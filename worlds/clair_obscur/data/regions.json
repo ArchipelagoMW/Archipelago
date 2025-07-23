@@ -3,16 +3,14 @@
         "region_name": "World Map: No Esquie",
         "locations": [],
         "parent_map": "Menu",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
         "region_name": "World Map: Base Esquie",
         "locations": [],
         "parent_map": "World Map: No Esquie",
-        "barrier_breaker_required": false,
-        "condition": {
+                "condition": {
             "Progressive Rock": 1
         },
         "exits": []
@@ -21,8 +19,7 @@
         "region_name": "World Map: Swim",
         "locations": [],
         "parent_map": "World Map: Base Esquie",
-        "barrier_breaker_required": false,
-        "condition": {
+                "condition": {
             "Progressive Rock": 2
         },
         "exits": []
@@ -31,8 +28,7 @@
         "region_name": "World Map: Destroy Coral",
         "locations": [],
         "parent_map": "World Map: Swim",
-        "barrier_breaker_required": false,
-        "condition": {
+                "condition": {
             "Progressive Rock": 3
         },
         "exits": []
@@ -41,9 +37,9 @@
         "region_name": "World Map: Fly",
         "locations": [],
         "parent_map": "World Map: Destroy Coral",
-        "barrier_breaker_required": false,
-        "condition": {
-            "Progressive Rock": 4
+                "condition": {
+            "Progressive Rock": 4,
+                    "Painted Power":  1
         },
         "exits": []
     },
@@ -120,8 +116,7 @@
             "Chest_WorldMap_68"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {
+                "condition": {
             "Progressive Rock": 5
         },
         "exits": []
@@ -149,8 +144,7 @@
             "Chest_AncientSanctuary_19"
         ],
         "parent_map": "World Map: No Esquie",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -167,8 +161,7 @@
             "Chest_CrimsonForest_9"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -185,8 +178,7 @@
             "Chest_DarkShores_9"
         ],
         "parent_map": "World Map: Swim",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -201,8 +193,7 @@
             "Chest_EsquiesNest_7"
         ],
         "parent_map": "World Map: No Esquie",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -213,8 +204,7 @@
             "Chest_FallingLeaves_3"
         ],
         "parent_map": "World Map: Destroy Coral",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -258,8 +248,7 @@
             "Chest_FlyingManor_41"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -293,8 +282,7 @@
             "Chest_ForgottenBattlefield_26"
         ],
         "parent_map": "World Map: Swim",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -332,8 +320,7 @@
             "Chest_FrozenHearts_31"
         ],
         "parent_map": "World Map: Swim",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -350,8 +337,7 @@
             "Chest_GestralVillage_9"
         ],
         "parent_map": "World Map: No Esquie",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -386,8 +372,7 @@
             "Chest_GoblusLair_27"
         ],
         "parent_map": "World Map: No Esquie",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -397,8 +382,7 @@
             "Chest_GrandisStation_2"
         ],
         "parent_map": "World Map: Swim",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -450,8 +434,9 @@
             "Chest_Lumiere_44"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": true,
-        "condition": {},
+        "condition": {
+            "Barrier Breaker":  1
+        },
         "exits": []
     },
     {
@@ -463,8 +448,7 @@
             "Chest_Lumiere_ACT1_4"
         ],
         "parent_map": "World Map: No Esquie",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -487,8 +471,7 @@
             "Chest_Manor_16"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -537,8 +520,9 @@
             "Chest_Monolith_41"
         ],
         "parent_map": "World Map: Destroy Coral",
-        "barrier_breaker_required": true,
-        "condition": {},
+        "condition": {
+            "Barrier Breaker":  1
+        },
         "exits": []
     },
     {
@@ -566,8 +550,7 @@
             "Chest_OldLumiere_20"
         ],
         "parent_map": "World Map: Swim",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -601,8 +584,7 @@
             "Chest_Reacher_26"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -622,8 +604,7 @@
             "Chest_RenoirSDraft_12"
         ],
         "parent_map": "World Map: Dive",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -670,8 +651,7 @@
             "Chest_SeaCliff_39"
         ],
         "parent_map": "World Map: Base Esquie",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -708,8 +688,7 @@
             "Chest_Sirene_30"
         ],
         "parent_map": "World Map: Destroy Coral",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -718,8 +697,7 @@
             "Chest_SmallLevel_RedWoods_1"
         ],
         "parent_map": "World Map: No Esquie",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -728,8 +706,7 @@
             "Chest_SmallLevel_GoblusLair_02_1"
         ],
         "parent_map": "World Map: No Esquie",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -741,8 +718,7 @@
             "Chest_SmallLevel_StonewaveCliffsCave_4"
         ],
         "parent_map": "World Map: Swim",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -751,8 +727,7 @@
             "Chest_SmallLevel_ChosenPath_1"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -761,8 +736,7 @@
             "Chest_SmallLevel_FloatingIsland_1"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -772,8 +746,7 @@
             "Chest_SmallLevel_Visages_2"
         ],
         "parent_map": "World Map: Destroy Coral",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -782,8 +755,7 @@
             "Chest_SmallLevel_Reacher_1"
         ],
         "parent_map": "World Map: Destroy Coral",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -799,8 +771,7 @@
             "Chest_SmallLevel_RockTrailing_8"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -812,8 +783,7 @@
             "Chest_SmallLevel_Cemetery_4"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -822,8 +792,7 @@
             "Chest_SmallLevel_CoastalCave_1"
         ],
         "parent_map": "World Map: Swim",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -832,8 +801,7 @@
             "Chest_SmallLevel_CavernCrusher_1"
         ],
         "parent_map": "World Map: Swim",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -846,8 +814,7 @@
             "Chest_SmallLevel_DoorMaze_5"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -858,8 +825,7 @@
             "Chest_SmallLevel_SinisterCave_3"
         ],
         "parent_map": "World Map: Destroy Coral",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -874,8 +840,7 @@
             "Chest_MiniLevels_7"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -884,8 +849,7 @@
             "Chest_SmallLevel_SpringMeadows_1"
         ],
         "parent_map": "World Map: No Esquie",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -894,8 +858,7 @@
             "Chest_SmallLevel_FlyingCasinoEntrance_1"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -905,8 +868,7 @@
             "Chest_SmallLevel_TheCarrousel_2"
         ],
         "parent_map": "World Map: Swim",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -916,8 +878,7 @@
             "Chest_SmallLevel_WhiteSands_2"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -926,8 +887,7 @@
             "Chest_SmallLevel_SacredRiver_1"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -961,8 +921,7 @@
             "Chest_SpringMeadows_26"
         ],
         "parent_map": "World Map: No Esquie",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -986,8 +945,7 @@
             "Chest_TwilightSanctuary_16"
         ],
         "parent_map": "World Map: Fly",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -1014,8 +972,7 @@
             "Chest_Visages_20"
         ],
         "parent_map": "World Map: Destroy Coral",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     },
     {
@@ -1029,8 +986,7 @@
             "Chest_YellowForest_6"
         ],
         "parent_map": "World Map: Base Esquie",
-        "barrier_breaker_required": false,
-        "condition": {},
+                "condition": {},
         "exits": []
     }
 ]
