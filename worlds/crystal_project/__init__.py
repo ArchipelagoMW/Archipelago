@@ -222,6 +222,20 @@ class CrystalProjectWorld(World):
 
         # pick one region to give a starting pass to and then save that later
         if self.options.regionsanity.value == self.options.regionsanity.option_true:
+            starting_passes_list: List[str] = []
+            #checking the start inventory for region passes and using the first one as the starter region, if any
+            for item_name in self.options.start_inventory.keys():
+                if item_name in self.item_name_groups[PASS]:
+                    starting_passes_list.append(item_name)
+            for item_name in self.options.start_inventory_from_pool.keys():
+                if item_name in self.item_name_groups[PASS]:
+                    starting_passes_list.append(item_name)
+            if len(starting_passes_list) > 0:
+                for region_name in region_name_to_pass_dict:
+                    if region_name_to_pass_dict[region_name] == starting_passes_list[0]:
+                        self.starter_region = region_name
+                        break
+
             # If this is UT re-gen the value isn't empty and we skip trying to pick a starter_region since we already have one
             if self.starter_region == "":
                 initially_reachable_regions = []
@@ -237,7 +251,9 @@ class CrystalProjectWorld(World):
                 self.starter_region = self.random.choice(initially_reachable_regions).name
             # logging.getLogger().info("Starting region is " + self.starter_region)
             self.origin_region_name = self.starter_region
-            self.multiworld.push_precollected(self.create_item(region_name_to_pass_dict[self.starter_region]))
+            #only push if player doesn't already have the pass from their starting inventory
+            if len(starting_passes_list) == 0:
+                self.multiworld.push_precollected(self.create_item(region_name_to_pass_dict[self.starter_region]))
             self.multiworld.get_region(self.starter_region, self.player).add_exits([MENU])
 
     def create_item(self, name: str) -> Item:
@@ -279,6 +295,8 @@ class CrystalProjectWorld(World):
                 if self.options.clamshellGoalQuantity.value < 2:
                     self.options.clamshellGoalQuantity.value = 2
                 self.options.extraClamshellsInPool.value = int(max_clamshells - self.options.clamshellGoalQuantity.value)
+                if self.options.extraClamshellsInPool.value < 0:
+                    self.options.extraClamshellsInPool.value = 0
 
                 # Log the change to player settings
                 message = ("For player {2}: total_clamshells was {0} but there was only room for {1} clamshells in the pool. "
@@ -290,6 +308,8 @@ class CrystalProjectWorld(World):
         return total_clamshell_quantity
 
     def get_total_progressive_levels(self, max_progressive_levels: int) -> int:
+        if max_progressive_levels < 1:
+            max_progressive_levels = 1
         # this formula is how we can do ceiling division in Python
         progressive_levels = -(self.options.maxLevel.value // -self.options.progressiveLevelSize.value)
         #don't forget to -1
@@ -300,14 +320,10 @@ class CrystalProjectWorld(World):
             if potential_progressive_level_size > self.options.progressiveLevelSize.range_end:
                 potential_progressive_level_size = self.options.progressiveLevelSize.range_end
                 potential_max_level = max_progressive_levels * potential_progressive_level_size
-                if potential_max_level < self.options.maxLevel.range_start:
-                    potential_max_level = self.options.maxLevel.range_start
 
             if self.options.maxLevel.value > potential_max_level:
-                message = (f"For player {self.player_name}: yaml settings were too restrictive. Only room for {max_progressive_levels} Progressive Levels in the pool. "
-                           f"Reduced max_level to {potential_max_level} and increased progressive_level_size to {potential_progressive_level_size}.")
-                logging.getLogger().info(message)
-                self.options.maxLevel.value = potential_max_level
+                raise Exception(f"For player {self.player_name}: yaml settings were too restrictive. Needed at least {-(self.options.maxLevel.value // -potential_progressive_level_size)} Progressive Levels, but only room for {max_progressive_levels} Progressive Levels in the pool. "
+                                f"This is usually caused by mods that add more items than locations. Change settings and regenerate.")
             else:
                 message = (f"For player {self.player_name}: yaml settings were too restrictive. Only room for {max_progressive_levels} Progressive Levels in the pool. "
                            f"Increased progressive_level_size to {potential_progressive_level_size}.")

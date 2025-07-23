@@ -527,7 +527,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SALMON_RIVER, "Salmon River Chest - In the stands of Salmon race finish line", 2976 + treasure_index_offset), #Ether Pouch chest
         LocationData(SALMON_RIVER, "Salmon River Chest - Inside Salmon Shack", 2913 + treasure_index_offset), #Salmon River map chest
         LocationData(SALMON_RIVER, "Overpass Chest - Hop east from shrine to shroom-studded mountainside", 3539 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #(32, 181, -373) 2nd Overpass scrap on (Cloudy Wind)
-        LocationData(SALMON_RIVER, "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #(60, 225, -435) Overpass (Snow) River Cats Ego map
+        LocationData(SALMON_RIVER, "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state)), #(60, 225, -435) Overpass (Snow) River Cats Ego map
         LocationData(SALMON_RIVER, "Overpass Chest - Ultimate Mulan challenge past mushroom mountain", 1401 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #(-35, 166, -387) Overpass (Cloudy Wind) Zether Pouch chest
 
         #NPCs
@@ -542,7 +542,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SALMON_RIVER, "Salmon River NPC - Salmon Race 3rd place price", 50646 + npc_index_offset, lambda state: logic.has_swimming(state)),
         LocationData(SALMON_RIVER, "Salmon River NPC - Salmon Race 2nd place price", 50647 + npc_index_offset, lambda state: logic.has_swimming(state)),
         LocationData(SALMON_RIVER, "Salmon River NPC - Win the Salmon Race", 639 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER, "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
+        LocationData(SALMON_RIVER, "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state)), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
 
         #Crystals
         LocationData(SALMON_RIVER, "River Cats Ego Crystal - Appease the QuizFish Nomad", 630 + crystal_index_offset), #River Cats Ego
@@ -1021,8 +1021,8 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Treasure chests
         LocationData(LANDS_END, "Land's End Chest - Definitely requires Quintar *wink* among the first spikes 1", 2849 + treasure_index_offset), #Ether chest
         LocationData(LANDS_END, "Land's End Chest - Definitely requires Quintar *wink* among the first spikes 2", 3003 + treasure_index_offset), #Potion chest
-        LocationData(LANDS_END, "Land's End Chest - Brave the spikes to climb the northern peak", 3002 + treasure_index_offset), #Money chest
-        LocationData(LANDS_END, "Land's End Chest - To defeat the Huns", 2740 + treasure_index_offset), #Blue Cape chest
+        LocationData(LANDS_END, "Land's End Chest - Brave the spikes to climb the northern peak", 3002 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Money chest
+        LocationData(LANDS_END, "Land's End Chest - To defeat the Huns", 2740 + treasure_index_offset, lambda state: logic.has_glide(state) or logic.has_vertical_movement(state)), #Blue Cape chest
         LocationData(LANDS_END, "Land's End Chest - Tucked up high against River Cats Ego", 1692 + treasure_index_offset), #Blue Cape chest
         LocationData(LANDS_END, "Land's End Chest - In spikes and storm", 1358 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Defender chest
         LocationData(LANDS_END, "Land's End Chest - Fancy some spikes cliff diving?", 1693 + treasure_index_offset), #Rune Ward chest
@@ -1031,7 +1031,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(LANDS_END, "Overpass Chest - Lonely mountain ledge below owl shrine", 3678 + treasure_index_offset, lambda state: logic.has_glide(state)), #(191, 177, -214) 9th Scrap on main Overpass map
 
         #NPCs
-        LocationData(LANDS_END, "Land's End NPC - Lets get down to business in the mountains for Gold", 2848 + npc_index_offset), #Ingot
+        LocationData(LANDS_END, "Land's End NPC - Lets get down to business in the mountains for Gold", 2848 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ingot
         LocationData(LANDS_END, "Land's End NPC - Pillar Gold by River Cats Ego", 2850 + npc_index_offset), #Ore
         LocationData(LANDS_END, "Land's End NPC - Gold in spikes and storm", 2851 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
         LocationData(LANDS_END, "Land's End NPC - Gold behind the shrine", 2852 + npc_index_offset), #Ingot
