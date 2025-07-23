@@ -119,9 +119,9 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         # AP Container
         elif handler:
             data = zfile.open(file, "r").read()
-            patch = handler(BytesIO(data))
-            patch.read()
-            files[patch.player] = data
+            with zipfile.ZipFile(BytesIO(data)) as container:
+                player = json.loads(container.open("archipelago.json").read())["player"]
+            files[player] = data
 
         # Spoiler
         elif file.filename.endswith(".txt"):
@@ -135,11 +135,6 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                 flash("Could not load multidata. File may be corrupted or incompatible.")
                 multidata = None
 
-        # Minecraft
-        elif file.filename.endswith(".apmc"):
-            data = zfile.open(file, "r").read()
-            metadata = json.loads(base64.b64decode(data).decode("utf-8"))
-            files[metadata["player_id"]] = data
 
         # Factorio
         elif file.filename.endswith(".zip"):
