@@ -394,7 +394,7 @@ class LingoPlayerLogic:
                     or painting.room in required_painting_rooms:
                 return False
 
-            if world.options.shuffle_doors == ShuffleDoors.option_none:
+            if world.options.shuffle_doors != ShuffleDoors.option_doors:
                 if painting.req_blocked_when_no_doors:
                     return False
 
