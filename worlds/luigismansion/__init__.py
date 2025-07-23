@@ -772,7 +772,7 @@ class LMWorld(World):
                         if location.address:
                             if location.item.type == "Door Key":
                                 itemid = location.item.doorid
-                        inv_reg_list = dict((v, k) for k, v in REGION_LIST.items())
+                        inv_reg_list = {v:k for k, v in REGION_LIST.items()}
                         roomid = inv_reg_list[location.parent_region.name]
                         item_info = {
                             "player": location.item.player,
@@ -789,7 +789,7 @@ class LMWorld(World):
 
                         output_data["Locations"][location.name] = item_info
                     else:
-                        inv_reg_list = dict((v, k) for k, v in REGION_LIST.items())
+                        inv_reg_list = {v:k for k, v in REGION_LIST.items()}
                         roomid = inv_reg_list[location.parent_region.name]
                         item_info = {
                             "player": location.item.player,
