@@ -72,8 +72,19 @@ class EventItemData(ItemData, base_event):
     def __init__(self, item: InternalItemData, **kwargs: Unpack[EventDataDict]):
         super().__init__(item, **kwargs)
 
-_overrides: dict[str, ItemDataDict] = dict()
-_overrides[ItemName.Catch_Beads] = {"progression": ItemClassification.filler}
+_overrides: dict[str, ItemDataDict] = {
+    ItemName.Catch_Beads: {"progression": ItemClassification.filler},
+    ItemName.Shamans_Rod: {"progression": ItemClassification.progression_deprioritized},
+    ItemName.Sea_Gods_Tear: {"progression": ItemClassification.progression_deprioritized},
+    ItemName.Right_Prong: {"progression": ItemClassification.progression_deprioritized},
+    ItemName.Left_Prong: {"progression": ItemClassification.progression_deprioritized},
+    ItemName.Center_Prong: {"progression": ItemClassification.progression_deprioritized},
+    ItemName.Healing_Fungus: {"progression": ItemClassification.progression_deprioritized},
+    ItemName.Red_Cloth: {"progression": ItemClassification.progression_deprioritized},
+    ItemName.Milk: {"progression": ItemClassification.progression_deprioritized},
+    ItemName.Aquarius_Stone: {"progression": ItemClassification.progression_deprioritized},
+    ItemName.Ruin_Key: {"progression": ItemClassification.progression_deprioritized},
+}
 
 
 def _wrap_datum(item: InternalItemData) -> ItemData:
