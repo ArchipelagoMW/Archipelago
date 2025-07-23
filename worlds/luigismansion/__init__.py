@@ -713,32 +713,30 @@ class LMWorld(World):
 
     @classmethod
     def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str):
-        hint_worlds = [world for world in multiworld.get_game_worlds(cls.game)
-                       if (world.options.hint_distribution.value != 5 and world.options.hint_distribution.value != 1)]
-        boo_worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.boo_health_option == 2]
+        hint_worlds = {world.player for world in multiworld.get_game_worlds(cls.game)
+                       if (world.options.hint_distribution.value != 5 and world.options.hint_distribution.value != 1)}
+        boo_worlds = {world.player for world in multiworld.get_game_worlds(cls.game) if world.options.boo_health_option == 2}
         if not boo_worlds and not hint_worlds:
             return
-        player_hints = {world.player for world in hint_worlds}
-        if player_hints:
-            get_hints_by_option(multiworld, player_hints)
+        if hint_worlds:
+            get_hints_by_option(multiworld, hint_worlds)
         if not boo_worlds:
             return
-        boo_players = {world.player for world in boo_worlds}
         def check_boo_players_done() -> None:
             done_players = set()
-            for player in boo_players:
+            for player in boo_worlds:
                 player_world = multiworld.worlds[player]
                 if len(player_world.boo_spheres.keys()) == len(ROOM_BOO_LOCATION_TABLE.keys()):
                     player_world.finished_boo_scaling.set()
                     done_players.add(player)
-            boo_players.difference_update(done_players)
+            boo_worlds.difference_update(done_players)
         for sphere_num, sphere in enumerate(multiworld.get_spheres(), 1):
             for loc in sphere:
-                if loc.player in boo_players and loc.name in ROOM_BOO_LOCATION_TABLE.keys():
+                if loc.player in boo_worlds and loc.name in ROOM_BOO_LOCATION_TABLE.keys():
                     player_world = multiworld.worlds[loc.player]
                     player_world.boo_spheres.update({loc.name: sphere_num})
             check_boo_players_done()
-            if not boo_players:
+            if not boo_worlds:
                 return
 
 
