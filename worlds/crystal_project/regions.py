@@ -437,6 +437,7 @@ def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[Lo
     return per_region
 
 def create_region(world: "CrystalProjectWorld", player: int, locations_per_region: Dict[str, List[LocationData]], name: str, excluded: bool) -> Region:
+    logic = CrystalProjectLogic(player, world.options)
     region = Region(name, player, world.multiworld)
 
     region_completion: Location | None = None
@@ -457,6 +458,12 @@ def create_region(world: "CrystalProjectWorld", player: int, locations_per_regio
         for location in region.locations:
             if location != region_completion:
                 region_completion.access_rule = combine_callables(region_completion.access_rule, location.access_rule)
+
+    # This is for making sure players can earn money for required shop checks in shopsanity + regionsanity
+    if world.options.regionsanity.value == world.options.regionsanity.option_true and world.options.shopsanity.value != world.options.shopsanity.option_disabled:
+        for location in region.locations:
+            if "Shop -" in location.name:
+                location.access_rule = combine_callables(location.access_rule, lambda state: logic.can_earn_money(state, region.name))
 
     return region
 

@@ -222,6 +222,20 @@ class CrystalProjectWorld(World):
 
         # pick one region to give a starting pass to and then save that later
         if self.options.regionsanity.value == self.options.regionsanity.option_true:
+            starting_passes_list: List[str] = []
+            #checking the start inventory for region passes and using the first one as the starter region, if any
+            for item_name in self.options.start_inventory.keys():
+                if item_name in self.item_name_groups[PASS]:
+                    starting_passes_list.append(item_name)
+            for item_name in self.options.start_inventory_from_pool.keys():
+                if item_name in self.item_name_groups[PASS]:
+                    starting_passes_list.append(item_name)
+            if len(starting_passes_list) > 0:
+                for region_name in region_name_to_pass_dict:
+                    if region_name_to_pass_dict[region_name] == starting_passes_list[0]:
+                        self.starter_region = region_name
+                        break
+
             # If this is UT re-gen the value isn't empty and we skip trying to pick a starter_region since we already have one
             if self.starter_region == "":
                 initially_reachable_regions = []
@@ -237,7 +251,9 @@ class CrystalProjectWorld(World):
                 self.starter_region = self.random.choice(initially_reachable_regions).name
             # logging.getLogger().info("Starting region is " + self.starter_region)
             self.origin_region_name = self.starter_region
-            self.multiworld.push_precollected(self.create_item(region_name_to_pass_dict[self.starter_region]))
+            #only push if player doesn't already have the pass from their starting inventory
+            if len(starting_passes_list) == 0:
+                self.multiworld.push_precollected(self.create_item(region_name_to_pass_dict[self.starter_region]))
             self.multiworld.get_region(self.starter_region, self.player).add_exits([MENU])
 
     def create_item(self, name: str) -> Item:
