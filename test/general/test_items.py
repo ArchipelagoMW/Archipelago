@@ -181,48 +181,53 @@ class TestBase(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             multiworld = setup_solo_multiworld(world_type)
             with self.subTest(game=game_name, seed=multiworld.seed):
-                # Get all advancements in the multiworld and split them into event and non-event.
-                # Event advancements need to be kept as locations so that they can be collected in a natural order
-                # because a world might expect some of them to always be collected in a specific order and base logic
-                # around this order.
-                non_event_advancements = []
-                event_locations = []
+                # Get all advancements in the multiworld and split them into items that were locked on locations and
+                # items that were not locked on locations.
+                # Locked advancements need to be kept as locations so that they can be collected in a natural order
+                # because a world might know that some of them will always be collected in a specific order and base
+                # logic around this order. Typically, most locked advancements will be events, but this is not always
+                # the case.
+                non_locked_advancements = []
+                locked_advancement_locations = []
                 duplicated_items: Counter[str] = Counter()
                 world = multiworld.worlds[1]
                 for loc in multiworld.get_locations():
                     if not loc.advancement:
                         continue
                     item = loc.item
-                    if item.is_event:
-                        event_locations.append(loc)
+                    if loc.locked:
+                        locked_advancement_locations.append(loc)
                     else:
-                        non_event_advancements.append(item)
+                        non_locked_advancements.append(item)
 
-                        # Create duplicates of each non-event item, to simulate players adding additional items to the
-                        # multiworld through starting inventory, item plando, item link replacement items or any other
-                        # methods.
-                        # Create no more than 5 of each duplicate item to prevent the case of creating a huge number of
-                        # additional 'macguffin' items.
-                        if item.name in world.item_name_to_id and duplicated_items[item.name] < 5:
-                            duplicate_item = world.create_item(item.name)
-                            if duplicate_item.advancement:
-                                non_event_advancements.append(duplicated_items)
-                            duplicated_items[item.name] += 1
+                    # Create duplicates of each non-event item, to emulate players adding additional items to the
+                    # multiworld through starting inventory, item plando, item link replacement items or any other
+                    # means that can add new items to the multiworld.
+                    # Multiple duplicates are created to try to account for worlds that expect multiple copies of an
+                    # item to exist in the multiworld to begin with, so creating only 1 extra copy might not be a good
+                    # test.
+                    # Create no more than 10 of each duplicate item to prevent the case of creating a huge number of
+                    # additional 'macguffin' items.
+                    if not item.is_event and duplicated_items[item.name] < 10:
+                        duplicate_item = world.create_item(item.name)
+                        if duplicate_item.advancement:
+                            non_locked_advancements.append(duplicated_items)
+                        duplicated_items[item.name] += 1
 
-                # Create an instance of every other item in the data package, to simulate players adding additional
-                # items to the multiworld that do not exist in a normal generation.
+                # Create an instance of every item in the data package that has not already been created, to emulate
+                # players adding additional items to the multiworld that do not exist in a normal generation.
                 for item_name in world.item_name_to_id.keys():
                     if item_name not in duplicated_items:
                         new_item = world.create_item(item_name)
                         if new_item.advancement:
-                            non_event_advancements.append(new_item)
+                            non_locked_advancements.append(new_item)
 
                 # Shuffle the items into a deterministically random order because otherwise, the order of all items
                 # should always be the same, limiting what can be tested.
-                multiworld.random.shuffle(non_event_advancements)
+                multiworld.random.shuffle(non_locked_advancements)
                 # Deterministically randomly shuffle, otherwise the locations are expected to always be in the same
                 # order, limiting what can be tested.
-                multiworld.random.shuffle(event_locations)
+                multiworld.random.shuffle(locked_advancement_locations)
 
                 # Get all locations in the multiworld.
                 locations = multiworld.get_locations()
@@ -251,13 +256,13 @@ class TestBase(unittest.TestCase):
                     new_reachable_locations_at_each_collect.append(newly_reachable)
 
                 def collect_reachable_events():
-                    nonlocal event_locations
-                    if event_locations:
+                    nonlocal locked_advancement_locations
+                    if locked_advancement_locations:
                         changed = True
                         while changed:
                             next_event_locations = []
                             reachable_events = []
-                            for loc in event_locations:
+                            for loc in locked_advancement_locations:
                                 if loc.can_reach(state):
                                     reachable_events.append(loc.item)
                                 else:
@@ -266,11 +271,11 @@ class TestBase(unittest.TestCase):
                                 collect_and_check(event)
                             # If any events were collected, loop again to try to reach more events.
                             changed = len(reachable_events) > 0
-                            event_locations = next_event_locations
+                            locked_advancement_locations = next_event_locations
 
-                while non_event_advancements:
+                while non_locked_advancements:
                     collect_reachable_events()
-                    non_event = non_event_advancements.pop()
+                    non_event = non_locked_advancements.pop()
                     collect_and_check(non_event)
 
                 # Collect any remaining reachable events now that all non-events have been collected.
