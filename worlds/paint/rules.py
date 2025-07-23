@@ -13,9 +13,9 @@ def paint_percent_available(state: CollectionState, world: PaintWorld, player: i
 
 def calculate_paint_percent_available(state: CollectionState, world: PaintWorld, player: int) -> float:
     p = state.has("Pick Color", player)
-    r = state.count("Progressive Color Depth (Red)", player)
-    g = state.count("Progressive Color Depth (Green)", player)
-    b = state.count("Progressive Color Depth (Blue)", player)
+    r = min(state.count("Progressive Color Depth (Red)", player), 7)
+    g = min(state.count("Progressive Color Depth (Green)", player), 7)
+    b = min(state.count("Progressive Color Depth (Blue)", player), 7)
     if not p:
         r = min(r, 2)
         g = min(g, 2)
@@ -29,7 +29,8 @@ def calculate_paint_percent_available(state: CollectionState, world: PaintWorld,
     # total score achievable assuming the worst possible target image. Finally, this is multiplied by the logic percent
     # option which restricts the logic so as to not require pixel perfection.
     return ((1 - ((sqrt(((2 ** (7 - r) - 1) ** 2 + (2 ** (7 - g) - 1) ** 2 + (2 ** (7 - b) - 1) ** 2) * 12)) / 765)) *
-            (400 + w * world.options.canvas_size_increment) * (300 + h * world.options.canvas_size_increment) *
+            min(400 + w * world.options.canvas_size_increment, 800) *
+            min(300 + h * world.options.canvas_size_increment, 600) *
             world.options.logic_percent / 480000)
 
 
