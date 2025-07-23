@@ -311,7 +311,7 @@ def get_modded_bosses(mod_info: List[ModInfoModel]) -> List[ModLocationData]:
 
             #Entity type 2 is Spark
             if entity_type == 2:
-                location = build_spark_location(location, mod.shifted_spark_ids)
+                location = build_spark_location(location, mod.shifted_entity_ids)
                 if location is not None:
                     locations.append(location)
 
@@ -620,7 +620,7 @@ def build_boss_npc(location, boss_troop_ids: List[int], shifted_entity_ids: List
 
     return None
 
-def build_spark_location(location, shifted_spark_ids: List[ModIncrementedIdData]) -> Optional[ModLocationData]:
+def build_spark_location(location, shifted_entity_ids: List[ModIncrementedIdData]) -> Optional[ModLocationData]:
     if not location['SparkData']:
         return None
 
@@ -636,7 +636,7 @@ def build_spark_location(location, shifted_spark_ids: List[ModIncrementedIdData]
     item_id = location['ID']
 
     new_id = item_id
-    for incremented_id in shifted_spark_ids:
+    for incremented_id in shifted_entity_ids:
         if incremented_id.original_id == item_id:
             new_id = incremented_id.new_id
 
