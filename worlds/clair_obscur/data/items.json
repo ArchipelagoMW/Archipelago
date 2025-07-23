@@ -1,2525 +1,2282 @@
 [
-    {
-        "type": "Upgrade material",
-        "name": "UpgradeMaterial_Level1",
-        "progressive": 2
-    },
-    {
-        "type": "Upgrade material",
-        "name": "UpgradeMaterial_Level2",
-        "progressive": 2
-    },
-    {
-        "type": "Upgrade material",
-        "name": "UpgradeMaterial_Level3",
-        "progressive": 2
-    },
-    {
-        "type": "Upgrade material",
-        "name": "UpgradeMaterial_Level4",
-        "progressive": 2
-    },
-
-    {
-        "type": "Upgrade material",
-        "name": "ConsumableUpgradeMaterial_Health",
-        "progressive": 2
-    },
-    {
-        "type": "Upgrade material",
-        "name": "ConsumableUpgradeMaterial_AP",
-        "progressive": 2
-    },
-    {
-        "type": "Upgrade material",
-        "name": "ConsumableUpgradeMaterial_Revive",
-        "progressive": 2
-    },
-
-    {
-        "type": "Esquie",
-        "name": "Progressive Rock",
-        "progressive": 1
-    },
-
-    {
-        "type": "Exploration capacities",
-        "name": "FreeAim",
-        "progressive": 1
-    },
-    {
-        "type": "Exploration capacities",
-        "name": "AttackInWorld",
-        "progressive": 1
-    },
-    {
-        "type": "Exploration capacities",
-        "name": "FreeAimTeleport",
-        "progressive": 1
-    },
-    {
-        "type": "Exploration capacities",
-        "name": "Overlay",
-        "progressive": 1
-    },
-    {
-        "type": "Exploration capacities",
-        "name": "GameMenu",
-        "progressive": 1
-    },
-    {
-        "type": "Exploration capacities",
-        "name": "FastTravel",
-        "progressive": 1
-    },
-    {
-        "type": "Exploration capacities",
-        "name": "Camp",
-        "progressive": 1
-    },
-
-    {
-        "type": "Journal",
-        "name": "Journal - Simon",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Julie Search and Rescue",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 84",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 81",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 78",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 70",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 69",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 68",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 67",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 66",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 65",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 64",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 63",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 62",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 61",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 60",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 59",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 58",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 57",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 56",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 55",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 54",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 53",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 52",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 51",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 50",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 49",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 48",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 47",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 46",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 45",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 44",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 43",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 42",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 41",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 40",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 39",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 38",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 37",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 36",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 35",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Expedition 34",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Fracture Survivor",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Unknown (Sirene)",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Unknown (Visages)",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Unknown (Reacher)",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Renoir",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Aline",
-        "progressive": 0
-    },
-    {
-        "type": "Journal",
-        "name": "Journal - Verso",
-        "progressive": 0
-    },
-
-
-    {
-        "type": "Picto",
-        "name": "DoubleAP",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AP+1TurnStart",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AP+1Attack",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AP+1Parry",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Augmented1stStrike",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "RiskSeeker",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Survivor",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AegisRevival",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Recovery",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LuckyAim",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CounterUpdragdeA",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SecondChance",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FirstStrike",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SoloFighter",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Teamwork",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SweetKill",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AugmentedAttack",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AttackLifesteal",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AugmentedAim",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ComboAttack1",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "HealingParry",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LimonsolPictos",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AutoPowerful",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AutoShell",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AutoRush",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Auto1Hp",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AutoRegen",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiBurn",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiFrozen",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiSilence",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiStun",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiInverted",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiCurse",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiBound",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiShock",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiDizzy",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PhysicalCoat",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FireCoat",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "IceCoat",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ThunderCoat",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "EarthCoat",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LightCoat",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DarkCoat",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "NullPhysical",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "NullFire",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "NullIce",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "NullEarth",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "NullThunder",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "NullDark",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "NullLight",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AbsorbPhysical",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AbsorbFire",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AbsorbIce",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AbsorbEarth",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AbsorbLight",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AbsorbThunder",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AbsorbDark",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Speedster",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Blitz",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AngelGrace",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AngelPresent",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AngelicChance",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BackAtYou",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Dodger",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "RiskTaker",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "InitialAp+1A",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "InitialAp+1B",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "InitialAp+1C",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "InitialAp+1D",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ManOfParry",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Confident",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "HighOnPerfect",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FasterThanHisShadow",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BrambleSkin",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SpreadingBrambleSkin",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BrambleParry",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BloodyBullet",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FastAttacker",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveBombFire",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveBombIce",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveBombThunder",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveBombEarth",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveCheer",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveWithRegen",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveWithShell",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveWithPrecision",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveWithPower",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveWithRush",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FireSkin",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FrozenSkin",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "InvertedSkin",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "OverConfident",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Fugitive",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Solidifying",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "TheOne",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BootyHunter",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "TurboKiller",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SniperWolf",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BurningShot",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FrozenShot",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "StunningShot",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "InvertedShot",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PiercingShot",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BurningDodge",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DefenseBreakerDodge",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DefenseRiserDodge",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerBreakerDodge",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerRiserDodge",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SpeedsterDodge",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FlashDodge",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "HazardousChoice",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "HealingDeath",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DeathBombPhysical",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DeathBombFire",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DeathBombFrozen",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DeathBombThunder",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DeathBombEarth",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DeathBombLight",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DeathBombDark",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DeathBombVoid",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "EnergyDeath",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ShieldingDeath",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ProtectingDeath",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "EmpoweringDeath",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BurnAffinity",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FrozenAffinity",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "InvertedAffinity",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ExhaustAffinity",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PhysicalModifier",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AutoDeath",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AutoBurn",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AutoCurse",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LastStand",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Stand",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "MakeItQuick",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "OverPowered",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SosShell",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SosPower",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CounterUpdragdeB",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CounterUpdragdeC",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AutoPrecision",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiExhaust",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GathererA",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SosRush",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GestralFlute",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SosPrecision",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LearnerA",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BramblePerformer",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SolidifyingMeditation",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerBreakerShot",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BlankPictos",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "TEST_FullStatsPicto",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "TEST_FullStatsPicto_1",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "TEST_FullStatsPicto_2",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "TEST_FullStatsPicto_3",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DoubleBurn",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ProtectingFire",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "HealingFire",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "RewardingMark",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DoubleMark",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "StunBoost",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Sniper",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PierceDefense",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Energy",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Cheater",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FromBehind",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ProBlocker",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "HealingCounter",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerfulShield",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BaseShield",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "InMediasRes",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ShieldBreaker",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ShieldAffinity",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CriticalMoment",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CriticalHavoc",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FasterThanStrong",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Warming",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Shortcut",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "RandomDefense",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GlassCanon",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ProtectionSpirit",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DefensiveMode",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GreaterPowerful",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GreaterSpeed",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GreaterPrecision",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GreaterShell",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LastStandCritical",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveParadox",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "EffectiveHeal",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SharedCare",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "EnergizingHeal",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerfulHeal",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ProtectingHeal",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AcceleratorHeal",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ConfidentFighter",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PerfectHeal",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "HealingShare",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "WeaknessGain",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DeadEnergy",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PatientFighter",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "EffectivSupport",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "VersatileHealer",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BeneficialContamination",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PerfectReward",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PhysicalFighter",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Roulette",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SoulEater",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Painter",
-        "progressive": 1
-    },
-    {
-        "type": "Picto",
-        "name": "Immaculate",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Tainted",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FirstOffensive",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CursedPower",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CriticalCursedPower",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ProRetreat",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ParryHelper",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "WeakeningMark",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BurningMark",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerfulMark",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "HealingMark",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "StayMarked",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CharybdeToScylla",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FreeAimBurnShot",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FreeAimInvertedShot",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FreeAimMarkingShot",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FreeAimPowerful",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FreeAimShell",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FreeAimSpeed",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FreeAimPrecision",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FreeAimEnergy",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Versatile",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerfulStrike",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ShellStrike",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerlessStrike",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DefenslessStrike",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReinforcementParade",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LastStandSpeed",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LastStandPowerful",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LastStandShell",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerOfPain",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "JumpRecovery",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "FullEnergyAttack",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ComboAttack2",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ComboAttack3",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "Breaker",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SimpleBreaker",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "EnergyBreak",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BreakMomentum",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BreakingStrong",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "StunEnergy",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "HealingStun",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BurningBreak",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CriticalBreak",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BreakingCounter",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientBreak",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BreakShot",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GreatFireBreak",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientFighter",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientHeal",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientEnergy",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientStacker",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientBreaker",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PostGradient",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientCure",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientCounterCharge",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientWeakness",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientMark",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ReviveTintEnergy",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "HealingTintEnergy",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerfulTint",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ShellTint",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ShieldingTint",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SpeedTint",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GreatHealingTint",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CleansingTint",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BigHealingTint",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BigEnergyTint",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientTint",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "TimeTint",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "APOnBurn",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BreakDamageOnBurn",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CritChanceBurn",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BurningDeath",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BurnDurationIncrease",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BreakDamageOnCrit",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CritChanceOnWeak",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CritChanceOnStunned",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CritChanceOnDefenseless",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerDodgeCombo",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "MarkOnBreak",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "SlowOnBreak",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DefenselessOnBreak",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BreakSpecialist",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BreakingDeath",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BreakDamageOnSlow",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LongerPowerful",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LongerShell",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LongerRush",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "PowerfulOnShell",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "RushOnPowerful",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ShellOnRush",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "EvasiveHealer",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "APOnPowerful",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "APOnShell",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "APOnRush",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "HealOnBuff",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GreaterPowerless",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GreaterDefenseless",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GreaterSlow",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AutoDispelEnergy",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DispelOnAPConsume",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiBlight",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientOnCrit",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientOnBurn",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientOnStun",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "GradientOnBuff",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "LongerDodge",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ParrySpecialist",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "DodgeSpecialist",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BestDefense",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BonusHealthNoDefense",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "ParryDamageNoDodge",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "BreakingAttack",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "AntiCharm",
-        "progressive": 2
-    },
-    {
-        "type": "Picto",
-        "name": "CleasLife",
-        "progressive": 2
-    },
-
-
-    {
-        "type": "Weapon",
-        "name": "Noahram",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Maellum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Lunerim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Scieleson",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Verleso",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Monocaro",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Lanceram",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Nosaram",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Volesterum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Gaulteram",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Elerim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Medalum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Potierim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Brulerum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Jarum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Chevalam",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Delaram",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Saperim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Seashelum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Scaverim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Glaisum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Cruleram",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Minason",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Seeram",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Deminerim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Lusteson",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Abysseram",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Gobluson",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sakaram",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Coralim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Algueron",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Gesam",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Redalim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sekarum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Bourgelon",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Blodam",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Corderon",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Cultam",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Demonam",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Trebuchim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Rangeson",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Betelim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Veremum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Hevason",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Painerim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Yeverum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Direton",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Melarum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Lighterim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Duenum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Chation",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Chainebum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Troubadum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Ramasson",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Chaliso",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Benisim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Battlum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Charnon",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Corpeso",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Dualim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Stalum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Contorson",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Danseso",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Braselim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Coldum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Glaceso",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Snowim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sadon",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Clierum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Garganon",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Moissoso",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Angerim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Blizzon",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Confuso",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Facesum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Chapelim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sireso_1",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sirenon_1",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sirenum_1",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sireso_2",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sirenim_1",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sirenum_2",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sirenim_2",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sirenon_2",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Reacheso_1",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Reachum_1",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Reacherim_1",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Reacheron_1",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Reacheso_2",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Reacheron_2",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Reachum_2",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Reacherim_2",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "GDC_Weapon_Sciel",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "GDC_Weapon_Maelle",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "GDC_Weapon_Lune",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "GDC_Weapon_Verso",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "GDC_Weapon_Monoco",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Grandaro",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Chromaro",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Boucharo",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Joyaro",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sirenaro_1",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sirenaro_2",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Reacharo_1",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Reacharo_2",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Brumaro",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Sidaro",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "MitigatedPerfection",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Beselbum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Gelerim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Nibalum",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Velokan",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Telarim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Milerim",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "Simoso",
-        "progressive": 2
-    }
+  {
+    "type": "Upgrade material",
+    "name": "Chroma Catalyst",
+    "internal_name": "UpgradeMaterial_Level1",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Polished Chroma Catalyst",
+    "internal_name": "UpgradeMaterial_Level2",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Resplendent Chroma Catalyst",
+    "internal_name": "UpgradeMaterial_Level3",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Grandiose Chroma Catalyst",
+    "internal_name": "UpgradeMaterial_Level4",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Perfect Chroma Catalyst",
+    "internal_name": "UpgradeMaterial_Level5",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Shape of Health",
+    "internal_name": "ConsumableUpgradeMaterial_Health",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Shape of Energy",
+    "internal_name": "ConsumableUpgradeMaterial_AP",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Shape of Life",
+    "internal_name": "ConsumableUpgradeMaterial_Revive",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Healing Tint Shard",
+    "internal_name": "HealingTint_Shard",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Energy Tint Shard",
+    "internal_name": "EnergyTint_Shard",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Revive Tint Shard",
+    "internal_name": "ReviveTint_Shard",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Recoat",
+    "internal_name": "Consumable_Respec",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Chroma Elixir Shard",
+    "internal_name": "PartyHealShard",
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Colour of Lumina",
+    "internal_name": "Consumable_LuminaPoint",
+    "progressive": 2
+  },
+  {
+    "type": "Exploration capacities",
+    "name": "Progressive Rock",
+    "internal_name": "",
+    "progressive": 1
+  },
+  {
+    "type": "Exploration capacities",
+    "name": "Paint Break",
+    "internal_name": "",
+    "progressive": 1
+  },
+  {
+    "type": "Key item",
+    "name": "Bourgeon Skin",
+    "progressive": 1,
+    "internal_name": "Quest_BourgeonSkin"
+  },
+  {
+    "type": "Key item",
+    "name": "Eternal Ice",
+    "progressive": 1,
+    "internal_name": "Quest_EternalIce"
+  },
+  {
+    "type": "Key item",
+    "name": "Intact Mine",
+    "progressive": 1,
+    "internal_name": "Quest_Mine"
+  },
+  {
+    "type": "Key item",
+    "name": "Manor Family Canvas",
+    "progressive": 1,
+    "internal_name": "Quest_ManorFamilyCanvas"
+  },
+  {
+    "type": "Key item",
+    "name": "Mushroom",
+    "progressive": 1,
+    "internal_name": "Quest_Mushroom"
+  },
+  {
+    "type": "Key item",
+    "name": "Old Key",
+    "progressive": 1,
+    "internal_name": "Quest_OldKey"
+  },
+  {
+    "type": "Key item",
+    "name": "Resin",
+    "progressive": 1,
+    "internal_name": "Quest_Resin"
+  },
+  {
+    "type": "Key item",
+    "name": "Rock Crystal",
+    "progressive": 1,
+    "internal_name": "Quest_HexgaRock"
+  },
+  {
+    "type": "Key item",
+    "name": "Weird Pictos",
+    "progressive": 1,
+    "internal_name": "Quest_WeirdPictos"
+  },
+  {
+    "type": "Key item",
+    "name": "Wood Boards",
+    "progressive": 1,
+    "internal_name": "Quest_WoodBoards"
+  },
+  {
+    "type": "Key item",
+    "name": "Wooden Stick",
+    "progressive": 0,
+    "internal_name": "Quest_WoodenStick"
+  },
+  {
+    "type": "Key item",
+    "name": "Colour of the Beast",
+    "progressive": 1,
+    "internal_name": "Quest_CleaWorkshop_Part1"
+  },
+  {
+    "type": "Key item",
+    "name": "Shape of the Beast",
+    "progressive": 1,
+    "internal_name": "Quest_CleaWorkshop_Part2"
+  },
+  {
+    "name": "Light of the Beast",
+    "type": "Key item",
+    "internal_name": "Quest_CleaWorkshop_Part3",
+    "progressive": 1
+  },
+  {
+    "type": "Key item",
+    "name": "Lost Gestral",
+    "internal_name": "LostGestral",
+    "progressive": 1
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Simon",
+    "internal_name": "Journal_Exp100A",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Julie Search and Rescue",
+    "internal_name": "Journal_Exp100B",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 84",
+    "internal_name": "Journal_Exp84",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 81",
+    "internal_name": "Journal_Exp81",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 78",
+    "internal_name": "Journal_Exp78",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 70",
+    "internal_name": "Journal_Exp70",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 69",
+    "internal_name": "Journal_Exp69",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 68",
+    "internal_name": "Journal_Exp68",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 67",
+    "internal_name": "Journal_Exp67",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 66",
+    "internal_name": "Journal_Exp66",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 65",
+    "internal_name": "Journal_Exp65",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 64",
+    "internal_name": "Journal_Exp64",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 63",
+    "internal_name": "Journal_Exp63",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 62",
+    "internal_name": "Journal_Exp62",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 61",
+    "internal_name": "Journal_Exp61",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 60",
+    "internal_name": "Journal_Exp60",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 59",
+    "internal_name": "Journal_Exp59",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 58",
+    "internal_name": "Journal_Exp58",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 57",
+    "internal_name": "Journal_Exp57",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 56",
+    "internal_name": "Journal_Exp56",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 55",
+    "internal_name": "Journal_Exp55",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 54",
+    "internal_name": "Journal_Exp54",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 53",
+    "internal_name": "Journal_Exp53",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 52",
+    "internal_name": "Journal_Exp52",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 51",
+    "internal_name": "Journal_Exp51",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 50",
+    "internal_name": "Journal_Exp50",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 49",
+    "internal_name": "Journal_Exp49",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 48",
+    "internal_name": "Journal_Exp48",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 47",
+    "internal_name": "Journal_Exp47",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 46",
+    "internal_name": "Journal_Exp46",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 45",
+    "internal_name": "Journal_Exp45",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 44",
+    "internal_name": "Journal_Exp44",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 43",
+    "internal_name": "Journal_Exp43",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 42",
+    "internal_name": "Journal_Exp42",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 41",
+    "internal_name": "Journal_Exp41",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 40",
+    "internal_name": "Journal_Exp40",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 39",
+    "internal_name": "Journal_Exp39",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 38",
+    "internal_name": "Journal_Exp38",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 37",
+    "progressive": 0,
+    "internal_name": "Journal_Exp37"
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 36",
+    "internal_name": "Journal_Exp36",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 35",
+    "internal_name": "Journal_Exp35",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Expedition 34",
+    "internal_name": "Journal_Exp34",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Fracture Survivor",
+    "internal_name": "Journal_OldLumiere",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Unknown (Sirene)",
+    "internal_name": "Journal_RenoirSirene",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "internal_name": "Journal_RenoirVisages",
+    "progressive": 0,
+    "name": "Journal - Unknown (Visages)"
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Unknown (Reacher)",
+    "internal_name": "Journal_RenoirReacher",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Renoir",
+    "internal_name": "Journal_RenoirManor",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Aline",
+    "internal_name": "Journal_Aline",
+    "progressive": 0
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Verso",
+    "internal_name": "Journal_Verso",
+    "progressive": 0
+  },
+  {
+    "type": "Picto",
+    "name": "Energy Master",
+    "internal_name": "DoubleAP",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Turn",
+    "internal_name": "AP+1TurnStart",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Attack I",
+    "internal_name": "AP+1Attack",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Parry",
+    "internal_name": "AP+1Parry",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Augmented First Strike",
+    "internal_name": "Augmented1stStrike",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Survivor",
+    "internal_name": "Survivor",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Aegis Revival",
+    "internal_name": "AegisRevival",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Recovery",
+    "internal_name": "Recovery",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Augmented Counter I",
+    "internal_name": "CounterUpdragdeA",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Augmented Counter II",
+    "internal_name": "CounterUpdragdeB",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Augmented Counter III",
+    "internal_name": "CounterUpdragdeC",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Second Chance",
+    "internal_name": "SecondChance",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "First Strike",
+    "internal_name": "FirstStrike",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Solo Fighter",
+    "internal_name": "SoloFighter",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Teamwork",
+    "internal_name": "Teamwork",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Sweet Kill",
+    "internal_name": "SweetKill",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Augmented Attack",
+    "internal_name": "AugmentedAttack",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Attack Lifesteal",
+    "internal_name": "AttackLifesteal",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Augmented Aim",
+    "internal_name": "AugmentedAim",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Combo Attack I",
+    "internal_name": "ComboAttack1",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Healing Parry",
+    "internal_name": "HealingParry",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Auto Powerful",
+    "internal_name": "AutoPowerful",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Auto Shell",
+    "internal_name": "AutoShell",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Auto Rush",
+    "internal_name": "AutoRush",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Auto Regen",
+    "internal_name": "AutoRegen",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Anti-Burn",
+    "internal_name": "AntiBurn",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Anti-Freeze",
+    "internal_name": "AntiFrozen",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Anti-Stun",
+    "internal_name": "AntiStun",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Dodger",
+    "internal_name": "Dodger",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Start I",
+    "internal_name": "InitialAp+1A",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Start II",
+    "internal_name": "InitialAp+1B",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Start III",
+    "internal_name": "InitialAp+1C",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Start IV",
+    "internal_name": "InitialAp+1D",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Perilous Parry",
+    "internal_name": "ManOfParry",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Confident",
+    "internal_name": "Confident",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Revive",
+    "internal_name": "ReviveCheer",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Rejuvenating Revive",
+    "internal_name": "ReviveWithRegen",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Powerful Revive",
+    "internal_name": "ReviveWithPower",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Solidifying",
+    "internal_name": "Solidifying",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "The One",
+    "internal_name": "TheOne",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Dead Energy II",
+    "internal_name": "BootyHunter",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Piercing Shot",
+    "internal_name": "PiercingShot",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Death Bomb",
+    "internal_name": "DeathBombPhysical",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Death",
+    "internal_name": "EnergyDeath",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Shielding Death",
+    "internal_name": "ShieldingDeath",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Protecting Death",
+    "internal_name": "ProtectingDeath",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Burn Affinity",
+    "internal_name": "BurnAffinity",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Inverted Affinity",
+    "internal_name": "InvertedAffinity",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Exhaust Affinity",
+    "internal_name": "ExhaustAffinity",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Auto Death",
+    "internal_name": "AutoDeath",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "At Death's Door",
+    "internal_name": "LastStand",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Full Strength",
+    "internal_name": "Stand",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Painted Power",
+    "internal_name": "OverPowered",
+    "progressive": 1
+  },
+  {
+    "type": "Picto",
+    "name": "SOS Shell",
+    "internal_name": "SosShell",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "SOS Power",
+    "internal_name": "SosPower",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "SOS Rush",
+    "internal_name": "SosRush",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Double Burn",
+    "internal_name": "DoubleBurn",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Healing Fire",
+    "internal_name": "HealingFire",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Rewarding Mark",
+    "internal_name": "RewardingMark",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Double Mark",
+    "internal_name": "DoubleMark",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Stun Boost",
+    "internal_name": "StunBoost",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Sniper",
+    "internal_name": "Sniper",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Attack II",
+    "internal_name": "Energy",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Cheater",
+    "internal_name": "Cheater",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Healing Counter",
+    "internal_name": "HealingCounter",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Powerful Shield",
+    "internal_name": "PowerfulShield",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Base Shield",
+    "internal_name": "BaseShield",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "In Media Res",
+    "internal_name": "InMediasRes",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Shield Affinity",
+    "internal_name": "ShieldAffinity",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Critical Moment",
+    "internal_name": "CriticalMoment",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Faster Than Strong",
+    "internal_name": "FasterThanStrong",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Warming Up",
+    "internal_name": "Warming",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Shortcut",
+    "internal_name": "Shortcut",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Random Defense",
+    "internal_name": "RandomDefense",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Glass Cannon",
+    "internal_name": "GlassCanon",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Defensive Mode",
+    "internal_name": "DefensiveMode",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Greater Powerful",
+    "internal_name": "GreaterPowerful",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Greater Rush",
+    "internal_name": "GreaterSpeed",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Greater Shell",
+    "internal_name": "GreaterShell",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Last Stand Critical",
+    "internal_name": "LastStandCritical",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Revive Paradox",
+    "internal_name": "ReviveParadox",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Effective Heal",
+    "internal_name": "EffectiveHeal",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Shared Care",
+    "internal_name": "SharedCare",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Heal",
+    "internal_name": "EnergizingHeal",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Powerful Heal",
+    "internal_name": "PowerfulHeal",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Protecting Heal",
+    "internal_name": "ProtectingHeal",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Accelerating Heal",
+    "internal_name": "AcceleratorHeal",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Confident Fighter",
+    "internal_name": "ConfidentFighter",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Healing Share",
+    "internal_name": "HealingShare",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Weakness Gain",
+    "internal_name": "WeaknessGain",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Dead Energy I",
+    "internal_name": "DeadEnergy",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Effective Support",
+    "internal_name": "EffectivSupport",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energetic Healer",
+    "internal_name": "VersatileHealer",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Beneficial Contamination",
+    "internal_name": "BeneficialContamination",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Roulette",
+    "internal_name": "Roulette",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Painter",
+    "internal_name": "Painter",
+    "progressive": 1
+  },
+  {
+    "type": "Picto",
+    "name": "Immaculate",
+    "internal_name": "Immaculate",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Tainted",
+    "internal_name": "Tainted",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "First Offensive",
+    "internal_name": "FirstOffensive",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Pro Retreat",
+    "internal_name": "ProRetreat",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Enfeebling Mark",
+    "internal_name": "WeakeningMark",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Burning Mark",
+    "internal_name": "BurningMark",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Powerful Mark",
+    "internal_name": "PowerfulMark",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Healing Mark",
+    "internal_name": "HealingMark",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Stay Marked",
+    "internal_name": "StayMarked",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Burning Shots",
+    "internal_name": "FreeAimBurnShot",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Marking Shots",
+    "internal_name": "FreeAimMarkingShot",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Powerful Shots",
+    "internal_name": "FreeAimPowerful",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Protecting Shots",
+    "internal_name": "FreeAimShell",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Accelerating Shots",
+    "internal_name": "FreeAimSpeed",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Shots",
+    "internal_name": "FreeAimEnergy",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Versatile",
+    "internal_name": "Versatile",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Empowering Attack",
+    "internal_name": "PowerfulStrike",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Protecting Attack",
+    "internal_name": "ShellStrike",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Enfeebling Attack",
+    "internal_name": "PowerlessStrike",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Exposing Attack",
+    "internal_name": "DefenslessStrike",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Empowering Parry",
+    "internal_name": "ReinforcementParade",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Accelerating Last Stand",
+    "internal_name": "LastStandSpeed",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Empowering Last Stand",
+    "internal_name": "LastStandPowerful",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Protecting Last Stand",
+    "internal_name": "LastStandShell",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Pain",
+    "internal_name": "PowerOfPain",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Jump",
+    "internal_name": "JumpRecovery",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Powered Attack",
+    "internal_name": "FullEnergyAttack",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Combo Attack II",
+    "internal_name": "ComboAttack2",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Combo Attack III",
+    "internal_name": "ComboAttack3",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Breaker",
+    "internal_name": "Breaker",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Staggering Attack",
+    "internal_name": "SimpleBreaker",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Break",
+    "internal_name": "EnergyBreak",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Quick Break",
+    "internal_name": "BreakMomentum",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Empowering Break",
+    "internal_name": "BreakingStrong",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Stun",
+    "internal_name": "StunEnergy",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Healing Stun",
+    "internal_name": "HealingStun",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Burning Break",
+    "internal_name": "BurningBreak",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Critical Stun",
+    "internal_name": "CriticalBreak",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Breaking Counter",
+    "internal_name": "BreakingCounter",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Gradient Break",
+    "internal_name": "GradientBreak",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Breaking Shots",
+    "internal_name": "BreakShot",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Fueling Break",
+    "internal_name": "GreatFireBreak",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Gradient Fighter",
+    "internal_name": "GradientFighter",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Gradient",
+    "internal_name": "GradientEnergy",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Charging Attack",
+    "internal_name": "GradientStacker",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Gradient Breaker",
+    "internal_name": "GradientBreaker",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Charging Counter",
+    "internal_name": "GradientCounterCharge",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Charging Weakness",
+    "internal_name": "GradientWeakness",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Charging Mark",
+    "internal_name": "GradientMark",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Revive Tint Energy",
+    "internal_name": "ReviveTintEnergy",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Healing Tint Energy",
+    "internal_name": "HealingTintEnergy",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Empowering Tint",
+    "internal_name": "PowerfulTint",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Protecting Tint",
+    "internal_name": "ShellTint",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Shielding Tint",
+    "internal_name": "ShieldingTint",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Accelerating Tint",
+    "internal_name": "SpeedTint",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Cleansing Tint",
+    "internal_name": "CleansingTint",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Charging Tint",
+    "internal_name": "GradientTint",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Time Tint",
+    "internal_name": "TimeTint",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Burn",
+    "internal_name": "APOnBurn",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Breaking Burn",
+    "internal_name": "BreakDamageOnBurn",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Critical Burn",
+    "internal_name": "CritChanceBurn",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Burning Death",
+    "internal_name": "BurningDeath",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Longer Burn",
+    "internal_name": "BurnDurationIncrease",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Critical Break",
+    "internal_name": "BreakDamageOnCrit",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Critical Weakness",
+    "internal_name": "CritChanceOnWeak",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Critical Vulnerability",
+    "internal_name": "CritChanceOnDefenseless",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Empowering Dodge",
+    "internal_name": "PowerDodgeCombo",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Marking Break",
+    "internal_name": "MarkOnBreak",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Slowing Break",
+    "internal_name": "SlowOnBreak",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Exposing Break",
+    "internal_name": "DefenselessOnBreak",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Break Specialist",
+    "internal_name": "BreakSpecialist",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Breaking Death",
+    "internal_name": "BreakingDeath",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Breaking Slow",
+    "internal_name": "BreakDamageOnSlow",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Longer Powerful",
+    "internal_name": "LongerPowerful",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Longer Shell",
+    "internal_name": "LongerShell",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Longer Rush",
+    "internal_name": "LongerRush",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Powerful On Shell",
+    "internal_name": "PowerfulOnShell",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Rush On Powerful",
+    "internal_name": "RushOnPowerful",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Shell On Rush",
+    "internal_name": "ShellOnRush",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Powerful",
+    "internal_name": "APOnPowerful",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Shell",
+    "internal_name": "APOnShell",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Rush",
+    "internal_name": "APOnRush",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Healing Boon",
+    "internal_name": "HealOnBuff",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Greater Powerless",
+    "internal_name": "GreaterPowerless",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Greater Defenceless",
+    "internal_name": "GreaterDefenseless",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Greater Slow",
+    "internal_name": "GreaterSlow",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Energising Cleanse",
+    "internal_name": "AutoDispelEnergy",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Draining Cleanse",
+    "internal_name": "DispelOnAPConsume",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Anti-Blight",
+    "internal_name": "AntiBlight",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Charging Critical",
+    "internal_name": "GradientOnCrit",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Charging Burn",
+    "internal_name": "GradientOnBurn",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Charging Stun",
+    "internal_name": "GradientOnStun",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Charging Alteration",
+    "internal_name": "GradientOnBuff",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Breaking Attack",
+    "internal_name": "BreakingAttack",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Anti-Charm",
+    "internal_name": "AntiCharm",
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "internal_name": "CleasLife",
+    "progressive": 2,
+    "name": "Clea's Life"
+  },
+  {
+    "type": "Weapon",
+    "name": "Noahram",
+    "internal_name": "Noahram",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Maellum",
+    "internal_name": "Maellum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Lunerim",
+    "internal_name": "Lunerim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Scieleson",
+    "internal_name": "Scieleson",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Verleso",
+    "internal_name": "Verleso",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Monocaro",
+    "internal_name": "Monocaro",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Lanceram",
+    "internal_name": "Lanceram",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Nosaram",
+    "internal_name": "Nosaram",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Volesterum",
+    "internal_name": "Volesterum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Gaulteram",
+    "internal_name": "Gaulteram",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Elerim",
+    "internal_name": "Elerim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Medalum",
+    "internal_name": "Medalum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Potierim",
+    "internal_name": "Potierim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Brulerum",
+    "internal_name": "Brulerum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Jarum",
+    "internal_name": "Jarum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Chevalam",
+    "internal_name": "Chevalam",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Delaram",
+    "internal_name": "Delaram",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Saperim",
+    "internal_name": "Saperim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Seashelum",
+    "internal_name": "Seashelum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Scaverim",
+    "internal_name": "Scaverim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Glaisum",
+    "internal_name": "Glaisum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Cruleram",
+    "internal_name": "Cruleram",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Minason",
+    "internal_name": "Minason",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Seeram",
+    "internal_name": "Seeram",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Deminerim",
+    "internal_name": "Deminerim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Lusteson",
+    "internal_name": "Lusteson",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Abysseram",
+    "internal_name": "Abysseram",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Gobluson",
+    "internal_name": "Gobluson",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Sakaram",
+    "internal_name": "Sakaram",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Coralim",
+    "internal_name": "Coralim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Algueron",
+    "internal_name": "Algueron",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Gesam",
+    "internal_name": "Gesam",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Redalim",
+    "internal_name": "Redalim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Sekarum",
+    "internal_name": "Sekarum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Bourgelon",
+    "internal_name": "Bourgelon",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Blodam",
+    "internal_name": "Blodam",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Corderon",
+    "internal_name": "Corderon",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Cultam",
+    "internal_name": "Cultam",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Demonam",
+    "internal_name": "Demonam",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Trebuchim",
+    "internal_name": "Trebuchim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Rangeson",
+    "internal_name": "Rangeson",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Betelim",
+    "internal_name": "Betelim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Veremum",
+    "internal_name": "Veremum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Hevason",
+    "internal_name": "Hevason",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Painerim",
+    "internal_name": "Painerim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Yeverum",
+    "internal_name": "Yeverum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Direton",
+    "internal_name": "Direton",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Melarum",
+    "internal_name": "Melarum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Lighterim",
+    "internal_name": "Lighterim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "internal_name": "Duenum",
+    "progressive": 2,
+    "name": "Duenum"
+  },
+  {
+    "type": "Weapon",
+    "name": "Chation",
+    "internal_name": "Chation",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Barrier Breaker",
+    "internal_name": "Chainebum",
+    "progressive": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Chalium",
+    "internal_name": "Troubadum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Ramasson",
+    "internal_name": "Ramasson",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Dualiso",
+    "internal_name": "Chaliso",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Benisim",
+    "internal_name": "Benisim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Battlum",
+    "internal_name": "Battlum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Charnon",
+    "internal_name": "Charnon",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Corpeso",
+    "internal_name": "Corpeso",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Troubadim",
+    "internal_name": "Dualim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Stalum",
+    "internal_name": "Stalum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Moisson",
+    "internal_name": "Contorson",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Danseso",
+    "internal_name": "Danseso",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Braselim",
+    "internal_name": "Braselim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Coldum",
+    "internal_name": "Coldum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Glaceso",
+    "internal_name": "Glaceso",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Snowim",
+    "internal_name": "Snowim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Sadon",
+    "internal_name": "Sadon",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Clierum",
+    "internal_name": "Clierum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Garganon",
+    "internal_name": "Garganon",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Contorso",
+    "internal_name": "Moissoso",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Angerim",
+    "internal_name": "Angerim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Blizzon",
+    "internal_name": "Blizzon",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Confuso",
+    "internal_name": "Confuso",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Facesum",
+    "internal_name": "Facesum",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Chapelim",
+    "internal_name": "Chapelim",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Sireso",
+    "internal_name": "Sireso_1",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Tisseron",
+    "internal_name": "Sirenon_1",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Tissenum",
+    "internal_name": "Sirenum_1",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Dreameso",
+    "internal_name": "Sireso_2",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Choralim",
+    "internal_name": "Sirenim_1",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Chantenum",
+    "internal_name": "Sirenum_2",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Colim",
+    "internal_name": "Sirenim_2",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Martenon",
+    "internal_name": "Sirenon_2",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Tireso",
+    "internal_name": "Reacheso_1",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Lithum",
+    "internal_name": "Reachum_1",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Kralim",
+    "internal_name": "Reacherim_1",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Guleson",
+    "internal_name": "Reacheron_1",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Liteso",
+    "internal_name": "Reacheso_2",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Litheson",
+    "internal_name": "Reacheron_2",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Plenum",
+    "internal_name": "Reachum_2",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Lithelim",
+    "internal_name": "Reacherim_2",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Grandaro",
+    "internal_name": "Grandaro",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Chromaro",
+    "internal_name": "Chromaro",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Boucharo",
+    "internal_name": "Boucharo",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Joyaro",
+    "internal_name": "Joyaro",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Ballaro",
+    "internal_name": "Sirenaro_1",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Urnaro",
+    "internal_name": "Sirenaro_2",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Nusaro",
+    "internal_name": "Reacharo_1",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Fragaro",
+    "internal_name": "Reacharo_2",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Brumaro",
+    "internal_name": "Brumaro",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Sidaro",
+    "internal_name": "Sidaro",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Simoso",
+    "internal_name": "Simoso",
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Baguette (Gustave)",
+    "progressive": 2,
+    "internal_name": "DebugVerso"
+  },
+  {
+    "type": "Weapon",
+    "name": "Baguette (Lune)",
+    "progressive": 2,
+    "internal_name": "DebugLune"
+  },
+  {
+    "type": "Weapon",
+    "name": "Baguette (Maelle)",
+    "progressive": 2,
+    "internal_name": "DebugMaelle"
+  },
+  {
+    "type": "Weapon",
+    "name": "Baguette (Monoco)",
+    "progressive": 2,
+    "internal_name": "DebugMonoco"
+  },
+  {
+    "type": "Weapon",
+    "name": "Baguette (Sciel)",
+    "progressive": 2,
+    "internal_name": "DebugSciel"
+  }
 ]
