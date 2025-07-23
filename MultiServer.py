@@ -1235,6 +1235,7 @@ class CommandMeta(type):
             commands.update(base.commands)
         commands.update({command_name[5:]: method for command_name, method in attrs.items() if
                          command_name.startswith("_cmd_")})
+        attrs["aliases"] = {}
         return super(CommandMeta, cls).__new__(cls, name, bases, attrs)
 
 
@@ -1249,6 +1250,7 @@ def mark_raw(function: typing.Callable[[typing.Any], _Return]) -> typing.Callabl
 
 class CommandProcessor(metaclass=CommandMeta):
     commands: typing.Dict[str, typing.Callable]
+    aliases: typing.Dict[str, str]
     client = None
     marker = "/"
 
@@ -1265,7 +1267,11 @@ class CommandProcessor(metaclass=CommandMeta):
                 command = raw.split()
             basecommand = command[0]
             if basecommand[0] == self.marker:
-                method = self.commands.get(basecommand[1:].lower(), None)
+                method_name = basecommand[1:].lower()
+                if method_name in self.aliases:
+                    method_name = self.aliases[method_name]
+
+                method = self.commands.get(method_name, None)
                 if not method:
                     self._error_unknown_command(basecommand[1:])
                 else:
@@ -1356,6 +1362,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def __init__(self, ctx: Context, client: Client):
         self.ctx = ctx
         self.client = client
+        self.aliases.update({
+            "yeet": "release",
+            "yoink": "collect",
+        })
 
     def __call__(self, raw: str) -> typing.Optional[bool]:
         if not raw.startswith("!admin"):
@@ -2130,6 +2140,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def __init__(self, ctx: Context):
         self.ctx = ctx
         super(ServerCommandProcessor, self).__init__()
+        self.aliases |= {
+            "yeet": "release",
+            "yoink": "collect",
+        }
 
     def output(self, text: str):
         if self.client:
