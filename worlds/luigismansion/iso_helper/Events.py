@@ -352,7 +352,7 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
 
         csv_lines = csv_lines.replace("{BreakHere}", "\n")
         lines = lines.replace("{HintType}", case_type)
-        if event_no in [4, 17, 32, 63]:
+        if event_no in (4, 17, 32, 63):
             lines = lines.replace("{LUIGIMAXHP}", maxhp)
 
         if event_no == 4:
