@@ -1,6 +1,6 @@
 import unittest
-from worlds.luigismansion.lm.Wallet.Wallet import Wallet, _RANK_REQ_AMTS
-from worlds.luigismansion.lm.Wallet.Currency import *
+from worlds.luigismansion.client.Wallet import Wallet, _RANK_REQ_AMTS
+from worlds.luigismansion.game.Currency import *
 
 class _MockCurrency(Currency):
     """
@@ -13,6 +13,9 @@ class _MockCurrency(Currency):
     
     def get(self):
         return self.current_amount
+
+    def add(self, amount: int):
+        self.current_amount += amount
 
 class TEST_DATA:
     def get_test_currencies() -> dict[str, _MockCurrency]:
@@ -270,7 +273,20 @@ class TestWalletWorth(unittest.TestCase):
         wallet.check_rank_requirement()
 
         actual_result = wallet.check_rank_requirement()
-        self.assertFalse(actual_result)                
+        self.assertFalse(actual_result)
+    
+    def test_add_currencies(self):
+        """Verifies that multiple currency types can be added to luigi's wallet."""
+        test_currencies: dict[str, _MockCurrency] = TEST_DATA.get_test_currencies()
+        wallet = Wallet(test_currencies)
+
+        wallet.add_to_wallet({
+            CURRENCY_NAME.COINS: 10,
+            CURRENCY_NAME.BILLS: 15,
+        })
+
+        self.assertEqual(test_currencies[CURRENCY_NAME.COINS].get(), 10)
+        self.assertEqual(test_currencies[CURRENCY_NAME.BILLS].get(), 15)
 
 class TestWallet(unittest.TestCase):
     def test_get_rank_requirement(self):

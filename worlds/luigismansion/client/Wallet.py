@@ -1,4 +1,4 @@
-from .Currency import Currency, CURRENCIES
+from ..game.Currency import Currency, CURRENCIES
 
 # Rank Requirements for each rank. H, G, F, E, D, C, B, A
 _RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000, 50000000, 60000000, 70000000, 100000000]
@@ -21,29 +21,15 @@ class Wallet:
         for currency in self._currencies.values():
             total_worth += currency.calculate_worth()
         return total_worth
-    
-    # TODO: determine method for adding currency to the wallet equally. 
-    def add_to_wallet(self, amount: int):
+
+    def add_to_wallet(self, currencies: dict[str, int]):
         """
-        Adds currency to Luigi's wallet, the type of currency added is based upon the amount sent starting with the lowest currency type.
+        Adds currencies to Luigi's wallet.
         
-        :param amount: The amount to be added to the wallet.
+        :param currencies: Collection of key value pairs, where the key is the name of the currency and the value is the amount to be added.
         """
-        temp_amount = amount
-        amounts_added: dict[str, int]
-        for currency in self._currencies.values():
-            temp_amount_worth = temp_amount * self._currencies[0].calc_value
-            if temp_amount_worth <= currency.calc_value:
-                continue
-
-            quotient, remainder = divmod(temp_amount_worth, currency.calc_value)
-            temp_amount -= quotient
-            amounts_added.update(currency.name, quotient)
-
-            if temp_amount == 0:
-                break
-
-        return amounts_added
+        for key, value in currencies.items():
+            self._currencies[key].add(value)
     
     def check_rank_requirement(self) -> bool:
         """

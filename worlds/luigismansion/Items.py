@@ -3,7 +3,10 @@ from typing import NamedTuple, Dict, Set, Optional
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
 from .Helper_Functions import LMRamData
+from .game.Currency import CURRENCY_NAME
 
+class ItemType:
+    MONEY = "Money"
 
 class LMItemData(NamedTuple):
     type: str
@@ -11,6 +14,10 @@ class LMItemData(NamedTuple):
     classification: IC
     doorid: Optional[int] = None
     update_ram_addr: Optional[list[LMRamData]] = None
+
+class CurrencyItemData(LMItemData):
+    def __new__(self, code, type=ItemType.MONEY, classification=IC.filler, update_ram_addr = []):
+        return super().__new__(self, type=type, code=code, classification=classification, update_ram_addr=update_ram_addr)
 
 
 class LMItem(Item):
@@ -224,36 +231,23 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
 }
 
 other_filler_items: Dict[str, LMItemData] = {
-    "20 Coins & Bills": LMItemData("Money", 119, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=20),
-                         LMRamData(0x803D8B7C, pointer_offset=0x328, ram_byte_size=4, item_count=20)]),
-    "Sapphire": LMItemData("Money", 121, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x330, ram_byte_size=4, item_count=1)]),
-    "Emerald": LMItemData("Money", 122, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x334, ram_byte_size=4, item_count=1)]),
-    "Ruby": LMItemData("Money", 123, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x338, ram_byte_size=4, item_count=1)]),
-    "Diamond": LMItemData("Money", 124, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x33C, ram_byte_size=4, item_count=1)]),
-    "Dust": LMItemData("Dust", 127, IC.filler),
+    "20 Coins & Bills": CurrencyItemData(119),
+    "Sapphire": CurrencyItemData(121),
+    "Emerald": CurrencyItemData(122),
+    "Ruby": CurrencyItemData(123),
+    "Diamond": CurrencyItemData(124),
+    "Dust": LMItemData("Dust", 127, IC.filler, update_ram_addr=[]),
     "Small Heart": LMItemData("Heart", 128, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B40, pointer_offset=0xB8, ram_byte_size=2, item_count=20)]),
     "Large Heart": LMItemData("Heart", 129, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B40, pointer_offset=0xB8, ram_byte_size=2, item_count=50)]),
-    "10 Coins": LMItemData("Money", 133, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=10)]),
-    "20 Coins": LMItemData("Money", 134, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=20)]),
-    "30 Coins": LMItemData("Money", 135, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=30)]),
-    "15 Bills": LMItemData("Money", 136, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x328, ram_byte_size=4, item_count=15)]),
-    "25 Bills": LMItemData("Money", 137, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x328, ram_byte_size=4, item_count=25)]),
-    "1 Gold Bar": LMItemData("Money", 138, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4, item_count=1)]),
-    "2 Gold Bars": LMItemData("Money", 139, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4, item_count=2)]),
+    "10 Coins": CurrencyItemData(133),
+    "20 Coins": CurrencyItemData(134),
+    "30 Coins": CurrencyItemData(135),
+    "15 Bills": CurrencyItemData(136),
+    "25 Bills": CurrencyItemData(137),
+    "1 Gold Bar": CurrencyItemData(138),
+    "2 Gold Bars": CurrencyItemData(139),
 }
 
 trap_filler_items: Dict[str, LMItemData] = {
@@ -308,3 +302,75 @@ POSSESION_EQUIV = ["Poison Trap", "Possession Trap", "Laughter Trap", "My Turn! 
 
 trap_id_list = [8125, 8126, 8130, 8131, 8132, 8141, 8142]
 ACCEPTED_TRAPS = ICE_TRAP_EQUIV+BOMB_EQUIV+BANANA_TRAP_EQUIV+GHOST_EQUIV+POISON_MUSH_EQUIV+BONK_EQUIV+POSSESION_EQUIV
+
+class CurrencyReceiver:
+    from .client.Wallet import Wallet
+    def __init__(self, wallet: Wallet):
+        self.wallet = wallet
+
+    def send_to_wallet(self, received_id: int):
+        currency_to_send: dict[str, int]
+        if received_id == 119:
+            currency_to_send = { 
+                CURRENCY_NAME.BILLS: 20,
+                CURRENCY_NAME.COINS: 20,
+            }
+
+        elif received_id == 121:
+            currency_to_send = {
+                CURRENCY_NAME.SAPPHIRE: 1,
+            }
+        
+        elif received_id == 122:
+            currency_to_send = {
+                CURRENCY_NAME.EMERALD: 1,
+            }
+        
+        elif received_id == 123:
+            currency_to_send = {
+                CURRENCY_NAME.RUBY: 1,
+            }
+        
+        elif received_id == 124:
+            currency_to_send = {
+                CURRENCY_NAME.DIAMOND: 1,
+            }
+        
+        elif received_id == 133:
+            currency_to_send = {
+                CURRENCY_NAME.COINS: 10,
+            }
+        
+        elif received_id == 134:
+            currency_to_send = {
+                CURRENCY_NAME.COINS: 20,
+            }
+        
+        elif received_id == 135:
+            currency_to_send = {
+                CURRENCY_NAME.COINS: 30,
+            }
+        
+        elif received_id == 136:
+            currency_to_send = {
+                CURRENCY_NAME.BILLS: 15,
+            }
+        
+        elif received_id == 137:
+            currency_to_send = {
+                CURRENCY_NAME.BILLS: 25,
+            }
+        
+        elif received_id == 138:
+            currency_to_send = {
+                CURRENCY_NAME.GOLD_BARS: 1,
+            }
+        
+        elif received_id == 139:
+            currency_to_send = {
+                CURRENCY_NAME.GOLD_BARS: 2,
+            }
+        else:
+            return
+        
+        self.wallet.add_to_wallet(currency_to_send)

@@ -9,7 +9,7 @@ from .iso_helper.lm_rom import LMUSAAPPatch
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Helper_Functions import StringByteFunction as sbf
-from .lm.Wallet.Wallet import Wallet
+from .client.Wallet import Wallet
 
 CLIENT_VERSION = "V0.4.11"
 
@@ -157,7 +157,6 @@ class LMContext(CommonContext):
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
     items_handling = 0b111
-    boo_count: "Label" = None
 
     def __init__(self, server_address, password):
         """
@@ -325,6 +324,22 @@ class LMContext(CommonContext):
         # AP version is added behind this automatically
         ui.base_title += " | Archipelago"
         return ui
+    
+    async def get_wallet_value(self):
+        if not self.check_ingame():
+            return
+    
+        # KivyMD support, also keeps support with regular Kivy (hopefully)
+        try:
+            from kvui import MDLabel as Label
+        except ImportError:
+            from kvui import Label
+
+        if not hasattr(self, "wallet_ui") or not self.wallet_ui:
+            self.wallet_ui = Label(text=f"", width=240, halign="left")
+            self.ui.connect_layout.add_widget(self.wallet_ui)
+
+        self.wallet_ui.text = f"Wallet:{self.wallet.get_wallet_worth()}/{self.wallet.get_rank_requirement()}"
 
     async def update_boo_count_label(self):
         if not self.check_ingame():
@@ -336,7 +351,7 @@ class LMContext(CommonContext):
         except ImportError:
             from kvui import Label
 
-        if not self.boo_count:
+        if not hasattr(self, "boo_count") or not self.boo_count:
             self.boo_count = Label(text=f"", size_hint_x=None, width=120, halign="center")
             self.ui.connect_layout.add_widget(self.boo_count)
 
@@ -623,6 +638,7 @@ async def dolphin_sync_task(ctx: LMContext):
                     # Update boo count in LMClient
                     if ctx.ui:
                         await ctx.update_boo_count_label()
+                        await ctx.get_wallet_value()
                     if "DeathLink" in ctx.tags:
                         await ctx.check_death()
                     if "TrapLink" in ctx.tags:
@@ -727,6 +743,9 @@ async def give_player_items(ctx: LMContext):
 
             if "TrapLink" in ctx.tags and item.item in trap_id_list:
                 await ctx.send_trap_link(lm_item_name)
+            if lm_item.type == ItemType.MONEY:
+                currency_receiver = CurrencyReceiver(ctx.wallet)
+                currency_receiver.send_to_wallet(lm_item.code)
 
             # Filter for only items where we have not received yet. If same slot, only receive locations from pre-set
             # list of locations, otherwise accept other slots. Additionally accept only items from a pre-approved list.
