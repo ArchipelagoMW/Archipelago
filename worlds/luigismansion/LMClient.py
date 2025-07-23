@@ -293,7 +293,7 @@ class LMContext(CommonContext):
             self.spawn = str(args["slot_data"]["spawn_region"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
-            if "trap_link" in args["slot_data"] and "TrapLink" not in self.tags:
+            if args["slot_data"]["trap_link"] == 1 and "TrapLink" not in self.tags:
                 self.tags.add("TrapLink")
 
         if cmd == "Bounced":
