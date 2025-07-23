@@ -771,7 +771,7 @@ class MegaMan3Client(BizHawkClient):
 
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
-            location = ctx.location_names[new_check_id]
+            location = ctx.location_names.lookup_in_game(new_check_id)
             nes_logger.info(
                 f'New Check: {location} ({len(ctx.locations_checked)}/'
                 f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
