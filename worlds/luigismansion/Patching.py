@@ -23,7 +23,7 @@ def __get_item_name(item_data, slot: int):
     if item_data["door_id"] != 0:
         return "key_" + str(item_data["door_id"])
     elif "Bills" in item_data["name"] or "Coins" in item_data["name"] or "Gold Bar" in item_data["name"]:
-        if item_data["type"] in ["Freestanding", "Chest", "BSpeedy", "Mouse"]:
+        if item_data["type"] in ("Freestanding", "Chest", "BSpeedy", "Mouse"):
             return "nothing" # Do not spawn the money physically let it be handled remotely
         return "money"
 
@@ -51,15 +51,15 @@ def __get_item_name(item_data, slot: int):
                 return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "rdiamond"
         case "Sapphire":
-            if item_data["type"] in ["Freestanding", "Chest", "BSpeedy", "Mouse"]:
+            if item_data["type"] in ("Freestanding", "Chest", "BSpeedy", "Mouse"):
                 return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "sapphire"
         case "Emerald":
-            if item_data["type"] in ["Freestanding", "Chest", "BSpeedy", "Mouse"]:
+            if item_data["type"] in ("Freestanding", "Chest", "BSpeedy", "Mouse"):
                 return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "emerald"
         case "Ruby":
-            if item_data["type"] in ["Freestanding", "Chest", "BSpeedy", "Mouse"]:
+            if item_data["type"] in ("Freestanding", "Chest", "BSpeedy", "Mouse"):
                 return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "ruby"
         case "Diamond":
@@ -262,7 +262,7 @@ def update_character_info(character_info, output_data):
             x["pos_y"] = 600.000000
 
         # Allow Chauncey, Lydia, and the Twins to spawn as soon as a new game is created.
-        if x["name"] in ["baby", "mother", "dboy", "dboy2"]:
+        if x["name"] in ("baby", "mother", "dboy", "dboy2"):
             x["appear_flag"] = 0
 
         # Fix a Nintendo mistake where the Cellar chest has a room ID of 0 instead of 63.
@@ -1201,9 +1201,9 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         item_appear_entry_idx = filtered_item_appear[len(filtered_item_appear) - 1]
 
         # Adjust move types for WDYM furniture items. Trees require water, obviously
-        if item_data["loc_enum"] in [184, 185, 138, 139, 140, 141]:
+        if item_data["loc_enum"] in (184, 185, 138, 139, 140, 141):
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["move"] = 34
-        if item_data["loc_enum"] in [9, 23, 314, 538, 539, 628, 629, 683]:
+        if item_data["loc_enum"] in (9, 23, 314, 538, 539, 628, 629, 683):
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["move"] = 0
 
         furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
