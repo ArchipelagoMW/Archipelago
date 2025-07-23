@@ -402,7 +402,7 @@ class LMContext(CommonContext):
             return False
 
         # These are the only valid maps we want Luigi to have checks with or do health detection with.
-        if curr_map_id in [2, 3, 6, 9, 10, 11, 13]:
+        if curr_map_id in (2, 3, 6, 9, 10, 11, 13):
             if not time.time() > (self.last_not_ingame + (CHECKS_WAIT*LONGER_MODIFIER)):
                 return False
 
@@ -771,6 +771,11 @@ async def give_player_items(ctx: LMContext):
                     flower_count: int = len([netItem for netItem in ctx.items_received if netItem.item == 8140])
                     curr_val = min(flower_count + 234, 237)
                     ram_offset = None
+                elif item.item == 8064:
+                    curr_val = int.from_bytes(dme.read_bytes(0x803D339B, byte_size))
+                    curr_val = (curr_val | (1 << 6))
+                    await write_bytes_and_validate(0x803D339B, ram_offset,
+                                                   curr_val.to_bytes(byte_size, 'big'))
                 elif not addr_to_update.item_count is None:
                     if not ram_offset is None:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
@@ -794,13 +799,9 @@ async def give_player_items(ctx: LMContext):
                         else:
                             curr_val += 1
                 #await wait_for_next_loop(10)
-                if item.item == 8064:
-                    curr_val = 1
-                    await write_bytes_and_validate(0x803D339B, None,
-                                                   curr_val.to_bytes(1, 'big'))
-                else:
-                    await write_bytes_and_validate(addr_to_update.ram_addr, ram_offset,
-                        curr_val.to_bytes(byte_size, 'big'))
+
+                await write_bytes_and_validate(addr_to_update.ram_addr, ram_offset,
+                    curr_val.to_bytes(byte_size, 'big'))
 
             # Update the last received index to ensure we don't receive the same item over and over.
             last_recv_idx += 1
