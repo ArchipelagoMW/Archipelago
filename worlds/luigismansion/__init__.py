@@ -538,7 +538,7 @@ class LMWorld(World):
             self.options.balcony_boo_count.value = 31
 
         if self.origin_region_name in ("Telephone Room", "Clockwork Room"):
-            if self.options.balcony_boo_count.value > 4 and () and self.options.boosanity.value == 0:
+            if self.options.balcony_boo_count.value > 4 and self.options.boosanity.value == 0:
                 self.options.balcony_boo_count.value = 4
 
         if self.options.boo_gates.value == 0:
@@ -549,8 +549,6 @@ class LMWorld(World):
     def create_regions(self):
         # Add all randomizable regions
         for region_name in REGION_LIST.values():
-            if region_name in self.multiworld.regions.region_cache[self.player]:
-                continue
             self.multiworld.regions.append(Region(region_name, self.player, self.multiworld))
 
         # Assign each location to their region
