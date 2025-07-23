@@ -229,4 +229,18 @@ class TestBase(unittest.TestCase):
                     # Check that all locations reachable before this item was collected are still reachable.
                     # Also checks that removing the item has not made additional locations reachable.
                     reachable_so_far.difference_update(only_reachable_because_of_this_item)
-                    self.assertSetEqual(reachable_so_far, reachable_locations)
+                    if reachable_so_far != reachable_locations:
+                        should_have_been_reachable = reachable_so_far - reachable_locations
+                        if len(should_have_been_reachable) > 0:
+                            self.fail(f"Removing '{item}' resulted in locations becoming unreachable that were"
+                                      f" reachable before '{item}' was collected. Locations that should have been"
+                                      f" reachable: {should_have_been_reachable}."
+                                      f"\nPreviously removed items in order of removal: {items[-1:i:-1]}"
+                                      f"\nPreviously collected items in order of collection: {items[0:i]}")
+                        unexpectedly_reachable = reachable_locations - reachable_so_far
+                        if len(unexpectedly_reachable) > 0:
+                            self.fail(f"Removing '{item}' resulted in locations becoming reachable that were"
+                                      f" unreachable before '{item}' was collected. Locations that should have been"
+                                      f" unreachable: {unexpectedly_reachable}."
+                                      f"\nPreviously removed items in order of removal: {items[-1:i:-1]}"
+                                      f"\nPreviously collected items in order of collection: {items[0:i]}")
