@@ -180,16 +180,23 @@ class TestBase(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             multiworld = setup_solo_multiworld(world_type)
             with self.subTest(game=game_name, seed=multiworld.seed):
-                # Get all the non-event advancement items in the multiworld.
-                non_event_items = [item for item in multiworld.get_items() if item.advancement and not item.is_event]
+                # Get all advancements in the multiworld and split them into event and non-event.
+                # Event advancements need to be kept as locations so that they can be collected in a natural order
+                # because a world might expect some of them to always be collected in a specific order and base logic
+                # around this order.
+                non_event_advancements = []
+                event_locations = []
+                for loc in multiworld.get_locations():
+                    if not loc.advancement:
+                        continue
+                    if loc.item.is_event:
+                        event_locations.append(loc)
+                    else:
+                        non_event_advancements.append(loc.item)
+
                 # Shuffle the items into a deterministically random order because otherwise, the order of all items
                 # should always be the same, limiting what can be tested.
-                multiworld.random.shuffle(non_event_items)
-
-                # Find all advancement event locations. The world might expect some events to always be collected in a
-                # specific order.
-                event_locations = [loc for loc in multiworld.get_locations()
-                                   if loc.item and loc.item.is_event and loc.advancement]
+                multiworld.random.shuffle(non_event_advancements)
                 # Deterministically randomly shuffle, otherwise the locations are expected to always be in the same
                 # order, limiting what can be tested.
                 multiworld.random.shuffle(event_locations)
@@ -238,9 +245,9 @@ class TestBase(unittest.TestCase):
                             changed = len(reachable_events) > 0
                             event_locations = next_event_locations
 
-                while non_event_items:
+                while non_event_advancements:
                     collect_reachable_events()
-                    non_event = non_event_items.pop()
+                    non_event = non_event_advancements.pop()
                     collect_and_check(non_event)
 
                 # Collect any remaining reachable events now that all non-events have been collected.
