@@ -146,6 +146,9 @@ class FishingLogic(BaseLogic):
     def has_specific_bait(self, fish: FishItem) -> StardewRule:
         return self.can_catch_fish(fish) & self.logic.has(Machine.bait_maker)
 
+    def can_use_specific_bait(self, fish_name: str) -> StardewRule:
+        return self.has_specific_bait(self.content.fishes[fish_name]) & self.logic.tool.has_fishing_rod(FishingRod.fiberglass)
+
     @cached_property
     def can_crab_pot_anywhere(self) -> StardewRule:
         return self.logic.fishing.can_crab_pot & self.can_reach_any_fishing_regions

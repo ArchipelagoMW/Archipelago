@@ -414,14 +414,14 @@ def set_festival_entrance_rules(logic, rule_collector: StardewRuleCollector):
     rule_collector.set_entrance_rule(LogicEntrance.attend_flower_dance, logic.season.has(Season.spring))
 
     rule_collector.set_entrance_rule(LogicEntrance.attend_luau, logic.season.has(Season.summer))
-    rule_collector.set_entrance_rule(LogicEntrance.attend_trout_derby, logic.season.has(Season.summer))
+    rule_collector.set_entrance_rule(LogicEntrance.attend_trout_derby, logic.season.has(Season.summer) & logic.fishing.can_use_specific_bait(Fish.rainbow_trout))
     rule_collector.set_entrance_rule(LogicEntrance.attend_moonlight_jellies, logic.season.has(Season.summer))
 
     rule_collector.set_entrance_rule(LogicEntrance.attend_fair, logic.season.has(Season.fall))
     rule_collector.set_entrance_rule(LogicEntrance.attend_spirit_eve, logic.season.has(Season.fall))
 
     rule_collector.set_entrance_rule(LogicEntrance.attend_festival_of_ice, logic.season.has(Season.winter))
-    rule_collector.set_entrance_rule(LogicEntrance.attend_squidfest, logic.season.has(Season.winter))
+    rule_collector.set_entrance_rule(LogicEntrance.attend_squidfest, logic.season.has(Season.winter) & logic.fishing.can_use_specific_bait(Fish.squid))
     rule_collector.set_entrance_rule(LogicEntrance.attend_night_market, logic.season.has(Season.winter))
     rule_collector.set_entrance_rule(LogicEntrance.attend_winter_star, logic.season.has(Season.winter))
 
