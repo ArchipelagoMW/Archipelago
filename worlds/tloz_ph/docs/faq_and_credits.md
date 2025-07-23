@@ -78,3 +78,6 @@ Since most locked doors in TotOK re-lock themselves each time you enter, TotOK h
 * When you reach the midway room with the yellow warp, it saves the number of keys you still have. When you take the yellow warp you should start with however many keys you saved.
 * Logic can expect you to restart from the beginning to use your keys differently.
 * The grappling hook can be used to skip a key on B3. This is in logic.
+
+### My sword disappeared
+This is an annoyng bug that i can't seem to track down, I'm adding a symptomatic fix in the next update until i figure out what causes it. if you want a bad backup to get your sword back, open the memory editor in bizhawk, find address `0x1BA644` in `Main RAM` and use the poke tool to add `1` to it, then save and quit.
