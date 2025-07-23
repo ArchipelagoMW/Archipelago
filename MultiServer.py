@@ -1361,10 +1361,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def __init__(self, ctx: Context, client: Client):
         self.ctx = ctx
         self.client = client
-        self.aliases.update({
+        self.aliases |= {
             "yeet": "release",
             "yoink": "collect",
-        })
+        }
 
     def __call__(self, raw: str) -> typing.Optional[bool]:
         if not raw.startswith("!admin"):
