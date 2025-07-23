@@ -175,6 +175,7 @@ class LMWorld(World):
         self.hints: dict[str, dict[str, str]] = {}
         self.spawn_full_locked: bool = False
 
+    @staticmethod
     def interpret_slot_data(self, slot_data):
         # There are more clever ways to do this, but all would require much larger changes
         return slot_data  # Tell UT that we have logic to fix
@@ -345,7 +346,7 @@ class LMWorld(World):
             for location, data in LIGHT_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
-                if entry.code not in [771, 775, 776]:
+                if entry.code not in (771, 775, 776):
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if entry.code == 741 and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
@@ -355,9 +356,9 @@ class LMWorld(World):
                              "and")
                 elif entry.code == 772:
                     add_rule(entry, lambda state: state.can_reach_location("Nursery Clear Chest", self.player))
-                elif entry.code in [773]:
+                elif entry.code in (773):
                     add_rule(entry, lambda state: state.can_reach_location("Graveyard Clear Chest", self.player))
-                elif entry.code in [778, 782, 784, 789, 790, 851]:
+                elif entry.code in (778, 782, 784, 789, 790, 851):
                     add_rule(entry, lambda state: state.can_reach_location("Balcony Clear Chest", self.player))
                 elif entry.code == 757 and self.options.enemizer.value != 2:
                     add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
@@ -486,9 +487,7 @@ class LMWorld(World):
             self.options.door_rando.value = 3
 
         if self.options.vacuum_start.value:
-            self.options.start_inventory.value["Progressive Vacuum"] = (
-                    self.options.start_inventory.value.get("Progressive Vacuum", 0) + 1
-            )
+            self.multiworld.push_precollected(self.create_item("Progressive Vacuum"))
 
         if self.using_ut:
             # We know we're in second gen
@@ -530,19 +529,15 @@ class LMWorld(World):
 
         # If player wants to start with boo radar or good vacuum
         if self.options.boo_radar == 0:
-            self.options.start_inventory.value["Boo Radar"] = (
-                    self.options.start_inventory.value.get("Boo Radar", 0) + 1
-            )
+            self.multiworld.push_precollected(self.create_item("Boo Radar"))
 
         if self.options.good_vacuum == 0:
-            self.options.start_inventory.value["Progressive Vacuum"] = (
-                    self.options.start_inventory.value.get("Progressive Vacuum", 0) + 1
-            )
+            self.multiworld.push_precollected(self.create_item("Progressive Vacuum"))
 
         if self.options.boosanity.value == 0 and self.options.balcony_boo_count.value > 31:
             self.options.balcony_boo_count.value = 31
 
-        if self.origin_region_name in ["Telephone Room", "Clockwork Room"]:
+        if self.origin_region_name in ("Telephone Room", "Clockwork Room"):
             if self.options.balcony_boo_count.value > 4 and () and self.options.boosanity.value == 0:
                 self.options.balcony_boo_count.value = 4
 
@@ -560,7 +555,7 @@ class LMWorld(World):
 
         # Assign each location to their region
         for location, data in BASE_LOCATION_TABLE.items():
-            if data.code in [708, 853, 925, 926, 927]:
+            if data.code in (708, 853, 925, 926, 927):
                 region = self.get_region(self.origin_region_name)
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
@@ -600,7 +595,7 @@ class LMWorld(World):
     def create_item(self, item: str) -> LMItem:
         set_non_progress = False
 
-        if item in ALL_ITEMS_TABLE:
+        if item in ALL_ITEMS_TABLE.keys():
             return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
         raise Exception(f"Invalid item name: {item}")
 
