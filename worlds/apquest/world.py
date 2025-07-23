@@ -13,8 +13,9 @@ from .web_world import APQuestWebWorld
 # The world class is the heart and soul of an apworld implementation.
 # It holds all the data and functions required to build the world and submit it to the multiworld generator.
 # You could have all your world code in just this one class, but for readability and better structure,
-# this implementation choses to split up the world functionality over a few different files, each covering one topic.
-# These files are: regions.py, locations.py, rules.py, items.py, options.py and web_world.py.
+# it is common to split up world functionality into multiple files.
+# This implementation in particular has the following additional files, each covering one topic:
+# regions.py, locations.py, rules.py, items.py, options.py and web_world.py.
 # It is recommended that you read these in that specific order, then come back to the world class.
 class APQuestWorld(World):
     game = "APQuest"
