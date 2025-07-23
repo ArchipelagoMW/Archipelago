@@ -1,5 +1,6 @@
 import unittest
 from argparse import Namespace
+from collections import Counter
 from typing import Type
 
 from BaseClasses import CollectionState, MultiWorld, Item
@@ -186,13 +187,35 @@ class TestBase(unittest.TestCase):
                 # around this order.
                 non_event_advancements = []
                 event_locations = []
+                duplicated_items: Counter[str] = Counter()
+                world = multiworld.worlds[1]
                 for loc in multiworld.get_locations():
                     if not loc.advancement:
                         continue
-                    if loc.item.is_event:
+                    item = loc.item
+                    if item.is_event:
                         event_locations.append(loc)
                     else:
-                        non_event_advancements.append(loc.item)
+                        non_event_advancements.append(item)
+
+                        # Create duplicates of each non-event item, to simulate players adding additional items to the
+                        # multiworld through starting inventory, item plando, item link replacement items or any other
+                        # methods.
+                        # Create no more than 5 of each duplicate item to prevent the case of creating a huge number of
+                        # additional 'macguffin' items.
+                        if item.name in world.item_name_to_id and duplicated_items[item.name] < 5:
+                            duplicate_item = world.create_item(item.name)
+                            if duplicate_item.advancement:
+                                non_event_advancements.append(duplicated_items)
+                            duplicated_items[item.name] += 1
+
+                # Create an instance of every other item in the data package, to simulate players adding additional
+                # items to the multiworld that do not exist in a normal generation.
+                for item_name in world.item_name_to_id.keys():
+                    if item_name not in duplicated_items:
+                        new_item = world.create_item(item_name)
+                        if new_item.advancement:
+                            non_event_advancements.append(new_item)
 
                 # Shuffle the items into a deterministically random order because otherwise, the order of all items
                 # should always be the same, limiting what can be tested.
