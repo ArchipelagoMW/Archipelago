@@ -26,6 +26,7 @@ class TestBackpackVanilla(TestBackpackBase):
 
     def test_no_backpacks(self):
         location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn("Small Pack", location_names)
         self.assertNotIn("Large Pack", location_names)
         self.assertNotIn("Deluxe Pack", location_names)
 
@@ -36,6 +37,7 @@ class TestBackpackProgressive(TestBackpackBase):
 
     def test_has_correct_backpack_locations(self):
         location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn("Small Pack", location_names)
         self.assertIn("Large Pack", location_names)
         self.assertIn("Deluxe Pack", location_names)
 
@@ -62,9 +64,11 @@ class TestBackpackSplit1(TestBackpackBase):
 
     def test_has_correct_backpack_locations(self):
         location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn("Small Pack", location_names)
         self.assertNotIn("Large Pack", location_names)
         self.assertNotIn("Deluxe Pack", location_names)
         for i in range(1, 13):
+            self.assertNotIn(f"Small Pack {i}", location_names)
             self.assertIn(f"Large Pack {i}", location_names)
             self.assertIn(f"Deluxe Pack {i}", location_names)
 
@@ -76,12 +80,15 @@ class TestBackpackSplit2(TestBackpackBase):
 
     def test_has_correct_backpack_locations(self):
         location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn("Small Pack", location_names)
         self.assertNotIn("Large Pack", location_names)
         self.assertNotIn("Deluxe Pack", location_names)
         for i in range(1, 7):
+            self.assertNotIn(f"Small Pack {i}", location_names)
             self.assertIn(f"Large Pack {i}", location_names)
             self.assertIn(f"Deluxe Pack {i}", location_names)
         for i in range(7, 13):
+            self.assertNotIn(f"Small Pack {i}", location_names)
             self.assertNotIn(f"Large Pack {i}", location_names)
             self.assertNotIn(f"Deluxe Pack {i}", location_names)
 
@@ -93,12 +100,15 @@ class TestBackpackSplit4(TestBackpackBase):
 
     def test_has_correct_backpack_locations(self):
         location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn("Small Pack", location_names)
         self.assertNotIn("Large Pack", location_names)
         self.assertNotIn("Deluxe Pack", location_names)
         for i in range(1, 4):
+            self.assertNotIn(f"Small Pack {i}", location_names)
             self.assertIn(f"Large Pack {i}", location_names)
             self.assertIn(f"Deluxe Pack {i}", location_names)
         for i in range(4, 13):
+            self.assertNotIn(f"Small Pack {i}", location_names)
             self.assertNotIn(f"Large Pack {i}", location_names)
             self.assertNotIn(f"Deluxe Pack {i}", location_names)
 
@@ -110,12 +120,15 @@ class TestBackpackSplit6(TestBackpackBase):
 
     def test_has_correct_backpack_locations(self):
         location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn("Small Pack", location_names)
         self.assertNotIn("Large Pack", location_names)
         self.assertNotIn("Deluxe Pack", location_names)
         for i in range(1, 3):
+            self.assertNotIn(f"Small Pack {i}", location_names)
             self.assertIn(f"Large Pack {i}", location_names)
             self.assertIn(f"Deluxe Pack {i}", location_names)
         for i in range(3, 13):
+            self.assertNotIn(f"Small Pack {i}", location_names)
             self.assertNotIn(f"Large Pack {i}", location_names)
             self.assertNotIn(f"Deluxe Pack {i}", location_names)
 

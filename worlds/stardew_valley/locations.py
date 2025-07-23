@@ -408,12 +408,12 @@ def extend_backpack_locations(randomized_locations: List[LocationData], options:
     if options.backpack_progression == BackpackProgression.option_vanilla:
         return
 
+    no_start_tools = options.tool_progression & ToolProgression.value_no_starting_tools
     if options.backpack_size == BackpackSize.option_12:
-        backpack_locations = [location for location in locations_by_tag[LocationTags.BACKPACK_TIER]]
+        backpack_locations = [location for location in locations_by_tag[LocationTags.BACKPACK_TIER] if no_start_tools or LocationTags.STARTING_TOOLS not in location.tags]
     else:
         num_per_tier = options.backpack_size.count_per_tier()
-        backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in content.registered_packs,
-                                                             options.tool_progression & ToolProgression.value_no_starting_tools)
+        backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in content.registered_packs, no_start_tools)
         backpack_locations = []
         for tier in backpack_tier_names:
             for i in range(1, num_per_tier + 1):
