@@ -321,7 +321,7 @@ class InventorySpillTrapCount(TrapCount):
 
 class FactorioWorldGen(OptionDict):
     """World Generation settings. Overview of options at https://wiki.factorio.com/Map_generator,
-    with in-depth documentation at https://lua-api.factorio.com/latest/Concepts.html#MapGenSettings"""
+    with in-depth documentation at https://lua-api.factorio.com/latest/concepts/MapGenSettings.html"""
     display_name = "World Generation"
     # FIXME: do we want default be a rando-optimized default or in-game DS?
     value: dict[str, dict[str, typing.Any]]
