@@ -188,7 +188,7 @@ events: List[InternalEventItemData] = [
     InternalEventItemData(5001, 1912, "Mars Lighthouse - Doom Dragon Fight", "Victory"),
     InternalEventItemData(5002, 2219, "Alhafra Briggs", "Briggs defeated"),
     InternalEventItemData(5003, 2431, "Alhafra Prison Briggs", "Briggs escaped"),
-    InternalEventItemData(5004, 2303, "Gabomba Statue", "Gabomba Statue Completed"),
+    InternalEventItemData(5004, 2303, "Gabomba Statue Event", "Gabomba Statue Completed"),
     InternalEventItemData(5005, 2542, "Gaia Rock - Serpent Fight", "Serpent defeated"),
     InternalEventItemData(5006, 1637, "Sea of Time - Poseidon fight", "Poseidon defeated"),
     InternalEventItemData(5007, 2367, "Lemurian Ship - Aqua Hydra fight", "Aqua Hydra defeated"),

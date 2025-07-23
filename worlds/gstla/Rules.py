@@ -17,6 +17,7 @@ import logging
 if TYPE_CHECKING:
     from . import GSTLAWorld
     from .Items import GSTLAItem
+    from .Locations import GSTLALocation
 
 
 def set_entrance_rules(world: 'GSTLAWorld'):
@@ -797,6 +798,8 @@ def set_access_rules(world: 'GSTLAWorld'):
                  lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(64 * djinn_percentage))
         add_rule(world.get_location(LocationName.Treasure_Isle_Star_Magician),
                  lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(64 * djinn_percentage))
+        add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Dullahan),
+                 lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(72 * djinn_percentage))
     else:
         #Force whirldwind to be able to get all 4 light orbs to make serpent as weak as possible to beat it logically without djinn
         add_rule(world.get_location(LocationName.Gaia_Rock_Serpent_Fight),
@@ -804,16 +807,17 @@ def set_access_rules(world: 'GSTLAWorld'):
 
     # Superbosses logic
     add_rule(world.get_location(LocationName.Yampi_Desert_Cave_Valukar),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(ItemName.Pound_Cube, player))
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(
+                 ItemName.Pound_Cube, player))
     add_rule(world.get_location(LocationName.Islet_Cave_Sentinel),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(ItemName.Teleport_Lapis, player))
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(
+                 ItemName.Teleport_Lapis, player))
     add_rule(world.get_location(LocationName.Treasure_Isle_Star_Magician),
              lambda state: state.count_group(ItemType.Character.name, player) >= 7)
     add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Dullahan),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(ItemName.Lifting_Gem, player) and state.has(
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(
+                 ItemName.Lifting_Gem, player) and state.has(
                  ItemName.Sand, player) and state.has(ItemName.Hover_Jade, player))
-    add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Dullahan),
-             lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(72 * djinn_percentage))
 
 
     #Optional Super Boss content

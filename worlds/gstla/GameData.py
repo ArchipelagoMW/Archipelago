@@ -516,7 +516,7 @@ class GameData:
             EventDatum(event_offset + 1, 0x778, "Mars Lighthouse - Doom Dragon Fight", "Victory" ),
             EventDatum(event_offset + 2, 0x8AB, "Alhafra Briggs", "Briggs defeated" ),
             EventDatum(event_offset + 3, 0x97F, "Alhafra Prison Briggs", "Briggs escaped" ),
-            EventDatum(event_offset + 4, 0x8FF, "Gabomba Statue", "Gabomba Statue Completed" ),
+            EventDatum(event_offset + 4, 0x8FF, "Gabomba Statue Event", "Gabomba Statue Completed" ),
             EventDatum(event_offset + 5, 0x9EE, "Gaia Rock - Serpent Fight", "Serpent defeated" ),
             EventDatum(event_offset + 6, 0x665, "Sea of Time - Poseidon fight", "Poseidon defeated"),
             EventDatum(event_offset + 7, 0x93F, "Lemurian Ship - Aqua Hydra fight", "Aqua Hydra defeated"),

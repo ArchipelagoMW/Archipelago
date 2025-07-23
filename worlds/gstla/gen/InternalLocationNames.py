@@ -236,7 +236,7 @@ class InternalLocationName:
     Mars_Lighthouse_Doom_Dragon_Fight = "Mars Lighthouse - Doom Dragon Fight"
     Alhafra_Briggs = "Alhafra Briggs"
     Alhafra_Prison_Briggs = "Alhafra Prison Briggs"
-    Gabomba_Statue = "Gabomba Statue"
+    Gabomba_Statue_Event = "Gabomba Statue Event"
     Gaia_Rock_Serpent_Fight = "Gaia Rock - Serpent Fight"
     Sea_of_Time_Poseidon_fight = "Sea of Time - Poseidon fight"
     Lemurian_Ship_Aqua_Hydra_fight = "Lemurian Ship - Aqua Hydra fight"
@@ -515,7 +515,7 @@ ids_by_loc_name: Dict[str, int] = {
     InternalLocationName.Mars_Lighthouse_Doom_Dragon_Fight: 5001,
     InternalLocationName.Alhafra_Briggs: 5002,
     InternalLocationName.Alhafra_Prison_Briggs: 5003,
-    InternalLocationName.Gabomba_Statue: 5004,
+    InternalLocationName.Gabomba_Statue_Event: 5004,
     InternalLocationName.Gaia_Rock_Serpent_Fight: 5005,
     InternalLocationName.Sea_of_Time_Poseidon_fight: 5006,
     InternalLocationName.Lemurian_Ship_Aqua_Hydra_fight: 5007,
@@ -930,7 +930,7 @@ ids_by_py_name: Dict[str, int] = {
     "Mars_Lighthouse_Doom_Dragon_Fight": 5001,
     "Alhafra_Briggs": 5002,
     "Alhafra_Prison_Briggs": 5003,
-    "Gabomba_Statue": 5004,
+    "Gabomba_Statue_Event": 5004,
     "Gaia_Rock_Serpent_Fight": 5005,
     "Sea_of_Time_Poseidon_fight": 5006,
     "Lemurian_Ship_Aqua_Hydra_fight": 5007,
@@ -1345,7 +1345,7 @@ loc_names_by_id: Dict[int, str] = {
     5001: InternalLocationName.Mars_Lighthouse_Doom_Dragon_Fight,
     5002: InternalLocationName.Alhafra_Briggs,
     5003: InternalLocationName.Alhafra_Prison_Briggs,
-    5004: InternalLocationName.Gabomba_Statue,
+    5004: InternalLocationName.Gabomba_Statue_Event,
     5005: InternalLocationName.Gaia_Rock_Serpent_Fight,
     5006: InternalLocationName.Sea_of_Time_Poseidon_fight,
     5007: InternalLocationName.Lemurian_Ship_Aqua_Hydra_fight,

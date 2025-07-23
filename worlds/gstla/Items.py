@@ -10,7 +10,6 @@ from .gen.ItemData import (ItemData, events, mimics, psyenergy_as_item_list, psy
                            TrapType, FillerType, all_items as all_gen_items, djinn_items, characters as character_items)
 from .gen.LocationData import LocationType, location_type_to_data
 from .GameData import ItemType
-from ..ror2.items import classification
 
 if TYPE_CHECKING:
     from . import GSTLAWorld, GSTLALocation

@@ -34,10 +34,12 @@ from .LocationGroups import goldensuntla_location_groups
 from .Rom import GSTLAPatchExtension, GSTLADeltaPatch, CHECKSUM_GSTLA
 from .BizClient import GSTLAClient
 
+if TYPE_CHECKING:
+    from BaseClasses import MultiWorld
 
 import logging
 
-from ..Files import APTokenTypes
+from worlds.Files import APTokenTypes
 
 logger = logging.getLogger()
 
@@ -109,7 +111,7 @@ class GSTLAWorld(World):
         ItemType.Djinn.name: {item.name for item in all_items if item.type == ItemType.Djinn},
         ItemType.Character.name: {item.name for item in all_items if item.type == ItemType.Character},
         ItemType.Summon.name: {item.name for item in all_items if item.type == ItemType.Summon},
-        ItemType.Mimic.name: {item.name for item in all_items if item.type == ItemType.Mimic},
+        "Mimics": {item.name for item in all_items if item.type == ItemType.Mimic},
         "Lash": {ItemName.Lash_Pebble},
         "Pound": {ItemName.Pound_Cube},
         "Force": {ItemName.Orb_of_Force},
