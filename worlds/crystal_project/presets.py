@@ -1,6 +1,4 @@
-from typing import Any, Dict
-
-from Options import Accessibility, ProgressionBalancing
+from Options import ProgressionBalancing
 from .options import *
 from .constants.key_items import *
 
@@ -17,6 +15,8 @@ explorer_mode_options = {
     "maxLevel":                      99,
     "keyMode":                       KeyMode.option_vanilla_skelefree,
     "start_inventory_from_pool":     {PROGRESSIVE_LEVEL: 9},
+    "auto_spend_lp":                 True,
+    "auto_equip_passives":           True,
 }
 
 crystal_project_options_presets: Dict[str, Dict[str, Any]] = {

@@ -234,12 +234,6 @@ class MaxLevel(Range):
     range_end = 99
     default = 60
 
-class EasyLeveling(Toggle):
-    """
-    When enabled, characters will not receive reduced experience for being dead or for being a higher level than the fought enemy.
-    """
-    display_name = "Easy Leveling"
-
 class KeyMode(Choice):
     """
     Skeleton Key: Only the Skeleton Key, which can open any locked door, will be in your item pool.
@@ -263,6 +257,25 @@ class ObscureRoutes(Toggle):
     When enabled, connections between regions that are difficult to find will be expected in logic.
     """
     display_name = "Obscure Routes"
+
+class AutoSpendLP(Toggle):
+    """
+    When enabled, every time a character earn LP it will automatically purchase the most expensive node you can currently reach.
+    """
+    display_name = "Automatically Spend LP"
+
+class AutoEquipPassives(Toggle):
+    """
+    When enabled, every time a character unlocks a new passive node, it will equip it immediately if enough passive points are available.
+    Passives with drawbacks or that modify threat are not automatically equipped.
+    """
+    display_name = "Automatically Equip Passives"
+
+class EasyLeveling(Toggle):
+    """
+    When enabled, characters will not receive reduced experience for being dead or for being a higher level than the fought enemy.
+    """
+    display_name = "Easy Leveling"
 
 #"""Item Pool Options"""
 class ProgressiveEquipmentMode(DefaultOnToggle):
@@ -350,9 +363,11 @@ class CrystalProjectOptions(PerGameCommonOptions):
     levelComparedToEnemies: LevelComparedToEnemies
     progressiveLevelSize: ProgressiveLevelSize
     maxLevel: MaxLevel
-    easyLeveling: EasyLeveling
     keyMode: KeyMode
     obscureRoutes: ObscureRoutes
+    auto_spend_lp: AutoSpendLP
+    auto_equip_passives: AutoEquipPassives
+    easyLeveling: EasyLeveling
     progressiveEquipmentMode: ProgressiveEquipmentMode
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
@@ -364,7 +379,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity, Regionsanity],
-    "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, EasyLeveling, KeyMode, ObscureRoutes],
+    "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, AutoSpendLP, AutoEquipPassives, EasyLeveling],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [RandomizeMusic, UseMods]
 }

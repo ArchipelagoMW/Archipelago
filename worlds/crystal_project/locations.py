@@ -483,7 +483,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(OKIMOTO_NS, "Okimoto N.S. Chest - Lurking behind bookcase", 434 + treasure_index_offset), #Potion Pouch chest
         LocationData(OKIMOTO_NS, "Okimoto N.S. Chest - Past hidden staircase", 694 + treasure_index_offset), #Tachi chest
         LocationData(OKIMOTO_NS, "Okimoto N.S. Chest - Dance above the koi pond", 1103 + treasure_index_offset), #Training Gi chest
-        LocationData(OKIMOTO_NS, "Overpass Chest - Mountain lake north of the yashiki", 3534 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state)), #(605, 228, -270) 3rd Overpass Scrap in Overpass main map
+        LocationData(OKIMOTO_NS, "Overpass Chest - Mountain lake north of the yashiki", 3534 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or logic.has_swimming(state)), #(605, 228, -270) 3rd Overpass Scrap in Overpass main map
 
         #NPCs
         LocationData(OKIMOTO_NS, "Okimoto N.S. NPC - Silver on the way up", 359 + npc_index_offset), #Dust
