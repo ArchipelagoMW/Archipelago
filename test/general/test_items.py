@@ -2,7 +2,7 @@ import unittest
 from argparse import Namespace
 from typing import Type
 
-from BaseClasses import CollectionState, MultiWorld
+from BaseClasses import CollectionState, MultiWorld, Item
 from Fill import distribute_items_restrictive
 from Options import ItemLinks
 from worlds.AutoWorld import AutoWorldRegister, World, call_all
@@ -180,22 +180,30 @@ class TestBase(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             multiworld = setup_solo_multiworld(world_type)
             with self.subTest(game=game_name, seed=multiworld.seed):
-                # Get all the advancement items in the multiworld.
-                items = [item for item in multiworld.get_items() if item.advancement]
+                # Get all the non-event advancement items in the multiworld.
+                non_event_items = [item for item in multiworld.get_items() if item.advancement and not item.is_event]
+                # Shuffle the items into a deterministically random order because otherwise, the order of all items
+                # should always be the same, limiting what can be tested.
+                multiworld.random.shuffle(non_event_items)
+
+                # Find all advancement event locations. The world might expect some events to always be collected in a
+                # specific order.
+                event_locations = [loc for loc in multiworld.get_locations()
+                                   if loc.item and loc.item.is_event and loc.advancement]
+                # Deterministically randomly shuffle, otherwise the locations are expected to always be in the same
+                # order, limiting what can be tested.
+                multiworld.random.shuffle(event_locations)
 
                 # Get all locations in the multiworld.
                 locations = multiworld.get_locations()
 
-                # Shuffle the items into a deterministically random order because otherwise, the order of all items
-                # should always be the same, limiting what can be tested.
-                multiworld.random.shuffle(items)
-
+                items = []
                 state = CollectionState(multiworld)
                 initially_reachable = {loc for loc in locations if loc.can_reach(state)}
                 new_reachable_locations_at_each_collect = [initially_reachable]
                 reachable_so_far = initially_reachable.copy()
 
-                for i, item in enumerate(items):
+                def collect_and_check(item: Item):
                     state.collect(item, prevent_sweep=True)
                     reachable_locations = {loc for loc in locations if loc.can_reach(state)}
                     # Check that all previously reachable locations were still reachable. Collecting an item must never
@@ -204,12 +212,39 @@ class TestBase(unittest.TestCase):
                     if len(no_longer_accessible) > 0:
                         self.fail(f"Collecting '{item}' reduced accessibility. No longer accessible after collecting"
                                   f" '{item}': {no_longer_accessible}."
-                                  f"\nPreviously collected items in order of collection: {items[0:i]}")
+                                  f"\nPreviously collected items in order of collection: {items}")
+                    items.append(item)
                     # Find the newly reachable locations and update the locations reachable so far, as well as the list
                     # of sets of locations that became reachable with each item collected.
                     newly_reachable = reachable_locations - reachable_so_far
                     reachable_so_far.update(newly_reachable)
                     new_reachable_locations_at_each_collect.append(newly_reachable)
+
+                def collect_reachable_events():
+                    nonlocal event_locations
+                    if event_locations:
+                        changed = True
+                        while changed:
+                            next_event_locations = []
+                            reachable_events = []
+                            for loc in event_locations:
+                                if loc.can_reach(state):
+                                    reachable_events.append(loc.item)
+                                else:
+                                    next_event_locations.append(loc)
+                            for event in reachable_events:
+                                collect_and_check(event)
+                            # If any events were collected, loop again to try to reach more events.
+                            changed = len(reachable_events) > 0
+                            event_locations = next_event_locations
+
+                while non_event_items:
+                    collect_reachable_events()
+                    non_event = non_event_items.pop()
+                    collect_and_check(non_event)
+
+                # Collect any remaining reachable events now that all non-events have been collected.
+                collect_reachable_events()
 
                 # Remove each item in reverse and check that the reachable locations are the same as before the item was
                 # collected.
