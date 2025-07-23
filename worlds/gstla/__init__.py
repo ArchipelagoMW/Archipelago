@@ -136,10 +136,18 @@ class GSTLAWorld(World):
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
         self._character_levels: List[Tuple[int, int]] = []
+        self.goal_conditions: Set[str] = set()
 
     def generate_early(self) -> None:
         if len(self.options.goal.value) == 0:
             raise OptionError("A goal must be selected")
+
+        if self.options.random_goals.value == 0 or self.options.random_goals.value >= len(self.options.goal.value):
+            self.goal_conditions = self.options.goal.value
+        else:
+            for goal in self.random.sample(list(self.options.goal.value), k=self.options.random_goals.value):
+                self.goal_conditions.add(goal)
+
         if self.options.shuffle_characters < 2:
             self.options.non_local_items.value -= self.item_name_groups[ItemType.Character.name]
 
@@ -187,7 +195,7 @@ class GSTLAWorld(World):
         set_entrance_rules(self)
         set_item_rules(self)
         set_access_rules(self)
-        goal_conditions = self.options.goal.value
+        goal_conditions = self.goal_conditions
         needed_items: Set[str] = set()
 
         if len(goal_conditions) == 0 or "Doom Dragon" in goal_conditions:
@@ -274,13 +282,13 @@ class GSTLAWorld(World):
         goal_dict = dict()
         flags = set()
         counts = dict()
-        for goal in self.options.goal.value:
+        for goal in self.goal_conditions:
             if "Hunt" in goal:
                 continue
             flags.add(goal)
-        if "Djinn Hunt" in self.options.goal:
+        if "Djinn Hunt" in self.goal_conditions:
             counts["djinn"] = self.options.djinn_hunt_count.value
-        if "Summon Hunt" in self.options.goal:
+        if "Summon Hunt" in self.goal_conditions:
             counts["summons"] = self.options.summon_hunt_count.value
         goal_dict['flags'] = flags
         goal_dict['counts'] = counts

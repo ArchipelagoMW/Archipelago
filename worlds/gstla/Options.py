@@ -659,6 +659,13 @@ class Goal(OptionSet):
     }
     default = {"Doom Dragon"}
 
+class RandomGoals(Range):
+    """From the goals configured in "goals", pick the configured number of the goals randomly.
+    0 disables random picking, and all the configured goals are selected."""
+    range_start = 0
+    range_end = 17
+    default = 0
+
 class DjinnHuntCount(Range):
     """How many djinn you need to obtain in order to satisfy the Djinn Hunt Objective"""
     range_start = 1
@@ -675,6 +682,7 @@ class SummonHuntCount(Range):
 class GSTLAOptions(PerGameCommonOptions):
     #Pool and Logic settings
     goal: Goal
+    random_goals: RandomGoals
     djinn_hunt_count: DjinnHuntCount
     summon_hunt_count: SummonHuntCount
     item_shuffle: ItemShuffle

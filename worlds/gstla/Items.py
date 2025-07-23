@@ -192,7 +192,7 @@ def create_items(world: 'GSTLAWorld', player: int):
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
     summon_classification = None
-    if "Summon Hunt" in world.options.goal:
+    if "Summon Hunt" in world.goal_conditions:
         summon_classification = ItemClassification.progression_deprioritized_skip_balancing
     for item in summon_list:
         #Ignore summons that are obtained by gaining X djinn
