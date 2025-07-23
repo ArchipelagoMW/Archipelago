@@ -24,9 +24,6 @@
     - '!worlds/**'
     - '!WebHost.py'
     - '!WebHostLib/**'
-    - '!Dockerfile'
-    - '!.dockerignore'
-    - '!deploy/**'
   - any-glob-to-any-file: # exceptions to the above rules of "stuff that isn't core"
     - 'worlds/generic/**/*.py'
     - 'worlds/*.py'
