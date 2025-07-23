@@ -350,7 +350,7 @@ regions: Dict[str, RegionData] = {
         LocationName.Gabomba_Statue_Mimic,
         LocationName.Gabomba_Statue_Elixir,
         LocationName.Gabomba_Statue_Bone_Armlet,
-        LocationName.Gabomba_Statue,
+        LocationName.Gabomba_Statue_Event,
         LocationName.Steel
     ],
     [

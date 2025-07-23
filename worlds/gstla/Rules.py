@@ -371,7 +371,7 @@ def set_access_rules(world: 'GSTLAWorld'):
 
 
     #Gabomba Statue
-    add_rule(world.get_location(LocationName.Gabomba_Statue),
+    add_rule(world.get_location(LocationName.Gabomba_Statue_Event),
              lambda state: state.has(ItemName.Pound_Cube, player))
 
     add_rule(world.get_location(LocationName.Steel),
