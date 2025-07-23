@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import Region
+from BaseClasses import Entrance, Region
 from entrance_rando import EntranceType, randomize_entrances
 from .connections import RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .options import ShuffleTransitions, TransitionPlando
@@ -8,6 +8,33 @@ from .options import ShuffleTransitions, TransitionPlando
 if TYPE_CHECKING:
     from . import MessengerWorld
 
+
+def disconnect_entrances(world: "MessengerWorld") -> None:
+    def disconnect_entrance() -> None:
+        child = entrance.connected_region.name
+        child_region = entrance.connected_region
+        child_region.entrances.remove(entrance)
+        entrance.connected_region = None
+
+        er_type = EntranceType.ONE_WAY if child == "Glacial Peak - Left" else \
+            EntranceType.TWO_WAY if child in RANDOMIZED_CONNECTIONS else EntranceType.ONE_WAY
+        if er_type == EntranceType.TWO_WAY:
+            mock_entrance = entrance.parent_region.create_er_target(entrance.name)
+        else:
+            mock_entrance = child_region.create_er_target(child)
+
+        entrance.randomization_type = er_type
+        mock_entrance.randomization_type = er_type
+
+
+    for parent, child in RANDOMIZED_CONNECTIONS.items():
+        if child == "Corrupted Future":
+            entrance = world.get_entrance("Artificer's Portal")
+        elif child == "Tower of Time - Left":
+            entrance = world.get_entrance("Artificer's Challenge")
+        else:
+            entrance = world.get_entrance(f"{parent} -> {child}")
+        disconnect_entrance()
 
 def connect_plando(world: "MessengerWorld", plando_connections: TransitionPlando) -> None:
     def remove_dangling_exit(region: Region) -> None:
@@ -58,32 +85,6 @@ def connect_plando(world: "MessengerWorld", plando_connections: TransitionPlando
 
 def shuffle_transitions(world: "MessengerWorld") -> None:
     coupled = world.options.shuffle_transitions == ShuffleTransitions.option_coupled
-
-    def disconnect_entrance() -> None:
-        child_region.entrances.remove(entrance)
-        entrance.connected_region = None
-
-        er_type = EntranceType.ONE_WAY if child == "Glacial Peak - Left" else \
-            EntranceType.TWO_WAY if child in RANDOMIZED_CONNECTIONS else EntranceType.ONE_WAY
-        if er_type == EntranceType.TWO_WAY:
-            mock_entrance = parent_region.create_er_target(entrance.name)
-        else:
-            mock_entrance = child_region.create_er_target(child)
-
-        entrance.randomization_type = er_type
-        mock_entrance.randomization_type = er_type
-
-    for parent, child in RANDOMIZED_CONNECTIONS.items():
-        if child == "Corrupted Future":
-            entrance = world.get_entrance("Artificer's Portal")
-        elif child == "Tower of Time - Left":
-            entrance = world.get_entrance("Artificer's Challenge")
-        else:
-            entrance = world.get_entrance(f"{parent} -> {child}")
-        parent_region = entrance.parent_region
-        child_region = entrance.connected_region
-        entrance.world = world
-        disconnect_entrance()
 
     plando = world.options.plando_connections
     if plando:

@@ -1,15 +1,5 @@
-from typing import Union
-
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
-from .quest_logic import QuestLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogicMixin
-from .skill_logic import SkillLogicMixin
-from .special_order_logic import SpecialOrderLogicMixin
 from .. import options
 from ..data.craftable_data import CraftingRecipe
 from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, \
@@ -25,8 +15,7 @@ class CraftingLogicMixin(BaseLogicMixin):
         self.crafting = CraftingLogic(*args, **kwargs)
 
 
-class CraftingLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, MoneyLogicMixin, RelationshipLogicMixin,
-SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
+class CraftingLogic(BaseLogic):
     @cache_self1
     def can_craft(self, recipe: CraftingRecipe = None) -> StardewRule:
         if recipe is None:
