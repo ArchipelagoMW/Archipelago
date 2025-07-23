@@ -377,10 +377,21 @@ class MegaMan3Client(BizHawkClient):
     doc_status: Optional[int] = None  # default to no doc progress
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
-        from worlds._bizhawk import RequestFailedError, read
+        from worlds._bizhawk import RequestFailedError, read, get_memory_size
         from . import MM3World
 
         try:
+
+            if (await get_memory_size(ctx.bizhawk_ctx, "PRG ROM")) < 0x3FFB0:
+                # not the entire size, but enough to check validation
+                if "pool" in ctx.command_processor.commands:
+                    ctx.command_processor.commands.pop("pool")
+                if "request" in ctx.command_processor.commands:
+                    ctx.command_processor.commands.pop("request")
+                if "autoheal" in ctx.command_processor.commands:
+                    ctx.command_processor.commands.pop("autoheal")
+                return False
+
             game_name, version = (await read(ctx.bizhawk_ctx, [(0x3F320, 21, "PRG ROM"),
                                                                (0x3F33C, 3, "PRG ROM")]))
             if game_name[:3] != b"MM3" or version != bytes(MM3World.world_version):
