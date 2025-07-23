@@ -112,7 +112,7 @@ def update_common_events(gcm: GCM, randomize_mice: bool) -> GCM:
 
 # Update the intro event and E. Gadd event as needed.
 def update_intro_and_lab_events(gcm: GCM, hidden_mansion: bool, max_health: str, start_inv: list[str],
-    doors_to_open: dict[int, int], starting_vac: bool) -> GCM:
+    start_radar: bool,doors_to_open: dict[int, int], starting_vac: bool) -> GCM:
     lines = get_data(MAIN_PKG_NAME, "data/custom_events/event08.txt").decode('utf-8')
     lines = lines.replace("{LUIGIMAXHP}", max_health)
     csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message8.csv").decode('utf-8')
@@ -126,7 +126,7 @@ def update_intro_and_lab_events(gcm: GCM, hidden_mansion: bool, max_health: str,
         lines = lines.replace("{WEAPON}", "<WEAPON>")
 
     include_radar = ""
-    if any("Boo Radar" in key for key in start_inv):
+    if any("Boo Radar" in key for key in start_inv) or start_radar:
         include_radar = "<FLAGON>(73)\r\n<FLAGON>(75)"
     lines = lines.replace("{BOO RADAR}", include_radar)
 

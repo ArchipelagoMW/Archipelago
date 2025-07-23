@@ -177,6 +177,7 @@ class LuigisMansionRandomizer:
         bool_randomize_music: bool = True if int(self.output_data["Options"]["random_music"]) == 1 else False
         bool_randomize_mice: bool = True if int(self.output_data["Options"]["gold_mice"]) == 1 else False
         bool_hidden_mansion: bool = True if int(self.output_data["Options"]["hidden_mansion"]) == 1 else False
+        bool_start_boo_radar: bool = True if int(self.output_data["Options"]["boo_radar"]) == 0 else False
         walk_speed: int = int(self.output_data["Options"]["walk_speed"])
         bool_pickup_anim_enabled: bool = \
             True if int(self.output_data["Options"]["enable_fear_animation"]) == 1 else False
@@ -186,6 +187,7 @@ class LuigisMansionRandomizer:
         king_boo_health: int = int(self.output_data["Options"]["king_boo_health"])
         random_spawn: str = str(self.output_data["Options"]["spawn"])
         door_model_rando_on: bool = True if int(self.output_data["Options"]["door_model_rando"]) == 1 else False
+        bool_start_extra_vacuum: bool = True if int(self.output_data["Options"]["good_vacuum"]) == 0 else False
 
         # Boo related options
         bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False
@@ -200,15 +202,15 @@ class LuigisMansionRandomizer:
         bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
 
         logger.info("Updating all the main.dol offsets with their appropriate values.")
-        self.gcm, self.dol = update_dol_offsets(self.gcm, self.dol, self.seed, start_inv_list, walk_speed, player_name,
-            random_spawn, king_boo_health, bool_fear_anim_enabled, bool_pickup_anim_enabled, bool_boo_rando_enabled,
-            door_model_rando_on)
+        self.gcm, self.dol = update_dol_offsets(self.gcm, self.dol, self.seed, bool_start_extra_vacuum, bool_start_vacuum,
+            start_inv_list, walk_speed, player_name, random_spawn, king_boo_health, bool_fear_anim_enabled,
+            bool_pickup_anim_enabled, bool_boo_rando_enabled, door_model_rando_on)
 
         logger.info("Updating all of the common events with the customized version.")
         self.gcm = update_common_events(self.gcm, bool_randomize_mice)
 
         logger.info("Updating the intro and lab events with the customized version.")
-        self.gcm = update_intro_and_lab_events(self.gcm, bool_hidden_mansion, max_health, start_inv_list,
+        self.gcm = update_intro_and_lab_events(self.gcm, bool_hidden_mansion, max_health, start_inv_list, bool_start_boo_radar,
             door_to_close_list, bool_start_vacuum)
 
         if bool_boo_checks:
