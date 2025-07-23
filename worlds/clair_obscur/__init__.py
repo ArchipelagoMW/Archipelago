@@ -59,20 +59,20 @@ class ClairObscurWorld(World):
             item = self.create_item_by_id(item_id)
             self.item_pool.append(item)
 
-        for i in range(0, 81):
-            item = self.create_item_by_id(2)
-            self.item_pool.append(item)
-
         #Add 4 more Progressive Rocks
         for i in range(0, 4):
             #item = self.create_item("Progressive Rock")
             # ^ This ends up adding the offset twice. For now, I'm hardcoding in the ID as with the filler items above.
-            item = self.create_item_by_id(7)
+            item = self.create_item_by_id(14)
             self.item_pool.append(item)
 
+        #Add filler to match the amount of locations
+        location_count = len(data.locations)
+        remaining_items_to_generate = location_count - len(self.item_pool) + 1
+        for i in range(0, remaining_items_to_generate):
+            item = self.create_item_by_id(2)
+            self.item_pool.append(item)
         self.multiworld.itempool += self.item_pool
-
-
 
     def fill_slot_data(self) -> typing.Dict[str, Any]:
         return self.options.as_dict(
@@ -107,5 +107,8 @@ class ClairObscurWorld(World):
 
         create_locations(self, regions)
 
-        self.multiworld.completion_condition[self.player] = (lambda state: state.has("Progressive Rock", self.player, 4)
-                                                             and state.has("Painter", self.player))
+        # self.multiworld.completion_condition[self.player] = (lambda state: state.has("Progressive Rock", self.player, 4)
+        #                                                      and state.has("Barrier Breaker", self.player))
+
+        self.multiworld.completion_condition[self.player] = (lambda state: state.can_reach_location("Chest_Lumiere_17", self.player))
+
