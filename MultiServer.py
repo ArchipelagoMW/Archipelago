@@ -1268,8 +1268,7 @@ class CommandProcessor(metaclass=CommandMeta):
             basecommand = command[0]
             if basecommand[0] == self.marker:
                 method_name = basecommand[1:].lower()
-                if method_name in self.aliases:
-                    method_name = self.aliases[method_name]
+                method_name = self.aliases.get(method_name, method_name)
 
                 method = self.commands.get(method_name, None)
                 if not method:
