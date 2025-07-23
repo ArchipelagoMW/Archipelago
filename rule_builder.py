@@ -83,6 +83,7 @@ class RuleWorldMixin(World):
         return self.simplify_rule(resolved_rule)
 
     def get_cached_rule(self, resolved_rule: "Rule.Resolved") -> "Rule.Resolved":
+        """Returns a cached instance of a resolved rule based on the hash"""
         if not self.rule_caching_enabled:
             # skip the caching logic entirely
             object.__setattr__(resolved_rule, "cacheable", False)
@@ -94,6 +95,7 @@ class RuleWorldMixin(World):
         return resolved_rule
 
     def register_rule_dependencies(self, resolved_rule: "Rule.Resolved") -> None:
+        """Registers a rule's item, region, location, and entrance dependencies to this world instance"""
         if not self.rule_caching_enabled:
             return
         for item_name, rule_ids in resolved_rule.item_dependencies().items():
@@ -111,7 +113,7 @@ class RuleWorldMixin(World):
             self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
 
     def register_dependencies(self) -> None:
-        """Register all rules that depend on locations with that location's dependencies"""
+        """Register all rules that depend on locations or entrances with their dependencies"""
         if not self.rule_caching_enabled:
             return
 
@@ -668,7 +670,10 @@ class False_(Rule[TWorld], game="Archipelago"):
 
 @dataclasses.dataclass(init=False)
 class NestedRule(Rule[TWorld], game="Archipelago"):
+    """A rule that takes an iterable of other rules as an argument and does logic based on them"""
+
     children: "tuple[Rule[TWorld], ...]"
+    """The child rules this rule's logic is based on"""
 
     def __init__(self, *children: "Rule[TWorld]", options: "Iterable[OptionFilter[Any]]" = ()) -> None:
         super().__init__(options=options)
@@ -749,6 +754,8 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
 
 @dataclasses.dataclass(init=False)
 class And(NestedRule[TWorld], game="Archipelago"):
+    """A rule that only returns true when all child rules evaluate as true"""
+
     class Resolved(NestedRule.Resolved):
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -780,6 +787,8 @@ class And(NestedRule[TWorld], game="Archipelago"):
 
 @dataclasses.dataclass(init=False)
 class Or(NestedRule[TWorld], game="Archipelago"):
+    """A rule that returns true when any child rule evaluates as true"""
+
     class Resolved(NestedRule.Resolved):
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -814,6 +823,7 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
     """A rule that wraps another rule to provide extra logic or data"""
 
     child: "Rule[TWorld]"
+    """The child rule being wrapped"""
 
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
@@ -892,8 +902,13 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
 
 @dataclasses.dataclass()
 class Has(Rule[TWorld], game="Archipelago"):
+    """A rule that checks if the player has at least `count` of a given item"""
+
     item_name: str
+    """The item to check for"""
+
     count: int = 1
+    """The count the player is required to have"""
 
     @override
     def _instantiate(self, world: "TWorld") -> "Resolved":
@@ -1580,6 +1595,8 @@ class HasGroupUnique(HasGroup[TWorld], game="Archipelago"):
 
 @dataclasses.dataclass()
 class CanReachLocation(Rule[TWorld], game="Archipelago"):
+    """A rule that checks if the given location is reachable by the current player"""
+
     location_name: str
     """The name of the location to test access to"""
 
@@ -1651,6 +1668,8 @@ class CanReachLocation(Rule[TWorld], game="Archipelago"):
 
 @dataclasses.dataclass()
 class CanReachRegion(Rule[TWorld], game="Archipelago"):
+    """A rule that checks if the given region is reachable by the current player"""
+
     region_name: str
     """The name of the region to test access to"""
 
@@ -1701,6 +1720,8 @@ class CanReachRegion(Rule[TWorld], game="Archipelago"):
 
 @dataclasses.dataclass()
 class CanReachEntrance(Rule[TWorld], game="Archipelago"):
+    """A rule that checks if the given entrance is reachable by the current player"""
+
     entrance_name: str
     """The name of the entrance to test access to"""
 

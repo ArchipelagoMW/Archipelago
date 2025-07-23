@@ -57,6 +57,8 @@ There is also a `create_entrance` helper that will resolve the rule, check if it
 self.create_entrance(from_region, to_region, rule)
 ```
 
+> ⚠️ If you use a `CanReachLocation` rule on an entrance, you will either have to create the locations first, or specify the location's parent region name with the `parent_region_name` argument of `CanReachLocation`.
+
 You can also set a rule for your world's completion condition:
 
 ```python
@@ -119,6 +121,22 @@ class MyWorld(RuleWorldMixin, World):
 ```
 
 You'll have to benchmark your own world to see if it should be disabled or not.
+
+### Item name mapping
+
+If you have multiple real items that map to a single logic item, add a `item_mapping` class dict to your world that maps actual item names to real item names so the cache system knows what to invalidate.
+
+For example, if you have multiple `Currecy x<num>` items on locations, but your rules only check a singlular logical `Currency` item, eg `Has("Currency", 1000)`, you'll want to map each numerical currency item to the single logical `Currency`.
+
+```python
+class MyWorld(RuleWorldMixin, World):
+    item_mapping = {
+        "Currency x10": "Currency",
+        "Currency x50": "Currency",
+        "Currency x100": "Currency",
+        "Currency x500": "Currency",
+    }
+```
 
 ## Defining custom rules
 
@@ -361,3 +379,48 @@ class MyRule(Rule, game="My Game"):
         def __str__(self) -> str:
             return "You must be THIS tall to beat the game"
 ```
+
+## APIs
+
+This section is provided for reference, refer to the above sections for examples.
+
+### World API
+
+These are properties and helpers that are available to you in your world.
+
+#### Properties
+
+- `completion_rule: Rule.Resolved | None`: The resolved rule used for the completion condition of this world as set by `set_completion_rule`
+- `true_rule: Rule.Resolved`: A pre-resolved rule for this player that is equal to `True_()`
+- `false_rule: Rule.Resolved`: A pre-resolved rule for this player that is equal to `False_()`
+- `item_mapping: dict[str, str]`: A mapping of actual item name to logical item name
+- `rule_caching_enabled: bool`: A boolean value to enable or disable rule caching for this world
+
+#### Methods
+
+- `rule_from_dict(data)`: Create a rule instance from a deserialized dict representation
+- `register_dependencies()`: Register all rules that depend on location or entrance access with the inherited dependencies
+- `set_rule(spot: Location | Entrance, rule: Rule)`: Resolve a rule, register its dependencies, and set it on the given location or entrance
+- `create_entrance(from_region: Region, to_rengion: Region, rule: Rule | None, name: str | None = None)`: Attempt to create an entrance from `from_region` to `to_rengion`, skipping creation if `rule` is defined and evaluates to `False_()`
+- `set_completion_rule(rule: Rule)`: Sets the completion condition for this world
+
+### Rule API
+
+These are properties and helpers that you can use or override for custom rules.
+
+- `_instantiate(world: World)`: Create a new resolved rule instance, override for custom rules as required
+- `to_dict()`: Create a JSON-compatible dict representation of this rule, override if you want to customize your rule's serialization
+- `from_dict(data, world_cls: type[World])`: Return a new rule instance from a deserialized representation, override if you've overridden `to_dict`
+- `__str__()`: Basic string representation of a rule, useful for debugging
+
+#### Resolved rule API
+
+- `player: int`: The slot this rule is resolved for
+- `_evaluate(state: CollectionState)`: Evaluate this rule against the given state, override this to define the logic for this rule
+- `item_dependencies()`: A mapping of item name to set of ids, override this if your custom rule depends on item collection
+- `region_dependencies()`: A mapping of region name to set of ids, override this if your custom rule depends on reaching regions
+- `location_dependencies()`: A mapping of location name to set of ids, override this if your custom rule depends on reaching locations
+- `entrance_dependencies()`: A mapping of entrance name to set of ids, override this if your custom rule depends on reaching entrances
+- `explain_json(state: CollectionState | None = None)`: Return a list of printJSON messages describing this rule's logic (and if state is defined its evaluation) in a human readable way, override to explain custom rules
+- `explain_str(state: CollectionState | None = None)`: Return a string describing this rule's logic (and if state is defined its evaluation) in a human readable way, override to explain custom rules, more useful for debugging
+- `__str__()`: A string describing this rule's logic without its evaluation, override to explain custom rules
