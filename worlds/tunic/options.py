@@ -146,17 +146,6 @@ class EntranceRando(TextChoice):
     default = 0
 
 
-class FixedShop(Toggle):
-    """
-    This option has been superseded by the Entrance Layout option.
-    If enabled, it will override the Entrance Layout option.
-    This is kept to keep older yamls working, and will be removed at a later date.
-    """
-    visibility = Visibility.none
-    internal_name = "fixed_shop"
-    display_name = "Fewer Shops in Entrance Rando"
-
-
 class EntranceLayout(Choice):
     """
     Decide how the Entrance Randomizer chooses how to pair the entrances.
@@ -390,8 +379,8 @@ class TunicOptions(PerGameCommonOptions):
 
     all_random: HiddenAllRandom
 
-    fixed_shop: FixedShop  # will be removed at a later date
-    logic_rules: Removed  # fully removed in the direction pairs update
+    fixed_shop: Removed
+    logic_rules: Removed
 
 
 tunic_option_groups = [
