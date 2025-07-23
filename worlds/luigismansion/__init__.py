@@ -164,7 +164,6 @@ class LMWorld(World):
 
     def __init__(self, *args, **kwargs):
         self.itempool: list[LMItem] = []
-        self.pre_fill_items: list[LMItem] = []
         super(LMWorld, self).__init__(*args, **kwargs)
         self.ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM.copy()
         self.open_doors: dict[int, int] = vanilla_door_state.copy()
@@ -641,7 +640,7 @@ class LMWorld(World):
 
         # Calculate the number of additional filler items to create to fill all locations
         n_locations = len(self.multiworld.get_unfilled_locations(self.player))
-        n_items = len(self.pre_fill_items) + len(self.itempool)
+        n_items = len(self.itempool)
         n_filler_items = n_locations - n_items
         n_trap_items = math.ceil(n_filler_items*(self.options.trap_percentage.value/100))
         n_other_filler = n_filler_items - n_trap_items
