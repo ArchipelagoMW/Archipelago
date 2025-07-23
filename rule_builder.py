@@ -153,7 +153,7 @@ class RuleWorldMixin(World):
         self,
         from_region: "Region",
         to_region: "Region",
-        rule: "Rule[Self] | None",
+        rule: "Rule[Self] | None" = None,
         name: str | None = None,
     ) -> "Entrance | None":
         """Try to create an entrance between regions with the given rule, skipping it if the rule resolves to False"""
@@ -939,7 +939,15 @@ class Has(Rule[TWorld], game="Archipelago"):
             if self.count > 1:
                 messages.append({"type": "color", "color": "cyan", "text": str(self.count)})
                 messages.append({"type": "text", "text": "x "})
-            messages.append({"type": "item_name", "flags": 0b001, "text": self.item_name, "player": self.player})
+            item_message: JSONMessagePart = {
+                "type": "item_name",
+                "flags": 0b001,
+                "text": self.item_name,
+                "player": self.player,
+            }
+            if state:
+                item_message["color"] = "green" if self(state) else "salmon"
+            messages.append(item_message)
             return messages
 
         @override
@@ -1418,7 +1426,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
                 messages = [
                     {"type": "text", "text": "Has "},
                     {"type": "color", "color": "cyan", "text": str(self.count)},
-                    {"type": "text", "text": " items from ("},
+                    {"type": "text", "text": "x items from ("},
                 ]
                 for i, item in enumerate(self.item_names):
                     if i > 0:
@@ -1427,11 +1435,16 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
                 messages.append({"type": "text", "text": ")"})
                 return messages
 
+            found_count = state.count_from_list(self.item_names, self.player)
             found = [item for item in self.item_names if state.has(item, self.player)]
             missing = [item for item in self.item_names if item not in found]
             messages = [
                 {"type": "text", "text": "Has "},
-                {"type": "color", "color": "cyan", "text": f"{len(found)}/{self.count}"},
+                {
+                    "type": "color",
+                    "color": "green" if found_count >= self.count else "salmon",
+                    "text": f"{found_count}/{self.count}",
+                },
                 {"type": "text", "text": " items from ("},
             ]
             if found:
@@ -1460,17 +1473,19 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
         def explain_str(self, state: "CollectionState | None" = None) -> str:
             if state is None:
                 return str(self)
+            found_count = state.count_from_list(self.item_names, self.player)
             found = [item for item in self.item_names if state.has(item, self.player)]
             missing = [item for item in self.item_names if item not in found]
             found_str = f"Found: {', '.join(found)}" if found else ""
             missing_str = f"Missing: {', '.join(missing)}" if missing else ""
             infix = "; " if found and missing else ""
-            return f"Has {len(found)}/{self.count} items from ({found_str}{infix}{missing_str})"
+            return f"Has {found_count}/{self.count} items from ({found_str}{infix}{missing_str})"
 
         @override
         def __str__(self) -> str:
             items = ", ".join(self.item_names)
-            return f"Has {self.count} items from ({items})"
+            count = f"{self.count}x items" if self.count > 1 else "an item"
+            return f"Has {count} from ({items})"
 
 
 @dataclasses.dataclass(init=False)
@@ -1495,6 +1510,74 @@ class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.has_from_list_unique(self.item_names, self.player, self.count)
+
+        @override
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: list[JSONMessagePart] = []
+            if state is None:
+                messages = [
+                    {"type": "text", "text": "Has "},
+                    {"type": "color", "color": "cyan", "text": str(self.count)},
+                    {"type": "text", "text": "x unique items from ("},
+                ]
+                for i, item in enumerate(self.item_names):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
+                messages.append({"type": "text", "text": ")"})
+                return messages
+
+            found_count = state.count_from_list_unique(self.item_names, self.player)
+            found = [item for item in self.item_names if state.has(item, self.player)]
+            missing = [item for item in self.item_names if item not in found]
+            messages = [
+                {"type": "text", "text": "Has "},
+                {
+                    "type": "color",
+                    "color": "green" if found_count >= self.count else "salmon",
+                    "text": f"{found_count}/{self.count}",
+                },
+                {"type": "text", "text": " unique items from ("},
+            ]
+            if found:
+                messages.append({"type": "text", "text": "Found: "})
+                for i, item in enumerate(found):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
+                    )
+                if missing:
+                    messages.append({"type": "text", "text": "; "})
+
+            if missing:
+                messages.append({"type": "text", "text": "Missing: "})
+                for i, item in enumerate(missing):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
+                    )
+            messages.append({"type": "text", "text": ")"})
+            return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            found_count = state.count_from_list_unique(self.item_names, self.player)
+            found = [item for item in self.item_names if state.has(item, self.player)]
+            missing = [item for item in self.item_names if item not in found]
+            found_str = f"Found: {', '.join(found)}" if found else ""
+            missing_str = f"Missing: {', '.join(missing)}" if missing else ""
+            infix = "; " if found and missing else ""
+            return f"Has {found_count}/{self.count} unique items from ({found_str}{infix}{missing_str})"
+
+        @override
+        def __str__(self) -> str:
+            items = ", ".join(self.item_names)
+            count = f"{self.count}x unique items" if self.count > 1 else "a unique item"
+            return f"Has {count} from ({items})"
 
 
 @dataclasses.dataclass()

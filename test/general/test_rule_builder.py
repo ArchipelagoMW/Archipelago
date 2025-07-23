@@ -34,6 +34,7 @@ from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionState, MultiWorld
+    from NetUtils import JSONMessagePart
 
 
 class ToggleOption(Toggle):
@@ -54,7 +55,7 @@ class RuleBuilderOptions(PerGameCommonOptions):
 
 
 GAME = "Rule Builder Test Game"
-LOC_COUNT = 6
+LOC_COUNT = 20
 
 
 class RuleBuilderItem(Item):
@@ -69,7 +70,10 @@ class RuleBuilderWorld(RuleWorldMixin, World):  # pyright: ignore[reportUnsafeMu
     game: ClassVar[str] = GAME
     item_name_to_id: ClassVar[dict[str, int]] = {f"Item {i}": i for i in range(1, LOC_COUNT + 1)}
     location_name_to_id: ClassVar[dict[str, int]] = {f"Location {i}": i for i in range(1, LOC_COUNT + 1)}
-    item_name_groups: ClassVar[dict[str, set[str]]] = {"Group 1": {"Item 1", "Item 2", "Item 3"}}
+    item_name_groups: ClassVar[dict[str, set[str]]] = {
+        "Group 1": {"Item 1", "Item 2", "Item 3"},
+        "Group 2": {"Item 4", "Item 5"},
+    }
     hidden: ClassVar[bool] = True
     options_dataclass: "ClassVar[type[PerGameCommonOptions]]" = RuleBuilderOptions
     options: RuleBuilderOptions  # pyright: ignore[reportIncompatibleVariableOverride]
@@ -141,6 +145,22 @@ network_data_package["games"][RuleBuilderWorld.game] = RuleBuilderWorld.get_data
                 Has("F"),
             ),
             HasAny.Resolved(("A", "B", "C", "F"), player=1),
+        ),
+        (
+            And(Has("A"), True_()),
+            Has.Resolved("A", player=1),
+        ),
+        (
+            And(Has("A"), False_()),
+            False_.Resolved(player=1),
+        ),
+        (
+            Or(Has("A"), True_()),
+            True_.Resolved(player=1),
+        ),
+        (
+            Or(Has("A"), False_()),
+            Has.Resolved("A", player=1),
         ),
     )
 )
@@ -592,6 +612,13 @@ class TestRules(unittest.TestCase):
         self.state.remove(items[1])
         self.assertFalse(resolved_rule(self.state))
 
+    def test_completion_rule(self) -> None:
+        rule = Has("Item 1")
+        self.world.set_completion_rule(rule)
+        self.assertEqual(self.multiworld.can_beat_game(self.state), False)
+        self.state.collect(self.world.create_item("Item 1"))
+        self.assertEqual(self.multiworld.can_beat_game(self.state), True)
+
 
 class TestSerialization(unittest.TestCase):
     maxDiff: int | None = None
@@ -741,3 +768,420 @@ class TestSerialization(unittest.TestCase):
 
         deserialized_rule = world.rule_from_dict(self.rule_dict)
         self.assertEqual(deserialized_rule, self.rule, str(deserialized_rule))
+
+
+class TestExplain(unittest.TestCase):
+    multiworld: "MultiWorld"  # pyright: ignore[reportUninitializedInstanceVariable]
+    world: "RuleBuilderWorld"  # pyright: ignore[reportUninitializedInstanceVariable]
+    state: "CollectionState"  # pyright: ignore[reportUninitializedInstanceVariable]
+    player: int = 1
+
+    resolved_rule: ClassVar[Rule.Resolved] = And.Resolved(
+        (
+            Or.Resolved(
+                (
+                    Has.Resolved("Item 1", count=4, player=1),
+                    HasAll.Resolved(("Item 2", "Item 3"), player=1),
+                    HasAny.Resolved(("Item 4", "Item 5"), player=1),
+                ),
+                player=1,
+            ),
+            HasAllCounts.Resolved((("Item 6", 1), ("Item 7", 5)), player=1),
+            HasAnyCount.Resolved((("Item 8", 2), ("Item 9", 3)), player=1),
+            HasFromList.Resolved(("Item 10", "Item 11", "Item 12"), count=2, player=1),
+            HasFromListUnique.Resolved(("Item 13", "Item 14"), player=1),
+            HasGroup.Resolved("Group 1", ("Item 15", "Item 16", "Item 17"), player=1),
+            HasGroupUnique.Resolved("Group 2", ("Item 18", "Item 19"), count=2, player=1),
+            CanReachRegion.Resolved("Region 2", player=1),
+            CanReachLocation.Resolved("Location 2", "Region 2", player=1),
+            CanReachEntrance.Resolved("Entrance 2", "Region 2", player=1),
+            True_.Resolved(player=1),
+            False_.Resolved(player=1),
+        ),
+        player=1,
+    )
+
+    @override
+    def setUp(self) -> None:
+        self.multiworld = setup_solo_multiworld(RuleBuilderWorld, seed=0)
+        world = self.multiworld.worlds[1]
+        assert isinstance(world, RuleBuilderWorld)
+        self.world = world
+        self.state = self.multiworld.state
+
+        region1 = Region("Region 1", self.player, self.multiworld)
+        region2 = Region("Region 2", self.player, self.multiworld)
+        region3 = Region("Region 3", self.player, self.multiworld)
+        self.multiworld.regions.extend([region1, region2, region3])
+
+        region2.add_locations({"Location 2": 1}, RuleBuilderLocation)
+        world.create_entrance(region1, region2, Has("Item 1"))
+        world.create_entrance(region2, region3, name="Entrance 2")
+
+    def _collect_all(self) -> None:
+        for i in range(1, LOC_COUNT + 1):
+            for _ in range(10):
+                item = self.world.create_item(f"Item {i}")
+                self.state.collect(item)
+
+    def test_explain_json_with_state_no_items(self) -> None:
+        expected: list[JSONMessagePart] = [
+            {"type": "text", "text": "("},
+            {"type": "text", "text": "("},
+            {"type": "text", "text": "Missing "},
+            {"type": "color", "color": "cyan", "text": "4"},
+            {"type": "text", "text": "x "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 1", "player": 1},
+            {"type": "text", "text": " | "},
+            {"type": "text", "text": "Missing "},
+            {"type": "color", "color": "cyan", "text": "some"},
+            {"type": "text", "text": " of ("},
+            {"type": "text", "text": "Missing: "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 2", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 3", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " | "},
+            {"type": "text", "text": "Missing "},
+            {"type": "color", "color": "cyan", "text": "all"},
+            {"type": "text", "text": " of ("},
+            {"type": "text", "text": "Missing: "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 4", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 5", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Missing "},
+            {"type": "color", "color": "cyan", "text": "some"},
+            {"type": "text", "text": " of ("},
+            {"type": "text", "text": "Missing: "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 6", "player": 1},
+            {"type": "text", "text": " x1"},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 7", "player": 1},
+            {"type": "text", "text": " x5"},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Missing "},
+            {"type": "color", "color": "cyan", "text": "all"},
+            {"type": "text", "text": " of ("},
+            {"type": "text", "text": "Missing: "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 8", "player": 1},
+            {"type": "text", "text": " x2"},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 9", "player": 1},
+            {"type": "text", "text": " x3"},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "salmon", "text": "0/2"},
+            {"type": "text", "text": " items from ("},
+            {"type": "text", "text": "Missing: "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 10", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 11", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 12", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "salmon", "text": "0/1"},
+            {"type": "text", "text": " unique items from ("},
+            {"type": "text", "text": "Missing: "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 13", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 14", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "salmon", "text": "0/1"},
+            {"type": "text", "text": " items from "},
+            {"type": "color", "color": "cyan", "text": "Group 1"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "salmon", "text": "0/2"},
+            {"type": "text", "text": " unique items from "},
+            {"type": "color", "color": "cyan", "text": "Group 2"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Cannot reach region "},
+            {"type": "color", "color": "yellow", "text": "Region 2"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Cannot reach location "},
+            {"type": "location_name", "text": "Location 2", "player": 1},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Cannot reach entrance "},
+            {"type": "entrance_name", "text": "Entrance 2", "player": 1},
+            {"type": "text", "text": " & "},
+            {"type": "color", "color": "green", "text": "True"},
+            {"type": "text", "text": " & "},
+            {"type": "color", "color": "salmon", "text": "False"},
+            {"type": "text", "text": ")"},
+        ]
+        assert self.resolved_rule.explain_json(self.state) == expected
+
+    def test_explain_json_with_state_all_items(self) -> None:
+        self._collect_all()
+
+        expected: list[JSONMessagePart] = [
+            {"type": "text", "text": "("},
+            {"type": "text", "text": "("},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "4"},
+            {"type": "text", "text": "x "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 1", "player": 1},
+            {"type": "text", "text": " | "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "all"},
+            {"type": "text", "text": " of ("},
+            {"type": "text", "text": "Found: "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 2", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 3", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " | "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "some"},
+            {"type": "text", "text": " of ("},
+            {"type": "text", "text": "Found: "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 4", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 5", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "all"},
+            {"type": "text", "text": " of ("},
+            {"type": "text", "text": "Found: "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 6", "player": 1},
+            {"type": "text", "text": " x1"},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 7", "player": 1},
+            {"type": "text", "text": " x5"},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "some"},
+            {"type": "text", "text": " of ("},
+            {"type": "text", "text": "Found: "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 8", "player": 1},
+            {"type": "text", "text": " x2"},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 9", "player": 1},
+            {"type": "text", "text": " x3"},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "green", "text": "30/2"},
+            {"type": "text", "text": " items from ("},
+            {"type": "text", "text": "Found: "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 10", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 11", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 12", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "green", "text": "2/1"},
+            {"type": "text", "text": " unique items from ("},
+            {"type": "text", "text": "Found: "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 13", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 14", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "green", "text": "30/1"},
+            {"type": "text", "text": " items from "},
+            {"type": "color", "color": "cyan", "text": "Group 1"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "green", "text": "2/2"},
+            {"type": "text", "text": " unique items from "},
+            {"type": "color", "color": "cyan", "text": "Group 2"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Reached region "},
+            {"type": "color", "color": "yellow", "text": "Region 2"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Reached location "},
+            {"type": "location_name", "text": "Location 2", "player": 1},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Reached entrance "},
+            {"type": "entrance_name", "text": "Entrance 2", "player": 1},
+            {"type": "text", "text": " & "},
+            {"type": "color", "color": "green", "text": "True"},
+            {"type": "text", "text": " & "},
+            {"type": "color", "color": "salmon", "text": "False"},
+            {"type": "text", "text": ")"},
+        ]
+        assert self.resolved_rule.explain_json(self.state) == expected
+
+    def test_explain_json_without_state(self) -> None:
+        expected: list[JSONMessagePart] = [
+            {"type": "text", "text": "("},
+            {"type": "text", "text": "("},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "4"},
+            {"type": "text", "text": "x "},
+            {"type": "item_name", "flags": 1, "text": "Item 1", "player": 1},
+            {"type": "text", "text": " | "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "all"},
+            {"type": "text", "text": " of ("},
+            {"type": "item_name", "flags": 1, "text": "Item 2", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "text": "Item 3", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " | "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "any"},
+            {"type": "text", "text": " of ("},
+            {"type": "item_name", "flags": 1, "text": "Item 4", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "text": "Item 5", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "all"},
+            {"type": "text", "text": " of ("},
+            {"type": "item_name", "flags": 1, "text": "Item 6", "player": 1},
+            {"type": "text", "text": " x1"},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "text": "Item 7", "player": 1},
+            {"type": "text", "text": " x5"},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "any"},
+            {"type": "text", "text": " of ("},
+            {"type": "item_name", "flags": 1, "text": "Item 8", "player": 1},
+            {"type": "text", "text": " x2"},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "text": "Item 9", "player": 1},
+            {"type": "text", "text": " x3"},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "2"},
+            {"type": "text", "text": "x items from ("},
+            {"type": "item_name", "flags": 1, "text": "Item 10", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "text": "Item 11", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "text": "Item 12", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "1"},
+            {"type": "text", "text": "x unique items from ("},
+            {"type": "item_name", "flags": 1, "text": "Item 13", "player": 1},
+            {"type": "text", "text": ", "},
+            {"type": "item_name", "flags": 1, "text": "Item 14", "player": 1},
+            {"type": "text", "text": ")"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "1"},
+            {"type": "text", "text": " items from "},
+            {"type": "color", "color": "cyan", "text": "Group 1"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Has "},
+            {"type": "color", "color": "cyan", "text": "2"},
+            {"type": "text", "text": " unique items from "},
+            {"type": "color", "color": "cyan", "text": "Group 2"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Can reach region "},
+            {"type": "color", "color": "yellow", "text": "Region 2"},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Can reach location "},
+            {"type": "location_name", "text": "Location 2", "player": 1},
+            {"type": "text", "text": " & "},
+            {"type": "text", "text": "Can reach entrance "},
+            {"type": "entrance_name", "text": "Entrance 2", "player": 1},
+            {"type": "text", "text": " & "},
+            {"type": "color", "color": "green", "text": "True"},
+            {"type": "text", "text": " & "},
+            {"type": "color", "color": "salmon", "text": "False"},
+            {"type": "text", "text": ")"},
+        ]
+        assert self.resolved_rule.explain_json() == expected
+
+    def test_explain_str_with_state_no_items(self) -> None:
+        expected = (
+            "((Missing 4x Item 1",
+            "| Missing some of (Missing: Item 2, Item 3)",
+            "| Missing all of (Missing: Item 4, Item 5))",
+            "& Missing some of (Missing: Item 6 x1, Item 7 x5)",
+            "& Missing all of (Missing: Item 8 x2, Item 9 x3)",
+            "& Has 0/2 items from (Missing: Item 10, Item 11, Item 12)",
+            "& Has 0/1 unique items from (Missing: Item 13, Item 14)",
+            "& Has 0/1 items from Group 1",
+            "& Has 0/2 unique items from Group 2",
+            "& Cannot reach region Region 2",
+            "& Cannot reach location Location 2",
+            "& Cannot reach entrance Entrance 2",
+            "& True",
+            "& False)",
+        )
+        assert self.resolved_rule.explain_str(self.state) == " ".join(expected)
+
+    def test_explain_str_with_state_all_items(self) -> None:
+        self._collect_all()
+
+        expected = (
+            "((Has 4x Item 1",
+            "| Has all of (Found: Item 2, Item 3)",
+            "| Has some of (Found: Item 4, Item 5))",
+            "& Has all of (Found: Item 6 x1, Item 7 x5)",
+            "& Has some of (Found: Item 8 x2, Item 9 x3)",
+            "& Has 30/2 items from (Found: Item 10, Item 11, Item 12)",
+            "& Has 2/1 unique items from (Found: Item 13, Item 14)",
+            "& Has 30/1 items from Group 1",
+            "& Has 2/2 unique items from Group 2",
+            "& Reached region Region 2",
+            "& Reached location Location 2",
+            "& Reached entrance Entrance 2",
+            "& True",
+            "& False)",
+        )
+        assert self.resolved_rule.explain_str(self.state) == " ".join(expected)
+
+    def test_explain_str_without_state(self) -> None:
+        expected = (
+            "((Has 4x Item 1",
+            "| Has all of (Item 2, Item 3)",
+            "| Has any of (Item 4, Item 5))",
+            "& Has all of (Item 6 x1, Item 7 x5)",
+            "& Has any of (Item 8 x2, Item 9 x3)",
+            "& Has 2x items from (Item 10, Item 11, Item 12)",
+            "& Has a unique item from (Item 13, Item 14)",
+            "& Has an item from Group 1",
+            "& Has 2x unique items from Group 2",
+            "& Can reach region Region 2",
+            "& Can reach location Location 2",
+            "& Can reach entrance Entrance 2",
+            "& True",
+            "& False)",
+        )
+        assert self.resolved_rule.explain_str() == " ".join(expected)
+
+    def test_str(self) -> None:
+        expected = (
+            "((Has 4x Item 1",
+            "| Has all of (Item 2, Item 3)",
+            "| Has any of (Item 4, Item 5))",
+            "& Has all of (Item 6 x1, Item 7 x5)",
+            "& Has any of (Item 8 x2, Item 9 x3)",
+            "& Has 2x items from (Item 10, Item 11, Item 12)",
+            "& Has a unique item from (Item 13, Item 14)",
+            "& Has an item from Group 1",
+            "& Has 2x unique items from Group 2",
+            "& Can reach region Region 2",
+            "& Can reach location Location 2",
+            "& Can reach entrance Entrance 2",
+            "& True",
+            "& False)",
+        )
+        assert str(self.resolved_rule) == " ".join(expected)
