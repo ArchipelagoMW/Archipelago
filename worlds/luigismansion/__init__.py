@@ -611,7 +611,7 @@ class LMWorld(World):
             exclude += ["Progressive Vacuum"]
         if self.options.boo_radar.value == 2:
             exclude += ["Boo Radar"]
-        item_list = []
+        item_list: set = set()
         for item, data in ITEM_TABLE.items():
             if data.doorid in self.open_doors.keys() and self.open_doors.get(data.doorid) == 1:
                 exclude += [item]
@@ -623,11 +623,11 @@ class LMWorld(World):
                     copies_to_place = 2
             else:
                 copies_to_place = 1
-            copies_to_place = 0 if copies_to_place - exclude.count(item) <= 0 else copies_to_place - exclude.count(item)
+            copies_to_place = max(0, copies_to_place - exclude.count(item))
             if data.code == 64 and copies_to_place < 1:
                 raise Options.OptionError(f"{self.player_name} has excluded too many copies of Progressive Vacuum and the seed cannot be completed")
             for _ in range(copies_to_place):
-                item_list.append(item)
+                item_list.add(item)
                 self.itempool.append(self.create_item(item))
         if self.options.early_first_key.value == 1:
             early_key = ""
