@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import List, Optional
 
+import settings
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 
 import Utils
@@ -97,7 +98,7 @@ class GSTLAPatchExtension(APPatchExtension):
         return caller.apply_ups(rom, data['patch'])
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_settings()
+    options = settings.get_settings()
     if not file_name:
         gstla_options = options.get("gstla_options", None)
         if gstla_options is None:
