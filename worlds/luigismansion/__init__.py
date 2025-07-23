@@ -163,7 +163,6 @@ class LMWorld(World):
 
 
     def __init__(self, *args, **kwargs):
-        self.itempool: list[LMItem] = []
         super(LMWorld, self).__init__(*args, **kwargs)
         self.ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM.copy()
         self.open_doors: dict[int, int] = vanilla_door_state.copy()
@@ -443,7 +442,7 @@ class LMWorld(World):
             rankcalc = 4
         else:
             rankcalc = 5
-        loc = self.multiworld.get_location("King Boo", self.player)
+        loc = self.get_location("King Boo")
         add_rule(loc, lambda state: state.has("Gold Diamond", self.player, rankcalc), "and")
         add_rule(loc, lambda state: state.has("Progressive Vacuum", self.player), "and")
 
@@ -601,12 +600,13 @@ class LMWorld(World):
 
     def create_items(self):
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
+        loc_itempool: list[LMItem] = []
         if self.options.boosanity:
             for item, data in BOO_ITEM_TABLE.items():
                 copies_to_place = 1
                 copies_to_place = 0 if copies_to_place - exclude.count(item) <= 0 else 1 - exclude.count(item)
                 for _ in range(copies_to_place):
-                    self.itempool.append(self.create_item(item))
+                    loc_itempool.append(self.create_item(item))
         if self.options.good_vacuum.value == 2:
             exclude += ["Progressive Vacuum"]
         if self.options.boo_radar.value == 2:
@@ -628,7 +628,7 @@ class LMWorld(World):
                 raise Options.OptionError(f"{self.player_name} has excluded too many copies of Progressive Vacuum and the seed cannot be completed")
             for _ in range(copies_to_place):
                 item_list.add(item)
-                self.itempool.append(self.create_item(item))
+                loc_itempool.append(self.create_item(item))
         if self.options.early_first_key.value == 1:
             early_key = ""
             for key in spawn_locations[self.origin_region_name]["key"]:
@@ -640,7 +640,7 @@ class LMWorld(World):
 
         # Calculate the number of additional filler items to create to fill all locations
         n_locations = len(self.multiworld.get_unfilled_locations(self.player))
-        n_items = len(self.itempool)
+        n_items = len(loc_itempool)
         n_filler_items = n_locations - n_items
         n_trap_items = math.ceil(n_filler_items*(self.options.trap_percentage.value/100))
         n_other_filler = n_filler_items - n_trap_items
@@ -651,15 +651,15 @@ class LMWorld(World):
 
         if sum(filler_trap_weights) > 0:# Add filler items to the item pool.
             for _ in range(n_trap_items):
-                self.itempool.append(self.create_item(self.get_trap_item_name()))
+                loc_itempool.append(self.create_item(self.get_trap_item_name()))
 
             for _ in range(n_other_filler):
-                self.itempool.append(self.create_item((self.get_other_filler_item())))
+                loc_itempool.append(self.create_item((self.get_other_filler_item())))
         else:
             for _ in range(n_filler_items):
-                self.itempool.append(self.create_item((self.get_other_filler_item())))
+                loc_itempool.append(self.create_item((self.get_other_filler_item())))
 
-        self.multiworld.itempool += self.itempool
+        self.multiworld.itempool += loc_itempool
 
     def get_trap_item_name(self) -> str:
         filler = list(trap_filler_items.keys())
@@ -768,7 +768,7 @@ class LMWorld(World):
             self.finished_boo_scaling.wait()
 
         # Output which item has been placed at each location
-        locations = self.multiworld.get_locations(self.player)
+        locations = self.get_locations()
         for location in locations:
             if location.address is not None or (location.name in ROOM_BOO_LOCATION_TABLE.keys()):
                 if location.item:
