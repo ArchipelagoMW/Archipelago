@@ -144,7 +144,7 @@ class LuigisMansionRandomizer:
             update_teiden_enemy_info(self.jmp_enemy_info_table, self.jmp_teiden_enemy_info_table)
         update_boo_table(self.jmp_boo_table, self.output_data)
         update_iyapoo_table(self.jmp_iyapoo_table, self.output_data)
-        update_event_info(self.jmp_map3_event_info_table, self.output_data)
+        update_event_info(self.jmp_map3_event_info_table, bool_boo_checks, self.output_data)
 
         # Updates all the data entries in each jmp table in the szp file.
         self.update_map_info_table(self.map_two_file,self.jmp_character_info_table)
