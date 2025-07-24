@@ -25,11 +25,6 @@ from .Helper_Functions import StringByteFunction as sbf
 from .iso_helper.Events import *
 
 RANDOMIZER_NAME = "Luigi's Mansion"
-CLEAN_LUIGIS_MANSION_ISO_MD5 = 0x6e3d9ae0ed2fbd2f77fa1ca09a60c494  # Based on the USA version of Luigi's Mansion
-
-
-class InvalidCleanISOError(Exception): pass
-
 
 class LuigisMansionRandomizer:
     def __init__(self, clean_iso_path: str, randomized_output_file_path: str, ap_output_data: bytes, debug_flag=False):
