@@ -276,6 +276,7 @@ These packets are sent purely from client to server. They are not accepted by cl
 * [Sync](#Sync)
 * [LocationChecks](#LocationChecks)
 * [LocationScouts](#LocationScouts)
+* [CreateHints](#CreateHints)
 * [UpdateHint](#UpdateHint)
 * [StatusUpdate](#StatusUpdate)
 * [Say](#Say)
@@ -346,6 +347,21 @@ This is useful in cases where an item appears in the game world, such as 'ledge 
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
 | create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
+
+### CreateHints
+
+Sent to the server to create hints for a specified list of locations.  
+Hints that already exist will be silently skipped and their status will not be updated.
+
+When creating hints for another slot's locations, the packet will fail if any of those locations don't contain items for the requesting slot.  
+When creating hints for your own slot's locations, non-existing locations will silently be skipped.  
+
+#### Arguments
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| locations | list\[int\] | The ids of the locations to create hints for. |
+| player | int | The ID of the player whose locations are being hinted for. Defaults to the requesting slot. |
+| status | [HintStatus](#HintStatus) | If included, sets the status of the hint to this status. Defaults to `HINT_UNSPECIFIED`. Cannot set `HINT_FOUND`. |
 
 ### UpdateHint
 Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
