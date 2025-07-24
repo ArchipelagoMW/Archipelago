@@ -129,9 +129,9 @@ class GoalManager:
         server_djinn = ctx.stored_data.get(client.get_djinn_location_key(ctx), [])
         if server_djinn is None:
             server_djinn: List[int] = []
-        difference = False
-        if "djinn" in self.count_requirements:
-            difference = client.checked_djinn.difference(server_djinn)
+
+        # Always compute difference for pop tracker
+        difference = client.checked_djinn.difference(server_djinn)
 
         if updated_flags or difference:
             # logger.info(f"Flags updated: {updated_flags}")

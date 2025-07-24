@@ -53,10 +53,6 @@ def _wrap_loc(loc: InternalLocationData) -> LocationData:
 def _convert_locs(data: List[InternalLocationData]) -> List[LocationData]:
     return [_wrap_loc(x) for x in data]
 
-ap_only_events = [
-
-]
-
 djinn_locations = _convert_locs(LocationLists.djinn_locations)
 
 summon_tablets = _convert_locs(LocationLists.summon_tablets)

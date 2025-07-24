@@ -567,7 +567,3 @@ class TestTreasureLogic(GSTestBase):
                                 f"Location {location} with flag {hex(flag)} cannot be reached with items {items} state {state.prog_items}")
 
 
-# locations_by_flag = {
-#     x.rando_flag: x
-#     for x in all_locations if x
-# }

@@ -532,6 +532,8 @@ class GameData:
             EventDatum(event_offset + 17, 0x6dd, "Islet Cave - Sentinel", "Sentinel defeated"),
             EventDatum(event_offset + 18, 0x6d1, "Yampi Desert Cave - Valukar", "Valukar defeated"),
             EventDatum(event_offset + 19, 0x6da, "Anemos Inner Sanctum - Dullahan", "Dullahan defeated"),
+            # Flag here is really the Jupiter Lighthouse flag.  Base rando with PC shuffle seems to do something weird
+            # with the reunion flag
             EventDatum(event_offset + 20, 0xA21, "Contigo - Reunion", "Reunion"),
             # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Karst", "Karst defeated"),
             # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Agatio", "Agatio defeated"),

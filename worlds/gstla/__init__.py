@@ -293,7 +293,6 @@ class GSTLAWorld(World):
         goal_dict['flags'] = flags
         goal_dict['counts'] = counts
         ret["goal"] = goal_dict
-        print(ret)
         return ret
 
     def generate_output(self, output_directory: str):
