@@ -8,8 +8,10 @@ on:
     paths:
       - '**'
       - '!docs/**'
+      - '!worlds/*/docs/**'
       - '!setup.py'
       - '!*.iss'
+      - '!**.md'
       - '!.gitignore'
       - '!.github/workflows/**'
       - '.github/workflows/unittests.yml'
@@ -17,8 +19,10 @@ on:
     paths:
       - '**'
       - '!docs/**'
+      - '!worlds/*/docs/**'
       - '!setup.py'
       - '!*.iss'
+      - '!**.md'
       - '!.gitignore'
       - '!.github/workflows/**'
       - '.github/workflows/unittests.yml'
