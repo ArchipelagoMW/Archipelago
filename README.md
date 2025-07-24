@@ -80,6 +80,7 @@ Currently, the following games are supported:
 * Jak and Daxter: The Precursor Legacy
 * Super Mario Land 2: 6 Golden Coins
 * shapez
+* Paint
 * Satisfactory
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
