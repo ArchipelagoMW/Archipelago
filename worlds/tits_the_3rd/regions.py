@@ -7,6 +7,13 @@ from worlds.tits_the_3rd.names.region_name import RegionName
 from BaseClasses import CollectionState, MultiWorld, Region
 
 
+chapter_1_combat_regions = [
+    RegionName.jade_corridor_start,
+    RegionName.jade_corridor_expansion_area_1,
+    RegionName.jade_corridor_expansion_area_2,
+]
+
+
 def create_region(multiworld: MultiWorld, player: int, name: str):
     """Create a region for Trails in the Sky the 3rd"""
     region = Region(name, player, multiworld)
@@ -30,6 +37,15 @@ def create_regions(multiworld: MultiWorld, player: int):
     create_region(multiworld, player, RegionName.jade_corridor_expansion_area_1)
     create_region(multiworld, player, RegionName.jade_corridor_expansion_area_2)
     create_region(multiworld, player, RegionName.jade_corridor_arseille)
+    create_region(multiworld, player, RegionName.level_90)
+    create_region(multiworld, player, RegionName.level_95)
+    create_region(multiworld, player, RegionName.level_103)
+    create_region(multiworld, player, RegionName.level_105)
+    create_region(multiworld, player, RegionName.level_111)
+    create_region(multiworld, player, RegionName.level_116)
+    create_region(multiworld, player, RegionName.level_124)
+    create_region(multiworld, player, RegionName.level_133)
+    create_region(multiworld, player, RegionName.level_136)
 
     create_region(multiworld, player, RegionName.day_grancel_south)
     create_region(multiworld, player, RegionName.day_grancel_north)
@@ -263,3 +279,10 @@ def connect_regions(multiworld: MultiWorld, player: int):
         RegionName.jade_corridor_expansion_area_2,
         lambda state: state.can_reach_region(RegionName.jade_corridor_expansion_area_2, player)
     )
+
+    # Assuming no progression balancing for now:
+    connect_region(multiworld, player, RegionName.hermit_garden, RegionName.level_90)
+
+    for region in chapter_1_combat_regions:
+        connect_region(multiworld, player, region, RegionName.level_90)
+        connect_region(multiworld, player, region, RegionName.level_95)
