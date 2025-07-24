@@ -17,22 +17,11 @@ class Logic(Choice):
     display_name = "Logic"
 
 
-class BrownBoxes(Choice):
-    """Include the 201 brown box locations from the original game. Brown Boxes are all the boxes that contained a
-    consumable in the original game. If shuffle is chosen, the consumables contained will be shuffled but the brown
-    boxes will not be Archipelago location checks."""
-    option_exclude = 0
-    option_include = 1
-    option_shuffle = 2
-    default = 1
-    display_name = "Brown Boxes"
-
-
 class SkyCoinMode(Choice):
     """Configure how the Sky Coin is acquired. With standard, the Sky Coin will be placed randomly. With Start With, the
     Sky Coin will be in your inventory at the start of the game. With Save The Crystals, the Sky Coin will be acquired
     once you save all 4 crystals. With Shattered Sky Coin, the Sky Coin is split in 40 fragments; you can enter Doom
-    Castle once the required amount is found. Shattered Sky Coin will force brown box locations to be included."""
+    Castle once the required amount is found."""
     option_standard = 0
     option_start_with = 1
     option_save_the_crystals = 2
@@ -119,17 +108,26 @@ class BossesScalingUpper(EnemyScaling):
 
 
 class EnemizerAttacks(Choice):
-    """Shuffles enemy attacks. Standard: No shuffle. Safe: Randomize every attack but leave out self-destruct and Dark
-    King attacks. Chaos: Randomize and include self-destruct and Dark King attacks. Self Destruct: Every enemy
-    self-destructs. Simple Shuffle: Instead of randomizing, shuffle one monster's attacks to another. Dark King is left
-    vanilla."""
+    """Shuffles enemy attacks. Standard: No shuffle. Balanced: Randomize every attack, but remove self-destruct
+    and multiply; only the Dark Castle's bosses can get Dark King attacks.
+    Balanced Expert: Same as balanced, but enemies tends to have stronger attacks.
+    Chaos: Randomize and include self-destruct and Dark King attacks.
+    Self Destruct: Every enemy self-destructs.
+    Simple Shuffle: Instead of randomizing, shuffle one monster's attacks to another. Dark King is left vanilla."""
     display_name = "Enemizer Attacks"
     option_normal = 0
-    option_safe = 1
-    option_chaos = 2
-    option_self_destruct = 3
-    option_simple_shuffle = 4
+    option_balanced = 1
+    option_balanced_expert = 2
+    option_chaos = 3
+    option_self_destruct = 4
+    option_simple_shuffle = 5
     default = 0
+
+
+class ProgressiveEnemizer(Toggle):
+    """Enemies of the same type will share the same attack pool."""
+    default = 0
+    display_name = "Progressive Enemizer"
 
 
 class EnemizerGroups(Choice):
@@ -187,18 +185,25 @@ class TweakFrustratingDungeons(Toggle):
     display_name = "Tweak Frustrating Dungeons"
 
 
+class OverworldShuffle(Toggle):
+    """Shuffle the Overworld."""
+    display_name = "Overworld Shuffle"
+
+
 class MapShuffle(Choice):
-    """None: No shuffle. Overworld: Only shuffle the Overworld locations. Dungeons: Only shuffle the dungeons' floors
-    amongst themselves. Temples and Towns aren't included. Overworld And Dungeons: Shuffle the Overworld and dungeons
-    at the same time. Everything: Shuffle the Overworld, dungeons, temples and towns all amongst each others.
+    """Shuffle dungeon floors.
+    None: No shuffle.
+    Dungeons Internal: Shuffle each individual dungeons' floors. Temples and Towns aren't included.
+    Dungeons Mixed: Mix up all dungeons' floors amongst themselves.
+    Everything: Shuffle the dungeons, temples and towns' floors all amongst each others.
     When dungeons are shuffled, defeating Pazuzu won't teleport you to the 7th floor, you have to get there normally to
-    save the Crystal and get Pazuzu's Chest."""
+    save the Crystal and get Pazuzu's Chest. Some one ways have been blocked in Lava Dome, Giant Tree & Pazuzu's Tower
+    to avoid softlock."""
     display_name = "Map Shuffle"
     option_none = 0
-    option_overworld = 1
-    option_dungeons = 2
-    option_overworld_and_dungeons = 3
-    option_everything = 4
+    option_dungeons_internal = 1
+    option_dungeons_mixed = 2
+    option_everything = 3
     default = 0
 
 
@@ -322,11 +327,29 @@ class KaelisMomFightsMinotaur(Toggle):
     default = 0
 
 
+class HintMode(Choice):
+    """Four NPCs, one in each INN, will reveal the location of an item. NPCs will never hint for an item already in your
+    inventory, so hints may change during playthrough. If Enemy Density is set to 0%, NPCs will refuse to give hints
+    until you have enough GPs to also cover any remaining vendor items.
+    None: No Hints.
+    Free: Hints are given for free.
+    Fixed: All hints will cost that amount of GPs.
+    Progressive: Each time you buy a hint, the cost of the other hints will increment by that amount."""
+    display_name = "Hint Mode"
+    default = 0
+    option_none = 0
+    option_free = 1
+    option_fixed250 = 2
+    option_fixed500 = 3
+    option_fixed1000 = 4
+    option_prog125 = 5
+    option_prog250 = 6
+    option_prog500 = 7
+
 @dataclass
 class FFMQOptions(PerGameCommonOptions):
     accessibility: ItemsAccessibility
     logic: Logic
-    brown_boxes: BrownBoxes
     sky_coin_mode: SkyCoinMode
     shattered_sky_coin_quantity: ShatteredSkyCoinQuantity
     starting_weapon: StartingWeapon
@@ -344,6 +367,7 @@ class FFMQOptions(PerGameCommonOptions):
     bosses_scaling_lower: BossesScalingLower
     bosses_scaling_upper: BossesScalingUpper
     enemizer_attacks: EnemizerAttacks
+    progressive_enemizer: ProgressiveEnemizer
     enemizer_groups: EnemizerGroups
     shuffle_res_weak_types: ShuffleResWeakType
     shuffle_enemies_position: ShuffleEnemiesPositions
@@ -351,8 +375,10 @@ class FFMQOptions(PerGameCommonOptions):
     doom_castle_mode: DoomCastle
     doom_castle_shortcut: DoomCastleShortcut
     tweak_frustrating_dungeons: TweakFrustratingDungeons
+    overworld_shuffle: OverworldShuffle
     map_shuffle: MapShuffle
     crest_shuffle: CrestShuffle
     shuffle_battlefield_rewards: ShuffleBattlefieldRewards
     map_shuffle_seed: MapShuffleSeed
     battlefields_battles_quantities: BattlefieldsBattlesQuantities
+    hint_mode: HintMode
