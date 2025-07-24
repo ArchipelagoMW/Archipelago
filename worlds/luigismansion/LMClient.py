@@ -490,7 +490,6 @@ class LMContext(CommonContext):
         Checks a provided location in ram to see if the location was interacted with. This includes
         furniture, plants, entering rooms,
         """
-        # TODO optimize all other cases for reading when a pointer is there vs not.
         match loc_data.type:
             case "Furniture" | "Plant":
                 # Check all possible furniture addresses.
@@ -536,24 +535,17 @@ class LMContext(CommonContext):
             if current_map_id not in lm_loc_data.map_id:
                 continue
 
-            # If in main mansion map
-            if current_map_id == 2:
-                current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
-                for addr_to_update in lm_loc_data.update_ram_addr:
-                    # Only check locations that are currently in the same room as us.
+            for addr_to_update in lm_loc_data.update_ram_addr:
+                # If in main mansion map
+                if current_map_id == 2:
+                    current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
                     room_to_check = addr_to_update.in_game_room_id if not addr_to_update.in_game_room_id is None \
                         else current_room_id
-
                     if not room_to_check == current_room_id:
                         continue
 
-                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, lm_loc_data.map_id):
-                        self.locations_checked.add(mis_loc)
-
-            else:
-                for addr_to_update in lm_loc_data.update_ram_addr:
-                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, lm_loc_data.map_id):
-                        self.locations_checked.add(mis_loc)
+                if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, lm_loc_data.map_id):
+                    self.locations_checked.add(mis_loc)
 
         await self.check_locations(self.locations_checked)
 
