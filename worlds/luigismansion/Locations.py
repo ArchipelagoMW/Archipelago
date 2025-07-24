@@ -19,7 +19,7 @@ class LMLocationData(NamedTuple):
 
 class LMLocation(Location):
     game: str = "Luigi's Mansion"
-    access: []
+    access: list[str]
     rule_def: str = ""
     locked_item: Optional[str]
 
