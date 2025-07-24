@@ -10,7 +10,7 @@ from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Helper_Functions import StringByteFunction as sbf
 
-CLIENT_VERSION = "V0.4.11"
+CLIENT_VERSION = "V0.5.0"
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
@@ -798,7 +798,6 @@ async def give_player_items(ctx: LMContext):
                             curr_val = (curr_val | (1 << addr_to_update.bit_position))
                         else:
                             curr_val += 1
-                #await wait_for_next_loop(10)
 
                 await write_bytes_and_validate(addr_to_update.ram_addr, ram_offset,
                     curr_val.to_bytes(byte_size, 'big'))
