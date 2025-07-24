@@ -244,6 +244,58 @@ def connect_regions(multiworld: MultiWorld, player: int):
         RegionName.night_grancel_north,
     )
 
+    connect_region(
+        multiworld,
+        player,
+        RegionName.grancel_castle,
+        RegionName.silver_road,
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.silver_road,
+        RegionName.grancel_castle,
+    )
+
+    connect_region(
+        multiworld,
+        player,
+        RegionName.grancel_castle,
+        RegionName.golden_road,
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.golden_road,
+        RegionName.grancel_castle,
+    )
+
+    connect_region(
+        multiworld,
+        player,
+        RegionName.golden_road,
+        RegionName.regroup_area,
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.regroup_area,
+        RegionName.golden_road,
+    )
+
+    connect_region(
+        multiworld,
+        player,
+        RegionName.silver_road,
+        RegionName.regroup_area,
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.regroup_area,
+        RegionName.silver_road,
+    )
+
     # Assume the warp menu is always reachable, but add access rules to specific warps.
     connect_region(
         multiworld,
