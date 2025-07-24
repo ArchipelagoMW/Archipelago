@@ -1670,9 +1670,11 @@ TREASURES_LOCATION_TABLE = {
                                        update_ram_addr=[LMRamData(in_game_room_id=29)]),
 }
 
-WDYM_LOCATION_TABLE = {
+
+# Map Visits, furniture items in maps, other stuff?
+WDYM_LOCATION_TABLE ={
     "Roof Entry Hut": LMLocationData("Roof", 854, "Furniture", 716, [],
-                                                              update_ram_addr=[LMRamData(in_game_room_id=63)]),
+                                                              update_ram_addr=[LMRamData(in_game_room_id=63)], require_poltergust=False),
     "Graveyard West Tree": LMLocationData("Graveyard", 855, "Furniture", 184, ["Water Element Medal"],
                                                               update_ram_addr=[LMRamData(in_game_room_id=15)]),
     "Graveyard East Tree": LMLocationData("Graveyard", 856, "Furniture", 185, ["Water Element Medal"],
@@ -1688,9 +1690,9 @@ WDYM_LOCATION_TABLE = {
     "Courtyard Laundry Bar": LMLocationData("Courtyard", 861, "Furniture", 314, [],
                                                      update_ram_addr=[LMRamData(in_game_room_id=24)]),
     "Cellar Fence": LMLocationData("Cellar", 864, "Furniture", 9, [],
-                                     update_ram_addr=[LMRamData(in_game_room_id=66)]),
+                                     update_ram_addr=[LMRamData(in_game_room_id=66)], require_poltergust=False),
     "Pipe Room Fence": LMLocationData("Pipe Room", 865, "Furniture", 23, [],
-                                       update_ram_addr=[LMRamData(in_game_room_id=68)]),
+                                       update_ram_addr=[LMRamData(in_game_room_id=68)], require_poltergust=False),
     "Safari Room L Cheetah Carpet": LMLocationData("Safari Room", 866, "Furniture", 628, [],
                                                   update_ram_addr=[LMRamData(in_game_room_id=55)]),
     "Safari Room R Cheetah Carpet": LMLocationData("Safari Room", 867, "Furniture", 629, [],
