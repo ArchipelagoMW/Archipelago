@@ -458,10 +458,8 @@ class ALTTPWorld(World):
                         return None
             else:
                 if 'Sword' in item_name:
-                    if state.has('Golden Sword', item.player):
-                        pass
-                    elif (state.has('Tempered Sword', item.player) and
-                          self.difficulty_requirements.progressive_sword_limit >= 4):
+                    if (state.has('Tempered Sword', item.player) and
+                            self.difficulty_requirements.progressive_sword_limit >= 4):
                         return 'Golden Sword'
                     elif (state.has('Master Sword', item.player) and
                           self.difficulty_requirements.progressive_sword_limit >= 3):
@@ -472,17 +470,13 @@ class ALTTPWorld(World):
                     elif self.difficulty_requirements.progressive_sword_limit >= 1:
                         return 'Fighter Sword'
                 elif 'Glove' in item_name:
-                    if state.has('Titans Mitts', item.player):
-                        return
-                    elif state.has('Power Glove', item.player):
+                    if state.has('Power Glove', item.player):
                         return 'Titans Mitts'
                     else:
                         return 'Power Glove'
                 elif 'Shield' in item_name:
-                    if state.has('Mirror Shield', item.player):
-                        return
-                    elif (state.has('Red Shield', item.player) and
-                          self.difficulty_requirements.progressive_shield_limit >= 3):
+                    if (state.has('Red Shield', item.player) and
+                            self.difficulty_requirements.progressive_shield_limit >= 3):
                         return 'Mirror Shield'
                     elif (state.has('Blue Shield', item.player) and
                           self.difficulty_requirements.progressive_shield_limit >= 2):
@@ -490,11 +484,9 @@ class ALTTPWorld(World):
                     elif self.difficulty_requirements.progressive_shield_limit >= 1:
                         return 'Blue Shield'
                 elif 'Bow' in item_name:
-                    if state.has('Silver Bow', item.player):
-                        return
-                    elif state.has('Bow', item.player) and (self.difficulty_requirements.progressive_bow_limit >= 2
-                                                            or self.options.glitches_required == 'no_glitches'
-                                                            or self.options.swordless):
+                    if state.has('Bow', item.player) and (self.difficulty_requirements.progressive_bow_limit >= 2
+                                                          or self.options.glitches_required == 'no_glitches'
+                                                          or self.options.swordless):
                         # modes where silver bow is always required for ganon
                         return 'Silver Bow'
                     elif self.difficulty_requirements.progressive_bow_limit >= 1:
