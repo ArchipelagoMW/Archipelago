@@ -1,6 +1,5 @@
 import copy
-from pkgutil import get_data
-from typing import Dict, Any, List, TYPE_CHECKING
+from typing import Any, List, TYPE_CHECKING
 
 from BaseClasses import Location,  MultiWorld
 if TYPE_CHECKING:
