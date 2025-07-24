@@ -212,26 +212,26 @@ def lmconnect(world: "LMWorld", source: str, target: str, key: Optional[str] = N
 
     if required_element == "Fire":
         for fregion in Rules.FIRE_SPIRIT_SPOT:
-            world.multiworld.register_indirect_condition(world.multiworld.get_region(fregion,world.player),
+            world.multiworld.register_indirect_condition(world.get_region(fregion),
                                                          world.multiworld.get_entrance(f"{source_region.name} -> {target_region.name}", world.player))
             if not one_way:
-                world.multiworld.register_indirect_condition(world.multiworld.get_region(fregion, world.player),
+                world.multiworld.register_indirect_condition(world.get_region(fregion),
                                                              world.multiworld.get_entrance(
                                                                  f"{target_region.name} -> {source_region.name}", world.player))
     elif required_element == "Ice":
         for iregion in Rules.ICE_SPIRIT_SPOT:
-            world.multiworld.register_indirect_condition(world.multiworld.get_region(iregion,world.player),
+            world.multiworld.register_indirect_condition(world.get_region(iregion),
                                                          world.multiworld.get_entrance(f"{source_region.name} -> {target_region.name}", world.player))
             if not one_way:
-                world.multiworld.register_indirect_condition(world.multiworld.get_region(iregion, world.player),
+                world.multiworld.register_indirect_condition(world.get_region(iregion),
                                                              world.multiworld.get_entrance(
                                                                  f"{target_region.name} -> {source_region.name}", world.player))
     elif required_element == "Water":
         for wregion in Rules.WATER_SPIRIT_SPOT:
-            world.multiworld.register_indirect_condition(world.multiworld.get_region(wregion,world.player),
+            world.multiworld.register_indirect_condition(world.get_region(wregion),
                                                          world.multiworld.get_entrance(f"{source_region.name} -> {target_region.name}", world.player))
             if not one_way:
-                world.multiworld.register_indirect_condition(world.multiworld.get_region(wregion, world.player),
+                world.multiworld.register_indirect_condition(world.get_region(wregion),
                                                              world.multiworld.get_entrance(
                                                                  f"{target_region.name} -> {source_region.name}", world.player))
 

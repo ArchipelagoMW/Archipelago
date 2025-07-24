@@ -163,8 +163,6 @@ class LMWorld(World):
 
 
     def __init__(self, *args, **kwargs):
-        self.itempool: list[LMItem] = []
-        self.pre_fill_items: list[LMItem] = []
         super(LMWorld, self).__init__(*args, **kwargs)
         self.ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM.copy()
         self.open_doors: dict[int, int] = vanilla_door_state.copy()
@@ -175,29 +173,45 @@ class LMWorld(World):
         self.hints: dict[str, dict[str, str]] = {}
         self.spawn_full_locked: bool = False
 
+    @staticmethod
     def interpret_slot_data(self, slot_data):
         # There are more clever ways to do this, but all would require much larger changes
         return slot_data  # Tell UT that we have logic to fix
 
+    def set_element_rules(self, location: LMLocation, use_enemizer: bool):
+        region = location.region
+        if len(location.access) != 0:
+            for item in location.access:
+                if item == "Fire Element Medal":
+                    add_rule(location, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                elif item == "Water Element Medal":
+                    add_rule(location, lambda state: Rules.can_fst_water(state, self.player), "and")
+                elif item == "Ice Element Medal":
+                    add_rule(location, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                else:
+                    add_rule(location, lambda state, i=item: state.has(i, self.player), "and")
+
+        if use_enemizer:
+            if region in GHOST_TO_ROOM.keys() and location != "Uncle Grimmly, Hermit of the Darkness":
+                # if fire, require water
+                if self.ghost_affected_regions[region] == "Fire":
+                    add_rule(location, lambda state: Rules.can_fst_water(state, self.player), "and")
+                # if water, require ice
+                elif self.ghost_affected_regions[region] == "Water":
+                    add_rule(location, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                # if ice, require fire
+                elif self.ghost_affected_regions[region] == "Ice":
+                    add_rule(location, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                else:
+                    pass
     def _set_optional_locations(self):
 
         # Set the flags for progression location by checking player's settings
         if self.options.toadsanity:
             for location, data in TOAD_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
-                entry = LMLocation(self.player, location, region, data)
-                if region.name in GHOST_TO_ROOM.keys():
-                    # if fire, require water
-                    if self.ghost_affected_regions[region.name] == "Fire":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    # if water, require ice
-                    elif self.ghost_affected_regions[region.name] == "Water":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    # if ice, require fire
-                    elif self.ghost_affected_regions[region.name] == "Ice":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    else:
-                        pass
+                entry: LMLocation = LMLocation(self.player, location, region, data)
+                self.set_element_rules(entry, True)
                 region.locations.append(entry)
         if "Full" in self.options.furnisanity.value:
             for location, data in FURNITURE_LOCATION_TABLE.items():
@@ -205,16 +219,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                self.set_element_rules(entry, False)
                 region.locations.append(entry)
         else:
             LOCATION_DICT: dict[str, LMLocationData] = {}
@@ -306,16 +311,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                self.set_element_rules(entry, False)
                 region.locations.append(entry)
         if self.options.gold_mice:
             for location, data in GOLD_MICE_LOCATION_TABLE.items():
@@ -342,34 +338,13 @@ class LMWorld(World):
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-                if region.name in GHOST_TO_ROOM.keys() and location != "Uncle Grimmly, Hermit of the Darkness":
-                    # if fire, require water
-                    if self.ghost_affected_regions[region.name] == "Fire":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    # if water, require ice
-                    elif self.ghost_affected_regions[region.name] == "Water":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    # if ice, require fire
-                    elif self.ghost_affected_regions[region.name] == "Ice":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    else:
-                        pass
+                self.set_element_rules(entry, True)
                 region.locations.append(entry)
         if self.options.lightsanity:
             for location, data in LIGHT_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
-                if entry.code not in [771, 775, 776]:
+                if entry.code not in (771, 775, 776):
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if entry.code == 741 and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
@@ -379,34 +354,13 @@ class LMWorld(World):
                              "and")
                 elif entry.code == 772:
                     add_rule(entry, lambda state: state.can_reach_location("Nursery Clear Chest", self.player))
-                elif entry.code in [773]:
+                elif entry.code in (773):
                     add_rule(entry, lambda state: state.can_reach_location("Graveyard Clear Chest", self.player))
-                elif entry.code in [778, 782, 784, 789, 790, 851]:
+                elif entry.code in (778, 782, 784, 789, 790, 851):
                     add_rule(entry, lambda state: state.can_reach_location("Balcony Clear Chest", self.player))
                 elif entry.code == 757 and self.options.enemizer.value != 2:
                     add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-                if region.name in GHOST_TO_ROOM.keys():
-                    # if fire, require water
-                    if self.ghost_affected_regions[region.name] == "Fire":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    # if water, require ice
-                    elif self.ghost_affected_regions[region.name] == "Water":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    # if ice, require fire
-                    elif self.ghost_affected_regions[region.name] == "Ice":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    else:
-                        pass
+                self.set_element_rules(entry, True)
                 region.locations.append(entry)
         if self.options.walksanity:
             for location, data in WALK_LOCATION_TABLE.items():
@@ -414,21 +368,12 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                self.set_element_rules(entry, False)
                 region.locations.append(entry)
         if self.options.boosanity:
             for location, data in ROOM_BOO_LOCATION_TABLE.items():
                 region: Region = self.get_region(data.region)
-                entry: Location = LMLocation(self.player, location, region, data)
+                entry: LMLocation = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if entry.code == 675 and self.open_doors.get(28) == 0:
@@ -444,28 +389,7 @@ class LMWorld(World):
                         keys = spawn_locations[self.origin_region_name]["door_keys"]
                         for key in keys:
                             add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-                if region.name in GHOST_TO_ROOM.keys():
-                    # if fire, require water
-                    if self.ghost_affected_regions[region.name] == "Fire":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    # if water, require ice
-                    elif self.ghost_affected_regions[region.name] == "Water":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    # if ice, require fire
-                    elif self.ghost_affected_regions[region.name] == "Ice":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    else:
-                        pass
+                self.set_element_rules(entry, True)
                 region.locations.append(entry)
             for location, data in BOOLOSSUS_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
@@ -495,28 +419,7 @@ class LMWorld(World):
                         for key in keys:
                             add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
                 entry.code = None
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-                if region.name in GHOST_TO_ROOM.keys():
-                    # if fire, require water
-                    if self.ghost_affected_regions[region.name] == "Fire":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    # if water, require ice
-                    elif self.ghost_affected_regions[region.name] == "Water":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    # if ice, require fire
-                    elif self.ghost_affected_regions[region.name] == "Ice":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    else:
-                        pass
+                self.set_element_rules(entry, True)
                 region.locations.append(entry)
             for location, data in BOOLOSSUS_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
@@ -539,7 +442,7 @@ class LMWorld(World):
             rankcalc = 4
         else:
             rankcalc = 5
-        loc = self.multiworld.get_location("King Boo", self.player)
+        loc = self.get_location("King Boo")
         add_rule(loc, lambda state: state.has("Gold Diamond", self.player, rankcalc), "and")
         add_rule(loc, lambda state: state.has("Progressive Vacuum", self.player), "and")
 
@@ -582,9 +485,7 @@ class LMWorld(World):
             self.options.door_rando.value = 3
 
         if self.options.vacuum_start.value:
-            self.options.start_inventory.value["Progressive Vacuum"] = (
-                    self.options.start_inventory.value.get("Progressive Vacuum", 0) + 1
-            )
+            self.multiworld.push_precollected(self.create_item("Progressive Vacuum"))
 
         if self.using_ut:
             # We know we're in second gen
@@ -623,23 +524,22 @@ class LMWorld(World):
         elif self.options.door_rando.value == 3:
             for door_id in self.open_doors.keys():
                 self.open_doors[door_id] = 1
+        elif self.options.door_rando.value == 4:
+            for door_id in self.open_doors.keys():
+                self.open_doors[door_id] = 0
 
         # If player wants to start with boo radar or good vacuum
         if self.options.boo_radar == 0:
-            self.options.start_inventory.value["Boo Radar"] = (
-                    self.options.start_inventory.value.get("Boo Radar", 0) + 1
-            )
+            self.multiworld.push_precollected(self.create_item("Boo Radar"))
 
         if self.options.good_vacuum == 0:
-            self.options.start_inventory.value["Progressive Vacuum"] = (
-                    self.options.start_inventory.value.get("Progressive Vacuum", 0) + 1
-            )
+            self.multiworld.push_precollected(self.create_item("Progressive Vacuum"))
 
         if self.options.boosanity.value == 0 and self.options.balcony_boo_count.value > 31:
             self.options.balcony_boo_count.value = 31
 
-        if self.origin_region_name in ["Telephone Room", "Clockwork Room"]:
-            if self.options.balcony_boo_count.value > 4 and () and self.options.boosanity.value == 0:
+        if self.origin_region_name in ("Telephone Room", "Clockwork Room"):
+            if self.options.balcony_boo_count.value > 4 and self.options.boosanity.value == 0:
                 self.options.balcony_boo_count.value = 4
 
         if self.options.boo_gates.value == 0:
@@ -650,13 +550,11 @@ class LMWorld(World):
     def create_regions(self):
         # Add all randomizable regions
         for region_name in REGION_LIST.values():
-            if region_name in self.multiworld.regions.region_cache[self.player]:
-                continue
             self.multiworld.regions.append(Region(region_name, self.player, self.multiworld))
 
         # Assign each location to their region
         for location, data in BASE_LOCATION_TABLE.items():
-            if data.code in [708, 853, 925, 926, 927]:
+            if data.code in (708, 853, 925, 926, 927):
                 region = self.get_region(self.origin_region_name)
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
@@ -667,16 +565,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                self.set_element_rules(entry, False)
                 if location == "Huge Flower (Boneyard)":
                     add_rule(entry, lambda state: state.has("Progressive Flower", self.player, 3))
                 if entry.code is None:
@@ -686,28 +575,7 @@ class LMWorld(World):
             region = self.get_region(data.region)
             entry = LMLocation(self.player, location, region, data)
             add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-            if len(entry.access) != 0:
-                for item in entry.access:
-                    if item == "Fire Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    elif item == "Water Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    elif item == "Ice Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    else:
-                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-            if region.name in GHOST_TO_ROOM.keys():
-                # if fire, require water
-                if self.ghost_affected_regions[region.name] == "Fire":
-                    add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                # if water, require ice
-                elif self.ghost_affected_regions[region.name] == "Water":
-                    add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                # if ice, require fire
-                elif self.ghost_affected_regions[region.name] == "Ice":
-                    add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                else:
-                    pass
+            self.set_element_rules(entry, True)
             region.locations.append(entry)
         for location, data in CLEAR_LOCATION_TABLE.items():
             region = self.get_region(data.region)
@@ -718,28 +586,7 @@ class LMWorld(World):
                          lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value))
             if entry.code == 25 and self.open_doors.get(28) == 0:
                 add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
-            if len(entry.access) != 0:
-                for item in entry.access:
-                    if item == "Fire Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    elif item == "Water Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    elif item == "Ice Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    else:
-                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-            if region.name in GHOST_TO_ROOM.keys():
-                # if fire, require water
-                if self.ghost_affected_regions[region.name] == "Fire":
-                    add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                # if water, require ice
-                elif self.ghost_affected_regions[region.name] == "Water":
-                    add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                # if ice, require fire
-                elif self.ghost_affected_regions[region.name] == "Ice":
-                    add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                else:
-                    pass
+            self.set_element_rules(entry, True)
             region.locations.append(entry)
         self._set_optional_locations()
         connect_regions(self)
@@ -747,7 +594,7 @@ class LMWorld(World):
     def create_item(self, item: str) -> LMItem:
         set_non_progress = False
 
-        if item in ALL_ITEMS_TABLE:
+        if item in ALL_ITEMS_TABLE.keys():
             return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
         raise Exception(f"Invalid item name: {item}")
 
@@ -756,17 +603,18 @@ class LMWorld(World):
 
     def create_items(self):
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
+        loc_itempool: list[LMItem] = []
+        copies_to_place = 1
         if self.options.boosanity:
             for item, data in BOO_ITEM_TABLE.items():
-                copies_to_place = 1
-                copies_to_place = 0 if copies_to_place - exclude.count(item) <= 0 else 1 - exclude.count(item)
+                copies_to_place = max(0, copies_to_place - exclude.count(item))
                 for _ in range(copies_to_place):
-                    self.itempool.append(self.create_item(item))
+                    loc_itempool.append(self.create_item(item))
         if self.options.good_vacuum.value == 2:
             exclude += ["Progressive Vacuum"]
         if self.options.boo_radar.value == 2:
             exclude += ["Boo Radar"]
-        item_list = []
+        item_list: set = set()
         for item, data in ITEM_TABLE.items():
             if data.doorid in self.open_doors.keys() and self.open_doors.get(data.doorid) == 1:
                 exclude += [item]
@@ -776,14 +624,12 @@ class LMWorld(World):
                 copies_to_place = 3
             elif data.code == 64:
                     copies_to_place = 2
-            else:
-                copies_to_place = 1
-            copies_to_place = 0 if copies_to_place - exclude.count(item) <= 0 else copies_to_place - exclude.count(item)
+            copies_to_place = max(0, copies_to_place - exclude.count(item))
             if data.code == 64 and copies_to_place < 1:
                 raise Options.OptionError(f"{self.player_name} has excluded too many copies of Progressive Vacuum and the seed cannot be completed")
             for _ in range(copies_to_place):
-                item_list.append(item)
-                self.itempool.append(self.create_item(item))
+                item_list.add(item)
+                loc_itempool.append(self.create_item(item))
         if self.options.early_first_key.value == 1:
             early_key = ""
             for key in spawn_locations[self.origin_region_name]["key"]:
@@ -795,7 +641,7 @@ class LMWorld(World):
 
         # Calculate the number of additional filler items to create to fill all locations
         n_locations = len(self.multiworld.get_unfilled_locations(self.player))
-        n_items = len(self.pre_fill_items) + len(self.itempool)
+        n_items = len(loc_itempool)
         n_filler_items = n_locations - n_items
         n_trap_items = math.ceil(n_filler_items*(self.options.trap_percentage.value/100))
         n_other_filler = n_filler_items - n_trap_items
@@ -803,37 +649,13 @@ class LMWorld(World):
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.poison_trap_weight.value,
                           self.options.ghost_weight.value]
-
-        if sum(filler_trap_weights) > 0:# Add filler items to the item pool.
-            for _ in range(n_trap_items):
-                self.itempool.append(self.create_item(self.get_trap_item_name()))
-
-            for _ in range(n_other_filler):
-                self.itempool.append(self.create_item((self.get_other_filler_item())))
-        else:
-            for _ in range(n_filler_items):
-                self.itempool.append(self.create_item((self.get_other_filler_item())))
-
-        self.multiworld.itempool += self.itempool
-
-    def get_trap_item_name(self) -> str:
-        filler = list(trap_filler_items.keys())
-        filler_weights = [self.options.poss_trap_weight.value, self.options.bonk_trap_weight.value,
-                          self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
-                          self.options.banana_trap_weight.value, self.options.poison_trap_weight.value,
-                          self.options.ghost_weight.value]
-        return self.random.choices(filler, weights=filler_weights, k=1)[0]
-
-
-    def get_other_filler_item(self) -> str:
-        filler = list(other_filler_items.keys())
-        thircoin = 0 if self.options.coin_weight.value - 10 <= 0 else self.options.coin_weight.value - 10
-        twencoin = 0 if self.options.coin_weight.value - 5 <= 0 else self.options.coin_weight.value - 5
-        twenbill = 0 if self.options.bill_weight.value - 5 <= 0 else self.options.bill_weight.value - 5
-        morebar = 0 if self.options.bars_weight.value - 5 <= 0 else self.options.bars_weight.value - 5
+        thircoin = max(0,self.options.coin_weight.value - 10)
+        twencoin = max(0,self.options.coin_weight.value - 5)
+        twenbill = max(0,self.options.bill_weight.value - 5)
+        morebar = max(0,self.options.bars_weight.value - 5)
         diamweight = math.ceil(self.options.gems_weight.value * 0.4)
-        lheart = 0 if self.options.heart_weight.value - 5 <= 0 else self.options.heart_weight.value - 5
-        filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
+        lheart = max(0,self.options.heart_weight.value - 5)
+        other_filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,
                           # emerald, ruby, diamond
                           self.options.dust_weight.value, self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
@@ -841,20 +663,39 @@ class LMWorld(World):
                           # banana, 10coin, 20coin, 30coin
                           self.options.bill_weight.value, twenbill, self.options.bars_weight.value,
                           morebar]
-        return self.random.choices(filler, weights=filler_weights, k=1)[0]
+        other_filler = list(other_filler_items.keys())
+        trap_filler = list(trap_filler_items.keys())
+        if sum(filler_trap_weights) > 0:# Add filler items to the item pool.
+            for _ in range(n_trap_items):
+                loc_itempool.append(self.create_item(self.get_trap_item_name(trap_filler, filler_trap_weights)))
+
+            for _ in range(n_other_filler):
+                loc_itempool.append(self.create_item((self.get_other_filler_item(other_filler, other_filler_weights))))
+        else:
+            for _ in range(n_filler_items):
+                loc_itempool.append(self.create_item((self.get_other_filler_item(other_filler, other_filler_weights))))
+
+        self.multiworld.itempool += loc_itempool
+
+    def get_trap_item_name(self, trap_filler, filler_weights) -> str:
+        return self.random.choices(trap_filler, weights=filler_weights, k=1)[0]
+
+
+    def get_other_filler_item(self,other_filler, filler_weights) -> str:
+        return self.random.choices(other_filler, weights=filler_weights, k=1)[0]
 
     def get_filler_item_name(self) -> str:
         filler = list(filler_items.keys())
-        thircoin = 0 if self.options.coin_weight.value - 10 <= 0 else self.options.coin_weight.value - 10
-        twencoin = 0 if self.options.coin_weight.value - 5 <= 0 else self.options.coin_weight.value - 5
-        twenbill = 0 if self.options.bill_weight.value - 5 <= 0 else self.options.bill_weight.value - 5
-        morebar = 0 if self.options.bars_weight.value - 5 <= 0 else self.options.bars_weight.value - 5
+        thircoin = max(0, self.options.coin_weight.value - 10 <= 0)
+        twencoin = max(0, self.options.coin_weight.value - 5 <= 0)
+        twenbill = max(0, self.options.bill_weight.value - 5 <= 0)
+        morebar = max(0, self.options.bars_weight.value - 5 <= 0)
         diamweight = math.ceil(self.options.gems_weight.value * 0.4)
-        lheart = 0 if self.options.heart_weight.value - 5 <= 0 else self.options.heart_weight.value - 5
+        lheart = max(0, self.options.heart_weight.value - 5 <= 0)
         filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,
                           # emerald, ruby, diamond
-                          self.options.poison_trap_weight.value, self.options.ghost_weight, self.options.nothing_weight.value,
+                          self.options.poison_trap_weight.value, self.options.ghost_weight, self.options.dust_weight.value,
                           self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, thircoin,
@@ -868,32 +709,30 @@ class LMWorld(World):
 
     @classmethod
     def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str):
-        hint_worlds = [world for world in multiworld.get_game_worlds(cls.game)
-                       if (world.options.hint_distribution.value != 5 and world.options.hint_distribution.value != 1)]
-        boo_worlds = [world for world in multiworld.get_game_worlds(cls.game) if world.options.boo_health_option == 2]
+        hint_worlds = {world.player for world in multiworld.get_game_worlds(cls.game)
+                       if (world.options.hint_distribution.value != 5 and world.options.hint_distribution.value != 1)}
+        boo_worlds = {world.player for world in multiworld.get_game_worlds(cls.game) if world.options.boo_health_option == 2}
         if not boo_worlds and not hint_worlds:
             return
-        player_hints = {world.player for world in hint_worlds}
-        if player_hints:
-            get_hints_by_option(multiworld, player_hints)
+        if hint_worlds:
+            get_hints_by_option(multiworld, hint_worlds)
         if not boo_worlds:
             return
-        boo_players = {world.player for world in boo_worlds}
         def check_boo_players_done() -> None:
             done_players = set()
-            for player in boo_players:
+            for player in boo_worlds:
                 player_world = multiworld.worlds[player]
                 if len(player_world.boo_spheres.keys()) == len(ROOM_BOO_LOCATION_TABLE.keys()):
                     player_world.finished_boo_scaling.set()
                     done_players.add(player)
-            boo_players.difference_update(done_players)
+            boo_worlds.difference_update(done_players)
         for sphere_num, sphere in enumerate(multiworld.get_spheres(), 1):
             for loc in sphere:
-                if loc.player in boo_players and loc.name in ROOM_BOO_LOCATION_TABLE.keys():
+                if loc.player in boo_worlds and loc.name in ROOM_BOO_LOCATION_TABLE.keys():
                     player_world = multiworld.worlds[loc.player]
                     player_world.boo_spheres.update({loc.name: sphere_num})
             check_boo_players_done()
-            if not boo_players:
+            if not boo_worlds:
                 return
 
 
@@ -925,7 +764,7 @@ class LMWorld(World):
             self.finished_boo_scaling.wait()
 
         # Output which item has been placed at each location
-        locations = self.multiworld.get_locations(self.player)
+        locations = self.get_locations()
         for location in locations:
             if location.address is not None or (location.name in ROOM_BOO_LOCATION_TABLE.keys()):
                 if location.item:
@@ -934,7 +773,7 @@ class LMWorld(World):
                         if location.address:
                             if location.item.type == "Door Key":
                                 itemid = location.item.doorid
-                        inv_reg_list = dict((v, k) for k, v in REGION_LIST.items())
+                        inv_reg_list = {v:k for k, v in REGION_LIST.items()}
                         roomid = inv_reg_list[location.parent_region.name]
                         item_info = {
                             "player": location.item.player,
@@ -947,11 +786,11 @@ class LMWorld(World):
                             "loc_enum": location.jmpentry
                         }
                         if self.options.boo_health_option.value == 2 and location.name in ROOM_BOO_LOCATION_TABLE.keys():
-                                item_info.update({"boo_sphere": self.boo_spheres[location.name]})
+                            item_info.update({"boo_sphere": self.boo_spheres[location.name]})
 
                         output_data["Locations"][location.name] = item_info
                     else:
-                        inv_reg_list = dict((v, k) for k, v in REGION_LIST.items())
+                        inv_reg_list = {v:k for k, v in REGION_LIST.items()}
                         roomid = inv_reg_list[location.parent_region.name]
                         item_info = {
                             "player": location.item.player,

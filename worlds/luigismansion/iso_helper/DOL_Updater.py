@@ -12,7 +12,7 @@ CUSTOM_CODE_OFFSET_START = 0x39FA20
 
 # Updates the main DOL file, which is the main file used for GC and Wii games. This section includes some custom code
 # inside the DOL file itself.
-def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk_speed: int, slot_name: str,
+def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac: bool, start_inv: list[str], walk_speed: int, slot_name: str,
     random_spawn: str, king_boo_health: int, fear_anim_enabled: bool, pickup_anim_enabled: bool,
     boo_rand_on: bool, dool_model_rando_on: bool) -> (GCM, DOL):
 
@@ -33,7 +33,16 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
     dol.data.write(struct.pack(">H", speed_to_use))
 
     # Vacuum Speed
-    vac_count = len(list("Progressive Vacuum" in key for key in start_inv))
+    if extra_vac:
+        if start_vac:
+            vac_count = 2
+        else:
+            vac_count = 1
+    elif start_vac:
+        vac_count = 1
+    else:
+        vac_count = 0
+    vac_count = vac_count + len(list("Progressive Vacuum" in key for key in start_inv))
     match vac_count:
         case x if vac_count >= 2:
             vac_speed = "3800000F"

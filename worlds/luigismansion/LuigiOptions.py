@@ -136,7 +136,10 @@ class HeartWeight(Range):
 
 
 class BetterVacuum(Choice):
-    """Choose whether to include the Poltergust 4000"""
+    """
+    Choose whether to include the Poltergust 4000.
+
+    If you start with the upgrade on a no-poltergust start, you will receive the base poltergust instead"""
     display_name = "Poltergust 4000"
     internal_name = "good_vacuum"
     option_start_with = 0
@@ -364,13 +367,16 @@ class DoorRando(Choice):
     Suite Doors - Randomize doors but guarantee the Suite Key Doors remain locked
 
     All Doors Unlocked - Unlocks all doors in the mansion. Without Boo gates, this will make King Boo immediately accessible.
+
+    All Doors Locked - Locks all door in the mansion.
     """
     display_name = "Door Randomization"
     internal_name = "door_rando"
     option_off = 0
     option_randomized = 1
     option_suite_doors = 2
-    option_unlocked = 3
+    option_all_doors_unlocked = 3
+    option_all_doors_locked = 4
     default = 0
 
 
@@ -598,13 +604,13 @@ class DoorModelRando(Toggle):
 
 class TrapPercentage(Range):
     """
-    Set the percentage of filler items that are traps.
+    Set the percentage of filler items that are traps. Default percentage is 0%
     """
     display_name = "Trap Percentage"
     internal_name = "trap_percentage"
     range_start = 0
     range_end = 100
-    default = 50
+    default = 0
 
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):

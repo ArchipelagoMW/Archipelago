@@ -11,7 +11,7 @@ from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_
 from .Helper_Functions import StringByteFunction as sbf
 from .client.Wallet import Wallet
 
-CLIENT_VERSION = "V0.4.11"
+CLIENT_VERSION = "V0.5.0"
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
@@ -274,7 +274,7 @@ class LMContext(CommonContext):
             self.spawn = str(args["slot_data"]["spawn_region"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
-            if "trap_link" in args["slot_data"] and "TrapLink" not in self.tags:
+            if args["slot_data"]["trap_link"] == 1 and "TrapLink" not in self.tags:
                 self.tags.add("TrapLink")
 
         if cmd == "Bounced":
@@ -399,7 +399,7 @@ class LMContext(CommonContext):
             return False
 
         # These are the only valid maps we want Luigi to have checks with or do health detection with.
-        if curr_map_id in [2, 3, 6, 9, 10, 11, 13]:
+        if curr_map_id in (2, 3, 6, 9, 10, 11, 13):
             if not time.time() > (self.last_not_ingame + (CHECKS_WAIT*LONGER_MODIFIER)):
                 return False
 
@@ -487,7 +487,6 @@ class LMContext(CommonContext):
         Checks a provided location in ram to see if the location was interacted with. This includes
         furniture, plants, entering rooms,
         """
-        # TODO optimize all other cases for reading when a pointer is there vs not.
         match loc_data.type:
             case "Furniture" | "Plant":
                 # Check all possible furniture addresses.
@@ -533,24 +532,18 @@ class LMContext(CommonContext):
             if current_map_id not in lm_loc_data.map_id:
                 continue
 
-            # If in main mansion map
-            if current_map_id == 2:
-                current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
-                for addr_to_update in lm_loc_data.update_ram_addr:
-                    # Only check locations that are currently in the same room as us.
+            for addr_to_update in lm_loc_data.update_ram_addr:
+                # If in main mansion map
+                # TODO this will now calculate every iteration, which will slow down location checks are more are added.
+                if current_map_id == 2:
+                    current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
                     room_to_check = addr_to_update.in_game_room_id if not addr_to_update.in_game_room_id is None \
                         else current_room_id
-
                     if not room_to_check == current_room_id:
                         continue
 
-                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, lm_loc_data.map_id):
-                        self.locations_checked.add(mis_loc)
-
-            else:
-                for addr_to_update in lm_loc_data.update_ram_addr:
-                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, lm_loc_data.map_id):
-                        self.locations_checked.add(mis_loc)
+                if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, lm_loc_data.map_id):
+                    self.locations_checked.add(mis_loc)
 
         await self.check_locations(self.locations_checked)
 
@@ -767,6 +760,11 @@ async def give_player_items(ctx: LMContext):
                     flower_count: int = len([netItem for netItem in ctx.items_received if netItem.item == 8140])
                     curr_val = min(flower_count + 234, 237)
                     ram_offset = None
+                elif item.item == 8064:
+                    curr_val = int.from_bytes(dme.read_bytes(0x803D339B, byte_size))
+                    curr_val = (curr_val | (1 << 6))
+                    await write_bytes_and_validate(0x803D339B, ram_offset,
+                                                   curr_val.to_bytes(byte_size, 'big'))
                 elif not addr_to_update.item_count is None:
                     if not ram_offset is None:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
@@ -789,7 +787,7 @@ async def give_player_items(ctx: LMContext):
                             curr_val = (curr_val | (1 << addr_to_update.bit_position))
                         else:
                             curr_val += 1
-                #await wait_for_next_loop(10)
+
                 await write_bytes_and_validate(addr_to_update.ram_addr, ram_offset,
                     curr_val.to_bytes(byte_size, 'big'))
 

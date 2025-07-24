@@ -28,7 +28,7 @@ def update_game_usa(given_gcm: GCM) -> GCM:
     unused_params = list(sub_file for sub_file in (next(sub_folder for sub_folder in next(game_usa_nodes for
         game_usa_nodes in game_usa_edit.nodes if game_usa_nodes.name == "param").files if
         sub_folder.name == "ctp").node.files) if sub_file.name.startswith("iyapoo2") and sub_file.name
-        not in ["iyapoo2.prm", 'iyapoo20.prm'])
+        not in ("iyapoo2.prm", 'iyapoo20.prm'))
     for prm_file in unused_params:
         game_usa_edit.delete_file(prm_file)
 

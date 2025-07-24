@@ -99,7 +99,7 @@ def update_blackout_event(gcm: GCM) -> GCM:
 
 # Updates all common events
 def update_common_events(gcm: GCM, randomize_mice: bool) -> GCM:
-    list_custom_events = ["03", "10", "22", "24", "29", "33", "35", "38", "50", "61", "64", "65",
+    list_custom_events = ["03", "10", "22", "23", "24", "29", "33", "35", "38", "50", "61", "64", "65",
      "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "88", "89", "90"]
     if randomize_mice:
         list_custom_events += ["95", "97", "98", "99", "100"]
@@ -112,7 +112,7 @@ def update_common_events(gcm: GCM, randomize_mice: bool) -> GCM:
 
 # Update the intro event and E. Gadd event as needed.
 def update_intro_and_lab_events(gcm: GCM, hidden_mansion: bool, max_health: str, start_inv: list[str],
-    doors_to_open: dict[int, int]) -> GCM:
+    start_radar: bool,doors_to_open: dict[int, int], starting_vac: bool) -> GCM:
     lines = get_data(MAIN_PKG_NAME, "data/custom_events/event08.txt").decode('utf-8')
     lines = lines.replace("{LUIGIMAXHP}", max_health)
     csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message8.csv").decode('utf-8')
@@ -120,9 +120,13 @@ def update_intro_and_lab_events(gcm: GCM, hidden_mansion: bool, max_health: str,
 
     lines = get_data(MAIN_PKG_NAME, "data/custom_events/event48.txt").decode('utf-8')
     lines = lines.replace("{MANSION_TYPE}", "<URALUIGI>" if hidden_mansion else "<OMOTELUIGI>")
+    if not starting_vac:
+        lines = lines.replace("{WEAPON}", "<NOWEAPON>")
+    else:
+        lines = lines.replace("{WEAPON}", "<WEAPON>")
 
     include_radar = ""
-    if any("Boo Radar" in key for key in start_inv):
+    if any("Boo Radar" in key for key in start_inv) or start_radar:
         include_radar = "<FLAGON>(73)\r\n<FLAGON>(75)"
     lines = lines.replace("{BOO RADAR}", include_radar)
 
@@ -348,7 +352,7 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
 
         csv_lines = csv_lines.replace("{BreakHere}", "\n")
         lines = lines.replace("{HintType}", case_type)
-        if event_no in [4, 17, 32, 63]:
+        if event_no in (4, 17, 32, 63):
             lines = lines.replace("{LUIGIMAXHP}", maxhp)
 
         if event_no == 4:

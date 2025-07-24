@@ -9,6 +9,13 @@
 <ACTOR>"demo_luigi"<ACT>"DM_TEL_ST"
 <ACTOR>"tel3"<ACT>"IP_ST"
 <FRAMEEND>
+<CHECKFLAG>(22)"Upgrade""Continue"
+-------------------------
+<CASE>"Upgrade"
+<WEAPON>
+<RAMDOMJMP>"Continue"
+-------------------------
+<CASE>"Continue"
 <WAIT>(15)
 <WINDOW>(0)<COLOR>(17)
 <RAMDOMJMP>"{HintType}"
