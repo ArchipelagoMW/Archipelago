@@ -59,6 +59,10 @@ def create_regions(multiworld: MultiWorld, player: int):
     create_region(multiworld, player, RegionName.night_grancel_port)
     create_region(multiworld, player, RegionName.grancel_castle)
 
+    create_region(multiworld, player, RegionName.silver_road)
+    create_region(multiworld, player, RegionName.golden_road)
+    create_region(multiworld, player, RegionName.regroup_area)
+
 
 def connect_regions(multiworld: MultiWorld, player: int):
     """Connect AP regions for Trails in the Sky the 3rd"""

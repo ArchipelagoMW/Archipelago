@@ -157,6 +157,8 @@ class ItemName:
     lower_elements_sepith_max_id = "Lower Elements Sepith Max ID"
     higher_elements_sepith_min_id = "Higher Elements Sepith Min ID"
     higher_elements_sepith_max_id = "Higher Elements Sepith Max ID"
+    all_sepith_min_id = "All Sepith Min ID"
+    all_sepith_max_id = "All Sepith Max ID"
     character_min_id = "Character Min ID"
     character_max_id = "Character Max ID"
     area_min_id = "Location Min ID"
