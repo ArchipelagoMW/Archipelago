@@ -658,18 +658,6 @@ SetBreakMan:
   LDA #$16
   STA $22
   RTS
-
-CheckRushWeapon:
-  AND #$01
-  BNE .DontHave
-  JMP $A3CF
-  .DontHave:
-  LDA $A1
-  AND #$01
-  BNE .Skip
-  DEC $A1
-  .Skip:
-  JMP $A477
   
 CheckFirstWep:
   LDA $B4
@@ -771,3 +759,15 @@ EnergyLink:
   .Return:
   LDA $BDEC, Y
   RTS
+
+CheckRushWeapon:
+  AND #$01
+  BNE .DontHave
+  JMP $A3CF
+  .DontHave:
+  LDA $A1
+  AND #$01
+  BNE .Skip
+  DEC $A1
+  .Skip:
+  JMP $A477

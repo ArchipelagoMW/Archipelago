@@ -115,7 +115,7 @@ enemy_addresses: Dict[str, int] = {
 
 # addresses printed when assembling basepatch
 consumables_ptr: int = 0x7FDEA
-wily_4_ptr: int = 0x7F582
+wily_4_ptr: int = 0x7F570
 energylink_ptr: int = 0x7FDF9
 
 
