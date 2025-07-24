@@ -39,7 +39,6 @@ meta_data_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.lower_elements_sepith_max_id: TitsThe3rdItemData(300999, ItemClassification.filler),
     ItemName.higher_elements_sepith_min_id: TitsThe3rdItemData(350000, ItemClassification.filler),
     ItemName.higher_elements_sepith_max_id: TitsThe3rdItemData(350999, ItemClassification.filler),
-    #TODO figure out what to do for all sepith with different amounts on lower and higher elements
     ItemName.all_sepith_min_id: TitsThe3rdItemData(360000, ItemClassification.filler),
     ItemName.all_sepith_max_id: TitsThe3rdItemData(369999, ItemClassification.filler),
     ItemName.character_min_id: TitsThe3rdItemData(70000, ItemClassification.filler),
