@@ -58,10 +58,14 @@ consumable_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.fluffy_crepe: TitsThe3rdItemData(332, ItemClassification.filler),
     ItemName.septium_drops: TitsThe3rdItemData(503, ItemClassification.filler),
     ItemName.queenly_cookie: TitsThe3rdItemData(480, ItemClassification.filler),
+    ItemName.amar_spiritus: TitsThe3rdItemData(410, ItemClassification.filler),
+    ItemName.miso_fish: TitsThe3rdItemData(436, ItemClassification.filler),
+    ItemName.castel_castella: TitsThe3rdItemData(402, ItemClassification.filler),
     ItemName.fresh_water: TitsThe3rdItemData(411, ItemClassification.filler),
     ItemName.fishy_finale: TitsThe3rdItemData(437, ItemClassification.filler),
     ItemName.tear_balm: TitsThe3rdItemData(501, ItemClassification.filler),
     ItemName.teara_balm: TitsThe3rdItemData(502, ItemClassification.filler),
+    ItemName.tearal_balm: TitsThe3rdItemData(514, ItemClassification.filler),
     ItemName.reviving_balm: TitsThe3rdItemData(508, ItemClassification.filler),
     ItemName.celestial_balm: TitsThe3rdItemData(509, ItemClassification.filler),
     ItemName.ep_charge: TitsThe3rdItemData(510, ItemClassification.filler),
@@ -71,6 +75,7 @@ consumable_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.s_tablet: TitsThe3rdItemData(518, ItemClassification.filler),
     ItemName.purging_balm: TitsThe3rdItemData(504, ItemClassification.filler),
     ItemName.zeram_powder: TitsThe3rdItemData(517, ItemClassification.filler),
+    ItemName.curia_balm: TitsThe3rdItemData(499, ItemClassification.filler),
 }
 
 recipe_table: Dict[str, TitsThe3rdItemData] = {
@@ -84,22 +89,34 @@ equipment_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.glam_choker: TitsThe3rdItemData(358, ItemClassification.useful),
     ItemName.glam_choker_plus: TitsThe3rdItemData(359, ItemClassification.useful),
     ItemName.white_bracelet: TitsThe3rdItemData(360, ItemClassification.useful),
+    ItemName.white_bracelet_plus: TitsThe3rdItemData(361, ItemClassification.useful),
     ItemName.proxy_puppet: TitsThe3rdItemData(325, ItemClassification.useful),
     ItemName.long_barrel_2: TitsThe3rdItemData(332, ItemClassification.useful),
     ItemName.crimson_eye: TitsThe3rdItemData(394, ItemClassification.useful),
-    ItemName.pearl_earings: TitsThe3rdItemData(362, ItemClassification.useful),
+    ItemName.pearl_earring: TitsThe3rdItemData(362, ItemClassification.useful),
+    ItemName.pearl_earring_plus: TitsThe3rdItemData(363, ItemClassification.useful),
+    ItemName.tiger_heart: TitsThe3rdItemData(392, ItemClassification.useful),
+    ItemName.skull_pendant: TitsThe3rdItemData(368, ItemClassification.useful),
     # Weapons
     ItemName.akashic_heart: TitsThe3rdItemData(1184, ItemClassification.useful),
     ItemName.stun_gb: TitsThe3rdItemData(1274, ItemClassification.useful),
+    ItemName.kumo_no_tachi: TitsThe3rdItemData(1230, ItemClassification.useful),
+    ItemName.stinger_m: TitsThe3rdItemData(1139, ItemClassification.useful),
+    ItemName.sting_edges: TitsThe3rdItemData(1049, ItemClassification.useful),
+    ItemName.aion_bow: TitsThe3rdItemData(1365, ItemClassification.useful),
+    ItemName.silvahn: TitsThe3rdItemData(1455, ItemClassification.useful),
     # Armor
     ItemName.bestia_coat: TitsThe3rdItemData(1553, ItemClassification.useful),
+    ItemName.gaia_greaves: TitsThe3rdItemData(105, ItemClassification.useful),
 }
 
 quartz_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.hp_1: TitsThe3rdItemData(600, ItemClassification.useful),
     ItemName.hp_2: TitsThe3rdItemData(601, ItemClassification.useful),
+    ItemName.hp_3: TitsThe3rdItemData(602, ItemClassification.useful),
     ItemName.attack_1: TitsThe3rdItemData(606, ItemClassification.useful),
     ItemName.attack_2: TitsThe3rdItemData(607, ItemClassification.useful),
+    ItemName.attack_3: TitsThe3rdItemData(608, ItemClassification.useful),
     ItemName.shield_1: TitsThe3rdItemData(615, ItemClassification.useful),
     ItemName.shield_2: TitsThe3rdItemData(616, ItemClassification.useful),
     ItemName.hit_1: TitsThe3rdItemData(618, ItemClassification.useful),
@@ -165,7 +182,10 @@ craft_unlock_table: Dict[str, TitsThe3rdItemData] = { # Item ID is 400000 + char
     ItemName.renne_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 15, ItemClassification.useful),
 }
 
-key_item_table: Dict[str, TitsThe3rdItemData] = {ItemName.bennu_defeat: TitsThe3rdItemData(500000, ItemClassification.progression)}
+key_item_table: Dict[str, TitsThe3rdItemData] = {
+    ItemName.bennu_defeat: TitsThe3rdItemData(500000, ItemClassification.progression),
+    ItemName.entrance_exam_results: TitsThe3rdItemData(831, ItemClassification.progression),
+}
 
 
 item_data_table: Dict[str, TitsThe3rdItemData] = {
