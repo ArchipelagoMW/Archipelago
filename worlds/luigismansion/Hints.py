@@ -34,7 +34,8 @@ def get_hints_by_option(multiworld: MultiWorld, player_hints: set[int]) -> None:
     prog_items = [item for item in all_items if item.advancement]
     prog_no_skip = [items for items in prog_items if not items.skip_in_prog_balancing]
     other_items = [item for item in all_items if not item.advancement]
-    for player_int in player_hints:
+    player_hint_worlds = sorted(player_hints)
+    for player_int in player_hint_worlds:
         world: "LMWorld" = multiworld.worlds[player_int]
         already_hinted_locations: List[Location] = []
         hint_list = copy.copy(ALWAYS_HINT)
