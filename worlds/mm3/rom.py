@@ -7,7 +7,7 @@ import os
 import settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 from . import names
-from .rules import minimum_weakness_requirement, bosses
+from .rules import bosses
 
 from .text import MM3TextEntry
 from .color import get_colors_for_item, write_palette_shuffle
@@ -301,7 +301,6 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
         patch.write_byte(0x12643, 0x20)
         # Gamma
         patch.write_byte(0x7DA4A, 0xF)
-
 
     if world.options.music_shuffle:
         if world.options.music_shuffle.current_key == "no_music":
