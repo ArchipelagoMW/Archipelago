@@ -25,11 +25,6 @@ from .Helper_Functions import StringByteFunction as sbf
 from .iso_helper.Events import *
 
 RANDOMIZER_NAME = "Luigi's Mansion"
-CLEAN_LUIGIS_MANSION_ISO_MD5 = 0x6e3d9ae0ed2fbd2f77fa1ca09a60c494  # Based on the USA version of Luigi's Mansion
-
-
-class InvalidCleanISOError(Exception): pass
-
 
 class LuigisMansionRandomizer:
     def __init__(self, clean_iso_path: str, randomized_output_file_path: str, ap_output_data: bytes, debug_flag=False):
@@ -168,26 +163,24 @@ class LuigisMansionRandomizer:
 
     def save_randomized_iso(self):
         # Get Output data required information
-        bool_boo_rando_enabled: bool = True if self.output_data["Options"]["boosanity"] == 1 else False
+        bool_boo_rando_enabled: bool = bool(self.output_data["Options"]["boosanity"])
         req_mario_count: str = str(self.output_data["Options"]["mario_items"])
         max_health: str = str(self.output_data["Options"]["luigi_max_health"])
         door_to_close_list: dict[int, int] = dict(self.output_data["Entrances"])
         start_inv_list: list[str] = list(self.output_data["Options"]["start_inventory"])
-        bool_start_vacuum: bool = True if int(self.output_data["Options"]["vacuum_start"]) == 1 else False
-        bool_randomize_music: bool = True if int(self.output_data["Options"]["random_music"]) == 1 else False
-        bool_randomize_mice: bool = True if int(self.output_data["Options"]["gold_mice"]) == 1 else False
-        bool_hidden_mansion: bool = True if int(self.output_data["Options"]["hidden_mansion"]) == 1 else False
-        bool_start_boo_radar: bool = True if int(self.output_data["Options"]["boo_radar"]) == 0 else False
+        bool_start_vacuum: bool = bool(self.output_data["Options"]["vacuum_start"])
+        bool_randomize_music: bool = bool(self.output_data["Options"]["random_music"])
+        bool_randomize_mice: bool = bool(self.output_data["Options"]["gold_mice"])
+        bool_hidden_mansion: bool = bool(self.output_data["Options"]["hidden_mansion"])
+        bool_start_boo_radar: bool = not bool(self.output_data["Options"]["boo_radar"])
         walk_speed: int = int(self.output_data["Options"]["walk_speed"])
-        bool_pickup_anim_enabled: bool = \
-            True if int(self.output_data["Options"]["enable_fear_animation"]) == 1 else False
-        bool_fear_anim_enabled: bool = \
-            True if int(self.output_data["Options"]["enable_pickup_animation"]) == 1 else False
+        bool_pickup_anim_enabled: bool =  bool(self.output_data["Options"]["enable_fear_animation"])
+        bool_fear_anim_enabled: bool = bool(self.output_data["Options"]["enable_pickup_animation"])
         player_name: str = str(self.output_data["Name"])
         king_boo_health: int = int(self.output_data["Options"]["king_boo_health"])
         random_spawn: str = str(self.output_data["Options"]["spawn"])
-        door_model_rando_on: bool = True if int(self.output_data["Options"]["door_model_rando"]) == 1 else False
-        bool_start_extra_vacuum: bool = True if int(self.output_data["Options"]["good_vacuum"]) == 0 else False
+        door_model_rando_on: bool = bool(self.output_data["Options"]["door_model_rando"])
+        bool_start_extra_vacuum: bool = not bool(self.output_data["Options"]["good_vacuum"])
 
         # Boo related options
         bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False

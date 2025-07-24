@@ -537,6 +537,7 @@ class LMContext(CommonContext):
 
             for addr_to_update in lm_loc_data.update_ram_addr:
                 # If in main mansion map
+                # TODO this will now calculate every iteration, which will slow down location checks are more are added.
                 if current_map_id == 2:
                     current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
                     room_to_check = addr_to_update.in_game_room_id if not addr_to_update.in_game_room_id is None \
