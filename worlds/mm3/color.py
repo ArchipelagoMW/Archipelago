@@ -175,11 +175,17 @@ def expand_colors(color_1: int, color_2: int) -> Tuple[Tuple[int, int, int], Tup
     if color_1 < 0x10:
         color_c = color_1 + 0x10
         color_d = color_1
+        color_e = color_1 + 0x20
+    elif color_1 >= 0x30:
+        color_c = color_1 - 0x10
+        color_d = color_1 - 0x20
+        color_e = color_1
     else:
         color_c = color_1
         color_d = color_1 - 0x10
+        color_e = color_1 + 0x10
 
-    return (0x30, color_a, color_c), (color_d, color_a, color_b)
+    return (0x30, color_a, color_b), (color_d, color_e, color_c)
 
 
 def get_colors_for_item(name: str) -> Tuple[Tuple[int, int, int], Tuple[int, int, int]]:
