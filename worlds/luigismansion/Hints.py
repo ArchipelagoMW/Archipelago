@@ -1,6 +1,7 @@
 import copy
 from typing import Any, List, TYPE_CHECKING
 
+import Utils
 from BaseClasses import Location,  MultiWorld
 if TYPE_CHECKING:
     from . import LMWorld
@@ -14,18 +15,22 @@ PORTRAIT_HINTS = ["<father>", "<mother>", "<baby>", "<dancer>", "<situji>", "<pi
 
 
 def get_progression_only_items(multiworld: MultiWorld, player: int, loc, hinted_loc, prog_items_no_skip) -> Location:
-    while loc is None:
-        item = multiworld.worlds[player].random.choice(prog_items_no_skip)
+    multiworld.worlds[player].random.shuffle(prog_items_no_skip)
+    for item in prog_items_no_skip:
         if item.location not in hinted_loc and item.code is not None and (item.player == player or item.location.player == player):
             loc: Location = item.location
+        else:
+            continue
     return loc
 
 
 def get_other_items(multiworld: MultiWorld, player: int, loc, hinted_loc, other_items) -> Location:
-    while loc is None:
-        item = multiworld.worlds[player].random.choice(other_items)
+    multiworld.worlds[player].random.shuffle(other_items)
+    for item in other_items:
         if item.location not in hinted_loc and item.code is not None and (item.player == player or item.location.player == player):
             loc: Location = item.location
+        else:
+            continue
     return loc
 
 
