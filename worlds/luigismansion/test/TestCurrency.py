@@ -1,6 +1,6 @@
 import unittest
 
-from worlds.luigismansion.game.Currency import Currency
+from ..game.Currency import Currency
 from unittest.mock import patch
 
 _TEST_CURRENCY_NAME = "TEST_NAME"

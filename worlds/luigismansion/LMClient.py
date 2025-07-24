@@ -336,7 +336,7 @@ class LMContext(CommonContext):
             from kvui import Label
 
         if not hasattr(self, "wallet_ui") or not self.wallet_ui:
-            self.wallet_ui = Label(text=f"", width=240, halign="left")
+            self.wallet_ui = Label(text=f"", width=120, halign="center")
             self.ui.connect_layout.add_widget(self.wallet_ui)
 
         self.wallet_ui.text = f"Wallet:{self.wallet.get_wallet_worth()}/{self.wallet.get_rank_requirement()}"
@@ -745,7 +745,7 @@ async def give_player_items(ctx: LMContext):
                 await ctx.send_trap_link(lm_item_name)
             if lm_item.type == ItemType.MONEY:
                 currency_receiver = CurrencyReceiver(ctx.wallet)
-                currency_receiver.send_to_wallet(lm_item.code)
+                currency_receiver.send_to_wallet(lm_item)
 
             # Filter for only items where we have not received yet. If same slot, only receive locations from pre-set
             # list of locations, otherwise accept other slots. Additionally accept only items from a pre-approved list.

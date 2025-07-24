@@ -1,6 +1,6 @@
 import unittest
-from worlds.luigismansion.client.Wallet import Wallet, _RANK_REQ_AMTS
-from worlds.luigismansion.game.Currency import *
+from ..client.Wallet import Wallet, _RANK_REQ_AMTS
+from ..game.Currency import *
 
 class _MockCurrency(Currency):
     """
