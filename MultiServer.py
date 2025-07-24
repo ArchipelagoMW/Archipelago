@@ -1235,7 +1235,7 @@ class CommandMeta(type):
             commands.update(base.commands)
         commands.update({command_name[5:]: method for command_name, method in attrs.items() if
                          command_name.startswith("_cmd_")})
-        attrs["aliases"] = {}
+        attrs["command_aliases"] = {}
         return super(CommandMeta, cls).__new__(cls, name, bases, attrs)
 
 
@@ -1250,7 +1250,7 @@ def mark_raw(function: typing.Callable[[typing.Any], _Return]) -> typing.Callabl
 
 class CommandProcessor(metaclass=CommandMeta):
     commands: typing.Dict[str, typing.Callable]
-    aliases: typing.Dict[str, str]
+    command_aliases: typing.Dict[str, str]
     client = None
     marker = "/"
 
@@ -1268,7 +1268,7 @@ class CommandProcessor(metaclass=CommandMeta):
             basecommand = command[0]
             if basecommand[0] == self.marker:
                 method_name = basecommand[1:].lower()
-                method_name = self.aliases.get(method_name, method_name)
+                method_name = self.command_aliases.get(method_name, method_name)
 
                 method = self.commands.get(method_name, None)
                 if not method:
@@ -1361,7 +1361,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def __init__(self, ctx: Context, client: Client):
         self.ctx = ctx
         self.client = client
-        self.aliases |= {
+        self.command_aliases |= {
             "yeet": "release",
             "yoink": "collect",
         }
@@ -2139,7 +2139,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def __init__(self, ctx: Context):
         self.ctx = ctx
         super(ServerCommandProcessor, self).__init__()
-        self.aliases |= {
+        self.command_aliases |= {
             "yeet": "release",
             "yoink": "collect",
         }
