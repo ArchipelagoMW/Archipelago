@@ -26,7 +26,8 @@ SALMON_RIVER_IDS = {28, 31, 78, 110}
 POKO_POKO_IDS = {26, 51, 124, 167, 170, 187, 195}
 SARA_SARA_IDS = {27, 122}
 SARA_SARA_BEACH_IDS = {33}
-ANCIENT_RESERVOIR_IDS = {30, 66, 85, 86, 87}
+ANCIENT_RESERVOIR_IDS = {30, 66, 85, 87}
+IBEK_CAVE_IDS = {86}
 SALMON_BAY_IDS = {60, 67}
 OPEN_SEA_IDS = {34, 129, 185}
 WATERFRONT_IDS = {115}
@@ -119,6 +120,8 @@ def get_region_by_id(region_id: int) -> str:
         return SARA_SARA_BEACH_EAST
     if region_id in ANCIENT_RESERVOIR_IDS:
         return ANCIENT_RESERVOIR
+    if region_id in IBEK_CAVE_IDS:
+        return IBEK_CAVE
     if region_id in SALMON_BAY_IDS:
         return SALMON_BAY
     if region_id in OPEN_SEA_IDS:

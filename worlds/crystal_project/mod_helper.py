@@ -327,7 +327,6 @@ def get_removed_locations(mod_info: List[ModInfoModel]) -> List[ModLocationData]
         for location in mod.data_model.Entities:
             location_id = location['ID']
             biome_id = location['BiomeID']
-            region = get_region_by_id(biome_id)
             has_no_npc_info = location['NpcData'] is None or not location['NpcData']['Pages']
 
             if has_no_npc_info and location['SignData'] is None and location['SparkData'] is None and location['DoorData'] is None and location['HomePointData'] is None and location['TreasureData'] is None and location['CrystalData'] is None and location['MarkerData'] is None:
@@ -339,19 +338,19 @@ def get_removed_locations(mod_info: List[ModInfoModel]) -> List[ModLocationData]
 
                 for vanilla_location in vanilla_locations:
                     if vanilla_location.code == treasure_id:
-                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(vanilla_location.region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
                     if vanilla_location.code == npc_id:
-                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(vanilla_location.region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
                     if vanilla_location.code == crystal_id:
-                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(vanilla_location.region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
 
                 for boss in vanilla_bosses:
                     if boss.code == boss_id:
-                        removed_locations.append(ModLocationData(region, boss.name, boss.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(boss.region, boss.name, boss.code, location_id, '0,0,0', biome_id, None))
 
                 for shop in vanilla_shops:
                     if shop.code == shop_id:
-                        removed_locations.append(ModLocationData(region, shop.name, shop.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(shop.region, shop.name, shop.code, location_id, '0,0,0', biome_id, None))
 
     return removed_locations
 
