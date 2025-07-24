@@ -187,7 +187,7 @@ class TestBase(unittest.TestCase):
                 # because a world might know that some of them will always be collected in a specific order and base
                 # logic around this order. Typically, most locked advancements will be events, but this is not always
                 # the case.
-                non_locked_advancements = []
+                non_locked_advancements = [item for item in multiworld.itempool if item.advancement]
                 locked_advancement_locations = []
                 duplicated_items: Counter[str] = Counter()
                 world = multiworld.worlds[1]
@@ -200,19 +200,23 @@ class TestBase(unittest.TestCase):
                     else:
                         non_locked_advancements.append(item)
 
-                    # Create duplicates of each non-event item, to emulate players adding additional items to the
-                    # multiworld through starting inventory, item plando, item link replacement items or any other
-                    # means that can add new items to the multiworld.
-                    # Multiple duplicates are created to try to account for worlds that expect multiple copies of an
-                    # item to exist in the multiworld to begin with, so creating only 1 extra copy might not be a good
-                    # test.
-                    # Create no more than 10 of each duplicate item to prevent the case of creating a huge number of
-                    # additional 'macguffin' items.
-                    if not item.is_event and duplicated_items[item.name] < 10:
-                        duplicate_item = world.create_item(item.name)
-                        if duplicate_item.advancement:
-                            non_locked_advancements.append(duplicate_item)
-                        duplicated_items[item.name] += 1
+                # Create duplicates of each non-event item, to emulate players adding additional items to the
+                # multiworld through starting inventory, item plando, item link replacement items or any other
+                # means that can add new items to the multiworld.
+                duplicated_advancements = []
+                for advancements in [non_locked_advancements, (loc.item for loc in locked_advancement_locations)]:
+                    for item in advancements:
+                        # Multiple duplicates are created to try to account for worlds that expect multiple copies of an
+                        # item to exist in the multiworld to begin with, so creating only 1 extra copy might not be a
+                        # good test.
+                        # Create no more than 10 of each duplicate item to prevent the case of creating a huge number of
+                        # additional 'macguffin' items.
+                        if not item.is_event and duplicated_items[item.name] < 10:
+                            duplicate_item = world.create_item(item.name)
+                            if duplicate_item.advancement:
+                                duplicated_advancements.append(duplicate_item)
+                            duplicated_items[item.name] += 1
+                non_locked_advancements.extend(duplicated_advancements)
 
                 # Create an instance of every item in the data package that has not already been created, to emulate
                 # players adding additional items to the multiworld that do not exist in a normal generation.
