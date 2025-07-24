@@ -165,7 +165,7 @@ class TestBase(unittest.TestCase):
                         self.assertEqual(non_local_items, multiworld.worlds[1].options.non_local_items.value,
                                          f"{game_name} modified non_local_items during {step}")
 
-    def test_collect_remove_location_accessibility(self):
+    def test_collect_remove_location_accessibility(self) -> None:
         """
         Test that worlds' .remove() implements the reverse of .collect() by checking location accessibility, and test
         that collecting an item never reduces accessibility.
@@ -249,9 +249,10 @@ class TestBase(unittest.TestCase):
                     # reduce accessibility.
                     no_longer_accessible = reachable_so_far - reachable_locations
                     if len(no_longer_accessible) > 0:
+                        previously_collected = ", ".join(item.name for item in items)
                         self.fail(f"Collecting '{item}' reduced accessibility. No longer accessible after collecting"
                                   f" '{item}': {no_longer_accessible}."
-                                  f"\nPreviously collected items in order of collection: {items}")
+                                  f"\nPreviously collected items in order of collection: {previously_collected}")
                     items.append(item)
                     # Find the newly reachable locations and update the locations reachable so far, as well as the list
                     # of sets of locations that became reachable with each item collected.
@@ -259,7 +260,7 @@ class TestBase(unittest.TestCase):
                     reachable_so_far.update(newly_reachable)
                     new_reachable_locations_at_each_collect.append(newly_reachable)
 
-                def collect_reachable_events():
+                def collect_reachable_locked_items():
                     nonlocal locked_advancement_locations
                     if locked_advancement_locations:
                         changed = True
@@ -278,12 +279,12 @@ class TestBase(unittest.TestCase):
                             locked_advancement_locations = next_event_locations
 
                 while non_locked_advancements:
-                    collect_reachable_events()
-                    non_event = non_locked_advancements.pop()
-                    collect_and_check(non_event)
+                    collect_reachable_locked_items()
+                    non_locked_item = non_locked_advancements.pop()
+                    collect_and_check(non_locked_item)
 
                 # Collect any remaining reachable events now that all non-events have been collected.
-                collect_reachable_events()
+                collect_reachable_locked_items()
 
                 # Remove each item in reverse and check that the reachable locations are the same as before the item was
                 # collected.
@@ -292,13 +293,18 @@ class TestBase(unittest.TestCase):
                     state.remove(item)
                     reachable_locations = {loc for loc in locations if loc.can_reach(state)}
                     # Check that the locations that were only reachable because of this item are now unreachable.
-                    should_have_become_unreachable = only_reachable_because_of_this_item.intersection(reachable_locations)
+                    should_have_become_unreachable = only_reachable_because_of_this_item & reachable_locations
                     if len(should_have_become_unreachable) > 0:
+                        # Reaching this conditional branch usually means that `remove` removed less than what `collect`
+                        # collected into the CollectionState.
+                        # Removals start from the end, so the order is reversed.
+                        previously_removed = ", ".join(item.name for item in items[-1:i:-1])
+                        previously_collected = ", ".join(item.name for item in items[0:i])
                         self.fail(f"Removing '{item}' did not result in losing access to the same locations that"
                                   f" '{item}' gave access to. Locations that removing '{item}' should have removed"
                                   f" access to but did not: {should_have_become_unreachable}."
-                                  f"\nPreviously removed items in order of removal: {items[-1:i:-1]}"
-                                  f"\nPreviously collected items in order of collection: {items[0:i]}")
+                                  f"\nPreviously removed items in order of removal: {previously_removed}"
+                                  f"\nPreviously collected items in order of collection: {previously_collected}")
 
                     # Check that all locations reachable before this item was collected are still reachable.
                     # Also checks that removing the item has not made additional locations reachable.
@@ -306,15 +312,25 @@ class TestBase(unittest.TestCase):
                     if reachable_so_far != reachable_locations:
                         should_have_been_reachable = reachable_so_far - reachable_locations
                         if len(should_have_been_reachable) > 0:
+                            # Reaching this conditional branch usually means that `remove` removed more than what
+                            # `collect` collected into the CollectionState.
+                            # Removals start from the end, so the order is reversed.
+                            previously_removed = ", ".join(item.name for item in items[-1:i:-1])
+                            previously_collected = ", ".join(item.name for item in items[0:i])
                             self.fail(f"Removing '{item}' resulted in locations becoming unreachable that were"
                                       f" reachable before '{item}' was collected. Locations that should have been"
                                       f" reachable: {should_have_been_reachable}."
-                                      f"\nPreviously removed items in order of removal: {items[-1:i:-1]}"
-                                      f"\nPreviously collected items in order of collection: {items[0:i]}")
+                                      f"\nPreviously removed items in order of removal: {previously_removed}"
+                                      f"\nPreviously collected items in order of collection: {previously_collected}")
                         unexpectedly_reachable = reachable_locations - reachable_so_far
                         if len(unexpectedly_reachable) > 0:
+                            # Reaching this conditional branch is unusual, but could mean that a world's `.remove()` is
+                            # erroneously collecting items into a state rather than removing them.
+                            # Removals start from the end, so the order is reversed.
+                            previously_removed = ", ".join(item.name for item in items[-1:i:-1])
+                            previously_collected = ", ".join(item.name for item in items[0:i])
                             self.fail(f"Removing '{item}' resulted in locations becoming reachable that were"
                                       f" unreachable before '{item}' was collected. Locations that should have been"
                                       f" unreachable: {unexpectedly_reachable}."
-                                      f"\nPreviously removed items in order of removal: {items[-1:i:-1]}"
-                                      f"\nPreviously collected items in order of collection: {items[0:i]}")
+                                      f"\nPreviously removed items in order of removal: {previously_removed}"
+                                      f"\nPreviously collected items in order of collection: {previously_collected}")
