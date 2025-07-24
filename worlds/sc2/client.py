@@ -38,7 +38,8 @@ from .options import (
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunPassiveAbilityPresence,
     SpearOfAdunPassivesPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms, VoidTradeWorkers,
-    DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup, MercenaryHighlanders, WarCouncilNerfs
+    DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup, MercenaryHighlanders, WarCouncilNerfs,
+    is_mission_in_soa_presence,
 )
 from .mission_order.slot_data import CampaignSlotData, LayoutSlotData, MissionSlotData, MissionOrderObjectSlotData
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData, MissionEntryRules
@@ -1579,16 +1580,7 @@ def caclulate_soa_options(ctx: SC2Context, mission: SC2Mission) -> int:
     # Bits 0, 1
     # SoA Calldowns available
     soa_presence_value = 0
-    if (
-        (ctx.spear_of_adun_presence == SpearOfAdunPresence.option_everywhere)
-        or (ctx.spear_of_adun_presence == SpearOfAdunPresence.option_protoss and MissionFlag.Protoss in mission.flags)
-        or (ctx.spear_of_adun_presence == SpearOfAdunPresence.option_any_race_lotv and mission.campaign == SC2Campaign.LOTV)
-        or (ctx.spear_of_adun_presence == SpearOfAdunPresence.option_lotv_protoss
-            and (MissionFlag.VanillaSoa in mission.flags  # Keeps SOA off on Growing Shadow, as that's vanilla behaviour
-                or (MissionFlag.NoBuild in mission.flags and mission.campaign == SC2Campaign.LOTV)
-            )
-        )
-    ):
+    if is_mission_in_soa_presence(ctx.spear_of_adun_presence, mission):
         soa_presence_value = 3
     result |= soa_presence_value << 0
 
@@ -1600,20 +1592,7 @@ def caclulate_soa_options(ctx: SC2Context, mission: SC2Mission) -> int:
     # Bits 3,4
     # Autocasts
     soa_autocasts_presence_value = 0
-    if (
-        (ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_everywhere)
-        or (ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_protoss
-            and MissionFlag.Protoss in mission.flags
-        )
-        or (ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_any_race_lotv
-            and (mission.campaign == SC2Campaign.LOTV or mission == SC2Mission.INTO_THE_VOID)
-        )
-        or (ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_lotv_protoss
-            and (MissionFlag.VanillaSoa in mission.flags  # Keeps SOA off on Growing Shadow, as that's vanilla behaviour
-                or (MissionFlag.NoBuild in mission.flags and mission.campaign == SC2Campaign.LOTV)
-            )
-        )
-    ):
+    if is_mission_in_soa_presence(ctx.spear_of_adun_passive_ability_presence, mission, SpearOfAdunPassiveAbilityPresence):
         soa_autocasts_presence_value = 3
     # Guardian Shell breaks without SoA on version 4+, but can be generated without SoA on version 3
     if ctx.slot_data_version < 4 and MissionFlag.Protoss in mission.flags:
