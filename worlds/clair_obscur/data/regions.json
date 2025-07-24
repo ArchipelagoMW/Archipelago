@@ -1,25 +1,45 @@
 [
     {
         "region_name": "World Map: No Esquie",
-        "locations": [],
+        "locations": [
+            "Chest_WorldMap_1",
+            "Chest_WorldMap_2",
+            "Chest_WorldMap_3",
+            "Chest_WorldMap_4",
+            "Chest_WorldMap_5",
+            "Chest_WorldMap_6",
+            "Chest_WorldMap_7"
+        ],
         "parent_map": "Menu",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
         "region_name": "World Map: Base Esquie",
-        "locations": [],
+        "locations": [
+            "Chest_MiniLevels_3",
+            "Chest_MiniLevels_4",
+            "Chest_MiniLevels_7"
+        ],
         "parent_map": "World Map: No Esquie",
-                "condition": {
+        "condition": {
             "Progressive Rock": 1
         },
         "exits": []
     },
     {
         "region_name": "World Map: Swim",
-        "locations": [],
+        "locations": [
+            "Chest_Manor_6",
+            "Chest_Manor_16",
+            "Chest_MiniLevels_1",
+            "Chest_MiniLevels_2",
+            "Chest_MiniLevels_5",
+            "Chest_MiniLevels_6"
+        ],
         "parent_map": "World Map: Base Esquie",
-                "condition": {
+        "condition": {
             "Progressive Rock": 2
         },
         "exits": []
@@ -28,31 +48,26 @@
         "region_name": "World Map: Destroy Coral",
         "locations": [],
         "parent_map": "World Map: Swim",
-                "condition": {
+        "condition": {
             "Progressive Rock": 3
         },
         "exits": []
     },
     {
         "region_name": "World Map: Fly",
-        "locations": [],
+        "locations": [
+            "Chest_Manor_4",
+            "Chest_WorldMap_62"
+        ],
         "parent_map": "World Map: Destroy Coral",
-                "condition": {
-            "Progressive Rock": 4,
-                    "Painted Power":  1
+        "condition": {
+            "Progressive Rock": 4
         },
         "exits": []
     },
     {
         "region_name": "World Map: Dive",
         "locations": [
-            "Chest_WorldMap_1",
-            "Chest_WorldMap_2",
-            "Chest_WorldMap_3",
-            "Chest_WorldMap_4",
-            "Chest_WorldMap_5",
-            "Chest_WorldMap_6",
-            "Chest_WorldMap_7",
             "Chest_WorldMap_8",
             "Chest_WorldMap_9",
             "Chest_WorldMap_10",
@@ -107,7 +122,6 @@
             "Chest_WorldMap_59",
             "Chest_WorldMap_60",
             "Chest_WorldMap_61",
-            "Chest_WorldMap_62",
             "Chest_WorldMap_63",
             "Chest_WorldMap_64",
             "Chest_WorldMap_65",
@@ -117,7 +131,7 @@
         ],
         "parent_map": "World Map: Fly",
                 "condition": {
-            "Progressive Rock": 5
+                    "Progressive Rock": 5
         },
         "exits": []
     },
@@ -161,7 +175,9 @@
             "Chest_CrimsonForest_9"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
@@ -177,8 +193,10 @@
             "Chest_DarkShores_8",
             "Chest_DarkShores_9"
         ],
-        "parent_map": "World Map: Swim",
-                "condition": {},
+        "parent_map": "World Map: Fly",
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
@@ -199,12 +217,15 @@
     {
         "region_name": "Falling Leaves",
         "locations": [
+            "Chest_Manor_7",
             "Chest_FallingLeaves_1",
             "Chest_FallingLeaves_2",
             "Chest_FallingLeaves_3"
         ],
         "parent_map": "World Map: Destroy Coral",
-                "condition": {},
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
@@ -248,7 +269,9 @@
             "Chest_FlyingManor_41"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
@@ -282,12 +305,14 @@
             "Chest_ForgottenBattlefield_26"
         ],
         "parent_map": "World Map: Swim",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
         "region_name": "Frozen Hearts",
         "locations": [
+            "Chest_Manor_15",
             "Chest_FrozenHearts_1",
             "Chest_FrozenHearts_2",
             "Chest_FrozenHearts_3",
@@ -319,13 +344,17 @@
             "Chest_FrozenHearts_30",
             "Chest_FrozenHearts_31"
         ],
-        "parent_map": "World Map: Swim",
-                "condition": {},
+        "parent_map": "World Map: Fly",
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
         "region_name": "Gestral Village",
         "locations": [
+            "Chest_Manor_1",
+            "Chest_Manor_5",
             "Chest_GestralVillage_1",
             "Chest_GestralVillage_2",
             "Chest_GestralVillage_3",
@@ -343,6 +372,9 @@
     {
         "region_name": "Flying Waters",
         "locations": [
+            "Chest_Manor_2",
+            "Chest_Manor_3",
+            "Chest_Manor_11",
             "Chest_GoblusLair_1",
             "Chest_GoblusLair_2",
             "Chest_GoblusLair_3",
@@ -382,7 +414,8 @@
             "Chest_GrandisStation_2"
         ],
         "parent_map": "World Map: Swim",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -435,7 +468,8 @@
         ],
         "parent_map": "World Map: Fly",
         "condition": {
-            "Barrier Breaker":  1
+            "Barrier Breaker": 1,
+            "Painted Power": 1
         },
         "exits": []
     },
@@ -453,30 +487,16 @@
     },
     {
         "region_name": "Manor",
-        "locations": [
-            "Chest_Manor_1",
-            "Chest_Manor_2",
-            "Chest_Manor_3",
-            "Chest_Manor_4",
-            "Chest_Manor_5",
-            "Chest_Manor_6",
-            "Chest_Manor_7",
-            "Chest_Manor_8",
-            "Chest_Manor_9",
-            "Chest_Manor_11",
-            "Chest_Manor_12",
-            "Chest_Manor_13",
-            "Chest_Manor_14",
-            "Chest_Manor_15",
-            "Chest_Manor_16"
-        ],
+        "locations": [],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
         "region_name": "The Monolith",
         "locations": [
+            "Chest_Manor_8",
             "Chest_Monolith_1",
             "Chest_Monolith_2",
             "Chest_Monolith_3",
@@ -521,13 +541,14 @@
         ],
         "parent_map": "World Map: Destroy Coral",
         "condition": {
-            "Barrier Breaker":  1
+            "Barrier Breaker": 1
         },
         "exits": []
     },
     {
         "region_name": "Old Lumiere",
         "locations": [
+            "Chest_Manor_9",
             "Chest_OldLumiere_1",
             "Chest_OldLumiere_2",
             "Chest_OldLumiere_3",
@@ -550,7 +571,8 @@
             "Chest_OldLumiere_20"
         ],
         "parent_map": "World Map: Swim",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -584,7 +606,9 @@
             "Chest_Reacher_26"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
@@ -604,12 +628,15 @@
             "Chest_RenoirSDraft_12"
         ],
         "parent_map": "World Map: Dive",
-                "condition": {},
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
         "region_name": "Stone Wave Cliffs",
         "locations": [
+            "Chest_Manor_13",
             "Chest_SeaCliff_1",
             "Chest_SeaCliff_2",
             "Chest_SeaCliff_3",
@@ -651,12 +678,14 @@
             "Chest_SeaCliff_39"
         ],
         "parent_map": "World Map: Base Esquie",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
         "region_name": "Sirene",
         "locations": [
+            "Chest_Manor_14",
             "Chest_Sirene_1",
             "Chest_Sirene_2",
             "Chest_Sirene_3",
@@ -688,7 +717,8 @@
             "Chest_Sirene_30"
         ],
         "parent_map": "World Map: Destroy Coral",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -718,7 +748,8 @@
             "Chest_SmallLevel_StonewaveCliffsCave_4"
         ],
         "parent_map": "World Map: Swim",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -727,7 +758,9 @@
             "Chest_SmallLevel_ChosenPath_1"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
@@ -736,7 +769,9 @@
             "Chest_SmallLevel_FloatingIsland_1"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
@@ -745,8 +780,10 @@
             "Chest_SmallLevel_Visages_1",
             "Chest_SmallLevel_Visages_2"
         ],
-        "parent_map": "World Map: Destroy Coral",
-                "condition": {},
+        "parent_map": "World Map: Fly",
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
@@ -755,7 +792,8 @@
             "Chest_SmallLevel_Reacher_1"
         ],
         "parent_map": "World Map: Destroy Coral",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -771,7 +809,8 @@
             "Chest_SmallLevel_RockTrailing_8"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -783,7 +822,9 @@
             "Chest_SmallLevel_Cemetery_4"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
@@ -792,7 +833,8 @@
             "Chest_SmallLevel_CoastalCave_1"
         ],
         "parent_map": "World Map: Swim",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -801,11 +843,12 @@
             "Chest_SmallLevel_CavernCrusher_1"
         ],
         "parent_map": "World Map: Swim",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
-        "region_name": "Small Level Door Maze",
+        "region_name": "Esoteric Ruins",
         "locations": [
             "Chest_SmallLevel_DoorMaze_1",
             "Chest_SmallLevel_DoorMaze_2",
@@ -813,8 +856,9 @@
             "Chest_SmallLevel_DoorMaze_4",
             "Chest_SmallLevel_DoorMaze_5"
         ],
-        "parent_map": "World Map: Fly",
-                "condition": {},
+        "parent_map": "World Map: Swim",
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -825,22 +869,8 @@
             "Chest_SmallLevel_SinisterCave_3"
         ],
         "parent_map": "World Map: Destroy Coral",
-                "condition": {},
-        "exits": []
-    },
-    {
-        "region_name": "Mini Levels",
-        "locations": [
-            "Chest_MiniLevels_1",
-            "Chest_MiniLevels_2",
-            "Chest_MiniLevels_3",
-            "Chest_MiniLevels_4",
-            "Chest_MiniLevels_5",
-            "Chest_MiniLevels_6",
-            "Chest_MiniLevels_7"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -858,7 +888,8 @@
             "Chest_SmallLevel_FlyingCasinoEntrance_1"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -868,7 +899,8 @@
             "Chest_SmallLevel_TheCarrousel_2"
         ],
         "parent_map": "World Map: Swim",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -878,7 +910,8 @@
             "Chest_SmallLevel_WhiteSands_2"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -887,7 +920,9 @@
             "Chest_SmallLevel_SacredRiver_1"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
@@ -945,12 +980,15 @@
             "Chest_TwilightSanctuary_16"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {},
+                "condition": {
+                    "Painted Power": 1
+                },
         "exits": []
     },
     {
         "region_name": "Visages",
         "locations": [
+            "Chest_Manor_12",
             "Chest_Visages_1",
             "Chest_Visages_2",
             "Chest_Visages_3",
@@ -972,7 +1010,8 @@
             "Chest_Visages_20"
         ],
         "parent_map": "World Map: Destroy Coral",
-                "condition": {},
+                "condition": {
+                },
         "exits": []
     },
     {
@@ -986,7 +1025,9 @@
             "Chest_YellowForest_6"
         ],
         "parent_map": "World Map: Base Esquie",
-                "condition": {},
+                "condition": {
+                    "Progressive Rock": 1
+                },
         "exits": []
     }
 ]

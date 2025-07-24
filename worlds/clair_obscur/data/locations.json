@@ -1401,7 +1401,9 @@
         "name": "Chest_Manor_11",
         "location": "Manor",
         "original_item": "SkinMaelle_Alicia",
-        "condition": {}
+        "condition": {
+            "Manor Family Canvas": 1
+        }
     },
     {
         "name": "Chest_Manor_12",
@@ -3453,7 +3455,9 @@
         "name": "Chest_WorldMap_62",
         "location": "World Map",
         "original_item": "BreakDamageOnSlow",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_63",

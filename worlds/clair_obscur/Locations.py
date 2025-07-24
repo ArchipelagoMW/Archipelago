@@ -3,7 +3,7 @@ from typing import Dict, Optional, TYPE_CHECKING
 from BaseClasses import Location, Region
 from worlds.clair_obscur.Const import BASE_OFFSET, LOCATION_OFFSET
 from worlds.clair_obscur.Data import data
-
+from ..generic.Rules import add_rule, set_rule
 
 if TYPE_CHECKING:
     from . import ClairObscurWorld
@@ -40,7 +40,11 @@ def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> N
                 region,
                 location_data.default_item
             )
-
+            conditions = data.locations[location_name].condition
+            if conditions:
+                for cond in conditions:
+                    amount = conditions[cond]
+                    add_rule(location, lambda state, con=cond, pl=world.player, am=amount: state.has(con, pl, am))
             region.locations.append(location)
             code += 1
 

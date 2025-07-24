@@ -7,7 +7,7 @@ from worlds.clair_obscur.Data import data
 from worlds.clair_obscur.Items import create_item_name_to_ap_id, ClairObscurItem, get_classification, offset_item_value
 from worlds.clair_obscur.Locations import create_location_name_to_ap_id, create_locations
 from worlds.clair_obscur.Options import OPTIONS_GROUP, ClairObscurOptions
-
+from worlds.clair_obscur.Const import BASE_OFFSET
 
 class WebClairObscur(WebWorld):
     """
@@ -54,23 +54,37 @@ class ClairObscurWorld(World):
 
 
     def create_items(self) -> None:
+
+        #Amounts of each item to generate (anything else will be added once). Progressive Rock and quest items shouldn't change;
+        #other items can be adjusted based on options once options are implemented
+        amounts = {
+            "Progressive Rock": 5,
+            "Rock Crystal": 3,
+            "Lost Gestral": 9,
+            "Chroma Catalyst": 10,
+            "Polished Chroma Catalyst": 30,
+            "Resplendent Chroma Catalyst": 40,
+            "Grandiose Chroma Catalyst": 30,
+            "Perfect Chroma Catalyst": 10
+        }
+
         self.item_pool = []
         for item_id, item_data in data.items.items():
-            item = self.create_item_by_id(item_id)
-            self.item_pool.append(item)
-
-        #Add 4 more Progressive Rocks
-        for i in range(0, 4):
-            #item = self.create_item("Progressive Rock")
-            # ^ This ends up adding the offset twice. For now, I'm hardcoding in the ID as with the filler items above.
-            item = self.create_item_by_id(14)
-            self.item_pool.append(item)
+            amount = 1
+            #For future options: check a list of excluded item types here.
+            #if item_data.type in excluded:
+                #continue
+            if item_data.name in amounts:
+                amount = amounts[item_data.name]
+            for i in range(0, amount):
+                item = self.create_item_by_id(item_id)
+                self.item_pool.append(item)
 
         #Add filler to match the amount of locations
         location_count = len(data.locations)
-        remaining_items_to_generate = location_count - len(self.item_pool) + 1
+        remaining_items_to_generate = location_count - len(self.item_pool)
         for i in range(0, remaining_items_to_generate):
-            item = self.create_item_by_id(2)
+            item = self.create_item("Resplendent Chroma Catalyst")
             self.item_pool.append(item)
         self.multiworld.itempool += self.item_pool
 
@@ -84,12 +98,15 @@ class ClairObscurWorld(World):
 
 
     def create_item_by_id(self, ap_id: int) -> ClairObscurItem:
-        real_ap_id = offset_item_value(ap_id)
+        if ap_id < BASE_OFFSET:
+            #Should only offset the ID if it hasn't been already; calling create_item on an already created item
+            #by name would otherwise offset twice
+            ap_id = offset_item_value(ap_id)
 
         return ClairObscurItem(
-            self.item_id_to_name[real_ap_id],
-            get_classification(real_ap_id),
-            real_ap_id,
+            self.item_id_to_name[ap_id],
+            get_classification(ap_id),
+            ap_id,
             self.player
         )
 
@@ -97,7 +114,7 @@ class ClairObscurWorld(World):
         return [self.create_item(self.get_filler_item_name())]
 
     def get_filler_item_name(self) -> str:
-        return "UpgradeMaterial_Level3"
+        return "Resplendent Chroma Catalyst"
 
     def create_regions(self) -> None:
         from .Regions import create_regions
@@ -107,8 +124,8 @@ class ClairObscurWorld(World):
 
         create_locations(self, regions)
 
-        # self.multiworld.completion_condition[self.player] = (lambda state: state.has("Progressive Rock", self.player, 4)
-        #                                                      and state.has("Barrier Breaker", self.player))
+        self.multiworld.completion_condition[self.player] = (
+            lambda state: state.can_reach_location("Chest_Lumiere_17", self.player)
+        )
 
-        self.multiworld.completion_condition[self.player] = (lambda state: state.can_reach_location("Chest_Lumiere_17", self.player))
 
