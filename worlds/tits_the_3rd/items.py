@@ -39,6 +39,7 @@ meta_data_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.lower_elements_sepith_max_id: TitsThe3rdItemData(300999, ItemClassification.filler),
     ItemName.higher_elements_sepith_min_id: TitsThe3rdItemData(350000, ItemClassification.filler),
     ItemName.higher_elements_sepith_max_id: TitsThe3rdItemData(350999, ItemClassification.filler),
+    #TODO figure out what to do for all sepith with different amounts on lower and higher elements
     ItemName.character_min_id: TitsThe3rdItemData(70000, ItemClassification.filler),
     ItemName.character_max_id: TitsThe3rdItemData(71000, ItemClassification.filler),
     ItemName.area_min_id: TitsThe3rdItemData(200000, ItemClassification.filler),
@@ -148,6 +149,12 @@ currency_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.higher_elements_sepith_100: TitsThe3rdItemData(meta_data_table[ItemName.higher_elements_sepith_min_id].code + 100, ItemClassification.filler),
     ItemName.higher_elements_sepith_250: TitsThe3rdItemData(meta_data_table[ItemName.higher_elements_sepith_min_id].code + 250, ItemClassification.filler),
     ItemName.higher_elements_sepith_500: TitsThe3rdItemData(meta_data_table[ItemName.higher_elements_sepith_min_id].code + 500, ItemClassification.filler),
+    #TODO All Sepith, temporarily replaced with tear balm while the solution is getting worked on (didn't replace with other sepith that way I wont miss this)
+    ItemName.all_sepith_100_50: TitsThe3rdItemData(501, ItemClassification.filler),
+    ItemName.all_sepith_100: TitsThe3rdItemData(501, ItemClassification.filler),
+    ItemName.all_sepith_200: TitsThe3rdItemData(501, ItemClassification.filler),
+    ItemName.all_sepith_500: TitsThe3rdItemData(501, ItemClassification.filler),
+    ItemName.all_sepith_1000: TitsThe3rdItemData(501, ItemClassification.filler),
 }
 
 character_table: Dict[str, TitsThe3rdItemData] = {

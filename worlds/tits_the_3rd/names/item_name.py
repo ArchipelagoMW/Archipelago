@@ -99,6 +99,11 @@ class ItemName:
     higher_elements_sepith_100 = "Higher Elements Sepith (100)"
     higher_elements_sepith_250 = "Higher Elements Sepith (250)"
     higher_elements_sepith_500 = "Higher Elements Sepith (500)"
+    all_sepith_100_50 = "Lower Elements Sepith (100) and Higher Elements Sepith (50)"
+    all_sepith_100 = "All Sepith (100)"
+    all_sepith_200 = "All Sepith (200)"
+    all_sepith_500 = "All Sepith (500)"
+    all_sepith_1000 = "All Sepith (1000)"
 
     # Characters
     estelle = "Estelle"
