@@ -105,7 +105,7 @@ They will deposit surplus produced energy and draw energy from the shared storag
 
 Just like the base game, there is no limit to the discharge/draw rate of one building,
 and each Power Storage provides 100 MW of charging throughput.
-The shared storage has unlimited capacity, and no energy is lost during depositing.
+The shared storage has unlimited capacity, and only a small amount of energy is lost during depositing.
 The amount of energy currently in the shared storage is displayed in the Archipelago client
 and appears in the Power Storage building UI.
 
@@ -190,6 +190,7 @@ when you install it using the Satisfactory Mod Manager:
 - [Free Samples](https://ficsit.app/mod/FreeSamples) - Used to implement the Free Samples options. Even if you don't have this game option enabled, the mod will still be present, but its functionality will be disabled.
 - [MAM Enhancer](https://ficsit.app/mod/MAMTips) - Allows viewing MAM research nodes in detail. Enables you to hover over the items/unlocks of a node to see more info, especially important when their names get long.
 - [FixClientResourceSinkPoints](https://ficsit.app/mod/FixClientResourceSinkPoints) - Fixes a bug where AWESOME Sink points values aren't loaded properly on multiplayer clients.
+- [Hover Pack Fuse Reminder](https://ficsit.app/mod/HoverpackFuseReminder) - Due to randomization, engieers can get accewss to hoverpacks early while thier power grids arent ready for the power draw yet
 
 ### Certified Compatible Mods
 
