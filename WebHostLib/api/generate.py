@@ -1,15 +1,16 @@
 import json
 import pickle
+import typing
 from uuid import UUID
 
 from flask import request, session, url_for
 from markupsafe import Markup
-from pony.orm import commit
+from pony.orm import commit, select
 
-from WebHostLib import app
+from WebHostLib import app, cache
 from WebHostLib.check import get_yaml_data, roll_options
 from WebHostLib.generate import get_meta
-from WebHostLib.models import Generation, STATE_QUEUED, Seed, STATE_ERROR
+from WebHostLib.models import Generation, STATE_QUEUED, STATE_STARTED, Seed, STATE_ERROR
 from . import api_endpoints
 
 
@@ -74,12 +75,23 @@ def generate_api():
 def wait_seed_api(seed: UUID):
     seed_id = seed
     seed = Seed.get(id=seed_id)
+    reply_dict: dict[str, typing.Any] = {"queue_len": get_queue_length()}
     if seed:
-        return {"text": "Generation done"}, 201
+        reply_dict["text"] = "Generation done"
+        return reply_dict, 201
     generation = Generation.get(id=seed_id)
 
     if not generation:
-        return {"text": "Generation not found"}, 404
+        reply_dict["text"] = "Generation not found"
+        return reply_dict, 404
     elif generation.state == STATE_ERROR:
-        return {"text": "Generation failed"}, 500
-    return {"text": "Generation running"}, 202
+        reply_dict["text"] = "Generation failed"
+        return reply_dict, 500
+    reply_dict["text"] = "Generation running"
+    return reply_dict, 202
+
+
+@cache.memoize(timeout=5)
+def get_queue_length() -> int:
+    return select(generation for generation in Generation if
+                  generation.state == STATE_STARTED or generation.state == STATE_QUEUED).count()
