@@ -1141,8 +1141,8 @@ def __set_key_info_entry(key_info_single_entry, item_data, slot: int):
     key_info_single_entry["name"] = __get_item_name(item_data, slot) if not (item_data["door_id"] > 0) else \
         (__get_key_name(item_data["door_id"]))
     key_info_single_entry["open_door_no"] = item_data["door_id"]
-    key_info_single_entry["appear_type"] = 0
-    key_info_single_entry["invisible"] = 0
+    if key_info_single_entry["CodeName"] == "demo_key2":
+        key_info_single_entry["invisible"] = 0
     key_info_single_entry["appear_flag"] = 0
     key_info_single_entry["disappear_flag"] = 0
 
