@@ -260,14 +260,15 @@ class ObscureRoutes(Toggle):
 
 class AutoSpendLP(Toggle):
     """
-    When enabled, every time a character earn LP it will automatically purchase the most expensive node you can currently reach.
+    When enabled, every time a character earn LP it will automatically spend LP on abilities or passives.
     """
     display_name = "Automatically Spend LP"
 
 class AutoEquipPassives(Toggle):
     """
-    When enabled, every time a character unlocks a new passive node, it will equip it immediately if enough passive points are available.
-    Passives with drawbacks or that modify threat are not automatically equipped.
+    When enabled, every time a character unlocks a new passive, it will equip it immediately if enough passive points are available.
+    Passives with drawbacks, that enable equipping more gear types, or that modify threat are not automatically equipped.
+    If mods are enabled all passives are auto-equipped with no exclusions.
     """
     display_name = "Automatically Equip Passives"
 
