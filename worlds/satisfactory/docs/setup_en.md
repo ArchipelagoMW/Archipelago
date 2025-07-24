@@ -127,7 +127,7 @@ Next, enter the connection details in the relevant fields.
 
 - **Server URI**: Archipelago Server URI and port, for example, `archipelago.gg:49236`
 - **User Name**: The name you entered as your Player Name when you created your config file. It's also listed in the Name column of your room page.
-- **Password**: The password for your slot, blank if you did not assign one.
+- **Password**: The password for your archipelag room, blank if you did not assign or recieve one.
 
 Note that the Satisfactory Server/Client does *not* need a copy of your Archipelago config file.
 The mod communicates with the Archipelago Server, which already has your config file,
