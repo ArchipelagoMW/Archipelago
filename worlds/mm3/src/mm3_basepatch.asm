@@ -664,7 +664,11 @@ CheckRushWeapon:
   BNE .DontHave
   JMP $A3CF
   .DontHave:
+  LDA $A1
+  AND #$01
+  BNE .Skip
   DEC $A1
+  .Skip:
   JMP $A477
   
 CheckFirstWep:
