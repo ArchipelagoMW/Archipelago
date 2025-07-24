@@ -17,6 +17,7 @@ class ClairObscurLocationData(NamedTuple):
     name: str
     region: str
     default_item: str
+    condition: Dict[str, int]
 
 class ClairObscurRegionData:
     name: str
@@ -25,10 +26,10 @@ class ClairObscurRegionData:
     locations: List[str]
     condition: {}
 
-    def __init__(self, name: str, parent_map: str, cond: {}):
+    def __init__(self, cond: {}, name: str, parent_map: str, exits = List[str]):
         self.name = name
         self.parent_map = parent_map
-        self.exits = []
+        self.exits = exits if exits is not None else []
         self.locations = []
         self.condition = cond if cond is not None else {}
 
@@ -58,12 +59,13 @@ def populate_data_locations() -> Dict[str, ClairObscurLocationData]:
     locations_json = load_json_data("locations.json")
     for location in locations_json:
         location_name: str = location["name"]
-
+        location_condition = location["condition"]
 
         new_location = ClairObscurLocationData(
             location_name,
             location["location"],
-            location["original_item"]
+            location["original_item"],
+            location_condition
         )
 
         locations[location_name] = new_location
@@ -90,7 +92,7 @@ def populate_data_items() -> dict[int, ClairObscurItemData]:
             item_name,
             item_id,
             classification,
-            item["type"],
+            item["type"]
         )
 
         item_id += 1
@@ -103,10 +105,12 @@ def populate_data_regions() -> Dict[str, ClairObscurRegionData]:
     regions_json = load_json_data("regions.json")
     for region in regions_json:
         region_name = region["region_name"]
+        region_exits = region["exits"]
         current_region_data = ClairObscurRegionData(
+            region["condition"],
             region_name,
             region["parent_map"],
-            region["condition"]
+            region_exits
         )
 
         for location_name in region["locations"]:
