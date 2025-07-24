@@ -205,7 +205,9 @@ item_table: Dict[str, int] = {name: data.code for name, data in item_data_table.
 default_item_pool: Counter[str] = Counter()
 default_chest_pool: Counter[str] = Counter()
 default_character_quartz_pool: Counter[str] = Counter()
+default_craft_pool: Counter[str] = Counter()
 # fills the pool counters according to info in location_table
+# obviously ignores commented lines, just uncomment them to add them to the pools
 for location in location_table:
     if location_table[location].vanilla_item != "":
         match location_table[location].check_type:
@@ -215,44 +217,10 @@ for location in location_table:
                 default_character_quartz_pool[location_table[location].vanilla_item] += 1
             case CheckTypeName.area_unlock:
                 default_item_pool[location_table[location].vanilla_item] += 1
+            case CheckTypeName.craft:
+                default_craft_pool[location_table[location].vanilla_item] += 1
 
 default_character_to_location = {
     ItemName.tita: LocationName.sealing_stone_tita,
     ItemName.julia: LocationName.sealing_stone_julia,
 }
-
-
-# This will be default craft pool eventually.
-full_game_craft_pool: Counter[str] = Counter(
-    {
-        ItemName.estelle_progressive_craft: 13,
-        ItemName.joshua_progressive_craft: 14,
-        ItemName.scherazard_progressive_craft: 10,
-        ItemName.olivier_progressive_craft: 9,
-        ItemName.kloe_progressive_craft: 7,
-        ItemName.agate_progressive_craft: 12,
-        ItemName.tita_progressive_craft: 8,
-        ItemName.zin_progressive_craft: 13,
-        ItemName.kevin_progressive_craft: 12,
-        ItemName.anelace_progressive_craft: 10,
-        ItemName.josette_progressive_craft: 7,
-        ItemName.richard_progressive_craft: 10,
-        ItemName.mueller_progressive_craft: 11,
-        ItemName.julia_progressive_craft: 9,
-        ItemName.ries_progressive_craft: 10,
-        ItemName.renne_progressive_craft: 9,
-    }
-)
-
-
-# This is purely while we only have part of the AP world complete.
-chapter_1_craft_pool: Counter[str] = Counter(
-    {
-        ItemName.tita_progressive_craft: 5,
-        ItemName.kevin_progressive_craft: 7,
-        ItemName.julia_progressive_craft: 5,
-        ItemName.ries_progressive_craft: 4,
-    }
-)
-
-default_craft_pool = chapter_1_craft_pool
