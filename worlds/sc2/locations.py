@@ -11332,14 +11332,14 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
         ),
         make_location_data(
             SC2Mission.HAND_OF_DARKNESS_T.mission_name,
-            "North Brutalisk",
+            "North War Bot",
             SC2_RACESWAP_LOC_ID_OFFSET + 8501,
             LocationType.VANILLA,
             logic.terran_hand_of_darkness_requirement,
         ),
         make_location_data(
             SC2Mission.HAND_OF_DARKNESS_T.mission_name,
-            "South Brutalisk",
+            "South War Bot",
             SC2_RACESWAP_LOC_ID_OFFSET + 8502,
             LocationType.VANILLA,
             logic.terran_hand_of_darkness_requirement,
