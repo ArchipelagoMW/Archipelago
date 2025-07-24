@@ -3,10 +3,11 @@ import enum
 from dataclasses import dataclass, field
 from functools import reduce
 from pathlib import Path
-from typing import Dict, List, Protocol, Union, Set, Optional
+from typing import Dict, List, Protocol, Union, Set
 
 from BaseClasses import Item, ItemClassification
 from .. import data
+from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..logic.logic_event import all_events
 
 ITEM_CODE_OFFSET = 717000
@@ -80,11 +81,12 @@ class Group(enum.Enum):
 
 @dataclass(frozen=True)
 class ItemData:
-    code_without_offset: Optional[int]
+    code_without_offset: int | None
     name: str
     classification: ItemClassification
-    mod_name: Optional[str] = None
     groups: Set[Group] = field(default_factory=frozenset)
+    content_packs: frozenset[str] = frozenset()
+    """All the content packs required for this item to be available."""
 
     def __post_init__(self):
         if not isinstance(self.groups, frozenset):
@@ -111,11 +113,15 @@ def load_item_csv():
     with files(data).joinpath("items.csv").open() as file:
         item_reader = csv.DictReader(file)
         for item in item_reader:
-            id = int(item["id"]) if item["id"] else None
+            item_id = int(item["id"]) if item["id"] else None
             classification = reduce((lambda a, b: a | b), {ItemClassification[str_classification] for str_classification in item["classification"].split(",")})
             groups = {Group[group] for group in item["groups"].split(",") if group}
-            mod_name = str(item["mod_name"]) if item["mod_name"] else None
-            items.append(ItemData(id, item["name"], classification, mod_name, groups))
+
+            content_packs = frozenset(cp for cp in item["content_packs"].split(",") if cp)
+            if Group.GINGER_ISLAND in groups:
+                content_packs |= {ginger_island_content_pack.name}
+
+            items.append(ItemData(item_id, item["name"], classification, groups, content_packs))
     return items
 
 

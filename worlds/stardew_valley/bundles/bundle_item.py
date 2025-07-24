@@ -23,7 +23,7 @@ class VanillaItemSource(BundleItemSource):
 
 class IslandItemSource(BundleItemSource):
     def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
-        return content_packs.ginger_island_content_pack.name in content.registered_packs
+        return content.is_enabled(content_packs.ginger_island_content_pack)
 
 
 class FestivalItemSource(BundleItemSource):
