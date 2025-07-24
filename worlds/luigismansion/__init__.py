@@ -524,6 +524,9 @@ class LMWorld(World):
         elif self.options.door_rando.value == 3:
             for door_id in self.open_doors.keys():
                 self.open_doors[door_id] = 1
+        elif self.options.door_rando.value == 4:
+            for door_id in self.open_doors.keys():
+                self.open_doors[door_id] = 0
 
         # If player wants to start with boo radar or good vacuum
         if self.options.boo_radar == 0:
