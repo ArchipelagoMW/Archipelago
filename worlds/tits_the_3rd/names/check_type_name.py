@@ -9,3 +9,4 @@ class CheckTypeName:
     character_quartz = "Character Quartz"
     area_unlock = "Area Unlock"
     boss = "Boss"
+    craft = "Craft"
