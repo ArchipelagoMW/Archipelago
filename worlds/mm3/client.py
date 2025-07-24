@@ -14,6 +14,7 @@ logger = logging.getLogger("Client")
 
 MM3_CURRENT_STAGE = 0x22
 MM3_MEGAMAN_STATE = 0x30
+MM3_PROG_STATE = 0x60
 MM3_ROBOT_MASTERS_DEFEATED = 0x61
 MM3_DOC_STATUS = 0x62
 MM3_HEALTH = 0xA2
@@ -475,10 +476,11 @@ class MegaMan3Client(BizHawkClient):
             return
 
         # get our relevant bytes
-        (robot_masters_unlocked, robot_masters_defeated, doc_status, doc_robo_unlocked, doc_robo_defeated,
+        (prog_state, robot_masters_unlocked, robot_masters_defeated, doc_status, doc_robo_unlocked, doc_robo_defeated,
          rush_acquired, received_items, completed_stages, consumable_checks,
             e_tanks, lives, weapon_energy, health, state, bar_state, current_stage,
             energy_link_packet, last_wily) = await read(ctx.bizhawk_ctx, [
+                (MM3_PROG_STATE, 1, "RAM"),
                 (MM3_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
                 (MM3_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
                 (MM3_DOC_STATUS, 1, "RAM"),
@@ -762,12 +764,15 @@ class MegaMan3Client(BizHawkClient):
             new_checks.append(0x89000F)
 
         if bar_state[0] == 0x80:  # currently in stage
-            for consumable in MM3_CONSUMABLE_TABLE[current_stage[0]]:
-                consumable_info = MM3_CONSUMABLE_TABLE[current_stage[0]][consumable]
-                if consumable not in ctx.checked_locations:
-                    is_checked = consumable_checks[consumable_info[0]] & (1 << consumable_info[1])
-                    if is_checked:
-                        new_checks.append(consumable)
+            if (prog_state[0] > 0x00 and current_stage[0] >= 8) or prog_state[0] == 0x00:
+                # need to block the specific state of Break Man prog=0x12 stage=0x5
+                # it doesn't clean the consumable table and he doesn't have any anyways
+                for consumable in MM3_CONSUMABLE_TABLE[current_stage[0]]:
+                    consumable_info = MM3_CONSUMABLE_TABLE[current_stage[0]][consumable]
+                    if consumable not in ctx.checked_locations:
+                        is_checked = consumable_checks[consumable_info[0]] & (1 << consumable_info[1])
+                        if is_checked:
+                            new_checks.append(consumable)
 
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
