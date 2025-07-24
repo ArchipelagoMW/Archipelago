@@ -211,7 +211,7 @@ class TestBase(unittest.TestCase):
                     if not item.is_event and duplicated_items[item.name] < 10:
                         duplicate_item = world.create_item(item.name)
                         if duplicate_item.advancement:
-                            non_locked_advancements.append(duplicated_items)
+                            non_locked_advancements.append(duplicate_item)
                         duplicated_items[item.name] += 1
 
                 # Create an instance of every item in the data package that has not already been created, to emulate
