@@ -686,12 +686,12 @@ class LMWorld(World):
 
     def get_filler_item_name(self) -> str:
         filler = list(filler_items.keys())
-        thircoin = 0 if self.options.coin_weight.value - 10 <= 0 else self.options.coin_weight.value - 10
-        twencoin = 0 if self.options.coin_weight.value - 5 <= 0 else self.options.coin_weight.value - 5
-        twenbill = 0 if self.options.bill_weight.value - 5 <= 0 else self.options.bill_weight.value - 5
-        morebar = 0 if self.options.bars_weight.value - 5 <= 0 else self.options.bars_weight.value - 5
+        thircoin = max(0, self.options.coin_weight.value - 10 <= 0)
+        twencoin = max(0, self.options.coin_weight.value - 5 <= 0)
+        twenbill = max(0, self.options.bill_weight.value - 5 <= 0)
+        morebar = max(0, self.options.bars_weight.value - 5 <= 0)
         diamweight = math.ceil(self.options.gems_weight.value * 0.4)
-        lheart = 0 if self.options.heart_weight.value - 5 <= 0 else self.options.heart_weight.value - 5
+        lheart = max(0, self.options.heart_weight.value - 5 <= 0)
         filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,
                           # emerald, ruby, diamond
