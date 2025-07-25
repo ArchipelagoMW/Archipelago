@@ -2192,7 +2192,7 @@ ALL_LOCATION_TABLE = {**BASE_LOCATION_TABLE,
                       **LIGHT_LOCATION_TABLE}
 
 
-#TODO figure out why this is a list of list of ints instead of a list of ints
+
 SELF_LOCATIONS_TO_RECV: list[int] = [
     LMLocation.get_apid(value.code) for value in ALL_LOCATION_TABLE.values() if value.remote_only]
 
