@@ -91,6 +91,8 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         pools.move_mission(SC2Mission.DEVILS_PLAYGROUND_Z, Difficulty.EASY, Difficulty.STARTER)
         pools.move_mission(SC2Mission.DEVILS_PLAYGROUND_P, Difficulty.EASY, Difficulty.STARTER)
         if world.options.required_tactics != RequiredTactics.option_any_units:
+            # Per playtester feedback: doing this mission with only one unit is flaky
+            # but there are enough viable comps that >= 2 random units is probably workable
             pools.move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, Difficulty.EASY, Difficulty.STARTER)
             pools.move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY_Z, Difficulty.EASY, Difficulty.STARTER)
             pools.move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P, Difficulty.EASY, Difficulty.STARTER)

@@ -726,17 +726,17 @@ class SpearOfAdunPresence(Choice):
     Affects only abilities used from Spear of Adun top menu.
 
     Not Present: Spear of Adun calldowns are unavailable.
-    Vanilla: Spear of Adun calldowns are only available where they appear in the basegame (protoss missions after The Growing Shadow)
+    Vanilla: Spear of Adun calldowns are only available where they appear in the basegame (Protoss missions after The Growing Shadow)
     Protoss: Spear of Adun calldowns are available in any Protoss mission
     Everywhere: Spear of Adun calldowns are available in any mission of any race
     Any Race LotV: Spear of Adun calldowns are available in any race-swapped variant of a LotV mission
     """
     display_name = "Spear of Adun Presence"
     option_not_present = 0
-    option_vanilla = 1
+    option_vanilla = 4
     option_protoss = 2
     option_everywhere = 3
-    option_any_race_lotv = 4
+    option_any_race_lotv = 1
     default = option_vanilla
 
     # Fix case
@@ -765,17 +765,17 @@ class SpearOfAdunPassiveAbilityPresence(Choice):
     Does not affect building abilities like Orbital Assimilators or Warp Harmonization.
 
     Not Present: Autocasts are not available.
-    Vanilla: Spear of Adun calldowns are only available where it appears in the basegame (protoss missions after The Growing Shadow)
+    Vanilla: Spear of Adun calldowns are only available where it appears in the basegame (Protoss missions after The Growing Shadow)
     Protoss: Spear of Adun autocasts are available in any Protoss mission
     Everywhere: Spear of Adun autocasts are available in any mission of any race
     Any Race LotV: Spear of Adun autocasts are available in any race-swapped variant of a LotV mission
     """
     display_name = "Spear of Adun Passive Ability Presence"
     option_not_present = 0
-    option_vanilla = 1
+    option_vanilla = 4
     option_protoss = 2
     option_everywhere = 3
-    option_any_race_lotv = 4
+    option_any_race_lotv = 1
     default = option_vanilla
 
     # Fix case
@@ -1661,7 +1661,7 @@ def is_mission_in_soa_presence(
         (spear_of_adun_presence == option_class.option_everywhere)
         or (spear_of_adun_presence == option_class.option_protoss and MissionFlag.Protoss in mission.flags)
         or (spear_of_adun_presence == option_class.option_any_race_lotv
-            and (mission.campaign == SC2Campaign.LOTV or mission == SC2Mission.INTO_THE_VOID)
+            and (mission.campaign == SC2Campaign.LOTV or MissionFlag.VanillaSoa in mission.flags)
         )
         or (spear_of_adun_presence == option_class.option_vanilla
             and (MissionFlag.VanillaSoa in mission.flags  # Keeps SOA off on Growing Shadow, as that's vanilla behaviour
