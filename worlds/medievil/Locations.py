@@ -79,7 +79,7 @@ class MedievilLocation(Location):
                 for j, location_data in enumerate(location_tables[region_name]):
                     # Assign an ID to each location within the region
                     # The ID for each location in a region will be current_region_base_id + j
-                    print(f"{current_region_base_id + j}: {location_data.name}")
+                    # print(f"{current_region_base_id + j}: {location_data.name}")
                     output[location_data.name] = current_region_base_id + j
 
         return output
@@ -103,7 +103,7 @@ location_tables = {
         MedievilLocationData("Equipment: Magic Sword from Dirk Steadfast - HH","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
         MedievilLocationData("Equipment: Hammer from Stanyer Iron Hewer - HH","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
         MedievilLocationData("Equipment: Axe from Bloodmonath- HH","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-        MedievilLocationData("Equipment: Crossbow from Canny Tim - HH","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+        MedievilLocationData("Equipment: Crossbow from Canny Tim - HH","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
         MedievilLocationData("Equipment: Longbow from Ravenhooves The Archer - HH","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
         MedievilLocationData("Equipment: Fire Longbow from Ravenhooves the Archer - HH","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
         MedievilLocationData("Equipment: Magic Longbow from Ravenhooves the Archer - HH","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
@@ -133,7 +133,7 @@ location_tables = {
          MedievilLocationData("Life Bottle: Dan's Crypt","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Life Bottle: Dan's Crypt - Behind Wall","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Equipment: Small Sword - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Equipment: Copper Shield in Chest - DC","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+         MedievilLocationData("Equipment: Copper Shield in Chest - DC","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Equipment: Daggers - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Over the water - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Behind Wall in Crypt - Left - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
@@ -145,9 +145,10 @@ location_tables = {
          MedievilLocationData("Life Bottle: The Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Earth Rune: The Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Chaos Rune: The Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
-         MedievilLocationData("Equipment: Copper Shield - TG","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+         MedievilLocationData("Equipment: Copper Shield - TG","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Gold Coins: Bag at Start - TG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Near Chaos Rune - TG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+         MedievilLocationData("Gold Coins: Behind Fence at Statue - TG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),         
          MedievilLocationData("Gold Coins: Life Bottle Left Chest - TG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Life Bottle Right Chest - TG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Shop Chest - TG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
@@ -158,10 +159,10 @@ location_tables = {
 
     "Cemetery Hill": [
          MedievilLocationData("Key Item: Witches Talisman - CH","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
-         MedievilLocationData("Equipment: Copper Shield 1 - CH","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Equipment: Copper Shield 2 - CH","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Equipment: Copper Shield 3 - CH","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Equipment: Club - CH","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+         MedievilLocationData("Equipment: Copper Shield 1 - CH","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
+         MedievilLocationData("Equipment: Copper Shield 2 - CH","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
+         MedievilLocationData("Equipment: Copper Shield 3 - CH","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
+         MedievilLocationData("Equipment: Club - CH","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Equipment: Copper Shield in Arena - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Energy Vial: Near Shop - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Energy Vial: Arena - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
@@ -181,8 +182,8 @@ location_tables = {
          MedievilLocationData("Chaos Rune: The Hilltop Mausoleum","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Earth Rune: The Hilltop Mausoleum","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Moon Rune: The Hilltop Mausoleum","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
-         MedievilLocationData("Equipment: Club near Broken Benches - HM","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Equipment: Daggers near Block Puzzle - HM","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+         MedievilLocationData("Equipment: Club near Broken Benches - HM","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
+         MedievilLocationData("Equipment: Daggers near Block Puzzle - HM","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Equipment: Copper Shield near Block Puzzle - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Energy Vial: Right Coffin - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Energy Vial: Near Rune on Left Ramp - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
@@ -202,7 +203,7 @@ location_tables = {
     "Return to the Graveyard": [
         # REQUIRES SKULL KEY TO PROGRESS
          MedievilLocationData("Star Rune: Return to the Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
-         MedievilLocationData("Equipment: Silver Shield in Chest at Shop - RTG","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+         MedievilLocationData("Equipment: Silver Shield in Chest at Shop - RTG","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Skill: Daring Dash","Gold Shield Ammo (100)", MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Energy Vial: Coffin Area West - RTG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Energy Vial: Coffin Area East - RTG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),

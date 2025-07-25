@@ -98,6 +98,10 @@ key_item_names = {
     "Key Item: Skull Key", 
     "Key Item: Sheet Music", 
     
+    # Required Equipment
+    
+    "Equipment: Club",
+    
     # Runes 
     
     "Chaos Rune: The Graveyard", 
@@ -179,7 +183,7 @@ _all_items: List[MedievilItemData] = [
     ("Equipment: Small Sword", 31, MedievilItemCategory.WEAPON, False),
     ("Equipment: Broadsword", 32, MedievilItemCategory.WEAPON, False),
     ("Equipment: Magic Sword", 33, MedievilItemCategory.WEAPON, False),
-    ("Equipment: Club", 34, MedievilItemCategory.PROGRESSION, False),
+    ("Equipment: Club", 34, MedievilItemCategory.PROGRESSION, True),
     ("Equipment: Hammer", 35, MedievilItemCategory.WEAPON, False),
     ("Equipment: Daggers", 36, MedievilItemCategory.WEAPON, False),    
     ("Equipment: Axe", 37, MedievilItemCategory.WEAPON, False),
