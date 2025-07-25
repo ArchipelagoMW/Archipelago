@@ -610,10 +610,8 @@ class LMWorld(World):
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
         loc_itempool: list[LMItem] = []
         if self.options.boosanity:
-            for item, data in BOO_ITEM_TABLE.items():
-                copies_to_place = 1
-                copies_to_place = max(0, copies_to_place - exclude.count(item))
-                for _ in range(copies_to_place):
+            for item, data in BOO_ITEM_TABLE.items(): # Always create 1 copy of each boo and not more
+                for _ in range(max(0, 1 - exclude.count(item))):
                     loc_itempool.append(self.create_item(item))
         if self.options.good_vacuum.value == 2:
             exclude += ["Progressive Vacuum"]
@@ -624,11 +622,11 @@ class LMWorld(World):
             copies_to_place = 1
             if data.doorid in self.open_doors.keys() and self.open_doors.get(data.doorid) == 1:
                 exclude += [item]
-            if data.code == 65:
+            if data.code == 65: # Gold Diamonds
                 copies_to_place = 5
-            elif data.code == 140:
+            elif data.code == 140: # Progressive Flowers
                 copies_to_place = 3
-            elif data.code == 64:
+            elif data.code == 64: # Progressive Vacuums
                     copies_to_place = 2
             copies_to_place = max(0, copies_to_place - exclude.count(item))
             if data.code == 64 and copies_to_place < 1:
