@@ -46,7 +46,7 @@ def update_age_access(world: "SohWorld", state: CollectionState):
         _spread_age_access(world, state, Regions.TEMPLE_OF_TIME)
 
 #Returns whether ToT was just found
-def _spread_age_access(world: SohWorld, state: CollectionState, root: str) -> bool:
+def _spread_age_access(world: "SohWorld", state: CollectionState, root: str) -> bool:
     region_list = [root]
     just_found_tot = False
     while len(region_list) > 0:
@@ -81,19 +81,19 @@ def _spread_age_access(world: SohWorld, state: CollectionState, root: str) -> bo
                         just_found_tot = True
     return just_found_tot
 
-def can_access_region_as_child(state: CollectionState, world: SohWorld, region: Region | str) -> bool:
+def can_access_region_as_child(state: CollectionState, world: "SohWorld", region: Region | str) -> bool:
     if region is Region:
         region = cast(Region, region).name
     region = cast(str, region)
     return child_access_table[region] and state.can_reach_region(region, world.player)
 
-def can_access_region_as_adult(state: CollectionState, world: SohWorld, region: Region | str) -> bool:
+def can_access_region_as_adult(state: CollectionState, world: "SohWorld", region: Region | str) -> bool:
     if region is Region:
         region = cast(Region, region).name
     region = cast(str, region)
     return adult_access_table[region] and state.can_reach_region(region, world.player)
 
-def can_access_entrance_as_child( state: CollectionState, world: SohWorld, entrance: Entrance | str) -> bool:
+def can_access_entrance_as_child( state: CollectionState, world: "SohWorld", entrance: Entrance | str) -> bool:
     if isinstance(entrance, Entrance):
         entrance = cast(Entrance, entrance)
         if entrance.parent_region is None:
@@ -104,7 +104,7 @@ def can_access_entrance_as_child( state: CollectionState, world: SohWorld, entra
         entrance = cast(str, entrance)
         return can_access_entrance_as_child(state, world, world.get_entrance(entrance))
 
-def can_access_entrance_as_adult(state: CollectionState, world: SohWorld, entrance: Entrance | str) -> bool:
+def can_access_entrance_as_adult(state: CollectionState, world: "SohWorld", entrance: Entrance | str) -> bool:
     if isinstance(entrance, Entrance):
         entrance = cast(Entrance, entrance)
         if entrance.parent_region is None:

@@ -28,6 +28,7 @@ from .Locations import SohLocation, base_location_table, \
 from .Options import SohOptions
 from .Regions import region_data_table, reset_age_access, update_age_access
 from .Rules import get_soh_rule
+from .Enums import *
 from .dodongos_cavern import create_dc_regions_and_rules, set_location_rules_dc
 
 
@@ -58,139 +59,55 @@ class SohWorld(World):
     item_name_to_id = item_table
 
     def create_item(self, name: str) -> SohItem:
-        return SohItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
+        return SohItem(name, item_data_table[name].type, item_data_table[name].item_id, self.player)
 
     def create_items(self) -> None:
         item_pool: List[SohItem] = []
 
-        # Add Base Progression Items
-        item_pool.append(self.create_item("Kokiri Sword"))
-        item_pool.append(self.create_item("Biggoron's Sword"))
-        item_pool.append(self.create_item("Deku Shield"))
-        item_pool.append(self.create_item("Hylian Shield"))
-        item_pool.append(self.create_item("Mirror Shield"))
-        item_pool.append(self.create_item("Goron Tunic"))
-        item_pool.append(self.create_item("Zora Tunic"))
-        item_pool.append(self.create_item("Iron Boots"))
-        item_pool.append(self.create_item("Hover Boots"))
-        item_pool.append(self.create_item("Boomerang"))
-        item_pool.append(self.create_item("Lens of Truth"))
-        item_pool.append(self.create_item("Megaton Hammer"))
-        item_pool.append(self.create_item("Stone of Agony"))
-        item_pool.append(self.create_item("Din's Fire"))
-        item_pool.append(self.create_item("Farore's Wind"))
-        item_pool.append(self.create_item("Nayru's Love"))
-        item_pool.append(self.create_item("Fire Arrow"))
-        item_pool.append(self.create_item("Ice Arrow"))
-        item_pool.append(self.create_item("Light Arrow"))
-        item_pool.append(self.create_item("Gerudo Membership Card"))
-        item_pool.append(self.create_item("Double Defense"))
-        item_pool.append(self.create_item("Claim Check"))
-        for i in range(2): item_pool.append(self.create_item("Progressive Hookshot"))
-        for i in range(3): item_pool.append(self.create_item("Strength Upgrade"))
-        for i in range(3): item_pool.append(self.create_item("Progressive Bomb Bag"))
-        for i in range(3): item_pool.append(self.create_item("Progressive Bow"))
-        for i in range(3): item_pool.append(self.create_item("Progressive Slingshot"))
-        for i in range(3): item_pool.append(self.create_item("Progressive Wallet"))
-        for i in range(2): item_pool.append(self.create_item("Progressive Scale"))
-        for i in range(2): item_pool.append(self.create_item("Progressive Nut Capacity"))
-        for i in range(2): item_pool.append(self.create_item("Progressive Stick Capacity"))
-        for i in range(6): item_pool.append(self.create_item("Progressive Bombchu"))
-        for i in range(2): item_pool.append(self.create_item("Progressive Magic Meter"))
-        for i in range(2): item_pool.append(self.create_item("Progressive Ocarina"))
-        item_pool.append(self.create_item("Empty Bottle"))
-        item_pool.append(self.create_item("Bottle with Ruto's Letter"))
-        item_pool.append(self.create_item("Bottle with Big Poe"))
-        item_pool.append(self.create_item("Bottle with Bugs"))
-        item_pool.append(self.create_item("Zelda's Lullaby"))
-        item_pool.append(self.create_item("Epona's Song"))
-        item_pool.append(self.create_item("Saria's Song"))
-        item_pool.append(self.create_item("Sun's Song"))
-        item_pool.append(self.create_item("Song of Time"))
-        item_pool.append(self.create_item("Song of Storms"))
-        item_pool.append(self.create_item("Minuet of Forest"))
-        item_pool.append(self.create_item("Bolero of Fire"))
-        item_pool.append(self.create_item("Serenade of Water"))
-        item_pool.append(self.create_item("Requiem of Spirit"))
-        item_pool.append(self.create_item("Nocturne of Shadow"))
-        item_pool.append(self.create_item("Prelude of Light"))
-        item_pool.append(self.create_item("Great Deku Tree Map"))
-        item_pool.append(self.create_item("Dodongo's Cavern Map"))
-        item_pool.append(self.create_item("Jabu-Jabu's Belly Map"))
-        item_pool.append(self.create_item("Forest Temple Map"))
-        item_pool.append(self.create_item("Fire Temple Map"))
-        item_pool.append(self.create_item("Water Temple Map"))
-        item_pool.append(self.create_item("Spirit Temple Map"))
-        item_pool.append(self.create_item("Shadow Temple Map"))
-        item_pool.append(self.create_item("Bottom of the Well Map"))
-        item_pool.append(self.create_item("Ice Cavern Map"))
-        item_pool.append(self.create_item("Great Deku Tree Compass"))
-        item_pool.append(self.create_item("Dodongo's Cavern Compass"))
-        item_pool.append(self.create_item("Jabu-Jabu's Belly Compass"))
-        item_pool.append(self.create_item("Forest Temple Compass"))
-        item_pool.append(self.create_item("Fire Temple Compass"))
-        item_pool.append(self.create_item("Water Temple Compass"))
-        item_pool.append(self.create_item("Spirit Temple Compass"))
-        item_pool.append(self.create_item("Shadow Temple Compass"))
-        item_pool.append(self.create_item("Bottom of the Well Compass"))
-        item_pool.append(self.create_item("Ice Cavern Compass"))
-        item_pool.append(self.create_item("Forest Temple Boss Key"))
-        item_pool.append(self.create_item("Fire Temple Boss Key"))
-        item_pool.append(self.create_item("Water Temple Boss Key"))
-        item_pool.append(self.create_item("Spirit Temple Boss Key"))
-        item_pool.append(self.create_item("Shadow Temple Boss Key"))
-        for i in range(5): item_pool.append(self.create_item("Forest Temple Small Key"))
-        for i in range(8): item_pool.append(self.create_item("Fire Temple Small Key"))
-        for i in range(6): item_pool.append(self.create_item("Water Temple Small Key"))
-        for i in range(5): item_pool.append(self.create_item("Spirit Temple Small Key"))
-        for i in range(5): item_pool.append(self.create_item("Shadow Temple Small Key"))
-        for i in range(3): item_pool.append(self.create_item("Bottom of the Well Small Key"))
-        for i in range(9): item_pool.append(self.create_item("Training Ground Small Key"))
-        for i in range(2): item_pool.append(self.create_item("Ganon's Castle Small Key"))
-        item_pool.append(self.create_item("Greg the Green Rupee"))
-        for i in range(35): item_pool.append(self.create_item("Piece of Heart"))
-        item_pool.append(self.create_item("Piece of Heart (WINNER)"))
-        for i in range(8): item_pool.append(self.create_item("Heart Container"))
-        for i in range(6): item_pool.append(self.create_item("Ice Trap"))
+        items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
 
         # Add Ganon's Castle Boss Key when shuffled anywhere.
         if self.options.gcbk_setting == "anywhere":
-            item_pool.append(self.create_item("Ganon's Castle Boss Key"))
+            items_to_create[GANONS_CASTLE_BOSS_KEY] = 1
 
         # Add dungeon rewards when shuffled
         if self.options.shuffle_dungeon_rewards == "anywhere":
-            item_pool.append(self.create_item("Kokiri's Emerald"))
-            item_pool.append(self.create_item("Goron's Ruby"))
-            item_pool.append(self.create_item("Zora's Sapphire"))
-            item_pool.append(self.create_item("Forest Medallion"))
-            item_pool.append(self.create_item("Fire Medallion"))
-            item_pool.append(self.create_item("Water Medallion"))
-            item_pool.append(self.create_item("Spirit Medallion"))
-            item_pool.append(self.create_item("Shadow Medallion"))
-            item_pool.append(self.create_item("Light Medallion"))
+            items_to_create[KOKIRIS_EMERALD] = 1
+            items_to_create[GORONS_RUBY] = 1
+            items_to_create[ZORAS_SAPPHIRE] = 1
+            items_to_create[FOREST_MEDALLION] = 1
+            items_to_create[FIRE_MEDALLION] = 1
+            items_to_create[WATER_MEDALLION] = 1
+            items_to_create[SPIRIT_MEDALLION] = 1
+            items_to_create[SHADOW_MEDALLION] = 1
+            items_to_create[LIGHT_MEDALLION] = 1
 
         # Add overworld tokens when shuffled
         if self.options.shuffle_tokens == "overworld" or self.options.shuffle_tokens == "all":
-            for i in range(56): item_pool.append(self.create_item("Gold Skulltula Token"))
+            items_to_create[GOLD_SKULLTULA_TOKEN] += 56
 
         # Add dungeon tokens when shuffled
         if self.options.shuffle_tokens == "dungeon" or self.options.shuffle_tokens == "all":
-            for i in range(44): item_pool.append(self.create_item("Gold Skulltula Token"))
+            items_to_create[GOLD_SKULLTULA_TOKEN] += 44
 
         if self.options.shuffle_trade_items:
-            item_pool.append(self.create_item("Pocket Egg"))
-            item_pool.append(self.create_item("Cojiro"))
-            item_pool.append(self.create_item("Odd Mushroom"))
-            item_pool.append(self.create_item("Odd Potion"))
-            item_pool.append(self.create_item("Poacher's Saw"))
-            item_pool.append(self.create_item("Broken Goron's Sword"))
-            item_pool.append(self.create_item("Prescription"))
-            item_pool.append(self.create_item("Eyeball Frog"))
-            item_pool.append(self.create_item("World's Finest Eyedrops"))
+            items_to_create[POCKET_EGG] = 1
+            items_to_create[COJIRO] = 1
+            items_to_create[ODD_MUSHROOM] = 1
+            items_to_create[ODD_POTION] = 1
+            items_to_create[POACHERS_SAW] = 1
+            items_to_create[BROKEN_GORONS_SWORD] = 1
+            items_to_create[PRESCRIPTION] = 1
+            items_to_create[EYEBALL_FROG] = 1
+            items_to_create[WORLDS_FINEST_EYEDROPS] = 1
 
         if self.options.shuffle_merchants:
-            item_pool.append(self.create_item("Giant's Knife"))
-            item_pool.append(self.create_item("Magic Bean Pack"))
+            items_to_create[GIANTS_KNIFE] = 1
+            items_to_create[MAGIC_BEAN_PACK] = 1
+
+        for item, quantity in items_to_create.items():
+            for _ in range(quantity):
+                item_pool.append(self.create_item(item))
 
         filler_item_count: int = len(self.multiworld.get_unfilled_locations()) - len(item_pool)
         item_pool += [self.create_item(self.get_filler_item_name()) for _ in range(filler_item_count)]
