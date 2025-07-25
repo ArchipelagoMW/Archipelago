@@ -27,7 +27,9 @@
         "name": "Chest_AncientSanctuary_5",
         "location": "Ancient Sanctuary",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_AncientSanctuary_6",
@@ -63,7 +65,9 @@
         "name": "Chest_AncientSanctuary_11",
         "location": "Ancient Sanctuary",
         "original_item": "UpgradeMaterial",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_AncientSanctuary_12",
@@ -75,13 +79,17 @@
         "name": "Chest_AncientSanctuary_13",
         "location": "Ancient Sanctuary",
         "original_item": "PiercingShot",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_AncientSanctuary_14",
         "location": "Ancient Sanctuary",
         "original_item": "ChromaPack_ExtraLarge",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_AncientSanctuary_15",
@@ -867,13 +875,17 @@
         "name": "Chest_GestralVillage_7",
         "location": "Gestral Village",
         "original_item": "Betelim",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_GestralVillage_8",
         "location": "Gestral Village",
         "original_item": "FreeAimPowerful",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_GestralVillage_9",
@@ -957,7 +969,9 @@
         "name": "Chest_GoblusLair_13",
         "location": "Goblus Lair",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_GoblusLair_14",
@@ -2771,13 +2785,17 @@
         "name": "Chest_SpringMeadows_9",
         "location": "Spring Meadows",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_SpringMeadows_10",
         "location": "Spring Meadows",
         "original_item": "AegisRevival",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_SpringMeadows_11",
@@ -2807,7 +2825,9 @@
         "name": "Chest_SpringMeadows_15",
         "location": "Spring Meadows",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_SpringMeadows_16",
@@ -3143,7 +3163,9 @@
         "name": "Chest_WorldMap_10",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_11",
@@ -3179,7 +3201,9 @@
         "name": "Chest_WorldMap_16",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_17",
@@ -3197,7 +3221,9 @@
         "name": "Chest_WorldMap_19",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_20",
@@ -3245,7 +3271,9 @@
         "name": "Chest_WorldMap_27",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_28",
@@ -3293,7 +3321,9 @@
         "name": "Chest_WorldMap_35",
         "location": "World Map",
         "original_item": "ChromaPack_Large",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_36",
@@ -3329,7 +3359,9 @@
         "name": "Chest_WorldMap_41",
         "location": "World Map",
         "original_item": "ChromaPack_Large",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_42",
@@ -3389,7 +3421,9 @@
         "name": "Chest_WorldMap_51",
         "location": "World Map",
         "original_item": "ChromaPack_Large",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_52",
@@ -3431,7 +3465,9 @@
         "name": "Chest_WorldMap_58",
         "location": "World Map",
         "original_item": "BreakDamageOnCrit",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_59",
@@ -3481,7 +3517,9 @@
         "name": "Chest_WorldMap_66",
         "location": "World Map",
         "original_item": "APOnShell",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_67",
