@@ -606,6 +606,17 @@ class VacTrapWeight(Range):
     range_end = 100
     default = 5
 
+class BoolossusDifficulty(Choice):
+    """
+    Alter the difficulty of the mini-boos in the Boolossus fight. Easy slows them down, Hard speeds them up.
+    """
+    display_name = "Boolossus Diffculty"
+    internal_name = "boolossus_difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    default = 1
+
 class PossTrapWeight(Range):
     """
     Set the weight for how often possession traps get chosen as traps.
@@ -688,6 +699,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     balcony_boo_count: BalconyBooCount
     final_boo_count: FinalBooCount
     king_boo_health: KingBooHealth
+    boolossus_difficulty: BoolossusDifficulty
     boo_health_option: BooHealthOption
     boo_health_value: BooHealthValue
     boo_speed: BooSpeed

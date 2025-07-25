@@ -87,6 +87,7 @@ class LMWeb(WebWorld):
             LuigiOptions.LuigiMaxHealth,
             LuigiOptions.BetterVacuum,
             LuigiOptions.KingBooHealth,
+            LuigiOptions.BoolossusDifficulty,
             LuigiOptions.StartWithBooRadar,
             LuigiOptions.StartHiddenMansion,
             LuigiOptions.HintDistribution,

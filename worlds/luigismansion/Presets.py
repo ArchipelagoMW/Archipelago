@@ -31,6 +31,7 @@ all_random_settings = {
     LMOptions.SpeedySpirits.internal_name:             "random",
     LMOptions.BooGates.internal_name:                  "random",
     LMOptions.KingBooHealth.internal_name:             "random",
+    LMOptions.BoolossusDifficulty.internal_name:       "random",
     LMOptions.MarioItems.internal_name:                "random",
     # LMOptions.WashroomBooCount.internal_name:          "random",
     LMOptions.BalconyBooCount.internal_name:           "random",
