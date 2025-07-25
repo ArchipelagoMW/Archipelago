@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Toggle, DeathLink, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range
+from Options import ExcludeLocations, Toggle, DeathLink, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range
 
 class DifficultyLogic(Choice):
     """What tricks are allowed. Default Intended.
@@ -65,10 +65,9 @@ class EnableBonuses(DefaultOnToggle):
     """
     display_name = "Include Bonus Levels"
 
-class EnableAtlantisBonus(Toggle):
-    """Makes Atlantis Bonus contain checks. Requires Bonus Levels. Default off.
-    """
-    display_name = "Include Atlantis Bonus"
+class GloverExcludeLocations(ExcludeLocations):
+    """Prevent these locations from having important item."""
+    default = frozenset({"Atlantis_Bonus"})
 
 class TagLink(Toggle):
     """When you transform the ball, everyone who enabled swap link changes character or the ball. Of course, the reverse is true too. Default off.
@@ -278,13 +277,13 @@ class GloverOptions(PerGameCommonOptions):
     entrance_randomizer : EntranceRandomizer
     spawning_checkpoint_randomizer : SpawningCheckpointRandomizer
     bonus_levels : EnableBonuses
-    atlantis_bonus : EnableAtlantisBonus
     death_link : DeathLink
     tag_link : TagLink
 
     randomize_jump : RandomizeJump
     include_power_ball : IncludePowerBall
     checkpoint_checks : CheckpointsChecks
+    switches_checks : SwitchesChecks
     mr_tip_checks : MrTipChecks
 
     mr_hints : MrHints
@@ -310,4 +309,5 @@ class GloverOptions(PerGameCommonOptions):
     tip_trap_weight : TrapTipWeight
 
     start_inventory_from_pool : StartInventoryPool
+    exclude_locations : GloverExcludeLocations
 
