@@ -174,10 +174,10 @@ def create_region(world: MultiWorld, player: int,
     return region
 
 
-def create_regions(world: MultiWorld, player: int, locations_per_region: dict[str, list[LocationData]],
+def create_regions(multiworld: MultiWorld, player: int, locations_per_region: dict[str, list[LocationData]],
                     region_names: list[str]) -> dict[str, Region]:
     return {
-        name : create_region(world, player, locations_per_region, name)
+        name : create_region(multiworld, player, locations_per_region, name)
         for name in region_names
     }
 

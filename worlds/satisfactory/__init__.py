@@ -44,7 +44,7 @@ class SatisfactoryWorld(World):
     def generate_early(self) -> None:
         self.interpret_slot_data(None)
 
-        if self.critical_path_seed == None:
+        if not self.critical_path_seed:
             self.critical_path_seed = self.random.random()
 
         if self.options.mam_logic_placement.value == Placement.starting_inventory:
