@@ -700,7 +700,6 @@ def place_one_way_priority_entrance(ootworld, priority_name, allowed_regions, al
 
 
 def shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrances, locations_to_ensure_reachable, all_state, none_state, check_all=False, retry_count=10):
-    
     restrictive_entrances, soft_entrances = split_entrances_by_requirements(ootworld, entrance_pool, target_entrances)
 
     while retry_count:
@@ -784,7 +783,6 @@ def split_entrances_by_requirements(ootworld, entrances_to_split, assumed_entran
 # Check to ensure the world is valid. 
 # TODO: improve this function
 def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all_state_orig, none_state_orig):
-
     multiworld = ootworld.multiworld
     player = ootworld.player
 
@@ -881,7 +879,6 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
             # Ensure that Kokiri Shop is reachable as child with no items
             if multiworld.get_region('KF Kokiri Shop', player) not in none_state.child_reachable_regions[player]:
                 raise EntranceShuffleError('Kokiri Forest Shop not accessible as child in closed forest')
-
 
 
 # Recursively check if a given entrance is unreachable as a given age

@@ -288,7 +288,6 @@ def patch_rom(world, rom):
     rom.write_byte(0x0202039D, 0x20)
     rom.write_byte(0x0202043C, 0x24)
 
-
     # Fix Castle Courtyard to check for meeting Zelda, not Zelda fleeing, to block you
     rom.write_bytes(0xCD5E76, [0x0E, 0xDC])
     rom.write_bytes(0xCD5E12, [0x0E, 0xDC])
@@ -323,7 +322,6 @@ def patch_rom(world, rom):
         rom.write_int16s(None, [0x0073, 0x001, 0x0002, 0x0002]) # ID, start, end, end
     else:
         rom.write_int16s(None, [0x0073, 0x003B, 0x003C, 0x003C]) # ID, start, end, end
-
 
     rom.write_int32s(0x02E8E91C, [0x00000013, 0x0000000C]) # Textbox, Count
     if songs_as_items:
@@ -968,7 +966,6 @@ def patch_rom(world, rom):
         rom.write_byte(0x273E27B, 0x05)  # Set Spawn Room to be correct
 
     def set_entrance_updates(entrances):
-
         # Boss shuffle
         blue_warp_remaps = {}
         if (world.shuffle_bosses != 'off'):
@@ -1319,7 +1316,6 @@ def patch_rom(world, rom):
 
     # Make all chest opening animations fast
     rom.write_byte(rom.sym('FAST_CHESTS'), int(world.fast_chests))
-
 
     # Set up Rainbow Bridge conditions
     symbol = rom.sym('RAINBOW_BRIDGE_CONDITION')
@@ -1769,7 +1765,6 @@ def patch_rom(world, rom):
         # rom.write_int32(0xE09FB0, 0x240F0001)
         # song of time
         rom.write_int32(0xDB532C, 0x24050003)
-
 
     # Set damage multiplier
     if world.damage_multiplier == 'half':

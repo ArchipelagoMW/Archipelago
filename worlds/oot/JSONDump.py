@@ -1,5 +1,4 @@
 import json
-
 from functools import reduce
 
 INDENT = '  '

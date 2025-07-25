@@ -78,7 +78,6 @@ def get_alt_list_bytes(alt_list):
 # AP method to retrieve address + bit for each item
 # Based on get_collectible_flag_offset in the C code
 def get_collectible_flag_addresses(world, collectible_scene_flags_table):
-
     # Ported directly from get_items.c
     def get_collectible_flag_offset(scene: int, room: int, setup_id: int) -> int:
         num_scenes = collectible_scene_flags_table[0]
@@ -117,4 +116,3 @@ def get_collectible_flag_addresses(world, collectible_scene_flags_table):
             item_id = location.address
             collectible_flag_addresses[item_id] = [offset, flag]
     return collectible_flag_addresses
-

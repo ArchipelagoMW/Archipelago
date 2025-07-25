@@ -480,4 +480,3 @@ def restore_music(rom):
         # Zero out old audioseq
         rom.write_bytes(start, [0] * size)
         rom.update_dmadata_record(start, orig_start, orig_end)
-

@@ -7,12 +7,10 @@ from .Hints import HintArea
 # copied from OoT-Randomizer/Region.py
 @unique
 class RegionType(Enum):
-
     Overworld = 1
     Interior = 2
     Dungeon = 3
     Grotto = 4
-
 
     @property
     def is_indoors(self):
@@ -25,8 +23,6 @@ class TimeOfDay(object):
     DAY = 1
     DAMPE = 2
     ALL = DAY | DAMPE
-
-
 
 
 class OOTRegion(Region):

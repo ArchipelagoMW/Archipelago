@@ -265,4 +265,3 @@ def apply_patch_file(rom, file, sub_file=None):
         # Save the new data to rom
         rom.write_bytes(block_start, data)
         block_start = block_start+block_size
-

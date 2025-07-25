@@ -377,7 +377,6 @@ def patch_trails(rom, ootworld, trails):
             rom.write_bytes(color_symbol, color)
 
 
-
 def patch_gauntlet_colors(rom, ootworld, symbols):
     # patch gauntlet colors
     gauntlets = [
@@ -626,7 +625,6 @@ def patch_sfx(rom, ootworld, symbols):
             sound_id  = sound_dict[selection]
             for loc in hook.value.locations:
                 rom.write_int16(loc, sound_id)
-
 
 
 def patch_instrument(rom, ootworld, symbols):

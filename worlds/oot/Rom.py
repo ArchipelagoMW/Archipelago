@@ -91,7 +91,6 @@ class Rom(BigStream):
             raise RuntimeError('ROM file %s is not a valid OoT 1.0 US ROM.' % file)
         elif len(self.buffer) == 0x2000000:
             # If Input ROM is compressed, then Decompress it
-
             sub_dir = data_path("Decompress")
 
             if platform.system() == 'Windows':

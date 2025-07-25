@@ -83,7 +83,6 @@ def LocationFactory(locations, player: int):
 
 
 def build_location_name_groups() -> dict:
-
     def fix_sing(t) -> tuple:
         if isinstance(t, str):
             return (t,)
@@ -135,4 +134,3 @@ def build_location_name_groups() -> dict:
     rename(ret, 'the Lost Woods', 'Lost Woods')
 
     return ret
-

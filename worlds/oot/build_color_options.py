@@ -38,7 +38,6 @@ def assemble_sfx_option(f, internal_name: str, sound_hook: sfx.SoundHooks, displ
 
 
 with open('ColorSFXOptions.py', 'w') as f:
-
     f.write("# Auto-generated color and sound-effect options from Colors.py and Sounds.py \n")
     f.write("from Options import Choice\n\n\n")
 

@@ -57,7 +57,6 @@ def getHint(item, rand, clearer_hint=False):
 def getHintGroup(group, world):
     ret = []
     for name in hintTable:
-
         hint = getHint(name, world.random, world.clearer_hints)
 
         if hint.name in world.always_hints and group == 'always':

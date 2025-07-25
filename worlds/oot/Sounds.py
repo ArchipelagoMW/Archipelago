@@ -180,8 +180,6 @@ class SoundHooks(Enum):
                         0xC18832, 0xC18C32, 0xC19A7E, 0xC19CBE, 0xC1A1F2, 0xC1A3B6, 0xC1B08A,
                         0xC1B556, 0xC1C28A, 0xC1CC36, 0xC1EB4A, 0xC1F18E, 0xC6B136, 0xC6BBA2,
                         0xC1E93A, 0XC6B366, 0XC6B562])
-
-
 #   # Some enemies have a different cutting sound, making this a bit weird
 #   SWORD_SLASH     = SoundHook('Sword Slash',      standard,         [0xAC2942])
 

@@ -53,7 +53,6 @@ class OOTLogic(LogicMixin):
     def _oot_region_has_shortcuts(self, player, regionname):
         return self.multiworld.worlds[player].region_has_shortcuts(regionname)
 
-
     # This function operates by assuming different behavior based on the "level of recursion", handled manually. 
     # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 
     # If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal. 
@@ -231,7 +230,6 @@ def set_shop_rules(ootworld):
 # This function should be ran once after setting up entrances and before placing items
 # The goal is to automatically set item rules based on age requirements in case entrances were shuffled
 def set_entrances_based_rules(ootworld):
-
     all_state = ootworld.get_state_with_complete_itempool()
     all_state.sweep_for_advancements(locations=ootworld.get_locations())
 
@@ -240,4 +238,3 @@ def set_entrances_based_rules(ootworld):
         if not all_state._oot_reach_as_age(location.parent_region.name, 'adult', ootworld.player):
             forbid_item(location, 'Buy Goron Tunic', ootworld.player)
             forbid_item(location, 'Buy Zora Tunic', ootworld.player)
-

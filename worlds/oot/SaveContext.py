@@ -58,12 +58,10 @@ class Address():
         else:
             self.max = max
 
-
     def get_value(self, default=0):
         if self.value is None:
             return default
         return self.value
-
 
     def get_value_raw(self):
         if self.value is None:
@@ -82,7 +80,6 @@ class Address():
 
         value = (value << self.bit_offset) & self.mask
         return value
-
 
     def set_value_raw(self, value):
         if value is None:
@@ -104,7 +101,6 @@ class Address():
 
         self.value = value
 
-
     def get_writes(self, save_context):
         if self.value is None:
             return
@@ -124,7 +120,6 @@ class Address():
             else:
                 save_context.write_bits(self.address + i, byte, mask=mask)
 
-
     def to_bytes(value, size):
         ret = []
         for _ in range(size):
@@ -138,7 +133,6 @@ class SaveContext():
         self.save_bits = {}
         self.save_bytes = {}
         self.addresses = self.get_save_context_addresses()
-
 
     # will set the bits of value to the offset in the save (or'ing them with what is already there)
     def write_bits(self, address, value, mask=None, predicate=None):
@@ -161,7 +155,6 @@ class SaveContext():
         else:
             self.save_bits[address] = value
 
-
     # will overwrite the byte at offset with the given value
     def write_byte(self, address, value, predicate=None):
         if predicate and not predicate(value):
@@ -172,12 +165,10 @@ class SaveContext():
 
         self.save_bytes[address] = value
 
-
     # will overwrite the byte at offset with the given value
     def write_bytes(self, address, bytes, predicate=None):
         for i, value in enumerate(bytes):
             self.write_byte(address + i, value, predicate)
-
 
     def write_save_entry(self, address):
         if isinstance(address, dict):
@@ -219,7 +210,6 @@ class SaveContext():
             else:
                 self.addresses['ammo'][ammo].max = ammo_max
 
-
     # will overwrite the byte at offset with the given value
     def write_save_table(self, rom):
         self.set_ammo_max()
@@ -239,7 +229,6 @@ class SaveContext():
             raise Exception("The Initial Save Table has exceeded its maximum capacity: 0x%03X/0x400" % table_len)
         rom.write_bytes(rom.sym('INITIAL_SAVE_DATA'), save_table)
 
-
     def give_bottle(self, item, count):
         for bottle_id in range(4):
             item_slot = 'bottle_%d' % (bottle_id + 1)
@@ -252,7 +241,6 @@ class SaveContext():
             if count == 0:
                 return
 
-
     def give_health(self, health):
         health += self.addresses['health_capacity'].get_value(0x30) / 0x10
         health += self.addresses['quest']['heart_pieces'].get_value() / 4
@@ -260,7 +248,6 @@ class SaveContext():
         self.addresses['health_capacity'].value       = int(health) * 0x10
         self.addresses['health'].value                = int(health) * 0x10
         self.addresses['quest']['heart_pieces'].value = int((health % 1) * 4) * 0x10
-
 
     def give_item(self, world, item, count=1):
         if item.endswith(')'):
@@ -351,18 +338,14 @@ class SaveContext():
         else:
             raise ValueError("Cannot give unknown starting item %s" % item)
 
-
     def give_bombchu_item(self, world):
         self.give_item(world, "Bombchus", 0)
-
 
     def equip_default_items(self, age):
         self.equip_items(age, 'equips_' + age)
 
-
     def equip_current_items(self, age):
         self.equip_items(age, 'equips')
-
 
     def equip_items(self, age, equip_type):
         if age not in ['child', 'adult']:
@@ -392,7 +375,6 @@ class SaveContext():
                     if equip_item == 'sword':
                         self.addresses[equip_type]['button_items']['b'].value = item
                     break
-
 
     def get_save_context_addresses(self):
         return {
@@ -713,7 +695,6 @@ class SaveContext():
             'pending_freezes'            : Address(0xD4 + 0x1C * 0x49 + 0x10, size=4), # Unused word in scene x49
         }
 
-
     item_id_map = {
         'none'                : 0xFF,
         'stick'               : 0x00,
@@ -838,7 +819,6 @@ class SaveContext():
         'small_key'           : 0x67,
     }
 
-
     slot_id_map = {
         'stick'               : 0x00,
         'nut'                 : 0x01,
@@ -866,7 +846,6 @@ class SaveContext():
         'child_trade'         : 0x17,
     }
 
-
     bottle_types = {
         "Bottle"                   : 'bottle',
         "Bottle with Red Potion"   : 'red_potion',
@@ -882,7 +861,6 @@ class SaveContext():
         "Bottle with Milk (Half)"  : 'half_milk',
         "Bottle with Poe"          : 'poe',    
     }
-
 
     save_writes_table = {
         "Deku Stick Capacity": {
@@ -1130,7 +1108,6 @@ class SaveContext():
             'total_keys.gc': 3,
         },
     }
-
 
     equipable_items = {
         'equips_adult' : {

@@ -199,12 +199,10 @@ class OOTWorld(World):
         self.collectible_flags_available = threading.Event()
         super(OOTWorld, self).__init__(world, player)
 
-
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
         oot_settings = OOTWorld.settings
         rom = Rom(file=oot_settings.rom_file)
-
 
     # Option parsing, handling incompatible options, building useful-item table
     def generate_early(self):
@@ -523,7 +521,6 @@ class OOTWorld(World):
                 # Farore's Wind skippable if not used for this logic trick in Water Temple
                 self.nonadvancement_items.add('Farores Wind')
 
-
     # Reads a group of regions from the given JSON file.
     def load_regions_from_json(self, file_path):
         region_json = read_json(file_path)
@@ -596,7 +593,6 @@ class OOTWorld(World):
             self.regions.append(new_region)
             self._regions_cache[new_region.name] = new_region
 
-
     # Sets deku scrub prices
     def set_scrub_prices(self):
         # Get Deku Scrub Locations
@@ -626,7 +622,6 @@ class OOTWorld(World):
                     if location.item is not None:
                         location.item.price = price
 
-
     # Sets prices for shuffled shop locations
     def random_shop_prices(self):
         shop_item_indexes = ['7', '5', '8', '6']
@@ -652,7 +647,6 @@ class OOTWorld(World):
                             self.shop_prices[location.name] = self.random.randrange(0,501,5)
                         elif self.shopsanity_prices == 'tycoons_wallet':
                             self.shop_prices[location.name] = self.random.randrange(0,1000,5)
-
 
     # Fill boss prizes
     def fill_bosses(self, bossCount=9):
@@ -711,11 +705,9 @@ class OOTWorld(World):
                 main_items.append(item)
         return main_items, prefill_items
 
-
     # only returns proper result after create_items and divide_itempools are run
     def get_pre_fill_items(self):
         return self.pre_fill_items
-
 
     # Note on allow_arbitrary_name:
     # OoT defines many helper items and event names that are treated indistinguishably from regular items,
@@ -738,7 +730,6 @@ class OOTWorld(World):
         if name not in item_table:
             location.internal = True
         return item
-
 
     # Create regions, locations, and entrances
     def create_regions(self):
@@ -766,7 +757,6 @@ class OOTWorld(World):
         for region in self.regions:
             for exit in region.exits:
                 exit.connect(self.get_region(exit.vanilla_connected_region))
-
 
     # Create items, starting item handling, boss prize fill (before entrance randomizer)
     def create_items(self):
@@ -802,7 +792,6 @@ class OOTWorld(World):
 
         # Fill boss prizes. needs to happen before entrance shuffle
         self.fill_bosses()
-
 
     def set_rules(self):
         # This has to run AFTER creating items but BEFORE set_entrances_based_rules
@@ -841,9 +830,7 @@ class OOTWorld(World):
         set_rules(self)
         set_entrances_based_rules(self)
 
-
     def generate_basic(self):  # mostly killing locations that shouldn't exist by settings
-
         # Gather items for ice trap appearances
         self.fake_items = []
         if self.ice_trap_appearance in ['major_only', 'anything']:
@@ -877,9 +864,7 @@ class OOTWorld(World):
             loc = self.multiworld.get_location("Deliver Rutos Letter", self.player)
             loc.parent_region.locations.remove(loc)
 
-
     def pre_fill(self):
-
         def prefill_state(base_state):
             state = base_state.copy()
             for item in self.get_pre_fill_items():
@@ -1048,9 +1033,7 @@ class OOTWorld(World):
                     or (self.shuffle_child_trade == 'skip_child_zelda' and loc.name in ['HC Zeldas Letter', 'Song from Impa'])):
                 loc.address = None
 
-
     def generate_output(self, output_directory: str):
-
         # Write entrances to spoiler log
         all_entrances = self.get_shuffled_entrances()
         all_entrances.sort(reverse=True, key=lambda x: (x.type, x.name))
@@ -1109,7 +1092,6 @@ class OOTWorld(World):
                 player=self.player,
                 player_name=self.multiworld.get_player_name(self.player))
             apz5.write()
-
 
     # Gathers hint data for OoT. Loops over all world locations for woth, barren, and major item locations.
     @classmethod
@@ -1189,7 +1171,6 @@ class OOTWorld(World):
             for autoworld in multiworld.get_game_worlds("Ocarina of Time"):
                 autoworld.hint_data_available.set()
 
-
     def fill_slot_data(self):
         self.collectible_flags_available.wait()
 
@@ -1222,9 +1203,7 @@ class OOTWorld(World):
         )
         return slot_data
 
-
     def modify_multidata(self, multidata: dict):
-
         # Replace connect name
         multidata['connect_names'][self.connect_name] = multidata['connect_names'][self.multiworld.player_name[self.player]]
 
@@ -1246,9 +1225,7 @@ class OOTWorld(World):
             if zelda_item_id:
                 multidata["precollected_items"][self.player].append(zelda_item_id)
 
-
     def extend_hint_information(self, er_hint_data: dict):
-
         er_hint_data[self.player] = {}
 
         hint_entrances = set()
@@ -1293,7 +1270,6 @@ class OOTWorld(World):
                             er_hint_data[self.player][location.address] = main_entrance.name
                             logger.debug(f"Set {location.name} hint data to {main_entrance.name}")
 
-
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         required_trials_str = ", ".join(t for t in self.skipped_trials if not self.skipped_trials[t])
         if required_trials_str == "":
@@ -1304,7 +1280,6 @@ class OOTWorld(World):
             spoiler_handle.write(f"\nShop Prices ({self.multiworld.get_player_name(self.player)}):\n")
             for k, v in self.shop_prices.items():
                 spoiler_handle.write(f"{k}: {v} Rupees\n")
-
 
     # Key ring handling:
     # Key rings are multiple items glued together into one, so we need to give
@@ -1340,7 +1315,6 @@ class OOTWorld(World):
             state.adult_blocked_connections[self.player] = set()
             state._oot_stale[self.player] = True
         return changed
-
 
     # Helper functions
     def region_has_shortcuts(self, regionname):
@@ -1462,4 +1436,3 @@ def gather_locations(multiworld: MultiWorld,
         locations += filter(condition, multiworld.get_unfilled_locations(player=player))
 
     return locations
-

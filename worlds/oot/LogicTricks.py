@@ -1,6 +1,5 @@
 known_logic_tricks = {
     # General tricks
-
     'Pass Through Visible One-Way Collisions': {
         'name'    : 'logic_visible_collisions',
         'tags'    : ("Entrance", "Kakariko Village",),
@@ -467,7 +466,6 @@ known_logic_tricks = {
                     '''},
 
     # Dungeons
-
     'Deku Tree Basement Vines GS with Jump Slash': {
         'name'    : 'logic_deku_basement_gs',
         'tags'    : ("Deku Tree", "Skulltulas",),

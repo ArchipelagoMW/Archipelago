@@ -51,7 +51,6 @@ def isliteral(expr):
 
 
 class Rule_AST_Transformer(ast.NodeTransformer):
-
     def __init__(self, world, player):
         self.world = world
         self.player = player
@@ -67,7 +66,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         self.rule_cache = {}
         self.kwarg_defaults = kwarg_defaults.copy()  # otherwise this gets contaminated between players
         self.kwarg_defaults['player'] = self.player
-
 
     def visit_Name(self, node):
         if node.id in dir(self):
@@ -121,7 +119,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             return self.visit_Str(node)
         return node
 
-
     def visit_Tuple(self, node):
         if len(node.elts) != 2:
             raise Exception('Parse Error: Tuple must have 2 values', self.current_spot.name, ast.dump(node, False))
@@ -152,7 +149,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 ctx=ast.Load()),
             args=[ast.Str(iname), ast.Constant(self.player), count],
             keywords=[])
-
 
     def visit_Call(self, node):
         if not isinstance(node.func, ast.Name):
@@ -203,7 +199,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
 
         return self.make_call(node, node.func.id, new_args, node.keywords)
 
-
     def visit_Subscript(self, node):
         if isinstance(node.value, ast.Name):
             s = node.slice if isinstance(node.slice, ast.Name) else node.slice.value
@@ -229,7 +224,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 ctx=node.ctx)
         else:
             return node
-
 
     def visit_Compare(self, node):
         def escape_or_string(n):
@@ -260,7 +254,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             return self.visit(ast.parse('%r' % res, mode='eval').body)
         return node
 
-
     def visit_UnaryOp(self, node):
         # visit the children first
         self.generic_visit(node)
@@ -270,7 +263,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             return ast.parse('%r' % res, mode='eval').body
         return node
 
-
     def visit_BinOp(self, node):
         # visit the children first
         self.generic_visit(node)
@@ -279,7 +271,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             res = eval(compile(ast.Expression(node), '<string>', 'eval'))
             return ast.parse('%r' % res, mode='eval').body
         return node
-
 
     def visit_BoolOp(self, node):
         # Everything else must be visited, then can be removed/reduced to.
@@ -333,7 +324,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             return node.values[0]
         return node
 
-
     # Generates an ast.Call invoking the given State function 'name',
     # providing given args and keywords, and adding in additional
     # keyword args from kwarg_defaults (age, etc.)
@@ -351,7 +341,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 ctx=ast.Load()),
             args=args,
             keywords=keywords)
-
 
     def replace_subrule(self, target, node):
         rule = ast.dump(node, False)
@@ -373,7 +362,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         # (and reserve the item name in the process)
         self.replaced_rules[target][rule] = item_rule
         return item_rule
-
 
     # Requires the target regions have been defined in the world.
     def create_delayed_rules(self):
@@ -399,7 +387,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         # Safeguard in case this is called multiple times per world
         self.delayed_rules.clear()
 
-
     def make_access_rule(self, body):
         rule_str = ast.dump(body, False)
         if rule_str not in self.rule_cache:
@@ -424,7 +411,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 raise Exception('Parse Error: %s' % e, self.current_spot.name, ast.dump(body, False))
         return self.rule_cache[rule_str]
 
-
     ## Handlers for specific internal functions used in the json logic.
 
     # at(region_name, rule)
@@ -434,7 +420,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         if len(node.args) < 2 or not isinstance(node.args[0], ast.Str):
             raise Exception('Parse Error: invalid at() arguments', self.current_spot.name, ast.dump(node, False))
         return self.replace_subrule(node.args[0].s, node.args[1])
-
 
     # here(rule)
     # Creates an internal event in the same region and depends on it.
@@ -473,7 +458,6 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
             return ast.parse(f"(state.has('Ocarina', player) and state.has('Suns Song', player)) or state._oot_reach_at_time('{r.name}', TimeOfDay.DAMPE, [], player)", mode='eval').body
         return ast.NameConstant(True)
-
 
     # Parse entry point
     # If spot is None, here() rules won't work.

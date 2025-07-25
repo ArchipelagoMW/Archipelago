@@ -238,7 +238,6 @@ def add_hint(world, groups, gossip_text, count, location=None, force_reachable=F
     return success
 
 
-
 def writeGossipStoneHints(world, messages):
     for id, gossip_text in world.gossip_hints.items():
         update_message_by_id(messages, id, str(gossip_text), 0x23)
@@ -779,10 +778,8 @@ hint_dist_keys = {
 }
 
 
-
 # builds out general hints based on location and whether an item is required or not
 def buildWorldGossipHints(world, checkedLocations=None):
-
     # rebuild hint exclusion list
     hintExclusions(world, clear_cache=True)
 
@@ -830,7 +827,6 @@ def buildWorldGossipHints(world, checkedLocations=None):
     stoneGroups.extend([[id] for id in stoneIDs])
 
     world.hint_rng.shuffle(stoneGroups)
-
 
     # Load hint distro from distribution file or pre-defined settings
     #

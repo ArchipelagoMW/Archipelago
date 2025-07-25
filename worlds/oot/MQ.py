@@ -222,7 +222,6 @@ class Scene(object):
             rom.write_int32s(cur, [room.file.start, room.file.end])
             cur += 0x08
 
-
     def write_map_data(self, rom:Rom):
         if self.id >= 10:
             return
@@ -260,7 +259,6 @@ class Scene(object):
             for icon in minimap:
                 Icon.write_to_minimap(icon, rom, cur)
                 cur += 0x26
-
 
     def patch_mesh(self, rom:Rom, mesh:CollisionMesh):
         start = self.file.start
@@ -327,14 +325,11 @@ class Scene(object):
         # Write Mesh to Scene
         mesh.write_to_scene(rom, self.file.start)
 
-
     def write_cam_data(self, rom:Rom, addr, cam_data):
-
         for item in cam_data:
             data, pos = item
             rom.write_int32s(addr, [data, pos])
             addr += 8
-
 
     # appends path data to the end of the rom
     # returns segment address to path data
@@ -416,7 +411,6 @@ class Room(object):
 
 
 def patch_files(rom:Rom, mq_scenes:list):
-
     data = get_json()
     scenes = [Scene(x) for x in data]
     for scene in scenes:
@@ -424,7 +418,6 @@ def patch_files(rom:Rom, mq_scenes:list):
             if scene.id == 9:
                 patch_ice_cavern_scene_header(rom)
             scene.write_data(rom)
-
 
 
 def get_json():

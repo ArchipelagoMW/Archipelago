@@ -720,7 +720,6 @@ def add_message(messages, text, id=0, opts=0x00):
 
 # holds a row in the shop item table (which contains pointers to the description and purchase messages)
 class Shop_Item():
-
     def display(self):
         meta_data = ["#" + str(self.index),
          "Item: 0x" + "{:04x}".format(self.get_item_id),
@@ -739,7 +738,6 @@ class Shop_Item():
 
     # write the shop item back
     def write(self, rom, shop_table_address, index):
-
         entry_offset = shop_table_address + 0x20 * index
 
         bytes = []
@@ -760,7 +758,6 @@ class Shop_Item():
 
     # read a single message
     def __init__(self, rom, shop_table_address, index):
-
         entry_offset = shop_table_address + 0x20 * index
         entry = rom.read_bytes(entry_offset, 0x20)
 
@@ -927,7 +924,6 @@ def read_messages(rom):
 
 # write the messages back
 def repack_messages(rom, messages, permutation=None, always_allow_skip=True, speed_up_text=True):
-
     rom.update_dmadata_record(TEXT_START, TEXT_START, TEXT_START + ENG_TEXT_SIZE_LIMIT)
 
     if permutation is None:
@@ -969,7 +965,6 @@ def repack_messages(rom, messages, permutation=None, always_allow_skip=True, spe
 
 # shuffles the messages in the game, making sure to keep various message types in their own group
 def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
-
     permutation = [i for i, _ in enumerate(messages)]
 
     def is_exempt(m):
@@ -997,7 +992,6 @@ def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
     have_two_choice   = list( filter(lambda m: not is_exempt(m) and m.has_two_choice,   messages) )
     have_three_choice = list( filter(lambda m: not is_exempt(m) and m.has_three_choice, messages) )
     basic_messages    = list( filter(lambda m: not is_exempt(m) and m.is_basic(),       messages) )
-
 
     def shuffle_group(group):
         group_permutation = [i for i, _ in enumerate(group)]

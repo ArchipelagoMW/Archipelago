@@ -691,7 +691,6 @@ class sfx_navi_overworld(Choice):
     option_adult_zelda_gasp = 32
 
 
-
 class sfx_navi_enemy(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option.
         "completely_random" selects any random sound."""
@@ -731,7 +730,6 @@ class sfx_navi_enemy(Choice):
     option_adult_zelda_gasp = 32
 
 
-
 class sfx_low_hp(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option.
         "completely_random" selects any random sound."""
@@ -767,7 +765,6 @@ class sfx_low_hp(Choice):
     option_tambourine = 28
     option_timer = 29
     option_adult_zelda_gasp = 30
-
 
 
 class sfx_menu_cursor(Choice):
@@ -840,7 +837,6 @@ class sfx_menu_cursor(Choice):
     option_thunder = 63
     option_timer = 64
     option_adult_zelda_gasp = 65
-
 
 
 class sfx_menu_select(Choice):
@@ -917,7 +913,6 @@ class sfx_menu_select(Choice):
     option_adult_zelda_gasp = 67
 
 
-
 class sfx_nightfall(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option.
         "completely_random" selects any random sound."""
@@ -935,7 +930,6 @@ class sfx_nightfall(Choice):
     option_redead_moan = 10
     option_talon_snore = 11
     option_thunder = 12
-
 
 
 class sfx_horse_neigh(Choice):
@@ -957,7 +951,6 @@ class sfx_horse_neigh(Choice):
     option_stalchild_attack = 12
 
 
-
 class sfx_hover_boots(Choice):
     """Choose a sound effect. "random_choice" selects a random option. "random_ear_safe" selects a random safe option.
         "completely_random" selects any random sound."""
@@ -973,6 +966,3 @@ class sfx_hover_boots(Choice):
     option_mweep = 8
     option_shabom_pop = 9
     option_tambourine = 10
-
-
-
