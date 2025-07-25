@@ -35,7 +35,7 @@ class OOTLogic(LogicMixin):
         total_hearts = 3 + containers + int(pieces / 4)
         return total_hearts >= count
 
-    def _oot_has_bottle(self, player): 
+    def _oot_has_bottle(self, player):
         return self.has_group("logic_bottles", player)
 
     def _oot_has_beans(self, player):

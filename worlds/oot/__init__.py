@@ -4,8 +4,8 @@ import copy
 import functools
 import settings
 import typing
-from typing import Optional, List, AbstractSet, Union  # remove when 3.8 support is dropped
 from collections import Counter, deque
+from collections.abc import Iterable
 from string import printable
 
 logger = logging.getLogger("Ocarina of Time")
@@ -86,7 +86,7 @@ class OOTSettings(settings.Group):
         """
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
-    rom_start: typing.Union[RomStart, bool] = True
+    rom_start: RomStart | bool = True
 
 
 class OOTWeb(WebWorld):
@@ -138,7 +138,7 @@ class OOTWorld(World):
     learn magical ocarina songs, and explore twelve dungeons on your quest. Use Link's many items and abilities
     to rescue the Seven Sages, and then confront Ganondorf to save Hyrule!
     """
-    game: str = "Ocarina of Time"
+    game = "Ocarina of Time"
     options_dataclass = OoTOptions
     options: OoTOptions
     settings: typing.ClassVar[OOTSettings]
@@ -1406,9 +1406,9 @@ def valid_dungeon_item_location(world: OOTWorld, option: str, dungeon: str, loc:
 
 def gather_locations(multiworld: MultiWorld,
     item_type: str,
-    players: Union[int, AbstractSet[int]],
+    players: int | Iterable[int],
     dungeon: str = ''
-) -> Optional[List[OOTLocation]]:
+) -> list[OOTLocation] | None:
     type_to_setting = {
         'Map': 'shuffle_mapcompass',
         'Compass': 'shuffle_mapcompass',

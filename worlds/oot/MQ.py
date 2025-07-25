@@ -167,7 +167,6 @@ class Scene(object):
         for item in temp_paths:
             self.paths.append(item['Points'])
 
-
     def write_data(self, rom:Rom):
         # write floormap and minimap data
         self.write_map_data(rom)

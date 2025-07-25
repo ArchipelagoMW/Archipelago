@@ -12,6 +12,7 @@ class TrackRandomRange(Range):
     """Overrides normal from_any behavior to track whether the option was randomized at generation time."""
     supports_weighting = False
     randomized: bool = False
+    display_name: typing.ClassVar[str]
 
     @classmethod
     def from_any(cls, data: typing.Any) -> Range:
@@ -141,7 +142,7 @@ class Trials(TrackRandomRange):
     range_end = 6
 
 
-open_options: typing.Dict[str, type(Option)] = {
+open_options: dict[str, type[Option]] = {
     "open_forest": Forest,
     "open_kakariko": Gate,
     "open_door_of_time": DoorOfTime,
@@ -362,7 +363,7 @@ class MQDungeonCount(TrackRandomRange):
 #     default = 2
 
 
-world_options: typing.Dict[str, type(Option)] = {
+world_options: dict[str, type[Option]] = {
     "starting_age": StartingAge,
     "shuffle_interior_entrances": InteriorEntrances,
     "shuffle_grotto_entrances": GrottoEntrances,
@@ -374,7 +375,7 @@ world_options: typing.Dict[str, type(Option)] = {
     "shuffle_bosses": BossEntrances,
     # "mix_entrance_pools": MixEntrancePools,
     # "decouple_entrances": DecoupleEntrances,
-    "triforce_hunt": TriforceHunt, 
+    "triforce_hunt": TriforceHunt,
     "triforce_goal": TriforceGoal,
     "extra_triforce_percentage": ExtraTriforces,
     "bombchus_in_logic": LogicalChus,
@@ -432,7 +433,7 @@ class BridgeHearts(Range):
     default = 20
 
 
-bridge_options: typing.Dict[str, type(Option)] = {
+bridge_options: dict[str, type[Option]] = {
     "bridge_stones": BridgeStones,
     "bridge_medallions": BridgeMedallions,
     "bridge_rewards": BridgeRewards,
@@ -609,7 +610,7 @@ class ShuffleFrogRupees(Toggle):
     display_name = "Shuffle Frog Song Rupees"
 
 
-shuffle_options: typing.Dict[str, type(Option)] = {
+shuffle_options: dict[str, type[Option]] = {
     "shuffle_song_items": SongShuffle,
     "shopsanity": ShopShuffle,
     "shop_slots": ShopSlots,
@@ -821,7 +822,7 @@ class KeyRingList(OptionSet):
     }
 
 
-dungeon_items_options: typing.Dict[str, type(Option)] = {
+dungeon_items_options: dict[str, type[Option]] = {
     "shuffle_mapcompass": ShuffleMapCompass,
     "shuffle_smallkeys": ShuffleKeys,
     "shuffle_hideoutkeys": ShuffleGerudoKeys,
@@ -914,7 +915,7 @@ class FAETorchCount(Range):
     default = 24
 
 
-timesavers_options: typing.Dict[str, type(Option)] = {
+timesavers_options: dict[str, type[Option]] = {
     "no_escape_sequence": SkipEscape,
     "no_guard_stealth": SkipStealth,
     "no_epona_race": SkipEponaRace,
@@ -1077,7 +1078,7 @@ class RupeeStart(Toggle):
     display_name = "Start with Rupees"
 
 
-misc_options: typing.Dict[str, type(Option)] = {
+misc_options: dict[str, type[Option]] = {
     "correct_chest_appearances": CorrectChestAppearance,
     "minor_items_as_major_chest": MinorInMajor,
     "invisible_chests": InvisibleChests,
@@ -1151,7 +1152,7 @@ class AdultTradeStart(Choice):
     default = 9
 
 
-itempool_options: typing.Dict[str, type(Option)] = {
+itempool_options: dict[str, type[Option]] = {
     "item_pool_value": ItemPoolValue,
     "junk_ice_traps": IceTraps,
     "ice_trap_appearance": IceTrapVisual,
@@ -1211,7 +1212,7 @@ class SwordTrailDuration(Range):
     default = 4
 
 
-cosmetic_options: typing.Dict[str, type(Option)] = {
+cosmetic_options: dict[str, type[Option]] = {
     "default_targeting": Targeting,
     "display_dpad": DisplayDpad,
     "dpad_dungeon_menu": DpadDungeonMenu,
@@ -1259,7 +1260,7 @@ class SfxOcarina(Choice):
     option_flute = 6
     default = 1
 
-sfx_options: typing.Dict[str, type(Option)] = {
+sfx_options: dict[str, type[Option]] = {
     "sfx_navi_overworld":   sfx_navi_overworld,
     "sfx_navi_enemy":       sfx_navi_enemy,
     "sfx_low_hp":           sfx_low_hp,
@@ -1434,7 +1435,7 @@ class OoTOptions(PerGameCommonOptions):
     sfx_ocarina:          SfxOcarina
 
 
-oot_option_groups: typing.List[OptionGroup] = [
+oot_option_groups: list[OptionGroup] = [
     OptionGroup("Open", [option for option in open_options.values()]),
     OptionGroup("World", [*[option for option in world_options.values()],
                 *[option for option in bridge_options.values()]]),
