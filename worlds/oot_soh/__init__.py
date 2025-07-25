@@ -31,7 +31,6 @@ from .Rules import get_soh_rule
 from .Enums import *
 from .dodongos_cavern import create_dc_regions_and_rules, set_location_rules_dc
 
-
 class SohWebWorld(WebWorld):
     theme = "ice"
     
@@ -357,10 +356,12 @@ class SohWorld(World):
         }
     
     def collect(self, state: CollectionState, item: Item) -> bool:
-        update_age_access(self, state)
+        # Temporarily disabled because logic is in progress
+        #update_age_access(self, state)
         return super().collect(state, item)
     
     def remove(self, state: CollectionState, item: Item) -> bool:
-        reset_age_access() #TODO pass the starting age option 
-        update_age_access(self, state)
+        # Temporarily disabled because logic is in progress
+        #reset_age_access() #TODO pass the starting age option 
+        #update_age_access(self, state)
         return super().remove(state, item)

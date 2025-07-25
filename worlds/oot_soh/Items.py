@@ -299,4 +299,17 @@ item_data_table: Dict[str, SohItemData] = {
 
 item_table = {name: data.item_id for name, data in item_data_table.items() if data.item_id is not None}
 
-filler_items = [Items.RECOVERY_HEART, Items.BLUE_RUPEE, Items.RED_RUPEE, Items.PURPLE_RUPEE, Items.HUGE_RUPEE, Items.BOMBS_5, Items.BOMBS_10, Items.ARROWS_5, Items.ARROWS_10, Items.DEKU_NUTS_5, Items.DEKU_NUTS_10, Items.DEKU_STICK_1]
+filler_items = [
+    Items.RECOVERY_HEART.value, 
+    Items.BLUE_RUPEE.value, 
+    Items.RED_RUPEE.value, 
+    Items.PURPLE_RUPEE.value, 
+    Items.HUGE_RUPEE.value, 
+    Items.BOMBS_5.value, 
+    Items.BOMBS_10.value, 
+    Items.ARROWS_5.value, 
+    Items.ARROWS_10.value, 
+    Items.DEKU_NUTS_5.value, 
+    Items.DEKU_NUTS_10.value, 
+    Items.DEKU_STICK_1.value
+    ]

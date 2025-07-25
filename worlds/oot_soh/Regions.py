@@ -30,8 +30,8 @@ def reset_age_access(start_as_adult: bool = False):
         child_access_table[k] = False
         adult_access_table[k] = False
 
-    child_access_table[Regions.ROOT] = not start_as_adult
-    adult_access_table[Regions.ROOT] = start_as_adult
+    child_access_table[Regions.ROOT.value] = not start_as_adult
+    adult_access_table[Regions.ROOT.value] = start_as_adult
 
 reset_age_access()
 
@@ -40,9 +40,9 @@ def update_age_access(world: "SohWorld", state: CollectionState):
     # Spread from Menu
     # If ToT accessible, spread from ToT
     # Any access at our starting age that ToT access opens up would be covered in the ToT floodfill, since if it mattered, we wouldn't reach that point
-    just_found_tot = _spread_age_access(world, state, Regions.ROOT)
+    just_found_tot = _spread_age_access(world, state, Regions.ROOT.value)
     if just_found_tot: # As said, if we just found ToT, we probably need to do a floodfill from there
-        _spread_age_access(world, state, Regions.TEMPLE_OF_TIME)
+        _spread_age_access(world, state, Regions.TEMPLE_OF_TIME.value)
 
 # Returns whether ToT was just found
 def _spread_age_access(world: "SohWorld", state: CollectionState, root: str) -> bool:
@@ -61,7 +61,7 @@ def _spread_age_access(world: "SohWorld", state: CollectionState, root: str) -> 
                     child_access_table[next_name] = True
                     if next_name not in region_list:
                         region_list.append(next_name)
-                    if next_name == Regions.TEMPLE_OF_TIME: # If we just got access to ToT, we need to reset the floodfill to cover the adult side
+                    if next_name == Regions.TEMPLE_OF_TIME.value: # If we just got access to ToT, we need to reset the floodfill to cover the adult side
                         # If we are in this clause, we first gained access as child, which must have been our starting age
                         adult_access_table[next_name] = True
                         just_found_tot = True
@@ -76,7 +76,7 @@ def _spread_age_access(world: "SohWorld", state: CollectionState, root: str) -> 
                     child_access_table[next_name] = True
                     if next_name not in region_list:
                         region_list.append(next_name)
-                    if next_name == Regions.TEMPLE_OF_TIME: # If we just got access to ToT, we need to reset the floodfill to cover the child side
+                    if next_name == Regions.TEMPLE_OF_TIME.value: # If we just got access to ToT, we need to reset the floodfill to cover the child side
                         # If we're in this clause, we first gained access as adult, which must have been our starting age
                         child_access_table[next_name] = True
                         just_found_tot = True
