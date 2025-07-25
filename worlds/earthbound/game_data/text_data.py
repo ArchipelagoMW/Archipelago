@@ -213,7 +213,9 @@ lumine_hall_text = [
     "64 bits! 32 bits! 16 bits! 8 bits! 4 bits! 2 bits! 1 bit! Half bit! Quarter bit! THE WRIST GAME!!!",
     "Where did YOU learn to teleport?",
     "My statistics show about 70% of kids these days don't stop to read bulletin boards anymore. Well, I had to shell out a lot of money for this, but let's see you ignore THIS one, suckers!          ...Brick Road",
-    "I'm Ness... I could go for a burger right about now... That girl from Twoson sure is cute... I wonder if I should ask her out on a date... W...wha...? What's...? H-HEY! These thoughts are PRIVATE!"
+    "I'm Ness... I could go for a burger right about now... That girl from Twoson sure is cute... I wonder if I should ask her out on a date... W...wha...? What's...? H-HEY! These thoughts are PRIVATE!",
+    "Chris, when is Parasite Eve in AP?",
+    "Praise the Fool!"
 ]
 
 spoiler_psi = {

@@ -9113,6 +9113,9 @@ dd CheckForRubyPoo
 ORG $C80C40
 db $E1, $03
 
+ORG $C91EA8; TEST THIS!!!! SKY RUNNER FIX
+db $d2
+
 
 ;New data table go here
 
