@@ -303,10 +303,9 @@ ICE_TRAP_EQUIV = ["Freeze Trap", "Frozen Trap", "Ice Trap", "Paralyze Trap", "Ch
 BOMB_EQUIV = ["TNT Barrel Trap", "Bomb", "Fire Trap"]
 BANANA_TRAP_EQUIV = ["Stun Trap", "Banana Trap", "Thwimp Trap", "Hiccup Trap", "Push Trap"]
 GHOST_EQUIV = ["OmoTrap", "Ghost", "Bee Trap", "Police Trap", "Nut Trap", "Army Trap", "Buyon Trap"]
-POISON_MUSH_EQUIV = [ "Tiny Trap", "Poison Mushroom", "Iron Boots Trap"]
+POISON_MUSH_EQUIV = [ "Tiny Trap", "Poison Mushroom", "Iron Boots Trap", "Poison Trap"]
 BONK_EQUIV = ["Spring Trap", "Damage Trap", "Bonk Trap", "Jumping Jacks Trap"]
-POSSESION_EQUIV = ["Poison Trap", "Possession Trap", "Laughter Trap", "My Turn! Trap", "Blue Balls Curse",
-                   "Controller Drift Trap"]
+POSSESION_EQUIV = ["Possession Trap", "Laughter Trap", "My Turn! Trap", "Blue Balls Curse", "Controller Drift Trap"]
 FEAR_EQUIV = ["Fear Trap", "Confuse Trap", "Confound Trap", "Confusion Trap"]
 SPOOKY_EQUIV = ["Spooky Time", "Deisometric Trap", "Fake Transition", "Ghost Chat"]
 SQUASH_EQUIV = ["Squash Trap", "W I D E Trap"]
