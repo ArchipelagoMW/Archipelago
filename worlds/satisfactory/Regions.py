@@ -31,7 +31,7 @@ class SatisfactoryLocation(Location):
         return not item.advancement
 
 
-def create_regions_and_return_locations(world: MultiWorld, options: SatisfactoryOptions, player: int,
+def create_regions_and_return_locations(multiworld: MultiWorld, options: SatisfactoryOptions, player: int,
         game_logic: GameLogic, state_logic: StateLogic, critical_path: CriticalPathCalculator,
         locations: list[LocationData]):
     
@@ -64,12 +64,12 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
                 region_names.append(f"{tree_name}: {node.name}")
 
     locations_per_region: dict[str, LocationData] = get_locations_per_region(locations)
-    regions: dict[str, Region] = create_regions(world, player, locations_per_region, region_names)
+    regions: dict[str, Region] = create_regions(multiworld, player, locations_per_region, region_names)
 
     if __debug__:
         throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
         
-    world.regions += regions.values()
+    multiworld.regions += regions.values()
 
     super_early_game_buildings: list[str] = [
         "Foundation", 
@@ -94,7 +94,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
     if options.final_elevator_package == 1:
         super_early_game_buildings.extend(early_game_buildings)
 
-    is_ut = getattr(world, "generation_is_fake", False)
+    is_ut = getattr(multiworld, "generation_is_fake", False)
 
     connect(regions, "Overworld", "Hub Tier 1")
     connect(regions, "Hub Tier 1", "Hub Tier 2",
@@ -160,10 +160,10 @@ def throwIfAnyLocationIsNotAssignedToARegion(regions: dict[str, Region], regionN
         raise Exception(f"Satisfactory: the following regions are used in locations: {regionNames - existingRegions}, but no such region exists")
 
 
-def create_region(world: MultiWorld, player: int, 
+def create_region(multiworld: MultiWorld, player: int, 
         locations_per_region: dict[str, list[LocationData]], name: str) -> Region:
 
-    region = Region(name, player, world)
+    region = Region(name, player, multiworld)
 
     if name in locations_per_region:
         region.locations += [
