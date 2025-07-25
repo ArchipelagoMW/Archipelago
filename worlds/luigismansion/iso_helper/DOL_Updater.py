@@ -110,17 +110,17 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac
     dol.data.write(blank_data)
 
     # Read in all the other custom DOL changes and update their values to the new value as expected.
-    custom_dol_code = get_data(__file__, "lm_custom_code.lmco")
+    custom_dol_code = get_data(__name__.split('.')[0], "lm_custom_code.lmco")
     dol.data.seek(CUSTOM_CODE_OFFSET_START)
     dol.data.write(custom_dol_code)
 
-    dol_csv_offsets = get_data(__file__, "dol_diff.csv").decode("utf-8").splitlines()
+    dol_csv_offsets = get_data(__name__.split('.')[0], "dol_diff.csv").decode("utf-8").splitlines()
     for csv_line in dol_csv_offsets:
         dol_addr, dol_val = csv_line.split(",")
         dol.data.seek(int(dol_addr, 16))
         dol.data.write(bytes.fromhex(dol_val))
 
-    if not random_spawn == "Foyer":
+    if not random_spawn == "Foyer": # TODO update with new ASM location
         spawn_info: dict = spawn_locations[random_spawn]
         dol.data.seek(0x3A02B0)
         dol.data.write(struct.pack(">f", spawn_info["pos_x"]))
