@@ -228,16 +228,15 @@ location_tables = {
     ],
 
     "Scarecrow Fields": [
-        # REQUIRES DARING DASH
         # Requires Harvester Parts for Chalice
          MedievilLocationData("Life Bottle: Scarecrow Fields","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Key Item: Harvester Parts - SF","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Chaos Rune: Scarecrow Fields","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
          MedievilLocationData("Earth Rune: Scarecrow Fields","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Moon Rune: Scarecrow Fields","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Equipment: Club Inside Hut - SF","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Equipment: Silver Shield Behind Windmill - SF","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Equipment: Copper Shield in Chest In the Barn - SF","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+         MedievilLocationData("Equipment: Club Inside Hut - SF","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
+         MedievilLocationData("Equipment: Silver Shield Behind Windmill - SF","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
+         MedievilLocationData("Equipment: Copper Shield in Chest In the Barn - SF","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Energy Vial: Right of fire near Moon Door - SF","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Energy Vial: Cornfield Path - SF","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Haystack at Beginning - SF","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
@@ -474,8 +473,8 @@ location_tables = {
          MedievilLocationData("Chaos Rune: Pumpkin Gorge","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Earth Rune: Pumpkin Gorge","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Moon Rune: Pumpkin Gorge","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
-         MedievilLocationData("Equipment: Club in Chest in Tunnel - PG","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Equipment: Silver Shield in Chest at Top of Hill - PG","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+         MedievilLocationData("Equipment: Club in Chest in Tunnel - PG","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
+         MedievilLocationData("Equipment: Silver Shield in Chest at Top of Hill - PG","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Energy Vial: Vine Patch Left - PG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Energy Vial: Vine Patch Right - PG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Energy Vial: In Coop - PG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
