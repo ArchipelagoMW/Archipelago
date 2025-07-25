@@ -7,14 +7,13 @@ from gclib.gcm import GCM
 
 from ..Regions import spawn_locations
 
-MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
 CUSTOM_CODE_OFFSET_START = 0x39FA20
 
 # Updates the main DOL file, which is the main file used for GC and Wii games. This section includes some custom code
 # inside the DOL file itself.
-def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac: bool, start_inv: list[str], walk_speed: int, slot_name: str,
-    random_spawn: str, king_boo_health: int, fear_anim_enabled: bool, pickup_anim_enabled: bool,
-    boo_rand_on: bool, dool_model_rando_on: bool) -> (GCM, DOL):
+def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac: bool, start_inv: list[str],
+    walk_speed: int, slot_name: str, random_spawn: str, king_boo_health: int, fear_anim_enabled: bool,
+    pickup_anim_enabled: bool, boo_rand_on: bool, dool_model_rando_on: bool) -> (GCM, DOL):
 
     random.seed(seed)
 
@@ -23,26 +22,13 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac
     dol.read(dol_data)
 
     # Walk Speed
-    if walk_speed == 0:
-        speed_to_use = 16784
-    elif walk_speed == 1:
-        speed_to_use = 16850
-    else:
-        speed_to_use = 16950
+    speed_to_use = 16784 if walk_speed == 0 else (16850 if walk_speed == 1 else 16950)
     dol.data.seek(0x396538)
     dol.data.write(struct.pack(">H", speed_to_use))
 
     # Vacuum Speed
-    if extra_vac:
-        if start_vac:
-            vac_count = 2
-        else:
-            vac_count = 1
-    elif start_vac:
-        vac_count = 1
-    else:
-        vac_count = 0
-    vac_count = vac_count + len(list("Progressive Vacuum" in key for key in start_inv))
+    vac_count = 2 if (extra_vac and start_vac) else (1 if start_vac else 0)
+    vac_count += len(list("Progressive Vacuum" in key for key in start_inv))
     match vac_count:
         case x if vac_count >= 2:
             vac_speed = "3800000F"
@@ -79,10 +65,6 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac
         gem_val = "05"
         hat_val = "05"
         elem_val = "15"
-
-        # Write additional code to enable Custom Pickup animations when animations are turned off for King Boo
-        dol.data.seek(0x0AD624)
-        dol.data.write(bytes.fromhex("4842D769"))
 
     # Keys and important animations
     dol.data.seek(0xCD39B)
@@ -128,11 +110,11 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac
     dol.data.write(blank_data)
 
     # Read in all the other custom DOL changes and update their values to the new value as expected.
-    custom_dol_code = get_data(MAIN_PKG_NAME, "data/lm_custom_code.lmco")
+    custom_dol_code = get_data(__file__, "lm_custom_code.lmco")
     dol.data.seek(CUSTOM_CODE_OFFSET_START)
     dol.data.write(custom_dol_code)
 
-    dol_csv_offsets = get_data(MAIN_PKG_NAME, "data/dol_diff.csv").decode("utf-8").splitlines()
+    dol_csv_offsets = get_data(__file__, "dol_diff.csv").decode("utf-8").splitlines()
     for csv_line in dol_csv_offsets:
         dol_addr, dol_val = csv_line.split(",")
         dol.data.seek(int(dol_addr, 16))
