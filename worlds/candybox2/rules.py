@@ -148,7 +148,7 @@ class CandyBox2RulesPackageRuleItemExpression(CandyBox2RulesPackageRuleExpressio
         if self.item == CandyBox2ItemName.PROGRESSIVE_WEAPON:
             # Special case Progressive Weapon
             # This check becomes false if progressive weapons aren't enabled
-            if world.starting_weapon == -1:
+            if world.starting_weapon != -1:
                 return False
 
         return state.has(self.item, player, self.count)

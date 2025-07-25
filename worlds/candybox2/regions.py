@@ -113,14 +113,6 @@ def connect_entrances(world: "CandyBox2World"):
     if world.options.quest_randomisation == "off":
         return world.original_entrances
 
-    pairings = []
-
-    if not world.options.randomise_tower.value:
-        pairings = [*pairings, lock_entrance(world, CandyBox2Room.TOWER)]
-
-    if not world.options.randomise_x_potion.value:
-        pairings = [*pairings, lock_entrance(world, CandyBox2Room.QUEST_THE_X_POTION)]
-
     if hasattr(world.multiworld, "re_gen_passthrough"):
         placements = getattr(world.multiworld, "re_gen_passthrough")["Candy Box 2"]["entranceInformation"]
         placement_state = ERPlacementState(world, True)
@@ -134,13 +126,21 @@ def connect_entrances(world: "CandyBox2World"):
         for x in placements:
             placement_state.connect(exits[x[0]], er_targets[x[1]])
         world.entrance_randomisation = placement_state
-        return [*pairings, world.entrance_randomisation.pairings]
+        return world.entrance_randomisation.pairings
+
+    pairings = []
+
+    if not world.options.randomise_tower.value:
+        pairings = [*pairings, lock_entrance(world, CandyBox2Room.TOWER)]
+
+    if not world.options.randomise_x_potion.value:
+        pairings = [*pairings, lock_entrance(world, CandyBox2Room.QUEST_THE_X_POTION)]
 
     if world.options.quest_randomisation == "quests_only":
         world.entrance_randomisation = randomize_entrances(world, True, {
             CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
         })
-        return [*pairings, world.entrance_randomisation.pairings]
+        return [*pairings, *world.entrance_randomisation.pairings]
 
     if world.options.quest_randomisation == "quests_and_rooms_separate":
         world.entrance_randomisation = randomize_entrances(world, True, {
@@ -148,7 +148,7 @@ def connect_entrances(world: "CandyBox2World"):
             CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
             CandyBox2RandomizationGroup.LOLLIPOP_FARM: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
         })
-        return [*pairings, world.entrance_randomisation.pairings]
+        return [*pairings, *world.entrance_randomisation.pairings]
 
     if world.options.quest_randomisation == "everything":
         # Place the lollipop farm first to avoid condition where ER places everything but the lollipop farm and X potion
