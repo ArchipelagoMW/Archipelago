@@ -1,10 +1,21 @@
+from typing import NamedTuple, Optional
+
 from BaseClasses import Location
+from BaseClasses import ItemClassification as IC
+
+class GrinchLocationData(NamedTuple):
+    region: str
+    type: str
+    code: Optional[int]
+    classification: IC
+    update_ram_addr: Optional[list[GrinchRamData]] = None
+    value: Optional[int] = None #I can either set or add either hex or unsigned values through Client.py
+    binary_bit_pos: Optional[int] = None
+    bit_size: int = 1
 
 class GrinchLocation(Location):
-    region: str
-    code: Optional[int]
+    game: str = "The Grinch"
     location_group: str
-    update_ram_addr: Optional[list[GrinchRamData]]
 
 grinch_locations = {
 #Visitsanity
@@ -127,4 +138,5 @@ grinch_locations = {
     "Grinch Copter Blueprint - Who Lake South Shore - Submarine World - Above Surface": GrinchLocationData("Grinch Copter Blueprints", 1212, [GrinchRamData()]),
     "Grinch Copter Blueprint - Who Lake South Shore - Submarine World - Underwater": GrinchLocationData("Grinch Copter Blueprints", 1213, [GrinchRamData()]),
     "Grinch Copter Blueprint - Who Lake North Shore - Mayor's Villa - Tree Branch": GrinchLocationData("Grinch Copter Blueprints", 1214, [GrinchRamData()]),
-    "Grinch Copter Blueprint - Who Lake North Shore - Mayor's Villa - Cave": GrinchLocationData("Grinch Copter Blueprints", 1215, [GrinchRamData()]),
+    "Grinch Copter Blueprint - Who Lake North Shore - Mayor's Villa - Cave": GrinchLocationData("Grinch Copter Blueprints", 1215, [GrinchRamData()])
+}

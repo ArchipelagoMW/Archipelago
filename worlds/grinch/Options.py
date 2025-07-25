@@ -1,11 +1,15 @@
-from Options import FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, TextChoice, Range, NamedRange, OptionList
+from dataclasses import dataclass
 
-class KeyType(Choice):
-    """Selects whether you want your access items to be separated or progressive"""
-    display_name = "Key Type"
-    option_separated = 0
-    option_progressive = 1
-    default = 0
+from Options import FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, TextChoice, Range, NamedRange, OptionList, \
+    PerGameCommonOptions
+
+
+class ProgressiveVacuum(DefaultOnToggle):
+    """
+    Determines whether you get access to main areas progressively
+    Default: Whoville > Who Forest > Who Dump > Who Lake
+    """
+    display_name = "Progressive Vacuum Access"
 
 # class StartingArea(Choice):
 #     """
@@ -19,9 +23,9 @@ class KeyType(Choice):
 
 # class Supadow(Toggle):
 #     """Enables completing minigames through the Supadows in Mount Crumpit as checks. (9 locations)"""
-#     display_name = "Supadow Minigame Locations"
-#
-#
+#     display_name = "Supadow Minigame Locations"#
+
+
 # class Gifts(Toggle):
 #     """Missions that require you to squash every present in a level. (4 locations)"""
 #     display_name = "Gift Collection Locations"
@@ -32,6 +36,11 @@ class KeyType(Choice):
 #     display_name = "Movesanity"
 
 
-class RottenEggs(Toggle):
+class UnlimitedRottenEggs(Toggle):
     """Determine whether or not you run out of rotten eggs when you utilize your gadgets."""
     display_name = "Unlimited Rotten Eggs"
+
+@dataclass
+class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
+    progressive_vacuum: ProgressiveVacuum
+    unlimited_rotten_eggs: UnlimitedRottenEggs

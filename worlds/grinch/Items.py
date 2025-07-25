@@ -143,3 +143,12 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
     "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]),
     "Who sent me here?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x8008FB94, value=1)])
 }
+
+ALL_ITEMS_TABLE: dict[str, GrinchItemData] = {
+    **GADGETS_TABLE,
+    **MISSION_ITEMS_TABLE,
+    **SLEIGH_PARTS_TABLE,
+    **KEYS_TABLE,
+    **MISC_ITEMS_TABLE,
+    **TRAPS_TABLE
+}

@@ -1,4 +1,4 @@
-def set_rules(world: World, world: World, options: GrinchOptions, int):
+def set_rules(world: World, options: GrinchOptions, int):
 
 rules_dict = {
 
