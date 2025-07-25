@@ -648,7 +648,8 @@ class LMWorld(World):
         filler_trap_weights = [self.options.poss_trap_weight.value, self.options.bonk_trap_weight.value,
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.poison_trap_weight.value,
-                          self.options.ghost_weight.value]
+                          self.options.ghost_weight.value, self.options.fear_weight.value,
+                          self.options.spooky_weight.value, self.options.squash_weight.value, self.options.vac_trap_weight.value]
         thircoin = max(0,self.options.coin_weight.value - 10)
         twencoin = max(0,self.options.coin_weight.value - 5)
         twenbill = max(0,self.options.bill_weight.value - 5)
@@ -696,7 +697,7 @@ class LMWorld(World):
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,
                           # emerald, ruby, diamond
                           self.options.poison_trap_weight.value, self.options.ghost_weight, self.options.dust_weight.value,
-                          self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
+                          self.options.heart_weight.value, lheart,
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, thircoin,
                           # banana, 10coin, 20coin, 30coin
