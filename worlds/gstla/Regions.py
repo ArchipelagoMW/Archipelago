@@ -69,6 +69,7 @@ regions: Dict[str, RegionData] = {
         LocationName.Idejima_Shamans_Rod,
         LocationName.Idejima_Jenna,
         LocationName.Idejima_Sheba,
+        LocationName.Victory_Event,
     ],
     [
         EntranceName.IdejimaToDaila,

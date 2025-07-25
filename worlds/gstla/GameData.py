@@ -513,7 +513,7 @@ class GameData:
         # Just some offset to avoid colliding with anything else; needs to avoid any location or item ids in AP
         event_offset = 5000
         events = [
-            EventDatum(event_offset + 1, 0x778, "Mars Lighthouse - Doom Dragon Fight", "Victory" ),
+            EventDatum(event_offset + 1, 0x778, "Mars Lighthouse - Doom Dragon Fight", "Doom Dragon Defeated" ),
             EventDatum(event_offset + 2, 0x8AB, "Alhafra Briggs", "Briggs defeated" ),
             EventDatum(event_offset + 3, 0x97F, "Alhafra Prison Briggs", "Briggs escaped" ),
             EventDatum(event_offset + 4, 0x8FF, "Gabomba Statue Event", "Gabomba Statue Completed" ),
@@ -535,6 +535,7 @@ class GameData:
             # Flag here is really the Jupiter Lighthouse flag.  Base rando with PC shuffle seems to do something weird
             # with the reunion flag
             EventDatum(event_offset + 20, 0xA21, "Contigo - Reunion", "Reunion"),
+            EventDatum(event_offset + 21, 0x1, "Victory Event", "Victory"),
             # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Karst", "Karst defeated"),
             # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Agatio", "Agatio defeated"),
         ]

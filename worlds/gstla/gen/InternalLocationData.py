@@ -257,7 +257,7 @@ psyenergy_locations = [
 
 events = [
     InternalLocationData(1912, 1912, 5001, 5001, [0], 0,
-        5001, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Doom Dragon Fight Victory
+        5001, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Doom Dragon Fight Doom Dragon Defeated
     InternalLocationData(2219, 2219, 5002, 5002, [0], 0,
         5002, True, True, LocationType.Event, LocationRestriction(7), True), # Alhafra Briggs Briggs defeated
     InternalLocationData(2431, 2431, 5003, 5003, [0], 0,
@@ -296,6 +296,8 @@ events = [
         5019, True, True, LocationType.Event, LocationRestriction(7), True), # Anemos Inner Sanctum - Dullahan Dullahan defeated
     InternalLocationData(2593, 2593, 5020, 5020, [0], 0,
         5020, True, True, LocationType.Event, LocationRestriction(7), True), # Contigo - Reunion Reunion
+    InternalLocationData(1, 1, 5021, 5021, [0], 0,
+        5021, True, True, LocationType.Event, LocationRestriction(7), True), # Victory Event Victory
     
 ]
 

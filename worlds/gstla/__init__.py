@@ -195,51 +195,7 @@ class GSTLAWorld(World):
         set_entrance_rules(self)
         set_item_rules(self)
         set_access_rules(self)
-        goal_conditions = self.goal_conditions
-        needed_items: Set[str] = set()
-
-        if len(goal_conditions) == 0 or "Doom Dragon" in goal_conditions:
-            needed_items.add(ItemName.Victory)
-        if "Chestbeaters" in goal_conditions:
-            needed_items.add(ItemName.Chestbeaters_defeated)
-        if "King Scorpion" in goal_conditions:
-            needed_items.add(ItemName.King_Scorpion_defeated)
-        if "Briggs" in goal_conditions:
-            needed_items.add(ItemName.Briggs_defeated)
-        if "Aqua Hydra" in goal_conditions:
-            needed_items.add(ItemName.Aqua_Hydra_defeated)
-        if "Poseidon" in goal_conditions:
-            needed_items.add(ItemName.Poseidon_defeated)
-        if "Serpent" in goal_conditions:
-            needed_items.add(ItemName.Serpent_defeated)
-        if "Avimander" in goal_conditions:
-            needed_items.add(ItemName.Avimander_defeated)
-        if "Moapa" in goal_conditions:
-            needed_items.add(ItemName.Moapa_defeated)
-        if "Reunion" in goal_conditions:
-            needed_items.add(ItemName.Reunion)
-        if "Flame Dragons" in goal_conditions:
-            needed_items.add(ItemName.Flame_Dragons_defeated)
-        if "Star Magician" in goal_conditions:
-            needed_items.add(ItemName.Star_Magician_defeated)
-        if "Sentinel" in goal_conditions:
-            needed_items.add(ItemName.Sentinel_defeated)
-        if "Valukar" in goal_conditions:
-            needed_items.add(ItemName.Valukar_defeated)
-        if "Dullahan" in goal_conditions:
-            needed_items.add(ItemName.Dullahan_defeated)
-        if "Djinn Hunt" in goal_conditions:
-            djinn_needed = self.options.djinn_hunt_count.value
-        else:
-            djinn_needed = 0
-        if "Summon Hunt" in goal_conditions:
-            summons_needed = self.options.summon_hunt_count.value
-        else:
-            summons_needed = 0
-        self.multiworld.completion_condition[self.player] = \
-            lambda state: (all([state.has(item, self.player) for item in needed_items]) and
-                           state.count_group(ItemType.Djinn.name, self.player) >= djinn_needed and
-                           state.count_group(ItemType.Summon.name, self.player) >= summons_needed)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player)
 
 
     def get_pre_fill_items(self) -> List["Item"]:
@@ -380,6 +336,8 @@ class GSTLAWorld(World):
         ap_item = location.item
         if ap_item.player != self.player:
             return True
+        if ap_item.item_data.type == ItemType.Djinn:
+            return False
         coop_opt = self.options.coop.value
         if coop_opt == 0:
             # off

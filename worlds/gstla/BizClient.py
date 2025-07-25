@@ -216,7 +216,7 @@ def cmd_print_goals(self: 'BizHawkClientCommandProcessor') -> None:
     if counters:
         logger.info("Obtain the following: ")
         for thing, num in counters.items():
-            logger.info(f"{thing}: {num}")
+            logger.info(f"{thing.capitalize()} count: {num}")
 
 def cmd_print_progress(self: 'BizHawkClientCommandProcessor') -> None:
     """Prints the current progress towards the goal"""

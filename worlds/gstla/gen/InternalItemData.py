@@ -185,7 +185,7 @@ djinn_items: List[InternalDjinnItemData] = [
 ]
 
 events: List[InternalEventItemData] = [
-    InternalEventItemData(5001, 1912, "Mars Lighthouse - Doom Dragon Fight", "Victory"),
+    InternalEventItemData(5001, 1912, "Mars Lighthouse - Doom Dragon Fight", "Doom Dragon Defeated"),
     InternalEventItemData(5002, 2219, "Alhafra Briggs", "Briggs defeated"),
     InternalEventItemData(5003, 2431, "Alhafra Prison Briggs", "Briggs escaped"),
     InternalEventItemData(5004, 2303, "Gabomba Statue Event", "Gabomba Statue Completed"),
@@ -205,6 +205,7 @@ events: List[InternalEventItemData] = [
     InternalEventItemData(5018, 1745, "Yampi Desert Cave - Valukar", "Valukar defeated"),
     InternalEventItemData(5019, 1754, "Anemos Inner Sanctum - Dullahan", "Dullahan defeated"),
     InternalEventItemData(5020, 2593, "Contigo - Reunion", "Reunion"),
+    InternalEventItemData(5021, 1, "Victory Event", "Victory"),
     
 ]
 

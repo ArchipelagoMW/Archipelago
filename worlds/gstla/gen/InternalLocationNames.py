@@ -253,6 +253,7 @@ class InternalLocationName:
     Yampi_Desert_Cave_Valukar = "Yampi Desert Cave - Valukar"
     Anemos_Inner_Sanctum_Dullahan = "Anemos Inner Sanctum - Dullahan"
     Contigo_Reunion = "Contigo - Reunion"
+    Victory_Event = "Victory Event"
     
 
     ##remainder
@@ -532,6 +533,7 @@ ids_by_loc_name: Dict[str, int] = {
     InternalLocationName.Yampi_Desert_Cave_Valukar: 5018,
     InternalLocationName.Anemos_Inner_Sanctum_Dullahan: 5019,
     InternalLocationName.Contigo_Reunion: 5020,
+    InternalLocationName.Victory_Event: 5021,
     InternalLocationName.Daila_Herb: 991776,
     InternalLocationName.Daila_Smoke_Bomb: 991784,
     InternalLocationName.Daila_Psy_Crystal: 991812,
@@ -947,6 +949,7 @@ ids_by_py_name: Dict[str, int] = {
     "Yampi_Desert_Cave_Valukar": 5018,
     "Anemos_Inner_Sanctum_Dullahan": 5019,
     "Contigo_Reunion": 5020,
+    "Victory_Event": 5021,
     "Daila_Herb": 991776,
     "Daila_Smoke_Bomb": 991784,
     "Daila_Psy_Crystal": 991812,
@@ -1362,6 +1365,7 @@ loc_names_by_id: Dict[int, str] = {
     5018: InternalLocationName.Yampi_Desert_Cave_Valukar,
     5019: InternalLocationName.Anemos_Inner_Sanctum_Dullahan,
     5020: InternalLocationName.Contigo_Reunion,
+    5021: InternalLocationName.Victory_Event,
     991776: InternalLocationName.Daila_Herb,
     991784: InternalLocationName.Daila_Smoke_Bomb,
     991812: InternalLocationName.Daila_Psy_Crystal,

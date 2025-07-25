@@ -514,7 +514,7 @@ class InternalItemName:
     Lull = "Lull"
     Gale = "Gale"
     # Events
-    Victory = "Victory"
+    Doom_Dragon_Defeated = "Doom Dragon Defeated"
     Briggs_defeated = "Briggs defeated"
     Briggs_escaped = "Briggs escaped"
     Gabomba_Statue_Completed = "Gabomba Statue Completed"
@@ -534,6 +534,7 @@ class InternalItemName:
     Valukar_defeated = "Valukar defeated"
     Dullahan_defeated = "Dullahan defeated"
     Reunion = "Reunion"
+    Victory = "Victory"
     
 
     # Characters
@@ -959,7 +960,7 @@ item_id_by_py_name: Dict[str, int] = {
     "Catastrophe": 3866,
     "Charon": 3867,
     "Iris": 3868,
-    "Victory": 5001,
+    "Doom_Dragon_Defeated": 5001,
     "Briggs_defeated": 5002,
     "Briggs_escaped": 5003,
     "Gabomba_Statue_Completed": 5004,
@@ -979,6 +980,7 @@ item_id_by_py_name: Dict[str, int] = {
     "Valukar_defeated": 5018,
     "Dullahan_defeated": 5019,
     "Reunion": 5020,
+    "Victory": 5021,
     "Flint": 16384000,
     "Granite": 16384002,
     "Quartz": 16384004,
