@@ -638,6 +638,9 @@ class CommonContext:
         for game, game_data in data_package["games"].items():
             Utils.store_data_package_for_checksum(game, game_data)
 
+    async def delete_old_data_packages(self):
+        Utils.delete_old_data_packages()
+
     # data storage
 
     def set_notify(self, *keys: str) -> None:
@@ -965,6 +968,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
         server_url = urllib.parse.urlparse(ctx.server_address)
         Utils.persistent_store("client", "last_server_address", server_url.netloc)
+
+        await ctx.delete_old_data_packages()
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
