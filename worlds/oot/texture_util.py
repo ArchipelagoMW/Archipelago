@@ -14,6 +14,7 @@ def ci4_to_rgba16(rom: Rom, address, length, palette):
         newPixels.append(palette[byte & 0x0F])
     return newPixels
 
+
 # Convert an rgba16 texture to ci8
 # rgba16_texture - texture to convert
 # returns - tuple (ci8_texture, palette)
@@ -32,12 +33,14 @@ def rgba16_to_ci8(rgba16_texture):
             ci8_texture.append(palette.index(pixel))
     return (ci8_texture, palette)
 
+
 # Load a palette (essentially just an rgba16 texture) from rom
 def load_palette(rom: Rom, address, length):
     palette = []
     for i in range(0, length):
         palette.append(rom.read_int16(address + 2 * i))
     return palette
+
 
 # Get a list of unique colors (palette) from an rgba16 texture
 def get_colors_from_rgba16(rgba16_texture):
@@ -46,6 +49,7 @@ def get_colors_from_rgba16(rgba16_texture):
         if pixel not in colors:
             colors.append(pixel)
     return colors
+
 
 # Apply a patch to a rgba16 texture. The patch texture is exclusive or'd with the original to produce the result
 # rgba16_texture - Original texture
@@ -64,6 +68,7 @@ def apply_rgba16_patch(rgba16_texture, rgba16_patch):
         new_texture.append(rgba16_texture[i] ^ rgba16_patch[i])
     return new_texture
 
+
 # Save a rgba16 texture to a file
 def save_rgba16_texture(rgba16_texture, fileStr):
     file = open(fileStr, 'wb')
@@ -73,6 +78,7 @@ def save_rgba16_texture(rgba16_texture, fileStr):
     file.write(bytes)
     file.close()
 
+
 # Save a ci8 texture to a file
 def save_ci8_texture(ci8_texture, fileStr):
     file = open(fileStr, 'wb')
@@ -81,6 +87,7 @@ def save_ci8_texture(ci8_texture, fileStr):
         bytes.extend(pixel.to_bytes(1, 'big'))
     file.write(bytes)
     file.close()
+
 
 # Read an rgba16 texture from ROM
 # rom - Rom object to load the texture from
@@ -93,6 +100,7 @@ def load_rgba16_texture_from_rom(rom: Rom, base_texture_address, size):
         texture.append(int.from_bytes(rom.read_bytes(base_texture_address + 2 * i, 2), 'big'))
     return texture
 
+
 # Load an rgba16 texture from a binary file.
 # fileStr - path to the file
 # size - number of 16-bit pixels in the texture.
@@ -104,6 +112,7 @@ def load_rgba16_texture(fileStr, size):
 
     file.close()
     return(texture)
+
 
 # Create an new rgba16 texture byte array from a rgba16 binary file. Use this if you want to create complete new textures using no copyrighted content (or for testing).
 # rom - Unused set to None
@@ -118,6 +127,7 @@ def rgba16_from_file(rom: Rom, base_texture_address, base_palette_address, size,
     for pixel in new_texture:
         bytes.extend(int.to_bytes(pixel, 2, 'big'))
     return bytes
+
 
 # Create a new rgba16 texture from a original rgba16 texture and a rgba16 patch file
 # rom - Rom object to load the original texture from
@@ -136,6 +146,7 @@ def rgba16_patch(rom: Rom, base_texture_address, base_palette_address, size, pat
     for pixel in new_texture_rgba16:
         bytes.extend(int.to_bytes(pixel, 2, 'big'))
     return bytes
+
 
 # Create a new ci8 texture from a ci4 texture/palette and a rgba16 patch file
 # rom - Rom object to load the original textures from
@@ -159,6 +170,7 @@ def ci4_rgba16patch_to_ci8(rom, base_texture_address, base_palette_address, size
     for pixel in ci8_texture:
         bytes.extend(int.to_bytes(pixel, 1, 'big'))
     return bytes
+
 
 # Function to create rgba16 texture patches for crates
 def build_crate_ci8_patches():
@@ -223,6 +235,7 @@ def build_crate_ci8_patches():
         file.close()
         print(texture)
 
+
 # Function to create rgba16 texture patches for pots.
 def build_pot_patches():
     # load pot textures from rom
@@ -247,6 +260,7 @@ def build_pot_patches():
     save_rgba16_texture(key_patch, 'pot_key_rgba16_patch.bin')
     save_rgba16_texture(skull_patch, 'pot_skull_rgba16_patch.bin')
     save_rgba16_texture(bosskey_patch, 'pot_bosskey_rgba16_patch.bin')
+
 
 def build_smallcrate_patches():
     # load small crate texture from rom

@@ -17,6 +17,7 @@ class RegionType(Enum):
         """Shorthand for checking if Interior or Dungeon"""
         return self in (RegionType.Interior, RegionType.Dungeon, RegionType.Grotto)
 
+
 # Pretends to be an enum, but when the values are raw ints, it's much faster
 class TimeOfDay(object):
     NONE = 0

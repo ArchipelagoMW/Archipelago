@@ -98,6 +98,7 @@ def compare_version(a, b):
             return -1
     return 0
 
+
 # https://stackoverflow.com/a/23146126
 def find_last(source_list, sought_element):
     for reverse_index, element in enumerate(reversed(source_list)):

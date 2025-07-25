@@ -522,6 +522,7 @@ def update_dmadata(rom:Rom, file:File):
     rom.update_dmadata_record(key, start, end, from_file)
     file.dma_key = file.start
 
+
 def update_scene_table(rom:Rom, sceneId, start, end):
     cur = sceneId * 0x14 + SCENE_TABLE
     rom.write_int32s(cur, [start, end])
@@ -532,11 +533,14 @@ def write_actor_data(rom:Rom, cur, actors):
         rom.write_int16s(cur, actor)
         cur += 0x10
 
+
 def align4(value):
     return ((value + 3) // 4) * 4
 
+
 def align16(value):
     return ((value + 0xF) // 0x10) * 0x10
+
 
 # This function inserts space in a ovl section at the section's offset
 # The section size is expanded

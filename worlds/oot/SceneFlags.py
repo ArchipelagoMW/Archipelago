@@ -39,6 +39,7 @@ def get_collectible_flag_table(world):
         #scene_flags.append((i, max_enemy_flag))
     return (scene_flags, alt_list)
 
+
 # Create a byte array from the scene flag table created by get_collectible_flag_table
 def get_collectible_flag_table_bytes(scene_flag_table):
     num_flag_bytes = 0
@@ -57,6 +58,7 @@ def get_collectible_flag_table_bytes(scene_flag_table):
 
     return bytes, num_flag_bytes
 
+
 def get_alt_list_bytes(alt_list):
     bytes = bytearray()
     for entry in alt_list:
@@ -74,6 +76,7 @@ def get_alt_list_bytes(alt_list):
         bytes.append((primary_override & 0xFF00) >> 8)
         bytes.append(primary_override & 0xFF)
     return bytes
+
 
 # AP method to retrieve address + bit for each item
 # Based on get_collectible_flag_offset in the C code

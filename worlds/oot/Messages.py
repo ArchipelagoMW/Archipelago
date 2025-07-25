@@ -679,6 +679,7 @@ class Message:
 
     __str__ = __repr__ = display
 
+
 # wrapper for updating the text of a message, given its message id
 # if the id does not exist in the list, then it will add it
 def update_message_by_id(messages, id, text, opts=None):
@@ -690,6 +691,7 @@ def update_message_by_id(messages, id, text, opts=None):
     else:
         add_message(messages, text, id, opts)
 
+
 # Gets the message by its ID. Returns None if the index does not exist
 def get_message_by_id(messages, id):
     # get the message index
@@ -698,6 +700,7 @@ def get_message_by_id(messages, id):
         return messages[index]
     else:
         return None
+
 
 # wrapper for updating the text of a message, given its index in the list
 def update_message_by_index(messages, index, text, opts=None):
@@ -710,6 +713,7 @@ def update_message_by_index(messages, index, text, opts=None):
         messages[index] = Message.from_string(text, messages[index].id, opts)
     messages[index].index = index
 
+
 # wrapper for adding a string message to a list of messages
 def add_message(messages, text, id=0, opts=0x00):
     if isinstance(text, bytearray):
@@ -717,6 +721,7 @@ def add_message(messages, text, id=0, opts=0x00):
     else:
         messages.append( Message.from_string(text, id, opts) )
     messages[-1].index = len(messages) - 1
+
 
 # holds a row in the shop item table (which contains pointers to the description and purchase messages)
 class Shop_Item():
@@ -777,6 +782,7 @@ class Shop_Item():
 
     __str__ = __repr__ = display
 
+
 # reads each of the shop items
 def read_shop_items(rom, shop_table_address):
     shop_items = []
@@ -785,6 +791,7 @@ def read_shop_items(rom, shop_table_address):
         shop_items.append( Shop_Item(rom, shop_table_address, index) )
 
     return shop_items
+
 
 # writes each of the shop item back into rom
 def write_shop_items(rom, shop_table_address, shop_items):
@@ -803,11 +810,13 @@ def get_shop_message_id_set(shop_items):
             ids.add(shop.purchase_message)
     return ids
 
+
 # remove all messages that easy to tell are unused to create space in the message index table
 def remove_unused_messages(messages):
     messages[:] = [m for m in messages if not m.is_id_message()]
     for index, m in enumerate(messages):
         m.index = index
+
 
 # takes all messages used for shop items, and moves messages from the 00xx range into the unused 80xx range
 def move_shop_item_messages(messages, shop_items):
@@ -832,6 +841,7 @@ def move_shop_item_messages(messages, shop_items):
             shop.description_message |= 0x8000
         if is_in_item_range(shop.purchase_message):
             shop.purchase_message |= 0x8000
+
 
 def make_player_message(text):
     player_text = '\x05\x42\x0F\x05\x40'
@@ -922,6 +932,7 @@ def read_messages(rom):
 
     return messages
 
+
 # write the messages back
 def repack_messages(rom, messages, permutation=None, always_allow_skip=True, speed_up_text=True):
     rom.update_dmadata_record(TEXT_START, TEXT_START, TEXT_START + ENG_TEXT_SIZE_LIMIT)
@@ -962,6 +973,7 @@ def repack_messages(rom, messages, permutation=None, always_allow_skip=True, spe
     if 8 * (table_index + 1) > EXTENDED_TABLE_SIZE:
         raise(TypeError("Message ID table is too large: 0x" + "{:x}".format(8 * (table_index + 1)) + " written / 0x" + "{:x}".format(EXTENDED_TABLE_SIZE) + " allowed."))
     rom.write_bytes(entry_offset, [0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+
 
 # shuffles the messages in the game, making sure to keep various message types in their own group
 def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
@@ -1009,6 +1021,7 @@ def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
     ]))
 
     return permutation
+
 
 # Update warp song text boxes for ER
 def update_warp_song_text(messages, world):

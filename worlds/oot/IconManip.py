@@ -50,11 +50,13 @@ def add_extra_data(rgbValues, fileName, intensity = 0.5):
         for x in range(3):
             rgbValues[i][x] = int((fileRGB[i][x] * alpha + intensity) + (rgbValues[i][x] * (1 - alpha - intensity)))
 
+
 # Function for desaturating RGB values
 def greyscaleRGB(rgbValues, intensity: int = 2):
     for rgb in rgbValues:
         rgb[0] = rgb[1] = rgb[2] = int((rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722) * intensity)
     return rgbValues
+
 
 # Converts rgb5a1 values to RGBA lists
 def rgb5a1ToRGB(rgb5a1Bytes):
@@ -68,12 +70,14 @@ def rgb5a1ToRGB(rgb5a1Bytes):
         pixels.append([r,g,b,a])
     return pixels
 
+
 # Adds a hue to RGB values
 def addHueToRGB(rgbValues, color):
     for rgb in rgbValues:
         for i in range(3):
             rgb[i] = int(((rgb[i]/255) * (color[i]/255)) * 255)
     return rgbValues
+
 
 # Convert RGB to RGB5a1 format
 def rgbToRGB5a1(rgbValues):
@@ -95,6 +99,7 @@ def rgbToRGB5a1(rgbValues):
     for i in rgb5a1:
         assert i <= 255, i
     return bytes(rgb5a1)
+
 
 # Patch overworld icons
 def patch_overworld_icon(rom, color, address, fileName = None):

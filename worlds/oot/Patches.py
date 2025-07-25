@@ -2598,6 +2598,7 @@ def get_override_itemid(override_table, scene, type, flags):
             return entry[4]
     return None
 
+
 def remove_entrance_blockers(rom):
     def remove_entrance_blockers_do(rom, actor_id, actor, scene):
         if actor_id == 0x014E and scene == 97:
@@ -2605,6 +2606,7 @@ def remove_entrance_blockers(rom):
             if actor_var == 0xFF01:
                 rom.write_int16(actor + 14, 0x0700)
     get_actor_list(rom, remove_entrance_blockers_do)
+
 
 def set_cow_id_data(rom, world):
     def set_cow_id(rom, actor_id, actor, scene):
