@@ -78,7 +78,7 @@ def dump_dict(obj, current_indent='', sub_width=None, ensure_ascii=False):
         sub_keys = get_keys(obj, obj.depth)
         sub_width = (obj.depth, reduce(lambda acc, entry: max(acc, len(entry)), sub_keys, 0))
 
-    for key, value in obj.items():        
+    for key, value in obj.items():
         entries.append((dump_scalar(str(key), ensure_ascii), dump_obj(value, current_indent + INDENT, sub_width, ensure_ascii)))
 
     if key_width is None:
@@ -102,7 +102,7 @@ def dump_dict(obj, current_indent='', sub_width=None, ensure_ascii=False):
     output = output_format.format(
         indent=current_indent,
         values=join_format.join([values_format.format(
-            key='{key}:'.format(key=key), 
+            key='{key}:'.format(key=key),
             value=value,
             indent=current_indent + INDENT,
             padding=key_width + 2,

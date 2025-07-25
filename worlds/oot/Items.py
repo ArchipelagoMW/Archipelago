@@ -3,22 +3,22 @@ import typing
 from BaseClasses import Item, ItemClassification
 
 
-def oot_data_to_ap_id(data, event): 
-    if event or data[2] is None or data[0] == 'Shop': 
+def oot_data_to_ap_id(data, event):
+    if event or data[2] is None or data[0] == 'Shop':
         return None
     offset = 66000
     if data[0] in ['Item', 'BossKey', 'Compass', 'Map', 'SmallKey', 'Token', 'GanonBossKey', 'HideoutSmallKey', 'Song']:
         return offset + data[2]
-    else: 
+    else:
         raise Exception(f'Unexpected OOT item type found: {data[0]}')
 
 
-def ap_id_to_oot_data(ap_id): 
+def ap_id_to_oot_data(ap_id):
     offset = 66000
     val = ap_id - offset
-    try: 
+    try:
         return list(filter(lambda d: d[1][0] == 'Item' and d[1][2] == val, item_table.items()))[0]
-    except IndexError: 
+    except IndexError:
         raise Exception(f'Could not find desired item ID: {ap_id}')
 
 

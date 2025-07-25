@@ -155,7 +155,7 @@ def create_patch_file(rom, rand, xor_range=(0x00B8AD30, 0x00F029A0)):
         # start a new block
         if not block_start:
             block_start = address
-            block_end = address - 1             
+            block_end = address - 1
 
         # save the new data
         data += rom.buffer[block_end+1:address+1]

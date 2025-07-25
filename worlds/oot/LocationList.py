@@ -37,7 +37,7 @@ def shop_address(shop_id, shelf_id):
 
 # For pot/crate/freestanding locations, the Default variable contains a tuple of the format (Room ID, Scene Setup, Actor ID) where:
 #   Room ID - The room index in the scene
-#   Scene Setup - The scene setup that the location exists in. This is a number 0-3: 0=Child Day, 1=Child Night, 2=Adult Day, 3=Adult Night. 
+#   Scene Setup - The scene setup that the location exists in. This is a number 0-3: 0=Child Day, 1=Child Night, 2=Adult Day, 3=Adult Night.
 #   Actor ID - The position of the actor in the actor table.
 # The default variable can also be a list of such tuples in the case that multiple scene setups contain the same locations to be shuffled together.
 
@@ -485,7 +485,7 @@ location_table = OrderedDict([
     ("GC Spinning Pot Rupee Drop 3",                                 ("RupeeTower",   0x62,  (3,0,0x46), None,                      'Rupee (1)',                             ("Goron City", "RupeeTower"))),
     ("GC Spinning Pot PoH Drop Rupee 1",                             ("RupeeTower",   0x62,  (3,0,0x47), None,                      'Rupees (20)',                           ("Goron City", "RupeeTower"))),
     ("GC Spinning Pot PoH Drop Rupee 2",                             ("RupeeTower",   0x62,  (3,0,0x48), None,                      'Rupees (5)',                            ("Goron City", "RupeeTower"))),
-    # Goron City Pots. 
+    # Goron City Pots.
     ("GC Darunia Pot 1",                                             ("Pot",          0x62,  [(1,0,6),(1,2,2)], None,               'Deku Stick (1)',                        ("Goron City", "Pot"))),
     ("GC Darunia Pot 2",                                             ("Pot",          0x62,  [(1,0,7),(1,2,3)], None,               'Rupee (1)',                             ("Goron City", "Pot"))),
     ("GC Darunia Pot 3",                                             ("Pot",          0x62,  [(1,0,8),(1,2,4)], None,               'Deku Stick (1)',                        ("Goron City", "Pot"))),
@@ -511,21 +511,21 @@ location_table = OrderedDict([
     ("DMC GS Crate",                                                 ("GS Token",     0x0F,  0x80, None,                            'Gold Skulltula Token',                  ("Death Mountain Crater", "Skulltulas"))),
     ("DMC GS Bean Patch",                                            ("GS Token",     0x0F,  0x01, None,                            'Gold Skulltula Token',                  ("Death Mountain Crater", "Skulltulas"))),
     # Death Mountain Crater Freestanding
-    ("DMC Adult Green Rupee 1",                                      ("RupeeTower",   0x61,  (1,2,0x40),([0x0225E63C], None ),      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),    
-    ("DMC Adult Green Rupee 2",                                      ("RupeeTower",   0x61,  (1,2,0x41), None,                      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),    
-    ("DMC Adult Green Rupee 3",                                      ("RupeeTower",   0x61,  (1,2,0x42), None,                      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),    
-    ("DMC Adult Green Rupee 4",                                      ("RupeeTower",   0x61,  (1,2,0x43), None,                      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),    
-    ("DMC Adult Green Rupee 5",                                      ("RupeeTower",   0x61,  (1,2,0x44), None,                      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),    
-    ("DMC Adult Green Rupee 6",                                      ("RupeeTower",   0x61,  (1,2,0x45), None,                      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),    
-    ("DMC Adult Red Rupee",                                          ("RupeeTower",   0x61,  (1,2,0x46), None,                      'Rupees (20)',                           ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),    
-    ("DMC Child Red Rupee 1",                                        ("Freestanding", 0x61,  (1,0,2), None,                         'Rupees (20)',                           ("Death Mountain Crater", "Death Mountain","Freestanding",))),    
-    ("DMC Child Red Rupee 2",                                        ("Freestanding", 0x61,  (1,0,3), None,                         'Rupees (20)',                           ("Death Mountain Crater", "Death Mountain", "Freestanding",))),    
-    ("DMC Child Blue Rupee 1",                                       ("Freestanding", 0x61,  (1,0,4), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),    
-    ("DMC Child Blue Rupee 2",                                       ("Freestanding", 0x61,  (1,0,5), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),    
-    ("DMC Child Blue Rupee 3",                                       ("Freestanding", 0x61,  (1,0,6), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),    
-    ("DMC Child Blue Rupee 4",                                       ("Freestanding", 0x61,  (1,0,7), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),    
-    ("DMC Child Blue Rupee 5",                                       ("Freestanding", 0x61,  (1,0,8), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),    
-    ("DMC Child Blue Rupee 6",                                       ("Freestanding", 0x61,  (1,0,9), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),    
+    ("DMC Adult Green Rupee 1",                                      ("RupeeTower",   0x61,  (1,2,0x40),([0x0225E63C], None ),      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),
+    ("DMC Adult Green Rupee 2",                                      ("RupeeTower",   0x61,  (1,2,0x41), None,                      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),
+    ("DMC Adult Green Rupee 3",                                      ("RupeeTower",   0x61,  (1,2,0x42), None,                      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),
+    ("DMC Adult Green Rupee 4",                                      ("RupeeTower",   0x61,  (1,2,0x43), None,                      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),
+    ("DMC Adult Green Rupee 5",                                      ("RupeeTower",   0x61,  (1,2,0x44), None,                      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),
+    ("DMC Adult Green Rupee 6",                                      ("RupeeTower",   0x61,  (1,2,0x45), None,                      'Rupee (1)',                             ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),
+    ("DMC Adult Red Rupee",                                          ("RupeeTower",   0x61,  (1,2,0x46), None,                      'Rupees (20)',                           ("Death Mountain Crater", "Death Mountain", "RupeeTower"))),
+    ("DMC Child Red Rupee 1",                                        ("Freestanding", 0x61,  (1,0,2), None,                         'Rupees (20)',                           ("Death Mountain Crater", "Death Mountain","Freestanding",))),
+    ("DMC Child Red Rupee 2",                                        ("Freestanding", 0x61,  (1,0,3), None,                         'Rupees (20)',                           ("Death Mountain Crater", "Death Mountain", "Freestanding",))),
+    ("DMC Child Blue Rupee 1",                                       ("Freestanding", 0x61,  (1,0,4), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),
+    ("DMC Child Blue Rupee 2",                                       ("Freestanding", 0x61,  (1,0,5), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),
+    ("DMC Child Blue Rupee 3",                                       ("Freestanding", 0x61,  (1,0,6), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),
+    ("DMC Child Blue Rupee 4",                                       ("Freestanding", 0x61,  (1,0,7), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),
+    ("DMC Child Blue Rupee 5",                                       ("Freestanding", 0x61,  (1,0,8), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),
+    ("DMC Child Blue Rupee 6",                                       ("Freestanding", 0x61,  (1,0,9), None,                         'Rupees (5)',                            ("Death Mountain Crater", "Death Mountain", "Freestanding",))),
     # Death Mountain Crater Pots
     ("DMC Near GC Pot 1",                                            ("Pot",          0x61,  (1,2,14), None,                        'Recovery Heart',                        ("Death Mountain Crater", "Death Mountain", "Pot"))),
     ("DMC Near GC Pot 2",                                            ("Pot",          0x61,  (1,2,15), None,                        'Arrows (10)',                           ("Death Mountain Crater", "Death Mountain", "Pot"))),
@@ -1537,7 +1537,7 @@ location_table = OrderedDict([
    #("Shadow Temple After Boat Pot 2"                                ("Pot",          0x07,  (21,0,18), None,                        'Recovery Heart',                        ("Shadow Temple", "Vanilla", "Pot"))),
     ("Shadow Temple Near Boss Pot 1",                                ("Pot",          0x07,  (21,0,19), None,                       'Arrows (30)',                           ("Shadow Temple", "Vanilla", "Pot"))),
     ("Shadow Temple Near Boss Pot 2",                                ("Pot",          0x07,  (21,0,20), None,                       'Rupees (5)',                            ("Shadow Temple", "Vanilla", "Pot"))),
-    
+
     # Shadow Temple MQ
     ("Shadow Temple MQ Early Gibdos Chest",                          ("Chest",        0x07,  0x03, None,                            'Small Key (Shadow Temple)',             ("Shadow Temple", "Master Quest"))),
     ("Shadow Temple MQ Map Chest",                                   ("Chest",        0x07,  0x02, None,                            'Map (Shadow Temple)',                   ("Shadow Temple", "Master Quest"))),
@@ -1667,9 +1667,9 @@ location_table = OrderedDict([
     ("Spirit Temple MQ GS Symphony Room",                            ("GS Token",     0x06,  0x08, None,                            'Gold Skulltula Token',                  ("Spirit Temple", "Master Quest", "Skulltulas"))),
     ("Spirit Temple MQ GS Nine Thrones Room West",                   ("GS Token",     0x06,  0x04, None,                            'Gold Skulltula Token',                  ("Spirit Temple", "Master Quest", "Skulltulas"))),
     ("Spirit Temple MQ GS Nine Thrones Room North",                  ("GS Token",     0x06,  0x10, None,                            'Gold Skulltula Token',                  ("Spirit Temple", "Master Quest", "Skulltulas"))),
-    
+
     ("Spirit Temple Twinrova Heart",                                 ("BossHeart",    0x17,  0x4F, None,                            'Heart Container',                       ("Spirit Temple", "Vanilla", "Master Quest"))),
- 
+
     # Spirit Temple Freestanding
     ("Spirit Temple Shifting Wall Recovery Heart 1",                 ("Freestanding", 0x06,  (23,0,3), None,                        'Recovery Heart',                        ("Spirit Temple", "Vanilla", "Freestanding"))),
     ("Spirit Temple Shifting Wall Recovery Heart 2",                 ("Freestanding", 0x06,  (23,0,4), None,                        'Recovery Heart',                        ("Spirit Temple", "Vanilla", "Freestanding"))),
@@ -1776,7 +1776,7 @@ location_table = OrderedDict([
     ("Ice Cavern Near End Pot 1",                                    ("Pot",          0x09,  (6,0,1), None,                         'Recovery Heart',                        ("Ice Cavern", "Vanilla", "Pot"))),
     ("Ice Cavern Near End Pot 2",                                    ("Pot",          0x09,  (6,0,2), None,                         'Recovery Heart',                        ("Ice Cavern", "Vanilla", "Pot"))),
     ("Ice Cavern Frozen Pot",                                        ("Pot",          0x09,  (9,0,10), None,                        'Rupees (50)',                           ("Ice Cavern", "Vanilla", "Pot"))),
-    
+
     # Ice Cavern MQ
     ("Ice Cavern MQ Map Chest",                                      ("Chest",        0x09,  0x01, None,                            'Map (Ice Cavern)',                      ("Ice Cavern", "Master Quest"))),
     ("Ice Cavern MQ Compass Chest",                                  ("Chest",        0x09,  0x00, None,                            'Compass (Ice Cavern)',                  ("Ice Cavern", "Master Quest"))),
@@ -2098,6 +2098,6 @@ dungeon_song_locations = [
 def set_drop_location_names(ootworld):
     for region in ootworld.regions:
         for location in region.locations:
-            if location.type == 'Drop': 
+            if location.type == 'Drop':
                 location.name = location.parent_region.name + " " + location.name
                 location.show_in_spoiler = False

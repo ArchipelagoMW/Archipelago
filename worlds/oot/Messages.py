@@ -554,7 +554,7 @@ class Message:
         size = (size + 3) & -4 # align to nearest 4 bytes
 
         return size
-    
+
     # applies whatever transformations we want to the dialogs
     def transform(self, replace_ending=False, ending=None, always_allow_skip=True, speed_up_text=True):
         ending_codes = [0x02, 0x07, 0x0A, 0x0B, 0x0E, 0x10]

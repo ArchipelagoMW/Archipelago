@@ -5,10 +5,10 @@ import struct
 
 class uint16:
     _struct = struct.Struct('>H')
-    def write(buffer, address, value): 
+    def write(buffer, address, value):
         struct.pack_into('>H', buffer, address, value)
 
-    def read(buffer, address=0): 
+    def read(buffer, address=0):
         return uint16._struct.unpack_from(buffer, address)[0]
 
     def bytes(value):
@@ -21,10 +21,10 @@ class uint16:
 
 class uint32:
     _struct = struct.Struct('>I')
-    def write(buffer, address, value): 
+    def write(buffer, address, value):
         struct.pack_into('>I', buffer, address, value)
 
-    def read(buffer, address=0): 
+    def read(buffer, address=0):
         return uint32._struct.unpack_from(buffer, address)[0]
 
     def bytes(value):
@@ -37,10 +37,10 @@ class uint32:
 
 class int32:
     _struct = struct.Struct('>i')
-    def write(buffer, address, value): 
+    def write(buffer, address, value):
         struct.pack_into('>i', buffer, address, value)
 
-    def read(buffer, address=0): 
+    def read(buffer, address=0):
         return int32._struct.unpack_from(buffer, address)[0]
 
     def bytes(value):
@@ -56,11 +56,11 @@ class int32:
 
 
 class uint24:
-    def write(buffer, address, value): 
+    def write(buffer, address, value):
         byte_arr = bytes(value)
         buffer[address:address + 3] = byte_arr[0:3]
 
-    def read(buffer, address=0): 
+    def read(buffer, address=0):
         return (buffer[address+0] << 16) | (buffer[address+1] << 8) | buffer[address+2]
 
     def bytes(value):

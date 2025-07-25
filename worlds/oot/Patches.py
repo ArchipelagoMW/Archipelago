@@ -1140,7 +1140,7 @@ def patch_rom(world, rom):
             save_context.write_permanent_flag(Scenes.JABU_JABU, FlagType.CLEAR,  0x2, 0x01) # Jabu Red Slimy Thing defeated
             save_context.write_permanent_flag(Scenes.JABU_JABU, FlagType.SWITCH, 0x2, 0x08) # Jabu Red Slimy Thing not in front of boss lobby
             save_context.write_permanent_flag(Scenes.JABU_JABU, FlagType.SWITCH, 0x1, 0x10) # Jabu Boss Door Switch Activated
-        
+
     if 'Forest Temple' in world.dungeon_shortcuts:
         # Forest, flags are the same between vanilla/MQ
         save_context.write_permanent_flag(Scenes.FOREST_TEMPLE, FlagType.SWITCH, 0x0, 0x10) # Forest Elevator up
@@ -1161,7 +1161,7 @@ def patch_rom(world, rom):
             save_context.write_permanent_flag(Scenes.SPIRIT_TEMPLE, FlagType.SWITCH, 0x2, 0x02) # Spirit Silver Block
             save_context.write_permanent_flag(Scenes.SPIRIT_TEMPLE, FlagType.SWITCH, 0x1, 0x80) # Spirit Chains
             save_context.write_permanent_flag(Scenes.SPIRIT_TEMPLE, FlagType.SWITCH, 0x3, 0x10) # Spirit Face
-        
+
     if 'Shadow Temple' in world.dungeon_shortcuts:
         # Shadow
         if not world.dungeon_mq['Shadow Temple']:
@@ -1292,9 +1292,9 @@ def patch_rom(world, rom):
         save_context.give_item(world, item.name)
         if item.name == 'Slingshot':
             save_context.give_item(world, "Deku Seeds (30)")
-        elif item.name == 'Bow': 
+        elif item.name == 'Bow':
             save_context.give_item(world, "Arrows (30)")
-        elif item.name == 'Bomb Bag': 
+        elif item.name == 'Bomb Bag':
             save_context.give_item(world, "Bombs (20)")
         save_context.write_bits(0x0ED7, 0x04) # "Obtained Malon's Item"
         save_context.write_bits(0x0ED7, 0x08) # "Woke Talon in castle"
@@ -2384,7 +2384,7 @@ def patch_rom(world, rom):
 
     rom.write_bytes(rom.sym('SHOP_SLOTS'), [
         sum(f'{shop} Item {idx}' in world.shop_prices for idx in ('7', '5', '8', '6'))
-        for shop in ('KF Shop', 'Market Bazaar', 'Market Potion Shop', 'Market Bombchu Shop', 
+        for shop in ('KF Shop', 'Market Bazaar', 'Market Potion Shop', 'Market Bombchu Shop',
             'Kak Bazaar', 'Kak Potion Shop', 'GC Shop', 'ZD Shop')
     ])
 
@@ -2451,13 +2451,13 @@ def get_override_entry(ootworld, location):
     scene = location.scene
     default = location.default
     player_id = 0 if ootworld.player == location.item.player else min(location.item.player, 255)
-    if location.item.game != 'Ocarina of Time': 
-        # This is an AP sendable. It's guaranteed to not be None. 
+    if location.item.game != 'Ocarina of Time':
+        # This is an AP sendable. It's guaranteed to not be None.
         if location.item.advancement:
             item_id = AP_PROGRESSION
         else:
             item_id = AP_JUNK
-    else: 
+    else:
         item_id = location.item.index
         if None in [scene, default, item_id]:
             return None

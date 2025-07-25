@@ -528,7 +528,7 @@ def shuffle_random_entrances(ootworld):
             one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, pool_type, valid_target_types, exclude=['Prelude of Light Warp -> Temple of Time'])
             for target in one_way_target_entrance_pools[pool_type]:
                 set_rule(target, lambda state: state._oot_reach_as_age(target.parent_region, 'child', player))
-        elif pool_type in {'Spawn', 'WarpSong'}: 
+        elif pool_type in {'Spawn', 'WarpSong'}:
             valid_target_types = ('Spawn', 'WarpSong', 'OwlDrop', 'Overworld', 'Interior', 'SpecialInterior', 'Extra')
             one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, pool_type, valid_target_types)
         # Ensure that the last entrance doesn't assume the rest of the targets are reachable
@@ -713,7 +713,7 @@ def shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrances, 
                 shuffle_entrances(ootworld, pool_type+'Soft', soft_entrances, target_entrances, rollbacks, set(), all_state, none_state)
 
             validate_world(ootworld, None, locations_to_ensure_reachable, all_state, none_state)
-            for entrance, target in rollbacks: 
+            for entrance, target in rollbacks:
                 confirm_replacement(entrance, target)
             return
         except EntranceShuffleError as e:
@@ -780,7 +780,7 @@ def split_entrances_by_requirements(ootworld, entrances_to_split, assumed_entran
     return restrictive_entrances, soft_entrances
 
 
-# Check to ensure the world is valid. 
+# Check to ensure the world is valid.
 # TODO: improve this function
 def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all_state_orig, none_state_orig):
     multiworld = ootworld.multiworld
@@ -891,7 +891,7 @@ def entrance_unreachable_as(entrance, age, already_checked=[]):
         return age == 'adult'
     elif entrance.name == 'Child Spawn -> KF Links House':
         return age == 'adult'
-    elif entrance.name == 'Adult Spawn -> Temple of Time': 
+    elif entrance.name == 'Adult Spawn -> Temple of Time':
         return age == 'child'
 
     for parent_entrance in entrance.parent_region.entrances:
@@ -916,7 +916,7 @@ def get_entrance_replacing(region, entrance_name, player):
     try:
         return next(filter(lambda entrance: entrance.replaces and entrance.replaces.name == entrance_name and \
                                             entrance.parent_region and entrance.parent_region.name != 'Root Exits' and \
-                                            entrance.type not in ('OwlDrop', 'Spawn', 'WarpSong') and entrance.player == player, 
+                                            entrance.type not in ('OwlDrop', 'Spawn', 'WarpSong') and entrance.player == player,
                                             region.entrances))
     except StopIteration:
         return None

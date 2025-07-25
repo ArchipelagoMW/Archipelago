@@ -456,7 +456,7 @@ def get_hint_area(spot):
             already_checked.append(current_spot)
 
             parent_region = current_spot.parent_region
-        
+
             if parent_region.dungeon:
                 return parent_region.dungeon.hint_text
             elif parent_region.hint and (spot.parent_region.name == 'Root' or parent_region.name != 'Root'):
@@ -572,11 +572,11 @@ def get_good_item_hint(world, checked):
     item_text = getHint(getItemGenericName(location.item), world.hint_rng, world.clearer_hints).text
     if getattr(location.parent_region, "dungeon", None):
         location_text = getHint(location.parent_region.dungeon.name, world.hint_rng, world.clearer_hints).text
-        return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)), 
+        return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)),
             ['Green', 'Red']), location)
     else:
         location_text = get_hint_area(location)
-        return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)), 
+        return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)),
             ['Red', 'Green']), location)
 
 
@@ -584,7 +584,7 @@ def get_specific_item_hint(world, checked):
     if len(world.named_item_pool) == 0:
         logger = logging.getLogger('')
         logger.info("Named item hint requested, but pool is empty.")
-        return None  
+        return None
     while True:
         itemname = world.named_item_pool.pop(0)
         if itemname == "Bottle" and world.hint_dist == "bingo":
@@ -619,14 +619,14 @@ def get_specific_item_hint(world, checked):
         if world.hint_dist_user.get('vague_named_items', False):
             return (GossipText('#%s# may be on the hero\'s path.' % (location_text), ['Green']), location)
         else:
-            return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)), 
+            return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)),
                 ['Green', 'Red']), location)
     else:
         location_text = get_hint_area(location)
         if world.hint_dist_user.get('vague_named_items', False):
             return (GossipText('#%s# may be on the hero\'s path.' % (location_text), ['Green']), location)
         else:
-            return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)), 
+            return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)),
                 ['Red', 'Green']), location)
 
 
@@ -650,11 +650,11 @@ def get_random_location_hint(world, checked):
     item_text = getHint(getItemGenericName(location.item), world.hint_rng, world.clearer_hints).text
     if dungeon:
         location_text = getHint(dungeon.name, world.hint_rng, world.clearer_hints).text
-        return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)), 
+        return (GossipText('#%s# hoards #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)),
             ['Green', 'Red']), location)
     else:
         location_text = get_hint_area(location)
-        return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)), 
+        return (GossipText('#%s# can be found at #%s#.' % (attach_name(item_text, location.item, world), attach_name(location_text, location, world)),
             ['Red', 'Green']), location)
 
 
@@ -676,7 +676,7 @@ def get_specific_hint(world, checked, type):
         location_text = '#%s#' % location_text
     item_text = getHint(getItemGenericName(location.item), world.hint_rng, world.clearer_hints).text
 
-    return (GossipText('%s #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)), 
+    return (GossipText('%s #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)),
         ['Green', 'Red']), location)
 
 
@@ -882,7 +882,7 @@ def buildWorldGossipHints(world, checkedLocations=None):
             if '#' not in location_text:
                 location_text = '#%s#' % location_text
             item_text = getHint(getItemGenericName(location.item), world.hint_rng, world.clearer_hints).text
-            add_hint(world, stoneGroups, GossipText('%s #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)), 
+            add_hint(world, stoneGroups, GossipText('%s #%s#.' % (attach_name(location_text, location, world), attach_name(item_text, location.item, world)),
                 ['Green', 'Red']), hint_dist['always'][1], location, force_reachable=True)
             logging.getLogger('').debug('Placed always hint for %s.', location.name)
 
@@ -916,7 +916,7 @@ def buildWorldGossipHints(world, checkedLocations=None):
                     place_ok = add_hint(world, stoneGroups, gossip_text, hint_dist['named-item'][1], location)
                     if not place_ok:
                         raise Exception('Not enough gossip stones for user-provided item hints')
-    
+
     # Shuffle named items hints
     # When all items are not required to be hinted, this allows for
     # opportunity-style hints to be drawn at random from the defined list.
@@ -995,8 +995,8 @@ def buildAltarHints(world, messages, include_rewards=True, include_wincons=True)
     child_text = '\x08'
     if include_rewards:
         bossRewardsSpiritualStones = [
-            ('Kokiri Emerald',   'Green'), 
-            ('Goron Ruby',       'Red'), 
+            ('Kokiri Emerald',   'Green'),
+            ('Goron Ruby',       'Red'),
             ('Zora Sapphire',    'Blue'),
         ]
         child_text += getHint('Spiritual Stone Text Start', world.hint_rng, world.clearer_hints).text + '\x04'
@@ -1122,7 +1122,7 @@ def buildGanonText(world, messages):
     update_message_by_id(messages, 0x70CB, text)
 
 
-# Modified from original. Uses optimized AP methods, no support for custom items. 
+# Modified from original. Uses optimized AP methods, no support for custom items.
 def buildMiscItemHints(world, messages):
     for hint_type, data in misc_item_hint_table.items():
         if hint_type in world.misc_hints:

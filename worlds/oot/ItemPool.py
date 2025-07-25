@@ -26,10 +26,10 @@ plentiful_items = ([
     'Progressive Scale',
     'Progressive Wallet',
     'Magic Meter',
-    'Deku Stick Capacity', 
-    'Deku Nut Capacity', 
-    'Bow', 
-    'Slingshot', 
+    'Deku Stick Capacity',
+    'Deku Nut Capacity',
+    'Bow',
+    'Slingshot',
     'Bomb Bag',
     'Double Defense'] +
     ['Heart Container'] * 8
@@ -146,12 +146,12 @@ item_difficulty_max = {
         'Bombchus (5)': 1,
         'Bombchus (10)': 2,
         'Bombchus (20)': 0,
-        'Magic Meter': 1, 
-        'Double Defense': 0, 
-        'Deku Stick Capacity': 1, 
-        'Deku Nut Capacity': 1, 
-        'Bow': 2, 
-        'Slingshot': 2, 
+        'Magic Meter': 1,
+        'Double Defense': 0,
+        'Deku Stick Capacity': 1,
+        'Deku Nut Capacity': 1,
+        'Bow': 2,
+        'Slingshot': 2,
         'Bomb Bag': 2,
         'Heart Container': 0,
     },
@@ -160,13 +160,13 @@ item_difficulty_max = {
         'Bombchus (5)': 1,
         'Bombchus (10)': 0,
         'Bombchus (20)': 0,
-        'Magic Meter': 1, 
+        'Magic Meter': 1,
         'Nayrus Love': 1,
-        'Double Defense': 0, 
-        'Deku Stick Capacity': 0, 
-        'Deku Nut Capacity': 0, 
-        'Bow': 1, 
-        'Slingshot': 1, 
+        'Double Defense': 0,
+        'Deku Stick Capacity': 0,
+        'Deku Nut Capacity': 0,
+        'Bow': 1,
+        'Slingshot': 1,
         'Bomb Bag': 1,
         'Heart Container': 0,
         'Piece of Heart': 0,
@@ -671,7 +671,7 @@ def get_pool_core(world):
     if world.free_scarecrow:
         world.multiworld.push_precollected(world.create_item('Scarecrow Song'))
         world.remove_from_start_inventory.append('Scarecrow Song')
-    
+
     if world.no_epona_race:
         world.multiworld.push_precollected(world.create_item('Epona', allow_arbitrary_name=True))
         world.remove_from_start_inventory.append('Epona')

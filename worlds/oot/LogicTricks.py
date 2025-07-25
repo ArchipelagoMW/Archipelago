@@ -236,7 +236,7 @@ known_logic_tricks = {
                     Destinations" is enabled, or if the settings are such
                     that trade items do not need to be delivered within a
                     time limit.
-                    '''},                    
+                    '''},
     'Goron City Spinning Pot PoH with Bombchu': {
         'name'    : 'logic_goron_city_pot',
         'tags'    : ("Goron City",),
@@ -368,7 +368,7 @@ known_logic_tricks = {
                     recoil back onto the top of the frozen waterfall.
                     To kill it, the logic normally guarantees one of
                     Hookshot, Bow, or Magic.
-                    '''},                    
+                    '''},
     'Lake Hylia Lab Wall GS with Jump Slash': {
         'name'    : 'logic_lab_wall_gs',
         'tags'    : ("Lake Hylia", "Skulltulas",),
@@ -644,7 +644,7 @@ known_logic_tricks = {
                     Hookshot or Longshot using the same methods as hitting the switch
                     in vanilla. This trick is usually only relevant if Jabu dungeon
                     shortcuts are enabled.
-                    '''},                    
+                    '''},
     'Jabu Near Boss Ceiling Switch with Explosives': {
         'name'    : 'logic_jabu_near_boss_explosives',
         'tags'    : ("Jabu Jabu's Belly", "Entrance",),
@@ -661,7 +661,7 @@ known_logic_tricks = {
         'tooltip' : '''\
                     Removes the requirements for the Lens of Truth
                     in Jabu MQ.
-                    '''},                                      
+                    '''},
     'Jabu MQ Compass Chest with Boomerang': {
         'name'    : 'logic_jabu_mq_rang_jump',
         'tags'    : ("Jabu Jabu's Belly", "MQ",),
@@ -691,7 +691,7 @@ known_logic_tricks = {
         'tags'    : ("Bottom of the Well",),
         'tooltip' : '''\
                     Requires 9 sticks or 5 jump slashes.
-                    '''},   
+                    '''},
     'Bottom of the Well Map Chest with Strength & Sticks': {
         'name'    : 'logic_botw_basement',
         'tags'    : ("Bottom of the Well",),
@@ -735,7 +735,7 @@ known_logic_tricks = {
         'tooltip' : '''\
                     Precise Boomerang throws can allow child to
                     kill the Skulltula and collect the token.
-                    '''},                                      
+                    '''},
     'Forest Temple East Courtyard Vines with Hookshot': {
         'name'    : 'logic_forest_vines',
         'tags'    : ("Forest Temple", "MQ",),
@@ -767,7 +767,7 @@ known_logic_tricks = {
                     the falling ceiling room early. In Master Quest,
                     this allows you to obtain the GS on the door frame
                     as adult without Hookshot or Song of Time.
-                    '''},                    
+                    '''},
     'Forest Temple Outside Backdoor with Jump Slash': {
         'name'    : 'logic_forest_outside_backdoor',
         'tags'    : ("Forest Temple", "MQ",),
@@ -795,7 +795,7 @@ known_logic_tricks = {
         'tooltip' : '''\
                     Send the Bombchu straight up the center of the
                     wall directly to the left upon entering the room.
-                    '''},                    
+                    '''},
     'Forest Temple MQ Twisted Hallway Switch with Jump Slash': {
         'name'    : 'logic_forest_mq_hallway_switch_jumpslash',
         'tags'    : ("Forest Temple", "MQ",),
@@ -941,7 +941,7 @@ known_logic_tricks = {
                     is only solid from above. From the maze below, the
                     Longshot can be shot through the ceiling to obtain 
                     the token with two fewer small keys than normal.
-                    '''},                    
+                    '''},
     'Fire Temple MQ Flame Wall Maze Skip': {
         'name'    : 'logic_fire_mq_flame_maze',
         'tags'    : ("Fire Temple", "Skulltulas", "MQ",),
@@ -1038,7 +1038,7 @@ known_logic_tricks = {
                     Iron Boots to go through the door after the water has
                     been raised, you can obtain the Skulltula Token with
                     the Hookshot.
-                    '''},                    
+                    '''},
     'Water Temple Central Bow Target without Longshot or Hover Boots': {
         'name'    : 'logic_water_central_bow',
         'tags'    : ("Water Temple",),
@@ -1183,7 +1183,7 @@ known_logic_tricks = {
                     Applies to both Vanilla and Master Quest. For obtaining
                     the chests in this room with just Hover Boots, be sure to
                     enable "Shadow Temple Stone Umbrella Skip".
-                    '''},                    
+                    '''},
     'Shadow Temple Freestanding Key with Bombchu': {
         'name'    : 'logic_shadow_freestanding_key',
         'tags'    : ("Shadow Temple",),
@@ -1229,7 +1229,7 @@ known_logic_tricks = {
                     Removes the requirement for the Lens of Truth or
                     Nayru's Love in Shadow Temple MQ for the Invisible
                     Blades room silver rupee collection.
-                    '''},                    
+                    '''},
     'Shadow Temple MQ Invisible Moving Platform without Lens of Truth': {
         'name'    : 'logic_lens_shadow_mq_platform',
         'tags'    : ("Lens of Truth", "Shadow Temple", "MQ",),
@@ -1307,7 +1307,7 @@ known_logic_tricks = {
                     Skulltula. You must throw the Boomerang slightly off to
                     the side so that it curves into the Skulltula, as aiming
                     directly at it will clank off of the wall in front.
-                    '''},                    
+                    '''},
     'Spirit Temple Lower Adult Switch with Bombs': {
         'name'    : 'logic_spirit_lower_adult_switch',
         'tags'    : ("Spirit Temple",),
@@ -1388,7 +1388,7 @@ known_logic_tricks = {
                     Throw the Boomerang in such a way that it
                     curves through the side of the glass block
                     to hit the Gold Skulltula.
-                    '''},                    
+                    '''},
     'Spirit Temple MQ Lower Adult without Fire Arrows': {
         'name'    : 'logic_spirit_mq_lower_adult',
         'tags'    : ("Spirit Temple", "MQ",),
@@ -1490,7 +1490,7 @@ known_logic_tricks = {
                     without a projectile, using a precise jump slash.
                     This trick supersedes "Gerudo Training Ground MQ Left Side
                     Silver Rupees with Hookshot".
-                    '''},       
+                    '''},
     "Ganon's Castle without Lens of Truth": {
         'name'    : 'logic_lens_castle',
         'tags'    : ("Lens of Truth", "Ganon's Castle",),

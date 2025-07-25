@@ -1,4 +1,4 @@
-# Auto-generated color and sound-effect options from Colors.py and Sounds.py 
+# Auto-generated color and sound-effect options from Colors.py and Sounds.py
 from Options import Choice
 
 

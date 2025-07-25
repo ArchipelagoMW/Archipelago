@@ -1098,9 +1098,9 @@ class OOTWorld(World):
     def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str):
         def hint_type_players(hint_type: str) -> set:
             return {autoworld.player for autoworld in multiworld.get_game_worlds("Ocarina of Time")
-                    if autoworld.hints != 'none' 
+                    if autoworld.hints != 'none'
                     and autoworld.hint_dist_user['distribution'][hint_type]['copies'] > 0
-                    and (autoworld.hint_dist_user['distribution'][hint_type]['fixed'] > 0 
+                    and (autoworld.hint_dist_user['distribution'][hint_type]['fixed'] > 0
                       or autoworld.hint_dist_user['distribution'][hint_type]['weight'] > 0)}
 
         try:

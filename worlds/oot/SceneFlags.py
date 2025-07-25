@@ -54,7 +54,7 @@ def get_collectible_flag_table_bytes(scene_flag_table):
             bytes.append((num_flag_bytes & 0xFF00) >> 8)
             bytes.append(num_flag_bytes & 0x00FF )
             num_flag_bytes += ceil((rooms[room] + 1) / 8)
-            
+
     return bytes, num_flag_bytes
 
 def get_alt_list_bytes(alt_list):

@@ -20,13 +20,13 @@ class OOTLogic(LogicMixin):
         self._oot_stale = {player: True for player, world in parent.worlds.items()
                            if parent.worlds[player].game == "Ocarina of Time"}
 
-    def _oot_has_stones(self, count, player): 
+    def _oot_has_stones(self, count, player):
         return self.has_group("stones", player, count)
 
-    def _oot_has_medallions(self, count, player): 
+    def _oot_has_medallions(self, count, player):
         return self.has_group("medallions", player, count)
 
-    def _oot_has_dungeon_rewards(self, count, player): 
+    def _oot_has_dungeon_rewards(self, count, player):
         return self.has_group("rewards", player, count)
 
     def _oot_has_hearts(self, count, player):
@@ -53,12 +53,12 @@ class OOTLogic(LogicMixin):
     def _oot_region_has_shortcuts(self, player, regionname):
         return self.multiworld.worlds[player].region_has_shortcuts(regionname)
 
-    # This function operates by assuming different behavior based on the "level of recursion", handled manually. 
-    # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region. 
-    # If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal. 
-    #   This lets us fake the OOT accessibility check that cares about age. Unfortunately it's still tied to the ground region. 
-    def _oot_reach_as_age(self, regionname, age, player): 
-        if self.age[player] is None: 
+    # This function operates by assuming different behavior based on the "level of recursion", handled manually.
+    # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region.
+    # If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal.
+    #   This lets us fake the OOT accessibility check that cares about age. Unfortunately it's still tied to the ground region.
+    def _oot_reach_as_age(self, regionname, age, player):
+        if self.age[player] is None:
             self.age[player] = age
             can_reach = self.multiworld.get_region(regionname, player).can_reach(self)
             self.age[player] = None
@@ -115,7 +115,7 @@ class OOTLogic(LogicMixin):
             while queue:
                 connection = queue.popleft()
                 new_region = connection.connected_region
-                if new_region is None: 
+                if new_region is None:
                     continue
                 if new_region in rrp:
                     bc.remove(connection)
@@ -134,10 +134,10 @@ def set_rules(ootworld):
     multiworld = ootworld.multiworld
     player = ootworld.player
 
-    if ootworld.logic_rules != 'no_logic': 
-        if ootworld.triforce_hunt: 
+    if ootworld.logic_rules != 'no_logic':
+        if ootworld.triforce_hunt:
             multiworld.completion_condition[player] = lambda state: state.has('Triforce Piece', player, ootworld.triforce_goal)
-        else: 
+        else:
             multiworld.completion_condition[player] = lambda state: state.has('Triforce', player)
 
     # ganon can only carry triforce
