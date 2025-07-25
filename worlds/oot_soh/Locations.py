@@ -9,11 +9,15 @@ if TYPE_CHECKING:
 class SohLocation(Location):
     game = "Ship of Harkinian"
 
-soh_base_id = int = 0xFF0000
+
+soh_base_id: int = 0xFF0000
+
 
 class SohLocationData(NamedTuple):
     region: str
     address: Optional[int] = None
+    event_item: str | None = None
+
 
 base_location_table: Dict[str, SohLocationData] = {
     # Commented out locations that aren't added as shuffle options yet, or are MQ locations.
@@ -173,11 +177,11 @@ base_location_table: Dict[str, SohLocationData] = {
     #"Deku Tree MQ Before Spinning Log Chest": SohLocationData(region="Hyrule", address=soh_base_id + 363, ),
     #"Deku Tree MQ After Spinning Log Chest": SohLocationData(region="Hyrule", address=soh_base_id + 364, ),
     "Deku Tree Queen Gohma Heart Container": SohLocationData(region="Hyrule", address=soh_base_id + 370, ),
-    "Dodongos Cavern Map Chest": SohLocationData(region="Hyrule", address=soh_base_id + 371, ),
-    "Dodongos Cavern Compass Chest": SohLocationData(region="Hyrule", address=soh_base_id + 372, ),
-    "Dodongos Cavern Bomb Flower Platform Chest": SohLocationData(region="Hyrule", address=soh_base_id + 373, ),
-    "Dodongos Cavern Bomb Bag Chest": SohLocationData(region="Hyrule", address=soh_base_id + 374, ),
-    "Dodongos Cavern End Of Bridge Chest": SohLocationData(region="Hyrule", address=soh_base_id + 375, ),
+    "Dodongos Cavern Map Chest": SohLocationData(region="Dodongos Cavern Lobby", address=soh_base_id + 371, ),
+    "Dodongos Cavern Compass Chest": SohLocationData(region="Dodongos Cavern Compass Room", address=soh_base_id + 372, ),
+    "Dodongos Cavern Bomb Flower Platform Chest": SohLocationData(region="Dodongos Cavern Bomb Room Lower", address=soh_base_id + 373, ),
+    "Dodongos Cavern Bomb Bag Chest": SohLocationData(region="Dodongos Cavern Bomb Room Upper", address=soh_base_id + 374, ),
+    "Dodongos Cavern End Of Bridge Chest": SohLocationData(region="Dodongos Cavern Far Bridge", address=soh_base_id + 375, ),
     #"Dodongos Cavern MQ Map Chest": SohLocationData(region="Hyrule", address=soh_base_id + 385, ),
     #"Dodongos Cavern MQ Bomb Bag Chest": SohLocationData(region="Hyrule", address=soh_base_id + 386, ),
     #"Dodongos Cavern MQ Torch Puzzle Room Chest": SohLocationData(region="Hyrule", address=soh_base_id + 387, ),

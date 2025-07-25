@@ -28,6 +28,8 @@ from .Locations import SohLocation, base_location_table, \
 from .Options import SohOptions
 from .Regions import region_data_table, reset_age_access, update_age_access
 from .Rules import get_soh_rule
+from .dodongos_cavern import create_dc_regions_and_rules, set_location_rules_dc
+
 
 class SohWebWorld(WebWorld):
     theme = "ice"
@@ -201,6 +203,9 @@ class SohWorld(World):
         for region_name in region_data_table.keys():
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
+
+        # todo: maybe easier to have region and rule making functions instead
+        create_dc_regions_and_rules(self)
 
         # Create locations.
         for region_name, region_data in region_data_table.items():

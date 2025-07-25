@@ -12,7 +12,8 @@ class SohRegionData(NamedTuple):
 
 region_data_table: Dict[str, SohRegionData] = {
     "Menu": SohRegionData(["Hyrule"]),
-    "Hyrule": SohRegionData(),
+    "Hyrule": SohRegionData(["Dodongos Cavern Entryway"]),
+    "Dodongos Cavern Entryway": SohRegionData(["Hyrule"]),
 }
 
 class SohEntranceData(NamedTuple):
