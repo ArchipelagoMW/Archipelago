@@ -1,4 +1,5 @@
-from .regions import *
+from .ap_regions import *
+from .display_regions import *
 
 SPAWNING_MEADOWS_IDS = {1}
 DELENDE_IDS = {2, 10, 21, 155, 184}
@@ -31,7 +32,7 @@ SALMON_BAY_IDS = {60, 67}
 OPEN_SEA_IDS = {34, 129, 185}
 WATERFRONT_IDS = {115}
 SHOUDU_IDS = {38, 71, 83, 109}
-Undercity_IDS = {43, 181}
+UNDERCITY_IDS = {43, 181}
 GANYMEDE_IDS = {50}
 BEAURIOR_VOLCANO_IDS = {44, 151}
 BEAURIOR_ROCK_IDS = {19, 70, 142, 144, 145, 146, 147}
@@ -63,129 +64,129 @@ NEW_WORLD_IDS = {59, 111, 180}
 OLD_WORLD_IDS = {178}
 #TODO Underpass, overpass
 
-def get_region_by_id(region_id: int) -> str:
+def get_display_region_by_id(region_id: int) -> str:
     if region_id in SPAWNING_MEADOWS_IDS:
-        return SPAWNING_MEADOWS
+        return SPAWNING_MEADOWS_DISPLAY_NAME
     if region_id in DELENDE_IDS:
-        return DELENDE
+        return DELENDE_DISPLAY_NAME
     if region_id in SOILED_DEN_IDS:
-        return SOILED_DEN
+        return SOILED_DEN_DISPLAY_NAME
     if region_id in PALE_GROTTO_IDS:
-        return THE_PALE_GROTTO
+        return THE_PALE_GROTTO_DISPLAY_NAME
     if region_id in SEASIDE_CLIFF_IDS:
-        return SEASIDE_CLIFFS
+        return SEASIDE_CLIFFS_DISPLAY_NAME
     if region_id in DRAFT_SHAFT_CONDUITS_IDS:
-        return DRAFT_SHAFT_CONDUIT
+        return DRAFT_SHAFT_CONDUIT_DISPLAY_NAME
     if region_id in MERCURY_SHRINE_IDS:
-        return MERCURY_SHRINE
+        return MERCURY_SHRINE_DISPLAY_NAME
     if region_id in PROVING_MEADOWS_IDS:
-        return PROVING_MEADOWS
+        return PROVING_MEADOWS_DISPLAY_NAME
     if region_id in YAMAGAWA_MA_IDS:
-        return YAMAGAWA_MA
+        return YAMAGAWA_MA_DISPLAY_NAME
     if region_id in SKUMPARADISE_IDS:
-        return SKUMPARADISE
+        return SKUMPARADISE_DISPLAY_NAME
     if region_id in CAPITAL_IDS:
-        return CAPITAL_SEQUOIA
+        return CAPITAL_SEQUOIA_DISPLAY_NAME
     if region_id in JOJO_SEWERS_IDS:
-        return JOJO_SEWERS
+        return JOJO_SEWERS_DISPLAY_NAME
     if region_id in BOOMER_SOCIETY_IDS:
-        return BOOMER_SOCIETY
+        return BOOMER_SOCIETY_DISPLAY_NAME
     if region_id in ROLLING_QUINTAR_FIELDS_IDS:
-        return ROLLING_QUINTAR_FIELDS
+        return ROLLING_QUINTAR_FIELDS_DISPLAY_NAME
     if region_id in QUINTAR_NEST_IDS:
-        return QUINTAR_NEST
+        return QUINTAR_NEST_DISPLAY_NAME
     if region_id in QUINTAR_SANCTUM_IDS:
-        return QUINTAR_SANCTUM
+        return QUINTAR_SANCTUM_DISPLAY_NAME
     if region_id in CAPITAL_JAIL_IDS:
-        return CAPITAL_JAIL
+        return CAPITAL_JAIL_DISPLAY_NAME
     if region_id in CAPITAL_PIPELINE_IDS:
-        return CAPITAL_PIPELINE
+        return CAPITAL_PIPELINE_DISPLAY_NAME
     if region_id in COBBLESTONE_CRAG_IDS:
-        return COBBLESTONE_CRAG
+        return COBBLESTONE_CRAG_DISPLAY_NAME
     if region_id in OKIMOTO_IDS:
-        return OKIMOTO_NS
+        return OKIMOTO_NS_DISPLAY_NAME
     if region_id in GREENSHIRE_IDS:
-        return GREENSHIRE_REPRISE
+        return GREENSHIRE_REPRISE_DISPLAY_NAME
     if region_id in SALMON_PASS_IDS:
-        return SALMON_PASS
+        return SALMON_PASS_DISPLAY_NAME
     if region_id in SALMON_RIVER_IDS:
-        return SALMON_RIVER
+        return SALMON_RIVER_DISPLAY_NAME
     if region_id in POKO_POKO_IDS:
-        return POKO_POKO_DESERT
+        return POKO_POKO_DESERT_DISPLAY_NAME
     if region_id in SARA_SARA_IDS:
-        return SARA_SARA_BAZAAR
+        return SARA_SARA_BAZAAR_DISPLAY_NAME
     if region_id in SARA_SARA_BEACH_IDS:
         #No idea why there are two of these now, but we have no way to know so just pick one
-        return SARA_SARA_BEACH_EAST
+        return SARA_SARA_BEACH_EAST_DISPLAY_NAME
     if region_id in ANCIENT_RESERVOIR_IDS:
-        return ANCIENT_RESERVOIR
+        return ANCIENT_RESERVOIR_DISPLAY_NAME
     if region_id in SALMON_BAY_IDS:
-        return SALMON_BAY
+        return SALMON_BAY_DISPLAY_NAME
     if region_id in OPEN_SEA_IDS:
-        return THE_OPEN_SEA
+        return THE_OPEN_SEA_DISPLAY_NAME
     if region_id in WATERFRONT_IDS:
-        return SHOUDU_WATERFRONT
+        return SHOUDU_WATERFRONT_DISPLAY_NAME
     if region_id in SHOUDU_IDS:
-        return SHOUDU_PROVINCE
-    if region_id in Undercity_IDS:
-        return THE_UNDERCITY
+        return SHOUDU_PROVINCE_DISPLAY_NAME
+    if region_id in UNDERCITY_IDS:
+        return THE_UNDERCITY_DISPLAY_NAME
     if region_id in GANYMEDE_IDS:
-        return GANYMEDE_SHRINE
+        return GANYMEDE_SHRINE_DISPLAY_NAME
     if region_id in BEAURIOR_VOLCANO_IDS:
-        return BEAURIOR_VOLCANO
+        return BEAURIOR_VOLCANO_DISPLAY_NAME
     if region_id in BEAURIOR_ROCK_IDS:
-        return BEAURIOR_ROCK
+        return BEAURIOR_ROCK_DISPLAY_NAME
     if region_id in LAKE_DELENDE_IDS:
-        return LAKE_DELENDE
+        return LAKE_DELENDE_DISPLAY_NAME
     if region_id in QUINTAR_RESERVE_IDS:
-        return QUINTAR_RESERVE
+        return QUINTAR_RESERVE_DISPLAY_NAME
     if region_id in DIONE_SHRINE_IDS:
-        return DIONE_SHRINE
+        return DIONE_SHRINE_DISPLAY_NAME
     if region_id in QUINTAR_MAUSOLEUM_IDS:
-        return QUINTAR_MAUSOLEUM
+        return QUINTAR_MAUSOLEUM_DISPLAY_NAME
     if region_id in EASTERN_CHASM_IDS:
-        return EASTERN_CHASM
+        return EASTERN_CHASM_DISPLAY_NAME
     if region_id in TALL_TALL_HEIGHTS_IDS:
-        return TALL_TALL_HEIGHTS
+        return TALL_TALL_HEIGHTS_DISPLAY_NAME
     if region_id in NORTHERN_CAVE_IDS:
-        return NORTHERN_CAVE
+        return NORTHERN_CAVE_DISPLAY_NAME
     if region_id in LANDS_END_IDS:
-        return LANDS_END
+        return LANDS_END_DISPLAY_NAME
     if region_id in SLIP_GLIDE_RIDE_IDS:
-        return SLIP_GLIDE_RIDE
+        return SLIP_GLIDE_RIDE_DISPLAY_NAME
     if region_id in SEQUOIA_ATHENAEUM_IDS:
-        return SEQUOIA_ATHENAEUM
+        return SEQUOIA_ATHENAEUM_DISPLAY_NAME
     if region_id in NORTHERN_STRETCH_IDS:
-        return NORTHERN_STRETCH
+        return NORTHERN_STRETCH_DISPLAY_NAME
     if region_id in CASTLE_RAMPARTS_IDS:
-        return CASTLE_RAMPARTS
+        return CASTLE_RAMPARTS_DISPLAY_NAME
     if region_id in CHALICE_OF_TAR_IDS:
-        return THE_CHALICE_OF_TAR
+        return THE_CHALICE_OF_TAR_DISPLAY_NAME
     if region_id in FLYERS_CRAG_IDS:
-        return FLYERS_CRAG
+        return FLYERS_CRAG_DISPLAY_NAME
     if region_id in JIDAMBA_IDS:
-        return JIDAMBA_TANGLE
+        return JIDAMBA_TANGLE_DISPLAY_NAME
     if region_id in EACLANEYA_IDS:
-        return JIDAMBA_EACLANEYA
+        return JIDAMBA_EACLANEYA_DISPLAY_NAME
     if region_id in DEEP_SEA_IDS:
-        return THE_DEEP_SEA
+        return THE_DEEP_SEA_DISPLAY_NAME
     if region_id in NEPTUNE_SHRINE_IDS:
-        return NEPTUNE_SHRINE
+        return NEPTUNE_SHRINE_DISPLAY_NAME
     if region_id in JADE_CAVERN_IDS:
-        return JADE_CAVERN
+        return JADE_CAVERN_DISPLAY_NAME
     if region_id in CONTINENTAL_TRAM_IDS:
-        return CONTINENTAL_TRAM
+        return CONTINENTAL_TRAM_DISPLAY_NAME
     if region_id in ANCIENT_LABYRINTH_IDS:
-        return ANCIENT_LABYRINTH
+        return ANCIENT_LABYRINTH_DISPLAY_NAME
     if region_id in SEQUOIA_IDS:
-        return THE_SEQUOIA
+        return THE_SEQUOIA_DISPLAY_NAME
     if region_id in DEPTHS_IDS:
-        return THE_DEPTHS
+        return THE_DEPTHS_DISPLAY_NAME
     if region_id in CASTLE_SEQUOIA_IDS:
-        return CASTLE_SEQUOIA
+        return CASTLE_SEQUOIA_DISPLAY_NAME
     if region_id in NEW_WORLD_IDS:
-        return THE_NEW_WORLD
+        return THE_NEW_WORLD_DISPLAY_NAME
     if region_id in OLD_WORLD_IDS:
-        return THE_OLD_WORLD
+        return THE_OLD_WORLD_DISPLAY_NAME
 
-    return MODDED_ZONE
+    return MODDED_ZONE_DISPLAY_NAME

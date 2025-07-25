@@ -1,7 +1,7 @@
 from .bases import CrystalProjectTestBase
 from ..constants.key_items import *
 from ..constants.keys import *
-from ..constants.regions import *
+from ..constants.ap_regions import *
 from ..items import key_rings, dungeon_keys
 
 class MultiuseKeyMethods(CrystalProjectTestBase):
@@ -94,9 +94,9 @@ class TestKeyRings(MultiuseKeyMethods):
 
     def test_has_jidamba_keyring(self):
         self.collect_mounts_and_progressive_levels_and_passes()
-        self.assertFalse(self.can_reach_region(JIDAMBA_EACLANEYA))
+        self.assertFalse(self.can_reach_region(JIDAMBA_EACLANEYA_AP_REGION))
         self.collect(self.get_item_by_name(JIDAMBA_KEY_RING))
-        self.assertTrue(self.can_reach_region(JIDAMBA_EACLANEYA))
+        self.assertTrue(self.can_reach_region(JIDAMBA_EACLANEYA_AP_REGION))
 
 class TestVanillaKeys(MultiuseKeyMethods):
     run_default_tests = False

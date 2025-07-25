@@ -9,7 +9,7 @@ from .options import CrystalProjectOptions
 from .items import item_table, equipment_index_offset, item_index_offset, job_index_offset
 from .locations import get_locations, get_shops, get_bosses, npc_index_offset, treasure_index_offset, crystal_index_offset, boss_index_offset, shop_index_offset
 from .unused_locations import get_unused_locations
-from .constants.biomes import get_region_by_id
+from .constants.biomes import get_display_region_by_id
 from .rules import CrystalProjectLogic
 import json
 
@@ -327,7 +327,7 @@ def get_removed_locations(mod_info: List[ModInfoModel]) -> List[ModLocationData]
         for location in mod.data_model.Entities:
             location_id = location['ID']
             biome_id = location['BiomeID']
-            region = get_region_by_id(biome_id)
+            region = get_display_region_by_id(biome_id)
             has_no_npc_info = location['NpcData'] is None or not location['NpcData']['Pages']
 
             if has_no_npc_info and location['SignData'] is None and location['SparkData'] is None and location['DoorData'] is None and location['HomePointData'] is None and location['TreasureData'] is None and location['CrystalData'] is None and location['MarkerData'] is None:
@@ -364,7 +364,7 @@ def get_mod_directory() -> str:
 def build_npc_location(location, shifted_entity_ids: List[ModIncrementedIdData], excluded_ids: IdsExcludedFromRandomization) -> Optional[ModLocationData]:
     options: CrystalProjectOptions
     biome_id = location['BiomeID']
-    region = get_region_by_id(biome_id)
+    region = get_display_region_by_id(biome_id)
     item_id = location['ID']
 
     new_id = item_id
@@ -450,7 +450,7 @@ def build_shop_locations(location, shifted_entity_ids: List[ModIncrementedIdData
     location_codes: List[int] = []
     options: CrystalProjectOptions
     biome_id = location['BiomeID']
-    region = get_region_by_id(biome_id)
+    region = get_display_region_by_id(biome_id)
     item_id = location['ID']
     coord = location['Coord']
     coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
@@ -496,7 +496,7 @@ def build_shop_locations(location, shifted_entity_ids: List[ModIncrementedIdData
 def build_treasure_location(location, shifted_entity_ids: List[ModIncrementedIdData], excluded_ids: IdsExcludedFromRandomization) -> Optional[ModLocationData]:
     #Chests always add an item and never have conditions, so nice and easy
     biome_id = location['BiomeID']
-    region = get_region_by_id(biome_id)
+    region = get_display_region_by_id(biome_id)
     item_id = location['ID']
 
     new_id = item_id
@@ -522,7 +522,7 @@ def build_treasure_location(location, shifted_entity_ids: List[ModIncrementedIdD
 def build_crystal_location(location, shifted_entity_ids: List[ModIncrementedIdData], excluded_ids: IdsExcludedFromRandomization) -> Optional[ModLocationData]:
     # Crystals always add a job and never have conditions, so nice and easy
     biome_id = location['BiomeID']
-    region = get_region_by_id(biome_id)
+    region = get_display_region_by_id(biome_id)
     item_id = location['ID']
 
     new_id = item_id
@@ -550,7 +550,7 @@ def build_crystal_location(location, shifted_entity_ids: List[ModIncrementedIdDa
 def build_boss_npc(location, boss_troop_ids: List[int], shifted_entity_ids: List[ModIncrementedIdData]) -> Optional[ModLocationData]:
     options: CrystalProjectOptions
     biome_id = location['BiomeID']
-    region = get_region_by_id(biome_id)
+    region = get_display_region_by_id(biome_id)
     item_id = location['ID']
     troop_id = None
 
@@ -632,7 +632,7 @@ def build_spark_location(location, shifted_entity_ids: List[ModIncrementedIdData
 
     options: CrystalProjectOptions
     biome_id = location['BiomeID']
-    region = get_region_by_id(biome_id)
+    region = get_display_region_by_id(biome_id)
     item_id = location['ID']
 
     new_id = item_id

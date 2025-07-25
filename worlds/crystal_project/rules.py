@@ -3,7 +3,7 @@ from .constants.keys import *
 from .constants.key_items import *
 from .constants.mounts import *
 from .constants.teleport_stones import *
-from .constants.regions import *
+from .constants.ap_regions import *
 from .constants.region_passes import *
 from .constants.item_groups import *
 from .items import singleton_keys
@@ -51,9 +51,9 @@ class CrystalProjectLogic:
         else:
             has_rental_quintar = state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player) or state.has(PROGRESSIVE_MOUNT, self.player)
             if self.options.regionsanity:
-                if rental_region_name == ROLLING_QUINTAR_FIELDS and not state.has(ROLLING_QUINTAR_FIELDS_PASS, self.player):
+                if rental_region_name == ROLLING_QUINTAR_FIELDS_AP_REGION and not state.has(ROLLING_QUINTAR_FIELDS_PASS, self.player):
                     has_rental_quintar = False
-                if rental_region_name == SARA_SARA_BAZAAR and not state.has(SARA_SARA_BAZAAR_PASS, self.player):
+                if rental_region_name == SARA_SARA_BAZAAR_AP_REGION and not state.has(SARA_SARA_BAZAAR_PASS, self.player):
                     has_rental_quintar = False
 
         return has_rental_quintar
@@ -147,7 +147,7 @@ class CrystalProjectLogic:
             return False
 
     def can_earn_money(self, state: CollectionState, shop_region: str) -> bool:
-        if shop_region == MERCURY_SHRINE:
+        if shop_region == MERCURY_SHRINE_AP_REGION:
             return True
 
         from .regions import region_levels_dictionary
@@ -159,9 +159,9 @@ class CrystalProjectLogic:
         for region in state.multiworld.worlds[self.player].get_regions():
             region_checked += 1
             #checking if the player has access to money-earning zones that are higher than 6 regions below the shop's region, to make sure they're not expected to grind Spawning Meadows enemies to buy something in Neptune Shrine
-            if region_checked > (shop_region_index - 6) and region.can_reach(state) and region.name != MENU and region.name != MODDED_ZONE:
+            if region_checked > (shop_region_index - 6) and region.can_reach(state) and region.name != MENU_AP_REGION and region.name != MODDED_ZONE_AP_REGION:
                 enemy_level = region_levels_dictionary[region.name][0]
-                if enemy_level > 0 or region.name == CAPITAL_SEQUOIA or region.name == QUINTAR_RESERVE:
+                if enemy_level > 0 or region.name == CAPITAL_SEQUOIA_AP_REGION or region.name == QUINTAR_RESERVE_AP_REGION:
                     has_combat = True
                     break
 

@@ -1,5 +1,5 @@
 from .bases import CrystalProjectTestBase
-from ..constants.regions import *
+from ..constants.ap_regions import *
 
 
 class TestDefault(CrystalProjectTestBase):
@@ -12,5 +12,5 @@ class TestDefault(CrystalProjectTestBase):
 
     def test_base_functions(self):
         self.collect_mounts_and_progressive_levels_and_passes()
-        self.assert_region_entrances(JIDAMBA_TANGLE, (THE_OPEN_SEA,), (JIDAMBA_EACLANEYA,))
+        self.assert_region_entrances(JIDAMBA_TANGLE_AP_REGION, (THE_OPEN_SEA_AP_REGION,), (JIDAMBA_EACLANEYA_AP_REGION,))
         self.assert_locations(["Spawning Meadows Chest - Jump on Nan"], ["Spawning Meadows NPC - Butterfly Goo"])

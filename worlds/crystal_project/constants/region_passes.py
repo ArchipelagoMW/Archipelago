@@ -28,7 +28,6 @@ SARA_SARA_BAZAAR_PASS = "Item - Sara Sara Bazaar Pass"
 SARA_SARA_BEACH_EAST_PASS = "Item - Sara Sara Beach East Pass"
 SARA_SARA_BEACH_WEST_PASS = "Item - Sara Sara Beach West Pass"
 ANCIENT_RESERVOIR_PASS = "Item - Ancient Reservoir Pass"
-IBEK_CAVE_PASS = "Item - Ibek Cave Pass"
 SALMON_BAY_PASS = "Item - Salmon Bay Pass"
 #Expert
 THE_OPEN_SEA_PASS = "Item - The Open Sea Pass"
