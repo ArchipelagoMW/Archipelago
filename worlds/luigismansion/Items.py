@@ -3,7 +3,10 @@ from typing import NamedTuple, Dict, Set, Optional
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
 from .Helper_Functions import LMRamData
+from .game.Currency import CURRENCY_NAME
 
+class ItemType:
+    MONEY = "Money"
 
 class LMItemData(NamedTuple):
     type: str
@@ -12,6 +15,13 @@ class LMItemData(NamedTuple):
     doorid: Optional[int] = None
     update_ram_addr: Optional[list[LMRamData]] = None
 
+class CurrencyItemData(LMItemData):
+    currencies: dict[str, int]
+
+    def __new__(self, code, currencies: dict[str, int], type=ItemType.MONEY, classification=IC.filler, update_ram_addr = []):
+        instance = super().__new__(self, type, code, classification, update_ram_addr=update_ram_addr)
+        instance.currencies = currencies
+        return instance
 
 class LMItem(Item):
     game: str = "Luigi's Mansion"
@@ -114,8 +124,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Boo Radar": LMItemData("Upgrade", 63, IC.progression,
         update_ram_addr=[LMRamData(0x803D33A2, bit_position=1), LMRamData(0x803D33A2, bit_position=3)]),
     "Progressive Vacuum": LMItemData("Upgrade", 64, IC.progression, update_ram_addr=[LMRamData(0x80081CC8, item_count=0)]),
-    "Gold Diamond": LMItemData("Money", 65, IC.progression,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x344, ram_byte_size=4, item_count=1)]),
+    "Gold Diamond": CurrencyItemData(65, { CURRENCY_NAME.GOLD_DIAMOND: 1 }, classification=IC.progression),
     "Progressive Flower": LMItemData("Flower Stage", 140, IC.progression,
         update_ram_addr=[LMRamData(0x80338fc0, ram_byte_size=4)])
 }
@@ -224,36 +233,23 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
 }
 
 other_filler_items: Dict[str, LMItemData] = {
-    "20 Coins & Bills": LMItemData("Money", 119, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=20),
-                         LMRamData(0x803D8B7C, pointer_offset=0x328, ram_byte_size=4, item_count=20)]),
-    "Sapphire": LMItemData("Money", 121, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x330, ram_byte_size=4, item_count=1)]),
-    "Emerald": LMItemData("Money", 122, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x334, ram_byte_size=4, item_count=1)]),
-    "Ruby": LMItemData("Money", 123, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x338, ram_byte_size=4, item_count=1)]),
-    "Diamond": LMItemData("Money", 124, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x33C, ram_byte_size=4, item_count=1)]),
-    "Dust": LMItemData("Dust Item", 127, IC.filler),
+    "20 Coins & Bills": CurrencyItemData(119, { CURRENCY_NAME.BILLS: 20, CURRENCY_NAME.COINS: 20, }),
+    "Sapphire": CurrencyItemData(121, { CURRENCY_NAME.SAPPHIRE: 1, }),
+    "Emerald": CurrencyItemData(122, { CURRENCY_NAME.EMERALD: 1, }),
+    "Ruby": CurrencyItemData(123, { CURRENCY_NAME.RUBY: 1, }),
+    "Diamond": CurrencyItemData(124, { CURRENCY_NAME.DIAMOND: 1, }),
+    "Dust": LMItemData("Dust", 127, IC.filler, update_ram_addr=[]),
     "Small Heart": LMItemData("Heart", 128, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B40, pointer_offset=0xB8, ram_byte_size=2, item_count=20)]),
     "Large Heart": LMItemData("Heart", 129, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B40, pointer_offset=0xB8, ram_byte_size=2, item_count=50)]),
-    "10 Coins": LMItemData("Money", 133, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=10)]),
-    "20 Coins": LMItemData("Money", 134, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=20)]),
-    "30 Coins": LMItemData("Money", 135, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=30)]),
-    "15 Bills": LMItemData("Money", 136, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x328, ram_byte_size=4, item_count=15)]),
-    "25 Bills": LMItemData("Money", 137, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x328, ram_byte_size=4, item_count=25)]),
-    "1 Gold Bar": LMItemData("Money", 138, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4, item_count=1)]),
-    "2 Gold Bars": LMItemData("Money", 139, IC.filler,
-        update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4, item_count=2)]),
+    "10 Coins": CurrencyItemData(133, { CURRENCY_NAME.COINS: 10, }),
+    "20 Coins": CurrencyItemData(134, { CURRENCY_NAME.COINS: 20, }),
+    "30 Coins": CurrencyItemData(135, { CURRENCY_NAME.COINS: 30, }),
+    "15 Bills": CurrencyItemData(136, { CURRENCY_NAME.BILLS: 15, }),
+    "25 Bills": CurrencyItemData(137, { CURRENCY_NAME.BILLS: 25, }),
+    "1 Gold Bar": CurrencyItemData(138, { CURRENCY_NAME.GOLD_BARS: 1, }),
+    "2 Gold Bars": CurrencyItemData(139, { CURRENCY_NAME.GOLD_BARS: 2, }),
 }
 
 trap_filler_items: Dict[str, LMItemData] = {
@@ -308,3 +304,13 @@ POSSESION_EQUIV = ["Poison Trap", "Possession Trap", "Laughter Trap", "My Turn! 
 
 trap_id_list = [8125, 8126, 8130, 8131, 8132, 8141, 8142]
 ACCEPTED_TRAPS = ICE_TRAP_EQUIV+BOMB_EQUIV+BANANA_TRAP_EQUIV+GHOST_EQUIV+POISON_MUSH_EQUIV+BONK_EQUIV+POSSESION_EQUIV
+
+class CurrencyReceiver:
+    from .client.Wallet import Wallet
+    def __init__(self, wallet: Wallet):
+        self.wallet = wallet
+
+    def send_to_wallet(self, item: CurrencyItemData):
+        if not isinstance(item, CurrencyItemData):
+            return
+        self.wallet.add_to_wallet(item.currencies)

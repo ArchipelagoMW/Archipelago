@@ -9,6 +9,7 @@ from .iso_helper.lm_rom import LMUSAAPPatch
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Helper_Functions import StringByteFunction as sbf
+from .client.Wallet import Wallet
 
 CLIENT_VERSION = "V0.5.0"
 
@@ -83,26 +84,6 @@ EVENT_FLAG_RECV_ADDRR = 0x803D33B1
 # This address will monitor when you capture the final boss, King Boo
 KING_BOO_ADDR = 0x803D5DBF
 
-# This address will start the point to Luigi's inventory to get his wallet to calculate rank.
-WALLET_START_ADDR = 0x803D8B7C
-
-WALLET_OFFSETS: dict[int, int] = {
-    0x324: 5000,
-    0x328: 20000,
-    0x32C: 100000,
-    0x330: 500000,
-    0x334: 800000,
-    0x338: 1000000,
-    0x33C: 2000000,
-    0x344: 20000000,
-    0x348: 50000,
-    0x34C: 100000,
-    0x350: 1000000
-}
-
-# Rank Requirements for each rank. H, G, F, E, D, C, B, A
-RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000, 50000000, 60000000, 70000000, 100000000]
-
 # Static time to wait for health and death checks
 CHECKS_WAIT = 3
 LONGER_MODIFIER = 2
@@ -176,7 +157,6 @@ class LMContext(CommonContext):
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
     items_handling = 0b111
-    boo_count: "Label" = None
 
     def __init__(self, server_address, password):
         """
@@ -192,6 +172,8 @@ class LMContext(CommonContext):
         self.dolphin_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
 
+        self.wallet = Wallet()
+
         # All used when death link is enabled.
         self.is_luigi_dead = False
         self.last_health_checked = time.time()
@@ -206,7 +188,6 @@ class LMContext(CommonContext):
         # Used for handling received items to the client.
         self.already_mentioned_rank_diff = False
         self.game_clear = False
-        self.rank_req = -1
         self.last_not_ingame = time.time()
         self.boosanity = False
         #self.boo_washroom_count = None
@@ -343,6 +324,22 @@ class LMContext(CommonContext):
         # AP version is added behind this automatically
         ui.base_title += " | Archipelago"
         return ui
+    
+    async def get_wallet_value(self):
+        if not self.check_ingame():
+            return
+    
+        # KivyMD support, also keeps support with regular Kivy (hopefully)
+        try:
+            from kvui import MDLabel as Label
+        except ImportError:
+            from kvui import Label
+
+        if not hasattr(self, "wallet_ui") or not self.wallet_ui:
+            self.wallet_ui = Label(text=f"", width=120, halign="center")
+            self.ui.connect_layout.add_widget(self.wallet_ui)
+
+        self.wallet_ui.text = f"Wallet:{self.wallet.get_wallet_worth()}/{self.wallet.get_rank_requirement()}"
 
     async def update_boo_count_label(self):
         if not self.check_ingame():
@@ -354,7 +351,7 @@ class LMContext(CommonContext):
         except ImportError:
             from kvui import Label
 
-        if not self.boo_count:
+        if not hasattr(self, "boo_count") or not self.boo_count:
             self.boo_count = Label(text=f"", size_hint_x=None, width=120, halign="center")
             self.ui.connect_layout.add_widget(self.boo_count)
 
@@ -554,17 +551,12 @@ class LMContext(CommonContext):
         if current_map_id == 9:
             beat_king_boo = dme.read_byte(KING_BOO_ADDR)
             if (beat_king_boo & (1 << 5)) > 0 and not self.game_clear:
-                int_rank_sum = 0
-                req_rank_amt = RANK_REQ_AMTS[self.rank_req]
-                for key in WALLET_OFFSETS.keys():
-                    currency_amt = dme.read_word(dme.follow_pointers(WALLET_START_ADDR, [key]))
-                    int_rank_sum += currency_amt * WALLET_OFFSETS[key]
-                if int_rank_sum >= req_rank_amt:
+                if self.wallet.check_rank_requirement():
                     self.game_clear = True
                 else:
                     if not self.already_mentioned_rank_diff:
                         logger.info("Unfortunately, you do NOT have enough money to satisfy the rank" +
-                                f"requirements.\nYou are missing: '{(req_rank_amt - int_rank_sum):,}'")
+                                f"requirements.\nYou are missing: '{(self.wallet.get_rank_requirement() - self.wallet.get_wallet_worth()):,}'")
                         self.already_mentioned_rank_diff = True
 
         if not self.finished_game and self.game_clear:
@@ -639,6 +631,7 @@ async def dolphin_sync_task(ctx: LMContext):
                     # Update boo count in LMClient
                     if ctx.ui:
                         await ctx.update_boo_count_label()
+                        await ctx.get_wallet_value()
                     if "DeathLink" in ctx.tags:
                         await ctx.check_death()
                     if "TrapLink" in ctx.tags:
@@ -743,6 +736,9 @@ async def give_player_items(ctx: LMContext):
 
             if "TrapLink" in ctx.tags and item.item in trap_id_list:
                 await ctx.send_trap_link(lm_item_name)
+            if lm_item.type == ItemType.MONEY:
+                currency_receiver = CurrencyReceiver(ctx.wallet)
+                currency_receiver.send_to_wallet(lm_item)
 
             # Filter for only items where we have not received yet. If same slot, only receive locations from pre-set
             # list of locations, otherwise accept other slots. Additionally accept only items from a pre-approved list.
