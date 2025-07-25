@@ -505,10 +505,11 @@ class ALTTPWorld(World):
     def pre_fill(self):
         from Fill import fill_restrictive, FillError
         attempts = 5
-        all_state = self.multiworld.get_all_state(use_cache=False)
+        all_state = self.multiworld.get_all_state(perform_sweep=False)
         crystals = [self.create_item(name) for name in ['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6']]
         for crystal in crystals:
             all_state.remove(crystal)
+        all_state.sweep_for_advancements()
         crystal_locations = [self.get_location('Turtle Rock - Prize'),
                              self.get_location('Eastern Palace - Prize'),
                              self.get_location('Desert Palace - Prize'),
