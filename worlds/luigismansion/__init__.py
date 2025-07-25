@@ -755,11 +755,18 @@ class LMWorld(World):
             output_data["Options"][field.name] = getattr(self.options, field.name).value
             output_data["Options"]["spawn"]: str = self.origin_region_name
 
+        # Ourput Randomized Door info
         output_data["Entrances"] = self.open_doors
+
+        # Output randomized Ghost info
         output_data["Room Enemies"] = self.ghost_affected_regions
+
+        # Output hints for patching
         if self.options.hint_distribution != 5 and self.options.hint_distribution != 1:
             self.finished_hints.wait()
             output_data["Hints"] = self.hints
+
+        # Output boo spheres for relevant worlds
         if self.options.boo_health_option.value == 2:
             self.finished_boo_scaling.wait()
 
