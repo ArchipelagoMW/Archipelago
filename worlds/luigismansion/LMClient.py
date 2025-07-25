@@ -11,7 +11,7 @@ from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_
 from .Helper_Functions import StringByteFunction as sbf
 from .client.Wallet import Wallet
 
-CLIENT_VERSION = "V0.5.0"
+CLIENT_VERSION = "V0.4.10"
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
@@ -303,6 +303,14 @@ class LMContext(CommonContext):
                     self.received_trap_link = "Bonk Trap"
                 if trap_name in POSSESION_EQUIV:
                     self.received_trap_link = "Possession Trap"
+                if trap_name in FEAR_EQUIV:
+                    self.received_trap_link = "Fear Trap"
+                if trap_name in SPOOKY_EQUIV:
+                    self.received_trap_link = "Spooky Time"
+                if trap_name in SQUASH_EQUIV:
+                    self.received_trap_link = "Squash Trap"
+                if trap_name in NOVAC_EQUIV:
+                    self.received_trap_link = "No Vac Trap"
 
     def on_deathlink(self, data: dict[str, Any]):
         """

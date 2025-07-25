@@ -270,10 +270,11 @@ trap_filler_items: Dict[str, LMItemData] = {
     "Fear Trap": LMItemData("Trap", 143, IC.trap,
         update_ram_addr=[LMRamData(0x804DDE7C, ram_byte_size=4, item_count=8)]), #Crawling
     # "Drag Trap": LMItemData("Trap", 144, IC.trap, update_ram_addr=),
-    # "Spooky Time": LMItemData("Trap", 145, IC.trap, update_ram_addr=),
+    "Spooky Time": LMItemData("Trap", 145, IC.trap,
+        update_ram_addr=[LMRamData(0x804de478, ram_byte_size=4, item_count=150)]),
     "Squash Trap": LMItemData("Trap", 146, IC.trap,
         update_ram_addr=[LMRamData(0x804DDE7C, ram_byte_size=4, item_count=7)]),
-    "Take Vac Trap": LMItemData("Trap", 147, IC.trap,
+    "No Vac Trap": LMItemData("Trap", 147, IC.trap,
         update_ram_addr=[LMRamData(0x804DDE7C, ram_byte_size=4, item_count=9)])
 }
 
@@ -301,13 +302,18 @@ HEALTH_RELATED_ITEMS: list[int] = [8128, 8129]
 ICE_TRAP_EQUIV = ["Freeze Trap", "Frozen Trap", "Ice Trap", "Paralyze Trap", "Chaos Control Trap"]
 BOMB_EQUIV = ["TNT Barrel Trap", "Bomb", "Fire Trap"]
 BANANA_TRAP_EQUIV = ["Stun Trap", "Banana Trap", "Thwimp Trap", "Hiccup Trap", "Push Trap"]
-GHOST_EQUIV = ["OmoTrap", "Ghost", "Bee Trap", "Police Trap", "Nut Trap", "Army Trap"]
-POISON_MUSH_EQUIV = [ "Tiny Trap", "Poison Mushroom", "Iron Boots Trap"]
+GHOST_EQUIV = ["OmoTrap", "Ghost", "Bee Trap", "Police Trap", "Nut Trap", "Army Trap", "Buyon Trap"]
+POISON_MUSH_EQUIV = [ "Tiny Trap", "Poison Mushroom", "Iron Boots Trap", "Poison Trap"]
 BONK_EQUIV = ["Spring Trap", "Damage Trap", "Bonk Trap", "Jumping Jacks Trap"]
-POSSESION_EQUIV = ["Poison Trap", "Possession Trap", "Laughter Trap", "My Turn! Trap"]
+POSSESION_EQUIV = ["Possession Trap", "Laughter Trap", "My Turn! Trap", "Blue Balls Curse", "Controller Drift Trap"]
+FEAR_EQUIV = ["Fear Trap", "Confuse Trap", "Confound Trap", "Confusion Trap"]
+SPOOKY_EQUIV = ["Spooky Time", "Deisometric Trap", "Fake Transition", "Ghost Chat"]
+SQUASH_EQUIV = ["Squash Trap", "W I D E Trap"]
+NOVAC_EQUIV = ["No Vac Trap", "Eject Ability"]
 
-trap_id_list = [8125, 8126, 8130, 8131, 8132, 8141, 8142]
-ACCEPTED_TRAPS = ICE_TRAP_EQUIV+BOMB_EQUIV+BANANA_TRAP_EQUIV+GHOST_EQUIV+POISON_MUSH_EQUIV+BONK_EQUIV+POSSESION_EQUIV
+trap_id_list = [8125, 8126, 8130, 8131, 8132, 8141, 8142, 8143, 8145, 8146, 8147]
+ACCEPTED_TRAPS: list[str] = (ICE_TRAP_EQUIV+BOMB_EQUIV+BANANA_TRAP_EQUIV+GHOST_EQUIV+POISON_MUSH_EQUIV+BONK_EQUIV+POSSESION_EQUIV+
+                  FEAR_EQUIV+SPOOKY_EQUIV+SQUASH_EQUIV+NOVAC_EQUIV)
 
 class CurrencyReceiver:
     from .client.Wallet import Wallet

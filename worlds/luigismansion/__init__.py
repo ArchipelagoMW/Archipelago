@@ -87,6 +87,7 @@ class LMWeb(WebWorld):
             LuigiOptions.LuigiMaxHealth,
             LuigiOptions.BetterVacuum,
             LuigiOptions.KingBooHealth,
+            LuigiOptions.BoolossusDifficulty,
             LuigiOptions.StartWithBooRadar,
             LuigiOptions.StartHiddenMansion,
             LuigiOptions.HintDistribution,
@@ -111,6 +112,10 @@ class LMWeb(WebWorld):
             LuigiOptions.PossTrapWeight,
             LuigiOptions.BonkTrapWeight,
             LuigiOptions.GhostTrapWeight,
+            LuigiOptions.FearWeight,
+            LuigiOptions.SpookyWeight,
+            LuigiOptions.SquashWeight,
+            LuigiOptions.VacTrapWeight,
             LuigiOptions.NothingWeight,
             LuigiOptions.HeartWeight,
         ]),
@@ -354,7 +359,7 @@ class LMWorld(World):
                              "and")
                 elif entry.code == 772:
                     add_rule(entry, lambda state: state.can_reach_location("Nursery Clear Chest", self.player))
-                elif entry.code in (773):
+                elif entry.code == 773:
                     add_rule(entry, lambda state: state.can_reach_location("Graveyard Clear Chest", self.player))
                 elif entry.code in (778, 782, 784, 789, 790, 851):
                     add_rule(entry, lambda state: state.can_reach_location("Balcony Clear Chest", self.player))
@@ -648,7 +653,8 @@ class LMWorld(World):
         filler_trap_weights = [self.options.poss_trap_weight.value, self.options.bonk_trap_weight.value,
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.poison_trap_weight.value,
-                          self.options.ghost_weight.value]
+                          self.options.ghost_weight.value, self.options.fear_weight.value,
+                          self.options.spooky_weight.value, self.options.squash_weight.value, self.options.vac_trap_weight.value]
         thircoin = max(0,self.options.coin_weight.value - 10)
         twencoin = max(0,self.options.coin_weight.value - 5)
         twenbill = max(0,self.options.bill_weight.value - 5)
@@ -695,13 +701,15 @@ class LMWorld(World):
         filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,
                           # emerald, ruby, diamond
-                          self.options.poison_trap_weight.value, self.options.ghost_weight, self.options.dust_weight.value,
-                          self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
-                          self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
-                          self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, thircoin,
+                          self.options.dust_weight.value, self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
+                          self.options.coin_weight.value, twencoin, thircoin,
                           # banana, 10coin, 20coin, 30coin
                           self.options.bill_weight.value, twenbill, self.options.bars_weight.value,
-                          morebar, self.options.poss_trap_weight.value, self.options.bonk_trap_weight.value]  # 15bill, 25bill, 1bar, 2bar
+                          morebar, self.options.poss_trap_weight.value, self.options.bonk_trap_weight.value,
+                          self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
+                          self.options.banana_trap_weight.value, self.options.poison_trap_weight.value,
+                          self.options.ghost_weight.value, self.options.fear_weight.value,
+                          self.options.spooky_weight.value, self.options.squash_weight.value, self.options.vac_trap_weight.value]  # 15bill, 25bill, 1bar, 2bar
         return self.random.choices(filler, weights=filler_weights, k=1)[0]
 
     def set_rules(self):
