@@ -134,7 +134,7 @@ class ShuffleGrass(Choice):
 
 class ShuffleFish(Choice):
     """
-    Shuffle fish. Fishing pond fish will have 15 fish for each age. Overworld fish need a bottle to scoop up.
+    Shuffle fish. Fishing pond fish will have 15 fish for each age. Overworld fish need a bottle to scoop up. Hylian Loach is not included.
     """
     display_name = "Shuffle Fish"
     option_off = 0

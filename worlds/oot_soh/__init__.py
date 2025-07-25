@@ -59,51 +59,51 @@ class SohWorld(World):
     item_name_to_id = item_table
 
     def create_item(self, name: str) -> SohItem:
-        return SohItem(name, item_data_table[name].type, item_data_table[name].item_id, self.player)
+        return SohItem(name, item_data_table[name].classification, item_data_table[name].item_id, self.player)
 
     def create_items(self) -> None:
         item_pool: List[SohItem] = []
 
-        items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
+        items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_data_table.items()}
 
         # Add Ganon's Castle Boss Key when shuffled anywhere.
         if self.options.gcbk_setting == "anywhere":
-            items_to_create[GANONS_CASTLE_BOSS_KEY] = 1
+            items_to_create[Items.GANONS_CASTLE_BOSS_KEY.value] = 1
 
         # Add dungeon rewards when shuffled
         if self.options.shuffle_dungeon_rewards == "anywhere":
-            items_to_create[KOKIRIS_EMERALD] = 1
-            items_to_create[GORONS_RUBY] = 1
-            items_to_create[ZORAS_SAPPHIRE] = 1
-            items_to_create[FOREST_MEDALLION] = 1
-            items_to_create[FIRE_MEDALLION] = 1
-            items_to_create[WATER_MEDALLION] = 1
-            items_to_create[SPIRIT_MEDALLION] = 1
-            items_to_create[SHADOW_MEDALLION] = 1
-            items_to_create[LIGHT_MEDALLION] = 1
+            items_to_create[Items.KOKIRIS_EMERALD.value] = 1
+            items_to_create[Items.GORONS_RUBY.value] = 1
+            items_to_create[Items.ZORAS_SAPPHIRE.value] = 1
+            items_to_create[Items.FOREST_MEDALLION.value] = 1
+            items_to_create[Items.FIRE_MEDALLION.value] = 1
+            items_to_create[Items.WATER_MEDALLION.value] = 1
+            items_to_create[Items.SPIRIT_MEDALLION.value] = 1
+            items_to_create[Items.SHADOW_MEDALLION.value] = 1
+            items_to_create[Items.LIGHT_MEDALLION.value] = 1
 
         # Add overworld tokens when shuffled
         if self.options.shuffle_tokens == "overworld" or self.options.shuffle_tokens == "all":
-            items_to_create[GOLD_SKULLTULA_TOKEN] += 56
+            items_to_create[Items.GOLD_SKULLTULA_TOKEN.value] += 56
 
         # Add dungeon tokens when shuffled
         if self.options.shuffle_tokens == "dungeon" or self.options.shuffle_tokens == "all":
-            items_to_create[GOLD_SKULLTULA_TOKEN] += 44
+            items_to_create[Items.GOLD_SKULLTULA_TOKEN.value] += 44
 
         if self.options.shuffle_trade_items:
-            items_to_create[POCKET_EGG] = 1
-            items_to_create[COJIRO] = 1
-            items_to_create[ODD_MUSHROOM] = 1
-            items_to_create[ODD_POTION] = 1
-            items_to_create[POACHERS_SAW] = 1
-            items_to_create[BROKEN_GORONS_SWORD] = 1
-            items_to_create[PRESCRIPTION] = 1
-            items_to_create[EYEBALL_FROG] = 1
-            items_to_create[WORLDS_FINEST_EYEDROPS] = 1
+            items_to_create[Items.POCKET_EGG.value] = 1
+            items_to_create[Items.COJIRO.value] = 1
+            items_to_create[Items.ODD_MUSHROOM.value] = 1
+            items_to_create[Items.ODD_POTION.value] = 1
+            items_to_create[Items.POACHERS_SAW.value] = 1
+            items_to_create[Items.BROKEN_GORONS_SWORD.value] = 1
+            items_to_create[Items.PRESCRIPTION.value] = 1
+            items_to_create[Items.EYEBALL_FROG.value] = 1
+            items_to_create[Items.WORLDS_FINEST_EYEDROPS.value] = 1
 
         if self.options.shuffle_merchants:
-            items_to_create[GIANTS_KNIFE] = 1
-            items_to_create[MAGIC_BEAN_PACK] = 1
+            items_to_create[Items.GIANTS_KNIFE.value] = 1
+            items_to_create[Items.MAGIC_BEAN_PACK.value] = 1
 
         for item, quantity in items_to_create.items():
             for _ in range(quantity):
@@ -276,20 +276,26 @@ class SohWorld(World):
 
         # Keep Weird Egg and Zelda's Letter in their vanilla location until we add shuffles for them
         # Entirely disabled for now because we're forcing on Skip Child Zelda
-        #self.get_location("HC Malon Egg").place_locked_item(self.create_item("Weird Egg"))
-        #self.get_location("HC Zeldas Letter").place_locked_item(self.create_item("Zelda's Letter"))
+        #self.get_location("HC Malon Egg").place_locked_item(self.create_item(WEIRD_EGG))
+        #self.get_location("HC Zeldas Letter").place_locked_item(self.create_item(ZELDAS_LETTER))
+
+        # Place Master Sword on vanilla location
+        # TODO Implement MS shuffle option
+        self.get_location(Locations.MARKET_TOT_MASTER_SWORD.value).place_locked_item(self.create_item(Items.MASTER_SWORD.value))
+
+        self.get_location(Locations.GCSHOP_ITEM1.value).place_locked_item(self.create_item(Items.BUY_GORON_TUNIC.value))
 
         # Create a dictionary mapping blue warp rewards to their vanilla items
         dungeon_reward_item_mapping = {
-            "Queen Gohma": "Kokiri's Emerald",
-            "King Dodongo": "Goron's Ruby",
-            "Barinade": "Zora's Sapphire",
-            "Phantom Ganon": "Forest Medallion",
-            "Volvagia": "Fire Medallion",
-            "Morpha": "Water Medallion",
-            "Bongo Bongo": "Spirit Medallion",
-            "Twinrova": "Shadow Medallion",
-            "Link's Pocket": "Light Medallion"
+            Locations.QUEEN_GOHMA.value: Items.KOKIRIS_EMERALD.value,
+            Locations.KING_DODONGO.value: Items.GORONS_RUBY.value,
+            Locations.BARINADE.value: Items.ZORAS_SAPPHIRE.value,
+            Locations.PHANTOM_GANON.value: Items.FOREST_MEDALLION.value,
+            Locations.VOLVAGIA.value: Items.FIRE_MEDALLION.value,
+            Locations.MORPHA.value: Items.WATER_MEDALLION.value,
+            Locations.BONGO_BONGO.value: Items.SPIRIT_MEDALLION.value,
+            Locations.TWINROVA.value: Items.SHADOW_MEDALLION.value,
+            Locations.LINKS_POCKET.value: Items.LIGHT_MEDALLION.value
         }
 
         # Preplace dungeon rewards in vanilla locations when not shuffled
@@ -309,16 +315,16 @@ class SohWorld(World):
 
         # Place Ganons Boss Key to the Light Arrow Cutscene when set to needing specific requirements
         if self.options.gcbk_setting == "dungeon_rewards":
-            self.get_location("Market ToT Light Arrow Cutscene").place_locked_item(self.create_item("Ganon's Castle Boss Key"))
+            self.get_location(Locations.MARKET_TOT_LIGHT_ARROW_CUTSCENE.value).place_locked_item(self.create_item(Items.GANONS_CASTLE_BOSS_KEY.value))
 
         # Preplace tokens based on settings.
         if self.options.shuffle_tokens == "off" or self.options.shuffle_tokens == "dungeon":
-            token_item = self.create_item("Gold Skulltula Token")
+            token_item = self.create_item(Items.GOLD_SKULLTULA_TOKEN.value)
             for location_name, location_data in gold_skulltula_overworld_location_table.items():
                 self.get_location(location_name).place_locked_item(token_item)
 
         if self.options.shuffle_tokens == "off" or self.options.shuffle_tokens == "overworld":
-            token_item = self.create_item("Gold Skulltula Token")
+            token_item = self.create_item(Items.GOLD_SKULLTULA_TOKEN.value)
             for location_name, location_data in gold_skulltula_dungeon_location_table.items():
                 self.get_location(location_name).place_locked_item(token_item)
 
