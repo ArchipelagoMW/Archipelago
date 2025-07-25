@@ -4,8 +4,6 @@ import logging
 from . import Music as music
 from . import Sounds as sfx
 from . import IconManip as icon
-from .JSONDump import dump_obj, CollapseList, CollapseDict, AlignedDict, SortedDict
-import json
 
 logger = logging.getLogger('')
 

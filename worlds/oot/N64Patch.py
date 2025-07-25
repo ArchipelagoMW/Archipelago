@@ -1,6 +1,3 @@
-import struct
-import io
-import array
 import zlib
 import copy
 import zipfile

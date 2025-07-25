@@ -4,7 +4,7 @@ import copy
 import functools
 import settings
 import typing
-from collections import Counter, deque
+from collections import Counter
 from collections.abc import Iterable
 from string import printable
 
@@ -22,7 +22,7 @@ from .Rules import set_rules, set_shop_rules, set_entrances_based_rules
 from .RuleParser import Rule_AST_Transformer
 from .Options import OoTOptions, oot_option_groups
 from .Utils import data_path, read_json
-from .LocationList import business_scrubs, set_drop_location_names, dungeon_song_locations
+from .LocationList import business_scrubs, dungeon_song_locations
 from .DungeonList import dungeon_table, create_dungeons
 from .LogicTricks import normalized_name_tricks
 from .Rom import Rom
@@ -30,10 +30,10 @@ from .Patches import OoTContainer, patch_rom
 from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 
-from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
+from BaseClasses import MultiWorld, CollectionState, Tutorial
 from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections, PlandoItems
 from Fill import fill_restrictive, fast_fill, FillError
-from worlds.generic.Rules import exclusion_rules, add_item_rule
+from worlds.generic.Rules import exclusion_rules
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
 
 # OoT's generate_output doesn't benefit from more than 2 threads, instead it uses a lot of memory.

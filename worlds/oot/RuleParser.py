@@ -1,6 +1,5 @@
 import ast
 from collections import defaultdict
-from inspect import signature, _ParameterKind
 import logging
 import re
 

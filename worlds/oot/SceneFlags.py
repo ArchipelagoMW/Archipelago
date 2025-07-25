@@ -1,7 +1,5 @@
 from math import ceil
 
-from .LocationList import location_table
-
 # Create a dict of dicts of the format:
 # {
 #   scene_number_n : {

@@ -1,7 +1,7 @@
 #Much of this is heavily inspired from and/or based on az64's / Deathbasket's MM randomizer
 
 import os
-from .Utils import compare_version, data_path
+from .Utils import data_path
 
 
 # Format: (Title, Sequence ID)

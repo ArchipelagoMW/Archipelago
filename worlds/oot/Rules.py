@@ -1,15 +1,10 @@
 from collections import deque
-import logging
-import typing
 
 from .Regions import TimeOfDay
-from .DungeonList import dungeon_table
-from .Hints import HintArea
 from .Items import oot_is_item_of_type
-from .LocationList import dungeon_song_locations
 
 from BaseClasses import CollectionState, MultiWorld
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_item
+from worlds.generic.Rules import add_rule, add_item_rule, forbid_item
 from worlds.AutoWorld import LogicMixin
 
 

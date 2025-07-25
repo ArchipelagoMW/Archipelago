@@ -1,4 +1,3 @@
-from itertools import chain
 from enum import IntEnum
 from .ItemPool import IGNORE_LOCATION
 

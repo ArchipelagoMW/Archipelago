@@ -1,5 +1,5 @@
 from .Rom import Rom
-from .Utils import *
+
 
 # Read a ci4 texture from rom and convert to rgba16
 # rom - Rom

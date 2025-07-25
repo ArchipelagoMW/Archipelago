@@ -1,11 +1,9 @@
 import struct
 import itertools
-import re
 import zlib
 import zipfile
 import os
 import datetime
-from collections import defaultdict
 from functools import partial
 
 from .Items import OOTItem
@@ -37,7 +35,7 @@ AP_JUNK = 0xD5
 
 
 class OoTContainer(APPatch):
-    game: str = 'Ocarina of Time'
+    game = 'Ocarina of Time'
     patch_file_ending = ".apz5"
 
     def __init__(self, patch_data: bytes, base_path: str, output_directory: str,

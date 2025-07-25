@@ -1,21 +1,13 @@
-import io
-import hashlib
 import logging
 import os
-import struct
-import random
 from collections import OrderedDict
-import urllib.request
-from urllib.error import URLError, HTTPError
-import json
 from enum import Enum
 
 from BaseClasses import Region
 from .Items import OOTItem
-from .HintList import getHint, getHintGroup, Hint, hintExclusions, \
-    misc_item_hint_table, misc_location_hint_table
+from .HintList import getHint, getHintGroup, hintExclusions, misc_item_hint_table, misc_location_hint_table
 from .Messages import COLOR_MAP, update_message_by_id
-from .TextBox import line_wrap, character_table, rom_safe_text
+from .TextBox import line_wrap, rom_safe_text
 from .Utils import data_path, read_json
 
 

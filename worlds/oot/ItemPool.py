@@ -1,8 +1,5 @@
-from collections import namedtuple
-from itertools import chain
 from .Items import item_table
 from .Location import DisableType
-from .LocationList import location_groups
 from decimal import Decimal, ROUND_HALF_UP
 
 
