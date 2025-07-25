@@ -604,7 +604,7 @@ class VacTrapWeight(Range):
     internal_name = "vac_trap_weight"
     range_start = 0
     range_end = 100
-    default = 15
+    default = 5
 
 class PossTrapWeight(Range):
     """
