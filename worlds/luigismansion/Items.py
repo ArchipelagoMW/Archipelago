@@ -18,7 +18,7 @@ class LMItemData(NamedTuple):
 class CurrencyItemData(LMItemData):
     currencies: dict[str, int]
 
-    def __new__(self, code, currencies: dict[str, int], type=ItemType.MONEY, classification=IC.filler, update_ram_addr = []):
+    def __new__(self, code, currencies: dict[str, int], type=ItemType.MONEY, classification: IC =IC.filler, update_ram_addr = []):
         instance = super().__new__(self, type, code, classification, update_ram_addr=update_ram_addr)
         instance.currencies = currencies
         return instance

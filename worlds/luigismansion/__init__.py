@@ -13,7 +13,7 @@ from BaseClasses import Tutorial, Item, ItemClassification, MultiWorld
 from Utils import visualize_regions, local_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess, icon_paths
-from worlds.generic.Rules import add_item_rule, add_rule
+from worlds.generic.Rules import add_rule
 from Options import OptionGroup
 
 # Relative Imports
@@ -609,7 +609,6 @@ class LMWorld(World):
     def create_items(self):
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
         loc_itempool: list[LMItem] = []
-        copies_to_place = 1
         if self.options.boosanity:
             for item, data in BOO_ITEM_TABLE.items():
                 copies_to_place = max(0, copies_to_place - exclude.count(item))
@@ -621,6 +620,7 @@ class LMWorld(World):
             exclude += ["Boo Radar"]
         item_list: set = set()
         for item, data in ITEM_TABLE.items():
+            copies_to_place = 1
             if data.doorid in self.open_doors.keys() and self.open_doors.get(data.doorid) == 1:
                 exclude += [item]
             if data.code == 65:
