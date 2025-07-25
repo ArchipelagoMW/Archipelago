@@ -1,6 +1,6 @@
 from typing import List, Dict, Any
 
-from BaseClasses import Region, Tutorial
+from BaseClasses import CollectionState, Item, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table, filler_items
 from .Locations import SohLocation, base_location_table, \
@@ -26,7 +26,7 @@ from .Locations import SohLocation, base_location_table, \
     fish_overworld_location_table, \
     location_table
 from .Options import SohOptions
-from .Regions import region_data_table
+from .Regions import region_data_table, reset_age_access, update_age_access
 from .Rules import get_soh_rule
 
 class SohWebWorld(WebWorld):
@@ -427,3 +427,12 @@ class SohWorld(World):
             "shuffle_grass": self.options.shuffle_grass.value,
             "shuffle_fish": self.options.shuffle_fish.value,
         }
+    
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        update_age_access(self, state)
+        return super().collect(state, item)
+    
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        reset_age_access() #TODO pass the starting age option 
+        update_age_access(self, state)
+        return super().remove(state, item)
