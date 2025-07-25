@@ -670,7 +670,7 @@ class LMWorld(World):
                           morebar]
         other_filler = list(other_filler_items.keys())
         trap_filler = list(trap_filler_items.keys())
-        if sum(filler_trap_weights) > 0:# Add filler items to the item pool.
+        if sum(filler_trap_weights) > 0:# Add filler items to the item pool. Add traps if they are on.
             for _ in range(n_trap_items):
                 loc_itempool.append(self.create_item(self.get_trap_item_name(trap_filler, filler_trap_weights)))
 
@@ -715,16 +715,20 @@ class LMWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)
 
     @classmethod
-    def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str):
+    def stage_generate_output(cls, multiworld: MultiWorld):
+        # Filter for any Luigi's Mansion worlds that need hints or have boo health by sphere turned on
         hint_worlds = {world.player for world in multiworld.get_game_worlds(cls.game)
                        if (world.options.hint_distribution.value != 5 and world.options.hint_distribution.value != 1)}
         boo_worlds = {world.player for world in multiworld.get_game_worlds(cls.game) if world.options.boo_health_option == 2}
         if not boo_worlds and not hint_worlds:
             return
+        # Produce hints for LM games that need them
         if hint_worlds:
             get_hints_by_option(multiworld, hint_worlds)
         if not boo_worlds:
             return
+
+        # Produce values for boo health for worlds the need them
         def check_boo_players_done() -> None:
             done_players = set()
             for player in boo_worlds:
@@ -833,7 +837,7 @@ class LMWorld(World):
         # Write the expected output zip container to the Generated Seed folder.
         lm_container.write()
 
-    # TODO: UPDATE FOR LM tracker
+    # Fill slot data for LM tracker
     def fill_slot_data(self):
         from .LMClient import CLIENT_VERSION
 
