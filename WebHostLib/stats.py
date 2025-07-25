@@ -1,4 +1,3 @@
-import typing
 from collections import Counter, defaultdict
 from colorsys import hsv_to_rgb
 from datetime import datetime, timedelta, date
@@ -18,10 +17,9 @@ from .models import Room
 PLOT_WIDTH = 600
 
 
-def get_db_data(known_games: typing.Set[str]) -> typing.Tuple[typing.Counter[str],
-                                                              typing.DefaultDict[datetime.date, typing.Dict[str, int]]]:
-    games_played = defaultdict(Counter)
-    total_games = Counter()
+def get_db_data(known_games: set[str]) -> tuple[Counter[str], defaultdict[date, dict[str, int]]]:
+    games_played: defaultdict[date, dict[str, int]] = defaultdict(Counter)
+    total_games: Counter[str] = Counter()
     cutoff = date.today() - timedelta(days=30)
     room: Room
     for room in select(room for room in Room if room.creation_time >= cutoff):
@@ -32,7 +30,7 @@ def get_db_data(known_games: typing.Set[str]) -> typing.Tuple[typing.Counter[str
     return total_games, games_played
 
 
-def get_color_palette(colors_needed: int) -> typing.List[RGB]:
+def get_color_palette(colors_needed: int) -> list[RGB]:
     colors = []
     # colors_needed +1 to prevent first and last color being too close to each other
     colors_needed += 1
@@ -47,8 +45,7 @@ def get_color_palette(colors_needed: int) -> typing.List[RGB]:
     return colors
 
 
-def create_game_played_figure(all_games_data: typing.Dict[datetime.date, typing.Dict[str, int]],
-                              game: str, color: RGB) -> figure:
+def create_game_played_figure(all_games_data: dict[date, dict[str, int]], game: str, color: RGB) -> figure:
     occurences = []
     days = [day for day, game_data in all_games_data.items() if game_data[game]]
     for day in days:
@@ -84,7 +81,7 @@ def stats():
     days = sorted(games_played)
 
     color_palette = get_color_palette(len(total_games))
-    game_to_color: typing.Dict[str, RGB] = {game: color for game, color in zip(total_games, color_palette)}
+    game_to_color: dict[str, RGB] = {game: color for game, color in zip(total_games, color_palette)}
 
     for game in sorted(total_games):
         occurences = []
