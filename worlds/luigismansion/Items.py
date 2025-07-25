@@ -18,8 +18,8 @@ class LMItemData(NamedTuple):
 class CurrencyItemData(LMItemData):
     currencies: dict[str, int]
 
-    def __new__(self, code, currencies: dict[str, int], type=ItemType.MONEY, classification: IC =IC.filler, update_ram_addr = []):
-        instance = super().__new__(self, type, code, classification, update_ram_addr=update_ram_addr)
+    def __new__(cls, code, currencies: dict[str, int], item_type=ItemType.MONEY, classification: IC=IC.filler):
+        instance = super().__new__(cls, item_type, code, classification, update_ram_addr=[])
         instance.currencies = currencies
         return instance
 
@@ -316,11 +316,19 @@ ACCEPTED_TRAPS: list[str] = (ICE_TRAP_EQUIV+BOMB_EQUIV+BANANA_TRAP_EQUIV+GHOST_E
                   FEAR_EQUIV+SPOOKY_EQUIV+SQUASH_EQUIV+NOVAC_EQUIV)
 
 class CurrencyReceiver:
+    """
+    Sends currency game data from Archipelago server.
+    """
     from .client.Wallet import Wallet
     def __init__(self, wallet: Wallet):
         self.wallet = wallet
 
     def send_to_wallet(self, item: CurrencyItemData):
+        """
+        Sends currency to the game client based upon the item data received from Archipelago.
+
+        :param item: The currency item data to be sent to the client.
+        """
         if not isinstance(item, CurrencyItemData):
             return
         self.wallet.add_to_wallet(item.currencies)

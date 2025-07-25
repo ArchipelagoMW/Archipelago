@@ -343,8 +343,8 @@ class LMContext(CommonContext):
         except ImportError:
             from kvui import Label
 
-        if not hasattr(self, "wallet_ui") or not self.wallet_ui:
-            self.wallet_ui = Label(text=f"", width=120, halign="center")
+        if not hasattr(self, "wallet_ui"):
+            self.wallet_ui = Label(text="", size_hint_x=None, width=120, halign="center")
             self.ui.connect_layout.add_widget(self.wallet_ui)
 
         self.wallet_ui.text = f"Wallet:{self.wallet.get_wallet_worth()}/{self.wallet.get_rank_requirement()}"
@@ -359,8 +359,8 @@ class LMContext(CommonContext):
         except ImportError:
             from kvui import Label
 
-        if not hasattr(self, "boo_count") or not self.boo_count:
-            self.boo_count = Label(text=f"", size_hint_x=None, width=120, halign="center")
+        if not hasattr(self, "boo_count"):
+            self.boo_count = Label(text="", size_hint_x=None, width=120, halign="center")
             self.ui.connect_layout.add_widget(self.boo_count)
 
         curr_boo_count = len(set(([item.item for item in self.items_received if item.item in BOO_AP_ID_LIST])))
@@ -744,14 +744,20 @@ async def give_player_items(ctx: LMContext):
 
             if "TrapLink" in ctx.tags and item.item in trap_id_list:
                 await ctx.send_trap_link(lm_item_name)
-            if lm_item.type == ItemType.MONEY:
-                currency_receiver = CurrencyReceiver(ctx.wallet)
-                currency_receiver.send_to_wallet(lm_item)
 
             # Filter for only items where we have not received yet. If same slot, only receive locations from pre-set
             # list of locations, otherwise accept other slots. Additionally accept only items from a pre-approved list.
             if item.item in RECV_ITEMS_IGNORE or (item.player == ctx.slot and not
             (item.location in SELF_LOCATIONS_TO_RECV or item.item in RECV_OWN_GAME_ITEMS or item.location < 0)):
+                last_recv_idx += 1
+                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+                continue
+            
+            # Sends remote currency items from the server to the client.
+            if lm_item.type == ItemType.MONEY:
+                currency_receiver = CurrencyReceiver(ctx.wallet)
+                currency_receiver.send_to_wallet(lm_item)
+
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
