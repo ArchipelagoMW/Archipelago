@@ -11,7 +11,7 @@ from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_
 from .Helper_Functions import StringByteFunction as sbf
 from .client.Wallet import Wallet
 
-CLIENT_VERSION = "V0.5.0"
+CLIENT_VERSION = "V0.4.10"
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
