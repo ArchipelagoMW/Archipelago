@@ -468,7 +468,7 @@ def set_access_rules(world: 'GSTLAWorld'):
 
     #Apoji Islands
     add_rule(world.get_location(LocationName.Haze),
-             lambda state: state.has(ItemName.Sand, player) and state.has(ItemName.Whirlwind, player))
+             lambda state: state.has(ItemName.Sand, player) and state.has(ItemName.Whirlwind, player) and state.has(ItemName.Lash_Pebble))
 
     #Aqua Rock
     add_rule(world.get_location(LocationName.Aqua_Rock_Water_of_Life),
