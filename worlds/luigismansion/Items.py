@@ -267,10 +267,14 @@ trap_filler_items: Dict[str, LMItemData] = {
         update_ram_addr=[LMRamData(0x804DDE7C, ram_byte_size=4, item_count=6)]), # value of 6
     "Ghost": LMItemData("Trap", 126, IC.trap,
         update_ram_addr=[LMRamData(0x804DDA50, ram_byte_size=4, item_count=1)]),
-    # "Fear Trap": LMItemData("Trap", 143, IC.trap, update_ram_addr=), #Crawling
+    "Fear Trap": LMItemData("Trap", 143, IC.trap,
+        update_ram_addr=[LMRamData(0x804DDE7C, ram_byte_size=4, item_count=8)]), #Crawling
     # "Drag Trap": LMItemData("Trap", 144, IC.trap, update_ram_addr=),
     # "Spooky Time": LMItemData("Trap", 145, IC.trap, update_ram_addr=),
-    # "Squash Trap": LMItemData("Trap", 146, IC.trap, update_ram_addr=),
+    "Squash Trap": LMItemData("Trap", 146, IC.trap,
+        update_ram_addr=[LMRamData(0x804DDE7C, ram_byte_size=4, item_count=7)]),
+    "Take Vac Trap": LMItemData("Trap", 147, IC.trap,
+        update_ram_addr=[LMRamData(0x804DDE7C, ram_byte_size=4, item_count=9)])
 }
 
 filler_items = {**other_filler_items,
