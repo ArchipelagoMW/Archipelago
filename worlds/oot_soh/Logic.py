@@ -6,7 +6,7 @@ from worlds.oot_soh import SohWorld
 #Contains a set of helpers for access rules
 
 #TODO Some of this uses Item names that will likely move to the Events enum
-def HasItem(state: CollectionState, world: SohWorld, itemName: str, count:int = 1, can_be_child: bool = True, can_be_adult: bool = True) -> bool:
+def HasItem(state: CollectionState, world: "SohWorld", itemName: str, count:int = 1, can_be_child: bool = True, can_be_adult: bool = True) -> bool:
     def has(name, count=1): 
         if name in state.prog_items:
             return state.has(name, world.player, count) #To shorten the many calls in this function
@@ -76,7 +76,7 @@ def HasItem(state: CollectionState, world: SohWorld, itemName: str, count:int = 
         case _:
             return has(itemName, count)
         
-def CanUse(state: CollectionState, world: SohWorld, name: str, can_be_child: bool = True, can_be_adult: bool = True) -> bool:
+def CanUse(state: CollectionState, world: "SohWorld", name: str, can_be_child: bool = True, can_be_adult: bool = True) -> bool:
     if not HasItem(state, world, name):
         return False
     def has(name, count=1): 
@@ -208,15 +208,15 @@ def CanUse(state: CollectionState, world: SohWorld, name: str, can_be_child: boo
         case _:
             return False
 
-def ScarecrowsSong(state: CollectionState, world: SohWorld) -> bool:
+def ScarecrowsSong(state: CollectionState, world: "SohWorld") -> bool:
     #TODO handle scarecrow song option in place of the False
     return (False and HasItem(state, world, Items.FAIRY_OCARINA) and OcarinaButtons(state, world) > 2) or \
         (HasItem(state, world, Events.CHILD_SCARECROW) and HasItem(state, world, Events.ADULT_SCARECROW))
 
-def HasBottle(state: CollectionState, world: SohWorld) -> bool: # soup
+def HasBottle(state: CollectionState, world: "SohWorld") -> bool: # soup
     return BottleCount(state, world) >= 1
 
-def BottleCount(state: CollectionState, world: SohWorld) -> int:
+def BottleCount(state: CollectionState, world: "SohWorld") -> int:
     count = 0
     for name in [Items.EMPTY_BOTTLE, Items.BOTTLE_WITH_BLUE_POTION, Items.BOTTLE_WITH_BUGS, Items.BOTTLE_WITH_FAIRY, Items.BOTTLE_WITH_FISH, \
                   Items.BOTTLE_WITH_GREEN_POTION, Items.BOTTLE_WITH_GREEN_POTION, Items.BOTTLE_WITH_BLUE_FIRE, Items.BOTTLE_WITH_MILK, Items.BOTTLE_WITH_RED_POTION]:
@@ -227,15 +227,15 @@ def BottleCount(state: CollectionState, world: SohWorld) -> int:
         count += state.count(Items.BOTTLE_WITH_BIG_POE, world.player)
     return count
 
-def BombchuRefill(state: CollectionState, world: SohWorld) -> bool:
+def BombchuRefill(state: CollectionState, world: "SohWorld") -> bool:
     return state.has_any([Events.CAN_BUY_BOMBCHUS, Events.COULD_PLAY_BOWLING, Events.CARPET_MERCHANT], world.player) or False #TODO put enable bombchu drops option here
 
-def BombchusEnabled(state: CollectionState, world: SohWorld) -> bool:
+def BombchusEnabled(state: CollectionState, world: "SohWorld") -> bool:
     if False: #TODO bombchu bag enabled
         return HasItem(state, world, Items.BOMBCHU_BAG)
     return HasItem(state, world, Items.BOMB_BAG)
 
-def CanPlaySong(state: CollectionState, world: SohWorld, *buttons: str) -> bool:
+def CanPlaySong(state: CollectionState, world: "SohWorld", *buttons: str) -> bool:
     if not HasItem(state, world, Items.FAIRY_OCARINA):
         return False
     for button in buttons:
@@ -246,6 +246,6 @@ def CanPlaySong(state: CollectionState, world: SohWorld, *buttons: str) -> bool:
             return True
     return True
 
-def OcarinaButtons(state: CollectionState, world: SohWorld) -> int:
+def OcarinaButtons(state: CollectionState, world: "SohWorld") -> int:
     return state.count_from_list([Items.OCARINA_ABUTTON, Items.OCARINA_CDOWN_BUTTON, Items.OCARINA_CLEFT_BUTTON, \
                                   Items.OCARINA_CUP_BUTTON, Items.OCARINA_CRIGHT_BUTTON], world.player)
