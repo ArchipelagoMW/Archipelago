@@ -41,7 +41,7 @@ except ImportError:
 
 import NetUtils
 import Utils
-from Utils import version_tuple, restricted_dumps, restricted_loads, Version, async_start, get_intended_text
+from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType, LocationStore, Hint, HintStatus
 from BaseClasses import ItemClassification
@@ -546,7 +546,7 @@ class Context:
 
     def _save(self, exit_save: bool = False) -> bool:
         try:
-            encoded_save = restricted_dumps(self.get_save())
+            encoded_save = pickle.dumps(self.get_save())
             with open(self.save_filename, "wb") as f:
                 f.write(zlib.compress(encoded_save))
         except Exception as e:
