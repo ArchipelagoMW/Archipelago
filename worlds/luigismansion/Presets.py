@@ -48,6 +48,10 @@ all_random_settings = {
     LMOptions.PossTrapWeight.internal_name:            "random",
     LMOptions.BonkTrapWeight.internal_name:            "random",
     LMOptions.GhostTrapWeight.internal_name:           "random",
+    LMOptions.FearWeight.internal_name:                "random",
+    LMOptions.SpookyWeight.internal_name:              "random",
+    LMOptions.SquashWeight.internal_name:              "random",
+    LMOptions.VacTrapWeight.internal_name:             "random",
     LMOptions.HeartWeight.internal_name:               "random",
     LMOptions.NothingWeight.internal_name:             "random",
     LMOptions.ChestTypes.internal_name:                "random",
@@ -88,6 +92,10 @@ money_settings = {
     LMOptions.PossTrapWeight.internal_name:            0,
     LMOptions.BonkTrapWeight.internal_name:            0,
     LMOptions.GhostTrapWeight.internal_name:           0,
+    LMOptions.FearWeight.internal_name:                0,
+    LMOptions.SpookyWeight.internal_name:              0,
+    LMOptions.SquashWeight.internal_name:              0,
+    LMOptions.VacTrapWeight.internal_name:             0,
     LMOptions.TrapPercentage.internal_name:            0,
 }
 
@@ -104,6 +112,10 @@ trap_settings = {
     LMOptions.PossTrapWeight.internal_name:            100,
     LMOptions.BonkTrapWeight.internal_name:            100,
     LMOptions.GhostTrapWeight.internal_name:           100,
+    LMOptions.FearWeight.internal_name:                100,
+    LMOptions.SpookyWeight.internal_name:              100,
+    LMOptions.SquashWeight.internal_name:              100,
+    LMOptions.VacTrapWeight.internal_name:             100,
     LMOptions.TrapPercentage.internal_name:            100,
 }
 

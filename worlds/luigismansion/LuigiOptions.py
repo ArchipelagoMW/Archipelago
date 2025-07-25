@@ -566,6 +566,46 @@ class LuigiMaxHealth(Range):
     range_end = 1000
     default = 100
 
+class FearWeight(Range):
+    """
+    Set the weight for how often fear traps get chosen as traps.
+    """
+    display_name = "Fear Trap Weight"
+    internal_name = "fear_weight"
+    range_start = 0
+    range_end = 100
+    default = 25
+
+class SpookyWeight(Range):
+    """
+    Set the weight for how often spooky time gets chosen as a trap.
+    """
+    display_name = "Spooky Time Weight"
+    internal_name = "spooky_weight"
+    range_start = 0
+    range_end = 100
+    default = 25
+
+class SquashWeight(Range):
+    """
+    Set the weight for how often Squash traps get chosen as traps.
+    """
+    display_name = "Squash Trap Weight"
+    internal_name = "squash_weight"
+    range_start = 0
+    range_end = 100
+    default = 15
+
+class VacTrapWeight(Range):
+    """
+    Set the weight for how often No Vac traps get chosen as traps.
+    """
+    display_name = "No Vac Trap Weight"
+    internal_name = "vac_trap_weight"
+    range_start = 0
+    range_end = 100
+    default = 15
+
 class PossTrapWeight(Range):
     """
     Set the weight for how often possession traps get chosen as traps.
@@ -670,6 +710,10 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     poss_trap_weight: PossTrapWeight
     bonk_trap_weight: BonkTrapWeight
     ghost_weight: GhostTrapWeight
+    fear_weight: FearWeight
+    spooky_weight: SpookyWeight
+    squash_weight: SquashWeight
+    vac_trap_weight: VacTrapWeight
     dust_weight: NothingWeight
     heart_weight: HeartWeight
     start_inventory_from_pool: StartInventoryPool
