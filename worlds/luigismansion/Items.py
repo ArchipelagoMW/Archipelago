@@ -306,9 +306,14 @@ GHOST_EQUIV = ["OmoTrap", "Ghost", "Bee Trap", "Police Trap", "Nut Trap", "Army 
 POISON_MUSH_EQUIV = [ "Tiny Trap", "Poison Mushroom", "Iron Boots Trap"]
 BONK_EQUIV = ["Spring Trap", "Damage Trap", "Bonk Trap", "Jumping Jacks Trap"]
 POSSESION_EQUIV = ["Poison Trap", "Possession Trap", "Laughter Trap", "My Turn! Trap"]
+FEAR_EQUIV = ["Fear Trap"]
+SPOOKY_EQUIV = ["Spooky Time"]
+SQUASH_EQUIV = ["Squash Trap"]
+NOVAC_EQUIV = ["No Vac Trap"]
 
-trap_id_list = [8125, 8126, 8130, 8131, 8132, 8141, 8142]
-ACCEPTED_TRAPS = ICE_TRAP_EQUIV+BOMB_EQUIV+BANANA_TRAP_EQUIV+GHOST_EQUIV+POISON_MUSH_EQUIV+BONK_EQUIV+POSSESION_EQUIV
+trap_id_list = [8125, 8126, 8130, 8131, 8132, 8141, 8142, 8143, 8145, 8146, 8147]
+ACCEPTED_TRAPS: list[str] = (ICE_TRAP_EQUIV+BOMB_EQUIV+BANANA_TRAP_EQUIV+GHOST_EQUIV+POISON_MUSH_EQUIV+BONK_EQUIV+POSSESION_EQUIV+
+                  FEAR_EQUIV+SPOOKY_EQUIV+SQUASH_EQUIV+NOVAC_EQUIV)
 
 class CurrencyReceiver:
     from .client.Wallet import Wallet
