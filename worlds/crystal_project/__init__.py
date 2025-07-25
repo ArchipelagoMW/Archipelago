@@ -11,7 +11,7 @@ from .constants.region_passes import *
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
-    region_name_to_pass_dict
+    display_region_name_to_pass_dict
 from .locations import get_locations, get_bosses, get_shops, get_region_completions, LocationData
 from .presets import crystal_project_options_presets
 from .regions import init_areas
@@ -231,8 +231,8 @@ class CrystalProjectWorld(World):
                 if item_name in self.item_name_groups[PASS]:
                     starting_passes_list.append(item_name)
             if len(starting_passes_list) > 0:
-                for region_name in region_name_to_pass_dict:
-                    if region_name_to_pass_dict[region_name] == starting_passes_list[0]:
+                for region_name in display_region_name_to_pass_dict:
+                    if display_region_name_to_pass_dict[region_name] == starting_passes_list[0]:
                         self.starter_region = region_name
                         break
 
@@ -253,7 +253,7 @@ class CrystalProjectWorld(World):
             self.origin_region_name = self.starter_region
             #only push if player doesn't already have the pass from their starting inventory
             if len(starting_passes_list) == 0:
-                self.multiworld.push_precollected(self.create_item(region_name_to_pass_dict[self.starter_region]))
+                self.multiworld.push_precollected(self.create_item(display_region_name_to_pass_dict[self.starter_region]))
             self.multiworld.get_region(self.starter_region, self.player).add_exits([MENU_AP_REGION])
 
     def create_item(self, name: str) -> Item:
@@ -447,7 +447,7 @@ class CrystalProjectWorld(World):
             for region_pass in self.item_name_groups[PASS]:
                 excluded_items.add(region_pass)
         else:
-            excluded_items.add(region_name_to_pass_dict[self.starter_region])
+            excluded_items.add(display_region_name_to_pass_dict[self.starter_region])
 
         return excluded_items
 

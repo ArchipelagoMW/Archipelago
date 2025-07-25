@@ -1,5 +1,5 @@
 from test.bases import WorldTestBase
-from ..items import region_name_to_pass_dict
+from ..items import display_region_name_to_pass_dict
 from ..constants.mounts import *
 from ..constants.key_items import *
 from ..constants.item_groups import *
@@ -51,8 +51,8 @@ class CrystalProjectTestBase(WorldTestBase):
             self.collect(self.get_item_by_name(PROGRESSIVE_LEVEL))
 
     def collect_passes(self):
-        for region in region_name_to_pass_dict:
-            self.collect_by_name(region_name_to_pass_dict[region])
+        for region in display_region_name_to_pass_dict:
+            self.collect_by_name(display_region_name_to_pass_dict[region])
 
 
     def collect_mounts_and_progressive_levels_and_passes(self):
