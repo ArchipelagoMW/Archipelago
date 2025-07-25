@@ -303,6 +303,14 @@ class LMContext(CommonContext):
                     self.received_trap_link = "Bonk Trap"
                 if trap_name in POSSESION_EQUIV:
                     self.received_trap_link = "Possession Trap"
+                if trap_name in FEAR_EQUIV:
+                    self.received_trap_link = "Fear Trap"
+                if trap_name in SPOOKY_EQUIV:
+                    self.received_trap_link = "Spooky Time"
+                if trap_name in SQUASH_EQUIV:
+                    self.received_trap_link = "Squash Trap"
+                if trap_name in NOVAC_EQUIV:
+                    self.received_trap_link = "No Vac Trap"
 
     def on_deathlink(self, data: dict[str, Any]):
         """
