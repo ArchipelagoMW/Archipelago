@@ -359,7 +359,7 @@ class LMWorld(World):
                              "and")
                 elif entry.code == 772:
                     add_rule(entry, lambda state: state.can_reach_location("Nursery Clear Chest", self.player))
-                elif entry.code in (773):
+                elif entry.code == 773:
                     add_rule(entry, lambda state: state.can_reach_location("Graveyard Clear Chest", self.player))
                 elif entry.code in (778, 782, 784, 789, 790, 851):
                     add_rule(entry, lambda state: state.can_reach_location("Balcony Clear Chest", self.player))
