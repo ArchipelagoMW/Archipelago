@@ -27,7 +27,7 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac
     dol.data.write(struct.pack(">H", speed_to_use))
 
     # Vacuum Speed
-    vac_count = 2 if (extra_vac and start_vac) else (1 if start_vac else 0)
+    vac_count = 2 if (extra_vac and start_vac) else (1 if (extra_vac or start_vac) else 0)
     vac_count += len(list("Progressive Vacuum" in key for key in start_inv))
     match vac_count:
         case x if vac_count >= 2:
