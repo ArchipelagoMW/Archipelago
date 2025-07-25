@@ -611,6 +611,7 @@ class LMWorld(World):
         loc_itempool: list[LMItem] = []
         if self.options.boosanity:
             for item, data in BOO_ITEM_TABLE.items():
+                copies_to_place = 1
                 copies_to_place = max(0, copies_to_place - exclude.count(item))
                 for _ in range(copies_to_place):
                     loc_itempool.append(self.create_item(item))
