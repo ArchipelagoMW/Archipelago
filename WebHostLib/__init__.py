@@ -87,12 +87,17 @@ app.jinja_env.filters["title_sorted"] = title_sorted
 def register():
     """Import submodules, triggering their registering on flask routing.
     Note: initializes worlds subsystem."""
+    import importlib
+
+    from werkzeug.utils import find_modules
     # has automatic patch integration
     import worlds.Files
     app.jinja_env.filters['is_applayercontainer'] = worlds.Files.is_ap_player_container
 
     from WebHostLib.customserver import run_server_process
-    # to trigger app routing picking up on it
-    from . import tracker, upload, landing, check, generate, downloads, api, stats, misc, robots, options, session
 
+    for module in find_modules("WebHostLib", include_packages=True):
+        importlib.import_module(module)
+
+    from . import api
     app.register_blueprint(api.api_endpoints)
