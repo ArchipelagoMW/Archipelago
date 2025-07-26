@@ -21,7 +21,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Astrid's Basement Treasure Map": {
         "on_scenes": [0xD0A],
-        "has_items": [("Treasure Map #3", 1)],
+        "has_items": [("Treasure Map #3 (Gusts SW)", 1)],
         "set_if_true": [(0x1BA651, 0x20)]
     },
     "Ember summit treasure map": {
@@ -31,7 +31,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Ember summit treasure map": {
         "on_scenes": [0xD00, 0x1C0],
-        "has_items": [("Treasure Map #4", 1)],
+        "has_items": [("Treasure Map #4 (Bannan SE)", 1)],
         "set_if_true": [(0x1BA651, 0x80)]
     },
     "Mercay yellow guy treasure map": {
@@ -41,7 +41,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Mercay yellow guy treasure map": {
         "on_scenes": [0x000, 0xB00, 0xB02, 0xB0C, 0xB0D, 0xB0E, 0xB0F, 0xB11, 0x2701],
-        "has_items": [("Treasure Map #9", 1)],
+        "has_items": [("Treasure Map #9 (Cannon W)", 1)],
         "set_if_true": [(0x1BA650, 0x02)]
     },
     "Mercay freedle gift treasure map": {
@@ -51,7 +51,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Mercay freedle gift treasure map": {
         "on_scenes": [0xB01, 0xB03, 0xB12],
-        "has_items": [("Treasure Map #12", 1)],
+        "has_items": [("Treasure Map #12 (Dee Ess N)", 1)],
         "set_if_true": [(0x1BA652, 0x20)]
     },
     "Mercay oshus dig treasure map": {
@@ -61,7 +61,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Mercay oshus dig treasure map": {
         "on_scenes": [0xB01, 0xB03, 0xB13, 0xB01, 0xB0A, 0xB0B],
-        "has_items": [("Treasure Map #10", 1)],
+        "has_items": [("Treasure Map #10 (Gusts SE)", 1)],
         "set_if_true": [(0x1BA651, 0x10)]
     },
     "Molida Cuccoo dig map": {
@@ -71,7 +71,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Molida Cuccoo dig map": {
         "on_scenes": [0x000, 0xC01, 0xC0A, 0xC0B, 0xC0C,  0xC0D, 0xC0E,],
-        "has_items": [("Treasure Map #20", 1)],
+        "has_items": [("Treasure Map #20 (Bannan E)", 1)],
         "set_if_true": [(0x1BA651, 0x40)]
     },
     "Zauz Map": {
@@ -81,7 +81,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Zauz Map": {
         "on_scenes": [0x1],
-        "has_items": [("Treasure Map #5", 1)],
+        "has_items": [("Treasure Map #5 (Molida N)", 1)],
         "set_if_true": [(0x1BA650, 0x40)]
     },
     "Uncharted Island Map": {
@@ -91,7 +91,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Uncharted Island Map": {
         "on_scenes": [0x1],
-        "has_items": [("Treasure Map #6", 1)],
+        "has_items": [("Treasure Map #6 (Bannan W)", 1)],
         "set_if_true": [(0x1BA651, 0x1)]
     },
     "Frost Island Map": {
@@ -101,7 +101,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Frost Island Map": {
         "on_scenes": [0xF00],
-        "has_items": [("Treasure Map #19", 1)],
+        "has_items": [("Treasure Map #19 (Gusts NE)", 1)],
         "set_if_true": [(0x1BA651, 0x4)]
     },
     "Bannan Wayfarer Map": {
@@ -111,7 +111,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Bannan Wayfarer Map": {
         "on_scenes": [0x1],
-        "has_items": [("Treasure Map #21", 1)],
+        "has_items": [("Treasure Map #21 (Molida NW)", 1)],
         "set_if_true": [(0x1BA650, 0x20)]
     },
     "Bannan Island Map": {
@@ -121,7 +121,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Bannan Island Map": {
         "on_scenes": [0x1],
-        "has_items": [("Treasure Map #22", 1)],
+        "has_items": [("Treasure Map #22 (Harrow S)", 1)],
         "set_if_true": [(0x1BA652, 0x8)]
     },
     # TotoK 1F
@@ -140,14 +140,14 @@ DYNAMIC_FLAGS = {
     "Enter Cannon: Not Bought Cannon": {
         "on_scenes": [0x130B],
         "not_has_locations": ["Cannon Island Cannon"],
-        "unset_if_true": [(0x1B5582, 0x1)]
+        "unset_if_true": [(0x1B5582, 0x1), (0x1B558D, 0x10)]
     },
     "Enter Cannon: Not Bought Salvage": {
         "on_scenes": [0x130B],
         "not_has_locations": ["Cannon Island Salvage Arm"],
         "has_locations": ["Cannon Island Cannon"],
         "set_if_true": [(0x1B5582, 0x1)],
-        "unset_if_true": [(0x1BA649, 0x10)],
+        "unset_if_true": [(0x1BA649, 0x10), (0x1B558D, 0x10)],
     },
     "Exit Cannon: Have Cannon": {
         "on_scenes": [0x1300, 0x130A],
@@ -157,7 +157,7 @@ DYNAMIC_FLAGS = {
     "Exit Cannon: Have Salvage": {
         "on_scenes": [0x1300, 0x130A],
         "has_items": [("Salvage Arm", 1)],
-        "set_if_true": [(0x1BA649, 0x10)]
+        "set_if_true": [(0x1BA649, 0x10), (0x1B558D, 0x10)]
     },
     "Exit Cannon: Not Have Cannon": {
         "on_scenes": [0x1300, 0x130A],
@@ -167,7 +167,7 @@ DYNAMIC_FLAGS = {
     "Exit Cannon: Not Have Salvage": {
         "on_scenes": [0x1300, 0x130A],
         "has_items": [("Salvage Arm", 0)],
-        "unset_if_true": [(0x1BA649, 0x10)]
+        "unset_if_true": [(0x1BA649, 0x10), (0x1B558D, 0x10)]
     },
     "Cannon Open Door": {
         "on_scenes": [0x130B],
@@ -354,6 +354,7 @@ DYNAMIC_FLAGS = {
         "goal_requirement": True,
         "set_if_true": [(0x1B5599, 0x4)],
         "has_slot_data": [["bellum_access", 2]],
+        "has_locations": ["TotOK Phantom Hourglass"]
     },
     "Spawn phantom wreckage": {
         "on_scenes": [0x0],
@@ -402,7 +403,7 @@ DYNAMIC_FLAGS = {
     },
     "Mercay skip blow on map for Linebeck": {
         "on_scenes": [0xB03],
-        "unset_if_true": [(0x1B557D, 0x1d2)]
+        "unset_if_true": [(0x1B557D, 0x2)]
     },
     "mercay Safety Shipyard": {
         "on_scenes": [0xB03],
@@ -574,42 +575,42 @@ DYNAMIC_FLAGS = {
     },
     "RESET Harrow island Map 1": {
         "on_scenes": [0x2],
-        "has_items": [("Treasure Map #14", 1)],
+        "has_items": [("Treasure Map #14 (Goron NW)", 1)],
         "set_if_true": [(0x1BA652, 0x1)]
     },
     "RESET Harrow island Map 1 got": {
         "on_scenes": [0x2],
-        "has_items": [("Treasure Map #14", 0)],
+        "has_items": [("Treasure Map #14 (Goron NW)", 0)],
         "unset_if_true": [(0x1BA652, 0x1)]
     },
     "RESET Harrow island Map 2": {
         "on_scenes": [0x2],
-        "has_items": [("Treasure Map #15", 1)],
+        "has_items": [("Treasure Map #15 (Goron W)", 1)],
         "set_if_true": [(0x1BA652, 0x2)]
     },
     "RESET Harrow island Map 2 got": {
         "on_scenes": [0x2],
-        "has_items": [("Treasure Map #15", 0)],
+        "has_items": [("Treasure Map #15 (Goron W)", 0)],
         "unset_if_true": [(0x1BA652, 0x2)]
     },
     "RESET Harrow island Map 3": {
         "on_scenes": [0x2],
-        "has_items": [("Treasure Map #24", 1)],
+        "has_items": [("Treasure Map #24 (Ruins W)", 1)],
         "set_if_true": [(0x1BA653, 2)]
     },
     "RESET Harrow island Map 3 got": {
         "on_scenes": [0x2],
-        "has_items": [("Treasure Map #24", 0)],
+        "has_items": [("Treasure Map #24 (Ruins W)", 0)],
         "unset_if_true": [(0x1BA653, 2)]
     },
     "RESET Harrow island Map 4": {
         "on_scenes": [0x2],
-        "has_items": [("Treasure Map #25", 1)],
+        "has_items": [("Treasure Map #25 (Dead E)", 1)],
         "set_if_true": [(0x1BA653, 0x4)]
     },
     "RESET Harrow island Map 4 got": {
         "on_scenes": [0x2],
-        "has_items": [("Treasure Map #25", 0)],
+        "has_items": [("Treasure Map #25 (Dead E)", 0)],
         "unset_if_true": [(0x1BA653, 0x4)]
     },
     "Harrow have NE sea chart": {
@@ -949,6 +950,71 @@ DYNAMIC_FLAGS = {
         "on_scenes": [0, 1, 2, 3, 0xB03],
         "has_items": [("Sword (Progressive)", 1)],
         "set_if_true": [(0x1BA644, 1)]
-    }
+    },
+    # Salvage
+    "Salvage has no hitbox until you get cannon...": {
+        "on_scenes": [0x300, 0xB0D],
+        "set_if_true": [(0x1B5582, 1), (0x1B558D, 0x10)]
+    },
+    "RESET Salvage has no hitbox until you get cannon...": {
+        "on_scenes": [0, 1, 2, 3, 0xB03],
+        "unset_if_true": [(0x1B5582, 1)],
+        "has_items": [("Cannon", 0)]
+    },
+    "RESET Salvage salvage": {
+        "on_scenes": [0xD00],
+        "unset_if_true": [(0x1B558D, 0x10)],
+        "not_has_locations": ["Cannon Island Salvage Arm"]
+    },
+    # Man of smiles prize postcard
+    "Man of smiles prize postcard removal": {
+        "on_scenes": [0x600],
+        "unset_if_true": [(0x1B558F, 0x08)],
+        "not_has_locations": ["Ocean NE Man of Smiles Prize Postcard"]
+    },
+    # Heal on bellumbeck
+    "Full heal on bellumbeck": {
+        "on_scenes": [0x3300],
+        "full_heal": True
+    },
+    # Skippyjack protection
+    "Remove big catch lure if no skippyjack": {
+        "on_scenes": [0, 1, 2, 3],
+        "not_has_location": ["Fishing Catch Skippyjack"],
+        "unset_if_true": [(0x1ba649, 0x80)]
+    },
+    "RESET Remove big catch lure if no skippyjack": {
+        "on_scenes": [0, 1, 2, 3],
+        "has_location": ["Fishing Catch Skippyjack"],
+        "has_items": [("Big Catch Lure", 1)],
+        "set_if_true": [(0x1ba649, 0x80)]
+    },
+    # Beedle Point Thresholds
+    "Beedle points bronze": {
+        "on_scenes": [0x500],
+        "beedle_points": 1,
+        "set_if_true": [(0x1B5588, 0x40)]
+    },
+    "Beedle points silver": {
+        "on_scenes": [0x500],
+        "beedle_points": 20,
+        "set_if_true": [(0x1b558e, 0x20)]
+    },
+    "Beedle points gold": {
+        "on_scenes": [0x500],
+        "beedle_points": 50,
+        "set_if_true": [(0x1b558e, 0x40)]
+    },
+    "Beedle points plat": {
+        "on_scenes": [0x500],
+        "beedle_points": 100,
+        "set_if_true": [(0x1b558e, 0x80)]
+    },
+    "Beedle points vip": {
+        "on_scenes": [0x500],
+        "beedle_points": 200,
+        "set_if_true": [(0x1b558f, 0x1)]
+    },
+
 }
 

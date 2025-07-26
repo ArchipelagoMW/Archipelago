@@ -2,980 +2,1365 @@ from BaseClasses import ItemClassification
 from worlds.tloz_ph.data.Constants import *
 
 ITEMS_DATA = {
-    #   "No Item": {
+    #   "Item Name": {
     #   'classification': ItemClassification,   # classification category
-    #   'address': int,                         # address in memory
+    #   'address': int,                         # address in memory. not used if progressive
     #   'value': int,                           # value to set in memory, if incremental added else bitwise or
+    #   'incremental': bool                     # true for positive, False for negative
+    #   'progressive': list[tuple[int, int]]    # address, value for each progressive stage
     #   'size': int,                            # size in bytes
     #   'set_bit': list[tuple[int, int]],       # for setting additional bits on acquisition
-    #   'incremental': bool                     # true for positive, False for negative
-    #   'progressive': list[list[int, int]]     # address, value for each progressive stage
     #   'give_ammo': list[int]                  # how much ammo to give for each progressive stage
-    #   'ammo_address: int                      # address for ammo
+    #   'ammo_address': int                     # address for ammo
+    #   'progressive_overwrite':                # for setting progressive stages as overwrites instead of bitwise or.
+    # used for ammo upgrades cause setting the upgrade to 3 rather than 1 or 2 creates a glitched ammo upgrade
+    #   'id': int                               # item id. no longer generated automatically :(
+    #   'ammo_address': int                     # address for ammo
+    #   'dungeon': int                          # Stage id for items tied to specific dungeons, like small keys
+    #   'dummy': bool                           # ignores all item writing operations. Used for big keys and abstracts
+    #   'force_vanilla': bool                   # forces item to be in it's vanilla location, probably not used?
+    #   'hint_on_receive': list[str]            # locations to hint if conditions are met
+    #   'ship': int                             # ship id for ships
+    #   'refill': str                      # progressive item to draw data from
+    #   'treasure': bool                   # treasure item tag
+    #   'backup_filler': bool              # if item can safely be classified as filler when the filler pool runs out
     #    },
 
     # ======= Regular Items==========
 
+    # Link items
     "Sword (Progressive)": {
-        'classification': ItemClassification.progression,
-        'progressive': [[0x1BA644, 1], [0x1BA648, 32]],
-        'set_bit': [(0x1BA644, 1)]  # Means that sending sword if sword breaks gives the base layer
+        "classification": ItemClassification.progression,
+        "progressive": [(0x1ba644, 0x1), (0x1ba648, 0x20)],
+        "set_bit": [(0x1ba644, 0x1)],
+        "id": 1,
     },
     "Oshus' Sword": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA644,
-        'value': 1
+        "classification": ItemClassification.progression,
+        "address": 0x1ba644,
+        "value": 0x1,
+        "id": 2,
     },
     "Phantom Sword": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA648,
-        'value': 32
+        "classification": ItemClassification.progression,
+        "address": 0x1ba648,
+        "value": 0x20,
+        "id": 3,
     },
     "Shield": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA644,
-        'value': 0x02
+        "classification": ItemClassification.progression,
+        "address": 0x1ba644,
+        "value": 0x2,
+        "id": 4,
     },
     "Boomerang": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA644,
-        'value': 0x04,
-        'set_bit': [(0x1BA6BC, 1)]
+        "classification": ItemClassification.progression,
+        "address": 0x1ba644,
+        "value": 0x4,
+        "set_bit": [(0x1ba6bc, 0x1)],
+        "id": 5,
     },
     "Bombs (Progressive)": {
-        'classification': ItemClassification.progression,
-        "progressive": [[0x1BA644, 0x10], [0x1BA5D2, 1], [0x1BA5D2, 2]],
+        "classification": ItemClassification.progression,
+        "progressive": [(0x1ba644, 0x10), (0x1ba5d2, 0x1), (0x1ba5d2, 0x2)],
         "progressive_overwrite": True,
-        "give_ammo": [10, 20, 30],
-        "ammo_address": 0x1BA6C0
+        "give_ammo": [0xa, 0x14, 0x1e],
+        "ammo_address": 0x1ba6c0,
+        "id": 6,
     },
     "Bombchus (Progressive)": {
-        'classification': ItemClassification.progression,
-        'progressive': [[0x1BA644, 0x80], [0x1BA5D4, 1], [0x1BA5D4, 2]],
-        "give_ammo": [10, 20, 30],
-        "ammo_address": 0x1BA6C6,
+        "classification": ItemClassification.progression,
+        "progressive": [(0x1ba644, 0x80), (0x1ba5d4, 0x1), (0x1ba5d4, 0x2)],
+        "give_ammo": [0xa, 0x14, 0x1e],
+        "ammo_address": 0x1ba6c6,
         "progressive_overwrite": True,
+        "id": 7,
     },
     "Bow (Progressive)": {
-        'classification': ItemClassification.progression,
-        "progressive": [[0x1BA644, 0x20], [0x1BA5D0, 1], [0x1BA5D0, 2]],
-        "give_ammo": [20, 30, 50],
-        "ammo_address": 0x1BA6C2,
+        "classification": ItemClassification.progression,
+        "progressive": [(0x1ba644, 0x20), (0x1ba5d0, 0x1), (0x1ba5d0, 0x2)],
+        "give_ammo": [0x14, 0x1e, 0x32],
+        "ammo_address": 0x1ba6c2,
         "progressive_overwrite": True,
+        "id": 8,
     },
     "Grappling Hook": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA644,
-        'value': 0x40,
-        "set_bit": [(0x1BA6C4, 1)]
+        "classification": ItemClassification.progression,
+        "address": 0x1ba644,
+        "value": 0x40,
+        "set_bit": [(0x1ba6c4, 0x1)],
+        "id": 9,
     },
     "Shovel": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA644,
-        'value': 0x08,
-        "set_bit": [(0x1BA6BE, 1)]
+        "classification": ItemClassification.progression,
+        "address": 0x1ba644,
+        "value": 0x8,
+        "set_bit": [(0x1ba6be, 0x1)],
+        "id": 10,
     },
     "Hammer": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA645,
-        'value': 0x01,
-        'set_bit': [(0x1BA6C8, 1)]
+        "classification": ItemClassification.progression,
+        "address": 0x1ba645,
+        "value": 0x1,
+        "set_bit": [(0x1ba6c8, 0x1)],
+        "id": 11,
     },
 
-    # ============= Spirits and Upgrades =============
-
+    # Spirits
     "Spirit of Power (Progressive)": {
-        'classification': ItemClassification.progression,
-        'progressive': [[0x1BA646, 0x20], [0x1BA647, 0x01], [0x1BA647, 0x08]]
+        "classification": ItemClassification.progression,
+        "progressive": [(0x1ba646, 0x20), (0x1ba647, 0x1), (0x1ba647, 0x8)],
+        "id": 12,
     },
     "Spirit of Wisdom (Progressive)": {
-        'classification': ItemClassification.progression,
-        'progressive': [[0x1BA646, 0x40], [0x1BA647, 0x02], [0x1BA647, 0x10]]
+        "classification": ItemClassification.progression,
+        "progressive": [(0x1ba646, 0x40), (0x1ba647, 0x2), (0x1ba647, 0x10)],
+        "id": 13,
     },
     "Spirit of Courage (Progressive)": {
-        'classification': ItemClassification.progression,
-        'progressive': [[0x1BA646, 0x10], [0x1BA646, 0x80], [0x1BA647, 0x04]]
+        "classification": ItemClassification.progression,
+        "progressive": [(0x1ba646, 0x10), (0x1ba646, 0x80), (0x1ba647, 0x4)],
+        "id": 14,
     },
     "Spirit of Courage White": {
-        'classification': ItemClassification.progression,
-        'address': None,
-        'dummy': True  # TODO won't be dummy once address exists
+        "classification": ItemClassification.progression,
+        "address": None,
+        "dummy": True,
+        "id": 15,
     },
+
+    # Upgrades
     "Heart Container": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'address': 0x1BA388,
-        'value': 4,
-        'incremental': True,
-        'size': 2
+        "classification": ItemClassification.progression,
+        "address": 0x1ba388,
+        "value": 0x4,
+        "incremental": True,
+        "size": 2,
+        "id": 16,
     },
     "Phantom Hourglass": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA528,
-        'value': "Sand PH",
-        'incremental': True,
-        'size': 4
+        "classification": ItemClassification.progression,
+        "address": 0x1ba528,
+        "value": "Sand PH",
+        "incremental": True,
+        "size": 4,
+        "id": 17,
     },
     "Sand of Hours (Boss)": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'address': 0x1BA528,
-        'value': 7200,
-        'incremental': True,
-        'size': 4
+        "classification": ItemClassification.progression,
+        "backup_filler": True,
+        "address": 0x1ba528,
+        "value": 0x1c20,
+        "incremental": True,
+        "size": 4,
+        "id": 18,
     },
     "Sand of Hours (Small)": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'address': 0x1BA528,
-        'value': 3600,
-        'incremental': True,
-        'size': 4
+        "classification": ItemClassification.progression,
+        "backup_filler": True,
+        "address": 0x1ba528,
+        "value": 0xe10,
+        "incremental": True,
+        "size": 4,
+        "id": 19,
     },
     "Sand of Hours": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'address': 0x1BA528,
-        'value': "Sand",
-        'incremental': True,
-        'size': 4
+        "classification": ItemClassification.progression,
+        "address": 0x1ba528,
+        "value": "Sand",
+        "incremental": True,
+        "size": 4,
+        "id": 20,
     },
     "Swordsman's Scroll": {
-        'classification': ItemClassification.useful,
-        'address': 0x1BA649,
-        'value': 0x20,
-
+        "classification": ItemClassification.useful,
+        "address": 0x1ba649,
+        "value": 0x20,
+        "id": 21,
     },
-    # ============= Ship Items =============
 
+    # Ship Items
     "Cannon": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B5582,
-        'value': 1
+        "classification": ItemClassification.progression,
+        "address": 0x1b5582,
+        "value": 0x1,
+        "id": 22,
     },
     "Salvage Arm": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA649,
-        'value': 0x10
+        "classification": ItemClassification.progression,
+        "address": 0x1ba649,
+        "value": 0x10,
+        "id": 23,
     },
     "Fishing Rod": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA649,
-        'value': 0x01,
+        "classification": ItemClassification.progression,
+        "address": 0x1ba649,
+        "value": 0x1,
+        "id": 24,
     },
     "Big Catch Lure": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA649,
-        'value': 0x80
+        "classification": ItemClassification.progression,
+        "address": 0x1ba649,
+        "value": 0x80,
+        "id": 25,
     },
     "Swordfish Shadows": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B55A7,
-        'value': 0x10
+        "classification": ItemClassification.progression,
+        "address": 0x1b55a7,
+        "value": 0x10,
+        "id": 26,
     },
     "Cyclone Slate": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA649,
-        'value': 0x40
+        "classification": ItemClassification.progression,
+        "address": 0x1ba649,
+        "value": 0x40,
+        "id": 27,
     },
-    # ========== Sea Charts ============
 
+    # Sea Charts
     "SW Sea Chart": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA648,
-        'value': 0x02
+        "classification": ItemClassification.progression,
+        "address": 0x1ba648,
+        "value": 0x2,
+        "id": 28,
     },
     "NW Sea Chart": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA648,
-        'value': 0x04
+        "classification": ItemClassification.progression,
+        "address": 0x1ba648,
+        "value": 0x4,
+        "id": 29,
     },
     "SE Sea Chart": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA648,
-        'value': 0x08,
-        'set_bit': [(0x1B557D, 0x8)]
+        "classification": ItemClassification.progression,
+        "address": 0x1ba648,
+        "value": 0x8,
+        "set_bit": [(0x1b557d, 0x8)],
+        "id": 30,
     },
     "NE Sea Chart": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA648,
-        'value': 0x10
+        "classification": ItemClassification.progression,
+        "address": 0x1ba648,
+        "value": 0x10,
+        "id": 31,
     },
 
-    # ========= Gems ==============
-
+    # Spirit gems
     "Power Gem": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'address': 0x1BA541,
-        'value': 1,
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba541,
+        "value": 0x1,
+        "incremental": True,
+        "id": 32,
     },
     "Wisdom Gem": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'address': 0x1BA542,
-        'value': 1,
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba542,
+        "value": 0x1,
+        "incremental": True,
+        "id": 33,
     },
     "Courage Gem": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'address': 0x1BA540,
-        'value': 1,
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba540,
+        "value": 0x1,
+        "incremental": True,
+        "id": 34,
     },
     "Power Gem Pack": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'address': 0x1BA541,
-        'value': "pack_size",
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba541,
+        "value": "pack_size",
+        "incremental": True,
+        "id": 35,
     },
     "Wisdom Gem Pack": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'address': 0x1BA542,
-        'value': "pack_size",
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba542,
+        "value": "pack_size",
+        "incremental": True,
+        "id": 36,
     },
     "Courage Gem Pack": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'address': 0x1BA540,
-        'value': "pack_size",
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba540,
+        "value": "pack_size",
+        "incremental": True,
+        "id": 37,
     },
 
-    # ========== Rupees and filler =============
-
+    # Rupees and filler
     "Green Rupee (1)": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA53E,
-        'value': 1,
-        'incremental': True,
-        'size': 2
+        "classification": ItemClassification.filler,
+        "address": 0x1ba53e,
+        "value": 0x1,
+        "incremental": True,
+        "size": 2,
+        "id": 38,
     },
     "Blue Rupee (5)": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA53E,
-        'value': 5,
-        'incremental': True,
-        'size': 2
+        "classification": ItemClassification.filler,
+        "address": 0x1ba53e,
+        "value": 0x5,
+        "incremental": True,
+        "size": 2,
+        "id": 39,
     },
     "Red Rupee (20)": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA53E,
-        'value': 20,
-        'incremental': True,
-        'size': 2,
+        "classification": ItemClassification.filler,
+        "address": 0x1ba53e,
+        "value": 0x14,
+        "incremental": True,
+        "size": 2,
+        "id": 40,
     },
     "Big Green Rupee (100)": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'backup_filler': True,
-        'address': 0x1BA53E,
-        'value': 100,
-        'incremental': True,
-        'size': 2
+        "classification": ItemClassification.progression_skip_balancing,
+        "backup_filler": True,
+        "address": 0x1ba53e,
+        "value": 0x64,
+        "incremental": True,
+        "size": 2,
+        "id": 41,
     },
     "Big Red Rupee (200)": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'backup_filler': True,
-        'address': 0x1BA53E,
-        'value': 200,
-        'incremental': True,
-        'size': 2
+        "classification": ItemClassification.progression_skip_balancing,
+        "backup_filler": True,
+        "address": 0x1ba53e,
+        "value": 0xc8,
+        "incremental": True,
+        "size": 2,
+        "id": 42,
     },
     "Gold Rupee (300)": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'backup_filler': True,
-        'address': 0x1BA53E,
-        'value': 300,
-        'incremental': True,
-        'size': 2
+        "classification": ItemClassification.progression_skip_balancing,
+        "backup_filler": True,
+        "address": 0x1ba53e,
+        "value": 0x12c,
+        "incremental": True,
+        "size": 2,
+        "id": 43,
     },
     "Rupoor (-10)": {
-        'classification': ItemClassification.trap,
-        'address': 0x1BA53E,
-        'value': -10,
-        'incremental': True,
-        'size': 2
+        "classification": ItemClassification.trap,
+        "address": 0x1ba53e,
+        "value": -0xa,
+        "incremental": True,
+        "size": 2,
+        "id": 44,
     },
     "Big Rupoor (-50)": {
-        'classification': ItemClassification.trap,
-        'address': 0x1BA53E,
-        'value': -50,
-        'incremental': True,
-        'size': 2
+        "classification": ItemClassification.trap,
+        "address": 0x1ba53e,
+        "value": -0x32,
+        "incremental": True,
+        "size": 2,
+        "id": 45,
     },
     "Pre-Alpha Rupee (5000)": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA53E,
-        'value': 5000,
-        'incremental': True,
-        'size': 2
+        "classification": ItemClassification.progression,
+        "address": 0x1ba53e,
+        "value": 0x1388,
+        "incremental": True,
+        "size": 2,
+        "id": 46,
     },
     "Treasure": {
-        'classification': ItemClassification.filler,
-        'incremental': True
+        "classification": ItemClassification.filler,
+        "incremental": True,
+        "id": 47,
     },
     "Ship Part": {
-        'classification': ItemClassification.filler,
-        'ship_part': True
+        "classification": ItemClassification.filler,
+        "ship_part": True,
+        "id": 48,
     },
     "Potion": {
-        'classification': ItemClassification.filler,
-        'dummy': True
+        "classification": ItemClassification.filler,
+        "dummy": True,
+        "id": 49,
     },
     "Red Potion": {
-        'classification': ItemClassification.filler,
-        'value': 100
+        "classification": ItemClassification.filler,
+        "value": 0x64,
+        "id": 50,
     },
     "Purple Potion": {
-        'classification': ItemClassification.filler,
-        'value': 100
+        "classification": ItemClassification.filler,
+        "value": 0x64,
+        "id": 51,
     },
     "Yellow Potion": {
-        'classification': ItemClassification.filler,
-        'value': 200
+        "classification": ItemClassification.filler,
+        "value": 0xc8,
+        "id": 52,
     },
     "Nothing!": {
-        'classification': ItemClassification.filler,
-        'dummy': True
+        "classification": ItemClassification.filler,
+        "dummy": True,
+        "id": 53,
     },
     "Refill: Bombs": {
-        'classification': ItemClassification.filler,
-        "give_ammo": [10, 20, 30],
-        "address": 0x1BA6C0,
-        "refill": "Bombs (Progressive)"
+        "classification": ItemClassification.filler,
+        "give_ammo": [0xa, 0x14, 0x1e],
+        "address": 0x1ba6c0,
+        "refill": "Bombs (Progressive)",
+        "id": 54,
     },
     "Refill: Arrows": {
-        'classification': ItemClassification.filler,
-        "give_ammo": [20, 30, 50],
-        "address": 0x1BA6C2,
-        "refill": "Bow (Progressive)"
+        "classification": ItemClassification.filler,
+        "give_ammo": [0x14, 0x1e, 0x32],
+        "address": 0x1ba6c2,
+        "refill": "Bow (Progressive)",
+        "id": 55,
     },
     "Refill: Bombchus": {
-        'classification': ItemClassification.filler,
-        "give_ammo": [10, 20, 30],
-        "address": 0x1BA6C6,
-        "refill": "Bombchus (Progressive)"
+        "classification": ItemClassification.filler,
+        "give_ammo": [0xa, 0x14, 0x1e],
+        "address": 0x1ba6c6,
+        "refill": "Bombchus (Progressive)",
+        "id": 56,
+    },
+    "Salvage Repair Kit": {
+        "classification": ItemClassification.filler,
+        "address": 0x1ba661,
+        "value": 0x1,
+        "id": 57,
+    },
+    "Refill: Health": {
+        "classification": ItemClassification.filler,
+        "value": "full_heal",
+        "id": 193,
     },
 
-    # ========= Treasure =============
-
+    # Treasure
     "Treasure: Pink Coral": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'backup_filler': True,
-        'treasure': True,
-        'address': 0x1BA5AC,
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "backup_filler": True,
+        "treasure": True,
+        "address": 0x1ba5ac,
+        "incremental": True,
+        "id": 58,
     },
     "Treasure: White Pearl Loop": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'backup_filler': True,
-        'treasure': True,
-        'address': 0x1BA5AD,
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "backup_filler": True,
+        "treasure": True,
+        "address": 0x1ba5ad,
+        "incremental": True,
+        "id": 59,
     },
     "Treasure: Dark Pearl Loop": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'backup_filler': True,
-        'treasure': True,
-        'address': 0x1BA5AE,
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "backup_filler": True,
+        "treasure": True,
+        "address": 0x1ba5ae,
+        "incremental": True,
+        "id": 60,
     },
     "Treasure: Zora Scale": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'backup_filler': True,
-        'treasure': True,
-        'address': 0x1BA5AF,
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "backup_filler": True,
+        "treasure": True,
+        "address": 0x1ba5af,
+        "incremental": True,
+        "id": 61,
     },
     "Treasure: Goron Amber": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'backup_filler': True,
-        'treasure': True,
-        'address': 0x1BA5B0,
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "backup_filler": True,
+        "treasure": True,
+        "address": 0x1ba5b0,
+        "incremental": True,
+        "id": 62,
     },
     "Treasure: Ruto Crown": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'backup_filler': True,
-        'treasure': True,
-        'address': 0x1BA5B1,
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "backup_filler": True,
+        "treasure": True,
+        "address": 0x1ba5b1,
+        "incremental": True,
+        "id": 63,
     },
     "Treasure: Helmaroc Plume": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'backup_filler': True,
-        'treasure': True,
-        'address': 0x1BA5B2,
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "backup_filler": True,
+        "treasure": True,
+        "address": 0x1ba5b2,
+        "incremental": True,
+        "id": 64,
     },
     "Treasure: Regal Ring": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'backup_filler': True,
-        'treasure': True,
-        'address': 0x1BA5B3,
-        'incremental': True
+        "classification": ItemClassification.progression_skip_balancing,
+        "backup_filler": True,
+        "treasure": True,
+        "address": 0x1ba5b3,
+        "incremental": True,
+        "id": 65,
     },
 
-    # =============== Treasure Maps ==============
-
+    # Salvage
     "Courage Crest": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B558C,
-        'value': 0x04,
-        'set_bit': [(0x1BA650, 1)]
+        "classification": ItemClassification.progression,
+        "address": 0x1b558c,
+        "value": 0x4,
+        "set_bit": [(0x1ba650, 0x1)],
+        "id": 66,
     },
-    "Treasure Map #1": {
+    "Treasure Map #1 (Molida SW)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba650,
         "value": 0x80,
-        "id": 0x42,
-        "hint_on_receive": ['Ocean SW Salvage #1 Molida SW'],
+        "id": 67,
+        "hint_on_receive": ["Ocean SW Salvage #1 Molida SW"],
     },
-    "Treasure Map #2": {
+    "Treasure Map #2 (Mercay NE)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba650,
         "value": 0x10,
-        "id": 0x43,
-        "hint_on_receive": ['Ocean SW Salvage #2 Mercay NE'],
+        "id": 68,
+        "hint_on_receive": ["Ocean SW Salvage #2 Mercay NE"],
     },
-    "Treasure Map #3": {
+    "Treasure Map #3 (Gusts SW)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba651,
         "value": 0x20,
-        "id": 0x44,
-        "hint_on_receive": ['Ocean NW Salvage #3 Gusts SW'],
+        "id": 69,
+        "hint_on_receive": ["Ocean NW Salvage #3 Gusts SW"],
     },
-    "Treasure Map #4": {
+    "Treasure Map #4 (Bannan SE)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba651,
         "value": 0x80,
-        "id": 0x45,
-        "hint_on_receive": ['Ocean NW Salvage #4 Bannan SE'],
+        "id": 70,
+        "hint_on_receive": ["Ocean NW Salvage #4 Bannan SE"],
     },
-    "Treasure Map #5": {
+    "Treasure Map #5 (Molida N)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba650,
         "value": 0x40,
-        "id": 0x46,
-        "hint_on_receive": ['Ocean SW Salvage #5 Molida N'],
+        "id": 71,
+        "hint_on_receive": ["Ocean SW Salvage #5 Molida N"],
     },
-    "Treasure Map #6": {
+    "Treasure Map #6 (Bannan W)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba651,
         "value": 0x1,
-        "id": 0x47,
-        "hint_on_receive": ['Ocean NW Salvage #6 Bannan W'],
+        "id": 72,
+        "hint_on_receive": ["Ocean NW Salvage #6 Bannan W"],
     },
-    "Treasure Map #7": {
+    "Treasure Map #7 (Gusts E)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba651,
         "value": 0x8,
-        "id": 0x48,
-        "hint_on_receive": ['Ocean NW Salvage #7 Gusts E'],
+        "id": 73,
+        "hint_on_receive": ["Ocean NW Salvage #7 Gusts E"],
     },
-    "Treasure Map #8": {
+    "Treasure Map #8 (Mercay SE)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba650,
         "value": 0x8,
-        "id": 0x49,
-        "hint_on_receive": ['Ocean SW Salvage #8 Mercay SE'],
+        "id": 74,
+        "hint_on_receive": ["Ocean SW Salvage #8 Mercay SE"],
     },
-    "Treasure Map #9": {
+    "Treasure Map #9 (Cannon W)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba650,
         "value": 0x2,
-        "id": 0x4a,
-        "hint_on_receive": ['Ocean SW Salvage #9 Cannon W'],
+        "id": 75,
+        "hint_on_receive": ["Ocean SW Salvage #9 Cannon W"],
     },
-    "Treasure Map #10": {
+    "Treasure Map #10 (Gusts SE)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba651,
         "value": 0x10,
-        "id": 0x4b,
-        "hint_on_receive": ['Ocean NW Salvage #10 Gusts SE'],
+        "id": 76,
+        "hint_on_receive": ["Ocean NW Salvage #10 Gusts SE"],
     },
-    "Treasure Map #11": {
+    "Treasure Map #11 (Gusts N)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba651,
         "value": 0x2,
-        "id": 0x4c,
-        "hint_on_receive": ['Ocean NW Salvage #11 Gusts N'],
+        "id": 77,
+        "hint_on_receive": ["Ocean NW Salvage #11 Gusts N"],
     },
-    "Treasure Map #12": {
+    "Treasure Map #12 (Dee Ess N)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba652,
         "value": 0x20,
-        "id": 0x4d,
-        "hint_on_receive": ['Ocean SE Salvage #12 Dee Ess N'],
+        "id": 78,
+        "hint_on_receive": ["Ocean SE Salvage #12 Dee Ess N"],
     },
-    "Treasure Map #13": {
+    "Treasure Map #13 (Harrow E)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba652,
         "value": 0x4,
-        "id": 0x4e,
-        "hint_on_receive": ['Ocean SE Salvage #13 Harrow E'],
+        "id": 79,
+        "hint_on_receive": ["Ocean SE Salvage #13 Harrow E"],
     },
-    "Treasure Map #14": {
+    "Treasure Map #14 (Goron NW)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba652,
         "value": 0x1,
-        "id": 0x4f,
-        "hint_on_receive": ['Ocean SE Salvage #14 Goron NW'],
+        "id": 80,
+        "hint_on_receive": ["Ocean SE Salvage #14 Goron NW"],
     },
-    "Treasure Map #15": {
+    "Treasure Map #15 (Goron W)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba652,
         "value": 0x2,
-        "id": 0x50,
-        "hint_on_receive": ['Ocean SE Salvage #15 Goron W'],
+        "id": 81,
+        "hint_on_receive": ["Ocean SE Salvage #15 Goron W"],
     },
-    "Treasure Map #16": {
+    "Treasure Map #16 (Goron NE)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba652,
         "value": 0x10,
-        "id": 0x51,
-        "hint_on_receive": ['Ocean SE Salvage #16 Goron NE'],
+        "id": 82,
+        "hint_on_receive": ["Ocean SE Salvage #16 Goron NE"],
     },
-    "Treasure Map #17": {
+    "Treasure Map #17 (Frost S)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba652,
         "value": 0x40,
-        "id": 0x52,
-        "hint_on_receive": ['Ocean SE Salvage #17 Frost S'],
+        "id": 83,
+        "hint_on_receive": ["Ocean SE Salvage #17 Frost S"],
     },
-    "Treasure Map #18": {
+    "Treasure Map #18 (Cannon S)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba650,
         "value": 0x4,
-        "id": 0x53,
-        "hint_on_receive": ['Ocean SW Salvage #18 Cannon S'],
+        "id": 84,
+        "hint_on_receive": ["Ocean SW Salvage #18 Cannon S"],
     },
-    "Treasure Map #19": {
+    "Treasure Map #19 (Gusts NE)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba651,
         "value": 0x4,
-        "id": 0x54,
-        "hint_on_receive": ['Ocean NW Salvage #19 Gusts NE'],
+        "id": 85,
+        "hint_on_receive": ["Ocean NW Salvage #19 Gusts NE"],
     },
-    "Treasure Map #20": {
+    "Treasure Map #20 (Bannan E)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba651,
         "value": 0x40,
-        "id": 0x55,
-        "hint_on_receive": ['Ocean NW Salvage #20 Bannan E'],
+        "id": 86,
+        "hint_on_receive": ["Ocean NW Salvage #20 Bannan E"],
     },
-    "Treasure Map #21": {
+    "Treasure Map #21 (Molida NW)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba650,
         "value": 0x20,
-        "id": 0x56,
-        "hint_on_receive": ['Ocean SW Salvage #21 Molida NW'],
+        "id": 87,
+        "hint_on_receive": ["Ocean SW Salvage #21 Molida NW"],
     },
-    "Treasure Map #22": {
+    "Treasure Map #22 (Harrow S)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba652,
         "value": 0x8,
-        "id": 0x57,
-        "hint_on_receive": ['Ocean SE Salvage #22 Harrow S'],
+        "id": 88,
+        "hint_on_receive": ["Ocean SE Salvage #22 Harrow S"],
     },
-    "Treasure Map #23": {
+    "Treasure Map #23 (Frost NW)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba652,
         "value": 0x80,
-        "id": 0x58,
-        "hint_on_receive": ['Ocean SE Salvage #23 Frost NW'],
+        "id": 89,
+        "hint_on_receive": ["Ocean SE Salvage #23 Frost NW"],
     },
-    "Treasure Map #24": {
+    "Treasure Map #24 (Ruins W)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba653,
         "value": 0x2,
-        "id": 0x59,
-        "hint_on_receive": ['Ocean NE Salvage #24 Ruins W'],
+        "id": 90,
+        "hint_on_receive": ["Ocean NE Salvage #24 Ruins W"],
     },
-    "Treasure Map #25": {
+    "Treasure Map #25 (Dead E)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba653,
         "value": 0x4,
-        "id": 0x5a,
-        "hint_on_receive": ['Ocean NE Salvage #25 Dead E'],
+        "id": 91,
+        "hint_on_receive": ["Ocean NE Salvage #25 Dead E"],
     },
-    "Treasure Map #26": {
+    "Treasure Map #26 (Ruins SW)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba653,
         "value": 0x20,
-        "id": 0x5b,
-        "hint_on_receive": ['Ocean NE Salvage #26 Ruins SW'],
+        "id": 92,
+        "hint_on_receive": ["Ocean NE Salvage #26 Ruins SW"],
     },
-    "Treasure Map #27": {
+    "Treasure Map #27 (Maze E)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba653,
         "value": 0x8,
-        "id": 0x5c,
-        "hint_on_receive": ['Ocean NE Salvage #27 Maze E'],
+        "id": 93,
+        "hint_on_receive": ["Ocean NE Salvage #27 Maze E"],
     },
-    "Treasure Map #28": {
+    "Treasure Map #28 (Ruins NW)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba653,
         "value": 0x1,
-        "id": 0x5d,
-        "hint_on_receive": ['Ocean NE Salvage #28 Ruins NW'],
+        "id": 94,
+        "hint_on_receive": ["Ocean NE Salvage #28 Ruins NW"],
     },
-    "Treasure Map #29": {
+    "Treasure Map #29 (Maze W)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba653,
         "value": 0x10,
-        "id": 0x5e,
-        "hint_on_receive": ['Ocean NE Salvage #29 Maze W'],
+        "id": 95,
+        "hint_on_receive": ["Ocean NE Salvage #29 Maze W"],
     },
-    "Treasure Map #30": {
+    "Treasure Map #30 (Ruins S)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba653,
         "value": 0x40,
-        "id": 0x5f,
-        "hint_on_receive": ['Ocean NE Salvage #30 Ruins S'],
+        "id": 96,
+        "hint_on_receive": ["Ocean NE Salvage #30 Ruins S"],
     },
-    "Treasure Map #31": {
+    "Treasure Map #31 (Dead S)": {
         "classification": ItemClassification.progression_skip_balancing,
         "address": 0x1ba653,
         "value": 0x80,
-        "id": 0x60,
-        "hint_on_receive": ['Ocean NE Salvage #31 Dead S'],
+        "id": 97,
+        "hint_on_receive": ["Ocean NE Salvage #31 Dead S"],
     },
 
-
-    # =========== Keys ============
-
+    # Keys
     "Small Key (Mountain Passage)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 39,
-        'incremental': True
+        "classification": ItemClassification.progression,
+        "dungeon": 0x27,
+        "incremental": True,
+        "id": 98,
     },
     "Small Key (Temple of the Ocean King)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 37,
-        'incremental': True
+        "classification": ItemClassification.progression,
+        "dungeon": 0x25,
+        "incremental": True,
+        "id": 99,
     },
     "Small Key (Temple of Fire)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 0x1C,
-        'incremental': True
+        "classification": ItemClassification.progression,
+        "dungeon": 0x1c,
+        "incremental": True,
+        "id": 100,
     },
     "Small Key (Temple of Wind)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 0x1D,
-        'incremental': True
+        "classification": ItemClassification.progression,
+        "dungeon": 0x1d,
+        "incremental": True,
+        "id": 101,
     },
     "Small Key (Temple of Courage)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 0x1E,
-        'incremental': True
+        "classification": ItemClassification.progression,
+        "dungeon": 0x1e,
+        "incremental": True,
+        "id": 102,
     },
     "Small Key (Temple of Ice)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 0x1F,
-        'incremental': True
+        "classification": ItemClassification.progression,
+        "dungeon": 0x1f,
+        "incremental": True,
+        "id": 103,
     },
     "Small Key (Mutoh's Temple)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 0x21,
-        'incremental': True
+        "classification": ItemClassification.progression,
+        "dungeon": 0x21,
+        "incremental": True,
+        "id": 104,
     },
     "Boss Key (Temple of Fire)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dungeon": True,
+        "dummy": True,
+        "id": 105,
     },
     "Boss Key (Temple of Wind)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': 0x1D,
-        'dummy': True
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dungeon": 0x1d,
+        "dummy": True,
+        "id": 106,
     },
     "Boss Key (Temple of Courage)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dungeon": True,
+        "dummy": True,
+        "id": 107,
     },
     "Boss Key (Goron Temple)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dungeon": True,
+        "dummy": True,
+        "id": 108,
     },
     "Boss Key (Temple of Ice)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dungeon": True,
+        "dummy": True,
+        "id": 109,
     },
     "Boss Key (Mutoh's Temple)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dungeon": True,
+        "dummy": True,
+        "id": 110,
     },
     "Square Crystal (Temple of Courage)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True,
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dungeon": True,
+        "dummy": True,
+        "id": 111,
     },
     "Triangle Crystal (Ghost Ship)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True,
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dungeon": True,
+        "dummy": True,
+        "id": 112,
     },
     "Round Crystal (Ghost Ship)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True,
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dungeon": True,
+        "dummy": True,
+        "id": 113,
     },
     "Round Crystal (Temple of the Ocean King)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dummy': True,
-        'dungeon': 37,
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dummy": True,
+        "dungeon": 0x25,
+        "id": 114,
     },
     "Triangle Crystal (Temple of the Ocean King)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dummy': True,
-        'dungeon': 37,
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dummy": True,
+        "dungeon": 0x25,
+        "id": 115,
+    },
+    "Square Crystal (Temple of the Ocean King)": {
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dungeon": True,
+        "dummy": True,
+        "id": 116,
     },
     "Force Gem (B3)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dummy': True,
-        'dungeon': 37,
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dummy": True,
+        "dungeon": 0x25,
+        "id": 117,
     },
     "Force Gem (B12)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dummy': True,
-        'dungeon': 37,
+        "classification": ItemClassification.progression,
+        "force_vanilla": True,
+        "dummy": True,
+        "dungeon": 0x25,
+        "id": 118,
     },
     "Triforce Crest": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B5580,
-        'value': 0x02
+        "classification": ItemClassification.progression,
+        "address": 0x1b5580,
+        "value": 0x2,
+        "id": 119,
     },
     "Sun Key": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA648,
-        'value': 0x40
+        "classification": ItemClassification.progression,
+        "address": 0x1ba648,
+        "value": 0x40,
+        "id": 120,
     },
     "Ghost Key": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA649,
-        'value': 0x08
+        "classification": ItemClassification.progression,
+        "address": 0x1ba649,
+        "value": 0x8,
+        "id": 121,
     },
     "King's Key": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA649,
-        'value': 0x04
+        "classification": ItemClassification.progression,
+        "address": 0x1ba649,
+        "value": 0x4,
+        "id": 122,
     },
     "Regal Necklace": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B5582,
-        'value': 0x08
+        "classification": ItemClassification.progression,
+        "address": 0x1b5582,
+        "value": 0x8,
+        "id": 123,
     },
+
+    # Metals
     "Crimzonine": {
-        'classification': ItemClassification.progression,
-        "address": 0x1B558B,
-        "value": 0x40
+        "classification": ItemClassification.progression,
+        "address": 0x1b558b,
+        "value": 0x40,
+        "id": 124,
     },
     "Azurine": {
-        'classification': ItemClassification.progression,
-        "address": 0x1B558B,
-        "value": 0x20
+        "classification": ItemClassification.progression,
+        "address": 0x1b558b,
+        "value": 0x20,
+        "id": 125,
     },
     "Aquanine": {
-        'classification': ItemClassification.progression,
-        "address": 0x1B558B,
-        "value": 0x80
+        "classification": ItemClassification.progression,
+        "address": 0x1b558b,
+        "value": 0x80,
+        "id": 126,
     },
     "Rare Metal": {
-        'classification': ItemClassification.progression,
-        'dummy': True
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 127,
     },
     "Additional Rare Metal": {
-        'classification': ItemClassification.progression,
-        'dummy': True
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 128,
     },
-    # Trade Quest and misc
+    "Verdanine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 129,
+    },
+    "Lavendine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 130,
+    },
+    "Amberine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 131,
+    },
+    "Vermilline": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 132,
+    },
+    "Burgundine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 133,
+    },
+    "Crystaline": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 134,
+    },
+    "Carrotine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 135,
+    },
+    "Olivine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 136,
+    },
+    "Chartreusine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 137,
+    },
+    "Violetine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 138,
+    },
+    "Ceruline": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 139,
+    },
+    "Fuchsianine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 140,
+    },
+    "Saffrine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 141,
+    },
+    "Sepianine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 142,
+    },
+    "Apricotine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 143,
+    },
+    "Scarletine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 144,
+    },
+    "Coraline": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 145,
+    },
+    "Magentine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 146,
+    },
+    "Cyanine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 147,
+    },
+    "Mauvine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 148,
+    },
+    "Indigorine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 149,
+    },
+    "Junipine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 150,
+    },
+    "Viridine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 151,
+    },
+    "Limeinine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 152,
+    },
+    "Mintine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 153,
+    },
+    "Umberine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 154,
+    },
+    "Lilacine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 155,
+    },
+    "Saffronine": {
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 156,
+    },
 
+    # Trade Quest
     "Hero's New Clothes": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B5590,
-        'value': 0x4
+        "classification": ItemClassification.progression,
+        "address": 0x1b5590,
+        "value": 0x4,
+        "id": 157,
     },
     "Kaleidoscope": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B5590,
-        'value': 0x8
+        "classification": ItemClassification.progression,
+        "address": 0x1b5590,
+        "value": 0x8,
+        "id": 158,
     },
     "Guard Notebook": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B5590,
-        'value': 0x10
+        "classification": ItemClassification.progression,
+        "address": 0x1b5590,
+        "value": 0x10,
+        "id": 159,
     },
     "Wood Heart": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B5590,
-        'value': 0x80
+        "classification": ItemClassification.progression,
+        "address": 0x1b5590,
+        "value": 0x80,
+        "id": 160,
     },
     "Phantom Blade": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B5592,
-        'value': 0x20
+        "classification": ItemClassification.progression,
+        "address": 0x1b5592,
+        "value": 0x20,
+        "id": 161,
+    },
+
+    # Letters and cards
+    "Freebie Card": {
+        "classification": ItemClassification.progression,
+        "address": 0x1b558a,
+        "value": 0x40,
+        "id": 162,
+        "backup_filler": True
+    },
+    "Member's Card (Progressive)": {
+        "classification": ItemClassification.progression,
+        "progressive": [(0x1B5588, 0x40), (0x1b558e, 0x20), (0x1b558e, 0x40), (0x1b558e, 0x80), (0x1b558f, 0x1)],
+        "id": 163,
+    },
+    "Complimentary Card": {
+        "classification": ItemClassification.filler,
+        "address": 0x1b558a,
+        "value": 0x20,
+        "id": 164,
+    },
+    "Compliment Card": {
+        "classification": ItemClassification.filler,
+        "address": 0x1b558a,
+        "value": 0x80,
+        "id": 190,
+    },
+    "Jolene's Letter": {
+        "classification": ItemClassification.progression,
+        "address": 0x1b5590,
+        "value": 0x20,
+        "id": 165,
+    },
+    "Prize Postcard": {
+        "classification": ItemClassification.filler,
+        "address": 0x1b558f,
+        "value": 0x8,
+        "id": 166,
+    },
+    "Beedle Points (10)": {
+        "classification": ItemClassification.progression,
+        "address": 0x1B2773,
+        "value": 10,
+        "id": 167,
+    },
+    "Beedle Points (20)": {
+        "classification": ItemClassification.progression,
+        "address": 0x1B2773,
+        "value": 20,
+        "id": 191,
+    },
+    "Beedle Points (50)": {
+        "classification": ItemClassification.progression,
+        "address": 0x1B2773,
+        "value": 50,
+        "id": 192,
     },
 
     # Frogs
     "Golden Frog Glyph X": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B55A2,
-        'value': 0x80
+        "classification": ItemClassification.progression,
+        "address": 0x1b55a2,
+        "value": 0x80,
+        "id": 168,
     },
     "Golden Frog Glyph Phi": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B55A3,
-        'value': 0x01
+        "classification": ItemClassification.progression,
+        "address": 0x1b55a3,
+        "value": 0x1,
+        "id": 169,
     },
     "Golden Frog Glyph N": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B55A3,
-        'value': 0x02
+        "classification": ItemClassification.progression,
+        "address": 0x1b55a3,
+        "value": 0x2,
+        "id": 170,
     },
     "Golden Frog Glyph Omega": {
-        'classification': ItemClassification.useful,
-        'address': 0x1B55A3,
-        'value': 0x04
+        "classification": ItemClassification.useful,
+        "address": 0x1b55a3,
+        "value": 0x4,
+        "id": 171,
     },
     "Golden Frog Glyph W": {
-        'classification': ItemClassification.useful,
-        'address': 0x1B55A3,
-        'value': 0x08
+        "classification": ItemClassification.useful,
+        "address": 0x1b55a3,
+        "value": 0x8,
+        "id": 172,
     },
     "Golden Frog Glyph Square": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B55A3,
-        'value': 0x10
+        "classification": ItemClassification.progression,
+        "address": 0x1b55a3,
+        "value": 0x10,
+        "id": 173,
     },
 
     # Ships
+    "Ship: SS Linebeck": {
+        "classification": ItemClassification.filler,
+        "id": 174,
+    },
     "Ship: Bright Ship": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'ship': 1
+        "classification": ItemClassification.useful,
+        "backup_filler": True,
+        "ship": 0x1,
+        "id": 175,
     },
     "Ship: Iron Ship": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'ship': 2
+        "classification": ItemClassification.useful,
+        "backup_filler": True,
+        "ship": 0x2,
+        "id": 176,
     },
     "Ship: Stone Ship": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'ship': 3
+        "classification": ItemClassification.useful,
+        "backup_filler": True,
+        "ship": 0x3,
+        "id": 177,
     },
     "Ship: Vintage Ship": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'ship': 4
+        "classification": ItemClassification.useful,
+        "backup_filler": True,
+        "ship": 0x4,
+        "id": 178,
     },
     "Ship: Demon Ship": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'ship': 5
+        "classification": ItemClassification.useful,
+        "backup_filler": True,
+        "ship": 0x5,
+        "id": 179,
     },
     "Ship: Tropical Ship": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'ship': 6
+        "classification": ItemClassification.useful,
+        "backup_filler": True,
+        "ship": 0x6,
+        "id": 180,
     },
     "Ship: Dignified Ship": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'ship': 7
+        "classification": ItemClassification.useful,
+        "backup_filler": True,
+        "ship": 0x7,
+        "id": 181,
     },
     "Ship: Golden Ship": {
-        'classification': ItemClassification.useful,
-        'backup_filler': True,
-        'ship': 8
+        "classification": ItemClassification.useful,
+        "backup_filler": True,
+        "ship": 0x8,
+        "id": 182,
     },
+
     # Fish
     "Fish: Skippyjack": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA5B4,
-        'value': 1,
-        'incremental': True,
-        'size': 1
+        "classification": ItemClassification.filler,
+        "address": 0x1ba5b4,
+        "value": 0x1,
+        "incremental": True,
+        "size": 1,
+        "id": 183,
     },
     "Fish: Toona": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA5B5,
-        'value': 1,
-        'incremental': True,
-        'size': 1
+        "classification": ItemClassification.filler,
+        "address": 0x1ba5b5,
+        "value": 0x1,
+        "incremental": True,
+        "size": 1,
+        "id": 184,
     },
     "Fish: Loovar": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'address': 0x1BA5B6,
-        'value': 1,
-        'incremental': True,
-        'size': 1
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba5b6,
+        "value": 0x1,
+        "incremental": True,
+        "size": 1,
+        "id": 185,
     },
     "Fish: Rusty Swordfish": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'address': 0x1BA5B7,
-        'value': 1,
-        'incremental': True,
-        'size': 1
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba5b7,
+        "value": 0x1,
+        "incremental": True,
+        "size": 1,
+        "id": 186,
     },
     "Fish: Legendary Neptoona": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'address': 0x1BA5B8,
-        'value': 1,
-        'incremental': True,
-        'size': 1
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba5b8,
+        "value": 0x1,
+        "incremental": True,
+        "size": 1,
+        "id": 187,
     },
     "Fish: Stowfish": {
-        'classification': ItemClassification.progression_skip_balancing,
-        'address': 0x1BA5B9,
-        'value': 1,
-        'incremental': True,
-        'size': 1
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba5b9,
+        "value": 0x1,
+        "incremental": True,
+        "size": 1,
+        "id": 188,
     },
     "_UT_Glitched_logic": {
-        'classification': ItemClassification.progression,
-        'dummy': True
-    }
+        "classification": ItemClassification.progression,
+        "dummy": True,
+        "id": 189,
+    },
+
 }
 
 
-# Oops apparently not a constant lul (it will be after this)
-for i, k in enumerate(ITEMS_DATA):
-    ITEMS_DATA[k]["id"] = i+1
+# IDs are now fixed!!!
+"""for i, k in enumerate(ITEMS_DATA):
+    ITEMS_DATA[k]["id"] = i+1"""
 
+# bulk data editing / export
 if __name__ == "__main__":
     for name, data in ITEMS_DATA.items():
-        if "Treasure Map" in name:
-            i = int(name[name.find("#")+1:])
-
-            loc = LOCATION_GROUPS["Salvage Locations"][i-1]
-            data["hint_on_receive"] = [loc]
-            print(f"\t\"{name}\": " + "{")
-            for key, value in data.items():
-                if type(value) is str:
-                    print(f"\t\t\"{key}\": \"{value}\",")
-                elif key == "classification":
-                    print(f"\t\t\"{key}\": ItemClassification.progression_skip_balancing,")
-                elif type(value) is int:
-                    print(f"\t\t\"{key}\": {hex(value)},")
-                elif key != "id":
+        if "progressive" not in data and "dummy" not in data:
+            if "value" not in data:
+                address = data.get('address', 0)
+                if address is not None:
+                    print(f"{name}, {hex(address)}")
+"""
+    keys = set()
+    for name, data in ITEMS_DATA.items():
+        for key in data:
+            keys.add(key)
+    for i in keys:
+        print(i)
+    # print(f"\t\"{name}\": " + "{")
+"""
+"""
+        for key, value in data.items():
+            if type(value) is str:
+                print(f"\t\t\"{key}\": \"{value}\",")
+            elif key == "classification":
+                print(f"\t\t\"{key}\": ItemClassification.{CLASSIFICATION[value]},")
+            elif type(value) is int:
+                if key in ["id", "size"]:
                     print(f"\t\t\"{key}\": {value},")
-            print("\t},")
-
+                else:
+                    print(f"\t\t\"{key}\": {hex(value)},")
+            elif type(value) is list:
+                l_print = "["
+                for i in value:
+                    if type(i) is tuple or type(i) is list:
+                        l_print += "("
+                        for j in i:
+                            if type(j) is int:
+                                l_print += f"{hex(j)}, "
+                            elif type(j) is str:
+                                l_print += f"\"{j}\", "
+                            else:
+                                l_print += f"{j}, "
+                        l_print = l_print[:-2]
+                        l_print += "), "
+                    else:
+                        if type(i) is int:
+                            l_print += f"{hex(i)}, "
+                        elif type(i) is str:
+                            l_print += f"\"{i}\", "
+                        else:
+                            l_print += f"{i}, "
+                l_print = l_print[:-2]
+                l_print += "]"
+                print(f"\t\t\"{key}\": {l_print},")
+            else:
+                print(f"\t\t\"{key}\": {value},")
+        print("\t},")
+"""
