@@ -15,8 +15,8 @@ def ap_id_to_oot_data(ap_id):
     offset = 66000
     val = ap_id - offset
     try:
-        return list(filter(lambda d: d[1][0] == 'Item' and d[1][2] == val, item_table.items()))[0]
-    except IndexError:
+        return next(filter(lambda d: d[1][0] == 'Item' and d[1][2] == val, item_table.items()))
+    except StopIteration:
         raise Exception(f'Could not find desired item ID: {ap_id}')
 
 

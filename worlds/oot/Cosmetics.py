@@ -373,14 +373,12 @@ def patch_trails(rom, ootworld, trails):
 
 def patch_gauntlet_colors(rom, ootworld, symbols):
     gauntlets = [
-        ('Silver Gauntlets', 'silver_gauntlets_color', 0x00B6DA44,
-            ([0x173B4CC], [0x173B4D4, 0x173B50C, 0x173B514])), # GI Model DList colors
-        ('Gold Gauntlets', 'golden_gauntlets_color',  0x00B6DA47,
-            ([0x173B4EC], [0x173B4F4, 0x173B52C, 0x173B534])), # GI Model DList colors
+        ('silver_gauntlets_color', 0x00B6DA44, ([0x173B4CC], [0x173B4D4, 0x173B50C, 0x173B514])), # GI Model DList colors
+        ('golden_gauntlets_color',  0x00B6DA47, ([0x173B4EC], [0x173B4F4, 0x173B52C, 0x173B534])), # GI Model DList colors
     ]
     gauntlet_color_list = get_gauntlet_colors()
 
-    for gauntlet, gauntlet_setting, address, model_addresses in gauntlets:
+    for gauntlet_setting, address, model_addresses in gauntlets:
         gauntlet_option = format_cosmetic_option_result(ootworld.__dict__[gauntlet_setting])
 
         # handle random
@@ -404,13 +402,13 @@ def patch_gauntlet_colors(rom, ootworld, symbols):
 
 def patch_shield_frame_colors(rom, ootworld, symbols):
     shield_frames = [
-        ('Mirror Shield Frame', 'mirror_shield_frame_color',
+        ('mirror_shield_frame_color',
             [0xFA7274, 0xFA776C, 0xFAA27C, 0xFAC564, 0xFAC984, 0xFAEDD4],
             ([0x1616FCC], [0x1616FD4])),
     ]
     shield_frame_color_list = get_shield_frame_colors()
 
-    for shield_frame, shield_frame_setting, addresses, model_addresses in shield_frames:
+    for shield_frame_setting, addresses, model_addresses in shield_frames:
         shield_frame_option = format_cosmetic_option_result(ootworld.__dict__[shield_frame_setting])
 
         # handle random
@@ -436,14 +434,14 @@ def patch_shield_frame_colors(rom, ootworld, symbols):
 
 def patch_heart_colors(rom, ootworld, symbols):
     hearts = [
-        ('Heart Color', 'heart_color', symbols['CFG_HEART_COLOR'], 0xBB0994,
+        ('heart_color', symbols['CFG_HEART_COLOR'], 0xBB0994,
             ([0x14DA474, 0x14DA594, 0x14B701C, 0x14B70DC],
              [0x14B70FC, 0x14DA494, 0x14DA5B4, 0x14B700C, 0x14B702C, 0x14B703C, 0x14B704C, 0x14B705C,
               0x14B706C, 0x14B707C, 0x14B708C, 0x14B709C, 0x14B70AC, 0x14B70BC, 0x14B70CC])), # GI Model DList colors
     ]
     heart_color_list = get_heart_colors()
 
-    for heart, heart_setting, symbol, file_select_address, model_addresses in hearts:
+    for heart_setting, symbol, file_select_address, model_addresses in hearts:
         heart_option = format_cosmetic_option_result(ootworld.__dict__[heart_setting])
 
         # handle random
@@ -475,12 +473,12 @@ def patch_heart_colors(rom, ootworld, symbols):
 
 def patch_magic_colors(rom, ootworld, symbols):
     magic = [
-        ('Magic Meter Color', 'magic_color', symbols["CFG_MAGIC_COLOR"],
+        ('magic_color', symbols["CFG_MAGIC_COLOR"],
             ([0x154C654, 0x154CFB4], [0x154C65C, 0x154CFBC])), # GI Model DList colors
     ]
     magic_color_list = get_magic_colors()
 
-    for magic_color, magic_setting, symbol, model_addresses in magic:
+    for magic_setting, symbol, model_addresses in magic:
         magic_option = format_cosmetic_option_result(ootworld.__dict__[magic_setting])
 
         if magic_option == 'Random Choice':
@@ -505,7 +503,7 @@ def patch_magic_colors(rom, ootworld, symbols):
 
 def patch_button_colors(rom, ootworld, symbols):
     buttons = [
-        ('A Button Color', 'a_button_color', a_button_colors,
+        ('a_button_color', a_button_colors,
             [('A Button Color', symbols['CFG_A_BUTTON_COLOR'],
                 None),
              ('Text Cursor Color', symbols['CFG_TEXT_CURSOR_COLOR'],
@@ -521,11 +519,11 @@ def patch_button_colors(rom, ootworld, symbols):
              ('A Note Color', symbols['CFG_A_NOTE_COLOR'], # For Textbox Song Display
                 [(0xBB299A, 0xBB299B, 0xBB299E), (0xBB2C8E, 0xBB2C8F, 0xBB2C92), (0xBB2F8A, 0xBB2F8B, 0xBB2F96)]), # Pause Menu Song Display
             ]),
-        ('B Button Color', 'b_button_color', b_button_colors,
+        ('b_button_color', b_button_colors,
             [('B Button Color', symbols['CFG_B_BUTTON_COLOR'],
                 None),
             ]),
-        ('C Button Color', 'c_button_color', c_button_colors,
+        ('c_button_color', c_button_colors,
             [('C Button Color', symbols['CFG_C_BUTTON_COLOR'],
                 None),
              ('Pause Menu C Cursor Color', None,
@@ -535,13 +533,13 @@ def patch_button_colors(rom, ootworld, symbols):
              ('C Note Color', symbols['CFG_C_NOTE_COLOR'], # For Textbox Song Display
                 [(0xBB2996, 0xBB2997, 0xBB29A2), (0xBB2C8A, 0xBB2C8B, 0xBB2C96), (0xBB2F86, 0xBB2F87, 0xBB2F9A)]), # Pause Menu Song Display
             ]),
-        ('Start Button Color', 'start_button_color', start_button_colors,
+        ('start_button_color', start_button_colors,
             [('Start Button Color', None,
                 [(0xAE9EC6, 0xAE9EC7, 0xAE9EDA)]),
             ]),
     ]
 
-    for button, button_setting, button_colors, patches in buttons:
+    for button_setting, button_colors, patches in buttons:
         button_option = format_cosmetic_option_result(ootworld.__dict__[button_setting])
         color_set = None
         colors = {}

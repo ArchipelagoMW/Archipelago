@@ -33,6 +33,8 @@ rule_aliases = {}
 nonaliases = set()
 
 def load_aliases():
+    global nonaliases
+
     j = read_json(data_path('LogicHelpers.json'))
     for s, repl in j.items():
         if '(' in s:

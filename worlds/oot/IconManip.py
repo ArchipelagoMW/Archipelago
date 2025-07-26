@@ -10,7 +10,7 @@ def add_hue(image, color, tiff=False):
         try:
             for x in range(3):
                 image[i + x] = int(((image[i + x]/255) * (color[x]/255)) * 255)
-        except:
+        except Exception:
             pass
     return image
 
@@ -24,7 +24,7 @@ def add_belt(tunic, belt, tiff=False):
                 alpha = belt[i + 3] / 255
                 for x in range(3):
                     tunic[i + x] = int((belt[i + x] * alpha) + (tunic[i + x] * (1 - alpha)))
-        except:
+        except Exception:
             pass
     return tunic
 

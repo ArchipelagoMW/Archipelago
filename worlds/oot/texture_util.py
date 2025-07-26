@@ -77,22 +77,20 @@ def apply_rgba16_patch(rgba16_texture, rgba16_patch):
 
 def save_rgba16_texture(rgba16_texture, fileStr):
     """Save a rgba16 texture to a file"""
-    file = open(fileStr, 'wb')
     bytes = bytearray()
     for pixel in rgba16_texture:
         bytes.extend(pixel.to_bytes(2, 'big'))
-    file.write(bytes)
-    file.close()
+    with open(fileStr, 'wb') as file:
+        file.write(bytes)
 
 
 def save_ci8_texture(ci8_texture, fileStr):
     """Save a ci8 texture to a file"""
-    file = open(fileStr, 'wb')
     bytes = bytearray()
     for pixel in ci8_texture:
         bytes.extend(pixel.to_bytes(1, 'big'))
-    file.write(bytes)
-    file.close()
+    with open(fileStr, 'wb') as file:
+        file.write(bytes)
 
 
 def load_rgba16_texture_from_rom(rom: Rom, base_texture_address, size):
@@ -116,11 +114,10 @@ def load_rgba16_texture(fileStr, size):
     size - number of 16-bit pixels in the texture.
     """
     texture = []
-    file = open(fileStr, 'rb')
-    for i in range(0, size):
-        texture.append(int.from_bytes(file.read(2), 'big'))
+    with open(fileStr, 'rb') as file:
+        for _ in range(size):
+            texture.append(int.from_bytes(file.read(2), 'big'))
 
-    file.close()
     return texture
 
 
@@ -239,14 +236,14 @@ def build_crate_ci8_patches():
     save_rgba16_texture(bosskey_palette, 'crate_bosskey_palette.bin')
 
     crate_textures = [
-        (5, 'texture_crate_default', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, None),
-        (6, 'texture_crate_gold', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_gold_rgba16_patch.bin'),
-        (7, 'texture_crate_key', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_key_rgba16_patch.bin'),
-        (8, 'texture_crate_skull', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_skull_rgba16_patch.bin'),
-        (9, 'texture_crate_bosskey', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_bosskey_rgba16_patch.bin'),
+        ('texture_crate_default', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, None),
+        ('texture_crate_gold', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_gold_rgba16_patch.bin'),
+        ('texture_crate_key', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_key_rgba16_patch.bin'),
+        ('texture_crate_skull', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_skull_rgba16_patch.bin'),
+        ('texture_crate_bosskey', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_bosskey_rgba16_patch.bin'),
     ]
 
-    for texture_id, texture_name, rom_address_base, rom_address_palette, size, func, patchfile in crate_textures:
+    for texture_name, rom_address_base, rom_address_palette, size, func, patchfile in crate_textures:
         texture = func(rom, rom_address_base, rom_address_palette, size, patchfile)
         file = open(texture_name, 'wb')
         file.write(texture)

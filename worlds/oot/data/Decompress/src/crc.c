@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #define ROL(i, b) (((i) << (b)) | ((i) >> (32 - (b))))
 #define BYTES2LONG(b) ( (b)[0] << 24 | \

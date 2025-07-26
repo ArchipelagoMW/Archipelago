@@ -1161,8 +1161,6 @@ class OOTWorld(World):
             for player in barren_hint_players:
                 multiworld.worlds[player].empty_areas = {region: info for region, info in items_by_region[player].items()
                                                          if info['is_barren']}
-        except Exception as e:
-            raise e
         finally:
             for autoworld in multiworld.get_game_worlds("Ocarina of Time"):
                 autoworld.hint_data_available.set()
@@ -1257,7 +1255,7 @@ class OOTWorld(World):
         if (self.shuffle_interior_entrances != 'off' or self.shuffle_dungeon_entrances
             or self.shuffle_grotto_entrances or self.shuffle_bosses != 'off'):
             for region in self.regions:
-                if not any(bool(loc.address) for loc in region.locations): # check if region has any non-event locations
+                if not all(loc.is_event for loc in region.locations): # check if region has any non-event locations
                     continue
                 main_entrance = get_entrance_to_region(region)
                 if main_entrance is not None and (main_entrance.shuffled or (region.is_boss_room and self.shuffle_bosses != 'off')):

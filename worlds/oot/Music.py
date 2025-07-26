@@ -317,12 +317,12 @@ def rebuild_sequences(rom, sequences):
         if new_sequences[i].size == 0:
             try:
                 j = [seq for seq in sequences if seq.replaces == new_sequences[i].address].pop()
-            except:
+            except Exception:
                 j = -1
         else:
             try:
                 j = [seq for seq in sequences if seq.replaces == i].pop()
-            except:
+            except Exception:
                 j = -1
         if j != -1:
             rom.write_byte(base, j.instrument_set)

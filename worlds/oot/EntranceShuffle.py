@@ -533,7 +533,7 @@ def shuffle_random_entrances(ootworld):
             one_way_target_entrance_pools[pool_type] = build_one_way_targets(ootworld, pool_type, valid_target_types)
         # Ensure that the last entrance doesn't assume the rest of the targets are reachable
         for target in one_way_target_entrance_pools[pool_type]:
-            add_rule(target, (lambda entrances=entrance_pool: (lambda state: any(entrance.connected_region == None for entrance in entrances)))())
+            add_rule(target, lambda state, entrances=entrance_pool: any(entrance.connected_region is None for entrance in entrances))
     # Disconnect one-way entrances for priority placement
     for entrance in chain.from_iterable(one_way_entrance_pools.values()):
         entrance.disconnect()
