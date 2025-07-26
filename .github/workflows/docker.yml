@@ -52,6 +52,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    outputs:
+      suffixed-tags: ${{ steps.amd64-tags.outputs.tags }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -66,6 +68,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Compute AMD64 tags
+        id: amd64-tags
+        run: |
+          IFS=',' read -r -a tags <<< "${{ needs.prepare.outputs.tags }}"
+          suffixed=()
+          for t in "${tags[@]}"; do
+            suffixed+=("$t-amd64")
+          done
+          echo "tags=$(IFS=','; echo "${suffixed[*]}")" >> $GITHUB_OUTPUT
+
       - name: Build and push AMD64 Docker image
         uses: docker/build-push-action@v5
         with:
@@ -73,7 +85,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ needs.prepare.outputs.tags }}-amd64
+          tags: ${{ steps.amd64-tags.outputs.tags }}
           labels: ${{ needs.prepare.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -85,6 +97,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    outputs:
+      suffixed-tags: ${{ steps.arm64-tags.outputs.tags }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -99,6 +113,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Compute ARM64 tags
+        id: arm64-tags
+        run: |
+          IFS=',' read -r -a tags <<< "${{ needs.prepare.outputs.tags }}"
+          suffixed=()
+          for t in "${tags[@]}"; do
+            suffixed+=("$t-arm64")
+          done
+          echo "tags=$(IFS=','; echo "${suffixed[*]}")" >> $GITHUB_OUTPUT
+
       - name: Build and push ARM64 Docker image
         uses: docker/build-push-action@v5
         with:
@@ -106,7 +130,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/arm64
           push: true
-          tags: ${{ needs.prepare.outputs.tags }}-arm64
+          tags: ${{ steps.arm64-tags.outputs.tags }}
           labels: ${{ needs.prepare.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -125,19 +149,14 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create and push multi-arch manifest
-        env:
-          IMAGE: ${{ env.REGISTRY }}/${{ needs.prepare.outputs.image-name }}
-          TAGS: ${{ needs.prepare.outputs.tags }}
         run: |
-          # Split tags into array
-          IFS=',' read -r -a tag_array <<< "$TAGS"
+          IFS=',' read -r -a tag_array <<< "${{ needs.prepare.outputs.tags }}"
 
           for tag in "${tag_array[@]}"; do
-            docker manifest create $IMAGE:$tag \
-              $IMAGE:$tag-amd64 \
-              $IMAGE:$tag-arm64
+            docker manifest create "$tag" \
+              "$tag-amd64" \
+              "$tag-arm64"
             
-            docker manifest push $IMAGE:$tag
+            docker manifest push "$tag"
           done
