@@ -94,7 +94,7 @@ jobs:
           tags: ${{ steps.amd64-tags.outputs.tags }}
           labels: ${{ needs.prepare.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=max,scope=amd64
           provenance: false
 
   build-arm64:
@@ -139,7 +139,7 @@ jobs:
           tags: ${{ steps.arm64-tags.outputs.tags }}
           labels: ${{ needs.prepare.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=max,scope=arm64
           provenance: false
 
   manifest:
