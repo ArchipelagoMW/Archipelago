@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, Toggle, DeathLink, DefaultOnToggle, TextChoice, Range, OptionDict, PerGameCommonOptions, \
-    Visibility
+from Options import Choice, Toggle, DeathLink, TextChoice, Range, OptionDict, PerGameCommonOptions
 from schema import Schema, And, Use, Optional
 from .rules import bosses, weapons_to_id
 
@@ -82,13 +81,16 @@ class EnemyWeaknesses(Toggle):
 
 
 class StrictWeaknesses(Toggle):
-    """Only your starting Robot Master will take damage from the Mega Buster, the rest must be defeated with weapons.
-    Weapons that only do 1-3 damage to bosses no longer deal damage (aside from Wily/Gamma)."""
+    """
+    Only your starting Robot Master will take damage from the Mega Buster, the rest must be defeated with weapons.
+    Weapons that only do 1-3 damage to bosses no longer deal damage (aside from Wily/Gamma).
+    """
     display_name = "Strict Boss Weaknesses"
 
 
 class RandomWeaknesses(Choice):
-    """None: Bosses will have their regular weaknesses.
+    """
+    None: Bosses will have their regular weaknesses.
     Shuffled: Weapon damage will be shuffled amongst the weapons, so Shadow Blade may do Top Spin damage.
     Randomized: Weapon damage will be fully randomized.
     """
@@ -101,8 +103,10 @@ class RandomWeaknesses(Choice):
 
 
 class Wily4Requirement(Range):
-    """Change the amount of Robot Masters that are required to be defeated for
-    the door to the Wily Machine to open."""
+    """
+    Change the amount of Robot Masters that are required to be defeated for
+    the door to the Wily Machine to open.
+    """
     display_name = "Wily 4 Requirement"
     default = 8
     range_start = 1

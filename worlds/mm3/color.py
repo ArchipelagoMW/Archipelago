@@ -68,7 +68,19 @@ MM3_COLORS: Dict[str, Tuple[int, int]] = {
     names.spark_shock: (0x30, 0x26),
     names.rush_marine: (0x30, 0x15),
     names.shadow_blade: (0x34, 0x14),
-    names.rush_jet: (0x30, 0x15)
+    names.rush_jet: (0x30, 0x15),
+    names.needle_man_stage: (0x3C, 0x11),
+    names.magnet_man_stage: (0x30, 0x15),
+    names.gemini_man_stage: (0x30, 0x21),
+    names.hard_man_stage: (0x10, 0xC),
+    names.top_man_stage: (0x30, 0x26),
+    names.snake_man_stage: (0x30, 0x29),
+    names.spark_man_stage: (0x30, 0x26),
+    names.shadow_man_stage: (0x30, 0x11),
+    names.doc_needle_stage: (0x27, 0x15),
+    names.doc_gemini_stage: (0x27, 0x15),
+    names.doc_spark_stage: (0x27, 0x15),
+    names.doc_shadow_stage: (0x27, 0x15),
 }
 
 MM3_KNOWN_COLORS: Dict[str, Tuple[int, int]] = {
@@ -130,6 +142,15 @@ palette_pointers: Dict[str, List[int]] = {
     "Rush Marine": [0x4674],
     "Shadow Blade": [0x4678],
     "Rush Jet": [0x467C],
+    "Needle Man": [0x216C],
+    "Magnet Man": [0x215C],
+    "Gemini Man": [0x217C],
+    "Hard Man": [0x2164],
+    "Top Man": [0x2194],
+    "Snake Man": [0x2174],
+    "Spark Man": [0x2184],
+    "Shadow Man": [0x218C],
+    "Doc Robot": [0x20B8]
 }
 
 
@@ -278,7 +299,7 @@ def write_palette_shuffle(world: "MM3World", rom: "MM3ProcedurePatch") -> None:
                         real_colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
                         palettes_to_write[character] = real_colors
         else:
-            shuffled_colors = list(MM3_COLORS.values())
+            shuffled_colors = list(MM3_COLORS.values()[:-3])  # only include one Doc Robot
             shuffled_colors.append((0x2C, 0x11))  # Mega Buster
             world.random.shuffle(shuffled_colors)
             for character in palette_pointers:

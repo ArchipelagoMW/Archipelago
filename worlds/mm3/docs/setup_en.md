@@ -1,10 +1,10 @@
-# Mega Man 2 Setup Guide
+# Mega Man 3 Setup Guide
 
 ## Required Software
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-- An English Mega Man 2 ROM. Alternatively, the [Mega Man Legacy Collection](https://store.steampowered.com/app/363440/Mega_Man_Legacy_Collection/) on Steam.
-- [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 or later
+- An English Mega Man 3 ROM. Alternatively, the [Mega Man Legacy Collection](https://store.steampowered.com/app/363440/Mega_Man_Legacy_Collection/) on Steam.
+- [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 or later. Bizhawk 2.10
 
 ### Configuring Bizhawk
 
