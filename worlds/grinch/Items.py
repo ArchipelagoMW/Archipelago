@@ -1,19 +1,42 @@
 from typing import NamedTuple, Optional
 
+from .RamHandler import GrinchRamData
 from BaseClasses import Item
-from BaseClasses import ItemClassification as IC
+from BaseClasses import ItemClassification as IC #IC can be any name, saves having to type the whole word in code
 
 class GrinchItemData(NamedTuple):
-    type: str
-    code: Optional[int]
+    item_group: str #arbituary that can be whatever it can be, basically the field/property for item groups
+    id: Optional[int]
     classification: IC
-    update_ram_addr: Optional[list[GrinchRamData]] = None
-    value: Optional[int] = None #I can either set or add either hex or unsigned values through Client.py
-    binary_bit_pos: Optional[int] = None
+    update_ram_addr: list[GrinchRamData]
     bit_size: int = 1
+    value: Optional[int] = None #none is empty/null
+    # Either set or add either hex or unsigned values through Client.py
+    # Hex uses 0x00, unsigned are base whole numbers
+    binary_bit_pos: Optional[int] = None
+    second_item_group: Optional[str] = None
 
+class GrinchItem(Item):
+    game: str = "The Grinch"
+
+#Tells server what item id it is
+    @staticmethod
+    def get_apid(code: int):
+        #If you give me an input id, I will return the Grinch equivalent server/ap id
+        base_id: int = 42069
+        return base_id + code if code is not None else None
+
+#allows hinting of items via category
+def get_item_names_per_category() -> dict[str, set[str]]:
+    categories: dict[str, set[str]] = {}
+
+    for name, data in ALL_ITEMS_TABLE.items():
+        categories.setdefault(data.item_group, set()).add(name)
+
+    return categories
 
 #Gadgets
+#All gadgets require at least 4 different blueprints to be unlocked in the computer in Mount Crumpit.
 GADGETS_TABLE: dict[str, GrinchItemData] = {
     "Binoculars": GrinchItemData("Gadgets", 100, IC.useful,
         [GrinchRamData(0x800102B6, value=0x40), GrinchRamData(0x800102B7, value=0x41),
@@ -62,27 +85,27 @@ GADGETS_TABLE: dict[str, GrinchItemData] = {
 #Mission Specific Items
 MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
     "Who Cloak": GrinchItemData("Mission Specific Items", 200, IC.progression,
-        [GrinchRamData(0x800101F9, binary_bit_pos=1)]),
+        [GrinchRamData(0x800101F9, binary_bit_pos=1)], second_item_group="Useful Items"),
     "Painting Bucket": GrinchItemData("Mission Specific Items", 201, IC.progression,
-        [GrinchRamData(0x800101F9, binary_bit_pos=2)]),
+        [GrinchRamData(0x800101F9, binary_bit_pos=2)], second_item_group="Useful Items"),
     "Scissors": GrinchItemData("Mission Specific Items", 202, IC.progression,
-        [GrinchRamData(0x800101F9, binary_bit_pos=7)]),
+        [GrinchRamData(0x800101F9, binary_bit_pos=7)], second_item_group="Useful Items"),
     "Glue Bucket": GrinchItemData("Mission Specific Items", 203, IC.progression,
-        [GrinchRamData(0x800101F9, binary_bit_pos=5)]),
+        [GrinchRamData(0x800101F9, binary_bit_pos=5)], second_item_group="Useful Items"),
     "Cable Car Access Card": GrinchItemData("Mission Specific Items", 204, IC.progression,
-        [GrinchRamData(0x800101F9, binary_bit_pos=6)]),
+        [GrinchRamData(0x800101F9, binary_bit_pos=6)], second_item_group="Useful Items"),
     "Drill": GrinchItemData("Mission Specific Items", 205, IC.progression,
-        [GrinchRamData(0x800101FA, binary_bit_pos=3)]),
+        [GrinchRamData(0x800101FA, binary_bit_pos=3)], second_item_group="Useful Items"),
     "Rope": GrinchItemData("Mission Specific Items", 206, IC.progression,
-        [GrinchRamData(0x800101FA, binary_bit_pos=2)]),
+        [GrinchRamData(0x800101FA, binary_bit_pos=2)], second_item_group="Useful Items"),
     "Hook": GrinchItemData("Mission Specific Items", 207, IC.progression,
-        [GrinchRamData(0x800101FA, binary_bit_pos=1)]),
+        [GrinchRamData(0x800101FA, binary_bit_pos=1)], second_item_group="Useful Items"),
     "Sculpting Tools": GrinchItemData("Mission Specific Items", 208, IC.progression,
-        [GrinchRamData(0x800101F9, binary_bit_pos=3)]),
+        [GrinchRamData(0x800101F9, binary_bit_pos=3)], second_item_group="Useful Items"),
     "Hammer": GrinchItemData("Mission Specific Items", 209, IC.progression,
-        [GrinchRamData(0x800101F9, binary_bit_pos=4)]),
+        [GrinchRamData(0x800101F9, binary_bit_pos=4)], second_item_group="Useful Items"),
     "Scout Clothes": GrinchItemData("Mission Specific Items", 210, IC.progression,
-        [GrinchRamData(0x800101F9, binary_bit_pos=8)])
+        [GrinchRamData(0x800101F9, binary_bit_pos=8)], second_item_group="Useful Items")
 }
 
 #Sleigh Parts
@@ -144,11 +167,21 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
     "Who sent me here?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x8008FB94, value=1)])
 }
 
+#Movesets
+MOVES_TABLE: dict[str, GrinchItemData] = {
+    "Bad Breath": GrinchItemData("Movesets", 700, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=1)]),
+    "Pancake": GrinchItemData("Movesets", 701, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=2)]),
+    "Push & Pull": GrinchItemData("Movesets", 702, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=3)]),
+    "Max": GrinchItemData("Movesets", 703, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=4)]),
+    "Tip Toe": GrinchItemData("Movesets", 704, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=5)]),
+}
+#Double star combines all dictionaries from each individual list together
 ALL_ITEMS_TABLE: dict[str, GrinchItemData] = {
     **GADGETS_TABLE,
     **MISSION_ITEMS_TABLE,
     **SLEIGH_PARTS_TABLE,
     **KEYS_TABLE,
     **MISC_ITEMS_TABLE,
-    **TRAPS_TABLE
+    **TRAPS_TABLE,
+    **MOVES_TABLE
 }

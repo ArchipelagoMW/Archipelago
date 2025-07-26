@@ -31,4 +31,5 @@ supadow_list = [
     "Dankamania Supadow",
     "The Copter Race Contest Supadow"
 ]
+
 def create_regions(player: int, world: World, options: GrinchOptions):

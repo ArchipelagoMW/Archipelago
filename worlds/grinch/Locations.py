@@ -5,10 +5,10 @@ from BaseClasses import ItemClassification as IC
 
 class GrinchLocationData(NamedTuple):
     region: str
-    type: str
-    code: Optional[int]
+    location_group: str
+    id: Optional[int]
     classification: IC
-    update_ram_addr: Optional[list[GrinchRamData]] = None
+    update_ram_addr: list[GrinchRamData]
     value: Optional[int] = None #I can either set or add either hex or unsigned values through Client.py
     binary_bit_pos: Optional[int] = None
     bit_size: int = 1
@@ -17,59 +17,69 @@ class GrinchLocation(Location):
     game: str = "The Grinch"
     location_group: str
 
+    @staticmethod
+    def get_apid(code: int):
+        base_id: int = 42069
+        return base_id + code
+
 grinch_locations = {
+#Going to use current map id as indicator whether or not you visited a location
 #Visitsanity
-    "Enter Whoville": GrinchLocationData("Visitsanity", 100, [GrinchRamData()]),
-    "Enter the Post Office": GrinchLocationData("Visitsanity", 101, [GrinchRamData()]),
-    "Enter the Town Hall": GrinchLocationData("Visitsanity", 102, [GrinchRamData()]),
-    "Enter the Countdown-To-Xmas Clock Tower": GrinchLocationData("Visitsanity", 103, [GrinchRamData()]),
-    "Enter Who Forest": GrinchLocationData("Visitsanity", 104, [GrinchRamData()]),
-    "Enter the Ski Resort": GrinchLocationData("Visitsanity", 105, [GrinchRamData()]),
-    "Enter the Civic Center": GrinchLocationData("Visitsanity", 106, [GrinchRamData()]),
-    "Enter Who Dump": GrinchLocationData("Visitsanity", 107, [GrinchRamData()]),
-    "Enter the Guardian's House Mine Field": GrinchLocationData("Visitsanity", 108, [GrinchRamData()]),
-    "Enter the exterior of the Power Plant": GrinchLocationData("Visitsanity", 109, [GrinchRamData()]),
-    "Enter the interior of the Power Plant": GrinchLocationData("Visitsanity", 110, [GrinchRamData()]),
-    "Enter Who Lake": GrinchLocationData("Visitsanity", 111, [GrinchRamData()]),
-    "Enter the Submarine World": GrinchLocationData("Visitsanity", 112, [GrinchRamData()]),
-    "Enter the Scout's Hut": GrinchLocationData("Visitsanity", 113, [GrinchRamData()]),
-    "Enter the North Shore": GrinchLocationData("Visitsanity", 114, [GrinchRamData()]),
-    "Enter the Mayor's Villa": GrinchLocationData("Visitsanity", 115, [GrinchRamData()]),
+    "Enter Whoville": GrinchLocationData("Visitsanity", 100, [GrinchRamData(0x80010000, value=0x07)]),
+    "Enter the Post Office": GrinchLocationData("Visitsanity", 101, [GrinchRamData(0x80010000, value=0x0A)]),
+    "Enter the Town Hall": GrinchLocationData("Visitsanity", 102, [GrinchRamData(0x80010000, value=0x08)]),
+    "Enter the Countdown-To-Xmas Clock Tower": GrinchLocationData("Visitsanity", 103, [GrinchRamData(0x80010000, value=0x09)]),
+    "Enter Who Forest": GrinchLocationData("Visitsanity", 104, [GrinchRamData(0x80010000, value=0x0B)]),
+    "Enter the Ski Resort": GrinchLocationData("Visitsanity", 105, [GrinchRamData(0x80010000, value=0x0C)]),
+    "Enter the Civic Center": GrinchLocationData("Visitsanity", 106, [GrinchRamData(0x80010000, value=0x0D)]),
+    "Enter Who Dump": GrinchLocationData("Visitsanity", 107, [GrinchRamData(0x80010000, value=0x0E)]),
+    "Enter the Guardian's House Mine Field": GrinchLocationData("Visitsanity", 108, [GrinchRamData(0x80010000, value=0x11)]),
+    "Enter the exterior of the Power Plant": GrinchLocationData("Visitsanity", 109, [GrinchRamData(0x80010000, value=0x10)]),
+    "Enter the interior of the Power Plant": GrinchLocationData("Visitsanity", 110, [GrinchRamData(0x80010000, value=0x0F)]),
+    "Enter Who Lake": GrinchLocationData("Visitsanity", 111, [GrinchRamData(0x80010000, value=0x12)]),
+    "Enter the Submarine World": GrinchLocationData("Visitsanity", 112, [GrinchRamData(0x80010000, value=0x17)]),
+    "Enter the Scout's Hut": GrinchLocationData("Visitsanity", 113, [GrinchRamData(0x80010000, value=0x13)]),
+    "Enter the North Shore": GrinchLocationData("Visitsanity", 114, [GrinchRamData(0x80010000, value=0x14)]),
+    "Enter the Mayor's Villa": GrinchLocationData("Visitsanity", 115, [GrinchRamData(0x80010000, value=0x16)]),
+#Need to find mission completion address for handful of locations that are not documented.
+#Missions that have value are those ones we need to find the check for
 #Whoville Missions
-    "Smashing Snowmen": GrinchLocationData("Whoville Missions", 200, [GrinchRamData()]),
-    "Shuffling The Mail": GrinchLocationData("Whoville Missions", 201, [GrinchRamData()]),
-    "Painting The Mayor's Posters": GrinchLocationData("Whoville Missions", 202, [GrinchRamData()]),
-    "Launching Eggs Into Houses": GrinchLocationData("Whoville Missions", 203, [GrinchRamData()]),
-    "Modifying The Mayor's Statue": GrinchLocationData("Whoville Missions", 204, [GrinchRamData()]),
-    "Advancing The Countdown-To-Xmas Clock": GrinchLocationData("Whoville Missions", 205, [GrinchRamData()]),
-    "Squashing All Gifts in Whoville": GrinchLocationData("Whoville Missions", 206, [GrinchRamData()]),
+    "Smashing Snowmen": GrinchLocationData("Whoville Missions", 200, [GrinchRamData(0x8001020C, value=10)]),
+    "Shuffling The Mail": GrinchLocationData("Whoville Missions", 201, [GrinchRamData(0x800100BE, binary_bit_pos=1)]),
+    "Painting The Mayor's Posters": GrinchLocationData("Whoville Missions", 202, [GrinchRamData(0x800100C6, value=10)]),
+    "Launching Eggs Into Houses": GrinchLocationData("Whoville Missions", 203, [GrinchRamData(0x800100C7, value=10)]),
+    "Modifying The Mayor's Statue": GrinchLocationData("Whoville Missions", 204, [GrinchRamData(0x800100BE, binary_bit_pos=2)]),
+    "Advancing The Countdown-To-Xmas Clock": GrinchLocationData("Whoville Missions", 205, [GrinchRamData(0x800100BE, binary_bit_pos=3)]),
+    "Squashing All Gifts in Whoville": GrinchLocationData("Whoville Missions", 206, [GrinchRamData(0x8001005C, value=500)]),
 #Who Forest Missions
-    "Making Xmas Trees Droop": GrinchLocationData("Who Forest Missions", 300, [GrinchRamData()]),
-    "Sabotaging Snow Cannon With Glue": GrinchLocationData("Who Forest Missions", 301, [GrinchRamData()]),
-    "Putting Beehives In Cabins": GrinchLocationData("Who Forest Missions", 302, [GrinchRamData()]),
-    "Sliming The Mayor's Skis": GrinchLocationData("Who Forest Missions", 303, [GrinchRamData()]),
-    "Replacing The Candles On The Cake With Fireworks": GrinchLocationData("Who Forest Missions", 304, [GrinchRamData()]),
-    "Squashing All Gifts in Who Forest": GrinchLocationData("Who Forest Missions", 305, [GrinchRamData()]),
+    "Making Xmas Trees Droop": GrinchLocationData("Who Forest Missions", 300, [GrinchRamData(0x800100C8, value=10)]),
+    "Sabotaging Snow Cannon With Glue": GrinchLocationData("Who Forest Missions", 301, [GrinchRamData(0x800100BE, binary_bit_pos=4)]),
+    "Putting Beehives In Cabins": GrinchLocationData("Who Forest Missions", 302, [GrinchRamData(0x800100CA, value=10)]),
+    "Sliming The Mayor's Skis": GrinchLocationData("Who Forest Missions", 303, [GrinchRamData(0x800100BE, binary_bit_pos=5)]),
+    "Replacing The Candles On The Cake With Fireworks": GrinchLocationData("Who Forest Missions", 304, [GrinchRamData(0x800100BE, binary_bit_pos=6)]),
+    "Squashing All Gifts in Who Forest": GrinchLocationData("Who Forest Missions", 305, [GrinchRamData(0x8001005E, value=750)]),
 #Who Dump Missions
-    "Stealing Food From Birds": GrinchLocationData("Who Dump Missions", 400, [GrinchRamData()]),
-    "Feeding The Computer With Robot Parts": GrinchLocationData("Who Dump Missions", 401, [GrinchRamData()]),
-    "Infesting The Mayor's House With Rats": GrinchLocationData("Who Dump Missions", 402, [GrinchRamData()]),
-    "Conducting The Stinky Gas To Who-Bris' Shack": GrinchLocationData("Who Dump Missions", 403, [GrinchRamData()]),
-    "Shaving Who Dump Guardian": GrinchLocationData("Who Dump Missions", 404, [GrinchRamData()]),
-    "Short-Circuiting Power-Plant": GrinchLocationData("Who Dump Missions", 405, [GrinchRamData()]),
-    "Squashing All Gifts in Who Dump": GrinchLocationData("Who Dump Missions", 406, [GrinchRamData()]),
+    "Stealing Food From Birds": GrinchLocationData("Who Dump Missions", 400, [GrinchRamData(0x800100CB, value=10)]),
+    "Feeding The Computer With Robot Parts": GrinchLocationData("Who Dump Missions", 401, [GrinchRamData(0x800100BF, binary_bit_pos=3)]),
+    "Infesting The Mayor's House With Rats": GrinchLocationData("Who Dump Missions", 402, [GrinchRamData(0x800100BE, binary_bit_pos=7)]),
+    "Conducting The Stinky Gas To Who-Bris' Shack": GrinchLocationData("Who Dump Missions", 403, [GrinchRamData(0x800100BE, binary_bit_pos=8)]),
+    "Shaving Who Dump Guardian": GrinchLocationData("Who Dump Missions", 404, [GrinchRamData(0x800100BF, binary_bit_pos=1)]),
+    "Short-Circuiting Power-Plant": GrinchLocationData("Who Dump Missions", 405, [GrinchRamData(0x800100BF, binary_bit_pos=2)]),
+    "Squashing All Gifts in Who Dump": GrinchLocationData("Who Dump Missions", 406, [GrinchRamData(0x80010060, value=750)]),
 #Who Lake Missions
-    "Putting Thistles In Shorts": GrinchLocationData("Who Lake Missions", 500, [GrinchRamData()]),
-    "Sabotaging The Tents": GrinchLocationData("Who Lake Missions", 501, [GrinchRamData()]),
-    "Drilling Holes In Canoes": GrinchLocationData("Who Lake Missions", 502, [GrinchRamData()]),
-    "Modifying The Marine Mobile": GrinchLocationData("Who Lake Missions", 503, [GrinchRamData()]),
-    "Hooking The Mayor's Bed To The Motorboat": GrinchLocationData("Who Lake Missions", 504, [GrinchRamData()]),
-    "Squashing All Gifts in Who Lake": GrinchLocationData("Who Lake Missions", 505, [GrinchRamData()]),
+    "Putting Thistles In Shorts": GrinchLocationData("Who Lake Missions", 500, [GrinchRamData(0x800100E6, value=10)]),
+    "Sabotaging The Tents": GrinchLocationData("Who Lake Missions", 501, [GrinchRamData(0x800100E5, value=10)]),
+    "Drilling Holes In Canoes": GrinchLocationData("Who Lake Missions", 502, [GrinchRamData(0x800100EE, value=10)]),
+    "Modifying The Marine Mobile": GrinchLocationData("Who Lake Missions", 503, [GrinchRamData(0x800100BF, binary_bit_pos=5)]),
+    "Hooking The Mayor's Bed To The Motorboat": GrinchLocationData("Who Lake Missions", 504, [GrinchRamData(0x800100BF, binary_bit_pos=4)]),
+    "Squashing All Gifts in Who Lake": GrinchLocationData("Who Lake Missions", 505, [GrinchRamData(0x80010062, value=1000)]),
+#Need to find binary values for individual blueprints, but all ram addresses are found
+#Blueprints
 #Binoculars Blueprints
-    "Binoculars Blueprint - Post Office Roof": GrinchLocationData("Binocular Blueprints", 600, [GrinchRamData()]),
-    "Binoculars Blueprint - City Hall Library - Left Side": GrinchLocationData("Binocular Blueprints", 601, [GrinchRamData()]),
-    "Binoculars Blueprint - City Hall Library - Front Side": GrinchLocationData("Binocular Blueprints", 602, [GrinchRamData()]),
-    "Binoculars Blueprint - City Hall Library - Right Side": GrinchLocationData("Binocular Blueprints", 603, [GrinchRamData()]),
+    "Binoculars Blueprint - Post Office Roof": GrinchLocationData("Binocular Blueprints", 600, [GrinchRamData(0x80100824, binary_bit_pos=0)]),
+    "Binoculars Blueprint - City Hall Library - Left Side": GrinchLocationData("Binocular Blueprints", 601, [GrinchRamData(0x8001021F, binary_bit_pos=0)]),
+    "Binoculars Blueprint - City Hall Library - Front Side": GrinchLocationData("Binocular Blueprints", 602, [GrinchRamData(0x8001021F, binary_bit_pos=0)]),
+    "Binoculars Blueprint - City Hall Library - Right Side": GrinchLocationData("Binocular Blueprints", 603, [GrinchRamData(0x8001021F, binary_bit_pos=0)]),
 #Rotten Egg Launcher Blueprints
     "Rotten Egg Launcher Blueprint - Outside City Hall": GrinchLocationData("Rotten Egg Launcher Blueprints", 700, [GrinchRamData()]),
     "Rotten Egg Launcher Blueprint - Outside Clock Tower": GrinchLocationData("Rotten Egg Launcher Blueprints", 701, [GrinchRamData()]),
@@ -139,4 +149,7 @@ grinch_locations = {
     "Grinch Copter Blueprint - Who Lake South Shore - Submarine World - Underwater": GrinchLocationData("Grinch Copter Blueprints", 1213, [GrinchRamData()]),
     "Grinch Copter Blueprint - Who Lake North Shore - Mayor's Villa - Tree Branch": GrinchLocationData("Grinch Copter Blueprints", 1214, [GrinchRamData()]),
     "Grinch Copter Blueprint - Who Lake North Shore - Mayor's Villa - Cave": GrinchLocationData("Grinch Copter Blueprints", 1215, [GrinchRamData()])
+#Sleigh Room Locations
+    "Stealing All Gifts": GrinchLocationData("Sleigh Ride", 1300, [GrinchRamData(0x800100BF, binary_bit_pos=7)]),
+    "Neutralizing Santa": GrinchLocationData("Sleigh Ride", 1301, [GrinchRamData(0x800100BF, binary_bit_pos=8)]),
 }

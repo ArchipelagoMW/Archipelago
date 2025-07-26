@@ -7,9 +7,26 @@ from Options import FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, Te
 class ProgressiveVacuum(DefaultOnToggle):
     """
     Determines whether you get access to main areas progressively
-    Default: Whoville > Who Forest > Who Dump > Who Lake
+
+    Enabled: Whoville > Who Forest > Who Dump > Who Lake
     """
     display_name = "Progressive Vacuum Access"
+
+class Missionsanity(Choice):
+    """
+    How mission checks are randomized in the pool
+
+    None: Does not add mission checks
+    Completion: Only completing the mission gives you a check
+    Individual: Individual tasks for one mission, such as individual snowmen squashed, are checks.
+    Both: Both individual tasks and mission completion are randomized.
+    """
+    display_name = "Mission Locations"
+    option_none = 0
+    option_completion = 1
+    option_individual = 2
+    option_both = 3
+    default = 1
 
 # class StartingArea(Choice):
 #     """
@@ -44,3 +61,4 @@ class UnlimitedRottenEggs(Toggle):
 class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     progressive_vacuum: ProgressiveVacuum
     unlimited_rotten_eggs: UnlimitedRottenEggs
+    missionsanity: Missionsanity
