@@ -19,16 +19,18 @@ new_name_order = sorted(location_table.keys(),
                 else 1 if name in locnames_pre_70
                 else 0)
 
-location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(new_name_order) 
+location_name_to_id = {name: (location_id_offset + index) for index, name in enumerate(new_name_order)
     if location_table[name][0] not in non_indexed_location_types}
 
+
 class DisableType(Enum):
-    ENABLED  = 0
+    ENABLED = 0
     PENDING = 1
     DISABLED = 2
 
-class OOTLocation(Location): 
-    game: str = 'Ocarina of Time'
+
+class OOTLocation(Location):
+    game = 'Ocarina of Time'
 
     def __init__(self, player, name='', code=None, address1=None, address2=None,
         default=None, type='Chest', scene=None, parent=None, filter_tags=None,
@@ -42,7 +44,7 @@ class OOTLocation(Location):
         self.scene = scene
         self.internal = internal
         self.vanilla_item = vanilla_item
-        if filter_tags is None: 
+        if filter_tags is None:
             self.filter_tags = None
         else:
             self.filter_tags = list(filter_tags)
@@ -83,7 +85,6 @@ def LocationFactory(locations, player: int):
 
 
 def build_location_name_groups() -> dict:
-
     def fix_sing(t) -> tuple:
         if isinstance(t, str):
             return (t,)
@@ -135,4 +136,3 @@ def build_location_name_groups() -> dict:
     rename(ret, 'the Lost Woods', 'Lost Woods')
 
     return ret
-
