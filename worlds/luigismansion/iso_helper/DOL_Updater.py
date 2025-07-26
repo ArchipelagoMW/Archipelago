@@ -142,9 +142,6 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac
             dol.data.write(door_model_id.to_bytes())
 
     # Save all changes to the DOL itself.
-    with open("main.dol", "wb") as file:
-        dol.data.seek(0)
-        file.write(dol.data.read())
     dol.save_changes()
     gcm.changed_files["sys/main.dol"] = dol.data
 
