@@ -288,8 +288,3 @@ def build_smallcrate_patches():
     save_rgba16_texture(key_patch, 'smallcrate_key_rgba16_patch.bin')
     save_rgba16_texture(skull_patch, 'smallcrate_skull_rgba16_patch.bin')
     save_rgba16_texture(bosskey_patch, 'smallcrate_bosskey_rgba16_patch.bin')
-
-
-#build_crate_ci8_patches()
-#build_pot_patches()
-#build_smallcrate_patches()

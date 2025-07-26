@@ -121,8 +121,6 @@ def patch_rom(world, rom):
     # Apply patches for custom textures for pots and crates and add as new files in rom
     # Crates are ci4 textures in the normal ROM but for pot/crate textures match contents were upgraded to ci8 to support more colors
     # Pot textures are rgba16
-    # Get the texture table from rom (see textures.c)
-    texture_table_start = rom.sym('texture_table') # Get the address of the texture table
 
     # texture list. See textures.h for texture IDs
     #   ID, texture_name,                   Rom Address    CI4 Pallet Addr  Size    Patching function                          Patch file (None for default)
@@ -253,11 +251,6 @@ def patch_rom(world, rom):
         _bytes = list(ord(c) for c in txt[:size - 1]) + [0] * size
         return _bytes[:size]
 
-    def truncstr(txt, size):
-        if len(txt) > size:
-            txt = txt[:size-3] + "..."
-        return txt
-
     line_len = 21
     version_str = "version " + __version__
     if len(version_str) > line_len:
@@ -276,10 +269,10 @@ def patch_rom(world, rom):
     rom.write_byte(rom.sym('CFG_SHOW_SETTING_INFO'), 0x01)
 
     msg = [f"Archipelago {ap_version}", world.multiworld.get_player_name(world.player)]
-    for idx,part in enumerate(msg):
-        part_bytes = list(ord(c) for c in part) + [0] * (line_len+1)
-        part_bytes = part_bytes[:(line_len+1)]
-        symbol = rom.sym('CFG_CUSTOM_MESSAGE_{}'.format(idx+1))
+    for idx, part in enumerate(msg):
+        part_bytes = list(ord(c) for c in part) + [0] * (line_len + 1)
+        part_bytes = part_bytes[:line_len + 1]
+        symbol = rom.sym('CFG_CUSTOM_MESSAGE_{}'.format(idx + 1))
         rom.write_bytes(symbol, part_bytes)
 
     # Change graveyard graves to not allow grabbing on to the ledge
@@ -2635,7 +2628,6 @@ def set_cow_id_data(rom, world):
 def set_grotto_shuffle_data(rom, world):
     def override_grotto_data(rom, actor_id, actor, scene):
         if actor_id == 0x009B: #Grotto
-            actor_zrot = rom.read_int16(actor + 12)
             actor_var = rom.read_int16(actor + 14)
             grotto_type = (actor_var >> 8) & 0x0F
             grotto_actor_id = (scene << 8) + (actor_var & 0x00FF)
@@ -2699,7 +2691,6 @@ def get_doors_to_unlock(rom, world):
         door_type = actor_var >> 6
         switch_flag = actor_var & 0x003F
 
-        flag_id = (1 << switch_flag)
         flag_byte = 3 - (switch_flag >> 3)
         flag_bits = 1 << (switch_flag & 0x07)
 

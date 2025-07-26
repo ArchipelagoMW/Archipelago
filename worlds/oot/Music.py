@@ -158,7 +158,7 @@ def process_sequences(rom, sequences, target_sequences, disabled_source_sequence
                         lines = stream.readlines()
                     # Strip newline(s)
                     lines = [line.rstrip() for line in lines]
-                except FileNotFoundError as ex:
+                except FileNotFoundError:
                     raise FileNotFoundError('No meta file for: "' + fname + '". This should never happen')
 
                 # Create new sequence, checking third line for correct type
@@ -265,7 +265,7 @@ def rebuild_sequences(rom, sequences):
                     if new_entry.size <= 0x10:
                         raise Exception('Invalid sequence file "' + s.name + '.seq"')
                     new_entry.data[1] = 0x20
-                except FileNotFoundError as ex:
+                except FileNotFoundError:
                     raise FileNotFoundError('No sequence file for: "' + s.name + '"')
         else:
             new_entry.size = old_sequences[i].size

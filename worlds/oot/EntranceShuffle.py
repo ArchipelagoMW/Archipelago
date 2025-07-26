@@ -664,7 +664,7 @@ def shuffle_one_way_priority_entrances(ootworld, one_way_priorities, one_way_ent
             for entrance, target in rollbacks:
                 confirm_replacement(entrance, target)
             return
-        except EntranceShuffleError as error:
+        except EntranceShuffleError:
             for entrance, target in rollbacks:
                 restore_connections(entrance, target)
             logging.getLogger('').debug(f'Failed to place all priority one-way entrances, retrying {retry_count} more times')
@@ -716,7 +716,7 @@ def shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrances, 
             for entrance, target in rollbacks:
                 confirm_replacement(entrance, target)
             return
-        except EntranceShuffleError as e:
+        except EntranceShuffleError:
             for entrance, target in rollbacks:
                 restore_connections(entrance, target)
             logging.getLogger('').debug(f'Failed to place all entrances in pool, retrying {retry_count} more times')

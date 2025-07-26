@@ -222,21 +222,6 @@ class SpawnPositions(Choice):
     alias_true = 3
 
 
-# class MixEntrancePools(Choice):
-#     """Shuffles entrances into a mixed pool instead of separate ones. "indoor" keeps overworld entrances separate; "all"
-#      mixes them in."""
-#     display_name = "Mix Entrance Pools"
-#     option_off = 0
-#     option_indoor = 1
-#     option_all = 2
-
-
-# class DecoupleEntrances(Toggle):
-#     """Decouple entrances when shuffling them. Also adds the one-way entrance from Gerudo Valley to Lake Hylia if
-#     overworld is shuffled."""
-#     display_name = "Decouple Entrances"
-
-
 class TriforceHunt(Toggle):
     """Gather pieces of the Triforce scattered around the world to complete the game."""
     display_name = "Triforce Hunt"
@@ -333,36 +318,6 @@ class MQDungeonCount(TrackRandomRange):
     default = 0
 
 
-# class EmptyDungeons(Choice):
-#     """Pre-completed dungeons are barren and rewards are given for free."""
-#     display_name = "Pre-completed Dungeons Mode"
-#     option_none = 0
-#     option_specific = 1
-#     option_count = 2
-
-
-# class EmptyDungeonList(OptionSet):
-#     """Chosen dungeons to be pre-completed."""
-#     display_name = "Pre-completed Dungeon List"
-#     valid_keys = {
-#         "Deku Tree",
-#         "Dodongo's Cavern",
-#         "Jabu Jabu's Belly",
-#         "Forest Temple",
-#         "Fire Temple",
-#         "Water Temple",
-#         "Shadow Temple",
-#         "Spirit Temple",
-#     }
-
-
-# class EmptyDungeonCount(Range):
-#     display_name = "Pre-completed Dungeon Count"
-#     range_start = 1
-#     range_end = 8
-#     default = 2
-
-
 world_options: dict[str, type[Option]] = {
     "starting_age": StartingAge,
     "shuffle_interior_entrances": InteriorEntrances,
@@ -373,8 +328,6 @@ world_options: dict[str, type[Option]] = {
     "warp_songs": WarpSongs,
     "spawn_positions": SpawnPositions,
     "shuffle_bosses": BossEntrances,
-    # "mix_entrance_pools": MixEntrancePools,
-    # "decouple_entrances": DecoupleEntrances,
     "triforce_hunt": TriforceHunt,
     "triforce_goal": TriforceGoal,
     "extra_triforce_percentage": ExtraTriforces,
@@ -386,10 +339,6 @@ world_options: dict[str, type[Option]] = {
     "mq_dungeons_mode": MQDungeons,
     "mq_dungeons_list": MQDungeonList,
     "mq_dungeons_count": MQDungeonCount,
-
-    # "empty_dungeons_mode": EmptyDungeons,
-    # "empty_dungeons_list": EmptyDungeonList,
-    # "empty_dungeon_count": EmptyDungeonCount,
 }
 
 
@@ -1307,8 +1256,6 @@ class OoTOptions(PerGameCommonOptions):
     warp_songs: WarpSongs
     spawn_positions: SpawnPositions
     shuffle_bosses: BossEntrances
-    # mix_entrance_pools: MixEntrancePools
-    # decouple_entrances: DecoupleEntrances
     triforce_hunt: TriforceHunt
     triforce_goal: TriforceGoal
     extra_triforce_percentage: ExtraTriforces
@@ -1318,9 +1265,6 @@ class OoTOptions(PerGameCommonOptions):
     mq_dungeons_mode: MQDungeons
     mq_dungeons_list: MQDungeonList
     mq_dungeons_count: MQDungeonCount
-    # empty_dungeons_mode: EmptyDungeons
-    # empty_dungeons_list: EmptyDungeonList
-    # empty_dungeon_count: EmptyDungeonCount
     bridge_stones: BridgeStones
     bridge_medallions: BridgeMedallions
     bridge_rewards: BridgeRewards

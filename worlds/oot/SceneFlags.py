@@ -13,8 +13,6 @@ def get_collectible_flag_table(world):
     scene_flags = {}
     alt_list = []
     for i in range(0, 101):
-        max_room_num = 0
-        max_enemy_flag = 0
         scene_flags[i] = {}
         for location in world.get_locations():
             if(location.scene == i and location.type in ["Freestanding", "Pot", "FlyingPot", "Crate", "SmallCrate", "Beehive", "RupeeTower"]):

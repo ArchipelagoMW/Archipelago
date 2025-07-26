@@ -212,7 +212,7 @@ class SaveContext():
     # will overwrite the byte at offset with the given value
     def write_save_table(self, rom):
         self.set_ammo_max()
-        for name, address in self.addresses.items():
+        for address in self.addresses.values():
             self.write_save_entry(address)
 
         save_table = []
@@ -364,7 +364,7 @@ class SaveContext():
                 if not c_buttons:
                     break
 
-        for equip_item, equip_addresses in self.addresses[age]['equips'].items():
+        for equip_item in self.addresses[age]['equips']:
             for item in SaveContext.equipable_items[age][equip_item]:
                 if self.addresses['equip_items'][item].get_value():
                     item_value = self.addresses['equip_items'][item].get_value_raw()

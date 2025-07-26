@@ -338,7 +338,7 @@ def generate_itempool(ootworld):
     global random
     random = world.random
 
-    junk_pool = get_junk_pool(ootworld)
+    get_junk_pool(ootworld)
 
     # set up item pool
     (pool, placed_items) = get_pool_core(ootworld)
@@ -349,8 +349,6 @@ def generate_itempool(ootworld):
 
 
 def get_pool_core(world):
-    global random
-
     pool = []
     placed_items = {}
     remain_shop_items = []

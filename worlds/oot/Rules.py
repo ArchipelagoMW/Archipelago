@@ -124,8 +124,6 @@ class OOTLogic(LogicMixin):
 
 # Sets extra rules on various specific locations not handled by the rule parser.
 def set_rules(ootworld):
-    logger = logging.getLogger('')
-
     multiworld = ootworld.multiworld
     player = ootworld.player
 

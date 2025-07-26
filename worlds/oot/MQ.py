@@ -594,7 +594,6 @@ def insert_space(rom, file, vram_start, insert_section, insert_offset, insert_si
 
         # value contains the vram address
         value = rom.read_int32(address)
-        raw_value = value
         if type == 2:
             # Data entry: value is the raw vram address
             pass

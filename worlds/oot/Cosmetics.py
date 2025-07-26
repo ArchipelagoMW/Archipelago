@@ -239,14 +239,14 @@ def patch_sword_trails(rom, ootworld, symbols):
 
         colors = []
         option_dict = {}
-        for address_index, (address, inner_transparency, inner_white_transparency, outer_transparency, outer_white_transparency) in enumerate(trail_addresses):
+        for address, inner_transparency, inner_white_transparency, outer_transparency, outer_white_transparency in trail_addresses:
             address_colors = {}
             colors.append(address_colors)
             transparency_dict = {}
-            for index, (trail_part, option, rainbow_symbol, white_transparency, transparency) in enumerate([
+            for trail_part, option, rainbow_symbol, white_transparency, transparency in [
                 ('inner', option_inner, rainbow_inner_symbol, inner_white_transparency, inner_transparency),
                 ('outer', option_outer, rainbow_outer_symbol, outer_white_transparency, outer_transparency),
-            ]):
+            ]:
                 color = None
 
                 # set rainbow option
@@ -602,8 +602,6 @@ def patch_sfx(rom, ootworld, symbols):
           ('sfx_hover_boots',    sfx.SoundHooks.BOOTS_HOVER),
     ]
     sound_dict = sfx.get_patch_dict()
-    sounds_keyword_label = {sound.value.keyword: sound.value.label for sound in sfx.Sounds}
-    sounds_label_keyword = {sound.value.label: sound.value.keyword for sound in sfx.Sounds}
 
     for setting, hook in sfx_config:
         selection = ootworld.__dict__[setting].replace('_', '-')

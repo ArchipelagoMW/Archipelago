@@ -201,7 +201,7 @@ class OOTWorld(World):
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
         oot_settings = OOTWorld.settings
-        rom = Rom(file=oot_settings.rom_file)
+        Rom(file=oot_settings.rom_file)
 
     # Option parsing, handling incompatible options, building useful-item table
     def generate_early(self):
@@ -870,7 +870,6 @@ class OOTWorld(World):
             return state
 
         # Prefill shops, songs, and dungeon items
-        items = self.get_pre_fill_items()
         locations = list(self.multiworld.get_unfilled_locations(self.player))
         self.random.shuffle(locations)
 
@@ -1398,7 +1397,6 @@ def valid_dungeon_item_location(world: OOTWorld, option: str, dungeon: str, loc:
                 and (world.shuffle_song_items != 'song' or loc.type != 'Song')
                 and (world.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations))
     return False
-    # raise ValueError(f'Unexpected argument to valid_dungeon_item_location: {option}')
 
 
 def gather_locations(multiworld: MultiWorld,

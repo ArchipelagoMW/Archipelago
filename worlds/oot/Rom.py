@@ -148,7 +148,7 @@ class Rom(BigStream):
         try:
             with open(file, 'rb') as stream:
                 self.buffer = bytearray(stream.read())
-        except FileNotFoundError as ex:
+        except FileNotFoundError:
             raise FileNotFoundError('Invalid path to Base ROM: "' + file + '"')
 
     # dmadata/file management helper functions
@@ -243,7 +243,6 @@ class Rom(BigStream):
     # after patching in the new files, but before vanilla files are repointed
     def scan_dmadata_update(self):
         cur = DMADATA_START
-        dma_data_end = None
         dma_index = 0
         dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
         old_dma_start, old_dma_end, old_dma_size = self.original._get_dmadata_record(cur)
