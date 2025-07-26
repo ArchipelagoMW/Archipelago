@@ -325,7 +325,7 @@ def get_junk_item(rand, count=1, pool=None, plando_pool=None):
 
 def replace_max_item(items, item, max, rand):
     count = 0
-    for i,val in enumerate(items):
+    for i, val in enumerate(items):
         if val == item:
             if count >= max:
                 items[i] = get_junk_item(rand)[0]

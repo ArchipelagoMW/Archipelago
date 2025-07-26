@@ -118,11 +118,11 @@ def create_patch_file(rom, rand, xor_range=(0x00B8AD30, 0x00F029A0)):
         if from_file >= 0:
             old_dma_start, old_dma_end, old_size = rom.original.get_dmadata_record_by_key(from_file)
             copy_size = min(size, old_size)
-            new_buffer[start:start+copy_size] = rom.original.read_bytes(from_file, copy_size)
-            new_buffer[start+copy_size:start+size] = [0] * (size - copy_size)
+            new_buffer[start:start + copy_size] = rom.original.read_bytes(from_file, copy_size)
+            new_buffer[start + copy_size:start + size] = [0] * (size - copy_size)
         else:
             # this is a new file, so we just fill with null data
-            new_buffer[start:start+size] = [0] * size
+            new_buffer[start:start + size] = [0] * size
 
     # end of DMA entries
     patch_data.append_int16(0xFFFF)
@@ -155,7 +155,7 @@ def create_patch_file(rom, rand, xor_range=(0x00B8AD30, 0x00F029A0)):
             block_end = address - 1
 
         # save the new data
-        data += rom.buffer[block_end+1:address+1]
+        data += rom.buffer[block_end + 1:address + 1]
 
     # if there was any left over blocks, write them out
     if block_start:
@@ -225,10 +225,10 @@ def apply_patch_file(rom, file, sub_file=None):
             old_dma_start, old_dma_end, old_size = rom.original.get_dmadata_record_by_key(from_file)
             copy_size = min(size, old_size)
             rom.write_bytes(start, rom.original.read_bytes(from_file, copy_size))
-            rom.buffer[start+copy_size:start+size] = [0] * (size - copy_size)
+            rom.buffer[start + copy_size:start + size] = [0] * (size - copy_size)
         else:
             # if it's a new file, fill with 0s
-            rom.buffer[start:start+size] = [0] * size
+            rom.buffer[start:start + size] = [0] * size
 
     # Read in the XOR data blocks. This goes to the end of the file.
     block_start = None
@@ -261,4 +261,4 @@ def apply_patch_file(rom, file, sub_file=None):
 
         # Save the new data to rom
         rom.write_bytes(block_start, data)
-        block_start = block_start+block_size
+        block_start = block_start + block_size

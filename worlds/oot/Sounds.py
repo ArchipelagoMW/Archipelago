@@ -188,7 +188,7 @@ def get_patch_dict():
     return {s.value.keyword: s.value.id for s in Sounds}
 
 
-def get_hook_pool(sound_hook, earsafeonly = "FALSE"):
+def get_hook_pool(sound_hook, earsafeonly="FALSE"):
     if earsafeonly == "TRUE":
         list = [s for s in sound_hook.value.pool if Tags.PAINFUL not in s.value.tags]
         return list

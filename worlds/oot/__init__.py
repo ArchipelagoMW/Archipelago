@@ -640,13 +640,13 @@ class OOTWorld(World):
                         elif self.shopsanity_prices == 'affordable':
                             self.shop_prices[location.name] = 10
                         elif self.shopsanity_prices == 'starting_wallet':
-                            self.shop_prices[location.name] = self.random.randrange(0,100,5)
+                            self.shop_prices[location.name] = self.random.randrange(0, 100, 5)
                         elif self.shopsanity_prices == 'adults_wallet':
-                            self.shop_prices[location.name] = self.random.randrange(0,201,5)
+                            self.shop_prices[location.name] = self.random.randrange(0, 201, 5)
                         elif self.shopsanity_prices == 'giants_wallet':
-                            self.shop_prices[location.name] = self.random.randrange(0,501,5)
+                            self.shop_prices[location.name] = self.random.randrange(0, 501, 5)
                         elif self.shopsanity_prices == 'tycoons_wallet':
-                            self.shop_prices[location.name] = self.random.randrange(0,1000,5)
+                            self.shop_prices[location.name] = self.random.randrange(0, 1000, 5)
 
     # Fill boss prizes
     def fill_bosses(self, bossCount=9):
@@ -676,7 +676,6 @@ class OOTWorld(World):
             loc = prize_locs.pop()
             loc.place_locked_item(item)
             self.hinted_dungeon_reward_locations[item.name] = loc
-
 
     # Separate the result from generate_itempool into main and prefill pools
     def divide_itempools(self):
@@ -1191,7 +1190,7 @@ class OOTWorld(World):
             "shuffle_overworld_entrances", "shuffle_bosses", "key_rings", "key_rings_list", "enhance_map_compass",
             "shuffle_mapcompass", "shuffle_smallkeys", "shuffle_hideoutkeys", "shuffle_bosskeys",
             "logic_rules", "logic_no_night_tokens_without_suns_song", "logic_tricks",
-            "warp_songs", "shuffle_song_items","shuffle_medigoron_carpet_salesman", "shuffle_frog_song_rupees",
+            "warp_songs", "shuffle_song_items", "shuffle_medigoron_carpet_salesman", "shuffle_frog_song_rupees",
             "shuffle_scrubs", "shuffle_child_trade", "shuffle_freestanding_items", "shuffle_pots", "shuffle_crates",
             "shuffle_cows", "shuffle_beehives", "shuffle_kokiri_sword", "shuffle_ocarinas", "shuffle_gerudo_card",
             "shuffle_beans", "starting_age", "bombchus_in_logic", "spawn_positions", "owl_drops",

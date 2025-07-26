@@ -22,7 +22,7 @@ def rgba16_to_ci8(rgba16_texture):
     ci8_texture = []
     palette = get_colors_from_rgba16(rgba16_texture) # Get all of the colors in the texture
     if len(palette) > 0x100: # Make sure there are <= 256 colors. Could probably do some fancy stuff to convert, but nah.
-        raise(Exception("RGB Texture exceeds maximum of 256 colors"))
+        raise Exception("RGB Texture exceeds maximum of 256 colors")
     if len(palette) < 0x100: #Pad the palette with 0x0001 #Pad the palette with 0001s to take up the full 256 colors
         for i in range(0, 0x100 - len(palette)):
             palette.append(0x0001)
@@ -57,7 +57,7 @@ def get_colors_from_rgba16(rgba16_texture):
 # returns - new texture = texture xor patch
 def apply_rgba16_patch(rgba16_texture, rgba16_patch):
     if rgba16_patch is not None and (len(rgba16_texture) != len(rgba16_patch)):
-        raise(Exception("OG Texture and Patch not the same length!"))
+        raise Exception("OG Texture and Patch not the same length!")
 
     new_texture = []
     if not rgba16_patch:
@@ -111,7 +111,7 @@ def load_rgba16_texture(fileStr, size):
         texture.append(int.from_bytes(file.read(2), 'big'))
 
     file.close()
-    return(texture)
+    return texture
 
 
 # Create an new rgba16 texture byte array from a rgba16 binary file. Use this if you want to create complete new textures using no copyrighted content (or for testing).
@@ -222,13 +222,13 @@ def build_crate_ci8_patches():
 
     crate_textures = [
         (5, 'texture_crate_default', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, None),
-        (6, 'texture_crate_gold'   , 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_gold_rgba16_patch.bin'),
+        (6, 'texture_crate_gold', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_gold_rgba16_patch.bin'),
         (7, 'texture_crate_key', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_key_rgba16_patch.bin'),
-        (8, 'texture_crate_skull',  0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_skull_rgba16_patch.bin'),
+        (8, 'texture_crate_skull', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_skull_rgba16_patch.bin'),
         (9, 'texture_crate_bosskey', 0x18B6000 + 0x20, 0x018B6000, 4096, ci4_rgba16patch_to_ci8, 'crate_bosskey_rgba16_patch.bin'),
     ]
 
-    for texture_id, texture_name, rom_address_base, rom_address_palette, size,func, patchfile in crate_textures:
+    for texture_id, texture_name, rom_address_base, rom_address_palette, size, func, patchfile in crate_textures:
         texture = func(rom, rom_address_base, rom_address_palette, size, patchfile)
         file = open(texture_name, 'wb')
         file.write(texture)

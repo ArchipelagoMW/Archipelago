@@ -116,7 +116,7 @@ def patch_tunic_colors(rom, ootworld, symbols):
             tunic_option = 'Custom'
         # "Weird" weirdshots will crash if the Kokiri Tunic Green value is > 0x99. Brickwall it.
         if ootworld.logic_rules != 'glitchless' and tunic == 'Kokiri Tunic':
-            color[1] = min(color[1],0x98)
+            color[1] = min(color[1], 0x98)
         rom.write_bytes(address, color)
 
         # patch the tunic icon
@@ -149,8 +149,8 @@ def patch_navi_colors(rom, ootworld, symbols):
     rainbow_error = None
 
     for navi_action, navi_setting, navi_addresses, rainbow_inner_symbol, rainbow_outer_symbol in navi:
-        navi_option_inner = format_cosmetic_option_result(ootworld.__dict__[navi_setting+'_inner'])
-        navi_option_outer = format_cosmetic_option_result(ootworld.__dict__[navi_setting+'_outer'])
+        navi_option_inner = format_cosmetic_option_result(ootworld.__dict__[navi_setting + '_inner'])
+        navi_option_outer = format_cosmetic_option_result(ootworld.__dict__[navi_setting + '_outer'])
 
         # choose a random choice for the whole group
         if navi_option_inner == 'Random Choice':
@@ -206,7 +206,6 @@ def patch_navi_colors(rom, ootworld, symbols):
             color = address_colors['inner'] + [0xFF] + address_colors['outer'] + [0xFF]
             rom.write_bytes(address, color)
 
-
     if rainbow_error:
         logger.error(rainbow_error)
 
@@ -226,8 +225,8 @@ def patch_sword_trails(rom, ootworld, symbols):
     rainbow_error = None
 
     for trail_name, trail_setting, trail_addresses, rainbow_inner_symbol, rainbow_outer_symbol in sword_trails:
-        option_inner = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_inner'])
-        option_outer = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_outer'])
+        option_inner = format_cosmetic_option_result(ootworld.__dict__[trail_setting + '_inner'])
+        option_outer = format_cosmetic_option_result(ootworld.__dict__[trail_setting + '_outer'])
 
         # handle random choice
         if option_inner == 'Random Choice':
@@ -319,8 +318,8 @@ def patch_boomerang_trails(rom, ootworld, symbols):
 def patch_trails(rom, ootworld, trails):
     for trail_name, trail_setting, trail_color_list, trail_color_dict, trail_symbols in trails:
         color_inner_symbol, color_outer_symbol, rainbow_inner_symbol, rainbow_outer_symbol = trail_symbols
-        option_inner = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_inner'])
-        option_outer = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_outer'])
+        option_inner = format_cosmetic_option_result(ootworld.__dict__[trail_setting + '_inner'])
+        option_outer = format_cosmetic_option_result(ootworld.__dict__[trail_setting + '_outer'])
 
         # handle random choice
         if option_inner == 'Random Choice':
@@ -620,7 +619,7 @@ def patch_sfx(rom, ootworld, symbols):
                 selection = ootworld.random.choice(sfx.get_hook_pool(hook, "TRUE")).value.keyword
             elif selection == 'completely-random':
                 selection = ootworld.random.choice(sfx.standard).value.keyword
-            sound_id  = sound_dict[selection]
+            sound_id = sound_dict[selection]
             for loc in hook.value.locations:
                 rom.write_int16(loc, sound_id)
 

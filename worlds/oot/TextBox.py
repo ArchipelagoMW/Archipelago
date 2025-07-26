@@ -17,7 +17,7 @@ CONTROL_CHARS = {
     'NAME':         ['@', '\x0F'],
     'COLOR':        ['#', '\x05\x00'],
 }
-TEXT_END   = '\x02'
+TEXT_END = '\x02'
 
 
 def line_wrap(text, strip_existing_lines=False, strip_existing_boxes=False, replace_control_chars=True):
@@ -44,10 +44,10 @@ def line_wrap(text, strip_existing_lines=False, strip_existing_boxes=False, repl
             if text_code.code in strip_codes:
                 # Check for existing whitespace near this control code.
                 # If one is found, simply remove this text code.
-                if index > 0 and text_codes[index-1].code == 0x20:
+                if index > 0 and text_codes[index - 1].code == 0x20:
                     text_codes.pop(index)
                     continue
-                if index + 1 < len(text_codes) and text_codes[index+1].code == 0x20:
+                if index + 1 < len(text_codes) and text_codes[index + 1].code == 0x20:
                     text_codes.pop(index)
                     continue
                 # Replace this text code with a space.
@@ -86,10 +86,10 @@ def line_wrap(text, strip_existing_lines=False, strip_existing_boxes=False, repl
             # Find us a whole word.
             if text_code.code in [0x01, 0x04, 0x20]:
                 if index > 1:
-                    words.append(box_codes[0:index-1])
+                    words.append(box_codes[0:index - 1])
                 if text_code.code in [0x01, 0x04]:
                     # If we have ran into a line or box break, add it as a "word" as well.
-                    words.append([box_codes[index-1]])
+                    words.append([box_codes[index - 1]])
                 box_codes = box_codes[index:]
                 index = 0
             if index > 0 and index == len(box_codes):
@@ -108,18 +108,18 @@ def line_wrap(text, strip_existing_lines=False, strip_existing_boxes=False, repl
 
             # If this word is a line/box break, trim our line back a word and deal with it later.
             break_char = False
-            if words[end_index-1][0].code in [0x01, 0x04]:
-                line = words[start_index:end_index-1]
+            if words[end_index - 1][0].code in [0x01, 0x04]:
+                line = words[start_index:end_index - 1]
                 break_char = True
 
             # Check the width of the line after adding one more word.
-            if end_index == len(words) or break_char or calculate_width(words[start_index:end_index+1]) > line_width:
+            if end_index == len(words) or break_char or calculate_width(words[start_index:end_index + 1]) > line_width:
                 if line or lines:
                     lines.append(line)
                 start_index = end_index
 
             # If we've reached the end of the box, finalize it.
-            if end_index == len(words) or words[end_index-1][0].code == 0x04 or len(lines) == LINES_PER_BOX:
+            if end_index == len(words) or words[end_index - 1][0].code == 0x04 or len(lines) == LINES_PER_BOX:
                 # Append the same icon to any wrapped boxes.
                 if icon_code and box_count > 1:
                     lines[0][0] = [icon_code] + lines[0][0]

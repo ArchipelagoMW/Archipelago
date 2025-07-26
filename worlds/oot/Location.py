@@ -24,7 +24,7 @@ location_name_to_id = {name: (location_id_offset + index) for (index, name) in e
 
 
 class DisableType(Enum):
-    ENABLED  = 0
+    ENABLED = 0
     PENDING = 1
     DISABLED = 2
 

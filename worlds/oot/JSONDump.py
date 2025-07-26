@@ -70,7 +70,7 @@ def dump_dict(obj, current_indent='', sub_width=None, ensure_ascii=False):
 
     key_width = None
     if sub_width is not None:
-        sub_width = (sub_width[0]-1, sub_width[1])
+        sub_width = (sub_width[0] - 1, sub_width[1])
         if sub_width[0] == 0:
             key_width = sub_width[1]
 

@@ -112,7 +112,7 @@ class Sequence(object):
         self.data = []
 
 
-def process_sequences(rom, sequences, target_sequences, disabled_source_sequences, disabled_target_sequences, ids, seq_type = 'bgm'):
+def process_sequences(rom, sequences, target_sequences, disabled_source_sequences, disabled_target_sequences, ids, seq_type='bgm'):
     # Process vanilla music data
     for bgm in ids:
         # Get sequence metadata

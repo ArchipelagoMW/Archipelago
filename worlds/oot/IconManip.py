@@ -9,8 +9,8 @@ def add_hue(image, color, tiff=False):
     for i in range(start, len(image), 4):
         try:
             for x in range(3):
-                image[i+x] = int(((image[i+x]/255) * (color[x]/255)) * 255)
-        except: 
+                image[i + x] = int(((image[i + x]/255) * (color[x]/255)) * 255)
+        except:
             pass
     return image
 
@@ -20,10 +20,10 @@ def add_belt(tunic, belt, tiff=False):
     start = 154 if tiff else 0
     for i in range(start, len(tunic), 4):
         try:
-            if belt[i+3] != 0:
-                alpha = belt[i+3] / 255
+            if belt[i + 3] != 0:
+                alpha = belt[i + 3] / 255
                 for x in range(3):
-                    tunic[i+x] = int((belt[i+x] * alpha) + (tunic[i+x] * (1 - alpha)))
+                    tunic[i + x] = int((belt[i + x] * alpha) + (tunic[i + x] * (1 - alpha)))
         except:
             pass
     return tunic
@@ -39,12 +39,12 @@ def generate_tunic_icon(color):
 # END TODO
 
 # Function to add extra data on top of icon
-def add_extra_data(rgbValues, fileName, intensity = 0.5):
+def add_extra_data(rgbValues, fileName, intensity=0.5):
     fileRGB = []
     with open(fileName, "rb") as fil:
         data = fil.read()
         for i in range(0, len(data), 4):
-            fileRGB.append([data[i+0], data[i+1], data[i+2], data[i+3]])
+            fileRGB.append(list(data[i:i + 4]))
     for i in range(len(rgbValues)):
         alpha = fileRGB[i][3] / 255
         for x in range(3):
@@ -62,12 +62,12 @@ def greyscaleRGB(rgbValues, intensity: int = 2):
 def rgb5a1ToRGB(rgb5a1Bytes):
     pixels = []
     for i in range(0, len(rgb5a1Bytes), 2):
-        bits = format(rgb5a1Bytes[i], '#010b')[2:] + format(rgb5a1Bytes[i+1], '#010b')[2:]
+        bits = format(rgb5a1Bytes[i], '#010b')[2:] + format(rgb5a1Bytes[i + 1], '#010b')[2:]
         r = int(int(bits[0:5], 2) * (255/31))
         g = int(int(bits[5:10], 2) * (255/31))
         b = int(int(bits[10:15], 2) * (255/31))
         a = int(bits[15], 2) * 255
-        pixels.append([r,g,b,a])
+        pixels.append([r, g, b, a])
     return pixels
 
 

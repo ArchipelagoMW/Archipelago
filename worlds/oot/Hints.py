@@ -12,7 +12,7 @@ from .Utils import data_path, read_json
 
 
 bingoBottlesForHints = (
-    "Bottle", "Bottle with Red Potion","Bottle with Green Potion", "Bottle with Blue Potion",
+    "Bottle", "Bottle with Red Potion", "Bottle with Green Potion", "Bottle with Blue Potion",
     "Bottle with Fairy", "Bottle with Fish", "Bottle with Blue Fire", "Bottle with Bugs",
     "Bottle with Big Poe", "Bottle with Poe",
 )
@@ -885,11 +885,11 @@ def buildWorldGossipHints(world, checkedLocations=None):
         elif world.trials_random and world.trials == 0:
             add_hint(world, stoneGroups, GossipText("Sheik dispelled the barrier around #Ganon's Tower#.", ['Yellow']), hint_dist['trial'][1], force_reachable=True)
         elif world.trials < 6 and world.trials > 3:
-            for trial,skipped in world.skipped_trials.items():
+            for trial, skipped in world.skipped_trials.items():
                 if skipped:
-                    add_hint(world, stoneGroups,GossipText("the #%s Trial# was dispelled by Sheik." % trial, ['Yellow']), hint_dist['trial'][1], force_reachable=True)
+                    add_hint(world, stoneGroups, GossipText("the #%s Trial# was dispelled by Sheik." % trial, ['Yellow']), hint_dist['trial'][1], force_reachable=True)
         elif world.trials <= 3 and world.trials > 0:
-            for trial,skipped in world.skipped_trials.items():
+            for trial, skipped in world.skipped_trials.items():
                 if not skipped:
                     add_hint(world, stoneGroups, GossipText("the #%s Trial# protects Ganon's Tower." % trial, ['Pink']), hint_dist['trial'][1], force_reachable=True)
 
@@ -915,7 +915,7 @@ def buildWorldGossipHints(world, checkedLocations=None):
     world.hint_rng.shuffle(world.named_item_pool)
 
     hint_types = list(hint_types)
-    hint_prob  = list(hint_prob)
+    hint_prob = list(hint_prob)
     hint_counts = {}
 
     custom_fixed = True

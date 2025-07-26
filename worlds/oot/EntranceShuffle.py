@@ -706,11 +706,11 @@ def shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrances, 
         retry_count -= 1
         rollbacks = []
         try:
-            shuffle_entrances(ootworld, pool_type+'Rest', restrictive_entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state)
+            shuffle_entrances(ootworld, pool_type + 'Rest', restrictive_entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state)
             if check_all:
-                shuffle_entrances(ootworld, pool_type+'Soft', soft_entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state)
+                shuffle_entrances(ootworld, pool_type + 'Soft', soft_entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state)
             else:
-                shuffle_entrances(ootworld, pool_type+'Soft', soft_entrances, target_entrances, rollbacks, set(), all_state, none_state)
+                shuffle_entrances(ootworld, pool_type + 'Soft', soft_entrances, target_entrances, rollbacks, set(), all_state, none_state)
 
             validate_world(ootworld, None, locations_to_ensure_reachable, all_state, none_state)
             for entrance, target in rollbacks:

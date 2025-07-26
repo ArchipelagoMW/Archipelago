@@ -1,6 +1,7 @@
 import itertools
 from .ntype import uint32
 
+
 def calculate_crc(self):
     t1 = t2 = t3 = t4 = t5 = t6 = 0xDF26F436
     u32 = 0xFFFFFFFF
@@ -16,7 +17,7 @@ def calculate_crc(self):
         if ((t6 + d) & u32) < t6:
             t4 += 1
 
-        t6 = (t6+d) & u32
+        t6 = (t6 + d) & u32
         t3 ^= d
         shift = d & 0x1F
         r = ((d << shift) | (d >> (32 - shift)))

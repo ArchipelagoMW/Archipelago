@@ -221,7 +221,7 @@ class SaveContext():
                 save_table += [(address & 0xFF00) >> 8, address & 0xFF, 0x00, value]
         for address, value in self.save_bytes.items():
             save_table += [(address & 0xFF00) >> 8, address & 0xFF, 0x01, value]
-        save_table += [0x00,0x00,0x00,0x00]
+        save_table += [0x00, 0x00, 0x00, 0x00]
 
         table_len = len(save_table)
         if table_len > 0x400:
@@ -323,7 +323,7 @@ class SaveContext():
                         raise ValueError('Unknown key %s in %s of SaveContext' % (sub_address, prev_sub_address))
 
                     if isinstance(address_value, list):
-                        sub_address =  int(sub_address)
+                        sub_address = int(sub_address)
 
                     address_value = address_value[sub_address]
                     prev_sub_address = sub_address
@@ -864,7 +864,7 @@ class SaveContext():
     save_writes_table = {
         "Deku Stick Capacity": {
             'item_slot.stick'            : 'stick',
-            'upgrades.stick_upgrade'     : [2,3],
+            'upgrades.stick_upgrade'     : [2, 3],
         },
         "Deku Stick": {
             'item_slot.stick'            : 'stick',
@@ -878,7 +878,7 @@ class SaveContext():
         },
         "Deku Nut Capacity": {
             'item_slot.nut'              : 'nut',
-            'upgrades.nut_upgrade'       : [2,3],
+            'upgrades.nut_upgrade'       : [2, 3],
         },
         "Deku Nuts": {
             'item_slot.nut'              : 'nut',

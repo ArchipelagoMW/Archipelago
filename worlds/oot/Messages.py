@@ -504,9 +504,9 @@ class Message:
         for i in range(4):
             code = self.text_codes[i].code
             if not (
-                    code in range(ord('0'), ord('9')+1)
-                    or code in range(ord('A'), ord('F')+1)
-                    or code in range(ord('a'), ord('f')+1)
+                    code in range(ord('0'), ord('9') + 1)
+                    or code in range(ord('A'), ord('F') + 1)
+                    or code in range(ord('a'), ord('f') + 1)
             ):
                 return False
         return True

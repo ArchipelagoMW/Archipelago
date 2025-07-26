@@ -61,7 +61,7 @@ class uint24:
         buffer[address:address + 3] = byte_arr[0:3]
 
     def read(buffer, address=0):
-        return (buffer[address+0] << 16) | (buffer[address+1] << 8) | buffer[address+2]
+        return (buffer[address] << 16) | (buffer[address + 1] << 8) | buffer[address + 2]
 
     def bytes(value):
         value = value & 0xFFFFFF
@@ -72,7 +72,7 @@ class uint24:
 
 
 class BigStream(object):
-    def __init__(self, buffer:bytearray):
+    def __init__(self, buffer: bytearray):
         self.last_address = 0
         self.buffer = buffer
 
@@ -182,7 +182,7 @@ class BigStream(object):
     def append_int32(self, value):
         self.append_bytes(uint32.bytes(value))
 
-    def append_f32(self, value:float):
+    def append_f32(self, value: float):
         self.append_bytes(struct.pack('>f', value))
 
     def append_bytes(self, values):

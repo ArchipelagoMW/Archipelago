@@ -1,5 +1,6 @@
 from math import ceil
 
+
 # Create a dict of dicts of the format:
 # {
 #   scene_number_n : {
@@ -20,7 +21,7 @@ def get_collectible_flag_table(world):
                 default = location.default
                 if(isinstance(default, list)): #List of alternative room/setup/flag to use
                     primary_tuple = default[0]
-                    for c in range(1,len(default)):
+                    for c in range(1, len(default)):
                         alt_list.append((location, default[c], primary_tuple))
                     default = location.default[0] #Use the first tuple as the primary tuple
                 if(isinstance(default, tuple)):
@@ -90,14 +91,14 @@ def get_collectible_flag_addresses(world, collectible_scene_flags_table):
         # Loop through collectible_scene_flags_table until we find the right scene
         while num_scenes > 0:
             scene_id = collectible_scene_flags_table[index]
-            room_setup_count = collectible_scene_flags_table[index+1]
+            room_setup_count = collectible_scene_flags_table[index + 1]
             index += 2
             if scene_id == scene:  # found the scene
                 # Loop through each room/setup combination until we find the right one.
                 for i in range(room_setup_count):
                     room_id = collectible_scene_flags_table[index] & 0x3F
                     setup_id_temp = (collectible_scene_flags_table[index] & 0xC0) >> 6
-                    room_byte_offset = (collectible_scene_flags_table[index+1] << 8) + collectible_scene_flags_table[index+2]
+                    room_byte_offset = (collectible_scene_flags_table[index + 1] << 8) + collectible_scene_flags_table[index + 2]
                     index += 3
                     if room_id == room and setup_id_temp == setup_id:
                         return room_byte_offset

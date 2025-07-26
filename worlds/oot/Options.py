@@ -261,7 +261,7 @@ class ExtraTriforces(Range):
 
 class LogicalChus(Toggle):
     """Bombchus are properly considered in logic.
-    The first found pack will always have 20 chus. 
+    The first found pack will always have 20 chus.
     Kokiri Shop and Bazaar will sell refills at reduced cost.
     Bombchus open Bombchu Bowling."""
     display_name = "Bombchus Considered in Logic"
@@ -1274,7 +1274,7 @@ sfx_options: dict[str, type[Option]] = {
 
 
 class LogicTricks(OptionSet):
-    """Set various tricks for logic in Ocarina of Time. 
+    """Set various tricks for logic in Ocarina of Time.
     Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
     A full list of supported tricks can be found at:
     https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py

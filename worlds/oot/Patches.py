@@ -64,7 +64,7 @@ def patch_rom(world, rom):
         titleBytesComp = stream.read()
         titleBytesDiff = zlib.decompress(titleBytesComp)
 
-        originalBytes = rom.original.buffer[writeAddress: writeAddress+ len(titleBytesDiff)]
+        originalBytes = rom.original.buffer[writeAddress: writeAddress + len(titleBytesDiff)]
         titleBytes = bytearray([a ^ b for a, b in zip(titleBytesDiff, originalBytes)])
         rom.write_bytes(writeAddress, titleBytes)
 
@@ -74,7 +74,7 @@ def patch_rom(world, rom):
         keatonBytesComp = stream.read()
         keatonBytesDiff = zlib.decompress(keatonBytesComp)
 
-        originalBytes = rom.original.buffer[writeAddress: writeAddress+ len(keatonBytesDiff)]
+        originalBytes = rom.original.buffer[writeAddress: writeAddress + len(keatonBytesDiff)]
         keatonBytes = bytearray([a ^ b for a, b in zip(keatonBytesDiff, originalBytes)])
         rom.write_bytes(writeAddress, keatonBytes)
 
@@ -143,7 +143,7 @@ def patch_rom(world, rom):
     ]
 
     # Loop through the textures and apply the patch. Add the new texture as a new file in rom.
-    for texture_id, texture_name, rom_address_base, rom_address_palette, size,func, patchfile in crate_textures:
+    for texture_id, texture_name, rom_address_base, rom_address_palette, size, func, patchfile in crate_textures:
         texture_file = File({'Name': texture_name}) # Create a new file for the texture
         texture_file.copy(rom) # Relocate this file to free space is the rom
         texture_data = func(rom, rom_address_base, rom_address_palette, size, data_path(patchfile) if patchfile else None) # Apply the texture patch. Resulting texture will be stored in texture_data as a bytearray
@@ -207,8 +207,8 @@ def patch_rom(world, rom):
 
     # Fix Ice Cavern Alcove Camera
     if not world.dungeon_mq['Ice Cavern']:
-        rom.write_byte(0x2BECA25,0x01)
-        rom.write_byte(0x2BECA2D,0x01)
+        rom.write_byte(0x2BECA25, 0x01)
+        rom.write_byte(0x2BECA2D, 0x01)
 
     # Fix GS rewards to be static
     rom.write_int32(0xEA3934, 0)
@@ -250,7 +250,7 @@ def patch_rom(world, rom):
 
     # show seed info on file select screen
     def makebytes(txt, size):
-        _bytes = list(ord(c) for c in txt[:size-1]) + [0] * size
+        _bytes = list(ord(c) for c in txt[:size - 1]) + [0] * size
         return _bytes[:size]
 
     def truncstr(txt, size):
@@ -620,7 +620,7 @@ def patch_rom(world, rom):
 
     if world.shuffle_ocarinas:
         symbol = rom.sym('OCARINAS_SHUFFLED')
-        rom.write_byte(symbol,0x01)
+        rom.write_byte(symbol, 0x01)
 
     # Speed Zelda Light Arrow cutscene
     rom.write_bytes(0x2531B40, [0x00, 0x28, 0x00, 0x01, 0x00, 0x02, 0x00, 0x02])
@@ -856,7 +856,7 @@ def patch_rom(world, rom):
     # Forbid Sun's Song from a bunch of cutscenes
     Suns_scenes = [0x2016FC9, 0x2017219, 0x20173D9, 0x20174C9, 0x2017679, 0x20C1539, 0x20C15D9, 0x21A0719, 0x21A07F9, 0x2E90129, 0x2E901B9, 0x2E90249, 0x225E829, 0x225E939, 0x306D009]
     for address in Suns_scenes:
-        rom.write_byte(address,0x01)
+        rom.write_byte(address, 0x01)
 
     # Allow Warp Songs in additional places
     rom.write_byte(0xB6D3D2, 0x00) # Gerudo Training Ground
@@ -884,7 +884,7 @@ def patch_rom(world, rom):
     # Make item descriptions into a single box
     Short_item_descriptions = [0x92EC84, 0x92F9E3, 0x92F2B4, 0x92F37A, 0x92F513, 0x92F5C6, 0x92E93B, 0x92EA12]
     for address in Short_item_descriptions:
-        rom.write_byte(address,0x02)
+        rom.write_byte(address, 0x02)
 
     et_original = rom.read_bytes(0xB6FBF0, 4 * 0x0614)
 
@@ -892,7 +892,7 @@ def patch_rom(world, rom):
 
     def copy_entrance_record(source_index, destination_index, count=4):
         ti = source_index * 4
-        rom.write_bytes(0xB6FBF0 + destination_index * 4, et_original[ti:ti+(4 * count)])
+        rom.write_bytes(0xB6FBF0 + destination_index * 4, et_original[ti:ti + 4 * count])
 
     def generate_exit_lookup_table():
         # Assumes that the last exit on a scene's exit list cannot be 0000
@@ -974,7 +974,7 @@ def patch_rom(world, rom):
             # We'll need to iterate more than once, so make a copy so we can iterate more than once.
             entrances = list(entrances)
             for entrance in entrances:
-                if entrance.type not in('ChildBoss', 'AdultBoss') or not entrance.replaces or 'patch_addresses' not in entrance.data:
+                if entrance.type not in ('ChildBoss', 'AdultBoss') or not entrance.replaces or 'patch_addresses' not in entrance.data:
                     continue
                 if entrance == entrance.replaces:
                     # This can happen if something is plando'd vanilla.
@@ -1092,7 +1092,7 @@ def patch_rom(world, rom):
     # Set entrances to update, except grotto entrances which are handled on their own at a later point
     set_entrance_updates(filter(lambda entrance: entrance.type != 'Grotto', world.get_shuffled_entrances()))
 
-    for k, v in [(k,v) for k, v in exit_updates if k in exit_table]:
+    for k, v in [(k, v) for k, v in exit_updates if k in exit_table]:
         for addr in exit_table[k]:
             rom.write_int16(addr, v)
 
@@ -1526,9 +1526,9 @@ def patch_rom(world, rom):
     ### Load Shop File
     # Move shop actor file to free space
     shop_item_file = File({
-            'Name':'En_GirlA',
-            'Start':'00C004E0',
-            'End':'00C02E00',
+            'Name': 'En_GirlA',
+            'Start': '00C004E0',
+            'End': '00C02E00',
         })
     shop_item_file.relocate(rom)
 
@@ -1556,9 +1556,9 @@ def patch_rom(world, rom):
 
     # Create 2nd Bazaar Room
     bazaar_room_file = File({
-            'Name':'shop1_room_1',
-            'Start':'028E4000',
-            'End':'0290D7B0',
+            'Name': 'shop1_room_1',
+            'Start': '028E4000',
+            'End': '0290D7B0',
         })
     bazaar_room_file.copy(rom)
 
@@ -2046,7 +2046,7 @@ def patch_rom(world, rom):
     GILDED_CHEST = 12
     SILVER_CHEST = 13
     SKULL_CHEST_SMALL = 14
-    SKULL_CHEST_BIG =  15
+    SKULL_CHEST_BIG = 15
     if world.bombchus_in_logic or world.minor_items_as_major_chest:
         bombchu_ids = [0x6A, 0x03, 0x6B]
         for i in bombchu_ids:
