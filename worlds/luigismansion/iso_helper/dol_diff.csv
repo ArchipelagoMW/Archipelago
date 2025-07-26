@@ -1,17 +1,17 @@
 0x00277C,60000000,# Debug
-0x0087C8,484D200D,
+0x0087C8,484D200D,# Ghost Generation Trap
 0x008F9C,484D1705,
 0x019040,60000000,# Disable 1F washroom door
-0x02E79C,7FE3FB78,
-0x02E7A4,484AC6C1,
-0x0339CC,60000000,
+0x02E79C,7FE3FB78,# Multiple Gold Bar creation
+0x02E7A4,484AC925,# Multiple Gold Bar creation
+0x0339CC,60000000,# Van Gore Minigame Painting Zoom
 0x03458C,38600001,# Force Storage Room Wall
 0x03E60C,7C852810,
 0x03E620,7C002800,
 0x03E63C,7C002800,
 0x047500,38600002,# Skip new game intro cutscene
-0x04DBB0,4848D205,
-0x04DC10,4848D1A5,
+0x04DBB0,4848D469,# Custom Counter Bitfield reading
+0x04DC10,4848D409,# Custom Counter Bitfield reading
 0x05C62C,4847EBAD,# Perform Monochrome
 0x072428,60000000,# Disable flag 15 auto turn on
 0x079E64,60000000,
@@ -26,13 +26,13 @@
 0x0ACE94,60000000,# Disable flag 12 auto turn on
 0x0ACEA0,60000000,# Disable flag 15 auto turn on# Disable flag 68 auto turn on
 0x0ACEAC,60000000,# Disable flag 82 auto turn on
-0x0AD624,4842D8AD,
+0x0AD624,4842DB4D,# Bowser Gem Pickup thing
 0x0B311C,48427E21,# Player set custom equipment
-0x0B4478,C0220000,
-0x0B447C,C0420000,
-0x0B4480,C0620000,
-0x0B63BC,48424959,
-0x0B6988,48424259,
+0x0B4478,C022CC80,# Mirror Warp?
+0x0B447C,C042CC84,# Mirror Warp?
+0x0B4480,C062CC88,# Mirror Warp?
+0x0B63BC,48424BBD,
+0x0B6988,48424305,
 0x0C4E74,48416119,# Set Current Ghost room detector
 0x0D3A50,3C608034,
 0x0D3A54,80038FC0,
@@ -43,5 +43,5 @@
 0x1347D0,3880000A,
 0x131EAC,60000000,
 0x135C9C,483A5499,# Set Boolossus Difficulty
-0x1AB9A0,4832F47D,
+0x1AB9A0,4832F6E1,# Something to do with Received display texts
 0x351C40,3F800000,
