@@ -145,8 +145,8 @@ async def game_watcher(ctx: ChecksFinderContext):
         await asyncio.sleep(0.1)
 
 
-if __name__ == '__main__':
-    async def main(args):
+def main(args):
+    async def main():
         ctx = ChecksFinderContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         if gui_enabled:

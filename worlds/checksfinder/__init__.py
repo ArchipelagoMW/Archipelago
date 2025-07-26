@@ -4,8 +4,17 @@ from .Locations import ChecksFinderLocation, advancement_table
 from Options import PerGameCommonOptions
 from .Rules import set_rules, set_completion_rules
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import launch, components, Component, Type
 
 client_version = 7
+
+
+def launch_client(*args: str):
+    from .Client import main
+    launch(main, name="ChecksFinderClient", args=args)
+
+
+components.append(Component(display_name="ChecksFinder Client", func=launch_client, component_type=Type.CLIENT))
 
 
 class ChecksFinderWeb(WebWorld):

@@ -581,8 +581,6 @@ class ALTTPSNIClient(SNIClient):
 
 
 def get_alttp_settings(romfile: str):
-    import LttPAdjuster
-
     adjustedromfile = ''
     if vars(Utils.get_adjuster_settings_no_defaults(GAME_ALTTP)):
         last_settings = Utils.get_adjuster_settings(GAME_ALTTP)
@@ -681,18 +679,18 @@ def get_alttp_settings(romfile: str):
             choice = 'yes'
 
         if 'yes' in choice:
-            import LttPAdjuster
+            import Adjuster
             from .Rom import get_base_rom_path
             last_settings.rom = romfile
             last_settings.baserom = get_base_rom_path()
             last_settings.world = None
 
             if last_settings.sprite_pool:
-                from LttPAdjuster import AdjusterWorld
+                from .Adjuster import AdjusterWorld
                 last_settings.world = AdjusterWorld(getattr(last_settings, "sprite_pool"))
 
             adjusted = True
-            _, adjustedromfile = LttPAdjuster.adjust(last_settings)
+            _, adjustedromfile = Adjuster.adjust(last_settings)
 
             if hasattr(last_settings, "world"):
                 delattr(last_settings, "world")

@@ -19,6 +19,15 @@ from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_ea
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule
+from worlds.LauncherComponents import Component, components, launch, Type, SuffixIdentifier
+
+
+def launch_client(*args: str):
+    from .Client import main
+    launch(main, name="Zelda1Client", args=args)
+
+components.append(Component(display_name="Zelda 1 Client", func=launch_client, component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier('.aptloz')))
 
 
 class TLoZSettings(settings.Group):

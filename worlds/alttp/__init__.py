@@ -7,6 +7,7 @@ import typing
 import settings
 from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
 from worlds.AutoWorld import World, WebWorld, LogicMixin
+from worlds.LauncherComponents import launch as launch_component, components, Component, Type
 from .Client import ALTTPSNIClient
 from .Dungeons import create_dungeons, Dungeon
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
@@ -26,6 +27,14 @@ from .SubClasses import ALttPItem, LTTPRegionType
 lttp_logger = logging.getLogger("A Link to the Past")
 
 extras_list = sum(difficulties['normal'].extras[0:5], [])
+
+
+def launch_adjuster(*args):
+    from .Adjuster import launch
+    launch_component(launch, "LttPAdjuster", args=args)
+
+
+components.append(Component(display_name="LttP Adjuster", component_type=Type.ADJUSTER, func=launch_adjuster))
 
 
 class ALTTPSettings(settings.Group):

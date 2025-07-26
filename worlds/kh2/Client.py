@@ -1007,8 +1007,8 @@ async def kh2_watcher(ctx: KH2Context):
         await asyncio.sleep(0.5)
 
 
-def launch():
-    async def main(args):
+def main(args):
+    async def main():
         ctx = KH2Context(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         if gui_enabled:
