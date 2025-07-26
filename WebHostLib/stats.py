@@ -26,7 +26,6 @@ def get_db_data(known_games: typing.Set[str]) -> typing.Tuple[typing.Counter[str
     room: Room
     for room in select(room for room in Room if room.creation_time >= cutoff):
         for slot in room.seed.slots:
-            
             if slot.game in known_games:
                 current_game = slot.game
             else:
