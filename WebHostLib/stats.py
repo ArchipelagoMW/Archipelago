@@ -25,8 +25,11 @@ def get_db_data(known_games: set[str]) -> tuple[Counter[str], defaultdict[date, 
     for room in select(room for room in Room if room.creation_time >= cutoff):
         for slot in room.seed.slots:
             if slot.game in known_games:
-                total_games[slot.game] += 1
-                games_played[room.creation_time.date()][slot.game] += 1
+                current_game = slot.game
+            else:
+                current_game = "Other"
+            total_games[current_game] += 1
+            games_played[room.creation_time.date()][current_game] += 1
     return total_games, games_played
 
 
