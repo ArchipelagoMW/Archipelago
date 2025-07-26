@@ -134,7 +134,7 @@ class LMWeb(WebWorld):
             "English",
             "setup_en.md",
             "setup/en",
-            ["BootsinSoots"],
+            ["BootsinSoots", "SomeJakeGuy"],
         )
     ]
 
