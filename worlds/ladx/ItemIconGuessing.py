@@ -107,6 +107,7 @@ SYNONYMS = {
     'JUMP': 'FEATHER',
     'PLUME': 'FEATHER',
     'WING': 'FEATHER',
+    "QUILL": "FEATHER",
 
     # SHOVEL
     'DIG': 'SHOVEL',
@@ -343,6 +344,8 @@ SYNONYMS = {
     # TRADING_ITEM_LETTER
     'CARD': 'TRADING_ITEM_LETTER',
     'MESSAGE': 'TRADING_ITEM_LETTER',
+    "TICKET": 'TRADING_ITEM_LETTER',
+    "PASS": 'TRADING_ITEM_LETTER',
 
     # TRADING_ITEM_BROOM
     'SWEEP': 'TRADING_ITEM_BROOM',
@@ -365,6 +368,8 @@ SYNONYMS = {
     'MIRROR': 'TRADING_ITEM_MAGNIFYING_GLASS',
     'SCOPE': 'TRADING_ITEM_MAGNIFYING_GLASS',
     'XRAY': 'TRADING_ITEM_MAGNIFYING_GLASS',
+    "DETECTOR": 'TRADING_ITEM_MAGNIFYING_GLASS',
+    "ITEMFINDER": 'TRADING_ITEM_MAGNIFYING_GLASS',
 
     # PIECE_OF_POWER
     'TRIANGLE': 'PIECE_OF_POWER',
@@ -378,6 +383,7 @@ PHRASES = {
     'BOSS KEY': 'NIGHTMARE_KEY',
     'HEART PIECE': 'HEART_PIECE',
     'PIECE OF HEART': 'HEART_PIECE',
+    "ROCK SMASH": 'BOMB', 
 }
 
 # All following will only be used to match items for the specific game.
@@ -404,6 +410,16 @@ GAME_SPECIFIC_PHRASES = {
 
     'Ocarina of Time': {
         'COJIRO': 'ROOSTER',
+        "Goron Tunic": "RED_TUNIC",
+        "Zora Tunic": "BLUE_TUNIC",
+        "Wallet": "MAGIC_POWDER",
+        "Medallion": "PIECE_OF_POWER",
+        "Kokiri Emerald": "RUPEES_500",
+        "Goron Ruby": "RUPEES_500",
+        "Zora Sapphire": "RUPEES_500",
+        "Dins Fire": "MAGIC_ROD", # Fire shield
+        "Nayrus Love": "MAGIC_ROD", # Protective barrier
+        "Farores Wind": "MAGIC_ROD", # Create/use warp point in dungeons
     },
 
     'SMZ3': {
@@ -417,10 +433,14 @@ GAME_SPECIFIC_PHRASES = {
 
     'Sonic Adventure 2 Battle': {
         'CHAOS EMERALD': 'PIECE_OF_POWER',
+        "Rings": "RUPEES_20", # This should only affect filler Rings currency, not Flame Ring upgrade
+        "Grapes": "TRADING_ITEM_PINEAPPLE",
+        "Pick Nails": "SHOVEL", # Digging upgrade
     },
 
     'Super Mario 64': {
         'POWER STAR': 'PIECE_OF_POWER',
+        "Key": "NIGHTMARE_KEY" # Affect 2nd Floor / Basement / Progressive keys
     },
 
     'Super Mario World': {
@@ -528,4 +548,336 @@ GAME_SPECIFIC_PHRASES = {
         '2500 Tokens': 'RUPEES_500',
         '5000 Tokens': 'RUPEES_500',
     },
+
+    "Donkey Kong Country 3": {
+        "Flupperius Petallus Pongus": "TRADING_ITEM_HIBISCUS", # It's a flower in the game
+        "Banana Bird": "ROOSTER", # Made sure this is a BIRD, not a BANANA
+    },
+
+    "Pokemon Red and Blue": {
+
+        # Key Items
+
+        "Old Amber": "STONE_BEAK", # Aerodactyl's fossil should still be a fossil
+        "Coin Case": "MAGIC_POWDER", # This shouldn't spawn as RUPEES
+        "Bike Voucher": "TRADING_ITEM_LETTER",
+        "Oak's Parcel": "TRADING_ITEM_LETTER",
+
+        # Drinks always get converted to MEDICINE
+        "Soda Pop": "MEDICINE",
+        "Fresh Water": "MEDICINE",
+
+        # Consumables
+        "Elixir": "MEDICINE",
+        "Ether": "MEDICINE",
+        "Antidote": "MEDICINE",
+        "Awakening": "MEDICINE",
+        "Burn Heal": "MEDICINE",
+        "Ice Heal": "MEDICINE",
+        "Paralyze Heal": "MEDICINE",
+        "Full Heal": "MEDICINE",
+        "Full Restore": "MEDICINE",
+    },
+
+    "Pokemon Emerald": {
+
+        "Coin Case": "MAGIC_POWDER", # This shouldn't spawn as RUPEES
+
+        # Drinks always get converted to MEDICINE
+        
+        "Soda Pop": "MEDICINE",
+        "Fresh Water": "MEDICINE",
+
+        # Consumables
+        "Elixir": "MEDICINE",
+        "Ether": "MEDICINE",
+        "Antidote": "MEDICINE",
+        "Awakening": "MEDICINE",
+        "Burn Heal": "MEDICINE",
+        "Ice Heal": "MEDICINE",
+        "Paralyze Heal": "MEDICINE",
+        "Full Heal": "MEDICINE",
+        "Full Restore": "MEDICINE",
+        "Nanab Berry": "TRADING_ITEM_BANANAS", # Special exception for Nanab Berry, which look like bananas
+        "Berry": "TRADING_ITEM_PINEAPPLE",
+        "Mail": "TRADING_ITEM_LETTER", # Snail mail, not chain mail
+    },
+
+    "Mario & Luigi Superstar Saga": {
+
+        # Key Items
+        "Peach's Extra Dress": "RED_TUNIC",
+        "Peasley's Rose": "TRADING_ITEM_HIBISCUS",
+        "Beanstar": "PIECE_OF_POWER", # Hits both Fake Beanstar and pieces of the real Beanstar, hopefully
+        "Beanstone": "RUPEES_500", # They're gemstones
+        "Firebrand": "POWER_BRACELET", # Magic power that affects Mario/Luigi's hands, either this or MAGIC_ROD would be okay
+        "Thunderhand": "POWER_BRACELET", # Ditto
+
+        # 1-UP Super fix
+        "1-UP Super": "TOADSTOOL",
+
+        # Drinks --> medicine
+
+        # Syrup bottles
+        "Syrup": "MEDICINE",
+
+        # Coffee blends
+        "Hoolumbian": "MEDICINE",
+        "Chuckoccino": "MEDICINE",
+        "Teeheespresso": "MEDICINE",
+        "Blend": "MEDICINE", # for all coffee blends
+
+        # Secret Scrolls --> MESSAGE
+        "Secret Scroll": "TRADING_ITEM_LETTER",
+
+        # Goblets --> MEDICINE
+        "Goblet": "MEDICINE",
+
+        # Pearl Beans --> Fruit
+        "Pearl Bean": 'TRADING_ITEM_PINEAPPLE',
+
+        # Bros. Armor --> Blue Tunic
+        "Pants": "BLUE_TUNIC",
+        "Jeans": "BLUE_TUNIC",
+        "Trousers": "BLUE_TUNIC",
+        "Slacks": "BLUE_TUNIC",
+        "Casual Coral": "BLUE_TUNIC",
+        "Shroom Bells": "BLUE_TUNIC",
+
+        # Badges --> Ribbon
+        "Badge": "TRADING_ITEM_RIBBON",
+        "Soulful Bros.": "TRADING_ITEM_RIBBON",
+        "Bros. Rock": "TRADING_ITEM_RIBBON",
+
+        # Misc. Beans --> Acorns
+        "Hoo Bean": "GUARDIAN_ACORN", # Beans and nuts are similar enough, right?
+        "Chuckle Bean": "GUARDIAN_ACORN",
+        "Hee Bean": "GUARDIAN_ACORN",
+        "Woo Bean": "GUARDIAN_ACORN", 
+    },
+
+    "DOOM 1993": {
+        "Keycard": "KEY",
+        "Computer area map": "MAP",
+        "Box of": "SINGLE_ARROW", # bullets, rockets, or shotgun shells
+        "Energy cell pack": "SINGLE_ARROW",
+        "Chainsaw": "SWORD",
+        "Medikit": "MEDICINE",
+        "Skull key": "NIGHTMARE_KEY",
+    },
+
+    "DOOM II": {
+        "Keycard": "KEY",
+        "Computer area map": "MAP",
+        "Box of": "SINGLE_ARROW", # bullets, rockets, or shotgun shells
+        "Energy cell pack": "SINGLE_ARROW",
+        "Chainsaw": "SWORD",
+        "Medikit": "MEDICINE",
+        "Skull key": "NIGHTMARE_KEY",
+    },
+
+    "Inscryption": {
+        "Extra Candle": "HEART_CONTAINER", # Candles act as extra health
+        "Magnificus Eye": "TRADING_ITEM_MAGNIFYING_GLASS", # Needed to see hidden drawings / messages
+        "Monocle": "TRADING_ITEM_MAGNIFYING_GLASS", # Ditto
+        "Pile Of Meat": "TRADING_ITEM_DOG_FOOD",
+        "Angler Hook": "TRADING_ITEM_FISHING_HOOK", # Good fish.
+        "Currency": "RUPEES_20",
+    },
+
+    "Minecraft": {
+        "Progressive Weapons": "SWORD",
+        "Progressive Tools": "SHOVEL",
+        "Archery": "BOW",
+        "Emerald": "RUPEES_20",
+        "Brewing": "MEDICINE",
+        "Spyglass": 'TRADING_ITEM_MAGNIFYING_GLASS',
+        "Porkchop": "TRADING_ITEM_DOG_FOOD"
+    },
+    "VVVVVV": {
+        "Trinket": "PIECE_OF_POWER",
+    },
+
+    "A Hat in Time": {
+        "Time Piece": "PIECE_OF_POWER",
+        "Metro Ticket": "TRADING_ITEM_LETTER",
+        "Snatcher's Contract": "TRADING_ITEM_LETTER",
+        "Pon": "RUPEES_20",
+    },
+
+    "Kingdom Hearts 2": {
+        # Goal items / Collectibles
+        "Proof of": "PIECE_OF_POWER",
+        "Lucky Emblem": "PIECE_OF_POWER",
+        "Secret Ansem's Report": "TRADING_ITEM_LETTER",
+
+        # Sora Keyblades
+        "Bond of Flame": "SWORD",
+        "Circle of Life": "SWORD",
+        "Decisive Pumpkin": "SWORD",
+        "Fatal Crest": "SWORD",
+        "Fenrir": "SWORD",
+        "Follow the Wind": "SWORD",
+        "Guardian Soul": "SWORD",
+        "Gull Wing": "SWORD",
+        "Hero's Crest": "SWORD",
+        "Hidden Dragon": "SWORD",
+        "Monochrome": "SWORD",
+        "Mysterious Abyss": "SWORD",
+        "Oathkeeper": "SWORD",
+        "Oblivion": "SWORD",
+        "Photon Debugger": "SWORD",
+        "Pureblood": "SWORD",
+        "Rumbling Rose": "SWORD",
+        "Sleeping Lion": "SWORD",
+        "Star Seeker": "SWORD",
+        "Sweet Memories": "SWORD",
+        "Two Become One": "SWORD",
+        "Ultima Weapon": "SWORD",
+        "Winner's Proof": "SWORD",
+        "Wishing Lamp": "SWORD",
+
+        # Donald Staves
+        "Centurion+": "MAGIC_ROD",
+        "Nobody Lance": "MAGIC_ROD",
+        "Precious Mushroom": "MAGIC_ROD",
+        "Precious Mushroom+": "MAGIC_ROD",
+        "Premium Mushroom": "MAGIC_ROD",
+        "Rising Dragon": "MAGIC_ROD",
+        "Save The Queen+": "MAGIC_ROD",
+        "Shaman's Relic": "MAGIC_ROD",
+        "Victory Bell": "MAGIC_ROD",
+
+        # Goofy Shields
+        "Akashic Record": "SHIELD",
+        "Frozen Pride+": "SHIELD",
+        "Majestic Mushroom": "SHIELD",
+        "Majestic Mushroom+": "SHIELD",
+        "Nobody Guard": "SHIELD",
+        "Ogre Shield": "SHIELD",
+        "Save The King+": "SHIELD",
+        "Ultimate Mushroom": "SHIELD",
+
+        # Accessories as RIBBON
+        "Star Charm": "TRADING_ITEM_RIBBON",
+        "Ring": "TRADING_ITEM_RIBBON",
+        "Earring": "TRADING_ITEM_RIBBON",
+        "Shadow Archive": "TRADING_ITEM_RIBBON",
+        "Shadow Archive+": "TRADING_ITEM_RIBBON",
+        "Full Bloom": "TRADING_ITEM_RIBBON",
+        "Full Bloom+": "TRADING_ITEM_RIBBON",
+
+        # Armor as BLUE_TUNIC
+       "Bandanna": "BLUE_TUNIC",
+       "Belt": "BLUE_TUNIC",
+       "Band": "BLUE_TUNIC",
+       "Bangle": "BLUE_TUNIC",
+       "Armlet": "BLUE_TUNIC",
+       "Trinket": "BLUE_TUNIC",
+       "Charm": "BLUE_TUNIC",
+       "Anklet": "BLUE_TUNIC",
+       "Chain": "BLUE_TUNIC",
+       "Acrisius": "BLUE_TUNIC",
+       "Ribbon": "BLUE_TUNIC",
+
+        # Magic
+        "Element": "MAGIC_ROD",
+
+        # Other
+        "Munny Pouch": "MAGIC_POWDER",
+        "Ether": "MEDICINE",
+        "Elixir": "MEDICINE",
+        "Megalixir": "MEDICINE",
+    },
+
+    "Kingdom Hearts": {
+        # Goal/collectible items
+        "Ansem's Report": "TRADING_ITEM_LETTER",
+
+        # Dalmatian puppies
+        "Puppy": "BOWWOW",
+        "Puppies": "BOWWOW",
+        
+        # Sora Keyblades
+        "Jungle King": "SWORD",
+        "Three Wishes": "SWORD",
+        "Fairy Harp": "SWORD",
+        "Pumpkinhead": "SWORD",
+        "Crabclaw": "SWORD",
+        "Divine Rose": "SWORD",
+        "Spellbinder": "SWORD",
+        "Olympia": "SWORD",
+        "Lionheart": "SWORD",
+        "Metal Chocobo": "SWORD",
+        "Oathkeeper": "SWORD",
+        "Oblivion": "SWORD",
+        "Lady Luck": "SWORD",
+        "Wishing Star": "SWORD",
+        "Ultima Weapon": "SWORD",
+        "Diamond Dust": "SWORD",
+        "One-Winged Angel": "SWORD",
+
+        # Donald Staves
+        "Morning Star": "MAGIC_ROD",
+        "Shooting Star": "MAGIC_ROD",
+        "Warhammer": "MAGIC_ROD",
+        "Silver Mallet": "MAGIC_ROD",
+        "Grand Mallet": "MAGIC_ROD",
+        "Lord Fortune": "MAGIC_ROD",
+        "Violetta": "MAGIC_ROD",
+        "Save the Queen": "MAGIC_ROD",
+        "Wizard's Relic": "MAGIC_ROD",
+        "Meteor Strike": "MAGIC_ROD",
+        "Fantasista": "MAGIC_ROD",
+
+        # Goofy Shields
+        "Smasher": "SHIELD",
+        "Gigas Fist": "SHIELD",
+        "Save the King": "SHIELD",
+        "Defender": "SHIELD",
+        "Seven Elements": "SHIELD",
+
+        # Magic
+        "Progressive Fire": "MAGIC_ROD",
+        "Progressive Blizzard": "MAGIC_ROD",
+        "Progressive Thunder": "MAGIC_ROD",
+        "Progressive Cure": "MAGIC_ROD",
+        "Progressive Gravity": "MAGIC_ROD",
+        "Progressive Stop": "MAGIC_ROD",
+        "Progressive Aero": "MAGIC_ROD",
+
+        # Accessories / armor (Let's go with BLUE_TUNIC for these, these items are closer to RPG armor anyways)
+        "Chain": "BLUE_TUNIC",
+        "Ring": "BLUE_TUNIC",
+        "Band": "BLUE_TUNIC",
+        "Three Stars": "BLUE_TUNIC",
+        "Stud": "BLUE_TUNIC",
+        "Earring": "BLUE_TUNIC",
+        "Bangle": "BLUE_TUNIC",
+        "Armlet": "BLUE_TUNIC",
+        "Moogle Badge": "BLUE_TUNIC",
+        "Cosmic Arts": "BLUE_TUNIC",
+        "Heartguard": "BLUE_TUNIC",
+        "Crystal Crown": "BLUE_TUNIC",
+        "Ribbon": "BLUE_TUNIC",
+        "Brave Warrior": "BLUE_TUNIC",
+        "Ifrit's Horn": "BLUE_TUNIC",
+        "White Fang": "BLUE_TUNIC",
+        "Ray of Light": "BLUE_TUNIC",
+        "Circlet": "BLUE_TUNIC",
+        "Raven's Claw": "BLUE_TUNIC",
+        "Omega Arts": "BLUE_TUNIC",
+        "Royal Crown": "BLUE_TUNIC",
+        "Prime Cap": "BLUE_TUNIC",
+        "Belt": "BLUE_TUNIC",
+        "EXP Bracelet": "BLUE_TUNIC",
+        "EXP Necklace": "BLUE_TUNIC",
+
+        # Other
+        "Glide": "FEATHER",
+        "Ether": "MEDICINE",
+        "Elixir": "MEDICINE",
+        "Megalixir": "MEDICINE",
+        
+    }
 }

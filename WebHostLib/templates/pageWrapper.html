@@ -5,26 +5,29 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/tooltip.css") }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/cookieNotice.css") }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/globalStyles.css") }}" />
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/styleController.js") }}"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/cookieNotice.js") }}"></script>
     {% block head %}
         <title>Archipelago</title>
     {% endblock %}
 </head>
 <body>
+    <main>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div>
+                    {% for message in messages | unique %}
+                        <div class="user-message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <div>
-            {% for message in messages | unique %}
-                <div class="user-message">{{ message }}</div>
-            {% endfor %}
-        </div>
+        {% block body %}
+        {% endblock %}
+    </main>
+
+    {% if show_footer %}
+        {% include "islandFooter.html" %}
     {% endif %}
-{% endwith %}
-
-{% block body %}
-{% endblock %}
-
 </body>
 </html>
