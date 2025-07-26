@@ -22,7 +22,7 @@ def format_cosmetic_option_result(option_result):
 
 
 def patch_targeting(rom, ootworld, symbols):
-    # Set default targeting option to Hold
+    """Set default targeting option to Hold"""
     if ootworld.default_targeting == 'hold':
         rom.write_byte(0xB71E6D, 0x01)
     else:
@@ -30,7 +30,7 @@ def patch_targeting(rom, ootworld, symbols):
 
 
 def patch_dpad(rom, ootworld, symbols):
-    # Display D-Pad HUD
+    """Display D-Pad HUD"""
     if ootworld.display_dpad:
         rom.write_byte(symbols['CFG_DISPLAY_DPAD'], 0x01)
     else:
@@ -38,7 +38,7 @@ def patch_dpad(rom, ootworld, symbols):
 
 
 def patch_dpad_info(rom, ootworld, symbols):
-    # Display D-Pad HUD in pause menu for either dungeon info or equips
+    """Display D-Pad HUD in pause menu for either dungeon info or equips"""
     if ootworld.dpad_dungeon_menu:
         rom.write_byte(symbols['CFG_DPAD_DUNGEON_INFO_ENABLE'], 0x01)
     else:
@@ -46,7 +46,6 @@ def patch_dpad_info(rom, ootworld, symbols):
 
 
 def patch_music(rom, ootworld, symbols):
-    # patch music
     if ootworld.background_music != 'normal' or ootworld.fanfares != 'normal':
         music.restore_music(rom)
         log, errors = music.randomize_music(rom, ootworld, {})
@@ -90,7 +89,6 @@ def patch_tunic_icon(rom, tunic, color):
 
 
 def patch_tunic_colors(rom, ootworld, symbols):
-    # patch tunic colors
     tunics = [
         ('Kokiri Tunic', 'kokiri_color', 0x00B6DA38),
         ('Goron Tunic',  'goron_color',  0x00B6DA3B),
@@ -127,7 +125,6 @@ def patch_tunic_colors(rom, ootworld, symbols):
 
 
 def patch_navi_colors(rom, ootworld, symbols):
-    # patch navi colors
     navi = [
         # colors for Navi
         ('Navi Idle',            'navi_color_default',
@@ -375,7 +372,6 @@ def patch_trails(rom, ootworld, trails):
 
 
 def patch_gauntlet_colors(rom, ootworld, symbols):
-    # patch gauntlet colors
     gauntlets = [
         ('Silver Gauntlets', 'silver_gauntlets_color', 0x00B6DA44,
             ([0x173B4CC], [0x173B4D4, 0x173B50C, 0x173B514])), # GI Model DList colors
@@ -407,7 +403,6 @@ def patch_gauntlet_colors(rom, ootworld, symbols):
             patch_model_colors(rom, None, model_addresses)
 
 def patch_shield_frame_colors(rom, ootworld, symbols):
-    # patch shield frame colors
     shield_frames = [
         ('Mirror Shield Frame', 'mirror_shield_frame_color',
             [0xFA7274, 0xFA776C, 0xFAA27C, 0xFAC564, 0xFAC984, 0xFAEDD4],
@@ -440,7 +435,6 @@ def patch_shield_frame_colors(rom, ootworld, symbols):
 
 
 def patch_heart_colors(rom, ootworld, symbols):
-    # patch heart colors
     hearts = [
         ('Heart Color', 'heart_color', symbols['CFG_HEART_COLOR'], 0xBB0994,
             ([0x14DA474, 0x14DA594, 0x14B701C, 0x14B70DC],
@@ -480,7 +474,6 @@ def patch_heart_colors(rom, ootworld, symbols):
             icon.patch_overworld_icon(rom, None, 0xF43D80)
 
 def patch_magic_colors(rom, ootworld, symbols):
-    # patch magic colors
     magic = [
         ('Magic Meter Color', 'magic_color', symbols["CFG_MAGIC_COLOR"],
             ([0x154C654, 0x154CFB4], [0x154C65C, 0x154CFBC])), # GI Model DList colors

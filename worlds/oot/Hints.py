@@ -139,10 +139,12 @@ def isRestrictedDungeonItem(dungeon, item):
     return False
 
 
-# Attach a player name to the item or location text.
-# If the associated player of the item/location and the world are the same, does nothing.
-# Otherwise, attaches the object's player's name to the string, calling rom_safe_text for foreign items/locations.
 def attach_name(text, hinted_object, world):
+    """
+    Attach a player name to the item or location text.
+    If the associated player of the item/location and the world are the same, does nothing.
+    Otherwise, attaches the object's player's name to the string, calling rom_safe_text for foreign items/locations.
+    """
     if hinted_object.player == world.player:
         return text
     return rom_safe_text(f"{world.multiworld.get_player_name(hinted_object.player)}'s {text}")
@@ -331,10 +333,12 @@ class HintArea(Enum):
     DESERT_COLOSSUS        = 'at',     'at',     'the Desert Colossus',        "Desert Colossus",        'Yellow',     None
     SPIRIT_TEMPLE          = 'inside', 'in',     'the Spirit Temple',          "Spirit Temple",          'Yellow',     'Spirit Temple'
 
-    # Performs a breadth first search to find the closest hint area from a given spot (region, location, or entrance).
-    # May fail to find a hint if the given spot is only accessible from the root and not from any other region with a hint area
     @staticmethod
     def at(spot, use_alt_hint=False):
+        """
+        Performs a breadth first search to find the closest hint area from a given spot (region, location, or entrance).
+        May fail to find a hint if the given spot is only accessible from the root and not from any other region with a hint area
+        """
         if isinstance(spot, Region):
             original_parent = spot
         else:
@@ -406,9 +410,11 @@ class HintArea(Enum):
                 return dungeon.is_dungeon_item(item)
         return False
 
-    # Formats the hint text for this area with proper grammar.
-    # Dungeons are hinted differently depending on the clearer_hints setting.
     def text(self, rand, clearer_hints, preposition=False, world=None):
+        """
+        Formats the hint text for this area with proper grammar.
+        Dungeons are hinted differently depending on the clearer_hints setting.
+        """
         if self.is_dungeon:
             text = getHint(self.dungeon_name, rand, clearer_hints).text
         else:
@@ -435,10 +441,12 @@ class HintArea(Enum):
         return text
 
 
-# Peforms a breadth first search to find the closest hint area from a given spot (location or entrance)
-# May fail to find a hint if the given spot is only accessible from the root and not from any other region with a hint area
-# Returns the name of the location if the spot is not in OoT
 def get_hint_area(spot):
+    """
+    Peforms a breadth first search to find the closest hint area from a given spot (location or entrance)
+    May fail to find a hint if the given spot is only accessible from the root and not from any other region with a hint area
+    Returns the name of the location if the spot is not in OoT
+    """
     if spot.game == 'Ocarina of Time':
         already_checked = []
         spot_queue = [spot]
@@ -770,8 +778,8 @@ hint_dist_keys = {
 }
 
 
-# builds out general hints based on location and whether an item is required or not
 def buildWorldGossipHints(world, checkedLocations=None):
+    """Builds out general hints based on location and whether an item is required or not"""
     # rebuild hint exclusion list
     hintExclusions(world, clear_cache=True)
 
@@ -981,8 +989,11 @@ def buildWorldGossipHints(world, checkedLocations=None):
                 fixed_hint_types.insert(0, hint_type)
 
 
-# builds text that is displayed at the temple of time altar for child and adult, rewards pulled based off of item in a fixed order.
 def buildAltarHints(world, messages, include_rewards=True, include_wincons=True):
+    """
+    Builds text that is displayed at the temple of time altar for child and adult,
+    rewards pulled based off of item in a fixed order.
+    """
     # text that appears at altar as a child.
     child_text = '\x08'
     if include_rewards:
@@ -1022,8 +1033,8 @@ def buildAltarHints(world, messages, include_rewards=True, include_wincons=True)
     update_message_by_id(messages, 0x7057, get_raw_text(adult_text), 0x20)
 
 
-# pulls text string from hintlist for reward after sending the location to hintlist.
 def buildBossString(reward, color, world):
+    """Pulls text string from hintlist for reward after sending the location to hintlist."""
     item_icon = chr(world.create_item(reward).special['item_id'])
     if world.multiworld.state.has(reward, world.player):
         if world.clearer_hints:

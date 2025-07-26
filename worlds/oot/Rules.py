@@ -36,23 +36,25 @@ class OOTLogic(LogicMixin):
     def _oot_has_beans(self, player):
         return self.has("Magic Bean Pack", player) or self.has("Buy Magic Bean", player) or self.has("Magic Bean", player, 10)
 
-    # Used for fall damage and other situations where damage is unavoidable
     def _oot_can_live_dmg(self, player, hearts):
+        """Used for fall damage and other situations where damage is unavoidable"""
         mult = self.multiworld.worlds[player].damage_multiplier
         if hearts * 4 >= 3:
             return mult != 'ohko' and mult != 'quadruple'
         else:
             return mult != 'ohko'
 
-    # Figure out if the given region's parent dungeon has shortcuts enabled
     def _oot_region_has_shortcuts(self, player, regionname):
+        """Figure out if the given region's parent dungeon has shortcuts enabled"""
         return self.multiworld.worlds[player].region_has_shortcuts(regionname)
 
-    # This function operates by assuming different behavior based on the "level of recursion", handled manually.
-    # If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region.
-    # If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal.
-    #   This lets us fake the OOT accessibility check that cares about age. Unfortunately it's still tied to the ground region.
     def _oot_reach_as_age(self, regionname, age, player):
+        """
+        This function operates by assuming different behavior based on the "level of recursion", handled manually.
+        If it's called while self.age[player] is None, then it will set the age variable and then attempt to reach the region.
+        If self.age[player] is not None, then it will compare it to the 'age' parameter, and return True iff they are equal.
+          This lets us fake the OOT accessibility check that cares about age. Unfortunately it's still tied to the ground region.
+        """
         if self.age[player] is None:
             self.age[player] = age
             can_reach = self.multiworld.get_region(regionname, player).can_reach(self)
@@ -122,8 +124,8 @@ class OOTLogic(LogicMixin):
                     self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
 
-# Sets extra rules on various specific locations not handled by the rule parser.
 def set_rules(ootworld):
+    """Sets extra rules on various specific locations not handled by the rule parser."""
     multiworld = ootworld.multiworld
     player = ootworld.player
 

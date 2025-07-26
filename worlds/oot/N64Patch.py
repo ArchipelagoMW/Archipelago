@@ -4,10 +4,12 @@ import zipfile
 from .ntype import BigStream
 
 
-# get the next XOR key. Uses some location in the source rom.
-# This will skip of 0s, since if we hit a block of 0s, the
-# patch data will be raw.
 def key_next(rom, key_address, address_range):
+    """
+    Get the next XOR key. Uses some location in the source rom.
+    This will skip of 0s, since if we hit a block of 0s, the
+    patch data will be raw.
+    """
     key = 0
     while key == 0:
         key_address += 1
@@ -17,10 +19,12 @@ def key_next(rom, key_address, address_range):
     return key, key_address
 
 
-# creates a XOR block for the patch. This might break it up into
-# multiple smaller blocks if there is a concern about the XOR key
-# or if it is too long.
 def write_block(rom, xor_address, xor_range, block_start, data, patch_data):
+    """
+    Creates a XOR block for the patch. This might break it up into
+    multiple smaller blocks if there is a concern about the XOR key
+    or if it is too long.
+    """
     new_data = []
     key_offset = 0
     continue_block = False
@@ -67,11 +71,13 @@ def write_block(rom, xor_address, xor_range, block_start, data, patch_data):
     return xor_address
 
 
-# This saves a sub-block for the XOR block. If it's the first part
-# then it will include the address to write to. Otherwise it will
-# have a number of XOR keys to skip and then continue writing after
-# the previous block
 def write_block_section(start, key_skip, in_data, patch_data, is_continue):
+    """
+    This saves a sub-block for the XOR block. If it's the first part
+    then it will include the address to write to. Otherwise it will
+    have a number of XOR keys to skip and then continue writing after
+    the previous block
+    """
     if not is_continue:
         patch_data.append_int32(start)
     else:
@@ -80,11 +86,13 @@ def write_block_section(start, key_skip, in_data, patch_data, is_continue):
     patch_data.append_bytes(in_data)
 
 
-# This will create the patch file. Which can be applied to a source rom.
-# xor_range is the range the XOR key will read from. This range is not
-# too important, but I tried to choose from a section that didn't really
-# have big gaps of 0s which we want to avoid.
 def create_patch_file(rom, rand, xor_range=(0x00B8AD30, 0x00F029A0)):
+    """
+    This will create the patch file. Which can be applied to a source rom.
+    xor_range is the range the XOR key will read from. This range is not
+    too important, but I tried to choose from a section that didn't really
+    have big gaps of 0s which we want to avoid.
+    """
     dma_start, dma_end = rom.get_dma_table_range()
 
     # add header
@@ -168,8 +176,8 @@ def create_patch_file(rom, rand, xor_range=(0x00B8AD30, 0x00F029A0)):
     return patch_data
 
 
-# This will apply a patch file to a source rom to generate a patched rom.
 def apply_patch_file(rom, file, sub_file=None):
+    """Applies a patch file to a source rom to generate a patched rom."""
     # load the patch file and decompress
     if sub_file:
         with zipfile.ZipFile(file, 'r') as patch_archive:

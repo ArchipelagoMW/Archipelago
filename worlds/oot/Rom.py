@@ -200,9 +200,11 @@ class Rom(BigStream):
             raise Exception("Overlapping DMA Data Records!\n%s" % \
                             '\n-------------------------------------\n'.join(overlapping_records))
 
-    # update dmadata record with start vrom address "key"
-    # if key is not found, then attempt to add a new dmadata entry
     def update_dmadata_record(self, key, start, end, from_file=None):
+        """
+        Update dmadata record with start vrom address "key"
+        if key is not found, then attempt to add a new dmadata entry
+        """
         cur, dma_data_end = self.get_dma_table_range()
         dma_index = 0
         dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
@@ -238,10 +240,12 @@ class Rom(BigStream):
             cur += 0x10
             dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
 
-    # This will scan for any changes that have been made to the DMA table
-    # This assumes any changes here are new files, so this should only be called
-    # after patching in the new files, but before vanilla files are repointed
     def scan_dmadata_update(self):
+        """
+        This will scan for any changes that have been made to the DMA table
+        This assumes any changes here are new files, so this should only be called
+        after patching in the new files, but before vanilla files are repointed
+        """
         cur = DMADATA_START
         dma_index = 0
         dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
@@ -260,8 +264,8 @@ class Rom(BigStream):
             dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
             old_dma_start, old_dma_end, old_dma_size = self.original._get_dmadata_record(cur)
 
-    # gets the last used byte of rom defined in the DMA table
     def free_space(self):
+        """Gets the last used byte of rom defined in the DMA table"""
         cur = DMADATA_START
         max_end = 0
 

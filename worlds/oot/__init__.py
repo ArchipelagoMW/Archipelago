@@ -519,8 +519,8 @@ class OOTWorld(World):
                 # Farore's Wind skippable if not used for this logic trick in Water Temple
                 self.nonadvancement_items.add('Farores Wind')
 
-    # Reads a group of regions from the given JSON file.
     def load_regions_from_json(self, file_path):
+        """Reads a group of regions from the given JSON file."""
         region_json = read_json(file_path)
 
         for region in region_json:
@@ -591,8 +591,8 @@ class OOTWorld(World):
             self.regions.append(new_region)
             self._regions_cache[new_region.name] = new_region
 
-    # Sets deku scrub prices
     def set_scrub_prices(self):
+        """Sets deku scrub prices"""
         # Get Deku Scrub Locations
         scrub_locations = [location for location in self.get_locations() if location.type in {'Scrub', 'GrottoScrub'}]
         scrub_dictionary = {}
@@ -620,8 +620,8 @@ class OOTWorld(World):
                     if location.item is not None:
                         location.item.price = price
 
-    # Sets prices for shuffled shop locations
     def random_shop_prices(self):
+        """Sets prices for shuffled shop locations"""
         shop_item_indexes = ['7', '5', '8', '6']
         self.shop_prices = {}
         for region in self.regions:
@@ -646,8 +646,8 @@ class OOTWorld(World):
                         elif self.shopsanity_prices == 'tycoons_wallet':
                             self.shop_prices[location.name] = self.random.randrange(0, 1000, 5)
 
-    # Fill boss prizes
     def fill_bosses(self, bossCount=9):
+        """Fill boss prizes"""
         boss_location_names = (
             'Queen Gohma',
             'King Dodongo',
@@ -675,8 +675,8 @@ class OOTWorld(World):
             loc.place_locked_item(item)
             self.hinted_dungeon_reward_locations[item.name] = loc
 
-    # Separate the result from generate_itempool into main and prefill pools
     def divide_itempools(self):
+        """Separate the result from generate_itempool into main and prefill pools"""
         prefill_item_types = set()
         if self.shopsanity != 'off':
             prefill_item_types.add('Shop')
@@ -1361,9 +1361,11 @@ class OOTWorld(World):
 
         return True
 
-    # Specifically ensures that only real items are gotten, not any events.
-    # In particular, ensures that Time Travel needs to be found.
     def get_state_with_complete_itempool(self):
+        """
+        Specifically ensures that only real items are gotten, not any events.
+        In particular, ensures that Time Travel needs to be found.
+        """
         all_state = CollectionState(self.multiworld)
         for item in self.itempool + self.pre_fill_items:
             self.multiworld.worlds[item.player].collect(all_state, item)

@@ -323,10 +323,12 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             return node.values[0]
         return node
 
-    # Generates an ast.Call invoking the given State function 'name',
-    # providing given args and keywords, and adding in additional
-    # keyword args from kwarg_defaults (age, etc.)
     def make_call(self, node, name, args, keywords):
+        """
+        Generates an ast.Call invoking the given State function 'name',
+        providing given args and keywords, and adding in additional
+        keyword args from kwarg_defaults (age, etc.)
+        """
         if not hasattr(State, name):
             raise Exception('Parse Error: No such function State.%s' % name, self.current_spot.name, ast.dump(node, False))
 
@@ -462,9 +464,11 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 mode='eval').body
         return ast.NameConstant(True)
 
-    # Parse entry point
-    # If spot is None, here() rules won't work.
     def parse_rule(self, rule_string, spot=None):
+        """
+        Parse entry point
+        If spot is None, here() rules won't work.
+        """
         self.current_spot = spot
         return self.make_access_rule(self.visit(ast.parse(rule_string, mode='eval').body))
 

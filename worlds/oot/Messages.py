@@ -342,13 +342,13 @@ MISC_MESSAGES = {
 }
 
 
-# convert byte array to an integer
 def bytes_to_int(bytes, signed=False):
+    """Convert byte array to an integer"""
     return int.from_bytes(bytes, byteorder='big', signed=signed)
 
 
-# convert int to an array of bytes of the given width
 def int_to_bytes(num, width, signed=False):
+    """Convert int to an array of bytes of the given width"""
     return int.to_bytes(num, width, byteorder='big', signed=signed)
 
 
@@ -407,8 +407,8 @@ def parse_control_codes(text):
     return text_codes
 
 
-# holds a single character or control code of a string
 class Text_Code:
+    """Holds a single character or control code of a string"""
     def display(self):
         if self.code in CONTROL_CODES:
             return CONTROL_CODES[self.code][2](self.data)
@@ -448,15 +448,15 @@ class Text_Code:
             # raise ValueError(repr(REVERSE_MAP))
             return REVERSE_MAP[self.code]
 
-    # writes the code to the given offset, and returns the offset of the next byte
     def size(self):
+        """Writes the code to the given offset, and returns the offset of the next byte"""
         size = 1
         if self.code in CONTROL_CODES:
             size += CONTROL_CODES[self.code][1]
         return size
 
-    # writes the code to the given offset, and returns the offset of the next byte
     def write(self, rom, offset):
+        """Writes the code to the given offset, and returns the offset of the next byte"""
         rom.write_byte(TEXT_START + offset, self.code)
 
         extra_bytes = 0
@@ -478,8 +478,8 @@ class Text_Code:
     __str__ = __repr__ = display
 
 
-# holds a single message, and all its data
 class Message:
+    """Holds a single message, and all its data"""
     def display(self):
         meta_data = [
             "#" + str(self.index),
@@ -497,8 +497,8 @@ class Message:
             ret = ret + code.get_python_string()
         return ret
 
-    # check if this is an unused message that just contains it's own id as text
     def is_id_message(self):
+        """Check if this is an unused message that just contains it's own id as text"""
         if self.unpadded_length != 5:
             return False
         for i in range(4):
@@ -544,8 +544,8 @@ class Message:
     def is_basic(self):
         return not (self.has_goto or self.has_keep_open or self.has_event or self.has_fade or self.has_ocarina or self.has_two_choice or self.has_three_choice)
 
-    # computes the size of a message, including padding
     def size(self):
+        """Computes the size of a message, including padding"""
         size = 0
 
         for code in self.text_codes:
@@ -555,8 +555,8 @@ class Message:
 
         return size
 
-    # applies whatever transformations we want to the dialogs
     def transform(self, replace_ending=False, ending=None, always_allow_skip=True, speed_up_text=True):
+        """Applies whatever transformations we want to the dialogs"""
         ending_codes = [0x02, 0x07, 0x0A, 0x0B, 0x0E, 0x10]
         box_breaks = [0x04, 0x0C]
         slows_text = [0x08, 0x09, 0x14]
@@ -608,9 +608,11 @@ class Message:
 
         self.text_codes = text_codes
 
-    # writes a Message back into the rom, using the given index and offset to update the table
-    # returns the offset of the next message
     def write(self, rom, index, offset):
+        """
+        Writes a Message back into the rom, using the given index and offset to update the table
+        returns the offset of the next message
+        """
         # construct the table entry
         id_bytes = int_to_bytes(self.id, 2)
         offset_bytes = int_to_bytes(offset, 3)
@@ -626,7 +628,6 @@ class Message:
             offset = Text_Code(0x00, 0).write(rom, offset) # pad to 4 byte align
 
         return offset
-
 
     def __init__(self, raw_text, index, id, opts, offset, length):
         self.raw_text = raw_text
@@ -650,9 +651,9 @@ class Message:
 
         self.parse_text()
 
-    # read a single message from rom
     @classmethod
     def from_rom(cls, rom, index):
+        """Read a single message from rom"""
         entry_offset = ENG_TABLE_START + 8 * index
         entry = rom.read_bytes(entry_offset, 8)
         next = rom.read_bytes(entry_offset + 8, 8)
@@ -680,9 +681,11 @@ class Message:
     __str__ = __repr__ = display
 
 
-# wrapper for updating the text of a message, given its message id
-# if the id does not exist in the list, then it will add it
 def update_message_by_id(messages, id, text, opts=None):
+    """
+    Wrapper for updating the text of a message, given its message id
+    if the id does not exist in the list, then it will add it
+    """
     # get the message index
     index = next( (m.index for m in messages if m.id == id), -1)
     # update if it was found
@@ -692,8 +695,8 @@ def update_message_by_id(messages, id, text, opts=None):
         add_message(messages, text, id, opts)
 
 
-# Gets the message by its ID. Returns None if the index does not exist
 def get_message_by_id(messages, id):
+    """Gets the message by its ID. Returns None if the index does not exist"""
     # get the message index
     index = next( (m.index for m in messages if m.id == id), -1)
     if index >= 0:
@@ -702,8 +705,8 @@ def get_message_by_id(messages, id):
         return None
 
 
-# wrapper for updating the text of a message, given its index in the list
 def update_message_by_index(messages, index, text, opts=None):
+    """Wrapper for updating the text of a message, given its index in the list"""
     if opts is None:
         opts = messages[index].opts
 
@@ -714,8 +717,8 @@ def update_message_by_index(messages, index, text, opts=None):
     messages[index].index = index
 
 
-# wrapper for adding a string message to a list of messages
 def add_message(messages, text, id=0, opts=0x00):
+    """Wrapper for adding a string message to a list of messages"""
     if isinstance(text, bytearray):
         messages.append( Message.from_bytearray(text, id, opts) )
     else:
@@ -723,8 +726,8 @@ def add_message(messages, text, id=0, opts=0x00):
     messages[-1].index = len(messages) - 1
 
 
-# holds a row in the shop item table (which contains pointers to the description and purchase messages)
 class Shop_Item():
+    """Holds a row in the shop item table (which contains pointers to the description and purchase messages)"""
     def display(self):
         meta_data = ["#" + str(self.index),
          "Item: 0x" + "{:04x}".format(self.get_item_id),
@@ -741,8 +744,8 @@ class Shop_Item():
          "func4: 0x" + "{:08x}".format(self.func4),]
         return ', '.join(meta_data) + '\n' + ', '.join(func_data)
 
-    # write the shop item back
     def write(self, rom, shop_table_address, index):
+        """Write the shop item back"""
         entry_offset = shop_table_address + 0x20 * index
 
         bytes = []
@@ -761,8 +764,8 @@ class Shop_Item():
 
         rom.write_bytes(entry_offset, bytes)
 
-    # read a single message
     def __init__(self, rom, shop_table_address, index):
+        """Read a single message"""
         entry_offset = shop_table_address + 0x20 * index
         entry = rom.read_bytes(entry_offset, 0x20)
 
@@ -783,26 +786,26 @@ class Shop_Item():
     __str__ = __repr__ = display
 
 
-# reads each of the shop items
 def read_shop_items(rom, shop_table_address):
+    """Reads each of the shop items"""
     shop_items = []
 
-    for index in range(0, 100):
-        shop_items.append( Shop_Item(rom, shop_table_address, index) )
+    for index in range(100):
+        shop_items.append(Shop_Item(rom, shop_table_address, index))
 
     return shop_items
 
 
-# writes each of the shop item back into rom
 def write_shop_items(rom, shop_table_address, shop_items):
+    """Writes each of the shop item back into rom"""
     for s in shop_items:
         s.write(rom, shop_table_address, s.index)
 
 # these are unused shop items, and contain text ids that are used elsewhere, and should not be moved
 SHOP_ITEM_EXCEPTIONS = [0x0A, 0x0B, 0x11, 0x12, 0x13, 0x14, 0x29]
 
-# returns a set of all message ids used for shop items
 def get_shop_message_id_set(shop_items):
+    """Returns a set of all message ids used for shop items"""
     ids = set()
     for shop in shop_items:
         if shop.index not in SHOP_ITEM_EXCEPTIONS:
@@ -811,15 +814,15 @@ def get_shop_message_id_set(shop_items):
     return ids
 
 
-# remove all messages that easy to tell are unused to create space in the message index table
 def remove_unused_messages(messages):
+    """Remove all messages that easy to tell are unused to create space in the message index table"""
     messages[:] = [m for m in messages if not m.is_id_message()]
     for index, m in enumerate(messages):
         m.index = index
 
 
-# takes all messages used for shop items, and moves messages from the 00xx range into the unused 80xx range
 def move_shop_item_messages(messages, shop_items):
+    """Takes all messages used for shop items, and moves messages from the 00xx range into the unused 80xx range"""
     # checks if a message id is in the item message range
     def is_in_item_range(id):
         bytes = int_to_bytes(id, 2)
@@ -890,9 +893,11 @@ def make_player_message(text):
     return new_text
 
 
-# reduce item message sizes and add new item messages
-# make sure to call this AFTER move_shop_item_messages()
 def update_item_messages(messages, world):
+    """
+    Reduce item message sizes and add new item messages
+    make sure to call this AFTER move_shop_item_messages()
+    """
     new_item_messages = {**ITEM_MESSAGES, **KEYSANITY_MESSAGES}
     for id, text in new_item_messages.items():
         if world.multiworld.players > 1:
@@ -904,14 +909,14 @@ def update_item_messages(messages, world):
         update_message_by_id(messages, id, text, opt)
 
 
-# run all keysanity related patching to add messages for dungeon specific items
 def add_item_messages(messages, shop_items, world):
+    """Run all keysanity related patching to add messages for dungeon specific items"""
     move_shop_item_messages(messages, shop_items)
     update_item_messages(messages, world)
 
 
-# reads each of the game's messages into a list of Message objects
 def read_messages(rom):
+    """Reads each of the game's messages into a list of Message objects"""
     table_offset = ENG_TABLE_START
     index = 0
     messages = []
@@ -933,8 +938,8 @@ def read_messages(rom):
     return messages
 
 
-# write the messages back
 def repack_messages(rom, messages, permutation=None, always_allow_skip=True, speed_up_text=True):
+    """Write the messages back"""
     rom.update_dmadata_record(TEXT_START, TEXT_START, TEXT_START + ENG_TEXT_SIZE_LIMIT)
 
     if permutation is None:
@@ -975,8 +980,8 @@ def repack_messages(rom, messages, permutation=None, always_allow_skip=True, spe
     rom.write_bytes(entry_offset, [0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
-# shuffles the messages in the game, making sure to keep various message types in their own group
 def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
+    """Shuffles the messages in the game, making sure to keep various message types in their own group"""
     permutation = [i for i, _ in enumerate(messages)]
 
     def is_exempt(m):
@@ -1023,8 +1028,8 @@ def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
     return permutation
 
 
-# Update warp song text boxes for ER
 def update_warp_song_text(messages, world):
+    """Update warp song text boxes for ER"""
     from .Hints import HintArea
 
     msg_list = {

@@ -3,8 +3,8 @@ from .Utils import data_path
 # TODO
 # Move the tunic to the generalized system
 
-# Function for adding hue to a greyscaled icon
 def add_hue(image, color, tiff=False):
+    """Function for adding hue to a greyscaled icon"""
     start = 154 if tiff else 0
     for i in range(start, len(image), 4):
         try:
@@ -15,8 +15,8 @@ def add_hue(image, color, tiff=False):
     return image
 
 
-# Function for adding belt to tunic
 def add_belt(tunic, belt, tiff=False):
+    """Function for adding belt to tunic"""
     start = 154 if tiff else 0
     for i in range(start, len(tunic), 4):
         try:
@@ -29,8 +29,8 @@ def add_belt(tunic, belt, tiff=False):
     return tunic
 
 
-# Function for putting tunic colors together
 def generate_tunic_icon(color):
+    """Function for putting tunic colors together"""
     with open(data_path('icons/grey.tiff'), 'rb') as grey_fil, open(data_path('icons/belt.tiff'), 'rb') as belt_fil:
         grey = list(grey_fil.read())
         belt = list(belt_fil.read())
@@ -38,8 +38,8 @@ def generate_tunic_icon(color):
 
 # END TODO
 
-# Function to add extra data on top of icon
 def add_extra_data(rgbValues, fileName, intensity=0.5):
+    """Function to add extra data on top of icon"""
     fileRGB = []
     with open(fileName, "rb") as fil:
         data = fil.read()
@@ -51,15 +51,15 @@ def add_extra_data(rgbValues, fileName, intensity=0.5):
             rgbValues[i][x] = int((fileRGB[i][x] * alpha + intensity) + (rgbValues[i][x] * (1 - alpha - intensity)))
 
 
-# Function for desaturating RGB values
-def greyscaleRGB(rgbValues, intensity: int = 2):
+def greyscaleRGB(rgbValues, intensity: int=2):
+    """Function for desaturating RGB values"""
     for rgb in rgbValues:
         rgb[0] = rgb[1] = rgb[2] = int((rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722) * intensity)
     return rgbValues
 
 
-# Converts rgb5a1 values to RGBA lists
 def rgb5a1ToRGB(rgb5a1Bytes):
+    """Converts rgb5a1 values to RGBA lists"""
     pixels = []
     for i in range(0, len(rgb5a1Bytes), 2):
         bits = format(rgb5a1Bytes[i], '#010b')[2:] + format(rgb5a1Bytes[i + 1], '#010b')[2:]
@@ -71,16 +71,16 @@ def rgb5a1ToRGB(rgb5a1Bytes):
     return pixels
 
 
-# Adds a hue to RGB values
 def addHueToRGB(rgbValues, color):
+    """Adds a hue to RGB values"""
     for rgb in rgbValues:
         for i in range(3):
             rgb[i] = int(((rgb[i]/255) * (color[i]/255)) * 255)
     return rgbValues
 
 
-# Convert RGB to RGB5a1 format
 def rgbToRGB5a1(rgbValues):
+    """Convert RGB to RGB5a1 format"""
     rgb5a1 = []
     for rgb in rgbValues:
         r = int(rgb[0] / (255/31))
@@ -101,7 +101,6 @@ def rgbToRGB5a1(rgbValues):
     return bytes(rgb5a1)
 
 
-# Patch overworld icons
 def patch_overworld_icon(rom, color, address, fileName = None):
     original = rom.original.read_bytes(address, 0x800)
 

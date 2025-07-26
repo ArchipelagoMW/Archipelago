@@ -88,8 +88,9 @@ ocarina_sequence_ids = [
     ("Song of Storms", 0x49)
 ]
 
-# Represents the information associated with a sequence, aside from the sequence data itself
+
 class TableEntry(object):
+    """Represents the information associated with a sequence, aside from the sequence data itself"""
     def __init__(self, name, cosmetic_name, type = 0x0202, instrument_set = 0x03, replaces = -1, vanilla_id = -1):
         self.name = name
         self.cosmetic_name = cosmetic_name
@@ -104,8 +105,8 @@ class TableEntry(object):
         return copy
 
 
-# Represents actual sequence data, along with metadata for the sequence data block
 class Sequence(object):
+    """Represents actual sequence data, along with metadata for the sequence data block"""
     def __init__(self):
         self.address = -1
         self.size = -1

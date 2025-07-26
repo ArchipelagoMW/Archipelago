@@ -330,9 +330,11 @@ class Scene(object):
             rom.write_int32s(addr, [data, pos])
             addr += 8
 
-    # appends path data to the end of the rom
-    # returns segment address to path data
     def append_path_data(self, rom: Rom):
+        """
+        Appends path data to the end of the rom
+        returns segment address to path data
+        """
         start = self.file.start
         cur = self.file.end
         records = []
@@ -397,7 +399,6 @@ class Room(object):
         # update file reference
         self.file.end = align16(self.file.end)
         update_dmadata(rom, self.file)
-
 
     def append_object_data(self, rom: Rom, objects):
         offset = self.file.end - self.file.start
@@ -542,11 +543,13 @@ def align16(value):
     return ((value + 0xF) // 0x10) * 0x10
 
 
-# This function inserts space in a ovl section at the section's offset
-# The section size is expanded
-# Every relocation entry in the section after the offet is moved accordingly
-# Every relocation value that is after the inserted space is increased accordingly
 def insert_space(rom, file, vram_start, insert_section, insert_offset, insert_size):
+    """
+    This function inserts space in a ovl section at the section's offset
+    The section size is expanded
+    Every relocation entry in the section after the offet is moved accordingly
+    Every relocation value that is after the inserted space is increased accordingly
+    """
     sections = []
     val_hi = {}
     adr_hi = {}

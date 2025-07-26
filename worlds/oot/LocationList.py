@@ -2092,10 +2092,12 @@ dungeon_song_locations = [
 ]
 
 
-# Function to run exactly once after after placing items in drop locations for each world
-# Sets all Drop locations to a unique name in order to avoid name issues and to identify locations in the spoiler
-# Also cause them to not be shown in the list of locations, only in playthrough
 def set_drop_location_names(ootworld):
+    """
+    Function to run exactly once after after placing items in drop locations for each world
+    Sets all Drop locations to a unique name in order to avoid name issues and to identify locations in the spoiler
+    Also cause them to not be shown in the list of locations, only in playthrough
+    """
     for region in ootworld.regions:
         for location in region.locations:
             if location.type == 'Drop':

@@ -1,15 +1,17 @@
 from math import ceil
 
 
-# Create a dict of dicts of the format:
-# {
-#   scene_number_n : {
-#       room_setup_number: max_flags
-#   }
-# }
-# where room_setup_number defines the room + scene setup as ((setup << 6) + room) for scene n
-# and max_flags is the highest used enemy flag for that setup/room
 def get_collectible_flag_table(world):
+    """
+    Create a dict of dicts of the format:
+    {
+    scene_number_n : {
+            room_setup_number: max_flags
+        }
+    }
+    where room_setup_number defines the room + scene setup as ((setup << 6) + room) for scene n
+    and max_flags is the highest used enemy flag for that setup/room
+    """
     scene_flags = {}
     alt_list = []
     for i in range(0, 101):
@@ -37,8 +39,8 @@ def get_collectible_flag_table(world):
     return (scene_flags, alt_list)
 
 
-# Create a byte array from the scene flag table created by get_collectible_flag_table
 def get_collectible_flag_table_bytes(scene_flag_table):
+    """Create a byte array from the scene flag table created by get_collectible_flag_table"""
     num_flag_bytes = 0
     bytes = bytearray()
     bytes.append(len(scene_flag_table.keys()))
@@ -75,9 +77,11 @@ def get_alt_list_bytes(alt_list):
     return bytes
 
 
-# AP method to retrieve address + bit for each item
-# Based on get_collectible_flag_offset in the C code
 def get_collectible_flag_addresses(world, collectible_scene_flags_table):
+    """
+    AP method to retrieve address + bit for each item
+    Based on get_collectible_flag_offset in the C code
+    """
     # Ported directly from get_items.c
     def get_collectible_flag_offset(scene: int, room: int, setup_id: int) -> int:
         num_scenes = collectible_scene_flags_table[0]

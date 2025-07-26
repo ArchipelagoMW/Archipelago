@@ -2676,16 +2676,19 @@ def set_spirit_shortcut_actors(rom):
     get_actor_list(rom, set_spirit_shortcut)
 
 
-# Gets a dict of doors to unlock based on settings
-# Returns: dict with entries address: [byte_offset, bit]
-# Where:    address = rom address of the door
-#           byte_offset = the offset, in bytes, of the door flag in the SaveContext
-#           bit = the bit offset within the byte for the door flag
-# If small keys are set to remove, returns all small key doors
-# If boss keys are set to remove, returns boss key doors
-# If ganons boss key is set to remove, returns ganons boss key doors
-# If pot/crate shuffle is enabled, returns the first ganon's boss key door so that it can be unlocked separately to allow access to the room w/ the pots..
 def get_doors_to_unlock(rom, world):
+    """
+    Gets a dict of doors to unlock based on settings
+    Returns: dict with entries address: [byte_offset, bit]
+    Where:    address = rom address of the door
+            byte_offset = the offset, in bytes, of the door flag in the SaveContext
+            bit = the bit offset within the byte for the door flag
+    If small keys are set to remove, returns all small key doors
+    If boss keys are set to remove, returns boss key doors
+    If ganons boss key is set to remove, returns ganons boss key doors
+    If pot/crate shuffle is enabled, returns the first ganon's boss key door so that it
+    can be unlocked separately to allow access to the room w/ the pots.
+    """
     def get_door_to_unlock(rom, actor_id, actor, scene):
         actor_var = rom.read_int16(actor + 14)
         door_type = actor_var >> 6
@@ -2840,17 +2843,21 @@ def configure_dungeon_info(rom, world):
     rom.write_bytes(rom.sym('CFG_DUNGEON_IS_MQ'), dungeon_is_mq)
     rom.write_bytes(rom.sym('CFG_DUNGEON_REWARD_AREAS'), dungeon_reward_areas)
 
-# Overwrite an actor in rom w/ the actor data from LocationList
+
 def patch_actor_override(location, rom: Rom):
+    """Overwrite an actor in rom w/ the actor data from LocationList"""
     addresses = location.address1
     patch = location.address2
     if addresses is not None and patch is not None:
         for address in addresses:
             rom.write_bytes(address, patch)
 
-# Patch rupee towers (circular patterns of rupees) to include their flag in their actor initialization data z rotation.
-# Also used for goron pot, shadow spinning pots
+
 def patch_rupee_tower(location, rom: Rom):
+    """
+    Patch rupee towers (circular patterns of rupees) to include their flag in their actor initialization data z rotation.
+    Also used for goron pot, shadow spinning pots
+    """
     flag = location.default
     if(isinstance(location.default, tuple)):
         room, scene_setup, flag = location.default
@@ -2861,8 +2868,9 @@ def patch_rupee_tower(location, rom: Rom):
         for address in location.address1:
             rom.write_bytes(address + 12, flag.to_bytes(2, byteorder='big'))
 
-# Patch the first boss key door in ganons tower that leads to the room w/ the pots
+
 def patch_ganons_tower_bk_door(rom: Rom, flag):
+    """Patch the first boss key door in ganons tower that leads to the room w/ the pots"""
     var = (0x05 << 6) + (flag & 0x3F)
     bytes = [(var & 0xFF00) >> 8, var & 0xFF]
     rom.write_bytes(0x2EE30FE, bytes)

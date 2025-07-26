@@ -780,7 +780,6 @@ def split_entrances_by_requirements(ootworld, entrances_to_split, assumed_entran
     return restrictive_entrances, soft_entrances
 
 
-# Check to ensure the world is valid.
 # TODO: improve this function
 def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all_state_orig, none_state_orig):
     multiworld = ootworld.multiworld
@@ -881,8 +880,8 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
                 raise EntranceShuffleError('Kokiri Forest Shop not accessible as child in closed forest')
 
 
-# Recursively check if a given entrance is unreachable as a given age
 def entrance_unreachable_as(entrance, age, already_checked=[]):
+    """Recursively check if a given entrance is unreachable as a given age"""
     already_checked.append(entrance)
 
     if entrance.type in {'WarpSong', 'Overworld'}:
