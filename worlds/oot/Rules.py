@@ -13,7 +13,7 @@ class OOTLogic(LogicMixin):
         # Separate stale state for OOTRegion.can_reach() to use because CollectionState.update_reachable_regions() sets
         # `self.state[player] = False` for all players without updating OOT's age region accessibility.
         self._oot_stale = {player: True for player, world in parent.worlds.items()
-                           if parent.worlds[player].game == "Ocarina of Time"}
+                           if world.game == "Ocarina of Time"}
 
     def _oot_has_stones(self, count, player):
         return self.has_group("stones", player, count)
@@ -103,7 +103,7 @@ class OOTLogic(LogicMixin):
             start = self.multiworld.get_region('Menu', player)
 
             # init on first call - this can't be done on construction since the regions don't exist yet
-            if not start in rrp:
+            if start not in rrp:
                 rrp.add(start)
                 bc.update(start.exits)
                 queue.extend(start.exits)

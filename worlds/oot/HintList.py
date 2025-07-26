@@ -21,7 +21,7 @@ from .Items import OOTItem
 #       ZF      Zora's Fountain
 #       ZR      Zora's River
 
-class Hint(object):
+class Hint:
     name = ""
     text = ""
     type = []
@@ -33,7 +33,7 @@ class Hint(object):
         if isinstance(text, str):
             self.text = text
         else:
-            if choice == None:
+            if choice is None:
                 self.text = rand.choice(text)
             else:
                 self.text = text[choice]
@@ -43,7 +43,7 @@ def getHint(item, rand, clearer_hint=False):
     if item in hintTable:
         textOptions, clearText, hintType = hintTable[item]
         if clearer_hint:
-            if clearText == None:
+            if clearText is None:
                 return Hint(item, textOptions, hintType, rand, 0)
             return Hint(item, clearText, hintType, rand)
         else:
@@ -1670,8 +1670,11 @@ goalTable = {
 }
 
 
-# This specifies which hints will never appear due to either having known or known useless contents or due to the locations not existing.
 def hintExclusions(world, clear_cache=False):
+    """
+    Specifies which hints will never appear due to either having known
+    or known useless contents or due to the locations not existing.
+    """
     if not clear_cache and world.hint_exclusions is not None:
         return world.hint_exclusions
 
@@ -1703,6 +1706,7 @@ def hintExclusions(world, clear_cache=False):
             world.hint_exclusions.append(hint.name)
 
     return world.hint_exclusions
+
 
 def nameIsLocation(name, hint_type, world):
     if isinstance(hint_type, (list, tuple)):

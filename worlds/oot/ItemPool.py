@@ -310,7 +310,7 @@ def get_junk_item(rand, count=1, pool=None, plando_pool=None):
         count -= pending_count
 
     if pool and plando_pool:
-        jw_list = [(junk, weight) for (junk, weight) in junk_pool
+        jw_list = [(junk, weight) for junk, weight in junk_pool
                    if junk not in plando_pool or pool.count(junk) < plando_pool[junk].count]
         try:
             junk_items, junk_weights = zip(*jw_list)
@@ -343,7 +343,7 @@ def generate_itempool(ootworld):
     # set up item pool
     (pool, placed_items) = get_pool_core(ootworld)
     ootworld.itempool = [ootworld.create_item(item) for item in pool]
-    for (location_name, item) in placed_items.items():
+    for location_name, item in placed_items.items():
         location = world.get_location(location_name, player)
         location.place_locked_item(ootworld.create_item(item, allow_arbitrary_name=True))
 

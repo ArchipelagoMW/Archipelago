@@ -102,11 +102,11 @@ def dump_dict(obj, current_indent='', sub_width=None, ensure_ascii=False):
     output = output_format.format(
         indent=current_indent,
         values=join_format.join([values_format.format(
-            key='{key}:'.format(key=key),
+            key=f'{key}:',
             value=value,
             indent=current_indent + INDENT,
             padding=key_width + 2,
-        ) for (key, value) in entries])
+        ) for key, value in entries])
     )
 
     return output

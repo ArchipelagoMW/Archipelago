@@ -28,7 +28,7 @@ def rgba16_to_ci8(rgba16_texture):
     if len(palette) > 0x100: # Make sure there are <= 256 colors. Could probably do some fancy stuff to convert, but nah.
         raise Exception("RGB Texture exceeds maximum of 256 colors")
     if len(palette) < 0x100: #Pad the palette with 0x0001 #Pad the palette with 0001s to take up the full 256 colors
-        for i in range(0, 0x100 - len(palette)):
+        for _ in range(0x100 - len(palette)):
             palette.append(0x0001)
 
     # Create the new ci8 texture (list of bytes) by locating the index of each color from the rgba16 texture in the color palette.
@@ -41,7 +41,7 @@ def rgba16_to_ci8(rgba16_texture):
 def load_palette(rom: Rom, address, length):
     """Load a palette (essentially just an rgba16 texture) from rom"""
     palette = []
-    for i in range(0, length):
+    for i in range(length):
         palette.append(rom.read_int16(address + 2 * i))
     return palette
 
@@ -67,11 +67,11 @@ def apply_rgba16_patch(rgba16_texture, rgba16_patch):
 
     new_texture = []
     if not rgba16_patch:
-        for i in range(0, len(rgba16_texture)):
-            new_texture.append(rgba16_texture[i])
+        for texture in rgba16_texture:
+            new_texture.append(texture)
         return new_texture
-    for i in range(0, len(rgba16_texture)):
-        new_texture.append(rgba16_texture[i] ^ rgba16_patch[i])
+    for i, texture in enumerate(rgba16_texture):
+        new_texture.append(texture ^ rgba16_patch[i])
     return new_texture
 
 
@@ -104,7 +104,7 @@ def load_rgba16_texture_from_rom(rom: Rom, base_texture_address, size):
     returns - list of ints representing each 16-bit pixel
     """
     texture = []
-    for i in range(0, size):
+    for i in range(size):
         texture.append(int.from_bytes(rom.read_bytes(base_texture_address + 2 * i, 2), 'big'))
     return texture
 

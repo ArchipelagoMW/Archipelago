@@ -1543,4 +1543,4 @@ known_logic_tricks = {
                     '''},
 }
 
-normalized_name_tricks = {trick.casefold(): info for (trick, info) in known_logic_tricks.items()}
+normalized_name_tricks = {trick.casefold(): info for trick, info in known_logic_tricks.items()}

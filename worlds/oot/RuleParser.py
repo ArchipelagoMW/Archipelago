@@ -332,8 +332,8 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         if not hasattr(State, name):
             raise Exception('Parse Error: No such function State.%s' % name, self.current_spot.name, ast.dump(node, False))
 
-        for (k, v) in self.kwarg_defaults.items():
-            keywords.append(ast.keyword(arg=f'{k}', value=ast.Constant(v)))
+        for k, v in self.kwarg_defaults.items():
+            keywords.append(ast.keyword(arg=str(k), value=ast.Constant(v)))
 
         return ast.Call(
             func=ast.Attribute(

@@ -1,4 +1,4 @@
-class Dungeon(object):
+class Dungeon:
     def __init__(self, world, name, hint, font_color):
         self.world = world
         self.name = name

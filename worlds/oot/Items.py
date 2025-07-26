@@ -29,7 +29,7 @@ def oot_is_item_of_type(item, item_type):
 
 
 class OOTItem(Item):
-    game: str = "Ocarina of Time"
+    game = "Ocarina of Time"
     type: str
 
     def __init__(self, name, player, data, event, force_not_advancement):

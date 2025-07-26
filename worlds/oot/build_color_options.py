@@ -8,8 +8,7 @@ def assemble_color_option(f, internal_name: str, func, display_name: str, defaul
     color_options = func()
     if outer:
         color_options.append("Match Inner")
-    format_color = lambda color: color.replace(' ', '_').lower()
-    color_to_id = {format_color(color): index for index, color in enumerate(color_options)}
+    color_to_id = {color.replace(' ', '_').lower(): index for index, color in enumerate(color_options)}
 
     docstring = 'Choose a color. "random_choice" selects a random option. "completely_random" generates a random hex code.'
     if outer:
@@ -21,7 +20,7 @@ def assemble_color_option(f, internal_name: str, func, display_name: str, defaul
     for color, id in color_to_id.items():
         f.write(f"    option_{color} = {id}\n")
     f.write(f"    default = {color_options.index(default_option)}")
-    f.write(f"\n\n\n")
+    f.write("\n\n\n")
 
 
 def assemble_sfx_option(f, internal_name: str, sound_hook: sfx.SoundHooks, display_name: str):
@@ -34,7 +33,7 @@ def assemble_sfx_option(f, internal_name: str, sound_hook: sfx.SoundHooks, displ
     f.write(f"    display_name = \"{display_name}\"\n")
     for sound, id in sfx_to_id.items():
         f.write(f"    option_{sound} = {id}\n")
-    f.write(f"\n\n\n")
+    f.write("\n\n\n")
 
 
 with open('ColorSFXOptions.py', 'w') as f:

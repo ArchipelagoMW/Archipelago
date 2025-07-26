@@ -32,7 +32,7 @@ class FlagType(IntEnum):
     VISITED_ROOM = 0x05
     VISITED_FLOOR = 0x06
 
-class Address():
+class Address:
     prev_address = None
 
     def __init__(self, address=None, size=4, mask=0xFFFFFFFF, max=None, choices=None, value=None):
@@ -70,7 +70,7 @@ class Address():
         if self.choices is not None:
             value = self.choices[value]
         if not isinstance(value, int):
-            raise ValueError("Invalid value type '%s'" % str(value))
+            raise ValueError(f"Invalid value type '{value}'")
 
         if isinstance(value, bool):
             value = 1 if value else 0
@@ -127,7 +127,7 @@ class Address():
         return ret
 
 
-class SaveContext():
+class SaveContext:
     def __init__(self):
         self.save_bits = {}
         self.save_bytes = {}
@@ -221,7 +221,7 @@ class SaveContext():
                 save_table += [(address & 0xFF00) >> 8, address & 0xFF, 0x00, value]
         for address, value in self.save_bytes.items():
             save_table += [(address & 0xFF00) >> 8, address & 0xFF, 0x01, value]
-        save_table += [0x00, 0x00, 0x00, 0x00]
+        save_table += [0x00] * 4
 
         table_len = len(save_table)
         if table_len > 0x400:

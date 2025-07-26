@@ -1,7 +1,7 @@
 from BaseClasses import Entrance
 
 class OOTEntrance(Entrance):
-    game: str = 'Ocarina of Time'
+    game = 'Ocarina of Time'
 
     def __init__(self, player, multiworld, name='', parent=None):
         super(OOTEntrance, self).__init__(player, name, parent)

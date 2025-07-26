@@ -71,7 +71,7 @@ class uint24:
         return (values[0] << 16) | (values[1] << 8) | values[2]
 
 
-class BigStream(object):
+class BigStream:
     def __init__(self, buffer: bytearray):
         self.last_address = 0
         self.buffer = buffer
@@ -86,83 +86,83 @@ class BigStream(object):
         return self.last_address >= len(self.buffer)
 
     def read_byte(self, address=None):
-        if address == None:
+        if address is None:
             address = self.last_address
         self.last_address = address + 1
         return self.buffer[address]
 
     def read_bytes(self, address=None, length=1):
-        if address == None:
+        if address is None:
             address = self.last_address
         self.last_address = address + length
         return self.buffer[address : address + length]
 
     def read_int16(self, address=None):
-        if address == None:
+        if address is None:
             address = self.last_address
         return uint16.value(self.read_bytes(address, 2))
 
     def read_int24(self, address=None):
-        if address == None:
+        if address is None:
             address = self.last_address
         return uint24.value(self.read_bytes(address, 3))
 
     def read_int32(self, address=None):
-        if address == None:
+        if address is None:
             address = self.last_address
         return uint32.value(self.read_bytes(address, 4))
 
     def write_byte(self, address, value):
-        if address == None:
+        if address is None:
             address = self.last_address
         self.buffer[address] = value
         self.last_address = address + 1
 
     def write_sbyte(self, address, value):
-        if address == None:
+        if address is None:
             address = self.last_address
         self.write_bytes(address, struct.pack('b', value))
 
     def write_int16(self, address, value):
-        if address == None:
+        if address is None:
             address = self.last_address
         self.write_bytes(address, uint16.bytes(value))
 
     def write_int24(self, address, value):
-        if address == None:
+        if address is None:
             address = self.last_address
         self.write_bytes(address, uint24.bytes(value))
 
     def write_int32(self, address, value):
-        if address == None:
+        if address is None:
             address = self.last_address
         self.write_bytes(address, uint32.bytes(value))
 
-    def write_f32(self, address, value:float):
-        if address == None:
+    def write_f32(self, address, value: float):
+        if address is None:
             address = self.last_address
         self.write_bytes(address, struct.pack('>f', value))
 
     def write_bytes(self, startaddress, values):
-        if startaddress == None:
+        if startaddress is None:
             startaddress = self.last_address
         self.last_address = startaddress + len(values)
         self.buffer[startaddress:startaddress + len(values)] = values
 
     def write_int16s(self, startaddress, values):
-        if startaddress == None:
+        if startaddress is None:
             startaddress = self.last_address
         for i, value in enumerate(values):
             self.write_int16(startaddress + (i * 2), value)
 
     def write_int24s(self, startaddress, values):
-        if startaddress == None:
+        if startaddress is None:
             startaddress = self.last_address
         for i, value in enumerate(values):
             self.write_int24(startaddress + (i * 3), value)
 
     def write_int32s(self, startaddress, values):
-        if startaddress == None:
+        if startaddress is None:
             startaddress = self.last_address
         for i, value in enumerate(values):
             self.write_int32(startaddress + (i * 4), value)

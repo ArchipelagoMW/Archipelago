@@ -19,7 +19,7 @@ new_name_order = sorted(location_table.keys(),
                 else 1 if name in locnames_pre_70
                 else 0)
 
-location_name_to_id = {name: (location_id_offset + index) for (index, name) in enumerate(new_name_order)
+location_name_to_id = {name: (location_id_offset + index) for index, name in enumerate(new_name_order)
     if location_table[name][0] not in non_indexed_location_types}
 
 
@@ -30,7 +30,7 @@ class DisableType(Enum):
 
 
 class OOTLocation(Location):
-    game: str = 'Ocarina of Time'
+    game = 'Ocarina of Time'
 
     def __init__(self, player, name='', code=None, address1=None, address2=None,
         default=None, type='Chest', scene=None, parent=None, filter_tags=None,

@@ -30,14 +30,14 @@ class RegionRestriction(Enum):
     OVERWORLD = 2,
 
 
-class GossipStone():
+class GossipStone:
     def __init__(self, name, location):
         self.name = name
         self.location = location
         self.reachable = True
 
 
-class GossipText():
+class GossipText:
     def __init__(self, text, colors=None, prefix="They say that "):
         text = prefix + text
         text = text[:1].upper() + text[1:]
@@ -112,9 +112,7 @@ gossipLocations = {
     0x044A: GossipStone('DMC (Upper Grotto)',               'DMC Upper Grotto Gossip Stone'),
 }
 
-gossipLocations_reversemap = {
-    stone.name : stone_id for stone_id, stone in gossipLocations.items()
-}
+gossipLocations_reversemap = {stone.name: stone_id for stone_id, stone in gossipLocations.items()}
 
 def getItemGenericName(item):
     if item.game != "Ocarina of Time":
@@ -907,9 +905,9 @@ def buildWorldGossipHints(world, checkedLocations=None):
         if hint_dist['named-item'][1] == 0:
             raise Exception('User-provided item hints were requested, but copies per named-item hint is zero')
         else:
-            for i in range(0, len(world.named_item_pool)):
+            for _ in range(len(world.named_item_pool)):
                 hint = get_specific_item_hint(world, checkedLocations)
-                if hint == None:
+                if hint is None:
                     raise Exception('No valid hints for user-provided item')
                 else:
                     gossip_text, location = hint
@@ -969,7 +967,7 @@ def buildWorldGossipHints(world, checkedLocations=None):
 
         hint = hint_func[hint_type](world, checkedLocations)
 
-        if hint == None:
+        if hint is None:
             index = hint_types.index(hint_type)
             hint_prob[index] = 0
             # Zero out the probability in the base distribution in case the probability list is modified
@@ -1003,7 +1001,7 @@ def buildAltarHints(world, messages, include_rewards=True, include_wincons=True)
             ('Zora Sapphire',    'Blue'),
         ]
         child_text += getHint('Spiritual Stone Text Start', world.hint_rng, world.clearer_hints).text + '\x04'
-        for (reward, color) in bossRewardsSpiritualStones:
+        for reward, color in bossRewardsSpiritualStones:
             child_text += buildBossString(reward, color, world)
     child_text += getHint('Child Altar Text End', world.hint_rng, world.clearer_hints).text
     child_text += '\x0B'
@@ -1021,7 +1019,7 @@ def buildAltarHints(world, messages, include_rewards=True, include_wincons=True)
             ('Shadow Medallion', 'Pink'),
             ('Spirit Medallion', 'Yellow'),
         ]
-        for (reward, color) in bossRewardsMedallions:
+        for reward, color in bossRewardsMedallions:
             adult_text += buildBossString(reward, color, world)
     if include_wincons:
         adult_text += buildBridgeReqsString(world)

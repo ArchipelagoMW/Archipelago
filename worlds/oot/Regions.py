@@ -19,7 +19,7 @@ class RegionType(Enum):
 
 
 # Pretends to be an enum, but when the values are raw ints, it's much faster
-class TimeOfDay(object):
+class TimeOfDay:
     NONE = 0
     DAY = 1
     DAMPE = 2
@@ -27,8 +27,6 @@ class TimeOfDay(object):
 
 
 class OOTRegion(Region):
-    game: str = "Ocarina of Time"
-
     def __init__(self, name: str, player: int, multiworld: MultiWorld):
         super(OOTRegion, self).__init__(name, player, multiworld)
         self._oot_hint = None

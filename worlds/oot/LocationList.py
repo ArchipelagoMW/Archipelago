@@ -2053,18 +2053,18 @@ business_scrubs = [
 
 dungeons = ('Deku Tree', 'Dodongo\'s Cavern', 'Jabu Jabu\'s Belly', 'Forest Temple', 'Fire Temple', 'Water Temple', 'Spirit Temple', 'Shadow Temple', 'Ice Cavern', 'Bottom of the Well', 'Gerudo Training Ground', 'Ganon\'s Castle')
 location_groups = {
-    'Song': [name for (name, data) in location_table.items() if data[0] == 'Song'],
-    'Chest': [name for (name, data) in location_table.items() if data[0] == 'Chest'],
-    'Collectable': [name for (name, data) in location_table.items() if data[0] in ['Collectable']],
-    'Boss': [name for (name, data) in location_table.items() if data[0] == 'Boss'],
-    'ActorOverride': [name for (name, data) in location_table.items() if data[0] == 'ActorOverride'],
-    'BossHeart': [name for (name, data) in location_table.items() if data[0] == 'BossHeart'],
-    'CollectableLike': [name for (name, data) in location_table.items() if data[0] in ('Collectable', 'BossHeart', 'GS Token')],
-    'CanSee': [name for (name, data) in location_table.items()
+    'Song': [name for name, data in location_table.items() if data[0] == 'Song'],
+    'Chest': [name for name, data in location_table.items() if data[0] == 'Chest'],
+    'Collectable': [name for name, data in location_table.items() if data[0] in ['Collectable']],
+    'Boss': [name for name, data in location_table.items() if data[0] == 'Boss'],
+    'ActorOverride': [name for name, data in location_table.items() if data[0] == 'ActorOverride'],
+    'BossHeart': [name for name, data in location_table.items() if data[0] == 'BossHeart'],
+    'CollectableLike': [name for name, data in location_table.items() if data[0] in ('Collectable', 'BossHeart', 'GS Token')],
+    'CanSee': [name for name, data in location_table.items()
                if data[0] in ('Collectable', 'BossHeart', 'GS Token', 'Shop', 'Freestanding', 'ActorOverride', 'RupeeTower', 'Pot', 'Crate', 'FlyingPot', 'SmallCrate', 'Beehive')
                # Treasure Box Shop, Bombchu Bowling, Hyrule Field (OoT), Lake Hylia (RL/FA)
                or data[0:2] in [('Chest', 0x10), ('NPC', 0x4B), ('NPC', 0x51), ('NPC', 0x57)]],
-    'Dungeon': [name for (name, data) in location_table.items() if data[5] is not None and any(dungeon in data[5] for dungeon in dungeons)],
+    'Dungeon': [name for name, data in location_table.items() if data[5] is not None and any(dungeon in data[5] for dungeon in dungeons)],
 }
 
 

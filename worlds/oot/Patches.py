@@ -79,7 +79,7 @@ def patch_rom(world, rom):
         rom.write_bytes(writeAddress, keatonBytes)
 
     # Load Triforce model into a file
-    triforce_obj_file = File({ 'Name': 'object_gi_triforce' })
+    triforce_obj_file = File({'Name': 'object_gi_triforce'})
     triforce_obj_file.copy(rom)
     with open(data_path('Triforce.zobj'), 'rb') as stream:
         obj_data = stream.read()
@@ -107,7 +107,7 @@ def patch_rom(world, rom):
     add_to_extended_object_table(rom, 0x194, dd_obj_file)
 
     # Load Key Ring model into a file
-    keyring_obj_file = File({ 'Name': 'object_gi_keyring' })
+    keyring_obj_file = File({'Name': 'object_gi_keyring'})
     keyring_obj_file.copy(rom)
     with open(data_path('KeyRing.zobj'), 'rb') as stream:
         obj_data = stream.read()
@@ -269,10 +269,10 @@ def patch_rom(world, rom):
     rom.write_byte(rom.sym('CFG_SHOW_SETTING_INFO'), 0x01)
 
     msg = [f"Archipelago {ap_version}", world.multiworld.get_player_name(world.player)]
-    for idx, part in enumerate(msg):
-        part_bytes = list(ord(c) for c in part) + [0] * (line_len + 1)
+    for idx, part in enumerate(msg, start=1):
+        part_bytes = [ord(c) for c in part] + [0] * (line_len + 1)
         part_bytes = part_bytes[:line_len + 1]
-        symbol = rom.sym('CFG_CUSTOM_MESSAGE_{}'.format(idx + 1))
+        symbol = rom.sym(f"CFG_CUSTOM_MESSAGE_{idx}")
         rom.write_bytes(symbol, part_bytes)
 
     # Change graveyard graves to not allow grabbing on to the ledge
@@ -903,7 +903,7 @@ def patch_rom(world, rom):
                 command = rom.read_byte(current)
                 if command == 0x18: # Alternate header list
                     header_list = scene_start + (rom.read_int32(current + 4) & 0x00FFFFFF)
-                    for alt_id in range(0,3):
+                    for _ in range(3):
                         header_offset = rom.read_int32(header_list) & 0x00FFFFFF
                         if header_offset != 0:
                             add_scene_exits(scene_start, header_offset)
@@ -925,7 +925,7 @@ def patch_rom(world, rom):
 
             # update
             addr = scene_start + exit_list_start_off
-            for _ in range(0, list_length):
+            for _ in range(list_length):
                 index = rom.read_int16(addr)
                 if index not in exit_table:
                     exit_table[index] = []
@@ -933,7 +933,7 @@ def patch_rom(world, rom):
                 addr += 2
 
         scene_table = 0x00B71440
-        for scene in range(0x00, 0x65):
+        for scene in range(0x65):
             scene_start = rom.read_int32(scene_table + (scene * 0x14))
             add_scene_exits(scene_start)
 
@@ -1085,16 +1085,17 @@ def patch_rom(world, rom):
     # Set entrances to update, except grotto entrances which are handled on their own at a later point
     set_entrance_updates(filter(lambda entrance: entrance.type != 'Grotto', world.get_shuffled_entrances()))
 
-    for k, v in [(k, v) for k, v in exit_updates if k in exit_table]:
-        for addr in exit_table[k]:
-            rom.write_int16(addr, v)
+    for k, v in exit_updates:
+        if k in exit_table:
+            for addr in exit_table[k]:
+                rom.write_int16(addr, v)
 
     # Fix text for Pocket Cucco.
     rom.write_byte(0xBEEF45, 0x0B)
 
     # Fix stupid alcove cameras in Ice Cavern -- thanks to krim and mzx for the help
-    rom.write_byte(0x2BECA25,0x01)
-    rom.write_byte(0x2BECA2D,0x01)
+    rom.write_byte(0x2BECA25, 0x01)
+    rom.write_byte(0x2BECA2D, 0x01)
 
     configure_dungeon_info(rom, world)
 
@@ -1627,7 +1628,7 @@ def patch_rom(world, rom):
 
     # Update "Princess Ruto got the Spiritual Stone!" text before the midboss in Jabu
     if reward_text is None:
-        new_message = f"\x08Princess Ruto got \x01\x05\x43nothing\x05\x40!\x01Well, that's disappointing...\x02"
+        new_message = "\x08Princess Ruto got \x01\x05\x43nothing\x05\x40!\x01Well, that's disappointing...\x02"
     else:
         reward_texts = {
             'Kokiri Emerald':   "the \x05\x42Kokiri Emerald\x05\x40",
@@ -2030,7 +2031,7 @@ def patch_rom(world, rom):
     if world.shuffle_pots != 'off': # Update the first BK door in ganon's castle to use a separate flag so it can be unlocked to get to the pots
         patch_ganons_tower_bk_door(rom, 0x15) # Using flag 0x15 for the door. GBK doors normally use 0x14.
     locked_doors = get_doors_to_unlock(rom, world)
-    for _, [door_byte, door_bits] in locked_doors.items():
+    for door_byte, door_bits in locked_doors.values():
         save_context.write_bits(door_byte, door_bits)
 
     # Fix chest animations
@@ -2298,7 +2299,7 @@ def patch_rom(world, rom):
         rom.write_byte(symbol, 0x01)
 
     # actually write the save table to rom
-    for (name, count) in world.starting_items.items():
+    for name, count in world.starting_items.items():
         if count == 0:
             continue
         save_context.give_item(world, name, count)
@@ -2426,7 +2427,7 @@ def write_rom_texture(rom, texture_id, texture):
 
 
 def get_override_table(world):
-    return list(filter(lambda val: val != None, map(partial(get_override_entry, world), world.multiworld.get_filled_locations(world.player))))
+    return [val for val in map(partial(get_override_entry, world), world.multiworld.get_filled_locations(world.player)) if val is not None]
 
 
 override_struct = struct.Struct('>BBHHBB') # match override_t in get_items.c
@@ -2518,7 +2519,7 @@ def room_get_actors(rom, actor_func, room_data, scene, alternate=None):
         if command == 0x01: # actor list
             actor_count = rom.read_byte(room_data + 1)
             actor_list = room_start + (rom.read_int32(room_data + 4) & 0x00FFFFFF)
-            for _ in range(0, actor_count):
+            for _ in range(actor_count):
                 actor_id = rom.read_int16(actor_list)
                 entry = actor_func(rom, actor_id, actor_list, scene)
                 if entry:
@@ -2526,7 +2527,7 @@ def room_get_actors(rom, actor_func, room_data, scene, alternate=None):
                 actor_list = actor_list + 16
         if command == 0x18: # Alternate header list
             header_list = room_start + (rom.read_int32(room_data + 4) & 0x00FFFFFF)
-            for alt_id in range(0,3):
+            for _ in range(3):
                 header_data = room_start + (rom.read_int32(header_list) & 0x00FFFFFF)
                 if header_data != 0 and not alternate:
                     actors.update(room_get_actors(rom, actor_func, header_data, scene, room_start))
@@ -2536,7 +2537,7 @@ def room_get_actors(rom, actor_func, room_data, scene, alternate=None):
 
 
 def scene_get_actors(rom, actor_func, scene_data, scene, alternate=None, processed_rooms=None):
-    if processed_rooms == None:
+    if processed_rooms is None:
         processed_rooms = []
     actors = {}
     scene_start = alternate if alternate else scene_data
@@ -2546,17 +2547,17 @@ def scene_get_actors(rom, actor_func, scene_data, scene, alternate=None, process
         if command == 0x04: #room list
             room_count = rom.read_byte(scene_data + 1)
             room_list = scene_start + (rom.read_int32(scene_data + 4) & 0x00FFFFFF)
-            for _ in range(0, room_count):
+            for _ in range(room_count):
                 room_data = rom.read_int32(room_list)
 
-                if not room_data in processed_rooms:
+                if room_data not in processed_rooms:
                     actors.update(room_get_actors(rom, actor_func, room_data, scene))
                     processed_rooms.append(room_data)
                 room_list = room_list + 8
         if command == 0x0E: #transition actor list
             actor_count = rom.read_byte(scene_data + 1)
             actor_list = scene_start + (rom.read_int32(scene_data + 4) & 0x00FFFFFF)
-            for _ in range(0, actor_count):
+            for _ in range(actor_count):
                 actor_id = rom.read_int16(actor_list + 4)
                 entry = actor_func(rom, actor_id, actor_list, scene)
                 if entry:
@@ -2564,7 +2565,7 @@ def scene_get_actors(rom, actor_func, scene_data, scene, alternate=None, process
                 actor_list = actor_list + 16
         if command == 0x18: # Alternate header list
             header_list = scene_start + (rom.read_int32(scene_data + 4) & 0x00FFFFFF)
-            for alt_id in range(0,3):
+            for _ in range(3):
                 header_data = scene_start + (rom.read_int32(header_list) & 0x00FFFFFF)
                 if header_data != 0 and not alternate:
                     actors.update(scene_get_actors(rom, actor_func, header_data, scene, scene_start, processed_rooms))
@@ -2577,7 +2578,7 @@ def scene_get_actors(rom, actor_func, scene_data, scene, alternate=None, process
 def get_actor_list(rom, actor_func):
     actors = {}
     scene_table = 0x00B71440
-    for scene in range(0x00, 0x65):
+    for scene in range(0x65):
         scene_data = rom.read_int32(scene_table + (scene * 0x14))
         actors.update(scene_get_actors(rom, actor_func, scene_data, scene))
     return actors
@@ -2797,7 +2798,7 @@ def place_shop_items(rom, world, shop_items, messages, locations, init_shop_id=F
             update_message_by_id(messages, shop_item.description_message, description_text, 0x03)
             update_message_by_id(messages, shop_item.purchase_message, purchase_text, 0x03)
 
-        if any(filter(lambda c: c in location.name, {'5', '6', '7', '8'})):
+        if any(c in location.name for c in {'5', '6', '7', '8'}):
             world.current_shop_id += 1
 
     return shop_objs
@@ -2835,7 +2836,8 @@ def configure_dungeon_info(rom, world):
     rom.write_int32(rom.sym('CFG_DUNGEON_INFO_MQ_ENABLE'), int(mq_enable))
     rom.write_int32(rom.sym('CFG_DUNGEON_INFO_MQ_NEED_MAP'), int(enhance_map_compass))
     rom.write_int32(rom.sym('CFG_DUNGEON_INFO_REWARD_ENABLE'), int('altar' in world.misc_hints or enhance_map_compass))
-    rom.write_int32(rom.sym('CFG_DUNGEON_INFO_REWARD_NEED_COMPASS'), (2 if False else 1) if enhance_map_compass else 0) #TODO set to 2 if boss reward shuffle and/or mixed pools bosses are on
+    # TODO set to 2 if boss reward shuffle and/or mixed pools bosses are on
+    rom.write_int32(rom.sym('CFG_DUNGEON_INFO_REWARD_NEED_COMPASS'), (2 if False else 1) if enhance_map_compass else 0)
     rom.write_int32(rom.sym('CFG_DUNGEON_INFO_REWARD_NEED_ALTAR'), int(not enhance_map_compass))
     # if hasattr(world, 'mix_entrance_pools'):
     #     rom.write_int32(rom.sym('CFG_DUNGEON_INFO_REWARD_SUMMARY_ENABLE'), int('Boss' not in world.mix_entrance_pools))

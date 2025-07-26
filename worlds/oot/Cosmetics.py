@@ -160,7 +160,7 @@ def patch_navi_colors(rom, ootworld, symbols):
 
         colors = []
         option_dict = {}
-        for address_index, address in enumerate(navi_addresses):
+        for address in navi_addresses:
             address_colors = {}
             colors.append(address_colors)
             for index, (navi_part, option, rainbow_symbol) in enumerate([
@@ -330,10 +330,10 @@ def patch_trails(rom, ootworld, trails):
         option_dict = {}
         colors = {}
 
-        for index, (trail_part, option, rainbow_symbol, color_symbol) in enumerate([
+        for trail_part, option, rainbow_symbol, color_symbol in [
             ('inner', option_inner, rainbow_inner_symbol, color_inner_symbol),
             ('outer', option_outer, rainbow_outer_symbol, color_outer_symbol),
-        ]):
+        ]:
             color = None
 
             # set rainbow option
@@ -670,7 +670,7 @@ patch_sets[0x1F04FA62] = {
 
 # 3.14.11
 patch_sets[0x1F05D3F9] = {
-    "patches": patch_sets[0x1F04FA62]["patches"] + [],
+    "patches": patch_sets[0x1F04FA62]["patches"],
     "symbols": {**patch_sets[0x1F04FA62]["symbols"]},
 }
 

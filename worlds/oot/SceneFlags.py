@@ -14,7 +14,7 @@ def get_collectible_flag_table(world):
     """
     scene_flags = {}
     alt_list = []
-    for i in range(0, 101):
+    for i in range(101):
         scene_flags[i] = {}
         for location in world.get_locations():
             if(location.scene == i and location.type in ["Freestanding", "Pot", "FlyingPot", "Crate", "SmallCrate", "Beehive", "RupeeTower"]):
@@ -97,7 +97,7 @@ def get_collectible_flag_addresses(world, collectible_scene_flags_table):
             index += 2
             if scene_id == scene:  # found the scene
                 # Loop through each room/setup combination until we find the right one.
-                for i in range(room_setup_count):
+                for _ in range(room_setup_count):
                     room_id = collectible_scene_flags_table[index] & 0x3F
                     setup_id_temp = (collectible_scene_flags_table[index] & 0xC0) >> 6
                     room_byte_offset = (collectible_scene_flags_table[index + 1] << 8) + collectible_scene_flags_table[index + 2]

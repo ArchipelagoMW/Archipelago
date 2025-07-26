@@ -109,9 +109,6 @@ class Rom(BigStream):
                 raise RuntimeError(f'Decompressor does not exist! Please place it at {subcall[0]}.')
             subprocess.call(subcall, **subprocess_args())
             self.read_rom(decomp_file)
-        else:
-            # ROM file is a valid and already uncompressed
-            pass
 
     def write_byte(self, address, value):
         super().write_byte(address, value)
@@ -144,7 +141,7 @@ class Rom(BigStream):
         self.write_bytes(0x10, crc)
 
     def read_rom(self, file):
-        # "Reads rom into bytearray"
+        """Reads rom into bytearray"""
         try:
             with open(file, 'rb') as stream:
                 self.buffer = bytearray(stream.read())
@@ -186,7 +183,7 @@ class Rom(BigStream):
 
         dma_data.sort(key=lambda v: v[0])
 
-        for i in range(0, len(dma_data) - 1):
+        for i in range(len(dma_data) - 1):
             this_start, this_end, this_size = dma_data[i]
             next_start, next_end, next_size = dma_data[i + 1]
 
@@ -217,11 +214,11 @@ class Rom(BigStream):
             dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
 
         if cur >= (dma_data_end - 0x10):
-            raise Exception('dmadata update failed: key {0:x} not found in dmadata and dma table is full.'.format(key))
+            raise Exception(f'dmadata update failed: key {key:x} not found in dmadata and dma table is full.')
         else:
             self.write_int32s(cur, [start, end, start, 0])
-            if from_file == None:
-                if key == None:
+            if from_file is None:
+                if key is None:
                     from_file = -1
                 else:
                     from_file = key

@@ -111,6 +111,6 @@ def patch_overworld_icon(rom, color, address, fileName = None):
     rgbBytes = rgb5a1ToRGB(original)
     greyscaled = greyscaleRGB(rgbBytes)
     rgbBytes = addHueToRGB(greyscaled, color)
-    if fileName != None:
+    if fileName is not None:
         add_extra_data(rgbBytes, fileName)
     rom.write_bytes(address, rgbToRGB5a1(rgbBytes))

@@ -30,7 +30,7 @@ def assume_entrance_pool(entrance_pool, ootworld, pool_type):
     assumed_pool = []
     for entrance in entrance_pool:
         assumed_forward = entrance.assume_reachable(pool_type)
-        if entrance.reverse != None and not ootworld.decouple_entrances:
+        if entrance.reverse is not None and not ootworld.decouple_entrances:
             assumed_return = entrance.reverse.assume_reachable(pool_type)
             if not (ootworld.mix_entrance_pools != 'off' and (ootworld.shuffle_overworld_entrances or ootworld.shuffle_special_interior_entrances)):
                 if (entrance.type in ('Dungeon', 'Grotto', 'Grave') and entrance.reverse.name != 'Spirit Temple Lobby -> Desert Colossus From Spirit Lobby') or \
@@ -573,7 +573,7 @@ def shuffle_random_entrances(ootworld):
             except StopIteration:
                 raise RuntimeError(f"Could not find entrance to plando: {conn.entrance} => {conn.exit}")
             finally:
-                for (entrance, target) in rollbacks:
+                for entrance, target in rollbacks:
                     confirm_replacement(entrance, target)
 
     # Check placed one way entrances and trim.
@@ -618,14 +618,14 @@ def shuffle_random_entrances(ootworld):
     # Multiple checks after shuffling to ensure everything is OK
     # Check that all entrances hook up correctly
     for entrance in ootworld.get_shuffled_entrances():
-        if entrance.connected_region == None:
+        if entrance.connected_region is None:
             logging.getLogger('').error(f'{entrance} was shuffled but is not connected to any region')
-        if entrance.replaces == None:
+        if entrance.replaces is None:
             logging.getLogger('').error(f'{entrance} was shuffled but does not replace any entrance')
     if len(ootworld.get_region('Root Exits').exits) > 8:
         for exit in ootworld.get_region('Root Exits').exits:
             logging.getLogger('').error(f'Root Exit: {exit} -> {exit.connected_region}')
-        logging.getLogger('').error(f'Root has too many entrances left after shuffling entrances')
+        logging.getLogger('').error('Root has too many entrances left after shuffling entrances')
     # Game is beatable
     new_all_state = ootworld.get_state_with_complete_itempool()
     if not multiworld.has_beaten_game(new_all_state, player):
@@ -726,7 +726,7 @@ def shuffle_entrance_pool(ootworld, pool_type, entrance_pool, target_entrances, 
 def shuffle_entrances(ootworld, pool_type, entrances, target_entrances, rollbacks, locations_to_ensure_reachable, all_state, none_state):
     ootworld.random.shuffle(entrances)
     for entrance in entrances:
-        if entrance.connected_region != None:
+        if entrance.connected_region is not None:
             continue
         ootworld.random.shuffle(target_entrances)
         # Here we deliberately introduce bias by prioritizing certain interiors, i.e. the ones most likely to cause problems.
@@ -734,11 +734,11 @@ def shuffle_entrances(ootworld, pool_type, entrances, target_entrances, rollback
         if pool_type in {'InteriorSoft', 'MixedSoft'}:
             target_entrances.sort(reverse=True, key=lambda entrance: interior_entrance_bias.get(entrance.replaces.name, 0))
         for target in target_entrances:
-            if target.connected_region == None:
+            if target.connected_region is None:
                 continue
             if replace_entrance(ootworld, entrance, target, rollbacks, locations_to_ensure_reachable, all_state, none_state):
                 break
-        if entrance.connected_region == None:
+        if entrance.connected_region is None:
             raise EntranceShuffleError('No more valid entrances')
 
 
@@ -823,7 +823,7 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
                 raise EntranceShuffleError(f'{loc} is unreachable')
 
     if ootworld.shuffle_interior_entrances and (ootworld.misc_hints or ootworld.hints != 'none') and \
-        (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior']):
+        (entrance_placed is None or entrance_placed.type in ['Interior', 'SpecialInterior']):
         # Ensure Kak Potion Shop entrances are in the same hint area so there is no ambiguity as to which entrance is used for hints
         potion_front = get_entrance_replacing(multiworld.get_region('Kak Potion Shop Front', player), 'Kakariko Village -> Kak Potion Shop Front', player)
         potion_back = get_entrance_replacing(multiworld.get_region('Kak Potion Shop Back', player), 'Kak Backyard -> Kak Potion Shop Back', player)
@@ -864,7 +864,7 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
             raise EntranceShuffleError('Path to ToT as child not guaranteed')
 
     if (ootworld.shuffle_interior_entrances or ootworld.shuffle_overworld_entrances) and \
-        (entrance_placed == None or entrance_placed.type in ['Interior', 'SpecialInterior', 'Overworld', 'Spawn', 'WarpSong', 'OwlDrop']):
+        (entrance_placed is None or entrance_placed.type in ['Interior', 'SpecialInterior', 'Overworld', 'Spawn', 'WarpSong', 'OwlDrop']):
         # Ensure big poe shop is always reachable as adult
         if multiworld.get_region('Market Guard House', player) not in time_travel_state.adult_reachable_regions[player]:
             raise EntranceShuffleError('Big Poe Shop access not guaranteed as adult')
@@ -954,9 +954,8 @@ def confirm_replacement(entrance, target):
 
 
 def delete_target_entrance(target):
-    if target.connected_region != None:
+    if target.connected_region is not None:
         target.disconnect()
-    if target.parent_region != None:
+    if target.parent_region is not None:
         target.parent_region.exits.remove(target)
         target.parent_region = None
-    del target

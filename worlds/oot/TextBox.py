@@ -368,8 +368,7 @@ def test_support_long_words():
     else:
         print('"Support Long Words" test passed!')
 
-# AP additions
 
-rom_safe_lambda = lambda c: c if c in character_table else '?'
+# AP additions
 def rom_safe_text(text):
-    return ''.join(map(rom_safe_lambda, text))
+    return ''.join(c if c in character_table else "?" for c in text)

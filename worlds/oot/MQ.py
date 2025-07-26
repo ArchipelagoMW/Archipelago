@@ -51,7 +51,7 @@ from struct import pack, unpack
 SCENE_TABLE = 0xB71440
 
 
-class File(object):
+class File:
     def __init__(self, file):
         self.name = file['Name']
         self.start = int(file['Start'], 16) if 'Start' in file else 0
@@ -68,8 +68,8 @@ class File(object):
     def __repr__(self):
         remap = "None"
         if self.remap is not None:
-            remap = "{0:x}".format(self.remap)
-        return "{0}: {1:x} {2:x}, remap {3}".format(self.name, self.start, self.end, remap)
+            remap = f"{self.remap:x}"
+        return f"{self.name}: {self.start:x} {self.end:x}, remap {remap}"
 
     def relocate(self, rom: Rom):
         if self.remap is None:
@@ -91,7 +91,7 @@ class File(object):
         self.relocate(rom)
 
 
-class CollisionMesh(object):
+class CollisionMesh:
     def __init__(self, rom: Rom, start, offset):
         self.offset = offset
         self.poly_addr = rom.read_int32(start + offset + 0x18)
@@ -104,7 +104,7 @@ class CollisionMesh(object):
         rom.write_int32s(addr, [self.poly_addr, self.polytypes_addr, self.camera_data_addr])
 
 
-class ColDelta(object):
+class ColDelta:
     def __init__(self, delta):
         self.is_larger = delta['IsLarger']
         self.polys = delta['Polys']
@@ -112,10 +112,10 @@ class ColDelta(object):
         self.cams = delta['Cams']
 
 
-class Icon(object):
+class Icon:
     def __init__(self, data):
-        self.icon = data["Icon"];
-        self.count = data["Count"];
+        self.icon = data["Icon"]
+        self.count = data["Count"]
         self.points = [IconPoint(x) for x in data["IconPoints"]]
 
     def write_to_minimap(self, rom: Rom, addr):
@@ -136,7 +136,7 @@ class Icon(object):
             cur += 0x0C
 
 
-class IconPoint(object):
+class IconPoint:
     def __init__(self, point):
         self.flag = point["Flag"]
         self.x = point["x"]
@@ -153,7 +153,7 @@ class IconPoint(object):
         rom.write_f32(addr + 8, float(self.y))
 
 
-class Scene(object):
+class Scene:
     def __init__(self, scene):
         self.file = File(scene['File'])
         self.id = scene['Id']
@@ -188,7 +188,7 @@ class Scene(object):
             if code == 0x03: #collision
                 col_mesh_offset = rom.read_int24(headcur + 5)
                 col_mesh = CollisionMesh(rom, start, col_mesh_offset)
-                self.patch_mesh(rom, col_mesh);
+                self.patch_mesh(rom, col_mesh)
 
             elif code == 0x04: #rooms
                 room_list_offset = rom.read_int24(headcur + 5)
@@ -360,7 +360,7 @@ class Scene(object):
         return records_offset
 
 
-class Room(object):
+class Room:
     def __init__(self, room):
         self.file = File(room['File'])
         self.id = room['Id']
@@ -510,12 +510,12 @@ def verify_remap(scenes):
     for scene in scenes:
         file = scene.file
         result = test_remap(file)
-        print("{0} - {1}".format(result, file))
+        print(f"{result} - {file}")
 
         for room in scene.rooms:
             file = room.file
             result = test_remap(file)
-            print("{0} - {1}".format(result, file))
+            print(f"{result} - {file}")
 
 
 def update_dmadata(rom: Rom, file: File):
@@ -557,7 +557,7 @@ def insert_space(rom, file, vram_start, insert_section, insert_offset, insert_si
     # get the ovl header
     cur = file.end - rom.read_int32(file.end - 4)
     section_total = 0
-    for i in range(0, 4):
+    for i in range(4):
         # build the section offsets
         section_size = rom.read_int32(cur)
         sections.append(section_total)
@@ -576,7 +576,7 @@ def insert_space(rom, file, vram_start, insert_section, insert_offset, insert_si
     # iterate over the relocation table
     relocate_count = rom.read_int32(cur)
     cur += 4
-    for i in range(0, relocate_count):
+    for _ in range(relocate_count):
         entry = rom.read_int32(cur)
 
         # parse relocation entry
@@ -622,7 +622,7 @@ def insert_space(rom, file, vram_start, insert_section, insert_offset, insert_si
             value = None
 
         # update the vram values if it's been moved
-        if value != None and value >= insert_vram:
+        if value is not None and value >= insert_vram:
             # value = new vram address
             new_value = value + insert_size
 
@@ -666,7 +666,7 @@ def add_relocations(rom, file, addresses):
 
     # read section sizes and build offsets
     section_total = 0
-    for i in range(0, 4):
+    for _ in range(4):
         section_size = rom.read_int32(cur)
         sections.append(section_total)
         section_total += section_size
@@ -675,7 +675,7 @@ def add_relocations(rom, file, addresses):
     # get all entries in relocation table
     relocate_count = rom.read_int32(cur)
     cur += 4
-    for i in range(0, relocate_count):
+    for _ in range(relocate_count):
         relocations.append(rom.read_int32(cur))
         cur += 4
 

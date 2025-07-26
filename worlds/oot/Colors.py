@@ -400,4 +400,4 @@ def hex_to_color(option):
 
 
 def color_to_hex(color):
-    return '#' + ''.join(['{:02X}'.format(c) for c in color])
+    return '#' + ''.join([f'{c:02X}' for c in color])

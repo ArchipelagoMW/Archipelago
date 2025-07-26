@@ -1,5 +1,7 @@
-import io, re, json
+import io
+import json
 import os
+import re
 import subprocess
 from functools import lru_cache
 
@@ -68,7 +70,7 @@ def get_version_bytes(a):
         return version_bytes
     sa = a.replace('v', '').replace(' ', '.').split('.')
 
-    for i in range(0, 3):
+    for i in range(3):
         try:
             version_byte = int(sa[i])
         except ValueError:
@@ -89,7 +91,7 @@ def compare_version(a, b):
     sa = get_version_bytes(a)
     sb = get_version_bytes(b)
 
-    for i in range(0, 3):
+    for i in range(3):
         if sa[i] > sb[i]:
             return 1
         if sa[i] < sb[i]:

@@ -8,8 +8,6 @@ from collections import Counter
 from collections.abc import Iterable
 from string import printable
 
-logger = logging.getLogger("Ocarina of Time")
-
 from .Location import OOTLocation, LocationFactory, location_name_to_id, build_location_name_groups
 from .Entrance import OOTEntrance
 from .EntranceShuffle import shuffle_random_entrances, entrance_shuffle_table, EntranceShuffleError
@@ -36,6 +34,8 @@ from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
 
+
+logger = logging.getLogger("Ocarina of Time")
 # OoT's generate_output doesn't benefit from more than 2 threads, instead it uses a lot of memory.
 i_o_limiter = threading.Semaphore(2)
 
@@ -1159,7 +1159,7 @@ class OOTWorld(World):
                                 if not multiworld.can_beat_game(state):
                                     multiworld.worlds[player].required_locations.append(loc)
             for player in barren_hint_players:
-                multiworld.worlds[player].empty_areas = {region: info for (region, info) in items_by_region[player].items()
+                multiworld.worlds[player].empty_areas = {region: info for region, info in items_by_region[player].items()
                                                          if info['is_barren']}
         except Exception as e:
             raise e
@@ -1322,7 +1322,7 @@ class OOTWorld(World):
             return False
 
     def get_shufflable_entrances(self, type=None, only_primary=False):
-        return [entrance for entrance in self.get_entrances() if ((type == None or entrance.type == type)
+        return [entrance for entrance in self.get_entrances() if ((type is None or entrance.type == type)
                                                                    and (not only_primary or entrance.primary))]
 
     def get_shuffled_entrances(self, type=None, only_primary=False):

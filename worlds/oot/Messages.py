@@ -20,35 +20,35 @@ EXTENDED_TABLE_SIZE = JPN_TABLE_SIZE + ENG_TABLE_SIZE # 0x8360 bytes, 4204 entri
 
 # name of type, followed by number of additional bytes to read, follwed by a function that prints the code
 CONTROL_CODES = {
-    0x00: ('pad', 0, lambda _: '<pad>' ),
-    0x01: ('line-break', 0, lambda _: '\n' ),
-    0x02: ('end', 0, lambda _: '' ),
-    0x04: ('box-break', 0, lambda _: '\n▼\n' ),
-    0x05: ('color', 1, lambda d: '<color ' + "{:02x}".format(d) + '>' ),
-    0x06: ('gap', 1, lambda d: '<' + str(d) + 'px gap>' ),
-    0x07: ('goto', 2, lambda d: '<goto ' + "{:04x}".format(d) + '>' ),
-    0x08: ('instant', 0, lambda _: '<allow instant text>' ),
-    0x09: ('un-instant', 0, lambda _: '<disallow instant text>' ),
-    0x0A: ('keep-open', 0, lambda _: '<keep open>' ),
-    0x0B: ('event', 0, lambda _: '<event>' ),
-    0x0C: ('box-break-delay', 1, lambda d: '\n▼<wait ' + str(d) + ' frames>\n' ),
-    0x0E: ('fade-out', 1, lambda d: '<fade after ' + str(d) + ' frames?>' ),
-    0x0F: ('name', 0, lambda _: '<name>' ),
-    0x10: ('ocarina', 0, lambda _: '<ocarina>' ),
-    0x12: ('sound', 2, lambda d: '<play SFX ' + "{:04x}".format(d) + '>' ),
-    0x13: ('icon', 1, lambda d: '<icon ' + "{:02x}".format(d) + '>' ),
-    0x14: ('speed', 1, lambda d: '<delay each character by ' + str(d) + ' frames>' ),
-    0x15: ('background', 3, lambda d: '<set background to ' + "{:06x}".format(d) + '>' ),
-    0x16: ('marathon', 0, lambda _: '<marathon time>' ),
-    0x17: ('race', 0, lambda _: '<race time>' ),
-    0x18: ('points', 0, lambda _: '<points>' ),
-    0x19: ('skulltula', 0, lambda _: '<skulltula count>' ),
-    0x1A: ('unskippable', 0, lambda _: '<text is unskippable>' ),
-    0x1B: ('two-choice', 0, lambda _: '<start two choice>' ),
-    0x1C: ('three-choice', 0, lambda _: '<start three choice>' ),
-    0x1D: ('fish', 0, lambda _: '<fish weight>' ),
-    0x1E: ('high-score', 1, lambda d: '<high-score ' + "{:02x}".format(d) + '>' ),
-    0x1F: ('time', 0, lambda _: '<current time>' ),
+    0x00: ('pad', 0, lambda _: '<pad>'),
+    0x01: ('line-break', 0, lambda _: '\n'),
+    0x02: ('end', 0, lambda _: ''),
+    0x04: ('box-break', 0, lambda _: '\n▼\n'),
+    0x05: ('color', 1, lambda d: f"<color {d:02x}>"),
+    0x06: ('gap', 1, lambda d: f"<{d}px gap>"),
+    0x07: ('goto', 2, lambda d: f"<goto {d:04x}>"),
+    0x08: ('instant', 0, lambda _: '<allow instant text>'),
+    0x09: ('un-instant', 0, lambda _: '<disallow instant text>'),
+    0x0A: ('keep-open', 0, lambda _: '<keep open>'),
+    0x0B: ('event', 0, lambda _: '<event>'),
+    0x0C: ('box-break-delay', 1, lambda d: f"\n▼<wait {d} frames>\n"),
+    0x0E: ('fade-out', 1, lambda d: f"<fade after {d} frames?>"),
+    0x0F: ('name', 0, lambda _: '<name>'),
+    0x10: ('ocarina', 0, lambda _: '<ocarina>'),
+    0x12: ('sound', 2, lambda d: f"<play SFX {d:04x}>"),
+    0x13: ('icon', 1, lambda d: f"<icon {d:02x}>"),
+    0x14: ('speed', 1, lambda d: f"<delay each character by {d} frames>"),
+    0x15: ('background', 3, lambda d: f"<set background to {d:06x}>"),
+    0x16: ('marathon', 0, lambda _: '<marathon time>'),
+    0x17: ('race', 0, lambda _: '<race time>'),
+    0x18: ('points', 0, lambda _: '<points>'),
+    0x19: ('skulltula', 0, lambda _: '<skulltula count>'),
+    0x1A: ('unskippable', 0, lambda _: '<text is unskippable>'),
+    0x1B: ('two-choice', 0, lambda _: '<start two choice>'),
+    0x1C: ('three-choice', 0, lambda _: '<start three choice>'),
+    0x1D: ('fish', 0, lambda _: '<fish weight>'),
+    0x1E: ('high-score', 1, lambda d: f"<high-score {d:02x}>"),
+    0x1F: ('time', 0, lambda _: '<current time>'),
 }
 
 # Maps unicode characters to corresponding bytes in OOTR's character set.
@@ -105,7 +105,7 @@ for char, byte in CHARACTER_MAP.items():
     REVERSE_MAP[byte] = char
 
 # [0x0500,0x0560] (inclusive) are reserved for plandomakers
-GOSSIP_STONE_MESSAGES = list( range(0x0401, 0x04FF) ) # ids of the actual hints
+GOSSIP_STONE_MESSAGES = list(range(0x0401, 0x04FF)) # ids of the actual hints
 GOSSIP_STONE_MESSAGES += [0x2053, 0x2054] # shared initial stone messages
 TEMPLE_HINTS_MESSAGES = [0x7057, 0x707A] # dungeon reward hints from the temple of time pedestal
 GS_TOKEN_MESSAGES = [0x00B4, 0x00B5] # Get Gold Skulltula Token messages
@@ -423,7 +423,7 @@ class Text_Code:
         if self.code in CONTROL_CODES:
             ret = ''
             subdata = self.data
-            for _ in range(0, CONTROL_CODES[self.code][1]):
+            for _ in range(CONTROL_CODES[self.code][1]):
                 ret = ('\\x%02X' % (subdata & 0xFF)) + ret
                 subdata = subdata >> 8
             ret = '\\x%02X' % self.code + ret
@@ -439,7 +439,7 @@ class Text_Code:
         if self.code in CONTROL_CODES:
             ret = ''
             subdata = self.data
-            for _ in range(0, CONTROL_CODES[self.code][1]):
+            for _ in range(CONTROL_CODES[self.code][1]):
                 ret = chr(subdata & 0xFF) + ret
                 subdata = subdata >> 8
             ret = chr(self.code) + ret
@@ -482,12 +482,12 @@ class Message:
     """Holds a single message, and all its data"""
     def display(self):
         meta_data = [
-            "#" + str(self.index),
-            "ID: 0x" + "{:04x}".format(self.id),
-            "Offset: 0x" + "{:06x}".format(self.offset),
-            "Length: 0x" + "{:04x}".format(self.unpadded_length) + "/0x" + "{:04x}".format(self.length),
-            "Box Type: " + str(self.box_type),
-            "Postion: " + str(self.position)
+            f"#{self.index}",
+            f"ID: 0x{self.id:04x}",
+            f"Offset: 0x{self.offset:06x}",
+            f"Length: 0x{self.unpadded_length:04x}/0x{self.length:04x}",
+            f"Box Type: {self.box_type}",
+            f"Postion: {self.position}",
         ]
         return ', '.join(meta_data) + '\n' + self.text
 
@@ -726,22 +726,25 @@ def add_message(messages, text, id=0, opts=0x00):
     messages[-1].index = len(messages) - 1
 
 
-class Shop_Item():
+class Shop_Item:
     """Holds a row in the shop item table (which contains pointers to the description and purchase messages)"""
     def display(self):
-        meta_data = ["#" + str(self.index),
-         "Item: 0x" + "{:04x}".format(self.get_item_id),
-         "Price: " + str(self.price),
-         "Amount: " + str(self.pieces),
-         "Object: 0x" + "{:04x}".format(self.object),
-         "Model: 0x" + "{:04x}".format(self.model),
-         "Description: 0x" + "{:04x}".format(self.description_message),
-         "Purchase: 0x" + "{:04x}".format(self.purchase_message),]
+        meta_data = [
+            f"#{self.index}",
+            f"Item: 0x{self.get_item_id:04x}",
+            f"Price: {self.price}",
+            f"Amount: {self.pieces}",
+            f"Object: 0x{self.object:04x}",
+            f"Model: 0x{self.model:04x}",
+            f"Description: 0x{self.description_message:04x}",
+            f"Purchase: 0x{self.purchase_message:04x}",
+        ]
         func_data = [
-         "func1: 0x" + "{:08x}".format(self.func1),
-         "func2: 0x" + "{:08x}".format(self.func2),
-         "func3: 0x" + "{:08x}".format(self.func3),
-         "func4: 0x" + "{:08x}".format(self.func4),]
+            f"func1: 0x{self.func1:08x}",
+            f"func2: 0x{self.func2:08x}",
+            f"func3: 0x{self.func3:08x}",
+            f"func4: 0x{self.func4:08x}",
+         ]
         return ', '.join(meta_data) + '\n' + ', '.join(func_data)
 
     def write(self, rom, shop_table_address, index):
@@ -966,7 +969,7 @@ def repack_messages(rom, messages, permutation=None, always_allow_skip=True, spe
     # raise an exception if too much is written
     # we raise it at the end so that we know how much overflow there is
     if offset > text_size_limit:
-        raise(TypeError("Message Text table is too large: 0x" + "{:x}".format(offset) + " written / 0x" + "{:x}".format(ENG_TEXT_SIZE_LIMIT) + " allowed."))
+        raise TypeError(f"Message Text table is too large: 0x{offset:x} written / 0x{ENG_TEXT_SIZE_LIMIT:x} allowed.")
 
     # end the table
     table_index = len(messages)
@@ -976,13 +979,13 @@ def repack_messages(rom, messages, permutation=None, always_allow_skip=True, spe
     table_index += 1
     entry_offset = EXTENDED_TABLE_START + 8 * table_index
     if 8 * (table_index + 1) > EXTENDED_TABLE_SIZE:
-        raise(TypeError("Message ID table is too large: 0x" + "{:x}".format(8 * (table_index + 1)) + " written / 0x" + "{:x}".format(EXTENDED_TABLE_SIZE) + " allowed."))
+        raise TypeError(f"Message ID table is too large: 0x{8 * (table_index + 1):x} written / 0x{EXTENDED_TABLE_SIZE:x} allowed.")
     rom.write_bytes(entry_offset, [0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
 def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
     """Shuffles the messages in the game, making sure to keep various message types in their own group"""
-    permutation = [i for i, _ in enumerate(messages)]
+    permutation = [i for i in range(len(messages))]
 
     def is_exempt(m):
         hint_ids = (
@@ -1001,24 +1004,24 @@ def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
         is_shuffle_exempt = (m.id in shuffle_exempt)
         return (is_hint or is_error_message or m.is_id_message() or is_shuffle_exempt)
 
-    have_goto         = list( filter(lambda m: not is_exempt(m) and m.has_goto,         messages) )
-    have_keep_open    = list( filter(lambda m: not is_exempt(m) and m.has_keep_open,    messages) )
-    have_event        = list( filter(lambda m: not is_exempt(m) and m.has_event,        messages) )
-    have_fade         = list( filter(lambda m: not is_exempt(m) and m.has_fade,         messages) )
-    have_ocarina      = list( filter(lambda m: not is_exempt(m) and m.has_ocarina,      messages) )
-    have_two_choice   = list( filter(lambda m: not is_exempt(m) and m.has_two_choice,   messages) )
-    have_three_choice = list( filter(lambda m: not is_exempt(m) and m.has_three_choice, messages) )
-    basic_messages    = list( filter(lambda m: not is_exempt(m) and m.is_basic(),       messages) )
+    have_goto         = list(filter(lambda m: not is_exempt(m) and m.has_goto,         messages))
+    have_keep_open    = list(filter(lambda m: not is_exempt(m) and m.has_keep_open,    messages))
+    have_event        = list(filter(lambda m: not is_exempt(m) and m.has_event,        messages))
+    have_fade         = list(filter(lambda m: not is_exempt(m) and m.has_fade,         messages))
+    have_ocarina      = list(filter(lambda m: not is_exempt(m) and m.has_ocarina,      messages))
+    have_two_choice   = list(filter(lambda m: not is_exempt(m) and m.has_two_choice,   messages))
+    have_three_choice = list(filter(lambda m: not is_exempt(m) and m.has_three_choice, messages))
+    basic_messages    = list(filter(lambda m: not is_exempt(m) and m.is_basic(),       messages))
 
     def shuffle_group(group):
-        group_permutation = [i for i, _ in enumerate(group)]
+        group_permutation = [i for i in range(len(group))]
         rand.shuffle(group_permutation)
 
         for index_from, index_to in enumerate(group_permutation):
             permutation[group[index_to].index] = group[index_from].index
 
     # need to use 'list' to force 'map' to actually run through
-    list( map( shuffle_group, [
+    list(map(shuffle_group, [
         have_goto + have_keep_open + have_event + have_fade + basic_messages,
         have_ocarina,
         have_two_choice,

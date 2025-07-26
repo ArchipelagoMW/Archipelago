@@ -89,7 +89,7 @@ ocarina_sequence_ids = [
 ]
 
 
-class TableEntry(object):
+class TableEntry:
     """Represents the information associated with a sequence, aside from the sequence data itself"""
     def __init__(self, name, cosmetic_name, type = 0x0202, instrument_set = 0x03, replaces = -1, vanilla_id = -1):
         self.name = name
@@ -105,7 +105,7 @@ class TableEntry(object):
         return copy
 
 
-class Sequence(object):
+class Sequence:
     """Represents actual sequence data, along with metadata for the sequence data block"""
     def __init__(self):
         self.address = -1
@@ -135,7 +135,7 @@ def process_sequences(rom, sequences, target_sequences, disabled_source_sequence
 
     # If present, load the file containing custom music to exclude
     try:
-        with open(os.path.join(data_path(), u'custom_music_exclusion.txt')) as excl_in:
+        with open(os.path.join(data_path(), 'custom_music_exclusion.txt')) as excl_in:
             seq_exclusion_list = excl_in.readlines()
         seq_exclusion_list = [seq.rstrip() for seq in seq_exclusion_list if seq[0] != '#']
         seq_exclusion_list = [seq for seq in seq_exclusion_list if seq.endswith('.meta')]
@@ -145,7 +145,7 @@ def process_sequences(rom, sequences, target_sequences, disabled_source_sequence
     # Process music data in data/Music/
     # Each sequence requires a valid .seq sequence file and a .meta metadata file
     # Current .meta format: Cosmetic Name\nInstrument Set\nPool
-    for dirpath, _, filenames in os.walk(u'./data/Music', followlinks=True):
+    for dirpath, _, filenames in os.walk('./data/Music', followlinks=True):
         for fname in filenames:
             # Skip if included in exclusion file
             if fname in seq_exclusion_list:
