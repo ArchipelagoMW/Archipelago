@@ -546,6 +546,7 @@ class Context:
 
     def _save(self, exit_save: bool = False) -> bool:
         try:
+            # Does not use Utils.restricted_dumps because we'd rather make a save than not make one
             encoded_save = pickle.dumps(self.get_save())
             with open(self.save_filename, "wb") as f:
                 f.write(zlib.compress(encoded_save))
