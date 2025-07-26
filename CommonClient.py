@@ -257,6 +257,7 @@ class CommonContext:
     keep_alive_task: typing.Optional["asyncio.Task[None]"] = None
     server_task: typing.Optional["asyncio.Task[None]"] = None
     autoreconnect_task: typing.Optional["asyncio.Task[None]"] = None
+    delete_old_data_package_task: typing.Optional["asyncio.Task[None]"] = None
     disconnected_intentionally: bool = False
     server: typing.Optional[Endpoint] = None
     server_version: Version = Version(0, 0, 0)
@@ -575,6 +576,7 @@ class CommonContext:
             self.input_queue.put_nowait(None)
             self.input_requests -= 1
         self.keep_alive_task.cancel()
+        self.delete_old_data_package_task.cancel()
         if self.ui_task:
             await self.ui_task
         if self.input_task:
@@ -969,7 +971,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         server_url = urllib.parse.urlparse(ctx.server_address)
         Utils.persistent_store("client", "last_server_address", server_url.netloc)
 
-        await ctx.delete_old_data_packages()
+        ctx.delete_old_data_package_task = asyncio.create_task(ctx.delete_old_data_packages())
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
