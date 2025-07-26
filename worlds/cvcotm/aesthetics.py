@@ -734,8 +734,8 @@ def get_start_inventory_data(world: "CVCotMWorld") -> Tuple[Dict[int, bytes], bo
                 magic_items_array[array_offset] += 1
 
     # Add the start inventory arrays to the offset data in bytes form.
-    start_inventory_data[0x680080] = bytes(magic_items_array)
-    start_inventory_data[0x6800A0] = bytes(cards_array)
+    start_inventory_data[0x690080] = bytes(magic_items_array)
+    start_inventory_data[0x6900A0] = bytes(cards_array)
 
     # Add the extra max HP/MP/Hearts to all classes' base stats. Doing it this way makes us less likely to hit the max
     # possible Max Ups.
