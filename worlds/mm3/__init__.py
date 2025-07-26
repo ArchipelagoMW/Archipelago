@@ -77,7 +77,10 @@ class MM3WebWorld(WebWorld):
 
 class MM3World(World):
     """
-    Mega Man 3 Description
+    Following his second defeat by Mega Man, Dr. Wily has finally come to his senses. He and Dr. Light begin work on
+    Gamma, a giant peacekeeping robot. However, Gamma's power source, the Energy Elements, are being guarded by the
+    Robot Masters sent to retrieve them. It's up to Mega Man to retrieve the Energy Elements and defeat the mastermind
+    behind the Robot Masters' betrayal.
     """
 
     game = "Mega Man 3"
