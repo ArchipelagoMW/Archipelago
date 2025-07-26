@@ -7,7 +7,6 @@ Currently, the following games are supported:
 
 * The Legend of Zelda: A Link to the Past
 * Factorio
-* Minecraft
 * Subnautica
 * Risk of Rain 2
 * The Legend of Zelda: Ocarina of Time
@@ -15,7 +14,6 @@ Currently, the following games are supported:
 * Super Metroid
 * Secret of Evermore
 * Final Fantasy
-* Rogue Legacy
 * VVVVVV
 * Raft
 * Super Mario 64
@@ -42,7 +40,6 @@ Currently, the following games are supported:
 * The Messenger
 * Kingdom Hearts 2
 * The Legend of Zelda: Link's Awakening DX
-* Clique
 * Adventure
 * DLC Quest
 * Noita
@@ -83,6 +80,7 @@ Currently, the following games are supported:
 * Jak and Daxter: The Precursor Legacy
 * Super Mario Land 2: 6 Golden Coins
 * shapez
+* Paint
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
