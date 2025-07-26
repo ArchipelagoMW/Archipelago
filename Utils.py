@@ -392,6 +392,10 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
 
 
 def delete_old_data_packages() -> None:
+    if getattr(delete_old_data_packages, "checked", False):
+        return
+    setattr(delete_old_data_packages, "checked", True)
+
     expiry_in_months = 6
     expiry_in_seconds = expiry_in_months * 30 * 24 * 60 * 60
 
