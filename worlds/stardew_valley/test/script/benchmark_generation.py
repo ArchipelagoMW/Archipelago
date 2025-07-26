@@ -79,6 +79,8 @@ def generate_monitor_rules():
     original_collect = StardewValleyWorld.collect
     original_remove = StardewValleyWorld.remove
     original_call_single = AutoWorld.call_single
+    original_sweep_for_advancements = CollectionState.sweep_for_advancements
+    original_update_reachable_regions = CollectionState.update_reachable_regions
 
     class Run:
         def __init__(self, index: int, seed: int):
@@ -88,6 +90,8 @@ def generate_monitor_rules():
             self.collects = []
             self.removes = []
             self.gen_steps = {}
+            self.sweep_for_advancements = []
+            self.update_reachable_regions = []
 
         def apply_patches(self):
             @wraps(original_set_location_rule)
@@ -136,6 +140,24 @@ def generate_monitor_rules():
 
             AutoWorld.call_single = patched_call_single
 
+            @wraps(CollectionState.sweep_for_advancements)
+            def patched_sweep_for_advancements(self_, *args, **kwargs):
+                start = time.perf_counter_ns()
+                original_sweep_for_advancements(self_, *args, **kwargs)
+                end = time.perf_counter_ns()
+                self.sweep_for_advancements.append(end - start)
+
+            CollectionState.sweep_for_advancements = patched_sweep_for_advancements
+
+            @wraps(CollectionState.update_reachable_regions)
+            def patched_update_reachable_regions(self_, *args, **kwargs):
+                start = time.perf_counter_ns()
+                original_update_reachable_regions(self_, *args, **kwargs)
+                end = time.perf_counter_ns()
+                self.update_reachable_regions.append(end - start)
+
+            CollectionState.update_reachable_regions = patched_update_reachable_regions
+
         def run_one_generation(self) -> None:
             multiworld = setup_solo_multiworld(options, self.seed, _cache={})
 
@@ -154,7 +176,7 @@ def generate_monitor_rules():
                 print(f"{rule.location}: {total_duration / 1_000_000:.2f} ms over {len(rule.calls)} calls")
             print(f"Total generation steps took {sum(step for step in self.gen_steps.values()) / 1_000_000_000:.2f} s.\n")
 
-    run_count = 20
+    run_count = 1
     runs = []
 
     def run_multiple_generations():
@@ -182,7 +204,7 @@ def generate_monitor_rules():
                     grouped[rule.location].append(call)
 
         sorted_by_duration = sorted(grouped.items(), key=lambda item: sum(rule_call.duration_ns for rule_call in item[1]), reverse=True)
-        print(f"\n\nCumulative results across all {run_count} runs:")
+        print(f"\nCumulative results across all {run_count} runs:")
         for location, calls in sorted_by_duration[:10]:
             total_duration = sum(call.duration_ns for call in calls)
             avg_duration = total_duration / len(calls)
@@ -193,21 +215,29 @@ def generate_monitor_rules():
             key=lambda item: sum(rule_call.duration_ns for rule_call in item[1]) / len(item[1]),
             reverse=True
         )
-        print("\n\nTop 10 average durations across all runs:")
+        print("\nTop 10 average durations across all runs:")
         for location, calls in sorted_by_avg_duration[:10]:
             total_duration = sum(call.duration_ns for call in calls)
             avg_duration = total_duration / len(calls)
             print(f"{location}: average {avg_duration / 1_000_000:.2f} ms over {len(calls)} calls ({total_duration / 1_000_000:.2f} ms total)")
 
-        print("\n\nStats for collects and removes:")
+        print("\nStats for collection state:")
+        total_rules = sum(call.duration_ns for run in runs for rule in run.monitored_rules for call in rule.calls)
+        print(f"Total evaluating rules: {total_rules / 1_000_000:.2f} ms across all runs")
         total_collects = sum(sum(run.collects) for run in runs)
-        total_removes = sum(sum(run.removes) for run in runs)
         avg_collects = total_collects / sum(len(run.collects) for run in runs)
-        avg_removes = total_removes / sum(len(run.removes) for run in runs) if total_removes else 0
         print(f"Total collects: {total_collects / 1_000_000:.2f} ms, average per collect: {avg_collects / 1_000_000:.4f} ms")
+        total_removes = sum(sum(run.removes) for run in runs)
+        avg_removes = total_removes / sum(len(run.removes) for run in runs) if total_removes else 0
         print(f"Total removes: {total_removes / 1_000_000:.2f} ms, average per remove: {avg_removes / 1_000_000:.4f} ms")
+        total_sweep = sum(sum(run.sweep_for_advancements) for run in runs)
+        avg_sweep = total_sweep / sum(len(run.sweep_for_advancements) for run in runs) if total_sweep else 0
+        print(f"Total sweep for advancements: {total_sweep / 1_000_000:.2f} ms, average per sweep: {avg_sweep / 1_000_000:.4f} ms")
+        total_update_reachable = sum(sum(run.update_reachable_regions) for run in runs)
+        avg_update_reachable = total_update_reachable / sum(len(run.update_reachable_regions) for run in runs) if total_update_reachable else 0
+        print(f"Total update reachable regions: {total_update_reachable / 1_000_000:.2f} ms, average per update: {avg_update_reachable / 1_000_000:.4f} ms")
 
-        print("\n\nGeneration steps:")
+        print("\nGeneration steps:")
         for step in gen_steps + ('fill',):
             total_time = sum(run.gen_steps.get(step, 0) for run in runs)
             avg_time = total_time / run_count
