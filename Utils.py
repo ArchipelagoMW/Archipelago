@@ -486,13 +486,15 @@ def restricted_loads(s: bytes) -> Any:
 def restricted_dumps(obj: Any) -> bytes:
     """Helper function analogous to pickle.dumps()."""
     s = pickle.dumps(obj)
+    import pickletools
+    pickletools.optimize(s)
     # Assert that the string can be successfully loaded by restricted_loads
     try:
         restricted_loads(s)
     except pickle.UnpicklingError as e:
         raise pickle.PicklingError(e) from e
-    import pickletools
-    return pickletools.optimize(s)
+
+    return s
 
 
 class ByValue:
