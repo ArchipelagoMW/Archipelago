@@ -19,25 +19,27 @@ Zusätzlich gibt es zu diesem Spiel "Datenpaket-Einstellungen", die du nach
 
 Alle Belohnungen aus den Tutorial-Level (das Freischalten von Gebäuden und Spielmechaniken) und Verbesserungen durch
 Upgrades werden dem Itempool der Multiworld hinzugefügt. Außerdem werden, wenn so in den Spieler-Optionen festgelegt,
-die Bedingungen zum Abschließen eines Levels und zum Kaufen der Upgrades randomisiert.
+die Bedingungen zum Abschließen eines Levels und zum Kaufen der Upgrades randomisiert und die Reihenfolge der Gebäude 
+in deinen Toolbars (Haupt- und Kabelebene) gemischt.
 
 ## Was ist das Ziel von shapez in Archipelago?
 
-Da das Spiel eigentlich kein konkretes Ziel (nach dem Tutorial) hat, kann man sich zwischen (momentan) 4 verschiedenen
-Zielen entscheiden:
+Da das Spiel eigentlich kein konkretes Ziel, welches das Ende des Spiels bedeuten würde, hat, kann man sich zwischen 
+(aktuell) 4 verschiedenen Zielen entscheiden:
 1. Vanilla: Schließe Level 26 ab (eigentlich das Ende des Tutorials).
 2. MAM: Schließe ein bestimmtes Level nach Level 26 ab, das zuvor in den Spieler-Optionen festgelegt wurde. Es ist
 empfohlen, eine Maschine zu bauen, die alles automatisch herstellt ("Make-Anything-Machine", kurz MAM).
-3. Even Fasterer: Kaufe alle Upgrades bis zu einer in den Spieler-Optionen festgelegten Stufe (nach Stufe 8).
+3. Even Fasterer: Kaufe alle Upgrades bis zu einer in den Spieler-Optionen festgelegten Stufe (nach Stufe VIII (8)).
 4. Efficiency III: Liefere 256 Blaupausen-Formen pro Sekunde ins Zentrum.
 
 ## Welche Items können in den Welten anderer Spieler erscheinen?
 
-- Freischalten verschiedener Gebäude
+- Gebäude
 - Blaupausen freischalten
-- Große Upgrades (addiert 1 zum Geschwindigkeitsmultiplikator)
-- Kleine Upgrades (addiert 0.1 zum Geschwindigkeitsmultiplikator)
-- Andere ungewöhnliche Upgrades (optional)
+- Upgrades
+  - Große Upgrades (addiert 1 zum Geschwindigkeitsmultiplikator)
+  - Kleine Upgrades (addiert 0.1 zum Geschwindigkeitsmultiplikator)
+  - Andere ungewöhnliche (auch negative) Upgrades (optional)
 - Verschiedene Bündel, die bestimmte Formen enthalten
 - Fallen, die bestimmte Formen aus dem Zentrum dränieren (ja, das Wort gibt es)
 - Fallen, die zufällige Gebäude oder andere Spielmechaniken betreffen
@@ -45,7 +47,7 @@ empfohlen, eine Maschine zu bauen, die alles automatisch herstellt ("Make-Anythi
 ## Was ist eine Location / ein Check?
 
 - Level (minimum 1-25, bis zu 499 je nach Spieler-Optionen, mit zusätzlichen Checks für Level 1 und 20)
-- Upgrades (minimum Stufen II-VIII (2-8), bis zu D (500) je nach Spieler-Optionen)
+- Upgrades (minimum Stufen II-VIII (2-8), bis zu D (500), je nach Spieler-Optionen)
 - Bestimmte Formen mindestens einmal ins Zentrum liefern ("Shapesanity", bis zu 1000 zufällig gewählte Definitionen)
 - Errungenschaften (bis zu 45)
 

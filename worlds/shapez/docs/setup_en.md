@@ -16,9 +16,9 @@
 
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
     * (Only for the TextClient)
-    * (If you want, you can use the built-in console as a read-only text client by launching the game 
-  with the `-dev` parameter)
-- Universal Tracker (check UT's `#future-game-design` thread in the discord server for instructions)
+    * (You can alternatively use the built-in console by launching the game with the `-dev` parameter and typing 
+      `AP.sendAPMessage("<message>"")`)
+- Universal Tracker (check UT's channel in the discord server for more information and instructions)
 
 ## Installation
 
