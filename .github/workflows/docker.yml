@@ -179,11 +179,11 @@ jobs:
               suffixed_tag="${tag#*:}-$arch"  # Extract just the tag part without registry/image
               
               # Get version IDs for versions containing the suffixed tag
-              versions=$(gh api --paginate repos/${{ github.repository }}/packages/container/${{ needs.prepare.outputs.package-name }}/versions --jq '.[] | select(.metadata.container.tags | index("'"$suffixed_tag"'") != null) | .id' | tr '\n' ' ')
+              versions=$(gh api --paginate users/${{ github.repository_owner }}/packages/container/${{ needs.prepare.outputs.package-name }}/versions --jq '.[] | select(.metadata.container.tags | index("'"$suffixed_tag"'") != null) | .id' | tr '\n' ' ')
               
               for version_id in $versions; do
                 if [ -n "$version_id" ]; then
-                  gh api --method DELETE repos/${{ github.repository }}/packages/container/${{ needs.prepare.outputs.package-name }}/versions/$version_id
+                  gh api --method DELETE users/${{ github.repository_owner }}/packages/container/${{ needs.prepare.outputs.package-name }}/versions/$version_id
                   echo "Deleted version $version_id associated with tag $suffixed_tag"
                 fi
               done
