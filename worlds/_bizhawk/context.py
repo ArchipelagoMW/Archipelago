@@ -9,6 +9,7 @@ import enum
 import subprocess
 from typing import Any
 
+import settings
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
 import Patch
 import Utils
@@ -304,10 +305,10 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
 async def _run_game(rom: str):
     import os
-    auto_start = Utils.get_settings().bizhawkclient_options.rom_start
+    auto_start = settings.get_settings().bizhawkclient_options.rom_start
 
     if auto_start is True:
-        emuhawk_path = Utils.get_settings().bizhawkclient_options.emuhawk_path
+        emuhawk_path = settings.get_settings().bizhawkclient_options.emuhawk_path
         subprocess.Popen(
             [
                 emuhawk_path,
