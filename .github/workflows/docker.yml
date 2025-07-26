@@ -167,25 +167,3 @@ jobs:
             
             docker manifest push "$tag"
           done
-
-      - name: Cleanup temporary tags
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          readarray -t tag_array <<< "${{ needs.prepare.outputs.tags }}"
-
-          for tag in "${tag_array[@]}"; do
-            for arch in amd64 arm64; do
-              suffixed_tag="${tag#*:}-$arch"  # Extract just the tag part without registry/image
-              
-              # Get version IDs for versions containing the suffixed tag
-              versions=$(gh api --paginate users/${{ github.repository_owner }}/packages/container/${{ needs.prepare.outputs.package-name }}/versions --jq '.[] | select(.metadata.container.tags | index("'"$suffixed_tag"'") != null) | .id' | tr '\n' ' ')
-              
-              for version_id in $versions; do
-                if [ -n "$version_id" ]; then
-                  gh api --method DELETE users/${{ github.repository_owner }}/packages/container/${{ needs.prepare.outputs.package-name }}/versions/$version_id
-                  echo "Deleted version $version_id associated with tag $suffixed_tag"
-                fi
-              done
-            done
-          done
