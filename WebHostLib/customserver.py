@@ -159,6 +159,7 @@ class WebHostContext(Context):
     @db_session
     def _save(self, exit_save: bool = False) -> bool:
         room = Room.get(id=self.room_id)
+        # Does not use Utils.restricted_dumps because we'd rather make a save than not make one
         room.multisave = pickle.dumps(self.get_save())
         # saving only occurs on activity, so we can "abuse" this information to mark this as last_activity
         if not exit_save:  # we don't want to count a shutdown as activity, which would restart the server again
