@@ -236,6 +236,8 @@ class ALTTPWorld(World):
     required_client_version = (0, 4, 1)
     web = ALTTPWeb()
 
+    shops: list[Shop]
+
     pedestal_credit_texts: typing.Dict[int, str] = \
         {data.item_code: data.pedestal_credit for data in item_table.values() if data.pedestal_credit}
     sickkid_credit_texts: typing.Dict[int, str] = \
@@ -282,6 +284,10 @@ class ALTTPWorld(World):
     clock_mode: str = ""
     treasure_hunt_required: int = 0
     treasure_hunt_total: int = 0
+    light_world_light_cone: bool = False
+    dark_world_light_cone: bool = False
+    save_and_quit_from_boss: bool = True
+    rupoor_cost: int = 10
 
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
@@ -298,6 +304,7 @@ class ALTTPWorld(World):
         self.fix_trock_exit = None
         self.required_medallions = ["Ether", "Quake"]
         self.escape_assist = []
+        self.shops = []
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
@@ -800,7 +807,7 @@ class ALTTPWorld(World):
 
             return shop_data
 
-        if shop_info := [build_shop_info(shop) for shop in self.multiworld.shops if shop.custom]:
+        if shop_info := [build_shop_info(shop) for shop in self.shops if shop.custom]:
             spoiler_handle.write('\n\nShops:\n\n')
         for shop_data in shop_info:
             spoiler_handle.write("{} [{}]\n    {}\n".format(shop_data['location'], shop_data['type'], "\n    ".join(

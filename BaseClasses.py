@@ -154,17 +154,11 @@ class MultiWorld():
         self.algorithm = 'balanced'
         self.groups = {}
         self.regions = self.RegionManager(players)
-        self.shops = []
         self.itempool = []
         self.seed = None
         self.seed_name: str = "Unavailable"
         self.precollected_items = {player: [] for player in self.player_ids}
         self.required_locations = []
-        self.light_world_light_cone = False
-        self.dark_world_light_cone = False
-        self.rupoor_cost = 10
-        self.aga_randomness = True
-        self.save_and_quit_from_boss = True
         self.custom = False
         self.customitemarray = []
         self.shuffle_ganon = True
