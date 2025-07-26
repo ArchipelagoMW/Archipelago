@@ -42,7 +42,7 @@ class LADXPatchExtensions(worlds.Files.APPatchExtension):
         return rom
 
 class LADXProcedurePatch(worlds.Files.APProcedurePatch):
-    hash = [LADX_HASH]
+    hash = LADX_HASH
     game = LINKS_AWAKENING
     patch_file_ending: str = ".apladx"
     result_file_ending: str = ".gbc"
@@ -78,7 +78,34 @@ def write_patch_data(world: "LinksAwakeningWorld", patch: LADXProcedurePatch):
             "boss_mapping": world.ladxr_logic.world_setup.boss_mapping,
             "miniboss_mapping": world.ladxr_logic.world_setup.miniboss_mapping,
         },
-        "options": world.options.as_dict(*world.options.__dataclass_fields__.keys()),
+        "options": world.options.as_dict(
+            "tradequest",
+            "rooster",
+            "experimental_dungeon_shuffle",
+            "experimental_entrance_shuffle",
+            "goal",
+            "instrument_count",
+            "link_palette",
+            "warps",
+            "trendy_game",
+            "gfxmod",
+            "palette",
+            "text_shuffle",
+            "shuffle_nightmare_keys",
+            "shuffle_small_keys",
+            "music",
+            "music_change_condition",
+            "nag_messages",
+            "ap_title_screen",
+            "boots_controls",
+            # "stealing",
+            "quickswap",
+            "hard_mode",
+            "low_hp_beep",
+            "text_mode",
+            "no_flash",
+            "overworld",
+        ),
     }
     patch.write_file("data.json", json.dumps(data_dict).encode('utf-8'))
 
