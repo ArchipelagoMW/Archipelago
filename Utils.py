@@ -491,8 +491,8 @@ def restricted_dumps(obj: Any) -> bytes:
         restricted_loads(s)
     except pickle.UnpicklingError as e:
         raise pickle.PicklingError(e) from e
-
-    return s
+    import pickletools
+    return pickletools.optimize(s)
 
 
 class ByValue:
