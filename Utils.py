@@ -400,8 +400,11 @@ def delete_old_data_packages() -> None:
     for game_folder in game_folders:
         datapackage_files = [os.path.join(game_folder, file) for file in os.listdir(game_folder) if os.path.isfile(os.path.join(game_folder, file))]
         for file_path in datapackage_files:
-            if time() - os.path.getmtime(file_path) > expiry_in_seconds:
-                os.remove(file_path)
+            try:
+                if time() - os.path.getmtime(file_path) > expiry_in_seconds:
+                    os.remove(file_path)
+            except Exception as e:
+                logging.warning(f"Could not delete old data package: {e}")
 
         if not os.listdir(game_folder):
             os.rmdir(game_folder)
