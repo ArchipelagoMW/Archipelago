@@ -93,7 +93,7 @@ jobs:
           push: true
           tags: ${{ steps.amd64-tags.outputs.tags }}
           labels: ${{ needs.prepare.outputs.labels }}
-          cache-from: type=gha
+          cache-from: type=gha,scope=amd64
           cache-to: type=gha,mode=max,scope=amd64
           provenance: false
 
@@ -138,7 +138,7 @@ jobs:
           push: true
           tags: ${{ steps.arm64-tags.outputs.tags }}
           labels: ${{ needs.prepare.outputs.labels }}
-          cache-from: type=gha
+          cache-from: type=gha,scope=arm64
           cache-to: type=gha,mode=max,scope=arm64
           provenance: false
 
