@@ -1,6 +1,6 @@
 import hashlib
 import logging
-from typing import Any, TYPE_CHECKING, Sequence, ClassVar
+from typing import Any, Sequence, ClassVar
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
 from worlds.AutoWorld import World, WebWorld
@@ -19,9 +19,6 @@ import threading
 import base64
 import settings
 logger = logging.getLogger("Mega Man 3")
-
-if TYPE_CHECKING:
-    from BaseClasses import CollectionState
 
 
 class MM3Settings(settings.Group):
@@ -281,4 +278,3 @@ class MM3World(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
-

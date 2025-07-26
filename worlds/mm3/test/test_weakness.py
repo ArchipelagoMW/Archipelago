@@ -60,6 +60,7 @@ def validate_wily_4(base: MM3TestBase) -> None:
                 weapon_energy[wp] -= weapon_costs[wp] * uses
                 weapon_weight.pop(wp)
 
+
 class WeaknessTests(MM3TestBase):
     def test_that_every_boss_has_a_weakness(self) -> None:
         world = self.multiworld.worlds[self.player]
@@ -77,21 +78,25 @@ class StrictWeaknessTests(WeaknessTests):
         "strict_weakness": True,
     }
 
+
 class RandomWeaknessTests(WeaknessTests):
     options = {
         "random_weakness": "randomized"
     }
+
 
 class ShuffledWeaknessTests(WeaknessTests):
     options = {
         "random_weakness": "shuffled"
     }
 
+
 class RandomStrictWeaknessTests(WeaknessTests):
     options = {
         "strict_weakness": True,
         "random_weakness": "randomized",
     }
+
 
 class ShuffledStrictWeaknessTests(WeaknessTests):
     options = {

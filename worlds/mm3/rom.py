@@ -4,7 +4,6 @@ import hashlib
 import Utils
 import os
 
-import settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 from . import names
 from .rules import bosses
@@ -98,7 +97,7 @@ enemy_addresses: dict[str, int] = {
     "Top Man": 0xD2,
     "Shadow Man": 0xD3,
     "Top Man's Top": 0xD5,
-    "Shadow Man (Sliding)": 0xD8, # Capcom I swear
+    "Shadow Man (Sliding)": 0xD8,  # Capcom I swear
     "Hard Man": 0xE0,
     "Spark Man": 0xE2,
     "Snake Man": 0xE4,
