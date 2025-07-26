@@ -24,7 +24,7 @@ from .grind_logic import GrindLogicMixin
 from .harvesting_logic import HarvestingLogicMixin
 from .has_logic import HasLogicMixin
 from .hats_logic import HatLogicMixin
-from .logic_event import all_logic_events
+from .logic_event import all_item_events
 from .meme_items_logic import MemeItemsLogicMixin
 from .mine_logic import MineLogicMixin
 from .money_logic import MoneyLogicMixin
@@ -59,7 +59,7 @@ from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
 from ..options import StardewValleyOptions, BundleRandomization
-from ..stardew_rule import False_, StardewRule
+from ..stardew_rule import False_, StardewRule, Or, Reach
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -392,10 +392,25 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             self.registry.item_rules[boots] = self.combat.has_specific_boots(boots)
 
     def setup_events(self, register_event: Callable[[str, str, StardewRule], None]) -> None:
-        for logic_event in all_logic_events:
-            rule = self.registry.item_rules[logic_event.item]
-            register_event(logic_event.name, logic_event.region, rule)
-            self.registry.item_rules[logic_event.item] = self.received(logic_event.name)
+        for item_event in all_item_events:
+            rule = self.registry.item_rules[item_event.item]
+
+            if isinstance(rule, Or) and bool(reaches := [r for r in rule.current_rules if isinstance(r, Reach) and r.resolution_hint == "Region"]):
+                logger.info("Sharding rule for %s in multiple logic events, placed in %s.", item_event.item, [r.spot for r in reaches])
+
+                for i, reach in enumerate(reaches):
+                    location_name = f"{item_event.name} sharded_{i}"
+                    new_rule = self.region.can_reach(item_event.region)
+                    register_event(item_event.name, reach.spot, new_rule, location_name=location_name)
+
+                remaining_rules = [r for r in rule.current_rules if not isinstance(r, Reach) or r.resolution_hint != "Region"]
+                if remaining_rules:
+                    register_event(item_event.name, item_event.region, Or(*remaining_rules))
+
+            else:
+                register_event(item_event.name, item_event.region, rule)
+
+            self.registry.item_rules[item_event.item] = self.received(item_event.name)
 
     def can_smelt(self, item: str) -> StardewRule:
         return self.has(Machine.furnace) & self.has(item)

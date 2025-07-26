@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 
 from ..strings.ap_names import event_names
@@ -5,7 +7,7 @@ from ..strings.metal_names import MetalBar, Ore
 from ..strings.region_names import Region
 
 all_events = event_names.all_events.copy()
-all_logic_events = list()
+all_item_events: list[LogicItemEvent] = list()
 
 
 @dataclass(frozen=True)
@@ -25,7 +27,7 @@ class LogicItemEvent(LogicEvent):
 
 def register_item_event(item: str, region: str = Region.farm):
     event = LogicItemEvent(item, region)
-    all_logic_events.append(event)
+    all_item_events.append(event)
     all_events.add(event.name)
 
 

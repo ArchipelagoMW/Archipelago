@@ -302,8 +302,10 @@ class StardewValleyWorld(World):
                 self.multiworld.push_precollected(self.create_item("Progressive Backpack"))
 
     def setup_logic_events(self):
-        def register_event(name: str, region: str, rule: StardewRule):
-            event_location = LocationData(None, region, name)
+        def register_event(name: str, region: str, rule: StardewRule, location_name: str | None = None) -> None:
+            if location_name is None:
+                location_name = name
+            event_location = LocationData(None, region, location_name)
             self.create_event_location(event_location, rule, name)
 
         self.logic.setup_events(register_event)
