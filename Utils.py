@@ -458,6 +458,8 @@ class RestrictedUnpickler(pickle.Unpickler):
         # used by MultiServer -> savegame/multidata
         if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint",
                                              "SlotType", "NetworkSlot", "HintStatus"}:
+            if name == "Hint":
+                name = "CompatibleHint"
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
         if module == "worlds.generic" and name == "PlandoItem":

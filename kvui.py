@@ -77,7 +77,8 @@ from kivymd.uix.tooltip import MDTooltip, MDTooltipPlain
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus
+from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus, status_names, status_colors, \
+    status_sort_weights
 from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
@@ -544,9 +545,9 @@ class AutocompleteHintInput(ResizableTextField):
 
 
 status_icons = {
-    HintStatus.HINT_NO_PRIORITY: "information",
-    HintStatus.HINT_PRIORITY: "exclamation-thick",
-    HintStatus.HINT_AVOID: "alert"
+    HintStatus.HINT_PRIORITY_NO_PRIORITY: "information",
+    HintStatus.HINT_PRIORITY_PRIORITY: "exclamation-thick",
+    HintStatus.HINT_PRIORITY_AVOID: "alert"
 }
 
 
@@ -569,7 +570,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
         ctx = MDApp.get_running_app().ctx
         menu_items = []
 
-        for status in (HintStatus.HINT_NO_PRIORITY, HintStatus.HINT_PRIORITY, HintStatus.HINT_AVOID):
+        for status in (HintStatus.HINT_PRIORITY_NO_PRIORITY, HintStatus.HINT_PRIORITY_PRIORITY, HintStatus.HINT_PRIORITY_AVOID):
             name = status_names[status]
             status_button = MDDropDownItem(MDDropDownItemText(text=name), size_hint_y=None, height=dp(50))
             status_button.status = status
@@ -611,7 +612,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
             if self.collide_point(*touch.pos):
                 status_label = self.ids["status"]
                 if status_label.collide_point(*touch.pos):
-                    if self.hint["status"] == HintStatus.HINT_FOUND:
+                    if not self.hint["status"].changeable:
                         return
                     ctx = MDApp.get_running_app().ctx
                     if ctx.slot_concerns_self(self.hint["receiving_player"]):  # If this player owns this hint
@@ -637,7 +638,9 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                 if child.collide_point(*touch.pos):
                     key = child.sort_key
                     if key == "status":
-                        parent.hint_sorter = lambda element: status_sort_weights[element["status"]["hint"]["status"]]
+                        parent.hint_sorter = lambda element: (
+                            status_sort_weights[element["status"]["hint"]["status"].as_display_status()]
+                        )
                     else:
                         parent.hint_sorter = lambda element: (
                             remove_between_brackets.sub("", element[key]["text"]).lower()
@@ -1173,28 +1176,6 @@ class HintLayout(MDBoxLayout):
                 fix_func()
 
 
-status_names: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "Found",
-    HintStatus.HINT_UNSPECIFIED: "Unspecified",
-    HintStatus.HINT_NO_PRIORITY: "No Priority",
-    HintStatus.HINT_AVOID: "Avoid",
-    HintStatus.HINT_PRIORITY: "Priority",
-}
-status_colors: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "green",
-    HintStatus.HINT_UNSPECIFIED: "white",
-    HintStatus.HINT_NO_PRIORITY: "cyan",
-    HintStatus.HINT_AVOID: "salmon",
-    HintStatus.HINT_PRIORITY: "plum",
-}
-status_sort_weights: dict[HintStatus, int] = {
-    HintStatus.HINT_FOUND: 0,
-    HintStatus.HINT_UNSPECIFIED: 1,
-    HintStatus.HINT_NO_PRIORITY: 2,
-    HintStatus.HINT_AVOID: 3,
-    HintStatus.HINT_PRIORITY: 4,
-}
-
 class HintLog(MDRecycleView):
     header = {
         "receiving": {"text": "[u]Receiving Player[/u]"},
@@ -1221,12 +1202,14 @@ class HintLog(MDRecycleView):
         data = []
         ctx = MDApp.get_running_app().ctx
         for hint in hints:
-            if not hint.get("status"): # Allows connecting to old servers
-                hint["status"] = HintStatus.HINT_FOUND if hint["found"] else HintStatus.HINT_UNSPECIFIED
+            if "found" in hint:
+                # Old hint format, only display found/unfound
+                hint["status"] = HintStatus.from_found_and_priority(hint["found"], HintStatus.OLD_HINT_FORMAT)
+            hint["status"] = HintStatus(hint["status"]).as_display_status()
             hint_status_node = self.parser.handle_node({"type": "color",
                                                         "color": status_colors.get(hint["status"], "red"),
                                                         "text": status_names.get(hint["status"], "Unknown")})
-            if hint["status"] != HintStatus.HINT_FOUND and ctx.slot_concerns_self(hint["receiving_player"]):
+            if ctx.slot_concerns_self(hint["receiving_player"]) and hint["status"].changeable:
                 hint_status_node = f"[u]{hint_status_node}[/u]"
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},

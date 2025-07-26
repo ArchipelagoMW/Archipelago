@@ -11,12 +11,87 @@ if typing.TYPE_CHECKING:
 from Utils import ByValue, Version
 
 
-class HintStatus(ByValue, enum.IntEnum):
-    HINT_UNSPECIFIED = 0
-    HINT_NO_PRIORITY = 10
-    HINT_AVOID = 20
-    HINT_PRIORITY = 30
-    HINT_FOUND = 40
+class HintStatus(ByValue, enum.IntFlag):
+    # Lower 5 bits: Priorities as integers
+    HINT_PRIORITY_UNSPECIFIED = 0  # For readable code
+    HINT_PRIORITY_NO_PRIORITY = 1
+    HINT_PRIORITY_AVOID = 2
+    HINT_PRIORITY_PRIORITY = 3
+    PRIORITY_MASK = 0b11111
+
+    # Bits 6+: Technical status
+    HINT_FOUND = 1 << 7
+
+    # For "compatibility", only used in CommonClient, thus should not affect memory for MultiServer
+    HINT_UNFOUND_LEGACY = OLD_HINT_FORMAT = 1 << 15
+
+    @property
+    def priority(self):
+        return self & HintStatus.PRIORITY_MASK
+
+    def with_priority(self, priority: HintStatus):
+        return (self & ~HintStatus.PRIORITY_MASK) | (priority & HintStatus.PRIORITY_MASK)
+
+    @property
+    def found(self):
+        return HintStatus.HINT_FOUND in self
+
+    def with_found(self, found: bool):
+        return (self & ~HintStatus.HINT_FOUND) | (found * HintStatus.HINT_FOUND)
+
+    @classmethod
+    def from_found_and_priority(cls, found: bool, priority: HintStatus):
+        return cls((HintStatus.HINT_FOUND * found) | priority)
+
+    def as_display_status(self):
+        if self.found:
+            return HintStatus.HINT_FOUND
+        if HintStatus.OLD_HINT_FORMAT in self:
+            return HintStatus.HINT_UNFOUND_LEGACY
+
+        # Make sure we're only returning statuses that are actually displayable
+        return next(
+            (priority for priority in status_names if priority == self.priority),
+            self.HINT_PRIORITY_UNSPECIFIED
+        )
+
+    @property
+    def changeable(self):
+        return not self.found and not HintStatus.OLD_HINT_FORMAT in self
+
+
+status_names_brackets: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "(found)",
+    HintStatus.HINT_PRIORITY_PRIORITY: "(priority)",
+    HintStatus.HINT_PRIORITY_AVOID: "(avoid)",
+    HintStatus.HINT_PRIORITY_NO_PRIORITY: "(no priority)",
+    HintStatus.HINT_PRIORITY_UNSPECIFIED: "(unspecified)",
+    HintStatus.HINT_UNFOUND_LEGACY: "(not found)"
+}
+status_names: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "Found",
+    HintStatus.HINT_PRIORITY_UNSPECIFIED: "Unspecified",
+    HintStatus.HINT_PRIORITY_NO_PRIORITY: "No Priority",
+    HintStatus.HINT_PRIORITY_AVOID: "Avoid",
+    HintStatus.HINT_PRIORITY_PRIORITY: "Priority",
+    HintStatus.HINT_UNFOUND_LEGACY: "Not Found"
+}
+status_colors: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "green",
+    HintStatus.HINT_PRIORITY_PRIORITY: "plum",
+    HintStatus.HINT_PRIORITY_AVOID: "salmon",
+    HintStatus.HINT_PRIORITY_NO_PRIORITY: "slateblue",
+    HintStatus.HINT_PRIORITY_UNSPECIFIED: "white",
+    HintStatus.HINT_UNFOUND_LEGACY: "red",
+}
+status_sort_weights: dict[HintStatus, int] = {
+    HintStatus.HINT_FOUND: 0,
+    HintStatus.HINT_PRIORITY_UNSPECIFIED: 1,
+    HintStatus.HINT_PRIORITY_NO_PRIORITY: 2,
+    HintStatus.HINT_PRIORITY_AVOID: 3,
+    HintStatus.HINT_PRIORITY_PRIORITY: 4,
+    HintStatus.HINT_UNFOUND_LEGACY: 5,
+}
 
 
 class JSONMessagePart(typing.TypedDict, total=False):
@@ -299,7 +374,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         return self._handle_color(node)
 
     def _handle_hint_status(self, node: JSONMessagePart):
-        node["color"] = status_colors.get(node["hint_status"], "red")
+        node["color"] = status_colors[HintStatus(node["hint_status"]).as_display_status()]
         return self._handle_color(node)
 
 
@@ -334,25 +409,10 @@ def add_json_location(parts: list, location_id: int, player: int = 0, **kwargs) 
     parts.append({"text": str(location_id), "player": player, "type": JSONTypes.location_id, **kwargs})
 
 
-status_names: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "(found)",
-    HintStatus.HINT_UNSPECIFIED: "(unspecified)",
-    HintStatus.HINT_NO_PRIORITY: "(no priority)",
-    HintStatus.HINT_AVOID: "(avoid)",
-    HintStatus.HINT_PRIORITY: "(priority)",
-}
-status_colors: typing.Dict[HintStatus, str] = {
-    HintStatus.HINT_FOUND: "green",
-    HintStatus.HINT_UNSPECIFIED: "white",
-    HintStatus.HINT_NO_PRIORITY: "slateblue",
-    HintStatus.HINT_AVOID: "salmon",
-    HintStatus.HINT_PRIORITY: "plum",
-}
-
-
 def add_json_hint_status(parts: list, hint_status: HintStatus, text: typing.Optional[str] = None, **kwargs):
-    parts.append({"text": text if text != None else status_names.get(hint_status, "(unknown)"),
-                  "hint_status": hint_status, "type": JSONTypes.hint_status, **kwargs})
+    if text is None:
+        text = status_names_brackets[hint_status.as_display_status()]
+    parts.append({"text": text, "hint_status": hint_status, "type": JSONTypes.hint_status, **kwargs})
 
 
 class Hint(typing.NamedTuple):
@@ -360,25 +420,26 @@ class Hint(typing.NamedTuple):
     finding_player: int
     location: int
     item: int
-    found: bool
     entrance: str = ""
     item_flags: int = 0
-    status: HintStatus = HintStatus.HINT_UNSPECIFIED
+    status: HintStatus = HintStatus.from_found_and_priority(False, HintStatus.HINT_PRIORITY_UNSPECIFIED)
+
+    @property
+    def found(self):
+        return self.status.found
 
     def re_check(self, ctx, team) -> Hint:
-        if self.found and self.status == HintStatus.HINT_FOUND:
+        if self.found:
             return self
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
-            return self._replace(found=found, status=HintStatus.HINT_FOUND)
+            return self._replace(status=self.status.with_found(True))
         return self
     
-    def re_prioritize(self, ctx, status: HintStatus) -> Hint:
-        if self.found and status != HintStatus.HINT_FOUND:
-            status = HintStatus.HINT_FOUND
-        if status != self.status:
-            return self._replace(status=status)
-        return self
+    def re_prioritize(self, status: HintStatus) -> Hint:
+        if status.priority == self.status.priority:
+            return self
+        return self._replace(status=status.with_priority(status.priority))
 
     def __hash__(self):
         return hash((self.receiving_player, self.finding_player, self.location, self.item, self.entrance))
@@ -409,6 +470,22 @@ class Hint(typing.NamedTuple):
     @property
     def local(self):
         return self.receiving_player == self.finding_player
+
+
+# From what I can tell, all the methods to make unpickling backwards compatible don't work for NamedTuples.
+# This is because you can't override __getattributes__ or __new__ on a NamedTuple.
+# The only approach I found was to reroute the Unpickler to a dummy class with a custom __new__ in its find_class.
+class CompatibleHint:
+    def __new__(cls, *args, **kwargs):
+        if type(args[4]) == bool:
+            # old hint format
+            legacy_found = args[4]
+
+            # No compatibility for old priority system, just revert to unspecified
+            new_hint_status = HintStatus.from_found_and_priority(legacy_found, HintStatus.HINT_PRIORITY_UNSPECIFIED)
+
+            args = (*args[:4], *args[5:-1], new_hint_status)
+        return Hint.__new__(Hint, *args, **kwargs)
 
 
 class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tuple[int, int, int]]]):

@@ -365,30 +365,35 @@ When creating hints for your own slot's locations, non-existing locations will s
 
 ### UpdateHint
 Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
+Only the priority bits of the HintStatus bitflag will be updated, technical status bits will be ignored.
 
 ### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | player | int | The ID of the player whose location is being hinted for. |
 | location | int | The ID of the location to update the hint for. If no hint exists for this location, the packet is ignored. |
-| status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. Cannot set `HINT_FOUND`, or change the status from `HINT_FOUND`. |
+| status | [HintStatus](#HintStatus) | Optional. If included, sets the priority bits of the status of the hint to this status. |
 
 #### HintStatus
 An enumeration containing the possible hint states.
 
 ```python
 import enum
-class HintStatus(enum.IntEnum):
-    HINT_UNSPECIFIED = 0  # The receiving player has not specified any status
-    HINT_NO_PRIORITY = 10 # The receiving player has specified that the item is unneeded
-    HINT_AVOID = 20       # The receiving player has specified that the item is detrimental
-    HINT_PRIORITY = 30    # The receiving player has specified that the item is needed
-    HINT_FOUND = 40       # The location has been collected. Status cannot be changed once found.
+class HintStatus(enum.IntFlag):
+    # Lower 5 bits: Priorities as integers
+    HINT_PRIORITY_UNSPECIFIED = 0  # For readable code
+    HINT_PRIORITY_NO_PRIORITY = 1
+    HINT_PRIORITY_AVOID = 2
+    HINT_PRIORITY_PRIORITY = 3
+    PRIORITY_MASK = 0b11111
+
+    # Bits 6+: Technical status
+    HINT_FOUND = 0b10000000
 ```
-- Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
+- Hints for items with only `ItemClassification.trap` default to `HINT_AVOID`.
 - Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
 - Hints created with `!hint` or similar (hinting an item for yourself) default to `HINT_PRIORITY`.
-- Once a hint is collected, its' status is updated to `HINT_FOUND` automatically, and can no longer be changed.
+- Once a hint is collected, its status is updated to `HINT_FOUND` automatically, and can no longer be changed.
 
 ### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)
@@ -684,17 +689,19 @@ class Permission(enum.IntEnum):
 
 ### Hint
 An object representing a Hint.
+
 ```python
 import typing
+
+
 class Hint(typing.NamedTuple):
-    receiving_player: int
-    finding_player: int
-    location: int
-    item: int
-    found: bool
-    entrance: str = ""
-    item_flags: int = 0
-    status: HintStatus = HintStatus.HINT_UNSPECIFIED
+  receiving_player: int
+  finding_player: int
+  location: int
+  item: int
+  entrance: str = ""
+  item_flags: int = 0
+  status: HintStatus = HintStatus.from_found_and_priority(False, HintStatus.HINT_PRIORITY_UNSPECIFIED)
 ```
 
 ### Data Package Contents

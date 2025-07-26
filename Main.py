@@ -285,10 +285,10 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                             f"{locations_data[location.player][location.address]}")
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
-                        auto_status = HintStatus.HINT_AVOID if location.item.trap else HintStatus.HINT_PRIORITY
+                        auto_status = HintStatus.HINT_PRIORITY_AVOID if location.item.trap else HintStatus.HINT_PRIORITY_PRIORITY
                         if location.name in multiworld.worlds[location.player].options.start_location_hints:
                             if not location.item.trap:  # Unspecified status for location hints, except traps
-                                auto_status = HintStatus.HINT_UNSPECIFIED
+                                auto_status = HintStatus.HINT_PRIORITY_UNSPECIFIED
                             precollect_hint(location, auto_status)
                         elif location.item.name in multiworld.worlds[location.item.player].options.start_hints:
                             precollect_hint(location, auto_status)
