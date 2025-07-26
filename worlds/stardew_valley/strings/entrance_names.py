@@ -108,6 +108,7 @@ class Entrance:
     enter_casino = "Oasis to Casino"
     enter_skull_cavern_entrance = "Desert to Skull Cavern Entrance"
     enter_skull_cavern = "Skull Cavern Entrance to Skull Cavern"
+    mine_in_skull_cavern = "Can Mine in Skull Cavern"
     mine_to_skull_cavern_floor_25 = dig_to_skull_floor(25)
     mine_to_skull_cavern_floor_50 = dig_to_skull_floor(50)
     mine_to_skull_cavern_floor_75 = dig_to_skull_floor(75)

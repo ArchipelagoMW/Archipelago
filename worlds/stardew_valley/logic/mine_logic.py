@@ -26,8 +26,7 @@ class MineLogic(BaseLogic):
         return self.logic.region.can_reach(Region.mines_floor_85)
 
     def can_mine_in_the_skull_cavern(self) -> StardewRule:
-        return (self.logic.mine.can_progress_in_the_mines_from_floor(120) &
-                self.logic.region.can_reach(Region.skull_cavern))
+        return self.logic.region.can_reach(Region.skull_cavern_mining)
 
     @cache_self1
     def get_weapon_rule_for_floor_tier(self, tier: int):

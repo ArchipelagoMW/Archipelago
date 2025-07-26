@@ -368,6 +368,8 @@ def set_mines_floor_entrance_rules(logic, rule_collector: StardewRuleCollector):
 
 
 def set_skull_cavern_floor_entrance_rules(logic, rule_collector: StardewRuleCollector):
+    rule_collector.set_entrance_rule(Entrance.mine_in_skull_cavern, logic.mine.can_progress_in_the_mines_from_floor(120))
+
     for floor in range(25, 200 + 25, 25):
         rule = logic.mod.elevator.has_skull_cavern_elevator_to_floor(floor - 25)
         if floor == 25 or floor == 75 or floor == 125:
@@ -414,7 +416,8 @@ def set_festival_entrance_rules(logic, rule_collector: StardewRuleCollector):
     rule_collector.set_entrance_rule(LogicEntrance.attend_flower_dance, logic.season.has(Season.spring))
 
     rule_collector.set_entrance_rule(LogicEntrance.attend_luau, logic.season.has(Season.summer))
-    rule_collector.set_entrance_rule(LogicEntrance.attend_trout_derby, logic.season.has(Season.summer) & logic.fishing.can_use_specific_bait(Fish.rainbow_trout))
+    rule_collector.set_entrance_rule(LogicEntrance.attend_trout_derby,
+                                     logic.season.has(Season.summer) & logic.fishing.can_use_specific_bait(Fish.rainbow_trout))
     rule_collector.set_entrance_rule(LogicEntrance.attend_moonlight_jellies, logic.season.has(Season.summer))
 
     rule_collector.set_entrance_rule(LogicEntrance.attend_fair, logic.season.has(Season.fall))

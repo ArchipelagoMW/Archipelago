@@ -34,6 +34,7 @@ class Region:
     mines = "The Mines"
     skull_cavern_entrance = "Skull Cavern Entrance"
     skull_cavern = "Skull Cavern"
+    skull_cavern_mining = "Skull Cavern Mining"
     sewer = "Sewer"
     mutant_bug_lair = "Mutant Bug Lair"
     witch_swamp = "Witch's Swamp"
