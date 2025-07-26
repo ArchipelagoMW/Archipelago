@@ -539,7 +539,7 @@ In addition, the following methods can be implemented and are called in this ord
   creates the output files if there is output to be generated. When this is called,
   `self.multiworld.get_locations(self.player)` has all locations for the player, with attribute `item` pointing to the
   item. `location.item.player` can be used to see if it's a local item.
-* `fill_slot_data(self)` and `modify_multidata(self, multidata: Dict[str, Any])` can be used to modify the data that
+* `fill_slot_data(self)` and `modify_multidata(self, multidata: MultiData)` can be used to modify the data that
   will be used by the server to host the MultiWorld.
 
 All instance methods can, optionally, have a class method defined which will be called after all instance methods are
