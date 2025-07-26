@@ -1,5 +1,5 @@
 import pkgutil
-from typing import Optional, TYPE_CHECKING, Iterable, Dict, Sequence
+from typing import TYPE_CHECKING, Iterable, Sequence
 import hashlib
 import Utils
 import os
@@ -21,7 +21,7 @@ PROTEUSHASH = "9ff045a3ca30018b6e874c749abb3ec4"
 MM3NESHASH = "4a53b6f58067d62c9a43404fe835dd5c"
 MM3VCHASH = "c50008f1ac86fae8d083232cdd3001a5"
 
-enemy_weakness_ptrs: Dict[int, int] = {
+enemy_weakness_ptrs: dict[int, int] = {
     0: 0x14100,
     1: 0x14200,
     2: 0x14300,
@@ -33,7 +33,7 @@ enemy_weakness_ptrs: Dict[int, int] = {
     8: 0x14900,
 }
 
-enemy_addresses: Dict[str, int] = {
+enemy_addresses: dict[str, int] = {
     "Dada": 0x12,
     "Potton": 0x13,
     "New Shotman": 0x15,
@@ -169,18 +169,13 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
 
     base_address = 0x3C000
     color_address = 0x31BC7
-    for i, offset, location in zip([0, 8, 1, 2, 3, 4, 5, 6, 7, 9], [
-        0x10,
-        0x50,
-        0x91,
-        0xD2,
-        0x113,
-        0x154,
-        0x195,
-        0x1D6,
-        0x217,
-        0x257
-    ], [
+    for i, offset, location in zip([0, 8, 1, 2,
+                                    3, 4, 5, 6,
+                                    7, 9],
+                                   [0x10, 0x50, 0x91, 0xD2,
+                                    0x113, 0x154, 0x195, 0x1D6,
+                                    0x217, 0x257],
+                                   [
                                        names.get_needle_cannon,
                                        names.get_rush_jet,
                                        names.get_magnet_missile,
@@ -214,10 +209,10 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
             player_str = world.multiworld.get_player_name(item.player)
             if len(player_str) > 13:
                 player_str = player_str[:13]
-            y_coords = 0xA1
+            y_coords = 0xA5
             row = 0x21
             if location in [names.get_rush_marine, names.get_rush_jet]:
-                y_coords = 0x41
+                y_coords = 0x45
                 row = 0x22
             patch.write_bytes(base_address + offset, MM3TextEntry(first_str, y_coords, row).resolve())
             patch.write_bytes(base_address + 16 + offset, MM3TextEntry(second_str, y_coords + 0x20, row).resolve())
@@ -234,7 +229,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
 
     write_palette_shuffle(world, patch)
 
-    enemy_weaknesses: Dict[str, Dict[int, int]] = {}
+    enemy_weaknesses: dict[str, dict[int, int]] = {}
 
     if world.options.strict_weakness or world.options.random_weakness or world.options.plando_weakness:
         # we need to write boss weaknesses
@@ -359,7 +354,7 @@ def read_headerless_nes_rom(rom: bytes) -> bytes:
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
-    base_rom_bytes: Optional[bytes] = getattr(get_base_rom_bytes, "base_rom_bytes", None)
+    base_rom_bytes: bytes | None = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
         base_rom_bytes = read_headerless_nes_rom(bytes(open(file_name, "rb").read()))
@@ -382,9 +377,9 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options: settings.Settings = settings.get_settings()
+    from . import MM3World
     if not file_name:
-        file_name = options["mm3_options"]["rom_file"]
+        file_name = MM3World.settings.rom_file
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name

@@ -1,5 +1,5 @@
 from BaseClasses import Item
-from typing import NamedTuple, Dict
+from typing import NamedTuple
 from .names import (needle_cannon, magnet_missile, gemini_laser, hard_knuckle, top_spin, search_snake, spark_shock,
                     shadow_blade, rush_coil, rush_marine, rush_jet, needle_man_stage, magnet_man_stage,
                     gemini_man_stage, hard_man_stage, top_man_stage, snake_man_stage, spark_man_stage, shadow_man_stage,
@@ -77,4 +77,4 @@ item_names = {
     "Rush": {name for name in rush_item_table.keys()}
 }
 
-lookup_item_to_id: Dict[str, int] = {item_name: data.code for item_name, data in item_table.items() if data.code}
+lookup_item_to_id: dict[str, int] = {item_name: data.code for item_name, data in item_table.items() if data.code}

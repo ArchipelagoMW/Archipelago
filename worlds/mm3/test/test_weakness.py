@@ -1,6 +1,6 @@
 from math import ceil
 
-from . import MM3TestBase
+from .bases import MM3TestBase
 from ..rules import minimum_weakness_requirement
 from ..options import bosses
 

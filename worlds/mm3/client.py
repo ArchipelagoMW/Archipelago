@@ -2,7 +2,7 @@ import logging
 import time
 from enum import IntEnum
 from base64 import b64encode
-from typing import TYPE_CHECKING, Dict, Tuple, List, Optional, Any
+from typing import TYPE_CHECKING, Any
 from NetUtils import ClientStatus, color, NetworkItem
 from worlds._bizhawk.client import BizHawkClient
 
@@ -58,7 +58,7 @@ MM3_COMPLETED_STAGES = 0x687
 MM3_RECEIVED_ITEMS = 0x688
 MM3_RUSH_RECEIVED = 0x689
 
-MM3_CONSUMABLE_TABLE: Dict[int, Dict[int, Tuple[int, int]]] = {
+MM3_CONSUMABLE_TABLE: dict[int, dict[int, tuple[int, int]]] = {
     # Stage:
     #   Item: (byte offset, bit mask)
     0: {
@@ -264,7 +264,7 @@ class MM3EnergyLinkType(IntEnum):
     RushJet = 0x13
 
 
-request_to_name: Dict[str, str] = {
+request_to_name: dict[str, str] = {
     "HP": "health",
     "NE": "Needle Cannon energy",
     "MA": "Magnet Missile energy",
@@ -311,7 +311,7 @@ def cmd_request(self: "BizHawkClientCommandProcessor", amount: str, target: str)
     if not self.ctx.server or not self.ctx.slot:
         logger.warning("You must be connected to a server to use this command.")
         return
-    valid_targets: Dict[str, MM3EnergyLinkType] = {
+    valid_targets: dict[str, MM3EnergyLinkType] = {
         "HP": MM3EnergyLinkType.Life,
         "NE": MM3EnergyLinkType.NeedleCannon,
         "MA": MM3EnergyLinkType.MagnetMissile,
@@ -355,7 +355,7 @@ def cmd_autoheal(self) -> None:
             logger.info(f"Auto healing enabled.")
 
 
-def get_sfx_writes(sfx: int) -> Tuple[int, bytes, str]:
+def get_sfx_writes(sfx: int) -> tuple[int, bytes, str]:
     return MM3_SFX_QUEUE, sfx.to_bytes(1, 'little'), "RAM"
 
 
@@ -363,19 +363,19 @@ class MegaMan3Client(BizHawkClient):
     game = "Mega Man 3"
     system = "NES"
     patch_suffix = ".apmm3"
-    item_queue: List[NetworkItem] = []
+    item_queue: list[NetworkItem] = []
     pending_death_link: bool = False
     # default to true, as we don't want to send a deathlink until Mega Man's HP is initialized once
     sending_death_link: bool = True
     death_link: bool = False
     energy_link: bool = False
-    rom: Optional[bytes] = None
+    rom: bytes | None = None
     weapon_energy: int = 0
     health_energy: int = 0
     auto_heal: bool = False
-    refill_queue: List[Tuple[MM3EnergyLinkType, int]] = []
-    last_wily: Optional[int] = None  # default to wily 1
-    doc_status: Optional[int] = None  # default to no doc progress
+    refill_queue: list[tuple[MM3EnergyLinkType, int]] = []
+    last_wily: int | None = None  # default to wily 1
+    doc_status: int | None = None  # default to no doc progress
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from worlds._bizhawk import RequestFailedError, read, get_memory_size
@@ -440,7 +440,7 @@ class MegaMan3Client(BizHawkClient):
         if self.rom:
             ctx.auth = b64encode(self.rom).decode()
 
-    def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: Dict[str, Any]) -> None:
+    def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict[str, Any]) -> None:
         if cmd == "Bounced":
             if "tags" in args:
                 assert ctx.slot is not None

@@ -48,7 +48,7 @@ MM3_WEAPON_ENCODING: DefaultDict[str, int] = defaultdict(lambda: 0x25, {
 
 
 class MM3TextEntry:
-    def __init__(self, text: str = "", y_coords: int = 0x0B, row: int = 0x21):
+    def __init__(self, text: str = "", y_coords: int = 0xA5, row: int = 0x21):
         self.target_area: int = row  # don't change
         self.coords: int = y_coords  # 0xYX, Y can only be increments of 0x20
         self.text: str = text

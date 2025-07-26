@@ -1,5 +1,5 @@
 import sys
-from typing import Dict, Tuple, List, TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from . import names
 from zlib import crc32
 import struct
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from . import MM3World
     from .rom import MM3ProcedurePatch
 
-HTML_TO_NES: Dict[str, int] = {
+HTML_TO_NES: dict[str, int] = {
     'SNOW': 0x20,
     'LINEN': 0x36,
     'SEASHELL': 0x36,
@@ -57,7 +57,7 @@ HTML_TO_NES: Dict[str, int] = {
     # can add more as needed
 }
 
-MM3_COLORS: Dict[str, Tuple[int, int]] = {
+MM3_COLORS: dict[str, tuple[int, int]] = {
     names.gemini_laser: (0x30, 0x21),
     names.needle_cannon: (0x30, 0x17),
     names.hard_knuckle: (0x10, 0x01),
@@ -83,7 +83,7 @@ MM3_COLORS: Dict[str, Tuple[int, int]] = {
     names.doc_shadow_stage: (0x27, 0x15),
 }
 
-MM3_KNOWN_COLORS: Dict[str, Tuple[int, int]] = {
+MM3_KNOWN_COLORS: dict[str, tuple[int, int]] = {
     **MM3_COLORS,
     # Street Fighter, technically
     "Hadouken": (0x3C, 0x11),
@@ -124,12 +124,12 @@ if "worlds.mm2" in sys.modules:
     try:
         mm2 = sys.modules["worlds.mm2"]
         MM3_KNOWN_COLORS.update(mm2.Color.MM2_COLORS)
-        for color in MM3_COLORS:
-            mm2.Color.add_color_to_mm2(color, MM3_COLORS[color])
+        for item in MM3_COLORS:
+            mm2.Color.add_color_to_mm2(item, MM3_COLORS[item])
     except Exception:
         pass
 
-palette_pointers: Dict[str, List[int]] = {
+palette_pointers: dict[str, list[int]] = {
     "Mega Buster": [0x7C8A8, 0x4650],
     "Gemini Laser": [0x4654],
     "Needle Cannon": [0x4658],
@@ -154,7 +154,7 @@ palette_pointers: Dict[str, List[int]] = {
 }
 
 
-def add_color_to_mm3(name: str, color: Tuple[int, int]) -> None:
+def add_color_to_mm3(name: str, color: tuple[int, int]) -> None:
     """
     Add a color combo for Mega Man 3 to recognize as the color to display for a given item.
     For information on available colors: https://www.nesdev.org/wiki/PPU_palettes#2C02
@@ -162,7 +162,7 @@ def add_color_to_mm3(name: str, color: Tuple[int, int]) -> None:
     MM3_KNOWN_COLORS[name] = validate_colors(*color)
 
 
-def extrapolate_color(color: int) -> Tuple[int, int]:
+def extrapolate_color(color: int) -> tuple[int, int]:
     if color > 0x1F:
         color_1 = color
         color_2 = color_1 - 0x10
@@ -172,7 +172,7 @@ def extrapolate_color(color: int) -> Tuple[int, int]:
     return color_1, color_2
 
 
-def validate_colors(color_1: int, color_2: int, allow_match: bool = False) -> Tuple[int, int]:
+def validate_colors(color_1: int, color_2: int, allow_match: bool = False) -> tuple[int, int]:
     # Black should be reserved for outlines, a gray should suffice
     if color_1 in [0x0D, 0x0E, 0x0F, 0x1E, 0x2E, 0x3E, 0x1F, 0x2F, 0x3F]:
         color_1 = 0x10
@@ -186,7 +186,7 @@ def validate_colors(color_1: int, color_2: int, allow_match: bool = False) -> Tu
     return color_1, color_2
 
 
-def expand_colors(color_1: int, color_2: int) -> Tuple[Tuple[int, int, int], Tuple[int, int, int]]:
+def expand_colors(color_1: int, color_2: int) -> tuple[tuple[int, int, int], tuple[int, int, int]]:
     if color_2 >= 0x30:
         color_a = color_b = color_2
     else:
@@ -209,7 +209,7 @@ def expand_colors(color_1: int, color_2: int) -> Tuple[Tuple[int, int, int], Tup
     return (0x30, color_a, color_b), (color_d, color_e, color_c)
 
 
-def get_colors_for_item(name: str) -> Tuple[Tuple[int, int, int], Tuple[int, int, int]]:
+def get_colors_for_item(name: str) -> tuple[tuple[int, int, int], tuple[int, int, int]]:
     if name in MM3_KNOWN_COLORS:
         return expand_colors(*MM3_KNOWN_COLORS[name])
 
@@ -240,7 +240,7 @@ def get_colors_for_item(name: str) -> Tuple[Tuple[int, int, int], Tuple[int, int
     return expand_colors(color_1, color_2)
 
 
-def parse_color(colors: List[str]) -> Tuple[int, int]:
+def parse_color(colors: list[str]) -> tuple[int, int]:
     color_a = colors[0]
     if color_a.startswith("$"):
         color_1 = int(color_a[1:], 16)
@@ -260,8 +260,8 @@ def parse_color(colors: List[str]) -> Tuple[int, int]:
 
 
 def write_palette_shuffle(world: "MM3World", rom: "MM3ProcedurePatch") -> None:
-    palette_shuffle: Union[int, str] = world.options.palette_shuffle.value
-    palettes_to_write: Dict[str, Tuple[int, int]] = {}
+    palette_shuffle: int | str = world.options.palette_shuffle.value
+    palettes_to_write: dict[str, tuple[int, int]] = {}
     if isinstance(palette_shuffle, str):
         color_sets = palette_shuffle.split(";")
         if len(color_sets) == 1:

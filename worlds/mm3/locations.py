@@ -1,5 +1,4 @@
 from BaseClasses import Location, Region
-from typing import Dict, Tuple, Optional
 from . import names
 
 
@@ -11,120 +10,120 @@ class MM3Region(Region):
     game = "Mega Man 3"
 
 
-needle_man_locations: Dict[str, Optional[int]] = {
+needle_man_locations: dict[str, int | None] = {
     names.needle_man: 0x890001,
     names.get_needle_cannon: 0x890101,
     names.get_rush_jet: 0x890111,
 }
 
-magnet_man_locations: Dict[str, Optional[int]] = {
+magnet_man_locations: dict[str, int | None] = {
     names.magnet_man: 0x890002,
     names.get_magnet_missile: 0x890102
 }
 
-gemini_man_locations: Dict[str, Optional[int]] = {
+gemini_man_locations: dict[str, int | None] = {
     names.gemini_man: 0x890003,
     names.get_gemini_laser: 0x890103
 }
 
-hard_man_locations: Dict[str, Optional[int]] = {
+hard_man_locations: dict[str, int | None] = {
     names.hard_man: 0x890004,
     names.get_hard_knuckle: 0x890104
 }
 
-top_man_locations: Dict[str, Optional[int]] = {
+top_man_locations: dict[str, int | None] = {
     names.top_man: 0x890005,
     names.get_top_spin: 0x890105,
 }
 
-snake_man_locations: Dict[str, Optional[int]] = {
+snake_man_locations: dict[str, int | None] = {
     names.snake_man: 0x890006,
     names.get_search_snake: 0x890106,
 }
 
-spark_man_locations: Dict[str, Optional[int]] = {
+spark_man_locations: dict[str, int | None] = {
     names.spark_man: 0x890007,
     names.get_spark_shock: 0x890107
 }
 
-shadow_man_locations: Dict[str, Optional[int]] = {
+shadow_man_locations: dict[str, int | None] = {
     names.shadow_man: 0x890008,
     names.get_shadow_blade: 0x890108,
     names.get_rush_marine: 0x890112
 }
 
-doc_air_locations: Dict[str, Optional[int]] = {
+doc_air_locations: dict[str, int | None] = {
     names.doc_air: 0x890010,
 }
 
-doc_crash_locations: Dict[str, Optional[int]] = {
+doc_crash_locations: dict[str, int | None] = {
     names.doc_crash: 0x890011,
     names.doc_needle: None
 }
 
-doc_flash_locations: Dict[str, Optional[int]] = {
+doc_flash_locations: dict[str, int | None] = {
     names.doc_flash: 0x890012,
 }
 
-doc_bubble_locations: Dict[str, Optional[int]] = {
+doc_bubble_locations: dict[str, int | None] = {
     names.doc_bubble: 0x890013,
     names.doc_gemini: None
 }
 
-doc_wood_locations: Dict[str, Optional[int]] = {
+doc_wood_locations: dict[str, int | None] = {
     names.doc_wood: 0x890014,
 }
 
-doc_heat_locations: Dict[str, Optional[int]] = {
+doc_heat_locations: dict[str, int | None] = {
     names.doc_heat: 0x890015,
     names.doc_shadow: None
 }
 
-doc_metal_locations: Dict[str, Optional[int]] = {
+doc_metal_locations: dict[str, int | None] = {
     names.doc_metal: 0x890016,
 }
 
-doc_quick_locations: Dict[str, Optional[int]] = {
+doc_quick_locations: dict[str, int | None] = {
     names.doc_quick: 0x890017,
     names.doc_spark: None
 }
 
-break_man_location: Dict[str, Optional[int]] = {
+break_man_location: dict[str, int | None] = {
     names.break_man: 0x89000F,
     names.break_stage: None
 }
 
-wily_1_locations: Dict[str, Optional[int]] = {
+wily_1_locations: dict[str, int | None] = {
     names.wily_1_boss: 0x890009,
     names.wily_stage_1: None
 }
 
-wily_2_locations: Dict[str, Optional[int]] = {
+wily_2_locations: dict[str, int | None] = {
     names.wily_2_boss: 0x89000A,
     names.wily_stage_2: None
 }
 
-wily_3_locations: Dict[str, Optional[int]] = {
+wily_3_locations: dict[str, int | None] = {
     names.wily_3_boss: 0x89000B,
     names.wily_stage_3: None
 }
 
-wily_4_locations: Dict[str, Optional[int]] = {
+wily_4_locations: dict[str, int | None] = {
     # Wily 4 doesn't have a boss, it just has the RBM rush
     names.wily_stage_4: None
 }
 
-wily_5_locations: Dict[str, Optional[int]] = {
+wily_5_locations: dict[str, int | None] = {
     names.wily_5_boss: 0x89000D,
     names.wily_stage_5: None
 }
 
-wily_6_locations: Dict[str, Optional[int]] = {
+wily_6_locations: dict[str, int | None] = {
     names.gamma: None
 }
 
 
-etank_1ups: Dict[str, Dict[str, Optional[int]]] = {
+etank_1ups: dict[str, dict[str, int | None]] = {
     "Needle Man Stage": {
         names.needle_man_c2: 0x890201
     },
@@ -187,7 +186,7 @@ etank_1ups: Dict[str, Dict[str, Optional[int]]] = {
     }
 }
 
-energy_pickups: Dict[str, Dict[str, Optional[int]]] = {
+energy_pickups: dict[str, dict[str, int | None]] = {
     "Needle Man Stage": {
         names.needle_man_c1: 0x890200
     },
@@ -336,7 +335,7 @@ energy_pickups: Dict[str, Dict[str, Optional[int]]] = {
     }
 }
 
-mm3_regions: Dict[str, Tuple[Tuple[str, ...], Dict[str, Optional[int]], Optional[str]]] = {
+mm3_regions: dict[str, tuple[tuple[str, ...], dict[str, int | None], str | None]] = {
     "Needle Man Stage": ((names.needle_man_stage,), needle_man_locations, None),
     "Magnet Man Stage": ((names.magnet_man_stage,), magnet_man_locations, None),
     "Gemini Man Stage": ((names.gemini_man_stage,), gemini_man_locations, None),
@@ -362,7 +361,7 @@ mm3_regions: Dict[str, Tuple[Tuple[str, ...], Dict[str, Optional[int]], Optional
     "Wily Stage 6": ((names.wily_stage_5,), wily_6_locations, "Wily Stage 5")
 }
 
-location_table: Dict[str, Optional[int]] = {
+location_table: dict[str, int | None] = {
     **needle_man_locations,
     **magnet_man_locations,
     **gemini_man_locations,
@@ -394,7 +393,7 @@ for table in energy_pickups:
     location_table.update(energy_pickups[table])
 
 
-def get_consumables(stage: str) -> Dict[str, int]:
+def get_consumables(stage: str) -> dict[str, int]:
     return {**etank_1ups.get(stage, {}), **energy_pickups.get(stage, {})}
 
 
@@ -421,4 +420,4 @@ location_groups = {
     "Shadow Man Stage": {*shadow_man_locations.keys()},
 }
 
-lookup_location_to_id: Dict[str, int] = {location: idx for location, idx in location_table.items() if idx is not None}
+lookup_location_to_id: dict[str, int] = {location: idx for location, idx in location_table.items() if idx is not None}

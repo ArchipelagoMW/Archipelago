@@ -1,5 +1,5 @@
 from math import ceil
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING
 from . import names
 from .locations import (needle_man_locations, magnet_man_locations, gemini_man_locations, hard_man_locations,
                         top_man_locations, snake_man_locations, spark_man_locations, shadow_man_locations,
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from . import MM3World
     from BaseClasses import CollectionState
 
-bosses = {
+bosses: dict[str, int] = {
     "Needle Man": 0,
     "Magnet Man": 1,
     "Gemini Man": 2,
@@ -38,7 +38,7 @@ bosses = {
     "Gamma": 21
 }
 
-weapons_to_id = {
+weapons_to_id: dict[str, int] = {
     "Mega Buster": 0,
     "Needle Cannon": 1,
     "Magnet Missile": 2,
@@ -50,7 +50,7 @@ weapons_to_id = {
     "Shadow Blade": 8,
 }
 
-weapon_damage: Dict[int, List[int]] = {
+weapon_damage: dict[int, list[int]] = {
     0: [1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 0, ],  # Mega Buster
     1: [4, 1, 1, 0, 2, 4, 2, 1, 0, 1, 1, 2, 4, 2, 4, 2, 0, 3, 1, 1, 1, 0, ],  # Needle Cannon
     2: [1, 4, 2, 4, 1, 0, 0, 1, 4, 2, 4, 1, 1, 0, 0, 1, 0, 3, 1, 0, 1, 0, ],  # Magnet Missile
@@ -62,7 +62,7 @@ weapon_damage: Dict[int, List[int]] = {
     8: [2, 7, 2, 0, 1, 2, 4, 4, 2, 2, 0, 1, 2, 4, 2, 4, 0, 1, 3, 2, 2, 2, ],  # Shadow Blade
 }
 
-weapons_to_name: Dict[int, str] = {
+weapons_to_name: dict[int, str] = {
     1: names.needle_cannon,
     2: names.magnet_missile,
     3: names.gemini_laser,
@@ -73,7 +73,7 @@ weapons_to_name: Dict[int, str] = {
     8: names.shadow_blade
 }
 
-minimum_weakness_requirement: Dict[int, int] = {
+minimum_weakness_requirement: dict[int, int] = {
     0: 1,  # Mega Buster is free
     1: 1,  # 112 shots of Needle Cannon
     2: 2,  # 14 shots of Magnet Missile
@@ -85,7 +85,7 @@ minimum_weakness_requirement: Dict[int, int] = {
     8: 1,  # 56 uses of Shadow Blade
 }
 
-robot_masters: Dict[int, str] = {
+robot_masters: dict[int, str] = {
     0: "Needle Man Defeated",
     1: "Magnet Man Defeated",
     2: "Gemini Man Defeated",
@@ -110,7 +110,7 @@ weapon_costs = {
 
 
 def can_defeat_enough_rbms(state: "CollectionState", player: int,
-                           required: int, boss_requirements: Dict[int, List[int]]):
+                           required: int, boss_requirements: dict[int, list[int]]):
     can_defeat = 0
     for boss, reqs in boss_requirements.items():
         if boss in robot_masters:

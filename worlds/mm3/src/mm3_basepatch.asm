@@ -215,46 +215,46 @@ EnergyLinkHook:
   JSR EnergyLink
 
 %org($A000, $1E)
-db $21, $A1, $0C, "PLACEHOLDER 1"
-db $21, $C1, $0C, "PLACEHOLDER 2"
-db $21, $E1, $0C, "PLACEHOLDER 3"
-db $22, $01, $0C, "PLACEHOLDER P"
-db $22, $41, $0C, "PLACEHOLDER 1"
-db $22, $61, $0C, "PLACEHOLDER 2"
-db $22, $81, $0C, "PLACEHOLDER 3"
-db $22, $A1, $0C, "PLACEHOLDER P", $FF
-db $21, $A1, $0C, "PLACEHOLDER 1"
-db $21, $C1, $0C, "PLACEHOLDER 2"
-db $21, $E1, $0C, "PLACEHOLDER 3"
-db $22, $01, $0C, "PLACEHOLDER P", $FF
-db $21, $A1, $0C, "PLACEHOLDER 1"
-db $21, $C1, $0C, "PLACEHOLDER 2"
-db $21, $E1, $0C, "PLACEHOLDER 3"
-db $22, $01, $0C, "PLACEHOLDER P", $FF
-db $21, $A1, $0C, "PLACEHOLDER 1"
-db $21, $C1, $0C, "PLACEHOLDER 2"
-db $21, $E1, $0C, "PLACEHOLDER 3"
-db $22, $01, $0C, "PLACEHOLDER P", $FF
-db $21, $A1, $0C, "PLACEHOLDER 1"
-db $21, $C1, $0C, "PLACEHOLDER 2"
-db $21, $E1, $0C, "PLACEHOLDER 3"
-db $22, $01, $0C, "PLACEHOLDER P", $FF
-db $21, $A1, $0C, "PLACEHOLDER 1"
-db $21, $C1, $0C, "PLACEHOLDER 2"
-db $21, $E1, $0C, "PLACEHOLDER 3"
-db $22, $01, $0C, "PLACEHOLDER P", $FF
-db $21, $A1, $0C, "PLACEHOLDER 1"
-db $21, $C1, $0C, "PLACEHOLDER 2"
-db $21, $E1, $0C, "PLACEHOLDER 3"
-db $22, $01, $0C, "PLACEHOLDER P", $FF
-db $21, $A1, $0C, "PLACEHOLDER 1"
-db $21, $C1, $0C, "PLACEHOLDER 2"
-db $21, $E1, $0C, "PLACEHOLDER 3"
-db $22, $01, $0C, "PLACEHOLDER P"
-db $22, $41, $0C, "PLACEHOLDER 1"
-db $22, $61, $0C, "PLACEHOLDER 2"
-db $22, $81, $0C, "PLACEHOLDER 3"
-db $22, $A1, $0C, "PLACEHOLDER P", $FF
+db $21, $A5, $0C, "PLACEHOLDER 1"
+db $21, $C5, $0C, "PLACEHOLDER 2"
+db $21, $E5, $0C, "PLACEHOLDER 3"
+db $22, $05, $0C, "PLACEHOLDER P"
+db $22, $45, $0C, "PLACEHOLDER 1"
+db $22, $65, $0C, "PLACEHOLDER 2"
+db $22, $85, $0C, "PLACEHOLDER 3"
+db $22, $A5, $0C, "PLACEHOLDER P", $FF
+db $21, $A5, $0C, "PLACEHOLDER 1"
+db $21, $C5, $0C, "PLACEHOLDER 2"
+db $21, $E5, $0C, "PLACEHOLDER 3"
+db $22, $05, $0C, "PLACEHOLDER P", $FF
+db $21, $A5, $0C, "PLACEHOLDER 1"
+db $21, $C5, $0C, "PLACEHOLDER 2"
+db $21, $E5, $0C, "PLACEHOLDER 3"
+db $22, $05, $0C, "PLACEHOLDER P", $FF
+db $21, $A5, $0C, "PLACEHOLDER 1"
+db $21, $C5, $0C, "PLACEHOLDER 2"
+db $21, $E5, $0C, "PLACEHOLDER 3"
+db $22, $05, $0C, "PLACEHOLDER P", $FF
+db $21, $A5, $0C, "PLACEHOLDER 1"
+db $21, $C5, $0C, "PLACEHOLDER 2"
+db $21, $E5, $0C, "PLACEHOLDER 3"
+db $22, $05, $0C, "PLACEHOLDER P", $FF
+db $21, $A5, $0C, "PLACEHOLDER 1"
+db $21, $C5, $0C, "PLACEHOLDER 2"
+db $21, $E5, $0C, "PLACEHOLDER 3"
+db $22, $05, $0C, "PLACEHOLDER P", $FF
+db $21, $A5, $0C, "PLACEHOLDER 1"
+db $21, $C5, $0C, "PLACEHOLDER 2"
+db $21, $E5, $0C, "PLACEHOLDER 3"
+db $22, $05, $0C, "PLACEHOLDER P", $FF
+db $21, $A5, $0C, "PLACEHOLDER 1"
+db $21, $C5, $0C, "PLACEHOLDER 2"
+db $21, $E5, $0C, "PLACEHOLDER 3"
+db $22, $05, $0C, "PLACEHOLDER P"
+db $22, $45, $0C, "PLACEHOLDER 1"
+db $22, $65, $0C, "PLACEHOLDER 2"
+db $22, $85, $0C, "PLACEHOLDER 3"
+db $22, $A5, $0C, "PLACEHOLDER P", $FF
 
 ShowItemString:
   STY $04
@@ -292,7 +292,7 @@ ItemUpper:
   db $A0, $A0, $A0, $A1, $A1, $A1, $A1, $A2, $A2
 
 ItemLower:
-  db $00, $91, $D2, $13, $54, $95, $D6, $17, $58
+  db $00, $81, $C2, $03, $44, $85, $C6, $07, $47
 
 %org($C8F7, $3E)
 RemoveRushCoil:

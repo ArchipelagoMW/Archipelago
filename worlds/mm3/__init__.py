@@ -1,6 +1,6 @@
 import hashlib
 import logging
-from typing import Dict, Any, TYPE_CHECKING, Optional, Sequence, Tuple, ClassVar, List
+from typing import Any, TYPE_CHECKING, Sequence, ClassVar
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
 from worlds.AutoWorld import World, WebWorld
@@ -28,12 +28,12 @@ class MM3Settings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the MM3 EN rom"""
         description = "Mega Man 3 ROM File"
-        copy_to: Optional[str] = "Mega Man 3 (USA).nes"
+        copy_to: str | None = "Mega Man 3 (USA).nes"
         md5s = [MM3NESHASH, MM3LCHASH, PROTEUSHASH, MM3VCHASH]
 
         def browse(self: settings.T,
-                   filetypes: Optional[Sequence[Tuple[str, Sequence[str]]]] = None,
-                   **kwargs: Any) -> Optional[settings.T]:
+                   filetypes: Sequence[tuple[str, Sequence[str]]] | None = None,
+                   **kwargs: Any) -> settings.T | None:
             if not filetypes:
                 file_types = [("NES", [".nes"]), ("Program", [".exe"])]  # LC1 is only a windows executable, no linux
                 return super().browse(file_types, **kwargs)
@@ -93,14 +93,14 @@ class MM3World(World):
     location_name_groups = location_groups
     web = MM3WebWorld()
     rom_name: bytearray
-    world_version: Tuple[int, int, int] = (0, 1, 2)
+    world_version: tuple[int, int, int] = (0, 1, 2)
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name = bytearray()
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
         self.weapon_damage = weapon_damage.copy()
-        self.wily_4_weapons: Dict[int, List[int]] = {}
+        self.wily_4_weapons: dict[int, list[int]] = {}
 
     def create_regions(self) -> None:
         menu = MM3Region("Menu", self.player, self.multiworld)
@@ -108,18 +108,18 @@ class MM3World(World):
         for region in mm3_regions:
             stage = MM3Region(region, self.player, self.multiworld)
             required_items = mm3_regions[region][0]
-            locations = mm3_regions[region][1]
+            stage_locations = mm3_regions[region][1]
             prev_stage = mm3_regions[region][2]
             if prev_stage is None:
                 menu.connect(stage, f"To {region}",
-                             lambda state, items=required_items: state.has_all(items, self.player))
+                             lambda state, req=required_items: state.has_all(req, self.player))
             else:
                 old_stage = self.multiworld.get_region(prev_stage, self.player)
                 old_stage.connect(stage, f"To {region}",
-                                  lambda state, items=required_items: state.has_all(items, self.player))
-            stage.add_locations(locations)
+                                  lambda state, req=required_items: state.has_all(req, self.player))
+            stage.add_locations(stage_locations)
             for location in stage.get_locations():
-                if location.address is None and location.name is not gamma:
+                if location.address is None and location.name != gamma:
                     location.place_locked_item(MM3Item(location.name, ItemClassification.progression,
                                                        None, self.player))
             if self.options.consumables in (Consumables.option_1up_etank,
@@ -190,10 +190,10 @@ class MM3World(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def fill_hook(self,
-                  prog_item_pool: List["Item"],
-                  useful_item_pool: List["Item"],
-                  filler_item_pool: List["Item"],
-                  fill_locations: List["Location"]) -> None:
+                  prog_item_pool: list["Item"],
+                  useful_item_pool: list["Item"],
+                  filler_item_pool: list["Item"],
+                  fill_locations: list["Location"]) -> None:
         # on a solo gen, fill can try to force Wily into sphere 2, but for most generations this is impossible
         # MM3 is worse than MM2 here, some of the RBMs can also require Rush
         if self.multiworld.players > 1:
@@ -262,18 +262,18 @@ class MM3World(World):
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         return {
             "death_link": self.options.death_link.value,
             "weapon_damage": self.weapon_damage
         }
 
     @staticmethod
-    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
+    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
         local_weapon = {int(key): value for key, value in slot_data["weapon_damage"].items()}
         return {"weapon_damage": local_weapon}
 
-    def modify_multidata(self, multidata: Dict[str, Any]) -> None:
+    def modify_multidata(self, multidata: dict[str, Any]) -> None:
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
