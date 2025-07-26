@@ -1,11 +1,11 @@
 import concurrent.futures
 import json
 import os
-import pickle
 import random
 import tempfile
 import zipfile
 from collections import Counter
+from pickle import PicklingError
 from typing import Any
 
 from flask import flash, redirect, render_template, request, session, url_for
@@ -14,7 +14,7 @@ from pony.orm import commit, db_session
 from BaseClasses import get_seed, seeddigits
 from Generate import PlandoOptions, handle_name
 from Main import main as ERmain
-from Utils import __version__
+from Utils import __version__, restricted_dumps
 from WebHostLib import app
 from settings import ServerOptions, GeneratorOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
@@ -83,12 +83,18 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
               f"If you have a larger group, please generate it yourself and upload it.")
         return redirect(url_for(request.endpoint, **(request.view_args or {})))
     elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
-        gen = Generation(
-            options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
-            # convert to json compatible
-            meta=json.dumps(meta),
-            state=STATE_QUEUED,
-            owner=session["_id"])
+        try:
+            gen = Generation(
+                options=restricted_dumps({name: vars(options) for name, options in gen_options.items()}),
+                # convert to json compatible
+                meta=json.dumps(meta),
+                state=STATE_QUEUED,
+                owner=session["_id"])
+        except PicklingError as e:
+            from .autolauncher import handle_generation_failure
+            handle_generation_failure(e)
+            return render_template("seedError.html", seed_error=("PicklingError: " + str(e)))
+
         commit()
 
         return redirect(url_for("wait_seed", seed=gen.id))
