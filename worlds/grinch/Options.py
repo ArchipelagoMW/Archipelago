@@ -60,5 +60,5 @@ class UnlimitedRottenEggs(Toggle):
 @dataclass
 class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     progressive_vacuum: ProgressiveVacuum
-    unlimited_rotten_eggs: UnlimitedRottenEggs
     missionsanity: Missionsanity
+    unlimited_rotten_eggs: UnlimitedRottenEggs
