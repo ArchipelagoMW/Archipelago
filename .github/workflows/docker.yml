@@ -71,7 +71,7 @@ jobs:
       - name: Compute AMD64 tags
         id: amd64-tags
         run: |
-          IFS=',' read -r -a tags <<< "${{ needs.prepare.outputs.tags }}"
+          IFS=$'\n' read -r -d '' -a tags < <(echo "${{ needs.prepare.outputs.tags }}" && echo)
           suffixed=()
           for t in "${tags[@]}"; do
             suffixed+=("$t-amd64")
@@ -116,7 +116,7 @@ jobs:
       - name: Compute ARM64 tags
         id: arm64-tags
         run: |
-          IFS=',' read -r -a tags <<< "${{ needs.prepare.outputs.tags }}"
+          IFS=$'\n' read -r -d '' -a tags < <(echo "${{ needs.prepare.outputs.tags }}" && echo)
           suffixed=()
           for t in "${tags[@]}"; do
             suffixed+=("$t-arm64")
@@ -151,7 +151,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Create and push multi-arch manifest
         run: |
-          IFS=',' read -r -a tag_array <<< "${{ needs.prepare.outputs.tags }}"
+          IFS=$'\n' read -r -d '' -a tag_array < <(echo "${{ needs.prepare.outputs.tags }}" && echo)
 
           for tag in "${tag_array[@]}"; do
             docker manifest create "$tag" \
