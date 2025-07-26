@@ -1,2 +1,2 @@
-Credit to Raven-187 on gamehacking.org for providing the addresses for various cheat codes, which would of made RAM searching much more tedious.
-Shoutouts to SomeJakeGuy for basically teaching me how to code, in general.
+- Credit to Raven-187 on gamehacking.org for providing the addresses for various cheat codes. Without them, would of made RAM searching much more tedious.
+- Shoutouts to SomeJakeGuy for basically teaching me how to code, in general.
