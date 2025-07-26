@@ -399,15 +399,29 @@ def delete_old_data_packages() -> None:
     game_folders = [game_folder.path for game_folder in os.scandir(datapackage_folder) if game_folder.is_dir()]
     for game_folder in game_folders:
         datapackage_files = [os.path.join(game_folder, file) for file in os.listdir(game_folder) if os.path.isfile(os.path.join(game_folder, file))]
+
+        # Find the newest file in the folder
+        newest_file_path = None
+        newest_mtime = None
+        try:
+            for file_path in datapackage_files:
+                file_mtime = os.path.getmtime(file_path)
+                if newest_mtime is None or file_mtime > newest_mtime:
+                    newest_mtime = file_mtime
+                    newest_file_path = file_path
+        except Exception as e:
+            logging.warning(f"Could not delete old data package: {e}")
+
+        #don't delete the newest file in the folder
+        if newest_file_path is not None:
+            datapackage_files.remove(newest_file_path)
+
         for file_path in datapackage_files:
             try:
                 if time() - os.path.getmtime(file_path) > expiry_in_seconds:
                     os.remove(file_path)
             except Exception as e:
                 logging.warning(f"Could not delete old data package: {e}")
-
-        if not os.listdir(game_folder):
-            os.rmdir(game_folder)
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:
