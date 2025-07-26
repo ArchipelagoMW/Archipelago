@@ -25,6 +25,7 @@ jobs:
       image-name: ${{ steps.image.outputs.name }}
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
+      package-name: ${{ steps.package.outputs.name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,6 +34,11 @@ jobs:
         id: image
         run: |
           echo "name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+
+      - name: Set package name
+        id: package
+        run: |
+          echo "name=$(basename ${GITHUB_REPOSITORY,,})" >> $GITHUB_OUTPUT
 
       - name: Extract metadata
         id: meta
@@ -165,21 +171,20 @@ jobs:
       - name: Cleanup temporary tags
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE_NAME: ${{ needs.prepare.outputs.image-name }}
         run: |
           readarray -t tag_array <<< "${{ needs.prepare.outputs.tags }}"
 
           for tag in "${tag_array[@]}"; do
             for arch in amd64 arm64; do
-              suffixed_tag="$tag-$arch"
+              suffixed_tag="${tag#*:}-$arch"  # Extract just the tag part without registry/image
               
-              # Get package versions
-              versions=$(gh api repos/${{ github.repository }}/packages/container/${IMAGE_NAME//[\/]/%2F}/versions --jq '.[] | select(.metadata.container.tags[0] == "'$suffixed_tag'") | .id')
+              # Get version IDs for versions containing the suffixed tag
+              versions=$(gh api --paginate repos/${{ github.repository }}/packages/container/${{ needs.prepare.outputs.package-name }}/versions --jq '.[] | select(.metadata.container.tags | index("'"$suffixed_tag"'") != null) | .id' | tr '\n' ' ')
               
               for version_id in $versions; do
                 if [ -n "$version_id" ]; then
-                  gh api --method DELETE repos/${{ github.repository }}/packages/container/${IMAGE_NAME//[\/]/%2F}/versions/$version_id
-                  echo "Deleted version $version_id for tag $suffixed_tag"
+                  gh api --method DELETE repos/${{ github.repository }}/packages/container/${{ needs.prepare.outputs.package-name }}/versions/$version_id
+                  echo "Deleted version $version_id associated with tag $suffixed_tag"
                 fi
               done
             done
