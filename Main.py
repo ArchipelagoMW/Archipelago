@@ -3,7 +3,6 @@ from collections.abc import Mapping
 import concurrent.futures
 import logging
 import os
-import pickle
 import tempfile
 import time
 from typing import Any
@@ -16,7 +15,7 @@ from Fill import FillError, balance_multiworld_progression, distribute_items_res
     parse_planned_blocks, distribute_planned_blocks, resolve_early_locations_for_planned
 from NetUtils import convert_to_base_types
 from Options import StartInventoryPool
-from Utils import __version__, output_path, version_tuple
+from Utils import __version__, output_path, restricted_dumps, version_tuple
 from settings import get_settings
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
@@ -95,6 +94,15 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     del local_early
             del early
 
+        # items can't be both local and non-local, prefer local
+        multiworld.worlds[player].options.non_local_items.value -= multiworld.worlds[player].options.local_items.value
+        multiworld.worlds[player].options.non_local_items.value -= set(multiworld.local_early_items[player])
+
+    # Clear non-applicable local and non-local items.
+    if multiworld.players == 1:
+        multiworld.worlds[1].options.non_local_items.value = set()
+        multiworld.worlds[1].options.local_items.value = set()
+
     logger.info('Creating MultiWorld.')
     AutoWorld.call_all(multiworld, "create_regions")
 
@@ -102,12 +110,6 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     AutoWorld.call_all(multiworld, "create_items")
 
     logger.info('Calculating Access Rules.')
-
-    for player in multiworld.player_ids:
-        # items can't be both local and non-local, prefer local
-        multiworld.worlds[player].options.non_local_items.value -= multiworld.worlds[player].options.local_items.value
-        multiworld.worlds[player].options.non_local_items.value -= set(multiworld.local_early_items[player])
-
     AutoWorld.call_all(multiworld, "set_rules")
 
     for player in multiworld.player_ids:
@@ -128,11 +130,9 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
         multiworld.worlds[player].options.priority_locations.value -= world_excluded_locations
 
     # Set local and non-local item rules.
+    # This function is called so late because worlds might otherwise overwrite item_rules which are how locality works
     if multiworld.players > 1:
         locality_rules(multiworld)
-    else:
-        multiworld.worlds[1].options.non_local_items.value = set()
-        multiworld.worlds[1].options.local_items.value = set()
 
     multiworld.plando_item_blocks = parse_planned_blocks(multiworld)
 
@@ -345,7 +345,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 for key in ("slot_data", "er_hint_data"):
                     multidata[key] = convert_to_base_types(multidata[key])
 
-                multidata = zlib.compress(pickle.dumps(multidata), 9)
+                multidata = zlib.compress(restricted_dumps(multidata), 9)
 
                 with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
                     f.write(bytes([3]))  # version of format
