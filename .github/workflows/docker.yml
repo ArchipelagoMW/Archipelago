@@ -2,6 +2,14 @@ name: Build and Publish Docker Images
 
 on:
   push:
+    paths:
+      - "**"
+      - "!docs/**"
+      - "!deploy/**"
+      - "!setup.py"
+      - "!.gitignore"
+      - "!.github/workflows/**"
+      - ".github/workflows/docker.yml"
     branches:
       - "*"
     tags:
