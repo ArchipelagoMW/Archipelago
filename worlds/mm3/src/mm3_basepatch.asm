@@ -719,19 +719,6 @@ Wily4Comparison:
 
 ; out of space here :(
 
-%org($FC28, $3F)
-CheckRushWeapon:
-  AND #$01
-  BNE .DontHave
-  JMP $A3CF
-  .DontHave:
-  LDA $A1
-  AND #$01
-  BNE .Skip
-  DEC $A1
-  .Skip:
-  JMP $A477
-
 %org($FDBA, $3F)
 WeaponReceived:
   TAX
@@ -772,3 +759,20 @@ EnergyLink:
   .Return:
   LDA $BDEC, Y
   RTS
+
+; out of room here :(
+
+%org($FFCF, $3F)
+CheckRushWeapon:
+  AND #$01
+  BNE .DontHave
+  JMP $A3CF
+  .DontHave:
+  LDA $A1
+  AND #$01
+  BNE .Skip
+  DEC $A1
+  .Skip:
+  JMP $A477
+
+; don't even try to go past this point
