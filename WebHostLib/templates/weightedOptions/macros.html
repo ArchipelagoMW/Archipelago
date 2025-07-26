@@ -139,6 +139,7 @@
 {% endmacro %}
 
 {% macro OptionList(option_name, option) %}
+    <input type="hidden" id="{{ option_name }}-{{ key }}-hidden" name="{{ option_name }}" value="ensure-empty-list"/>
     <div class="list-container">
         {% for key in (option.valid_keys if option.valid_keys is ordered else option.valid_keys|sort) %}
             <div class="list-entry">
@@ -202,6 +203,7 @@
 {% endmacro %}
 
 {% macro OptionSet(option_name, option) %}
+    <input type="hidden" id="{{ option_name }}-{{ key }}-hidden" name="{{ option_name }}" value="ensure-empty-list"/>
     <div class="set-container">
         {% for key in (option.valid_keys if option.valid_keys is ordered else option.valid_keys|sort) %}
             <div class="set-entry">
