@@ -38,7 +38,8 @@ from .options import (
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunPassiveAbilityPresence,
     SpearOfAdunPassivesPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms, VoidTradeWorkers,
-    DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup, MercenaryHighlanders, WarCouncilNerfs
+    DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup, MercenaryHighlanders, WarCouncilNerfs,
+    is_mission_in_soa_presence,
 )
 from .mission_order.slot_data import CampaignSlotData, LayoutSlotData, MissionSlotData, MissionOrderObjectSlotData
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData, MissionEntryRules
@@ -1566,19 +1567,20 @@ def calculate_kerrigan_options(ctx: SC2Context) -> int:
     return result
 
 
-def caclulate_soa_options(ctx: SC2Context) -> int:
+def caclulate_soa_options(ctx: SC2Context, mission: SC2Mission) -> int:
+    """
+    Pack SOA options into a single integer with bitflags.
+    0b000011 = SOA presence
+    0b000100 = SOA in no-builds
+    0b011000 = Passives presence
+    0b100000 = PAssives in no-builds
+    """
     result = 0
 
     # Bits 0, 1
     # SoA Calldowns available
     soa_presence_value = 0
-    if ctx.spear_of_adun_presence == SpearOfAdunPresence.option_not_present:
-        soa_presence_value = 0
-    elif ctx.spear_of_adun_presence == SpearOfAdunPresence.option_lotv_protoss:
-        soa_presence_value = 1
-    elif ctx.spear_of_adun_presence == SpearOfAdunPresence.option_protoss:
-        soa_presence_value = 2
-    elif ctx.spear_of_adun_presence == SpearOfAdunPresence.option_everywhere:
+    if is_mission_in_soa_presence(ctx.spear_of_adun_presence, mission):
         soa_presence_value = 3
     result |= soa_presence_value << 0
 
@@ -1590,17 +1592,11 @@ def caclulate_soa_options(ctx: SC2Context) -> int:
     # Bits 3,4
     # Autocasts
     soa_autocasts_presence_value = 0
-    if ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_not_present:
-        soa_autocasts_presence_value = 0
-    elif ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_lotv_protoss:
-        soa_autocasts_presence_value = 1
-    elif ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_protoss:
-        soa_autocasts_presence_value = 2
-    elif ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_everywhere:
+    if is_mission_in_soa_presence(ctx.spear_of_adun_passive_ability_presence, mission, SpearOfAdunPassiveAbilityPresence):
         soa_autocasts_presence_value = 3
     # Guardian Shell breaks without SoA on version 4+, but can be generated without SoA on version 3
-    if ctx.slot_data_version < 4 and soa_autocasts_presence_value < 2:
-        soa_autocasts_presence_value = 2
+    if ctx.slot_data_version < 4 and MissionFlag.Protoss in mission.flags:
+        soa_autocasts_presence_value = 3
     result |= soa_autocasts_presence_value << 3
 
     # Bit 5
@@ -1737,15 +1733,15 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         game_state = 0
         if not self.setup_done:
             self.setup_done = True
+            mission = lookup_id_to_mission[self.mission_id]
             start_items = calculate_items(self.ctx)
             missions_beaten = self.missions_beaten_count()
             kerrigan_level = get_kerrigan_level(self.ctx, start_items, missions_beaten)
             kerrigan_options = calculate_kerrigan_options(self.ctx)
-            soa_options = caclulate_soa_options(self.ctx)
+            soa_options = caclulate_soa_options(self.ctx, mission)
             generic_upgrade_options = calculate_generic_upgrade_options(self.ctx)
             trade_options = calculate_trade_options(self.ctx)
             mission_variant = get_mission_variant(self.mission_id)  # 0/1/2/3 for unchanged/Terran/Zerg/Protoss
-            mission = lookup_id_to_mission[self.mission_id]
             nova_fallback: bool
             if MissionFlag.Nova in mission.flags:
                 nova_fallback = self.ctx.use_nova_nco_fallback

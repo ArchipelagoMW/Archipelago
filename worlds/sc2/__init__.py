@@ -26,6 +26,7 @@ from .options import (
     GrantStoryTech, GenericUpgradeResearch, RequiredTactics,
     upgrade_included_names, EnableVoidTrade, FillerItemsDistribution, MissionOrderScouting, option_groups,
     NovaGhostOfAChanceVariant, MissionOrder, VanillaItemsOnly, ExcludeOverpoweredItems,
+    is_mission_in_soa_presence,
 )
 from .rules import get_basic_units, SC2Logic
 from . import settings
@@ -560,13 +561,12 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
     # Check if SOA actives should be present
     if world.options.spear_of_adun_presence != SpearOfAdunPresence.option_not_present:
         soa_missions = missions
+        soa_missions = [
+            m for m in soa_missions
+            if is_mission_in_soa_presence(world.options.spear_of_adun_presence.value, m)
+        ]
         if not world.options.spear_of_adun_present_in_no_build:
             soa_missions = [m for m in soa_missions if MissionFlag.NoBuild not in m.flags]
-        if world.options.spear_of_adun_presence == SpearOfAdunPresence.option_lotv_protoss:
-            soa_missions = [m for m in soa_missions if m.campaign == SC2Campaign.LOTV]
-        if world.options.spear_of_adun_presence in [SpearOfAdunPresence.option_lotv_protoss, SpearOfAdunPresence.option_protoss]:
-            soa_missions = [m for m in soa_missions if MissionFlag.Protoss in m.flags]
-
         soa_presence = len(soa_missions) > 0
     else:
         soa_presence = False
@@ -574,13 +574,16 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
     # Check if SOA passives should be present
     if world.options.spear_of_adun_passive_ability_presence != SpearOfAdunPassiveAbilityPresence.option_not_present:
         soa_missions = missions
+        soa_missions = [
+            m for m in soa_missions
+            if is_mission_in_soa_presence(
+                world.options.spear_of_adun_passive_ability_presence.value,
+                m,
+                SpearOfAdunPassiveAbilityPresence
+            )
+        ]
         if not world.options.spear_of_adun_passive_present_in_no_build:
             soa_missions = [m for m in soa_missions if MissionFlag.NoBuild not in m.flags]
-        if world.options.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_lotv_protoss:
-            soa_missions = [m for m in soa_missions if m.campaign == SC2Campaign.LOTV]
-        if world.options.spear_of_adun_passive_ability_presence in [SpearOfAdunPassiveAbilityPresence.option_protoss, SpearOfAdunPassiveAbilityPresence.option_lotv_protoss]:
-            soa_missions = [m for m in soa_missions if MissionFlag.Protoss in m.flags]
-
         soa_passive_presence = len(soa_missions) > 0
     else:
         soa_passive_presence = False
@@ -1031,6 +1034,7 @@ def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[StarcraftIte
         else:
             round_func = ceil
         add_kerrigan_level_items(size, round_func(float(total_levels) / size))
+
 
 def push_precollected_items_to_multiworld(world: SC2World, item_list: List[StarcraftItem]) -> None:
     # Clear the pre-collected items, as AP will try to do this for us,

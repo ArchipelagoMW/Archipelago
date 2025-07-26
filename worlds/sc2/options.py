@@ -726,22 +726,24 @@ class SpearOfAdunPresence(Choice):
     Affects only abilities used from Spear of Adun top menu.
 
     Not Present: Spear of Adun calldowns are unavailable.
-    LotV Protoss: Spear of Adun calldowns are only available in LotV main campaign
+    Vanilla: Spear of Adun calldowns are only available where they appear in the basegame (Protoss missions after The Growing Shadow)
     Protoss: Spear of Adun calldowns are available in any Protoss mission
     Everywhere: Spear of Adun calldowns are available in any mission of any race
+    Any Race LotV: Spear of Adun calldowns are available in any race-swapped variant of a LotV mission
     """
     display_name = "Spear of Adun Presence"
     option_not_present = 0
-    option_lotv_protoss = 1
+    option_vanilla = 4
     option_protoss = 2
     option_everywhere = 3
-    default = option_lotv_protoss
+    option_any_race_lotv = 1
+    default = option_vanilla
 
     # Fix case
     @classmethod
     def get_option_name(cls, value: int) -> str:
-        if value == SpearOfAdunPresence.option_lotv_protoss:
-            return "LotV Protoss"
+        if value == SpearOfAdunPresence.option_any_race_lotv:
+            return "Any Race LotV"
         else:
             return super().get_option_name(value)
 
@@ -763,22 +765,24 @@ class SpearOfAdunPassiveAbilityPresence(Choice):
     Does not affect building abilities like Orbital Assimilators or Warp Harmonization.
 
     Not Present: Autocasts are not available.
-    LotV Protoss: Spear of Adun autocasts are only available in LotV main campaign
+    Vanilla: Spear of Adun calldowns are only available where it appears in the basegame (Protoss missions after The Growing Shadow)
     Protoss: Spear of Adun autocasts are available in any Protoss mission
     Everywhere: Spear of Adun autocasts are available in any mission of any race
+    Any Race LotV: Spear of Adun autocasts are available in any race-swapped variant of a LotV mission
     """
     display_name = "Spear of Adun Passive Ability Presence"
     option_not_present = 0
-    option_lotv_protoss = 1
+    option_vanilla = 4
     option_protoss = 2
     option_everywhere = 3
-    default = option_lotv_protoss
+    option_any_race_lotv = 1
+    default = option_vanilla
 
     # Fix case
     @classmethod
     def get_option_name(cls, value: int) -> str:
-        if value == SpearOfAdunPresence.option_lotv_protoss:
-            return "LotV Protoss"
+        if value == SpearOfAdunPresence.option_any_race_lotv:
+            return "Any Race LotV"
         else:
             return super().get_option_name(value)
 
@@ -1642,6 +1646,30 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
                 excluded_missions = excluded_missions.union(variants)
 
     return excluded_missions
+
+
+def is_mission_in_soa_presence(
+    spear_of_adun_presence: int,
+    mission: SC2Mission,
+    option_class: Type[SpearOfAdunPresence] | Type[SpearOfAdunPassiveAbilityPresence] = SpearOfAdunPresence
+) -> bool:
+    """
+    Returns True if the mission can have Spear of Adun abilities.
+    No-build presence must be checked separately.
+    """
+    return (
+        (spear_of_adun_presence == option_class.option_everywhere)
+        or (spear_of_adun_presence == option_class.option_protoss and MissionFlag.Protoss in mission.flags)
+        or (spear_of_adun_presence == option_class.option_any_race_lotv
+            and (mission.campaign == SC2Campaign.LOTV or MissionFlag.VanillaSoa in mission.flags)
+        )
+        or (spear_of_adun_presence == option_class.option_vanilla
+            and (MissionFlag.VanillaSoa in mission.flags  # Keeps SOA off on Growing Shadow, as that's vanilla behaviour
+                or (MissionFlag.NoBuild in mission.flags and mission.campaign == SC2Campaign.LOTV)
+            )
+        )
+    )
+
 
 
 static_mission_orders = [
