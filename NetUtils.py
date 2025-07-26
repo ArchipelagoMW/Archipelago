@@ -499,7 +499,7 @@ class MultiData(typing.TypedDict):
     er_hint_data: dict[int, dict[int, str]]
     precollected_items: dict[int, list[int]]
     precollected_hints: dict[int, set[Hint]]
-    version: tuple[int, ...]
+    version: tuple[int, int, int]
     tags: list[str]
     minimum_versions: MinimumVersions
     seed_name: str

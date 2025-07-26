@@ -331,7 +331,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     "er_hint_data": er_hint_data,
                     "precollected_items": precollected_items,
                     "precollected_hints": precollected_hints,
-                    "version": tuple(version_tuple),
+                    "version": (version_tuple.major, version_tuple.minor, version_tuple.build),
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
                     "seed_name": multiworld.seed_name,
@@ -339,6 +339,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     "datapackage": data_package,
                     "race_mode": int(multiworld.is_race),
                 }
+                # TODO: change to `"version": version_tuple` after getting better serialization
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
 
                 for key in ("slot_data", "er_hint_data"):
