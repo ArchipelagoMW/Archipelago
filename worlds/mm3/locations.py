@@ -123,7 +123,7 @@ wily_6_locations: dict[str, int | None] = {
 }
 
 
-etank_1ups: dict[str, dict[str, int | None]] = {
+etank_1ups: dict[str, dict[str, int]] = {
     "Needle Man Stage": {
         names.needle_man_c2: 0x890201
     },
@@ -186,7 +186,7 @@ etank_1ups: dict[str, dict[str, int | None]] = {
     }
 }
 
-energy_pickups: dict[str, dict[str, int | None]] = {
+energy_pickups: dict[str, dict[str, int]] = {
     "Needle Man Stage": {
         names.needle_man_c1: 0x890200
     },

@@ -299,7 +299,7 @@ def write_palette_shuffle(world: "MM3World", rom: "MM3ProcedurePatch") -> None:
                         real_colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
                         palettes_to_write[character] = real_colors
         else:
-            shuffled_colors = list(MM3_COLORS.values()[:-3])  # only include one Doc Robot
+            shuffled_colors = list(MM3_COLORS.values())[:-3]  # only include one Doc Robot
             shuffled_colors.append((0x2C, 0x11))  # Mega Buster
             world.random.shuffle(shuffled_colors)
             for character in palette_pointers:

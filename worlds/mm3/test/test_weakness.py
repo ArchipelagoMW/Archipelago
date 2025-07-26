@@ -1,8 +1,7 @@
 from math import ceil
 
 from .bases import MM3TestBase
-from ..rules import minimum_weakness_requirement
-from ..options import bosses
+from ..rules import minimum_weakness_requirement, bosses
 
 
 # Need to figure out how this test should work
@@ -32,9 +31,9 @@ def validate_wily_4(base: MM3TestBase) -> None:
         )
         for boss, weapon_damages in weapon_boss.items()
     }
-    flexibility = sorted(flexibility, key=flexibility.get)  # Fast way to sort dict by value
-    used_weapons = {i: set() for i in range(8)}
-    for boss in flexibility:
+    boss_flexibility = sorted(flexibility, key=flexibility.get)  # Fast way to sort dict by value
+    used_weapons: dict[int, set[int]] = {i: set() for i in range(8)}
+    for boss in boss_flexibility:
         boss_damage = weapon_boss[boss]
         weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in
                          boss_damage.items() if weapon_energy[weapon] > 0}

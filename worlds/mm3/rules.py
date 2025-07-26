@@ -110,7 +110,7 @@ weapon_costs = {
 
 
 def can_defeat_enough_rbms(state: "CollectionState", player: int,
-                           required: int, boss_requirements: dict[int, list[int]]):
+                           required: int, boss_requirements: dict[int, list[int]]) -> bool:
     can_defeat = 0
     for boss, reqs in boss_requirements.items():
         if boss in robot_masters:
@@ -121,19 +121,19 @@ def can_defeat_enough_rbms(state: "CollectionState", player: int,
     return False
 
 
-def has_rush_vertical(state: "CollectionState", player: int):
+def has_rush_vertical(state: "CollectionState", player: int) -> bool:
     return state.has_any([names.rush_coil, names.rush_jet], player)
 
 
-def can_traverse_long_water(state: "CollectionState", player: int):
+def can_traverse_long_water(state: "CollectionState", player: int) -> bool:
     return state.has_any([names.rush_marine, names.rush_jet], player)
 
 
-def has_any_rush(state: "CollectionState", player: int):
+def has_any_rush(state: "CollectionState", player: int) -> bool:
     return state.has_any([names.rush_coil, names.rush_jet, names.rush_marine], player)
 
 
-def has_rush_jet(state: "CollectionState", player: int):
+def has_rush_jet(state: "CollectionState", player: int) -> bool:
     return state.has(names.rush_jet, player)
 
 
@@ -220,9 +220,9 @@ def set_rules(world: "MM3World") -> None:
         )
         for boss, weapon_damages in weapon_boss.items()
     }
-    flexibility = sorted(flexibility, key=flexibility.get)  # Fast way to sort dict by value
-    used_weapons = {i: set() for i in range(8)}
-    for boss in flexibility:
+    boss_flexibility = sorted(flexibility, key=flexibility.get)  # Fast way to sort dict by value
+    used_weapons: dict[int, set[int]] = {i: set() for i in range(8)}
+    for boss in boss_flexibility:
         boss_damage = weapon_boss[boss]
         weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in
                          boss_damage.items() if weapon_energy[weapon] > 0}

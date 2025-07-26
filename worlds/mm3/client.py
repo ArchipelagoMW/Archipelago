@@ -240,11 +240,11 @@ MM3_CONSUMABLE_TABLE: dict[int, dict[int, tuple[int, int]]] = {
 }
 
 
-def to_oneup_format(val: int):
+def to_oneup_format(val: int) -> int:
     return ((val // 10) * 0x10) + val % 10
 
 
-def from_oneup_format(val: int):
+def from_oneup_format(val: int) -> int:
     return ((val // 0x10) * 10) + val % 0x10
 
 
@@ -337,7 +337,7 @@ def cmd_request(self: "BizHawkClientCommandProcessor", amount: str, target: str)
     logger.info(f"Restoring {amount} {request_to_name[target.upper()]}.")
 
 
-def cmd_autoheal(self) -> None:
+def cmd_autoheal(self: "BizHawkClientCommandProcessor") -> None:
     """Enable auto heal from EnergyLink."""
     if self.ctx.game != "Mega Man 3":
         logger.warning("This command can only be used when playing Mega Man 3.")
