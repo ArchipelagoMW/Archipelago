@@ -9,17 +9,12 @@ class GrinchItemData(NamedTuple):
     id: Optional[int]
     classification: IC
     update_ram_addr: list[GrinchRamData]
-    bit_size: int = 1
-    value: Optional[int] = None #none is empty/null
-    # Either set or add either hex or unsigned values through Client.py
-    # Hex uses 0x00, unsigned are base whole numbers
-    binary_bit_pos: Optional[int] = None
     second_item_group: Optional[str] = None
 
 class GrinchItem(Item):
     game: str = "The Grinch"
 
-#Tells server what item id it is
+    #Tells server what item id it is
     @staticmethod
     def get_apid(code: int):
         #If you give me an input id, I will return the Grinch equivalent server/ap id

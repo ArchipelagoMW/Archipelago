@@ -1,21 +1,16 @@
 from typing import NamedTuple, Optional
 
+from .RamHandler import GrinchRamData
 from BaseClasses import Location
-from BaseClasses import ItemClassification as IC
 
 class GrinchLocationData(NamedTuple):
     region: str
     location_group: str
     id: Optional[int]
-    classification: IC
     update_ram_addr: list[GrinchRamData]
-    value: Optional[int] = None #I can either set or add either hex or unsigned values through Client.py
-    binary_bit_pos: Optional[int] = None
-    bit_size: int = 1
 
 class GrinchLocation(Location):
     game: str = "The Grinch"
-    location_group: str
 
     @staticmethod
     def get_apid(code: int):
@@ -76,24 +71,24 @@ grinch_locations = {
 #Need to find binary values for individual blueprints, but all ram addresses are found
 #Blueprints
 #Binoculars Blueprints
-    "Binoculars Blueprint - Post Office Roof": GrinchLocationData("Binocular Blueprints", 600, [GrinchRamData(0x80100824, binary_bit_pos=0)]),
-    "Binoculars Blueprint - City Hall Library - Left Side": GrinchLocationData("Binocular Blueprints", 601, [GrinchRamData(0x8001021F, binary_bit_pos=0)]),
-    "Binoculars Blueprint - City Hall Library - Front Side": GrinchLocationData("Binocular Blueprints", 602, [GrinchRamData(0x8001021F, binary_bit_pos=0)]),
-    "Binoculars Blueprint - City Hall Library - Right Side": GrinchLocationData("Binocular Blueprints", 603, [GrinchRamData(0x8001021F, binary_bit_pos=0)]),
+    "Binoculars Blueprint - Post Office Roof": GrinchLocationData("Binocular Blueprints", 600, [GrinchRamData(0x80100825, binary_bit_pos=3)]),
+    "Binoculars Blueprint - City Hall Library - Left Side": GrinchLocationData("Binocular Blueprints", 601, [GrinchRamData(0x8001020B, binary_bit_pos=7)]),
+    "Binoculars Blueprint - City Hall Library - Front Side": GrinchLocationData("Binocular Blueprints", 602, [GrinchRamData(0x8001020B, binary_bit_pos=6)]),
+    "Binoculars Blueprint - City Hall Library - Right Side": GrinchLocationData("Binocular Blueprints", 603, [GrinchRamData(0x8001020B, binary_bit_pos=5)]),
 #Rotten Egg Launcher Blueprints
-    "Rotten Egg Launcher Blueprint - Outside City Hall": GrinchLocationData("Rotten Egg Launcher Blueprints", 700, [GrinchRamData()]),
-    "Rotten Egg Launcher Blueprint - Outside Clock Tower": GrinchLocationData("Rotten Egg Launcher Blueprints", 701, [GrinchRamData()]),
-    "Rotten Egg Launcher Blueprint - Post Office - Front of Silver Door": GrinchLocationData("Rotten Egg Launcher Blueprints", 702, [GrinchRamData()]),
-    "Rotten Egg Launcher Blueprint - Post Office - After Mission Completion": GrinchLocationData("Rotten Egg Launcher Blueprints", 703, [GrinchRamData()]),
+    "Rotten Egg Launcher Blueprint - Outside City Hall": GrinchLocationData("Rotten Egg Launcher Blueprints", 700, [GrinchRamData(0x8001020B, binary_bit_pos=1)]),
+    "Rotten Egg Launcher Blueprint - Outside Clock Tower": GrinchLocationData("Rotten Egg Launcher Blueprints", 701, [GrinchRamData(0x8001020B, binary_bit_pos=2)]),
+    "Rotten Egg Launcher Blueprint - Post Office - Front of Silver Door": GrinchLocationData("Rotten Egg Launcher Blueprints", 702, [GrinchRamData(0x8001021C, binary_bit_pos=2)]),
+    "Rotten Egg Launcher Blueprint - Post Office - After Mission Completion": GrinchLocationData("Rotten Egg Launcher Blueprints", 703, [GrinchRamData(0x8001021C, binary_bit_pos=3)]),
 #Rocket Spring Blueprints
-    "Rocket Spring Blueprint - Behind Vacuum": GrinchLocationData("Rocket Spring Blueprints", 800, [GrinchRamData()]),
-    "Rocket Spring Blueprint - Front of 2nd House near entrance": GrinchLocationData("Rocket Spring Blueprints", 801, [GrinchRamData()]),
-    "Rocket Spring Blueprint - Near Tree House on Ground": GrinchLocationData("Rocket Spring Blueprints", 802, [GrinchRamData()]),
+    "Rocket Spring Blueprint - Behind Vacuum": GrinchLocationData("Rocket Spring Blueprints", 800, [GrinchRamData(0x80010243, binary_bit_pos=4)]),
+    "Rocket Spring Blueprint - Front of 2nd House near entrance": GrinchLocationData("Rocket Spring Blueprints", 801, [GrinchRamData(0x80010243, binary_bit_pos=2)]),
+    "Rocket Spring Blueprint - Near Tree House on Ground": GrinchLocationData("Rocket Spring Blueprints", 802, [GrinchRamData(0x80010243, binary_bit_pos=5)]),
     "Rocket Spring Blueprint - Near Cable Car House": GrinchLocationData("Rocket Spring Blueprints", 804, [GrinchRamData()]),
     "Rocket Spring Blueprint - Near Who Snowball in Cave": GrinchLocationData("Rocket Spring Blueprints", 805, [GrinchRamData()]),
-    "Rocket Spring Blueprint - Branch Platform Closest to Glue Cannon": GrinchLocationData("Rocket Spring Blueprints", 806, [GrinchRamData()]),
-    "Rocket Spring Blueprint - Branch Platform Near Beast": GrinchLocationData("Rocket Spring Blueprints", 807, [GrinchRamData()]),
-    "Rocket Spring Blueprint - Branch Platform Ledge Grab House": GrinchLocationData("Rocket Spring Blueprints", 808, [GrinchRamData()]),
+    "Rocket Spring Blueprint - Branch Platform Closest to Glue Cannon": GrinchLocationData("Rocket Spring Blueprints", 806, [GrinchRamData(0x80010243, binary_bit_pos=3)]),
+    "Rocket Spring Blueprint - Branch Platform Near Beast": GrinchLocationData("Rocket Spring Blueprints", 807, [GrinchRamData(0x80010243, binary_bit_pos=1)]),
+    "Rocket Spring Blueprint - Branch Platform Ledge Grab House": GrinchLocationData("Rocket Spring Blueprints", 808, [GrinchRamData(0x80010243, binary_bit_pos=7)]),
     "Rocket Spring Blueprint - On Tree House": GrinchLocationData("Rocket Spring Blueprints", 809, [GrinchRamData()]),
 #Slime Shooter Blueprints
     "Slime Shooter Blueprint - Branch Platform Elevated House": GrinchLocationData("Slime Shooter Blueprints", 900, [GrinchRamData()]),
@@ -116,32 +111,32 @@ grinch_locations = {
     "Octopus Climbing Device Blueprint - Guardian's House - Right side of Guardian House": GrinchLocationData("Octopus Climbing Device Blueprints", 1008, [GrinchRamData()]),
     "Octopus Climbing Device Blueprint - Inside Guardian's House": GrinchLocationData("Octopus Climbing Device Blueprints", 1009, [GrinchRamData()]),
 #Marine Mobile Blueprints
-    "Marine Mobile Blueprint - South Shore - Bridge to Scout's Hut": GrinchLocationData("Marine Mobile Blueprints", 1100, [GrinchRamData()]),
-    "Marine Mobile Blueprint - South Shore - Tent near Porcupine": GrinchLocationData("Marine Mobile Blueprints", 1101, [GrinchRamData()]),
-    "Marine Mobile Blueprint - South Shore - Near Scout Shack": GrinchLocationData("Marine Mobile Blueprints", 1102, [GrinchRamData()]),
+    "Marine Mobile Blueprint - South Shore - Bridge to Scout's Hut": GrinchLocationData("Marine Mobile Blueprints", 1100, [GrinchRamData(0x80010281, binary_bit_pos=6)]),
+    "Marine Mobile Blueprint - South Shore - Tent near Porcupine": GrinchLocationData("Marine Mobile Blueprints", 1101, [GrinchRamData(0x80010281, binary_bit_pos=6)]),
+    "Marine Mobile Blueprint - South Shore - Near Scout Shack": GrinchLocationData("Marine Mobile Blueprints", 1102, [GrinchRamData(0x80010281, binary_bit_pos=8)]),
     "Marine Mobile Blueprint - South Shore - Under a Hill Bridge": GrinchLocationData("Marine Mobile Blueprints", 1103, [GrinchRamData()]),
     "Marine Mobile Blueprint - South Shore - Scout's Hut Roof": GrinchLocationData("Marine Mobile Blueprints", 1104, [GrinchRamData()]),
     "Marine Mobile Blueprint - South Shore - Jump from Boulder": GrinchLocationData("Marine Mobile Blueprints", 1105, [GrinchRamData()]),
     "Marine Mobile Blueprint - South Shore - Rope Swing by Beast": GrinchLocationData("Marine Mobile Blueprints", 1106, [GrinchRamData()]),
     "Marine Mobile Blueprint - South Shore - Near Summer Beast": GrinchLocationData("Marine Mobile Blueprints", 1107, [GrinchRamData()]),
-    "Marine Mobile Blueprint - North Shore - Below Bridge": GrinchLocationData("Marine Mobile Blueprints", 1108, [GrinchRamData()]),
-    "Marine Mobile Blueprint - North Shore - Behind Skunk Hut": GrinchLocationData("Marine Mobile Blueprints", 1109, [GrinchRamData()]),
+    "Marine Mobile Blueprint - North Shore - Below Bridge": GrinchLocationData("Marine Mobile Blueprints", 1108, [GrinchRamData(0x80010293, binary_bit_pos=1)]),
+    "Marine Mobile Blueprint - North Shore - Behind Skunk Hut": GrinchLocationData("Marine Mobile Blueprints", 1109, [GrinchRamData(0x80010293, binary_bit_pos=3)]),
     "Marine Mobile Blueprint - North Shore - Inside Skunk Hut": GrinchLocationData("Marine Mobile Blueprints", 1110, [GrinchRamData()]),
     "Marine Mobile Blueprint - North Shore - Fenced in Area": GrinchLocationData("Marine Mobile Blueprints", 1111, [GrinchRamData()]),
-    "Marine Mobile Blueprint - North Shore - Boulder Box near Bridge": GrinchLocationData("Marine Mobile Blueprints", 1112, [GrinchRamData()]),
-    "Marine Mobile Blueprint - North Shore - Boulder Box behind Skunk Hut": GrinchLocationData("Marine Mobile Blueprints", 1113, [GrinchRamData()]),
+    "Marine Mobile Blueprint - North Shore - Boulder Box near Bridge": GrinchLocationData("Marine Mobile Blueprints", 1112, [GrinchRamData(0x80010293, binary_bit_pos=4)]),
+    "Marine Mobile Blueprint - North Shore - Boulder Box behind Skunk Hut": GrinchLocationData("Marine Mobile Blueprints", 1113, [GrinchRamData(0x80010293, binary_bit_pos=5)]),
     "Marine Mobile Blueprint - North Shore - Inside Drill House": GrinchLocationData("Marine Mobile Blueprints", 1114, [GrinchRamData()]),
-    "Marine Mobile Blueprint - North Shore - Crow Platform": GrinchLocationData("Marine Mobile Blueprints", 1115, [GrinchRamData()]),
+    "Marine Mobile Blueprint - North Shore - Crow Platform": GrinchLocationData("Marine Mobile Blueprints", 1115, [GrinchRamData(0x80010293, binary_bit_pos=2)]),
 #Grinch Copter Blueprints
-    "Grinch Copter Blueprint - Whoville City Hall - Safe Room": GrinchLocationData("Grinch Copter Blueprints", 1200, [GrinchRamData()]),
-    "Grinch Copter Blueprint - Whoville City Hall - Statue Room": GrinchLocationData("Grinch Copter Blueprints", 1201, [GrinchRamData()]),
+    "Grinch Copter Blueprint - Whoville City Hall - Safe Room": GrinchLocationData("Grinch Copter Blueprints", 1200, [GrinchRamData(0x8001020B, binary_bit_pos=8)]),
+    "Grinch Copter Blueprint - Whoville City Hall - Statue Room": GrinchLocationData("Grinch Copter Blueprints", 1201, [GrinchRamData(0x80010220, binary_bit_pos=1)]),
     "Grinch Copter Blueprint - Whoville Clock Tower - Before Bells": GrinchLocationData("Grinch Copter Blueprints", 1202, [GrinchRamData()]),
     "Grinch Copter Blueprint - Whoville Clock Tower - After Bells": GrinchLocationData("Grinch Copter Blueprints", 1203, [GrinchRamData()]),
-    "Grinch Copter Blueprint - Who Forest Ski Resort - Inside Dog's Fence": GrinchLocationData("Grinch Copter Blueprints", 1204, [GrinchRamData()]),
-    "Grinch Copter Blueprint - Who Forest Ski Resort - Max Cave": GrinchLocationData("Grinch Copter Blueprints", 1205, [GrinchRamData()]),
+    "Grinch Copter Blueprint - Who Forest Ski Resort - Inside Dog's Fence": GrinchLocationData("Grinch Copter Blueprints", 1204, [GrinchRamData((0x80010234, binary_bit_pos=8)]),
+    "Grinch Copter Blueprint - Who Forest Ski Resort - Max Cave": GrinchLocationData("Grinch Copter Blueprints", 1205, [GrinchRamData(0x80010234, binary_bit_pos=7)]),
     "Grinch Copter Blueprint - Who Forest Civic Center - Climb across wall": GrinchLocationData("Grinch Copter Blueprints", 1206, [GrinchRamData()]),
-    "Grinch Copter Blueprint - Who Forest Civic Center - Icicle": GrinchLocationData("Grinch Copter Blueprints", 1207, [GrinchRamData()]),
-    "Grinch Copter Blueprint - Who Dump Outside of Power Plant - First": GrinchLocationData("Grinch Copter Blueprints", 1208, [GrinchRamData()]),
+    "Grinch Copter Blueprint - Who Forest Civic Center - Shoot the Icicle": GrinchLocationData("Grinch Copter Blueprints", 1207, [GrinchRamData()]),
+    "Grinch Copter Blueprint - Who Dump Outside of Power Plant - First": GrinchLocationData("Grinch Copter Blueprints", 1208, [GrinchRamData(0x80010220, binary_bit_pos=2)]),
     "Grinch Copter Blueprint - Who Dump Outside of Power Plant - Second Gate": GrinchLocationData("Grinch Copter Blueprints", 1209, [GrinchRamData()]),
     "Grinch Copter Blueprint - Who Dump Inside of Power Plant - Before Mission": GrinchLocationData("Grinch Copter Blueprints", 1210, [GrinchRamData()]),
     "Grinch Copter Blueprint - Who Dump Inside of Power Plant - After Mission": GrinchLocationData("Grinch Copter Blueprints", 1211, [GrinchRamData()]),
