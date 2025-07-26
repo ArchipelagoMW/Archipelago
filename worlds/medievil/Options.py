@@ -51,6 +51,13 @@ class MonsterSanityToggle(Toggle):
     option_true = 1
     option_false = 0
     
+class RuneSanityToggle(Toggle):
+    """Sets whether to mix runes into the pool (Is this by default, but doesn't work. Vanilla progression)"""
+    display_name = "RuneSanity"
+    default = 0
+    option_true = 1
+    option_false = 0    
+    
 class BookSanityToggle(Toggle):
     """Sets whether reading books counts as checks (Doesn't work)"""
     display_name = "BookSanity"
@@ -66,4 +73,5 @@ class MedievilOption(PerGameCommonOptions):
     exclude_dynamic_items: ExcludeDynamicItems
     monstersanity: MonsterSanityToggle
     booksanity: BookSanityToggle
+    runesanity: RuneSanityToggle
     guaranteed_items: GuaranteedItemsOption
