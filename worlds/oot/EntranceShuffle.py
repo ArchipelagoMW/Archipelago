@@ -850,7 +850,7 @@ def validate_world(ootworld, entrance_placed, locations_to_ensure_reachable, all
     # Check basic refills, time passing, return to ToT
     if (ootworld.shuffle_special_interior_entrances or ootworld.shuffle_overworld_entrances or ootworld.spawn_positions) and \
         (entrance_placed == None or entrance_placed.type in ['SpecialInterior', 'Overworld', 'Spawn', 'WarpSong', 'OwlDrop']):
-        
+
         valid_starting_regions = {'Kokiri Forest', 'Kakariko Village'}
         if not any(region for region in valid_starting_regions if none_state.can_reach(region, 'Region', player)):
             raise EntranceShuffleError('Invalid starting area')
@@ -914,8 +914,8 @@ def get_entrance_replacing(region, entrance_name, player):
         return original_entrance
 
     try:
-        return next(filter(lambda entrance: entrance.replaces and entrance.replaces.name == entrance_name and \
-                                            entrance.parent_region and entrance.parent_region.name != 'Root Exits' and \
+        return next(filter(lambda entrance: entrance.replaces and entrance.replaces.name == entrance_name and
+                                            entrance.parent_region and entrance.parent_region.name != 'Root Exits' and
                                             entrance.type not in ('OwlDrop', 'Spawn', 'WarpSong') and entrance.player == player,
                                             region.entrances))
     except StopIteration:

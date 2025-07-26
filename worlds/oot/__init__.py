@@ -158,24 +158,24 @@ class OOTWorld(World):
     item_name_groups = {
         # internal groups
         "medallions": {"Light Medallion", "Forest Medallion", "Fire Medallion",
-            "Water Medallion", "Shadow Medallion", "Spirit Medallion"},
+                       "Water Medallion", "Shadow Medallion", "Spirit Medallion"},
         "stones": {"Kokiri Emerald", "Goron Ruby", "Zora Sapphire"},
         "rewards": {"Light Medallion", "Forest Medallion", "Fire Medallion",
-            "Water Medallion", "Shadow Medallion", "Spirit Medallion",
-            "Kokiri Emerald", "Goron Ruby", "Zora Sapphire"},
+                    "Water Medallion", "Shadow Medallion", "Spirit Medallion",
+                    "Kokiri Emerald", "Goron Ruby", "Zora Sapphire"},
         "logic_bottles": {"Bottle", "Bottle with Milk", "Deliver Letter",
-            "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion",
-            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish",
-            "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"},
+                          "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion",
+                          "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish",
+                          "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"},
 
         # hint groups
         "Bottles": {"Bottle", "Bottle with Milk", "Rutos Letter",
-            "Bottle with Big Poe", "Bottle with Red Potion", "Bottle with Green Potion",
-            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish",
-            "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"},
+                    "Bottle with Big Poe", "Bottle with Red Potion", "Bottle with Green Potion",
+                    "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish",
+                    "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"},
         "Adult Trade Item": {"Pocket Egg", "Pocket Cucco", "Cojiro", "Odd Mushroom",
-            "Odd Potion", "Poachers Saw", "Broken Sword", "Prescription",
-            "Eyeball Frog", "Eyedrops", "Claim Check"},
+                             "Odd Potion", "Poachers Saw", "Broken Sword", "Prescription",
+                             "Eyeball Frog", "Eyedrops", "Claim Check"},
         "Keys": {"Small Key (Bottom of the Well)", "Small Key (Fire Temple)", "Small Key (Forest Temple)",
                  "Small Key (Ganons Castle)", "Small Key (Gerudo Training Ground)", "Small Key (Shadow Temple)",
                  "Small Key (Spirit Temple)", "Small Key (Thieves Hideout)", "Small Key (Water Temple)",
@@ -192,7 +192,6 @@ class OOTWorld(World):
     }
 
     location_name_groups = build_location_name_groups()
-
 
     def __init__(self, world, player):
         self.hint_data_available = threading.Event()
@@ -347,7 +346,7 @@ class OOTWorld(World):
 
         if self.misc_hints:
             self.misc_hints = ['ganondorf', 'altar', 'warp_songs', 'dampe_diary',
-                '10_skulltulas', '20_skulltulas', '30_skulltulas', '40_skulltulas', '50_skulltulas']
+                               '10_skulltulas', '20_skulltulas', '30_skulltulas', '40_skulltulas', '50_skulltulas']
         else:
             self.misc_hints = []
 
@@ -401,8 +400,7 @@ class OOTWorld(World):
         elif self.key_rings == 'choose':
             self.key_rings = self.key_rings_list
         elif self.key_rings == 'random_dungeons':
-            self.key_rings = self.random.sample(keyring_dungeons,
-                self.random.randint(0, len(keyring_dungeons)))
+            self.key_rings = self.random.sample(keyring_dungeons, self.random.randint(0, len(keyring_dungeons)))
 
         # Determine which dungeons are MQ. Not compatible with glitched logic.
         mq_dungeons = set()
@@ -424,9 +422,9 @@ class OOTWorld(World):
         self.empty_dungeons = {name: False for name in self.dungeon_mq}
 
         # Determine which dungeons have shortcuts. Not compatible with glitched logic.
-        shortcut_dungeons = ['Deku Tree', 'Dodongos Cavern', \
-            'Jabu Jabus Belly', 'Forest Temple', 'Fire Temple', \
-            'Water Temple', 'Shadow Temple', 'Spirit Temple']
+        shortcut_dungeons = ['Deku Tree', 'Dodongos Cavern',
+                             'Jabu Jabus Belly', 'Forest Temple', 'Fire Temple',
+                             'Water Temple', 'Shadow Temple', 'Spirit Temple']
         if self.logic_rules != 'glitched':
             if self.dungeon_shortcuts_choice == 'off':
                 self.dungeon_shortcuts = set()
@@ -1088,8 +1086,8 @@ class OOTWorld(World):
             rom.restore()
 
             apz5 = OoTContainer(patch_data, outfile_name, output_directory,
-                player=self.player,
-                player_name=self.multiworld.get_player_name(self.player))
+                                player=self.player,
+                                player_name=self.multiworld.get_player_name(self.player))
             apz5.write()
 
     # Gathers hint data for OoT. Loops over all world locations for woth, barren, and major item locations.
@@ -1100,7 +1098,7 @@ class OOTWorld(World):
                     if autoworld.hints != 'none'
                     and autoworld.hint_dist_user['distribution'][hint_type]['copies'] > 0
                     and (autoworld.hint_dist_user['distribution'][hint_type]['fixed'] > 0
-                      or autoworld.hint_dist_user['distribution'][hint_type]['weight'] > 0)}
+                         or autoworld.hint_dist_user['distribution'][hint_type]['weight'] > 0)}
 
         try:
             item_hint_players = hint_type_players('item')
@@ -1122,7 +1120,7 @@ class OOTWorld(World):
                     player = loc.item.player
                     autoworld = multiworld.worlds[player]
                     if ((player in item_hint_players and (autoworld.is_major_item(loc.item) or loc.item.name in autoworld.item_added_hint_types['item']))
-                                or (loc.player in item_hint_players and loc.name in multiworld.worlds[loc.player].added_hint_types['item'])):
+                         or (loc.player in item_hint_players and loc.name in multiworld.worlds[loc.player].added_hint_types['item'])):
                         autoworld.major_item_locations.append(loc)
 
                     if loc.game == "Ocarina of Time" and loc.item.code and (not loc.locked or
@@ -1163,7 +1161,7 @@ class OOTWorld(World):
                                     multiworld.worlds[player].required_locations.append(loc)
             for player in barren_hint_players:
                 multiworld.worlds[player].empty_areas = {region: info for (region, info) in items_by_region[player].items()
-                                                    if info['is_barren']}
+                                                         if info['is_barren']}
         except Exception as e:
             raise e
         finally:
@@ -1326,7 +1324,7 @@ class OOTWorld(World):
 
     def get_shufflable_entrances(self, type=None, only_primary=False):
         return [entrance for entrance in self.get_entrances() if ((type == None or entrance.type == type)
-            and (not only_primary or entrance.primary))]
+                                                                   and (not only_primary or entrance.primary))]
 
     def get_shuffled_entrances(self, type=None, only_primary=False):
         return [entrance for entrance in self.get_shufflable_entrances(type=type, only_primary=only_primary) if
@@ -1384,21 +1382,21 @@ class OOTWorld(World):
 def valid_dungeon_item_location(world: OOTWorld, option: str, dungeon: str, loc: OOTLocation) -> bool:
     if option == 'dungeon':
         return (getattr(loc.parent_region.dungeon, 'name', None) == dungeon
-            and (world.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations))
+                and (world.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations))
     elif option == 'any_dungeon':
         return (loc.parent_region.dungeon is not None
-            and (world.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations))
+                and (world.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations))
     elif option == 'overworld':
         return (loc.parent_region.dungeon is None
-            and (loc.type != 'Shop' or loc.name in world.shop_prices)
-            and (world.shuffle_song_items != 'song' or loc.type != 'Song')
-            and (world.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations))
+                and (loc.type != 'Shop' or loc.name in world.shop_prices)
+                and (world.shuffle_song_items != 'song' or loc.type != 'Song')
+                and (world.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations))
     elif option == 'regional':
         color = HintArea.for_dungeon(dungeon).color
         return (HintArea.at(loc).color == color
-            and (loc.type != 'Shop' or loc.name in world.shop_prices)
-            and (world.shuffle_song_items != 'song' or loc.type != 'Song')
-            and (world.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations))
+                and (loc.type != 'Shop' or loc.name in world.shop_prices)
+                and (world.shuffle_song_items != 'song' or loc.type != 'Song')
+                and (world.shuffle_song_items != 'dungeon' or loc.name not in dungeon_song_locations))
     return False
     # raise ValueError(f'Unexpected argument to valid_dungeon_item_location: {option}')
 
@@ -1430,8 +1428,7 @@ def gather_locations(multiworld: MultiWorld,
     if any(map(lambda v: v == 'keysanity', fill_opts.values())):
         return None
     for player, option in fill_opts.items():
-        condition = functools.partial(valid_dungeon_item_location,
-            multiworld.worlds[player], option, dungeon)
+        condition = functools.partial(valid_dungeon_item_location, multiworld.worlds[player], option, dungeon)
         locations += filter(condition, multiworld.get_unfilled_locations(player=player))
 
     return locations

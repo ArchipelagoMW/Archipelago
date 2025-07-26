@@ -436,7 +436,9 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             # tod has DAY or (tod == NONE and (ss or find a path from a provider))
             # parsing is better than constructing this expression by hand
             r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
-            return ast.parse(f"(state.has('Ocarina', player) and state.has('Suns Song', player)) or state._oot_reach_at_time('{r.name}', TimeOfDay.DAY, [], player)", mode='eval').body
+            return ast.parse(
+                f"(state.has('Ocarina', player) and state.has('Suns Song', player)) or state._oot_reach_at_time('{r.name}', TimeOfDay.DAY, [], player)",
+                mode='eval').body
         return ast.NameConstant(True)
 
     def at_dampe_time(self, node):
@@ -455,7 +457,9 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             # tod has DAMPE or (tod == NONE and (ss or find a path from a provider))
             # parsing is better than constructing this expression by hand
             r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
-            return ast.parse(f"(state.has('Ocarina', player) and state.has('Suns Song', player)) or state._oot_reach_at_time('{r.name}', TimeOfDay.DAMPE, [], player)", mode='eval').body
+            return ast.parse(
+                f"(state.has('Ocarina', player) and state.has('Suns Song', player)) or state._oot_reach_at_time('{r.name}', TimeOfDay.DAMPE, [], player)",
+                mode='eval').body
         return ast.NameConstant(True)
 
     # Parse entry point

@@ -319,10 +319,10 @@ COLOR_MAP = {
 
 MISC_MESSAGES = {
     0x507B: (bytearray(
-            b"\x08I tell you, I saw him!\x04" \
-            b"\x08I saw the ghostly figure of Damp\x96\x01" \
-            b"the gravekeeper sinking into\x01" \
-            b"his grave. It looked like he was\x01" \
+            b"\x08I tell you, I saw him!\x04"
+            b"\x08I saw the ghostly figure of Damp\x96\x01"
+            b"the gravekeeper sinking into\x01"
+            b"his grave. It looked like he was\x01"
             b"holding some kind of \x05\x41treasure\x05\x40!\x02"
             ), None),
     0x0422: ("They say that once \x05\x41Morpha's Curse\x05\x40\x01is lifted, striking \x05\x42this stone\x05\x40 can\x01shift the tides of \x05\x44Lake Hylia\x05\x40.\x02", 0x23),

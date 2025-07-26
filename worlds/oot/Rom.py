@@ -192,7 +192,7 @@ class Rom(BigStream):
 
             if this_end > next_start:
                 overlapping_records.append(
-                    '0x%08X - 0x%08X (Size: 0x%04X)\n0x%08X - 0x%08X (Size: 0x%04X)' % \
+                    '0x%08X - 0x%08X (Size: 0x%04X)\n0x%08X - 0x%08X (Size: 0x%04X)' %
                     (this_start, this_end, this_size, next_start, next_end, next_size)
                 )
 
@@ -249,8 +249,7 @@ class Rom(BigStream):
         old_dma_start, old_dma_end, old_dma_size = self.original._get_dmadata_record(cur)
 
         while True:
-            if (dma_start == 0 and dma_end == 0) and \
-                    (old_dma_start == 0 and old_dma_end == 0):
+            if (dma_start == 0 and dma_end == 0) and (old_dma_start == 0 and old_dma_end == 0):
                 break
 
             # If the entries do not match, the flag the changed entry

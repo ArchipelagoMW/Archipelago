@@ -20,8 +20,7 @@ def read_json(file_path):
     try:
         return json.loads(json_string)
     except json.JSONDecodeError as error:
-        raise Exception("JSON parse error around text:\n" + \
-                        json_string[error.pos - 35:error.pos + 35] + "\n" + \
+        raise Exception(f"JSON parse error around text:\n{json_string[error.pos - 35:error.pos + 35]}\n"
                         "                                   ^^\n")
 
 
