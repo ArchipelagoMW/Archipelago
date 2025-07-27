@@ -57,6 +57,9 @@ class SohWorld(World):
     location_name_to_id = location_table
     item_name_to_id = item_table
 
+    def generate_early(self) -> None:
+        input("\033[33m WARNING: Ship of Harkinian currently only supports NO LOGIC! If you're OK with this, press Enter to continue. \033[0m")
+
     def create_item(self, name: str) -> SohItem:
         return SohItem(name, item_data_table[name].classification, item_data_table[name].item_id, self.player)
 
@@ -66,7 +69,7 @@ class SohWorld(World):
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_data_table.items()}
 
         # Add Ganon's Castle Boss Key when shuffled anywhere.
-        if self.options.gcbk_setting == "anywhere":
+        if self.options.ganons_castle_boss_key == "anywhere":
             items_to_create[Items.GANONS_CASTLE_BOSS_KEY.value] = 1
 
         # Add dungeon rewards when shuffled
@@ -89,7 +92,7 @@ class SohWorld(World):
         if self.options.shuffle_tokens == "dungeon" or self.options.shuffle_tokens == "all":
             items_to_create[Items.GOLD_SKULLTULA_TOKEN.value] += 44
 
-        if self.options.shuffle_trade_items:
+        if self.options.shuffle_adult_trade_items:
             items_to_create[Items.POCKET_EGG.value] = 1
             items_to_create[Items.COJIRO.value] = 1
             items_to_create[Items.ODD_MUSHROOM.value] = 1
@@ -160,7 +163,7 @@ class SohWorld(World):
                 }, SohLocation)
 
             # Trade Items
-            if self.options.shuffle_trade_items:
+            if self.options.shuffle_adult_trade_items:
                 region.add_locations({
                     location_name: location_data.address for location_name, location_data in trade_items_location_table.items()
                     if location_data.region == region_name
@@ -181,7 +184,7 @@ class SohWorld(World):
                 }, SohLocation)
 
             # Frogs
-            if self.options.shuffle_frogs:
+            if self.options.shuffle_frog_song_rupees:
                 region.add_locations({
                     location_name: location_data.address for location_name, location_data in frogs_location_table.items()
                     if location_data.region == region_name
@@ -223,14 +226,14 @@ class SohWorld(World):
                 }, SohLocation)
 
             # Freestanding (Overworld)
-            if self.options.shuffle_freestanding == "overworld" or self.options.shuffle_freestanding == "all":
+            if self.options.shuffle_freestanding_items == "overworld" or self.options.shuffle_freestanding_items == "all":
                 region.add_locations({
                     location_name: location_data.address for location_name, location_data in freestanding_overworld_location_table.items()
                     if location_data.region == region_name
                 }, SohLocation)
 
             # Freestanding (Dungeon)
-            if self.options.shuffle_freestanding == "dungeon" or self.options.shuffle_freestanding == "all":
+            if self.options.shuffle_freestanding_items == "dungeon" or self.options.shuffle_freestanding_items == "all":
                 region.add_locations({
                     location_name: location_data.address for location_name, location_data in freestanding_dungeon_location_table.items()
                     if location_data.region == region_name
@@ -301,7 +304,7 @@ class SohWorld(World):
         if self.options.shuffle_dungeon_rewards == "off":      
             # Loop through dungeons rewards and set their items to the vanilla reward.      
             for location_name, reward_name in zip(dungeon_reward_item_mapping.keys(), dungeon_reward_item_mapping.values()):
-                self.get_location(location_name).place_locked_item(self.create_item(reward_name))        
+                self.get_location(location_name).place_locked_item(self.create_item(reward_name))
 
         if self.options.shuffle_dungeon_rewards == "dungeons": 
             # Extract and shuffle just the item names from location_item_mapping
@@ -313,7 +316,7 @@ class SohWorld(World):
                 self.get_location(location_name).place_locked_item(self.create_item(reward_name))
 
         # Place Ganons Boss Key to the Light Arrow Cutscene when set to needing specific requirements
-        if self.options.gcbk_setting == "dungeon_rewards":
+        if self.options.ganons_castle_boss_key == "dungeon_rewards":
             self.get_location(Locations.MARKET_TOT_LIGHT_ARROW_CUTSCENE.value).place_locked_item(self.create_item(Items.GANONS_CASTLE_BOSS_KEY.value))
 
         # Preplace tokens based on settings.
@@ -336,23 +339,68 @@ class SohWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
-            "shuffle_dungeon_rewards": self.options.shuffle_dungeon_rewards.value,
-            "gcbk_setting": self.options.gcbk_setting.value,
-            "gcbk_rewards_required": self.options.gcbk_rewards_required.value,
+            "closed_forest": self.options.closed_forest.value,
+            "kakariko_gate": self.options.kakariko_gate.value,
+            "door_of_time": self.options.door_of_time.value,
+            "zoras_fountain": self.options.zoras_fountain.value,
+            "sleeping_waterfall": self.options.sleeping_waterfall.value,
+            "jabu_jabu": self.options.jabu_jabu.value,
+            "lock_overworld_doors": self.options.lock_overworld_doors.value,
+            "fortress_carpenters": self.options.fortress_carpenters.value,
+            "rainbow_bridge": self.options.rainbow_bridge.value,
+            "rainbow_bridge_stones_required": self.options.rainbow_bridge_stones_required.value,
+            "rainbow_bridge_medallions_required": self.options.rainbow_bridge_medallions_required.value,
+            "rainbow_bridge_dungeon_rewards_required": self.options.rainbow_bridge_dungeon_rewards_required.value,
+            "rainbow_bridge_dungeons_required": self.options.rainbow_bridge_dungeons_required.value,
+            "rainbow_bridge_skulltokens_required": self.options.rainbow_bridge_skulltokens_required.value,
+            "ganons_trials_required": self.options.ganons_trials_required.value,
+            "triforce_hunt": self.options.triforce_hunt.value,
+            "triforce_hunt_required_pieces": self.options.triforce_hunt_required_pieces.value,
+            "triforce_hunt_extra_pieces_percentage": self.options.triforce_hunt_extra_pieces_percentage.value,
             "shuffle_tokens": self.options.shuffle_tokens.value,
+            "shuffle_master_sword": self.options.shuffle_master_sword.value,
+            "shuffle_childs_wallet": self.options.shuffle_childs_wallet.value,
+            "shuffle_ocarina_buttons": self.options.shuffle_ocarina_buttons.value,
+            "shuffle_swim": self.options.shuffle_swim.value,
+            "shuffle_weird_egg": self.options.shuffle_weird_egg.value,
+            "shuffle_fishing_pole": self.options.shuffle_fishing_pole.value,
+            "shuffle_deku_stick_bag": self.options.shuffle_deku_stick_bag.value,
+            "shuffle_deku_nut_bag": self.options.shuffle_deku_nut_bag.value,
+            "shuffle_freestanding_items": self.options.shuffle_freestanding_items.value,
             "shuffle_shops": self.options.shuffle_shops.value,
+            "shuffle_fish": self.options.shuffle_fish.value,
             "shuffle_scrubs": self.options.shuffle_scrubs.value,
-            "shuffle_trade_items": self.options.shuffle_trade_items.value,
-            "shuffle_merchants": self.options.shuffle_merchants.value,
-            "shuffle_cows": self.options.shuffle_cows.value,
-            "shuffle_frogs": self.options.shuffle_frogs.value,
             "shuffle_beehives": self.options.shuffle_beehives.value,
+            "shuffle_cows": self.options.shuffle_cows.value,
             "shuffle_pots": self.options.shuffle_pots.value,
             "shuffle_crates": self.options.shuffle_crates.value,
-            "shuffle_freestanding": self.options.shuffle_freestanding.value,
+            "shuffle_merchants": self.options.shuffle_merchants.value,
+            "shuffle_frog_song_rupees": self.options.shuffle_frog_song_rupees.value,
+            "shuffle_adult_trade_items": self.options.shuffle_adult_trade_items.value,
+            "shuffle_boss_souls": self.options.shuffle_boss_souls.value,
             "shuffle_fairies": self.options.shuffle_fairies.value,
             "shuffle_grass": self.options.shuffle_grass.value,
-            "shuffle_fish": self.options.shuffle_fish.value,
+            "shuffle_dungeon_rewards": self.options.shuffle_dungeon_rewards.value,
+            "maps_and_compasses": self.options.maps_and_compasses.value,
+            "ganons_castle_boss_key": self.options.ganons_castle_boss_key.value,
+            "ganons_castle_boss_key_stones_required": self.options.ganons_castle_boss_key_stones_required.value,
+            "ganons_castle_boss_key_medallions_required": self.options.ganons_castle_boss_key_medallions_required.value,
+            "ganons_castle_boss_key_dungeon_rewards_required": self.options.ganons_castle_boss_key_dungeon_rewards_required.value,
+            "ganons_castle_boss_key_dungeons_required": self.options.ganons_castle_boss_key_dungeons_required.value,
+            "ganons_castle_boss_key_skull_tokens_required": self.options.ganons_castle_boss_key_skull_tokens_required.value,
+            "key_rings": self.options.key_rings.value,
+            "big_poe_target_count": self.options.big_poe_target_count.value,
+            "skip_child_zelda": self.options.skip_child_zelda.value,
+            "skip_epona_race": self.options.skip_epona_race.value,
+            "complete_mask_quest": self.options.complete_mask_quest.value,
+            "skip_scarecrows_song": self.options.skip_scarecrows_song.value,
+            "full_wallets": self.options.full_wallets.value,
+            "bombchu_bag": self.options.bombchu_bag.value,
+            "bombchu_drops": self.options.bombchu_drops.value,
+            "blue_fire_arrows": self.options.blue_fire_arrows.value,
+            "sunlight_arrows": self.options.sunlight_arrows.value,
+            "infinite_upgrades": self.options.infinite_upgrades.value,
+            "skeleton_key": self.options.skeleton_key.value,
         }
     
     def collect(self, state: CollectionState, item: Item) -> bool:
