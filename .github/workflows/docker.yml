@@ -51,6 +51,22 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=nightly,enable={{is_default_branch}}
 
+      - name: Compute final tags
+        id: final-tags
+        run: |
+          tags="${{ steps.meta.outputs.tags }}"
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            tag="${{ github.ref_name }}"
+            if [[ "$tag" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              if [ -n "$tags" ]; then
+                tags="$tags,latest"
+              else
+                tags="latest"
+              fi
+            fi
+          fi
+          echo "tags=$tags" >> $GITHUB_OUTPUT
+
   build-amd64:
     needs: prepare
     runs-on: ubuntu-latest
