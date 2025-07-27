@@ -15,8 +15,8 @@
 0x05C62C,4847EBAD,# Perform Monochrome
 0x072428,60000000,# Disable flag 15 auto turn on
 0x079E64,60000000,
-0x07EA28,800D5C30,# Set Vac Speed location
-0x07EC44,4845BCB1,# Point to a new adress for Vac Speed
+0x07EA28,800D5E80,# Set Vac Speed location
+0x07EC44,4845BF01,# Point to a new adress for Vac Speed
 0x0AC304,807F07E8,
 0x0AC308,38800000,
 0x0AC30C,38BE0000,
