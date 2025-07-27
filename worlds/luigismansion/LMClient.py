@@ -633,8 +633,9 @@ async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
 
     while not ctx.exit_event.is_set():
-        try:
+        try: # If DME is connected to the client
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
+                # If we are connected to the server already, launch primary async functions
                 if ctx.slot:
                     # Update boo count in LMClient
                     if ctx.ui:
@@ -647,8 +648,11 @@ async def dolphin_sync_task(ctx: LMContext):
                     await ctx.lm_check_locations()
                     await ctx.lm_update_non_savable_ram()
                 else:
+                    # If we are not connected to server, check for player name in RAM address
                     if not ctx.auth:
                         ctx.auth = read_string(SLOT_NAME_ADDR, SLOT_NAME_STR_LENGTH)
+
+                        # If no player name is found, disconnect DME and inform player
                         if not ctx.auth:
                             ctx.auth = None
                             ctx.awaiting_rom = False
@@ -658,10 +662,12 @@ async def dolphin_sync_task(ctx: LMContext):
                             dme.un_hook()
                             await asyncio.sleep(5)
                             continue
+                    # Connect to server if we have player name
                     if ctx.awaiting_rom:
                         await ctx.server_auth()
                 await asyncio.sleep(0.1)
             else:
+                # If we were connected but no longer are, inform player and retry
                 if ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
                     logger.info("Connection to Dolphin lost, reconnecting...")
                     ctx.dolphin_status = CONNECTION_LOST_STATUS
@@ -675,6 +681,7 @@ async def dolphin_sync_task(ctx: LMContext):
                     await asyncio.sleep(5)
                     continue
 
+                # If the Game ID is a standard one, the randomized ISO has not been loaded - so disconnect
                 if ((read_string(0x80000000, 6) == "GLME01" or
                         read_string(0x80000000, 6) == "GLMJ01") or
                         read_string(0x80000000, 6) == "GLMP01"):

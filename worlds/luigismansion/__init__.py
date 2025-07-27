@@ -714,8 +714,8 @@ class LMWorld(World):
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)
 
-    @classmethod
-    def stage_generate_output(cls, multiworld: MultiWorld):
+    @classmethod # output_directory is required even though we don't use it
+    def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str):
         # Filter for any Luigi's Mansion worlds that need hints or have boo health by sphere turned on
         hint_worlds = {world.player for world in multiworld.get_game_worlds(cls.game)
                        if (world.options.hint_distribution.value != 5 and world.options.hint_distribution.value != 1)}
