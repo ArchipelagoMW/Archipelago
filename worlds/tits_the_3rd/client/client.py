@@ -443,7 +443,7 @@ class TitsThe3rdContext(CommonContext):
             elif get_item_id(ItemName.all_sepith_min_id) <= item_id <= get_item_id(ItemName.all_sepith_max_id):
                 result = self.game_interface.give_all_sepith(item_id - get_item_id(ItemName.all_sepith_min_id), item_id - get_item_id(ItemName.all_sepith_min_id))
             # Give all sepith (100 lower, 50 higher)
-            elif get_item_id(ItemName.all_sepith_100_50):
+            elif get_item_id(ItemName.all_sepith_100_50) == item_id:
                 result = self.game_interface.give_all_sepith(100,50)
             # Give higher element sepith
             elif get_item_id(ItemName.higher_elements_sepith_min_id) <= item_id <= get_item_id(ItemName.higher_elements_sepith_max_id):
