@@ -57,6 +57,8 @@ class TitsThe3rdMemoryIO():
     OFFSET_ITEMS_RECEIVED_INDEX = OFFSET_FLAG_0 + (1024 // 8)
     OFFSET_CHARACTER_LEVEL: int = 0x2ACD11C # Estelle's character level.
     CHARACTER_LEVEL_OFFSET_INTERVAL: int = 0x3C # Offset between each character's level.
+    FLAG_EVENT_CRAFT_ACQUIRED_ARRAY: int = 12000
+    FLAG_HAS_CRAFT_ARRAY: int = 11600
     CHARACTER_ID_TO_NAME = {
         0: "estelle",
         1: "joshua",
@@ -446,7 +448,14 @@ class TitsThe3rdMemoryIO():
         message = message.ljust(34)
         self.tits_the_3rd_mem.write_bytes(address + 55, bytes(message, encoding="utf8"), 34)
         self.call_scena(self.scena_functions["give_craft"])
+        self.write_flag(self.FLAG_HAS_CRAFT_ARRAY + craft_id, True)
+        print("setting flag", self.FLAG_HAS_CRAFT_ARRAY + craft_id, True)
         return True
+
+    def has_craft(self, craft_id: int) -> bool:
+        flag_number = self.FLAG_HAS_CRAFT_ARRAY + craft_id
+        print("checking flag", flag_number, self.read_flag(flag_number))
+        return self.read_flag(flag_number)
 
     def give_mira(self, amount: int):
         """Function to give mira to the player in game"""

@@ -17,7 +17,15 @@ import colorama
 
 from NetUtils import ClientStatus, NetworkItem, NetworkPlayer
 from settings import get_settings
-from worlds.tits_the_3rd.locations import get_location_id, MIN_CRAFT_LOCATION_ID, MAX_CRAFT_LOCATION_ID, craft_location_id_to_character_id_and_level_threshold
+from worlds.tits_the_3rd.locations import (
+    get_location_id,
+    MIN_CRAFT_LOCATION_ID,
+    MAX_CRAFT_LOCATION_ID,
+)
+from worlds.tits_the_3rd.tables.location_list import (
+    craft_location_id_to_character_id_and_level_threshold,
+    event_craft_location_id_to_character_id_and_craft_id,
+)
 from worlds.tits_the_3rd.items import get_item_id
 from worlds.tits_the_3rd.names.location_name import LocationName
 from worlds.tits_the_3rd.names.item_name import ItemName
@@ -486,7 +494,7 @@ class TitsThe3rdContext(CommonContext):
         for location_id in self.location_ids:
             if location_id in self.locations_checked:
                 continue
-            if (
+            elif (
                 MIN_CRAFT_LOCATION_ID <= location_id <= MAX_CRAFT_LOCATION_ID
                 and location_id in craft_location_id_to_character_id_and_level_threshold
             ):
@@ -495,8 +503,33 @@ class TitsThe3rdContext(CommonContext):
                     continue
                 if self.game_interface.read_character_level(character_id) >= level_threshold:
                     await self.check_location(location_id)
-            if self.game_interface.read_flag(location_id):
+                    continue
+            elif (
+                MIN_CRAFT_LOCATION_ID <= location_id <= MAX_CRAFT_LOCATION_ID
+                and location_id in event_craft_location_id_to_character_id_and_craft_id
+            ):
+                # TODO: this condition can be removed once location_id = flag_event_craft_acquired_array + craft_id
+                character_id, craft_id = event_craft_location_id_to_character_id_and_craft_id[location_id]
+                if self.game_interface.read_flag(self.game_interface.FLAG_EVENT_CRAFT_ACQUIRED_ARRAY + craft_id):
+                    await self.check_location(location_id)
+            elif self.game_interface.read_flag(location_id):
                 await self.check_location(location_id)
+        if self.slot_data["default_event_crafts"]:
+            # These are not locations in AP, but the client needs to give them manually.
+            for location_id in event_craft_location_id_to_character_id_and_craft_id:
+                character_id, craft_id = event_craft_location_id_to_character_id_and_craft_id[location_id]
+                if not self.game_interface.has_character(character_id):
+                    continue
+                if (
+                    self.game_interface.read_flag(self.game_interface.FLAG_EVENT_CRAFT_ACQUIRED_ARRAY + craft_id)
+                    and not self.game_interface.has_craft(craft_id)
+                    and self.game_interface.should_send_and_recieve_items(self.world_player_identifier)
+                    and self.game_interface.is_valid_to_receive_item()
+                ):
+                    print("giving craft", character_id, craft_id)
+                    self.game_interface.give_craft(character_id, craft_id)
+                    while self.game_interface.is_in_event():
+                        await asyncio.sleep(0.1)
 
 
 async def tits_the_3rd_watcher(ctx: TitsThe3rdContext):
