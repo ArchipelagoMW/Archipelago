@@ -155,16 +155,18 @@ MISC_ITEMS_TABLE: dict[str, GrinchItemData] = {
 
 #Traps
 TRAPS_TABLE: dict[str, GrinchItemData] = {
-    "Ice Trap": GrinchItemData("Traps", 600, IC.trap, [GrinchRamData()]),
+    "Freeze Trap": GrinchItemData("Traps", 600, IC.trap, [GrinchRamData()]), #alias to Ice Trap for traplink
     "Bee Trap": GrinchItemData("Traps", 601, IC.trap, [GrinchRamData()]),
-    "Electric Trap": GrinchItemData("Traps", 602, IC.trap, [GrinchRamData()]),
-    "Tip Toe Trap": GrinchItemData("Traps", 603, IC.trap, [GrinchRamData()]),
+    "Electrocution Trap": GrinchItemData("Traps", 602, IC.trap, [GrinchRamData()]),
+    "Tip Toe Trap": GrinchItemData("Traps", 603, IC.trap, [GrinchRamData()]), #alias to Slowness Trap for traplink
     "Damage Trap": GrinchItemData("Traps", 604, IC.trap, [GrinchRamData(0x800E8FDC, value=20)]),
     "Depletion Trap": GrinchItemData("Traps", 605, IC.trap, [GrinchRamData(0x80010058, value=0)]),
-    "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap,
+    "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
         [GrinchRamData(0x80010000, value=0x05), GrinchRamData(0x8008FB94, value=1)]),
-    "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]),
-    "Who sent me here?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x8008FB94, value=1)])
+    "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]), #alias to Spring Trap for traplink
+    "Who sent me here?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x8008FB94, value=1)]), #alias to Home Trap for traplink
+    "Cutscene Trap": GrinchItemData("Traps", 609, IC.trap, [GrinchRamData()]),
+    "No Vac Trap": GrinchItemData("Traps", 610, IC.trap, [GrinchRamData()])
 }
 
 #Movesets
