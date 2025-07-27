@@ -5,7 +5,6 @@ import logging
 import typing
 
 import Utils
-import settings
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
@@ -20,37 +19,15 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     progressive_technology_table, common_tech_table, tech_to_progressive_lookup, progressive_tech_table, \
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
     fluids, stacking_items, valid_ingredients, progressive_rows
+from .settings import FactorioSettings
 
 
-def launch_client():
+def launch_client(*args: str):
     from .Client import launch
-    launch_component(launch, name="FactorioClient")
+    launch_component(launch, name="Factorio Client", args=args)
 
 
-components.append(Component("Factorio Client", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
-
-
-class FactorioSettings(settings.Group):
-    class Executable(settings.UserFilePath):
-        is_exe = True
-
-    class ServerSettings(settings.OptionalUserFilePath):
-        """
-        by default, no settings are loaded if this file does not exist. \
-If this file does exist, then it will be used.
-        server_settings: "factorio\\\\data\\\\server-settings.json"
-        """
-
-    class FilterItemSends(settings.Bool):
-        """Whether to filter item send messages displayed in-game to only those that involve you."""
-
-    class BridgeChatOut(settings.Bool):
-        """Whether to send chat messages from players on the Factorio server to Archipelago."""
-
-    executable: Executable = Executable("factorio/bin/x64/factorio")
-    server_settings: typing.Optional[FactorioSettings.ServerSettings] = None
-    filter_item_sends: typing.Union[FilterItemSends, bool] = False
-    bridge_chat_out: typing.Union[BridgeChatOut, bool] = True
+components.append(Component("Factorio Client", func=launch_client, component_type=Type.CLIENT))
 
 
 class FactorioWeb(WebWorld):
@@ -115,6 +92,7 @@ class Factorio(World):
     settings: typing.ClassVar[FactorioSettings]
     trap_names: tuple[str] = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery",
                               "Atomic Rocket", "Atomic Cliff Remover", "Inventory Spill")
+    want_progressives: dict[str, bool] = collections.defaultdict(lambda: False)
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
@@ -133,6 +111,8 @@ class Factorio(World):
                 self.options.max_tech_cost.value, self.options.min_tech_cost.value
         self.tech_mix = self.options.tech_cost_mix.value
         self.skip_silo = self.options.silo.value == Silo.option_spawn
+        self.want_progressives = collections.defaultdict(
+            lambda: self.options.progressive.want_progressives(self.random))
 
     def create_regions(self):
         player = self.player
@@ -201,9 +181,6 @@ class Factorio(World):
                                             range(getattr(self.options,
                                                           f"{trap_name.lower().replace(' ', '_')}_traps")))
 
-        want_progressives = collections.defaultdict(lambda: self.options.progressive.
-                                                    want_progressives(self.random))
-
         cost_sorted_locations = sorted(self.science_locations, key=lambda location: location.name)
         special_index = {"automation": 0,
                          "logistics": 1,
@@ -218,7 +195,7 @@ class Factorio(World):
         for tech_name in base_tech_table:
             if tech_name not in self.removed_technologies:
                 progressive_item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
-                want_progressive = want_progressives[progressive_item_name]
+                want_progressive = self.want_progressives[progressive_item_name]
                 item_name = progressive_item_name if want_progressive else tech_name
                 tech_item = self.create_item(item_name)
                 index = special_index.get(tech_name, None)
@@ -232,6 +209,12 @@ class Factorio(World):
                         loc.count = min(loc.count, 10)
                     loc.place_locked_item(tech_item)
                     loc.revealed = True
+
+    def get_filler_item_name(self) -> str:
+        tech_name: str = self.random.choice(tuple(tech_table))
+        progressive_item_name: str = tech_to_progressive_lookup.get(tech_name, tech_name)
+        want_progressive: bool = self.want_progressives[progressive_item_name]
+        return progressive_item_name if want_progressive else tech_name
 
     def set_rules(self):
         player = self.player

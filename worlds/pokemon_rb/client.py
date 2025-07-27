@@ -23,6 +23,7 @@ DATA_LOCATIONS = {
     "DexSanityFlag": (0x1A71, 19),
     "GameStatus": (0x1A84, 0x01),
     "Money": (0x141F, 3),
+    "CurrentMap": (0x1436, 1),
     "ResetCheck": (0x0100, 4),
     # First and second Vermilion Gym trash can selection. Second is not used, so should always be 0.
     # First should never be above 0x0F. This is just before Event Flags.
@@ -65,6 +66,7 @@ class PokemonRBClient(BizHawkClient):
         self.banking_command = None
         self.game_state = False
         self.last_death_link = 0
+        self.current_map = 0
 
     async def validate_rom(self, ctx):
         game_name = await read(ctx.bizhawk_ctx, [(0x134, 12, "ROM")])
@@ -229,6 +231,10 @@ class PokemonRBClient(BizHawkClient):
                              {"operation": "max", "value": 0}],
                     }])
             self.banking_command = None
+
+        if data["CurrentMap"][0] != self.current_map:
+            await ctx.send_msgs([{"cmd": "Bounce", "slots": [ctx.slot], "data": {"currentMap": data["CurrentMap"][0]}}])
+            self.current_map = data["CurrentMap"][0]
 
         # VICTORY
 
