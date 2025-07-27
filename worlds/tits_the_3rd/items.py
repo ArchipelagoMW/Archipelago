@@ -43,6 +43,8 @@ meta_data_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.area_max_id: TitsThe3rdItemData(299999, ItemClassification.filler),
     ItemName.recipe_min_id: TitsThe3rdItemData(80000, ItemClassification.filler),
     ItemName.recipe_max_id: TitsThe3rdItemData(81000, ItemClassification.filler),
+    ItemName.craft_min_id: TitsThe3rdItemData(400000, ItemClassification.filler),
+    ItemName.craft_max_id: TitsThe3rdItemData(400999, ItemClassification.filler),
 }
 
 consumable_table: Dict[str, TitsThe3rdItemData] = {
@@ -136,17 +138,29 @@ character_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.julia: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 13, ItemClassification.progression),
 }
 
-character_spoiler_table: Dict[str, TitsThe3rdItemData] = {
-    ItemName.kevin_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 8, ItemClassification.progression),
-    ItemName.ries_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 14, ItemClassification.progression),
-    ItemName.tita_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 6, ItemClassification.progression),
-    ItemName.julia_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 13, ItemClassification.progression),
-}
-
 area_unlock_table: Dict[str, TitsThe3rdItemData] = {  # Item ID is 200000 + flag number
     ItemName.jade_corridor_unlock_1: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 256, ItemClassification.progression),
     ItemName.jade_corridor_unlock_2: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 257, ItemClassification.progression),
     ItemName.jade_corridor_arseille_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 258, ItemClassification.progression),
+}
+
+craft_unlock_table: Dict[str, TitsThe3rdItemData] = { # Item ID is 400000 + character ID
+    ItemName.estelle_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code, ItemClassification.useful),
+    ItemName.joshua_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 1, ItemClassification.useful),
+    ItemName.scherazard_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 2, ItemClassification.useful),
+    ItemName.olivier_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 3, ItemClassification.useful),
+    ItemName.kloe_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 4, ItemClassification.useful),
+    ItemName.agate_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 5, ItemClassification.useful),
+    ItemName.tita_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 6, ItemClassification.useful),
+    ItemName.zin_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 7, ItemClassification.useful),
+    ItemName.kevin_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 8, ItemClassification.useful),
+    ItemName.anelace_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 9, ItemClassification.useful),
+    ItemName.josette_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 10, ItemClassification.useful),
+    ItemName.richard_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 11, ItemClassification.useful),
+    ItemName.mueller_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 12, ItemClassification.useful),
+    ItemName.julia_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 13, ItemClassification.useful),
+    ItemName.ries_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 14, ItemClassification.useful),
+    ItemName.renne_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 15, ItemClassification.useful),
 }
 
 key_item_table: Dict[str, TitsThe3rdItemData] = {ItemName.bennu_defeat: TitsThe3rdItemData(500000, ItemClassification.progression)}
@@ -160,9 +174,9 @@ item_data_table: Dict[str, TitsThe3rdItemData] = {
     **currency_table,
     **key_item_table,
     **character_table,
-    **character_spoiler_table,
     **area_unlock_table,
     **meta_data_table,
+    **craft_unlock_table,
 }
 
 item_groups: Dict[str, Set[str]] = {
@@ -172,7 +186,6 @@ item_groups: Dict[str, Set[str]] = {
     "Quartz": set(quartz_table.keys()),
     "Currency": set(currency_table.keys()),
     "Characters": set(character_table.keys()),
-    "Characters Spoiler": set(character_spoiler_table.keys()),
     "Area Unlock": set(area_unlock_table.keys()),
 }
 
@@ -268,3 +281,39 @@ default_character_to_location = {
     ItemName.tita: LocationName.sealing_stone_tita,
     ItemName.julia: LocationName.sealing_stone_julia,
 }
+
+
+# This will be default craft pool eventually.
+full_game_craft_pool: Counter[str] = Counter(
+    {
+        ItemName.estelle_progressive_craft: 13,
+        ItemName.joshua_progressive_craft: 14,
+        ItemName.scherazard_progressive_craft: 10,
+        ItemName.olivier_progressive_craft: 9,
+        ItemName.kloe_progressive_craft: 7,
+        ItemName.agate_progressive_craft: 12,
+        ItemName.tita_progressive_craft: 8,
+        ItemName.zin_progressive_craft: 13,
+        ItemName.kevin_progressive_craft: 12,
+        ItemName.anelace_progressive_craft: 10,
+        ItemName.josette_progressive_craft: 7,
+        ItemName.richard_progressive_craft: 10,
+        ItemName.mueller_progressive_craft: 11,
+        ItemName.julia_progressive_craft: 9,
+        ItemName.ries_progressive_craft: 10,
+        ItemName.renne_progressive_craft: 9,
+    }
+)
+
+
+# This is purely while we only have part of the AP world complete.
+chapter_1_craft_pool: Counter[str] = Counter(
+    {
+        ItemName.tita_progressive_craft: 5,
+        ItemName.kevin_progressive_craft: 7,
+        ItemName.julia_progressive_craft: 5,
+        ItemName.ries_progressive_craft: 4,
+    }
+)
+
+default_craft_pool = chapter_1_craft_pool

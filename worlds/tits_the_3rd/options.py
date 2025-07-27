@@ -106,6 +106,26 @@ class CharacterStartingQuartzOptions(Choice):
     option_random_quartz = 2
     option_completely_random = 3
 
+class CraftShuffle(Toggle):
+    """
+    If enabled, characters crafts may differ from their default crafts.
+    E.g. Estelle may get Joshua's Dual Strike instead of Hurricane.
+    """
+    display_name = "Craft Shuffle"
+    default_value = False
+
+class CraftPlacement(Choice):
+    """
+    Shuffle craft unlocks into the item pool.
+
+    Default: Crafts are placed in the default locations.
+    Crafts: Craft unlock locations will always unlock a craft, but it will be for a random character.
+    Anywhere: Crafts can be anywhere in the item pool.
+    """
+    display_name = "Craft Placement"
+    option_default = 0
+    option_crafts = 1
+    option_anywhere = 2
 
 @dataclass
 class TitsThe3rdOptions(PerGameCommonOptions):
@@ -117,3 +137,5 @@ class TitsThe3rdOptions(PerGameCommonOptions):
     second_starting_character: SecondStartingCharacter
     sealing_stone_character_options: SealingStoneCharactersOptions
     character_starting_quartz_options: CharacterStartingQuartzOptions
+    craft_shuffle: CraftShuffle
+    craft_placement: CraftPlacement

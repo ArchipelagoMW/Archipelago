@@ -3,10 +3,30 @@ from typing import Callable, Dict, Optional, Set
 
 from BaseClasses import CollectionState, MultiWorld, Location
 from .names.location_name import LocationName
-from .names.region_name import RegionName
-from .names.item_name import ItemName
-from .tables.location_list import location_table
-from .names.item_name import ItemName
+from .tables.location_list import (
+    location_table,
+    estelle_craft_locations,
+    joshua_craft_locations,
+    scherazard_craft_locations,
+    olivier_craft_locations,
+    kloe_craft_locations,
+    agate_craft_locations,
+    tita_craft_locations,
+    zin_craft_locations,
+    kevin_craft_locations,
+    anelace_craft_locations,
+    josette_craft_locations,
+    richard_craft_locations,
+    mueller_craft_locations,
+    julia_craft_locations,
+    ries_craft_locations,
+    renne_craft_locations
+)
+from .options import TitsThe3rdOptions, CraftPlacement
+from .spoiler_mapping import scrub_spoiler_data
+
+MIN_CRAFT_LOCATION_ID = 100000
+MAX_CRAFT_LOCATION_ID = 100000 + 10000
 
 class TitsThe3rdLocation(Location):
     """Trails in the Sky the 3rd Location Definition"""
@@ -14,12 +34,15 @@ class TitsThe3rdLocation(Location):
 
 
 def get_location_id(location_name: LocationName):
+    """
+    Get the location id for a given location name.
+    """
     if location_name not in location_table:
-        raise Exception(f"{location_name} is not part of location list. Something went wrong?")
+        raise RuntimeError(f"{location_name} is not part of location list. Something went wrong?")
     return location_table[location_name].flag
 
 
-def create_location(multiworld: MultiWorld, player: int, location_name: str, rule: Optional[Callable[[CollectionState], bool]] = None):
+def create_location(multiworld: MultiWorld, player: int, location_name: str, options: TitsThe3rdOptions, rule: Optional[Callable[[CollectionState], bool]] = None):
     """
     Create a location in accordance with the location table in location_list.py
 
@@ -30,13 +53,16 @@ def create_location(multiworld: MultiWorld, player: int, location_name: str, rul
         rule: A rule to apply to the location.
     """
     region = multiworld.get_region(location_table[location_name].region, player)
-    location = TitsThe3rdLocation(player, location_name, location_table[location_name].flag, region)
+    shown_location_name = location_name
+    if options.name_spoiler_option:
+        shown_location_name = scrub_spoiler_data(location_name)
+    location = TitsThe3rdLocation(player, shown_location_name, location_table[location_name].flag, region)
     if rule:
         location.access_rule = rule
     region.locations.append(location)
 
 
-def create_locations(multiworld: MultiWorld, player: int, spoiler_mode: bool = False):
+def create_locations(multiworld: MultiWorld, player: int, options: TitsThe3rdOptions):
     """
     Define AP locations for Trails in the Sky the 3rd.
     Assumes regions have already been created.
@@ -46,25 +72,32 @@ def create_locations(multiworld: MultiWorld, player: int, spoiler_mode: bool = F
         player: The player number.
     """
     for location_name in location_table:
-        if spoiler_mode & (location_table[location_name].spoiler_name != ""):
-            create_location(multiworld, player, location_table[location_name].spoiler_name)
-        else:
-            create_location(multiworld, player, location_name)
+        if location_table[location_name].check_type == "Craft" and options.craft_placement == CraftPlacement.option_default and not options.craft_shuffle:
+            continue
+        rule = None
+        if location_table[location_name].item_requirements:
+            rule = lambda state: all(
+                state.has(item_name, quantity, player)
+                for item_name, quantity in location_table[location_name].item_requirements
+            )
+        create_location(multiworld, player, location_name, options, rule)
 
-location_groups: Dict[str, Set[str]] = {}
 
-default_sealing_stone_quartz = {
-    # Tita
-    LocationName.tita_orbment_item_1: ItemName.ep_cut_2,
-    LocationName.tita_orbment_item_2: ItemName.attack_1,
-    LocationName.tita_orbment_item_3: ItemName.eagle_eye,
-    LocationName.tita_orbment_item_4: ItemName.hp_1,
-    # Julia
-    LocationName.julia_orbment_item_1: ItemName.ep_cut_2,
-    LocationName.julia_orbment_item_2: ItemName.action_1,
-    LocationName.julia_orbment_item_3: ItemName.hit_1,
-    LocationName.julia_orbment_item_4: ItemName.range_1,
-    LocationName.julia_orbment_item_5: ItemName.move_1,
-    LocationName.julia_orbment_item_6: ItemName.attack_1,
-    LocationName.julia_orbment_item_7: ItemName.shield_1,
+location_groups: Dict[str, Set[str]] = {
+    "Estelle Crafts": set(estelle_craft_locations.keys()),
+    "Joshua Crafts": set(joshua_craft_locations.keys()),
+    "Scherazard Crafts": set(scherazard_craft_locations.keys()),
+    "Olivier Crafts": set(olivier_craft_locations.keys()),
+    "Kloe Crafts": set(kloe_craft_locations.keys()),
+    "Agate Crafts": set(agate_craft_locations.keys()),
+    "Tita Crafts": set(tita_craft_locations.keys()),
+    "Zin Crafts": set(zin_craft_locations.keys()),
+    "Kevin Crafts": set(kevin_craft_locations.keys()),
+    "Anelace Crafts": set(anelace_craft_locations.keys()),
+    "Josette Crafts": set(josette_craft_locations.keys()),
+    "Richard Crafts": set(richard_craft_locations.keys()),
+    "Mueller Crafts": set(mueller_craft_locations.keys()),
+    "Julia Crafts": set(julia_craft_locations.keys()),
+    "Ries Crafts": set(ries_craft_locations.keys()),
+    "Renne Crafts": set(renne_craft_locations.keys()),
 }

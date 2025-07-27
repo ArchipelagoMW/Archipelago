@@ -29,12 +29,10 @@ class LocationName:
     chapter1_boss_defeated = "Defeat Bennu (Chapter 1 Boss)"  # 9757
 
     sealing_stone_tita = "Sealing Stone - Tita"  # 9740
-    sealing_stone_tita_spoiler = "Sealing Stone - Chapter 1 First Character"  # 9740
     sealing_stone_jade_corridor_1_unlock = "Sealing Stone - Unlock Jade Corridor 1"  # 2256
     sealing_stone_arseille_unlock = "Sealing Stone - Unlock Arseille"  # 2258
 
     sealing_stone_julia = "Sealing Stone - Julia"  # 9753
-    sealing_stone_julia_spoiler = "Sealing Stone - Chapter 1 Second Character"  # 9753
     sealing_stone_jade_corridor_2_unlock = "Sealing Stone - Unlock Jade Corridor 2"  # 2257
 
     # Tita
@@ -46,22 +44,10 @@ class LocationName:
     tita_orbment_item_3 = "Tita's Orbment - Quartz 3"  # 1165
     tita_orbment_item_4 = "Tita's Orbment - Quartz 4"  # 1166
 
-    tita_initial_weapon_spoiler = "Chapter 1 First Character's Initial Equipment - Weapon"  # 1160
-    tita_initial_armor_spoiler = "Chapter 1 First Character's Initial Equipment - Armor"  # 1161
-    tita_initial_boots_spoiler = "Chapter 1 First Character's Initial Equipment - Boots"  # 1162
-    tita_orbment_item_1_spoiler = "Chapter 1 First Character's Orbment - Quartz 1"  # 1163
-    tita_orbment_item_2_spoiler = "Chapter 1 First Character's Orbment - Quartz 2"  # 1164
-    tita_orbment_item_3_spoiler = "Chapter 1 First Character's Orbment - Quartz 3"  # 1165
-    tita_orbment_item_4_spoiler = "Chapter 1 First Character's Orbment - Quartz 4"  # 1166
-
     # Kevin
     kevin_initial_weapon = "Kevin's Initial Equipment - Weapon"  # 1180
     kevin_initial_armor = "Kevin's Initial Equipment - Armor"  # 1181
     kevin_initial_boots = "Kevin's Initial Equipment - Boots"  # 1182
-
-    kevin_initial_weapon_spoiler = "Male Default Character's Initial Equipment - Weapon"  # 1180
-    kevin_initial_armor_spoiler = "Male Default Character's Initial Equipment - Armor"  # 1181
-    kevin_initial_boots_spoiler = "Male Default Character's Initial Equipment - Boots"  # 1182
 
     # Julia
     julia_initial_weapon = "Julia's Initial Equipment - Weapon"  # 1230
@@ -75,25 +61,10 @@ class LocationName:
     julia_orbment_item_6 = "Julia's Orbment - Quartz 6"  # 1238
     julia_orbment_item_7 = "Julia's Orbment - Quartz 7"  # 1239
 
-    julia_initial_weapon_spoiler = "Chapter 1 Second Character's Initial Equipment - Weapon"  # 1230
-    julia_initial_armor_spoiler = "Chapter 1 Second Character's Initial Equipment - Armor"  # 1231
-    julia_initial_boots_spoiler = "Chapter 1 Second Character's Initial Equipment - Boots"  # 1232
-    julia_orbment_item_1_spoiler = "Chapter 1 Second Character's Orbment - Quartz 1"  # 1233
-    julia_orbment_item_2_spoiler = "Chapter 1 Second Character's Orbment - Quartz 2"  # 1234
-    julia_orbment_item_3_spoiler = "Chapter 1 Second Character's Orbment - Quartz 3"  # 1235
-    julia_orbment_item_4_spoiler = "Chapter 1 Second Character's Orbment - Quartz 4"  # 1236
-    julia_orbment_item_5_spoiler = "Chapter 1 Second Character's Orbment - Quartz 5"  # 1237
-    julia_orbment_item_6_spoiler = "Chapter 1 Second Character's Orbment - Quartz 6"  # 1238
-    julia_orbment_item_7_spoiler = "Chapter 1 Second Character's Orbment - Quartz 7"  # 1239
-
     # Ries
     ries_initial_weapon = "Ries' Initial Equipment - Weapon"  # 1240
     ries_initial_armor = "Ries' Initial Equipment - Armor"  # 1241
     ries_initial_boots = "Ries' Initial Equipment - Boots"  # 1242
-
-    ries_initial_weapon_spoiler = "Female Default Character's Initial Equipment - Weapon"  # 1240
-    ries_initial_armor_spoiler = "Female Default Character's Initial Equipment - Armor"  # 1241
-    ries_initial_boots_spoiler = "Female Default Character's Initial Equipment - Boots"  # 1242
 
     day_grancel_south_orbment_store = "Day Grancel South Chest (Orbment Store)" # 10119
     day_grancel_south_arms_dealer = "Day Grancel South Chest (Arms Dealer)" # 10116
@@ -178,34 +149,186 @@ class LocationName:
         sealing_stone_julia,
     ]
 
-    original_to_spoiler_mapping = {
-        # Tita
-        sealing_stone_tita: sealing_stone_tita_spoiler,
-        tita_initial_weapon: tita_initial_weapon_spoiler,
-        tita_initial_armor: tita_initial_armor_spoiler,
-        tita_initial_boots: tita_initial_boots_spoiler,
-        tita_orbment_item_1: tita_orbment_item_1_spoiler,
-        tita_orbment_item_2: tita_orbment_item_2_spoiler,
-        tita_orbment_item_3: tita_orbment_item_3_spoiler,
-        tita_orbment_item_4: tita_orbment_item_4_spoiler,
-        # Kevin
-        kevin_initial_weapon: kevin_initial_weapon_spoiler,
-        kevin_initial_armor: kevin_initial_armor_spoiler,
-        kevin_initial_boots: kevin_initial_boots_spoiler,
-        # Julia
-        sealing_stone_julia: sealing_stone_julia_spoiler,
-        julia_initial_weapon: julia_initial_weapon_spoiler,
-        julia_initial_armor: julia_initial_armor_spoiler,
-        julia_initial_boots: julia_initial_boots_spoiler,
-        julia_orbment_item_1: julia_orbment_item_1_spoiler,
-        julia_orbment_item_2: julia_orbment_item_2_spoiler,
-        julia_orbment_item_3: julia_orbment_item_3_spoiler,
-        julia_orbment_item_4: julia_orbment_item_4_spoiler,
-        julia_orbment_item_5: julia_orbment_item_5_spoiler,
-        julia_orbment_item_6: julia_orbment_item_6_spoiler,
-        julia_orbment_item_7: julia_orbment_item_7_spoiler,
-        # Ries
-        ries_initial_weapon: ries_initial_weapon_spoiler,
-        ries_initial_armor: ries_initial_armor_spoiler,
-        ries_initial_boots: ries_initial_boots_spoiler,
-    }
+    estelle_craft_unlock_level_1_morale = "Estelle Craft Unlock (Level 1) - Morale" # 100000
+    estelle_craft_unlock_level_1_true_comet = "Estelle Craft Unlock (Level 1) - True Comet" # 100001
+    estelle_craft_unlock_level_1_true_hard_break = "Estelle Craft Unlock (Level 1) - True Hard Break" # 100002
+    estelle_craft_unlock_level_1_true_hurricane = "Estelle Craft Unlock (Level 1) - True Hurricane" # 100003
+    estelle_craft_unlock_level_1_taunt = "Estelle Craft Unlock (Level 1) - Taunt" # 100004
+    estelle_craft_unlock_level_1_chain_3 = "Estelle Craft Unlock (Level 1) - Chain 3" # 100005
+    estelle_craft_unlock_level_1_true_pummel = "Estelle Craft Unlock (Level 1) - True Pummel" # 100006
+    estelle_craft_unlock_level_1_true_barrage = "Estelle Craft Unlock (Level 1) - True Barrage" # 100007
+    estelle_craft_unlock_level_1_wheel_of_time = "Estelle Craft Unlock (Level 1) - Wheel Of Time" # 100008
+    estelle_craft_unlock_level_95_supreme_hurricane = "Estelle Craft Unlock (Level 95) - Supreme Hurricane" # 100009
+    estelle_craft_unlock_level_112_supreme_comet = "Estelle Craft Unlock (Level 112) - Supreme Comet" # 100010
+    estelle_craft_unlock_level_120_true_wheel_of_time = "Estelle Craft Unlock (Level 120) - True Wheel Of Time" # 100011
+    estelle_craft_unlock_level_127_supreme_hard_break = "Estelle Craft Unlock (Level 127) - Supreme Hard Break" # 100012
+
+    joshua_craft_unlock_level_1_true_dual_strike = "Joshua Craft Unlock (Level 1) - True Dual Strike" # 100013
+    joshua_craft_unlock_level_1_true_flicker = "Joshua Craft Unlock (Level 1) - True Flicker" # 100014
+    joshua_craft_unlock_level_1_true_cloak_and_dagger = "Joshua Craft Unlock (Level 1) - True Cloak & Dagger" # 100015
+    joshua_craft_unlock_level_1_evil_eye_ex = "Joshua Craft Unlock (Level 1) - Evil Eye Ex" # 100016
+    joshua_craft_unlock_level_1_taunt = "Joshua Craft Unlock (Level 1) - Taunt" # 100017
+    joshua_craft_unlock_level_1_chain_3 = "Joshua Craft Unlock (Level 1) - Chain 3" # 100018
+    joshua_craft_unlock_level_1_true_sever = "Joshua Craft Unlock (Level 1) - True Sever" # 100019
+    joshua_craft_unlock_level_1_true_black_fang = "Joshua Craft Unlock (Level 1) - True Black Fang" # 100020
+    joshua_craft_unlock_level_1_phantom_raid = "Joshua Craft Unlock (Level 1) - Phantom Raid" # 100021
+    joshua_craft_unlock_level_95_supreme_dual_strike = "Joshua Craft Unlock (Level 95) - Supreme Dual Strike" # 100022
+    joshua_craft_unlock_level_110_supreme_flicker = "Joshua Craft Unlock (Level 110) - Supreme Flicker" # 100023
+    joshua_craft_unlock_level_115_supreme_cloak_and_dagger = "Joshua Craft Unlock (Level 115) - Supreme Cloak & Dagger" # 100024
+    joshua_craft_unlock_level_125_true_phantom_raid = "Joshua Craft Unlock (Level 125) - True Phantom Raid" # 100025
+    joshua_craft_unlock_level_128_supreme_evil_eye = "Joshua Craft Unlock (Level 128) - Supreme Evil Eye" # 100026
+
+    scherazard_craft_unlock_level_1_sylphen_whip = "Scherazard Craft Unlock (Level 1) - Sylphen Whip" # 100027
+    scherazard_craft_unlock_level_1_bind_whip = "Scherazard Craft Unlock (Level 1) - Bind Whip" # 100028
+    scherazard_craft_unlock_level_11_sadist_whip = "Scherazard Craft Unlock (Level 11) - Sadist Whip" # 100029
+    scherazard_craft_unlock_level_90_sylphen_whip_2 = "Scherazard Craft Unlock (Level 90) - Sylphen Whip 2" # 100030
+    scherazard_craft_unlock_level_90_bind_whip_2 = "Scherazard Craft Unlock (Level 90) - Bind Whip 2" # 100031
+    scherazard_craft_unlock_level_90_heavens_kiss = "Scherazard Craft Unlock (Level 90) - Heaven's Kiss" # 100032
+    scherazard_craft_unlock_level_90_chain_3 = "Scherazard Craft Unlock (Level 90) - Chain 3" # 100033
+    scherazard_craft_unlock_level_90_sadist_whip_2 = "Scherazard Craft Unlock (Level 90) - Sadist Whip 2" # 100034
+    scherazard_craft_unlock_level_90_judgment_card = "Scherazard Craft Unlock (Level 90) - Judgment Card" # 100035
+    scherazard_craft_unlock_level_98_fox_tail = "Scherazard Craft Unlock (Level 98) - Fox Tail" # 100036
+    scherazard_craft_unlock_level_115_sylphen_whip_3 = "Scherazard Craft Unlock (Level 115) - Sylphen Whip 3" # 100037
+    scherazard_craft_unlock_level_120_bind_whip_3 = "Scherazard Craft Unlock (Level 120) - Bind Whip 3" # 100038
+    scherazard_craft_unlock_level_122_judgment_card_2 = "Scherazard Craft Unlock (Level 122) - Judgment Card 2" # 100039
+
+    olivier_craft_unlock_level_1_quick_draw_2 = "Olivier Craft Unlock (Level 1) - Quick Draw 2" # 100040
+    olivier_craft_unlock_level_1_sniper_shot_2 = "Olivier Craft Unlock (Level 1) - Sniper Shot 2" # 100041
+    olivier_craft_unlock_level_1_happy_trigger_2 = "Olivier Craft Unlock (Level 1) - Happy Trigger 2" # 100042
+    olivier_craft_unlock_level_1_chain_3 = "Olivier Craft Unlock (Level 1) - Chain 3" # 100043
+    olivier_craft_unlock_level_1_howling_bullet_2 = "Olivier Craft Unlock (Level 1) - Howling Bullet 2" # 100044
+    olivier_craft_unlock_level_1_requiem_hearts = "Olivier Craft Unlock (Level 1) - Requiem Hearts" # 100045
+    olivier_craft_unlock_level_105_sniper_shot_3 = "Olivier Craft Unlock (Level 105) - Sniper Shot 3" # 100046
+    olivier_craft_unlock_level_116_happy_trigger_3 = "Olivier Craft Unlock (Level 116) - Happy Trigger 3" # 100047
+    olivier_craft_unlock_level_124_requiem_hearts_2 = "Olivier Craft Unlock (Level 124) - Requiem Hearts 2" # 100048
+
+    kloe_craft_unlock_level_1_kaempfer_2 = "Kloe Craft Unlock (Level 1) - Kaempfer 2" # 100055
+    kloe_craft_unlock_level_1_sturm_2 = "Kloe Craft Unlock (Level 1) - Sturm 2" # 100056
+    kloe_craft_unlock_level_1_chain_3 = "Kloe Craft Unlock (Level 1) - Chain 3" # 100057
+    kloe_craft_unlock_level_1_lichtkreis_2 = "Kloe Craft Unlock (Level 1) - Lichtkreis 2" # 100058
+    kloe_craft_unlock_level_1_sanctus_nova = "Kloe Craft Unlock (Level 1) - Sanctus Nova" # 100059
+    kloe_craft_unlock_level_118_sturm_3 = "Kloe Craft Unlock (Level 118) - Sturm 3" # 100060
+    kloe_craft_unlock_level_124_lichtkreis_3 = "Kloe Craft Unlock (Level 124) - Lichtkreis 3" # 100061
+
+    agate_craft_unlock_level_1_wild_rage_2 = "Agate Craft Unlock (Level 1) - Wild Rage 2" # 100062
+    agate_craft_unlock_level_1_flame_smash_2 = "Agate Craft Unlock (Level 1) - Flame Smash 2" # 100063
+    agate_craft_unlock_level_1_draguna_edge_2 = "Agate Craft Unlock (Level 1) - Draguna Edge 2" # 100064
+    agate_craft_unlock_level_1_spiral_edge_2 = "Agate Craft Unlock (Level 1) - Spiral Edge 2" # 100065
+    agate_craft_unlock_level_1_chain_3 = "Agate Craft Unlock (Level 1) - Chain 3" # 100066
+    agate_craft_unlock_level_1_beat_down_2 = "Agate Craft Unlock (Level 1) - Beat Down 2" # 100067
+    agate_craft_unlock_level_1_final_break_2 = "Agate Craft Unlock (Level 1) - Final Break 2" # 100068
+    agate_craft_unlock_level_1_dragon_dive = "Agate Craft Unlock (Level 1) - Dragon Dive" # 100069
+    agate_craft_unlock_level_102_draguna_edge_3 = "Agate Craft Unlock (Level 102) - Draguna Edge 3" # 100070
+    agate_craft_unlock_level_115_flame_smash_3 = "Agate Craft Unlock (Level 115) - Flame Smash 3" # 100071
+    agate_craft_unlock_level_125_dragon_dive_2 = "Agate Craft Unlock (Level 125) - Dragon Dive 2" # 100072
+    agate_craft_unlock_level_128_spiral_edge_3 = "Agate Craft Unlock (Level 128) - Spiral Edge 3" # 100073
+
+    tita_craft_unlock_level_1_smoke_cannon_2 = "Tita Craft Unlock (Level 1) - Smoke Cannon 2" # 100074
+    tita_craft_unlock_level_1_vital_cannon_2 = "Tita Craft Unlock (Level 1) - Vital Cannon 2" # 100075
+    tita_craft_unlock_level_1_chain_3 = "Tita Craft Unlock (Level 1) - Chain 3" # 100076
+    tita_craft_unlock_level_1_cannon_impulse_2 = "Tita Craft Unlock (Level 1) - Cannon Impulse 2" # 100077
+    tita_craft_unlock_level_1_satellite_beam = "Tita Craft Unlock (Level 1) - Satellite Beam" # 100078
+    tita_craft_unlock_level_113_vital_cannon_3 = "Tita Craft Unlock (Level 113) - Vital Cannon 3" # 100079
+    tita_craft_unlock_level_124_satellite_beam_2 = "Tita Craft Unlock (Level 124) - Satellite Beam 2" # 100080
+    tita_craft_unlock_moon_door_1_orbal_gear = "Tita Craft Unlock (Moon Door 1) - Orbal Gear" # 100081
+
+    zin_craft_unlock_level_1_taunt = "Zin Craft Unlock (Level 1) - Taunt" # 100082
+    zin_craft_unlock_level_1_true_distend = "Zin Craft Unlock (Level 1) - True Distend" # 100083
+    zin_craft_unlock_level_1_true_composure = "Zin Craft Unlock (Level 1) - True Composure" # 100084
+    zin_craft_unlock_level_1_true_smite = "Zin Craft Unlock (Level 1) - True Smite" # 100085
+    zin_craft_unlock_level_1_thunder_god_kick = "Zin Craft Unlock (Level 1) - Thunder God Kick" # 100086
+    zin_craft_unlock_level_1_chain_3 = "Zin Craft Unlock (Level 1) - Chain 3" # 100087
+    zin_craft_unlock_level_1_true_disable = "Zin Craft Unlock (Level 1) - True Disable" # 100088
+    zin_craft_unlock_level_1_true_aural_blast = "Zin Craft Unlock (Level 1) - True Aural Blast" # 100089
+    zin_craft_unlock_level_1_wrath_of_genbu = "Zin Craft Unlock (Level 1) - Wrath Of Genbu" # 100090
+    zin_craft_unlock_level_110_supreme_composure = "Zin Craft Unlock (Level 110) - Supreme Composure" # 100091
+    zin_craft_unlock_level_120_supreme_smite = "Zin Craft Unlock (Level 120) - Supreme Smite" # 100092
+    zin_craft_unlock_level_122_true_wrath_of_genbu = "Zin Craft Unlock (Level 122) - True Wrath Of Genbu" # 100093
+    zin_craft_unlock_level_128_supreme_thunder_god_kick = "Zin Craft Unlock (Level 128) - Supreme Thunder God Kick" # 100094
+
+    kevin_craft_unlock_level_1_crossgear_rage = "Kevin Craft Unlock (Level 1) - Crossgear Rage" # 100095
+    kevin_craft_unlock_level_1_sacred_breath = "Kevin Craft Unlock (Level 1) - Sacred Breath" # 100096
+    kevin_craft_unlock_level_1_sacrifice_arrow = "Kevin Craft Unlock (Level 1) - Sacrifice Arrow" # 100097
+    kevin_craft_unlock_level_1_chain_3 = "Kevin Craft Unlock (Level 1) - Chain 3" # 100098
+    kevin_craft_unlock_level_1_mortal_punishment = "Kevin Craft Unlock (Level 1) - Mortal Punishment" # 100099
+    kevin_craft_unlock_level_1_grail_sphere = "Kevin Craft Unlock (Level 1) - Grail Sphere" # 100100
+    kevin_craft_unlock_level_95_crossgear_rage_2 = "Kevin Craft Unlock (Level 95) - Crossgear Rage 2" # 100101
+    kevin_craft_unlock_level_109_sacred_breath_2 = "Kevin Craft Unlock (Level 109) - Sacred Breath 2" # 100102
+    kevin_craft_unlock_level_116_gorgon_arrow = "Kevin Craft Unlock (Level 116) - Gorgon Arrow" # 100103
+    kevin_craft_unlock_level_126_mortal_punishment_2 = "Kevin Craft Unlock (Level 126) - Mortal Punishment 2" # 100104
+    kevin_craft_unlock_chapter_4_end_spear_of_loa = "Kevin Craft Unlock (Chapter 4 End) - Spear Of Loa" # 100105
+    kevin_craft_unlock_chapter_7_end_spear_of_ur = "Kevin Craft Unlock (Chapter 7 End) - Spear Of Ur" # 100106
+
+    anelace_craft_unlock_level_1_eight_leaf_blitz = "Anelace Craft Unlock (Level 1) - Eight-Leaf Blitz" # 100107
+    anelace_craft_unlock_level_1_swordwind_slash = "Anelace Craft Unlock (Level 1) - Swordwind Slash" # 100108
+    anelace_craft_unlock_level_1_fallen_leaves = "Anelace Craft Unlock (Level 1) - Fallen Leaves" # 100109
+    anelace_craft_unlock_level_1_petal_dance = "Anelace Craft Unlock (Level 1) - Petal Dance" # 100110
+    anelace_craft_unlock_level_1_chain_3 = "Anelace Craft Unlock (Level 1) - Chain 3" # 100111
+    anelace_craft_unlock_level_1_true_piercing_wave = "Anelace Craft Unlock (Level 1) - True Piercing Wave" # 100112
+    anelace_craft_unlock_level_98_whirlwind_dance = "Anelace Craft Unlock (Level 98) - Whirlwind Dance" # 100113
+    anelace_craft_unlock_level_118_true_eight_leaf_blitz = "Anelace Craft Unlock (Level 118) - True Eight-Leaf Blitz" # 100114
+    anelace_craft_unlock_level_123_supreme_piercing_wave = "Anelace Craft Unlock (Level 123) - Supreme Piercing Wave" # 100115
+    anelace_craft_unlock_level_128_true_swordwind_slash = "Anelace Craft Unlock (Level 128) - True Swordwind Slash" # 100116
+
+    josette_craft_unlock_level_1_stampede = "Josette Craft Unlock (Level 1) - Stampede" # 100117
+    josette_craft_unlock_level_1_anchor_flail = "Josette Craft Unlock (Level 1) - Anchor Flail" # 100118
+    josette_craft_unlock_level_1_chain_3 = "Josette Craft Unlock (Level 1) - Chain 3" # 100119
+    josette_craft_unlock_level_94_plunder = "Josette Craft Unlock (Level 94) - Plunder" # 100120
+    josette_craft_unlock_level_111_orbal_bomb = "Josette Craft Unlock (Level 111) - Orbal Bomb" # 100121
+    josette_craft_unlock_sun_door_1_bobcat = "Josette Craft Unlock (Sun Door 1) - Bobcat" # 100122
+    josette_craft_unlock_sky_bandit_fight_bobcat_2 = "Josette Craft Unlock (Sky Bandit Fight) - Bobcat 2" # 100123
+
+    richard_craft_unlock_level_1_luminous_ogre_slash = "Richard Craft Unlock (Level 1) - Luminous Ogre Slash" # 100124
+    richard_craft_unlock_level_1_luminous_wheel = "Richard Craft Unlock (Level 1) - Luminous Wheel" # 100125
+    richard_craft_unlock_level_1_luminous_divider = "Richard Craft Unlock (Level 1) - Luminous Divider" # 100126
+    richard_craft_unlock_level_1_chain_2 = "Richard Craft Unlock (Level 1) - Chain 2" # 100127
+    richard_craft_unlock_level_1_afterglow_smasher = "Richard Craft Unlock (Level 1) - Afterglow Smasher" # 100128
+    richard_craft_unlock_level_102_chain_3 = "Richard Craft Unlock (Level 102) - Chain 3" # 100129
+    richard_craft_unlock_level_103_true_luminous_wheel = "Richard Craft Unlock (Level 103) - True Luminous Wheel" # 100130
+    richard_craft_unlock_level_114_true_luminous_ogre_slash = "Richard Craft Unlock (Level 114) - True Luminous Ogre Slash" # 100131
+    richard_craft_unlock_level_120_sakura_morning_moon = "Richard Craft Unlock (Level 120) - Sakura Morning Moon" # 100132
+    richard_craft_unlock_level_128_true_luminous_divider = "Richard Craft Unlock (Level 128) - True Luminous Divider" # 100133
+
+    mueller_craft_unlock_level_1_ragna_bind = "Mueller Craft Unlock (Level 1) - Ragna Bind" # 100134
+    mueller_craft_unlock_level_1_hound_gale = "Mueller Craft Unlock (Level 1) - Hound Gale" # 100135
+    mueller_craft_unlock_level_1_blade_dancer = "Mueller Craft Unlock (Level 1) - Blade Dancer" # 100136
+    mueller_craft_unlock_level_1_mirage_edge = "Mueller Craft Unlock (Level 1) - Mirage Edge" # 100137
+    mueller_craft_unlock_level_1_chain_1 = "Mueller Craft Unlock (Level 1) - Chain 1" # 100138
+    mueller_craft_unlock_level_1_righteous_witness = "Mueller Craft Unlock (Level 1) - Righteous Witness" # 100139
+    mueller_craft_unlock_level_96_chain_2 = "Mueller Craft Unlock (Level 96) - Chain 2" # 100140
+    mueller_craft_unlock_level_115_chain_3 = "Mueller Craft Unlock (Level 115) - Chain 3" # 100141
+    mueller_craft_unlock_level_116_hound_gale_2 = "Mueller Craft Unlock (Level 116) - Hound Gale 2" # 100142
+    mueller_craft_unlock_level_124_true_righteous_witness = "Mueller Craft Unlock (Level 124) - True Righteous Witness" # 100143
+    mueller_craft_unlock_level_127_blade_dancer_2 = "Mueller Craft Unlock (Level 127) - Blade Dancer 2" # 100144
+
+    julia_craft_unlock_level_1_lanzenreiter = "Julia Craft Unlock (Level 1) - Lanzenreiter" # 100145
+    julia_craft_unlock_level_1_mirageberg = "Julia Craft Unlock (Level 1) - Mirageberg" # 100146
+    julia_craft_unlock_level_1_chain_2 = "Julia Craft Unlock (Level 1) - Chain 2" # 100147
+    julia_craft_unlock_level_1_trinity_kleis = "Julia Craft Unlock (Level 1) - Trinity Kleis" # 100148
+    julia_craft_unlock_level_94_attack_orders = "Julia Craft Unlock (Level 94) - Attack Orders" # 100149
+    julia_craft_unlock_level_99_chain_3 = "Julia Craft Unlock (Level 99) - Chain 3" # 100150
+    julia_craft_unlock_level_112_lanzenreiter_2 = "Julia Craft Unlock (Level 112) - Lanzenreiter 2" # 100151
+    julia_craft_unlock_level_123_pentagrammic_kleis = "Julia Craft Unlock (Level 123) - Pentagrammic Kleis" # 100152
+    julia_craft_unlock_level_126_mirageberg_2 = "Julia Craft Unlock (Level 126) - Mirageberg 2" # 100153
+
+    ries_craft_unlock_level_1_arc_fencer = "Ries Craft Unlock (Level 1) - Arc Fencer" # 100154
+    ries_craft_unlock_level_1_holy_blessing = "Ries Craft Unlock (Level 1) - Holy Blessing" # 100155
+    ries_craft_unlock_level_1_chain_1 = "Ries Craft Unlock (Level 1) - Chain 1" # 100156
+    ries_craft_unlock_level_100_chain_2 = "Ries Craft Unlock (Level 100) - Chain 2" # 100157
+    ries_craft_unlock_level_105_thousand_sparrows = "Ries Craft Unlock (Level 105) - Thousand Sparrows" # 100158
+    ries_craft_unlock_level_118_chain_3 = "Ries Craft Unlock (Level 118) - Chain 3" # 100159
+    ries_craft_unlock_level_119_arc_fencer_2 = "Ries Craft Unlock (Level 119) - Arc Fencer 2" # 100160
+    ries_craft_unlock_level_122_heavenly_sphere = "Ries Craft Unlock (Level 122) - Heavenly Sphere" # 100161
+    ries_craft_unlock_level_127_infinity_sparrows = "Ries Craft Unlock (Level 127) - Infinity Sparrows" # 100162
+    ries_craft_unlock_chapter_1_end_heavenly_strike = "Ries Craft Unlock (Chapter 1 End) - Heavenly Strike" # 100163
+
+    renne_craft_unlock_level_1_calamity_throw = "Renne Craft Unlock (Level 1) - Calamity Throw" # 100164
+    renne_craft_unlock_level_1_blood_circle = "Renne Craft Unlock (Level 1) - Blood Circle" # 100165
+    renne_craft_unlock_level_1_rennede = "Renne Craft Unlock (Level 1) - Rennede" # 100166
+    renne_craft_unlock_level_93_chain_1 = "Renne Craft Unlock (Level 93) - Chain 1" # 100167
+    renne_craft_unlock_level_105_chain_2 = "Renne Craft Unlock (Level 105) - Chain 2" # 100168
+    renne_craft_unlock_level_110_blood_circle_2 = "Renne Craft Unlock (Level 110) - Blood Circle 2" # 100169
+    renne_craft_unlock_level_124_calamity_throw_2 = "Renne Craft Unlock (Level 124) - Calamity Throw 2" # 100170
+    renne_craft_unlock_level_129_chain_3 = "Renne Craft Unlock (Level 129) - Chain 3" # 100171
+    renne_craft_unlock_star_door_10_pater_mater = "Renne Craft Unlock (Star Door 10) - Pater-Mater" # 100172
+

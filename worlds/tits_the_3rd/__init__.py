@@ -2,7 +2,7 @@
 This module servies as an entrypoint into the Trails in the Sky the 3rd AP world.
 """
 from copy import deepcopy
-from typing import ClassVar, Counter, Dict, Set
+from typing import ClassVar, Counter, Dict, Set, Any
 
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, launch_subprocess, Type
@@ -21,14 +21,17 @@ from .items import (
     default_chest_pool,
     default_character_quartz_pool,
     default_character_to_location,
+    default_craft_pool,
 )
-from .locations import create_locations, location_groups, location_table, default_sealing_stone_quartz
-from .options import CharacterStartingQuartzOptions, ChestItemPoolOptions, SealingStoneCharactersOptions, StartingCharactersOptions, TitsThe3rdOptions
+from .tables.location_list import craft_locations, location_table
+from .locations import create_locations, location_groups
+from .options import CharacterStartingQuartzOptions, ChestItemPoolOptions, SealingStoneCharactersOptions, StartingCharactersOptions, TitsThe3rdOptions, CraftShuffle, CraftPlacement
 from .regions import create_regions, connect_regions
 from .settings import TitsThe3rdSettings
 from .web import TitsThe3rdWeb
 from .tables import location_list
-
+from .crafts.craft_randomizer import shuffle_crafts_main
+from .spoiler_mapping import scrub_spoiler_data
 
 def launch_client():
     """Launch a Trails in the Sky the 3rd client instance"""
@@ -65,6 +68,8 @@ class TitsThe3rdWorld(World):
     def create_item(self, name: str) -> TitsThe3rdItem:
         """Create a Trails in the Sky the 3rd item for this player"""
         data: TitsThe3rdItemData = item_data_table[name]
+        if self.options.name_spoiler_option:
+            name = scrub_spoiler_data(name)
         return TitsThe3rdItem(name, data.classification, data.code, self.player)
 
     def create_event(self, name: str) -> TitsThe3rdItem:
@@ -75,7 +80,7 @@ class TitsThe3rdWorld(World):
         """Define regions and locations for Trails in the Sky the 3rd AP"""
         create_regions(self.multiworld, self.player)
         connect_regions(self.multiworld, self.player)
-        create_locations(self.multiworld, self.player, self.options.name_spoiler_option)
+        create_locations(self.multiworld, self.player, self.options)
 
     def setup_characters(self, itempool: Counter[str]) -> Counter[str]:
         # Randomize starting characters here
@@ -85,12 +90,8 @@ class TitsThe3rdWorld(World):
             character_list.remove(ItemName.ries)
             first_starting_character = ItemName.kevin
             second_starting_character = ItemName.ries
-            if self.options.name_spoiler_option:
-                self.multiworld.push_precollected(self.create_item(ItemName.original_to_spoiler_mapping[ItemName.kevin]))
-                self.multiworld.push_precollected(self.create_item(ItemName.original_to_spoiler_mapping[ItemName.ries]))
-            else:
-                self.multiworld.push_precollected(self.create_item(ItemName.kevin))
-                self.multiworld.push_precollected(self.create_item(ItemName.ries))
+            self.multiworld.push_precollected(self.create_item(ItemName.kevin))
+            self.multiworld.push_precollected(self.create_item(ItemName.ries))
         elif self.options.starting_character_option == StartingCharactersOptions.option_set:
             first_starting_character = self.options.first_starting_character.current_key.capitalize()
             character_list.remove(first_starting_character)
@@ -102,30 +103,18 @@ class TitsThe3rdWorld(World):
             else:
                 character_list.remove(second_starting_character)
 
-            if self.options.name_spoiler_option:
-                self.multiworld.push_precollected(self.create_item(ItemName.original_to_spoiler_mapping[first_starting_character]))
-                self.multiworld.push_precollected(self.create_item(ItemName.original_to_spoiler_mapping[second_starting_character]))
-            else:
-                self.multiworld.push_precollected(self.create_item(first_starting_character))
-                self.multiworld.push_precollected(self.create_item(second_starting_character))
+            self.multiworld.push_precollected(self.create_item(first_starting_character))
+            self.multiworld.push_precollected(self.create_item(second_starting_character))
         else:
             self.multiworld.random.shuffle(character_list)
             first_starting_character = character_list.pop()
             second_starting_character = character_list.pop()
-            if self.options.name_spoiler_option:
-                first_character_item = self.create_item(ItemName.original_to_spoiler_mapping[first_starting_character])
-                second_character_item = self.create_item(ItemName.original_to_spoiler_mapping[second_starting_character])
-            else:
-                first_character_item = self.create_item(first_starting_character)
-                second_character_item = self.create_item(second_starting_character)
-            self.multiworld.push_precollected(first_character_item)
-            self.multiworld.push_precollected(second_character_item)
+            self.multiworld.push_precollected(self.create_item(first_starting_character))
+            self.multiworld.push_precollected(self.create_item(second_starting_character))
 
         # Sealing Stone Characters
         # Charactersanity
         if self.options.sealing_stone_character_options == SealingStoneCharactersOptions.option_charactersanity:
-            if self.options.name_spoiler_option:
-                character_list = [ItemName.original_to_spoiler_mapping[character] for character in character_list]
             itempool.update(character_list)
         # Vanilla
         elif self.options.sealing_stone_character_options == SealingStoneCharactersOptions.option_vanilla:
@@ -134,42 +123,87 @@ class TitsThe3rdWorld(World):
             for character in character_list:
                 if character in default_character_to_location:
                     location_name = default_character_to_location[character]
-                    if self.options.name_spoiler_option:
-                        character_item = self.create_item(ItemName.original_to_spoiler_mapping[character])
-                        self.multiworld.get_location(LocationName.original_to_spoiler_mapping[location_name], self.player).place_locked_item(character_item)
-                    else:
-                        character_item = self.create_item(character)
-                        self.multiworld.get_location(location_name, self.player).place_locked_item(character_item)
+                    character_item = self.create_item(character)
+                    self.multiworld.get_location(location_name, self.player).place_locked_item(character_item)
                     sealing_stone_locations.remove(location_name)
                 else:
                     leftover_characters.append(character)
 
             for character in leftover_characters:
                 location_name = sealing_stone_locations.pop()
-                if self.options.name_spoiler_option:
-                    character_item = self.create_item(ItemName.original_to_spoiler_mapping[character])
-                    self.multiworld.get_location(LocationName.original_to_spoiler_mapping[location_name], self.player).place_locked_item(character_item)
-                else:
-                    character_item = self.create_item(character)
-                    self.multiworld.get_location(location_name, self.player).place_locked_item(character_item)
+                character_item = self.create_item(character)
+                self.multiworld.get_location(location_name, self.player).place_locked_item(character_item)
         # Shuffle
         else:
             sealing_stone_locations = deepcopy(LocationName.sealing_stone_locations)
             self.multiworld.random.shuffle(sealing_stone_locations)
             for character in character_list:
                 location_name = sealing_stone_locations.pop()
-                if self.options.name_spoiler_option:
-                    character_item = self.create_item(ItemName.original_to_spoiler_mapping[character])
-                    self.multiworld.get_location(LocationName.original_to_spoiler_mapping[location_name], self.player).place_locked_item(character_item)
-                else:
-                    character_item = self.create_item(character)
-                    self.multiworld.get_location(location_name, self.player).place_locked_item(character_item)
+                character_item = self.create_item(character)
+                self.multiworld.get_location(location_name, self.player).place_locked_item(character_item)
 
         return itempool
 
+    def _set_default_craft_locations_for_character(self, location_names: Set[str], item_name: ItemName) -> None:
+        """
+        Given a set of craft location names, set them to the progressive craft for the given character.
+
+        Args:
+            location_names (Set[str]): The set of location names to set the progressive craft for.
+            item_name (ItemName): The item name of the progressive craft.
+
+        Returns:
+            None
+        """
+        for location_name in location_names:
+            self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item(item_name))
+
+    def _set_default_craft_locations(self) -> None:
+        """
+        Set the craft unlock locations for each character to the default location.
+
+        Returns:
+            None
+        """
+        self._set_default_craft_locations_for_character(location_names=location_groups["Estelle Crafts"], item_name=ItemName.estelle_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Joshua Crafts"], item_name=ItemName.joshua_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Scherazard Crafts"], item_name=ItemName.scherazard_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Olivier Crafts"], item_name=ItemName.olivier_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Kloe Crafts"], item_name=ItemName.kloe_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Agate Crafts"], item_name=ItemName.agate_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Tita Crafts"], item_name=ItemName.tita_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Zin Crafts"], item_name=ItemName.zin_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Kevin Crafts"], item_name=ItemName.kevin_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Anelace Crafts"], item_name=ItemName.anelace_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Josette Crafts"], item_name=ItemName.josette_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Richard Crafts"], item_name=ItemName.richard_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Mueller Crafts"], item_name=ItemName.mueller_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Julia Crafts"], item_name=ItemName.julia_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Ries Crafts"], item_name=ItemName.ries_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Renne Crafts"], item_name=ItemName.renne_progressive_craft)
+
+    def pre_fill(self) -> None:
+        # Crafts
+        if self.options.craft_placement == CraftPlacement.option_default and self.options.craft_shuffle:
+            # Crafts are at their default locations, but which craft is given is randomized.
+            # (E.g. Estelle may get Dual Strike when she levels up)
+            self._set_default_craft_locations()
+        elif self.options.craft_placement == CraftPlacement.option_crafts:
+            # Crafts are shuffled amongst each other (e.g. levelling up as character X may give a craft for character Y)
+            craft_items = []
+            for item_name, quantity in default_craft_pool.items():
+                for _ in range(quantity):
+                    craft_items.append(self.create_item(item_name))
+            remaining_craft_locations = list(craft_locations.keys())
+            for item in craft_items:
+                location_name = self.multiworld.random.choice(remaining_craft_locations)
+                self.multiworld.get_location(location_name, self.player).place_locked_item(item)
+                remaining_craft_locations.remove(location_name)
+
     def create_items(self) -> None:
-        itempool = deepcopy(default_item_pool)
         """Define items for Trails in the Sky the 3rd AP"""
+        itempool = deepcopy(default_item_pool)
+
         # Handle Sealing Stone Quartz
         # Vanilla Shuffle
         if self.options.character_starting_quartz_options == CharacterStartingQuartzOptions.option_vanilla_shuffle:
@@ -178,22 +212,14 @@ class TitsThe3rdWorld(World):
         elif self.options.character_starting_quartz_options == CharacterStartingQuartzOptions.option_vanilla:
             for location_name, quartz_name in default_sealing_stone_quartz.items():
                 quartz_item = self.create_item(quartz_name)
-                if self.options.name_spoiler_option:
-                    self.multiworld.get_location(LocationName.original_to_spoiler_mapping[location_name], self.player).place_locked_item(quartz_item)
-                else:
-                    self.multiworld.get_location(location_name, self.player).place_locked_item(quartz_item)
+                self.multiworld.get_location(location_name, self.player).place_locked_item(quartz_item)
         # Random Quartz
         elif self.options.character_starting_quartz_options == CharacterStartingQuartzOptions.option_random_quartz:
             quartz_list = list(quartz_table.keys())
             for location_name in default_sealing_stone_quartz:
                 quartz_item = self.create_item(self.multiworld.random.choice(quartz_list))
-                if self.options.name_spoiler_option:
-                    self.multiworld.get_location(LocationName.original_to_spoiler_mapping[location_name], self.player).place_locked_item(quartz_item)
-                else:
-                    self.multiworld.get_location(location_name, self.player).place_locked_item(quartz_item)
-        # All Random: We just let the filler handler further down handle this
-        else:
-            ...
+                self.multiworld.get_location(location_name, self.player).place_locked_item(quartz_item)
+        # Else all random (NOP): We just let the filler handler further down handle this
 
         # Handle Chest Item Pool
         if self.options.chest_itempool_option == ChestItemPoolOptions.option_vanilla_shuffle:
@@ -206,6 +232,12 @@ class TitsThe3rdWorld(World):
 
         # Setup all the playable characters stuffs
         itempool = self.setup_characters(itempool)
+
+        # Add craft items to item pool.
+        # If crafts are shuffled amongst each other, or placed as their default locations, this was placed in prefill.
+        if self.options.craft_placement == CraftPlacement.option_anywhere:
+            itempool.update(default_craft_pool)
+
         # Generate filler here
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         itempool.update([self.get_filler_item_name() for _ in range(total_locations - itempool.total())])
@@ -217,6 +249,19 @@ class TitsThe3rdWorld(World):
     def set_rules(self) -> None:
         """Set remaining rules."""
         self.multiworld.completion_condition[self.player] = lambda _: True
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+        # Note: if craft shuffle is on, event get crafts will be a random progressive craft.
+        # If craft shuffle is off, event get crafts will be the default craft.
+        #   For these, craft_get_order will be ignored.
+        # This behaviour is handled by the client.
+        craft_get_order, old_craft_id_to_new_craft_id = shuffle_crafts_main(self.options, self.random)
+        return {
+            "craft_get_order": craft_get_order,
+            "old_craft_id_to_new_craft_id": old_craft_id_to_new_craft_id,
+            "default_event_crafts": self.options.craft_placement == CraftPlacement.option_default and not self.options.craft_shuffle,
+            "default_crfget": self.options.craft_placement == CraftPlacement.option_default and not self.options.craft_shuffle,
+        }
 
     def get_filler_item_name(self):
         filler_item_name = self.multiworld.random.choice(filler_items)

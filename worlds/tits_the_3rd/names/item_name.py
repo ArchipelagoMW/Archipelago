@@ -83,26 +83,45 @@ class ItemName:
     higher_elements_sepith_500 = "Higher Elements Sepith (500)"
 
     # Characters
-    kevin = "Kevin"
-    kevin_spoiler = "Male Default Character"
-    ries = "Ries"
-    ries_spoiler = "Female Default Character"
+    estelle = "Estelle"
+    joshua = "Joshua"
+    scherazard = "Scherazard"
+    olivier = "Olivier"
+    kloe = "Kloe"
+    agate = "Agate"
     tita = "Tita"
-    tita_spoiler = "Chapter 1 First Character"
+    zin = "Zin"
+    kevin = "Kevin"
+    anelace = "Anelace"
+    josette = "Josette"
+    richard = "Richard"
+    mueller = "Mueller"
     julia = "Julia"
-    julia_spoiler = "Chapter 1 Second Character"
+    ries = "Ries"
+    renne = "Renne"
 
-    original_to_spoiler_mapping = {
-        kevin: kevin_spoiler,
-        ries: ries_spoiler,
-        tita: tita_spoiler,
-        julia: julia_spoiler,
-    }
-
-    # Location Unlock
+    # Area Unlock
     jade_corridor_unlock_1 = "Area Expansion: Jade Corridor 1"
     jade_corridor_unlock_2 = "Area Expansion: Jade Corridor 2"
     jade_corridor_arseille_unlock = "Area Expansion: Arseille"
+
+    # Craft Unlock
+    estelle_progressive_craft = "Estelle's Progressive Craft"
+    joshua_progressive_craft = "Joshua's Progressive Craft"
+    scherazard_progressive_craft = "Scherazard's Progressive Craft"
+    olivier_progressive_craft = "Olivier's Progressive Craft"
+    kloe_progressive_craft = "Kloe's Progressive Craft"
+    agate_progressive_craft = "Agate's Progressive Craft"
+    tita_progressive_craft = "Tita's Progressive Craft"
+    zin_progressive_craft = "Zin's Progressive Craft"
+    kevin_progressive_craft = "Kevin's Progressive Craft"
+    anelace_progressive_craft = "Anelace's Progressive Craft"
+    josette_progressive_craft = "Josette's Progressive Craft"
+    richard_progressive_craft = "Richard's Progressive Craft"
+    mueller_progressive_craft = "Mueller's Progressive Craft"
+    julia_progressive_craft = "Julia's Progressive Craft"
+    ries_progressive_craft = "Ries's Progressive Craft"
+    renne_progressive_craft = "Renne's Progressive Craft"
 
     # Key Item
     bennu_defeat = "Bennu Defeated (Victory)"
@@ -120,3 +139,5 @@ class ItemName:
     area_max_id = "Location Max ID"
     recipe_min_id = "Recipe Min ID"
     recipe_max_id = "Recipe Max ID"
+    craft_min_id = "Craft Min ID"
+    craft_max_id = "Craft Max ID"

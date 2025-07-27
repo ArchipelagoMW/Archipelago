@@ -24,3 +24,19 @@ class RegionName:
     night_grancel_east = "Night Grancel East"
     night_grancel_port = "Night Grancel Port"
     grancel_castle = "Grancel Castle"
+
+    level_90 = "Level 90" # Start
+    level_95 = "Level 95" # Chapter 1
+    level_103 = "Level 103" # Chapter 2
+    level_105 = "Level 105" # Chapter 3
+    level_111 = "Level 111" # Chapter 4
+    level_116 = "Level 116" # Chapter 5
+    level_124 = "Level 124" # Chapter 6
+    level_133 = "Level 133" # Chapter 7
+    level_136 = "Level 136" # Finale
+
+    # Additional regions for craft unlocks
+    chapter_4_end = "Chapter 4 End"
+    chapter_7_end = "Chapter 7 End"
+    sky_bandit_fight = "Sky Bandit Fight"
+    star_door_10 = "Star Door 10"
