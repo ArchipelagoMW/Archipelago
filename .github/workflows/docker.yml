@@ -10,8 +10,6 @@ on:
       - "!.gitignore"
       - "!.github/workflows/**"
       - ".github/workflows/docker.yml"
-    branches:
-      - "*"
     tags:
       - "*.*.*"
 
