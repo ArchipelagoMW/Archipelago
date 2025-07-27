@@ -43,9 +43,9 @@ including the exclamation point.
 
 ### Collect/Release
 - `!collect` Grants you all the remaining items for your world by collecting them from all games. Typically used after 
-  goal completion.
+  goal completion. (Aliases: `!yoink`)
 - `!release` Releases all items contained in your world to other worlds. Typically, done automatically by the server,
-  but can be configured to allow/require manual usage of this command.
+  but can be configured to allow/require manual usage of this command. (Aliases: `!yeet`)
 
 ### Cheats
 - `!getitem <item>` Cheats an item to the currently connected slot, if it is enabled in the server.
