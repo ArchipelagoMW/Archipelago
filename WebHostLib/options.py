@@ -155,7 +155,7 @@ def generate_weighted_yaml(game: str):
         options = {}
 
         for key, val in request.form.items():
-            if val == "ensure-empty-list":
+            if val == "_ensure-empty-list":
                 options[key] = {}
             elif "||" not in key:
                 if len(str(val)) == 0:
@@ -216,7 +216,7 @@ def generate_yaml(game: str):
         intent_generate = False
 
         for key, val in request.form.items(multi=True):
-            if val == "ensure-empty-list":
+            if val == "_ensure-empty-list":
                 options[key] = []
             elif options.get(key):
                 if not isinstance(options[key], list):
