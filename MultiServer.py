@@ -1287,7 +1287,15 @@ class CommandProcessor(metaclass=CommandMeta):
         except Exception as e:
             self._error_parsing_command(e)
 
+    def get_command_alias_reverse_lookup(self) -> dict[str, list[str]]:
+        command_aliases_reversed = {}
+        for alias, command in self.command_aliases.items():
+            command_aliases_reversed.setdefault(command, []).append(alias)
+        return command_aliases_reversed
+
     def get_help_text(self) -> str:
+        command_aliases_reversed = self.get_command_alias_reverse_lookup()
+
         s = ""
         for command, method in self.commands.items():
             spec = inspect.signature(method).parameters
@@ -1304,6 +1312,9 @@ class CommandProcessor(metaclass=CommandMeta):
                 argtext += argname
                 argtext += " "
             s += f"{self.marker}{command} {argtext}\n    {method.__doc__}\n"
+            aliases = command_aliases_reversed.get(command, [])
+            if aliases:
+                s += f"    Aliases: {', '.join(aliases)}\n"
         return s
 
     def _cmd_help(self):
