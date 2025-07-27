@@ -104,8 +104,8 @@ def download_SNI() -> None:
             # prefer "many" builds
             if "many" in download_url:
                 break
-            # prefer first windows build
-            if platform_name == "windows":
+            # prefer the correct windows build
+            if platform_name == "windows" and "windows7" not in download_url:
                 break
 
     if source_url and source_url.endswith(".zip"):
