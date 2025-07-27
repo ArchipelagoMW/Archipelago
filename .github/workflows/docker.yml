@@ -14,6 +14,7 @@ on:
       - "*"
     tags:
       - "*.*.*"
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
