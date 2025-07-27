@@ -13,9 +13,9 @@ class GrinchLocation(Location):
     game: str = "The Grinch"
 
     @staticmethod
-    def get_apid(code: int):
+    def get_apid(id: int):
         base_id: int = 42069
-        return base_id + code
+        return base_id + id
 
 grinch_locations = {
 #Going to use current map id as indicator whether or not you visited a location
@@ -29,8 +29,8 @@ grinch_locations = {
     "Enter the Civic Center": GrinchLocationData("Visitsanity", 106, [GrinchRamData(0x80010000, value=0x0D)]),
     "Enter Who Dump": GrinchLocationData("Visitsanity", 107, [GrinchRamData(0x80010000, value=0x0E)]),
     "Enter the Guardian's House Mine Field": GrinchLocationData("Visitsanity", 108, [GrinchRamData(0x80010000, value=0x11)]),
-    "Enter the exterior of the Power Plant": GrinchLocationData("Visitsanity", 109, [GrinchRamData(0x80010000, value=0x10)]),
-    "Enter the interior of the Power Plant": GrinchLocationData("Visitsanity", 110, [GrinchRamData(0x80010000, value=0x0F)]),
+    "Enter the Power Plant": GrinchLocationData("Visitsanity", 109, [GrinchRamData(0x80010000, value=0x10)]),
+    "Enter the Generator Building": GrinchLocationData("Visitsanity", 110, [GrinchRamData(0x80010000, value=0x0F)]),
     "Enter Who Lake": GrinchLocationData("Visitsanity", 111, [GrinchRamData(0x80010000, value=0x12)]),
     "Enter the Submarine World": GrinchLocationData("Visitsanity", 112, [GrinchRamData(0x80010000, value=0x17)]),
     "Enter the Scout's Hut": GrinchLocationData("Visitsanity", 113, [GrinchRamData(0x80010000, value=0x13)]),
@@ -106,7 +106,7 @@ grinch_locations = {
     "Octopus Climbing Device Blueprint - Mayor's House Vent Cage": GrinchLocationData("Octopus Climbing Device Blueprints", 1003, [GrinchRamData(0x80010252, binary_bit_pos=2)]),
     "Octopus Climbing Device Blueprint - Left Pipe": GrinchLocationData("Octopus Climbing Device Blueprints", 1004, [GrinchRamData(0x80010252, binary_bit_pos=5)]),
     "Octopus Climbing Device Blueprint - Near Power Plant Wall on left side": GrinchLocationData("Octopus Climbing Device Blueprints", 1005, [GrinchRamData(0x80010252, binary_bit_pos=1)]),
-    "Octopus Climbing Device Blueprint - Near Who-Bris' Shack": GrinchLocationData("Octopus Climbing Device Blueprints", 1006, [GrinchRamData()]),
+    "Octopus Climbing Device Blueprint - Near Who-Bris' Shack": GrinchLocationData("Octopus Climbing Device Blueprints", 1006, [GrinchRamData(0x80010252, binary_bit_pos=3)]),
     "Octopus Climbing Device Blueprint - Guardian's House - Left side of Guardian House": GrinchLocationData("Octopus Climbing Device Blueprints", 1007, [GrinchRamData(0x8001026E, binary_bit_pos=3)]),
     "Octopus Climbing Device Blueprint - Guardian's House - Right side of Guardian House": GrinchLocationData("Octopus Climbing Device Blueprints", 1008, [GrinchRamData(0x8001026E, binary_bit_pos=5)]),
     "Octopus Climbing Device Blueprint - Inside Guardian's House": GrinchLocationData("Octopus Climbing Device Blueprints", 1009, [GrinchRamData(0x8001026E, binary_bit_pos=3)]),
@@ -130,16 +130,16 @@ grinch_locations = {
 #Grinch Copter Blueprints
     "Grinch Copter Blueprint - Whoville City Hall - Safe Room": GrinchLocationData("Grinch Copter Blueprints", 1200, [GrinchRamData(0x8001020B, binary_bit_pos=8)]),
     "Grinch Copter Blueprint - Whoville City Hall - Statue Room": GrinchLocationData("Grinch Copter Blueprints", 1201, [GrinchRamData(0x80010220, binary_bit_pos=1)]),
-    "Grinch Copter Blueprint - Whoville Clock Tower - Before Bells": GrinchLocationData("Grinch Copter Blueprints", 1202, [GrinchRamData()]),
-    "Grinch Copter Blueprint - Whoville Clock Tower - After Bells": GrinchLocationData("Grinch Copter Blueprints", 1203, [GrinchRamData()]),
+    "Grinch Copter Blueprint - Whoville Clock Tower - Before Bells": GrinchLocationData("Grinch Copter Blueprints", 1202, [GrinchRamData(0x80010265, binary_bit_pos=4)]),
+    "Grinch Copter Blueprint - Whoville Clock Tower - After Bells": GrinchLocationData("Grinch Copter Blueprints", 1203, [GrinchRamData(0x80010265, binary_bit_pos=3)]),
     "Grinch Copter Blueprint - Who Forest Ski Resort - Inside Dog's Fence": GrinchLocationData("Grinch Copter Blueprints", 1204, [GrinchRamData(0x80010234, binary_bit_pos=8)]),
     "Grinch Copter Blueprint - Who Forest Ski Resort - Max Cave": GrinchLocationData("Grinch Copter Blueprints", 1205, [GrinchRamData(0x80010234, binary_bit_pos=7)]),
     "Grinch Copter Blueprint - Who Forest Civic Center - Climb across wall": GrinchLocationData("Grinch Copter Blueprints", 1206, [GrinchRamData(0x8001022A, binary_bit_pos=8)]),
     "Grinch Copter Blueprint - Who Forest Civic Center - Shoot the Icicle": GrinchLocationData("Grinch Copter Blueprints", 1207, [GrinchRamData(0x8001022B, binary_bit_pos=1)]),
-    "Grinch Copter Blueprint - Who Dump Outside of Power Plant - First": GrinchLocationData("Grinch Copter Blueprints", 1208, [GrinchRamData(0x80010265, binary_bit_pos=2)]),
-    "Grinch Copter Blueprint - Who Dump Outside of Power Plant - Second Gate": GrinchLocationData("Grinch Copter Blueprints", 1209, [GrinchRamData(0x80010265, binary_bit_pos=3)]),
-    "Grinch Copter Blueprint - Who Dump Inside of Power Plant - Before Mission": GrinchLocationData("Grinch Copter Blueprints", 1210, [GrinchRamData(0x8001026B, binary_bit_pos=1)]),
-    "Grinch Copter Blueprint - Who Dump Inside of Power Plant - After Mission": GrinchLocationData("Grinch Copter Blueprints", 1211, [GrinchRamData(0x8001026B, binary_bit_pos=2)]),
+    "Grinch Copter Blueprint - Who Dump Power Plant - First": GrinchLocationData("Grinch Copter Blueprints", 1208, [GrinchRamData(0x80010265, binary_bit_pos=2)]),
+    "Grinch Copter Blueprint - Who Dump Power Plant - Second Gate": GrinchLocationData("Grinch Copter Blueprints", 1209, [GrinchRamData(0x80010265, binary_bit_pos=3)]),
+    "Grinch Copter Blueprint - Who Dump Generator Building - Before Mission": GrinchLocationData("Grinch Copter Blueprints", 1210, [GrinchRamData(0x8001026B, binary_bit_pos=1)]),
+    "Grinch Copter Blueprint - Who Dump Generator Building - After Mission": GrinchLocationData("Grinch Copter Blueprints", 1211, [GrinchRamData(0x8001026B, binary_bit_pos=2)]),
     "Grinch Copter Blueprint - Who Lake South Shore - Submarine World - Above Surface": GrinchLocationData("Grinch Copter Blueprints", 1212, [GrinchRamData(0x80010289, binary_bit_pos=4)]),
     "Grinch Copter Blueprint - Who Lake South Shore - Submarine World - Underwater": GrinchLocationData("Grinch Copter Blueprints", 1213, [GrinchRamData(0x80010289, binary_bit_pos=5)]),
     "Grinch Copter Blueprint - Who Lake North Shore - Mayor's Villa - Tree Branch": GrinchLocationData("Grinch Copter Blueprints", 1214, [GrinchRamData(0x80010275, binary_bit_pos=8)]),
@@ -148,3 +148,9 @@ grinch_locations = {
     "Stealing All Gifts": GrinchLocationData("Sleigh Ride", 1300, [GrinchRamData(0x800100BF, binary_bit_pos=7)]),
     "Neutralizing Santa": GrinchLocationData("Sleigh Ride", 1301, [GrinchRamData(0x800100BF, binary_bit_pos=8)])
 }
+
+def grinch_locations_to_id() -> dict[str,int]:
+    location_mappings: dict[str, int] = {}
+    for LocationName, LocationData in grinch_locations.items():
+        location_mappings.update({LocationName: GrinchLocation.get_apid(LocationData.id)})
+    return location_mappings

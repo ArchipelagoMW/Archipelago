@@ -16,10 +16,10 @@ class GrinchItem(Item):
 
     #Tells server what item id it is
     @staticmethod
-    def get_apid(code: int):
+    def get_apid(id: int):
         #If you give me an input id, I will return the Grinch equivalent server/ap id
         base_id: int = 42069
-        return base_id + code if code is not None else None
+        return base_id + id if id is not None else None
 
 #allows hinting of items via category
 def get_item_names_per_category() -> dict[str, set[str]]:
@@ -147,7 +147,7 @@ KEYS_TABLE: dict[str, GrinchItemData] = {
 #Misc Items
 MISC_ITEMS_TABLE: dict[str, GrinchItemData] = {
     "Fully Healed Grinch": GrinchItemData("Health Items", 500, IC.filler, [GrinchRamData(0x800E8FDC, value=120)]),
-    "Heart of Stones": GrinchItemData("Health Items", 501, IC.useful, [GrinchRamData(0x800100ED, value=1)]),
+    "Heart of Stone": GrinchItemData("Health Items", 501, IC.useful, [GrinchRamData(0x800100ED, value=1)]),
     "5 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 502, IC.filler, [GrinchRamData(0x80010058, value=5)]),
     "10 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 503, IC.filler, [GrinchRamData(0x80010058, value=10)]),
     "20 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 504, IC.filler, [GrinchRamData(0x80010058, value=20)])
@@ -185,3 +185,9 @@ ALL_ITEMS_TABLE: dict[str, GrinchItemData] = {
     **TRAPS_TABLE,
     **MOVES_TABLE
 }
+
+def grinch_items_to_id() -> dict[str, int]:
+    item_mappings: dict[str, int] = {}
+    for ItemName, ItemData in ALL_ITEMS_TABLE.items():
+        item_mappings.update({ItemName: GrinchItem.get_apid(ItemData.id)})
+    return item_mappings
