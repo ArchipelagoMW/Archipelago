@@ -515,6 +515,7 @@ In addition, the following methods can be implemented and are called in this ord
   called per player before any items or locations are created. You can set properties on your
   world here. Already has access to player options and RNG. This is the earliest step where the world should start
   setting up for the current multiworld, as the multiworld itself is still setting up before this point.
+  You cannot modify `local_items`, or `non_local_items` after this step.
 * `create_regions(self)`
   called to place player's regions and their locations into the MultiWorld's regions list.
   If it's hard to separate, this can be done during `generate_early` or `create_items` as well.
@@ -538,7 +539,7 @@ In addition, the following methods can be implemented and are called in this ord
   creates the output files if there is output to be generated. When this is called,
   `self.multiworld.get_locations(self.player)` has all locations for the player, with attribute `item` pointing to the
   item. `location.item.player` can be used to see if it's a local item.
-* `fill_slot_data(self)` and `modify_multidata(self, multidata: Dict[str, Any])` can be used to modify the data that
+* `fill_slot_data(self)` and `modify_multidata(self, multidata: MultiData)` can be used to modify the data that
   will be used by the server to host the MultiWorld.
 
 All instance methods can, optionally, have a class method defined which will be called after all instance methods are
