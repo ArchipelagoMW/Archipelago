@@ -5,8 +5,8 @@
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 - [LB-ARK](https://github.com/Aureole-Suite/LB-ARK/releases) Latest Version. Put `d3dxof.dll` in the game install folder
 - [Factoria](https://github.com/Aureole-Suite/Factoria/releases) Latest Version. Put `factoria.exe` in the game install folder
-- [T_Magic_Converter](https://github.com/akatatsu27/FalcomToolsCollection/releases/tag/T_MAGIC) Latest Version.  Put `T_Magic_Converter.exe` in the game install folder (unzip the file from the download).
-- [AS_Converter](https://broken_link) Latest Version. Put `AS_Converter.exe` in the game install folder.
+- [T_Magic_Converter](https://github.com/akatatsu27/FalcomToolsCollection/releases/tag/T_MAGIC) Latest Version. Unzip and put `T_Magic_Converter.exe` in the game install folder (unzip the file from the download).
+- [AS_Converter](https://github.com/tdkollins/FalcomToolsCollection/releases/tag/1.0.0) Latest Version. Unzip and put `AS_Converter.exe` in the game install folder.
 - [Trails in the Sky the 3rd AP World](https://github.com/Archipelago-Trails-in-the-Sky-the-3rd/Archipelago-Trails-in-the-Sky-the-3rd/releases) Latest Version. Put `tits_the3rd.apworld` the `custom_worlds` folder under your archipelago install (create this folder if it does not exist).
 
 ### Regarding SoraVoice

@@ -905,6 +905,12 @@ craft_table = [
 ]
 base_craft_name_to_obj = {craft.base_craft_name: craft for craft in craft_table}
 base_craft_id_to_obj = {craft.base_craft_id: craft for craft in craft_table}
+base_craft_name_to_id = {craft.base_craft_name: craft.base_craft_id for craft in craft_table}
+upgraded_craft_name_to_id = {craft.upgraded_craft_name: craft.upgraded_craft_id for craft in [
+    *upgradable_scraft_table,
+    *upgradable_normal_craft_table,
+]}
+craft_name_to_id = {**base_craft_name_to_id, **upgraded_craft_name_to_id}
 
 default_characters = [
     Character(

@@ -6,6 +6,7 @@ from ..names.item_name import ItemName
 from ..names.location_name import LocationName
 from ..names.region_name import RegionName
 from ..names.check_type_name import CheckTypeName
+from ..tables.craft_list import craft_name_to_id
 
 LocationData = namedtuple('LocationData', ['flag', 'check_type', 'region', 'vanilla_item', "item_requirements"])
 
@@ -470,6 +471,7 @@ character_name_to_id = {
     "renne": 15
 }
 craft_location_id_to_character_id_and_level_threshold = {}
+event_craft_location_id_to_character_id_and_craft_id = {}
 for craft in craft_locations:
     # Parse the level threshold and character from the craft name to build the above table
     character_name = craft.split(" ")[0].lower()
@@ -478,3 +480,7 @@ for craft in craft_locations:
     if level_match:
         level_threshold = int(level_match.group(1))
         craft_location_id_to_character_id_and_level_threshold[craft_locations[craft].flag] = (character_id, level_threshold)
+    else:
+        craft_name = craft.split(" - ", 1)[1]
+        craft_id = craft_name_to_id[craft_name]
+        event_craft_location_id_to_character_id_and_craft_id[craft_locations[craft].flag] = (character_id, craft_id)

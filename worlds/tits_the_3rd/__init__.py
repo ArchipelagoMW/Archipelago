@@ -259,7 +259,7 @@ class TitsThe3rdWorld(World):
         return {
             "craft_get_order": craft_get_order,
             "old_craft_id_to_new_craft_id": old_craft_id_to_new_craft_id,
-            "default_event_crafts": not self.options.craft_shuffle,
+            "default_event_crafts": self.options.craft_placement == CraftPlacement.option_default and not self.options.craft_shuffle,
             "default_crfget": self.options.craft_placement == CraftPlacement.option_default and not self.options.craft_shuffle,
         }
 
