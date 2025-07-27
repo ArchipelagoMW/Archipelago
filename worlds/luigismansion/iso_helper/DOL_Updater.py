@@ -120,13 +120,13 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac
         dol.data.seek(int(dol_addr, 16))
         dol.data.write(bytes.fromhex(dol_val))
 
-    if not random_spawn == "Foyer": # TODO update with new ASM location
+    if not random_spawn == "Foyer":
         spawn_info: dict = spawn_locations[random_spawn]
-        dol.data.seek(0x3A02B0)
+        dol.data.seek(0x3A05E0)
         dol.data.write(struct.pack(">f", spawn_info["pos_x"]))
-        dol.data.seek(0x3A02B4)
+        dol.data.seek(0x3A05E4)
         dol.data.write(struct.pack(">f", spawn_info["pos_y"]))
-        dol.data.seek(0x3A02B8)
+        dol.data.seek(0x3A05E8)
         dol.data.write(struct.pack(">f", spawn_info["pos_z"]))
 
     if dool_model_rando_on:
