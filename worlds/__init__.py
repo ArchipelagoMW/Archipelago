@@ -7,8 +7,9 @@ import warnings
 import zipimport
 import time
 import dataclasses
-from typing import Dict, List, TypedDict
+from typing import List
 
+from NetUtils import DataPackage
 from Utils import local_path, user_path
 
 local_folder = os.path.dirname(__file__)
@@ -24,25 +25,11 @@ __all__ = {
     "world_sources",
     "local_folder",
     "user_folder",
-    "GamesPackage",
-    "DataPackage",
     "failed_world_loads",
 }
 
 
 failed_world_loads: List[str] = []
-
-
-class GamesPackage(TypedDict, total=False):
-    item_name_groups: Dict[str, List[str]]
-    item_name_to_id: Dict[str, int]
-    location_name_groups: Dict[str, List[str]]
-    location_name_to_id: Dict[str, int]
-    checksum: str
-
-
-class DataPackage(TypedDict):
-    games: Dict[str, GamesPackage]
 
 
 @dataclasses.dataclass(order=True)
