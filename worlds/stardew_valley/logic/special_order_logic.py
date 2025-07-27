@@ -50,8 +50,8 @@ class SpecialOrderLogic(BaseLogic):
             SpecialOrder.robins_resource_rush: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &
                                                self.logic.has(Fertilizer.tree) & self.logic.ability.can_mine_perfectly(),
             SpecialOrder.juicy_bugs_wanted: self.logic.has(Loot.bug_meat),
-            SpecialOrder.a_curious_substance: self.logic.region.can_reach(Region.wizard_tower),
-            SpecialOrder.prismatic_jelly: self.logic.region.can_reach(Region.wizard_tower),
+            SpecialOrder.a_curious_substance: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_55,)),
+            SpecialOrder.prismatic_jelly: self.logic.region.can_reach_all(*(Region.wizard_tower, Region.mines_floor_25,)),
 
         })
 
