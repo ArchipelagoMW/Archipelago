@@ -201,8 +201,6 @@ class KH2World(World):
         """
         Determines the quantity of items and maps plando locations to items.
         """
-        if self.player_name != self.multiworld.get_file_safe_player_name(self.player):
-            raise Exception(f"{self.player_name} yaml name contains characters not supported for kingdom hearts 2")
 
         # Item: Quantity Map
         # Example. Quick Run: 4

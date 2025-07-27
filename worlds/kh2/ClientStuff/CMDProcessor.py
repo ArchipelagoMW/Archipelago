@@ -31,7 +31,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         None: Toggle off any of the receiving notifications.
         """
         if notification_type in {"Puzzle", "Info", "None"}:
-            temp_client_settings = self.ctx.client_settings["receive_popup_type"]
+            temp_client_settings = self.ctx.client_settings["send_popup_type"]
             self.ctx.client_settings["send_popup_type"] = notification_type
             # doing it in this order to make sure it actually changes
             self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['send_popup_type']}")
