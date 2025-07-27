@@ -154,7 +154,17 @@ class HKWeb(WebWorld):
         ["JoaoVictor-FA"]
     )
 
-    tutorials = [setup_en, setup_pt_br]
+    setup_es = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        ["GreenMarco", "Panto UwUr"]
+    )
+
+    tutorials = [setup_en, setup_pt_br, setup_es]
+    game_info_languages = ["en", "es"]
 
     bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
 
@@ -218,6 +228,11 @@ class HKWorld(World):
         wp = self.options.WhitePalace
         if wp <= WhitePalace.option_nopathofpain:
             exclusions.update(path_of_pain_locations)
+            exclusions.update((
+                "Soul_Totem-Path_of_Pain",
+                "Lore_Tablet-Path_of_Pain_Entrance",
+                "Journal_Entry-Seal_of_Binding",
+                ))
         if wp <= WhitePalace.option_kingfragment:
             exclusions.update(white_palace_checks)
         if wp == WhitePalace.option_exclude:
@@ -226,6 +241,9 @@ class HKWorld(World):
                 # If charms are randomized, this will be junk-filled -- so transitions and events are not progression
                 exclusions.update(white_palace_transitions)
                 exclusions.update(white_palace_events)
+            exclusions.update(item_name_groups["PalaceJournal"])
+            exclusions.update(item_name_groups["PalaceLore"])
+            exclusions.update(item_name_groups["PalaceTotem"])
         return exclusions
 
     def create_regions(self):

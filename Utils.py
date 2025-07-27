@@ -47,7 +47,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.2"
+__version__ = "0.6.3"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -166,6 +166,10 @@ def home_path(*path: str) -> str:
                 os.symlink(home_path.cached_path, legacy_home_path)
             else:
                 os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
+    elif sys.platform == 'darwin':
+        import platformdirs
+        home_path.cached_path = platformdirs.user_data_dir("Archipelago", False)
+        os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
     else:
         # not implemented
         home_path.cached_path = local_path()  # this will generate the same exceptions we got previously
@@ -177,7 +181,7 @@ def user_path(*path: str) -> str:
     """Returns either local_path or home_path based on write permissions."""
     if hasattr(user_path, "cached_path"):
         pass
-    elif os.access(local_path(), os.W_OK):
+    elif os.access(local_path(), os.W_OK) and not (is_macos and is_frozen()):
         user_path.cached_path = local_path()
     else:
         user_path.cached_path = home_path()
@@ -226,7 +230,12 @@ def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
         from shutil import which
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
         assert open_command, "Didn't find program for open_file! Please report this together with system details."
-        subprocess.call([open_command, filename])
+
+        env = os.environ
+        if "LD_LIBRARY_PATH" in env:
+            env = env.copy()
+            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        subprocess.call([open_command, filename], env=env)
 
 
 # from https://gist.github.com/pypt/94d747fe5180851196eb#gistcomment-4015118 with some changes
@@ -404,13 +413,23 @@ def get_adjuster_settings(game_name: str) -> Namespace:
 
 @cache_argsless
 def get_unique_identifier():
-    uuid = persistent_load().get("client", {}).get("uuid", None)
+    common_path = cache_path("common.json")
+    if os.path.exists(common_path):
+        with open(common_path) as f:
+            common_file = json.load(f)
+            uuid = common_file.get("uuid", None)
+    else:
+        common_file = {}
+        uuid = None
+
     if uuid:
         return uuid
 
-    import uuid
-    uuid = uuid.getnode()
-    persistent_store("client", "uuid", uuid)
+    from uuid import uuid4
+    uuid = str(uuid4())
+    common_file["uuid"] = uuid
+    with open(common_path, "w") as f:
+        json.dump(common_file, f, separators=(",", ":"))
     return uuid
 
 
@@ -433,6 +452,7 @@ class RestrictedUnpickler(pickle.Unpickler):
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
         # used by OptionCounter
+        # necessary because the actual Options class instances are pickled when transfered to WebHost generation pool
         if module == "collections" and name == "Counter":
             return collections.Counter
         # used by MultiServer -> savegame/multidata
@@ -461,6 +481,18 @@ class RestrictedUnpickler(pickle.Unpickler):
 def restricted_loads(s: bytes) -> Any:
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
+
+
+def restricted_dumps(obj: Any) -> bytes:
+    """Helper function analogous to pickle.dumps()."""
+    s = pickle.dumps(obj)
+    # Assert that the string can be successfully loaded by restricted_loads
+    try:
+        restricted_loads(s)
+    except pickle.UnpicklingError as e:
+        raise pickle.PicklingError(e) from e
+
+    return s
 
 
 class ByValue:
@@ -708,12 +740,17 @@ def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args:
     res.put(open_filename(*args))
 
 
+def _run_for_stdout(*args: str):
+    env = os.environ
+    if "LD_LIBRARY_PATH" in env:
+        env = env.copy()
+        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    return subprocess.run(args, capture_output=True, text=True, env=env).stdout.split("\n", 1)[0] or None
+
+
 def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     logging.info(f"Opening file input dialog for {title}.")
-
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
 
     if is_linux:
         # prefer native dialog
@@ -721,12 +758,12 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         kdialog = which("kdialog")
         if kdialog:
             k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return run(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
+            return _run_for_stdout(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
             selection = (f"--filename={suggest}",) if suggest else ()
-            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
     try:
@@ -760,21 +797,18 @@ def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args
 
 
 def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
-
     if is_linux:
         # prefer native dialog
         from shutil import which
         kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--getexistingdirectory",
+            return _run_for_stdout(kdialog, f"--title={title}", "--getexistingdirectory",
                        os.path.abspath(suggest) if suggest else ".")
         zenity = which("zenity")
         if zenity:
             z_filters = ("--directory",)
             selection = (f"--filename={os.path.abspath(suggest)}/",) if suggest else ()
-            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
     try:
@@ -801,9 +835,6 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
-
     if is_kivy_running():
         from kvui import MessageBox
         MessageBox(title, text, error).open()
@@ -814,10 +845,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         from shutil import which
         kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--error" if error else "--msgbox", text)
+            return _run_for_stdout(kdialog, f"--title={title}", "--error" if error else "--msgbox", text)
         zenity = which("zenity")
         if zenity:
-            return run(zenity, f"--title={title}", f"--text={text}", "--error" if error else "--info")
+            return _run_for_stdout(zenity, f"--title={title}", f"--text={text}", "--error" if error else "--info")
 
     elif is_windows:
         import ctypes

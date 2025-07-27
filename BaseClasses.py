@@ -5,12 +5,13 @@ import functools
 import logging
 import random
 import secrets
+import warnings
 from argparse import Namespace
-from collections import Counter, deque
+from collections import Counter, deque, defaultdict
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
 from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Literal, Mapping, NamedTuple,
-                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
+                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING, Literal, overload)
 import dataclasses
 
 from typing_extensions import NotRequired, TypedDict
@@ -450,12 +451,27 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False,
+    def get_all_state(self, use_cache: bool | None = None, allow_partial_entrances: bool = False,
                       collect_pre_fill_items: bool = True, perform_sweep: bool = True) -> CollectionState:
-        cached = getattr(self, "_all_state", None)
-        if use_cache and cached:
-            return cached.copy()
+        """
+        Creates a new CollectionState, and collects all precollected items, all items in the multiworld itempool, those
+        specified in each worlds' `get_pre_fill_items()`, and then sweeps the multiworld collecting any other items
+        it is able to reach, building as complete of a completed game state as possible.
 
+        :param use_cache: Deprecated and unused.
+        :param allow_partial_entrances: Whether the CollectionState should allow for disconnected entrances while
+         sweeping, such as before entrance randomization is complete.
+        :param collect_pre_fill_items: Whether the items in each worlds' `get_pre_fill_items()` should be added to this
+         state.
+        :param perform_sweep: Whether this state should perform a sweep for reachable locations, collecting any placed
+         items it can.
+
+        :return: The completed CollectionState.
+        """
+        if __debug__ and use_cache is not None:
+            # TODO swap to Utils.deprecate when we want this to crash on source and warn on frozen
+            warnings.warn("multiworld.get_all_state no longer caches all_state and this argument will be removed.",
+                          DeprecationWarning)
         ret = CollectionState(self, allow_partial_entrances)
 
         for item in self.itempool:
@@ -468,8 +484,6 @@ class MultiWorld():
         if perform_sweep:
             ret.sweep_for_advancements()
 
-        if use_cache:
-            self._all_state = ret
         return ret
 
     def get_items(self) -> List[Item]:
@@ -588,45 +602,9 @@ class MultiWorld():
             if not unbeaten_game_players:
                 return True
 
-        base_locations = self.get_locations() if locations is None else locations
-
-        checked_locations = state.locations_checked
-        prog_locations_per_player: dict[int, set[Location]] = collections.defaultdict(set)
-        for location in base_locations:
-            if location not in checked_locations and location.item is not None and location.item.advancement:
-                prog_locations_per_player[location.player].add(location)
-
-        # All players must be checked to start with.
-        players_to_check: AbstractSet[int] = set(prog_locations_per_player.keys())
-        while prog_locations_per_player:
-            sphere: list[list[Location]] = []
-            # build up spheres of collection radius.
-            # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
-            for player in players_to_check:
-                if player not in prog_locations_per_player:
-                    continue
-                player_locations = prog_locations_per_player[player]
-                reachable_player_locations = [location for location in player_locations if location.can_reach(state)]
-                if reachable_player_locations:
-                    sphere.append(reachable_player_locations)
-                    player_locations.difference_update(reachable_player_locations)
-                    if not player_locations:
-                        del prog_locations_per_player[player]
-
-            if not sphere:
-                # ran out of places and did not finish yet, quit
-                return False
-
-            state_changed_players = set()
-            for reachable_locations in sphere:
-                for location in reachable_locations:
-                    item = location.item
-                    if state.collect(item, True, location):
-                        # State changed, so there may be players that can reach additional locations in the next sphere.
-                        state_changed_players.add(item.player)
-
-            players_to_check = self.get_players_logically_dependent_on_players(state_changed_players)
-
+        for players_to_check in state.sweep_for_advancements(locations,
+                                                             yield_each_sweep=True,
+                                                             checked_locations=state.locations_checked):
             # Update the list of players that have yet to beat their game.
             unbeaten_game_players = [player for player in unbeaten_game_players
                                      if not (player in players_to_check and self.has_beaten_game(state, player))]
@@ -764,6 +742,12 @@ class MultiWorld():
                     sphere.append(locations.pop(n))
 
             if not sphere:
+                if __debug__:
+                    from Fill import FillError
+                    raise FillError(
+                        f"Could not access required locations for accessibility check. Missing: {locations}",
+                        multiworld=self,
+                    )
                 # ran out of places and did not finish yet, quit
                 logging.warning(f"Could not access required locations for accessibility check."
                                 f" Missing: {locations}")
@@ -1005,51 +989,127 @@ class CollectionState():
                         "Please switch over to sweep_for_advancements.")
         return self.sweep_for_advancements(locations)
 
-    def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None) -> None:
-        locations_per_player: dict[int, set[Location]]
-        # since the loop has a good chance to run more than once, only filter the advancements once
-        if locations is None:
-            locations_per_player = {}
-            for player, locations_dict in self.multiworld.regions.location_cache.items():
-                player_locations = {loc for loc in locations_dict.values()
-                                    if loc.advancement and loc not in self.advancements}
-                if player_locations:
-                    locations_per_player[player] = player_locations
-        else:
-            locations_per_player = collections.defaultdict(set)
-            for loc in locations:
-                if loc.advancement and loc not in self.advancements:
-                    locations_per_player[loc.player].add(loc)
+    def _sweep_for_advancements_impl(self, advancements_per_player: List[Tuple[int, List[Location]]],
+                                     yield_each_sweep: bool) -> Iterator[AbstractSet[int]]:
+        """
+        The implementation for sweep_for_advancements is separated here because it returns a generator due to the use
+        of a yield statement.
+        """
+        all_players = {player for player, _ in advancements_per_player}
+        players_to_check: AbstractSet[int] = all_players
+        while players_to_check:
+            next_advancements_per_player: List[Tuple[int, List[Location]]] = []
+            next_players_to_check = set()
 
-        players_to_check: AbstractSet[int] = set(locations_per_player.keys())
-        while locations_per_player:
-            reachable_advancements_list: List[List[Location]] = []
-
-            for player in players_to_check:
-                if player not in locations_per_player:
+            for player, locations in advancements_per_player:
+                if player not in players_to_check:
+                    next_advancements_per_player.append((player, locations))
                     continue
-                player_locations = locations_per_player[player]
-                reachable_player_locations = [loc for loc in player_locations if loc.can_reach(self)]
-                if reachable_player_locations:
-                    reachable_advancements_list.append(reachable_player_locations)
-                    player_locations.difference_update(reachable_player_locations)
-                    if not player_locations:
-                        del locations_per_player[player]
 
-            if not reachable_advancements_list:
-                break
+                # Accessibility of each location is checked first because a player's region accessibility cache becomes
+                # stale whenever one of their own items is collected into the state.
+                reachable_locations: List[Location] = []
+                unreachable_locations: List[Location] = []
+                for location in locations:
+                    if location.can_reach(self):
+                        # Locations containing items that do not belong to `player` could be collected immediately
+                        # because they won't stale `player`'s region accessibility cache, but, for simplicity, all the
+                        # items at reachable locations are collected in a single loop.
+                        reachable_locations.append(location)
+                    else:
+                        unreachable_locations.append(location)
+                if unreachable_locations:
+                    next_advancements_per_player.append((player, unreachable_locations))
 
-            state_changed_players: set[int] = set()
-            for reachable_advancements in reachable_advancements_list:
-                for advancement in reachable_advancements:
+                # A previous player's locations processed in the current `while players_to_check` iteration could have
+                # collected items belonging to a player that `player` is logically dependent on, but now that all of
+                # `player`'s reachable locations have been found, it can be assumed that `player` will not gain any
+                # more reachable locations until another item is collected, that belongs to a world `player` is
+                # logically dependent on.
+                # It would be clearer to not add players to `next_players_to_check` in the first place if they have yet
+                # to be processed in the current `while players_to_check` iteration, but checking if a player should be
+                # added to `next_players_to_check` would need to be run once for every item that is collected, so it is
+                # more performant to instead discard `player` from `next_players_to_check` once their locations have
+                # been processed.
+                next_players_to_check.discard(player)
+
+                # Collect the items from the reachable locations.
+                collected_advancement_players = set()
+                for advancement in reachable_locations:
                     self.advancements.add(advancement)
                     item = advancement.item
-                    assert isinstance(item, Item), "tried to collect Event with no Item"
+                    assert isinstance(item, Item), "tried to collect advancement Location with no Item"
                     if self.collect(item, True, advancement):
-                        # State changed, so there may be players that can reach additional locations in the next sphere.
-                        state_changed_players.add(item.player)
+                        collected_advancement_players.add(item.player)
+                # Worlds logically dependent on players that collected advancement items may be able to reach additional
+                # locations in the next sweep iteration.
+                next_players_to_check.update(
+                    self.multiworld.get_players_logically_dependent_on_players(collected_advancement_players))
 
-            players_to_check = self.multiworld.get_players_logically_dependent_on_players(state_changed_players)
+            players_to_check = next_players_to_check
+            advancements_per_player = next_advancements_per_player
+
+            if yield_each_sweep:
+                yield players_to_check
+
+    @overload
+    def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None, *,
+                               yield_each_sweep: Literal[True],
+                               checked_locations: Optional[Set[Location]] = None) -> Iterator[AbstractSet[int]]: ...
+
+    @overload
+    def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None,
+                               yield_each_sweep: Literal[False] = False,
+                               checked_locations: Optional[Set[Location]] = None) -> None: ...
+
+    def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None, yield_each_sweep: bool = False,
+                               checked_locations: Optional[Set[Location]] = None
+                               ) -> Optional[Iterator[AbstractSet[int]]]:
+        """
+        Sweep through the locations that contain uncollected advancement items, collecting the items into the state
+        until there are no more reachable locations that contain uncollected advancement items.
+
+        :param locations: The locations to sweep through, defaulting to all locations in the multiworld.
+        :param yield_each_sweep: When True, return a Generator that yields, at the end of each sweep iteration, a set of
+        players that may now be able to reach additional locations.
+        :param checked_locations: Optional override of locations to filter out from the locations argument, defaults to
+        self.advancements when None.
+        :return: With yield_each_sweep=True, a Generator that yields, at the end of each sweep iteration, a set of
+        players that may now be able to reach additional locations. With yield_each_sweep=False, None.
+        """
+        if checked_locations is None:
+            checked_locations = self.advancements
+
+        # Since the sweep loop usually performs many iterations, the locations are filtered in advance.
+        # A list of tuples is used, instead of a dictionary, because it is faster to iterate.
+        advancements_per_player: List[Tuple[int, List[Location]]]
+        if locations is None:
+            # `location.advancement` can only be True for filled locations, so unfilled locations are filtered out.
+            advancements_per_player = []
+            for player, locations_dict in self.multiworld.regions.location_cache.items():
+                filtered_locations = [location for location in locations_dict.values()
+                                      if location.advancement and location not in checked_locations]
+                if filtered_locations:
+                    advancements_per_player.append((player, filtered_locations))
+        else:
+            # Filter and separate the locations into a list for each player.
+            advancements_per_player_dict: Dict[int, List[Location]] = defaultdict(list)
+            for location in locations:
+                if location.advancement and location not in checked_locations:
+                    advancements_per_player_dict[location.player].append(location)
+            # Convert to a list of tuples.
+            advancements_per_player = list(advancements_per_player_dict.items())
+            del advancements_per_player_dict
+
+        if yield_each_sweep:
+            # Return a generator that will yield at the end of each sweep iteration.
+            return self._sweep_for_advancements_impl(advancements_per_player, True)
+        else:
+            # Create the generator, but tell it not to yield anything, so it will run to completion in zero iterations
+            # once started, then start and exhaust the generator by attempting to iterate it.
+            for _ in self._sweep_for_advancements_impl(advancements_per_player, False):
+                assert False, "Generator yielded when it should have run to completion without yielding"
+            return None
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
@@ -1319,13 +1379,13 @@ class Region:
             self.region_manager = region_manager
 
         def __getitem__(self, index: int) -> Location:
-            return self._list.__getitem__(index)
+            return self._list[index]
 
         def __setitem__(self, index: int, value: Location) -> None:
             raise NotImplementedError()
 
         def __len__(self) -> int:
-            return self._list.__len__()
+            return len(self._list)
 
         def __iter__(self):
             return iter(self._list)
@@ -1339,8 +1399,8 @@ class Region:
 
     class LocationRegister(Register):
         def __delitem__(self, index: int) -> None:
-            location: Location = self._list.__getitem__(index)
-            self._list.__delitem__(index)
+            location: Location = self._list[index]
+            del self._list[index]
             del(self.region_manager.location_cache[location.player][location.name])
 
         def insert(self, index: int, value: Location) -> None:
@@ -1351,8 +1411,8 @@ class Region:
 
     class EntranceRegister(Register):
         def __delitem__(self, index: int) -> None:
-            entrance: Entrance = self._list.__getitem__(index)
-            self._list.__delitem__(index)
+            entrance: Entrance = self._list[index]
+            del self._list[index]
             del(self.region_manager.entrance_cache[entrance.player][entrance.name])
 
         def insert(self, index: int, value: Entrance) -> None:
@@ -1506,8 +1566,8 @@ class Region:
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
         :param exits: exits from the region. format is {"connecting_region": "exit_name"}. if a non dict is provided,
-        created entrances will be named "self.name -> connecting_region"
-        :param rules: rules for the exits from this region. format is {"connecting_region", rule}
+                      created entrances will be named "self.name -> connecting_region"
+        :param rules: rules for the exits from this region. format is {"connecting_region": rule}
         """
         if not isinstance(exits, Dict):
             exits = dict.fromkeys(exits)
@@ -1599,27 +1659,43 @@ class Location:
 
 
 class ItemClassification(IntFlag):
-    filler = 0b0000
+    filler = 0b00000
     """ aka trash, as in filler items like ammo, currency etc """
 
-    progression = 0b0001
+    progression = 0b00001
     """ Item that is logically relevant.
     Protects this item from being placed on excluded or unreachable locations. """
 
-    useful = 0b0010
+    useful = 0b00010
     """ Item that is especially useful.
     Protects this item from being placed on excluded or unreachable locations.
     When combined with another flag like "progression", it means "an especially useful progression item". """
 
-    trap = 0b0100
+    trap = 0b00100
     """ Item that is detrimental in some way. """
 
-    skip_balancing = 0b1000
+    skip_balancing = 0b01000
     """ should technically never occur on its own
     Item that is logically relevant, but progression balancing should not touch.
-    Typically currency or other counted items. """
+    
+    Possible reasons for why an item should not be pulled ahead by progression balancing:
+    1. This item is quite insignificant, so pulling it earlier doesn't help (currency/etc.)
+    2. It is important for the player experience that this item is evenly distributed in the seed (e.g. goal items) """
 
-    progression_skip_balancing = 0b1001  # only progression gets balanced
+    deprioritized = 0b10000
+    """ Should technically never occur on its own.
+    Will not be considered for priority locations,
+    unless Priority Locations Fill runs out of regular progression items before filling all priority locations. 
+    
+    Should be used for items that would feel bad for the player to find on a priority location.
+    Usually, these are items that are plentiful or insignificant. """
+
+    progression_deprioritized_skip_balancing = 0b11001
+    """ Since a common case of both skip_balancing and deprioritized is "insignificant progression", 
+    these items often want both flags. """
+
+    progression_skip_balancing = 0b01001  # only progression gets balanced
+    progression_deprioritized = 0b10001  # only progression can be placed during priority fill
 
     def as_flag(self) -> int:
         """As Network API flag int."""
@@ -1666,6 +1742,10 @@ class Item:
     @property
     def trap(self) -> bool:
         return ItemClassification.trap in self.classification
+
+    @property
+    def deprioritized(self) -> bool:
+        return ItemClassification.deprioritized in self.classification
 
     @property
     def filler(self) -> bool:
