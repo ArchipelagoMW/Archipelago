@@ -12,6 +12,7 @@ on:
       - ".github/workflows/docker.yml"
     tags:
       - "*.*.*"
+#test
 
 env:
   REGISTRY: ghcr.io
