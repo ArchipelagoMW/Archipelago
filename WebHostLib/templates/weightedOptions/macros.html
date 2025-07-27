@@ -159,6 +159,7 @@
 {% endmacro %}
 
 {% macro LocationSet(option_name, option, world) %}
+    <input type="hidden" id="{{ option_name }}-{{ key }}-hidden" name="{{ option_name }}" value="ensure-empty-list"/>
     <div class="set-container">
         {% for group_name in world.location_name_groups.keys()|sort %}
             {% if group_name != "Everywhere" %}
@@ -181,6 +182,7 @@
 {% endmacro %}
 
 {% macro ItemSet(option_name, option, world) %}
+    <input type="hidden" id="{{ option_name }}-{{ key }}-hidden" name="{{ option_name }}" value="ensure-empty-list"/>
     <div class="set-container">
         {% for group_name in world.item_name_groups.keys()|sort %}
             {% if group_name != "Everything" %}
