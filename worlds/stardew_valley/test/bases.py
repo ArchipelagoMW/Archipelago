@@ -132,8 +132,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         assert count > 0
 
         if not isinstance(item, str):
-            super().collect(item)
-            return None
+            return super().collect(item)
 
         if count == 1:
             item = self.create_item(item)
@@ -163,37 +162,37 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def assert_rule_true(self, rule: StardewRule, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_rule_true(rule, state)
+        return super().assert_rule_true(rule, state)
 
     def assert_rule_false(self, rule: StardewRule, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_rule_false(rule, state)
+        return super().assert_rule_false(rule, state)
 
     def assert_can_reach_location(self, location: Location | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_can_reach_location(location, state)
+        return super().assert_can_reach_location(location, state)
 
     def assert_cannot_reach_location(self, location: Location | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_cannot_reach_location(location, state)
+        return super().assert_cannot_reach_location(location, state)
 
     def assert_can_reach_region(self, region: Region | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_can_reach_region(region, state)
+        return super().assert_can_reach_region(region, state)
 
     def assert_cannot_reach_region(self, region: Region | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_cannot_reach_region(region, state)
+        return super().assert_cannot_reach_region(region, state)
 
     def assert_can_reach_entrance(self, entrance: Entrance | str, state: CollectionState | None = None) -> None:
         if state is None:
             state = self.multiworld.state
-        super().assert_can_reach_entrance(entrance, state)
+        return super().assert_can_reach_entrance(entrance, state)
 
 
 pre_generated_worlds = {}
