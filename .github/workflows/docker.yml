@@ -10,9 +10,10 @@ on:
       - "!.gitignore"
       - "!.github/workflows/**"
       - ".github/workflows/docker.yml"
+    branches:
+      - "*"
     tags:
       - "*.*.*"
-#test
 
 env:
   REGISTRY: ghcr.io
