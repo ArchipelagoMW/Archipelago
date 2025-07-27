@@ -704,9 +704,17 @@ server most easily and not maintain their own mappings. Some contents include:
    - Name to ID mappings for items and locations.
    - A checksum of each game's data package for clients to tell if a cached package is invalid.
 
-We encourage clients to cache the data package they receive on disk, or otherwise not tied to a session. You will know 
-when your cache is outdated if the [RoomInfo](#RoomInfo) packet or the datapackage itself denote a different checksum
-than any locally cached ones.
+Clients should cache the data package they receive on disk to prevent re-downloading it on every connect. The shared 
+cache location is `user_cache_dir\Cache\datapackage`. `user_cache_dir` varies by platform. The
+platformdirs library is used in python to pick the correct location https://github.com/tox-dev/platformdirs.
+For example `C:\Users\<UserName>\AppData\Local\Archipelago\Cache\datapackage` on Windows.
+Each game has its own subfolder inside the previously mentioned datapackage folder i.e.
+`user_cache_dir\Cache\datapackage\A Hat in Time`.
+
+Whenever a client reads a data package from the cache, it should update the last modified time of the file. This
+is because CommonClient contains code that removes sufficiently old data packages. You will know when your cache
+is outdated if the [RoomInfo](#RoomInfo) packet or the data package itself denote a different checksum than any
+locally cached ones.
 
 **Important Notes about IDs and Names**: 
 
