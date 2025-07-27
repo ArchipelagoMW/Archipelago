@@ -55,18 +55,23 @@ jobs:
       - name: Compute final tags
         id: final-tags
         run: |
-          tags="${{ steps.meta.outputs.tags }}"
+          readarray -t tags <<< "${{ steps.meta.outputs.tags }}"
+
           if [[ "${{ github.ref_type }}" == "tag" ]]; then
             tag="${{ github.ref_name }}"
             if [[ "$tag" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-              if [ -n "$tags" ]; then
-                tags="$tags,latest"
-              else
-                tags="latest"
+              full_latest="${{ env.REGISTRY }}/${{ steps.image.outputs.name }}:latest"
+              # Check if latest is already in tags to avoid duplicates
+              if ! printf '%s\n' "${tags[@]}" | grep -q "^$full_latest$"; then
+                tags+=("$full_latest")
               fi
             fi
           fi
-          echo "tags=$tags" >> $GITHUB_OUTPUT
+
+          # Set multiline output
+          echo "tags<<EOF" >> $GITHUB_OUTPUT
+          printf '%s\n' "${tags[@]}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
   build-amd64:
     needs: prepare
