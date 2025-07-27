@@ -486,25 +486,29 @@ def ph_has_freebie_card(state, player):
 
 
 def ph_beedle_shop(state, player, price):
-    other_costs = 550
+    # Multiplier only applies to non-linear items
+    multiplier = 0.7 if ph_option_shop_hints(state, player) else 1
+    other_costs = 500 * multiplier + 50
     discount = ph_count_beedle_discount(state, player)  # Discount from points
+    # Island shop items
     if ph_has_bow(state, player):
         other_costs += 1000
         if ph_has_chus(state, player):
             other_costs += 3000
     if ph_has_bombs(state, player):
-        other_costs += 1000 * discount  # Bomb bag is effected by discount
+        other_costs += 1000 * discount * multiplier  # Bomb bag is effected by discount
     if ph_option_randomize_masked_beedle(state, player):
-        other_costs += 1500
+        other_costs += 1500 * multiplier
     if ph_has_freebie_card(state, player):
-        other_costs -= 500*discount  # Freebie card assumed to be used for the 500r wisdom gem
-    other_costs *= 0.7  # Cost multiplier, cause the chance of all checks being useful is low
+        other_costs -= 500 * discount  # Freebie card assumed to be used for the 500r wisdom gem.
     return ph_has_rupees(state, player, price * discount + other_costs)
+
 
 def ph_count_beedle_points(state, player):
     return (state.count("Beedle Points (10)", player) * 10 +
-                  state.count("Beedle Points (20)", player) * 20 +
-                  state.count("Beedle Points (50)", player) * 50)
+            state.count("Beedle Points (20)", player) * 20 +
+            state.count("Beedle Points (50)", player) * 50)
+
 
 def ph_count_beedle_discount(state, player):
     thresholds = {20: 0.9, 50: 0.8, 100: 0.7}
@@ -514,6 +518,10 @@ def ph_count_beedle_discount(state, player):
         if points >= threshold:
             res = discount
     return res
+
+def ph_option_shop_hints(state, player):
+    return state.multiworld.worlds[player].options.shop_hints
+
 def ph_has_beedle_points_buyable(state, player, points):
     points_res = points - ph_count_beedle_points(state, player)
     if points_res > 0:
@@ -525,7 +533,7 @@ def ph_has_beedle_points_buyable(state, player, points):
     return ph_beedle_shop(state, player, cost)
 
 
-def ph_has_beedle_points(state, player, points):
+def ph_has_beedle_points(state: CollectionState, player, points):
     option = state.multiworld.worlds[player].options.randomize_beedle_membership
     if option == "randomize":
         if points <= 20:  # Buying 20 points is always in logic
@@ -534,6 +542,7 @@ def ph_has_beedle_points(state, player, points):
     elif option == "randomize_with_grinding":
         return ph_has_beedle_points_buyable(state, player, points)
     return False
+
 
 def ph_can_buy_gem(state: CollectionState, player: int):
     return all([ph_has_bow(state, player), ph_island_shop(state, player, 500)])
@@ -676,8 +685,7 @@ def ph_goal_option_phantom_door(state: CollectionState, player: int):
 
 
 def ph_goal_option_staircase(state: CollectionState, player: int):
-    return (state.multiworld.worlds[player].options.bellum_access in
-            ["spawn_phantoms_on_b13", "spawn_phantoms_on_b13", "warp_to_bellum"])
+    return True  # All goal options unlock staircase on goal req...
 
 
 def ph_goal_option_warp(state: CollectionState, player: int):
@@ -735,6 +743,10 @@ def ph_option_time_no_logic(state, player):
     ])
 
 
+def ph_option_ph_required(state, player):
+    return state.multiworld.worlds[player].options.ph_required
+
+
 def ph_option_floor_time(state, player, room):
     time_option = state.multiworld.worlds[player].options.ph_time_logic
     if time_option.value not in [3, 4]:
@@ -760,6 +772,14 @@ def ph_has_time(state: CollectionState, player, time, room=4):
     if time_option > 2:
         return ph_option_floor_time(state, player, room)
     else:
+
+        # Heart logic for if ph is required
+        heart_time = state.multiworld.worlds[player].options.ph_heart_time.value
+        heart_total = heart_time * (state.count("Heart Containers", player) + 2)
+        multiplier = ph_option_time_divider(state, player)
+        if ph_option_ph_required(state, player) and not ph_has_phantom_hourglass(state, player):
+            return heart_total >= time // multiplier
+
         # Time calculations for proper time logic
         ph_time = state.multiworld.worlds[player].options.ph_starting_time.value
         sand_time = state.multiworld.worlds[player].options.ph_time_increment.value
@@ -767,12 +787,8 @@ def ph_has_time(state: CollectionState, player, time, room=4):
                       sand_time * state.count("Sand of Hours", player) +
                       60 * state.count("Sand of Hours (Small)", player) +
                       120 * state.count("Sand of Hours (Boss)", player) +
-                      # Heart time calc
-                      (state.count("Heart Containers", player) + 2) *
-                      state.multiworld.worlds[player].options.ph_heart_time.value)
-        multiplier = ph_option_time_divider(state, player)
-        # print( f"Time Logic {total_time} > {time // multiplier} {ph_time}*{state.count('Phantom Hourglass',
-        # player)}; {sand_time}*{state.count('Sand of Hours', player)}")
+                      heart_total)
+
         return total_time >= time // multiplier
 
 
@@ -1204,8 +1220,8 @@ def ph_toi_3f_boomerang(state, player):
         any([
             ph_has_boomerang(state, player),
             ph_has_grapple(state, player)
-            ])
         ])
+    ])
 
 
 def ph_toi_b2(state, player):
@@ -1295,9 +1311,13 @@ def ph_mutoh_water(state, player):
                 ph_has_boomerang(state, player),
                 ph_has_beam_sword(state, player)
             ])
-
         ]),
-        ph_can_arrow_despawn(state, player)
+        ph_can_arrow_despawn(state, player),
+        all([
+            ph_has_beam_sword(state, player),
+            ph_has_explosives(state, player),
+            ph_option_glitched_logic(state, player)
+        ])
     ])
 
 
@@ -1442,6 +1462,7 @@ def ph_time_b8(state, player):
     return min(ph_time_b7(state, player) + 20,
                ph_time_b8_shortcut(state, player))
 
+
 def ph_time_b8_shortcut(state, player):
     comp = [6000]
     if ph_has_small_keys(state, player, "Temple of the Ocean King", 6):
@@ -1449,8 +1470,10 @@ def ph_time_b8_shortcut(state, player):
         # comp += [ph_time_b7_e(state, player) + 20] Invalid, causes loop
     return min(comp)
 
+
 def ph_time_b9_shortcut(state, player):
     return ph_time_b8_shortcut(state, player) + 2
+
 
 def ph_time_b9(state, player):
     return min(ph_time_b8(state, player) + 10,
@@ -1802,8 +1825,11 @@ def ph_totok_b5_chest(state, player):
 
 def ph_totok_b5_alt_chest(state, player):
     return all([
-        ph_has_shovel(state, player),
-        ph_totok_has_floor_time(state, player, 5, 7)
+        any([
+            ph_has_shovel(state, player),
+            ph_has_grapple(state, player)
+        ]),
+        ph_totok_has_floor_time(state, player, 5, 7),
     ])
 
 
@@ -1837,6 +1863,7 @@ def ph_totok_b7(state, player):
         ph_has_triforce_crest(state, player),
         ph_totok_has_floor_time(state, player, 7)
     ])
+
 
 def ph_totok_b7_crystal(state, player):
     return any([
@@ -1876,6 +1903,7 @@ def ph_totok_b8_phantom(state, player):
             ph_totok_has_floor_time(state, player, 8, 45)
         ])
     ])
+
 
 def ph_totok_b9(state, player):
     return any([
@@ -1967,6 +1995,7 @@ def ph_totok_b8_2_crystal_chest(state, player):
             ])
         ])
     ])
+
 
 def ph_totok_b10(state, player):
     return all([

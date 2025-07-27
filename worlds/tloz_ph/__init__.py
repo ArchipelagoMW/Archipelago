@@ -130,6 +130,7 @@ class PhantomHourglassWorld(World):
 
             # Set randomized data that effects exclusions etc
             self.required_dungeons = slot_data["required_dungeons"]
+            self.boss_reward_items_pool = slot_data["boss_reward_items_pool"]
 
         else:
             self.pick_required_dungeons()
@@ -291,7 +292,6 @@ class PhantomHourglassWorld(World):
                 self.create_event("toi gleeok", "_required_dungeon")
             if "Mutoh's Temple" in self.required_dungeons:
                 self.create_event("mutoh eox", "_required_dungeon")
-            self.create_event("beat required dungeons", "_has_bellum_requirement")
         # Post Dungeon Events
         self.create_event("post tof", "_beat_tof")
         self.create_event("post toc", "_beat_toc")
@@ -613,7 +613,7 @@ class PhantomHourglassWorld(World):
             # Hint settings
             "dungeon_hints", "shop_hints", "spirit_island_hints",
             # PH settings
-            "ph_time_logic", "ph_starting_time", "ph_time_increment", "ph_heart_time",
+            "ph_time_logic", "ph_starting_time", "ph_time_increment", "ph_heart_time", "ph_required",
             # Cosmetic
             "additional_metal_names",
             # Deathlink
@@ -628,6 +628,7 @@ class PhantomHourglassWorld(World):
             else self.options.dungeons_required.value
         # Used for dungeon hints in client
         slot_data["required_dungeon_locations"] = self.boss_reward_location_names  # for dungeon hints
+        slot_data["boss_reward_items_pool"] = self.boss_reward_items_pool
         return slot_data
 
     def write_spoiler(self, spoiler_handle):

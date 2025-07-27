@@ -378,8 +378,13 @@ DYNAMIC_FLAGS = {
     # boat requires sea chart
     "Despawn linebeck 2": {
         "on_scenes": [0xB03],
-        "not_has_locations": ["Mercay Oshus Phantom Sword"],
+        "has_items": [("Sword (Progressive)", 2, "not_has")],
         "unset_if_true": [(0x1B5580, 0x4)],
+    },
+    "Respawn linebeck 2": {
+        "on_scenes": [0xB03],
+        "has_items": [("Sword (Progressive)", 2)],
+        "set_if_true": [(0x1B5580, 0x4)],
     },
     "RESET despawn linebeck 2": {
         "on_scenes": [0xB02, 0xB00],
@@ -877,6 +882,10 @@ DYNAMIC_FLAGS = {
     "RESET Doyland memory bit": {
         "on_scenes": [0x1102, 0x1202],
         "set_if_true": [(0x1B5590, 0x02)],  # Memory of water
+    },
+    "Doylan post temple item": {
+        "on_scenes": [0x2201],
+        "unset_if_true": [(0x1B55A9, 0x20)],
     },
     "Ice Field pre-dungeon": {
         "on_scenes": [0xF03, 0xF01],

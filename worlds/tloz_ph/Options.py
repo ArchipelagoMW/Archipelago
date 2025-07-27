@@ -23,37 +23,47 @@ class PhantomHourglassMetalHuntRequiredMetals(Range):
     """
     Number of metals required to win if metal hunt is enabled
     The item group 'Metals' can be used to specify all metals for generic settings, like local_items
+    Setting too high of a value can max the item pool depending on other settings, this will fail generation
     """
     display_name = "metal_hunt_required"
     range_start = 0
-    range_end = 30
+    range_end = 50
     default = 20
 
 class PhantomHourglassMetalHuntTotalMetals(Range):
     """
     Total number of metals in the pool if metals are enabled
     If less than required metals, it is set to the required metal count
+    Setting too high of a value can max the item pool depending on other settings, this will fail generation
     """
     display_name = "metal_hunt_total"
     range_start = 0
-    range_end = 30
+    range_end = 50
     default = 25
 
 class PhantomHourglassStartingTime(Range):
     """
-    How much time in the Phantom Hourglass Item. There is one in the pool.
-    You don't need to have found the Phantom Hourglass for Sand items to work
+    How much time given by the Phantom Hourglass item. There is one in the pool.
     """
     display_name = "Phantom Hourglass Starting Time"
     range_start = 0
     range_end = 5999
     default = 600
 
+class PhantomHourglassTimeRequiresHourglass(Toggle):
+    """
+    Whether you need the phantom hourglass to make use of Sand of Hours.
+    If false the Phantom Hourglass functions like one big optional time item.
+    Hearts still count for time logic if True
+    """
+    display_name = "ph_required"
+    default = 0
 
 class PhantomHourglassTimeIncrement(Range):
     """
     How much time to get for each sand of hours upgrade, in seconds. It will try and create more upgrades items than you need.
     You don't need to have found the Phantom Hourglass to make use of the upgrades
+    If you exclude as many locations as possible, and have 30 metal items, generation breaks at 6 seconds
     """
     display_name = "Increment for each Sand of Hours"
     range_start = 0
@@ -179,7 +189,7 @@ class PhantomHourglassFrogRandomization(Choice):
 class PhantomHourglassBoatRequiresSeaChart(Toggle):
     """
     If True, heading out to sea from mercay requires the SW sea chart.
-    WARNING! If set to False and you travel without a sea chart, you can softlock by crossing to another sea chart.
+    WARNING! If set to False and you travel without a sea chart, you can't come back without warping to start.
     Frogs require their sea chart to work
     """
     display_name = "Boat Requires Sea Chart"
@@ -437,7 +447,8 @@ class PhantomHourglassRandomizeBeedlePoints(Choice):
     the Freebie Card, Complimentary Card and Compliment card to the pool
     Point thresholds are at 0, 20, 50, 100 and 200.
     - no_beedle_points: don't randomize this
-    - cards_only: adds the cards to the item pool, but doesn't randomize the membership card
+    - cards_only: adds the Freebie, Comploment and Complimentary cards to the item pool, but doesn't randomize
+    Membership thresholds
     - randomize: randomizes the beedle membership levels. You will only be logically expected to buy the first level.
     - randomize_with_grinding: randomizes the beedle membership levels. If you have a farmable source of rupees, the
     game can expect you to farm 20 000 rupees and use time travelling to buy out his stock day after day. Don't pick
@@ -502,6 +513,7 @@ class PhantomHourglassOptions(PerGameCommonOptions):
 
     # Phantom Hourglass options
     ph_time_logic: PhantomHourglassTimeLogic
+    ph_required: PhantomHourglassTimeRequiresHourglass
     ph_starting_time: PhantomHourglassStartingTime
     ph_heart_time: PhantomHourglassHeartLogic
     ph_time_increment: PhantomHourglassTimeIncrement

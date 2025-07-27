@@ -66,6 +66,7 @@ ITEMS_DATA = {
         "progressive_overwrite": True,
         "give_ammo": [0xa, 0x14, 0x1e],
         "ammo_address": 0x1ba6c0,
+        "set_bit": [(0x1ba644, 0x10)],
         "id": 6,
     },
     "Bombchus (Progressive)": {
@@ -74,6 +75,7 @@ ITEMS_DATA = {
         "give_ammo": [0xa, 0x14, 0x1e],
         "ammo_address": 0x1ba6c6,
         "progressive_overwrite": True,
+        "set_bit": [(0x1ba644, 0x80)],
         "id": 7,
     },
     "Bow (Progressive)": {
@@ -82,6 +84,7 @@ ITEMS_DATA = {
         "give_ammo": [0x14, 0x1e, 0x32],
         "ammo_address": 0x1ba6c2,
         "progressive_overwrite": True,
+        "set_bit": [(0x1ba644, 0x20)],
         "id": 8,
     },
     "Grappling Hook": {
@@ -122,10 +125,10 @@ ITEMS_DATA = {
         "progressive": [(0x1ba646, 0x10), (0x1ba646, 0x80), (0x1ba647, 0x4)],
         "id": 14,
     },
-    "Spirit of Courage White": {
+    "Spirit of Courage White": {  # Used to remove spirit from Temple of Courage
         "classification": ItemClassification.progression,
-        "address": None,
-        "dummy": True,
+        "address": 0x1BA647,
+        "value": 0x20,
         "id": 15,
     },
 
@@ -338,7 +341,7 @@ ITEMS_DATA = {
         "value": 0x12c,
         "incremental": True,
         "size": 2,
-        "id": 43,
+        "id": 43
     },
     "Rupoor (-10)": {
         "classification": ItemClassification.trap,

@@ -526,7 +526,7 @@ LOCATIONS_DATA = {
     },
     "TotOK B7 Peg Chest": {
         "region_id": "totok b7 switch",
-        "vanilla_item": "Courage Gem",
+        "vanilla_item": "Power Gem",
         "stage_id": 37,
         "floor_id": 0xA,
         "x_min": 50000,
@@ -1230,7 +1230,7 @@ LOCATIONS_DATA = {
     },
     "Temple of Courage Crayk Dungeon Reward": {
         "region_id": "toc crayk",
-        "vanilla_item": "Spirit of Courage (Progressive)",
+        "vanilla_item": "Spirit of Courage (White)",
         "item_override": "Rare Metal",
         "stage_id": 0x2C,
         "floor_id": 0,
@@ -1689,16 +1689,6 @@ LOCATIONS_DATA = {
         "force_vanilla": True,
         "dungeon": "Ghost Ship",
     },
-    "Ghost Ship B2 Third Sister Left Chest": {
-        "region_id": "ghost ship b2",
-        "stage_id": 0x29,
-        "floor_id": 1,
-        "vanilla_item": "Rupoor (-10)",
-        "x_max": -30000,
-        "dungeon": "Ghost Ship",
-        "sram_addr": 0xB14,
-        "sram_value": 1
-    },
     "Ghost Ship B2 Third Sister Right Chest": {
         "region_id": "ghost ship b2",
         "stage_id": 0x29,
@@ -1710,6 +1700,16 @@ LOCATIONS_DATA = {
         "sram_addr": 0xB14,
         "sram_value": 4,
         "delay_pickup": "Ghost Ship B2 Third Sister Left Chest"
+    },
+    "Ghost Ship B2 Third Sister Left Chest": {
+        "region_id": "ghost ship b2",
+        "stage_id": 0x29,
+        "floor_id": 1,
+        "vanilla_item": "Rupoor (-10)",
+        "x_max": -30000,
+        "dungeon": "Ghost Ship",
+        "sram_addr": 0xB14,
+        "sram_value": 1
     },
     "Ghost Ship B2 Spike Chest": {
         "region_id": "ghost ship b2",
@@ -2052,7 +2052,7 @@ LOCATIONS_DATA = {
         "region_id": "iof dig",
         "stage_id": 0xF,
         "floor_id": 0x0,
-        "vanilla_item": "Wisdom Gem",
+        "vanilla_item": "Big Green Rupee (100)",
         "y": 0x2666
     },
     "Isle of Frost Estate Sign Dig": {

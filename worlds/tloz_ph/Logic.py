@@ -138,7 +138,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["beedle", "beedle vip", False, lambda state: ph_has_beedle_points(state, player, 200)],
 
 
-            # ============ SW Ocean =================
+        # ============ SW Ocean =================
 
         ["mercay island", "sw ocean east", False, lambda state: ph_boat_access(state, player)],
         ["sw ocean east", "cannon island", False, None],

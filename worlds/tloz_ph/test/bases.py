@@ -1,5 +1,5 @@
 from BaseClasses import LocationProgressType
-from test.bases import WorldTestBase
+from test.bases import *
 
 
 
@@ -11,21 +11,22 @@ class TestGeneration(WorldTestBase):
         "logic": "hard",
         "accessibility": "items",
         "randomize_frogs": "start_with",
-        "dungeons_required": 5,
+        "dungeons_required": 0,
         "goal": "metal_hunt",
         "ghost_ship_in_dungeon_pool": "rescue_tetra",
         "totok_in_dungeon_pool": False,
-        "randomize_harrow": "randomize_with_hints",
+        "randomize_harrow": "no_harrow",
         "exclude_non_required_dungeons": True,
-        "randomize_masked_beedle": True,
-        "randomize minigames": "randomize_with_hints",
-        "randomize_salvage": "randomize_with_hints",
-        "additional_metal_names": "vanilla_only",
+        "randomize_masked_beedle": False,
+        "randomize minigames": "no_minigames",
+        "randomize_salvage": "no_salvage",
+        "additional_metal_names": "additional_rare_metal",
         "zauz_required_metals": 16,
-        "metal_hunt_required": 2,
-        "metal_hunt_total": 7,
-        "ph_time_logic": "no_logic",
-        "ph_starting_time": 50,
-        "ph_time_increment": 10,
-        "randomize_beedle_membership": "randomize",
+        "metal_hunt_required": 30,
+        "metal_hunt_total": 30,
+        "ph_time_logic": "easy",
+        "ph_starting_time": 0,
+        "ph_time_increment": 6,
+        "randomize_beedle_membership": "no_beedle_points",
                }
+
