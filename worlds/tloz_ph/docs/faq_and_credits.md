@@ -31,20 +31,29 @@ This version of the randomizer was made by me, Carrotinator. But it wouldn't hav
 
 The whole game!
 Things not implemented:
-- Salvage
-- Fish
-- Post
-- Time logic in Temple of the Ocean King
-- Any kind of entrance rando
+- Entrance Rando
+- Postman locations
+- That one treasure map from the girl on Molida Island
+
+It's still early alpha, and there are lots of issues around! Report issues to the [phantom hourglass thread](https://discord.com/channels/731205301247803413/1256012365049233438) in the [Archipelago Discord](https://discord.gg/8Z65BR2)
 
 ### Is there a tracker?
 
 [Universal Tracker](https://github.com/FarisTheAncient/Archipelago/releases) is supported.  
+There's an [item tracker](https://github.com/ZobeePlays/PH-AP-Item-Tracker/tree/main) for [poptracker](https://github.com/black-sliver/PopTracker) by ZobeePlays.
 Kizugaya/Kirito who made the [twilight princess poptracker](https://github.com/Kizugaya/TPRAP_poptracker) has started
-working on a [poptracker](https://github.com/black-sliver/PopTracker) pack for phantom hourglass. More info coming soon!
+working on a map tracker for [poptracker](https://github.com/black-sliver/PopTracker). More info coming soon!
+
+### How do I warp to start?
+
+Open the collection screen with select or from the menu tab, and press the button to switch the screens. Then enter any 
+scene transition. There will be messages in the archipelago client to let you know it's working.
+
+### Where do I find more ammo?
+
+The Milk Bar on Mercay Island will give free refills. How nice
 
 ### My ship is slow. How do i go faster?
-
 There are multiple ways of doing this, but my favorite is to create a cheat in bizhawk for address `021FA0A4` in 
 `ARM7 system bus`, and set to any speed value. Default max speed is ``0x0080``.  My favorite is `0x0200`, or 4x speed.
 Note that this forces a max speed, and makes turning weird- you'll need to toggle it on and off to do things precisely.
@@ -62,13 +71,7 @@ reenter the room with the locations in question. So far this is only implemented
 checks on Mercay Island, and some problematic checks like big rupees that can despawn or fall in the sea. I'm planning 
 to add all locations in bulk soon.
 
-This is also implemented for some problematic locations that are close together.
-
-### I softlocked. How do I warp to start?
-
-Some known softlock locations have fixes, check your inventory for temporary items.
-There is so far no implemented warp to start, but you can freeze certain values in the bizhawk cheat menu to change where an entrance takes you.
-You want to freeze `0x1B2E94` in `Main RAM` at `0xB` for Mercay, and probably also set your room id `0x1B2E98`, floor number `0x1B2EA6` and entrance id `0x1B2EA7`to `0` to avoid pesky crashes
+This is also implemented for some problematic locations that are close together. Most of which have been fixed.
 
 ### How do small keys work in Temple of the Ocean King?
 

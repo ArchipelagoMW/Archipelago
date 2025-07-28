@@ -8,34 +8,67 @@ from worlds.tloz_ph.data.Items import ITEMS_DATA
 
 class PhantomHourglassGoal(Choice):
     """
-    The goal to accomplish in order to complete the seed.
+    The goal to accomplish in order to unlock the endgame specified in 'bellum_access'
     - Triforce_door: Open the triforce door on TotOK B6. Leftover from pre-alpha
-    - beat_bellumbeck: beat bellumbeck on the ruins of the ghost ship
+    - complete_dungeons: complete dungeons to unlock the endgame
+    - metal_hunt: collect a specified number of metals to unlock the endgame
     """
-    display_name = "Goal"
+    display_name = "goal_requirements"
     option_triforce_door = 0
-    option_beat_bellumbeck = 1
+    option_complete_dungeons = 1
+    option_metal_hunt = 2
     default = 1
 
+class PhantomHourglassMetalHuntRequiredMetals(Range):
+    """
+    Number of metals required to win if metal hunt is enabled
+    The item group 'Metals' can be used to specify all metals for generic settings, like local_items
+    Setting too high of a value can max the item pool depending on other settings, this will fail generation
+    """
+    display_name = "metal_hunt_required"
+    range_start = 0
+    range_end = 50
+    default = 20
+
+class PhantomHourglassMetalHuntTotalMetals(Range):
+    """
+    Total number of metals in the pool if metals are enabled
+    If less than required metals, it is set to the required metal count
+    Setting too high of a value can max the item pool depending on other settings, this will fail generation
+    """
+    display_name = "metal_hunt_total"
+    range_start = 0
+    range_end = 50
+    default = 25
 
 class PhantomHourglassStartingTime(Range):
     """
-    How much time to start with in your Phantom Hourglass, in minutes
+    How much time given by the Phantom Hourglass item. There is one in the pool.
     """
     display_name = "Phantom Hourglass Starting Time"
     range_start = 0
-    range_end = 30
-    default = 10
+    range_end = 5999
+    default = 600
 
+class PhantomHourglassTimeRequiresHourglass(Toggle):
+    """
+    Whether you need the phantom hourglass to make use of Sand of Hours.
+    If false the Phantom Hourglass functions like one big optional time item.
+    Hearts still count for time logic if True
+    """
+    display_name = "ph_required"
+    default = 0
 
 class PhantomHourglassTimeIncrement(Range):
     """
-    How much time to get for each sand of hours upgrade, in minutes
+    How much time to get for each sand of hours upgrade, in seconds. It will try and create more upgrades items than you need.
+    You don't need to have found the Phantom Hourglass to make use of the upgrades
+    If you exclude as many locations as possible, and have 30 metal items, generation breaks at 6 seconds
     """
     display_name = "Increment for each Sand of Hours"
     range_start = 0
-    range_end = 30
-    default = 1
+    range_end = 5999
+    default = 60
 
 
 class PhantomHourglassRemoveItemsFromPool(ItemDict):
@@ -52,9 +85,10 @@ class PhantomHourglassLogic(Choice):
     """
     Logic options:
     - Normal: Glitches not in logic.
-    - Medium: Includes some cool uses of pots aren't hard, bun unconventional
+    - Hard: Includes some cool unconventional uses of pots, tricky enemy fights and Molida Archery 2000
     - Glitched: Hammer clips, chu camera displacement and clever use of items in logic
     Be careful, using glitches on normal logic can cause key-related softlocks
+    Full coverage of tricks included can be found here https://github.com/carrotinator/Archipelago/blob/main/worlds/tloz_ph/docs/tricks_and_skips.md
     """
     display_name = "logic"
     option_normal = 0
@@ -82,10 +116,11 @@ class PhantomHourglassPhantomCombatDifficulty(Choice):
 
 class PhantomHourglassKeyRandomization(Choice):
     """
-    Small Key Logic options:
+    Small Key Logic options
     - vanilla: Keys are not randomized
     - in_own_dungeon: Keys can be found in their own dungeon
     - anywhere: Keysanity. Keys can be found anywhere
+    You can use the item group "Small Keys" to specify further key options
     """
     display_name = "Key Settings"
     option_vanilla = 0
@@ -107,6 +142,7 @@ class PhantomHourglassDungeonsRequired(Range):
     """
     How many dungeons are required to access the endgame.
     Max is 6 unless you add Ghost ship and TotOK with their own options below
+    If metal hunt is enabled, this only effects what dungeons are excluded or not
     """
     display_name = "dungeons_required"
     range_start = 0
@@ -114,11 +150,10 @@ class PhantomHourglassDungeonsRequired(Range):
     default = 3
 
 
-
 class PhantomHourglassBellumAccess(Choice):
     """
-    What unlocks after you reach your dungeon requirement
-    - spawn_phantoms_on_b13: getting your goal requirement spawns the phantoms on TotOK B13, and killing them gives
+    What unlocks after you reach your goal requirement. For bellum options, game completion is sent on entering the credits.
+    - spawn_phantoms_on_b13: getting your goal requirement spawns the phantoms on TotOK B13, and killing them gives \
     you bellum access. You will have to run TotOK to the bottom after getting your goal requirement
     - unlock_staircase: getting your goal requirement unlocks the staircase to bellum. The phantoms on B13 spawn by
     default, and killing them unlocks the warp for later
@@ -126,12 +161,14 @@ class PhantomHourglassBellumAccess(Choice):
     default, and the staircase to bellum is blocked off until reaching the goal
     - spawn_bellumbeck: getting your goal requirement spawns the ruins of the ghost ship in the SW quadrant, and you
     can skip bellum 1 and the ghost ship fight
+    - win: reaching your goal requirement wins the game
     """
     display_name = "bellum_access"
     option_spawn_phantoms_on_b13 = 0
     option_unlock_staircase = 1
     option_warp_to_bellum = 2
     option_spawn_bellumbeck = 3
+    option_win = 4
 
 
 class PhantomHourglassFrogRandomization(Choice):
@@ -149,14 +186,15 @@ class PhantomHourglassFrogRandomization(Choice):
     default = 0
 
 
-class PhantomHourglassBoatRequriesSeaChart(Toggle):
+class PhantomHourglassBoatRequiresSeaChart(Toggle):
     """
     If True, heading out to sea from mercay requires the SW sea chart.
-    WARNING! If set to False and you travel without a sea chart, you can softlock by crossing to another sea chart.
+    WARNING! If set to False and you travel without a sea chart, you can't come back without warping to start.
     Frogs require their sea chart to work
     """
     display_name = "Boat Requires Sea Chart"
     default = 1
+
 
 class PhantomHourglassFogSettings(Choice):
     """
@@ -173,12 +211,17 @@ class PhantomHourglassFogSettings(Choice):
     default = 0
 
 
-class PhantomHourglassRandomizeHarrow(Toggle):
+class PhantomHourglassRandomizeHarrow(Choice):
     """
     Choose whether to randomize the rng hell checks on harrow island
+    If enabled, the hint option with give you hints on entering the island
     """
-    display_name = "Randomize Harrow"
+    display_name = "randomize_harrow"
+    option_no_harrow = 0
+    option_randomize_with_hints = 1
+    option_randomize_without_hints = 2
     default = 0
+
 
 class PhantomHourglassGhostShipInDungeonPool(Choice):
     """
@@ -193,12 +236,14 @@ class PhantomHourglassGhostShipInDungeonPool(Choice):
     option_false = 2
     default = 0
 
+
 class PhantomHourglassTotokInDungeonPool(Toggle):
     """
     Choose whether the NE Sea Chart chest on B13 of Temple of the Ocean King is in the dungeon reward pool
     """
     display_name = "TotOK in Dungeon Pool"
     default = 0
+
 
 class PhantomHourglassRandomizeMaskedBeedle(Toggle):
     """
@@ -207,6 +252,7 @@ class PhantomHourglassRandomizeMaskedBeedle(Toggle):
     """
     auto_display_name = "masked_beedle"
     default = 0
+
 
 class PhantomHourglassDungeonHints(Choice):
     """
@@ -221,12 +267,14 @@ class PhantomHourglassDungeonHints(Choice):
     option_totok = 2
     default = 1
 
+
 class PhantomHourglassExcludeNonRequriedDungeons(Toggle):
     """
     Non-required dungeons won't have progression or useful items. Does not apply to TotOK.
     """
     display_name = "exclude_non_required_dungeons"
     default = 1
+
 
 class PhantomHourglassHintSpiritIsland(Choice):
     """
@@ -241,6 +289,7 @@ class PhantomHourglassHintSpiritIsland(Choice):
     option_none = 2
     default = 0
 
+
 class PhantomHourglassShopHints(Toggle):
     """
     Get hints for shop items you currently can buy
@@ -249,29 +298,205 @@ class PhantomHourglassShopHints(Toggle):
     display_name = "hint_shops"
     default = 1
 
+
+class PhantomHourglassRandomizeDigSpots(Toggle):
+    """
+    Randomize dig spots that give 100-300 rupees
+    """
+    display_name = "randomize_rupee_dig_spots"
+    default = 1
+
+
+class PhantomHourglassRandomizeMinigames(Choice):
+    """
+    Randomize the following minigames:
+    - Bannan Cannon Game
+    - Molida Archery
+    - Dee Ess Goron Game
+    - Maze Island Main Rewards
+    - Prince of Red Lions Fight
+    if the hint option is on, all minigame rewards will be hinted for on entering their scene
+    """
+    display_name = "randomize_minigames"
+    option_no_minigames = 0
+    option_randomize_with_hints = 1
+    option_randomize_without_hints = 2
+    default = 2
+
+
+class PhantomHourglassSkipOceanFights(Toggle):
+    """
+    The Massive Eye fight before Goron Island, ice pillars around Isle of Frost and Giant Eye Plant before Bannan trade
+    quest item are removed, and cannon isn't required for those locations
+    """
+    display_name = "skip_ocean_fights"
+    default = 0
+
+
+class PhantomHourglassRandomizeFishing(Choice):
+    """
+    Adds checks for catching the 6 fish you can catch at sea, and handing in 4 fish to the wayfarer on bannan island.
+    The hint option also gives free hints for the catching fish checks on entering the wayfarers hut on bannan island.
+    """
+    display_name = "randomize_fishing"
+    option_no_fish = 0
+    option_randomize_with_hints = 1
+    option_randomize_without_hints = 2
+    default = 0
+
+
+class PhantomHourglassSpiritGemPacks(Range):
+    """
+    Instead of having 20 individual spirit gems of each type, you get them in packs of n
+    """
+    display_name = "spirit_gem_packs"
+    range_vanilla = 1
+    range_packs_of_4 = 4
+    range_start = 1
+    range_end = 20
+    default = 1
+
+
+class PhantomHourglassAdditionalSpiritGems(Range):
+    """
+    Adds additional spirit gems/packs to the pool.
+    At 0 there will be exactly enough to get both upgrade locations
+    Can cause generation errors if too many locations are excluded
+    """
+    display_name = "additional_spirit_gems"
+    range_start = 0
+    range_end = 5
+    default = 0
+
+
+class PhantomHourglassRandomizeSalvage(Choice):
+    """
+    Randomize all 31 treasure maps and salvage locations!
+    Hint option gives you a hint for the location on receiving the map item
+    """
+    display_name = "randomize_salvage"
+    option_no_salvage = 0
+    option_randomize_with_hints = 1
+    option_randomize_without_hints = 2
+
+
+class PhantomHourglassZauzRequiredMetals(Range):
+    """
+    How many rare metals you need to have obtained for zauz to give the phantom blade forging check
+    If the value is greater than the number of required dungeons/total metal hunt items, the value will be the number
+    of dungeons/total metals
+    """
+    display_name = "zauz_required_metals"
+    range_start = 0
+    range_end = 30
+    default = 3
+
+class PhantomHourglassAdditionalMetalNames(Choice):
+    """
+    If there are more than 3 rare metals in the pool, what should the additional items be called?
+    - vanilla_only: additional metals are duplicate vanilla metals
+    - additional_rare_metal: additional metals are all called "Additional Rare Metal"
+    - custom_metals: additional metals are chosen randomly from a pre-defined list of names I made up. The names are
+    based on color words ending in "ine". Some examples are "Verdantine", "Lavendine" and "Amberine". Currently there
+    30 metal names defined.
+    - custom_metals_unique: same as custom metals, but there can only be 1 of each item. Additional metals will be
+    named "Additional Rare Metal"
+    """
+    display_name = "additional_metal_names"
+    option_vanilla_only = 0
+    option_additional_rare_metal = 1
+    option_custom = 2
+    option_custom_unique = 3
+    default = 1
+
+class PhantomHourglassTimeLogic(Choice):
+    """
+    Logic Requirements for Sand of Hours in Temple of the Ocean King
+    - beginner: double the time requirement of easy. Expects you to get everything with ~10 minutes
+    - easy: each check has a time requirement based on walking to each location. Does not take yellow pots into account.
+    Expects you to get everything with ~5 minutes
+    - medium: half of the easy times. Expects you to get everything with ~2.5 minutes
+    - hard: a quarter of the easy times. Expects you to get everything with ~1.25 minutes
+    - ph_only_b1: only the phantom hourglass item is required for checks past b1, checks above that are always in logic
+    - ph_only_b4: only the phantom hourglass item is required for checks past b4, checks above that are always in logic
+    - no_logic: Sand of Hours does not effect logic
+    """
+    display_name = "ph_time_logic"
+    option_beginner = -1
+    option_easy = 0
+    option_medium = 1
+    option_hard = 2
+    option_ph_only_b1 = 3
+    option_ph_only_b4 = 4
+    option_no_logic = 5
+    default = 0
+
+class PhantomHourglassHeartLogic(Range):
+    """
+    How much to value hearts as sand in Temple of the Ocean King, in seconds.
+    Counts 2 out of your 3 starting hearts.
+    Standing in the open, each heart depletes after 9 seconds.
+    Keep in mind that hearts in pots respawn infinitely
+    """
+    display_name = "ph_heart_time"
+    default = 0
+    range_start = 0
+    range_end = 60
+
+class PhantomHourglassRandomizeBeedlePoints(Choice):
+    """
+    Adds locations to the five membership cards in Beedle's shop, point items to help reach their thresholds and adds
+    the Freebie Card, Complimentary Card and Compliment card to the pool
+    Point thresholds are at 0, 20, 50, 100 and 200.
+    - no_beedle_points: don't randomize this
+    - cards_only: adds the Freebie, Comploment and Complimentary cards to the item pool, but doesn't randomize
+    Membership thresholds
+    - randomize: randomizes the beedle membership levels. You will only be logically expected to buy the first level.
+    - randomize_with_grinding: randomizes the beedle membership levels. If you have a farmable source of rupees, the
+    game can expect you to farm 20 000 rupees and use time travelling to buy out his stock day after day. Don't pick
+    unless you know what you're signing up for
+    """
+    display_name = "randomize_beedle_membership"
+    option_no_beedle_points = 0
+    option_cards_only = 1
+    option_randomize = 2
+    option_randomize_with_grinding = 3
+    default = 1
+
 @dataclass
 class PhantomHourglassOptions(PerGameCommonOptions):
     # Accessibility
     accessibility: ItemsAccessibility
 
     # Goal
-    goal: PhantomHourglassGoal
+    goal_requirements: PhantomHourglassGoal
+    bellum_access: PhantomHourglassBellumAccess
+
+    # Dungeons
     dungeons_required: PhantomHourglassDungeonsRequired
     exclude_non_required_dungeons: PhantomHourglassExcludeNonRequriedDungeons
-    bellum_access: PhantomHourglassBellumAccess
     ghost_ship_in_dungeon_pool: PhantomHourglassGhostShipInDungeonPool
     totok_in_dungeon_pool: PhantomHourglassTotokInDungeonPool
+
+    # Metal Hunt
+    metal_hunt_required: PhantomHourglassMetalHuntRequiredMetals
+    metal_hunt_total: PhantomHourglassMetalHuntTotalMetals
 
     # Logic options
     logic: PhantomHourglassLogic
     phantom_combat_difficulty: PhantomHourglassPhantomCombatDifficulty
-    boat_requires_sea_chart: PhantomHourglassBoatRequriesSeaChart
+    boat_requires_sea_chart: PhantomHourglassBoatRequiresSeaChart
 
     # Item Randomization
     keysanity: PhantomHourglassKeyRandomization
+    randomize_minigames: PhantomHourglassRandomizeMinigames
     randomize_frogs: PhantomHourglassFrogRandomization
-    randomize_triforce_crest: PhantomHourglassTriforceCrestRandomization
+    randomize_fishing: PhantomHourglassRandomizeFishing
+    randomize_salvage: PhantomHourglassRandomizeSalvage
     randomize_harrow: PhantomHourglassRandomizeHarrow
+    randomize_digs: PhantomHourglassRandomizeDigSpots
+    randomize_triforce_crest: PhantomHourglassTriforceCrestRandomization
+    randomize_beedle_membership: PhantomHourglassRandomizeBeedlePoints
     randomize_masked_beedle: PhantomHourglassRandomizeMaskedBeedle
 
     # Hint Options
@@ -281,10 +506,22 @@ class PhantomHourglassOptions(PerGameCommonOptions):
 
     # World Options
     fog_settings: PhantomHourglassFogSettings
+    skip_ocean_fights: PhantomHourglassSkipOceanFights
+    zauz_required_metals: PhantomHourglassZauzRequiredMetals
 
-    # Phantom Hourglass
+    # Spirit Gem options
+    spirit_gem_packs: PhantomHourglassSpiritGemPacks
+    additional_spirit_gems: PhantomHourglassAdditionalSpiritGems
+
+    # Phantom Hourglass options
+    ph_time_logic: PhantomHourglassTimeLogic
+    ph_required: PhantomHourglassTimeRequiresHourglass
     ph_starting_time: PhantomHourglassStartingTime
+    ph_heart_time: PhantomHourglassHeartLogic
     ph_time_increment: PhantomHourglassTimeIncrement
+
+    # Cosmetic
+    additional_metal_names: PhantomHourglassAdditionalMetalNames
 
     # Generic
     start_inventory_from_pool: StartInventoryPool

@@ -1,4 +1,6 @@
+import time
 
+from worlds.tloz_ph.data.Constants import *
 
 # TODO: Add sram data for saveslot 2
 # TODO: Add the rest of sram data in bulk
@@ -6,7 +8,8 @@
 LOCATIONS_DATA = {
     "Mercay Sword Chest": {
         "region_id": "mercay island",
-        "vanilla_item": "Sword (Progressive)",
+        "item_override": "Sword (Progressive)",
+        "vanilla_item": "Oshus' Sword",
         "stage_id": 11,
         "floor_id": 19,
         "sram_addr": 0x00043C,
@@ -27,9 +30,7 @@ LOCATIONS_DATA = {
         "stage_id": 11,
         "floor_id": 0,
         "y": 0x1333,
-        "vanilla_item": "Treasure Map #10",
-        # "sram_addr": 0x000EB0,
-        # "sram_value": 1
+        "vanilla_item": "Treasure Map #10 (Gusts SE)",
     },
     "Mercay Cuccoo Chest": {
         "region_id": "mercay island",
@@ -84,7 +85,8 @@ LOCATIONS_DATA = {
         "address": 0x1B55A0,
         "value": 0x4,
         "y": 0x399A,
-        "vanilla_item": "Nothing!"
+        "vanilla_item": "Nothing!",
+        # "item_override": "Phantom Hourglass",
     },
     "Mercay Freedle Tunnel Chest": {
         "region_id": "mercay freedle tunnel chest",
@@ -110,7 +112,7 @@ LOCATIONS_DATA = {
         "floor_id": 2,
         "y": 0x4CCD,
         "x_max": 0x00025000,
-        "vanilla_item": "Treasure Map #12",
+        "vanilla_item": "Treasure Map #12 (Dee Ess N)",
         # "sram_addr": 0x000EB0,  something's bugging with this
         # "sram_value": 0x08
     },
@@ -120,7 +122,7 @@ LOCATIONS_DATA = {
         "floor_id": 3,
         "address": 0x1BA650,
         "value": 2,
-        "vanilla_item": "Treasure Map #9",
+        "vanilla_item": "Treasure Map #9 (Cannon W)",
     },
     "Mercay Shipyard Chest": {
         "region_id": "post tof",
@@ -142,7 +144,8 @@ LOCATIONS_DATA = {
         "region_id": "mercay oshus phantom blade",
         "stage_id": 11,
         "floor_id": 10,
-        "vanilla_item": "Sword (Progressive)",
+        "item_override": "Sword (Progressive)",
+        "vanilla_item": "Phantom Sword",
         "address": 0x1BA648,
         "value": 0x20
     },
@@ -198,6 +201,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Power Gem",
         "stage_id": 11,
         "floor_id": 0x11,
+        "additional_rooms": [0xC0E, 0x1014],
         "address": 0x1B5589,
         "value": 0x02,
         "island_shop": True,
@@ -208,6 +212,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Bow (Progressive)",
         "stage_id": 11,
         "floor_id": 0x11,
+        "additional_rooms": [0xC0E, 0x1014],
         "address": 0x1B5589,
         "value": 0x08,
         "island_shop": True,
@@ -218,6 +223,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Bombchus (Progressive)",
         "stage_id": 11,
         "floor_id": 0x11,
+        "additional_rooms": [0xC0E, 0x1014],
         "address": 0x1B5589,
         "value": 0x10,
         "island_shop": True,
@@ -228,6 +234,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Heart Container",
         "stage_id": 11,
         "floor_id": 0x11,
+        "additional_rooms": [0xC0E, 0x1014],
         "address": 0x1B5588,
         "value": 0x80,
         "island_shop": True
@@ -274,7 +281,7 @@ LOCATIONS_DATA = {
     # ========== TotOK ==============
 
     "TotOK 1F SW Sea Chart Chest": {
-        "region_id": "totok 1f chart chest",
+        "region_id": "totok 1f chart",
         "vanilla_item": "SW Sea Chart",
         "stage_id": 37,
         "floor_id": 0,
@@ -283,7 +290,7 @@ LOCATIONS_DATA = {
         'set_bit': [(0x1B557D, 2)]
     },
     "TotOK 1F Linebeck Key": {
-        "region_id": "totok",
+        "region_id": "totok 1f",
         "vanilla_item": "Small Key (Temple of the Ocean King)",
         "stage_id": 37,
         "floor_id": 0,
@@ -294,7 +301,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK 1F Empty Chest": {
-        "region_id": "totok",
+        "region_id": "totok 1f chest",
         "vanilla_item": "Nothing!",
         "stage_id": 37,
         "floor_id": 0,
@@ -310,7 +317,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B1 Shoot Eye Chest": {
-        "region_id": "totok b1 eye chest",
+        "region_id": "totok b1 bow",
         "vanilla_item": "Courage Gem",
         "stage_id": 37,
         "floor_id": 1,
@@ -319,7 +326,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B1 Phantom Chest": {
-        "region_id": "totok b1 phantom chest",
+        "region_id": "totok b1 phantom",
         "vanilla_item": "Treasure",
         "farmable": True,
         "stage_id": 37,
@@ -330,7 +337,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B2 Bombchu Chest": {
-        "region_id": "totok b2 bombchu chest",
+        "region_id": "totok b2 chu",
         "vanilla_item": "Wisdom Gem",
         "stage_id": 37,
         "floor_id": 2,
@@ -341,7 +348,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B2 Phantom Chest": {
-        "region_id": "totok b2 phantom chest",
+        "region_id": "totok b2 phantom",
         "vanilla_item": "Treasure",
         "farmable": True,
         "stage_id": 37,
@@ -359,7 +366,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B3 Bow Chest": {
-        "region_id": "totok b3 bow chest",
+        "region_id": "totok b3 bow",
         "vanilla_item": "Power Gem",
         "stage_id": 37,
         "floor_id": 3,
@@ -369,7 +376,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B3 Phantom Chest": {
-        "region_id": "totok b3 phantom chest",
+        "region_id": "totok b3 phantom",
         "vanilla_item": "Treasure",
         "farmable": True,
         "stage_id": 37,
@@ -380,7 +387,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B3 NW Chest": {
-        "region_id": "totok b3",
+        "region_id": "totok b3 nw",
         "vanilla_item": "Force Gem (B3)",
         "stage_id": 37,
         "floor_id": 3,
@@ -392,7 +399,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B3 SW Chest": {
-        "region_id": "totok b3 locked chest",
+        "region_id": "totok b3 sw",
         "vanilla_item": "Force Gem (B3)",
         "stage_id": 37,
         "floor_id": 3,
@@ -405,7 +412,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B3 SE Chest": {
-        "region_id": "totok b3",
+        "region_id": "totok b3 se",
         "vanilla_item": "Force Gem (B3)",
         "stage_id": 37,
         "floor_id": 3,
@@ -417,21 +424,21 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B3 Small Key": {
-        "region_id": "totok b3",
+        "region_id": "totok b3 key",
         "vanilla_item": "Small Key (Temple of the Ocean King)",
         "stage_id": 37,
         "floor_id": 3,
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B3 NW Sea Chart Chest": {
-        "region_id": "totok b3.5",
+        "region_id": "totok b35",
         "vanilla_item": "NW Sea Chart",
         "stage_id": 37,
         "floor_id": 4,
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B4 Phantom Eye Chest": {
-        "region_id": "totok b4",
+        "region_id": "totok b4 eyes",
         "vanilla_item": "Power Gem",
         "stage_id": 37,
         "floor_id": 5,
@@ -441,7 +448,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B4 Phantom Chest": {
-        "region_id": "totok b4 phantom chest",
+        "region_id": "totok b4 phantom",
         "vanilla_item": "Treasure",
         "farmable": True,
         "stage_id": 37,
@@ -459,8 +466,8 @@ LOCATIONS_DATA = {
         "delay_pickup": "TotOK B4 Small Key",
     },
     "TotOK B5 Alt Path Chest": {
-        "region_id": "totok b5.5 chest",
-        "vanilla_item": "Treasure Map #23",
+        "region_id": "totok b5 alt chest",
+        "vanilla_item": "Treasure Map #23 (Frost NW)",
         "stage_id": 37,
         "floor_id": 6,
         "x_max": -15000,
@@ -476,7 +483,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B6 Phantom Chest": {
-        "region_id": "totok b6 phantom chest",
+        "region_id": "totok b6 phantom",
         "vanilla_item": "Treasure",
         "farmable": True,
         "stage_id": 37,
@@ -486,15 +493,15 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B6 Bow Chest": {
-        "region_id": "totok b6 bow chest",
-        "vanilla_item": "Treasure Map #11",
+        "region_id": "totok b6 bow",
+        "vanilla_item": "Treasure Map #11 (Gusts N)",
         "stage_id": 37,
         "floor_id": 7,
         "z_max": -40000,
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B6 Courage Crest": {
-        "region_id": "totok b6 cc",
+        "region_id": "totok b6 crest",
         "vanilla_item": "Nothing!",
         "item_override": "Courage Crest",
         "stage_id": 37,
@@ -507,7 +514,7 @@ LOCATIONS_DATA = {
     # =============== TotOK Part 2 ===================
 
     "TotOK B7 North Chest": {
-        "region_id": "totok b7 east",
+        "region_id": "totok b7 crystal",
         "vanilla_item": "Round Crystal (Temple of the Ocean King)",
         "stage_id": 37,
         "floor_id": 0xA,
@@ -518,8 +525,8 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B7 Peg Chest": {
-        "region_id": "totok b7 peg",
-        "vanilla_item": "Courage Gem",
+        "region_id": "totok b7 switch",
+        "vanilla_item": "Power Gem",
         "stage_id": 37,
         "floor_id": 0xA,
         "x_min": 50000,
@@ -538,7 +545,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B8 2 Crystals Chest": {
-        "region_id": "totok b8 2 crystals",
+        "region_id": "totok b8 2c chest",
         "vanilla_item": "Courage Gem",
         "stage_id": 37,
         "floor_id": 0xB,
@@ -547,7 +554,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B8 Phantom Chest": {
-        "region_id": "totok b7 phantom",
+        "region_id": "totok b8 phantom",
         "vanilla_item": "Ship Part",
         "farmable": True,
         "stage_id": 37,
@@ -559,7 +566,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B9 NW Chest": {
-        "region_id": "totok b9 nw",
+        "region_id": "totok b9 corner chest",
         "vanilla_item": "Triangle Crystal (Temple of the Ocean King)",
         "stage_id": 37,
         "floor_id": 0xC,
@@ -568,7 +575,7 @@ LOCATIONS_DATA = {
         'force_vanilla': True,
         'dungeon': "Temple of the Ocean King"
     },
-    "TotOK B9 Ghost Chest": {
+    "TotOK B9 Wizzrobe Chest": {
         "region_id": "totok b9 ghosts",
         "vanilla_item": "Wisdom Gem",
         "stage_id": 37,
@@ -590,7 +597,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B9.5 SE Sea Chart Chest": {
-        "region_id": "totok b9.5",
+        "region_id": "totok b10",
         "vanilla_item": "SE Sea Chart",
         "stage_id": 37,
         "floor_id": 0xD,
@@ -598,7 +605,7 @@ LOCATIONS_DATA = {
     },
     "TotOK B10 Hammer Switch Chest": {
         "region_id": "totok b10 hammer",
-        "vanilla_item": "Treasure Map #30",
+        "vanilla_item": "Treasure Map #30 (Ruins S)",
         "stage_id": 37,
         "floor_id": 0xE,
         "x_min": 15000,
@@ -624,7 +631,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B10 Phantom Eye Chest": {
-        "region_id": "totok b10 phantom eyes",
+        "region_id": "totok b10 eye",
         "vanilla_item": "Red Potion",
         "stage_id": 37,
         "floor_id": 0xE,
@@ -632,14 +639,14 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B10 Small Key": {
-        "region_id": "totok b10",
+        "region_id": "totok b10 key",
         "vanilla_item": "Small Key (Temple of the Ocean King)",
         "stage_id": 37,
         "floor_id": 0xE,
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B11 Phantom Eye Chest": {
-        "region_id": "totok b11",
+        "region_id": "totok b11 eyes",
         "vanilla_item": "Treasure",
         "stage_id": 37,
         "floor_id": 0x0F,
@@ -658,7 +665,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B12 NW Chest": {
-        "region_id": "totok b12",
+        "region_id": "totok b12 nw",
         "vanilla_item": "Force Gem (B12)",
         "stage_id": 37,
         "floor_id": 0x10,
@@ -668,7 +675,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B12 NE Chest": {
-        "region_id": "totok b12",
+        "region_id": "totok b12 ne",
         "vanilla_item": "Force Gem (B12)",
         "stage_id": 37,
         "floor_id": 0x10,
@@ -679,14 +686,14 @@ LOCATIONS_DATA = {
     },
     "TotOK B12 Hammer Chest": {
         "region_id": "totok b12 hammer",
-        "vanilla_item": "Treasure Map #31",
+        "vanilla_item": "Treasure Map #31 (Dead S)",
         "stage_id": 37,
         "floor_id": 0x10,
         "x_min": 65000,
         'dungeon': "Temple of the Ocean King"
     },
-    "TotOK B12 Ghost Chest": {
-        "region_id": "totok b12",
+    "TotOK B12 Kill Everything Chest": {
+        "region_id": "totok b12 ghost",
         "vanilla_item": "Ship Part",
         "item_override": "NE Sea Chart",  # Lets the B13 chest be a dungeon reward
         "stage_id": 37,
@@ -707,7 +714,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B13 NE Sea Chart Chest": {
-        "region_id": "totok b13",
+        "region_id": "totok b13 chest",
         "vanilla_item": "NE Sea Chart",
         "item_override": "Rare Metal",
         "stage_id": 37,
@@ -754,13 +761,22 @@ LOCATIONS_DATA = {
     # Cannon Island
     "Cannon Island Bee Chest": {
         "region_id": "cannon island",
-        "vanilla_item": "Treasure Map #1",
+        "vanilla_item": "Treasure Map #1 (Molida SW)",
         "stage_id": 0x13,
         "floor_id": 0,
         "x_max": -30000,
         "z_max": -15000,
         "x_min": -50000,
         "y": 0x1333,
+    },
+    "Cannon Island Bee Dig": {
+        "region_id": "cannon island dig",
+        "vanilla_item": "Big Red Rupee (200)",
+        "stage_id": 0x13,
+        "floor_id": 0,
+        "x_max": -50000,
+        "y": 0x1333,
+        "conditional": True
     },
     "Cannon Island Cave Chest": {
         "region_id": "cannon island",
@@ -774,6 +790,16 @@ LOCATIONS_DATA = {
         "stage_id": 0x13,
         "floor_id": 0,
         "y": 0x2666
+    },
+    "Cannon Island SE Dig": {
+        "region_id": "cannon island dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x13,
+        "floor_id": 0,
+        "y": 0x1333,
+        "x_max": 27000,
+        "z_min": 37000,
+        "conditional": True
     },
     "Cannon Island Bonk Tree": {
         "region_id": "cannon island",
@@ -796,7 +822,8 @@ LOCATIONS_DATA = {
         "x_min": 0,
         "z_max": 12300,
         "sram_addr": 0x000190,
-        "sram_value": 2
+        "sram_value": 2,
+        "conditional": True
     },
     "Cannon Island Cannon": {
         "region_id": "cannon island",
@@ -820,7 +847,7 @@ LOCATIONS_DATA = {
 
     "Isle of Ember Astrid's Basement Dig": {
         "region_id": "ember island dig",
-        "vanilla_item": "Treasure Map #3",
+        "vanilla_item": "Treasure Map #3 (Gusts SW)",
         "stage_id": 0xD,
         "floor_id": 20
     },
@@ -834,7 +861,7 @@ LOCATIONS_DATA = {
     },
     "Isle of Ember Summit Dig": {
         "region_id": "ember island dig",
-        "vanilla_item": "Treasure Map #4",
+        "vanilla_item": "Treasure Map #4 (Bannan SE)",
         "stage_id": 0xD,
         "floor_id": 1,
         "y": 0x2666,
@@ -958,11 +985,12 @@ LOCATIONS_DATA = {
         "z_max": 58000,
         "z_min": 25000,
         "x_min": 40000,
-        "y": 0
+        "y": 0,
+        "conditional": True
     },
     "Molida Cave Wayfarer Hideaway Chest": {
         "region_id": "molida dig",
-        "vanilla_item": "Treasure Map #2",
+        "vanilla_item": "Treasure Map #2 (Mercay NE)",
         "stage_id": 0xC,
         "floor_id": 10,
         "y": 0,
@@ -982,7 +1010,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xC,
         "floor_id": 10,
         "y": 0,
-        "x_min": 15000
+        "x_min": 15000,
+        "conditional": True
     },
     "Molida Cave Shovel Chest": {
         "region_id": "molida cave back",
@@ -999,7 +1028,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xC,
         "floor_id": 15,
         "sram_addr": 0x158,
-        "sram_value": 0x100
+        "sram_value": 0x100,
+        "conditional": True
     },
     "Molida Island Cliff Chest": {
         "region_id": "molida cave back",
@@ -1012,11 +1042,21 @@ LOCATIONS_DATA = {
     },
     "Molida Island Cuccoo Grapple Tree Dig": {
         "region_id": "molida cuccoo dig",
-        "vanilla_item": "Treasure Map #20",
+        "vanilla_item": "Treasure Map #20 (Bannan E)",
         "stage_id": 0xC,
         "floor_id": 0,
         "y": 0x1333,
         "x_min": 90000
+    },
+    "Molida Island Cuccoo Grapple Small Island Dig": {
+        "region_id": "molida cuccoo dig",
+        "vanilla_item": "Big Red Rupee (200)",
+        "stage_id": 0xC,
+        "floor_id": 0,
+        "z_min": 58000,
+        "y": 0,
+        "x_min": 40000,
+        "conditional": True
     },
     "Molida Island North Dig Chest": {
         "region_id": "molida north",
@@ -1043,6 +1083,7 @@ LOCATIONS_DATA = {
         "value": 0x8,
         'post_dungeon': "Temple of Courage",
         "delay_reset": True,
+        "conditional": True
     },
     "Molida Archery 2000": {
         "region_id": "molida archery",
@@ -1052,7 +1093,8 @@ LOCATIONS_DATA = {
         "address": 0x1B55A6,
         "value": 0x10,
         'post_dungeon': "Temple of Courage",
-        "delay_reset": True
+        "delay_reset": True,
+        "conditional": True
     },
 
     # ============= Temple of Courage ===========
@@ -1188,7 +1230,7 @@ LOCATIONS_DATA = {
     },
     "Temple of Courage Crayk Dungeon Reward": {
         "region_id": "toc crayk",
-        "vanilla_item": "Spirit of Courage (Progressive)",
+        "vanilla_item": "Spirit of Courage (White)",
         "item_override": "Rare Metal",
         "stage_id": 0x2C,
         "floor_id": 0,
@@ -1200,7 +1242,7 @@ LOCATIONS_DATA = {
     },
     "Temple of Courage Crayk Sand of Hours": {
         "region_id": "toc crayk",
-        "vanilla_item": "Sand of Hours",
+        "vanilla_item": "Sand of Hours (Boss)",
         "stage_id": 0x2C,
         "floor_id": 0,
         "address": 0x1B557F,
@@ -1290,14 +1332,15 @@ LOCATIONS_DATA = {
         "floor_id": 1,
         "conditional": True
     },
-    "Prince of Red Lion Combat Reward": {
+    "Ocean NW Prince of Red Lion Combat Reward": {
         "region_id": "porl item",
         "vanilla_item": "Heart Container",
         "stage_id": 7,
         "floor_id": 0,
         "address": 0x1B55A4,
         "value": 0x40,
-        "delay_reset": True
+        "delay_reset": True,
+        "conditional": True
     },
     # ============ Isle of Gust ============
     "Isle of Gust Hideout Chest": {
@@ -1308,7 +1351,7 @@ LOCATIONS_DATA = {
     },
     "Isle of Gust Miblin Cave North Chest": {
         "region_id": "gust combat",
-        "vanilla_item": "Treasure Map #7",
+        "vanilla_item": "Treasure Map #7 (Gusts E)",
         "stage_id": 0xE,
         "floor_id": 0xB,
         "z_max": -22000
@@ -1325,7 +1368,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Big Green Rupee (100)",
         "stage_id": 0xE,
         "floor_id": 0x0,
-        "y": 0x4CCD
+        "y": 0x4CCD,
+        "conditional": True
     },
     "Isle of Gust West Cliff Chest": {
         "region_id": "gust dig",
@@ -1340,11 +1384,12 @@ LOCATIONS_DATA = {
         "stage_id": 0xE,
         "floor_id": 0x1,
         "y": 0x2666,
-        "x_max": -85000
+        "x_max": -85000,
+        "conditional": True
     },
     "Isle of Gust Sandworm Chest": {
         "region_id": "gust dig",
-        "vanilla_item": "Treasure Map #8",
+        "vanilla_item": "Treasure Map #8 (Mercay SE)",
         "stage_id": 0xE,
         "floor_id": 0x1,
         "y": 0x2666,
@@ -1412,7 +1457,7 @@ LOCATIONS_DATA = {
     },
     "Temple of Wind Cyclok Sand of Hours": {
         "region_id": "tow cyclok",
-        "vanilla_item": "Sand of Hours",
+        "vanilla_item": "Sand of Hours (Boss)",
         "stage_id": 0x2A,
         "floor_id": 0x0,
         "address": 0x1B557F,
@@ -1451,7 +1496,7 @@ LOCATIONS_DATA = {
     },
     "Bannan Island Wayfarers Dig": {
         "region_id": "bannan dig",
-        "vanilla_item": "Treasure Map #21",
+        "vanilla_item": "Treasure Map #21 (Molida NW)",
         "stage_id": 0x14,
         "floor_id": 0,
         "z_max": -30000,
@@ -1460,11 +1505,54 @@ LOCATIONS_DATA = {
     "Bannan Island Wayfarer Gift": {
         "region_id": "bannan",
         "vanilla_item": "Fishing Rod",
+        "item_override": "Nothing!",
         "stage_id": 0x14,
         "floor_id": 1,
         "address": 0x1B5581,
         "value": 8,
         "delay_reset": True
+    },
+    "Bannan Island Wayfarer Give Loovar": {
+        "region_id": "bannan loovar",
+        "vanilla_item": "Big Catch Lure",
+        "stage_id": 0x14,
+        "floor_id": 1,
+        "address": 0x1B55A4,
+        "value": 1,
+        "delay_reset": True,
+        "conditional": True,
+    },
+    "Bannan Island Wayfarer Give Rusty Swordfish": {
+        "region_id": "bannan rsf",
+        "vanilla_item": "Ship Part",
+        "item_override": "Swordfish Shadows",
+        "stage_id": 0x14,
+        "floor_id": 1,
+        "address": 0x1B55A3,
+        "value": 0x80,
+        "delay_reset": True,
+        "conditional": True,
+    },
+    "Bannan Island Wayfarer Give Legendary Neptoona": {
+        "region_id": "bannan neptoona",
+        "vanilla_item": "Heart Container",
+        "stage_id": 0x14,
+        "floor_id": 1,
+        "address": 0x1B55A3,
+        "value": 0x40,
+        "delay_reset": True,
+        "conditional": True,
+    },
+    "Bannan Island Wayfarer Give Stowfish": {
+        "region_id": "bannan stowfish",
+        "vanilla_item": "Ship Part",
+        "item_override": "Fishing Rod",
+        "stage_id": 0x14,
+        "floor_id": 1,
+        "address": 0x1B55A9,
+        "value": 0x4,
+        "delay_reset": True,
+        "conditional": True,
     },
     "Bannan Island East Grapple Chest East": {
         "region_id": "bannan east grapple",
@@ -1491,7 +1579,7 @@ LOCATIONS_DATA = {
     },
     "Bannan Island East Grapple Dig": {
         "region_id": "bannan east grapple dig",
-        "vanilla_item": "Treasure Map #22",
+        "vanilla_item": "Treasure Map #22 (Harrow S)",
         "stage_id": 0x14,
         "floor_id": 0,
         "x_min": 60000,
@@ -1507,7 +1595,8 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "address": 0x1B55AA,
         "value": 0x40,
-        "delay_reset": True
+        "delay_reset": True,
+        "conditional": True
     },
     "Bannan Island Wayfarer Trade Quest Chest": {
         "region_id": "bannan scroll",
@@ -1522,7 +1611,7 @@ LOCATIONS_DATA = {
 
     "Uncharted Island Eye Dig": {
         "region_id": "uncharted dig",
-        "vanilla_item": "Treasure Map #6",
+        "vanilla_item": "Treasure Map #6 (Bannan W)",
         "stage_id": 0x1A,
         "floor_id": 0,
         "x_min": -75000
@@ -1553,7 +1642,7 @@ LOCATIONS_DATA = {
     },
     "Zauz's Island Secret Dig": {
         "region_id": "zauz dig",
-        "vanilla_item": "Treasure Map #5",
+        "vanilla_item": "Treasure Map #5 (Molida N)",
         "stage_id": 0x16,
         "floor_id": 0,
         "y": 0x0
@@ -1600,26 +1689,27 @@ LOCATIONS_DATA = {
         "force_vanilla": True,
         "dungeon": "Ghost Ship",
     },
-    "Ghost Ship B2 Third Sister Left Chest": {
-        "region_id": "ghost ship b2",
-        "stage_id": 0x29,
-        "floor_id": 1,
-        "vanilla_item": "Rupoor (-10)",
-        "x_max": -40000,
-        "dungeon": "Ghost Ship",
-        "sram_addr": 0xB14,
-        "sram_value": 1
-    },
     "Ghost Ship B2 Third Sister Right Chest": {
         "region_id": "ghost ship b2",
         "stage_id": 0x29,
         "floor_id": 1,
         "vanilla_item": "Red Potion",
-        "x_min": -40000,
+        "x_min": -50000,
         "x_max": -30000,
         "dungeon": "Ghost Ship",
         "sram_addr": 0xB14,
-        "sram_value": 4
+        "sram_value": 4,
+        "delay_pickup": "Ghost Ship B2 Third Sister Left Chest"
+    },
+    "Ghost Ship B2 Third Sister Left Chest": {
+        "region_id": "ghost ship b2",
+        "stage_id": 0x29,
+        "floor_id": 1,
+        "vanilla_item": "Rupoor (-10)",
+        "x_max": -30000,
+        "dungeon": "Ghost Ship",
+        "sram_addr": 0xB14,
+        "sram_value": 1
     },
     "Ghost Ship B2 Spike Chest": {
         "region_id": "ghost ship b2",
@@ -1698,7 +1788,7 @@ LOCATIONS_DATA = {
         "region_id": "goron chus",
         "stage_id": 0x10,
         "floor_id": 0x2,
-        "vanilla_item": "Treasure Map #16",
+        "vanilla_item": "Treasure Map #16 (Goron NE)",
         "address": 0x1BA652,
         "value": 0x10
     },
@@ -1722,7 +1812,7 @@ LOCATIONS_DATA = {
         "region_id": "goron north bombchu",
         "stage_id": 0x10,
         "floor_id": 0x1,
-        "vanilla_item": "Treasure Map #18",
+        "vanilla_item": "Treasure Map #18 (Cannon S)",
         "x_min": 110000,
         "z_max": -110000
     },
@@ -1756,7 +1846,7 @@ LOCATIONS_DATA = {
         "region_id": "gt",
         "stage_id": 0x20,
         "floor_id": 0x0,
-        "vanilla_item": "Treasure Map #17",
+        "vanilla_item": "Treasure Map #17 (Frost S)",
         "y": 0x2666,
         "dungeon": "Goron Temple",
     },
@@ -1814,7 +1904,7 @@ LOCATIONS_DATA = {
         "region_id": "gt dongo",
         "stage_id": 0x2E,
         "floor_id": 0x0,
-        "vanilla_item": "Sand of Hours",
+        "vanilla_item": "Sand of Hours (Boss)",
         "address": 0x1B559B,
         "value": 0x4,
         "dungeon": "Goron Temple",
@@ -1842,7 +1932,7 @@ LOCATIONS_DATA = {
         "region_id": "harrow dig",
         "stage_id": 0x18,
         "floor_id": 0x0,
-        "item_override": "Treasure Map #14",  # Allows you to keep digging
+        "item_override": "Treasure Map #14 (Goron NW)",  # Allows you to keep digging
         "vanilla_item": "Nothing!",
         "address": 0x1BA652,
         "value": 0x1,
@@ -1852,7 +1942,7 @@ LOCATIONS_DATA = {
         "region_id": "harrow dig",
         "stage_id": 0x18,
         "floor_id": 0x0,
-        "item_override": "Treasure Map #15",
+        "item_override": "Treasure Map #15 (Goron W)",
         "vanilla_item": "Nothing!",
         "address": 0x1BA652,
         "value": 0x2,
@@ -1862,7 +1952,7 @@ LOCATIONS_DATA = {
         "region_id": "harrow dig 2",
         "stage_id": 0x18,
         "floor_id": 0x0,
-        "item_override": "Treasure Map #24",
+        "item_override": "Treasure Map #24 (Ruins W)",
         "vanilla_item": "Nothing!",
         "address": 0x1BA653,
         "value": 2,
@@ -1872,7 +1962,7 @@ LOCATIONS_DATA = {
         "region_id": "harrow dig 2",
         "stage_id": 0x18,
         "floor_id": 0x0,
-        "item_override": "Treasure Map #25",
+        "item_override": "Treasure Map #25 (Dead E)",
         "vanilla_item": "Nothing!",
         "address": 0x1BA653,
         "value": 4,
@@ -1891,6 +1981,16 @@ LOCATIONS_DATA = {
         "x_max": -25000,
         "z_min": 45000
     },
+    "Dee Ess Blow in Microphone Chest": {
+        "region_id": "ds",
+        "stage_id": 0x1B,
+        "floor_id": 0x0,
+        "vanilla_item": "Gold Rupee (300)",
+        "y": 0,
+        "x_max": -15000,
+        "z_min": 10000,
+        "z_max": 30000,
+    },
     "Dee Ess Left Speakers Dig SSW": {
         "region_id": "ds dig",
         "stage_id": 0x1B,
@@ -1898,7 +1998,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Big Green Rupee (100)",
         "y": 0x2666,
         "x_min": -67500,
-        "x_max": -50000
+        "x_max": -50000,
+        "conditional": True
     },
     "Dee Ess Right Speakers Dig SE": {
         "region_id": "ds dig",
@@ -1907,6 +2008,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Big Green Rupee (100)",
         "y": 0x2666,
         "x_min": 45000,
+        "conditional": True
     },
     "Dee Ess Left Speakers Dig West ": {
         "region_id": "ds dig",
@@ -1915,6 +2017,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Big Green Rupee (100)",
         "y": 0x2666,
         "x_max": -67500,
+        "conditional": True
     },
     "Dee Ess Win Goron Game": {
         "region_id": "ds race",
@@ -1924,7 +2027,8 @@ LOCATIONS_DATA = {
         "address": 0x1B559F,
         "value": 0x20,
         'post_dungeon': "Goron Temple",
-        'delay_reset': True
+        'delay_reset': True,
+        "conditional": True
     },
     "Dee Ess Eye Brute Chest": {
         "region_id": "ds combat",
@@ -1948,15 +2052,17 @@ LOCATIONS_DATA = {
         "region_id": "iof dig",
         "stage_id": 0xF,
         "floor_id": 0x0,
-        "vanilla_item": "Wisdom Gem",
-        "y": 0x2666
+        "vanilla_item": "Big Green Rupee (100)",
+        "y": 0x2666,
+        "conditional": True
     },
     "Isle of Frost Estate Sign Dig": {
         "region_id": "iof dig",
         "stage_id": 0xF,
         "floor_id": 0x2,
         "vanilla_item": "Big Red Rupee (200)",
-        "z_min": -20000
+        "z_min": -20000,
+        "conditional": True
     },
     "Isle of Frost Fofo Dig (SE)": {
         "region_id": "iof dig",
@@ -1966,7 +2072,8 @@ LOCATIONS_DATA = {
         "z_min": -60000,
         "z_max": -30000,
         "x_min": -115000,
-        "x_max": -85000
+        "x_max": -85000,
+        "conditional": True
     },
     "Isle of Frost Dobo Dig (SW)": {
         "region_id": "iof dig",
@@ -1976,13 +2083,14 @@ LOCATIONS_DATA = {
         "z_min": -60000,
         "z_max": -30000,
         "x_min": -175000,
-        "x_max": -145000
+        "x_max": -145000,
+        "conditional": True
     },
     "Isle of Frost Estate SW Island Dig": {
         "region_id": "iof dig",
         "stage_id": 0xF,
         "floor_id": 0x2,
-        "vanilla_item": "Treasure Map #19",
+        "vanilla_item": "Treasure Map #19 (Gusts NE)",
         "x_max": -185000
     },
     "Isle of Frost Estate SE Island Dig": {
@@ -1990,17 +2098,19 @@ LOCATIONS_DATA = {
         "stage_id": 0xF,
         "floor_id": 0x2,
         "vanilla_item": "Gold Rupee (300)",
-        "x_min": -60000
+        "x_min": -60000,
+        "conditional": True
     },
     "Isle of Frost Ice Field South Ledge West Chest": {
         "region_id": "iof grapple",
         "stage_id": 0xF,
         "floor_id": 0x3,
-        "vanilla_item": "Big Red Rupee (200)",
+        "vanilla_item": "Red Rupee (20)",
         "x_max": 150000,
         "y": 0x399A,
         "sram_addr": 0x544,
-        "sram_value": 2
+        "sram_value": 2,
+
     },
     "Isle of Frost Ice Field South Ledge East Chest": {
         "region_id": "iof grapple",
@@ -2010,7 +2120,7 @@ LOCATIONS_DATA = {
         "x_min": 150000,
         "y": 0x399A,
         "sram_addr": 0x544,
-        "sram_value": 4
+        "sram_value": 4,
     },
     "Isle of Frost Ice Field SE Ledge Chest": {
         "region_id": "iof grapple",
@@ -2114,7 +2224,7 @@ LOCATIONS_DATA = {
         "region_id": "toi gleeok",
         "stage_id": 0x2D,
         "floor_id": 0x0,
-        "vanilla_item": "Sand of Hours",
+        "vanilla_item": "Sand of Hours (Boss)",
         "address": 0x1B559B,
         "value": 0x8,
         "dungeon": "Temple of Ice",
@@ -2171,7 +2281,7 @@ LOCATIONS_DATA = {
     },
     "Isle of the Dead Rupoor Cave 2": {
         "region_id": "iotd rupoor",
-        "vanilla_item": "Treasure Map #28",
+        "vanilla_item": "Treasure Map #28 (Ruins NW)",
         "stage_id": 0x15,
         "floor_id": 2,
         "z_max": -55000,
@@ -2199,7 +2309,7 @@ LOCATIONS_DATA = {
     },
     "Isle of the Dead Face Chest": {
         "region_id": "iotd dig",
-        "vanilla_item": "Treasure Map #29",
+        "vanilla_item": "Treasure Map #29 (Maze W)",
         "stage_id": 0x15,
         "floor_id": 0,
         "y": 0x4CCD
@@ -2223,7 +2333,8 @@ LOCATIONS_DATA = {
         "additional_rooms": [0x1201],
         "y": 0x1333,
         "x_max": -200000,
-        "z_max": -40000
+        "z_max": -40000,
+        "conditional": True
     },
     "Isle of Ruins Bonk Tree": {
         "region_id": "ruins",
@@ -2233,7 +2344,7 @@ LOCATIONS_DATA = {
         "additional_rooms": [0x1201],
         "y": 0x4CCD,
     },
-    "Isle of Ruins Doyland's Item": {
+    "Isle of Ruins Doylan's Item": {
         "region_id": "ruins",
         "vanilla_item": "King's Key",
         "stage_id": 0x22,
@@ -2274,7 +2385,7 @@ LOCATIONS_DATA = {
         "y": 0x0,
         "z_min": -30000
     },
-    "Isle of Ruins Outside Doyland's Temple Chest": {
+    "Isle of Ruins Outside Doylan's Temple Chest": {
         "region_id": "ruins water",
         "vanilla_item": "Courage Gem",
         "stage_id": 0x12,
@@ -2357,7 +2468,7 @@ LOCATIONS_DATA = {
     },
     "Mutoh's Temple Eox Sand of Hours": {
         "region_id": "mutoh eox",
-        "vanilla_item": "Sand of Hours",
+        "vanilla_item": "Sand of Hours (Boss)",
         "stage_id": 0x2F,
         "floor_id": 0,
         "address": 0x1B559B,
@@ -2394,21 +2505,59 @@ LOCATIONS_DATA = {
         "z_max": 24000,
         "z_min": -26000
     },
+    "Maze Island SE Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_min": 80000,
+        "z_min": 70000,
+        "conditional": True,
+        "sram_addr": 0x1c1,
+        "sram_value": 0x08
+    },
+    "Maze Island NE Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_min": 40000,
+        "z_max": -60000,
+        "conditional": True,
+        "sram_addr": 0x1c1,
+        "sram_value": 0x10
+    },
+    "Maze Island NW Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_max": -15000,
+        "z_max": -60000,
+        "conditional": True,
+        "sram_addr": 0x1c1,
+        "sram_value": 0x80
+    },
     "Maze Island Beginner": {
         "region_id": "maze",
         "vanilla_item": "Wisdom Gem",
         "stage_id": 0x19,
         "floor_id": 0,
         "address": 0x1B558E,
-        "value": 1
+        "value": 1,
+        "conditional": True
     },
     "Maze Island Normal": {
         "region_id": "maze normal",
-        "vanilla_item": "Treasure Map #27",
+        "vanilla_item": "Treasure Map #27 (Maze E)",
         "stage_id": 0x19,
         "floor_id": 0,
         "address": 0x1B5598,
-        "value": 0x40
+        "value": 0x40,
+        "conditional": True
     },
     "Maze Island Expert": {
         "region_id": "maze expert",
@@ -2416,7 +2565,8 @@ LOCATIONS_DATA = {
         "stage_id": 0x19,
         "floor_id": 0,
         "address": 0x1B5598,
-        "value": 0x80
+        "value": 0x80,
+        "conditional": True
     },
     "Maze Island Bonus Reward": {
         "region_id": "maze expert",
@@ -2424,7 +2574,8 @@ LOCATIONS_DATA = {
         "stage_id": 0x19,
         "floor_id": 0,
         "x_max": -50000,
-        "z_min": 50000
+        "z_min": 50000,
+        "conditional": True
     },
 
     # Goals
@@ -2456,7 +2607,7 @@ LOCATIONS_DATA = {
     },
     "Ocean NE Man Of Smiles Item 2": {
         "region_id": "ne ocean combat",
-        "vanilla_item": "Treasure Map #26",
+        "vanilla_item": "Treasure Map #26 (Ruins SW)",
         "stage_id": 0x6,
         "floor_id": 0,
         "address": 0x1B558F,
@@ -2487,76 +2638,507 @@ LOCATIONS_DATA = {
         "value": 0x10
     },
 
-    # ==== New checks at bottom to preserve id ordering
-    "Dee Ess Blow in Microphone Chest": {
-        "region_id": "ds",
-        "stage_id": 0x1B,
-        "floor_id": 0x0,
-        "vanilla_item": "Gold Rupee (300)",
-        "y": 0,
-        "x_max": -15000,
-        "z_min": 10000,
-        "z_max": 30000,
-    },
-    "Cannon Island SE Dig": {
-        "region_id": "cannon island dig",
-        "vanilla_item": "Big Green Rupee (100)",
-        "stage_id": 0x13,
+    # ==== Fishing ===
+    "Fishing Catch Skippyjack": {
+        "region_id": "fishing",
+        "vanilla_item": "Fish: Skippyjack",
+        "stage_id": 0x2,
         "floor_id": 0,
-        "y": 0x1333,
-        "x_max": 27000,
-        "z_min": 37000
+        "address": 0x1BA5B4,
+        "value": 1,
+        "conditional": True,
     },
-    "Maze Island SE Dig": {
-        "region_id": "maze dig",
-        "vanilla_item": "Big Green Rupee (100)",
-        "stage_id": 0x19,
+    "Fishing Catch Toona": {
+        "region_id": "fishing",
+        "vanilla_item": "Fish: Toona",
+        "stage_id": 0x2,
         "floor_id": 0,
-        "y": 0,
-        "x_min": 80000,
-        "z_min": 70000
+        "address": 0x1BA5B5,
+        "value": 1,
+        "conditional": True,
     },
-    "Maze Island NE Dig": {
-        "region_id": "maze dig",
-        "vanilla_item": "Big Green Rupee (100)",
-        "stage_id": 0x19,
+    "Fishing Catch Loovar": {
+        "region_id": "fishing",
+        "vanilla_item": "Fish: Loovar",
+        "stage_id": 0x2,
         "floor_id": 0,
-        "y": 0,
-        "x_min": 40000,
-        "z_max": -60000
+        "address": 0x1BA5B6,
+        "value": 1,
+        "conditional": True,
     },
-    "Maze Island NW Dig": {
-        "region_id": "maze dig",
-        "vanilla_item": "Big Green Rupee (100)",
-        "stage_id": 0x19,
+    "Fishing Catch Rusty Swordfish": {
+        "region_id": "fishing rsf",
+        "vanilla_item": "Fish: Rusty Swordfish",
+        "stage_id": 0x2,
         "floor_id": 0,
-        "y": 0,
-        "x_max": -15000,
-        "z_max": -60000
+        "address": 0x1BA5B7,
+        "value": 1,
+        "conditional": True,
     },
-    "Cannon Island Bee Dig": {
-        "region_id": "cannon island dig",
-        "vanilla_item": "Big Red Rupee (200)",
-        "stage_id": 0x13,
+    "Fishing Catch Legendary Neptoona": {
+        "region_id": "fishing shadows",
+        "vanilla_item": "Fish: Legendary Neptoona",
+        "stage_id": 0x2,
         "floor_id": 0,
-        "x_max": -50000,
-        "y": 0x1333,
+        "address": 0x1BA5B8,
+        "value": 0x1,
+        "conditional": True,
     },
-    "Molida Island Cuccoo Grapple Small Island Dig": {
-        "region_id": "molida cuccoo dig",
-        "vanilla_item": "Big Red Rupee (200)",
-        "stage_id": 0xC,
+    "Fishing Catch Stowfish": {
+        "region_id": "fishing stowfish",
+        "vanilla_item": "Fish: Stowfish",
+        "stage_id": 0x2,
         "floor_id": 0,
-        "z_min": 58000,
-        "y": 0,
-        "x_min": 40000
+        "address": 0x1BA5B9,
+        "value": 0x1,
+        "conditional": True,
     },
 
+    # Salvage
+    "Ocean SW Salvage #1 Molida SW": {
+        "region_id": "salvage 1",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 128,
+        "id": 290,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #1 (Molida SW)",
+    },
+    "Ocean SW Salvage #2 Mercay NE": {
+        "region_id": "salvage 2",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 16,
+        "id": 291,
+        "vanilla_item": "Sand of Hours (Small)",
+        "item_override": "Treasure Map #2 (Mercay NE)",
+    },
+    "Ocean NW Salvage #3 Gusts SW": {
+        "region_id": "salvage 3",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 32,
+        "id": 292,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #3 (Gusts SW)",
+    },
+    "Ocean NW Salvage #4 Bannan SE": {
+        "region_id": "salvage 4",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 128,
+        "id": 293,
+        "vanilla_item": "Sand of Hours (Small)",
+        "item_override": "Treasure Map #4 (Bannan SE)",
+    },
+    "Ocean SW Salvage #5 Molida N": {
+        "region_id": "salvage 5",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 64,
+        "id": 294,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #5 (Molida N)",
+    },
+    "Ocean NW Salvage #6 Bannan W": {
+        "region_id": "salvage 6",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 1,
+        "id": 295,
+        "vanilla_item": "Treasure",
+        "item_override": "Treasure Map #6 (Bannan W)",
+    },
+    "Ocean NW Salvage #7 Gusts E": {
+        "region_id": "salvage 7",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 8,
+        "id": 296,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #7 (Gusts E)",
+    },
+    "Ocean SW Salvage #8 Mercay SE": {
+        "region_id": "salvage 8",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 8,
+        "id": 297,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #8 (Mercay SE)",
+    },
+    "Ocean SW Salvage #9 Cannon W": {
+        "region_id": "salvage 9",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 2,
+        "id": 298,
+        "vanilla_item": "Sand of Hours (Small)",
+        "item_override": "Treasure Map #9 (Cannon W)",
+    },
+    "Ocean NW Salvage #10 Gusts SE": {
+        "region_id": "salvage 10",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 16,
+        "id": 299,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #10 (Gusts SE)",
+    },
+    "Ocean NW Salvage #11 Gusts N": {
+        "region_id": "salvage 11",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 2,
+        "id": 300,
+        "vanilla_item": "Sand of Hours (Small)",
+        "item_override": "Treasure Map #11 (Gusts N)",
+    },
+    "Ocean SE Salvage #12 Dee Ess N": {
+        "region_id": "salvage 12",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 32,
+        "id": 301,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #12 (Dee Ess N)",
+    },
+    "Ocean SE Salvage #13 Harrow E": {
+        "region_id": "salvage 13",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 4,
+        "id": 302,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #13 (Harrow E)",
+    },
+    "Ocean SE Salvage #14 Goron NW": {
+        "region_id": "salvage 14",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 1,
+        "id": 303,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #14 (Goron NW)",
+    },
+    "Ocean SE Salvage #15 Goron W": {
+        "region_id": "salvage 15",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 2,
+        "id": 304,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #15 (Goron W)",
+    },
+    "Ocean SE Salvage #16 Goron NE": {
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #16 (Goron NE)",
+        "region_id": "salvage 16",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 16,
+        "id": 305,
+    },
+    "Ocean SE Salvage #17 Frost S": {
+        "region_id": "salvage 17",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 64,
+        "id": 306,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #17 (Frost S)",
+    },
+    "Ocean SW Salvage #18 Cannon S": {
+        "region_id": "salvage 18",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 4,
+        "id": 307,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #18 (Cannon S)",
+    },
+    "Ocean NW Salvage #19 Gusts NE": {
+        "region_id": "salvage 19",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 4,
+        "id": 308,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #19 (Gusts NE)",
+    },
+    "Ocean NW Salvage #20 Bannan E": {
+        "region_id": "salvage 20",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 64,
+        "id": 309,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #20 (Bannan E)",
+    },
+    "Ocean SW Salvage #21 Molida NW": {
+        "region_id": "salvage 21",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 32,
+        "id": 310,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #21 (Molida NW)",
+    },
+    "Ocean SE Salvage #22 Harrow S": {
+        "region_id": "salvage 22",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 8,
+        "id": 311,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #22 (Harrow S)",
+    },
+    "Ocean SE Salvage #23 Frost NW": {
+        "region_id": "salvage 23",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 128,
+        "id": 312,
+        "vanilla_item": "Sand of Hours (Small)",
+        "item_override": "Treasure Map #23 (Frost NW)",
+    },
+    "Ocean NE Salvage #24 Ruins W": {
+        "region_id": "salvage 24",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 2,
+        "id": 313,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #24 (Ruins W)",
+    },
+    "Ocean NE Salvage #25 Dead E": {
+        "region_id": "salvage 25",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 4,
+        "id": 314,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #25 (Dead E)",
+    },
+    "Ocean NE Salvage #26 Ruins SW": {
+        "region_id": "salvage 26",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 32,
+        "id": 315,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #26 (Ruins SW)",
+    },
+    "Ocean NE Salvage #27 Maze E": {
+        "region_id": "salvage 27",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 8,
+        "id": 316,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #27 (Maze E)",
+    },
+    "Ocean NE Salvage #28 Ruins NW": {
+        "region_id": "salvage 28",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 1,
+        "id": 317,
+        "vanilla_item": "Treasure",
+        "item_override": "Treasure Map #28 (Ruins NW)",
+    },
+    "Ocean NE Salvage #29 Maze W": {
+        "region_id": "salvage 29",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 16,
+        "id": 318,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #29 (Maze W)",
+    },
+    "Ocean NE Salvage #30 Ruins S": {
+        "region_id": "salvage 30",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 64,
+        "id": 319,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #30 (Ruins S)",
+    },
+    "Ocean NE Salvage #31 Dead S": {
+        "region_id": "salvage 31",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 128,
+        "id": 320,
+        "vanilla_item": "Gold Rupee (300)",
+        "item_override": "Treasure Map #31 (Dead S)",
+    },
+
+    # Letter Locations
+    "Bannan Island Give Letter to Joanne": {
+        "region_id": "bannan letter",
+        "stage_id": 0x14,
+        "floor_id": 0x1,
+        "vanilla_item": "Wisdom Gem",
+        "item_override": "Jolene's Letter",
+        "address": 0x1B558F,
+        "value": 0x2
+    },
+    # Beedle Cards
+    "Beedle Membership Bronze": {
+        "region_id": "beedle bronze",
+        "stage_id": 0x5,
+        "floor_id": 0,
+        "vanilla_item": "Nothing!",
+        "address": 0x1B5588,
+        "value": 0x40,
+        "conditional": True
+    },
+    "Beedle Membership Silver": {
+        "region_id": "beedle silver",
+        "stage_id": 0x5,
+        "floor_id": 0,
+        "vanilla_item": "Nothing!",
+        "address": 0x1B558E,
+        "value": 0x20,
+        "conditional": True
+    },
+    "Beedle Membership Gold": {
+        "region_id": "beedle gold",
+        "stage_id": 0x5,
+        "floor_id": 0,
+        "vanilla_item": "Nothing!",
+        "address": 0x1B558E,
+        "value": 0x40,
+        "conditional": True
+    },
+    "Beedle Membership Platinum": {
+        "region_id": "beedle plat",
+        "stage_id": 0x5,
+        "floor_id": 0,
+        "vanilla_item": "Nothing!",
+        "address": 0x1B558E,
+        "value": 0x80,
+        "conditional": True
+    },
+    "Beedle Membership VIP": {
+        "region_id": "beedle vip",
+        "stage_id": 0x5,
+        "floor_id": 0,
+        "vanilla_item": "Nothing!",
+        "address": 0x1B558F,
+        "value": 0x1,
+        "conditional": True
+    },
+    "Ocean NE Man of Smiles Prize Postcard": {
+        "region_id": "ne ocean combat",
+        "vanilla_item": "Prize Postcard",
+        "stage_id": 0x6,
+        "floor_id": 0,
+        "address": 0x1B558F,
+        "value": 0x08
+    }
+
+
+
+    # ==== New checks at bottom to preserve id ordering
 }
 
 for i, name in enumerate(LOCATIONS_DATA):
     LOCATIONS_DATA[name]["id"] = i+1
 
 if __name__ == "__main__":
-    for location, data in LOCATIONS_DATA.items():
-        print(f"{location} | {data['region_id']} | id: {data['id']} | stage: {data['stage_id']} | room: {data['floor_id']}")
+    """    islands = {}
+        island_groups = {}
+        for location, data in LOCATIONS_DATA.items():
+            islands.setdefault(data["stage_id"], [])
+            islands[data["stage_id"]].append(location)
+    
+        for i, data in islands.items():
+            island_groups[STAGES[i]] = data
+            print(f"\t\"{STAGES[i]}\": [")
+            for loc in data:
+                print(f"\t\t\"{loc}\",")
+            print(f"\t],")
+    """
+    for name, data in LOCATIONS_DATA.items():
+        if "Salvage" in name and "#" in name:
+
+            print(f"\t\t\"{name}\",")
+
+            """ident = name[name.find("#")+1:name.find(" ", name.find("#"))]
+            data["vanilla_item"] = ""
+            data["item_override"] = f"Treasure Map #{ident}"
+
+            print(f"\t\"{name}\": " + "{")
+            for key, value in data.items():
+                if type(value) is str:
+                    print(f"\t\t\"{key}\": \"{value}\",")
+                else:
+                    print(f"\t\t\"{key}\": {value},")
+            print("\t},")"""
+
+

@@ -22,3 +22,7 @@
 7. You are now ready to play! Start a new savefile and go! You can check that everything worked by checking if the bridge has been repaired.
 8. The sword and items menu don't work until you've save and quit. Likewise, the sword chest will give you a fake usable sword until you save and quit to remove it.
 
+## Further Reading
+
+- [FAQ and Credits](https://github.com/carrotinator/Archipelago/blob/main/worlds/tloz_ph/docs/faq_and_credits.md)
+- [Tricks and Skips](https://github.com/carrotinator/Archipelago/blob/main/worlds/tloz_ph/docs/tricks_and_skips.md)
