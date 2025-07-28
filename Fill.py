@@ -358,7 +358,12 @@ def fast_fill(multiworld: MultiWorld,
     return item_pool[placing:], fill_locations[placing:]
 
 
-def accessibility_corrections(multiworld: MultiWorld, state: CollectionState, locations, pool=[]):
+def accessibility_corrections(multiworld: MultiWorld,
+                              state: CollectionState,
+                              locations: list[Location],
+                              pool: list[Item] | None = None) -> None:
+    if pool is None:
+        pool = []
     maximum_exploration_state = sweep_from_pool(state, pool)
     minimal_players = {player for player in multiworld.player_ids if
                        multiworld.worlds[player].options.accessibility == "minimal"}
