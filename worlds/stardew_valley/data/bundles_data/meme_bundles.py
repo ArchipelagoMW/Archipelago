@@ -223,7 +223,7 @@ frazzleduck_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.frazzl
 loser_club_items = [tuna]
 loser_club_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.loser_club, loser_club_items, 1, 1)
 
-ministry_items = [item.as_amount(999) for item in [trash, joja_cola, broken_glasses, broken_glasses, soggy_newspaper]]
+ministry_items = [item.as_amount(999) for item in [trash, joja_cola, broken_glasses, broken_cd, soggy_newspaper]]
 ministry_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.ministry_of_madness, ministry_items, 4, 1)
 
 pomnut_items = [pomegranate, hazelnut, carrot]
