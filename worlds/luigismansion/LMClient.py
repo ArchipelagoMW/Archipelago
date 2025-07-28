@@ -270,10 +270,8 @@ class LMContext(CommonContext):
             self.boo_final_count = int(args["slot_data"]["final boo count"])
             self.luigimaxhp = int(args["slot_data"]["luigi max health"])
             self.spawn = str(args["slot_data"]["spawn_region"])
-            if "death_link" in args["slot_data"]:
-                Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
-            if args["slot_data"]["trap_link"] == 1 and "TrapLink" not in self.tags:
-                self.tags.add("TrapLink")
+            Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])), name="Update Deathlink")
+            Utils.async_start(self.update_trap_link(bool(args["slot_data"]["trap_link"])), name="Update Traplink")
 
         if cmd == "Bounced":
             if "tags" not in args:
