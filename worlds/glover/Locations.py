@@ -98,6 +98,7 @@ def build_logic(player : int, multiworld : MultiWorld, spawn_checkpoint : List[i
     logic_data = json.load(logic_file)
     loc_con_index = 0
     map_levels : List[RegionLevel] = []
+    locations : List[Location] = []
     for world_index in 1:
         world_prefix : str = GloverWorld.world_prefixes[world_index]
         each_world = logic_data[world_index]
@@ -134,7 +135,7 @@ def build_logic(player : int, multiworld : MultiWorld, spawn_checkpoint : List[i
             region_level : RegionLevel = create_region_level(level_name, spawn_checkpoint, player, multiworld)
             map_levels.append(region_level)
             #Attach the locations to the regions
-            assign_locations_to_regions(region_level, map_regions, location_data_list)
+            locations.extend(assign_locations_to_regions(region_level, map_regions, location_data_list))
 
 class LocationData(NamedTuple):
     name : str
@@ -182,9 +183,10 @@ def create_region_pair(check_info : dict, check_name : str, level_name : str, pl
 def connect_region_pairs(pairs : List[RegionPair]):
     for each_pair in pairs:
         for each_method in each_pair.ball_region_methods:
-            each_method.region_name
+            each_pair.ball_region.connect(get_region_from_name(each_method.region_name))
         for each_method in each_pair.no_ball_region_methods:
-            each_method.region_name
+            each_pair.no_ball_region.connect(get_region_from_name(each_method.region_name))
+        each_pair.ball_region.connect(each_pair.no_ball_region)
 
 class RegionLevel(NamedTuple):
     name : str
@@ -242,7 +244,8 @@ def create_access_method(info : dict, prefix : str) -> AccessMethod:
     info["regionIndex"]
     return AccessMethod(info["regionIndex"], info["ballRequirement"], info["trickDifficulty"], required_moves)
 
-def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[RegionPair], location_data_list : List[LocationData], player : int, multiworld : MultiWorld):
+def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[RegionPair], location_data_list : List[LocationData], player : int, multiworld : MultiWorld) -> List[Location]:
+    locations : List[Location] = []
     for each_location_data in location_data_list:
         #Is this a mono location?
         location_regions : List[str] = []
@@ -257,12 +260,14 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
         if location_regions.count() > 1:
             #Multi location construction creates a shared region to reach this location
             region_for_use = Region(each_location_data.name + " Region", player, multiworld, region_level.name)
-        else:
+            for each_region_name in location_regions:
+                #Make sure to apply the correct rules here later
+                get_region_from_name(map_regions, each_region_name).connect(region_for_use, each_location_data.name + " from " + each_region_name)
+        elif location_regions.count() == 1:
             #Single location construction assigns to the specific element in the RegionPair
-            region_for_use = map_regions[0]
+            region_for_use = get_region_from_name(map_regions, location_regions[0])
         #Construct location data
         #The garib sorting stuff has to go here! Don't forget to do that later
-        locations : List[Location] = []
         if each_location_data.ap_ids.count() == 1:
             #If the location data accounts for 1 location
             locations.append(Location(player, each_location_data.name, each_location_data.ap_ids[0], region_for_use))
@@ -273,4 +278,14 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
                 sublocation_name : str = each_location_data.name
                 sublocation_name.removesuffix("s")
                 locations.append(Location(player, sublocation_name + " " + str(each_ap_id_index + 1), each_ap_id, region_for_use))
-        
+    return locations
+
+def get_region_from_name(region_pairs : List[RegionPair], lookup_key : str) -> Region:
+    ball_region : bool = lookup_key.endswith("W/Ball")
+    for each_pair in region_pairs:
+        if ball_region:
+            if each_pair.name + " W/Ball" == lookup_key:
+                return each_pair.ball_region
+        else:
+            if each_pair.name == lookup_key:
+                return each_pair.no_ball_region
