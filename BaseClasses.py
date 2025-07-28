@@ -996,7 +996,17 @@ class CollectionState():
         of a yield statement.
         """
         all_players = {player for player, _ in advancements_per_player}
-        players_to_check: AbstractSet[int] = all_players
+        players_to_check = all_players
+        # As an optimization, it is assumed that each player's world only logically depends on itself. However, worlds
+        # are allowed to logically depend on other worlds, so once there are no more players that should be checked
+        # under this assumption, an extra sweep iteration is performed that checks every player, to confirm that the
+        # sweep is finished.
+        # Because it is typically only a small part of a world that is made logically dependent on another world, this
+        # assumption usually performs better than correctly updating `players_to_check` to include cross-world logic
+        # dependencies. It is highly likely that a world with cross-world logic will collect some of its own items and
+        # will be included in the next `players_to_check` anyway, meaning that spending extra time to correctly update
+        # `players_to_check` is usually pointless.
+        checking_if_finished = False
         while players_to_check:
             next_advancements_per_player: List[Tuple[int, List[Location]]] = []
             next_players_to_check = set()
@@ -1022,10 +1032,9 @@ class CollectionState():
                     next_advancements_per_player.append((player, unreachable_locations))
 
                 # A previous player's locations processed in the current `while players_to_check` iteration could have
-                # collected items belonging to a player that `player` is logically dependent on, but now that all of
-                # `player`'s reachable locations have been found, it can be assumed that `player` will not gain any
-                # more reachable locations until another item is collected, that belongs to a world `player` is
-                # logically dependent on.
+                # collected items belonging to `player`, but now that all of `player`'s reachable locations have been
+                # found, it can be assumed that `player` will not gain any more reachable locations until another one of
+                # their items is collected.
                 # It would be clearer to not add players to `next_players_to_check` in the first place if they have yet
                 # to be processed in the current `while players_to_check` iteration, but checking if a player should be
                 # added to `next_players_to_check` would need to be run once for every item that is collected, so it is
@@ -1034,17 +1043,23 @@ class CollectionState():
                 next_players_to_check.discard(player)
 
                 # Collect the items from the reachable locations.
-                collected_advancement_players = set()
                 for advancement in reachable_locations:
                     self.advancements.add(advancement)
                     item = advancement.item
                     assert isinstance(item, Item), "tried to collect advancement Location with no Item"
                     if self.collect(item, True, advancement):
-                        collected_advancement_players.add(item.player)
-                # Worlds logically dependent on players that collected advancement items may be able to reach additional
-                # locations in the next sweep iteration.
-                next_players_to_check.update(
-                    self.multiworld.get_players_logically_dependent_on_players(collected_advancement_players))
+                        # The player the item belongs to may be able to reach additional locations in the next sweep
+                        # iteration.
+                        next_players_to_check.add(item.player)
+
+            if not next_players_to_check:
+                if not checking_if_finished:
+                    # It is assumed that each player's world only logically depends on itself, which may not be the
+                    # case, so confirm that the sweep is finished by doing an extra iteration that checks every player.
+                    checking_if_finished = True
+                    next_players_to_check = all_players
+            else:
+                checking_if_finished = False
 
             players_to_check = next_players_to_check
             advancements_per_player = next_advancements_per_player
@@ -1071,7 +1086,9 @@ class CollectionState():
 
         :param locations: The locations to sweep through, defaulting to all locations in the multiworld.
         :param yield_each_sweep: When True, return a Generator that yields, at the end of each sweep iteration, a set of
-        players that may now be able to reach additional locations.
+        players that may now be able to reach additional locations. When some worlds logically depend on parts of other
+        worlds, each yielded set is not guaranteed to include all players that could now reach additional locations, but
+        each player that can reach additional locations will eventually be included in a yielded set.
         :param checked_locations: Optional override of locations to filter out from the locations argument, defaults to
         self.advancements when None.
         :return: With yield_each_sweep=True, a Generator that yields, at the end of each sweep iteration, a set of
