@@ -2,9 +2,8 @@
 <LUIGISTOP2>
 <FLAGON>(109)
 <BGM>(11)
-------------------------
-<CASE>"First"
 <WINDOW>(0)<COLOR>(17)
+------------------------
 <SAY>Hi Luigi! What do you need?
 <CHOICE>"Hint"(0)"Save"(1)"Heal"(2)"Next"(3)<LISTEND>
 <ANYKEY>
@@ -15,7 +14,7 @@
 <RAMDOMJMP>"Close"
 -------------------------
 <CASE>"Heal"
-<SPEAK>(7)
+<SPEAK>(6)
 <ANYKEY>
 <ACTOR>"demo_luigi"<HP>({LUIGIMAXHP})
 <CLOSEWINDOW>(0)
@@ -23,11 +22,11 @@
 -------------------------
 <CASE>"Next"
 <SAY>Hi Luigi! What do you need?
-<CHOICE>"Lab"(4)"First"(5)"Close"(6)<LISTEND>
+<CHOICE>"Lab"(4)"Close"(5)<LISTEND>
 <ANYKEY>
 -------------------------
 <CASE>"Lab"
-<SPEAK>(8)
+<SPEAK>(7)
 <ANYKEY>
 <CLOSEWINDOW>(0)
 <BGMSTOP>
@@ -41,30 +40,30 @@
 <RAMDOMJMP>"{HintType}"
 -------------------------
 <CASE>"SpecificHint"
-<SPEAK>(9)
+<SPEAK>(8)
 <ANYKEY>
 <SAY><COLOR>(0)Can be found at:
 <ANYKEY>
-<SPEAK>(10)
+<SPEAK>(9)
 <ANYKEY>
 <RAMDOMJMP>"Close"
 -------------------------
 <CASE>"VagueHint"
-<SPEAK>(9)
+<SPEAK>(8)
 <ANYKEY>
 <SAY><COLOR>(0)Is somewhere in:
 <ANYKEY>
-<SPEAK>(10)
+<SPEAK>(9)
 <ANYKEY>
 <RAMDOMJMP>"Close"
 -------------------------
 <CASE>"DisabledHint"
-<SPEAK>(11)
+<SPEAK>(10)
 <ANYKEY>
 <RAMDOMJMP>"Close"
 -------------------------
 <CASE>"JokeHint"
-<SPEAK>(12)
+<SPEAK>(11)
 <ANYKEY>
 <RAMDOMJMP>"Close"
 -------------------------
