@@ -61,7 +61,7 @@ def add_sand(starting_time, time_incr, time_logic):
     max_sand_count = ceil((5999 - starting_time) / time_incr)
     max_time = 1
     if time_logic <= 2:
-        max_time = 310 // [1, 2, 4][time_logic]
+        max_time = 310 // [1, 2, 4, 0.5][time_logic]
     min_sand_count = ceil(max(max_time - starting_time, 1) / time_incr)
     if min_sand_count > 20:
         print(f"Too many sand items? Adding {min_sand_count} Sands or Hours to pool")

@@ -759,7 +759,7 @@ def ph_option_floor_time(state, player, room):
 def ph_option_time_divider(state, player):
     time_option = state.multiworld.worlds[player].options.ph_time_logic.value
     # print(f"Time option {time_option}")
-    time_lookup = {0: 1, 1: 2, 2: 4}
+    time_lookup = {0: 1, 1: 2, 2: 4, -1: 0.5}
     return time_lookup.get(time_option, 1)
 
 
@@ -1227,11 +1227,18 @@ def ph_toi_3f_boomerang(state, player):
 def ph_toi_b2(state, player):
     return all([
         ph_has_bow(state, player),
-        ph_quick_switches(state, player),
         any([
-            ph_toi_key_doors(state, player, 3, 2),
-            ph_can_hammer_clip(state, player),
-            ph_can_bcl(state, player)
+            all([
+                ph_quick_switches(state, player),
+                any([
+                    ph_toi_key_doors(state, player, 3, 2),
+                    ph_can_hammer_clip(state, player),
+                ]),
+            ]),
+            all([
+                ph_can_bcl(state, player),
+                ph_has_boomerang(state, player)
+            ])
         ])
     ])
 

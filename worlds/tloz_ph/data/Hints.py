@@ -60,12 +60,22 @@ HINT_DATA = {
     # Dungeon Hints
     "Oshus Dungeon Hints": {
         "scenes": [0xb0A],
-        "slot_data": [("dungeon_hints", 1)],
+        "slot_data": [("dungeon_hints", 1), ("goal_requirements", 1)],
+        "locations": ["Dungeon Hints"]
+    },
+    "Oshus Dungeon Hints metal hunt": {
+        "scenes": [0xb0A],
+        "slot_data": [("dungeon_hints", 1), ("goal_requirements", 2), ("exclude_non_required_dungeons", 1)],
         "locations": ["Dungeon Hints"]
     },
     "TotOK Dungeon Hints": {
         "scenes": [0x2600],
-        "slot_data": [("dungeon_hints", 2)],
+        "slot_data": [("dungeon_hints", 2), ("goal_requirements", 1)],
+        "locations": ["Dungeon Hints"]
+    },
+    "TotOK Dungeon Hints metal hunt": {
+        "scenes": [0x2600],
+        "slot_data": [("dungeon_hints", 1), ("goal_requirements", 2), ("exclude_non_required_dungeons", 1)],
         "locations": ["Dungeon Hints"]
     },
 

@@ -6,7 +6,16 @@ Thanks to the [glitches spreadsheet](https://docs.google.com/spreadsheets/d/18NC
 - [Mercay out of bounds](https://www.youtube.com/watch?v=IcyfYE68LUQ). (Glitched Logic)
 
 ## TotOK
-- Phantom hourglass time is not yet in logic, I've started planning for it but it's a ways away.
+### Time Logic
+Phantom hourglass time logic is now available! On easy, it calculates the time it takes to walk (no rolling) from one 
+floor to the next with various items. It then calculates the time to get each location from the start of their floor, 
+for various items. It does not account for golden time pots. Medium halves the logically required time, and hard 
+quarters it, while beginner doubles it. The longest probable required amount of time is around 10 minutes for beginner, 
+5 for easy, 2.5 for medium and 1.25 for hard. It will generate slightly more sand than necessary based on your settings.
+There's also a setting for how to count hearts as time, for only requiring the phantom hourglass item or for not 
+calculating logic at all! Good luck!
+
+### Tricks and Skips
 - Kill b1 phantoms with
   - Phantom Sword (all settings)
   - Bow or (Sword + 2 Spirits of Power) or Hammer (Kill phantoms with stun). Push them into the pit by the grapple pegs
@@ -67,7 +76,8 @@ Thanks to the [glitches spreadsheet](https://docs.google.com/spreadsheets/d/18NC
 - Kill Eye brutes with their own bombs (Hard Logic)
 
 ## Temple of Ice
-- 1F [Color Switch early](https://www.youtube.com/watch?v=na6olZJgE3M) (Should be hard logic)
+- 1F [Color Switch early](https://www.youtube.com/watch?v=na6olZJgE3M) (Hard Logic)
+- 3F Hit entrance switch with bomb held over head (All Settings)
 - 3F hit boomerang switches with bow (Hard Logic)
 - 1F shortcut hammer clip (Glitched Logic)
 - B1 Hammer clip color switch (Glitched logic)
@@ -78,4 +88,4 @@ Thanks to the [glitches spreadsheet](https://docs.google.com/spreadsheets/d/18NC
 # Mutoh's Temple
 - 1F Skip one side with hammer (All Settings)
 - B1 [Arrow despawn](https://www.youtube.com/watch?v=XvgpXRtiq0w) for puzzle and small key skips (Glitched Logic)
-- B1 [Hammer pad skew](https://www.youtube.com/watch?v=qZzMGVTJMHE) (Not Implemented yet)
+- B1 [Hammer pad skew](https://www.youtube.com/watch?v=qZzMGVTJMHE) and Spirit of Power level 1 can skip bow. Works with both bombs and chus (Glitched Logic)

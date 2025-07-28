@@ -412,6 +412,7 @@ class PhantomHourglassAdditionalMetalNames(Choice):
 class PhantomHourglassTimeLogic(Choice):
     """
     Logic Requirements for Sand of Hours in Temple of the Ocean King
+    - beginner: double the time requirement of easy. Expects you to get everything with ~10 minutes
     - easy: each check has a time requirement based on walking to each location. Does not take yellow pots into account.
     Expects you to get everything with ~5 minutes
     - medium: half of the easy times. Expects you to get everything with ~2.5 minutes
@@ -421,6 +422,7 @@ class PhantomHourglassTimeLogic(Choice):
     - no_logic: Sand of Hours does not effect logic
     """
     display_name = "ph_time_logic"
+    option_beginner = -1
     option_easy = 0
     option_medium = 1
     option_hard = 2

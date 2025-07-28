@@ -391,7 +391,11 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["toi 2f", "toi 3f", False, lambda state: any([
             ph_has_range(state, player),
             ph_has_bombs(state, player)])],
-        ["toi 3f", "toi 3f switch", False, lambda state: ph_has_explosives(state, player)],
+        ["toi 3f", "toi 3f switch", False, lambda state: any([ph_has_bombs(state, player),
+                                                              all([
+                                                                  ph_option_hard_logic(state, player),
+                                                                  ph_has_chus(state, player)
+                                                              ])])],
         ["toi 3f switch", "toi 3f boomerang", False, lambda state: ph_toi_3f_boomerang(state, player)],
         ["toi 3f boomerang", "toi 2f miniboss", False, lambda state: ph_toi_key_door_1_ut(state, player)],
         ["toi 3f", "toi 2f miniboss", False, lambda state: ph_toi_key_doors(state, player, 3, 1)],

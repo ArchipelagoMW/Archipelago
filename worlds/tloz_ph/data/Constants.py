@@ -121,6 +121,7 @@ STAGE_FLAGS = {
 }
 
 SKIP_OCEAN_FIGHTS_FLAGS = [0x86, 0xFC, 0x66, 0xFD]
+SPAWN_B3_REAPLING_FLAGS = [0xC2, 0x10, 0xED, 0x08]
 
 STAGES = {
     0: "Sea",
@@ -996,6 +997,7 @@ CATEGORY_LOCATION_GROUPS = {
         "Maze Island NE Dig",
         "Maze Island NW Dig",
         "Isle of Ruins Like-Like Dig",
+        "Isle of Frost Chief House Dig",
         "Isle of Frost Estate SE Island Dig",
         "Isle of Frost Chief House Dig",
         "Isle of Frost Estate Sign Dig",

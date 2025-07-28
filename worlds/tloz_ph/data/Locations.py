@@ -2053,7 +2053,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xF,
         "floor_id": 0x0,
         "vanilla_item": "Big Green Rupee (100)",
-        "y": 0x2666
+        "y": 0x2666,
+        "conditional": True
     },
     "Isle of Frost Estate Sign Dig": {
         "region_id": "iof dig",
@@ -2104,7 +2105,7 @@ LOCATIONS_DATA = {
         "region_id": "iof grapple",
         "stage_id": 0xF,
         "floor_id": 0x3,
-        "vanilla_item": "Big Red Rupee (200)",
+        "vanilla_item": "Red Rupee (20)",
         "x_max": 150000,
         "y": 0x399A,
         "sram_addr": 0x544,

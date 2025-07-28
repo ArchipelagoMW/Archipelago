@@ -47,7 +47,7 @@ RAM_ADDRS = {
     "link_y": (0x1B6FF0, 4, "Main RAM"),
     "link_z": (0x1B6FF4, 4, "Main RAM"),
     "using_item:": (0x1BA71C, 1, "Main RAM"),
-    "drawing_sea_route": (0x241570, 1, "Main RAM"),
+    "drawing_sea_route": (0x207C4C, 1, "Main RAM"),
     "boat_x": (0x1B8518, 4, "Main RAM"),
     "boat_z": (0x1B8520, 4, "Main RAM"),
     "save_slot": (0x1B8124, 1, "Main RAM"),
@@ -81,7 +81,7 @@ read_keys_always = ["game_state", "in_cutscene", "received_item_index", "stage",
                     "opened_clog"]
 read_keys_deathlink = ["link_health"]
 read_keys_land = ["getting_item", "getting_ship_part"]
-read_keys_sea = ["shot_frog", "getting_salvage"]
+read_keys_sea = ["shot_frog"]
 read_keys_deathlink_sea = ["boat_health", "drawing_sea_route"]
 read_keys_deathlink_salvage = ["salvage_health"]
 
@@ -148,11 +148,11 @@ async def write_memory_value(ctx, address: int, value: int, domain="Main RAM", i
 
 
 # Write list of values starting from address
-async def write_memory_values(ctx, address: int, values: list, domain="Main RAM", overwrite=False):
+async def write_memory_values(ctx, address: int, values: list, domain="Main RAM", overwrite=False, size=4):
     if not overwrite:
         prev = await read_memory_value(ctx, address, len(values), domain)
-        new_values = [old | new for old, new in zip(split_bits(prev, 4), values)]
-        print(f"values: {new_values}, old: {split_bits(prev, 4)}")
+        new_values = [old | new for old, new in zip(split_bits(prev, size), values)]
+        print(f"values: {new_values}, old: {split_bits(prev, size)}")
     else:
         new_values = values
     await bizhawk.write(ctx.bizhawk_ctx, [(address, new_values, domain)])
@@ -392,7 +392,7 @@ class PhantomHourglassClient(BizHawkClient):
             self.main_read_list = {k: v for k, v in RAM_ADDRS.items() if k in read_keys} | death_link_reads
         else:
             self.at_sea = None
-        # print(f"Read kwys {read_keys}, {death_link_reads}, {stage}")
+        print(f"Read kwys {read_keys}, {death_link_reads}, {stage}")
 
     async def full_heal(self, ctx, bonus=0):
         if not self.at_sea:
@@ -418,7 +418,7 @@ class PhantomHourglassClient(BizHawkClient):
             write_list += [(data["ammo_address"], [data["give_ammo"][count - 1]], "Main RAM")]
         await bizhawk.write(ctx.bizhawk_ctx, write_list)
         await self.full_heal(ctx)
-        logger.info(f"You drink a glass of milk. You feel refreshed.")
+        logger.info(f"You drink a glass of milk. You feel refreshed, and your ammo has been refilled.")
 
     def get_progress(self, ctx, scene=0):
         # Count current metals
@@ -479,14 +479,14 @@ class PhantomHourglassClient(BizHawkClient):
             read_result = await read_memory_values(ctx, self.main_read_list)
 
             in_game = read_result["game_state"]
-            in_cutscene = not read_result["in_cutscene"]
+            in_cutscene = read_result["in_cutscene"]
             slot_memory = read_result["slot_id"]
             current_stage = read_result["stage"]
             self.current_stage = current_stage
 
             # loading_stage = not read_result["loading_stage"]
             loading_room = read_result["loading_room"]
-            loading_scene = loading_room # or loading_stage
+            loading_scene = loading_room  # or loading_stage
             loading = loading_scene or self.entered_entrance
 
             # If player is on title screen, don't do anything else
@@ -533,7 +533,7 @@ class PhantomHourglassClient(BizHawkClient):
             num_received_items = read_result["received_item_index"]
             is_dead = not read_result.get("link_health", True)
             salvage_health = read_result.get("salvage_health", 5)
-            drawing_on_sea_chart = read_result.get("drawing_sea_route", False)
+            drawing_on_sea_chart = read_result.get("drawing_sea_route", False) and self.at_sea
             opened_clog = read_result.get("opened_clog", False)
 
             # Process on new room. As soon as it's triggered, changing the scene variable causes entrance destination
@@ -680,6 +680,7 @@ class PhantomHourglassClient(BizHawkClient):
                     await self.process_game_completion(ctx, current_scene)
 
                 # Process Deathlink
+               # print(f"hi {"DeathLink" in ctx.tags} {not drawing_on_sea_chart} {not in_cutscene}")
                 if "DeathLink" in ctx.tags and not drawing_on_sea_chart and not in_cutscene:
                     # print(f"Deathlink {read_result['link_health']}, {is_dead}")
                     await self.process_deathlink(ctx, is_dead, self.current_stage)
@@ -730,6 +731,12 @@ class PhantomHourglassClient(BizHawkClient):
                 # Oshus gives metal info
                 if current_scene in [0xB0A, 0x160A]:
                     self.get_progress(ctx, current_scene)
+
+                # Shipyard gives ship parts
+                if current_scene in [0xB0D]:
+                    await self.edit_ship(ctx)
+                if current_scene in [0xB03]:
+                    await self.remove_ship_parts(ctx)
 
                 self.last_stage = current_stage
                 self.last_scene = current_scene
@@ -923,7 +930,7 @@ class PhantomHourglassClient(BizHawkClient):
             # Read all values for all dynamic flags in scene
             read_list = {a: (a, 1, "Main RAM") for a in read_addr}
             prev = await read_memory_values(ctx, read_list)
-            # print(f"{[[hex(int(a)), hex(v)] for a, v in prev.items()]}")
+            print(f"{[[hex(int(a)), hex(v)] for a, v in prev.items()]}")
 
             # Calculate values to write
             for a, v in set_bits.items():
@@ -947,6 +954,8 @@ class PhantomHourglassClient(BizHawkClient):
             # Change certain stage flags based on options
             if stage == 0 and ctx.slot_data["skip_ocean_fights"] == 1:
                 flags = SKIP_OCEAN_FIGHTS_FLAGS
+            if stage == 41 and ctx.slot_data["logic"] <= 1:
+                flags = SPAWN_B3_REAPLING_FLAGS
 
             print(f"Setting Stage flags for {STAGES[stage]}, "
                   f"adr: {hex(self.stage_address + STAGE_FLAGS_OFFSET)}")
@@ -973,6 +982,7 @@ class PhantomHourglassClient(BizHawkClient):
                      "rupees": (0x1BA53E, 2, "Main RAM"),
                      "repair_kits": (0x1BA661, 1, "Main RAM"), }
         prev = await read_memory_values(ctx, read_list)
+        prev["repair_kits"] &= 0x7
         if prev["salvage_health"] <= 2:
             write_list = []
             text = f"Repaired Salvage Arm for "
@@ -997,7 +1007,7 @@ class PhantomHourglassClient(BizHawkClient):
 
     @staticmethod
     async def instant_repair_salvage_arm(ctx):
-        salvage_kits = await read_memory_value(ctx, 0x1BA661)
+        salvage_kits = await read_memory_value(ctx, 0x1BA661) & 7
         if salvage_kits > 0:
             write_list = [(0x1BA661, [salvage_kits - 1], "Main RAM"),
                           (RAM_ADDRS["salvage_health"][0], [5], "Main RAM"),
@@ -1095,7 +1105,6 @@ class PhantomHourglassClient(BizHawkClient):
             # Certain checks use their detection method to differentiate them, like frogs and salvage
             locations_in_scene = self.locations_in_scene.copy()
 
-            print(locations_in_scene)
             # Figure out what check was just gotten
             for i, loc in enumerate(locations_in_scene.items()):
                 loc_name, location = loc
@@ -1388,8 +1397,9 @@ class PhantomHourglassClient(BizHawkClient):
 
         # Set ship
         elif "ship" in item_data:
-            for addr in EQUIPPED_SHIP_PARTS_ADDR:
-                write_list.append((addr, [item_data["ship"]], "Main RAM"))
+            if not (await read_memory_value(ctx, 0x1ba661) & 0x80):
+                for addr in EQUIPPED_SHIP_PARTS_ADDR:
+                    write_list.append((addr, [item_data["ship"]], "Main RAM"))
 
         elif item_name == "Refill: Health":
             await self.full_heal(ctx)
@@ -1412,6 +1422,30 @@ class PhantomHourglassClient(BizHawkClient):
             self.metal_count += 1
             await self.process_game_completion(ctx, 0)
 
+    @staticmethod
+    async def remove_ship_parts(ctx):
+        ship_write_list = ([1] + [0] * 8) * 8
+        await write_memory_values(ctx, 0x1BA564, ship_write_list, overwrite=True)
+
+    async def edit_ship(self, ctx):
+        # Figure out what ships player has
+        ships = [1] + [0]*8
+        for i in ctx.items_received:
+            item_id = i.item
+            item_name = self.item_id_to_name[item_id]
+            if "Ship:" in item_name:
+                item_data = ITEMS_DATA[item_name]
+                ships[item_data.get("ship", 0)] = 1
+        # Give ship parts
+        ship_write_list = [] + ships * 8
+        print(ships, ship_write_list)
+        await bizhawk.write(ctx.bizhawk_ctx, [(0x1BA564, ship_write_list, "Main RAM")])
+        await write_memory_value(ctx, 0x1ba661, 0x80)
+
+
+
+
+
     async def remove_vanilla_item(self, ctx, num_received_items):
         print(f"Removing vanilla items {self.last_vanilla_item}")
         # Handle items from random pools
@@ -1423,8 +1457,9 @@ class PhantomHourglassClient(BizHawkClient):
                 print(f"Treasure Write List: {treasure_write_list}")
                 await write_memory_values(ctx, 0x1BA5AC, treasure_write_list, overwrite=True)
             elif item == "Ship Part":
-                ship_write_list = ([1] + [0] * 8) * 8
-                await write_memory_values(ctx, 0x1BA564, ship_write_list, overwrite=True)
+                await self.remove_ship_parts(ctx)
+                if self.last_scene == 0xB0D:
+                    await self.edit_ship(ctx)
             elif "Potion" in item:
                 print(f"Pots {self.last_potions}")
                 if not all(self.last_potions):
@@ -1448,6 +1483,9 @@ class PhantomHourglassClient(BizHawkClient):
                     if "give_ammo" in data:
                         ammo_v = data["give_ammo"][max(index - 1, 0)]
                         write_list.append((data["ammo_address"], [ammo_v], "Main RAM"))
+                    # Progressive overwrite fix
+                    if "progressive_overwrite" in data and index > 1:
+                        write_list.append((data["progressive"][index-1][0], [data["progressive"][index-1][1]], "Main RAM"))
                     await bizhawk.write(ctx.bizhawk_ctx, write_list)
                 else:
                     address, value = data["address"], data.get("value", 1)

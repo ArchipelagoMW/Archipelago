@@ -124,6 +124,16 @@ DYNAMIC_FLAGS = {
         "has_items": [("Treasure Map #22 (Harrow S)", 1)],
         "set_if_true": [(0x1BA652, 0x8)]
     },
+    "Rupoor cave map": {
+        "on_scenes": [0x1502],
+        "not_has_locations": ["Isle of the Dead Rupoor Cave 2"],
+        "unset_if_true": [(0x1BA653, 0x1)]
+    },
+    "RESET Rupoor cave map": {
+        "on_scenes": [0x1501],
+        "has_items": [("Treasure Map #28 (Ruins NW)", 1)],
+        "set_if_true": [(0x1BA653, 0x1)]
+    },
     # TotoK 1F
     "TotoK Don't open key door": {
         "on_scenes": [0x2500],
@@ -848,6 +858,7 @@ DYNAMIC_FLAGS = {
         "not_has_locations": ["Uncharted Island Cyclone Slate"],
         "unset_if_true": [(0x1B55A2, 0x40)]
     },
+    """
     # Mountain Passage anti-softlock
     "Give Anti-softlock bombs": {
         "on_scenes": [0xB01],
@@ -855,11 +866,15 @@ DYNAMIC_FLAGS = {
         "has_items": [("Bombs (Progressive)", 0)],
         "set_if_true": [(0x1BA644, 0x10), (0x1BA6C0, 1)]
     },
+
+    
     "RESET Anti-softlock bombs": {
         "on_scenes": [0xB00, 0x2700],
         "has_items": [("Bombs (Progressive)", 0)],
         "unset_if_true": [(0x1BA644, 0x10)]
     },
+    """
+
     # Doyland
     "Doyland has lowered water": {
         "on_scenes": [0x2201],
