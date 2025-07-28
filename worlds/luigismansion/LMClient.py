@@ -127,10 +127,8 @@ async def write_bytes_and_validate(addr: int, ram_offset: list[str] | None, curr
 class LMCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx: CommonContext, server_address: str = None):
         if server_address:
-            super().__init__(ctx, server_address=server_address)
-        else:
-            super().__init__(ctx)
-
+            ctx.server_address = server_address
+        super().__init__(ctx)
 
     def _cmd_dolphin(self):
         """Prints the current Dolphin status to the client."""
@@ -663,7 +661,7 @@ async def dolphin_sync_task(ctx: LMContext):
                             await asyncio.sleep(5)
                             continue
                     # Connect to server if we have player name
-                    if ctx.awaiting_rom:
+                    if ctx.awaiting_rom and ctx.auth:
                         await ctx.server_auth()
                 await asyncio.sleep(0.1)
             else:
