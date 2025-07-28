@@ -57,7 +57,7 @@ def calculate_paint_percent_available(state: CollectionState, world: "PaintWorld
     return (SINGLE_PIXEL_SCORE_LOOKUP[r, g, b] *
             min(400 + w * world.options.canvas_size_increment.value, 800) *
             min(300 + h * world.options.canvas_size_increment.value, 600) *
-            world.options.logic_percent.value / 480000)
+            world.per_pixel_logic_percent)
 
 
 def set_completion_rules(world: "PaintWorld", player: int) -> None:
