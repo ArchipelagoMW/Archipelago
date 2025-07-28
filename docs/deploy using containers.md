@@ -9,9 +9,10 @@ Follow these steps to build and deploy a containerized instance of the web host 
 
 What you'll need:
  * A container runtime engine such as:
-   * [Docker](https://www.docker.com/)
-   * [Podman](https://podman.io/)
+   * [Docker](https://www.docker.com/) (Version 23.0 or later)
+   * [Podman](https://podman.io/) (version 4.0 or later)
      * For running with rootless podman, you need to ensure all ports used are usable rootless, by default ports less than 1024 are root only. See [the official tutorial](https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md) for details.
+ * The Docker Buildx plugin (for Docker), as the Dockerfile uses `$TARGETARCH` for architecture detection. Follow [Docker's guide](https://docs.docker.com/build/buildx/install/). Verify with `docker buildx version`.
 
 Starting from the root repository directory, the standalone Archipelago image can be built and run with the command:
 `docker build -t archipelago .`
