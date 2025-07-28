@@ -16,6 +16,10 @@ from collections.abc import Iterable, Sequence
 from hashlib import sha3_512
 from pathlib import Path
 
+
+SNI_VERSION = "v0.0.100"  # change back to "latest" once tray icon issues are fixed
+
+
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 requirement = 'cx-Freeze==8.0.0'
 try:
@@ -63,7 +67,6 @@ non_apworlds: set[str] = {
     "Adventure",
     "ArchipIDLE",
     "Archipelago",
-    "Clique",
     "Lufia II Ancient Cave",
     "Meritous",
     "Ocarina of Time",
@@ -90,7 +93,8 @@ def download_SNI() -> None:
     machine_name = platform.machine().lower()
     # force amd64 on macos until we have universal2 sni, otherwise resolve to GOARCH
     machine_name = "universal" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
-    with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
+    sni_version_ref = "latest" if SNI_VERSION == "latest" else f"tags/{SNI_VERSION}"
+    with urllib.request.urlopen(f"https://api.github.com/repos/alttpo/SNI/releases/{sni_version_ref}") as request:
         data = json.load(request)
     files = data["assets"]
 
