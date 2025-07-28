@@ -25,6 +25,7 @@ from .Hints import get_hints_by_option, ALWAYS_HINT, PORTRAIT_HINTS
 from .Presets import lm_options_presets
 from .Regions import *
 from . import Rules
+from .Rules import set_element_rules
 from .iso_helper.lm_rom import LMPlayerContainer
 
 def run_client(*args):
@@ -183,40 +184,18 @@ class LMWorld(World):
         # There are more clever ways to do this, but all would require much larger changes
         return slot_data  # Tell UT that we have logic to fix
 
-    def set_element_rules(self, location: LMLocation, use_enemizer: bool):
-        region = location.region
-        if len(location.access) != 0:
-            for item in location.access:
-                if item == "Fire Element Medal":
-                    add_rule(location, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                elif item == "Water Element Medal":
-                    add_rule(location, lambda state: Rules.can_fst_water(state, self.player), "and")
-                elif item == "Ice Element Medal":
-                    add_rule(location, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                else:
-                    add_rule(location, lambda state, i=item: state.has(i, self.player), "and")
-
-        if use_enemizer:
-            if region in GHOST_TO_ROOM.keys() and location != "Uncle Grimmly, Hermit of the Darkness":
-                # if fire, require water
-                if self.ghost_affected_regions[region] == "Fire":
-                    add_rule(location, lambda state: Rules.can_fst_water(state, self.player), "and")
-                # if water, require ice
-                elif self.ghost_affected_regions[region] == "Water":
-                    add_rule(location, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                # if ice, require fire
-                elif self.ghost_affected_regions[region] == "Ice":
-                    add_rule(location, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                else:
-                    pass
     def _set_optional_locations(self):
 
         # Set the flags for progression location by checking player's settings
         if self.options.toadsanity:
             for location, data in TOAD_LOCATION_TABLE.items():
-                region = self.get_region(data.region)
+                # If location is starting room toad, assign to starting room. Otherwise proceed as normal
+                if data.code == 617:
+                    region = self.get_region(self.origin_region_name)
+                else:
+                    region = self.get_region(data.region)
                 entry: LMLocation = LMLocation(self.player, location, region, data)
-                self.set_element_rules(entry, True)
+                set_element_rules(self, entry, True)
                 region.locations.append(entry)
         if "Full" in self.options.furnisanity.value:
             for location, data in FURNITURE_LOCATION_TABLE.items():
@@ -224,7 +203,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                self.set_element_rules(entry, False)
+                set_element_rules(self, entry, False)
                 region.locations.append(entry)
         else:
             LOCATION_DICT: dict[str, LMLocationData] = {}
@@ -316,7 +295,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                self.set_element_rules(entry, False)
+                set_element_rules(self, entry, False)
                 region.locations.append(entry)
         if self.options.gold_mice:
             for location, data in GOLD_MICE_LOCATION_TABLE.items():
@@ -337,35 +316,35 @@ class LMWorld(World):
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if entry.code == 624 and self.open_doors.get(28) == 0:
+                if entry.region == "Twins' Room" and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
-                if entry.code == 627:
+                if data.region == "Fortune-Teller's Room": # If it's Clairvoya's room, should match Mario item count
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
-                self.set_element_rules(entry, True)
+                set_element_rules(self, entry, True)
                 region.locations.append(entry)
         if self.options.lightsanity:
             for location, data in LIGHT_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
-                if entry.code not in (771, 775, 776):
+                if entry.code not in (771, 775, 776): # If not a room that turns on automatically
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if entry.code == 741 and self.open_doors.get(28) == 0:
+                if entry.region == "Twins' Room" and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
-                if entry.code == 745:
+                if data.region == "Fortune-Teller's Room": # If it's Clairvoya's room, should match Mario item count
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
-                elif entry.code == 772:
+                elif entry.code == 772: # If family ahllway light
                     add_rule(entry, lambda state: state.can_reach_location("Nursery Clear Chest", self.player))
-                elif entry.code == 773:
+                elif entry.code == 773: # If 1F Hallway light
                     add_rule(entry, lambda state: state.can_reach_location("Graveyard Clear Chest", self.player))
-                elif entry.code in (778, 782, 784, 789, 790, 851):
+                elif entry.code in (778, 782, 784, 789, 790, 851): # If any other hallway light
                     add_rule(entry, lambda state: state.can_reach_location("Balcony Clear Chest", self.player))
-                elif entry.code == 757 and self.options.enemizer.value != 2:
+                elif entry.code == 757 and self.options.enemizer.value != 2: # If sitting room light
                     add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                self.set_element_rules(entry, True)
+                set_element_rules(self, entry, True)
                 region.locations.append(entry)
         if self.options.walksanity:
             for location, data in WALK_LOCATION_TABLE.items():
@@ -373,7 +352,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                self.set_element_rules(entry, False)
+                set_element_rules(self, entry, False)
                 region.locations.append(entry)
         if self.options.boosanity:
             for location, data in ROOM_BOO_LOCATION_TABLE.items():
@@ -381,11 +360,11 @@ class LMWorld(World):
                 entry: LMLocation = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if entry.code == 675 and self.open_doors.get(28) == 0:
+                if entry.region == "Twins' Room" and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
-                if data.code == 674 and self.open_doors.get(27) == 0:
+                if data.region == "Nursery" and self.open_doors.get(27) == 0:
                     add_rule(entry, lambda state: state.has("Nursery Key", self.player), "and")
-                if entry.code == 679:
+                if data.region == "Fortune-Teller's Room": # If it's Clairvoya's room, should match Mario item count
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
@@ -394,7 +373,7 @@ class LMWorld(World):
                         keys = spawn_locations[self.origin_region_name]["door_keys"]
                         for key in keys:
                             add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
-                self.set_element_rules(entry, True)
+                set_element_rules(self, entry, True)
                 region.locations.append(entry)
             for location, data in BOOLOSSUS_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
@@ -410,11 +389,11 @@ class LMWorld(World):
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
                 add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if data.code == 675 and self.open_doors.get(28) == 0:
+                if entry.region == "Twins' Room" and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
-                if data.code == 674 and self.open_doors.get(27) == 0:
+                if data.region == "Nursery" and self.open_doors.get(27) == 0:
                     add_rule(entry, lambda state: state.has("Nursery Key", self.player), "and")
-                if data.code == 679:
+                if data.region == "Fortune-Teller's Room": # If it's Clairvoya's room, should match Mario item count
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
@@ -424,7 +403,7 @@ class LMWorld(World):
                         for key in keys:
                             add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
                 entry.code = None
-                self.set_element_rules(entry, True)
+                set_element_rules(self, entry, True)
                 region.locations.append(entry)
             for location, data in BOOLOSSUS_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
@@ -559,39 +538,36 @@ class LMWorld(World):
 
         # Assign each location to their region
         for location, data in BASE_LOCATION_TABLE.items():
+            # Set our special spawn locations to the spawn regions
             if data.code in (708, 853, 925, 926, 927):
                 region = self.get_region(self.origin_region_name)
-                entry = LMLocation(self.player, location, region, data)
-                if data.require_poltergust:
-                    add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                region.locations.append(entry)
             else:
                 region = self.get_region(data.region)
-                entry = LMLocation(self.player, location, region, data)
-                if data.require_poltergust:
-                    add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                self.set_element_rules(entry, False)
-                if location == "Huge Flower (Boneyard)":
-                    add_rule(entry, lambda state: state.has("Progressive Flower", self.player, 3))
-                if entry.code is None:
-                    entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
-                region.locations.append(entry)
+            entry = LMLocation(self.player, location, region, data)
+            if data.require_poltergust:
+                add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
+            set_element_rules(self, entry, False)
+            if location == "Huge Flower (Boneyard)":
+                add_rule(entry, lambda state: state.has("Progressive Flower", self.player, 3))
+            if entry.code is None:
+                entry.place_locked_item(Item(entry.locked_item, ItemClassification.progression, None, self.player))
+            region.locations.append(entry)
         for location, data in ENEMIZER_LOCATION_TABLE.items():
             region = self.get_region(data.region)
             entry = LMLocation(self.player, location, region, data)
             add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-            self.set_element_rules(entry, True)
+            set_element_rules(self, entry, True)
             region.locations.append(entry)
         for location, data in CLEAR_LOCATION_TABLE.items():
             region = self.get_region(data.region)
             entry = LMLocation(self.player, location, region, data)
             add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-            if entry.code == 5:
+            if entry.code == 5: # If it's Clairvoya's room, should match Mario item count
                 add_rule(entry,
                          lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value))
             if entry.code == 25 and self.open_doors.get(28) == 0:
                 add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
-            self.set_element_rules(entry, True)
+            set_element_rules(self, entry, True)
             region.locations.append(entry)
         self._set_optional_locations()
         connect_regions(self)
