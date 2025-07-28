@@ -55,12 +55,12 @@ def calculate_paint_percent_available(state: CollectionState, world: "PaintWorld
     # total score achievable assuming the worst possible target image. Finally, this is multiplied by the logic percent
     # option which restricts the logic so as to not require pixel perfection.
     return (SINGLE_PIXEL_SCORE_LOOKUP[r, g, b] *
-            min(400 + w * world.options.canvas_size_increment, 800) *
-            min(300 + h * world.options.canvas_size_increment, 600) *
-            world.options.logic_percent / 480000)
+            min(400 + w * world.options.canvas_size_increment.value, 800) *
+            min(300 + h * world.options.canvas_size_increment.value, 600) *
+            world.options.logic_percent.value / 480000)
 
 
 def set_completion_rules(world: "PaintWorld", player: int) -> None:
     world.multiworld.completion_condition[player] = \
         lambda state: (paint_percent_available(state, world, player) >=
-                       min(world.options.logic_percent, world.options.goal_percent))
+                       min(world.options.logic_percent.value, world.options.goal_percent.value))
