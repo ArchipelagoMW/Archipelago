@@ -2,6 +2,8 @@ from typing import NamedTuple, Dict, Optional
 
 from BaseClasses import CollectionState, Location, Region
 
+from .rules import paint_percent_available
+
 
 class PaintLocation(Location):
     game = "Paint"
@@ -14,7 +16,6 @@ class PaintLocation(Location):
         self.required_percent = (self.address % 198600) / 4
 
     def access_rule(self, state: CollectionState):
-        from .rules import paint_percent_available
         return paint_percent_available(state, state.multiworld.worlds[self.player], self.player) >=\
                self.required_percent
 

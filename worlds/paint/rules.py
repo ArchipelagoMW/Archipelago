@@ -1,8 +1,11 @@
 from itertools import product
 from math import sqrt
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from . import PaintWorld
+
+if TYPE_CHECKING:
+    from . import PaintWorld
 
 
 # There are only 512 (8**3) possible sets of arguments when each of r, g and b can be from 0 inclusive to 7 inclusive,
@@ -23,14 +26,14 @@ def _make_single_pixel_score_lookup():
 SINGLE_PIXEL_SCORE_LOOKUP = _make_single_pixel_score_lookup()
 
 
-def paint_percent_available(state: CollectionState, world: PaintWorld, player: int) -> bool:
+def paint_percent_available(state: CollectionState, world: "PaintWorld", player: int) -> bool:
     if state.paint_percent_stale[player]:
         state.paint_percent_available[player] = calculate_paint_percent_available(state, world, player)
         state.paint_percent_stale[player] = False
     return state.paint_percent_available[player]
 
 
-def calculate_paint_percent_available(state: CollectionState, world: PaintWorld, player: int) -> float:
+def calculate_paint_percent_available(state: CollectionState, world: "PaintWorld", player: int) -> float:
     p = state.has("Pick Color", player)
     r = state.count("Progressive Color Depth (Red)", player)
     g = state.count("Progressive Color Depth (Green)", player)
@@ -57,7 +60,7 @@ def calculate_paint_percent_available(state: CollectionState, world: PaintWorld,
             world.options.logic_percent / 480000)
 
 
-def set_completion_rules(world: PaintWorld, player: int) -> None:
+def set_completion_rules(world: "PaintWorld", player: int) -> None:
     world.multiworld.completion_condition[player] = \
         lambda state: (paint_percent_available(state, world, player) >=
                        min(world.options.logic_percent, world.options.goal_percent))
