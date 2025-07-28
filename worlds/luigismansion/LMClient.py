@@ -5,6 +5,7 @@ import NetUtils, Utils
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 import dolphin_memory_engine as dme
 
+from .Regions import spawn_locations
 from .iso_helper.lm_rom import LMUSAAPPatch
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV
@@ -528,12 +529,18 @@ class LMContext(CommonContext):
             if current_map_id not in lm_loc_data.map_id:
                 continue
 
+
+
             for addr_to_update in lm_loc_data.update_ram_addr:
                 # If in main mansion map
                 # TODO this will now calculate every iteration, which will slow down location checks are more are added.
                 if current_map_id == 2:
-                    room_to_check = addr_to_update.in_game_room_id if not addr_to_update.in_game_room_id is None \
-                        else current_room_id
+                    # If special moving Toad, room_to_check should be the spawn room id
+                    if lm_loc_data.code == 617:
+                        room_to_check: int = spawn_locations[self.spawn]["room_no"]
+                    else:
+                        room_to_check = addr_to_update.in_game_room_id if not addr_to_update.in_game_room_id is None \
+                            else current_room_id
                     if not room_to_check == current_room_id:
                         continue
 
