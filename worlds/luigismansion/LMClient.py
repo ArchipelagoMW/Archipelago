@@ -762,6 +762,9 @@ async def give_player_items(ctx: LMContext):
                     flower_count: int = len([netItem for netItem in ctx.items_received if netItem.item == 8140])
                     curr_val = min(flower_count + 234, 237)
                     ram_offset = None
+                elif item.item == 8064: # If it's a Progressive Vacuum
+                    curr_val: int = min(5, (len([netItem for netItem in ctx.items_received if netItem.item == 8064])-1))
+                    ram_offset = None
                 elif not addr_to_update.item_count is None:
                     if not ram_offset is None:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
