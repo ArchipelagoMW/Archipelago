@@ -10,7 +10,7 @@
 
 1. Download and install the Archipelago Multiworld Suite from the link above, making sure to install the most recent version.
 
-2. Download and install the Dolphin Gamecube/Wii Emulator from the link above, making sure to install the most recent version.
+2. Download and install the Dolphin Gamecube/Wii Emulator from the link above, making sure to install the most recent version (minimum 2503).
 Run the emulator at least once to make sure it is working.
 
 3. Acquire the most recent APWorld from the [Releases page](https://github.com/BootsinSoots/Archipelago/releases/latest) and place the luigismansion.apworld in the custom_worlds folder of your Archipelago install
