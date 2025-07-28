@@ -21,6 +21,12 @@ class GrinchItem(Item):
         base_id: int = 42069
         return base_id + id if id is not None else None
 
+    def __init__(self, name: str, player: int, data: GrinchItemData):
+        super(GrinchItem, self).__init__(name,data.classification, GrinchItem.get_apid(data.id), player)
+
+        self.type = data.item_group
+        self.item_id = data.id
+
 #allows hinting of items via category
 def get_item_names_per_category() -> dict[str, set[str]]:
     categories: dict[str, set[str]] = {}
@@ -124,24 +130,24 @@ SLEIGH_PARTS_TABLE: dict[str, GrinchItemData] = {
 
 #Access Keys
 KEYS_TABLE: dict[str, GrinchItemData] = {
-    "Whoville Vacuum Access": GrinchItemData("Vacuum Access", 400, IC.progression,
-        [GrinchRamData()]),
+    # "Whoville Vacuum Access": GrinchItemData("Vacuum Access", 400, IC.progression,
+    #     [GrinchRamData()]),
     "Who Forest Vacuum Access": GrinchItemData("Vacuum Access", 401, IC.progression,
         [GrinchRamData(0x800100AA, binary_bit_pos=3)]),
     "Who Dump Vacuum Access": GrinchItemData("Vacuum Access", 402, IC.progression,
         [GrinchRamData(0x800100AA, binary_bit_pos=4)]),
     "Who Lake Vacuum Access": GrinchItemData("Vacuum Access", 403, IC.progression,
         [GrinchRamData(0x800100AA, binary_bit_pos=5)]),
-    "Progressive Vacuum Access": GrinchItemData("Vacuum Access", 404, IC.progression,
-        [GrinchRamData()]),
-    "Spin N' Win Door Unlock": GrinchItemData("Supadow Door Unlocks", 405, IC.progression,
-        [GrinchRamData()]),
-    "Dankamania Door Unlock": GrinchItemData("Supadow Door Unlocks", 406, IC.progression,
-        [GrinchRamData()]),
-    "The Copter Race Contest Door Unlock": GrinchItemData("Supadow Door Unlocks", 407, IC.progression,
-        [GrinchRamData()]),
-    "Progressive Supadow Door Unlock": GrinchItemData("Supadow Door Unlocks", 408, IC.progression,
-        [GrinchRamData()])
+    # "Progressive Vacuum Access": GrinchItemData("Vacuum Access", 404, IC.progression,
+    #     [GrinchRamData()]),
+    # "Spin N' Win Door Unlock": GrinchItemData("Supadow Door Unlocks", 405, IC.progression,
+    #     [GrinchRamData()]),
+    # "Dankamania Door Unlock": GrinchItemData("Supadow Door Unlocks", 406, IC.progression,
+    #     [GrinchRamData()]),
+    # "The Copter Race Contest Door Unlock": GrinchItemData("Supadow Door Unlocks", 407, IC.progression,
+    #     [GrinchRamData()]),
+    # "Progressive Supadow Door Unlock": GrinchItemData("Supadow Door Unlocks", 408, IC.progression,
+    #     [GrinchRamData()])
 }
 
 #Misc Items
@@ -155,18 +161,18 @@ MISC_ITEMS_TABLE: dict[str, GrinchItemData] = {
 
 #Traps
 TRAPS_TABLE: dict[str, GrinchItemData] = {
-    "Freeze Trap": GrinchItemData("Traps", 600, IC.trap, [GrinchRamData()]), #alias to Ice Trap for traplink
-    "Bee Trap": GrinchItemData("Traps", 601, IC.trap, [GrinchRamData()]),
-    "Electrocution Trap": GrinchItemData("Traps", 602, IC.trap, [GrinchRamData()]),
-    "Tip Toe Trap": GrinchItemData("Traps", 603, IC.trap, [GrinchRamData()]), #alias to Slowness Trap for traplink
+    # "Freeze Trap": GrinchItemData("Traps", 600, IC.trap, [GrinchRamData()]), #alias to Ice Trap for traplink
+    # "Bee Trap": GrinchItemData("Traps", 601, IC.trap, [GrinchRamData()]),
+    # "Electrocution Trap": GrinchItemData("Traps", 602, IC.trap, [GrinchRamData()]),
+    # "Tip Toe Trap": GrinchItemData("Traps", 603, IC.trap, [GrinchRamData()]), #alias to Slowness Trap for traplink
     "Damage Trap": GrinchItemData("Traps", 604, IC.trap, [GrinchRamData(0x800E8FDC, value=20)]),
     "Depletion Trap": GrinchItemData("Traps", 605, IC.trap, [GrinchRamData(0x80010058, value=0)]),
     "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
         [GrinchRamData(0x80010000, value=0x05), GrinchRamData(0x8008FB94, value=1)]),
-    "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]), #alias to Spring Trap for traplink
+    # "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]), #alias to Spring Trap for traplink
     "Who sent me here?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x8008FB94, value=1)]), #alias to Home Trap for traplink
-    "Cutscene Trap": GrinchItemData("Traps", 609, IC.trap, [GrinchRamData()]),
-    "No Vac Trap": GrinchItemData("Traps", 610, IC.trap, [GrinchRamData()])
+    # "Cutscene Trap": GrinchItemData("Traps", 609, IC.trap, [GrinchRamData()]),
+    # "No Vac Trap": GrinchItemData("Traps", 610, IC.trap, [GrinchRamData()])
 }
 
 #Movesets

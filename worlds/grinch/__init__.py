@@ -1,11 +1,16 @@
-from .Locations import grinch_locations_to_id
-from .Items import grinch_items_to_id
+from BaseClasses import Region, Item, ItemClassification
+from .Locations import grinch_locations_to_id, grinch_locations, GrinchLocation
+from .Items import grinch_items_to_id, GrinchItem, ALL_ITEMS_TABLE
+from .Regions import connect_regions
+from .Rules import set_rules
 
 from typing import ClassVar
 
 from worlds.AutoWorld import World
 
 from . import Options
+from .Rules import access_rules_dict
+
 
 class GrinchWorld(World):
     game: ClassVar[str] = "The Grinch"
@@ -13,5 +18,43 @@ class GrinchWorld(World):
     options = Options.GrinchOptions
     topology_present = True #not an open world game, very linear
     item_name_to_id: ClassVar[dict[str,int]] = grinch_items_to_id()
-    location_name_to_id = ClassVar[dict[str,int]] = grinch_locations_to_id()
+    location_name_to_id: ClassVar[dict[str,int]] = grinch_locations_to_id()
     required_client_version = (0, 6, 2)
+
+
+    def __init__(self, *args, **kwargs): #Pulls __init__ function and takes control from there in BaseClasses.py
+        self.origin_region_name: str = "Mount Crumpit"
+        super(GrinchWorld, self).__init__(*args, **kwargs)
+
+    def generate_early(self) -> None: #Special conditions changed before generation occurs
+        pass
+
+    def create_regions(self): #Generates all regions for the multiworld
+        for region_name in access_rules_dict.keys():
+            self.multiworld.regions.append(Region(region_name, self.player, self.multiworld))
+        self.multiworld.regions.append(Region("Mount Crumpit", self.player, self.multiworld))
+        for location, data in grinch_locations.items():
+            region = self.get_region(data.region)
+            entry = GrinchLocation(self.player, location, region, data)
+            if location == "Neutralizing Santa":
+                entry.place_locked_item(Item("Goal", ItemClassification.progression, None, self.player))
+            region.locations.append(entry)
+        connect_regions(self)
+
+    def create_item(self, item: str) -> GrinchItem: #Creates specific items on demand
+        if item in ALL_ITEMS_TABLE.keys():
+            return GrinchItem(item, self.player, ALL_ITEMS_TABLE[item])
+        raise Exception(f"Invalid item name: {item}")
+
+    def create_items(self): #Generates all items for the multiworld
+        self_itempool: list[GrinchItem] = []
+        for item, data in ALL_ITEMS_TABLE.items():
+            self_itempool.append(self.create_item(item))
+            if item == "Heart of Stone":
+                for _ in range(3):
+                    self_itempool.append(self.create_item(item))
+        self.multiworld.itempool += self_itempool
+
+    def set_rules(self):
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Goal", self.player)
+        set_rules(self)
