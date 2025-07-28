@@ -4,7 +4,7 @@
 
 * [Archipelago 0.6.1+](https://archipelago.gg/tutorial/Archipelago/setup/en)
 * [Bizhawk 2.10+](https://github.com/TASEmulators/BizHawk)
-* Legally acquired Phantom Hourglass EU rom (US support coming soon). Apparently it only works in english.
+* Legally acquired Phantom Hourglass EU rom (US support coming soon). Apparently it only works in English
 * [Latest tloz_ph.apworld](https://github.com/carrotinator/Archipelago/releases)
 
 ## Recommended Software
