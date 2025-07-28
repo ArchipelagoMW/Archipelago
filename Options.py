@@ -494,6 +494,30 @@ class Choice(NumericOption):
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
+    def __lt__(self, other: typing.Union[Choice, int, str]):
+        if isinstance(other, str):
+            assert other in self.options, f"compared against an unknown string. {self} < {other}"
+            other = self.options[other]
+        return super(Choice, self).__lt__(other)
+
+    def __gt__(self, other: typing.Union[Choice, int, str]):
+        if isinstance(other, str):
+            assert other in self.options, f"compared against an unknown string. {self} > {other}"
+            other = self.options[other]
+        return super(Choice, self).__gt__(other)
+
+    def __le__(self, other: typing.Union[Choice, int, str]):
+        if isinstance(other, str):
+            assert other in self.options, f"compared against an unknown string. {self} <= {other}"
+            other = self.options[other]
+        return super(Choice, self).__le__(other)
+
+    def __ge__(self, other: typing.Union[Choice, int, str]):
+        if isinstance(other, str):
+            assert other in self.options, f"compared against an unknown string. {self} >= {other}"
+            other = self.options[other]
+        return super(Choice, self).__ge__(other)
+
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
@@ -1315,6 +1339,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
         will be returned as a sorted list.
         """
         assert option_names, "options.as_dict() was used without any option names."
+        assert len(option_names) < len(self.__class__.type_hints), "Specify only options you need."
         option_results = {}
         for option_name in option_names:
             if option_name not in type(self).type_hints:
@@ -1643,7 +1668,7 @@ class OptionGroup(typing.NamedTuple):
 
 
 item_and_loc_options = [LocalItems, NonLocalItems, StartInventory, StartInventoryPool, StartHints,
-                        StartLocationHints, ExcludeLocations, PriorityLocations, ItemLinks]
+                        StartLocationHints, ExcludeLocations, PriorityLocations, ItemLinks, PlandoItems]
 """
 Options that are always populated in "Item & Location Options" Option Group. Cannot be moved to another group.
 If desired, a custom "Item & Location Options" Option Group can be defined, but only for adding additional options to
