@@ -61,6 +61,6 @@ def calculate_paint_percent_available(state: CollectionState, world: "PaintWorld
 
 
 def set_completion_rules(world: "PaintWorld", player: int) -> None:
+    goal_percent = min(world.options.logic_percent.value, world.options.goal_percent.value)
     world.multiworld.completion_condition[player] = \
-        lambda state: (paint_percent_available(state, world, player) >=
-                       min(world.options.logic_percent.value, world.options.goal_percent.value))
+        lambda state: paint_percent_available(state, world, player) >= goal_percent
