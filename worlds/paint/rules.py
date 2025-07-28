@@ -12,14 +12,16 @@ if TYPE_CHECKING:
 # so pre-calculate them.
 def _make_single_pixel_score_lookup():
     """
-    Create a lookup for the maximum possible score for a pixel in the worst case, for r, g and b from 0-7 inclusive.
+    Create a lookup for the maximum possible score for a pixel in the worst case, for r, g and b color depth from 0-7
+    inclusive.
     """
-    rgb = [(2 ** (7 - i) - 1) ** 2 for i in range(8)]
+    # The color depth calculation is the same for r, g and b, so can be calculated once for each possible input value.
+    color_depth = {i: (2 ** (7 - i) - 1) ** 2 for i in range(8)}
     return {
-        t: 1 - sqrt(
-            (rgb[t[0]] + rgb[t[1]] + rgb[t[2]]) * 12
+        (r, g, b): 1 - sqrt(
+            (color_depth[r] + color_depth[g] + color_depth[b]) * 12
         ) / 765
-        for t in product(range(8), repeat=3)
+        for r, g, b in product(range(8), repeat=3)
     }
 
 
