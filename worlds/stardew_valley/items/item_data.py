@@ -53,7 +53,6 @@ class Group(enum.Enum):
     GEODE = enum.auto()
     ORE = enum.auto()
     FERTILIZER = enum.auto()
-    SEED = enum.auto()
     CROPSANITY = enum.auto()
     FISHING_RESOURCE = enum.auto()
     SEASON = enum.auto()
