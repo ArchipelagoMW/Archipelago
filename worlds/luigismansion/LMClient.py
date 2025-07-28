@@ -763,8 +763,11 @@ async def give_player_items(ctx: LMContext):
                     curr_val = min(flower_count + 234, 237)
                     ram_offset = None
                 elif item.item == 8064: # If it's a Progressive Vacuum
-                    curr_val: int = min(5, (len([netItem for netItem in ctx.items_received if netItem.item == 8064])-1))
-                    ram_offset = None
+                    if addr_to_update.ram_addr == 0x804dda54: # If we're checking against our vacuum-on address
+                        curr_val = addr_to_update.item_count
+                    else:    # If we're checking against our vacuum speed address
+                        curr_val: int = min(5, (len([netItem for netItem in ctx.items_received if netItem.item == 8064])-1))
+                        ram_offset = None
                 elif not addr_to_update.item_count is None:
                     if not ram_offset is None:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,

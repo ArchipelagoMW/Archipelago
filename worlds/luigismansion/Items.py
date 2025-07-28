@@ -124,7 +124,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Boo Radar": LMItemData("Upgrade", 63, IC.progression,
         update_ram_addr=[LMRamData(0x803D33A2, bit_position=1), LMRamData(0x803D33A2, bit_position=3)]),
     "Progressive Vacuum": LMItemData("Upgrade", 64, IC.progression,
-        update_ram_addr=[LMRamData(0x804ddde0, item_count=1, ram_byte_size=4)]),
+        update_ram_addr=[LMRamData(0x804ddde0, item_count=1, ram_byte_size=4), LMRamData(0x804dda54, ram_byte_size=4, item_count=1)]),
     "Gold Diamond": CurrencyItemData(65, { CURRENCY_NAME.GOLD_DIAMOND: 1 }, classification=IC.progression),
     "Progressive Flower": LMItemData("Flower Stage", 140, IC.progression,
         update_ram_addr=[LMRamData(0x80338fc0, ram_byte_size=4)])
@@ -295,7 +295,7 @@ IMPORTANT_ITEM_AP_LIST: list[int] = [LMItem.get_apid(value.code) for value in IT
 RECV_OWN_GAME_ITEMS: list[int] = BOO_AP_ID_LIST + IMPORTANT_ITEM_AP_LIST + [8126, 8141, 8142]
 
 # List of received items to ignore because they are handled elsewhere
-RECV_ITEMS_IGNORE: list[int] = [8127, 8064]
+RECV_ITEMS_IGNORE: list[int] = [8127]
 
 # List of health related items, which are used to not exceed max health
 HEALTH_RELATED_ITEMS: list[int] = [8128, 8129]
