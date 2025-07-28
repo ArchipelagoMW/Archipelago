@@ -7,7 +7,7 @@ import dolphin_memory_engine as dme
 
 from .iso_helper.lm_rom import LMUSAAPPatch
 from .Items import *
-from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
+from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV
 from .Helper_Functions import StringByteFunction as sbf
 from .client.Wallet import Wallet
 
