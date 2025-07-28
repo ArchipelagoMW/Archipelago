@@ -32,13 +32,17 @@ def paint_percent_available(state: CollectionState, world: PaintWorld, player: i
 
 def calculate_paint_percent_available(state: CollectionState, world: PaintWorld, player: int) -> float:
     p = state.has("Pick Color", player)
-    r = min(state.count("Progressive Color Depth (Red)", player), 7)
-    g = min(state.count("Progressive Color Depth (Green)", player), 7)
-    b = min(state.count("Progressive Color Depth (Blue)", player), 7)
+    r = state.count("Progressive Color Depth (Red)", player)
+    g = state.count("Progressive Color Depth (Green)", player)
+    b = state.count("Progressive Color Depth (Blue)", player)
     if not p:
         r = min(r, 2)
         g = min(g, 2)
         b = min(b, 2)
+    else:
+        r = min(r, 7)
+        g = min(g, 7)
+        b = min(b, 7)
     w = state.count("Progressive Canvas Width", player)
     h = state.count("Progressive Canvas Height", player)
     # This code looks a little messy but it's a mathematical formula derived from the similarity calculations in the
