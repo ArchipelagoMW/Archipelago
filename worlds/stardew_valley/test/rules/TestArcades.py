@@ -1,5 +1,5 @@
+from ..bases import SVTestBase
 from ... import options
-from ...test import SVTestBase
 
 
 class TestArcadeMachinesLogic(SVTestBase):
