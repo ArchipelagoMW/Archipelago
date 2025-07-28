@@ -2,10 +2,9 @@ import re
 from math import ceil
 from random import choice, randint
 
-from . import FURNITURE_LOCATION_TABLE
 from .Regions import spawn_locations
 from .Items import ALL_ITEMS_TABLE, filler_items
-from .Locations import FLIP_BALCONY_BOO_EVENT_LIST
+from .Locations import FLIP_BALCONY_BOO_EVENT_LIST, ALL_LOCATION_TABLE
 
 speedy_observer_index: list[int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
 speedy_enemy_index: list[int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
@@ -1241,7 +1240,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
                 furniture_info.info_file_field_entries[item_data["loc_enum"]]["telesa_hide"] = 10
 
         # If our furniture location is remote only, do not add any values to the table and make sure it remains blank
-        if FURNITURE_LOCATION_TABLE[item_name].remote_only:
+        if ALL_LOCATION_TABLE[item_name].remote_only:
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = 0
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = 0
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = 0
