@@ -318,6 +318,22 @@ class IncludeScholarAbilities(DefaultOnToggle):
     display_name = "Include Scholar Abilities in the item pool"
 
 #"""Bonus Fun"""
+class ItemInfoMode(Choice):
+    """
+    For Full, all treasure and store icons on the map will display if they are progression, useful, or filler items.
+
+    For Earned, all treasure and store icons on the map will display as mimics until you obtain the map-revealing item that is not yet implemented idk come back v0.9.
+
+    For Obscured, all treasure and store icons on the map will display as mimics permanently.
+    If you find skipping treasures is distasteful but part of your brain always wants to be efficient, this option is for you!
+    It's also good for a race environment.
+    """
+    display_name = "Item Info Mode"
+    option_full = 0
+    option_earned = 1
+    option_obscured = 2
+    default = 0
+
 class RandomizeMusic(Toggle):
     """
     When enabled, music will be randomized upon connecting to the AP World. (This toggles the base game's Randomize Music function.)
@@ -374,6 +390,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     startWithMaps: StartWithMaps
     includeSummonAbilities: IncludeSummonAbilities
     includeScholarAbilities: IncludeScholarAbilities
+    item_info_mode: ItemInfoMode
     randomizeMusic: RandomizeMusic
     useMods: UseMods
 
@@ -382,5 +399,5 @@ crystal_project_option_groups: Dict[str, List[Any]] = {
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity, Regionsanity],
     "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, AutoSpendLP, AutoEquipPassives, EasyLeveling],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
-    "Bonus Fun": [RandomizeMusic, UseMods]
+    "Bonus Fun": [ItemInfoMode, RandomizeMusic, UseMods]
 }

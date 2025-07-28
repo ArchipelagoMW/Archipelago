@@ -41,7 +41,7 @@ class CrystalProjectWeb(WebWorld):
 
 class CrystalProjectWorld(World):
     """Crystal Project is a mix of old school job based jRPG mixed with a ton of 3D platforming and exploration."""
-    apworld_version = "0.7.0"
+    apworld_version = "0.8.0"
     game = "Crystal Project"
     options_dataclass = CrystalProjectOptions
     options: CrystalProjectOptions
@@ -630,6 +630,7 @@ class CrystalProjectWorld(World):
             "startWithMaps": bool(self.options.startWithMaps.value),
             "includeSummonAbilities": self.options.includeSummonAbilities.value,
             "includeScholarAbilities": self.options.includeScholarAbilities.value,
+            "item_info_mode": self.options.item_info_mode.value,
             "randomizeMusic": bool(self.options.randomizeMusic.value),
             "useMods": self.options.useMods.value,
             "modInfo": mod_info,
