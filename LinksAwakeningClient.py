@@ -514,6 +514,9 @@ class LinksAwakeningClient():
         wGameplayType = (await self.gameboy.async_read_memory(LAClientConstants.wGameplayType))[0]
         wHealth = (await self.gameboy.async_read_memory(LAClientConstants.wHealth))[0]
         cmd_block = await self.gameboy.async_read_memory(LAClientConstants.wMWRecvIndexHi, 3)
+        if not await self.gameboy.check_safe_gameplay():
+            return
+
         [wMWRecvIndexHi, wMWRecvIndexLo, wMWCommand] = cmd_block
 
         if wGameplayType == 1: # Credits
