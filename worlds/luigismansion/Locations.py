@@ -441,8 +441,6 @@ DECOR_LOCATION_TABLE = {
                                           update_ram_addr=[LMRamData(in_game_room_id=34)]),
     "Nursery Vase": LMLocationData("Nursery", 166, "Furniture", 488, [], 2,
                                    update_ram_addr=[LMRamData(in_game_room_id=26)]),
-    "Nursery Rocking Horse": LMLocationData("Nursery", 168, "Furniture", 364, [],  2, remote_only=True,
-                                            update_ram_addr=[LMRamData(in_game_room_id=26)]),  # TODO doesn't work?
     "Chauncey's Crib (Nursery)": LMLocationData("Nursery", 167, "Furniture", 372, [], 2, remote_only=True,
                                                 update_ram_addr=[LMRamData(in_game_room_id=26)], require_poltergust=False),
     "Nursery Toy Blocks R (closer to Door)": LMLocationData("Nursery", 173, "Furniture", 498, [], 2,
