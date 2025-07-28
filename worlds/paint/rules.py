@@ -1,7 +1,26 @@
+from itertools import product
 from math import sqrt
 
 from BaseClasses import CollectionState
 from . import PaintWorld
+
+
+# There are only 512 (8**3) possible sets of arguments when each of r, g and b can be from 0 inclusive to 7 inclusive,
+# so pre-calculate them.
+def _make_single_pixel_score_lookup():
+    """
+    Create a lookup for the maximum possible score for a pixel in the worst case, for r, g and b from 0-7 inclusive.
+    """
+    rgb = [(2 ** (7 - i) - 1) ** 2 for i in range(8)]
+    return {
+        t: 1 - sqrt(
+            (rgb[t[0]] + rgb[t[1]] + rgb[t[2]]) * 12
+        ) / 765
+        for t in product(range(8), repeat=3)
+    }
+
+
+SINGLE_PIXEL_SCORE_LOOKUP = _make_single_pixel_score_lookup()
 
 
 def paint_percent_available(state: CollectionState, world: PaintWorld, player: int) -> bool:
@@ -28,7 +47,7 @@ def calculate_paint_percent_available(state: CollectionState, world: PaintWorld,
     # starting canvas is 400x300) over the total number of pixels with everything unlocked (800x600) to get the
     # total score achievable assuming the worst possible target image. Finally, this is multiplied by the logic percent
     # option which restricts the logic so as to not require pixel perfection.
-    return ((1 - ((sqrt(((2 ** (7 - r) - 1) ** 2 + (2 ** (7 - g) - 1) ** 2 + (2 ** (7 - b) - 1) ** 2) * 12)) / 765)) *
+    return (SINGLE_PIXEL_SCORE_LOOKUP[r, g, b] *
             min(400 + w * world.options.canvas_size_increment, 800) *
             min(300 + h * world.options.canvas_size_increment, 600) *
             world.options.logic_percent / 480000)
