@@ -728,6 +728,37 @@ def update_observer_info(observer_info):
         "(Undocumented)": 0,
     })
 
+    # This one adds an observer into the Foyer where if Luigi is in the room anywhere, it will turn on the lights..
+    observer_info.info_file_field_entries.append({
+        "name": "observer",
+        "code_name": "(null)",
+        "string_arg0": "(null)",
+        "cond_string_arg0": "(null)",
+        "pos_x": 0.000000,
+        "pos_y": 0.000000,
+        "pos_z": 0.000000,
+        "dir_x": 0.000000,
+        "dir_y": 0.000000,
+        "dir_z": 0.000000,
+        "scale_x": 0.000000,
+        "scale_y": 0.000000,
+        "scale_z": 0.000000,
+        "room_no": 2,
+        "cond_arg0": 0,
+        "arg0": 0,
+        "arg1": 0,
+        "arg2": 0,
+        "arg3": 0,
+        "arg4": 0,
+        "arg5": 0,
+        "appear_flag": 0,
+        "disappear_flag": 0,
+        "cond_type": 15,
+        "do_type": 1,
+        "invisible": 1,
+        "(Undocumented)": 0,
+    })
+
 
 def update_generator_info(generator_info):
     for x in generator_info.info_file_field_entries:
