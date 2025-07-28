@@ -2,6 +2,7 @@ import re
 from math import ceil
 from random import choice, randint
 
+from . import FURNITURE_LOCATION_TABLE
 from .Regions import spawn_locations
 from .Items import ALL_ITEMS_TABLE, filler_items
 from .Locations import FLIP_BALCONY_BOO_EVENT_LIST
@@ -1238,6 +1239,13 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         if ((item_data["type"] == "Furniture" and item_name != "Kitchen Oven") and
             output_data["Options"]["extra_boo_spots"] == 1):
                 furniture_info.info_file_field_entries[item_data["loc_enum"]]["telesa_hide"] = 10
+
+        # If our furniture location is remote only, do not add any values to the table and make sure it remains blank
+        if FURNITURE_LOCATION_TABLE[item_name].remote_only:
+            furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = 0
+            furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = 0
+            furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = 0
+            continue
 
         actor_item_name = __get_item_name(item_data, int(output_data["Slot"]))
 
