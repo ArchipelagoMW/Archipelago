@@ -576,13 +576,15 @@ class LMContext(CommonContext):
             return
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
-        #vac_count = len(list(netItem.item for netItem in self.items_received if netItem.item == 8064))
-        #if vac_count >= 2:
-        #    vac_speed = "3800000F"
-        #    lm_item_name = self.item_names.lookup_in_game(8064)
-        #    lm_item = ALL_ITEMS_TABLE[lm_item_name]
-        #    for addr_to_update in lm_item.update_ram_addr:
-        #        dme.write_bytes(addr_to_update.ram_addr, bytes.fromhex(vac_speed))
+        vac_count = len(list(netItem.item for netItem in self.items_received if netItem.item == 8064))
+        vac_speed = min(vac_count - 1, 5)
+        lm_item_name = self.item_names.lookup_in_game(8064)
+        lm_item = ALL_ITEMS_TABLE[lm_item_name]
+        for addr_to_update in lm_item.update_ram_addr:
+            if addr_to_update.ram_addr == 0x804dda54 and vac_count > 0:  # If we're checking against our vacuum-on address
+                dme.write_bytes(addr_to_update.ram_addr, 1)
+            else:
+                dme.write_bytes(addr_to_update.ram_addr, vac_speed)
 
         # Always adjust Pickup animation issues if the user turned pick up animations off.
         if not self.pickup_anim_on:
