@@ -364,7 +364,7 @@ def update_teiden_observer_info(observer_info, teiden_observer_info, update_spee
 
 def update_observer_info(observer_info):
     for x in observer_info.info_file_field_entries:
-        # Allows the Foyer Toad to spawn by default.
+        # Allows the Toads to spawn by default.
         if x["name"] == "kinopio":
             x["cond_arg0"] = 0
             x["appear_flag"] = 0
