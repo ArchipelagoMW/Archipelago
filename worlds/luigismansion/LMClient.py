@@ -569,13 +569,13 @@ class LMContext(CommonContext):
             return
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
-        vac_count = len(list(netItem.item for netItem in self.items_received if netItem.item == 8064))
-        if vac_count >= 2:
-            vac_speed = "3800000F"
-            lm_item_name = self.item_names.lookup_in_game(8064)
-            lm_item = ALL_ITEMS_TABLE[lm_item_name]
-            for addr_to_update in lm_item.update_ram_addr:
-                dme.write_bytes(addr_to_update.ram_addr, bytes.fromhex(vac_speed))
+        #vac_count = len(list(netItem.item for netItem in self.items_received if netItem.item == 8064))
+        #if vac_count >= 2:
+        #    vac_speed = "3800000F"
+        #    lm_item_name = self.item_names.lookup_in_game(8064)
+        #    lm_item = ALL_ITEMS_TABLE[lm_item_name]
+        #    for addr_to_update in lm_item.update_ram_addr:
+        #        dme.write_bytes(addr_to_update.ram_addr, bytes.fromhex(vac_speed))
 
         # Always adjust Pickup animation issues if the user turned pick up animations off.
         if not self.pickup_anim_on:
@@ -762,11 +762,6 @@ async def give_player_items(ctx: LMContext):
                     flower_count: int = len([netItem for netItem in ctx.items_received if netItem.item == 8140])
                     curr_val = min(flower_count + 234, 237)
                     ram_offset = None
-                elif item.item == 8064:
-                    curr_val = int.from_bytes(dme.read_bytes(0x803D339B, byte_size))
-                    curr_val = (curr_val | (1 << 6))
-                    await write_bytes_and_validate(0x803D339B, ram_offset,
-                                                   curr_val.to_bytes(byte_size, 'big'))
                 elif not addr_to_update.item_count is None:
                     if not ram_offset is None:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
