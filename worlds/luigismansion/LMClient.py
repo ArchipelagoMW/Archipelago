@@ -263,7 +263,7 @@ class LMContext(CommonContext):
                                 "Please verify that you are using the right ISO/seed/APLM file.")
 
             self.boosanity = bool(args["slot_data"]["boosanity"])
-            self.pickup_anim_on = True if int(args["slot_data"]["pickup animation"]) == 1 else False
+            self.pickup_anim_on = bool(args["slot_data"]["pickup animation"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
             #self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
             self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
