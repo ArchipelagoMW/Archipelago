@@ -110,7 +110,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Sealed Room Upper C Big Chest": LMLocationData("Sealed Room", 36, "Furniture", 527, [], remote_only=True,
                                                      update_ram_addr=[LMRamData(in_game_room_id=37)], require_poltergust=False),
     "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 869, "Furniture", 531, [],
-        update_ram_addr=[LMRamData(in_game_room_id=37)]), #TODO test that this is the right entry
+        update_ram_addr=[LMRamData(in_game_room_id=37)]),
     "Armory 4th Gray Chest": LMLocationData("Armory", 38, "Furniture", 651, [], remote_only=True,
                                                      update_ram_addr=[LMRamData(in_game_room_id=51)], require_poltergust=False),
     "Armory 5th Gray Chest": LMLocationData("Armory", 40, "Furniture", 653, [], remote_only=True,
