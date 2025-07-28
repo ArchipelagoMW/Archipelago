@@ -22,15 +22,12 @@ try:
 except ImportError:
     from CommonClient import ClientCommandProcessor, CommonContext
 
-CONNECTION_REFUSED_GAME_STATUS = (
-    "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
-)
-CONNECTION_REFUSED_SAVE_STATUS = (
-    "Dolphin failed to connect. Please load into the save file. Trying again in 5 seconds..."
-)
+CONNECTION_REFUSED_STATUS = "Detected a non-randomized ROM for LM. Please close and load a different one. Retrying in 5 seconds..."
 CONNECTION_LOST_STATUS = "Dolphin connection was lost. Please restart your emulator and make sure LM is running."
-CONNECTION_CONNECTED_STATUS = "Dolphin connected successfully."
-CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
+NO_SLOT_NAME_STATUS = "No slot name was detected. Ensure a randomized ROM is loaded. Retrying in 5 seconds..."
+CONNECTION_VERIFY_SERVER = "Dolphin was confirmed to be opened and ready, Connect to the server when ready..."
+CONNECTION_INITIAL_STATUS = "Dolphin emulator was not detected to be running. Retrying in 5 seconds..."
+CONNECTION_CONNECTED_STATUS = "Dolpin is connected, AP is connected, Ready to play LM!"
 
 # This is the address that holds the player's slot name.
 # This way, the player does not have to manually authenticate their slot name.
@@ -168,7 +165,6 @@ class LMContext(CommonContext):
         # Handle various Dolphin connection related tasks
         self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
         self.dolphin_status = CONNECTION_INITIAL_STATUS
-        self.awaiting_rom = False
 
         self.wallet = Wallet()
 
@@ -185,6 +181,7 @@ class LMContext(CommonContext):
 
         # Used for handling received items to the client.
         self.already_mentioned_rank_diff = False
+        self.rank_req = None
         self.game_clear = False
         self.last_not_ingame = time.time()
         self.boosanity = False
@@ -231,13 +228,12 @@ class LMContext(CommonContext):
         if password_requested and not self.password:
             await super(LMContext, self).server_auth(password_requested)
         if not self.auth:
-            if self.awaiting_rom:
-                return
-            self.awaiting_rom = True
-            if dme.is_hooked():
-                logger.info("A game is playing in dolphin, waiting to verify additional details...")
             return
         await self.send_connect()
+
+        if self.slot:
+            logger.info(CONNECTION_CONNECTED_STATUS)
+            self.dolphin_status = CONNECTION_CONNECTED_STATUS
 
     def on_package(self, cmd: str, args: dict):
         """
@@ -330,9 +326,6 @@ class LMContext(CommonContext):
         return ui
     
     async def get_wallet_value(self):
-        if not self.check_ingame():
-            return
-    
         # KivyMD support, also keeps support with regular Kivy (hopefully)
         try:
             from kvui import MDLabel as Label
@@ -343,12 +336,12 @@ class LMContext(CommonContext):
             self.wallet_ui = Label(text="", size_hint_x=None, width=120, halign="center")
             self.ui.connect_layout.add_widget(self.wallet_ui)
 
-        self.wallet_ui.text = f"Wallet:{self.wallet.get_wallet_worth()}/{self.wallet.get_rank_requirement()}"
+        if not self.check_ingame():
+            self.wallet_ui.text = f"Wallet:{0}/{self.rank_req}"
+        else:
+            self.wallet_ui.text = f"Wallet:{self.wallet.get_wallet_worth()}/{self.wallet.get_rank_requirement()}"
 
     async def update_boo_count_label(self):
-        if not self.check_ingame():
-            return
-
         # KivyMD support, also keeps support with regular Kivy (hopefully)
         try:
             from kvui import MDLabel as Label
@@ -529,6 +522,8 @@ class LMContext(CommonContext):
 
         # There will be different checks on different maps.
         current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
+        if current_map_id == 2:
+            current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
 
         for mis_loc in self.missing_locations:
             local_loc = self.location_names.lookup_in_game(mis_loc)
@@ -540,7 +535,6 @@ class LMContext(CommonContext):
                 # If in main mansion map
                 # TODO this will now calculate every iteration, which will slow down location checks are more are added.
                 if current_map_id == 2:
-                    current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
                     room_to_check = addr_to_update.in_game_room_id if not addr_to_update.in_game_room_id is None \
                         else current_room_id
                     if not room_to_check == current_room_id:
@@ -629,80 +623,81 @@ async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
 
     while not ctx.exit_event.is_set():
-        try: # If DME is connected to the client
-            if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
-                # If we are connected to the server already, launch primary async functions
-                if ctx.slot:
-                    # Update boo count in LMClient
-                    if ctx.ui:
-                        await ctx.update_boo_count_label()
-                        await ctx.get_wallet_value()
-                    if "DeathLink" in ctx.tags:
-                        await ctx.check_death()
-                    if "TrapLink" in ctx.tags:
-                        await ctx.handle_traplink()
-                    await ctx.lm_check_locations()
-                    await ctx.lm_update_non_savable_ram()
-                else:
-                    # If we are not connected to server, check for player name in RAM address
-                    if not ctx.auth:
-                        ctx.auth = read_string(SLOT_NAME_ADDR, SLOT_NAME_STR_LENGTH)
-
-                        # If no player name is found, disconnect DME and inform player
-                        if not ctx.auth:
-                            ctx.auth = None
-                            ctx.awaiting_rom = False
-                            logger.info("No slot name was detected. Ensure a randomized ROM is loaded, " +
-                                        "retrying in 5 seconds...")
-                            ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
-                            dme.un_hook()
-                            await asyncio.sleep(5)
-                            continue
-                    # Connect to server if we have player name
-                    if ctx.awaiting_rom and ctx.auth:
-                        await ctx.server_auth()
-                await asyncio.sleep(0.1)
-            else:
-                # If we were connected but no longer are, inform player and retry
-                if ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
-                    logger.info("Connection to Dolphin lost, reconnecting...")
-                    ctx.dolphin_status = CONNECTION_LOST_STATUS
-
-                logger.info("Attempting to connect to Dolphin...")
+        try:
+            # If DME is not already hooked or connected in any way
+            if not dme.is_hooked():
                 dme.hook()
-                if not dme.is_hooked():
-                    logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
-                    ctx.dolphin_status = CONNECTION_LOST_STATUS
-                    await ctx.disconnect()
-                    await asyncio.sleep(5)
-                    continue
-
-                # If the Game ID is a standard one, the randomized ISO has not been loaded - so disconnect
-                if ((read_string(0x80000000, 6) == "GLME01" or
-                        read_string(0x80000000, 6) == "GLMJ01") or
-                        read_string(0x80000000, 6) == "GLMP01"):
-                    logger.info(CONNECTION_REFUSED_GAME_STATUS)
-                    ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
+                if dme.get_status() == dme.get_status().noEmu or dme.get_status() == dme.get_status().notRunning:
                     dme.un_hook()
-                    await asyncio.sleep(5)
+                    ctx.dolphin_status = CONNECTION_INITIAL_STATUS
+                    logger.info(ctx.dolphin_status)
+                    await wait_for_next_loop(5)
                     continue
 
-                logger.info(CONNECTION_CONNECTED_STATUS)
-                ctx.dolphin_status = CONNECTION_CONNECTED_STATUS
+            if not ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
+                # If the Game ID is a standard one, the randomized ISO has not been loaded - so disconnect
+                game_id = read_string(0x80000000, 6)
+                if game_id in ["GLME01", "GLMJ01","GLMP01"]:
+                    logger.info(CONNECTION_REFUSED_STATUS)
+                    ctx.dolphin_status = CONNECTION_REFUSED_STATUS
+                    dme.un_hook()
+                    await wait_for_next_loop(5)
+                    continue
+
+                # If we are not connected to server, check for player name in RAM address
+                if not ctx.auth:
+                    ctx.auth = read_string(SLOT_NAME_ADDR, SLOT_NAME_STR_LENGTH)
+
+                    # If no player name is found, disconnect DME and inform player
+                    if not ctx.auth:
+                        ctx.auth = None
+                        ctx.dolphin_status = NO_SLOT_NAME_STATUS
+                        logger.info(ctx.dolphin_status)
+                        dme.un_hook()
+                        await wait_for_next_loop(5)
+                        continue
+
+                # Reset the locations_checked while we wait
                 ctx.locations_checked = set()
+
+                # Inform the player we are ready and waiting for them to connect.
+                if not ctx.dolphin_status == CONNECTION_VERIFY_SERVER:
+                    ctx.dolphin_status = CONNECTION_VERIFY_SERVER
+                    logger.info(ctx.dolphin_status)
+                await ctx.server_auth()
+
+                if not ctx.slot:
+                    await wait_for_next_loop(5)
+                    continue
+
+            # At this point, we are verified as connected. Update boo count in LMClient
+            if ctx.ui:
+                await ctx.update_boo_count_label()
+                await ctx.get_wallet_value()
+
+            # Check any Links that a user is subscribed to.
+            if "DeathLink" in ctx.tags:
+                await ctx.check_death()
+            if "TrapLink" in ctx.tags:
+                await ctx.handle_traplink()
+
+            # Lastly check any locations and update the non-saveable ram stuff
+            await ctx.lm_check_locations()
+            await ctx.lm_update_non_savable_ram()
+            await asyncio.sleep(0.1)
         except Exception:
             dme.un_hook()
-            logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
             logger.error(traceback.format_exc())
+            logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
             ctx.dolphin_status = CONNECTION_LOST_STATUS
             await ctx.disconnect()
             await asyncio.sleep(5)
             continue
 
-async def give_player_items(ctx: LMContext):
-    async def wait_for_next_loop(time_to_wait: float):
-        await asyncio.sleep(time_to_wait)
+async def wait_for_next_loop(time_to_wait: float):
+    await asyncio.sleep(time_to_wait)
 
+async def give_player_items(ctx: LMContext):
     while not ctx.exit_event.is_set():
         if not (dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and
             ctx.check_ingame() and ctx.check_alive()):
