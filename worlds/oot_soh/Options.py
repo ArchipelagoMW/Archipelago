@@ -239,7 +239,7 @@ class ShuffleFreestandingItems(Choice):
 
 class ShuffleShops(Toggle):
     """
-    Shuffle the 4 left items in every shop. Randomized items are free. The other 4 shop items stay vanilla.
+    Shuffle the 4 left items in every shop. Randomized items cost 10 rupees. The other 4 shop items stay vanilla.
     """
     display_name = "Shuffle Shops"
 
@@ -256,7 +256,7 @@ class ShuffleFish(Choice):
 
 class ShuffleScrubs(Toggle):
     """
-    Shuffles all Deku Scrub merchants in the game. Randomized items are free.
+    Shuffles all Deku Scrub merchants in the game. Randomized items cost 10 rupees.
     """
     display_name = "Shuffle Scrubs"
 
@@ -294,11 +294,16 @@ class ShuffleCrates(Choice):
     option_all = 3
     default = 0
 
-class ShuffleMerchants(Toggle):
+class ShuffleMerchants(Choice):
     """
-    Randomize what the bean merchant, Granny's shop, Medigoron and the Wasteland Carpet Merchant sell.
+    
     """
     display_name = "Shuffle Merchants"
+    option_off = 0
+    option_bean_merchant_only = 1
+    option_all_but_beans = 2
+    option_all = 3
+    default = 0
 
 class ShuffleFrogSongRupees(Toggle):
     """
@@ -354,9 +359,9 @@ class MapsAndCompasses(Choice):
     
     """
     display_name = "Maps and Compasses"
-    option_shuffle = 0
-    option_start_with = 1
-    default = 1
+    option_start_with = 0
+    option_shuffle = 1
+    default = 0
 
 class GanonsCastleBossKey(Choice):
     """
@@ -439,30 +444,35 @@ class SkipChildZelda(Toggle):
     
     """
     display_name = "Skip Child Zelda"
+    default = 1
 
 class SkipEponaRace(Toggle):
     """
     
     """
     display_name = "Skip Epona Zelda"
+    default = 1
 
 class CompleteMaskQuest(Toggle):
     """
     
     """
     display_name = "Complete Mask Quest"
+    default = 1
 
 class SkipScarecrowsSong(Toggle):
     """
     
     """
     display_name = "Skip Scarecrow's Song"
+    default = 1
 
 class FullWallets(Toggle):
     """
     
     """
     display_name = "Full Wallets"
+    default = 1
 
 class BombchuBag(Toggle):
     """
@@ -475,18 +485,21 @@ class BombchuDrops(Toggle):
     
     """
     display_name = "Bombchu Drops"
+    default = 1
 
 class BlueFireArrows(Toggle):
     """
     
     """
     display_name = "Blue Fire Arrows"
+    default = 1
 
 class SunlightArrows(Toggle):
     """
     
     """
     display_name = "Sunlight Arrows"
+    default = 1
 
 class InfiniteUpgrades(Choice):
     """
@@ -519,12 +532,12 @@ class SohOptions(PerGameCommonOptions):
     rainbow_bridge_medallions_required: RainbowBridgeMedallionsRequired
     rainbow_bridge_dungeon_rewards_required: RainbowBridgeDungeonRewardsRequired
     rainbow_bridge_dungeons_required: RainbowBridgeDungeonsRequired
-    rainbow_bridge_skulltokens_required: RainbowBridgeSkullTokensRequired
+    rainbow_bridge_skull_tokens_required: RainbowBridgeSkullTokensRequired
     ganons_trials_required: GanonsTrialsRequired
     triforce_hunt: TriforceHunt
     triforce_hunt_required_pieces: TriforceHuntRequiredPieces
     triforce_hunt_extra_pieces_percentage: TriforceHuntExtraPiecesPercentage
-    shuffle_tokens: ShuffleTokens
+    shuffle_skull_tokens: ShuffleTokens
     shuffle_master_sword: ShuffleMasterSword
     shuffle_childs_wallet: ShuffleChildsWallet
     shuffle_ocarina_buttons: ShuffleOcarinaButtons

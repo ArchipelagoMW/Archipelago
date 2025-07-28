@@ -79,9 +79,6 @@ base_location_table: Dict[str, SohLocationData] = {
     #"Market Chest Game Fifth Room Key": SohLocationData(region="Hyrule", address=87, ),
     "Market ToT Light Arrow Cutscene": SohLocationData(region="Hyrule", address=113, ),
     "Market ToT Master Sword": SohLocationData(region="Hyrule", address=114, ),
-    # Need to add the following 2 as locations conditionally when adding Skip Child Zelda as option and not forced on
-    #"HC Malon Egg": SohLocationData(region="Hyrule", address=115, ),
-    #"HC Zeldas Letter": SohLocationData(region="Hyrule", address=116, ),
     "HC Great Fairy Reward": SohLocationData(region="Hyrule", address=117, ),
     "LLR Talons Chickens": SohLocationData(region="Hyrule", address=120, ),
     "LLR Freestanding PoH": SohLocationData(region="Hyrule", address=121, ),
@@ -145,11 +142,6 @@ base_location_table: Dict[str, SohLocationData] = {
     "GF Chest": SohLocationData(region="Hyrule", address=321, ),
     "GF HBA 1000 Points": SohLocationData(region="Hyrule", address=322, ),
     "GF HBA 1500 Points": SohLocationData(region="Hyrule", address=323, ),
-    "GF Freed All Carpenters": SohLocationData(region="Hyrule", address=324, ),
-    "GF 1 Torch Carpenter": SohLocationData(region="Hyrule", address=325, ),
-    "GF Dead End Carpenter": SohLocationData(region="Hyrule", address=326, ),
-    "GF Double Cell Carpenter": SohLocationData(region="Hyrule", address=327, ),
-    "GF Steep Slope Carpenter": SohLocationData(region="Hyrule", address=328, ),
     #"Unused 1": SohLocationData(region="Hyrule", address=331, can_create=lambda world: False, ),
     #"Unused 2": SohLocationData(region="Hyrule", address=332, can_create=lambda world: False, ),
     #"Unused 3": SohLocationData(region="Hyrule", address=333, can_create=lambda world: False, ),
@@ -2474,6 +2466,19 @@ fish_overworld_location_table: Dict[str, SohLocationData] = {
     "ZD Fish 5": SohLocationData(region="Hyrule", address=1634, ),
 }
 
+child_zelda_location_table: Dict[str, SohLocationData] = {
+    "HC Malon Egg": SohLocationData(region="Hyrule", address=115, ),
+    "HC Zeldas Letter": SohLocationData(region="Hyrule", address=116, ),
+}
+
+carpenters_location_table: Dict[str, SohLocationData] = {
+    "GF Freed All Carpenters": SohLocationData(region="Hyrule", address=324, ),
+    "GF 1 Torch Carpenter": SohLocationData(region="Hyrule", address=325, ),
+    "GF Dead End Carpenter": SohLocationData(region="Hyrule", address=326, ),
+    "GF Double Cell Carpenter": SohLocationData(region="Hyrule", address=327, ),
+    "GF Steep Slope Carpenter": SohLocationData(region="Hyrule", address=328, ),
+}
+
 location_data_table: Dict[str, SohLocationData] = {
     **base_location_table,
     **gold_skulltula_overworld_location_table,
@@ -2495,7 +2500,9 @@ location_data_table: Dict[str, SohLocationData] = {
     **grass_overworld_location_table,
     **grass_dungeon_location_table,
     **fish_pond_location_table,
-    **fish_overworld_location_table
+    **fish_overworld_location_table,
+    **child_zelda_location_table,
+    **carpenters_location_table
 }
 
 location_table = {name: data.address for name, data in location_data_table.items() if data.address is not None}
