@@ -141,7 +141,7 @@ class CrystalProjectLogic:
         return False
 
     def has_jidamba_keys(self, state: CollectionState) -> bool:
-        if self.has_key(state, FOLIAGE_KEY, 1) and self.has_key(state, CAVE_KEY, 1) and self.has_key(state, CANOPY_KEY,1):
+        if state.has(SKELETON_KEY, self.player) or (self.has_key(state, FOLIAGE_KEY, 1) and self.has_key(state, CAVE_KEY, 1) and self.has_key(state, CANOPY_KEY,1)):
             return True
         else:
             return False
