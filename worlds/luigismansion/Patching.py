@@ -246,6 +246,15 @@ def update_event_info(event_info, boo_checks: bool, output_data):
         if x["EventNo"] == 10:
             x["EventFlag"] = 0
 
+        # Update Foyer Toad Event (event17) to move to the spawn region.
+        if x["EventNo"] == 17:
+            spawn_region_name = output_data["Options"]["spawn"]
+            if not spawn_region_name == "Foyer":
+                spawn_data = spawn_locations[spawn_region_name]
+                x["pos_y"] = spawn_data["pos_y"]
+                x["pos_z"] = int(spawn_data["pos_z"]) - 150
+                x["pos_x"] = int(spawn_data["pos_x"]) - 150 + 2
+
 
 def update_character_info(character_info, output_data):
     # Removes useless cutscene objects and the vacuum in the Parlor under the closet.
@@ -362,10 +371,17 @@ def update_teiden_observer_info(observer_info, teiden_observer_info, update_spee
     })
 
 
-def update_observer_info(observer_info):
+def update_observer_info(observer_info, output_data):
     for x in observer_info.info_file_field_entries:
         # Allows the Toads to spawn by default.
         if x["name"] == "kinopio":
+            if x["code_name"] == "dm_kinopio1":
+                spawn_region_name = output_data["Options"]["spawn"]
+                if not spawn_region_name == "Foyer":
+                    spawn_data = spawn_locations[spawn_region_name]
+                    x["pos_y"] = spawn_data["pos_y"]
+                    x["pos_z"] = int(spawn_data["pos_z"]) - 150
+                    x["pos_x"] = int(spawn_data["pos_x"]) - 150
             x["cond_arg0"] = 0
             x["appear_flag"] = 0
             x["cond_type"] = 13
