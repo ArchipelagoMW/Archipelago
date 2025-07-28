@@ -757,7 +757,13 @@ async def give_player_items(ctx: LMContext):
                     ram_offset = [addr_to_update.pointer_offset]
 
                 if item.item in trap_id_list:
-                    curr_val = addr_to_update.item_count
+                    # If we have no vacuum, do not trigger a No Vac trap
+                    if item.item == 8147 and len([netItem for netItem in ctx.items_received if netItem.item == 8064]) < 1:
+                        last_recv_idx += 1
+                        dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+                        continue
+                    else:
+                        curr_val = addr_to_update.item_count
                 elif item.item == 8140:  # Progressive Flower, 00EB, 00EC, 00ED
                     flower_count: int = len([netItem for netItem in ctx.items_received if netItem.item == 8140])
                     curr_val = min(flower_count + 234, 237)
