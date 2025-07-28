@@ -247,7 +247,7 @@ ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 # Adds Toads as locations
 TOAD_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Foyer Toad": LMLocationData("Foyer", 617, "Toad", -1, [], remote_only=True,
+    "Starting Room Toad": LMLocationData("Foyer", 617, "Toad", -1, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803D33A6, bit_position=5, in_game_room_id=2)], require_poltergust=False),
     "Wardrobe Balcony Toad": LMLocationData("Wardrobe Balcony", 618, "Toad", -1, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803D33A6, bit_position=5, in_game_room_id=40)], require_poltergust=False),
