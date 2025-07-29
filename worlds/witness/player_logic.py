@@ -22,6 +22,7 @@ from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 from .data import static_logic as static_witness_logic
 from .data.definition_classes import ConnectionDefinition, WitnessRule
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
+from .data.settings.progressive_items import PROGRESSIVE_SYMBOLS
 from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import (
     get_boat,
@@ -74,12 +75,12 @@ class WitnessPlayerLogic:
         self.UNREACHABLE_REGIONS: Set[str] = set()
 
         self.THEORETICAL_BASE_ITEMS: Set[str] = set()
-        self.THEORETICAL_ITEMS: Set[str] = set()
-        self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
+        self.THEORETICAL_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
+        self.ENABLED_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
+        self.FINALIZED_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
+        self.PARENT_ITEM_COUNT_PER_BASE_ITEM: Dict[str, int] = {}
+        self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()  # No "progressive" conversion yet
         self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
-
-        self.PARENT_ITEM_COUNT_PER_BASE_ITEM: Dict[str, int] = defaultdict(lambda: 1)
-        self.PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
         self.FORBIDDEN_DOORS: Set[str] = set()
 
@@ -303,15 +304,13 @@ class WitnessPlayerLogic:
             line_split = line.split(" - ")
             item_name = line_split[0]
 
+            # Do not add progressive items, delete the individual items
+            assert not isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition)
+
             if item_name not in static_witness_items.ITEM_DATA:
                 raise RuntimeError(f'Item "{item_name}" does not exist.')
 
-            self.THEORETICAL_ITEMS.add(item_name)
-            if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
-                self.THEORETICAL_BASE_ITEMS.update(cast(ProgressiveItemDefinition,
-                                                        static_witness_logic.ALL_ITEMS[item_name]).child_item_names)
-            else:
-                self.THEORETICAL_BASE_ITEMS.add(item_name)
+            self.THEORETICAL_BASE_ITEMS.add(item_name)
 
             if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
                 entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
@@ -323,13 +322,10 @@ class WitnessPlayerLogic:
         if adj_type == "Remove Items":
             item_name = line
 
-            self.THEORETICAL_ITEMS.discard(item_name)
-            if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
-                self.THEORETICAL_BASE_ITEMS.difference_update(
-                    cast(ProgressiveItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).child_item_names
-                )
-            else:
-                self.THEORETICAL_BASE_ITEMS.discard(item_name)
+            self.THEORETICAL_BASE_ITEMS.discard(item_name)
+
+            # Do not delete progressive items, delete the individual items
+            assert not isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition)
 
             if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
                 entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
@@ -537,6 +533,52 @@ class WitnessPlayerLogic:
 
         return postgame_adjustments
 
+    def add_implicit_dependencies_to_requirements(self, dependencies: Dict[str, str]) -> None:
+        if not dependencies:
+            return
+
+        for entity, requirement in self.DEPENDENT_REQUIREMENTS_BY_HEX.items():
+            if "items" not in requirement:
+                continue
+
+            new_requirement_options = set()
+            for requirement_option in requirement["items"]:
+                changed_requirement_option = set(requirement_option)
+                for item1, item2 in dependencies.items():
+                    if item1 in requirement_option:
+                        changed_requirement_option.add(item2)
+                new_requirement_options.add(frozenset(changed_requirement_option))
+            self.DEPENDENT_REQUIREMENTS_BY_HEX[entity]["items"] = frozenset(new_requirement_options)
+
+    def adjust_requirements_for_second_stage_symbols(self, world: "WitnessWorld") -> None:
+        """
+        When playing with non-progressive symbols,
+        there are some second-stage symbols that can't be used without the first-stage symbol.
+        However, there is a player option that makes these second stage symbols independent.
+
+        If they are independent, we rename "Dots" to "Sparse Dots" and "Stars" to "Simple Stars"
+        to drive home the separation of the respective items.
+
+        If they are not independent, we need to add the "Dots" requirement to every "Full Dots" panel,
+        as well as the "Stars" requirement to every "Stars + Same Colored Symbol" panel.
+
+        Also, if Progressive Symmetry is off and independent symbols are off, a Symmetry requirement is added to the
+        Symmetry Laser sets.
+        """
+
+        implicit_dependencies = {}
+
+        if "Full Dots" not in world.options.second_stage_symbols_act_independently:
+            implicit_dependencies["Full Dots"] = "Dots"
+
+        if "Stars + Same Colored Symbol" not in world.options.second_stage_symbols_act_independently:
+            implicit_dependencies["Stars + Same Colored Symbol"] = "Stars"
+
+        if "Colored Dots" not in world.options.second_stage_symbols_act_independently:
+            implicit_dependencies["Colored Dots"] = "Symmetry"
+
+        self.add_implicit_dependencies_to_requirements(implicit_dependencies)
+
     def set_easter_egg_requirements(self, world: "WitnessWorld") -> None:
         eggs_per_check, logically_required_eggs_per_check = world.options.easter_egg_hunt.get_step_and_logical_step()
 
@@ -648,6 +690,28 @@ class WitnessPlayerLogic:
 
         if world.options.shuffle_symbols:
             adjustment_linesets_in_order.append(get_symbol_shuffle_list())
+
+        self.THEORETICAL_PROGRESSIVE_LISTS = copy.deepcopy(PROGRESSIVE_SYMBOLS)
+
+        self.adjust_requirements_for_second_stage_symbols(world)
+
+        if world.options.colored_dots_are_progressive_dots:
+            # Insert after Dots
+            dots_index = self.THEORETICAL_PROGRESSIVE_LISTS["Progressive Dots"].index("Dots")
+            self.THEORETICAL_PROGRESSIVE_LISTS["Progressive Dots"].insert(dots_index + 1, "Colored Dots")
+
+            # Remove from Progressive Symmetry
+            self.THEORETICAL_PROGRESSIVE_LISTS["Progressive Symmetry"].remove("Colored Dots")
+
+        if world.options.sound_dots_are_progressive_dots:
+            # Insert before Full Dots
+            full_dots_index = self.THEORETICAL_PROGRESSIVE_LISTS["Progressive Dots"].index("Full Dots")
+            self.THEORETICAL_PROGRESSIVE_LISTS["Progressive Dots"].insert(full_dots_index, "Sound Dots")
+
+        self.ENABLED_PROGRESSIVE_LISTS = {
+            progressive_item: item_list for progressive_item, item_list in self.THEORETICAL_PROGRESSIVE_LISTS.items()
+            if progressive_item in world.options.progressive_symbols
+        }
 
         if world.options.EP_difficulty == "normal":
             adjustment_linesets_in_order.append(get_ep_easy())
@@ -962,18 +1026,32 @@ class WitnessPlayerLogic:
         """
         Finalise which items are used in the world, and handle their progressive versions.
         """
-        for item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME:
-            if item not in self.THEORETICAL_ITEMS:
-                progressive_item_name = static_witness_logic.get_parent_progressive_item(item)
-                self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
-                child_items = cast(ProgressiveItemDefinition,
-                                   static_witness_logic.ALL_ITEMS[progressive_item_name]).child_item_names
-                progressive_list = [child_item for child_item in child_items
-                              if child_item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME]
-                self.PARENT_ITEM_COUNT_PER_BASE_ITEM[item] = progressive_list.index(item) + 1
-                self.PROGRESSIVE_LISTS[progressive_item_name] = progressive_list
-            else:
-                self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
+
+        self.FINALIZED_PROGRESSIVE_LISTS = self.ENABLED_PROGRESSIVE_LISTS.copy()
+
+        # Filter non existent base items
+        self.FINALIZED_PROGRESSIVE_LISTS = {
+            progressive_item: [
+                item for item in base_items if item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME
+            ]
+            for progressive_item, base_items in self.FINALIZED_PROGRESSIVE_LISTS.items()
+        }
+
+        # Filter empty chains / chains with only one item (no point in having those)
+        self.FINALIZED_PROGRESSIVE_LISTS = {
+            progressive_item: base_items
+            for progressive_item, base_items in self.FINALIZED_PROGRESSIVE_LISTS.items()
+            if len(base_items) >= 2  # No point in a single-item progressive chain
+        }
+
+        # Build PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME with the finalized progressive item replacements in mind
+        self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME = self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.copy()
+        for progressive_item, base_items in self.FINALIZED_PROGRESSIVE_LISTS.items():
+            self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item)
+            self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME -= set(base_items)
+
+            for i, base_item in enumerate(base_items):
+                self.PARENT_ITEM_COUNT_PER_BASE_ITEM[base_item] = i + 1
 
     def solvability_guaranteed(self, entity_hex: str) -> bool:
         return not (
