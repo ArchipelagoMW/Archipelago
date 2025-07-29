@@ -13,7 +13,7 @@ from .Rules import set_rules
 from .Presets import kh1_option_presets
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component, icon_paths
 from .GenerateJSON import generate_json
-from .Data import VANILLA_KEYBLADE_STATS, VANILLA_PUPPY_LOCATIONS, CHAR_TO_KH, VANILLA_ABILITY_AP_COSTS
+from .Data import VANILLA_KEYBLADE_STATS, VANILLA_PUPPY_LOCATIONS, CHAR_TO_KH, VANILLA_ABILITY_AP_COSTS, WORLD_KEY_ITEMS
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
 def launch_client():
@@ -154,7 +154,11 @@ class KH1World(World):
                 continue
             if name in starting_worlds or name in starting_tools or name in starting_party_member_accessories:
                 continue
-            if name == "Puppy":
+            if self.options.stacking_world_items and name in WORLD_KEY_ITEMS.keys() and name not in ("Crystal Trident", "Jack-In-The-Box"): # Handling these special cases separately
+                item_pool += [self.create_item(WORLD_KEY_ITEMS[name]) for _ in range(0, 1)]
+            elif self.options.halloween_town_key_item_bundle and name == "Jack-In-The-Box":
+                continue
+            elif name == "Puppy":
                 item_pool += [self.create_item(name) for _ in range(ceil(99/self.options.puppy_value.value))]
             elif name == "Atlantica":
                 if self.options.atlantica:
@@ -166,7 +170,10 @@ class KH1World(World):
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
             elif name == "Crystal Trident":
                 if self.options.atlantica:
-                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
+                    if self.options.stacking_world_items:
+                        item_pool += [self.create_item(WORLD_KEY_ITEMS[name]) for _ in range(0, 1)]
+                    else:
+                        item_pool += [self.create_item(name) for _ in range(0, quantity)]
             elif name == "High Jump":
                 if self.options.extra_shared_abilities:
                     item_pool += [self.create_item(name) for _ in range(0, 3)]
@@ -284,6 +291,7 @@ class KH1World(World):
                     "force_stats_on_levels": int(self.options.force_stats_on_levels.value),
                     "four_by_three": bool(self.options.four_by_three),
                     "goofy_death_link": bool(self.options.goofy_death_link),
+                    "halloween_town_key_item_bundle": bool(self.options.halloween_town_key_item_bundle),
                     "homecoming_materials": int(self.options.homecoming_materials.value),
                     "hundred_acre_wood": bool(self.options.hundred_acre_wood),
                     "interact_in_battle": bool(self.options.interact_in_battle),
@@ -314,6 +322,7 @@ class KH1World(World):
                     "seed": self.multiworld.seed_name,
                     "shorten_go_mode": bool(self.options.shorten_go_mode),
                     "slot_2_level_checks": int(self.options.slot_2_level_checks.value),
+                    "stacking_world_items": bool(self.options.stacking_world_items),
                     "starting_items": [item.code for item in self.multiworld.precollected_items[self.player]],
                     "starting_tools": bool(self.options.starting_tools),
                     "super_bosses": bool(self.options.super_bosses),
@@ -367,6 +376,10 @@ class KH1World(World):
             if initial_materials_settings[i] != new_materials_settings[i]:
                 logging.info(f"{self.player_name}'s value {initial_materials_settings[i]} for \"{value_names[i]}\" was invalid\n"
                              f"Setting \"{value_names[i]}\" value to {new_materials_settings[i]}")
+        
+        if self.options.stacking_world_items.value and not self.options.halloween_town_key_item_bundle.value:
+            logging.info(f"{self.player_name}'s value {self.options.halloween_town_key_item_bundle.value} for Halloween Town Key Item Bundle must be TRUE when Stacking World Items is on.  Setting to TRUE")
+            self.options.halloween_town_key_item_bundle.value = True
     
     def change_numbers_of_lucky_emblems_to_consider(self) -> None:
         if self.options.end_of_the_world_unlock == "lucky_emblems" and self.options.final_rest_door_key == "lucky_emblems":

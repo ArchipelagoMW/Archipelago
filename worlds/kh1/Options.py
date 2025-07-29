@@ -507,7 +507,7 @@ class Slot2LevelChecks(Range):
     If Remote Items is OFF, these checks will only contain abilities.
     """
     display_name = "Slot 2 Level Checks"
-    default = 10
+    default = 0
     range_start = 0
     range_end = 33
 
@@ -713,6 +713,26 @@ class MaterialsInPool(Range):
     range_start = 0
     range_end = 20
 
+class StackingWorldItems(DefaultOnToggle):
+    """
+    Multiple world items give you the world's associated key item.
+    WL - Footprints
+    OC - Entry Pass
+    DJ - Slides
+    HT - Forget-Me-Not and Jack-In-The-Box
+    HB - Theon Vol. 6
+    Adds an extra world to the pool for each that has a key item (WL, OC, DJ, HT, HB).
+    Forces stacking Forget-Me-Not ON.
+    """
+    display_name = "Stacking World Items"
+
+class HalloweenTownKeyItemBundle(DefaultOnToggle):
+    """
+    Obtaining the Forget-Me-Not automatically gives Jack-in-the-Box as well.
+    Removes Jack-in-the-Box from the pool.
+    """
+    display_name = "Halloween Town Key Item Bundle"
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     final_rest_door_key: FinalRestDoorKey
@@ -792,6 +812,9 @@ class KH1Options(PerGameCommonOptions):
     day_2_materials: Day2Materials
     homecoming_materials: HomecomingMaterials
     materials_in_pool: MaterialsInPool
+    stacking_world_items: StackingWorldItems
+    halloween_town_key_item_bundle: HalloweenTownKeyItemBundle
+    
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -864,6 +887,8 @@ kh1_option_groups = [
         InteractInBattle,
         LogicDifficulty,
         ExtraSharedAbilities,
+        StackingWorldItems,
+        HalloweenTownKeyItemBundle,
         EXPZeroInPool,
         RandomizePartyMemberStartingAccessories,
         DeathLink,

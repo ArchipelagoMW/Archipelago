@@ -185,3 +185,13 @@ VANILLA_ABILITY_AP_COSTS = [
     {"Ability Name": "EXP Zero",        "AP Cost": 0, "Randomize": True},
     {"Ability Name": "Combo Master",    "AP Cost": 3, "Randomize": True}
     ]
+
+WORLD_KEY_ITEMS = {
+    "Footprints": "Wonderland",
+    "Entry Pass": "Olympus Coliseum",
+    "Slides": "Deep Jungle",
+    "Crystal Trident": "Atlantica",
+    "Forget-Me-Not": "Halloween Town",
+    "Jack-In-The-Box": "Halloween Town",
+    "Theon Vol. 6": "Hollow Bastion"
+}
