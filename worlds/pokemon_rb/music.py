@@ -254,6 +254,8 @@ default_music = {
 
 
 def randomize_map_music(world, write_bytes):
+    if world.options.randomize_map_music == "vanilla":
+        return
     music_data = bytearray(0x1ee)
     if world.options.randomize_map_music == "shuffle":
         shuffled_music = list(music_pointers.keys())
