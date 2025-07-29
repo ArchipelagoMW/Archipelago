@@ -423,7 +423,7 @@ class ShuffleDungeonRewards(Choice):
 class MapsAndCompasses(Choice):
     """
     Start with - You will start with Maps & Compasses from all dungeons.
-    Shuffle - Maps & Compasses can appear anywhere in the world.
+    Shuffle - Maps & Compasses can appear anywhere.
     """
     display_name = "Maps and Compasses"
     option_start_with = 0
@@ -433,9 +433,9 @@ class MapsAndCompasses(Choice):
 class GanonsCastleBossKey(Choice):
     """
     Vanilla - Ganon's Boss Key will appear in the vanilla location.
-    Anywhere - Ganon's Boss Key Key can appear anywhere in the world.
+    Anywhere - Ganon's Boss Key Key can appear anywhere.
     LACS - These settings put the boss key on the Light Arrow Cutscene location, from Zelda in Temple of Time as adult, with differing requirements:
-    - Vanilla: Obtain the Shadow Medallion and Spirit Medallion
+    - Vanilla: Obtain the Shadow Medallion and Spirit Medallion.
     - Stones: Obtain the specified amount of Spiritual Stones.
     - Medallions: Obtain the specified amount of medallions.
     - Dungeon rewards: Obtain the specified total sum of Spiritual Stones or medallions.
@@ -599,7 +599,7 @@ class InfiniteUpgrades(Choice):
 
 class SkeletonKey(Toggle):
     """
-    Adds a new item called the Skeleton Key, it unlocks every dungeon door locked by a small key.
+    Adds a new item called the Skeleton Key, it unlocks every door locked by a small key.
     """
     display_name = "Skeleton Key"
 
