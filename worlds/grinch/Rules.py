@@ -386,18 +386,14 @@ rules_dict: dict[str,list[list[str]]] = {
 
 
 access_rules_dict: dict[str,list[list[str]]] = {
-    "Whoville": [
-        []
-    ],
+    "Whoville": None,
     "Post Office": [
         ["Who Cloak"]
     ],
     "City Hall": [
         ["Rotten Egg Launcher"]
     ],
-    "Countdown to X-Mas Clock Tower": [
-        []
-    ],
+    "Countdown to X-Mas Clock Tower": None,
     "Who Forest": [
         ["Who Forest Vacuum Access"],
         # ["Progressive Vacuum Access": 1]
@@ -449,13 +445,29 @@ access_rules_dict: dict[str,list[list[str]]] = {
 }
 
 
+# def interpret_rule(rule_set: list[list[str]], player: int):
+#     old_rule = lambda state: True
+#     if len(rule_set) < 1:
+#         return old_rule
+#     else:
+#         old_rule = lambda state: False
+#     for item_set in rule_set:
+#         logger.info("Rules to access: " + ";".join(item_set))
+#         old_rule = lambda state: state.has_all(item_set, player) or old_rule
+#     return old_rule
+
 def interpret_rule(rule_set: list[list[str]], player: int):
-    old_rule = lambda state: True
-    if len(rule_set) < 1:
-        return old_rule
-    else:
-        old_rule = lambda state: False
-    for item_set in rule_set:
-        logger.info("Rules to access: " + ";".join(item_set))
-        old_rule = lambda state: state.has_all(item_set, player) or old_rule
-    return old_rule
+    if not rule_set or all(not inner_list for inner_list in rule_set):
+        return lambda state: True
+    and_groups: list[set[str]] = []
+    for inner_list in rule_set:
+        and_groups.append(set(inner_list))
+
+    return lambda target_items_raw: (
+        (target_items_set := set(target_items_raw)) and
+        player in target_items_set and
+        any(
+            all(item in target_items_set for item in and_group)
+            for and_group in and_groups
+        )
+    )
