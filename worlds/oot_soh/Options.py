@@ -49,8 +49,12 @@ class ZorasFountain(Choice):
 
 class SleepingWaterfall(Choice):
     """
-    Closed - Sleeping Waterfall obstructs the entrance to Zora's Domain. Zelda's Lullaby must be played in order to open it (but only once; then it stays open in both time periods).
-    Open - Sleeping Waterfall is always open. Link may always enter Zora's Domain.
+    Closed:
+    Sleeping Waterfall obstructs the entrance to Zora's Domain. Zelda's Lullaby must be played in order to open
+    it (but only once; then it stays open in both time periods).
+
+    Open: 
+    Sleeping Waterfall is always open. Link may always enter Zora's Domain.
     """
     display_name = "Sleeping Waterfall"
     option_closed = 0
@@ -168,7 +172,8 @@ class TriforceHunt(Toggle):
     """
     Pieces of the Triforce of Courage have been scattered across the world. Find them all to finish the game! 
     If this option is enabled, Ganon's Boss Key will not be shuffled and Light Arrow Cutscene (LACS) will revert to its vanilla behavior.
-    When the required amount of pieces have been found, the game is saved and Ganon's Boss key is given to you when you load back into the game if you desire to beat Ganon afterwards.
+    When the required amount of pieces have been found, the game is saved and Ganon's Boss key is
+    given to you when you load back into the game if you desire to beat Ganon afterwards.
     """
     display_name = "Triforce Hunt"
 
