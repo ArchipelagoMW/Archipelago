@@ -1,7 +1,8 @@
 from worlds.AutoWorld import World
 # from .Options import GrinchOptions
 from worlds.generic.Rules import add_rule
-
+import logging
+logger = logging.getLogger()
 
 def set_rules(world: World):
     all_locations = world.get_locations()
@@ -455,5 +456,6 @@ def interpret_rule(rule_set: list[list[str]], player: int):
     else:
         old_rule = lambda state: False
     for item_set in rule_set:
+        logger.info("Rules to access: " + ";".join(item_set))
         old_rule = lambda state: state.has_all(item_set, player) or old_rule
     return old_rule

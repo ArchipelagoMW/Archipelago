@@ -6,11 +6,14 @@ from .Options import GrinchOptions
 from BaseClasses import Region
 from .Rules import access_rules_dict, interpret_rule
 
+import logging
+logger = logging.getLogger()
+
 if TYPE_CHECKING:
+
     from . import GrinchWorld
 
 mainareas_list = [
-    "Mount Crumpit",
     "Whoville",
     "Who Forest",
     "Who Dump",
@@ -51,10 +54,11 @@ def create_regions(world: "GrinchWorld"):
         world.multiworld.regions.append(Region(supadow, world.player, world.multiworld))
 
 def grinchconnect(world: "GrinchWorld", current_region_name: str, connected_region_name: str):
-    rule = []
+    logger.info("Current Region Name: "+ current_region_name)
+    logger.info("Connected Region Name: "+ connected_region_name)
     current_region = world.get_region(current_region_name)
     connected_region = world.get_region(connected_region_name)
-    required_items: set[list[str]] = access_rules_dict[connected_region.name]
+    required_items: list[list[str]] = access_rules_dict[connected_region.name]
     rule = interpret_rule(required_items, world.player)
     #Goes from current to connected
     current_region.connect(connected_region, rule = rule)

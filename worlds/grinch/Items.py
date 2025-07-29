@@ -153,10 +153,13 @@ KEYS_TABLE: dict[str, GrinchItemData] = {
 #Misc Items
 MISC_ITEMS_TABLE: dict[str, GrinchItemData] = {
     "Fully Healed Grinch": GrinchItemData("Health Items", 500, IC.filler, [GrinchRamData(0x800E8FDC, value=120)]),
-    "Heart of Stone": GrinchItemData("Health Items", 501, IC.useful, [GrinchRamData(0x800100ED, value=1)]),
     "5 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 502, IC.filler, [GrinchRamData(0x80010058, value=5)]),
     "10 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 503, IC.filler, [GrinchRamData(0x80010058, value=10)]),
     "20 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 504, IC.filler, [GrinchRamData(0x80010058, value=20)])
+}
+
+USEFUL_IC_TABLE: dict[str, GrinchItemData] = {
+    "Heart of Stone": GrinchItemData("Health Items", 501, IC.useful, [GrinchRamData(0x800100ED, value=1)])
 }
 
 #Traps
@@ -176,13 +179,13 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
 }
 
 #Movesets
-MOVES_TABLE: dict[str, GrinchItemData] = {
-    "Bad Breath": GrinchItemData("Movesets", 700, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=1)]),
-    "Pancake": GrinchItemData("Movesets", 701, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=2)]),
-    "Push & Pull": GrinchItemData("Movesets", 702, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=3)]),
-    "Max": GrinchItemData("Movesets", 703, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=4)]),
-    "Tip Toe": GrinchItemData("Movesets", 704, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=5)]),
-}
+# MOVES_TABLE: dict[str, GrinchItemData] = {
+#     "Bad Breath": GrinchItemData("Movesets", 700, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=1)]),
+#     "Pancake": GrinchItemData("Movesets", 701, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=2)]),
+#     "Push & Pull": GrinchItemData("Movesets", 702, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=3)]),
+#     "Max": GrinchItemData("Movesets", 703, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=4)]),
+#     "Tip Toe": GrinchItemData("Movesets", 704, IC.progression, [GrinchRamData(0x800100BB, binary_bit_pos=5)])
+# }
 #Double star combines all dictionaries from each individual list together
 ALL_ITEMS_TABLE: dict[str, GrinchItemData] = {
     **GADGETS_TABLE,
@@ -191,7 +194,8 @@ ALL_ITEMS_TABLE: dict[str, GrinchItemData] = {
     **KEYS_TABLE,
     **MISC_ITEMS_TABLE,
     **TRAPS_TABLE,
-    **MOVES_TABLE
+    **USEFUL_IC_TABLE
+    # **MOVES_TABLE
 }
 
 def grinch_items_to_id() -> dict[str, int]:
