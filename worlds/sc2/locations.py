@@ -7856,9 +7856,8 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 2500,
             LocationType.VICTORY,
             lambda state: (
-                adv_tactics
-                or logic.zerg_moderate_anti_air(state)
-                and (logic.zerg_common_unit(state))
+                logic.zerg_moderate_anti_air(state)
+                and logic.zerg_common_unit(state)
             ),
         ),
         make_location_data(
@@ -7891,7 +7890,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Southwest Reinforcements",
             SC2_RACESWAP_LOC_ID_OFFSET + 2505,
             LocationType.EXTRA,
-            lambda state: adv_tactics or logic.zerg_common_unit(state),
+            lambda state: logic.zerg_common_unit(state),
         ),
         make_location_data(
             SC2Mission.DEVILS_PLAYGROUND_Z.mission_name,
@@ -7899,9 +7898,8 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 2506,
             LocationType.EXTRA,
             lambda state: (
-                adv_tactics
-                or logic.zerg_moderate_anti_air(state)
-                and (logic.zerg_common_unit(state))
+                logic.zerg_moderate_anti_air(state)
+                and logic.zerg_common_unit(state)
             ),
         ),
         make_location_data(
@@ -7911,7 +7909,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             LocationType.EXTRA,
             lambda state: (
                 logic.zerg_moderate_anti_air(state)
-                and (adv_tactics or logic.zerg_common_unit(state))
+                and logic.zerg_common_unit(state)
             ),
         ),
         make_location_data(
@@ -7920,7 +7918,8 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 2508,
             LocationType.CHALLENGE,
             lambda state: (
-                logic.zerg_competent_anti_air(state) and logic.zerg_common_unit(state)
+                logic.zerg_competent_anti_air(state)
+                and logic.zerg_common_unit(state)
             ),
             flags=LocationFlag.BASEBUST,
         ),
