@@ -438,7 +438,7 @@ class MapsAndCompasses(Choice):
 class GanonsCastleBossKey(Choice):
     """
     Vanilla - Ganon's Boss Key will appear in the vanilla location.
-    Anywhere - Ganon's Boss Key Key can appear anywhere.
+    Anywhere - Ganon's Boss Key can appear anywhere.
     LACS - These settings put the boss key on the Light Arrow Cutscene location, from Zelda in Temple of Time as adult, with differing requirements:
     - Vanilla: Obtain the Shadow Medallion and Spirit Medallion.
     - Stones: Obtain the specified amount of Spiritual Stones.
