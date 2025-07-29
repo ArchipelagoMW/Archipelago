@@ -240,6 +240,13 @@ class SohWorld(World):
             items_to_create[Items.TRAINING_GROUND_KEY_RING.value] = 1
             items_to_create[Items.GANONS_CASTLE_KEY_RING.value] = 1
 
+        # Bombchu bag
+        if self.options.bombchu_bag:
+            items_to_create[Items.BOMBCHUS_5.value] = 0
+            items_to_create[Items.BOMBCHUS_10.value] = 0
+            items_to_create[Items.BOMBCHUS_20.value] = 0
+            items_to_create[Items.PROGRESSIVE_BOMBCHU.value] = 5
+
         # Infinite Upgrades
         if self.options.infinite_upgrades == "progressive":
             items_to_create[Items.PROGRESSIVE_BOMB_BAG.value] += 1
