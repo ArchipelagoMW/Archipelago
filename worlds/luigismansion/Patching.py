@@ -1,3 +1,4 @@
+import copy
 import re
 from math import ceil
 from random import choice, randint
@@ -99,15 +100,19 @@ def __get_item_name(item_data, slot: int):
 def update_event_info(event_info, boo_checks: bool, output_data):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc. Also remove Mario Items/Elemental Item events
-    events_to_remove = [7, 9, 12, 15, 18, 19, 20, 21, 41, 42, 45, 47, 54, 69, 70, 73, 80, 81, 85, 91]
+    events_to_remove = [9, 12, 15, 18, 19, 20, 21, 41, 42, 45, 47, 54, 69, 70, 73, 80, 81, 85, 91]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
         events_to_remove += [16, 96]
+    if output_data["Options"]["spawn"] in ("Foyer", "Courtyard", "Wardrobe Balcony", "1F Washroom"):
+        events_to_remove += [7]
 
     event_info.info_file_field_entries = list(filter(
         lambda info_entry: not (info_entry["EventNo"] in events_to_remove or (info_entry["EventNo"] == 93 and
             info_entry["pos_x"] == 0)), event_info.info_file_field_entries))
+
+    spawn_data = spawn_locations[output_data["Options"]["spawn"]]
 
     for x in event_info.info_file_field_entries:
         # Move Telephone rings to third phone, make an A press and make always on
@@ -162,7 +167,6 @@ def update_event_info(event_info, boo_checks: bool, output_data):
 
         # Update the spawn in event trigger to wherever spawn is
         if x["EventNo"] == 48:
-            spawn_data = spawn_locations[output_data["Options"]["spawn"]]
             x["pos_y"] = spawn_data["pos_y"]
             x["pos_z"] = spawn_data["pos_z"]
             x["pos_x"] = spawn_data["pos_x"]
@@ -225,7 +229,7 @@ def update_event_info(event_info, boo_checks: bool, output_data):
             x["PlayerStop"] = 1
             x["EventLoad"] = 0
 
-        # Update the Into event to talk about save anywhere and healing.
+        # Update the Intro event to talk about save anywhere and healing.
         if x["EventNo"] == 11:
             x["EventFlag"] = 0
             x["disappear_flag"] = 0
@@ -235,22 +239,24 @@ def update_event_info(event_info, boo_checks: bool, output_data):
             x["PlayerStop"] = 1
             x["EventLock"] = 1
             x["event_parameter"] = 0
-
-            spawn_region: dict[str, int] = spawn_locations[output_data["Options"]["spawn"]]
-            x["room_no"] = spawn_region["room_no"]
-            x["pos_y"] = spawn_region["pos_y"]
-            x["pos_x"] = spawn_region["pos_x"]
-            x["pos_z"] = spawn_region["pos_z"]
+            x["room_no"] = spawn_data["room_no"]
+            x["pos_y"] = spawn_data["pos_y"]
+            x["pos_x"] = spawn_data["pos_x"]
+            x["pos_z"] = spawn_data["pos_z"]
 
         # Change Training room second visit to always be on
         if x["EventNo"] == 10:
             x["EventFlag"] = 0
 
-        # Update Foyer Toad Event (event17) to move to the spawn region.
-        if x["EventNo"] == 17:
-            spawn_region_name = output_data["Options"]["spawn"]
-            if not spawn_region_name == "Foyer":
-                spawn_data = spawn_locations[spawn_region_name]
+        # Update Starting Toad Event (event07) to move to the spawn region.
+        if x["EventNo"] == 7:
+            if not output_data["Options"]["spawn"] in ("Foyer", "Courtyard", "Wardrobe Balcony", "1F Washroom"):
+                x["EventFlag"] = 0
+                x["disappear_flag"] = 0
+                x["EventLoad"] = 0
+                x["EventArea"] = 330
+                x["EventIf"] = 1
+                x["PlayerStop"] = 1
                 x["pos_y"] = spawn_data["pos_y"]
                 x["pos_z"] = int(spawn_data["pos_z"]) - 150
                 x["pos_x"] = int(spawn_data["pos_x"]) - 150 + 2
@@ -375,16 +381,23 @@ def update_observer_info(observer_info, output_data):
     for x in observer_info.info_file_field_entries:
         # Allows the Toads to spawn by default.
         if x["name"] == "kinopio":
-            if x["code_name"] == "dm_kinopio1":
-                spawn_region_name = output_data["Options"]["spawn"]
-                if not spawn_region_name == "Foyer":
-                    spawn_data = spawn_locations[spawn_region_name]
-                    x["pos_y"] = spawn_data["pos_y"]
-                    x["pos_z"] = int(spawn_data["pos_z"]) - 150
-                    x["pos_x"] = int(spawn_data["pos_x"]) - 150
+            if x["code_name"] == "dm_kinopio5":
+                continue
             x["cond_arg0"] = 0
             x["appear_flag"] = 0
             x["cond_type"] = 13
+            new_x = x.copy()
+            spawn_region_name = output_data["Options"]["spawn"]
+            if not spawn_region_name in ("Foyer", "Courtyard", "1F Washroom", "Wardrobe Balcony"):
+                spawn_data = spawn_locations[spawn_region_name]
+                new_x["room_no"] = spawn_data["room_no"]
+                new_x["pos_y"] = spawn_data["pos_y"]
+                new_x["pos_z"] = int(spawn_data["pos_z"]) - 150
+                new_x["pos_x"] = int(spawn_data["pos_x"]) - 150
+                new_x["code_name"] = "dm_kinopio5"
+                observer_info.info_file_field_entries.append(new_x)
+
+
 
         # Allows the Master Bedroom to be lit after clearing it, even if Neville hasn't been caught.
         if x["room_no"] == 33:

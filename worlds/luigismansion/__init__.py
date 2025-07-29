@@ -293,7 +293,7 @@ class LMWorld(World):
             for location, data in LOCATION_DICT.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
-                if data.require_poltergust:
+                if data.require_poltergust or region.name == self.origin_region_name:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 set_element_rules(self, entry, False)
                 region.locations.append(entry)
