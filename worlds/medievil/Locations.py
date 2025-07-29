@@ -67,7 +67,10 @@ class MedievilLocation(Location):
             "The Ghost Ship",
             "The Entrance Hall",
             "The Time Device",
-            "Zaroks Lair"           
+            "Zaroks Lair",
+            "Locked Items CH",
+            "Locked Items HM",
+            "Locked Items SF"
         ]
 
         output = {}
@@ -172,7 +175,6 @@ location_tables = {
          MedievilLocationData("Gold Coins: Chest at Exit - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest in Arena - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Cemetery Hill","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Cemetery Hill","Chalice of Souls",MedievilLocationCategory.CHALICE),
     ],
     
     "The Hilltop Mausoleum": [
@@ -193,11 +195,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Left Coffin - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: After Earth Rune Door - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest in Moon Room - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Gold Coins: Gold Chest at Phantom of the Opera 1 - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Gold Coins: Gold Chest at Phantom of the Opera 2 - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Gold Coins: Gold Chest at Phantom of the Opera 3 - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: The Hilltop Mausoleum","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: The Hilltop Mausoleum","Chalice of Souls",MedievilLocationCategory.CHALICE),
     ],
     
     "Return to the Graveyard": [
@@ -229,7 +227,6 @@ location_tables = {
 
     "Scarecrow Fields": [
         # Requires Harvester Parts for Chalice
-         MedievilLocationData("Life Bottle: Scarecrow Fields","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Key Item: Harvester Parts - SF","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Chaos Rune: Scarecrow Fields","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
          MedievilLocationData("Earth Rune: Scarecrow Fields","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
@@ -250,9 +247,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Bag in the Press - SF","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Bag in the Spinner - SF","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest next to Harvester Part - SF","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Gold Coins: Chest Next to Chalice - SF","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Scarecrow Fields","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Scarecrow Fields","Chalice of Souls",MedievilLocationCategory.CHALICE),
     ],
         
     "Ant Hill": [
@@ -576,7 +571,22 @@ location_tables = {
          MedievilLocationData("Equipment: Good Lightning - ZL","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
          MedievilLocationData("Equipment: Silver Shield - ZL Arena","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
          MedievilLocationData("Cleared: Zaroks Lair","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
-    ]
+    ],
+    
+    "Locked Items CH": [
+         MedievilLocationData("Chalice: Cemetery Hill","Chalice of Souls",MedievilLocationCategory.CHALICE),
+    ],
+    "Locked Items HM": [
+         MedievilLocationData("Gold Coins: Gold Chest at Phantom of the Opera 1 - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+         MedievilLocationData("Gold Coins: Gold Chest at Phantom of the Opera 2 - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+         MedievilLocationData("Gold Coins: Gold Chest at Phantom of the Opera 3 - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+         MedievilLocationData("Chalice: The Hilltop Mausoleum","Chalice of Souls",MedievilLocationCategory.CHALICE),
+    ],
+    "Locked Items SF": [
+         MedievilLocationData("Life Bottle: Scarecrow Fields","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),         
+         MedievilLocationData("Gold Coins: Chest Next to Chalice - SF","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+         MedievilLocationData("Chalice: Scarecrow Fields","Chalice of Souls",MedievilLocationCategory.CHALICE),
+    ],
     
     # Books for Booksanity go here
     

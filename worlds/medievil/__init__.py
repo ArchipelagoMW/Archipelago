@@ -95,7 +95,10 @@ class MedievilWorld(World):
             "The Ghost Ship",
             "The Entrance Hall",
             "The Time Device",
-            "Zaroks Lair"
+            "Zaroks Lair",
+            "Locked Items CH",
+            "Locked Items HM",
+            "Locked Items SF"
         ]})
         
         def create_connection(from_region: str, to_region: str):
@@ -172,6 +175,10 @@ class MedievilWorld(World):
         create_connection("The Ghost Ship", "Hall of Heroes")
         create_connection("The Entrance Hall", "Hall of Heroes")
         create_connection("The Time Device", "Hall of Heroes")
+        
+        create_connection("Cemetery Hill", "Locked Items CH")
+        create_connection("The Hilltop Mausoleum", "Locked Items HM")
+        create_connection("Scarecrow Fields", "Locked Items SF")
         
         create_connection("Hall of Heroes", "Map")
                                                                                                                    
@@ -296,7 +303,7 @@ class MedievilWorld(World):
                 "Key Item: Amber 5",
                 "Key Item: Amber 6",
                 "Key Item: Amber 7"
-            ], self.player, 7)
+            ], self.player)
         
         def has_number_of_chalices(self, count, state: CollectionState):
             
@@ -384,6 +391,12 @@ class MedievilWorld(World):
         set_rule(self.get_entrance("The Ghost Ship -> Hall of Heroes"), lambda state: has_number_of_chalices(self,18, state))
         set_rule(self.get_entrance("The Entrance Hall -> Hall of Heroes"), lambda state: has_number_of_chalices(self,19, state))
         set_rule(self.get_entrance("The Time Device -> Hall of Heroes"), lambda state: has_number_of_chalices(self,20, state))
+        
+        # locked chalice items
+        
+        set_rule(self.get_entrance("Cemetery Hill -> Locked Items CH"), lambda state: has_weapon_required(self, "Club", state))
+        set_rule(self.get_entrance("The Hilltop Mausoleum -> Locked Items HM"), lambda state: has_keyitem_required(self, "Sheet Music", state))
+        set_rule(self.get_entrance("Scarecrow Fields -> Locked Items SF"), lambda state: has_keyitem_required(self, "Harvester Parts", state))
         
         # Get a birds eye view of everything
         
