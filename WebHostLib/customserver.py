@@ -117,6 +117,7 @@ class WebHostContext(Context):
         self.gamespackage = {"Archipelago": static_gamespackage.get("Archipelago", {})}  # this may be modified by _load
         self.item_name_groups = {"Archipelago": static_item_name_groups.get("Archipelago", {})}
         self.location_name_groups = {"Archipelago": static_location_name_groups.get("Archipelago", {})}
+        missing_checksum = False
 
         for game in list(multidata.get("datapackage", {})):
             game_data = multidata["datapackage"][game]
@@ -128,15 +129,17 @@ class WebHostContext(Context):
                 else:
                     row = GameDataPackage.get(checksum=game_data["checksum"])
                     if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
-                        game_data_packages[game] = Utils.restricted_loads(row.data)
+                        game_data_packages[game] = restricted_loads(row.data)
                         continue
                     else:
                         self.logger.warning(f"Did not find game_data_package for {game}: {game_data['checksum']}")
+            else:
+                missing_checksum = True  # Game rolled on old AP and will load data package from multidata
             self.gamespackage[game] = static_gamespackage.get(game, {})
             self.item_name_groups[game] = static_item_name_groups.get(game, {})
             self.location_name_groups[game] = static_location_name_groups.get(game, {})
 
-        if not game_data_packages:
+        if not game_data_packages and not missing_checksum:
             # all static -> use the static dicts directly
             self.gamespackage = static_gamespackage
             self.item_name_groups = static_item_name_groups
@@ -156,6 +159,7 @@ class WebHostContext(Context):
     @db_session
     def _save(self, exit_save: bool = False) -> bool:
         room = Room.get(id=self.room_id)
+        # Does not use Utils.restricted_dumps because we'd rather make a save than not make one
         room.multisave = pickle.dumps(self.get_save())
         # saving only occurs on activity, so we can "abuse" this information to mark this as last_activity
         if not exit_save:  # we don't want to count a shutdown as activity, which would restart the server again
@@ -224,6 +228,9 @@ def set_up_logging(room_id) -> logging.Logger:
 def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                        cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
                        host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue):
+    from setproctitle import setproctitle
+
+    setproctitle(name)
     Utils.init_logging(name)
     try:
         import resource
@@ -244,8 +251,23 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
         raise Exception("Worlds system should not be loaded in the custom server.")
 
     import gc
-    ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
-    del cert_file, cert_key_file, ponyconfig
+
+    if not cert_file:
+        def get_ssl_context():
+            return None
+    else:
+        load_date = None
+        ssl_context = load_server_cert(cert_file, cert_key_file)
+
+        def get_ssl_context():
+            nonlocal load_date, ssl_context
+            today = datetime.date.today()
+            if load_date != today:
+                ssl_context = load_server_cert(cert_file, cert_key_file)
+                load_date = today
+            return ssl_context
+
+    del ponyconfig
     gc.collect()  # free intermediate objects used during setup
 
     loop = asyncio.get_event_loop()
@@ -260,12 +282,12 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 assert ctx.server is None
                 try:
                     ctx.server = websockets.serve(
-                        functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
+                        functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=get_ssl_context())
 
                     await ctx.server
                 except OSError:  # likely port in use
                     ctx.server = websockets.serve(
-                        functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
+                        functools.partial(server, ctx=ctx), ctx.host, 0, ssl=get_ssl_context())
 
                     await ctx.server
                 port = 0

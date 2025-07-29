@@ -1,5 +1,5 @@
 import unittest
-from typing import List, Tuple
+from typing import ClassVar, List, Tuple
 from unittest import TestCase
 
 from BaseClasses import CollectionState, Location, MultiWorld
@@ -7,6 +7,7 @@ from Fill import distribute_items_restrictive
 from Options import Accessibility
 from worlds.AutoWorld import AutoWorldRegister, call_all, call_single
 from ..general import gen_steps, setup_multiworld
+from ..param import classvar_matrix
 
 
 class MultiworldTestBase(TestCase):
@@ -63,15 +64,18 @@ class TestAllGamesMultiworld(MultiworldTestBase):
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
 
 
+@classvar_matrix(game=AutoWorldRegister.world_types.keys())
 class TestTwoPlayerMulti(MultiworldTestBase):
+    game: ClassVar[str]
+
     def test_two_player_single_game_fills(self) -> None:
         """Tests that a multiworld of two players for each registered game world can generate."""
-        for world_type in AutoWorldRegister.world_types.values():
-            self.multiworld = setup_multiworld([world_type, world_type], ())
-            for world in self.multiworld.worlds.values():
-                world.options.accessibility.value = Accessibility.option_full
-            self.assertSteps(gen_steps)
-            with self.subTest("filling multiworld", games=world_type.game, seed=self.multiworld.seed):
-                distribute_items_restrictive(self.multiworld)
-                call_all(self.multiworld, "post_fill")
-                self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
+        world_type = AutoWorldRegister.world_types[self.game]
+        self.multiworld = setup_multiworld([world_type, world_type], ())
+        for world in self.multiworld.worlds.values():
+            world.options.accessibility.value = Accessibility.option_full
+        self.assertSteps(gen_steps)
+        with self.subTest("filling multiworld", games=world_type.game, seed=self.multiworld.seed):
+            distribute_items_restrictive(self.multiworld)
+            call_all(self.multiworld, "post_fill")
+            self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
