@@ -59,6 +59,10 @@ def create_regions(multiworld: MultiWorld, player: int):
     create_region(multiworld, player, RegionName.night_grancel_port)
     create_region(multiworld, player, RegionName.grancel_castle)
 
+    create_region(multiworld, player, RegionName.silver_road)
+    create_region(multiworld, player, RegionName.golden_road)
+    create_region(multiworld, player, RegionName.regroup_area)
+
 
 def connect_regions(multiworld: MultiWorld, player: int):
     """Connect AP regions for Trails in the Sky the 3rd"""
@@ -242,6 +246,58 @@ def connect_regions(multiworld: MultiWorld, player: int):
         player,
         RegionName.grancel_castle,
         RegionName.night_grancel_north,
+    )
+
+    connect_region(
+        multiworld,
+        player,
+        RegionName.grancel_castle,
+        RegionName.silver_road,
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.silver_road,
+        RegionName.grancel_castle,
+    )
+
+    connect_region(
+        multiworld,
+        player,
+        RegionName.grancel_castle,
+        RegionName.golden_road,
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.golden_road,
+        RegionName.grancel_castle,
+    )
+
+    connect_region(
+        multiworld,
+        player,
+        RegionName.golden_road,
+        RegionName.regroup_area,
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.regroup_area,
+        RegionName.golden_road,
+    )
+
+    connect_region(
+        multiworld,
+        player,
+        RegionName.silver_road,
+        RegionName.regroup_area,
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.regroup_area,
+        RegionName.silver_road,
     )
 
     # Assume the warp menu is always reachable, but add access rules to specific warps.

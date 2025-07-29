@@ -24,6 +24,9 @@ class RegionName:
     night_grancel_east = "Night Grancel East"
     night_grancel_port = "Night Grancel Port"
     grancel_castle = "Grancel Castle"
+    silver_road = "Silver Road"
+    golden_road = "Golden Road"
+    regroup_area = "Regroup Area"
 
     level_90 = "Level 90" # Start
     level_95 = "Level 95" # Chapter 1

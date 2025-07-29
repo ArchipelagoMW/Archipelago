@@ -13,10 +13,14 @@ class ItemName:
     fluffy_crepe = "Fluffy Crepe"
     septium_drops = "Seeptium Drops"
     queenly_cookie = "Queenly Cookie"
+    amar_spiritus = "Amar Spirits"
+    miso_fish = "Miso Fish"
+    castel_castella = "Castel Castella"
     fresh_water = "Fresh Water"
     fishy_finale = "Fishy Finale"
     tear_balm = "Tear Balm"
     teara_balm = "Teara Balm"
+    tearal_balm = "Tearal Balm"
     reviving_balm = "Reviving Balm"
     celestial_balm = "Celestial Balm"
     ep_charge = "EP Charge"
@@ -26,6 +30,7 @@ class ItemName:
     s_tablet = "S-Tablet"
     purging_balm = "Purging Balm"
     zeram_powder = "Zeram Powder"
+    curia_balm = "Curia Balm"
 
     # Recipes
     easy_paella_recipe = "Easy Paella Recipe"
@@ -37,23 +42,36 @@ class ItemName:
     glam_choker = "Glam Choker"
     glam_choker_plus = "Glam Choker+"
     white_bracelet = "White Bracelet"
+    white_bracelet_plus = "White Bracelet+"
     proxy_puppet = "Proxy Puppet"
     long_barrel_2 = "Long Barrel 2"
     crimson_eye = "Crimson Eye"
-    pearl_earings = "Pearl Earings"
+    pearl_earring = "Pearl Earring"
+    pearl_earring_plus = "Pearl Earring+"
+    tiger_heart = "Tiger Heart"
+    silver_earring = "Silver Earring"
+    skull_pendant = "Skull Pendant"
 
     # Weapons
     akashic_heart = "Akashic Heart"
     stun_gb = "Stun GB"
+    kumo_no_tachi = "Kumo No Tachi"
+    stinger_m = "Stinger-M"
+    sting_edges = "Sting Edges"
+    aion_bow = "Aion Bow"
+    silvahn = "Silvahn"
 
     # Armor
     bestia_coat = "Bestia Coat"
+    gaia_greaves = "Gaia Greaves"
 
     # Quartz
     hp_1 = "HP 1"
     hp_2 = "HP 2"
+    hp_3 = "HP 3"
     attack_1 = "Attack 1"
     attack_2 = "Attack 2"
+    attack_3 = "Attack 3"
     shield_1 = "Shield 1"
     shield_2 = "Shield 2"
     hit_1 = "Hit 1"
@@ -81,6 +99,11 @@ class ItemName:
     higher_elements_sepith_100 = "Higher Elements Sepith (100)"
     higher_elements_sepith_250 = "Higher Elements Sepith (250)"
     higher_elements_sepith_500 = "Higher Elements Sepith (500)"
+    all_sepith_100_50 = "Lower Elements Sepith (100) and Higher Elements Sepith (50)"
+    all_sepith_100 = "All Sepith (100)"
+    all_sepith_200 = "All Sepith (200)"
+    all_sepith_500 = "All Sepith (500)"
+    all_sepith_1000 = "All Sepith (1000)"
 
     # Characters
     estelle = "Estelle"
@@ -125,6 +148,7 @@ class ItemName:
 
     # Key Item
     bennu_defeat = "Bennu Defeated (Victory)"
+    entrance_exam_results = "Entrance Exam Results"
 
     # Metadata
     mira_min_id = "Mira Min ID"
@@ -133,6 +157,8 @@ class ItemName:
     lower_elements_sepith_max_id = "Lower Elements Sepith Max ID"
     higher_elements_sepith_min_id = "Higher Elements Sepith Min ID"
     higher_elements_sepith_max_id = "Higher Elements Sepith Max ID"
+    all_sepith_min_id = "All Sepith Min ID"
+    all_sepith_max_id = "All Sepith Max ID"
     character_min_id = "Character Min ID"
     character_max_id = "Character Max ID"
     area_min_id = "Location Min ID"

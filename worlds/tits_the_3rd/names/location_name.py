@@ -143,6 +143,36 @@ class LocationName:
     grancel_castle_balcony_south_chest = "Grancel Castle Chest (Balcony South Chest)" # 10137
     grancel_castle_queens_bedroom = "Grancel Castle Chest (Queen's Bedroom)" # 10152
 
+    silver_road_1_left_of_entrance = "Silver Road 1 (Left of Entrance)" # 10384
+    silver_road_1_before_triple ="Silver Road 1 (Before Triple)" # 10391
+    silver_road_1_triple_left ="Silver Road 1 (Triple Left)" # 10389
+    silver_road_1_triple_center ="Silver Road 1 (Triple Center)" # 10385
+    silver_road_1_triple_right ="Silver Road 1 (Triple Right)" # 10390
+    silver_road_1_first_chest_along_path ="Silver Road 1 (First Chest Along Path)" # 10387
+    silver_road_1_second_chest_along_path ="Silver Road 1 (Second Chest Along Path)" # 10388
+    silver_road_1_before_teleporter ="Silver Road 1 (Before Teleporter)" # 10386
+    silver_road_1_behind_teleporter ="Silver Road 1 (Behind Teleporter)" # 10411
+    silver_road_2_first_chest = "Silver Road 2 (First Chest)" # 10392
+    silver_road_2_second_chest = "Silver Road 2 (Second Chest)" # 10412
+    silver_road_2_third_chest = "Silver Road 2 (Third Chest)" # 10369
+    silver_road_2_fourth_chest = "Silver Road 2 (Fourth Chest)" # 10394
+    silver_road_2_fifth_chest = "Silver Road 2 (Fifth Chest)" # 10393
+    golden_road_1_right_of_entrance = "Golden Road 1 (Right of Entrance)" # 10400
+    golden_road_1_left_at_second_intersection = "Golden Road 1 (Left at Second Intersection)" # 10402
+    golden_road_1_first_triple_center = "Golden Road 1 (First Triple Center)" # 10401
+    golden_road_1_first_triple_left = "Golden Road 1 (First Triple Left)" # 10404
+    golden_road_1_first_triple_right = "Golden Road 1 (First Triple Right)" # 10405
+    golden_road_1_second_triple_center = "Golden Road 1 (Second Triple Center)" # 10403
+    golden_road_1_second_triple_right = "Golden Road 1 (Second Triple Right)" # 10406
+    golden_road_1_second_triple_left = "Golden Road 1 (Second Triple Left)" # 10407
+    golden_road_1_behind_teleporter = "Golden Road 1 (Behind Teleporter)" # 10413
+    golden_road_2_first_chest = "Golden Road 2 (First Chest)" # 10408
+    golden_road_2_second_chest = "Golden Road 2 (Second Chest)" # 10414
+    golden_road_2_third_chest = "Golden Road 2 (Third Chest)" # 10368
+    golden_road_2_fourth_chest = "Golden Road 2 (Fourth Chest)" # 10410
+    golden_road_2_fifth_chest = "Golden Road 2 (Fifth Chest)" # 10409
+    regroup_area_chest = "Regroup Area Chest" # 10415
+
     # Metadata Stuffs
     sealing_stone_locations = [
         sealing_stone_tita,

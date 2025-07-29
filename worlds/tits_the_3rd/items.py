@@ -6,6 +6,8 @@ from typing import Dict, List, NamedTuple, Optional, Set
 
 from .names.item_name import ItemName
 from .names.location_name import LocationName
+from .names.check_type_name import CheckTypeName
+from .tables.location_list import location_table
 from BaseClasses import Item, ItemClassification
 
 
@@ -37,6 +39,8 @@ meta_data_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.lower_elements_sepith_max_id: TitsThe3rdItemData(300999, ItemClassification.filler),
     ItemName.higher_elements_sepith_min_id: TitsThe3rdItemData(350000, ItemClassification.filler),
     ItemName.higher_elements_sepith_max_id: TitsThe3rdItemData(350999, ItemClassification.filler),
+    ItemName.all_sepith_min_id: TitsThe3rdItemData(360000, ItemClassification.filler),
+    ItemName.all_sepith_max_id: TitsThe3rdItemData(369999, ItemClassification.filler),
     ItemName.character_min_id: TitsThe3rdItemData(70000, ItemClassification.filler),
     ItemName.character_max_id: TitsThe3rdItemData(71000, ItemClassification.filler),
     ItemName.area_min_id: TitsThe3rdItemData(200000, ItemClassification.filler),
@@ -56,10 +60,14 @@ consumable_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.fluffy_crepe: TitsThe3rdItemData(332, ItemClassification.filler),
     ItemName.septium_drops: TitsThe3rdItemData(503, ItemClassification.filler),
     ItemName.queenly_cookie: TitsThe3rdItemData(480, ItemClassification.filler),
+    ItemName.amar_spiritus: TitsThe3rdItemData(410, ItemClassification.filler),
+    ItemName.miso_fish: TitsThe3rdItemData(436, ItemClassification.filler),
+    ItemName.castel_castella: TitsThe3rdItemData(402, ItemClassification.filler),
     ItemName.fresh_water: TitsThe3rdItemData(411, ItemClassification.filler),
     ItemName.fishy_finale: TitsThe3rdItemData(437, ItemClassification.filler),
     ItemName.tear_balm: TitsThe3rdItemData(501, ItemClassification.filler),
     ItemName.teara_balm: TitsThe3rdItemData(502, ItemClassification.filler),
+    ItemName.tearal_balm: TitsThe3rdItemData(514, ItemClassification.filler),
     ItemName.reviving_balm: TitsThe3rdItemData(508, ItemClassification.filler),
     ItemName.celestial_balm: TitsThe3rdItemData(509, ItemClassification.filler),
     ItemName.ep_charge: TitsThe3rdItemData(510, ItemClassification.filler),
@@ -69,6 +77,7 @@ consumable_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.s_tablet: TitsThe3rdItemData(518, ItemClassification.filler),
     ItemName.purging_balm: TitsThe3rdItemData(504, ItemClassification.filler),
     ItemName.zeram_powder: TitsThe3rdItemData(517, ItemClassification.filler),
+    ItemName.curia_balm: TitsThe3rdItemData(499, ItemClassification.filler),
 }
 
 recipe_table: Dict[str, TitsThe3rdItemData] = {
@@ -82,22 +91,35 @@ equipment_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.glam_choker: TitsThe3rdItemData(358, ItemClassification.useful),
     ItemName.glam_choker_plus: TitsThe3rdItemData(359, ItemClassification.useful),
     ItemName.white_bracelet: TitsThe3rdItemData(360, ItemClassification.useful),
+    ItemName.white_bracelet_plus: TitsThe3rdItemData(361, ItemClassification.useful),
     ItemName.proxy_puppet: TitsThe3rdItemData(325, ItemClassification.useful),
     ItemName.long_barrel_2: TitsThe3rdItemData(332, ItemClassification.useful),
     ItemName.crimson_eye: TitsThe3rdItemData(394, ItemClassification.useful),
-    ItemName.pearl_earings: TitsThe3rdItemData(362, ItemClassification.useful),
+    ItemName.pearl_earring: TitsThe3rdItemData(362, ItemClassification.useful),
+    ItemName.pearl_earring_plus: TitsThe3rdItemData(363, ItemClassification.useful),
+    ItemName.silver_earring: TitsThe3rdItemData(350, ItemClassification.useful),
+    ItemName.tiger_heart: TitsThe3rdItemData(392, ItemClassification.useful),
+    ItemName.skull_pendant: TitsThe3rdItemData(368, ItemClassification.useful),
     # Weapons
     ItemName.akashic_heart: TitsThe3rdItemData(1184, ItemClassification.useful),
     ItemName.stun_gb: TitsThe3rdItemData(1274, ItemClassification.useful),
+    ItemName.kumo_no_tachi: TitsThe3rdItemData(1230, ItemClassification.useful),
+    ItemName.stinger_m: TitsThe3rdItemData(1139, ItemClassification.useful),
+    ItemName.sting_edges: TitsThe3rdItemData(1049, ItemClassification.useful),
+    ItemName.aion_bow: TitsThe3rdItemData(1365, ItemClassification.useful),
+    ItemName.silvahn: TitsThe3rdItemData(1455, ItemClassification.useful),
     # Armor
     ItemName.bestia_coat: TitsThe3rdItemData(1553, ItemClassification.useful),
+    ItemName.gaia_greaves: TitsThe3rdItemData(105, ItemClassification.useful),
 }
 
 quartz_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.hp_1: TitsThe3rdItemData(600, ItemClassification.useful),
     ItemName.hp_2: TitsThe3rdItemData(601, ItemClassification.useful),
+    ItemName.hp_3: TitsThe3rdItemData(602, ItemClassification.useful),
     ItemName.attack_1: TitsThe3rdItemData(606, ItemClassification.useful),
     ItemName.attack_2: TitsThe3rdItemData(607, ItemClassification.useful),
+    ItemName.attack_3: TitsThe3rdItemData(608, ItemClassification.useful),
     ItemName.shield_1: TitsThe3rdItemData(615, ItemClassification.useful),
     ItemName.shield_2: TitsThe3rdItemData(616, ItemClassification.useful),
     ItemName.hit_1: TitsThe3rdItemData(618, ItemClassification.useful),
@@ -129,6 +151,11 @@ currency_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.higher_elements_sepith_100: TitsThe3rdItemData(meta_data_table[ItemName.higher_elements_sepith_min_id].code + 100, ItemClassification.filler),
     ItemName.higher_elements_sepith_250: TitsThe3rdItemData(meta_data_table[ItemName.higher_elements_sepith_min_id].code + 250, ItemClassification.filler),
     ItemName.higher_elements_sepith_500: TitsThe3rdItemData(meta_data_table[ItemName.higher_elements_sepith_min_id].code + 500, ItemClassification.filler),
+    ItemName.all_sepith_100_50: TitsThe3rdItemData(370000, ItemClassification.filler),
+    ItemName.all_sepith_100: TitsThe3rdItemData(meta_data_table[ItemName.all_sepith_min_id].code + 100, ItemClassification.filler),
+    ItemName.all_sepith_200: TitsThe3rdItemData(meta_data_table[ItemName.all_sepith_min_id].code + 200, ItemClassification.filler),
+    ItemName.all_sepith_500: TitsThe3rdItemData(meta_data_table[ItemName.all_sepith_min_id].code + 500, ItemClassification.filler),
+    ItemName.all_sepith_1000: TitsThe3rdItemData(meta_data_table[ItemName.all_sepith_min_id].code + 1000, ItemClassification.filler),
 }
 
 character_table: Dict[str, TitsThe3rdItemData] = {
@@ -163,7 +190,10 @@ craft_unlock_table: Dict[str, TitsThe3rdItemData] = { # Item ID is 400000 + char
     ItemName.renne_progressive_craft: TitsThe3rdItemData(meta_data_table[ItemName.craft_min_id].code + 15, ItemClassification.useful),
 }
 
-key_item_table: Dict[str, TitsThe3rdItemData] = {ItemName.bennu_defeat: TitsThe3rdItemData(500000, ItemClassification.progression)}
+key_item_table: Dict[str, TitsThe3rdItemData] = {
+    ItemName.bennu_defeat: TitsThe3rdItemData(500000, ItemClassification.progression),
+    ItemName.entrance_exam_results: TitsThe3rdItemData(831, ItemClassification.progression),
+}
 
 
 item_data_table: Dict[str, TitsThe3rdItemData] = {
@@ -200,120 +230,25 @@ filler_items: List[str] = list(
 
 item_table: Dict[str, int] = {name: data.code for name, data in item_data_table.items()}
 
-default_item_pool: Counter[str] = Counter(
-    {
-        ItemName.jade_corridor_unlock_1: 1,
-        ItemName.jade_corridor_unlock_2: 1,
-        ItemName.jade_corridor_arseille_unlock: 1,
-        ItemName.easy_paella_recipe: 1,  # Default locations: 9873
-    }
-)
-
-
-default_chest_pool: Counter[str] = Counter(
-    {
-        ItemName.extra_spicy_fries: 1,  # Default locations: 9864
-        ItemName.fresh_water: 1,  # Default locations: 9880
-        ItemName.fishy_finale: 1,  # Default locations: 9884
-        ItemName.tear_balm: 2,  # Default locations: 9858, 9865
-        ItemName.teara_balm: 10,  # Default locations: 9720, 9722, 10175, 10115, 10124, 10164, 10160, 10151, 10144, 10136
-        ItemName.reviving_balm: 1,  # Default locations: 9874
-        ItemName.ep_charge: 3,  # Default locations: 9721, 9723, 10166
-        ItemName.smelling_salts: 2,  # Default locations: 9866, 10113
-        ItemName.easy_paella_recipe: 1,  # Default locations: 9873
-        ItemName.royal_spikes: 1,  # Default locations: 9869
-        ItemName.black_bangle: 1,  # Default locations: 9867
-        ItemName.glam_choker: 1,  # Default locations: 9868
-        ItemName.hit_2: 1,  # Default locations: 9872
-        ItemName.information: 1,  # Default locations: 9857
-        ItemName.mira_300: 2,  # Default locations: 9859, 9875
-        ItemName.lower_elements_sepith_50: 3,  # Default locations: 9881, 10172, 10173
-        ItemName.higher_elements_sepith_50: 1,  # Default locations: 9885
-        ItemName.hp_2: 1, # Default locations: 10119
-        ItemName.akashic_heart: 1, # Default locations: 10116
-        ItemName.fried_phoenix: 1, # Default locations: 10120
-        ItemName.insulating_tape: 1, # Default locations: 10112
-        ItemName.mira_500: 3, # Default locations: 10127, 10128, 10129
-        ItemName.white_bracelet: 1, # Default locations: 10126
-        ItemName.proxy_puppet: 1, # 10176
-        ItemName.softening_balm: 1, # 10177
-        ItemName.septium_drops: 1, # 10178
-        ItemName.bestia_coat: 1, # 10174
-        ItemName.black_bangle_plus: 1, # 10133
-        ItemName.brain_roast: 1, # 10121
-        ItemName.swingwich: 1, # 10122
-        ItemName.s_tablet: 1, # 10114
-        ItemName.stun_gb: 1, # 10125
-        ItemName.celestial_balm: 1, # 10123
-        ItemName.long_barrel_2: 1, # 10168
-        ItemName.crimson_eye: 1, # 10163
-        ItemName.purging_balm: 2, # 10161, 10162
-        ItemName.scent: 1, # 10165
-        ItemName.repellent_dish: 1, # 10150
-        ItemName.queenly_cookie: 1, # 10145
-        ItemName.fluffy_crepe: 1, # 10146
-        ItemName.shield_2: 1, # 10138
-        ItemName.pearl_earings: 1, # 10144
-        ItemName.glam_choker_plus: 1, # 10147
-        ItemName.zeram_powder: 1, # 10148
-        ItemName.attack_2: 1, # 10137
-        ItemName.haze: 1, # 10152
-    }
-)
-
-
-default_character_quartz_pool: Counter[str] = Counter(
-    {
-        ItemName.ep_cut_2: 2,
-        ItemName.action_1: 1,
-        ItemName.hit_1: 1,
-        ItemName.range_1: 1,
-        ItemName.move_1: 1,
-        ItemName.attack_1: 2,
-        ItemName.shield_1: 1,
-        ItemName.eagle_eye: 1,
-        ItemName.hp_1: 1,
-    }
-)
-
+default_item_pool: Counter[str] = Counter()
+default_chest_pool: Counter[str] = Counter()
+default_character_quartz_pool: Counter[str] = Counter()
+default_craft_pool: Counter[str] = Counter()
+# fills the pool counters according to info in location_table
+# obviously ignores commented lines, just uncomment them to add them to the pools
+for location in location_table:
+    if location_table[location].vanilla_item != "":
+        match location_table[location].check_type:
+            case CheckTypeName.chest:
+                default_chest_pool[location_table[location].vanilla_item] += 1
+            case CheckTypeName.character_quartz:
+                default_character_quartz_pool[location_table[location].vanilla_item] += 1
+            case CheckTypeName.area_unlock:
+                default_item_pool[location_table[location].vanilla_item] += 1
+            case CheckTypeName.craft:
+                default_craft_pool[location_table[location].vanilla_item] += 1
 
 default_character_to_location = {
     ItemName.tita: LocationName.sealing_stone_tita,
     ItemName.julia: LocationName.sealing_stone_julia,
 }
-
-
-# This will be default craft pool eventually.
-full_game_craft_pool: Counter[str] = Counter(
-    {
-        ItemName.estelle_progressive_craft: 13,
-        ItemName.joshua_progressive_craft: 14,
-        ItemName.scherazard_progressive_craft: 10,
-        ItemName.olivier_progressive_craft: 9,
-        ItemName.kloe_progressive_craft: 7,
-        ItemName.agate_progressive_craft: 12,
-        ItemName.tita_progressive_craft: 8,
-        ItemName.zin_progressive_craft: 13,
-        ItemName.kevin_progressive_craft: 12,
-        ItemName.anelace_progressive_craft: 10,
-        ItemName.josette_progressive_craft: 7,
-        ItemName.richard_progressive_craft: 10,
-        ItemName.mueller_progressive_craft: 11,
-        ItemName.julia_progressive_craft: 9,
-        ItemName.ries_progressive_craft: 10,
-        ItemName.renne_progressive_craft: 9,
-    }
-)
-
-
-# This is purely while we only have part of the AP world complete.
-chapter_1_craft_pool: Counter[str] = Counter(
-    {
-        ItemName.tita_progressive_craft: 5,
-        ItemName.kevin_progressive_craft: 7,
-        ItemName.julia_progressive_craft: 5,
-        ItemName.ries_progressive_craft: 4,
-    }
-)
-
-default_craft_pool = chapter_1_craft_pool
