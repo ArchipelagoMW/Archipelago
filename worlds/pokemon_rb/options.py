@@ -925,6 +925,11 @@ class DebugOptions(OptionList):
     visibility = Visibility.spoiler
 
 
+class PokemonDeathLink(DeathLink):
+    """When you black out, trigger a death link for all players with death link enabled, causing a blackout
+    for Pokemon Red and Blue players, and death in general for various other games."""
+
+
 @dataclass
 class PokemonRBOptions(PerGameCommonOptions):
     accessibility: ItemsAccessibility
@@ -1030,5 +1035,5 @@ class PokemonRBOptions(PerGameCommonOptions):
     ice_trap_weight: IceTrapWeight
     randomize_pokemon_palettes: RandomizePokemonPalettes
     randomize_map_music: RandomizeMapMusic
-    death_link: DeathLink
+    death_link: PokemonDeathLink
     debug_options: DebugOptions
