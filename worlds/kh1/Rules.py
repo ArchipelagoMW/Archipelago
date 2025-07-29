@@ -199,7 +199,6 @@ def set_rules(kh1world):
             and
             (
                 state.has("Progressive Glide", player)
-                or (difficulty > 0 and state.has("High Jump", player, 3))
                 or
                 (
                     difficulty > 5
@@ -1596,7 +1595,7 @@ def set_rules(kh1world):
                     state.has("Progressive Blizzard", player, 3)
                     or (difficulty > 0 and state.has_any_count({"Progressive Blizzard": 2, "Progressive Fire": 3,"Progressive Thunder": 3, "Progressive Gravity": 3}, player))
                     or (difficulty > 5 and (state.has_any_count({"Progressive Blizzard": 1, "Progressive Fire": 2, "Progressive Thunder": 2, "Progressive Gravity": 2}, player)))
-                    or (difficulty > 10 and (state.has_any({"Progressive Fire", "Progressive Thunder", "Progressive Gravity"}, player) or has_all_summons))
+                    or (difficulty > 10 and (state.has_any({"Progressive Fire", "Progressive Thunder", "Progressive Gravity"}, player) or (state.has_group("Magic", player) and state.has_all({"Mushu", "Genie", "Dumbo"}, player))))
                 )
             ))
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"),
@@ -1609,7 +1608,7 @@ def set_rules(kh1world):
                     state.has("Progressive Blizzard", player, 3)
                     or (difficulty > 0 and state.has_any_count({"Progressive Blizzard": 2, "Progressive Fire": 3,"Progressive Thunder": 3, "Progressive Gravity": 3}, player))
                     or (difficulty > 5 and (state.has_any_count({"Progressive Blizzard": 1, "Progressive Fire": 2, "Progressive Thunder": 2, "Progressive Gravity": 2}, player)))
-                    or (difficulty > 10 and (state.has_any({"Progressive Fire", "Progressive Thunder", "Progressive Gravity"}, player) or has_all_summons))
+                    or (difficulty > 10 and (state.has_any({"Progressive Fire", "Progressive Thunder", "Progressive Gravity"}, player) or (state.has_group("Magic", player) and state.has_all({"Mushu", "Genie", "Dumbo"}, player))))
                 ) 
             ))
     if options.super_bosses or options.final_rest_door_key.current_key == "sephiroth":
