@@ -4956,10 +4956,16 @@
       Outside The Initiated:
         room: Art Gallery
         door: Exit
-      The Bearer (East): True
-      The Bearer (North): True
-      The Bearer (South): True
-      The Bearer (West): True
+      The Bearer (East):
+        static_painting: True
+      The Bearer (North):
+        static_painting: True
+      The Bearer (South):
+        static_painting: True
+      The Bearer (West):
+        - static_painting: True
+        - room: The Bearer (West)
+          door: Side Area Shortcut
       Roof: True
     panels:
       Achievement:
@@ -5053,7 +5059,8 @@
           - MIDDLE
   The Bearer (East):
     entrances:
-      Cross Tower (East): True
+      Cross Tower (East):
+        static_painting: True
       Bearer Side Area:
         door: Side Area Access
       Roof: True
@@ -5084,7 +5091,8 @@
             panel: SPACE
   The Bearer (North):
     entrances:
-      Cross Tower (East): True
+      Cross Tower (North):
+        static_painting: True
       Roof: True
     panels:
       SILENT (1):
@@ -5128,7 +5136,8 @@
             panel: POTS
   The Bearer (South):
     entrances:
-      Cross Tower (North): True
+      Cross Tower (South):
+        static_painting: True
       Bearer Side Area:
         door: Side Area Shortcut
       Roof: True
@@ -5162,7 +5171,10 @@
             panel: SILENT (1)
   The Bearer (West):
     entrances:
-      Cross Tower (West): True
+      Cross Tower (West):
+        static_painting: True
+      The Bearer:
+        door: Side Area Shortcut
       Bearer Side Area:
         door: Side Area Shortcut
       Roof: True
@@ -5235,6 +5247,7 @@
       The Bearer:
         room: The Bearer
         door: East Entrance
+        static_painting: True
       Roof: True
     panels:
       WINTER:
@@ -5250,6 +5263,7 @@
       The Bearer (East):
         room: The Bearer (East)
         door: North Entrance
+        static_painting: True
       Roof: True
     panels:
       NORTH:
@@ -5270,6 +5284,7 @@
       The Bearer (North):
         room: The Bearer (North)
         door: South Entrance
+        static_painting: True
     panels:
       FIRE:
         id: Cross Room/Panel_fire_fire
@@ -5284,6 +5299,7 @@
       Bearer Side Area:
         room: Bearer Side Area
         door: West Entrance
+        static_painting: True
       Roof: True
     panels:
       DIAMONDS:
@@ -7108,6 +7124,8 @@
     entrances:
       Orange Tower Third Floor:
         warp: True
+      Art Gallery (First Floor):
+        warp: True
       Art Gallery (Second Floor):
         warp: True
       Art Gallery (Third Floor):
@@ -7125,22 +7143,6 @@
         required_door:
           room: Number Hunt
           door: Eights
-      EON:
-        id: Painting Room/Panel_eon_one
-        colors: yellow
-        tag: midyellow
-      TRUSTWORTHY:
-        id: Painting Room/Panel_to_two
-        colors: red
-        tag: midred
-      FREE:
-        id: Painting Room/Panel_free_three
-        colors: purple
-        tag: midpurp
-      OUR:
-        id: Painting Room/Panel_our_four
-        colors: blue
-        tag: midblue
       ORDER:
         id: Painting Room/Panel_order_onepathmanyturns
         tag: forbid
@@ -7159,15 +7161,8 @@
           - scenery_painting_2c
         skip_location: True
         panels:
-          - EON
-      First Floor Puzzles:
-        skip_item: True
-        location_name: Art Gallery - First Floor Puzzles
-        panels:
-          - EON
-          - TRUSTWORTHY
-          - FREE
-          - OUR
+          - room: Art Gallery (First Floor)
+            panel: EON
       Third Floor:
         painting_id:
           - scenery_painting_3b
@@ -7227,11 +7222,42 @@
           - Third Floor
           - Fourth Floor
           - Fifth Floor
+  Art Gallery (First Floor):
+    entrances:
+      Art Gallery:
+        static_painting: True
+    panels:
+      EON:
+        id: Painting Room/Panel_eon_one
+        colors: yellow
+        tag: midyellow
+      TRUSTWORTHY:
+        id: Painting Room/Panel_to_two
+        colors: red
+        tag: midred
+      FREE:
+        id: Painting Room/Panel_free_three
+        colors: purple
+        tag: midpurp
+      OUR:
+        id: Painting Room/Panel_our_four
+        colors: blue
+        tag: midblue
+    doors:
+      Puzzles:
+        skip_item: True
+        location_name: Art Gallery - First Floor Puzzles
+        panels:
+          - EON
+          - TRUSTWORTHY
+          - FREE
+          - OUR
   Art Gallery (Second Floor):
     entrances:
       Art Gallery:
         room: Art Gallery
         door: Second Floor
+        static_painting: True
     panels:
       HOUSE:
         id: Painting Room/Panel_house_neighborhood
@@ -7263,6 +7289,7 @@
       Art Gallery:
         room: Art Gallery
         door: Third Floor
+        static_painting: True
     panels:
       AN:
         id: Painting Room/Panel_an_many
@@ -7294,6 +7321,7 @@
       Art Gallery:
         room: Art Gallery
         door: Fourth Floor
+        static_painting: True
     panels:
       URNS:
         id: Painting Room/Panel_urns_turns

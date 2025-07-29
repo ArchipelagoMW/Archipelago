@@ -16,9 +16,9 @@ from worlds.LauncherComponents import Component, components, icon_paths, launch 
 from Utils import local_path
 
 
-def launch_client():
+def launch_client(*args: str):
     from .Client import launch
-    launch_component(launch, name="AHITClient")
+    launch_component(launch, name="AHITClient", args=args)
 
 
 components.append(Component("A Hat in Time Client", "AHITClient", func=launch_client,

@@ -269,7 +269,7 @@ def randomize_map_music(world, write_bytes):
         for music_map in default_music.keys():
             map_id = map_ids[music_map]
             music_data[map_id * 2:(map_id * 2) + 2] \
-                = world.random.choice(music_pointers.values()).to_bytes(2, byteorder='big')
+                = world.random.choice(list(music_pointers.values())).to_bytes(2, byteorder='big')
     elif world.options.randomize_map_music == "chaos":
         write_bytes(rom_addresses["Option_Chaos_Music"], [0, 0])
         write_bytes(rom_addresses["Chaos_Music_Quantity"], len(music_pointers))
