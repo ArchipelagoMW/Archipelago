@@ -3,4 +3,7 @@ target-version = "py310"
 
 [lint]
 select = ["B", "C", "E", "F", "R", "W", "I", "N", "Q", "TC", "UP", "RUF", "ISC", "PLC", "PLE", "PLW", "T20", "PERF"]
-ignore = ["C901"]  # Author disagrees with forcing a specific amount of branch complexity in functions
+ignore = [
+    "C901",  # Author disagrees with limiting branch complexity
+    "PLC0415",  # In AP, we consider local imports totally fine & necessary
+]
