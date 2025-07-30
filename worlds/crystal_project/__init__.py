@@ -8,7 +8,7 @@ from .constants.regions import *
 from .constants.teleport_stones import *
 from .constants.item_groups import *
 from .constants.region_passes import *
-from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
+from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, trap_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
     region_name_to_pass_dict
@@ -339,15 +339,12 @@ class CrystalProjectWorld(World):
         return self.random.sample(optional_scholar_abilities, count)
 
     def get_filler_item_name(self) -> str:
-        # traps go here if we have any
-        # trap_chance: int = self.options.trap_chance.value
-        # enabled_traps: List[str] = self.options.traps.value
+        trap_chance: int = self.options.trapLikelihood.value
 
-        # if self.random.random() < (trap_chance / 100) and enabled_traps:
-        #     return self.random.choice(enabled_traps)
-        # else:
-        #     return self.random.choice(filler_items) 
-        return self.random.choice(filler_items)
+        if trap_chance > 0 and self.random.random() < (trap_chance / 100):
+             return self.random.choice(trap_items)
+        else:
+            return self.random.choice(filler_items)
 
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
