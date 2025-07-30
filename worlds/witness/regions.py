@@ -11,13 +11,13 @@ from worlds.generic.Rules import CollectionRule
 
 from .data import static_logic as static_witness_logic
 from .data.definition_classes import WitnessRule
-from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import optimize_witness_rule
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
 if TYPE_CHECKING:
     from . import WitnessWorld
+    from .data.static_logic import StaticWitnessLogicObj
 
 
 class WitnessPlayerRegions:
@@ -162,6 +162,6 @@ class WitnessPlayerRegions:
 
         world.multiworld.regions += regions_by_name.values()
 
-        for region_name, region in regions_to_create.items():
+        for region_name in regions_to_create:
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 self.connect_if_possible(world, region_name, connection[0], connection[1], regions_by_name)

@@ -7,10 +7,10 @@ from BaseClasses import CollectionState, Item, Location, LocationProgressType, M
 
 from .data import static_logic as static_witness_logic
 from .data.utils import weighted_sample
-from .player_items import WitnessItem
 
 if TYPE_CHECKING:
     from . import WitnessWorld
+    from .player_items import WitnessItem
 
 CompactHintArgs: TypeAlias = tuple[str | int, str | int]
 CompactHintData: TypeAlias = tuple[str, str | int, str | int]
@@ -212,7 +212,7 @@ def try_getting_location_group_for_location(world: "WitnessWorld", hint_loc: Loc
         return world.random.choices(location_groups, weights, k=1)[0], "Group"
 
     if allow_regions:
-        return cast(Region, hint_loc.parent_region).name, "Region"
+        return cast("Region", hint_loc.parent_region).name, "Region"
 
     return "Everywhere", "Everywhere"
 
@@ -317,7 +317,7 @@ def get_item_and_location_names_in_random_order(world: "WitnessWorld",
     world.random.shuffle(locations_in_this_world)
 
     if world.options.vague_hints:
-        locations_in_this_world.sort(key=lambda location: cast(Item, location.item).advancement)
+        locations_in_this_world.sort(key=lambda location: cast("Item", location.item).advancement)
 
     location_names_in_this_world = [location.name for location in locations_in_this_world]
 
@@ -680,11 +680,9 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
         extra_always_and_priority_hints: list[WitnessLocationHint] = []
 
-        for _ in range(more_always_hints):
-            extra_always_and_priority_hints.append(always_hints.pop())
+        extra_always_and_priority_hints.extend([always_hints.pop() for _ in range(more_always_hints)])
 
-        for _ in range(more_priority_hints):
-            extra_always_and_priority_hints.append(priority_hints.pop())
+        extra_always_and_priority_hints.extend([priority_hints.pop() for _ in range(more_priority_hints)])
 
         generated_hints += make_extra_location_hints(
             world, hint_amount - len(generated_hints), world.own_itempool, already_hinted_locations,

@@ -3,7 +3,7 @@ Archipelago init file for The Witness
 """
 import dataclasses
 from logging import error, warning
-from typing import Any, ClassVar, cast
+from typing import TYPE_CHECKING, Any, ClassVar, cast
 
 from BaseClasses import CollectionState, Entrance, Location, LocationProgressType, Region, Tutorial
 
@@ -13,7 +13,6 @@ from worlds.AutoWorld import WebWorld, World
 from .data import static_items as static_witness_items
 from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
-from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import cast_not_none, get_audio_logs
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
@@ -23,6 +22,9 @@ from .player_logic import WitnessPlayerLogic
 from .presets import witness_option_presets
 from .regions import WitnessPlayerRegions
 from .rules import set_rules
+
+if TYPE_CHECKING:
+    from .data.item_definition_classes import DoorItemDefinition, ItemData
 
 
 class WitnessWebWorld(WebWorld):
@@ -268,7 +270,7 @@ class WitnessWorld(World):
             ("Desert Outside", "Desert Surface 2"),
         ]
 
-        for i in range(num_early_locs, needed_size):
+        for _ in range(num_early_locs, needed_size):
             if not extra_checks:
                 break
 
@@ -352,7 +354,7 @@ class WitnessWorld(World):
             laser_hints = make_laser_hints(self, sorted(static_witness_items.ITEM_GROUPS["Lasers"]))
 
             for item_name, hint in laser_hints.items():
-                item_def = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name])
+                item_def = cast("DoorItemDefinition", static_witness_logic.ALL_ITEMS[item_name])
                 self.laser_ids_to_hints[int(item_def.panel_id_hexes[0], 16)] = make_compact_hint_data(hint, self.player)
                 already_hinted_locations.add(cast_not_none(hint.location))
 

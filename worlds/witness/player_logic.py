@@ -22,7 +22,6 @@ from typing import TYPE_CHECKING, cast
 from .data import static_logic as static_witness_logic
 from .data.definition_classes import ConnectionDefinition, WitnessRule
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
-from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import (
     get_boat,
     get_caves_except_path_to_challenge_exclusion_list,
@@ -53,6 +52,7 @@ from .entity_hunt import EntityHuntPicker
 
 if TYPE_CHECKING:
     from . import WitnessWorld
+    from .data.static_logic import StaticWitnessLogicObj
 
 
 class WitnessPlayerLogic:
@@ -308,13 +308,13 @@ class WitnessPlayerLogic:
 
             self.THEORETICAL_ITEMS.add(item_name)
             if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
-                self.THEORETICAL_BASE_ITEMS.update(cast(ProgressiveItemDefinition,
+                self.THEORETICAL_BASE_ITEMS.update(cast("ProgressiveItemDefinition",
                                                         static_witness_logic.ALL_ITEMS[item_name]).child_item_names)
             else:
                 self.THEORETICAL_BASE_ITEMS.add(item_name)
 
             if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
-                entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
+                entity_hexes = cast("DoorItemDefinition", static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
                 for entity_hex in entity_hexes:
                     self.DOOR_ITEMS_BY_ID.setdefault(entity_hex, []).append(item_name)
 
@@ -326,13 +326,13 @@ class WitnessPlayerLogic:
             self.THEORETICAL_ITEMS.discard(item_name)
             if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
                 self.THEORETICAL_BASE_ITEMS.difference_update(
-                    cast(ProgressiveItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).child_item_names
+                    cast("ProgressiveItemDefinition", static_witness_logic.ALL_ITEMS[item_name]).child_item_names
                 )
             else:
                 self.THEORETICAL_BASE_ITEMS.discard(item_name)
 
             if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
-                entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
+                entity_hexes = cast("DoorItemDefinition", static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
                 for entity_hex in entity_hexes:
                     if entity_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[entity_hex]:
                         self.DOOR_ITEMS_BY_ID[entity_hex].remove(item_name)
@@ -731,10 +731,12 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(get_obelisk_keys())
 
         if world.options.shuffle_EPs == "obelisk_sides":
-            ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
-                      if ep_obj["entityType"] == "EP")
+            ep_gen = (
+                ep_hex for ep_hex, ep_obj in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
+                if ep_obj["entityType"] == "EP"
+            )
 
-            for ep_hex, ep_obj in ep_gen:
+            for ep_hex in ep_gen:
                 obelisk = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[self.REFERENCE_LOGIC.EP_TO_OBELISK_SIDE[ep_hex]]
                 obelisk_name = obelisk["checkName"]
                 ep_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[ep_hex]["checkName"]
@@ -966,7 +968,7 @@ class WitnessPlayerLogic:
             if item not in self.THEORETICAL_ITEMS:
                 progressive_item_name = static_witness_logic.get_parent_progressive_item(item)
                 self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
-                child_items = cast(ProgressiveItemDefinition,
+                child_items = cast("ProgressiveItemDefinition",
                                    static_witness_logic.ALL_ITEMS[progressive_item_name]).child_item_names
                 progressive_list = [child_item for child_item in child_items
                               if child_item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME]

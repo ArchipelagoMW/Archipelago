@@ -238,7 +238,7 @@ def convert_requirement_option(requirement: list[CollectionRule | SimpleItemRepr
     """
 
     collection_rules = cast(
-        list[CollectionRule],
+        "list[CollectionRule]",
         [rule for rule in requirement if not isinstance(rule, SimpleItemRepresentation)]
     )
     item_rules = [rule for rule in requirement if isinstance(rule, SimpleItemRepresentation)]
@@ -336,8 +336,8 @@ def set_rules(world: "WitnessWorld") -> None:
         if rule is None:
             continue
 
-        location = world.get_location(location)
+        location_obj = world.get_location(location)
 
-        set_rule(location, rule)
+        set_rule(location_obj, rule)
 
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
