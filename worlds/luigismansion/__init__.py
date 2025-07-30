@@ -590,7 +590,8 @@ class LMWorld(World):
                 for _ in range(max(0, 1 - exclude.count(item))):
                     loc_itempool.append(self.create_item(item))
         if self.options.good_vacuum.value == 2:
-            exclude += ["Progressive Vacuum"]
+            for _ in range(5):
+                exclude += ["Progressive Vacuum"]
         if self.options.boo_radar.value == 2:
             exclude += ["Boo Radar"]
         item_list: set = set()
@@ -598,14 +599,14 @@ class LMWorld(World):
             copies_to_place = 1
             if data.doorid in self.open_doors.keys() and self.open_doors.get(data.doorid) == 1:
                 exclude += [item]
-            if data.code == 65: # Gold Diamonds
+            if item == "Gold Diamond": # Gold Diamonds
                 copies_to_place = 5
-            elif data.code == 140: # Progressive Flowers
+            elif item == "Progressive Flower": # Progressive Flowers
                 copies_to_place = 3
-            elif data.code == 64: # Progressive Vacuums
-                    copies_to_place = 2
+            elif item == "Progressive Vacuum": # Progressive Vacuums
+                    copies_to_place = 6
             copies_to_place = max(0, copies_to_place - exclude.count(item))
-            if data.code == 64 and copies_to_place < 1:
+            if item == "Progressive Vacuum" and copies_to_place < 1:
                 raise Options.OptionError(f"{self.player_name} has excluded too many copies of Progressive Vacuum and the seed cannot be completed")
             for _ in range(copies_to_place):
                 item_list.add(item)
