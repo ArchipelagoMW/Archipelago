@@ -6,7 +6,7 @@ from worlds.LauncherComponents import Component, components, Type, launch_subpro
 import random
 
 from worlds.glover.Options import GloverOptions
-from worlds.glover import ItemPool
+from worlds.glover import ItemPool, JsonReader
 
 class GloverWeb(WebWorld):
     englishTut = Tutorial("",
@@ -28,6 +28,16 @@ class GloverWorld(World):
     item_name_to_id = {}
     options : GloverOptions
     all_items_table : ItemPool
+    json_info : JsonReader.JsonInfo
+
+    spawn_checkpoint = [
+        2,3,3,
+        4,5,4,
+        3,3,4,
+        3,4,4,
+        3,3,5,
+        2,1,4]
+    
     #Check/Item Prefixes
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
@@ -79,13 +89,32 @@ class GloverWorld(World):
             return 2
         return -1
 
-    
     def world_from_string(self, name : str) -> int:
         if name[:3] in self.world_prefixes:
             return self.level_prefixes.index(name[:3])
         if name.startswith("Hubworld") or name.startswith("Castle Cave") or name.startswith("Training"):
             return 6
         return -1
+
+    def generate_early(self):
+        #Setup the spawning checkpoints
+        if self.options.spawning_checkpoint_randomizer:
+            #If randomized, pick a number from it's assigned value to the current value
+            for each_item in self.spawn_checkpoint.count():
+                self.spawn_checkpoint[each_item] = random.randint(1, self.spawn_checkpoint[each_item])
+        else:
+            #By default, they're all Checkpoint 1
+            for each_item in self.spawn_checkpoint.count():
+                self.spawn_checkpoint[each_item] = 1
+        self.json_info = JsonReader.build_data(self)
+
+    def create_regions(self):
+        main_menu = Region("Menu", self.player, self.multiworld)
+        self.multiworld.regions.append(main_menu)
+        for each_level in self.json_info.all_levels:
+            for each_region_pair in each_level.map_regions:
+                each_region_pair.ball_region
+
 
     def create_item(self, name) -> Item:
         item_classification = None
@@ -134,25 +163,11 @@ class GloverWorld(World):
         
         #Checkpoint Logic
         checkpoint_items = []
-        spawn_checkpoint = [
-            2,3,3,
-            4,5,4,
-            3,3,4,
-            3,4,4,
-            3,3,5,
-            2,1,4]
-        if self.options.spawning_checkpoint_randomizer:
-            for each_item in spawn_checkpoint.count():
-                spawn_checkpoint[each_item] = random.randint(1, spawn_checkpoint[each_item])
-        else:
-            for each_item in spawn_checkpoint.count():
-                spawn_checkpoint[each_item] = 1
-
         if self.options.checkpoint_checks:
             for each_checkpoint in self.all_items_table.checkpoint_table:
                 level_offset = self.level_from_string(each_checkpoint)
                 world_offset = self.world_from_string(each_checkpoint)
-                if spawn_checkpoint[level_offset + (world_offset * 3)] != int(each_checkpoint[-1]):
+                if self.spawn_checkpoint[level_offset + (world_offset * 3)] != int(each_checkpoint[-1]):
                     checkpoint_items.append[each_checkpoint]
 
         #Level Event Logic
@@ -173,7 +188,12 @@ class GloverWorld(World):
         all_core_items.extend(ability_items)
         for each_item in garib_items:
             self.create_item(each_item)
-
+        for each_item in checkpoint_items:
+            self.create_item(each_item)
+        for each_item in event_items:
+            self.create_item(each_item)
+        for each_item in ability_items:
+            self.create_item(each_item)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         options = self.options.as_dict(

@@ -92,51 +92,6 @@ class AccessMethod(NamedTuple):
     difficulty : int
     required_items : list
 
-def build_logic(player : int, multiworld : MultiWorld, spawn_checkpoint : List[int]):
-    #Build Logic
-    logic_file = open('Logic.json')
-    logic_data = json.load(logic_file)
-    loc_con_index = 0
-    map_levels : List[RegionLevel] = []
-    locations : List[Location] = []
-    for world_index in 1:
-        world_prefix : str = GloverWorld.world_prefixes[world_index]
-        each_world = logic_data[world_index]
-        #Go over the Glover worlds
-        for level_key in each_world:
-            each_level = each_world[level_key]
-            checkpoint_entry_pairs = levels_in_order[loc_con_index]
-            loc_con_index += 1
-            level_prefix = GloverWorld.level_prefixes[int(level_key[-1])]
-            level_name : str = world_prefix + level_prefix
-            prefix : str = level_name + ": "
-            map_regions : List[RegionPair] = []
-            location_data_list : List[LocationData] = []
-            #Get the check name
-            for check_name in each_level:
-                check_info = each_level[check_name]
-                #Location
-                if type(check_info) is list:
-                    location_data_list.append(create_location_data(check_name, check_info, prefix))
-                        
-                #In-Level Region
-                if type(check_info) is dict:
-                    map_regions.append(create_region_pair(check_info, prefix, check_name, level_name, player, multiworld))
-                    #You get the one from checkpoints by default
-                    region_checkpoints = []
-                    for check_index in range(1, checkpoint_entry_pairs.count()):
-                        matching_name = checkpoint_entry_pairs[check_index]
-                        if matching_name == check_name:
-                            region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
-            #Sort the in-level regions
-            map_regions = sorted(map_regions, key=attrgetter('base_id'))
-            connect_region_pairs(map_regions)
-            #Create the level info attached to it
-            region_level : RegionLevel = create_region_level(level_name, spawn_checkpoint, player, multiworld)
-            map_levels.append(region_level)
-            #Attach the locations to the regions
-            locations.extend(assign_locations_to_regions(region_level, map_regions, location_data_list))
-
 class LocationData(NamedTuple):
     name : str
     ap_ids : List[int]
@@ -155,9 +110,9 @@ def create_location_data(check_name : str, check_info : list, prefix : str) -> L
 class RegionPair(NamedTuple):
     name : str
     base_id : int
-    ball_region : Region
+    #ball_region : Region
     ball_region_methods : list[AccessMethod]
-    no_ball_region : Region
+    #no_ball_region : Region
     no_ball_region_methods : list[AccessMethod]
 
 def create_region_pair(check_info : dict, check_name : str, level_name : str, player : int, multiworld : MultiWorld) -> RegionPair:
@@ -171,14 +126,12 @@ def create_region_pair(check_info : dict, check_name : str, level_name : str, pl
         if check_pairing.count() > 1:
             for each_method in check_pairing[1]:
                 ball_region_methods.append(create_access_method(each_method, prefix))
-    ball_region = Region(prefix + level_name, player, multiworld, level_name)
     for check_pairing in check_info["D"]:
         #ids = check_pairing[0]
         if check_pairing.count() > 1:
             for each_method in check_pairing[1]:
                 no_ball_region_methods.append(create_access_method(each_method, prefix))
-    no_ball_region = Region(prefix + level_name, player, multiworld, level_name)
-    return RegionPair(region_name, base_id, ball_region, ball_region_methods, no_ball_region, no_ball_region_methods)
+    return RegionPair(region_name, base_id, ball_region_methods, no_ball_region_methods)
 
 def connect_region_pairs(pairs : List[RegionPair]):
     for each_pair in pairs:
@@ -190,7 +143,9 @@ def connect_region_pairs(pairs : List[RegionPair]):
 
 class RegionLevel(NamedTuple):
     name : str
-    region : Region
+    #region : Region
+    default_region : int
+    starting_checkpoint : int
     map_regions : List[RegionPair]
 
 def create_region_level(level_name, spawn_checkpoint : List[int] | None, starting_checkpoint : int | None, map_regions : List[RegionPair], player : int, multiworld : MultiWorld, self : GloverWorld):
@@ -232,7 +187,7 @@ def create_region_level(level_name, spawn_checkpoint : List[int] | None, startin
         #if default_region != region_index:
         #    level_entrances.access_rule
 
-    return RegionLevel(level_name, region, starting_checkpoint, map_regions)
+    return RegionLevel(level_name, default_region, starting_checkpoint, map_regions)
 
 def create_access_method(info : dict, prefix : str) -> AccessMethod:
     required_moves : list = []
@@ -289,3 +244,53 @@ def get_region_from_name(region_pairs : List[RegionPair], lookup_key : str) -> R
         else:
             if each_pair.name == lookup_key:
                 return each_pair.no_ball_region
+
+class JsonInfo(NamedTuple):
+    all_levels : List[RegionLevel] = []
+    locations : List[Location] = []
+
+def build_data(self : GloverWorld) -> JsonInfo:
+    all_levels : List[RegionLevel] = []
+    locations : List[Location] = []
+
+    #Build Logic
+    logic_file = open('Logic.json')
+    logic_data = json.load(logic_file)
+    loc_con_index = 0
+    for world_index in 1:
+        world_prefix : str = GloverWorld.world_prefixes[world_index]
+        each_world = logic_data[world_index]
+        #Go over the Glover worlds
+        for level_key in each_world:
+            each_level = each_world[level_key]
+            checkpoint_entry_pairs = levels_in_order[loc_con_index]
+            loc_con_index += 1
+            level_prefix = GloverWorld.level_prefixes[int(level_key[-1])]
+            level_name : str = world_prefix + level_prefix
+            prefix : str = level_name + ": "
+            map_regions : List[RegionPair] = []
+            location_data_list : List[LocationData] = []
+            #Get the check name
+            for check_name in each_level:
+                check_info = each_level[check_name]
+                #Location
+                if type(check_info) is list:
+                    location_data_list.append(create_location_data(check_name, check_info, prefix))
+                #In-Level Region
+                if type(check_info) is dict:
+                    map_regions.append(create_region_pair(check_info, prefix, check_name, level_name, self.player, self.multiworld))
+                    #You get the one from checkpoints by default
+                    region_checkpoints = []
+                    for check_index in range(1, checkpoint_entry_pairs.count()):
+                        matching_name = checkpoint_entry_pairs[check_index]
+                        if matching_name == check_name:
+                            region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
+            #Sort the in-level regions
+            map_regions = sorted(map_regions, key=attrgetter('base_id'))
+            connect_region_pairs(map_regions)
+            #Create the level info attached to it
+            region_level : RegionLevel = create_region_level(level_name, self.spawn_checkpoint, self.player, self.multiworld)
+            all_levels.append(region_level)
+            #Attach the locations to the regions
+            locations.extend(assign_locations_to_regions(region_level, map_regions, location_data_list))
+    return JsonInfo(all_levels, locations)
