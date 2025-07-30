@@ -99,7 +99,7 @@ def update_blackout_event(gcm: GCM) -> GCM:
 
 # Updates all common events
 def update_common_events(gcm: GCM, randomize_mice: bool) -> GCM:
-    list_custom_events = ["03", "07", "10", "22", "23", "24", "29", "33", "35", "38", "50", "61", "64", "65",
+    list_custom_events = ["03", "10", "22", "23", "24", "29", "33", "35", "38", "50", "61", "64", "65",
      "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "88", "89", "90"]
     if randomize_mice:
         list_custom_events += ["95", "97", "98", "99", "100"]
@@ -286,9 +286,9 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
     random.seed(seed)
 
     # Add new event and csv to our special spawn toad
-    lines = get_data(MAIN_PKG_NAME, "data/custom_events/event07.txt").decode('utf-8')
-    csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message7.csv").decode('utf-8')
-    gcm = __update_custom_event(gcm, "07", True, lines, csv_lines)
+    lines = get_data(MAIN_PKG_NAME, "data/custom_events/event12.txt").decode('utf-8')
+    csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message12.csv").decode('utf-8')
+    gcm = __update_custom_event(gcm, "12", True, lines, csv_lines)
 
     #Add various hints to their specific hint spots
     for hint_name in ALWAYS_HINT:

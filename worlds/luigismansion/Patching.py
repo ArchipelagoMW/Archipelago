@@ -100,13 +100,13 @@ def __get_item_name(item_data, slot: int):
 def update_event_info(event_info, boo_checks: bool, output_data):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc. Also remove Mario Items/Elemental Item events
-    events_to_remove = [9, 12, 15, 18, 19, 20, 21, 41, 42, 45, 47, 54, 69, 70, 73, 80, 81, 85, 91]
+    events_to_remove = [7, 9, 15, 18, 19, 20, 21, 41, 42, 45, 47, 54, 69, 70, 73, 80, 81, 85, 91]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
         events_to_remove += [16, 96]
     if output_data["Options"]["spawn"] in ("Foyer", "Courtyard", "Wardrobe Balcony", "1F Washroom"):
-        events_to_remove += [7]
+        events_to_remove += [12]
 
     event_info.info_file_field_entries = list(filter(
         lambda info_entry: not (info_entry["EventNo"] in events_to_remove or (info_entry["EventNo"] == 93 and
@@ -249,7 +249,7 @@ def update_event_info(event_info, boo_checks: bool, output_data):
             x["EventFlag"] = 0
 
         # Update Starting Toad Event (event07) to move to the spawn region.
-        if x["EventNo"] == 7:
+        if x["EventNo"] == 12:
             if not output_data["Options"]["spawn"] in ("Foyer", "Courtyard", "Wardrobe Balcony", "1F Washroom"):
                 x["EventFlag"] = 0
                 x["disappear_flag"] = 0
