@@ -25,6 +25,10 @@
 <WAIT>(20)
 <ACTOR>"demo_luigi"<ACT>"DM_LOKGB_ST"
 <ANYKEY>
+<SAY><COLOR>(0)There might be something\nin it for you to visit\nmy gallery and complete the training
+<WAIT>(20)
+<ACTOR>"demo_luigi"<ACT>"DM_LOKGB_ST"
+<ANYKEY>
 <SAY><COLOR>(0)Don't forget, your health resets\nto max HP every time you quit.
 <WAIT>(20)
 <ACTOR>"demo_luigi"<ACT>"DM_NOD_01"
