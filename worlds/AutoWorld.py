@@ -15,7 +15,7 @@ from Utils import deprecate
 
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
-    from . import GamesPackage
+    from NetUtils import GamesPackage, MultiData
     from settings import Group
 
 perf_logger = logging.getLogger("performance")
@@ -396,7 +396,7 @@ class World(metaclass=AutoWorldRegister):
     def create_items(self) -> None:
         """
         Method for creating and submitting items to the itempool. Items and Regions must *not* be created and submitted
-        to the MultiWorld after this step. If items need to be placed during pre_fill use `get_prefill_items`.
+        to the MultiWorld after this step. If items need to be placed during pre_fill use `get_pre_fill_items`.
         """
 
     @classmethod
@@ -560,7 +560,7 @@ class World(metaclass=AutoWorldRegister):
         # so you can have more specific typing in your world implementation.
         return {}
 
-    def modify_multidata(self, multidata: dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
+    def modify_multidata(self, multidata: "MultiData") -> None:  # TODO: TypedDict for multidata?
         """
         For deeper modification of server multidata, such as adding additional custom connection names.
 
@@ -714,7 +714,7 @@ class World(metaclass=AutoWorldRegister):
         """
         name = self.collect_item(state, item)
         if name:
-            state.prog_items[self.player][name] += 1
+            state.add_item(name, self.player)
             return True
         return False
 
@@ -728,9 +728,7 @@ class World(metaclass=AutoWorldRegister):
         """
         name = self.collect_item(state, item, True)
         if name:
-            state.prog_items[self.player][name] -= 1
-            if state.prog_items[self.player][name] < 1:
-                del (state.prog_items[self.player][name])
+            state.remove_item(name, self.player)
             return True
         return False
 

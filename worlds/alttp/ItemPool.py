@@ -490,12 +490,16 @@ def generate_itempool(world):
         # Otherwise, logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
         # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
         # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
-        if world.options.item_pool in ['easy', 'normal', 'hard'] and not (multiworld.custom and multiworld.customitemarray[30] == 0):
-            next(item for item in items if item.name == 'Boss Heart Container').classification = ItemClassification.progression
-        elif world.options.item_pool in ['expert'] and not (multiworld.custom and multiworld.customitemarray[29] < 4):
+        try:
+            next(item for item in items if item.name == 'Boss Heart Container').classification \
+                |= ItemClassification.progression
+        except StopIteration:
             adv_heart_pieces = (item for item in items if item.name == 'Piece of Heart')
             for i in range(4):
-                next(adv_heart_pieces).classification = ItemClassification.progression
+                try:
+                    next(adv_heart_pieces).classification |= ItemClassification.progression
+                except StopIteration:
+                    break  # logically health tanking is an option, so rules should still resolve to something beatable
 
     world.required_medallions = (world.options.misery_mire_medallion.current_key.title(),
                                  world.options.turtle_rock_medallion.current_key.title())
@@ -544,10 +548,12 @@ def set_up_take_anys(multiworld, world, player):
     old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True, total_shop_slots)
     multiworld.shops.append(old_man_take_any.shop)
 
-    swords = [item for item in multiworld.itempool if item.player == player and item.type == 'Sword']
-    if swords:
-        sword = multiworld.random.choice(swords)
-        multiworld.itempool.remove(sword)
+    sword_indices = [
+        index for index, item in enumerate(multiworld.itempool) if item.player == player and item.type == 'Sword'
+    ]
+    if sword_indices:
+        sword_index = multiworld.random.choice(sword_indices)
+        sword = multiworld.itempool.pop(sword_index)
         multiworld.itempool.append(item_factory('Rupees (20)', world))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0)
         loc_name = "Old Man Sword Cave"
