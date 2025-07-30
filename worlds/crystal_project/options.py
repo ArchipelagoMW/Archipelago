@@ -318,6 +318,15 @@ class IncludeScholarAbilities(DefaultOnToggle):
     display_name = "Include Scholar Abilities in the item pool"
 
 #"""Bonus Fun"""
+class TrapLikelihood(Range):
+    """
+    This is the likelihood that a trap will replace a filler check, a value of 0 means no traps
+    """
+    display_name = "Trap Likelihood"
+    range_start = 0
+    range_end = 100
+    default = 0
+
 class ItemInfoMode(Choice):
     """
     For Full, all treasure and store icons on the map will display if they are progression, useful, or filler items.
@@ -390,6 +399,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     startWithMaps: StartWithMaps
     includeSummonAbilities: IncludeSummonAbilities
     includeScholarAbilities: IncludeScholarAbilities
+    trapLikelihood: TrapLikelihood
     item_info_mode: ItemInfoMode
     randomizeMusic: RandomizeMusic
     useMods: UseMods

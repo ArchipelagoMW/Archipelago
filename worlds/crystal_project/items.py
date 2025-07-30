@@ -41,6 +41,7 @@ item_index_offset = 101
 equipment_index_offset = 1001
 summon_index_offset = 10001
 scholar_index_offset = 100001
+trap_index_offset = 1000001
 
 item_table: Dict[str, ItemData] = {
     #Jobs
@@ -1064,6 +1065,9 @@ item_table: Dict[str, ItemData] = {
     OVERlOAD: ItemData(SCHOLAR_ABILITY, 365 + scholar_index_offset, ItemClassification.useful, 0, 1),
     REFLECTION: ItemData(SCHOLAR_ABILITY, 366 + scholar_index_offset, ItemClassification.useful, 0, 1),
     LIFEGIVER: ItemData(SCHOLAR_ABILITY, 376 + scholar_index_offset, ItemClassification.useful, 0, 1),
+
+    #Traps
+    "Trap - Dialog Trap": ItemData(TRAP, 1 + trap_index_offset, ItemClassification.filler, 0),
 }
 
 progressive_equipment: Tuple[str, ...] = (
@@ -1850,6 +1854,10 @@ filler_items: Tuple[str, ...] = (
     "Item - Fresh Salmon",
     "Item - Scroll",
     # add currency?
+)
+
+trap_items: Tuple[str, ...] = (
+    "Trap - Dialog Trap",
 )
 
 def get_item_names_per_category() -> Dict[str, Set[str]]:
