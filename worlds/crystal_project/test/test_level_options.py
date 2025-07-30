@@ -187,10 +187,10 @@ class TestMaxLevelDecrease(CrystalProjectTestBase):
     def test_number_of_progressive_levels_in_pool(self):
         # 0 Progressive Levels in the pool
         self.assertTrue(len(self.get_items_by_name(PROGRESSIVE_LEVEL)) == 0)
-        decreased_max_level_state: CollectionState = CollectionState(self.multiworld)
+        starting_state: CollectionState = CollectionState(self.multiworld)
         # only 1 pre-collected Progressive Level
-        self.assertTrue(decreased_max_level_state.has(PROGRESSIVE_LEVEL, self.player, 1))
-        self.assertFalse(decreased_max_level_state.has(PROGRESSIVE_LEVEL, self.player, 2))
+        self.assertTrue(starting_state.has(PROGRESSIVE_LEVEL, self.player, 1))
+        self.assertFalse(starting_state.has(PROGRESSIVE_LEVEL, self.player, 2))
 
 class TestProgressiveLevelSize(CrystalProjectTestBase):
     options = {
