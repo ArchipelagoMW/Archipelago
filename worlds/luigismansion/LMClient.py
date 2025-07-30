@@ -265,6 +265,7 @@ class LMContext(CommonContext):
             self.boo_final_count = int(args["slot_data"]["final boo count"])
             self.luigimaxhp = int(args["slot_data"]["luigi max health"])
             self.spawn = str(args["slot_data"]["spawn_region"])
+            self.boolossus_difficulty = int(args["slot_data"]["boolossus_difficulty"])
             Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])), name="Update Deathlink")
             Utils.async_start(self.update_trap_link(bool(args["slot_data"]["trap_link"])), name="Update Traplink")
 
@@ -593,7 +594,10 @@ class LMContext(CommonContext):
             crown_helper_val = "00000001"
             dme.write_bytes(0x804DE40C, bytes.fromhex(crown_helper_val))
 
-        # Make it so the displayed Boo counter always appears even if you dont have boo radar or if you haven't caught
+        # Always update Boolossus difficulty
+        dme.write_bytes(0x804de3d0, self.boolossus_difficulty.to_bytes(4,'big'))
+
+        # Make it so the displayed Boo counter always appears even if you don't have boo radar or if you haven't caught
         # a boo in-game yet.
         if self.boosanity:
             # This allows the in-game display to work correctly.
