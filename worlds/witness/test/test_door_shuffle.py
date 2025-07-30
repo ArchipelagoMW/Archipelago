@@ -60,7 +60,7 @@ class TestForbiddenDoors(WitnessMultiworldTestBase):
             )
 
         with self.subTest("Test that slot data is set up correctly for a panels seed with Early Caves"):
-            slot_data = cast(WitnessWorld, self.multiworld.worlds[3])._get_slot_data()
+            slot_data = cast("WitnessWorld", self.multiworld.worlds[3])._get_slot_data()
 
             self.assertIn(
                 WitnessWorld.item_name_to_id["Caves Panels"],
