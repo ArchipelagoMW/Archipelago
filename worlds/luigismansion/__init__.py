@@ -834,6 +834,7 @@ class LMWorld(World):
             "walksanity": self.options.walksanity.value,
             "clairvoya requirement": self.options.mario_items.value,
             "boo gates": self.options.boo_gates.value,
+            "boolossus_difficulty": self.options.boolossus_difficulty.value,
             # "washroom boo count": self.options.washroom_boo_count.value,
             "balcony boo count": self.options.balcony_boo_count.value,
             "final boo count": self.options.final_boo_count.value,
