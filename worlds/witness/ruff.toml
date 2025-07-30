@@ -7,3 +7,5 @@ ignore = ["C9"]
 [lint.per-file-ignores]
 # The import list would just be so big if I imported every option individually in presets.py
 "presets.py" = ["F403", "F405"]
+# WorldTestBase.options should probably be a ClassVar. Since it's not, I'm just gonna ignore this rule.
+"test/*.py" = ["RUF012"]
