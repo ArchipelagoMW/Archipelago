@@ -6,7 +6,7 @@ from random import choice, randint
 from .Regions import spawn_locations
 from .Items import ALL_ITEMS_TABLE, filler_items
 from .Locations import FLIP_BALCONY_BOO_EVENT_LIST, ALL_LOCATION_TABLE
-from .game.Currency import CURRENCY_NAME
+from .game.Currency import CURRENCY_NAME, CURRENCIES
 
 speedy_observer_index: list[int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
 speedy_enemy_index: list[int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
@@ -1010,55 +1010,22 @@ def update_treasure_table(treasure_info, character_info, output_data):
                     chest_size = __get_chest_size_from_key(item_data["door_id"])
 
             treasure_item_name = __get_item_name(item_data, slot_num) #nothing
-            coin_amount = 0
-            bill_amount = 0
-            gold_bar_amount = 0
-            sapphire_amount = 0
-            emerald_amount = 0
-            ruby_amount = 0
-            diamond_amount = 0
-            rdiamond_amount = 0
+
+            # Setting all curriences to 0 value by default.
+            for currency_name in CURRENCIES:
+                treasure_info.info_file_field_entries[item_data["loc_enum"]][currency_name] = 0
 
             # Define the actor name to use from the Location in the generation output. Act differently if it's a key.
             # Don't give any items that are not from our game, leave those 0 / blank.
             if int(item_data["player"]) == slot_num and item_data["name"] in ALL_ITEMS_TABLE.keys():
                 lm_item_data = ALL_ITEMS_TABLE[item_data["name"]]
 
-                if "Coins" in item_data["name"]:
-                    if "Bills" in item_data["name"]:
-                        coin_amount = lm_item_data.currencies[CURRENCY_NAME.COINS]
-                        bill_amount = lm_item_data.currencies[CURRENCY_NAME.BILLS]
-                    else:
-                        coin_amount = lm_item_data.currencies[CURRENCY_NAME.COINS]
-                elif "Bills" in item_data["name"]:
-                    bill_amount = lm_item_data.currencies[CURRENCY_NAME.BILLS]
-                elif "Gold Bar" in item_data["name"]:
-                    gold_bar_amount = lm_item_data.currencies[CURRENCY_NAME.GOLD_BARS]
-                elif "Sapphire" in item_data["name"]:
-                    sapphire_amount = lm_item_data.currencies[CURRENCY_NAME.SAPPHIRE]
-                elif "Emerald" in item_data["name"]:
-                    emerald_amount = lm_item_data.currencies[CURRENCY_NAME.EMERALD]
-                elif "Ruby" in item_data["name"]:
-                    ruby_amount = lm_item_data.currencies[CURRENCY_NAME.RUBY]
-                elif item_data["name"] == "Diamond":
-                    diamond_amount = lm_item_data.currencies[CURRENCY_NAME.DIAMOND]
-                elif "Gold Diamond" in item_data["name"]:
-                    rdiamond_amount = lm_item_data.currencies[CURRENCY_NAME.GOLD_DIAMOND]
+                if hasattr(lm_item_data, 'currencies'):
+                    for currency_name, currency_amount in lm_item_data.currencies.items():
+                        treasure_info.info_file_field_entries[item_data["loc_enum"]][currency_name] = currency_amount
 
             treasure_info.info_file_field_entries[item_data["loc_enum"]]["other"] = treasure_item_name
             treasure_info.info_file_field_entries[item_data["loc_enum"]]["size"] = chest_size
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["coin"] = coin_amount
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["bill"] = bill_amount
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["gold"] = gold_bar_amount
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["spearl"] = 0
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["mpearl"] = 0
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["lpearl"] = 0
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["sapphire"] = sapphire_amount
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["emerald"] = emerald_amount
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["ruby"] = ruby_amount
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["diamond"] = diamond_amount
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["cdiamond"] = 0
-            treasure_info.info_file_field_entries[item_data["loc_enum"]]["rdiamond"] = rdiamond_amount
             treasure_info.info_file_field_entries[item_data["loc_enum"]]["effect"] = 0
             treasure_info.info_file_field_entries[item_data["loc_enum"]]["camera"] = 0
 

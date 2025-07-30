@@ -4,17 +4,17 @@ import dolphin_memory_engine as dme
 _WALLET_START_ADDR = 0x803D8B7C
 
 class CURRENCY_NAME:
-    COINS = "coins"
-    BILLS = "bills"
-    GOLD_BARS = "gold_bars"
+    COINS = "coin"
+    BILLS = "bill"
+    GOLD_BARS = "gold"
     SAPPHIRE = "sapphire"
     EMERALD = "emerald"
     RUBY = "ruby"
     DIAMOND = "diamond"
-    GOLD_DIAMOND = "gold_diamond"
-    SMALL_PEARL = "small_pearl"
-    MEDIUM_PEARL = "medium_pearl"
-    LARGE_PEARL = "large_pearl"
+    GOLD_DIAMOND = "rdiamond"
+    SMALL_PEARL = "spearl"
+    MEDIUM_PEARL = "mpearl"
+    LARGE_PEARL = "lpearl"
 
 class Currency:
     """Memory representation of type and worth of currency Luigi can obtain."""
