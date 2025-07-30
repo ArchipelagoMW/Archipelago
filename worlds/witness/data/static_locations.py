@@ -440,8 +440,6 @@ OBELISK_SIDES = {
     "Town Obelisk Side 6",
 }
 
-ALL_LOCATIONS_TO_ID: dict[str, int] = {}
-
 AREA_LOCATION_GROUPS: dict[str, set[str]] = {}
 
 
@@ -463,7 +461,7 @@ def get_event_name(entity_hex: str) -> str:
     return cast("str", static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]) + action
 
 
-ALL_LOCATIONS_TO_ID = {
+ALL_LOCATIONS_TO_ID: dict[str, int]  = {
     panel_obj["checkName"]: get_id(chex)
     for chex, panel_obj in static_witness_logic.ENTITIES_BY_HEX.items()
     if panel_obj["id"]
