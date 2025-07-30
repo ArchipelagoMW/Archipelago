@@ -1024,6 +1024,7 @@ def update_treasure_table(treasure_info, character_info, output_data):
                     for currency_name, currency_amount in lm_item_data.currencies.items():
                         treasure_info.info_file_field_entries[item_data["loc_enum"]][currency_name] = currency_amount
 
+            treasure_info.info_file_field_entries[item_data["loc_enum"]]["cdiamond"] = 0
             treasure_info.info_file_field_entries[item_data["loc_enum"]]["other"] = treasure_item_name
             treasure_info.info_file_field_entries[item_data["loc_enum"]]["size"] = chest_size
             treasure_info.info_file_field_entries[item_data["loc_enum"]]["effect"] = 0
