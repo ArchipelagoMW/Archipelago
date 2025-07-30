@@ -190,7 +190,7 @@ class LMWorld(World):
         if self.options.toadsanity:
             for location, data in TOAD_LOCATION_TABLE.items():
                 # If location is starting room toad, assign to starting room. Otherwise proceed as normal
-                if data.code == 617:
+                if location == "Starting Room Toad":
                     region = self.get_region(self.origin_region_name)
                 else:
                     region = self.get_region(data.region)
@@ -496,7 +496,7 @@ class LMWorld(World):
             self.open_doors = dict(zip(self.random.sample(k, k=len(self.open_doors)),
                                        v))
             if self.options.door_rando.value == 2:
-                for door_num in [3, 42, 59, 72]:
+                for door_num in [3, 42, 59, 72]: # If door is a suite_door, lock it in this option
                     self.open_doors[door_num] = 0
             spawn_doors = copy.copy(spawn_locations[self.origin_region_name]["door_ids"])
             if spawn_doors:
@@ -522,6 +522,7 @@ class LMWorld(World):
         if self.options.boosanity.value == 0 and self.options.balcony_boo_count.value > 31:
             self.options.balcony_boo_count.value = 31
 
+        # If spawn region is past Boolossus, make sure the gate is possible
         if self.origin_region_name in ("Telephone Room", "Clockwork Room"):
             if self.options.balcony_boo_count.value > 4 and self.options.boosanity.value == 0:
                 self.options.balcony_boo_count.value = 4
@@ -562,10 +563,12 @@ class LMWorld(World):
             region = self.get_region(data.region)
             entry = LMLocation(self.player, location, region, data)
             add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-            if entry.code == 5: # If it's Clairvoya's room, should match Mario item count
+            # If it's Clairvoya's room chest, should match Mario item count.
+            # Do not compare to region to keep rule correct for the Candles Key
+            if data.code == 5:
                 add_rule(entry,
                          lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value))
-            if entry.code == 25 and self.open_doors.get(28) == 0:
+            if entry.region == "Twins' Room" and self.open_doors.get(28) == 0:
                 add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
             set_element_rules(self, entry, True)
             region.locations.append(entry)
