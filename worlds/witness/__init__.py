@@ -3,7 +3,7 @@ Archipelago init file for The Witness
 """
 import dataclasses
 from logging import error, warning
-from typing import Any, cast
+from typing import Any, ClassVar, cast
 
 from BaseClasses import CollectionState, Entrance, Location, LocationProgressType, Region, Tutorial
 
@@ -52,7 +52,7 @@ class WitnessWebWorld(WebWorld):
         ["Rever"]
     )
 
-    tutorials = [setup_en, setup_de, setup_fr]
+    tutorials = [setup_en, setup_de, setup_fr]  # noqa: RUF012
 
     options_presets = witness_option_presets
     option_groups = witness_option_groups
@@ -73,7 +73,7 @@ class WitnessWorld(World):
     options_dataclass = TheWitnessOptions
     options: TheWitnessOptions
 
-    item_name_to_id = {
+    item_name_to_id: ClassVar[dict[str, int]] = {
         # ITEM_DATA doesn't have any event items in it
         name: cast_not_none(data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
     }
