@@ -332,7 +332,9 @@ class PanelHuntPlando(LocationSet):
 
     display_name = "Panel Hunt Plando"
 
-    valid_keys = [static_witness_logic.ENTITIES_BY_HEX[panel_hex]["checkName"] for panel_hex in ALL_HUNTABLE_PANELS]
+    valid_keys = [  # noqa: RUF012
+        static_witness_logic.ENTITIES_BY_HEX[panel_hex]["checkName"] for panel_hex in ALL_HUNTABLE_PANELS
+    ]
 
 
 class PuzzleRandomization(Choice):
