@@ -135,7 +135,7 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
 
         self.multiworld = setup_multiworld([WitnessWorld] * len(self.options_per_world), ())
 
-        for world, options in zip(self.multiworld.worlds.values(), self.options_per_world):
+        for world, options in zip(self.multiworld.worlds.values(), self.options_per_world, strict=False):
             for option_name, option_value in {**self.common_options, **options}.items():
                 option = getattr(world.options, option_name)
                 self.assertIsNotNone(option)

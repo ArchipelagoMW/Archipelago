@@ -194,7 +194,7 @@ class WitnessPlayerItems:
 
         # Get the actual number of each item by scaling the float weight values to match the target quantity.
         int_weights: list[int] = build_weighted_int_list(filler_items.values(), remaining_quantity)
-        output.update(zip(filler_items.keys(), int_weights))
+        output.update(zip(filler_items.keys(), int_weights, strict=False))
 
         return output
 
