@@ -1,4 +1,5 @@
 line-length = 120
+target-version = "py310"
 
 [lint]
 select = ["C", "E", "F", "R", "W", "I", "N", "Q", "UP", "RUF", "ISC", "T20"]
