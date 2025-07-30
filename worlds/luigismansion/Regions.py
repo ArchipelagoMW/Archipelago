@@ -103,9 +103,9 @@ spawn_locations = {
                               "key": ["North Rec Room Key", "South Rec Room Key", "Lower 2F Stairwell Key", "Upper 2F Stairwell Key"],
                               "door_keys": ["North Rec Room Key", "South Rec Room Key"],
                               "door_ids": [24, 25]}, # Rec Room
-    "Laundry Room":          {"room_no": 5, "pos_x": -3165.112550, "pos_y": 0, "pos_z": -804.770508,
-                              "key": ["Laundry Key", "Butler's Rom Key", "Heart Key"], "door_keys": ["Laundry Key", "Butler's Rom Key"],
-                              "door_ids": [1, 7]},  # Laundry
+    # "Laundry Room":          {"room_no": 5, "pos_x": -3165.112550, "pos_y": 0, "pos_z": -804.770508,
+    #                           "key": ["Laundry Key", "Butler's Rom Key", "Heart Key"], "door_keys": ["Laundry Key", "Butler's Rom Key"],
+    #                           "door_ids": [1, 7]},  # Laundry
     "Telephone Room":        {"room_no": 50, "pos_x": -9.812825, "pos_y": 1100, "pos_z": 118.738243,
                               "key": ["Telephone Room Key", "Clockwork Room Key"], "door_keys": ["Telephone Room Key", "Clockwork Room Key"],
                               "door_ids": [53, 52]}, # Telephone
