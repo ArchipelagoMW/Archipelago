@@ -4,7 +4,7 @@ from math import ceil
 from random import choice, randint
 
 from .Regions import spawn_locations
-from .Items import ALL_ITEMS_TABLE, filler_items
+from .Items import ALL_ITEMS_TABLE, filler_items, LMItemData, CurrencyItemData
 from .Locations import FLIP_BALCONY_BOO_EVENT_LIST, ALL_LOCATION_TABLE
 from .game.Currency import CURRENCY_NAME, CURRENCIES
 
@@ -999,6 +999,7 @@ def update_treasure_table(treasure_info, character_info, output_data):
                 char_entry["pos_x"] = -1900.000000
                 char_entry["pos_z"] = -4830.000000
 
+            # Change chest appearance based of player cosmetic choices
             chest_size = int(treasure_info.info_file_field_entries[item_data["loc_enum"]]["size"])
             if item_data["room_no"] != 11 and chest_option > 0:
                 char_entry["name"] = __get_item_chest_visual(item_data["name"], chest_option,
@@ -1009,17 +1010,18 @@ def update_treasure_table(treasure_info, character_info, output_data):
                 else:
                     chest_size = __get_chest_size_from_key(item_data["door_id"])
 
+            # Define the actor name to use from the Location in the generation output. Act differently if it's a key.
             treasure_item_name = __get_item_name(item_data, slot_num) #nothing
 
             # Setting all curriences to 0 value by default.
             for currency_name in CURRENCIES:
                 treasure_info.info_file_field_entries[item_data["loc_enum"]][currency_name] = 0
 
-            # Define the actor name to use from the Location in the generation output. Act differently if it's a key.
             # Don't give any items that are not from our game, leave those 0 / blank.
             if int(item_data["player"]) == slot_num and item_data["name"] in ALL_ITEMS_TABLE.keys():
-                lm_item_data = ALL_ITEMS_TABLE[item_data["name"]]
+                lm_item_data: type[LMItemData|CurrencyItemData] = ALL_ITEMS_TABLE[item_data["name"]]
 
+                # If it's a money item, set the currencies based on our defined bundles
                 if hasattr(lm_item_data, 'currencies'):
                     for currency_name, currency_amount in lm_item_data.currencies.items():
                         treasure_info.info_file_field_entries[item_data["loc_enum"]][currency_name] = currency_amount
