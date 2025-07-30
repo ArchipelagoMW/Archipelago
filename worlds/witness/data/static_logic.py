@@ -1,5 +1,5 @@
 from collections import Counter, defaultdict
-from typing import Any, Dict, FrozenSet, List, Optional, Set
+from typing import Any, Optional
 
 from Utils import cache_argsless
 
@@ -26,25 +26,25 @@ from .utils import (
 
 
 class StaticWitnessLogicObj:
-    def __init__(self, lines: Optional[List[str]] = None) -> None:
+    def __init__(self, lines: Optional[list[str]] = None) -> None:
         if lines is None:
             lines = get_sigma_normal_logic()
 
         # All regions with a list of panels in them and the connections to other regions, before logic adjustments
-        self.ALL_REGIONS_BY_NAME: Dict[str, RegionDefinition] = {}
-        self.ALL_AREAS_BY_NAME: Dict[str, AreaDefinition] = {}
-        self.CONNECTIONS_WITH_DUPLICATES: Dict[str, List[ConnectionDefinition]] = defaultdict(list)
-        self.STATIC_CONNECTIONS_BY_REGION_NAME: Dict[str, List[ConnectionDefinition]] = {}
+        self.ALL_REGIONS_BY_NAME: dict[str, RegionDefinition] = {}
+        self.ALL_AREAS_BY_NAME: dict[str, AreaDefinition] = {}
+        self.CONNECTIONS_WITH_DUPLICATES: dict[str, list[ConnectionDefinition]] = defaultdict(list)
+        self.STATIC_CONNECTIONS_BY_REGION_NAME: dict[str, list[ConnectionDefinition]] = {}
 
-        self.ENTITIES_BY_HEX: Dict[str, Dict[str, Any]] = {}
-        self.ENTITIES_BY_NAME: Dict[str, Dict[str, Any]] = {}
-        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Dict[str, WitnessRule]] = {}
+        self.ENTITIES_BY_HEX: dict[str, dict[str, Any]] = {}
+        self.ENTITIES_BY_NAME: dict[str, dict[str, Any]] = {}
+        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX: dict[str, dict[str, WitnessRule]] = {}
 
-        self.OBELISK_SIDE_ID_TO_EP_HEXES: Dict[int, Set[int]] = {}
+        self.OBELISK_SIDE_ID_TO_EP_HEXES: dict[int, set[int]] = {}
 
-        self.EP_TO_OBELISK_SIDE: Dict[str, str] = {}
+        self.EP_TO_OBELISK_SIDE: dict[str, str] = {}
 
-        self.ENTITY_ID_TO_NAME: Dict[str, str] = {}
+        self.ENTITY_ID_TO_NAME: dict[str, str] = {}
 
         self.read_logic_file(lines)
         self.reverse_connections()
@@ -52,7 +52,7 @@ class StaticWitnessLogicObj:
 
     def add_easter_eggs(self) -> None:
         egg_counter = 0
-        area_counts: Dict[str, int] = Counter()
+        area_counts: dict[str, int] = Counter()
         for region_name, entity_amount in EASTER_EGGS.items():
             region_object = self.ALL_REGIONS_BY_NAME[region_name]
             correct_area = region_object.area
@@ -114,7 +114,7 @@ class StaticWitnessLogicObj:
             easter_egg_region.logical_entities.append(entity_hex)
             easter_egg_region.physical_entities.append(entity_hex)
 
-    def read_logic_file(self, lines: List[str]) -> None:
+    def read_logic_file(self, lines: list[str]) -> None:
         """
         Reads the logic file and does the initial population of data structures
         """
@@ -260,7 +260,7 @@ class StaticWitnessLogicObj:
 
     def reverse_connection(self, source_region: str, connection: ConnectionDefinition) -> None:
         # Reverse this connection with all its possibilities, except the ones marked as "OneWay".
-        remaining_options: Set[FrozenSet[str]] = set()
+        remaining_options: set[frozenset[str]] = set()
         for sub_option in connection.traversal_rule:
             if not any(req == "TrueOneWay" for req in sub_option):
                 remaining_options.add(sub_option)
@@ -293,8 +293,8 @@ class StaticWitnessLogicObj:
 
 
 # Item data parsed from WitnessItems.txt
-ALL_ITEMS: Dict[str, ItemDefinition] = {}
-_progressive_lookup: Dict[str, str] = {}
+ALL_ITEMS: dict[str, ItemDefinition] = {}
+_progressive_lookup: dict[str, str] = {}
 
 
 def parse_items() -> None:
@@ -302,7 +302,7 @@ def parse_items() -> None:
     Parses currently defined items from WitnessItems.txt
     """
 
-    lines: List[str] = get_items()
+    lines: list[str] = get_items()
     current_category: ItemCategory = ItemCategory.SYMBOL
 
     for line in lines:
@@ -319,7 +319,7 @@ def parse_items() -> None:
 
         item_code = int(line_split[0])
         item_name = line_split[1]
-        arguments: List[str] = line_split[2].split(",") if len(line_split) >= 3 else []
+        arguments: list[str] = line_split[2].split(",") if len(line_split) >= 3 else []
 
         if current_category in [ItemCategory.DOOR, ItemCategory.LASER]:
             # Map doors to IDs.

@@ -3,7 +3,7 @@ Defines the rules by which locations can be accessed,
 depending on the items received
 """
 from collections import Counter
-from typing import TYPE_CHECKING, Dict, List, NamedTuple, Optional, Union
+from typing import TYPE_CHECKING, NamedTuple, Optional, Union
 
 from BaseClasses import CollectionState
 
@@ -163,8 +163,8 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     # We also need a way from Town to Tunnels.
 
     return (
-        any(e.can_reach(state) for e in two_way_entrance_register["Tunnels", "Windmill Interior"])
-        and any(e.can_reach(state) for e in two_way_entrance_register["Outside Windmill", "Windmill Interior"])
+        (any(e.can_reach(state) for e in two_way_entrance_register["Tunnels", "Windmill Interior"])
+        and any(e.can_reach(state) for e in two_way_entrance_register["Outside Windmill", "Windmill Interior"]))
         or any(e.can_reach(state) for e in two_way_entrance_register["Tunnels", "Town"])
     )
 
@@ -210,8 +210,8 @@ def _has_item(item: str, world: "WitnessWorld",
     return simple_rule
 
 
-def optimize_requirement_option(requirement_option: List[Union[CollectionRule, SimpleItemRepresentation]])\
-        -> List[Union[CollectionRule, SimpleItemRepresentation]]:
+def optimize_requirement_option(requirement_option: list[Union[CollectionRule, SimpleItemRepresentation]])\
+        -> list[Union[CollectionRule, SimpleItemRepresentation]]:
     """
     This optimises out a requirement like [("Progressive Dots": 1), ("Progressive Dots": 2)] to only the "2" version.
     """
@@ -220,7 +220,7 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
     if not direct_items:
         return requirement_option
 
-    max_per_item: Dict[str, int] = Counter()
+    max_per_item: dict[str, int] = Counter()
     for item_rule in direct_items:
         max_per_item[item_rule[0]] = max(max_per_item[item_rule[0]], item_rule[1])
 
@@ -230,8 +230,8 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
     ]
 
 
-def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleItemRepresentation]],
-                               player: int) -> List[CollectionRule]:
+def convert_requirement_option(requirement: list[Union[CollectionRule, SimpleItemRepresentation]],
+                               player: int) -> list[CollectionRule]:
     """
     Converts a list of CollectionRules and SimpleItemRepresentations to just a list of CollectionRules.
     If the list is ONLY SimpleItemRepresentations, we can just return a CollectionRule based on state.has_all_counts()
