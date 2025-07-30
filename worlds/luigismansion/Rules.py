@@ -45,7 +45,7 @@ def set_element_rules(world: "LMWorld", location: LMLocation, use_enemizer: bool
                 add_rule(location, lambda state, i=item: state.has(i, world.player), "and")
 
     if use_enemizer:
-        if region in world.GHOST_TO_ROOM.keys() and location != "Uncle Grimmly, Hermit of the Darkness":
+        if region in world.ghost_affected_regions.keys() and location != "Uncle Grimmly, Hermit of the Darkness":
             # if fire, require water
             if world.ghost_affected_regions[region] == "Fire":
                 add_rule(location, lambda state: can_fst_water(state, world.player), "and")
