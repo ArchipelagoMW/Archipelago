@@ -640,7 +640,8 @@ class CommonContext:
             self.input_queue.put_nowait(None)
             self.input_requests -= 1
         self.keep_alive_task.cancel()
-        self.delete_old_data_package_task.cancel()
+        if self.delete_old_data_package_task:
+            self.delete_old_data_package_task.cancel()
         if self.ui_task:
             await self.ui_task
         if self.input_task:
