@@ -98,6 +98,10 @@ class SohWorld(World):
             items_to_create[Items.HYLIA_LAB_KEY.value] = 1
             items_to_create[Items.FISHING_HOLE_KEY.value] = 1
 
+        # Gerudo Fortress Keys
+        if self.options.fortress_carpenters == "fast":
+                items_to_create[Items.GERUDO_FORTRESS_SMALL_KEY.value] = 1
+        
         # Triforce pieces
         if self.options.triforce_hunt:
             total_triforce_pieces = math.floor(self.options.triforce_hunt_required_pieces * (1 + (self.options.triforce_hunt_extra_pieces_percentage / 100)))
@@ -239,6 +243,9 @@ class SohWorld(World):
             items_to_create[Items.BOTTOM_OF_THE_WELL_KEY_RING.value] = 1
             items_to_create[Items.TRAINING_GROUND_KEY_RING.value] = 1
             items_to_create[Items.GANONS_CASTLE_KEY_RING.value] = 1
+            if self.options.fortress_carpenters == "normal":
+                items_to_create[Items.GERUDO_FORTRESS_SMALL_KEY.value] = 0
+                items_to_create[Items.GERUDO_FORTRESS_KEY_RING.value] = 1
 
         # Bombchu bag
         if self.options.bombchu_bag:
