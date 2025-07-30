@@ -381,7 +381,7 @@ def update_observer_info(observer_info, output_data):
     for x in observer_info.info_file_field_entries:
         # Allows the Toads to spawn by default.
         if x["name"] == "kinopio":
-            if x["code_name"] == "dm_kinopio5":
+            if x["code_name"] in ("dm_kinopio5", "dm_kinopio4", "dm_kinopio3", "dm_kinopio2"):
                 continue
             x["cond_arg0"] = 0
             x["appear_flag"] = 0

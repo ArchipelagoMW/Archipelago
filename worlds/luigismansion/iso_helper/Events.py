@@ -285,6 +285,12 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
     seed: str) -> GCM:
     random.seed(seed)
 
+    # Add new event and csv to our special spawn toad
+    lines = get_data(MAIN_PKG_NAME, "data/custom_events/event07.txt").decode('utf-8')
+    csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message7.csv").decode('utf-8')
+    gcm = __update_custom_event(gcm, "07", True, lines, csv_lines)
+
+    #Add various hints to their specific hint spots
     for hint_name in ALWAYS_HINT:
         if hint_name == "Madame Clairvoya":
             continue
