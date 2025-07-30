@@ -2,4 +2,4 @@ line-length = 120
 
 [lint]
 select = ["C", "E", "F", "R", "W", "I", "N", "Q", "UP", "RUF", "ISC", "T20"]
-ignore = ["C9"]  # Author disagrees with forcing a specific amount of branch complexity in functions
+ignore = ["C901"]  # Author disagrees with forcing a specific amount of branch complexity in functions
