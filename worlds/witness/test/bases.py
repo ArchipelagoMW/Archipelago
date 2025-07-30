@@ -1,5 +1,5 @@
 from collections.abc import Iterable, Mapping
-from typing import Any, ClassVar, Union
+from typing import Any, ClassVar
 
 from BaseClasses import CollectionState, Entrance, Item, Location, Region
 
@@ -27,7 +27,7 @@ class WitnessTestBase(WorldTestBase):
             state.collect(item)
         return state.multiworld.can_beat_game(state)
 
-    def assert_dependency_on_event_item(self, spot: Union[Location, Region, Entrance], item_name: str) -> None:
+    def assert_dependency_on_event_item(self, spot: Location | Region | Entrance, item_name: str) -> None:
         """
         WorldTestBase.assertAccessDependency, but modified & simplified to work with event items
         """
@@ -144,7 +144,7 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
 
         self.assertSteps(gen_steps)
 
-    def collect_by_name(self, item_names: Union[str, Iterable[str]], player: int) -> list[Item]:
+    def collect_by_name(self, item_names: str | Iterable[str], player: int) -> list[Item]:
         """
         Collect all copies of a specified item name (or list of item names) for a player in the multiworld item pool.
         """
@@ -154,7 +154,7 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
             self.multiworld.state.collect(item)
         return items
 
-    def get_items_by_name(self, item_names: Union[str, Iterable[str]], player: int) -> list[Item]:
+    def get_items_by_name(self, item_names: str | Iterable[str], player: int) -> list[Item]:
         """
         Return all copies of a specified item name (or list of item names) for a player in the multiworld item pool.
         """

@@ -3,7 +3,7 @@ Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
 from collections import defaultdict
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
 
@@ -41,7 +41,7 @@ class WitnessPlayerRegions:
         self.created_region_names: set[str] = set()
 
     @staticmethod
-    def make_lambda(item_requirement: WitnessRule, world: "WitnessWorld") -> Optional[CollectionRule]:
+    def make_lambda(item_requirement: WitnessRule, world: "WitnessWorld") -> CollectionRule | None:
         from .rules import _meets_item_requirements
 
         """

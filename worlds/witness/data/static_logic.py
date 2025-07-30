@@ -1,5 +1,5 @@
 from collections import Counter, defaultdict
-from typing import Any, Optional
+from typing import Any
 
 from Utils import cache_argsless
 
@@ -26,7 +26,7 @@ from .utils import (
 
 
 class StaticWitnessLogicObj:
-    def __init__(self, lines: Optional[list[str]] = None) -> None:
+    def __init__(self, lines: list[str] | None = None) -> None:
         if lines is None:
             lines = get_sigma_normal_logic()
 
