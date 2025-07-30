@@ -1,5 +1,6 @@
 import asyncio, time, traceback
 from typing import Any
+from urllib.parse import to_bytes
 
 import NetUtils, Utils
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
@@ -582,9 +583,10 @@ class LMContext(CommonContext):
         lm_item = ALL_ITEMS_TABLE[lm_item_name]
         for addr_to_update in lm_item.update_ram_addr:
             if addr_to_update.ram_addr == 0x804dda54 and vac_count > 0:  # If we're checking against our vacuum-on address
-                dme.write_bytes(addr_to_update.ram_addr, 1)
+                curr_val = 1
+                dme.write_bytes(addr_to_update.ram_addr, curr_val.to_bytes(addr_to_update.ram_byte_size, 'big'))
             else:
-                dme.write_bytes(addr_to_update.ram_addr, vac_speed)
+                dme.write_bytes(addr_to_update.ram_addr, vac_speed.to_bytes(addr_to_update.ram_byte_size, 'big'))
 
         # Always adjust Pickup animation issues if the user turned pick up animations off.
         if not self.pickup_anim_on:
