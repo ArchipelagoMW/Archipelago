@@ -1,7 +1,7 @@
 import logging
 import math
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Optional, Union, cast
+from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 
@@ -12,8 +12,8 @@ from .player_items import WitnessItem
 if TYPE_CHECKING:
     from . import WitnessWorld
 
-CompactHintArgs = tuple[Union[str, int], Union[str, int]]
-CompactHintData = tuple[str, Union[str, int], Union[str, int]]
+CompactHintArgs: TypeAlias = tuple[str | int, str | int]
+CompactHintData: TypeAlias = tuple[str, str | int, str | int]
 
 
 @dataclass
@@ -34,10 +34,10 @@ class WitnessLocationHint:
 @dataclass
 class WitnessWordedHint:
     wording: str
-    location: Optional[Location] = None
-    area: Optional[str] = None
-    area_amount: Optional[int] = None
-    area_hunt_panels: Optional[int] = None
+    location: Location | None = None
+    area: str | None = None
+    area_amount: int | None = None
+    area_hunt_panels: int | None = None
     vague_location_hint: bool = False
 
 
@@ -232,7 +232,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
             item_name += " (" + world.multiworld.get_player_name(item.player) + ")"
 
     hint_text = ""
-    area: Optional[str] = None
+    area: str | None = None
 
     if world.options.vague_hints:
         chosen_group, group_type = try_getting_location_group_for_location(world, hint.location)
@@ -271,7 +271,7 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
 
 
 def hint_from_item(world: "WitnessWorld", item_name: str,
-                   own_itempool: list["WitnessItem"]) -> Optional[WitnessLocationHint]:
+                   own_itempool: list["WitnessItem"]) -> WitnessLocationHint | None:
     def get_real_location(multiworld: MultiWorld, location: Location) -> Location:
         """If this location is from an item_link pseudo-world, get the location that the item_link item is on.
         Return the original location otherwise / as a fallback."""
@@ -298,7 +298,7 @@ def hint_from_item(world: "WitnessWorld", item_name: str,
     return WitnessLocationHint(location_obj, False)
 
 
-def hint_from_location(world: "WitnessWorld", location: str) -> Optional[WitnessLocationHint]:
+def hint_from_location(world: "WitnessWorld", location: str) -> WitnessLocationHint | None:
     return WitnessLocationHint(world.get_location(location), True)
 
 
@@ -401,7 +401,7 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
             logging.warning(f"Ran out of items/locations to hint for player {world.player_name}.")
             break
 
-        location_hint: Optional[WitnessLocationHint]
+        location_hint: WitnessLocationHint | None
         if hints_to_use_first:
             location_hint = hints_to_use_first.pop()
         elif next_random_hint_is_location and locations_in_this_world:
@@ -484,7 +484,7 @@ def get_hintable_areas(world: "WitnessWorld") -> tuple[dict[str, list[Location]]
     return locations_per_area, items_per_area
 
 
-def word_area_hint(world: "WitnessWorld", hinted_area: str, area_items: list[Item]) -> tuple[str, int, Optional[int]]:
+def word_area_hint(world: "WitnessWorld", hinted_area: str, area_items: list[Item]) -> tuple[str, int, int | None]:
     """
     Word the hint for an area using natural sounding language.
     This takes into account how much progression there is, how much of it is local/non-local, and whether there are

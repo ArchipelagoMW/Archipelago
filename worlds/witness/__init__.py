@@ -3,7 +3,7 @@ Archipelago init file for The Witness
 """
 import dataclasses
 from logging import error, warning
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 from BaseClasses import CollectionState, Entrance, Location, LocationProgressType, Region, Tutorial
 
@@ -432,12 +432,12 @@ class WitnessLocation(Location):
     """
     game: str = "The Witness"
 
-    def __init__(self, player: int, name: str, address: Optional[int], parent: Region) -> None:
+    def __init__(self, player: int, name: str, address: int | None, parent: Region) -> None:
         super().__init__(player, name, address, parent)
 
 
 def create_region(world: WitnessWorld, name: str, player_locations: WitnessPlayerLocations,
-                  region_locations: Optional[list[str]] = None, exits: Optional[list[str]] = None) -> Region:
+                  region_locations: list[str] | None = None, exits: list[str] | None = None) -> Region:
     """
     Create an Archipelago Region for The Witness
     """

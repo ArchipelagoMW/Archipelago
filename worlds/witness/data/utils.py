@@ -3,14 +3,14 @@ from datetime import date
 from math import floor
 from pkgutil import get_data
 from random import Random
-from typing import Optional, TypeVar
+from typing import TypeVar
 
 from .definition_classes import AreaDefinition, ConnectionDefinition, RegionDefinition, WitnessRule
 
 T = TypeVar("T")
 
 
-def cast_not_none(value: Optional[T]) -> T:
+def cast_not_none(value: T | None) -> T:
     assert value is not None
     return value
 

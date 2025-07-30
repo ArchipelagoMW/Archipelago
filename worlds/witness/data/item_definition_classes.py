@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
 
 from BaseClasses import ItemClassification
 
@@ -53,7 +52,7 @@ class ItemData:
     """
     ItemData for an item in The Witness
     """
-    ap_code: Optional[int]
+    ap_code: int | None
     definition: ItemDefinition
     classification: ItemClassification
     local_only: bool = False
