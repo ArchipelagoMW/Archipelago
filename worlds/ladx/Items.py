@@ -98,6 +98,7 @@ class ItemName:
     HEART_CONTAINER = "Heart Container"
     BAD_HEART_CONTAINER = "Bad Heart Container"
     TOADSTOOL = "Toadstool"
+    GUARDIAN_ACORN = "Guardian Acorn"
     KEY = "Key"
     KEY1 = "Small Key (Tail Cave)"
     KEY2 = "Small Key (Bottle Grotto)"
@@ -173,6 +174,7 @@ class ItemName:
     TRADING_ITEM_NECKLACE = "Necklace"
     TRADING_ITEM_SCALE = "Scale"
     TRADING_ITEM_MAGNIFYING_GLASS = "Magnifying Glass"
+    PIECE_OF_POWER = "Piece Of Power"
 
 trade_item_prog = ItemClassification.progression
 
@@ -219,6 +221,7 @@ links_awakening_items = [
     ItemData(ItemName.HEART_CONTAINER, "HEART_CONTAINER", ItemClassification.useful),
     #ItemData(ItemName.BAD_HEART_CONTAINER, "BAD_HEART_CONTAINER", ItemClassification.trap),
     ItemData(ItemName.TOADSTOOL, "TOADSTOOL", ItemClassification.progression),
+    ItemData(ItemName.GUARDIAN_ACORN, "GUARDIAN_ACORN", ItemClassification.filler),
     DungeonItemData(ItemName.KEY, "KEY", ItemClassification.progression),
     DungeonItemData(ItemName.KEY1, "KEY1", ItemClassification.progression),
     DungeonItemData(ItemName.KEY2, "KEY2", ItemClassification.progression),
@@ -293,7 +296,8 @@ links_awakening_items = [
     TradeItemData(ItemName.TRADING_ITEM_FISHING_HOOK, "TRADING_ITEM_FISHING_HOOK", trade_item_prog, "Grandma (Animal Village)"),
     TradeItemData(ItemName.TRADING_ITEM_NECKLACE, "TRADING_ITEM_NECKLACE", trade_item_prog, "Fisher (Martha's Bay)"),
     TradeItemData(ItemName.TRADING_ITEM_SCALE, "TRADING_ITEM_SCALE", trade_item_prog, "Mermaid (Martha's Bay)"),
-    TradeItemData(ItemName.TRADING_ITEM_MAGNIFYING_GLASS, "TRADING_ITEM_MAGNIFYING_GLASS", trade_item_prog, "Mermaid Statue (Martha's Bay)")
+    TradeItemData(ItemName.TRADING_ITEM_MAGNIFYING_GLASS, "TRADING_ITEM_MAGNIFYING_GLASS", trade_item_prog, "Mermaid Statue (Martha's Bay)"),
+    ItemData(ItemName.PIECE_OF_POWER, "PIECE_OF_POWER", ItemClassification.filler),
 ]
 
 ladxr_item_to_la_item_name = {
