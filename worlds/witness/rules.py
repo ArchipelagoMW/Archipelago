@@ -211,7 +211,7 @@ def _has_item(item: str, world: "WitnessWorld",
 
 
 def optimize_requirement_option(requirement_option: list[CollectionRule | SimpleItemRepresentation])\
-        -> list[CollectionRule| SimpleItemRepresentation]:
+        -> list[CollectionRule | SimpleItemRepresentation]:
     """
     This optimises out a requirement like [("Progressive Dots": 1), ("Progressive Dots": 2)] to only the "2" version.
     """
