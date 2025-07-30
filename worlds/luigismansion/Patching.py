@@ -6,6 +6,7 @@ from random import choice, randint
 from .Regions import spawn_locations
 from .Items import ALL_ITEMS_TABLE, filler_items
 from .Locations import FLIP_BALCONY_BOO_EVENT_LIST, ALL_LOCATION_TABLE
+from .game.Currency import CURRENCY_NAME
 
 speedy_observer_index: list[int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
 speedy_enemy_index: list[int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
@@ -1022,31 +1023,27 @@ def update_treasure_table(treasure_info, character_info, output_data):
             # Don't give any items that are not from our game, leave those 0 / blank.
             if int(item_data["player"]) == slot_num and item_data["name"] in ALL_ITEMS_TABLE.keys():
                 lm_item_data = ALL_ITEMS_TABLE[item_data["name"]]
-                if lm_item_data.update_ram_addr and any(update_addr.item_count for update_addr in
-                        lm_item_data.update_ram_addr if update_addr.item_count and update_addr.item_count > 0):
-                    item_amt = next(update_addr.item_count for update_addr in lm_item_data.update_ram_addr if
-                       update_addr.item_count and update_addr.item_count > 0)
 
-                    if "Coins" in item_data["name"]:
-                        if "Bills" in item_data["name"]:
-                            coin_amount = item_amt
-                            bill_amount = item_amt
-                        else:
-                            coin_amount = item_amt
-                    elif "Bills" in item_data["name"]:
-                        bill_amount = item_amt
-                    elif "Gold Bar" in item_data["name"]:
-                        gold_bar_amount = item_amt
-                    elif "Sapphire" in item_data["name"]:
-                        sapphire_amount = item_amt
-                    elif "Emerald" in item_data["name"]:
-                        emerald_amount = item_amt
-                    elif "Ruby" in item_data["name"]:
-                        ruby_amount = item_amt
-                    elif item_data["name"] == "Diamond":
-                        diamond_amount = item_amt
-                    elif "Gold Diamond" in item_data["name"]:
-                        rdiamond_amount = item_amt
+                if "Coins" in item_data["name"]:
+                    if "Bills" in item_data["name"]:
+                        coin_amount = lm_item_data.currencies[CURRENCY_NAME.COINS]
+                        bill_amount = lm_item_data.currencies[CURRENCY_NAME.BILLS]
+                    else:
+                        coin_amount = lm_item_data.currencies[CURRENCY_NAME.COINS]
+                elif "Bills" in item_data["name"]:
+                    bill_amount = lm_item_data.currencies[CURRENCY_NAME.BILLS]
+                elif "Gold Bar" in item_data["name"]:
+                    gold_bar_amount = lm_item_data.currencies[CURRENCY_NAME.GOLD_BARS]
+                elif "Sapphire" in item_data["name"]:
+                    sapphire_amount = lm_item_data.currencies[CURRENCY_NAME.SAPPHIRE]
+                elif "Emerald" in item_data["name"]:
+                    emerald_amount = lm_item_data.currencies[CURRENCY_NAME.EMERALD]
+                elif "Ruby" in item_data["name"]:
+                    ruby_amount = lm_item_data.currencies[CURRENCY_NAME.RUBY]
+                elif item_data["name"] == "Diamond":
+                    diamond_amount = lm_item_data.currencies[CURRENCY_NAME.DIAMOND]
+                elif "Gold Diamond" in item_data["name"]:
+                    rdiamond_amount = lm_item_data.currencies[CURRENCY_NAME.GOLD_DIAMOND]
 
             treasure_info.info_file_field_entries[item_data["loc_enum"]]["other"] = treasure_item_name
             treasure_info.info_file_field_entries[item_data["loc_enum"]]["size"] = chest_size
