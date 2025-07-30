@@ -4,8 +4,8 @@ These steps should be followed in order to establish a gameplay connection with 
 
 1. Client establishes WebSocket connection to Archipelago server.
 2. Server accepts connection and responds with a [RoomInfo](#RoomInfo) packet.
-3. Client may send a [GetDataPackage](#GetDataPackage) packet.
-4. Server sends a [DataPackage](#DataPackage) packet in return. (If the client sent GetDataPackage.)
+3. Client should check if the data packages are in the shared data package cache, if not they should send a [GetDataPackage](#GetDataPackage) packet containing the list of missing data packages.
+4. Server sends a [DataPackage](#DataPackage) packet in return. (If the client sent GetDataPackage.) The returned data packages should be saved to the shared data package cache.
 5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
 6. Server validates the client's packet and responds with [Connected](#Connected) or [ConnectionRefused](#ConnectionRefused).
 7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are queued up for it.
@@ -408,6 +408,8 @@ Basic chat command which sends text to the server to be distributed to other cli
 
 ### GetDataPackage
 Requests the data package from the server. Does not require client authentication.
+Should be called if the needed data packages are not present in the shared cache.
+See [Data Package Shared Cache](#Data-Package-Shared-Cache) for details.
 
 #### Arguments
 | Name  | Type | Notes                                                                                                                           |
@@ -704,18 +706,6 @@ server most easily and not maintain their own mappings. Some contents include:
    - Name to ID mappings for items and locations.
    - A checksum of each game's data package for clients to tell if a cached package is invalid.
 
-Clients should cache the data package they receive on disk to prevent re-downloading it on every connect. The shared 
-cache location is `user_cache_dir\Cache\datapackage`. `user_cache_dir` varies by platform. The
-platformdirs library is used in python to pick the correct location https://github.com/tox-dev/platformdirs.
-For example `C:\Users\<UserName>\AppData\Local\Archipelago\Cache\datapackage` on Windows.
-Each game has its own subfolder inside the previously mentioned datapackage folder i.e.
-`user_cache_dir\Cache\datapackage\A Hat in Time`.
-
-Whenever a client reads a data package from the cache, it should update the last modified time of the file. This
-is because CommonClient contains code that removes sufficiently old data packages. You will know when your cache
-is outdated if the [RoomInfo](#RoomInfo) packet or the data package itself denote a different checksum than any
-locally cached ones.
-
 **Important Notes about IDs and Names**: 
 
 * IDs ≤ 0 are reserved for "Archipelago" and should not be used by other world implementations.
@@ -761,6 +751,38 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 | item_name_to_id     | dict[str, int] | Mapping of all item names to their respective ID.                                                                             |
 | location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID.                                                                         |
 | checksum            | str            | A checksum hash of this game's data.                                                                                          |
+
+
+### Data Package Shared Cache
+The shared cache location is `user_cache_dir\datapackage`. `user_cache_dir` varies by platform. The
+platformdirs library is used in python to pick the correct location https://github.com/tox-dev/platformdirs.
+Similar libraries exist for other languages.
+For example:
+```
+import platformdirs
+game_name = "Subnautica"
+cache_path = platformdirs.user_cache_dir("Archipelago", False)
+datapackage_path = os.path.join(cache_path, datapackage, game_name)
+```
+Similar libraries exist for other languages, for example in C#:
+```
+using System.IO;
+CacheFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
+                Path.Combine("Archipelago", Path.Combine("Cache", "datapackage")));
+```
+
+Each game has its own subfolder inside the previously mentioned datapackage folder i.e.
+`user_cache_dir\datapackage\A Hat in Time`.
+
+Before requesting a new data package, a client should check if that package is already in the shared cache.
+The client should use the checksums included in the [RoomInfo](#RoomInfo) packet to confirm the data package in the cache is up to date.
+
+Whenever a client finds the desired data package in the cache, it should update the last modified time of the file. This
+is because CommonClient contains code that removes sufficiently old data packages.
+
+Should the client not find a data package in the shared cache, they should instead download it using a [GetDataPackage](#GetDataPackage) packet.
+Clients should cache the data packages they receive on disk to prevent re-downloading it on every connect.
+
 
 ### Tags
 Tags are represented as a list of strings, the common client tags follow:
