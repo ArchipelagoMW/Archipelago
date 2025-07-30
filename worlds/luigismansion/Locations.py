@@ -129,6 +129,8 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
                        update_ram_addr=[LMRamData(0x803D33B2, bit_position=0, in_game_room_id=0)], map_id=[3]),
     "Catch 9 Ghosts in Training": LMLocationData("Training Room", 927, "Special", 0, [], remote_only=True,
                        update_ram_addr=[LMRamData(0x803D33B2, bit_position=1, in_game_room_id=0)], map_id=[3]),
+    "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"],
+          update_ram_addr=[LMRamData(0x803CDF9C, bit_position=2, in_game_room_id=41, ram_byte_size=2)]),
 
 
     # Special Case
@@ -187,8 +189,6 @@ CLEAR_GHOST_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803CDF62, bit_position=2, in_game_room_id=8, ram_byte_size=2)]),
     "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, [],
         update_ram_addr=[LMRamData(0x803CDF56, bit_position=2, in_game_room_id=3, ram_byte_size=2)]),
-    "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"],
-        update_ram_addr=[LMRamData(0x803CDF9C, bit_position=2, in_game_room_id=41, ram_byte_size=2)]),
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, [],
         update_ram_addr=[LMRamData(0x803CDF94, bit_position=2, in_game_room_id=35, ram_byte_size=2)]),
     "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, [],
