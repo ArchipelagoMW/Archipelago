@@ -643,7 +643,6 @@ class World(metaclass=AutoWorldRegister):
     def create_item(self, name: str) -> "Item":
         """
         Create an item for this world type and player.
-        Warning: this may be called with self.world = None, for example by MultiServer.
 
         :param name: The name of the item to be created.
         :return: The created item.
@@ -706,7 +705,7 @@ class World(metaclass=AutoWorldRegister):
     # these two methods can be extended for pseudo-items on state
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         """
-        Called when an item is collected in to state. Useful for things such as progressive items or currency.
+        Called when an item is collected into state. Useful for things such as progressive items or currency.
 
         :param state: The current CollectionState instance this item should be collected into.
         :param item: The item to be collected.
@@ -720,7 +719,7 @@ class World(metaclass=AutoWorldRegister):
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         """
-        Called when an item is removed from to state. Useful for things such as progressive items or currency.
+        Called when an item is removed from state. Useful for things such as progressive items or currency.
 
         :param state: The current CollectionState instance this item should be removed from.
         :param item: The item to be removed.
