@@ -1,4 +1,4 @@
-from typing import Dict, List, Set, cast
+from typing import cast
 
 from BaseClasses import ItemClassification
 
@@ -6,23 +6,23 @@ from . import static_logic as static_witness_logic
 from .item_definition_classes import DoorItemDefinition, ItemCategory, ItemData
 from .static_locations import ID_START
 
-ITEM_DATA: Dict[str, ItemData] = {}
-ITEM_GROUPS: Dict[str, Set[str]] = {}
+ITEM_DATA: dict[str, ItemData] = {}
+ITEM_GROUPS: dict[str, set[str]] = {}
 
 # Useful items that are treated specially at generation time and should not be automatically added to the player's
 # item list during get_progression_items.
-_special_usefuls: List[str] = ["Puzzle Skip"]
+_special_usefuls: list[str] = ["Puzzle Skip"]
 
-ALWAYS_GOOD_SYMBOL_ITEMS: Set[str] = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
+ALWAYS_GOOD_SYMBOL_ITEMS: set[str] = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
-MODE_SPECIFIC_GOOD_ITEMS: Dict[str, Set[str]] = {
+MODE_SPECIFIC_GOOD_ITEMS: dict[str, set[str]] = {
     "none": set(),
     "sigma_normal": set(),
     "sigma_expert": {"Triangles"},
     "umbra_variety": {"Triangles"}
 }
 
-MODE_SPECIFIC_GOOD_DISCARD_ITEMS: Dict[str, Set[str]] = {
+MODE_SPECIFIC_GOOD_DISCARD_ITEMS: dict[str, set[str]] = {
     "none": {"Triangles"},
     "sigma_normal": {"Triangles"},
     "sigma_expert": {"Arrows"},
@@ -72,8 +72,8 @@ def populate_items() -> None:
                                         classification, local_only)
 
 
-def get_item_to_door_mappings() -> Dict[int, List[int]]:
-    output: Dict[int, List[int]] = {}
+def get_item_to_door_mappings() -> dict[int, list[int]]:
+    output: dict[int, list[int]] = {}
     for item_name, item_data in ITEM_DATA.items():
         if not isinstance(item_data.definition, DoorItemDefinition) or item_data.ap_code is None:
             continue

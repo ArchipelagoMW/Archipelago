@@ -1,4 +1,4 @@
-from typing import Dict, Set, cast
+from typing import cast
 
 from . import static_logic as static_witness_logic
 
@@ -450,9 +450,9 @@ OBELISK_SIDES = {
     "Town Obelisk Side 6",
 }
 
-ALL_LOCATIONS_TO_ID: Dict[str, int] = {}
+ALL_LOCATIONS_TO_ID: dict[str, int] = {}
 
-AREA_LOCATION_GROUPS: Dict[str, Set[str]] = {}
+AREA_LOCATION_GROUPS: dict[str, set[str]] = {}
 
 
 def get_id(entity_hex: str) -> int:

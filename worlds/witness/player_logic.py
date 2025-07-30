@@ -17,7 +17,7 @@ When the world has parsed its options, a second function is called to finalize t
 
 import copy
 from collections import defaultdict
-from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
+from typing import TYPE_CHECKING, cast
 
 from .data import static_logic as static_witness_logic
 from .data.definition_classes import ConnectionDefinition, WitnessRule
@@ -60,30 +60,30 @@ class WitnessPlayerLogic:
 
     VICTORY_LOCATION: str
 
-    def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]) -> None:
-        self.YAML_DISABLED_LOCATIONS: Set[str] = disabled_locations
-        self.YAML_ADDED_ITEMS: Dict[str, int] = start_inv
+    def __init__(self, world: "WitnessWorld", disabled_locations: set[str], start_inv: dict[str, int]) -> None:
+        self.YAML_DISABLED_LOCATIONS: set[str] = disabled_locations
+        self.YAML_ADDED_ITEMS: dict[str, int] = start_inv
 
-        self.EVENT_PANELS_FROM_PANELS: Set[str] = set()
-        self.EVENT_PANELS_FROM_REGIONS: Set[str] = set()
+        self.EVENT_PANELS_FROM_PANELS: set[str] = set()
+        self.EVENT_PANELS_FROM_REGIONS: set[str] = set()
 
-        self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES: Set[str] = set()
+        self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES: set[str] = set()
 
-        self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY: Set[str] = set()
+        self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY: set[str] = set()
 
-        self.UNREACHABLE_REGIONS: Set[str] = set()
+        self.UNREACHABLE_REGIONS: set[str] = set()
 
-        self.THEORETICAL_BASE_ITEMS: Set[str] = set()
-        self.THEORETICAL_ITEMS: Set[str] = set()
-        self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
-        self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
+        self.THEORETICAL_BASE_ITEMS: set[str] = set()
+        self.THEORETICAL_ITEMS: set[str] = set()
+        self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME: set[str] = set()
+        self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME: set[str] = set()
 
-        self.PARENT_ITEM_COUNT_PER_BASE_ITEM: Dict[str, int] = defaultdict(lambda: 1)
-        self.PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
-        self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
-        self.FORBIDDEN_DOORS: Set[str] = set()
+        self.PARENT_ITEM_COUNT_PER_BASE_ITEM: dict[str, int] = defaultdict(lambda: 1)
+        self.PROGRESSIVE_LISTS: dict[str, list[str]] = {}
+        self.DOOR_ITEMS_BY_ID: dict[str, list[str]] = {}
+        self.FORBIDDEN_DOORS: set[str] = set()
 
-        self.STARTING_INVENTORY: Set[str] = set()
+        self.STARTING_INVENTORY: set[str] = set()
 
         self.DIFFICULTY = world.options.puzzle_randomization
 
@@ -97,29 +97,29 @@ class WitnessPlayerLogic:
         elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = static_witness_logic.vanilla
 
-        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL: Dict[str, List[ConnectionDefinition]] = copy.deepcopy(
+        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL: dict[str, list[ConnectionDefinition]] = copy.deepcopy(
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
         )
-        self.CONNECTIONS_BY_REGION_NAME: Dict[str, List[ConnectionDefinition]] = copy.deepcopy(
+        self.CONNECTIONS_BY_REGION_NAME: dict[str, list[ConnectionDefinition]] = copy.deepcopy(
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
         )
-        self.DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Dict[str, WitnessRule]] = copy.deepcopy(
+        self.DEPENDENT_REQUIREMENTS_BY_HEX: dict[str, dict[str, WitnessRule]] = copy.deepcopy(
             self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX
         )
-        self.REQUIREMENTS_BY_HEX: Dict[str, WitnessRule] = {}
+        self.REQUIREMENTS_BY_HEX: dict[str, WitnessRule] = {}
 
-        self.EVENT_ITEM_PAIRS: Dict[str, Tuple[str, str]] = {}
-        self.COMPLETELY_DISABLED_ENTITIES: Set[str] = set()
-        self.DISABLE_EVERYTHING_BEHIND: Set[str] = set()
-        self.EXCLUDED_ENTITIES: Set[str] = set()
-        self.ADDED_CHECKS: Set[str] = set()
+        self.EVENT_ITEM_PAIRS: dict[str, tuple[str, str]] = {}
+        self.COMPLETELY_DISABLED_ENTITIES: set[str] = set()
+        self.DISABLE_EVERYTHING_BEHIND: set[str] = set()
+        self.EXCLUDED_ENTITIES: set[str] = set()
+        self.ADDED_CHECKS: set[str] = set()
         self.VICTORY_LOCATION = "0x0356B"
 
-        self.PRE_PICKED_HUNT_ENTITIES: Set[str] = set()
-        self.HUNT_ENTITIES: Set[str] = set()
+        self.PRE_PICKED_HUNT_ENTITIES: set[str] = set()
+        self.HUNT_ENTITIES: set[str] = set()
 
-        self.AVAILABLE_EASTER_EGGS: Set[str] = set()
-        self.AVAILABLE_EASTER_EGGS_PER_REGION: Dict[str, int] = {}
+        self.AVAILABLE_EASTER_EGGS: set[str] = set()
+        self.AVAILABLE_EASTER_EGGS_PER_REGION: dict[str, int] = {}
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
             "0x00509": "+1 Laser",
             "0x012FB": "+1 Laser (Unredirected)",
@@ -138,8 +138,8 @@ class WitnessPlayerLogic:
             "0xFFF00": "Bottom Floor Discard Turns On",
         }
 
-        self.USED_EVENT_NAMES_BY_HEX: Dict[str, List[str]] = {}
-        self.CONDITIONAL_EVENTS: Dict[Tuple[str, str], str] = {}
+        self.USED_EVENT_NAMES_BY_HEX: dict[str, list[str]] = {}
+        self.CONDITIONAL_EVENTS: dict[tuple[str, str], str] = {}
 
         # The basic requirements to solve each entity come from StaticWitnessLogic.
         # However, for any given world, the options (e.g. which item shuffles are enabled) affect the requirements.
@@ -218,7 +218,7 @@ class WitnessPlayerLogic:
                 # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved,
                 # except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
                 # In the future, it'd be wise to make a distinction between "power dependencies" and other dependencies.
-                or entity_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels)
+                or (entity_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels))
                 # Another dependency that is not power-based: The Symmetry Island Upper Panel latches
                 or entity_hex == "0x1C349"
             )
@@ -425,7 +425,7 @@ class WitnessPlayerLogic:
                 line = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
-    def handle_regular_postgame(self, world: "WitnessWorld") -> List[List[str]]:
+    def handle_regular_postgame(self, world: "WitnessWorld") -> list[list[str]]:
         """
         In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
         This mostly involves the disabling of key panels (e.g. long box when the goal is short box).
@@ -475,10 +475,10 @@ class WitnessPlayerLogic:
 
         mbfd_extra_exclusions = (
             # Progressive Dots 2 behind 11 lasers in an Elevator seed with vanilla doors = :(
-            victory == "elevator" and not remote_doors
+            (victory == "elevator" and not remote_doors)
 
             # Caves Shortcuts / Challenge Entry (Panel) on MBFD in a Challenge seed with vanilla doors = :(
-            or victory == "challenge" and early_caves and not remote_doors
+            or (victory == "challenge" and early_caves and not remote_doors)
         )
 
         if mbfd_extra_exclusions:
@@ -501,7 +501,7 @@ class WitnessPlayerLogic:
 
         return postgame_adjustments
 
-    def handle_panelhunt_postgame(self, world: "WitnessWorld") -> List[List[str]]:
+    def handle_panelhunt_postgame(self, world: "WitnessWorld") -> list[list[str]]:
         postgame_adjustments = []
 
         # Make some quick references to some options
@@ -740,10 +740,10 @@ class WitnessPlayerLogic:
                 ep_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[ep_hex]["checkName"]
                 self.ALWAYS_EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk_name} - {ep_name}"
         else:
-            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
+            adjustment_linesets_in_order.append(["Disabled Locations:", *get_ep_obelisks()[1:]])
 
         if not world.options.shuffle_EPs:
-            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_all_individual()[1:])
+            adjustment_linesets_in_order.append(["Disabled Locations:", *get_ep_all_individual()[1:]])
 
         for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
             if yaml_disabled_location not in self.REFERENCE_LOGIC.ENTITIES_BY_NAME:
@@ -780,7 +780,7 @@ class WitnessPlayerLogic:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
-    def discover_reachable_regions(self) -> Set[str]:
+    def discover_reachable_regions(self) -> set[str]:
         """
         Some options disable panels or remove specific items.
         This can make entire regions completely unreachable, because all their incoming connections are invalid.
@@ -889,7 +889,7 @@ class WitnessPlayerLogic:
 
         # Check each traversal option individually
         for option in connection.traversal_rule:
-            individual_entity_requirements: List[WitnessRule] = []
+            individual_entity_requirements: list[WitnessRule] = []
             for entity in option:
                 # If a connection requires solving a disabled entity, it is not valid.
                 if not self.solvability_guaranteed(entity) or entity in self.DISABLE_EVERYTHING_BEHIND:
@@ -1011,7 +1011,7 @@ class WitnessPlayerLogic:
         # Make some helper booleans so it is easier to follow what's going on
         mountain_upper_is_in_postgame = (
                 goal == "mountain_box_short"
-                or goal == "mountain_box_long" and longbox_req <= shortbox_req
+                or (goal == "mountain_box_long" and longbox_req <= shortbox_req)
         )
         mountain_upper_included = postgame_included or not mountain_upper_is_in_postgame
         remote_doors = doors >= 2
@@ -1026,7 +1026,7 @@ class WitnessPlayerLogic:
             "0x0368A": symbols_shuffled or door_panels,  # Quarry Stoneworks Stairs Door
             "0x3865F": symbols_shuffled or door_panels or eps_shuffled,  # Quarry Boathouse 2nd Barrier
             "0x17CC4": quarry_elevator_comes_to_you or eps_shuffled,  # Quarry Elevator Panel
-            "0x17E2B": swamp_bridge_comes_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
+            "0x17E2B": (swamp_bridge_comes_to_you and boat_shuffled) or eps_shuffled,  # Swamp Long Bridge
             "0x0CF2A": eggs_exist,  # Jungle Monastery Garden Shortcut
             "0x0364E": False,  # Monastery Laser Shortcut Door
             "0x03713": remote_doors,  # Monastery Laser Shortcut Panel

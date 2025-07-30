@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Optional
 
 from BaseClasses import ItemClassification
 
@@ -16,7 +16,7 @@ class ItemCategory(Enum):
     EVENT = 7
 
 
-CATEGORY_NAME_MAPPINGS: Dict[str, ItemCategory] = {
+CATEGORY_NAME_MAPPINGS: dict[str, ItemCategory] = {
     "Symbols:": ItemCategory.SYMBOL,
     "Doors:": ItemCategory.DOOR,
     "Lasers:": ItemCategory.LASER,
@@ -35,12 +35,12 @@ class ItemDefinition:
 
 @dataclass(frozen=True)
 class ProgressiveItemDefinition(ItemDefinition):
-    child_item_names: List[str]
+    child_item_names: list[str]
 
 
 @dataclass(frozen=True)
 class DoorItemDefinition(ItemDefinition):
-    panel_id_hexes: List[str]
+    panel_id_hexes: list[str]
 
 
 @dataclass(frozen=True)

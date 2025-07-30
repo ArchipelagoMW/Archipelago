@@ -1,4 +1,5 @@
-from typing import Any, ClassVar, Dict, Iterable, List, Mapping, Union
+from collections.abc import Iterable, Mapping
+from typing import Any, ClassVar, Dict, List, Union
 
 from BaseClasses import CollectionState, Entrance, Item, Location, Region
 
@@ -91,7 +92,7 @@ class WitnessTestBase(WorldTestBase):
         """
         # Find the actual items
         found_items = [item for item in self.multiworld.get_items() if item.name in required_item_counts]
-        actual_items: Dict[str, List[Item]] = {item_name: [] for item_name in required_item_counts}
+        actual_items: dict[str, list[Item]] = {item_name: [] for item_name in required_item_counts}
         for item in found_items:
             if len(actual_items[item.name]) < required_item_counts[item.name]:
                 actual_items[item.name].append(item)
@@ -124,8 +125,8 @@ class WitnessTestBase(WorldTestBase):
 
 
 class WitnessMultiworldTestBase(MultiworldTestBase):
-    options_per_world: List[Dict[str, Any]]
-    common_options: Dict[str, Any] = {}
+    options_per_world: list[dict[str, Any]]
+    common_options: dict[str, Any] = {}
 
     def setUp(self) -> None:
         """
@@ -143,7 +144,7 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
 
         self.assertSteps(gen_steps)
 
-    def collect_by_name(self, item_names: Union[str, Iterable[str]], player: int) -> List[Item]:
+    def collect_by_name(self, item_names: Union[str, Iterable[str]], player: int) -> list[Item]:
         """
         Collect all copies of a specified item name (or list of item names) for a player in the multiworld item pool.
         """
@@ -153,7 +154,7 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
             self.multiworld.state.collect(item)
         return items
 
-    def get_items_by_name(self, item_names: Union[str, Iterable[str]], player: int) -> List[Item]:
+    def get_items_by_name(self, item_names: Union[str, Iterable[str]], player: int) -> list[Item]:
         """
         Return all copies of a specified item name (or list of item names) for a player in the multiworld item pool.
         """

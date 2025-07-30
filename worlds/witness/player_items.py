@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List, Set
+from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
@@ -56,7 +56,7 @@ class WitnessPlayerItems:
         self._locations: WitnessPlayerLocations = player_locations
 
         # Duplicate the static item data, then make any player-specific adjustments to classification.
-        self.item_data: Dict[str, ItemData] = copy.deepcopy(static_witness_items.ITEM_DATA)
+        self.item_data: dict[str, ItemData] = copy.deepcopy(static_witness_items.ITEM_DATA)
 
         # Remove all progression items that aren't actually in the game.
         self.item_data = {
@@ -77,7 +77,7 @@ class WitnessPlayerItems:
                 item_data.local_only = True
 
         # Build the mandatory item list.
-        self._mandatory_items: Dict[str, int] = {}
+        self._mandatory_items: dict[str, int] = {}
 
         # Add progression items to the mandatory item list.
         progression_dict = {
@@ -150,20 +150,20 @@ class WitnessPlayerItems:
                 item_data.classification |= ItemClassification.useful
 
 
-    def get_mandatory_items(self) -> Dict[str, int]:
+    def get_mandatory_items(self) -> dict[str, int]:
         """
         Returns the list of items that must be in the pool for the game to successfully generate.
         """
         return self._mandatory_items.copy()
 
-    def get_filler_items(self, quantity: int) -> Dict[str, int]:
+    def get_filler_items(self, quantity: int) -> dict[str, int]:
         """
         Generates a list of filler items of the given length.
         """
         if quantity <= 0:
             return {}
 
-        output: Dict[str, int] = {}
+        output: dict[str, int] = {}
         remaining_quantity = quantity
 
         # Add joke items.
@@ -181,7 +181,7 @@ class WitnessPlayerItems:
         # Add filler items to the list.
         filler_weight = 1 - trap_weight
 
-        filler_items: Dict[str, float]
+        filler_items: dict[str, float]
         filler_items = {name: data.definition.weight if isinstance(data.definition, WeightedItemDefinition) else 1
                         for (name, data) in self.item_data.items() if data.definition.category is ItemCategory.FILLER}
         filler_items = {name: base_weight * filler_weight / sum(filler_items.values())
@@ -193,16 +193,16 @@ class WitnessPlayerItems:
                                  for name, base_weight in trap_items.items() if base_weight > 0})
 
         # Get the actual number of each item by scaling the float weight values to match the target quantity.
-        int_weights: List[int] = build_weighted_int_list(filler_items.values(), remaining_quantity)
+        int_weights: list[int] = build_weighted_int_list(filler_items.values(), remaining_quantity)
         output.update(zip(filler_items.keys(), int_weights))
 
         return output
 
-    def get_early_items(self) -> List[str]:
+    def get_early_items(self) -> list[str]:
         """
         Returns items that are ideal for placing on extremely early checks, like the tutorial gate.
         """
-        output: Set[str] = set()
+        output: set[str] = set()
         if self._world.options.shuffle_symbols:
             discards_on = self._world.options.shuffle_discarded_panels
             mode = self._world.options.puzzle_randomization.current_key
@@ -229,7 +229,7 @@ class WitnessPlayerItems:
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
         return sorted(output)
 
-    def get_door_item_ids_in_pool(self) -> List[int]:
+    def get_door_item_ids_in_pool(self) -> list[int]:
         """
         Returns the ids of all door items that exist in the pool.
         """
@@ -239,7 +239,7 @@ class WitnessPlayerItems:
             if isinstance(item_data.definition, DoorItemDefinition)
         ]
 
-    def get_symbol_ids_not_in_pool(self) -> List[int]:
+    def get_symbol_ids_not_in_pool(self) -> list[int]:
         """
         Returns the item IDs of symbol items that were defined in the configuration file but are not in the pool.
         """
@@ -249,8 +249,8 @@ class WitnessPlayerItems:
             if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL
         ]
 
-    def get_progressive_item_ids_in_pool(self) -> Dict[int, List[int]]:
-        output: Dict[int, List[int]] = {}
+    def get_progressive_item_ids_in_pool(self) -> dict[int, list[int]]:
+        output: dict[int, list[int]] = {}
         for item_name, quantity in dict(self._mandatory_items.items()).items():
             item = self.item_data[item_name]
             if isinstance(item.definition, ProgressiveItemDefinition):
