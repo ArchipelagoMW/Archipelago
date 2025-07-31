@@ -319,11 +319,28 @@ class LMContext(CommonContext):
         ui = super().make_gui()
         ui.base_title = f"Luigi's Mansion Client {CLIENT_VERSION}"
         if tracker_loaded:
+            if not self.check_universal_tracker_version():
+                Utils.messagebox("Universal Tracker needs updated", "The minimum version of Universal Tracker required for LM is v0.2.11", error=True)
+                raise ImportError("Need to update universal tracker version to at least v0.2.11.")
             ui.base_title += f" | Universal Tracker {UT_VERSION}"
 
         # AP version is added behind this automatically
         ui.base_title += " | Archipelago"
         return ui
+    
+    def check_universal_tracker_version(self) -> bool:
+        if not tracker_loaded:
+            return False
+
+        ut_split = UT_VERSION.split(".")
+        if len(ut_split) != 3:
+            return False
+        if int(ut_split[1]) < 2:
+            return False
+        if int(ut_split[2]) < 11:
+            return False
+
+        return True
     
     async def get_wallet_value(self):
         # KivyMD support, also keeps support with regular Kivy (hopefully)
