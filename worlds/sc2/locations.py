@@ -11401,14 +11401,14 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
         ),
         make_location_data(
             SC2Mission.HAND_OF_DARKNESS_P.mission_name,
-            "North Brutalisk",
+            "North Stone Zealot",
             SC2_RACESWAP_LOC_ID_OFFSET + 8601,
             LocationType.VANILLA,
             logic.protoss_hand_of_darkness_requirement,
         ),
         make_location_data(
             SC2Mission.HAND_OF_DARKNESS_P.mission_name,
-            "South Brutalisk",
+            "South Stone Zealot",
             SC2_RACESWAP_LOC_ID_OFFSET + 8602,
             LocationType.VANILLA,
             logic.protoss_hand_of_darkness_requirement,
