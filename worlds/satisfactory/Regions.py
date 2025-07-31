@@ -94,15 +94,16 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
     if options.final_elevator_package == 1:
         super_early_game_buildings.extend(early_game_buildings)
 
-    is_ut = getattr(multiworld, "generation_is_fake", False)
+    # Hub Tier 1 and 2 are always accessible, so universal tracker should display them out the gates
+    is_universal_tracker = getattr(multiworld, "generation_is_fake", False)
 
     connect(regions, "Overworld", "Hub Tier 1")
     connect(regions, "Hub Tier 1", "Hub Tier 2",
-            lambda state: is_ut or state_logic.can_build_all(state, super_early_game_buildings))
+            lambda state: is_universal_tracker or state_logic.can_build_all(state, super_early_game_buildings))
     
     if options.final_elevator_package >= 2:
         connect(regions, "Hub Tier 2", "Hub Tier 3", lambda state: state.has("Elevator Tier 1", player) 
-                                              and (is_ut or state_logic.can_build_all(state, early_game_buildings)))
+                                              and (is_universal_tracker or state_logic.can_build_all(state, early_game_buildings)))
         connect(regions, "Hub Tier 3", "Hub Tier 4")
     if options.final_elevator_package >= 3:
         connect(regions, "Hub Tier 4", "Hub Tier 5", lambda state: state.has("Elevator Tier 2", player))
