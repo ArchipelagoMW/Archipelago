@@ -137,7 +137,16 @@ class APContainer:
                 raise InvalidDataError(f"{message}This might be the incorrect world version for this file") from e
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
-        with opened_zipfile.open("archipelago.json", "r") as f:
+        try:
+            manifest_info = opened_zipfile.getinfo("archipelago.json")
+        except KeyError as e:
+            for info in opened_zipfile.infolist():
+                if info.filename.endswith("archipelago.json"):
+                    manifest_info = info
+                    break
+            else:
+                raise e
+        with opened_zipfile.open(manifest_info, "r") as f:
             manifest = json.load(f)
         if manifest["compatible_version"] > self.version:
             raise Exception(f"File (version: {manifest['compatible_version']}) too new "
