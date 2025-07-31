@@ -8,7 +8,7 @@ The [player options page for this game](../player-options) contains all the opti
 ## What is Ship of Harkinian (SoH)?
 
 Ship of Harkinian is a fanmade PC port of The Legend of Zelda: Ocarina of Time. Due to it being a port, it has access to a ton
-of enhancements like native widescreen support, higher framerate, built-in randomizer, built-in
+of enhancements like native widescreen support, higher framerates, built-in randomizer, built-in
 trackers, and too many optional Quality of Life options to name them all here. 
 If you're curious about the specifics, please [download SoH](https://www.shipofharkinian.com/) and take a look
 through the ESC menu!
@@ -16,24 +16,23 @@ through the ESC menu!
 
 ## I haven't played Ocarina of Time before.
 
-We recomend play Ocarina of Time in vanilla first! Preferably to 100% completion. 
+We recommend to play Ocarina of Time in vanilla first! Preferably to 100% completion. 
 Ship of Harkinian has presets for its enhancements, including one for new players. 
-You'll have a much better time in the randomizer when you're familliar with the base game. 
+You'll have a much better time in the randomizer when you're familiar with the base game. 
 
 
 ## What does randomization do to this game?
 
 Pretty much every item can be randomized: chests, major items, dungeon rewards, shop items, freestanding items, etc. 
-There are additional options for the requirements for opening the Rainbow Bridge to Ganon's Castle and for recieving Ganon's Castle Boss Key.
-As well as additional shuffle options like Boss Souls, 
-requiring to be found before the respective boss can be fought. 
-Many of these are optional and can be viewed within the player options page.
+There are additional options for the requirements for opening the Rainbow Bridge to Ganon's Castle and for receiving Ganon's Castle Boss Key.
+As well as additional shuffle options like Boss Souls, requiring to be found before the respective boss can be fought. 
+Most of these are optional and can be viewed within the player options page.
 
 
 ## What is the goal of Ship of Harkinian when randomized?
 
-The standard goal is the same as the vanilla game: find whatever you need to reach and defeat and Ganon.
-The requirement of which will depend on chosen settings.
+The standard goal is the same as the vanilla game: find whatever you need to reach and defeat Ganon.
+The requirements of which will depend on chosen settings.
 
 There's an alternative goal in Triforce Hunt, where the player has to find the required amount of pieces and will be automatically
 warped to the end credits once finding the proper amount of pieces. If this is turned on, Ganon's Castle Boss Key will be granted
