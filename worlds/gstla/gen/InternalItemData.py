@@ -185,16 +185,16 @@ djinn_items: List[InternalDjinnItemData] = [
 ]
 
 events: List[InternalEventItemData] = [
-    InternalEventItemData(5001, 1912, "Mars Lighthouse - Doom Dragon Fight", "Doom Dragon Defeated"),
+    InternalEventItemData(5001, 1912, "Mars Lighthouse - Doom Dragon", "Doom Dragon Defeated"),
     InternalEventItemData(5002, 2219, "Alhafra Briggs", "Briggs defeated"),
     InternalEventItemData(5003, 2431, "Alhafra Prison Briggs", "Briggs escaped"),
     InternalEventItemData(5004, 2303, "Gabomba Statue Event", "Gabomba Statue Completed"),
-    InternalEventItemData(5005, 2542, "Gaia Rock - Serpent Fight", "Serpent defeated"),
-    InternalEventItemData(5006, 1637, "Sea of Time - Poseidon fight", "Poseidon defeated"),
-    InternalEventItemData(5007, 2367, "Lemurian Ship - Aqua Hydra fight", "Aqua Hydra defeated"),
-    InternalEventItemData(5008, 2381, "Shaman Village - Moapa fight", "Moapa defeated"),
-    InternalEventItemData(5009, 2593, "Jupiter_Lighthouse Aeri - Agatio and Karst fight", "Jupiter Beacon Lit"),
-    InternalEventItemData(5010, 2635, "Mars Lighthouse - Flame Dragons fight", "Flame Dragons - defeated"),
+    InternalEventItemData(5005, 2542, "Gaia Rock - Serpent", "Serpent defeated"),
+    InternalEventItemData(5006, 1637, "Sea of Time - Poseidon", "Poseidon defeated"),
+    InternalEventItemData(5007, 2367, "Lemurian Ship - Aqua Hydra", "Aqua Hydra defeated"),
+    InternalEventItemData(5008, 2381, "Shaman Village - Moapa", "Moapa defeated"),
+    InternalEventItemData(5009, 2593, "Jupiter_Lighthouse Aeri - Agatio and Karst", "Jupiter Beacon Lit"),
+    InternalEventItemData(5010, 2635, "Mars Lighthouse - Flame Dragons", "Flame Dragons - defeated"),
     InternalEventItemData(5011, 2270, "Lemurian Ship - Engine Room", "Ship"),
     InternalEventItemData(5012, 2271, "Contigo - Wings of Anemos", "Wings of Anemos"),
     InternalEventItemData(5013, 1610, "Kandorean Temple - Chestbeaters", "Chestbeaters defeated"),

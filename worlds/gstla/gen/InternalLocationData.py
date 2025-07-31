@@ -257,7 +257,7 @@ psyenergy_locations = [
 
 events = [
     InternalLocationData(1912, 1912, 5001, 5001, [0], 0,
-        5001, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Doom Dragon Fight Doom Dragon Defeated
+        5001, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Doom Dragon Doom Dragon Defeated
     InternalLocationData(2219, 2219, 5002, 5002, [0], 0,
         5002, True, True, LocationType.Event, LocationRestriction(7), True), # Alhafra Briggs Briggs defeated
     InternalLocationData(2431, 2431, 5003, 5003, [0], 0,
@@ -265,17 +265,17 @@ events = [
     InternalLocationData(2303, 2303, 5004, 5004, [0], 0,
         5004, True, True, LocationType.Event, LocationRestriction(7), True), # Gabomba Statue Event Gabomba Statue Completed
     InternalLocationData(2542, 2542, 5005, 5005, [0], 0,
-        5005, True, True, LocationType.Event, LocationRestriction(7), True), # Gaia Rock - Serpent Fight Serpent defeated
+        5005, True, True, LocationType.Event, LocationRestriction(7), True), # Gaia Rock - Serpent Serpent defeated
     InternalLocationData(1637, 1637, 5006, 5006, [0], 0,
-        5006, True, True, LocationType.Event, LocationRestriction(7), True), # Sea of Time - Poseidon fight Poseidon defeated
+        5006, True, True, LocationType.Event, LocationRestriction(7), True), # Sea of Time - Poseidon Poseidon defeated
     InternalLocationData(2367, 2367, 5007, 5007, [0], 0,
-        5007, True, True, LocationType.Event, LocationRestriction(7), True), # Lemurian Ship - Aqua Hydra fight Aqua Hydra defeated
+        5007, True, True, LocationType.Event, LocationRestriction(7), True), # Lemurian Ship - Aqua Hydra Aqua Hydra defeated
     InternalLocationData(2381, 2381, 5008, 5008, [0], 0,
-        5008, True, True, LocationType.Event, LocationRestriction(7), True), # Shaman Village - Moapa fight Moapa defeated
+        5008, True, True, LocationType.Event, LocationRestriction(7), True), # Shaman Village - Moapa Moapa defeated
     InternalLocationData(2593, 2593, 5009, 5009, [0], 0,
-        5009, True, True, LocationType.Event, LocationRestriction(7), True), # Jupiter_Lighthouse Aeri - Agatio and Karst fight Jupiter Beacon Lit
+        5009, True, True, LocationType.Event, LocationRestriction(7), True), # Jupiter_Lighthouse Aeri - Agatio and Karst Jupiter Beacon Lit
     InternalLocationData(2635, 2635, 5010, 5010, [0], 0,
-        5010, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Flame Dragons fight Flame Dragons - defeated
+        5010, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Flame Dragons Flame Dragons - defeated
     InternalLocationData(2270, 2270, 5011, 5011, [0], 0,
         5011, True, True, LocationType.Event, LocationRestriction(7), True), # Lemurian Ship - Engine Room Ship
     InternalLocationData(2271, 2271, 5012, 5012, [0], 0,

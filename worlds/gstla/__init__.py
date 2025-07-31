@@ -140,7 +140,7 @@ class GSTLAWorld(World):
 
     def generate_early(self) -> None:
         if len(self.options.goal.value) == 0:
-            raise OptionError("A goal must be selected")
+            raise OptionError(f"A goal must be selected for Golden Sun TLA for player {self.player_name}")
 
         if self.options.random_goals.value == 0 or self.options.random_goals.value >= len(self.options.goal.value):
             self.goal_conditions = self.options.goal.value
