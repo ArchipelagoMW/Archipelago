@@ -92,7 +92,7 @@ class APContainer:
     version: ClassVar[int] = container_version
     compression_level: ClassVar[int] = 9
     compression_method: ClassVar[int] = zipfile.ZIP_DEFLATED
-
+    manifest_path: str = "archipelago.json"
     path: Optional[str]
 
     def __init__(self, path: Optional[str] = None):
@@ -116,7 +116,7 @@ class APContainer:
         except Exception as e:
             raise Exception(f"Manifest {manifest} did not convert to json.") from e
         else:
-            opened_zipfile.writestr("archipelago.json", manifest_str)
+            opened_zipfile.writestr(self.manifest_path, manifest_str)
 
     def read(self, file: Optional[Union[str, BinaryIO]] = None) -> None:
         """Read data into patch object. file can be file-like, such as an outer zip file's stream."""
@@ -138,11 +138,12 @@ class APContainer:
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
         try:
-            manifest_info = opened_zipfile.getinfo("archipelago.json")
+            manifest_info = opened_zipfile.getinfo(self.manifest_path)
         except KeyError as e:
             for info in opened_zipfile.infolist():
                 if info.filename.endswith("archipelago.json"):
                     manifest_info = info
+                    self.manifest_path = info.filename
                     break
             else:
                 raise e
@@ -257,10 +258,8 @@ class APProcedurePatch(APAutoPatchInterface):
             manifest["compatible_version"] = 5
         return manifest
 
-    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
-        super(APProcedurePatch, self).read_contents(opened_zipfile)
-        with opened_zipfile.open("archipelago.json", "r") as f:
-            manifest = json.load(f)
+    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
+        manifest = super(APProcedurePatch, self).read_contents(opened_zipfile)
         if "procedure" not in manifest:
             # support patching files made before moving to procedures
             self.procedure = [("apply_bsdiff4", ["delta.bsdiff4"])]
@@ -269,6 +268,7 @@ class APProcedurePatch(APAutoPatchInterface):
         for file in opened_zipfile.namelist():
             if file not in ["archipelago.json"]:
                 self.files[file] = opened_zipfile.read(file)
+        return manifest
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         super(APProcedurePatch, self).write_contents(opened_zipfile)
