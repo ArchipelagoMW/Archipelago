@@ -155,6 +155,21 @@ Note that multiple base-game bugs affect the chat menu's functionality
 and Archipelago can put a lot of info into the chat.
 You may wish to launch the Archipelago Text Client and use it to run commands instead of the game's chat.
 
+### Hints
+
+Archipelago's hint system is available within Satisfactory via the `/hint` command.
+Most multiworld item names have a prefix to distinguish recipes from bundles.
+For example, to hint for the Assembler, run `/hint Building: Assembler`.
+
+Satisfactory's hint system has special behavior for Satisfactory crafting items.
+If you hint the unprefixed name of an item with multiple recipes, the system will hint the recipe you are expected to find first in randomizer logic.
+For example, hinting `Smart Plating` will return the logically first Smart Plating recipe,
+but hinting `Recipe: Smart Plating` or `Recipe: Plastic Smart Plating` will hint that specific recipe for Smart Plating,
+which may or may not be in logic.
+
+Exact Archipelago Item names (for hints/starting inventory/etc.) can be found
+[on the mod's github](https://github.com/Jarno458/Archipelago/blob/Satisfactory/worlds/satisfactory/Items.py).
+
 ## Multiplayer and Dedicated Servers
 
 It is possible to host a Satisfactory Archipelago Slot using the game's built in multiplayer,
