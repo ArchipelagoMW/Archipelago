@@ -105,7 +105,7 @@ spawn_locations = {
                               "door_ids": [24, 25]}, # Rec Room
     # "Laundry Room":          {"room_no": 5, "pos_x": -3165.112550, "pos_y": 0, "pos_z": -804.770508,
     #                           "key": ["Laundry Key", "Butler's Rom Key", "Heart Key"], "door_keys": ["Laundry Key", "Butler's Rom Key"],
-    #                           "door_ids": [1, 7]},  # Laundry
+    #                           "door_ids": [1, 7]},  # Laundry removed due to new spawn toad triggering as you leave
     "Telephone Room":        {"room_no": 50, "pos_x": -9.812825, "pos_y": 1100, "pos_z": 118.738243,
                               "key": ["Telephone Room Key", "Clockwork Room Key"], "door_keys": ["Telephone Room Key", "Clockwork Room Key"],
                               "door_ids": [53, 52]}, # Telephone
@@ -141,7 +141,7 @@ spawn_locations = {
 exp_spawns: dict[str,dict[str, int]] = {
 
     # "2F Bathroom":           {"room_no": 45, "pos_x": -1902.854130, "pos_y": 550, "pos_z": -4660.501950,
-    #                           "key": ["Heart Key", "2F Bathroom Key"]}, # 2f bath
+    #                           "key": ["2F Bathroom Key", "Upper 2F Stairwell Key"], "door_keys": [], "door_ids": []}, # 2f bath
     # "Tea Room":              {"room_no": 47, "pos_x": -2873.639400, "pos_y": 550, "pos_z": -4770.667970,
     #                           "key": ["Tea Room Key", "Upper 2F Stairwell Key", "South Rec Room Key", "Lower 2F Stairwell Key"]}, # tea
     # "Observatory":           {"room_no": 41, "pos_x": 3596.065920, "pos_y": 550, "pos_z": -3220.102780,
@@ -153,17 +153,17 @@ exp_spawns: dict[str,dict[str, int]] = {
     # "Guest Room":            {"room_no": 28, "pos_x": 2949.315430, "pos_y": 550, "pos_z": -149.029785,
     #                           "key": ["Heart Key", "Guest Room Key"]}, # guest
     # "Safari Room":           {"room_no": 52, "pos_x": 2718.783450, "pos_y": 1100, "pos_z": -131.375854,
-    #                           "key": ["Heart Key", "Safari Room Key"]}, # safari
+    #                           "key": ["Safari Room Key", "East Attic Hallway Key", "Balcony Key"]}, # safari
     # "Ceramics Studio":       {"room_no": 55, "pos_x": -2397.3373540, "pos_y": 1100, "pos_z": -1579.717410,
-    #                           "key": ["Armory Key", "Heart Key"]}, # ceramics
+    #                           "key": ["Armory Key", "Diamond Key", "Telephone Room Key"]}, # ceramics
     # "Anteroom":              {"room_no": 39, "pos_x": -1.503195, "pos_y": 550, "pos_z": -3087.626950,
-    #                           "key": ["Wardrobe Key", "Anteroom Key"]}, # Anteroom
+    #                           "key": ["Wardrobe Key", "Anteroom Key", "Parlor Key"]}, # Anteroom
     # "Wardrobe":              {"room_no": 38, "pos_x": -1789.859250, "pos_y": 550, "pos_z": -3303.123780,
-    #                           "key": ["Heart Key", "Wardrobe Key"]}, # Wardrobe
+    #                           "key": ["Wardrobe Key", "Heart Key"]}, # Wardrobe
     # "Projection Room":       {"room_no": 13, "pos_x": 281.914215, "pos_y": 0, "pos_z": -3137.967530,
     #                           "key": ["Projection Room Key", "Billiards Room Key"]}, # Projection
     # "1F Bathroom":           {"room_no": 17, "pos_x": -2160.237550, "pos_y": 0, "pos_z": -4671.114750,
-    #                           "key": ["Heart Key", "1F Bathroom Key"]}, # 1f bath
+    #                           "key": ["1F Bathroom Key", "Heart Key"]}, # 1f bath
     # "Fortune-Teller's Room": {"room_no": 3, "pos_x": 1807.135740, "pos_y": 0, "pos_z": 214.838852,
     #                           "key": ["Fortune Teller Key", "Mirror Room Key"]}, # Fortune Teller
     # "Mirror Room":           {"room_no": 4, "pos_x": 3343.897950, "pos_y": 0, "pos_z": -114.910957,
