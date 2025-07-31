@@ -1,14 +1,13 @@
 import itertools
 import time
-from typing import Dict, List
 
 from worlds.shapez.data.strings import SHAPESANITY, REGIONS
 
-shapesanity_simple: Dict[str, str] = {}
-shapesanity_1_4: Dict[str, str] = {}
-shapesanity_two_sided: Dict[str, str] = {}
-shapesanity_three_parts: Dict[str, str] = {}
-shapesanity_four_parts: Dict[str, str] = {}
+shapesanity_simple: dict[str, str] = {}
+shapesanity_1_4: dict[str, str] = {}
+shapesanity_two_sided: dict[str, str] = {}
+shapesanity_three_parts: dict[str, str] = {}
+shapesanity_four_parts: dict[str, str] = {}
 subshape_names = [SHAPESANITY.circle, SHAPESANITY.square, SHAPESANITY.star, SHAPESANITY.windmill]
 color_names = [SHAPESANITY.red, SHAPESANITY.blue, SHAPESANITY.green, SHAPESANITY.yellow, SHAPESANITY.purple,
                SHAPESANITY.cyan, SHAPESANITY.white, SHAPESANITY.uncolored]
@@ -16,7 +15,7 @@ short_subshapes = ["C", "R", "S", "W"]
 short_colors = ["b", "c", "g", "p", "r", "u", "w", "y"]
 
 
-def color_to_needed_building(color_list: List[str]) -> str:
+def color_to_needed_building(color_list: list[str]) -> str:
     for next_color in color_list:
         if next_color in [SHAPESANITY.yellow, SHAPESANITY.purple, SHAPESANITY.cyan, SHAPESANITY.white,
                           "y", "p", "c", "w"]:

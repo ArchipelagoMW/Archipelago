@@ -16,6 +16,10 @@ from collections.abc import Iterable, Sequence
 from hashlib import sha3_512
 from pathlib import Path
 
+
+SNI_VERSION = "v0.0.100"  # change back to "latest" once tray icon issues are fixed
+
+
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 requirement = 'cx-Freeze==8.0.0'
 try:
@@ -57,7 +61,6 @@ from Utils import version_tuple, is_windows, is_linux
 from Cython.Build import cythonize
 
 
-# On  Python < 3.10 LogicMixin is not currently supported.
 non_apworlds: set[str] = {
     "A Link to the Past",
     "Adventure",
@@ -74,9 +77,6 @@ non_apworlds: set[str] = {
     "Wargroove",
 }
 
-# LogicMixin is broken before 3.10 import revamp
-if sys.version_info < (3,10):
-    non_apworlds.add("Hollow Knight")
 
 def download_SNI() -> None:
     print("Updating SNI")
@@ -89,7 +89,8 @@ def download_SNI() -> None:
     machine_name = platform.machine().lower()
     # force amd64 on macos until we have universal2 sni, otherwise resolve to GOARCH
     machine_name = "universal" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
-    with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
+    sni_version_ref = "latest" if SNI_VERSION == "latest" else f"tags/{SNI_VERSION}"
+    with urllib.request.urlopen(f"https://api.github.com/repos/alttpo/SNI/releases/{sni_version_ref}") as request:
         data = json.load(request)
     files = data["assets"]
 
@@ -103,8 +104,8 @@ def download_SNI() -> None:
             # prefer "many" builds
             if "many" in download_url:
                 break
-            # prefer the correct windows or windows7 build
-            if platform_name == "windows" and ("windows7" in download_url) == (sys.version_info < (3, 9)):
+            # prefer non-windows7 builds to get up-to-date dependencies
+            if platform_name == "windows" and "windows7" not in download_url:
                 break
 
     if source_url and source_url.endswith(".zip"):
@@ -413,7 +414,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         if is_windows:
             # Inno setup stuff
             with open("setup.ini", "w") as f:
-                min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
+                min_supported_windows = "6.2.9200"
                 f.write(f"[Data]\nsource_path={self.buildfolder}\nmin_windows={min_supported_windows}\n")
             with open("installdelete.iss", "w") as f:
                 f.writelines("Type: filesandordirs; Name: \"{app}\\lib\\worlds\\"+world_directory+"\"\n"
