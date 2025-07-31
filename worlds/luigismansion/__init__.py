@@ -823,6 +823,7 @@ class LMWorld(World):
 
         return {
             "rank requirement": self.options.rank_requirement.value,
+            "game mode": self.options.game_mode.value,
             "better vacuum": self.options.good_vacuum.value,
             "door rando": self.options.door_rando.value,
             "door rando list": self.open_doors,
