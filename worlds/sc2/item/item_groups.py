@@ -663,10 +663,13 @@ item_name_groups[ItemGroupNames.INF_TERRAN_UPGRADES] = infterr_upgrades = [
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK,
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR,
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE,
+    item_names.INFESTED_MISSILE_TURRET_BIOELECTRIC_PAYLOAD,
+    item_names.INFESTED_MISSILE_TURRET_ACID_SPORE_VENTS,
 ]
 item_name_groups[ItemGroupNames.INF_TERRAN_ITEMS] = (
     infterr_units
     + infterr_upgrades
+    + [item_names.INFESTED_MISSILE_TURRET]
 )
 
 # Protoss
