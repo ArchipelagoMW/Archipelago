@@ -1,10 +1,11 @@
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 from BaseClasses import LocationProgressType
 
-from .. import WitnessWorld
 from ..test import WitnessMultiworldTestBase
 
+if TYPE_CHECKING:
+    from .. import WitnessWorld
 
 class TestEasterEggShuffle(WitnessMultiworldTestBase):
     options_per_world = [
@@ -33,8 +34,10 @@ class TestEasterEggShuffle(WitnessMultiworldTestBase):
             egg_locations = {location for location in self.multiworld.get_locations(1) if "Egg" in location.name}
             self.assertFalse(egg_locations)
 
-        for player, eggs_per_check, logical_eggs_per_check in zip([2, 3, 4, 5, 6], [3, 3, 4, 4, 4], [8, 6, 6, 5, 4]):
-            world = cast(WitnessWorld, self.multiworld.worlds[player])
+        for player, eggs_per_check, logical_eggs_per_check in zip(
+            [2, 3, 4, 5, 6], [3, 3, 4, 4, 4], [8, 6, 6, 5, 4], strict=True
+        ):
+            world = cast("WitnessWorld", self.multiworld.worlds[player])
             option_name = world.options.easter_egg_hunt
 
             with self.subTest(f"Test that {option_name} Egg Hunt player starts with 0 eggs"):
