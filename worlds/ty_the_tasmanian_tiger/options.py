@@ -28,10 +28,13 @@ class LogicDifficulty(Choice):
     Standard: The logic assumes elemental rangs are required to enter hubs
 
     Advanced: Assumes hubs may be entered early and elemental rangs are optional
+
+    Doom: Assumes checks can be completed with the bare-minimum of items. WARNING: MAY CAUSE SUFFERING!
     """
     display_name = "Logic Difficulty"
     option_standard = 0
     option_advanced = 1
+    option_doom = 2
     default = 0
 
 

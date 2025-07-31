@@ -145,6 +145,9 @@ def get_rules(world):
                 lambda state:
                     has_stopwatch(world, state, Ty1LevelCode.A3) if world.options.gate_time_attacks
                     else state.can_reach_location("Ship Rex - Where's Elle?", world.player),
+            "Ship Rex - Ship Wreck":
+                lambda state:
+                    can_throw_water(world, state),
             "BotRT - Collect 300 Opals":
                 lambda state:
                     can_go_water(world, state),
@@ -164,13 +167,13 @@ def get_rules(world):
             "BotRT - Ty Diving":
                 lambda state:
                     has_rang(world, state, Ty1Rang.DIVE)
-                    or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.ZAPPYRANG)),
+                    or (world.options.logic_difficulty != 0 and has_rang(world, state, Ty1Rang.ZAPPYRANG)),
             "Snow Worries - Collect 300 Opals":
                 lambda state:
                     has_rang(world, state, Ty1Rang.AQUARANG),
             "Snow Worries - Koala Chaos":
                 lambda state:
-                    has_rang(world, state, Ty1Rang.SECOND_RANG) or world.options.logic_difficulty == 1,
+                    has_rang(world, state, Ty1Rang.SECOND_RANG) or world.options.logic_difficulty != 0,
             "Snow Worries - Find 5 Bilbies":
                 lambda state:
                     has_all_bilbies(world, state, Ty1LevelCode.B2),
@@ -201,14 +204,14 @@ def get_rules(world):
             "LLPoF - Muddy Towers":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG)
-                    or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.DIVE)),
+                    or (world.options.logic_difficulty != 0 and has_rang(world, state, Ty1Rang.DIVE)),
             "BtBS - Collect 300 Opals":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG),
             "BtBS - Find 5 Bilbies":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "BtBS - Wombat Rematch":
                 lambda state:
                     has_stopwatch(world, state, Ty1LevelCode.C2) if world.options.gate_time_attacks
@@ -216,7 +219,7 @@ def get_rules(world):
             "BtBS - Koala Crisis":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FROSTYRANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "RMtS - Find 5 Bilbies":
                 lambda state:
                     has_all_bilbies(world, state, Ty1LevelCode.C3),
@@ -227,58 +230,59 @@ def get_rules(world):
             "RMtS - Geyser Hop":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or (world.options.logic_difficulty == 1
+                    or (world.options.logic_difficulty != 0
                         and (can_ice_swim(world, state)
                              or has_rang(world, state, Ty1Rang.DOOMERANG))),
             "RMtS - Volcanic Panic":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG) or
-                    (world.options.logic_difficulty == 1 and can_ice_swim(world, state)),
+                    (world.options.logic_difficulty != 0 and can_ice_swim(world, state)),
             "BotRT - Golden Cog 1":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "BotRT - Golden Cog 2":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "BotRT - Golden Cog 8":
                 lambda state:
                     can_throw_water(world, state) or has_rang(world, state, Ty1Rang.FROSTYRANG)
-                    or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.SECOND_RANG)),
+                    or (world.options.logic_difficulty != 0 and has_rang(world, state, Ty1Rang.SECOND_RANG)),
             "BotRT - Golden Cog 10":
                 lambda state:
-                    can_go_water(world, state),
+                    can_go_water(world, state)
+                    or (world.options.logic_difficulty == 2 and has_rang(world, state, Ty1Rang.DOOMERANG)),
             "Snow Worries - Golden Cog 3":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or (world.options.logic_difficulty == 1 and can_go_water(world, state)),
+                    or (world.options.logic_difficulty != 0 and can_go_water(world, state)),
             "Snow Worries - Golden Cog 7":
                 lambda state:
                     has_rang(world, state, Ty1Rang.AQUARANG),
             "LLPoF - Golden Cog 4":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "LLPoF - Golden Cog 5":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "LLPoF - Golden Cog 10":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "BtBS - Golden Cog 7":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "RMtS - Golden Cog 2":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG) or has_rang(world, state, Ty1Rang.FROSTYRANG),
             "RMtS - Golden Cog 6":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "RMtS - Golden Cog 8":
                 lambda state:
                     can_throw_water(world, state) or has_rang(world, state, Ty1Rang.FROSTYRANG),
@@ -312,25 +316,25 @@ def get_rules(world):
             "BotRT - Bilby Mum":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG)
-                    or (world.options.logic_difficulty == 1
+                    or (world.options.logic_difficulty != 0
                         and has_rang(world, state, Ty1Rang.SECOND_RANG)
                         and can_go_water(world, state)),
             "Snow Worries - Bilby Mum":
                 lambda state:
                     (has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player))
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "BtBS - Bilby Dad":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "BtBS - Bilby Mum":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "Snow Worries - PF 13":
                 lambda state:
-                    has_rang(world, state, Ty1Rang.FLAMERANG)
-                    or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.SECOND_RANG)),
+                    (has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player))
+                    or world.options.logic_difficulty != 0,
             "Ship Rex - Opal 28":
                 lambda state:
                     can_go_water(world, state),
@@ -349,46 +353,46 @@ def get_rules(world):
             "Snow Worries - Opal 64":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "Snow Worries - Opal 69":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "Snow Worries - Opal 74":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "Snow Worries - Opal 79":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "Snow Worries - Opal 84":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "Snow Worries - Opal 85":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) or state.has("Kaboomerang", world.player)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "LLPoF - Opal 91":
                 lambda state:
                 has_rang(world, state, Ty1Rang.SECOND_RANG)
-                or world.options.logic_difficulty == 1,
+                or world.options.logic_difficulty != 0,
             "LLPoF - Opal 98":
                 lambda state:
                 has_rang(world, state, Ty1Rang.SECOND_RANG)
-                or world.options.logic_difficulty == 1,
+                or world.options.logic_difficulty != 0,
             "LLPoF - Opal 101":
                 lambda state:
                 has_rang(world, state, Ty1Rang.SECOND_RANG)
-                or world.options.logic_difficulty == 1,
+                or world.options.logic_difficulty != 0,
             "Attribute - Doomerang":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FLAMERANG) and has_rang(world, state, Ty1Rang.FROSTYRANG),
             "Attribute - Extra Health":
                 lambda state:
                     can_go_water(world, state) and
-                    (world.options.logic_difficulty == 1 or
+                    (world.options.logic_difficulty != 0 or
                         all(state.can_reach_region(region, world.player) for region in [
                             "Bli Bli Station Gate",
                             "Pippy Beach",
@@ -438,18 +442,21 @@ def get_rules(world):
                     state.can_reach_region("Bli Bli Station Gate - PF", world.player),
             "Platypus Talisman":
                 lambda state:
-                    can_throw_water(world, state) and has_rang(world, state, Ty1Rang.FLAMERANG),
+                    (can_throw_water(world, state) and has_rang(world, state, Ty1Rang.FLAMERANG))
+                    or (world.options.logic_difficulty != 0 and has_rang(world, state, Ty1Rang.DOOMERANG))
+                    or (world.options.logic_difficulty == 2 and has_rang(world, state, Ty1Rang.FLAMERANG)),
             "Cockatoo Talisman":
                 lambda state:
-                    has_rang(world, state, Ty1Rang.FLAMERANG) and has_rang(world, state, Ty1Rang.FROSTYRANG)
-                    or world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.DOOMERANG),
+                    (has_rang(world, state, Ty1Rang.FLAMERANG) and has_rang(world, state, Ty1Rang.FROSTYRANG))
+                    or (world.options.logic_difficulty != 0 and has_rang(world, state, Ty1Rang.DOOMERANG)),
             "Dingo Talisman":
                 lambda state:
-                    has_rang(world, state, Ty1Rang.SECOND_RANG),
+                    has_rang(world, state, Ty1Rang.SECOND_RANG)
+                    or world.options.logic_difficulty == 2,
             "Tiger Talisman":
                 lambda state:
                     has_rang(world, state, Ty1Rang.DOOMERANG) and
-                    (world.options.logic_difficulty == 1 or (has_rang(world, state, Ty1Rang.FLAMERANG)
+                    (world.options.logic_difficulty != 0 or (has_rang(world, state, Ty1Rang.FLAMERANG)
                      and has_rang(world, state, Ty1Rang.FROSTYRANG))),
             "Attribute - Flamerang":
                 lambda state:
@@ -468,15 +475,15 @@ def get_rules(world):
             "Rainbow Scale 11":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FROSTYRANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "Rainbow Scale 7":
                 lambda state:
                 has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "Rainbow Scale 15":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "Rainbow Scale 16":
                 lambda state:
                     can_go_water(world, state),
@@ -489,7 +496,7 @@ def get_rules(world):
             "Two Up - Time Attack Challenge":
                 lambda state:
                     state.can_reach_location("Two Up - Time Attack", world.player)
-                    and has_rang(world, state, Ty1Rang.DIVE) if world.options.logic_difficulty == 1 else True,
+                    and has_rang(world, state, Ty1Rang.DIVE) if world.options.logic_difficulty != 0 else True,
             "WitP - Time Attack Challenge":
                 lambda state:
                     state.can_reach_location("WitP - Wombat Race", world.player),
@@ -500,7 +507,7 @@ def get_rules(world):
             "BotRT - Time Attack Challenge":
                 lambda state:
                     state.can_reach_location("BotRT - Time Attack", world.player)
-                    and can_go_water(world, state) if world.options.logic_difficulty == 1 else True,
+                    and can_go_water(world, state) if world.options.logic_difficulty != 0 else True,
             "Snow Worries - Time Attack Challenge":
                 lambda state:
                     state.can_reach_location("Snow Worries - Time Attack", world.player),
@@ -549,10 +556,10 @@ def get_rules(world):
                     state.can_reach_location("Frog Talisman", world.player),
             "Beat Crikey":
                 lambda state:
-                    state.can_reach_location("Cockatoo Talisman", world.player),
+                    state.can_reach_location("Platypus Talisman", world.player),
             "Beat Fluffy":
                 lambda state:
-                    state.can_reach_location("Platypus Talisman", world.player),
+                    state.can_reach_location("Cockatoo Talisman", world.player),
             "Beat Shadow":
                 lambda state:
                     state.can_reach_location("Dingo Talisman", world.player),
@@ -563,32 +570,36 @@ def get_rules(world):
         "entrances": {
             "Z1 - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "A Zone Gate":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG)
-                    or world.options.logic_difficulty == 1,
+                    or world.options.logic_difficulty != 0,
             "A Zone Gate - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Z1 -> B Zone":
                 lambda state: 
                     has_rang(world, state, Ty1Rang.FLAMERANG)
-                    or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.DIVE)),
+                    or (world.options.logic_difficulty != 0 and has_rang(world, state, Ty1Rang.DIVE)),
             "B Zone - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Z1 -> C Zone":
                 lambda state:
                     has_rang(world, state, Ty1Rang.FROSTYRANG)
-                    or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.DIVE)),
+                    or (world.options.logic_difficulty != 0 and has_rang(world, state, Ty1Rang.DIVE)),
             "Z1 -> E Zone":
                 lambda state:
                     has_rang(world, state, Ty1Rang.ZAPPYRANG)
-                    or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.DIVE)),
+                    or (world.options.logic_difficulty != 0 and has_rang(world, state, Ty1Rang.DIVE)),
             "E Zone - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "A1 Portal":
                 lambda state:
                     has_level(world, state, 0),
@@ -637,78 +648,92 @@ def get_rules(world):
                              and state.has("Beat Fluffy", world.player))),
             "Two Up - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Two Up - Upper Area":
                 lambda state:
-                    world.options.logic_difficulty == 1 or
+                    world.options.logic_difficulty != 0 or
                     (has_rang(world, state, Ty1Rang.SWIM) or has_rang(world, state, Ty1Rang.DIVE)
                      or has_rang(world, state, Ty1Rang.SECOND_RANG)),
             "Two Up - Upper Area - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Two Up - End Area":
                 lambda state:
-                    world.options.logic_difficulty == 1 or
+                    world.options.logic_difficulty != 0 or
                     has_rang(world, state, Ty1Rang.SECOND_RANG),
             "Walk in the Park - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Ship Rex - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Ship Rex - Sea Gate":
                 lambda state:
                     (world.options.logic_difficulty == 0 and can_throw_water(world, state))
-                    or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.DIVE)),
+                    or (world.options.logic_difficulty != 0 and has_rang(world, state, Ty1Rang.DIVE))
+                    or (world.options.logic_difficulty == 2 and can_go_water),
             "Ship Rex - Gate - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Bridge on the River Ty - Underwater":
                 lambda state:
                     can_go_water(world, state),
             "Bridge on the River Ty - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Bridge on the River Ty - Broken Bridge Glide":
                 lambda state:
-                    world.options.logic_difficulty == 1 or has_rang(world, state, Ty1Rang.SECOND_RANG),
+                    world.options.logic_difficulty != 0 or has_rang(world, state, Ty1Rang.SECOND_RANG),
             "Bridge on the River Ty - Beyond Broken Bridge Underwater":
                 lambda state:
                     can_go_water(world, state),
             "Bridge on the River Ty - Broken Bridge - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Snow Worries - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Snow Worries - Underwater":
                 lambda state:
                    has_rang(world, state, Ty1Rang.SWIM)
-                   or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.DIVE)),
+                   or (world.options.logic_difficulty != 0 and has_rang(world, state, Ty1Rang.DIVE)),
             "Lyre, Lyre Pants on Fire - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Beyond the Black Stump - Behind Burning Logs":
                 lambda state:
-                    world.options.logic_difficulty == 1 or has_rang(world, state, Ty1Rang.FROSTYRANG),
+                    world.options.logic_difficulty != 0 or has_rang(world, state, Ty1Rang.FROSTYRANG),
             "Beyond the Black Stump - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Beyond the Black Stump - Upper Area":
                 lambda state:
-                    world.options.logic_difficulty == 1 or has_rang(world, state, Ty1Rang.SECOND_RANG),
+                    world.options.logic_difficulty != 0 or has_rang(world, state, Ty1Rang.SECOND_RANG),
             "Beyond the Black Stump - Glide":
                 lambda state:
                     has_rang(world, state, Ty1Rang.SECOND_RANG),
             "Beyond the Black Stump - Upper Area - PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Rex Marks the Spot, PF":
                 lambda state:
-                    not world.options.frames_require_infra or state.has("Infrarang", world.player),
+                    not world.options.frames_require_infra or state.has("Infrarang", world.player)
+                    or world.options.logic_difficulty == 2,
             "Rex Marks the Spot - Underwater":
                 lambda state:
-                    can_go_water(world, state),
+                    can_go_water(world, state)
+                    or world.options.logic_difficulty == 2,
         }
     }
     return rules
