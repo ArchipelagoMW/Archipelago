@@ -825,6 +825,7 @@ class LMWorld(World):
             "rank requirement": self.options.rank_requirement.value,
             "game mode": self.options.game_mode.value,
             "better vacuum": self.options.good_vacuum.value,
+            "vacuum start": self.options.vacuum_start.value,
             "door rando": self.options.door_rando.value,
             "door rando list": self.open_doors,
             "ghost elements": self.ghost_affected_regions,
