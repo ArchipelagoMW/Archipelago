@@ -168,7 +168,7 @@ but hinting `Recipe: Smart Plating` or `Recipe: Plastic Smart Plating` will hint
 which may or may not be in logic.
 
 Exact Archipelago Item names (for hints/starting inventory/etc.) can be found
-[on the mod's github](https://github.com/Jarno458/Archipelago/blob/Satisfactory/worlds/satisfactory/Items.py).
+[on the mod's GitHub](https://github.com/Jarno458/Archipelago/blob/Satisfactory/worlds/satisfactory/Items.py).
 
 ## Multiplayer and Dedicated Servers
 
@@ -186,8 +186,8 @@ Dedicated server support is only working for Windows at the moment.
 
 ## Additional Mods
 
-It is possible to load other Satisfactory mods in tandem with the Archipelago Satisfactory mod.
-However, no guarantee is made that any mods except the "Certified Compatible Mods" listed below will work correctly,
+It is possible to use other Satisfactory mods in tandem with the Archipelago Satisfactory mod.
+However, no guarantee is made that they will work correctly,
 especially if they affect game progression, recipes, or add unlocks to base-game technologies.
 
 Content added by unaffiliated mods may end up inaccessible based on your chosen slot settings,
@@ -196,25 +196,5 @@ You may be able to write patches using [ContentLib](https://ficsit.app/mod/Conte
 to adjust other mods to work with your slot settings,
 but doing so is out of the scope of this guide.
 
-Use unaffiliated mods at your own risk, support will not be offered.
-
-The following mods are **required dependencies** of the Archipelago mod and **will automatically be installed for you**
-when you install it using the Satisfactory Mod Manager:
-
-- [ContentLib](https://ficsit.app/mod/ContentLib) - Runtime content generation.
-- [Free Samples](https://ficsit.app/mod/FreeSamples) - Used to implement the Free Samples options. Even if you don't have this game option enabled, the mod will still be present, but its functionality will be disabled.
-- [MAM Enhancer](https://ficsit.app/mod/MAMTips) - Allows viewing MAM research nodes in detail. Enables you to hover over the items/unlocks of a node to see more info, especially important when their names get long.
-- [FixClientResourceSinkPoints](https://ficsit.app/mod/FixClientResourceSinkPoints) - Fixes a bug where AWESOME Sink point values aren't loaded properly on multiplayer clients.
-- [Hover Pack Fuse Reminder](https://ficsit.app/mod/HoverpackFuseReminder) - Randomization means pioneers can get access to hoverpacks while their power grids can't yet handle the power draw. This mod reminds the player if they're wearing a hoverpack when resetting fuses.
-
-### Certified Compatible Mods
-
-The following mods are known to work with Archipelago:
-
-- [TFIT - FICSIT Information Tool](https://ficsit.app/mod/TFIT) - View how many Sink Points items are worth and how points-profitable recipes are. Helpful for the AWESOME Sink goals.
-- [Faster Manual Crafting Redux](https://ficsit.app/mod/FasterManualCraftingRedux) - Reduce the early game manual crafting grind with a manual crafting speed that ramps up as you craft larger batches at once.
-
-The following mods have been used successfully by other players but have not been thoroughly tested with Archipelago:
-
-- [Resource Roulette](https://ficsit.app/mod/ResourceRoulette) - Randomize the location of resource nodes
-- [Infinite Zoop](https://ficsit.app/mod/InfiniteZoop) - Adds a research tree in the MAM where you can improve your Zoop capacity. Also enables multi-row & column Wall and Foundation construction.
+[The Archipelago Satisfactory mod GitHub](https://github.com/Jarno458/SatisfactoryArchipelagoMod/blob/main/Docs/AdditionalMods.md)
+maintains a list of additional mods that have been tested with Archipelago to some extent.
