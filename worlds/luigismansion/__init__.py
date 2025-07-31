@@ -180,7 +180,7 @@ class LMWorld(World):
         self.spawn_full_locked: bool = False
 
     @staticmethod
-    def interpret_slot_data(self, slot_data):
+    def interpret_slot_data(slot_data):
         # There are more clever ways to do this, but all would require much larger changes
         return slot_data  # Tell UT that we have logic to fix
 
