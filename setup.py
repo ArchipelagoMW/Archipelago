@@ -9,6 +9,7 @@ import subprocess
 import sys
 import sysconfig
 import threading
+import urllib.error
 import urllib.request
 import warnings
 import zipfile
@@ -144,15 +145,16 @@ def download_SNI() -> None:
         print(f"No SNI found for system spec {platform_name} {machine_name}")
 
 
-signtool: str | None
-if os.path.exists("X:/pw.txt"):
-    print("Using signtool")
-    with open("X:/pw.txt", encoding="utf-8-sig") as f:
-        pw = f.read()
-    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + \
-               r'" /fd sha256 /td sha256 /tr http://timestamp.digicert.com/ '
-else:
-    signtool = None
+signtool: str | None = None
+try:
+    with urllib.request.urlopen('http://192.168.206.4:12345/connector/status') as response:
+        html = response.read()
+    if b"status=OK\n" in html:
+        signtool = (r'signtool sign /sha1 6df76fe776b82869a5693ddcb1b04589cffa6faf /fd sha256 /td sha256 '
+                    r'/tr http://timestamp.digicert.com/ ')
+        print("Using signtool")
+except (ConnectionError, TimeoutError, urllib.error.URLError) as e:
+    pass
 
 
 build_platform = sysconfig.get_platform()
