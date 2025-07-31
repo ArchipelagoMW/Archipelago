@@ -140,6 +140,9 @@ parent_present[parent_names.BANELING_SOURCE] = AnyOf(
     item_names.ZERGLING_BANELING_ASPECT,
 )
 parent_present[parent_names.INFESTED_UNITS] = AnyOf(item_groups.infterr_units, display_string='Infested')
+parent_present[parent_names.INFESTED_FACTORY_OR_STARPORT] = AnyOf(
+    (item_names.INFESTED_DIAMONDBACK, item_names.INFESTED_SIEGE_TANK, item_names.INFESTED_LIBERATOR, item_names.INFESTED_BANSHEE, item_names.BULLFROG)
+)
 parent_present[parent_names.MORPH_SOURCE_AIR] = MorphlingOrAnyOf((item_names.MUTALISK, item_names.CORRUPTOR), "Mutalisk/Corruptor Morphs")
 parent_present[parent_names.MORPH_SOURCE_ROACH] = MorphlingOrItem(item_names.ROACH)
 parent_present[parent_names.MORPH_SOURCE_ZERGLING] = MorphlingOrItem(item_names.ZERGLING)
