@@ -1,4 +1,5 @@
-from Options import Range, Toggle, DefaultOnToggle, Choice, DeathLink
+from dataclasses import dataclass
+from Options import Range, Toggle, DefaultOnToggle, Choice, DeathLink, PerGameCommonOptions
 
 class MinimumResourcePackAmount(Range):
     """The minimum amount of resources available in a resource pack"""
@@ -32,7 +33,13 @@ class FillerItemTypes(Choice):
     option_both = 2
 
 class IslandFrequencyLocations(Choice):
-    """Sets where frequencies for story islands are located."""
+    """Sets where frequencies for story islands are located.
+    Vanilla will keep frequencies in their vanilla, non-randomized locations.
+    Random On Island will randomize each frequency within its vanilla island, but will preserve island order.
+    Random Island Order will change the order you visit islands, but will preserve the vanilla location of each frequency unlock.
+    Random On Island Random Order will randomize the location containing the frequency on each island and randomize the order.
+    Progressive will randomize the frequencies to anywhere, but will always unlock the frequencies in vanilla order as the frequency items are received.
+    Anywhere will randomize the frequencies to anywhere, and frequencies will be received in any order."""
     display_name = "Frequency locations"
     option_vanilla = 0
     option_random_on_island = 1
@@ -41,6 +48,8 @@ class IslandFrequencyLocations(Choice):
     option_progressive = 4
     option_anywhere = 5
     default = 2
+    def is_filling_frequencies_in_world(self):
+        return self.value <= self.option_random_on_island_random_order
 
 class IslandGenerationDistance(Choice):
     """Sets how far away islands spawn from you when you input their coordinates into the Receiver."""
@@ -53,7 +62,8 @@ class IslandGenerationDistance(Choice):
     default = 8
 
 class ExpensiveResearch(Toggle):
-    """Makes unlocking items in the Crafting Table consume the researched items."""
+    """If No is selected, researching items and unlocking items in the Crafting Table works the same as vanilla Raft.
+    If Yes is selected, each unlock in the Crafting Table will require its own set of researched items in order to unlock it."""
     display_name = "Expensive research"
 
 class ProgressiveItems(DefaultOnToggle):
@@ -66,20 +76,19 @@ class BigIslandEarlyCrafting(Toggle):
     display_name = "Early recipes behind big islands"
 
 class PaddleboardMode(Toggle):
-    """Sets later story islands to in logic without an Engine or Steering Wheel. May require lots of paddling. Not
-    recommended."""
+    """Sets later story islands to be in logic without an Engine or Steering Wheel. May require lots of paddling."""
     display_name = "Paddleboard Mode"
 
-raft_options = {
-    "minimum_resource_pack_amount": MinimumResourcePackAmount,
-    "maximum_resource_pack_amount": MaximumResourcePackAmount,
-    "duplicate_items": DuplicateItems,
-    "filler_item_types": FillerItemTypes,
-    "island_frequency_locations": IslandFrequencyLocations,
-    "island_generation_distance": IslandGenerationDistance,
-    "expensive_research": ExpensiveResearch,
-    "progressive_items": ProgressiveItems,
-    "big_island_early_crafting": BigIslandEarlyCrafting,
-    "paddleboard_mode": PaddleboardMode,
-    "death_link": DeathLink
-}
+@dataclass
+class RaftOptions(PerGameCommonOptions):
+    minimum_resource_pack_amount: MinimumResourcePackAmount
+    maximum_resource_pack_amount: MaximumResourcePackAmount
+    duplicate_items: DuplicateItems
+    filler_item_types: FillerItemTypes
+    island_frequency_locations: IslandFrequencyLocations
+    island_generation_distance: IslandGenerationDistance
+    expensive_research: ExpensiveResearch
+    progressive_items: ProgressiveItems
+    big_island_early_crafting: BigIslandEarlyCrafting
+    paddleboard_mode: PaddleboardMode
+    death_link: DeathLink

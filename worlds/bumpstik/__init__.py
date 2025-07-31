@@ -39,8 +39,6 @@ class BumpStikWorld(World):
     location_name_to_id = location_table
     item_name_groups = item_groups
 
-    data_version = 1
-
     required_client_version = (0, 3, 8)
 
     options: BumpstikOptions
@@ -127,6 +125,6 @@ class BumpStikWorld(World):
             lambda state: state.has("Hazard Bumper", self.player, 25)
             
         self.multiworld.completion_condition[self.player] = \
-            lambda state: state.has("Booster Bumper", self.player, 5) and \
-            state.has("Treasure Bumper", self.player, 32)
+            lambda state: state.has_all_counts({"Booster Bumper": 5, "Treasure Bumper": 32, "Hazard Bumper": 25}, \
+                self.player)
 

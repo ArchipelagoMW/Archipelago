@@ -30,7 +30,7 @@ def is_acceptable_pilgrimage_entrance(entrance_type: EntranceType, world: "Lingo
     allowed_entrance_types = EntranceType.NORMAL
 
     if world.options.pilgrimage_allows_paintings:
-        allowed_entrance_types |= EntranceType.PAINTING
+        allowed_entrance_types |= EntranceType.PAINTING | EntranceType.STATIC_PAINTING
 
     if world.options.pilgrimage_allows_roof_access:
         allowed_entrance_types |= EntranceType.CROSSROADS_ROOF_ACCESS
@@ -49,8 +49,15 @@ def connect_entrance(regions: Dict[str, Region], source_region: Region, target_r
     if door is not None:
         effective_room = target_region.name if door.room is None else door.room
         if door.door not in world.player_logic.item_by_door.get(effective_room, {}):
-            for region in world.player_logic.calculate_door_requirements(effective_room, door.door, world).rooms:
+            access_reqs = world.player_logic.calculate_door_requirements(effective_room, door.door, world)
+            for region in access_reqs.rooms:
                 world.multiworld.register_indirect_condition(regions[region], connection)
+
+            # This pretty much only applies to Orange Tower Sixth Floor -> Orange Tower Basement.
+            if access_reqs.the_master:
+                for mastery_req in world.player_logic.mastery_reqs:
+                    for region in mastery_req.rooms:
+                        world.multiworld.register_indirect_condition(regions[region], connection)
     
     if not pilgrimage and world.options.enable_pilgrimage and is_acceptable_pilgrimage_entrance(entrance_type, world)\
             and source_region.name != "Menu":
@@ -98,7 +105,8 @@ def create_regions(world: "LingoWorld") -> None:
                 regions[pilgrimage_region_name] = Region(pilgrimage_region_name, world.player, world.multiworld)
 
     # Connect all created regions now that they exist.
-    allowed_entrance_types = EntranceType.NORMAL | EntranceType.WARP | EntranceType.CROSSROADS_ROOF_ACCESS
+    allowed_entrance_types = EntranceType.NORMAL | EntranceType.WARP | EntranceType.CROSSROADS_ROOF_ACCESS | \
+                             EntranceType.STATIC_PAINTING
 
     if not painting_shuffle:
         # Don't use the vanilla painting connections if we are shuffling paintings.
@@ -149,11 +157,11 @@ def create_regions(world: "LingoWorld") -> None:
             regions[from_room].connect(regions[to_room], f"Pilgrimage Part {i+1}")
     else:
         connect_entrance(regions, regions["Starting Room"], regions["Pilgrim Antechamber"], "Sun Painting",
-                         RoomAndDoor("Pilgrim Antechamber", "Sun Painting"), EntranceType.PAINTING, False, world)
+                         RoomAndDoor("Pilgrim Antechamber", "Sun Painting"), EntranceType.STATIC_PAINTING, False, world)
 
     if early_color_hallways:
-        connect_entrance(regions, regions["Starting Room"], regions["Outside The Undeterred"], "Early Color Hallways",
-                         None, EntranceType.PAINTING, False, world)
+        connect_entrance(regions, regions["Starting Room"], regions["Color Hallways"], "Early Color Hallways",
+                         None, EntranceType.STATIC_PAINTING, False, world)
 
     if painting_shuffle:
         for warp_enter, warp_exit in world.player_logic.painting_mapping.items():

@@ -292,6 +292,9 @@ blacklisted_combos = {
     # See above comment
     "Time Rift - Deep Sea":             ["Alpine Free Roam", "Nyakuza Free Roam", "Contractual Obligations",
                                          "Murder on the Owl Express"],
+
+    # was causing test failures
+    "Time Rift - Balcony":              ["Alpine Free Roam"],
 }
 
 
@@ -344,7 +347,7 @@ def create_regions(world: "HatInTimeWorld"):
     sf_act3 = create_region_and_connect(world, "Toilet of Doom", "Subcon Forest - Act 3", subcon_forest)
     sf_act4 = create_region_and_connect(world, "Queen Vanessa's Manor", "Subcon Forest - Act 4", subcon_forest)
     sf_act5 = create_region_and_connect(world, "Mail Delivery Service", "Subcon Forest - Act 5", subcon_forest)
-    create_region_and_connect(world, "Your Contract has Expired", "Subcon Forest - Finale", subcon_forest)
+    sf_finale = create_region_and_connect(world, "Your Contract has Expired", "Subcon Forest - Finale", subcon_forest)
 
     # ------------------------------------------- ALPINE SKYLINE ------------------------------------------ #
     alpine_skyline = create_region_and_connect(world, "Alpine Skyline",  "Telescope -> Alpine Skyline", spaceship)
@@ -383,11 +386,24 @@ def create_regions(world: "HatInTimeWorld"):
     create_rift_connections(world, create_region(world, "Time Rift - Bazaar"))
 
     sf_area: Region = create_region(world, "Subcon Forest Area")
+    sf_behind_boss_firewall: Region = create_region(world, "Subcon Forest Behind Boss Firewall")
+    sf_boss_arena: Region = create_region(world, "Subcon Forest Boss Arena")
+    sf_area.connect(sf_behind_boss_firewall, "SF Area -> SF Behind Boss Firewall")
+    sf_behind_boss_firewall.connect(sf_boss_arena, "SF Behind Boss Firewall -> SF Boss Arena")
     sf_act1.connect(sf_area, "Subcon Forest Entrance CO")
     sf_act2.connect(sf_area, "Subcon Forest Entrance SW")
     sf_act3.connect(sf_area, "Subcon Forest Entrance TOD")
     sf_act4.connect(sf_area, "Subcon Forest Entrance QVM")
     sf_act5.connect(sf_area, "Subcon Forest Entrance MDS")
+    # YCHE puts the player directly in the boss arena, with no access to the rest of Subcon Forest by default.
+    sf_finale.connect(sf_boss_arena, "Subcon Forest Entrance YCHE")
+    # To support the Snatcher Hover expert logic for Act Completion (Your Contract has Expired), the act completion has
+    # to go in a separate region because the Snatcher Hover gives direct access to the Act Completion, but does not
+    # give access to the act itself.
+    sf_finale_post_fight: Region = create_region(world, "Your Contract has Expired - Post Fight")
+    # This connection must never have any rules placed on it because they will not be inherited when setting up act
+    # connections, only the rules for the entrances to the act and the rules for the Act Completion are inherited.
+    sf_finale.connect(sf_finale_post_fight, "YCHE -> YCHE - Post Fight")
 
     create_rift_connections(world, create_region(world, "Time Rift - Sleepy Subcon"))
     create_rift_connections(world, create_region(world, "Time Rift - Pipe"))
@@ -656,6 +672,10 @@ def is_valid_act_combo(world: "HatInTimeWorld", entrance_act: Region,
             if exit_act.name not in chapter_finales:
                 return False
 
+    exit_chapter: str = act_chapters.get(exit_act.name)
+    # make sure that certain time rift combinations never happen
+    always_block: bool = exit_chapter != "Mafia Town" and exit_chapter != "Subcon Forest"
+    if not ignore_certain_rules or always_block:
         if entrance_act.name in rift_access_regions and exit_act.name in rift_access_regions[entrance_act.name]:
             return False
 
@@ -681,9 +701,12 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
     if act.name not in guaranteed_first_acts:
         return False
 
+    if world.options.ActRandomizer == ActRandomizer.option_light and "Time Rift" in act.name:
+        return False
+
     # If there's only a single level in the starting chapter, only allow Mafia Town or Subcon Forest levels
     start_chapter = world.options.StartingChapter
-    if start_chapter is ChapterIndex.ALPINE or start_chapter is ChapterIndex.SUBCON:
+    if start_chapter == ChapterIndex.ALPINE or start_chapter == ChapterIndex.SUBCON:
         if "Time Rift" in act.name:
             return False
 
@@ -720,7 +743,8 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
     elif act.name == "Contractual Obligations" and world.options.ShuffleSubconPaintings:
         return False
 
-    if world.options.ShuffleSubconPaintings and act_chapters.get(act.name, "") == "Subcon Forest":
+    if world.options.ShuffleSubconPaintings and "Time Rift" not in act.name \
+       and act_chapters.get(act.name, "") == "Subcon Forest":
         # Only allow Subcon levels if painting skips are allowed
         if diff < Difficulty.MODERATE or world.options.NoPaintingSkips:
             return False
@@ -729,17 +753,20 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
 
 
 def connect_time_rift(world: "HatInTimeWorld", time_rift: Region, exit_region: Region):
-    i = 1
-    while i <= len(rift_access_regions[time_rift.name]):
+    for i, access_region in enumerate(rift_access_regions[time_rift.name], start=1):
+        # Matches the naming convention and iteration order in `create_rift_connections()`.
         name = f"{time_rift.name} Portal - Entrance {i}"
         entrance: Entrance
         try:
-            entrance = world.multiworld.get_entrance(name, world.player)
+            entrance = world.get_entrance(name)
+            # Reconnect the rift access region to the new exit region.
             reconnect_regions(entrance, entrance.parent_region, exit_region)
         except KeyError:
-            time_rift.connect(exit_region, name)
-
-        i += 1
+            # The original entrance to the time rift has been deleted by already reconnecting a telescope act to the
+            # time rift, so create a new entrance from the original rift access region to the new exit region.
+            # Normally, acts and time rifts are sorted such that time rifts are reconnected to acts/rifts first, but
+            # starting acts/rifts and act-plando can reconnect acts to time rifts before this happens.
+            world.get_region(access_region).connect(exit_region, name)
 
 
 def get_shuffleable_act_regions(world: "HatInTimeWorld") -> List[Region]:
@@ -933,6 +960,16 @@ def get_shuffled_region(world: "HatInTimeWorld", region: str) -> str:
                     return name
 
 
+def get_region_shuffled_to(world: "HatInTimeWorld", region: str) -> str:
+    if world.options.ActRandomizer:
+        original_ci: str = chapter_act_info[region]
+        shuffled_ci = world.act_connections[original_ci]
+        return next(act_name for act_name, ci in chapter_act_info.items()
+                    if ci == shuffled_ci)
+    else:
+        return region
+
+
 def get_region_location_count(world: "HatInTimeWorld", region_name: str, included_only: bool = True) -> int:
     count = 0
     region = world.multiworld.get_region(region_name, world.player)
@@ -957,40 +994,35 @@ def get_act_by_number(world: "HatInTimeWorld", chapter_name: str, num: int) -> R
 def create_thug_shops(world: "HatInTimeWorld"):
     min_items: int = world.options.NyakuzaThugMinShopItems.value
     max_items: int = world.options.NyakuzaThugMaxShopItems.value
-    count = -1
-    step = 0
-    old_name = ""
+
+    thug_location_counts: Dict[str, int] = {}
 
     for key, data in shop_locations.items():
-        if data.nyakuza_thug == "":
+        thug_name = data.nyakuza_thug
+        if thug_name == "":
+            # Different shop type.
             continue
 
-        if old_name != "" and old_name == data.nyakuza_thug:
+        if thug_name not in world.nyakuza_thug_items:
+            shop_item_count = world.random.randint(min_items, max_items)
+            world.nyakuza_thug_items[thug_name] = shop_item_count
+        else:
+            shop_item_count = world.nyakuza_thug_items[thug_name]
+
+        if shop_item_count <= 0:
             continue
 
-        try:
-            if world.nyakuza_thug_items[data.nyakuza_thug] <= 0:
-                continue
-        except KeyError:
-            pass
+        location_count = thug_location_counts.setdefault(thug_name, 0)
+        if location_count >= shop_item_count:
+            # Already created all the locations for this thug.
+            continue
 
-        if count == -1:
-            count = world.random.randint(min_items, max_items)
-            world.nyakuza_thug_items.setdefault(data.nyakuza_thug, count)
-            if count <= 0:
-                continue
-
-        if count >= 1:
-            region = world.multiworld.get_region(data.region, world.player)
-            loc = HatInTimeLocation(world.player, key, data.id, region)
-            region.locations.append(loc)
-            world.shop_locs.append(loc.name)
-
-            step += 1
-            if step >= count:
-                old_name = data.nyakuza_thug
-                step = 0
-                count = -1
+        # Create the shop location.
+        region = world.multiworld.get_region(data.region, world.player)
+        loc = HatInTimeLocation(world.player, key, data.id, region)
+        region.locations.append(loc)
+        world.shop_locs.append(loc.name)
+        thug_location_counts[thug_name] = location_count + 1
 
 
 def create_events(world: "HatInTimeWorld") -> int:

@@ -37,8 +37,6 @@ class Hylics2World(World):
     options_dataclass = Hylics2Options
     options: Hylics2Options
 
-    data_version = 3
-
 
     def set_rules(self):
         Rules.set_rules(self)
@@ -129,6 +127,10 @@ class Hylics2World(World):
                 tv = tvs.pop()
                 self.get_location(tv).place_locked_item(self.create_item(gesture))
 
+    def get_pre_fill_items(self) -> List["Item"]:
+        if self.options.gesture_shuffle:
+            return [self.create_item(gesture["name"]) for gesture in Items.gesture_item_table.values()]
+        return []
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {

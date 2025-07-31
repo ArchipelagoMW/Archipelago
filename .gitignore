@@ -4,11 +4,13 @@
 *_Spoiler.txt
 *.bmbp
 *.apbp
+*.apcivvi
 *.apl2ac
 *.apm3
 *.apmc
 *.apz5
 *.aptloz
+*.aptww
 *.apemerald
 *.pyc
 *.pyd
@@ -54,7 +56,6 @@ success.txt
 output/
 Output Logs/
 /factorio/
-/Minecraft Forge Server/
 /WebHostLib/static/generated
 /freeze_requirements.txt
 /Archipelago.zip
@@ -62,6 +63,7 @@ Output Logs/
 /installdelete.iss
 /data/user.kv
 /datapackage
+/custom_worlds
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -149,7 +151,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-.code-workspace
+*.code-workspace
 shell.nix
 
 # Spyder project settings
@@ -177,14 +179,9 @@ dmypy.json
 cython_debug/
 
 # Cython intermediates
+_speedups.c
 _speedups.cpp
 _speedups.html
-
-# minecraft server stuff
-jdk*/
-minecraft*/
-minecraft_versions.json
-!worlds/minecraft/
 
 # pyenv
 .python-version

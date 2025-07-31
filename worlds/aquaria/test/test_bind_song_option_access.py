@@ -5,8 +5,10 @@ Description: Unit test used to test accessibility of locations with and without 
              under rock needing bind song option)
 """
 
-from worlds.aquaria.test import AquariaTestBase
-from worlds.aquaria.test.test_bind_song_access import after_home_water_locations
+from . import AquariaTestBase
+from .test_bind_song_access import after_home_water_locations
+from ..Items import ItemNames
+from ..Locations import AquariaLocationNames
 
 
 class BindSongOptionAccessTest(AquariaTestBase):
@@ -18,25 +20,25 @@ class BindSongOptionAccessTest(AquariaTestBase):
     def test_bind_song_location(self) -> None:
         """Test locations that require Bind song with the bind song needed option activated"""
         locations = [
-            "Verse cave right area, Big Seed",
-            "Verse cave left area, bulb under the rock at the end of the path",
-            "Home water, bulb under the rock in the left path from the verse cave",
-            "Song cave, bulb under the rock close to the song door",
-            "Song cave, bulb under the rock in the path to the singing statues",
-            "Naija's home, bulb under the rock at the right of the main path",
-            "Home water, bulb in the path below Nautilus Prime",
-            "Home water, bulb in the bottom left room",
-            "Home water, Nautilus Egg",
-            "Song cave, Verse egg",
-            "Energy temple first area, beating the energy statue",
-            "Energy temple first area, bulb in the bottom room blocked by a rock",
-            "Energy temple first area, Energy Idol",
-            "Energy temple second area, bulb under the rock",
-            "Energy temple bottom entrance, Krotite armor",
-            "Energy temple third area, bulb in the bottom path",
-            "Energy temple boss area, Fallen god tooth",
-            "Energy temple blaster room, Blaster egg",
+            AquariaLocationNames.VERSE_CAVE_RIGHT_AREA_BIG_SEED,
+            AquariaLocationNames.VERSE_CAVE_LEFT_AREA_BULB_UNDER_THE_ROCK_AT_THE_END_OF_THE_PATH,
+            AquariaLocationNames.HOME_WATERS_BULB_UNDER_THE_ROCK_IN_THE_LEFT_PATH_FROM_THE_VERSE_CAVE,
+            AquariaLocationNames.SONG_CAVE_BULB_UNDER_THE_ROCK_CLOSE_TO_THE_SONG_DOOR,
+            AquariaLocationNames.SONG_CAVE_BULB_UNDER_THE_ROCK_IN_THE_PATH_TO_THE_SINGING_STATUES,
+            AquariaLocationNames.NAIJA_S_HOME_BULB_UNDER_THE_ROCK_AT_THE_RIGHT_OF_THE_MAIN_PATH,
+            AquariaLocationNames.HOME_WATERS_BULB_IN_THE_PATH_BELOW_NAUTILUS_PRIME,
+            AquariaLocationNames.HOME_WATERS_BULB_IN_THE_BOTTOM_LEFT_ROOM,
+            AquariaLocationNames.HOME_WATERS_NAUTILUS_EGG,
+            AquariaLocationNames.SONG_CAVE_VERSE_EGG,
+            AquariaLocationNames.ENERGY_TEMPLE_FIRST_AREA_BEATING_THE_ENERGY_STATUE,
+            AquariaLocationNames.ENERGY_TEMPLE_FIRST_AREA_BULB_IN_THE_BOTTOM_ROOM_BLOCKED_BY_A_ROCK,
+            AquariaLocationNames.ENERGY_TEMPLE_ENERGY_IDOL,
+            AquariaLocationNames.ENERGY_TEMPLE_SECOND_AREA_BULB_UNDER_THE_ROCK,
+            AquariaLocationNames.ENERGY_TEMPLE_BOTTOM_ENTRANCE_KROTITE_ARMOR,
+            AquariaLocationNames.ENERGY_TEMPLE_THIRD_AREA_BULB_IN_THE_BOTTOM_PATH,
+            AquariaLocationNames.ENERGY_TEMPLE_BOSS_AREA_FALLEN_GOD_TOOTH,
+            AquariaLocationNames.ENERGY_TEMPLE_BLASTER_ROOM_BLASTER_EGG,
             *after_home_water_locations
         ]
-        items = [["Bind song"]]
+        items = [[ItemNames.BIND_SONG]]
         self.assertAccessDependency(locations, items)
