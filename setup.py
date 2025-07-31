@@ -104,7 +104,7 @@ def download_SNI() -> None:
             # prefer "many" builds
             if "many" in download_url:
                 break
-            # prefer the correct windows build
+            # prefer non-windows7 builds to get up-to-date dependencies
             if platform_name == "windows" and "windows7" not in download_url:
                 break
 
