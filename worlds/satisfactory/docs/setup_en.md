@@ -13,69 +13,40 @@
 
 ## Overview
 
-This guide will walk you through installing the Satisfactory Archipelago mod via the Mod Manager
-and entering Archipelago server connection details in the mod configuration options.
-The server will send the required data to the game client and create the content required by the seed at runtime.
-
-## Create a Config (.yaml) File
-
-### What is a config file and why do I need one?
-
-Your config file contains a set of configuration options
-which provide the generator with information about how it should generate your game.
-Each player of a multiworld will provide their own config file.
-This setup allows each player to enjoy an experience customized for their taste,
-and different players in the same multiworld can all have different options.
-
-### Where do I get a config file?
-
-The Player Settings page on the website
-allows you to configure your personal settings and export a config file from them.
-Satisfactory player settings page: [Satisfactory Settings Page](/games/Satisfactory/player-settings)
-
-### Verifying Your Config File
-
-If you would like to validate your config file to make sure it works,
-you may do so on the YAML Validator page.
-YAML Validator page: [Yaml Validation Page](/mysterycheck)
-
-### Starting Inventory
-
-The Player Settings page provides a few options for controlling what materials you start with
-and when certain key technologies are unlocked.
-Any Resource Bundle type items added to your starting inventory will be delivered to your player inventory when you initially spawn,
-unless they can't fit, in which case they can be collected by building an Archipelago Portal.
-
-Advanced users can use Plando, Weighted Options, and manual yaml editing to further configure the starting inventory.
-If you don't wish to use these techniques, consider using Satisfactory's
-[Advanced Game Settings](https://satisfactory.wiki.gg/wiki/Advanced_Game_Settings)
-to spawn the items you desire.
-
-### Advanced Configuration
-
-Advanced users can utilize the
-[Weighted Options Page](/weighted-options)
-and [Plando](/tutorial/Archipelago/plando)
-to further customize their experience.
-
-## Prepare to Host Your Own Satisfactory Game
+This guide walks you through installing the Satisfactory Archipelago mod via the Satisfactory Mod Manager,
+configuring an Archipelago slot for Satisfactory,
+and playing the game with a Satisfactory client.
 
 ### Defining Some Terms
 
 In Archipelago, multiple Satisfactory worlds may be played simultaneously.
-Each of these worlds must be hosted by a Satisfactory Server which is connected to the Archipelago Server via the Archipelago mod.
+Each of these worlds must be hosted by a Satisfactory Host which is connected to the Archipelago Server via the Archipelago mod.
 
 This guide uses the following terms to refer to the software:
 
 - **Archipelago Server** - The central Archipelago server, which connects all games to each other.
-- **Satisfactory Server** - The Satisfactory instance (game client or dedicated server) which will be used to host the game.
+- **Archipelago Client** - The desktop application used by many Archipelago games as middleware. Satisfactory does NOT require this software, unless you would like to generate a world locally.
+- **Archipelago (Satisfactory) mod** - The Satisfactory mod which implements Archipelago in-game functionality and connectivity.
+  All Satisfactory hosts and clients must have this mod installed.
+- **Satisfactory Host** - The Satisfactory instance which will be used to host the game.
+  This could be a Satisfactory Client using Singleplayer or host-and-play multiplayer, or it could be a Satisfactory dedicated server.
   It must be supplied with the Archipelago Server connection details.
   *Any number of Satisfactory Clients may connect to this server.*
 - **Satisfactory Client** - The Satisfactory instance (game client) with which additional players can use to connect to the same Satisfactory world.
-  They must also have the Archipelago mod installed, but require no configuration.
 
-It is important to note that the Satisfactory Archipelago mod
-is not yet compatible with Linux dedicated servers - only Windows dedicated servers are supported.
+### What a Playable State Looks Like
+
+- An Archipelago Server
+- One running modded Satisfactory Host (game client or dedicated server) per Satisfactory world
+- Optionally, additional modded Satisfactory Clients for additional players
+
+### Additional Resources
+
+- Satisfactory Wiki: [Satisfactory Official Wiki](https://satisfactory.wiki.gg/wiki/)
+- Satisfactory Modding 'Frequently Asked Questions' page: [Satisfactory Modding Documentation FAQ](https://docs.ficsit.app/satisfactory-modding/latest/faq.html)
+- Satisfactory Archipelago Item names (for hints/starting inventory/etc.) can be found [on the mod's github](https://github.com/Jarno458/Archipelago/blob/Satisfactory/worlds/satisfactory/Items.py)
+
+## Preparing to Play Satisfactory Archipelago
 
 ### Installing Satisfactory
 
@@ -115,8 +86,73 @@ desktop shortcuts, Steam, Epic. etc. will all launch the game with mods still lo
 
 You may also wish to install some of the suggested mods mentioned on the
 [Archipelago Info page for Satisfactory](/games/Satisfactory/info/en#additional-mods).
+If you are playing multiplayer in the same Satisfactory world, all Satisfactory Clients should have the same mods installed.
+The Mod Manager's profile import/export feature makes coordinating this easy.
 
-### Creating a New World
+## Connecting to Someone Else's Satisfactory Game
+
+If you are joining someone else's existing Satisfactory game,
+your setup process is almost complete.
+If your host has sent you a Mod Manager profile containing additional mods,
+be sure to install it.
+See [Satisfactory Modding Documentation: Profiles](https://docs.ficsit.app/satisfactory-modding/latest/ForUsers/SatisfactoryModManager.html#_profiles) for more information.
+
+To get started playing, connect to the Satisfactory Host using the connection details provided by your host.
+([Satisfactory Wiki: Joining a Session](https://satisfactory.wiki.gg/wiki/Multiplayer#Joining_a_session))
+
+See the [Troubleshooting section below](#troubleshooting) if you encounter any issues.
+
+## Hosting Your Own Satisfactory Game
+
+If you're hosting your own Satisfactory game,
+you will need to configure an Archipelago world and set up the Satisfactory Host you will be playing on.
+
+### Create a Config (.yaml) File
+
+#### What is a config file and why do I need one?
+
+Your config file contains a set of configuration options
+which provide the generator with information about how it should generate your game.
+Each player of a multiworld will provide their own config file.
+This setup allows each player to enjoy an experience customized for their taste,
+and different players in the same multiworld can all have different options.
+
+#### Where do I get a config file?
+
+The Player Settings page on the website
+allows you to configure your personal settings and export a config file from them.
+Satisfactory player settings page: [Satisfactory Settings Page](/games/Satisfactory/player-settings)
+
+#### Verifying Your Config File
+
+If you would like to validate your config file to make sure it works,
+you may do so on the YAML Validator page.
+YAML Validator page: [Yaml Validation Page](/mysterycheck)
+
+#### Starting Inventory
+
+The Player Settings page provides a few options for controlling what materials you start with
+and when certain key technologies are unlocked.
+Any Resource Bundle type items added to your starting inventory will be delivered to your player inventory when you initally spawn,
+unless they can't fit, in which case they can be collected by building an Archipelago Portal.
+
+Advanced users can use Plando, Weighted Options, and manual yaml editing to further configure the starting inventory.
+If you don't wish to use these techniques, consider using Satisfactory's
+[Advanced Game Settings (Satisfactory Wiki)](https://satisfactory.wiki.gg/wiki/Advanced_Game_Settings)
+to spawn the items you desire.
+
+#### Advanced Configuration
+
+Advanced users can utilize the
+[Weighted Options Page](/weighted-options)
+and [Plando](/tutorial/Archipelago/plando)
+to futher customize their experience.
+
+### Generating and Hosting the Multiworld
+
+Generating a game and hosting an Archipelago server is explained in the [Archipelago Setup Guide](/tutorial/Archipelago/setup/en).
+
+### Creating the Satisfactory World
 
 After you have installed the mods, launch the game via the Mod Manager or via your preferred method.
 Once the game has launched, start creating a new game.
@@ -127,9 +163,9 @@ Next, enter the connection details in the relevant fields.
 
 - **Server URI**: Archipelago Server URI and port, for example, `archipelago.gg:49236`
 - **User Name**: The name you entered as your Player Name when you created your config file. It's also listed in the Name column of your room page.
-- **Password**: The password for your archipelag room, blank if you did not assign or recieve one.
+- **Password**: The password for your Archipelago room, blank if you did not assign or receive one.
 
-Note that the Satisfactory Server/Client does *not* need a copy of your Archipelago config file.
+Note that the Satisfactory Host/Client does *not* need a copy of your Archipelago config file.
 The mod communicates with the Archipelago Server, which already has your config file,
 to generate the required content at runtime.
 
@@ -137,8 +173,6 @@ Consider enabling Advanced Game Settings to allow dealing with bugs that may ari
 Within the Advanced Game Settings menus,
 you may wish to switch the "Keep Inventory" setting to "Keep Everything" to avoid dropping items on death,
 although this will never lock you out of progression.
-
-> note: [the starting inventory feature currently gets send to the portal on dedicated servers](https://github.com/Jarno458/SatisfactoryArchipelagoMod/issues/105).
 
 ### Verifying Connection Success
 
@@ -152,13 +186,40 @@ You may wish to use the Text Client to run commands since Satisfactory's in game
 
 Check out the HUB to get started!
 
+See the [Troubleshooting section below](#troubleshooting) if you encounter any issues.
+
+### Allowing Other People to Join Your Game
+
+Additional players can join your game using the game's built-in multiplayer functionality.
+For more information, see [Satisfactory Wiki: Multiplayer](https://satisfactory.wiki.gg/wiki/Multiplayer).
+
+Have anyone you want to join follow the [Preparing to Play Satisfactory Archipelago](#preparing-to-play-satisfactory-archipelago) section above.
+If you're using any additional mods, be sure to export a profile using the Mod Manager for players to import.
+[Satisfactory Modding Documentation: Sharing Mod Manager Profiles](https://docs.ficsit.app/satisfactory-modding/latest/ForUsers/SatisfactoryModManager.html#_sharing_profiles)
+
+As mentioned above, it is possible to use a Satisfactory dedicated Server as your Satisfactory Host.
+The process for setting up and configuring a dedicated server is out of scope of this guide,
+but you can find more information here: [Satisfactory Modding Documentation: Installing Mods on Dedicated Servers](https://docs.ficsit.app/satisfactory-modding/latest/ForUsers/DedicatedServerSetup.html).
+
+It is important to note that the Satisfactory Archipelago mod
+is not yet compatible with Linux dedicated servers - only Windows dedicated servers are supported.
+
+### Port Changes
+
+If you are using a public Archipelago Server to host your game,
+rooms are automatically put to sleep after a period of inactivity.
+The room can be awoken by visiting the room page on the Archipelago website.
+This may cause the room's assigned port to change,
+requiring you to update your "Mod Savegame Settings" with the new Server URI.
+To do this, open your save, go to the pause menu's "Mod Savegame Settings" section,
+enter the updated Server URI, then save and reload the game.
+
 ## Troubleshooting
 
-- If you are having trouble connecting to the Archipelago server,
+- If you are having trouble connecting to the Archipelago Server,
   make sure you have entered the correct server address and port.
   The server port may have changed if the room went to sleep.
-  If you need to enter a new port,
-  access the save's settings via the Mod Savegame Settings button in the pause menu.
+  See the [Port Changes section](#port-changes) above for more information.
 - If you are having trouble using the Satisfactory Mod Manager, join the [Satisfactory Modding Discord](https://discord.ficsit.app) for support.
 - If you encounter a game crash, please report it to us via the [Satisfactory Modding Discord](https://discord.ficsit.app).
   Please include the following information:
@@ -167,11 +228,3 @@ Check out the HUB to get started!
   - Use the Mod Manager to generate a debug zip and attach that file.
    [Satisfactory Modding Documentation FAQ: Generating a debug zip](https://docs.ficsit.app/satisfactory-modding/latest/faq.html#_where_can_i_find_the_games_log_files)
   - Attach your Archipelago config file and spoiler to your report.
-- If your early game power grid is repeatedly shutting down for unclear reasons,
-  ensure you are not wearing a Hover Pack, as they draw 100 MW.
-
-## Additional Resources
-
-- Satisfactory Wiki: [Satisfactory Official Wiki](https://satisfactory.wiki.gg/wiki/)
-- Satisfactory Modding FAQ page: [Satisfactory Modding Documentation FAQ](https://docs.ficsit.app/satisfactory-modding/latest/faq.html)
-- Satisfactory Archipelago Item names (for hints/starting inventory/etc.) can be found [on the mod's github](https://github.com/Jarno458/Archipelago/blob/Satisfactory/worlds/satisfactory/Items.py)
