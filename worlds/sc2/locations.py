@@ -12062,7 +12062,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2Mission.DARK_WHISPERS_Z.mission_name,
             "Zerg Base",
             SC2_RACESWAP_LOC_ID_OFFSET + 10005,
-            LocationType.VANILLA,
+            LocationType.MASTERY,
             lambda state: (
                 logic.zerg_competent_comp(state)
                 and logic.zerg_moderate_anti_air(state)
