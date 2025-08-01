@@ -6,7 +6,8 @@ from worlds.LauncherComponents import Component, components, Type, launch_subpro
 import random
 
 from .Options import GloverOptions
-from worlds.glover import ItemPool, JsonReader
+from .JsonReader import JsonInfo, build_data, generate_location_name_to_id
+from .ItemPool import generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table
 
 class GloverItem(Item):
 	#Start at 650000
@@ -33,8 +34,7 @@ class GloverWorld(World):
     web = GloverWeb()
     topology_present = True
     options : GloverOptions
-    all_items_table : ItemPool
-    json_info : JsonReader.JsonInfo
+    json_info : JsonInfo
     options_dataclass = Options.GloverOptions
 
     spawn_checkpoint = [
@@ -49,9 +49,9 @@ class GloverWorld(World):
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
 
-    item_name_to_id = ItemPool.generate_item_name_to_id()
-    item_name_groups = ItemPool.generate_item_name_groups()
-    location_name_to_id = JsonReader.generate_location_name_to_id()
+    item_name_to_id = generate_item_name_to_id()
+    item_name_groups = generate_item_name_groups()
+    location_name_to_id = generate_location_name_to_id(world_prefixes, level_prefixes)
 
     def __init__(self, world, player):
         self.version = "V0.1"
@@ -117,7 +117,7 @@ class GloverWorld(World):
             #By default, they're all Checkpoint 1
             for each_item in range(len(self.spawn_checkpoint)):
                 self.spawn_checkpoint[each_item] = 1
-        self.json_info = JsonReader.build_data(self)
+        self.json_info = build_data(self)
 
     def create_regions(self):
         main_menu = Region("Menu", self.player, self.multiworld)
@@ -132,7 +132,7 @@ class GloverWorld(World):
         item_classification = None
         item_id = -1
         knownLevelAndWorld = [self.level_from_string(self, name), self.world_from_string(self, name)]
-        item_data = ItemPool.find_item_data(name)
+        item_data = find_item_data(name)
         item_id = item_data.glid
         match item_data.type:
             case "Progression":
@@ -151,7 +151,7 @@ class GloverWorld(World):
         name_for_use = name
         if name == "Garibsanity":
             name_for_use = "Garib"
-        item_output = ItemPool.GloverItem(name_for_use, item_classification, item_id, self.player)
+        item_output = GloverItem(name_for_use, item_classification, item_id, self.player)
         return item_output
 
     def create_items(self) -> None:
@@ -162,20 +162,20 @@ class GloverWorld(World):
             #Garib Groups
             case 1:
                 if self.options.garib_sorting == 0:
-                    garib_items = list(self.all_items_table.world_garib_table.keys())
+                    garib_items = list(world_garib_table.keys())
                 else:
-                    garib_items = list(self.all_items_table.decoupled_garib_table.keys())
+                    garib_items = list(decoupled_garib_table.keys())
             #Individual Garibs
             case 2:
                 if self.options.garib_logic == 0:
-                    garib_items = list(self.all_items_table.garibsanity_world_table.keys())
+                    garib_items = list(garibsanity_world_table.keys())
                 else:
                     garib_items = ["Garibsanity"]
         
         #Checkpoint Logic
         checkpoint_items = []
         if self.options.checkpoint_checks:
-            for each_checkpoint in self.all_items_table.checkpoint_table:
+            for each_checkpoint in checkpoint_table:
                 level_offset = self.level_from_string(each_checkpoint)
                 world_offset = self.world_from_string(each_checkpoint)
                 if self.spawn_checkpoint[level_offset + (world_offset * 3)] != int(each_checkpoint[-1]):
@@ -184,10 +184,10 @@ class GloverWorld(World):
         #Level Event Logic
         event_items = []
         if self.options.switches_checks:
-            event_items = list(self.all_items_table.level_event_table.keys())
+            event_items = list(level_event_table.keys())
 
         #Abilities
-        ability_items = list(self.all_items_table.ability_table.keys())
+        ability_items = list(ability_table.keys())
         if not self.options.include_power_ball:
             ability_items.remove("Power Ball")
         

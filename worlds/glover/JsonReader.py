@@ -1,9 +1,8 @@
 import json
+import pkgutil
 from BaseClasses import Entrance, Location, MultiWorld, Region
 from typing import List, NamedTuple
 from operator import attrgetter
-
-from worlds.glover import GloverWorld
 
 move_name = [
     "Cartwheel",
@@ -83,19 +82,22 @@ levels_in_order = [
 #    ["Training", "Start"]
 ]
 
+file = pkgutil.get_data(__name__, "Logic.json").decode("utf-8")
+
 #List of worlds, dictionary of levels, dictionary of locations and regions in those levels
 #If it's a list, it's a location. Contains first entry AP_ID/ID, and all other entries methods
 #If it's a dictionary, it's a region. B for Ball, D for No Ball, I for Local ID
 #B/D in region has AP_ID/IDs, followed by methods as per Locations
 logic_data : list[
     dict[str, 
-         dict[str, 
-              dict[str,
-                   list[
-                       dict[str, any]]] | 
-              list[
-                  dict[str, any]
-              ]]]] = json.load(open('Logic.json'))
+        dict[str, 
+            dict[str,
+                list[
+                    dict[str, any]] | 
+                int] |
+            list[
+                dict[str, any]
+    ]]]] = json.loads(file)
 
 class AccessMethod(NamedTuple):
     region_name : str
@@ -161,7 +163,7 @@ class RegionLevel(NamedTuple):
     starting_checkpoint : int
     map_regions : List[RegionPair]
 
-def create_region_level(level_name, spawn_checkpoint : List[int] | None, starting_checkpoint : int | None, map_regions : List[RegionPair], player : int, multiworld : MultiWorld, self : GloverWorld):
+def create_region_level(level_name, spawn_checkpoint : List[int] | None, starting_checkpoint : int | None, map_regions : List[RegionPair], player : int, multiworld : MultiWorld, self):
     #By default, the region level leads to the first checkpoint's region
     level_checkpoint_region : List[str] = levels_in_order[level_name]
     default_region : int = 0
@@ -255,21 +257,21 @@ class JsonInfo(NamedTuple):
     all_levels : List[RegionLevel] = []
     locations : List[Location] = []
 
-def build_data(self : GloverWorld) -> JsonInfo:
+def build_data(self) -> JsonInfo:
     all_levels : List[RegionLevel] = []
     locations : List[Location] = []
 
     #Build Logic
     loc_con_index = 0
     for world_index in 1:
-        world_prefix : str = GloverWorld.world_prefixes[world_index]
+        world_prefix : str = self.world_prefixes[world_index]
         each_world = logic_data[world_index]
         #Go over the Glover worlds
         for level_key in each_world:
             each_level = each_world[level_key]
             checkpoint_entry_pairs = levels_in_order[loc_con_index]
             loc_con_index += 1
-            level_prefix = GloverWorld.level_prefixes[int(level_key[-1])]
+            level_prefix = self.level_prefixes[int(level_key[-1])]
             level_name : str = world_prefix + level_prefix
             prefix : str = level_name + ": "
             map_regions : List[RegionPair] = []
@@ -299,30 +301,28 @@ def build_data(self : GloverWorld) -> JsonInfo:
             locations.extend(assign_locations_to_regions(region_level, map_regions, location_data_list))
     return JsonInfo(all_levels, locations)
 
-def build_location_pairings(base_name : str, ap_ids : list) -> list[tuple]:
+def build_location_pairings(base_name : str, ap_ids : list) -> list[list]:
     if len(ap_ids) == 1:
         #If the location data accounts for 1 location
-        return [tuple(base_name, ap_ids[0])]
-    output : list[tuple] = []
+        return [[base_name, ap_ids[0]]]
+    output : list[list] = []
     #If the location accounts for multiple locations
-    for each_ap_id_index ,ap_id in enumerate(ap_ids):
-        each_ap_id = ap_ids[each_ap_id_index]
+    for each_ap_id_index, each_ap_id in enumerate(ap_ids):
         sublocation_name : str = base_name
         sublocation_name.removesuffix("s")
         sublocation_name + " " + str(each_ap_id_index + 1), each_ap_id
-        output.append(tuple(sublocation_name, each_ap_id))
+        output.append([sublocation_name, each_ap_id])
     #I don't know if garib groups are their own location, but if they are, uncomment this
-    #output.append(tuple(base_name, ap_ids[0] + 10000))
+    #output.append(list[base_name, ap_ids[0] + 10000])
     return output
     
-
-def generate_location_name_to_id() -> dict:
+def generate_location_name_to_id(world_prefixes, level_prefixes) -> dict:
     output : dict = {}
     #Each World
     for each_world_index, each_world in enumerate(logic_data):
-        world_prefix : str = GloverWorld.world_prefixes[each_world_index]
+        world_prefix : str = world_prefixes[each_world_index]
         for level_key, level_data in each_world.items():
-            prefix : str = world_prefix + GloverWorld.level_prefixes[int(level_key[-1])] + ": "
+            prefix : str = world_prefix + level_prefixes[int(level_key[-1])] + ": "
             for location_name in level_data:
                 #Not regions
                 if type(level_data[location_name]) is dict:

@@ -155,7 +155,7 @@ class FillerLifeWeight(Range):
     range_end = 100
     default = 50
 
-class FillerBoomerangBallWeight():
+class FillerBoomerangBallWeight(Range):
     """What percentage of filler items are Boomerang Balls. Default is 5.
     """
     display_name = "Boomerang Ball Weight"
@@ -163,7 +163,7 @@ class FillerBoomerangBallWeight():
     range_end = 100
     default = 5
 
-class FillerBeachballWeight():
+class FillerBeachballWeight(Range):
     """What percentage of filler items are Beach Balls. Default is 5.
     """
     display_name = "Beach Ball Weight"
@@ -171,7 +171,7 @@ class FillerBeachballWeight():
     range_end = 100
     default = 5
 
-class FillerHerculesPotionWeight():
+class FillerHerculesPotionWeight(Range):
     """What percentage of filler items are Hercules Potions. Default is 5.
     """
     display_name = "Hercules Potion Weight"
@@ -179,7 +179,7 @@ class FillerHerculesPotionWeight():
     range_end = 100
     default = 5
 
-class FillerHelicopterPotionWeight():
+class FillerHelicopterPotionWeight(Range):
     """What percentage of filler items are Helicopter Potions. Default is 5.
     """
     display_name = "Helicopter Potion Weight"
@@ -187,7 +187,7 @@ class FillerHelicopterPotionWeight():
     range_end = 100
     default = 5
 
-class FillerSpeedPotionWeight():
+class FillerSpeedPotionWeight(Range):
     """What percentage of filler items are Speed Potions. Default is 5.
     """
     display_name = "Speed Potion Weight"
@@ -195,7 +195,7 @@ class FillerSpeedPotionWeight():
     range_end = 100
     default = 5
 
-class FillerFrogPotionWeight():
+class FillerFrogPotionWeight(Range):
     """What percentage of filler items are Frog Potions. Default is 5.
     """
     display_name = "Frog Potion Weight"
@@ -203,7 +203,7 @@ class FillerFrogPotionWeight():
     range_end = 100
     default = 5
 
-class FillerDeathPotionWeight():
+class FillerDeathPotionWeight(Range):
     """What percentage of filler items are Death Potions. Default is 5.
     """
     display_name = "Death Potion Weight"
@@ -211,7 +211,7 @@ class FillerDeathPotionWeight():
     range_end = 100
     default = 5
 
-class FillerStickyPotionWeight():
+class FillerStickyPotionWeight(Range):
     """What percentage of filler items are Sticky Potions. Default is 5.
     """
     display_name = "Sticky Potion Weight"
