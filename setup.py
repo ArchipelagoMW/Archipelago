@@ -411,7 +411,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 os.system(signtool + os.path.join(self.buildfolder, "lib", "worlds", "oot", "data", *exe_path))
 
         remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttpr")
-        remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "remote")
+        remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttp" / "remote")
 
         self.create_manifest()
 

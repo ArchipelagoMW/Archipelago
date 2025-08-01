@@ -368,7 +368,7 @@ def run_sprite_update():
 def update_sprites(task, on_finish=None, repository_url: str = "https://alttpr.com/sprites"):
     resultmessage = ""
     successful = True
-    sprite_dir = user_path("data", "sprites", "remote")
+    sprite_dir = user_path("data", "sprites", "alttp", "remote")
     os.makedirs(sprite_dir, exist_ok=True)
     ctx = get_cert_none_ssl_context()
 
@@ -1168,11 +1168,11 @@ class SpriteSelector():
 
     @property
     def remote_sprite_dir(self):
-        return user_path("data", "sprites", "remote")
+        return user_path("data", "sprites", "alttp", "remote")
 
     @property
     def custom_sprite_dir(self):
-        return user_path("data", "sprites", "custom")
+        return user_path("data", "sprites", "alttp", "custom")
 
 
 def get_image_for_sprite(sprite, gif_only: bool = False):
