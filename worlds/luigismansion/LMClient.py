@@ -287,6 +287,9 @@ class LMContext(CommonContext):
                 Utils.async_start(self.update_link_tags(bool(args["slot_data"][EnergyLinkConstants.INTERNAL_NAME]),
                     EnergyLinkConstants.FRIENDLY_NAME), name=f"Update {EnergyLinkConstants.FRIENDLY_NAME}")
 
+                if EnergyLinkConstants.FRIENDLY_NAME in self.tags:
+                    Utils.async_start(energy_link_check(self), name="Luigi EnergyLink")
+
             case "Bounced":
                 if "tags" not in args:
                     return
@@ -861,6 +864,17 @@ async def give_player_items(ctx: LMContext):
             dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
         await wait_for_next_loop(0.5)
 
+async def energy_link_check(ctx: LMContext):
+    while not ctx.exit_event.is_set():
+        delay = 0
+        amount_to_send = 0
+        while delay <= 5:
+            delay += 1
+            amount_to_send += await ctx.energy_link.get_currency_updates()
+            await wait_for_next_loop(5)
+
+        if amount_to_send > 0:
+            await ctx.energy_link._energy_link.send_energy_async(amount_to_send)
 
 def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
     Utils.init_logging("Luigi's Mansion Client")

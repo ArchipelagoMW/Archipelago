@@ -102,6 +102,9 @@ class Wallet:
         first_key = next(iter(sorted_currencies))
         return int(self._currencies[first_key].calc_value * amount)
 
+    def get_currencies(self) -> dict[str, Currency]:
+        return self._currencies
+
 def _create_currencies_to_update_from_int(amount: int, currencies: dict[str, Currency]) -> dict[str, int]:
     new_amount = amount
     currencies_to_add: dict[str, int] = {}

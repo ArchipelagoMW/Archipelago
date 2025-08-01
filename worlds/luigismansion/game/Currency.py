@@ -68,7 +68,7 @@ class Currency:
             dme.write_word(dme.follow_pointers(_WALLET_START_ADDR, [self.mem_loc]), (current_currency - amount))
             return True
         return False
-    
+
     def calculate_worth(self) -> int:
         """
         Gets the value of the currency type when calculating 'rank_requirement'.
