@@ -1002,13 +1002,18 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
 
     # set light cones
     rom.write_byte(0x180038, 0x01 if local_world.options.mode == "standard" else 0x00)
-    rom.write_byte(0x180039, 0x01 if world.light_world_light_cone else 0x00)
-    rom.write_byte(0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
+    # light world light cone
+    rom.write_byte(0x180039, local_world.light_world_light_cone)
+    # dark world light cone
+    rom.write_byte(0x18003A, local_world.dark_world_light_cone)
 
     GREEN_TWENTY_RUPEES = 0x47
     GREEN_CLOCK = item_table["Green Clock"].item_code
 
     rom.write_byte(0x18004F, 0x01)  # Byrna Invulnerability: on
+
+    # Rupoor negative value
+    rom.write_int16(0x180036, local_world.rupoor_cost)
 
     # handle item_functionality
     if local_world.options.item_functionality == 'hard':
@@ -1027,8 +1032,6 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         # Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
-        # Rupoor negative value
-        rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x02)  # Hookshot only
     elif local_world.options.item_functionality == 'expert':
@@ -1047,8 +1050,6 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         # Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
-        # Rupoor negative value
-        rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x00)  # Nothing
     else:
@@ -1066,8 +1067,6 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         rom.write_byte(0x18004F, 0x01)
         # Enable catching fairies
         rom.write_byte(0x34FD6, 0xF0)
-        # Rupoor negative value
-        rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x03)  # All standard items
         # Set overflow items for progressive equipment
@@ -1313,7 +1312,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x18008C, 0x01 if local_world.options.crystals_needed_for_gt == 0 else 0x00)  # GT pre-opened if crystal requirement is 0
     rom.write_byte(0xF5D73, 0xF0)  # bees are catchable
     rom.write_byte(0xF5F10, 0xF0)  # bees are catchable
-    rom.write_byte(0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
+    rom.write_byte(0x180086, 0x00)  # set blue ball and ganon warp randomness
     rom.write_byte(0x1800A0, 0x01)  # return to light world on s+q without mirror
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     rom.write_byte(0x180174, 0x01 if local_world.fix_fake_world else 0x00)
@@ -1618,7 +1617,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
     rom.write_byte(0x1800A4, 0x01 if local_world.options.glitches_required != 'no_logic' else 0x00)  # enable POD EG fix
     rom.write_byte(0x186383, 0x01 if local_world.options.glitches_required == 'no_logic' else 0x00)  # disable glitching to Triforce from Ganons Room
-    rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
+    rom.write_byte(0x180042, 0x01 if local_world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle
     rom.write_bytes(0x6D253, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
@@ -1739,8 +1738,7 @@ def get_price_data(price: int, price_type: int) -> List[int]:
 
 
 def write_custom_shops(rom, world, player):
-    shops = sorted([shop for shop in world.shops if shop.custom and shop.region.player == player],
-                   key=lambda shop: shop.sram_offset)
+    shops = sorted([shop for shop in world.worlds[player].shops if shop.custom], key=lambda shop: shop.sram_offset)
 
     shop_data = bytearray()
     items_data = bytearray()
