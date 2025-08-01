@@ -2,8 +2,9 @@ from collections.abc import Callable
 from random import Random
 from unittest import TestCase
 
-from . import setup_solo_multiworld, gen_steps
 from worlds.AutoWorld import AutoWorldRegister, call_single, call_stage
+
+from . import gen_steps, setup_solo_multiworld
 
 
 class TestDeterminism(TestCase):
