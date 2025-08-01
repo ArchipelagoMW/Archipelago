@@ -1,142 +1,5 @@
 [
     {
-        "region_name": "World Map: No Esquie",
-        "locations": [
-            "Chest_WorldMap_2",
-            "Chest_WorldMap_5",
-            "Chest_WorldMap_10",
-            "Chest_WorldMap_11",
-            "Chest_WorldMap_15",
-            "Chest_WorldMap_16",
-            "Chest_WorldMap_17",
-            "Chest_WorldMap_18",
-            "Chest_WorldMap_20"
-        ],
-        "parent_map": "Menu",
-                "condition": {},
-        "exits": []
-    },
-    {
-        "region_name": "World Map: Base Esquie",
-        "locations": [
-            "Chest_WorldMap_1",
-            "Chest_WorldMap_7",
-            "Chest_WorldMap_8",
-            "Chest_WorldMap_12",
-            "Chest_WorldMap_13",
-            "Chest_WorldMap_14",
-            "Chest_WorldMap_19",
-            "Chest_MiniLevels_3",
-            "Chest_MiniLevels_4",
-            "Chest_MiniLevels_7"
-        ],
-        "parent_map": "World Map: No Esquie",
-        "condition": {
-            "Progressive Rock": 1
-        },
-        "exits": []
-    },
-    {
-        "region_name": "World Map: Swim",
-        "locations": [
-            "Chest_WorldMap_4",
-            "Chest_WorldMap_21",
-            "Chest_WorldMap_22",
-            "Chest_WorldMap_23",
-            "Chest_WorldMap_24",
-            "Chest_WorldMap_25",
-            "Chest_WorldMap_26",
-            "Chest_WorldMap_27",
-            "Chest_WorldMap_28",
-            "Chest_WorldMap_30",
-            "Chest_WorldMap_31",
-            "Chest_WorldMap_33",
-            "Chest_WorldMap_34",
-            "Chest_WorldMap_35",
-            "Chest_WorldMap_36",
-            "Chest_WorldMap_37",
-            "Chest_WorldMap_39",
-            "Chest_WorldMap_40",
-            "Chest_WorldMap_42",
-            "Chest_WorldMap_43",
-            "Chest_WorldMap_44",
-            "Chest_WorldMap_45",
-            "Chest_WorldMap_46",
-            "Chest_WorldMap_47",
-            "Chest_WorldMap_50",
-            "Chest_WorldMap_56",
-            "Chest_Manor_6",
-            "Chest_Manor_16",
-            "Chest_MiniLevels_1",
-            "Chest_MiniLevels_2",
-            "Chest_MiniLevels_5",
-            "Chest_MiniLevels_6"
-        ],
-        "parent_map": "World Map: Base Esquie",
-        "condition": {
-            "Progressive Rock": 2
-        },
-        "exits": []
-    },
-    {
-        "region_name": "World Map: Destroy Coral",
-        "locations": [
-            "Chest_WorldMap_48",
-            "Chest_WorldMap_49",
-            "Chest_WorldMap_51",
-            "Chest_WorldMap_54",
-            "Chest_WorldMap_55",
-            "Chest_WorldMap_57",
-            "Chest_WorldMap_58",
-            "Chest_WorldMap_63"
-        ],
-        "parent_map": "World Map: Swim",
-        "condition": {
-            "Progressive Rock": 3
-        },
-        "exits": []
-    },
-    {
-        "region_name": "World Map: Fly",
-        "locations": [
-            "Chest_Manor_4",
-            "Chest_WorldMap_3",
-            "Chest_WorldMap_6",
-            "Chest_WorldMap_9",
-            "Chest_WorldMap_29",
-            "Chest_WorldMap_32",
-            "Chest_WorldMap_38",
-            "Chest_WorldMap_41",
-            "Chest_WorldMap_52",
-            "Chest_WorldMap_53",
-            "Chest_WorldMap_59",
-            "Chest_WorldMap_60",
-            "Chest_WorldMap_61",
-            "Chest_WorldMap_62",
-            "Chest_WorldMap_64",
-            "Chest_WorldMap_65",
-            "Chest_WorldMap_66",
-            "Chest_WorldMap_67",
-            "Chest_WorldMap_68"
-        ],
-        "parent_map": "World Map: Destroy Coral",
-        "condition": {
-            "Progressive Rock": 4
-        },
-        "exits": []
-    },
-    {
-        "region_name": "World Map: Dive",
-        "locations": [
-
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                    "Progressive Rock": 5
-        },
-        "exits": []
-    },
-    {
         "region_name": "Ancient Sanctuary",
         "locations": [
             "Chest_AncientSanctuary_1",
@@ -156,11 +19,11 @@
             "Chest_AncientSanctuary_15",
             "Chest_AncientSanctuary_16",
             "Chest_AncientSanctuary_17",
-            "Chest_AncientSanctuary_19"
-        ],
-        "parent_map": "World Map: No Esquie",
-                "condition": {},
-        "exits": []
+            "Chest_AncientSanctuary_19",
+            "Ancient Sanctuary: Mime",
+            "Ancient Sanctuary: Petank",
+            "Ancient Sanctuary: Ultimate Sakapatate"
+        ]
     },
     {
         "region_name": "Crimson Forest",
@@ -173,13 +36,9 @@
             "Chest_CrimsonForest_6",
             "Chest_CrimsonForest_7",
             "Chest_CrimsonForest_8",
-            "Chest_CrimsonForest_9"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+            "Chest_CrimsonForest_9",
+            "Crimson Forest: Chromatic Gold Chevaliere"
+        ]
     },
     {
         "region_name": "Dark Shores",
@@ -193,12 +52,7 @@
             "Chest_DarkShores_7",
             "Chest_DarkShores_8",
             "Chest_DarkShores_9"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+        ]
     },
     {
         "region_name": "Esquie's Nest",
@@ -209,11 +63,11 @@
             "Chest_EsquiesNest_4",
             "Chest_EsquiesNest_5",
             "Chest_EsquiesNest_6",
-            "Chest_EsquiesNest_7"
-        ],
-        "parent_map": "World Map: No Esquie",
-                "condition": {},
-        "exits": []
+            "Chest_EsquiesNest_7",
+            "Esquie’s Nest: Mime",
+            "Esquie’s Nest: Petank",
+            "Esquie’s Nest: Francois"
+        ]
     },
     {
         "region_name": "Falling Leaves",
@@ -221,13 +75,10 @@
             "Chest_Manor_7",
             "Chest_FallingLeaves_1",
             "Chest_FallingLeaves_2",
-            "Chest_FallingLeaves_3"
-        ],
-        "parent_map": "World Map: Destroy Coral",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+            "Chest_FallingLeaves_3",
+            "Falling Leaves: Chromatic Ballet",
+            "Falling Leaves: Scavenger"
+        ]
     },
     {
         "region_name": "Flying Manor",
@@ -267,13 +118,15 @@
             "Chest_FlyingManor_38",
             "Chest_FlyingManor_39",
             "Chest_FlyingManor_40",
-            "Chest_FlyingManor_41"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+            "Chest_FlyingManor_41",
+            "Flying Manor: Clea",
+            "Flying Manor: Dualliste",
+            "Flying Manor: Eveques",
+            "Flying Manor: Goblu",
+            "Flying Manor: Lampmaster",
+            "Flying Manor: Mime",
+            "Flying Manor: Petank"
+        ]
     },
     {
         "region_name": "Forgotten Battlefield",
@@ -303,12 +156,11 @@
             "Chest_ForgottenBattlefield_23",
             "Chest_ForgottenBattlefield_24",
             "Chest_ForgottenBattlefield_25",
-            "Chest_ForgottenBattlefield_26"
-        ],
-        "parent_map": "World Map: Swim",
-                "condition": {
-                },
-        "exits": []
+            "Chest_ForgottenBattlefield_26",
+            "Forgotten Battlefield: Chromatic Luster",
+            "Forgotten Battlefield: Dualliste",
+            "Forgotten Battlefield: Petank"
+        ]
     },
     {
         "region_name": "Frozen Hearts",
@@ -343,13 +195,12 @@
             "Chest_FrozenHearts_27",
             "Chest_FrozenHearts_29",
             "Chest_FrozenHearts_30",
-            "Chest_FrozenHearts_31"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+            "Chest_FrozenHearts_31",
+            "Frozen Hearts: Mime",
+            "Frozen Hearts: Petank",
+            "Frozen Hearts: Chromatic Veilleur",
+            "Frozen Hearts: Gargant"
+        ]
     },
     {
         "region_name": "Gestral Village",
@@ -365,10 +216,7 @@
             "Chest_GestralVillage_7",
             "Chest_GestralVillage_8",
             "Chest_GestralVillage_9"
-        ],
-        "parent_map": "World Map: No Esquie",
-                "condition": {},
-        "exits": []
+        ]
     },
     {
         "region_name": "Flying Waters",
@@ -402,22 +250,19 @@
             "Chest_GoblusLair_24",
             "Chest_GoblusLair_25",
             "Chest_GoblusLair_26",
-            "Chest_GoblusLair_27"
-        ],
-        "parent_map": "World Map: No Esquie",
-                "condition": {},
-        "exits": []
+            "Chest_GoblusLair_27",
+            "Flying Waters: Bourgeon",
+            "Flying Waters: Chromatic Troubador",
+            "Flying Waters: Goblu",
+            "Flying Waters: Mime"
+        ]
     },
     {
         "region_name": "Monoco's Station",
         "locations": [
             "Chest_GrandisStation_1",
             "Chest_GrandisStation_2"
-        ],
-        "parent_map": "World Map: Swim",
-                "condition": {
-                },
-        "exits": []
+        ]
     },
     {
         "region_name": "Lumiere",
@@ -465,34 +310,11 @@
             "Chest_Lumiere_41",
             "Chest_Lumiere_42",
             "Chest_Lumiere_43",
-            "Chest_Lumiere_44"
-        ],
-        "parent_map": "World Map: Fly",
-        "condition": {
-            "Barrier Breaker": 1,
-            "Painted Power": 1
-        },
-        "exits": []
-    },
-    {
-        "region_name": "Lumiere ACT1",
-        "locations": [
-            "Chest_Lumiere_ACT1_1",
-            "Chest_Lumiere_ACT1_2",
-            "Chest_Lumiere_ACT1_3",
-            "Chest_Lumiere_ACT1_4"
-        ],
-        "parent_map": "World Map: No Esquie",
-                "condition": {},
-        "exits": []
-    },
-    {
-        "region_name": "Manor",
-        "locations": [],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                },
-        "exits": []
+            "Chest_Lumiere_44",
+            "Lumiere: Chromatic Echassier",
+            "Lumiere: Creation",
+            "Lumiere: The Curator"
+        ]
     },
     {
         "region_name": "The Monolith",
@@ -538,13 +360,18 @@
             "Chest_Monolith_38",
             "Chest_Monolith_39",
             "Chest_Monolith_40",
-            "Chest_Monolith_41"
-        ],
-        "parent_map": "World Map: Destroy Coral",
-        "condition": {
-            "Barrier Breaker": 1
-        },
-        "exits": []
+            "Chest_Monolith_41",
+            "The Monolith: Chromatic Bourgeon",
+            "The Monolith: Chromatic Clair Obscur",
+            "The Monolith: Clair Obscur",
+            "The Monolith: Eveque",
+            "The Monolith: Gargant",
+            "The Monolith: Mime",
+            "The Monolith: Petank",
+            "The Monolith: Renoir",
+            "The Monolith: Ultimate Sakapatate",
+            "The Monolith: The Paintress"
+        ]
     },
     {
         "region_name": "Old Lumiere",
@@ -569,11 +396,13 @@
             "Chest_OldLumiere_17",
             "Chest_OldLumiere_18",
             "Chest_OldLumiere_19",
-            "Chest_OldLumiere_20"
+            "Chest_OldLumiere_20",
+            "Old Lumiere: Chromatic Danseuse",
+            "Old Lumiere: Mime",
+            "Old Lumiere: Renoir"
         ],
         "parent_map": "World Map: Swim",
-                "condition": {
-                },
+        "condition": {},
         "exits": []
     },
     {
@@ -604,13 +433,12 @@
             "Chest_Reacher_23",
             "Chest_Reacher_24",
             "Chest_Reacher_25",
-            "Chest_Reacher_26"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+            "Chest_Reacher_26",
+            "The Reacher: Chromatic Braseleur",
+            "The Reacher: Mime",
+            "The Reacher: Petank",
+            "The Reacher: Alicia"
+        ]
     },
     {
         "region_name": "Renoir's Drafts",
@@ -626,13 +454,10 @@
             "Chest_RenoirSDraft_9",
             "Chest_RenoirSDraft_10",
             "Chest_RenoirSDraft_11",
-            "Chest_RenoirSDraft_12"
-        ],
-        "parent_map": "World Map: Dive",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+            "Chest_RenoirSDraft_12",
+            "Renoir’s Drafts: Chromatic Creation",
+            "The Abyss: Simon"
+        ]
     },
     {
         "region_name": "Stone Wave Cliffs",
@@ -676,12 +501,11 @@
             "Chest_SeaCliff_36",
             "Chest_SeaCliff_37",
             "Chest_SeaCliff_38",
-            "Chest_SeaCliff_39"
-        ],
-        "parent_map": "World Map: Base Esquie",
-                "condition": {
-                },
-        "exits": []
+            "Chest_SeaCliff_39",
+            "Stone Wave Cliffs: Chromatic Gault",
+            "Stone Wave Cliffs: Petank",
+            "Stone Wave Cliffs: Lampmaster"
+        ]
     },
     {
         "region_name": "Sirene",
@@ -715,30 +539,27 @@
             "Chest_Sirene_27",
             "Chest_Sirene_28",
             "Chest_Sirene_29",
-            "Chest_Sirene_30"
-        ],
-        "parent_map": "World Map: Destroy Coral",
-                "condition": {
-                },
-        "exits": []
+            "Chest_Sirene_30",
+            "Sirene: Blue Petank",
+            "Sirene: Red Petank",
+            "Sirene: Chromatic Greatsword Cultist",
+            "Sirene: Glissando",
+            "Sirene: Mime",
+            "Sirene: Tisseur",
+            "Sirene: Sirene"
+        ]
     },
     {
-        "region_name": "Small Level Red Woods",
+        "region_name": "Red Woods",
         "locations": [
             "Chest_SmallLevel_RedWoods_1"
-        ],
-        "parent_map": "World Map: No Esquie",
-                "condition": {},
-        "exits": []
+        ]
     },
     {
         "region_name": "The Small Bourgeon",
         "locations": [
             "Chest_SmallLevel_GoblusLair_02_1"
-        ],
-        "parent_map": "World Map: No Esquie",
-                "condition": {},
-        "exits": []
+        ]
     },
     {
         "region_name": "Stone Wave Cliffs Cave",
@@ -746,73 +567,48 @@
             "Chest_SmallLevel_StonewaveCliffsCave_1",
             "Chest_SmallLevel_StonewaveCliffsCave_2",
             "Chest_SmallLevel_StonewaveCliffsCave_3",
-            "Chest_SmallLevel_StonewaveCliffsCave_4"
-        ],
-        "parent_map": "World Map: Swim",
-                "condition": {
-                },
-        "exits": []
+            "Chest_SmallLevel_StonewaveCliffsCave_4",
+            "Stone Wave Cliffs Cave: Chromatic Hexga"
+        ]
     },
     {
-        "region_name": "Chosen Path",
+        "region_name": "The Chosen Path",
         "locations": [
-            "Chest_SmallLevel_ChosenPath_1"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+            "Chest_SmallLevel_ChosenPath_1",
+            "The Chosen Path: Benisseur",
+            "The Chosen Path: Contorsionniste",
+            "The Chosen Path: Glaise",
+            "The Chosen Path: Jar",
+            "The Chosen Path: Stalact"
+        ]
     },
     {
         "region_name": "Sky Island",
         "locations": [
-            "Chest_SmallLevel_FloatingIsland_1"
+            "Chest_SmallLevel_FloatingIsland_1",
+            "Sky Island: Chromatic Glaise"
         ],
         "parent_map": "World Map: Fly",
-                "condition": {
-                    "Painted Power": 1
-                },
+        "condition": {
+            "Painted Power": 1
+        },
         "exits": []
     },
     {
-        "region_name": "Small Level Visages",
+        "region_name": "Isle of the Eyes",
         "locations": [
             "Chest_SmallLevel_Visages_1",
-            "Chest_SmallLevel_Visages_2"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+            "Chest_SmallLevel_Visages_2",
+            "Isle of the Eyes: Chromatic Boucheclier",
+            "Isle of the Eyes: Petank"
+        ]
     },
     {
         "region_name": "The Crows",
         "locations": [
-            "Chest_SmallLevel_Reacher_1"
-        ],
-        "parent_map": "World Map: Destroy Coral",
-                "condition": {
-                },
-        "exits": []
-    },
-    {
-        "region_name": "Small Level Rock Trailing",
-        "locations": [
-            "Chest_SmallLevel_RockTrailing_1",
-            "Chest_SmallLevel_RockTrailing_2",
-            "Chest_SmallLevel_RockTrailing_3",
-            "Chest_SmallLevel_RockTrailing_4",
-            "Chest_SmallLevel_RockTrailing_5",
-            "Chest_SmallLevel_RockTrailing_6",
-            "Chest_SmallLevel_RockTrailing_7",
-            "Chest_SmallLevel_RockTrailing_8"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                },
-        "exits": []
+            "Chest_SmallLevel_Reacher_1",
+            "The Crows: Chromatic Chapelier"
+        ]
     },
     {
         "region_name": "Floating Cemetery",
@@ -821,32 +617,20 @@
             "Chest_SmallLevel_Cemetery_2",
             "Chest_SmallLevel_Cemetery_3",
             "Chest_SmallLevel_Cemetery_4"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+        ]
     },
     {
         "region_name": "Coastal Cave",
         "locations": [
             "Chest_SmallLevel_CoastalCave_1"
-        ],
-        "parent_map": "World Map: Swim",
-                "condition": {
-                },
-        "exits": []
+        ]
     },
     {
         "region_name": "Crushing Cavern",
         "locations": [
-            "Chest_SmallLevel_CavernCrusher_1"
-        ],
-        "parent_map": "World Map: Swim",
-                "condition": {
-                },
-        "exits": []
+            "Chest_SmallLevel_CavernCrusher_1",
+            "Crushing Cavern: Giant Sapling"
+        ]
     },
     {
         "region_name": "Esoteric Ruins",
@@ -856,75 +640,55 @@
             "Chest_SmallLevel_DoorMaze_3",
             "Chest_SmallLevel_DoorMaze_4",
             "Chest_SmallLevel_DoorMaze_5"
-        ],
-        "parent_map": "World Map: Swim",
-                "condition": {
-                },
-        "exits": []
+        ]
     },
     {
         "region_name": "Sinister Cave",
         "locations": [
             "Chest_SmallLevel_SinisterCave_1",
             "Chest_SmallLevel_SinisterCave_2",
-            "Chest_SmallLevel_SinisterCave_3"
-        ],
-        "parent_map": "World Map: Destroy Coral",
-                "condition": {
-                },
-        "exits": []
+            "Chest_SmallLevel_SinisterCave_3",
+            "Sinister Cave: Chromatic Chalier"
+        ]
+    },
+    {
+        "region_name": "The Fountain",
+        "locations": [
+            "Chest_SmallLevel_SpringMeadows_1"
+        ]
     },
     {
         "region_name": "Abbest Cave",
         "locations": [
-            "Chest_SmallLevel_SpringMeadows_1"
-        ],
-        "parent_map": "World Map: No Esquie",
-                "condition": {},
-        "exits": []
+            "Abbest Cave: Chromatic Abbest"
+        ]
     },
     {
-        "region_name": "Small Level Flying Casino Entrance",
+        "region_name": "Flying Casino",
         "locations": [
             "Chest_SmallLevel_FlyingCasinoEntrance_1"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                },
-        "exits": []
+        ]
     },
     {
         "region_name": "The Carousel",
         "locations": [
             "Chest_SmallLevel_TheCarrousel_1",
             "Chest_SmallLevel_TheCarrousel_2"
-        ],
-        "parent_map": "World Map: Swim",
-                "condition": {
-                },
-        "exits": []
+        ]
     },
     {
         "region_name": "White Sands",
         "locations": [
             "Chest_SmallLevel_WhiteSands_1",
             "Chest_SmallLevel_WhiteSands_2"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                },
-        "exits": []
+        ]
     },
     {
         "region_name": "Sacred River",
         "locations": [
-            "Chest_SmallLevel_SacredRiver_1"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+            "Chest_SmallLevel_SacredRiver_1",
+            "Sacred River: Golgra"
+        ]
     },
     {
         "region_name": "Spring Meadows",
@@ -954,11 +718,11 @@
             "Chest_SpringMeadows_23",
             "Chest_SpringMeadows_24",
             "Chest_SpringMeadows_25",
-            "Chest_SpringMeadows_26"
-        ],
-        "parent_map": "World Map: No Esquie",
-                "condition": {},
-        "exits": []
+            "Chest_SpringMeadows_26",
+            "Spring Meadows: Chromatic Lancelier",
+            "Spring Meadows: Mime",
+            "Spring Meadows: Eveque"
+        ]
     },
     {
         "region_name": "Endless Night Sanctuary",
@@ -978,13 +742,10 @@
             "Chest_TwilightSanctuary_13",
             "Chest_TwilightSanctuary_14",
             "Chest_TwilightSanctuary_15",
-            "Chest_TwilightSanctuary_16"
-        ],
-        "parent_map": "World Map: Fly",
-                "condition": {
-                    "Painted Power": 1
-                },
-        "exits": []
+            "Chest_TwilightSanctuary_16",
+            "Endless Night Sanctuary: Chromatic Crluer",
+            "Endless Night Sanctuary: Petank"
+        ]
     },
     {
         "region_name": "Visages",
@@ -1008,12 +769,11 @@
             "Chest_Visages_17",
             "Chest_Visages_18",
             "Chest_Visages_19",
-            "Chest_Visages_20"
-        ],
-        "parent_map": "World Map: Destroy Coral",
-                "condition": {
-                },
-        "exits": []
+            "Chest_Visages_20",
+            "Visages: Mime",
+            "Visages: Visages/Mask Keeper",
+            "Visages: Chromatic Ramasseur"
+        ]
     },
     {
         "region_name": "Yellow Harvest",
@@ -1023,12 +783,232 @@
             "Chest_YellowForest_3",
             "Chest_YellowForest_4",
             "Chest_YellowForest_5",
-            "Chest_YellowForest_6"
-        ],
-        "parent_map": "World Map: Base Esquie",
-                "condition": {
-                    "Progressive Rock": 1
-                },
-        "exits": []
+            "Chest_YellowForest_6",
+            "Yellow Harvest: Chromatic Orphelin",
+            "Yellow Harvest: Mime",
+            "Yellow Harvest: Glaise"
+        ]
+    },
+    {
+        "region_name": "WM: First Continent South",
+        "locations": [
+            "Chest_WorldMap_2",
+            "Chest_WorldMap_5",
+            "Chest_WorldMap_1",
+            "Chest_WorldMap_7",
+            "Chest_WorldMap_8",
+            "Chest_MiniLevels_3"
+        ]
+    },
+    {
+        "region_name": "WM: First Continent North",
+        "locations": [
+            "Chest_WorldMap_10",
+            "Chest_WorldMap_11",
+            "Chest_WorldMap_15",
+            "Chest_WorldMap_16",
+            "Chest_WorldMap_17",
+            "Chest_WorldMap_18",
+            "Chest_WorldMap_12",
+            "Chest_WorldMap_13",
+            "Chest_WorldMap_14",
+            "Chest_WorldMap_19",
+            "Chest_MiniLevels_7",
+            "World Map: Chromatic Bruler"
+        ]
+    },
+    {
+        "region_name": "WM: South Sea",
+        "locations": [
+            "Chest_WorldMap_4",
+            "Chest_WorldMap_21",
+            "Chest_WorldMap_22",
+            "Chest_WorldMap_23",
+            "Chest_WorldMap_24",
+            "Chest_WorldMap_25",
+            "Chest_WorldMap_26",
+            "Chest_WorldMap_27",
+            "Chest_WorldMap_28",
+            "Chest_WorldMap_30",
+            "Chest_WorldMap_42",
+            "Chest_WorldMap_50",
+            "Chest_Manor_6",
+            "Chest_Manor_16",
+            "Chest_MiniLevels_1",
+            "Chest_MiniLevels_2",
+            "Chest_MiniLevels_6",
+            "World Map: Chromatic Jar"
+        ]
+    },
+    {
+        "region_name": "WM: Second Continent South",
+        "locations": [
+            "Chest_WorldMap_31",
+            "Chest_WorldMap_33",
+            "Chest_WorldMap_34",
+            "Chest_WorldMap_35",
+            "Chest_WorldMap_36",
+            "Chest_WorldMap_37",
+            "World Map: Frost Eveque",
+            "World Map: Grosse Tete"
+        ]
+    },
+    {
+        "region_name": "WM: Second Continent NE",
+        "locations": [
+            "Chest_WorldMap_39",
+            "Chest_WorldMap_40"
+        ]
+    },
+    {
+        "region_name": "WM: Second Continent NW",
+        "locations": [
+            "Chest_WorldMap_43",
+            "Chest_WorldMap_44",
+            "Chest_WorldMap_45",
+            "Chest_WorldMap_46",
+            "Chest_WorldMap_47"
+        ]
+    },
+    {
+        "region_name": "WM: North Sea",
+        "locations": [
+            "Chest_WorldMap_56",
+            "Chest_MiniLevels_5",
+            "Chest_WorldMap_48",
+            "Chest_WorldMap_49",
+            "Chest_WorldMap_51",
+            "Chest_WorldMap_54",
+            "Chest_WorldMap_55",
+            "Chest_WorldMap_57",
+            "Chest_WorldMap_58",
+            "Chest_WorldMap_63",
+            "World Map: Chromatic Moissoneuse",
+            "World Map: Chromatic Reaper Cultist",
+            "World Map: Mime"
+        ]
+    },
+    {
+        "region_name": "WM: Outside Gestral Village",
+        "locations": [
+            "Chest_WorldMap_20"
+        ]
+    },
+    {
+        "region_name": "WM: Sky",
+        "locations": [
+            "Chest_Manor_4",
+            "Chest_WorldMap_3",
+            "Chest_WorldMap_6",
+            "Chest_WorldMap_9",
+            "Chest_WorldMap_29",
+            "Chest_WorldMap_32",
+            "Chest_WorldMap_38",
+            "Chest_WorldMap_41",
+            "Chest_WorldMap_52",
+            "Chest_WorldMap_53",
+            "Chest_WorldMap_59",
+            "Chest_WorldMap_60",
+            "Chest_WorldMap_61",
+            "Chest_WorldMap_62",
+            "Chest_WorldMap_64",
+            "Chest_WorldMap_65",
+            "Chest_WorldMap_66",
+            "Chest_WorldMap_67",
+            "Chest_WorldMap_68",
+            "World Map: Chromatic Aberration",
+            "World Map: Chromatic Benisseur",
+            "World Map: Chromatic Demineur",
+            "World Map: Chromatic Goblu",
+            "World Map: Chromatic Petank",
+            "World Map: Chromatic Portier",
+            "World Map: Serpenphare",
+            "World Map: Sprong",
+            "World Map: Thunder Eveque"
+        ]
+    },
+    {
+        "region_name": "WM: Underwater",
+        "locations": []
+    },
+    {
+        "region_name": "Lost Woods",
+        "locations": [
+            "Chest_MiniLevels_4"
+        ]
+    },
+    {
+        "region_name": "Painting Workshop",
+        "locations": [
+            "Painting Workshop: Lampmaster"
+        ]
+    },
+    {
+        "region_name": "Endless Tower",
+        "locations": [
+            "Endless Tower: Stage 1-1",
+            "Endless Tower: Stage 1-2",
+            "Endless Tower: Stage 1-3",
+            "Endless Tower: Stage 10-1",
+            "Endless Tower: Stage 10-2",
+            "Endless Tower: Stage 10-3",
+            "Endless Tower: Stage 11-1",
+            "Endless Tower: Stage 11-2",
+            "Endless Tower: Stage 11-3",
+            "Endless Tower: Stage 2-1",
+            "Endless Tower: Stage 2-2",
+            "Endless Tower: Stage 2-3",
+            "Endless Tower: Stage 3-1",
+            "Endless Tower: Stage 3-2",
+            "Endless Tower: Stage 3-3",
+            "Endless Tower: Stage 4-1",
+            "Endless Tower: Stage 4-2",
+            "Endless Tower: Stage 4-3",
+            "Endless Tower: Stage 5-1",
+            "Endless Tower: Stage 5-2",
+            "Endless Tower: Stage 5-3",
+            "Endless Tower: Stage 6-1",
+            "Endless Tower: Stage 6-2",
+            "Endless Tower: Stage 6-3",
+            "Endless Tower: Stage 7-1",
+            "Endless Tower: Stage 7-2",
+            "Endless Tower: Stage 7-3",
+            "Endless Tower: Stage 8-1",
+            "Endless Tower: Stage 8-2",
+            "Endless Tower: Stage 8-3",
+            "Endless Tower: Stage 9-1",
+            "Endless Tower: Stage 9-2",
+            "Endless Tower: Stage 9-3"
+        ]
+    },
+    {
+        "region_name": "Dark Gestral Arena",
+        "locations": [
+            "Dark Gestral Arena: Round 1",
+            "Dark Gestral Arena: Round 2",
+            "Dark Gestral Arena: Round 3",
+            "Dark Gestral Arena: Golgra"
+        ]
+    },
+    {
+        "region_name": "Hidden Gestral Arena",
+        "locations": [
+            "Hidden Gestral Arena: Bertrand Big Hands",
+            "Hidden Gestral Arena: Dominique Giant Feet",
+            "Hidden Gestral Arena: Julien Tiny Head",
+            "Hidden Gestral Arena: Matthieu the Colossus"
+        ]
+    },
+    {
+        "region_name": "Sirene's Dress",
+        "locations": [
+            "Sirene’s Dress: Chromatic Glissando"
+        ]
+    },
+    {
+        "region_name": "Sunless Cliffs",
+        "locations": [
+            "Sunless Cliffs: Bald Mime"
+        ]
     }
 ]
