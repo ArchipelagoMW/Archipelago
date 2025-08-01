@@ -165,6 +165,14 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
         self.ctx.update_death_link(self.ctx.deathlink_enabled)
         logger.info(f"Deathlink {'Enabled.' if self.ctx.deathlink_enabled else 'Disabled.'}")
 
+    def _cmd_instantmax_toggle(self):
+        """Toggle InstantMax on or off"""
+        if not self.ctx.glslotdata:
+            logger.info("Cannot toggle InstantMax: slot data not initialized.")
+            return
+        self.ctx.glslotdata["instant_max"] = not self.ctx.glslotdata["instant_max"]
+        logger.info(f"InstantMax {'Enabled.' if self.ctx.glslotdata["instant_max"] else 'Disabled.'}")
+
     def _cmd_players(self, value: int):
         """Set number of local players"""
         value = int(value)
