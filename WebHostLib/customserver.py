@@ -129,7 +129,7 @@ class WebHostContext(Context):
                 else:
                     row = GameDataPackage.get(checksum=game_data["checksum"])
                     if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
-                        game_data_packages[game] = Utils.restricted_loads(row.data)
+                        game_data_packages[game] = restricted_loads(row.data)
                         continue
                     else:
                         self.logger.warning(f"Did not find game_data_package for {game}: {game_data['checksum']}")
@@ -159,6 +159,7 @@ class WebHostContext(Context):
     @db_session
     def _save(self, exit_save: bool = False) -> bool:
         room = Room.get(id=self.room_id)
+        # Does not use Utils.restricted_dumps because we'd rather make a save than not make one
         room.multisave = pickle.dumps(self.get_save())
         # saving only occurs on activity, so we can "abuse" this information to mark this as last_activity
         if not exit_save:  # we don't want to count a shutdown as activity, which would restart the server again
