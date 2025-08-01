@@ -473,7 +473,7 @@ async def patch_and_run_game(patch_file, ctx):
     async_start(run_game(comp_path))
 
 
-if __name__ == '__main__':
+def main(*launch_args: str):
 
     Utils.init_logging("AdventureClient")
 
@@ -483,7 +483,7 @@ if __name__ == '__main__':
                             help='Path to an ADVNTURE.BIN rom file')
         parser.add_argument('port', default=17242, type=int, nargs="?",
                             help='port for adventure_connector connection')
-        args = parser.parse_args()
+        args = parser.parse_args(launch_args)
 
         ctx = AdventureContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")

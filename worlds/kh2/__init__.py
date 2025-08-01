@@ -15,12 +15,12 @@ from .Rules import *
 from .Subclasses import KH2Item
 
 
-def launch_client():
-    from .Client import launch
-    launch_component(launch, name="KH2Client")
+def launch_client(*args: str):
+    from .Client import main
+    launch_component(main, name="KH2Client", args=args)
 
 
-components.append(Component("KH2 Client", "KH2Client", func=launch_client, component_type=Type.CLIENT))
+components.append(Component(display_name="KH2 Client", func=launch_client, component_type=Type.CLIENT))
 
 
 class KingdomHearts2Web(WebWorld):

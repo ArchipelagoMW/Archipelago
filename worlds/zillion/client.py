@@ -480,12 +480,12 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
         logger.info("zillion sync task ending")
 
 
-async def main() -> None:
+async def main(launcher_args) -> None:
     parser = get_base_parser()
     parser.add_argument("diff_file", default="", type=str, nargs="?",
                         help="Path to a .apzl Archipelago Binary Patch file")
     # SNI parser.add_argument('--loglevel', default='info', choices=['debug', 'info', 'warning', 'error', 'critical'])
-    args = parser.parse_args()
+    args = parser.parse_args(launcher_args)
     print(args)
 
     if args.diff_file:
@@ -515,7 +515,7 @@ async def main() -> None:
     await ctx.shutdown()
 
 
-def launch() -> None:
+def launch(*launcher_args: str) -> None:
     colorama.just_fix_windows_console()
-    asyncio.run(main())
+    asyncio.run(main(launcher_args))
     colorama.deinit()
