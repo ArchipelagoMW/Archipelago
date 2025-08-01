@@ -276,6 +276,7 @@ These packets are sent purely from client to server. They are not accepted by cl
 * [Sync](#Sync)
 * [LocationChecks](#LocationChecks)
 * [LocationScouts](#LocationScouts)
+* [CreateHints](#CreateHints)
 * [UpdateHint](#UpdateHint)
 * [StatusUpdate](#StatusUpdate)
 * [Say](#Say)
@@ -294,7 +295,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | password       | str                               | If the game session requires a password, it should be passed here.                           |
 | game           | str                               | The name of the game the client is playing. Example: `A Link to the Past`                    |
 | name           | str                               | The player name for this client.                                                             |
-| uuid           | str                               | Unique identifier for player client.                                                         |
+| uuid           | str                               | Unique identifier for player. Cached in the user cache \Archipelago\Cache\common.json        |
 | version        | [NetworkVersion](#NetworkVersion) | An object representing the Archipelago version this client supports.                         |
 | items_handling | int                               | Flags configuring which items should be sent by the server. Read below for individual flags. |
 | tags           | list\[str\]                       | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags)        |
@@ -339,13 +340,29 @@ Sent to the server to retrieve the items that are on a specified list of locatio
 Fully remote clients without a patch file may use this to "place" items onto their in-game locations, most commonly to display their names or item classifications before/upon pickup.
 
 LocationScouts can also be used to inform the server of locations the client has seen, but not checked. This creates a hint as if the player had run `!hint_location` on a location, but without deducting hint points.
-This is useful in cases where an item appears in the game world, such as 'ledge items' in _A Link to the Past_. To do this, set the `create_as_hint` parameter to a non-zero value.
+This is useful in cases where an item appears in the game world, such as 'ledge items' in _A Link to the Past_. To do this, set the `create_as_hint` parameter to a non-zero value.  
+Note that LocationScouts with a non-zero `create_as_hint` value will _always_ create a **persistent** hint (listed in the Hints tab of concerning players' TextClients), even if the location was already found. If this is not desired behavior, you need to prevent sending LocationScouts with `create_as_hint` for already found locations in your client-side code.
 
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
 | create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
+
+### CreateHints
+
+Sent to the server to create hints for a specified list of locations.  
+Hints that already exist will be silently skipped and their status will not be updated.
+
+When creating hints for another slot's locations, the packet will fail if any of those locations don't contain items for the requesting slot.  
+When creating hints for your own slot's locations, non-existing locations will silently be skipped.  
+
+#### Arguments
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| locations | list\[int\] | The ids of the locations to create hints for. |
+| player | int | The ID of the player whose locations are being hinted for. Defaults to the requesting slot. |
+| status | [HintStatus](#HintStatus) | If included, sets the status of the hint to this status. Defaults to `HINT_UNSPECIFIED`. Cannot set `HINT_FOUND`. |
 
 ### UpdateHint
 Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
