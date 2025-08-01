@@ -486,7 +486,7 @@ class BooHealthOption(Choice):
 
 class BooHealthValue(Range):
     """
-    Choose the health value all Boos will have it the Boo Health Option is Choice. Range between 1 and 999
+    Choose the health value all Boos will have if the Boo Health Option is Choice. Range between 1 and 999
 
     Values over 150 may not be catchable within the current room and logic cannot account for where they move
 
