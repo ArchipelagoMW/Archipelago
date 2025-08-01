@@ -27,7 +27,9 @@
         "name": "Chest_AncientSanctuary_5",
         "location": "Ancient Sanctuary",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_AncientSanctuary_6",
@@ -63,7 +65,9 @@
         "name": "Chest_AncientSanctuary_11",
         "location": "Ancient Sanctuary",
         "original_item": "UpgradeMaterial",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_AncientSanctuary_12",
@@ -75,13 +79,17 @@
         "name": "Chest_AncientSanctuary_13",
         "location": "Ancient Sanctuary",
         "original_item": "PiercingShot",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_AncientSanctuary_14",
         "location": "Ancient Sanctuary",
         "original_item": "ChromaPack_ExtraLarge",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_AncientSanctuary_15",
@@ -867,13 +875,17 @@
         "name": "Chest_GestralVillage_7",
         "location": "Gestral Village",
         "original_item": "Betelim",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_GestralVillage_8",
         "location": "Gestral Village",
         "original_item": "FreeAimPowerful",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_GestralVillage_9",
@@ -957,7 +969,9 @@
         "name": "Chest_GoblusLair_13",
         "location": "Goblus Lair",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_GoblusLair_14",
@@ -1317,30 +1331,6 @@
         "name": "Chest_Lumiere_44",
         "location": "Lumiere",
         "original_item": "MusicRecord_2",
-        "condition": {}
-    },
-    {
-        "name": "Chest_Lumiere_ACT1_1",
-        "location": "Lumiere ACT1",
-        "original_item": "ChromaPack_Regular",
-        "condition": {}
-    },
-    {
-        "name": "Chest_Lumiere_ACT1_2",
-        "location": "Lumiere ACT1",
-        "original_item": "ChromaPack_Regular",
-        "condition": {}
-    },
-    {
-        "name": "Chest_Lumiere_ACT1_3",
-        "location": "Lumiere ACT1",
-        "original_item": "ChromaPack_Regular",
-        "condition": {}
-    },
-    {
-        "name": "Chest_Lumiere_ACT1_4",
-        "location": "Lumiere ACT1",
-        "original_item": "ChromaPack_Regular",
         "condition": {}
     },
     {
@@ -2111,7 +2101,9 @@
         "name": "Chest_SeaCliff_14",
         "location": "Sea Cliff",
         "original_item": "DefensiveMode",
-        "condition": {}
+        "condition": {
+            "Progressive Rock": 2
+        }
     },
     {
         "name": "Chest_SeaCliff_15",
@@ -2273,7 +2265,9 @@
         "name": "Chest_Sirene_2",
         "location": "Sirene",
         "original_item": "UpgradeMaterial",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_Sirene_3",
@@ -2309,7 +2303,9 @@
         "name": "Chest_Sirene_9",
         "location": "Sirene",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_Sirene_10",
@@ -2504,54 +2500,6 @@
         "condition": {}
     },
     {
-        "name": "Chest_SmallLevel_RockTrailing_1",
-        "location": "Small Level Rock Trailing",
-        "original_item": "Consumable_LuminaPoint",
-        "condition": {}
-    },
-    {
-        "name": "Chest_SmallLevel_RockTrailing_2",
-        "location": "Small Level Rock Trailing",
-        "original_item": "Consumable_LuminaPoint",
-        "condition": {}
-    },
-    {
-        "name": "Chest_SmallLevel_RockTrailing_3",
-        "location": "Small Level Rock Trailing",
-        "original_item": "ChromaPack_ExtraLarge",
-        "condition": {}
-    },
-    {
-        "name": "Chest_SmallLevel_RockTrailing_4",
-        "location": "Small Level Rock Trailing",
-        "original_item": "Consumable_LuminaPoint",
-        "condition": {}
-    },
-    {
-        "name": "Chest_SmallLevel_RockTrailing_5",
-        "location": "Small Level Rock Trailing",
-        "original_item": "Consumable_LuminaPoint",
-        "condition": {}
-    },
-    {
-        "name": "Chest_SmallLevel_RockTrailing_6",
-        "location": "Small Level Rock Trailing",
-        "original_item": "ChromaPack_ExtraLarge",
-        "condition": {}
-    },
-    {
-        "name": "Chest_SmallLevel_RockTrailing_7",
-        "location": "Small Level Rock Trailing",
-        "original_item": "Consumable_LuminaPoint",
-        "condition": {}
-    },
-    {
-        "name": "Chest_SmallLevel_RockTrailing_8",
-        "location": "Small Level Rock Trailing",
-        "original_item": "Consumable_LuminaPoint",
-        "condition": {}
-    },
-    {
         "name": "Chest_SmallLevel_Cemetery_1",
         "location": "Small Level Cemetery",
         "original_item": "Consumable_LuminaPoint",
@@ -2651,7 +2599,9 @@
         "name": "Chest_MiniLevels_3",
         "location": "Mini Levels",
         "original_item": "MusicRecord_16",
-        "condition": {}
+        "condition": {
+            "Progressive Rock": 1
+        }
     },
     {
         "name": "Chest_MiniLevels_4",
@@ -2675,7 +2625,9 @@
         "name": "Chest_MiniLevels_7",
         "location": "Mini Levels",
         "original_item": "MusicRecord_11",
-        "condition": {}
+        "condition": {
+            "Progressive Rock": 1
+        }
     },
     {
         "name": "Chest_SmallLevel_SpringMeadows_1",
@@ -2771,13 +2723,17 @@
         "name": "Chest_SpringMeadows_9",
         "location": "Spring Meadows",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_SpringMeadows_10",
         "location": "Spring Meadows",
         "original_item": "AegisRevival",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_SpringMeadows_11",
@@ -2807,7 +2763,9 @@
         "name": "Chest_SpringMeadows_15",
         "location": "Spring Meadows",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_SpringMeadows_16",
@@ -3089,7 +3047,9 @@
         "name": "Chest_WorldMap_1",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Progressive Rock": 1
+        }
     },
     {
         "name": "Chest_WorldMap_2",
@@ -3125,13 +3085,17 @@
         "name": "Chest_WorldMap_7",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Progressive Rock": 1
+        }
     },
     {
         "name": "Chest_WorldMap_8",
         "location": "World Map",
         "original_item": "ChromaPack_Large",
-        "condition": {}
+        "condition": {
+            "Progressive Rock": 1
+        }
     },
     {
         "name": "Chest_WorldMap_9",
@@ -3143,7 +3107,9 @@
         "name": "Chest_WorldMap_10",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_11",
@@ -3155,19 +3121,25 @@
         "name": "Chest_WorldMap_12",
         "location": "World Map",
         "original_item": "HealingParry",
-        "condition": {}
+        "condition": {
+            "Progressive Rock": 1
+        }
     },
     {
         "name": "Chest_WorldMap_13",
         "location": "World Map",
         "original_item": "ChromaPack_Large",
-        "condition": {}
+        "condition": {
+            "Progressive Rock": 1
+        }
     },
     {
         "name": "Chest_WorldMap_14",
         "location": "World Map",
         "original_item": "InitialAp+1A",
-        "condition": {}
+        "condition": {
+            "Progressive Rock": 1
+        }
     },
     {
         "name": "Chest_WorldMap_15",
@@ -3179,7 +3151,9 @@
         "name": "Chest_WorldMap_16",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_17",
@@ -3197,7 +3171,10 @@
         "name": "Chest_WorldMap_19",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1,
+            "Progressive Rock": 1
+        }
     },
     {
         "name": "Chest_WorldMap_20",
@@ -3245,7 +3222,9 @@
         "name": "Chest_WorldMap_27",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_28",
@@ -3293,7 +3272,9 @@
         "name": "Chest_WorldMap_35",
         "location": "World Map",
         "original_item": "ChromaPack_Large",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_36",
@@ -3329,7 +3310,9 @@
         "name": "Chest_WorldMap_41",
         "location": "World Map",
         "original_item": "ChromaPack_Large",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_42",
@@ -3389,7 +3372,9 @@
         "name": "Chest_WorldMap_51",
         "location": "World Map",
         "original_item": "ChromaPack_Large",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_52",
@@ -3431,7 +3416,9 @@
         "name": "Chest_WorldMap_58",
         "location": "World Map",
         "original_item": "BreakDamageOnCrit",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_59",
@@ -3481,7 +3468,9 @@
         "name": "Chest_WorldMap_66",
         "location": "World Map",
         "original_item": "APOnShell",
-        "condition": {}
+        "condition": {
+            "Paint Break": 1
+        }
     },
     {
         "name": "Chest_WorldMap_67",
@@ -3530,5 +3519,1310 @@
         "location": "Yellow Forest",
         "original_item": "DeathBombPhysical",
         "condition": {}
+    },
+    {
+        "name": "Ancient Sanctuary: Ultimate Sakapatate",
+        "internal_name": "AS_PotatoBag_Boss",
+        "location": "Ancient Sanctuary",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "The Abyss: Simon",
+        "internal_name": "Boss_SimonALPHA*1",
+        "location": "The Abyss",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "Flying Manor: Clea",
+        "internal_name": "CFH_Boss_Clea",
+        "location": "Flying Manor",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "Painting Workshop: Lampmaster",
+        "internal_name": "CW_Boss_LampmasterAlpha",
+        "location": "Painting Workshop",
+        "original_item": "",
+        "condition": {
+            "Shape of the Beast": 1,
+            "Colour of the Beast": 1,
+            "Light of the Beast": 1,
+            "Painted Power": 1
+        },
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "Esquie’s Nest: Francois",
+        "internal_name": "EN_Francois",
+        "location": "Esquie’s Nest",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "Lumiere: The Curator",
+        "internal_name": "L_Boss_Curator_P1",
+        "location": "Lumiere",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "The Monolith: The Paintress",
+        "internal_name": "L_Boss_Paintress_P1",
+        "location": "The Monolith",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "Frozen Hearts: Gargant",
+        "internal_name": "MM_Gargant",
+        "location": "Frozen Hearts",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "The Reacher: Alicia",
+        "internal_name": "RC_Alicia",
+        "location": "The Reacher",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "Stone Wave Cliffs: Lampmaster",
+        "internal_name": "SC_LampMaster",
+        "location": "Stone Wave Cliffs",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "Sirene: Sirene",
+        "internal_name": "SI_Axon_Sirene",
+        "location": "Sirene",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "Endless Tower: Stage 11-3",
+        "internal_name": "TowerBattle_33",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "Flying Waters: Bourgeon",
+        "internal_name": "GO_Bourgeon*1",
+        "location": "Flying Waters",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Bourgeon"
+    },
+    {
+        "name": "Dark Gestral Arena: Round 1",
+        "internal_name": "DarkGestralArena_Round1",
+        "location": "Dark Gestral Arena",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Dark Gestral Arena: Round 2",
+        "internal_name": "DarkGestralArena_Round2",
+        "location": "Dark Gestral Arena",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Dark Gestral Arena: Round 3",
+        "internal_name": "DarkGestralArena_Round3",
+        "location": "Dark Gestral Arena",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Visages: Chromatic Ramasseur",
+        "internal_name": "FB_RamasseurALPHA",
+        "location": "Visages",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Flying Waters: Chromatic Troubador",
+        "internal_name": "FB_TroubadourAlpha",
+        "location": "Flying Waters",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "The Monolith: Chromatic Bourgeon",
+        "internal_name": "GO_BourgeonALPHA*1_0",
+        "location": "The Monolith",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Endless Night Sanctuary: Chromatic Crluer",
+        "internal_name": "GO_CrulerALPHA*1_0",
+        "location": "Endless Night Sactuary",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Forgotten Battlefield: Chromatic Luster",
+        "internal_name": "GO_LusterAlpha",
+        "location": "Forgotten Battlefield",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "World Map: Chromatic Aberration",
+        "internal_name": "L_Aberration_Alpha",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Lumiere: Chromatic Echassier",
+        "internal_name": "LU_EchassierAlpha*1",
+        "location": "Lumiere",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Isle of the Eyes: Chromatic Boucheclier",
+        "internal_name": "MF_BoucheclierALPHA",
+        "location": "Isle of the Eyes",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "The Crows: Chromatic Chapelier",
+        "internal_name": "MF_ChapelieALPHA",
+        "location": "The Crows",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "The Reacher: Chromatic Braseleur",
+        "internal_name": "MM_BraseleurALPHA*1",
+        "location": "The Reacher",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "The Monolith: Chromatic Clair Obscur",
+        "internal_name": "MM_ClairObscurAlpha",
+        "location": "The Monolith",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Old Lumiere: Chromatic Danseuse",
+        "internal_name": "MM_DanseuseAlpha*1",
+        "location": "Old Lumiere",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Falling Leaves: Chromatic Ballet",
+        "internal_name": "OF_BalletAlpha",
+        "location": "Falling Leaves",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Renoir’s Drafts: Chromatic Creation",
+        "internal_name": "RD_CreationAlpha",
+        "location": "Renoir’s Drafts",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Frozen Hearts: Chromatic Veilleur",
+        "internal_name": "RE_VeilleurAlpha",
+        "location": "Frozen Hearts",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Crimson Forest: Chromatic Gold Chevaliere",
+        "internal_name": "RF_ChevaliereCAlpha_Clair_Obscur",
+        "location": "Crimson Forest",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Sirene: Chromatic Greatsword Cultist",
+        "internal_name": "SC_CultistHeavy_Alpha",
+        "location": "Sirene",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Stone Wave Cliffs Cave: Chromatic Hexga",
+        "internal_name": "SC_Hexga_Alpha*1",
+        "location": "Stone Wave Cliffs Cave",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Sirene’s Dress: Chromatic Glissando",
+        "internal_name": "SL_GlissandoAlpha*1",
+        "location": "Sirene’s Dress",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Abbest Cave: Chromatic Abbest",
+        "internal_name": "SM_Abbest_Alpha*1",
+        "location": "Abbest Cave",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Spring Meadows: Chromatic Lancelier",
+        "internal_name": "SM_Lancelier_Alpha",
+        "location": "Spring Meadows",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "World Map: Chromatic Benisseur",
+        "internal_name": "WM_BenisseurAlpha",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "World Map: Chromatic Bruler",
+        "internal_name": "WM_Bruler_Alpha",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "World Map: Chromatic Demineur",
+        "internal_name": "WM_Demineur_Alpha",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Stone Wave Cliffs: Chromatic Gault",
+        "internal_name": "WM_Gault_Alpha",
+        "location": "Stone Wave Cliffs",
+        "original_item": "",
+        "condition": {
+            "Paint Break": 1
+        },
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "World Map: Chromatic Goblu",
+        "internal_name": "WM_Goblu_Alpha",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "World Map: Chromatic Moissoneuse",
+        "internal_name": "WM_MoissoneuseAlpha",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "World Map: Chromatic Petank",
+        "internal_name": "WM_Petank_Alpha",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Sky Island: Chromatic Glaise",
+        "internal_name": "YF_GlaiseALPHA",
+        "location": "Sky Island",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "World Map: Chromatic Jar",
+        "internal_name": "YF_JarALPHA",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Yellow Harvest: Chromatic Orphelin",
+        "internal_name": "RE_OrphelinAlpha",
+        "location": "Yellow Harvest",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "World Map: Chromatic Reaper Cultist",
+        "internal_name": "WM_CultistFlying_Alpha",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "World Map: Chromatic Portier",
+        "internal_name": "WM_Portier_Alpha",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Ancient Sanctuary: Mime",
+        "internal_name": "AS_Mime*1",
+        "location": "Ancient Sanctuary",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "Flying Manor: Mime",
+        "internal_name": "CFH_Mime*1",
+        "location": "Flying Manor",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "Esquie’s Nest: Mime",
+        "internal_name": "EN_Mime*1",
+        "location": "Esquie’s Nest",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "Flying Waters: Mime",
+        "internal_name": "GO_Mime*1",
+        "location": "Flying Waters",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "Visages: Mime",
+        "internal_name": "MF_Mime*1",
+        "location": "Visages",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "The Monolith: Mime",
+        "internal_name": "ML_Clair*1_Obscure*1_Mime*1",
+        "location": "The Monolith",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "Old Lumiere: Mime",
+        "internal_name": "OL_Mime*1",
+        "location": "Old Lumiere",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "The Reacher: Mime",
+        "internal_name": "RE_Mime*1",
+        "location": "The Reacher",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "Sirene: Mime",
+        "internal_name": "SI_Mime*1",
+        "location": "Sirene",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "Spring Meadows: Mime",
+        "internal_name": "SM_Mime*1",
+        "location": "Spring Meadows",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "World Map: Mime",
+        "internal_name": "WM_Mime_Mime",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "Sunless Cliffs: Bald Mime",
+        "internal_name": "WM_MimeBald*1",
+        "location": "Sunless Cliffs",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "Yellow Harvest: Mime",
+        "internal_name": "YF_Mime*1",
+        "location": "Yellow Harvest",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "Frozen Hearts: Mime",
+        "internal_name": "MM_Mime*1",
+        "location": "Frozen Hearts",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Mime"
+    },
+    {
+        "name": "Flying Manor: Dualliste",
+        "internal_name": "CFH_Boss_Dualliste",
+        "location": "Flying Manor",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Flying Manor: Eveques",
+        "internal_name": "CFH_Boss_Eveque",
+        "location": "Flying Manor",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Flying Manor: Goblu",
+        "internal_name": "CFH_Boss_Goblu",
+        "location": "Flying Manor",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Flying Manor: Lampmaster",
+        "internal_name": "CFH_Boss_Lampmaster",
+        "location": "Flying Manor",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "The Chosen Path: Benisseur",
+        "internal_name": "CP_Benisseur",
+        "location": "The Chosen Path",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "The Chosen Path: Contorsionniste",
+        "internal_name": "CP_Contorsionniste",
+        "location": "The Chosen Path",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "The Chosen Path: Glaise",
+        "internal_name": "CP_Glaise*1",
+        "location": "The Chosen Path",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "The Chosen Path: Jar",
+        "internal_name": "CP_Jar*1",
+        "location": "The Chosen Path",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "The Chosen Path: Stalact",
+        "internal_name": "CP_Stalact",
+        "location": "The Chosen Path",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Sinister Cave: Chromatic Chalier",
+        "internal_name": "FB_ChalierSwordAlpha*1",
+        "location": "Sinister Cave",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Forgotten Battlefield: Dualliste",
+        "internal_name": "FB_DuallisteLR",
+        "location": "Forgotten Battlefield",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Lumiere: Creation",
+        "internal_name": "L_Creation*1_Aberration*2",
+        "location": "Lumiere",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Visages: Visages/Mask Keeper",
+        "internal_name": "MF_Axon_Visages",
+        "location": "Visages",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "The Monolith: Clair Obscur",
+        "internal_name": "ML_Clair*1_Obscure*1_CLairObscur*1",
+        "location": "The Monolith",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "The Monolith: Eveque",
+        "internal_name": "ML_Eveque*1",
+        "location": "The Monolith",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "The Monolith: Gargant",
+        "internal_name": "ML_Gargant",
+        "location": "The Monolith",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "The Monolith: Ultimate Sakapatate",
+        "internal_name": "ML_PotatoBagBoss*1_Mage*2",
+        "location": "The Monolith",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "The Monolith: Renoir",
+        "internal_name": "MM_MirrorRenoir",
+        "location": "The Monolith",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Old Lumiere: Renoir",
+        "internal_name": "OL_MirrorRenoir_FirstFight",
+        "location": "Old Lumiere",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Sirene: Glissando",
+        "internal_name": "SI_Glissando*1",
+        "location": "Sirene",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Sirene: Tisseur",
+        "internal_name": "SI_Tisseur",
+        "location": "Sirene",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Crushing Cavern: Giant Sapling",
+        "internal_name": "SL_Sapling_CrushingWalls_0",
+        "location": "Crushing Cavern",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Spring Meadows: Eveque",
+        "internal_name": "SM_Eveque*1",
+        "location": "Spring Meadows",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 1-1",
+        "internal_name": "TowerBattle_1",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 4-1",
+        "internal_name": "TowerBattle_10",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 4-2",
+        "internal_name": "TowerBattle_11",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 4-3",
+        "internal_name": "TowerBattle_12",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 5-1",
+        "internal_name": "TowerBattle_13",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 5-2",
+        "internal_name": "TowerBattle_14",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 5-3",
+        "internal_name": "TowerBattle_15",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 6-1",
+        "internal_name": "TowerBattle_16",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 6-2",
+        "internal_name": "TowerBattle_17",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 6-3",
+        "internal_name": "TowerBattle_18",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 7-1",
+        "internal_name": "TowerBattle_19",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 1-2",
+        "internal_name": "TowerBattle_2",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 7-2",
+        "internal_name": "TowerBattle_20",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 7-3",
+        "internal_name": "TowerBattle_21",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 8-1",
+        "internal_name": "TowerBattle_22",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 8-2",
+        "internal_name": "TowerBattle_23",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 8-3",
+        "internal_name": "TowerBattle_24",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 9-1",
+        "internal_name": "TowerBattle_25",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 9-2",
+        "internal_name": "TowerBattle_26",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 9-3",
+        "internal_name": "TowerBattle_27",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 10-1",
+        "internal_name": "TowerBattle_28",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 10-2",
+        "internal_name": "TowerBattle_29",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 1-3",
+        "internal_name": "TowerBattle_3",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 10-3",
+        "internal_name": "TowerBattle_30",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 11-1",
+        "internal_name": "TowerBattle_31",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 11-2",
+        "internal_name": "TowerBattle_32",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 2-1",
+        "internal_name": "TowerBattle_4",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 2-2",
+        "internal_name": "TowerBattle_5",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 2-3",
+        "internal_name": "TowerBattle_6",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 3-1",
+        "internal_name": "TowerBattle_7",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 3-2",
+        "internal_name": "TowerBattle_8",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Endless Tower: Stage 3-3",
+        "internal_name": "TowerBattle_9",
+        "location": "Endless Tower",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "World Map: Frost Eveque",
+        "internal_name": "WM_EvequeIce_Alpha",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "World Map: Thunder Eveque",
+        "internal_name": "WM_EvequeLighting_Alpha",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "World Map: Grosse Tete",
+        "internal_name": "WM_GrossTete",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "World Map: Serpenphare",
+        "internal_name": "WM_Serpenphare",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "World Map: Sprong",
+        "internal_name": "WM_Sprong",
+        "location": "World Map",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Yellow Harvest: Glaise",
+        "internal_name": "YF_GlaiseBoss*1",
+        "location": "Yellow Harvest",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Falling Leaves: Scavenger",
+        "internal_name": "YF_Scavenger",
+        "location": "Falling Leaves",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Dark Gestral Arena: Golgra",
+        "internal_name": "QUEST_Golgra_DarkArena*1",
+        "location": "Dark Gestral Arena",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Sacred River: Golgra",
+        "internal_name": "QUEST_Golgra_SacredRiver*1",
+        "location": "Sacred River",
+        "original_item": "",
+        "condition": {
+            "Painted Power": 1
+        },
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Hidden Gestral Arena: Julien Tiny Head",
+        "internal_name": "QUEST_JulienTinyHead*1",
+        "location": "Hidden Gestral Arena",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Hidden Gestral Arena: Matthieu the Colossus",
+        "internal_name": "QUEST_MatthieuTheColossus*1",
+        "location": "Hidden Gestral Arena",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Sirene: Blue Petank",
+        "internal_name": "Petank_Blue",
+        "location": "Sirene",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "Ancient Sanctuary: Petank",
+        "internal_name": "Petank_Blue",
+        "location": "Ancient Sanctuary",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "Sirene: Red Petank",
+        "internal_name": "Petank_Red",
+        "location": "Sirene",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "Frozen Hearts: Petank",
+        "internal_name": "Petank_Red",
+        "location": "Frozen Hearts",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "The Monolith: Petank",
+        "internal_name": "Petank_Green",
+        "location": "The Monolith",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "Isle of the Eyes: Petank",
+        "internal_name": "Petank_Green",
+        "location": "Isle of the Eyes",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "Stone Wave Cliffs: Petank",
+        "internal_name": "Petank_Orange",
+        "location": "Stone Wave Cliffs",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "Flying Manor: Petank",
+        "internal_name": "Petank_Orange",
+        "location": "Flying Manor",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "Forgotten Battlefield: Petank",
+        "internal_name": "Petank_Violet",
+        "location": "Forgotten Battlefield",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "Endless Night Sanctuary: Petank",
+        "internal_name": "Petank_Violet",
+        "location": "Endless Night Sactuary",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "Esquie’s Nest: Petank",
+        "internal_name": "Petank_Yellow",
+        "location": "Esquie’s Nest",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "The Reacher: Petank",
+        "internal_name": "Petank_Yellow",
+        "location": "The Reacher",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Petank"
+    },
+    {
+        "name": "Flying Waters: Goblu",
+        "internal_name": "GO_Goblu",
+        "location": "Flying Waters",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Area"
+    },
+    {
+        "name": "Hidden Gestral Arena: Bertrand Big Hands",
+        "internal_name": "QUEST_BertrandBigHands*1",
+        "location": "Hidden Gestral Arena",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Hidden Gestral Arena: Dominique Giant Feet",
+        "internal_name": "QUEST_DominiqueGiantFeet*1",
+        "location": "Hidden Gestral Arena",
+        "original_item": "",
+        "condition": {},
+        "type": "Boss drop",
+        "boss_type": "Normal"
     }
 ]

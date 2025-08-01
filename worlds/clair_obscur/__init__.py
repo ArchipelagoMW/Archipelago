@@ -32,6 +32,7 @@ class ClairObscurSettings(Group):
     """
     No idea
     """
+    #me either but i'll get there
 
 class ClairObscurWorld(World):
     game = "Clair Obscur Expedition 33"
@@ -55,8 +56,8 @@ class ClairObscurWorld(World):
 
     def create_items(self) -> None:
 
-        #Amounts of each item to generate (anything else will be added once). Progressive Rock and quest items shouldn't change;
-        #other items can be adjusted based on options once options are implemented
+        #Amounts of each item to generate (anything else will be added once). Progressive Rock and quest items
+        #shouldn't change; other items can be adjusted based on options once options are implemented
         amounts = {
             "Progressive Rock": 5,
             "Rock Crystal": 3,
@@ -65,15 +66,25 @@ class ClairObscurWorld(World):
             "Polished Chroma Catalyst": 30,
             "Resplendent Chroma Catalyst": 40,
             "Grandiose Chroma Catalyst": 30,
+            "Shape of Health": 2,
+            "Shape of Life": 2,
+            "Shape of Energy": 2,
+
+            #Only 10 are possible to get in a normal playthrough
             "Perfect Chroma Catalyst": 10
         }
 
         self.item_pool = []
+
+        #TODO- Populate this from options
+        excluded = ["Journal"]
+
         for item_id, item_data in data.items.items():
             amount = 1
-            #For future options: check a list of excluded item types here.
-            #if item_data.type in excluded:
-                #continue
+
+
+            if item_data.type in excluded:
+                continue
             if item_data.name in amounts:
                 amount = amounts[item_data.name]
             for i in range(0, amount):
@@ -81,8 +92,19 @@ class ClairObscurWorld(World):
                 self.item_pool.append(item)
 
         #Add filler to match the amount of locations
+
+
         location_count = len(data.locations)
+
         remaining_items_to_generate = location_count - len(self.item_pool)
+
+        #TODO- proper filler generation. Add proportional amounts of upgrade mats to an array i.e. Polished, Polished,
+        #Polished, Polished 3-pack - and modulo iterate through them
+
+        #filler_item_sequence = []
+        # for i in range(0, remaining_items_to_generate):
+            #i modulo filler_item_sequence length
+
         for i in range(0, remaining_items_to_generate):
             item = self.create_item("Resplendent Chroma Catalyst")
             self.item_pool.append(item)
@@ -117,15 +139,16 @@ class ClairObscurWorld(World):
         return "Resplendent Chroma Catalyst"
 
     def create_regions(self) -> None:
-        from .Regions import create_regions
+        from .Regions import create_regions, connect_regions
         from .Locations import create_locations
 
         regions = create_regions(self)
-
+        connect_regions(self)
         create_locations(self, regions)
 
+        #Temporary completion condition
         self.multiworld.completion_condition[self.player] = (
-            lambda state: state.can_reach_location("Chest_Lumiere_17", self.player)
+            lambda state: state.can_reach_location("Lumiere: The Curator", self.player)
         )
 
 
