@@ -12,6 +12,9 @@ from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV
 from .Helper_Functions import StringByteFunction as sbf
 from .client.Wallet import Wallet
+from .client.ap_link.energy_link.energy_link_client import EnergyLinkClient
+from .client.ap_link.energy_link.energy_link import EnergyLinkConstants
+from .client.ap_link.energy_link.energy_link_command_processor import EnergyLinkCommandProcessor
 
 CLIENT_VERSION = "V0.4.10"
 
@@ -123,7 +126,7 @@ async def write_bytes_and_validate(addr: int, ram_offset: list[str] | None, curr
         dme.write_bytes(dme.follow_pointers(addr, ram_offset), curr_value)
 
 
-class LMCommandProcessor(ClientCommandProcessor):
+class LMCommandProcessor(EnergyLinkCommandProcessor):
     def __init__(self, ctx: CommonContext, server_address: str = None):
         if server_address:
             ctx.server_address = server_address
@@ -154,6 +157,7 @@ class LMContext(CommonContext):
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
     items_handling = 0b111
+    wallet: Wallet
 
     def __init__(self, server_address, password):
         """
@@ -168,7 +172,9 @@ class LMContext(CommonContext):
         self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
         self.dolphin_status = CONNECTION_INITIAL_STATUS
 
+        # Manages energy link operations and state.
         self.wallet = Wallet()
+        self.energy_link = EnergyLinkClient(self, self.wallet)
 
         # All used when death link is enabled.
         self.is_luigi_dead = False
@@ -183,7 +189,6 @@ class LMContext(CommonContext):
 
         # Used for handling received items to the client.
         self.already_mentioned_rank_diff = False
-        self.rank_req = None
         self.game_clear = False
         self.last_not_ingame = time.time()
         self.boosanity = False
@@ -217,6 +222,16 @@ class LMContext(CommonContext):
             self.tags -= {"TrapLink"}
         if old_tags != self.tags and self.server and not self.server.socket.closed:
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
+    
+    async def update_link_tags(self, link_enabled: bool, link_name:str):
+        """Helper function to set link connection tags on/off and update the connection if already connected."""
+        old_tags = self.tags.copy()
+        if link_enabled:
+            self.tags.add(link_name)
+        else:
+            self.tags -= { link_name }
+        if old_tags != self.tags and self.server and not self.server.socket.closed:
+            await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
     async def server_auth(self, password_requested: bool = False):
         """
@@ -242,67 +257,72 @@ class LMContext(CommonContext):
         :param args: The command arguments.
         """
         super().on_package(cmd, args)
-        if cmd == "Connected":  # On Connect
-            # Make sure the world version matches
-            if not args["slot_data"]["apworld version"] == CLIENT_VERSION:
-                local_version = str(args["slot_data"]["apworld version"]) if (
-                    str(args["slot_data"]["apworld version"])) else "N/A"
-                raise Utils.VersionException("Error! Server was generated with a different Luigi's Mansion " +
-                    f"APWorld version.\nThe client version is {CLIENT_VERSION}!\nPlease verify you are using the " +
-                    f"same APWorld as the generator, which is '{local_version}'")
+        match cmd:
+            case "Connected": # On Connect
+                # Make sure the world version matches
+                if not args["slot_data"]["apworld version"] == CLIENT_VERSION:
+                    local_version = str(args["slot_data"]["apworld version"]) if (
+                        str(args["slot_data"]["apworld version"])) else "N/A"
+                    raise Utils.VersionException("Error! Server was generated with a different Luigi's Mansion " +
+                        f"APWorld version.\nThe client version is {CLIENT_VERSION}!\nPlease verify you are using the " +
+                        f"same APWorld as the generator, which is '{local_version}'")
 
-            arg_seed = str(args["slot_data"]["seed"])
-            iso_seed = read_string(0x80000001, len(arg_seed))
-            if arg_seed != iso_seed:
-                raise Exception("Incorrect Randomized Luigi's Mansion ISO file selected. The seed does not match." +
-                                "Please verify that you are using the right ISO/seed/APLM file.")
+                arg_seed = str(args["slot_data"]["seed"])
+                iso_seed = read_string(0x80000001, len(arg_seed))
+                if arg_seed != iso_seed:
+                    raise Exception("Incorrect Randomized Luigi's Mansion ISO file selected. The seed does not match." +
+                                    "Please verify that you are using the right ISO/seed/APLM file.")
 
-            self.boosanity = bool(args["slot_data"]["boosanity"])
-            self.pickup_anim_on = bool(args["slot_data"]["pickup animation"])
-            self.rank_req = int(args["slot_data"]["rank requirement"])
-            #self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
-            self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
-            self.boo_final_count = int(args["slot_data"]["final boo count"])
-            self.luigimaxhp = int(args["slot_data"]["luigi max health"])
-            self.spawn = str(args["slot_data"]["spawn_region"])
-            self.boolossus_difficulty = int(args["slot_data"]["boolossus_difficulty"])
-            Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])), name="Update Deathlink")
-            Utils.async_start(self.update_trap_link(bool(args["slot_data"]["trap_link"])), name="Update Traplink")
+                self.boosanity = bool(args["slot_data"]["boosanity"])
+                self.pickup_anim_on = bool(args["slot_data"]["pickup animation"])
+                self.wallet.rank_requirement = int(args["slot_data"]["rank requirement"])
+                #self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
+                self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
+                self.boo_final_count = int(args["slot_data"]["final boo count"])
+                self.luigimaxhp = int(args["slot_data"]["luigi max health"])
+                self.spawn = str(args["slot_data"]["spawn_region"])
+                self.boolossus_difficulty = int(args["slot_data"]["boolossus_difficulty"])
+                Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])), name="Update Deathlink")
+                Utils.async_start(self.update_trap_link(bool(args["slot_data"]["trap_link"])), name="Update Traplink")
+                Utils.async_start(self.update_link_tags(bool(args["slot_data"][EnergyLinkConstants.INTERNAL_NAME]),
+                    EnergyLinkConstants.FRIENDLY_NAME), name=f"Update {EnergyLinkConstants.FRIENDLY_NAME}")
 
-        if cmd == "Bounced":
-            if "tags" not in args:
-                return
-            if not hasattr(self, "instance_id"):
-                self.instance_id = time.time()
-
-            source_name = args["data"]["source"]
-            if "TrapLink" in self.tags and "TrapLink" in args["tags"] and source_name != self.slot_info[self.slot].name:
-                trap_name: str = args["data"]["trap_name"]
-                if trap_name not in ACCEPTED_TRAPS:
+            case "Bounced":
+                if "tags" not in args:
                     return
+                if not hasattr(self, "instance_id"):
+                    self.instance_id = time.time()
 
-                if trap_name in ICE_TRAP_EQUIV:
-                    self.received_trap_link = "Ice Trap"
-                if trap_name in BOMB_EQUIV:
-                    self.received_trap_link = "Bomb"
-                if trap_name in BANANA_TRAP_EQUIV:
-                    self.received_trap_link = "Banana Trap"
-                if trap_name in GHOST_EQUIV:
-                    self.received_trap_link = "Ghost"
-                if trap_name in POISON_MUSH_EQUIV:
-                    self.received_trap_link = "Poison Mushroom"
-                if trap_name in BONK_EQUIV:
-                    self.received_trap_link = "Bonk Trap"
-                if trap_name in POSSESION_EQUIV:
-                    self.received_trap_link = "Possession Trap"
-                if trap_name in FEAR_EQUIV:
-                    self.received_trap_link = "Fear Trap"
-                if trap_name in SPOOKY_EQUIV:
-                    self.received_trap_link = "Spooky Time"
-                if trap_name in SQUASH_EQUIV:
-                    self.received_trap_link = "Squash Trap"
-                if trap_name in NOVAC_EQUIV:
-                    self.received_trap_link = "No Vac Trap"
+                source_name = args["data"]["source"]
+                if "TrapLink" in self.tags and "TrapLink" in args["tags"] and source_name != self.slot_info[self.slot].name:
+                    trap_name: str = args["data"]["trap_name"]
+                    if trap_name not in ACCEPTED_TRAPS:
+                        return
+
+                    if trap_name in ICE_TRAP_EQUIV:
+                        self.received_trap_link = "Ice Trap"
+                    if trap_name in BOMB_EQUIV:
+                        self.received_trap_link = "Bomb"
+                    if trap_name in BANANA_TRAP_EQUIV:
+                        self.received_trap_link = "Banana Trap"
+                    if trap_name in GHOST_EQUIV:
+                        self.received_trap_link = "Ghost"
+                    if trap_name in POISON_MUSH_EQUIV:
+                        self.received_trap_link = "Poison Mushroom"
+                    if trap_name in BONK_EQUIV:
+                        self.received_trap_link = "Bonk Trap"
+                    if trap_name in POSSESION_EQUIV:
+                        self.received_trap_link = "Possession Trap"
+                    if trap_name in FEAR_EQUIV:
+                        self.received_trap_link = "Fear Trap"
+                    if trap_name in SPOOKY_EQUIV:
+                        self.received_trap_link = "Spooky Time"
+                    if trap_name in SQUASH_EQUIV:
+                        self.received_trap_link = "Squash Trap"
+                    if trap_name in NOVAC_EQUIV:
+                        self.received_trap_link = "No Vac Trap"
+            case "SetReply":
+                self.energy_link.try_update_energy_request(args)
 
     def on_deathlink(self, data: dict[str, Any]):
         """
@@ -327,17 +347,20 @@ class LMContext(CommonContext):
         # AP version is added behind this automatically
         ui.base_title += " | Archipelago"
         return ui
-    
+
     def check_universal_tracker_version(self) -> bool:
+        import re
         if not tracker_loaded:
             return False
 
-        ut_split = UT_VERSION.split(".")
-        if len(ut_split) != 3:
+        # We are checking for a string that starts with v contains any amount of digits followed by a period
+        # repeating three times (e.x. v0.2.11)
+        match = re.search("v\d+.(\d+).(\d+)", UT_VERSION)
+        if len(match.groups()) < 2:
             return False
-        if int(ut_split[1]) < 2:
+        if int(match.groups()[0]) < 2:
             return False
-        if int(ut_split[2]) < 11:
+        if int(match.groups()[1]) < 11:
             return False
 
         return True
@@ -353,10 +376,11 @@ class LMContext(CommonContext):
             self.wallet_ui = Label(text="", size_hint_x=None, width=120, halign="center")
             self.ui.connect_layout.add_widget(self.wallet_ui)
 
-        if not self.check_ingame():
-            self.wallet_ui.text = f"Wallet:{0}/{self.rank_req}"
-        else:
-            self.wallet_ui.text = f"Wallet:{self.wallet.get_wallet_worth()}/{self.wallet.get_rank_requirement()}"
+        current_worth = 0
+        if self.check_ingame():
+            current_worth = self.wallet.get_wallet_worth()
+            
+        self.wallet_ui.text = f"Wallet:{current_worth}/{self.wallet.get_rank_requirement()}"
 
     async def update_boo_count_label(self):
         # KivyMD support, also keeps support with regular Kivy (hopefully)

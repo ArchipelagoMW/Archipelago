@@ -529,6 +529,15 @@ class BooAnger(Toggle):
     internal_name = "boo_anger"
     default = 0
 
+class EnergyLink(Toggle):
+    """
+    Games that support energylink will be able to send and retrieve 'energy' from the team's pool. 
+    If no team is present, the default team will be used (0).
+    
+    'Energy' in the context of Luigi's Mansion will be money.
+    """
+    display_name = "EnergyLink"
+    internal_name = "energy_link"
 
 class TrapLink(Toggle):
     """
@@ -709,6 +718,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     chest_types: ChestTypes
     trap_chests: TrapChestType
     trap_link: TrapLink
+    energy_link: EnergyLink
     trap_percentage: TrapPercentage
     bundle_weight: BundleWeight
     coin_weight: CoinWeight
