@@ -488,8 +488,8 @@ class SohWorld(World):
             Locations.PHANTOM_GANON.value: Items.FOREST_MEDALLION.value,
             Locations.VOLVAGIA.value: Items.FIRE_MEDALLION.value,
             Locations.MORPHA.value: Items.WATER_MEDALLION.value,
-            Locations.BONGO_BONGO.value: Items.SPIRIT_MEDALLION.value,
-            Locations.TWINROVA.value: Items.SHADOW_MEDALLION.value,
+            Locations.BONGO_BONGO.value: Items.SHADOW_MEDALLION.value,
+            Locations.TWINROVA.value: Items.SPIRIT_MEDALLION.value,
             Locations.LINKS_POCKET.value: Items.LIGHT_MEDALLION.value
         }
 
