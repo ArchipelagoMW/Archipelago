@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
 from .models import Seed, Room, Command, UUID, uuid4
+from Utils import __version__
 
 
 def get_world_theme(game_name: str):
@@ -109,6 +110,12 @@ def glossary(lang: str):
             }
         ),
     )
+
+
+@app.route("/downloads")
+@cache.cached()
+def downloads():
+    return render_template("downloads.html")
 
 
 @app.route('/seed/<suuid:seed>')
