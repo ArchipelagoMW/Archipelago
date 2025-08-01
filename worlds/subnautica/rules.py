@@ -221,9 +221,10 @@ def get_max_depth(state: "CollectionState", player: int):
     )
 
 
-def is_radiated(x: float, y: float, z: float) -> bool:
+def is_radiation_suit_needed(state: "CollectionState", player: int, x: float, y: float, z: float) -> bool:
+    radiation_rule: RadiationRule = state.multiworld.worlds[player].options.radiation_rule
     aurora_dist = math.sqrt((x - 1038.0) ** 2 + y ** 2 + (z - -163.1) ** 2)
-    return aurora_dist < 950
+    return aurora_dist < radiation_rule.distance
 
 
 def can_access_location(state: "CollectionState", player: int, loc: LocationDict) -> bool:
@@ -240,7 +241,7 @@ def can_access_location(state: "CollectionState", player: int, loc: LocationDict
     pos_y = pos["y"]
     pos_z = pos["z"]
 
-    need_radiation_suit = is_radiated(pos_x, pos_y, pos_z)
+    need_radiation_suit = is_radiation_suit_needed(state, player, pos_x, pos_y, pos_z)
     if need_radiation_suit and not state.has("Radiation Suit", player):
         return False
 

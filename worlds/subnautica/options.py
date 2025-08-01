@@ -129,6 +129,34 @@ class FillerItemsDistribution(ItemDict):
         return list(self.value.keys()), list(accumulate(self.value.values()))
 
 
+class RadiationRule(Choice):
+    """By default (None), checks inside the radiation zone are logically expected only with a Radiation Suit.
+    None: Always require the Radiation Suit inside the radiation zone.
+    Outer: Checks may be expected on the outer parts of the radiation zone (but still inside it)
+    Inner: As Outer, but checks may also be expected on the inner parts of the radiation zone (i.e., Lifepod 4)
+    All: All locations will be considered accessible without a Radiation Suit (including inside the Aurora).
+    Warning: 'All' can be _very_ hard.
+    """
+
+    display_name = "Radiation Rule"
+    option_none = 0
+    option_outer = 1
+    option_inner = 2
+    option_all = 3
+
+    @property
+    def distance(self) -> int:
+        # Distances were computed using the locations of the databoxes in locations.py
+        # Outer includes the following locations:
+        # - Bulb Zone West Wreck (800 units from Aurora)
+        # - Bulb Zone East Wreck (827 units from Aurora)
+        # - Grassy Plateaus East Wreck (940 units from Aurora)
+        # - Lifepod 6 (830 units from Aurora)
+        # - Lifepod 12 (780 units from Aurora)
+        # Inner adds Lifepod 4 (460 units) to the accessible locations
+        return [950, 750, 450, 0][self.value]
+
+
 @dataclass
 class SubnauticaOptions(PerGameCommonOptions):
     swim_rule: SwimRule
@@ -140,3 +168,4 @@ class SubnauticaOptions(PerGameCommonOptions):
     death_link: SubnauticaDeathLink
     start_inventory_from_pool: StartInventoryPool
     filler_items_distribution: FillerItemsDistribution
+    radiation_rule: RadiationRule
