@@ -16,7 +16,7 @@ class TestDeterminism(TestCase):
                 attribute = super().__getattribute__(item)
 
                 if not allow_multiworld_random_calls and isinstance(attribute, Callable):
-                    assert False
+                    raise ValueError("Worlds should not use multiworld.random in steps / instance methods.")
 
                 return attribute
 
