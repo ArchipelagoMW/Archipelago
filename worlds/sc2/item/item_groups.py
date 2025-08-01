@@ -632,6 +632,7 @@ item_name_groups[ItemGroupNames.HOTS_ITEMS] = vanilla_hots_items = (
 item_name_groups[ItemGroupNames.INF_TERRAN_UNITS] = infterr_units = [
     item_names.INFESTED_MARINE,
     item_names.INFESTED_BUNKER,
+    item_names.BULLFROG,
     item_names.INFESTED_DIAMONDBACK,
     item_names.INFESTED_SIEGE_TANK,
     item_names.INFESTED_LIBERATOR,
@@ -644,6 +645,10 @@ item_name_groups[ItemGroupNames.INF_TERRAN_UPGRADES] = infterr_upgrades = [
     item_names.INFESTED_BUNKER_CALCIFIED_ARMOR,
     item_names.INFESTED_BUNKER_REGENERATIVE_PLATING,
     item_names.INFESTED_BUNKER_ENGORGED_BUNKERS,
+    item_names.BULLFROG_WILD_MUTATION,
+    item_names.BULLFROG_BROODLINGS,
+    item_names.BULLFROG_HARD_IMPACT,
+    item_names.BULLFROG_RANGE,
     item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS,
     item_names.INFESTED_DIAMONDBACK_CONCENTRATED_SPEW,
     item_names.INFESTED_DIAMONDBACK_PROGRESSIVE_FUNGAL_SNARE,
