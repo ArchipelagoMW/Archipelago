@@ -34,11 +34,6 @@ def is_adult(state: CollectionState, world: "SohWorld") -> bool:
     return True
 
 
-def has_explosives(state: CollectionState, world: "SohWorld") -> bool:
-    # todo: logic goes here
-    return True
-
-
 def can_attack(state: CollectionState, world: "SohWorld") -> bool:
     # todo: logic goes here
     return True

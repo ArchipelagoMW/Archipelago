@@ -247,6 +247,11 @@ class SohWorld(World):
                 items_to_create[Items.GERUDO_FORTRESS_SMALL_KEY.value] = 0
                 items_to_create[Items.GERUDO_FORTRESS_KEY_RING.value] = 1
 
+        # Big Poe Bottle
+        if self.options.big_poe_target_count == 0:
+            items_to_create[Items.BOTTLE_WITH_BIG_POE.value] = 0
+            items_to_create[Items.BOTTLE_WITH_FISH.value] = 1
+
         # Bombchu bag
         if self.options.bombchu_bag:
             items_to_create[Items.BOMBCHUS_5.value] = 0
@@ -272,8 +277,8 @@ class SohWorld(World):
             for _ in range(quantity):
                 item_pool.append(self.create_item(item))
 
-        locked_locations = [loc for loc in self.get_locations() if loc.locked]
-        filler_item_count: int = len(self.get_locations()) - len(locked_locations) - len(item_pool)
+        open_location_count = sum(1 for loc in self.get_locations() if not loc.locked)
+        filler_item_count: int = open_location_count - len(item_pool)
         item_pool += [self.create_item(self.get_filler_item_name()) for _ in range(filler_item_count)]
 
         self.multiworld.itempool += item_pool

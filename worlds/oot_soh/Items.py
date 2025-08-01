@@ -157,7 +157,7 @@ item_data_table: Dict[str, SohItemData] = {
     Items.HUGE_RUPEE.value: SohItemData( 139, IC.filler, 0 ),
     Items.PIECE_OF_HEART.value: SohItemData( 140, IC.useful, 35 ),
     Items.HEART_CONTAINER.value: SohItemData( 141, IC.progression, 8 ),
-    Items.ICE_TRAP.value: SohItemData( 142, IC.progression, 6 ),
+    Items.ICE_TRAP.value: SohItemData( 142, IC.trap, 6 ),
     #Items.MILK.value: SohItemData( 143, ),
     #Items.FISH.value: SohItemData( 144, ),
     Items.BOMBS_5.value: SohItemData( 145, IC.filler, 0 ),
