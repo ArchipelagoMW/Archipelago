@@ -1072,6 +1072,7 @@ item_table: Dict[str, ItemData] = {
     "Trap - Clothes Fall Off Trap": ItemData(TRAP, 3 + trap_index_offset, ItemClassification.filler, 0),
     "Trap - Oregon Trap": ItemData(TRAP, 4 + trap_index_offset, ItemClassification.filler, 0),
     "Trap - Teleport Trap": ItemData(TRAP, 5 + trap_index_offset, ItemClassification.filler, 0),
+    "Trap - Moon Jump Trap": ItemData(TRAP, 6 + trap_index_offset, ItemClassification.filler, 0),
 }
 
 progressive_equipment: Tuple[str, ...] = (
@@ -1865,7 +1866,8 @@ trap_items: Tuple[str, ...] = (
     "Trap - Crag Demon Trap",
     "Trap - Clothes Fall Off Trap",
     "Trap - Oregon Trap",
-    "Trap - Teleport Trap"
+    "Trap - Teleport Trap",
+    "Trap - Moon Jump Trap"
 )
 
 def get_item_names_per_category() -> Dict[str, Set[str]]:
