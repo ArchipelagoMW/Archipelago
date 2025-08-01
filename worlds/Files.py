@@ -7,6 +7,7 @@ from enum import IntEnum
 import os
 import threading
 from io import BytesIO
+from pathlib import Path
 
 from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload, Sequence
 
@@ -137,7 +138,22 @@ class APContainer:
                 raise InvalidDataError(f"{message}This might be the incorrect world version for this file") from e
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
-        with opened_zipfile.open("archipelago.json", "r") as f:
+        try:
+            manifest_info = opened_zipfile.getinfo("archipelago.json")
+        except KeyError as e:
+            # Look for single directory in root
+            paths = {Path(info.filename).parts[0] for info in opened_zipfile.infolist()}
+            if len(paths) != 1:
+                raise e
+            only_folder = next(iter(paths))
+
+            # Look for archipelago.json in this single directory
+            try:
+                manifest_info = opened_zipfile.getinfo(f"{only_folder}/archipelago.json")
+            except KeyError:
+                raise e
+
+        with opened_zipfile.open(manifest_info, "r") as f:
             manifest = json.load(f)
         if manifest["compatible_version"] > self.version:
             raise Exception(f"File (version: {manifest['compatible_version']}) too new "
