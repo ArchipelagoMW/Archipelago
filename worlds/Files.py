@@ -148,15 +148,25 @@ class APContainer:
         try:
             manifest_info = opened_zipfile.getinfo("archipelago.json")
         except KeyError as e:
-            # Look for single directory in root
-            paths = {Path(info.filename).parts[0] for info in opened_zipfile.infolist()}
-            if len(paths) != 1:
-                raise e
-            only_folder = next(iter(paths))
+            infolist = opened_zipfile.infolist()
+
+            # Make sure root only contains one folder
+            only_folder = None
+            for info in infolist:
+                if not len(Path(info.filename).parts) == 1:
+                    continue
+
+                if not info.is_dir():
+                    raise e
+
+                if only_folder is not None:
+                    raise e
+
+                only_folder = info
 
             # Look for archipelago.json in this single directory
             try:
-                manifest_info = opened_zipfile.getinfo(f"{only_folder}/archipelago.json")
+                manifest_info = opened_zipfile.getinfo(f"{only_folder.filename}/archipelago.json")
             except KeyError:
                 raise e
 
