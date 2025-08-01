@@ -218,25 +218,6 @@ components: List[Component] = [
               description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
               description="Connect to a multiworld using the text client."),
-    Component('Links Awakening DX Client', 'LinksAwakeningClient',
-              file_identifier=SuffixIdentifier('.apladx')),
-    Component('LttP Adjuster', 'LttPAdjuster'),
-    # Ocarina of Time
-    Component('OoT Client', 'OoTClient',
-              file_identifier=SuffixIdentifier('.apz5')),
-    Component('OoT Adjuster', 'OoTAdjuster'),
-    # TLoZ
-    Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
-    # ChecksFinder
-    Component('ChecksFinder Client', 'ChecksFinderClient'),
-    # Starcraft 2
-    Component('Starcraft 2 Client', 'Starcraft2Client'),
-    # Zillion
-    Component('Zillion Client', 'ZillionClient',
-              file_identifier=SuffixIdentifier('.apzl')),
-
-    #MegaMan Battle Network 3
-    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'))
 ]
 
 

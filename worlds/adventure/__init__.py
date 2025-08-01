@@ -8,7 +8,7 @@ import settings
 from BaseClasses import Item, ItemClassification, MultiWorld, Tutorial, LocationProgressType
 from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, components, SuffixIdentifier
+from worlds.LauncherComponents import Component, components, SuffixIdentifier, launch, Type
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, standard_item_max
 from .Locations import location_table, base_location_id, LocationData, get_random_room_in_regions
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table, \
@@ -19,8 +19,14 @@ from .Regions import create_regions
 from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, AdventureAutoCollectLocation
 from .Rules import set_rules
 
-# Adventure
-components.append(Component('Adventure Client', 'AdventureClient', file_identifier=SuffixIdentifier('.apadvn')))
+
+def launch_client(*args):
+    from .Client import main
+    launch(main, name="AdventureClient", args=args)
+
+
+components.append(Component(display_name='Adventure Client', func=launch_client, component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier('.apadvn')))
 
 
 class AdventureSettings(settings.Group):

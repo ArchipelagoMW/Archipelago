@@ -337,7 +337,7 @@ async def nes_sync_task(ctx: ZeldaContext):
                 continue
 
 
-if __name__ == '__main__':
+def main():
     # Text Mode to use !hint and such with games that have no text entry
     Utils.init_logging("ZeldaClient")
 

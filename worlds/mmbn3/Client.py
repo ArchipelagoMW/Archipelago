@@ -336,7 +336,7 @@ def confirm_checksum():
     return CHECKSUM_BLUE == basemd5.hexdigest()
 
 
-if __name__ == "__main__":
+def main(*launch_args: str):
     Utils.init_logging("MMBN3Client")
 
     async def main():
@@ -344,7 +344,7 @@ if __name__ == "__main__":
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?",
                             help="Path to an APMMBN3 file")
-        args = parser.parse_args()
+        args = parser.parse_args(launch_args)
         checksum_matches = confirm_checksum()
         if checksum_matches:
             if args.patch_file:
