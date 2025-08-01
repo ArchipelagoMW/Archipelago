@@ -21,28 +21,35 @@ class ClairObscurLocationData(NamedTuple):
 
 class ClairObscurRegionData:
     name: str
-    parent_map: str
-    exits: List[str]
     locations: List[str]
-    condition: {}
 
-    def __init__(self, cond: {}, name: str, parent_map: str, exits = List[str]):
+    def __init__(self, name: str):
         self.name = name
-        self.parent_map = parent_map
-        self.exits = exits if exits is not None else []
         self.locations = []
-        self.condition = cond if cond is not None else {}
 
+class ClairObscurRegionConnection:
+    origin_region: str
+    destination_region: str
+    condition: {}
+    pictos_required: int
+
+    def __init__(self, cond: {}, origin: str, destination: str, pictos: int):
+        self.origin_region = origin
+        self.destination_region = destination
+        self.condition = cond if cond is not None else {}
+        self.pictos_required = pictos if pictos is not None else 1
 
 class ClairObscurData:
     items: Dict[int, ClairObscurItemData]
     locations: Dict[str, ClairObscurLocationData]
     regions: Dict[str, ClairObscurRegionData]
+    connections: List[ClairObscurRegionConnection]
 
     def __init__(self) -> None:
         self.items = {}
         self.locations = {}
         self.regions = {}
+        self.connections = []
 
 
 def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
@@ -52,7 +59,7 @@ def _init() -> None:
     data.items = populate_data_items()
     data.locations = populate_data_locations()
     data.regions = populate_data_regions()
-
+    data.connections = populate_data_connections()
 
 def populate_data_locations() -> Dict[str, ClairObscurLocationData]:
     locations = {}
@@ -105,12 +112,8 @@ def populate_data_regions() -> Dict[str, ClairObscurRegionData]:
     regions_json = load_json_data("regions.json")
     for region in regions_json:
         region_name = region["region_name"]
-        region_exits = region["exits"]
         current_region_data = ClairObscurRegionData(
-            region["condition"],
-            region_name,
-            region["parent_map"],
-            region_exits
+            region_name
         )
 
         for location_name in region["locations"]:
@@ -126,6 +129,25 @@ def populate_data_regions() -> Dict[str, ClairObscurRegionData]:
 
     return regions
 
+def populate_data_connections() -> List[ClairObscurRegionConnection]:
+    region_connections = []
+    conns_json = load_json_data("connections.json")
+    for conn in conns_json:
+        conn_from = conn["from"]
+        conn_to = conn["to"]
+        conn_condition = conn["condition"]
+        conn_pictos = int(conn["pictos"])
+
+        new_connection = ClairObscurRegionConnection(
+            conn_condition,
+            conn_from,
+            conn_to,
+            conn_pictos
+        )
+
+        region_connections.append(new_connection)
+
+    return region_connections
 
 data = ClairObscurData()
 _init()
