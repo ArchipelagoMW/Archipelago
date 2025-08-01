@@ -6,5 +6,6 @@ select = ["B", "C", "E", "F", "R", "W", "I", "N", "Q", "UP", "RUF", "ISC", "PLC"
 ignore = [
     "B0011",  # In AP, the use of assert False is essential because we optimise out these statements for release builds.
     "C901",  # Author disagrees with limiting branch complexity
+    "N818",  # Author agrees with this rule, but Core AP violates this and changing it would be a hassle.
     "PLC0415",  # In AP, we consider local imports totally fine & necessary
 ]
