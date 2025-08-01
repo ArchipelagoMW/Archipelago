@@ -261,9 +261,10 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     THE_OPEN_SEA: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, SKUMPARADISE, [PROVING_MEADOWS, CAPITAL_SEQUOIA],
                     {PROVING_MEADOWS: lambda state: logic.has_jobs(state, 3)})
-    fancy_add_exits(world, CAPITAL_SEQUOIA, [JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, COBBLESTONE_CRAG, GREENSHIRE_REPRISE, CASTLE_SEQUOIA, SKUMPARADISE],
+    fancy_add_exits(world, CAPITAL_SEQUOIA, [JOJO_SEWERS, BOOMER_SOCIETY, ROLLING_QUINTAR_FIELDS, COBBLESTONE_CRAG, GREENSHIRE_REPRISE, CASTLE_SEQUOIA, SKUMPARADISE],
                     # why rental and horizontal both listed?
-                    {COBBLESTONE_CRAG: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_horizontal_movement(state),
+                    {BOOMER_SOCIETY: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
+                    COBBLESTONE_CRAG: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_horizontal_movement(state),
                     GREENSHIRE_REPRISE: lambda state: logic.has_jobs(state, 5),
                     #note for eme: technically possible to get into the first dungeon with quintar instead of glide, but it's hard lol; come from Quintar Sanctum save point and go west up mountain and fall down through grate (that part's easy) then the quintar jump to the lamp is hard
                     CASTLE_SEQUOIA: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)})
@@ -272,7 +273,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     CAPITAL_JAIL: lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_swimming(state),
                     THE_PALE_GROTTO: lambda state: logic.has_swimming(state),
                     QUINTAR_NEST: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_swimming(state))})
-    fancy_add_exits(world, BOOMER_SOCIETY, [JOJO_SEWERS, GREENSHIRE_REPRISE])
+    fancy_add_exits(world, BOOMER_SOCIETY, [CAPITAL_SEQUOIA, JOJO_SEWERS, GREENSHIRE_REPRISE])
     fancy_add_exits(world, ROLLING_QUINTAR_FIELDS, [CAPITAL_SEQUOIA, QUINTAR_NEST, QUINTAR_SANCTUM, QUINTAR_RESERVE],
                     {QUINTAR_SANCTUM: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_vertical_movement(state)),
                     QUINTAR_RESERVE: lambda state: logic.has_vertical_movement(state)})

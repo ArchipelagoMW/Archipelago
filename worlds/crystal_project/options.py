@@ -181,12 +181,15 @@ class LevelGating(Choice):
     Level Catch-Up: Progressive Levels are added to the pool. Collecting them will help your party catch up in levels (and LP!) based on the number you've collected. For example, if the Progressive Level
     Size Setting is 6 (see below), 1 Progressive Level will bring your party's level up to 6, 2 Progressive Levels will bring your party's level up to 12, etc. If your party
     has already reached that level, no extra levels will be granted. 2 LP are granted per 1 level granted. In-game tracking will light up checks that you have access to based on the number you have collected.
+
+    Level Set: A combination of Level Catch-Up and Capped. The player will always be at the level set by the Progressive Level. There is no escape.
     """
     display_name = "Level Gating"
     option_none = 0
     option_level_passes = 1
     option_level_capped = 2
     option_level_catch_up = 3
+    option_level_set = 4
     default = 1
 
 class LevelComparedToEnemies(Range):
@@ -215,6 +218,7 @@ class ProgressiveLevelSize(Range):
        Level Passes - At the start, areas up to level 6 are considered in logic. The first Progressive Level you collect will signal that areas up to 12 are now logic, the second up to 18, etc.
        Level Capped - Your party's level cap starts at 6. The first Progressive Level you collect will increase your party's level cap to 12, the second to 18, and so on.
        Level Catch-Up - Your party is leveled up to 6 at the start. The first Progressive Level you collect will bring your party's level up to 12 if it isn't already, the second up to 18, and so on.
+       Level Set - Your party's level and level cap start at 6. The first Progressive Level you collect will increase your party's level and level cap to 12, the second to 18, and so on.
 
     This setting will only increase your party's starting level (3 by default) if you pick Level Catch-Up.
     """

@@ -549,10 +549,11 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Poko Poko Desert
         #Treasure chests
-        LocationData(POKO_POKO_DESERT, "Poko Poko Desert Chest - Quintar leapfrog", 1080 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Butter Cutter chest
-        LocationData(POKO_POKO_DESERT, "Poko Poko Desert Chest - South of tricky Quintar Gold", 1082 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Hatchet chest
-        LocationData(POKO_POKO_DESERT, "Poko Poko Desert Chest - North Lookout Tower", 1190 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #North Lookout Token chest
-        LocationData(POKO_POKO_DESERT, "Poko Poko Desert Chest - This chests (on) a butte", 1169 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dueller
+        LocationData(POKO_POKO_DESERT, "Poko Poko Desert Chest - Quintar leapfrog", 1080 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Butter Cutter chest
+        # if you're Good At Jumping you can get to this chest south of rocky outcropping gold with no mounts
+        LocationData(POKO_POKO_DESERT, "Poko Poko Desert Chest - South of tricky Quintar Gold", 1082 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Hatchet chest
+        LocationData(POKO_POKO_DESERT, "Poko Poko Desert Chest - North Lookout Tower", 1190 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR) or logic.has_vertical_movement(state)), #North Lookout Token chest
+        LocationData(POKO_POKO_DESERT, "Poko Poko Desert Chest - This chests (on) a butte", 1169 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR)), #Dueller
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert Chest - Stormy first floor of ruins", 2676 + treasure_index_offset), #Fenix Juice chest
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert Chest - West Lookout Tower", 1170 + treasure_index_offset), #West Lookout Token chest
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert Chest - Potion chest to fortify you for jumping puzzle from hell", 2708 + treasure_index_offset),
@@ -565,6 +566,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Todo NPCs CheckOrNot: three Quintar Eggs in Poko Poko Desert (Nest) map
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Silver beneath overhang in ruins south of shrine", 2675 + npc_index_offset), #Dust
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Silver slumbering in broken house NE of shrine", 1081 + npc_index_offset), #Ingot
+        # if you're Good At Jumping you can get to this rocky outcropping gold with no mounts
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Rocky outcropping Gold will put your Quintar to the test", 2817 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Dust
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Silver in desert arch shade", 2682 + npc_index_offset), #Ingot
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Thirsty Lad", 1201 + npc_index_offset, lambda state: state.has(SPECIAL_MILK, player)),
@@ -623,18 +625,18 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Treasure chests
         LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West Chest - South of Beach Birds Nest", 154 + treasure_index_offset), #Ether chest
         LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West Chest - Across the palms above the dust", 1509 + treasure_index_offset), #Potion chest
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West Chest - Beach cave", 2718 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Blank Pages chest
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West Chest - Tightrope walk below Beach Birds Nest", 1546 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state)), #Potion chest; possible with rental if masochists play our game
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West Chest - Beach cave", 2718 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Blank Pages chest
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West Chest - Tightrope walk below Beach Birds Nest", 1546 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state)), #Potion chest; possible with rental if masochists play our game/Good At Jumping option
 
         #NPCs
         #Todo NPCs Job Masters: Master Dervish ID 3575 (-255, 103, -237); gives you Dervish Seal in exchange for job mastery
         LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Cross my palms with Silver", 2693 + npc_index_offset), #Dust
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver past angry birds", 2697 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Dust
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver past angry birds", 2697 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_glide(state)), #Dust
         LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver south of Beach Birds Nest", 2694 + npc_index_offset), #Ingot
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver at the foot of the Tower of Zot", 2699 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ingot
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Lonely Islet Silver", 2878 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ingot
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver at the foot of the Tower of Zot", 2699 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Ingot
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Lonely Islet Silver", 2878 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Ingot
         LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Southern silver along the cliffside", 2692 + npc_index_offset), #Ore
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver chilling in beach cave", 2698 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver chilling in beach cave", 2698 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Ore
         LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver further along beach", 2877 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
 
         #Ancient Reservoir
