@@ -23,6 +23,7 @@ DATA_LOCATIONS = {
     "DexSanityFlag": (0x1A71, 19),
     "GameStatus": (0x1A84, 0x01),
     "Money": (0x141F, 3),
+    "CurrentMap": (0x1436, 1),
     "ResetCheck": (0x0100, 4),
     # First and second Vermilion Gym trash can selection. Second is not used, so should always be 0.
     # First should never be above 0x0F. This is just before Event Flags.
@@ -31,7 +32,7 @@ DATA_LOCATIONS = {
     "CrashCheck2": (0x1617, 1),
     # Progressive keys, should never be above 10. Just before Dexsanity flags.
     "CrashCheck3": (0x1A70, 1),
-    # Route 18 script value. Should never be above 2. Just before Hidden items flags.
+    # Route 18 Gate script value. Should never be above 3. Just before Hidden items flags.
     "CrashCheck4": (0x16DD, 1),
 }
 
@@ -65,6 +66,7 @@ class PokemonRBClient(BizHawkClient):
         self.banking_command = None
         self.game_state = False
         self.last_death_link = 0
+        self.current_map = 0
 
     async def validate_rom(self, ctx):
         game_name = await read(ctx.bizhawk_ctx, [(0x134, 12, "ROM")])
@@ -116,7 +118,7 @@ class PokemonRBClient(BizHawkClient):
               or data["CrashCheck1"][0] & 0xF0 or data["CrashCheck1"][1] & 0xFF
               or data["CrashCheck2"][0]
               or data["CrashCheck3"][0] > 10
-              or data["CrashCheck4"][0] > 2):
+              or data["CrashCheck4"][0] > 3):
             # Should mean game crashed
             logger.warning("Pokémon Red/Blue game may have crashed. Disconnecting from server.")
             self.game_state = False
@@ -229,6 +231,10 @@ class PokemonRBClient(BizHawkClient):
                              {"operation": "max", "value": 0}],
                     }])
             self.banking_command = None
+
+        if data["CurrentMap"][0] != self.current_map:
+            await ctx.send_msgs([{"cmd": "Bounce", "slots": [ctx.slot], "data": {"currentMap": data["CurrentMap"][0]}}])
+            self.current_map = data["CurrentMap"][0]
 
         # VICTORY
 

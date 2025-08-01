@@ -41,7 +41,8 @@ class TestDungeons(TestInvertedOWG):
 
             ["Tower of Hera - Basement Cage", False, []],
             ["Tower of Hera - Basement Cage", False, [], ['Moon Pearl']],
-            ["Tower of Hera - Basement Cage", True, ['Pegasus Boots', 'Moon Pearl']],
+            ["Tower of Hera - Basement Cage", True, ['Pegasus Boots', 'Moon Pearl', 'Bomb Upgrade (50)']],
+            ["Tower of Hera - Basement Cage", True, ['Pegasus Boots', 'Moon Pearl', 'Progressive Sword']],
 
             ["Castle Tower - Room 03", False, []],
             ["Castle Tower - Room 03", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Progressive Sword', 'Hammer', 'Progressive Bow', 'Fire Rod', 'Ice Rod', 'Cane of Somaria', 'Cane of Byrna']],
@@ -101,7 +102,7 @@ class TestDungeons(TestInvertedOWG):
             ["Turtle Rock - Chain Chomps", True, ['Progressive Sword', 'Progressive Sword', 'Pegasus Boots']],
 
             ["Turtle Rock - Crystaroller Room", False, []],
-            ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl', 'Big Key (Turtle Rock)']],
+            ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl', 'Big Key (Turtle Rock)', 'Bomb Upgrade (50)']],
             ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl', 'Lamp', 'Cane of Somaria']],
 
             ["Ganons Tower - Hope Room - Left", False, []],

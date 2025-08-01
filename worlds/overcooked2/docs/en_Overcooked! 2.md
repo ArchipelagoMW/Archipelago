@@ -2,7 +2,7 @@
 
 ## Quick Links
 - [Setup Guide](../../../../tutorial/Overcooked!%202/setup/en)
-- [Settings Page](../../../../games/Overcooked!%202/player-settings)
+- [Options Page](../../../../games/Overcooked!%202/player-options)
 - [OC2-Modding GitHub](https://github.com/toasterparty/oc2-modding)
 
 ## How Does Randomizer Work in the Kitchen?
@@ -55,7 +55,7 @@ The following items were invented for Randomizer:
 - Ramp Buttons (x7)
 - Bonus Star (Filler Item*)
 
-**Note: Bonus star count varies with settings*
+**Note: Bonus star count varies with options*
 
 ## Other Game Modifications
 

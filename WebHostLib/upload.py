@@ -1,4 +1,3 @@
-import base64
 import json
 import pickle
 import typing
@@ -7,16 +6,15 @@ import zipfile
 import zlib
 
 from io import BytesIO
-from flask import request, flash, redirect, url_for, session, render_template
+from flask import request, flash, redirect, url_for, session, render_template, abort
 from markupsafe import Markup
 from pony.orm import commit, flush, select, rollback
 from pony.orm.core import TransactionIntegrityError
 import schema
 
 import MultiServer
-from NetUtils import SlotType
+from NetUtils import GamesPackage, SlotType
 from Utils import VersionException, __version__
-from worlds import GamesPackage
 from worlds.Files import AutoPatchRegister
 from worlds.AutoWorld import data_package_checksum
 from . import app
@@ -63,12 +61,13 @@ def process_multidata(compressed_multidata, files={}):
                 game_data = games_package_schema.validate(game_data)
                 game_data = {key: value for key, value in sorted(game_data.items())}
                 game_data["checksum"] = data_package_checksum(game_data)
-                game_data_package = GameDataPackage(checksum=game_data["checksum"],
-                                                    data=pickle.dumps(game_data))
                 if original_checksum != game_data["checksum"]:
                     raise Exception(f"Original checksum {original_checksum} != "
                                     f"calculated checksum {game_data['checksum']} "
                                     f"for game {game}.")
+
+                game_data_package = GameDataPackage(checksum=game_data["checksum"],
+                                                    data=pickle.dumps(game_data))
                 decompressed_multidata["datapackage"][game] = {
                     "version": game_data.get("version", 0),
                     "checksum": game_data["checksum"],
@@ -118,9 +117,9 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         # AP Container
         elif handler:
             data = zfile.open(file, "r").read()
-            patch = handler(BytesIO(data))
-            patch.read()
-            files[patch.player] = data
+            with zipfile.ZipFile(BytesIO(data)) as container:
+                player = json.loads(container.open("archipelago.json").read())["player"]
+            files[player] = data
 
         # Spoiler
         elif file.filename.endswith(".txt"):
@@ -134,11 +133,6 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                 flash("Could not load multidata. File may be corrupted or incompatible.")
                 multidata = None
 
-        # Minecraft
-        elif file.filename.endswith(".apmc"):
-            data = zfile.open(file, "r").read()
-            metadata = json.loads(base64.b64decode(data).decode("utf-8"))
-            files[metadata["player_id"]] = data
 
         # Factorio
         elif file.filename.endswith(".zip"):
@@ -192,6 +186,8 @@ def uploads():
                             res = upload_zip_to_db(zfile)
                         except VersionException:
                             flash(f"Could not load multidata. Wrong Version detected.")
+                        except Exception as e:
+                            flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                         else:
                             if res is str:
                                 return res
@@ -219,3 +215,29 @@ def user_content():
     rooms = select(room for room in Room if room.owner == session["_id"])
     seeds = select(seed for seed in Seed if seed.owner == session["_id"])
     return render_template("userContent.html", rooms=rooms, seeds=seeds)
+
+
+@app.route("/disown_seed/<suuid:seed>", methods=["GET"])
+def disown_seed(seed):
+    seed = Seed.get(id=seed)
+    if not seed:
+        return abort(404)
+    if seed.owner !=  session["_id"]:
+        return abort(403)
+    
+    seed.owner = 0
+
+    return redirect(url_for("user_content"))
+
+
+@app.route("/disown_room/<suuid:room>", methods=["GET"])
+def disown_room(room):
+    room = Room.get(id=room)
+    if not room:
+        return abort(404)
+    if room.owner != session["_id"]:
+        return abort(403)
+
+    room.owner = 0
+
+    return redirect(url_for("user_content"))

@@ -1,12 +1,12 @@
 import concurrent.futures
 import json
 import os
-import pickle
 import random
 import tempfile
 import zipfile
 from collections import Counter
-from typing import Any, Dict, List, Optional, Union
+from pickle import PicklingError
+from typing import Any
 
 from flask import flash, redirect, render_template, request, session, url_for
 from pony.orm import commit, db_session
@@ -14,34 +14,32 @@ from pony.orm import commit, db_session
 from BaseClasses import get_seed, seeddigits
 from Generate import PlandoOptions, handle_name
 from Main import main as ERmain
-from Utils import __version__
+from Utils import __version__, restricted_dumps
 from WebHostLib import app
+from settings import ServerOptions, GeneratorOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from .check import get_yaml_data, roll_options
 from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
 from .upload import upload_zip_to_db
 
 
-def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[str], Dict[str, Any]]]:
-    plando_options = {
-        options_source.get("plando_bosses", ""),
-        options_source.get("plando_items", ""),
-        options_source.get("plando_connections", ""),
-        options_source.get("plando_texts", "")
-    }
-    plando_options -= {""}
+def get_meta(options_source: dict, race: bool = False) -> dict[str, list[str] | dict[str, Any]]:
+    plando_options: set[str] = set()
+    for substr in ("bosses", "items", "connections", "texts"):
+        if options_source.get(f"plando_{substr}", substr in GeneratorOptions.plando_options):
+            plando_options.add(substr)
 
     server_options = {
-        "hint_cost": int(options_source.get("hint_cost", 10)),
-        "release_mode": options_source.get("release_mode", "goal"),
-        "remaining_mode": options_source.get("remaining_mode", "disabled"),
-        "collect_mode": options_source.get("collect_mode", "disabled"),
-        "item_cheat": bool(int(options_source.get("item_cheat", 1))),
-        "server_password": options_source.get("server_password", None),
+        "hint_cost": int(options_source.get("hint_cost", ServerOptions.hint_cost)),
+        "release_mode": str(options_source.get("release_mode", ServerOptions.release_mode)),
+        "remaining_mode": str(options_source.get("remaining_mode", ServerOptions.remaining_mode)),
+        "collect_mode": str(options_source.get("collect_mode", ServerOptions.collect_mode)),
+        "item_cheat": bool(int(options_source.get("item_cheat", not ServerOptions.disable_item_cheat))),
+        "server_password": str(options_source.get("server_password", None)),
     }
     generator_options = {
-        "spoiler": int(options_source.get("spoiler", 0)),
-        "race": race
+        "spoiler": int(options_source.get("spoiler", GeneratorOptions.spoiler)),
+        "race": race,
     }
 
     if race:
@@ -70,40 +68,51 @@ def generate(race=False):
                 flash(options)
             else:
                 meta = get_meta(request.form, race)
-                results, gen_options = roll_options(options, set(meta["plando_options"]))
-
-                if any(type(result) == str for result in results.values()):
-                    return render_template("checkResult.html", results=results)
-                elif len(gen_options) > app.config["MAX_ROLL"]:
-                    flash(f"Sorry, generating of multiworlds is limited to {app.config['MAX_ROLL']} players. "
-                          f"If you have a larger group, please generate it yourself and upload it.")
-                elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
-                    gen = Generation(
-                        options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
-                        # convert to json compatible
-                        meta=json.dumps(meta),
-                        state=STATE_QUEUED,
-                        owner=session["_id"])
-                    commit()
-
-                    return redirect(url_for("wait_seed", seed=gen.id))
-                else:
-                    try:
-                        seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
-                                           meta=meta, owner=session["_id"].int)
-                    except BaseException as e:
-                        from .autolauncher import handle_generation_failure
-                        handle_generation_failure(e)
-                        return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": " + str(e)))
-
-                    return redirect(url_for("view_seed", seed=seed_id))
+                return start_generation(options, meta)
 
     return render_template("generate.html", race=race, version=__version__)
 
 
-def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
-    if not meta:
-        meta: Dict[str, Any] = {}
+def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
+    results, gen_options = roll_options(options, set(meta["plando_options"]))
+
+    if any(type(result) == str for result in results.values()):
+        return render_template("checkResult.html", results=results)
+    elif len(gen_options) > app.config["MAX_ROLL"]:
+        flash(f"Sorry, generating of multiworlds is limited to {app.config['MAX_ROLL']} players. "
+              f"If you have a larger group, please generate it yourself and upload it.")
+        return redirect(url_for(request.endpoint, **(request.view_args or {})))
+    elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
+        try:
+            gen = Generation(
+                options=restricted_dumps({name: vars(options) for name, options in gen_options.items()}),
+                # convert to json compatible
+                meta=json.dumps(meta),
+                state=STATE_QUEUED,
+                owner=session["_id"])
+        except PicklingError as e:
+            from .autolauncher import handle_generation_failure
+            handle_generation_failure(e)
+            return render_template("seedError.html", seed_error=("PicklingError: " + str(e)))
+
+        commit()
+
+        return redirect(url_for("wait_seed", seed=gen.id))
+    else:
+        try:
+            seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
+                               meta=meta, owner=session["_id"].int)
+        except BaseException as e:
+            from .autolauncher import handle_generation_failure
+            handle_generation_failure(e)
+            return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": " + str(e)))
+
+        return redirect(url_for("view_seed", seed=seed_id))
+
+
+def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, sid=None):
+    if meta is None:
+        meta = {}
 
     meta.setdefault("server_options", {}).setdefault("hint_cost", 10)
     race = meta.setdefault("generator_options", {}).setdefault("race", False)
@@ -132,6 +141,8 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
                                                                        {"bosses", "items", "connections", "texts"}))
         erargs.skip_prog_balancing = False
         erargs.skip_output = False
+        erargs.spoiler_only = False
+        erargs.csv_output = False
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):

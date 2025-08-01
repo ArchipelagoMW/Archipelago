@@ -1,15 +1,15 @@
 # Noita
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
 
 Noita is a procedurally generated action roguelike. During runs in Noita you will find potions, wands, spells, perks,
 chests, etc. Shop items, chests/hearts hidden in the environment, and pedestal items will be replaced with location
-checks. Orbs and boss drops can give location checks as well, if they are enabled in the settings.
+checks. Orbs and boss drops can give location checks as well, if their respective options are enabled.
 Noita items that can be found in other players' games include specific perks, orbs (optional), wands, hearts, gold,
 potions, and other items. If traps are enabled, some randomized negative effects can affect your game when found.
 
@@ -50,9 +50,9 @@ Traps consist of all "Bad" and "Awful" events from Noita's native stream integra
 
 ## How many location checks are there?
 
-When using the default settings, there are 109 location checks. The number of checks in the game is dependent on the settings that you choose.
-Please check the information boxes next to the settings when setting up your YAML to see how many checks the individual options add.
-There are always 42 Holy Mountain checks and 4 Secret Shop checks in the pool which are not affected by your YAML settings.
+When using the default options, there are 109 location checks. The number of checks in the game is dependent on the options that you choose.
+Please check the information boxes next to the options when setting up your YAML to see how many checks the individual options add.
+There are always 42 Holy Mountain checks and 4 Secret Shop checks in the pool which are not affected by your YAML options.
 
 ## What does another world's item look like in Noita?
 

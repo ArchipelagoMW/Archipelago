@@ -1,41 +1,46 @@
 import unittest
-from typing import Dict
+from itertools import combinations
+from typing import ClassVar
 
-from BaseClasses import MultiWorld
-from Options import NamedRange
-from .option_names import options_to_include
-from worlds.stardew_valley.test.checks.world_checks import assert_can_win, assert_same_number_items_locations
-from .. import setup_solo_multiworld, SVTestCase
-
-
-def basic_checks(tester: unittest.TestCase, multiworld: MultiWorld):
-    assert_can_win(tester, multiworld)
-    assert_same_number_items_locations(tester, multiworld)
+from BaseClasses import get_seed
+from test.param import classvar_matrix
+from ..assertion.world_assert import WorldAssertMixin
+from ..bases import skip_long_tests, SVTestCase, solo_multiworld
+from ..options.option_names import all_option_choices
+from ... import options
 
 
-def get_option_choices(option) -> Dict[str, int]:
-    if issubclass(option, NamedRange):
-        return option.special_range_names
-    elif option.options:
-        return option.options
-    return {}
+@unittest.skip
+class TestDynamicOptionDebug(WorldAssertMixin, SVTestCase):
+
+    def test_option_pair_debug(self):
+        option_dict = {
+            options.Goal.internal_name: options.Goal.option_cryptic_note,
+            options.EntranceRandomization.internal_name: options.EntranceRandomization.option_buildings,
+        }
+        for i in range(1):
+            seed = get_seed(76312028554502615508)
+            with self.subTest(f"Seed: {seed}"):
+                print(f"Seed: {seed}")
+                with solo_multiworld(option_dict, seed=seed) as (multiworld, _):
+                    self.assert_basic_checks(multiworld)
 
 
-class TestGenerateDynamicOptions(SVTestCase):
+if skip_long_tests():
+    raise unittest.SkipTest("Long tests disabled")
+
+
+@classvar_matrix(options_and_choices=combinations(all_option_choices, 2))
+class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):
+    options_and_choices: ClassVar[tuple[tuple[str, str], tuple[str, str]]]
+
     def test_given_option_pair_when_generate_then_basic_checks(self):
-        if self.skip_long_tests:
-            return
-        num_options = len(options_to_include)
-        for option1_index in range(0, num_options):
-            for option2_index in range(option1_index + 1, num_options):
-                option1 = options_to_include[option1_index]
-                option2 = options_to_include[option2_index]
-                option1_choices = get_option_choices(option1)
-                option2_choices = get_option_choices(option2)
-                for key1 in option1_choices:
-                    for key2 in option2_choices:
-                        with self.subTest(f"{option1.internal_name}: {key1}, {option2.internal_name}: {key2}"):
-                            choices = {option1.internal_name: option1_choices[key1],
-                                       option2.internal_name: option2_choices[key2]}
-                            multiworld = setup_solo_multiworld(choices)
-                            basic_checks(self, multiworld)
+        (option1, option1_choice), (option2, option2_choice) = self.options_and_choices
+
+        world_options = {
+            option1: option1_choice,
+            option2: option2_choice
+        }
+
+        with solo_multiworld(world_options, world_caching=False) as (multiworld, _):
+            self.assert_basic_checks(multiworld)

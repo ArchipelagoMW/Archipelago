@@ -6,17 +6,19 @@ import settings
 import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import SMWItem, ItemData, item_table, junk_table
-from .Locations import SMWLocation, all_locations, setup_locations, special_zone_level_names, special_zone_dragon_coin_names, special_zone_hidden_1up_names, special_zone_blocksanity_names
-from .Options import SMWOptions
-from .Regions import create_regions, connect_regions
-from .Levels import full_level_list, generate_level_list, location_id_to_level_id
-from .Rules import set_rules
-from worlds.generic.Rules import add_rule, exclusion_rules
-from .Names import ItemName, LocationName
-from .Client import SMWSNIClient
 from worlds.AutoWorld import WebWorld, World
+from worlds.generic.Rules import add_rule, exclusion_rules
+
+from .Client import SMWSNIClient
+from .Items import SMWItem, ItemData, item_table, junk_table
+from .Levels import full_level_list, generate_level_list, location_id_to_level_id
+from .Locations import SMWLocation, all_locations, setup_locations, special_zone_level_names, special_zone_dragon_coin_names, special_zone_hidden_1up_names, special_zone_blocksanity_names
+from .Names import ItemName, LocationName
+from .Options import SMWOptions, smw_option_groups
+from .Presets import smw_options_presets
+from .Regions import create_regions, connect_regions
 from .Rom import LocalRom, patch_rom, get_base_rom_path, SMWDeltaPatch
+from .Rules import set_rules
 
 
 class SMWSettings(settings.Group):
@@ -40,8 +42,11 @@ class SMWWeb(WebWorld):
         "setup/en",
         ["PoryGone"]
     )
-    
+
     tutorials = [setup_en]
+
+    option_groups = smw_option_groups
+    options_presets = smw_options_presets
 
 
 class SMWWorld(World):
@@ -58,7 +63,7 @@ class SMWWorld(World):
     options: SMWOptions
 
     topology_present = False
-    required_client_version = (0, 4, 4)
+    required_client_version = (0, 4, 5)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
@@ -85,6 +90,7 @@ class SMWWorld(World):
             "blocksanity",
         )
         slot_data["active_levels"] = self.active_level_dict
+        slot_data["trap_weights"] = self.output_trap_weights()
 
         return slot_data
 
@@ -317,3 +323,15 @@ class SMWWorld(World):
 
     def set_rules(self):
         set_rules(self)
+
+    def output_trap_weights(self) -> dict[int, int]:
+        trap_data = {}
+
+        trap_data[0xBC0013] = self.options.ice_trap_weight.value
+        trap_data[0xBC0014] = self.options.stun_trap_weight.value
+        trap_data[0xBC0015] = self.options.literature_trap_weight.value
+        trap_data[0xBC0016] = self.options.timer_trap_weight.value
+        trap_data[0xBC001C] = self.options.reverse_trap_weight.value
+        trap_data[0xBC001D] = self.options.thwimp_trap_weight.value
+
+        return trap_data

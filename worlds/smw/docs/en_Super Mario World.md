@@ -1,8 +1,8 @@
 # Super Mario World
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a config file.
+The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
 
 ## What does randomization do to this game?
 
@@ -25,10 +25,16 @@ There are two goals which can be chosen:
 
 ## What items and locations get shuffled?
 
-Each unique level exit awards a location check. Optionally, collecting five Dragon Coins in each level can also award a location check.
+Each unique level exit awards a location check. Additionally, the following in-level actions can be set to award a location check:
+- Collecting Five Dragon Coins
+- Collecting 3-Up Moons
+- Activating Bonus Blocks
+- Receiving Hidden 1-Ups
+- Hitting Blocks containing coins or items
+
 Mario's various abilities and powerups as described above are placed into the item pool.
 If the player is playing Yoshi Egg Hunt, a certain number of Yoshi Eggs will be placed into the item pool.
-Any additional items that are needed to fill out the item pool with be 1-Up Mushrooms.
+Any additional items that are needed to fill out the item pool will be 1-Up Mushrooms, bundles of coins, or, if enabled, various trap items.
 
 ## Which items can be in another player's world?
 

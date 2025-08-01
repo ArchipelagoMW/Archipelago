@@ -1,8 +1,8 @@
 # DOOM 1993
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page](../player-settings) contains the options needed to configure your game session.
+The [player options page](../player-options) contains the options needed to configure your game session.
 
 ## What does randomization do to this game?
 

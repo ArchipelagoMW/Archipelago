@@ -1,7 +1,7 @@
 import os
 import zipfile
 import base64
-from typing import Union, Dict, Set, Tuple
+from collections.abc import Set
 
 from flask import request, flash, redirect, url_for, render_template
 from markupsafe import Markup
@@ -28,7 +28,7 @@ def check():
                 results, _ = roll_options(options)
                 if len(options) > 1:
                     # offer combined file back
-                    combined_yaml = "---\n".join(f"# original filename: {file_name}\n{file_content.decode('utf-8-sig')}"
+                    combined_yaml = "\n---\n".join(f"# original filename: {file_name}\n{file_content.decode('utf-8-sig')}"
                                                  for file_name, file_content in options.items())
                     combined_yaml = base64.b64encode(combined_yaml.encode("utf-8-sig")).decode()
                 else:
@@ -43,7 +43,7 @@ def mysterycheck():
     return redirect(url_for("check"), 301)
 
 
-def get_yaml_data(files) -> Union[Dict[str, str], str, Markup]:
+def get_yaml_data(files) -> dict[str, str] | str | Markup:
     options = {}
     for uploaded_file in files:
         if banned_file(uploaded_file.filename):
@@ -84,12 +84,12 @@ def get_yaml_data(files) -> Union[Dict[str, str], str, Markup]:
     return options
 
 
-def roll_options(options: Dict[str, Union[dict, str]],
+def roll_options(options: dict[str, dict | str],
                  plando_options: Set[str] = frozenset({"bosses", "items", "connections", "texts"})) -> \
-        Tuple[Dict[str, Union[str, bool]], Dict[str, dict]]:
+        tuple[dict[str, str | bool], dict[str, dict]]:
     plando_options = PlandoOptions.from_set(set(plando_options))
-    results = {}
-    rolled_results = {}
+    results: dict[str, str | bool] = {}
+    rolled_results: dict[str, dict] = {}
     for filename, text in options.items():
         try:
             if type(text) is dict:
@@ -105,10 +105,14 @@ def roll_options(options: Dict[str, Union[dict, str]],
                                                              plando_options=plando_options)
                 else:
                     for i, yaml_data in enumerate(yaml_datas):
-                        rolled_results[f"{filename}/{i + 1}"] = roll_settings(yaml_data,
-                                                                              plando_options=plando_options)
+                        if yaml_data is not None:
+                            rolled_results[f"{filename}/{i + 1}"] = roll_settings(yaml_data,
+                                                                                  plando_options=plando_options)
             except Exception as e:
-                results[filename] = f"Failed to generate options in {filename}: {e}"
+                if e.__cause__:
+                    results[filename] = f"Failed to generate options in {filename}: {e} - {e.__cause__}"
+                else:
+                    results[filename] = f"Failed to generate options in {filename}: {e}"
             else:
                 results[filename] = True
     return results, rolled_results

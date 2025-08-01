@@ -1,2 +1,0 @@
-Disabled Locations:
-0x17FA2 (Mountain Bottom Floor Discard)

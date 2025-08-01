@@ -2,7 +2,7 @@
 
 ## Quick Links
 - [Main Page](../../../../games/Overcooked!%202/info/en)
-- [Settings Page](../../../../games/Overcooked!%202/player-settings)
+- [Options Page](../../../../games/Overcooked!%202/player-options)
 - [OC2-Modding GitHub](https://github.com/toasterparty/oc2-modding)
 
 ## Required Software
@@ -49,9 +49,7 @@ To completely remove *OC2-Modding*, navigate to your game's installation folder 
 
 ## Generate a MultiWorld Game
 
-1. Visit the [Player Settings](../../../../games/Overcooked!%202/player-settings) page and configure the game-specific settings to taste
-
-*By default, these settings will only use levels from the base game and the "Seasonal" free DLC updates. If you own any of the paid DLC, you may select individual DLC packs to include/exclude on the [Weighted Settings](../../../../weighted-settings) page*
+1. Visit the [Player Options](../../../../games/Overcooked!%202/player-options) page and configure the game-specific options to taste
 
 2. Export your yaml file and use it to generate a new randomized game
 
@@ -84,11 +82,11 @@ To completely remove *OC2-Modding*, navigate to your game's installation folder 
 
 Since the goal of randomizer isn't necessarily to achieve new personal high scores, players may find themselves waiting for a level timer to expire once they've met their objective. A new feature called *Auto-Complete* has been added to automatically complete levels once a target star count has been achieved.
 
-To enable *Auto-Complete*, press the **Show** button near the top of your screen to expand the modding controls. Then, repeatedly press the **Auto-Complete** button until it shows the desired setting.
+To enable *Auto-Complete*, press the **Show** button near the top of your screen to expand the modding controls. Then, repeatedly press the **Auto-Complete** button until it shows the desired option.
 
 ## Overworld Sequence Breaking
 
-In the world's settings, there is an option called "Overworld Tricks" which allows the generator to make games which require doing tricks with the food truck to complete. This includes:
+In the world's options, there is an option called "Overworld Tricks" which allows the generator to make games which require doing tricks with the food truck to complete. This includes:
 
 - Dashing across gaps
 

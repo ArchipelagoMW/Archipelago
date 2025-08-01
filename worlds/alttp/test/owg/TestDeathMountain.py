@@ -177,7 +177,7 @@ class TestDeathMountain(TestVanillaOWG):
             ["Hookshot Cave - Bottom Right", False, []],
             ["Hookshot Cave - Bottom Right", False, [], ['Progressive Glove', 'Pegasus Boots']],
             ["Hookshot Cave - Bottom Right", False, [], ['Moon Pearl']],
-            ["Hookshot Cave - Bottom Right", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Hookshot Cave - Bottom Right", True, ['Moon Pearl', 'Pegasus Boots', 'Bomb Upgrade (50)']],
             ["Hookshot Cave - Bottom Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Flute']],
             ["Hookshot Cave - Bottom Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Lamp']],
 
@@ -185,7 +185,7 @@ class TestDeathMountain(TestVanillaOWG):
             ["Hookshot Cave - Bottom Left", False, [], ['Progressive Glove', 'Pegasus Boots']],
             ["Hookshot Cave - Bottom Left", False, [], ['Moon Pearl']],
             ["Hookshot Cave - Bottom Left", False, [], ['Hookshot']],
-            ["Hookshot Cave - Bottom Left", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot']],
+            ["Hookshot Cave - Bottom Left", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot', 'Bomb Upgrade (50)']],
             ["Hookshot Cave - Bottom Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Flute']],
             ["Hookshot Cave - Bottom Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Lamp']],
 
@@ -193,7 +193,7 @@ class TestDeathMountain(TestVanillaOWG):
             ["Hookshot Cave - Top Left", False, [], ['Progressive Glove', 'Pegasus Boots']],
             ["Hookshot Cave - Top Left", False, [], ['Moon Pearl']],
             ["Hookshot Cave - Top Left", False, [], ['Hookshot']],
-            ["Hookshot Cave - Top Left", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot']],
+            ["Hookshot Cave - Top Left", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot', 'Bomb Upgrade (50)']],
             ["Hookshot Cave - Top Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Flute']],
             ["Hookshot Cave - Top Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Lamp']],
 
@@ -201,7 +201,7 @@ class TestDeathMountain(TestVanillaOWG):
             ["Hookshot Cave - Top Right", False, [], ['Progressive Glove', 'Pegasus Boots']],
             ["Hookshot Cave - Top Right", False, [], ['Moon Pearl']],
             ["Hookshot Cave - Top Right", False, [], ['Hookshot']],
-            ["Hookshot Cave - Top Right", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot']],
+            ["Hookshot Cave - Top Right", True, ['Moon Pearl', 'Pegasus Boots', 'Hookshot', 'Bomb Upgrade (50)']],
             ["Hookshot Cave - Top Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Flute']],
             ["Hookshot Cave - Top Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove', 'Hookshot', 'Lamp']],
         ])

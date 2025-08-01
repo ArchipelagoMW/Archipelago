@@ -1,0 +1,232 @@
+html {
+  background-image: url("../../static/backgrounds/grass.png");
+  background-repeat: repeat;
+  background-size: 650px 650px;
+  scroll-padding-top: 90px;
+}
+
+#weighted-options {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 1rem;
+  color: #eeffeb;
+}
+#weighted-options #weighted-options-header h1 {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+#weighted-options #weighted-options-header h1:nth-child(2) {
+  font-size: 1.4rem;
+  margin-top: -8px;
+  margin-bottom: 0.5rem;
+}
+#weighted-options .js-warning-banner {
+  width: calc(100% - 1rem);
+  padding: 0.5rem;
+  border-radius: 4px;
+  background-color: #f3f309;
+  color: #000000;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+#weighted-options .option-wrapper {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+#weighted-options .option-wrapper .add-option-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+}
+#weighted-options .option-wrapper .add-option-div button {
+  width: auto;
+  height: auto;
+  margin: 0 0 0 0.15rem;
+  padding: 0 0.25rem;
+  border-radius: 4px;
+  cursor: default;
+}
+#weighted-options .option-wrapper .add-option-div button:active {
+  margin-bottom: 1px;
+}
+#weighted-options p.option-description {
+  margin: 0 0 1rem;
+}
+#weighted-options p.hint-text {
+  margin: 0 0 1rem;
+  font-style: italic;
+}
+#weighted-options table {
+  width: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+#weighted-options table th, #weighted-options table td {
+  border: none;
+}
+#weighted-options table td {
+  padding: 5px;
+}
+#weighted-options table .td-left {
+  font-family: LexendDeca-Regular, sans-serif;
+  padding-right: 1rem;
+  width: 200px;
+}
+#weighted-options table .td-middle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding-right: 1rem;
+}
+#weighted-options table .td-right {
+  width: 4rem;
+  text-align: right;
+}
+#weighted-options table .td-delete {
+  width: 50px;
+  text-align: right;
+}
+#weighted-options table .range-option-delete {
+  cursor: pointer;
+}
+#weighted-options #weighted-options-button-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+#weighted-options #user-message {
+  display: none;
+  width: calc(100% - 8px);
+  background-color: #ffe86b;
+  border-radius: 4px;
+  color: #000000;
+  padding: 4px;
+  text-align: center;
+}
+#weighted-options #user-message.visible {
+  display: block;
+  cursor: pointer;
+}
+#weighted-options h1 {
+  font-size: 2.5rem;
+  font-weight: normal;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  text-shadow: 1px 1px 4px #000000;
+}
+#weighted-options h2, #weighted-options details summary.h2 {
+  font-size: 2rem;
+  font-weight: normal;
+  border-bottom: 1px solid #ffffff;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  color: #ffe993;
+  text-transform: none;
+  text-shadow: 1px 1px 2px #000000;
+}
+#weighted-options h3, #weighted-options h4, #weighted-options h5, #weighted-options h6 {
+  color: #ffffff;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  text-transform: none;
+  cursor: unset;
+}
+#weighted-options h3.option-group-header {
+  margin-top: 0.75rem;
+  font-weight: bold;
+}
+#weighted-options a {
+  color: #ffef00;
+  cursor: pointer;
+}
+#weighted-options input:not([type]) {
+  border: 1px solid #000000;
+  padding: 3px;
+  border-radius: 3px;
+  min-width: 150px;
+}
+#weighted-options input:not([type]):focus {
+  border: 1px solid #ffffff;
+}
+#weighted-options .invisible {
+  display: none;
+}
+#weighted-options .unsupported-option {
+  margin-top: 0.5rem;
+}
+#weighted-options .set-container, #weighted-options .dict-container, #weighted-options .list-container {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(20, 20, 20, 0.25);
+  border-radius: 3px;
+  color: #ffffff;
+  max-height: 15rem;
+  min-width: 14.5rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  padding-left: 0.25rem;
+  margin-top: 0.5rem;
+}
+#weighted-options .set-container .divider, #weighted-options .dict-container .divider, #weighted-options .list-container .divider {
+  width: 100%;
+  height: 2px;
+  background-color: rgba(20, 20, 20, 0.25);
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
+}
+#weighted-options .set-container .set-entry, #weighted-options .set-container .dict-entry, #weighted-options .set-container .list-entry, #weighted-options .dict-container .set-entry, #weighted-options .dict-container .dict-entry, #weighted-options .dict-container .list-entry, #weighted-options .list-container .set-entry, #weighted-options .list-container .dict-entry, #weighted-options .list-container .list-entry {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-bottom: 0.25rem;
+  padding-top: 0.25rem;
+  user-select: none;
+  line-height: 1rem;
+}
+#weighted-options .set-container .set-entry:hover, #weighted-options .set-container .dict-entry:hover, #weighted-options .set-container .list-entry:hover, #weighted-options .dict-container .set-entry:hover, #weighted-options .dict-container .dict-entry:hover, #weighted-options .dict-container .list-entry:hover, #weighted-options .list-container .set-entry:hover, #weighted-options .list-container .dict-entry:hover, #weighted-options .list-container .list-entry:hover {
+  background-color: rgba(20, 20, 20, 0.25);
+}
+#weighted-options .set-container .set-entry input[type=checkbox], #weighted-options .set-container .dict-entry input[type=checkbox], #weighted-options .set-container .list-entry input[type=checkbox], #weighted-options .dict-container .set-entry input[type=checkbox], #weighted-options .dict-container .dict-entry input[type=checkbox], #weighted-options .dict-container .list-entry input[type=checkbox], #weighted-options .list-container .set-entry input[type=checkbox], #weighted-options .list-container .dict-entry input[type=checkbox], #weighted-options .list-container .list-entry input[type=checkbox] {
+  margin-right: 0.25rem;
+}
+#weighted-options .set-container .set-entry input[type=number], #weighted-options .set-container .dict-entry input[type=number], #weighted-options .set-container .list-entry input[type=number], #weighted-options .dict-container .set-entry input[type=number], #weighted-options .dict-container .dict-entry input[type=number], #weighted-options .dict-container .list-entry input[type=number], #weighted-options .list-container .set-entry input[type=number], #weighted-options .list-container .dict-entry input[type=number], #weighted-options .list-container .list-entry input[type=number] {
+  max-width: 1.5rem;
+  max-height: 1rem;
+  margin-left: 0.125rem;
+  text-align: center;
+  /* Hide arrows on input[type=number] fields */
+  -moz-appearance: textfield;
+}
+#weighted-options .set-container .set-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .set-container .set-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .set-container .dict-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .set-container .dict-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .set-container .list-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .set-container .list-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .dict-container .set-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .dict-container .set-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .dict-container .dict-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .dict-container .dict-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .dict-container .list-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .dict-container .list-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .list-container .set-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .list-container .set-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .list-container .dict-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .list-container .dict-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .list-container .list-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .list-container .list-entry input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#weighted-options .set-container .set-entry label, #weighted-options .set-container .dict-entry label, #weighted-options .set-container .list-entry label, #weighted-options .dict-container .set-entry label, #weighted-options .dict-container .dict-entry label, #weighted-options .dict-container .list-entry label, #weighted-options .list-container .set-entry label, #weighted-options .list-container .dict-entry label, #weighted-options .list-container .list-entry label {
+  flex-grow: 1;
+  margin-right: 0;
+  min-width: unset;
+  display: unset;
+}
+
+.hidden {
+  display: none;
+}
+
+@media all and (max-width: 1000px), all and (orientation: portrait) {
+  #weighted-options .game-options {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  #game-options table label {
+    display: block;
+    min-width: 200px;
+  }
+}
+
+/*# sourceMappingURL=weightedOptions.css.map */

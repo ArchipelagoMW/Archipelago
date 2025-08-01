@@ -45,7 +45,8 @@ MinVersion={#min_windows}
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}";
+Name: "deletelib"; Description: "Clean existing /lib folder and subfolders including /worlds (leave checked if unsure)"; Check: ShouldShowDeleteLibTask
 
 [Types]
 Name: "full"; Description: "Full installation"
@@ -75,7 +76,7 @@ Name: "{commondesktop}\{#MyAppName} Launcher"; Filename: "{app}\ArchipelagoLaunc
 [Run]
 
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: IsVCRedist64BitNeeded; StatusMsg: "Installing VC++ redistributable..."
-Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Flags: nowait; Components: lttp_sprites
+Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: lttp_sprites
 Filename: "{app}\ArchipelagoLauncher"; Parameters: "--update_settings"; StatusMsg: "Updating host.yaml..."; Flags: runasoriginaluser runhidden
 Filename: "{app}\ArchipelagoLauncher"; Description: "{cm:LaunchProgram,{#StringChange('Launcher', '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
@@ -83,11 +84,9 @@ Filename: "{app}\ArchipelagoLauncher"; Description: "{cm:LaunchProgram,{#StringC
 Type: dirifempty; Name: "{app}"
 
 [InstallDelete]
-Type: files; Name: "{app}\lib\worlds\_bizhawk.apworld"
-Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
-Type: files; Name: "{app}\ArchipelagoPokemonClient.exe"
+Type: files; Name: "{app}\*.exe"
 Type: files; Name: "{app}\data\lua\connector_pkmn_rb.lua"
-Type: filesandordirs; Name: "{app}\lib\worlds\rogue-legacy*"
+Type: files; Name: "{app}\data\lua\connector_ff1.lua"
 Type: filesandordirs; Name: "{app}\SNI\lua*"
 Type: filesandordirs; Name: "{app}\EnemizerCLI*"
 #include "installdelete.iss"
@@ -139,11 +138,6 @@ Root: HKCR; Subkey: "{#MyAppName}kdl3patch";                     ValueData: "Arc
 Root: HKCR; Subkey: "{#MyAppName}kdl3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}kdl3patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
 
-Root: HKCR; Subkey: ".apmc";                                     ValueData: "{#MyAppName}mcdata";         Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}mcdata";                        ValueData: "Archipelago Minecraft Data"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}mcdata\DefaultIcon";            ValueData: "{app}\ArchipelagoMinecraftClient.exe,0";                           ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}mcdata\shell\open\command";     ValueData: """{app}\ArchipelagoMinecraftClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
-
 Root: HKCR; Subkey: ".apz5";                                     ValueData: "{#MyAppName}n64zpf";         Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}n64zpf";                        ValueData: "Archipelago Ocarina of Time Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}n64zpf\DefaultIcon";            ValueData: "{app}\ArchipelagoOoTClient.exe,0";                           ValueType: string;  ValueName: "";
@@ -169,6 +163,26 @@ Root: HKCR; Subkey: "{#MyAppName}pkmnepatch";                     ValueData: "Ar
 Root: HKCR; Subkey: "{#MyAppName}pkmnepatch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                                          ValueType: string; ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}pkmnepatch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                                 ValueType: string; ValueName: "";
 
+Root: HKCR; Subkey: ".apmlss";                                 ValueData: "{#MyAppName}mlsspatch";                               Flags: uninsdeletevalue; ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}mlsspatch";                     ValueData: "Archipelago Mario & Luigi Superstar Saga Patch";                    Flags: uninsdeletekey;   ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}mlsspatch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                                          ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}mlsspatch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                                 ValueType: string; ValueName: "";
+
+Root: HKCR; Subkey: ".apcv64";                                 ValueData: "{#MyAppName}cv64patch";                               Flags: uninsdeletevalue; ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}cv64patch";                     ValueData: "Archipelago Castlevania 64 Patch";                    Flags: uninsdeletekey;   ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}cv64patch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                                          ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}cv64patch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                                 ValueType: string; ValueName: "";
+
+Root: HKCR; Subkey: ".apcvcotm";                                 ValueData: "{#MyAppName}cvcotmpatch";                               Flags: uninsdeletevalue; ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}cvcotmpatch";                     ValueData: "Archipelago Castlevania Circle of the Moon Patch";                    Flags: uninsdeletekey;   ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}cvcotmpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                                          ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}cvcotmpatch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                                 ValueType: string; ValueName: "";
+
+Root: HKCR; Subkey: ".apmm2";                                   ValueData: "{#MyAppName}mm2patch";                               Flags: uninsdeletevalue; ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}mm2patch";                     ValueData: "Archipelago Mega Man 2 Patch";                    Flags: uninsdeletekey;   ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}mm2patch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                                          ValueType: string; ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}mm2patch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                                 ValueType: string; ValueName: "";
+
 Root: HKCR; Subkey: ".apladx";                                   ValueData: "{#MyAppName}ladxpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}ladxpatch";                     ValueData: "Archipelago Links Awakening DX Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}ladxpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoLinksAwakeningClient.exe,0";                           ValueType: string;  ValueName: "";
@@ -184,15 +198,35 @@ Root: HKCR; Subkey: "{#MyAppName}advnpatch";                     ValueData: "Arc
 Root: HKCR; Subkey: "{#MyAppName}advnpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoAdventureClient.exe,0";                ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}advnpatch\shell\open\command";  ValueData: """{app}\ArchipelagoAdventureClient.exe"" ""%1""";       ValueType: string;  ValueName: "";
 
+Root: HKCR; Subkey: ".apyi";                                   ValueData: "{#MyAppName}yipatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}yipatch";                     ValueData: "Archipelago Yoshi's Island Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}yipatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}yipatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
+
+Root: HKCR; Subkey: ".apygo06";                                   ValueData: "{#MyAppName}ygo06patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}ygo06patch";                     ValueData: "Archipelago Yu-Gi-Oh 2006 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}ygo06patch\DefaultIcon";         ValueData: "{app}\ArchipelagoBizHawkClient.exe,0";                           ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}ygo06patch\shell\open\command";  ValueData: """{app}\ArchipelagoBizHawkClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
+
+Root: HKCR; Subkey: ".apcivvi";                                   ValueData: "{#MyAppName}apcivvipatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}apcivvipatch";                     ValueData: "Archipelago Civilization 6 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}apcivvipatch\DefaultIcon";         ValueData: "{app}\ArchipelagoLauncher.exe,0";                           ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}apcivvipatch\shell\open\command";  ValueData: """{app}\ArchipelagoLauncher.exe"" ""%1""";                  ValueType: string;  ValueName: "";
+
 Root: HKCR; Subkey: ".archipelago";                              ValueData: "{#MyAppName}multidata";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}multidata";                     ValueData: "Archipelago Server Data";      Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}multidata\DefaultIcon";         ValueData: "{app}\ArchipelagoServer.exe,0";                         ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}multidata\shell\open\command";  ValueData: """{app}\ArchipelagoServer.exe"" ""%1""";                ValueType: string;  ValueName: "";
 
+Root: HKCR; Subkey: ".apworld";                                 ValueData: "{#MyAppName}worlddata";  Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}worlddata";                    ValueData: "Archipelago World Data"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}worlddata\DefaultIcon";        ValueData: "{app}\ArchipelagoLauncher.exe,0";                 ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}worlddata\shell\open\command"; ValueData: """{app}\ArchipelagoLauncher.exe"" ""%1""";        ValueType: string;  ValueName: "";
+
 Root: HKCR; Subkey: "archipelago"; ValueType: "string"; ValueData: "Archipegalo Protocol"; Flags: uninsdeletekey;
 Root: HKCR; Subkey: "archipelago"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: "";
-Root: HKCR; Subkey: "archipelago\DefaultIcon"; ValueType: "string"; ValueData: "{app}\ArchipelagoTextClient.exe,0";
-Root: HKCR; Subkey: "archipelago\shell\open\command"; ValueType: "string"; ValueData: """{app}\ArchipelagoTextClient.exe"" ""%1""";
+Root: HKCR; Subkey: "archipelago\DefaultIcon"; ValueType: "string"; ValueData: "{app}\ArchipelagoLauncher.exe,0";
+Root: HKCR; Subkey: "archipelago\shell\open\command"; ValueType: "string"; ValueData: """{app}\ArchipelagoLauncher.exe"" ""%1""";
 
 [Code]
 // See: https://stackoverflow.com/a/51614652/2287576
@@ -212,5 +246,19 @@ begin
     // Not even an old version installed
     Log('VC Redist x64 is not already installed');
     Result := True;
+  end;
+end;
+
+function ShouldShowDeleteLibTask: Boolean;
+begin
+  Result := DirExists(ExpandConstant('{app}\lib'));
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssInstall then
+  begin
+    if WizardIsTaskSelected('deletelib') then
+      DelTree(ExpandConstant('{app}\lib'), True, True, True);
   end;
 end;

@@ -1,8 +1,8 @@
 # Lufia II - Rise of the Sinistrals (Ancient Cave)
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -53,8 +53,9 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 - Randomize enemy movement patterns, enemy sprites, and which enemy types can appear at which floor numbers
 - Option to make shops appear in the cave so that you have a way to spend your hard-earned gold
 - Option to shuffle your party members and/or capsule monsters into the multiworld, meaning that someone will have to
-  find them in order to unlock them for you to use. While cave diving, you can add newly unlocked members to your party
-  by using the character items from your inventory
+  find them in order to unlock them for you to use. While cave diving, you can add or remove unlocked party members by
+  using the character items from your inventory. There's also an option to allow inactive characters to gain some EXP,
+  so that new party members added during a run don't have to start off at a low level
 
 ###### Quality of life:
 

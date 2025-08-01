@@ -21,11 +21,8 @@ class ModNames:
     ayeisha = "Ayeisha - The Postal Worker (Custom NPC)"
     riley = "Custom NPC - Riley"
     skull_cavern_elevator = "Skull Cavern Elevator"
-
-
-all_mods = frozenset({ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
-                      ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
-                      ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
-                      ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
-                      ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
-                      ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator})
+    sve = "Stardew Valley Expanded"
+    alecto = "Alecto the Witch"
+    distant_lands = "Distant Lands - Witch Swamp Overhaul"
+    lacey = "Hat Mouse Lacey"
+    boarding_house = "Boarding House and Bus Stop Extension"

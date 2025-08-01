@@ -1,6 +1,6 @@
 from ..utils.utils import randGaussBounds, getRangeDict, chooseFromRange
 from ..utils import log
-import logging, copy, random
+import logging, copy
 
 class Item:
     __slots__ = ( 'Category', 'Class', 'Name', 'Code', 'Type', 'BeamBits', 'ItemBits', 'Id' )
@@ -335,7 +335,7 @@ class ItemManager:
         itemCode = item.Code + modifier
         return itemCode
 
-    def __init__(self, majorsSplit, qty, sm, nLocs, bossesItems, maxDiff):
+    def __init__(self, majorsSplit, qty, sm, nLocs, bossesItems, maxDiff, random):
         self.qty = qty
         self.sm = sm
         self.majorsSplit = majorsSplit
@@ -344,6 +344,7 @@ class ItemManager:
         self.maxDiff = maxDiff
         self.majorClass = 'Chozo' if majorsSplit == 'Chozo' else 'Major'
         self.itemPool = []
+        self.random = random
 
     def newItemPool(self, addBosses=True):
         self.itemPool = []
@@ -386,7 +387,7 @@ class ItemManager:
             return ItemManager.Items[itemType].withClass(itemClass)
 
     def createItemPool(self, exclude=None):
-        itemPoolGenerator = ItemPoolGenerator.factory(self.majorsSplit, self, self.qty, self.sm, exclude, self.nLocs, self.maxDiff)
+        itemPoolGenerator = ItemPoolGenerator.factory(self.majorsSplit, self, self.qty, self.sm, exclude, self.nLocs, self.maxDiff, self.random)
         self.itemPool = itemPoolGenerator.getItemPool()
 
     @staticmethod
@@ -402,20 +403,20 @@ class ItemPoolGenerator(object):
     nbBosses = 9
 
     @staticmethod
-    def factory(majorsSplit, itemManager, qty, sm, exclude, nLocs, maxDiff):
+    def factory(majorsSplit, itemManager, qty, sm, exclude, nLocs, maxDiff, random):
         if majorsSplit == 'Chozo':
-            return ItemPoolGeneratorChozo(itemManager, qty, sm, maxDiff)
+            return ItemPoolGeneratorChozo(itemManager, qty, sm, maxDiff, random)
         elif majorsSplit == 'Plando':
-            return ItemPoolGeneratorPlando(itemManager, qty, sm, exclude, nLocs, maxDiff)
+            return ItemPoolGeneratorPlando(itemManager, qty, sm, exclude, nLocs, maxDiff, random)
         elif nLocs == ItemPoolGenerator.maxLocs:
             if majorsSplit == "Scavenger":
-                return ItemPoolGeneratorScavenger(itemManager, qty, sm, maxDiff)
+                return ItemPoolGeneratorScavenger(itemManager, qty, sm, maxDiff, random)
             else:
-                return ItemPoolGeneratorMajors(itemManager, qty, sm, maxDiff)
+                return ItemPoolGeneratorMajors(itemManager, qty, sm, maxDiff, random)
         else:
-            return ItemPoolGeneratorMinimizer(itemManager, qty, sm, nLocs, maxDiff)
+            return ItemPoolGeneratorMinimizer(itemManager, qty, sm, nLocs, maxDiff, random)
 
-    def __init__(self, itemManager, qty, sm, maxDiff):
+    def __init__(self, itemManager, qty, sm, maxDiff, random):
         self.itemManager = itemManager
         self.qty = qty
         self.sm = sm
@@ -423,12 +424,13 @@ class ItemPoolGenerator(object):
         self.maxEnergy = 18 # 14E, 4R
         self.maxDiff = maxDiff
         self.log = log.get('ItemPool')
+        self.random = random
 
     def isUltraSparseNoTanks(self):
         # if low stuff botwoon is not known there is a hard energy req of one tank, even
         # with both suits
         lowStuffBotwoon = self.sm.knowsLowStuffBotwoon()
-        return random.random() < 0.5 and (lowStuffBotwoon.bool == True and lowStuffBotwoon.difficulty <= self.maxDiff)
+        return self.random.random() < 0.5 and (lowStuffBotwoon.bool == True and lowStuffBotwoon.difficulty <= self.maxDiff)
 
     def calcMaxMinors(self):
         pool = self.itemManager.getItemPool()
@@ -464,7 +466,7 @@ class ItemPoolGenerator(object):
             rangeDict = getRangeDict(ammoQty)
             self.log.debug("rangeDict: {}".format(rangeDict))
             while len(self.itemManager.getItemPool()) < maxItems:
-                item = chooseFromRange(rangeDict)
+                item = chooseFromRange(rangeDict, self.random)
                 self.itemManager.addMinor(item)
         else:
             minorsTypes = ['Missile', 'Super', 'PowerBomb']
@@ -522,7 +524,7 @@ class ItemPoolGeneratorChozo(ItemPoolGenerator):
                 # no etank nor reserve
                 self.itemManager.removeItem('ETank')
                 self.itemManager.addItem('NoEnergy', 'Chozo')
-            elif random.random() < 0.5:
+            elif self.random.random() < 0.5:
                 # replace only etank with reserve
                 self.itemManager.removeItem('ETank')
                 self.itemManager.addItem('Reserve', 'Chozo')
@@ -535,9 +537,9 @@ class ItemPoolGeneratorChozo(ItemPoolGenerator):
             # 4-6
             # already 3E and 1R
             alreadyInPool = 4
-            rest = randGaussBounds(2, 5)
+            rest = randGaussBounds(self.random, 2, 5)
             if rest >= 1:
-                if random.random() < 0.5:
+                if self.random.random() < 0.5:
                     self.itemManager.addItem('Reserve', 'Minor')
                 else:
                     self.itemManager.addItem('ETank', 'Minor')
@@ -550,13 +552,13 @@ class ItemPoolGeneratorChozo(ItemPoolGenerator):
             # 8-12
             # add up to 3 Reserves or ETanks (cannot add more than 3 reserves)
             for i in range(3):
-                if random.random() < 0.5:
+                if self.random.random() < 0.5:
                     self.itemManager.addItem('Reserve', 'Minor')
                 else:
                     self.itemManager.addItem('ETank', 'Minor')
             # 7 already in the pool (3 E, 1 R, + the previous 3)
             alreadyInPool = 7
-            rest = 1 + randGaussBounds(4, 3.7)
+            rest = 1 + randGaussBounds(self.random, 4, 3.7)
             for i in range(rest):
                 self.itemManager.addItem('ETank', 'Minor')
             # fill the rest with NoEnergy
@@ -581,10 +583,10 @@ class ItemPoolGeneratorChozo(ItemPoolGenerator):
         return self.itemManager.getItemPool()
 
 class ItemPoolGeneratorMajors(ItemPoolGenerator):
-    def __init__(self, itemManager, qty, sm, maxDiff):
-        super(ItemPoolGeneratorMajors, self).__init__(itemManager, qty, sm, maxDiff)
-        self.sparseRest = 1 + randGaussBounds(2, 5)
-        self.mediumRest = 3 + randGaussBounds(4, 3.7)
+    def __init__(self, itemManager, qty, sm, maxDiff, random):
+        super(ItemPoolGeneratorMajors, self).__init__(itemManager, qty, sm, maxDiff, random)
+        self.sparseRest = 1 + randGaussBounds(self.random,2, 5)
+        self.mediumRest = 3 + randGaussBounds(self.random, 4, 3.7)
         self.ultraSparseNoTanks = self.isUltraSparseNoTanks()
 
     def addNoEnergy(self):
@@ -609,7 +611,7 @@ class ItemPoolGeneratorMajors(ItemPoolGenerator):
                 # no energy at all
                 self.addNoEnergy()
             else:
-                if random.random() < 0.5:
+                if self.random.random() < 0.5:
                     self.itemManager.addItem('ETank')
                 else:
                     self.itemManager.addItem('Reserve')
@@ -620,7 +622,7 @@ class ItemPoolGeneratorMajors(ItemPoolGenerator):
 
         elif energyQty == 'sparse':
             # 4-6
-            if random.random() < 0.5:
+            if self.random.random() < 0.5:
                 self.itemManager.addItem('Reserve')
             else:
                 self.itemManager.addItem('ETank')
@@ -639,7 +641,7 @@ class ItemPoolGeneratorMajors(ItemPoolGenerator):
             alreadyInPool = 2
             n = getE(3)
             for i in range(n):
-                if random.random() < 0.5:
+                if self.random.random() < 0.5:
                     self.itemManager.addItem('Reserve')
                 else:
                     self.itemManager.addItem('ETank')
@@ -676,15 +678,15 @@ class ItemPoolGeneratorMajors(ItemPoolGenerator):
         return self.itemManager.getItemPool()
 
 class ItemPoolGeneratorScavenger(ItemPoolGeneratorMajors):
-    def __init__(self, itemManager, qty, sm, maxDiff):
-        super(ItemPoolGeneratorScavenger, self).__init__(itemManager, qty, sm, maxDiff)
+    def __init__(self, itemManager, qty, sm, maxDiff, random):
+        super(ItemPoolGeneratorScavenger, self).__init__(itemManager, qty, sm, maxDiff, random)
 
     def addNoEnergy(self):
         self.itemManager.addItem('Nothing')
 
 class ItemPoolGeneratorMinimizer(ItemPoolGeneratorMajors):
-    def __init__(self, itemManager, qty, sm, nLocs, maxDiff):
-        super(ItemPoolGeneratorMinimizer, self).__init__(itemManager, qty, sm, maxDiff)
+    def __init__(self, itemManager, qty, sm, nLocs, maxDiff, random):
+        super(ItemPoolGeneratorMinimizer, self).__init__(itemManager, qty, sm, maxDiff, random)
         self.maxItems = nLocs
         self.calcMaxAmmo()
         nMajors = len([itemName for itemName,item in ItemManager.Items.items() if item.Class == 'Major' and item.Category != 'Energy'])
@@ -716,8 +718,8 @@ class ItemPoolGeneratorMinimizer(ItemPoolGeneratorMajors):
         self.log.debug("maxEnergy: "+str(self.maxEnergy))
 
 class ItemPoolGeneratorPlando(ItemPoolGenerator):
-    def __init__(self, itemManager, qty, sm, exclude, nLocs, maxDiff):
-        super(ItemPoolGeneratorPlando, self).__init__(itemManager, qty, sm, maxDiff)
+    def __init__(self, itemManager, qty, sm, exclude, nLocs, maxDiff, random):
+        super(ItemPoolGeneratorPlando, self).__init__(itemManager, qty, sm, maxDiff, random)
         # in exclude dict:
         #   in alreadyPlacedItems:
         #     dict of 'itemType: count' of items already added in the plando.
@@ -805,7 +807,7 @@ class ItemPoolGeneratorPlando(ItemPoolGenerator):
             if ammoQty:
                 rangeDict = getRangeDict(ammoQty)
                 while len(self.itemManager.getItemPool()) < maxItems and remain > 0:
-                    item = chooseFromRange(rangeDict)
+                    item = chooseFromRange(rangeDict, self.random)
                     self.itemManager.addMinor(item)
                     remain -= 1
 

@@ -18,7 +18,7 @@ Voir le guide d'Archipelago sur la mise en place d'un YAML de base : [Basic Mult
 
 ### Où puis-je obtenir un fichier YAML ?
 
-Vous pouvez personnaliser vos paramètres en visitant la [page des paramètres du joueur DLC Quest] (/games/DLCQuest/player-settings).
+Vous pouvez personnaliser vos paramètres en visitant la [page des paramètres du joueur DLC Quest](/games/DLCQuest/player-options).
 
 ## Rejoindre une partie multi-monde
 

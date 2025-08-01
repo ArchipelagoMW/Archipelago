@@ -593,6 +593,20 @@ class HealingFloorChance(Range):
     default = 16
 
 
+class InactiveExpGain(Choice):
+    """The rate at which characters not currently in the active party gain EXP.
+
+    Supported values: disabled, half, full
+    Default value: disabled (same as in an unmodified game)
+    """
+
+    display_name = "Inactive character EXP gain"
+    option_disabled = 0
+    option_half = 50
+    option_full = 100
+    default = option_disabled
+
+
 class InitialFloor(Range):
     """The initial floor, where you begin your journey.
 
@@ -805,7 +819,7 @@ class ShufflePartyMembers(Toggle):
     false — all 6 optional party members are present in the cafe and can be recruited right away
     true — only Maxim is available from the start; 6 new "items" are added to your pool and shuffled into the
         multiworld; when one of these items is found, the corresponding party member is unlocked for you to use.
-        While cave diving, you can add newly unlocked ones to your party by using the character items from the inventory
+        While cave diving, you can add or remove unlocked party members by using the character items from the inventory
     Default value: false (same as in an unmodified game)
     """
 
@@ -838,6 +852,7 @@ class L2ACOptions(PerGameCommonOptions):
     goal: Goal
     gold_modifier: GoldModifier
     healing_floor_chance: HealingFloorChance
+    inactive_exp_gain: InactiveExpGain
     initial_floor: InitialFloor
     iris_floor_chance: IrisFloorChance
     iris_treasures_required: IrisTreasuresRequired

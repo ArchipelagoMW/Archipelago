@@ -2,7 +2,8 @@ import collections
 import logging
 from typing import Iterator, Set
 
-from BaseClasses import Entrance, MultiWorld
+from Options import ItemsAccessibility
+from BaseClasses import MultiWorld
 from worlds.generic.Rules import (add_item_rule, add_rule, forbid_item,
                                   item_name_in_location_names, location_item_name, set_rule, allow_self_locking_items)
 
@@ -10,7 +11,7 @@ from . import OverworldGlitchRules
 from .Bosses import GanonDefeatRule
 from .Items import item_factory, item_name_groups, item_table, progression_items
 from .Options import small_key_shuffle
-from .OverworldGlitchRules import no_logic_rules, overworld_glitches_rules
+from .OverworldGlitchRules import overworld_glitches_rules
 from .Regions import LTTPRegionType, location_table
 from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            can_lift_heavy_rocks, can_lift_rocks,
@@ -18,29 +19,29 @@ from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            can_shoot_arrows, has_beam_sword, has_crystals,
                            has_fire_source, has_hearts, has_melee_weapon,
                            has_misery_mire_medallion, has_sword, has_turtle_rock_medallion,
-                           has_triforce_pieces, can_use_bombs, can_bomb_or_bonk)
+                           has_triforce_pieces, can_use_bombs, can_bomb_or_bonk,
+                           can_activate_crystal_switch)
 from .UnderworldGlitchRules import underworld_glitches_rules
 
 
 def set_rules(world):
     player = world.player
     world = world.multiworld
-    if world.glitches_required[player] == 'no_logic':
+    if world.worlds[player].options.glitches_required == 'no_logic':
         if player == next(player_id for player_id in world.get_game_players("A Link to the Past")
-                          if world.glitches_required[player_id] == 'no_logic'):  # only warn one time
+                          if world.worlds[player_id].options.glitches_required == 'no_logic'):  # only warn one time
             logging.info(
                 'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
 
         if world.players == 1:
-            no_logic_rules(world, player)
             for exit in world.get_region('Menu', player).exits:
                 exit.hide_path = True
             return
         else:
             # Set access rules according to max glitches for multiworld progression.
             # Set accessibility to none, and shuffle assuming the no logic players can always win
-            world.accessibility[player] = world.accessibility[player].from_text("minimal")
-            world.progression_balancing[player].value = 0
+            world.worlds[player].options.accessibility.value = ItemsAccessibility.option_minimal
+            world.worlds[player].options.progression_balancing.value = 0
 
     else:
         world.completion_condition[player] = lambda state: state.has('Triforce', player)
@@ -48,48 +49,52 @@ def set_rules(world):
     dungeon_boss_rules(world, player)
     global_rules(world, player)
 
-    if world.mode[player] != 'inverted':
+    if world.worlds[player].options.mode != 'inverted':
         default_rules(world, player)
 
-    if world.mode[player] == 'open':
+    if world.worlds[player].options.mode == 'open':
         open_rules(world, player)
-    elif world.mode[player] == 'standard':
+    elif world.worlds[player].options.mode == 'standard':
         standard_rules(world, player)
-    elif world.mode[player] == 'inverted':
+    elif world.worlds[player].options.mode == 'inverted':
         open_rules(world, player)
         inverted_rules(world, player)
     else:
-        raise NotImplementedError(f'World state {world.mode[player]} is not implemented yet')
+        raise NotImplementedError(f'World state {world.worlds[player].options.mode} is not implemented yet')
 
-    if world.glitches_required[player] == 'no_glitches':
+    if world.worlds[player].options.glitches_required == 'no_glitches':
         no_glitches_rules(world, player)
-    elif world.glitches_required[player] == 'overworld_glitches':
+        forbid_bomb_jump_requirements(world, player)
+    elif world.worlds[player].options.glitches_required == 'overworld_glitches':
         # Initially setting no_glitches_rules to set the baseline rules for some
         # entrances. The overworld_glitches_rules set is primarily additive.
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
-    elif world.glitches_required[player] in ['hybrid_major_glitches', 'no_logic']:
+        forbid_bomb_jump_requirements(world, player)
+    elif world.worlds[player].options.glitches_required in ['hybrid_major_glitches', 'no_logic']:
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
         underworld_glitches_rules(world, player)
-    elif world.glitches_required[player] == 'minor_glitches':
+        bomb_jump_requirements(world, player)
+    elif world.worlds[player].options.glitches_required == 'minor_glitches':
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
+        forbid_bomb_jump_requirements(world, player)
     else:
-        raise NotImplementedError(f'Not implemented yet: Logic - {world.glitches_required[player]}')
+        raise NotImplementedError(f'Not implemented yet: Logic - {world.worlds[player].options.glitches_required}')
 
-    if world.goal[player] == 'bosses':
+    if world.worlds[player].options.goal == 'bosses':
         # require all bosses to beat ganon
         add_rule(world.get_location('Ganon', player), lambda state: state.can_reach('Master Sword Pedestal', 'Location', player) and state.has('Beat Agahnim 1', player) and state.has('Beat Agahnim 2', player) and has_crystals(state, 7, player))
-    elif world.goal[player] == 'ganon':
+    elif world.worlds[player].options.goal == 'ganon':
         # require aga2 to beat ganon
         add_rule(world.get_location('Ganon', player), lambda state: state.has('Beat Agahnim 2', player))
 
-    if world.mode[player] != 'inverted':
+    if world.worlds[player].options.mode != 'inverted':
         set_big_bomb_rules(world, player)
-        if world.glitches_required[player].current_key in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.entrance_shuffle[player].current_key not in {'insanity', 'insanity_legacy', 'madness'}:
+        if world.worlds[player].options.glitches_required.current_key in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.worlds[player].options.entrance_shuffle.current_key not in {'insanity', 'insanity_legacy', 'madness'}:
             path_to_courtyard = mirrorless_path_to_castle_courtyard(world, player)
             add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.multiworld.get_entrance('Dark Death Mountain Offset Mirror', player).can_reach(state) and all(rule(state) for rule in path_to_courtyard), 'or')
     else:
@@ -97,21 +102,24 @@ def set_rules(world):
 
     # if swamp and dam have not been moved we require mirror for swamp palace
     # however there is mirrorless swamp in hybrid MG, so we don't necessarily want this. HMG handles this requirement itself. 
-    if not world.swamp_patch_required[player] and world.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic']:
+    if not world.worlds[player].swamp_patch_required and world.worlds[player].options.glitches_required not in ['hybrid_major_glitches', 'no_logic']:
         add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player))
 
     # GT Entrance may be required for Turtle Rock for OWG and < 7 required
-    ganons_tower = world.get_entrance('Inverted Ganons Tower' if world.mode[player] == 'inverted' else 'Ganons Tower', player)
-    if world.crystals_needed_for_gt[player] == 7 and not (world.glitches_required[player] in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and world.mode[player] != 'inverted'):
+    ganons_tower = world.get_entrance('Inverted Ganons Tower' if world.worlds[player].options.mode == 'inverted' else 'Ganons Tower', player)
+    if (world.worlds[player].options.crystals_needed_for_gt == 7
+            and not (world.worlds[player].options.glitches_required
+                     in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']
+                     and world.worlds[player].options.mode != 'inverted')):
         set_rule(ganons_tower, lambda state: False)
 
     set_trock_key_rules(world, player)
 
-    set_rule(ganons_tower, lambda state: has_crystals(state, state.multiworld.crystals_needed_for_gt[player], player))
-    if world.mode[player] != 'inverted' and world.glitches_required[player] in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
+    set_rule(ganons_tower, lambda state: has_crystals(state, state.multiworld.worlds[player].options.crystals_needed_for_gt, player))
+    if world.worlds[player].options.mode != 'inverted' and world.worlds[player].options.glitches_required in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
         add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.multiworld.get_entrance('Ganons Tower Ascent', player).can_reach(state), 'or')
 
-    set_bunny_rules(world, player, world.mode[player] == 'inverted')
+    set_bunny_rules(world, player, world.worlds[player].options.mode == 'inverted')
 
 
 def mirrorless_path_to_castle_courtyard(world, player):
@@ -145,17 +153,17 @@ def set_always_allow(spot, rule):
 
 
 def add_lamp_requirement(world: MultiWorld, spot, player: int, has_accessible_torch: bool = False):
-    if world.dark_room_logic[player] == "lamp":
+    if world.worlds[player].options.dark_room_logic == "lamp":
         add_rule(spot, lambda state: state.has('Lamp', player))
-    elif world.dark_room_logic[player] == "torches":  # implicitly lamp as well
+    elif world.worlds[player].options.dark_room_logic == "torches":  # implicitly lamp as well
         if has_accessible_torch:
             add_rule(spot, lambda state: state.has('Lamp', player) or state.has('Fire Rod', player))
         else:
             add_rule(spot, lambda state: state.has('Lamp', player))
-    elif world.dark_room_logic[player] == "none":
+    elif world.worlds[player].options.dark_room_logic == "none":
         pass
     else:
-        raise ValueError(f"Unknown Dark Room Logic: {world.dark_room_logic[player]}")
+        raise ValueError(f"Unknown Dark Room Logic: {world.worlds[player].options.dark_room_logic}")
 
 
 non_crossover_items = (item_name_groups["Small Keys"] | item_name_groups["Big Keys"] | progression_items) - {
@@ -186,244 +194,250 @@ def dungeon_boss_rules(world, player):
         set_defeat_dungeon_boss_rule(world.get_location(location, player))
 
 
-def global_rules(world, player):
+def global_rules(multiworld: MultiWorld, player: int):
+    world = multiworld.worlds[player]
     # ganon can only carry triforce
-    add_item_rule(world.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
+    add_item_rule(multiworld.get_location('Ganon', player), lambda item: item.name == 'Triforce' and item.player == player)
     # dungeon prizes can only be crystals/pendants
     crystals_and_pendants: Set[str] = \
         {item for item, item_data in item_table.items() if item_data.type == "Crystal"}
     prize_locations: Iterator[str] = \
         (locations for locations, location_data in location_table.items() if location_data[2] == True)
     for prize_location in prize_locations:
-        add_item_rule(world.get_location(prize_location, player),
+        add_item_rule(multiworld.get_location(prize_location, player),
                       lambda item: item.name in crystals_and_pendants and item.player == player)
     # determines which S&Q locations are available - hide from paths since it isn't an in-game location
-    for exit in world.get_region('Menu', player).exits:
+    for exit in multiworld.get_region('Menu', player).exits:
         exit.hide_path = True
     try:
-        old_man_sq = world.get_entrance('Old Man S&Q', player)
+        old_man_sq = multiworld.get_entrance('Old Man S&Q', player)
     except KeyError:
         pass  # it doesn't exist, should be dungeon-only unittests
     else:
-        old_man = world.get_location("Old Man", player)
+        old_man = multiworld.get_location("Old Man", player)
         set_rule(old_man_sq, lambda state: old_man.can_reach(state))
 
-    set_rule(world.get_location('Sunken Treasure', player), lambda state: state.has('Open Floodgate', player))
-    set_rule(world.get_location('Dark Blacksmith Ruins', player), lambda state: state.has('Return Smith', player))
-    set_rule(world.get_location('Purple Chest', player),
+    set_rule(multiworld.get_location('Sunken Treasure', player), lambda state: state.has('Open Floodgate', player))
+    set_rule(multiworld.get_location('Dark Blacksmith Ruins', player), lambda state: state.has('Return Smith', player))
+    set_rule(multiworld.get_location('Purple Chest', player),
              lambda state: state.has('Pick Up Purple Chest', player))  # Can S&Q with chest
-    set_rule(world.get_location('Ether Tablet', player), lambda state: can_retrieve_tablet(state, player))
-    set_rule(world.get_location('Master Sword Pedestal', player), lambda state: state.has('Red Pendant', player) and state.has('Blue Pendant', player) and state.has('Green Pendant', player))
+    set_rule(multiworld.get_location('Ether Tablet', player), lambda state: can_retrieve_tablet(state, player))
+    set_rule(multiworld.get_location('Master Sword Pedestal', player), lambda state: state.has('Red Pendant', player) and state.has('Blue Pendant', player) and state.has('Green Pendant', player))
 
-    set_rule(world.get_location('Missing Smith', player), lambda state: state.has('Get Frog', player) and state.can_reach('Blacksmiths Hut', 'Region', player))  # Can't S&Q with smith
-    set_rule(world.get_location('Blacksmith', player), lambda state: state.has('Return Smith', player))
-    set_rule(world.get_location('Magic Bat', player), lambda state: state.has('Magic Powder', player))
-    set_rule(world.get_location('Sick Kid', player), lambda state: state.has_group("Bottles", player))
-    set_rule(world.get_location('Library', player), lambda state: state.has('Pegasus Boots', player))
+    set_rule(multiworld.get_location('Missing Smith', player), lambda state: state.has('Get Frog', player) and state.can_reach('Blacksmiths Hut', 'Region', player))  # Can't S&Q with smith
+    set_rule(multiworld.get_location('Blacksmith', player), lambda state: state.has('Return Smith', player))
+    set_rule(multiworld.get_location('Magic Bat', player), lambda state: state.has('Magic Powder', player))
+    set_rule(multiworld.get_location('Sick Kid', player), lambda state: state.has_group("Bottles", player))
+    set_rule(multiworld.get_location('Library', player), lambda state: state.has('Pegasus Boots', player))
 
-    if world.enemy_shuffle[player]:
-        set_rule(world.get_location('Mimic Cave', player), lambda state: state.has('Hammer', player) and
-                 can_kill_most_things(state, player, 4))
+    if world.options.enemy_shuffle:
+        set_rule(multiworld.get_location('Mimic Cave', player), lambda state: state.has('Hammer', player) and
+                                                                              can_kill_most_things(state, player, 4))
     else:
-        set_rule(world.get_location('Mimic Cave', player), lambda state: state.has('Hammer', player)
-                 and ((state.multiworld.enemy_health[player] in ("easy", "default") and can_use_bombs(state, player, 4))
+        set_rule(multiworld.get_location('Mimic Cave', player), lambda state: state.has('Hammer', player)
+                                                                              and ((state.multiworld.worlds[player].options.enemy_health in ("easy", "default")
+                                                                                    and can_use_bombs(state, player, 4))
                       or can_shoot_arrows(state, player) or state.has("Cane of Somaria", player)
                       or has_beam_sword(state, player)))
 
-    set_rule(world.get_location('Sahasrahla', player), lambda state: state.has('Green Pendant', player))
+    set_rule(multiworld.get_location('Sahasrahla', player), lambda state: state.has('Green Pendant', player))
 
-    set_rule(world.get_location('Aginah\'s Cave', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_location('Blind\'s Hideout - Top', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_location('Chicken House', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_location('Kakariko Well - Top', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_location('Graveyard Cave', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_location('Sahasrahla\'s Hut - Left', player), lambda state: can_bomb_or_bonk(state, player))
-    set_rule(world.get_location('Sahasrahla\'s Hut - Middle', player), lambda state: can_bomb_or_bonk(state, player))
-    set_rule(world.get_location('Sahasrahla\'s Hut - Right', player), lambda state: can_bomb_or_bonk(state, player))
-    set_rule(world.get_location('Paradox Cave Lower - Left', player), lambda state: can_use_bombs(state, player)
-        or has_beam_sword(state, player) or can_shoot_arrows(state, player)
-        or state.has_any(["Fire Rod", "Cane of Somaria"], player))
-    set_rule(world.get_location('Paradox Cave Lower - Right', player), lambda state: can_use_bombs(state, player)
-        or has_beam_sword(state, player) or can_shoot_arrows(state, player)
-        or state.has_any(["Fire Rod", "Cane of Somaria"], player))
-    set_rule(world.get_location('Paradox Cave Lower - Far Right', player), lambda state: can_use_bombs(state, player)
-        or has_beam_sword(state, player) or can_shoot_arrows(state, player)
-        or state.has_any(["Fire Rod", "Cane of Somaria"], player))
-    set_rule(world.get_location('Paradox Cave Lower - Middle', player), lambda state: can_use_bombs(state, player)
-        or has_beam_sword(state, player) or can_shoot_arrows(state, player)
-        or state.has_any(["Fire Rod", "Cane of Somaria"], player))
-    set_rule(world.get_location('Paradox Cave Lower - Far Left', player), lambda state: can_use_bombs(state, player)
-        or has_beam_sword(state, player) or can_shoot_arrows(state, player)
-        or state.has_any(["Fire Rod", "Cane of Somaria"], player))
-    set_rule(world.get_location('Paradox Cave Upper - Left', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_location('Paradox Cave Upper - Right', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_location('Mini Moldorm Cave - Far Left', player), lambda state: can_kill_most_things(state, player, 4))
-    set_rule(world.get_location('Mini Moldorm Cave - Left', player), lambda state: can_kill_most_things(state, player, 4))
-    set_rule(world.get_location('Mini Moldorm Cave - Far Right', player), lambda state: can_kill_most_things(state, player, 4))
-    set_rule(world.get_location('Mini Moldorm Cave - Right', player), lambda state: can_kill_most_things(state, player, 4))
-    set_rule(world.get_location('Mini Moldorm Cave - Generous Guy', player), lambda state: can_kill_most_things(state, player, 4))
-    set_rule(world.get_location('Hype Cave - Bottom', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_location('Hype Cave - Middle Left', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_location('Hype Cave - Middle Right', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_location('Hype Cave - Top', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_entrance('Light World Death Mountain Shop', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Aginah\'s Cave', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Blind\'s Hideout - Top', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Chicken House', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Kakariko Well - Top', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Graveyard Cave', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Sahasrahla\'s Hut - Left', player), lambda state: can_bomb_or_bonk(state, player))
+    set_rule(multiworld.get_location('Sahasrahla\'s Hut - Middle', player), lambda state: can_bomb_or_bonk(state, player))
+    set_rule(multiworld.get_location('Sahasrahla\'s Hut - Right', player), lambda state: can_bomb_or_bonk(state, player))
+    set_rule(multiworld.get_location('Paradox Cave Lower - Left', player), lambda state: can_use_bombs(state, player)
+                                                                                         or has_beam_sword(state, player) or can_shoot_arrows(state, player)
+                                                                                         or state.has_any(["Fire Rod", "Cane of Somaria"], player))
+    set_rule(multiworld.get_location('Paradox Cave Lower - Right', player), lambda state: can_use_bombs(state, player)
+                                                                                          or has_beam_sword(state, player) or can_shoot_arrows(state, player)
+                                                                                          or state.has_any(["Fire Rod", "Cane of Somaria"], player))
+    set_rule(multiworld.get_location('Paradox Cave Lower - Far Right', player), lambda state: can_use_bombs(state, player)
+                                                                                              or has_beam_sword(state, player) or can_shoot_arrows(state, player)
+                                                                                              or state.has_any(["Fire Rod", "Cane of Somaria"], player))
+    set_rule(multiworld.get_location('Paradox Cave Lower - Middle', player), lambda state: can_use_bombs(state, player)
+                                                                                           or has_beam_sword(state, player) or can_shoot_arrows(state, player)
+                                                                                           or state.has_any(["Fire Rod", "Cane of Somaria"], player))
+    set_rule(multiworld.get_location('Paradox Cave Lower - Far Left', player), lambda state: can_use_bombs(state, player)
+                                                                                             or has_beam_sword(state, player) or can_shoot_arrows(state, player)
+                                                                                             or state.has_any(["Fire Rod", "Cane of Somaria"], player))
+    set_rule(multiworld.get_location('Paradox Cave Upper - Left', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Paradox Cave Upper - Right', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Mini Moldorm Cave - Far Left', player), lambda state: can_kill_most_things(state, player, 4))
+    set_rule(multiworld.get_location('Mini Moldorm Cave - Left', player), lambda state: can_kill_most_things(state, player, 4))
+    set_rule(multiworld.get_location('Mini Moldorm Cave - Far Right', player), lambda state: can_kill_most_things(state, player, 4))
+    set_rule(multiworld.get_location('Mini Moldorm Cave - Right', player), lambda state: can_kill_most_things(state, player, 4))
+    set_rule(multiworld.get_location('Mini Moldorm Cave - Generous Guy', player), lambda state: can_kill_most_things(state, player, 4))
+    set_rule(multiworld.get_location('Hype Cave - Bottom', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Hype Cave - Middle Left', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Hype Cave - Middle Right', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Hype Cave - Top', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_entrance('Light World Death Mountain Shop', player), lambda state: can_use_bombs(state, player))
 
-    set_rule(world.get_entrance('Two Brothers House Exit (West)', player), lambda state: can_bomb_or_bonk(state, player))
-    set_rule(world.get_entrance('Two Brothers House Exit (East)', player), lambda state: can_bomb_or_bonk(state, player))
+    set_rule(multiworld.get_entrance('Two Brothers House Exit (West)', player), lambda state: can_bomb_or_bonk(state, player))
+    set_rule(multiworld.get_entrance('Two Brothers House Exit (East)', player), lambda state: can_bomb_or_bonk(state, player))
 
-    set_rule(world.get_location('Spike Cave', player), lambda state:
+    set_rule(multiworld.get_location('Spike Cave', player), lambda state:
              state.has('Hammer', player) and can_lift_rocks(state, player) and
              ((state.has('Cape', player) and can_extend_magic(state, player, 16, True)) or
               (state.has('Cane of Byrna', player) and
                (can_extend_magic(state, player, 12, True) or
-                (state.multiworld.can_take_damage[player] and (state.has('Pegasus Boots', player) or has_hearts(state, player, 4))))))
+                (world.can_take_damage and (state.has('Pegasus Boots', player) or has_hearts(state, player, 4))))))
              )
 
-    set_rule(world.get_location('Hookshot Cave - Top Right', player), lambda state: state.has('Hookshot', player))
-    set_rule(world.get_location('Hookshot Cave - Top Left', player), lambda state: state.has('Hookshot', player))
-    set_rule(world.get_location('Hookshot Cave - Bottom Right', player),
+    set_rule(multiworld.get_entrance('Hookshot Cave Bomb Wall (North)', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_entrance('Hookshot Cave Bomb Wall (South)', player), lambda state: can_use_bombs(state, player))
+
+    set_rule(multiworld.get_location('Hookshot Cave - Top Right', player), lambda state: state.has('Hookshot', player))
+    set_rule(multiworld.get_location('Hookshot Cave - Top Left', player), lambda state: state.has('Hookshot', player))
+    set_rule(multiworld.get_location('Hookshot Cave - Bottom Right', player),
              lambda state: state.has('Hookshot', player) or state.has('Pegasus Boots', player))
-    set_rule(world.get_location('Hookshot Cave - Bottom Left', player), lambda state: state.has('Hookshot', player))
+    set_rule(multiworld.get_location('Hookshot Cave - Bottom Left', player), lambda state: state.has('Hookshot', player))
 
-    set_rule(world.get_entrance('Sewers Door', player),
+    set_rule(multiworld.get_location('Hyrule Castle - Map Guard Key Drop', player),
+             lambda state: can_kill_most_things(state, player, 1))
+
+    set_rule(multiworld.get_entrance('Sewers Door', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4) or (
-                         world.small_key_shuffle[player] == small_key_shuffle.option_universal and world.mode[
-                     player] == 'standard'))  # standard universal small keys cannot access the shop
-    set_rule(world.get_entrance('Sewers Back Door', player),
+                     world.options.small_key_shuffle == small_key_shuffle.option_universal and world.options.mode == 'standard'))  # standard universal small keys cannot access the shop
+    set_rule(multiworld.get_entrance('Sewers Back Door', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4))
-    set_rule(world.get_entrance('Sewers Secret Room', player), lambda state: can_bomb_or_bonk(state, player))
+    set_rule(multiworld.get_entrance('Sewers Secret Room', player), lambda state: can_bomb_or_bonk(state, player))
 
-    set_rule(world.get_entrance('Agahnim 1', player),
+    set_rule(multiworld.get_entrance('Agahnim 1', player),
              lambda state: has_sword(state, player) and state._lttp_has_key('Small Key (Agahnims Tower)', player, 4))
 
-    set_rule(world.get_location('Castle Tower - Room 03', player), lambda state: can_kill_most_things(state, player, 4))
-    set_rule(world.get_location('Castle Tower - Dark Maze', player),
+    set_rule(multiworld.get_location('Castle Tower - Room 03', player), lambda state: can_kill_most_things(state, player, 4))
+    set_rule(multiworld.get_location('Castle Tower - Dark Maze', player),
              lambda state: can_kill_most_things(state, player, 4) and state._lttp_has_key('Small Key (Agahnims Tower)',
                                                                                    player))
-    set_rule(world.get_location('Castle Tower - Dark Archer Key Drop', player),
+    set_rule(multiworld.get_location('Castle Tower - Dark Archer Key Drop', player),
              lambda state: can_kill_most_things(state, player, 4) and state._lttp_has_key('Small Key (Agahnims Tower)',
                                                                                    player, 2))
-    set_rule(world.get_location('Castle Tower - Circle of Pots Key Drop', player),
+    set_rule(multiworld.get_location('Castle Tower - Circle of Pots Key Drop', player),
              lambda state: can_kill_most_things(state, player, 4) and state._lttp_has_key('Small Key (Agahnims Tower)',
                                                                                    player, 3))
-    set_always_allow(world.get_location('Eastern Palace - Big Key Chest', player),
+    set_always_allow(multiworld.get_location('Eastern Palace - Big Key Chest', player),
                      lambda state, item: item.name == 'Big Key (Eastern Palace)' and item.player == player)
-    set_rule(world.get_location('Eastern Palace - Big Key Chest', player),
+    set_rule(multiworld.get_location('Eastern Palace - Big Key Chest', player),
              lambda state: can_kill_most_things(state, player, 5) and (state._lttp_has_key('Small Key (Eastern Palace)',
              player, 2) or ((location_item_name(state, 'Eastern Palace - Big Key Chest', player)
                              == ('Big Key (Eastern Palace)', player) and state.has('Small Key (Eastern Palace)',
                                                                                    player)))))
-    set_rule(world.get_location('Eastern Palace - Dark Eyegore Key Drop', player),
+    set_rule(multiworld.get_location('Eastern Palace - Dark Eyegore Key Drop', player),
              lambda state: state.has('Big Key (Eastern Palace)', player) and can_kill_most_things(state, player, 1))
-    set_rule(world.get_location('Eastern Palace - Big Chest', player),
+    set_rule(multiworld.get_location('Eastern Palace - Big Chest', player),
              lambda state: state.has('Big Key (Eastern Palace)', player))
     # not bothering to check for can_kill_most_things in the rooms leading to boss, as if you can kill a boss you should
     # be able to get through these rooms
-    ep_boss = world.get_location('Eastern Palace - Boss', player)
+    ep_boss = multiworld.get_location('Eastern Palace - Boss', player)
     add_rule(ep_boss, lambda state: state.has('Big Key (Eastern Palace)', player) and
                                     state._lttp_has_key('Small Key (Eastern Palace)', player, 2) and
                                     ep_boss.parent_region.dungeon.boss.can_defeat(state))
-    ep_prize = world.get_location('Eastern Palace - Prize', player)
+    ep_prize = multiworld.get_location('Eastern Palace - Prize', player)
     add_rule(ep_prize, lambda state: state.has('Big Key (Eastern Palace)', player) and
                                      state._lttp_has_key('Small Key (Eastern Palace)', player, 2) and
                                      ep_prize.parent_region.dungeon.boss.can_defeat(state))
-    if not world.enemy_shuffle[player]:
+    if not world.options.enemy_shuffle:
         add_rule(ep_boss, lambda state: can_shoot_arrows(state, player))
         add_rule(ep_prize, lambda state: can_shoot_arrows(state, player))
 
     # You can always kill the Stalfos' with the pots on easy/normal
-    if world.enemy_health[player] in ("hard", "expert") or world.enemy_shuffle[player]:
+    if world.options.enemy_health in ("hard", "expert") or world.options.enemy_shuffle:
         stalfos_rule = lambda state: can_kill_most_things(state, player, 4)
         for location in ['Eastern Palace - Compass Chest', 'Eastern Palace - Big Chest',
                          'Eastern Palace - Dark Square Pot Key', 'Eastern Palace - Dark Eyegore Key Drop',
                          'Eastern Palace - Big Key Chest', 'Eastern Palace - Boss', 'Eastern Palace - Prize']:
-            add_rule(world.get_location(location, player), stalfos_rule)
+            add_rule(multiworld.get_location(location, player), stalfos_rule)
 
-    set_rule(world.get_location('Desert Palace - Big Chest', player), lambda state: state.has('Big Key (Desert Palace)', player))
-    set_rule(world.get_location('Desert Palace - Torch', player), lambda state: state.has('Pegasus Boots', player))
+    set_rule(multiworld.get_location('Desert Palace - Big Chest', player), lambda state: state.has('Big Key (Desert Palace)', player))
+    set_rule(multiworld.get_location('Desert Palace - Torch', player), lambda state: state.has('Pegasus Boots', player))
 
-    set_rule(world.get_entrance('Desert Palace East Wing', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4))
-    set_rule(world.get_location('Desert Palace - Big Key Chest', player), lambda state: can_kill_most_things(state, player, 3))
-    set_rule(world.get_location('Desert Palace - Beamos Hall Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 2) and can_kill_most_things(state, player, 4))
-    set_rule(world.get_location('Desert Palace - Desert Tiles 2 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 3) and can_kill_most_things(state, player, 4))
-    add_rule(world.get_location('Desert Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
-    add_rule(world.get_location('Desert Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
+    set_rule(multiworld.get_entrance('Desert Palace East Wing', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4))
+    set_rule(multiworld.get_location('Desert Palace - Big Key Chest', player), lambda state: can_kill_most_things(state, player, 3))
+    set_rule(multiworld.get_location('Desert Palace - Beamos Hall Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 2) and can_kill_most_things(state, player, 4))
+    set_rule(multiworld.get_location('Desert Palace - Desert Tiles 2 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 3) and can_kill_most_things(state, player, 4))
+    add_rule(multiworld.get_location('Desert Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Prize', player).parent_region.dungeon.boss.can_defeat(state))
+    add_rule(multiworld.get_location('Desert Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Desert Palace)', player, 4) and state.has('Big Key (Desert Palace)', player) and has_fire_source(state, player) and state.multiworld.get_location('Desert Palace - Boss', player).parent_region.dungeon.boss.can_defeat(state))
 
     # logic patch to prevent placing a crystal in Desert that's required to reach the required keys
-    if not (world.small_key_shuffle[player] and world.big_key_shuffle[player]):
-        add_rule(world.get_location('Desert Palace - Prize', player), lambda state: state.multiworld.get_region('Desert Palace Main (Outer)', player).can_reach(state))
+    if not (world.options.small_key_shuffle and world.options.big_key_shuffle):
+        add_rule(multiworld.get_location('Desert Palace - Prize', player), lambda state: state.multiworld.get_region('Desert Palace Main (Outer)', player).can_reach(state))
 
-    set_rule(world.get_entrance('Tower of Hera Small Key Door', player), lambda state: state._lttp_has_key('Small Key (Tower of Hera)', player) or location_item_name(state, 'Tower of Hera - Big Key Chest', player) == ('Small Key (Tower of Hera)', player))
-    set_rule(world.get_entrance('Tower of Hera Big Key Door', player), lambda state: state.has('Big Key (Tower of Hera)', player))
-    if world.enemy_shuffle[player]:
-        add_rule(world.get_entrance('Tower of Hera Big Key Door', player), lambda state: can_kill_most_things(state, player, 3))
+    set_rule(multiworld.get_location('Tower of Hera - Basement Cage', player), lambda state: can_activate_crystal_switch(state, player))
+    set_rule(multiworld.get_location('Tower of Hera - Map Chest', player), lambda state: can_activate_crystal_switch(state, player))
+    set_rule(multiworld.get_entrance('Tower of Hera Small Key Door', player), lambda state: can_activate_crystal_switch(state, player) and (state._lttp_has_key('Small Key (Tower of Hera)', player) or location_item_name(state, 'Tower of Hera - Big Key Chest', player) == ('Small Key (Tower of Hera)', player)))
+    set_rule(multiworld.get_entrance('Tower of Hera Big Key Door', player), lambda state: can_activate_crystal_switch(state, player) and state.has('Big Key (Tower of Hera)', player))
+    if world.options.enemy_shuffle:
+        add_rule(multiworld.get_entrance('Tower of Hera Big Key Door', player), lambda state: can_kill_most_things(state, player, 3))
     else:
-        add_rule(world.get_entrance('Tower of Hera Big Key Door', player),
+        add_rule(multiworld.get_entrance('Tower of Hera Big Key Door', player),
                  lambda state: (has_melee_weapon(state, player) or (state.has('Silver Bow', player)
                                 and can_shoot_arrows(state, player)) or state.has("Cane of Byrna", player)
                                 or state.has("Cane of Somaria", player)))
-    set_rule(world.get_location('Tower of Hera - Big Chest', player), lambda state: state.has('Big Key (Tower of Hera)', player))
-    set_rule(world.get_location('Tower of Hera - Big Key Chest', player), lambda state: has_fire_source(state, player))
-    if world.accessibility[player] != 'locations':
-        set_always_allow(world.get_location('Tower of Hera - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Tower of Hera)' and item.player == player)
+    set_rule(multiworld.get_location('Tower of Hera - Big Chest', player), lambda state: state.has('Big Key (Tower of Hera)', player))
+    set_rule(multiworld.get_location('Tower of Hera - Big Key Chest', player), lambda state: has_fire_source(state, player))
+    if world.options.accessibility != 'full':
+        set_always_allow(multiworld.get_location('Tower of Hera - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Tower of Hera)' and item.player == player)
 
-    set_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Flippers', player) and state.has('Open Floodgate', player))
-    set_rule(world.get_entrance('Swamp Palace Small Key Door', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player))
-    set_rule(world.get_location('Swamp Palace - Map Chest', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_location('Swamp Palace - Trench 1 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 2))
-    set_rule(world.get_entrance('Swamp Palace (Center)', player), lambda state: state.has('Hammer', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 3))
-    set_rule(world.get_location('Swamp Palace - Hookshot Pot Key', player), lambda state: state.has('Hookshot', player))
-    if world.pot_shuffle[player]:
+    set_rule(multiworld.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Flippers', player) and state.has('Open Floodgate', player))
+    set_rule(multiworld.get_entrance('Swamp Palace Small Key Door', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player))
+    set_rule(multiworld.get_location('Swamp Palace - Map Chest', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Swamp Palace - Trench 1 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 2))
+    set_rule(multiworld.get_entrance('Swamp Palace (Center)', player), lambda state: state.has('Hammer', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 3))
+    set_rule(multiworld.get_location('Swamp Palace - Hookshot Pot Key', player), lambda state: state.has('Hookshot', player))
+    if world.options.pot_shuffle:
         # it could move the key to the top right platform which can only be reached with bombs
-        add_rule(world.get_location('Swamp Palace - Hookshot Pot Key', player), lambda state: can_use_bombs(state, player))
-    set_rule(world.get_entrance('Swamp Palace (West)', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6)
-        if state.has('Hookshot', player)
-        else state._lttp_has_key('Small Key (Swamp Palace)', player, 4))
-    set_rule(world.get_location('Swamp Palace - Big Chest', player), lambda state: state.has('Big Key (Swamp Palace)', player))
-    if world.accessibility[player] != 'locations':
-        allow_self_locking_items(world.get_location('Swamp Palace - Big Chest', player), 'Big Key (Swamp Palace)')
-    set_rule(world.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 5))
-    if not world.small_key_shuffle[player] and world.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic']:
-        forbid_item(world.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
-    set_rule(world.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
-    set_rule(world.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
-    if world.pot_shuffle[player]:
+        add_rule(multiworld.get_location('Swamp Palace - Hookshot Pot Key', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_entrance('Swamp Palace (West)', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
+    set_rule(multiworld.get_location('Swamp Palace - Big Chest', player), lambda state: state.has('Big Key (Swamp Palace)', player))
+    if world.options.accessibility != 'full':
+        allow_self_locking_items(multiworld.get_location('Swamp Palace - Big Chest', player), 'Big Key (Swamp Palace)')
+    set_rule(multiworld.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 5))
+    if not world.options.small_key_shuffle and world.options.glitches_required not in ['hybrid_major_glitches', 'no_logic']:
+        forbid_item(multiworld.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
+    add_rule(multiworld.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
+    add_rule(multiworld.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
+    if world.options.pot_shuffle:
         # key can (and probably will) be moved behind bombable wall
-        set_rule(world.get_location('Swamp Palace - Waterway Pot Key', player), lambda state: can_use_bombs(state, player))
+        set_rule(multiworld.get_location('Swamp Palace - Waterway Pot Key', player), lambda state: can_use_bombs(state, player))
 
-    set_rule(world.get_entrance('Thieves Town Big Key Door', player), lambda state: state.has('Big Key (Thieves Town)', player))
-
-    if world.worlds[player].dungeons["Thieves Town"].boss.enemizer_name == "Blind":
-        set_rule(world.get_entrance('Blind Fight', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3) and can_use_bombs(state, player))
-
-    set_rule(world.get_location('Thieves\' Town - Big Chest', player),
+    set_rule(multiworld.get_entrance('Thieves Town Big Key Door', player), lambda state: state.has('Big Key (Thieves Town)', player))
+    if world.dungeons["Thieves Town"].boss.enemizer_name == "Blind":
+        set_rule(multiworld.get_entrance('Blind Fight', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3) and can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Thieves\' Town - Big Chest', player),
              lambda state: ((state._lttp_has_key('Small Key (Thieves Town)', player, 3)) or (location_item_name(state, 'Thieves\' Town - Big Chest', player) == ("Small Key (Thieves Town)", player)) and state._lttp_has_key('Small Key (Thieves Town)', player, 2)) and state.has('Hammer', player))
-    if world.accessibility[player] != 'locations':
-        set_always_allow(world.get_location('Thieves\' Town - Big Chest', player), lambda state, item: item.name == 'Small Key (Thieves Town)' and item.player == player)
-
-    set_rule(world.get_location('Thieves\' Town - Attic', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3))
-    set_rule(world.get_location('Thieves\' Town - Spike Switch Pot Key', player),
+    set_rule(multiworld.get_location('Thieves\' Town - Blind\'s Cell', player),
+             lambda state: state._lttp_has_key('Small Key (Thieves Town)', player))
+    if world.options.accessibility != 'full' and not world.options.key_drop_shuffle:
+        set_always_allow(multiworld.get_location('Thieves\' Town - Big Chest', player), lambda state, item: item.name == 'Small Key (Thieves Town)' and item.player == player)
+    set_rule(multiworld.get_location('Thieves\' Town - Attic', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3))
+    set_rule(multiworld.get_location('Thieves\' Town - Spike Switch Pot Key', player),
              lambda state: state._lttp_has_key('Small Key (Thieves Town)', player))
 
     # We need so many keys in the SW doors because they are all reachable as the last door (except for the door to mothula)
-    set_rule(world.get_entrance('Skull Woods First Section South Door', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
-    set_rule(world.get_entrance('Skull Woods First Section (Right) North Door', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
-    set_rule(world.get_entrance('Skull Woods First Section West Door', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
-    set_rule(world.get_entrance('Skull Woods First Section (Left) Door to Exit', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
-    set_rule(world.get_location('Skull Woods - Big Chest', player), lambda state: state.has('Big Key (Skull Woods)', player) and can_use_bombs(state, player))
-    if world.accessibility[player] != 'locations':
-        allow_self_locking_items(world.get_location('Skull Woods - Big Chest', player), 'Big Key (Skull Woods)')
-    set_rule(world.get_entrance('Skull Woods Torch Room', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 4) and state.has('Fire Rod', player) and has_sword(state, player))  # sword required for curtain
-    add_rule(world.get_location('Skull Woods - Prize', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
-    add_rule(world.get_location('Skull Woods - Boss', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
+    set_rule(multiworld.get_entrance('Skull Woods First Section South Door', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
+    set_rule(multiworld.get_entrance('Skull Woods First Section (Right) North Door', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
+    set_rule(multiworld.get_entrance('Skull Woods First Section West Door', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
+    set_rule(multiworld.get_entrance('Skull Woods First Section (Left) Door to Exit', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
+    set_rule(multiworld.get_location('Skull Woods - Big Chest', player), lambda state: state.has('Big Key (Skull Woods)', player) and can_use_bombs(state, player))
+    if world.options.accessibility != 'full':
+        allow_self_locking_items(multiworld.get_location('Skull Woods - Big Chest', player), 'Big Key (Skull Woods)')
+    set_rule(multiworld.get_entrance('Skull Woods Torch Room', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 4) and state.has('Fire Rod', player) and has_sword(state, player))  # sword required for curtain
+    add_rule(multiworld.get_location('Skull Woods - Prize', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
+    add_rule(multiworld.get_location('Skull Woods - Boss', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
 
-    set_rule(world.get_location('Ice Palace - Jelly Key Drop', player), lambda state: can_melt_things(state, player))
-    set_rule(world.get_location('Ice Palace - Compass Chest', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player))
-    set_rule(world.get_entrance('Ice Palace (Second Section)', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player) and can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Ice Palace - Jelly Key Drop', player), lambda state: can_melt_things(state, player))
+    set_rule(multiworld.get_location('Ice Palace - Compass Chest', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player))
+    set_rule(multiworld.get_entrance('Ice Palace (Second Section)', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player) and can_use_bombs(state, player))
 
-    set_rule(world.get_entrance('Ice Palace (Main)', player), lambda state: state._lttp_has_key('Small Key (Ice Palace)', player, 2))
-    set_rule(world.get_location('Ice Palace - Big Chest', player), lambda state: state.has('Big Key (Ice Palace)', player))
-    set_rule(world.get_entrance('Ice Palace (Kholdstare)', player), lambda state: can_lift_rocks(state, player) and state.has('Hammer', player) and state.has('Big Key (Ice Palace)', player) and (state._lttp_has_key('Small Key (Ice Palace)', player, 6) or (state.has('Cane of Somaria', player) and state._lttp_has_key('Small Key (Ice Palace)', player, 5))))
+    set_rule(multiworld.get_entrance('Ice Palace (Main)', player), lambda state: state._lttp_has_key('Small Key (Ice Palace)', player, 2))
+    set_rule(multiworld.get_location('Ice Palace - Big Chest', player), lambda state: state.has('Big Key (Ice Palace)', player))
+    set_rule(multiworld.get_entrance('Ice Palace (Kholdstare)', player), lambda state: can_lift_rocks(state, player) and state.has('Hammer', player) and state.has('Big Key (Ice Palace)', player) and (state._lttp_has_key('Small Key (Ice Palace)', player, 6) or (state.has('Cane of Somaria', player) and state._lttp_has_key('Small Key (Ice Palace)', player, 5))))
     # This is a complicated rule, so let's break it down.
     # Hookshot always suffices to get to the right side.
     # Also, once you get over there, you have to cross the spikes, so that's the last line.
@@ -433,161 +447,174 @@ def global_rules(world, player):
     # Hence if big key is available then it's 6 keys, otherwise 4 keys.
     # If key_drop is off, then we have 3 drop keys available, and can never satisfy the 6 key requirement because one key is on right side,
     # so this reduces perfectly to original logic.
-    set_rule(world.get_entrance('Ice Palace (East)', player), lambda state: (state.has('Hookshot', player) or
-        (state._lttp_has_key('Small Key (Ice Palace)', player, 4)
+    set_rule(multiworld.get_entrance('Ice Palace (East)', player), lambda state: (state.has('Hookshot', player) or
+                                                                                  (state._lttp_has_key('Small Key (Ice Palace)', player, 4)
             if item_name_in_location_names(state, 'Big Key (Ice Palace)', player, [('Ice Palace - Spike Room', player),
                 ('Ice Palace - Hammer Block Key Drop', player),
                 ('Ice Palace - Big Key Chest', player),
                 ('Ice Palace - Map Chest', player)])
-            else state._lttp_has_key('Small Key (Ice Palace)', player, 6))) and
-        (state.multiworld.can_take_damage[player] or state.has('Hookshot', player) or state.has('Cape', player) or state.has('Cane of Byrna', player)))
-    set_rule(world.get_entrance('Ice Palace (East Top)', player), lambda state: can_lift_rocks(state, player) and state.has('Hammer', player))
+            else state._lttp_has_key('Small Key (Ice Palace)', player, 6))) and (
+            world.can_take_damage or state.has('Hookshot', player) or state.has('Cape', player) or state.has('Cane of Byrna', player)))
+    set_rule(multiworld.get_entrance('Ice Palace (East Top)', player), lambda state: can_lift_rocks(state, player) and state.has('Hammer', player))
 
-    set_rule(world.get_entrance('Misery Mire Entrance Gap', player), lambda state: (state.has('Pegasus Boots', player) or state.has('Hookshot', player)) and (has_sword(state, player) or state.has('Fire Rod', player) or state.has('Ice Rod', player) or state.has('Hammer', player) or state.has('Cane of Somaria', player) or can_shoot_arrows(state, player)))  # need to defeat wizzrobes, bombs don't work ...
-    set_rule(world.get_location('Misery Mire - Fishbone Pot Key', player), lambda state: state.has('Big Key (Misery Mire)', player) or state._lttp_has_key('Small Key (Misery Mire)', player, 4))
+    set_rule(multiworld.get_entrance('Misery Mire Entrance Gap', player), lambda state: (state.has('Pegasus Boots', player) or state.has('Hookshot', player)) and (has_sword(state, player) or state.has('Fire Rod', player) or state.has('Ice Rod', player) or state.has('Hammer', player) or state.has('Cane of Somaria', player) or can_shoot_arrows(state, player)))  # need to defeat wizzrobes, bombs don't work ...
+    set_rule(multiworld.get_location('Misery Mire - Fishbone Pot Key', player), lambda state: state.has('Big Key (Misery Mire)', player) or state._lttp_has_key('Small Key (Misery Mire)', player, 4))
 
-    set_rule(world.get_location('Misery Mire - Big Chest', player), lambda state: state.has('Big Key (Misery Mire)', player))
-    set_rule(world.get_location('Misery Mire - Spike Chest', player), lambda state: (state.multiworld.can_take_damage[player] and has_hearts(state, player, 4)) or state.has('Cane of Byrna', player) or state.has('Cape', player))
-    set_rule(world.get_entrance('Misery Mire Big Key Door', player), lambda state: state.has('Big Key (Misery Mire)', player))
-    # How to access crystal switch:
-    # If have big key: then you will need 2 small keys to be able to hit switch and return to main area, as you can burn key in dark room
-    # If not big key: cannot burn key in dark room, hence need only 1 key. all doors immediately available lead to a crystal switch.
-    # The listed chests are those which can be reached if you can reach a crystal switch.
-    set_rule(world.get_location('Misery Mire - Map Chest', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 2))
-    set_rule(world.get_location('Misery Mire - Main Lobby', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 2))
+    set_rule(multiworld.get_location('Misery Mire - Big Chest', player), lambda state: state.has('Big Key (Misery Mire)', player))
+    set_rule(multiworld.get_location('Misery Mire - Spike Chest', player), lambda state: (world.can_take_damage and has_hearts(state, player, 4)) or state.has('Cane of Byrna', player) or state.has('Cape', player))
+    set_rule(multiworld.get_entrance('Misery Mire Big Key Door', player), lambda state: state.has('Big Key (Misery Mire)', player))
+
+    # The most number of keys you can burn without opening the map chest and without reaching a crystal switch is 1,
+    # but if you cannot activate a crystal switch except by throwing a pot, you could burn another two going through
+    # the conveyor crystal room.
+    set_rule(multiworld.get_location('Misery Mire - Map Chest', player), lambda state: (state._lttp_has_key('Small Key (Misery Mire)', player, 2) and can_activate_crystal_switch(state, player)) or state._lttp_has_key('Small Key (Misery Mire)', player, 4))
+    # Using a key on the map door chest will get you the map chest but not a crystal switch. Main Lobby should require
+    # one more key.
+    set_rule(multiworld.get_location('Misery Mire - Main Lobby', player), lambda state: (state._lttp_has_key('Small Key (Misery Mire)', player, 3) and can_activate_crystal_switch(state, player)) or state._lttp_has_key('Small Key (Misery Mire)', player, 5))
+
     # we can place a small key in the West wing iff it also contains/blocks the Big Key, as we cannot reach and softlock with the basement key door yet
-    set_rule(world.get_location('Misery Mire - Conveyor Crystal Key Drop', player),
+    set_rule(multiworld.get_location('Misery Mire - Conveyor Crystal Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 4)
              if location_item_name(state, 'Misery Mire - Compass Chest', player) == ('Big Key (Misery Mire)', player) or location_item_name(state, 'Misery Mire - Big Key Chest', player) == ('Big Key (Misery Mire)', player) or location_item_name(state, 'Misery Mire - Conveyor Crystal Key Drop', player) == ('Big Key (Misery Mire)', player)
              else state._lttp_has_key('Small Key (Misery Mire)', player, 5))
-    set_rule(world.get_entrance('Misery Mire (West)', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 5)
+    set_rule(multiworld.get_entrance('Misery Mire (West)', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 5)
         if ((location_item_name(state, 'Misery Mire - Compass Chest', player) in [('Big Key (Misery Mire)', player)]) or (location_item_name(state, 'Misery Mire - Big Key Chest', player) in [('Big Key (Misery Mire)', player)]))
         else state._lttp_has_key('Small Key (Misery Mire)', player, 6))
-    set_rule(world.get_location('Misery Mire - Compass Chest', player), lambda state: has_fire_source(state, player))
-    set_rule(world.get_location('Misery Mire - Big Key Chest', player), lambda state: has_fire_source(state, player))
-    set_rule(world.get_entrance('Misery Mire (Vitreous)', player), lambda state: state.has('Cane of Somaria', player) and can_use_bombs(state, player))
+    set_rule(multiworld.get_location('Misery Mire - Compass Chest', player), lambda state: has_fire_source(state, player))
+    set_rule(multiworld.get_location('Misery Mire - Big Key Chest', player), lambda state: has_fire_source(state, player))
+    set_rule(multiworld.get_entrance('Misery Mire (Vitreous)', player), lambda state: state.has('Cane of Somaria', player) and can_use_bombs(state, player))
 
-    set_rule(world.get_entrance('Turtle Rock Entrance Gap', player), lambda state: state.has('Cane of Somaria', player))
-    set_rule(world.get_entrance('Turtle Rock Entrance Gap Reverse', player), lambda state: state.has('Cane of Somaria', player))
-    set_rule(world.get_location('Turtle Rock - Pokey 1 Key Drop', player), lambda state: can_kill_most_things(state, player, 5))
-    set_rule(world.get_location('Turtle Rock - Pokey 2 Key Drop', player), lambda state: can_kill_most_things(state, player, 5))
-    set_rule(world.get_location('Turtle Rock - Compass Chest', player), lambda state: state.has('Cane of Somaria', player))
-    set_rule(world.get_location('Turtle Rock - Roller Room - Left', player), lambda state: state.has('Cane of Somaria', player) and state.has('Fire Rod', player))
-    set_rule(world.get_location('Turtle Rock - Roller Room - Right', player), lambda state: state.has('Cane of Somaria', player) and state.has('Fire Rod', player))
-    set_rule(world.get_location('Turtle Rock - Big Chest', player), lambda state: state.has('Big Key (Turtle Rock)', player) and (state.has('Cane of Somaria', player) or state.has('Hookshot', player)))
-    set_rule(world.get_entrance('Turtle Rock (Big Chest) (North)', player), lambda state: state.has('Cane of Somaria', player) or state.has('Hookshot', player))
-    set_rule(world.get_entrance('Turtle Rock Big Key Door', player), lambda state: state.has('Big Key (Turtle Rock)', player) and can_kill_most_things(state, player, 10))
-    set_rule(world.get_entrance('Turtle Rock Ledge Exit (West)', player), lambda state: can_use_bombs(state, player) and can_kill_most_things(state, player, 10))
-    set_rule(world.get_location('Turtle Rock - Chain Chomps', player), lambda state: can_use_bombs(state, player) or can_shoot_arrows(state, player)
-        or has_beam_sword(state, player) or state.has_any(["Blue Boomerang", "Red Boomerang", "Hookshot", "Cane of Somaria", "Fire Rod", "Ice Rod"], player))
-    set_rule(world.get_entrance('Turtle Rock (Dark Room) (North)', player), lambda state: state.has('Cane of Somaria', player))
-    set_rule(world.get_entrance('Turtle Rock (Dark Room) (South)', player), lambda state: state.has('Cane of Somaria', player))
-    set_rule(world.get_location('Turtle Rock - Eye Bridge - Bottom Left', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
-    set_rule(world.get_location('Turtle Rock - Eye Bridge - Bottom Right', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
-    set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Left', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
-    set_rule(world.get_location('Turtle Rock - Eye Bridge - Top Right', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
-    set_rule(world.get_entrance('Turtle Rock (Trinexx)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6) and state.has('Big Key (Turtle Rock)', player) and state.has('Cane of Somaria', player))
+    set_rule(multiworld.get_entrance('Turtle Rock Entrance Gap', player), lambda state: state.has('Cane of Somaria', player))
+    set_rule(multiworld.get_entrance('Turtle Rock Entrance Gap Reverse', player), lambda state: state.has('Cane of Somaria', player))
+    set_rule(multiworld.get_location('Turtle Rock - Pokey 1 Key Drop', player), lambda state: can_kill_most_things(state, player, 5))
+    set_rule(multiworld.get_location('Turtle Rock - Pokey 2 Key Drop', player), lambda state: can_kill_most_things(state, player, 5))
+    set_rule(multiworld.get_location('Turtle Rock - Compass Chest', player), lambda state: state.has('Cane of Somaria', player))
+    set_rule(multiworld.get_location('Turtle Rock - Roller Room - Left', player), lambda state: state.has('Cane of Somaria', player) and state.has('Fire Rod', player))
+    set_rule(multiworld.get_location('Turtle Rock - Roller Room - Right', player), lambda state: state.has('Cane of Somaria', player) and state.has('Fire Rod', player))
+    set_rule(multiworld.get_location('Turtle Rock - Big Chest', player), lambda state: state.has('Big Key (Turtle Rock)', player) and (state.has('Cane of Somaria', player) or state.has('Hookshot', player)))
+    set_rule(multiworld.get_entrance('Turtle Rock (Big Chest) (North)', player), lambda state: state.has('Cane of Somaria', player) or state.has('Hookshot', player))
+    set_rule(multiworld.get_entrance('Turtle Rock Big Key Door', player), lambda state: state.has('Big Key (Turtle Rock)', player) and can_kill_most_things(state, player, 10) and can_bomb_or_bonk(state, player))
+    set_rule(multiworld.get_location('Turtle Rock - Chain Chomps', player), lambda state: can_use_bombs(state, player) or can_shoot_arrows(state, player)
+                                                                                          or has_beam_sword(state, player) or state.has_any(["Blue Boomerang", "Red Boomerang", "Hookshot", "Cane of Somaria", "Fire Rod", "Ice Rod"], player))
+    set_rule(multiworld.get_entrance('Turtle Rock (Dark Room) (North)', player), lambda state: state.has('Cane of Somaria', player))
+    set_rule(multiworld.get_entrance('Turtle Rock (Dark Room) (South)', player), lambda state: state.has('Cane of Somaria', player))
+    set_rule(multiworld.get_location('Turtle Rock - Eye Bridge - Bottom Left', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
+    set_rule(multiworld.get_location('Turtle Rock - Eye Bridge - Bottom Right', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
+    set_rule(multiworld.get_location('Turtle Rock - Eye Bridge - Top Left', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
+    set_rule(multiworld.get_location('Turtle Rock - Eye Bridge - Top Right', player), lambda state: state.has('Cane of Byrna', player) or state.has('Cape', player) or state.has('Mirror Shield', player))
+    set_rule(multiworld.get_entrance('Turtle Rock (Trinexx)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6) and state.has('Big Key (Turtle Rock)', player) and state.has('Cane of Somaria', player))
+    set_rule(multiworld.get_entrance('Turtle Rock Second Section Bomb Wall', player), lambda state: can_kill_most_things(state, player, 10))
 
-    if world.enemy_shuffle[player]:
-        set_rule(world.get_entrance('Palace of Darkness Bonk Wall', player), lambda state: can_bomb_or_bonk(state, player) and can_kill_most_things(state, player, 3))
+    if not world.fix_trock_doors:
+        add_rule(multiworld.get_entrance('Turtle Rock Second Section Bomb Wall', player), lambda state: can_use_bombs(state, player))
+        set_rule(multiworld.get_entrance('Turtle Rock Second Section from Bomb Wall', player), lambda state: can_use_bombs(state, player))
+        set_rule(multiworld.get_entrance('Turtle Rock Eye Bridge from Bomb Wall', player), lambda state: can_use_bombs(state, player))
+        set_rule(multiworld.get_entrance('Turtle Rock Eye Bridge Bomb Wall', player), lambda state: can_use_bombs(state, player))
+
+    if world.options.enemy_shuffle:
+        set_rule(multiworld.get_entrance('Palace of Darkness Bonk Wall', player), lambda state: can_bomb_or_bonk(state, player) and can_kill_most_things(state, player, 3))
     else:
-        set_rule(world.get_entrance('Palace of Darkness Bonk Wall', player), lambda state: can_bomb_or_bonk(state, player) and can_shoot_arrows(state, player))
-    set_rule(world.get_entrance('Palace of Darkness Hammer Peg Drop', player), lambda state: state.has('Hammer', player))
-    set_rule(world.get_entrance('Palace of Darkness Bridge Room', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 1))  # If we can reach any other small key door, we already have back door access to this area
-    set_rule(world.get_entrance('Palace of Darkness Big Key Door', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) and state.has('Big Key (Palace of Darkness)', player) and can_shoot_arrows(state, player) and state.has('Hammer', player))
-    set_rule(world.get_entrance('Palace of Darkness (North)', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 4))
-    set_rule(world.get_location('Palace of Darkness - Big Chest', player), lambda state: can_use_bombs(state, player) and state.has('Big Key (Palace of Darkness)', player))
-    set_rule(world.get_location('Palace of Darkness - The Arena - Ledge', player), lambda state: can_use_bombs(state, player))
-    if world.pot_shuffle[player]:
+        set_rule(multiworld.get_entrance('Palace of Darkness Bonk Wall', player), lambda state: can_bomb_or_bonk(state, player) and can_shoot_arrows(state, player))
+    set_rule(multiworld.get_entrance('Palace of Darkness Hammer Peg Drop', player), lambda state: state.has('Hammer', player))
+    set_rule(multiworld.get_entrance('Palace of Darkness Bridge Room', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 1))  # If we can reach any other small key door, we already have back door access to this area
+    set_rule(multiworld.get_entrance('Palace of Darkness Big Key Door', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) and state.has('Big Key (Palace of Darkness)', player) and can_shoot_arrows(state, player) and state.has('Hammer', player))
+    set_rule(multiworld.get_entrance('Palace of Darkness (North)', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 4))
+    set_rule(multiworld.get_location('Palace of Darkness - Big Chest', player), lambda state: can_use_bombs(state, player) and state.has('Big Key (Palace of Darkness)', player))
+    set_rule(multiworld.get_location('Palace of Darkness - The Arena - Ledge', player), lambda state: can_use_bombs(state, player))
+    if world.options.pot_shuffle:
         # chest switch may be up on ledge where bombs are required
-        set_rule(world.get_location('Palace of Darkness - Stalfos Basement', player), lambda state: can_use_bombs(state, player))
+        set_rule(multiworld.get_location('Palace of Darkness - Stalfos Basement', player), lambda state: can_use_bombs(state, player))
 
-    set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase', player), lambda state: can_use_bombs(state, player) and (state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) or (
+    set_rule(multiworld.get_entrance('Palace of Darkness Big Key Chest Staircase', player), lambda state: can_use_bombs(state, player) and (state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) or (
             location_item_name(state, 'Palace of Darkness - Big Key Chest', player) in [('Small Key (Palace of Darkness)', player)] and state._lttp_has_key('Small Key (Palace of Darkness)', player, 3))))
-    if world.accessibility[player] != 'locations':
-        set_always_allow(world.get_location('Palace of Darkness - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Palace of Darkness)' and item.player == player and state._lttp_has_key('Small Key (Palace of Darkness)', player, 5))
+    if world.options.accessibility != 'full':
+        set_always_allow(multiworld.get_location('Palace of Darkness - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Palace of Darkness)' and item.player == player and state._lttp_has_key('Small Key (Palace of Darkness)', player, 5))
 
-    set_rule(world.get_entrance('Palace of Darkness Spike Statue Room Door', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) or (
+    set_rule(multiworld.get_entrance('Palace of Darkness Spike Statue Room Door', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) or (
             location_item_name(state, 'Palace of Darkness - Harmless Hellway', player) in [('Small Key (Palace of Darkness)', player)] and state._lttp_has_key('Small Key (Palace of Darkness)', player, 4)))
-    if world.accessibility[player] != 'locations':
-        set_always_allow(world.get_location('Palace of Darkness - Harmless Hellway', player), lambda state, item: item.name == 'Small Key (Palace of Darkness)' and item.player == player and state._lttp_has_key('Small Key (Palace of Darkness)', player, 5))
+    if world.options.accessibility != 'full':
+        set_always_allow(multiworld.get_location('Palace of Darkness - Harmless Hellway', player), lambda state, item: item.name == 'Small Key (Palace of Darkness)' and item.player == player and state._lttp_has_key('Small Key (Palace of Darkness)', player, 5))
 
-    set_rule(world.get_entrance('Palace of Darkness Maze Door', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6))
+    set_rule(multiworld.get_entrance('Palace of Darkness Maze Door', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6))
 
     # these key rules are conservative, you might be able to get away with more lenient rules
     randomizer_room_chests = ['Ganons Tower - Randomizer Room - Top Left', 'Ganons Tower - Randomizer Room - Top Right', 'Ganons Tower - Randomizer Room - Bottom Left', 'Ganons Tower - Randomizer Room - Bottom Right']
     compass_room_chests = ['Ganons Tower - Compass Room - Top Left', 'Ganons Tower - Compass Room - Top Right', 'Ganons Tower - Compass Room - Bottom Left', 'Ganons Tower - Compass Room - Bottom Right', 'Ganons Tower - Conveyor Star Pits Pot Key']
     back_chests = ['Ganons Tower - Bob\'s Chest', 'Ganons Tower - Big Chest', 'Ganons Tower - Big Key Room - Left', 'Ganons Tower - Big Key Room - Right', 'Ganons Tower - Big Key Chest']
 
-    set_rule(world.get_location('Ganons Tower - Bob\'s Torch', player), lambda state: state.has('Pegasus Boots', player))
-    set_rule(world.get_entrance('Ganons Tower (Tile Room)', player), lambda state: state.has('Cane of Somaria', player))
-    set_rule(world.get_entrance('Ganons Tower (Hookshot Room)', player), lambda state: state.has('Hammer', player) and (state.has('Hookshot', player) or state.has('Pegasus Boots', player)))
-    set_rule(world.get_entrance('Ganons Tower (Map Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
+    set_rule(multiworld.get_location('Ganons Tower - Bob\'s Torch', player), lambda state: state.has('Pegasus Boots', player))
+    set_rule(multiworld.get_entrance('Ganons Tower (Tile Room)', player), lambda state: state.has('Cane of Somaria', player))
+    set_rule(multiworld.get_entrance('Ganons Tower (Hookshot Room)', player), lambda state: state.has('Hammer', player) and (state.has('Hookshot', player) or state.has('Pegasus Boots', player)))
+    set_rule(multiworld.get_location('Ganons Tower - Double Switch Pot Key', player), lambda state: state.has('Cane of Somaria', player) or can_use_bombs(state, player))
+    set_rule(multiworld.get_entrance('Ganons Tower (Double Switch Room)', player), lambda state: state.has('Cane of Somaria', player) or can_use_bombs(state, player))
+    if world.options.pot_shuffle:
+        set_rule(multiworld.get_location('Ganons Tower - Conveyor Cross Pot Key', player), lambda state: state.has('Hammer', player) and (state.has('Hookshot', player) or state.has('Pegasus Boots', player)))
+    set_rule(multiworld.get_entrance('Ganons Tower (Map Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
                 location_item_name(state, 'Ganons Tower - Map Chest', player) in [('Big Key (Ganons Tower)', player)] and state._lttp_has_key('Small Key (Ganons Tower)', player, 6)))
 
     # this seemed to be causing generation failure, disable for now
-    # if world.accessibility[player] != 'locations':
+    # if world.worlds[player].options.accessibility != 'full':
     #     set_always_allow(world.get_location('Ganons Tower - Map Chest', player), lambda state, item: item.name == 'Small Key (Ganons Tower)' and item.player == player and state._lttp_has_key('Small Key (Ganons Tower)', player, 7) and state.can_reach('Ganons Tower (Hookshot Room)', 'region', player))
 
     # It is possible to need more than 6 keys to get through this entrance if you spend keys elsewhere. We reflect this in the chest requirements.
     # However we need to leave these at the lower values to derive that with 7 keys it is always possible to reach Bob and Ice Armos.
-    set_rule(world.get_entrance('Ganons Tower (Double Switch Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 6))
+    set_rule(multiworld.get_entrance('Ganons Tower (Double Switch Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 6))
     # It is possible to need more than 7 keys ....
-    set_rule(world.get_entrance('Ganons Tower (Firesnake Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
+    set_rule(multiworld.get_entrance('Ganons Tower (Firesnake Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
                     item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests + back_chests, [player] * len(randomizer_room_chests + back_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
 
     # The actual requirements for these rooms to avoid key-lock
-    set_rule(world.get_location('Ganons Tower - Firesnake Room', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or
-        ((item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) or item_name_in_location_names(state, 'Small Key (Ganons Tower)', player, [('Ganons Tower - Firesnake Room', player)])) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
+    set_rule(multiworld.get_location('Ganons Tower - Firesnake Room', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or
+                                                                                             ((item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) or item_name_in_location_names(state, 'Small Key (Ganons Tower)', player, [('Ganons Tower - Firesnake Room', player)])) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
     for location in randomizer_room_chests:
-        set_rule(world.get_location(location, player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
-                    item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 6)))
+        set_rule(multiworld.get_location(location, player), lambda state: can_use_bombs(state, player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
+                    item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 6))))
 
     # Once again it is possible to need more than 7 keys...
-    set_rule(world.get_entrance('Ganons Tower (Tile Room) Key Door', player), lambda state: state.has('Fire Rod', player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
+    set_rule(multiworld.get_entrance('Ganons Tower (Tile Room) Key Door', player), lambda state: state.has('Fire Rod', player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
                     item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(compass_room_chests, [player] * len(compass_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5))))
-    set_rule(world.get_entrance('Ganons Tower (Bottom) (East)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
+    set_rule(multiworld.get_entrance('Ganons Tower (Bottom) (East)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
                     item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(back_chests, [player] * len(back_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
     # Actual requirements
     for location in compass_room_chests:
-        set_rule(world.get_location(location, player), lambda state: (can_use_bombs(state, player) or state.has("Cane of Somaria", player)) and state.has('Fire Rod', player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
+        set_rule(multiworld.get_location(location, player), lambda state: (can_use_bombs(state, player) or state.has("Cane of Somaria", player)) and state.has('Fire Rod', player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
                     item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(compass_room_chests, [player] * len(compass_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5))))
 
-    set_rule(world.get_location('Ganons Tower - Big Chest', player), lambda state: state.has('Big Key (Ganons Tower)', player))
+    set_rule(multiworld.get_location('Ganons Tower - Big Chest', player), lambda state: state.has('Big Key (Ganons Tower)', player))
 
-    set_rule(world.get_location('Ganons Tower - Big Key Room - Left', player),
+    set_rule(multiworld.get_location('Ganons Tower - Big Key Room - Left', player),
              lambda state: can_use_bombs(state, player) and state.multiworld.get_location('Ganons Tower - Big Key Room - Left', player).parent_region.dungeon.bosses['bottom'].can_defeat(state))
-    set_rule(world.get_location('Ganons Tower - Big Key Chest', player),
+    set_rule(multiworld.get_location('Ganons Tower - Big Key Chest', player),
              lambda state: can_use_bombs(state, player) and state.multiworld.get_location('Ganons Tower - Big Key Chest', player).parent_region.dungeon.bosses['bottom'].can_defeat(state))
-    set_rule(world.get_location('Ganons Tower - Big Key Room - Right', player),
+    set_rule(multiworld.get_location('Ganons Tower - Big Key Room - Right', player),
              lambda state: can_use_bombs(state, player) and state.multiworld.get_location('Ganons Tower - Big Key Room - Right', player).parent_region.dungeon.bosses['bottom'].can_defeat(state))
-    if world.enemy_shuffle[player]:
-        set_rule(world.get_entrance('Ganons Tower Big Key Door', player),
+    if world.options.enemy_shuffle:
+        set_rule(multiworld.get_entrance('Ganons Tower Big Key Door', player),
                  lambda state: state.has('Big Key (Ganons Tower)', player))
     else:
-        set_rule(world.get_entrance('Ganons Tower Big Key Door', player),
+        set_rule(multiworld.get_entrance('Ganons Tower Big Key Door', player),
                  lambda state: state.has('Big Key (Ganons Tower)', player) and can_shoot_arrows(state, player))
-    set_rule(world.get_entrance('Ganons Tower Torch Rooms', player),
+    set_rule(multiworld.get_entrance('Ganons Tower Torch Rooms', player),
              lambda state: can_kill_most_things(state, player, 8) and has_fire_source(state, player) and state.multiworld.get_entrance('Ganons Tower Torch Rooms', player).parent_region.dungeon.bosses['middle'].can_defeat(state))
-    set_rule(world.get_location('Ganons Tower - Mini Helmasaur Key Drop', player), lambda state: can_kill_most_things(state, player, 1))
-    set_rule(world.get_location('Ganons Tower - Pre-Moldorm Chest', player),
-             lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7))
-    set_rule(world.get_entrance('Ganons Tower Moldorm Door', player),
-             lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8))
-    set_rule(world.get_entrance('Ganons Tower Moldorm Gap', player),
+    set_rule(multiworld.get_location('Ganons Tower - Mini Helmasaur Key Drop', player), lambda state: can_kill_most_things(state, player, 1))
+    set_rule(multiworld.get_location('Ganons Tower - Pre-Moldorm Chest', player),
+             lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) and can_use_bombs(state, player))
+    set_rule(multiworld.get_entrance('Ganons Tower Moldorm Door', player),
+             lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) and can_use_bombs(state, player))
+    set_rule(multiworld.get_entrance('Ganons Tower Moldorm Gap', player),
              lambda state: state.has('Hookshot', player) and state.multiworld.get_entrance('Ganons Tower Moldorm Gap', player).parent_region.dungeon.bosses['top'].can_defeat(state))
-    set_defeat_dungeon_boss_rule(world.get_location('Agahnim 2', player))
-    ganon = world.get_location('Ganon', player)
+    set_defeat_dungeon_boss_rule(multiworld.get_location('Agahnim 2', player))
+    ganon = multiworld.get_location('Ganon', player)
     set_rule(ganon, lambda state: GanonDefeatRule(state, player))
-    if world.goal[player] in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
+    if world.options.goal in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
         add_rule(ganon, lambda state: has_triforce_pieces(state, player))
-    elif world.goal[player] == 'ganon_pedestal':
-        add_rule(world.get_location('Ganon', player), lambda state: state.can_reach('Master Sword Pedestal', 'Location', player))
+    elif world.options.goal == 'ganon_pedestal':
+        add_rule(multiworld.get_location('Ganon', player), lambda state: state.can_reach('Master Sword Pedestal', 'Location', player))
     else:
-        add_rule(ganon, lambda state: has_crystals(state, state.multiworld.crystals_needed_for_ganon[player], player))
-    set_rule(world.get_entrance('Ganon Drop', player), lambda state: has_beam_sword(state, player))  # need to damage ganon to get tiles to drop
+        add_rule(ganon, lambda state: has_crystals(state, state.multiworld.worlds[player].options.crystals_needed_for_ganon, player))
+    set_rule(multiworld.get_entrance('Ganon Drop', player), lambda state: has_beam_sword(state, player))  # need to damage ganon to get tiles to drop
 
-    set_rule(world.get_location('Flute Activation Spot', player), lambda state: state.has('Flute', player))
+    set_rule(multiworld.get_location('Flute Activation Spot', player), lambda state: state.has('Flute', player))
 
 
 def default_rules(world, player):
@@ -701,9 +728,9 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Floating Island Mirror Spot', player), lambda state: state.has('Magic Mirror', player))
     set_rule(world.get_entrance('Turtle Rock', player), lambda state: state.has('Moon Pearl', player) and has_sword(state, player) and has_turtle_rock_medallion(state, player) and state.can_reach('Turtle Rock (Top)', 'Region', player))  # sword required to cast magic (!)
 
-    set_rule(world.get_entrance('Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player].to_bool(world, player))
+    set_rule(world.get_entrance('Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.worlds[player].options.open_pyramid.to_bool(world, player))
 
-    if world.swordless[player]:
+    if world.worlds[player].options.swordless:
         swordless_rules(world, player)
 
 
@@ -858,14 +885,14 @@ def inverted_rules(world, player):
     set_rule(world.get_entrance('Dark Grassy Lawn Flute', player), lambda state: state.has('Activated Flute', player))
     set_rule(world.get_entrance('Hammer Peg Area Flute', player), lambda state: state.has('Activated Flute', player))
 
-    set_rule(world.get_entrance('Inverted Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.open_pyramid[player])
+    set_rule(world.get_entrance('Inverted Pyramid Hole', player), lambda state: state.has('Beat Agahnim 2', player) or world.worlds[player].options.open_pyramid)
 
-    if world.swordless[player]:
+    if world.worlds[player].options.swordless:
         swordless_rules(world, player)
 
 def no_glitches_rules(world, player):
     """"""
-    if world.mode[player] == 'inverted':
+    if world.worlds[player].options.mode == 'inverted':
         set_rule(world.get_entrance('Zoras River', player), lambda state: state.has('Moon Pearl', player) and (state.has('Flippers', player) or can_lift_rocks(state, player)))
         set_rule(world.get_entrance('Lake Hylia Central Island Pier', player), lambda state: state.has('Moon Pearl', player) and state.has('Flippers', player))  # can be fake flippered to
         set_rule(world.get_entrance('Lake Hylia Island Pier', player), lambda state: state.has('Moon Pearl', player) and state.has('Flippers', player))  # can be fake flippered to
@@ -886,11 +913,10 @@ def no_glitches_rules(world, player):
 
     add_rule(world.get_entrance('Ganons Tower (Double Switch Room)', player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_entrance('Paradox Cave Push Block Reverse', player), lambda state: False)  # no glitches does not require block override
-    forbid_bomb_jump_requirements(world, player)
     add_conditional_lamps(world, player)
 
 def fake_flipper_rules(world, player):
-    if world.mode[player] == 'inverted':
+    if world.worlds[player].options.mode == 'inverted':
         set_rule(world.get_entrance('Zoras River', player), lambda state: state.has('Moon Pearl', player))
         set_rule(world.get_entrance('Lake Hylia Central Island Pier', player), lambda state: state.has('Moon Pearl', player))
         set_rule(world.get_entrance('Lake Hylia Island Pier', player), lambda state: state.has('Moon Pearl', player))
@@ -914,12 +940,20 @@ def fake_flipper_rules(world, player):
         set_rule(world.get_entrance('East Dark World River Pier', player), lambda state: state.has('Moon Pearl', player))
 
 
-def forbid_bomb_jump_requirements(world, player):
+def bomb_jump_requirements(multiworld, player):
     DMs_room_chests = ['Ganons Tower - DMs Room - Top Left', 'Ganons Tower - DMs Room - Top Right', 'Ganons Tower - DMs Room - Bottom Left', 'Ganons Tower - DMs Room - Bottom Right']
     for location in DMs_room_chests:
-        add_rule(world.get_location(location, player), lambda state: state.has('Hookshot', player))
-    set_rule(world.get_entrance('Paradox Cave Bomb Jump', player), lambda state: False)
-    set_rule(world.get_entrance('Skull Woods First Section Bomb Jump', player), lambda state: False)
+        add_rule(multiworld.get_location(location, player), lambda state: can_use_bombs(state, player), combine="or")
+    set_rule(multiworld.get_entrance('Paradox Cave Bomb Jump', player), lambda state: can_use_bombs(state, player))
+    set_rule(multiworld.get_entrance('Skull Woods First Section Bomb Jump', player), lambda state: can_use_bombs(state, player))
+
+
+def forbid_bomb_jump_requirements(multiworld, player):
+    DMs_room_chests = ['Ganons Tower - DMs Room - Top Left', 'Ganons Tower - DMs Room - Top Right', 'Ganons Tower - DMs Room - Bottom Left', 'Ganons Tower - DMs Room - Bottom Right']
+    for location in DMs_room_chests:
+        add_rule(multiworld.get_location(location, player), lambda state: state.has('Hookshot', player))
+    set_rule(multiworld.get_entrance('Paradox Cave Bomb Jump', player), lambda state: False)
+    set_rule(multiworld.get_entrance('Skull Woods First Section Bomb Jump', player), lambda state: False)
 
 
 DW_Entrances = ['Bumper Cave (Bottom)',
@@ -968,7 +1002,7 @@ def add_conditional_lamps(world, player):
                          'Location', True)
     add_conditional_lamp('Palace of Darkness - Dark Basement - Right', 'Palace of Darkness (Entrance)',
                          'Location', True)
-    if world.mode[player] != 'inverted':
+    if world.worlds[player].options.mode != 'inverted':
         add_conditional_lamp('Agahnim 1', 'Agahnims Tower', 'Entrance')
         add_conditional_lamp('Castle Tower - Dark Maze', 'Agahnims Tower')
         add_conditional_lamp('Castle Tower - Dark Archer Key Drop', 'Agahnims Tower')
@@ -990,16 +1024,13 @@ def add_conditional_lamps(world, player):
     add_conditional_lamp('Eastern Palace - Boss', 'Eastern Palace', 'Location', True)
     add_conditional_lamp('Eastern Palace - Prize', 'Eastern Palace', 'Location', True)
 
-    if not world.mode[player] == "standard":
+    if not world.worlds[player].options.mode == "standard":
         add_lamp_requirement(world, world.get_location('Sewers - Dark Cross', player), player)
         add_lamp_requirement(world, world.get_entrance('Sewers Back Door', player), player)
         add_lamp_requirement(world, world.get_entrance('Throne Room', player), player)
 
 
 def open_rules(world, player):
-
-    set_rule(world.get_location('Hyrule Castle - Map Guard Key Drop', player),
-             lambda state: can_kill_most_things(state, player, 1))
 
     def basement_key_rule(state):
         if location_item_name(state, 'Sewers - Key Rat Key Drop', player) == ("Small Key (Hyrule Castle)", player):
@@ -1009,7 +1040,7 @@ def open_rules(world, player):
 
     set_rule(world.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
              lambda state: basement_key_rule(state) and can_kill_most_things(state, player, 2))
-    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player), basement_key_rule)
+    set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player), lambda state: basement_key_rule(state) and can_kill_most_things(state, player, 1))
 
     set_rule(world.get_location('Sewers - Key Rat Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3) and can_kill_most_things(state, player, 1))
@@ -1017,8 +1048,10 @@ def open_rules(world, player):
     set_rule(world.get_location('Hyrule Castle - Big Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4) and can_kill_most_things(state, player, 1))
     set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
-             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4) and
-                           state.has('Big Key (Hyrule Castle)', player))
+             lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 4)
+                           and state.has('Big Key (Hyrule Castle)', player)
+                           and (world.worlds[player].options.enemy_health in ("easy", "default")
+                                or can_kill_most_things(state, player, 1)))
 
 
 def swordless_rules(world, player):
@@ -1031,7 +1064,7 @@ def swordless_rules(world, player):
 
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has('Hammer', player))  # need to damage ganon to get tiles to drop
 
-    if world.mode[player] != 'inverted':
+    if world.worlds[player].options.mode != 'inverted':
         set_rule(world.get_entrance('Agahnims Tower', player), lambda state: state.has('Cape', player) or state.has('Hammer', player) or state.has('Beat Agahnim 1', player))  # barrier gets removed after killing agahnim, relevant for entrance shuffle
         set_rule(world.get_entrance('Turtle Rock', player), lambda state: state.has('Moon Pearl', player) and has_turtle_rock_medallion(state, player) and state.can_reach('Turtle Rock (Top)', 'Region', player))   # sword not required to use medallion for opening in swordless (!)
         set_rule(world.get_entrance('Misery Mire', player), lambda state: state.has('Moon Pearl', player) and has_misery_mire_medallion(state, player))  # sword not required to use medallion for opening in swordless (!)
@@ -1044,9 +1077,9 @@ def swordless_rules(world, player):
 def add_connection(parent_name, target_name, entrance_name, world, player):
     parent = world.get_region(parent_name, player)
     target = world.get_region(target_name, player)
-    connection = Entrance(player, entrance_name, parent)
-    parent.exits.append(connection)
-    connection.connect(target)
+    parent.connect(target, entrance_name)
+
+
 
 def standard_rules(world, player):
     add_connection('Menu', 'Hyrule Castle Secret Entrance', 'Uncle S&Q', world, player)
@@ -1057,23 +1090,29 @@ def standard_rules(world, player):
     set_rule(world.get_entrance('Links House S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Sanctuary S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
 
-    if world.small_key_shuffle[player] != small_key_shuffle.option_universal:
+    if world.worlds[player].options.small_key_shuffle != small_key_shuffle.option_universal:
         set_rule(world.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
-                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1))
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1)
+                               and can_kill_most_things(state, player, 2))
         set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player),
-                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1))
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1)
+                               and can_kill_most_things(state, player, 1))
 
         set_rule(world.get_location('Hyrule Castle - Big Key Drop', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2))
         set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
-                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2) and
-                               state.has('Big Key (Hyrule Castle)', player))
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2)
+                               and state.has('Big Key (Hyrule Castle)', player)
+                               and (world.worlds[player].options.enemy_health in ("easy", "default")
+                                    or can_kill_most_things(state, player, 1)))
 
         set_rule(world.get_location('Sewers - Key Rat Key Drop', player),
-                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3))
+                 lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3)
+                               and can_kill_most_things(state, player, 1))
     else:
         set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
                  lambda state: state.has('Big Key (Hyrule Castle)', player))
+
 
 def toss_junk_item(world, player):
     items = ['Rupees (20)', 'Bombs (3)', 'Arrows (10)', 'Rupees (5)', 'Rupee (1)', 'Bombs (10)',
@@ -1087,32 +1126,28 @@ def toss_junk_item(world, player):
     raise Exception("Unable to find a junk item to toss to make room for a TR small key")
 
 
-def set_trock_key_rules(world, player):
+def set_trock_key_rules(multiworld, player):
     # First set all relevant locked doors to impassible.
     for entrance in ['Turtle Rock Dark Room Staircase', 'Turtle Rock (Chain Chomp Room) (North)', 'Turtle Rock (Chain Chomp Room) (South)', 'Turtle Rock Entrance to Pokey Room', 'Turtle Rock (Pokey Room) (South)', 'Turtle Rock (Pokey Room) (North)', 'Turtle Rock Big Key Door']:
-        set_rule(world.get_entrance(entrance, player), lambda state: False)
+        set_rule(multiworld.get_entrance(entrance, player), lambda state: False)
 
-    all_state = world.get_all_state(use_cache=False)
+    all_state = multiworld.get_all_state(use_cache=False, allow_partial_entrances=True)
     all_state.reachable_regions[player] = set()  # wipe reachable regions so that the locked doors actually work
     all_state.stale[player] = True
 
     # Check if each of the four main regions of the dungoen can be reached. The previous code section prevents key-costing moves within the dungeon.
-    can_reach_back = all_state.can_reach(world.get_region('Turtle Rock (Eye Bridge)', player)) if world.can_access_trock_eyebridge[player] is None else world.can_access_trock_eyebridge[player]
-    world.can_access_trock_eyebridge[player] = can_reach_back
-    can_reach_front = all_state.can_reach(world.get_region('Turtle Rock (Entrance)', player)) if world.can_access_trock_front[player] is None else world.can_access_trock_front[player]
-    world.can_access_trock_front[player] = can_reach_front
-    can_reach_big_chest = all_state.can_reach(world.get_region('Turtle Rock (Big Chest)', player)) if world.can_access_trock_big_chest[player] is None else world.can_access_trock_big_chest[player]
-    world.can_access_trock_big_chest[player] = can_reach_big_chest
-    can_reach_middle = all_state.can_reach(world.get_region('Turtle Rock (Second Section)', player)) if world.can_access_trock_middle[player] is None else world.can_access_trock_middle[player]
-    world.can_access_trock_middle[player] = can_reach_middle
+    can_reach_back = all_state.can_reach(multiworld.get_region('Turtle Rock (Eye Bridge)', player))
+    can_reach_front = all_state.can_reach(multiworld.get_region('Turtle Rock (Entrance)', player))
+    can_reach_big_chest = all_state.can_reach(multiworld.get_region('Turtle Rock (Big Chest)', player))
+    can_reach_middle = all_state.can_reach(multiworld.get_region('Turtle Rock (Second Section)', player))
 
     # If you can't enter from the back, the door to the front of TR requires only 2 small keys if the big key is in one of these chests since 2 key doors are locked behind the big key door.
     # If you can only enter from the middle, this includes all locations that can only be reached by exiting the front.  This can include Laser Bridge and Crystaroller if the front and back connect via Dark DM Ledge!
     front_locked_locations = {('Turtle Rock - Compass Chest', player), ('Turtle Rock - Roller Room - Left', player), ('Turtle Rock - Roller Room - Right', player)}
     if can_reach_middle and not can_reach_back and not can_reach_front:
         normal_regions = all_state.reachable_regions[player].copy()
-        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: True)
-        set_rule(world.get_entrance('Turtle Rock (Pokey Room) (South)', player), lambda state: True)
+        set_rule(multiworld.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: True)
+        set_rule(multiworld.get_entrance('Turtle Rock (Pokey Room) (South)', player), lambda state: True)
         all_state.update_reachable_regions(player)
         front_locked_regions = all_state.reachable_regions[player].difference(normal_regions)
         front_locked_locations = set((location.name, player) for region in front_locked_regions for location in region.locations)
@@ -1122,37 +1157,38 @@ def set_trock_key_rules(world, player):
 
     # Big key door requires the big key, obviously. We removed this rule in the previous section to flag front_locked_locations correctly,
     # otherwise crystaroller room might not be properly marked as reachable through the back.
-    set_rule(world.get_entrance('Turtle Rock Big Key Door', player), lambda state: state.has('Big Key (Turtle Rock)', player))
+    set_rule(multiworld.get_entrance('Turtle Rock Big Key Door', player), lambda state: state.has('Big Key (Turtle Rock)', player) and can_kill_most_things(state, player, 10) and can_bomb_or_bonk(state, player))
+
 
     # No matter what, the key requirement for going from the middle to the bottom should be five keys.
-    set_rule(world.get_entrance('Turtle Rock Dark Room Staircase', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 5))
+    set_rule(multiworld.get_entrance('Turtle Rock Dark Room Staircase', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 5))
 
     # Now we need to set rules based on which entrances we have access to. The most important point is whether we have back access. If we have back access, we
     # might open all the locked doors in any order, so we need maximally restrictive rules.
     if can_reach_back:
-        set_rule(world.get_location('Turtle Rock - Big Key Chest', player), lambda state: (state._lttp_has_key('Small Key (Turtle Rock)', player, 6) or location_item_name(state, 'Turtle Rock - Big Key Chest', player) == ('Small Key (Turtle Rock)', player)))
-        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 5))
-        set_rule(world.get_entrance('Turtle Rock (Pokey Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6))
+        set_rule(multiworld.get_location('Turtle Rock - Big Key Chest', player), lambda state: (state._lttp_has_key('Small Key (Turtle Rock)', player, 6) or location_item_name(state, 'Turtle Rock - Big Key Chest', player) == ('Small Key (Turtle Rock)', player)))
+        set_rule(multiworld.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 5))
+        set_rule(multiworld.get_entrance('Turtle Rock (Pokey Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6))
 
-        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (North)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6))
-        set_rule(world.get_entrance('Turtle Rock (Pokey Room) (North)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6))
-        set_rule(world.get_entrance('Turtle Rock Entrance to Pokey Room', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 5))
+        set_rule(multiworld.get_entrance('Turtle Rock (Chain Chomp Room) (North)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6))
+        set_rule(multiworld.get_entrance('Turtle Rock (Pokey Room) (North)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6))
+        set_rule(multiworld.get_entrance('Turtle Rock Entrance to Pokey Room', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 5))
     else:
         # Middle to front requires 3 keys if the back is locked by this door, otherwise 5
-        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 3)
+        set_rule(multiworld.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 3)
                 if item_name_in_location_names(state, 'Big Key (Turtle Rock)', player, front_locked_locations.union({('Turtle Rock - Pokey 1 Key Drop', player)}))
                 else state._lttp_has_key('Small Key (Turtle Rock)', player, 5))
         # Middle to front requires 4 keys if the back is locked by this door, otherwise 6
-        set_rule(world.get_entrance('Turtle Rock (Pokey Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 4)
+        set_rule(multiworld.get_entrance('Turtle Rock (Pokey Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 4)
                 if item_name_in_location_names(state, 'Big Key (Turtle Rock)', player, front_locked_locations)
                 else state._lttp_has_key('Small Key (Turtle Rock)', player, 6))
 
         # Front to middle requires 3 keys (if the middle is accessible then these doors can be avoided, otherwise no keys can be wasted)
-        set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (North)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 3))
-        set_rule(world.get_entrance('Turtle Rock (Pokey Room) (North)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 2))
-        set_rule(world.get_entrance('Turtle Rock Entrance to Pokey Room', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 1))
+        set_rule(multiworld.get_entrance('Turtle Rock (Chain Chomp Room) (North)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 3))
+        set_rule(multiworld.get_entrance('Turtle Rock (Pokey Room) (North)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 2))
+        set_rule(multiworld.get_entrance('Turtle Rock Entrance to Pokey Room', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 1))
 
-        set_rule(world.get_location('Turtle Rock - Big Key Chest', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, tr_big_key_chest_keys_needed(state)))
+        set_rule(multiworld.get_location('Turtle Rock - Big Key Chest', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, tr_big_key_chest_keys_needed(state)))
 
         def tr_big_key_chest_keys_needed(state):
             # This function handles the key requirements for the TR Big Chest in the situations it having the Big Key should logically require 2 keys, small key
@@ -1165,30 +1201,29 @@ def set_trock_key_rules(world, player):
             return 6
 
         # If TR is only accessible from the middle, the big key must be further restricted to prevent softlock potential
-        if not can_reach_front and not world.small_key_shuffle[player]:
+        if not can_reach_front and not multiworld.worlds[player].options.small_key_shuffle:
             # Must not go in the Big Key Chest - only 1 other chest available and 2+ keys required for all other chests
-            forbid_item(world.get_location('Turtle Rock - Big Key Chest', player), 'Big Key (Turtle Rock)', player)
+            forbid_item(multiworld.get_location('Turtle Rock - Big Key Chest', player), 'Big Key (Turtle Rock)', player)
             if not can_reach_big_chest:
                 # Must not go in the Chain Chomps chest - only 2 other chests available and 3+ keys required for all other chests
-                forbid_item(world.get_location('Turtle Rock - Chain Chomps', player), 'Big Key (Turtle Rock)', player)
-                forbid_item(world.get_location('Turtle Rock - Pokey 2 Key Drop', player), 'Big Key (Turtle Rock)', player)
-            if world.accessibility[player] == 'locations':
-                if world.big_key_shuffle[player] and can_reach_big_chest:
+                forbid_item(multiworld.get_location('Turtle Rock - Chain Chomps', player), 'Big Key (Turtle Rock)', player)
+                forbid_item(multiworld.get_location('Turtle Rock - Pokey 2 Key Drop', player), 'Big Key (Turtle Rock)', player)
+            if multiworld.worlds[player].options.accessibility == 'full':
+                if multiworld.worlds[player].options.big_key_shuffle and can_reach_big_chest:
                     # Must not go in the dungeon - all 3 available chests (Chomps, Big Chest, Crystaroller) must be keys to access laser bridge, and the big key is required first
                     for location in ['Turtle Rock - Chain Chomps', 'Turtle Rock - Compass Chest',
                                      'Turtle Rock - Pokey 1 Key Drop', 'Turtle Rock - Pokey 2 Key Drop',
                                      'Turtle Rock - Roller Room - Left', 'Turtle Rock - Roller Room - Right']:
-                        forbid_item(world.get_location(location, player), 'Big Key (Turtle Rock)', player)
+                        forbid_item(multiworld.get_location(location, player), 'Big Key (Turtle Rock)', player)
                 else:
                     # A key is required in the Big Key Chest to prevent a possible softlock.  Place an extra key to ensure 100% locations still works
-                    item = item_factory('Small Key (Turtle Rock)', world.worlds[player])
-                    location = world.get_location('Turtle Rock - Big Key Chest', player)
+                    item = item_factory('Small Key (Turtle Rock)', multiworld.worlds[player])
+                    location = multiworld.get_location('Turtle Rock - Big Key Chest', player)
                     location.place_locked_item(item)
-                    location.event = True
-                    toss_junk_item(world, player)
+                    toss_junk_item(multiworld, player)
 
-    if world.accessibility[player] != 'locations':
-        set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
+    if multiworld.worlds[player].options.accessibility != 'full':
+        set_always_allow(multiworld.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
                 and state.can_reach(state.multiworld.get_region('Turtle Rock (Second Section)', player)))
 
 
@@ -1654,7 +1689,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
     def get_rule_to_add(region, location = None, connecting_entrance = None):
         # In OWG, a location can potentially be superbunny-mirror accessible or
         # bunny revival accessible.
-        if world.glitches_required[player] in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
+        if world.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
             if region.name == 'Swamp Palace (Entrance)':  # Need to 0hp revive - not in logic
                 return lambda state: state.has('Moon Pearl', player)
             if region.name == 'Tower of Hera (Bottom)':  # Need to hit the crystal switch
@@ -1694,7 +1729,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
                 seen.add(new_region)
                 if not is_link(new_region):
                     # For glitch rulesets, establish superbunny and revival rules.
-                    if world.glitches_required[player] in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and entrance.name not in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
+                    if world.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and entrance.name not in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                         if region.name in OverworldGlitchRules.get_sword_required_superbunny_mirror_regions():
                             possible_options.append(lambda state: path_to_access_rule(new_path, entrance) and state.has('Magic Mirror', player) and has_sword(state, player))
                         elif (region.name in OverworldGlitchRules.get_boots_required_superbunny_mirror_regions()
@@ -1731,7 +1766,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
     # Add requirements for all locations that are actually in the dark world, except those available to the bunny, including dungeon revival
     for entrance in world.get_entrances(player):
         if is_bunny(entrance.connected_region):
-            if world.glitches_required[player] in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] :
+            if world.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] :
                 if entrance.connected_region.type == LTTPRegionType.Dungeon:
                     if entrance.parent_region.type != LTTPRegionType.Dungeon and entrance.connected_region.name in OverworldGlitchRules.get_invalid_bunny_revival_dungeons():
                         add_rule(entrance, get_rule_to_add(entrance.connected_region, None, entrance))
@@ -1739,7 +1774,7 @@ def set_bunny_rules(world: MultiWorld, player: int, inverted: bool):
                 if entrance.connected_region.name == 'Turtle Rock (Entrance)':
                     add_rule(world.get_entrance('Turtle Rock Entrance Gap', player), get_rule_to_add(entrance.connected_region, None, entrance))
             for location in entrance.connected_region.locations:
-                if world.glitches_required[player] in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and entrance.name in OverworldGlitchRules.get_invalid_mirror_bunny_entrances():
+                if world.worlds[player].options.glitches_required in ['minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'] and entrance.name in OverworldGlitchRules.get_invalid_mirror_bunny_entrances():
                     continue
                 if location.name in bunny_accessible_locations:
                     continue

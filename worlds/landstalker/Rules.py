@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 def _landstalker_has_visited_regions(state: CollectionState, player: int, regions):
-    return all([state.can_reach(region, None, player) for region in regions])
+    return all(state.has("event_visited_" + region.code, player) for region in regions)
 
 
 def _landstalker_has_health(state: CollectionState, player: int, health):
@@ -37,7 +37,8 @@ def add_path_requirements(world: "LandstalkerWorld"):
         name = data["fromId"] + " -> " + data["toId"]
 
         # Determine required items to reach this region
-        required_items = data["requiredItems"] if "requiredItems" in data else []
+        # WORLD_PATHS_JSON is shared by all Landstalker worlds, so a copy is made to prevent modifying the original
+        required_items = data["requiredItems"].copy() if "requiredItems" in data else []
         if "itemsPlacedWhenCrossing" in data:
             required_items += data["itemsPlacedWhenCrossing"]
 

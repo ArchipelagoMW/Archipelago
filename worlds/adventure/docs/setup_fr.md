@@ -42,7 +42,7 @@ une expérience personnalisée à leur goût, et différents joueurs dans le mê
 
 ### Où puis-je obtenir un fichier YAML ?
 
-Vous pouvez générer un yaml ou télécharger un modèle en visitant la [page des paramètres d'aventure](/games/Adventure/player-settings)
+Vous pouvez générer un yaml ou télécharger un modèle en visitant la [page des paramètres d'aventure](/games/Adventure/player-options)
 
 ### Quels sont les paramètres recommandés pour s'initier à la rando ?
 Régler la difficulty_switch_a et réduire la vitesse des dragons rend les dragons plus faciles à éviter. Ajouter Calice à

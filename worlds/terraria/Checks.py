@@ -157,126 +157,141 @@ COND_FN = 2
 COND_GROUP = 3
 
 
+class Condition:
+    def __init__(
+        self,
+        # True = positive, False = negative
+        sign: bool,
+        # See the `COND_*` constants
+        type: int,
+        # Condition name or list
+        condition: Union[str, Tuple[Union[bool, None], List["Condition"]]],
+        argument: Union[str, int, None],
+    ):
+        self.sign = sign
+        self.type = type
+        self.condition = condition
+        self.argument = argument
+
+
+class Rule:
+    def __init__(
+        self,
+        name: str,
+        # Name to arg
+        flags: Dict[str, Union[str, int, None]],
+        # True = or, False = and, None = N/A
+        operator: Union[bool, None],
+        conditions: List[Condition],
+    ):
+        self.name = name
+        self.flags = flags
+        self.operator = operator
+        self.conditions = conditions
+
+
 def validate_conditions(
     rule: str,
     rule_indices: dict,
-    conditions: List[
-        Tuple[
-            bool, int, Union[str, Tuple[Union[bool, None], list]], Union[str, int, None]
-        ]
-    ],
+    conditions: List[Condition],
 ):
-    for _, type, condition, _ in conditions:
-        if type == COND_ITEM:
-            if condition not in rule_indices:
-                raise Exception(f"item `{condition}` in `{rule}` is not defined")
-        elif type == COND_LOC:
-            if condition not in rule_indices:
-                raise Exception(f"location `{condition}` in `{rule}` is not defined")
-        elif type == COND_FN:
-            if condition not in {
+    for condition in conditions:
+        if condition.type == COND_ITEM:
+            if condition.condition not in rule_indices:
+                raise Exception(
+                    f"item `{condition.condition}` in `{rule}` is not defined"
+                )
+        elif condition.type == COND_LOC:
+            if condition.condition not in rule_indices:
+                raise Exception(
+                    f"location `{condition.condition}` in `{rule}` is not defined"
+                )
+        elif condition.type == COND_FN:
+            if condition.condition not in {
                 "npc",
                 "calamity",
+                "grindy",
                 "pickaxe",
                 "hammer",
                 "mech_boss",
                 "minions",
+                "getfixedboi",
             }:
-                raise Exception(f"function `{condition}` in `{rule}` is not defined")
-        elif type == COND_GROUP:
-            _, conditions = condition
+                raise Exception(
+                    f"function `{condition.condition}` in `{rule}` is not defined"
+                )
+        elif condition.type == COND_GROUP:
+            _, conditions = condition.condition
             validate_conditions(rule, rule_indices, conditions)
 
 
 def mark_progression(
-    conditions: List[
-        Tuple[
-            bool, int, Union[str, Tuple[Union[bool, None], list]], Union[str, int, None]
-        ]
-    ],
+    conditions: List[Condition],
     progression: Set[str],
     rules: list,
     rule_indices: dict,
     loc_to_item: dict,
 ):
-    for _, type, condition, _ in conditions:
-        if type == COND_ITEM:
-            prog = condition in progression
-            progression.add(loc_to_item[condition])
-            _, flags, _, conditions = rules[rule_indices[condition]]
+    for condition in conditions:
+        if condition.type == COND_ITEM:
+            prog = condition.condition in progression
+            progression.add(loc_to_item[condition.condition])
+            rule = rules[rule_indices[condition.condition]]
             if (
                 not prog
-                and "Achievement" not in flags
-                and "Location" not in flags
-                and "Item" not in flags
+                and "Achievement" not in rule.flags
+                and "Location" not in rule.flags
+                and "Item" not in rule.flags
             ):
                 mark_progression(
-                    conditions, progression, rules, rule_indices, loc_to_item
+                    rule.conditions, progression, rules, rule_indices, loc_to_item
                 )
-        elif type == COND_LOC:
-            _, _, _, conditions = rules[rule_indices[condition]]
-            mark_progression(conditions, progression, rules, rule_indices, loc_to_item)
-        elif type == COND_GROUP:
-            _, conditions = condition
+        elif condition.type == COND_LOC:
+
+            mark_progression(
+                rules[rule_indices[condition.condition]].conditions,
+                progression,
+                rules,
+                rule_indices,
+                loc_to_item,
+            )
+        elif condition.type == COND_GROUP:
+            _, conditions = condition.condition
             mark_progression(conditions, progression, rules, rule_indices, loc_to_item)
 
 
-def read_data() -> (
-    Tuple[
-        # Goal to rule index that ends that goal's range and the locations required
-        List[Tuple[int, Set[str]]],
-        # Rules
-        List[
-            Tuple[
-                # Rule
-                str,
-                # Flag to flag arg
-                Dict[str, Union[str, int, None]],
-                # True = or, False = and, None = N/A
-                Union[bool, None],
-                # Conditions
-                List[
-                    Tuple[
-                        # True = positive, False = negative
-                        bool,
-                        # Condition type
-                        int,
-                        # Condition name or list (True = or, False = and, None = N/A) (list shares type with outer)
-                        Union[str, Tuple[Union[bool, None], List]],
-                        # Condition arg
-                        Union[str, int, None],
-                    ]
-                ],
-            ]
-        ],
-        # Rule to rule index
-        Dict[str, int],
-        # Label to rewards
-        Dict[str, List[str]],
-        # Reward to flags
-        Dict[str, Set[str]],
-        # Item name to ID
-        Dict[str, int],
-        # Location name to ID
-        Dict[str, int],
-        # NPCs
-        List[str],
-        # Pickaxe to pick power
-        Dict[str, int],
-        # Hammer to hammer power
-        Dict[str, int],
-        # Mechanical bosses
-        List[str],
-        # Calamity final bosses
-        List[str],
-        # Progression rules
-        Set[str],
-        # Armor to minion count,
-        Dict[str, int],
-        # Accessory to minion count,
-        Dict[str, int],
-    ]
-):
+def read_data() -> Tuple[
+    # Goal to rule index that ends that goal's range and the locations required
+    List[Tuple[int, Set[str]]],
+    # Rules
+    List[Rule],
+    # Rule to rule index
+    Dict[str, int],
+    # Label to rewards
+    Dict[str, List[str]],
+    # Reward to flags
+    Dict[str, Set[str]],
+    # Item name to ID
+    Dict[str, int],
+    # Location name to ID
+    Dict[str, int],
+    # NPCs
+    List[str],
+    # Pickaxe to pick power
+    Dict[str, int],
+    # Hammer to hammer power
+    Dict[str, int],
+    # Mechanical bosses
+    List[str],
+    # Calamity final bosses
+    List[str],
+    # Progression rules
+    Set[str],
+    # Armor to minion count,
+    Dict[str, int],
+    # Accessory to minion count,
+    Dict[str, int],
+]:
     next_id = 0x7E0000
     item_name_to_id = {}
 
@@ -380,7 +395,7 @@ def read_data() -> (
                     unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
             elif pos == COND_OR_SEMI:
                 if id == IDENT:
-                    conditions.append((sign, COND_ITEM, token, None))
+                    conditions.append(Condition(sign, COND_ITEM, token, None))
                     sign = True
                     pos = POST_COND
                 elif id == HASH:
@@ -425,14 +440,14 @@ def read_data() -> (
                         )
                     condition = operator, conditions
                     sign, operator, conditions = outer.pop()
-                    conditions.append((sign, COND_GROUP, condition, None))
+                    conditions.append(Condition(sign, COND_GROUP, condition, None))
                     sign = True
                     pos = POST_COND
                 else:
                     unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
             elif pos == COND:
                 if id == IDENT:
-                    conditions.append((sign, COND_ITEM, token, None))
+                    conditions.append(Condition(sign, COND_ITEM, token, None))
                     sign = True
                     pos = POST_COND
                 elif id == HASH:
@@ -450,7 +465,7 @@ def read_data() -> (
                     unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
             elif pos == LOC:
                 if id == IDENT:
-                    conditions.append((sign, COND_LOC, token, None))
+                    conditions.append(Condition(sign, COND_LOC, token, None))
                     sign = True
                     pos = POST_COND
                 else:
@@ -465,10 +480,10 @@ def read_data() -> (
                 if id == LPAREN:
                     pos = FN_ARG
                 elif id == SEMI:
-                    conditions.append((sign, COND_FN, function, None))
+                    conditions.append(Condition(sign, COND_FN, function, None))
                     pos = END
                 elif id == AND:
-                    conditions.append((sign, COND_FN, function, None))
+                    conditions.append(Condition(sign, COND_FN, function, None))
                     sign = True
                     if operator is True:
                         raise Exception(
@@ -477,7 +492,7 @@ def read_data() -> (
                     operator = False
                     pos = COND
                 elif id == OR:
-                    conditions.append((sign, COND_FN, function, None))
+                    conditions.append(Condition(sign, COND_FN, function, None))
                     sign = True
                     if operator is False:
                         raise Exception(
@@ -486,21 +501,21 @@ def read_data() -> (
                     operator = True
                     pos = COND
                 elif id == RPAREN:
-                    conditions.append((sign, COND_FN, function, None))
+                    conditions.append(Condition(sign, COND_FN, function, None))
                     if not outer:
                         raise Exception(
                             f"found `)` at {line + 1}:{char + 1} without matching `(`"
                         )
                     condition = operator, conditions
                     sign, operator, conditions = outer.pop()
-                    conditions.append((sign, COND_GROUP, condition, None))
+                    conditions.append(Condition(sign, COND_GROUP, condition, None))
                     sign = True
                     pos = POST_COND
                 else:
                     unexpected(line, char, id, token, pos, POS_FMT, "Rules.dsv")
             elif pos == FN_ARG:
                 if id == IDENT or id == NUM:
-                    conditions.append((sign, COND_FN, function, token))
+                    conditions.append(Condition(sign, COND_FN, function, token))
                     sign = True
                     pos = FN_ARG_END
                 else:
@@ -528,7 +543,33 @@ def read_data() -> (
                     f"rule `{name}` on line `{line + 1}` shadows a previous rule"
                 )
             rule_indices[name] = len(rules)
-            rules.append((name, flags, operator, conditions))
+            rules.append(Rule(name, flags, operator, conditions))
+
+            for flag in flags:
+                if flag not in {
+                    "Location",
+                    "Item",
+                    "Goal",
+                    "Early",
+                    "Achievement",
+                    "Grindy",
+                    "Fishing",
+                    "Npc",
+                    "Pickaxe",
+                    "Hammer",
+                    "Minions",
+                    "Armor Minions",
+                    "Mech Boss",
+                    "Final Boss",
+                    "Getfixedboi",
+                    "Not Getfixedboi",
+                    "Calamity",
+                    "Not Calamity",
+                    "Not Calamity Getfixedboi",
+                }:
+                    raise Exception(
+                        f"rule `{name}` on line `{line + 1}` has unrecognized flag `{flag}`"
+                    )
 
             if "Item" in flags:
                 item_name = flags["Item"] or f"Post-{name}"
@@ -559,7 +600,7 @@ def read_data() -> (
                 final_bosses.append(flags["Item"] or f"Post-{name}")
                 final_boss_loc.append(name)
 
-            if (minions := flags.get("ArmorMinions")) is not None:
+            if (minions := flags.get("Armor Minions")) is not None:
                 armor_minions[name] = minions
 
             if (minions := flags.get("Minions")) is not None:
@@ -573,16 +614,19 @@ def read_data() -> (
             goal_indices[goal] = len(goals)
             goals.append((len(rules), set()))
 
-    for name, flags, _, _ in rules:
-        if "Goal" in flags:
-            _, items = goals[
-                goal_indices[
-                    name.translate(str.maketrans("", "", string.punctuation))
+    for rule in rules:
+        if "Goal" in rule.flags:
+            if (name := rule.flags.get("Goal")) is not None:
+                goal_name = name
+            else:
+                goal_name = (
+                    rule.name.translate(str.maketrans("", "", string.punctuation))
                     .replace(" ", "_")
                     .lower()
-                ]
-            ]
-            items.add(name)
+                )
+
+            _, items = goals[goal_indices[goal_name]]
+            items.add(rule.name)
 
     _, mech_boss_items = goals[goal_indices["mechanical_bosses"]]
     mech_boss_items.update(mech_boss_loc)
@@ -590,24 +634,27 @@ def read_data() -> (
     _, final_boss_items = goals[goal_indices["calamity_final_bosses"]]
     final_boss_items.update(final_boss_loc)
 
-    for name, _, _, conditions in rules:
-        validate_conditions(name, rule_indices, conditions)
+    for rule in rules:
+        validate_conditions(rule.name, rule_indices, rule.conditions)
 
-    for name, flags, _, conditions in rules:
+    for rule in rules:
         prog = False
         if (
-            "Npc" in flags
-            or "Goal" in flags
-            or "Pickaxe" in flags
-            or "Hammer" in flags
-            or "Mech Boss" in flags
-            or "Minions" in flags
-            or "ArmorMinions" in flags
+            "Npc" in rule.flags
+            or "Goal" in rule.flags
+            or "Pickaxe" in rule.flags
+            or "Hammer" in rule.flags
+            or "Mech Boss" in rule.flags
+            or "Final Boss" in rule.flags
+            or "Minions" in rule.flags
+            or "Armor Minions" in rule.flags
         ):
-            progression.add(loc_to_item[name])
+            progression.add(loc_to_item[rule.name])
             prog = True
-        if prog or "Location" in flags or "Achievement" in flags:
-            mark_progression(conditions, progression, rules, rule_indices, loc_to_item)
+        if prog or "Location" in rule.flags or "Achievement" in rule.flags:
+            mark_progression(
+                rule.conditions, progression, rules, rule_indices, loc_to_item
+            )
 
     # Will be randomized via `slot_randoms` / `self.multiworld.random`
     label = None
@@ -686,16 +733,15 @@ def read_data() -> (
             next_id += 1
 
     item_name_to_id["Reward: Coins"] = next_id
-    item_name_to_id["Victory"] = next_id + 1
-    next_id += 2
+    next_id += 1
 
     location_name_to_id = {}
 
-    for name, flags, _, _ in rules:
-        if "Location" in flags or "Achievement" in flags:
-            if name in location_name_to_id:
-                raise Exception(f"location `{name}` shadows a previous location")
-            location_name_to_id[name] = next_id
+    for rule in rules:
+        if "Location" in rule.flags or "Achievement" in rule.flags:
+            if rule.name in location_name_to_id:
+                raise Exception(f"location `{rule.name}` shadows a previous location")
+            location_name_to_id[rule.name] = next_id
             next_id += 1
 
     return (

@@ -1,5 +1,7 @@
 import typing
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range
+
+from Options import Choice, Option, PerGameCommonOptions, Toggle, DefaultOnToggle, Range, ItemsAccessibility, StartInventoryPool
+from dataclasses import dataclass
 
 class SMLogic(Choice):
     """This option selects what kind of logic to use for item placement inside
@@ -25,7 +27,7 @@ class SwordLocation(Choice):
     Randomized - The sword can be placed anywhere.
     Early - The sword will be placed in a location accessible from the start of
     the game.
-    Unce assured - The sword will always be placed on Link's Uncle."""
+    Uncle - The sword will always be placed on Link's Uncle."""
     display_name = "Sword Location"
     option_Randomized = 0
     option_Early = 1
@@ -48,7 +50,7 @@ class MorphLocation(Choice):
     
 class Goal(Choice):
     """This option decides what goal is required to finish the randomizer.
-    Defeat Ganon and Mother Brain - Find the required crystals and boss tokens kill both bosses.
+    Defeat Ganon and Mother Brain - Find the required crystals and boss tokens to kill both bosses.
     Fast Ganon and Defeat Mother Brain - The hole to ganon is open without having to defeat Agahnim in 
                                          Ganon's Tower and Ganon can be defeat as soon you have the required 
                                          crystals to make Ganon vulnerable. For keysanity, this mode also removes 
@@ -126,19 +128,20 @@ class EnergyBeep(DefaultOnToggle):
     """Toggles the low health energy beep in Super Metroid."""
     display_name = "Energy Beep"
 
-
-smz3_options: typing.Dict[str, type(Option)] = {
-    "sm_logic": SMLogic,
-    "sword_location": SwordLocation,
-    "morph_location": MorphLocation,
-    "goal": Goal,
-    "key_shuffle": KeyShuffle,
-    "open_tower": OpenTower, 
-    "ganon_vulnerable": GanonVulnerable,
-    "open_tourian": OpenTourian,
-    "spin_jumps_animation": SpinJumpsAnimation,
-    "heart_beep_speed": HeartBeepSpeed,
-    "heart_color": HeartColor, 
-    "quick_swap": QuickSwap,
-    "energy_beep": EnergyBeep
-    }
+@dataclass
+class SMZ3Options(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+    accessibility: ItemsAccessibility
+    sm_logic: SMLogic
+    sword_location: SwordLocation
+    morph_location: MorphLocation
+    goal: Goal
+    key_shuffle: KeyShuffle
+    open_tower: OpenTower
+    ganon_vulnerable: GanonVulnerable
+    open_tourian: OpenTourian
+    spin_jumps_animation: SpinJumpsAnimation
+    heart_beep_speed: HeartBeepSpeed
+    heart_color: HeartColor
+    quick_swap: QuickSwap
+    energy_beep: EnergyBeep

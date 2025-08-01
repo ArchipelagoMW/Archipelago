@@ -1,8 +1,8 @@
 # Risk of Rain 2
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -23,7 +23,7 @@ Explore Mode:
 
   - Chests will continue to work as they did in Classic Mode, the difference being that each environment
   will have a set amount of items that can be sent out. In addition, shrines, radio scanners, newt altars, 
-  and scavenger bags will need to be checked, depending on your settings.
+  and scavenger bags will need to be checked, depending on your options.
   This mode also makes each environment an item. In order to access a particular stage, you'll need it to be 
   sent in the multiworld.
 
@@ -32,7 +32,7 @@ Explore Mode:
 Just like in the original game, any way to "beat the game" counts as a win. This means beating one of the bosses 
 on Commencement, The Planetarium, or A Moment, Whole. Alternatively, if you are new to the game and 
 aren't very confident in being able to "beat the game", you can set **Final Stage Death is Win** to true
-(You can turn this on in your player settings.) This will make it so dying on either Commencement or The Planetarium,
+(You can turn this on in your player options.) This will make it so dying on either Commencement or The Planetarium,
 or **obliterating yourself in A Moment, Fractured** will count as your goal.
 **You do not need to complete all the location checks** to win; any item you don't collect may be released if the 
 server options allow.
@@ -48,16 +48,15 @@ then finish a normal mode run while keeping the items you received via the multi
 ## Can you play multiplayer?
 
 Yes! You can have a single multiplayer instance as one world in the multiworld. All the players involved need to have
-the Archipelago mod, but only the host needs to configure the Archipelago settings. When someone finds an item for your
+the Archipelago mod, but only the host needs to configure the Archipelago options. When someone finds an item for your
 world, all the connected players will receive a copy of the item, and the location check bar will increase whenever any
 player finds an item in Risk of Rain.
 
 You cannot have players with different player slots in the same co-op game instance. Only the host's Archipelago
-settings apply, so each Risk of Rain 2 player slot in the multiworld needs to be a separate game instance. You could,
+options apply, so each Risk of Rain 2 player slot in the multiworld needs to be a separate game instance. You could,
 for example, have two players trade off hosting and making progress on each other's player slot, but a single co-op
 instance can't make progress towards multiple player slots in the multiworld.
 
-Explore mode is untested in multiplayer and will likely not work until a later release.
 
 ## What Risk of Rain items can appear in other players' worlds?
 
@@ -69,7 +68,7 @@ The Risk of Rain items are:
 * `Legendary Item` (Red items)
 * `Lunar Item`     (Blue items)
 * `Equipment`      (Orange items)
-* `Dio's Best Friend` (Used if you set the YAML setting `total_revives_available` above `0`)
+* `Dio's Best Friend` (Used if you set the YAML option `total_revives_available` above `0`)
 * `Void Item`      (Purple items) (needs dlc_sotv: enabled)
 
 Each item grants you a random in-game item from the category it belongs to.
@@ -127,7 +126,7 @@ what item you sent out. If the message does not appear, this likely means that a
 
 ## What is the item pickup step?
 
-The item pickup step is a setting in the YAML which allows you to set how many items you need to spawn before the _next_ item
+The item pickup step is an option in the YAML which allows you to set how many items you need to spawn before the _next_ item
 that is spawned disappears (in a poof of smoke) and goes out to the multiworld. For instance, an item step of **1** means that 
 every other chest will send an item to the multiworld. An item step of **2** means that every third chest sends out an item 
 just as an item step of **0** would send an item on **each chest.**

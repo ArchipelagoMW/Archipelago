@@ -1,0 +1,20 @@
+User-agent: Googlebot
+Disallow: /
+
+User-agent: APIs-Google
+Disallow: /
+
+User-agent: AdsBot-Google-Mobile
+Disallow: /
+
+User-agent: AdsBot-Google-Mobile
+Disallow: /
+
+User-agent: Mediapartners-Google
+Disallow: /
+
+User-agent: Google-Safety
+Disallow: /
+
+User-agent: *
+Disallow: /

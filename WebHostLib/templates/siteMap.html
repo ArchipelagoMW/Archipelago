@@ -24,9 +24,9 @@
             <li><a href="/games">Supported Games Page</a></li>
             <li><a href="/tutorial">Tutorials Page</a></li>
             <li><a href="/user-content">User Content</a></li>
-            <li><a href="/weighted-options">Weighted Options Page</a></li>
             <li><a href="{{url_for('stats')}}">Game Statistics</a></li>
             <li><a href="/glossary/en">Glossary</a></li>
+            <li><a href="{{url_for("show_session")}}">Session / Login</a></li>
         </ul>
 
         <h2>Tutorials</h2>
@@ -50,8 +50,12 @@
         <ul>
             {% for game in games | title_sorted %}
                 {% if game['has_settings'] %}
-                    <li><a href="{{ url_for('player_options', game=game['title']) }}">{{ game['title'] }}</a></li>
-                {% endif %} 
+                    <li>{{ game['title'] }}</li>
+                    <ul>
+                        <li><a href="{{ url_for('player_options', game=game['title']) }}">Player Options</a></li>
+                        <li><a href="{{ url_for('weighted_options', game=game['title']) }}">Weighted Options</a></li>
+                    </ul>
+                {% endif %}
             {% endfor %}
         </ul>
     </div>

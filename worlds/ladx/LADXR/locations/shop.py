@@ -18,7 +18,8 @@ class ShopItem(ItemInfo):
         mw_text = ""
         if multiworld:
             mw_text = f" for player {rom.player_names[multiworld - 1].encode('ascii', 'replace').decode()}"
-
+            # filter out { and } since they cause issues with string.format later on
+            mw_text = mw_text.replace("{", "").replace("}", "")
         
         if self.custom_item_name:
             name = self.custom_item_name

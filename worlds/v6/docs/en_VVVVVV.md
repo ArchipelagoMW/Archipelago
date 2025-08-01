@@ -1,9 +1,9 @@
 # VVVVVV
 
-## Where is the settings page?
+## Where is the options page?
 
-The player settings page for this game contains all the options you need to configure and export a config file. Player
-settings page link: [VVVVVV Player Settings Page](../player-settings).
+The player options page for this game contains all the options you need to configure and export a config file. Player
+options page link: [VVVVVV Player Options Page](../player-options).
 
 ## What does randomization do to this game?
 All 20 Trinkets are now Location Checks and may not actually contain Trinkets, but Items for different games.

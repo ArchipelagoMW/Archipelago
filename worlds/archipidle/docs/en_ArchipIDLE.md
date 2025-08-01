@@ -6,8 +6,8 @@ ArchipIDLE was originally the 2022 Archipelago April Fools' Day joke. It is an i
 on regular intervals. Updated annually with more items, gimmicks, and features, the game is visible
 only during the month of April.
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure
+The [player options page for this game](../player-options) contains all the options you need to configure
 and export a config file.
 

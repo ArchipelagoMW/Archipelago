@@ -1,0 +1,160 @@
+#player-tracker-wrapper{
+    margin: 0;
+}
+
+#tracker-table td {
+    vertical-align: top;
+}
+
+.inventory-table-area{
+    border: 2px solid #000000;
+    border-radius: 4px;
+    padding: 3px 10px 3px 10px;
+}
+
+.inventory-table-area:has(.inventory-table-terran) {
+    width: 690px;
+    background-color: #525494;
+}
+
+.inventory-table-area:has(.inventory-table-zerg) {
+    width: 360px;
+    background-color: #9d60d2;
+}
+
+.inventory-table-area:has(.inventory-table-protoss) {
+    width: 400px;
+    background-color: #d2b260;
+}
+
+#tracker-table .inventory-table td{
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.inventory-table td.title{
+    padding-top: 10px;
+    height: 20px;
+    font-family: "JuraBook", monospace;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.inventory-table img{
+    height: 100%;
+    max-width: 40px;
+    max-height: 40px;
+    border: 1px solid #000000;
+    filter: grayscale(100%) contrast(75%) brightness(20%);
+    background-color: black;
+}
+
+.inventory-table img.acquired{
+    filter: none;
+    background-color: black;
+}
+
+.inventory-table .tint-terran img.acquired {
+    filter: sepia(100%) saturate(300%) brightness(130%) hue-rotate(120deg)
+}
+
+.inventory-table .tint-protoss img.acquired {
+    filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(180deg)
+}
+
+.inventory-table .tint-level-1 img.acquired {
+    filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg)
+}
+
+.inventory-table .tint-level-2 img.acquired {
+    filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg) hue-rotate(120deg)
+}
+
+.inventory-table .tint-level-3 img.acquired {
+    filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg) hue-rotate(240deg)
+}
+
+.inventory-table div.counted-item {
+    position: relative;
+}
+
+.inventory-table div.item-count {
+    width: 160px;
+    text-align: left;
+    color: black;
+    font-family: "JuraBook", monospace;
+    font-weight: bold;
+}
+
+#location-table{
+    border: 2px solid #000000;
+    border-radius: 4px;
+    background-color: #87b678;
+    padding: 10px 3px 3px;
+    font-family: "JuraBook", monospace;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: default;
+}
+
+#location-table table{
+    width: 100%;
+}
+
+#location-table th{
+    vertical-align: middle;
+    text-align: left;
+    padding-right: 10px;
+}
+
+#location-table td{
+    padding-top: 2px;
+    padding-bottom: 2px;
+    line-height: 20px;
+}
+
+#location-table td.counter {
+    text-align: right;
+    font-size: 14px;
+}
+
+#location-table td.toggle-arrow {
+    text-align: right;
+}
+
+#location-table tr#Total-header {
+    font-weight: bold;
+}
+
+#location-table img{
+    height: 100%;
+    max-width: 30px;
+    max-height: 30px;
+}
+
+#location-table tbody.locations {
+    font-size: 16px;
+}
+
+#location-table td.location-name {
+    padding-left: 16px;
+}
+
+#location-table td:has(.location-column) {
+    vertical-align: top;
+}
+
+#location-table .location-column {
+    width: 100%;
+    height: 100%;
+}
+
+#location-table .location-column .spacer {
+    min-height: 24px;
+}
+
+.hide {
+    display: none;
+}

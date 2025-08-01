@@ -30,6 +30,9 @@ def generate_lithograph_hint(world: "LandstalkerWorld"):
     jewel_items = world.jewel_items
 
     for item in jewel_items:
+        if item.location is None:
+            continue
+
         # Jewel hints are composed of 4 'words' shuffled randomly:
         # - the name of the player whose world contains said jewel (if not ours)
         # - the color of the jewel (if relevant)
@@ -42,7 +45,7 @@ def generate_lithograph_hint(world: "LandstalkerWorld"):
             words.append(item.name.split(" ")[0].upper())
         if item.location.player != world.player:
             # Add player name if it's not in our own world
-            player_name = world.multiworld.get_player_name(world.player)
+            player_name = world.multiworld.get_player_name(item.location.player)
             words.append(player_name.upper())
         world.random.shuffle(words)
         hint_text += " ".join(words) + "\n"
@@ -61,7 +64,7 @@ def generate_random_hints(world: "LandstalkerWorld"):
     excluded_items = ["Life Stock", "EkeEke"]
 
     progression_items = [item for item in multiworld.itempool if item.advancement and
-                         item.name not in excluded_items]
+                         item.name not in excluded_items and item.location is not None]
 
     local_own_progression_items = [item for item in progression_items if item.player == this_player
                                    and item.location.player == this_player]
@@ -128,7 +131,7 @@ def generate_random_hints(world: "LandstalkerWorld"):
     hint_texts = list(set(hint_texts))
     random.shuffle(hint_texts)
 
-    hint_count = world.options.hint_count.value
+    hint_count = min(world.options.hint_count.value, len(hint_texts))
     del hint_texts[hint_count:]
 
     hint_source_names = [source["description"] for source in HINT_SOURCES_JSON if
