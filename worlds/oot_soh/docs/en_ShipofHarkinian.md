@@ -2,7 +2,8 @@
 
 ## Where is the options page?
 
-The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
+An option page will be available on the archipelago.gg website whenever this gets upstreamed. For now, use the .yaml file
+to pick your settings.
 
 
 ## What is Ship of Harkinian (SoH)?
