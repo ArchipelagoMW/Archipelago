@@ -754,7 +754,12 @@ class Settings(Group):
                 return super().__getattribute__(key)
             # directly import world and grab settings class
             world_mod, world_cls_name = _world_settings_name_cache[key].rsplit(".", 1)
-            world = cast(type, getattr(__import__(world_mod, fromlist=[world_cls_name]), world_cls_name))
+            try:
+                world = cast(type, getattr(__import__(world_mod, fromlist=[world_cls_name]), world_cls_name))
+            except AttributeError:
+                import warnings
+                warnings.warn(f"World {world_cls_name} failed to initialize properly.")
+                return super().__getattribute__(key)
             assert getattr(world, "settings_key") == key
             try:
                 cls_or_name = world.__annotations__["settings"]
