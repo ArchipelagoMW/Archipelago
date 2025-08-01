@@ -272,7 +272,8 @@ class SohWorld(World):
             for _ in range(quantity):
                 item_pool.append(self.create_item(item))
 
-        filler_item_count: int = len(self.multiworld.get_unfilled_locations()) - len(item_pool)
+        locked_locations = [loc for loc in self.get_locations() if loc.locked]
+        filler_item_count: int = len(self.get_locations()) - len(locked_locations) - len(item_pool)
         item_pool += [self.create_item(self.get_filler_item_name()) for _ in range(filler_item_count)]
 
         self.multiworld.itempool += item_pool
