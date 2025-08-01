@@ -664,10 +664,10 @@ item_name_groups[ItemGroupNames.INF_TERRAN_UPGRADES] = infterr_upgrades = [
     item_names.INFESTED_BANSHEE_FLESHFUSED_TARGETING_OPTICS,
     item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON,
     item_names.INFESTED_BANSHEE_RAPID_HIBERNATION,
-    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK,
-    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK,
-    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR,
-    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE,
+    item_names.INFESTED_DIAMONDBACK_FRIGHTFUL_FLESHWELDER,
+    item_names.INFESTED_SIEGE_TANK_FRIGHTFUL_FLESHWELDER,
+    item_names.INFESTED_LIBERATOR_FRIGHTFUL_FLESHWELDER,
+    item_names.INFESTED_BANSHEE_FRIGHTFUL_FLESHWELDER,
     item_names.INFESTED_MISSILE_TURRET_BIOELECTRIC_PAYLOAD,
     item_names.INFESTED_MISSILE_TURRET_ACID_SPORE_VENTS,
 ]
@@ -700,7 +700,7 @@ protoss_ground_wa = [
 protoss_air_wa = [
     item_names.WARP_PRISM_PHASE_BLASTER,
     item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.SKIRMISHER,
-    item_names.VOID_RAY, item_names.DESTROYER, item_names.INTERCESSOR, item_names.DAWNBRINGER,
+    item_names.VOID_RAY, item_names.DESTROYER, item_names.PULSAR, item_names.DAWNBRINGER,
     item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME,
     item_names.SCOUT, item_names.TEMPEST, item_names.MOTHERSHIP,
     item_names.ARBITER, item_names.ORACLE, item_names.OPPRESSOR,
@@ -746,7 +746,7 @@ item_name_groups[ItemGroupNames.ROBO_UNITS] = robo_units = [
 ]
 item_name_groups[ItemGroupNames.STARGATE_UNITS] = stargate_units = [
     item_names.PHOENIX, item_names.SKIRMISHER, item_names.MIRAGE, item_names.CORSAIR,
-    item_names.VOID_RAY, item_names.DESTROYER, item_names.INTERCESSOR, item_names.DAWNBRINGER,
+    item_names.VOID_RAY, item_names.DESTROYER, item_names.PULSAR, item_names.DAWNBRINGER,
     item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME,
     item_names.TEMPEST, item_names.SCOUT, item_names.MOTHERSHIP,
     item_names.ARBITER, item_names.ORACLE, item_names.OPPRESSOR,

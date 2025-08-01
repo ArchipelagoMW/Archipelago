@@ -158,7 +158,7 @@ ITEM_NAME_ANNOTATIONS = {
     item_names.CORSAIR:      "(Stargate, Nerazim)",
     item_names.VOID_RAY:     "(Stargate, Nerazim)",
     item_names.DESTROYER:    "(Stargate, Tal'darim)",
-    item_names.INTERCESSOR:  "(Stargate, Aiur)",
+    item_names.PULSAR:       "(Stargate, Aiur)",
     item_names.DAWNBRINGER:  "(Stargate, Purifier)",
     item_names.SCOUT:        "(Stargate, Aiur)",
     item_names.OPPRESSOR:    "(Stargate, Tal'darim)",
