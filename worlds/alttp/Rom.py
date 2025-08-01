@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import Utils
+import settings
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
@@ -3023,7 +3024,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_settings()
+    options = settings.get_settings()
     if not file_name:
         file_name = options["lttp_options"]["rom_file"]
     if not os.path.exists(file_name):

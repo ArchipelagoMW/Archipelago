@@ -286,6 +286,7 @@ async def gba_sync_task(ctx: MMBN3Context):
             except ConnectionRefusedError:
                 logger.debug("Connection Refused, Trying Again")
                 ctx.gba_status = CONNECTION_REFUSED_STATUS
+                await asyncio.sleep(1)
                 continue
 
 

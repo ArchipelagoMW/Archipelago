@@ -43,7 +43,7 @@ import NetUtils
 import Utils
 from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
-    SlotType, LocationStore, Hint, HintStatus
+    SlotType, LocationStore, MultiData, Hint, HintStatus
 from BaseClasses import ItemClassification
 
 
@@ -445,7 +445,7 @@ class Context:
             raise Utils.VersionException("Incompatible multidata.")
         return restricted_loads(zlib.decompress(data[1:]))
 
-    def _load(self, decoded_obj: dict, game_data_packages: typing.Dict[str, typing.Any],
+    def _load(self, decoded_obj: MultiData, game_data_packages: typing.Dict[str, typing.Any],
               use_embedded_server_options: bool):
 
         self.read_data = {}
@@ -546,6 +546,7 @@ class Context:
 
     def _save(self, exit_save: bool = False) -> bool:
         try:
+            # Does not use Utils.restricted_dumps because we'd rather make a save than not make one
             encoded_save = pickle.dumps(self.get_save())
             with open(self.save_filename, "wb") as f:
                 f.write(zlib.compress(encoded_save))
@@ -752,7 +753,7 @@ class Context:
             return self.player_names[team, slot]
 
     def notify_hints(self, team: int, hints: typing.List[Hint], only_new: bool = False,
-                     recipients: typing.Sequence[int] = None):
+                     persist_even_if_found: bool = False, recipients: typing.Sequence[int] = None):
         """Send and remember hints."""
         if only_new:
             hints = [hint for hint in hints if hint not in self.hints[team, hint.finding_player]]
@@ -767,8 +768,9 @@ class Context:
             if not hint.local and data not in concerns[hint.finding_player]:
                 concerns[hint.finding_player].append(data)
 
-            # only remember hints that were not already found at the time of creation
-            if not hint.found:
+            # For !hint use cases, only hints that were not already found at the time of creation should be remembered
+            # For LocationScouts use-cases, all hints should be remembered
+            if not hint.found or persist_even_if_found:
                 # since hints are bidirectional, finding player and receiving player,
                 # we can check once if hint already exists
                 if hint not in self.hints[team, hint.finding_player]:
@@ -1946,10 +1948,52 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location,
                                                           HintStatus.HINT_UNSPECIFIED))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
-            ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2)
+            ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2, persist_even_if_found=True)
             if locs and create_as_hint:
                 ctx.save()
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
+
+        elif cmd == 'CreateHints':
+            location_player = args.get("player", client.slot)
+            locations = args["locations"]
+            status = args.get("status", HintStatus.HINT_UNSPECIFIED)
+
+            if not locations:
+                await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
+                                              "text": "CreateHints: No locations specified.", "original_cmd": cmd}])
+
+            hints = []
+
+            for location in locations:
+                if location_player != client.slot and location not in ctx.locations[location_player]:
+                    error_text = (
+                        "CreateHints: One or more of the locations do not exist for the specified off-world player. "
+                        "Please refrain from hinting other slot's locations that you don't know contain your items."
+                    )
+                    await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
+                                                  "text": error_text, "original_cmd": cmd}])
+                    return
+
+                target_item, item_player, flags = ctx.locations[location_player][location]
+
+                if client.slot not in ctx.slot_set(item_player):
+                    if status != HintStatus.HINT_UNSPECIFIED:
+                        error_text = 'CreateHints: Must use "unspecified"/None status for items from other players.'
+                        await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
+                                                      "text": error_text, "original_cmd": cmd}])
+                        return
+
+                    if client.slot != location_player:
+                        error_text = "CreateHints: Can only create hints for own items or own locations."
+                        await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
+                                                      "text": error_text, "original_cmd": cmd}])
+                        return
+
+                hints += collect_hint_location_id(ctx, client.team, location_player, location, status)
+
+            # As of writing this code, only_new=True does not update status for existing hints
+            ctx.notify_hints(client.team, hints, only_new=True, persist_even_if_found=True)
+            ctx.save()
         
         elif cmd == 'UpdateHint':
             location = args["location"]
