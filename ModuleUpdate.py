@@ -16,7 +16,11 @@ elif sys.version_info < (3, 10, 1):
     raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. 3.10.1+ is supported.")
 
 # don't run update if environment is frozen/compiled or if not the parent process (skip in subprocess)
-_skip_update = bool(getattr(sys, "frozen", False) or multiprocessing.parent_process())
+_skip_update = bool(
+    getattr(sys, "frozen", False) or 
+    multiprocessing.parent_process() or 
+    os.environ.get("SKIP_REQUIREMENTS_UPDATE", "").lower() in ("1", "true", "yes")
+)
 update_ran = _skip_update
 
 

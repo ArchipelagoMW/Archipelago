@@ -1,8 +1,9 @@
 from . import content_packs
-from .feature import cropsanity, friendsanity, fishsanity, booksanity, skill_progression, tool_progression
+from .feature import cropsanity, friendsanity, fishsanity, booksanity, building_progression, skill_progression, tool_progression
 from .game_content import ContentPack, StardewContent, StardewFeatures
 from .unpacking import unpack_content
 from .. import options
+from ..strings.building_names import Building
 
 
 def create_content(player_options: options.StardewValleyOptions) -> StardewContent:
@@ -20,7 +21,7 @@ def choose_content_packs(player_options: options.StardewValleyOptions):
         if player_options.special_order_locations & options.SpecialOrderLocations.value_qi:
             active_packs.append(content_packs.qi_board_content_pack)
 
-    for mod in player_options.mods.value:
+    for mod in sorted(player_options.mods.value):
         active_packs.append(content_packs.by_mod[mod])
 
     return active_packs
@@ -29,6 +30,7 @@ def choose_content_packs(player_options: options.StardewValleyOptions):
 def choose_features(player_options: options.StardewValleyOptions) -> StardewFeatures:
     return StardewFeatures(
         choose_booksanity(player_options.booksanity),
+        choose_building_progression(player_options.building_progression, player_options.farm_type),
         choose_cropsanity(player_options.cropsanity),
         choose_fishsanity(player_options.fishsanity),
         choose_friendsanity(player_options.friendsanity, player_options.friendsanity_heart_size),
@@ -107,6 +109,32 @@ def choose_friendsanity(friendsanity_option: options.Friendsanity, heart_size: o
         return friendsanity.FriendsanityAllWithMarriage(heart_size.value)
 
     raise ValueError(f"No friendsanity feature mapped to {str(friendsanity_option.value)}")
+
+
+def choose_building_progression(building_option: options.BuildingProgression,
+                                farm_type_option: options.FarmType) -> building_progression.BuildingProgressionFeature:
+    starting_buildings = {Building.farm_house, Building.pet_bowl, Building.shipping_bin}
+
+    if farm_type_option == options.FarmType.option_meadowlands:
+        starting_buildings.add(Building.coop)
+
+    if (building_option == options.BuildingProgression.option_vanilla
+            or building_option == options.BuildingProgression.option_vanilla_cheap
+            or building_option == options.BuildingProgression.option_vanilla_very_cheap):
+        return building_progression.BuildingProgressionVanilla(
+            starting_buildings=starting_buildings,
+        )
+
+    starting_buildings.remove(Building.shipping_bin)
+
+    if (building_option == options.BuildingProgression.option_progressive
+            or building_option == options.BuildingProgression.option_progressive_cheap
+            or building_option == options.BuildingProgression.option_progressive_very_cheap):
+        return building_progression.BuildingProgressionProgressive(
+            starting_buildings=starting_buildings,
+        )
+
+    raise ValueError(f"No building progression feature mapped to {str(building_option.value)}")
 
 
 skill_progression_by_option = {

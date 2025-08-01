@@ -1,7 +1,7 @@
 import unittest
 
 from Fill import distribute_items_restrictive
-from NetUtils import encode
+from NetUtils import convert_to_base_types
 from worlds.AutoWorld import AutoWorldRegister, call_all
 from worlds import failed_world_loads
 from . import setup_solo_multiworld
@@ -47,12 +47,28 @@ class TestImplemented(unittest.TestCase):
                 call_all(multiworld, "post_fill")
                 for key, data in multiworld.worlds[1].fill_slot_data().items():
                     self.assertIsInstance(key, str, "keys in slot data must be a string")
-                    self.assertIsInstance(encode(data), str, f"object {type(data).__name__} not serializable.")
+                    convert_to_base_types(data)  # only put base data types into slot data
 
     def test_no_failed_world_loads(self):
         if failed_world_loads:
             self.fail(f"The following worlds failed to load: {failed_world_loads}")
 
+    def test_prefill_items(self):
+        """Test that every world can reach every location from allstate before pre_fill."""
+        for gamename, world_type in AutoWorldRegister.world_types.items():
+            if gamename not in ("Archipelago", "Sudoku", "Final Fantasy", "Test Game"):
+                with self.subTest(gamename):
+                    multiworld = setup_solo_multiworld(world_type, ("generate_early", "create_regions", "create_items",
+                                                                    "set_rules", "connect_entrances", "generate_basic"))
+                    allstate = multiworld.get_all_state(False)
+                    locations = multiworld.get_locations()
+                    reachable = multiworld.get_reachable_locations(allstate)
+                    unreachable = [location for location in locations if location not in reachable]
+
+                    self.assertTrue(not unreachable,
+                                    f"Locations were not reachable with all state before prefill: "
+                                    f"{unreachable}. Seed: {multiworld.seed}")
+                    
     def test_explicit_indirect_conditions_spheres(self):
         """Tests that worlds using explicit indirect conditions produce identical spheres as when using implicit
         indirect conditions"""
