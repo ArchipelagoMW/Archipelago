@@ -1465,13 +1465,13 @@ item_table = {
                  classification=ItemClassification.progression, parent=item_names.INFESTED_DIAMONDBACK, quantity=2),
     item_names.INFESTED_DIAMONDBACK_CONCENTRATED_SPEW:
         ItemData(375 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 1, SC2Race.ZERG, parent=item_names.INFESTED_DIAMONDBACK),
-    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK:
+    item_names.INFESTED_SIEGE_TANK_FRIGHTFUL_FLESHWELDER:
         ItemData(376 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 2, SC2Race.ZERG, parent=item_names.INFESTED_SIEGE_TANK),
-    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK:
+    item_names.INFESTED_DIAMONDBACK_FRIGHTFUL_FLESHWELDER:
         ItemData(377 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 3, SC2Race.ZERG, parent=item_names.INFESTED_DIAMONDBACK),
-    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE:
+    item_names.INFESTED_BANSHEE_FRIGHTFUL_FLESHWELDER:
         ItemData(378 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 4, SC2Race.ZERG, parent=item_names.INFESTED_BANSHEE),
-    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR:
+    item_names.INFESTED_LIBERATOR_FRIGHTFUL_FLESHWELDER:
         ItemData(379 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 5, SC2Race.ZERG, parent=item_names.INFESTED_LIBERATOR),
     item_names.INFESTED_LIBERATOR_DEFENDER_MODE:
         ItemData(380 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 8, SC2Race.ZERG, parent=item_names.INFESTED_LIBERATOR,
