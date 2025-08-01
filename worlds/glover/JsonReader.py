@@ -83,9 +83,6 @@ levels_in_order = [
 #    ["Training", "Start"]
 ]
 
-class GloverLocation(Location):
-    game : str = "Glover"
-
 class AccessMethod(NamedTuple):
     region_name : str
     ball_in_region : bool
@@ -110,9 +107,9 @@ def create_location_data(check_name : str, check_info : list, prefix : str) -> L
 class RegionPair(NamedTuple):
     name : str
     base_id : int
-    #ball_region : Region
+    ball_region : Region | None
     ball_region_methods : list[AccessMethod]
-    #no_ball_region : Region
+    no_ball_region : Region | None
     no_ball_region_methods : list[AccessMethod]
 
 def create_region_pair(check_info : dict, check_name : str, level_name : str, player : int, multiworld : MultiWorld) -> RegionPair:
@@ -121,17 +118,19 @@ def create_region_pair(check_info : dict, check_name : str, level_name : str, pl
     ball_region_methods : list[AccessMethod] = []
     no_ball_region_methods : list[AccessMethod] = []
     base_id : int = check_info["I"]
+    ball_region = Region(prefix + region_name + " W/Ball", player, multiworld)
     for check_pairing in check_info["B"]:
         #ids = check_pairing[0]
         if check_pairing.count() > 1:
             for each_method in check_pairing[1]:
                 ball_region_methods.append(create_access_method(each_method, prefix))
+    no_ball_region = Region(prefix + region_name, player, multiworld)
     for check_pairing in check_info["D"]:
         #ids = check_pairing[0]
         if check_pairing.count() > 1:
             for each_method in check_pairing[1]:
                 no_ball_region_methods.append(create_access_method(each_method, prefix))
-    return RegionPair(region_name, base_id, ball_region_methods, no_ball_region_methods)
+    return RegionPair(region_name, base_id, ball_region, ball_region_methods, no_ball_region, no_ball_region_methods)
 
 def connect_region_pairs(pairs : List[RegionPair]):
     for each_pair in pairs:
@@ -143,7 +142,7 @@ def connect_region_pairs(pairs : List[RegionPair]):
 
 class RegionLevel(NamedTuple):
     name : str
-    #region : Region
+    region : Region
     default_region : int
     starting_checkpoint : int
     map_regions : List[RegionPair]
@@ -187,7 +186,8 @@ def create_region_level(level_name, spawn_checkpoint : List[int] | None, startin
         #if default_region != region_index:
         #    level_entrances.access_rule
 
-    return RegionLevel(level_name, default_region, starting_checkpoint, map_regions)
+    level_region : Region = Region(level_name, player, multiworld)
+    return RegionLevel(level_name, level_region, default_region, starting_checkpoint, map_regions)
 
 def create_access_method(info : dict, prefix : str) -> AccessMethod:
     required_moves : list = []
@@ -294,3 +294,7 @@ def build_data(self : GloverWorld) -> JsonInfo:
             #Attach the locations to the regions
             locations.extend(assign_locations_to_regions(region_level, map_regions, location_data_list))
     return JsonInfo(all_levels, locations)
+
+def generate_location_name_to_id() -> dict:
+    output : dict = {name: data.id for name, data in all_location_table.items()}
+    return output

@@ -1,12 +1,19 @@
 from typing import Any, Dict
 
-from BaseClasses import ItemClassification, Tutorial, Item, Region, MultiWorld
+from BaseClasses import ItemClassification, Location, Tutorial, Item, Region, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 import random
 
-from worlds.glover.Options import GloverOptions
+from .Options import GloverOptions
 from worlds.glover import ItemPool, JsonReader
+
+class GloverItem(Item):
+	#Start at 650000
+	game: str = "Glover"
+
+class GloverLocation(Location):
+    game : str = "Glover"
 
 class GloverWeb(WebWorld):
     englishTut = Tutorial("",
@@ -25,10 +32,13 @@ class GloverWorld(World):
     version : str = "V0.1"
     web = GloverWeb()
     topology_present = True
-    item_name_to_id = {}
     options : GloverOptions
     all_items_table : ItemPool
     json_info : JsonReader.JsonInfo
+    options_dataclass = Options.GloverOptions
+    item_name_to_id = ItemPool.generate_item_name_to_id()
+    item_name_groups = ItemPool.generate_item_name_groups()
+    location_name_to_id = JsonReader.generate_location_name_to_id()
 
     spawn_checkpoint = [
         2,3,3,
@@ -113,8 +123,7 @@ class GloverWorld(World):
         self.multiworld.regions.append(main_menu)
         for each_level in self.json_info.all_levels:
             for each_region_pair in each_level.map_regions:
-                each_region_pair.ball_region
-
+                each_region_pair.ball_region_methods
 
     def create_item(self, name) -> Item:
         item_classification = None
@@ -141,7 +150,6 @@ class GloverWorld(World):
             name_for_use = "Garib"
         item_output = ItemPool.GloverItem(name_for_use, item_classification, item_id, self.player)
         return item_output
-
 
     def create_items(self) -> None:
         #Garib Logic
@@ -194,6 +202,14 @@ class GloverWorld(World):
             self.create_item(each_item)
         for each_item in ability_items:
             self.create_item(each_item)
+
+    def set_rules(self):
+        #MethodData to actual method logic
+        return super().set_rules()
+
+    def connect_entrances(self):
+        #Level portal randomization
+        return super().connect_entrances()
 
     def fill_slot_data(self) -> Dict[str, Any]:
         options = self.options.as_dict(
