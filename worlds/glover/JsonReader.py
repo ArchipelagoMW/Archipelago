@@ -83,6 +83,20 @@ levels_in_order = [
 #    ["Training", "Start"]
 ]
 
+#List of worlds, dictionary of levels, dictionary of locations and regions in those levels
+#If it's a list, it's a location. Contains first entry AP_ID/ID, and all other entries methods
+#If it's a dictionary, it's a region. B for Ball, D for No Ball, I for Local ID
+#B/D in region has AP_ID/IDs, followed by methods as per Locations
+logic_data : list[
+    dict[str, 
+         dict[str, 
+              dict[str,
+                   list[
+                       dict[str, any]]] | 
+              list[
+                  dict[str, any]
+              ]]]] = json.load(open('Logic.json'))
+
 class AccessMethod(NamedTuple):
     region_name : str
     ball_in_region : bool
@@ -99,7 +113,7 @@ def create_location_data(check_name : str, check_info : list, prefix : str) -> L
     for check_pairing in check_info:
         both_ids = check_pairing[0]
         methods : List[AccessMethod] = []
-        if check_pairing.count() > 1:
+        if len(check_pairing) > 1:
             for each_method in check_pairing[1]:
                 methods.append(create_access_method(each_method, prefix))
     return LocationData(prefix + check_name, both_ids["AP_IDS"], both_ids["IDS"], methods)
@@ -121,13 +135,13 @@ def create_region_pair(check_info : dict, check_name : str, level_name : str, pl
     ball_region = Region(prefix + region_name + " W/Ball", player, multiworld)
     for check_pairing in check_info["B"]:
         #ids = check_pairing[0]
-        if check_pairing.count() > 1:
+        if len(check_pairing) > 1:
             for each_method in check_pairing[1]:
                 ball_region_methods.append(create_access_method(each_method, prefix))
     no_ball_region = Region(prefix + region_name, player, multiworld)
     for check_pairing in check_info["D"]:
         #ids = check_pairing[0]
-        if check_pairing.count() > 1:
+        if len(check_pairing) > 1:
             for each_method in check_pairing[1]:
                 no_ball_region_methods.append(create_access_method(each_method, prefix))
     return RegionPair(region_name, base_id, ball_region, ball_region_methods, no_ball_region, no_ball_region_methods)
@@ -172,7 +186,7 @@ def create_region_level(level_name, spawn_checkpoint : List[int] | None, startin
     start_without_ball : bool = level_offset == 0 or level_name[:3] == "OoW"
     
     #Assign entrances required by checkpoints here
-    for region_index in level_checkpoint_region.count():
+    for region_index in range(len(level_checkpoint_region)):
         checkpoint_name : str = level_name + " Checkpoint " + str(region_index + 1)
         level_entrances : Entrance = region.create_exit(checkpoint_name)
         region_pair : RegionPair = map_regions[region_index]
@@ -212,27 +226,19 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
                 location_regions.append(region_name)
         #Depending on if it is or not
         region_for_use : Region
-        if location_regions.count() > 1:
+        if len(location_regions) > 1:
             #Multi location construction creates a shared region to reach this location
             region_for_use = Region(each_location_data.name + " Region", player, multiworld, region_level.name)
             for each_region_name in location_regions:
                 #Make sure to apply the correct rules here later
                 get_region_from_name(map_regions, each_region_name).connect(region_for_use, each_location_data.name + " from " + each_region_name)
-        elif location_regions.count() == 1:
+        elif len(location_regions) == 1:
             #Single location construction assigns to the specific element in the RegionPair
             region_for_use = get_region_from_name(map_regions, location_regions[0])
         #Construct location data
         #The garib sorting stuff has to go here! Don't forget to do that later
-        if each_location_data.ap_ids.count() == 1:
-            #If the location data accounts for 1 location
-            locations.append(Location(player, each_location_data.name, each_location_data.ap_ids[0], region_for_use))
-        else:
-            #If the location accounts for multiple locations
-            for each_ap_id_index in each_location_data.ap_ids.count():
-                each_ap_id = each_location_data.ap_ids[each_ap_id_index]
-                sublocation_name : str = each_location_data.name
-                sublocation_name.removesuffix("s")
-                locations.append(Location(player, sublocation_name + " " + str(each_ap_id_index + 1), each_ap_id, region_for_use))
+        for each_pairing in build_location_pairings(each_location_data.name, each_location_data.ap_ids):
+            locations.append(Location(player, each_pairing[0], each_pairing[1], region_for_use))
     return locations
 
 def get_region_from_name(region_pairs : List[RegionPair], lookup_key : str) -> Region:
@@ -254,8 +260,6 @@ def build_data(self : GloverWorld) -> JsonInfo:
     locations : List[Location] = []
 
     #Build Logic
-    logic_file = open('Logic.json')
-    logic_data = json.load(logic_file)
     loc_con_index = 0
     for world_index in 1:
         world_prefix : str = GloverWorld.world_prefixes[world_index]
@@ -281,7 +285,7 @@ def build_data(self : GloverWorld) -> JsonInfo:
                     map_regions.append(create_region_pair(check_info, prefix, check_name, level_name, self.player, self.multiworld))
                     #You get the one from checkpoints by default
                     region_checkpoints = []
-                    for check_index in range(1, checkpoint_entry_pairs.count()):
+                    for check_index in range(1, len(checkpoint_entry_pairs)):
                         matching_name = checkpoint_entry_pairs[check_index]
                         if matching_name == check_name:
                             region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
@@ -295,6 +299,36 @@ def build_data(self : GloverWorld) -> JsonInfo:
             locations.extend(assign_locations_to_regions(region_level, map_regions, location_data_list))
     return JsonInfo(all_levels, locations)
 
+def build_location_pairings(base_name : str, ap_ids : list) -> list[tuple]:
+    if len(ap_ids) == 1:
+        #If the location data accounts for 1 location
+        return [tuple(base_name, ap_ids[0])]
+    output : list[tuple] = []
+    #If the location accounts for multiple locations
+    for each_ap_id_index ,ap_id in enumerate(ap_ids):
+        each_ap_id = ap_ids[each_ap_id_index]
+        sublocation_name : str = base_name
+        sublocation_name.removesuffix("s")
+        sublocation_name + " " + str(each_ap_id_index + 1), each_ap_id
+        output.append(tuple(sublocation_name, each_ap_id))
+    #I don't know if garib groups are their own location, but if they are, uncomment this
+    #output.append(tuple(base_name, ap_ids[0] + 10000))
+    return output
+    
+
 def generate_location_name_to_id() -> dict:
-    output : dict = {name: data.id for name, data in all_location_table.items()}
+    output : dict = {}
+    #Each World
+    for each_world_index, each_world in enumerate(logic_data):
+        world_prefix : str = GloverWorld.world_prefixes[each_world_index]
+        for level_key, level_data in each_world.items():
+            prefix : str = world_prefix + GloverWorld.level_prefixes[int(level_key[-1])] + ": "
+            for location_name in level_data:
+                #Not regions
+                if type(level_data[location_name]) is dict:
+                    continue
+                #Only locations remain
+                ap_ids : list = level_data[location_name][0]["AP_IDS"]
+                for each_pairing in build_location_pairings(prefix + location_name, ap_ids):
+                    output[each_pairing[0]] = each_pairing[1]
     return output

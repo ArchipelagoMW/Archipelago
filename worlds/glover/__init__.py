@@ -26,7 +26,7 @@ class GloverWeb(WebWorld):
 
 class GloverWorld(World):
     """
-    Glover is an N64 physics puzzle platformeing game.
+    Glover is an N64 physics puzzle platforming game.
     """
     game : str = "Glover"
     version : str = "V0.1"
@@ -36,9 +36,6 @@ class GloverWorld(World):
     all_items_table : ItemPool
     json_info : JsonReader.JsonInfo
     options_dataclass = Options.GloverOptions
-    item_name_to_id = ItemPool.generate_item_name_to_id()
-    item_name_groups = ItemPool.generate_item_name_groups()
-    location_name_to_id = JsonReader.generate_location_name_to_id()
 
     spawn_checkpoint = [
         2,3,3,
@@ -51,6 +48,10 @@ class GloverWorld(World):
     #Check/Item Prefixes
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
+
+    item_name_to_id = ItemPool.generate_item_name_to_id()
+    item_name_groups = ItemPool.generate_item_name_groups()
+    location_name_to_id = JsonReader.generate_location_name_to_id()
 
     def __init__(self, world, player):
         self.version = "V0.1"
@@ -110,17 +111,19 @@ class GloverWorld(World):
         #Setup the spawning checkpoints
         if self.options.spawning_checkpoint_randomizer:
             #If randomized, pick a number from it's assigned value to the current value
-            for each_item in self.spawn_checkpoint.count():
-                self.spawn_checkpoint[each_item] = random.randint(1, self.spawn_checkpoint[each_item])
+            for each_inxex, each_item in enumerate(self.spawn_checkpoint):
+                self.spawn_checkpoint[each_item] = random.randint(1, each_inxex)
         else:
             #By default, they're all Checkpoint 1
-            for each_item in self.spawn_checkpoint.count():
+            for each_item in range(len(self.spawn_checkpoint)):
                 self.spawn_checkpoint[each_item] = 1
         self.json_info = JsonReader.build_data(self)
 
     def create_regions(self):
         main_menu = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(main_menu)
+        #Replace with a connection to the hubworld rather than Atlantis 1
+        main_menu.connect(self.json_info.all_levels[0].region)
         for each_level in self.json_info.all_levels:
             for each_region_pair in each_level.map_regions:
                 each_region_pair.ball_region_methods
