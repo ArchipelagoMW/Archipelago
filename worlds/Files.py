@@ -95,6 +95,7 @@ class APContainer:
     compression_method: ClassVar[int] = zipfile.ZIP_DEFLATED
 
     path: Optional[str]
+    manifest_write_subdirectory: Optional[str] = None
 
     def __init__(self, path: Optional[str] = None):
         self.path = path
@@ -116,8 +117,14 @@ class APContainer:
             manifest_str = json.dumps(manifest)
         except Exception as e:
             raise Exception(f"Manifest {manifest} did not convert to json.") from e
-        else:
-            opened_zipfile.writestr("archipelago.json", manifest_str)
+
+        manifest_location = "archipelago.json"
+        if self.manifest_write_subdirectory is not None:
+            if len(Path(self.manifest_write_subdirectory).parts) != 1:
+                raise ValueError("APContainer manifest_write_subdirectory must be single-depth.")
+            manifest_location = f"{self.manifest_write_subdirectory}/{manifest_location}"
+
+        opened_zipfile.writestr(manifest_location, manifest_str)
 
     def read(self, file: Optional[Union[str, BinaryIO]] = None) -> None:
         """Read data into patch object. file can be file-like, such as an outer zip file's stream."""
