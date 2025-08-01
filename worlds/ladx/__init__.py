@@ -1,14 +1,11 @@
 import binascii
 import dataclasses
 import os
-import pkgutil
-import tempfile
 import typing
 import logging
-import bsdiff4
 
 import settings
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
@@ -16,18 +13,16 @@ from .ForeignItemIcons import ForeignItemIconMatcher
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name,
                     links_awakening_item_name_groups)
-from .LADXR import generator
 from .LADXR.itempool import ItemPool as LADXRItemPool
 from .LADXR.locations.instrument import Instrument
 from .LADXR.logic import Logic as LADXRLogic
-from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id,
                         links_awakening_location_name_groups)
 from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
-from .Rom import LADXDeltaPatch, get_base_rom_path
+from .Rom import LADXProcedurePatch, write_patch_data
 
 DEVELOPER_MODE = False
 
@@ -37,7 +32,7 @@ class LinksAwakeningSettings(settings.Group):
         """File name of the Link's Awakening DX rom"""
         copy_to = "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
         description = "LADX ROM File"
-        md5s = [LADXDeltaPatch.hash]
+        md5s = [LADXProcedurePatch.hash]
 
     class RomStart(str):
         """
@@ -54,8 +49,16 @@ class LinksAwakeningSettings(settings.Group):
     class DisplayMsgs(settings.Bool):
         """Display message inside of Bizhawk"""
 
+    class GfxModFile(settings.FilePath):
+        """
+        Gfxmod file, get it from upstream: https://github.com/daid/LADXR/tree/master/gfx
+        Only .bin or .bdiff files
+        The same directory will be checked for a matching text modification file
+        """
+
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: typing.Union[RomStart, bool] = True
+    gfx_mod_file: GfxModFile = GfxModFile()
 
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
@@ -332,7 +335,9 @@ class LinksAwakeningWorld(World):
                 start_item = next((item for item in start_items if opens_new_regions(item)), None)
 
             if start_item:
-                itempool.remove(start_item)
+                # Make sure we're removing the same copy of the item that we're placing
+                # (.remove checks __eq__, which could be a different copy, so we find the first index and use .pop)
+                start_item = itempool.pop(itempool.index(start_item))
                 start_loc.place_locked_item(start_item)
             else:
                 logging.getLogger("Link's Awakening Logger").warning(f"No {self.options.tarins_gift.current_option_name} available for Tarin's Gift.")
@@ -362,7 +367,7 @@ class LinksAwakeningWorld(World):
             # ...also set the rules for the dungeon
             for location in locs:
                 orig_rule = location.item_rule
-                # If an item is about to be placed on a dungeon location, it can go there iff
+                # If an item is about to be placed on a dungeon location, it can go there iff 
                 # 1. it fits the general rules for that location (probably 'return True' for most places)
                 # 2. Either
                 #    2a. it's not a restricted dungeon item
@@ -418,12 +423,6 @@ class LinksAwakeningWorld(World):
         fill_restrictive(self.multiworld, partial_all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
 
 
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
-
     def generate_output(self, output_directory: str):
         matcher = ForeignItemIconMatcher()
         # copy items back to locations
@@ -458,31 +457,13 @@ class LinksAwakeningWorld(World):
                     # Kind of kludge, make it possible for the location to differentiate between local and remote items
                     loc.ladxr_item.location_owner = self.player
 
-        rom_name = Rom.get_base_rom_path()
-        out_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.player_name}.gbc"
-        out_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gbc")
+        
+        patch = LADXProcedurePatch(player=self.player, player_name=self.player_name)
+        write_patch_data(self, patch)
+        out_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
+                                                  f"{patch.patch_file_ending}")
 
-        parser = get_parser()
-        args = parser.parse_args([rom_name, "-o", out_name, "--dump"])
-
-        rom = generator.generateRom(args, self)
-
-        with open(out_path, "wb") as handle:
-            rom.save(handle, name="LADXR")
-
-        # Write title screen after everything else is done - full gfxmods may stomp over the egg tiles
-        if self.options.ap_title_screen:
-            with tempfile.NamedTemporaryFile(delete=False) as title_patch:
-                title_patch.write(pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
-
-            bsdiff4.file_patch_inplace(out_path, title_patch.name)
-            os.unlink(title_patch.name)
-
-        patch = LADXDeltaPatch(os.path.splitext(out_path)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
-                               player_name=self.player_name, patched_path=out_path)
-        patch.write()
-        if not DEVELOPER_MODE:
-            os.unlink(out_path)
+        patch.write(out_path)
 
     def generate_multi_key(self):
         return bytearray(self.random.getrandbits(8) for _ in range(10)) + self.player.to_bytes(2, 'big')

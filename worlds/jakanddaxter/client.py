@@ -367,7 +367,7 @@ def find_root_directory(ctx: JakAndDaxterContext):
                         f"   Close all launchers, games, clients, and console windows, then restart Archipelago.")
 
     if not os.path.exists(settings_path):
-        msg = (f"{err_title}: the OpenGOAL settings file does not exist.\n"
+        msg = (f"{err_title}: The OpenGOAL settings file does not exist.\n"
                f"{alt_instructions}")
         ctx.on_log_error(logger, msg)
         return
@@ -375,14 +375,44 @@ def find_root_directory(ctx: JakAndDaxterContext):
     with open(settings_path, "r") as f:
         load = json.load(f)
 
-        jak1_installed = load["games"]["Jak 1"]["isInstalled"]
+        # This settings file has changed format once before, and may do so again in the future.
+        # Guard against future incompatibilities by checking the file version first, and use that to determine
+        # what JSON keys to look for next.
+        try:
+            settings_version = load["version"]
+            logger.debug(f"OpenGOAL settings file version: {settings_version}")
+        except KeyError:
+            msg = (f"{err_title}: The OpenGOAL settings file has no version number!\n"
+                   f"{alt_instructions}")
+            ctx.on_log_error(logger, msg)
+            return
+
+        try:
+            if settings_version == "2.0":
+                jak1_installed = load["games"]["Jak 1"]["isInstalled"]
+                mod_sources = load["games"]["Jak 1"]["modsInstalledVersion"]
+
+            elif settings_version == "3.0":
+                jak1_installed = load["games"]["jak1"]["isInstalled"]
+                mod_sources = load["games"]["jak1"]["mods"]
+
+            else:
+                msg = (f"{err_title}: The OpenGOAL settings file has an unknown version number ({settings_version}).\n"
+                       f"{alt_instructions}")
+                ctx.on_log_error(logger, msg)
+                return
+        except KeyError as e:
+            msg = (f"{err_title}: The OpenGOAL settings file does not contain key entry {e}!\n"
+                   f"{alt_instructions}")
+            ctx.on_log_error(logger, msg)
+            return
+
         if not jak1_installed:
             msg = (f"{err_title}: The OpenGOAL Launcher is missing a normal install of Jak 1!\n"
                    f"{alt_instructions}")
             ctx.on_log_error(logger, msg)
             return
 
-        mod_sources = load["games"]["Jak 1"]["modsInstalledVersion"]
         if mod_sources is None:
             msg = (f"{err_title}: No mod sources have been configured in the OpenGOAL Launcher!\n"
                    f"{alt_instructions}")
