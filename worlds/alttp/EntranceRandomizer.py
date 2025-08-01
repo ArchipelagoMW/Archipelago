@@ -54,16 +54,13 @@ def parse_arguments(argv, no_defaults=False):
     ret = parser.parse_args(argv)
 
     # cannot be set through CLI currently
-    ret.plando_items = []
-    ret.plando_texts = {}
-    ret.plando_connections = []
 
     if multiargs.multi:
         defaults = copy.deepcopy(ret)
         for player in range(1, multiargs.multi + 1):
             playerargs = parse_arguments(shlex.split(getattr(ret, f"p{player}")), True)
 
-            for name in ["plando_items", "plando_texts", "plando_connections", "game", "sprite", "sprite_pool"]:
+            for name in ["game", "sprite", "sprite_pool"]:
                 value = getattr(defaults, name) if getattr(playerargs, name) is None else getattr(playerargs, name)
                 if player == 1:
                     setattr(ret, name, {1: value})

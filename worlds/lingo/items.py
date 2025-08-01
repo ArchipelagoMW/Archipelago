@@ -58,8 +58,6 @@ def get_prog_item_classification(item_name: str):
 
 
 def load_item_data():
-    global ALL_ITEM_TABLE, ITEMS_BY_GROUP
-
     for color in ["Black", "Red", "Blue", "Yellow", "Green", "Orange", "Gray", "Brown", "Purple"]:
         ALL_ITEM_TABLE[color] = ItemData(get_special_item_id(color), get_prog_item_classification(color),
                                          ItemType.COLOR, False, [])

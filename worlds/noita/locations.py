@@ -1,6 +1,6 @@
 # Locations are specific points that you would obtain an item at.
 from enum import IntEnum
-from typing import Dict, NamedTuple, Optional, Set
+from typing import NamedTuple
 
 from BaseClasses import Location
 
@@ -27,7 +27,7 @@ class LocationFlag(IntEnum):
 # Only the first Hidden Chest and Pedestal are mapped here, the others are created in Regions.
 # ltype key: "Chest" = Hidden Chests, "Pedestal" = Pedestals, "Boss" = Boss, "Orb" = Orb.
 # 110000-110671
-location_region_mapping: Dict[str, Dict[str, LocationData]] = {
+location_region_mapping: dict[str, dict[str, LocationData]] = {
     "Coal Pits Holy Mountain": {
         "Coal Pits Holy Mountain Shop Item 1":   LocationData(110000),
         "Coal Pits Holy Mountain Shop Item 2":   LocationData(110001),
@@ -207,15 +207,15 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
 }
 
 
-def make_location_range(location_name: str, base_id: int, amt: int) -> Dict[str, int]:
+def make_location_range(location_name: str, base_id: int, amt: int) -> dict[str, int]:
     if amt == 1:
         return {location_name: base_id}
     return {f"{location_name} {i+1}": base_id + i for i in range(amt)}
 
 
-location_name_groups: Dict[str, Set[str]] = {"Shop": set(), "Orb": set(), "Boss": set(), "Chest": set(),
+location_name_groups: dict[str, set[str]] = {"Shop": set(), "Orb": set(), "Boss": set(), "Chest": set(),
                                              "Pedestal": set()}
-location_name_to_id: Dict[str, int] = {}
+location_name_to_id: dict[str, int] = {}
 
 
 for region_name, location_group in location_region_mapping.items():
