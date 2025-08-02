@@ -119,10 +119,11 @@ class APContainer:
             raise Exception(f"Manifest {manifest} did not convert to json.") from e
 
         manifest_location = "archipelago.json"
-        if self.manifest_write_subdirectory is not None:
-            if len(Path(self.manifest_write_subdirectory).parts) != 1:
+        if self.manifest_write_subdirectory:
+            stripped_write_directory = self.manifest_write_subdirectory.rstrip("/\\")
+            if "/" in stripped_write_directory or "\\" in stripped_write_directory:
                 raise ValueError("APContainer manifest_write_subdirectory must be single-depth.")
-            manifest_location = f"{self.manifest_write_subdirectory}/{manifest_location}"
+            manifest_location = f"{stripped_write_directory}/{manifest_location}"
 
         opened_zipfile.writestr(manifest_location, manifest_str)
 
