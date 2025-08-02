@@ -435,7 +435,7 @@ class WitnessPlayerLogic:
         postgame_adjustments = []
 
         # Make some quick references to some options
-        remote_doors = world.options.shuffle_doors >= 2  # "Panels" mode has no region accessibility implications.
+        remote_doors = world.options.shuffle_doors >= "doors"  # "Panels" mode has no region accessibility implications.
         early_caves = world.options.early_caves
         victory = world.options.victory_condition
         mnt_lasers = world.options.mountain_lasers
@@ -592,7 +592,7 @@ class WitnessPlayerLogic:
 
         # Make condensed references to some options
 
-        remote_doors = world.options.shuffle_doors >= 2  # "Panels" mode has no overarching region access implications.
+        remote_doors = world.options.shuffle_doors >= "doors"  # "Panels" mode has no region access implications.
         lasers = world.options.shuffle_lasers
         victory = world.options.victory_condition
         mnt_lasers = world.options.mountain_lasers

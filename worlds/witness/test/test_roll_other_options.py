@@ -1,5 +1,5 @@
 from ..options import ElevatorsComeToYou
-from ..test import WitnessTestBase
+from ..test.bases import WitnessTestBase
 
 # These are just some random options combinations, just to catch whether I broke anything obvious
 
