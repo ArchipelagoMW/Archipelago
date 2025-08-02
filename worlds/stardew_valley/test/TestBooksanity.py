@@ -1,4 +1,4 @@
-from . import SVTestBase
+from .bases import SVTestBase
 from ..options import ExcludeGingerIsland, Booksanity, Shipsanity
 from ..strings.book_names import Book, LostBook
 

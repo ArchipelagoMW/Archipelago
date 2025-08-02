@@ -1,4 +1,4 @@
-from ..test import WitnessMultiworldTestBase, WitnessTestBase
+from ..test.bases import WitnessMultiworldTestBase, WitnessTestBase
 
 
 class TestProgressiveSymbols(WitnessTestBase):
