@@ -28,25 +28,12 @@ def get_visible_worlds() -> dict[str, type(World)]:
 
 
 def render_markdown(path: str) -> str:
-    import markdown
+    import mistune
 
     with open(path, encoding="utf-8-sig") as f:
         document = f.read()
-    return markdown.markdown(
-        document,
-        extensions=[
-            "mdx_breakless_lists",
-            "markdown.extensions.fenced_code",
-            "markdown.extensions.smarty",
-            "toc",
-        ],
-        extension_configs={
-            "toc": {
-                "anchorlink": True,
-                # documentation says setting this to an empty string speeds up parsing if no marker present
-                "marker": "",
-            },
-        }
+    return mistune.html(
+        document
     )
 
 
