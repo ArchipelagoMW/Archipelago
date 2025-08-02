@@ -50,9 +50,9 @@ def create_regions(world: 'GSTLAWorld'):
 
     if world.options.lemurian_ship < 2:
         regions_copy[RegionName.Lemurian_Ship].locations.append(LocationName.Lemurian_Ship_Engine_Room)
-        regions_copy[RegionName.Lemurian_Ship].locations.append(LocationName.Lemurian_Ship_Aqua_Hydra_fight)
+        regions_copy[RegionName.Lemurian_Ship].locations.append(LocationName.Lemurian_Ship_Aqua_Hydra)
     else:
-        regions_copy[RegionName.Lemurian_Ship_Revisit].locations.append(LocationName.Lemurian_Ship_Aqua_Hydra_fight)
+        regions_copy[RegionName.Lemurian_Ship_Revisit].locations.append(LocationName.Lemurian_Ship_Aqua_Hydra)
 
     if world.options.start_with_wings_of_anemos == 0:
         regions_copy[RegionName.Reunion].locations.append(LocationName.Contigo_Wings_of_Anemos)
@@ -482,7 +482,7 @@ regions: Dict[str, RegionData] = {
         LocationName.Gaia_Rock_Rusty_Mace,
         LocationName.Gaia_Rock_Cloud_Brand,
         LocationName.Gaia_Rock_Dancing_Idol,
-        LocationName.Gaia_Rock_Serpent_Fight,
+        LocationName.Gaia_Rock_Serpent,
         LocationName.Gaia_Rock_Sand
     ]),
     RegionName.TreasureIsland: RegionData(RegionName.TreasureIsland,
@@ -607,7 +607,7 @@ regions: Dict[str, RegionData] = {
     ]),
     RegionName.SeaOfTime: RegionData(RegionName.SeaOfTime,
     [
-        LocationName.Sea_of_Time_Poseidon_fight,
+        LocationName.Sea_of_Time_Poseidon,
     ],
     [
         EntranceName.SeaOfTimeToLemuria
@@ -673,7 +673,7 @@ regions: Dict[str, RegionData] = {
         LocationName.Shaman_Village_Lucky_Medal,
         LocationName.Shaman_Village_Lucky_Pepper,
         LocationName.Shaman_Village_Weasels_Claw,
-        LocationName.Shaman_Village_Moapa_fight,
+        LocationName.Shaman_Village_Moapa,
         LocationName.Shaman_Village_Hover_Jade,
         LocationName.Aroma,
         LocationName.Gasp
@@ -717,7 +717,7 @@ regions: Dict[str, RegionData] = {
         LocationName.Jupiter_Lighthouse_Red_Key,
         LocationName.Jupiter_Lighthouse_Water_of_Life,
         LocationName.Whorl,
-        LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst_fight
+        LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst
     ]),
     RegionName.Reunion: RegionData(RegionName.Reunion,
     [
@@ -797,7 +797,7 @@ regions: Dict[str, RegionData] = {
         LocationName.Mars_Lighthouse_Mimic,
         LocationName.Mars_Lighthouse_Orihalcon,
         LocationName.Mars_Lighthouse_Valkyrie_Mail,
-        LocationName.Mars_Lighthouse_Flame_Dragons_fight,
+        LocationName.Mars_Lighthouse_Flame_Dragons,
         LocationName.Mars_Lighthouse_Teleport_Lapis,
         LocationName.Balm,
     ],
@@ -809,6 +809,6 @@ regions: Dict[str, RegionData] = {
         LocationName.Fugue,
         LocationName.Mars_Lighthouse_Alastors_Hood,
         LocationName.Mars_Lighthouse_Psy_Crystal,
-        LocationName.Mars_Lighthouse_Doom_Dragon_Fight,
+        LocationName.Mars_Lighthouse_Doom_Dragon,
     ])
 }
