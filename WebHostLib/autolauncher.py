@@ -172,6 +172,7 @@ class MultiworldInstance():
         self.cert = config["SELFLAUNCHCERT"]
         self.key = config["SELFLAUNCHKEY"]
         self.host = config["HOST_ADDRESS"]
+        self.room_ports_config = config["ROOM_PORTS"]
         self.rooms_to_start = multiprocessing.Queue()
         self.rooms_shutting_down = multiprocessing.Queue()
         self.name = f"MultiHoster{id}"
@@ -181,7 +182,9 @@ class MultiworldInstance():
             return False
 
         process = multiprocessing.Process(group=None, target=run_server_process,
-                                          args=(self.name, self.ponyconfig, get_static_server_data(),
+                                          args=(self.name, self.ponyconfig,
+                                                self.room_ports_config,
+                                                get_static_server_data(),
                                                 self.cert, self.key, self.host,
                                                 self.rooms_to_start, self.rooms_shutting_down),
                                           name=self.name)
