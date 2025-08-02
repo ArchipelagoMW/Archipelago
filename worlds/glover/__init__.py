@@ -5,7 +5,7 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 import random
 
-from .Options import GloverOptions
+from .Options import GaribLogic, GloverOptions, SpawningCheckpointRandomizer
 from .JsonReader import JsonInfo, build_data, generate_location_name_to_id
 from .ItemPool import generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table
 
@@ -108,10 +108,10 @@ class GloverWorld(World):
     def generate_early(self):
         print("Generate Early")
         #Garib Sorting Order
-        if self.options.garib_sorting == 'garibsanity':
+        if self.options.garib_sorting == GaribLogic.option_garibsanity:
             random.shuffle(self.garib_level_order)
         #Setup the spawning checkpoints
-        if self.options.spawning_checkpoint_randomizer.value == 1:
+        if self.options.spawning_checkpoint_randomizer:
             #If randomized, pick a number from it's assigned value to the current value
             for each_inxex, each_item in enumerate(self.spawn_checkpoint):
                 self.spawn_checkpoint[each_item] = random.randint(1, each_inxex)

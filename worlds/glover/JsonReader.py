@@ -113,13 +113,13 @@ class LocationData(NamedTuple):
 
 def create_location_data(check_name : str, check_info : list, prefix : str) -> LocationData:
     print("create_location_data")
-    for check_pairing in check_info:
-        both_ids = check_pairing[0]
-        methods : List[AccessMethod] = []
+    methods : List[AccessMethod] = []
+    for check_index in range(1, len(check_info)):
+        check_pairing = check_info[check_index]
         if len(check_pairing) > 1:
             for each_method in check_pairing[1]:
                 methods.append(create_access_method(each_method, prefix))
-    return LocationData(prefix + check_name, both_ids["AP_IDS"], both_ids["IDS"], methods)
+    return LocationData(prefix + check_name, check_info[0]["AP_IDS"], check_info[0]["IDS"], methods)
 
 class RegionPair(NamedTuple):
     name : str
@@ -270,7 +270,7 @@ def build_data(self) -> JsonInfo:
 
     #Build Logic
     loc_con_index = 0
-    for world_index in 1:
+    for world_index in range(1):
         world_prefix : str = self.world_prefixes[world_index]
         each_world = logic_data[world_index]
         #Go over the Glover worlds
