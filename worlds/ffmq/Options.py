@@ -53,7 +53,7 @@ class StartingWeapon(Choice):
     default = "random"
 
 
-class ShuffleSteelArmor(Choice):
+class ShuffleSteelArmor(Toggle):
     """Shuffle the Steel Armor into the item pool instead of starting with it."""
     display_name = "Shuffle Steel Armor"
     default = False
