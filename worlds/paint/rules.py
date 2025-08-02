@@ -50,12 +50,9 @@ def calculate_paint_percent_available(state: CollectionState, world: "PaintWorld
         b = min(b, 7)
     w = state.count("Progressive Canvas Width", player)
     h = state.count("Progressive Canvas Height", player)
-    # This code looks a little messy but it's a mathematical formula derived from the similarity calculations in the
-    # client. The first line calculates the maximum score achievable for a single pixel with the current items in the
-    # worst possible case. This per-pixel score is then multiplied by the number of pixels currently available (the
-    # starting canvas is 400x300) over the total number of pixels with everything unlocked (800x600) to get the
-    # total score achievable assuming the worst possible target image. Finally, this is multiplied by the logic percent
-    # option which restricts the logic so as to not require pixel perfection.
+    # This code calculates the total similarity in logic using the formula:
+    # (expected score per pixel) * (pixels currently available) * (logic percent from options) / (total pixel count)
+    # The expected score and logic percent per pixel are calculated elsewhere for efficiency.
     return (SINGLE_PIXEL_SCORE_LOOKUP[r, g, b] *
             min(400 + w * world.options.canvas_size_increment.value, 800) *
             min(300 + h * world.options.canvas_size_increment.value, 600) *
