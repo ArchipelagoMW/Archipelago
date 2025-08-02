@@ -4824,5 +4824,160 @@
         "condition": {},
         "type": "Boss drop",
         "boss_type": "Normal"
+    },
+    {
+        "name": "Lost Gestral near Esquie's Nest",
+        "internal_name": "Bonus_LostGestrals",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral near Stone Wave Cliffs",
+        "internal_name": "Bonus_LostGestrals",
+        "location": "World Map",
+        "condition": {
+            "Progressive Rock": 1
+        },
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral near The Reacher",
+        "internal_name": "Bonus_LostGestrals",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral near Endless Night Sanctuary",
+        "internal_name": "Bonus_LostGestrals",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral near White Tree",
+        "internal_name": "Bonus_LostGestrals",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral near Monoco's Station",
+        "internal_name": "Bonus_LostGestrals",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral on flying island",
+        "internal_name": "Bonus_LostGestrals",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral near Coastal Cave",
+        "internal_name": "Bonus_LostGestrals",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral on red island near the mimes",
+        "internal_name": "Bonus_LostGestrals",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral reward 1",
+        "location": "Camp",
+        "condition": {
+            "Lost Gestral": 1
+        },
+        "original_item": "",
+        "type": "Quest reward"
+    },
+    {
+        "name": "Lost Gestral reward 2",
+        "location": "Camp",
+        "condition": {
+            "Lost Gestral": 2
+        },
+        "original_item": "",
+        "type": "Quest reward"
+    },
+    {
+        "name": "Lost Gestral reward 3",
+        "location": "Camp",
+        "condition": {
+            "Lost Gestral": 3
+        },
+        "original_item": "",
+        "type": "Quest reward"
+    },
+    {
+        "name": "Lost Gestral reward 4",
+        "location": "Camp",
+        "condition": {
+            "Lost Gestral": 4
+        },
+        "original_item": "",
+        "type": "Quest reward"
+    },
+    {
+        "name": "Lost Gestral reward 5",
+        "location": "Camp",
+        "condition": {
+            "Lost Gestral": 5
+        },
+        "original_item": "",
+        "type": "Quest reward"
+    },
+    {
+        "name": "Lost Gestral reward 6",
+        "location": "Camp",
+        "condition": {
+            "Lost Gestral": 6
+        },
+        "original_item": "",
+        "type": "Quest reward"
+    },
+    {
+        "name": "Lost Gestral reward 7",
+        "location": "Camp",
+        "condition": {
+            "Lost Gestral": 7
+        },
+        "original_item": "",
+        "type": "Quest reward"
+    },
+    {
+        "name": "Lost Gestral reward 8",
+        "location": "Camp",
+        "condition": {
+            "Lost Gestral": 8
+        },
+        "original_item": "",
+        "type": "Quest reward"
+    },
+    {
+        "name": "Lost Gestral reward 9",
+        "location": "Camp",
+        "condition": {
+            "Lost Gestral": 9
+        },
+        "original_item": "",
+        "type": "Quest reward"
     }
 ]

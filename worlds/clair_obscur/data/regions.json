@@ -797,7 +797,16 @@
             "Chest_WorldMap_1",
             "Chest_WorldMap_7",
             "Chest_WorldMap_8",
-            "Chest_MiniLevels_3"
+            "Chest_MiniLevels_3",
+            "Lost Gestral reward 1",
+            "Lost Gestral reward 2",
+            "Lost Gestral reward 3",
+            "Lost Gestral reward 4",
+            "Lost Gestral reward 5",
+            "Lost Gestral reward 6",
+            "Lost Gestral reward 7",
+            "Lost Gestral reward 8",
+            "Lost Gestral reward 9"
         ]
     },
     {
@@ -814,7 +823,9 @@
             "Chest_WorldMap_14",
             "Chest_WorldMap_19",
             "Chest_MiniLevels_7",
-            "World Map: Chromatic Bruler"
+            "World Map: Chromatic Bruler",
+            "Lost Gestral near Esquie's Nest",
+            "Lost Gestral near Stone Wave Cliffs"
         ]
     },
     {
@@ -837,7 +848,8 @@
             "Chest_MiniLevels_1",
             "Chest_MiniLevels_2",
             "Chest_MiniLevels_6",
-            "World Map: Chromatic Jar"
+            "World Map: Chromatic Jar",
+            "Lost Gestral near White Tree"
         ]
     },
     {
@@ -850,7 +862,8 @@
             "Chest_WorldMap_36",
             "Chest_WorldMap_37",
             "World Map: Frost Eveque",
-            "World Map: Grosse Tete"
+            "World Map: Grosse Tete",
+            "Lost Gestral near Monoco's Station"
         ]
     },
     {
@@ -885,7 +898,9 @@
             "Chest_WorldMap_63",
             "World Map: Chromatic Moissoneuse",
             "World Map: Chromatic Reaper Cultist",
-            "World Map: Mime"
+            "World Map: Mime",
+            "Lost Gestral near Coastal Cave",
+            "Lost Gestral on red island near the mimes"
         ]
     },
     {
@@ -924,7 +939,10 @@
             "World Map: Chromatic Portier",
             "World Map: Serpenphare",
             "World Map: Sprong",
-            "World Map: Thunder Eveque"
+            "World Map: Thunder Eveque",
+            "Lost Gestral near The Reacher",
+            "Lost Gestral near Endless Night Sanctuary",
+            "Lost Gestral on flying island"
         ]
     },
     {
