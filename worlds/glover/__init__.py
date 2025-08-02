@@ -210,9 +210,6 @@ class GloverWorld(World):
         return super().connect_entrances()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        self.glover_cleanup()
-        reffers = gc.get_referrers(self.multiworld)
-        print(reffers)
         options = {}
         options["difficulty_logic"] = self.options.difficulty_logic.value
         options["death_link"] = self.options.death_link.value
@@ -237,10 +234,6 @@ class GloverWorld(World):
         options["player_name"] = self.multiworld.player_name[self.player]
         options["seed"] = self.random.randint(-6500000, 6500000)
         options["version"] = self.version
+        reffers = gc.get_referrers(self.multiworld)
+        print(reffers)
         return options
-
-    def glover_cleanup(self):
-        for each_level in self.json_info.all_levels:
-            each_level.map_regions.clear()
-        self.json_info.all_levels.clear()
-        self.json_info.locations.clear()
