@@ -122,10 +122,9 @@ class GloverWorld(World):
         multiworld = self.multiworld
         player = self.player
         self.json_info = build_data(self)
-        main_menu = Region("Menu", self.player, self.multiworld)
-        self.multiworld.regions.append(main_menu)
+        multiworld.regions.append(Region("Menu", player, multiworld))
         #Replace with a connection to the hubworld rather than Atlantis
-        main_menu.connect(multiworld.get_region("Atl1", player))
+        multiworld.get_region("Menu", player).connect(multiworld.get_region("Atl1", player))
 
     def create_item(self, name) -> Item:
         item_classification = None

@@ -133,7 +133,6 @@ def create_region_pair(check_info : dict, check_name : str, level_name : str, pl
     no_ball_region_methods : list[AccessMethod] = []
     base_id : int = check_info["I"]
     ball_region = Region(region_name + " W/Ball", player, multiworld, level_name)
-
     for index, check_pairing in enumerate(check_info["B"]):
         if index == 0:
             continue
