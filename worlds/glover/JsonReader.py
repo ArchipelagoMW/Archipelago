@@ -291,7 +291,8 @@ def build_data(self) -> JsonInfo:
                     location_data_list.append(create_location_data(check_name, check_info, prefix))
                 #In-Level Region
                 if type(check_info) is dict:
-                    map_regions.append(create_region_pair(check_info, prefix, check_name, level_name, self.player, self.multiworld))
+                    new_region_pair = create_region_pair(check_info, check_name, level_name, self.player, self.multiworld)
+                    map_regions.append(new_region_pair)
                     #You get the one from checkpoints by default
                     region_checkpoints = []
                     for check_index in range(1, len(checkpoint_entry_pairs)):

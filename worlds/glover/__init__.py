@@ -84,6 +84,7 @@ class GloverWorld(World):
     def __init__(self, world, player):
         self.version = "V0.1"
         print("Init")
+        super(GloverWorld, self).__init__(world, player)
 
     def level_from_string(self, name : str) -> int:
         print("level_from_string")
