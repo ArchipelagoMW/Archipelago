@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import ExcludeLocations, Toggle, DeathLink, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range
+from Options import ExcludeLocations, Toggle, DeathLink, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin
 
 class DifficultyLogic(Choice):
     """What tricks are allowed. Default Intended.
@@ -47,7 +47,7 @@ class GaribSorting(Choice):
     display_name = "Garib Sorting"
     option_by_level = 0
     option_in_order = 1
-    option_random = 2
+    option_random_order = 2
     default = 1
 
 class EntranceRandomizer(DefaultOnToggle):
@@ -269,7 +269,8 @@ class TrapTipWeight(Range):
     range_end = 100
     default = 30
 
-class GloverOptions(PerGameCommonOptions):
+@dataclass
+class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     difficulty_logic : DifficultyLogic
     starting_ball : StartingBall
     garib_logic : GaribLogic
@@ -277,7 +278,6 @@ class GloverOptions(PerGameCommonOptions):
     entrance_randomizer : EntranceRandomizer
     spawning_checkpoint_randomizer : SpawningCheckpointRandomizer
     bonus_levels : EnableBonuses
-    death_link : DeathLink
     tag_link : TagLink
 
     randomize_jump : RandomizeJump

@@ -45,6 +45,34 @@ class GloverWorld(World):
         3,3,5,
         2,1,4]
     
+    #Garib level order table
+    garib_level_order = [
+        ["Atl1", 50]#,
+        #["Atl2", 60],
+        #["Atl3", 80],
+        #["Atl?", 25],
+        #["Crn1", 65],
+        #["Crn2", 80],
+        #["Crn3", 80],
+        #["Crn?", 20],
+        #["Prt1", 70],
+        #["Prt2", 60],
+        #["Prt3", 80],
+        #["Prt?", 50],
+        #["Pht1", 80],
+        #["Pht2", 80],
+        #["Pht3", 80],
+        #["Pht?", 60],
+        #["FoF1", 60],
+        #["FoF2", 60],
+        #["FoF3", 70],
+        #["FoF?", 56],
+        #["Otw1", 50],
+        #["Otw2", 50],
+        #["Otw3", 80],
+        #["Otw?", 50]
+    ]
+    
     #Check/Item Prefixes
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
@@ -56,38 +84,6 @@ class GloverWorld(World):
     def __init__(self, world, player):
         self.version = "V0.1"
         
-        #Garib level order table
-        garib_level_order = [
-            ["Atl1", 50]#,
-            #["Atl2", 60],
-            #["Atl3", 80],
-            #["Atl?", 25],
-            #["Crn1", 65],
-            #["Crn2", 80],
-            #["Crn3", 80],
-            #["Crn?", 20],
-            #["Prt1", 70],
-            #["Prt2", 60],
-            #["Prt3", 80],
-            #["Prt?", 50],
-            #["Pht1", 80],
-            #["Pht2", 80],
-            #["Pht3", 80],
-            #["Pht?", 60],
-            #["FoF1", 60],
-            #["FoF2", 60],
-            #["FoF3", 70],
-            #["FoF?", 56],
-            #["Otw1", 50],
-            #["Otw2", 50],
-            #["Otw3", 80],
-            #["Otw?", 50]
-        ]
-
-        if self.options.garib_sorting == 2:
-            random.shuffle(garib_level_order)
-        
-        super(GloverWorld, self).__init__(world, player)
 
     def level_from_string(self, name : str) -> int:
         if name[3:4] in self.level_prefixes:
@@ -108,8 +104,11 @@ class GloverWorld(World):
         return -1
 
     def generate_early(self):
+        #Garib Sorting Order
+        if self.options.garib_sorting == 'garibsanity':
+            random.shuffle(self.garib_level_order)
         #Setup the spawning checkpoints
-        if self.options.spawning_checkpoint_randomizer:
+        if self.options.spawning_checkpoint_randomizer.value == 1:
             #If randomized, pick a number from it's assigned value to the current value
             for each_inxex, each_item in enumerate(self.spawn_checkpoint):
                 self.spawn_checkpoint[each_item] = random.randint(1, each_inxex)
@@ -144,7 +143,7 @@ class GloverWorld(World):
             case "Trap":
                 item_classification = ItemClassification.trap
             case "Garib":
-                if self.options.bonus_levels or self.options.difficulty_logic > 0:
+                if self.options.bonus_levels == 1 or self.options.difficulty_logic.value > 0:
                     item_classification = ItemClassification.progression_deprioritized
                 else:
                     item_classification = ItemClassification.filler
@@ -157,24 +156,24 @@ class GloverWorld(World):
     def create_items(self) -> None:
         #Garib Logic
         garib_items = []
-        match self.options.garib_logic:
+        match self.options.garib_logic.value:
             #0: Level Garibs (No items to be sent)
             #Garib Groups
             case 1:
-                if self.options.garib_sorting == 0:
+                if self.options.garib_sorting.value == 0:
                     garib_items = list(world_garib_table.keys())
                 else:
                     garib_items = list(decoupled_garib_table.keys())
             #Individual Garibs
             case 2:
-                if self.options.garib_logic == 0:
+                if self.options.garib_logic.value == 0:
                     garib_items = list(garibsanity_world_table.keys())
                 else:
                     garib_items = ["Garibsanity"]
         
         #Checkpoint Logic
         checkpoint_items = []
-        if self.options.checkpoint_checks:
+        if self.options.checkpoint_checks.value == 1:
             for each_checkpoint in checkpoint_table:
                 level_offset = self.level_from_string(each_checkpoint)
                 world_offset = self.world_from_string(each_checkpoint)
@@ -183,12 +182,12 @@ class GloverWorld(World):
 
         #Level Event Logic
         event_items = []
-        if self.options.switches_checks:
+        if self.options.switches_checks.value == 1:
             event_items = list(level_event_table.keys())
 
         #Abilities
         ability_items = list(ability_table.keys())
-        if not self.options.include_power_ball:
+        if not self.options.include_power_ball.value == 1:
             ability_items.remove("Power Ball")
         
         #Apply all core items
@@ -215,27 +214,27 @@ class GloverWorld(World):
         return super().connect_entrances()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        options = self.options.as_dict(
-            "death_link",
-            "tag_link",
-            "difficuilty_logic",
-            "starting_ball",
-            "garib_logic",
-            "garib_sorting",
-            "entrance_randomizer",
-            "spawning_checkingpoint_randomizer",
-            "bonus_levels",
-            "atlantis_bonus",
-            "death_link",
-            "tag_link",
-            "randomize_jump",
-            "include_power_ball",
-            "checkpoint_checks",
-            "switches_checks",
-            "mr_tip_checks",
-            "mr_hints",
-            "chicken_hints"
-            )
+        options = {}
+       #options["difficulty_logic"] = self.options.difficulty_logic.value
+       #options["death_link"] = self.options.death_link.value
+       #options["tag_link"] = self.options.tag_link.value
+       #options["starting_ball"] = self.options.starting_ball.value
+       #options["garib_logic"] = self.options.garib_logic.value
+       #options["garib_sorting"] = self.options.garib_sorting.value
+       #options["entrance_randomizer"] = self.options.entrance_randomizer.value
+       #options["spawning_checkpoint_randomizer"] = self.options.spawning_checkpoint_randomizer.value
+       #options["bonus_levels"] = self.options.bonus_levels.value
+       ##options["atlantis_bonus"] = self.options.atlantis_bonus.value
+       #options["death_link"] = self.options.death_link.value
+       #options["tag_link"] = self.options.tag_link.value
+       #options["randomize_jump"] = self.options.randomize_jump.value
+       #options["include_power_ball"] = self.options.include_power_ball.value
+       #options["checkpoint_checks"] = self.options.checkpoint_checks.value
+       #options["switches_checks"] = self.options.switches_checks.value
+       #options["mr_tip_checks"] = self.options.mr_tip_checks.value
+       #options["mr_hints"] = self.options.mr_hints.value
+       #options["chicken_hints"] = self.options.chicken_hints.value
+
         options["player_name"] = self.multiworld.player_name[self.player]
         options["seed"] = self.random.randint()
         options["version"] = self.version
