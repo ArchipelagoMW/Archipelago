@@ -117,16 +117,15 @@ class GloverWorld(World):
             #By default, they're all Checkpoint 1
             for each_item in range(len(self.spawn_checkpoint)):
                 self.spawn_checkpoint[each_item] = 1
-        self.json_info = build_data(self)
 
     def create_regions(self):
+        multiworld = self.multiworld
+        player = self.player
+        self.json_info = build_data(self)
         main_menu = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(main_menu)
-        #Replace with a connection to the hubworld rather than Atlantis 1
-        main_menu.connect(self.json_info.all_levels[0].region)
-        for each_level in self.json_info.all_levels:
-            for each_region_pair in each_level.map_regions:
-                each_region_pair.ball_region_methods
+        #Replace with a connection to the hubworld rather than Atlantis
+        main_menu.connect(multiworld.get_region("Atl1", player))
 
     def create_item(self, name) -> Item:
         item_classification = None
@@ -241,5 +240,7 @@ class GloverWorld(World):
         return options
 
     def glover_cleanup(self):
+        for each_level in self.json_info.all_levels:
+            each_level.map_regions.clear()
         self.json_info.all_levels.clear()
         self.json_info.locations.clear()

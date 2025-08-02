@@ -121,9 +121,9 @@ def create_location_data(check_name : str, check_info : list, prefix : str) -> L
 class RegionPair(NamedTuple):
     name : str
     base_id : int
-    ball_region : Region | None
+    #ball_region : Region | None
     ball_region_methods : list[AccessMethod]
-    no_ball_region : Region | None
+    #no_ball_region : Region | None
     no_ball_region_methods : list[AccessMethod]
 
 def create_region_pair(check_info : dict, check_name : str, level_name : str, player : int, multiworld : MultiWorld) -> RegionPair:
@@ -146,39 +146,45 @@ def create_region_pair(check_info : dict, check_name : str, level_name : str, pl
             continue
         #ids = check_pairing[0]
         no_ball_region_methods.append(create_access_method(check_pairing, prefix))
-    return RegionPair(region_name, base_id, ball_region, ball_region_methods, no_ball_region, no_ball_region_methods)
+    multiworld.regions.append(ball_region)
+    multiworld.regions.append(no_ball_region)
+    return RegionPair(region_name, base_id, ball_region_methods, no_ball_region_methods)
 
-def connect_region_pairs(pairs : List[RegionPair]):
+def connect_region_pairs(pairs : List[RegionPair], multiworld : MultiWorld, player : int):
     for each_pair in pairs:
+        ball_region = multiworld.get_region(each_pair.name + " W/Ball", player)
+        no_ball_region = multiworld.get_region(each_pair.name, player)
         pair_ball_connections : dict[Region, list[AccessMethod]] = {}
         pair_no_ball_connections : dict[Region, list[AccessMethod]] = {}
         for each_method in each_pair.ball_region_methods:
-            region_to_connect : Region = get_region_from_method(pairs, each_method)
+            region_to_connect : Region = get_region_from_method(multiworld, player, pairs, each_method)
             if not region_to_connect in pair_ball_connections.keys():
                 pair_ball_connections[region_to_connect] = [each_method]
         for each_method in each_pair.no_ball_region_methods:
-            region_to_connect : Region = get_region_from_method(pairs, each_method)
+            region_to_connect : Region = get_region_from_method(multiworld, player, pairs, each_method)
             if not region_to_connect in pair_no_ball_connections.keys():
                 pair_no_ball_connections[region_to_connect] = [each_method]
         for each_connection, methods in pair_ball_connections.items():
             #Create the rules using methods
-            each_pair.ball_region.connect(each_connection)
+            ball_region.connect(each_connection)
         for each_connection, methods in pair_no_ball_connections.items():
             #Create the rules using methods part 2
-            each_pair.no_ball_region.connect(each_connection)
-        each_pair.ball_region.connect(each_pair.no_ball_region)
+            no_ball_region.connect(each_connection)
+        ball_region.connect(no_ball_region)
 
 class RegionLevel(NamedTuple):
     name : str
-    region : Region
+    #region : Region | None
     starting_checkpoint : int
     map_regions : List[RegionPair]
 
 def create_region_level(level_name, checkpoint_for_use : int | None, checkpoint_entry_pairs : list, map_regions : List[RegionPair], self):
     #By default, the region level leads to the first checkpoint's region
-    
+    multiworld = self.multiworld
+    player = self.player
+
     default_checkpoint : int = 1
-    region : Region = Region(level_name, self.player, self.multiworld)
+    region : Region = Region(level_name, player, multiworld)
 
     #Get the checkpoint from the core levels
     if type(checkpoint_for_use) is int:
@@ -193,19 +199,21 @@ def create_region_level(level_name, checkpoint_for_use : int | None, checkpoint_
         level_entrances : Entrance = region.create_exit(checkpoint_name)
         connecting_region : Region
         for each_region_pair in map_regions:
+            no_ball_region = multiworld.get_region(each_region_pair.name, player)
+            ball_region = multiworld.get_region(each_region_pair.name, player)
             if each_region_pair.base_id == checkpoint_entry_pairs[checkpoint_number]:
                 if start_without_ball:
-                    connecting_region = each_region_pair.no_ball_region
+                    connecting_region = no_ball_region
                 else:
-                    connecting_region = each_region_pair.ball_region
+                    connecting_region = ball_region
                 break
         level_entrances.connect(connecting_region)
         #Let's not think about access rules yet
         #if default_region != region_index:
         #    level_entrances.access_rule
 
-    level_region : Region = Region(level_name, self.player, self.multiworld)
-    return RegionLevel(level_name, level_region, default_checkpoint, map_regions)
+    multiworld.regions.append(region)
+    return RegionLevel(level_name, default_checkpoint, map_regions)
 
 def create_access_method(info : dict, prefix : str) -> AccessMethod:
     required_moves : list = []
@@ -239,35 +247,23 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
             region_for_use = Region(each_location_data.name + " Region", player, multiworld, region_level.name)
             for each_region_name in location_regions:
                 #Make sure to apply the correct rules here later
-                get_region_from_name(map_regions, each_region_name).connect(region_for_use, each_location_data.name + " from " + each_region_name)
+                multiworld.get_region(each_region_name, player).connect(region_for_use, each_location_data.name + " from " + each_region_name)
         elif len(location_regions) == 1:
             #Single location construction assigns to the specific element in the RegionPair
-            region_for_use = get_region_from_name(map_regions, location_regions[0])
+            region_for_use = multiworld.get_region(location_regions[0], player)
         #Construct location data
         #The garib sorting stuff has to go here! Don't forget to do that later
         for each_pairing in build_location_pairings(each_location_data.name, each_location_data.ap_ids):
             locations.append(Location(player, each_pairing[0], each_pairing[1], region_for_use))
     return locations
 
-def get_region_from_method(region_pairs : List[RegionPair], method : AccessMethod) -> Region:
+def get_region_from_method(multiworld : MultiWorld, player : int, region_pairs : List[RegionPair], method : AccessMethod) -> Region:
     for each_pair in region_pairs:
+        lookup_name = each_pair.name
         if method.ball_in_region:
-            if each_pair.base_id == method.region_index:
-                return each_pair.ball_region
-        else:
-            if each_pair.base_id == method.region_index:
-                return each_pair.no_ball_region
-
-
-def get_region_from_name(region_pairs : List[RegionPair], lookup_key : str) -> Region:
-    ball_region : bool = lookup_key.endswith("W/Ball")
-    for each_pair in region_pairs:
-        if ball_region:
-            if each_pair.name + " W/Ball" == lookup_key:
-                return each_pair.ball_region
-        else:
-            if each_pair.name == lookup_key:
-                return each_pair.no_ball_region
+            lookup_name += " W/Ball"
+        if each_pair.base_id == method.region_index:
+            return multiworld.get_region(lookup_name, player)
 
 class JsonInfo(NamedTuple):
     all_levels : List[RegionLevel] = []
@@ -311,7 +307,7 @@ def build_data(self) -> JsonInfo:
                             region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
             #Sort the in-level regions
             map_regions = sorted(map_regions, key=attrgetter('base_id'))
-            connect_region_pairs(map_regions)
+            connect_region_pairs(map_regions, self.multiworld, self.player)
             #Create the level info attached to it
             checkpoint_for_use : int | None 
             if level_int > 0 & level_int < 4:
