@@ -19,6 +19,34 @@
 						"0x66",
 						"0x65"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 8,
+					"mv1": 11,
+					"mv2": 13,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 12,
+					"mv1": 27,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 8,
+					"mv1": 32,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 4,
+					"trickDifficulty": 1
 				}
 			],
 			"Block Garibs": [
@@ -31,6 +59,19 @@
 						"0x40",
 						"0x44"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 14,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Bull": [
@@ -39,6 +80,13 @@
 						"0x32"
 					],
 					"IDS": []
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Bull Tip Left": [
@@ -49,6 +97,11 @@
 					"IDS": [
 						"0x0142"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Bull Tip Right": [
@@ -59,6 +112,11 @@
 					"IDS": [
 						"0x0144"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Center Platform": {
@@ -69,7 +127,36 @@
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 31,
+						"mv0": 26,
+						"mv1": 31,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 16,
+						"mv1": 25,
+						"mv2": 12,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 16,
+						"mv1": 0,
+						"mv2": 12,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 16,
+						"mv1": 10,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					}
@@ -84,6 +171,18 @@
 						"mv0": 25,
 						"regionIndex": 2,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 29,
+						"regionIndex": 0,
+						"trickDifficulty": 1
 					}
 				],
 				"I": 3
@@ -98,6 +197,11 @@
 						"0x46",
 						"0x42"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 1": [
@@ -108,6 +212,12 @@
 					"IDS": [
 						"0x28"
 					]
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 31,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 2": [
@@ -118,6 +228,12 @@
 					"IDS": [
 						"0x2E"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 31,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint Tip": [
@@ -128,6 +244,11 @@
 					"IDS": [
 						"0x0143"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Cliff Life": [
@@ -150,6 +271,11 @@
 						"0x48",
 						"0x4A"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Edge Platforms": {
@@ -175,6 +301,18 @@
 						"mv0": 25,
 						"regionIndex": 0,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 29,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 2
@@ -188,6 +326,15 @@
 					{
 						"ballRequirement": true,
 						"mv0": 31,
+						"mv1": 26,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 16,
+						"mv1": 25,
+						"mv2": 12,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					}
@@ -200,6 +347,12 @@
 					{
 						"ballRequirement": false,
 						"mv0": 25,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					}
@@ -229,12 +382,25 @@
 					"IDS": [
 						"0xD3"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Goal": [
 				{
 					"AP_IDS": [],
 					"IDS": []
+				},
+				{
+					"ballRequirement": true,
+					"ck0": "Gate",
+					"regionIndex": 4,
+					"trickDifficulty": 0
 				}
 			],
 			"Goal Life": [
@@ -245,6 +411,12 @@
 					"IDS": [
 						"0x28"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 4,
+					"trickDifficulty": 0
 				}
 			],
 			"Pillar Garibs": [
@@ -259,6 +431,20 @@
 						"0x62",
 						"0x61"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 14,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 2,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Pillar Life": [
@@ -269,6 +455,13 @@
 					"IDS": [
 						"0x5E"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 2,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Pillars": {
@@ -317,6 +510,11 @@
 						"0x7C",
 						"0x7A"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 2,
+					"trickDifficulty": 0
 				}
 			],
 			"Platform B Garibs": [
@@ -333,6 +531,11 @@
 						"0x81",
 						"0x7F"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 2,
+					"trickDifficulty": 0
 				}
 			],
 			"Platform C Garibs": [
@@ -349,6 +552,11 @@
 						"0x86",
 						"0x84"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 2,
+					"trickDifficulty": 0
 				}
 			],
 			"Platform D Garibs": [
@@ -365,6 +573,11 @@
 						"0x8B",
 						"0x89"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 3,
+					"trickDifficulty": 0
 				}
 			],
 			"Platform E Garibs": [
@@ -381,6 +594,11 @@
 						"0x90",
 						"0x8E"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 2,
+					"trickDifficulty": 0
 				}
 			],
 			"Platforms Tip": [
@@ -391,6 +609,11 @@
 					"IDS": [
 						"0x0145"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Pool Edge Garibs": [
@@ -409,6 +632,11 @@
 						"0x50",
 						"0x52"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 1,
+					"trickDifficulty": 0
 				}
 			],
 			"Shark Garibs": [
@@ -435,6 +663,11 @@
 						"0x71",
 						"0x6E"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Shark Tip": [
@@ -445,6 +678,11 @@
 					"IDS": [
 						"0x0141"
 					]
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			]
 		}

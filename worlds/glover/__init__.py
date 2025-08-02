@@ -1,3 +1,4 @@
+import gc
 from typing import Any, Dict
 
 from BaseClasses import ItemClassification, Location, Tutorial, Item, Region, MultiWorld
@@ -83,11 +84,9 @@ class GloverWorld(World):
 
     def __init__(self, world, player):
         self.version = "V0.1"
-        print("Init")
         super(GloverWorld, self).__init__(world, player)
 
     def level_from_string(self, name : str) -> int:
-        print("level_from_string")
         if name[3:4] in self.level_prefixes:
             return self.level_prefixes.index(name[3:4])
         if name.startswith("Hubworld"):
@@ -99,7 +98,6 @@ class GloverWorld(World):
         return -1
 
     def world_from_string(self, name : str) -> int:
-        print("world_from_string")
         if name[:3] in self.world_prefixes:
             return self.world_prefixes.index(name[:3])
         if name.startswith("Hubworld") or name.startswith("Castle Cave") or name.startswith("Training"):
@@ -107,7 +105,6 @@ class GloverWorld(World):
         return -1
 
     def generate_early(self):
-        print("Generate Early")
         #Garib Sorting Order
         if self.options.garib_sorting == GaribLogic.option_garibsanity:
             random.shuffle(self.garib_level_order)
@@ -123,7 +120,6 @@ class GloverWorld(World):
         self.json_info = build_data(self)
 
     def create_regions(self):
-        print("Regions")
         main_menu = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(main_menu)
         #Replace with a connection to the hubworld rather than Atlantis 1
@@ -133,10 +129,9 @@ class GloverWorld(World):
                 each_region_pair.ball_region_methods
 
     def create_item(self, name) -> Item:
-        print("create_item")
         item_classification = None
         item_id = -1
-        knownLevelAndWorld = [self.level_from_string(self, name), self.world_from_string(self, name)]
+        #knownLevelAndWorld = [self.level_from_string(self, name), self.world_from_string(self, name)]
         item_data = find_item_data(name)
         item_id = item_data.glid
         match item_data.type:
@@ -160,7 +155,6 @@ class GloverWorld(World):
         return item_output
 
     def create_items(self) -> None:
-        print("Items")
         #Garib Logic
         garib_items = []
         match self.options.garib_logic.value:
@@ -212,18 +206,14 @@ class GloverWorld(World):
         for each_item in ability_items:
             self.create_item(each_item)
 
-    def set_rules(self):
-        print("set_rules")
-        #MethodData to actual method logic
-        return super().set_rules()
-
     def connect_entrances(self):
-        print("connect_entrances")
         #Level portal randomization
         return super().connect_entrances()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        print("Fill Slot Data")
+        self.glover_cleanup()
+        reffers = gc.get_referrers(self.multiworld)
+        print(reffers)
         options = {}
         options["difficulty_logic"] = self.options.difficulty_logic.value
         options["death_link"] = self.options.death_link.value
@@ -246,7 +236,10 @@ class GloverWorld(World):
         options["chicken_hints"] = self.options.chicken_hints.value
 
         options["player_name"] = self.multiworld.player_name[self.player]
-        options["seed"] = self.random.randint()
+        options["seed"] = self.random.randint(-6500000, 6500000)
         options["version"] = self.version
-        print("Fill Slot Data Over")
         return options
+
+    def glover_cleanup(self):
+        self.json_info.all_levels.clear()
+        self.json_info.locations.clear()

@@ -112,13 +112,10 @@ class LocationData(NamedTuple):
     methods : List[AccessMethod]
 
 def create_location_data(check_name : str, check_info : list, prefix : str) -> LocationData:
-    print("create_location_data")
     methods : List[AccessMethod] = []
     for check_index in range(1, len(check_info)):
-        check_pairing = check_info[check_index]
-        if len(check_pairing) > 1:
-            for each_method in check_pairing[1]:
-                methods.append(create_access_method(each_method, prefix))
+        check_method = check_info[check_index]
+        methods.append(create_access_method(check_method, prefix))
     return LocationData(prefix + check_name, check_info[0]["AP_IDS"], check_info[0]["IDS"], methods)
 
 class RegionPair(NamedTuple):
@@ -130,7 +127,6 @@ class RegionPair(NamedTuple):
     no_ball_region_methods : list[AccessMethod]
 
 def create_region_pair(check_info : dict, check_name : str, level_name : str, player : int, multiworld : MultiWorld) -> RegionPair:
-    print("create_region_pair")
     prefix = level_name + ": "
     region_name = prefix + check_name
     ball_region_methods : list[AccessMethod] = []
@@ -212,7 +208,6 @@ def create_region_level(level_name, checkpoint_for_use : int | None, checkpoint_
     return RegionLevel(level_name, level_region, default_checkpoint, map_regions)
 
 def create_access_method(info : dict, prefix : str) -> AccessMethod:
-    print("create_access_method")
     required_moves : list = []
     for each_key in info:
         if each_key.startswith("mv"):
@@ -223,13 +218,16 @@ def create_access_method(info : dict, prefix : str) -> AccessMethod:
     return AccessMethod(info["regionIndex"], info["ballRequirement"], info["trickDifficulty"], required_moves)
 
 def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[RegionPair], location_data_list : List[LocationData], player : int, multiworld : MultiWorld) -> List[Location]:
-    print("assign_locations_to_regions")
     locations : List[Location] = []
     for each_location_data in location_data_list:
         #Is this a mono location?
         location_regions : List[str] = []
         for each_method in each_location_data.methods:
-            region_name = each_method.region_name
+            region_index = each_method.region_index
+            region_name : str
+            for each_pair in map_regions:
+                if region_index == each_pair.base_id:
+                    region_name = each_pair.name
             if each_method.ball_in_region:
                 region_name = region_name + " W/Ball"
             if not region_name in location_regions:
@@ -262,7 +260,6 @@ def get_region_from_method(region_pairs : List[RegionPair], method : AccessMetho
 
 
 def get_region_from_name(region_pairs : List[RegionPair], lookup_key : str) -> Region:
-    print("get_region_from_name")
     ball_region : bool = lookup_key.endswith("W/Ball")
     for each_pair in region_pairs:
         if ball_region:
@@ -277,7 +274,6 @@ class JsonInfo(NamedTuple):
     locations : List[Location] = []
 
 def build_data(self) -> JsonInfo:
-    print("build_data")
     all_levels : List[RegionLevel] = []
     locations : List[Location] = []
 
@@ -327,7 +323,6 @@ def build_data(self) -> JsonInfo:
     return JsonInfo(all_levels, locations)
 
 def build_location_pairings(base_name : str, ap_ids : list) -> list[list]:
-    print("build_location_pairings")
     if len(ap_ids) == 1:
         #If the location data accounts for 1 location
         return [[base_name, ap_ids[0]]]
@@ -343,7 +338,6 @@ def build_location_pairings(base_name : str, ap_ids : list) -> list[list]:
     return output
     
 def generate_location_name_to_id(world_prefixes, level_prefixes) -> dict:
-    print("generate_location_name_to_id")
     output : dict = {}
     #Each World
     for each_world_index, each_world in enumerate(logic_data):
