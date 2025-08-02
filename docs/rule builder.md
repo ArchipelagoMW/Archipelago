@@ -401,7 +401,7 @@ These are properties and helpers that are available to you in your world.
 - `rule_from_dict(data)`: Create a rule instance from a deserialized dict representation
 - `register_dependencies()`: Register all rules that depend on location or entrance access with the inherited dependencies
 - `set_rule(spot: Location | Entrance, rule: Rule)`: Resolve a rule, register its dependencies, and set it on the given location or entrance
-- `create_entrance(from_region: Region, to_rengion: Region, rule: Rule | None, name: str | None = None)`: Attempt to create an entrance from `from_region` to `to_rengion`, skipping creation if `rule` is defined and evaluates to `False_()`
+- `create_entrance(from_region: Region, to_rengion: Region, rule: Rule | None, name: str | None = None)`: Attempt to create an entrance from `from_region` to `to_region`, skipping creation if `rule` is defined and evaluates to `False_()`
 - `set_completion_rule(rule: Rule)`: Sets the completion condition for this world
 
 ### Rule API
