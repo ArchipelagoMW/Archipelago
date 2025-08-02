@@ -50,6 +50,8 @@ class SubnauticaWorld(World):
             raise Exception("Filler Items Distribution needs at least one positive weight.")
         if self.options.early_seaglide:
             self.multiworld.local_early_items[self.player]["Seaglide Fragment"] = 2
+        if self.options.propulsion_cannon_logic.current_key == "early_propulsion_cannon":
+            self.multiworld.local_early_items[self.player]["Propulsion Cannon Fragment"] = 2
 
         scan_option: options.AggressiveScanLogic = self.options.creature_scan_logic
         creature_pool = scan_option.get_pool()
@@ -155,6 +157,7 @@ class SubnauticaWorld(World):
             "creatures_to_scan": self.creatures_to_scan,
             "death_link": self.options.death_link.value,
             "free_samples": self.options.free_samples.value,
+            "propulsion_cannon_logic": self.options.propulsion_cannon_logic.current_key,
         }
 
         return slot_data
