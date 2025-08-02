@@ -229,8 +229,9 @@ def create_items(self) -> None:
                            "Axe": "Progressive Axe",
                            "Bomb": "Progressive Bomb",
                            "Cat Claw": "Progressive Claw"}[starting_weapon]
-        self.multiworld.push_precollected(self.create_item("Progressive Armor"))
-    else:
+        if not self.options.shuffle_steel_armor:
+            self.multiworld.push_precollected(self.create_item("Progressive Armor"))
+    elif not self.options.shuffle_steel_armor:
         self.multiworld.push_precollected(self.create_item("Steel Armor"))
     self.multiworld.push_precollected(self.create_item(starting_weapon))
     if self.options.sky_coin_mode == "start_with":
@@ -292,7 +293,7 @@ def create_items(self) -> None:
     if self.options.sky_coin_mode == "shattered_sky_coin":
         self.multiworld.random.shuffle(filler_items)
         filler_items = filler_items[39:]
-    items += filler_items
+    items += filler_items[1:]
 
     self.multiworld.itempool += items
 

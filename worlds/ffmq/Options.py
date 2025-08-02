@@ -53,6 +53,12 @@ class StartingWeapon(Choice):
     default = "random"
 
 
+class ShuffleSteelArmor(Choice):
+    """Shuffle the Steel Armor into the item pool instead of starting with it."""
+    display_name = "Shuffle Steel Armor"
+    default = False
+
+
 class ProgressiveGear(Toggle):
     """Pieces of gear are always acquired from weakest to strongest in a set."""
     display_name = "Progressive Gear"
@@ -353,6 +359,7 @@ class FFMQOptions(PerGameCommonOptions):
     sky_coin_mode: SkyCoinMode
     shattered_sky_coin_quantity: ShatteredSkyCoinQuantity
     starting_weapon: StartingWeapon
+    shuffle_steel_armor: ShuffleSteelArmor
     progressive_gear: ProgressiveGear
     leveling_curve: LevelingCurve
     starting_companion: StartingCompanion
