@@ -370,6 +370,11 @@
 					{
 						"AP_IDS": [],
 						"IDS": []
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 0

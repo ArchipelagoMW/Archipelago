@@ -268,7 +268,7 @@ class JsonInfo(NamedTuple):
     all_levels : List[RegionLevel] = []
     locations : List[Location] = []
 
-def build_data(self) -> JsonInfo:
+def build_data(self, spawn_checkpoint) -> JsonInfo:
     all_levels : List[RegionLevel] = []
     locations : List[Location] = []
 
@@ -310,7 +310,7 @@ def build_data(self) -> JsonInfo:
             #Create the level info attached to it
             checkpoint_for_use : int | None 
             if level_int > 0 & level_int < 4:
-                checkpoint_for_use = self.spawn_checkpoint[(world_index * 3) + level_int]
+                checkpoint_for_use = spawn_checkpoint[(world_index * 3) + level_int]
             region_level : RegionLevel = create_region_level(level_name, checkpoint_for_use, checkpoint_entry_pairs, map_regions, self)
             all_levels.append(region_level)
             #Attach the locations to the regions

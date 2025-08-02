@@ -4,11 +4,46 @@ from typing import Any, Dict
 from BaseClasses import ItemClassification, Location, Tutorial, Item, Region, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-import random
 
 from .Options import GaribLogic, GloverOptions, SpawningCheckpointRandomizer
 from .JsonReader import JsonInfo, build_data, generate_location_name_to_id
 from .ItemPool import generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table
+
+spawn_checkpoint = [
+    2,3,3,
+    4,5,4,
+    3,3,4,
+    3,4,4,
+    3,3,5,
+    2,1,4]
+
+#Garib level order table
+garib_level_order = [
+    ["Atl1", 50]#,
+    #["Atl2", 60],
+    #["Atl3", 80],
+    #["Atl?", 25],
+    #["Crn1", 65],
+    #["Crn2", 80],
+    #["Crn3", 80],
+    #["Crn?", 20],
+    #["Prt1", 70],
+    #["Prt2", 60],
+    #["Prt3", 80],
+    #["Prt?", 50],
+    #["Pht1", 80],
+    #["Pht2", 80],
+    #["Pht3", 80],
+    #["Pht?", 60],
+    #["FoF1", 60],
+    #["FoF2", 60],
+    #["FoF3", 70],
+    #["FoF?", 56],
+    #["Otw1", 50],
+    #["Otw2", 50],
+    #["Otw3", 80],
+    #["Otw?", 50]
+]
 
 class GloverItem(Item):
 	#Start at 650000
@@ -34,46 +69,10 @@ class GloverWorld(World):
     version : str = "V0.1"
     web = GloverWeb()
     topology_present = True
+    
+    options_dataclass = GloverOptions
     options : GloverOptions
-    json_info : JsonInfo
-    options_dataclass = Options.GloverOptions
 
-    spawn_checkpoint = [
-        2,3,3,
-        4,5,4,
-        3,3,4,
-        3,4,4,
-        3,3,5,
-        2,1,4]
-    
-    #Garib level order table
-    garib_level_order = [
-        ["Atl1", 50]#,
-        #["Atl2", 60],
-        #["Atl3", 80],
-        #["Atl?", 25],
-        #["Crn1", 65],
-        #["Crn2", 80],
-        #["Crn3", 80],
-        #["Crn?", 20],
-        #["Prt1", 70],
-        #["Prt2", 60],
-        #["Prt3", 80],
-        #["Prt?", 50],
-        #["Pht1", 80],
-        #["Pht2", 80],
-        #["Pht3", 80],
-        #["Pht?", 60],
-        #["FoF1", 60],
-        #["FoF2", 60],
-        #["FoF3", 70],
-        #["FoF?", 56],
-        #["Otw1", 50],
-        #["Otw2", 50],
-        #["Otw3", 80],
-        #["Otw?", 50]
-    ]
-    
     #Check/Item Prefixes
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
@@ -107,21 +106,21 @@ class GloverWorld(World):
     def generate_early(self):
         #Garib Sorting Order
         if self.options.garib_sorting == GaribLogic.option_garibsanity:
-            random.shuffle(self.garib_level_order)
+            self.random.shuffle(garib_level_order)
         #Setup the spawning checkpoints
         if self.options.spawning_checkpoint_randomizer:
             #If randomized, pick a number from it's assigned value to the current value
-            for each_inxex, each_item in enumerate(self.spawn_checkpoint):
-                self.spawn_checkpoint[each_item] = random.randint(1, each_inxex)
+            for each_inxex, each_item in enumerate(spawn_checkpoint):
+                spawn_checkpoint[each_item] = self.random.randint(1, each_inxex)
         else:
             #By default, they're all Checkpoint 1
-            for each_item in range(len(self.spawn_checkpoint)):
-                self.spawn_checkpoint[each_item] = 1
+            for each_item in range(len(spawn_checkpoint)):
+                spawn_checkpoint[each_item] = 1
 
     def create_regions(self):
         multiworld = self.multiworld
         player = self.player
-        self.json_info = build_data(self)
+        build_data(self, spawn_checkpoint)
         multiworld.regions.append(Region("Menu", player, multiworld))
         #Replace with a connection to the hubworld rather than Atlantis
         multiworld.get_region("Menu", player).connect(multiworld.get_region("Atl1", player))
@@ -176,7 +175,7 @@ class GloverWorld(World):
             for each_checkpoint in checkpoint_table:
                 level_offset = self.level_from_string(each_checkpoint)
                 world_offset = self.world_from_string(each_checkpoint)
-                if self.spawn_checkpoint[level_offset + (world_offset * 3)] != int(each_checkpoint[-1]):
+                if spawn_checkpoint[level_offset + (world_offset * 3)] != int(each_checkpoint[-1]):
                     checkpoint_items.append[each_checkpoint]
 
         #Level Event Logic
@@ -235,4 +234,5 @@ class GloverWorld(World):
         options["version"] = self.version
         reffers = gc.get_referrers(self.multiworld)
         print(reffers)
+        
         return options
