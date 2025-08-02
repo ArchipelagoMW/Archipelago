@@ -654,8 +654,10 @@ class Goal(OptionSet):
         - "Summon Hunt"
 
     IMPORTANT:
-    If Doom Dragon is a selected goal, make sure you have a save prior to the fight available if you don't
+    1. If Doom Dragon is a selected goal, make sure you have a save prior to the fight available if you don't
     end the world on this fight.  We take no responsibility for borked experiences due to save mismanagement.
+    2. If any of the non-Dullahan superbosses are selected as a goal, then omit_locations is set to 1 (if not 0).
+    If Dullahan is a goal, then the omit_locations option is set to 0.
     """
     valid_keys = {
         "Chestbeaters",
