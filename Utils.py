@@ -503,13 +503,29 @@ class RestrictedPickler(pickle.Pickler):
 
             # Used by OptionCounter options
             collections.Counter,
+
+            # Allowed builtin types that objects can use as their reconstructor or in their reconstructor arguments as
+            # returned by __reduce__ or __reduce_ex__. Also allows for the type objects to be pickled directly.
+            *[getattr(builtins, name) for name in safe_builtins]
         }
         # Options are unpickled by WebHost -> Generate
         self.allowed_option_subclasses = (Options.Option, Options.PlandoConnection, Options.PlandoText)
 
     def reducer_override(self, obj):
+        """
+        Override the reduction of objects to be pickled.
+
+        :param obj: The object to be pickled.
+        :return: A tuple to reconstruct `obj`, matching the __reduce__ interface, or `NotImplemented` to fall back to
+        `self.dispatch_table` or `obj.__reduce__()`/`obj.__reduce_ex__()` if `self.dispatch_table` does not have a
+        reduction function for `obj`.
+        """
         # RestrictedUnpickler works by only allowing certain classes to be found, so RestrictedPickler needs to work
-        # with the types of objects.
+        # by only allowing certain types to be pickled.
+        # Exact instances of builtin types, such as int, list and set are pickled specially, and will never be processed
+        # by reducer_override.
+        # The type objects of builtin types themselves may be processed by reducer_override if an object's __reduce__ or
+        # __reduce_ex__ returns one of the builtin type objects, or if the type objects are pickled directly.
         if isinstance(obj, type):
             obj_type = obj
         else:
