@@ -137,25 +137,27 @@ def create_region_pair(check_info : dict, check_name : str, level_name : str, pl
     no_ball_region_methods : list[AccessMethod] = []
     base_id : int = check_info["I"]
     ball_region = Region(prefix + region_name + " W/Ball", player, multiworld)
-    for check_pairing in check_info["B"]:
-        #ids = check_pairing[0]
-        if len(check_pairing) > 1:
-            for each_method in check_pairing[1]:
-                ball_region_methods.append(create_access_method(each_method, prefix))
+    if len(check_info["B"]) > 1:
+        for index, check_pairing in enumerate(check_info["B"]):
+            if index == 0:
+                continue
+            #ids = check_pairing[0]
+            ball_region_methods.append(create_access_method(check_pairing, prefix))
     no_ball_region = Region(prefix + region_name, player, multiworld)
-    for check_pairing in check_info["D"]:
-        #ids = check_pairing[0]
-        if len(check_pairing) > 1:
-            for each_method in check_pairing[1]:
-                no_ball_region_methods.append(create_access_method(each_method, prefix))
+    if len(check_info["D"]) > 1:
+        for index, check_pairing in enumerate(check_info["D"]):
+            if index == 0:
+                continue
+            #ids = check_pairing[0]
+            no_ball_region_methods.append(create_access_method(check_pairing, prefix))
     return RegionPair(region_name, base_id, ball_region, ball_region_methods, no_ball_region, no_ball_region_methods)
 
 def connect_region_pairs(pairs : List[RegionPair]):
     for each_pair in pairs:
         for each_method in each_pair.ball_region_methods:
-            each_pair.ball_region.connect(get_region_from_name(each_method.region_name))
+            each_pair.ball_region.connect(get_region_from_name(pairs, each_method.region_name))
         for each_method in each_pair.no_ball_region_methods:
-            each_pair.no_ball_region.connect(get_region_from_name(each_method.region_name))
+            each_pair.no_ball_region.connect(get_region_from_name(pairs, each_method.region_name))
         each_pair.ball_region.connect(each_pair.no_ball_region)
 
 class RegionLevel(NamedTuple):
