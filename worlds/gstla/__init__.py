@@ -148,6 +148,14 @@ class GSTLAWorld(World):
             for goal in self.random.sample(list(self.options.goal.value), k=self.options.random_goals.value):
                 self.goal_conditions.add(goal)
 
+        if "Dullahan" in self.goal_conditions:
+            if self.options.omit_locations.value > 0:
+                self.options.omit_locations.value = 0
+
+        if "Valukar" in self.goal_conditions or "Sentinel" in self.goal_conditions or "Star Magician" in self.goal_conditions:
+            if self.options.omit_locations.value == 2:
+                self.options.omit_locations.value = 1
+
         if self.options.shuffle_characters < 2:
             self.options.non_local_items.value -= self.item_name_groups[ItemType.Character.name]
 

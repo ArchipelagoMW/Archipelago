@@ -38,11 +38,15 @@ def create_region(world: 'GSTLAWorld', region_data: RegionData):
 def create_regions(world: 'GSTLAWorld'):
     regions_copy = deepcopy(regions)
     if world.options.omit_locations < 2:
+        regions_copy[RegionName.YampiDesertCave].locations.append(LocationName.Yampi_Desert_Cave_Valukar)
         regions_copy[RegionName.YampiDesertCave].locations.append(LocationName.Yampi_Desert_Cave_Daedalus)
+        regions_copy[RegionName.IsletCave].locations.append(LocationName.Islet_Cave_Sentinel)
         regions_copy[RegionName.IsletCave].locations.append(LocationName.Islet_Cave_Catastrophe)
+        regions_copy[RegionName.TreasureIsland_PostReunion].locations.append(LocationName.Treasure_Isle_Star_Magician)
         regions_copy[RegionName.TreasureIsland_PostReunion].locations.append(LocationName.Treasure_Isle_Azul)
 
     if world.options.omit_locations < 1:
+        regions_copy[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Dullahan)
         regions_copy[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Orihalcon)
         regions_copy[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Iris)
         regions_copy[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Charon)
@@ -225,7 +229,6 @@ regions: Dict[str, RegionData] = {
         LocationName.Yampi_Desert_Cave_Dark_Matter,
         LocationName.Yampi_Desert_Cave_Mythril_Silver,
         LocationName.Crystal,
-        LocationName.Yampi_Desert_Cave_Valukar,
     ]),
     RegionName.Alhafra: RegionData(RegionName.Alhafra,
     [
@@ -433,7 +436,6 @@ regions: Dict[str, RegionData] = {
         LocationName.Islet_Cave_Rusty_Staff,
         LocationName.Meld,
         LocationName.Serac,
-        LocationName.Islet_Cave_Sentinel,
     ]),
     RegionName.ApojiiIslands:RegionData(RegionName.ApojiiIslands,
     [
@@ -523,7 +525,6 @@ regions: Dict[str, RegionData] = {
         LocationName.Gale,
         LocationName.Treasure_Isle_Iris_Robe,
         LocationName.Treasure_Isle_Fire_Brand,
-        LocationName.Treasure_Isle_Star_Magician,
     ]),
     RegionName.TundariaTower: RegionData(RegionName.TundariaTower,
     [
@@ -733,7 +734,6 @@ regions: Dict[str, RegionData] = {
     ]),
     RegionName.AnemosSanctum: RegionData(RegionName.AnemosSanctum,
     [
-        LocationName.Anemos_Inner_Sanctum_Dullahan,
     ]),
     RegionName.GondowanSettlement: RegionData(RegionName.GondowanSettlement,
     [

@@ -93,6 +93,16 @@ def create_events(world: 'GSTLAWorld'):
             #world.multiworld.push_precollected(event_item)
             continue
 
+        if (event.location == LocationName.Treasure_Isle_Star_Magician or
+                event.location == LocationName.Yampi_Desert_Cave_Valukar or
+                event.location == LocationName.Islet_Cave_Sentinel):
+            if world.options.omit_locations.value == 2:
+                continue
+
+        if event.location == LocationName.Anemos_Inner_Sanctum_Dullahan:
+            if world.options.omit_locations.value > 0:
+                continue
+
         event_location = world.get_location(event.location)
         event_location.place_locked_item(event_item)
 
