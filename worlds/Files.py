@@ -120,7 +120,7 @@ class APContainer:
 
         manifest_location = "archipelago.json"
         if self.manifest_write_subdirectory:
-            stripped_write_directory = self.manifest_write_subdirectory.rstrip("/\\")
+            stripped_write_directory = self.manifest_write_subdirectory.strip("/\\")
             if "/" in stripped_write_directory or "\\" in stripped_write_directory:
                 raise ValueError("APContainer manifest_write_subdirectory must be single-depth.")
             manifest_location = f"{stripped_write_directory}/{manifest_location}"
