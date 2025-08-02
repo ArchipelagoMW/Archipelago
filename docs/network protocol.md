@@ -755,28 +755,33 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 
 
 ### Data Package Shared Cache
-The shared cache location is `user_cache_dir\datapackage`. `user_cache_dir` varies by platform. The
+The shared cache location is `user_cache_dir/datapackage`. `user_cache_dir` varies by platform. The
 platformdirs library is used in python to pick the correct location https://github.com/tox-dev/platformdirs.
 Similar libraries exist for other languages.
-For example:
+
+Python example:
 ```
 import platformdirs
 game_name = "Subnautica"
 cache_path = platformdirs.user_cache_dir("Archipelago", False)
 datapackage_path = os.path.join(cache_path, datapackage, game_name)
 ```
-Similar libraries exist for other languages, for example in C#:
+If your alternative library doesn't automatically include `/Archipelago/Cache/` you may need to
+assemble more of the path yourself.
 ```
-using System.IO;
-CacheFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
+DataPackageCacheFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
                 Path.Combine("Archipelago", Path.Combine("Cache", "datapackage")));
 ```
 
 Each game has its own subfolder inside the previously mentioned datapackage folder i.e.
-`user_cache_dir\datapackage\A Hat in Time`.
+`user_cache_dir/datapackage/A Hat in Time`.
+
+When reading from or writing to the data package shared cache, make sure your file paths are safe, meaning they do not have
+characters that are forbidden in file names `<>:"/\|?*`.
 
 Before requesting a new data package, a client should check if that package is already in the shared cache.
-The client should use the checksums included in the [RoomInfo](#RoomInfo) packet to confirm the data package in the cache is up to date.
+The name of the file will be `<checksum>.json`, for example `294cc7fc5ff1aa2a9669106ab8bf0a37e5d74f0d.json`.
+The client should use the checksums included in the [RoomInfo](#RoomInfo) packet to find the correct cached data package.
 
 Whenever a client finds the desired data package in the cache, it should update the last modified time of the file. This
 is because CommonClient contains code that removes sufficiently old data packages.
