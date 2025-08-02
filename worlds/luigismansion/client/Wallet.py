@@ -89,7 +89,10 @@ class Wallet:
         if self.get_wallet_worth() < calculated_amount:
             raise ArithmeticError("Not enough money in wallet to be sent to EnergyLink.")
 
-        currencies_to_remove = _create_currencies_to_update_from_int(calculated_amount, {k:v for k, v in self._currencies.items() if v.get() > 0 } )
+        currencies_to_remove = _create_currencies_to_update_from_int(calculated_amount, { k:v for k, v in self._currencies.items() if v.get() > 0 } )
+        if len(currencies_to_remove) == 0:
+            raise ArithmeticError("Not enough money in wallet to be sent to EnergyLink.")
+
         self.remove_from_wallet(currencies_to_remove)
 
     def get_calculated_amount_worth(self, amount: int) -> int:

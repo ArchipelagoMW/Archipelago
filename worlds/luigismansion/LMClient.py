@@ -866,15 +866,7 @@ async def give_player_items(ctx: LMContext):
 
 async def energy_link_check(ctx: LMContext):
     while not ctx.exit_event.is_set():
-        delay = 0
-        amount_to_send = 0
-        while delay <= 5:
-            delay += 1
-            amount_to_send += await ctx.energy_link.get_currency_updates()
-            await wait_for_next_loop(5)
-
-        if amount_to_send > 0:
-            await ctx.energy_link._energy_link.send_energy_async(amount_to_send)
+        await ctx.energy_link.send_energy_to_pool()
 
 def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
     Utils.init_logging("Luigi's Mansion Client")

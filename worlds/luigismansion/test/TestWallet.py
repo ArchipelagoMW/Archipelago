@@ -48,7 +48,7 @@ class TestWalletWorth(unittest.TestCase):
         total_worth = wallet.get_wallet_worth()
 
         self.assertEqual(total_worth, expected_worth)
-    
+
     def test_get_wallet_worth_single_each(self):
         """Verifies that get_wallet_worth retrurn the correct amount."""
         test_currencies: dict[str, _MockCurrency] = TEST_DATA.get_test_currencies()
@@ -309,14 +309,13 @@ class TestWalletWorth(unittest.TestCase):
                 for expected_currency_name, expected_currency_value  in expected_currencies.items():
                     actual_currency_value = test_currencies[expected_currency_name].get()
                     self.assertEqual(actual_currency_value, expected_currency_value.current_amount, f" {expected_currency_name} -> expected:{expected_currency_value.current_amount} actual:{actual_currency_value}.")
-                
+
     def test_remove_amount_from_wallet(self):
         """Verifies that consumers entering an amount properly removes currencies."""
         for amount, expected_currencies in {
             1:    TEST_DATA.get_test_currencies(coins=1),
             5000: TEST_DATA.get_test_currencies(diamond=2, gold_diamond=1, ruby=1),
             250:  TEST_DATA.get_test_currencies(gold_bars=2, ruby=1, small_pearl=1),
-            0:    TEST_DATA.get_test_currencies(),
         }.items():
             with self.subTest(label=f"test_remove_amount_from_wallet_{amount}"):
                 test_currencies = TEST_DATA.get_test_currencies()

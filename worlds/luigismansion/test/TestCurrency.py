@@ -19,7 +19,7 @@ class TestCurrency(unittest.TestCase):
         self.assertEqual(mock_dme_follow_pointers.call_count, 1)
         self.assertEqual(mock_dme_read_word.call_count, 1)
         self.assertEqual(actual_currency, expected_value)
-    
+
     @patch('dolphin_memory_engine.write_word')
     @patch('dolphin_memory_engine.read_word')
     @patch('dolphin_memory_engine.follow_pointers')
@@ -34,7 +34,7 @@ class TestCurrency(unittest.TestCase):
         self.assertEqual(mock_dme_write_word.call_count, 1)
         self.assertEqual(mock_dme_read_word.call_count, 1)
         self.assertTrue(result)
-    
+
     @patch('dolphin_memory_engine.write_word')
     @patch('dolphin_memory_engine.read_word')
     @patch('dolphin_memory_engine.follow_pointers')
@@ -49,6 +49,3 @@ class TestCurrency(unittest.TestCase):
         self.assertEqual(mock_dme_read_word.call_count, 1)
         self.assertEqual(mock_dme_write_word.call_count, 0)
         self.assertFalse(result)
-
-if __name__ == '__main__':
-    unittest.main()
