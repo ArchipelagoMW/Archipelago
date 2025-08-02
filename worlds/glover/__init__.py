@@ -101,7 +101,7 @@ class GloverWorld(World):
     def world_from_string(self, name : str) -> int:
         print("world_from_string")
         if name[:3] in self.world_prefixes:
-            return self.level_prefixes.index(name[:3])
+            return self.world_prefixes.index(name[:3])
         if name.startswith("Hubworld") or name.startswith("Castle Cave") or name.startswith("Training"):
             return 6
         return -1
