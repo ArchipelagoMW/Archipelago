@@ -658,6 +658,10 @@ witness_option_groups = [
     ]),
     OptionGroup("Progression Items", [
         ShuffleSymbols,
+        ProgressiveSymbols,
+        SecondStageSymbolsActIndependently,
+        ColoredDotsAreProgressiveDots,
+        SoundDotsAreProgressiveDots,
         ShuffleDoors,
         DoorGroupings,
         ShuffleLasers,
