@@ -15,6 +15,11 @@
     
 - Your legally obtained EarthBound English ROM file, probably named `EarthBound (USA).sfc`
 
+## Optional Software
+- EarthBound Archipelago Poptracker Pack
+	- PopTracker from: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/)
+	- EarthBound Archipelago PopTracker pack from: [EarthBound AP Tracker Releases Page](https://github.com/PinkSwitch/earthbound_poptracker/releases/tag/ebpoptracker1.0)
+    - todo finish the sprite converter and put it here
 
 ## Installation Procedures
 

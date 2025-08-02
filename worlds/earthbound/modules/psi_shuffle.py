@@ -71,7 +71,7 @@ def shuffle_psi(world) -> None:
 
         if not world.options.allow_flash_as_favorite_thing:
             if world.offensive_psi_slots[0] == "Flash":
-                adjust_psi_list(world.offensive_psi_slots, "Flash", world.random.randint(1, 5))
+                adjust_psi_list(world.offensive_psi_slots, "Flash", world.random.randint(1, 5)) # Randomize which slot gets Flash
 
         world.random.shuffle(world.assist_psi_slots)
 
@@ -507,4 +507,5 @@ def write_psi(world, rom) -> None:
 
 
 def adjust_psi_list(psi_input, spell, index) -> None:
+    """Move a spell in the PSI table to a different entry/slot"""
     psi_input.insert(index, (psi_input.pop(psi_input.index(spell))))

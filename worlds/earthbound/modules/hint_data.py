@@ -10,13 +10,12 @@ def setup_hints(world) -> None:
     hint_types = [
         # gives a hint for a specific out of the way location in this player's world, regardless of what item it is
         "item_at_location",
-        # woth or foolish hint, checks specific location groups of this world so as to be more helpful.
-        "region_progression_check",
+        "region_progression_check", # woth or foolish hint, checks specific location groups of this world so as to be more helpful.
         "hint_for_good_item",  # gives the exact location and sender of a good item for the local player
         "item_in_local_region",  # Hints a random item that can be found in a specific local location group
         "prog_item_at_region",  # Hints the region that a good item can be found for this player
         "joke_hint",  # Doesn't hint anything
-        "dungeon_location"
+        "dungeon_location"  # Hints what dungeon can be found at a specific entrance
     ]
     world.in_game_hint_types = []
     world.hinted_locations = {}
@@ -343,7 +342,7 @@ def parse_hint_data(world, location, rom, hint, index) -> None:
     rom.write_bytes(0x310000 + world.hint_pointer, text)
     rom.write_bytes(hint_addresses[world.hint_number], struct.pack("I", 0xF10000 + world.hint_pointer))
 
-    if hint in ["item_at_location", "hint_for_good_item"] and location.player == world.player:
+    if hint in ["item_at_location", "hint_for_good_item"] and location.player == world.player:  # Todo; set up CreateHint stuff here
         rom.write_bytes(scoutable_hint_addresses[world.hint_number], struct.pack("I", 0xEEF451))
         rom.write_bytes(0x310250 + (world.hint_number * 2), struct.pack("H", location.address - 0xEB0000))
     else:

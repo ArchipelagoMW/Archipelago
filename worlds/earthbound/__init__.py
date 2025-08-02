@@ -111,6 +111,7 @@ class EarthBoundWorld(World):
         self.boss_list: List[str] = []
         self.starting_region = int
         self.dungeon_connections = {}
+        self.has_generated_output: bool = False
 
         self.common_items = [
             "Cookie",
@@ -347,6 +348,7 @@ class EarthBoundWorld(World):
             world.get_all_spheres.set()
 
     def generate_output(self, output_directory: str) -> None:
+        self.has_generated_output = True  # Make sure data defined in generate output doesn't get added to spoiler only mode
         try:
             patch = EBProcPatch(player=self.player, player_name=self.multiworld.player_name[self.player])
             patch.write_file("earthbound_basepatch.bsdiff4", pkgutil.get_data(__name__, "src/earthbound_basepatch.bsdiff4"))
@@ -461,11 +463,12 @@ class EarthBoundWorld(World):
                     f" {dungeon} => {self.dungeon_connections[dungeon]}\n"
                 )
         
-        spoiler_handle.write("\nArea Levels:\n")
-        spoiler_excluded_areas = ["Ness's Mind", "Global ATM Access", "Common Condiment Shop"]
-        for area in self.area_levels:
-            if area not in spoiler_excluded_areas:
-                spoiler_handle.write(f" {area}: Level {self.area_levels[area]}\n")
+        if self.has_generated_output:
+            spoiler_handle.write("\nArea Levels:\n")
+            spoiler_excluded_areas = ["Ness's Mind", "Global ATM Access", "Common Condiment Shop"]
+            for area in self.area_levels:
+                if area not in spoiler_excluded_areas:
+                    spoiler_handle.write(f" {area}: Level {self.area_levels[area]}\n")
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
