@@ -20,35 +20,35 @@ EXTENDED_TABLE_SIZE = JPN_TABLE_SIZE + ENG_TABLE_SIZE # 0x8360 bytes, 4204 entri
 
 # name of type, followed by number of additional bytes to read, follwed by a function that prints the code
 CONTROL_CODES = {
-    0x00: ('pad', 0, lambda _: '<pad>' ),
-    0x01: ('line-break', 0, lambda _: '\n' ),
-    0x02: ('end', 0, lambda _: '' ),
-    0x04: ('box-break', 0, lambda _: '\n▼\n' ),
-    0x05: ('color', 1, lambda d: '<color ' + "{:02x}".format(d) + '>' ),
-    0x06: ('gap', 1, lambda d: '<' + str(d) + 'px gap>' ),
-    0x07: ('goto', 2, lambda d: '<goto ' + "{:04x}".format(d) + '>' ),
-    0x08: ('instant', 0, lambda _: '<allow instant text>' ),
-    0x09: ('un-instant', 0, lambda _: '<disallow instant text>' ),
-    0x0A: ('keep-open', 0, lambda _: '<keep open>' ),
-    0x0B: ('event', 0, lambda _: '<event>' ),
-    0x0C: ('box-break-delay', 1, lambda d: '\n▼<wait ' + str(d) + ' frames>\n' ),
-    0x0E: ('fade-out', 1, lambda d: '<fade after ' + str(d) + ' frames?>' ),
-    0x0F: ('name', 0, lambda _: '<name>' ),
-    0x10: ('ocarina', 0, lambda _: '<ocarina>' ),
-    0x12: ('sound', 2, lambda d: '<play SFX ' + "{:04x}".format(d) + '>' ),
-    0x13: ('icon', 1, lambda d: '<icon ' + "{:02x}".format(d) + '>' ),
-    0x14: ('speed', 1, lambda d: '<delay each character by ' + str(d) + ' frames>' ),
-    0x15: ('background', 3, lambda d: '<set background to ' + "{:06x}".format(d) + '>' ),
-    0x16: ('marathon', 0, lambda _: '<marathon time>' ),
-    0x17: ('race', 0, lambda _: '<race time>' ),
-    0x18: ('points', 0, lambda _: '<points>' ),
-    0x19: ('skulltula', 0, lambda _: '<skulltula count>' ),
-    0x1A: ('unskippable', 0, lambda _: '<text is unskippable>' ),
-    0x1B: ('two-choice', 0, lambda _: '<start two choice>' ),
-    0x1C: ('three-choice', 0, lambda _: '<start three choice>' ),
-    0x1D: ('fish', 0, lambda _: '<fish weight>' ),
-    0x1E: ('high-score', 1, lambda d: '<high-score ' + "{:02x}".format(d) + '>' ),
-    0x1F: ('time', 0, lambda _: '<current time>' ),
+    0x00: ('pad', 0, lambda _: '<pad>'),
+    0x01: ('line-break', 0, lambda _: '\n'),
+    0x02: ('end', 0, lambda _: ''),
+    0x04: ('box-break', 0, lambda _: '\n▼\n'),
+    0x05: ('color', 1, lambda d: f"<color {d:02x}>"),
+    0x06: ('gap', 1, lambda d: f"<{d}px gap>"),
+    0x07: ('goto', 2, lambda d: f"<goto {d:04x}>"),
+    0x08: ('instant', 0, lambda _: '<allow instant text>'),
+    0x09: ('un-instant', 0, lambda _: '<disallow instant text>'),
+    0x0A: ('keep-open', 0, lambda _: '<keep open>'),
+    0x0B: ('event', 0, lambda _: '<event>'),
+    0x0C: ('box-break-delay', 1, lambda d: f"\n▼<wait {d} frames>\n"),
+    0x0E: ('fade-out', 1, lambda d: f"<fade after {d} frames?>"),
+    0x0F: ('name', 0, lambda _: '<name>'),
+    0x10: ('ocarina', 0, lambda _: '<ocarina>'),
+    0x12: ('sound', 2, lambda d: f"<play SFX {d:04x}>"),
+    0x13: ('icon', 1, lambda d: f"<icon {d:02x}>"),
+    0x14: ('speed', 1, lambda d: f"<delay each character by {d} frames>"),
+    0x15: ('background', 3, lambda d: f"<set background to {d:06x}>"),
+    0x16: ('marathon', 0, lambda _: '<marathon time>'),
+    0x17: ('race', 0, lambda _: '<race time>'),
+    0x18: ('points', 0, lambda _: '<points>'),
+    0x19: ('skulltula', 0, lambda _: '<skulltula count>'),
+    0x1A: ('unskippable', 0, lambda _: '<text is unskippable>'),
+    0x1B: ('two-choice', 0, lambda _: '<start two choice>'),
+    0x1C: ('three-choice', 0, lambda _: '<start three choice>'),
+    0x1D: ('fish', 0, lambda _: '<fish weight>'),
+    0x1E: ('high-score', 1, lambda d: f"<high-score {d:02x}>"),
+    0x1F: ('time', 0, lambda _: '<current time>'),
 }
 
 # Maps unicode characters to corresponding bytes in OOTR's character set.
@@ -105,7 +105,7 @@ for char, byte in CHARACTER_MAP.items():
     REVERSE_MAP[byte] = char
 
 # [0x0500,0x0560] (inclusive) are reserved for plandomakers
-GOSSIP_STONE_MESSAGES = list( range(0x0401, 0x04FF) ) # ids of the actual hints
+GOSSIP_STONE_MESSAGES = list(range(0x0401, 0x04FF)) # ids of the actual hints
 GOSSIP_STONE_MESSAGES += [0x2053, 0x2054] # shared initial stone messages
 TEMPLE_HINTS_MESSAGES = [0x7057, 0x707A] # dungeon reward hints from the temple of time pedestal
 GS_TOKEN_MESSAGES = [0x00B4, 0x00B5] # Get Gold Skulltula Token messages
@@ -319,10 +319,10 @@ COLOR_MAP = {
 
 MISC_MESSAGES = {
     0x507B: (bytearray(
-            b"\x08I tell you, I saw him!\x04" \
-            b"\x08I saw the ghostly figure of Damp\x96\x01" \
-            b"the gravekeeper sinking into\x01" \
-            b"his grave. It looked like he was\x01" \
+            b"\x08I tell you, I saw him!\x04"
+            b"\x08I saw the ghostly figure of Damp\x96\x01"
+            b"the gravekeeper sinking into\x01"
+            b"his grave. It looked like he was\x01"
             b"holding some kind of \x05\x41treasure\x05\x40!\x02"
             ), None),
     0x0422: ("They say that once \x05\x41Morpha's Curse\x05\x40\x01is lifted, striking \x05\x42this stone\x05\x40 can\x01shift the tides of \x05\x44Lake Hylia\x05\x40.\x02", 0x23),
@@ -342,13 +342,13 @@ MISC_MESSAGES = {
 }
 
 
-# convert byte array to an integer
 def bytes_to_int(bytes, signed=False):
+    """Convert byte array to an integer"""
     return int.from_bytes(bytes, byteorder='big', signed=signed)
 
 
-# convert int to an array of bytes of the given width
 def int_to_bytes(num, width, signed=False):
+    """Convert int to an array of bytes of the given width"""
     return int.to_bytes(num, width, byteorder='big', signed=signed)
 
 
@@ -407,8 +407,8 @@ def parse_control_codes(text):
     return text_codes
 
 
-# holds a single character or control code of a string
 class Text_Code:
+    """Holds a single character or control code of a string"""
     def display(self):
         if self.code in CONTROL_CODES:
             return CONTROL_CODES[self.code][2](self.data)
@@ -423,7 +423,7 @@ class Text_Code:
         if self.code in CONTROL_CODES:
             ret = ''
             subdata = self.data
-            for _ in range(0, CONTROL_CODES[self.code][1]):
+            for _ in range(CONTROL_CODES[self.code][1]):
                 ret = ('\\x%02X' % (subdata & 0xFF)) + ret
                 subdata = subdata >> 8
             ret = '\\x%02X' % self.code + ret
@@ -439,7 +439,7 @@ class Text_Code:
         if self.code in CONTROL_CODES:
             ret = ''
             subdata = self.data
-            for _ in range(0, CONTROL_CODES[self.code][1]):
+            for _ in range(CONTROL_CODES[self.code][1]):
                 ret = chr(subdata & 0xFF) + ret
                 subdata = subdata >> 8
             ret = chr(self.code) + ret
@@ -448,15 +448,15 @@ class Text_Code:
             # raise ValueError(repr(REVERSE_MAP))
             return REVERSE_MAP[self.code]
 
-    # writes the code to the given offset, and returns the offset of the next byte
     def size(self):
+        """Writes the code to the given offset, and returns the offset of the next byte"""
         size = 1
         if self.code in CONTROL_CODES:
             size += CONTROL_CODES[self.code][1]
         return size
 
-    # writes the code to the given offset, and returns the offset of the next byte
     def write(self, rom, offset):
+        """Writes the code to the given offset, and returns the offset of the next byte"""
         rom.write_byte(TEXT_START + offset, self.code)
 
         extra_bytes = 0
@@ -478,16 +478,16 @@ class Text_Code:
     __str__ = __repr__ = display
 
 
-# holds a single message, and all its data
 class Message:
+    """Holds a single message, and all its data"""
     def display(self):
         meta_data = [
-            "#" + str(self.index),
-            "ID: 0x" + "{:04x}".format(self.id),
-            "Offset: 0x" + "{:06x}".format(self.offset),
-            "Length: 0x" + "{:04x}".format(self.unpadded_length) + "/0x" + "{:04x}".format(self.length),
-            "Box Type: " + str(self.box_type),
-            "Postion: " + str(self.position)
+            f"#{self.index}",
+            f"ID: 0x{self.id:04x}",
+            f"Offset: 0x{self.offset:06x}",
+            f"Length: 0x{self.unpadded_length:04x}/0x{self.length:04x}",
+            f"Box Type: {self.box_type}",
+            f"Postion: {self.position}",
         ]
         return ', '.join(meta_data) + '\n' + self.text
 
@@ -497,16 +497,16 @@ class Message:
             ret = ret + code.get_python_string()
         return ret
 
-    # check if this is an unused message that just contains it's own id as text
     def is_id_message(self):
+        """Check if this is an unused message that just contains it's own id as text"""
         if self.unpadded_length != 5:
             return False
         for i in range(4):
             code = self.text_codes[i].code
             if not (
-                    code in range(ord('0'), ord('9')+1)
-                    or code in range(ord('A'), ord('F')+1)
-                    or code in range(ord('a'), ord('f')+1)
+                    code in range(ord('0'), ord('9') + 1)
+                    or code in range(ord('A'), ord('F') + 1)
+                    or code in range(ord('a'), ord('f') + 1)
             ):
                 return False
         return True
@@ -544,8 +544,8 @@ class Message:
     def is_basic(self):
         return not (self.has_goto or self.has_keep_open or self.has_event or self.has_fade or self.has_ocarina or self.has_two_choice or self.has_three_choice)
 
-    # computes the size of a message, including padding
     def size(self):
+        """Computes the size of a message, including padding"""
         size = 0
 
         for code in self.text_codes:
@@ -554,9 +554,9 @@ class Message:
         size = (size + 3) & -4 # align to nearest 4 bytes
 
         return size
-    
-    # applies whatever transformations we want to the dialogs
+
     def transform(self, replace_ending=False, ending=None, always_allow_skip=True, speed_up_text=True):
+        """Applies whatever transformations we want to the dialogs"""
         ending_codes = [0x02, 0x07, 0x0A, 0x0B, 0x0E, 0x10]
         box_breaks = [0x04, 0x0C]
         slows_text = [0x08, 0x09, 0x14]
@@ -608,9 +608,11 @@ class Message:
 
         self.text_codes = text_codes
 
-    # writes a Message back into the rom, using the given index and offset to update the table
-    # returns the offset of the next message
     def write(self, rom, index, offset):
+        """
+        Writes a Message back into the rom, using the given index and offset to update the table
+        returns the offset of the next message
+        """
         # construct the table entry
         id_bytes = int_to_bytes(self.id, 2)
         offset_bytes = int_to_bytes(offset, 3)
@@ -626,7 +628,6 @@ class Message:
             offset = Text_Code(0x00, 0).write(rom, offset) # pad to 4 byte align
 
         return offset
-
 
     def __init__(self, raw_text, index, id, opts, offset, length):
         self.raw_text = raw_text
@@ -650,9 +651,9 @@ class Message:
 
         self.parse_text()
 
-    # read a single message from rom
     @classmethod
     def from_rom(cls, rom, index):
+        """Read a single message from rom"""
         entry_offset = ENG_TABLE_START + 8 * index
         entry = rom.read_bytes(entry_offset, 8)
         next = rom.read_bytes(entry_offset + 8, 8)
@@ -679,9 +680,12 @@ class Message:
 
     __str__ = __repr__ = display
 
-# wrapper for updating the text of a message, given its message id
-# if the id does not exist in the list, then it will add it
+
 def update_message_by_id(messages, id, text, opts=None):
+    """
+    Wrapper for updating the text of a message, given its message id
+    if the id does not exist in the list, then it will add it
+    """
     # get the message index
     index = next( (m.index for m in messages if m.id == id), -1)
     # update if it was found
@@ -690,8 +694,9 @@ def update_message_by_id(messages, id, text, opts=None):
     else:
         add_message(messages, text, id, opts)
 
-# Gets the message by its ID. Returns None if the index does not exist
+
 def get_message_by_id(messages, id):
+    """Gets the message by its ID. Returns None if the index does not exist"""
     # get the message index
     index = next( (m.index for m in messages if m.id == id), -1)
     if index >= 0:
@@ -699,8 +704,9 @@ def get_message_by_id(messages, id):
     else:
         return None
 
-# wrapper for updating the text of a message, given its index in the list
+
 def update_message_by_index(messages, index, text, opts=None):
+    """Wrapper for updating the text of a message, given its index in the list"""
     if opts is None:
         opts = messages[index].opts
 
@@ -710,36 +716,39 @@ def update_message_by_index(messages, index, text, opts=None):
         messages[index] = Message.from_string(text, messages[index].id, opts)
     messages[index].index = index
 
-# wrapper for adding a string message to a list of messages
+
 def add_message(messages, text, id=0, opts=0x00):
+    """Wrapper for adding a string message to a list of messages"""
     if isinstance(text, bytearray):
         messages.append( Message.from_bytearray(text, id, opts) )
     else:
         messages.append( Message.from_string(text, id, opts) )
     messages[-1].index = len(messages) - 1
 
-# holds a row in the shop item table (which contains pointers to the description and purchase messages)
-class Shop_Item():
 
+class Shop_Item:
+    """Holds a row in the shop item table (which contains pointers to the description and purchase messages)"""
     def display(self):
-        meta_data = ["#" + str(self.index),
-         "Item: 0x" + "{:04x}".format(self.get_item_id),
-         "Price: " + str(self.price),
-         "Amount: " + str(self.pieces),
-         "Object: 0x" + "{:04x}".format(self.object),
-         "Model: 0x" + "{:04x}".format(self.model),
-         "Description: 0x" + "{:04x}".format(self.description_message),
-         "Purchase: 0x" + "{:04x}".format(self.purchase_message),]
+        meta_data = [
+            f"#{self.index}",
+            f"Item: 0x{self.get_item_id:04x}",
+            f"Price: {self.price}",
+            f"Amount: {self.pieces}",
+            f"Object: 0x{self.object:04x}",
+            f"Model: 0x{self.model:04x}",
+            f"Description: 0x{self.description_message:04x}",
+            f"Purchase: 0x{self.purchase_message:04x}",
+        ]
         func_data = [
-         "func1: 0x" + "{:08x}".format(self.func1),
-         "func2: 0x" + "{:08x}".format(self.func2),
-         "func3: 0x" + "{:08x}".format(self.func3),
-         "func4: 0x" + "{:08x}".format(self.func4),]
+            f"func1: 0x{self.func1:08x}",
+            f"func2: 0x{self.func2:08x}",
+            f"func3: 0x{self.func3:08x}",
+            f"func4: 0x{self.func4:08x}",
+         ]
         return ', '.join(meta_data) + '\n' + ', '.join(func_data)
 
-    # write the shop item back
     def write(self, rom, shop_table_address, index):
-
+        """Write the shop item back"""
         entry_offset = shop_table_address + 0x20 * index
 
         bytes = []
@@ -758,9 +767,8 @@ class Shop_Item():
 
         rom.write_bytes(entry_offset, bytes)
 
-    # read a single message
     def __init__(self, rom, shop_table_address, index):
-
+        """Read a single message"""
         entry_offset = shop_table_address + 0x20 * index
         entry = rom.read_bytes(entry_offset, 0x20)
 
@@ -780,25 +788,27 @@ class Shop_Item():
 
     __str__ = __repr__ = display
 
-# reads each of the shop items
+
 def read_shop_items(rom, shop_table_address):
+    """Reads each of the shop items"""
     shop_items = []
 
-    for index in range(0, 100):
-        shop_items.append( Shop_Item(rom, shop_table_address, index) )
+    for index in range(100):
+        shop_items.append(Shop_Item(rom, shop_table_address, index))
 
     return shop_items
 
-# writes each of the shop item back into rom
+
 def write_shop_items(rom, shop_table_address, shop_items):
+    """Writes each of the shop item back into rom"""
     for s in shop_items:
         s.write(rom, shop_table_address, s.index)
 
 # these are unused shop items, and contain text ids that are used elsewhere, and should not be moved
 SHOP_ITEM_EXCEPTIONS = [0x0A, 0x0B, 0x11, 0x12, 0x13, 0x14, 0x29]
 
-# returns a set of all message ids used for shop items
 def get_shop_message_id_set(shop_items):
+    """Returns a set of all message ids used for shop items"""
     ids = set()
     for shop in shop_items:
         if shop.index not in SHOP_ITEM_EXCEPTIONS:
@@ -806,14 +816,16 @@ def get_shop_message_id_set(shop_items):
             ids.add(shop.purchase_message)
     return ids
 
-# remove all messages that easy to tell are unused to create space in the message index table
+
 def remove_unused_messages(messages):
+    """Remove all messages that easy to tell are unused to create space in the message index table"""
     messages[:] = [m for m in messages if not m.is_id_message()]
     for index, m in enumerate(messages):
         m.index = index
 
-# takes all messages used for shop items, and moves messages from the 00xx range into the unused 80xx range
+
 def move_shop_item_messages(messages, shop_items):
+    """Takes all messages used for shop items, and moves messages from the 00xx range into the unused 80xx range"""
     # checks if a message id is in the item message range
     def is_in_item_range(id):
         bytes = int_to_bytes(id, 2)
@@ -835,6 +847,7 @@ def move_shop_item_messages(messages, shop_items):
             shop.description_message |= 0x8000
         if is_in_item_range(shop.purchase_message):
             shop.purchase_message |= 0x8000
+
 
 def make_player_message(text):
     player_text = '\x05\x42\x0F\x05\x40'
@@ -883,9 +896,11 @@ def make_player_message(text):
     return new_text
 
 
-# reduce item message sizes and add new item messages
-# make sure to call this AFTER move_shop_item_messages()
 def update_item_messages(messages, world):
+    """
+    Reduce item message sizes and add new item messages
+    make sure to call this AFTER move_shop_item_messages()
+    """
     new_item_messages = {**ITEM_MESSAGES, **KEYSANITY_MESSAGES}
     for id, text in new_item_messages.items():
         if world.multiworld.players > 1:
@@ -897,14 +912,14 @@ def update_item_messages(messages, world):
         update_message_by_id(messages, id, text, opt)
 
 
-# run all keysanity related patching to add messages for dungeon specific items
 def add_item_messages(messages, shop_items, world):
+    """Run all keysanity related patching to add messages for dungeon specific items"""
     move_shop_item_messages(messages, shop_items)
     update_item_messages(messages, world)
 
 
-# reads each of the game's messages into a list of Message objects
 def read_messages(rom):
+    """Reads each of the game's messages into a list of Message objects"""
     table_offset = ENG_TABLE_START
     index = 0
     messages = []
@@ -925,9 +940,9 @@ def read_messages(rom):
 
     return messages
 
-# write the messages back
-def repack_messages(rom, messages, permutation=None, always_allow_skip=True, speed_up_text=True):
 
+def repack_messages(rom, messages, permutation=None, always_allow_skip=True, speed_up_text=True):
+    """Write the messages back"""
     rom.update_dmadata_record(TEXT_START, TEXT_START, TEXT_START + ENG_TEXT_SIZE_LIMIT)
 
     if permutation is None:
@@ -954,7 +969,7 @@ def repack_messages(rom, messages, permutation=None, always_allow_skip=True, spe
     # raise an exception if too much is written
     # we raise it at the end so that we know how much overflow there is
     if offset > text_size_limit:
-        raise(TypeError("Message Text table is too large: 0x" + "{:x}".format(offset) + " written / 0x" + "{:x}".format(ENG_TEXT_SIZE_LIMIT) + " allowed."))
+        raise TypeError(f"Message Text table is too large: 0x{offset:x} written / 0x{ENG_TEXT_SIZE_LIMIT:x} allowed.")
 
     # end the table
     table_index = len(messages)
@@ -964,13 +979,13 @@ def repack_messages(rom, messages, permutation=None, always_allow_skip=True, spe
     table_index += 1
     entry_offset = EXTENDED_TABLE_START + 8 * table_index
     if 8 * (table_index + 1) > EXTENDED_TABLE_SIZE:
-        raise(TypeError("Message ID table is too large: 0x" + "{:x}".format(8 * (table_index + 1)) + " written / 0x" + "{:x}".format(EXTENDED_TABLE_SIZE) + " allowed."))
+        raise TypeError(f"Message ID table is too large: 0x{8 * (table_index + 1):x} written / 0x{EXTENDED_TABLE_SIZE:x} allowed.")
     rom.write_bytes(entry_offset, [0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
-# shuffles the messages in the game, making sure to keep various message types in their own group
-def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
 
-    permutation = [i for i, _ in enumerate(messages)]
+def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
+    """Shuffles the messages in the game, making sure to keep various message types in their own group"""
+    permutation = [i for i in range(len(messages))]
 
     def is_exempt(m):
         hint_ids = (
@@ -989,25 +1004,24 @@ def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
         is_shuffle_exempt = (m.id in shuffle_exempt)
         return (is_hint or is_error_message or m.is_id_message() or is_shuffle_exempt)
 
-    have_goto         = list( filter(lambda m: not is_exempt(m) and m.has_goto,         messages) )
-    have_keep_open    = list( filter(lambda m: not is_exempt(m) and m.has_keep_open,    messages) )
-    have_event        = list( filter(lambda m: not is_exempt(m) and m.has_event,        messages) )
-    have_fade         = list( filter(lambda m: not is_exempt(m) and m.has_fade,         messages) )
-    have_ocarina      = list( filter(lambda m: not is_exempt(m) and m.has_ocarina,      messages) )
-    have_two_choice   = list( filter(lambda m: not is_exempt(m) and m.has_two_choice,   messages) )
-    have_three_choice = list( filter(lambda m: not is_exempt(m) and m.has_three_choice, messages) )
-    basic_messages    = list( filter(lambda m: not is_exempt(m) and m.is_basic(),       messages) )
-
+    have_goto         = list(filter(lambda m: not is_exempt(m) and m.has_goto,         messages))
+    have_keep_open    = list(filter(lambda m: not is_exempt(m) and m.has_keep_open,    messages))
+    have_event        = list(filter(lambda m: not is_exempt(m) and m.has_event,        messages))
+    have_fade         = list(filter(lambda m: not is_exempt(m) and m.has_fade,         messages))
+    have_ocarina      = list(filter(lambda m: not is_exempt(m) and m.has_ocarina,      messages))
+    have_two_choice   = list(filter(lambda m: not is_exempt(m) and m.has_two_choice,   messages))
+    have_three_choice = list(filter(lambda m: not is_exempt(m) and m.has_three_choice, messages))
+    basic_messages    = list(filter(lambda m: not is_exempt(m) and m.is_basic(),       messages))
 
     def shuffle_group(group):
-        group_permutation = [i for i, _ in enumerate(group)]
+        group_permutation = [i for i in range(len(group))]
         rand.shuffle(group_permutation)
 
         for index_from, index_to in enumerate(group_permutation):
             permutation[group[index_to].index] = group[index_from].index
 
     # need to use 'list' to force 'map' to actually run through
-    list( map( shuffle_group, [
+    list(map(shuffle_group, [
         have_goto + have_keep_open + have_event + have_fade + basic_messages,
         have_ocarina,
         have_two_choice,
@@ -1016,8 +1030,9 @@ def shuffle_messages(messages, rand, except_hints=True, always_allow_skip=True):
 
     return permutation
 
-# Update warp song text boxes for ER
+
 def update_warp_song_text(messages, world):
+    """Update warp song text boxes for ER"""
     from .Hints import HintArea
 
     msg_list = {
