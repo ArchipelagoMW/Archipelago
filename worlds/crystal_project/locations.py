@@ -1112,19 +1112,19 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Jidamba Tangle
         #Treasure chests
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Inside overgrown building E of Eaclaneya", 1629 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Demon Plate chest
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Up a tree in north foliage", 3024 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Inside overgrown building E of Eaclaneya", 1629 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Demon Plate chest
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Up a tree in north foliage", 3024 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Ether chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Along a river through the foliage", 3026 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Atop overgrown building E of Eaclaneya", 3028 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Atop overgrown building E of Eaclaneya", 3028 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Ether chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Tucked against eastern side of Eaclaneya", 2801 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Flame Guard chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Tucked against western side of Eaclaneya", 2802 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Flamespike chest
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Smack in the center of the foliage", 1632 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Foliage Key chest
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - NW foliage", 2807 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Partizan chest
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Tucked below NW foliage", 3025 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Potion chest
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Smack in the center of the foliage", 1632 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Foliage Key chest
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - NW foliage", 2807 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Partizan chest
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Tucked below NW foliage", 3025 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Potion chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Atop Eaclaneya", 2808 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Rune Bow chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Fly down from Weaver Outpost to pedestal", 2803 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Siege Bow chest
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Island in the river through the foliage", 3011 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Tower Shield chest
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - North of foliage river", 3027 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Z-Potion chest
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Island in the river through the foliage", 3011 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Tower Shield chest
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - North of foliage river", 3027 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Z-Potion chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Accompanied by orange cave flowers", 1435 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Cave Key chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Hop from underground root to sneaky passage pond", 2798 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ravens Cloak chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Underground sneaky passage by NE cave exit", 2797 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ravens Hood chest
@@ -1134,9 +1134,9 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #NPCs
         #Todo NPCs Job Masters: Jidamba Tangle (Outpost) has Master Weaver ID 3579 (627, 140, 77); gives you Weaver Seal in exchange for job mastery
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Chloe Queen of the Canopy", 2775 + npc_index_offset), #Super Rod (828, 119, 99); Fixed Missable
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Chloe Queen of the Canopy", 2775 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Super Rod (828, 119, 99); Fixed Missable
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Splish splash Diamond", 2871 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Diamond hot girl summer on the beach", 2873 + npc_index_offset), #Dust
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Diamond hot girl summer on the beach", 2873 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state) or logic.has_glide(state)), #Dust
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Damp Diamond lurking beneath diamondsmith", 2869 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Diamond at southern mouth of cave", 2874 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Fly from Summoners weeping tree to hot tub Diamond", 2876 + npc_index_offset, lambda state: logic.has_glide(state)), #Ingot
@@ -1334,7 +1334,7 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Boss - Tira Summon", 1132 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE, player=player) or state.can_reach(GANYMEDE_SHRINE, player=player)) and logic.is_area_in_level_range(state, 57)), #(720, 138, -278) Monster ID: 98
         LocationData(LAKE_DELENDE, "Lake Delende Boss - Ioske Summon", 1111 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 57)), #97, 126, -211 Monster ID: 92
         LocationData(TALL_TALL_HEIGHTS, "Tall, Tall Heights Boss - Pamoa Summon", 1136 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 53)), #498, 218, -412 Monster ID: 91
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Boss - Juses Summon", 1134 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_swimming(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(672, 124, 106) Monster ID: 99
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Boss - Juses Summon", 1134 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.has_vertical_movement(state) and  logic.has_glide(state) and logic.is_area_in_level_range(state, 58)), #(672, 124, 106) Monster ID: 99
         #Mind's Delusion is part of the Coyote fight
         LocationData(THE_DEEP_SEA, "The Deep Sea Boss - Coyote Summon", 1140 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #(-60, 53, 202) Monster ID: 95
 
