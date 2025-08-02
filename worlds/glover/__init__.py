@@ -83,9 +83,10 @@ class GloverWorld(World):
 
     def __init__(self, world, player):
         self.version = "V0.1"
-        
+        print("Init")
 
     def level_from_string(self, name : str) -> int:
+        print("level_from_string")
         if name[3:4] in self.level_prefixes:
             return self.level_prefixes.index(name[3:4])
         if name.startswith("Hubworld"):
@@ -97,6 +98,7 @@ class GloverWorld(World):
         return -1
 
     def world_from_string(self, name : str) -> int:
+        print("world_from_string")
         if name[:3] in self.world_prefixes:
             return self.level_prefixes.index(name[:3])
         if name.startswith("Hubworld") or name.startswith("Castle Cave") or name.startswith("Training"):
@@ -104,6 +106,7 @@ class GloverWorld(World):
         return -1
 
     def generate_early(self):
+        print("Generate Early")
         #Garib Sorting Order
         if self.options.garib_sorting == 'garibsanity':
             random.shuffle(self.garib_level_order)
@@ -119,6 +122,7 @@ class GloverWorld(World):
         self.json_info = build_data(self)
 
     def create_regions(self):
+        print("Regions")
         main_menu = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(main_menu)
         #Replace with a connection to the hubworld rather than Atlantis 1
@@ -128,6 +132,7 @@ class GloverWorld(World):
                 each_region_pair.ball_region_methods
 
     def create_item(self, name) -> Item:
+        print("create_item")
         item_classification = None
         item_id = -1
         knownLevelAndWorld = [self.level_from_string(self, name), self.world_from_string(self, name)]
@@ -154,6 +159,7 @@ class GloverWorld(World):
         return item_output
 
     def create_items(self) -> None:
+        print("Items")
         #Garib Logic
         garib_items = []
         match self.options.garib_logic.value:
@@ -206,36 +212,40 @@ class GloverWorld(World):
             self.create_item(each_item)
 
     def set_rules(self):
+        print("set_rules")
         #MethodData to actual method logic
         return super().set_rules()
 
     def connect_entrances(self):
+        print("connect_entrances")
         #Level portal randomization
         return super().connect_entrances()
 
     def fill_slot_data(self) -> Dict[str, Any]:
+        print("Fill Slot Data")
         options = {}
-       #options["difficulty_logic"] = self.options.difficulty_logic.value
-       #options["death_link"] = self.options.death_link.value
-       #options["tag_link"] = self.options.tag_link.value
-       #options["starting_ball"] = self.options.starting_ball.value
-       #options["garib_logic"] = self.options.garib_logic.value
-       #options["garib_sorting"] = self.options.garib_sorting.value
-       #options["entrance_randomizer"] = self.options.entrance_randomizer.value
-       #options["spawning_checkpoint_randomizer"] = self.options.spawning_checkpoint_randomizer.value
-       #options["bonus_levels"] = self.options.bonus_levels.value
-       ##options["atlantis_bonus"] = self.options.atlantis_bonus.value
-       #options["death_link"] = self.options.death_link.value
-       #options["tag_link"] = self.options.tag_link.value
-       #options["randomize_jump"] = self.options.randomize_jump.value
-       #options["include_power_ball"] = self.options.include_power_ball.value
-       #options["checkpoint_checks"] = self.options.checkpoint_checks.value
-       #options["switches_checks"] = self.options.switches_checks.value
-       #options["mr_tip_checks"] = self.options.mr_tip_checks.value
-       #options["mr_hints"] = self.options.mr_hints.value
-       #options["chicken_hints"] = self.options.chicken_hints.value
+        options["difficulty_logic"] = self.options.difficulty_logic.value
+        options["death_link"] = self.options.death_link.value
+        options["tag_link"] = self.options.tag_link.value
+        options["starting_ball"] = self.options.starting_ball.value
+        options["garib_logic"] = self.options.garib_logic.value
+        options["garib_sorting"] = self.options.garib_sorting.value
+        options["entrance_randomizer"] = self.options.entrance_randomizer.value
+        options["spawning_checkpoint_randomizer"] = self.options.spawning_checkpoint_randomizer.value
+        options["bonus_levels"] = self.options.bonus_levels.value
+        #options["atlantis_bonus"] = self.options.atlantis_bonus.value
+        options["death_link"] = self.options.death_link.value
+        options["tag_link"] = self.options.tag_link.value
+        options["randomize_jump"] = self.options.randomize_jump.value
+        options["include_power_ball"] = self.options.include_power_ball.value
+        options["checkpoint_checks"] = self.options.checkpoint_checks.value
+        options["switches_checks"] = self.options.switches_checks.value
+        options["mr_tip_checks"] = self.options.mr_tip_checks.value
+        options["mr_hints"] = self.options.mr_hints.value
+        options["chicken_hints"] = self.options.chicken_hints.value
 
         options["player_name"] = self.multiworld.player_name[self.player]
         options["seed"] = self.random.randint()
         options["version"] = self.version
+        print("Fill Slot Data Over")
         return options

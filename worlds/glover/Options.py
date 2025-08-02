@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import ExcludeLocations, Toggle, DeathLink, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin
+from Options import ExcludeLocations, Toggle, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin
 
 class DifficultyLogic(Choice):
     """What tricks are allowed. Default Intended.

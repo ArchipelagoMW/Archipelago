@@ -7,6 +7,7 @@ class ItemData(NamedTuple):
 	default_location: str = ""
 
 def find_item_data(name : str) -> ItemData:
+	print("find_item_data")
 	#Garibs
 	if name in world_garib_table:
 		return world_garib_table[name]
@@ -484,11 +485,13 @@ all_items = {
 }
 
 def generate_item_name_to_id() -> dict:
+	print("generate_item_name_to_id")
 	output : dict = {}
 	for name, data in all_items.items():
 		output[name] = data.glid
 	return output
 
 def generate_item_name_groups() -> dict:
-    output : dict = {}
-    return output
+	print("generate_item_name_groups")
+	output : dict = {}
+	return output
