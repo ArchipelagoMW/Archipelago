@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Choice, Toggle, DeathLink, DefaultOnToggle, TextChoice, Range, OptionDict, PerGameCommonOptions
+from Options import (Choice, Toggle, DeathLink, DefaultOnToggle, TextChoice, Range, OptionDict, PerGameCommonOptions,
+                     Visibility)
 from schema import Schema, And, Use, Optional
 
 bosses = {
@@ -178,6 +179,7 @@ class WeaknessPlando(OptionDict):
             And(str, Use(str.title), lambda s: s in weapons_to_id): And(int, lambda i: i in range(-1, 15))
         }
     })
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
     default = {}
 
 
