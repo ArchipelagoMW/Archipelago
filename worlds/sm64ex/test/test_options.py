@@ -1,14 +1,7 @@
 from .bases import SM64TestBase
 from .. import Options
 from ..Locations import loc100Coin_table, location_table
-from ..Regions import sm64_entrances_to_level, sm64_level_to_paintings, sm64_level_to_secrets
-
-# Levels with at least one star without a movement rule
-valid_move_randomizer_start_courses = [
-    "Bob-omb Battlefield", "Jolly Roger Bay", "Cool, Cool Mountain",
-    "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
-    "Dire, Dire Docks", "Snowman's Land"
-]
+from ..Regions import sm64_entrances_to_level, sm64_level_to_paintings, sm64_level_to_secrets, valid_move_randomizer_start_courses
 
 valid_move_randomizer_start_entrances = {
     level: entrance
