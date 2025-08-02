@@ -117,7 +117,7 @@ class FishingLogic(BaseLogic):
 
     @cached_property
     def can_crab_pot_anywhere(self) -> StardewRule:
-        return self.logic.fishing.can_fish() & self.logic.region.can_reach_any(fishing_regions)
+        return self.logic.fishing.can_crab_pot & self.logic.region.can_reach_any(fishing_regions)
 
     @cache_self1
     def can_crab_pot_at(self, region: str) -> StardewRule:
@@ -125,12 +125,4 @@ class FishingLogic(BaseLogic):
 
     @cached_property
     def can_crab_pot(self) -> StardewRule:
-        crab_pot_rule = self.logic.has(Fishing.bait)
-
-        # We can't use the same rule if skills are vanilla, because fishing levels are required to crab pot, which is required to get fishing levels...
-        if self.content.features.skill_progression.is_progressive:
-            crab_pot_rule = crab_pot_rule & self.logic.has(Machine.crab_pot)
-        else:
-            crab_pot_rule = crab_pot_rule & self.logic.skill.can_get_fishing_xp
-
-        return crab_pot_rule
+        return self.logic.has(Machine.crab_pot) & self.logic.has(Fishing.bait)
