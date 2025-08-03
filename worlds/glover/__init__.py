@@ -1,4 +1,5 @@
 import gc
+import math
 from typing import Any, Dict
 
 from BaseClasses import ItemClassification, Location, Tutorial, Item, Region, MultiWorld
@@ -6,44 +7,8 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
 from .Options import GaribLogic, GloverOptions, SpawningCheckpointRandomizer
-from .JsonReader import JsonInfo, build_data, generate_location_name_to_id
-from .ItemPool import generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table
-
-spawn_checkpoint = [
-    2,3,3,
-    4,5,4,
-    3,3,4,
-    3,4,4,
-    3,3,5,
-    2,1,4]
-
-#Garib level order table
-garib_level_order = [
-    ["Atl1", 50]#,
-    #["Atl2", 60],
-    #["Atl3", 80],
-    #["Atl?", 25],
-    #["Crn1", 65],
-    #["Crn2", 80],
-    #["Crn3", 80],
-    #["Crn?", 20],
-    #["Prt1", 70],
-    #["Prt2", 60],
-    #["Prt3", 80],
-    #["Prt?", 50],
-    #["Pht1", 80],
-    #["Pht2", 80],
-    #["Pht3", 80],
-    #["Pht?", 60],
-    #["FoF1", 60],
-    #["FoF2", 60],
-    #["FoF3", 70],
-    #["FoF?", 56],
-    #["Otw1", 50],
-    #["Otw2", 50],
-    #["Otw3", 80],
-    #["Otw?", 50]
-]
+from .JsonReader import build_data, generate_location_name_to_id
+from .ItemPool import generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, filler_table, trap_table
 
 class GloverItem(Item):
 	#Start at 650000
@@ -83,6 +48,40 @@ class GloverWorld(World):
 
     def __init__(self, world, player):
         self.version = "V0.1"
+        self.spawn_checkpoint = [
+            2,3,3,
+            4,5,4,
+            3,3,4,
+            3,4,4,
+            3,3,5,
+            2,1,4]
+        #Garib level order table
+        self.garib_level_order = [
+            ["Atl1", 50]#,
+            #["Atl2", 60],
+            #["Atl3", 80],
+            #["Atl?", 25],
+            #["Crn1", 65],
+            #["Crn2", 80],
+            #["Crn3", 80],
+            #["Crn?", 20],
+            #["Prt1", 70],
+            #["Prt2", 60],
+            #["Prt3", 80],
+            #["Prt?", 50],
+            #["Pht1", 80],
+            #["Pht2", 80],
+            #["Pht3", 80],
+            #["Pht?", 60],
+            #["FoF1", 60],
+            #["FoF2", 60],
+            #["FoF3", 70],
+            #["FoF?", 56],
+            #["Otw1", 50],
+            #["Otw2", 50],
+            #["Otw3", 80],
+            #["Otw?", 50]
+        ]
         super(GloverWorld, self).__init__(world, player)
 
     def level_from_string(self, name : str) -> int:
@@ -106,21 +105,21 @@ class GloverWorld(World):
     def generate_early(self):
         #Garib Sorting Order
         if self.options.garib_sorting == GaribLogic.option_garibsanity:
-            self.random.shuffle(garib_level_order)
+            self.random.shuffle(self.garib_level_order)
         #Setup the spawning checkpoints
         if self.options.spawning_checkpoint_randomizer:
             #If randomized, pick a number from it's assigned value to the current value
-            for each_inxex, each_item in enumerate(spawn_checkpoint):
-                spawn_checkpoint[each_item] = self.random.randint(1, each_inxex)
+            for each_inxex, each_item in enumerate(self.spawn_checkpoint):
+                self.spawn_checkpoint[each_item] = self.random.randint(1, each_inxex)
         else:
             #By default, they're all Checkpoint 1
-            for each_item in range(len(spawn_checkpoint)):
-                spawn_checkpoint[each_item] = 1
+            for each_item in range(len(self.spawn_checkpoint)):
+                self.spawn_checkpoint[each_item] = 1
 
     def create_regions(self):
         multiworld = self.multiworld
         player = self.player
-        build_data(self, spawn_checkpoint)
+        build_data(self)
         multiworld.regions.append(Region("Menu", player, multiworld))
         #Replace with a connection to the hubworld rather than Atlantis
         multiworld.get_region("Menu", player).connect(multiworld.get_region("Atl1", player))
@@ -151,6 +150,31 @@ class GloverWorld(World):
         item_output = GloverItem(name_for_use, item_classification, item_id, self.player)
         return item_output
 
+    def percent_of(self, percent : int) -> float:
+        return (float(percent) / 100.0)
+
+    def percents_sum_100(self, percents_dict : dict) -> bool:
+        sum : float = 0
+        for all_percentages in percents_dict.values():
+            sum += all_percentages
+        return math.isclose(sum, 1)
+
+    def highest_dict_value(self, input_dict : dict) -> str:
+        best_names : list[str]
+        best_value : float = -99
+        #Goes through all items
+        for each_name, each_value in input_dict.items():
+            if math.isclose(best_value, each_value):
+                best_names.append(each_name)
+            elif each_value > best_value:
+                best_value = each_value
+                best_names = [each_name]
+        #If there's multiple valid options, pick one at random
+        if len(best_names) > 1:
+            return best_names[self.random.randint(0, len(best_names) - 1)]
+        else:
+            return best_names[0]
+
     def create_items(self) -> None:
         #Garib Logic
         garib_items = []
@@ -175,7 +199,7 @@ class GloverWorld(World):
             for each_checkpoint in checkpoint_table:
                 level_offset = self.level_from_string(each_checkpoint)
                 world_offset = self.world_from_string(each_checkpoint)
-                if spawn_checkpoint[level_offset + (world_offset * 3)] != int(each_checkpoint[-1]):
+                if self.spawn_checkpoint[level_offset + (world_offset * 3)] != int(each_checkpoint[-1]):
                     checkpoint_items.append[each_checkpoint]
 
         #Level Event Logic
@@ -187,21 +211,67 @@ class GloverWorld(World):
         ability_items = list(ability_table.keys())
         if not self.options.include_power_ball.value == 1:
             ability_items.remove("Power Ball")
-        
+
         #Apply all core items
         all_core_items = []
         all_core_items.extend(garib_items)
         all_core_items.extend(checkpoint_items)
         all_core_items.extend(event_items)
-        all_core_items.extend(ability_items)
-        for each_item in garib_items:
-            self.create_item(each_item)
-        for each_item in checkpoint_items:
-            self.create_item(each_item)
-        for each_item in event_items:
-            self.create_item(each_item)
-        for each_item in ability_items:
-            self.create_item(each_item)
+        #all_core_items.extend(ability_items)
+        for each_item in all_core_items:
+            self.multiworld.itempool.append(self.create_item(each_item))
+        
+        #Calculate the amount of trap filler and the amount of regular filler
+        total_locations : int = len(self.multiworld.get_unfilled_locations(self.player))
+        total_core_items : int = len(self.multiworld.itempool)
+        total_filler_items : int = int(total_locations - total_core_items)
+        total_trap_items : int = int(self.percent_of(self.options.trap_percentage.value) * total_filler_items)
+        total_filler_items -= total_trap_items
+        filler_percentages : dict = {
+            "Extra Garibs" : 							self.percent_of(self.options.filler_extra_garibs_weight.value),
+            "Chicken Sound" : 							self.percent_of(self.options.filler_chicken_sound_weight.value),
+	        "Life" : 									self.percent_of(self.options.filler_life_weight.value),
+            "Boomerang" : 								self.percent_of(self.options.filler_boomerang_weight.value),
+            "Beachball" : 								self.percent_of(self.options.filler_beachball_weight.value),
+            "Hercules" : 								self.percent_of(self.options.filler_hercules_weight.value),
+            "Helicopter" : 								self.percent_of(self.options.filler_helicopter_weight.value),
+            "Speed" : 									self.percent_of(self.options.filler_speed_weight.value),
+            "Frog" : 									self.percent_of(self.options.filler_frog_weight.value),
+            "Death" : 									self.percent_of(self.options.filler_death_weight.value),
+            "Sticky" : 									self.percent_of(self.options.filler_sticky_weight.value),
+	    }
+        trap_percentages : dict = {
+            "Frog Spell" : 								self.percent_of(self.options.frog_trap_weight.value),
+            "Cursed Ball" :								self.percent_of(self.options.cursed_ball_trap_weight.value),
+            "Instant Crystal" :							self.percent_of(self.options.instant_crystal_trap_weight.value),
+            "Camera Rotate" :							self.percent_of(self.options.camera_rotate_trap_weight.value),
+            "Tip Trap" :								self.percent_of(self.options.tip_trap_weight.value)
+        }
+        
+        #Apply the filler
+        if not self.percents_sum_100(filler_percentages):
+            print("The total of filler percentages isn't 100!")
+        if not self.percents_sum_100(trap_percentages):
+            print("The total of trap percentages isn't 100!")
+        
+        #Filler begins
+        all_filler_items = []
+
+        #Filler Item Count
+        for each_item in range(int(total_filler_items)):
+            item_key : str = self.highest_dict_value(filler_percentages)
+            filler_percentages[item_key] -= total_filler_items / 100.0
+            all_filler_items.append(item_key)
+        
+        #Trap Count
+        for each_item in range(int(total_trap_items)):
+            item_key : str = self.highest_dict_value(trap_percentages)
+            trap_percentages[item_key] -= total_filler_items / 100.0
+            all_filler_items.append(item_key)
+
+        #Create the filler items
+        for each_item in all_filler_items:
+            self.multiworld.itempool.append(self.create_item(each_item))
 
     def connect_entrances(self):
         #Level portal randomization
@@ -233,6 +303,4 @@ class GloverWorld(World):
         options["seed"] = self.random.randint(-6500000, 6500000)
         options["version"] = self.version
         reffers = gc.get_referrers(self.multiworld)
-        print(reffers)
-        
         return options

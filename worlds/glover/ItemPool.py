@@ -389,15 +389,15 @@ ability_table = {
 	"Slap" : 									ItemData(BASE_ID + 340, 1,"Progression",None),
 	"Throw" : 									ItemData(BASE_ID + 341, 1,"Progression",None),
 	"Ball Toss" : 								ItemData(BASE_ID + 342, 1,"Progression",None),
-	#"Beachball" : 								ItemData(BASE_ID + 343, 1,"",None),
-	#"Death Potion" : 							ItemData(BASE_ID + 344, 1,"",None),
-	#"Helicopter Potion" : 						ItemData(BASE_ID + 345, 1,"",None),
-	#"Frog Potion" : 							ItemData(BASE_ID + 346, 1,"",None),
-	#"Boomerang Ball" : 						ItemData(BASE_ID + 347, 1,"",None),
-	#"Speed Potion" : 							ItemData(BASE_ID + 348, 1,"",None),
-	#"Sticky Potion" : 							ItemData(BASE_ID + 349, 1,"",None),
-	#"Hercules Potion" : 						ItemData(BASE_ID + 350, 1,"",None),
-	#"Grab" : 									ItemData(BASE_ID + 351, 1,"",None),
+	"Beachball" : 								ItemData(BASE_ID + 343, 1,"Progression",None),
+	"Death Potion" : 							ItemData(BASE_ID + 344, 1,"Useful",None),
+	"Helicopter Potion" : 						ItemData(BASE_ID + 345, 1,"Progression",None),
+	"Frog Potion" : 							ItemData(BASE_ID + 346, 1,"Useful",None),
+	"Boomerang Ball" : 							ItemData(BASE_ID + 347, 1,"Progression",None),
+	"Speed Potion" : 							ItemData(BASE_ID + 348, 1,"Progression",None),
+	"Sticky Potion" : 							ItemData(BASE_ID + 349, 1,"Progression",None),
+	"Hercules Potion" : 						ItemData(BASE_ID + 350, 1,"Progression",None),
+	"Grab" : 									ItemData(BASE_ID + 351, 1,"Progression",None),
 	"Rubber Ball" : 							ItemData(BASE_ID + 352, 1,"Progression",None),
 	"Bowling Ball" : 							ItemData(BASE_ID + 353, 1,"Progression",None),
 	"Ball Bearing" : 							ItemData(BASE_ID + 354, 1,"Progression",None),
@@ -406,11 +406,25 @@ ability_table = {
     }
 
 filler_table = {
-	"Life" : 									ItemData(BASE_ID + 357, -1,"Useful",None),
+    "Extra Garibs" : 							ItemData(BASE_ID + 357, -1,"Useful",None),
+    "Chicken Sound" : 							ItemData(BASE_ID + 358, -1,"Useful",None),
+	"Life" : 									ItemData(BASE_ID + 359, -1,"Useful",None),
+    "Boomerang" : 								ItemData(BASE_ID + 360, -1,"Useful",None),
+    "Beachball" : 								ItemData(BASE_ID + 361, -1,"Useful",None),
+    "Hercules" : 								ItemData(BASE_ID + 362, -1,"Useful",None),
+    "Helicopter" : 								ItemData(BASE_ID + 363, -1,"Useful",None),
+    "Speed" : 									ItemData(BASE_ID + 364, -1,"Useful",None),
+    "Frog" : 									ItemData(BASE_ID + 365, -1,"Useful",None),
+    "Death" : 									ItemData(BASE_ID + 366, -1,"Useful",None),
+    "Sticky" : 									ItemData(BASE_ID + 367, -1,"Useful",None)
 	}
 
 trap_table = {
-	"Frog Spell" : 								ItemData(BASE_ID + 358, -1,"Trap",None),
+	"Frog Spell" : 								ItemData(BASE_ID + 368, -1,"Trap",None),
+    "Cursed Ball" :								ItemData(BASE_ID + 369, -1,"Trap",None),
+    "Instant Crystal" :							ItemData(BASE_ID + 370, -1,"Trap",None),
+    "Camera Rotate" :							ItemData(BASE_ID + 371, -1,"Trap",None),
+    "Tip Trap" :								ItemData(BASE_ID + 372, -1,"Trap",None)
 	}
 
 garibsanity_world_table = {
