@@ -147,6 +147,8 @@ KEYS_TABLE: dict[str, GrinchItemData] = {
     # "The Copter Race Contest Door Unlock": GrinchItemData("Supadow Door Unlocks", 407, IC.progression,
     #     [GrinchRamData()]),
     # "Progressive Supadow Door Unlock": GrinchItemData("Supadow Door Unlocks", 408, IC.progression,
+    #     [GrinchRamData()]),
+    # "Bike Race Door Unlock": GrinchItemData("Supadow Door Unlocks", 409, IC.progression,
     #     [GrinchRamData()])
 }
 
@@ -170,8 +172,8 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
     # "Tip Toe Trap": GrinchItemData("Traps", 603, IC.trap, [GrinchRamData()]), #alias to Slowness Trap for traplink
     "Damage Trap": GrinchItemData("Traps", 604, IC.trap, [GrinchRamData(0x800E8FDC, value=20)]),
     "Depletion Trap": GrinchItemData("Traps", 605, IC.trap, [GrinchRamData(0x80010058, value=0)]),
-    # "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
-    #     [GrinchRamData(0x80010000, value=0x05), GrinchRamData(0x8008FB94, value=1)]),
+    "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
+        [GrinchRamData(0x80010000, value=0x05), GrinchRamData(0x8008FB94, value=1)]),
     # "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]), #alias to Spring Trap for traplink
     "Who sent me here?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x8008FB94, value=1)]), #alias to Home Trap for traplink
     # "Cutscene Trap": GrinchItemData("Traps", 609, IC.trap, [GrinchRamData()]),

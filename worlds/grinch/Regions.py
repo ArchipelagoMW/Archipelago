@@ -35,7 +35,8 @@ subareas_list = [
 supadow_list = [
     "Spin N' Win Supadow",
     "Dankamania Supadow",
-    "The Copter Race Contest Supadow"
+    "The Copter Race Contest Supadow",
+    "Bike Race"
 ]
 
 def create_regions(world: "GrinchWorld"):

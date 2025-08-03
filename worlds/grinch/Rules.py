@@ -394,11 +394,60 @@ rules_dict: dict[str,list[list[str]]] = {
         ["Rotten Egg Launcher", "Rocket Spring"]
     ],
     "Stealing All Gifts": [
-        ["Exhaust Pipes", "GPS", "Tires", "Skis", "Twin-End Tuba"]
+        []
     ],
     "Neutralizing Santa": [
-        ["Exhaust Pipes", "GPS", "Tires", "Skis", "Twin-End Tuba"]
-    ]
+        []
+    ],
+    "Heart of Stone - Whoville": [
+        []
+    ],
+    "Heart of Stone - Who Forest": [
+        []
+    ],
+    "Heart of Stone - Who Dump": [
+        ["Grinch Copter"],
+        ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
+    ],
+    "Heart of Stone - Who Lake": [
+        []
+    ],
+    "Spin N' Win - Easy": [
+        []
+    ],
+    "Spin N' Win - Hard": [
+        []
+    ],
+    "Spin N' Win - Real Tough": [
+        []
+    ],
+    "Dankamania - Easy - 15 Points": [
+        []
+    ],
+    "Dankamania - Hard - 15 Points": [
+        []
+    ],
+    "Dankamania - Real Tough - 15 Points": [
+        []
+    ],
+    "The Copter Race Contest - Easy": [
+        []
+    ],
+    "The Copter Race Contest - Hard": [
+        []
+    ],
+    "The Copter Race Contest - Real Tough": [
+        []
+    ],
+    "Bike Race - 1st Place": [
+        []
+    ],
+    "Bike Race - Top 2": [
+        []
+    ],
+    "Bike Race - Top 3": [
+        []
+    ],
 }
 
 
@@ -475,6 +524,10 @@ access_rules_dict: dict[str,list[list[str]]] = {
         ["The Copter Race Contest Door Unlock"],
         # ["Progressive Supadow Door Unlock: 3"]
     ],
+    "Bike Race": [
+        ["Bike Race Door Unlock"],
+        # ["Progressive Supadow Door Unlock: 4"]
+    ]
 }
 
 def interpret_rule(rule_set: list[list[str]], player: int):

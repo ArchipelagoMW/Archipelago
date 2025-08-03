@@ -4,7 +4,7 @@ from Options import FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, Te
     PerGameCommonOptions
 
 
-class ProgressiveVacuum(Toggle):
+class ProgressiveVacuum(Toggle):#DefaultOnToggle
     """
     Determines whether you get access to main areas progressively [NOT IMPLEMENTED]
 
