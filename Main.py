@@ -342,7 +342,18 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 # TODO: change to `"version": version_tuple` after getting better serialization
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
 
-                for key in ("slot_data", "er_hint_data"):
+                base_types_keys = ["er_hint_data"]
+
+                # starting with 0.7.0 pre-encode slot data, until then multiserver does it on load
+                if version_tuple < (0, 7, 0):
+                    base_types_keys.append("slot_data")
+                else:
+                    for slot, data in multidata["slot_data"].items():
+                        multidata[slot] = NetUtils.encode_to_bytes(data)
+                        assert type(multidata[slot]) is bytes
+                    multidata["minimum_versions"]["server"] = max((0, 7, 0), multidata["minimum_versions"]["server"])
+
+                for key in base_types_keys:
                     multidata[key] = convert_to_base_types(multidata[key])
 
                 multidata = zlib.compress(restricted_dumps(multidata), 9)

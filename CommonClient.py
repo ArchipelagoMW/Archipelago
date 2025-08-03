@@ -9,7 +9,6 @@ import sys
 import typing
 import time
 import functools
-import warnings
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -22,10 +21,11 @@ if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
 from MultiServer import CommandProcessor, mark_raw
-from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
-                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
+from NetUtils import (Endpoint, decode, NetworkItem, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
+                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus,
+                      SlotType, NetworkPlayer, encode_to_bytes)
 from Utils import Version, stream_input, async_start
-from worlds import network_data_package, AutoWorldRegister
+from worlds import network_data_package
 import os
 import ssl
 
@@ -502,10 +502,11 @@ class CommonContext:
         """ `msgs` JSON serializable """
         if not self.server or not self.server.socket.open or self.server.socket.closed:
             return
-        await self.server.socket.send(encode(msgs))
+        await self.server.socket.send(encode_to_bytes(msgs))
 
-    def consume_players_package(self, package: typing.List[tuple]):
-        self.player_names = {slot: name for team, slot, name, orig_name in package if self.team == team}
+    def consume_players_package(self, package: typing.List[NetworkPlayer]):
+        self.player_names = {network_player.slot: network_player.name for network_player in package
+                             if self.team == network_player.team}
         self.player_names[0] = "Archipelago"
 
     def event_invalid_slot(self):
@@ -514,11 +515,12 @@ class CommonContext:
     def event_invalid_game(self):
         raise Exception('Invalid Game; please verify that you connected with the right game to the correct world.')
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False) -> typing.Optional[str]:
         if password_requested and not self.password:
             logger.info('Enter the password required to join this game:')
             self.password = await self.console_input()
             return self.password
+        return None
 
     async def get_username(self):
         if not self.auth:
@@ -942,11 +944,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             logger.info('--------------------------------')
             logger.info('Room Information:')
             logger.info('--------------------------------')
-            version = args["version"]
-            ctx.server_version = Version(*version)
+            ctx.server_version = Version.from_network_dict(args["version"])
 
             if "generator_version" in args:
-                ctx.generator_version = Version(*args["generator_version"])
+                ctx.generator_version = Version.from_network_dict(args["generator_version"])
                 logger.info(f'Server protocol version: {ctx.server_version.as_simple_string()}, '
                             f'generator version: {ctx.generator_version.as_simple_string()}, '
                             f'tags: {", ".join(args["tags"])}')
@@ -1016,9 +1017,9 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.slot = args["slot"]
         # int keys get lost in JSON transfer
         ctx.slot_info = {0: NetworkSlot("Archipelago", "Archipelago", SlotType.player)}
-        ctx.slot_info.update({int(pid): data for pid, data in args["slot_info"].items()})
+        ctx.slot_info.update({int(pid): NetworkSlot.from_network_dict(data) for pid, data in args["slot_info"].items()})
         ctx.hint_points = args.get("hint_points", 0)
-        ctx.consume_players_package(args["players"])
+        ctx.consume_players_package([NetworkPlayer.from_network_dict(player) for player in args["players"]])
         ctx.stored_data_notification_keys.add(f"_read_hints_{ctx.team}_{ctx.slot}")
         if ctx.game:
             game = ctx.game
@@ -1067,17 +1068,17 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             await ctx.send_msgs(sync_msg)
         if start_index == len(ctx.items_received):
             for item in args['items']:
-                ctx.items_received.append(NetworkItem(*item))
+                ctx.items_received.append(NetworkItem.from_network_dict(item))
         ctx.watcher_event.set()
 
     elif cmd == 'LocationInfo':
-        for item in [NetworkItem(*item) for item in args['locations']]:
+        for item in [NetworkItem.from_network_dict(item) for item in args['locations']]:
             ctx.locations_info[item.location] = item
         ctx.watcher_event.set()
 
     elif cmd == "RoomUpdate":
         if "players" in args:
-            ctx.consume_players_package(args["players"])
+            ctx.consume_players_package([NetworkPlayer.from_network_dict(player) for player in args["players"]])
         if "hint_points" in args:
             ctx.hint_points = args['hint_points']
         if "checked_locations" in args:

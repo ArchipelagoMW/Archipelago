@@ -4,7 +4,7 @@ from collections.abc import Mapping, Sequence
 import typing
 import enum
 import warnings
-from json import JSONEncoder, JSONDecoder
+import orjson
 
 if typing.TYPE_CHECKING:
     from websockets import WebSocketServerProtocol as ServerConnection
@@ -78,6 +78,11 @@ class NetworkPlayer(typing.NamedTuple):
     alias: str
     name: str
 
+    @classmethod
+    def from_network_dict(cls, source: dict):
+        source.pop("class", None)
+        return cls(**source)
+
 
 class NetworkSlot(typing.NamedTuple):
     """Represents a particular slot across teams."""
@@ -86,6 +91,11 @@ class NetworkSlot(typing.NamedTuple):
     type: SlotType
     group_members: Sequence[int] = ()  # only populated if type == group
 
+    @classmethod
+    def from_network_dict(cls, source: dict):
+        source.pop("class", None)
+        return cls(**source)
+
 
 class NetworkItem(typing.NamedTuple):
     item: int
@@ -93,6 +103,11 @@ class NetworkItem(typing.NamedTuple):
     player: int
     """ Sending player, except in LocationInfo (from LocationScouts), where it is the receiving player. """
     flags: int = 0
+
+    @classmethod
+    def from_network_dict(cls, source: dict):
+        source.pop("class", None)
+        return cls(**source)
 
 
 def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
@@ -128,15 +143,12 @@ def convert_to_base_types(obj: typing.Any) -> _base_types:
         raise Exception(f"Cannot handle {type(obj)}")
 
 
-_encode = JSONEncoder(
-    ensure_ascii=False,
-    check_circular=False,
-    separators=(',', ':'),
-).encode
+def encode_to_bytes(obj: typing.Any) -> bytes:
+    return orjson.dumps(_scan_for_TypedTuples(obj), option=orjson.OPT_NON_STR_KEYS)
 
 
 def encode(obj: typing.Any) -> str:
-    return _encode(_scan_for_TypedTuples(obj))
+    return encode_to_bytes(obj).decode()
 
 
 def get_any_version(data: dict) -> Version:
@@ -144,33 +156,10 @@ def get_any_version(data: dict) -> Version:
     return Version(int(data["major"]), int(data["minor"]), int(data["build"]))
 
 
-allowlist = {
-    "NetworkPlayer": NetworkPlayer,
-    "NetworkItem": NetworkItem,
-    "NetworkSlot": NetworkSlot
-}
-
-custom_hooks = {
-    "Version": get_any_version
-}
-
-
-def _object_hook(o: typing.Any) -> typing.Any:
-    if isinstance(o, dict):
-        hook = custom_hooks.get(o.get("class", None), None)
-        if hook:
-            return hook(o)
-        cls = allowlist.get(o.get("class", None), None)
-        if cls:
-            for key in tuple(o):
-                if key not in cls._fields:
-                    del (o[key])
-            return cls(**o)
-
-    return o
-
-
-decode = JSONDecoder(object_hook=_object_hook).decode
+def decode(data: str | bytes) -> typing.Any:
+    if isinstance(data, str):
+        data = data.encode()
+    return orjson.loads(data)
 
 
 class Endpoint:
