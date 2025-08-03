@@ -17,14 +17,25 @@ class CCCharlesWeb(WebWorld):
 
     theme = "stone"
 
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setup Choo-Choo Charles for MultiWorld.",
+        "A guide to setup Choo-Choo Charles for the Archipelago MultiWorld Randomizer.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Yaranorgoth"]
-    )]
+    )
+
+    setup_fr = Tutorial(
+        "Guide d'Installation Multiworld",
+        "Un guide pour mettre en place Choo-Choo Charles pour le Randomiseur Multiworld Archipelago",
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Yaranorgoth"]
+    )
+
+    tutorials = [setup_en, setup_fr]
 
     game_info_languages = ["en", "fr"]
     rich_text_options_doc = True
