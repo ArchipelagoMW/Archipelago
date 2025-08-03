@@ -121,7 +121,13 @@ def create_location_data(check_name : str, check_info : list, prefix : str) -> L
     for check_index in range(1, len(check_info)):
         check_method = check_info[check_index]
         methods.append(create_access_method(check_method, prefix))
-    return LocationData(prefix + check_name, check_info[0]["TYPE"], check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], check_info[0]["AP_IDS"], check_info[0]["IDS"], methods)
+    ap_ids : list[int] = []
+    rom_ids : list[int] = []
+    for each_id in check_info[0]["AP_IDS"]:
+        ap_ids.append(int(each_id, 0))
+    for each_id in check_info[0]["IDS"]:
+        rom_ids.append(int(each_id, 0))
+    return LocationData(prefix + check_name, check_info[0]["TYPE"], check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], ap_ids, rom_ids, methods)
 
 class RegionPair(NamedTuple):
     name : str
@@ -322,7 +328,7 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
             #Garib Groups
             else:
                 #Regular Locations
-                location : Location = Location(player, each_location_data.name, int(each_location_data.ap_ids[0], 0) + 10000, region_for_use)
+                location : Location = Location(player, each_location_data.name, each_location_data.ap_ids[0] + 10000, region_for_use)
                 region_for_use.locations.append(location)
         else:
             #Regular Locations
@@ -417,5 +423,5 @@ def generate_location_name_to_id(world_prefixes, level_prefixes) -> dict:
                 #Only locations remain
                 ap_ids : list = level_data[location_name][0]["AP_IDS"]
                 for each_pairing in build_location_pairings(prefix + location_name, ap_ids):
-                    output[each_pairing[0]] = each_pairing[1]
+                    output[each_pairing[0]] = int(each_pairing[1], 0)
     return output
