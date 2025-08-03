@@ -68,6 +68,7 @@ def grinchconnect(world: "GrinchWorld", current_region_name: str, connected_regi
                     region_entrance.parent_region.name == current_region_name:
                 add_rule(region_entrance, access_rule)
 
+#What regions are connected to each other
 def connect_regions(world: "GrinchWorld"):
     grinchconnect(world, "Mount Crumpit", "Whoville")
     grinchconnect(world, "Mount Crumpit", "Who Forest")

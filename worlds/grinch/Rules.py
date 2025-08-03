@@ -4,6 +4,7 @@ from BaseClasses import CollectionState
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule
 
+#Adds all rules from access_rules_dict to locations
 def set_rules(world: World):
     all_locations = world.get_locations()
     for location in all_locations:
@@ -12,7 +13,7 @@ def set_rules(world: World):
         for access_rule in rule_list:
             add_rule(location, access_rule)
 
-
+    #Each item in the list is a separate list of rules. Each separate list is just an "OR" condition.
 rules_dict: dict[str,list[list[str]]] = {
     "Enter Whoville": [
         []
@@ -80,6 +81,9 @@ rules_dict: dict[str,list[list[str]]] = {
     "Advancing The Countdown-To-Xmas Clock": [
         ["Hammer", "Rocket Spring"]
     ],
+    "Squashing All Gifts in Whoville": [
+        ["Grinch Copter", "Slime Shooter", "Rotten Egg Launcher", "Who Cloak", "Rocket Spring"]
+    ],
     "Making Xmas Trees Droop": [
         ["Rotten Egg Launcher"]
     ],
@@ -97,6 +101,10 @@ rules_dict: dict[str,list[list[str]]] = {
     "Replacing The Candles On The Cake With Fireworks": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Octopus Climbing Device", "Rocket Spring"]
+    ],
+    "Squashing All Gifts in Who Forest": [
+        ["Grinch Copter", "Cable Car Access Card", "Slime Shooter", "Rotten Egg Launcher"],
+        ["Octopus Climbing Device", "Rocket Spring", "Cable Car Access Card", "Slime Shooter", "Rotten Egg Launcher"]
     ],
     "Stealing Food From Birds": [
         ["Rocket Spring", "Rotten Egg Launcher"]
@@ -119,6 +127,10 @@ rules_dict: dict[str,list[list[str]]] = {
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
     ],
+    "Squashing All Gifts in Who Dump": [
+        ["Grinch Copter", "Rocket Spring", "Slime Shooter", "Rotten Egg Launcher"],
+        ["Octopus Climbing Device", "Rocket Spring", "Slime Shooter", "Rotten Egg Launcher"]
+    ],
     "Putting Thistles In Shorts": [
         ["Rotten Egg Launcher", "Octopus Climbing Device"],
         ["Rotten Egg Launcher", "Grinch Copter"]
@@ -136,6 +148,10 @@ rules_dict: dict[str,list[list[str]]] = {
     "Hooking The Mayor's Bed To The Motorboat": [
         ["Rope", "Hook", "Rotten Egg Launcher", "Scout Clothes"]
     ],
+    "Squashing All Gifts in Who Lake": [
+        ["Grinch Copter", "Marine Mobile", "Scout Clothes", "Rotten Egg Launcher", "Hook", "Rope"],
+        ["Octopus Climbing Device", "Rocket Spring", "Marine Mobile", "Scout Clothes", "Rotten Egg Launcher", "Hook", "Rope"]
+    ],
     "Binoculars Blueprint - Post Office Roof": [
         []
     ],
@@ -148,232 +164,232 @@ rules_dict: dict[str,list[list[str]]] = {
     "Binoculars Blueprint - City Hall Library - Right Side": [
         []
     ],
-    "Rotten Egg Launcher Blueprint - Outside City Hall": [
+    "REL Blueprint - Outside City Hall": [
         []
     ],
-    "Rotten Egg Launcher Blueprint - Outside Clock Tower": [
+    "REL Blueprint - Outside Clock Tower": [
         []
     ],
-    "Rotten Egg Launcher Blueprint - Post Office - Front of Silver Door": [
+    "REL Blueprint - Post Office - Front of Silver Door": [
         ["Who Cloak"]
     ],
-    "Rotten Egg Launcher Blueprint - Post Office - After Mission Completion": [
+    "REL Blueprint - Post Office - After Mission Completion": [
         ["Who Cloak"]
     ],
-    "Rocket Spring Blueprint - Behind Vacuum": [
+    "RS Blueprint - Behind Vacuum": [
         []
     ],
-    "Rocket Spring Blueprint - Front of 2nd House near entrance": [
+    "RS Blueprint - Front of 2nd House near entrance": [
         []
     ],
-    "Rocket Spring Blueprint - Near Tree House on Ground": [
+    "RS Blueprint - Near Tree House on Ground": [
         []
     ],
-    "Rocket Spring Blueprint - Near Cable Car House": [
+    "RS Blueprint - Near Cable Car House": [
         []
     ],
-    "Rocket Spring Blueprint - Near Who Snowball in Cave": [
+    "RS Blueprint - Near Who Snowball in Cave": [
         []
     ],
-    "Rocket Spring Blueprint - Branch Platform Closest to Glue Cannon": [
+    "RS Blueprint - Branch Platform Closest to Glue Cannon": [
         []
     ],
-    "Rocket Spring Blueprint - Branch Platform Near Beast": [
+    "RS Blueprint - Branch Platform Near Beast": [
         []
     ],
-    "Rocket Spring Blueprint - Branch Platform Ledge Grab House": [
+    "RS Blueprint - Branch Platform Ledge Grab House": [
         []
     ],
-    "Rocket Spring Blueprint - On Tree House": [
+    "RS Blueprint - On Tree House": [
         ["Rotten Egg Launcher"],
         ["Grinch Copter"]
     ],
-    "Slime Shooter Blueprint - Branch Platform Elevated House": [
+    "SS Blueprint - Branch Platform Elevated House": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Slime Shooter Blueprint - Branch Platform House next to Beast": [
+    "SS Blueprint - Branch Platform House next to Beast": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Slime Shooter Blueprint - House near Civic Center Cave": [
+    "SS Blueprint - House near Civic Center Cave": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Slime Shooter Blueprint - House next to Tree House": [
+    "SS Blueprint - House next to Tree House": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Slime Shooter Blueprint - House across from Tree House": [
+    "SS Blueprint - House across from Tree House": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Slime Shooter Blueprint - 2nd House near entrance right side": [
+    "SS Blueprint - 2nd House near entrance right side": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Slime Shooter Blueprint - 2nd House near entrance left side": [
+    "SS Blueprint - 2nd House near entrance left side": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Slime Shooter Blueprint - 2nd House near entrance inbetween blueprints": [
+    "SS Blueprint - 2nd House near entrance inbetween blueprints": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Slime Shooter Blueprint - House near entrance": [
+    "SS Blueprint - House near entrance": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Octopus Climbing Device Blueprint - Middle Pipe": [
+    "OCD Blueprint - Middle Pipe": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Slime Shooter", "Rocket Spring"],
         ["Slime Shooter", "Grinch Copter"]
     ],
-    "Octopus Climbing Device Blueprint - Right Pipe": [
+    "OCD Blueprint - Right Pipe": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Octopus Climbing Device Blueprint - Mayor's House Rat Vent": [
+    "OCD Blueprint - Mayor's House Rat Vent": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Octopus Climbing Device Blueprint - Left Pipe": [
+    "OCD Blueprint - Left Pipe": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Slime Shooter", "Rocket Spring"],
         ["Slime Shooter", "Grinch Copter"]
     ],
-    "Octopus Climbing Device Blueprint - Near Power Plant Wall on right side": [
+    "OCD Blueprint - Near Power Plant Wall on right side": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Slime Shooter", "Rocket Spring"],
         ["Slime Shooter", "Grinch Copter"]
     ],
-    "Octopus Climbing Device Blueprint - Near Who-Bris' Shack": [
+    "OCD Blueprint - Near Who-Bris' Shack": [
         ["Rotten Egg Launcher", "Rocket Spring"]
     ],
-    "Octopus Climbing Device Blueprint - Guardian's House - Left Side": [
+    "OCD Blueprint - Guardian's House - Left Side": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
     ],
-    "Octopus Climbing Device Blueprint - Guardian's House - Right Side": [
+    "OCD Blueprint - Guardian's House - Right Side": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
     ],
-    "Octopus Climbing Device Blueprint - Inside Guardian's House": [
+    "OCD Blueprint - Inside Guardian's House": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
     ],
-    "Marine Mobile Blueprint - South Shore - Bridge to Scout's Hut": [
+    "MM Blueprint - South Shore - Bridge to Scout's Hut": [
         []
     ],
-    "Marine Mobile Blueprint - South Shore - Tent near Porcupine": [
+    "MM Blueprint - South Shore - Tent near Porcupine": [
         []
     ],
-    "Marine Mobile Blueprint - South Shore - Near Outhouse": [
+    "MM Blueprint - South Shore - Near Outhouse": [
         []
     ],
-    "Marine Mobile Blueprint - South Shore - Near Hill Bridge": [
+    "MM Blueprint - South Shore - Near Hill Bridge": [
         []
     ],
-    "Marine Mobile Blueprint - South Shore - Scout's Hut Roof": [
+    "MM Blueprint - South Shore - Scout's Hut Roof": [
         ["Rocket Spring"],
         ["Grinch Copter"]
     ],
-    "Marine Mobile Blueprint - South Shore - Grass Platform": [
+    "MM Blueprint - South Shore - Grass Platform": [
         ["Rocket Spring"],
         ["Grinch Copter"]
     ],
-    "Marine Mobile Blueprint - South Shore - Zipline by Beast": [
+    "MM Blueprint - South Shore - Zipline by Beast": [
         ["Rocket Spring", "Octopus Climbing Device"],
         ["Grinch Copter"]
     ],
-    "Marine Mobile Blueprint - South Shore - Behind Summer Beast": [
+    "MM Blueprint - South Shore - Behind Summer Beast": [
         ["Rotten Egg Launcher", "Octopus Climbing Device"],
         ["Grinch Copter"]
     ],
-    "Marine Mobile Blueprint - South Shore - Below Bridge": [
+    "MM Blueprint - South Shore - Below Bridge": [
         []
     ],
-    "Marine Mobile Blueprint - North Shore - Below Bridge": [
+    "MM Blueprint - North Shore - Below Bridge": [
         []
     ],
-    "Marine Mobile Blueprint - North Shore - Behind Skunk Hut": [
+    "MM Blueprint - North Shore - Behind Skunk Hut": [
         []
     ],
-    "Marine Mobile Blueprint - North Shore - Inside Skunk Hut": [
+    "MM Blueprint - North Shore - Inside Skunk Hut": [
         []
     ],
-    "Marine Mobile Blueprint - North Shore - Fenced in Area": [
+    "MM Blueprint - North Shore - Fenced in Area": [
         []
     ],
-    "Marine Mobile Blueprint - North Shore - Boulder Box near Bridge": [
+    "MM Blueprint - North Shore - Boulder Box near Bridge": [
         []
     ],
-    "Marine Mobile Blueprint - North Shore - Boulder Box behind Skunk Hut": [
+    "MM Blueprint - North Shore - Boulder Box behind Skunk Hut": [
         []
     ],
-    "Marine Mobile Blueprint - North Shore - Inside Drill House": [
+    "MM Blueprint - North Shore - Inside Drill House": [
         []
     ],
-    "Marine Mobile Blueprint - North Shore - Crow Platform near Drill House": [
+    "MM Blueprint - North Shore - Crow Platform near Drill House": [
         []
     ],
-    "Grinch Copter Blueprint - Whoville City Hall - Safe Room": [
+    "GC Blueprint - Whoville City Hall - Safe Room": [
         []
     ],
-    "Grinch Copter Blueprint - Whoville City Hall - Statue Room": [
+    "GC Blueprint - Whoville City Hall - Statue Room": [
         []
     ],
-    "Grinch Copter Blueprint - Whoville Clock Tower - Before Bells": [
+    "GC Blueprint - Whoville Clock Tower - Before Bells": [
         ["Rocket Spring"]
     ],
-    "Grinch Copter Blueprint - Whoville Clock Tower - After Bells": [
+    "GC Blueprint - Whoville Clock Tower - After Bells": [
         ["Rocket Spring"]
     ],
-    "Grinch Copter Blueprint - Who Forest Ski Resort - Inside Dog's Fence": [
+    "GC Blueprint - Who Forest Ski Resort - Inside Dog's Fence": [
         []
     ],
-    "Grinch Copter Blueprint - Who Forest Ski Resort - Max Cave": [
+    "GC Blueprint - Who Forest Ski Resort - Max Cave": [
         []
     ],
-    "Grinch Copter Blueprint - Who Forest Civic Center - Climb across Bat Cave wall": [
+    "GC Blueprint - Who Forest Civic Center - Climb across Bat Cave wall": [
         ["Grinch Copter"],
         ["Octopus Climbing Device", "Rocket Spring"]
     ],
-    "Grinch Copter Blueprint - Who Forest Civic Center - Shoot Icicle in Bat Entrance": [
+    "GC Blueprint - Who Forest Civic Center - Shoot Icicle in Bat Entrance": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Octopus Climbing Device", "Rocket Spring"],
         ["Slime Shooter", "Grinch Copter"],
         ["Slime Shooter", "Octopus Climbing Device", "Rocket Spring"]
     ],
-    "Grinch Copter Blueprint - Who Dump Power Plant - Max Cave": [
+    "GC Blueprint - Who Dump Power Plant - Max Cave": [
         []
     ],
-    "Grinch Copter Blueprint - Who Dump Power Plant - After First Gate": [
+    "GC Blueprint - Who Dump Power Plant - After First Gate": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Grinch Copter"]
     ],
-    "Grinch Copter Blueprint - Who Dump Generator Building - Before Mission": [
+    "GC Blueprint - Who Dump Generator Building - Before Mission": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
     ],
-    "Grinch Copter Blueprint - Who Dump Generator Building - After Mission": [
+    "GC Blueprint - Who Dump Generator Building - After Mission": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
     ],
-    "Grinch Copter Blueprint - Who Lake South Shore - Submarine World - Above Surface": [
+    "GC Blueprint - Who Lake South Shore - Submarine World - Above Surface": [
         ["Marine Mobile"]
     ],
-    "Grinch Copter Blueprint - Who Lake South Shore - Submarine World - Underwater": [
+    "GC Blueprint - Who Lake South Shore - Submarine World - Underwater": [
         ["Marine Mobile"]
     ],
-    "Grinch Copter Blueprint - Who Lake North Shore - Mayor's Villa - Tree Branch": [
+    "GC Blueprint - Who Lake North Shore - Mayor's Villa - Tree Branch": [
         ["Grinch Copter"],
         ["Rotten Egg Launcher", "Rocket Spring"]
     ],
-    "Grinch Copter Blueprint - Who Lake North Shore - Mayor's Villa - Cave": [
+    "GC Blueprint - Who Lake North Shore - Mayor's Villa - Cave": [
         ["Grinch Copter"],
         ["Rotten Egg Launcher", "Rocket Spring"]
     ],
@@ -462,8 +478,11 @@ access_rules_dict: dict[str,list[list[str]]] = {
 }
 
 def interpret_rule(rule_set: list[list[str]], player: int):
+    #If a region/location does not have any items required, make the section(s) return no logic.
     if len(rule_set) < 1:
         return True
+
+    #Otherwise, if a region/location DOES have items required, make the section(s) return list of logic.
 
     access_list: list[Callable[[CollectionState], bool]] = []
     for item_set in rule_set:

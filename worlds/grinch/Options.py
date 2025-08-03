@@ -6,7 +6,7 @@ from Options import FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, Te
 
 class ProgressiveVacuum(Toggle):
     """
-    Determines whether you get access to main areas progressively
+    Determines whether you get access to main areas progressively [NOT IMPLEMENTED]
 
     Enabled: Whoville > Who Forest > Who Dump > Who Lake
     """
@@ -14,7 +14,7 @@ class ProgressiveVacuum(Toggle):
 
 class Missionsanity(Choice):
     """
-    How mission checks are randomized in the pool
+    How mission checks are randomized in the pool [NOT IMPLEMENTED]
 
     None: Does not add mission checks
     Completion: Only completing the mission gives you a check
@@ -30,7 +30,8 @@ class Missionsanity(Choice):
 
 # class StartingArea(Choice):
 #     """
-#     Here, you can select which area you'll start the game with. Whichever one you pick is the region you'll have access to at the start of the Multiworld.
+#     Here, you can select which area you'll start the game with.
+#     Whichever one you pick is the region you'll have access to at the start of the Multiworld.
 #     """
 #     option_whoville = 0
 #     option_who_forest = 1
@@ -40,29 +41,34 @@ class Missionsanity(Choice):
 #     display_name = "Starting Area"
 
 # class Supadow(Toggle):
-#     """Enables completing minigames through the Supadows in Mount Crumpit as checks. (9 locations)"""
+#     """Enables completing minigames through the Supadows in Mount Crumpit as checks. (9 locations) [NOT IMPLEMENTED]"""
 #     display_name = "Supadow Minigame Locations"#
 
 
 # class Gifts(Toggle):
-#     """Missions that require you to squash every present in a level. (4 locations)"""
+#     """Missions that require you to squash every present in a level. (4 locations) [NOT IMPLEMENTED]"""
 #     display_name = "Gift Collection Locations"
 
 
 # class Movesanity(Toggle):
-#     """Randomizes Grinch's moveset along with randomizing max into the pool. (Currently randomizes Max)"""
+#     """Randomizes Grinch's moveset along with randomizing max into the pool. [NOT IMPLEMENTED]"""
 #     display_name = "Movesanity"
 
 
 class UnlimitedRottenEggs(Toggle):
-    """Determine whether or not you run out of rotten eggs when you utilize your gadgets."""
+    """Determine whether or not you run out of rotten eggs when you utilize your gadgets. [NOT IMPLEMENTED]"""
     display_name = "Unlimited Rotten Eggs"
 
 class RingLinkOption(Toggle):
-    """Whenever this is toggled, your ammo is linked with other ringlink-compatible games that also have this enabled"""
+    """Whenever this is toggled, your ammo is linked with other ringlink-compatible games that also have this enabled. [NOT IMPLEMENTED]"""
+
+class TrapLinkOption(Toggle):
+    """If a trap is sent from Grinch, traps that are compatible with other games are triggered aswell. [NOT IMPLEMENTED]"""
 
 @dataclass
 class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     progressive_vacuum: ProgressiveVacuum
     missionsanity: Missionsanity
     unlimited_rotten_eggs: UnlimitedRottenEggs
+    ring_link: RingLinkOption
+    trap_link: TrapLinkOption
