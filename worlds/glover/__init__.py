@@ -302,5 +302,5 @@ class GloverWorld(World):
         options["player_name"] = self.multiworld.player_name[self.player]
         options["seed"] = self.random.randint(-6500000, 6500000)
         options["version"] = self.version
-        reffers = gc.get_referrers(self.multiworld)
+        
         return options

@@ -130,6 +130,8 @@ class RegionPair(NamedTuple):
     ball_region_methods : list[AccessMethod]
     #no_ball_region : Region | None
     no_ball_region_methods : list[AccessMethod]
+    to_ball_default_region : int
+    to_no_ball_default_region : int
 
 def create_region_pair(check_info : dict, check_name : str, level_name : str, player : int, multiworld : MultiWorld) -> RegionPair:
     prefix = level_name + ": "
@@ -152,28 +154,48 @@ def create_region_pair(check_info : dict, check_name : str, level_name : str, pl
         no_ball_region_methods.append(create_access_method(check_pairing, prefix))
     multiworld.regions.append(ball_region)
     multiworld.regions.append(no_ball_region)
-    return RegionPair(region_name, base_id, ball_region_methods, no_ball_region_methods)
+    return RegionPair(region_name, base_id, ball_region_methods, no_ball_region_methods, check_info["B"][0]["REGION"], check_info["D"][0]["REGION"])
 
 def connect_region_pairs(pairs : List[RegionPair], multiworld : MultiWorld, player : int):
     for each_pair in pairs:
         ball_region = multiworld.get_region(each_pair.name + " W/Ball", player)
         no_ball_region = multiworld.get_region(each_pair.name, player)
-        pair_ball_connections : dict[Region, list[AccessMethod]] = {}
-        pair_no_ball_connections : dict[Region, list[AccessMethod]] = {}
-        for each_method in each_pair.ball_region_methods:
-            region_to_connect : Region = get_region_from_method(multiworld, player, pairs, each_method)
-            if not region_to_connect in pair_ball_connections.keys():
-                pair_ball_connections[region_to_connect] = [each_method]
-        for each_method in each_pair.no_ball_region_methods:
-            region_to_connect : Region = get_region_from_method(multiworld, player, pairs, each_method)
-            if not region_to_connect in pair_no_ball_connections.keys():
-                pair_no_ball_connections[region_to_connect] = [each_method]
-        for each_connection, methods in pair_ball_connections.items():
-            #Create the rules using methods
-            ball_region.connect(each_connection)
-        for each_connection, methods in pair_no_ball_connections.items():
-            #Create the rules using methods part 2
-            no_ball_region.connect(each_connection)
+        if len(each_pair.ball_region_methods) + len(each_pair.no_ball_region_methods) > 1:
+            pair_ball_connections : dict[Region, list[AccessMethod]] = {}
+            pair_no_ball_connections : dict[Region, list[AccessMethod]] = {}
+            for each_method in each_pair.ball_region_methods:
+                region_to_connect : Region = get_region_from_method(multiworld, player, pairs, each_method)
+                if not region_to_connect in pair_ball_connections.keys():
+                    pair_ball_connections[region_to_connect] = [each_method]
+            for each_method in each_pair.no_ball_region_methods:
+                region_to_connect : Region = get_region_from_method(multiworld, player, pairs, each_method)
+                if not region_to_connect in pair_no_ball_connections.keys():
+                    pair_no_ball_connections[region_to_connect] = [each_method]
+            for each_connection, methods in pair_ball_connections.items():
+                #Create the rules using methods
+                ball_region.connect(each_connection)
+            for each_connection, methods in pair_no_ball_connections.items():
+                #Create the rules using methods part 2
+                no_ball_region.connect(each_connection)
+        else:
+            #If it's default is itself, it's the root, skip it
+            if each_pair.to_ball_default_region != each_pair.base_id:
+                #By default, assume you can only get there with the ball
+                default_region_name : str
+                for matching_region in pairs:
+                    if matching_region.base_id == each_pair.to_ball_default_region:
+                        default_region_name = matching_region.name
+                default_region : Region = multiworld.get_region(default_region_name + " W/Ball", player)
+                ball_region.connect(default_region)
+                default_region.connect(ball_region)
+            if each_pair.to_no_ball_default_region != each_pair.base_id:
+                default_region_name : str
+                for matching_region in pairs:
+                    if matching_region.base_id == each_pair.to_ball_default_region:
+                        default_region_name = matching_region.name
+                default_region : Region = multiworld.get_region(default_region_name, player)
+                no_ball_region.connect(default_region)
+                default_region.connect(no_ball_region)
         ball_region.connect(no_ball_region)
 
 class RegionLevel(NamedTuple):

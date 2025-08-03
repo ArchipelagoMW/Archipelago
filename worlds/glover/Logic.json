@@ -262,6 +262,11 @@
 					"NEEDS_BALL": true,
 					"REGION": 4,
 					"TYPE": 5
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 4,
+					"trickDifficulty": 0
 				}
 			],
 			"Goal Life": [
