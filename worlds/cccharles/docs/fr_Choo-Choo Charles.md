@@ -31,7 +31,7 @@ Non, ceci est un travail en cours.
 Les options suivantes seront possibles une fois les implémentations disponibles :
 
 À n'importe quel moment, le joueur peu appuyer sur l'une des touches suivantes pour afficher la console dans le jeu :
-* "~" (querty)
+* "~" (qwerty)
 * "²" (azerty)
 * "F10"
 Puis, un indice peut être révélé en tapant "/hint [player] <item>"

@@ -1,5 +1,8 @@
 # Choo-Choo Charles
 
+## Game page in other languages
+* [Français]()
+
 ## Where is the options page?
 The player options page for this game contains all the options to configure and export a yaml config file.
 The page cannot be accessed yet, the default YAML should be used instead from [the Choo-Choo Charles Multiworld Randomizer YAML page](https://github.com/lgbarrere/CCCharles-Random/blob/main/Release/CCCharles.yaml).
@@ -31,7 +34,7 @@ No, this is a work in progress.
 The following options will be possible once the implementations are available :
 
 At any moment, the player can press one of the following keys to display a console in the game :
-* "~" or "`" (querty)
+* "~" or "`" (qwerty)
 * "²" (azerty)
 * "F10"
 Then, a hint can be revealed by typing "/hint [player] <item>".

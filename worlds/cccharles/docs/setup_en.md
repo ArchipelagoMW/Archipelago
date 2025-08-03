@@ -4,7 +4,7 @@ This page is a simplified guide of [the Choo-Choo Charles Multiworld Randomizer 
 ## Requirements and Required Softwares
 * A computer running Windows (the Mod is not handled by Linux or Mac)
 * [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-* A legal copy of the Choo-Choo Charles original game (can be found on [Steam](https://store.steampowered.com/))
+* A legal copy of the Choo-Choo Charles original game (can be found on [Steam](https://store.steampowered.com/app/1766740/ChooChoo_Charles/))
 
 ## Mod Installation for playing
 To install the Mod, open [the Choo-Choo Charles Multiworld Randomizer Mod page](https://github.com/lgbarrere/CCCharles-Random) and follow the steps below.
