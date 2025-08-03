@@ -176,7 +176,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
     multiworld.link_items()
 
-    if any(multiworld.item_links.values()):
+    if any(world.options.item_links for world in multiworld.worlds.values()):
         multiworld._all_state = None
 
     logger.info("Running Item Plando.")
