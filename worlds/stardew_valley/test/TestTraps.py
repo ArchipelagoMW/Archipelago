@@ -1,7 +1,7 @@
 import unittest
 
-from . import SVTestBase
 from .assertion import WorldAssertMixin
+from .bases import SVTestBase
 from .. import options, items_by_group, Group
 from ..options import TrapDistribution
 
@@ -119,4 +119,3 @@ class TestDistributionIsRespectedAllTraps(WorldAssertMixin, SVTestBase):
         self.assertLess(num_bark, num_debris - threshold_difference)
         self.assertGreater(num_meow, num_time_flies + threshold_difference)
         self.assertGreater(num_meow, num_debris + threshold_difference)
-
