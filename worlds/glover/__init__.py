@@ -3,12 +3,46 @@ import math
 from typing import Any, Dict
 
 from BaseClasses import ItemClassification, Location, Tutorial, Item, Region, MultiWorld
+import settings
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
 from .Options import GaribLogic, GloverOptions, SpawningCheckpointRandomizer
 from .JsonReader import build_data, generate_location_name_to_id
 from .ItemPool import generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, filler_table, trap_table
+
+
+def run_client():
+    from .GloverClient import main  # lazy import
+    launch_subprocess(main)
+
+components.append(Component("Glover Client", func=run_client, component_type=Type.CLIENT))
+
+class GloverSettings(settings.Group):
+
+  class RomPath(settings.OptionalUserFilePath):
+    """File path of the Banjo-Tooie (USA) ROM."""
+
+  class PatchPath(settings.OptionalUserFolderPath):
+    """Folder path of where to save the patched ROM."""
+
+  class ProgramPath(settings.OptionalUserFilePath):
+    """
+      File path of the program to automatically run.
+      Leave blank to disable.
+    """
+
+  class ProgramArgs(str):
+    """
+      Arguments to pass to the automatically run program.
+      Leave blank to disable.
+      Set to "--lua=" to automatically use the correct path for the lua connector.
+    """
+
+  rom_path: RomPath | str = ""
+  patch_path: PatchPath | str = ""
+  program_path: ProgramPath | str = ""
+  program_args: ProgramArgs | str = "--lua="
 
 class GloverItem(Item):
 	#Start at 650000
@@ -34,7 +68,8 @@ class GloverWorld(World):
     version : str = "V0.1"
     web = GloverWeb()
     topology_present = True
-    
+    settings: GloverSettings
+    settings_key = "glover_options"
     options_dataclass = GloverOptions
     options : GloverOptions
 
@@ -224,7 +259,7 @@ class GloverWorld(World):
         all_core_items.extend(garib_items)
         all_core_items.extend(checkpoint_items)
         all_core_items.extend(event_items)
-        #all_core_items.extend(ability_items)
+        all_core_items.extend(ability_items)
         for each_item in all_core_items:
             self.multiworld.itempool.append(self.create_item(each_item))
         

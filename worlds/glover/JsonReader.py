@@ -166,7 +166,7 @@ def connect_region_pairs(pairs : List[RegionPair], multiworld : MultiWorld, play
     for each_pair in pairs:
         ball_region = multiworld.get_region(each_pair.name + " W/Ball", player)
         no_ball_region = multiworld.get_region(each_pair.name, player)
-        if len(each_pair.ball_region_methods) + len(each_pair.no_ball_region_methods) > 0:
+        if len(each_pair.ball_region_methods) + len(each_pair.no_ball_region_methods) > 1:
             pair_ball_connections : dict[Region, list[AccessMethod]] = {}
             pair_no_ball_connections : dict[Region, list[AccessMethod]] = {}
             for each_method in each_pair.ball_region_methods:
@@ -179,10 +179,10 @@ def connect_region_pairs(pairs : List[RegionPair], multiworld : MultiWorld, play
                     pair_no_ball_connections[region_to_connect] = [each_method]
             for each_connection, methods in pair_ball_connections.items():
                 #Create the rules using methods
-                each_connection.connect(ball_region)
+                ball_region.connect(each_connection)
             for each_connection, methods in pair_no_ball_connections.items():
                 #Create the rules using methods part 2
-                each_connection.connect(no_ball_region)
+                no_ball_region.connect(each_connection)
         else:
             #If it's default is itself, it's the root, skip it
             if each_pair.to_ball_default_region != each_pair.base_id:

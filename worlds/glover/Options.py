@@ -309,5 +309,4 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     tip_trap_weight : TrapTipWeight
 
     start_inventory_from_pool : StartInventoryPool
-    exclude_locations : GloverExcludeLocations
-
+    #exclude_locations : GloverExcludeLocations

@@ -229,11 +229,6 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
-					},
-					{
-						"ballRequirement": false,
-						"regionIndex": 0,
-						"trickDifficulty": 0
 					}
 				],
 				"D": [
