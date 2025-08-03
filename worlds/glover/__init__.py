@@ -7,10 +7,10 @@ import settings
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
-from .Options import GaribLogic, GloverOptions, SpawningCheckpointRandomizer
+from .Options import GaribLogic, GloverOptions, GaribSorting
 from .JsonReader import build_data, generate_location_name_to_id
 from .ItemPool import generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, filler_table, trap_table
-
+from Utils import visualize_regions
 
 def run_client():
     from .GloverClient import main  # lazy import
@@ -21,7 +21,7 @@ components.append(Component("Glover Client", func=run_client, component_type=Typ
 class GloverSettings(settings.Group):
 
   class RomPath(settings.OptionalUserFilePath):
-    """File path of the Banjo-Tooie (USA) ROM."""
+    """File path of the Glover (USA) ROM."""
 
   class PatchPath(settings.OptionalUserFolderPath):
     """Folder path of where to save the patched ROM."""
@@ -144,8 +144,8 @@ class GloverWorld(World):
         #Setup the spawning checkpoints
         if self.options.spawning_checkpoint_randomizer:
             #If randomized, pick a number from it's assigned value to the current value
-            for each_inxex, each_item in enumerate(self.spawn_checkpoint):
-                self.spawn_checkpoint[each_item] = self.random.randint(1, each_inxex)
+            for each_index, each_item in enumerate(self.spawn_checkpoint):
+                self.spawn_checkpoint[each_index] = self.random.randint(1, each_item)
         else:
             #By default, they're all Checkpoint 1
             for each_item in range(len(self.spawn_checkpoint)):
@@ -220,29 +220,29 @@ class GloverWorld(World):
     def create_items(self) -> None:
         #Garib Logic
         garib_items = []
-        match self.options.garib_logic.value:
+        match self.options.garib_logic:
             #0: Level Garibs (No items to be sent)
             #Garib Groups
-            case 1:
-                if self.options.garib_sorting.value == 0:
+            case GaribLogic.option_garib_groups:
+                if self.options.garib_sorting == GaribSorting.option_by_level:
                     garib_items = list(world_garib_table.keys())
                 else:
                     garib_items = list(decoupled_garib_table.keys())
             #Individual Garibs
-            case 2:
-                if self.options.garib_logic.value == 0:
+            case GaribLogic.option_garibsanity:
+                if self.options.garib_logic.value == GaribSorting.option_by_level:
                     garib_items = list(garibsanity_world_table.keys())
                 else:
                     garib_items = ["Garibsanity"]
         
         #Checkpoint Logic
         checkpoint_items = []
-        if self.options.checkpoint_checks.value == 1:
+        if self.options.checkpoint_checks.value:
             for each_checkpoint in checkpoint_table:
                 level_offset = self.level_from_string(each_checkpoint)
                 world_offset = self.world_from_string(each_checkpoint)
-                if self.spawn_checkpoint[level_offset + (world_offset * 3)] != int(each_checkpoint[-1]):
-                    checkpoint_items.append[each_checkpoint]
+                if self.spawn_checkpoint[(level_offset - 1) + (world_offset * 3)] != int(each_checkpoint[-1]):
+                    checkpoint_items.append(each_checkpoint)
 
         #Level Event Logic
         event_items = []
@@ -261,7 +261,8 @@ class GloverWorld(World):
         all_core_items.extend(event_items)
         all_core_items.extend(ability_items)
         for each_item in all_core_items:
-            self.multiworld.itempool.append(self.create_item(each_item))
+            for total_items in range(find_item_data(each_item).qty):
+                self.multiworld.itempool.append(self.create_item(each_item))
         
         #Calculate the amount of trap filler and the amount of regular filler
         total_locations : int = len(self.multiworld.get_unfilled_locations(self.player))
@@ -317,6 +318,7 @@ class GloverWorld(World):
 
     def connect_entrances(self):
         #Level portal randomization
+        visualize_regions(self.multiworld.get_region("Menu", self.player), "Glover.puml")
         return super().connect_entrances()
 
     def fill_slot_data(self) -> Dict[str, Any]:
