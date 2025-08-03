@@ -1,0 +1,358 @@
+[
+  {
+    "count": 1,
+    "name": "Whirlwind",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Boomerang",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Whip",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": "2",
+    "name": "Progressive Bow",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": "3",
+    "name": "Progressive Bomb Bag",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Sand Wand",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Spirit Flute",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": "5",
+    "name": "Red Potion",
+    "category": [],
+    "useful": true
+  },
+  {
+    "count": "3",
+    "name": "Purple Potion",
+    "category": [],
+    "useful": true
+  },
+  {
+    "count": 1,
+    "name": "Yellow Potion",
+    "category": [],
+    "useful": true
+  },
+  {
+    "count": "2",
+    "name": "Progressive Sword",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Recruit Uniform",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Engineer's Clothes",
+    "category": [],
+    "filler": true
+  },
+  {
+    "count": 1,
+    "name": "Progressive Shield",
+    "category": [],
+    "useful": true
+  },
+  {
+    "count": "2",
+    "name": "Progressive Extra Quiver",
+    "category": [],
+    "useful": true
+  },
+  {
+    "count": 1,
+    "name": "Compass of Light",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Progressive Rail Map",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Royal Engineer's Certificate",
+    "category": [],
+    "filler": true
+  },
+  {
+    "count": "20",
+    "name": "Prize Postcards",
+    "category": [],
+    "filler": true
+  },
+  {
+    "count": 1,
+    "name": "Rabbit Net",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Sword Beam Swordsman's Scroll",
+    "category": [],
+    "useful": true
+  },
+  {
+    "count": 1,
+    "name": "Great Spin Swordsman's Scroll",
+    "category": [],
+    "useful": true
+  },
+  {
+    "count": "5",
+    "name": "Progressive Club Card",
+    "category": [],
+    "useful": true
+  },
+  {
+    "count": "15",
+    "name": "Tears of Light",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": "20",
+    "name": "Letter",
+    "category": [],
+    "filler": true
+  },
+  {
+    "count": 1,
+    "name": "Stamp Book",
+    "category": [],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Song of Awakening",
+    "category": [
+      "Songs"
+    ],
+    "useful": true
+  },
+  {
+    "count": 1,
+    "name": "Song of Healing",
+    "category": [
+      "Songs"
+    ],
+    "useful": true
+  },
+  {
+    "count": 1,
+    "name": "Song of Discovery",
+    "category": [
+      "Songs"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Song of Light",
+    "category": [
+      "Songs"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Song of Birds",
+    "category": [
+      "Songs"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "S of Trading Post Force Gem 1",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "SE Forest Realm Force Gem 2",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "W Forest Realm Force Gem 3",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Forest Temple - Castle Town Force Gem 4",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Snow Realm Lake Shortcut Force Gem 5",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Central Snow Realm Force Gem 6",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "NE Snow Realm Force Gem 7",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "W Fire Realm - Sand Realm Force Gem 8",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Forest Temple - Snow Realm Force Gem 9",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Snowdrift Station Force Gem 10",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Castle Town - Bridge Worker's Force Gem 11",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "N Forest Realm - Ocean Realm Force Gem 12",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "SW Forest Realm Force Gem 13",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Slippery Station Force Gem 14",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Disorientation Station Force Gem 15",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Pirate Hideout Force Gem 16",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Ocean Temple - Sand Realm Force Gem 17",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Dark Ore Mine Force Gem 18",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Lost at Sea Station Force Gem 19",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Ends of the Earth Station Force Gem 20",
+    "category": [
+      "Force Gems"
+    ],
+    "progression": true
+  }
+]

@@ -1,0 +1,235 @@
+{
+  "Aboda Village": {
+    "starting": true,
+    "connects_to": [
+      "Forest Realm"
+    ],
+    "requires": []
+  },
+  "Castle Town": {
+    "connects_to": [
+      "Hyrule Castle"
+    ],
+    "requires": []
+  },
+  "Hyrule Castle": {
+    "connects_to": [
+      "Behind the Castle"
+    ],
+    "requires": "|Recruit Uniform|"
+  },
+  "Behind the Castle": {
+    "connects_to": [
+      "Tower of Spirits"
+    ],
+    "requires": "|Progressive Sword:1|"
+  },
+  "Tower of Spirits": {
+    "connects_to": [
+      "Tower of Spirits 1st Section",
+      "Tower of Spirits 2nd Section",
+      "Tower of Spirits 3rd Section",
+      "Tower of Spirits 4th Section",
+      "Tower of Spirits 5th Section",
+      "Tower of Spirits Peak"
+    ],
+    "requires": "|Progressive Sword:1| AND |Recruit Uniform|"
+  },
+  "Forest Realm": {
+    "connects_to": [
+      "Castle Town",
+      "Tower of Spirits",
+      "Whittleton Village",
+      "Lost Woods",
+      "Rabbitland Rescue",
+      "Trading Post",
+      "Dark Realm"
+    ],
+    "requires": []
+  },
+  "Tower of Spirits 1st Section": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Whittleton Village": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Lost Woods": {
+    "connects_to": [
+      "Forest Sanctuary"
+    ],
+    "requires": "|Tears of Light:3|"
+  },
+  "Forest Sanctuary": {
+    "connects_to": [
+      "Forest Temple"
+    ],
+    "requires": "|Spirit Flute|"
+  },
+  "Forest Temple": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Tower of Spirits 2nd Section": {
+    "connects_to": [
+      "Forest Realm"
+    ],
+    "requires": "|Tears of Light:3| AND |Whirlwind| AND |Spirit Flute|"
+  },
+  "Snow Realm": {
+    "connects_to": [
+      "Anouki Village",
+      "Snow Sanctuary",
+      "Wellspring Station",
+      "Snow Temple",
+      "Fire Realm",
+      "Snowdrift Station"
+    ],
+    "requires": "|Tears of Light:6| AND |Whirlwind| AND |Spirit Flute|"
+  },
+  "Rabbitland Rescue": {
+    "connects_to": [
+      "Snow Realm"
+    ],
+    "requires": []
+  },
+  "Anouki Village": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Snow Sanctuary": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Wellspring Station": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Snow Temple": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Tower of Spirits 3rd Section": {
+    "connects_to": [
+      "Snow Realm"
+    ],
+    "requires": "|Tears of Light:6| AND |Whirlwind| AND |Spirit Flute| AND |Boomerang|"
+  },
+  "Ocean Realm": {
+    "connects_to": [
+      "Ocean Sanctuary",
+      "Papuchia Village",
+      "Ocean Temple",
+      "Sand Realm"
+    ],
+    "requires": "|Song of Light| AND |Tears of Light:9|"
+  },
+  "Trading Post": {
+    "connects_to": [
+      "Ocean Realm"
+    ],
+    "requires": []
+  },
+  "Ocean Sanctuary": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Papuchia Village": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Ocean Temple": {
+    "connects_to": [],
+    "requires": "|Song of Discovery| AND |Song of Birds|"
+  },
+  "Tower of Spirits 4th Section": {
+    "connects_to": [
+      "Ocean Realm"
+    ],
+    "requires": "|Tears of Light:9| AND |Whirlwind| AND |Spirit Flute| AND |Boomerang| AND |Whip|"
+  },
+  "Fire Realm": {
+    "connects_to": [
+      "Goron Village",
+      "Fire Sanctuary",
+      "Fire Temple",
+      "Goron Target Range",
+      "Sand Realm"
+    ],
+    "requires": "|Tears of Light:12| AND |Whirlwind| AND |Spirit Flute| AND |Boomerang| AND |Whip|"
+  },
+  "Goron Village": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Fire Sanctuary": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Fire Temple": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Snowdrift Station": {
+    "connects_to": [],
+    "requires": "|Snowdrift Station Force Gem 10|"
+  },
+  "Slippery Station": {
+    "connects_to": [],
+    "requires": "|Slippery Station Force Gem 14|"
+  },
+  "Tower of Spirits 5th Section": {
+    "connects_to": [
+      "Fire Realm"
+    ],
+    "requires": "|Tears of Light:12| AND |Whirlwind| AND |Spirit Flute| AND |Boomerang| AND |Whip| AND |Progressive Bow:1|"
+  },
+  "Goron Target Range": {
+    "connects_to": [],
+    "requires": "|Progressive Bow:1|"
+  },
+  "Disorientation Station": {
+    "connects_to": [],
+    "requires": "|Disorientation Station Force Gem 15|"
+  },
+  "Pirate Hideout": {
+    "connects_to": [],
+    "requires": "|Pirate Hideout Force Gem 16|"
+  },
+  "Sand Sanctuary": {
+    "connects_to": [],
+    "requires": "|Tears of Light:15| AND |Whirlwind| AND |Spirit Flute| AND |Boomerang| AND |Whip| AND |Progressive Bow:1|"
+  },
+  "Sand Temple": {
+    "connects_to": [],
+    "requires": []
+  },
+  "Sand Realm": {
+    "connects_to": [
+      "Sand Sanctuary",
+      "Sand Temple"
+    ],
+    "requires": []
+  },
+  "Tower of Spirits Peak": {
+    "connects_to": [],
+    "requires": "|Tears of Light:15| AND |Whirlwind| AND |Spirit Flute| AND |Boomerang| AND |Whip| AND |Progressive Bow:2| AND |Sand Wand| AND |Progressive Sword:2|"
+  },
+  "Ends of the Earth Station": {
+    "connects_to": [],
+    "requires": "|Ends of the Earth Station Force Gem 20|"
+  },
+  "Dark Ore Mine": {
+    "connects_to": [],
+    "requires": "|Dark Ore Mine Force Gem 18|"
+  },
+  "Lost at Sea Station": {
+    "connects_to": [],
+    "requires": "|Lost at Sea Station Force Gem 19|"
+  },
+  "Dark Realm": {
+    "connects_to": [],
+    "requires": "|Tears of Light:15| AND |Whirlwind| AND |Spirit Flute| AND |Boomerang| AND |Whip| AND |Progressive Bow:2| AND |Sand Wand| AND |Progressive Sword:2| AND |Compass of Light|"
+  }
+}
