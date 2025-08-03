@@ -4,7 +4,7 @@ from Options import FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, Te
     PerGameCommonOptions
 
 
-class ProgressiveVacuum(DefaultOnToggle):
+class ProgressiveVacuum(Toggle):
     """
     Determines whether you get access to main areas progressively
 
@@ -36,6 +36,7 @@ class Missionsanity(Choice):
 #     option_who_forest = 1
 #     option_who_dump = 2
 #     option_who_lake = 3
+#     default = 0
 #     display_name = "Starting Area"
 
 # class Supadow(Toggle):

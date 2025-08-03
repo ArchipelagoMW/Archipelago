@@ -1,8 +1,5 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import Region, MultiWorld
-from .Locations import GrinchLocation, grinch_locations
-from .Options import GrinchOptions
 from BaseClasses import Region
 from .Rules import access_rules_dict, interpret_rule
 
@@ -62,8 +59,14 @@ def grinchconnect(world: "GrinchWorld", current_region_name: str, connected_regi
     # Goes from connected to current
     connected_region.connect(current_region)
     for access_rule in rule_list:
-        add_rule(current_region.entrances[current_region.entrances.index(next(loc_entrance for loc_entrance in current_region.entrances if loc_entrance.name.startswith(connected_region_name)))], access_rule)
-        add_rule(connected_region.entrances[connected_region.entrances.index(next(loc_entrance for loc_entrance in connected_region.entrances if loc_entrance.name.startswith(current_region_name)))], access_rule)
+        for region_entrance in current_region.entrances:
+            if region_entrance.connected_region.name == current_region_name and \
+                region_entrance.parent_region.name == connected_region_name:
+                add_rule(region_entrance, access_rule)
+        for region_entrance in connected_region.entrances:
+            if region_entrance.connected_region.name == connected_region_name and \
+                    region_entrance.parent_region.name == current_region_name:
+                add_rule(region_entrance, access_rule)
 
 def connect_regions(world: "GrinchWorld"):
     grinchconnect(world, "Mount Crumpit", "Whoville")
