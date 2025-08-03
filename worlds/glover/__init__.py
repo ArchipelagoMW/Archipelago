@@ -123,8 +123,15 @@ class GloverWorld(World):
         multiworld.regions.append(Region("Menu", player, multiworld))
         #Replace with a connection to the hubworld rather than Atlantis
         multiworld.get_region("Menu", player).connect(multiworld.get_region("Atl1", player))
+        end_region : Region = multiworld.get_region("Atl1: End", player)
+        goal_location : Location = Location(player, "Ending", None, end_region)
+        end_region.locations.append(goal_location)
+        goal_location.place_locked_item(self.create_event("Victory"))
 
-    def create_item(self, name) -> Item:
+    def create_event(self, event : str) -> GloverItem:
+        return GloverItem(event, ItemClassification.progression, None, self.player)
+
+    def create_item(self, name) -> GloverItem:
         item_classification = None
         item_id = -1
         #knownLevelAndWorld = [self.level_from_string(self, name), self.world_from_string(self, name)]
