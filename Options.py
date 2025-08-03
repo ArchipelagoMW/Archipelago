@@ -1118,7 +1118,7 @@ class PlandoConnection(typing.NamedTuple):
 
     entrance: str
     exit: str
-    direction: typing.Literal["entrance", "exit", "both"]  # TODO: convert Direction to StrEnum once 3.8 is dropped
+    direction: typing.Literal["entrance", "exit", "both"]  # TODO: convert Direction to StrEnum once 3.10 is dropped
     percentage: int = 100
 
 
