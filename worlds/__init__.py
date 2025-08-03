@@ -63,9 +63,7 @@ class WorldSource:
                 sys.modules[mod.__name__] = mod
                 with warnings.catch_warnings():
                     warnings.filterwarnings("ignore", message="__package__ != __spec__.parent")
-                    # Found no equivalent for < 3.10
-                    if hasattr(importer, "exec_module"):
-                        importer.exec_module(mod)
+                    importer.exec_module(mod)
             else:
                 importlib.import_module(f".{self.path}", "worlds")
             self.time_taken = time.perf_counter()-start

@@ -9,7 +9,12 @@ on:
 
 env:
   ENEMIZER_VERSION: 7.1
-  APPIMAGETOOL_VERSION: 13
+  # NOTE: since appimage/appimagetool and appimage/type2-runtime does not have tags anymore,
+  #       we check the sha256 and require manual intervention if it was updated.
+  APPIMAGETOOL_VERSION: continuous
+  APPIMAGETOOL_X86_64_HASH: '363dafac070b65cc36ca024b74db1f043c6f5cd7be8fca760e190dce0d18d684'
+  APPIMAGE_RUNTIME_VERSION: continuous
+  APPIMAGE_RUNTIME_X86_64_HASH: 'e3c4dfb70eddf42e7e5a1d28dff396d30563aa9a901970aebe6f01f3fecf9f8e'
 
 permissions:  # permissions required for attestation
   id-token: 'write'
@@ -122,10 +127,13 @@ jobs:
       - name: Install build-time dependencies
         run: |
           echo "PYTHON=python3.12" >> $GITHUB_ENV
-          wget -nv https://github.com/AppImage/AppImageKit/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
+          wget -nv https://github.com/AppImage/appimagetool/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
+          echo "$APPIMAGETOOL_X86_64_HASH appimagetool-x86_64.AppImage" | sha256sum -c
+          wget -nv https://github.com/AppImage/type2-runtime/releases/download/$APPIMAGE_RUNTIME_VERSION/runtime-x86_64
+          echo "$APPIMAGE_RUNTIME_X86_64_HASH runtime-x86_64" | sha256sum -c
           chmod a+rx appimagetool-x86_64.AppImage
           ./appimagetool-x86_64.AppImage --appimage-extract
-          echo -e '#/bin/sh\n./squashfs-root/AppRun "$@"' > appimagetool
+          echo -e '#/bin/sh\n./squashfs-root/AppRun --runtime-file runtime-x86_64 "$@"' > appimagetool
           chmod a+rx appimagetool
       - name: Download run-time dependencies
         run: |

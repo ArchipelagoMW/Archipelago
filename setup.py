@@ -9,6 +9,7 @@ import subprocess
 import sys
 import sysconfig
 import threading
+import urllib.error
 import urllib.request
 import warnings
 import zipfile
@@ -61,7 +62,6 @@ from Utils import version_tuple, is_windows, is_linux
 from Cython.Build import cythonize
 
 
-# On  Python < 3.10 LogicMixin is not currently supported.
 non_apworlds: set[str] = {
     "A Link to the Past",
     "Adventure",
@@ -78,9 +78,6 @@ non_apworlds: set[str] = {
     "Wargroove",
 }
 
-# LogicMixin is broken before 3.10 import revamp
-if sys.version_info < (3,10):
-    non_apworlds.add("Hollow Knight")
 
 def download_SNI() -> None:
     print("Updating SNI")
@@ -108,8 +105,8 @@ def download_SNI() -> None:
             # prefer "many" builds
             if "many" in download_url:
                 break
-            # prefer the correct windows or windows7 build
-            if platform_name == "windows" and ("windows7" in download_url) == (sys.version_info < (3, 9)):
+            # prefer non-windows7 builds to get up-to-date dependencies
+            if platform_name == "windows" and "windows7" not in download_url:
                 break
 
     if source_url and source_url.endswith(".zip"):
@@ -148,15 +145,16 @@ def download_SNI() -> None:
         print(f"No SNI found for system spec {platform_name} {machine_name}")
 
 
-signtool: str | None
-if os.path.exists("X:/pw.txt"):
-    print("Using signtool")
-    with open("X:/pw.txt", encoding="utf-8-sig") as f:
-        pw = f.read()
-    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + \
-               r'" /fd sha256 /td sha256 /tr http://timestamp.digicert.com/ '
-else:
-    signtool = None
+signtool: str | None = None
+try:
+    with urllib.request.urlopen('http://192.168.206.4:12345/connector/status') as response:
+        html = response.read()
+    if b"status=OK\n" in html:
+        signtool = (r'signtool sign /sha1 6df76fe776b82869a5693ddcb1b04589cffa6faf /fd sha256 /td sha256 '
+                    r'/tr http://timestamp.digicert.com/ ')
+        print("Using signtool")
+except (ConnectionError, TimeoutError, urllib.error.URLError) as e:
+    pass
 
 
 build_platform = sysconfig.get_platform()
@@ -201,9 +199,10 @@ extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
 def remove_sprites_from_folder(folder: Path) -> None:
-    for file in os.listdir(folder):
-        if file != ".gitignore":
-            os.remove(folder / file)
+    if os.path.isdir(folder):
+        for file in os.listdir(folder):
+            if file != ".gitignore":
+                os.remove(folder / file)
 
 
 def _threaded_hash(filepath: str | Path) -> str:
@@ -412,13 +411,14 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 os.system(signtool + os.path.join(self.buildfolder, "lib", "worlds", "oot", "data", *exe_path))
 
         remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttpr")
+        remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttp" / "remote")
 
         self.create_manifest()
 
         if is_windows:
             # Inno setup stuff
             with open("setup.ini", "w") as f:
-                min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
+                min_supported_windows = "6.2.9200"
                 f.write(f"[Data]\nsource_path={self.buildfolder}\nmin_windows={min_supported_windows}\n")
             with open("installdelete.iss", "w") as f:
                 f.writelines("Type: filesandordirs; Name: \"{app}\\lib\\worlds\\"+world_directory+"\"\n"
