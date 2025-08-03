@@ -233,18 +233,27 @@ class InternalLocationName:
     
 
     ##events
-    Mars_Lighthouse_Doom_Dragon_Fight = "Mars Lighthouse - Doom Dragon Fight"
+    Mars_Lighthouse_Doom_Dragon = "Mars Lighthouse - Doom Dragon"
     Alhafra_Briggs = "Alhafra Briggs"
     Alhafra_Prison_Briggs = "Alhafra Prison Briggs"
-    Gabomba_Statue = "Gabomba Statue"
-    Gaia_Rock_Serpent_Fight = "Gaia Rock - Serpent Fight"
-    Sea_of_Time_Poseidon_fight = "Sea of Time - Poseidon fight"
-    Lemurian_Ship_Aqua_Hydra_fight = "Lemurian Ship - Aqua Hydra fight"
-    Shaman_Village_Moapa_fight = "Shaman Village - Moapa fight"
-    Jupiter_Lighthouse_Aeri_Agatio_and_Karst_fight = "Jupiter_Lighthouse Aeri - Agatio and Karst fight"
-    Mars_Lighthouse_Flame_Dragons_fight = "Mars Lighthouse - Flame Dragons fight"
+    Gabomba_Statue_Event = "Gabomba Statue Event"
+    Gaia_Rock_Serpent = "Gaia Rock - Serpent"
+    Sea_of_Time_Poseidon = "Sea of Time - Poseidon"
+    Lemurian_Ship_Aqua_Hydra = "Lemurian Ship - Aqua Hydra"
+    Shaman_Village_Moapa = "Shaman Village - Moapa"
+    Jupiter_Lighthouse_Aeri_Agatio_and_Karst = "Jupiter_Lighthouse Aeri - Agatio and Karst"
+    Mars_Lighthouse_Flame_Dragons = "Mars Lighthouse - Flame Dragons"
     Lemurian_Ship_Engine_Room = "Lemurian Ship - Engine Room"
     Contigo_Wings_of_Anemos = "Contigo - Wings of Anemos"
+    Kandorean_Temple_Chestbeaters = "Kandorean Temple - Chestbeaters"
+    Yampi_Desert_King_Scorpion = "Yampi Desert - King Scorpion"
+    Champa_Avimander = "Champa - Avimander"
+    Treasure_Isle_Star_Magician = "Treasure Isle - Star Magician"
+    Islet_Cave_Sentinel = "Islet Cave - Sentinel"
+    Yampi_Desert_Cave_Valukar = "Yampi Desert Cave - Valukar"
+    Anemos_Inner_Sanctum_Dullahan = "Anemos Inner Sanctum - Dullahan"
+    Contigo_Reunion = "Contigo - Reunion"
+    Victory_Event = "Victory Event"
     
 
     ##remainder
@@ -504,18 +513,27 @@ ids_by_loc_name: Dict[str, int] = {
     InternalLocationName.Gasp: 16384138,
     InternalLocationName.Lull: 16384140,
     InternalLocationName.Gale: 16384142,
-    InternalLocationName.Mars_Lighthouse_Doom_Dragon_Fight: 5001,
+    InternalLocationName.Mars_Lighthouse_Doom_Dragon: 5001,
     InternalLocationName.Alhafra_Briggs: 5002,
     InternalLocationName.Alhafra_Prison_Briggs: 5003,
-    InternalLocationName.Gabomba_Statue: 5004,
-    InternalLocationName.Gaia_Rock_Serpent_Fight: 5005,
-    InternalLocationName.Sea_of_Time_Poseidon_fight: 5006,
-    InternalLocationName.Lemurian_Ship_Aqua_Hydra_fight: 5007,
-    InternalLocationName.Shaman_Village_Moapa_fight: 5008,
-    InternalLocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst_fight: 5009,
-    InternalLocationName.Mars_Lighthouse_Flame_Dragons_fight: 5010,
+    InternalLocationName.Gabomba_Statue_Event: 5004,
+    InternalLocationName.Gaia_Rock_Serpent: 5005,
+    InternalLocationName.Sea_of_Time_Poseidon: 5006,
+    InternalLocationName.Lemurian_Ship_Aqua_Hydra: 5007,
+    InternalLocationName.Shaman_Village_Moapa: 5008,
+    InternalLocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst: 5009,
+    InternalLocationName.Mars_Lighthouse_Flame_Dragons: 5010,
     InternalLocationName.Lemurian_Ship_Engine_Room: 5011,
     InternalLocationName.Contigo_Wings_of_Anemos: 5012,
+    InternalLocationName.Kandorean_Temple_Chestbeaters: 5013,
+    InternalLocationName.Yampi_Desert_King_Scorpion: 5014,
+    InternalLocationName.Champa_Avimander: 5015,
+    InternalLocationName.Treasure_Isle_Star_Magician: 5016,
+    InternalLocationName.Islet_Cave_Sentinel: 5017,
+    InternalLocationName.Yampi_Desert_Cave_Valukar: 5018,
+    InternalLocationName.Anemos_Inner_Sanctum_Dullahan: 5019,
+    InternalLocationName.Contigo_Reunion: 5020,
+    InternalLocationName.Victory_Event: 5021,
     InternalLocationName.Daila_Herb: 991776,
     InternalLocationName.Daila_Smoke_Bomb: 991784,
     InternalLocationName.Daila_Psy_Crystal: 991812,
@@ -911,18 +929,27 @@ ids_by_py_name: Dict[str, int] = {
     "Gasp": 16384138,
     "Lull": 16384140,
     "Gale": 16384142,
-    "Mars_Lighthouse_Doom_Dragon_Fight": 5001,
+    "Mars_Lighthouse_Doom_Dragon": 5001,
     "Alhafra_Briggs": 5002,
     "Alhafra_Prison_Briggs": 5003,
-    "Gabomba_Statue": 5004,
-    "Gaia_Rock_Serpent_Fight": 5005,
-    "Sea_of_Time_Poseidon_fight": 5006,
-    "Lemurian_Ship_Aqua_Hydra_fight": 5007,
-    "Shaman_Village_Moapa_fight": 5008,
-    "Jupiter_Lighthouse_Aeri_Agatio_and_Karst_fight": 5009,
-    "Mars_Lighthouse_Flame_Dragons_fight": 5010,
+    "Gabomba_Statue_Event": 5004,
+    "Gaia_Rock_Serpent": 5005,
+    "Sea_of_Time_Poseidon": 5006,
+    "Lemurian_Ship_Aqua_Hydra": 5007,
+    "Shaman_Village_Moapa": 5008,
+    "Jupiter_Lighthouse_Aeri_Agatio_and_Karst": 5009,
+    "Mars_Lighthouse_Flame_Dragons": 5010,
     "Lemurian_Ship_Engine_Room": 5011,
     "Contigo_Wings_of_Anemos": 5012,
+    "Kandorean_Temple_Chestbeaters": 5013,
+    "Yampi_Desert_King_Scorpion": 5014,
+    "Champa_Avimander": 5015,
+    "Treasure_Isle_Star_Magician": 5016,
+    "Islet_Cave_Sentinel": 5017,
+    "Yampi_Desert_Cave_Valukar": 5018,
+    "Anemos_Inner_Sanctum_Dullahan": 5019,
+    "Contigo_Reunion": 5020,
+    "Victory_Event": 5021,
     "Daila_Herb": 991776,
     "Daila_Smoke_Bomb": 991784,
     "Daila_Psy_Crystal": 991812,
@@ -1318,18 +1345,27 @@ loc_names_by_id: Dict[int, str] = {
     16384138: InternalLocationName.Gasp,
     16384140: InternalLocationName.Lull,
     16384142: InternalLocationName.Gale,
-    5001: InternalLocationName.Mars_Lighthouse_Doom_Dragon_Fight,
+    5001: InternalLocationName.Mars_Lighthouse_Doom_Dragon,
     5002: InternalLocationName.Alhafra_Briggs,
     5003: InternalLocationName.Alhafra_Prison_Briggs,
-    5004: InternalLocationName.Gabomba_Statue,
-    5005: InternalLocationName.Gaia_Rock_Serpent_Fight,
-    5006: InternalLocationName.Sea_of_Time_Poseidon_fight,
-    5007: InternalLocationName.Lemurian_Ship_Aqua_Hydra_fight,
-    5008: InternalLocationName.Shaman_Village_Moapa_fight,
-    5009: InternalLocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst_fight,
-    5010: InternalLocationName.Mars_Lighthouse_Flame_Dragons_fight,
+    5004: InternalLocationName.Gabomba_Statue_Event,
+    5005: InternalLocationName.Gaia_Rock_Serpent,
+    5006: InternalLocationName.Sea_of_Time_Poseidon,
+    5007: InternalLocationName.Lemurian_Ship_Aqua_Hydra,
+    5008: InternalLocationName.Shaman_Village_Moapa,
+    5009: InternalLocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst,
+    5010: InternalLocationName.Mars_Lighthouse_Flame_Dragons,
     5011: InternalLocationName.Lemurian_Ship_Engine_Room,
     5012: InternalLocationName.Contigo_Wings_of_Anemos,
+    5013: InternalLocationName.Kandorean_Temple_Chestbeaters,
+    5014: InternalLocationName.Yampi_Desert_King_Scorpion,
+    5015: InternalLocationName.Champa_Avimander,
+    5016: InternalLocationName.Treasure_Isle_Star_Magician,
+    5017: InternalLocationName.Islet_Cave_Sentinel,
+    5018: InternalLocationName.Yampi_Desert_Cave_Valukar,
+    5019: InternalLocationName.Anemos_Inner_Sanctum_Dullahan,
+    5020: InternalLocationName.Contigo_Reunion,
+    5021: InternalLocationName.Victory_Event,
     991776: InternalLocationName.Daila_Herb,
     991784: InternalLocationName.Daila_Smoke_Bomb,
     991812: InternalLocationName.Daila_Psy_Crystal,

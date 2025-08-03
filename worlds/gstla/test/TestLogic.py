@@ -3,9 +3,8 @@ from __future__ import annotations
 import json
 import os
 import typing
+from collections import defaultdict
 from typing import List, Dict, Any, TYPE_CHECKING, Set
-
-from mypy.checkexpr import defaultdict
 
 from BaseClasses import CollectionState, Item
 from . import GSTestBase
@@ -332,7 +331,7 @@ class TestTreasureLogic(GSTestBase):
             x.rando_flag: world.get_location(loc_names_by_id[x.ap_id])
             for x in all_locations if x.loc_type != LocationType.Event and x.loc_type != LocationType.Djinn
         }
-        self.test_state = world.multiworld.state.copy()
+        self.test_state = CollectionState(self.multiworld)
         self.event_items: Dict[str, ItemData] = {}
         for event in events:
             self.event_items[event.name] = event
@@ -350,7 +349,14 @@ class TestTreasureLogic(GSTestBase):
         TestTreasureLogic.skip_missing_reqs[3920] = {ItemName.Douse_Drop, ItemName.Black_Crystal, ItemName.Piers}
         # self.test_state.collect(world.create_item(ItemName.Black_Crystal), True)
 
+    def tearDown(self) -> None:
+        self.locations_by_flag.clear()
+        self.test_state = None
+        super().tearDown()
+
     def test_treasure_logic(self):
+        if True:
+            pass
         logic = LocationLogic()
         dir_name = os.path.join(SCRIPT_DIR, '..', 'data', 'location_logic')
 
@@ -561,7 +567,3 @@ class TestTreasureLogic(GSTestBase):
                                 f"Location {location} with flag {hex(flag)} cannot be reached with items {items} state {state.prog_items}")
 
 
-locations_by_flag = {
-    x.rando_flag: x
-    for x in all_locations if x
-}

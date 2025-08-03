@@ -50,6 +50,10 @@ class TestRevealNotRequiredForHidden(GSTestBase):
 
 class TestRandoFormat(TestFormatBase):
 
+    options = {
+        "coop": 1
+    }
+
     def test_file_structure(self):
         world = self.get_world()
         loc_count = 0

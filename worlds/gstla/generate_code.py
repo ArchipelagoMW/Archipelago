@@ -210,6 +210,7 @@ def generate_location_names(env: Environment, data: GameData):
             hidden_items.append(loc_name)
         else:
             remainder.append(loc_name)
+
     with open(os.path.join(SCRIPT_DIR, 'gen', 'InternalLocationNames.py'), 'w') as outfile:
         write_warning(outfile)
         outfile.write(template.render(hiddenItems=hidden_items, keyItems=key_items,

@@ -10,6 +10,7 @@ from .gen.ItemData import (ItemData, events, mimics, psyenergy_as_item_list, psy
                            TrapType, FillerType, all_items as all_gen_items, djinn_items, characters as character_items)
 from .gen.LocationData import LocationType, location_type_to_data
 from .GameData import ItemType
+
 if TYPE_CHECKING:
     from . import GSTLAWorld, GSTLALocation
 
@@ -91,6 +92,16 @@ def create_events(world: 'GSTLAWorld'):
         if event.location == LocationName.Contigo_Wings_of_Anemos and world.options.start_with_wings_of_anemos == 1:
             #world.multiworld.push_precollected(event_item)
             continue
+
+        if (event.location == LocationName.Treasure_Isle_Star_Magician or
+                event.location == LocationName.Yampi_Desert_Cave_Valukar or
+                event.location == LocationName.Islet_Cave_Sentinel):
+            if world.options.omit_locations.value == 2:
+                continue
+
+        if event.location == LocationName.Anemos_Inner_Sanctum_Dullahan:
+            if world.options.omit_locations.value > 0:
+                continue
 
         event_location = world.get_location(event.location)
         event_location.place_locked_item(event_item)
@@ -190,11 +201,15 @@ def create_items(world: 'GSTLAWorld', player: int):
         ap_item = create_item_direct(item, player)
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
+    summon_classification = None
+    if "Summon Hunt" in world.goal_conditions:
+        # summon_classification = ItemClassification.progression_deprioritized_skip_balancing
+        summon_classification = ItemClassification.progression_skip_balancing
     for item in summon_list:
         #Ignore summons that are obtained by gaining X djinn
         if item.id < 3856:
             continue
-        ap_item = create_item_direct(item, player)
+        ap_item = create_item_direct(item, player, classification=summon_classification)
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
         

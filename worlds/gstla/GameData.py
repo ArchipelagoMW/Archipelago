@@ -50,6 +50,12 @@ class LocationDatum(NamedTuple):
     map_name: str
     restrictions: int
 
+class EnemyDatum(NamedTuple):
+    name: str
+    id: int
+    ap_id: int
+    flag: int
+
 class EventDatum(NamedTuple):
     event_id: int
     flag: int
@@ -74,6 +80,7 @@ class ItemType(int, Enum):
     Event = 14
     Character = 15
     Mimic = 16
+    Summon = 17
 
 class ItemFlags(IntFlag):
     NONE = 0
@@ -120,7 +127,7 @@ class SummonDatum(NamedTuple):
     id: int
     name: str
     addr: int
-    item_type: ItemType = ItemType.Psyenergy
+    item_type: ItemType = ItemType.Summon
 
 class PsyDatum(NamedTuple):
     id: int
@@ -164,6 +171,13 @@ class ItemName(NamedTuple):
                         ItemName.setup_str_name(item.name,suffix))
         return ret
 
+    @classmethod
+    def from_enemy_data(cls, enemy: EnemyDatum, event: bool = True):
+        ret = ItemName(enemy.ap_id,
+                       ItemName.setup_py_name(enemy.name, '_'+str(enemy.id) + (" Event" if event else "")),
+                       ItemName.setup_str_name(enemy.name, ' '+str(enemy.id) + (" Event" if event else "")))
+        return ret
+
     @staticmethod
     def setup_py_name(name: str, suffix=''):
         return (name + suffix).replace(' ', '_').replace("'", '').replace('???', 'Empty')
@@ -201,6 +215,7 @@ class GameData:
         self.raw_summon_data: List[SummonDatum] = []
         self.raw_psy_data: List[PsyDatum] = []
         self.raw_character_data: List[CharacterDatum] = []
+        self.raw_enemy_data: List[EnemyDatum] = []
         self.location_names: Dict[int, LocationName] = dict()
         self.item_names: Dict[int, ItemName] = dict()
         self.events: Dict[int, EventDatum] = dict()
@@ -385,6 +400,26 @@ class GameData:
                     SummonDatum(summon['id'] + 0xF00, summon['name'], summon['addr'])
                 )
 
+    def _load_enemies(self):
+        # Function is unused, but leaving here in case we actually want to use it for some reason
+        enemy_offset = 6000
+        with open(os.path.join(SCRIPT_DIR, 'data', 'enemies.json'), 'r') as enemy_file:
+            enemy_data = json.load(enemy_file)
+            for name, list in enemy_data.items():
+                if name == "???":
+                    continue
+                for enemy in list:
+                    self.raw_enemy_data.append(
+                        # Enemy kill flags start at 0x600; the flag is off by 7 sorta; -1 for the json
+                        # starting at 1 instead of 0, and + 8 for player characters
+                        EnemyDatum(enemy['name'], enemy['id'] - 1, enemy['id']+enemy_offset, enemy['id'] - 1 + 8 + 0x600)
+                    )
+
+        for enemy in self.raw_enemy_data:
+            name = ItemName.from_enemy_data(enemy)
+            self.item_names[enemy.ap_id] = name
+            self.location_names[enemy.ap_id] = LocationName(enemy.ap_id, enemy.flag, name.py_name, name.str_name)
+
     def _recurse_tracker_data(self,
                               tracker_name_data: Dict[int, str],
                               tracker_names: Dict[str, int],
@@ -478,18 +513,31 @@ class GameData:
         # Just some offset to avoid colliding with anything else; needs to avoid any location or item ids in AP
         event_offset = 5000
         events = [
-            EventDatum(event_offset + 1, 0x778, "Mars Lighthouse - Doom Dragon Fight", "Victory" ),
+            EventDatum(event_offset + 1, 0x778, "Mars Lighthouse - Doom Dragon", "Doom Dragon Defeated" ),
             EventDatum(event_offset + 2, 0x8AB, "Alhafra Briggs", "Briggs defeated" ),
             EventDatum(event_offset + 3, 0x97F, "Alhafra Prison Briggs", "Briggs escaped" ),
-            EventDatum(event_offset + 4, 0x8FF, "Gabomba Statue", "Gabomba Statue Completed" ),
-            EventDatum(event_offset + 5, 0x9EE, "Gaia Rock - Serpent Fight", "Serpent defeated" ),
-            EventDatum(event_offset + 6, 0x8DD, "Sea of Time - Poseidon fight", "Poseidon defeated"),
-            EventDatum(event_offset + 7, 0x93F, "Lemurian Ship - Aqua Hydra fight", "Aqua Hydra defeated"),
-            EventDatum(event_offset + 8, 0x94D, "Shaman Village - Moapa fight", "Moapa defeated" ),
-            EventDatum(event_offset + 9, 0xA21, "Jupiter_Lighthouse Aeri - Agatio and Karst fight", "Jupiter Beacon Lit"),
-            EventDatum(event_offset + 10, 0xA4B, "Mars Lighthouse - Flame Dragons fight", "Flame Dragons - defeated"),
+            EventDatum(event_offset + 4, 0x8FF, "Gabomba Statue Ritual", "Gabomba Statue Completed" ),
+            EventDatum(event_offset + 5, 0x9EE, "Gaia Rock - Serpent", "Serpent defeated" ),
+            EventDatum(event_offset + 6, 0x665, "Sea of Time - Poseidon", "Poseidon defeated"),
+            EventDatum(event_offset + 7, 0x93F, "Lemurian Ship - Aqua Hydra", "Aqua Hydra defeated"),
+            EventDatum(event_offset + 8, 0x94D, "Shaman Village - Moapa", "Moapa defeated" ),
+            EventDatum(event_offset + 9, 0xA21, "Jupiter_Lighthouse Aeri - Agatio and Karst", "Jupiter Beacon Lit"),
+            EventDatum(event_offset + 10, 0xA4B, "Mars Lighthouse - Flame Dragons", "Flame Dragons - defeated"),
             EventDatum(event_offset + 11, 0x8DE, "Lemurian Ship - Engine Room", "Ship"),
             EventDatum(event_offset + 12, 0x8DF, "Contigo - Wings of Anemos", "Wings of Anemos"),
+            EventDatum(event_offset + 13, 0x64a, "Kandorean Temple - Chestbeaters", "Chestbeaters defeated"),
+            EventDatum(event_offset + 14, 0x64d, "Yampi Desert - King Scorpion", "King Scorpion defeated"),
+            EventDatum(event_offset + 15, 0x662, "Champa - Avimander", "Avimander defeated"),
+            EventDatum(event_offset + 16, 0x6a4, "Treasure Isle - Star Magician", "Star Magician defeated"),
+            EventDatum(event_offset + 17, 0x6dd, "Islet Cave - Sentinel", "Sentinel defeated"),
+            EventDatum(event_offset + 18, 0x6d1, "Yampi Desert Cave - Valukar", "Valukar defeated"),
+            EventDatum(event_offset + 19, 0x6da, "Anemos Inner Sanctum - Dullahan", "Dullahan defeated"),
+            # Flag here is really the Jupiter Lighthouse flag.  Base rando with PC shuffle seems to do something weird
+            # with the reunion flag
+            EventDatum(event_offset + 20, 0xA21, "Contigo - Reunion", "Reunion"),
+            EventDatum(event_offset + 21, 0x1, "Victory Event", "Victory"),
+            # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Karst", "Karst defeated"),
+            # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Agatio", "Agatio defeated"),
         ]
         self.events = {e.event_id: e for e in events}
         for event in self.events.values():

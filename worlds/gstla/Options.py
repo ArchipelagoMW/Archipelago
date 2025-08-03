@@ -1,4 +1,4 @@
-from Options import Choice, Toggle, Range, NamedRange, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Toggle, Range, NamedRange, PerGameCommonOptions, StartInventoryPool, OptionSet
 from dataclasses import dataclass
 
 class StartWithShip(Choice):
@@ -614,9 +614,98 @@ class AutoRun(Toggle):
     display_name = "Auto Run"
     default = 1
 
+class Coop(Choice):
+    """Enables cooping a seed by making local items the same as remote items, enabling
+     your friends to receive items you pick up.  Also helpful if trying to play a world from multiple devices.
+     You will still need to pickup djinn the other person picks up.
+     off - vanilla
+     progression - Only progression items are treated as remote items
+     prog_useful - Progression and useful items are treated as remote items
+     all - All items are treated as remote items
+     """
+    option_off = 0
+    option_progression = 1
+    option_prog_useful = 2
+    option_all = 3
+    default = 0
+
+
+class Goal(OptionSet):
+    """What conditions must be satisfied for this world to goal.  You can select however many you want, and only
+    when all the selected conditions are satisfied is the world considered goaled.
+
+    Valid options are:
+        - "Chestbeaters"
+        - "King Scorpion"
+        - "Briggs"
+        - "Aqua Hydra"
+        - "Poseidon"
+        - "Serpent"
+        - "Avimander"
+        - "Moapa"
+        - "Reunion"
+        - "Flame Dragons"
+        - "Doom Dragon"
+        - "Star Magician"
+        - "Sentinel"
+        - "Valukar"
+        - "Dullahan"
+        - "Djinn Hunt"
+        - "Summon Hunt"
+
+    IMPORTANT:
+    1. If Doom Dragon is a selected goal, make sure you have a save prior to the fight available if you don't
+    end the world on this fight.  We take no responsibility for borked experiences due to save mismanagement.
+    2. If any of the non-Dullahan superbosses are selected as a goal, then omit_locations is set to 1 (if not 0).
+    If Dullahan is a goal, then the omit_locations option is set to 0.
+    """
+    valid_keys = {
+        "Chestbeaters",
+        "King Scorpion",
+        "Briggs",
+        "Aqua Hydra",
+        "Poseidon",
+        "Serpent",
+        "Avimander",
+        "Moapa",
+        "Reunion",
+        "Flame Dragons",
+        "Doom Dragon",
+        "Star Magician",
+        "Sentinel",
+        "Valukar",
+        "Dullahan",
+        "Djinn Hunt",
+        "Summon Hunt",
+    }
+    default = {"Doom Dragon"}
+
+class RandomGoals(Range):
+    """From the goals configured in "goals", pick the configured number of the goals randomly.
+    0 disables random picking, and all the configured goals are selected."""
+    range_start = 0
+    range_end = 17
+    default = 0
+
+class DjinnHuntCount(Range):
+    """How many djinn you need to obtain in order to satisfy the Djinn Hunt Objective"""
+    range_start = 1
+    range_end = 72
+    default = 56
+
+class SummonHuntCount(Range):
+    """How many summons you need to obtain in order to satisfy the Summon Hunt Objective"""
+    range_start = 1
+    range_end = 13
+    default = 10
+
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
     #Pool and Logic settings
+    goal: Goal
+    random_goals: RandomGoals
+    djinn_hunt_count: DjinnHuntCount
+    summon_hunt_count: SummonHuntCount
     item_shuffle: ItemShuffle
     reveal_hidden_item: RevealHiddenItem
     omit_locations: OmitLocations
@@ -692,6 +781,7 @@ class GSTLAOptions(PerGameCommonOptions):
     shuffle_music: MusicShuffle
     teleport_to_dungeons_and_towns: TelportEverywhere
     auto_run: AutoRun
+    coop: Coop
     
     start_inventory_from_pool: StartInventoryPool
 

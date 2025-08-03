@@ -257,29 +257,47 @@ psyenergy_locations = [
 
 events = [
     InternalLocationData(1912, 1912, 5001, 5001, [0], 0,
-        5001, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Doom Dragon Fight Victory
+        5001, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Doom Dragon Doom Dragon Defeated
     InternalLocationData(2219, 2219, 5002, 5002, [0], 0,
         5002, True, True, LocationType.Event, LocationRestriction(7), True), # Alhafra Briggs Briggs defeated
     InternalLocationData(2431, 2431, 5003, 5003, [0], 0,
         5003, True, True, LocationType.Event, LocationRestriction(7), True), # Alhafra Prison Briggs Briggs escaped
     InternalLocationData(2303, 2303, 5004, 5004, [0], 0,
-        5004, True, True, LocationType.Event, LocationRestriction(7), True), # Gabomba Statue Gabomba Statue Completed
+        5004, True, True, LocationType.Event, LocationRestriction(7), True), # Gabomba Statue Event Gabomba Statue Completed
     InternalLocationData(2542, 2542, 5005, 5005, [0], 0,
-        5005, True, True, LocationType.Event, LocationRestriction(7), True), # Gaia Rock - Serpent Fight Serpent defeated
-    InternalLocationData(2269, 2269, 5006, 5006, [0], 0,
-        5006, True, True, LocationType.Event, LocationRestriction(7), True), # Sea of Time - Poseidon fight Poseidon defeated
+        5005, True, True, LocationType.Event, LocationRestriction(7), True), # Gaia Rock - Serpent Serpent defeated
+    InternalLocationData(1637, 1637, 5006, 5006, [0], 0,
+        5006, True, True, LocationType.Event, LocationRestriction(7), True), # Sea of Time - Poseidon Poseidon defeated
     InternalLocationData(2367, 2367, 5007, 5007, [0], 0,
-        5007, True, True, LocationType.Event, LocationRestriction(7), True), # Lemurian Ship - Aqua Hydra fight Aqua Hydra defeated
+        5007, True, True, LocationType.Event, LocationRestriction(7), True), # Lemurian Ship - Aqua Hydra Aqua Hydra defeated
     InternalLocationData(2381, 2381, 5008, 5008, [0], 0,
-        5008, True, True, LocationType.Event, LocationRestriction(7), True), # Shaman Village - Moapa fight Moapa defeated
+        5008, True, True, LocationType.Event, LocationRestriction(7), True), # Shaman Village - Moapa Moapa defeated
     InternalLocationData(2593, 2593, 5009, 5009, [0], 0,
-        5009, True, True, LocationType.Event, LocationRestriction(7), True), # Jupiter_Lighthouse Aeri - Agatio and Karst fight Jupiter Beacon Lit
+        5009, True, True, LocationType.Event, LocationRestriction(7), True), # Jupiter_Lighthouse Aeri - Agatio and Karst Jupiter Beacon Lit
     InternalLocationData(2635, 2635, 5010, 5010, [0], 0,
-        5010, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Flame Dragons fight Flame Dragons - defeated
+        5010, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Flame Dragons Flame Dragons - defeated
     InternalLocationData(2270, 2270, 5011, 5011, [0], 0,
         5011, True, True, LocationType.Event, LocationRestriction(7), True), # Lemurian Ship - Engine Room Ship
     InternalLocationData(2271, 2271, 5012, 5012, [0], 0,
         5012, True, True, LocationType.Event, LocationRestriction(7), True), # Contigo - Wings of Anemos Wings of Anemos
+    InternalLocationData(1610, 1610, 5013, 5013, [0], 0,
+        5013, True, True, LocationType.Event, LocationRestriction(7), True), # Kandorean Temple - Chestbeaters Chestbeaters defeated
+    InternalLocationData(1613, 1613, 5014, 5014, [0], 0,
+        5014, True, True, LocationType.Event, LocationRestriction(7), True), # Yampi Desert - King Scorpion King Scorpion defeated
+    InternalLocationData(1634, 1634, 5015, 5015, [0], 0,
+        5015, True, True, LocationType.Event, LocationRestriction(7), True), # Champa - Avimander Avimander defeated
+    InternalLocationData(1700, 1700, 5016, 5016, [0], 0,
+        5016, True, True, LocationType.Event, LocationRestriction(7), True), # Treasure Isle - Star Magician Star Magician defeated
+    InternalLocationData(1757, 1757, 5017, 5017, [0], 0,
+        5017, True, True, LocationType.Event, LocationRestriction(7), True), # Islet Cave - Sentinel Sentinel defeated
+    InternalLocationData(1745, 1745, 5018, 5018, [0], 0,
+        5018, True, True, LocationType.Event, LocationRestriction(7), True), # Yampi Desert Cave - Valukar Valukar defeated
+    InternalLocationData(1754, 1754, 5019, 5019, [0], 0,
+        5019, True, True, LocationType.Event, LocationRestriction(7), True), # Anemos Inner Sanctum - Dullahan Dullahan defeated
+    InternalLocationData(2593, 2593, 5020, 5020, [0], 0,
+        5020, True, True, LocationType.Event, LocationRestriction(7), True), # Contigo - Reunion Reunion
+    InternalLocationData(1, 1, 5021, 5021, [0], 0,
+        5021, True, True, LocationType.Event, LocationRestriction(7), True), # Victory Event Victory
     
 ]
 

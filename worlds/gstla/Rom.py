@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import List, Optional
 
+import settings
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 
 import Utils
@@ -13,7 +14,7 @@ CHECKSUM_GSTLA = "8efe8b2aaed97149e897570cd123ff6e"
 
 class GSTLADeltaPatch(APProcedurePatch, APTokenMixin):
     hash = CHECKSUM_GSTLA
-    game = "Golden Sun: The Lost Age"
+    game = "Golden Sun The Lost Age"
     patch_file_ending = ".apgstla"
     result_file_ending = ".gba"
     procedure = [
@@ -74,7 +75,7 @@ class GSTLADeltaPatch(APProcedurePatch, APTokenMixin):
 
 
 class GSTLAPatchExtension(APPatchExtension):
-    game = "Golden Sun: The Lost Age"
+    game = "Golden Sun The Lost Age"
 
     @staticmethod
     def apply_gstla_rando(caller: GSTLADeltaPatch, rom: bytes, patch_file: str) -> bytes:
@@ -97,7 +98,7 @@ class GSTLAPatchExtension(APPatchExtension):
         return caller.apply_ups(rom, data['patch'])
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_settings()
+    options = settings.get_settings()
     if not file_name:
         gstla_options = options.get("gstla_options", None)
         if gstla_options is None:
