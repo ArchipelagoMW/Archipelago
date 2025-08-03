@@ -1,5 +1,7 @@
 from .locations.items import *
 from .utils import formatText
+from BaseClasses import ItemClassification
+from ..Locations import LinksAwakeningLocation
 
 
 hint_text_ids = [
@@ -49,14 +51,64 @@ useless_hint = [
 ]
 
 
-def addHints(rom, rnd, hint_generator):
+def addHints(rom, rnd, hint_texts):
+    hint_texts_copy = hint_texts.copy()
     text_ids = hint_text_ids.copy()
     rnd.shuffle(text_ids)
     for text_id in text_ids:
-        hint = hint_generator()
+        hint = hint_texts_copy.pop()
         if not hint:
             hint = rnd.choice(hints).format(*rnd.choice(useless_hint))
         rom.texts[text_id] = formatText(hint)
 
     for text_id in range(0x200, 0x20C, 2):
         rom.texts[text_id] = formatText("Read this book?", ask="YES  NO")
+
+
+def generate_hint_texts(world):
+    JUNK_HINT = 0.33
+    RANDOM_HINT= 0.66
+    # USEFUL_HINT = 1.0
+    # TODO: filter events, filter unshuffled keys
+    all_items = world.multiworld.get_items()
+    our_items = [item for item in all_items
+                 if item.player == world.player
+                 and item.location
+                 and item.code is not None
+                 and item.location.show_in_spoiler]
+    our_useful_items = [item for item in our_items if ItemClassification.progression in item.classification]
+    hint_texts = []
+    def gen_hint():
+        chance = world.random.uniform(0, 1)
+        if chance < JUNK_HINT:
+            return None
+        elif chance < RANDOM_HINT:
+            location = world.random.choice(our_items).location
+        else: # USEFUL_HINT
+            location = world.random.choice(our_useful_items).location
+
+        if location.item.player == world.player:
+            name = "Your"
+        else:
+            name = f"{world.multiworld.player_name[location.item.player]}'s"
+            # filter out { and } since they cause issues with string.format later on
+            name = name.replace("{", "").replace("}", "")
+
+        if isinstance(location, LinksAwakeningLocation):
+            location_name = location.ladxr_item.metadata.name
+        else:
+            location_name = location.name
+
+        hint = f"{name} {location.item} is at {location_name}"
+        if location.player != world.player:
+            # filter out { and } since they cause issues with string.format later on
+            player_name = world.multiworld.player_name[location.player].replace("{", "").replace("}", "")
+            hint += f" in {player_name}'s world"
+
+        # Cap hint size at 85
+        # Realistically we could go bigger but let's be safe instead
+        hint = hint[:85]
+        return hint
+    for _ in hint_text_ids:
+        hint_texts.append(gen_hint())
+    return hint_texts
