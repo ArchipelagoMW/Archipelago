@@ -6,8 +6,7 @@ from .Options import GrinchOptions
 from BaseClasses import Region
 from .Rules import access_rules_dict, interpret_rule
 
-import logging
-logger = logging.getLogger()
+from ..generic.Rules import add_rule
 
 if TYPE_CHECKING:
 
@@ -54,16 +53,17 @@ def create_regions(world: "GrinchWorld"):
         world.multiworld.regions.append(Region(supadow, world.player, world.multiworld))
 
 def grinchconnect(world: "GrinchWorld", current_region_name: str, connected_region_name: str):
-    logger.info("Current Region Name: "+ current_region_name)
-    logger.info("Connected Region Name: "+ connected_region_name)
     current_region = world.get_region(current_region_name)
     connected_region = world.get_region(connected_region_name)
     required_items: list[list[str]] = access_rules_dict[connected_region.name]
-    rule = interpret_rule(required_items, world.player)
-    #Goes from current to connected
-    current_region.connect(connected_region, rule = rule)
-    #Goes from connected to current
-    connected_region.connect(current_region, rule = rule)
+    rule_list = interpret_rule(required_items, world.player)
+    # Goes from current to connected
+    current_region.connect(connected_region)
+    # Goes from connected to current
+    connected_region.connect(current_region)
+    for access_rule in rule_list:
+        add_rule(current_region.entrances[current_region.entrances.index(next(loc_entrance for loc_entrance in current_region.entrances if loc_entrance.name.startswith(connected_region_name)))], access_rule)
+        add_rule(connected_region.entrances[connected_region.entrances.index(next(loc_entrance for loc_entrance in connected_region.entrances if loc_entrance.name.startswith(current_region_name)))], access_rule)
 
 def connect_regions(world: "GrinchWorld"):
     grinchconnect(world, "Mount Crumpit", "Whoville")
@@ -71,9 +71,9 @@ def connect_regions(world: "GrinchWorld"):
     grinchconnect(world, "Mount Crumpit", "Who Dump")
     grinchconnect(world, "Mount Crumpit", "Who Lake")
     grinchconnect(world, "Mount Crumpit", "Sleigh Room")
-    # grinchconnect(world, "Mount Crumpit", "Spin N' Win Supadow")
-    # grinchconnect(world, "Mount Crumpit", "Dankamania Supadow")
-    # grinchconnect(world, "Mount Crumpit", "The Copter Race Contest Supadow")
+    grinchconnect(world, "Mount Crumpit", "Spin N' Win Supadow")
+    grinchconnect(world, "Mount Crumpit", "Dankamania Supadow")
+    grinchconnect(world, "Mount Crumpit", "The Copter Race Contest Supadow")
     grinchconnect(world, "Whoville", "Post Office")
     grinchconnect(world, "Whoville", "City Hall")
     grinchconnect(world, "Whoville", "Countdown to X-Mas Clock Tower")

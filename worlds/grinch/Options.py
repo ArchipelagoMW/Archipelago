@@ -57,6 +57,9 @@ class UnlimitedRottenEggs(Toggle):
     """Determine whether or not you run out of rotten eggs when you utilize your gadgets."""
     display_name = "Unlimited Rotten Eggs"
 
+class RingLinkOption(Toggle):
+    """Whenever this is toggled, your ammo is linked with other ringlink-compatible games that also have this enabled"""
+
 @dataclass
 class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     progressive_vacuum: ProgressiveVacuum

@@ -1,15 +1,16 @@
+from typing import Callable
+
+from BaseClasses import CollectionState
 from worlds.AutoWorld import World
-# from .Options import GrinchOptions
 from worlds.generic.Rules import add_rule
-import logging
-logger = logging.getLogger()
 
 def set_rules(world: World):
     all_locations = world.get_locations()
     for location in all_locations:
         loc_rules = rules_dict[location.name]
-        rule = interpret_rule(loc_rules, world.player)
-        add_rule(location, rule)
+        rule_list = interpret_rule(loc_rules, world.player)
+        for access_rule in rule_list:
+            add_rule(location, access_rule)
 
 
 rules_dict: dict[str,list[list[str]]] = {
@@ -445,17 +446,26 @@ access_rules_dict: dict[str,list[list[str]]] = {
     ],
     "Sleigh Room": [
         ["Exhaust Pipes", "GPS", "Tires", "Skis", "Twin-End Tuba"]
-    ]
+    ],
+    "Spin N' Win Supadow": [
+        ["Spin N' Win Door Unlock"],
+        # ["Progressive Supadow Door Unlock"]
+    ],
+    "Dankamania Supadow": [
+        ["Dankamania Door Unlock"],
+        # ["Progressive Supadow Door Unlock: 2"]
+    ],
+    "The Copter Race Contest Supadow": [
+        ["The Copter Race Contest Door Unlock"],
+        # ["Progressive Supadow Door Unlock: 3"]
+    ],
 }
 
-
 def interpret_rule(rule_set: list[list[str]], player: int):
-    old_rule = lambda state: True
     if len(rule_set) < 1:
-        return old_rule
-    else:
-        old_rule = lambda state: False
+        return True
+
+    access_list: list[Callable[[CollectionState], bool]] = []
     for item_set in rule_set:
-        logger.info("Rules to access: " + ";".join(item_set))
-        old_rule = lambda state, items=item_set: state.has_all(items, player) or old_rule
-    return old_rule
+        access_list.append(lambda state: state.has_all(item_set, player))
+    return access_list
