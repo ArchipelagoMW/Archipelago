@@ -236,10 +236,6 @@ def pair_portals(world: "TunicWorld", regions: dict[str, Region]) -> dict[Portal
             return False
         return True
 
-    # If using Universal Tracker, restore portal_map. Could be cleaner, but it does not matter for UT even a little bit
-    if world.using_ut:
-        portal_map = portal_mapping.copy()
-
     # create separate lists for dead ends and non-dead ends
     for portal in portal_map:
         dead_end_status = world.er_regions[portal.region].dead_end
@@ -265,8 +261,10 @@ def pair_portals(world: "TunicWorld", regions: dict[str, Region]) -> dict[Portal
                 else:
                     dead_ends.append(portal)
                     dead_end_direction_tracker[portal.direction] += 1
-            if portal.region == "Zig Skip Exit" and entrance_layout == EntranceLayout.option_fixed_shop:
+            if (portal.region == "Zig Skip Exit" and entrance_layout == EntranceLayout.option_fixed_shop
+                    and not decoupled):
                 # direction isn't meaningful here since zig skip cannot be in direction pairs mode
+                # don't add it in decoupled
                 two_plus.append(portal)
 
     # now we generate the shops and add them to the dead ends list
