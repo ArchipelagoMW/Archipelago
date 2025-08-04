@@ -66,8 +66,8 @@ class KH1World(World):
     starting_accessories: list[str]
     ap_costs: list[dict[str, str | int | bool]]
 
-    def __init__(self, multiworld: "MultiWorld", player: int):
-        super().__init__(multiworld, player)
+    def __init__(self, multiworld, player):
+        super(KH1World, self).__init__(multiworld, player)
         self.slot_2_levels = None
         self.keyblade_stats = None
         self.starting_accessory_locations = None
