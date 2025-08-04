@@ -2,12 +2,12 @@ import gc
 import math
 from typing import Any, Dict
 
-from BaseClasses import ItemClassification, Location, Tutorial, Item, Region, MultiWorld
+from BaseClasses import ItemClassification, Location, Tutorial, Item, Region
 import settings
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
-from .Options import GaribLogic, GloverOptions, GaribSorting
+from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall
 from .JsonReader import build_data, generate_location_name_to_id
 from .ItemPool import generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, filler_table, trap_table
 from Utils import visualize_regions
@@ -117,6 +117,7 @@ class GloverWorld(World):
             #["Otw3", 80],
             #["Otw?", 50]
         ]
+        self.starting_ball : str = "Rubber Ball"
         super(GloverWorld, self).__init__(world, player)
 
     def level_from_string(self, name : str) -> int:
@@ -150,7 +151,36 @@ class GloverWorld(World):
             #By default, they're all Checkpoint 1
             for each_item in range(len(self.spawn_checkpoint)):
                 self.spawn_checkpoint[each_item] = 1
+        #Set the starting ball
+        match self.options.starting_ball:
+            case StartingBall.option_rubber_ball:
+                self.starting_ball = "Rubber Ball"
+            case StartingBall.option_bowling_ball:
+                self.starting_ball = "Bowling Ball"
+            case StartingBall.option_ball_bearing:
+                self.starting_ball = "Ball Bearing"
+            case StartingBall.option_crystal_ball:
+                self.starting_ball = "Crystal"
+            case StartingBall.option_power_ball:
+                self.starting_ball = "Power Ball"
+            case StartingBall.option_random_no_power_ball:
+                ball_options = ["Rubber Ball",
+	            "Bowling Ball",
+	            "Ball Bearing",
+	            "Crystal",
+	            "Power Ball"]
+                self.starting_ball = self.random.choice(ball_options)
+            case StartingBall.option_random_any:
+                ball_options = ["Rubber Ball",
+	            "Bowling Ball",
+	            "Ball Bearing",
+	            "Crystal"]
+                self.starting_ball = self.random.choice(ball_options)
+        self.multiworld.push_precollected(self.create_item(self.starting_ball))
+        if not self.options.randomize_jump:
+            self.multiworld.push_precollected(self.create_item("Jump"))
 
+    
     def create_regions(self):
         multiworld = self.multiworld
         player = self.player
@@ -213,7 +243,7 @@ class GloverWorld(World):
                 best_names = [each_name]
         #If there's multiple valid options, pick one at random
         if len(best_names) > 1:
-            return best_names[self.random.randint(0, len(best_names) - 1)]
+            return best_names[self.random.choice(best_names)]
         else:
             return best_names[0]
 
@@ -251,19 +281,30 @@ class GloverWorld(World):
 
         #Abilities
         ability_items = list(ability_table.keys())
-        if not self.options.include_power_ball.value == 1:
+        if not self.options.include_power_ball:
             ability_items.remove("Power Ball")
+        if not self.options.randomize_jump:
+            ability_items.remove("Jump")
 
+        #You don't need the item pool to contain your starting item
+        ability_items.remove(self.starting_ball)
+
+        #self.multiworld
         #Apply all core items
         all_core_items = []
         all_core_items.extend(garib_items)
         all_core_items.extend(checkpoint_items)
-        all_core_items.extend(event_items)
         all_core_items.extend(ability_items)
+        all_core_items.extend(event_items)
+        #Core Items
         for each_item in all_core_items:
             for total_items in range(find_item_data(each_item).qty):
                 self.multiworld.itempool.append(self.create_item(each_item))
-        
+        #Event Items
+        #for each_item in event_items:
+        #    self.multiworld.itempool.append(self.create_event(each_item))
+
+
         #Calculate the amount of trap filler and the amount of regular filler
         total_locations : int = len(self.multiworld.get_unfilled_locations(self.player))
         total_core_items : int = len(self.multiworld.itempool)

@@ -276,6 +276,9 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
                 #Checkpoints
                 if not self.options.checkpoint_checks:
                     continue
+                else:
+                    if region_level.starting_checkpoint == int(each_location_data.name[-1]):
+                        continue
             case 6:
                 #Tips
                 if not self.options.mr_tip_checks:
@@ -319,7 +322,7 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
         if each_location_data.type == 1:
             #Garibsanity
             if self.options.garib_logic == GaribLogic.option_garibsanity:
-                for each_garib_index in len(each_location_data.ap_ids):
+                for each_garib_index in range(len(each_location_data.ap_ids)):
                     each_garib = each_location_data.ap_ids[each_garib_index]
                     location_name : str = each_location_data.name.removesuffix("s")
                     location_name += " " + str(each_garib_index + 1)
@@ -387,7 +390,7 @@ def build_data(self) -> List[RegionLevel]:
             #Create the level info attached to it
             checkpoint_for_use : int | None 
             if level_int > 0 and level_int < 4:
-                checkpoint_for_use = self.spawn_checkpoint[(world_index * 3) + level_int]
+                checkpoint_for_use = self.spawn_checkpoint[(world_index * 3) + (level_int - 1)]
             region_level : RegionLevel = create_region_level(level_name, checkpoint_for_use, checkpoint_entry_pairs, map_regions, self)
             all_levels.append(region_level)
             #Attach the locations to the regions
