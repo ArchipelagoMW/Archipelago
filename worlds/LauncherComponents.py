@@ -27,6 +27,8 @@ class Component:
     """
     display_name: str
     """Used as the GUI button label and the component name in the CLI args"""
+    description: str
+    """Optional description displayed on the GUI underneath the display name"""
     type: Type
     """
     Enum "Type" classification of component intent, for filtering in the Launcher GUI
@@ -58,8 +60,9 @@ class Component:
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
                  func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None,
-                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False):
+                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False, description: str = "") -> None:
         self.display_name = display_name
+        self.description = description
         self.script_name = script_name
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
         self.icon = icon
@@ -88,7 +91,6 @@ processes = weakref.WeakSet()
 
 
 def launch_subprocess(func: Callable, name: str | None = None, args: Tuple[str, ...] = ()) -> None:
-    global processes
     import multiprocessing
     process = multiprocessing.Process(target=func, name=name, args=args)
     process.start()
@@ -208,30 +210,27 @@ components: List[Component] = [
     Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
     # Core
     Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
-              file_identifier=SuffixIdentifier('.archipelago', '.zip')),
-    Component('Generate', 'Generate', cli=True),
-    Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld")),
-    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
+              file_identifier=SuffixIdentifier('.archipelago', '.zip'),
+              description="Host a generated multiworld on your computer."),
+    Component('Generate', 'Generate', cli=True,
+              description="Generate a multiworld with the YAMLs in the players folder."),
+    Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
+              description="Install an APWorld to play games not included with Archipelago by default."),
+    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
+              description="Connect to a multiworld using the text client."),
     Component('Links Awakening DX Client', 'LinksAwakeningClient',
               file_identifier=SuffixIdentifier('.apladx')),
     Component('LttP Adjuster', 'LttPAdjuster'),
-    # Minecraft
-    Component('Minecraft Client', 'MinecraftClient', icon='mcicon', cli=True,
-              file_identifier=SuffixIdentifier('.apmc')),
     # Ocarina of Time
     Component('OoT Client', 'OoTClient',
               file_identifier=SuffixIdentifier('.apz5')),
     Component('OoT Adjuster', 'OoTAdjuster'),
-    # FF1
-    Component('FF1 Client', 'FF1Client'),
     # TLoZ
     Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
     Component('Starcraft 2 Client', 'Starcraft2Client'),
-    # Wargroove
-    Component('Wargroove Client', 'WargrooveClient'),
     # Zillion
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
@@ -244,6 +243,5 @@ components: List[Component] = [
 # if registering an icon from within an apworld, the format "ap:module.name/path/to/file.png" can be used
 icon_paths = {
     'icon': local_path('data', 'icon.png'),
-    'mcicon': local_path('data', 'mcicon.png'),
     'discord': local_path('data', 'discord-mark-blue.png'),
 }

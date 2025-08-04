@@ -103,6 +103,10 @@ item_table: Dict[str, TunicItemData] = {
     "Forever Friend": TunicItemData(IC.useful, 1, 84, "Golden Treasures", combat_ic=IC.progression),
     "Fool Trap": TunicItemData(IC.trap, 0, 85),
     "Money x1": TunicItemData(IC.filler, 3, 86, "Money"),
+    "Money x2": TunicItemData(IC.filler, 0, 152, "Money"),
+    "Money x3": TunicItemData(IC.filler, 0, 153, "Money"),
+    "Money x4": TunicItemData(IC.filler, 0, 154, "Money"),
+    "Money x5": TunicItemData(IC.filler, 0, 155, "Money"),
     "Money x10": TunicItemData(IC.filler, 1, 87, "Money"),
     "Money x15": TunicItemData(IC.filler, 10, 88, "Money"),
     "Money x16": TunicItemData(IC.filler, 1, 89, "Money"),
@@ -249,6 +253,7 @@ extra_groups: Dict[str, Set[str]] = {
     "Ladders in Atoll": {"Ladders in South Atoll"},
     "Ladders in Ruined Atoll": {"Ladders in South Atoll"},
     "Ladders in Town": {"Ladders in Overworld Town"},  # fuzzy matching decided this was Ladders in South Atoll
+    "Ladder in Quarry": {"Ladders in Lower Quarry"},  # fuzzy matching decided this was Ladder to Quarry
 }
 
 item_name_groups.update(extra_groups)
