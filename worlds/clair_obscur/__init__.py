@@ -49,6 +49,10 @@ class ClairObscurWorld(World):
     item_name_to_id = create_item_name_to_ap_id()
     location_name_to_id = create_location_name_to_ap_id()
 
+    item_name_groups = {
+        "Weapon": {name for name, data in data.items.items() if data.type == "Weapon"}
+    }
+
     required_client_version = (0, 5, 4)
 
     settings: typing.ClassVar[ClairObscurSettings]
@@ -146,9 +150,21 @@ class ClairObscurWorld(World):
         connect_regions(self)
         create_locations(self, regions)
 
-        #Temporary completion condition
+
+        goal = 1
+        goal_loc = ""
+        match goal:
+            case 0:
+                goal_loc = "The Monolith: The Paintress"
+            case 1:
+                goal_loc = "Lumiere: The Curator"
+            case 2:
+                goal_loc = "Endless Tower: Stage 11-3"
+            case 3:
+                goal_loc = "The Abyss: Simon"
+
         self.multiworld.completion_condition[self.player] = (
-            lambda state: state.can_reach_location("Lumiere: The Curator", self.player)
+            lambda state: state.can_reach_location(goal_loc, self.player)
         )
 
 
