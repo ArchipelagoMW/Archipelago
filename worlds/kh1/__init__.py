@@ -60,11 +60,19 @@ class KH1World(World):
     fillers.update(get_items_by_category("Item"))
     fillers.update(get_items_by_category("Camping"))
     fillers.update(get_items_by_category("Stat Ups"))
-    slot_2_levels = None
-    keyblade_stats = None
-    starting_accessory_locations = None
-    starting_accessories = None
-    ap_costs = None
+    slot_2_levels: list[int]
+    keyblade_stats: list[dict[str, int]]
+    starting_accessory_locations: list[str]
+    starting_accessories: list[str]
+    ap_costs: list[dict[str, str | int | bool]]
+
+    def __init__(self, multiworld: "MultiWorld", player: int):
+        super().__init__(multiworld, player)
+        self.slot_2_levels = None
+        self.keyblade_stats = None
+        self.starting_accessory_locations = None
+        self.starting_accessories = None
+        self.ap_costs = None
 
     def create_items(self):
         self.place_predetermined_items()
