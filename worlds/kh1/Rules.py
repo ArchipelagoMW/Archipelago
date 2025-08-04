@@ -108,9 +108,9 @@ def has_defensive_tools(state: CollectionState, player: int, logic_difficulty: i
 
 def has_basic_tools(state: CollectionState, player: int) -> bool:
     return (
-            state.has_all_counts({"Dodge Roll": 1, "Progressive Cure": 1}, player)
-            and state.has_any_count({"Combo Master": 1, "Strike Raid": 1, "Sonic Blade": 1, "Counterattack": 1}, player)
-            and state.has_any_count({"Leaf Bracer": 1, "Second Chance": 1, "Guard": 1}, player)
+            state.has_any({"Dodge Roll", "Progressive Cure"}, player)
+            and state.has_any({"Combo Master", "Strike Raid", "Sonic Blade", "Counterattack"}, player)
+            and state.has_any({"Leaf Bracer", "Second Chance", "Guard"}, player)
             and has_offensive_magic(state, player, 6)
         )
 
