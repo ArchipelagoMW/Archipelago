@@ -1,9 +1,9 @@
 import json
 import pkgutil
-from BaseClasses import Entrance, Location, MultiWorld, Region
+from BaseClasses import Location, MultiWorld, Region
 from typing import List, NamedTuple
 from operator import attrgetter
-from .Options import GaribLogic
+from .Options import GaribLogic, DifficultyLogic
 
 move_name = [
     "Cartwheel",
@@ -254,12 +254,68 @@ def create_access_method(info : dict, prefix : str) -> AccessMethod:
             required_moves.append(move_name[info[each_key]])
         if each_key.startswith("ck"):
             required_moves.append(prefix + info[each_key])
-    info["regionIndex"]
+    #Combine Not Bowling and Not Crystal into Not Bowling Or Crystal
+    if "Not Bowling" in required_moves and "Not Crystal" in required_moves:
+        required_moves.remove("Not Bowling")
+        required_moves.remove("Not Crystal")
+        required_moves.append("Not Bowling or Crystal")
+    #Make sure there's a jump required for double jumps and fist slams
+    if not "Jump" in required_moves and ("Double Jump" in required_moves or "Fist Slam" in required_moves):
+        required_moves.append("Jump")
+    #Here's the access method!
     return AccessMethod(info["regionIndex"], info["ballRequirement"], info["trickDifficulty"], required_moves)
 
+def access_methods_to_rules(self, all_methods : list[AccessMethod], map_regions : List[RegionPair], region_level : RegionLevel):
+    player : int = self.player
+    multiworld : MultiWorld = self.multiworld
+    valid_methods : list[AccessMethod] = []
+    for each_method in all_methods:
+        #Is this method in difficulty for you?
+        match each_method.difficulty:
+            #Intended only
+            case 0:
+                if self.options.difficulty_logic != DifficultyLogic.option_intended:
+                    continue
+            #Easy tricks only
+            case 1:
+                if self.options.difficulty_logic == DifficultyLogic.option_hard_tricks:
+                    continue
+        valid_methods.append(each_method)
+    #If there's no valid methods, it must be open
+    if len(valid_methods) == 0:
+        return None
+    #If there ARE valid methods, we must construct a rule to pass
+    region_level.name
+    for eath_method in valid_methods:
+        #The region the method takes place in
+        required_region : Region
+        for each_pair in map_regions:
+            if each_pair.base_id == eath_method.region_index:
+                if eath_method.ball_in_region:
+                    required_region = multiworld.get_region(region_level.name + ": " + each_pair.name + " W/Ball", player)
+                else:
+                    required_region = multiworld.get_region(region_level.name + ": " + each_pair.name, player)
+        #required_region.can_reach
+        #The items the method needs
+        passing_functions : list[function] = []
+        for each_item in eath_method.required_items:
+            match each_item:
+                case "Not Crystal":
+                    passing_functions.append(method_not_crystal)
+                case "Not Bowling":
+                    passing_functions.append(method_not_bowling)
+                case "Not Bowling or Crystal":
+                    passing_functions.append(method_not_bowling_or_crystal)
+                case "Sinks":
+                    passing_functions.append(method_sinks)
+                case "Floats":
+                    passing_functions.append(method_floats)
+                case "Ball Up":
+                    passing_functions.append(method_ball_up)
+
 def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[RegionPair], location_data_list : List[LocationData], self):
-    player = self.player
-    multiworld = self.multiworld
+    player : int = self.player
+    multiworld : MultiWorld = self.multiworld
     
     for each_location_data in location_data_list:
         #Should this location be generated?
