@@ -479,7 +479,7 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
 def combine_callables(callable1: Callable[[CollectionState], bool], callable2: Callable[[CollectionState], bool]) -> Callable[[CollectionState], bool]:
     return lambda state, a=callable1, b=callable2: a(state) and b(state)
 
-def fancy_add_exits(self, region: str, exits: Union[Iterable[str], Dict[str, Optional[str]]],
+def fancy_add_exits(self, region: str, exits: List[str],
                     rules: Dict[str, Callable[[CollectionState], bool]] | None = None):
     if rules is not None:
         for region_rule in rules:
@@ -493,6 +493,11 @@ def fancy_add_exits(self, region: str, exits: Union[Iterable[str], Dict[str, Opt
             rules[region_exit] = combine_callables(rules[region_exit], rules_on_regions[region_exit])
         else:
             rules[region_exit] = rules_on_regions[region_exit]
+
+    # all regions except Menu have an exit to menu
+    if region != MENU:
+        exits.append(MENU)
+
     self.multiworld.get_region(region, self.player).add_exits(exits, rules)
 
 def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOptions) -> None:

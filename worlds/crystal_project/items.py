@@ -1864,18 +1864,6 @@ filler_items: Tuple[str, ...] = (
     # add currency?
 )
 
-trap_items: Tuple[str, ...] = (
-    "Trap - Dialog Trap",
-    "Trap - Crag Demon Trap",
-    "Trap - Clothes Fall Off Trap",
-    "Trap - Oregon Trap",
-    "Trap - Teleport Trap",
-    "Trap - Moon Jump Trap",
-    "Trap - Snail Jump Trap",
-    "Trap - Dismount Trap",
-    "Trap - Dunk Tank Trap"
-)
-
 def get_item_names_per_category() -> Dict[str, Set[str]]:
     categories: Dict[str, Set[str]] = {}
 
