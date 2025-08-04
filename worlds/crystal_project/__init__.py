@@ -41,7 +41,7 @@ class CrystalProjectWeb(WebWorld):
 
 class CrystalProjectWorld(World):
     """Crystal Project is a mix of old school job based jRPG mixed with a ton of 3D platforming and exploration."""
-    apworld_version = "0.8.0"
+    apworld_version = "0.9.0"
     game = "Crystal Project"
     options_dataclass = CrystalProjectOptions
     options: CrystalProjectOptions
