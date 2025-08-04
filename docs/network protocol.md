@@ -47,6 +47,9 @@ Packets are simple JSON lists in which any number of ordered network commands ca
 
 An object can contain the "class" key, which will tell the content data type, such as "Version" in the following example.
 
+Websocket connections should support per-message compression. Uncompressed connections are deprecated and may stop
+working in the future.
+
 Example:
 ```javascript
 [{"cmd": "RoomInfo", "version": {"major": 0, "minor": 1, "build": 3, "class": "Version"}, "tags": ["WebHost"], ... }]
@@ -228,11 +231,11 @@ Sent to clients after a client requested this message be sent to them, more info
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
 
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| type | str | The [PacketProblemType](#PacketProblemType) that was detected in the packet. |
-| original_cmd | Optional[str] | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
-| text | str | A descriptive message of the problem at hand. |
+| Name | Type        | Notes |
+| ---- |-------------| ----- |
+| type | str         | The [PacketProblemType](#PacketProblemType) that was detected in the packet. |
+| original_cmd | str \| None | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
+| text | str         | A descriptive message of the problem at hand. |
 
 ##### PacketProblemType
 `PacketProblemType` indicates the type of problem that was detected in the faulty packet, the known problem types are below but others may be added in the future.
@@ -261,6 +264,7 @@ Sent to clients in response to a [Set](#Set) package if want_reply was set to tr
 | key            | str  | The key that was updated.                                                                  |
 | value          | any  | The new value for the key.                                                                 |
 | original_value | any  | The value the key had before it was updated. Not present on "_read" prefixed special keys. |
+| slot           | int  | The slot that originally sent the Set package causing this change.                         |
 
 Additional arguments added to the [Set](#Set) package that triggered this [SetReply](#SetReply) will also be passed along.
 
@@ -272,6 +276,7 @@ These packets are sent purely from client to server. They are not accepted by cl
 * [Sync](#Sync)
 * [LocationChecks](#LocationChecks)
 * [LocationScouts](#LocationScouts)
+* [CreateHints](#CreateHints)
 * [UpdateHint](#UpdateHint)
 * [StatusUpdate](#StatusUpdate)
 * [Say](#Say)
@@ -290,7 +295,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | password       | str                               | If the game session requires a password, it should be passed here.                           |
 | game           | str                               | The name of the game the client is playing. Example: `A Link to the Past`                    |
 | name           | str                               | The player name for this client.                                                             |
-| uuid           | str                               | Unique identifier for player client.                                                         |
+| uuid           | str                               | Unique identifier for player. Cached in the user cache \Archipelago\Cache\common.json        |
 | version        | [NetworkVersion](#NetworkVersion) | An object representing the Archipelago version this client supports.                         |
 | items_handling | int                               | Flags configuring which items should be sent by the server. Read below for individual flags. |
 | tags           | list\[str\]                       | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags)        |
@@ -335,13 +340,29 @@ Sent to the server to retrieve the items that are on a specified list of locatio
 Fully remote clients without a patch file may use this to "place" items onto their in-game locations, most commonly to display their names or item classifications before/upon pickup.
 
 LocationScouts can also be used to inform the server of locations the client has seen, but not checked. This creates a hint as if the player had run `!hint_location` on a location, but without deducting hint points.
-This is useful in cases where an item appears in the game world, such as 'ledge items' in _A Link to the Past_. To do this, set the `create_as_hint` parameter to a non-zero value.
+This is useful in cases where an item appears in the game world, such as 'ledge items' in _A Link to the Past_. To do this, set the `create_as_hint` parameter to a non-zero value.  
+Note that LocationScouts with a non-zero `create_as_hint` value will _always_ create a **persistent** hint (listed in the Hints tab of concerning players' TextClients), even if the location was already found. If this is not desired behavior, you need to prevent sending LocationScouts with `create_as_hint` for already found locations in your client-side code.
 
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
 | create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
+
+### CreateHints
+
+Sent to the server to create hints for a specified list of locations.  
+Hints that already exist will be silently skipped and their status will not be updated.
+
+When creating hints for another slot's locations, the packet will fail if any of those locations don't contain items for the requesting slot.  
+When creating hints for your own slot's locations, non-existing locations will silently be skipped.  
+
+#### Arguments
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| locations | list\[int\] | The ids of the locations to create hints for. |
+| player | int | The ID of the player whose locations are being hinted for. Defaults to the requesting slot. |
+| status | [HintStatus](#HintStatus) | If included, sets the status of the hint to this status. Defaults to `HINT_UNSPECIFIED`. Cannot set `HINT_FOUND`. |
 
 ### UpdateHint
 Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
@@ -359,11 +380,11 @@ An enumeration containing the possible hint states.
 ```python
 import enum
 class HintStatus(enum.IntEnum):
-    HINT_FOUND = 0        # The location has been collected. Status cannot be changed once found.
-    HINT_UNSPECIFIED = 1  # The receiving player has not specified any status
+    HINT_UNSPECIFIED = 0  # The receiving player has not specified any status
     HINT_NO_PRIORITY = 10 # The receiving player has specified that the item is unneeded
     HINT_AVOID = 20       # The receiving player has specified that the item is detrimental
     HINT_PRIORITY = 30    # The receiving player has specified that the item is needed
+    HINT_FOUND = 40       # The location has been collected. Status cannot be changed once found.
 ```
 - Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
 - Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
@@ -466,7 +487,7 @@ The following operations can be applied to a datastorage key
 | right_shift | Applies a bitwise right-shift to the current value of the key by `value`. |
 | remove | List only: removes the first instance of `value` found in the list. |
 | pop | List or Dict: for lists it will remove the index of the `value` given. for dicts it removes the element with the specified key of `value`. |
-| update | Dict only: Updates the dictionary with the specified elements given in `value` creating new keys, or updating old ones if they previously existed. |
+| update | List or Dict: Adds the elements of `value` to the container if they weren't already present. In the case of a Dict, already present keys will have their corresponding values updated. |
 
 ### SetNotify
 Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes.
@@ -529,9 +550,9 @@ In JSON this may look like:
     {"item": 3, "location": 3, "player": 3, "flags": 0}
 ]
 ```
-`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
-`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
 `player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 
@@ -540,20 +561,21 @@ In JSON this may look like:
 | ----- | ----- |
 | 0 | Nothing special about this item |
 | 0b001 | If set, indicates the item can unlock logical advancement |
-| 0b010 | If set, indicates the item is important but not in a way that unlocks advancement |
+| 0b010 | If set, indicates the item is especially useful |
 | 0b100 | If set, indicates the item is a trap |
 
 ### JSONMessagePart
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.
 
 ```python
-from typing import TypedDict, Optional
+from typing import TypedDict
 class JSONMessagePart(TypedDict):
-    type: Optional[str]
-    text: Optional[str]
-    color: Optional[str] # only available if type is a color
-    flags: Optional[int] # only available if type is an item_id or item_name
-    player: Optional[int] # only available if type is either item or location
+    type: str | None
+    text: str | None
+    color: str | None # only available if type is a color
+    flags: int | None # only available if type is an item_id or item_name
+    player: int | None # only available if type is either item or location
+    hint_status: HintStatus | None # only available if type is hint_status
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
@@ -569,6 +591,7 @@ Possible values for `type` include:
 | location_id | Location ID, should be resolved to Location Name |
 | location_name | Location Name, not currently used over network, but supported by reference Clients. |
 | entrance_name | Entrance Name. No ID mapping exists. |
+| hint_status | The [HintStatus](#HintStatus) of the hint. Both `text` and `hint_status` are given. |
 | color | Regular text that should be colored. Only `type` that will contain `color` data. |
 
 
@@ -742,6 +765,7 @@ Tags are represented as a list of strings, the common client tags follow:
 | HintGame  | Indicates the client is a hint game, made to send hints instead of locations. Special join/leave message,¹ `game` is optional.²      |
 | Tracker   | Indicates the client is a tracker, made to track instead of sending locations. Special join/leave message,¹ `game` is optional.²     |
 | TextOnly  | Indicates the client is a basic client, made to chat instead of sending locations. Special join/leave message,¹ `game` is optional.² |
+| NoText    | Indicates the client does not want to receive text messages, improving performance if not needed.                                    |
 
 ¹: When connecting or disconnecting, the chat message shows e.g. "tracking".\
 ²: Allows `game` to be empty or null in [Connect](#connect). Game and version validation will then be skipped.
@@ -749,8 +773,8 @@ Tags are represented as a list of strings, the common client tags follow:
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:
 
-| Name   | Type  | Notes                                                                                                                                                  |
-|--------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| time   | float | Unix Time Stamp of time of death.                                                                                                                      |
-| cause  | str   | Optional. Text to explain the cause of death. When provided, or checked, this should contain the player name, ex. "Berserker was run over by a train." |
-| source | str   | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                          |
+| Name   | Type  | Notes                                                                                                                                                                            |
+|--------|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| time   | float | Unix Time Stamp of time of death.                                                                                                                                                |
+| cause  | str   | Optional. Text to explain the cause of death. When provided, or checked, if the string is non-empty, it should contain the player name, ex. "Berserker was run over by a train." |
+| source | str   | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                                                    |
