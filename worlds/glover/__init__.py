@@ -180,7 +180,6 @@ class GloverWorld(World):
         if not self.options.randomize_jump:
             self.multiworld.push_precollected(self.create_item("Jump"))
 
-    
     def create_regions(self):
         multiworld = self.multiworld
         player = self.player
