@@ -12,7 +12,7 @@ class TimeLogicMixin(BaseLogicMixin):
         self.time = TimeLogic(*args, **kwargs)
 
 
-class TimeLogic(BaseLogic[Union[TimeLogicMixin, ReceivedLogicMixin]]):
+class TimeLogic(BaseLogic):
 
     def has_lived_months(self, number: int) -> StardewRule:
         return self.logic.received(Event.month_end, number)
@@ -72,4 +72,16 @@ of source (Monster drop and fish can have foraging sources).
   if easy logic is disabled. For instance, anything that requires money could be accessible as soon as you can sell something to someone (even wood).
 
 Items are classified by their source. An item with a fishing or a crab pot source is considered a fish, an item dropping from a monster is a monster drop. An
-item with a foraging source is a forageable. Items can fit in multiple categories. 
+item with a foraging source is a forageable. Items can fit in multiple categories.
+
+## Prefer rich class to anemic list of sources
+
+For game mechanic that might need more logic/interaction than a simple game item, prefer creating a class than just listing the sources and adding generic
+requirements to them. This will simplify the implementation of more complex mechanics and increase cohesion.
+
+For instance, `Building` can be upgraded. Instead of having a simple source for the `Big Coop` being a shop source with an additional requirement being having
+the previous building, the `Building` class has knowledge of the upgrade system and know from which building it can be upgraded.
+
+Another example is `Animal`. Instead of a shopping source with a requirement of having a `Coop`, the `Chicken` knows that a building is required. This way, a
+potential source of chicken from incubating an egg would not require an additional requirement of having a coop (assuming the incubator could be obtained
+without a big coop).
