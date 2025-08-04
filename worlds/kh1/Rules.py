@@ -2,7 +2,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, add_item_rule
 from math import ceil
 from BaseClasses import ItemClassification
-from .Data import WORLD_KEY_ITEMS
+from .Data import WORLD_KEY_ITEMS, LOGIC_BEGINNER, LOGIC_NORMAL, LOGIC_PROUD, LOGIC_MINIMAL
 
 from .Locations import KH1Location, location_table
 from .Items import KH1Item, item_table, get_items_by_type, get_items_by_category
@@ -34,7 +34,7 @@ BROKEN_KEYBLADE_LOCKING_LOCATIONS = [
 ]
 
 def has_x_worlds(state: CollectionState, player: int, num_of_worlds: int, keyblades_unlock_chests: bool, logic_difficulty: int) -> bool:
-    if logic_difficulty >= "minimal":
+    if logic_difficulty >= LOGIC_MINIMAL:
         return True
     else:
         worlds_acquired = 0.0
@@ -84,8 +84,8 @@ def has_all_magic_lvx(state: CollectionState, player: int, level) -> bool:
 def has_offensive_magic(state: CollectionState, player: int, logic_difficulty: int) -> bool:
     return (
         state.has_any({"Progressive Fire", "Progressive Blizzard"}, player)
-        or (logic_difficulty > "normal" and state.has_any({"Progressive Thunder", "Progressive Gravity"}, player))
-        or (logic_difficulty > "proud" and state.has("Progressive Stop", player))
+        or (logic_difficulty > LOGIC_NORMAL and state.has_any({"Progressive Thunder", "Progressive Gravity"}, player))
+        or (logic_difficulty > LOGIC_PROUD and state.has("Progressive Stop", player))
     )
 
 def has_lucky_emblems(state: CollectionState, player: int, required_amt: int) -> bool:
@@ -98,7 +98,7 @@ def has_final_rest_door(state: CollectionState, player: int, final_rest_door_req
         return state.has("Final Door Key", player)
 
 def has_defensive_tools(state: CollectionState, player: int, logic_difficulty: int) -> bool:
-    if logic_difficulty >= "minimal":
+    if logic_difficulty >= LOGIC_MINIMAL:
         return True
     else:
         return (
@@ -123,16 +123,16 @@ def can_dumbo_skip(state: CollectionState, player: int) -> bool:
 def has_oogie_manor(state: CollectionState, player: int, logic_difficulty: int) -> bool:
     return (
             state.has("Progressive Fire", player)
-            or (logic_difficulty > "beginner" and state.has("High Jump", player, 3))
-            or (logic_difficulty > "normal" and state.has("High Jump", player, 2) or (state.has_all({"High Jump", "Progressive Glide"}, player)))
-            or (logic_difficulty > "proud" and state.has_any({"High Jump", "Progressive Glide"}, player))
+            or (logic_difficulty > LOGIC_BEGINNER and state.has("High Jump", player, 3))
+            or (logic_difficulty > LOGIC_NORMAL and state.has("High Jump", player, 2) or (state.has_all({"High Jump", "Progressive Glide"}, player)))
+            or (logic_difficulty > LOGIC_PROUD and state.has_any({"High Jump", "Progressive Glide"}, player))
         )
 
 def has_item_workshop(state: CollectionState, player: int, logic_difficulty: int) -> bool:
     return (
             state.has("Green Trinity", player)
-            or (logic_difficulty > "beginner" and state.has("High Jump", player, 3))
-            or (logic_difficulty > "normal" and state.has("High Jump", player, 2))
+            or (logic_difficulty > LOGIC_BEGINNER and state.has("High Jump", player, 3))
+            or (logic_difficulty > LOGIC_NORMAL and state.has("High Jump", player, 2))
         )
 
 def has_parasite_cage(state: CollectionState, player: int, logic_difficulty: int, worlds: bool) -> bool:
@@ -141,7 +141,7 @@ def has_parasite_cage(state: CollectionState, player: int, logic_difficulty: int
             and
             (
                 state.has("High Jump", player)
-                or (logic_difficulty > "beginner" and state.has("Progressive Glide", player))
+                or (logic_difficulty > LOGIC_BEGINNER and state.has("Progressive Glide", player))
             )
             and worlds
     )

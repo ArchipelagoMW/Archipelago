@@ -195,3 +195,8 @@ WORLD_KEY_ITEMS = {
     "Jack-In-The-Box": "Halloween Town",
     "Theon Vol. 6": "Hollow Bastion"
 }
+
+LOGIC_BEGINNER = 0
+LOGIC_NORMAL = 5
+LOGIC_PROUD = 10
+LOGIC_MINIMAL = 15
