@@ -500,11 +500,11 @@ class KH1World(World):
                     starting_weapons = []
                     other_weapons = keyblade_stats
                 for keyblade in other_weapons:
-                        keyblade["STR"] = int(self.random.randint(min_str_bonus, max_str_bonus))
-                        keyblade["CRR"] = int(self.random.randint(min_crit_rate, max_crit_rate))
-                        keyblade["CRB"] = int(self.random.randint(min_crit_str, max_crit_str))
-                        keyblade["REC"] = int(self.random.randint(min_recoil, max_recoil))
-                        keyblade["MP"]  = int(self.random.randint(min_mp_bonus, max_mp_bonus))
+                        keyblade["STR"] = self.random.randint(min_str_bonus, max_str_bonus)
+                        keyblade["CRR"] = self.random.randint(min_crit_rate, max_crit_rate)
+                        keyblade["CRB"] = self.random.randint(min_crit_str, max_crit_str)
+                        keyblade["REC"] = self.random.randint(min_recoil, max_recoil)
+                        keyblade["MP"]  = self.random.randint(min_mp_bonus, max_mp_bonus)
                 keyblade_stats = starting_weapons + other_weapons
             elif self.options.keyblade_stats == "shuffle":
                 if self.options.bad_starting_weapons:
