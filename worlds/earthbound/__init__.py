@@ -2,7 +2,7 @@ import os
 import typing
 import threading
 import pkgutil
-from typing import List, Set, Dict, TextIO
+from typing import List, Set, Dict, TextIO, Tuple
 
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from Fill import fill_restrictive
@@ -112,6 +112,7 @@ class EarthBoundWorld(World):
         self.starting_region = int
         self.dungeon_connections = {}
         self.has_generated_output: bool = False
+        self.hint_man_hints: List[Tuple] = []
 
         self.common_items = [
             "Cookie",
@@ -383,6 +384,7 @@ class EarthBoundWorld(World):
             "pizza_logic": self.options.monkey_caves_mode.value,
             "free_sancs": self.options.no_free_sanctuaries.value,
             "shopsanity": self.options.shop_randomizer.value,
+            "hint_man_hints": self.hint_man_hints
         }
 
     def modify_multidata(self, multidata: dict) -> None:
