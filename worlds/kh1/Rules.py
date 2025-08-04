@@ -34,7 +34,7 @@ BROKEN_KEYBLADE_LOCKING_LOCATIONS = [
 ]
 
 def has_x_worlds(state: CollectionState, player: int, num_of_worlds: int, keyblades_unlock_chests: bool, logic_difficulty: int) -> bool:
-    if logic_difficulty > 14:
+    if logic_difficulty >= "minimal":
         return True
     else:
         worlds_acquired = 0.0
@@ -84,8 +84,8 @@ def has_all_magic_lvx(state: CollectionState, player: int, level) -> bool:
 def has_offensive_magic(state: CollectionState, player: int, logic_difficulty: int) -> bool:
     return (
         state.has_any({"Progressive Fire", "Progressive Blizzard"}, player)
-        or (logic_difficulty > 5 and state.has_any({"Progressive Thunder", "Progressive Gravity"}, player))
-        or (logic_difficulty > 10 and state.has("Progressive Stop", player))
+        or (logic_difficulty > "normal" and state.has_any({"Progressive Thunder", "Progressive Gravity"}, player))
+        or (logic_difficulty > "proud" and state.has("Progressive Stop", player))
     )
 
 def has_lucky_emblems(state: CollectionState, player: int, required_amt: int) -> bool:
@@ -98,7 +98,7 @@ def has_final_rest_door(state: CollectionState, player: int, final_rest_door_req
         return state.has("Final Door Key", player)
 
 def has_defensive_tools(state: CollectionState, player: int, logic_difficulty: int) -> bool:
-    if logic_difficulty > 14:
+    if logic_difficulty >= "minimal":
         return True
     else:
         return (
@@ -123,16 +123,16 @@ def can_dumbo_skip(state: CollectionState, player: int) -> bool:
 def has_oogie_manor(state: CollectionState, player: int, logic_difficulty: int) -> bool:
     return (
             state.has("Progressive Fire", player)
-            or (logic_difficulty > 0 and state.has("High Jump", player, 3))
-            or (logic_difficulty > 5 and state.has("High Jump", player, 2) or (state.has_all({"High Jump", "Progressive Glide"}, player)))
-            or (logic_difficulty > 10 and state.has_any({"High Jump", "Progressive Glide"}, player))
+            or (logic_difficulty > "beginner" and state.has("High Jump", player, 3))
+            or (logic_difficulty > "normal" and state.has("High Jump", player, 2) or (state.has_all({"High Jump", "Progressive Glide"}, player)))
+            or (logic_difficulty > "proud" and state.has_any({"High Jump", "Progressive Glide"}, player))
         )
 
 def has_item_workshop(state: CollectionState, player: int, logic_difficulty: int) -> bool:
     return (
             state.has("Green Trinity", player)
-            or (logic_difficulty > 0 and state.has("High Jump", player, 3))
-            or (logic_difficulty > 5 and state.has("High Jump", player, 2))
+            or (logic_difficulty > "beginner" and state.has("High Jump", player, 3))
+            or (logic_difficulty > "normal" and state.has("High Jump", player, 2))
         )
 
 def has_parasite_cage(state: CollectionState, player: int, logic_difficulty: int, worlds: bool) -> bool:
@@ -141,7 +141,7 @@ def has_parasite_cage(state: CollectionState, player: int, logic_difficulty: int
             and
             (
                 state.has("High Jump", player)
-                or (logic_difficulty > 0 and state.has("Progressive Glide", player))
+                or (logic_difficulty > "beginner" and state.has("Progressive Glide", player))
             )
             and worlds
     )
@@ -1746,29 +1746,27 @@ def set_rules(kh1world):
             if location_table[location].type == "Prize":
                 add_item_rule(kh1world.get_location(location),
                     lambda i: (i.player != player or (i.name in get_items_by_type("Item").keys())))
-        """
-        if options.remote_items.current_key in ("off", "allow"):
-            if location_table[location].type == "Prize":
-                add_item_rule(kh1world.get_location(location),
-                    lambda i: (
-                        i.player != player
-                        or
-                        (
-                            i.name in get_items_by_type("Item").keys()
-                            and i.name not in ("Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon")
-                            and 
-                            (
-                                i.name not in ("Protect Chain", "Fire Ring", "Thunder Ring", "Blizzard Ring")
-                                or options.randomize_party_member_starting_accessories
-                            )
-                            and
-                            (
-                                item_table[i.name].max_quantity == 1
-                                or item_table[i.name].classification == ItemClassification.filler
-                            )
-                        )
-                    ))
-        """
+        # if options.remote_items.current_key in ("off", "allow"):
+        #     if location_table[location].type == "Prize":
+        #         add_item_rule(kh1world.get_location(location),
+        #             lambda i: (
+        #                 i.player != player
+        #                 or
+        #                 (
+        #                     i.name in get_items_by_type("Item").keys()
+        #                     and i.name not in ("Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon")
+        #                     and 
+        #                     (
+        #                         i.name not in ("Protect Chain", "Fire Ring", "Thunder Ring", "Blizzard Ring")
+        #                         or options.randomize_party_member_starting_accessories
+        #                     )
+        #                     and
+        #                     (
+        #                         item_table[i.name].max_quantity == 1
+        #                         or item_table[i.name].classification == ItemClassification.filler
+        #                     )
+        #                 )
+        #             ))
         if options.keyblades_unlock_chests:
             if location_table[location].type == "Chest" or location in BROKEN_KEYBLADE_LOCKING_LOCATIONS:
                 location_world = location_table[location].category
