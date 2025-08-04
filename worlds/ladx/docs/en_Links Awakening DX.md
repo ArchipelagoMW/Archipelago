@@ -40,7 +40,7 @@ That's not a question - but I'd suggest clicking the **Open Tracker** button in 
 
 This randomizer is based on (forked from) the wonderful work daid did on [LADXR](https://github.com/daid/LADXR)
 
-The autotracker code for communication with magpie tracker is directly copied from [kbranch's repo](https://github.com/kbranch/Magpie/tree/master/autotracking)
+The autotracker code for communication with magpie tracker is directly copied from [kbranch's repo](https://github.com/kbranch/Magpie)
 
 ### Graphics
 
@@ -79,7 +79,7 @@ If you have weapons that require ammunition (bombs, powder, arrows), a ghost wil
 
 The flying rooster is (optionally) available as an item.
 
-You can access the Bird Key cave item with the L2 Power Bracelet.
+If the rooster is disabled, you can access the Bird Key cave item with the L2 Power Bracelet.
 
 Boomerang cave is now a random item gift by default (available post-bombs), and boomerang is in the item pool.
 
