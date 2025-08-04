@@ -92,6 +92,7 @@ e003_c005 = f"{RegionNames.e003}->{RegionNames.c005}"
 
 e004_e003 = f"{RegionNames.e004}->{RegionNames.e003}"
 e004_e005 = f"{RegionNames.e004}->{RegionNames.e005}"
+e004_sn = f"{RegionNames.e004}->{RegionNames.e004_sn}"
 
 e005_e004 = f"{RegionNames.e005}->{RegionNames.e004}"
 e005_e006 = f"{RegionNames.e005}->{RegionNames.e006}"

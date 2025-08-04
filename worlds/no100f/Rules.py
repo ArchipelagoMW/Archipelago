@@ -28,6 +28,7 @@ upgrade_rules = [
         ConnectionNames.o001_r005: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.ProgressiveJump, player, 1),
 
         # Hedge
+        ConnectionNames.e004_sn: lambda player: lambda state: state.can_reach(RegionNames.e003, "Region", player),
         ConnectionNames.e004_e005: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
         ConnectionNames.e006_e005: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
         ConnectionNames.e009_c001: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1),
@@ -48,7 +49,6 @@ upgrade_rules = [
         ConnectionNames.c004_c003: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
         ConnectionNames.c006_c007: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
         ConnectionNames.c007_g001: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1),
-        # ConnectionNames.c005_c006: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1),
 
         # Passage
         ConnectionNames.p001_p002: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1),
@@ -66,7 +66,7 @@ upgrade_rules = [
         ConnectionNames.l015_l017: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
         ConnectionNames.l015_w020: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2),
         ConnectionNames.l014_l013: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
-        ConnectionNames.l015_l019: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2),
+        ConnectionNames.l015_l019: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2) and state.can_reach(RegionNames.l018, "Region", player),
 
         # Wrecked Ships
         ConnectionNames.w020_w021: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1),
@@ -1000,12 +1000,26 @@ snack_rules = [
             LocationNames.f001_S32: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
             LocationNames.f001_S33: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
             LocationNames.f001_S34_COUNT30: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
+            LocationNames.f001_S36: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
             LocationNames.f001_S37: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
             LocationNames.f001_S39: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
             LocationNames.f001_S40: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
             LocationNames.f001_S41: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
             LocationNames.f001_S43: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
             LocationNames.f001_S44: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
+
+            LocationNames.f003_SS18: lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
+            LocationNames.f003_SS181: lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
+            LocationNames.f003_SS183: lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
+            LocationNames.f003_SS185: lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
+            LocationNames.f003_SS189:  lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
+            LocationNames.f003_SS1891: lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
+            LocationNames.f003_S01_AIR: lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
+            LocationNames.f003_SS1893: lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
+            LocationNames.f003_S02_AIR: lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
+            LocationNames.f003_SS1895: lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
+            LocationNames.f003_SSBOX03_AIR: lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
+            LocationNames.f003_SSBOX04_AIR: lambda player: lambda state: state.can_reach(RegionNames.f001, "Region", player),
 
             LocationNames.f003_S11: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
             LocationNames.f003_S12: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
@@ -1020,7 +1034,7 @@ snack_rules = [
             LocationNames.f003_SS16222: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.PoundPower, player, 1),
             LocationNames.f003_SSBOX01: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
             LocationNames.f003_SSBOX02: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
-            LocationNames.f003_S8: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and (state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1)),
+            LocationNames.f003_S8: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1) and (state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1)),
 
             LocationNames.f004_S91: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
             LocationNames.f004_S02: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
@@ -1130,8 +1144,8 @@ snack_rules = [
 
             LocationNames.f010_SS20: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.BootsPower, player, 1),
             LocationNames.f010_SSBOX02: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.BootsPower, player, 1),
-            LocationNames.f010_UPPERDECK_SSBOX04: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
-            LocationNames.f010_UPPERDECK_SSBOX06: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.f010_UPPERDECK_SSBOX04: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
+            LocationNames.f010_UPPERDECK_SSBOX06: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
             LocationNames.f010_CRATE_SNACK01: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2) and state.has(ItemNames.BootsPower, player, 1),
             LocationNames.f010_CRATE_SSBOX07: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2) and state.has(ItemNames.BootsPower, player, 1),
             LocationNames.f010_BP_SS03: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
