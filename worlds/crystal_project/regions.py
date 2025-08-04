@@ -497,7 +497,11 @@ def fancy_add_exits(self, region: str, exits: Union[Iterable[str], Dict[str, Opt
 def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOptions) -> None:
     logic = CrystalProjectLogic(world.player, options)
 
-    fancy_add_exits(world, MENU, [SPAWNING_MEADOWS, CAPITAL_SEQUOIA, MERCURY_SHRINE, SALMON_RIVER, POKO_POKO_DESERT, GANYMEDE_SHRINE, DIONE_SHRINE, TALL_TALL_HEIGHTS, LANDS_END, JIDAMBA_TANGLE, NEPTUNE_SHRINE, THE_OLD_WORLD, THE_NEW_WORLD, MODDED_ZONE],
+    # If regionsanity is enabled it will set its own origin region, if it isn't we should connect menu to spawning meadows
+    if options.regionsanity.value == options.regionsanity.option_false:
+        fancy_add_exits(world, MENU, [SPAWNING_MEADOWS])
+
+    fancy_add_exits(world, MENU, [CAPITAL_SEQUOIA, MERCURY_SHRINE, SALMON_RIVER, POKO_POKO_DESERT, GANYMEDE_SHRINE, DIONE_SHRINE, TALL_TALL_HEIGHTS, LANDS_END, JIDAMBA_TANGLE, NEPTUNE_SHRINE, THE_OLD_WORLD, THE_NEW_WORLD, MODDED_ZONE],
                     {CAPITAL_SEQUOIA: lambda state: state.has(GAEA_STONE, world.player),
                     MERCURY_SHRINE: lambda state: state.has(MERCURY_STONE, world.player),
                     SALMON_RIVER: lambda state: state.has(POSEIDON_STONE, world.player),

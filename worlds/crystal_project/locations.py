@@ -195,9 +195,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Treasure chests
         LocationData(MERCURY_SHRINE, "Mercury Shrine Chest - Pinnacle", 155 + treasure_index_offset, lambda state: state.has(MERCURY_STONE, player) or logic.has_vertical_movement(state)), #Contract chest
 
-        
-        LocationData(MERCURY_SHRINE, MERCURY_SHRINE + " Region Completion", 6007 + regionsanity_index_offset, regionsanity=True),
-
         #Yamagawa M.A.
         #Treasure chests
         LocationData(YAMAGAWA_MA, "Yamagawa M.A. Chest - Up first cliff", 2995 + treasure_index_offset), #Money chest
@@ -1828,6 +1825,7 @@ def get_region_completions(player: int, options: CrystalProjectOptions) -> List[
     location_table: List[LocationData] = [
         LocationData(SPAWNING_MEADOWS, SPAWNING_MEADOWS + " Region Completion", 6001 + regionsanity_index_offset, regionsanity=True),
         LocationData(DELENDE, DELENDE + " Region Completion", 6002 + regionsanity_index_offset, regionsanity=True),
+        LocationData(MERCURY_SHRINE, MERCURY_SHRINE + " Region Completion", 6007 + regionsanity_index_offset, regionsanity=True),
         LocationData(SOILED_DEN, SOILED_DEN + " Region Completion", 6003 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_PALE_GROTTO, THE_PALE_GROTTO + " Region Completion", 6004 + regionsanity_index_offset, regionsanity=True),
         LocationData(SEASIDE_CLIFFS, SEASIDE_CLIFFS + " Region Completion", 6005 + regionsanity_index_offset, regionsanity=True),
