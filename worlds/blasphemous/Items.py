@@ -739,6 +739,7 @@ group_table: Dict[str, Set[str]] = {
                  "Broken Left Eye of the Traitor"}
 }
 
+# Because each item is only in a single group, a reverse lookup table from each item to its group can be created.
 group_table_reverse: Dict[str, str] = {item: group for group, items in group_table.items() for item in items}
 
 tears_list: List[str] = [
