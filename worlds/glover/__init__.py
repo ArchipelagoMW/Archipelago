@@ -199,7 +199,7 @@ class GloverWorld(World):
         item_classification = None
         item_id = -1
         #knownLevelAndWorld = [self.level_from_string(self, name), self.world_from_string(self, name)]
-        item_data = find_item_data(name)
+        item_data = find_item_data(self, name)
         item_id = item_data.glid
         match item_data.type:
             case "Progression":
@@ -287,7 +287,7 @@ class GloverWorld(World):
 
         #You don't need the item pool to contain your starting item
         ability_items.remove(self.starting_ball)
-
+        
         #self.multiworld
         #Apply all core items
         all_core_items = []
@@ -297,7 +297,7 @@ class GloverWorld(World):
         all_core_items.extend(event_items)
         #Core Items
         for each_item in all_core_items:
-            for total_items in range(find_item_data(each_item).qty):
+            for total_items in range(find_item_data(self, each_item).qty):
                 self.multiworld.itempool.append(self.create_item(each_item))
         #Event Items
         #for each_item in event_items:
@@ -306,7 +306,7 @@ class GloverWorld(World):
 
         #Calculate the amount of trap filler and the amount of regular filler
         total_locations : int = len(self.multiworld.get_unfilled_locations(self.player))
-        total_core_items : int = len(self.multiworld.itempool)
+        total_core_items : int = len(self.multiworld.itempool) + len(self.get_pre_fill_items())
         total_filler_items : int = int(total_locations - total_core_items)
         total_trap_items : int = int(self.percent_of(self.options.trap_percentage.value) * total_filler_items)
         total_filler_items -= total_trap_items

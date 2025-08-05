@@ -93,6 +93,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 3
@@ -123,6 +129,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 31,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 2": [
@@ -136,6 +148,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 31,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint Tip": [
@@ -196,6 +214,17 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 2
@@ -208,6 +237,14 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 31,
+						"mv1": 26,
+						"mv2": 27,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -258,6 +295,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Goal": [
@@ -269,7 +312,8 @@
 					"TYPE": 5
 				},
 				{
-					"ballRequirement": false,
+					"ballRequirement": true,
+					"ck0": "Gate",
 					"regionIndex": 4,
 					"trickDifficulty": 0
 				}
@@ -355,6 +399,17 @@
 					"NEEDS_BALL": false,
 					"REGION": 2,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 2,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 10,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Platform B Garibs": [

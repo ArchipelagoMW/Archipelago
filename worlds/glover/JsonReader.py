@@ -1,45 +1,11 @@
 import json
 import pkgutil
-from BaseClasses import Location, MultiWorld, Region
-from typing import List, NamedTuple
+from BaseClasses import Entrance, Location, MultiWorld, Region, CollectionState
+from typing import Any, List, NamedTuple
 from operator import attrgetter
 from .Options import GaribLogic, DifficultyLogic
-
-move_name = [
-    "Cartwheel",
-    "Crawl",
-    "Double Jump",
-    "Fist Slam",
-    "Ledge",
-    "Push",
-    "Locate Garib",
-    "Locate Ball",
-    "Dribble",
-    "Quick Swap",
-    "Slap",
-    "Throw",
-    "Lob Ball",
-    "Rubber Ball",
-    "Bowling Ball",
-    "Ball Bearing",
-    "Crystal",
-    "Beachball",
-    "Death Potion",
-    "Helicopter Potion",
-    "Frog Potion",
-    "Boomerang Ball",
-    "Speed Potion",
-    "Sticky Potion",
-    "Hercules Potion",
-    "Jump",
-    "Not Crystal",
-    "Not Bowling",
-    "Sinks",
-    "Floats",
-    "Grab",
-    "Ball Up",
-    "Power Ball"
-]
+from .Rules import move_lookup, switches_to_event_items
+from worlds.generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 
 levels_in_order = [
 #    ["AtlH", ],
@@ -104,7 +70,7 @@ class AccessMethod(NamedTuple):
     region_index : int
     ball_in_region : bool
     difficulty : int
-    required_items : list
+    required_items : list[str]
 
 class LocationData(NamedTuple):
     name : str
@@ -162,7 +128,9 @@ def create_region_pair(check_info : dict, check_name : str, level_name : str, pl
     multiworld.regions.append(no_ball_region)
     return RegionPair(region_name, base_id, ball_region_methods, no_ball_region_methods, check_info["B"][0]["REGION"], check_info["D"][0]["REGION"])
 
-def connect_region_pairs(pairs : List[RegionPair], multiworld : MultiWorld, player : int):
+def connect_region_pairs(self, pairs : List[RegionPair]):
+    multiworld : MultiWorld = self.multiworld
+    player : int = self.player
     for each_pair in pairs:
         ball_region = multiworld.get_region(each_pair.name + " W/Ball", player)
         no_ball_region = multiworld.get_region(each_pair.name, player)
@@ -179,10 +147,12 @@ def connect_region_pairs(pairs : List[RegionPair], multiworld : MultiWorld, play
                     pair_no_ball_connections[region_to_connect] = [each_method]
             for each_connection, methods in pair_ball_connections.items():
                 #Create the rules using methods
-                each_connection.connect(ball_region)
+                entrance : Entrance | Any = each_connection.connect(ball_region)
+                access_methods_to_rules(self, methods, entrance)
             for each_connection, methods in pair_no_ball_connections.items():
                 #Create the rules using methods part 2
-                each_connection.connect(no_ball_region)
+                entrance : Entrance | Any = each_connection.connect(no_ball_region)
+                access_methods_to_rules(self, methods, entrance)
         else:
             #If it's default is itself, it's the root, skip it
             if each_pair.to_ball_default_region != each_pair.base_id:
@@ -239,19 +209,20 @@ def create_region_level(level_name, checkpoint_for_use : int | None, checkpoint_
                 else:
                     connecting_region = ball_region
                 break
-        region.connect(connecting_region, checkpoint_name)
-        #Let's not think about access rules yet
-        #if default_region != region_index:
-        #    level_entrances.access_rule
+        entrance : Entrance | Any = region.connect(connecting_region, checkpoint_name)
+        #The default checkpoint's always useable
+        if default_checkpoint != checkpoint_number:
+            #Other ones need the checkpoint item
+            set_rule(entrance, lambda state : state.has(checkpoint_name, player))
 
     multiworld.regions.append(region)
     return RegionLevel(level_name, default_checkpoint, map_regions)
 
 def create_access_method(info : dict, prefix : str) -> AccessMethod:
     required_moves : list = []
-    for each_key in info:
+    for each_key, each_result in info.items():
         if each_key.startswith("mv"):
-            required_moves.append(move_name[info[each_key]])
+            required_moves.append(list(move_lookup.keys())[info[each_key]])
         if each_key.startswith("ck"):
             required_moves.append(prefix + info[each_key])
     #Combine Not Bowling and Not Crystal into Not Bowling Or Crystal
@@ -265,9 +236,7 @@ def create_access_method(info : dict, prefix : str) -> AccessMethod:
     #Here's the access method!
     return AccessMethod(info["regionIndex"], info["ballRequirement"], info["trickDifficulty"], required_moves)
 
-def access_methods_to_rules(self, all_methods : list[AccessMethod], map_regions : List[RegionPair], region_level : RegionLevel):
-    player : int = self.player
-    multiworld : MultiWorld = self.multiworld
+def access_methods_to_rules(self, all_methods : list[AccessMethod], spot : Location | Entrance):
     valid_methods : list[AccessMethod] = []
     for each_method in all_methods:
         #Is this method in difficulty for you?
@@ -280,38 +249,27 @@ def access_methods_to_rules(self, all_methods : list[AccessMethod], map_regions 
             case 1:
                 if self.options.difficulty_logic == DifficultyLogic.option_hard_tricks:
                     continue
+        if len(each_method.required_items) == 0:
+            continue
         valid_methods.append(each_method)
     #If there's no valid methods, it must be open
     if len(valid_methods) == 0:
-        return None
-    #If there ARE valid methods, we must construct a rule to pass
-    region_level.name
-    for eath_method in valid_methods:
-        #The region the method takes place in
-        required_region : Region
-        for each_pair in map_regions:
-            if each_pair.base_id == eath_method.region_index:
-                if eath_method.ball_in_region:
-                    required_region = multiworld.get_region(region_level.name + ": " + each_pair.name + " W/Ball", player)
-                else:
-                    required_region = multiworld.get_region(region_level.name + ": " + each_pair.name, player)
-        #required_region.can_reach
-        #The items the method needs
-        passing_functions : list[function] = []
-        for each_item in eath_method.required_items:
-            match each_item:
-                case "Not Crystal":
-                    passing_functions.append(method_not_crystal)
-                case "Not Bowling":
-                    passing_functions.append(method_not_bowling)
-                case "Not Bowling or Crystal":
-                    passing_functions.append(method_not_bowling_or_crystal)
-                case "Sinks":
-                    passing_functions.append(method_sinks)
-                case "Floats":
-                    passing_functions.append(method_floats)
-                case "Ball Up":
-                    passing_functions.append(method_ball_up)
+        return
+    #Otherwise, go over each valid method and assign
+    for each_method in valid_methods:
+        add_rule(spot, lambda state : item_requirements_to_rule(self, state, each_method.required_items), "or")
+
+def item_requirements_to_rule(self, state : CollectionState, item_requirements : list[str]) -> bool:
+    for each_item in item_requirements:
+        #Abilities
+        if each_item in move_lookup:
+            if not move_lookup[each_item](self, state):
+                return False
+        #Level Event
+        else:
+            if not state.has(each_item, self.player):
+                return False
+    return True
 
 def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[RegionPair], location_data_list : List[LocationData], self):
     player : int = self.player
@@ -319,22 +277,23 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
     
     for each_location_data in location_data_list:
         #Should this location be generated?
+        ap_ids : list[int] = each_location_data.ap_ids
         match each_location_data.type:
             case 0:
                 #Switches
                 if not self.options.switches_checks:
-                    continue
+                    ap_ids.clear()
             case 1:
                 #Garibs
                 if self.options.garib_logic == GaribLogic.option_level_garibs:
                     continue
             case 3:
-                #Checkpoints
-                if not self.options.checkpoint_checks:
+                #Checkpoints don't give their starting location
+                if region_level.starting_checkpoint == int(each_location_data.name[-1]):
                     continue
-                else:
-                    if region_level.starting_checkpoint == int(each_location_data.name[-1]):
-                        continue
+                #As Events
+                if not self.options.checkpoint_checks:
+                    ap_ids.clear()
             case 6:
                 #Tips
                 if not self.options.mr_tip_checks:
@@ -342,8 +301,11 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
             #case 9:
                 #Misc
                 
+        
+        rules_applied : bool = False
+
         #Is this a mono location?
-        location_regions : List[str] = []
+        location_regions : dict[str, list[AccessMethod]] = {}
         for each_method in each_location_data.methods:
             region_index = each_method.region_index
             region_name : str
@@ -353,18 +315,22 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
             if each_method.ball_in_region:
                 region_name = region_name + " W/Ball"
             if not region_name in location_regions:
-                location_regions.append(region_name)
+                location_regions[region_name] = []
+            location_regions[region_name].append(each_method)
         #Depending on if it is or not
         region_for_use : Region
         if len(location_regions) > 1:
             #Multi location construction creates a shared region to reach this location
             region_for_use = Region(each_location_data.name + " Region", player, multiworld, region_level.name)
-            for each_region_name in location_regions:
-                #Make sure to apply the correct rules here later
-                multiworld.get_region(each_region_name, player).connect(region_for_use, each_location_data.name + " from " + each_region_name)
+            #Apply the rules here
+            rules_applied = True
+            for each_region_name, each_region_methods in location_regions.items():
+                #Only use the methods relevant to this entrance from the target region
+                entrance : Entrance | Any = multiworld.get_region(each_region_name, player).connect(region_for_use, each_location_data.name + " from " + each_region_name)
+                access_methods_to_rules(self, each_region_methods, entrance)
         elif len(location_regions) == 1:
             #Single location construction assigns to the specific element in the RegionPair
-            region_for_use = multiworld.get_region(location_regions[0], player)
+            region_for_use = multiworld.get_region(list(location_regions.keys())[0], player)
         else:
             #If there are no methods, use the fallback
             region_name : str
@@ -374,6 +340,7 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
             if each_location_data.default_needs_ball:
                 region_name = region_name + " W/Ball"
             region_for_use = multiworld.get_region(region_name, player)
+        
         #Construct location data
         if each_location_data.type == 1:
             #Garibsanity
@@ -384,11 +351,15 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
                     location_name += " " + str(each_garib_index + 1)
                     location : Location = Location(player, location_name, each_garib, region_for_use)
                     region_for_use.locations.append(location)
+                    if not rules_applied:
+                        access_methods_to_rules(self, each_location_data.methods, location)
             #Garib Groups
             else:
                 #Regular Locations
                 location : Location = Location(player, each_location_data.name, each_location_data.ap_ids[0] + 10000, region_for_use)
                 region_for_use.locations.append(location)
+                if not rules_applied:
+                        access_methods_to_rules(self, each_location_data.methods, location)
         else:
             #Regular Locations
             address : int | None = None
@@ -396,6 +367,21 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
                 address = each_location_data.ap_ids[0]
             location : Location = Location(player, each_location_data.name, address, region_for_use)
             region_for_use.locations.append(location)
+            if not rules_applied:
+                        access_methods_to_rules(self, each_location_data.methods, location)
+
+            if address == None:
+                match each_location_data.type:
+                    #Switches with no paired level event store their level event 
+                    #items as event items rather than AP items.
+                    case 0:
+                        new_event_item : str = switches_to_event_items[each_location_data.name]
+                        location.place_locked_item(self.create_event(new_event_item))
+                    #Checkpoints act likewise
+                    case 3:
+                        new_event_item : str = each_location_data.name.replace(":", "")
+                        location.place_locked_item(self.create_event(new_event_item))
+                    
 
 def get_region_from_method(multiworld : MultiWorld, player : int, region_pairs : List[RegionPair], method : AccessMethod) -> Region:
     for each_pair in region_pairs:
@@ -442,7 +428,7 @@ def build_data(self) -> List[RegionLevel]:
                             region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
             #Sort the in-level regions
             map_regions = sorted(map_regions, key=attrgetter('base_id'))
-            connect_region_pairs(map_regions, self.multiworld, self.player)
+            connect_region_pairs(self, map_regions)
             #Create the level info attached to it
             checkpoint_for_use : int | None 
             if level_int > 0 and level_int < 4:
