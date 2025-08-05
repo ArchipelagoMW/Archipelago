@@ -51,7 +51,7 @@ class Items:
         "Bundle: Encased Plutonium Cell": ItemData(G.Trap, 1338037, C.trap),
         "Bundle: Encased Uranium Cell": ItemData(G.Trap, 1338038, C.trap),
         "Bundle: Fabric": ItemData(G.Parts, 1338039),
-        "Bundle: FICSIT Coupon": ItemData(G.Parts, 1338040),
+        "Bundle: FICSIT Coupon": ItemData(G.Parts, 1338040, count=0),
         "Bundle: AI Expansion Server": ItemData(G.Parts, 1338041, count=0), #1.0
         "Bundle: Fused Modular Frame": ItemData(G.Parts, 1338042),
         "Bundle: Hard Drive": ItemData(G.Parts, 1338043, count=0),
