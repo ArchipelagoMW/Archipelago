@@ -631,7 +631,7 @@ class LMContext(CommonContext):
 
             # If the user is subscribed to send items and the trap is a valid trap and the trap was not already
             # received (to prevent sending the same traps over and over to other TrapLinkers if Luigi died)
-            if "TrapLink" in self.tags and item.item in trap_id_list and last_recv_idx < non_save_recv_idx:
+            if "TrapLink" in self.tags and item.item in trap_id_list and last_recv_idx <= non_save_recv_idx:
                 await self.send_trap_link(lm_item_name)
 
             # Filter for only items where we have not received yet. If same slot, only receive locations from pre-set
@@ -640,6 +640,10 @@ class LMContext(CommonContext):
             (item.location in SELF_LOCATIONS_TO_RECV or item.item in RECV_OWN_GAME_ITEMS or item.location < 0)):
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+
+                if last_recv_idx > non_save_recv_idx:
+                    # Lastly, update the non-saveable received index with the current last received index.
+                    dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
 
             # Sends remote currency items from the server to the client.
@@ -649,8 +653,12 @@ class LMContext(CommonContext):
 
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+
+                if last_recv_idx > non_save_recv_idx:
+                    # Lastly, update the non-saveable received index with the current last received index.
+                    dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
-            elif lm_item.type == "Trap" and last_recv_idx < non_save_recv_idx:
+            elif lm_item.type == "Trap" and last_recv_idx <= non_save_recv_idx:
                 # Skip this trap item to avoid Luigi dying in an infinite trap loop.
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
@@ -713,11 +721,11 @@ class LMContext(CommonContext):
             # Update the last received index to ensure we don't receive the same item over and over.
             last_recv_idx += 1
             dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
-            await wait_for_next_loop(0.5)
 
-        # Lastly, update the non-saveable received index with the current last received index.
-        dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
-        return
+            if last_recv_idx > non_save_recv_idx:
+                # Lastly, update the non-saveable received index with the current last received index.
+                dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
+            await wait_for_next_loop(0.5)
 
     async def lm_update_non_savable_ram(self):
         if not (self.check_ingame() and self.check_alive()):
