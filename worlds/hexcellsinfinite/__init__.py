@@ -18,7 +18,7 @@ from typing import Dict
 
 from .Locations import get_location_names, get_total_locations
 from .Items import create_item, create_itempool, item_table
-from .Options import APSkeletonOptions
+from .Options import HexcellsInfiniteOptions
 from .Regions import create_regions
 from .Types import ChapterType, chapter_type_to_name
 
@@ -32,31 +32,30 @@ class HexcellsInfiniteWebWorld(WebWorld):
     # You shouldnt have to change much here except the name at the bottom!
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up (the game you are randomizing) for Archipelago. "
+        "A guide to setting up Hexcells Infinite for Archipelago. "
         "This guide covers single-player, multiworld, and related software.",
         "English",
         "setup_en.md",
         "setup/en",
-        ["Nep (but you would put your name!)"]
+        ["ExpandedReality"]
     )]
 
 # This class is the real meat and potatoes
 # Same as the first class its normally named whatever you named your folder with World at the end
-class APSkeletonWorld(World):
+class HexcellsInfiniteWorld(World):
     """
-    This is where you describe your game. Pretend you are marketing the game and that people have no clue what it is.
-    Or make it silly. Whatever you wish I have no control over you.
+    Hexcells Infinite is a deterministic minesweeper puzzle game. If you like Minesweeper, but hate guessing, this is the game for you.
     """
 
     # You want to put the full name of the game here. If you shortened the name for the folder and class names, dont do that here
-    game = "APSkeleton"
+    game = "Hexcells Infinite"
     # The item_table will be setup in  your Items.py. This line gets all the items you put into item_table and puts it in a way that AP can understand it
     item_name_to_id = {name: data.ap_code for name, data in item_table.items()}
     # get_location_names() will come from your Locations.py
     location_name_to_id = get_location_names()
     # And these 2 are the name of your Options.py class. 
-    options_dataclass = APSkeletonOptions
-    options = APSkeletonOptions
+    options_dataclass = HexcellsInfiniteOptions
+    options = HexcellsInfiniteOptions
     # The name of the class above
     web = HexcellsInfiniteWebWorld()
     # print("🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀")
