@@ -49,6 +49,14 @@ class ElevatorTier(NamedRange):
     Put these Shipments to Space Elevator packages in logic.
     Milestones past these packages be empty.
     If your goal selection contains *Space Elevator Tier* then the goal will be to complete these shipments.
+
+    Estimated in-game completion times:
+    
+    - **one package (tiers 1-2)**: ~3 Hours
+    - **two packages (tiers 1-4)**: ~8 Hours
+    - **three packages (tiers 1-6)**: ~2 Days
+    - **four packages (tiers 1-8)**: ~1 Week
+    - **five packages (tiers 1-9)**: ~1.5 Week
     """
     display_name = "Space Elevator shipments in logic"
     default = 2
