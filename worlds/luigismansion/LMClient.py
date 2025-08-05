@@ -1,6 +1,5 @@
 import asyncio, time, traceback
 from typing import Any
-from urllib.parse import to_bytes
 
 import NetUtils, Utils
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
