@@ -544,13 +544,13 @@ def get_rules(world):
                     has_rang(world, state, Ty1Rang.SECOND_RANG),
             "Cass' Crest - Extra Life 2":
                 lambda state:
-                    has_rang(world, state, Ty1Rang.SECOND_RANG),
+                    has_rang(world, state, Ty1Rang.SECOND_RANG) or world.options.logic_difficulty == 2,
             "Cass' Crest - Extra Life 4":
                 lambda state:
                     can_go_water(world, state),
             "Cass' Crest - Extra Life 5":
                 lambda state:
-                    has_rang(world, state, Ty1Rang.SECOND_RANG),
+                    has_rang(world, state, Ty1Rang.SECOND_RANG) or world.options.logic_difficulty == 2,
             "Beat Bull":
                 lambda state:
                     state.can_reach_location("Frog Talisman", world.player),
@@ -641,7 +641,8 @@ def get_rules(world):
                     has_level(world, state, 9),
             "D2 -> E4":
                 lambda state:
-                    has_rang(world, state, Ty1Rang.SECOND_RANG) and state.has("Beat Shadow", world.player)
+                    (has_rang(world, state, Ty1Rang.SECOND_RANG) or (world.options.logic_difficulty != 2))
+                    and state.has("Beat Shadow", world.player)
                     and (not world.options.req_bosses
                          or (state.has("Beat Bull", world.player)
                              and state.has("Beat Crikey", world.player)
