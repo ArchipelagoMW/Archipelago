@@ -68,7 +68,7 @@ FURN_ID_OFFSET = 0xBC
 LAST_RECV_ITEM_ADDR = 0x803CDEBA
 
 # These addresses are related to displaying text in game.
-RECV_DEFAULT_TIMER_IN_HEX = "5A" # 3 Seconds
+RECV_DEFAULT_TIMER_IN_HEX = "96" # 5 Seconds
 RECV_ITEM_DISPLAY_TIMER_ADDR = 0x804DDA6C
 RECV_ITEM_DISPLAY_VIZ_ADDR = 0x804DDA70
 RECV_ITEM_NAME_ADDR = 0x804DE528
@@ -170,6 +170,7 @@ class LMContext(CommonContext):
         # Handle various Dolphin connection related tasks
         self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
         self.dolphin_status = CONNECTION_INITIAL_STATUS
+        self.item_display_queue: list[NetUtils.NetworkItem] = []
 
         # Manages energy link operations and state.
         self.wallet = Wallet()
@@ -429,6 +430,8 @@ class LMContext(CommonContext):
             return False
 
         # These are the only valid maps we want Luigi to have checks with or do health detection with.
+        # Map 2 is main mansion, 3 is the training room, 6 is the gallery, 9 is final boss (King Boo)
+        # 11 is the boolossus arena, and 13 is bogmire's arena.
         if curr_map_id in (2, 3, 6, 9, 10, 11, 13):
             if not time.time() > (self.last_not_ingame + (CHECKS_WAIT*LONGER_MODIFIER)):
                 return False
@@ -604,6 +607,101 @@ class LMContext(CommonContext):
             }])
         return
 
+    async def give_lm_items(self):
+        if not (self.check_ingame() and self.check_alive()):
+            return
+
+        last_recv_idx = dme.read_word(LAST_RECV_ITEM_ADDR)
+        if len(self.items_received) == last_recv_idx:
+            return
+
+        recv_items = self.items_received[last_recv_idx:]
+        for item in recv_items:
+            lm_item_name = self.item_names.lookup_in_game(item.item)
+            lm_item = ALL_ITEMS_TABLE[lm_item_name]
+
+            # Add the item to the display items queue to display when it can
+            self.item_display_queue.append(item)
+
+            if "TrapLink" in self.tags and item.item in trap_id_list:
+                await self.send_trap_link(lm_item_name)
+
+            # Filter for only items where we have not received yet. If same slot, only receive locations from pre-set
+            # list of locations, otherwise accept other slots. Additionally accept only items from a pre-approved list.
+            if item.item in RECV_ITEMS_IGNORE or (item.player == self.slot and not
+            (item.location in SELF_LOCATIONS_TO_RECV or item.item in RECV_OWN_GAME_ITEMS or item.location < 0)):
+                last_recv_idx += 1
+                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+                continue
+
+            # Sends remote currency items from the server to the client.
+            if lm_item.type == ItemType.MONEY:
+                currency_receiver = CurrencyReceiver(self.wallet)
+                currency_receiver.send_to_wallet(lm_item)
+
+                last_recv_idx += 1
+                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+                continue
+
+            for addr_to_update in lm_item.update_ram_addr:
+                byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
+                ram_offset = None
+                if addr_to_update.pointer_offset:
+                    ram_offset = [addr_to_update.pointer_offset]
+
+                if item.item in trap_id_list:
+                    # If we have no vacuum, do not trigger a No Vac trap
+                    if item.item == 8147 and len(
+                            [netItem for netItem in self.items_received if netItem.item == 8064]) < 1:
+                        last_recv_idx += 1
+                        dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+                        continue
+                    else:
+                        curr_val = addr_to_update.item_count
+                elif item.item == 8140:  # Progressive Flower, 00EB, 00EC, 00ED
+                    flower_count: int = len([netItem for netItem in self.items_received if netItem.item == 8140])
+                    curr_val = min(flower_count + 234, 237)
+                    ram_offset = None
+                elif item.item == 8064:  # If it's a Progressive Vacuum
+                    if addr_to_update.ram_addr == 0x804dda54:  # If we're checking against our vacuum-on address
+                        curr_val = addr_to_update.item_count
+                    else:  # If we're checking against our vacuum speed address
+                        curr_val: int = min(5, (
+                                    len([netItem for netItem in self.items_received if netItem.item == 8064]) - 1))
+                        ram_offset = None
+                elif not addr_to_update.item_count is None:
+                    if not ram_offset is None:
+                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
+                                                                                     [addr_to_update.pointer_offset]),
+                                                                 byte_size))
+                        if item.item in HEALTH_RELATED_ITEMS:
+                            curr_val = min(curr_val + addr_to_update.item_count, self.luigimaxhp)
+                        else:
+                            curr_val += addr_to_update.item_count
+                    else:
+                        curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
+                        curr_val += addr_to_update.item_count
+                else:
+                    if not addr_to_update.pointer_offset is None:
+                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
+                                                                                     [addr_to_update.pointer_offset]),
+                                                                 byte_size))
+                        curr_val = (curr_val | (1 << addr_to_update.bit_position))
+                    else:
+                        curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
+                        if not addr_to_update.bit_position is None:
+                            curr_val = (curr_val | (1 << addr_to_update.bit_position))
+                        else:
+                            curr_val += 1
+
+                await write_bytes_and_validate(addr_to_update.ram_addr, ram_offset,
+                                               curr_val.to_bytes(byte_size, 'big'))
+
+            # Update the last received index to ensure we don't receive the same item over and over.
+            last_recv_idx += 1
+            dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+            await wait_for_next_loop(0.5)
+
     async def lm_update_non_savable_ram(self):
         if not (self.check_ingame() and self.check_alive()):
             return
@@ -719,7 +817,7 @@ async def dolphin_sync_task(ctx: LMContext):
 
             # Lastly check any locations and update the non-saveable ram stuff
             await ctx.lm_check_locations()
-
+            await ctx.give_lm_items()
             await ctx.lm_update_non_savable_ram()
             await asyncio.sleep(0.1)
         except Exception:
@@ -734,22 +832,19 @@ async def dolphin_sync_task(ctx: LMContext):
 async def wait_for_next_loop(time_to_wait: float):
     await asyncio.sleep(time_to_wait)
 
-async def give_player_items(ctx: LMContext):
+async def display_received_items(ctx: LMContext):
     while not ctx.exit_event.is_set():
         if not (dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and
             ctx.check_ingame() and ctx.check_alive()):
             await wait_for_next_loop(5)
             continue
 
-        last_recv_idx = dme.read_word(LAST_RECV_ITEM_ADDR)
-        if len(ctx.items_received) == last_recv_idx:
-            await wait_for_next_loop(0.5)
+        if not ctx.item_display_queue:
+            await wait_for_next_loop(5)
             continue
 
-        recv_items = ctx.items_received[last_recv_idx:]
-        for item in recv_items:
+        for item in ctx.item_display_queue:
             lm_item_name = ctx.item_names.lookup_in_game(item.item)
-            lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
             item_name_display = lm_item_name[:RECV_MAX_STRING_LENGTH].replace("&", "")
             short_item_name = sbf.string_to_bytes_with_limit(item_name_display, RECV_LINE_STRING_LENGTH)
@@ -777,80 +872,8 @@ async def give_player_items(ctx: LMContext):
             while dme.read_byte(RECV_ITEM_DISPLAY_VIZ_ADDR) > 0:
                 await wait_for_next_loop(0.1)
 
-            if "TrapLink" in ctx.tags and item.item in trap_id_list:
-                await ctx.send_trap_link(lm_item_name)
-
-            # Filter for only items where we have not received yet. If same slot, only receive locations from pre-set
-            # list of locations, otherwise accept other slots. Additionally accept only items from a pre-approved list.
-            if item.item in RECV_ITEMS_IGNORE or (item.player == ctx.slot and not
-            (item.location in SELF_LOCATIONS_TO_RECV or item.item in RECV_OWN_GAME_ITEMS or item.location < 0)):
-                last_recv_idx += 1
-                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
-                continue
-            
-            # Sends remote currency items from the server to the client.
-            if lm_item.type == ItemType.MONEY:
-                currency_receiver = CurrencyReceiver(ctx.wallet)
-                currency_receiver.send_to_wallet(lm_item)
-
-                last_recv_idx += 1
-                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
-                continue
-
-            for addr_to_update in lm_item.update_ram_addr:
-                byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
-                ram_offset = None
-                if addr_to_update.pointer_offset:
-                    ram_offset = [addr_to_update.pointer_offset]
-
-                if item.item in trap_id_list:
-                    # If we have no vacuum, do not trigger a No Vac trap
-                    if item.item == 8147 and len([netItem for netItem in ctx.items_received if netItem.item == 8064]) < 1:
-                        last_recv_idx += 1
-                        dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
-                        continue
-                    else:
-                        curr_val = addr_to_update.item_count
-                elif item.item == 8140:  # Progressive Flower, 00EB, 00EC, 00ED
-                    flower_count: int = len([netItem for netItem in ctx.items_received if netItem.item == 8140])
-                    curr_val = min(flower_count + 234, 237)
-                    ram_offset = None
-                elif item.item == 8064: # If it's a Progressive Vacuum
-                    if addr_to_update.ram_addr == 0x804dda54: # If we're checking against our vacuum-on address
-                        curr_val = addr_to_update.item_count
-                    else:    # If we're checking against our vacuum speed address
-                        curr_val: int = min(5, (len([netItem for netItem in ctx.items_received if netItem.item == 8064])-1))
-                        ram_offset = None
-                elif not addr_to_update.item_count is None:
-                    if not ram_offset is None:
-                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
-                            [addr_to_update.pointer_offset]), byte_size))
-                        if item.item in HEALTH_RELATED_ITEMS:
-                            curr_val = min(curr_val + addr_to_update.item_count, ctx.luigimaxhp)
-                        else:
-                            curr_val += addr_to_update.item_count
-                    else:
-                        curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
-                        curr_val += addr_to_update.item_count
-                else:
-                    if not addr_to_update.pointer_offset is None:
-                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
-                            [addr_to_update.pointer_offset]), byte_size))
-                        curr_val = (curr_val | (1 << addr_to_update.bit_position))
-                    else:
-                        curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
-                        if not addr_to_update.bit_position is None:
-                            curr_val = (curr_val | (1 << addr_to_update.bit_position))
-                        else:
-                            curr_val += 1
-
-                await write_bytes_and_validate(addr_to_update.ram_addr, ram_offset,
-                    curr_val.to_bytes(byte_size, 'big'))
-
-            # Update the last received index to ensure we don't receive the same item over and over.
-            last_recv_idx += 1
-            dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
-        await wait_for_next_loop(0.5)
+        # Reset the list so next time we enter this function we don't display anything
+        ctx.item_display_queue = []
 
 async def energy_link_check(ctx: LMContext):
     while not ctx.exit_event.is_set():
@@ -891,7 +914,7 @@ def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
         await asyncio.sleep(1)
 
         ctx.dolphin_sync_task = asyncio.create_task(dolphin_sync_task(ctx), name="DolphinSync")
-        ctx.give_item_task = asyncio.create_task(give_player_items(ctx), name="LuigiGiveItems")
+        ctx.give_item_task = asyncio.create_task(display_received_items(ctx), name="LuigiDisplayItems")
 
         await ctx.exit_event.wait()
         await ctx.shutdown()
