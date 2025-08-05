@@ -5,16 +5,16 @@ import logging
 from .Types import LocData
 
 if TYPE_CHECKING:
-    from . import HexcellsInfiniteWorld
+    from . import APSkeletonWorld
 
 # This is technique in programming to make things more readable for booleans
 # A boolean is true or false
-def did_include_extra_locations(world: "HexcellsInfiniteWorld") -> bool:
+def did_include_extra_locations(world: "APSkeletonWorld") -> bool:
     return bool(world.options.ExtraLocations)
 
 # This is used by ap and in Items.py
 # Theres a multitude of reasons to need to grab how many locations there are
-def get_total_locations(world: "HexcellsInfiniteWorld") -> int:
+def get_total_locations(world: "APSkeletonWorld") -> int:
     # This is the total that we'll keep updating as we count how many locations there are
     total = 0
     for name in location_table:
@@ -40,7 +40,7 @@ def get_location_names() -> Dict[str, int]:
 # The check to make sure the location is valid
 # I know it looks like the same as when we counted it but thats because this is an example
 # Things get complicated fast so having a back up is nice
-def is_valid_location(world: "HexcellsInfiniteWorld", name) -> bool:
+def is_valid_location(world: "APSkeletonWorld", name) -> bool:
     if not did_include_extra_locations(world) and name in extra_locations:
         return False
     
@@ -53,7 +53,7 @@ def is_valid_location(world: "HexcellsInfiniteWorld", name) -> bool:
 # Heres where you do the next fun part of listing out all those locations
 # Its a lot
 # My advice, zone out for half an hour listening to music and hope you wake up to a completed list
-hexcells_infinite_locations = {
+ap_skeleton_locations = {
     # You can take a peak at Types.py for more information but,
     # LocData is code, region in this instance
     # Regions will be explained more in Regions.py
@@ -84,7 +84,7 @@ event_locations = {
 # Its not here because this is an example and im not funny enough to think of more locations
 # But important to note
 location_table = {
-    **hexcells_infinite_locations,
+    **ap_skeleton_locations,
     **extra_locations,
     **event_locations
 }

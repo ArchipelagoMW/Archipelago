@@ -7,7 +7,7 @@ from Options import Choice, OptionGroup, Toggle, Range
 # This is that
 def create_option_groups() -> List[OptionGroup]:
     option_group_list: List[OptionGroup] = []
-    for name, options in hexcells_infinite_option_groups.items():
+    for name, options in ap_skeleton_option_groups.items():
         option_group_list.append(OptionGroup(name=name, options=options))
 
     return option_group_list
@@ -63,7 +63,7 @@ class SpeedChangeTrapWeight(Range):
     default = 25
 
 @dataclass
-class HexcellsInfiniteOptions(PerGameCommonOptions):
+class APSkeletonOptions(PerGameCommonOptions):
     StartingChapter:            StartingChapter
     ExtraLocations:             ExtraLocations
     TrapChance:                 TrapChance
@@ -72,7 +72,7 @@ class HexcellsInfiniteOptions(PerGameCommonOptions):
 
 # This is where you organize your options
 # Its entirely up to you how you want to organize it
-hexcells_infinite_option_groups: Dict[str, List[Any]] = {
+ap_skeleton_option_groups: Dict[str, List[Any]] = {
     "General Options": [StartingChapter, ExtraLocations],
     "Trap Options": [TrapChance, ForcefemTrapWeight, SpeedChangeTrapWeight]
 }
