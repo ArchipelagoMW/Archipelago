@@ -25,14 +25,9 @@ from .Types import ChapterType, chapter_type_to_name
 # This is where you setup the page on the site!
 # Typically is the name of your game with web
 # Whatever you named the folder you are holding all of this in
-<<<<<<< HEAD
 class HexcellsInfiniteWebWorld(WebWorld):
-=======
-class APSkeletonWeb(WebWorld):
->>>>>>> parent of 5b4276cf (Basic replacement of APSkeleton with Hexcells)
-class HexcellsInfiniteWeb(WebWorld):
     # Theres a few different themes so have fun with it
-    theme = "Party"
+    theme = "partyTime"
     
     # You shouldnt have to change much here except the name at the bottom!
     tutorials = [Tutorial(
@@ -63,12 +58,7 @@ class APSkeletonWorld(World):
     options_dataclass = APSkeletonOptions
     options = APSkeletonOptions
     # The name of the class above
-<<<<<<< HEAD
     web = HexcellsInfiniteWebWorld()
-=======
-    web = APSkeletonWeb()
->>>>>>> parent of 5b4276cf (Basic replacement of APSkeleton with Hexcells)
-    web = HexcellsInfiniteWeb()
     # print("🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀")
 
     # There are other built in variables for AP. You can look at other worlds to see your options
