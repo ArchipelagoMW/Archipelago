@@ -7,7 +7,6 @@ from typing import NamedTuple, Optional
 from BaseClasses import Location, Item, ItemClassification
 
 # These 2 make it so that the generic Location and Item types are more specific for your game
-<<<<<<< HEAD
 class HexcellsInfiniteLocation(Location):
     game = "HexcellsInfinite"
 
