@@ -105,6 +105,7 @@ class MM3World(World):
     def create_regions(self) -> None:
         menu = MM3Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
+        location: MM3Location
         for region in mm3_regions:
             stage = MM3Region(region, self.player, self.multiworld)
             required_items = mm3_regions[region][0]

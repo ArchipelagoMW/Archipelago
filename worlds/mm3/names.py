@@ -79,7 +79,7 @@ wily_stage_3 = "Wily Stage 3 - Completed"
 wily_stage_4 = "Wily Stage 4 - Completed"
 wily_stage_5 = "Wily Stage 5 - Completed"
 
-# TODO: Consumable Locations
+# Consumable Locations
 needle_man_c1 = "Needle Man Stage - Weapon Energy 1"
 needle_man_c2 = "Needle Man Stage - E-Tank"
 magnet_man_c1 = "Magnet Man Stage - Health Energy 1"

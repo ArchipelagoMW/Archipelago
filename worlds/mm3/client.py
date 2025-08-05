@@ -306,7 +306,7 @@ def cmd_request(self: "BizHawkClientCommandProcessor", amount: str, target: str)
     from worlds._bizhawk.context import BizHawkClientContext
     """Request a refill from EnergyLink."""
     if self.ctx.game != "Mega Man 3":
-        logger.warning("This command can only be used when playing Mega Man 2.")
+        logger.warning("This command can only be used when playing Mega Man 3.")
         return
     if not self.ctx.server or not self.ctx.slot:
         logger.warning("You must be connected to a server to use this command.")
