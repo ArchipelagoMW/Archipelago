@@ -63,9 +63,12 @@ FURNITURE_ADDR_COUNT = 760
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
 
-# This is a short of length 0x02 which contains the last received index of the item that was given to Luigi
-# This index is updated every time a new item is received.
+# This is a word of length 0x04 which contains the last received index of the item that was given to Luigi
+# This index is updated every time a new item is received. This is located within the save data
 LAST_RECV_ITEM_ADDR = 0x803CDEBA
+# This is a duplicate of the above, except not located in the save data. If a user forgets to save since they last
+# recevied an item, this will prevent a trap death loop.
+NON_SAVE_LAST_RECV_ITEM_ADDR = 0x803D5CC0
 
 # These addresses are related to displaying text in game.
 RECV_DEFAULT_TIMER_IN_HEX = "96" # 5 Seconds
@@ -613,8 +616,11 @@ class LMContext(CommonContext):
 
         last_recv_idx = dme.read_word(LAST_RECV_ITEM_ADDR)
         if len(self.items_received) == last_recv_idx:
+            # Update the non-savable location in memory with the last received in case the player reloaded their game.
+            dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
             return
 
+        non_save_recv_idx: int = dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
         recv_items = self.items_received[last_recv_idx:]
         for item in recv_items:
             lm_item_name = self.item_names.lookup_in_game(item.item)
@@ -623,7 +629,9 @@ class LMContext(CommonContext):
             # Add the item to the display items queue to display when it can
             self.item_display_queue.append(item)
 
-            if "TrapLink" in self.tags and item.item in trap_id_list:
+            # If the user is subscribed to send items and the trap is a valid trap and the trap was not already
+            # received (to prevent sending the same traps over and over to other TrapLinkers if Luigi died)
+            if "TrapLink" in self.tags and item.item in trap_id_list and last_recv_idx < non_save_recv_idx:
                 await self.send_trap_link(lm_item_name)
 
             # Filter for only items where we have not received yet. If same slot, only receive locations from pre-set
@@ -635,10 +643,15 @@ class LMContext(CommonContext):
                 continue
 
             # Sends remote currency items from the server to the client.
-            if lm_item.type == ItemType.MONEY:
+            if lm_item.type == "Money":
                 currency_receiver = CurrencyReceiver(self.wallet)
                 currency_receiver.send_to_wallet(lm_item)
 
+                last_recv_idx += 1
+                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+                continue
+            elif lm_item.type == "Trap" and last_recv_idx < non_save_recv_idx:
+                # Skip this trap item to avoid Luigi dying in an infinite trap loop.
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
@@ -701,6 +714,10 @@ class LMContext(CommonContext):
             last_recv_idx += 1
             dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
             await wait_for_next_loop(0.5)
+
+        # Lastly, update the non-saveable received index with the current last received index.
+        dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
+        return
 
     async def lm_update_non_savable_ram(self):
         if not (self.check_ingame() and self.check_alive()):
