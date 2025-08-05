@@ -144,7 +144,7 @@ class LMCommandProcessor(EnergyLinkCommandProcessor):
     def _cmd_traplink(self):
         """Toggle traplink from client. Overrides default setting."""
         if isinstance(self.ctx, LMContext):
-            Utils.async_start(self.ctx.update_trap_link(not "TrapLink" in self.ctx.tags), name="Update Traplink")
+            Utils.async_start(self.ctx.update_link_tags(not "TrapLink" in self.ctx.tags, "TrapLink"), name="Update Traplink")
 
     def _cmd_jakeasked(self):
         """Provide debug information from Dolphin's RAM addresses while playing Luigi's Mansion,
@@ -211,16 +211,6 @@ class LMContext(CommonContext):
         """
         self.auth = None
         await super().disconnect(allow_autoreconnect)
-
-    async def update_trap_link(self, trap_link: bool):
-        """Helper function to set Trap Link connection tag on/off and update the connection if already connected."""
-        old_tags = self.tags.copy()
-        if trap_link:
-            self.tags.add("TrapLink")
-        else:
-            self.tags -= {"TrapLink"}
-        if old_tags != self.tags and self.server and not self.server.socket.closed:
-            await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
     
     async def update_link_tags(self, link_enabled: bool, link_name:str):
         """Helper function to set link connection tags on/off and update the connection if already connected."""
@@ -282,7 +272,7 @@ class LMContext(CommonContext):
                 self.spawn = str(args["slot_data"]["spawn_region"])
                 self.boolossus_difficulty = int(args["slot_data"]["boolossus_difficulty"])
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])), name="Update Deathlink")
-                Utils.async_start(self.update_trap_link(bool(args["slot_data"]["trap_link"])), name="Update Traplink")
+                Utils.async_start(self.update_link_tags(bool(args["slot_data"]["trap_link"]), "TrapLink"), name="Update Traplink")
                 Utils.async_start(self.update_link_tags(bool(args["slot_data"][EnergyLinkConstants.INTERNAL_NAME]),
                     EnergyLinkConstants.FRIENDLY_NAME), name=f"Update {EnergyLinkConstants.FRIENDLY_NAME}")
 
@@ -574,8 +564,6 @@ class LMContext(CommonContext):
             if current_map_id not in lm_loc_data.map_id:
                 continue
 
-
-
             for addr_to_update in lm_loc_data.update_ram_addr:
                 # If in main mansion map
                 # TODO this will now calculate every iteration, which will slow down location checks are more are added.
@@ -731,6 +719,7 @@ async def dolphin_sync_task(ctx: LMContext):
 
             # Lastly check any locations and update the non-saveable ram stuff
             await ctx.lm_check_locations()
+
             await ctx.lm_update_non_savable_ram()
             await asyncio.sleep(0.1)
         except Exception:
