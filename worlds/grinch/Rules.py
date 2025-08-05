@@ -63,10 +63,10 @@ rules_dict: dict[str,list[list[str]]] = {
     "Enter the Mayor's Villa": [
         []
     ],
-    "Smashing Snowmen": [
+    "Shuffling The Mail": [
         []
     ],
-    "Shuffling The Mail": [
+    "Smashing Snowmen": [
         []
     ],
     "Painting The Mayor's Posters": [

@@ -28,31 +28,31 @@ class Missionsanity(Choice):
     option_both = 3
     default = 1
 
-# class StartingArea(Choice):
-#     """
-#     Here, you can select which area you'll start the game with.
-#     Whichever one you pick is the region you'll have access to at the start of the Multiworld.
-#     """
-#     option_whoville = 0
-#     option_who_forest = 1
-#     option_who_dump = 2
-#     option_who_lake = 3
-#     default = 0
-#     display_name = "Starting Area"
+class StartingArea(Choice):
+    """
+    Here, you can select which area you'll start the game with.
+    Whichever one you pick is the region you'll have access to at the start of the Multiworld.
+    """
+    option_whoville = 0
+    option_who_forest = 1
+    option_who_dump = 2
+    option_who_lake = 3
+    default = 0
+    display_name = "Starting Area"
 
-# class Supadow(Toggle):
-#     """Enables completing minigames through the Supadows in Mount Crumpit as checks. (9 locations) [NOT IMPLEMENTED]"""
-#     display_name = "Supadow Minigame Locations"#
-
-
-# class Gifts(Toggle):
-#     """Missions that require you to squash every present in a level. (4 locations) [NOT IMPLEMENTED]"""
-#     display_name = "Gift Collection Locations"
+class Supadow(Toggle):
+    """Enables completing minigames through the Supadows in Mount Crumpit as checks. (9 locations) [NOT IMPLEMENTED]"""
+    display_name = "Supadow Minigame Locations"#
 
 
-# class Movesanity(Toggle):
-#     """Randomizes Grinch's moveset along with randomizing max into the pool. [NOT IMPLEMENTED]"""
-#     display_name = "Movesanity"
+class Gifts(Toggle):
+    """Missions that require you to squash every present in a level. (4 locations) [NOT IMPLEMENTED]"""
+    display_name = "Gift Collection Locations"
+
+
+class Movesanity(Toggle):
+    """Randomizes Grinch's moveset along with randomizing max into the pool. [NOT IMPLEMENTED]"""
+    display_name = "Movesanity"
 
 
 class UnlimitedRottenEggs(Toggle):
@@ -72,3 +72,7 @@ class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     unlimited_rotten_eggs: UnlimitedRottenEggs
     ring_link: RingLinkOption
     trap_link: TrapLinkOption
+    minigamesanity: Supadow
+    giftsanity: Gifts
+    movesanity: Movesanity
+    starting_area: StartingArea
