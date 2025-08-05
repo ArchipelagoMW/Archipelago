@@ -64,6 +64,7 @@ Output Logs/
 /data/user.kv
 /datapackage
 /custom_worlds
+/data/sprites
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
