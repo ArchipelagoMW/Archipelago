@@ -510,7 +510,7 @@ access_rules_dict: dict[str,list[list[str]]] = {
         ["Marine Mobile"]
     ],
     "Sleigh Room": [
-        ["Exhaust Pipes", "GPS", "Tires", "Skis", "Twin-End Tuba"]
+        ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
     ],
     "Spin N' Win Supadow": [
         ["Spin N' Win Door Unlock"],

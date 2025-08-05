@@ -118,7 +118,7 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
 SLEIGH_PARTS_TABLE: dict[str, GrinchItemData] = {
     "Exhaust Pipes": GrinchItemData("Sleigh Parts", 300, IC.progression_skip_balancing,
         [GrinchRamData(0x800101FB, binary_bit_pos=3), GrinchRamData(0x800100AA, binary_bit_pos=6)]),
-    "GPS": GrinchItemData("Sleigh Parts", 301, IC.progression_skip_balancing,
+    "GPS": GrinchItemData("Sleigh Parts", 301, IC.useful,
         [GrinchRamData(0x800101FB, binary_bit_pos=6), GrinchRamData(0x800100AA, binary_bit_pos=6)]),
     "Tires": GrinchItemData("Sleigh Parts", 302, IC.progression_skip_balancing,
         [GrinchRamData(0x800101FB, binary_bit_pos=5), GrinchRamData(0x800100AA, binary_bit_pos=6)]),
