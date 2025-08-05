@@ -1,6 +1,7 @@
 import datetime
 import os
-from typing import Any, IO, Dict, Iterator, List, Tuple, Union
+import warnings
+from typing import Any, IO, Dict, Iterator, List, Tuple, Union, Literal, get_args
 
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
@@ -14,13 +15,14 @@ from Utils import title_sorted
 
 
 def get_world_theme(game_name: str) -> str:
-    available = ["dirt", "grass", "grassFlowers", "ice", "jungle", "ocean", "partyTime", "stone"]
-    chosen_theme = ""
-    if game_name in AutoWorldRegister.world_types:
-        chosen_theme = AutoWorldRegister.world_types[game_name].web.theme
-    if chosen_theme in available:
-        return chosen_theme
-    return "grass"
+    if game_name not in AutoWorldRegister.world_types:
+        return "grass"
+    available = Literal["dirt", "grass", "grassFlowers", "ice", "jungle", "ocean", "partyTime", "stone"]
+    chosen_theme = AutoWorldRegister.world_types[game_name].web.theme
+    if chosen_theme not in get_args(available):
+        warnings.warn(f"Theme '{chosen_theme}' for {game_name} not valid, switching to default 'grass' theme.")
+        return "grass"
+    return chosen_theme
 
 
 def get_visible_worlds() -> dict[str, type(World)]:
