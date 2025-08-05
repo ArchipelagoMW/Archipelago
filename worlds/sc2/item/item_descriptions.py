@@ -922,7 +922,6 @@ item_descriptions = {
     item_names.SUPPLICANT_SOUL_AUGMENTATION: "Increases Supplicant max shields by +25.",
     item_names.SUPPLICANT_ENDLESS_SERVITUDE: "Increases Supplicant shield regeneration rate.",
     item_names.SUPPLICANT_ZENITH_PITCH: "Allows Supplicants to attack air units.",
-    item_names.SUPPLICANT_SACRIFICE: "Allows Supplicants to sacrifice themselves to save nearby units from death.",
     item_names.ADEPT_SHOCKWAVE: "When Adepts deal a finishing blow, their projectiles can jump onto 2 additional targets.",
     item_names.ADEPT_RESONATING_GLAIVES: "Increases Adept attack speed.",
     item_names.ADEPT_PHASE_BULWARK: "Increases Adept shield maximum by +50.",
@@ -1081,6 +1080,7 @@ item_descriptions = {
     item_names.OPPRESSOR_VULCAN_BLASTER: "Oppressor War Council ability.\n" + _ability_desc("Oppressors", "Vulcan Blaster", "activates a powerful short range anti-ground weapon for a limited time. Greatly reduces movement and turning speed, and disables other weapons while active"),
     item_names.CALADRIUS_CORONA_BEAM: "Caladrius War Council ability.\n" + _ability_desc("Caladrius", "Corona Beam", "channels a beam that drains up to 100 of the Caladrius' shields to deal up to 200 damage over time to a single target"),
     item_names.MISTWING_PHANTOM_DASH: "Mist Wing War Council ability.\n" + _ability_desc("Mist Wings", "Phantom Dash", "dashes forward to cover some distance quickly. Deals damage in a line if the Mist Wing is cloaked"),
+    item_names.SUPPLICANT_SACRIFICE: "Supplicant War Council ability.\nAllows Supplicants to sacrifice themselves to save nearby units from death.",
 
     
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
