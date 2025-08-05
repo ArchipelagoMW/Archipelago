@@ -47,7 +47,7 @@ class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
 class ElevatorTier(NamedRange):
     """
     Put these Shipments to Space Elevator packages in logic.
-    Milestones past these packages be empty.
+    Milestones past these packages will be empty.
     If your goal selection contains *Space Elevator Tier* then the goal will be to complete these shipments.
 
     Estimated in-game completion times:
@@ -115,7 +115,7 @@ class ResourceSinkPointsPerMinute(NamedRange):
     """
     Does nothing if *AWESOME Sink Points (per minute)* goal is not enabled.
 
-    Continuously Sink an amount of items to maintain a sink points per minute of this amount of points for 10 minutes to finish.
+    Sink items to maintain a sink points per minute of the chosen amount for 10 minutes to finish.
     This setting is in *points per minute* on the orange track, so DNA Capsules don't count.
     This option's presets are example production thresholds - you don't have to sink exactly those specific items.
 
@@ -157,7 +157,7 @@ class HardDriveProgressionLimit(Range):
 
 class FreeSampleEquipment(Range):
     """
-    How many free sample items of Equipment items should be given when they are unlocked.
+    How many free sample Equipment items are given when they are unlocked.
     
     (ex. Jetpack, Rifle)
     """
@@ -168,7 +168,7 @@ class FreeSampleEquipment(Range):
 
 class FreeSampleBuildings(Range):
     """
-    How many copies of a Building's construction cost to give as a free sample when they are unlocked.
+    How many copies of a Building's construction cost are given as a free sample when they are unlocked.
     Space Elevator is always excluded.
     
     (ex. Packager, Constructor, Smelter)
@@ -180,7 +180,7 @@ class FreeSampleBuildings(Range):
 
 class FreeSampleParts(NamedRange):
     """
-    How free sample items of general crafting components should be given when a recipe for them is unlocked.
+    How many general crafting component free samples are given when their recipe is unlocked.
     Space Elevator Project Parts are always excluded.
     
     Negative numbers mean that fraction of a full stack.
@@ -296,7 +296,7 @@ class EnergyLink(DefaultOnToggle):
 class MamLogic(PlacementLogic):
     """
     Where to place the MAM building in logic.
-    Earlier means it will be more likely you need to interact with it for progression purposes.
+    Earlier means it will be more likely that you will need to interact with it for progression purposes.
     """
     display_name = "MAM Placement"
     default = Placement.early.value
@@ -304,7 +304,7 @@ class MamLogic(PlacementLogic):
 class AwesomeLogic(PlacementLogic):
     """
     Where to place the AWESOME Shop and Sink buildings in logic.
-    Earlier means it will be more likely you need to interact with it for progression purposes.
+    Earlier means it will be more likely that you will need to interact with it for progression purposes.
     """
     display_name = "AWESOME Stuff Placement"
     default = Placement.early.value
@@ -312,7 +312,7 @@ class AwesomeLogic(PlacementLogic):
 class EnergyLinkLogic(PlacementLogic):
     """
     Where to place the EnergyLink building (or Power Storage if EnergyLink is disabled) in logic.
-    Earlier means it will be more likely to get access to it early into your game.
+    Earlier means it will be more likely that you will need to interact with it for progression purposes.
     """
     display_name = "EnergyLink Placement"
     default = Placement.early.value
@@ -320,7 +320,7 @@ class EnergyLinkLogic(PlacementLogic):
 class SplitterLogic(PlacementLogic):
     """
     Where to place the Conveyor Splitter and Merger buildings in logic.
-    Earlier means it will be more likely to get access to it early into your game.
+    Earlier means it will be more likely that you will need to interact with it for progression purposes.
     """
     display_name = "Splitter and Merger Placement"
     default = Placement.starting_inventory.value
@@ -406,7 +406,7 @@ class ExplorationCollectableCount(Range):
     """
     Does nothing if *Exploration Collectables* goal is not enabled.
 
-    Collect this amount of Mercer Spheres, Somersloops, Hard Drives, Paleberries, Beryl Nuts and Bacon Agarics each to finish.
+    Collect this amount of Mercer Spheres, Somersloops, Hard Drives, Paleberries, Beryl Nuts, and Bacon Agarics each to finish.
 
     - The amount of **Mercer Spheres** is **2x** the selected amount
     - The amount of **Somersloops** is **the** selected amount
@@ -424,7 +424,7 @@ class MilestoneCostMultiplier(Range):
     """
     Multiplies the amount of resources needed to unlock a Milestone by this factor.
 
-    The value is in percentage:
+    The value is a percentage:
 
     - **50** = half cost
     - **100** = normal milestone cost
