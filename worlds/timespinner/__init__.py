@@ -300,7 +300,9 @@ class TimespinnerWorld(World):
         if not item.advancement:
             return item
 
-        if (name == 'Tablet' or name == 'Library Keycard V') and not self.options.downloadable_items:
+        if name == 'Tablet' and not self.options.downloadable_items:
+            item.classification = ItemClassification.filler
+        elif name == 'Library Keycard V' and not (self.options.downloadable_items or self.options.pure_torcher):
             item.classification = ItemClassification.filler
         elif name == 'Oculus Ring' and not self.options.eye_spy:
             item.classification = ItemClassification.filler
