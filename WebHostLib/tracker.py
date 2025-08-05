@@ -1246,7 +1246,7 @@ if "ChecksFinder" in network_data_package["games"]:
     _player_trackers["ChecksFinder"] = render_ChecksFinder_tracker
 
 if "Starcraft 2" in network_data_package["games"]:
-    def render_Starcraft2_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
+    def render_Starcraft2_tracker_old(tracker_data: TrackerData, team: int, player: int) -> str:
         SC2WOL_LOC_ID_OFFSET = 1000
         SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
         SC2LOTV_LOC_ID_OFFSET = SC2HOTS_LOC_ID_OFFSET + 2000
@@ -2425,5 +2425,88 @@ if "Starcraft 2" in network_data_package["games"]:
             location_info=location_info,
             **display_data,
         )
+
+
+    def render_Starcraft2_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
+        SC2HOTS_ITEM_ID_OFFSET = 2000
+        SC2_KEY_ITEM_ID_OFFSET = 4000
+
+        STARTING_MINERALS_ITEM_ID = 1800
+        STARTING_VESPENE_ITEM_ID = 1801
+        STARTING_SUPPLY_ITEM_ID = 1802
+        # Nothing_ITEM_ID = 1803
+        MAX_SUPPLY_ITEM_ID = 1804
+        SHIELD_REGENERATION_ITEM_ID = 1805
+        BUILDING_CONSTRUCTION_SPEED_ITEM_ID = 1806
+        UPGRADE_RESEARCH_SPEED_ITEM_ID = 1807
+        UPGRADE_RESEARCH_COST_ITEM_ID = 1808
+        REDUCED_MAX_SUPPLY_ITEM_ID = 1850
+        slot_data = tracker_data.get_slot_data(team, player)
+        inventory: collections.Counter[int] = tracker_data.get_player_inventory_counts(team, player)
+        item_id_to_name = tracker_data.item_id_to_name["Starcraft 2"]
+        location_id_to_name = tracker_data.location_id_to_name["Starcraft 2"]
+
+        # Filler item counters
+        display_data = {}
+        display_data["minerals_count"] = slot_data.get("minerals_per_item", 15) * inventory.get(STARTING_MINERALS_ITEM_ID, 0)
+        display_data["vespene_count"] = slot_data.get("vespene_per_item", 15) * inventory.get(STARTING_VESPENE_ITEM_ID, 0)
+        display_data["supply_count"] = slot_data.get("starting_supply_per_item", 2) * inventory.get(STARTING_SUPPLY_ITEM_ID, 0)
+        display_data["max_supply_count"] = slot_data.get("maximum_supply_per_item", 1) * inventory.get(MAX_SUPPLY_ITEM_ID, 0)
+        display_data["reduced_supply_count"] = slot_data.get("maximum_supply_reduction_per_item", 1) * inventory.get(REDUCED_MAX_SUPPLY_ITEM_ID, 0)
+        display_data["construction_speed_count"] = inventory.get(BUILDING_CONSTRUCTION_SPEED_ITEM_ID, 0)
+        display_data["shield_regen_count"] = inventory.get(SHIELD_REGENERATION_ITEM_ID, 0)
+        display_data["upgrade_speed_count"] = inventory.get(UPGRADE_RESEARCH_SPEED_ITEM_ID, 0)
+        display_data["research_cost_count"] = inventory.get(UPGRADE_RESEARCH_COST_ITEM_ID, 0)
+        
+        # Locations
+        locations = tracker_data.get_player_locations(team, player)
+        checked_locations = tracker_data.get_player_checked_locations(team, player)
+        missions = set(
+            location_name.split(":", 1)[0]
+            for location_id, location_name in location_id_to_name.items()
+            if ":" in location_name
+            and location_id in locations
+        )
+
+        # Kerrigan level
+        level_item_id_to_amount = (
+            (509 + SC2HOTS_ITEM_ID_OFFSET, 1,),
+            (508 + SC2HOTS_ITEM_ID_OFFSET, 2,),
+            (507 + SC2HOTS_ITEM_ID_OFFSET, 3,),
+            (506 + SC2HOTS_ITEM_ID_OFFSET, 4,),
+            (505 + SC2HOTS_ITEM_ID_OFFSET, 5,),
+            (504 + SC2HOTS_ITEM_ID_OFFSET, 6,),
+            (503 + SC2HOTS_ITEM_ID_OFFSET, 7,),
+            (502 + SC2HOTS_ITEM_ID_OFFSET, 8,),
+            (501 + SC2HOTS_ITEM_ID_OFFSET, 9,),
+            (500 + SC2HOTS_ITEM_ID_OFFSET, 10,),
+            (510 + SC2HOTS_ITEM_ID_OFFSET, 14,),
+            (511 + SC2HOTS_ITEM_ID_OFFSET, 35,),
+            (512 + SC2HOTS_ITEM_ID_OFFSET, 70,),
+        )
+        kerrigan_level = 0
+        for item_id, levels_per_item in level_item_id_to_amount:
+            kerrigan_level += levels_per_item * inventory[item_id]
+        display_data["kerrigan_level"] = kerrigan_level
+        
+        # Victory condition
+        game_state = tracker_data.get_player_client_status(team, player)
+        display_data["game_finished"] = game_state == ClientStatus.CLIENT_GOAL
+
+        return render_template(
+            "tracker__Starcraft2.html",
+            inventory=inventory,
+            player=player,
+            team=team,
+            room=tracker_data.room,
+            player_name=tracker_data.get_player_name(team, player),
+            missions=missions,
+            locations=locations,
+            checked_locations=checked_locations,
+            location_id_to_name=location_id_to_name,
+            item_id_to_name=item_id_to_name,
+            **display_data,
+        )
+
 
     _player_trackers["Starcraft 2"] = render_Starcraft2_tracker
