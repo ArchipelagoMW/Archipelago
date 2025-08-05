@@ -5,9 +5,6 @@ from BaseClasses import ItemClassification as IC
 from .Helper_Functions import LMRamData
 from .game.Currency import CURRENCY_NAME
 
-class ItemType:
-    MONEY = "Money"
-
 class LMItemData(NamedTuple):
     type: str
     code: Optional[int]
@@ -18,7 +15,7 @@ class LMItemData(NamedTuple):
 class CurrencyItemData(LMItemData):
     currencies: dict[str, int]
 
-    def __new__(cls, code, currencies: dict[str, int], item_type=ItemType.MONEY, classification: IC=IC.filler):
+    def __new__(cls, code, currencies: dict[str, int], item_type="Money", classification: IC=IC.filler):
         instance = super().__new__(cls, item_type, code, classification, update_ram_addr=[])
         instance.currencies = currencies
         return instance
