@@ -728,8 +728,8 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('The lab (upper)', 'Lab: Genza Door Lantern 2', 1337285, logic.can_break_lanterns),
             LocationData('The lab (upper)', 'Lab: Download and Chest Lantern 1', 1337312, logic.can_break_lanterns),
             LocationData('The lab (upper)', 'Lab: Download and Chest Lantern 2', 1337313, logic.can_break_lanterns),
-            LocationData('Main Lab', 'Lab: Sentry Lantern 1', 1337279, lambda state: logic.can_break_lanterns and (state.has('Tablet', player) and (not options.lock_key_amadeus or state.has('Lab Access Genza', player) or logic.can_teleport_to(state, "Time", "GateDadsTower")))),
-            LocationData('Main Lab', 'Lab: Sentry Lantern 2', 1337280, lambda state: logic.can_break_lanterns and (state.has('Tablet', player) and (not options.lock_key_amadeus or state.has('Lab Access Genza', player) or logic.can_teleport_to(state, "Time", "GateDadsTower")))),
+            LocationData('Main Lab', 'Lab: Sentry Lantern 1', 1337279, lambda state: logic.can_break_lanterns(state) and (not options.lock_key_amadeus or state.has('Lab Access Genza', player) or logic.can_teleport_to(state, "Time", "GateDadsTower")))),
+            LocationData('Main Lab', 'Lab: Sentry Lantern 2', 1337280, lambda state: logic.can_break_lanterns(state) and (not options.lock_key_amadeus or state.has('Lab Access Genza', player) or logic.can_teleport_to(state, "Time", "GateDadsTower")))),
 
             LocationData('Emperors tower (courtyard)', 'Emperor\'s Tower: Courtyard Lantern 1', 1337314, logic.can_break_lanterns),
             LocationData('Emperors tower (courtyard)', 'Emperor\'s Tower: Courtyard Lantern 2', 1337316, logic.can_break_lanterns),
