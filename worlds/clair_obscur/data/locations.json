@@ -36,7 +36,9 @@
         "name": "Ancient Sactuary: Gestral Totem - Base of the totem",
         "location": "Ancient Sanctuary",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {},
+        "condition": {
+            "Paint Break": 1
+        },
         "type": "Chest"
     },
     {
@@ -84,7 +86,9 @@
         "name": "Ancient Sactuary: Gestral Totem - Ink bottles on the cliff",
         "location": "Ancient Sanctuary",
         "original_item": "UpgradeMaterial",
-        "condition": {},
+        "condition": {
+            "Paint Break": 1
+        },
         "type": "Chest"
     },
     {
@@ -100,7 +104,9 @@
         "name": "Ancient Sactuary: Gestral Totem - In shallow river",
         "location": "Ancient Sanctuary",
         "original_item": "PiercingShot",
-        "condition": {},
+        "condition": {
+            "Paint Break": 1
+        },
         "type": "Chest"
     },
     {
@@ -108,7 +114,9 @@
         "name": "Ancient Sactuary: Gestral Totem - Jump the gaps",
         "location": "Ancient Sanctuary",
         "original_item": "ChromaPack_ExtraLarge",
-        "condition": {},
+        "condition": {
+            "Paint Break": 1
+        },
         "type": "Chest"
     },
     {
@@ -132,7 +140,7 @@
         "name": "Ancient Sanctuary: Giant Bell Alley - Paint Cage before Expedition Flag",
         "location": "Ancient Sanctuary",
         "original_item": "PartyHealShard",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -412,7 +420,7 @@
         "name": "Flying Manor: Dualliste Wing - Paint Cage",
         "location": "Flying Manor",
         "original_item": "ReviveWithPower",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -652,7 +660,7 @@
         "name": "Flying Manor: Eveque Wing - Paint Cage",
         "location": "Flying Manor",
         "original_item": "StunEnergy",
-        "condition": {"Paint Break": 1, "Free Aim": 1},
+        "condition": {"Paint Break": 1},
         "type": "Chest"
     },
     {
@@ -852,7 +860,7 @@
         "name": "Forgotten Battlefield: Battlefield - Paint Cage",
         "location": "Forgotten Battlefield",
         "original_item": "PartyHealShard",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -900,7 +908,7 @@
         "name": "Frozen Hearts: Icebound Train Station - Past Paint Cage",
         "location": "Frozen Hearts",
         "original_item": "ChromaPack_Large",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -913,10 +921,10 @@
     },
     {
         "internal_name": "Chest_FrozenHearts_7",
-        "name": "Frozen Hearts: Glacial Falls - Paint Cage",
+        "name": "Frozen Hearts: Glacial Falls - Paint Cage 1",
         "location": "Frozen Hearts",
         "original_item": "AntiFrozen",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -929,10 +937,10 @@
     },
     {
         "internal_name": "Chest_FrozenHearts_9",
-        "name": "Frozen Hearts: Glacial Falls - Paint Cage",
+        "name": "Frozen Hearts: Glacial Falls - Paint Cage 2",
         "location": "Frozen Hearts",
         "original_item": "ReviveTint_Shard",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -1380,7 +1388,7 @@
         "name": "Flying Waters: Coral Cave - Paint Cage",
         "location": "Goblus Lair",
         "original_item": "ReviveTint_Shard",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -1436,7 +1444,7 @@
         "name": "Lumiere (Act 3): Entrance - In boxes",
         "location": "Lumiere",
         "original_item": "ChromaPack_Large",
-        "condition": {"Attack": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -1444,7 +1452,7 @@
         "name": "Lumiere (Act 3): Entrance - In Paint Spike",
         "location": "Lumiere",
         "original_item": "ChromaPack_Large",
-        "condition": {"Paint Break": 1, "Some flag to clear barricade": 1},
+        "condition": {"Paint Break": 1},
         "type": "Chest"
     },
     {
@@ -1828,7 +1836,7 @@
         "name": "Manor: From Gestral Village - In crawlspace",
         "location": "Manor",
         "original_item": "FaceMaelle_Rebellious",
-        "condition": {"Attack": 1, "Esquie Swim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -1892,7 +1900,7 @@
         "name": "Manor: From Sirene - Break the bathroom mirror",
         "location": "Manor",
         "original_item": "ConsumableUpgradeMaterial_Health",
-        "condition": {"Free Aim": 1, "Attack": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -1932,7 +1940,7 @@
         "name": "Monolith: Tainted Cliffs - Paint Cage",
         "location": "Monolith",
         "original_item": "ReviveTint_Shard",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -2012,7 +2020,7 @@
         "name": "Monolith: Tainted Sanctuary - Paint Cage",
         "location": "Monolith",
         "original_item": "RandomDefense",
-        "condition": {"Free Aim": 1, "Paint Break": 1},
+        "condition": {"Paint Break": 1},
         "type": "Chest"
     },
     {
@@ -2156,7 +2164,7 @@
         "name": "Monolith: Tainted Hearts - Paint Cage",
         "location": "Monolith",
         "original_item": "ReinforcementParade",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -2241,7 +2249,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_1",
-        "name": "Old Lumiere (Act 3): Left Street - In barrels after grapple",
+        "name": "Old Lumiere: Left Street - In barrels after grapple",
         "location": "Old Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -2249,7 +2257,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_2",
-        "name": "Old Lumiere (Act 3): Left Street - On top of broken pipe",
+        "name": "Old Lumiere: Left Street - On top of broken pipe",
         "location": "Old Lumiere",
         "original_item": "UpgradeMaterial",
         "condition": {},
@@ -2257,7 +2265,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_3",
-        "name": "Old Lumiere (Act 3): Right Street - On ledge overlooking rubble",
+        "name": "Old Lumiere: Right Street - On ledge overlooking rubble",
         "location": "Old Lumiere",
         "original_item": "TimeTint",
         "condition": {},
@@ -2265,7 +2273,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_4",
-        "name": "Old Lumiere (Act 3): Right Street - In crawl space",
+        "name": "Old Lumiere: Right Street - In crawl space",
         "location": "Old Lumiere",
         "original_item": "ChromaPack_ExtraLarge",
         "condition": {},
@@ -2273,7 +2281,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_5",
-        "name": "Old Lumiere (Act 3): Left Street - Past ruined doorway",
+        "name": "Old Lumiere: Left Street - Past ruined doorway",
         "location": "Old Lumiere",
         "original_item": "AutoRush",
         "condition": {},
@@ -2281,7 +2289,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_6",
-        "name": "Old Lumiere (Act 3): Left Street - Before Manor Gardens",
+        "name": "Old Lumiere: Left Street - Before Manor Gardens",
         "location": "Old Lumiere",
         "original_item": "UpgradeMaterial",
         "condition": {},
@@ -2289,7 +2297,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_7",
-        "name": "Old Lumiere (Act 3): Manor Gardens - Near Paint Cage",
+        "name": "Old Lumiere: Manor Gardens - Near Paint Cage",
         "location": "Old Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -2297,7 +2305,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_8",
-        "name": "Old Lumiere (Act 3): Manor Gardens - Near Sword of Lumiere",
+        "name": "Old Lumiere: Manor Gardens - Near Sword of Lumiere",
         "location": "Old Lumiere",
         "original_item": "ChromaPack_ExtraLarge",
         "condition": {},
@@ -2305,7 +2313,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_9",
-        "name": "Old Lumiere (Act 3): Right Street - Boxes near apartment building",
+        "name": "Old Lumiere: Right Street - Boxes near apartment building",
         "location": "Old Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -2313,7 +2321,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_10",
-        "name": "Old Lumiere (Act 3): Right Street - After Expedition Flag",
+        "name": "Old Lumiere: Right Street - After Expedition Flag",
         "location": "Old Lumiere",
         "original_item": "ChromaPack_Large",
         "condition": {},
@@ -2321,7 +2329,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_11",
-        "name": "Old Lumiere (Act 3): Right Street - After Expedition Flag on buried building",
+        "name": "Old Lumiere: Right Street - After Expedition Flag on buried building",
         "location": "Old Lumiere",
         "original_item": "Reacharo_1",
         "condition": {},
@@ -2329,7 +2337,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_12",
-        "name": "Old Lumiere (Act 3): Manor Gardens - In pit between building grapples",
+        "name": "Old Lumiere: Manor Gardens - In pit between building grapples",
         "location": "Old Lumiere",
         "original_item": "ChromaPack_ExtraLarge",
         "condition": {},
@@ -2337,7 +2345,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_13",
-        "name": "Old Lumiere (Act 3): Manor Gardens - Above Train Station Ruins Expedition Flag",
+        "name": "Old Lumiere: Manor Gardens - Above Train Station Ruins Expedition Flag",
         "location": "Old Lumiere",
         "original_item": "HealingDeath",
         "condition": {},
@@ -2345,7 +2353,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_14",
-        "name": "Old Lumiere (Act 3): Manor Gardens - Behind gate near hedge maze",
+        "name": "Old Lumiere: Manor Gardens - Behind gate near hedge maze",
         "location": "Old Lumiere",
         "original_item": "ChromaPack_Large",
         "condition": {},
@@ -2353,7 +2361,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_15",
-        "name": "Old Lumiere (Act 3): Left Street - Before Expedition Flag in ruins",
+        "name": "Old Lumiere: Left Street - Before Expedition Flag in ruins",
         "location": "Old Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -2361,7 +2369,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_16",
-        "name": "Old Lumiere (Act 3): Manor Gardens - Above Chromatic boss",
+        "name": "Old Lumiere: Manor Gardens - Above Chromatic boss",
         "location": "Old Lumiere",
         "original_item": "ChromaPack_ExtraLarge",
         "condition": {},
@@ -2369,7 +2377,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_17",
-        "name": "Old Lumiere (Act 3): Left Street - On Chevaliere corpse",
+        "name": "Old Lumiere: Left Street - On Chevaliere corpse",
         "location": "Old Lumiere",
         "original_item": "ChromaPack_Large",
         "condition": {},
@@ -2377,7 +2385,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_18",
-        "name": "Old Lumiere (Act 3): Train Station Ruins - Behind Chromatic boss",
+        "name": "Old Lumiere: Train Station Ruins - Behind Chromatic boss",
         "location": "Old Lumiere",
         "original_item": "ChromaPack_Regular",
         "condition": {},
@@ -2385,7 +2393,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_19",
-        "name": "Old Lumiere (Act 3): Right Street - Overlooking carousel",
+        "name": "Old Lumiere: Right Street - Overlooking carousel",
         "location": "Old Lumiere",
         "original_item": "ChromaPack_Regular",
         "condition": {},
@@ -2393,7 +2401,7 @@
     },
     {
         "internal_name": "Chest_OldLumiere_20",
-        "name": "Old Lumiere (Act 3): Manor Gardens - Paint Cage",
+        "name": "Old Lumiere: Manor Gardens - Paint Cage",
         "location": "Old Lumiere",
         "original_item": "Redalim",
         "condition": {"Paint Break": 1},
@@ -3036,7 +3044,7 @@
         "name": "Sirene: Dancing Classes - Paint Cage",
         "location": "Sirene",
         "original_item": "ShieldAffinity",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -3156,7 +3164,7 @@
         "name": "Sirene: Sewing Atelier - Paint Cage",
         "location": "Sirene",
         "original_item": "ReviveTint_Shard",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -3292,7 +3300,7 @@
         "name": "Stone Wave Cliffs Cave: Paint Cage",
         "location": "Small Level Stonewave Cliffs Cave",
         "original_item": "PartyHealShard",
-        "condition": {"Free Aim": 1, "Grapple": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -3396,7 +3404,7 @@
         "name": "Esoteric Ruins: Paint Cage",
         "location": "Small Level Door Maze",
         "original_item": "ChromaPack_ExtraLarge",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -3449,7 +3457,7 @@
     },
     {
         "internal_name": "Chest_MiniLevels_1",
-        "name": "The Meadows mini level",
+        "name": "The Meadows item",
         "location": "Mini Levels",
         "original_item": "MusicRecord_20",
         "condition": {},
@@ -3457,7 +3465,7 @@
     },
     {
         "internal_name": "Chest_MiniLevels_2",
-        "name": "White Tree mini level",
+        "name": "White Tree item",
         "location": "Mini Levels",
         "original_item": "MusicRecord_21",
         "condition": {},
@@ -3465,7 +3473,7 @@
     },
     {
         "internal_name": "Chest_MiniLevels_3",
-        "name": "Ancient Gestral City mini level",
+        "name": "Ancient Gestral City item",
         "location": "Mini Levels",
         "original_item": "MusicRecord_16",
         "condition": {},
@@ -3473,7 +3481,7 @@
     },
     {
         "internal_name": "Chest_MiniLevels_4",
-        "name": "Lost Woods mini level",
+        "name": "Lost Woods item",
         "location": "Mini Levels",
         "original_item": "MusicRecord_23",
         "condition": {},
@@ -3481,7 +3489,7 @@
     },
     {
         "internal_name": "Chest_MiniLevels_5",
-        "name": "Boat Graveyard mini level",
+        "name": "Boat Graveyard item",
         "location": "Mini Levels",
         "original_item": "MusicRecord_24",
         "condition": {},
@@ -3489,7 +3497,7 @@
     },
     {
         "internal_name": "Chest_MiniLevels_6",
-        "name": "Blades Graveyard mini level",
+        "name": "Blades Graveyard item",
         "location": "Mini Levels",
         "original_item": "MusicRecord_25",
         "condition": {},
@@ -3497,7 +3505,7 @@
     },
     {
         "internal_name": "Chest_MiniLevels_7",
-        "name": "Twilight Quarry mini level",
+        "name": "Twilight Quarry item",
         "location": "Mini Levels",
         "original_item": "MusicRecord_11",
         "condition": {},
@@ -3884,7 +3892,7 @@
         "name": "Endless Night Sanctuary: Night Totem - Paint Cage above flag",
         "location": "Twilight Sanctuary",
         "original_item": "UpgradeMaterial",
-        "condition": {"Free Aim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -3908,7 +3916,7 @@
         "name": "Visages: Plazza - Near entrance to Anger Vale under boxes",
         "location": "Visages",
         "original_item": "ChromaPack_Regular",
-        "condition": {"Attack": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -4244,7 +4252,7 @@
         "name": "World Map: First Continent Sea - Next to merchant on island near Sprong",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {"Attack": 1, "Swim": 1},
+        "condition": {},
         "type": "Chest"
     },
     {
@@ -4645,7 +4653,7 @@
         "location": "Ancient Sanctuary",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4654,7 +4662,7 @@
         "location": "The Abyss",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4663,7 +4671,7 @@
         "location": "Flying Manor",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4677,7 +4685,7 @@
             "Light of the Beast": 1,
             "Painted Power": 1
         },
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4686,7 +4694,7 @@
         "location": "Esquie’s Nest",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4695,7 +4703,7 @@
         "location": "Lumiere",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4704,7 +4712,7 @@
         "location": "The Monolith",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4713,7 +4721,7 @@
         "location": "Frozen Hearts",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4722,7 +4730,7 @@
         "location": "The Reacher",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4731,7 +4739,7 @@
         "location": "Stone Wave Cliffs",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4740,7 +4748,7 @@
         "location": "Sirene",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4749,7 +4757,7 @@
         "location": "Endless Tower",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -4758,7 +4766,7 @@
         "location": "Flying Waters",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Bourgeon"
     },
     {
@@ -4767,7 +4775,7 @@
         "location": "Dark Gestral Arena",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4776,7 +4784,7 @@
         "location": "Dark Gestral Arena",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4785,7 +4793,7 @@
         "location": "Dark Gestral Arena",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4794,7 +4802,7 @@
         "location": "Visages",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4803,7 +4811,7 @@
         "location": "Flying Waters",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4812,7 +4820,7 @@
         "location": "The Monolith",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4821,7 +4829,7 @@
         "location": "Endless Night Sactuary",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4830,7 +4838,7 @@
         "location": "Forgotten Battlefield",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4839,7 +4847,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4848,7 +4856,7 @@
         "location": "Lumiere",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4857,7 +4865,7 @@
         "location": "Isle of the Eyes",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4866,7 +4874,7 @@
         "location": "The Crows",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4875,7 +4883,7 @@
         "location": "The Reacher",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4884,7 +4892,7 @@
         "location": "The Monolith",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4893,7 +4901,7 @@
         "location": "Old Lumiere",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4902,7 +4910,7 @@
         "location": "Falling Leaves",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4911,7 +4919,7 @@
         "location": "Renoir’s Drafts",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4920,7 +4928,7 @@
         "location": "Frozen Hearts",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4929,7 +4937,7 @@
         "location": "Crimson Forest",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4938,7 +4946,7 @@
         "location": "Sirene",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4947,7 +4955,7 @@
         "location": "Stone Wave Cliffs Cave",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4956,7 +4964,7 @@
         "location": "Sirene’s Dress",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4965,7 +4973,7 @@
         "location": "Abbest Cave",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4974,7 +4982,7 @@
         "location": "Spring Meadows",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4983,7 +4991,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -4992,7 +5000,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -5001,7 +5009,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -5012,7 +5020,7 @@
         "condition": {
             "Paint Break": 1
         },
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -5021,7 +5029,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -5030,7 +5038,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -5039,7 +5047,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -5048,7 +5056,7 @@
         "location": "Sky Island",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -5057,7 +5065,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -5066,7 +5074,7 @@
         "location": "Yellow Harvest",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -5075,7 +5083,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -5084,7 +5092,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Chromatic"
     },
     {
@@ -5093,7 +5101,7 @@
         "location": "Ancient Sanctuary",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5102,7 +5110,7 @@
         "location": "Flying Manor",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5111,7 +5119,7 @@
         "location": "Esquie’s Nest",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5120,7 +5128,7 @@
         "location": "Flying Waters",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5129,7 +5137,7 @@
         "location": "Visages",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5138,7 +5146,7 @@
         "location": "The Monolith",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5147,7 +5155,7 @@
         "location": "Old Lumiere",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5156,7 +5164,7 @@
         "location": "The Reacher",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5165,7 +5173,7 @@
         "location": "Sirene",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5174,7 +5182,7 @@
         "location": "Spring Meadows",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5183,7 +5191,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5192,7 +5200,7 @@
         "location": "Sunless Cliffs",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5201,7 +5209,7 @@
         "location": "Yellow Harvest",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5210,7 +5218,7 @@
         "location": "Frozen Hearts",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Mime"
     },
     {
@@ -5219,7 +5227,7 @@
         "location": "Flying Manor",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5228,7 +5236,7 @@
         "location": "Flying Manor",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5237,7 +5245,7 @@
         "location": "Flying Manor",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5246,7 +5254,7 @@
         "location": "Flying Manor",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5255,7 +5263,7 @@
         "location": "The Chosen Path",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5264,7 +5272,7 @@
         "location": "The Chosen Path",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5273,7 +5281,7 @@
         "location": "The Chosen Path",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5282,7 +5290,7 @@
         "location": "The Chosen Path",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5291,7 +5299,7 @@
         "location": "The Chosen Path",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5300,7 +5308,7 @@
         "location": "Sinister Cave",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5309,7 +5317,7 @@
         "location": "Forgotten Battlefield",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5318,7 +5326,7 @@
         "location": "Lumiere",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5327,7 +5335,7 @@
         "location": "Visages",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5336,7 +5344,7 @@
         "location": "The Monolith",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5345,7 +5353,7 @@
         "location": "The Monolith",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5354,7 +5362,7 @@
         "location": "The Monolith",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5363,7 +5371,7 @@
         "location": "The Monolith",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5372,7 +5380,7 @@
         "location": "The Monolith",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5381,7 +5389,7 @@
         "location": "Old Lumiere",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5390,7 +5398,7 @@
         "location": "Sirene",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5399,7 +5407,7 @@
         "location": "Sirene",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5408,7 +5416,7 @@
         "location": "Crushing Cavern",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5417,7 +5425,7 @@
         "location": "Spring Meadows",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5714,7 +5722,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5723,7 +5731,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5732,7 +5740,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5741,7 +5749,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5750,7 +5758,7 @@
         "location": "World Map",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5759,7 +5767,7 @@
         "location": "Yellow Harvest",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5768,7 +5776,7 @@
         "location": "Falling Leaves",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5777,7 +5785,7 @@
         "location": "Dark Gestral Arena",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5788,7 +5796,7 @@
         "condition": {
             "Painted Power": 1
         },
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5797,7 +5805,7 @@
         "location": "Hidden Gestral Arena",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5806,7 +5814,7 @@
         "location": "Hidden Gestral Arena",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5815,7 +5823,7 @@
         "location": "Sirene",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5824,7 +5832,7 @@
         "location": "Ancient Sanctuary",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5833,7 +5841,7 @@
         "location": "Sirene",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5842,7 +5850,7 @@
         "location": "Frozen Hearts",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5851,7 +5859,7 @@
         "location": "The Monolith",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5860,7 +5868,7 @@
         "location": "Isle of the Eyes",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5869,7 +5877,7 @@
         "location": "Stone Wave Cliffs",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5878,7 +5886,7 @@
         "location": "Flying Manor",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5887,7 +5895,7 @@
         "location": "Forgotten Battlefield",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5896,7 +5904,7 @@
         "location": "Endless Night Sactuary",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5905,7 +5913,7 @@
         "location": "Esquie’s Nest",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5914,7 +5922,7 @@
         "location": "The Reacher",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Petank"
     },
     {
@@ -5923,7 +5931,7 @@
         "location": "Flying Waters",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Area"
     },
     {
@@ -5932,7 +5940,7 @@
         "location": "Hidden Gestral Arena",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -5941,7 +5949,7 @@
         "location": "Hidden Gestral Arena",
         "original_item": "",
         "condition": {},
-        "type": "Boss drop",
+        "type": "Boss",
         "boss_type": "Normal"
     },
     {
@@ -6098,5 +6106,82 @@
         },
         "original_item": "",
         "type": "Quest reward"
+    },
+    {
+        "name": "Underwater item 1",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Dive"
+    },
+    {
+        "name": "Underwater item 2",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Dive"
+    },
+    {
+        "name": "Underwater item 3",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Dive"
+    },
+    {
+        "name": "Underwater item 4",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Dive"
+    },
+    {
+        "name": "Underwater item 5",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Dive"
+    },
+    {
+        "name": "Underwater item 6",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Dive"
+    },
+    {
+        "name": "Underwater item 7",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Dive"
+    },
+    {
+        "name": "Underwater item 8",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Dive"
+    },
+    {
+        "name": "Underwater item 9",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Dive"
+    },
+    {
+        "name": "Underwater item 10",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Dive"
+    },
+    {
+        "name": "Underwater item 11",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Dive"
     }
 ]

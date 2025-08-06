@@ -8,6 +8,7 @@ from worlds.clair_obscur.Items import create_item_name_to_ap_id, ClairObscurItem
 from worlds.clair_obscur.Locations import create_location_name_to_ap_id, create_locations
 from worlds.clair_obscur.Options import OPTIONS_GROUP, ClairObscurOptions
 from worlds.clair_obscur.Const import BASE_OFFSET
+from worlds.clair_obscur.Rules import set_rules
 
 class WebClairObscur(WebWorld):
     """
@@ -49,9 +50,9 @@ class ClairObscurWorld(World):
     item_name_to_id = create_item_name_to_ap_id()
     location_name_to_id = create_location_name_to_ap_id()
 
-    item_name_groups = {
-        "Weapon": {name for name, data in data.items.items() if data.type == "Weapon"}
-    }
+    # item_name_groups = {
+    #
+    # }
 
     required_client_version = (0, 5, 4)
 
@@ -150,21 +151,6 @@ class ClairObscurWorld(World):
         connect_regions(self)
         create_locations(self, regions)
 
-
-        goal = 1
-        goal_loc = ""
-        match goal:
-            case 0:
-                goal_loc = "The Monolith: The Paintress"
-            case 1:
-                goal_loc = "Lumiere: The Curator"
-            case 2:
-                goal_loc = "Endless Tower: Stage 11-3"
-            case 3:
-                goal_loc = "The Abyss: Simon"
-
-        self.multiworld.completion_condition[self.player] = (
-            lambda state: state.can_reach_location(goal_loc, self.player)
-        )
-
+    def set_rules(self):
+        set_rules(self)
 
