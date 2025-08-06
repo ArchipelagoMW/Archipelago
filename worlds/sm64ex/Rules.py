@@ -71,9 +71,9 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     rf = RuleFactory(world, options, player, move_rando_bitvec)
 
     connect_regions(world, player, "Menu", randomized_entrances_s["Bob-omb Battlefield"])
-    connect_regions(world, player, "Menu", randomized_entrances_s["Whomp's Fortress"], lambda state: state.has("Power Star", player, 1))
-    connect_regions(world, player, "Menu", randomized_entrances_s["Jolly Roger Bay"], lambda state: state.has("Power Star", player, 3))
-    connect_regions(world, player, "Menu", randomized_entrances_s["Cool, Cool Mountain"], lambda state: state.has("Power Star", player, 3))
+    connect_regions(world, player, "Menu", randomized_entrances_s["Whomp's Fortress"], rf.painting_rule(lambda state: state.has("Power Star", player, 1), "WF"))
+    connect_regions(world, player, "Menu", randomized_entrances_s["Jolly Roger Bay"], rf.painting_rule(lambda state: state.has("Power Star", player, 3), "JRB"))
+    connect_regions(world, player, "Menu", randomized_entrances_s["Cool, Cool Mountain"], rf.painting_rule(lambda state: state.has("Power Star", player, 3), "CCM"))
     connect_regions(world, player, "Menu", randomized_entrances_s["Big Boo's Haunt"], lambda state: state.has("Power Star", player, 12))
     connect_regions(world, player, "Menu", randomized_entrances_s["The Princess's Secret Slide"], lambda state: state.has("Power Star", player, 1))
     connect_regions(world, player, randomized_entrances_s["Jolly Roger Bay"], randomized_entrances_s["The Secret Aquarium"],
@@ -85,10 +85,10 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
     connect_regions(world, player, "Menu", "Basement", lambda state: state.has("Basement Key", player) or state.has("Progressive Key", player, 1))
 
     connect_regions(world, player, "Basement", randomized_entrances_s["Hazy Maze Cave"])
-    connect_regions(world, player, "Basement", randomized_entrances_s["Lethal Lava Land"])
-    connect_regions(world, player, "Basement", randomized_entrances_s["Shifting Sand Land"])
+    connect_regions(world, player, "Basement", randomized_entrances_s["Lethal Lava Land"], rf.painting_rule(lambda state: True, "LLL"))
+    connect_regions(world, player, "Basement", randomized_entrances_s["Shifting Sand Land"], rf.painting_rule(lambda state: True, "SSL"))
     connect_regions(world, player, "Basement", randomized_entrances_s["Dire, Dire Docks"],
-                    lambda state: state.has("Power Star", player, star_costs["BasementDoorCost"]))
+                    rf.painting_rule(lambda state: state.has("Power Star", player, star_costs["BasementDoorCost"]), "DDD"))
     connect_regions(world, player, "Hazy Maze Cave", randomized_entrances_s["Cavern of the Metal Cap"])
     connect_regions(world, player, "Basement", randomized_entrances_s["Vanish Cap under the Moat"],
                     rf.build_rule("GP"))
@@ -101,17 +101,17 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
 
     connect_regions(world, player, "Menu", "Second Floor", lambda state: state.has("Second Floor Key", player) or state.has("Progressive Key", player, 2))
 
-    connect_regions(world, player, "Second Floor", randomized_entrances_s["Snowman's Land"])
-    connect_regions(world, player, "Second Floor", randomized_entrances_s["Wet-Dry World"])
-    connect_regions(world, player, "Second Floor", randomized_entrances_s["Tall, Tall Mountain"])
-    connect_regions(world, player, "Second Floor", randomized_entrances_s["Tiny-Huge Island (Tiny)"])
-    connect_regions(world, player, "Second Floor", randomized_entrances_s["Tiny-Huge Island (Huge)"])
+    connect_regions(world, player, "Second Floor", randomized_entrances_s["Snowman's Land"], rf.painting_rule(lambda state: True, "SL"))
+    connect_regions(world, player, "Second Floor", randomized_entrances_s["Wet-Dry World"], rf.painting_rule(lambda state: True, "WDW"))
+    connect_regions(world, player, "Second Floor", randomized_entrances_s["Tall, Tall Mountain"], rf.painting_rule(lambda state: True, "TTM"))
+    connect_regions(world, player, "Second Floor", randomized_entrances_s["Tiny-Huge Island (Tiny)"], rf.painting_rule(lambda state: True, "THI"))
+    connect_regions(world, player, "Second Floor", randomized_entrances_s["Tiny-Huge Island (Huge)"], rf.painting_rule(lambda state: True, "THI"))
     connect_regions(world, player, "Tiny-Huge Island (Tiny)", "Tiny-Huge Island")
     connect_regions(world, player, "Tiny-Huge Island (Huge)", "Tiny-Huge Island")
 
     connect_regions(world, player, "Second Floor", "Third Floor", lambda state: state.has("Power Star", player, star_costs["SecondFloorDoorCost"]))
 
-    connect_regions(world, player, "Third Floor", randomized_entrances_s["Tick Tock Clock"], rf.build_rule("LG/TJ/SF/BF/WK"))
+    connect_regions(world, player, "Third Floor", randomized_entrances_s["Tick Tock Clock"], rf.painting_rule(rf.build_rule("LG/TJ/SF/BF/WK"), "TTC"))
     connect_regions(world, player, "Third Floor", randomized_entrances_s["Rainbow Ride"], rf.build_rule("TJ/SF/BF"))
     connect_regions(world, player, "Third Floor", randomized_entrances_s["Wing Mario over the Rainbow"], rf.build_rule("TJ/SF/BF"))
     connect_regions(world, player, "Third Floor", "Bowser in the Sky", lambda state: state.has("Power Star", player, star_costs["StarsToFinish"]))
@@ -272,6 +272,7 @@ class RuleFactory:
         self.player = player
         self.move_rando_bitvec = move_rando_bitvec
         self.area_randomizer = options.area_rando > 0
+        self.painting_randomizer = options.enable_locked_paintings
         self.capless = not options.strict_cap_requirements
         self.cannonless = not options.strict_cannon_requirements
         self.moveless = not options.strict_move_requirements
@@ -286,6 +287,14 @@ class RuleFactory:
                 f"Error generating rule for {target_name} using rule expression {rule_expr}: {exception}")
         if rule:
             set_rule(target, rule)
+
+    def painting_rule(self, inner_rules: Callable, level_name: str) -> Callable:
+        painting_item_name = f"Painting Unlock {level_name}"
+        painting_condition = (lambda state: state.has(painting_item_name, self.player)) if self.painting_randomizer else (lambda state: True)
+        if inner_rules is not None:
+            return lambda state: painting_condition(state) and inner_rules(state)
+        else:
+            return painting_condition
 
     def build_rule(self, rule_expr: str, cannon_name: str = '') -> Callable:
         expressions = rule_expr.split(" | ")
