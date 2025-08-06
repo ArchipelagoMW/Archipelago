@@ -1149,6 +1149,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
         }
+
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
 
@@ -1167,6 +1168,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'locked_items': {item_name: 0 for item_name in unreleased_items},
         }
+
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
 
@@ -1181,6 +1183,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'excluded_items': [item_name for item_name in item_groups.terran_mercenaries],
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
         }
+
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
 
@@ -1194,8 +1197,10 @@ class TestItemFiltering(Sc2SetupTestBase):
             'unexcluded_items': [item_names.SOA_TIME_STOP],
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
         }
+
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
+
         self.assertNotIn(
             item_groups.overpowered_items[0],
             itempool,
@@ -1206,3 +1211,18 @@ class TestItemFiltering(Sc2SetupTestBase):
             itempool,
             f"{item_names.SOA_TIME_STOP} was not unexcluded by unexcluded_items when exclude_overpowered_items was true"
         )
+
+    def test_exclude_overpowered_items_and_not_allow_unit_nerfs(self) -> None:
+        world_options = {
+            'mission_order': MissionOrder.option_grid,
+            'maximum_campaign_size': MaximumCampaignSize.range_end,
+            'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
+            'war_council_nerfs': options.WarCouncilNerfs.option_false,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+        }
+
+        self.generate_world(world_options)
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+
+        # A unit nerf happens due to excluding OP items
+        self.assertNotIn(item_names.MOTHERSHIP_INTEGRATED_POWER, starting_inventory)
