@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Ship of Harkinian](https://www.shipofharkinian.com/) for Windows or Linux. Steam Deck and Mac will be supported later.
+- [Ship of Harkinian](https://www.shipofharkinian.com/). Windows, Linux (including Steam Deck) and Mac are supported!
 - An Ocarina of Time ROM. Every version of OoT is supported!
 
 
