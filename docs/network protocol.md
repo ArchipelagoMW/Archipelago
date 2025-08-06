@@ -1,19 +1,7 @@
 # Archipelago General Client
-## Archipelago Connection Handshake
-These steps should be followed in order to establish a gameplay connection with an Archipelago session.
-
-1. Client establishes WebSocket connection to Archipelago server.
-2. Server accepts connection and responds with a [RoomInfo](#RoomInfo) packet.
-3. Client should check if the data packages are in the shared data package cache, if not they should send a [GetDataPackage](#GetDataPackage) packet containing the list of missing data packages.
-4. Server sends a [DataPackage](#DataPackage) packet in return. (If the client sent GetDataPackage.) The returned data packages should be saved to the shared data package cache.
-5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
-6. Server validates the client's packet and responds with [Connected](#Connected) or [ConnectionRefused](#ConnectionRefused).
-7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are queued up for it.
-8. Server sends [PrintJSON](#PrintJSON) to all players to notify them of the new client connection.
-
-In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
-
-There are also a number of community-supported libraries available that implement this network protocol to make integrating with Archipelago easier.
+There are a number of community-supported libraries available that implement the Archipelago network protocol to make integrating with Archipelago easier.
+This document is intended for people who are creating a new library, 
+contributing code to an existing library, or handling all the networking directly in a client (not recommended).
 
 | Language/Runtime              | Project                                                                                            | Remarks                                                                         |
 |-------------------------------|----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
@@ -29,6 +17,20 @@ There are also a number of community-supported libraries available that implemen
 | Lua                           | [lua-apclientpp](https://github.com/black-sliver/lua-apclientpp)                                   |                                                                                 |
 | Game Maker + Studio 1.x       | [gm-apclientpp](https://github.com/black-sliver/gm-apclientpp)                                     | For GM7, GM8 and GMS1.x, maybe older                                            |
 | GameMaker: Studio 2.x+        | [see Discord](https://discord.com/channels/731205301247803413/1166418532519653396)                 |                                                                                 |
+
+## Archipelago Connection Handshake
+These steps should be followed in order to establish a gameplay connection with an Archipelago session.
+
+1. Client establishes WebSocket connection to Archipelago server.
+2. Server accepts connection and responds with a [RoomInfo](#RoomInfo) packet.
+3. Client should check if the data packages are in the shared data package cache, if not they should send a [GetDataPackage](#GetDataPackage) packet containing the list of missing data packages.
+4. Server sends a [DataPackage](#DataPackage) packet in return. (If the client sent GetDataPackage.) The returned data packages should be saved to the shared data package cache.
+5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
+6. Server validates the client's packet and responds with [Connected](#Connected) or [ConnectionRefused](#ConnectionRefused).
+7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are queued up for it.
+8. Server sends [PrintJSON](#PrintJSON) to all players to notify them of the new client connection.
+
+In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
 ## Synchronizing Items
 After a client connects, it will receive all previously collected items for its associated slot in a [ReceivedItems](#ReceivedItems) packet. This will include items the client may have already processed in a previous play session.  
