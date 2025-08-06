@@ -32,14 +32,14 @@ ITEMS_DATA = {
     },
     "Bombs (Progressive)": {
         'classification': ItemClassification.progression,
-        "progressive": [[0x265320, 0x10], #[0x1BA5D2, 1], [0x1BA5D2, 2]],
+        "progressive": [[0x265320, 0x10]], #[0x1BA5D2, 1], [0x1BA5D2, 2]],
         #"progressive_overwrite": True,
         #"give_ammo": [10, 20, 30],
         #"ammo_address": 0x1BA6C0
     },
     "Bow (Progressive)": {
         'classification': ItemClassification.progression,
-        "progressive": [[0x265320, 0x08], #[0x1BA5D0, 1], []],
+        "progressive": [[0x265320, 0x08]], #[0x1BA5D0, 1], []],
         #"give_ammo": [20, 30, 50],
         #"ammo_address": 0x1BA6C2,
         #"progressive_overwrite": True,
@@ -174,7 +174,7 @@ ITEMS_DATA = {
     "Snow Realm Rail Map": {
         'classification': ItemClassification.progression,
         'address': 0x265716,
-        'value': 0x01
+        'value': 0x01,
         'set_bit': [(0x265715, 0x80)]
     },
     "Ocean Realm Rail Map": {
@@ -186,7 +186,7 @@ ITEMS_DATA = {
     "Fire Realm Rail Map": {
         'classification': ItemClassification.progression,
         'address': 0x265716,
-        'value': 0x04
+        'value': 0x04,
         'set_bit': [(0x265715, 0x80)]
     },
 

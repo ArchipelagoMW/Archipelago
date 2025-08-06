@@ -12,7 +12,7 @@ REGIONS = [
     # Aboda Village
     "aboda village",
     "aboda village stamp book",
-    "aboda village stamp station",
+    #"aboda village stamp station",
     "aboda village rocks",
     "aboda village bees",
     #"aboda village left tree",

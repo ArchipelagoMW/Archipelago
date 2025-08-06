@@ -20,31 +20,29 @@ ROM_ADDRS = {
 }
 
 RAM_ADDRS = {
-    "game_state": (0x060C48, 1, "Main RAM"), 
-    "is_dead": (0xC2EE, 1, "ARM7 System Bus"),
+    #"game_state": (0x060C48, 1, "Main RAM"), 
+    #"is_dead": (0xC2EE, 1, "ARM7 System Bus"),
 
-    "received_item_index": (0x1BA64C, 2, "Main RAM"),
-    "slot_id": (0x1BA64A, 2, "Main RAM"),
+    #"received_item_index": (0x1BA64C, 2, "Main RAM"),
+    #"slot_id": (0x1BA64A, 2, "Main RAM"),
 
-    "stage": (0x1B2E94, 4, "Main RAM"),
-    "floor": (0x1B2E98, 4, "Main RAM"),
-    "room": (0x1B2EA6, 1, "Main RAM"),
-    "entrance": (0x1B2EA7, 1, "Main RAM"),
-    "flags": (0x1B557C, 52, "Main RAM"),
+    #"stage": (0x1B2E94, 4, "Main RAM"),
+    #"floor": (0x1B2E98, 4, "Main RAM"),
+    #"room": (0x1B2EA6, 1, "Main RAM"),
+    #"entrance": (0x1B2EA7, 1, "Main RAM"),
+    #"flags": (0x1B557C, 52, "Main RAM"),
 
-    "getting_item": (0x1B6F44, 1, "Main RAM"),
+    #"getting_item": (0x1B6F44, 1, "Main RAM"),
     #"shot_frog": (0x1B7038, 1, "Main RAM"),
-    "getting_train_part": (0x11F5E4, 1, "Main RAM"),
+    #"getting_train_part": (0x11F5E4, 1, "Main RAM"),
 
-    "link_x": (0x1B6FEC, 4, "Main RAM"),
-    "link_y": (0x1B6FF0, 4, "Main RAM"),
-    "link_z": (0x1B6FF4, 4, "Main RAM"),
-    "using_item:": (0x1BA71C, 1, "Main RAM"),
-    "boat_x": (0x1B8518, 4, "Main RAM"),
-    "boat_z": (0x1B8520, 4, "Main RAM"),
-    "save_slot": (0x1B8124, 1, "Main RAM"),
-    "equipped_item": (0x1BA520, 4, "Main RAM"),
-    "got_item_menu": (0x19A5B0, 1, "Main RAM")
+    "link_x": (0x7E05CC, 4, "Main RAM"),
+    "link_y": (0x7E05D0, 4, "Main RAM"),
+    "link_z": (0x7E05D4, 4, "Main RAM"),
+    #"using_item:": (0x1BA71C, 1, "Main RAM"),
+    #"save_slot": (0x1B8124, 1, "Main RAM"),
+    "equipped_item": (0x265318, 4, "Main RAM"),
+    #"got_item_menu": (0x19A5B0, 1, "Main RAM")
 }
 
 POINTERS = {
