@@ -968,7 +968,7 @@ if "Timespinner" in network_data_package["games"]:
 
         slot_data = tracker_data.get_slot_data(team, player)
         if (slot_data["DownloadableItems"]):
-            timespinner_location_ids["Present"] += [1337156, 1337157] + list(range(1337159, 1337180))
+            timespinner_location_ids["Present"] += [1337156, 1337157] + list(range(1337159, 1337170))
         if (slot_data["Cantoran"]):
             timespinner_location_ids["Past"].append(1337176)
         if (slot_data["LoreChecks"]):
