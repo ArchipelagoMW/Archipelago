@@ -14,9 +14,7 @@
   {
     "from": "WM: First Continent South",
     "to": "Abbest Cave",
-    "condition": {
-      "Area - Abbest Cave": 1
-    },
+    "condition": {},
     "pictos": 1
   },
   {
@@ -272,8 +270,7 @@
     "from": "WM: Sky",
     "to": "Dark Shores",
     "condition": {
-      "Painted Power": 1,
-      "Area - Dark Shores": 1
+      "Painted Power": 1
     },
     "pictos": 1
   },
@@ -355,7 +352,6 @@
     "from": "WM: South Sea",
     "to": "Stone Wave Cliffs Cave",
     "condition": {
-      "Area - Stone Wave Cliffs Cave": 1
     },
     "pictos": 1
   },
@@ -363,8 +359,7 @@
     "from": "WM: Sky",
     "to": "The Chosen Path",
     "condition": {
-      "Painted Power": 1,
-      "Area - The Chosen Path": 1
+      "Painted Power": 1
     },
     "pictos": 1
   },
@@ -372,8 +367,7 @@
     "from": "WM: Sky",
     "to": "Sky Island",
     "condition": {
-      "Painted Power": 1,
-      "Area - Sky Island": 1
+      "Painted Power": 1
     },
     "pictos": 1
   },
@@ -381,8 +375,7 @@
     "from": "WM: Sky",
     "to": "Isle of the Eyes",
     "condition": {
-      "Painted Power": 1,
-      "Area - Isle of the Eyes": 1
+      "Painted Power": 1
     },
     "pictos": 1
   },
@@ -390,7 +383,6 @@
     "from": "WM: North Sea",
     "to": "The Crows",
     "condition": {
-      "Area - The Crows": 1
     },
     "pictos": 1
   },
@@ -404,7 +396,6 @@
     "from": "WM: Sky",
     "to": "Floating Cemetery",
     "condition": {
-      "Area - Floating Cemetery": 1
     },
     "pictos": 1
   },
@@ -418,7 +409,6 @@
     "from": "WM: South Sea",
     "to": "Crushing Cavern",
     "condition": {
-      "Area - Crushing Cavern": 1
     },
     "pictos": 1
   },
@@ -426,7 +416,6 @@
     "from": "WM: Second Continent NW",
     "to": "Esoteric Ruins",
     "condition": {
-      "Area - Esoteric Ruins": 1
     },
     "pictos": 1
   },
@@ -434,7 +423,6 @@
     "from": "WM: North Sea",
     "to": "Sinister Cave",
     "condition": {
-      "Area - Sinister Cave": 1
     },
     "pictos": 1
   },
@@ -445,7 +433,7 @@
     "pictos": 1
   },
   {
-    "from": "WM: Second Continent NW",
+    "from": "WM: Second Continent NE",
     "to": "The Carousel",
     "condition": {},
     "pictos": 1
@@ -460,7 +448,6 @@
     "from": "WM: Sky",
     "to": "Sacred River",
     "condition": {
-      "Area - Sacred River": 1
     },
     "pictos": 1
   },
@@ -477,7 +464,6 @@
     "from": "WM: Sky",
     "to": "Painting Workshop",
     "condition": {
-      "Area - Painting Workshop": 1
     },
     "pictos": 1
   },
@@ -494,8 +480,7 @@
     "from": "WM: Sky",
     "to": "Dark Gestral Arena",
     "condition": {
-      "Painted Power": 1,
-      "Area - Dark Gestral Arena": 1
+      "Painted Power": 1
     },
     "pictos": 1
   },
@@ -503,7 +488,6 @@
     "from": "WM: First Continent North",
     "to": "Hidden Gestral Arena",
     "condition": {
-      "Area - Hidden Gestral Arena": 1
     },
     "pictos": 1
   },
@@ -511,8 +495,7 @@
     "from": "WM: Sky",
     "to": "Sirene's Dress",
     "condition": {
-      "Painted Power": 1,
-      "Area - Sirene's Dress": 1
+      "Painted Power": 1
     },
     "pictos": 1
   },
@@ -520,8 +503,7 @@
     "from": "WM: Sky",
     "to": "Sunless Cliffs",
     "condition": {
-      "Painted Power": 1,
-      "Area - Sunless Cliffs": 1
+      "Painted Power": 1
     },
     "pictos": 1
   },
