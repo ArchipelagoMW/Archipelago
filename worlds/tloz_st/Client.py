@@ -26,14 +26,14 @@ RAM_ADDRS = {
     "received_item_index": (0x1BA64C, 2, "Main RAM"),
     "slot_id": (0x1BA64A, 2, "Main RAM"),
 
-    "stage": (0x1B2E94, 4, "Main RAM"),
-    "floor": (0x1B2E98, 4, "Main RAM"),
-    "room": (0x1B2EA6, 1, "Main RAM"),
-    "entrance": (0x1B2EA7, 1, "Main RAM"),
+    "stage": (0x260A2C, 4, "Main RAM"),
+    #"floor": (0x1B2E98, 4, "Main RAM"),
+    "room": (0x2690EA, 1, "Main RAM"),
+    "entrance": (0x2690EB, 1, "Main RAM"),
     "flags": (0x1B557C, 52, "Main RAM"),
 
     "getting_item": (0x1B6F44, 1, "Main RAM"),
-    #"shot_frog": (0x1B7038, 1, "Main RAM"),
+    # "shot_frog": (0x1B7038, 1, "Main RAM"),
     "getting_train_part": (0x11F5E4, 1, "Main RAM"),
 
     "link_x": (0x1B6FEC, 4, "Main RAM"),
@@ -199,7 +199,7 @@ class SpiritTracksClient(BizHawkClient):
         self.new_stage_loading = None
         self.at_sea = False
 
-        self.delay_pickup: list[str, list[list[str, str, int]]] or None = None
+        self.delay_pickup: list[str, list[list[str, str, int]]] | None = None
         self.last_key_count = 0
         self.key_address = 0
         self.key_value = 0
@@ -313,7 +313,6 @@ class SpiritTracksClient(BizHawkClient):
         read_keys = read_keys_always
         if stage is not None:
             if stage == 0:
-                read_keys += read_keys_sea
                 self.at_sea = True
             else:
                 read_keys += read_keys_land
@@ -321,22 +320,22 @@ class SpiritTracksClient(BizHawkClient):
         self.main_read_list = {k: v for k, v in RAM_ADDRS.items() if k in read_keys}
 
     def get_ending_room(self, ctx):
-        if ctx.slot_data["goal"] == "beat_bellumbeck":
-            self.goal_room = 0x3600
-        elif ctx.slot_data["goal"] == "triforce_door":
-            self.goal_room = 0x2509
+        self.goal_room = 0x300
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
+        """
         if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed or ctx.slot is None:
             self.just_entered_game = True
             self.last_scene = None
             self.get_main_read_list(self.current_stage)
             return
+        """
 
         # Enable "DeathLink" tag if option was enabled
         if self.set_deathlink:
-            self.set_deathlink = False
-            await ctx.update_death_link(True)
+            pass
+            # self.set_deathlink = False
+            # await ctx.update_death_link(True)
 
         try:
             read_result = await read_memory_values(ctx, self.main_read_list)

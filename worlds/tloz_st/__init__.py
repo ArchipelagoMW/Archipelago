@@ -226,6 +226,7 @@ class SpiritTracksWorld(World):
         # If non required dungeons need to be excluded, and not UT
         if self.options.exclude_non_required_dungeons and not getattr(self.multiworld, "generation_is_fake", False):
             #TODO always_include = ["Temple of the Ocean King", "Mountain Passage"]
+            always_include = []
             if self.options.ghost_ship_in_dungeon_pool == "false":
                 always_include.append("Ghost Ship")
             excluded_dungeons = [d for d in DUNGEON_NAMES
@@ -455,15 +456,7 @@ class SpiritTracksWorld(World):
         return item_name
 
     def fill_slot_data(self) -> dict:
-        #TODO options = ["goal", "dungeons_required", "bellum_access",
-                   "ghost_ship_in_dungeon_pool", "exclude_non_required_dungeons",
-                   "logic", "phantom_combat_difficulty", "boat_requires_sea_chart",
-                   "keysanity", "randomize_frogs", "randomize_triforce_crest", "randomize_harrow",
-                   "randomize_masked_beedle",
-                   "fog_settings",
-                   "dungeon_hints", "shop_hints", "spirit_island_hints",
-                   "st_starting_time", "st_time_increment",
-                   "death_link"]
+        options = []
         slot_data = self.options.as_dict(*options)
         slot_data["excluded_dungeons"] = self.excluded_dungeons
         slot_data["locations_to_exclude"] = self.ut_locations_to_exclude
