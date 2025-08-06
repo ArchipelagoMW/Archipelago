@@ -69,7 +69,7 @@ item_data_table: Dict[str, SohItemData] = {
     #Items.MAGIC_DOUBLE.value: SohItemData( 51, IC.filler, 0 ),
     Items.PROGRESSIVE_OCARINA.value: SohItemData( 52, IC.progression, 2 ),
     Items.PROGRESSIVE_GORON_SWORD.value: SohItemData( 53, IC.progression, 0 ),
-    Items.EMPTY_BOTTLE.value: SohItemData( 54, IC.progression, 1 ),
+    Items.EMPTY_BOTTLE.value: SohItemData( 54, IC.progression, 0 ),
     Items.BOTTLE_WITH_MILK.value: SohItemData( 55, IC.progression, 0 ),
     Items.BOTTLE_WITH_RED_POTION.value: SohItemData( 56, IC.progression, 0 ),
     Items.BOTTLE_WITH_GREEN_POTION.value: SohItemData( 57, IC.progression, 0 ),
@@ -77,7 +77,7 @@ item_data_table: Dict[str, SohItemData] = {
     Items.BOTTLE_WITH_FAIRY.value: SohItemData( 59, IC.progression, 0 ),
     Items.BOTTLE_WITH_FISH.value: SohItemData( 60, IC.progression, 0 ),
     Items.BOTTLE_WITH_BLUE_FIRE.value: SohItemData( 61, IC.progression, 0 ),
-    Items.BOTTLE_WITH_BUGS.value: SohItemData( 62, IC.progression, 1 ),
+    Items.BOTTLE_WITH_BUGS.value: SohItemData( 62, IC.progression, 0 ),
     Items.BOTTLE_WITH_POE.value: SohItemData( 63, IC.progression, 0 ),
     Items.BOTTLE_WITH_RUTOS_LETTER.value: SohItemData( 64, IC.progression, 1 ),
     Items.BOTTLE_WITH_BIG_POE.value: SohItemData( 65, IC.progression, 1 ),
@@ -312,4 +312,17 @@ filler_items = [
     Items.DEKU_NUTS_5.value, 
     Items.DEKU_NUTS_10.value, 
     Items.DEKU_STICK_1.value
+    ]
+
+filler_bottles = [
+    Items.EMPTY_BOTTLE.value,
+    Items.BOTTLE_WITH_MILK.value,
+    Items.BOTTLE_WITH_RED_POTION.value,
+    Items.BOTTLE_WITH_GREEN_POTION.value,
+    Items.BOTTLE_WITH_BLUE_POTION.value,
+    Items.BOTTLE_WITH_FAIRY.value,
+    Items.BOTTLE_WITH_FISH.value,
+    Items.BOTTLE_WITH_BLUE_FIRE.value,
+    Items.BOTTLE_WITH_BUGS.value,
+    Items.BOTTLE_WITH_POE.value,
     ]

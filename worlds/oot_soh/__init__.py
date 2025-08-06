@@ -3,7 +3,7 @@ import math
 
 from BaseClasses import CollectionState, Item, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .Items import SohItem, item_data_table, item_table, filler_items
+from .Items import SohItem, item_data_table, item_table, filler_items, filler_bottles
 from .Locations import SohLocation, base_location_table, \
     gold_skulltula_overworld_location_table, \
     gold_skulltula_dungeon_location_table, \
@@ -71,6 +71,13 @@ class SohWorld(World):
 
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_data_table.items()}
 
+        filler_bottle_amount: int = 2
+
+        # King Zora
+        if self.options.zoras_fountain == "open":
+            items_to_create[Items.BOTTLE_WITH_RUTOS_LETTER.value] = 0
+            filler_bottle_amount += 1
+
         # Overworld door keys
         if self.options.lock_overworld_doors:
             items_to_create[Items.GUARD_HOUSE_KEY.value] = 1
@@ -101,6 +108,9 @@ class SohWorld(World):
         # Gerudo Fortress Keys
         if self.options.fortress_carpenters == "fast":
                 items_to_create[Items.GERUDO_FORTRESS_SMALL_KEY.value] = 1
+
+        if self.options.fortress_carpenters == "free":
+            items_to_create[Items.GERUDO_FORTRESS_SMALL_KEY.value] = 0
         
         # Triforce pieces
         if self.options.triforce_hunt:
@@ -250,7 +260,7 @@ class SohWorld(World):
         # Big Poe Bottle
         if self.options.big_poe_target_count == 0:
             items_to_create[Items.BOTTLE_WITH_BIG_POE.value] = 0
-            items_to_create[Items.BOTTLE_WITH_FISH.value] = 1
+            filler_bottle_amount += 1
 
         # Bombchu bag
         if self.options.bombchu_bag:
@@ -273,10 +283,15 @@ class SohWorld(World):
         if self.options.skeleton_key:
             items_to_create[Items.SKELETON_KEY.value] = 1
 
+        # Add regular item pool
         for item, quantity in items_to_create.items():
             for _ in range(quantity):
                 item_pool.append(self.create_item(item))
 
+        # Add random filler bottles
+        item_pool += [self.create_item(self.get_filler_bottle_name()) for _ in range(filler_bottle_amount)]
+
+        # Add junk items to fill remaining locations
         open_location_count = sum(1 for loc in self.get_locations() if not loc.locked)
         filler_item_count: int = open_location_count - len(item_pool)
         item_pool += [self.create_item(self.get_filler_item_name()) for _ in range(filler_item_count)]
@@ -533,6 +548,9 @@ class SohWorld(World):
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
+    
+    def get_filler_bottle_name(self) -> str:
+        return self.random.choice(filler_bottles)
 
     def set_rules(self) -> None:
         # Completion condition.
