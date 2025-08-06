@@ -26,15 +26,31 @@ logger = logging.getLogger("Client")
 class PhantomHourglassWeb(WebWorld):
     theme = "grass"
     setup_en = Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to setting up Phantom Hourglass pseudo manual for Archipelago on your computer.",
+        "Phantom Hourglass Setup Guide",
+        "A guide to setting up Phantom Hourglass Archipelago Randomizer on your computer.",
         "English",
-        "ph_setup_en.md",
-        "ph_setup/en",
+        "setup.md",
+        "setup/en",
+        ["Carrotinator"]
+    )
+    faq = Tutorial(
+        "Phantom Hourglass FAQ",
+        "Questions you might have about the implementation, and credits",
+        "English",
+        "faq_and_credits.md",
+        "faq/en",
+        ["Carrotinator"]
+    )
+    tricks = Tutorial(
+        "Phantom Hourglass Tricks and Skips",
+        "Tricks and skips that might be required in harder logic settings, with videos when available",
+        "English",
+        "tricks_and_skips.md",
+        "tricks_and_skips/en",
         ["Carrotinator"]
     )
 
-    tutorials = [setup_en]
+    tutorials = [setup_en, faq, tricks]
 
 
 # Adds a consistent count of items to pool, independent of how many are from locations
