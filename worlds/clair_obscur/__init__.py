@@ -8,6 +8,7 @@ from worlds.clair_obscur.Items import create_item_name_to_ap_id, ClairObscurItem
 from worlds.clair_obscur.Locations import create_location_name_to_ap_id, create_locations
 from worlds.clair_obscur.Options import OPTIONS_GROUP, ClairObscurOptions
 from worlds.clair_obscur.Const import BASE_OFFSET
+from worlds.clair_obscur.Rules import set_rules
 
 class WebClairObscur(WebWorld):
     """
@@ -48,6 +49,10 @@ class ClairObscurWorld(World):
 
     item_name_to_id = create_item_name_to_ap_id()
     location_name_to_id = create_location_name_to_ap_id()
+
+    # item_name_groups = {
+    #
+    # }
 
     required_client_version = (0, 5, 4)
 
@@ -146,9 +151,6 @@ class ClairObscurWorld(World):
         connect_regions(self)
         create_locations(self, regions)
 
-        #Temporary completion condition
-        self.multiworld.completion_condition[self.player] = (
-            lambda state: state.can_reach_location("Lumiere: The Curator", self.player)
-        )
-
+    def set_rules(self):
+        set_rules(self)
 
