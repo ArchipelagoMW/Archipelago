@@ -1,4 +1,4 @@
-# Hexcelss Infinite
+# Hexcells Infinite
 
 ## Required Software
 
