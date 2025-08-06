@@ -279,6 +279,9 @@ class PhantomHourglassClient(BizHawkClient):
         for adr, value in STARTING_FLAGS:
             write_list.append((adr, [value], "Main RAM"))
 
+        # Reset save slot
+        write_list.append((0x1BA64C, [0, 0], "Main RAM"))
+
         # Set starting time for PH, removed since ph became an item
         # ph_time = ctx.slot_data["ph_starting_time"] * 60
         ph_time_bits = split_bits(0, 4)
@@ -511,7 +514,7 @@ class PhantomHourglassClient(BizHawkClient):
                 print(f"Started Game")
 
             # If new file, set up starting flags
-            if slot_memory == 0:
+            if slot_memory == 0 and not loading:
                 if await read_memory_value(ctx, 0x1b55a8, silent=True) & 2:  # Check if watched intro cs
                     await self.set_starting_flags(ctx)
                     print(f"Set starting flags for slot {slot_memory}")
