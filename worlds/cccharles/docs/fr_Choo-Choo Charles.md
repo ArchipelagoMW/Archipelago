@@ -1,11 +1,10 @@
 # Choo-Choo Charles
 
 ## Où est la page d'options ?
-La page d'options du joueur pour ce jeu contient toutes les options pour configurer et exporter un fichier de configuration yaml.
-La page n'est pas encore possible pour le moment, le YAML par défaut doit être utilisé à la place depuis [la page YAML du Randomiseur Multiworld de Choo-Choo Charles](https://github.com/lgbarrere/CCCharles-Random/blob/main/Release/CCCharles.yaml).
+La [page d'options du joueur pour ce jeu](../player-options) contient toutes les options pour configurer et exporter un fichier de configuration yaml.
 
 ## Qu'est ce que la randomisation fait au jeu ?
-Tous les débrits ou n'importe quel objet collectionnable au sol (excepté les Caisses à Butin) et objets reçus par les missions de PNJs sont considérés comme emplacements à vérifier.
+Tous les débrits ou n'importe quel objet ramassable au sol (excepté les Caisses à Butin) et objets reçus par les missions de PNJs sont considérés comme emplacements à vérifier.
 
 ## Quel est le but de Choo-Choo Charles lorsqu'il est randomisé ?
 Vaincre le train démoniaque de l'Enfer nommé "Charles".

@@ -44,9 +44,8 @@ class CCCharlesWeb(WebWorld):
 class CCCharlesWorld(World):
     """ 
     An independent 3D horror game, taking place on an island.
-    The main gameplay is composed of 2 phases :
-    > Traveling and fighting a monster on board a train
-    > Walking disarmed to gather resources
+    The main gameplay consists of traveling and fighting a monster on board a train.
+    Upgrading the train requires leaving the train to gather resources with the threat of encountering the monster.
     """
 
     game = "Choo-Choo Charles"
@@ -105,7 +104,7 @@ class CCCharlesWorld(World):
                 classification = ItemClassification.progression
             case "Timed Dynamite" :
                 classification = ItemClassification.progression
-            case "Box of Rocket" :
+            case "Box of Rockets" :
                 classification = ItemClassification.progression
             case "Breaker" :
                 classification = ItemClassification.progression
@@ -125,7 +124,7 @@ class CCCharlesWorld(World):
                 classification = ItemClassification.filler
             case "Pink Paint Can" :
                 classification = ItemClassification.filler
-            case "Gray Paint Can" :
+            case "Grey Paint Can" :
                 classification = ItemClassification.filler
             case "Blue Paint Can" :
                 classification = ItemClassification.filler
@@ -167,3 +166,6 @@ class CCCharlesWorld(World):
 
     def set_rules(self) -> None:
         set_rules(self.multiworld, self.options, self.player)
+
+    def get_filler_item_name(self) -> str:
+        return "Scraps"

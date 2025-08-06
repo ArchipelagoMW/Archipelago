@@ -1,14 +1,13 @@
 # Choo-Choo Charles
 
 ## Game page in other languages
-* [Français]()
+* [Français](fr)
 
 ## Where is the options page?
-The player options page for this game contains all the options to configure and export a yaml config file.
-The page cannot be accessed yet, the default YAML should be used instead from [the Choo-Choo Charles Multiworld Randomizer YAML page](https://github.com/lgbarrere/CCCharles-Random/blob/main/Release/CCCharles.yaml).
+The [Player Options page](../player-options) contains all the options to configure and export a yaml config file.
 
 ## What does randomization do to this game?
-All scraps or any pickup item on the ground (except from Loot Crates) and items received from NPCs missions are considered as locations to check.
+All scraps or any collectable item on the ground (except from Loot Crates) and items received from NPCs missions are considered as locations to check.
 
 ## What is the goal of Choo-Choo Charles when randomized?
 Beating the evil train from Hell named "Charles".

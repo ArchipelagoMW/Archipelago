@@ -24,7 +24,7 @@ optional_items = {
     "Page Drawing" : base_id + 15,
     "Journal" : base_id + 16,
     "Timed Dynamite" : base_id + 17,
-    "Box of Rocket" : base_id + 18,
+    "Box of Rockets" : base_id + 18,
     "Breaker" : base_id + 19,
     "Broken Bob" : base_id + 20,
     "Employment Contracts" : base_id + 21,
@@ -37,7 +37,7 @@ useless_items = {
     "Green Paint Can" : base_id + 25,
     "White Paint Can" : base_id + 26,
     "Pink Paint Can" : base_id + 27,
-    "Gray Paint Can" : base_id + 28,
+    "Grey Paint Can" : base_id + 28,
     "Blue Paint Can" : base_id + 29,
     "Black Paint Can" : base_id + 30,
     "Lime Paint Can" : base_id + 31,
@@ -69,7 +69,7 @@ item_groups = {
             "Green Paint Can",
             "White Paint Can",
             "Pink Paint Can",
-            "Gray Paint Can",
+            "Grey Paint Can",
             "Blue Paint Can",
             "Black Paint Can",
             "Lime Paint Can",
@@ -102,7 +102,7 @@ item_groups = {
             "Page Drawing",
             "Journal",
             "Timed Dynamite",
-            "Box of Rocket",
+            "Box of Rockets",
             "Breaker",
             "Broken Bob",
             "Employment Contracts",
@@ -140,7 +140,7 @@ full_item_list += ["Blue Box"] * 1
 full_item_list += ["Page Drawing"] * 8
 full_item_list += ["Journal"] * 1
 full_item_list += ["Timed Dynamite"] * 1
-full_item_list += ["Box of Rocket"] * 1
+full_item_list += ["Box of Rockets"] * 1
 full_item_list += ["Breaker"] * 4
 full_item_list += ["Broken Bob"] * 1
 full_item_list += ["Employment Contracts"] * 1
@@ -150,7 +150,7 @@ full_item_list += ["Orange Paint Can"] * 1
 full_item_list += ["Green Paint Can"] * 1
 full_item_list += ["White Paint Can"] * 1
 full_item_list += ["Pink Paint Can"] * 1
-full_item_list += ["Gray Paint Can"] * 1
+full_item_list += ["Grey Paint Can"] * 1
 full_item_list += ["Blue Paint Can"] * 1
 full_item_list += ["Black Paint Can"] * 1
 full_item_list += ["Lime Paint Can"] * 1
