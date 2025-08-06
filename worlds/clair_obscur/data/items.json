@@ -2706,265 +2706,146 @@
     "name": "Area - Flying Waters",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "GoblusLair"
   },
   {
     "type": "Area ticket",
     "name": "Area - Ancient Sanctuary",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "AncientSanctuary"
   },
   {
     "type": "Area ticket",
     "name": "Area - Crimson Forest",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Dark Shores",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
+    "internal_name": "SideLevel_RedForest"
   },
   {
     "type": "Area ticket",
     "name": "Area - Esquie's Nest",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "EsquieNest"
   },
   {
     "type": "Area ticket",
     "name": "Area - Falling Leaves",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "SideLevel_OrangeForest"
   },
   {
     "type": "Area ticket",
     "name": "Area - Flying Manor",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "SideLevel_CleasFlyingHouse"
   },
   {
     "type": "Area ticket",
     "name": "Area - Forgotten Battlefield",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "ForgottenBattlefield"
   },
   {
     "type": "Area ticket",
     "name": "Area - Frozen Hearts",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "SidelLevel_FrozenHearts"
   },
   {
     "type": "Area ticket",
     "name": "Area - Gestral Village",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "GestralVillage"
   },
   {
     "type": "Area ticket",
     "name": "Area - Monoco's Station",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "MonocoStation"
   },
   {
     "type": "Area ticket",
     "name": "Area - Lumiere",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "Lumiere"
   },
   {
     "type": "Area ticket",
     "name": "Area - The Monolith",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "Monolith_Interior_PaintressIntro"
   },
   {
     "type": "Area ticket",
     "name": "Area - Old Lumiere",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "OldLumiere"
   },
   {
     "type": "Area ticket",
     "name": "Area - The Reacher",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "SideLevel_Reacher"
   },
   {
     "type": "Area ticket",
     "name": "Area - Renoir's Drafts",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "SideLevel_AxonPath"
   },
   {
     "type": "Area ticket",
     "name": "Area - Stone Wave Cliffs",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "SeaCliff"
   },
   {
     "type": "Area ticket",
     "name": "Area - Sirene",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Stone Wave Cliffs Cave",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - The Chosen Path",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Sky Island",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Isle of the Eyes",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - The Crows",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Floating Cemetery",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Crushing Cavern",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Esoteric Ruins",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Sinister Cave",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Abbest Cave",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Sacred River",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
+    "internal_name": "Sirene"
   },
   {
     "type": "Area ticket",
     "name": "Area - Endless Night Sanctuary",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "SideLevel_TwilightSanctuary"
   },
   {
     "type": "Area ticket",
     "name": "Area - Visages",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
+    "internal_name": "Visages"
   },
   {
     "type": "Area ticket",
     "name": "Area - Yellow Harvest",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Painting Workshop",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
+    "internal_name": "SideLevel_YellowForest"
   },
   {
     "type": "Area ticket",
     "name": "Area - Endless Tower",
     "quantity": 1,
     "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Dark Gestral Arena",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Hidden Gestral Arena",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Sirene's Dress",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
-  },
-  {
-    "type": "Area ticket",
-    "name": "Area - Sunless Cliffs",
-    "quantity": 1,
-    "progressive": 1,
-    "internal_name": ""
+    "internal_name": "SideLevel_CleasTower_Entrance"
   }
 ]
