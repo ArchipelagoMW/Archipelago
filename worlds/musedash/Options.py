@@ -175,6 +175,13 @@ class ExcludeSongs(SongSet):
     """
     display_name = "Exclude Songs"
 
+class GoalSong(SongSet):
+    """
+    One of the selected songs will be guaranteed to show up as the final Goal Song.
+    - You must have the DLC enabled to play these songs.
+    - If no songs are chosen, then the song will be randomly chosen from the available songs.
+    """
+    display_name = "Goal Song"
 
 md_option_groups = [
     OptionGroup("Song Choice", [
@@ -182,6 +189,7 @@ md_option_groups = [
         StreamerModeEnabled,
         IncludeSongs,
         ExcludeSongs,
+        GoalSong,
     ]),
     OptionGroup("Difficulty", [
         GradeNeeded,
@@ -214,6 +222,7 @@ class MuseDashOptions(PerGameCommonOptions):
     death_link: DeathLink
     include_songs: IncludeSongs
     exclude_songs: ExcludeSongs
+    goal_song: GoalSong
 
     # Removed
     allow_just_as_planned_dlc_songs: Removed
