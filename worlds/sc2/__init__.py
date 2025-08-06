@@ -550,13 +550,20 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
             and SC2Campaign.HOTS in get_enabled_campaigns(world) # TODO: Kerrigan available all Zerg/Everywhere
     )
 
-    # TvZ build missions -- check flags Terran and VsZerg are true and NoBuild is false
-    tvz_build_mask = MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.NoBuild
-    tvz_expect_value = MissionFlag.Terran|MissionFlag.VsZerg
+    # TvX build missions -- check flags
     if world.options.take_over_ai_allies:
-        tvz_build_mask |= MissionFlag.AiTerranAlly
-        tvz_expect_value |= MissionFlag.AiTerranAlly
-    tvz_build_missions = [mission for mission in missions if tvz_build_mask & mission.flags == tvz_expect_value]
+        terran_build_missions = [mission for mission in missions if (
+            (MissionFlag.Terran in mission.flags or MissionFlag.AiTerranAlly in mission.flags)
+            and MissionFlag.NoBuild not in mission.flags
+        )]
+    else:
+        terran_build_missions = [mission for mission in missions if (
+            MissionFlag.Terran in mission.flags
+            and MissionFlag.NoBuild not in mission.flags
+        )]
+    tvz_build_missions = [mission for mission in terran_build_missions if MissionFlag.VsZerg in mission.flags]
+    tvp_build_missions = [mission for mission in terran_build_missions if MissionFlag.VsProtoss in mission.flags]
+    tvt_build_missions = [mission for mission in terran_build_missions if MissionFlag.VsTerran in mission.flags]
 
     # Check if SOA actives should be present
     if world.options.spear_of_adun_presence != SpearOfAdunPresence.option_not_present:
@@ -623,9 +630,17 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
         if item.name in item_tables.spear_of_adun_castable_passives and not soa_passive_presence:
             item.flags |= ItemFilterFlags.FilterExcluded
 
-        # Remove Psi Disrupter and Hive Mind Emulator if you never play a build TvZ
+        # Remove matchup-specific items if you don't play that matchup
         if (item.name in (item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER)
             and not tvz_build_missions
+        ):
+            item.flags |= ItemFilterFlags.FilterExcluded
+        if (item.name in (item_names.PSI_INDOCTRINATOR, item_names.SONIC_DISRUPTER)
+            and not tvt_build_missions
+        ):
+            item.flags |= ItemFilterFlags.FilterExcluded
+        if (item.name in (item_names.PSI_SCREEN, item_names.ARGUS_AMPLIFIER)
+            and not tvp_build_missions
         ):
             item.flags |= ItemFilterFlags.FilterExcluded
     return
