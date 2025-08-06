@@ -1,5 +1,4 @@
 import asyncio
-from logging import exception
 
 from worlds.Files import APPatch, APPlayerContainer, AutoPatchRegister
 from settings import get_settings, Settings
