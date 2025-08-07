@@ -12,6 +12,12 @@ class ProgressiveVacuum(Toggle):#DefaultOnToggle
     """
     display_name = "Progressive Vacuum Access"
 
+class ProgressiveGadget(Toggle):#DefaultOnToggle
+    """
+    Determines whether you get access to a gadget as individual blueprint count [NOT IMPLEMENTED]
+    """
+    display_name = "Progressive Gadgets"
+
 class Missionsanity(Choice):
     """
     How mission checks are randomized in the pool [NOT IMPLEMENTED]
@@ -76,3 +82,4 @@ class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     giftsanity: Gifts
     movesanity: Movesanity
     starting_area: StartingArea
+    progressive_gadget: ProgressiveGadgets
