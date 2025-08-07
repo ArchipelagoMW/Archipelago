@@ -669,7 +669,7 @@ item_descriptions = {
     item_names.HYDRALISK_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.HYDRALISK),
     item_names.BANELING_CENTRIFUGAL_HOOKS: "Increases the movement speed of Banelings.",
     item_names.BANELING_TUNNELING_JAWS: "Allows Banelings to move while burrowed.",
-    item_names.BANELING_RAPID_METAMORPH: "Banelings morph faster.",
+    item_names.BANELING_RAPID_METAMORPH: "Banelings morph faster and no longer cost vespene gas to morph.",
     item_names.MUTALISK_SEVERING_GLAIVE: "Mutalisk bounce attacks will deal full damage.",
     item_names.MUTALISK_AERODYNAMIC_GLAIVE_SHAPE: "Increases the attack range of Mutalisks by 2.",
     item_names.SWARM_HOST_LOCUST_METABOLIC_BOOST: "Increases Locust movement speed.",
