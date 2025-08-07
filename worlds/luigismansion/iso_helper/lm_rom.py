@@ -95,7 +95,13 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
             with tempfile.TemporaryDirectory() as local_dir_path:
                 logger.info(f"Temporary Directory created as: {local_dir_path}")
                 self.download_lib_zip(local_dir_path)
-                asyncio.run(self.create_iso_async(local_dir_path, aplm_patch, output_file, lm_clean_iso))
+                from multiprocessing import Process
+                proc = Process(target=self.create_iso, args=(local_dir_path, aplm_patch, output_file, lm_clean_iso,))
+                proc.start()
+                proc.join()
+
+                if proc.exitcode is not 0:
+                    raise Exception("Process exit code is %s", proc.exitcode)
 
     def read_contents(self, aplm_patch: str) -> dict[str, Any]:
         with zipfile.ZipFile(aplm_patch, "r") as zf:
@@ -170,7 +176,7 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
 
         return
 
-    async def create_iso_async(self, temp_dir_path: str, patch_file_path: str, output_iso_path: str, vanilla_iso_path: str):
+    def create_iso(self, temp_dir_path: str, patch_file_path: str, output_iso_path: str, vanilla_iso_path: str):
         logger.info(f"Appending the following to sys path to get dependencies correctly: {temp_dir_path}")
         sys.path.append(temp_dir_path)
 
