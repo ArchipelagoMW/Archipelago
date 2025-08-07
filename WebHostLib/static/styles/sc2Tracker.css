@@ -232,6 +232,7 @@ input[type="checkbox"]{
 .item-counter{
   display: table;
   text-align: center;
+  padding: var(--item-class-padding);
 }
 .item-count{
   display: table-cell;
