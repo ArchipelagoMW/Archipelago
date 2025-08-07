@@ -271,7 +271,6 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, options: Star
         items.append(item_factory(Wallet.bears_knowledge))
     else:
         items.append(item_factory(Wallet.bears_knowledge, classification_pre_fill=ItemClassification.useful))  # Not necessary outside of SVE
-    items.append(item_factory(Wallet.iridium_snake_milk))
     items.append(item_factory("Dark Talisman"))
     if content.is_enabled(ginger_island_content_pack):
         items.append(item_factory("Fairy Dust Recipe"))
@@ -543,6 +542,7 @@ def create_secrets_items(item_factory: StardewItemFactory, content: StardewConte
     if SecretsanityOptionName.secret_notes in options.secretsanity:
         secret_items.extend(items_by_group[Group.SECRET_NOTES_SECRET])
         if options.quest_locations.has_no_story_quests():
+            secret_items.append(item_table[Wallet.club_card])
             secret_items.append(item_table[Wallet.iridium_snake_milk])
     filtered_secret_items = remove_excluded(list(secret_items), content, options)
     items.extend([item_factory(item) for item in filtered_secret_items])

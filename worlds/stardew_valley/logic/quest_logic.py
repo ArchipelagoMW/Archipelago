@@ -105,7 +105,7 @@ class QuestLogic(BaseLogic):
         return Has(quest, self.registry.quest_rules, "quest")
 
     def has_club_card(self) -> StardewRule:
-        if self.options.quest_locations.has_story_quests():
+        if self.options.quest_locations.has_story_quests() or SecretsanityOptionName.secret_notes in self.options.secretsanity:
             return self.logic.received(Wallet.club_card)
         return self.logic.quest.can_complete_quest(Quest.the_mysterious_qi)
 
