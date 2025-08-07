@@ -2430,11 +2430,13 @@ if "Starcraft 2" in network_data_package["games"]:
     def render_Starcraft2_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
         SC2HOTS_ITEM_ID_OFFSET = 2000
         SC2_KEY_ITEM_ID_OFFSET = 4000
+        NCO_LOCATION_ID_LOW = 20004500
+        NCO_LOCATION_ID_HIGH = NCO_LOCATION_ID_LOW + 1000
 
         STARTING_MINERALS_ITEM_ID = 1800
         STARTING_VESPENE_ITEM_ID = 1801
         STARTING_SUPPLY_ITEM_ID = 1802
-        # Nothing_ITEM_ID = 1803
+        # NOTHING_ITEM_ID = 1803
         MAX_SUPPLY_ITEM_ID = 1804
         SHIELD_REGENERATION_ITEM_ID = 1805
         BUILDING_CONSTRUCTION_SPEED_ITEM_ID = 1806
@@ -2459,14 +2461,19 @@ if "Starcraft 2" in network_data_package["games"]:
         display_data["research_cost_count"] = inventory.get(UPGRADE_RESEARCH_COST_ITEM_ID, 0)
         
         # Locations
+        have_nco_locations = False
         locations = tracker_data.get_player_locations(team, player)
         checked_locations = tracker_data.get_player_checked_locations(team, player)
-        missions = set(
-            location_name.split(":", 1)[0]
-            for location_id, location_name in location_id_to_name.items()
-            if ":" in location_name
-            and location_id in locations
-        )
+        missions: dict[str, list[tuple[str, bool]]] = {}
+        for location_id in locations:
+            location_name = location_id_to_name.get(location_id, "")
+            if ":" not in location_name:
+                continue
+            mission_name = location_name.split(":", 1)[0]
+            missions.setdefault(mission_name, []).append((location_name, location_id in checked_locations))
+            if location_id >= NCO_LOCATION_ID_LOW and location_id < NCO_LOCATION_ID_HIGH:
+                have_nco_locations = True
+
 
         # Kerrigan level
         level_item_id_to_amount = (
@@ -2488,6 +2495,10 @@ if "Starcraft 2" in network_data_package["games"]:
         for item_id, levels_per_item in level_item_id_to_amount:
             kerrigan_level += levels_per_item * inventory[item_id]
         display_data["kerrigan_level"] = kerrigan_level
+
+        # Hero presence
+        display_data["kerrigan_present"] = slot_data.get("kerrigan_presence", 0) == 0
+        display_data["nova_present"] = have_nco_locations
         
         # Victory condition
         game_state = tracker_data.get_player_client_status(team, player)

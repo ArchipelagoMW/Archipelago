@@ -20,7 +20,7 @@
         <input type="checkbox" class="collapse-section">
         <h2>Filler Items</h2>
       </div>
-      <div class="section-body">
+      <div id="section-filler" class="section-body">
         <div class="item-counter">
           <img src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/icon-mineral-nobg.png" title="Additional Starting Minerals&#10;Increases the starting minerals for all missions.">
           <span class="item-count">+{{ minerals_count }}</span>
@@ -91,7 +91,7 @@
             Miscellaneous
           </div>
         </div>
-      <div class="section-body">
+      <div id="section-terran" class="section-body">
         <div class="ss-header">
           &#x2014; Barracks &#x2014;
         </div>
@@ -846,7 +846,7 @@
             Miscellaneous
           </div>
         </div>
-      <div class="section-body">
+      <div id="section-zerg" class="section-body">
         <div class="ss-header">
           &#x2014; Ground &#x2014;
         </div>
@@ -1410,7 +1410,7 @@
             Miscellaneous
           </div>
         </div>
-      <div class="section-body">
+      <div id="section-protoss" class="section-body">
         <div class="ss-header">
           &#x2014; Gateway &#x2014;
         </div>
@@ -1445,7 +1445,7 @@
           <div class="item-class-upgrades">
             <img id="Blood Shield (Supplicant)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-protoss-alarak-supplicantarmor.png" title="Blood Shield (Supplicant)&#10;Increases the armor value of Supplicant shields." class="{{'acquired' if inventory[3300] > 0}}">
             <img id="Endless Servitude (Supplicant)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-endless-servitude.png" title="Endless Servitude (Supplicant)&#10;Increases Supplicant shield regeneration rate." class="{{'acquired' if inventory[3302] > 0}}">
-            <img id="Sacrifice (Supplicant)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-ability-protoss-supplicant-sacrificeon.pngicons/original/btn-ability-protoss-supplicant-sacrificeoff.png" title="Sacrifice (Supplicant)&#10;Supplicant War Council ability.&#10;Allows Supplicants to sacrifice themselves to save nearby units from death." class="{{'acquired' if inventory[3553] > 0}}">
+            <img id="Sacrifice (Supplicant)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-ability-protoss-supplicant-sacrificeon.png" title="Sacrifice (Supplicant)&#10;Supplicant War Council ability.&#10;Allows Supplicants to sacrifice themselves to save nearby units from death." class="{{'acquired' if inventory[3553] > 0}}">
             <img id="Soul Augmentation (Supplicant)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-protoss-alarak-supplicantextrashields.png" title="Soul Augmentation (Supplicant)&#10;Increases Supplicant max shields by +25." class="{{'acquired' if inventory[3301] > 0}}">
             <img id="Zenith Pitch (Supplicant)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-protoss-alarak-rangeweapon.png" title="Zenith Pitch (Supplicant)&#10;Allows Supplicants to attack air units." class="{{'acquired' if inventory[3395] > 0}}">
           </div>
@@ -2064,10 +2064,10 @@
     </div>
     <div id="nova-items" class="tracker-section">
       <div class="section-title">
-        <input type="checkbox" class="collapse-section" checked="t">
+        <input type="checkbox" class="collapse-section"{{' checked="t"' if not nova_present}}>
         <h2>Nova Items</h2>
       </div>
-      <div class="section-body">
+      <div id="section-nova" class="section-body">
         <img id="Ghost Visor (Nova Equipment)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-nova-equipment-ghostvisor.png" title="Ghost Visor (Nova Equipment)&#10;Reveals the locations of enemy units in the fog of war around Nova. Can detect cloaked units." class="{{'acquired' if inventory[1900] > 0}}">
         <img id="Rangefinder Oculus (Nova Equipment)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-nova-equipment-rangefinderoculus.png" title="Rangefinder Oculus (Nova Equipment)&#10;Increases Nova's vision range and non-melee weapon attack range by 2. Also increases range of melee weapons by 1." class="{{'acquired' if inventory[1901] > 0}}">
         <img id="Domination (Nova Ability)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-ability-nova-domination.png" title="Domination (Nova Ability)&#10;Gives Nova the ability to mind-control a target enemy unit." class="{{'acquired' if inventory[1902] > 0}}">
@@ -2094,10 +2094,10 @@
     </div>
     <div id="kerrigan-items" class="tracker-section">
       <div class="section-title">
-        <input type="checkbox" class="collapse-section" checked="t">
+        <input type="checkbox" class="collapse-section"{{' checked="t"' if not kerrigan_present}}>
         <h2>Kerrigan Items</h2>
       </div>
-      <div class="section-body">
+      <div id="section-kerrigan" class="section-body">
         <div class="item-counter">
           <img src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-ability-kerrigan-revive.png" title="Kerrigan Level">
           <span class="item-count">{{kerrigan_level}}</span>
@@ -2127,7 +2127,7 @@
         <input type="checkbox" class="collapse-section" checked="t">
         <h2>Keys</h2>
       </div>
-      <div class="section-body">
+      <div id="section-keys" class="section-body">
         <ul id="keylist">
           {% for key_name, key_amount in keys.items() %}
           <li id="{{key_name}}" data-count="{{key_amount}}">{{key_name}}{{ ' (' + (key_amount | string) + ')' if key_amount > 1}}</li>
@@ -2140,7 +2140,7 @@
         <input type="checkbox" class="collapse-section">
         <h2>Locations</h2>
       </div>
-      <div class="section-body">
+      <div id="section-locations" class="section-body">
       </div>
     </div>
   </div>
