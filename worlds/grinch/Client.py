@@ -1,8 +1,6 @@
 from typing import TYPE_CHECKING
 from .Locations import grinch_locations
 from .Items import ALL_ITEMS_TABLE
-from NetUtils import ClientStatus
-import asyncio
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 from worlds.Files import APDeltaPatch
@@ -16,12 +14,15 @@ class GrinchClient(BizHawkClient):
     system = "PSX"
     patch_suffix = ".apgrinch"
     items_handling = 0b111
+    last_received_index = 0
 
     def __init__(self):
         super().__init__()
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
+        from CommonClient import logger
 
+        # TODO Check the ROM data to see if it matches against bytes expected
         grinch_identifier_ram_address: int = 0x00928C
         bytes_expected: bytes = bytes.fromhex("e903c14f4becf89082f43ec936a68e62")
         try:
@@ -30,7 +31,7 @@ class GrinchClient(BizHawkClient):
 
             psx_rom_name = bytes_actual.decode("ascii")
             if psx_rom_name != "SLUS_011.97":
-                logger.info("Invalid rom detected. You are not playing Grinch USA Version.")
+                logger.error("Invalid rom detected. You are not playing Grinch USA Version.")
                 raise Exception("Invalid rom detected. You are not playing Grinch USA Version.")
         except Exception():
             return False
@@ -38,7 +39,7 @@ class GrinchClient(BizHawkClient):
         ctx.game = self.game
         ctx.items_handling = self.items_handling
         ctx.want_slot_data = True
-        ctx.watcher_timeout = 0.5
+        ctx.watcher_timeout = 0.125
 
         return True
 
@@ -49,7 +50,6 @@ class GrinchClient(BizHawkClient):
         #If the player is not connected to an AP Server, or their connection was disconnected.
         if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
             return
-
 
         try:
             # # Read save data
@@ -72,7 +72,7 @@ class GrinchClient(BizHawkClient):
             #         "status": ClientStatus.CLIENT_GOAL
             #     }])
             await self.location_checker(ctx)
-            # await self.receiving_items_handler(ctx)
+            await self.receiving_items_handler(ctx)
 
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
@@ -91,7 +91,7 @@ class GrinchClient(BizHawkClient):
             for addr_to_update in grinch_loc_ram_data.update_ram_addr:
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
                 current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
-                    addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0])
+                    addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
                 if is_binary:
                     if (current_ram_address_value & (1 << addr_to_update.binary_bit_pos)) > 0:
                         ctx.locations_checked.add(missing_location)
@@ -104,9 +104,30 @@ class GrinchClient(BizHawkClient):
         await ctx.check_locations(ctx.locations_checked)
 
     async def receiving_items_handler(self, ctx: "BizHawkClientContext"):
-        for item_received in ctx.items_received:
-            local_item = ctx.item_names.lookup_in_game(item_received)
+        # Len will give us the size of the items received list & we will track that against how many items we received already
+        # If the list says that we have 3 items and we already received items, we will ignore and continue.
+        # Otherwise, we will get the new items and give them to the player.
+        if len(ctx.items_received) == self.last_received_index:
+            return
+
+        # Ensures we only get the new items that we want to give the player
+        new_items_only = ctx.items_received[self.last_received_index:]
+
+        for item_received in new_items_only:
+            local_item = ctx.item_names.lookup_in_game(item_received.item)
             grinch_item_ram_data = ALL_ITEMS_TABLE[local_item]
 
             for addr_to_update in grinch_item_ram_data.update_ram_addr:
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
+                if is_binary:
+                    current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
+                        addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
+                    current_ram_address_value = (current_ram_address_value | (1 << addr_to_update.binary_bit_pos))
+                else:
+                    current_ram_address_value = addr_to_update.value
+
+                # Write the updated value back into RAM
+                await bizhawk.write(ctx.bizhawk_ctx, [(addr_to_update.ram_address,
+                    current_ram_address_value.to_bytes(addr_to_update.bit_size, "little"), "MainRAM")])
+
+            self.last_received_index += 1
