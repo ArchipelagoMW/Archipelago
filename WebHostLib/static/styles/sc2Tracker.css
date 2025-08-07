@@ -102,9 +102,11 @@ input[type="checkbox"]{
   flex-flow: row;
 }
 .item-class-upgrades{
-  display: flex;
-  flex-flow: column wrap;
-  max-height: calc(4 * var(--icon-size));
+  /* Note: {display: flex; flex-flow: column wrap} */
+  /* just breaks on Firefox (width does not scale to content) */
+  display: grid;
+  grid-template-rows: repeat(4, auto);
+  grid-auto-flow: column;
 }
 
 /* Subsections */

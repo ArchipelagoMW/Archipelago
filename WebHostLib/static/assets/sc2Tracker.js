@@ -5,7 +5,7 @@ let updateSection = (sectionName, fakeDOM) => {
 window.addEventListener('load', () => {
     // Reload tracker every 15 seconds
     const url = window.location;
-    setInterval(() => {
+    window.refreshInterval = setInterval(() => {
       const ajax = new XMLHttpRequest();
       ajax.onreadystatechange = () => {
         if (ajax.readyState !== 4) { return; }
