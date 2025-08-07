@@ -48,7 +48,7 @@ class TestBase(unittest.TestCase):
 
                 original_get_all_state = multiworld.get_all_state
 
-                def patched_get_all_state(use_cache: bool, allow_partial_entrances: bool = False):
+                def patched_get_all_state(use_cache: bool | None = None, allow_partial_entrances: bool = False):
                     self.assertTrue(allow_partial_entrances, (
                         "Before the connect_entrances step finishes, other worlds might still have partial entrances. "
                         "As such, any call to get_all_state must use allow_partial_entrances = True."
