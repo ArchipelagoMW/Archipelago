@@ -4,7 +4,8 @@ from typing import List, Mapping, Any
 from BaseClasses import Tutorial, Group, CollectionState
 from worlds.AutoWorld import WebWorld, World
 from worlds.clair_obscur.Data import data
-from worlds.clair_obscur.Items import create_item_name_to_ap_id, ClairObscurItem, get_classification, offset_item_value
+from worlds.clair_obscur.Items import create_item_name_to_ap_id, ClairObscurItem, get_classification, offset_item_value, \
+    create_item_groups
 from worlds.clair_obscur.Locations import create_location_name_to_ap_id, create_locations
 from worlds.clair_obscur.Options import OPTIONS_GROUP, ClairObscurOptions
 from worlds.clair_obscur.Const import BASE_OFFSET
@@ -50,9 +51,7 @@ class ClairObscurWorld(World):
     item_name_to_id = create_item_name_to_ap_id()
     location_name_to_id = create_location_name_to_ap_id()
 
-    # item_name_groups = {
-    #
-    # }
+    item_name_groups = create_item_groups(data.items)
 
     required_client_version = (0, 5, 4)
 

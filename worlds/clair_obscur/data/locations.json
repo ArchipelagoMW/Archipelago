@@ -1768,38 +1768,6 @@
         "type": "Chest"
     },
     {
-        "internal_name": "Chest_Lumiere_ACT1_1",
-        "name": "Lumiere (Act 1): On top of pile of wood",
-        "location": "Lumiere ACT1",
-        "original_item": "ChromaPack_Regular",
-        "condition": {},
-        "type": "Chest"
-    },
-    {
-        "internal_name": "Chest_Lumiere_ACT1_2",
-        "name": "Lumiere (Act 1): In dining area",
-        "location": "Lumiere ACT1",
-        "original_item": "ChromaPack_Regular",
-        "condition": {},
-        "type": "Chest"
-    },
-    {
-        "internal_name": "Chest_Lumiere_ACT1_3",
-        "name": "Lumiere (Act 1): Left side near docks",
-        "location": "Lumiere ACT1",
-        "original_item": "ChromaPack_Regular",
-        "condition": {},
-        "type": "Chest"
-    },
-    {
-        "internal_name": "Chest_Lumiere_ACT1_4",
-        "name": "Lumiere (Act 1): Near Sophie",
-        "location": "Lumiere ACT1",
-        "original_item": "ChromaPack_Regular",
-        "condition": {},
-        "type": "Chest"
-    },
-    {
         "internal_name": "Chest_Manor_1",
         "name": "Manor: From First Continent Sea - After library platforms",
         "location": "Manor",
@@ -4592,7 +4560,7 @@
         "type": "Chest"
     },
     {
-        "internal_name": "Chest_WorldMap_68",
+        "internal_name": "Chest_Generic_Chroma",
         "name": "World Map: Second Continent - On the ruined bridge",
         "location": "World Map",
         "original_item": "ChromaPack_Regular",
@@ -6028,6 +5996,7 @@
     },
     {
         "name": "Lost Gestral reward 1",
+        "internal_name": "",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 1
@@ -6037,6 +6006,7 @@
     },
     {
         "name": "Lost Gestral reward 2",
+        "internal_name": "",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 2
@@ -6046,6 +6016,7 @@
     },
     {
         "name": "Lost Gestral reward 3",
+        "internal_name": "",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 3
@@ -6055,6 +6026,7 @@
     },
     {
         "name": "Lost Gestral reward 4",
+        "internal_name": "",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 4
@@ -6064,6 +6036,7 @@
     },
     {
         "name": "Lost Gestral reward 5",
+        "internal_name": "",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 5
@@ -6073,6 +6046,7 @@
     },
     {
         "name": "Lost Gestral reward 6",
+        "internal_name": "",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 6
@@ -6082,6 +6056,7 @@
     },
     {
         "name": "Lost Gestral reward 7",
+        "internal_name": "",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 7
@@ -6091,6 +6066,7 @@
     },
     {
         "name": "Lost Gestral reward 8",
+        "internal_name": "",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 8
@@ -6100,6 +6076,7 @@
     },
     {
         "name": "Lost Gestral reward 9",
+        "internal_name": "",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 9
@@ -6109,79 +6086,90 @@
     },
     {
         "name": "Underwater item 1",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
         "location": "World Map",
         "condition": {},
-        "original_item": "",
+        "original_item": "Consumable_LuminaPoint",
         "type": "Dive"
     },
     {
         "name": "Underwater item 2",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
         "location": "World Map",
         "condition": {},
-        "original_item": "",
+        "original_item": "Consumable_LuminaPoint",
         "type": "Dive"
     },
     {
         "name": "Underwater item 3",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
         "location": "World Map",
         "condition": {},
-        "original_item": "",
+        "original_item": "Consumable_LuminaPoint",
         "type": "Dive"
     },
     {
         "name": "Underwater item 4",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
         "location": "World Map",
         "condition": {},
-        "original_item": "",
+        "original_item": "Consumable_LuminaPoint",
         "type": "Dive"
     },
     {
         "name": "Underwater item 5",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
         "location": "World Map",
         "condition": {},
-        "original_item": "",
+        "original_item": "Consumable_LuminaPoint",
         "type": "Dive"
     },
     {
         "name": "Underwater item 6",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
         "location": "World Map",
         "condition": {},
-        "original_item": "",
+        "original_item": "Consumable_LuminaPoint",
         "type": "Dive"
     },
     {
         "name": "Underwater item 7",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
         "location": "World Map",
         "condition": {},
-        "original_item": "",
+        "original_item": "Consumable_LuminaPoint",
         "type": "Dive"
     },
     {
         "name": "Underwater item 8",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
         "location": "World Map",
         "condition": {},
-        "original_item": "",
+        "original_item": "Consumable_LuminaPoint",
         "type": "Dive"
     },
     {
         "name": "Underwater item 9",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
         "location": "World Map",
         "condition": {},
-        "original_item": "",
+        "original_item": "Consumable_LuminaPoint",
         "type": "Dive"
     },
     {
         "name": "Underwater item 10",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
         "location": "World Map",
         "condition": {},
-        "original_item": "",
+        "original_item": "Consumable_LuminaPoint",
         "type": "Dive"
     },
     {
         "name": "Underwater item 11",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
         "location": "World Map",
         "condition": {},
-        "original_item": "",
+        "original_item": "Consumable_LuminaPoint",
         "type": "Dive"
     }
 ]
