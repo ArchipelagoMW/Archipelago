@@ -22,12 +22,24 @@ def set_rules(world):
         lambda state: state.can_reach_location(goal_loc, player)
     )
 
+    #Major map connections- the playthrough will always go through these.
+    major_connection_1 = world.get_entrance("WM: First Continent South -> WM: South Sea", player)
+    major_connection_2 = world.get_entrance("WM: South Sea -> WM: North Sea", player)
+
+
     #connection access: direct area tickets
 
     #paint break reqs
 
     #broad transition reqs: FCS -> SS, SS -> NS
     #   % of area tickets based on settings, character reqs
+    #   area tickets need to be in distinct groups for major areas in each section of the game; giving the player
+    #   Flying Manor won't ensure they have the level range to do Visages for instance
+    add_rule(major_connection_1, lambda state, pl=player: state.has_group("Area", pl, 2))
+    add_rule(major_connection_1, lambda state, pl=player: state.has_group("Character", pl, 1))
+
+    add_rule(major_connection_2, lambda state, pl=player: state.has_group("Area", pl, 4))
+    add_rule(major_connection_2, lambda state, pl=player: state.has_group("Character", pl, 2))
 
     #lost gestrals
 

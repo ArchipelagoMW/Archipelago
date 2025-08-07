@@ -1,8 +1,8 @@
-from typing import NamedTuple, Dict, Optional
+from typing import Dict, Optional, List, Set
 
 from BaseClasses import Item, ItemClassification
 from .Const import BASE_OFFSET
-from .Data import data
+from .Data import data, ClairObscurItemData
 
 
 class ClairObscurItem(Item):
@@ -36,3 +36,20 @@ def create_item_name_to_ap_id() -> Dict[str, int]:
 
 def get_classification(item_id: int) -> ItemClassification:
     return data.items[reverse_offset_item_value(item_id)].classification
+
+def create_item_groups(items: Dict[int, ClairObscurItemData]):
+    item_groups: Dict[str, Set[str]] = {
+        "Upgrade material": set(),
+        "Exploration capacities": set(),
+        "Quest item": set(),
+        "Journal": set(),
+        "Picto": set(),
+        "Weapon": set(),
+        "Character": set(),
+        "Area": set()
+    }
+
+    for item in items.keys():
+        item_groups[items[item].type].add(items[item].name)
+
+    return item_groups
