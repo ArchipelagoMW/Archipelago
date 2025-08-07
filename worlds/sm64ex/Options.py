@@ -25,10 +25,10 @@ class EnableLockedPaintings(Toggle):
 
     Off - Paintings are not locked, as long as you can access them you can enter them (Vanilla behavior).
 
-    On - Paintings (other than BoB) start off locked and 11 items are added to the pool to allow access to them.
+    On - Paintings (other than BoB) start off locked and 11 stars are replaced in the pool with items to allow access to them.
     Attempting to enter a locked painting will simply kick Mario out.
     Does not affect secrets and levels that don't have a painting (BBH, HMC, RR).
-    This only affects the ability for Mario to enter a painting, the destination of the painting may change due to Entrance Randomization.
+    This only affects the ability for Mario to enter a painting, the destination of the painting may change due to Entrance Randomization, if it is enabled.
     """
     display_name = "Enable Locked Paintings"
 

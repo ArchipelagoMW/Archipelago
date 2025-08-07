@@ -206,7 +206,7 @@ class SM64World(World):
         return {
             "AreaRando": self.area_connections,
             "MoveRandoVec": self.move_rando_bitvec,
-            "PaintingRando": 1 if self.options.enable_locked_paintings else 0,
+            "PaintingRando": self.options.enable_locked_paintings.value,
             "DeathLink": self.options.death_link.value,
             "CompletionType": self.options.completion_type.value,
             **self.star_costs

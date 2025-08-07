@@ -322,8 +322,6 @@ class RuleFactory:
 
     def build_star_painting_entry_requirements(self, painting_lvl_name: str = None, star_num_req: int = None) -> Callable:
         nop_condition = lambda state: True
-        if(painting_lvl_name is None and star_num_req is None):
-            return nop_condition
         star_rule = nop_condition
         painting_rule = nop_condition
         if painting_lvl_name is not None and self.painting_randomizer:
