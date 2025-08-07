@@ -196,5 +196,5 @@ You may be able to write patches using [ContentLib](https://ficsit.app/mod/Conte
 to adjust other mods to work with your slot settings,
 but doing so is out of the scope of this guide.
 
-[The Archipelago Satisfactory mod GitHub](https://github.com/Jarno458/SatisfactoryArchipelagoMod/blob/main/Docs/AdditionalMods.md)
+[The Satisfactory Archipelago mod GitHub](https://github.com/Jarno458/SatisfactoryArchipelagoMod/blob/main/Docs/AdditionalMods.md)
 maintains a list of additional mods that have been tested with Archipelago to some extent.
