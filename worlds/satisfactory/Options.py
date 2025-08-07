@@ -56,7 +56,7 @@ class ElevatorTier(NamedRange):
     - **two packages (tiers 1-4)**: ~8 Hours
     - **three packages (tiers 1-6)**: ~2 Days
     - **four packages (tiers 1-8)**: ~1 Week
-    - **five packages (tiers 1-9)**: ~1.5 Week
+    - **five packages (tiers 1-9)**: ~1.5 Weeks
     """
     display_name = "Space Elevator shipments in logic"
     default = 2
