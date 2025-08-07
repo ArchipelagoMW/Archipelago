@@ -14,7 +14,8 @@ window.addEventListener('load', () => {
         const domParser = new DOMParser();
         const fakeDOM = domParser.parseFromString(ajax.responseText, 'text/html');
   
-        // Update item tracker
+        // Update dynamic sections
+        updateSection('player-info', fakeDOM);
         updateSection('section-filler', fakeDOM);
         updateSection('section-terran', fakeDOM);
         updateSection('section-zerg', fakeDOM);
