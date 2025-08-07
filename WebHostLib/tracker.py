@@ -2493,6 +2493,13 @@ if "Starcraft 2" in network_data_package["games"]:
         game_state = tracker_data.get_player_client_status(team, player)
         display_data["game_finished"] = game_state == ClientStatus.CLIENT_GOAL
 
+        # Keys
+        keys: dict[str, int] = {}
+        for item_id, item_count in inventory.items():
+            if item_id < SC2_KEY_ITEM_ID_OFFSET:
+                continue
+            keys[item_id_to_name[item_id]] = item_count
+
         return render_template(
             "tracker__Starcraft2.html",
             inventory=inventory,
@@ -2505,6 +2512,7 @@ if "Starcraft 2" in network_data_package["games"]:
             checked_locations=checked_locations,
             location_id_to_name=location_id_to_name,
             item_id_to_name=item_id_to_name,
+            keys=keys,
             **display_data,
         )
 

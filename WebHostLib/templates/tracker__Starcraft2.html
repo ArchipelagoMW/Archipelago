@@ -2128,13 +2128,11 @@
         <h2>Keys</h2>
       </div>
       <div class="section-body">
-        <ol id="keylist">
-          <li id="Key 1" data-count="1">Key 1</li>
-          <li id="Key 2" data-count="1">Key 2</li>
-          <li id="Raynor Key" data-count="1">Raynor Key</li>
-          <li id="Artanis Key" data-count="1">Artanis Key</li>
-          <li id="Vorazun Key" data-count="1">Vorazun Key</li>
-        </ol>
+        <ul id="keylist">
+          {% for key_name, key_amount in keys.items() %}
+          <li id="{{key_name}}" data-count="{{key_amount}}">{{key_name}}{{ ' (' + (key_amount | string) + ')' if key_amount > 1}}</li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
     <div id="locations" class="tracker-section">
