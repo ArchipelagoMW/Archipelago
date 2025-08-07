@@ -82,4 +82,4 @@ class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     giftsanity: Gifts
     movesanity: Movesanity
     starting_area: StartingArea
-    progressive_gadget: ProgressiveGadgets
+    progressive_gadget: ProgressiveGadget
