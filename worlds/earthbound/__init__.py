@@ -160,6 +160,7 @@ class EarthBoundWorld(World):
             "Molokheiya Soup",
             "Plain Roll",
             "Magic Tart",
+            "PSI Caramel",
             "Popsicle",
             "Bottle Rocket"
         ]
@@ -178,7 +179,6 @@ class EarthBoundWorld(World):
             "Pizza",
             "Chef's Special",
             "Super Plush Bear",
-            "PSI Caramel",
             "Jar of Delisauce",
             "Secret Herb",
             "Xterminator Spray",
@@ -202,7 +202,8 @@ class EarthBoundWorld(World):
             "Bottle of DXwater",
             "Magic Pudding",
             "Big Bottle Rocket",
-            "Bazooka"
+            "Bazooka",
+            "Meteornium"
 
         ]
 

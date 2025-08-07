@@ -358,6 +358,7 @@ class EarthBoundClient(SNIClient):
             if shop_slots:
                 if shop_scouts_enabled[0] == 2:
                     await ctx.send_msgs([{"cmd": "LocationScouts", "locations": shop_slots, "create_as_hint": 2}])
+                    # await ctx.send_msgs([{"cmd": "CreateHints", "locations": shop_slots, "player": ctx.slot}]) implement this when 0.6.3 releases
                     await snes_write(ctx, [(WRAM_START + 0x0770, bytes([0x00]))])
                 else:
                     prog_shops = []
@@ -368,6 +369,7 @@ class EarthBoundClient(SNIClient):
                             if ctx.locations_info[location].flags & 0x01:
                                 prog_shops.append(location)
                     await ctx.send_msgs([{"cmd": "LocationScouts", "locations": prog_shops, "create_as_hint": 2}])
+                    # await ctx.send_msgs([{"cmd": "CreateHints", "locations": prog_shops, "player": ctx.slot}]) implement this when 0.6.3 releases
 
         await ctx.send_msgs([{
                     "cmd": "Set",
