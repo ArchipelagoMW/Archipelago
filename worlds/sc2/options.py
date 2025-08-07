@@ -280,7 +280,7 @@ class EnableRaceSwapVariants(Choice):
 class EnableMissionRaceBalancing(Choice):
     """
     If enabled, picks missions in such a way that the appearance rate of races is roughly equal.
-    The final rates may deviate if there are not enough missions enabled to accomodate each race.
+    The final rates may deviate if there are not enough missions enabled to accommodate each race.
 
     Disabled: Pick missions at random.
     Semi Balanced: Use a weighting system to pick missions in a random, but roughly equal ratio.
@@ -551,7 +551,6 @@ class KerriganPresence(Choice):
         and locations normally requiring Kerrigan can be checked by any unit.
         Kerrigan level items, active abilities and passive abilities affecting her will not appear.
         In missions where the Kerrigan unit is required, story abilities are given in same way as Grant Story Tech is set to true
-    Not Present And No Passives:  In addition to the above, Kerrigan's passive abilities affecting other units (such as Twin Drones) will not appear.
 
     Note: Always set to "Not Present" if Heart of the Swarm campaign is disabled.
     """
@@ -563,8 +562,6 @@ class KerriganPresence(Choice):
 class KerriganLevelsPerMissionCompleted(Range):
     """
     Determines how many levels Kerrigan gains when a mission is beaten.
-
-    NOTE: Setting this too low can result in generation failures if The Infinite Cycle or Supreme are in the mission pool.
     """
     display_name = "Levels Per Mission Beaten"
     range_start = 0
@@ -773,10 +770,10 @@ class SpearOfAdunPassiveAbilityPresence(Choice):
     """
     display_name = "Spear of Adun Passive Ability Presence"
     option_not_present = 0
-    option_vanilla = 4
+    option_any_race_lotv = 1
     option_protoss = 2
     option_everywhere = 3
-    option_any_race_lotv = 1
+    option_vanilla = 4
     default = option_vanilla
 
     # Fix case
@@ -1039,7 +1036,7 @@ class ExcludeVeryHardMissions(Choice):
     Yes: Non-Epilogue Very Hard missions are excluded and won't be generated
     No: Non-Epilogue Very Hard missions can appear normally. Not recommended for too short mission orders.
 
-    See also: Excluded Missions, Enable Epilogue Missions, Maximum Campaign Size
+    See also: Excluded Missions, Enabled Campaigns, Maximum Campaign Size
     """
     display_name = "Exclude Very Hard Missions"
     option_default = 0
