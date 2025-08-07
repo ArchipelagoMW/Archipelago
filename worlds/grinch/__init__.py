@@ -4,6 +4,7 @@ from .Items import grinch_items_to_id, GrinchItem, ALL_ITEMS_TABLE, MISC_ITEMS_T
 from .Regions import connect_regions
 from .Rules import set_rules
 
+from .Client import *
 from typing import ClassVar
 
 from worlds.AutoWorld import World
