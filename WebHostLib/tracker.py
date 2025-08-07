@@ -1247,7 +1247,9 @@ if "ChecksFinder" in network_data_package["games"]:
 
 if "Starcraft 2" in network_data_package["games"]:
     def render_Starcraft2_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
+        SC2WOL_ITEM_ID_OFFSET = 1000
         SC2HOTS_ITEM_ID_OFFSET = 2000
+        SC2LOTV_ITEM_ID_OFFSET = 2000
         SC2_KEY_ITEM_ID_OFFSET = 4000
         NCO_LOCATION_ID_LOW = 20004500
         NCO_LOCATION_ID_HIGH = NCO_LOCATION_ID_LOW + 1000
@@ -1293,7 +1295,6 @@ if "Starcraft 2" in network_data_package["games"]:
             if location_id >= NCO_LOCATION_ID_LOW and location_id < NCO_LOCATION_ID_HIGH:
                 have_nco_locations = True
 
-
         # Kerrigan level
         level_item_id_to_amount = (
             (509 + SC2HOTS_ITEM_ID_OFFSET, 1,),
@@ -1318,6 +1319,124 @@ if "Starcraft 2" in network_data_package["games"]:
         # Hero presence
         display_data["kerrigan_present"] = slot_data.get("kerrigan_presence", 0) == 0
         display_data["nova_present"] = have_nco_locations
+
+        # Upgrades
+        TERRAN_INFANTRY_WEAPON_ID = 100 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_INFANTRY_ARMOR_ID =  102 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_VEHICLE_WEAPON_ID =  103 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_VEHICLE_ARMOR_ID =   104 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_SHIP_WEAPON_ID =     105 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_SHIP_ARMOR_ID =      106 + SC2WOL_ITEM_ID_OFFSET
+        ZERG_MELEE_ATTACK_ID =      100 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_MISSILE_ATTACK_ID =    101 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_GROUND_CARAPACE_ID =   102 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_FLYER_ATTACK_ID =      103 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_FLYER_CARAPACE_ID =    104 + SC2HOTS_ITEM_ID_OFFSET
+        PROTOSS_GROUND_WEAPON_ID =  100 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_GROUND_ARMOR_ID =   101 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_SHIELDS_ID =        102 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_AIR_WEAPON_ID =     103 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_AIR_ARMOR_ID =      104 + SC2LOTV_ITEM_ID_OFFSET
+
+        # Bundles
+        TERRAN_WEAPON_UPGRADE_ID =        107 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_ARMOR_UPGRADE_ID =         108 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_INFANTRY_UPGRADE_ID =      109 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_VEHICLE_UPGRADE_ID =       110 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_SHIP_UPGRADE_ID =          111 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_WEAPON_ARMOR_UPGRADE_ID =  112 + SC2WOL_ITEM_ID_OFFSET
+        ZERG_WEAPON_UPGRADE_ID =          105 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_ARMOR_UPGRADE_ID =           106 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_GROUND_UPGRADE_ID =          107 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_FLYER_UPGRADE_ID =           108 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_WEAPON_ARMOR_UPGRADE_ID =    109 + SC2HOTS_ITEM_ID_OFFSET
+        PROTOSS_WEAPON_UPGRADE_ID =       105 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_ARMOR_UPGRADE_ID =        106 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_GROUND_UPGRADE_ID =       107 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_AIR_UPGRADE_ID =          108 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_WEAPON_ARMOR_UPGRADE_ID = 109 + SC2LOTV_ITEM_ID_OFFSET
+        grouped_item_replacements = {
+            TERRAN_WEAPON_UPGRADE_ID: [
+                TERRAN_INFANTRY_WEAPON_ID,
+                TERRAN_VEHICLE_WEAPON_ID,
+                TERRAN_SHIP_WEAPON_ID,
+            ],
+            TERRAN_ARMOR_UPGRADE_ID: [
+                TERRAN_INFANTRY_ARMOR_ID,
+                TERRAN_VEHICLE_ARMOR_ID,
+                TERRAN_SHIP_ARMOR_ID,
+            ],
+            TERRAN_INFANTRY_UPGRADE_ID: [
+                TERRAN_INFANTRY_WEAPON_ID,
+                TERRAN_INFANTRY_ARMOR_ID,
+            ],
+            TERRAN_VEHICLE_UPGRADE_ID: [
+                TERRAN_VEHICLE_WEAPON_ID,
+                TERRAN_VEHICLE_ARMOR_ID,
+            ],
+            TERRAN_SHIP_UPGRADE_ID: [
+                TERRAN_SHIP_WEAPON_ID,
+                TERRAN_SHIP_ARMOR_ID
+            ],
+            ZERG_WEAPON_UPGRADE_ID: [
+                ZERG_MELEE_ATTACK_ID,
+                ZERG_MISSILE_ATTACK_ID,
+                ZERG_FLYER_ATTACK_ID,
+            ],
+            ZERG_ARMOR_UPGRADE_ID: [
+                ZERG_GROUND_CARAPACE_ID,
+                ZERG_FLYER_CARAPACE_ID,
+            ],
+            ZERG_GROUND_UPGRADE_ID: [
+                ZERG_MELEE_ATTACK_ID,
+                ZERG_MISSILE_ATTACK_ID,
+                ZERG_GROUND_CARAPACE_ID,
+            ],
+            ZERG_FLYER_UPGRADE_ID: [
+                ZERG_FLYER_ATTACK_ID,
+                ZERG_FLYER_CARAPACE_ID,
+            ],
+            PROTOSS_WEAPON_UPGRADE_ID: [
+                PROTOSS_GROUND_WEAPON_ID,
+                PROTOSS_AIR_WEAPON_ID,
+            ],
+            PROTOSS_ARMOR_UPGRADE_ID: [
+                PROTOSS_GROUND_ARMOR_ID,
+                PROTOSS_SHIELDS_ID,
+                PROTOSS_AIR_ARMOR_ID,
+            ],
+            PROTOSS_GROUND_UPGRADE_ID: [
+                PROTOSS_GROUND_WEAPON_ID,
+                PROTOSS_GROUND_ARMOR_ID,
+                PROTOSS_SHIELDS_ID,
+            ],
+            PROTOSS_AIR_UPGRADE_ID: [
+                PROTOSS_AIR_WEAPON_ID,
+                PROTOSS_AIR_ARMOR_ID,
+                PROTOSS_SHIELDS_ID,
+            ]
+        }
+        grouped_item_replacements[TERRAN_WEAPON_ARMOR_UPGRADE_ID] = (
+            grouped_item_replacements[TERRAN_WEAPON_UPGRADE_ID]
+            + grouped_item_replacements[TERRAN_ARMOR_UPGRADE_ID]
+        )
+        grouped_item_replacements[ZERG_WEAPON_ARMOR_UPGRADE_ID] = (
+            grouped_item_replacements[ZERG_WEAPON_UPGRADE_ID]
+            + grouped_item_replacements[ZERG_ARMOR_UPGRADE_ID]
+        )
+        grouped_item_replacements[PROTOSS_WEAPON_ARMOR_UPGRADE_ID] = (
+            grouped_item_replacements[PROTOSS_WEAPON_UPGRADE_ID]
+            + grouped_item_replacements[PROTOSS_ARMOR_UPGRADE_ID]
+        )
+        for bundle_id, upgrade_ids in grouped_item_replacements.items():
+            bundle_amount = inventory[bundle_id]
+            for upgrade_id in upgrade_ids:
+                if bundle_amount > inventory[upgrade_id]:
+                    # Only assign, don't add.
+                    # This behaviour mimics protoss shields, where the output is
+                    # the maximum bundle contribution, not the sum
+                    inventory[upgrade_id] = bundle_amount
+
         
         # Victory condition
         game_state = tracker_data.get_player_client_status(team, player)
