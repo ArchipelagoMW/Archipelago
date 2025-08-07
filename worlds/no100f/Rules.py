@@ -1077,6 +1077,8 @@ snack_rules = [
             LocationNames.f007_SS05: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2),
 
             LocationNames.f008_S031: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.f008_S021: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.f008_S011: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
             LocationNames.f008_S16: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
             LocationNames.f008_S19: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1),
             LocationNames.f008_S20: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1),

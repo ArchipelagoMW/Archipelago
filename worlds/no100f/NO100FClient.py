@@ -1454,7 +1454,7 @@ class Snacks(Enum):
     SS025                            = 0xBC1DF0FF
     SS026                            = 0xBC1DF100
     SS027                            = 0xBC1DF101
-    SS029                            = 0xBC1DF102
+    SS029                            = 0xBC1DF103
     SS02A                            = 0xBC1DF10B
     SS02A1                           = 0x435258D2
     SS02A3                           = 0x435258D4
