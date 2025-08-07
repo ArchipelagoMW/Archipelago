@@ -1,5 +1,5 @@
 from test.bases import WorldTestBase
 
 
-class MyGameTestBase(WorldTestBase):
+class CCCharlesTestBase(WorldTestBase):
     game = "Choo-Choo Charles"

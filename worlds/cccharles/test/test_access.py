@@ -1,7 +1,7 @@
-from worlds.cccharles.test import MyGameTestBase
+from worlds.cccharles.test import CCCharlesTestBase
 
 
-class TestChestAccess(MyGameTestBase):
+class TestChestAccess(CCCharlesTestBase):
     def test_claire_breakers(self) -> None:
         """Test locations that require 4 Breakers"""
         locations = ["Lighthouse Claire Mission End"]
