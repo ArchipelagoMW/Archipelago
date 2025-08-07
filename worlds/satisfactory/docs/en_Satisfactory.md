@@ -109,7 +109,7 @@ They will deposit surplus produced energy and draw energy from the shared storag
 
 Just like the base game, there is no limit to the discharge/draw rate of one building,
 and each Power Storage provides 100 MW of charging throughput.
-The shared storage has unlimited capacity, and no energy is lost during depositing.
+The shared storage has unlimited capacity, and only a small amount of energy is lost during depositing.
 The amount of energy currently in the shared storage is displayed in the Archipelago client
 and appears in the Power Storage building UI.
 
@@ -150,7 +150,7 @@ the rest are filler or useful.
 
 ## Where do I run Archipelago commands?
 
-You can use the game's build-in chat menu.
+You can use the game's built-in chat menu.
 Check the game's keybinding options to see how to open it.
 Run the `/help` command to list all available commands.
 Note that Archipelago commands are *not* prefixed with `!` inside of Satisfactory.
@@ -158,6 +158,21 @@ Note that Archipelago commands are *not* prefixed with `!` inside of Satisfactor
 Note that multiple base-game bugs affect the chat menu's functionality
 and Archipelago can put a lot of info into the chat.
 You may wish to launch the Archipelago Text Client and use it to run commands instead of the game's chat.
+
+### Hints
+
+Archipelago's hint system is available within Satisfactory via the `/hint` command.
+Most multiworld item names have a prefix to distinguish recipes from bundles.
+For example, to hint for the Assembler, run `/hint Building: Assembler`.
+
+Satisfactory's hint system has special behavior for Satisfactory crafting items.
+If you hint the unprefixed name of an item with multiple recipes, the system will hint the recipe you are expected to find first in randomizer logic.
+For example, hinting `Smart Plating` will return the logically first Smart Plating recipe,
+but hinting `Recipe: Smart Plating` or `Recipe: Plastic Smart Plating` will hint that specific recipe for Smart Plating,
+which may or may not be in logic.
+
+Exact Archipelago Item names (for hints/starting inventory/etc.) can be found
+[on the mod's GitHub](https://github.com/Jarno458/Archipelago/blob/Satisfactory/worlds/satisfactory/Items.py).
 
 ## Multiplayer and Dedicated Servers
 
@@ -175,8 +190,8 @@ Dedicated server support is only working for Windows at the moment.
 
 ## Additional Mods
 
-It is possible to load other Satisfactory mods in tandem with the Archipelago Satisfactory mod.
-However, no guarantee is made that any mods except the "Certified Compatible Mods" listed below will work correctly,
+It is possible to use other Satisfactory mods in tandem with the Archipelago Satisfactory mod.
+However, no guarantee is made that they will work correctly,
 especially if they affect game progression, recipes, or add unlocks to base-game technologies.
 
 Content added by unaffiliated mods may end up inaccessible based on your chosen slot settings,
@@ -185,29 +200,5 @@ You may be able to write patches using [ContentLib](https://ficsit.app/mod/Conte
 to adjust other mods to work with your slot settings,
 but doing so is out of the scope of this guide.
 
-Use unaffiliated mods at your own risk, support will not be offered.
-
-The following mods are **required dependencies** of the Archipelago mod and **will automatically be installed for you**
-when you install it using the Satisfactory Mod Manager:
-
-- [ContentLib](https://ficsit.app/mod/ContentLib) - Runtime content generation.
-- [Free Samples](https://ficsit.app/mod/FreeSamples) - Used to implement the Free Samples options. Even if you don't have this game option enabled, the mod will still be present, but its functionality will be disabled.
-- [MAM Enhancer](https://ficsit.app/mod/MAMTips) - Allows viewing MAM research nodes in detail. Enables you to hover over the items/unlocks of a node to see more info, especially important when their names get long.
-- [FixClientResourceSinkPoints](https://ficsit.app/mod/FixClientResourceSinkPoints) - Fixes a bug where AWESOME Sink points values aren't loaded properly on multiplayer clients.
-
-### Certified Compatible Mods
-
-The following mods are known to work with Archipelago:
-
-<!-- Nog's Chat currently broken -->
-<!-- - [Nog's Chat](https://ficsit.app/mod/NogsChat) - Easily repeat past chat messages, improving the user experience of running Archipelago commands in the game's chat window. -->
-- [TFIT - FICSIT Information Tool](https://ficsit.app/mod/TFIT) - View how many Sink Points items are worth and how points-profitable recipes are. Helpful for the AWESOME Sink goals.
-- [Faster Manual Crafting Redux](https://ficsit.app/mod/FasterManualCraftingRedux) - Reduce the early game manual crafting grind with a manual crafting speed that ramps up as you craft larger batches at once.
-<!-- TODO Test these  -->
-<!-- - [Infinite Zoop](https://ficsit.app/mod/InfiniteZoop) - Adds a research tree in the MAM where you can improve your Zoop capacity. Also enables multi-row & column Wall and Foundation construction.  -->
-<!-- - [Nog's Research](https://ficsit.app/mod/NogsResearch/) - Queue Milestones and MAM Nodes for automatic research in the style of Factorio's research queue. Queue type might need to be changed to soft class reference to save CL schematics. -->
-
-The following mods have been used successfully by other players but have not been thoroughly tested with Archipelago:
-
-- [Resource Roulette](https://ficsit.app/mod/ResourceRoulette) - Randomize the location of resource nodes
-- [Infinite Zoop](https://ficsit.app/mod/InfiniteZoop) - Adds a research tree in the MAM where you can improve your Zoop capacity. Also enables multi-row & column Wall and Foundation construction.
+[The Satisfactory Archipelago mod GitHub](https://github.com/Jarno458/SatisfactoryArchipelagoMod/blob/main/Docs/AdditionalMods.md)
+maintains a list of additional mods that have been tested with Archipelago to some extent.

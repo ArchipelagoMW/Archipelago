@@ -196,7 +196,7 @@ Next, enter the connection details in the relevant fields.
 
 - **Server URI**: Archipelago Server URI and port, for example, `archipelago.gg:49236`
 - **User Name**: The name you entered as your Player Name when you created your config file. It's also listed in the Name column of your room page.
-- **Password**: The password for your slot, blank if you did not assign one.
+- **Password**: The password for your Archipelago room, blank if you did not assign or receive one.
 
 Note that the Satisfactory Host/Client does *not* need a copy of your Archipelago config file.
 The mod communicates with the Archipelago Server, which already has your config file,
@@ -230,10 +230,6 @@ You may wish to use the Text Client to run commands since Satisfactory's in game
 Check out the HUB to get started!
 
 See the [Troubleshooting section below](#troubleshooting) if you encounter any issues.
-
-<!-- ## Other Settings
-
-TODO implement filter_item_sends and bridge_chat_out mentioned in the Factorio guide? -->
 
 ### Allowing Other People to Join Your Game
 
@@ -275,6 +271,3 @@ enter the updated Server URI, then save and reload the game.
   - Use the Mod Manager to generate a debug zip and attach that file.
    [Satisfactory Modding Documentation FAQ: Generating a debug zip](https://docs.ficsit.app/satisfactory-modding/latest/faq.html#_where_can_i_find_the_games_log_files)
   - Attach your Archipelago config file and spoiler to your report.
-- If your early game power grid is repeatedly shutting down for unclear reasons,
-  ensure you are not wearing a Hover Pack, as they draw 100 MW.
-<!-- TODO remove hoverpack note once the mod is added as a dependency -->
