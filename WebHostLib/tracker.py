@@ -1294,6 +1294,7 @@ if "Starcraft 2" in network_data_package["games"]:
             missions.setdefault(mission_name, []).append((location_name, location_id in checked_locations))
             if location_id >= NCO_LOCATION_ID_LOW and location_id < NCO_LOCATION_ID_HIGH:
                 have_nco_locations = True
+        missions = {mission: missions[mission] for mission in sorted(missions)}
 
         # Kerrigan level
         level_item_id_to_amount = (
