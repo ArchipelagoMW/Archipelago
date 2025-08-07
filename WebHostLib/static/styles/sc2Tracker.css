@@ -256,6 +256,21 @@ input[type="checkbox"] {
   padding-right: 15pt;
 }
 
+/* Locations */
+#section-locations {
+    padding-left: 5px;
+}
+@media only screen and (min-width: 120ch) {
+  #section-locations ul {
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+  }
+}
+#locations li.checked {
+  list-style-type: "✔ ";
+}
+
 /* Allowing scrolling down a little further */
 .bottom-padding {
   min-height: 33vh;

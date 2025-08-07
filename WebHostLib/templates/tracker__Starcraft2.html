@@ -2094,7 +2094,7 @@
     </div>
     <div id="kerrigan-items" class="tracker-section">
       <div class="section-title">
-        <input type="checkbox" class="collapse-section"{{' checked="t"' if not kerrigan_present}}>
+        <input type="checkbox" class="collapse-section" checked="{{'t' if not kerrigan_present}}">
         <h2>Kerrigan Items</h2>
       </div>
       <div id="section-kerrigan" class="section-body">
@@ -2137,10 +2137,21 @@
     </div>
     <div id="locations" class="tracker-section">
       <div class="section-title">
-        <input type="checkbox" class="collapse-section">
+        <input type="checkbox" class="collapse-section" checked="t">
         <h2>Locations</h2>
       </div>
+      {{checked_locations | length}} / {{locations | length}} = {{((checked_locations | length) / (locations | length) * 100) | round(3)}}%
       <div id="section-locations" class="section-body">
+        <ol>
+        {% for mission_name, location_info in missions.items() %}
+          <li>{{mission_name}}<ul>
+            {% for location_name, collected in location_info %}
+              <li class="{{'checked' if collected}}">{{location_name}}</li>
+            {% endfor %}
+            </ul>
+          </li>
+        {% endfor %}
+        </ol>
       </div>
     </div>
   </div>
