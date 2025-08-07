@@ -27,8 +27,10 @@ def connect_regions(world: ClairObscurWorld):
         origin = world.multiworld.get_region(connection.origin_region, player)
         destination = world.multiworld.get_region(connection.destination_region, player)
         entrance = origin.connect(destination)
-        # Pictos amount currently not used.
         if connection.condition:
             for cond in connection.condition.keys():
                 amount = connection.condition[cond]
                 add_rule(entrance, lambda state, con = cond, pl = player, am=amount: state.has(con, pl, am))
+        if connection.pictos_required > 1:
+            add_rule(entrance, lambda state, pl = player, pic = connection.pictos_required: state.has_group(
+                "Picto", pl, pic))
