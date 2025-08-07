@@ -1,7 +1,9 @@
-from worlds.cccharles.test import CCCharlesTestBase
+from .bases import CCCharlesTestBase
 
 
-class TestChestAccess(CCCharlesTestBase):
+class TestAccess(CCCharlesTestBase):
+    game = "Choo-Choo Charles"
+
     def test_claire_breakers(self) -> None:
         """Test locations that require 4 Breakers"""
         locations = ["Lighthouse Claire Mission End"]
