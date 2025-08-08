@@ -50,7 +50,7 @@ After Installing the seed click "Mod Loader -> Build/Build and Run". Every slot 
 - [Kingdom Hearts 2 AP Tracker](https://github.com/palex00/kh2-ap-tracker/releases/latest/), for use with
 [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
-## What the Mod Manager Should Look Like.</h2>
+## What the Mod Manager Should Look Like.
 
 ![image](https://i.imgur.com/N0WJ8Qn.png)
 
