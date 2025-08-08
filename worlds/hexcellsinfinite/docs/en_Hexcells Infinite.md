@@ -15,4 +15,4 @@ Gems, which are the little blue pips you gain for beating a level in standard pl
 
 ## When the player receives an item, what happens?
 
-Currently, the BepInEx console will show items received.
+You will need to use the AP Text Client to see items sent out and received.
