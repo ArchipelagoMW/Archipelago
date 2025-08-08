@@ -79,12 +79,12 @@ GADGETS_TABLE: dict[str, GrinchItemData] = {
     "Grinch Copter": GrinchItemData("Gadgets", 106, IC.progression,
         [GrinchRamData(0x0102E9, value=0x40), GrinchRamData(0x0102EA, value=0x41),
         GrinchRamData(0x0102EB, value=0x42), GrinchRamData(0x0102EC, value=0x43),
-        GrinchRamData(0x0102ED, value=0x43), GrinchRamData(0x0102EE, value=0x44),
-        GrinchRamData(0x0102EF, value=0x44), GrinchRamData(0x0102F0, value=0x45),
-        GrinchRamData(0x0102F1, value=0x46), GrinchRamData(0x0102F2, value=0x47),
-        GrinchRamData(0x0102F3, value=0x48), GrinchRamData(0x0102F4, value=0x49),
-        GrinchRamData(0x0102F5, value=0x4A), GrinchRamData(0x0102F6, value=0x4B),
-        GrinchRamData(0x0102F7, value=0x4C), GrinchRamData(0x0102F8, value=0x4D),
+        GrinchRamData(0x0102ED, value=0x44), GrinchRamData(0x0102EE, value=0x45),
+        GrinchRamData(0x0102EF, value=0x46), GrinchRamData(0x0102F0, value=0x47),
+        GrinchRamData(0x0102F1, value=0x48), GrinchRamData(0x0102F2, value=0x49),
+        GrinchRamData(0x0102F3, value=0x4A), GrinchRamData(0x0102F4, value=0x4B),
+        GrinchRamData(0x0102F5, value=0x4C), GrinchRamData(0x0102F6, value=0x4D),
+        GrinchRamData(0x0102F7, value=0x4E), GrinchRamData(0x0102F8, value=0x4F),
         GrinchRamData(0x0100BC, binary_bit_pos=6)])
 }
 
@@ -117,15 +117,15 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
 #Sleigh Parts
 SLEIGH_PARTS_TABLE: dict[str, GrinchItemData] = {
     "Exhaust Pipes": GrinchItemData("Sleigh Parts", 300, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=3), GrinchRamData(0x0100AA, binary_bit_pos=5)]),
+        [GrinchRamData(0x0101FB, binary_bit_pos=2), GrinchRamData(0x0100AA, binary_bit_pos=5)]),
     "GPS": GrinchItemData("Sleigh Parts", 301, IC.useful,
-        [GrinchRamData(0x0101FB, binary_bit_pos=6), GrinchRamData(0x0100AA, binary_bit_pos=5)]),
-    "Tires": GrinchItemData("Sleigh Parts", 302, IC.progression_skip_balancing,
         [GrinchRamData(0x0101FB, binary_bit_pos=5), GrinchRamData(0x0100AA, binary_bit_pos=5)]),
-    "Skis": GrinchItemData("Sleigh Parts", 303, IC.progression_skip_balancing,
+    "Tires": GrinchItemData("Sleigh Parts", 302, IC.progression_skip_balancing,
         [GrinchRamData(0x0101FB, binary_bit_pos=4), GrinchRamData(0x0100AA, binary_bit_pos=5)]),
+    "Skis": GrinchItemData("Sleigh Parts", 303, IC.progression_skip_balancing,
+        [GrinchRamData(0x0101FB, binary_bit_pos=3), GrinchRamData(0x0100AA, binary_bit_pos=5)]),
     "Twin-End Tuba": GrinchItemData("Sleigh Parts", 304, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=7), GrinchRamData(0x0100AA, binary_bit_pos=5)])
+        [GrinchRamData(0x0101FB, binary_bit_pos=6), GrinchRamData(0x0100AA, binary_bit_pos=5)])
 }
 
 #Access Keys
@@ -175,7 +175,7 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
     "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
         [GrinchRamData(0x010000, value=0x05), GrinchRamData(0x08FB94, value=1)]),
     # "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]), #alias to Spring Trap for traplink
-    "Who sent me here?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x08FB94, value=1)]), #alias to Home Trap for traplink
+    "Who sent me back?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x08FB94, value=1)]), #alias to Home Trap for traplink
     # "Cutscene Trap": GrinchItemData("Traps", 609, IC.trap, [GrinchRamData()]),
     # "No Vac Trap": GrinchItemData("Traps", 610, IC.trap, [GrinchRamData()])
 }

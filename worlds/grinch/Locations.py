@@ -49,7 +49,7 @@ grinch_locations = {
 #Missions that have value are those ones we need to find the check for
 #Whoville Missions
         "Shuffling The Mail": GrinchLocationData("Post Office", "Whoville Missions", 201, [GrinchRamData(0x0100BE, binary_bit_pos=0)]),
-        "Smashing Snowmen": GrinchLocationData("Whoville", "Whoville Missions", 200, [GrinchRamData(0x01020C, value=10)]),
+        "Smashing Snowmen": GrinchLocationData("Whoville", "Whoville Missions", 200, [GrinchRamData(0x0100C5, value=10)]),
         "Painting The Mayor's Posters": GrinchLocationData("Whoville", "Whoville Missions", 202, [GrinchRamData(0x0100C6, value=10)]),
         "Launching Eggs Into Houses": GrinchLocationData("Whoville", "Whoville Missions", 203, [GrinchRamData(0x0100C7, value=10)]),
         "Modifying The Mayor's Statue": GrinchLocationData("City Hall", "Whoville Missions", 204, [GrinchRamData(0x0100BE, binary_bit_pos=3)]),
@@ -80,10 +80,10 @@ grinch_locations = {
 #Need to find binary values for individual blueprints, but all ram addresses are found
 #Blueprints
 #Binoculars Blueprints
-        "Binoculars Blueprint - Post Office Roof": GrinchLocationData("Whoville", "Binocular Blueprints", 600, [GrinchRamData(0x100825, binary_bit_pos=2)]),
-        "Binoculars Blueprint - City Hall Library - Left Side": GrinchLocationData("City Hall", "Binocular Blueprints", 601, [GrinchRamData(0x01020B, binary_bit_pos=6)]),
-        "Binoculars Blueprint - City Hall Library - Front Side": GrinchLocationData("City Hall", "Binocular Blueprints", 602, [GrinchRamData(0x01020B, binary_bit_pos=5)]),
-        "Binoculars Blueprint - City Hall Library - Right Side": GrinchLocationData("City Hall", "Binocular Blueprints", 603, [GrinchRamData(0x01020B, binary_bit_pos=4)]),
+        "Binoculars Blueprint - Post Office Roof": GrinchLocationData("Whoville", "Binocular Blueprints", 600, [GrinchRamData(0x01020B, binary_bit_pos=2)]),
+        "Binoculars Blueprint - City Hall Library - Left Side": GrinchLocationData("City Hall", "Binocular Blueprints", 601, [GrinchRamData(0x01021F, binary_bit_pos=6)]),
+        "Binoculars Blueprint - City Hall Library - Front Side": GrinchLocationData("City Hall", "Binocular Blueprints", 602, [GrinchRamData(0x01021F, binary_bit_pos=5)]),
+        "Binoculars Blueprint - City Hall Library - Right Side": GrinchLocationData("City Hall", "Binocular Blueprints", 603, [GrinchRamData(0x01021F, binary_bit_pos=4)]),
 #Rotten Egg Launcher Blueprints
         "REL Blueprint - Outside City Hall": GrinchLocationData("Whoville", "Rotten Egg Launcher Blueprints", 700, [GrinchRamData(0x01020B, binary_bit_pos=0)]),
         "REL Blueprint - Outside Clock Tower": GrinchLocationData("Whoville", "Rotten Egg Launcher Blueprints", 701, [GrinchRamData(0x01020B, binary_bit_pos=1)]),
@@ -118,7 +118,7 @@ grinch_locations = {
         "OCD Blueprint - Near Who-Bris' Shack": GrinchLocationData("Who Dump", "Octopus Climbing Device Blueprints", 1006, [GrinchRamData(0x010252, binary_bit_pos=2)]),
         "OCD Blueprint - Guardian's House - Left Side": GrinchLocationData("Minefield", "Octopus Climbing Device Blueprints", 1007, [GrinchRamData(0x01026E, binary_bit_pos=2)]),
         "OCD Blueprint - Guardian's House - Right Side": GrinchLocationData("Minefield", "Octopus Climbing Device Blueprints", 1008, [GrinchRamData(0x01026E, binary_bit_pos=4)]),
-        "OCD Blueprint - Inside Guardian's House": GrinchLocationData("Minefield", "Octopus Climbing Device Blueprints", 1009, [GrinchRamData(0x01026E, binary_bit_pos=2)]),
+        "OCD Blueprint - Inside Guardian's House": GrinchLocationData("Minefield", "Octopus Climbing Device Blueprints", 1009, [GrinchRamData(0x01026E, binary_bit_pos=3)]),
 #Marine Mobile Blueprints
         "MM Blueprint - South Shore - Bridge to Scout's Hut": GrinchLocationData("Who Lake", "Marine Mobile Blueprints", 1100, [GrinchRamData(0x010281, binary_bit_pos=5)]),
         "MM Blueprint - South Shore - Tent near Porcupine": GrinchLocationData("Who Lake", "Marine Mobile Blueprints", 1101, [GrinchRamData(0x010281, binary_bit_pos=6)]),
@@ -137,7 +137,7 @@ grinch_locations = {
         "MM Blueprint - North Shore - Inside Drill House": GrinchLocationData("North Shore", "Marine Mobile Blueprints", 1114, [GrinchRamData(0x010292, binary_bit_pos=5)]),
         "MM Blueprint - North Shore - Crow Platform near Drill House": GrinchLocationData("North Shore", "Marine Mobile Blueprints", 1115, [GrinchRamData(0x010293, binary_bit_pos=1)]),
         #Grinch Copter Blueprints
-        "GC Blueprint - Whoville City Hall - Safe Room": GrinchLocationData("City Hall", "Grinch Copter Blueprints", 1200, [GrinchRamData(0x01020B, binary_bit_pos=7)]),
+        "GC Blueprint - Whoville City Hall - Safe Room": GrinchLocationData("City Hall", "Grinch Copter Blueprints", 1200, [GrinchRamData(0x01021F, binary_bit_pos=7)]),
         "GC Blueprint - Whoville City Hall - Statue Room": GrinchLocationData("City Hall", "Grinch Copter Blueprints", 1201, [GrinchRamData(0x010220, binary_bit_pos=0)]),
         "GC Blueprint - Whoville Clock Tower - Before Bells": GrinchLocationData("Countdown to X-Mas Clock Tower", "Grinch Copter Blueprints", 1202, [GrinchRamData(0x010265, binary_bit_pos=3)]),
         "GC Blueprint - Whoville Clock Tower - After Bells": GrinchLocationData("Countdown to X-Mas Clock Tower", "Grinch Copter Blueprints", 1203, [GrinchRamData(0x010265, binary_bit_pos=2)]),
