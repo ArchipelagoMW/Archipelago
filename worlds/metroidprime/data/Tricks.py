@@ -257,7 +257,8 @@ class Tricks:
             "Use infinite speed to get the item in the magma pool. Stay in morph ball and navigate to a save station or elevator afterward",
             TrickDifficulty.Medium,
             rule_func=lambda world, state: self.logic.can_infinite_speed(world, state)
-            and self.logic.can_bomb(world, state),
+            and self.logic.can_bomb(world, state)
+            and (self.logic.can_heat(world, state) or self.logic.has_energy_tanks(world, state, 8)),
         )
 
         self.arboretum_scan_gate_skip: TrickInfo = TrickInfo(
@@ -394,7 +395,6 @@ class Tricks:
             lambda world, state: self.logic.can_missile(world, state, 1)
             and self.logic.can_space_jump(world, state)
             and self.logic.has_energy_tanks(world, state, 4)
-            and self.logic.can_heat(world, state)
             and state.can_reach(RoomName.Burning_Trail.value, None, world.player),
         )
         self.lava_lake_item_missiles_only = TrickInfo(
