@@ -145,7 +145,7 @@ if apworlds:
             elif apworld.maximum_ap_version and apworld.maximum_ap_version < version_tuple:
                 fail_world(apworld.game,
                            f"Did not load {apworld_source.path} "
-                           f"as its maximum core {apworld.maximum_ap_version} "
+                           f"as its maximum core version {apworld.maximum_ap_version} "
                            f"is lower than current core version {version_tuple}.")
             else:
                 core_compatible.append((apworld_source, apworld))
