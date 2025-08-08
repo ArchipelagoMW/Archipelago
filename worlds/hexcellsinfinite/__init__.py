@@ -107,13 +107,14 @@ class HexcellsInfiniteWorld(World):
     # Seed, Slot, and TotalLocations are all super important for AP though, you need those
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {
-            # "options": {
+            "options": {
             #     "StartingPlace":            self.options.StartingChapter.value,
             #     "ExtraLocations":           self.options.ExtraLocations.value,
             #     "TrapChance":               self.options.TrapChance.value,
             #     "ForcefemTrapWeight":       self.options.ForcefemTrapWeight.value,
             #     "SpeedChangeTrapWeight":    self.options.SpeedChangeTrapWeight.value
-            # },
+                  "RequirePerfectClears":     self.options.RequirePerfectClears.value
+            },
             "Seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "Slot": self.multiworld.player_name[self.player],  # to connect to server
             "TotalLocations": get_total_locations(self) # get_total_locations(self) comes from Locations.py
