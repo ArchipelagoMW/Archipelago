@@ -3,7 +3,6 @@ from ..options import FestivalLocations
 from ..stardew_rule import StardewRule
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.book_names import Book
-from ..strings.craftable_names import Fishing
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.festival_check_names import FestivalCheck
 from ..strings.fish_names import Fish
@@ -96,25 +95,24 @@ class FestivalLogic(BaseLogic):
             FestivalCheck.willy_challenge: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.scorpion_carp]),
             FestivalCheck.desert_scholar: self.logic.true_,
             FestivalCheck.squidfest_day_1_copper: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]),
-            FestivalCheck.squidfest_day_1_iron: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.bait),
-            FestivalCheck.squidfest_day_1_gold: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.deluxe_bait),
-            FestivalCheck.squidfest_day_1_iridium: self.logic.festival.can_squidfest_day_1_iridium_reward(),
+            FestivalCheck.squidfest_day_1_iron: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.fishing.can_use_any_bait(),
+            FestivalCheck.squidfest_day_1_gold: self.logic.festival.can_squidfest_iridium_reward(),
+            FestivalCheck.squidfest_day_1_iridium: self.logic.festival.can_squidfest_iridium_reward(),
             FestivalCheck.squidfest_day_2_copper: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]),
-            FestivalCheck.squidfest_day_2_iron: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.bait),
-            FestivalCheck.squidfest_day_2_gold: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.has(Fishing.deluxe_bait),
-            FestivalCheck.squidfest_day_2_iridium: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) &
-                                                   self.logic.fishing.has_specific_bait(self.content.fishes[Fish.squid]),
+            FestivalCheck.squidfest_day_2_iron: self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.fishing.can_use_any_bait(),
+            FestivalCheck.squidfest_day_2_gold: self.logic.festival.can_squidfest_iridium_reward(),
+            FestivalCheck.squidfest_day_2_iridium: self.logic.festival.can_squidfest_iridium_reward(),
         })
         for i in range(1, 11):
             check_name = f"{FestivalCheck.trout_derby_reward_pattern}{i}"
             self.registry.festival_rules[check_name] = self.logic.fishing.can_catch_fish(self.content.fishes[Fish.rainbow_trout])
 
-    def can_squidfest_day_1_iridium_reward(self) -> StardewRule:
-        return self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.fishing.has_specific_bait(self.content.fishes[Fish.squid])
+    def can_squidfest_iridium_reward(self) -> StardewRule:
+        return self.logic.fishing.can_catch_fish(self.content.fishes[Fish.squid]) & self.logic.fishing.can_use_specific_bait(Fish.squid)
 
     def has_squidfest_day_1_iridium_reward(self) -> StardewRule:
         if self.options.festival_locations == FestivalLocations.option_disabled:
-            return self.logic.festival.can_squidfest_day_1_iridium_reward()
+            return self.logic.festival.can_squidfest_iridium_reward()
         else:
             return self.logic.received(f"Book: {Book.the_art_o_crabbing}")
 
