@@ -42,12 +42,17 @@
 			"Bull": [
 				{
 					"AP_IDS": [
+						"0x3E",
 						"0x32"
 					],
-					"IDS": [],
+					"COUNT": 1,
+					"IDS": [
+						"0xC7",
+						"0x3E"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
-					"TYPE": 1
+					"TYPE": 10
 				}
 			],
 			"Bull Tip Left": [
@@ -93,12 +98,6 @@
 						"NEEDS_BALL": false,
 						"REGION": 2,
 						"TYPE": 8
-					},
-					{
-						"ballRequirement": false,
-						"mv0": 25,
-						"regionIndex": 2,
-						"trickDifficulty": 0
 					}
 				],
 				"I": 3
@@ -129,12 +128,6 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 3
-				},
-				{
-					"ballRequirement": false,
-					"mv0": 31,
-					"regionIndex": 0,
-					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 2": [
@@ -148,12 +141,6 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 3
-				},
-				{
-					"ballRequirement": false,
-					"mv0": 31,
-					"regionIndex": 0,
-					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint Tip": [
@@ -214,17 +201,6 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
-					},
-					{
-						"ballRequirement": false,
-						"mv0": 25,
-						"regionIndex": 0,
-						"trickDifficulty": 0
-					},
-					{
-						"ballRequirement": false,
-						"regionIndex": 3,
-						"trickDifficulty": 0
 					}
 				],
 				"I": 2
@@ -237,14 +213,6 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
-					},
-					{
-						"ballRequirement": true,
-						"mv0": 31,
-						"mv1": 26,
-						"mv2": 27,
-						"regionIndex": 0,
-						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -295,12 +263,6 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 0
-				},
-				{
-					"ballRequirement": false,
-					"mv0": 3,
-					"regionIndex": 0,
-					"trickDifficulty": 0
 				}
 			],
 			"Goal": [
@@ -310,12 +272,6 @@
 					"NEEDS_BALL": true,
 					"REGION": 4,
 					"TYPE": 5
-				},
-				{
-					"ballRequirement": true,
-					"ck0": "Gate",
-					"regionIndex": 4,
-					"trickDifficulty": 0
 				}
 			],
 			"Goal Life": [
@@ -399,17 +355,6 @@
 					"NEEDS_BALL": false,
 					"REGION": 2,
 					"TYPE": 1
-				},
-				{
-					"ballRequirement": false,
-					"regionIndex": 2,
-					"trickDifficulty": 0
-				},
-				{
-					"ballRequirement": true,
-					"mv0": 10,
-					"regionIndex": 0,
-					"trickDifficulty": 0
 				}
 			],
 			"Platform B Garibs": [
@@ -562,6 +507,607 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 6
+				}
+			]
+		},
+		"l2": {
+			"Arch Garibs": [
+				{
+					"AP_IDS": [
+						"0x67",
+						"0x68",
+						"0x69",
+						"0x6A",
+						"0x6B"
+					],
+					"IDS": [
+						"0x72",
+						"0x73",
+						"0x74",
+						"0x75",
+						"0x71"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 8,
+					"TYPE": 1
+				}
+			],
+			"Ball Switch": [
+				{
+					"AP_IDS": [
+						"0x81"
+					],
+					"IDS": [
+						"0xE2"
+					],
+					"NEEDS_BALL": true,
+					"REGION": 4,
+					"TYPE": 0
+				}
+			],
+			"Bridge A Garibs": [
+				{
+					"AP_IDS": [
+						"0x5D",
+						"0x5E",
+						"0x5F",
+						"0x60",
+						"0x61"
+					],
+					"IDS": [
+						"0x9E",
+						"0x9F",
+						"0xA0",
+						"0xA1",
+						"0x9D"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 4,
+					"TYPE": 1
+				}
+			],
+			"Bridge B Garibs": [
+				{
+					"AP_IDS": [
+						"0x62",
+						"0x63",
+						"0x64",
+						"0x65",
+						"0x66"
+					],
+					"IDS": [
+						"0x98",
+						"0x99",
+						"0x9A",
+						"0x9B",
+						"0x97"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 4,
+					"TYPE": 1
+				}
+			],
+			"Bulls": [
+				{
+					"AP_IDS": [
+						"0x86",
+						"0x87",
+						"0x88",
+						"0x78",
+						"0x79",
+						"0x7A"
+					],
+					"COUNT": 3,
+					"IDS": [
+						"0x012E",
+						"0x0107",
+						"0x0116",
+						"0x86",
+						"0x87",
+						"0x88"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 4,
+					"TYPE": 10
+				}
+			],
+			"Checkpoint 1": [
+				{
+					"AP_IDS": [
+						"0x7D"
+					],
+					"IDS": [
+						"0x0029"
+					],
+					"NEEDS_BALL": true,
+					"REGION": 0,
+					"TYPE": 3
+				}
+			],
+			"Checkpoint 2": [
+				{
+					"AP_IDS": [
+						"0x7E"
+					],
+					"IDS": [
+						"0x0145"
+					],
+					"NEEDS_BALL": true,
+					"REGION": 4,
+					"TYPE": 3
+				}
+			],
+			"Checkpoint 3": [
+				{
+					"AP_IDS": [
+						"0x7F"
+					],
+					"IDS": [
+						"0x017B"
+					],
+					"NEEDS_BALL": true,
+					"REGION": 8,
+					"TYPE": 3
+				}
+			],
+			"Clifftop": {
+				"B": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": true,
+						"REGION": 8,
+						"TYPE": 8
+					}
+				],
+				"D": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": false,
+						"REGION": 8,
+						"TYPE": 8
+					}
+				],
+				"I": 7
+			},
+			"Clifftop Garibs": [
+				{
+					"AP_IDS": [
+						"0x6E",
+						"0x6F",
+						"0x70",
+						"0x71",
+						"0x72",
+						"0x73",
+						"0x74"
+					],
+					"IDS": [
+						"0x8A",
+						"0x8B",
+						"0x8C",
+						"0x8D",
+						"0x8E",
+						"0x8F",
+						"0x89"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 7,
+					"TYPE": 1
+				}
+			],
+			"Drain Block": [
+				{
+					"AP_IDS": [
+						"0x80"
+					],
+					"IDS": [
+						"0x82"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 0
+				}
+			],
+			"End": {
+				"B": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": true,
+						"REGION": 4,
+						"TYPE": 8
+					}
+				],
+				"D": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": false,
+						"REGION": 4,
+						"TYPE": 8
+					}
+				],
+				"I": 8
+			},
+			"Glover Switch": [
+				{
+					"AP_IDS": [
+						"0x82"
+					],
+					"IDS": [
+						"0xE8"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 8,
+					"TYPE": 0
+				}
+			],
+			"Goal": [
+				{
+					"AP_IDS": [],
+					"IDS": [],
+					"NEEDS_BALL": true,
+					"REGION": 8,
+					"TYPE": 5
+				}
+			],
+			"Hercules Potion": [
+				{
+					"AP_IDS": [],
+					"IDS": [],
+					"NEEDS_BALL": false,
+					"REGION": 8,
+					"TYPE": 4
+				}
+			],
+			"Hidden Edge": {
+				"B": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": true,
+						"REGION": 1,
+						"TYPE": 8
+					}
+				],
+				"D": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": false,
+						"REGION": 1,
+						"TYPE": 8
+					}
+				],
+				"I": 2
+			},
+			"Mesa Garibs": [
+				{
+					"AP_IDS": [
+						"0x59",
+						"0x5A",
+						"0x5B"
+					],
+					"IDS": [
+						"0x91",
+						"0x93",
+						"0x95"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 4,
+					"TYPE": 1
+				}
+			],
+			"Mesa Jar": [
+				{
+					"AP_IDS": [
+						"0x5C"
+					],
+					"IDS": [
+						"0x29"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 4,
+					"TYPE": 1
+				}
+			],
+			"Plateau": {
+				"B": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": true,
+						"REGION": 0,
+						"TYPE": 8
+					}
+				],
+				"D": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": false,
+						"REGION": 0,
+						"TYPE": 8
+					}
+				],
+				"I": 4
+			},
+			"Pool Edge Garibs": [
+				{
+					"AP_IDS": [
+						"0x41",
+						"0x42",
+						"0x43",
+						"0x44"
+					],
+					"IDS": [
+						"0x60",
+						"0x61",
+						"0x62",
+						"0x5F"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 2,
+					"TYPE": 1
+				}
+			],
+			"Pyramid Life": [
+				{
+					"AP_IDS": [
+						"0x7B"
+					],
+					"IDS": [
+						"0x35"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 3,
+					"TYPE": 2
+				}
+			],
+			"Roof Garibs": [
+				{
+					"AP_IDS": [
+						"0x54",
+						"0x55",
+						"0x56",
+						"0x57",
+						"0x58"
+					],
+					"IDS": [
+						"0xA3",
+						"0xA7",
+						"0xA6",
+						"0xA5",
+						"0xA4"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 5,
+					"TYPE": 1
+				}
+			],
+			"Rooftop": {
+				"B": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": true,
+						"REGION": 4,
+						"TYPE": 8
+					}
+				],
+				"D": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": false,
+						"REGION": 4,
+						"TYPE": 8
+					}
+				],
+				"I": 5
+			},
+			"Secret": {
+				"B": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": true,
+						"REGION": 0,
+						"TYPE": 8
+					}
+				],
+				"D": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": false,
+						"REGION": 0,
+						"TYPE": 8
+					}
+				],
+				"I": 3
+			},
+			"Shark Jars": [
+				{
+					"AP_IDS": [
+						"0x3F",
+						"0x40"
+					],
+					"IDS": [
+						"0x2D",
+						"0x2B"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 1
+				}
+			],
+			"Small Pool": {
+				"B": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": true,
+						"REGION": 0,
+						"TYPE": 8
+					}
+				],
+				"D": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": false,
+						"REGION": 0,
+						"TYPE": 8
+					}
+				],
+				"I": 1
+			},
+			"Start": {
+				"B": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": true,
+						"REGION": 0,
+						"TYPE": 8
+					}
+				],
+				"D": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": false,
+						"REGION": 0,
+						"TYPE": 8
+					}
+				],
+				"I": 0
+			},
+			"Tip": [
+				{
+					"AP_IDS": [
+						"0x7C"
+					],
+					"IDS": [
+						"0x018F"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 8,
+					"TYPE": 6
+				}
+			],
+			"Under Roof": {
+				"B": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": true,
+						"REGION": 4,
+						"TYPE": 8
+					}
+				],
+				"D": [
+					{
+						"AP_IDS": [],
+						"IDS": [],
+						"NEEDS_BALL": false,
+						"REGION": 4,
+						"TYPE": 8
+					}
+				],
+				"I": 6
+			},
+			"Under Roof Garibs": [
+				{
+					"AP_IDS": [
+						"0x4F",
+						"0x50",
+						"0x51",
+						"0x52",
+						"0x53"
+					],
+					"IDS": [
+						"0x65",
+						"0x66",
+						"0x67",
+						"0x68",
+						"0x64"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 6,
+					"TYPE": 1
+				}
+			],
+			"Vault Garibs": [
+				{
+					"AP_IDS": [
+						"0x45",
+						"0x46",
+						"0x47",
+						"0x48",
+						"0x49",
+						"0x4A",
+						"0x4B",
+						"0x4C",
+						"0x4D",
+						"0x4E"
+					],
+					"IDS": [
+						"0x44",
+						"0x43",
+						"0x42",
+						"0x41",
+						"0x3B",
+						"0x3F",
+						"0x3E",
+						"0x3D",
+						"0x3C",
+						"0x40"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 3,
+					"TYPE": 1
+				}
+			],
+			"Waterfall Garibs": [
+				{
+					"AP_IDS": [
+						"0x6C",
+						"0x6D"
+					],
+					"IDS": [
+						"0x32",
+						"0x33"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 8,
+					"TYPE": 1
+				}
+			],
+			"Wind-Ups": [
+				{
+					"AP_IDS": [
+						"0x83",
+						"0x84",
+						"0x85",
+						"0x75",
+						"0x76",
+						"0x77"
+					],
+					"COUNT": 3,
+					"IDS": [
+						"0x0146",
+						"0x0151",
+						"0x0165",
+						"0x83",
+						"0x84",
+						"0x85"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 4,
+					"TYPE": 10
 				}
 			]
 		}

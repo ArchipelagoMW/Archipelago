@@ -7,10 +7,11 @@ from .Options import GaribLogic, DifficultyLogic
 from .Rules import move_lookup, switches_to_event_items
 from worlds.generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 
+#Level name, followed by the region indexes of each checkpoint
 levels_in_order = [
 #    ["AtlH", ],
-    ["Atl1", 0, 0]
-#    ["Atl2", ],
+    ["Atl1", 0, 0],
+    ["Atl2", 0, 4, 8]
 #    ["Atl3", ],
 #    ["Atl!", ],
 #    ["Atl?", ],
@@ -74,7 +75,7 @@ class AccessMethod(NamedTuple):
 
 class LocationData(NamedTuple):
     name : str
-    #{ SWITCH, GARIB, LIFE, CHECKPOINT, POTION, GOAL, TIP, LOADING_ZONE, REGION, MISC}
+    #{ SWITCH, GARIB, LIFE, CHECKPOINT, POTION, GOAL, TIP, LOADING_ZONE, REGION, MISC, ENEMY}
     type : int
     default_region : int
     default_needs_ball : bool
@@ -82,7 +83,8 @@ class LocationData(NamedTuple):
     rom_ids : List[int]
     methods : List[AccessMethod]
 
-def create_location_data(check_name : str, check_info : list, prefix : str) -> LocationData:
+def create_location_data(check_name : str, check_info : list, prefix : str) -> list[LocationData]:
+    outputs : List[LocationData] = []
     methods : List[AccessMethod] = []
     for check_index in range(1, len(check_info)):
         check_method = check_info[check_index]
@@ -93,7 +95,21 @@ def create_location_data(check_name : str, check_info : list, prefix : str) -> L
         ap_ids.append(int(each_id, 0))
     for each_id in check_info[0]["IDS"]:
         rom_ids.append(int(each_id, 0))
-    return LocationData(prefix + check_name, check_info[0]["TYPE"], check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], ap_ids, rom_ids, methods)
+    
+    #Enemies that have garibs
+    if "COUNT" in check_info[0].keys():
+        #Enemies get the first half of the array, garibs create the second
+        garib_ap_ids = []
+        garib_rom_ids = []
+        for each_garib in range(check_info[0]["COUNT"]):
+            garib_ap_ids.append(ap_ids.pop())
+            garib_rom_ids.append(rom_ids.pop())
+        outputs.append(LocationData(prefix + check_name.removesuffix("s") + " Garibs", 1, check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], garib_ap_ids, garib_rom_ids, methods))
+        outputs.append(LocationData(prefix + check_name, 10, check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], ap_ids, rom_ids, methods))
+    #All other checks
+    else:
+        outputs.append(LocationData(prefix + check_name, check_info[0]["TYPE"], check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], ap_ids, rom_ids, methods))
+    return outputs
 
 class RegionPair(NamedTuple):
     name : str
@@ -193,7 +209,7 @@ def create_region_level(level_name, checkpoint_for_use : int | None, checkpoint_
         default_checkpoint = checkpoint_for_use
 
     #See if you get the ball with the checkpoint
-    start_without_ball : bool = default_checkpoint == 1 or level_name[:3] == "OoW"
+    start_without_ball : bool = level_name[3:4] == "1" or level_name[:3] == "OoW"
     
     #Assign entrances required by checkpoints here
     for checkpoint_number in range(1, len(checkpoint_entry_pairs)):
@@ -202,7 +218,7 @@ def create_region_level(level_name, checkpoint_for_use : int | None, checkpoint_
         connecting_region : Region
         for each_region_pair in map_regions:
             no_ball_region = multiworld.get_region(each_region_pair.name, player)
-            ball_region = multiworld.get_region(each_region_pair.name, player)
+            ball_region = multiworld.get_region(each_region_pair.name + " W/Ball", player)
             if each_region_pair.base_id == checkpoint_entry_pairs[checkpoint_number]:
                 if start_without_ball:
                     connecting_region = no_ball_region
@@ -420,7 +436,7 @@ def build_data(self) -> List[RegionLevel]:
                 check_info = each_level[check_name]
                 #Location
                 if type(check_info) is list:
-                    location_data_list.append(create_location_data(check_name, check_info, prefix))
+                    location_data_list.extend(create_location_data(check_name, check_info, prefix))
                 #In-Level Region
                 if type(check_info) is dict:
                     new_region_pair = create_region_pair(check_info, check_name, level_name, self.player, self.multiworld)

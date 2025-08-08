@@ -106,8 +106,8 @@ class GloverWorld(World):
         self.overworld_entrances.append("Well")
         #Garib level order table
         self.garib_level_order = [
-            ["Atl1", 50]#,
-            #["Atl2", 60],
+            ["Atl1", 50],
+            ["Atl2", 60]#,
             #["Atl3", 80],
             #["Atl?", 25],
             #["Crn1", 65],
@@ -203,13 +203,16 @@ class GloverWorld(World):
         player = self.player
         build_data(self)
         multiworld.regions.append(Region("Menu", player, multiworld))
+        multiworld.regions.append(Region("AtlH", player, multiworld))
         #Replace with a connection to the hubworld rather than Atlantis
-        multiworld.get_region("Menu", player).connect(multiworld.get_region("Atl1", player))
-        end_region : Region = multiworld.get_region("Atl1: End W/Ball", player)
+        multiworld.get_region("Menu", player).connect(multiworld.get_region("AtlH", player))
+        multiworld.get_region("AtlH", player).connect(multiworld.get_region("Atl1", player))
+        multiworld.get_region("AtlH", player).connect(multiworld.get_region("Atl2", player))
+        end_region : Region = multiworld.get_region("Atl2: End W/Ball", player)
         goal_location : Location = Location(player, "Ending", None, end_region)
         end_region.locations.append(goal_location)
         goal_location.place_locked_item(self.create_event("Victory"))
-        add_rule(goal_location, lambda state: state.can_reach_location("Atl1: Goal", player))
+        add_rule(goal_location, lambda state: state.can_reach_location("Atl2: Goal", player))
         multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
         #multiworld.CreateHints 
 
@@ -263,7 +266,7 @@ class GloverWorld(World):
                 best_names = [each_name]
         #If there's multiple valid options, pick one at random
         if len(best_names) > 1:
-            return best_names[self.random.choice(best_names)]
+            return self.random.choice(best_names)
         else:
             return best_names[0]
 
