@@ -78,8 +78,7 @@ def open_patch():
 def generate_yamls(*args):
     from Options import generate_yaml_templates
 
-    usage = f"{os.path.basename(sys.argv[0])} 'Generate Template Options' -- [-h] [--skip_open_folder]"
-    parser = argparse.ArgumentParser(usage=usage)
+    parser = argparse.ArgumentParser(description="Generate Template Options", usage="[-h] [--skip_open_folder]")
     parser.add_argument("--skip_open_folder", action="store_true")
     args = parser.parse_args(args)
 
