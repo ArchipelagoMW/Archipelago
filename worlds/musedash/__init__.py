@@ -173,7 +173,7 @@ class MuseDashWorld(World):
 
     def create_item(self, name: str) -> Item:
         if name == self.md_collection.MUSIC_SHEET_NAME:
-            return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing,
+            return MuseDashFixedItem(name, ItemClassification.progression_deprioritized_skip_balancing,
                                      self.md_collection.MUSIC_SHEET_CODE, self.player)
 
         filler = self.md_collection.filler_items.get(name)
