@@ -39,6 +39,10 @@ class Missionsanity(Choice):
     option_both = 3
     default = 1
 
+class AnnoyingLocations(Toggle):
+    """Makes certain long, annoying, and tedious checks to be excluded [NOT IMPLEMENTED]"""
+    display_name = "Annoying Locations"
+
 class ProgressiveGadget(Toggle):#DefaultOnToggle
     """
     Determines whether you get access to a gadget as individual blueprint count [NOT IMPLEMENTED]
@@ -82,3 +86,4 @@ class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     movesanity: Movesanity
     starting_area: StartingArea
     progressive_gadget: ProgressiveGadget
+    annoyinglocations: AnnoyingLocations
