@@ -3,6 +3,17 @@ from dataclasses import dataclass
 from Options import FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, TextChoice, Range, NamedRange, OptionList, \
     PerGameCommonOptions
 
+class StartingArea(Choice):
+    """
+    Here, you can select which area you'll start the game with.
+    Whichever one you pick is the region you'll have access to at the start of the Multiworld.
+    """
+    option_whoville = 0
+    option_who_forest = 1
+    option_who_dump = 2
+    option_who_lake = 3
+    default = 0
+    display_name = "Starting Area"
 
 class ProgressiveVacuum(Toggle):#DefaultOnToggle
     """
@@ -11,12 +22,6 @@ class ProgressiveVacuum(Toggle):#DefaultOnToggle
     Enabled: Whoville > Who Forest > Who Dump > Who Lake
     """
     display_name = "Progressive Vacuum Access"
-
-class ProgressiveGadget(Toggle):#DefaultOnToggle
-    """
-    Determines whether you get access to a gadget as individual blueprint count [NOT IMPLEMENTED]
-    """
-    display_name = "Progressive Gadgets"
 
 class Missionsanity(Choice):
     """
@@ -34,17 +39,11 @@ class Missionsanity(Choice):
     option_both = 3
     default = 1
 
-class StartingArea(Choice):
+class ProgressiveGadget(Toggle):#DefaultOnToggle
     """
-    Here, you can select which area you'll start the game with.
-    Whichever one you pick is the region you'll have access to at the start of the Multiworld.
+    Determines whether you get access to a gadget as individual blueprint count [NOT IMPLEMENTED]
     """
-    option_whoville = 0
-    option_who_forest = 1
-    option_who_dump = 2
-    option_who_lake = 3
-    default = 0
-    display_name = "Starting Area"
+    display_name = "Progressive Gadgets"
 
 class Supadow(Toggle):
     """Enables completing minigames through the Supadows in Mount Crumpit as checks. (9 locations) [NOT IMPLEMENTED]"""
