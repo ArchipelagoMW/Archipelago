@@ -62,6 +62,13 @@ def create_option_groups() -> List[OptionGroup]:
 #     range_end = 100
 #     default = 25
 
+
+class RequirePerfectClears(Toggle):
+    """
+    This determines if levels need to be cleared with no mistakes to send out an item. 
+    """
+    display_name = "Require Perfect Clears"
+
 @dataclass
 class HexcellsInfiniteOptions(PerGameCommonOptions):
 
@@ -70,11 +77,11 @@ class HexcellsInfiniteOptions(PerGameCommonOptions):
     # TrapChance:                 TrapChance
     # ForcefemTrapWeight:         ForcefemTrapWeight
     # SpeedChangeTrapWeight:      SpeedChangeTrapWeight
-    print("")
+    RequirePerfectClears:         RequirePerfectClears
 
 # # This is where you organize your options
 # # Its entirely up to you how you want to organize it
 hexcells_infinite_option_groups: Dict[str, List[Any]] = {
-    # "General Options": [StartingChapter, ExtraLocations],
+    "General Options": [RequirePerfectClears],
     # "Trap Options": [TrapChance, ForcefemTrapWeight, SpeedChangeTrapWeight]
 }

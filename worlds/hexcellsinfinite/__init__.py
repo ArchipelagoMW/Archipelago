@@ -44,7 +44,7 @@ class HexcellsInfiniteWebWorld(WebWorld):
 # Same as the first class its normally named whatever you named your folder with World at the end
 class HexcellsInfiniteWorld(World):
     """
-    Hexcells Infinite is a deterministic minesweeper puzzle game. If you like Minesweeper, but hate guessing, this is the game for you.
+    Hexcells Infinite is a deterministic minesweeper puzzle game. \nIf you like Minesweeper, but hate guessing, this is the game for you.
     """
 
     # You want to put the full name of the game here. If you shortened the name for the folder and class names, dont do that here
