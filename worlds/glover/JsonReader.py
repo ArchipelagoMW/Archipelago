@@ -298,6 +298,7 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
                 #Tips
                 if not self.options.mr_tip_checks:
                     continue
+
             #case 9:
                 #Misc
                 
@@ -379,6 +380,10 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
                         location.place_locked_item(self.create_event(new_event_item))
                     #Checkpoints act likewise
                     case 3:
+                        new_event_item : str = each_location_data.name.replace(":", "")
+                        location.place_locked_item(self.create_event(new_event_item))
+                    #Level Warps
+                    case 7:
                         new_event_item : str = each_location_data.name.replace(":", "")
                         location.place_locked_item(self.create_event(new_event_item))
                     

@@ -501,8 +501,8 @@ function GLOVERHACK:dereferencePointer(addr)
         if GLOVERHACK:isPointer(address) then
             return address - self.RDRAMBase;
         else
-            -- print("Failed to Defref:")
-            -- print(address)
+            print("Failed to Defref:")
+            print(address)
             return nil;
         end
     end
@@ -554,7 +554,7 @@ function GLOVERHACK:getOffsetLocation(location_addr, offset, type)
 end
 
 function GLOVERHACK:checkRealFlag(offset, byte)
-    print("Checking Real Flags")
+    -- print("Checking Real Flags")
     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
 	local realptr = GLOVERHACK:dereferencePointer(self.real_flags + hackPointerIndex);
     -- if realptr == nil
@@ -668,7 +668,7 @@ function GLOVERHACK:setGaribSorting(gsort)
 end
 
 function GLOVERHACK:getItemsPointer()
-    print("Checking Items Flags")
+    -- print("Checking Items Flags")
     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
 	return self.ap_items + hackPointerIndex;
 end
@@ -700,7 +700,7 @@ function GLOVERHACK:getHubMap()
 end
 
 function GLOVERHACK:getPCPointer()
-    print("GetPCPtr")
+    -- print("GetPCPtr")
     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
     if hackPointerIndex == nil
     then
@@ -948,7 +948,7 @@ end
 
 function received_moves(itemId)
     if itemId == 6500329 then
-        print("Got Jump")
+        -- print("Got Jump")
         GVR:setItem(ITEM_TABLE["AP_JUMP"], 1)
     elseif itemId == 6500330 then
         GVR:setItem(ITEM_TABLE["AP_CARTWHEEL"], 1)
@@ -1441,7 +1441,7 @@ end
 function processAGIItem(item_list)
     for ap_id, memlocation in pairs(item_list) -- Items unrelated to AGI_MAP like Consumables
     do
-        print(receive_map)
+        -- print(receive_map)
         if receive_map[tostring(ap_id)] == nil
         then
             if(6501001 <= memlocation and memlocation <= 6501009) -- Single Garibs
@@ -1609,7 +1609,7 @@ function receive()
             print("timeout")
             return
         elseif e ~= nil then
-            print(e)
+            -- print(e)
             CUR_STATE = STATE_UNINITIALIZED
             return
         end
@@ -1642,7 +1642,7 @@ function getSlotData()
         print("timeout")
         return
     elseif e ~= nil then
-        print(e)
+        -- print(e)
         CUR_STATE = STATE_UNINITIALIZED
         return
     end

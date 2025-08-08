@@ -6,8 +6,9 @@ from BaseClasses import ItemClassification, Location, Tutorial, Item, Region
 import settings
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from worlds.generic.Rules import add_rule
 
-from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall
+from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall, MrHints, ChickenHints
 from .JsonReader import build_data, generate_location_name_to_id
 from .ItemPool import generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, filler_table, trap_table
 from Utils import visualize_regions
@@ -90,6 +91,19 @@ class GloverWorld(World):
             3,4,4,
             3,3,5,
             2,1,4]
+        
+        #Level Portal Randomization
+        self.wayroom_entrances : list[str] = []
+        self.overworld_entrances : list[str] = []
+        for each_world_prefix in self.world_prefixes:
+            for each_level_prefix in self.level_prefixes:
+                each_entrance : str = each_world_prefix + each_level_prefix
+                if each_level_prefix == "H":
+                    self.overworld_entrances.append(each_entrance)
+                else:
+                    self.wayroom_entrances.append(each_entrance)
+        self.wayroom_entrances.append("Tutorial")
+        self.overworld_entrances.append("Well")
         #Garib level order table
         self.garib_level_order = [
             ["Atl1", 50]#,
@@ -151,6 +165,10 @@ class GloverWorld(World):
             #By default, they're all Checkpoint 1
             for each_item in range(len(self.spawn_checkpoint)):
                 self.spawn_checkpoint[each_item] = 1
+        #Level entry randomization
+        if self.options.entrance_randomizer:
+            self.random.shuffle(self.wayroom_entrances)
+            self.random.shuffle(self.overworld_entrances)
         #Set the starting ball
         match self.options.starting_ball:
             case StartingBall.option_rubber_ball:
@@ -187,10 +205,13 @@ class GloverWorld(World):
         multiworld.regions.append(Region("Menu", player, multiworld))
         #Replace with a connection to the hubworld rather than Atlantis
         multiworld.get_region("Menu", player).connect(multiworld.get_region("Atl1", player))
-        end_region : Region = multiworld.get_region("Atl1: End", player)
+        end_region : Region = multiworld.get_region("Atl1: End W/Ball", player)
         goal_location : Location = Location(player, "Ending", None, end_region)
         end_region.locations.append(goal_location)
         goal_location.place_locked_item(self.create_event("Victory"))
+        add_rule(goal_location, lambda state: state.can_reach_location("Atl1: Goal", player))
+        multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
+        #multiworld.CreateHints 
 
     def create_event(self, event : str) -> GloverItem:
         return GloverItem(event, ItemClassification.progression, None, self.player)
@@ -357,11 +378,13 @@ class GloverWorld(World):
             self.multiworld.itempool.append(self.create_item(each_item))
 
     def connect_entrances(self):
-        #Level portal randomization
+        #Apply level entrances and hubworld entrances
+        self.wayroom_entrances
+
         visualize_regions(self.multiworld.get_region("Menu", self.player), "Glover.puml")
         return super().connect_entrances()
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def build_options(self):
         options = {}
         options["difficulty_logic"] = self.options.difficulty_logic.value
         options["death_link"] = self.options.death_link.value
@@ -386,5 +409,42 @@ class GloverWorld(World):
         options["player_name"] = self.multiworld.player_name[self.player]
         options["seed"] = self.random.randint(-6500000, 6500000)
         options["version"] = self.version
+        return options
+
+    def generate_hints(self):
+        ##Mr. Hints
+        #match self.options.mr_hints:
+        #    case MrHints.option_off:
+        #
+        #    case MrHints.option_balanced:
+        #
+        #    case MrHints.option_catagory_only:
+        #
+        #    case MrHints.option_chaos:
+        #
+        #    case MrHints.option_traps:
+        #
+        #    case MrHints.option_useful:
+        #
+        #    case MrHints.option_progression:
+        ##Chicken Hints
+        #match self.options.chicken_hints:
+        #    case MrHints.option_off:
+        #
+        #    case ChickenHints.option_balanced:
+        #
+        #    case ChickenHints.option_catagory_only:
+        #
+        #    case ChickenHints.option_chaos:
+        #
+        #    case ChickenHints.option_traps:
+        #
+        #    case ChickenHints.option_useful:
+        #
+        #    case ChickenHints.option_progression:
+        return
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+        options = self.build_options()
         
         return options
