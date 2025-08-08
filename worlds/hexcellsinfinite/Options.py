@@ -69,6 +69,38 @@ class RequirePerfectClears(Toggle):
     """
     display_name = "Require Perfect Clears"
 
+class PuzzleOptions(Choice):
+    """
+    This determines how puzzles will be randomized.
+    Vanilla: No puzzle randomization, all puzzles are as they are in the base game.
+    Randomized: Every level has a randomly generated puzzle.
+    True Randomized: Every level has a randomly generated puzzle, that is re-randomized if you leave the level.
+    """
+    display_name = "Puzzle Options"
+    option_vanilla = 1
+    option_randomized = 2
+    option_true_randomized = 3
+    default = 1
+
+
+class EnableShields(Toggle):
+    """
+    When enabled, puzzle solves that involve mistakes will give 1 shield (max of 1 shield). Shields are used to block mistakes on future levels. This pairs well with True Randomization. 
+    """
+    display_name = "Enable Shields"
+
+    
+class LevelUnlockType(Choice):
+    """
+    This determines how levels will be unlocked.
+    Vanilla: Levels are unlocked in groups of 6, with 6 groups total.
+    Individual: Levels are unlocked individually, with individual gem amount requirements.
+    """
+    display_name = "Level Unlock Type"
+    option_vanilla = 1
+    option_individual = 2
+    default = 1
+
 @dataclass
 class HexcellsInfiniteOptions(PerGameCommonOptions):
 
@@ -78,10 +110,14 @@ class HexcellsInfiniteOptions(PerGameCommonOptions):
     # ForcefemTrapWeight:         ForcefemTrapWeight
     # SpeedChangeTrapWeight:      SpeedChangeTrapWeight
     RequirePerfectClears:         RequirePerfectClears
+    PuzzleOptions:                PuzzleOptions
+    EnableShields:                EnableShields
+    LevelUnlockType:              LevelUnlockType
+
 
 # # This is where you organize your options
 # # Its entirely up to you how you want to organize it
 hexcells_infinite_option_groups: Dict[str, List[Any]] = {
-    "General Options": [RequirePerfectClears],
+    "General Options": [RequirePerfectClears, PuzzleOptions, EnableShields, LevelUnlockType],
     # "Trap Options": [TrapChance, ForcefemTrapWeight, SpeedChangeTrapWeight]
 }

@@ -113,7 +113,10 @@ class HexcellsInfiniteWorld(World):
             #     "TrapChance":               self.options.TrapChance.value,
             #     "ForcefemTrapWeight":       self.options.ForcefemTrapWeight.value,
             #     "SpeedChangeTrapWeight":    self.options.SpeedChangeTrapWeight.value
-                  "RequirePerfectClears":     self.options.RequirePerfectClears.value
+                  "RequirePerfectClears":     self.options.RequirePerfectClears.value,
+                  "PuzzleOptions":            self.options.PuzzleOptions.value,
+                  "EnableShields":            self.options.EnableShields.value,
+                  "LevelUnlockType":          self.options.LevelUnlockType.value
             },
             "Seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "Slot": self.multiworld.player_name[self.player],  # to connect to server
