@@ -135,6 +135,10 @@ class JakAndDaxterContext(CommonContext):
         self.tags = set()
         await self.send_connect()
 
+    async def disconnect(self, allow_autoreconnect: bool = False):
+        self.locations_checked = set()  # Clear this set to gracefully handle server disconnects.
+        await super(JakAndDaxterContext, self).disconnect(allow_autoreconnect)
+
     def on_package(self, cmd: str, args: dict):
 
         if cmd == "RoomInfo":
@@ -176,6 +180,10 @@ class JakAndDaxterContext(CommonContext):
                     await self.send_msgs([{"cmd": "Get", "keys": [f"jakanddaxter_{self.auth}_orbs_paid"]}])
 
                 create_task_log_exception(get_orb_balance())
+
+            # If there were any locations checked while the client wasn't connected, we want to make sure the server
+            # knows about them. To do that, replay the whole location_outbox (no duplicates will be sent).
+            self.memr.outbox_index = 0
 
             # Tell the server if Deathlink is enabled or disabled in the in-game options.
             # This allows us to "remember" the user's choice.
@@ -254,6 +262,7 @@ class JakAndDaxterContext(CommonContext):
 
     # We don't need an ap_inform function because check_locations solves that need.
     def on_location_check(self, location_ids: list[int]):
+        self.locations_checked.update(location_ids)  # Populate this set to gracefully handle server disconnects.
         create_task_log_exception(self.check_locations(location_ids))
 
     # CommonClient has no finished_game function, so we will have to craft our own. TODO - Update if that changes.
