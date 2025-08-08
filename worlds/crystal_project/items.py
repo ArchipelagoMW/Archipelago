@@ -1076,6 +1076,7 @@ item_table: Dict[str, ItemData] = {
     "Trap - Snail Jump Trap": ItemData(TRAP, 7 + trap_index_offset, ItemClassification.trap, 0),
     "Trap - Dismount Trap": ItemData(TRAP, 8 + trap_index_offset, ItemClassification.trap, 0),
     "Trap - Dunk Tank Trap": ItemData(TRAP, 9 + trap_index_offset, ItemClassification.trap, 0),
+    "Trap - Trap Pack Trap": ItemData(TRAP, 10 + trap_index_offset, ItemClassification.trap, 0),
 }
 
 progressive_equipment: Tuple[str, ...] = (
