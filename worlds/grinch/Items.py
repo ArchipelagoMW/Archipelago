@@ -154,6 +154,7 @@ KEYS_TABLE: dict[str, GrinchItemData] = {
 
 #Misc Items
 MISC_ITEMS_TABLE: dict[str, GrinchItemData] = {
+    # This item may not function properly if you receive it during a loading screen or in Mount Crumpit
     "Fully Healed Grinch": GrinchItemData("Health Items", 500, IC.filler, [GrinchRamData(0x0E8FDC, value=120)]),
     "5 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 502, IC.filler, [GrinchRamData(0x010058, value=5)]),
     "10 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 503, IC.filler, [GrinchRamData(0x010058, value=10)]),
@@ -166,16 +167,21 @@ USEFUL_IC_TABLE: dict[str, GrinchItemData] = {
 
 #Traps
 TRAPS_TABLE: dict[str, GrinchItemData] = {
-    # "Freeze Trap": GrinchItemData("Traps", 600, IC.trap, [GrinchRamData()]), #alias to Ice Trap for traplink
+    # alias to Ice Trap for traplink
+    # "Freeze Trap": GrinchItemData("Traps", 600, IC.trap, [GrinchRamData()]),
     # "Bee Trap": GrinchItemData("Traps", 601, IC.trap, [GrinchRamData()]),
     # "Electrocution Trap": GrinchItemData("Traps", 602, IC.trap, [GrinchRamData()]),
-    # "Tip Toe Trap": GrinchItemData("Traps", 603, IC.trap, [GrinchRamData()]), #alias to Slowness Trap for traplink
+    # alias to Slowness Trap for traplink
+    # "Tip Toe Trap": GrinchItemData("Traps", 603, IC.trap, [GrinchRamData()]),
+    # This item may not function properly if you receive it during a loading screen or in Mount Crumpit
     "Damage Trap": GrinchItemData("Traps", 604, IC.trap, [GrinchRamData(0x0E8FDC, value=20)]),
     "Depletion Trap": GrinchItemData("Traps", 605, IC.trap, [GrinchRamData(0x010058, value=0)]),
     "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
         [GrinchRamData(0x010000, value=0x05), GrinchRamData(0x08FB94, value=1)]),
-    # "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]), #alias to Spring Trap for traplink
-    "Who sent me back?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x08FB94, value=1)]), #alias to Home Trap for traplink
+    #alias to Spring Trap for traplink
+    # "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]),
+    #alias to Home Trap for traplink
+    "Who sent me back?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x08FB94, value=1)]),
     # "Cutscene Trap": GrinchItemData("Traps", 609, IC.trap, [GrinchRamData()]),
     # "No Vac Trap": GrinchItemData("Traps", 610, IC.trap, [GrinchRamData()])
 }
