@@ -4,12 +4,9 @@
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Please use version 0.6.2 or later for integrated
 BizHawk support.
 - Legally obtained NTSC Bin ROM file, probably named something like `Grinch, The (USA) (En,Fr,Es).bin`.
+- CUE files may work, but I have not tested this.
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) Version 2.9.1 is supported, but I can't promise if any version is stable or not.
-- The latest `thegrinch.apworld` file. You can find this on the [Releases page](https://github.com/MarioSpore/Grinch-AP/releases/latest). Put this in your `Archipelago/custom_worlds` folder.
-
-## Configuring BizHawk
-
-
+- The latest `grinch.apworld` file. You can find this on the [Releases page](https://github.com/MarioSpore/Grinch-AP/releases/latest). Put this in your `Archipelago/custom_worlds` folder.
 
 ## Configuring your Config (.yaml) file
 
@@ -29,16 +26,6 @@ If you would like to validate your config file to make sure it works, you may do
 so on the YAML Validator page: [YAML Validation page](/check)
 
 ## Joining a MultiWorld Game
-
-### Obtain your patch file and create your ROM
-
-When you join a multiworld game, you will be asked to provide your config file to whomever is
-hosting. Once that is done, the host will provide you with either a link to download your patch
-file, or with a zip file containing everyone's patch files. Your patch file should have a `.apgrinch`
-extension.
-
-Put your patch file on your desktop or somewhere convenient, and double click it. This should
-automatically launch the client, and will also create your ROM in the same place as your patch file.
 
 ### Connect to the Multiserver
 
