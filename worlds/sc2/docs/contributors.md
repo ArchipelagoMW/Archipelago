@@ -25,12 +25,13 @@ code contributors also reported bugs and participated in beta testing.
 * Alice Voltaire
 
 ### Voice Acting
-* Subsourian (@Subsourian) - Signifier
+* Subsourian (@Subsourian) - Signifier, Slayer
 * GiantGrantGames (@GiantGrantGames) - Trireme
 * Phaneros (@MatthewMarinets)- Skirmisher
 * Durygathn - Dawnbringer
 * 7thAce (@7thAce) - Intercessor
 * Panicmoon (@panicmoon.bsky.social‬) - Skylord
+* JayborinoPlays (@Jayborino) - Oppressor
 
 ## Maintenance of 2024 release
 * Ziktofel (@Ziktofel)
