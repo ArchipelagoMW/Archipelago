@@ -1,49 +1,31 @@
+let updateSection = (sectionName, fakeDOM) => {
+    document.getElementById(sectionName).innerHTML = fakeDOM.getElementById(sectionName).innerHTML;
+}
+
 window.addEventListener('load', () => {
-  // Reload tracker every 15 seconds
-  const url = window.location;
-  setInterval(() => {
-    const ajax = new XMLHttpRequest();
-    ajax.onreadystatechange = () => {
-      if (ajax.readyState !== 4) { return; }
-
-      // Create a fake DOM using the returned HTML
-      const domParser = new DOMParser();
-      const fakeDOM = domParser.parseFromString(ajax.responseText, 'text/html');
-
-      // Update item tracker
-      document.getElementById('inventory-table').innerHTML = fakeDOM.getElementById('inventory-table').innerHTML;
-      // Update only counters in the location-table
-      let counters = document.getElementsByClassName('counter');
-      const fakeCounters = fakeDOM.getElementsByClassName('counter');
-      for (let i = 0; i < counters.length; i++) {
-        counters[i].innerHTML = fakeCounters[i].innerHTML;
-      }
-    };
-    ajax.open('GET', url);
-    ajax.send();
-  }, 15000)
-
-  // Collapsible advancement sections
-  const categories = document.getElementsByClassName("location-category");
-  for (let category of categories) {
-    let hide_id = category.id.split('_')[0];
-    if (hide_id === 'Total') {
-      continue;
-    }
-    category.addEventListener('click', function() {
-      // Toggle the advancement list
-      document.getElementById(hide_id).classList.toggle("hide");
-      // Change text of the header
-      const tab_header = document.getElementById(hide_id+'_header').children[0];
-      const orig_text = tab_header.innerHTML;
-      let new_text;
-      if (orig_text.includes("▼")) {
-        new_text = orig_text.replace("▼", "▲");
-      }
-      else {
-        new_text = orig_text.replace("▲", "▼");
-      }
-      tab_header.innerHTML = new_text;
-    });
-  }
+    // Reload tracker every 15 seconds
+    const url = window.location;
+    window.refreshInterval = setInterval(() => {
+      const ajax = new XMLHttpRequest();
+      ajax.onreadystatechange = () => {
+        if (ajax.readyState !== 4) { return; }
+  
+        // Create a fake DOM using the returned HTML
+        const domParser = new DOMParser();
+        const fakeDOM = domParser.parseFromString(ajax.responseText, 'text/html');
+  
+        // Update dynamic sections
+        updateSection('player-info', fakeDOM);
+        updateSection('section-filler', fakeDOM);
+        updateSection('section-terran', fakeDOM);
+        updateSection('section-zerg', fakeDOM);
+        updateSection('section-protoss', fakeDOM);
+        updateSection('section-nova', fakeDOM);
+        updateSection('section-kerrigan', fakeDOM);
+        updateSection('section-keys', fakeDOM);
+        updateSection('section-locations', fakeDOM);
+      };
+      ajax.open('GET', url);
+      ajax.send();
+    }, 15000)
 });
