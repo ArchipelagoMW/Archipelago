@@ -1,4 +1,4 @@
-import asyncio
+import shutil
 
 from worlds.Files import APPatch, APPlayerContainer, AutoPatchRegister
 from settings import get_settings, Settings
@@ -73,6 +73,11 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
         logger.info(f"Dependency archive name to use: {lib_path}")
         return lib_path
 
+    def __get_temp_folder_name(self) -> str:
+        from ..LMClient import CLIENT_VERSION
+        temp_path = os.path.join(tempfile.gettempdir(), "luigis_mansion", CLIENT_VERSION, "libs")
+        return temp_path
+
     def patch(self, aplm_patch: str) -> None:
         # Get the AP Path for the base ROM
         lm_clean_iso = self.get_base_rom_path()
@@ -91,17 +96,7 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
                 aplm_bytes = zf.read("patch.aplm")
             LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
         except ImportError:
-            # Load the external dependencies based on OS
-            with tempfile.TemporaryDirectory() as local_dir_path:
-                logger.info(f"Temporary Directory created as: {local_dir_path}")
-                self.download_lib_zip(local_dir_path)
-                from multiprocessing import Process
-                proc = Process(target=self.create_iso, args=(local_dir_path, aplm_patch, output_file, lm_clean_iso,))
-                proc.start()
-                proc.join()
-
-                if proc.exitcode is not 0:
-                    raise Exception("Process exit code is %s", proc.exitcode)
+            self.__get_remote_dependencies_and_create_iso(aplm_patch, output_file, lm_clean_iso)
 
     def read_contents(self, aplm_patch: str) -> dict[str, Any]:
         with zipfile.ZipFile(aplm_patch, "r") as zf:
@@ -159,8 +154,7 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
 
 
     def download_lib_zip(self, tmp_dir_path: str) -> None:
-        logger.info("Missing dependencies detected for Luigi's Mansion, attempting to see if " +
-                    f"{tmp_dir_path} exists")
+        logger.info("Getting missing dependencies for Luigi's Mansion from remote source.")
 
         from ..LMClient import CLIENT_VERSION
         lib_path = self.__get_archive_name()
@@ -188,3 +182,19 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
         with zipfile.ZipFile(patch_file_path, "r") as zf:
             aplm_bytes = zf.read("patch.aplm")
         LuigisMansionRandomizer(vanilla_iso_path, output_iso_path, aplm_bytes)
+
+    def __get_remote_dependencies_and_create_iso(self, aplm_patch: str, output_file: str, lm_clean_iso: str):
+        try:
+            local_dir_path = self.__get_temp_folder_name()
+            # if temp directory exists and we failed to patch the ISO we want to remove the directory
+            # and get a fresh install.
+            if os.path.isdir(local_dir_path):
+                logger.info("Found temporary directory after unsuccessful attempt of generating seed, deleting %s.", local_dir_path)
+                shutil.rmtree(local_dir_path)
+            os.makedirs(local_dir_path, exist_ok=True)
+            # Load the external dependencies based on OS
+            logger.info("Temporary Directory created as: %s", local_dir_path)
+            self.download_lib_zip(local_dir_path)
+            self.create_iso(local_dir_path, aplm_patch, output_file, lm_clean_iso)
+        except PermissionError:
+            logger.warning("Failed to cleanup temp folder, %s ignoring delete.", local_dir_path)
