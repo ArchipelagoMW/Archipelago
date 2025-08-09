@@ -104,6 +104,11 @@ BOO_BALCONY_FLAG_BIT = 2
 BOO_FINAL_FLAG_ADDR = 0x803D33A2
 BOO_FINAL_FLAG_BIT = 5
 
+# Handles when Luigi says "Mario" in game.
+LUIGI_SHOUT_ADDR = 0x804EB558
+LUIGI_SHOUT_DURATION = 4 # Time in seconds of how long the mario shout lasts.
+LUIGI_SHOUT_RAMVALUE = "BCB84ED4"
+
 
 def read_short(console_address: int):
     return int.from_bytes(dme.read_bytes(console_address, 2))
@@ -206,6 +211,10 @@ class LMContext(CommonContext):
         # Used to let poptracker autotrack Luigi's room
         self.last_room_id = 0
 
+        # Used to handle if mario calling is enabled.
+        self.call_mario = False
+        self.yelling_in_client = False
+
     async def disconnect(self, allow_autoreconnect: bool = False):
         """
         Disconnect the client from the server and reset game state variables.
@@ -279,6 +288,7 @@ class LMContext(CommonContext):
                 Utils.async_start(self.update_link_tags(bool(args["slot_data"]["trap_link"]), "TrapLink"), name="Update Traplink")
                 Utils.async_start(self.update_link_tags(bool(args["slot_data"][EnergyLinkConstants.INTERNAL_NAME]),
                     EnergyLinkConstants.FRIENDLY_NAME), name=f"Update {EnergyLinkConstants.FRIENDLY_NAME}")
+                self.call_mario = bool(args["slot_data"]["call_mario"])
 
                 if EnergyLinkConstants.FRIENDLY_NAME in self.tags:
                     Utils.async_start(energy_link_check(self), name="Luigi EnergyLink")
@@ -775,7 +785,22 @@ class LMContext(CommonContext):
             if curr_boo_count >= self.boo_final_count:
                 boo_val = dme.read_byte(BOO_FINAL_FLAG_ADDR)
                 dme.write_byte(BOO_FINAL_FLAG_ADDR, (boo_val | (1 << BOO_FINAL_FLAG_BIT)))
+
+            if self.call_mario:
+                # Prevents the console from receiving the same message over and over.
+                if not self.yelling_in_client:
+                    luigi_shouting = dme.read_bytes(LUIGI_SHOUT_ADDR, 4)
+                    if luigi_shouting == bytes.fromhex(LUIGI_SHOUT_RAMVALUE):
+                        self.yelling_in_client = True
+                        Utils.async_start(self.yell_in_client(), name="Luigi Is Yelling")
         return
+
+    async def yell_in_client(self) -> None:
+        logger.info("MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARIOOOOOOOOOOOOOOOOOOOO")
+        await wait_for_next_loop(LUIGI_SHOUT_DURATION)
+        self.yelling_in_client = False
+        return
+
 
 async def dolphin_sync_task(ctx: LMContext):
     logger.info(f"Using Luigi's Mansion client {CLIENT_VERSION}")
