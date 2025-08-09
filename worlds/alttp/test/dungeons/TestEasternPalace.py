@@ -6,7 +6,7 @@ class TestEasternPalace(TestDungeon):
     def testEastern(self):
         self.starting_regions = ["Eastern Palace"]
         self.run_tests([
-                ["Eastern Palace - Compass Chest", True, []],
+                ["Eastern Palace - Skeleton Ambush Chest", True, []],
 
                 ["Eastern Palace - Cannonball Chest", True, []],
 
@@ -14,11 +14,11 @@ class TestEasternPalace(TestDungeon):
                 ["Eastern Palace - Big Chest", False, [], ['Big Key (Eastern Palace)']],
                 ["Eastern Palace - Big Chest", True, ['Big Key (Eastern Palace)']],
 
-                ["Eastern Palace - Map Chest", True, []],
+                ["Eastern Palace - Eastern Ledge Chest", True, []],
 
-                ["Eastern Palace - Big Key Chest", False, []],
-                ["Eastern Palace - Big Key Chest", False, [], ['Lamp']],
-                ["Eastern Palace - Big Key Chest", True, ['Lamp', 'Small Key (Eastern Palace)', 'Small Key (Eastern Palace)', 'Progressive Sword']],
+                ["Eastern Palace - Antifairy Chest", False, []],
+                ["Eastern Palace - Antifairy Chest", False, [], ['Lamp']],
+                ["Eastern Palace - Antifairy Chest", True, ['Lamp', 'Small Key (Eastern Palace)', 'Small Key (Eastern Palace)', 'Progressive Sword']],
 
                 #@todo: Advanced?
                 ["Eastern Palace - Boss", False, []],
