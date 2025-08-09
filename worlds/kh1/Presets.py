@@ -18,7 +18,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "cups": False,
         "vanilla_emblem_pieces": True,
         
-        "exp_multiplier": 48,
+        "exp_multiplier": 64,
         "level_checks": 100,
         "force_stats_on_levels": 1,
         "strength_increase": 24,
@@ -61,7 +61,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "cups": False,
         "vanilla_emblem_pieces": True,
         
-        "exp_multiplier": 48,
+        "exp_multiplier": 64,
         "level_checks": 100,
         "force_stats_on_levels": 1,
         "strength_increase": 24,
@@ -104,7 +104,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "cups": True,
         "vanilla_emblem_pieces": False,
         
-        "exp_multiplier": 48,
+        "exp_multiplier": 64,
         "level_checks": 100,
         "force_stats_on_levels": 1,
         "strength_increase": 24,
