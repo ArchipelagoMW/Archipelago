@@ -13,7 +13,7 @@ from .Options import (ItemShuffle, RevealHiddenItem, OmitLocations, AddGs1Items,
                       HalveEncounterRate, EasierBosses, NamedPuzzles, ManualRetreatGlitch, MusicShuffle,
                       TelportEverywhere, TrapChance, MimicTrapWeight, ForgeMaterialsFillerWeight,
                       RustyMaterialsFillerWeight, StatBoostFillerWeight, UncommonConsumableFillerWeight,
-                      ForgedEquipmentFillerWeight, LuckyFountainEquipmentFillerWeight, ShopEquipmentFillerWeight,
+                      ForgedEquipmentFillerWeight, LuckyEquipmentFillerWeight, ShopEquipmentFillerWeight,
                       CoinsFillerWeight, CommonConsumablesFillerWeight, AutoRun, ScaleMimics, ScaleCharacters,
                       MaxScaledLevel, ForgeMaterialsAreFiller, ArtifactsAreFiller)
 
@@ -105,7 +105,7 @@ gstla_option_groups = [
         StatBoostFillerWeight,
         UncommonConsumableFillerWeight,
         ForgedEquipmentFillerWeight,
-        LuckyFountainEquipmentFillerWeight,
+        LuckyEquipmentFillerWeight,
         ShopEquipmentFillerWeight,
         CoinsFillerWeight,
         CommonConsumablesFillerWeight

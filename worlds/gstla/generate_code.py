@@ -143,7 +143,6 @@ EXCLUDED_ITEMS = {
     223, # Mythril Bag (Jupiter)
     224, # Mythril Bag (Empty)
     225, # Small Jewel
-    228, # Game Ticket
     230, # Dragon's Eye
     232, # Anchor Charm
     234, # Cell Key
@@ -291,6 +290,10 @@ def generate_item_data(env: Environment, data: GameData):
                 forge_only_ids.add(id)
             vanilla_item_ids.add(id)
         for id in data.lucky_medal_ids:
+            if id not in vanilla_item_ids:
+                lucky_only_ids.add(id)
+            vanilla_item_ids.add(id)
+        for id in data.lucky_wheels_ids:
             if id not in vanilla_item_ids:
                 lucky_only_ids.add(id)
             vanilla_item_ids.add(id)

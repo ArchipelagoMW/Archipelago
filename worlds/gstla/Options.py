@@ -565,11 +565,11 @@ class ForgedEquipmentFillerWeight(Range):
     range_end = 100
     default = 0
     
-class LuckyFountainEquipmentFillerWeight(Range):
-    """The weight for a filler item to be a lucky item reward from the fountain in Lemuria.
-    Examples of these are Hestia Blade, Mighty Axe, Aegis Shield and Crown of Glory."""
+class LuckyEquipmentFillerWeight(Range):
+    """The weight for a filler item to be a lucky item reward from the fountain in Lemuria or Lucky Wheels in Contigo.
+    Examples of these are Hestia Blade, Mighty Axe, Aegis Shield, Crown of Glory, Quick Boots, Silk Shirt and War Ring."""
     internal_name = "lucky_equipment_filler_weight"
-    display_name = "Lucky Fountain Equipment Filler Weight"
+    display_name = "Lucky Equipment Filler Weight"
     range_start = 0
     range_end = 100
     default = 0
@@ -601,7 +601,7 @@ class CoinsFillerWeight(Range):
 
 class CommonConsumablesFillerWeight(Range):
     """The weight for a filler item to be a common consumable.
-    Examples of these are Herbs, Vials, Antidotes, Elixirs, Smoke Bombs and Lucky Medals"""
+    Examples of these are Herbs, Vials, Antidotes, Elixirs, Smoke Bombs, Lucky Medals and Game Tickets"""
     internal_name = "common_consumable_filler_weight"
     display_name = "Common Consumable Filler Weight"
     range_start = 0
@@ -797,7 +797,7 @@ class GSTLAOptions(PerGameCommonOptions):
     stat_boost_filler_weight: StatBoostFillerWeight
     uncommon_consumable_filler_weight: UncommonConsumableFillerWeight
     forged_equipment_filler_weight: ForgedEquipmentFillerWeight
-    lucky_equipment_filler_weight: LuckyFountainEquipmentFillerWeight
+    lucky_equipment_filler_weight: LuckyEquipmentFillerWeight
     artifacts_are_filler: ArtifactsAreFiller
     shop_equipment_filler_weight: ShopEquipmentFillerWeight
     coins_filler_weight: CoinsFillerWeight

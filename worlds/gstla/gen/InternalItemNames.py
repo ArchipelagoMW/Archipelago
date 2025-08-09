@@ -21,6 +21,7 @@ class InternalItemName:
     Lucky_Pepper = "Lucky Pepper"
     Smoke_Bomb = "Smoke Bomb"
     Sleep_Bomb = "Sleep Bomb"
+    Game_Ticket = "Game Ticket"
     Lucky_Medal = "Lucky Medal"
     Bone = "Bone"
     Corn = "Corn"
@@ -721,6 +722,7 @@ item_id_by_py_name: Dict[str, int] = {
     "Mars_Star": 222,
     "Smoke_Bomb": 226,
     "Sleep_Bomb": 227,
+    "Game_Ticket": 228,
     "Lucky_Medal": 229,
     "Bone": 231,
     "Corn": 233,

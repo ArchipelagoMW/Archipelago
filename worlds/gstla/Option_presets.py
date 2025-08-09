@@ -14,7 +14,7 @@ from .Options import (ItemShuffle, RevealHiddenItem, OmitLocations, AddGs1Items,
                       HalveEncounterRate, EasierBosses, NamedPuzzles, ManualRetreatGlitch, MusicShuffle,
                       TelportEverywhere, TrapChance, MimicTrapWeight, ForgeMaterialsFillerWeight,
                       RustyMaterialsFillerWeight, StatBoostFillerWeight, UncommonConsumableFillerWeight,
-                      ForgedEquipmentFillerWeight, LuckyFountainEquipmentFillerWeight, ShopEquipmentFillerWeight,
+                      ForgedEquipmentFillerWeight, LuckyEquipmentFillerWeight, ShopEquipmentFillerWeight,
                       CoinsFillerWeight, CommonConsumablesFillerWeight,ForgeMaterialsAreFiller, ArtifactsAreFiller)
 
 easy = {
