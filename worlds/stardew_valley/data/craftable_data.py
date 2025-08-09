@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 from .recipe_source import RecipeSource, StarterSource, QueenOfSauceSource, ShopSource, SkillSource, FriendshipSource, ShopTradeSource, CutsceneSource, \
-    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource, MasterySource, SkillCraftsanitySource
+    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource, MasterySource, SkillCraftsanitySource, ShopWithKnownRecipeSource
 from ..content.content_packs import ginger_island_content_pack
 from ..mods.mod_data import ModNames
 from ..strings.animal_product_names import AnimalProduct
@@ -77,6 +77,11 @@ def mastery_recipe(name: str, skill: str, ingredients: Dict[str, int], content_p
 
 def shop_recipe(name: str, region: str, price: int, ingredients: Dict[str, int], content_pack: List[str] | str | None = None) -> CraftingRecipe:
     source = ShopSource(region, price)
+    return create_recipe(name, ingredients, source, content_pack)
+
+
+def shop_with_known_recipe_recipe(name: str, region: str, price: int, recipe_requirement: str, ingredients: Dict[str, int], content_pack: List[str] | str | None = None) -> CraftingRecipe:
+    source = ShopWithKnownRecipeSource(region, price, recipe_requirement)
     return create_recipe(name, ingredients, source, content_pack)
 
 
@@ -287,7 +292,7 @@ drum_block = cutscene_recipe(Furniture.drum_block, Region.carpenter, NPC.robin, 
 chest = starter_recipe(Storage.chest, {Material.wood: 50})
 stone_chest = special_order_recipe(Storage.stone_chest, SpecialOrder.robins_resource_rush, {Material.stone: 50})
 big_chest = shop_recipe(Storage.big_chest, Region.carpenter, 5000, {Material.wood: 120, MetalBar.copper: 2})
-big_stone_chest = shop_recipe(Storage.big_stone_chest, LogicRegion.mines_dwarf_shop, 5000, {Material.stone: 250})
+big_stone_chest = shop_with_known_recipe_recipe(Storage.big_stone_chest, LogicRegion.mines_dwarf_shop, 5000, Storage.big_chest, {Material.stone: 250})
 
 wood_sign = starter_recipe(Sign.wood, {Material.wood: 25})
 stone_sign = starter_recipe(Sign.stone, {Material.stone: 25})
@@ -354,7 +359,7 @@ armor_elixir = shop_recipe(ModEdible.armor_elixir, SVERegion.alesia_shop, 50000,
                                                                                   Fossil.bone_fragment: 5}, content_pack=ModNames.sve)
 ginger_tincture = friendship_recipe(ModConsumable.ginger_tincture, ModNPC.goblin, 4, {DistantLandsForageable.brown_amanita: 1, Forageable.ginger: 5,
                                                                                       Material.cinder_shard: 1, DistantLandsForageable.swamp_herb: 1},
-                                    content_pack=(ModNames.distant_lands, ginger_island_content_pack.name,))
+                                    content_pack=[ModNames.distant_lands, ginger_island_content_pack.name])
 
 neanderthal_skeleton = shop_recipe(ModCraftable.neanderthal_skeleton, LogicRegion.mines_dwarf_shop, 5000,
                                    {ModFossil.neanderthal_skull: 1, ModFossil.neanderthal_ribs: 1, ModFossil.neanderthal_pelvis: 1,
