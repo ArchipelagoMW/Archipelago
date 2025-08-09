@@ -8,6 +8,7 @@ except ImportError:
 
 from game import Game, Input
 from graphics import Graphic
+
 from items import ITEM_TO_GRAPHIC
 
 graphic_to_char = {
@@ -19,8 +20,14 @@ graphic_to_char = {
     Graphic.BUTTON_DOOR: "?",
     Graphic.CHEST: "C",
     Graphic.BUSH: "T",
-    Graphic.NORMAL_ENEMY: "E",
-    Graphic.BOSS: "F",
+    Graphic.NORMAL_ENEMY_3_HEALTH: "3",
+    Graphic.NORMAL_ENEMY_2_HEATLH: "2",
+    Graphic.NORMAL_ENEMY_1_HEALTH: "1",
+    Graphic.BOSS_5_HEALTH: "5",
+    Graphic.BOSS_4_HEALTH: "4",
+    Graphic.BOSS_3_HEALTH: "3",
+    Graphic.BOSS_2_HEALTH: "2",
+    Graphic.BOSS_1_HEALTH: "1",
     Graphic.PLAYER_DOWN: "v",
     Graphic.PLAYER_UP: "^",
     Graphic.PLAYER_LEFT: "<",

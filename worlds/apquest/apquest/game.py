@@ -5,6 +5,7 @@ from entities import InteractableMixin
 from events import ConfettiFired, Event
 from gameboard import Gameboard, create_gameboard
 from graphics import Graphic
+
 from items import Item
 
 

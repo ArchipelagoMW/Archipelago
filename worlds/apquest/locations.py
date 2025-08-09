@@ -19,7 +19,6 @@ LOCATION_NAME_TO_ID = {
 }
 
 
-
 # It is common practice to override the base Location class to override the "game" field.
 class APQuestLocation(Location):
     game = "APQuest"
@@ -68,6 +67,7 @@ def create_regular_locations(world: "APQuestWorld"):
     }
     right_room.add_locations(right_room_locations, APQuestLocation)
 
+
 def create_events(world: "APQuestWorld"):
     # Sometimes, the player may perform in-game actions that allow them to progress which are not related to Items.
     # In our case, the player must press a button in the top left room to open the final boss door.
@@ -84,9 +84,7 @@ def create_events(world: "APQuestWorld"):
     top_left_room.locations += [button_in_top_left_room]
 
     # We then need to put an event item onto the location. Item creation is discussed more in create_items().
-    button_item = items.APQuestItem(
-        "Top Left Room Button Pressed", ItemClassification.progression, None, world.player
-    )
+    button_item = items.APQuestItem("Top Left Room Button Pressed", ItemClassification.progression, None, world.player)
     button_in_top_left_room.place_locked_item(button_item)
 
     # A way simpler way to do this is by using the region.create_event helper.

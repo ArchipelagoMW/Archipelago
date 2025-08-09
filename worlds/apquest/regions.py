@@ -1,4 +1,3 @@
-
 from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
@@ -38,9 +37,7 @@ def connect_regions(world: "APQuestWorld"):
     # Okay, now we can get connecting. For this, we need to create Entrances.
     # Entrances are inherently one-way, but crucially, AP assumes you can always return to the origin region.
     # One way to create an Entrance is by calling the Entrance constructor.
-    overworld_to_bottom_right_room = Entrance(
-        world.player, "Overworld to Bottom Right Room", parent=overworld
-    )
+    overworld_to_bottom_right_room = Entrance(world.player, "Overworld to Bottom Right Room", parent=overworld)
     overworld.exits.append(overworld_to_bottom_right_room)
 
     # You can then connect the Entrance to the target region.

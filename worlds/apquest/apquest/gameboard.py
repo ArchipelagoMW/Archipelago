@@ -16,6 +16,7 @@ from entities import (
     Wall,
 )
 from graphics import Graphic
+
 from locations import DEFAULT_CONTENT, Location
 
 if TYPE_CHECKING:

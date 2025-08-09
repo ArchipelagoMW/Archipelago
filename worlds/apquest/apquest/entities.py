@@ -2,6 +2,7 @@ from abc import abstractmethod
 from typing import TYPE_CHECKING, ClassVar
 
 from graphics import Graphic
+
 from items import ITEM_TO_GRAPHIC, Item
 from locations import Location
 
@@ -63,7 +64,7 @@ class Wall(Entity):
 class Chest(Entity, InteractableMixin, LocationMixin):
     solid = True
 
-    open: bool = False
+    is_open: bool = False
 
     def __init__(self, location: Location) -> None:
         self.location = location
@@ -71,8 +72,19 @@ class Chest(Entity, InteractableMixin, LocationMixin):
     def update_solidity(self) -> None:
         self.solid = not self.has_given_content
 
+    def open(self) -> None:
+        self.is_open = True
+        self.update_solidity()
+
     def interact(self, player: "Player") -> None:
-        self.give_content(player)
+        if self.has_given_content:
+            return
+
+        if self.is_open:
+            self.give_content(player)
+            return
+
+        self.open()
 
     def content_success(self) -> None:
         self.update_solidity()
@@ -84,6 +96,8 @@ class Chest(Entity, InteractableMixin, LocationMixin):
     def graphic(self) -> Graphic:
         if self.has_given_content:
             return Graphic.EMPTY
+        if self.is_open:
+            return ITEM_TO_GRAPHIC[self.content]
         return Graphic.CHEST
 
 
@@ -172,7 +186,12 @@ class Enemy(Entity, InteractableMixin):
 
     dead: bool = False
 
-    enemy_graphic: ClassVar[Graphic] = Graphic.NORMAL_ENEMY
+    enemy_graphic_by_health: ClassVar[dict[int, Graphic]] = {
+        3: Graphic.NORMAL_ENEMY_3_HEALTH,
+        2: Graphic.NORMAL_ENEMY_2_HEATLH,
+        1: Graphic.NORMAL_ENEMY_1_HEALTH,
+    }
+    enemy_default_graphic = Graphic.NORMAL_ENEMY_1_HEALTH
 
     def __init__(self, max_health: int) -> None:
         self.max_health = max_health
@@ -204,7 +223,7 @@ class Enemy(Entity, InteractableMixin):
     def graphic(self) -> Graphic:
         if self.dead:
             return Graphic.EMPTY
-        return self.enemy_graphic
+        return self.enemy_graphic_by_health.get(self.current_health, self.enemy_default_graphic)
 
 
 class EnemyWithLoot(Enemy, LocationMixin):
@@ -238,7 +257,14 @@ class EnemyWithLoot(Enemy, LocationMixin):
 
 
 class FinalBoss(Enemy):
-    enemy_graphic = Graphic.BOSS
+    enemy_graphic_by_health: ClassVar[dict[int, Graphic]] = {
+        5: Graphic.BOSS_5_HEALTH,
+        4: Graphic.BOSS_4_HEALTH,
+        3: Graphic.BOSS_3_HEALTH,
+        2: Graphic.BOSS_2_HEALTH,
+        1: Graphic.BOSS_1_HEALTH,
+    }
+    enemy_default_graphic = Graphic.BOSS_1_HEALTH
 
     def interact(self, player: "Player") -> None:
         dead_before = self.dead
