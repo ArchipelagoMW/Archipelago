@@ -293,7 +293,7 @@ class AdventureDeltaPatch(APPatch, metaclass=AutoPatchRegister):
 
 
 def apply_basepatch(base_rom_bytes: bytes) -> bytes:
-    with open(os.path.join(os.path.dirname(__file__), "../../data/adventure_basepatch.bsdiff4"), "rb") as basepatch:
+    with open(os.path.join(os.path.dirname(__file__), "data/adventure_basepatch.bsdiff4"), "rb") as basepatch:
         delta: bytes = basepatch.read()
     return bsdiff4.patch(base_rom_bytes, delta)
 
