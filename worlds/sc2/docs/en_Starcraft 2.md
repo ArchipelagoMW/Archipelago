@@ -113,6 +113,13 @@ Note that the behavior of the command `/received` was modified in the StarCraft 
 * Use `/received recent [amount]` to display the last `amount` items received in chronological order
   * `amount` defaults to 20 if not specified
 
+## Client-side settings
+Some settings can be set or overridden on the client side rather than within a world's options.
+This can allow, for example, overriding difficulty to always be `hard` no matter what the world specified.
+It can also modify display properties, like the client's window size on startup or the launcher button colours.
+
+Modify these within the `sc2_options` section of the host.yaml file within the Archipelago directory.
+
 ## Particularities in a multiworld
 
 ### Collect on goal completion
