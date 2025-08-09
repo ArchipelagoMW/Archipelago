@@ -97,3 +97,6 @@ class ArtisanLogic(BaseLogic):
         machine_rule = self.logic.has(Machine.bee_house)
         flower_rule = self.logic.has(flower)
         return machine_rule & flower_rule
+
+    def can_replicate_gem(self, gem: str) -> StardewRule:
+        return self.logic.has(Machine.crystalarium) & self.logic.has(gem)
