@@ -79,7 +79,7 @@ This guide uses the following terms to refer to the software:
 
 To play Factorio with Archipelago, a dedicated server setup is required. This dedicated Factorio Server must be
 installed separately from your main Factorio Client installation. The recommended way to install two instances of
-Factorio on your computer is to download the Factorio installer file directly from
+Factorio on your computer is to download the standalone Factorio file directly from
 factorio.com: [Factorio Official Website Download Page](https://factorio.com/download).
 
 #### If you purchased Factorio on Steam, GOG, etc.
@@ -106,7 +106,7 @@ have logged in, you may close the game.
 
 If you did not place the Factorio standalone in your Archipelago installation, you must modify your `host.yaml` file 
 inside your Archipelago installation directory so that it points to your standalone Factorio executable. Here is an 
-example of the appropriate setup, note the double `\\` are required:
+example of the appropriate setup, note the double `\\` are required if you are on Windows:
 
 ```yaml
 factorio_options:
@@ -120,7 +120,7 @@ This allows you to host your own Factorio game.
 1. Obtain the Factorio mod for this Archipelago seed. It should be named `AP_*.zip`, where `*` is the seed number.
 2. Install the mod into your Factorio Server by copying the zip file into the `mods` folder.
 3. Install the mod into your Factorio Client by copying the zip file into the `mods` folder, which is likely located
-   at `C:\Users\YourName\AppData\Roaming\Factorio\mods`.
+   at `C:\Users\YourName\AppData\Roaming\Factorio\mods`. If you're on Linux, it will be located at `~/.factorio/mods`.
 4. Obtain the Archipelago Server address from the website's host room, or from the server host.
 5. Run your Archipelago Client, which is named `ArchipelagoFactorioClient.exe`. This was installed along with
    Archipelago if you chose to include it during the installation process.
@@ -202,7 +202,7 @@ contents of this file may help you troubleshoot an issue on your own and is vita
 in Archipelago.
 
 ## Additional Resources
-
+- Alterntae Tutorial by [Skid-Inc Gaming: [16x9] Archipelago, Ep00: Setup](www.youtube.com/watch?v=_h5sXyuB9jA)
 - Alternate Tutorial by
   Umenen: [Factorio (Steam) Archipelago Setup Guide for Windows](https://docs.google.com/document/d/1yZPAaXB-QcetD8FJsmsFrenAHO5V6Y2ctMAyIoT9jS4)
 - Factorio Speedrun Guide: [Factorio Speedrun Guide by Nefrums](https://www.youtube.com/watch?v=ExLrmK1c7tA)
