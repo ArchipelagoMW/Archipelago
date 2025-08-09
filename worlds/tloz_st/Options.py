@@ -3,7 +3,7 @@ from datetime import datetime
 
 from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, Toggle, StartInventoryPool, \
     ItemDict, ItemsAccessibility, ItemSet, Visibility
-from worlds.tloz_ph.data.Items import ITEMS_DATA
+from worlds.tloz_st.data.Items import ITEMS_DATA
 
 # YAML options
 

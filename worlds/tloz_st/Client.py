@@ -20,29 +20,30 @@ ROM_ADDRS = {
 }
 
 RAM_ADDRS = {
-    #"game_state": (0x060C48, 1, "Main RAM"), 
-    #"is_dead": (0xC2EE, 1, "ARM7 System Bus"),
+    "game_state": (0x060C48, 1, "Main RAM"), 
+    "is_dead": (0xC2EE, 1, "ARM7 System Bus"),
 
-    #"received_item_index": (0x1BA64C, 2, "Main RAM"),
-    #"slot_id": (0x1BA64A, 2, "Main RAM"),
+    "received_item_index": (0x265380, 2, "Main RAM"),
+    "slot_id": (0x265782, 2, "Main RAM"),
 
-    #"stage": (0x1B2E94, 4, "Main RAM"),
+    "stage": (0x260A2C, 4, "Main RAM"),
     #"floor": (0x1B2E98, 4, "Main RAM"),
-    #"room": (0x1B2EA6, 1, "Main RAM"),
-    #"entrance": (0x1B2EA7, 1, "Main RAM"),
-    #"flags": (0x1B557C, 52, "Main RAM"),
+    "room": (0x2690EA, 1, "Main RAM"),
+    "entrance": (0x2690EB, 1, "Main RAM"),
+    #"flags": (0x265700, 52, "Main RAM"),
 
-    #"getting_item": (0x1B6F44, 1, "Main RAM"),
-    #"shot_frog": (0x1B7038, 1, "Main RAM"),
-    #"getting_train_part": (0x11F5E4, 1, "Main RAM"),
+    "getting_item": (0x04B114, 1, "Main RAM"),
+    # "shot_frog": (0x1B7038, 1, "Main RAM"),
+    "getting_train_part": (0x11F5E4, 1, "Main RAM"),
 
-    "link_x": (0x7E05CC, 4, "Main RAM"),
-    "link_y": (0x7E05D0, 4, "Main RAM"),
-    "link_z": (0x7E05D4, 4, "Main RAM"),
-    #"using_item:": (0x1BA71C, 1, "Main RAM"),
-    #"save_slot": (0x1B8124, 1, "Main RAM"),
-    "equipped_item": (0x265318, 4, "Main RAM"),
-    #"got_item_menu": (0x19A5B0, 1, "Main RAM")
+    "link_x": (0x05CC, 4, "Data TCM"),
+    "link_y": (0x05D0, 4, "Data TCM"),
+    "link_z": (0x05D4, 4, "Data TCM"),
+    #"using_item:": (0x26531C, 4, "Main RAM"),
+    #"boat_x": (0x1B8518, 4, "Main RAM"),
+    #"boat_z": (0x1B8520, 4, "Main RAM"),
+    #"save_slot": (265782, 2, "Main RAM"),
+    "equipped_item": (0x265318, 4, "Main RAM")
 }
 
 POINTERS = {
@@ -197,7 +198,7 @@ class SpiritTracksClient(BizHawkClient):
         self.new_stage_loading = None
         self.at_sea = False
 
-        self.delay_pickup: list[str, list[list[str, str, int]]] or None = None
+        self.delay_pickup: list[str, list[list[str, str, int]]] | None = None
         self.last_key_count = 0
         self.key_address = 0
         self.key_value = 0
@@ -238,25 +239,11 @@ class SpiritTracksClient(BizHawkClient):
     async def set_starting_flags(self, ctx: "BizHawkClientContext") -> None:
         write_list = [(RAM_ADDRS["slot_id"][0], [ctx.slot], "Main RAM")]
         print("New game, setting starting flags")
-        print(ctx.slot_data)
-        for adr, value in STARTING_FLAGS:
-            write_list.append((adr, [value], "Main RAM"))
-
-        # Set starting time for PH
-        st_time = ctx.slot_data["st_starting_time"] * 3600
-        st_time_bits = split_bits(st_time, 4)
-        write_list.append((0x1BA528, st_time_bits, "Main RAM"))
-
-        # Set Frog flags if not randomizing frogs
-        if ctx.slot_data["randomize_frogs"] == 1:
-            write_list += [(a, [v], "Main RAM") for a, v in STARTING_FROG_FLAGS]
-        # Set Fog Flags
-        fog_bits = FOG_SETTINGS_FLAGS[ctx.slot_data["fog_settings"]]
-        if len(fog_bits) > 0:
-            write_list += [(a, [v], "Main RAM") for a, v in fog_bits]
+        print(ctx.slot)
+        # for adr, value in STARTING_FLAGS:
+        #     write_list.append((adr, [value], "Main RAM"))
 
         await bizhawk.write(ctx.bizhawk_ctx, write_list)
-        self.removed_boomerang = False
 
     # Boomerang is set to enable item menu, called on s+q to remove it again.
     async def boomerwatch(self, ctx) -> bool:
@@ -311,30 +298,30 @@ class SpiritTracksClient(BizHawkClient):
         read_keys = read_keys_always
         if stage is not None:
             if stage == 0:
-                read_keys += read_keys_sea
                 self.at_sea = True
             else:
                 read_keys += read_keys_land
                 self.at_sea = False
         self.main_read_list = {k: v for k, v in RAM_ADDRS.items() if k in read_keys}
+        print(self.main_read_list)
 
     def get_ending_room(self, ctx):
-        if ctx.slot_data["goal"] == "beat_bellumbeck":
-            self.goal_room = 0x3600
-        elif ctx.slot_data["goal"] == "triforce_door":
-            self.goal_room = 0x2509
+        self.goal_room = 0x300
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
+
         if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed or ctx.slot is None:
             self.just_entered_game = True
             self.last_scene = None
             self.get_main_read_list(self.current_stage)
             return
 
+
         # Enable "DeathLink" tag if option was enabled
         if self.set_deathlink:
-            self.set_deathlink = False
-            await ctx.update_death_link(True)
+            pass
+            # self.set_deathlink = False
+            # await ctx.update_death_link(True)
 
         try:
             read_result = await read_memory_values(ctx, self.main_read_list)
@@ -359,17 +346,14 @@ class SpiritTracksClient(BizHawkClient):
                 self.last_stage = None
                 self.last_scene = None
                 self.removed_boomerang = False  # Catches stray item menu errors, only 1 read
-                self.save_slot = await read_memory_value(ctx, RAM_ADDRS["save_slot"][0])
+                # self.save_slot = await read_memory_value(ctx, RAM_ADDRS["save_slot"][0])
                 self.get_ending_room(ctx)
                 print(f"Started Game")
 
             # If new file, set up starting flags
             if slot_memory == 0:
-                if await read_memory_value(ctx, 0x1b55a8) & 2:  # Check if watched intro cs
-                    await self.set_starting_flags(ctx)
-                    print(f"Set starting flags for slot {slot_memory}")
-                else:
-                    return
+                print(f"Set starting flags for slot {slot_memory}")
+                await self.set_starting_flags(ctx)
 
             # Get current scene
             current_room = read_result["room"]
@@ -377,11 +361,8 @@ class SpiritTracksClient(BizHawkClient):
             current_scene = current_stage * 0x100 + current_room
 
             # This go true when link gets item
-            if self.at_sea:
-                getting_location = read_result.get("shot_frog", False)
-            else:
-                getting_location = read_result.get("getting_item", 0) & 0x20 or read_result.get("getting_train_part",
-                                                                                                False)
+            getting_location = read_result.get("getting_item", 0)
+            print(f"getting location? {bool(getting_location)}")
 
             # Other game variables
             num_received_items = read_result["received_item_index"]
@@ -424,7 +405,8 @@ class SpiritTracksClient(BizHawkClient):
 
             # Set stage flags when scene fully loaded
             if self.new_stage_loading is not None:
-                await self.enter_stage(ctx, current_stage, current_scene)
+                self.new_stage_loading = None  # Set during enter stage, prevents stuff from happening while loading
+                # await self.enter_stage(ctx, current_stage, current_scene)
 
             # Read for checks on specific global flags
             if len(self.watches) > 0:
@@ -841,20 +823,7 @@ class SpiritTracksClient(BizHawkClient):
 
             # Hint required dungeons
             if "dungeon_hints" in hint_data:
-                if ctx.slot_data["dungeon_hints"] == hint_data["dungeon_hints"]:
-                    for loc in ctx.slot_data["required_dungeon_locations"]:
-                        local_scouted_locations.add(self.location_name_to_id[loc])
-
-            print(f"Spirit hints {ctx.slot_data['spirit_island_hints']}")
-            # Hint Spirit Island
-            if hint_data.get("spirit_island_hints", False):
-                forces = ["Power", "Wisdom", "Courage"]
-                if ctx.slot_data["spirit_island_hints"] != 2:
-                    for i in forces:
-                        local_scouted_locations.add(self.location_name_to_id[f"Spirit Island {i} Upgrade Level 2"])
-                if ctx.slot_data["spirit_island_hints"] == 0:
-                    for i in forces:
-                        local_scouted_locations.add(self.location_name_to_id[f"Spirit Island {i} Upgrade Level 1"])
+                pass
 
         # Send hints
         if self.local_scouted_locations != local_scouted_locations:
@@ -938,11 +907,7 @@ class SpiritTracksClient(BizHawkClient):
 
             # Handle different writing operations
             if "incremental" in item_data:
-                # Sand of hours check
-                if item_data.get("value") == "Sand":
-                    value = ctx.slot_data["st_time_increment"] * 3600
-                else:
-                    value = item_data.get("value", 1)
+                value = item_data.get("value", 1)
 
                 item_value = prev_value + value
                 item_value = 0 if item_value <= 0 else item_value

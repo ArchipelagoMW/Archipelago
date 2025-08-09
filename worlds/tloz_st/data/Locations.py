@@ -3,55 +3,51 @@
 # TODO: Add sram data for saveslot 2
 # TODO: Add the rest of sram data in bulk
 
-#TODO obvs need all these changed
-
 LOCATIONS_DATA = {
 
     #Aboda Village
     "Aboda Clear Rocks": {
         "region_id": "aboda village rocks",
         "vanilla_item": "Red Rupee (20)",
-        #"stage_id": 11,
-        #"floor_id": 0,
-    
-        #"y": 0,
-        #"x_max": -170000,
-        "sram_addr": 0x265743,
-        "sram_value": 0x20
+        "item_override": "Boomerang",
+        "stage_id": 0x2F,
+        "floor_id": 0,
+        "address": 0x265743,
+        "value": 0x20
     },
     "Aboda Bee Tree": {
         "region_id": "aboda village bees",
-       # "vanilla_item": "Treasure Map #10",
-        #"stage_id": 11,
-        #"floor_id": 0,
-        #"y": 0x1333,
-        # "sram_addr": 0x000EB0,
-        # "sram_value": 1
+        "vanilla_item": "Treasure",
+        "stage_id": 0x2F,
+        "floor_id": 0,
+        "x_min": 34192,
+        "x_max": 52960,
+        "z_max": -10024,
+        "z_min": -34890
     },
     "Aboda Stamp Station": {
         "region_id": "aboda village stamp station",
         "vanilla_item": "Aboda Village Stamp",
-        #"stage_id": 11,
-        #"floor_id": 0,
-        #"y": 0x1333,
-        # "sram_addr": 0x000EB0,
-        # "sram_value": 1
+        "item_override": "Stamp Book",
+        "stage_id": 0x2F,
+        "floor_id": 0,
+        "stamp": True,
         "require_item": ["Stamp Book"]
         # 02271CD8 is array of stamp IDs
         # 02271CF4 is bitfield of all stamps found
     },
 
     # Castle Town
-    "Castle Town": {
-        "region_id": "castle town stamp station",
+    #"Castle Town": {
+    #    "region_id": "castle town stamp station",
        # "vanilla_item": "Castle Town Stamp",
         #"stage_id": 11,
         #"floor_id": 0,
         #"y": 0x1333,
         # "sram_addr": 0x000EB0,
         # "sram_value": 1
-        "require_item": ["Stamp Book"]
-    },
+    #    "require_item": ["Stamp Book"]
+    # },
 
 
     # # Shops

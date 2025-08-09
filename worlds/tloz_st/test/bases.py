@@ -1,5 +1,5 @@
 from BaseClasses import LocationProgressType
-from test.bases import WorldTestBase
+from test.bases import *
 
 
 class TestGeneration(WorldTestBase):

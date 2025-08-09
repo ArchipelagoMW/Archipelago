@@ -32,14 +32,14 @@ ITEMS_DATA = {
     },
     "Bombs (Progressive)": {
         'classification': ItemClassification.progression,
-        "progressive": [[0x265320, 0x10]], #[0x1BA5D2, 1], [0x1BA5D2, 2]],
+        "progressive": [[0x265320, 0x10]],
         #"progressive_overwrite": True,
         #"give_ammo": [10, 20, 30],
         #"ammo_address": 0x1BA6C0
     },
     "Bow (Progressive)": {
         'classification': ItemClassification.progression,
-        "progressive": [[0x265320, 0x08]], #[0x1BA5D0, 1], []],
+        "progressive": [[0x265320, 0x08]],
         #"give_ammo": [20, 30, 50],
         #"ammo_address": 0x1BA6C2,
         #"progressive_overwrite": True,
@@ -62,7 +62,7 @@ ITEMS_DATA = {
     "Spirit Flute": {
         'classification': ItemClassification.progression,
         'address': 0x265322,
-        'value': 0x0080,
+        'value': 0x80,
     },
 
     # ======= Misc Items==========
@@ -440,36 +440,6 @@ ITEMS_DATA = {
         'dungeon': True,
         'dummy': True
     },
-    "Square Crystal (Temple of Courage)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True,
-    },
-    "Triangle Crystal (Ghost Ship)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True,
-    },
-    "Round Crystal (Ghost Ship)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True,
-    },
-    "Round Crystal (Temple of the Ocean King)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dummy': True,
-        'dungeon': 37,
-    },
-    "Triangle Crystal (Temple of the Ocean King)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dummy': True,
-        'dungeon': 37,
-    },
     "Force Gem (B3)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
@@ -482,26 +452,6 @@ ITEMS_DATA = {
         'dummy': True,
         'dungeon': 37,
     },
-    "Triforce Crest": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B5580,
-        'value': 0x02
-    },
-    "Sun Key": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA648,
-        'value': 0x40
-    },
-    "Ghost Key": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA649,
-        'value': 0x08
-    },
-    "King's Key": {
-        'classification': ItemClassification.progression,
-        'address': 0x1BA649,
-        'value': 0x04
-    },
     "Regal Necklace": {
         'classification': ItemClassification.progression,
         'address': 0x1B5582,
@@ -511,36 +461,6 @@ ITEMS_DATA = {
     # Trade Quest and misc
 
     # Warp Gates
-    "Golden Frog Glyph X": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B55A2,
-        'value': 0x80
-    },
-    "Golden Frog Glyph Phi": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B55A3,
-        'value': 0x01
-    },
-    "Golden Frog Glyph N": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B55A3,
-        'value': 0x02
-    },
-    "Golden Frog Glyph Omega": {
-        'classification': ItemClassification.useful,
-        'address': 0x1B55A3,
-        'value': 0x04
-    },
-    "Golden Frog Glyph W": {
-        'classification': ItemClassification.useful,
-        'address': 0x1B55A3,
-        'value': 0x08
-    },
-    "Golden Frog Glyph Square": {
-        'classification': ItemClassification.progression,
-        'address': 0x1B55A3,
-        'value': 0x10
-    },
 
     # Trains
     "Train: Bright Train": {
@@ -584,6 +504,8 @@ ITEMS_DATA = {
         'train': 8
     },
 }
+
+
 
 
 # Oops apparently not a constant lul (it will be after this)

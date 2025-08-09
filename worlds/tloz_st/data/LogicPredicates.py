@@ -5,6 +5,9 @@ from .Constants import *
 
 # =========== Item States ============= TODO another big change
 
+def st_has_stamp_book(state, player):
+    return state.has("Stamp Book", player)
+
 def st_has_sword(state: CollectionState, player: int):
     return state.has("Sword (Progressive)", player)
 
