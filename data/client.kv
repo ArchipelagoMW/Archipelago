@@ -45,9 +45,8 @@
     markup: True
     halign: "left"
 <SelectableLabel>:
-    size_hint: 1, None
-    theme_text_color: "Custom"
-    text_color: 1, 1, 1, 1
+    base_color: self.theme_cls.surfaceContainerLowestColor
+    selected_color: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3)
     canvas.before:
         Color:
             rgba: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3) if self.selected else self.theme_cls.surfaceContainerLowestColor
@@ -95,9 +94,12 @@
         orientation: 'vertical'
         spacing: dp(3)
 <HintLabel>:
+    base_color: self.theme_cls.surfaceContainerLowestColor
+    selected_color: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3)
+    striped_color: self.theme_cls.surfaceContainerHighColor
     canvas.before:
         Color:
-            rgba: (.0, 0.9, .1, .3) if self.selected else self.theme_cls.surfaceContainerHighColor if self.striped else self.theme_cls.surfaceContainerLowColor
+            rgba: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3) if self.selected else self.theme_cls.surfaceContainerHighColor if self.striped else self.theme_cls.surfaceContainerLowestColor
         Rectangle:
             size: self.size
             pos: self.pos
