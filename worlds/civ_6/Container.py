@@ -44,9 +44,10 @@ class CivVIContainer(APPlayerContainer):
             opened_zipfile.writestr(filename, yml)
         super().write_contents(opened_zipfile)
 
+
 def sanitize_value(value: str) -> str:
-  """Removes values that can cause issues in XML"""
-  return value.replace('"', "'").replace('&', 'and')
+    """Removes values that can cause issues in XML"""
+    return value.replace('"', "'").replace('&', 'and').replace('{', '').replace('}', '')
 
 
 def get_cost(world: 'CivVIWorld', location: CivVILocationData) -> int:
@@ -87,8 +88,10 @@ def generate_new_items(world: 'CivVIWorld') -> str:
     boost_civics = []
 
     if world.options.boostsanity:
-        boost_techs = [location for location in locations if location.location_type == CivVICheckType.BOOST and location.name.split("_")[1] == "TECH"]
-        boost_civics = [location for location in locations if location.location_type == CivVICheckType.BOOST and location.name.split("_")[1] == "CIVIC"]
+        boost_techs = [location for location in locations if location.location_type ==
+                       CivVICheckType.BOOST and location.name.split("_")[1] == "TECH"]
+        boost_civics = [location for location in locations if location.location_type ==
+                        CivVICheckType.BOOST and location.name.split("_")[1] == "CIVIC"]
         techs += boost_techs
         civics += boost_civics
 
