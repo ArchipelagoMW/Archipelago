@@ -46,6 +46,11 @@ class Version(typing.NamedTuple):
     def as_simple_string(self) -> str:
         return ".".join(str(item) for item in self)
 
+    @classmethod
+    def from_network_dict(cls, source: dict):
+        source.pop("class", None)
+        return cls(**source)
+
 
 __version__ = "0.6.3"
 version_tuple = tuplize_version(__version__)
