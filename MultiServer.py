@@ -1237,6 +1237,7 @@ class CommandMeta(type):
             commands.update(base.commands)
         commands.update({command_name[5:]: method for command_name, method in attrs.items() if
                          command_name.startswith("_cmd_")})
+        attrs["command_aliases"] = {}
         return super(CommandMeta, cls).__new__(cls, name, bases, attrs)
 
 
@@ -1251,6 +1252,7 @@ def mark_raw(function: typing.Callable[[typing.Any], _Return]) -> typing.Callabl
 
 class CommandProcessor(metaclass=CommandMeta):
     commands: typing.Dict[str, typing.Callable]
+    command_aliases: typing.Dict[str, str]
     client = None
     marker = "/"
 
@@ -1267,7 +1269,10 @@ class CommandProcessor(metaclass=CommandMeta):
                 command = raw.split()
             basecommand = command[0]
             if basecommand[0] == self.marker:
-                method = self.commands.get(basecommand[1:].lower(), None)
+                method_name = basecommand[1:].lower()
+                method_name = self.command_aliases.get(method_name, method_name)
+
+                method = self.commands.get(method_name, None)
                 if not method:
                     self._error_unknown_command(basecommand[1:])
                 else:
@@ -1284,7 +1289,15 @@ class CommandProcessor(metaclass=CommandMeta):
         except Exception as e:
             self._error_parsing_command(e)
 
+    def get_command_alias_reverse_lookup(self) -> dict[str, list[str]]:
+        command_aliases_reversed = {}
+        for alias, command in self.command_aliases.items():
+            command_aliases_reversed.setdefault(command, []).append(alias)
+        return command_aliases_reversed
+
     def get_help_text(self) -> str:
+        command_aliases_reversed = self.get_command_alias_reverse_lookup()
+
         s = ""
         for command, method in self.commands.items():
             spec = inspect.signature(method).parameters
@@ -1301,6 +1314,9 @@ class CommandProcessor(metaclass=CommandMeta):
                 argtext += argname
                 argtext += " "
             s += f"{self.marker}{command} {argtext}\n    {method.__doc__}\n"
+            aliases = command_aliases_reversed.get(command, [])
+            if aliases:
+                s += f"    Aliases: {', '.join(aliases)}\n"
         return s
 
     def _cmd_help(self):
@@ -1358,6 +1374,10 @@ class ClientMessageProcessor(CommonCommandProcessor):
     def __init__(self, ctx: Context, client: Client):
         self.ctx = ctx
         self.client = client
+        self.command_aliases |= {
+            "yeet": "release",
+            "yoink": "collect",
+        }
 
     def __call__(self, raw: str) -> typing.Optional[bool]:
         if not raw.startswith("!admin"):
@@ -2132,6 +2152,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def __init__(self, ctx: Context):
         self.ctx = ctx
         super(ServerCommandProcessor, self).__init__()
+        self.command_aliases |= {
+            "yeet": "release",
+            "yoink": "collect",
+        }
 
     def output(self, text: str):
         if self.client:
