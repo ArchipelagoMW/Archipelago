@@ -265,9 +265,8 @@ def set_rules(kh1world):
         ))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Bear and Clock Puzzle Chest"),
         lambda state: (
-        
            state.has("Footprints", player)
-           or (options.advanced_logic and state.has("Progressive Glide", player))
+           or state.has("Progressive Glide", player)
         ))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Across From Bizarre Room Entrance Chest"),
         lambda state: (
@@ -642,7 +641,7 @@ def set_rules(kh1world):
             and
             (
                 has_emblems(state, player, options.keyblades_unlock_chests)
-                or (options.advanced_logic and state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
+                or (state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
                 or (options.advanced_logic and can_dumbo_skip(state, player) and state.has("Progressive Glide", player))
             )
         ))
@@ -693,7 +692,12 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop Heartless Sigil Door Gravity Chest"),
         lambda state: (
             state.has("Progressive Gravity", player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
+            and 
+            (
+                has_emblems(state, player, options.keyblades_unlock_chests)
+                or (state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
+                or (options.advanced_logic and can_dumbo_skip(state, player) and state.has("Progressive Glide", player))
+            )
         ))
     add_rule(kh1world.get_location("Hollow Bastion Waterway Blizzard on Bubble Chest"),
         lambda state: (
@@ -1919,7 +1923,7 @@ def set_rules(kh1world):
         add_rule(kh1world.get_location("End of the World Final Rest Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("Monstro Chamber 6 White Trinity Chest"),
-            lambda state: state.has("Oblivion", player))
+            lambda state: state.has("Wishing Star", player))
         if options.hundred_acre_wood:
             add_rule(kh1world.get_location("100 Acre Wood Meadow Inside Log Chest"),
                 lambda state: state.has("Oathkeeper", player))
