@@ -6,7 +6,7 @@
 
 - Factorio: [Factorio Official Website](https://factorio.com)
     - Needed by Players and Hosts
-    - Players will need to download an additional copy of Factorio for Archipelago to use.
+    - Players will need to download an additional copy of Factorio for Archipelago to use. If you already own the game, you can download another copy for free by logging into the website. 
 
 ##### Server Hosts
 
