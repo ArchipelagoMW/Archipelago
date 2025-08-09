@@ -7,6 +7,7 @@ class StrengthIncrease(Range):
     Determines the number of Strength Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "STR Increases"
@@ -19,6 +20,7 @@ class DefenseIncrease(Range):
     Determines the number of Defense Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "DEF Increases"
@@ -31,6 +33,7 @@ class HPIncrease(Range):
     Determines the number of HP Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "HP Increases"
@@ -43,6 +46,7 @@ class APIncrease(Range):
     Determines the number of AP Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "AP Increases"
@@ -55,6 +59,7 @@ class MPIncrease(Range):
     Determines the number of MP Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "MP Increases"
@@ -67,6 +72,7 @@ class AccessorySlotIncrease(Range):
     Determines the number of Accessory Slot Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "Accessory Slot Increases"
@@ -79,6 +85,7 @@ class ItemSlotIncrease(Range):
     Determines the number of Item Slot Increases to add to the multiworld.
     
     The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    
     Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "Item Slot Increases"
@@ -107,10 +114,13 @@ class SuperBosses(Toggle):
 class Cups(Choice):
     """
     Determines which cups have their locations added to the multiworld.
+    
     Please note that the cup items will still appear in the multiworld even if set to off, as they are required to challenge Sephiroth.
 
     Off: All cup locations are removed
+    
     Cups: Phil, Pegasus, and Hercules cups are included
+    
     Hades Cup: Hades Cup is included in addition to Phil, Pegasus, and Hercules cups. If Super Bosses are enabled, then Ice Titan is included
     """
     display_name = "Cups"
@@ -124,10 +134,15 @@ class FinalRestDoorKey(Choice):
     Determines what grants the player the Final Rest Door Key.
     
     Sephiroth: Defeat Sephiroth
+    
     Unknown: Defeat Unknown
+    
     Postcards: Turn in an amount of postcards in Traverse Town
+    
     Final Ansem: Enter End of the World and defeat Ansem as normal
+    
     Puppies: Rescue and return an amount of puppies in Traverse Town
+    
     Final Rest: Open the chest in End of the World Final Rest
     """
     display_name = "Final Rest Door Key"
@@ -143,6 +158,7 @@ class EndoftheWorldUnlock(Choice):
     """Determines how End of the World is unlocked.
     
     Item: You can receive an item called "End of the World" which unlocks the world
+    
     Lucky Emblems: A certain amount of lucky emblems are required to unlock End of the World, which is defined in your options"""
     display_name = "End of the World Unlock"
     option_item = 0
@@ -187,6 +203,7 @@ class PuppyValue(Range):
 class RandomizePuppies(DefaultOnToggle):
     """
     If OFF, the "Puppy" item is worth 3 puppies and puppies are placed in vanilla locations.
+    
     If ON, the "Puppy" item is worth an amount of puppies defined by "Puppy Value", and are shuffled randomly.
     """
     display_name = "Randomize Puppies"
@@ -239,8 +256,11 @@ class LuckyEmblemsInPool(Range):
 class KeybladeStats(Choice):
     """
     Determines whether Keyblade stats should be randomized.
-    Randomize: Randomly generates STR and MP bonuses for each keyblade between the defined minimums and maximums
+    
+    Randomize: Randomly generates STR and MP bonuses for each keyblade between the defined minimums and maximums.
+    
     Shuffle: Shuffles the stats of the vanilla keyblades amongst each other.
+    
     Vanilla: Keyblade stats are unchanged.
     """
     display_name = "Keyblade Stats"
@@ -350,6 +370,7 @@ class LevelChecks(Range):
 class ForceStatsOnLevels(NamedRange):
     """
     If this value is less than the value for Level Checks, this determines the minimum level from which only stat ups are obtained at level up locations.
+    
     For example, if you want to be able to find any multiworld item from levels 2-50, then just stat ups for levels 51-100, set this value to 51.
     """
     display_name = "Force Stats on Level Starting From"
@@ -394,17 +415,29 @@ class GoofyDeathLink(Toggle):
 class KeybladesUnlockChests(Toggle):
     """
     If toggled on, the player is required to have a certain keyblade to open chests in certain worlds.
+    
     TT   - Lionheart
+    
     WL   - Lady Luck
+    
     OC   - Olympia
+    
     DJ   - Jungle King
+    
     AG   - Three Wishes
+    
     MS   - Wishing Star
+    
     HT   - Pumpkinhead
+    
     NL   - Fairy Harp
+    
     HB   - Divine Rose
+    
     EotW - Oblivion
+    
     HAW  - Spellbinder
+    
     DI   - Oathkeeper
     
     Note: Does not apply to Atlantica, the emblem and carousel chests in Hollow Bastion, or the Aero chest in Neverland currently.
@@ -422,8 +455,11 @@ class LogicDifficulty(Choice):
     Determines what the randomizer logic may expect you to do to reach certain locations.
 
     Beginner: Logic only expects what would be the natural solution in vanilla gameplay or similar, as well as a guarantee of tools for boss fights.
+    
     Normal: Logic expects some clever use of abilities, exploration of options, and competent combat ability; generally does not require advanced knowledge.
+    
     Proud: Logic expects advanced knowledge of tricks and obscure interactions, such as using Combo Master, Dumbo, and other unusual methods to reach locations.
+    
     Minimal: Logic expects the bare minimum to get to locations; may require extensive grinding, beating fights with no tools, and performing very difficult or tedious tricks.
     """
     display_name = "Logic Difficulty"
@@ -456,7 +492,9 @@ class RandomizePostcards(Choice):
     Determines how Postcards are randomized
 
     All: All Postcards are randomized
+    
     Chests: Only the 3 Postcards in chests are randomized
+    
     Vanilla: Postcards are in their original location
     """
     display_name = "Randomize Postcards"
@@ -473,7 +511,9 @@ class JungleSlider(Toggle):
 class StartingWorlds(Range):
     """
     Number of random worlds to start with in addition to Traverse Town, which is always available.
+    
     Will only consider Atlantica if toggled, and will only consider End of the World if its unlock is set to "Item".
+    
     These are given by the server, and are received after connection.
     """
     display_name = "Starting Worlds"
@@ -484,6 +524,7 @@ class StartingWorlds(Range):
 class StartingTools(DefaultOnToggle):
     """
     Determines whether you start with Scan and Dodge Roll.
+    
     These are given by the server, and are received after connection.
     """
     display_name = "Starting Tools"
@@ -491,8 +532,11 @@ class StartingTools(DefaultOnToggle):
 class RemoteItems(Choice):
     """
     Determines if items can be placed on locations in your own world in such a way that will force them to be remote items.
+    
     Off: When your items are placed in your world, they can only be placed in locations that they can be acquired without server connection (stats on levels, items in chests, etc).
+    
     Allow: When your items are placed in your world, items that normally can't be placed in a location in-game are simply made remote (abilities on static events, etc).
+    
     Full: All items are remote.  Use this when doing something like a co-op seed.
     """
     display_name = "Remote Items"
@@ -504,6 +548,7 @@ class RemoteItems(Choice):
 class Slot2LevelChecks(Range):
     """
     Determines how many levels have an additional item.  Usually, this item is an ability.
+    
     If Remote Items is OFF, these checks will only contain abilities.
     """
     display_name = "Slot 2 Level Checks"
@@ -520,7 +565,9 @@ class ShortenGoMode(DefaultOnToggle):
 class DestinyIslands(Toggle):
     """
     If on, Adds a Destiny Islands item and a number of Raft Materials items to the pool.
+    
     When "Destiny Islands" is found, Traverse Town will have an additional place to land - Seashore.
+    
     "Raft Materials" allow progress into Day 2 and to Homecoming.  The amount is defined in Day 2 Materials and Homecoming Materials.
     """
     display_name = "Destiny Islands"
@@ -528,6 +575,7 @@ class DestinyIslands(Toggle):
 class MythrilInPool(Range):
     """
     Determines how much Mythril, one of the two synthesis items, is in the item pool.
+    
     You need 16 to synth every recipe that requires it.
     """
     display_name = "Mythril In Pool"
@@ -538,6 +586,7 @@ class MythrilInPool(Range):
 class OrichalcumInPool(Range):
     """
     Determines how much Orichalcum, one of the two synthesis items, is in the item pool.
+    
     You need 17 to synth every recipe that requires it.
     """
     display_name = "Mythril In Pool"
@@ -626,7 +675,9 @@ class Unskippable(DefaultOnToggle):
 class AutoSave(DefaultOnToggle):
     """
     If on, enables auto saving.
+    
     Press L1+L2+R1+R2+D-Pad Left to instantly load continue state.
+    
     Press L1+L2+R1+R2+D-Pad Right to instantly load autosave.
     """
     display_name = "AutoSave"
@@ -634,6 +685,7 @@ class AutoSave(DefaultOnToggle):
 class WarpAnywhere(Toggle):
     """
     If on, enables the player to warp at any time, even when not at a save point.
+    
     Press L1+L2+R2+Select to open the Save/Warp menu at any time.
     """
     display_name = "WarpAnywhere"
@@ -641,6 +693,7 @@ class WarpAnywhere(Toggle):
 class RandomizePartyMemberStartingAccessories(DefaultOnToggle):
     """
     If on, the 10 accessories that some party members (Aladdin, Ariel, Jack, Peter Pan, Beast) start with are randomized.
+    
     10 random accessories will be distributed amongst any party member aside from Sora in their starting equipment.
     """
     display_name = "Randomize Party Member Starting Accessories"
@@ -658,7 +711,9 @@ class RandomizeAPCosts(Choice):
     """
     Off: No randomization
     Shuffle: Ability AP Costs will be shuffled amongst themselves.
+    
     Randomize: Ability AP Costs will be randomized to the specified max and min.
+    
     Distribute: Ability AP Costs will totalled and re-distributed randomly between the specified max and min.
     """
     display_name = "Randomize AP Costs"
@@ -716,19 +771,27 @@ class MaterialsInPool(Range):
 class StackingWorldItems(DefaultOnToggle):
     """
     Multiple world items give you the world's associated key item.
+    
     WL - Footprints
+    
     OC - Entry Pass
+    
     DJ - Slides
+    
     HT - Forget-Me-Not and Jack-In-The-Box
+    
     HB - Theon Vol. 6
+    
     Adds an extra world to the pool for each that has a key item (WL, OC, DJ, HT, HB).
-    Forces stacking Forget-Me-Not ON.
+    
+    Forces Halloween Town Key Item Bundle ON.
     """
     display_name = "Stacking World Items"
 
 class HalloweenTownKeyItemBundle(DefaultOnToggle):
     """
     Obtaining the Forget-Me-Not automatically gives Jack-in-the-Box as well.
+    
     Removes Jack-in-the-Box from the pool.
     """
     display_name = "Halloween Town Key Item Bundle"
