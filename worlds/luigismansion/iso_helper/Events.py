@@ -99,8 +99,8 @@ def update_blackout_event(gcm: GCM) -> GCM:
 
 # Updates all common events
 def update_common_events(gcm: GCM, randomize_mice: bool) -> GCM:
-    list_custom_events = ["03", "10", "22", "23", "24", "28", "29", "33", "35", "38", "50", "61", "64", "65",
-     "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "88", "89", "90"]
+    list_custom_events = ["03", "10", "22", "23", "24", "28", "29", "33", "35", "37", "38", "50", "61", "64",
+        "65", "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "88", "89", "90"]
     if randomize_mice:
         list_custom_events += ["95", "97", "98", "99", "100"]
 
