@@ -301,13 +301,13 @@ ICE_TRAP_EQUIV = ["Freeze Trap", "Frozen Trap", "Ice Trap", "Paralyze Trap", "Ch
 BOMB_EQUIV = ["TNT Barrel Trap", "Bomb", "Fire Trap"]
 BANANA_TRAP_EQUIV = ["Stun Trap", "Banana Trap", "Thwimp Trap", "Hiccup Trap", "Push Trap"]
 GHOST_EQUIV = ["OmoTrap", "Ghost", "Bee Trap", "Police Trap", "Nut Trap", "Army Trap", "Buyon Trap"]
-POISON_MUSH_EQUIV = [ "Tiny Trap", "Poison Mushroom", "Iron Boots Trap", "Poison Trap"]
+POISON_MUSH_EQUIV = [ "Tiny Trap", "Poison Mushroom", "Iron Boots Trap", "Poison Trap", "Electrocution Trap"]
 BONK_EQUIV = ["Spring Trap", "Damage Trap", "Bonk Trap", "Jumping Jacks Trap"]
 POSSESION_EQUIV = ["Possession Trap", "Laughter Trap", "My Turn! Trap", "Blue Balls Curse", "Controller Drift Trap"]
 FEAR_EQUIV = ["Fear Trap", "Confuse Trap", "Confound Trap", "Confusion Trap"]
-SPOOKY_EQUIV = ["Spooky Time", "Deisometric Trap", "Fake Transition", "Ghost Chat"]
+SPOOKY_EQUIV = ["Spooky Time", "Deisometric Trap", "Fake Transition", "Ghost Chat", "SvC Effect"]
 SQUASH_EQUIV = ["Squash Trap", "W I D E Trap"]
-NOVAC_EQUIV = ["No Vac Trap", "Eject Ability"]
+NOVAC_EQUIV = ["No Vac Trap", "Eject Ability", "Depletion trap"]
 
 trap_id_list = [8125, 8126, 8130, 8131, 8132, 8141, 8142, 8143, 8145, 8146, 8147]
 ACCEPTED_TRAPS: list[str] = (ICE_TRAP_EQUIV+BOMB_EQUIV+BANANA_TRAP_EQUIV+GHOST_EQUIV+POISON_MUSH_EQUIV+BONK_EQUIV+POSSESION_EQUIV+
