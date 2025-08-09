@@ -1,6 +1,7 @@
 from dataclasses import dataclass
+from typing import Any
 
-from Options import PerGameCommonOptions, Choice, OptionGroup
+from Options import PerGameCommonOptions, Choice, OptionGroup, Range
 
 
 class Powers(Choice):
@@ -46,11 +47,36 @@ class Goal(Choice):
     option_aftergame = 1
 
 
+class NumRequiredBattleCount(Range):
+    """
+    Select the number of required consecutive Wins to challenge Battle count Pokemon.
+    """
+    display = "Number of Battle Count"
+    range_start = 0
+    range_end = 10
+    default = 5
+
+
 @dataclass
 class PokeparkOptions(PerGameCommonOptions):
     power_randomizer: Powers
     starting_zone: RandomStartingZones
     goal: Goal
+    num_required_battle_count: NumRequiredBattleCount
+
+    def get_output_dict(self) -> dict[str, Any]:
+        """
+        Returns a dictionary of option name to value to be placed in
+        the output pprk file.
+
+        :return: Dictionary of option name to value for the output file.
+        """
+
+        # Note: these options' values must be able to be passed through
+        # `yaml.safe_dump`.
+        return self.as_dict(
+            "num_required_battle_count",
+        )
 
 
 pokepark_option_groups = [
@@ -59,6 +85,7 @@ pokepark_option_groups = [
     ]),
     OptionGroup("Misc", [
         Powers,
-        RandomStartingZones
+        RandomStartingZones,
+        NumRequiredBattleCount
     ])
 ]

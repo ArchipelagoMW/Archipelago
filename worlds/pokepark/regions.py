@@ -2,7 +2,7 @@ from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState, Region
 from worlds.pokepark.locations import PokeparkLocation
-from worlds.pokepark.logic import Requirements, PokeparkRegion, PowerRequirement, WorldStateRequirement, \
+from worlds.pokepark.logic import Requirements, PokeparkRegion, PowerRequirement, \
     MinigameRequirement, generate_regions
 
 if TYPE_CHECKING:
@@ -30,55 +30,7 @@ POWER_REQUIREMENT_CHECKS: Dict[PowerRequirement, Callable] = {
     PowerRequirement.can_play_catch_intermediate: lambda state, world: state.has("Progressive Dash", world.player,
                                                                                  count=2),
 }
-WORLD_STATE_REQUIREMENT_CHECKS: Dict[WorldStateRequirement, Callable] = {
-    WorldStateRequirement.none: lambda state, world: True,
-    WorldStateRequirement.meadow_zone_or_higher: lambda state, world: (
-            state.has("Meadow Zone Unlock", world.player) or
-            state.has("Beach Zone Unlock", world.player) or
-            state.has("Ice Zone Unlock", world.player) or
-            state.has("Cavern Zone & Magma Zone Unlock", world.player) or
-            state.has("Haunted Zone Unlock", world.player) or
-            state.has("Granite Zone & Flower Zone Unlock", world.player) or
-            state.has("Skygarden Unlock", world.player)
 
-    ),
-    WorldStateRequirement.beach_zone_or_higher: lambda state, world: (
-            state.has("Beach Zone Unlock", world.player) or
-            state.has("Ice Zone Unlock", world.player) or
-            state.has("Cavern Zone & Magma Zone Unlock", world.player) or
-            state.has("Haunted Zone Unlock", world.player) or
-            state.has("Granite Zone & Flower Zone Unlock",
-                      world.player) or
-            state.has("Skygarden Unlock", world.player)
-
-    ),
-    WorldStateRequirement.ice_zone_or_higher: lambda state, world: (
-            state.has("Ice Zone Unlock", world.player) or
-            state.has("Cavern Zone & Magma Zone Unlock", world.player) or
-            state.has("Haunted Zone Unlock", world.player) or
-            state.has("Granite Zone & Flower Zone Unlock", world.player) or
-            state.has("Skygarden Unlock", world.player)
-
-    ),
-    WorldStateRequirement.cavern_and_magma_zone_or_higher: lambda state, world: (
-            state.has("Cavern Zone & Magma Zone Unlock", world.player) or
-            state.has("Haunted Zone Unlock", world.player) or
-            state.has("Granite Zone & Flower Zone Unlock", world.player) or
-            state.has("Skygarden Unlock", world.player)
-    ),
-    WorldStateRequirement.haunted_zone_or_higher: lambda state, world: (
-            state.has("Haunted Zone Unlock", world.player) or
-            state.has("Granite Zone & Flower Zone Unlock", world.player) or
-            state.has("Skygarden Unlock", world.player)
-    ),
-    WorldStateRequirement.granite_and_flower_zone_or_higher: lambda state, world: (
-            state.has("Granite Zone & Flower Zone Unlock", world.player) or
-            state.has("Skygarden Unlock", world.player)
-    ),
-    WorldStateRequirement.skygarden: lambda state, world: (
-        state.has("Skygarden Unlock", world.player)
-    )
-}
 MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
     MinigameRequirement.none: lambda state, world: True,
     MinigameRequirement.bulbasaur_dash_any: lambda state, world: (
@@ -602,7 +554,6 @@ def pokepark_requirements_satisfied(state: CollectionState, requirements: Requir
     else:
         has_any = True
     has_required_power = POWER_REQUIREMENT_CHECKS[requirements.powers](state, world)
-    has_required_world_state = WORLD_STATE_REQUIREMENT_CHECKS[requirements.world_state](state, world)
     has_required_minigames = MINIGAME_REQUIREMENT_CHECKS[requirements.minigame](state, world)
 
     return (has_required_unlocks and
@@ -612,7 +563,6 @@ def pokepark_requirements_satisfied(state: CollectionState, requirements: Requir
             has_any and
             can_reach_required_locations and
             has_required_power and
-            has_required_world_state and
             has_required_minigames)
 
 

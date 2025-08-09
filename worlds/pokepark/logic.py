@@ -3,8 +3,7 @@ from enum import Enum
 from typing import NamedTuple, TYPE_CHECKING
 
 from worlds.pokepark import FRIENDSHIP_ITEMS
-from worlds.pokepark.LocationIds import MinigameLocationIds, QuestLocationIds, OverworldPokemonLocationIds, \
-    UnlockLocationIds
+from worlds.pokepark.LocationIds import MinigameLocationIds, QuestLocationIds
 from worlds.pokepark.items import UNLOCK_ITEMS, PRISM_ITEM
 
 if TYPE_CHECKING:
@@ -21,17 +20,6 @@ class PowerRequirement(Enum):
     can_battle_thunderbolt_immune = 6
     can_farm_berries = 7
     can_play_catch_intermediate = 8
-
-
-class WorldStateRequirement(Enum):
-    none = 0
-    meadow_zone_or_higher = 1
-    beach_zone_or_higher = 2
-    ice_zone_or_higher = 3
-    cavern_and_magma_zone_or_higher = 4
-    haunted_zone_or_higher = 5
-    granite_and_flower_zone_or_higher = 6
-    skygarden = 7
 
 
 class MinigameRequirement(Enum):
@@ -73,7 +61,6 @@ class Requirements(NamedTuple):
     oneof_item_names: list[list[str]] = []
     can_reach_locations: list[str] = []
     powers: PowerRequirement = PowerRequirement.none
-    world_state: WorldStateRequirement = WorldStateRequirement.none
     minigame: MinigameRequirement = MinigameRequirement.none
 
 
@@ -106,6 +93,9 @@ def generate_regions():
 
     meadow_zone_bulbasaur_minigame_region = generate_meadow_zone_bulbasaur_minigame_region()
     all_regions.append(meadow_zone_bulbasaur_minigame_region)
+
+    venusaur_zone_overworld_region = generate_venusaur_zone_overworld_region()
+    all_regions.append(venusaur_zone_overworld_region)
 
     meadow_zone_venusaur_minigame_region = generate_meadow_zone_venusaur_minigame_region()
     all_regions.append(meadow_zone_venusaur_minigame_region)
@@ -175,6 +165,9 @@ def generate_regions():
 
     skygarden_overworld_region = generate_skygarden_overworld_region()
     all_regions.append(skygarden_overworld_region)
+
+    overworld_pokemon_regions = generate_overworld_pokemon_regions()
+    all_regions.extend(overworld_pokemon_regions)
     return all_regions
 
 
@@ -183,7 +176,7 @@ def generate_skygarden_overworld_region():
         PokeparkRegion(name="Skygarden - Overworld",
                        display="Skygarden - Overworld",
                        requirements=Requirements(
-                           unlock_names=["Skygarden Unlock"]
+                           prisma_names=["Rayquaza Prisma"]
                        ), parent_regions=["Treehouse"]))
 
     skygarden_overworld_region.quest_locations.append(
@@ -372,9 +365,9 @@ def generate_flower_zone_overworld_region():
         PokeparkRegion(name="Flower Zone - Overworld",
                        display="Flower Zone - Overworld",
                        requirements=Requirements(
-                           unlock_names=["Granite Zone & Flower Zone Unlock"]
-                       ), parent_regions=["Granite Zone - Overworld",
-                                          "Treehouse"]))
+                           oneof_item_names=[["Salamence Prisma"], ["Flower Zone Fast Travel"]]),
+                       parent_regions=["Granite Zone - Overworld",
+                                       "Treehouse"]))
 
     flower_zone_overworld_region.friendship_locations.append(
         Location(name="Skiploom",
@@ -399,21 +392,7 @@ def generate_flower_zone_overworld_region():
                      powers=PowerRequirement.can_play_catch_intermediate
                  )),
     )
-    flower_zone_overworld_region.friendship_locations.append(
-        Location(name="Furret",
-                 id=OverworldPokemonLocationIds.FURRET_FLOWER.value),
-    )
-    flower_zone_overworld_region.friendship_locations.append(
-        Location(name="Teddiursa",
-                 id=OverworldPokemonLocationIds.TEDDIURSA_FLOWER.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
-    flower_zone_overworld_region.friendship_locations.append(
-        Location(name="Meditite",
-                 id=OverworldPokemonLocationIds.MEDITITE_FLOWER.value),
-    )
+
     flower_zone_overworld_region.friendship_locations.append(
         Location(name="Dragonite",
                  id=FRIENDSHIP_ITEMS["Dragonite"],
@@ -430,10 +409,7 @@ def generate_flower_zone_overworld_region():
     )
     flower_zone_overworld_region.friendship_locations.append(
         Location(name="Bellossom",
-                 id=FRIENDSHIP_ITEMS["Bellossom"],
-                 requirements=Requirements(
-                     world_state=WorldStateRequirement.skygarden
-                 )),
+                 id=FRIENDSHIP_ITEMS["Bellossom"]),
     )
     return flower_zone_overworld_region
 
@@ -685,8 +661,7 @@ def generate_granite_zone_overworld_region():
         PokeparkRegion(name="Granite Zone - Overworld",
                        display="Granite Zone - Overworld",
                        requirements=Requirements(
-                           unlock_names=[
-                               "Granite Zone & Flower Zone Unlock"]
+                           oneof_item_names=[["Rotom Prisma"], ["Granite Zone Fast Travel"]]
                        ), parent_regions=["Treehouse"]))
 
     granite_zone_overworld_region.friendship_locations.append(
@@ -704,20 +679,13 @@ def generate_granite_zone_overworld_region():
                  )),
     )
     granite_zone_overworld_region.friendship_locations.append(
-        Location(name="Furret",
-                 id=FRIENDSHIP_ITEMS["Furret"]),
-    )
-    granite_zone_overworld_region.friendship_locations.append(
         Location(name="Charizard",
                  id=FRIENDSHIP_ITEMS["Charizard"],
                  requirements=Requirements(
                      powers=PowerRequirement.can_battle,
                  )),
     )
-    granite_zone_overworld_region.friendship_locations.append(
-        Location(name="Drifloon",
-                 id=OverworldPokemonLocationIds.DRIFLOON_GRANITE.value),
-    )
+
     granite_zone_overworld_region.friendship_locations.append(
         Location(name="Flygon",
                  id=FRIENDSHIP_ITEMS["Flygon"],
@@ -747,13 +715,7 @@ def generate_granite_zone_overworld_region():
                      powers=PowerRequirement.can_play_catch_intermediate,
                  )),
     )
-    granite_zone_overworld_region.friendship_locations.append(
-        Location(name="Taillow",
-                 id=OverworldPokemonLocationIds.TAILLOW_GRANITE.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch,
-                 )),
-    )
+
     granite_zone_overworld_region.friendship_locations.append(
         Location(name="Jolteon",
                  id=FRIENDSHIP_ITEMS["Jolteon"],
@@ -767,13 +729,7 @@ def generate_granite_zone_overworld_region():
         Location(name="Skorupi",
                  id=FRIENDSHIP_ITEMS["Skorupi"]),
     )
-    granite_zone_overworld_region.friendship_locations.append(
-        Location(name="Marowak",
-                 id=OverworldPokemonLocationIds.MAROWAK_GRANITE.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle_thunderbolt_immune
-                 )),
-    )
+
     granite_zone_overworld_region.friendship_locations.append(
         Location(name="Porygon-Z",
                  id=FRIENDSHIP_ITEMS["Porygon-Z"]),
@@ -794,22 +750,6 @@ def generate_granite_zone_overworld_region():
                      powers=PowerRequirement.can_battle_thunderbolt_immune
                  )),
     )
-    granite_zone_overworld_region.friendship_locations.append(
-        Location(name="Baltoy",
-                 id=OverworldPokemonLocationIds.BALTOY_GRANITE.value,
-                 requirements=Requirements(
-                     unlock_names=["Baltoy Unlock"],
-                     powers=PowerRequirement.can_battle_thunderbolt_immune,
-                 )),
-    )
-    granite_zone_overworld_region.friendship_locations.append(
-        Location(name="Claydol",
-                 id=OverworldPokemonLocationIds.CLAYDOL_GRANITE.value,
-                 requirements=Requirements(
-                     unlock_names=["Claydol Unlock"],
-                     powers=PowerRequirement.can_battle_thunderbolt_immune
-                 )),
-    )
 
     granite_zone_overworld_region.unlock_location.append(
         Location(name="Eevee Friendship - Pokemon Unlock",
@@ -823,12 +763,7 @@ def generate_granite_zone_overworld_region():
                  requirements=Requirements(
                      can_reach_locations=["Granite Zone - Overworld - Staraptor"])),
     )
-    granite_zone_overworld_region.unlock_location.append(
-        Location(name="Baltoy Friendship - Pokemon Unlock",
-                 id=UnlockLocationIds.CLAYDOL_GRANITE.value,
-                 requirements=Requirements(
-                     can_reach_locations=["Granite Zone - Overworld - Baltoy"])),
-    )
+
     return granite_zone_overworld_region
 
 
@@ -1123,10 +1058,6 @@ def generate_haunted_zone_overworld_mansion_region():
                      prisma_names=["Rotom Prisma"])),
     )
     haunted_zone_overworld_mansion_region.friendship_locations.append(
-        Location(name="Abra",
-                 id=FRIENDSHIP_ITEMS["Abra"]),
-    )
-    haunted_zone_overworld_mansion_region.friendship_locations.append(
         Location(name="Riolu",
                  id=FRIENDSHIP_ITEMS["Riolu"],
                  requirements=Requirements(
@@ -1375,42 +1306,9 @@ def generate_haunted_zone_overworld_region():
         PokeparkRegion(name="Haunted Zone - Overworld",
                        display="Haunted Zone - Overworld",
                        requirements=Requirements(
-                           unlock_names=["Haunted Zone Unlock"]),
+                           oneof_item_names=[["Blaziken Prisma"], ["Haunted Zone Fast Travel"]]),
                        parent_regions=["Treehouse"]))
 
-    haunted_zone_overworld_region.friendship_locations.append(
-        Location(name="Drifloon",
-                 id=FRIENDSHIP_ITEMS["Drifloon"],
-                 requirements=Requirements(
-                     prisma_names=["Rotom Prisma"]
-                 )),
-    )
-    haunted_zone_overworld_region.friendship_locations.append(
-        Location(name="Raichu",
-                 id=OverworldPokemonLocationIds.RAICHU_HAUNTED.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
-    haunted_zone_overworld_region.friendship_locations.append(
-        Location(name="Meowth",
-                 id=OverworldPokemonLocationIds.MEOWTH_HAUNTED.value),
-    )
-    haunted_zone_overworld_region.friendship_locations.append(
-        Location(name="Aipom",
-                 id=OverworldPokemonLocationIds.AIPOM_HAUNTED.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
-    haunted_zone_overworld_region.friendship_locations.append(
-        Location(name="Ambipom",
-                 id=OverworldPokemonLocationIds.AMBIPOM_HAUNTED.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle,
-                     unlock_names=["Ambipom Unlock"]
-                 )),
-    )
     haunted_zone_overworld_region.friendship_locations.append(
         Location(name="Murkrow",
                  id=FRIENDSHIP_ITEMS["Murkrow"],
@@ -1454,12 +1352,6 @@ def generate_haunted_zone_overworld_region():
                  )),
     )
 
-    haunted_zone_overworld_region.unlock_location.append(
-        Location(name="Aipom Friendship - Pokemon Unlock",
-                 id=UnlockLocationIds.AMBIPOM_HAUNTED.value,
-                 requirements=Requirements(
-                     can_reach_locations=["Haunted Zone - Overworld - Aipom"])),
-    )
     haunted_zone_overworld_region.unlock_location.append(
         Location(name="Murkrow Friendship - Pokemon Unlock",
                  id=UNLOCK_ITEMS["Honchkrow Unlock"],
@@ -1726,39 +1618,10 @@ def generate_magma_zone_overworld_region():
         PokeparkRegion(name="Magma Zone - Overworld",
                        display="Magma Zone - Overworld",
                        requirements=Requirements(
-                           unlock_names=["Cavern Zone & Magma Zone Unlock"]),
+                           oneof_item_names=[["Bastiodon Prisma"], ["Magma Zone Fast Travel"]]),
                        parent_regions=["Cavern Zone - Overworld",
                                        "Treehouse"]))
 
-    magma_zone_overworld_region.friendship_locations.append(
-        Location(name="Aron",
-                 id=OverworldPokemonLocationIds.ARON_MAGMA.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_dash_overworld
-                 )),
-    )
-    magma_zone_overworld_region.friendship_locations.append(
-        Location(name="Torchic",
-                 id=OverworldPokemonLocationIds.TORCHIC_MAGMA.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle
-                 )),
-    )
-    magma_zone_overworld_region.friendship_locations.append(
-        Location(name="Chimchar",
-                 id=OverworldPokemonLocationIds.CHIMCHAR_MAGMA.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle
-                 )),
-    )
-    magma_zone_overworld_region.friendship_locations.append(
-        Location(name="Geodude",
-                 id=OverworldPokemonLocationIds.GEODUDE_MAGMA.value),
-    )
-    magma_zone_overworld_region.friendship_locations.append(
-        Location(name="Bonsly",
-                 id=OverworldPokemonLocationIds.BONSLY_MAGMA.value),
-    )
     magma_zone_overworld_region.friendship_locations.append(
         Location(name="Camerupt",
                  id=FRIENDSHIP_ITEMS["Camerupt"],
@@ -1773,13 +1636,7 @@ def generate_magma_zone_overworld_region():
                      powers=PowerRequirement.can_play_catch
                  )),
     )
-    magma_zone_overworld_region.friendship_locations.append(
-        Location(name="Magby - Battle",
-                 id=OverworldPokemonLocationIds.MAGBY_MAGMA_BATTLE.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle
-                 )),
-    )
+
     magma_zone_overworld_region.friendship_locations.append(
         Location(name="Vulpix",
                  id=FRIENDSHIP_ITEMS["Vulpix"],
@@ -1849,23 +1706,6 @@ def generate_magma_zone_overworld_region():
                  )),
     )
     magma_zone_overworld_region.friendship_locations.append(
-        Location(name="Baltoy",
-                 id=FRIENDSHIP_ITEMS["Baltoy"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle_thunderbolt_immune,
-                     unlock_names=["Baltoy Unlock"],
-                     can_reach_locations=["Magma Zone - Overworld - Baltoy Crate Dash"]
-                 )),
-    )
-    magma_zone_overworld_region.friendship_locations.append(
-        Location(name="Claydol",
-                 id=FRIENDSHIP_ITEMS["Claydol"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle_thunderbolt_immune,
-                     unlock_names=["Claydol Unlock"]
-                 )),
-    )
-    magma_zone_overworld_region.friendship_locations.append(
         Location(name="Hitmonchan",
                  id=FRIENDSHIP_ITEMS["Hitmonchan"],
                  requirements=Requirements(
@@ -1898,12 +1738,6 @@ def generate_magma_zone_overworld_region():
     )
 
     magma_zone_overworld_region.unlock_location.append(
-        Location(name="Chimchar Friendship - Pokemon Unlock",
-                 id=UNLOCK_ITEMS["Infernape Unlock"],
-                 requirements=Requirements(
-                     can_reach_locations=["Magma Zone - Overworld - Chimchar"])),
-    )
-    magma_zone_overworld_region.unlock_location.append(
         Location(name="Vulpix Friendship - Pokemon Unlock",
                  id=UNLOCK_ITEMS["Ninetales Unlock"],
                  requirements=Requirements(
@@ -1916,12 +1750,7 @@ def generate_magma_zone_overworld_region():
                      powers=PowerRequirement.can_destroy_objects_overworld
                  )),
     )
-    magma_zone_overworld_region.unlock_location.append(
-        Location(name="Baltoy Friendship - Pokemon Unlock",
-                 id=UNLOCK_ITEMS["Claydol Unlock"],
-                 requirements=Requirements(
-                     can_reach_locations=["Magma Zone - Overworld - Baltoy"])),
-    )
+
     magma_zone_overworld_region.unlock_location.append(
         Location(name="Hitmonchan Friendship - Pokemon Unlock",
                  id=UNLOCK_ITEMS["Hitmonlee Unlock"],
@@ -2069,7 +1898,7 @@ def generate_cavern_zone_overworld_region():
         PokeparkRegion(name="Cavern Zone - Overworld",
                        display="Cavern Zone - Overworld",
                        requirements=Requirements(
-                           unlock_names=["Cavern Zone & Magma Zone Unlock"]),
+                           oneof_item_names=[["Empoleon Prisma"], ["Cavern Zone Fast Travel"]]),
                        parent_regions=["Treehouse"]))
 
     cavern_zone_overworld_region.friendship_locations.append(
@@ -2080,24 +1909,7 @@ def generate_cavern_zone_overworld_region():
                      can_reach_locations=["Cavern Zone - Overworld - Magnemite Crate Dash Entrance Area"]
                  )),
     )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Magnemite 2",
-                 id=OverworldPokemonLocationIds.MAGNEMITE_CAVERN_2.value,
-                 requirements=Requirements(
-                     unlock_names=["Magnemite Unlock 2"],
-                     can_reach_locations=[
-                         "Cavern Zone - Overworld - Magnemite Crate Dash Magma Zone Entrance"]
-                 )),
-    )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Magnemite 3",
-                 id=OverworldPokemonLocationIds.MAGNEMITE_CAVERN_3.value,
-                 requirements=Requirements(
-                     unlock_names=["Magnemite Unlock 3"],
-                     can_reach_locations=[
-                         "Cavern Zone - Overworld - Magnemite Crate Dash Magma Zone Entrance"]
-                 )),
-    )
+
     cavern_zone_overworld_region.friendship_locations.append(
         Location(name="Magnezone",
                  id=FRIENDSHIP_ITEMS["Magnezone"],
@@ -2107,47 +1919,10 @@ def generate_cavern_zone_overworld_region():
                  )),
     )
     cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Geodude",
-                 id=FRIENDSHIP_ITEMS["Geodude"]),
-    )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Torchic",
-                 id=FRIENDSHIP_ITEMS["Torchic"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle
-                 )),
-    )
-    cavern_zone_overworld_region.friendship_locations.append(
         Location(name="Machamp",
                  id=FRIENDSHIP_ITEMS["Machamp"]),
     )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Machamp - Battle",
-                 id=OverworldPokemonLocationIds.MACHAMP_CAVERN_BATTLE.value,
-                 requirements=Requirements(
-                     unlock_names=["Machamp Unlock"],
-                     powers=PowerRequirement.can_battle
-                 )),
-    )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Teddiursa",
-                 id=OverworldPokemonLocationIds.TEDDIURSA_CAVERN.value),
-    )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Meowth",
-                 id=FRIENDSHIP_ITEMS["Meowth"]),
-    )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Bonsly",
-                 id=OverworldPokemonLocationIds.BONSLY_CAVERN.value),
-    )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Chimchar",
-                 id=OverworldPokemonLocationIds.CHIMCHAR_CAVERN.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle
-                 )),
-    )
+
     cavern_zone_overworld_region.friendship_locations.append(
         Location(name="Cranidos",
                  id=FRIENDSHIP_ITEMS["Cranidos"],
@@ -2169,12 +1944,7 @@ def generate_cavern_zone_overworld_region():
                      powers=PowerRequirement.can_play_catch_intermediate
                  )),
     )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Sudowoodo",
-                 id=OverworldPokemonLocationIds.SUDOWOODO_CAVERN.value,
-                 requirements=Requirements(
-                     unlock_names=["Sudowoodo Unlock"])),
-    )
+
     cavern_zone_overworld_region.friendship_locations.append(
         Location(name="Scizor",
                  id=FRIENDSHIP_ITEMS["Scizor"],
@@ -2182,20 +1952,7 @@ def generate_cavern_zone_overworld_region():
                      powers=PowerRequirement.can_battle
                  )),
     )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Marowak",
-                 id=FRIENDSHIP_ITEMS["Marowak"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle_thunderbolt_immune
-                 )),
-    )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Aron",
-                 id=FRIENDSHIP_ITEMS["Aron"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_destroy_objects_overworld
-                 )),
-    )
+
     cavern_zone_overworld_region.friendship_locations.append(
         Location(name="Dugtrio",
                  id=FRIENDSHIP_ITEMS["Dugtrio"]),
@@ -2215,14 +1972,7 @@ def generate_cavern_zone_overworld_region():
                      unlock_names=["Phanpy Unlock"]
                  )),
     )
-    cavern_zone_overworld_region.friendship_locations.append(
-        Location(name="Raichu",
-                 id=FRIENDSHIP_ITEMS["Raichu"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch_intermediate,
-                     unlock_names=["Raichu Unlock"]
-                 )),
-    )
+
     cavern_zone_overworld_region.friendship_locations.append(
         Location(name="Hitmonlee",
                  id=FRIENDSHIP_ITEMS["Hitmonlee"],
@@ -2266,12 +2016,6 @@ def generate_cavern_zone_overworld_region():
                  id=UNLOCK_ITEMS["Machamp Unlock"],
                  requirements=Requirements(
                      can_reach_locations=["Cavern Zone - Overworld - Machamp"])),
-    )
-    cavern_zone_overworld_region.unlock_location.append(
-        Location(name="Bonsly Friendship - Pokemon Unlock",
-                 id=UnlockLocationIds.SUDOWOODO_CAVERN.value,
-                 requirements=Requirements(
-                     can_reach_locations=["Cavern Zone - Overworld - Bonsly"])),
     )
     cavern_zone_overworld_region.unlock_location.append(
         Location(name="Diglett Crate Dash",
@@ -2412,21 +2156,6 @@ def generate_ice_zone_overworld_lower_lift_region():
             friendship_names=["Prinplup"]), parent_regions=["Ice Zone - Overworld"])
 
     ice_zone_overworld_lower_lift_region.friendship_locations.append(
-        Location(name="Corphish",
-                 id=OverworldPokemonLocationIds.CORPHISH_ICE.value,
-                 requirements=Requirements(
-                     unlock_names=["Corphish Unlock"],
-                     powers=PowerRequirement.can_battle
-                 )),
-    )
-    ice_zone_overworld_lower_lift_region.friendship_locations.append(
-        Location(name="Wingull",
-                 id=OverworldPokemonLocationIds.WINGULL_ICE.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
-    ice_zone_overworld_lower_lift_region.friendship_locations.append(
         Location(name="Quagsire",
                  id=FRIENDSHIP_ITEMS["Quagsire"],
                  requirements=Requirements(
@@ -2441,7 +2170,7 @@ def generate_ice_zone_overworld_region():
         PokeparkRegion(name="Ice Zone - Overworld",
                        display="Ice Zone - Overworld",
                        requirements=Requirements(
-                           unlock_names=["Ice Zone Unlock"]),
+                           oneof_item_names=[["Gyarados Prisma"], ["Ice Zone Fast Travel"]]),
                        parent_regions=["Treehouse", "Beach Zone - Overworld"]))
 
     ice_zone_overworld_region.friendship_locations.append(
@@ -2455,20 +2184,7 @@ def generate_ice_zone_overworld_region():
                      powers=PowerRequirement.can_play_catch
                  )),
     )
-    ice_zone_overworld_region.friendship_locations.append(
-        Location(name="Krabby",
-                 id=OverworldPokemonLocationIds.KRABBY_ICE.value,
-                 requirements=Requirements(
-                     unlock_names=["Krabby Unlock"],
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
-    ice_zone_overworld_region.friendship_locations.append(
-        Location(name="Mudkip",
-                 id=OverworldPokemonLocationIds.MUDKIP_ICE.value,
-                 requirements=Requirements(
-                     unlock_names=["Mudkip Unlock"])),
-    )
+
     ice_zone_overworld_region.friendship_locations.append(
         Location(name="Octillery",
                  id=FRIENDSHIP_ITEMS["Octillery"],
@@ -2476,34 +2192,7 @@ def generate_ice_zone_overworld_region():
                      powers=PowerRequirement.can_battle
                  )),
     )
-    ice_zone_overworld_region.friendship_locations.append(
-        Location(name="Teddiursa",
-                 id=FRIENDSHIP_ITEMS["Teddiursa"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
-    ice_zone_overworld_region.friendship_locations.append(
-        Location(name="Taillow",
-                 id=OverworldPokemonLocationIds.TAILLOW_ICE.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
-    ice_zone_overworld_region.friendship_locations.append(
-        Location(name="Starly",
-                 id=OverworldPokemonLocationIds.STARLY_ICE.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
-    ice_zone_overworld_region.friendship_locations.append(
-        Location(name="Staravia",
-                 id=OverworldPokemonLocationIds.STARAVIA_ICE.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle
-                 )),
-    )
+
     ice_zone_overworld_region.friendship_locations.append(
         Location(name="Delibird",
                  id=FRIENDSHIP_ITEMS["Delibird"],
@@ -2917,7 +2606,7 @@ def generate_beach_zone_overworld_region():
         name="Beach Zone - Overworld",
         display="Beach Zone - Overworld",
         requirements=Requirements(
-            unlock_names=["Beach Zone Unlock"]),
+            oneof_item_names=[["Venusaur Prisma"], ["Beach Zone Fast Travel"]]),
         parent_regions=["Treehouse"]
     )
 
@@ -2954,12 +2643,7 @@ def generate_beach_zone_overworld_region():
                      powers=PowerRequirement.can_battle
                  )),
     )
-    beach_zone_overworld_region.friendship_locations.append(
-        Location(name="Mudkip",
-                 id=FRIENDSHIP_ITEMS["Mudkip"],
-                 requirements=Requirements(
-                     unlock_names=["Mudkip Unlock"])),
-    )
+
     beach_zone_overworld_region.friendship_locations.append(
         Location(name="Pidgeotto",
                  id=FRIENDSHIP_ITEMS["Pidgeotto"],
@@ -2967,27 +2651,7 @@ def generate_beach_zone_overworld_region():
                      powers=PowerRequirement.can_battle
                  )),
     )
-    beach_zone_overworld_region.friendship_locations.append(
-        Location(name="Taillow",
-                 id=FRIENDSHIP_ITEMS["Taillow"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
-    beach_zone_overworld_region.friendship_locations.append(
-        Location(name="Wingull",
-                 id=FRIENDSHIP_ITEMS["Wingull"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
-    beach_zone_overworld_region.friendship_locations.append(
-        Location(name="Staravia",
-                 id=FRIENDSHIP_ITEMS["Staravia"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_battle
-                 )),
-    )
+
     beach_zone_overworld_region.friendship_locations.append(
         Location(name="Corsola",
                  id=FRIENDSHIP_ITEMS["Corsola"]),
@@ -3016,27 +2680,12 @@ def generate_beach_zone_overworld_region():
                      powers=PowerRequirement.can_battle
                  )),
     )
-    beach_zone_overworld_region.friendship_locations.append(
-        Location(name="Krabby",
-                 id=FRIENDSHIP_ITEMS["Krabby"],
-                 requirements=Requirements(
-                     unlock_names=["Krabby Unlock"],
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
+
     beach_zone_overworld_region.friendship_locations.append(
         Location(name="Wailord",
                  id=FRIENDSHIP_ITEMS["Wailord"],
                  requirements=Requirements(
                      can_reach_locations=["Beach Zone - Overworld - Bottle Recycling 6"]
-                 )),
-    )
-    beach_zone_overworld_region.friendship_locations.append(
-        Location(name="Corphish",
-                 id=FRIENDSHIP_ITEMS["Corphish"],
-                 requirements=Requirements(
-                     unlock_names=["Corphish Unlock"],
-                     powers=PowerRequirement.can_battle
                  )),
     )
     beach_zone_overworld_region.friendship_locations.append(
@@ -3046,13 +2695,7 @@ def generate_beach_zone_overworld_region():
                      powers=PowerRequirement.can_battle
                  )),
     )
-    beach_zone_overworld_region.friendship_locations.append(
-        Location(name="Starly",
-                 id=OverworldPokemonLocationIds.STARLY_BEACH.value,
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
+
     beach_zone_overworld_region.friendship_locations.append(
         Location(name="Blastoise",
                  id=FRIENDSHIP_ITEMS["Blastoise"],
@@ -3157,7 +2800,7 @@ def generate_meadow_zone_venusaur_minigame_region():
                        requirements=Requirements(
                            friendship_names=["Croagunk",
                                              "Spearow"]),
-                       parent_regions=["Meadow Zone - Overworld"]))
+                       parent_regions=["Meadow Zone - Venusaur -- Overworld"]))
 
     meadow_zone_venusaur_minigame_region.minigame_location.append(
         Location(name="Prisma",
@@ -3270,6 +2913,25 @@ def generate_meadow_zone_venusaur_minigame_region():
                  )),
     )
     return meadow_zone_venusaur_minigame_region
+
+
+def generate_venusaur_zone_overworld_region():
+    venusaur_zone_overworld: PokeparkRegion = (
+        PokeparkRegion(name="Meadow Zone - Venusaur -- Overworld",
+                       display="Meadow Zone - Venusaur -- Overworld",
+                       requirements=Requirements(
+                           prisma_names=["Bulbasaur Prisma"]
+                       ),
+                       parent_regions=["Meadow Zone - Overworld"]))
+
+    venusaur_zone_overworld.friendship_locations.append(
+        Location(name="Venusaur",
+                 id=FRIENDSHIP_ITEMS["Venusaur"],
+                 requirements=Requirements(
+                     prisma_names=["Venusaur Prisma", "Empoleon Prisma", "Blaziken Prisma"],
+                 )),
+    )
+    return venusaur_zone_overworld
 
 
 def generate_meadow_zone_bulbasaur_minigame_region():
@@ -3449,16 +3111,57 @@ def generate_meadow_zone_overworld_region():
     meadow_zone_overworld: PokeparkRegion = (
         PokeparkRegion(name="Meadow Zone - Overworld",
                        display="Meadow Zone - Overworld",
-                       requirements=Requirements(
-                           unlock_names=["Meadow Zone Unlock"]
-                       ),
                        parent_regions=["Treehouse"]))
 
     meadow_zone_overworld.friendship_locations.append(
         Location(name="Bulbasaur",
                  id=FRIENDSHIP_ITEMS["Bulbasaur"],
                  requirements=Requirements(
-                     prisma_names=["Bulbasaur Prisma"])),
+                     prisma_names=["Bulbasaur Prisma"]
+                 )),
+    )
+
+    meadow_zone_overworld.friendship_locations.append(
+        Location(name="Turtwig",
+                 id=FRIENDSHIP_ITEMS["Turtwig"],
+                 requirements=Requirements(
+                     powers=PowerRequirement.can_play_catch)
+                 ),
+    )
+    meadow_zone_overworld.unlock_location.append(
+        Location(name="Turtwig -- Pachirisu Unlocked",
+                 id=UNLOCK_ITEMS["Pachirisu Unlock"],
+                 requirements=Requirements(
+                     can_reach_locations=["Meadow Zone - Overworld - Turtwig"]
+                 )),
+    )
+    meadow_zone_overworld.unlock_location.append(
+        Location(name="Turtwig -- Bonsly Unlocked",
+                 id=UNLOCK_ITEMS["Bonsly Unlock"],
+                 requirements=Requirements(
+                     can_reach_locations=["Meadow Zone - Overworld - Turtwig"]
+                 )),
+    )
+    meadow_zone_overworld.friendship_locations.append(
+        Location(name="Buneary",
+                 id=FRIENDSHIP_ITEMS["Buneary"],
+                 requirements=Requirements(
+                     powers=PowerRequirement.can_play_catch
+                 )),
+    )
+    meadow_zone_overworld.unlock_location.append(
+        Location(name="Buneary -- Lotad Unlocked",
+                 id=UNLOCK_ITEMS["Lotad Unlock"],
+                 requirements=Requirements(
+                     can_reach_locations=["Meadow Zone - Overworld - Buneary"]
+                 )),
+    )
+    meadow_zone_overworld.unlock_location.append(
+        Location(name="Buneary -- Shinx Unlocked",
+                 id=UNLOCK_ITEMS["Shinx Unlock"],
+                 requirements=Requirements(
+                     can_reach_locations=["Meadow Zone - Overworld - Buneary"]
+                 )),
     )
     meadow_zone_overworld.friendship_locations.append(
         Location(name="Munchlax",
@@ -3468,6 +3171,15 @@ def generate_meadow_zone_overworld_region():
                      powers=PowerRequirement.can_destroy_objects_overworld
                  )),
     )
+
+    meadow_zone_overworld.unlock_location.append(
+        Location(name="Munchlax -- Tropius Unlocked",
+                 id=UNLOCK_ITEMS["Tropius Unlock"],
+                 requirements=Requirements(
+                     can_reach_locations=["Meadow Zone - Overworld - Munchlax"]
+                 )),
+    )
+
     meadow_zone_overworld.friendship_locations.append(
         Location(name="Tropius",
                  id=FRIENDSHIP_ITEMS["Tropius"],
@@ -3477,19 +3189,7 @@ def generate_meadow_zone_overworld_region():
                      powers=PowerRequirement.can_destroy_objects_overworld
                  )),
     )
-    meadow_zone_overworld.friendship_locations.append(
-        Location(name="Turtwig",
-                 id=FRIENDSHIP_ITEMS["Turtwig"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch)
-                 ),
-    )
-    meadow_zone_overworld.friendship_locations.append(
-        Location(name="Bonsly",
-                 id=FRIENDSHIP_ITEMS["Bonsly"],
-                 requirements=Requirements(
-                     unlock_names=["Bonsly Unlock"])),
-    )
+
     meadow_zone_overworld.friendship_locations.append(
         Location(name="Pachirisu",
                  id=FRIENDSHIP_ITEMS["Pachirisu"],
@@ -3498,19 +3198,7 @@ def generate_meadow_zone_overworld_region():
                      powers=PowerRequirement.can_play_catch
                  )),
     )
-    meadow_zone_overworld.friendship_locations.append(
-        Location(name="Sudowoodo",
-                 id=FRIENDSHIP_ITEMS["Sudowoodo"],
-                 requirements=Requirements(
-                     unlock_names=["Sudowoodo Unlock"])),
-    )
-    meadow_zone_overworld.friendship_locations.append(
-        Location(name="Buneary",
-                 id=FRIENDSHIP_ITEMS["Buneary"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
+
     meadow_zone_overworld.friendship_locations.append(
         Location(name="Shinx",
                  id=FRIENDSHIP_ITEMS["Shinx"],
@@ -3572,29 +3260,6 @@ def generate_meadow_zone_overworld_region():
                  )),
     )
     meadow_zone_overworld.friendship_locations.append(
-        Location(name="Chimchar",
-                 id=FRIENDSHIP_ITEMS["Chimchar"],
-                 requirements=Requirements(
-                     unlock_names=["Chimchar Unlock"],
-                     powers=PowerRequirement.can_battle
-                 )),
-    )
-    meadow_zone_overworld.friendship_locations.append(
-        Location(name="Aipom",
-                 id=FRIENDSHIP_ITEMS["Aipom"],
-                 requirements=Requirements(
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
-    meadow_zone_overworld.friendship_locations.append(
-        Location(name="Ambipom",
-                 id=FRIENDSHIP_ITEMS["Ambipom"],
-                 requirements=Requirements(
-                     unlock_names=["Ambipom Unlock"],
-                     powers=PowerRequirement.can_battle
-                 )),
-    )
-    meadow_zone_overworld.friendship_locations.append(
         Location(name="Weedle",
                  id=FRIENDSHIP_ITEMS["Weedle"],
                  requirements=Requirements(
@@ -3652,14 +3317,7 @@ def generate_meadow_zone_overworld_region():
                      powers=PowerRequirement.can_battle_thunderbolt_immune
                  )),
     )
-    meadow_zone_overworld.friendship_locations.append(
-        Location(name="Starly",
-                 id=FRIENDSHIP_ITEMS["Starly"],
-                 requirements=Requirements(
-                     oneof_item_names=[["Starly Unlock"], ["Starly Unlock 2"]],
-                     powers=PowerRequirement.can_play_catch
-                 )),
-    )
+
     meadow_zone_overworld.friendship_locations.append(
         Location(name="Scyther",
                  id=FRIENDSHIP_ITEMS["Scyther"],
@@ -3668,36 +3326,9 @@ def generate_meadow_zone_overworld_region():
                      powers=PowerRequirement.can_battle
                  )),
     )
+
     meadow_zone_overworld.unlock_location.append(
-        Location(name="Munchlax Friendship - Pokemon Unlock",
-                 id=UNLOCK_ITEMS["Tropius Unlock"],
-                 requirements=Requirements(
-                     can_reach_locations=["Meadow Zone - Overworld - Munchlax"]
-                 )),
-    )
-    meadow_zone_overworld.unlock_location.append(
-        Location(name="Turtwig Friendship - Pokemon Unlock",
-                 id=UNLOCK_ITEMS["Pachirisu Unlock"],
-                 requirements=Requirements(
-                     can_reach_locations=["Meadow Zone - Overworld - Turtwig"]
-                 )),
-    )
-    meadow_zone_overworld.unlock_location.append(
-        Location(name="Bonsly Friendship - Pokemon Unlock",
-                 id=UNLOCK_ITEMS["Sudowoodo Unlock"],
-                 requirements=Requirements(
-                     can_reach_locations=["Meadow Zone - Overworld - Bonsly"]
-                 )),
-    )
-    meadow_zone_overworld.unlock_location.append(
-        Location(name="Buneary Friendship - Pokemon Unlock",
-                 id=UNLOCK_ITEMS["Lotad Unlock"],
-                 requirements=Requirements(
-                     can_reach_locations=["Meadow Zone - Overworld - Buneary"]
-                 )),
-    )
-    meadow_zone_overworld.unlock_location.append(
-        Location(name="Croagunk Friendship - Pokemon Unlock",
+        Location(name="Croagunk -- Scyther Unlocked",
                  id=UNLOCK_ITEMS["Scyther Unlock"],
                  requirements=Requirements(
                      can_reach_locations=["Meadow Zone - Overworld - Croagunk"]
@@ -3711,17 +3342,18 @@ def generate_meadow_zone_overworld_region():
                  )),
     )
     meadow_zone_overworld.unlock_location.append(
-        Location(name="Caterpie Friendship - Pokemon Unlock",
+        Location(name="Caterpie -- Butterfree Unlocked",
                  id=UNLOCK_ITEMS["Butterfree Unlock"],
                  requirements=Requirements(
                      can_reach_locations=["Meadow Zone - Overworld - Caterpie"]
                  )),
     )
+
     meadow_zone_overworld.unlock_location.append(
-        Location(name="Aipom Friendship - Pokemon Unlock",
-                 id=UNLOCK_ITEMS["Ambipom Unlock"],
+        Location(name="Mankey -- Chimchar Unlocked",
+                 id=UNLOCK_ITEMS["Chimchar Unlock"],
                  requirements=Requirements(
-                     can_reach_locations=["Meadow Zone - Overworld - Aipom"]
+                     can_reach_locations=["Meadow Zone - Overworld - Mankey"]
                  )),
     )
     meadow_zone_overworld.unlock_location.append(
@@ -3803,15 +3435,11 @@ def generate_treehouse_region():
                                                display="Treehouse")
     treehouse.friendship_locations.append(
         Location(name="Burmy",
-                 id=FRIENDSHIP_ITEMS["Burmy"],
-                 requirements=Requirements(
-                     world_state=WorldStateRequirement.ice_zone_or_higher))
+                 id=FRIENDSHIP_ITEMS["Burmy"])
     )
     treehouse.friendship_locations.append(
         Location(name="Mime Jr.",
-                 id=FRIENDSHIP_ITEMS["Mime Jr."],
-                 requirements=Requirements(
-                     world_state=WorldStateRequirement.cavern_and_magma_zone_or_higher)),
+                 id=FRIENDSHIP_ITEMS["Mime Jr."]),
     )
     treehouse.friendship_locations.append(
         Location(name="Drifblim",
@@ -3819,19 +3447,12 @@ def generate_treehouse_region():
                  requirements=Requirements(
                      powers=PowerRequirement.can_farm_berries)),
     )
-    treehouse.friendship_locations.append(
-        Location(name="Abra",
-                 id=OverworldPokemonLocationIds.ABRA_TREEHOUSE.value,
-                 requirements=Requirements(
-                     world_state=WorldStateRequirement.haunted_zone_or_higher)),
-    )
 
     treehouse.quest_locations.append(
         Location(name="Thunderbolt Upgrade 1",
                  id=QuestLocationIds.THUNDERBOLT_POWERUP1.value,
                  requirements=Requirements(
-                     powers=PowerRequirement.can_farm_berries,
-                     oneof_item_names=[["100 Berries", "50 Berries", "10 Berries"]]  # generation tweak
+                     powers=PowerRequirement.can_farm_berries
                  )),
     )
     treehouse.quest_locations.append(
@@ -3851,8 +3472,7 @@ def generate_treehouse_region():
                  id=QuestLocationIds.DASH_POWERUP1.value,
                  requirements=Requirements(
                      prisma_names=["Pelipper Prisma"],
-                     powers=PowerRequirement.can_farm_berries,
-                     oneof_item_names=[["100 Berries", "50 Berries", "10 Berries"]]
+                     powers=PowerRequirement.can_farm_berries
                  )),
     )
     treehouse.quest_locations.append(
@@ -3871,9 +3491,7 @@ def generate_treehouse_region():
         Location(name="Health Upgrade 1",
                  id=QuestLocationIds.HEALTH_POWERUP1.value,
                  requirements=Requirements(
-                     unlock_names=["Beach Zone Unlock"],
                      powers=PowerRequirement.can_farm_berries,
-                     oneof_item_names=[["100 Berries", "50 Berries", "10 Berries"]]
                  )),
     )
     treehouse.quest_locations.append(
@@ -3893,9 +3511,7 @@ def generate_treehouse_region():
         Location(name="Iron Tail Upgrade 1",
                  id=QuestLocationIds.IRON_TAIL_POWERUP1.value,
                  requirements=Requirements(
-                     world_state=WorldStateRequirement.ice_zone_or_higher,
                      powers=PowerRequirement.can_farm_berries,
-                     oneof_item_names=[["100 Berries", "50 Berries", "10 Berries"]]
                  )),
     )
     treehouse.quest_locations.append(
@@ -3911,3 +3527,386 @@ def generate_treehouse_region():
                      can_reach_locations=["Treehouse - Iron Tail Upgrade 2"]))
     )
     return treehouse
+
+
+def generate_overworld_pokemon_regions():
+    regions: [PokeparkRegion] = []
+
+    bonsly: PokeparkRegion = PokeparkRegion(name="Bonsly",
+                                            display="Bonsly",
+                                            requirements=Requirements(
+                                                unlock_names=["Bonsly Unlock"]),
+                                            parent_regions=["Meadow Zone - Overworld", "Cavern Zone - Overworld",
+                                                            "Magma Zone - Overworld"])
+    bonsly.friendship_locations.append(
+        Location(name="Bonsly",
+                 id=FRIENDSHIP_ITEMS["Bonsly"]),
+    )
+    bonsly.unlock_location.append(
+        Location(name="Bonsly Friendship - Pokemon Unlock",
+                 id=UNLOCK_ITEMS["Sudowoodo Unlock"])
+    )
+    regions.append(bonsly)
+
+    starly: PokeparkRegion = PokeparkRegion(name="Starly",
+                                            display="Starly",
+                                            requirements=Requirements(
+                                                oneof_item_names=[["Starly Unlock"], ["Starly Unlock 2"]],
+                                                powers=PowerRequirement.can_play_catch
+                                            ),
+                                            parent_regions=["Meadow Zone - Overworld", "Beach Zone - Overworld",
+                                                            "Ice Zone - Overworld"])
+
+    starly.friendship_locations.append(
+        Location(name="Starly",
+                 id=FRIENDSHIP_ITEMS["Starly"]),
+    )
+    regions.append(starly)
+
+    krabby: PokeparkRegion = PokeparkRegion(name="Krabby",
+                                            display="Krabby",
+                                            requirements=Requirements(
+                                                unlock_names=["Krabby Unlock"],
+                                                powers=PowerRequirement.can_play_catch
+                                            ),
+                                            parent_regions=["Beach Zone - Overworld",
+                                                            "Ice Zone - Overworld"])
+
+    krabby.friendship_locations.append(
+        Location(name="Krabby",
+                 id=FRIENDSHIP_ITEMS["Krabby"]),
+    )
+    regions.append(krabby)
+
+    corphish: PokeparkRegion = PokeparkRegion(name="Corphish",
+                                              display="Corphish",
+                                              requirements=Requirements(
+                                                  unlock_names=["Corphish Unlock"],
+                                                  powers=PowerRequirement.can_battle
+                                              ),
+                                              parent_regions=["Beach Zone - Overworld",
+                                                              "Ice Zone - Overworld"])
+
+    corphish.friendship_locations.append(
+        Location(name="Corphish",
+                 id=FRIENDSHIP_ITEMS["Corphish"],
+                 ),
+    )
+
+    regions.append(corphish)
+
+    mudkip: PokeparkRegion = PokeparkRegion(name="Mudkip",
+                                            display="Mudkip",
+                                            requirements=Requirements(
+                                                unlock_names=["Mudkip Unlock"]),
+                                            parent_regions=["Beach Zone - Overworld",
+                                                            "Ice Zone - Overworld"])
+
+    mudkip.friendship_locations.append(
+        Location(name="Mudkip",
+                 id=FRIENDSHIP_ITEMS["Mudkip"],
+                 ),
+    )
+
+    regions.append(mudkip)
+
+    taillow: PokeparkRegion = PokeparkRegion(name="Taillow",
+                                             display="Taillow",
+                                             requirements=Requirements(
+                                                 powers=PowerRequirement.can_play_catch,
+                                             ),
+                                             parent_regions=["Beach Zone - Overworld",
+                                                             "Ice Zone - Overworld",
+                                                             "Granite Zone - Overworld"])
+
+    taillow.friendship_locations.append(
+        Location(name="Taillow",
+                 id=FRIENDSHIP_ITEMS["Taillow"],
+                 ),
+    )
+
+    regions.append(taillow)
+
+    staravia: PokeparkRegion = PokeparkRegion(name="Staravia",
+                                              display="Staravia",
+                                              requirements=Requirements(
+                                                  powers=PowerRequirement.can_battle
+                                              ),
+                                              parent_regions=["Beach Zone - Overworld",
+                                                              "Ice Zone - Overworld"])
+
+    staravia.friendship_locations.append(
+        Location(name="Staravia",
+                 id=FRIENDSHIP_ITEMS["Staravia"],
+                 ),
+    )
+
+    regions.append(staravia)
+
+    wingull: PokeparkRegion = PokeparkRegion(name="Wingull",
+                                             display="Wingull",
+                                             requirements=Requirements(
+                                                 powers=PowerRequirement.can_play_catch
+                                             ),
+                                             parent_regions=["Beach Zone - Overworld",
+                                                             "Ice Zone - Overworld - Lower Lift Region"])
+
+    wingull.friendship_locations.append(
+        Location(name="Wingull",
+                 id=FRIENDSHIP_ITEMS["Wingull"],
+                 ),
+    )
+
+    regions.append(wingull)
+    teddiursa: PokeparkRegion = PokeparkRegion(name="Teddiursa",
+                                               display="Teddiursa",
+                                               parent_regions=["Ice Zone - Overworld", "Cavern Zone - Overworld",
+                                                               "Flower Zone - Overworld"])
+
+    teddiursa.friendship_locations.append(
+        Location(name="Teddiursa",
+                 id=FRIENDSHIP_ITEMS["Teddiursa"],
+                 ),
+    )
+
+    regions.append(teddiursa)
+
+    chimchar: PokeparkRegion = PokeparkRegion(name="Chimchar",
+                                              display="Chimchar",
+                                              requirements=Requirements(
+                                                  powers=PowerRequirement.can_battle
+                                              ),
+                                              parent_regions=["Meadow Zone - Overworld", "Cavern Zone - Overworld",
+                                                              "Magma Zone - Overworld"])
+
+    chimchar.friendship_locations.append(
+        Location(name="Chimchar",
+                 id=FRIENDSHIP_ITEMS["Chimchar"],
+                 ),
+    )
+    chimchar.unlock_location.append(
+        Location(name="Chimchar Friendship - Pokemon Unlock",
+                 id=UNLOCK_ITEMS["Infernape Unlock"]),
+    )
+
+    regions.append(chimchar)
+
+    sudowoodo: PokeparkRegion = PokeparkRegion(name="Sudowoodo",
+                                               display="Sudowoodo",
+                                               requirements=Requirements(
+                                                   unlock_names=["Sudowoodo Unlock"]),
+                                               parent_regions=["Meadow Zone - Overworld", "Cavern Zone - Overworld"])
+
+    sudowoodo.friendship_locations.append(
+        Location(name="Sudowoodo",
+                 id=FRIENDSHIP_ITEMS["Sudowoodo"],
+                 ),
+    )
+
+    regions.append(sudowoodo)
+
+    aron: PokeparkRegion = PokeparkRegion(name="Aron",
+                                          display="Aron",
+                                          requirements=Requirements(
+                                              powers=PowerRequirement.can_dash_overworld
+                                          ),
+                                          parent_regions=["Magma Zone - Overworld", "Cavern Zone - Overworld"])
+
+    aron.friendship_locations.append(
+        Location(name="Aron",
+                 id=FRIENDSHIP_ITEMS["Aron"],
+                 ),
+    )
+
+    regions.append(aron)
+
+    torchic: PokeparkRegion = PokeparkRegion(name="Torchic",
+                                             display="Torchic",
+                                             requirements=Requirements(
+                                                 powers=PowerRequirement.can_battle
+                                             ),
+                                             parent_regions=["Magma Zone - Overworld", "Cavern Zone - Overworld"])
+
+    torchic.friendship_locations.append(
+        Location(name="Torchic",
+                 id=FRIENDSHIP_ITEMS["Torchic"],
+                 ),
+    )
+
+    regions.append(torchic)
+
+    geodude: PokeparkRegion = PokeparkRegion(name="Geodude",
+                                             display="Geodude",
+                                             parent_regions=["Magma Zone - Overworld", "Cavern Zone - Overworld"])
+
+    geodude.friendship_locations.append(
+        Location(name="Geodude",
+                 id=FRIENDSHIP_ITEMS["Geodude"],
+                 ),
+    )
+
+    regions.append(geodude)
+
+    raichu: PokeparkRegion = PokeparkRegion(name="Raichu",
+                                            display="Raichu",
+                                            requirements=Requirements(
+                                                powers=PowerRequirement.can_play_catch
+                                            ),
+                                            parent_regions=["Cavern Zone - Overworld", "Haunted Zone - Overworld"])
+
+    raichu.friendship_locations.append(
+        Location(name="Raichu",
+                 id=FRIENDSHIP_ITEMS["Raichu"],
+                 ),
+    )
+
+    regions.append(raichu)
+
+    meowth: PokeparkRegion = PokeparkRegion(name="Meowth",
+                                            display="Meowth",
+                                            parent_regions=["Cavern Zone - Overworld", "Haunted Zone - Overworld"])
+
+    meowth.friendship_locations.append(
+        Location(name="Meowth",
+                 id=FRIENDSHIP_ITEMS["Meowth"],
+                 ),
+    )
+
+    regions.append(meowth)
+
+    aipom: PokeparkRegion = PokeparkRegion(name="Aipom",
+                                           display="Aipom",
+                                           requirements=Requirements(
+                                               powers=PowerRequirement.can_play_catch
+                                           ),
+                                           parent_regions=["Meadow Zone - Overworld", "Haunted Zone - Overworld"])
+
+    aipom.friendship_locations.append(
+        Location(name="Aipom",
+                 id=FRIENDSHIP_ITEMS["Aipom"],
+                 ),
+    )
+    aipom.unlock_location.append(
+        Location(name="Aipom -- Ambipom Unlocked",
+                 id=UNLOCK_ITEMS["Ambipom Unlock"]),
+    )
+
+    regions.append(aipom)
+
+    ambipom: PokeparkRegion = PokeparkRegion(name="Ambipom",
+                                             display="Ambipom",
+                                             requirements=Requirements(
+                                                 powers=PowerRequirement.can_battle,
+                                                 unlock_names=["Ambipom Unlock"]
+                                             ),
+                                             parent_regions=["Meadow Zone - Overworld", "Haunted Zone - Overworld"])
+
+    ambipom.friendship_locations.append(
+        Location(name="Ambipom",
+                 id=FRIENDSHIP_ITEMS["Ambipom"],
+                 ),
+    )
+
+    regions.append(ambipom)
+
+    drifloon: PokeparkRegion = PokeparkRegion(name="Drifloon",
+                                              display="Drifloon",
+                                              parent_regions=["Haunted Zone - Overworld", "Granite Zone - Overworld"])
+
+    drifloon.friendship_locations.append(
+        Location(name="Drifloon",
+                 id=FRIENDSHIP_ITEMS["Drifloon"],
+                 ),
+    )
+
+    regions.append(drifloon)
+
+    marowak: PokeparkRegion = PokeparkRegion(name="Marowak",
+                                             display="Marowak",
+                                             requirements=Requirements(
+                                                 powers=PowerRequirement.can_battle_thunderbolt_immune
+                                             ),
+                                             parent_regions=["Cavern Zone - Overworld", "Granite Zone - Overworld"])
+
+    marowak.friendship_locations.append(
+        Location(name="Marowak",
+                 id=FRIENDSHIP_ITEMS["Marowak"],
+                 ),
+    )
+
+    regions.append(marowak)
+
+    baltoy: PokeparkRegion = PokeparkRegion(name="Baltoy",
+                                            display="Baltoy",
+                                            requirements=Requirements(
+                                                unlock_names=["Baltoy Unlock"],
+                                                powers=PowerRequirement.can_battle_thunderbolt_immune,
+                                            ),
+                                            parent_regions=["Magma Zone - Overworld", "Granite Zone - Overworld"])
+
+    baltoy.friendship_locations.append(
+        Location(name="Baltoy",
+                 id=FRIENDSHIP_ITEMS["Baltoy"],
+                 ),
+    )
+
+    baltoy.unlock_location.append(
+        Location(name="Baltoy Friendship - Pokemon Unlock",
+                 id=UNLOCK_ITEMS["Claydol Unlock"]),
+    )
+
+    regions.append(baltoy)
+
+    claydol: PokeparkRegion = PokeparkRegion(name="Claydol",
+                                             display="Claydol",
+                                             requirements=Requirements(
+                                                 unlock_names=["Claydol Unlock"],
+                                                 powers=PowerRequirement.can_battle_thunderbolt_immune,
+                                             ),
+                                             parent_regions=["Magma Zone - Overworld", "Granite Zone - Overworld"])
+
+    claydol.friendship_locations.append(
+        Location(name="Claydol",
+                 id=FRIENDSHIP_ITEMS["Claydol"],
+                 ),
+    )
+
+    regions.append(claydol)
+
+    furret: PokeparkRegion = PokeparkRegion(name="Furret",
+                                            display="Furret",
+                                            parent_regions=["Granite Zone - Overworld", "Flower Zone - Overworld"])
+
+    furret.friendship_locations.append(
+        Location(name="Furret",
+                 id=FRIENDSHIP_ITEMS["Furret"],
+                 ),
+    )
+
+    regions.append(furret)
+
+    meditite: PokeparkRegion = PokeparkRegion(name="Meditite",
+                                              display="Meditite",
+                                              parent_regions=["Magma Zone - Overworld", "Flower Zone - Overworld"])
+
+    meditite.friendship_locations.append(
+        Location(name="Meditite",
+                 id=FRIENDSHIP_ITEMS["Meditite"],
+                 ),
+    )
+
+    regions.append(meditite)
+
+    abra: PokeparkRegion = PokeparkRegion(name="Abra",
+                                          display="Abra",
+                                          parent_regions=["Treehouse", "Haunted Zone - Overworld - Mansion"])
+
+    abra.friendship_locations.append(
+        Location(name="Abra",
+                 id=FRIENDSHIP_ITEMS["Abra"],
+                 ),
+    )
+
+    regions.append(abra)
+
+    return regions

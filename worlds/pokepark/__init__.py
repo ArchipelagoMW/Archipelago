@@ -1,6 +1,13 @@
 """
 Archipelago init file for Pokepark
 """
+import os
+import zipfile
+from base64 import b64encode
+from typing import Any
+
+import yaml
+
 from BaseClasses import ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
@@ -8,6 +15,7 @@ from .items import FRIENDSHIP_ITEMS, PokeparkItem, UNLOCK_ITEMS, BERRIES, ALL_IT
     REGION_UNLOCK, VICTORY
 from .locations import ALL_LOCATIONS_TABLE, REGIONS
 from .options import PokeparkOptions, pokepark_option_groups
+from ..Files import APPlayerContainer
 
 
 class PokeparkWebWorld(WebWorld):
@@ -29,6 +37,31 @@ class PokeparkWebWorld(WebWorld):
         }
     }
     option_groups = pokepark_option_groups
+
+
+class PokeparkContainer(APPlayerContainer):
+    """
+    This class defines the container file for The Wind Waker.
+    """
+
+    game: str = "PokePark"
+    patch_file_ending: str = ".appkprk"
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        if "data" in kwargs:
+            self.data = kwargs["data"]
+            del kwargs["data"]
+
+        super().__init__(*args, **kwargs)
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
+        """
+        Write the contents of the container file.
+        """
+        super().write_contents(opened_zipfile)
+
+        # Record the data for the game under the key `plando`.
+        opened_zipfile.writestr("plando", b64encode(bytes(yaml.safe_dump(self.data, sort_keys=False), "utf-8")))
 
 
 class PokeparkWorld(World):
@@ -69,6 +102,36 @@ class PokeparkWorld(World):
     }
 
     data_version = 1
+
+    def generate_output(self, output_directory: str) -> None:
+        """
+        Create the output Pokeprk file that is used to randomize the ISO.
+
+        :param output_directory: The output directory for the Pokeprk file.
+        """
+        multiworld = self.multiworld
+        player = self.player
+
+        # Output seed name and slot number to seed RNG in randomizer client.
+        output_data = {
+            "Seed": multiworld.seed_name,
+            "Slot": player,
+            "Name": self.player_name,
+            "Options": self.options.get_output_dict(),
+            "Locations": {},
+            "Entrances": {},
+        }
+
+        # Output the plando details to file.
+        aptww = PokeparkContainer(
+            path=os.path.join(
+                output_directory, f"{multiworld.get_out_file_name_base(player)}{PokeparkContainer.patch_file_ending}"
+            ),
+            player=player,
+            player_name=self.player_name,
+            data=output_data,
+        )
+        aptww.write()
 
     def create_regions(self):
         from .regions import create_regions
@@ -127,63 +190,17 @@ class PokeparkWorld(World):
 
     def _handle_starting_zones(self, pool):
         """Manages starting zones based on selected options."""
-        all_zones = ["Meadow Zone Unlock",
-                     "Beach Zone Unlock",
-                     "Ice Zone Unlock",
-                     "Cavern Zone & Magma Zone Unlock",
-                     "Haunted Zone Unlock",
-                     "Granite Zone & Flower Zone Unlock"]
-
-        if self.options.starting_zone == self.options.starting_zone.option_one:
-            # Randomly select one starting zone
-            starting_zones = self.random.sample(all_zones, 1)
-            for zone in starting_zones:
-                self.multiworld.push_precollected(self.create_item(zone))
-
-            # Add 50 Berries for Drifblim
-            self.multiworld.push_precollected(self.create_item("50 Berries"))
-
-            # Add remaining zones to the pool
-            for zone in all_zones:
-                if zone not in starting_zones:
-                    pool.append(self.create_item(zone))
-            # Add Skygarden Unlock
-            pool.append(self.create_item("Skygarden Unlock"))
-
-        if self.options.starting_zone == self.options.starting_zone.option_none:  # option_none (default is Meadow Zone)
-            self.multiworld.push_precollected(self.create_item("Meadow Zone Unlock"))
-
-            # Add remaining zones to the pool
-            for zone in all_zones:
-                if zone != "Meadow Zone Unlock":
-                    pool.append(self.create_item(zone))
-
-            # Add Skygarden Unlock
-            pool.append(self.create_item("Skygarden Unlock"))
-
-        if self.options.starting_zone == self.options.starting_zone.option_ice_zone:
-            self.multiworld.push_precollected(self.create_item("Ice Zone Unlock"))
-
-            # Add remaining zones to the pool
-            for zone in all_zones:
-                if zone != "Ice Zone Unlock":
-                    pool.append(self.create_item(zone))
-
-            # Add Skygarden Unlock
-            pool.append(self.create_item("Skygarden Unlock"))
-
-        # Drifblim is always unlocked
-        self.multiworld.push_precollected(self.create_item("Drifblim Unlock"))
 
     def _add_standard_items(self, pool):
         """Adds standard item categories to the pool."""
         # Items excluded from normal unlocks
-        unlock_item_exception = ["Drifblim Unlock"]
+        unlock_item_exception = []
 
         pool.extend([self.create_item(name) for name in FRIENDSHIP_ITEMS.keys()])
         pool.extend([self.create_item(name) for name in UNLOCK_ITEMS.keys()
                      if name not in unlock_item_exception])
         pool.extend([self.create_item(name) for name in PRISM_ITEM.keys()])
+        pool.extend([self.create_item(name) for name in REGION_UNLOCK.keys()])
 
     def _fill_remaining_slots_with_berries(self, pool):
         """Fills remaining slots with berry items."""
@@ -198,10 +215,12 @@ class PokeparkWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_item(self, name: str):
-        if name in FRIENDSHIP_ITEMS or name in UNLOCK_ITEMS or name in PRISM_ITEM or name in REGION_UNLOCK or name in POWERS or name in VICTORY:
+        if name.__contains__("Bidoof Unlock"):
+            classification = ItemClassification.filler
+        elif name in FRIENDSHIP_ITEMS or name in UNLOCK_ITEMS or name in PRISM_ITEM or name in REGION_UNLOCK or name in POWERS or name in VICTORY:
             classification = ItemClassification.progression
         elif name in BERRIES:
-            classification = ItemClassification.progression_skip_balancing
+            classification = ItemClassification.filler
         else:
             classification = ItemClassification.filler
 

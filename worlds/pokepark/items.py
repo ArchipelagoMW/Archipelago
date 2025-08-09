@@ -236,7 +236,6 @@ UNLOCK_ITEMS: dict[str, int] = {
     "Pikachu Balloon": 28000,
     "Pikachu Surfboard": 29000,
     "Pikachu Snowboard": 30000,
-    "Drifblim Unlock": 31000,
 
     # Ice Zone
     "Delibird Unlock": 32000,
@@ -337,13 +336,14 @@ POWERS: dict[str, int] = {
 }
 
 REGION_UNLOCK: dict[str, int] = {
-    "Meadow Zone Unlock": 99999,
-    "Beach Zone Unlock": 99998,
-    "Ice Zone Unlock": 99997,
-    "Cavern Zone & Magma Zone Unlock": 99996,
-    "Haunted Zone Unlock": 99995,
-    "Granite Zone & Flower Zone Unlock": 99994,
-    "Skygarden Unlock": 99993
+    "Meadow Zone Fast Travel": 99999,
+    "Beach Zone Fast Travel": 99998,
+    "Ice Zone Fast Travel": 99997,
+    "Cavern Zone Fast Travel": 99996,
+    "Magma Zone Fast Travel": 99995,
+    "Haunted Zone Fast Travel": 99994,
+    "Granite Zone Fast Travel": 99993,
+    "Flower Zone Fast Travel": 99992,
 }
 
 VICTORY: dict[str, int] = {

@@ -1,19 +1,14 @@
 import asyncio
+import traceback
+from typing import Optional, Any
 
 import dolphin_memory_engine as dme
 
 import ModuleUpdate
-from worlds.pokepark import POWERS, BERRIES
 from worlds.pokepark.adresses import \
-    berry_item_checks, \
-    POWER_INCREMENTS, POWER_SHARED_ADDR, prisma_blocked_itemIds, \
-    UNLOCKS, MemoryRange, PRISMAS, POKEMON_STATES, \
-    blocked_friendship_itemIds, \
-    blocked_friendship_unlock_itemIds, stage_id_address, BLOCKED_UNLOCKS, valid_stage_ids
-from worlds.pokepark.dme_helper import write_memory
-from worlds.pokepark.watcher.location_state_watcher import location_state_watcher
-from worlds.pokepark.watcher.location_watcher import location_watcher
-from worlds.pokepark.watcher.world_state_watcher import state_watcher
+    LOCATIONS, \
+    MemoryAddress, ITEMS, PowerItem, POWER_MAP
+from worlds.pokepark.dme_helper import read_memory
 
 ModuleUpdate.update()
 
@@ -23,59 +18,131 @@ from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
     CommonContext, server_loop
 
-old_berry_count = 0
-first_berry_check = True
+SLOT_NAME_ADDR = 0x80001820
+GIVE_ITEM_ADDR = 0x80001804
+OPCODE_ADDR = 0x80001808
+GLOBAL_MANAGER_STRUC_POINTER = 0x80001800
+CONNECTION_REFUSED_GAME_STATUS = (
+    "Dolphin failed to connect. Please load a randomized ROM for Pokepark. Trying again in 5 seconds..."
+)
+CONNECTION_REFUSED_SAVE_STATUS = (
+    "Dolphin failed to connect. Please load into the save file. Trying again in 5 seconds..."
+)
+CONNECTION_LOST_STATUS = (
+    "Dolphin connection was lost. Please restart your emulator and make sure Pokepark is running."
+)
+CONNECTION_CONNECTED_STATUS = "Dolphin connected successfully."
+CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
+AP_VISITED_STAGE_NAMES_KEY_FORMAT = "pokepark_visited_stages_%i"
+
+STAGE_NAME_MAP = {
+    0x0101.to_bytes(2): "Meadow Zone Overworld",
+    0x0201.to_bytes(2): "Treehouse",
+
+}
 
 
 class PokeparkCommandProcessor(ClientCommandProcessor):
 
-    def _cmd_connect(self, address: str = "") -> bool:
-        temp = super()._cmd_connect()
-        if dme.is_hooked():
-            logger.info("Already connected to Dolphin!")
-            self._cmd_resync()
-        else:
-            logger.info("Please connect to Dolphin (may have issues, default is to start game before opening client).")
-        if temp:
-            return True
-        else:
-            return False
+    def __init__(self, ctx: CommonContext):
+        """
+        Initialize the command processor with the provided context.
 
-    def _cmd_resync(self):
-        """Manually trigger a resync."""
-        self.output(f"Syncing items.")
-        self.ctx.syncing = True
-        refresh_items(self.ctx)
+        :param ctx: Context for the client.
+        """
+        super().__init__(ctx)
+
+    def _cmd_dolphin(self) -> None:
+        """
+        Display the current Dolphin emulator connection status.
+        """
+        if isinstance(self.ctx, PokeparkContext):
+            logger.info(f"Dolphin Status: {self.ctx.dolphin_status}")
 
 
 class PokeparkContext(CommonContext):
     command_processor = PokeparkCommandProcessor
     game = "PokePark"
     items_handling = 0b111  # full remote
-    hook_check = False
-    hook_nagged = False
-
-    believe_hooked = False
     victory = False
 
     def __init__(self, server_address, password):
         super(PokeparkContext, self).__init__(server_address, password)
-        self.send_index: int = 0
-        self.syncing = False
-        self.awaiting_bridge = False
+        self.items_received_2: list[tuple[NetworkItem, int]] = []
+        self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
+        self.dolphin_status: str = CONNECTION_INITIAL_STATUS
+        self.awaiting_rom: bool = False
+        self.last_rcvd_index: int = -1
+        self.visited_stage_names: Optional[set[str]] = None
 
-    async def server_auth(self, password_requested: bool = False):
+    async def disconnect(self, allow_autoreconnect: bool = False) -> None:
+        """
+        Disconnect the client from the server and reset game state variables.
+
+        :param allow_autoreconnect: Allow the client to auto-reconnect to the server. Defaults to `False`.
+
+        """
+        self.auth = None
+        self.current_stage_name = ""
+        self.visited_stage_names = None
+        self.dash_index = 0
+        self.thunderbolt_index = 0
+        self.health_index = 0
+        self.iron_tail_index = 0
+        await super().disconnect(allow_autoreconnect)
+
+    async def server_auth(self, password_requested: bool = False) -> None:
+        """
+        Authenticate with the Archipelago server.
+
+        :param password_requested: Whether the server requires a password. Defaults to `False`.
+        """
         if password_requested and not self.password:
-            await super(PokeparkContext, self).server_auth(password_requested)
-        await self.get_username()
+            await super().server_auth(password_requested)
+        if not self.auth:
+            if self.awaiting_rom:
+                return
+            self.awaiting_rom = True
+            logger.info("Awaiting connection to Dolphin to get player information.")
+            return
         await self.send_connect()
 
-    @property
-    def endpoints(self):
-        if self.server:
-            return [self.server]
-        else:
-            return []
+    def on_package(self, cmd: str, args: dict[str, Any]) -> None:
+        """
+        Handle incoming packages from the server.
+
+        :param cmd: The command received from the server.
+        :param args: The command arguments.
+        """
+        if cmd == "Connected":
+            self.items_received_2 = []
+            self.last_rcvd_index = -1
+            # Request the connected slot's dictionary (used as a set) of visited stages.
+            visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
+            Utils.async_start(self.send_msgs([{"cmd": "Get", "keys": [visited_stages_key]}]))
+        elif cmd == "ReceivedItems":
+            if args["index"] >= self.last_rcvd_index:
+                self.last_rcvd_index = args["index"]
+                for item in args["items"]:
+                    self.items_received_2.append((item, self.last_rcvd_index))
+                    self.last_rcvd_index += 1
+            self.items_received_2.sort(key=lambda v: v[1])
+        elif cmd == "Retrieved":
+            requested_keys_dict = args["keys"]
+            # Read the connected slot's dictionary (used as a set) of visited stages.
+            if self.slot is not None:
+                visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
+                if visited_stages_key in requested_keys_dict:
+                    visited_stages = requested_keys_dict[visited_stages_key]
+                    # If it has not been set before, the value in the response will be `None`.
+                    visited_stage_names = set() if visited_stages is None else set(visited_stages.keys())
+                    # If the current stage name is not in the set, send a message to update the dictionary on the
+                    # server.
+                    current_stage_name = self.current_stage_name
+                    if current_stage_name and current_stage_name not in visited_stage_names:
+                        visited_stage_names.add(current_stage_name)
+                        Utils.async_start(self.update_visited_stages(current_stage_name))
+                    self.visited_stage_names = visited_stage_names
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
@@ -90,164 +157,251 @@ class PokeparkContext(CommonContext):
         self.ui = PokeparkManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+    async def update_visited_stages(self, newly_visited_stage_name: str) -> None:
+        """
+        Update the server's data storage of the visited stage names to include the newly visited stage name.
 
-def game_start():
-    dme.hook()
-    return dme.is_hooked()
+        :param newly_visited_stage_name: The name of the stage recently visited.
+        """
+        if self.slot is not None:
+            visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
+            await self.send_msgs(
+                [
+                    {
+                        "cmd": "Set",
+                        "key": visited_stages_key,
+                        "default": {},
+                        "want_reply": False,
+                        "operations": [{"operation": "update", "value": {newly_visited_stage_name: True}}],
+                    }
+                ]
+            )
 
 
-async def game_watcher(ctx: PokeparkContext):
+def _give_item(ctx: PokeparkContext, item_id: int) -> bool:
+    """
+    Give an item to the player in-game.
+
+    :param ctx: The Pokepark client context.
+    :param item_id: Id of the item to give.
+    :return: Whether the item was successfully given.
+    """
+    if not check_ingame():
+        return False
+
+    item_slot = dme.read_word(GIVE_ITEM_ADDR)
+    opcode_slot = dme.read_word(OPCODE_ADDR)
+    if item_id not in ITEMS:
+        return True
+    item = ITEMS[item_id]
+    if item_slot == 0xFFFFFFFF and opcode_slot == 0xFFFFFFFF:
+
+        if isinstance(item, PowerItem):
+            if item.item_name == "Progressive Dash":
+                index = ctx.dash_index
+                ctx.dash_index += 1
+            elif item.item_name == "Progressive Thunderbolt":
+                index = ctx.thunderbolt_index
+                ctx.thunderbolt_index += 1
+            elif item.item_name == "Progressive Health":
+                index = ctx.health_index
+                ctx.health_index += 1
+            elif item.item_name == "Progressive Iron Tail":
+                index = ctx.iron_tail_index
+                ctx.iron_tail_index += 1
+            else:
+                return False
+
+            max_index = len(POWER_MAP[item.item_id]) - 1
+            if index <= max_index:
+                item_id = POWER_MAP[item.item_id][index]
+                opcode = item.opcode
+            else:
+                return True
+
+        else:
+            item_id = item.item_id
+            opcode = item.opcode
+        dme.write_word(OPCODE_ADDR, opcode)
+        dme.write_word(GIVE_ITEM_ADDR, item_id)
+        return True
+
+    return False
+
+
+async def give_items(ctx: PokeparkContext) -> None:
+    """
+    Give the player all outstanding items they have yet to receive.
+
+    :param ctx: Pokepark client context.
+    """
+    global_manager_data_struc_address = dme.read_word(GLOBAL_MANAGER_STRUC_POINTER)
+    chapter_address = global_manager_data_struc_address + 0x2d
+    if check_ingame():
+        # Read the expected index of the player, which is the index of the latest item they've received.
+        expected_idx = int.from_bytes(dme.read_bytes(chapter_address, 2), byteorder="big")
+
+        # Loop through items to give.
+        for item, idx in ctx.items_received_2:
+            # If the item's index is greater than the player's expected index, give the player the item.
+            if expected_idx <= idx:
+                # Attempt to give the item and increment the expected index.
+                while not _give_item(ctx, item.item):
+                    await asyncio.sleep(0.01)
+
+                # Increment the expected index.
+                dme.write_bytes(chapter_address, (idx + 0x1).to_bytes(2, byteorder="big"))
+
+
+async def check_current_stage_changed(ctx: PokeparkContext) -> None:
+    """
+    Check if the player has moved to a new stage.
+    If so, update all trackers with the new stage name.
+    If the stage has never been visited, additionally update the server.
+
+    :param ctx: The Pokepark client context.
+    """
+    global_manager_data_struc_address = dme.read_word(GLOBAL_MANAGER_STRUC_POINTER)
+    new_stage = dme.read_bytes(global_manager_data_struc_address + 0x5F00, 2)
+    new_stage_name = STAGE_NAME_MAP.get(new_stage)
+    if new_stage_name:
+        current_stage_name = ctx.current_stage_name
+        if new_stage_name != current_stage_name:
+            ctx.current_stage_name = new_stage_name
+            # Send a Bounced message containing the new stage name to all trackers connected to the current slot.
+            data_to_send = {"pokepark_stage_name": new_stage_name}
+            message = {
+                "cmd": "Bounce",
+                "slots": [ctx.slot],
+                "data": data_to_send,
+            }
+            await ctx.send_msgs([message])
+            # If the stage has never been visited before, update the server's data storage to indicate that it has been
+            # visited.
+            visited_stage_names = ctx.visited_stage_names
+            if visited_stage_names is not None and new_stage_name not in visited_stage_names:
+                visited_stage_names.add(new_stage_name)
+                await ctx.update_visited_stages(new_stage_name)
+
+
+async def check_locations(ctx: PokeparkContext) -> None:
+    """
+    Iterate through all locations and check whether the player has checked each location.
+
+    Update the server with all newly checked locations since the last update. If the player has completed the goal,
+    notify the server.
+
+    :param ctx: The Pokepark client context.
+    """
+
+    global_manager_data_struc_address = dme.read_word(GLOBAL_MANAGER_STRUC_POINTER)
+    for location in LOCATIONS:
+        expected_value = location.expected_value
+        memory = MemoryAddress(global_manager_data_struc_address,
+                               location.final_offset,
+                               memory_range=location.memory_range)
+        current_value = read_memory(dme, memory)
+        if (current_value & location.bit_mask) == expected_value:
+            for locationId in location.location_ids:
+                ctx.locations_checked.add(locationId)
+
+    # Send the list of newly-checked locations to the server.
+    locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
+    if locations_checked:
+        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
+
+
+def read_string(console_address: int, strlen: int) -> str:
+    """
+    Read a string from Dolphin memory.
+
+    :param console_address: Address to start reading from.
+    :param strlen: Length of the string to read.
+    :return: The string.
+    """
+    return dme.read_bytes(console_address, strlen).split(b"\0", 1)[0].decode()
+
+
+def check_ingame() -> bool:
+    """
+    Check if the player is currently in-game.
+
+    :return: `True` if the player is in-game, otherwise `False`.
+    """
+    global_manager_data_struc_address = dme.read_word(GLOBAL_MANAGER_STRUC_POINTER)
+    pointer = dme.read_byte(global_manager_data_struc_address + 0x1B8)
+    chapter_address = global_manager_data_struc_address + 0x2d
+    expected_idx = int.from_bytes(dme.read_bytes(chapter_address, 2), byteorder="big")
+    if pointer == 0 and expected_idx == 0:
+        return False
+    return True
+
+
+async def dolphin_sync_task(ctx: PokeparkContext) -> None:
+    """
+    The task loop for managing the connection to Dolphin.
+
+    While connected, read the emulator's memory to look for any relevant changes made by the player in the game.
+
+    :param ctx: The Wind Waker client context.
+    """
+    logger.info("Starting Dolphin connector. Use /dolphin for status information.")
     while not ctx.exit_event.is_set():
-        sync_msg = [{'cmd': 'Sync'}]
-        if ctx.locations_checked:
-            sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
-        await ctx.send_msgs(sync_msg)
-        if dme.is_hooked():
-            refresh_items(ctx)
+        try:
+            if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
+                if not check_ingame():
+                    # Reset the give item array while not in the game.
+                    dme.write_bytes(GIVE_ITEM_ADDR, bytes([0xFF] * 8))
+                    await asyncio.sleep(0.1)
+                    continue
+                if ctx.slot is not None:
 
-        ctx.lives_switch = True
-        if ctx.victory and not ctx.finished_game:
-            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-            ctx.finished_game = True
-        if not ctx.hook_check:
-            if not ctx.hook_nagged:
-                logger.info("Checking Dolphin hookup...")
-            dme.hook()
-            if dme.is_hooked():
-                logger.info("Hooked to Dolphin!")
-                gameid = dme.read_bytes(0x80000000, 6).decode("utf-8")
-                ctx.hook_check = True
-                if gameid == "R8AJ01":
-                    logger.info("Correct Game Version")
+                    await give_items(ctx)
+                    await check_locations(ctx)
+                    await check_current_stage_changed(ctx)
                 else:
-                    logger.error(f"Wrong Game make sure you have a game with id R8AJ01. Your GameId: {gameid}")
-
-            elif not ctx.hook_nagged:
-                logger.info(
-                    "Please connect to Dolphin (may have issues, default is to start game before opening client).")
-                ctx.hook_nagged = True
-
-        await asyncio.sleep(0.08)
-        ctx.lives_switch = False
-
-
-def refresh_items(ctx: PokeparkContext):
-    stage_id = dme.read_word(stage_id_address)
-    if not stage_id in valid_stage_ids:
-        return
-
-    blocked_items = set().union(
-        prisma_blocked_itemIds,
-        blocked_friendship_itemIds,
-        blocked_friendship_unlock_itemIds,
-        BLOCKED_UNLOCKS
-    )
-    items = [item for item in ctx.items_received if
-             not item.item in blocked_items]
-
-    activate_unlock_items(items)
-
-    activate_friendship_items(items)
-
-    activate_prisma_items(items)
-
-    give_berry_items(items)
-
-    activate_power_items(items)
-
-    check_victory(items, ctx)
+                    if not ctx.auth:
+                        ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
+                    if ctx.awaiting_rom:
+                        await ctx.server_auth()
+                await asyncio.sleep(0.1)
+            else:
+                if ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
+                    logger.info("Connection to Dolphin lost, reconnecting...")
+                    ctx.dolphin_status = CONNECTION_LOST_STATUS
+                logger.info("Attempting to connect to Dolphin...")
+                dme.hook()
+                if dme.is_hooked():
+                    value = dme.read_bytes(0x80000000, 6)
+                    if value not in (b"R8AJ99", b"R8AE99", b"R8AP99"):
+                        logger.info(CONNECTION_REFUSED_GAME_STATUS)
+                        ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
+                        dme.un_hook()
+                        await asyncio.sleep(5)
+                    else:
+                        logger.info(CONNECTION_CONNECTED_STATUS)
+                        ctx.dolphin_status = CONNECTION_CONNECTED_STATUS
+                        ctx.locations_checked = set()
+                else:
+                    logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
+                    ctx.dolphin_status = CONNECTION_LOST_STATUS
+                    await ctx.disconnect()
+                    await asyncio.sleep(5)
+                    continue
+        except Exception:
+            dme.un_hook()
+            logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
+            logger.error(traceback.format_exc())
+            ctx.dolphin_status = CONNECTION_LOST_STATUS
+            await ctx.disconnect()
+            await asyncio.sleep(5)
+            continue
 
 
 def check_victory(items: list[NetworkItem], ctx: PokeparkContext):
     for item in items:
         if item.item == 999999:
             send_victory(ctx)
-
-
-def activate_unlock_items(items: list[NetworkItem]):
-    sums = {}
-    for item in set(networkItem.item for networkItem in items):
-        if item in UNLOCKS:
-            unlock = UNLOCKS[item]
-            addr = unlock.item.final_address
-            key = (addr, unlock.item.memory_range)
-            sums[key] = sums.get(key, 0) + unlock.item.value
-
-    for (address, memory_range), value in sums.items():
-        value &= memory_range.mask
-        if memory_range == MemoryRange.WORD:
-            dme.write_word(address, value)
-        elif memory_range == MemoryRange.HALFWORD:
-            dme.write_bytes(address, value.to_bytes(2, byteorder='big'))
-        elif memory_range == MemoryRange.BYTE:
-            dme.write_byte(address, value)
-
-
-def activate_friendship_items(items: list[NetworkItem]):
-    for received_item in items:
-        if received_item.item in POKEMON_STATES:
-            friendship = POKEMON_STATES[received_item.item]
-            write_memory(dme, friendship.item, friendship.item.value)
-
-
-def activate_prisma_items(items: list[NetworkItem]):
-    for received_item in items:
-        if received_item.item in PRISMAS:
-            prisma = PRISMAS[received_item.item]
-            write_memory(dme, prisma.item, prisma.item.value)
-
-
-def give_berry_items(items: list[NetworkItem]):
-    global old_berry_count, first_berry_check
-    berry_count_new = sum(1 for item in items if item.item in BERRIES.values())
-    if first_berry_check and old_berry_count != berry_count_new and old_berry_count == 0 and berry_count_new > 1:
-        old_berry_count = berry_count_new
-        first_berry_check = False
-        return
-
-    new_berry_items = [item for item in items
-                       if item.item in BERRIES.values()][old_berry_count:berry_count_new]
-    for received_item in new_berry_items:
-        if received_item.item in berry_item_checks:
-            for address, value in berry_item_checks[received_item.item]:
-                current_berries = int.from_bytes(dme.read_bytes(address, 2), byteorder='big', signed=False)
-                if current_berries < 0xFFFF:
-                    new_value = min(current_berries + value, 0x270F)
-                    dme.write_bytes(address, new_value.to_bytes(2, byteorder='big'))
-
-    old_berry_count = berry_count_new
-
-
-def activate_power_items(items: list[NetworkItem]):
-    thunderbolt_count = sum(1 for item in items
-                            if item.item == POWERS["Progressive Thunderbolt"])
-    dash_count = sum(1 for item in items
-                     if item.item == POWERS["Progressive Dash"])
-    health_count = sum(1 for item in items
-                       if item.item == POWERS["Progressive Health"])
-    tail_count = sum(1 for item in items
-                     if item.item == POWERS["Progressive Iron Tail"])
-
-    max_thunderbolt = len(POWER_INCREMENTS["thunderbolt"]["increments"])
-    max_dash = len(POWER_INCREMENTS["dash"]["increments"])
-    max_health = len(POWER_INCREMENTS["health"]["increments"])
-    max_tail = len(POWER_INCREMENTS["iron_tail"]["increments"])
-
-    thunderbolt_count = min(thunderbolt_count, max_thunderbolt)
-    dash_count = min(dash_count, max_dash)
-    health_count = min(health_count, max_health)
-    tail_count = min(tail_count, max_tail)
-
-    new_value = 0x00
-    if thunderbolt_count > 0:
-        new_value += sum(POWER_INCREMENTS["thunderbolt"]["increments"][:thunderbolt_count])
-    if dash_count > 0:
-        new_value += sum(POWER_INCREMENTS["dash"]["increments"][:dash_count])
-    if health_count > 0:
-        new_value += sum(POWER_INCREMENTS["health"]["increments"][:health_count])
-    if tail_count > 0:
-        new_value += sum(POWER_INCREMENTS["iron_tail"]["increments"][:tail_count])
-    dme.write_bytes(POWER_SHARED_ADDR, new_value.to_bytes(2, byteorder='big'))
 
 
 def send_victory(ctx: PokeparkContext):
@@ -271,44 +425,15 @@ def main(connect=None, password=None):
         ctx.run_cli()
         await asyncio.sleep(1)
 
-        game_start()
-        if dme.is_hooked():
-            logger.info("Hooked to Dolphin!")
-
-        progression_watcher = asyncio.create_task(
-            game_watcher(ctx), name="PokeparkProgressionWatcher")
-        loc_watch = asyncio.create_task(location_watcher(ctx))
-        state_watch = asyncio.create_task(state_watcher(ctx))
-        location_state_watch = asyncio.create_task(location_state_watcher(ctx))
-
-        try:
-            await progression_watcher
-        except Exception as e:
-            logger.exception(f"Exception in game_watcher: {str(e)}")
-
-        try:
-            await loc_watch
-        except Exception as e:
-            logger.exception(f"Exception in location_watcher: {str(e)}")
-
-        try:
-            await state_watch
-        except Exception as e:
-            logger.exception(f"Exception in state_watcher: {str(e)}")
-
-        try:
-            await location_state_watch
-        except Exception as e:
-            logger.exception(f"Exception in location_state_watcher: {str(e)}")
-
-        await asyncio.sleep(.25)
-
+        ctx.dolphin_sync_task = asyncio.create_task(dolphin_sync_task(ctx), name="DolphinSync")
         await ctx.exit_event.wait()
         ctx.server_address = None
 
         await ctx.shutdown()
 
-        await asyncio.sleep(.5)
+        if ctx.dolphin_sync_task:
+            await asyncio.sleep(3)
+            await ctx.dolphin_sync_task
 
     import colorama
     colorama.init()
