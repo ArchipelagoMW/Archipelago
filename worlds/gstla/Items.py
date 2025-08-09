@@ -235,18 +235,6 @@ def create_items(world: 'GSTLAWorld', player: int):
         ap_item = create_filler(world, item)
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
-        
-    for x in range(2):
-        for item in useful_consumables:
-            ap_item = create_item_direct(item, player)
-            world.multiworld.itempool.append(ap_item)
-            sum_locations -= 1
-
-    for x in range(2):
-        for item in remainder:
-            ap_item = create_item_direct(item, player)
-            world.multiworld.itempool.append(ap_item)
-            sum_locations -= 1
 
     if world.options.add_elvenshirt_clericsring == 1:
         ap_item = create_item(ItemName.Elven_Shirt, player)

@@ -14,8 +14,10 @@ from .Options import (ItemShuffle, RevealHiddenItem, OmitLocations, AddGs1Items,
                       HalveEncounterRate, EasierBosses, NamedPuzzles, ManualRetreatGlitch, MusicShuffle,
                       TelportEverywhere, TrapChance, MimicTrapWeight, ForgeMaterialsFillerWeight,
                       RustyMaterialsFillerWeight, StatBoostFillerWeight, UncommonConsumableFillerWeight,
-                      ForgedEquipmentFillerWeight, LuckyFountainEquipmentFillerWeight, ShopEquipmentFillerWeight,
-                      CoinsFillerWeight, CommonConsumablesFillerWeight,ForgeMaterialsAreFiller, ArtifactsAreFiller)
+                      ForgedEquipmentFillerWeight, LuckyEquipmentFillerWeight, ShopEquipmentFillerWeight,
+                      CoinsFillerWeight, CommonConsumablesFillerWeight, AutoRun, ScaleMimics, ScaleCharacters,
+                      MaxScaledLevel, ForgeMaterialsAreFiller, ArtifactsAreFiller, DisableShopGameTickets,
+                      Goal, RandomGoals, DjinnHuntCount, SummonHuntCount)
 
 easy = {
     ItemShuffle.internal_name: ItemShuffle.option_all_chests_and_tablets,

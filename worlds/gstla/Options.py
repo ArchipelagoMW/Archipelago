@@ -565,11 +565,11 @@ class ForgedEquipmentFillerWeight(Range):
     range_end = 100
     default = 0
     
-class LuckyFountainEquipmentFillerWeight(Range):
-    """The weight for a filler item to be a lucky item reward from the fountain in Lemuria.
-    Examples of these are Hestia Blade, Mighty Axe, Aegis Shield and Crown of Glory."""
+class LuckyEquipmentFillerWeight(Range):
+    """The weight for a filler item to be a lucky item reward from the fountain in Lemuria or Lucky Wheels in Contigo.
+    Examples of these are Hestia Blade, Mighty Axe, Aegis Shield, Crown of Glory, Quick Boots, Silk Shirt and War Ring."""
     internal_name = "lucky_equipment_filler_weight"
-    display_name = "Lucky Fountain Equipment Filler Weight"
+    display_name = "Lucky Equipment Filler Weight"
     range_start = 0
     range_end = 100
     default = 0
@@ -601,7 +601,7 @@ class CoinsFillerWeight(Range):
 
 class CommonConsumablesFillerWeight(Range):
     """The weight for a filler item to be a common consumable.
-    Examples of these are Herbs, Vials, Antidotes, Elixirs, Smoke Bombs and Lucky Medals"""
+    Examples of these are Herbs, Vials, Antidotes, Elixirs, Smoke Bombs, Lucky Medals and Game Tickets"""
     internal_name = "common_consumable_filler_weight"
     display_name = "Common Consumable Filler Weight"
     range_start = 0
@@ -623,6 +623,8 @@ class Coop(Choice):
      prog_useful - Progression and useful items are treated as remote items
      all - All items are treated as remote items
      """
+    internal_name = "coop"
+    display_name = "Coop"
     option_off = 0
     option_progression = 1
     option_prog_useful = 2
@@ -678,26 +680,42 @@ class Goal(OptionSet):
         "Djinn Hunt",
         "Summon Hunt",
     }
+    internal_name = "goal"
+    display_name = "Goal"
     default = {"Doom Dragon"}
 
 class RandomGoals(Range):
     """From the goals configured in "goals", pick the configured number of the goals randomly.
     0 disables random picking, and all the configured goals are selected."""
+    internal_name = "random_goals"
+    display_name = "Random Goals Count"
     range_start = 0
     range_end = 17
     default = 0
 
 class DjinnHuntCount(Range):
     """How many djinn you need to obtain in order to satisfy the Djinn Hunt Objective"""
+    internal_name = "djinn_hunt_count"
+    display_name = "Djinn Hunt Count"
     range_start = 1
     range_end = 72
     default = 56
 
 class SummonHuntCount(Range):
     """How many summons you need to obtain in order to satisfy the Summon Hunt Objective"""
+    internal_name = "summon_hunt_count"
+    display_name = "Summon Hunt Count"
     range_start = 1
     range_end = 13
     default = 10
+
+class DisableShopGameTickets(Toggle):
+    """Disable Shopkeepers offering Game Tickets, in Vanilla this is the main way to get game tickets. 
+    In the randomizer they and/or their rewards may show up as part of the item pool (see common_consumable_filler_weight and lucky_equipment_filler_weight options).
+    Note disabling this setting will make shop interactions take longer each time a game ticket is offered."""
+    internal_name = "disable_shop_gametickets"
+    display_name = "Disable Shopkeeper Gametickets"
+    default = 1
 
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
@@ -782,6 +800,7 @@ class GSTLAOptions(PerGameCommonOptions):
     teleport_to_dungeons_and_towns: TelportEverywhere
     auto_run: AutoRun
     coop: Coop
+    disable_shop_gametickets: DisableShopGameTickets
     
     start_inventory_from_pool: StartInventoryPool
 
@@ -797,7 +816,7 @@ class GSTLAOptions(PerGameCommonOptions):
     stat_boost_filler_weight: StatBoostFillerWeight
     uncommon_consumable_filler_weight: UncommonConsumableFillerWeight
     forged_equipment_filler_weight: ForgedEquipmentFillerWeight
-    lucky_equipment_filler_weight: LuckyFountainEquipmentFillerWeight
+    lucky_equipment_filler_weight: LuckyEquipmentFillerWeight
     artifacts_are_filler: ArtifactsAreFiller
     shop_equipment_filler_weight: ShopEquipmentFillerWeight
     coins_filler_weight: CoinsFillerWeight

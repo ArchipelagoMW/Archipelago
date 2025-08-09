@@ -251,6 +251,23 @@ class GameData:
             387, # Crown of Glory
             395, # Brilliant Circlet
         }
+        self.lucky_wheels_ids: Set[int] = {
+            181, # Nut
+            182, # Vial
+            183, # Potion
+            188, # Elixer
+            186, # Psy Crystal
+            189, # Water of Life
+            258, # Fur Boots
+            257, # Quick Boots
+            256, # Hyper Boots
+            252, # Running Shirt
+            251, # Silk Shirt
+            250, # Mythril Shirt
+            264, #Sleep Ring
+            263, # War Ring
+            262, # Adept Ring
+        }
         self._load_locations()
         self._load_items()
         self._load_shop_data()
