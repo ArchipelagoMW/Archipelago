@@ -4,7 +4,7 @@ import itertools
 from typing import List, Dict, Any, cast
 
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
-from worlds.AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld, FillerReason
 from . import items
 from . import locations
 from . import creatures
@@ -139,7 +139,7 @@ class SubnauticaWorld(World):
 
         # resource bundle filler
         for _ in range(extras):
-            item = self.create_filler()
+            item = self.create_filler(FillerReason.world)
             item = cast(SubnauticaItem, item)
             pool.append(item)
 
