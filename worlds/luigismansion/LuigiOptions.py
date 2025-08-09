@@ -656,6 +656,14 @@ class GhostTrapWeight(Range):
     range_end = 100
     default = 15
 
+class CallMario(Toggle):
+    """
+    Let everyone know you're looking for Mario in teh client!
+    (CAUTION: THIS CAN EASILY SPAM THE CLIENT WITH MESSAGES)
+    """
+    display_name = "Press A to Mario"
+    internal_name = "call_mario"
+
 class DoorModelRando(Toggle):
     """
     Randomly choose models for every door in the mansion.
@@ -717,6 +725,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     extra_boo_spots: ExtraBooSpots
     chest_types: ChestTypes
     trap_chests: TrapChestType
+    call_mario: CallMario
     trap_link: TrapLink
     energy_link: EnergyLink
     trap_percentage: TrapPercentage
