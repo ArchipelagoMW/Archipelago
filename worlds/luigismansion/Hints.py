@@ -89,7 +89,10 @@ def get_hints_by_option(multiworld: MultiWorld, player_hints: set[int]) -> None:
                     icolor = "Trap"
                 else:
                     icolor = "Other"
-                hint = {name: {"Item": loc.item.name,
+                item_name: str = loc.item.name
+                if loc.player in world.multiworld.groups:
+                    loc: Location = world.random.choice(world.multiworld.find_item_locations(item_name, loc.player, True))
+                hint = {name: {"Item": item_name,
                                "Location": loc.name,
                                "Rec Player": multiworld.player_name[loc.item.player],
                                "Send Player": multiworld.player_name[loc.player],
