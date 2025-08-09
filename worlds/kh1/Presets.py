@@ -39,9 +39,9 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "puppies": Puppies.option_triplets,
         "starting_worlds": 0,
-        "interact_in_battle": False,
+        "interact_in_battle": True,
         "advanced_logic": False,
-        "extra_shared_abilities": False,
+        "extra_shared_abilities": True,
         "exp_zero_in_pool": False,
         "donald_death_link": False,
         "goofy_death_link": False
@@ -82,9 +82,9 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "puppies": Puppies.option_individual,
         "starting_worlds": 0,
-        "interact_in_battle": False,
+        "interact_in_battle": True,
         "advanced_logic": False,
-        "extra_shared_abilities": False,
+        "extra_shared_abilities": True,
         "exp_zero_in_pool": False,
         "donald_death_link": False,
         "goofy_death_link": False
@@ -167,9 +167,9 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "puppies": Puppies.option_triplets,
         "starting_worlds": 0,
-        "interact_in_battle": False,
+        "interact_in_battle": True,
         "advanced_logic": False,
-        "extra_shared_abilities": False,
+        "extra_shared_abilities": True,
         "exp_zero_in_pool": False,
         "donald_death_link": False,
         "goofy_death_link": False
