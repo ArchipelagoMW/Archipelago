@@ -202,7 +202,7 @@ contents of this file may help you troubleshoot an issue on your own and is vita
 in Archipelago.
 
 ## Additional Resources
-- Alterntae Tutorial by [Skid-Inc Gaming: [16x9] Archipelago, Ep00: Setup](www.youtube.com/watch?v=_h5sXyuB9jA)
+- Alternate Tutorial by [Skid-Inc Gaming: [16x9] Archipelago, Ep00: Setup](www.youtube.com/watch?v=_h5sXyuB9jA)
 - Alternate Tutorial by
   Umenen: [Factorio (Steam) Archipelago Setup Guide for Windows](https://docs.google.com/document/d/1yZPAaXB-QcetD8FJsmsFrenAHO5V6Y2ctMAyIoT9jS4)
 - Factorio Speedrun Guide: [Factorio Speedrun Guide by Nefrums](https://www.youtube.com/watch?v=ExLrmK1c7tA)
