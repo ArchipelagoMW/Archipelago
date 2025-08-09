@@ -623,6 +623,8 @@ class Coop(Choice):
      prog_useful - Progression and useful items are treated as remote items
      all - All items are treated as remote items
      """
+    internal_name = "coop"
+    display_name = "Coop"
     option_off = 0
     option_progression = 1
     option_prog_useful = 2
@@ -678,26 +680,42 @@ class Goal(OptionSet):
         "Djinn Hunt",
         "Summon Hunt",
     }
+    internal_name = "goal"
+    display_name = "Goal"
     default = {"Doom Dragon"}
 
 class RandomGoals(Range):
     """From the goals configured in "goals", pick the configured number of the goals randomly.
     0 disables random picking, and all the configured goals are selected."""
+    internal_name = "random_goals"
+    display_name = "Random Goals Count"
     range_start = 0
     range_end = 17
     default = 0
 
 class DjinnHuntCount(Range):
     """How many djinn you need to obtain in order to satisfy the Djinn Hunt Objective"""
+    internal_name = "djinn_hunt_count"
+    display_name = "Djinn Hunt Count"
     range_start = 1
     range_end = 72
     default = 56
 
 class SummonHuntCount(Range):
     """How many summons you need to obtain in order to satisfy the Summon Hunt Objective"""
+    internal_name = "summon_hunt_count"
+    display_name = "Summon Hunt Count"
     range_start = 1
     range_end = 13
     default = 10
+
+class DisableShopGameTickets(Toggle):
+    """Disable Shopkeepers offering Game Tickets, in Vanilla this is the main way to get game tickets. 
+    In the randomizer they and/or their rewards may show up as part of the item pool (see common_consumable_filler_weight and lucky_equipment_filler_weight options).
+    Note disabling this setting will make shop interactions take longer each time a game ticket is offered."""
+    internal_name = "disable_shop_gametickets"
+    display_name = "Disable Shopkeeper Gametickets"
+    default = 1
 
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
@@ -782,6 +800,7 @@ class GSTLAOptions(PerGameCommonOptions):
     teleport_to_dungeons_and_towns: TelportEverywhere
     auto_run: AutoRun
     coop: Coop
+    disable_shop_gametickets: DisableShopGameTickets
     
     start_inventory_from_pool: StartInventoryPool
 

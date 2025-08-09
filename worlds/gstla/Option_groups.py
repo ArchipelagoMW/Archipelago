@@ -15,7 +15,8 @@ from .Options import (ItemShuffle, RevealHiddenItem, OmitLocations, AddGs1Items,
                       RustyMaterialsFillerWeight, StatBoostFillerWeight, UncommonConsumableFillerWeight,
                       ForgedEquipmentFillerWeight, LuckyEquipmentFillerWeight, ShopEquipmentFillerWeight,
                       CoinsFillerWeight, CommonConsumablesFillerWeight, AutoRun, ScaleMimics, ScaleCharacters,
-                      MaxScaledLevel, ForgeMaterialsAreFiller, ArtifactsAreFiller)
+                      MaxScaledLevel, ForgeMaterialsAreFiller, ArtifactsAreFiller, DisableShopGameTickets,
+                      Goal, RandomGoals, DjinnHuntCount, SummonHuntCount)
 
 from Options import OptionGroup
 
@@ -26,6 +27,12 @@ gstla_option_groups = [
         OmitLocations,
         AddGs1Items,
         AddDummyItems
+    ]),
+    OptionGroup("Goal", [
+        Goal,
+        RandomGoals,
+        DjinnHuntCount,
+        SummonHuntCount
     ]),
     OptionGroup("Logic Adjustments", [
         RevealHiddenItem,
@@ -93,6 +100,7 @@ gstla_option_groups = [
         VisibleItems,
         MusicShuffle,
         AutoRun,
+        DisableShopGameTickets,
     ]),
     OptionGroup("Trap and Filler Distribution", [
         ForgeMaterialsAreFiller,

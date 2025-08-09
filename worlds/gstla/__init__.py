@@ -518,8 +518,8 @@ class GSTLAWorld(World):
         debug_file.write('Class Levels: ' + self.options.psynergy_levels.name_lookup[self.options.psynergy_levels] + '\n')
         write_me += 1 << 2 #qol-cutscenes
         debug_file.write('QoL Cutscenes: true\n')
-        write_me += 1 << 1 #qol-tickets
-        debug_file.write('QoL Tickets: true\n')
+        write_me += self.options.disable_shop_gametickets << 1 #qol-tickets
+        debug_file.write('QoL Tickets: ' + self.options.disable_shop_gametickets.name_lookup[self.options.disable_shop_gametickets] + '\n')
         write_me += 1 #qol-fastship
         debug_file.write('QoL Fastship: true\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
