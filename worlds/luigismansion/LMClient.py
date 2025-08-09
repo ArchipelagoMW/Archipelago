@@ -35,8 +35,8 @@ CONNECTION_CONNECTED_STATUS = "Dolphin is connected, AP is connected, Ready to p
 
 # This is the address that holds the player's slot name.
 # This way, the player does not have to manually authenticate their slot name.
-SLOT_NAME_ADDR = 0x80314660
-SLOT_NAME_STR_LENGTH = 16
+SLOT_NAME_ADDR = 0x80327740
+SLOT_NAME_STR_LENGTH = 64
 
 # This Play State address lets us know if the game is playable and ready. This should have a value of 2
 # Map ID is used to confirm Luigi is loading into the Mansion or one of the boss maps.

@@ -6,8 +6,10 @@ from gclib.dol import DOL, DOLSection
 from gclib.gcm import GCM
 
 from ..Regions import spawn_locations
+from ..Helper_Functions import StringByteFunction as sbf
 
 CUSTOM_CODE_OFFSET_START = 0x39FA20
+LM_PLAYER_NAME_BYTE_LENGTH = 64
 
 # Updates the main DOL file, which is the main file used for GC and Wii games. This section includes some custom code
 # inside the DOL file itself.
@@ -26,7 +28,7 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac
     dol.data.seek(0x396538)
     dol.data.write(struct.pack(">H", speed_to_use))
 
-    # Vacuum Speed TODO Change to support all speeds or remove?
+    # Vacuum Speed
     vac_count = 2 if (extra_vac and start_vac) else (1 if (extra_vac or start_vac) else 0)
     vac_count += len(list("Progressive Vacuum" in key for key in start_inv))
     match vac_count:
@@ -92,8 +94,8 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac
 
     # Store Player name
     lm_player_name = str(slot_name).strip()
-    dol.data.seek(0x311660)
-    dol.data.write(struct.pack(str(len(lm_player_name)) + "s", lm_player_name.encode()))
+    dol.data.seek(0x324740)
+    dol.data.write(sbf.string_to_bytes_with_limit(lm_player_name, LM_PLAYER_NAME_BYTE_LENGTH))
 
     # Change King Boo's Health
     dol.data.seek(0x399228)
