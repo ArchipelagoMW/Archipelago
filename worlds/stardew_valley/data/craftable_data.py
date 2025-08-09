@@ -292,7 +292,7 @@ drum_block = cutscene_recipe(Furniture.drum_block, Region.carpenter, NPC.robin, 
 chest = starter_recipe(Storage.chest, {Material.wood: 50})
 stone_chest = special_order_recipe(Storage.stone_chest, SpecialOrder.robins_resource_rush, {Material.stone: 50})
 big_chest = shop_recipe(Storage.big_chest, Region.carpenter, 5000, {Material.wood: 120, MetalBar.copper: 2})
-big_stone_chest = shop_with_known_recipe_recipe(Storage.big_stone_chest, LogicRegion.mines_dwarf_shop, 5000, Storage.big_chest, {Material.stone: 250})
+big_stone_chest = shop_with_known_recipe_recipe(Storage.big_stone_chest, LogicRegion.mines_dwarf_shop, 5000, Storage.stone_chest, {Material.stone: 250})
 
 wood_sign = starter_recipe(Sign.wood, {Material.wood: 25})
 stone_sign = starter_recipe(Sign.stone, {Material.stone: 25})
