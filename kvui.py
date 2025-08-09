@@ -116,7 +116,7 @@ class ImageButton(MDIconButton):
             val = kwargs.pop(kwarg, "None")
             if val != "None":
                 image_args[kwarg.replace("image_", "")] = val
-        super().__init__()
+        super().__init__(**kwargs)
         self.image = ApAsyncImage(**image_args)
 
         def set_center(button, center):
@@ -132,6 +132,7 @@ class ImageButton(MDIconButton):
 
 class ScrollBox(MDScrollView):
     layout: MDBoxLayout = ObjectProperty(None)
+    box_height: int = NumericProperty(dp(100))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -142,6 +143,7 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
     def __init__(self, *args, **kwargs):
         super(ToggleButton, self).__init__(*args, **kwargs)
         self.bind(state=self._update_bg)
+        self._update_bg(self, self.state)
 
     def _update_bg(self, _, state: str):
         if self.disabled:
@@ -159,7 +161,7 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
                 child.text_color = self.theme_cls.onPrimaryColor
                 child.icon_color = self.theme_cls.onPrimaryColor
         else:
-            self.md_bg_color = self.theme_cls.surfaceContainerLowestColor
+            self.md_bg_color = self.theme_cls.surfaceContainerLowColor
             for child in self.children:
                 if child.theme_text_color == "Primary":
                     child.theme_text_color = "Custom"
@@ -173,7 +175,6 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
 class ResizableTextField(MDTextField):
     """
     Resizable MDTextField that manually overrides the builtin sizing.
-
     Note that in order to use this, the sizing must be specified from within a .kv rule.
     """
     def __init__(self, *args, **kwargs):
@@ -237,7 +238,7 @@ Factory.register("HoverBehavior", HoverBehavior)
 
 
 class ToolTip(MDTooltipPlain):
-    pass
+    markup = True
 
 
 class ServerToolTip(ToolTip):
@@ -272,6 +273,8 @@ class TooltipLabel(HovererableLabel, MDTooltip):
     def on_mouse_pos(self, window, pos):
         if not self.get_root_window():
             return  # Abort if not displayed
+        if self.disabled:
+            return
         super().on_mouse_pos(window, pos)
         if self.refs and self.hovered:
 
