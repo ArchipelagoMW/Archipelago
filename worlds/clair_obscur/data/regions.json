@@ -978,37 +978,88 @@
         "locations": [
             "Endless Tower: Stage 1-1",
             "Endless Tower: Stage 1-2",
-            "Endless Tower: Stage 1-3",
-            "Endless Tower: Stage 10-1",
-            "Endless Tower: Stage 10-2",
-            "Endless Tower: Stage 10-3",
-            "Endless Tower: Stage 11-1",
-            "Endless Tower: Stage 11-2",
-            "Endless Tower: Stage 11-3",
+            "Endless Tower: Stage 1-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 2",
+        "locations": [
             "Endless Tower: Stage 2-1",
             "Endless Tower: Stage 2-2",
-            "Endless Tower: Stage 2-3",
+            "Endless Tower: Stage 2-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 3",
+        "locations": [
             "Endless Tower: Stage 3-1",
             "Endless Tower: Stage 3-2",
-            "Endless Tower: Stage 3-3",
+            "Endless Tower: Stage 3-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 4",
+        "locations": [
             "Endless Tower: Stage 4-1",
             "Endless Tower: Stage 4-2",
-            "Endless Tower: Stage 4-3",
+            "Endless Tower: Stage 4-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 5",
+        "locations": [
             "Endless Tower: Stage 5-1",
             "Endless Tower: Stage 5-2",
-            "Endless Tower: Stage 5-3",
+            "Endless Tower: Stage 5-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 6",
+        "locations": [
             "Endless Tower: Stage 6-1",
             "Endless Tower: Stage 6-2",
-            "Endless Tower: Stage 6-3",
+            "Endless Tower: Stage 6-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 7",
+        "locations": [
             "Endless Tower: Stage 7-1",
             "Endless Tower: Stage 7-2",
-            "Endless Tower: Stage 7-3",
+            "Endless Tower: Stage 7-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 8",
+        "locations": [
             "Endless Tower: Stage 8-1",
             "Endless Tower: Stage 8-2",
-            "Endless Tower: Stage 8-3",
+            "Endless Tower: Stage 8-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 9",
+        "locations": [
             "Endless Tower: Stage 9-1",
             "Endless Tower: Stage 9-2",
             "Endless Tower: Stage 9-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 10",
+        "locations": [
+            "Endless Tower: Stage 10-1",
+            "Endless Tower: Stage 10-2",
+            "Endless Tower: Stage 10-3"
+        ]
+    },
+    {
+        "region_name": "Endless Tower Stage 11",
+        "locations": [
+
+            "Endless Tower: Stage 11-1",
+            "Endless Tower: Stage 11-2",
+            "Endless Tower: Stage 11-3"
         ]
     },
     {

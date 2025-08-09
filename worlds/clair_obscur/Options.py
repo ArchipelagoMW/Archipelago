@@ -30,13 +30,33 @@ class ExcludeLocations(Choice):
     option_both = 3
     default = 3
 
-class ShuffleLostGestrals:
+class ShuffleLostGestrals(Choice):
+    """
+    Unimplemented
+    Shuffles the lost gestrals and/or their rewards into the pool as items and locations.
+    """
     internal_name = "shuffle_lost_gestrals"
     display_name = "Shuffle Lost Gestrals"
     option_false = 0
     option_gestrals = 1
     option_rewards = 2
     option_both = 3
+
+class AreaLogic(Choice):
+    """
+    Unimplemented
+    Determines how many major area unlock items will be placed how early.
+    Normal: Act 1 major areas won't be placed past Act 1; Forgotten Battlefield and Old Lumiere won't be placed behind
+    Visages/Sirene; Visages and Sirene won't be placed behind The Monolith.
+    Hard: Only half of the major areas will be placed in those segments.
+    No Logic: Areas could be anywhere. You may need to grind world map enemies for a long time.
+    """
+    internal_name = "area_logic"
+    display_name = "Area Logic"
+    option_normal = 0
+    option_hard = 1
+    option_no_logic = 2
+    default = 0
 
 class ClairObscurStartInventory(StartInventory):
     """

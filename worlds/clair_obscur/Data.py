@@ -31,13 +31,13 @@ class ClairObscurRegionConnection:
     origin_region: str
     destination_region: str
     condition: {}
-    pictos_required: int
+    pictos_level: int
 
     def __init__(self, cond: {}, origin: str, destination: str, pictos: int):
         self.origin_region = origin
         self.destination_region = destination
         self.condition = cond if cond is not None else {}
-        self.pictos_required = pictos if pictos is not None else 1
+        self.pictos_level = pictos if pictos is not None else 1
 
 class ClairObscurData:
     items: Dict[int, ClairObscurItemData]
@@ -136,7 +136,7 @@ def populate_data_connections() -> List[ClairObscurRegionConnection]:
         conn_from = conn["from"]
         conn_to = conn["to"]
         conn_condition = conn["condition"]
-        conn_pictos = int(conn["pictos"])
+        conn_pictos = int(conn["pictos_level"])
 
         new_connection = ClairObscurRegionConnection(
             conn_condition,
