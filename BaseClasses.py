@@ -1518,7 +1518,7 @@ class Location:
     @property
     def is_event(self) -> bool:
         """Returns True if the address of this location is None, denoting it is an Event Location."""
-        return self.address is None
+        return type(self.address) is not int
 
     @property
     def native_item(self) -> bool:
