@@ -26,9 +26,6 @@ def set_rules(world):
     major_connection_1 = world.get_entrance("WM: First Continent South -> WM: South Sea", player)
     major_connection_2 = world.get_entrance("WM: South Sea -> WM: North Sea", player)
 
-
-    #connection access: direct area tickets
-
     #paint break reqs
 
     #broad transition reqs: FCS -> SS, SS -> NS
