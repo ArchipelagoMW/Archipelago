@@ -13,7 +13,7 @@
   </div>
   <div id="player-tracker" data-tracker="{{ room.tracker|suuid }}">
     <div id="player-info">
-      <h1>{{ player_name }}&apos;s Starcraft 2 Tracker{{' - Finished' if game_finished}}</h3>
+      <h1>{{ player_name }}&apos;s Starcraft 2 Tracker{{' - Finished' if game_finished}}</h1>
     </div>
     <div id="filler-items" class="tracker-section">
       <div class="section-title">
@@ -1040,7 +1040,7 @@
             <img id="Centrifugal Hooks (Baneling)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-zerg-centrifugalhooks.png" title="Centrifugal Hooks (Baneling)&#10;Increases the movement speed of Banelings." class="{{'acquired' if inventory[2231] > 0}}">
             <img id="Corrosive Acid (Baneling)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-zerg-corrosiveacid.png" title="Corrosive Acid (Baneling)&#10;Increases the damage banelings deal to their primary target. Splash damage remains the same." class="{{'acquired' if inventory[2209] > 0}}">
             <img id="Hunter Strain (Baneling)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-unit-zerg-baneling-hunter.png" title="Hunter Strain (Baneling)&#10;Allows Banelings to jump up and down cliffs and leap onto enemies." class="{{'acquired' if inventory[2307] > 0}}">
-            <img id="Rapid Metamorph (Baneling)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-rapid-metamorph.png" title="Rapid Metamorph (Baneling)&#10;Banelings morph faster." class="{{'acquired' if inventory[2233] > 0}}">
+            <img id="Rapid Metamorph (Baneling)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-rapid-metamorph.png" title="Rapid Metamorph (Baneling)&#10;Banelings morph faster and no longer cost vespene gas to morph." class="{{'acquired' if inventory[2233] > 0}}">
             <img id="Regenerative Acid (Baneling)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-zerg-regenerativebile.png" title="Regenerative Acid (Baneling)&#10;Banelings will heal nearby friendly units when they explode." class="{{'acquired' if inventory[2211] > 0}}">
             <img id="Rupture (Baneling)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-zerg-rupture.png" title="Rupture (Baneling)&#10;Increases the splash radius of baneling attacks." class="{{'acquired' if inventory[2210] > 0}}">
             <img id="Splitter Strain (Baneling)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/talent-zagara-level14-unlocksplitterling.png" title="Splitter Strain (Baneling)&#10;Banelings will split into two smaller Splitterlings on exploding." class="{{'acquired' if inventory[2306] > 0}}">
@@ -1283,6 +1283,9 @@
           </div>
         </div>
         <div id="class-zerg-worm" class="item-class ss-5">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="Jormungandr Strain (Nydus Worm/Echidna Worm)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-zerg-enduringcorruption.png" title="Jormungandr Strain (Nydus Worm/Echidna Worm)&#10;Removes emerge time for Nydus Worm and Echidna Worm, and allows them to be salvaged to return the resources spent on them." class="{{'acquired' if inventory[2355] > 0}}">
             <img id="Resource Efficiency (Nydus Worm/Echidna Worm)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-ability-hornerhan-salvagebonus.png" title="Resource Efficiency (Nydus Worm/Echidna Worm)&#10;Reduces Nydus Worm and Echidna Worm cost by 50 minerals and 75 gas." class="{{'acquired' if inventory[2356] > 0}}">
@@ -1439,6 +1442,9 @@
           </div>
         </div>
         <div id="class-zealot-tier" class="item-class ss-1">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="Leg Enhancements (Zealot/Sentinel/Centurion)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-ability-protoss-lightningdash.png" title="Leg Enhancements (Zealot/Sentinel/Centurion)&#10;Zealots, Sentinels, and Centurions gain increased movement speed." class="{{'acquired' if inventory[3376] > 0}}">
             <img id="Shield Capacity (Zealot/Sentinel/Centurion)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-shield-capacity.png" title="Shield Capacity (Zealot/Sentinel/Centurion)&#10;Zealots, Sentinels, and Centurions gain +30 maximum shields." class="{{'acquired' if inventory[3377] > 0}}">
@@ -1483,6 +1489,9 @@
           </div>
         </div>
         <div id="class-stalker-tier" class="item-class ss-1">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="Disintegrating Particles (Stalker/Instigator/Slayer)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-disintegrating-particles.png" title="Disintegrating Particles (Stalker/Instigator/Slayer)&#10;Increases weapon damage of Stalkers, Instigators, and Slayers." class="{{'acquired' if inventory[3306] > 0}}">
             <img id="Particle Reflection (Stalker/Instigator/Slayer)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-protoss-fenix-adeptchampionbounceattack.png" title="Particle Reflection (Stalker/Instigator/Slayer)&#10;Attacks fired by Stalkers, Instigators, and Slayers have a chance to bounce to additional targets for reduced damage." class="{{'acquired' if inventory[3307] > 0}}">
@@ -1519,6 +1528,9 @@
           </div>
         </div>
         <div id="class-sentry-tier" class="item-class ss-1">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="Cloaking Module (Sentry/Energizer/Havoc)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-protoss-alarak-permanentcloak.png" title="Cloaking Module (Sentry/Energizer/Havoc)&#10;Sentries, Energizers, and Havocs become permanently cloaked." class="{{'acquired' if inventory[3368] > 0}}">
             <img id="Rapid Recharging (Sentry/Energizer/Havoc/Shield Battery)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-karax-energyregen200.png" title="Rapid Recharging (Sentry/Energizer/Havoc/Shield Battery)&#10;Sentries, Energizers, and Havocs gain +100% energy regeneration rate." class="{{'acquired' if inventory[3369] > 0}}">
@@ -1576,6 +1588,9 @@
           </div>
         </div>
         <div id="class-high-templar-tier" class="item-class ss-1">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="Hallucination (High Templar/Signifier)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-ability-protoss-hallucination-color.png" title="Hallucination (High Templar/Signifier)&#10;High Templar and Signifiers gain the Hallucination ability, &#10;which creates 2 hallucinated copies of a target unit." class="{{'acquired' if inventory[3359] > 0}}">
             <img id="Khaydarin Amulet (High Templar/Signifier)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-protoss-khaydarinamulet.png" title="Khaydarin Amulet (High Templar/Signifier)&#10;High Templar and Signifiers gain +150 starting energy and +50 maximum energy." class="{{'acquired' if inventory[3360] > 0}}">
@@ -1583,6 +1598,9 @@
           </div>
         </div>
         <div id="class-archon" class="item-class ss-1">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="High Archon (Archon)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-unit-protoss-archon-upgraded.png" title="High Archon (Archon)&#10;Archons can use High Templar abilities." class="{{'acquired' if inventory[3361] > 0}}">
             <img id="Transcendence (Archon)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-ability-protoss-astralwind.png" title="Transcendence (Archon)&#10;Archons can float in the air. Can traverse cliffs and phase through most units. Increases Archon attack range by 1." class="{{'acquired' if inventory[3391] > 0}}">
@@ -1630,6 +1648,9 @@
           </div>
         </div>
         <div id="class-dark-templar-tier" class="item-class ss-1">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="Blink (Dark Templar/Avenger/Blood Hunter)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-ability-protoss-shadowdash.png" title="Blink (Dark Templar/Avenger/Blood Hunter)&#10;Dark Templar, Avengers, and Blood Hunters gain the Blink ability." class="{{'acquired' if inventory[3355] > 0}}">
             <img id="Resource Efficiency (Dark Templar/Avenger/Blood Hunter)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-ability-hornerhan-salvagebonus.png" title="Resource Efficiency (Dark Templar/Avenger/Blood Hunter)&#10;Reduces Dark Templar, Avenger, and Blood Hunter cost by 50 gas." class="{{'acquired' if inventory[3356] > 0}}">
@@ -1657,6 +1678,9 @@
           </div>
         </div>
         <div id="class-immortal-tier" class="item-class ss-2">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="Advanced Targeting (Immortal/Annihilator)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-advanced-targeting.png" title="Advanced Targeting (Immortal/Annihilator)&#10;Immortals and Annihilators can attack air units." class="{{'acquired' if inventory[3349] > 0}}">
             <img id="Disruptor Dispersion (Immortal/Annihilator)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-disruptor-dispersion.png" title="Disruptor Dispersion (Immortal/Annihilator)&#10;Immortals and Annihilators deal minor splash damage." class="{{'acquired' if inventory[3380] > 0}}">
@@ -1778,6 +1802,9 @@
           </div>
         </div>
         <div id="class-phoenix-tier" class="item-class ss-3">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="Anion Pulse-Crystals (Phoenix/Mirage/Skirmisher)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-protoss-phoenixrange.png" title="Anion Pulse-Crystals (Phoenix/Mirage/Skirmisher)&#10;Increases Phoenix, Mirage, and Skirmiser range by +2." class="{{'acquired' if inventory[3320] > 0}}">
             <img id="Ionic Wavelength Flux (Phoenix/Mirage/Skirmisher)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-iconic-wavelength-flux.png" title="Ionic Wavelength Flux (Phoenix/Mirage/Skirmisher)&#10;Increases Phoenix, Mirage, and Skirmisher weapon damage by +2." class="{{'acquired' if inventory[3319] > 0}}">
@@ -1833,6 +1860,9 @@
           </div>
         </div>
         <div id="class-void-ray-tier" class="item-class ss-3">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="Flux Vanes (Void Ray/Destroyer/Pulsar/Dawnbringer)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-protoss-fluxvanes.png" title="Flux Vanes (Void Ray/Destroyer/Pulsar/Dawnbringer)&#10;Increases movement speed of Void Ray variants." class="{{'acquired' if inventory[3335] > 0}}">
           </div>
@@ -1880,6 +1910,9 @@
           </div>
         </div>
         <div id="class-scout-tier" class="item-class ss-3">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="Advanced Photon Blasters (Scout/Oppressor/Mist Wing)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-advanced-photon-blasters.png" title="Advanced Photon Blasters (Scout/Oppressor/Mist Wing)&#10;Scouts, Oppressors and Mist Wings gain increased damage against ground targets." class="{{'acquired' if inventory[3315] > 0}}">
             <img id="Combat Sensor Array (Scout/Oppressor/Caladrius/Mist Wing)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-protoss-fenix-scoutchampionrange.png" title="Combat Sensor Array (Scout/Oppressor/Caladrius/Mist Wing)&#10;All Scout variants gain increased range against air and ground." class="{{'acquired' if inventory[3312] > 0}}">
@@ -1911,6 +1944,9 @@
           </div>
         </div>
         <div id="class-carrier-tier" class="item-class ss-3">
+          <div class="item-class-header">
+            <div class="spacer"></div>
+          </div>
           <div class="item-class-upgrades">
             <img id="Hull of Past Glories (Carrier/Skylord/Trireme)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/original/btn-hull-of-past-glories.png" title="Hull of Past Glories (Carrier/Skylord/Trireme)&#10;Carrier-class ships gain +2 armor." class="{{'acquired' if inventory[3334] > 0}}">
             <img id="Graviton Catapult (Carrier/Trireme)" src="https://matthewmarinets.github.io/ap_sc2_icons/icons/blizzard/btn-upgrade-protoss-gravitoncatapult.png" title="Graviton Catapult (Carrier/Trireme)&#10;Carriers and Triremes can launch Interceptors and Bombers more quickly." class="{{'acquired' if inventory[3333] > 0}}">

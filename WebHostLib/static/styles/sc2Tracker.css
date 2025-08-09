@@ -89,6 +89,10 @@ input[type="checkbox"]{
 .item-counter img{
   filter: none;
 }
+.spacer{
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
 
 /* Item groups */
 .item-class{
