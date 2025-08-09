@@ -49,7 +49,7 @@ screw_you_items = [tea_set, ostrich_egg.as_quality(AnimalProductQuality.iridium)
 screw_you_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.screw_you, screw_you_items, 4, 4)
 
 sunmaid_items = [raisins.as_amount(28)]
-sunmaid_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.sunmaid, sunmaid_items, 2, 2)
+sunmaid_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.sunmaid, sunmaid_items, 1, 1)
 
 rick_items = [pickles]
 rick_bundle = FixedPriceBundleTemplate(CCRoom.boiler_room, MemeBundleName.rick, rick_items, 1, 1)
