@@ -139,8 +139,8 @@ grinch_locations = {
         #Grinch Copter Blueprints
         "GC Blueprint - Whoville City Hall - Safe Room": GrinchLocationData("City Hall", "Grinch Copter Blueprints", 1200, [GrinchRamData(0x01021F, binary_bit_pos=7)]),
         "GC Blueprint - Whoville City Hall - Statue Room": GrinchLocationData("City Hall", "Grinch Copter Blueprints", 1201, [GrinchRamData(0x010220, binary_bit_pos=0)]),
-        "GC Blueprint - Whoville Clock Tower - Before Bells": GrinchLocationData("Countdown to X-Mas Clock Tower", "Grinch Copter Blueprints", 1202, [GrinchRamData(0x010265, binary_bit_pos=3)]),
-        "GC Blueprint - Whoville Clock Tower - After Bells": GrinchLocationData("Countdown to X-Mas Clock Tower", "Grinch Copter Blueprints", 1203, [GrinchRamData(0x010265, binary_bit_pos=2)]),
+        "GC Blueprint - Whoville Clock Tower - Before Bells": GrinchLocationData("Countdown to X-Mas Clock Tower", "Grinch Copter Blueprints", 1202, [GrinchRamData(0x010216, binary_bit_pos=3)]),
+        "GC Blueprint - Whoville Clock Tower - After Bells": GrinchLocationData("Countdown to X-Mas Clock Tower", "Grinch Copter Blueprints", 1203, [GrinchRamData(0x010216, binary_bit_pos=2)]),
         "GC Blueprint - Who Forest Ski Resort - Inside Dog's Fence": GrinchLocationData("Ski Resort", "Grinch Copter Blueprints", 1204, [GrinchRamData(0x010234, binary_bit_pos=7)]),
         "GC Blueprint - Who Forest Ski Resort - Max Cave": GrinchLocationData("Ski Resort", "Grinch Copter Blueprints", 1205, [GrinchRamData(0x010234, binary_bit_pos=6)]),
         "GC Blueprint - Who Forest Civic Center - Climb across Bat Cave wall": GrinchLocationData("Civic Center", "Grinch Copter Blueprints", 1206, [GrinchRamData(0x01022A, binary_bit_pos=7)]),
