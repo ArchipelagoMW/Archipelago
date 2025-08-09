@@ -106,8 +106,8 @@ BOO_FINAL_FLAG_BIT = 5
 
 # Handles when Luigi says "Mario" in game.
 LUIGI_SHOUT_ADDR = 0x804EB558
-LUIGI_SHOUT_DURATION = 4 # Time in seconds of how long the mario shout lasts.
-LUIGI_SHOUT_RAMVALUE = "BCB84ED4"
+LUIGI_SHOUT_DURATION = 3 # Time in seconds of how long the mario shout lasts.
+LUIGI_SHOUT_RAMVALUE = 0xBCB84ED4
 
 
 def read_short(console_address: int):
@@ -361,7 +361,7 @@ class LMContext(CommonContext):
 
         # We are checking for a string that starts with v contains any amount of digits followed by a period
         # repeating three times (e.x. v0.2.11)
-        match = re.search("v\d+.(\d+).(\d+)", UT_VERSION)
+        match = re.search(r"v\d+.(\d+).(\d+)", UT_VERSION)
         if len(match.groups()) < 2:
             return False
         if int(match.groups()[0]) < 2:
@@ -786,13 +786,13 @@ class LMContext(CommonContext):
                 boo_val = dme.read_byte(BOO_FINAL_FLAG_ADDR)
                 dme.write_byte(BOO_FINAL_FLAG_ADDR, (boo_val | (1 << BOO_FINAL_FLAG_BIT)))
 
-            if self.call_mario:
-                # Prevents the console from receiving the same message over and over.
-                if not self.yelling_in_client:
-                    luigi_shouting = dme.read_bytes(LUIGI_SHOUT_ADDR, 4)
-                    if luigi_shouting == bytes.fromhex(LUIGI_SHOUT_RAMVALUE):
-                        self.yelling_in_client = True
-                        Utils.async_start(self.yell_in_client(), name="Luigi Is Yelling")
+        if self.call_mario:
+            # Prevents the console from receiving the same message over and over.
+            if not self.yelling_in_client:
+                luigi_shouting = dme.read_word(LUIGI_SHOUT_ADDR)
+                if luigi_shouting == LUIGI_SHOUT_RAMVALUE:
+                    self.yelling_in_client = True
+                    Utils.async_start(self.yell_in_client(), name="Luigi Is Yelling")
         return
 
     async def yell_in_client(self) -> None:
