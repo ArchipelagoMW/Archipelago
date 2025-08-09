@@ -119,11 +119,23 @@ class MuseDashWorld(World):
         start_items = self.options.start_inventory.value.keys()
         include_songs = self.options.include_songs.value
         exclude_songs = self.options.exclude_songs.value
+        chosen_goal_songs = sorted(self.options.goal_song)
 
         self.starting_songs = [s for s in start_items if s in song_items]
         self.starting_songs = self.md_collection.filter_songs_to_dlc(self.starting_songs, dlc_songs)
         self.included_songs = [s for s in include_songs if s in song_items and s not in self.starting_songs]
         self.included_songs = self.md_collection.filter_songs_to_dlc(self.included_songs, dlc_songs)
+
+        # Making sure songs chosen for goal are allowed by DLC and remove the chosen from being added to the pool.
+        if chosen_goal_songs:
+            chosen_goal_songs = self.md_collection.filter_songs_to_dlc(chosen_goal_songs, dlc_songs)
+            if chosen_goal_songs:
+                self.random.shuffle(chosen_goal_songs)
+                self.victory_song_name = chosen_goal_songs.pop()
+                if self.victory_song_name in self.starting_songs:
+                    self.starting_songs.remove(self.victory_song_name)
+                if self.victory_song_name in self.included_songs:
+                    self.included_songs.remove(self.victory_song_name)
 
         return [s for s in available_song_keys if s not in start_items
                 and s not in include_songs and s not in exclude_songs]
@@ -139,12 +151,13 @@ class MuseDashWorld(World):
         if included_song_count > additional_song_count:
             # If so, we want to thin the list, thus let's get the goal song and starter songs while we are at it.
             self.random.shuffle(self.included_songs)
-            self.victory_song_name = self.included_songs.pop()
+            if not self.victory_song_name:
+                self.victory_song_name = self.included_songs.pop()
             while len(self.included_songs) > additional_song_count:
                 next_song = self.included_songs.pop()
                 if len(self.starting_songs) < starting_song_count:
                     self.starting_songs.append(next_song)
-        else:
+        elif not self.victory_song_name:
             # If not, choose a random victory song from the available songs
             chosen_song = self.random.randrange(0, len(available_song_keys) + included_song_count)
             if chosen_song < included_song_count:
@@ -153,6 +166,8 @@ class MuseDashWorld(World):
             else:
                 self.victory_song_name = available_song_keys[chosen_song - included_song_count]
                 del available_song_keys[chosen_song - included_song_count]
+        elif self.victory_song_name in available_song_keys:
+            available_song_keys.remove(self.victory_song_name)
 
         # Next, make sure the starting songs are fulfilled
         if len(self.starting_songs) < starting_song_count:
@@ -173,7 +188,7 @@ class MuseDashWorld(World):
 
     def create_item(self, name: str) -> Item:
         if name == self.md_collection.MUSIC_SHEET_NAME:
-            return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing,
+            return MuseDashFixedItem(name, ItemClassification.progression_deprioritized_skip_balancing,
                                      self.md_collection.MUSIC_SHEET_CODE, self.player)
 
         filler = self.md_collection.filler_items.get(name)
