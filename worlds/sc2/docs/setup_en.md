@@ -94,7 +94,7 @@ For lists, every item goes on its own line, started with a hyphen:
 ```yaml
 excluded_items:
   - Battlecruiser
-  - Drop-Pods (Kerrigan Tier 7)
+  - Drop-Pods (Kerrigan Ability)
 ```
 
 An empty list is just a matching pair of square brackets: `[]`. 
@@ -141,7 +141,7 @@ Unreachable missions will have greyed-out text. Just click on an available missi
 
 ## The game isn't launching when I try to start a mission.
 
-First, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client.txt`). 
+First, check the log file for issues (stored at `[Archipelago Directory]/logs/Starcraft2Client.txt`). 
 If you can't figure out the log file, visit our [Discord's](https://discord.com/invite/8Z65BR2) tech-support channel 
 for help. 
 Please include a specific description of what's going wrong and attach your log file to your message.
@@ -186,6 +186,13 @@ export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 
 # FIXME Replace with path to the version of Wine used to run SC2
 export WINE="/usr/bin/wine"
+
+# FIXME If using nondefault wineprefix for SC2 install (usual for Lutris installs), uncomment the next line and change the path
+#export WINEPREFIX="/path/to/wineprefix"
+
+# FIXME Uncomment the following lines if experiencing issues with DXVK (like DDRAW.ddl does not exist)
+#export WINEDLLOVERRIDES=d3d10core,d3d11,d3d12,d3d12core,d3d9,d3dcompiler_33,d3dcompiler_34,d3dcompiler_35,d3dcompiler_36,d3dcompiler_37,d3dcompiler_38,d3dcompiler_39,d3dcompiler_40,d3dcompiler_41,d3dcompiler_42,d3dcompiler_43,d3dcompiler_46,d3dcompiler_47,d3dx10,d3dx10_33,d3dx10_34,d3dx10_35,d3dx10_36,d3dx10_37,d3dx10_38,d3dx10_39,d3dx10_40,d3dx10_41,d3dx10_42,d3dx10_43,d3dx11_42,d3dx11_43,d3dx9_24,d3dx9_25,d3dx9_26,d3dx9_27,d3dx9_28,d3dx9_29,d3dx9_30,d3dx9_31,d3dx9_32,d3dx9_33,d3dx9_34,d3dx9_35,d3dx9_36,d3dx9_37,d3dx9_38,d3dx9_39,d3dx9_40,d3dx9_41,d3dx9_42,d3dx9_43,dxgi,nvapi,nvapi64
+#export DXVK_ENABLE_NVAPI=1
 
 # FIXME Replace with path to StarCraft II install folder
 export SC2PATH="/home/user/Games/starcraft-ii/drive_c/Program Files (x86)/StarCraft II/"

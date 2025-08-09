@@ -277,7 +277,8 @@ There are two special use cases for this option:
 # This means the campaign or layout
 # will not have a title in the client
 display_name: ""
-
+```
+```yaml
 # This will randomly pick a name from the given list of options
 display_name:
   - My First Choice
@@ -298,6 +299,8 @@ This option prevents names from showing up multiple times in the client. It is r
 ```yaml
 # For campaigns
 goal: true
+```
+```yaml
 # For layouts and missions
 goal: false
 ```
@@ -405,7 +408,7 @@ Progressive keys come in two forms: `Progressive Key: <track>` and `Progressive 
 
 Note that if any Item rule within a track belongs to a mission, the generator will accept ties, in which case the affected rules will require the same number of progressive keys. If a track only contains Item rules belonging to layouts and campaigns, the track will be sorted in definition order (top to bottom in your YAML), so there will be no ties.
 
-If you would prefer not to manually specify the track, use the [`unique_progression_track`](#unique-progression-track) option.
+If you prefer not to manually specify the track, use the [`unique_progression_track`](#unique-progression-track) option.
 
 The Beat and Count rules both require a list of scopes. This list accepts addresses towards other parts of the mission order.
 

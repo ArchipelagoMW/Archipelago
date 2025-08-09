@@ -12,7 +12,7 @@ The following unlocks are randomized as items:
 1. Your ability to build any non-worker unit.
 2. Unit specific upgrades including some combinations not available in the vanilla campaigns, such as both strain 
 choices simultaneously for Zerg and every Spear of Adun upgrade simultaneously for Protoss!
-3. Your ability to get the generic unit upgrades, such as attack and armour upgrades.
+3. Your ability to get the generic unit upgrades, such as attack and armor upgrades.
 4. Other miscellaneous upgrades such as laboratory upgrades and mercenaries for Terran, Kerrigan levels and upgrades 
 for Zerg, and Spear of Adun upgrades for Protoss.
 5. Small boosts to your starting mineral, vespene gas, and supply totals on each mission.
@@ -98,9 +98,6 @@ Will overwrite existing files
     amounts, controlling AI allies, etc.
 * `/disable_mission_check` Disables the check to see if a mission is available to play. 
 Meant for co-op runs where one player can play the next mission in a chain the other player is doing.
-* `/play [mission_id]` Starts a StarCraft 2 mission based off of the mission_id provided
-* `/available` Get what missions are currently available to play
-* `/unfinished` Get what missions are currently available to play and have not had all locations checked
 * `/set_path [path]` Manually set the SC2 install directory (if the automatic detection fails)
 
 Note that the behavior of the command `/received` was modified in the StarCraft 2 client.

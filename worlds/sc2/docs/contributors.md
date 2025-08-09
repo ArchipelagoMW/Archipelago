@@ -1,5 +1,5 @@
 # Contributors
-Contibutors are listed with preferred or Discord names first, with github usernames prepended with an `@`.
+Contributors are listed with preferred or Discord names first, with GitHub usernames prepended with an `@`.
 Within an update, contributors for earlier sections are not repeated for their contributions in later sections;
 code contributors also reported bugs and participated in beta testing.
 
@@ -30,7 +30,7 @@ code contributors also reported bugs and participated in beta testing.
 * Phaneros (@MatthewMarinets)- Skirmisher
 * Durygathn - Dawnbringer
 * 7thAce (@7thAce) - Pulsar
-* Panicmoon (@panicmoon.bsky.social‬) - Skylord
+* Panicmoon (@panicmoon.bsky.social) - Skylord
 * JayborinoPlays (@Jayborino) - Oppressor
 
 ## Maintenance of 2024 release
