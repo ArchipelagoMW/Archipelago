@@ -111,6 +111,7 @@ class StardewValleyWorld(World):
         group_options = typing.cast(StardewValleyOptions, world_group.options)
         worlds_options = [typing.cast(StardewValleyOptions, multiworld.worlds[player].options) for player in players]
         apply_most_restrictive_options(group_options, worlds_options)
+        world_group.content = create_content(group_options)
 
         return world_group
 
@@ -324,7 +325,7 @@ class StardewValleyWorld(World):
 
     def get_filler_item_name(self) -> str:
         if not self.filler_item_pool_names:
-            self.filler_item_pool_names = generate_filler_choice_pool(self.options)
+            self.filler_item_pool_names = generate_filler_choice_pool(self.options, self.content)
         return self.random.choice(self.filler_item_pool_names)
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
