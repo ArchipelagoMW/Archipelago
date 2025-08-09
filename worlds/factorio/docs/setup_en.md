@@ -44,7 +44,7 @@ hosting your own Factorio game, not joining someone else's game.
 
 1. Acquire the Archipelago mod for this seed. It will be inside the zip file produced by the [generate game page.](https://archipelago.gg/generate) It should be named `AP-*-P<number>-<PlayerName>_<VersionNumber>.zip`, where `*` is the seed number.
 2. Copy the mod file into your Factorio `mods` folder, which by default is located at:  
-   `C:\Users\<YourUserName>\AppData\Roaming\Factorio\mods`
+   `C:\Users\<YourUserName>\AppData\Roaming\Factorio\mods`. If you're on Linux, it's located at `~/.factorio/mods`.
 3. Get the server address from the person hosting the game you are joining.
 4. Launch Factorio
 5. Click on "Multiplayer" in the main menu
