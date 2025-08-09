@@ -630,7 +630,7 @@ class LMContext(CommonContext):
             dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
             return
 
-        non_save_recv_idx: int = dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
+        non_save_recv_idx: int = dme.read_word(NON_SAVE_LAST_RECV_ITEM_ADDR)
         recv_items = self.items_received[last_recv_idx:]
         for item in recv_items:
             lm_item_name = self.item_names.lookup_in_game(item.item)
@@ -735,7 +735,7 @@ class LMContext(CommonContext):
             if last_recv_idx > non_save_recv_idx:
                 # Lastly, update the non-saveable received index with the current last received index.
                 dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
-            await wait_for_next_loop(0.5)
+            await wait_for_next_loop(1)
 
     async def lm_update_non_savable_ram(self):
         if not (self.check_ingame() and self.check_alive()):
