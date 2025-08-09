@@ -6,6 +6,7 @@
 
 - Factorio: [Factorio Official Website](https://factorio.com)
     - Needed by Players and Hosts
+    - Players will need to download an additional copy of Factorio for Archipelago to use.
 
 ##### Server Hosts
 
@@ -38,7 +39,10 @@ Validator page: [Yaml Validation Page](/check)
 Connecting to someone else's game is the simplest way to play Factorio with Archipelago. It allows multiple people to
 play in a single world, all contributing to the completion of the seed.
 
-1. Acquire the Archipelago mod for this seed. It should be named `AP_*.zip`, where `*` is the seed number.
+**Note:** If you are the only one in the Archipelago multiworld who is playing Factorio, you are
+hosting your own Factorio game, not joining someone else's game.
+
+1. Acquire the Archipelago mod for this seed. It will be inside the zip file produced by the [generate game page.](https://archipelago.gg/generate) It should be named `AP-*-P<number>-<PlayerName>_<VersionNumber>.zip`, where `*` is the seed number.
 2. Copy the mod file into your Factorio `mods` folder, which by default is located at:  
    `C:\Users\<YourUserName>\AppData\Roaming\Factorio\mods`
 3. Get the server address from the person hosting the game you are joining.
