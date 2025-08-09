@@ -173,17 +173,17 @@ class EXPMultiplier(NamedRange):
     Determines the multiplier to apply to EXP gained.
     """
     display_name = "EXP Multiplier"
-    default = 16
-    range_start = default // 4
+    default = 16 * 4
+    range_start = 16 // 4
     range_end = 128
     special_range_names = {
-        "0.25x": int(default // 4),
-        "0.5x": int(default // 2),
-        "1x": default,
-        "2x": default * 2,
-        "3x": default * 3,
-        "4x": default * 4,
-        "8x": default * 8,
+        "0.25x": int(16 // 4),
+        "0.5x": int(16 // 2),
+        "1x": 16,
+        "2x": 16 * 2,
+        "3x": 16 * 3,
+        "4x": 16 * 4,
+        "8x": 16 * 8,
     }
 
 class RequiredReportsEotW(Range):
@@ -316,7 +316,7 @@ class KeybladesUnlockChests(Toggle):
     """
     display_name = "Keyblades Unlock Chests"
 
-class InteractInBattle(Toggle):
+class InteractInBattle(DefaultOnToggle):
     """
     Allow Sora to talk to people, examine objects, and open chests in battle.
     """
@@ -328,7 +328,7 @@ class AdvancedLogic(Toggle):
     """
     display_name = "Advanced Logic"
 
-class ExtraSharedAbilities(Toggle):
+class ExtraSharedAbilities(DefaultOnToggle):
     """
     If on, adds extra shared abilities to the pool.  These can stack, so multiple high jumps make you jump higher and multiple glides make you superglide faster.
     """
