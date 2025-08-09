@@ -159,6 +159,14 @@ class RandomVisitLockingItem(Range):
     default = 0
 
 
+class HarderAS(Toggle):
+    """Choose if there are Absent Silhouettes to fight for checks or only Datas
+
+    True: The 5 fights that can be Absent Silhouettes will be the Data Version
+    False: The 5 fights that can be Absent Silhouettes will be Absent Silhouettes"""
+    display_name = "Data Organization Fights Only"
+    default = False
+
 class SuperBosses(Toggle):
     """Terra Sephiroth and Data Fights Toggle."""
     display_name = "Super Bosses"
@@ -364,6 +372,7 @@ class KingdomHearts2Options(PerGameCommonOptions):
     FillerItemsLocal: FillerItemsLocal
     Visitlocking: Visitlocking
     RandomVisitLockingItem: RandomVisitLockingItem
+    HarderAS: HarderAS
     SuperBosses: SuperBosses
     Cups: Cups
     SummonLevelLocationToggle: SummonLevelLocationToggle
