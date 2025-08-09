@@ -77,7 +77,7 @@ class SpiritTracksWorld(World):
     location_name_to_id = build_location_name_to_id_dict()
     item_name_to_id = build_item_name_to_id_dict()
     item_name_groups = ITEM_GROUPS
- #TODO   origin_region_name = "aboda village"
+    origin_region_name = "aboda village"
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
@@ -93,8 +93,9 @@ class SpiritTracksWorld(World):
         self.excluded_dungeons = []
 
     def generate_early(self):
-        self.pick_required_dungeons()
-        self.restrict_non_local_items()
+        # self.pick_required_dungeons()
+        # self.restrict_non_local_items()
+        pass
 
     def restrict_non_local_items(self):
         # Restrict non_local_items option in cases where it's incompatible with other options that enforce items
@@ -107,13 +108,6 @@ class SpiritTracksWorld(World):
         region = self.multiworld.get_region(region_name, self.player)
         location = Location(self.player, location_name, self.location_name_to_id[location_name], region)
         region.locations.append(location)
-        if "dungeon" in LOCATIONS_DATA[location_name]:
-            self.dungeon_name_groups.setdefault(LOCATIONS_DATA[location_name]["dungeon"], set())
-            self.dungeon_name_groups[LOCATIONS_DATA[location_name]["dungeon"]].add(location_name)
-        # For excluding post-dungeon checks from excluded dungeons
-        if "post_dungeon" in LOCATIONS_DATA[location_name]:
-            self.dungeon_name_groups.setdefault(LOCATIONS_DATA[location_name]["post_dungeon"], set())
-            self.dungeon_name_groups[LOCATIONS_DATA[location_name]["post_dungeon"]].add(location_name)
 
         if local:
             location.item_rule = lambda item: item.player == self.player
@@ -133,7 +127,7 @@ class SpiritTracksWorld(World):
             self.create_location(location_data['region_id'], location_name, is_local)
 
         self.create_events()
-        self.exclude_locations_automatically()
+        # self.exclude_locations_automatically()
 
     def create_event(self, region_name, event_item_name):
         region = self.multiworld.get_region(region_name, self.player)
@@ -144,21 +138,7 @@ class SpiritTracksWorld(World):
     def location_is_active(self, location_name, location_data):
         if not location_data.get("conditional", False):
             return True
-    """TODO  else:
-            if location_name in FROG_LOCATION_NAMES:
-                return self.options.randomize_frogs != SpiritTracksFrogRandomization.option_start_with
-            if "Harrow Island" in location_name:
-                return self.options.randomize_harrow
-            if "Zauz's Island Triforce Crest" in location_name:
-                return self.options.randomize_triforce_crest
-            if "Masked Beedle" in location_name:
-                return self.options.randomize_masked_beedle
-            if "GOAL" in location_name:
-                if location_name == "GOAL: Beat Bellumbeck" and self.options.goal == "beat_bellumbeck":
-                    return True
-                elif location_name == "GOAL: Triforce Door" and self.options.goal == "triforce_door":
-                    return True
-            return False """
+        return False
 
     """TODO def pick_required_dungeons(self):
         implemented_dungeons = ["Temple of Fire",
@@ -189,35 +169,8 @@ class SpiritTracksWorld(World):
         self.boss_reward_items_pool = boss_reward_pool[:self.options.dungeons_required]"""
 
     def create_events(self):
-        # TODO Create events for required dungeons
-        if "Temple of Fire" in self.required_dungeons:
-            self.create_event("tof blaaz", "_required_dungeon")
-        if "Temple of Wind" in self.required_dungeons:
-            self.create_event("tow cyclok", "_required_dungeon")
-        if "Temple of Courage" in self.required_dungeons:
-            self.create_event("toc crayk", "_required_dungeon")
-        if "Ghost Ship" in self.required_dungeons:
-            if self.options.ghost_ship_in_dungeon_pool == "rescue_tetra":
-                self.create_event("ghost ship tetra", "_required_dungeon")
-            elif self.options.ghost_ship_in_dungeon_pool == "cubus_sisters":
-                self.create_event("ghost ship cubus", "_required_dungeon")
-        if "Goron Temple" in self.required_dungeons:
-            self.create_event("gt dongo", "_required_dungeon")
-        if "Temple of Ice" in self.required_dungeons:
-            self.create_event("toi gleeok", "_required_dungeon")
-        if "Mutoh's Temple" in self.required_dungeons:
-            self.create_event("mutoh eox", "_required_dungeon")
-        self.create_event("beat required dungeons", "_has_bellum_requirement")
-        # Post Dungeon Events
-        self.create_event("post tof", "_beat_tof")
-        self.create_event("post toc", "_beat_toc")
-        self.create_event("post tow", "_beat_tow")
-        self.create_event("spawn pirate ambush", "_beat_ghost_ship")
-        # Farmable minigame events
-        self.create_event("bannan cannon game", "_can_play_cannon_game")
-        self.create_event("harrow dig", "_can_play_harrow")
-        self.create_event("ds race", "_can_play_goron_race")
-        # Goal
+        # if "Temple of Fire" in self.required_dungeons:
+        #     self.create_event("tof blaaz", "_required_dungeon")
         self.create_event("goal", "_beaten_game")
 
     def exclude_locations_automatically(self):
@@ -227,8 +180,6 @@ class SpiritTracksWorld(World):
         if self.options.exclude_non_required_dungeons and not getattr(self.multiworld, "generation_is_fake", False):
             #TODO always_include = ["Temple of the Ocean King", "Mountain Passage"]
             always_include = []
-            if self.options.ghost_ship_in_dungeon_pool == "false":
-                always_include.append("Ghost Ship")
             excluded_dungeons = [d for d in DUNGEON_NAMES
                                  if d not in self.required_dungeons + always_include]
             self.excluded_dungeons = excluded_dungeons
@@ -255,8 +206,6 @@ class SpiritTracksWorld(World):
         if name in self.extra_filler_items:
             self.extra_filler_items.remove(name)
             classification = ItemClassification.filler
-        #TODO if name == "Swordsman's Scroll" and self.options.logic == "glitched":
-            classification = ItemClassification.progression
 
         ap_code = self.item_name_to_id[name]
         return Item(name, classification, ap_code, self.player)
@@ -268,13 +217,13 @@ class SpiritTracksWorld(World):
         rupee_item_count = 0
         boss_reward_item_count = self.options.dungeons_required
         for loc_name, loc_data in LOCATIONS_DATA.items():
-            # print(f"New Location: {loc_name}")
+            print(f"New Location: {loc_name}")
             if not self.location_is_active(loc_name, loc_data):
-                # print(f"{loc_name} is not active")
+                print(f"{loc_name} is not active")
                 continue
             # If no defined vanilla item, fill with filler
             if "vanilla_item" not in loc_data:
-                # print(f"{loc_name} has no defined vanilla item")
+                print(f"{loc_name} has no defined vanilla item")
                 filler_item_count += 1
                 continue
 
@@ -287,55 +236,18 @@ class SpiritTracksWorld(World):
             if item_name == "Filler Item":
                 filler_item_count += 1
                 continue
-            if self.options.keysanity == "vanilla":
-                # Place small key in vanilla location
-                if "Small Key" in item_name:
-                    key_item = self.create_item(item_name)
-                    self.multiworld.get_location(loc_name, self.player).place_locked_item(key_item)
-                    continue
             if "force_vanilla" in loc_data and loc_data["force_vanilla"]:
                 forced_item = self.create_item(item_name)
                 self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
                 continue
-            if 'dungeon' in ITEMS_DATA[item_name]:
-                # if dungeon is excluded, place keys in vanilla locations
-                dung = item_name.rsplit('(', 1)[1][:-1]
-                if self.options.exclude_non_required_dungeons and dung in self.excluded_dungeons:
-                    forced_item = self.create_item(item_name)
-                    self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
-                    continue
-            """TODO if item_name in FROG_NAMES:
-                if self.options.randomize_frogs == "vanilla":
-                    forced_item = self.create_item(item_name)
-                    self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
-                    continue
-            if item_name == "Rare Metal":  # Change rare metals to filler items for unrequired dungeons
-                if boss_reward_item_count <= 0:
-                    filler_item_count += 1
-                    continue
-                item_name = self.boss_reward_items_pool[boss_reward_item_count - 1]
-                boss_reward_item_count -= 1
-            if item_name == "Triforce Crest" and not self.options.randomize_triforce_crest:
-                filler_item_count += 1
-                continue
-            if (item_name in ["Treasure", "Train Part", "Nothing!", "Potion", "Red Potion", "Purple Potion",
-                              "Yellow Potion", "Power Gem", "Wisdom Gem", "Courage Gem", "Heart Container"]
-                    or "Treasure Map" in item_name):
-                filler_item_count += 1
-                continue """
 
             item_pool_dict[item_name] = item_pool_dict.get(item_name, 0) + 1
 
         # TODO Fill filler count with consistent amounts of items, when filler count is empty it won't add any more items
         # so add progression items first
-        add_items = [("Wisdom Gem", 20), ("Power Gem", 20), ("Courage Gem", 20), ("Heart Container", 13)]
+        add_items = [("Heart Container", 13)]
         for i, count in add_items:
             item_pool_dict, filler_item_count = add_items_from_filler(item_pool_dict, filler_item_count, i, count)
-        # Add trains if enough room in filler pool
-        if filler_item_count >= 8:
-            for i in SHIPS[1:]:
-                item_pool_dict[i] = 1
-            filler_item_count -= 8
 
         # Add as many filler items as required
         for _ in range(filler_item_count):
@@ -352,7 +264,7 @@ class SpiritTracksWorld(World):
             for _ in range(quantity):
                 items.append(self.create_item(item_name))
 
-        self.filter_confined_dungeon_items_from_pool(items)
+        # self.filter_confined_dungeon_items_from_pool(items)
         self.multiworld.itempool.extend(items)
 
     def get_extra_filler_items(self, item_pool_dict):
@@ -374,8 +286,9 @@ class SpiritTracksWorld(World):
         return self.pre_fill_items
 
     def pre_fill(self) -> None:
-        self.pre_fill_boss_rewards()
-        self.pre_fill_dungeon_items()
+        # self.pre_fill_boss_rewards()
+        # self.pre_fill_dungeon_items()
+        pass
 
     def filter_confined_dungeon_items_from_pool(self, items: List[Item]):
         confined_dungeon_items = []
@@ -393,10 +306,6 @@ class SpiritTracksWorld(World):
 
     def pre_fill_boss_rewards(self):
         boss_reward_location_names = [DUNGEON_TO_BOSS_ITEM_LOCATION[dung_name] for dung_name in self.required_dungeons]
-        if "_gs" in boss_reward_location_names:  # TODO Ghost ship can have variable dungeon reward location
-            boss_reward_location_names.remove("_gs")
-            boss_reward_location_names.append(
-                GHOST_SHIP_BOSS_ITEM_LOCATION[self.options.ghost_ship_in_dungeon_pool.value])
         self.boss_reward_location_names = boss_reward_location_names
 
         boss_reward_locations = [loc for loc in self.multiworld.get_locations(self.player)
@@ -449,30 +358,25 @@ class SpiritTracksWorld(World):
             "Red Rupee (20)",
             "Rupoor (-10)"
         ]
-        filler_item_names += ITEM_GROUPS["Treasure Items"]
-        filler_item_names += ITEM_GROUPS["Ammo Refills"]
 
         item_name = self.random.choice(filler_item_names)
         return item_name
 
     def fill_slot_data(self) -> dict:
-        options = []
-        slot_data = self.options.as_dict(*options)
-        slot_data["excluded_dungeons"] = self.excluded_dungeons
-        slot_data["locations_to_exclude"] = self.ut_locations_to_exclude
-        slot_data["boss_rewards"] = self.boss_reward_items_pool
-        slot_data["required_dungeon_locations"] = self.boss_reward_location_names
+        options = ["keysanity", "goal", "logic"]
+        # slot_data = self.options.as_dict(*options)
+        slot_data = {}
         return slot_data
 
     def write_spoiler(self, spoiler_handle):
+        return
+        
         spoiler_handle.write(f"\n\nRequired Dungeons ({self.multiworld.player_name[self.player]}):\n")
         for dung in self.required_dungeons:
             spoiler_handle.write(f"\t- {dung}\n")
 
     # UT stuff
-    def interpret_slot_data(self, slot_data: dict[str, any]) -> None:
-        # Excluded dungeons depend on seed
-        # print(f"UT Excluding: {slot_data['locations_to_exclude']}")
-        for location in slot_data["locations_to_exclude"]:
-            self.multiworld.get_location(location, self.player).progress_type = LocationProgressType.EXCLUDED
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, any]) -> None:
+        return slot_data
 

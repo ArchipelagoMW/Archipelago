@@ -28,6 +28,7 @@ LOCATIONS_DATA = {
     "Aboda Stamp Station": {
         "region_id": "aboda village stamp station",
         "vanilla_item": "Aboda Village Stamp",
+        "item_override": "Stamp Book",
         "stage_id": 0x2F,
         "floor_id": 0,
         "stamp": True,
@@ -46,7 +47,7 @@ LOCATIONS_DATA = {
         # "sram_addr": 0x000EB0,
         # "sram_value": 1
     #    "require_item": ["Stamp Book"]
-    },
+    # },
 
 
     # # Shops

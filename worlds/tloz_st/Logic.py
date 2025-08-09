@@ -11,20 +11,13 @@ def make_overworld_logic(player: int, origin_name: str, options: SpiritTracksOpt
 
         # ====== Mercay Island ==============
 
-        #[region, region id]
+        #[region 1, region 2, two-directional, logic requirements],
         ["aboda village", "aboda village rocks", False, None],
-        ["mercay island", "mercay zora cave", False, lambda state: st_has_explosives(state, player)],
-        ["mercay zora cave", "mercay zora cave south", False, lambda state: st_has_bow(state, player)],
-        ["mercay island", "mercay zora cave south", False, lambda state: st_can_sword_scroll_clip(state, player)],
-        ["mercay island", "totok", False, None],
-        ["mercay island", "mercay freedle island", False, lambda state: st_has_explosives(state, player)],
-        ["mercay freedle island", "mercay freedle tunnel chest", False, lambda state: st_has_range(state, player)],
-        ["mercay freedle island", "mercay freedle gift", False, lambda state: st_has_sea_chart(state, player, "SE")],
-        ["mercay island", "mercay yellow guy", False, lambda state: st_has_courage_crest(state, player)],
-        ["post tow", "mercay oshus gem", False, None],
-        ["mercay island", "mercay oshus stantom blade", False, lambda state: st_has_stantom_blade(state, player)],
-        ["mercay oshus stantom blade", "mercay oshus gem", False, None],
-        ["mercay island", "sw ocean", False, lambda state: st_has_sea_chart(state, player, "SW")],
+        #["aboda village", "aboda village stamp book", False, None],
+        ["aboda village", "aboda village stamp station", False, None],
+        ["aboda village", "aboda village bees", False, None],
+        ["aboda village", "goal", False, None],
+
 
         # # ======== Mountain Passage =========
 
