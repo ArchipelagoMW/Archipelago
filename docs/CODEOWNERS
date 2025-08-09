@@ -48,9 +48,6 @@
 # Civilization VI
 /worlds/civ6/ @hesto2
 
-# Clique
-/worlds/clique/ @ThePhar
-
 # Dark Souls III
 /worlds/dark_souls_3/ @Marechal-L @nex3
 
@@ -121,9 +118,6 @@
 # The Messenger
 /worlds/messenger/ @alwaysintreble
 
-# Minecraft
-/worlds/minecraft/ @KonoTyran @espeon65536
-
 # Mega Man 2
 /worlds/mm2/ @Silvris
 
@@ -142,6 +136,9 @@
 # Overcooked! 2
 /worlds/overcooked2/ @toasterparty
 
+# Paint
+/worlds/paint/ @MarioManTAW
+
 # Pokemon Emerald
 /worlds/pokemon_emerald/ @Zunawe
 
@@ -150,9 +147,6 @@
 
 # Raft
 /worlds/raft/ @SunnyBat
-
-# Rogue Legacy
-/worlds/rogue_legacy/ @ThePhar
 
 # Risk of Rain 2
 /worlds/ror2/ @kindasneaki
@@ -206,7 +200,7 @@
 /worlds/timespinner/ @Jarno458
 
 # The Legend of Zelda (1)
-/worlds/tloz/ @Rosalie-A @t3hf1gm3nt
+/worlds/tloz/ @Rosalie-A
 
 # TUNIC
 /worlds/tunic/ @silent-destroyer @ScipioWright
