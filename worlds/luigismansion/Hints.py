@@ -49,11 +49,13 @@ def get_hints_by_option(multiworld: MultiWorld, player_hints: set[int]) -> None:
         for name in hint_list:
             if name == "Madame Clairvoya":
                 if world.open_doors[72] == 0:
-                    loc: Location = multiworld.find_item("Spade Key", player_int)
+                    locs: list[Location] = multiworld.find_item_locations("Spade Key", player_int, True)
                 else:
                     iname: str = world.random.choice(["Mario's Glove", "Mario's Letter", "Mario's Hat", "Mario's Star",
                                                      "Mario's Shoe"])
-                    loc: Location = multiworld.find_item(iname, player_int)
+                    locs: list[Location] = multiworld.find_item_locations(iname, player_int, True)
+
+                loc: Location = world.random.choice(locs)
                 hint = {name: {"Item": loc.item.name,
                                "Location": loc.name,
                                "Rec Player": multiworld.player_name[loc.item.player],
