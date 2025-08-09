@@ -8,7 +8,7 @@ LOCATIONS_DATA = {
     #Aboda Village
     "Aboda Clear Rocks": {
         "region_id": "aboda village rocks",
-        "vanilla_item": "Treasure",
+        "vanilla_item": "Red Rupee (20)",
         "item_override": "Boomerang",
         "stage_id": 0x2F,
         "floor_id": 0,
@@ -17,13 +17,13 @@ LOCATIONS_DATA = {
     },
     "Aboda Bee Tree": {
         "region_id": "aboda village bees",
-        "vanilla_item": "Red Rupee (20)",
+        "vanilla_item": "Treasure",
         "stage_id": 0x2F,
         "floor_id": 0,
         "x_min": 34192,
         "x_max": 52960,
-        "z_min": -10024,
-        "z_max": -34890
+        "z_max": -10024,
+        "z_min": -34890
     },
     "Aboda Stamp Station": {
         "region_id": "aboda village stamp station",

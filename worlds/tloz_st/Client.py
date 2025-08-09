@@ -239,12 +239,11 @@ class SpiritTracksClient(BizHawkClient):
     async def set_starting_flags(self, ctx: "BizHawkClientContext") -> None:
         write_list = [(RAM_ADDRS["slot_id"][0], [ctx.slot], "Main RAM")]
         print("New game, setting starting flags")
-        print(ctx.slot_data)
-        for adr, value in STARTING_FLAGS:
-            write_list.append((adr, [value], "Main RAM"))
+        print(ctx.slot)
+        # for adr, value in STARTING_FLAGS:
+        #     write_list.append((adr, [value], "Main RAM"))
 
         await bizhawk.write(ctx.bizhawk_ctx, write_list)
-        self.removed_boomerang = False
 
     # Boomerang is set to enable item menu, called on s+q to remove it again.
     async def boomerwatch(self, ctx) -> bool:
@@ -304,18 +303,19 @@ class SpiritTracksClient(BizHawkClient):
                 read_keys += read_keys_land
                 self.at_sea = False
         self.main_read_list = {k: v for k, v in RAM_ADDRS.items() if k in read_keys}
+        print(self.main_read_list)
 
     def get_ending_room(self, ctx):
         self.goal_room = 0x300
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
-        """
+
         if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed or ctx.slot is None:
             self.just_entered_game = True
             self.last_scene = None
             self.get_main_read_list(self.current_stage)
             return
-        """
+
 
         # Enable "DeathLink" tag if option was enabled
         if self.set_deathlink:
@@ -346,17 +346,14 @@ class SpiritTracksClient(BizHawkClient):
                 self.last_stage = None
                 self.last_scene = None
                 self.removed_boomerang = False  # Catches stray item menu errors, only 1 read
-                self.save_slot = await read_memory_value(ctx, RAM_ADDRS["save_slot"][0])
+                # self.save_slot = await read_memory_value(ctx, RAM_ADDRS["save_slot"][0])
                 self.get_ending_room(ctx)
                 print(f"Started Game")
 
             # If new file, set up starting flags
             if slot_memory == 0:
-                if await read_memory_value(ctx, 0x1b55a8) & 2:  # Check if watched intro cs
-                    await self.set_starting_flags(ctx)
-                    print(f"Set starting flags for slot {slot_memory}")
-                else:
-                    return
+                print(f"Set starting flags for slot {slot_memory}")
+                await self.set_starting_flags(ctx)
 
             # Get current scene
             current_room = read_result["room"]
@@ -364,11 +361,8 @@ class SpiritTracksClient(BizHawkClient):
             current_scene = current_stage * 0x100 + current_room
 
             # This go true when link gets item
-            if self.at_sea:
-                getting_location = read_result.get("shot_frog", False)
-            else:
-                getting_location = read_result.get("getting_item", 0) & 0x20 or read_result.get("getting_train_part",
-                                                                                                False)
+            getting_location = read_result.get("getting_item", 0)
+            print(f"getting location? {bool(getting_location)}")
 
             # Other game variables
             num_received_items = read_result["received_item_index"]
@@ -411,7 +405,8 @@ class SpiritTracksClient(BizHawkClient):
 
             # Set stage flags when scene fully loaded
             if self.new_stage_loading is not None:
-                await self.enter_stage(ctx, current_stage, current_scene)
+                self.new_stage_loading = None  # Set during enter stage, prevents stuff from happening while loading
+                # await self.enter_stage(ctx, current_stage, current_scene)
 
             # Read for checks on specific global flags
             if len(self.watches) > 0:
