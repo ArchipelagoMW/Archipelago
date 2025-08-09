@@ -17,9 +17,9 @@ REGIONS = [
     "aboda village bees",
     #"aboda village left tree",
     #"aboda village right tree",
-    "aboda village cuccos gem",
+    #"aboda village cuccos gem",
     #"aboda village joe gem",
-    "aboda village cannon",
+    #"aboda village cannon",
     
     # Shop Regions
     #"shop power gem",
@@ -31,16 +31,16 @@ REGIONS = [
     #"beedle bomb bag",
 
     # Castle Town
-    "castle town",
-    "castle town stamp station",
-    "castle town spirit flute",
-    "castle town hc guard chest",
-    "castle town hc bottom left chest",
-    "castle town hc outside chest",
-    "castle town guard captain sword",
-    "castle town tunnel key chest",
-    "castle town tunnel bomb chest",
-    "castle town minigame 1",
+    # "castle town",
+    # "castle town stamp station",
+    # "castle town spirit flute",
+    # "castle town hc guard chest",
+    # "castle town hc bottom left chest",
+    # "castle town hc outside chest",
+    # "castle town guard captain sword",
+    # "castle town tunnel key chest",
+    # "castle town tunnel bomb chest",
+    # "castle town minigame 1",
     #"castle town fish gem",
 
     # Tower of Spirits

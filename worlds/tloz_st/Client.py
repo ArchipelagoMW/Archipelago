@@ -23,28 +23,27 @@ RAM_ADDRS = {
     "game_state": (0x060C48, 1, "Main RAM"), 
     "is_dead": (0xC2EE, 1, "ARM7 System Bus"),
 
-    "received_item_index": (0x1BA64C, 2, "Main RAM"),
-    "slot_id": (0x1BA64A, 2, "Main RAM"),
+    "received_item_index": (0x265380, 2, "Main RAM"),
+    "slot_id": (0x265782, 2, "Main RAM"),
 
     "stage": (0x260A2C, 4, "Main RAM"),
     #"floor": (0x1B2E98, 4, "Main RAM"),
     "room": (0x2690EA, 1, "Main RAM"),
     "entrance": (0x2690EB, 1, "Main RAM"),
-    "flags": (0x1B557C, 52, "Main RAM"),
+    #"flags": (0x265700, 52, "Main RAM"),
 
-    "getting_item": (0x1B6F44, 1, "Main RAM"),
+    "getting_item": (0x04B114, 1, "Main RAM"),
     # "shot_frog": (0x1B7038, 1, "Main RAM"),
     "getting_train_part": (0x11F5E4, 1, "Main RAM"),
 
-    "link_x": (0x1B6FEC, 4, "Main RAM"),
-    "link_y": (0x1B6FF0, 4, "Main RAM"),
-    "link_z": (0x1B6FF4, 4, "Main RAM"),
-    "using_item:": (0x1BA71C, 1, "Main RAM"),
-    "boat_x": (0x1B8518, 4, "Main RAM"),
-    "boat_z": (0x1B8520, 4, "Main RAM"),
-    "save_slot": (0x1B8124, 1, "Main RAM"),
-    "equipped_item": (0x1BA520, 4, "Main RAM"),
-    "got_item_menu": (0x19A5B0, 1, "Main RAM")
+    "link_x": (0x05CC, 4, "Data TCM"),
+    "link_y": (0x05D0, 4, "Data TCM"),
+    "link_z": (0x05D4, 4, "Data TCM"),
+    #"using_item:": (0x26531C, 4, "Main RAM"),
+    #"boat_x": (0x1B8518, 4, "Main RAM"),
+    #"boat_z": (0x1B8520, 4, "Main RAM"),
+    #"save_slot": (265782, 2, "Main RAM"),
+    "equipped_item": (0x265318, 4, "Main RAM")
 }
 
 POINTERS = {
@@ -243,19 +242,6 @@ class SpiritTracksClient(BizHawkClient):
         print(ctx.slot_data)
         for adr, value in STARTING_FLAGS:
             write_list.append((adr, [value], "Main RAM"))
-
-        # Set starting time for PH
-        st_time = ctx.slot_data["st_starting_time"] * 3600
-        st_time_bits = split_bits(st_time, 4)
-        write_list.append((0x1BA528, st_time_bits, "Main RAM"))
-
-        # Set Frog flags if not randomizing frogs
-        if ctx.slot_data["randomize_frogs"] == 1:
-            write_list += [(a, [v], "Main RAM") for a, v in STARTING_FROG_FLAGS]
-        # Set Fog Flags
-        fog_bits = FOG_SETTINGS_FLAGS[ctx.slot_data["fog_settings"]]
-        if len(fog_bits) > 0:
-            write_list += [(a, [v], "Main RAM") for a, v in fog_bits]
 
         await bizhawk.write(ctx.bizhawk_ctx, write_list)
         self.removed_boomerang = False
@@ -842,20 +828,7 @@ class SpiritTracksClient(BizHawkClient):
 
             # Hint required dungeons
             if "dungeon_hints" in hint_data:
-                if ctx.slot_data["dungeon_hints"] == hint_data["dungeon_hints"]:
-                    for loc in ctx.slot_data["required_dungeon_locations"]:
-                        local_scouted_locations.add(self.location_name_to_id[loc])
-
-            print(f"Spirit hints {ctx.slot_data['spirit_island_hints']}")
-            # Hint Spirit Island
-            if hint_data.get("spirit_island_hints", False):
-                forces = ["Power", "Wisdom", "Courage"]
-                if ctx.slot_data["spirit_island_hints"] != 2:
-                    for i in forces:
-                        local_scouted_locations.add(self.location_name_to_id[f"Spirit Island {i} Upgrade Level 2"])
-                if ctx.slot_data["spirit_island_hints"] == 0:
-                    for i in forces:
-                        local_scouted_locations.add(self.location_name_to_id[f"Spirit Island {i} Upgrade Level 1"])
+                pass
 
         # Send hints
         if self.local_scouted_locations != local_scouted_locations:
@@ -939,11 +912,7 @@ class SpiritTracksClient(BizHawkClient):
 
             # Handle different writing operations
             if "incremental" in item_data:
-                # Sand of hours check
-                if item_data.get("value") == "Sand":
-                    value = ctx.slot_data["st_time_increment"] * 3600
-                else:
-                    value = item_data.get("value", 1)
+                value = item_data.get("value", 1)
 
                 item_value = prev_value + value
                 item_value = 0 if item_value <= 0 else item_value
