@@ -37,7 +37,7 @@ class CMWorld(World):
     game: ClassVar[str] = "ChecksMate"
     data_version = 0
     web = CMWeb()
-    required_client_version = (0, 3, 0)
+    required_chess_client_version = "0.3.1"
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CMOptions
     options: CMOptions
 
@@ -129,6 +129,7 @@ class CMWorld(World):
         self.random.shuffle(potential_pockets)
         cursed_knowledge["pocket_order"] = potential_pockets
         cursed_knowledge["total_queens"] = self.items_used[self.player].get("Progressive Major To Queen", 0)
+        cursed_knowledge["required_chess_client_version"] = self.required_chess_client_version
         if self.player in self.armies:
             cursed_knowledge["army"] = self.armies[self.player]
         option_names = ["goal", "death_link", "difficulty", "piece_locations", "piece_types",
