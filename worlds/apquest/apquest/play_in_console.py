@@ -3,8 +3,8 @@ from events import ConfettiFired
 try:
     from pynput import keyboard
     from pynput.keyboard import Key, KeyCode
-except ImportError:
-    raise ImportError("In order to play APQuest from console, you have to install pynput.")
+except ImportError as e:
+    raise ImportError("In order to play APQuest from console, you have to install pynput.") from e
 
 from game import Game, Input
 from graphics import Graphic
@@ -48,8 +48,7 @@ def render_to_console(game: Game) -> None:
 
     inventory = []
     for item, count in player.inventory.items():
-        for _ in range(count):
-            inventory.append(graphic_to_char[ITEM_TO_GRAPHIC[item]])
+        inventory += [graphic_to_char[ITEM_TO_GRAPHIC[item]] for _ in range(count)]
     inventory.sort()
 
     print(f"Inventory: {', '.join(inventory)}")
