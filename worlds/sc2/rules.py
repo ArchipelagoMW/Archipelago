@@ -3133,7 +3133,10 @@ class SC2Logic:
 
     def enemy_intelligence_cliff_garrison(self, state: CollectionState) -> bool:
         return (
-            state.has_any({item_names.REAPER, item_names.VIKING, item_names.MEDIVAC, item_names.HERCULES}, self.player)
+            state.has_any((item_names.REAPER, item_names.VIKING), self.player)
+            or (state.has_any((item_names.MEDIVAC, item_names.HERCULES), self.player)
+                and self.enemy_intelligence_garrisonable_unit(state)
+            )
             or state.has_all({item_names.GOLIATH, item_names.GOLIATH_JUMP_JETS}, self.player)
             or (self.advanced_tactics and state.has_any({item_names.HELS_ANGELS, item_names.BRYNHILDS}, self.player))
         )
