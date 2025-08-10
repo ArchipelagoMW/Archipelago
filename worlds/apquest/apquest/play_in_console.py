@@ -40,29 +40,32 @@ graphic_to_char = {
 }
 
 
-def render_to_console(game: Game) -> None:
+def render_to_text(game: Game) -> str:
     player = game.player
     rendered_graphics = game.render()
 
-    print(f"Health: {player.current_health}/{player.max_health}")
+    output_string = f"Health: {player.current_health}/{player.max_health}\n"
 
     inventory = []
     for item, count in player.inventory.items():
         inventory += [graphic_to_char[ITEM_TO_GRAPHIC[item]] for _ in range(count)]
     inventory.sort()
 
-    print(f"Inventory: {', '.join(inventory)}")
+    output_string += f"Inventory: {', '.join(inventory)}\n"
 
     if player.has_won:
-        print("VICTORY!!!")
+        output_string += "VICTORY!!!\n"
 
     while game.queued_events:
         next_event = game.queued_events.pop(0)
         if isinstance(next_event, ConfettiFired):
-            print("Confetti fired! You feel motivated :)")
+            output_string += "Confetti fired! You feel motivated :)\n"
 
     for row in rendered_graphics:
-        print(" ".join(graphic_to_char[graphic] for graphic in row))
+        output_string += " ".join(graphic_to_char[graphic] for graphic in row)
+        output_string += "\n"
+
+    return output_string
 
 
 if __name__ == "__main__":
@@ -73,7 +76,7 @@ if __name__ == "__main__":
 
     def input_and_rerender(input_key: Input) -> None:
         game.input(input_key)
-        render_to_console(game)
+        print(render_to_text(game))
 
     def on_press(key: Key | KeyCode | None) -> None:
         if key == keyboard.KeyCode.from_char("w"):
@@ -89,7 +92,7 @@ if __name__ == "__main__":
         if key == keyboard.KeyCode.from_char("c"):
             input_and_rerender(Input.CONFETTI)
 
-    render_to_console(game)
+    print(render_to_text(game))
 
     with keyboard.Listener(on_press=on_press) as listener:
         while True:

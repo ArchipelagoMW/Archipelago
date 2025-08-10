@@ -26,17 +26,21 @@ if TYPE_CHECKING:
 class Gameboard:
     gameboard: tuple[tuple[Entity, ...], ...]
 
+    content_filled: bool
+
     def __init__(self, gameboard: tuple[tuple[Entity, ...], ...]) -> None:
         assert gameboard, "Gameboard is empty"
         assert all(len(row) == len(gameboard[0]) for row in gameboard), "Not all rows have the same size"
 
         self.gameboard = gameboard
+        self.content_filled = False
 
     def fill_default_location_content(self) -> None:
         for entity in self.iterate_entities():
             if isinstance(entity, LocationMixin):
                 if entity.location in DEFAULT_CONTENT:
                     entity.content = DEFAULT_CONTENT[entity.location]
+        self.content_filled = True
 
     def get_entity_at(self, x: int, y: int) -> Entity:
         if x < 0 or x >= len(self.gameboard[0]):
@@ -69,6 +73,10 @@ class Gameboard:
             graphics.append(tuple(graphics_row))
 
         return tuple(graphics)
+
+    @property
+    def ready(self) -> bool:
+        return self.content_filled
 
 
 def create_gameboard(hard_mode: bool) -> Gameboard:
