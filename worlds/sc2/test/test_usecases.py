@@ -448,3 +448,45 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         nova_gadgets = [item_name for item_name in world_item_names if item_name in item_groups.nova_gadgets]
 
         self.assertLessEqual(len(nova_gadgets), target_number)
+    
+    def test_mercs_only(self) -> None:
+        world_options = {
+            'selected_races': [
+                SC2Race.TERRAN.get_title(),
+                SC2Race.ZERG.get_title(),
+            ],
+            'required_tactics': options.RequiredTactics.option_any_units,
+            'excluded_items': {
+                item_groups.ItemGroupNames.TERRAN_UNITS: 0,
+                item_groups.ItemGroupNames.ZERG_UNITS: 0,
+            },
+            'unexcluded_items': {
+                item_groups.ItemGroupNames.TERRAN_MERCENARIES: 0,
+                item_groups.ItemGroupNames.ZERG_MERCENARIES: 0,
+            },
+            'start_inventory': {
+                item_names.PROGRESSIVE_FAST_DELIVERY: 1,
+                item_names.ROGUE_FORCES: 1,
+                item_names.UNRESTRICTED_MUTATION: 1,
+                item_names.EVOLUTIONARY_LEAP: 1,
+            },
+            'mission_order': options.MissionOrder.option_grid,
+            'excluded_missions': [
+                SC2Mission.ENEMY_WITHIN.mission_name,  # Requires a unit for Niadra to build
+            ],
+        }
+        self.generate_world(world_options)
+        world_item_names = [item.name for item in self.multiworld.itempool]
+        terran_nonmerc_units = tuple(
+            item_name
+            for item_name in world_item_names
+            if item_name in item_groups.terran_units and item_name not in item_groups.terran_mercenaries
+        )
+        zerg_nonmerc_units = tuple(
+            item_name
+            for item_name in world_item_names
+            if item_name in item_groups.zerg_units and item_name not in item_groups.zerg_mercenaries
+        )
+
+        self.assertTupleEqual(terran_nonmerc_units, ())
+        self.assertTupleEqual(zerg_nonmerc_units, ())

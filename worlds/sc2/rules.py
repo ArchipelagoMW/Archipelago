@@ -3104,9 +3104,10 @@ class SC2Logic:
         """
         Has unit usable as a Garrison in Enemy Intelligence
         """
-        return state.has_any(
-            {
+        return (
+            state.has_any((
                 item_names.MARINE,
+                item_names.SON_OF_KORHAL,
                 item_names.REAPER,
                 item_names.MARAUDER,
                 item_names.GHOST,
@@ -3117,8 +3118,17 @@ class SC2Logic:
                 item_names.DIAMONDBACK,
                 item_names.VIKING,
                 item_names.DOMINION_TROOPER,
-            },
-            self.player,
+            ), self.player)
+            or (self.advanced_tactics
+                and state.has(item_names.ROGUE_FORCES, self.player)
+                and state.has_any((
+                    item_names.WAR_PIGS,
+                    item_names.HAMMER_SECURITIES,
+                    item_names.SPARTAN_COMPANY,
+                    item_names.HELS_ANGELS,
+                    item_names.BRYNHILDS,
+                ), self.player)
+            )
         )
 
     def enemy_intelligence_cliff_garrison(self, state: CollectionState) -> bool:
