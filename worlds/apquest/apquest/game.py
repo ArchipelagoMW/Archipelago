@@ -64,6 +64,8 @@ class Player:
 
     def receive_item(self, item: Item) -> None:
         self.inventory[item] += 1
+        if item == Item.HEALTH_UPGRADE:
+            self.current_health += 2
 
     def has_item(self, item: Item) -> bool:
         return self.inventory[item] > 0
