@@ -226,7 +226,7 @@ For example, if you want to make a custom campaign like the vanilla ones, you wi
 
 The natural flow of a mission order is defined by the types of its layouts. It makes sense for a mission to unlock its neighbors, it makes sense for a Hopscotch layout to wrap around the sides, and it makes sense for a Column's final mission to be at the bottom. Layout types create their flow by setting [`next`](#next), [`entrance`](#entrance), [`exit`](#exit), and [`entry_rules`](#entry-rules) on missions. More on these in a little bit.
 
-Layout types dictate their own visual structure, and will only rarely make mission slots with `empty: true`. If you want a certain shape that's not exactly like an existing type, make sure you pick a type that has missions in **more** spots than you want, not less, and then get rid of the spots you don't want by setting `empty: true` on them.
+Layout types dictate their own visual structure, and will only rarely make mission slots with `empty: true`. If you want a certain shape that's not exactly like an existing type, you can pick a type with more slots than you want and remove the extras by setting `empty: true` on them.
 
 With the basic setup in place, you should decide on what the goal of your mission order is. By default every campaign has `goal: true`, meaning all campaigns must be beaten to complete the world. You can additionally set `goal: true` on layouts and mission slots to require them to be beaten as well. If you set `goal: false` on everything, the mission order will default to setting the last campaign (lowest in your YAML) as the goal.
 
@@ -235,9 +235,11 @@ After deciding on a goal, you can complicate your way towards it. At the start o
 If this behavior isn't enough for your planned mission order, you can interrupt the natural flow of layout types using `entry_rules` in combination with `exit`.
 
 When this document refers to "beating" something, it means the following:
-- Beating a mission simply means getting its victory check
+- A mission is beaten if it is accessible and its victory location is checked.
 - Beating a layout means beating all the missions in the layout with `exit: true`
 - Beating a campaign means beating all the layouts in the campaign with `exit: true`
+
+Note victory checks may be claimed by someone else running `!collect` in a multiworld and receiving an item on a victory check. Collecting victory cache checks do not count, only victory checks.
 
 Layouts will have their default exit missions set by the layout type. If you don't want to use this default, you will have to manually set `exit: false` on the default exits. Campaigns default to using the last layout in them (the lowest in your YAML) as their exit, but only if you don't manually set `exit: true` on a layout.
 
@@ -260,7 +262,7 @@ To summarize:
 
 ## Shared options
 
-These are the options that campaigns, layouts and missions have in common, though not all of them apply to all three. All the options below are listed with their defaults.
+These are the options that are shared between at least two of campaigns, layouts and missions. All the options below are listed with their defaults.
 
 ---
 ### Display Name
