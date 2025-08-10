@@ -1007,7 +1007,8 @@ item_table = {
         ItemData(904 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive_2, 0, SC2Race.TERRAN, quantity=2,
                  classification=ItemClassification.progression),
     item_names.NOVA_ENERGY_SUIT_MODULE:
-        ItemData(905 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Nova_Gear, 4, SC2Race.TERRAN),
+        ItemData(905 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Nova_Gear, 4, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
     item_names.NOVA_ARMORED_SUIT_MODULE:
         ItemData(906 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Nova_Gear, 5, SC2Race.TERRAN,
                  classification=ItemClassification.progression),

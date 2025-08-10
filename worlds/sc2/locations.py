@@ -5662,8 +5662,8 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2NCO_LOC_ID_OFFSET + 700,
             LocationType.VICTORY,
             logic.enemy_shadow_victory,
-            hard_rule=lambda state: logic.nova_any_nobuild_damage(state)
-            and logic.enemy_shadow_door_unlocks_tool(state),
+            hard_rule=lambda state: logic.nova_beat_stone(state)
+                and logic.enemy_shadow_door_unlocks_tool(state),
         ),
         make_location_data(
             SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name,
