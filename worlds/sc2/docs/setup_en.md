@@ -213,7 +213,7 @@ To run StarCraft 2 through Archipelago on Linux, you will need to install the ga
 of the Archipelago client.
 
 Make sure you have StarCraft 2 installed using Wine, and you know where Wine and Starcraft 2 are installed.
-If you're having trouble installing or running StarCraft 2 on Linux, it is recommend to use the Lutris installer.
+If you're having trouble installing or running StarCraft 2 on Linux, it is recommended to use the Lutris installer.
 
 Copy the following into a .sh file, preferably within your Archipelago directory,
 replacing the values of **WINE** and **SC2PATH** variables with the relevant locations,

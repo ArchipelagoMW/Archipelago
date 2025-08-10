@@ -25,7 +25,7 @@ code contributors also reported bugs and participated in beta testing.
 * Alice Voltaire
 
 ### Voice Acting
-@-handles in this section are social media contacts rather than specifically github in this section.
+@-handles in this section are social media contacts rather than specifically GitHub in this section.
 
 * Subsourian (@Subsourian) - Signifier, Slayer
 * GiantGrantGames (@GiantGrantGames) - Trireme
