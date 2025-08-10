@@ -59,7 +59,7 @@ class APQuestWorld(World):
     # You must override this function and have it return the name of an infinitely repeatable filler item.
     # If you have multiple repeatable filler items, you can randomly choose one using e.g. self.random.choice(...).
     def get_filler_item_name(self) -> str:
-        return "Confetti Canon"
+        return "Confetti Cannon"
 
     # There may be data that the game client will need to modify the behavior of the game.
     # This is what slot_data exists for. Upon every client connection, the slot's slot_data is sent to the client.
