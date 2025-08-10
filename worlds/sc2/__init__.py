@@ -94,7 +94,7 @@ class SC2World(World):
     """Locations locked to contain specific items, such as victory events or forced resources"""
     location_cache: List[Location]
     final_missions: List[int]
-    required_client_version = 0, 4, 5
+    required_client_version = 0, 6, 3
     custom_mission_order: SC2MissionOrder
     logic: Optional['SC2Logic']
     filler_items_distribution: Dict[str, int]
