@@ -127,6 +127,11 @@ local ROM_ITEM_TABLE = {
     "AP_SPACE_L3_GARIBS",
     "AP_SPACE_BONUS_GARIBS",
     "AP_LIFE_UP",
+    "AP_HERCULES_POTION",
+    "AP_ATLANTIS_L1_GATE",
+    "AP_ATLANTIS_L2_RAISE_WATER",
+    "AP_ATLANTIS_L2_WATER_DRAIN",
+    "AP_ATLANTIS_L2_GATE",
     "AP_MAX_ITEM"
 };
 
@@ -376,10 +381,13 @@ local ADDRESS_MAP = {
             ["49"] = {
                 ['id'] = 0x31,
                 ['offset'] = 48,
-            },
+            }
+        },
+        ["ENEMY_GARIBS"] = {
             ["50"] = {
                 ['id'] = 0x32,
                 ['offset'] = 49,
+                ['object_id'] = 0x3E,
             },
         },
         ["LIFE"] = {
@@ -439,47 +447,47 @@ GLOVERHACK = {
     RDRAMBase = 0x80000000,
     RDRAMSize = 0x800000,
 
-    base_pointer = 0x400000,
+        base_pointer = 0x400000,
     pc = 0x0,
     text_size = 27,
     ap_items = 0x0,
-    ap_world = 0x4C,
+    ap_world = 0x54,
       hub_entrance = 0x0,
       door_number = 0x1,
       garib_locations = 0x4,
         garib_id = 0x4,
         garib_collected = 0x6,
-      garib_size = 0x8,
-      garib_all_collected = 0x284,
-      life_locations = 0x288,
+        garib_object_id = 0x8,
+      garib_size = 0xC,
+      garib_all_collected = 0x3C4,
+      life_locations = 0x3C8,
         life_id = 0x4,
         life_collected = 0x6,
       life_size = 0x8,
-      tip_locations = 0x2D8,
+      tip_locations = 0x418,
         tip_id = 0x4,
         tip_collected = 0x6,
       tip_size = 0x8,
-      checkpoint_locations = 0x300,
+      checkpoint_locations = 0x440,
         checkpoint_id = 0x4,
         checkpoint_collected = 0x6,
       checkpoint_size = 0xC,
-      switch_locations = 0x33C,
+      switch_locations = 0x47C,
         switch_id = 0x4,
         switch_collected = 0x6,
-      switch_size = 0x8,
-      goals = 0x364,
-    ap_world_offset = 0x36C,
-    ap_hub_order = 0x66F4,
-    garib_totals = 0x66FA,
-    settings = 0x6772,
+      switch_size = 0xC,
+      goals = 0x4E8,
+    ap_world_offset = 0x4F0,
+    ap_hub_order = 0x9474,
+    garib_totals = 0x947A,
+    settings = 0x94F2,
       garib_logic = 0x0,
       garib_sorting = 0x1,
-    hub_map = 0x6775,
-    world_map = 0x6776,
-    ROM_MAJOR_VERSION = 0x6780,
-    ROM_MINOR_VERSION = 0x6781,
-    ROM_PATCH_VERSION = 0x6782,
-
+    hub_map = 0x94F6,
+    world_map = 0x94F7,
+    ROM_MAJOR_VERSION = 0x9502,
+    ROM_MINOR_VERSION = 0x9503,
+    ROM_PATCH_VERSION = 0x9504,
 
     txt_queue = 0
 }
@@ -648,6 +656,24 @@ function GLOVERHACK:checkLocationFlag(world_id, type, offset, item_id)
             return true
         end
     end
+end
+
+function GLOVERHACK:checkEnemyGaribLocationFlag(world_id, offset_list, ap_id)
+    local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
+    local world_address = hackPointerIndex + GLOVERHACK:getWorldOffset(world_id)
+    for _, offset in pairs(offset_list)
+    do
+        local offset_location = GLOVERHACK:getOffsetLocation(self.garib_locations, offset, "garib")
+        local check_id = mainmemory.read_u16_be(world_address + offset_location + self.garib_object_id)
+        if check_id == ap_id then
+             local check_value = mainmemory.readbyte(world_address + offset_location + self.garib_collected)
+            if check_value ~= 0x0
+            then
+                return true
+            end
+        end
+    end
+    return false
 end
 
 function GLOVERHACK:getSettingPointer()
@@ -827,10 +853,6 @@ function GLOVERHACK:getRomVersion()
     end
 end
 
----------------------------------- JIGGIES ---------------------------------
-
-
-
 function garib_check()
     local checks = {}
         if ADDRESS_MAP[WORLD_NAME] ~= nil
@@ -840,6 +862,27 @@ function garib_check()
                 for loc_id,locationTable in pairs(ADDRESS_MAP[WORLD_NAME]["GARIBS"])
                 do
                     checks[loc_id] = GVR:checkLocationFlag(WORLD_ID, "garib", locationTable['offset'], locationTable['id'])
+                    -- print(loc_id..":"..tostring(checks[loc_id]))
+                end
+            end
+        end
+    return checks
+end
+
+function enemy_garib_check()
+    local checks = {}
+        if ADDRESS_MAP[WORLD_NAME] ~= nil
+        then
+            if ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"] ~= nil
+            then
+                local offset_list = {};
+                for loc_id,locationTable in pairs(ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"])
+                do
+                    offset_list[loc_id] = locationTable["offset"]
+                end
+                for loc_id,locationTable in pairs(ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"])
+                do
+                    checks[loc_id] = GVR:checkEnemyGaribLocationFlag(WORLD_ID, offset_list, locationTable['object_id'])
                     -- print(loc_id..":"..tostring(checks[loc_id]))
                 end
             end
@@ -1552,6 +1595,7 @@ function SendToClient()
     retTable["tip"] = tip_check()
     retTable["checkpoint"] = checkpoint_check()
     retTable["switch"] = switch_check()
+    retTable["enemy_garibs"] = enemy_garib_check()
 
     retTable["DEMO"] = false;
     retTable["sync_ready"] = "true"

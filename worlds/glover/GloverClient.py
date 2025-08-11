@@ -65,7 +65,7 @@ bt_loc_name_to_id = network_data_package["games"]["Glover"]["location_name_to_id
 bt_itm_name_to_id = network_data_package["games"]["Glover"]["item_name_to_id"]
 script_version: int = 1
 version: str = "V0.1"
-patch_md5: str = "fa2653f6cec8581ac5b79b24745022d6"
+patch_md5: str = "077170a297dc086b0babee581a90b036"
 gvr_options = settings.get_settings().glover_options
 program = None
 
@@ -299,6 +299,7 @@ class GloverContext(CommonContext):
         self.location_table = {}
 
         self.garib_table = {}
+        self.enemy_garib_table = {}
         self.life_table = {}
         self.tip_table = {}
         self.checkpoint_table = {}
@@ -568,8 +569,6 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
 
         ctx.finished_game = False
         ctx.location_table = {}
-        ctx.chuffy_table = {}
-        ctx.movelist_table = {}
         ctx.auth = payload["playerName"]
         await ctx.send_connect()
         return
@@ -587,6 +586,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     # Locations handling
     demo = payload["DEMO"]
     garibslist = payload["garibs"]
+    enemygaribslist = payload["enemy_garibs"]
     lifeslist = payload["life"]
     tipslist = payload["tip"]
     checkpointslist = payload["checkpoint"]
@@ -605,6 +605,8 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         demo = True
     if isinstance(garibslist, list):
         garibslist = {}
+    if isinstance(enemygaribslist, list):
+        enemygaribslist = {}
     if isinstance(lifeslist, list):
         lifeslist = {}
     if isinstance(tipslist, list):
@@ -624,6 +626,11 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         if ctx.garib_table != garibslist:
             ctx.garib_table = garibslist
             for locationId, value in garibslist.items():
+                if value == True:
+                    locs1.append(int(locationId))
+        if ctx.enemy_garib_table != enemygaribslist:
+            ctx.enemy_garib_table = enemygaribslist
+            for locationId, value in enemygaribslist.items():
                 if value == True:
                     locs1.append(int(locationId))
         if ctx.life_table != lifeslist:
