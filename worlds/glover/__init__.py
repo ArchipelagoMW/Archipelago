@@ -380,10 +380,23 @@ class GloverWorld(World):
         for each_item in all_filler_items:
             self.multiworld.itempool.append(self.create_item(each_item))
 
-    def connect_entrances(self):
+    def entrance_randomizer(self):
+        entry_name : list[str] = ["1", "2", "3", "Boss", "Bonus"]
         #Apply level entrances and hubworld entrances
-        self.wayroom_entrances
+        for world_index, each_world_prefix in enumerate(self.world_prefixes):
+            world_offset : int  = world_index * 5
+            wayroom_name : str = each_world_prefix + "H"
+            hubroom : Region = self.multiworld.get_region(wayroom_name, self.player)
+            for entry_index, each_entry_suffix in enumerate(entry_name):
+                offset : int = world_offset + entry_index
+                location_name : str = wayroom_name + ": Entry " + each_entry_suffix
+                required_location : Location = self.multiworld.get_location(location_name, self.player)
+                required_location.place_locked_item(self.wayroom_entrances[offset] + "Entry")
+                connecting_level : Region = self.multiworld.get_region(self.wayroom_entrances[offset], self.player)
+                hubroom.connect(connecting_level, location_name, lambda state: state.can_reach_location(location_name, self.player))
 
+    def connect_entrances(self):
+        #self.entrance_randomizer(self)
         visualize_regions(self.multiworld.get_region("Menu", self.player), "Glover.puml")
         return super().connect_entrances()
 

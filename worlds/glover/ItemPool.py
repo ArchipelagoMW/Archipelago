@@ -179,8 +179,8 @@ level_event_table = {
 	}
 
 checkpoint_table = {
-	"Atl1 Checkpoint 1" : 						ItemData(BASE_ID + 130, 1, "Useful", "Atl1: Checkpoint 1"),
-	"Atl1 Checkpoint 2" : 						ItemData(BASE_ID + 131, 1, "Useful", "Atl1: Checkpoint 2"),#,
+	"Atl1 Checkpoint 1" : 						ItemData(BASE_ID + 130, 1, "Progression", "Atl1: Checkpoint 1"),
+	"Atl1 Checkpoint 2" : 						ItemData(BASE_ID + 131, 1, "Progression", "Atl1: Checkpoint 2"),#,
 	#"Atl2 Checkpoint 2" : 						ItemData(1,"",None),
 	#"Atl2 Checkpoint 3" : 						ItemData(1,"",None),
 	#"Atl2 Checkpoint 1" : 						ItemData(1,"",None),
@@ -242,20 +242,20 @@ checkpoint_table = {
 	}
 
 world_garib_table = {
-	"Atl1 1 Garibs" : 							ItemData(BASE_ID + 190, 1,"Useful",None),
-	"Atl1 2 Garibs" : 							ItemData(BASE_ID + 191, 3,"Useful",None),
-	"Atl1 3 Garibs" : 							ItemData(BASE_ID + 192, 1,"Useful",None),
-	"Atl1 4 Garibs" : 							ItemData(BASE_ID + 193, 5,"Useful",None),
-	"Atl1 5 Garibs" : 							ItemData(BASE_ID + 194, 1,"Useful",None),
-	"Atl1 6 Garibs" : 							ItemData(BASE_ID + 195, 1,"Useful",None),
-	"Atl1 9 Garibs" : 							ItemData(BASE_ID + 196, 1,"Useful",None)
-	#"Atl2 1 Garibs" : 							ItemData(1,"",None),
-	#"Atl2 2 Garibs" : 							ItemData(2,,)
-	#"Atl2 3 Garibs" : 							ItemData(3,,)
-	#"Atl2 4 Garibs" : 							ItemData(1,"",None),
-	#"Atl2 5 Garibs" : 							ItemData(5,,)
-	#"Atl2 7 Garibs" : 							ItemData(1,"",None),
-	#"Atl2 10 Garibs" : 						ItemData(1,"",None),
+	"Atl1 1 Garibs" : 							ItemData(BASE_ID + 190, 1,"Garib",None),
+	"Atl1 2 Garibs" : 							ItemData(BASE_ID + 191, 3,"Garib",None),
+	"Atl1 3 Garibs" : 							ItemData(BASE_ID + 192, 1,"Garib",None),
+	"Atl1 4 Garibs" : 							ItemData(BASE_ID + 193, 5,"Garib",None),
+	"Atl1 5 Garibs" : 							ItemData(BASE_ID + 194, 1,"Garib",None),
+	"Atl1 6 Garibs" : 							ItemData(BASE_ID + 195, 1,"Garib",None),
+	"Atl1 9 Garibs" : 							ItemData(BASE_ID + 196, 1,"Garib",None)
+	#"Atl2 1 Garibs" : 							ItemData(BASE_ID + 197, 1,"Garib",None),
+	#"Atl2 2 Garibs" : 							ItemData(BASE_ID + 198, 2,"Garib",None),
+	#"Atl2 3 Garibs" : 							ItemData(BASE_ID + 199, 3,"Garib",None),
+	#"Atl2 4 Garibs" : 							ItemData(BASE_ID + 200, 1,"Garib",None),
+	#"Atl2 5 Garibs" : 							ItemData(BASE_ID + 201, 5,"Garib",None),
+	#"Atl2 7 Garibs" : 							ItemData(BASE_ID + 202, 1,"Garib",None),
+	#"Atl2 10 Garibs" : 						ItemData(BASE_ID + 203, 1,"Garib",None),
 	#"Atl3 1 Garibs" : 							ItemData(2,,)
 	#"Atl3 2 Garibs" : 							ItemData(1,"",None),
 	#"Atl3 3 Garibs" : 							ItemData(2,,)
@@ -437,7 +437,7 @@ trap_table = {
 	}
 
 garibsanity_world_table = {
-	"Atl1 Garib" : 								ItemData(BASE_ID + 2001, 50,"Useful",None)#,
+	"Atl1 Garib" : 								ItemData(BASE_ID + 2001, 50,"Garib",None)#,
 	#"Atl2 Garib" : 							ItemData(BASE_ID + 2002, 60,"",None),
 	#"Atl3 Garib" : 							ItemData(BASE_ID + 2003, 80,"",None),
 	#"Atl? Garib" : 							ItemData(BASE_ID + 2004, 25,"",None),
@@ -486,24 +486,26 @@ garibsanity_world_table = {
 
 #Atlantis 1
 decoupled_garib_table = {
-	"Garib" : 									ItemData(BASE_ID + 10001, 1, "Useful", None),
-	"2 Garibs" : 								ItemData(BASE_ID + 10002, 3, "Useful", None),
-	"3 Garibs" : 								ItemData(BASE_ID + 10003, 1, "Useful", None),
-	"4 Garibs" : 								ItemData(BASE_ID + 10004, 5, "Useful", None),
-	"5 Garibs" : 								ItemData(BASE_ID + 10005, 1, "Useful", None),
-	"6 Garibs" : 								ItemData(BASE_ID + 10006, 1, "Useful", None),
-	"9 Garibs" : 								ItemData(BASE_ID + 10009, 1, "Useful", None),
+	"Garib" : 									ItemData(BASE_ID + 10001, 1, "Garib", None),
+	"2 Garibs" : 								ItemData(BASE_ID + 10002, 3, "Garib", None),
+	"3 Garibs" : 								ItemData(BASE_ID + 10003, 1, "Garib", None),
+	"4 Garibs" : 								ItemData(BASE_ID + 10004, 5, "Garib", None),
+	"5 Garibs" : 								ItemData(BASE_ID + 10005, 1, "Garib", None),
+	"6 Garibs" : 								ItemData(BASE_ID + 10006, 1, "Garib", None),
+	"9 Garibs" : 								ItemData(BASE_ID + 10009, 1, "Garib", None),
 }
-garbinsanity = ItemData(BASE_ID + 10001, 50,"Useful", None)
+garbinsanity = ItemData(BASE_ID + 10001, 50,"Garib", None)
 
 all_items = {
 	**level_event_table, 
 	**checkpoint_table, 
-	**world_garib_table, 
 	**ability_table, 
 	**filler_table, 
 	**trap_table, 
-	**garibsanity_world_table
+	**world_garib_table, 
+	**garibsanity_world_table,
+	**{"Garibsanity" : garbinsanity},
+	**decoupled_garib_table
 }
 
 def generate_item_name_to_id() -> dict:

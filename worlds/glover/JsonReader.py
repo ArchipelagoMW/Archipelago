@@ -402,7 +402,6 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
                     case 7:
                         new_event_item : str = each_location_data.name.replace(":", "")
                         location.place_locked_item(self.create_event(new_event_item))
-                    
 
 def get_region_from_method(multiworld : MultiWorld, player : int, region_pairs : List[RegionPair], method : AccessMethod) -> Region:
     for each_pair in region_pairs:
@@ -474,7 +473,7 @@ def build_location_pairings(base_name : str, ap_ids : list) -> list[list]:
     #I don't know if garib groups are their own location, but if they are, uncomment this
     #output.append(list[base_name, ap_ids[0] + 10000])
     return output
-    
+
 def generate_location_name_to_id(world_prefixes, level_prefixes) -> dict:
     output : dict = {}
     #Each World
