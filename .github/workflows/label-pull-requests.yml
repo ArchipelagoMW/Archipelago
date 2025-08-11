@@ -21,8 +21,8 @@ jobs:
     name: 'Apply peer review label'
     needs: labeler
     if: >-
-      github.event.action == 'ready_for_review' ||
-      ((github.event.action == 'opened' || github.event.action == 'reopened') && !github.event.pull_request.draft)
+      (github.event.action == 'opened' || github.event.action == 'reopened' || 
+      github.event.action == 'ready_for_review') && !github.event.pull_request.draft
     runs-on: ubuntu-latest
     steps:
       - name: 'Add label'
