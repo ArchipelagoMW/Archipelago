@@ -4,28 +4,33 @@ import asyncio
 import re
 # webserver imports
 import urllib.parse
+from collections.abc import Iterable
 
 import Utils
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState, Location
 from CommonClient import logger, get_base_parser, gui_enabled, server_loop
 from MultiServer import mark_raw
 from NetUtils import JSONMessagePart
 from kvui import CommandPromptTextInput
+from . import StardewValleyWorld
 from .logic.logic import StardewLogic
 from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
 try:
-    from worlds.tracker.TrackerClient import TrackerGameContext, TrackerCommandProcessor as ClientCommandProcessor, UT_VERSION, updateTracker  # noqa
+    from worlds.tracker.TrackerClient import TrackerGameContext, TrackerCommandProcessor as ClientCommandProcessor, UT_VERSION  # noqa
+    from worlds.tracker.TrackerCore import TrackerCore
 
     tracker_loaded = True
-except ImportError:
+except ImportError as e:
+    logger.error(e)
     from CommonClient import CommonContext, ClientCommandProcessor
+
+    TrackerCore = object
 
 
     class TrackerGameContextMixin:
         """Expecting the TrackerGameContext to have these methods."""
-        multiworld: MultiWorld
-        player_id: int
+        tracker_core: TrackerCore
 
         def make_gui(self, manager):
             ...
@@ -48,19 +53,19 @@ class StardewCommandProcessor(ClientCommandProcessor):
     @mark_raw
     def _cmd_explain(self, location: str = ""):
         """Explain the logic behind a location."""
-        logic = self.ctx.get_logic()
+        logic = self.ctx.logic
         if logic is None:
             return
 
         try:
             rule = logic.region.can_reach_location(location)
-            expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
+            expl = explain(rule, self.ctx.current_state, expected=None, mode=ExplainMode.CLIENT)
         except KeyError:
 
-            result, usable, response = Utils.get_intended_text(location, [loc.name for loc in self.ctx.multiworld.get_locations(1)])
+            result, usable, response = Utils.get_intended_text(location, [loc.name for loc in self.ctx.all_locations])
             if usable:
                 rule = logic.region.can_reach_location(result)
-                expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
+                expl = explain(rule, self.ctx.current_state, expected=None, mode=ExplainMode.CLIENT)
             else:
                 self.ctx.ui.last_autofillable_command = "/explain"
                 self.output(response)
@@ -72,14 +77,14 @@ class StardewCommandProcessor(ClientCommandProcessor):
     @mark_raw
     def _cmd_explain_item(self, item: str = ""):
         """Explain the logic behind a game item."""
-        logic = self.ctx.get_logic()
+        logic = self.ctx.logic
         if logic is None:
             return
 
         result, usable, response = Utils.get_intended_text(item, logic.registry.item_rules.keys())
         if usable:
             rule = logic.has(result)
-            expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
+            expl = explain(rule, self.ctx.current_state, expected=None, mode=ExplainMode.CLIENT)
         else:
             self.ctx.ui.last_autofillable_command = "/explain_item"
             self.output(response)
@@ -99,19 +104,19 @@ class StardewCommandProcessor(ClientCommandProcessor):
         self.__explain("/explain_how", location, expected=False)
 
     def __explain(self, command: str, location: str, expected: bool | None = None):
-        logic = self.ctx.get_logic()
+        logic = self.ctx.logic
         if logic is None:
             return
 
         try:
             rule = logic.region.can_reach_location(location)
-            expl = explain(rule, get_updated_state(self.ctx), expected=expected, mode=ExplainMode.CLIENT)
+            expl = explain(rule, self.ctx.current_state, expected=expected, mode=ExplainMode.CLIENT)
         except KeyError:
 
-            result, usable, response = Utils.get_intended_text(location, [loc.name for loc in self.ctx.multiworld.get_locations(1)])
+            result, usable, response = Utils.get_intended_text(location, [loc.name for loc in self.ctx.all_locations])
             if usable:
                 rule = logic.region.can_reach_location(result)
-                expl = explain(rule, get_updated_state(self.ctx), expected=expected, mode=ExplainMode.CLIENT)
+                expl = explain(rule, self.ctx.current_state, expected=expected, mode=ExplainMode.CLIENT)
             else:
                 self.ctx.ui.last_autofillable_command = command
                 self.output(response)
@@ -173,8 +178,9 @@ class StardewClientContext(TrackerGameContext):
 
         return StardewManager
 
-    def get_logic(self) -> StardewLogic | None:
-        if self.player_id is None:
+    @property
+    def logic(self) -> StardewLogic | None:
+        if self.tracker_core.get_current_world() is None:
             logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
             return None
 
@@ -182,7 +188,19 @@ class StardewClientContext(TrackerGameContext):
             logger.warning(f"Please connect to a slot with explainable logic (not {self.game}).")
             return None
 
-        return self.multiworld.worlds[self.player_id].logic
+        return self.tracker_core.get_current_world().logic
+
+    @property
+    def current_state(self) -> CollectionState:
+        return self.tracker_core.updateTracker().state
+
+    @property
+    def world(self) -> StardewValleyWorld:
+        return self.tracker_core.get_current_world()
+
+    @property
+    def all_locations(self) -> Iterable[Location]:
+        return self.tracker_core.multiworld.get_locations(self.tracker_core.player_id)
 
 
 def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
@@ -228,10 +246,6 @@ def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
             messages.append({"text": s, "type": "text"})
 
     return messages
-
-
-def get_updated_state(ctx: TrackerGameContext) -> CollectionState:
-    return updateTracker(ctx).state
 
 
 async def main(args):
