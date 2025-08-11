@@ -32,6 +32,13 @@ class LocationMixin:
     remote: bool = False
     has_given_content: bool = False
 
+    def force_clear(self):
+        if self.has_given_content:
+            return False
+
+        self.has_given_content = True
+        self.content_success()
+
     def give_content(self, player: "Player") -> None:
         if self.has_given_content:
             return

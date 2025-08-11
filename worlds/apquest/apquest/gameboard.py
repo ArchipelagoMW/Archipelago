@@ -28,12 +28,15 @@ class Gameboard:
 
     content_filled: bool
 
+    remote_entity_by_location_id: dict[Location, LocationMixin]
+
     def __init__(self, gameboard: tuple[tuple[Entity, ...], ...]) -> None:
         assert gameboard, "Gameboard is empty"
         assert all(len(row) == len(gameboard[0]) for row in gameboard), "Not all rows have the same size"
 
         self.gameboard = gameboard
         self.content_filled = False
+        self.remote_entity_by_location_id = {}
 
     def fill_default_location_content(self) -> None:
         for entity in self.iterate_entities():
@@ -47,6 +50,8 @@ class Gameboard:
             if isinstance(entity, LocationMixin):
                 entity.content = Item.REMOTE_ITEM
                 entity.remote = True
+                self.remote_entity_by_location_id[entity.location] = entity
+
         self.content_filled = True
 
     def get_entity_at(self, x: int, y: int) -> Entity:
@@ -80,6 +85,10 @@ class Gameboard:
             graphics.append(tuple(graphics_row))
 
         return tuple(graphics)
+
+    def force_clear_location(self, location: Location) -> bool:
+        entity = self.remote_entity_by_location_id[location]
+        entity.force_clear()
 
     @property
     def ready(self) -> bool:

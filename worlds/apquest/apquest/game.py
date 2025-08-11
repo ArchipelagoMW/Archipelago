@@ -4,6 +4,7 @@ from .gameboard import Gameboard, create_gameboard
 from .graphics import Graphic
 from .inputs import Direction, Input
 from .items import Item, RemotelyReceivedItem
+from .locations import Location
 from .player import Player
 
 
@@ -84,3 +85,7 @@ class Game:
             return
 
         self.player.receive_item(Item(remote_item_id))
+
+    def force_clear_location(self, location_id: int) -> None:
+        location = Location(location_id)
+        self.gameboard.force_clear_location(location)

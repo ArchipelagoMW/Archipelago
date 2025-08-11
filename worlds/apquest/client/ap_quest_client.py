@@ -50,6 +50,7 @@ class APQuestContext(CommonContext):
 
     highest_processed_item_index: int = 0
     queued_locations: list[int]
+    ingame_cleared_locations: set[int]
 
     top_image_grid: list[list[Image]]
 
@@ -60,6 +61,7 @@ class APQuestContext(CommonContext):
         self.queued_locations = []
         self.slot_data = {}
         self.location_to_item = {}
+        self.ingame_cleared_locations = set()
 
     async def server_auth(self, password_requested: bool = False) -> None:
         await super().server_auth(password_requested)
@@ -84,13 +86,22 @@ class APQuestContext(CommonContext):
                 while self.queued_locations:
                     location = self.queued_locations.pop(0)
                     self.location_checked_side_effects(location)
+                    self.ingame_cleared_locations.add(location)
                     await self.check_locations({location})
 
+                rerender = False
+
                 new_items = self.items_received[self.highest_processed_item_index :]
-                if new_items:
-                    for item in new_items:
-                        self.highest_processed_item_index += 1
-                        self.ap_quest_game.receive_item(item.item, item.location, item.player)
+                for item in new_items:
+                    self.highest_processed_item_index += 1
+                    self.ap_quest_game.receive_item(item.item, item.location, item.player)
+                    rerender = True
+
+                for new_remotely_cleared_location in (self.checked_locations - self.ingame_cleared_locations):
+                    self.ap_quest_game.force_clear_location(new_remotely_cleared_location)
+                    rerender = True
+
+                if rerender:
                     self.render()
 
                 if self.ap_quest_game.player.has_won and not self.finished_game:
@@ -128,12 +139,14 @@ class APQuestContext(CommonContext):
         if cmd == "Disconnected":
             self.connection_status = ConnectionStatus.NOT_CONNECTED
             self.checked_locations = set()
+            self.ingame_cleared_locations = set()
             self.finished_game = False
 
     async def disconnect(self, *args, **kwargs) -> None:
         self.checked_locations = set()
-        self.finished_game = True
+        self.finished_game = False
         self.connection_status = ConnectionStatus.NOT_CONNECTED
+        self.ingame_cleared_locations = set()
         await super().disconnect(*args, **kwargs)
 
     def initial_render(self):
