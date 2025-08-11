@@ -19,8 +19,9 @@ from NetUtils import ClientStatus, NetworkItem
 
 from ..apquest.events import LocationClearedEvent, VictoryEvent
 from ..apquest.game import Game, Input
+from ..apquest.graphics import Graphic
 from ..apquest.locations import LOCATION_NAME_TO_ID
-from .graphics import IMAGE_GRAPHICS, TEXTURES
+from .graphics import IMAGE_GRAPHICS, PLAYER_GRAPHICS, TEXTURES, PlayerSprite
 from .item_quality import get_quality_for_network_item
 from .sounds import ALL_SOUNDS, ITEM_JINGLES, SOUND_PATHS, VICTORY_JINGLE
 
@@ -40,7 +41,10 @@ class APQuestContext(CommonContext):
 
     slot_data: dict[str, Any]
     location_to_item: dict[int, NetworkItem]
+
     ap_quest_game: Game | None = None
+    hard_mode: bool = False
+    player_sprite: PlayerSprite = PlayerSprite.HUMAN
 
     connection_status: ConnectionStatus = ConnectionStatus.NOT_CONNECTED
 
@@ -101,9 +105,14 @@ class APQuestContext(CommonContext):
         if cmd == "Connected":
             self.location_to_item = {}
             self.slot_data = args["slot_data"]
-            hard_mode = self.slot_data["hard_mode"]
+            self.hard_mode = self.slot_data["hard_mode"]
+            try:
+                self.player_sprite = PlayerSprite(self.slot_data["player_sprite"])
+            except Exception as e:
+                logger.exception(e)
+                self.player_sprite = PlayerSprite.UNKNOWN
 
-            self.ap_quest_game = Game(hard_mode)
+            self.ap_quest_game = Game(self.hard_mode)
             self.highest_processed_item_index = 0
             self.initial_render()
 
@@ -143,13 +152,19 @@ class APQuestContext(CommonContext):
     def render(self):
         for gameboard_row, image_row in zip(self.ap_quest_game.render(), self.top_image_grid, strict=False):
             for graphic, image in zip(gameboard_row, image_row, strict=False):
-                image_name = IMAGE_GRAPHICS[graphic]
+                if graphic in PLAYER_GRAPHICS:
+                    image_name = PLAYER_GRAPHICS[graphic].get(self.player_sprite, IMAGE_GRAPHICS[Graphic.UNKNOWN])
+                    if image_name is None:
+                        logger.exception(f"Couldn't find player sprite graphics for player sprite {self.player_sprite}")
+                else:
+                    image_name = IMAGE_GRAPHICS[graphic]
+
                 if image_name is None:
                     image.opacity = 0
                     image.texture = None
                     continue
 
-                image.texture = TEXTURES[image_name]
+                image.texture = TEXTURES.get(image_name, TEXTURES[IMAGE_GRAPHICS[Graphic.UNKNOWN]])
                 image.texture.mag_filter = "nearest"
                 image.opacity = 1
 

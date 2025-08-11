@@ -1,4 +1,5 @@
 import pkgutil
+from enum import Enum
 from io import BytesIO
 
 from kivy.uix.image import CoreImage
@@ -22,20 +23,38 @@ IMAGE_GRAPHICS = {
     Graphic.BOSS_3_HEALTH: "boss_3.png",
     Graphic.BOSS_2_HEALTH: "boss_2.png",
     Graphic.BOSS_1_HEALTH: "boss_1.png",
-    Graphic.PLAYER_DOWN: "duck_down.png",
-    Graphic.PLAYER_UP: "duck_up.png",
-    Graphic.PLAYER_LEFT: "duck_left.png",
-    Graphic.PLAYER_RIGHT: "duck_right.png",
     Graphic.KEY: "key.png",
     Graphic.SHIELD: "shield.png",
     Graphic.SWORD: "sword.png",
     Graphic.HEALTH_UPGRADE: "health.png",
     Graphic.CONFETTI_CANNON: "confetti_cannon.png",
     Graphic.REMOTE_ITEM: "ap_item.png",
+    Graphic.UNKNOWN: "unknown.png",
 }
+
+
+class PlayerSprite(Enum):
+    HUMAN = 0
+    DUCK = 1
+    HORSE = 2
+    CAT = 3
+    UNKNOWN = -1
+
+
+PLAYER_GRAPHICS = {
+    Graphic.PLAYER_DOWN: {PlayerSprite.HUMAN: "human_down.png", PlayerSprite.DUCK: "duck_down.png"},
+    Graphic.PLAYER_UP: {PlayerSprite.HUMAN: "human_up.png", PlayerSprite.DUCK: "duck_up.png"},
+    Graphic.PLAYER_LEFT: {PlayerSprite.HUMAN: "human_left.png", PlayerSprite.DUCK: "duck_left.png"},
+    Graphic.PLAYER_RIGHT: {PlayerSprite.HUMAN: "human_right.png", PlayerSprite.DUCK: "duck_right.png"},
+}
+
+ALL_GRAPHICS = [
+    *IMAGE_GRAPHICS.values(),
+    *[graphic for sub_dict in PLAYER_GRAPHICS.values() for graphic in sub_dict.values()],
+]
 
 TEXTURES = {
     file_name: CoreImage(BytesIO(pkgutil.get_data(__name__, f"../apquest/graphics/{file_name}")), ext="png").texture
-    for file_name in IMAGE_GRAPHICS.values()
+    for file_name in ALL_GRAPHICS
     if file_name is not None
 }
