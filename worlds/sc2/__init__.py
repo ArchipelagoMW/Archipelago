@@ -34,11 +34,16 @@ from .pool_filter import filter_items
 from .mission_tables import SC2Campaign, SC2Mission, SC2Race, MissionFlag
 from .regions import create_mission_order
 from .mission_order import SC2MissionOrder
-
+from worlds.LauncherComponents import components, Component, launch as launch_component
 
 logger = logging.getLogger("Starcraft 2")
 VICTORY_MODULO = 100
 
+def launch_client(*args: str):
+    from .client import launch
+    launch_component(launch, name="Factorio Client", args=args)
+
+components.append(Component('Starcraft 2 Client', func=launch_client, game_name='Starcraft 2', supports_uri=True))
 
 class Starcraft2WebWorld(WebWorld):
     setup_en = Tutorial(
