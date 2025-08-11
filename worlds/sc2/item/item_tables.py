@@ -871,15 +871,15 @@ item_table = {
     item_names.ADVANCED_OPTICS:
         ItemData(622 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 11, SC2Race.TERRAN),
     item_names.ROGUE_FORCES:
-        ItemData(623 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 12, SC2Race.TERRAN, parent=parent_names.TERRAN_MERCENARIES),
+        ItemData(623 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 12, SC2Race.TERRAN, classification=ItemClassification.progression, parent=parent_names.TERRAN_MERCENARIES),
     item_names.MECHANICAL_KNOW_HOW:
         ItemData(624 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 13, SC2Race.TERRAN),
     item_names.MERCENARY_MUNITIONS:
         ItemData(625 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 14, SC2Race.TERRAN),
     item_names.PROGRESSIVE_FAST_DELIVERY:
-        ItemData(626 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive_2, 8, SC2Race.TERRAN, quantity=2, parent=parent_names.TERRAN_MERCENARIES),
+        ItemData(626 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive_2, 8, SC2Race.TERRAN, quantity=2, classification=ItemClassification.progression, parent=parent_names.TERRAN_MERCENARIES),
     item_names.RAPID_REINFORCEMENT:
-        ItemData(627 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 16, SC2Race.TERRAN, parent=parent_names.TERRAN_MERCENARIES),
+        ItemData(627 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 16, SC2Race.TERRAN, classification=ItemClassification.progression, parent=parent_names.TERRAN_MERCENARIES),
     item_names.FUSION_CORE_FUSION_REACTOR:
         ItemData(628 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 17, SC2Race.TERRAN),
     item_names.SONIC_DISRUPTER:
@@ -1007,7 +1007,8 @@ item_table = {
         ItemData(904 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive_2, 0, SC2Race.TERRAN, quantity=2,
                  classification=ItemClassification.progression),
     item_names.NOVA_ENERGY_SUIT_MODULE:
-        ItemData(905 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Nova_Gear, 4, SC2Race.TERRAN),
+        ItemData(905 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Nova_Gear, 4, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
     item_names.NOVA_ARMORED_SUIT_MODULE:
         ItemData(906 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Nova_Gear, 5, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
@@ -1562,10 +1563,10 @@ item_table = {
     item_names.MACROSCOPIC_RECUPERATION: ItemData(707 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 13, SC2Race.ZERG),
     item_names.BIOMECHANICAL_STOCKPILING: ItemData(708 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 14, SC2Race.ZERG, parent=parent_names.INFESTED_FACTORY_OR_STARPORT),
     item_names.BROODLING_SPORE_SATURATION: ItemData(709 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 15, SC2Race.ZERG),
-    item_names.CELL_DIVISION: ItemData(710 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 16, SC2Race.ZERG, parent=parent_names.ZERG_MERCENARIES),
-    item_names.SELF_SUFFICIENT: ItemData(711 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 17, SC2Race.ZERG, parent=parent_names.ZERG_MERCENARIES),
-    item_names.UNRESTRICTED_MUTATION: ItemData(712 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 18, SC2Race.ZERG, parent=parent_names.ZERG_MERCENARIES),
-    item_names.EVOLUTIONARY_LEAP: ItemData(713 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 19, SC2Race.ZERG, parent=parent_names.ZERG_MERCENARIES),
+    item_names.CELL_DIVISION: ItemData(710 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 16, SC2Race.ZERG, classification=ItemClassification.progression, parent=parent_names.ZERG_MERCENARIES),
+    item_names.SELF_SUFFICIENT: ItemData(711 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 17, SC2Race.ZERG, classification=ItemClassification.progression, parent=parent_names.ZERG_MERCENARIES),
+    item_names.UNRESTRICTED_MUTATION: ItemData(712 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 18, SC2Race.ZERG, classification=ItemClassification.progression, parent=parent_names.ZERG_MERCENARIES),
+    item_names.EVOLUTIONARY_LEAP: ItemData(713 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 19, SC2Race.ZERG, classification=ItemClassification.progression, parent=parent_names.ZERG_MERCENARIES),
 
     # Morphs
     item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT: ItemData(800 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 6, SC2Race.ZERG, classification=ItemClassification.progression, parent=parent_names.MORPH_SOURCE_AIR),

@@ -165,23 +165,24 @@ class ValidInventory:
         def attempt_removal(
             item: StarcraftItem,
             remove_flag: ItemFilterFlags = ItemFilterFlags.FilterExcluded,
-        ) -> bool:
+        ) -> str:
             """
-            Returns true and applies `remove_flag` if the item is removable,
-            else returns false and applies `lock_flag`
+            Returns empty string and applies `remove_flag` if the item is removable,
+            else returns a string containing failed locations and applies ItemFilterFlags.LogicLocked
             """
             # Only run logic checks when removing logic items
             if self.logical_inventory.get(item.name, 0) > 0:
                 self.logical_inventory[item.name] -= 1
-                if not all(requirement(self) for (_, requirement) in mission_requirements):
+                failed_rules = [name for name, requirement in mission_requirements if not requirement(self)]
+                if failed_rules:
                     # If item cannot be removed, lock and revert
                     self.logical_inventory[item.name] += 1
                     item.filter_flags |= ItemFilterFlags.LogicLocked
-                    return False
+                    return f"{len(failed_rules)} rules starting with \"{failed_rules[0]}\""
                 if not self.logical_inventory[item.name]:
                     del self.logical_inventory[item.name]
             item.filter_flags |= remove_flag
-            return True
+            return ""
         
         def remove_child_items(
             parent_item: StarcraftItem,
@@ -195,7 +196,7 @@ class ValidInventory:
                 assert parent_id is not None
                 if item_parents.parent_present[parent_id](self.logical_inventory, self.world.options):
                     continue
-                if attempt_removal(child_item, remove_flag):
+                if not attempt_removal(child_item, remove_flag):
                     remove_child_items(child_item, remove_flag)
 
         def cull_items_over_maximum(group: List[StarcraftItem], allowed_max: int) -> None:
@@ -220,10 +221,11 @@ class ValidInventory:
         for excluded_item in excluded_items:
             if ItemFilterFlags.Unexcludable & excluded_item.filter_flags:
                 continue
-            if not attempt_removal(excluded_item, remove_flag=ItemFilterFlags.Removed):
+            removal_failed = attempt_removal(excluded_item, remove_flag=ItemFilterFlags.Removed)
+            if removal_failed:
                 if ItemFilterFlags.UserExcluded in excluded_item.filter_flags:
                     logging.getLogger("Starcraft 2").warning(
-                        f"Cannot exclude item {excluded_item.name} as it would break a logic rule"
+                        f"Cannot exclude item {excluded_item.name} as it would break {removal_failed}"
                     )
                 else:
                     assert False, f"Item filtering excluded an item which is logically required: {excluded_item.name}"
@@ -338,7 +340,7 @@ class ValidInventory:
                             for item in children:
                                 item.filter_flags |= ItemFilterFlags.Locked
                             return False
-            if attempt_removal(item, remove_flag):
+            if not attempt_removal(item, remove_flag):
                 remove_child_items(item, remove_flag)
                 return True
             return False

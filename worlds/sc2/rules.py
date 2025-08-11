@@ -644,6 +644,40 @@ class SC2Logic:
 
     def nova_escape_assist(self, state: CollectionState) -> bool:
         return state.has_any({item_names.NOVA_BLINK, item_names.NOVA_HOLO_DECOY, item_names.NOVA_IONIC_FORCE_FIELD}, self.player)
+    
+    def nova_beat_stone(self, state: CollectionState) -> bool:
+        """
+        Used for any units logic for beating Stone. Shotgun may not be possible; may need feedback.
+        """
+        return (
+            state.has_any((
+                item_names.NOVA_DOMINATION,
+                item_names.NOVA_BLAZEFIRE_GUNBLADE,
+                item_names.NOVA_C20A_CANISTER_RIFLE,
+            ), self.player)
+            or ((
+                    state.has_any((
+                        item_names.NOVA_PLASMA_RIFLE,
+                        item_names.NOVA_MONOMOLECULAR_BLADE,
+                    ), self.player)
+                    or state.has_all((
+                        item_names.NOVA_HELLFIRE_SHOTGUN,
+                        item_names.NOVA_STIM_INFUSION
+                    ), self.player)
+                )
+                and state.has_any((
+                    item_names.NOVA_JUMP_SUIT_MODULE,
+                    item_names.NOVA_ARMORED_SUIT_MODULE,
+                    item_names.NOVA_ENERGY_SUIT_MODULE,
+                ), self.player)
+                and state.has_any((
+                    item_names.NOVA_FLASHBANG_GRENADES,
+                    item_names.NOVA_STIM_INFUSION,
+                    item_names.NOVA_BLINK,
+                    item_names.NOVA_IONIC_FORCE_FIELD,
+                ), self.player)
+            )
+        )
 
     # Global Zerg
     def zerg_power_rating(self, state: CollectionState) -> int:
@@ -3070,9 +3104,10 @@ class SC2Logic:
         """
         Has unit usable as a Garrison in Enemy Intelligence
         """
-        return state.has_any(
-            {
+        return (
+            state.has_any((
                 item_names.MARINE,
+                item_names.SON_OF_KORHAL,
                 item_names.REAPER,
                 item_names.MARAUDER,
                 item_names.GHOST,
@@ -3083,13 +3118,26 @@ class SC2Logic:
                 item_names.DIAMONDBACK,
                 item_names.VIKING,
                 item_names.DOMINION_TROOPER,
-            },
-            self.player,
+            ), self.player)
+            or (self.advanced_tactics
+                and state.has(item_names.ROGUE_FORCES, self.player)
+                and state.count_from_list((
+                    item_names.WAR_PIGS,
+                    item_names.HAMMER_SECURITIES,
+                    item_names.DEATH_HEADS,
+                    item_names.SPARTAN_COMPANY,
+                    item_names.HELS_ANGELS,
+                    item_names.BRYNHILDS,
+                ), self.player) >= 3
+            )
         )
 
     def enemy_intelligence_cliff_garrison(self, state: CollectionState) -> bool:
         return (
-            state.has_any({item_names.REAPER, item_names.VIKING, item_names.MEDIVAC, item_names.HERCULES}, self.player)
+            state.has_any((item_names.REAPER, item_names.VIKING), self.player)
+            or (state.has_any((item_names.MEDIVAC, item_names.HERCULES), self.player)
+                and self.enemy_intelligence_garrisonable_unit(state)
+            )
             or state.has_all({item_names.GOLIATH, item_names.GOLIATH_JUMP_JETS}, self.player)
             or (self.advanced_tactics and state.has_any({item_names.HELS_ANGELS, item_names.BRYNHILDS}, self.player))
         )
@@ -3221,7 +3269,7 @@ class SC2Logic:
         return self.enemy_shadow_second_stage(state) and (self.grant_story_tech == GrantStoryTech.option_grant or self.enemy_shadow_door_unlocks_tool(state))
 
     def enemy_shadow_victory(self, state: CollectionState) -> bool:
-        return self.enemy_shadow_door_controls(state) and (self.grant_story_tech == GrantStoryTech.option_grant or self.nova_heal(state))
+        return self.enemy_shadow_door_controls(state) and (self.grant_story_tech == GrantStoryTech.option_grant or (self.nova_heal(state) and self.nova_beat_stone(state)))
 
     def dark_skies_requirement(self, state: CollectionState) -> bool:
         return self.terran_common_unit(state) and self.terran_beats_protoss_deathball(state) and self.terran_defense_rating(state, False, True) >= 8
@@ -3310,16 +3358,27 @@ class SC2Logic:
                     item_names.NIGHT_WOLF,
                     item_names.NIGHT_HAWK,
                     item_names.PRIDE_OF_AUGUSTRGRAD,
-                    # Mercs with shortest initial cooldown (300s)
-                    item_names.WAR_PIGS,
-                    item_names.DEATH_HEADS,
-                    item_names.HELS_ANGELS,
-                    item_names.WINGED_NIGHTMARES,
                 ), self.player)
                 or state.has_all((item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY), self.player)
                 or state.has_all((item_names.EMPERORS_GUARDIAN, item_names.LIBERATOR_RAID_ARTILLERY), self.player)
                 or state.has_all((item_names.VALKYRIE, item_names.VALKYRIE_FLECHETTE_MISSILES), self.player)
                 or state.has_all((item_names.WIDOW_MINE, item_names.WIDOW_MINE_DEMOLITION_PAYLOAD), self.player)
+                or (
+                    state.has_any((
+                        # Mercs with shortest initial cooldown (300s)
+                        item_names.WAR_PIGS,
+                        item_names.DEATH_HEADS,
+                        item_names.HELS_ANGELS,
+                        item_names.WINGED_NIGHTMARES,
+                    ), self.player)
+                    # + 2 upgrades that allow getting faster/earlier mercs
+                    and state.count_from_list((
+                        item_names.RAPID_REINFORCEMENT,
+                        item_names.PROGRESSIVE_FAST_DELIVERY,
+                        item_names.ROGUE_FORCES,
+                        # item_names.SIGNAL_BEACON,  # Probably doesn't help too much on the first unit
+                    ), self.player) >= 2
+                )
             )
 
         return _has_terran_units
@@ -3379,6 +3438,22 @@ class SC2Logic:
                     or (self.morph_devourer(state)
                         and state.has(item_names.DEVOURER_PRESCIENT_SPORES, self.player)
                     )
+                    or (
+                    state.has_any((
+                        # Mercs with <= 300s first drop time
+                        item_names.DEVOURING_ONES,
+                        item_names.HUNTER_KILLERS,
+                        item_names.CAUSTIC_HORRORS,
+                        item_names.HUNTERLING,
+                    ), self.player)
+                    # + 2 upgrades that allow getting faster/earlier mercs
+                    and state.count_from_list((
+                        item_names.UNRESTRICTED_MUTATION,
+                        item_names.EVOLUTIONARY_LEAP,
+                        item_names.CELL_DIVISION,
+                        item_names.SELF_SUFFICIENT,
+                    ), self.player) >= 2
+                )
                 )
             )
 
