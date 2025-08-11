@@ -2,6 +2,7 @@ from random import Random
 
 from . import options as stardew_options
 from .content import StardewContent
+from .content.vanilla.ginger_island import ginger_island_content_pack
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.transport_names import Transportation
 from .strings.building_names import Building
@@ -58,7 +59,7 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
     else:
         early_candidates.append(APWeapon.sword)
 
-    if options.exclude_ginger_island == stardew_options.ExcludeGingerIsland.option_false:
+    if content.is_enabled(ginger_island_content_pack):
         early_candidates.append(Transportation.island_obelisk)
 
         if options.walnutsanity.value:
