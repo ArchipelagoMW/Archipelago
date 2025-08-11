@@ -1,93 +1,10 @@
-from collections import Counter
-from enum import Enum
-
-from entities import InteractableMixin
-from events import ConfettiFired, Event
-from gameboard import Gameboard, create_gameboard
-from graphics import Graphic
-
-from items import Item
-
-
-class Direction(Enum):
-    LEFT = (-1, 0)
-    UP = (0, -1)
-    RIGHT = (1, 0)
-    DOWN = (0, 1)
-
-
-class Input(Enum):
-    LEFT = 1
-    UP = 2
-    RIGHT = 3
-    DOWN = 4
-    ACTION = 5
-    CONFETTI = 6
-
-
-class Player:
-    current_x: int
-    current_y: int
-    current_health: int
-
-    has_won: bool = False
-
-    facing: Direction
-
-    inventory: Counter[Item]
-
-    gameboard: Gameboard
-
-    def __init__(self, gameboard: Gameboard) -> None:
-        self.gameboard = gameboard
-        self.inventory = Counter()
-        self.respawn()
-
-    def respawn(self) -> None:
-        self.current_x = 4
-        self.current_y = 9
-        self.current_health = self.max_health
-        self.facing = Direction.DOWN
-
-    @property
-    def max_health(self) -> int:
-        return 2 + 2 * self.inventory[Item.HEALTH_UPGRADE]
-
-    def render(self) -> Graphic:
-        if self.facing == Direction.LEFT:
-            return Graphic.PLAYER_LEFT
-        if self.facing == Direction.UP:
-            return Graphic.PLAYER_UP
-        if self.facing == Direction.RIGHT:
-            return Graphic.PLAYER_RIGHT
-        return Graphic.PLAYER_DOWN
-
-    def receive_item(self, item: Item) -> None:
-        self.inventory[item] += 1
-        if item == Item.HEALTH_UPGRADE:
-            self.current_health += 2
-
-    def has_item(self, item: Item) -> bool:
-        return self.inventory[item] > 0
-
-    def remove_item(self, item: Item) -> None:
-        self.inventory[item] -= 1
-
-    def damage(self, damage: int) -> None:
-        if self.has_item(Item.SHIELD):
-            damage = damage // 2
-
-        self.current_health = max(0, self.current_health - damage)
-
-        if self.current_health <= 0:
-            self.die()
-
-    def die(self) -> None:
-        self.respawn()
-        self.gameboard.respawn_enemies()
-
-    def victory(self) -> None:
-        self.has_won = True
+from .entities import InteractableMixin
+from .events import ConfettiFired, Event
+from .gameboard import Gameboard, create_gameboard
+from .graphics import Graphic
+from .inputs import Direction, Input
+from .items import Item, RemotelyReceivedItem
+from .player import Player
 
 
 class Game:
@@ -96,10 +13,13 @@ class Game:
 
     queued_events: list[Event]
 
+    remotely_received_items: set[tuple[int, int, int]]
+
     def __init__(self, hard_mode: bool) -> None:
         self.queued_events = []
         self.gameboard = create_gameboard(hard_mode)
-        self.player = Player(self.gameboard)
+        self.player = Player(self.gameboard, self.queued_events.append)
+        self.remotely_received_items = set()
 
     def render(self) -> tuple[tuple[Graphic, ...], ...]:
         return self.gameboard.render(self.player)
@@ -154,3 +74,10 @@ class Game:
             return
 
         raise ValueError(f"Don't know input {input_key}")
+
+    def receive_item(self, remote_item_id: int, remote_location_id: int, remote_location_player: int) -> None:
+        remotely_received_item = RemotelyReceivedItem(remote_item_id, remote_location_id, remote_location_player)
+        if remotely_received_item in self.remotely_received_items:
+            return
+
+        self.player.receive_item(Item(remote_item_id))

@@ -1,16 +1,24 @@
 from collections import defaultdict
 from enum import Enum
+from typing import NamedTuple
 
-from graphics import Graphic
+from ..items import ITEM_NAME_TO_ID
+from .graphics import Graphic
 
 
 class Item(Enum):
-    KEY = 1
-    SWORD = 2
-    SHIELD = 3
-    HEALTH_UPGRADE = 4
-    CONFETTI_CANNON = 5
-    REMOTE_ITEM = 10
+    KEY = ITEM_NAME_TO_ID["Key"]
+    SWORD = ITEM_NAME_TO_ID["Sword"]
+    SHIELD = ITEM_NAME_TO_ID["Shield"]
+    HEALTH_UPGRADE = ITEM_NAME_TO_ID["Health Upgrade"]
+    CONFETTI_CANNON = ITEM_NAME_TO_ID["Confetti Cannon"]
+    REMOTE_ITEM = -1
+
+
+class RemotelyReceivedItem(NamedTuple):
+    remote_item_id: int
+    remote_location_id: int
+    remote_location_player: int
 
 
 ITEM_TO_GRAPHIC = defaultdict(

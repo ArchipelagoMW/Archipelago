@@ -1,13 +1,12 @@
 from abc import abstractmethod
 from typing import TYPE_CHECKING, ClassVar
 
-from graphics import Graphic
-
-from items import ITEM_TO_GRAPHIC, Item
-from locations import Location
+from .graphics import Graphic
+from .items import ITEM_TO_GRAPHIC, Item
+from .locations import Location
 
 if TYPE_CHECKING:
-    from game import Player
+    from .game import Player
 
 
 class Entity:
@@ -30,6 +29,7 @@ class ActivatableMixin:
 class LocationMixin:
     location: Location
     content: Item | None = None
+    remote: bool = False
     has_given_content: bool = False
 
     def give_content(self, player: "Player") -> None:
@@ -40,8 +40,12 @@ class LocationMixin:
             self.content_failure()
             return
 
+        if self.remote:
+            player.location_cleared(self.location.value)
+        else:
+            player.receive_item(self.content)
+
         self.has_given_content = True
-        player.receive_item(self.content)
         self.content_success()
 
     def content_success(self) -> None:

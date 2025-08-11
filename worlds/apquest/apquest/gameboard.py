@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
-from entities import (
+from .entities import (
     Bush,
     Button,
     ButtonDoor,
@@ -15,12 +15,12 @@ from entities import (
     LocationMixin,
     Wall,
 )
-from graphics import Graphic
-
-from locations import DEFAULT_CONTENT, Location
+from .graphics import Graphic
+from .items import Item
+from .locations import DEFAULT_CONTENT, Location
 
 if TYPE_CHECKING:
-    from game import Player
+    from .game import Player
 
 
 class Gameboard:
@@ -40,6 +40,13 @@ class Gameboard:
             if isinstance(entity, LocationMixin):
                 if entity.location in DEFAULT_CONTENT:
                     entity.content = DEFAULT_CONTENT[entity.location]
+        self.content_filled = True
+
+    def fill_remote_location_content(self) -> None:
+        for entity in self.iterate_entities():
+            if isinstance(entity, LocationMixin):
+                entity.content = Item.REMOTE_ITEM
+                entity.remote = True
         self.content_filled = True
 
     def get_entity_at(self, x: int, y: int) -> Entity:

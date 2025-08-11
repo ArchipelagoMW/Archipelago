@@ -1,4 +1,4 @@
-from events import ConfettiFired
+from .events import ConfettiFired
 
 try:
     from pynput import keyboard
@@ -6,10 +6,10 @@ try:
 except ImportError as e:
     raise ImportError("In order to play APQuest from console, you have to install pynput.") from e
 
-from game import Game, Input
-from graphics import Graphic
-
-from items import ITEM_TO_GRAPHIC
+from .game import Game
+from .graphics import Graphic
+from .inputs import Input
+from .items import ITEM_TO_GRAPHIC
 
 graphic_to_char = {
     Graphic.EMPTY: " ",
@@ -37,6 +37,7 @@ graphic_to_char = {
     Graphic.SWORD: "S",
     Graphic.HEALTH_UPGRADE: "H",
     Graphic.CONFETTI_CANNON: "?",
+    Graphic.REMOTE_ITEM: "I",
 }
 
 
