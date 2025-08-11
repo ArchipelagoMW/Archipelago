@@ -1,0 +1,20 @@
+<APQuestGrid>:
+    id: game_grid_top
+    cols: 11
+    rows: 11
+    spacing: 0
+    padding: 0
+    size_hint: None, None
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+<APQuestGameView>:
+    BoxLayout:
+        id: outer_container
+        orientation: "vertical"
+
+        Label:
+            text: "Inventory:"
+            size_hint_y: None
+
+        RelativeLayout:
+            id: game_container

@@ -1,22 +1,24 @@
+# isort: off
+from kivy.core.window import Keyboard, Window
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.image import Image
+from kivy.uix.layout import Layout
+from kivymd.uix.recycleview import MDRecycleView
+from kvui import GameManager
+# isort: on
+
 import asyncio
 import sys
+from pathlib import Path
 from typing import Any
 
 import colorama
 from CommonClient import CommonContext, get_base_parser, gui_enabled, handle_url_arg, logger, server_loop
-
-# isort: off
-from kvui import GameManager
-from kivy.core.window import Keyboard, Window
-from kivy.uix.layout import Layout
-from kivymd.uix.recycleview import MDRecycleView
-# isort: on
-
 from NetUtils import ClientStatus
 
-from .apquest.events import LocationClearedEvent
-from .apquest.game import Game, Input
-from .apquest.play_in_console import render_to_text
+from ..apquest.events import LocationClearedEvent
+from ..apquest.game import Game, Input
+from .graphics import IMAGE_GRAPHICS
 
 
 class APQuestContext(CommonContext):
@@ -32,9 +34,12 @@ class APQuestContext(CommonContext):
     queued_locations: list[int]
     victory: bool = False
 
+    top_image_grid: list[list[Image]]
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
+        self.top_image_grid = []
         self.queued_locations = []
         self.slot_data = {}
 
@@ -45,6 +50,10 @@ class APQuestContext(CommonContext):
 
     async def client_loop(self):
         while not self.exit_event.is_set():
+            if not self.ap_quest_game or not self.ap_quest_game.gameboard or not self.ap_quest_game.gameboard.ready:
+                await asyncio.sleep(0.1)
+                continue
+
             try:
                 while self.queued_locations:
                     location = self.queued_locations.pop(0)
@@ -71,16 +80,49 @@ class APQuestContext(CommonContext):
             hard_mode = self.slot_data["hard_mode"]
 
             self.ap_quest_game = Game(hard_mode)
+            self.highest_processed_item_index = 0
             self.ap_quest_game.gameboard.fill_remote_location_content()
-
-            self.client_loop = asyncio.create_task(self.client_loop(), name="Client Loop")
+            self.initial_render()
 
             self.ui.game_view.bind_keyboard()
 
             self.render()
 
+    def initial_render(self):
+        if self.ui.upper_game_grid.children:
+            return
+
+        self.top_image_grid = []
+
+        for row in self.ap_quest_game.gameboard.gameboard:
+            self.top_image_grid.append([])
+            for _ in row:
+                empty_path = Path(__file__).parent.parent / "apquest" / "graphics" / "empty.png"
+                image = Image(fit_mode="fill", source=str(empty_path.absolute()))
+                image.texture.mag_filter = "nearest"
+                self.ui.lower_game_grid.add_widget(image)
+
+                image2 = Image(fit_mode="fill")
+
+                self.ui.upper_game_grid.add_widget(image2)
+
+                self.top_image_grid[-1].append(image2)
+
+        self.render()
+
     def render(self):
-        self.ui.game_view.ids.game.text = render_to_text(self.ap_quest_game)
+        for gameboard_row, image_row in zip(self.ap_quest_game.render(), self.top_image_grid, strict=False):
+            for graphic, image in zip(gameboard_row, image_row, strict=False):
+                image_name = IMAGE_GRAPHICS[graphic]
+                if image_name is None:
+                    image.opacity = 0
+                    image.source = ""
+                    continue
+
+                image_path = Path(__file__).parent.parent / "apquest" / "graphics" / image_name
+                image.source = str(image_path.absolute())
+                image.texture.mag_filter = "nearest"
+                image.opacity = 1
 
     def handle_game_events(self):
         while self.ap_quest_game.queued_events:
@@ -104,6 +146,9 @@ class APQuestContext(CommonContext):
         class APQuestManager(ui):
             base_title = "APQuest for AP version"
             ctx: APQuestContext
+
+            lower_game_grid: GridLayout
+            upper_game_grid: GridLayout
 
             game_view: MDRecycleView
 
@@ -144,9 +189,26 @@ class APQuestContext(CommonContext):
                             input_and_rerender(Input.CONFETTI)
                         return True
 
+                class APQuestGrid(GridLayout):
+                    def __init__(self, **kwargs):
+                        super().__init__(**kwargs)
+
+                    def check_resize(self, instance, x, y):
+                        side = min(self.parent.size)
+                        self.size = (side, side)
+
                 self.game_view = APQuestGameView()
 
                 self.add_client_tab("APQuest", self.game_view)
+
+                game_container = self.game_view.ids["game_container"]
+                self.lower_game_grid = APQuestGrid()
+                self.upper_game_grid = APQuestGrid()
+                game_container.add_widget(self.lower_game_grid)
+                game_container.add_widget(self.upper_game_grid)
+
+                Window.bind(on_resize=self.lower_game_grid.check_resize)
+                Window.bind(on_resize=self.upper_game_grid.check_resize)
 
                 return container
 
@@ -173,6 +235,8 @@ async def main(args):
 
     ctx.run_gui()
     ctx.run_cli()
+
+    ctx.client_loop = asyncio.create_task(ctx.client_loop(), name="Client Loop")
 
     await ctx.exit_event.wait()
     await ctx.shutdown()
