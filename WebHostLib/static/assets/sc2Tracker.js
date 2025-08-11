@@ -27,5 +27,5 @@ window.addEventListener('load', () => {
       };
       ajax.open('GET', url);
       ajax.send();
-    }, 15000)
+    }, 60000)
 });
