@@ -84,7 +84,7 @@ class APQuestContext(CommonContext):
                 while self.queued_locations:
                     location = self.queued_locations.pop(0)
                     self.location_checked_side_effects(location)
-                    await self.send_msgs([{"cmd": "LocationChecks", "locations": [location]}])
+                    await self.check_locations({location})
 
                 new_items = self.items_received[self.highest_processed_item_index :]
                 if new_items:
@@ -127,6 +127,14 @@ class APQuestContext(CommonContext):
             self.connection_status = ConnectionStatus.CONNECTED
         if cmd == "Disconnected":
             self.connection_status = ConnectionStatus.NOT_CONNECTED
+            self.checked_locations = set()
+            self.finished_game = False
+
+    async def disconnect(self, *args, **kwargs) -> None:
+        self.checked_locations = set()
+        self.finished_game = True
+        self.connection_status = ConnectionStatus.NOT_CONNECTED
+        await super().disconnect(*args, **kwargs)
 
     def initial_render(self):
         if self.ui.upper_game_grid.children:
