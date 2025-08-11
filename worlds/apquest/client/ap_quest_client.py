@@ -1,11 +1,7 @@
 # isort: off
-from kivy.core.window import Keyboard, Window
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.image import Image
-from kivy.uix.layout import Layout
-from kivymd.uix.recycleview import MDRecycleView
 from kvui import GameManager
 # isort: on
+
 
 import asyncio
 import sys
@@ -14,6 +10,11 @@ from typing import Any
 
 import colorama
 from CommonClient import CommonContext, get_base_parser, gui_enabled, handle_url_arg, logger, server_loop
+from kivy.core.window import Keyboard, Window
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.image import Image
+from kivy.uix.layout import Layout
+from kivymd.uix.recycleview import MDRecycleView
 from NetUtils import ClientStatus
 
 from ..apquest.events import LocationClearedEvent
