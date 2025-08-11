@@ -3121,13 +3121,14 @@ class SC2Logic:
             ), self.player)
             or (self.advanced_tactics
                 and state.has(item_names.ROGUE_FORCES, self.player)
-                and state.has_any((
+                and state.count_from_list((
                     item_names.WAR_PIGS,
                     item_names.HAMMER_SECURITIES,
+                    item_names.DEATH_HEADS,
                     item_names.SPARTAN_COMPANY,
                     item_names.HELS_ANGELS,
                     item_names.BRYNHILDS,
-                ), self.player)
+                ), self.player) >= 3
             )
         )
 
@@ -3268,7 +3269,7 @@ class SC2Logic:
         return self.enemy_shadow_second_stage(state) and (self.grant_story_tech == GrantStoryTech.option_grant or self.enemy_shadow_door_unlocks_tool(state))
 
     def enemy_shadow_victory(self, state: CollectionState) -> bool:
-        return self.enemy_shadow_door_controls(state) and (self.grant_story_tech == GrantStoryTech.option_grant or self.nova_heal(state))
+        return self.enemy_shadow_door_controls(state) and (self.grant_story_tech == GrantStoryTech.option_grant or (self.nova_heal(state) and self.nova_beat_stone(state)))
 
     def dark_skies_requirement(self, state: CollectionState) -> bool:
         return self.terran_common_unit(state) and self.terran_beats_protoss_deathball(state) and self.terran_defense_rating(state, False, True) >= 8
