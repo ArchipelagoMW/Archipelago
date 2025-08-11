@@ -1,7 +1,7 @@
 import copy
-from pkgutil import get_data
-from typing import Dict, Any, List, TYPE_CHECKING
+from typing import Any, List, TYPE_CHECKING
 
+import Utils
 from BaseClasses import Location,  MultiWorld
 if TYPE_CHECKING:
     from . import LMWorld
@@ -15,27 +15,32 @@ PORTRAIT_HINTS = ["<father>", "<mother>", "<baby>", "<dancer>", "<situji>", "<pi
 
 
 def get_progression_only_items(multiworld: MultiWorld, player: int, loc, hinted_loc, prog_items_no_skip) -> Location:
-    while loc is None:
-        item = multiworld.worlds[player].random.choice(prog_items_no_skip)
+    multiworld.worlds[player].random.shuffle(prog_items_no_skip)
+    for item in prog_items_no_skip:
         if item.location not in hinted_loc and item.code is not None and (item.player == player or item.location.player == player):
             loc: Location = item.location
+        else:
+            continue
     return loc
 
 
 def get_other_items(multiworld: MultiWorld, player: int, loc, hinted_loc, other_items) -> Location:
-    while loc is None:
-        item = multiworld.worlds[player].random.choice(other_items)
+    multiworld.worlds[player].random.shuffle(other_items)
+    for item in other_items:
         if item.location not in hinted_loc and item.code is not None and (item.player == player or item.location.player == player):
             loc: Location = item.location
+        else:
+            continue
     return loc
 
 
 def get_hints_by_option(multiworld: MultiWorld, player_hints: set[int]) -> None:
     all_items = multiworld.get_items()
-    prog_items = [item for item in multiworld.get_items() if item.advancement]
+    prog_items = [item for item in all_items if item.advancement]
     prog_no_skip = [items for items in prog_items if not items.skip_in_prog_balancing]
-    other_items = [item for item in multiworld.get_items() if not item.advancement]
-    for player_int in player_hints:
+    other_items = [item for item in all_items if not item.advancement]
+    player_hint_worlds = sorted(player_hints)
+    for player_int in player_hint_worlds:
         world: "LMWorld" = multiworld.worlds[player_int]
         already_hinted_locations: List[Location] = []
         hint_list = copy.copy(ALWAYS_HINT)
@@ -44,11 +49,13 @@ def get_hints_by_option(multiworld: MultiWorld, player_hints: set[int]) -> None:
         for name in hint_list:
             if name == "Madame Clairvoya":
                 if world.open_doors[72] == 0:
-                    loc: Location = multiworld.find_item("Spade Key", player_int)
+                    locs: list[Location] = multiworld.find_item_locations("Spade Key", player_int, True)
                 else:
                     iname: str = world.random.choice(["Mario's Glove", "Mario's Letter", "Mario's Hat", "Mario's Star",
                                                      "Mario's Shoe"])
-                    loc: Location = multiworld.find_item(iname, player_int)
+                    locs: list[Location] = multiworld.find_item_locations(iname, player_int, True)
+
+                loc: Location = world.random.choice(locs)
                 hint = {name: {"Item": loc.item.name,
                                "Location": loc.name,
                                "Rec Player": multiworld.player_name[loc.item.player],
@@ -82,7 +89,10 @@ def get_hints_by_option(multiworld: MultiWorld, player_hints: set[int]) -> None:
                     icolor = "Trap"
                 else:
                     icolor = "Other"
-                hint = {name: {"Item": loc.item.name,
+                item_name: str = loc.item.name
+                if loc.player in world.multiworld.groups:
+                    loc: Location = world.random.choice(world.multiworld.find_item_locations(item_name, loc.player, True))
+                hint = {name: {"Item": item_name,
                                "Location": loc.name,
                                "Rec Player": multiworld.player_name[loc.item.player],
                                "Send Player": multiworld.player_name[loc.player],

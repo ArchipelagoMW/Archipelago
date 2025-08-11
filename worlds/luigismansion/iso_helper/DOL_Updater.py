@@ -6,15 +6,16 @@ from gclib.dol import DOL, DOLSection
 from gclib.gcm import GCM
 
 from ..Regions import spawn_locations
+from ..Helper_Functions import StringByteFunction as sbf
 
-MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
 CUSTOM_CODE_OFFSET_START = 0x39FA20
+LM_PLAYER_NAME_BYTE_LENGTH = 64
 
 # Updates the main DOL file, which is the main file used for GC and Wii games. This section includes some custom code
 # inside the DOL file itself.
-def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk_speed: int, slot_name: str,
-    random_spawn: str, king_boo_health: int, fear_anim_enabled: bool, pickup_anim_enabled: bool,
-    boo_rand_on: bool, dool_model_rando_on: bool) -> (GCM, DOL):
+def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac: bool, start_inv: list[str],
+    walk_speed: int, slot_name: str, random_spawn: str, king_boo_health: int, fear_anim_enabled: bool,
+    pickup_anim_enabled: bool, boo_rand_on: bool, dool_model_rando_on: bool) -> (GCM, DOL):
 
     random.seed(seed)
 
@@ -23,20 +24,19 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
     dol.read(dol_data)
 
     # Walk Speed
-    if walk_speed == 0:
-        speed_to_use = 16784
-    elif walk_speed == 1:
-        speed_to_use = 16850
-    else:
-        speed_to_use = 16950
+    speed_to_use = 16784 if walk_speed == 0 else (16850 if walk_speed == 1 else 16950)
     dol.data.seek(0x396538)
     dol.data.write(struct.pack(">H", speed_to_use))
 
     # Vacuum Speed
-    if any("Poltergust 4000" in key for key in start_inv):
-        vac_speed = "3800000F"
-    else:
-        vac_speed = "800D0160"
+    vac_count = 2 if (extra_vac and start_vac) else (1 if (extra_vac or start_vac) else 0)
+    vac_count += len(list("Progressive Vacuum" in key for key in start_inv))
+    match vac_count:
+        case x if vac_count >= 2:
+            vac_speed = "3800000F"
+        case _:
+            vac_speed = "800D0160"
+
     dol.data.seek(0x7EA28)
     dol.data.write(bytes.fromhex(vac_speed))
 
@@ -68,10 +68,6 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
         hat_val = "05"
         elem_val = "15"
 
-        # Write additional code to enable Custom Pickup animations when animations are turned off for King Boo
-        dol.data.seek(0x0AD624)
-        dol.data.write(bytes.fromhex("4842D769"))
-
     # Keys and important animations
     dol.data.seek(0xCD39B)
     dol.data.write(bytes.fromhex(keys_and_others_val))
@@ -98,8 +94,8 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
 
     # Store Player name
     lm_player_name = str(slot_name).strip()
-    dol.data.seek(0x311660)
-    dol.data.write(struct.pack(str(len(lm_player_name)) + "s", lm_player_name.encode()))
+    dol.data.seek(0x324740)
+    dol.data.write(sbf.string_to_bytes_with_limit(lm_player_name, LM_PLAYER_NAME_BYTE_LENGTH))
 
     # Change King Boo's Health
     dol.data.seek(0x399228)
@@ -116,23 +112,23 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
     dol.data.write(blank_data)
 
     # Read in all the other custom DOL changes and update their values to the new value as expected.
-    custom_dol_code = get_data(MAIN_PKG_NAME, "data/lm_custom_code.lmco")
+    custom_dol_code = get_data(__name__, "LM_custom_code.lmco")
     dol.data.seek(CUSTOM_CODE_OFFSET_START)
     dol.data.write(custom_dol_code)
 
-    dol_csv_offsets = get_data(MAIN_PKG_NAME, "data/dol_diff.csv").decode("utf-8").splitlines()
+    dol_csv_offsets = get_data(__name__, "dol_diff.csv").decode("utf-8").splitlines()
     for csv_line in dol_csv_offsets:
-        dol_addr, dol_val = csv_line.split(",")
+        dol_addr, dol_val, _ = csv_line.split(",")
         dol.data.seek(int(dol_addr, 16))
         dol.data.write(bytes.fromhex(dol_val))
 
     if not random_spawn == "Foyer":
         spawn_info: dict = spawn_locations[random_spawn]
-        dol.data.seek(0x3A02B0)
+        dol.data.seek(0x3A05E0)
         dol.data.write(struct.pack(">f", spawn_info["pos_x"]))
-        dol.data.seek(0x3A02B4)
+        dol.data.seek(0x3A05E4)
         dol.data.write(struct.pack(">f", spawn_info["pos_y"]))
-        dol.data.seek(0x3A02B8)
+        dol.data.seek(0x3A05E8)
         dol.data.write(struct.pack(">f", spawn_info["pos_z"]))
 
     if dool_model_rando_on:

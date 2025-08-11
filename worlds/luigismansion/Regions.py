@@ -1,6 +1,7 @@
 from typing import Optional, Callable, TYPE_CHECKING
 
 from . import Rules
+
 if TYPE_CHECKING:
     from . import Rules, LMWorld
 
@@ -25,7 +26,7 @@ vanilla_door_state = {
         10: 1,
         17: 0,
         18: 1,
-        20: 1,
+        20: 0,
         16: 0,
         74: 0,
         75: 1,
@@ -102,9 +103,9 @@ spawn_locations = {
                               "key": ["North Rec Room Key", "South Rec Room Key", "Lower 2F Stairwell Key", "Upper 2F Stairwell Key"],
                               "door_keys": ["North Rec Room Key", "South Rec Room Key"],
                               "door_ids": [24, 25]}, # Rec Room
-    "Laundry Room":          {"room_no": 5, "pos_x": -3165.112550, "pos_y": 0, "pos_z": -804.770508,
-                              "key": ["Laundry Key", "Butler's Rom Key", "Heart Key"], "door_keys": ["Laundry Key", "Butler's Rom Key"],
-                              "door_ids": [1, 7]},  # Laundry
+    # "Laundry Room":          {"room_no": 5, "pos_x": -3165.112550, "pos_y": 0, "pos_z": -804.770508,
+    #                           "key": ["Laundry Key", "Butler's Rom Key", "Heart Key"], "door_keys": ["Laundry Key", "Butler's Rom Key"],
+    #                           "door_ids": [1, 7]},  # Laundry removed due to new spawn toad triggering as you leave
     "Telephone Room":        {"room_no": 50, "pos_x": -9.812825, "pos_y": 1100, "pos_z": 118.738243,
                               "key": ["Telephone Room Key", "Clockwork Room Key"], "door_keys": ["Telephone Room Key", "Clockwork Room Key"],
                               "door_ids": [53, 52]}, # Telephone
@@ -140,7 +141,7 @@ spawn_locations = {
 exp_spawns: dict[str,dict[str, int]] = {
 
     # "2F Bathroom":           {"room_no": 45, "pos_x": -1902.854130, "pos_y": 550, "pos_z": -4660.501950,
-    #                           "key": ["Heart Key", "2F Bathroom Key"]}, # 2f bath
+    #                           "key": ["2F Bathroom Key", "Upper 2F Stairwell Key"], "door_keys": [], "door_ids": []}, # 2f bath
     # "Tea Room":              {"room_no": 47, "pos_x": -2873.639400, "pos_y": 550, "pos_z": -4770.667970,
     #                           "key": ["Tea Room Key", "Upper 2F Stairwell Key", "South Rec Room Key", "Lower 2F Stairwell Key"]}, # tea
     # "Observatory":           {"room_no": 41, "pos_x": 3596.065920, "pos_y": 550, "pos_z": -3220.102780,
@@ -152,17 +153,17 @@ exp_spawns: dict[str,dict[str, int]] = {
     # "Guest Room":            {"room_no": 28, "pos_x": 2949.315430, "pos_y": 550, "pos_z": -149.029785,
     #                           "key": ["Heart Key", "Guest Room Key"]}, # guest
     # "Safari Room":           {"room_no": 52, "pos_x": 2718.783450, "pos_y": 1100, "pos_z": -131.375854,
-    #                           "key": ["Heart Key", "Safari Room Key"]}, # safari
+    #                           "key": ["Safari Room Key", "East Attic Hallway Key", "Balcony Key"]}, # safari
     # "Ceramics Studio":       {"room_no": 55, "pos_x": -2397.3373540, "pos_y": 1100, "pos_z": -1579.717410,
-    #                           "key": ["Armory Key", "Heart Key"]}, # ceramics
+    #                           "key": ["Armory Key", "Diamond Key", "Telephone Room Key"]}, # ceramics
     # "Anteroom":              {"room_no": 39, "pos_x": -1.503195, "pos_y": 550, "pos_z": -3087.626950,
-    #                           "key": ["Wardrobe Key", "Anteroom Key"]}, # Anteroom
+    #                           "key": ["Wardrobe Key", "Anteroom Key", "Parlor Key"]}, # Anteroom
     # "Wardrobe":              {"room_no": 38, "pos_x": -1789.859250, "pos_y": 550, "pos_z": -3303.123780,
-    #                           "key": ["Heart Key", "Wardrobe Key"]}, # Wardrobe
+    #                           "key": ["Wardrobe Key", "Heart Key"]}, # Wardrobe
     # "Projection Room":       {"room_no": 13, "pos_x": 281.914215, "pos_y": 0, "pos_z": -3137.967530,
     #                           "key": ["Projection Room Key", "Billiards Room Key"]}, # Projection
     # "1F Bathroom":           {"room_no": 17, "pos_x": -2160.237550, "pos_y": 0, "pos_z": -4671.114750,
-    #                           "key": ["Heart Key", "1F Bathroom Key"]}, # 1f bath
+    #                           "key": ["1F Bathroom Key", "Heart Key"]}, # 1f bath
     # "Fortune-Teller's Room": {"room_no": 3, "pos_x": 1807.135740, "pos_y": 0, "pos_z": 214.838852,
     #                           "key": ["Fortune Teller Key", "Mirror Room Key"]}, # Fortune Teller
     # "Mirror Room":           {"room_no": 4, "pos_x": 3343.897950, "pos_y": 0, "pos_z": -114.910957,
@@ -193,7 +194,7 @@ def set_ghost_type(world: "LMWorld", ghost_list: dict):
 
 
 def lmconnect(world: "LMWorld", source: str, target: str, key: Optional[str] = None,
-            doorid: Optional[int] = None, rule: Optional[Callable] = None, one_way: bool = False):
+            doorid: Optional[int] = None, rule: Optional[Callable] = None, one_way: bool = False, required_element: Optional[str] = ""):
     player = world.player
 
     if world.open_doors.get(doorid) == 0:
@@ -208,6 +209,31 @@ def lmconnect(world: "LMWorld", source: str, target: str, key: Optional[str] = N
     source_region.connect(target_region, rule=rule)
     if not one_way:
         target_region.connect(source_region, rule=rule)
+
+    if required_element == "Fire":
+        for fregion in Rules.FIRE_SPIRIT_SPOT:
+            world.multiworld.register_indirect_condition(world.get_region(fregion),
+                                                         world.multiworld.get_entrance(f"{source_region.name} -> {target_region.name}", world.player))
+            if not one_way:
+                world.multiworld.register_indirect_condition(world.get_region(fregion),
+                                                             world.multiworld.get_entrance(
+                                                                 f"{target_region.name} -> {source_region.name}", world.player))
+    elif required_element == "Ice":
+        for iregion in Rules.ICE_SPIRIT_SPOT:
+            world.multiworld.register_indirect_condition(world.get_region(iregion),
+                                                         world.multiworld.get_entrance(f"{source_region.name} -> {target_region.name}", world.player))
+            if not one_way:
+                world.multiworld.register_indirect_condition(world.get_region(iregion),
+                                                             world.multiworld.get_entrance(
+                                                                 f"{target_region.name} -> {source_region.name}", world.player))
+    elif required_element == "Water":
+        for wregion in Rules.WATER_SPIRIT_SPOT:
+            world.multiworld.register_indirect_condition(world.get_region(wregion),
+                                                         world.multiworld.get_entrance(f"{source_region.name} -> {target_region.name}", world.player))
+            if not one_way:
+                world.multiworld.register_indirect_condition(world.get_region(wregion),
+                                                             world.multiworld.get_entrance(
+                                                                 f"{target_region.name} -> {source_region.name}", world.player))
 
 
 def connect_regions(world: "LMWorld"):
@@ -227,9 +253,9 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "1F Hallway", "1F Bathroom", "1F Bathroom Key", 23)
     lmconnect(world, "1F Hallway", "Conservatory", "Conservatory Key", 21)
     lmconnect(world, "1F Hallway", "Billiards Room", "Billiards Room Key", 17)
-    lmconnect(world, "1F Hallway", "1F Washroom", "1F Washroom Key", 20,
-            lambda state, wash_boo_count=world.options.washroom_boo_count.value: state.has_group("Boo", world.player, wash_boo_count)
-                          or state.has("Boo", world.player, wash_boo_count))
+    lmconnect(world, "1F Hallway", "1F Washroom", "1F Washroom Key", 20)
+            # lambda state, wash_boo_count=world.options.washroom_boo_count.value: state.has_group("Boo", world.player, wash_boo_count)
+            #               or state.has("Boo", world.player, wash_boo_count))
     lmconnect(world, "1F Hallway", "Ballroom", "Ballroom Key", 15)
     lmconnect(world, "1F Hallway", "Dining Room", "Dining Room Key", 14)
     lmconnect(world, "1F Hallway", "Laundry Room", "Laundry Room Key", 7)
@@ -238,9 +264,9 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "Ballroom", "Storage Room", "Storage Room Key", 16)
     lmconnect(world, "Dining Room", "Kitchen", "Kitchen Key", 11)
     lmconnect(world, "Kitchen", "Boneyard", "Boneyard Key", 10,
-            lambda state: Rules.can_fst_water(state, world.player))
+            lambda state: Rules.can_fst_water(state, world.player), required_element="Water")
     lmconnect(world, "Boneyard", "Graveyard",
-            rule=lambda state: Rules.can_fst_water(state, world.player))
+            rule=lambda state: Rules.can_fst_water(state, world.player), required_element="Water")
     lmconnect(world, "Billiards Room", "Projection Room", "Projection Room Key", 18)
     lmconnect(world, "Fortune-Teller's Room", "Mirror Room", "Mirror Room Key", 5)
     lmconnect(world, "Laundry Room", "Butler's Room", "Butler's Room Key", 1)
@@ -248,7 +274,7 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "Courtyard", "The Well")
     lmconnect(world, "Rec Room", "2F Stairwell", "South Rec Room Key", 24)
     lmconnect(world, "2F Stairwell", "Tea Room", "Tea Room Key", 47,
-            lambda state: Rules.can_fst_water(state, world.player))
+            lambda state: Rules.can_fst_water(state, world.player), required_element="Water")
     lmconnect(world, "2F Stairwell", "2F Rear Hallway", "Upper 2F Stairwell Key", 75)
     lmconnect(world, "2F Rear Hallway", "2F Bathroom", "2F Bathroom Key", 48)
     lmconnect(world, "2F Rear Hallway", "2F Washroom", "2F Washroom Key", 45)
@@ -257,7 +283,7 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "2F Rear Hallway", "Sitting Room", "Sitting Room Key", 29)
     lmconnect(world, "2F Rear Hallway", "Safari Room", "Safari Room Key", 56)
     lmconnect(world, "Astral Hall", "Observatory", "Observatory Key", 40,
-            lambda state: Rules.can_fst_fire(state, world.player))
+            lambda state: Rules.can_fst_fire(state, world.player), required_element="Fire")
     lmconnect(world, "Sitting Room", "Guest Room", "Guest Room Key", 30)
     lmconnect(world, "Safari Room", "East Attic Hallway", "East Attic Hallway Key", 55)
     lmconnect(world, "East Attic Hallway", "Artist's Studio", "Artist's Studio Key", 63)

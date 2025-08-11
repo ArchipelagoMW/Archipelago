@@ -1,0 +1,17 @@
+CHECKFLAG>(13)"13on""13off"
+---------------------------
+<CASE>"13on"
+<SE>(93)
+<FLAGON>(92)
+<GENON>"dm_uranai"
+<FLAGON>(255)
+<BGM>(32)
+<END>
+---------------------------
+<CASE>"13off"
+<MENUOFF>
+<FLAGON>(111)
+<SE>(93)
+<FLAGON>(92)
+<MENUON>
+<END>

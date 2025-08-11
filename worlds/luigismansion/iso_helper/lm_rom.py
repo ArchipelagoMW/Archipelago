@@ -1,3 +1,5 @@
+import shutil
+
 from worlds.Files import APPatch, APPlayerContainer, AutoPatchRegister
 from settings import get_settings, Settings
 import Utils
@@ -71,6 +73,11 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
         logger.info(f"Dependency archive name to use: {lib_path}")
         return lib_path
 
+    def __get_temp_folder_name(self) -> str:
+        from ..LMClient import CLIENT_VERSION
+        temp_path = os.path.join(tempfile.gettempdir(), "luigis_mansion", CLIENT_VERSION, "libs")
+        return temp_path
+
     def patch(self, aplm_patch: str) -> None:
         # Get the AP Path for the base ROM
         lm_clean_iso = self.get_base_rom_path()
@@ -89,42 +96,7 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
                 aplm_bytes = zf.read("patch.aplm")
             LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
         except ImportError:
-            # Load the external dependencies based on OS
-            ap_lib_path = Utils.home_path("lib")
-            ap_custom_lib_path = os.path.join(ap_lib_path, "custom_world_deps", "luigismansion", "deps")
-            logger.info("Missing dependencies detected for Luigi's Mansion, attempting to see if " +
-                f"{ap_custom_lib_path} exists")
-
-            if not os.path.exists(ap_custom_lib_path):
-                os.makedirs(ap_custom_lib_path, exist_ok=True)
-                logger.info(f"{ap_custom_lib_path} did not exist, downloading dependencies...")
-
-                from ..LMClient import CLIENT_VERSION
-                lib_path = self.__get_archive_name()
-                lib_path_base = f"https://github.com/BootsinSoots/Archipelago/releases/download/{CLIENT_VERSION}"
-                download_path = f"{lib_path_base}/{lib_path}.zip"
-
-                with tempfile.TemporaryDirectory() as tmp_dir_name:
-                    logger.info(f"Temporary Directory created as: {tmp_dir_name}")
-                    temp_zip_path = os.path.join(tmp_dir_name, "temp.zip")
-
-                    with urllib.request.urlopen(download_path) as response, open(temp_zip_path, 'wb') as created_zip:
-                        created_zip.write(response.read())
-
-                    with zipfile.ZipFile(temp_zip_path) as z:
-                        z.extractall(ap_custom_lib_path)
-
-            logger.info(f"Appending the following to sys path to get dependencies correctly: {ap_custom_lib_path}")
-            sys.path.append(ap_custom_lib_path)
-
-            # Verify we have a clean rom of the game first
-            self.verify_base_rom(lm_clean_iso)
-
-            # Use our randomize function to patch the file into an ISO.
-            from ..LMGenerator import LuigisMansionRandomizer
-            with zipfile.ZipFile(aplm_patch, "r") as zf:
-                aplm_bytes = zf.read("patch.aplm")
-            LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
+            self.__get_remote_dependencies_and_create_iso(aplm_patch, output_file, lm_clean_iso)
 
     def read_contents(self, aplm_patch: str) -> dict[str, Any]:
         with zipfile.ZipFile(aplm_patch, "r") as zf:
@@ -179,3 +151,50 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
                 raise InvalidCleanISOError("Invalid game given as the vanilla ISO. You must specify a " +
                                            f"{RANDOMIZER_NAME}'s ISO (North American version).")
         return
+
+
+    def download_lib_zip(self, tmp_dir_path: str) -> None:
+        logger.info("Getting missing dependencies for Luigi's Mansion from remote source.")
+
+        from ..LMClient import CLIENT_VERSION
+        lib_path = self.__get_archive_name()
+        lib_path_base = f"https://github.com/BootsinSoots/Archipelago/releases/download/{CLIENT_VERSION}"
+        download_path = f"{lib_path_base}/{lib_path}.zip"
+
+        temp_zip_path = os.path.join(tmp_dir_path, "temp.zip")
+        with urllib.request.urlopen(download_path) as response, open(temp_zip_path, 'wb') as created_zip:
+            created_zip.write(response.read())
+
+        with zipfile.ZipFile(temp_zip_path) as z:
+            z.extractall(tmp_dir_path)
+
+        return
+
+    def create_iso(self, temp_dir_path: str, patch_file_path: str, output_iso_path: str, vanilla_iso_path: str):
+        logger.info(f"Appending the following to sys path to get dependencies correctly: {temp_dir_path}")
+        sys.path.append(temp_dir_path)
+
+        # Verify we have a clean rom of the game first
+        self.verify_base_rom(vanilla_iso_path)
+
+        # Use our randomize function to patch the file into an ISO.
+        from ..LMGenerator import LuigisMansionRandomizer
+        with zipfile.ZipFile(patch_file_path, "r") as zf:
+            aplm_bytes = zf.read("patch.aplm")
+        LuigisMansionRandomizer(vanilla_iso_path, output_iso_path, aplm_bytes)
+
+    def __get_remote_dependencies_and_create_iso(self, aplm_patch: str, output_file: str, lm_clean_iso: str):
+        try:
+            local_dir_path = self.__get_temp_folder_name()
+            # if temp directory exists and we failed to patch the ISO we want to remove the directory
+            # and get a fresh install.
+            if os.path.isdir(local_dir_path):
+                logger.info("Found temporary directory after unsuccessful attempt of generating seed, deleting %s.", local_dir_path)
+                shutil.rmtree(local_dir_path)
+            os.makedirs(local_dir_path, exist_ok=True)
+            # Load the external dependencies based on OS
+            logger.info("Temporary Directory created as: %s", local_dir_path)
+            self.download_lib_zip(local_dir_path)
+            self.create_iso(local_dir_path, aplm_patch, output_file, lm_clean_iso)
+        except PermissionError:
+            logger.warning("Failed to cleanup temp folder, %s ignoring delete.", local_dir_path)

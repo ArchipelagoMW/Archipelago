@@ -25,7 +25,12 @@
 <WAIT>(20)
 <ACTOR>"demo_luigi"<ACT>"DM_LOKGB_ST"
 <ANYKEY>
+<SAY><COLOR>(0)If you complete ghost training\nand visit my gallery,\nI'll make it worth your time.
+<WAIT>(20)
+<ACTOR>"demo_luigi"<ACT>"DM_LOKGB_ST"
+<ANYKEY>
 <SAY><COLOR>(0)Don't forget, your health resets\nto max HP every time you quit.
+<WAIT>(20)
 <ACTOR>"demo_luigi"<ACT>"DM_NOD_01"
 <ANYKEY>
 <CLOSEWINDOW>(0)

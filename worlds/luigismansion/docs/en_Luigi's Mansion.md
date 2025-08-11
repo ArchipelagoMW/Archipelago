@@ -44,7 +44,7 @@ Items received in Luigi's Mansion will display a text overlay that does not inte
 - Add Toads into the pool as locations
 - Add almost every interactable object within the game into the pool as locations
 - Require the player to have obtained enough money to get a specific rank upon completion.
-- Customize the Boo count requirement for the 1F Washroom, Balcony, and Secret Altar
+- Customize the Boo count requirement for the Balcony and Secret Altar
 - Customize the number of Mario's items needed to trigger the Fortune-teller
 - Start with the stronger Poltergust or include it in the item pool
 - Start with the Boo Radar or include it in the pool
@@ -66,6 +66,7 @@ Boo Anger (if you want boos to stay passive or get aggressive and attack Luigi),
 
 - Save anywhere by pressing Down on the Dpad + B (as long as blackout is not on and if you are NOT in a boss fight)
 - Various streamlining tweaks (removed cutscenes, dialogue, transitions, and animations)
+- The 1F Washroom boo gate has been removed in favor of simply locking the door.
 - Many events have had text changed to better represent the state or events of the randomizer
 - Breaker Room starts locked unless Door Rando is on
 - In-game hints for the locations of items appear on Toads, Telephones and Madame Clairvoya
@@ -76,9 +77,23 @@ Boo Anger (if you want boos to stay passive or get aggressive and attack Luigi),
 - (Optional) Randomize music
 - (Optional) Change Luigi's Max Health
 - (Optional) Change King Boo's health (final boss)
+- (Optional) Energy Link support (I.e., Allows money to be sent to the Archipelago Server as energy)
 - Credit to discord user rishingfod for out Luigi's Mansion client icon
 
 ###### Quality of death:
 
 - (optional) Death Link support. (I.e., if Luigi is defeated, everyone else participating in death link also dies)
 - (optional) Trap Link support (I.e., If Luigi finds a trap, everyone else participating in trap link also gets a trap)
+
+###### Energy Link:
+
+Energy link allows players to send and receive money as energy to other energy-linked team members through commands sent through the LMClient.
+The energy link conversion rate is 1:5e3 of Luigi's worth. (worth is used when determining the rank requirement)
+
+For example, requesting 10 energy (50,000 worth) will send Luigi two Bills (20,000 each) and two Coins (5000 each), for a total worth of 50,000.
+
+Commands are:
+- `/send_energy <amount>` - Sends energy to the Archipelago server to be consumed by any player on the team.
+- `/request_energy <amount>` - Requests energy from the Archipelago server, reducing the available amount up to the requested value.
+- `/display_energy` - Displays the current energy available to your team
+- `/energy_link` - Toggles Energy Link settings for the player's existing session.

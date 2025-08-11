@@ -10,7 +10,7 @@
 
 1. Download and install the Archipelago Multiworld Suite from the link above, making sure to install the most recent version.
 
-2. Download and install the Dolphin Gamecube/Wii Emulator from the link above, making sure to install the most recent version.
+2. Download and install the Dolphin Gamecube/Wii Emulator from the link above, making sure to install the most recent version (minimum 2503).
 Run the emulator at least once to make sure it is working.
 
 3. Acquire the most recent APWorld from the [Releases page](https://github.com/BootsinSoots/Archipelago/releases/latest) and place the luigismansion.apworld in the custom_worlds folder of your Archipelago install
@@ -49,7 +49,7 @@ If you would like to validate your config file to make sure it works, you may do
       and click the "Generate Game" button.
 2. Open the Archipelago Launcher and click "Generate". This will create a zip file in Archipelago/output
    - You will need to open this .zip to get your .aplm patch file if you are not using the Archipelago website
-3. Navigate to the Archipelago website and go to the Host Game page
+3. Navigate to the Archipelago website and go to the Host Game page (top right menu)
 4. Click upload file and pass it the .zip created in your output folder
 5. Click the "Create New Room" link. You are now able to download your patch file from here (as of AP 0.6.2).
 6. Run the ArchipelagoLauncher.exe and click `Open Patch`. Select your `.aplm` patch file.
