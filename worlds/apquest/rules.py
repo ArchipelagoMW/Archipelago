@@ -45,7 +45,7 @@ def set_all_entrance_rules(world: "APQuestWorld") -> None:
     # Because the function has to be defined locally, most worlds prefer the lambda syntax.
     set_rule(overworld_to_top_left_room, lambda state: state.has("Key", world.player))
 
-    # Conditions can depend on events items.
+    # Conditions can depend on event items.
     set_rule(right_room_to_final_boss_room, lambda state: state.has("Top Left Room Button Pressed", world.player))
 
 

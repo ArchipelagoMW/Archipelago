@@ -49,6 +49,9 @@ class Game:
             self.queued_events.append(ConfettiFired(self.player.current_x, self.player.current_y))
 
     def input(self, input_key: Input) -> None:
+        if not self.gameboard.ready:
+            return
+
         if input_key == Input.LEFT:
             self.attempt_player_movement(Direction.LEFT)
             return

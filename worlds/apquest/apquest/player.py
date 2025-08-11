@@ -43,6 +43,9 @@ class Player:
         return 2 + 2 * self.inventory[Item.HEALTH_UPGRADE]
 
     def render(self) -> Graphic:
+        if not self.gameboard.ready:
+            return Graphic.EMPTY
+
         if self.facing == Direction.LEFT:
             return Graphic.PLAYER_LEFT
         if self.facing == Direction.UP:

@@ -2,38 +2,50 @@
 from kvui import GameManager
 # isort: on
 
-
 import asyncio
 import sys
-from pathlib import Path
+from enum import Enum
 from typing import Any
 
 import colorama
 from CommonClient import CommonContext, get_base_parser, gui_enabled, handle_url_arg, logger, server_loop
+from kivy.core.audio import Sound, SoundLoader
 from kivy.core.window import Keyboard, Window
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.layout import Layout
 from kivymd.uix.recycleview import MDRecycleView
-from NetUtils import ClientStatus
+from NetUtils import ClientStatus, NetworkItem
 
-from ..apquest.events import LocationClearedEvent
+from ..apquest.events import LocationClearedEvent, VictoryEvent
 from ..apquest.game import Game, Input
-from .graphics import IMAGE_GRAPHICS
+from ..apquest.locations import LOCATION_NAME_TO_ID
+from .graphics import IMAGE_GRAPHICS, TEXTURES
+from .item_quality import get_quality_for_network_item
+from .sounds import ALL_SOUNDS, ITEM_JINGLES, SOUND_PATHS, VICTORY_JINGLE
+
+
+class ConnectionStatus(Enum):
+    NOT_CONNECTED = 0
+    SCOUTS_NOT_SENT = 1
+    SCOUTS_SENT = 2
+    CONNECTED = 3
 
 
 class APQuestContext(CommonContext):
     game = "APQuest"
     items_handling = 0b111  # full remote
 
-    slot_data: dict[str, Any]
-
-    ap_quest_game: Game | None = None
     client_loop: asyncio.Task[None]
+
+    slot_data: dict[str, Any]
+    location_to_item: dict[int, NetworkItem]
+    ap_quest_game: Game | None = None
+
+    connection_status: ConnectionStatus = ConnectionStatus.NOT_CONNECTED
 
     highest_processed_item_index: int = 0
     queued_locations: list[int]
-    victory: bool = False
 
     top_image_grid: list[list[Image]]
 
@@ -43,6 +55,7 @@ class APQuestContext(CommonContext):
         self.top_image_grid = []
         self.queued_locations = []
         self.slot_data = {}
+        self.location_to_item = {}
 
     async def server_auth(self, password_requested: bool = False) -> None:
         await super().server_auth(password_requested)
@@ -51,6 +64,14 @@ class APQuestContext(CommonContext):
 
     async def client_loop(self):
         while not self.exit_event.is_set():
+            if self.connection_status != ConnectionStatus.CONNECTED:
+                if self.connection_status == ConnectionStatus.SCOUTS_NOT_SENT:
+                    await self.send_msgs([{"cmd": "LocationScouts", "locations": list(LOCATION_NAME_TO_ID.values())}])
+                    self.connection_status = ConnectionStatus.SCOUTS_SENT
+
+                await asyncio.sleep(0.1)
+                continue
+
             if not self.ap_quest_game or not self.ap_quest_game.gameboard or not self.ap_quest_game.gameboard.ready:
                 await asyncio.sleep(0.1)
                 continue
@@ -58,6 +79,7 @@ class APQuestContext(CommonContext):
             try:
                 while self.queued_locations:
                     location = self.queued_locations.pop(0)
+                    self.location_checked_side_effects(location)
                     await self.send_msgs([{"cmd": "LocationChecks", "locations": [location]}])
 
                 new_items = self.items_received[self.highest_processed_item_index :]
@@ -77,17 +99,25 @@ class APQuestContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict) -> None:
         if cmd == "Connected":
+            self.location_to_item = {}
             self.slot_data = args["slot_data"]
             hard_mode = self.slot_data["hard_mode"]
 
             self.ap_quest_game = Game(hard_mode)
             self.highest_processed_item_index = 0
-            self.ap_quest_game.gameboard.fill_remote_location_content()
             self.initial_render()
 
+            self.connection_status = ConnectionStatus.SCOUTS_NOT_SENT
+        if cmd == "LocationInfo":
+            self.location_to_item.update({network_item.location: network_item for network_item in args["locations"]})
+
+            self.ap_quest_game.gameboard.fill_remote_location_content()
+            self.render()
             self.ui.game_view.bind_keyboard()
 
-            self.render()
+            self.connection_status = ConnectionStatus.CONNECTED
+        if cmd == "Disconnected":
+            self.connection_status = ConnectionStatus.NOT_CONNECTED
 
     def initial_render(self):
         if self.ui.upper_game_grid.children:
@@ -98,8 +128,7 @@ class APQuestContext(CommonContext):
         for row in self.ap_quest_game.gameboard.gameboard:
             self.top_image_grid.append([])
             for _ in row:
-                empty_path = Path(__file__).parent.parent / "apquest" / "graphics" / "empty.png"
-                image = Image(fit_mode="fill", source=str(empty_path.absolute()))
+                image = Image(fit_mode="fill", texture=TEXTURES["empty.png"])
                 image.texture.mag_filter = "nearest"
                 self.ui.lower_game_grid.add_widget(image)
 
@@ -117,13 +146,21 @@ class APQuestContext(CommonContext):
                 image_name = IMAGE_GRAPHICS[graphic]
                 if image_name is None:
                     image.opacity = 0
-                    image.source = ""
+                    image.texture = None
                     continue
 
-                image_path = Path(__file__).parent.parent / "apquest" / "graphics" / image_name
-                image.source = str(image_path.absolute())
+                image.texture = TEXTURES[image_name]
                 image.texture.mag_filter = "nearest"
                 image.opacity = 1
+
+    def location_checked_side_effects(self, location: int):
+        network_item = self.location_to_item[location]
+
+        item_quality = get_quality_for_network_item(network_item)
+        self.play_audio(ITEM_JINGLES[item_quality])
+
+    def play_audio(self, audio_filename: str) -> None:
+        self.ui.play_audio(audio_filename)
 
     def handle_game_events(self):
         while self.ap_quest_game.queued_events:
@@ -131,6 +168,9 @@ class APQuestContext(CommonContext):
 
             if isinstance(event, LocationClearedEvent):
                 self.queued_locations.append(event.location_id)
+
+            if isinstance(event, VictoryEvent):
+                self.play_audio(VICTORY_JINGLE)
 
     def input_and_rerender(self, input_key: Input) -> None:
         if self.ap_quest_game is None:
@@ -152,6 +192,26 @@ class APQuestContext(CommonContext):
             upper_game_grid: GridLayout
 
             game_view: MDRecycleView
+
+            sounds: dict[int, list[Sound]]
+
+            def load_audio(self, sound_filename: str):
+                audio_path = SOUND_PATHS[sound_filename]
+
+                sound_object = SoundLoader.load(str(audio_path.absolute()))
+                sound_object.seek(0)
+                return sound_object
+
+            def populate_sounds(self):
+                self.sounds = {
+                    sound_filename: [self.load_audio(sound_filename) for _ in range(3)] for sound_filename in ALL_SOUNDS
+                }
+
+            def play_audio(self, audio_filename):
+                preloaded_sound_list = self.sounds[audio_filename]
+                sound = preloaded_sound_list.pop(0)
+                sound.play()
+                preloaded_sound_list.append(sound)
 
             def build(self) -> Layout:
                 container = super().build()
@@ -194,7 +254,7 @@ class APQuestContext(CommonContext):
                     def __init__(self, **kwargs):
                         super().__init__(**kwargs)
 
-                    def check_resize(self, instance, x, y):
+                    def check_resize(self, x, y):
                         side = min(self.parent.size)
                         self.size = (side, side)
 
@@ -208,8 +268,10 @@ class APQuestContext(CommonContext):
                 game_container.add_widget(self.lower_game_grid)
                 game_container.add_widget(self.upper_game_grid)
 
-                Window.bind(on_resize=self.lower_game_grid.check_resize)
-                Window.bind(on_resize=self.upper_game_grid.check_resize)
+                game_container.bind(size=self.lower_game_grid.check_resize)
+                game_container.bind(size=self.upper_game_grid.check_resize)
+
+                self.populate_sounds()
 
                 return container
 

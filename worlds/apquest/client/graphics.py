@@ -1,7 +1,12 @@
+import pkgutil
+from io import BytesIO
+
+from kivy.uix.image import CoreImage
+
 from ..apquest.graphics import Graphic
 
 IMAGE_GRAPHICS = {
-    Graphic.EMPTY: None,
+    Graphic.EMPTY: "empty.png",
     Graphic.WALL: "wall.png",
     Graphic.BUTTON_NOT_ACTIVATED: "button_not_activated.png",
     Graphic.BUTTON_ACTIVATED: "button_activated.png",
@@ -27,4 +32,10 @@ IMAGE_GRAPHICS = {
     Graphic.HEALTH_UPGRADE: "health.png",
     Graphic.CONFETTI_CANNON: "confetti_cannon.png",
     Graphic.REMOTE_ITEM: "ap_item.png",
+}
+
+TEXTURES = {
+    file_name: CoreImage(BytesIO(pkgutil.get_data(__name__, f"../apquest/graphics/{file_name}")), ext="png").texture
+    for file_name in IMAGE_GRAPHICS.values()
+    if file_name is not None
 }
