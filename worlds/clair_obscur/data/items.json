@@ -1,9 +1,23 @@
 [
   {
     "type": "Upgrade material",
-    "name": "Chroma Catalyst",
+    "name": "Chroma Catalyst (1)",
     "internal_name": "UpgradeMaterial_Level1",
     "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Chroma Catalyst (3)",
+    "internal_name": "UpgradeMaterial_Level1",
+    "quantity": 3,
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Chroma Catalyst (5)",
+    "internal_name": "UpgradeMaterial_Level1",
+    "quantity": 5,
     "progressive": 2
   },
   {
@@ -29,16 +43,44 @@
   },
   {
     "type": "Upgrade material",
-    "name": "Resplendent Chroma Catalyst",
+    "name": "Resplendent Chroma Catalyst (1)",
     "internal_name": "UpgradeMaterial_Level3",
     "quantity": 1,
     "progressive": 2
   },
   {
     "type": "Upgrade material",
-    "name": "Grandiose Chroma Catalyst",
+    "name": "Resplendent Chroma Catalyst (3)",
+    "internal_name": "UpgradeMaterial_Level3",
+    "quantity": 3,
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Resplendent Chroma Catalyst (5)",
+    "internal_name": "UpgradeMaterial_Level3",
+    "quantity": 5,
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Grandiose Chroma Catalyst (1)",
     "internal_name": "UpgradeMaterial_Level4",
     "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Grandiose Chroma Catalyst (3)",
+    "internal_name": "UpgradeMaterial_Level4",
+    "quantity": 3,
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Grandiose Chroma Catalyst (5)",
+    "internal_name": "UpgradeMaterial_Level4",
+    "quantity": 5,
     "progressive": 2
   },
   {
@@ -106,9 +148,16 @@
   },
   {
     "type": "Upgrade material",
-    "name": "Colour of Lumina",
+    "name": "Colour of Lumina (1)",
     "internal_name": "Consumable_LuminaPoint",
     "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Upgrade material",
+    "name": "Colour of Lumina (5)",
+    "internal_name": "Consumable_LuminaPoint",
+    "quantity": 5,
     "progressive": 2
   },
   {
