@@ -7,10 +7,11 @@ from flask import request, redirect, url_for, render_template, Response, session
 from pony.orm import count, commit, db_session
 from werkzeug.utils import secure_filename
 
+
 from worlds.AutoWorld import AutoWorldRegister, World
 from . import app, cache
 from .models import Seed, Room, Command, UUID, uuid4
-from Utils import title_sorted
+from Utils import title_sorted, utcnow
 
 
 def get_world_theme(game_name: str) -> str:
@@ -247,10 +248,12 @@ def host_room(room: UUID):
     if room is None:
         return abort(404)
 
-    now = datetime.datetime.utcnow()
+    now = utcnow()
     # indicate that the page should reload to get the assigned port
-    should_refresh = ((not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))
-                      or room.last_activity < now - datetime.timedelta(seconds=room.timeout))
+    should_refresh = (
+        (not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))
+        or room.last_activity < now - datetime.timedelta(seconds=room.timeout)
+    )
     with db_session:
         room.last_activity = now  # will trigger a spinup, if it's not already running
 
