@@ -97,7 +97,7 @@ class APQuestContext(CommonContext):
                     self.ap_quest_game.receive_item(item.item, item.location, item.player)
                     rerender = True
 
-                for new_remotely_cleared_location in (self.checked_locations - self.ingame_cleared_locations):
+                for new_remotely_cleared_location in self.checked_locations - self.ingame_cleared_locations:
                     self.ap_quest_game.force_clear_location(new_remotely_cleared_location)
                     rerender = True
 
