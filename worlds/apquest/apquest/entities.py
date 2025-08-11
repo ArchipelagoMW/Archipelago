@@ -214,12 +214,13 @@ class Enemy(Entity, InteractableMixin):
         if self.dead:
             return
 
-        self.current_health = max(0, self.current_health - 1)
+        if not player.has_item(Item.SWORD):
+            self.current_health = max(0, self.current_health - 1)
 
-        if self.current_health == 0:
-            if not self.dead:
-                self.die()
-            return
+            if self.current_health == 0:
+                if not self.dead:
+                    self.die()
+                return
 
         player.damage(2)
 
