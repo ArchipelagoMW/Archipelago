@@ -4,10 +4,14 @@ from typing import Any
 
 import colorama
 from CommonClient import CommonContext, get_base_parser, gui_enabled, handle_url_arg, logger, server_loop
+
+# isort: off
+from kvui import GameManager
 from kivy.core.window import Keyboard, Window
 from kivy.uix.layout import Layout
 from kivymd.uix.recycleview import MDRecycleView
-from kvui import GameManager
+# isort: on
+
 from NetUtils import ClientStatus
 
 from .apquest.events import LocationClearedEvent
