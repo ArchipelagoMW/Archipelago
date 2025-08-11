@@ -90,7 +90,7 @@ Boo Anger (if you want boos to stay passive or get aggressive and attack Luigi),
 Energy link allows players to send and receive money as energy to other energy-linked team members through commands sent through the LMClient.
 The energy link conversion rate is 1:5e3 of Luigi's worth. (worth is used when determining the rank requirement)
 
-For example, requesting 10 (50,000) energy will send Luigi a Bill, which has a worth of 50,000.
+For example, requesting 10 energy (50,000 worth) will send Luigi two Bills (20,000 each) and two Coins (5000 each), for a total worth of 50,000.
 
 Commands are:
 - `/send_energy <amount>` - Sends energy to the Archipelago server to be consumed by any player on the team.
