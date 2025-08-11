@@ -311,6 +311,9 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
                 if not self.options.checkpoint_checks:
                     ap_ids.clear()
             case 6:
+                #Tip hints
+                if self.options.mr_hints:
+                    self.tip_locations.append(each_location_data.name)
                 #Tips
                 if not self.options.mr_tip_checks:
                     continue

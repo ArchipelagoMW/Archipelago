@@ -8,10 +8,11 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from worlds.generic.Rules import add_rule
 
-from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall, MrHints, ChickenHints
+from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall
 from .JsonReader import build_data, generate_location_name_to_id
 from .ItemPool import generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, filler_table, trap_table
 from Utils import visualize_regions
+from .Hints import create_hints
 
 def run_client():
     from .GloverClient import main  # lazy import
@@ -132,6 +133,11 @@ class GloverWorld(World):
             #["Otw?", 50]
         ]
         self.starting_ball : str = "Rubber Ball"
+        #Grab Mr. Tips for hints
+        self.tip_locations : list[str] = []
+        #Speaking of hints
+        self.mr_hints : dict[str, Location] = {}
+        self.chicken_hints : dict[str, Location] = {}
         super(GloverWorld, self).__init__(world, player)
 
     def level_from_string(self, name : str) -> int:
@@ -213,8 +219,7 @@ class GloverWorld(World):
         end_region.locations.append(goal_location)
         goal_location.place_locked_item(self.create_event("Victory"))
         add_rule(goal_location, lambda state: state.can_reach_location("Atl2: Goal", player))
-        multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
-        #multiworld.CreateHints 
+        multiworld.completion_condition[player] = lambda state: state.has("Victory", player) 
 
     def create_event(self, event : str) -> GloverItem:
         return GloverItem(event, ItemClassification.progression, None, self.player)
@@ -327,7 +332,6 @@ class GloverWorld(World):
         #for each_item in event_items:
         #    self.multiworld.itempool.append(self.create_event(each_item))
 
-
         #Calculate the amount of trap filler and the amount of regular filler
         total_locations : int = len(self.multiworld.get_unfilled_locations(self.player))
         total_core_items : int = len(self.multiworld.itempool) + len(self.get_pre_fill_items())
@@ -428,39 +432,14 @@ class GloverWorld(World):
         return options
 
     def generate_hints(self):
-        ##Mr. Hints
-        #match self.options.mr_hints:
-        #    case MrHints.option_off:
-        #
-        #    case MrHints.option_balanced:
-        #
-        #    case MrHints.option_catagory_only:
-        #
-        #    case MrHints.option_chaos:
-        #
-        #    case MrHints.option_traps:
-        #
-        #    case MrHints.option_useful:
-        #
-        #    case MrHints.option_progression:
-        ##Chicken Hints
-        #match self.options.chicken_hints:
-        #    case MrHints.option_off:
-        #
-        #    case ChickenHints.option_balanced:
-        #
-        #    case ChickenHints.option_catagory_only:
-        #
-        #    case ChickenHints.option_chaos:
-        #
-        #    case ChickenHints.option_traps:
-        #
-        #    case ChickenHints.option_useful:
-        #
-        #    case ChickenHints.option_progression:
-        return
+        hint_groups = create_hints(self)
+        #Mr. Tip Hints
+        self.mr_hints = hint_groups[0]
+        #Chicken Hints
+        self.chicken_hints = hint_groups[1]
 
     def fill_slot_data(self) -> Dict[str, Any]:
+        self.generate_hints()
         options = self.build_options()
         
         return options
