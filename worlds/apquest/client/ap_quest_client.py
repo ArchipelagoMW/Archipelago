@@ -195,6 +195,10 @@ class APQuestContext(CommonContext):
 
             sounds: dict[int, list[Sound]]
 
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.sounds = {}
+
             def load_audio(self, sound_filename: str):
                 audio_path = SOUND_PATHS[sound_filename]
 
@@ -203,12 +207,16 @@ class APQuestContext(CommonContext):
                 return sound_object
 
             def populate_sounds(self):
-                self.sounds = {
-                    sound_filename: [self.load_audio(sound_filename) for _ in range(3)] for sound_filename in ALL_SOUNDS
-                }
+                try:
+                    self.sounds = {
+                        sound_filename: [self.load_audio(sound_filename) for _ in range(3)]
+                        for sound_filename in ALL_SOUNDS
+                    }
+                except Exception as e:
+                    logger.exception(e)
 
             def play_audio(self, audio_filename):
-                preloaded_sound_list = self.sounds[audio_filename]
+                preloaded_sound_list = self.sounds.get(audio_filename)
                 sound = preloaded_sound_list.pop(0)
                 sound.play()
                 preloaded_sound_list.append(sound)
