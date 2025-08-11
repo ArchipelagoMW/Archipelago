@@ -22,7 +22,8 @@ class EnergyLinkCommandProcessor(ClientCommandProcessor):
         self.energy_link = EnergyLinkProcessor(ctx)
 
     def _cmd_send_energy(self, arg: str):
-        """ Sends an amount of energy to the server.This amount is pulled from Luigi's money. """
+        """ Sends an amount of energy to the server, which is pulled from Luigi's wallet.
+        Each point of energy is worth a single coin (rank worth 5000)"""
         if not _validate_processor_context(self.ctx):
             return
 
@@ -37,7 +38,7 @@ class EnergyLinkCommandProcessor(ClientCommandProcessor):
 
     def _cmd_request_energy(self, arg: str):
         """
-        Requests energy from the server. 
+        Requests energy from the server, which each point has the worth of a single coin (rank worth 5000).
         Will return up to the requested amount based upon the team's energy pool.
         """
         if not _validate_processor_context(self.ctx):

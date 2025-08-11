@@ -5,7 +5,7 @@ import Utils
 
 from CommonClient import CommonContext, logger
 from ...Wallet import Wallet
-from .energy_link import EnergyLink
+from .energy_link import EnergyLink, EnergyLinkConstants
 
 class EnergyLinkProcessor:
     """
@@ -32,6 +32,9 @@ class EnergyLinkProcessor:
         """
         is_valid, amount = _validate_processor_arg(arg)
         if not is_valid:
+            return
+        
+        if not _has_energy_link_tag(self._ctx):
             return
 
         if not _check_if_in_game(self._ctx):
@@ -63,6 +66,9 @@ class EnergyLinkProcessor:
         if not _check_if_in_game(self._ctx):
             logger.error("Make sure that Luigi's Mansion is running before requesting energy.")
             return
+        
+        if not _has_energy_link_tag(self._ctx):
+            return
 
         await self.energy_link.request_energy_async(amount)
         logger.info("Requested %s energy.", amount)
@@ -71,6 +77,9 @@ class EnergyLinkProcessor:
         """
         Gets the amount of energy available in the team's pool.
         """
+        if not _has_energy_link_tag(self._ctx):
+            return
+
         await self.energy_link.get_energy_async()
 
         retries:int  = 0
@@ -103,5 +112,11 @@ def _check_if_in_game(ctx):
     if not hasattr(ctx, 'check_ingame') and inspect.isfunction(ctx.check_ingame()):
         return False
     if not ctx.check_ingame():
+        return False
+    return True
+
+def _has_energy_link_tag(ctx: CommonContext) -> bool:
+    if EnergyLinkConstants.FRIENDLY_NAME not in ctx.tags:
+        logger.info("Energy Link is not enabled for Luigi's Mansion.")
         return False
     return True

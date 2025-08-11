@@ -154,6 +154,12 @@ class LMCommandProcessor(EnergyLinkCommandProcessor):
         if isinstance(self.ctx, LMContext):
             Utils.async_start(self.ctx.update_link_tags(not "TrapLink" in self.ctx.tags, "TrapLink"), name="Update Traplink")
 
+    def _cmd_energy_link(self):
+        """Toggle EnergyLink from the client. Overrides default setting."""
+        if isinstance(self.ctx, LMContext):
+            Utils.async_start(self.ctx.update_link_tags(not EnergyLinkConstants.FRIENDLY_NAME in self.ctx.tags,
+                    EnergyLinkConstants.FRIENDLY_NAME), name=f"Update {EnergyLinkConstants.FRIENDLY_NAME}")
+
     def _cmd_jakeasked(self):
         """Provide debug information from Dolphin's RAM addresses while playing Luigi's Mansion,
         if the devs ask for it."""
@@ -224,7 +230,7 @@ class LMContext(CommonContext):
         """
         self.auth = None
         await super().disconnect(allow_autoreconnect)
-    
+
     async def update_link_tags(self, link_enabled: bool, link_name:str):
         """Helper function to set link connection tags on/off and update the connection if already connected."""
         old_tags = self.tags.copy()
@@ -289,9 +295,6 @@ class LMContext(CommonContext):
                 Utils.async_start(self.update_link_tags(bool(args["slot_data"][EnergyLinkConstants.INTERNAL_NAME]),
                     EnergyLinkConstants.FRIENDLY_NAME), name=f"Update {EnergyLinkConstants.FRIENDLY_NAME}")
                 self.call_mario = bool(args["slot_data"]["call_mario"])
-
-                if EnergyLinkConstants.FRIENDLY_NAME in self.tags:
-                    Utils.async_start(energy_link_check(self), name="Luigi EnergyLink")
 
             case "Bounced":
                 if "tags" not in args:
@@ -924,10 +927,6 @@ async def display_received_items(ctx: LMContext):
 
         # Reset the list so next time we enter this function we don't display anything
         ctx.item_display_queue = []
-
-async def energy_link_check(ctx: LMContext):
-    while not ctx.exit_event.is_set():
-        await ctx.energy_link.send_energy_to_pool()
 
 def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
     Utils.init_logging("Luigi's Mansion Client")
