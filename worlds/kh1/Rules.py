@@ -165,6 +165,7 @@ def set_rules(kh1world):
     difficulty                             = kh1world.options.logic_difficulty.value # difficulty > 0 is Normal or higher; difficulty > 5 is Proud or higher; difficulty > 10 is Minimal and higher; others are for if another difficulty is added
     stacking_world_items                   = kh1world.options.stacking_world_items.value
     halloween_town_key_item_bundle         = kh1world.options.halloween_town_key_item_bundle.value
+    end_of_the_world_unlock                = kh1world.options.end_of_the_world_unlock.current_key
 
     add_rule(kh1world.get_location("Traverse Town 1st District Candle Puzzle Chest"),
         lambda state: state.has("Progressive Blizzard", player))
@@ -1705,7 +1706,10 @@ def set_rules(kh1world):
                 or 
                 (
                     ( # Has access to EotW
-                        has_lucky_emblems(state, player, eotw_required_lucky_emblems) 
+                        (
+                            has_lucky_emblems(state, player, eotw_required_lucky_emblems) 
+                            and end_of_the_world_unlock == "lucky_emblems"
+                        )
                         or state.has("End of the World", player)
                     )
                     and has_final_rest_door(state, player, final_rest_door_requirement, final_rest_door_required_lucky_emblems) # Can open the Door
@@ -1799,7 +1803,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_entrance("Hollow Bastion"),
         lambda state: state.has("Hollow Bastion", player) and has_x_worlds(state, player, 6, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_entrance("End of the World"),
-        lambda state: has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty) and (has_lucky_emblems(state, player, eotw_required_lucky_emblems) or state.has("End of the World", player)))
+        lambda state: has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty) and ((has_lucky_emblems(state, player, eotw_required_lucky_emblems) and end_of_the_world_unlock == "lucky_emblems") or state.has("End of the World", player)))
     add_rule(kh1world.get_entrance("100 Acre Wood"),
         lambda state: state.has("Progressive Fire", player))
 
