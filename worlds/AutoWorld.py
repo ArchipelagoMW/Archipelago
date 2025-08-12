@@ -44,8 +44,8 @@ class AutoWorldRegister(type):
         if "web" in dct:
             assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
         # filter out any events
-        dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id}
-        dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id}
+        dct["item_name_to_id"] = {name: id for name, id in dct["item_name_to_id"].items() if id is not None}
+        dct["location_name_to_id"] = {name: id for name, id in dct["location_name_to_id"].items() if id is not None}
         # build reverse lookups
         dct["item_id_to_name"] = {code: name for name, code in dct["item_name_to_id"].items()}
         dct["location_id_to_name"] = {code: name for name, code in dct["location_name_to_id"].items()}
