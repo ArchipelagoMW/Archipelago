@@ -3,9 +3,10 @@ let updateSection = (sectionName, fakeDOM) => {
 }
 
 window.addEventListener('load', () => {
-    // Reload tracker every 15 seconds
+    // Reload tracker every 60 seconds (sync'd)
     const url = window.location;
-    const targetSecond = parseInt(document.getElementById('player-tracker').getAttribute('data-second')) + 2;
+    // Note: This synchronization code is adapted from code in trackerCommon.js
+    const targetSecond = parseInt(document.getElementById('player-tracker').getAttribute('data-second')) + 3;
     console.log("Target second of refresh: " + targetSecond);
 
     let getSleepTimeSeconds = () => {
