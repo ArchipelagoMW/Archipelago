@@ -42,6 +42,8 @@ jobs:
           - {version: '3.11'}
           - {version: '3.12'}
         include:
+          - python: {version: '3.11'}  # old compat
+            os: windows-latest
           - python: {version: '3.12'}  # current
             os: windows-latest
           - python: {version: '3.12'}  # current
