@@ -73,13 +73,11 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
-
 def format_exception(e: BaseException) -> str:
     return f"{e.__class__.__name__}: {e}"
 
 
 def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
-
     results, gen_options = roll_options(options, set(meta["plando_options"]))
 
     if any(type(result) == str for result in results.values()):
