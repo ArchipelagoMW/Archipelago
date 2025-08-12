@@ -38,5 +38,5 @@ window.addEventListener('load', () => {
         ajax.send();
         updater = setTimeout(updateTracker, getSleepTimeSeconds() * 1000);
     };
-    var updater = setTimeout(updateTracker, getSleepTimeSeconds() * 1000);
+    window.updater = setTimeout(updateTracker, getSleepTimeSeconds() * 1000);
 });
