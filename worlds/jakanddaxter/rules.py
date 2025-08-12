@@ -1,3 +1,5 @@
+import logging
+import math
 import typing
 from BaseClasses import CollectionState
 from Options import OptionError
@@ -131,100 +133,138 @@ def can_fight(state: CollectionState, player: int) -> bool:
     return state.has_any(("Jump Dive", "Jump Kick", "Punch", "Kick"), player)
 
 
-def enforce_multiplayer_limits(world: "JakAndDaxterWorld"):
+def clamp_cell_limits(world: "JakAndDaxterWorld") -> str:
     options = world.options
     friendly_message = ""
 
-    if (options.enable_orbsanity == EnableOrbsanity.option_global
-            and (options.global_orbsanity_bundle_size.value < GlobalOrbsanityBundleSize.friendly_minimum
-                 or options.global_orbsanity_bundle_size.value > GlobalOrbsanityBundleSize.friendly_maximum)):
-        friendly_message += (f"  "
-                             f"{options.global_orbsanity_bundle_size.display_name} must be no less than "
-                             f"{GlobalOrbsanityBundleSize.friendly_minimum} and no greater than "
-                             f"{GlobalOrbsanityBundleSize.friendly_maximum} (currently "
-                             f"{options.global_orbsanity_bundle_size.value}).\n")
-
-    if (options.enable_orbsanity == EnableOrbsanity.option_per_level
-            and options.level_orbsanity_bundle_size.value < PerLevelOrbsanityBundleSize.friendly_minimum):
-        friendly_message += (f"  "
-                             f"{options.level_orbsanity_bundle_size.display_name} must be no less than "
-                             f"{PerLevelOrbsanityBundleSize.friendly_minimum} (currently "
-                             f"{options.level_orbsanity_bundle_size.value}).\n")
-
     if options.fire_canyon_cell_count.value > FireCanyonCellCount.friendly_maximum:
+        old_value = options.fire_canyon_cell_count.value
+        options.fire_canyon_cell_count.value = FireCanyonCellCount.friendly_maximum
         friendly_message += (f"  "
                              f"{options.fire_canyon_cell_count.display_name} must be no greater than "
-                             f"{FireCanyonCellCount.friendly_maximum} (currently "
-                             f"{options.fire_canyon_cell_count.value}).\n")
+                             f"{FireCanyonCellCount.friendly_maximum} (was {old_value}), "
+                             f"changed option to appropriate value.\n")
 
     if options.mountain_pass_cell_count.value > MountainPassCellCount.friendly_maximum:
+        old_value = options.mountain_pass_cell_count.value
+        options.mountain_pass_cell_count.value = MountainPassCellCount.friendly_maximum
         friendly_message += (f"  "
                              f"{options.mountain_pass_cell_count.display_name} must be no greater than "
-                             f"{MountainPassCellCount.friendly_maximum} (currently "
-                             f"{options.mountain_pass_cell_count.value}).\n")
+                             f"{MountainPassCellCount.friendly_maximum} (was {old_value}), "
+                             f"changed option to appropriate value.\n")
 
     if options.lava_tube_cell_count.value > LavaTubeCellCount.friendly_maximum:
+        old_value = options.lava_tube_cell_count.value
+        options.lava_tube_cell_count.value = LavaTubeCellCount.friendly_maximum
         friendly_message += (f"  "
                              f"{options.lava_tube_cell_count.display_name} must be no greater than "
-                             f"{LavaTubeCellCount.friendly_maximum} (currently "
-                             f"{options.lava_tube_cell_count.value}).\n")
+                             f"{LavaTubeCellCount.friendly_maximum} (was {old_value}), "
+                             f"changed option to appropriate value.\n")
+
+    return friendly_message
+
+
+def clamp_trade_total_limits(world: "JakAndDaxterWorld"):
+    """Check if we need to recalculate the 2 trade orb options so the total fits under 2000. If so let's keep them
+    proportional relative to each other. Then we'll recalculate total_trade_orbs. Remember this situation is
+    only possible if both values are greater than 0, otherwise the absolute maximums would keep them under 2000."""
+    options = world.options
+    friendly_message = ""
+
+    world.total_trade_orbs = (9 * options.citizen_orb_trade_amount) + (6 * options.oracle_orb_trade_amount)
+    if world.total_trade_orbs > 2000:
+        old_total = world.total_trade_orbs
+        old_citizen_value = options.citizen_orb_trade_amount.value
+        old_oracle_value = options.oracle_orb_trade_amount.value
+
+        coefficient = old_oracle_value / old_citizen_value
+
+        options.citizen_orb_trade_amount.value = math.floor(2000 / (9 + (6 * coefficient)))
+        options.oracle_orb_trade_amount.value = math.floor(coefficient * options.citizen_orb_trade_amount.value)
+        world.total_trade_orbs = (9 * options.citizen_orb_trade_amount) + (6 * options.oracle_orb_trade_amount)
+
+        friendly_message += (f"  "
+                             f"Required number of orbs ({old_total}) must be no greater than total orbs in the game "
+                             f"(2000). Reduced the value of {world.options.citizen_orb_trade_amount.display_name} "
+                             f"from {old_citizen_value} to {options.citizen_orb_trade_amount.value} and "
+                             f"{world.options.oracle_orb_trade_amount.display_name} from {old_oracle_value} to "
+                             f"{options.oracle_orb_trade_amount.value}.\n")
+
+    return friendly_message
+
+
+def enforce_mp_friendly_limits(world: "JakAndDaxterWorld"):
+    options = world.options
+    friendly_message = ""
+
+    if options.enable_orbsanity == EnableOrbsanity.option_global:
+        if options.global_orbsanity_bundle_size.value < GlobalOrbsanityBundleSize.friendly_minimum:
+            old_value = options.global_orbsanity_bundle_size.value
+            options.global_orbsanity_bundle_size.value = GlobalOrbsanityBundleSize.friendly_minimum
+            friendly_message += (f"  "
+                                 f"{options.global_orbsanity_bundle_size.display_name} must be no less than "
+                                 f"{GlobalOrbsanityBundleSize.friendly_minimum} (was {old_value}), "
+                                 f"changed option to appropriate value.\n")
+
+        if options.global_orbsanity_bundle_size.value > GlobalOrbsanityBundleSize.friendly_maximum:
+            old_value = options.global_orbsanity_bundle_size.value
+            options.global_orbsanity_bundle_size.value = GlobalOrbsanityBundleSize.friendly_maximum
+            friendly_message += (f"  "
+                                 f"{options.global_orbsanity_bundle_size.display_name} must be no greater than "
+                                 f"{GlobalOrbsanityBundleSize.friendly_maximum} (was {old_value}), "
+                                 f"changed option to appropriate value.\n")
+
+    if options.enable_orbsanity == EnableOrbsanity.option_per_level:
+        if options.level_orbsanity_bundle_size.value < PerLevelOrbsanityBundleSize.friendly_minimum:
+            old_value = options.level_orbsanity_bundle_size.value
+            options.level_orbsanity_bundle_size.value = PerLevelOrbsanityBundleSize.friendly_minimum
+            friendly_message += (f"  "
+                                 f"{options.level_orbsanity_bundle_size.display_name} must be no less than "
+                                 f"{PerLevelOrbsanityBundleSize.friendly_minimum} (was {old_value}), "
+                                 f"changed option to appropriate value.\n")
 
     if options.citizen_orb_trade_amount.value > CitizenOrbTradeAmount.friendly_maximum:
+        old_value = options.citizen_orb_trade_amount.value
+        options.citizen_orb_trade_amount.value = CitizenOrbTradeAmount.friendly_maximum
         friendly_message += (f"  "
                              f"{options.citizen_orb_trade_amount.display_name} must be no greater than "
-                             f"{CitizenOrbTradeAmount.friendly_maximum} (currently "
-                             f"{options.citizen_orb_trade_amount.value}).\n")
+                             f"{CitizenOrbTradeAmount.friendly_maximum} (was {old_value}), "
+                             f"changed option to appropriate value.\n")
 
     if options.oracle_orb_trade_amount.value > OracleOrbTradeAmount.friendly_maximum:
+        old_value = options.oracle_orb_trade_amount.value
+        options.oracle_orb_trade_amount.value = OracleOrbTradeAmount.friendly_maximum
         friendly_message += (f"  "
                              f"{options.oracle_orb_trade_amount.display_name} must be no greater than "
-                             f"{OracleOrbTradeAmount.friendly_maximum} (currently "
-                             f"{options.oracle_orb_trade_amount.value}).\n")
+                             f"{OracleOrbTradeAmount.friendly_maximum} (was {old_value}), "
+                             f"changed option to appropriate value.\n")
+
+    friendly_message += clamp_cell_limits(world)
+    friendly_message += clamp_trade_total_limits(world)
 
     if friendly_message != "":
-        raise OptionError(f"{world.player_name}: The options you have chosen may disrupt the multiworld. \n"
-                          f"Please adjust the following Options for a multiplayer game. \n"
-                          f"{friendly_message}"
-                          f"Or use 'random-range-x-y' instead of 'random' in your player yaml.\n"
-                          f"Or set 'enforce_friendly_options' in the seed generator's host.yaml to false. "
-                          f"(Use at your own risk!)")
+        logging.warning(f"{world.player_name}: Your options have been modified to avoid disrupting the multiworld.\n"
+                        f"{friendly_message}"
+                        f"You can access more advanced options by setting 'enforce_friendly_options' in the seed "
+                        f"generator's host.yaml to false and generating locally. (Use at your own risk!)")
 
 
-def enforce_singleplayer_limits(world: "JakAndDaxterWorld"):
-    options = world.options
+def enforce_mp_absolute_limits(world: "JakAndDaxterWorld"):
     friendly_message = ""
 
-    if options.fire_canyon_cell_count.value > FireCanyonCellCount.friendly_maximum:
-        friendly_message += (f"  "
-                             f"{options.fire_canyon_cell_count.display_name} must be no greater than "
-                             f"{FireCanyonCellCount.friendly_maximum} (currently "
-                             f"{options.fire_canyon_cell_count.value}).\n")
-
-    if options.mountain_pass_cell_count.value > MountainPassCellCount.friendly_maximum:
-        friendly_message += (f"  "
-                             f"{options.mountain_pass_cell_count.display_name} must be no greater than "
-                             f"{MountainPassCellCount.friendly_maximum} (currently "
-                             f"{options.mountain_pass_cell_count.value}).\n")
-
-    if options.lava_tube_cell_count.value > LavaTubeCellCount.friendly_maximum:
-        friendly_message += (f"  "
-                             f"{options.lava_tube_cell_count.display_name} must be no greater than "
-                             f"{LavaTubeCellCount.friendly_maximum} (currently "
-                             f"{options.lava_tube_cell_count.value}).\n")
+    friendly_message += clamp_trade_total_limits(world)
 
     if friendly_message != "":
-        raise OptionError(f"The options you have chosen may result in seed generation failures. \n"
-                          f"Please adjust the following Options for a singleplayer game. \n"
-                          f"{friendly_message}"
-                          f"Or use 'random-range-x-y' instead of 'random' in your player yaml.\n"
-                          f"Or set 'enforce_friendly_options' in your host.yaml to false. "
-                          f"(Use at your own risk!)")
+        logging.warning(f"{world.player_name}: Your options have been modified to avoid seed generation failures.\n"
+                        f"{friendly_message}")
 
 
-def verify_orb_trade_amounts(world: "JakAndDaxterWorld"):
+def enforce_sp_limits(world: "JakAndDaxterWorld"):
+    friendly_message = ""
 
-    if world.total_trade_orbs > 2000:
-        raise OptionError(f"{world.player_name}: Required number of orbs for all trades ({world.total_trade_orbs}) "
-                          f"is more than all the orbs in the game (2000). Reduce the value of either "
-                          f"{world.options.citizen_orb_trade_amount.display_name} "
-                          f"or {world.options.oracle_orb_trade_amount.display_name}.")
+    friendly_message += clamp_cell_limits(world)
+    friendly_message += clamp_trade_total_limits(world)
+
+    if friendly_message != "":
+        logging.warning(f"{world.player_name}: Your options have been modified to avoid seed generation failures.\n"
+                        f"{friendly_message}")
