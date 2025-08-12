@@ -1,4 +1,6 @@
 # isort: off
+import typing
+
 from kvui import GameManager
 # isort: on
 
@@ -114,8 +116,8 @@ class APQuestContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict) -> None:
         if cmd == "Connected":
-            if self.slot == self.last_connected_slot:
-                self.connection_status = ConnectionStatus.GAME_RUNNING  # We can seemlessly keep going
+            if self.connection_status == ConnectionStatus.GAME_RUNNING:
+                # In a connection loss -> auto reconnect scenario, we can seamlessly keep going
                 return
 
             self.last_connected_slot = self.slot
@@ -147,6 +149,8 @@ class APQuestContext(CommonContext):
 
     async def disconnect(self, *args, **kwargs) -> None:
         self.finished_game = False
+        self.locations_checked = set()
+        self.connection_status = ConnectionStatus.NOT_CONNECTED
         await super().disconnect(*args, **kwargs)
 
     def initial_render(self):
