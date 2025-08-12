@@ -138,15 +138,11 @@ class APQuestContext(CommonContext):
             self.connection_status = ConnectionStatus.CONNECTED
         if cmd == "Disconnected":
             self.connection_status = ConnectionStatus.NOT_CONNECTED
-            self.checked_locations = set()
-            self.ingame_cleared_locations = set()
             self.finished_game = False
 
     async def disconnect(self, *args, **kwargs) -> None:
-        self.checked_locations = set()
-        self.finished_game = False
         self.connection_status = ConnectionStatus.NOT_CONNECTED
-        self.ingame_cleared_locations = set()
+        self.finished_game = False
         await super().disconnect(*args, **kwargs)
 
     def initial_render(self):
