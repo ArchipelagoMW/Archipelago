@@ -189,40 +189,40 @@ input[type="checkbox"]{
   display: contents;
 }
 
-.lvl-0 :nth-child(2),
-.lvl-0 :nth-child(3),
-.lvl-0 :nth-child(4),
-.lvl-0 :nth-child(5){
+.lvl-0 > :nth-child(2),
+.lvl-0 > :nth-child(3),
+.lvl-0 > :nth-child(4),
+.lvl-0 > :nth-child(5){
   display: none;
 }
-.lvl-1 :nth-child(2),
-.lvl-1 :nth-child(3),
-.lvl-1 :nth-child(4),
-.lvl-1 :nth-child(5){
+.lvl-1 > :nth-child(2),
+.lvl-1 > :nth-child(3),
+.lvl-1 > :nth-child(4),
+.lvl-1 > :nth-child(5){
   display: none;
 }
-.lvl-2 :nth-child(1),
-.lvl-2 :nth-child(3),
-.lvl-2 :nth-child(4),
-.lvl-2 :nth-child(5){
+.lvl-2 > :nth-child(1),
+.lvl-2 > :nth-child(3),
+.lvl-2 > :nth-child(4),
+.lvl-2 > :nth-child(5){
   display: none;
 }
-.lvl-3 :nth-child(1),
-.lvl-3 :nth-child(2),
-.lvl-3 :nth-child(4),
-.lvl-3 :nth-child(5){
+.lvl-3 > :nth-child(1),
+.lvl-3 > :nth-child(2),
+.lvl-3 > :nth-child(4),
+.lvl-3 > :nth-child(5){
   display: none;
 }
-.lvl-4 :nth-child(1),
-.lvl-4 :nth-child(2),
-.lvl-4 :nth-child(3),
-.lvl-4 :nth-child(5){
+.lvl-4 > :nth-child(1),
+.lvl-4 > :nth-child(2),
+.lvl-4 > :nth-child(3),
+.lvl-4 > :nth-child(5){
   display: none;
 }
-.lvl-5 :nth-child(1),
-.lvl-5 :nth-child(2),
-.lvl-5 :nth-child(3),
-.lvl-5 :nth-child(4){
+.lvl-5 > :nth-child(1),
+.lvl-5 > :nth-child(2),
+.lvl-5 > :nth-child(3),
+.lvl-5 > :nth-child(4){
   display: none;
 }
 
