@@ -1463,6 +1463,7 @@ if "Starcraft 2" in network_data_package["games"]:
             location_id_to_name=location_id_to_name,
             item_id_to_name=item_id_to_name,
             keys=keys,
+            saving_second=tracker_data.get_room_saving_second(),
             **display_data,
         )
 

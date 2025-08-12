@@ -11,7 +11,7 @@
   <div style="margin-bottom: 0.5rem; padding: 0.5rem">
     <a href="{{ url_for("get_generic_game_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}">Switch To Generic Tracker</a>
   </div>
-  <div id="player-tracker" data-tracker="{{ room.tracker|suuid }}">
+  <div id="player-tracker" data-tracker="{{ room.tracker|suuid }}" data-second="{{ saving_second }}">
     <div id="player-info">
       <h1>{{ player_name }}&apos;s Starcraft 2 Tracker{{' - Finished' if game_finished}}</h1>
     </div>
