@@ -74,20 +74,19 @@ input[type="checkbox"]{
 .section-title:hover h2{
   text-shadow: 0 0 4px #ddd;
 }
+.f {
+  display: flex;
+}
 
 /* Acquire item filters */
 .tracker-section img{
   height: 100%;
-  max-width: var(--icon-size);
-  max-height: var(--icon-size);
-  filter: grayscale(100%) contrast(80%) brightness(42%) blur(0.5px);
+  width: var(--icon-size);
+  height: var(--icon-size);
   background-color: black;
 }
-.tracker-section img.acquired{
-  filter: none;
-}
-.item-counter img{
-  filter: none;
+.unacquired, .lvl-0 .f{
+  filter: grayscale(100%) contrast(80%) brightness(42%) blur(0.5px);
 }
 .spacer{
   width: var(--icon-size);
@@ -190,11 +189,6 @@ input[type="checkbox"]{
   display: contents;
 }
 
-.lvl-1 img, .lvl-2 img,
-.lvl-3 img, .lvl-4 img,
-.lvl-5 img{
-  filter: none;
-}
 .lvl-0 :nth-child(2),
 .lvl-0 :nth-child(3),
 .lvl-0 :nth-child(4),
