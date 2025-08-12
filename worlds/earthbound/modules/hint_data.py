@@ -343,15 +343,9 @@ def parse_hint_data(world, location, rom, hint, index) -> None:
     rom.write_bytes(hint_addresses[world.hint_number], struct.pack("I", 0xF10000 + world.hint_pointer))
 
     if hint in ["item_at_location", "hint_for_good_item"]:
-        if location.player == world.player:  # Todo; set up CreateHint stuff here
-            rom.write_bytes(scoutable_hint_addresses[world.hint_number], struct.pack("I", 0xEEF451))
-            rom.write_bytes(0x310250 + (world.hint_number * 3), struct.pack("H", location.address - 0xEB0000))
-            rom.write_bytes(0x310252 + (world.hint_number * 3), bytearray([0x00]))
-            world.hint_man_hints.append((location.address, location.player))
-        else:
-            rom.write_bytes(scoutable_hint_addresses[world.hint_number], struct.pack("I", 0xEEF451))
-            rom.write_bytes(0x310252 + (world.hint_number * 3), bytearray([0x01]))
-            world.hint_man_hints.append((location.address, location.player))
+        rom.write_bytes(scoutable_hint_addresses[world.hint_number], struct.pack("I", 0xEEF451))
+        rom.write_bytes(0x310252 + (world.hint_number * 3), bytearray([0x01]))
+        world.hint_man_hints.append((location.address, location.player))
     else:
         rom.write_bytes(scoutable_hint_addresses[world.hint_number], struct.pack("I", 0xEEF4B2))
         world.hint_man_hints.append(("NULL", 0))

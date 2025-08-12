@@ -342,7 +342,7 @@ class EarthBoundClient(SNIClient):
                     if not scoutable_hint[2]:
                         scoutable_hint = (int.from_bytes(scoutable_hint[:2], byteorder="little") + 0xEB0000)
                         self.hint_list.append(i)
-                        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [scoutable_hint], "create_as_hint": 2}])
+                        await ctx.send_msgs([{"cmd": "CreateHints", "locations": [scoutable_hint], "player": ctx.player}])
                     else:
                         hint = self.slot_data['hint_man_hints'][i]
                         await ctx.send_msgs([{"cmd": "CreateHints", "locations": [hint[0]], "player": hint[1]}])
@@ -357,8 +357,7 @@ class EarthBoundClient(SNIClient):
             
             if shop_slots:
                 if shop_scouts_enabled[0] == 2:
-                    await ctx.send_msgs([{"cmd": "LocationScouts", "locations": shop_slots, "create_as_hint": 2}])
-                    # await ctx.send_msgs([{"cmd": "CreateHints", "locations": shop_slots, "player": ctx.slot}]) implement this when 0.6.3 releases
+                    await ctx.send_msgs([{"cmd": "CreateHints", "locations": shop_slots, "player": ctx.slot}])
                     await snes_write(ctx, [(WRAM_START + 0x0770, bytes([0x00]))])
                 else:
                     prog_shops = []
@@ -368,8 +367,8 @@ class EarthBoundClient(SNIClient):
                             self.hinted_shop_locations.append(location)
                             if ctx.locations_info[location].flags & 0x01:
                                 prog_shops.append(location)
-                    await ctx.send_msgs([{"cmd": "LocationScouts", "locations": prog_shops, "create_as_hint": 2}])
-                    # await ctx.send_msgs([{"cmd": "CreateHints", "locations": prog_shops, "player": ctx.slot}]) implement this when 0.6.3 releases
+                    if prog_shops:
+                        await ctx.send_msgs([{"cmd": "CreateHints", "locations": prog_shops, "player": ctx.slot}])
 
         await ctx.send_msgs([{
                     "cmd": "Set",
