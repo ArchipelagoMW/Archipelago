@@ -12,7 +12,7 @@
 <ANYKEY>
 <ACTOR>"demo_hakase"<ACT>"WAIT01"
 <ACTOR>"demo_luigi"<ACT>"DM_THINK_01"
-<CHOICE>"Lab"(1)"Train"(2)"Mansion"(3)"Close"(3)<LISTEND>
+<CHOICE>"Lab"(1)"Train"(2)"Mansion"(3)"Close"(4)<LISTEND>
 <ANYKEY>
 -------------------------
 <CASE>"Lab"
