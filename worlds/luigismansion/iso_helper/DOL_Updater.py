@@ -47,14 +47,15 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, extra_vac: bool, start_vac
 
     # Turn on custom code handler for boo display counter only if Boo Rando is on.
     if boo_rand_on:
+        # Shift for y offset using custom boo counter display
         dol.data.seek(0x04DB50)
         dol.data.write(bytes.fromhex("93C1FFF0"))
 
+        # Custom boo display counters hooks.
         dol.data.seek(0x04DBB0)
-        dol.data.write(bytes.fromhex("4848D0C1"))
-
+        dol.data.write(bytes.fromhex("4848D469"))
         dol.data.seek(0x04DC10)
-        dol.data.write(bytes.fromhex("4848D061"))
+        dol.data.write(bytes.fromhex("4848D409"))
 
     # Turn on/off pickup animations
     if pickup_anim_enabled:

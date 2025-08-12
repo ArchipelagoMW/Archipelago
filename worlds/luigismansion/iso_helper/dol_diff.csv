@@ -10,8 +10,6 @@
 0x03E620,7C002800,
 0x03E63C,7C002800,
 0x047500,38600002,# Skip new game intro cutscene
-0x04DBB0,4848D469,# Custom Counter Bitfield reading
-0x04DC10,4848D409,# Custom Counter Bitfield reading
 0x05C62C,4847EBAD,# Perform Monochrome
 0x072428,60000000,# Disable flag 15 auto turn on
 0x079E64,60000000,
