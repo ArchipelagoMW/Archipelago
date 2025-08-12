@@ -31,7 +31,7 @@ This mod is based upon Num's Garden of Assemblage Mod and requires it to work. W
 
 ### Required: Auto Save Mod and KH2 Lua Library
 
-Load these mods just like you loaded the GoA ROM mod during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` and `KH2FM-Mods-equations19/KH2-Lua-Library` Location doesn't matter, required in case of crashes. See [Best Practices](en#best-practices) on how to load the auto save
+Load these mods just like you loaded the GoA ROM mod during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` and `KH2FM-Mods-equations19/KH2-Lua-Library` Location doesn't matter, required in case of crashes. See [Best Practices](#best-practices) on how to load the auto save
 
 ### Optional QoL Mods: AP QoL and Bear Skip
 
