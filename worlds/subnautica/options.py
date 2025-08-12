@@ -129,6 +129,10 @@ class FillerItemsDistribution(ItemDict):
         return list(self.value.keys()), list(accumulate(self.value.values()))
 
 
+class EmptyTanks(DefaultOnToggle):
+    """Oxygen Tanks stored in inventory are empty if enabled."""
+
+
 @dataclass
 class SubnauticaOptions(PerGameCommonOptions):
     swim_rule: SwimRule
@@ -140,3 +144,4 @@ class SubnauticaOptions(PerGameCommonOptions):
     death_link: SubnauticaDeathLink
     start_inventory_from_pool: StartInventoryPool
     filler_items_distribution: FillerItemsDistribution
+    empty_tanks: EmptyTanks

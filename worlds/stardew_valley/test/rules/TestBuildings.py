@@ -1,5 +1,5 @@
+from ..bases import SVTestBase
 from ...options import BuildingProgression, FarmType
-from ...test import SVTestBase
 
 
 class TestBuildingLogic(SVTestBase):

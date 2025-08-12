@@ -1,6 +1,6 @@
+from ..bases import SVTestBase
 from ... import options
 from ...options import BuildingProgression, ExcludeGingerIsland, Chefsanity
-from ...test import SVTestBase
 
 
 class TestRecipeLearnLogic(SVTestBase):

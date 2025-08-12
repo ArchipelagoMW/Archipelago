@@ -29,14 +29,9 @@ def run_locations_benchmark():
 
         rule_iterations: int = 100_000
 
-        if sys.version_info >= (3, 9):
-            @staticmethod
-            def format_times_from_counter(counter: collections.Counter[str], top: int = 5) -> str:
-                return "\n".join(f"  {time:.4f} in {name}" for name, time in counter.most_common(top))
-        else:
-            @staticmethod
-            def format_times_from_counter(counter: collections.Counter, top: int = 5) -> str:
-                return "\n".join(f"  {time:.4f} in {name}" for name, time in counter.most_common(top))
+        @staticmethod
+        def format_times_from_counter(counter: collections.Counter[str], top: int = 5) -> str:
+            return "\n".join(f"  {time:.4f} in {name}" for name, time in counter.most_common(top))
 
         def location_test(self, test_location: Location, state: CollectionState, state_name: str) -> float:
             with TimeIt(f"{test_location.game} {self.rule_iterations} "
@@ -59,13 +54,13 @@ def run_locations_benchmark():
                     multiworld.game[1] = game
                     multiworld.player_name = {1: "Tester"}
                     multiworld.set_seed(0)
-                    multiworld.state = CollectionState(multiworld)
                     args = argparse.Namespace()
                     for name, option in AutoWorld.AutoWorldRegister.world_types[game].options_dataclass.type_hints.items():
                         setattr(args, name, {
                             1: option.from_any(getattr(option, "default"))
                         })
                     multiworld.set_options(args)
+                    multiworld.state = CollectionState(multiworld)
 
                     gc.collect()
                     for step in self.gen_steps:

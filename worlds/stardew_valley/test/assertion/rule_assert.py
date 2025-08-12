@@ -1,7 +1,7 @@
 from typing import List
 from unittest import TestCase
 
-from BaseClasses import CollectionState, Location, Region
+from BaseClasses import CollectionState, Location, Region, Entrance
 from ...stardew_rule import StardewRule, false_, MISSING_ITEM, Reach
 from ...stardew_rule.rule_explain import explain
 
@@ -78,4 +78,14 @@ class RuleAssertMixin(TestCase):
             self.assertFalse(can_reach, expl)
         except KeyError as e:
             raise AssertionError(f"Error while checking region {region_name}: {e}"
+                                 f"\nExplanation: {expl}")
+
+    def assert_can_reach_entrance(self, entrance: Entrance | str, state: CollectionState) -> None:
+        entrance_name = entrance.name if isinstance(entrance, Entrance) else entrance
+        expl = explain(Reach(entrance_name, "Entrance", 1), state)
+        try:
+            can_reach = state.can_reach_entrance(entrance_name, 1)
+            self.assertTrue(can_reach, expl)
+        except KeyError as e:
+            raise AssertionError(f"Error while checking entrance {entrance_name}: {e}"
                                  f"\nExplanation: {expl}")

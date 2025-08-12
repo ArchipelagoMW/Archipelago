@@ -20,16 +20,17 @@ A short period after receiving an item, you will get a notification indicating y
 
 ## FAQs
 - Do I need the DLC to play this?
-    - Yes, you need both Rise & Fall and Gathering Storm.
+    - You need both expansions, Rise & Fall and Gathering Storm. You do not need the other DLCs but they fully work with this.
 - Does this work with Multiplayer?
     - It does not and, despite my best efforts, probably won't until there's a new way for external programs to be able to interact with the game.
-- Does my mod that reskins Barbarians as various Pro Wrestlers work with this?
-    - Only one way to find out! Any mods that modify techs/civics will most likely cause issues, though.
+- Does this work with other mods?
+    - A lot of mods seem to work without issues combined with this, but you should avoid any mods that change things in the tech or civic tree, as even if they would work it could cause issues with the logic.
 - "Help! I can't see any of the items that have been sent to me!"
     - Both trees by default will show you the researchable Archipelago locations. To view the normal tree, you can click "Toggle Archipelago Tree" in the top-left corner of the tree view.
 - "Oh no! I received the Machinery tech and now instead of getting an Archer next turn, I have to wait an additional 10 turns to get a Crossbowman!"
     - Vanilla prevents you from building units of the same class from an earlier tech level after you have researched a later variant. For example, this could be problematic if someone unlocks Crossbowmen for you right out the gate since you won't be able to make Archers (which have a much lower production cost).
-Solution: You can now go in to the tech tree, click "Toggle Archipelago Tree" to view your unlocked techs, and then can click any tech you have unlocked to toggle whether it is currently active or not.
+    - Solution: You can now go in to the tech tree, click "Toggle Archipelago Tree" to view your unlocked techs, and then can click any tech you have unlocked to toggle whether it is currently active or not.
+	- If you think you should be able to make Field Cannons but seemingly can't try disabling `Telecommunications`
 - "How does DeathLink work? Am I going to have to start a new game every time one of my friends dies?"
     - Heavens no, my fellow Archipelago appreciator. When configuring your Archipelago options for Civilization on the options page, there are several choices available for you to fine tune the way you'd like to be punished for the follies of your friends. These include: Having a random unit destroyed, losing a percentage of gold or faith, or even losing a point on your era score. If you can't make up your mind, you can elect to have any of them be selected every time a death link is sent your way.
     In the event you lose one of your units in combat (this means captured units don't count), then you will send a death link event to the rest of your friends.
@@ -39,7 +40,8 @@ Solution: You can now go in to the tech tree, click "Toggle Archipelago Tree" to
           1. `TECH_WRITING`
           2. `TECH_EDUCATION`
           3. `TECH_CHEMISTRY`
-    - If you want to see the details around each item, you can review [this file](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/civ_6/data/progressive_districts.json).
+	- An important thing to note is that the seaport is part of progressive industrial zones, due to electricity having both an industrial zone building and the seaport.
+    - If you want to see the details around each item, you can review [this file](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/civ_6/data/progressive_districts.py).
 
 ## Boostsanity
 Boostsanity takes all of the Eureka & Inspiration events and makes them location checks. This feature is the one to change up the way Civilization is played in an AP multiworld/randomizer. What normally are mundane tasks that are passively collected now become a novel and interesting bucket list that you need to pay attention to  in order to unlock items for yourself and others!
@@ -56,4 +58,3 @@ Boosts have logic associated with them in order to verify you can always reach t
     - The unpredictable timing of boosts and unlocking them can occasionally lead to scenarios where you'll have to first encounter a locked era defeat and then load a previous save. To help reduce the frequency of this, local `PROGRESSIVE_ERA` items will never be located at a boost check.
 - There's too many boosts, how will I know which one's I should focus on?!
     - In order to give a little more focus to all the boosts rather than just arbitrarily picking them at random, items in both of the vanilla trees will now have an advisor icon on them if its associated boost contains a progression item.
-

@@ -1,4 +1,4 @@
-from . import SVTestCase, setup_multiworld
+from .bases import SVTestCase, setup_multiworld
 from .. import True_
 from ..options import FestivalLocations, StartingMoney
 from ..strings.festival_check_names import FestivalCheck

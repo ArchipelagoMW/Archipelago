@@ -321,7 +321,7 @@ class PokemonRedBlueWorld(World):
                             "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
                             "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"
                         ] if self.multiworld.get_location(loc, self.player).item is None]
-                    state = self.multiworld.get_all_state(False)
+                    state = self.multiworld.get_all_state(False, True, False)
                     # Give it two tries to place badges with wild Pokemon and learnsets as-is.
                     # If it can't, then try with all Pokemon collected, and we'll try to fix HM move availability after.
                     if attempt > 1:
@@ -395,7 +395,7 @@ class PokemonRedBlueWorld(World):
 
         # Delete evolution events for Pokémon that are not in logic in an all_state so that accessibility check does not
         # fail. Re-use test_state from previous final loop.
-        all_state = self.multiworld.get_all_state(False)
+        all_state = self.multiworld.get_all_state(False, True, False)
         evolutions_region = self.multiworld.get_region("Evolution", self.player)
         for location in evolutions_region.locations.copy():
             if not all_state.can_reach(location, player=self.player):
@@ -448,7 +448,7 @@ class PokemonRedBlueWorld(World):
 
         self.local_locs = locs
 
-        all_state = self.multiworld.get_all_state(False)
+        all_state = self.multiworld.get_all_state(False, True, False)
 
         reachable_mons = set()
         for mon in poke_data.pokemon_data:
@@ -515,6 +515,11 @@ class PokemonRedBlueWorld(World):
                 self.multiworld.itempool.append(loc.item)
                 loc.item = None
             loc.place_locked_item(self.pc_item)
+
+    def get_pre_fill_items(self) -> typing.List["Item"]:
+        pool = [self.create_item(mon) for mon in poke_data.pokemon_data]
+        pool.append(self.pc_item)
+        return pool
 
     @classmethod
     def stage_post_fill(cls, multiworld):

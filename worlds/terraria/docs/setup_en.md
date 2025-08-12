@@ -10,13 +10,6 @@ and [tModLoader](https://store.steampowered.com/app/1281930/tModLoader/) on Stea
 1. Subscribe to [the mod](https://steamcommunity.com/sharedfiles/filedetails/?id=2922217554) on Steam
 2. Open tModLoader
 3. Go to **Workshop -> Manage Mods** and enable the Archipelago mod
-   - If tModLoader states that you need version 1.4.3, follow the following steps
-     1. Close tModLoader
-     2. Right-Click tModLoader in Steam and select **Properties**
-     3. Navigate to **Betas -> Beta Participation**
-     4. Select **1.4.3-legacy - Legacy - Stable tModLoader for Terraria 1.4.3**
-     5. Update tModLoader through Steam
-     6. Open tModLoader and navigate back to the **Manage Mods** menu
 4. tModLoader will say that it needs to refresh; exit this menu, and it will do this automatically
 5. Once tModLoader finishes loading, the Archipelago mod is finished installing; you can now 
 [connect to an Archipelago game](#joining-an-archipelago-game-in-terraria).

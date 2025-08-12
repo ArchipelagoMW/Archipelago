@@ -24,9 +24,20 @@
 <BaseButton>:
     ripple_color: app.theme_cls.primaryColor
     ripple_duration_in_fast: 0.2
-<MDTabsItemBase>:
-    ripple_color: app.theme_cls.primaryColor
-    ripple_duration_in_fast: 0.2
+<MDNavigationItemBase>:
+    on_release: app.screens.switch_screens(self)
+
+    MDNavigationItemLabel:
+        text: root.text
+        theme_text_color: "Custom"
+        text_color_active: self.theme_cls.primaryColor
+        text_color_normal: 1, 1, 1, 1
+        # indicator is on icon only for some reason
+        canvas.before:
+            Color:
+                rgba: self.theme_cls.secondaryContainerColor if root.active else self.theme_cls.transparentColor
+            Rectangle:
+                size: root.size
 <TooltipLabel>:
     adaptive_height: True
     theme_font_size: "Custom"
@@ -222,3 +233,8 @@
         spacing: 10
         size_hint_y: None
         height: self.minimum_height
+<MessageBoxLabel>:
+    valign: "middle"
+    halign: "center"
+    text_size: self.width, None
+    height: self.texture_size[1]

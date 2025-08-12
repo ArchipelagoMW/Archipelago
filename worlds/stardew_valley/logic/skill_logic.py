@@ -34,7 +34,8 @@ class SkillLogic(BaseLogic):
         previous_level_rule = self.logic.skill.has_previous_level(skill, level)
 
         if skill == Skill.fishing:
-            xp_rule = self.logic.tool.has_fishing_rod(max(tool_level, 3))
+            # Not checking crab pot as this is used for not randomized skills logic, for which players need a fishing rod to start gaining xp.
+            xp_rule = self.logic.tool.has_fishing_rod(max(tool_level, 3)) & self.logic.fishing.can_fish_anywhere()
         elif skill == Skill.farming:
             xp_rule = self.can_get_farming_xp & self.logic.tool.has_tool(Tool.hoe, tool_material) & self.logic.tool.can_water(tool_level)
         elif skill == Skill.foraging:
@@ -134,7 +135,7 @@ class SkillLogic(BaseLogic):
     @cached_property
     def can_get_fishing_xp(self) -> StardewRule:
         if self.content.features.skill_progression.is_progressive:
-            return self.logic.fishing.can_fish_anywhere() | self.logic.fishing.can_crab_pot
+            return self.logic.fishing.can_fish_anywhere() | self.logic.fishing.can_crab_pot_anywhere
 
         return self.logic.fishing.can_fish_anywhere()
 

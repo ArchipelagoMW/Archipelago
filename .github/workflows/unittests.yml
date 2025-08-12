@@ -8,18 +8,24 @@ on:
     paths:
       - '**'
       - '!docs/**'
+      - '!deploy/**'
       - '!setup.py'
+      - '!Dockerfile'
       - '!*.iss'
       - '!.gitignore'
+      - '!.dockerignore'
       - '!.github/workflows/**'
       - '.github/workflows/unittests.yml'
   pull_request:
     paths:
       - '**'
       - '!docs/**'
+      - '!deploy/**'
       - '!setup.py'
+      - '!Dockerfile'
       - '!*.iss'
       - '!.gitignore'
+      - '!.dockerignore'
       - '!.github/workflows/**'
       - '.github/workflows/unittests.yml'
 

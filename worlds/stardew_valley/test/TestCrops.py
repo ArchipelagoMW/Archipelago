@@ -1,4 +1,4 @@
-from . import SVTestBase
+from .bases import SVTestBase
 from .. import options
 from ..strings.ap_names.transport_names import Transportation
 from ..strings.building_names import Building

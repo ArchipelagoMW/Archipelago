@@ -27,14 +27,32 @@ from .rules import set_rules
 
 class WitnessWebWorld(WebWorld):
     theme = "jungle"
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing The Witness with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
         ["NewSoupVi", "Jarno"]
-    )]
+    )
+    setup_de = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "German",
+        "setup_de.md",
+        "setup/de",
+        ["NewSoupVi"]
+    )
+    setup_fr = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Rever"]
+    )
+
+    tutorials = [setup_en, setup_de, setup_fr]
 
     options_presets = witness_option_presets
     option_groups = witness_option_groups
@@ -239,7 +257,7 @@ class WitnessWorld(World):
         needed_size = 2
         needed_size += self.options.puzzle_randomization == "sigma_expert"
         needed_size += self.options.shuffle_symbols
-        needed_size += self.options.shuffle_doors > 0
+        needed_size += self.options.shuffle_doors != "off"
 
         # Then, add checks in order until the required amount of sphere 1 checks is met.
 

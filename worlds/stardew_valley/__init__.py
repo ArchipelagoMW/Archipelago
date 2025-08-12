@@ -1,25 +1,28 @@
 import logging
 import typing
 from random import Random
-from typing import Dict, Any, Iterable, Optional, List, TextIO
+from typing import Dict, Any, Optional, List, TextIO
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+import entrance_rando
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .content import StardewContent, create_content
 from .early_items import setup_early_items
-from .items import item_table, create_items, ItemData, Group, items_by_group, generate_filler_choice_pool
+from .items import item_table, ItemData, Group, items_by_group
+from .items.item_creation import create_items, get_all_filler_items, remove_limited_amount_packs, \
+    generate_filler_choice_pool
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.logic import StardewLogic
-from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, NumberOfMovementBuffs, \
-    BuildingProgression, EntranceRandomization, FarmType
+from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, \
+    NumberOfMovementBuffs, BuildingProgression, EntranceRandomization, FarmType
 from .options.forced_options import force_change_options_if_incompatible
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
 from .options.worlds_group import apply_most_restrictive_options
-from .regions import create_regions
+from .regions import create_regions, prepare_mod_data
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent
 from .strings.ap_names.event_names import Event
@@ -47,15 +50,25 @@ class StardewWebWorld(WebWorld):
     options_presets = sv_options_presets
     option_groups = sv_option_groups
 
-    tutorials = [
-        Tutorial(
-            "Multiworld Setup Guide",
-            "A guide to playing Stardew Valley with Archipelago.",
-            "English",
-            "setup_en.md",
-            "setup/en",
-            ["KaitoKid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)"]
-        )]
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Stardew Valley with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["KaitoKid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)"]
+    )
+
+    setup_fr = Tutorial(
+        "Guide de configuration MultiWorld",
+        "Un guide pour configurer Stardew Valley sur Archipelago",
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Eindall"]
+    )
+
+    tutorials = [setup_en, setup_fr]
 
 
 class StardewValleyWorld(World):
@@ -122,18 +135,13 @@ class StardewValleyWorld(World):
         self.content = create_content(self.options)
 
     def create_regions(self):
-        def create_region(name: str, exits: Iterable[str]) -> Region:
-            region = Region(name, self.player, self.multiworld)
-            region.exits = [Entrance(self.player, exit_name, region) for exit_name in exits]
-            return region
+        def create_region(name: str) -> Region:
+            return Region(name, self.player, self.multiworld)
 
-        world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options, self.content)
+        world_regions = create_regions(create_region, self.options, self.content)
 
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
-        self.modified_bundles = get_all_bundles(self.random,
-                                                self.logic,
-                                                self.content,
-                                                self.options)
+        self.modified_bundles = get_all_bundles(self.random, self.logic, self.content, self.options)
 
         def add_location(name: str, code: Optional[int], region: str):
             region: Region = world_regions[region]
@@ -305,6 +313,11 @@ class StardewValleyWorld(World):
 
     def set_rules(self):
         set_rules(self)
+
+    def connect_entrances(self) -> None:
+        no_target_groups = {0: [0]}
+        placement = entrance_rando.randomize_entrances(self, coupled=True, target_group_lookup=no_target_groups)
+        self.randomized_entrances = prepare_mod_data(placement)
 
     def generate_basic(self):
         pass

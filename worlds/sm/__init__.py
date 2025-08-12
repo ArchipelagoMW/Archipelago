@@ -15,7 +15,7 @@ from worlds.generic.Rules import add_rule, set_rule
 
 logger = logging.getLogger("Super Metroid")
 
-from .Options import SMOptions
+from .Options import SMOptions, sm_option_groups
 from .Client import SMSNIClient
 from .Rom import SM_ROM_MAX_PLAYERID, SM_ROM_PLAYERDATA_COUNT, SMProcedurePatch, get_sm_symbols
 import Utils
@@ -78,6 +78,7 @@ class SMWeb(WebWorld):
         "multiworld/en",
         ["Farrak Kilhn"]
     )]
+    option_groups = sm_option_groups
 
 
 class ByteEdit(TypedDict):
@@ -852,7 +853,7 @@ class SMWorld(World):
     def fill_slot_data(self): 
         slot_data = {}
         if not self.multiworld.is_race:
-            slot_data = self.options.as_dict(*self.options_dataclass.type_hints)
+            slot_data = self.options.as_dict("start_location", "max_difficulty", "area_randomization", "doors_colors_rando", "boss_randomization")
             slot_data["Preset"] = { "Knows": {},
                                     "Settings": {"hardRooms": Settings.SettingsDict[self.player].hardRooms,
                                                  "bossesDifficulty": Settings.SettingsDict[self.player].bossesDifficulty,

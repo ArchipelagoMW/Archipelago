@@ -1,7 +1,7 @@
 import argparse
 import json
 
-from .. import setup_solo_multiworld
+from ..bases import setup_solo_multiworld
 from ..options.presets import allsanity_mods_6_x_x_exclude_disabled
 from ...options import FarmType, EntranceRandomization
 

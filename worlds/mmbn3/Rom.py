@@ -185,7 +185,7 @@ class TextArchive:
             # As far as I know, this should literally not be possible.
             # Every script I've looked at has dozens of unused indices, so finding 9 (8 plus one "ending" script)
             # should be no problem. We re-use these so we don't have to worry about an area getting tons of these
-            raise AssertionError("Error in generation -- not enough room for progressive undernet in archive "+self.startOffset)
+            raise AssertionError(f"Error in generation -- not enough room for progressive undernet in archive {self.startOffset} ({hex(self.startOffset)})")
         for i in range(9):  # There are 8 progressive undernet ranks
             new_script_index = self.unused_indices[i]
             new_script = ArchiveScript(new_script_index, generate_progressive_undernet(i, self.unused_indices[i+1]))
@@ -319,15 +319,16 @@ class MMBN3DeltaPatch(APDeltaPatch):
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
     if not file_name:
-        bn3_options = options.get("mmbn3_options", None)
+        from worlds.mmbn3 import MMBN3World
+        bn3_options = MMBN3World.settings
+
         if bn3_options is None:
             file_name = "Mega Man Battle Network 3 - Blue Version (USA).gba"
         else:
             file_name = bn3_options["rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name
 
 
