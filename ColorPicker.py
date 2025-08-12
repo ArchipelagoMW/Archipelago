@@ -111,22 +111,31 @@ class ColorPickerApp(ThemedApp):
         self.preset_dropdown.bind(on_select=lambda instance, x: self.set_preset(instance, x))
         self.options_layout.add_widget(self.presets_button)
         self.grid.add_widget(self.options_layout)
-        self.button_layout = MDGridLayout(cols=3, size_hint_y=0.5)
-        self.button_layout.spacing = 5
-        self.button_layout.padding = (10, 5)
+        self.button_layout = MDGridLayout(cols=2)
+        self.color_layout = MDGridLayout(cols=3, size_hint_y=0.5)
+        self.color_layout.spacing = 5
+        self.color_layout.padding = (10, 5)
 
         for color in self.text_colors:
-            new_button = MDButton(MDButtonText(text=color_usages[color], theme_text_color="Custom",
-                                               text_color="white"),
+            new_button = MDButton(MDButtonText(text=color_usages[color]),
                                   theme_bg_color="Custom",
                                   md_bg_color=hex_color_to_tuple(self.text_colors[color]))
             new_button.real_name = color
             new_button.bind(on_release=lambda button: self.set_color(button))
             self.buttons[color] = new_button
-            self.button_layout.add_widget(new_button)
-
+            self.color_layout.add_widget(new_button)
+        self.button_layout.add_widget(self.color_layout)
         self.grid.add_widget(self.button_layout)
         self.theme_layout = MDBoxLayout(orientation="vertical", spacing=5)
+        theme_button = MDButton(MDButtonText(text="Theme Style"))
+        palette_button = MDButton(MDButtonText(text="Primary Palette"))
+        scheme_button = MDButton(MDButtonText(text="Dynamic Scheme"))
+        contrast_slider = MDButton(MDButtonText(text="Contrast"))
+        self.theme_layout.add_widget(theme_button)
+        self.theme_layout.add_widget(palette_button)
+        self.theme_layout.add_widget(scheme_button)
+        self.theme_layout.add_widget(contrast_slider)
+        self.button_layout.add_widget(self.theme_layout)
         return self.container
 
     def populate_dropdown(self, dropdown: MDDropdownMenu) -> None:
@@ -188,9 +197,9 @@ class ColorPickerApp(ThemedApp):
 
     def save_preset_menu(self):
         save: bool = False
-        outer_box = BoxLayout(orientation="vertical", spacing=10)
+        outer_box = MDBoxLayout(orientation="vertical", spacing=10)
         preset_name = TextInput(size_hint_y=None, height=50)
-        inner_box = BoxLayout(orientation="horizontal", spacing=10)
+        inner_box = MDBoxLayout(orientation="horizontal", spacing=10)
         outer_box.add_widget(preset_name)
         outer_box.add_widget(inner_box)
         cancel = MDButton(MDButtonText(text="Cancel"), size_hint_y=None, height=50)
