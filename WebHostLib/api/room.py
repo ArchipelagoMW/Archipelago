@@ -14,7 +14,6 @@ def room_info(room_id: UUID) -> Dict[str, Any]:
     room = Room.get(id=room_id)
     if room is None:
         return abort(404)
-    from base64 import urlsafe_b64encode
 
     def supports_apdeltapatch(game: str) -> bool:
         return game in worlds.Files.AutoPatchRegister.patch_types

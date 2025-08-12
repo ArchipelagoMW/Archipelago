@@ -12,7 +12,7 @@ from WebHostLib.tracker import TrackerData
 
 
 @api_endpoints.route("/tracker/<suuid:tracker>")
-@cache.cached(timeout=60)
+@cache.memoize(timeout=60)
 def tracker_data(tracker: UUID) -> dict[str, Any]:
     """
     Outputs json data to <root_path>/api/tracker/<id of current session tracker>.
