@@ -17,7 +17,7 @@ ow_ladder_groups: Dict[str, OWLadderInfo] = {
                               ["Overworld Beach"]),
     # also the east filigree room
     "LS Elev 1": OWLadderInfo({"Ladders near Weathervane", "Ladders in Overworld Town", "Ladder to Swamp"},
-                              ["Furnace_gyro_lower", "Swamp Redux 2_wall"],
+                              ["Furnace_gyro_lower", "Furnace_gyro_west", "Swamp Redux 2_wall"],
                               ["Overworld Tunnel Turret"]),
     # also the fountain filigree room and ruined passage door
     "LS Elev 2": OWLadderInfo({"Ladders near Weathervane", "Ladders to West Bell"},
@@ -78,9 +78,11 @@ easy_ls: List[LadderInfo] = [
 
     # West Garden
     # exit after Garden Knight
-    LadderInfo("West Garden", "Archipelagos Redux, Overworld Redux_upper"),
+    LadderInfo("West Garden before Boss", "Archipelagos Redux, Overworld Redux_upper"),
     # West Garden laurels exit
-    LadderInfo("West Garden", "Archipelagos Redux, Overworld Redux_lowest"),
+    LadderInfo("West Garden after Terry", "Archipelagos Redux, Overworld Redux_lowest"),
+    # Magic dagger house, only relevant with combat logic on
+    LadderInfo("West Garden after Terry", "Archipelagos Redux, archipelagos_house_"),
 
     # Atoll, use the little ladder you fix at the beginning
     LadderInfo("Ruined Atoll", "Atoll Redux, Overworld Redux_lower"),
@@ -159,7 +161,8 @@ medium_ls: List[LadderInfo] = [
     LadderInfo("Quarry Back", "Quarry Redux, Monastery_back"),
 
     LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_2_"),
-    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Front", dest_is_region=True),
+    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Entry", dest_is_region=True),
+    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Mid Checkpoint", dest_is_region=True),
 
     # Swamp to Overworld upper
     LadderInfo("Swamp Mid", "Swamp Redux 2, Overworld Redux_wall", "Ladders in Swamp"),
@@ -172,9 +175,9 @@ hard_ls: List[LadderInfo] = [
     LadderInfo("Beneath the Well Front", "Sewer, Overworld Redux_west_aqueduct", "Ladders in Well"),
     LadderInfo("Beneath the Well Front", "Beneath the Well Back", "Ladders in Well", dest_is_region=True),
     # go through the hexagon engraving above the vault door
-    LadderInfo("Frog's Domain", "frog cave main, Frog Stairs_Exit", "Ladders to Frog's Domain"),
+    LadderInfo("Frog's Domain Front", "frog cave main, Frog Stairs_Exit", "Ladders to Frog's Domain"),
     # the turret at the end here is not affected by enemy rando
-    LadderInfo("Frog's Domain", "Frog's Domain Back", "Ladders to Frog's Domain", dest_is_region=True),
+    LadderInfo("Frog's Domain Front", "Frog's Domain Back", "Ladders to Frog's Domain", dest_is_region=True),
     # todo: see if we can use that new laurels strat here
     # LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_FTRoom_"),
     # go behind the cathedral to reach the door, pretty easily doable

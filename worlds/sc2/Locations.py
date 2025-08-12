@@ -66,11 +66,8 @@ def get_plando_locations(world: World) -> List[str]:
     if world is None:
         return []
     plando_locations = []
-    for plando_setting in world.multiworld.plando_items[world.player]:
-        plando_locations += plando_setting.get("locations", [])
-        plando_setting_location = plando_setting.get("location", None)
-        if plando_setting_location is not None:
-            plando_locations.append(plando_setting_location)
+    for plando_setting in world.options.plando_items:
+        plando_locations += plando_setting.locations
 
     return plando_locations
 
@@ -1387,7 +1384,7 @@ def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
                      lambda state: logic.templars_return_requirement(state)),
         LocationData("The Host", "The Host: Victory", SC2LOTV_LOC_ID_OFFSET + 2100, LocationType.VICTORY,
                      lambda state: logic.the_host_requirement(state)),
-        LocationData("The Host", "The Host: Southeast Void Shard", SC2LOTV_LOC_ID_OFFSET + 2101, LocationType.VICTORY,
+        LocationData("The Host", "The Host: Southeast Void Shard", SC2LOTV_LOC_ID_OFFSET + 2101, LocationType.EXTRA,
                      lambda state: logic.the_host_requirement(state)),
         LocationData("The Host", "The Host: South Void Shard", SC2LOTV_LOC_ID_OFFSET + 2102, LocationType.EXTRA,
                      lambda state: logic.the_host_requirement(state)),

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 import itertools
 from typing import List, Dict, Any, cast
 
@@ -10,13 +9,11 @@ from . import items
 from . import locations
 from . import creatures
 from . import options
-from .items import item_table, group_items, items_by_type, ItemType
+from .items import item_table, group_items
 from .rules import set_rules
 
-logger = logging.getLogger("Subnautica")
 
-
-class SubnaticaWeb(WebWorld):
+class SubnauticaWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Subnautica randomizer connected to an Archipelago Multiworld",
@@ -38,13 +35,13 @@ class SubnauticaWorld(World):
     You must find a cure for yourself, build an escape rocket, and leave the planet.
     """
     game = "Subnautica"
-    web = SubnaticaWeb()
+    web = SubnauticaWeb()
 
     item_name_to_id = {data.name: item_id for item_id, data in items.item_table.items()}
     location_name_to_id = all_locations
     options_dataclass = options.SubnauticaOptions
     options: options.SubnauticaOptions
-    required_client_version = (0, 5, 0)
+    required_client_version = (0, 6, 2)
     origin_region_name = "Planet 4546B"
     creatures_to_scan: List[str]
 
@@ -158,6 +155,7 @@ class SubnauticaWorld(World):
             "creatures_to_scan": self.creatures_to_scan,
             "death_link": self.options.death_link.value,
             "free_samples": self.options.free_samples.value,
+            "empty_tanks": self.options.empty_tanks.value,
         }
 
         return slot_data

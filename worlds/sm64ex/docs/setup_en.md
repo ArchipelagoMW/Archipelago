@@ -29,15 +29,25 @@ Then continue to `Using the Launcher`
 
 *Using the Launcher*
 
-1. Go to the page linked for SM64AP-Launcher, and press on the topmost entry
+1. Go to the page linked for SM64AP-Launcher, and press on the topmost entry.
 2. Scroll down, and download the zip file for your OS.
-3. Unpack the zip file in an empty folder
+3. Unpack the zip file in an empty folder.
 4. Run the Launcher. On first start, press `Check Requirements`, which will guide you through the rest of the needed steps.
     - Windows: If you did not use the default install directory for MSYS, close this window, check `Show advanced options` and reopen using `Re-check Requirements`. You can then set the path manually.
-5. When finished, use `Compile default SM64AP build` to continue
-    - Advanced user can use `Show advanced options` to build with custom makeflags (`BETTERCAMERA`, `NODRAWINGDISTANCE`, ...), different repos and branches, and game patches such as 60FPS, Enhanced Moveset and others.
-      - [Available Makeflags](https://github.com/sm64pc/sm64ex/wiki/Build-options)
-      - [Included Game Patches](https://github.com/N00byKing/sm64ex/blob/archipelago/enhancements/README.md)
+5. When finished, use `Compile default SM64AP build` to continue.
+    - **Advanced configuration:** If you want to use additional build options such as Better Camera, No Drawing Distance, etc or apply game patches such as 60FPS, Enhanced Moveset, etc, then use the `Compile custom build` option:
+      - Set a name for your build, e.g. "archipelago" or whatever you like.
+      - Press the `Download Files` button.
+      - Set Make Flags, e.g. `-j8 BETTERCAMERA=1 NODRAWINGDISTANCE=1` to enable Better Camera and No Drawing Distance.
+      - Press `Apply Patches` to select patches to apply. Example patches include:
+        - 60FPS: Improves frame rate.
+        - Enhanced Moveset: Gives Mario new abilities. [Details here](https://github.com/TheGag96/sm64-port).
+        - Nonstop Mode: Makes it possible to fetch multiple stars in a level without exiting the level first.
+      - Press `Create Build`. This will take several minutes.
+      - You can also use the Repository and Branch fields to build with different repos or branches if you want to build using a fork or development version of SM64AP.
+      - For more details, see:
+        - [Available Makeflags](https://github.com/sm64pc/sm64ex/wiki/Build-options)
+        - [Included Game Patches](https://github.com/N00byKing/sm64ex/blob/archipelago/enhancements/README.md)
 6. Press `Download Files` to prepare the build, afterwards `Create Build`.
 7. SM64EX will now be compiled. This can take a while.
 

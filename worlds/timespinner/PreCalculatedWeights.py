@@ -52,11 +52,12 @@ class PreCalculatedWeights:
             self.flood_lab = False
 
         self.pyramid_keys_unlock, self.present_key_unlock, self.past_key_unlock, self.time_key_unlock = \
-            self.get_pyramid_keys_unlocks(options, random, self.flood_maw, self.flood_xarion)
+            self.get_pyramid_keys_unlocks(options, random, self.flood_maw, self.flood_xarion, self.flood_lab)
 
     @staticmethod
     def get_pyramid_keys_unlocks(options: TimespinnerOptions, random: Random,
-                                 is_maw_flooded: bool, is_xarion_flooded: bool) -> Tuple[str, str, str, str]:
+                                 is_maw_flooded: bool, is_xarion_flooded: bool,
+                                 is_lab_flooded: bool) -> Tuple[str, str, str, str]:
         
         present_teleportation_gates: List[str] = [
             "GateKittyBoss",
@@ -85,10 +86,18 @@ class PreCalculatedWeights:
         if not is_maw_flooded:
             past_teleportation_gates.append("GateMaw")
 
-        if not is_xarion_flooded:
-            present_teleportation_gates.append("GateXarion")
+        if options.risky_warps: 
+            past_teleportation_gates.append("GateLakeSereneLeft")
+            if not is_xarion_flooded:
+                present_teleportation_gates.append("GateXarion")
+            # Prevent going past the lazers without a way to the past
+            if options.unchained_keys or options.prism_break or not options.pyramid_start:
+                present_teleportation_gates.append("GateDadsTower")
+                if not is_lab_flooded:
+                    present_teleportation_gates.append("GateLabEntrance")
 
-        if options.inverted:
+        # Prevent getting stuck in the past without a way back to the future
+        if options.inverted or (options.pyramid_start and not options.back_to_the_future):
             all_gates: Tuple[str, ...] = present_teleportation_gates
         else:
             all_gates: Tuple[str, ...] = past_teleportation_gates + present_teleportation_gates

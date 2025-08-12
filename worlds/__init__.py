@@ -10,8 +10,9 @@ import dataclasses
 import zipfile
 import json
 import platform
-from typing import Dict, List, TypedDict, Tuple, Any
+from typing import List
 
+from NetUtils import DataPackage
 from Utils import local_path, user_path, version_tuple, tuplize_version
 
 local_folder = os.path.dirname(__file__)
@@ -27,25 +28,11 @@ __all__ = {
     "world_sources",
     "local_folder",
     "user_folder",
-    "GamesPackage",
-    "DataPackage",
     "failed_world_loads",
 }
 
 
 failed_world_loads: List[str] = []
-
-
-class GamesPackage(TypedDict, total=False):
-    item_name_groups: Dict[str, List[str]]
-    item_name_to_id: Dict[str, int]
-    location_name_groups: Dict[str, List[str]]
-    location_name_to_id: Dict[str, int]
-    checksum: str
-
-
-class DataPackage(TypedDict):
-    games: Dict[str, GamesPackage]
 
 
 @dataclasses.dataclass(order=True)
@@ -97,26 +84,17 @@ class WorldSource:
                         manifest = json.loads(zf.read(os.path.join(self.path, "metadata.json")))
                         self.check_manifest(manifest)
                 importer = zipimport.zipimporter(self.resolved_path)
-                if hasattr(importer, "find_spec"):  # new in Python 3.10
-                    spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0].split('-', 1)[0])
-                    assert spec, f"{self.path} is not a loadable module"
-                    mod = importlib.util.module_from_spec(spec)
-                else:  # TODO: remove with 3.8 support
-                    mod = importer.load_module(os.path.basename(self.path).rsplit(".", 1)[0].split('-', 1)[0])
+                spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0].split('-', 1)[0])
+                assert spec, f"{self.path} is not a loadable module"
+                mod = importlib.util.module_from_spec(spec)
 
-                if mod.__package__ is not None:
-                    mod.__package__ = f"worlds.{mod.__package__}"
-                else:
-                    # load_module does not populate package, we'll have to assume mod.__name__ is correct here
-                    # probably safe to remove with 3.8 support
-                    mod.__package__ = f"worlds.{mod.__name__}"
+                mod.__package__ = f"worlds.{mod.__package__}"
+
                 mod.__name__ = f"worlds.{mod.__name__}"
                 sys.modules[mod.__name__] = mod
                 with warnings.catch_warnings():
                     warnings.filterwarnings("ignore", message="__package__ != __spec__.parent")
-                    # Found no equivalent for < 3.10
-                    if hasattr(importer, "exec_module"):
-                        importer.exec_module(mod)
+                    importer.exec_module(mod)
             else:
                 if os.path.exists(os.path.join(self.resolved_path, "metadata.json")):
                     self.check_manifest(json.load(open(os.path.join(self.resolved_path, "metadata.json"), "r")))
