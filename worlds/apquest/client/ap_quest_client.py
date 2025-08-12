@@ -30,7 +30,7 @@ class ConnectionStatus(Enum):
     NOT_CONNECTED = 0
     SCOUTS_NOT_SENT = 1
     SCOUTS_SENT = 2
-    CONNECTED = 3
+    GAME_RUNNING = 3
 
 
 class APQuestContext(CommonContext):
@@ -38,6 +38,8 @@ class APQuestContext(CommonContext):
     items_handling = 0b111  # full remote
 
     client_loop: asyncio.Task[None]
+
+    last_connected_slot: int | None = None
 
     slot_data: dict[str, Any]
     location_to_item: dict[int, NetworkItem]
@@ -50,7 +52,6 @@ class APQuestContext(CommonContext):
 
     highest_processed_item_index: int = 0
     queued_locations: list[int]
-    ingame_cleared_locations: set[int]
 
     top_image_grid: list[list[Image]]
 
@@ -61,7 +62,6 @@ class APQuestContext(CommonContext):
         self.queued_locations = []
         self.slot_data = {}
         self.location_to_item = {}
-        self.ingame_cleared_locations = set()
 
     async def server_auth(self, password_requested: bool = False) -> None:
         await super().server_auth(password_requested)
@@ -70,7 +70,7 @@ class APQuestContext(CommonContext):
 
     async def client_loop(self):
         while not self.exit_event.is_set():
-            if self.connection_status != ConnectionStatus.CONNECTED:
+            if self.connection_status != ConnectionStatus.GAME_RUNNING:
                 if self.connection_status == ConnectionStatus.SCOUTS_NOT_SENT:
                     await self.send_msgs([{"cmd": "LocationScouts", "locations": list(LOCATION_NAME_TO_ID.values())}])
                     self.connection_status = ConnectionStatus.SCOUTS_SENT
@@ -86,7 +86,7 @@ class APQuestContext(CommonContext):
                 while self.queued_locations:
                     location = self.queued_locations.pop(0)
                     self.location_checked_side_effects(location)
-                    self.ingame_cleared_locations.add(location)
+                    self.locations_checked.add(location)
                     await self.check_locations({location})
 
                 rerender = False
@@ -97,7 +97,7 @@ class APQuestContext(CommonContext):
                     self.ap_quest_game.receive_item(item.item, item.location, item.player)
                     rerender = True
 
-                for new_remotely_cleared_location in self.checked_locations - self.ingame_cleared_locations:
+                for new_remotely_cleared_location in self.checked_locations - self.locations_checked:
                     self.ap_quest_game.force_clear_location(new_remotely_cleared_location)
                     rerender = True
 
@@ -114,6 +114,14 @@ class APQuestContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict) -> None:
         if cmd == "Connected":
+            if self.slot == self.last_connected_slot:
+                self.connection_status = ConnectionStatus.GAME_RUNNING  # We can seemlessly keep going
+                return
+
+            self.last_connected_slot = self.slot
+
+            self.connection_status = ConnectionStatus.NOT_CONNECTED  # for safety, it will get set again later
+
             self.location_to_item = {}
             self.slot_data = args["slot_data"]
             self.hard_mode = self.slot_data["hard_mode"]
@@ -135,12 +143,9 @@ class APQuestContext(CommonContext):
             self.render()
             self.ui.game_view.bind_keyboard()
 
-            self.connection_status = ConnectionStatus.CONNECTED
-        if cmd == "Disconnected":
-            self.connection_status = ConnectionStatus.NOT_CONNECTED
+            self.connection_status = ConnectionStatus.GAME_RUNNING
 
     async def disconnect(self, *args, **kwargs) -> None:
-        self.connection_status = ConnectionStatus.NOT_CONNECTED
         self.finished_game = False
         await super().disconnect(*args, **kwargs)
 
