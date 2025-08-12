@@ -22,7 +22,7 @@ SNI_VERSION = "v0.0.100"  # change back to "latest" once tray icon issues are fi
 
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
-requirement = 'cx-Freeze==8.0.0'
+requirement = 'cx-Freeze==8.4.0'
 try:
     import pkg_resources
     try:
