@@ -15,7 +15,7 @@ from .client.ap_link.energy_link.energy_link_client import EnergyLinkClient
 from .client.ap_link.energy_link.energy_link import EnergyLinkConstants
 from .client.ap_link.energy_link.energy_link_command_processor import EnergyLinkCommandProcessor
 
-CLIENT_VERSION = "V0.4.10"
+CLIENT_VERSION = "V0.5.0"
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
