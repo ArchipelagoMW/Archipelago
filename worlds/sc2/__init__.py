@@ -41,7 +41,7 @@ VICTORY_MODULO = 100
 
 def launch_client(*args: str):
     from .client import launch
-    launch_component(launch, name="Factorio Client", args=args)
+    launch_component(launch, name="Starcraft 2 Client", args=args)
 
 components.append(Component('Starcraft 2 Client', func=launch_client, game_name='Starcraft 2', supports_uri=True))
 
