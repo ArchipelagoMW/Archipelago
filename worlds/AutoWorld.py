@@ -6,12 +6,10 @@ import pathlib
 import sys
 import time
 from random import Random
-from dataclasses import make_dataclass
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Generic, Iterable, List, Mapping, Optional, Set, TextIO,
                     Tuple, TYPE_CHECKING, Type, Union)
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
-from Utils import deprecate
 from BaseClasses import (
     CollectionState, Item, Location, MultiWorld, RegionManager, _T_Reg, _T_Ent, _T_Loc, _T_Item,
     Tutorial,

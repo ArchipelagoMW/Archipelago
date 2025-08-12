@@ -83,7 +83,7 @@ class RegionManager(Generic[_T_Reg, _T_Ent, _T_Loc]):
     def __init__(self, multiworld: MultiWorld = None):
         # players is no longer needed. The multiworld is passed in here so we can reference the worlds' caches
         # while they continue to use multiworld.regions
-        # TODO remove later
+        # TODO remove after worlds use self.regions instead of multiworld.regions
         self.multiworld = multiworld
         self.region_cache = {}
         self.entrance_cache = {}
