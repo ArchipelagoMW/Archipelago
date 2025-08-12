@@ -139,14 +139,15 @@ def tutorial_landing():
     tutorials = {}
     worlds = AutoWorldRegister.world_types
     for world_name, world_type in worlds.items():
-        current_world = tutorials[world_name] = {}
-        for tutorial in world_type.web.tutorials:
-            current_tutorial = current_world.setdefault(tutorial.tutorial_name, {
-                "description": tutorial.description, "files": {}})
-            current_tutorial["files"][secure_filename(tutorial.file_name).rsplit(".", 1)[0]] = {
-                "authors": tutorial.authors,
-                "language": tutorial.language
-            }
+        if hasattr(world_type.web, "tutorials"):
+            current_world = tutorials[world_name] = {}
+            for tutorial in world_type.web.tutorials:
+                current_tutorial = current_world.setdefault(tutorial.tutorial_name, {
+                    "description": tutorial.description, "files": {}})
+                current_tutorial["files"][secure_filename(tutorial.file_name).rsplit(".", 1)[0]] = {
+                    "authors": tutorial.authors,
+                    "language": tutorial.language
+                }
     tutorials = {world_name: tutorials for world_name, tutorials in title_sorted(
         tutorials.items(), key=lambda element: "\x00" if element[0] == "Archipelago" else worlds[element[0]].game)}
     return render_template("tutorialLanding.html", worlds=worlds, tutorials=tutorials)
