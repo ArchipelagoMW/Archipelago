@@ -494,6 +494,30 @@ class Choice(NumericOption):
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
+    def __lt__(self, other: typing.Union[Choice, int, str]):
+        if isinstance(other, str):
+            assert other in self.options, f"compared against an unknown string. {self} < {other}"
+            other = self.options[other]
+        return super(Choice, self).__lt__(other)
+
+    def __gt__(self, other: typing.Union[Choice, int, str]):
+        if isinstance(other, str):
+            assert other in self.options, f"compared against an unknown string. {self} > {other}"
+            other = self.options[other]
+        return super(Choice, self).__gt__(other)
+
+    def __le__(self, other: typing.Union[Choice, int, str]):
+        if isinstance(other, str):
+            assert other in self.options, f"compared against an unknown string. {self} <= {other}"
+            other = self.options[other]
+        return super(Choice, self).__le__(other)
+
+    def __ge__(self, other: typing.Union[Choice, int, str]):
+        if isinstance(other, str):
+            assert other in self.options, f"compared against an unknown string. {self} >= {other}"
+            other = self.options[other]
+        return super(Choice, self).__ge__(other)
+
     __hash__ = Option.__hash__  # see https://docs.python.org/3/reference/datamodel.html#object.__hash__
 
 
@@ -1094,7 +1118,7 @@ class PlandoConnection(typing.NamedTuple):
 
     entrance: str
     exit: str
-    direction: typing.Literal["entrance", "exit", "both"]  # TODO: convert Direction to StrEnum once 3.8 is dropped
+    direction: typing.Literal["entrance", "exit", "both"]  # TODO: convert Direction to StrEnum once 3.10 is dropped
     percentage: int = 100
 
 
