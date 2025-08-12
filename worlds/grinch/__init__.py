@@ -20,7 +20,7 @@ class GrinchWorld(World):
     topology_present = True #not an open world game, very linear
     item_name_to_id: ClassVar[dict[str,int]] = grinch_items_to_id()
     location_name_to_id: ClassVar[dict[str,int]] = grinch_locations_to_id()
-    required_client_version = (0, 6, 2)
+    required_client_version = (0, 6, 3)
 
 
     def __init__(self, *args, **kwargs): #Pulls __init__ function and takes control from there in BaseClasses.py

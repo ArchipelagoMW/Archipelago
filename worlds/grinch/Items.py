@@ -116,16 +116,16 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
 
 #Sleigh Parts
 SLEIGH_PARTS_TABLE: dict[str, GrinchItemData] = {
-    "Exhaust Pipes": GrinchItemData("Sleigh Parts", 300, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=2), GrinchRamData(0x0100AA, binary_bit_pos=5)]),
+    "Exhaust Pipes": GrinchItemData("Sleigh Parts", 300, IC.deprioritized,
+        [GrinchRamData(0x0101FB, binary_bit_pos=2)]),
     "GPS": GrinchItemData("Sleigh Parts", 301, IC.useful,
-        [GrinchRamData(0x0101FB, binary_bit_pos=5), GrinchRamData(0x0100AA, binary_bit_pos=5)]),
-    "Tires": GrinchItemData("Sleigh Parts", 302, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=4), GrinchRamData(0x0100AA, binary_bit_pos=5)]),
-    "Skis": GrinchItemData("Sleigh Parts", 303, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=3), GrinchRamData(0x0100AA, binary_bit_pos=5)]),
-    "Twin-End Tuba": GrinchItemData("Sleigh Parts", 304, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=6), GrinchRamData(0x0100AA, binary_bit_pos=5)])
+        [GrinchRamData(0x0101FB, binary_bit_pos=5)]),
+    "Tires": GrinchItemData("Sleigh Parts", 302, IC.deprioritized,
+        [GrinchRamData(0x0101FB, binary_bit_pos=4)]),
+    "Skis": GrinchItemData("Sleigh Parts", 303, IC.deprioritized,
+        [GrinchRamData(0x0101FB, binary_bit_pos=3)]),
+    "Twin-End Tuba": GrinchItemData("Sleigh Parts", 304, IC.deprioritized,
+        [GrinchRamData(0x0101FB, binary_bit_pos=6)])
 }
 
 #Access Keys
@@ -167,23 +167,24 @@ USEFUL_IC_TABLE: dict[str, GrinchItemData] = {
 
 #Traps
 TRAPS_TABLE: dict[str, GrinchItemData] = {
-    # alias to Ice Trap for traplink
+# alias to Ice Trap for traplink
     # "Freeze Trap": GrinchItemData("Traps", 600, IC.trap, [GrinchRamData()]),
     # "Bee Trap": GrinchItemData("Traps", 601, IC.trap, [GrinchRamData()]),
     # "Electrocution Trap": GrinchItemData("Traps", 602, IC.trap, [GrinchRamData()]),
-    # alias to Slowness Trap for traplink
+# alias to Slowness Trap for traplink
     # "Tip Toe Trap": GrinchItemData("Traps", 603, IC.trap, [GrinchRamData()]),
-    # This item may not function properly if you receive it during a loading screen or in Mount Crumpit
+# This item may not function properly if you receive it during a loading screen or in Mount Crumpit
     "Damage Trap": GrinchItemData("Traps", 604, IC.trap, [GrinchRamData(0x0E8FDC, value=20)]),
     "Depletion Trap": GrinchItemData("Traps", 605, IC.trap, [GrinchRamData(0x010058, value=0)]),
     "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
         [GrinchRamData(0x010000, value=0x05), GrinchRamData(0x08FB94, value=1)]),
-    #alias to Spring Trap for traplink
+#alias to Spring Trap for traplink
     # "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]),
-    #alias to Home Trap for traplink
+#alias to Home Trap for traplink
     "Who sent me back?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x08FB94, value=1)]),
     # "Cutscene Trap": GrinchItemData("Traps", 609, IC.trap, [GrinchRamData()]),
-    # "No Vac Trap": GrinchItemData("Traps", 610, IC.trap, [GrinchRamData()])
+    # "No Vac Trap": GrinchItemData("Traps", 610, IC.trap, [GrinchRamData(0x0102DA, value=0]),
+    # "Invisible Trap": GrinchItemData("Traps", 611, IC.trap, [GrinchRamData(0x0102DA, value=0, bit_size=4)])
 }
 
 #Movesets
@@ -205,6 +206,15 @@ ALL_ITEMS_TABLE: dict[str, GrinchItemData] = {
     **USEFUL_IC_TABLE
     # **MOVES_TABLE
 }
+
+# Psuedocoding traplink table
+# BEE_TRAP_EQUIV = ["Army Trap", "Buyon Trap", "Ghost", "Gooey Bag", "OmoTrap", "Police Trap"]
+# ICE_TRAP_EQUIV = ["Chaos Control Trap", "Freeze Trap", "Frozen Trap", "Honey Trap", "Paralyze Trap", "Stun Trap"]
+# DAMAGE_TRAP_EQUIV = ["Banana Trap", "Bomb", "Bonk Trap", "Fire Trap", "Laughter Trap", "Nut Trap", "Push Trap", "Squash Trap", "Thwimp Trap", "TNT Barrel Trap"]
+# SPRING_TRAP_EQUIV = ["Eject Ability", "Hiccup Trap", "Jump Trap", "Jumping Jacks Trap", "Whoops! Trap"]
+# HOME_TRAP_EQUIV = ["Blue Balls Curse", "Instant Death Trap"]
+# SLOWNESS_TRAP_EQUIV = ["Iron Boots Trap", "Slow Trap", "Sticky Floor Trap"]
+# CUTSCENE_TRAP_EQUIV = ["Phone Trap"]
 
 def grinch_items_to_id() -> dict[str, int]:
     item_mappings: dict[str, int] = {}
