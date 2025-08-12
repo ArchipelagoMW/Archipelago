@@ -73,6 +73,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
     multiworld.collect_starting_inventory()
 
+    for player in multiworld.player_ids:
         # items can't be both local and non-local, prefer local
         multiworld.worlds[player].options.non_local_items.value -= multiworld.worlds[player].options.local_items.value
         multiworld.worlds[player].options.non_local_items.value -= set(multiworld.local_early_items[player])
