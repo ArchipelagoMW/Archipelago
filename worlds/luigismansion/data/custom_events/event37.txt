@@ -1,4 +1,4 @@
-CHECKFLAG>(13)"13on""13off"
+<CHECKFLAG>(13)"13on""13off"
 ---------------------------
 <CASE>"13on"
 <SE>(93)
