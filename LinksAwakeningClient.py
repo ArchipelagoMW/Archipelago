@@ -33,7 +33,7 @@ from worlds.ladx.TrackerConsts import storage_key
 from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
 from worlds.ladx.Locations import get_locations_to_id, meta_to_name
-from worlds.ladx.Tracker import LocationTracker, MagpieBridge
+from worlds.ladx.Tracker import LocationTracker, MagpieBridge, Check
 
 
 class GameboyException(Exception):
@@ -50,22 +50,6 @@ class InvalidEmulatorStateError(GameboyException):
 
 class BadRetroArchResponse(GameboyException):
     pass
-
-
-def magpie_logo():
-    from kivy.uix.image import CoreImage
-    binary_data = """
-iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXN
-SR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA
-7DAcdvqGQAAADGSURBVDhPhVLBEcIwDHOYhjHCBuXHj2OTbAL8+
-MEGZIxOQ1CinOOk0Op0bmo7tlXXeR9FJMYDLOD9mwcLjQK7+hSZ
-wgcWMZJOAGeGKtChNHFL0j+FZD3jSCuo0w7l03wDrWdg00C4/aW
-eDEYNenuzPOfPspBnxf0kssE80vN0L8361j10P03DK4x6FHabuV
-ear8fHme+b17rwSjbAXeUMLb+EVTV2QHm46MWQanmnydA98KsVS
-XkV+qFpGQXrLhT/fqraQeQLuplpNH5g+WkAAAAASUVORK5CYII="""
-    binary_data = base64.b64decode(binary_data)
-    data = io.BytesIO(binary_data)
-    return CoreImage(data, ext="png").texture
 
 
 class LAClientConstants:
@@ -530,7 +514,9 @@ class LinksAwakeningContext(CommonContext):
 
     def run_gui(self) -> None:
         import webbrowser
-        from kvui import GameManager, ImageButton
+        from kvui import GameManager
+        from kivy.metrics import dp
+        from kivymd.uix.button import MDButton, MDButtonText
 
         class LADXManager(GameManager):
             logging_pairs = [
@@ -543,8 +529,10 @@ class LinksAwakeningContext(CommonContext):
                 b = super().build()
 
                 if self.ctx.magpie_enabled:
-                    button = ImageButton(texture=magpie_logo(), fit_mode="cover", image_size=(32, 32), size_hint_x=None,
-                                on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
+                    button = MDButton(MDButtonText(text="Open Tracker"), style="filled", size=(dp(100), dp(70)), radius=5,
+                                      size_hint_x=None, size_hint_y=None, pos_hint={"center_y": 0.55},
+                                      on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
+                    button.height = self.server_connect_bar.height
                     self.connect_layout.add_widget(button)
 
                 return b
@@ -638,6 +626,11 @@ class LinksAwakeningContext(CommonContext):
                 "password": self.password,
             })
 
+            # We can process linked items on already-checked checks now that we have slot_data
+            if self.client.tracker:
+                checked_checks = set(self.client.tracker.all_checks) - set(self.client.tracker.remaining_checks)
+                self.add_linked_items(checked_checks)
+
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
@@ -653,6 +646,13 @@ class LinksAwakeningContext(CommonContext):
         sync_msg = [{'cmd': 'Sync'}]
         await self.send_msgs(sync_msg)
 
+    def add_linked_items(self, checks: typing.List[Check]):
+        for check in checks:
+            if check.value and check.linkedItem:
+                linkedItem = check.linkedItem
+                if 'condition' not in linkedItem or (self.slot_data and linkedItem['condition'](self.slot_data)):
+                    self.client.item_tracker.setExtraItem(check.linkedItem['item'], check.linkedItem['qty'])
+
     item_id_lookup = get_locations_to_id()
 
     async def run_game_loop(self):
@@ -661,11 +661,7 @@ class LinksAwakeningContext(CommonContext):
                 checkMetadataTable[check.id])] for check in ladxr_checks]
             self.new_checks(checks, [check.id for check in ladxr_checks])
 
-            for check in ladxr_checks:
-                if check.value and check.linkedItem:
-                    linkedItem = check.linkedItem
-                    if 'condition' not in linkedItem or linkedItem['condition'](self.slot_data):
-                        self.client.item_tracker.setExtraItem(check.linkedItem['item'], check.linkedItem['qty'])
+            self.add_linked_items(ladxr_checks)
 
         async def victory():
             await self.send_victory()
