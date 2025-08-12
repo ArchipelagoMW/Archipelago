@@ -14,6 +14,7 @@ from .options import (
     SpearOfAdunPresence,
     MissionOrder,
     EnableMorphling,
+    NovaGhostOfAChanceVariant,
     get_enabled_campaigns,
     get_enabled_races,
 )
@@ -75,6 +76,7 @@ class SC2Logic:
         self.mission_order = MissionOrder.default if world is None else world.options.mission_order.value
         self.generic_upgrade_missions = 0 if world is None else world.options.generic_upgrade_missions.value
         self.all_in_map = AllInMap.option_ground if world is None else world.options.all_in_map.value
+        self.nova_ghost_of_a_chance_variant = NovaGhostOfAChanceVariant.option_wol if world is None else world.options.nova_ghost_of_a_chance_variant.value
         self.war_council_upgrades = True if world is None else not world.options.war_council_nerfs.value
         self.base_power_rating = 2 if self.advanced_tactics else 0
 
@@ -1639,9 +1641,10 @@ class SC2Logic:
         )
 
     # Mission-specific rules
-    def ghost_in_a_chance_requirement(self, state: CollectionState) -> bool:
+    def ghost_of_a_chance_requirement(self, state: CollectionState) -> bool:
         return (
             self.grant_story_tech == GrantStoryTech.option_grant
+            or self.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_wol
             or not self.nova_used
             or (
                 self.nova_ranged_weapon(state)
