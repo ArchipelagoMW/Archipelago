@@ -72,15 +72,6 @@ class AutoWorldRegister(type):
                     dct["required_client_version"] = max(dct["required_client_version"],
                                                          base.__dict__["required_client_version"])
 
-        # create missing options_dataclass from legacy option_definitions
-        # TODO - remove this once all worlds use options dataclasses
-        if "options_dataclass" not in dct and "option_definitions" in dct:
-            # TODO - switch to deprecate after a version
-            deprecate(f"{name} Assigned options through option_definitions which is now deprecated. "
-                      "Please use options_dataclass instead.")
-            dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
-                                                      bases=(PerGameCommonOptions,))
-
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
         new_class.__file__ = sys.modules[new_class.__module__].__file__
@@ -560,7 +551,7 @@ class World(metaclass=AutoWorldRegister):
         # so you can have more specific typing in your world implementation.
         return {}
 
-    def modify_multidata(self, multidata: "MultiData") -> None:  # TODO: TypedDict for multidata?
+    def modify_multidata(self, multidata: "MultiData") -> None:
         """
         For deeper modification of server multidata, such as adding additional custom connection names.
 
@@ -669,9 +660,6 @@ class World(metaclass=AutoWorldRegister):
         :param players: The players that belong to this group.
         :return: The created group's world.
         """
-        # TODO remove loop when worlds use options dataclass
-        for option_key, option in cls.options_dataclass.type_hints.items():
-            getattr(multiworld, option_key)[new_player_id] = option.from_any(option.default)
         group = cls(multiworld, new_player_id)
         group.options = cls.options_dataclass(**{option_key: option.from_any(option.default)
                                                  for option_key, option in cls.options_dataclass.type_hints.items()})
