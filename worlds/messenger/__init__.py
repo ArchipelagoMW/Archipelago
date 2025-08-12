@@ -281,7 +281,7 @@ class MessengerWorld(World):
             disconnect_entrances(self)
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
-        attempts = 5
+        attempts = 20
         if self.options.shuffle_portals:
             self.portal_mapping = []
             self.spoiler_portal_mapping = {}
