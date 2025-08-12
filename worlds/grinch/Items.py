@@ -90,41 +90,41 @@ GADGETS_TABLE: dict[str, GrinchItemData] = {
 
 #Mission Specific Items
 MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
-    "Who Cloak": GrinchItemData("Mission Specific Items", 200, IC.progression,
+    "Who Cloak": GrinchItemData("Mission Specific Items", 200, IC.progression_deprioritized,
         [GrinchRamData(0x0101F9, binary_bit_pos=0)], second_item_group="Useful Items"),
-    "Painting Bucket": GrinchItemData("Mission Specific Items", 201, IC.progression,
+    "Painting Bucket": GrinchItemData("Mission Specific Items", 201, IC.progression_deprioritized,
         [GrinchRamData(0x0101F9, binary_bit_pos=1)], second_item_group="Useful Items"),
-    "Scissors": GrinchItemData("Mission Specific Items", 202, IC.progression,
+    "Scissors": GrinchItemData("Mission Specific Items", 202, IC.progression_deprioritized,
         [GrinchRamData(0x0101F9, binary_bit_pos=6)], second_item_group="Useful Items"),
-    "Glue Bucket": GrinchItemData("Mission Specific Items", 203, IC.progression,
+    "Glue Bucket": GrinchItemData("Mission Specific Items", 203, IC.progression_deprioritized,
         [GrinchRamData(0x0101F9, binary_bit_pos=4)], second_item_group="Useful Items"),
-    "Cable Car Access Card": GrinchItemData("Mission Specific Items", 204, IC.progression,
+    "Cable Car Access Card": GrinchItemData("Mission Specific Items", 204, IC.progression_deprioritized,
         [GrinchRamData(0x0101F9, binary_bit_pos=5)], second_item_group="Useful Items"),
-    "Drill": GrinchItemData("Mission Specific Items", 205, IC.progression,
+    "Drill": GrinchItemData("Mission Specific Items", 205, IC.progression_deprioritized,
         [GrinchRamData(0x0101FA, binary_bit_pos=2)], second_item_group="Useful Items"),
-    "Rope": GrinchItemData("Mission Specific Items", 206, IC.progression,
+    "Rope": GrinchItemData("Mission Specific Items", 206, IC.progression_deprioritized,
         [GrinchRamData(0x0101FA, binary_bit_pos=1)], second_item_group="Useful Items"),
-    "Hook": GrinchItemData("Mission Specific Items", 207, IC.progression,
+    "Hook": GrinchItemData("Mission Specific Items", 207, IC.progression_deprioritized,
         [GrinchRamData(0x0101FA, binary_bit_pos=0)], second_item_group="Useful Items"),
-    "Sculpting Tools": GrinchItemData("Mission Specific Items", 208, IC.progression,
+    "Sculpting Tools": GrinchItemData("Mission Specific Items", 208, IC.progression_deprioritized,
         [GrinchRamData(0x0101F9, binary_bit_pos=2)], second_item_group="Useful Items"),
-    "Hammer": GrinchItemData("Mission Specific Items", 209, IC.progression,
+    "Hammer": GrinchItemData("Mission Specific Items", 209, IC.progression_deprioritized,
         [GrinchRamData(0x0101F9, binary_bit_pos=3)], second_item_group="Useful Items"),
-    "Scout Clothes": GrinchItemData("Mission Specific Items", 210, IC.progression,
+    "Scout Clothes": GrinchItemData("Mission Specific Items", 210, IC.progression_deprioritized,
         [GrinchRamData(0x0101F9, binary_bit_pos=7)], second_item_group="Useful Items")
 }
 
 #Sleigh Parts
 SLEIGH_PARTS_TABLE: dict[str, GrinchItemData] = {
-    "Exhaust Pipes": GrinchItemData("Sleigh Parts", 300, IC.deprioritized,
+    "Exhaust Pipes": GrinchItemData("Sleigh Parts", 300, IC.progression_skip_balancing,
         [GrinchRamData(0x0101FB, binary_bit_pos=2)]),
     "GPS": GrinchItemData("Sleigh Parts", 301, IC.useful,
         [GrinchRamData(0x0101FB, binary_bit_pos=5)]),
-    "Tires": GrinchItemData("Sleigh Parts", 302, IC.deprioritized,
+    "Tires": GrinchItemData("Sleigh Parts", 302, IC.progression_skip_balancing,
         [GrinchRamData(0x0101FB, binary_bit_pos=4)]),
-    "Skis": GrinchItemData("Sleigh Parts", 303, IC.deprioritized,
+    "Skis": GrinchItemData("Sleigh Parts", 303, IC.progression_skip_balancing,
         [GrinchRamData(0x0101FB, binary_bit_pos=3)]),
-    "Twin-End Tuba": GrinchItemData("Sleigh Parts", 304, IC.deprioritized,
+    "Twin-End Tuba": GrinchItemData("Sleigh Parts", 304, IC.progression_skip_balancing,
         [GrinchRamData(0x0101FB, binary_bit_pos=6)])
 }
 
