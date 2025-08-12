@@ -22,7 +22,7 @@ SNI_VERSION = "v0.0.100"  # change back to "latest" once tray icon issues are fi
 
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
-requirement = 'cx-Freeze==8.0.0'
+requirement = 'cx-Freeze==8.2.0'
 try:
     import pkg_resources
     try:
@@ -63,19 +63,11 @@ from Cython.Build import cythonize
 
 
 non_apworlds: set[str] = {
-    "A Link to the Past",
-    "Adventure",
-    "ArchipIDLE",
-    "Archipelago",
-    "Lufia II Ancient Cave",
-    "Meritous",
-    "Ocarina of Time",
-    "Overcooked! 2",
-    "Raft",
-    "Sudoku",
-    "Super Mario 64",
-    "VVVVVV",
-    "Wargroove",
+    "Archipelago",  # needs a way to specify load order
+    "Final Fantasy",  # loads json files badly
+    "Lufia II Ancient Cave",  # loads basepatch badly
+    "Ocarina of Time",  # has executables in folder
+    "Raft",  # loads json files badly
 }
 
 
