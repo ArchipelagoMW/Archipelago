@@ -878,7 +878,7 @@ def fill_slot_data(self) -> dict[str, Any]:
     # In order for our game client to handle the generated seed correctly we need to know what the user selected
     # for their difficulty and final boss HP.
     # A dictionary returned from this method gets set as the slot_data and will be sent to the client after connecting.
-    # The options dataclass has a method to return a `Dict[str, Any]` of each option name provided and the relevant
+    # The options dataclass has a method to return a `dict[str, Any]` of each option name provided and the relevant
     # option's value.
     return self.options.as_dict("difficulty", "final_boss_hp")
 ```
