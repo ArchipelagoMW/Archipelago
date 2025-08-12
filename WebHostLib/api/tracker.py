@@ -112,7 +112,7 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
     client_activity_timers: tuple[tuple[int, int], float] = tracker_data._multisave.get("client_activity_timers", ())
     for (team, player), timestamp in client_activity_timers:
         # use index since we can rely on order
-        activity_timers[team]["player_timers"][player]["time"] = datetime.fromtimestamp(timestamp, timezone.utc)
+        activity_timers[team]["player_timers"][player - 1]["time"] = datetime.fromtimestamp(timestamp, timezone.utc)
 
     connection_timers: list[dict[str, int | list[PlayerTimer]]] = []
     """Time of last connection per player. Returned as RFC 1123 format and null if no connection has been made."""
@@ -126,7 +126,7 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
     client_connection_timers: tuple[tuple[int, int], float] = tracker_data._multisave.get(
         "client_connection_timers", ())
     for (team, player), timestamp in client_connection_timers:
-        connection_timers[team]["player_timers"][player]["time"] = datetime.fromtimestamp(timestamp, timezone.utc)
+        connection_timers[team]["players"][player - 1]["time"] = datetime.fromtimestamp(timestamp, timezone.utc)
 
     class PlayerStatus(TypedDict):
         player: int
@@ -226,7 +226,5 @@ def get_static_tracker_data(room: Room) -> dict[str, Any]:
 
     return {
         "groups": groups,
-        "games": games,
-        "names": player_names,
         "slot_data": slot_data,
     }
