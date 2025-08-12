@@ -3,16 +3,14 @@ import os
 import Utils
 import typing
 from kvui import ContainerLayout, MainLayout, KivyJSONtoTextParser, ThemedApp
-from kivymd.app import MDApp
 from kivy.metrics import dp
 from kivy.uix.textinput import TextInput
-from kivy.lang.builder import Builder
 from kivy.lang.parser import Parser
 from kivymd.uix.button import MDButton, MDButtonText
 from kivy.uix.colorpicker import ColorPicker
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.dropdown import DropDown
+from kivymd.uix.gridlayout import MDGridLayout
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.menu import MDDropdownMenu
 from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
 
@@ -69,10 +67,10 @@ class ColorPickerApp(ThemedApp):
     container: ContainerLayout
     grid: MainLayout
     color_picker: ColorPicker
-    button_layout: GridLayout
-    options_layout: BoxLayout
+    button_layout: MDGridLayout
+    options_layout: MDBoxLayout
     presets_button: MDButton
-    preset_dropdown: DropDown
+    preset_dropdown: MDDropdownMenu
     text_colors: typing.Dict[str, str] = default_colors.copy()
     buttons: typing.Dict[str, MDButton] = {}
     current_color: str = "red"
@@ -89,14 +87,13 @@ class ColorPickerApp(ThemedApp):
     def build(self) -> Widget:
         self.set_colors()
         self.container = ContainerLayout()
-        self.grid = MainLayout(cols=1)
-        self.grid.spacing = 20
-        self.grid.padding = 20
+        self.container.md_bg_color = self.theme_cls.backgroundColor
+        self.grid = MainLayout(cols=1, spacing=20, padding=20)
         self.container.add_widget(self.grid)
         self.color_picker = ColorPicker(color=hex_color_to_tuple(self.text_colors[self.current_color]))
         self.color_picker.bind(color=lambda picker, x: self.on_color(picker, x))
         self.grid.add_widget(self.color_picker)
-        self.options_layout = BoxLayout(size_hint_y=None, height=dp(40), orientation="horizontal")
+        self.options_layout = MDBoxLayout(size_hint_y=None, height=dp(40), orientation="horizontal")
         defaults_button = MDButton(MDButtonText(text="Restore Defaults"))
         defaults_button.bind(on_release=lambda _: self.restore_defaults())
         self.options_layout.add_widget(defaults_button)
@@ -104,7 +101,7 @@ class ColorPickerApp(ThemedApp):
         current_button.bind(on_release=lambda _: self.restore_current())
         self.options_layout.add_widget(current_button)
         self.presets_button = MDButton(MDButtonText(text="Preset Loaded: None"))
-        self.preset_dropdown = DropDown()
+        self.preset_dropdown = MDDropdownMenu()
         self.populate_dropdown(self.preset_dropdown)
 
         def open_dropdown(button: MDButton) -> None:
@@ -114,7 +111,7 @@ class ColorPickerApp(ThemedApp):
         self.preset_dropdown.bind(on_select=lambda instance, x: self.set_preset(instance, x))
         self.options_layout.add_widget(self.presets_button)
         self.grid.add_widget(self.options_layout)
-        self.button_layout = GridLayout(cols=3, size_hint_y=0.5)
+        self.button_layout = MDGridLayout(cols=3, size_hint_y=0.5)
         self.button_layout.spacing = 5
         self.button_layout.padding = (10, 5)
 
@@ -122,18 +119,17 @@ class ColorPickerApp(ThemedApp):
             new_button = MDButton(MDButtonText(text=color_usages[color], theme_text_color="Custom",
                                                text_color="white"),
                                   theme_bg_color="Custom",
-                                  md_bg_color=hex_color_to_tuple(self.text_colors[color]),
-                                  theme_width="Custom",
-                                  size_hint_x=None)
+                                  md_bg_color=hex_color_to_tuple(self.text_colors[color]))
             new_button.real_name = color
             new_button.bind(on_release=lambda button: self.set_color(button))
             self.buttons[color] = new_button
             self.button_layout.add_widget(new_button)
 
         self.grid.add_widget(self.button_layout)
+        self.theme_layout = MDBoxLayout(orientation="vertical", spacing=5)
         return self.container
 
-    def populate_dropdown(self, dropdown: DropDown) -> None:
+    def populate_dropdown(self, dropdown: MDDropdownMenu) -> None:
         dropdown.clear_widgets()
         path = Utils.user_path("data", "presets")
         for dirpath, _, files in os.walk(path):
@@ -147,7 +143,7 @@ class ColorPickerApp(ThemedApp):
         save_button.bind(on_release=lambda button: self.save_preset_menu())
         dropdown.add_widget(save_button)
 
-    def set_preset(self, _: DropDown, path: str) -> None:
+    def set_preset(self, _: MDDropdownMenu, path: str) -> None:
         preset_name, _ = os.path.splitext(os.path.basename(path))
         setattr(self.presets_button, "text", f"Preset Loaded: {preset_name}")
         self.parse_preset_kv(path)
@@ -161,7 +157,7 @@ class ColorPickerApp(ThemedApp):
 
     def on_color(self, instance, value):
         self.text_colors[self.current_color] = instance.hex_color[1:-2]  # formatted usually #RRGGBBAA
-        self.buttons[self.current_color].background_color = value
+        self.buttons[self.current_color].md_bg_color = value
 
     def restore_defaults(self):
         self.set_text_colors(default_colors)
@@ -175,7 +171,7 @@ class ColorPickerApp(ThemedApp):
     def set_text_colors(self, colors):
         self.text_colors = colors.copy()
         for button in self.buttons:
-            self.buttons[button].background_color = hex_color_to_tuple(self.text_colors[button])
+            self.buttons[button].md_bg_color = hex_color_to_tuple(self.text_colors[button])
         self.color_picker.set_color(hex_color_to_tuple(self.text_colors[self.current_color]))
 
     def parse_preset_kv(self, path):
@@ -229,7 +225,7 @@ class ColorPickerApp(ThemedApp):
         file.write("<TextColors>:\n")
         for color in colors:
             file.write(f"\t{color}: \"{colors[color].upper()}\"\n")
-        file.write(f"<Label>:\n\tcolor: \"{colors['white']}\"")
+        file.write(f"<SelectableLabel>:\n\ttext_color: \"{colors['white']}\"")
 
     def on_stop(self):
         user_colors = open(Utils.user_path("data", "user.kv"), 'w')
