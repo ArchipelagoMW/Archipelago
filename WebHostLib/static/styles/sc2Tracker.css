@@ -74,20 +74,20 @@ input[type="checkbox"]{
 .section-title:hover h2{
   text-shadow: 0 0 4px #ddd;
 }
+.f {
+  display: flex;
+  overflow: hidden;
+}
 
 /* Acquire item filters */
 .tracker-section img{
   height: 100%;
-  max-width: var(--icon-size);
-  max-height: var(--icon-size);
-  filter: grayscale(100%) contrast(80%) brightness(42%) blur(0.5px);
+  width: var(--icon-size);
+  height: var(--icon-size);
   background-color: black;
 }
-.tracker-section img.acquired{
-  filter: none;
-}
-.item-counter img{
-  filter: none;
+.unacquired, .lvl-0 .f{
+  filter: grayscale(100%) contrast(80%) brightness(42%) blur(0.5px);
 }
 .spacer{
   width: var(--icon-size);
@@ -190,45 +190,40 @@ input[type="checkbox"]{
   display: contents;
 }
 
-.lvl-1 img, .lvl-2 img,
-.lvl-3 img, .lvl-4 img,
-.lvl-5 img{
-  filter: none;
-}
-.lvl-0 :nth-child(2),
-.lvl-0 :nth-child(3),
-.lvl-0 :nth-child(4),
-.lvl-0 :nth-child(5){
+.lvl-0 > :nth-child(2),
+.lvl-0 > :nth-child(3),
+.lvl-0 > :nth-child(4),
+.lvl-0 > :nth-child(5){
   display: none;
 }
-.lvl-1 :nth-child(2),
-.lvl-1 :nth-child(3),
-.lvl-1 :nth-child(4),
-.lvl-1 :nth-child(5){
+.lvl-1 > :nth-child(2),
+.lvl-1 > :nth-child(3),
+.lvl-1 > :nth-child(4),
+.lvl-1 > :nth-child(5){
   display: none;
 }
-.lvl-2 :nth-child(1),
-.lvl-2 :nth-child(3),
-.lvl-2 :nth-child(4),
-.lvl-2 :nth-child(5){
+.lvl-2 > :nth-child(1),
+.lvl-2 > :nth-child(3),
+.lvl-2 > :nth-child(4),
+.lvl-2 > :nth-child(5){
   display: none;
 }
-.lvl-3 :nth-child(1),
-.lvl-3 :nth-child(2),
-.lvl-3 :nth-child(4),
-.lvl-3 :nth-child(5){
+.lvl-3 > :nth-child(1),
+.lvl-3 > :nth-child(2),
+.lvl-3 > :nth-child(4),
+.lvl-3 > :nth-child(5){
   display: none;
 }
-.lvl-4 :nth-child(1),
-.lvl-4 :nth-child(2),
-.lvl-4 :nth-child(3),
-.lvl-4 :nth-child(5){
+.lvl-4 > :nth-child(1),
+.lvl-4 > :nth-child(2),
+.lvl-4 > :nth-child(3),
+.lvl-4 > :nth-child(5){
   display: none;
 }
-.lvl-5 :nth-child(1),
-.lvl-5 :nth-child(2),
-.lvl-5 :nth-child(3),
-.lvl-5 :nth-child(4){
+.lvl-5 > :nth-child(1),
+.lvl-5 > :nth-child(2),
+.lvl-5 > :nth-child(3),
+.lvl-5 > :nth-child(4){
   display: none;
 }
 
