@@ -1,15 +1,12 @@
 import binascii
 import dataclasses
 import os
-import pkgutil
-import tempfile
 import typing
+import logging
 import re
 
-import bsdiff4
-
 import settings
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
@@ -17,19 +14,17 @@ from . import ItemIconGuessing
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name,
                     links_awakening_item_name_groups)
-from .LADXR import generator
 from .LADXR.itempool import ItemPool as LADXRItemPool
 from .LADXR.locations.constants import CHEST_ITEMS
 from .LADXR.locations.instrument import Instrument
 from .LADXR.logic import Logic as LADXRLogic
-from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id,
                         links_awakening_location_name_groups)
 from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
-from .Rom import LADXDeltaPatch, get_base_rom_path
+from .Rom import LADXProcedurePatch, write_patch_data
 
 DEVELOPER_MODE = False
 
@@ -39,7 +34,7 @@ class LinksAwakeningSettings(settings.Group):
         """File name of the Link's Awakening DX rom"""
         copy_to = "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
         description = "LADX ROM File"
-        md5s = [LADXDeltaPatch.hash]
+        md5s = [LADXProcedurePatch.hash]
 
     class RomStart(str):
         """
@@ -56,8 +51,16 @@ class LinksAwakeningSettings(settings.Group):
     class DisplayMsgs(settings.Bool):
         """Display message inside of Bizhawk"""
 
+    class GfxModFile(settings.FilePath):
+        """
+        Gfxmod file, get it from upstream: https://github.com/daid/LADXR/tree/master/gfx
+        Only .bin or .bdiff files
+        The same directory will be checked for a matching text modification file
+        """
+
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: typing.Union[RomStart, bool] = True
+    gfx_mod_file: GfxModFile = GfxModFile()
 
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
@@ -206,6 +209,8 @@ class LinksAwakeningWorld(World):
         return Item(event, ItemClassification.progression, None, self.player)
 
     def create_items(self) -> None:
+        itempool = []
+
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
 
         self.prefill_original_dungeon = [ [], [], [], [], [], [], [], [], [] ]
@@ -265,9 +270,9 @@ class LinksAwakeningWorld(World):
                                 self.prefill_own_dungeons.append(item)
                                 self.pre_fill_items.append(item)
                             else:
-                                self.multiworld.itempool.append(item)
+                                itempool.append(item)
                     else:
-                        self.multiworld.itempool.append(item)
+                        itempool.append(item)
 
         self.multi_key = self.generate_multi_key()
 
@@ -290,21 +295,55 @@ class LinksAwakeningWorld(World):
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
-        # For now, special case first item
-        FORCE_START_ITEM = True
-        if FORCE_START_ITEM:
-            self.force_start_item()
+        if self.options.tarins_gift != "any_item":
+            self.force_start_item(itempool)
 
-    def force_start_item(self):    
+
+        self.multiworld.itempool += itempool
+
+    def force_start_item(self, itempool):
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
         if not start_loc.item:
-            possible_start_items = [index for index, item in enumerate(self.multiworld.itempool)
-                if item.player == self.player 
-                    and item.item_data.ladxr_id in start_loc.ladxr_item.OPTIONS and not item.location]
-            if possible_start_items:
-                index = self.random.choice(possible_start_items)
-                start_item = self.multiworld.itempool.pop(index)
+            """
+            Find an item that forces progression or a bush breaker for the player, depending on settings.
+            """
+            def is_possible_start_item(item):
+                return item.advancement and item.name not in self.options.non_local_items
+
+            def opens_new_regions(item):
+                collection_state = base_collection_state.copy()
+                collection_state.collect(item, prevent_sweep=True)
+                collection_state.sweep_for_advancements(self.get_locations())
+                return len(collection_state.reachable_regions[self.player]) > reachable_count
+
+            start_items = [item for item in itempool if is_possible_start_item(item)]
+            self.random.shuffle(start_items)
+
+            if self.options.tarins_gift == "bush_breaker":
+                start_item = next((item for item in start_items if item.name in links_awakening_item_name_groups["Bush Breakers"]), None)
+
+            else:  # local_progression
+                entrance_mapping = self.ladxr_logic.world_setup.entrance_mapping
+                # Tail key opens a region but not a location if d1 entrance is not mapped to d1 or d4
+                # exclude it in these cases to avoid fill errors
+                if entrance_mapping['d1'] not in ['d1', 'd4']:
+                    start_items = [item for item in start_items if item.name != 'Tail Key']
+                # Exclude shovel unless starting in Mabe Village
+                if entrance_mapping['start_house'] not in ['start_house', 'shop']:
+                    start_items = [item for item in start_items if item.name != 'Shovel']
+                base_collection_state = CollectionState(self.multiworld)
+                base_collection_state.sweep_for_advancements(self.get_locations())
+                reachable_count = len(base_collection_state.reachable_regions[self.player])
+                start_item = next((item for item in start_items if opens_new_regions(item)), None)
+
+            if start_item:
+                # Make sure we're removing the same copy of the item that we're placing
+                # (.remove checks __eq__, which could be a different copy, so we find the first index and use .pop)
+                start_item = itempool.pop(itempool.index(start_item))
                 start_loc.place_locked_item(start_item)
+            else:
+                logging.getLogger("Link's Awakening Logger").warning(f"No {self.options.tarins_gift.current_option_name} available for Tarin's Gift.")
+
 
     def get_pre_fill_items(self):
         return self.pre_fill_items
@@ -382,9 +421,9 @@ class LinksAwakeningWorld(World):
 
         # Sweep to pick up already placed items that are reachable with everything but the dungeon items.
         partial_all_state.sweep_for_advancements()
-        
-        fill_restrictive(self.multiworld, partial_all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
 
+        fill_restrictive(self.multiworld, partial_all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
+        
 
     name_cache = {}
     # Tries to associate an icon from another game with an icon we have
@@ -410,7 +449,7 @@ class LinksAwakeningWorld(World):
             phrases.update(ItemIconGuessing.GAME_SPECIFIC_PHRASES[foreign_game])
 
         for phrase, icon in phrases.items():
-            if phrase in uppered:
+            if phrase.upper() in uppered:
                 return icon
         # pattern for breaking down camelCase, also separates out digits
         pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
@@ -423,12 +462,6 @@ class LinksAwakeningWorld(World):
                 return self.name_cache[name]
         
         return "TRADING_ITEM_LETTER"
-
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
 
     def generate_output(self, output_directory: str):
         # copy items back to locations
@@ -462,31 +495,13 @@ class LinksAwakeningWorld(World):
                     # Kind of kludge, make it possible for the location to differentiate between local and remote items
                     loc.ladxr_item.location_owner = self.player
 
-        rom_name = Rom.get_base_rom_path()
-        out_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.player_name}.gbc"
-        out_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gbc")
-
-        parser = get_parser()
-        args = parser.parse_args([rom_name, "-o", out_name, "--dump"])
-
-        rom = generator.generateRom(args, self)
-      
-        with open(out_path, "wb") as handle:
-            rom.save(handle, name="LADXR")
-
-        # Write title screen after everything else is done - full gfxmods may stomp over the egg tiles
-        if self.options.ap_title_screen:
-            with tempfile.NamedTemporaryFile(delete=False) as title_patch:
-                title_patch.write(pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
         
-            bsdiff4.file_patch_inplace(out_path, title_patch.name)
-            os.unlink(title_patch.name)
+        patch = LADXProcedurePatch(player=self.player, player_name=self.player_name)
+        write_patch_data(self, patch)
+        out_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
+                                                  f"{patch.patch_file_ending}")
 
-        patch = LADXDeltaPatch(os.path.splitext(out_path)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
-                               player_name=self.player_name, patched_path=out_path)
-        patch.write()
-        if not DEVELOPER_MODE:
-            os.unlink(out_path)
+        patch.write(out_path)
 
     def generate_multi_key(self):
         return bytearray(self.random.getrandbits(8) for _ in range(10)) + self.player.to_bytes(2, 'big')
@@ -553,5 +568,7 @@ class LinksAwakeningWorld(World):
                 option: value.current_key
                 for option, value in dataclasses.asdict(self.options).items() if option in slot_options_display_name
             })
+
+            slot_data.update({"entrance_mapping": self.ladxr_logic.world_setup.entrance_mapping})
 
         return slot_data

@@ -30,7 +30,7 @@ def is_acceptable_pilgrimage_entrance(entrance_type: EntranceType, world: "Lingo
     allowed_entrance_types = EntranceType.NORMAL
 
     if world.options.pilgrimage_allows_paintings:
-        allowed_entrance_types |= EntranceType.PAINTING
+        allowed_entrance_types |= EntranceType.PAINTING | EntranceType.STATIC_PAINTING
 
     if world.options.pilgrimage_allows_roof_access:
         allowed_entrance_types |= EntranceType.CROSSROADS_ROOF_ACCESS
@@ -105,7 +105,8 @@ def create_regions(world: "LingoWorld") -> None:
                 regions[pilgrimage_region_name] = Region(pilgrimage_region_name, world.player, world.multiworld)
 
     # Connect all created regions now that they exist.
-    allowed_entrance_types = EntranceType.NORMAL | EntranceType.WARP | EntranceType.CROSSROADS_ROOF_ACCESS
+    allowed_entrance_types = EntranceType.NORMAL | EntranceType.WARP | EntranceType.CROSSROADS_ROOF_ACCESS | \
+                             EntranceType.STATIC_PAINTING
 
     if not painting_shuffle:
         # Don't use the vanilla painting connections if we are shuffling paintings.
@@ -156,11 +157,11 @@ def create_regions(world: "LingoWorld") -> None:
             regions[from_room].connect(regions[to_room], f"Pilgrimage Part {i+1}")
     else:
         connect_entrance(regions, regions["Starting Room"], regions["Pilgrim Antechamber"], "Sun Painting",
-                         RoomAndDoor("Pilgrim Antechamber", "Sun Painting"), EntranceType.PAINTING, False, world)
+                         RoomAndDoor("Pilgrim Antechamber", "Sun Painting"), EntranceType.STATIC_PAINTING, False, world)
 
     if early_color_hallways:
         connect_entrance(regions, regions["Starting Room"], regions["Color Hallways"], "Early Color Hallways",
-                         None, EntranceType.PAINTING, False, world)
+                         None, EntranceType.STATIC_PAINTING, False, world)
 
     if painting_shuffle:
         for warp_enter, warp_exit in world.player_logic.painting_mapping.items():
