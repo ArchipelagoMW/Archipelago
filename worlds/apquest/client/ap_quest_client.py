@@ -138,7 +138,6 @@ class APQuestContext(CommonContext):
             self.connection_status = ConnectionStatus.CONNECTED
         if cmd == "Disconnected":
             self.connection_status = ConnectionStatus.NOT_CONNECTED
-            self.finished_game = False
 
     async def disconnect(self, *args, **kwargs) -> None:
         self.connection_status = ConnectionStatus.NOT_CONNECTED
