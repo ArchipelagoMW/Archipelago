@@ -76,6 +76,7 @@ input[type="checkbox"]{
 }
 .f {
   display: flex;
+  overflow: hidden;
 }
 
 /* Acquire item filters */
