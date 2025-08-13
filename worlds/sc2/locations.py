@@ -2345,8 +2345,9 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 200,
             LocationType.VICTORY,
             lambda state: logic.basic_kerrigan(state)
-            or kerriganless
-            or logic.grant_story_tech == GrantStoryTech.option_grant,
+                or kerriganless
+                or logic.grant_story_tech == GrantStoryTech.option_grant,
+            hard_rule=logic.zerg_any_units_back_in_the_saddle_requirement,
         ),
         make_location_data(
             SC2Mission.BACK_IN_THE_SADDLE.mission_name,
@@ -2354,8 +2355,9 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 201,
             LocationType.EXTRA,
             lambda state: logic.basic_kerrigan(state)
-            or kerriganless
-            or logic.grant_story_tech == GrantStoryTech.option_grant,
+                or kerriganless
+                or logic.grant_story_tech == GrantStoryTech.option_grant,
+            hard_rule=logic.zerg_any_units_back_in_the_saddle_requirement,
         ),
         make_location_data(
             SC2Mission.BACK_IN_THE_SADDLE.mission_name,
@@ -2381,8 +2383,9 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 205,
             LocationType.EXTRA,
             lambda state: logic.basic_kerrigan(state)
-            or kerriganless
-            or logic.grant_story_tech == GrantStoryTech.option_grant,
+                or kerriganless
+                or logic.grant_story_tech == GrantStoryTech.option_grant,
+            hard_rule=logic.zerg_any_units_back_in_the_saddle_requirement,
         ),
         make_location_data(
             SC2Mission.RENDEZVOUS.mission_name,

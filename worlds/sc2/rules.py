@@ -2317,6 +2317,39 @@ class SC2Logic:
                 )
             )
         )
+    def zerg_any_units_back_in_the_saddle_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.grant_story_tech == GrantStoryTech.option_grant
+            # Note(mm): This check isn't necessary as self.kerrigan_levels cover it,
+            # and it's not fully desirable in future when we support non-grant story tech + kerriganless.
+            # or not self.kerrigan_presence
+            or state.has_any((
+                # Cases tested by Snarky
+                item_names.KERRIGAN_KINETIC_BLAST,
+                item_names.KERRIGAN_LEAPING_STRIKE,
+                item_names.KERRIGAN_CRUSHING_GRIP,
+                item_names.KERRIGAN_PSIONIC_SHIFT,
+                item_names.KERRIGAN_SPAWN_BANELINGS,
+                item_names.KERRIGAN_FURY,
+                item_names.KERRIGAN_APOCALYPSE,
+                item_names.KERRIGAN_DROP_PODS,
+                item_names.KERRIGAN_SPAWN_LEVIATHAN,
+                item_names.KERRIGAN_IMMOBILIZATION_WAVE,  # Involves a 1-minute cooldown wait before the ultra
+                item_names.KERRIGAN_MEND,  # See note from THE EV below
+            ), self.player)
+            or self.kerrigan_levels(state, 20)
+            or (self.kerrigan_levels(state, 10) and state.has(item_names.KERRIGAN_CHAIN_REACTION, self.player))
+            # Tested by THE EV, "facetank with Kerrigan and stutter step to the end with >10s left"
+            # > have to lure the first group of Zerg in the 2nd timed section into the first room of the second area
+            # > (with the heal box) so you can kill them before the timer starts.
+            # 
+            # phaneros: Technically possible without the levels, but adding them in for safety margin and to hopefully
+            # make generation force this branch less often
+            or (state.has_any((item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_INFEST_BROODLINGS), self.player)
+                and self.kerrigan_levels(state, 5)
+            )
+            # Insufficient: Wild Mutation, Assimilation Aura
+        )
 
     def zerg_pass_vents(self, state: CollectionState) -> bool:
         return (
