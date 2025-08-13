@@ -2336,6 +2336,7 @@ class SC2Logic:
                 item_names.KERRIGAN_DROP_PODS,
                 item_names.KERRIGAN_SPAWN_LEVIATHAN,
                 item_names.KERRIGAN_IMMOBILIZATION_WAVE,  # Involves a 1-minute cooldown wait before the ultra
+                item_names.KERRIGAN_MEND,  # See note from THE EV below
             ), self.player)
             or self.kerrigan_levels(state, 20)
             or (self.kerrigan_levels(state, 10) and state.has(item_names.KERRIGAN_CHAIN_REACTION, self.player))
@@ -2345,7 +2346,7 @@ class SC2Logic:
             # 
             # phaneros: Technically possible without the levels, but adding them in for safety margin and to hopefully
             # make generation force this branch less often
-            or (state.has_any((item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_MEND), self.player)
+            or (state.has(item_names.KERRIGAN_HEROIC_FORTITUDE, self.player)
                 and self.kerrigan_levels(state, 5)
             )
             # Insufficient: Wild Mutation, Assimilation Aura
