@@ -39,7 +39,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python:
-          - {version: '3.11'}
+          - {version: '3.11.2'} # Change to '3.11' around 2026-06-10
           - {version: '3.12'}
         include:
           - python: {version: '3.11'}  # old compat
