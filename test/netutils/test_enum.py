@@ -15,7 +15,7 @@ class Base:
 
         def test_unpickle(self) -> None:
             """Tests that enums used in multidata or multisave can be pickled and unpickled."""
-            pickled = restricted_dumps(self.value)
+            pickled = pickle.dumps(self.value)
             unpickled = restricted_loads(pickled)
             self.assertEqual(unpickled, self.value)
             self.assertIsInstance(unpickled, self.type)
