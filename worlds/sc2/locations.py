@@ -2376,7 +2376,6 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Reach the Sublevel",
             SC2HOTS_LOC_ID_OFFSET + 204,
             LocationType.EXTRA,
-            hard_rule=logic.zerg_any_units_back_in_the_saddle_requirement,
         ),
         make_location_data(
             SC2Mission.BACK_IN_THE_SADDLE.mission_name,

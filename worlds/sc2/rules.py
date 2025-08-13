@@ -2319,20 +2319,25 @@ class SC2Logic:
         )
     def zerg_any_units_back_in_the_saddle_requirement(self, state: CollectionState) -> bool:
         return (
-            state.has_any((
+            not self.kerrigan_unit_available
+            or self.grant_story_tech == GrantStoryTech.option_grant
+            or state.has_any((
+                # Cases tested by Snarky
                 item_names.KERRIGAN_KINETIC_BLAST,
                 item_names.KERRIGAN_LEAPING_STRIKE,
                 item_names.KERRIGAN_CRUSHING_GRIP,
-                item_names.KERRIGAN_CHAIN_REACTION,
                 item_names.KERRIGAN_PSIONIC_SHIFT,
                 item_names.KERRIGAN_SPAWN_BANELINGS,
-                item_names.KERRIGAN_INFEST_BROODLINGS,
+                item_names.KERRIGAN_INFEST_BROODLINGS,  # Note(Snarky): Pretty tight, but I got it fairly consistently
                 item_names.KERRIGAN_FURY,
                 item_names.KERRIGAN_APOCALYPSE,
                 item_names.KERRIGAN_DROP_PODS,
                 item_names.KERRIGAN_SPAWN_LEVIATHAN,
-                item_names.KERRIGAN_IMMOBILIZATION_WAVE,
+                item_names.KERRIGAN_IMMOBILIZATION_WAVE,  # Involves a 1-minute cooldown wait before the ultra
             ), self.player)
+            or self.kerrigan_levels(state, 20)
+            or (self.kerrigan_levels(state, 10) and state.has(item_names.KERRIGAN_CHAIN_REACTION, self.player))
+            # Insufficient: Mend, Heroic Fortitude, Wild Mutation, Assimilation Aura
         )
 
     def zerg_pass_vents(self, state: CollectionState) -> bool:
