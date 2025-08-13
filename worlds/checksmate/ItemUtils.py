@@ -1,9 +1,9 @@
-from typing import List, Tuple
+
 from .Items import item_table
 from BaseClasses import Item
 
 
-def get_parents(item_name: str) -> List[Tuple[str, int]]:
+def get_parents(item_name: str) -> list[tuple[str, int]]:
     """Get the parent items and their required quantities for an item.
     
     Args:
@@ -15,7 +15,7 @@ def get_parents(item_name: str) -> List[Tuple[str, int]]:
     return item_table[item_name].parents
 
 
-def get_children(item_name: str) -> List[str]:
+def get_children(item_name: str) -> list[str]:
     """Get the child items for an item.
     
     Args:
@@ -26,7 +26,7 @@ def get_children(item_name: str) -> List[str]:
     """
     return [child for child in item_table if item_name in [parent[0] for parent in item_table[child].parents]] 
 
-def chessmen_count(items: List[Item], pocket_limit_by_pocket: int) -> int:
+def chessmen_count(items: list[Item], pocket_limit_by_pocket: int) -> int:
     """Count the number of chessmen in the item list, including pocket pieces."""
     chessmen = len([item for item in items if "Progressive" in item.name and "Pocket" not in item.name])
     if pocket_limit_by_pocket > 0:

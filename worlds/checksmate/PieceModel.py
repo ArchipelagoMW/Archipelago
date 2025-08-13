@@ -1,5 +1,5 @@
 import math
-from typing import Dict, List, Optional, Union
+
 from .Items import item_table
 from .Options import piece_type_limit_options, piece_limit_options
 from .PieceLimitCascade import PieceLimitCascade
@@ -10,19 +10,19 @@ class PieceModel:
     
     def __init__(self, world):
         self.world = world
-        self.items_used: Dict[int, Dict[str, int]] = {}
+        self.items_used: dict[int, dict[str, int]] = {}
 
-    def get_parents(self, chosen_item: str) -> List[List[Union[str, int]]]:
+    def get_parents(self, chosen_item: str) -> list[list[str | int]]:
         """Get the parent items required for this item."""
         return item_table[chosen_item].parents
 
-    def get_children(self, chosen_item: str) -> List[str]:
+    def get_children(self, chosen_item: str) -> list[str]:
         """Get the items that can be created from this item."""
         return [item for item in item_table
                 if item_table[item].parents is not None and chosen_item in map(
                 lambda x: x[0], item_table[item].parents)]
 
-    def fewest_parents(self, parents: List[List[Union[str, int]]]) -> Optional[int]:
+    def fewest_parents(self, parents: list[list[str | int]]) -> int | None:
         """Get the minimum number of parent items available."""
         return min([self.items_used[self.world.player].get(item[0], 0) for item in parents])
 
@@ -56,7 +56,7 @@ class PieceModel:
         return current_count < max_count
 
     def under_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade,
-                         available_items: Optional[List[str]] = None) -> bool:
+                         available_items: list[str] | None = None) -> bool:
         """Check if adding this item would exceed piece limits."""
         if self.world.player not in self.items_used:
             return True
@@ -71,7 +71,7 @@ class PieceModel:
         return True
 
     def find_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade,
-                        available_items: Optional[List[str]] = None) -> int:
+                        available_items: list[str] | None = None) -> int:
         """Find the piece limit for this item type."""
         if chosen_item not in piece_type_limit_options:
             return 0

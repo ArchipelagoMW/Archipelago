@@ -1,4 +1,4 @@
-from typing import List, Dict, Set, Tuple
+
 from BaseClasses import CollectionState, Item, ItemClassification
 from .bases import CMTestBase
 from ..Items import item_table, material_items, item_name_groups
@@ -27,7 +27,7 @@ class TestLocationLogic(CMTestBase):
         self.world.collect(self.collection_state, item)
         return material_gain
 
-    def get_accessible_locations(self) -> Set[str]:
+    def get_accessible_locations(self) -> set[str]:
         """Helper to get all currently accessible location names"""
         return {loc.name for loc in self.multiworld.get_reachable_locations(self.collection_state, self.player)}
 

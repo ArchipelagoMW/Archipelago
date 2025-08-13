@@ -1,6 +1,6 @@
 import math
 from sys import maxsize
-from typing import Dict, NamedTuple, Optional, List, Union
+from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
 
@@ -10,12 +10,12 @@ class CMItem(Item):
 
 
 class CMItemData(NamedTuple):
-    code: Optional[int]
+    code: int | None
     classification: ItemClassification
     quantity: int = 1  # maximum, not guaranteed
     material: int = 0  # pawns=100, minor=300, major=500, queen=900
     # for each given parent item, the maximum number of child items which may be present
-    parents: List[List[Union[str, int]]] = []
+    parents: list[list[str | int]] = []
 
 
 item_table = {
@@ -76,17 +76,17 @@ item_table = {
     # == End possible pocket implementation ==
 }
 
-lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+lookup_id_to_name: dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
 
-material_items: Dict[str, CMItemData] = {
+material_items: dict[str, CMItemData] = {
     item: item_data for (item, item_data) in item_table.items() if item_data.material > 0}
-progression_items: Dict[str, CMItemData] = {
+progression_items: dict[str, CMItemData] = {
     item: item_data for (item, item_data) in item_table.items() if
     item_data.classification == ItemClassification.progression}
-useful_items: Dict[str, CMItemData] = {
+useful_items: dict[str, CMItemData] = {
     item: item_data for (item, item_data) in item_table.items() if
     item_data.classification == ItemClassification.useful}
-filler_items: Dict[str, CMItemData] = {
+filler_items: dict[str, CMItemData] = {
     item: item_data for (item, item_data) in item_table.items() if
     item_data.classification == ItemClassification.filler}
 item_name_groups = {

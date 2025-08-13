@@ -1,4 +1,4 @@
-from typing import Dict, List
+
 from BaseClasses import Item
 from .Items import item_table, progression_items, item_name_groups
 from .Locations import highest_chessmen_requirement_small, highest_chessmen_requirement
@@ -12,8 +12,8 @@ class ItemRemoval:
         self.piece_model = piece_model
 
     def should_remove_item(self, chosen_item: str, material: int, min_material: float,
-                          max_material: float, items: List[Item], progression_items_list: List[str],
-                          locked_items: Dict[str, int], user_location_count: int) -> bool:
+                          max_material: float, items: list[Item], progression_items_list: list[str],
+                          locked_items: dict[str, int], user_location_count: int) -> bool:
         """Determine if an item should be removed from the pool based on various rules."""
         # Check queen upgrade rules
         if chosen_item == "Progressive Major To Queen":
@@ -43,7 +43,7 @@ class ItemRemoval:
 
         return False
 
-    def _exceeds_basic_limits(self, chosen_item: str, progression_items_list: List[str]) -> bool:
+    def _exceeds_basic_limits(self, chosen_item: str, progression_items_list: list[str]) -> bool:
         """Check if the item exceeds basic quantity or piece type limits."""
         # Check quantity limits
         if chosen_item in self.piece_model.items_used[self.world.player]:
@@ -56,7 +56,7 @@ class ItemRemoval:
 
         return False
 
-    def _should_remove_queen_upgrade(self, items: List[Item], locked_items: Dict[str, int]) -> bool:
+    def _should_remove_queen_upgrade(self, items: list[Item], locked_items: dict[str, int]) -> bool:
         """Determine if a queen upgrade should be removed based on major piece availability."""
         total_majors = (
             len([item for item in items if item.name == "Progressive Major Piece"]) +
@@ -79,7 +79,7 @@ class ItemRemoval:
         return total_queens + 2 >= total_majors
 
     def _violates_chessmen_requirements(self, chosen_item: str, max_material: float, total_material: float,
-                                       items: List[Item], locked_items: Dict[str, int]) -> bool:
+                                       items: list[Item], locked_items: dict[str, int]) -> bool:
         """Check if adding this item would violate chessmen requirements."""
         chessmen_requirement = self._get_chessmen_requirement()
         necessary_chessmen = chessmen_requirement - self._count_chessmen(items)
@@ -100,7 +100,7 @@ class ItemRemoval:
         return False
 
     def _violates_material_requirements(self, chosen_item: str, min_material: float, total_material: float,
-                                        items: List[Item], locked_items: Dict[str, int],
+                                        items: list[Item], locked_items: dict[str, int],
                                         user_location_count: int) -> bool:
         """Check if adding this item would violate material requirements."""
         # TODO(chesslogic): In games with many pawns, check that we have enough locations for high-value items
@@ -125,7 +125,7 @@ class ItemRemoval:
                 if self.world.options.goal.value == self.world.options.goal.option_single
                 else highest_chessmen_requirement)
 
-    def _count_chessmen(self, items: List[Item]) -> int:
+    def _count_chessmen(self, items: list[Item]) -> int:
         """Count the number of chessmen in the items list."""
         pocket_limit = self.world.options.pocket_limit_by_pocket.value
         pocket_amount = (0 if pocket_limit <= 0 else
@@ -141,7 +141,7 @@ class ItemRemoval:
         """Check if an item is a pocket piece."""
         return item_name == "Progressive Pocket"
 
-    def _creates_new_pocket(self, item_name: str, items: List[Item], locked_items: Dict[str, int]) -> bool:
+    def _creates_new_pocket(self, item_name: str, items: list[Item], locked_items: dict[str, int]) -> bool:
         """Check if adding this pocket piece would create a new pocket."""
         if not self._is_pocket_piece(item_name):
             return False
@@ -150,7 +150,7 @@ class ItemRemoval:
                       len([item for item in items if item.name == "Progressive Pocket"]) + 1)
         return next_pocket % pocket_limit == 1
 
-    def _calculate_lockable_material(self, chosen_item: str, items: List[Item], locked_items: Dict[str, int]) -> int:
+    def _calculate_lockable_material(self, chosen_item: str, items: list[Item], locked_items: dict[str, int]) -> int:
         """Calculate the material value if this item was added."""
         material = progression_items[chosen_item].material
         if self._is_minimal_accessibility():
@@ -166,7 +166,7 @@ class ItemRemoval:
 
         return material
 
-    def _calculate_remaining_material(self, locked_items: Dict[str, int]) -> int:
+    def _calculate_remaining_material(self, locked_items: dict[str, int]) -> int:
         """Calculate the material value of locked items."""
         return sum(locked_items[item] * progression_items[item].material 
                   for item in locked_items 

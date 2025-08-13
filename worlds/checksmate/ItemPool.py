@@ -1,4 +1,4 @@
-from typing import Dict, List
+
 from collections import Counter
 from BaseClasses import Item
 import logging
@@ -18,8 +18,8 @@ class CMItemPool:
 
     def __init__(self, world):
         self.world = world
-        self.items_used: Dict[int, Dict[str, int]] = {}
-        self.items_remaining: Dict[int, Dict[str, int]] = {}
+        self.items_used: dict[int, dict[str, int]] = {}
+        self.items_remaining: dict[int, dict[str, int]] = {}
         self._piece_model = None
         self._material_model = None
         self._removal = None
@@ -139,7 +139,7 @@ class CMItemPool:
         self.items_used[self.world.player] = {}
         self.items_remaining[self.world.player] = {}
 
-    def initialize_required_items(self) -> List[Item]:
+    def initialize_required_items(self) -> list[Item]:
         """Initialize required items like Victory and Play as White."""
         items = []
         
@@ -157,9 +157,9 @@ class CMItemPool:
         
         return items
 
-    def get_excluded_items(self) -> Dict[str, int]:
+    def get_excluded_items(self) -> dict[str, int]:
         """Get items that should be excluded from the item pool."""
-        excluded_items: Dict[str, int] = {}
+        excluded_items: dict[str, int] = {}
 
         # Handle super-sized items
         if self.world.options.goal.value == self.world.options.goal.option_super:
@@ -180,8 +180,8 @@ class CMItemPool:
         return excluded_items
 
     def assign_starter_items(self,
-                             excluded_items: Dict[str, int],
-                             locked_locations: List[str]) -> List[Item]:
+                             excluded_items: dict[str, int],
+                             locked_locations: list[str]) -> list[Item]:
         """Assign starter items based on game options."""
         user_items = []
         
@@ -224,7 +224,7 @@ class CMItemPool:
 
         return user_items
 
-    def handle_excluded_items(self, excluded_items: Dict[str, int]) -> List[Item]:
+    def handle_excluded_items(self, excluded_items: dict[str, int]) -> list[Item]:
         """Process excluded items and return starter items."""
         starter_items = []
         for item_name in excluded_items:
@@ -249,10 +249,10 @@ class CMItemPool:
             self.items_used[self.world.player].get("Progressive Pocket", 0) +
             (12 - min(self.world.options.max_pocket.value, 3 * self.world.options.pocket_limit_by_pocket.value)))
 
-    def handle_locked_items(self) -> Dict[str, int]:
+    def handle_locked_items(self) -> dict[str, int]:
         """Process locked items from options and ensure prerequisites are met."""
         # Get locked items from options
-        yaml_locked_items: Dict[str, int] = self.world.options.locked_items.value
+        yaml_locked_items: dict[str, int] = self.world.options.locked_items.value
         locked_items = dict(yaml_locked_items)
 
         # Ensure locked items have enough parents
@@ -295,8 +295,8 @@ class CMItemPool:
                                max_items: int,
                                min_material: float = 4100,
                                max_material: float = 4600,
-                               locked_items: Dict[str, int] = {},
-                               user_event_count: int = 0) -> List[Item]:
+                               locked_items: dict[str, int] = {},
+                               user_event_count: int = 0) -> list[Item]:
         """Create progression items up to material limits."""
         items = []
         material = self.calculate_current_material(items)
@@ -329,7 +329,7 @@ class CMItemPool:
                       " having generated " + str(Counter(items)))
         return items
 
-    def prepare_progression_item_pool(self) -> List[str]:
+    def prepare_progression_item_pool(self) -> list[str]:
         """Prepare the pool of progression items with adjusted frequencies."""
         # Start with all progression items except Victory and those with quantity=0
         items = [item for item in progression_items.keys() 
@@ -345,7 +345,7 @@ class CMItemPool:
         items.append("Progressive Minor Piece")  # Extra minor piece
         return items
 
-    def create_useful_items(self, max_items: int, locked_items: Dict[str, int] = {}, user_event_count: int = 0) -> List[Item]:
+    def create_useful_items(self, max_items: int, locked_items: dict[str, int] = {}, user_event_count: int = 0) -> list[Item]:
         """Create useful items."""
         items = []
         my_useful_items = list(useful_items.keys())
@@ -363,7 +363,7 @@ class CMItemPool:
                 my_useful_items.remove(chosen_item)
         return items
 
-    def create_filler_items(self, has_pocket: bool, max_items: int, locked_items: Dict[str, int] = {}, user_event_count: int = 0) -> List[Item]:
+    def create_filler_items(self, has_pocket: bool, max_items: int, locked_items: dict[str, int] = {}, user_event_count: int = 0) -> list[Item]:
         """Create filler items up to max_items limit."""
         items = []
         my_filler_items = list(filler_items.keys())
@@ -397,7 +397,7 @@ class CMItemPool:
                 
         return items
 
-    def consume_item(self, item_name: str, locked_items: Dict[str, int]) -> bool:
+    def consume_item(self, item_name: str, locked_items: dict[str, int]) -> bool:
         """Track item consumption in the pool. Returns True if the item was locked."""
         was_locked = item_name in locked_items
         if was_locked:
@@ -418,7 +418,7 @@ class CMItemPool:
 
         return was_locked
 
-    def lock_new_items(self, chosen_item: str, items: List[Item], locked_items: Dict[str, int]) -> None:
+    def lock_new_items(self, chosen_item: str, items: list[Item], locked_items: dict[str, int]) -> None:
         """Ensures the Castling location is reachable by locking necessary items."""
         if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
             return
@@ -429,7 +429,7 @@ class CMItemPool:
                 # TODO(chesslogic): Choose between Progressive Jack and Progressive Major Piece
                 locked_items["Progressive Major Piece"] += 1
 
-    def calculate_current_material(self, items: List[Item] = None) -> int:
+    def calculate_current_material(self, items: list[Item] = None) -> int:
         """Calculate the total material value of currently generated items.
         
         Args:
@@ -444,7 +444,7 @@ class CMItemPool:
             if item_name in progression_items
         )
 
-    def calculate_remaining_material(self, locked_items: Dict[str, int]) -> int:
+    def calculate_remaining_material(self, locked_items: dict[str, int]) -> int:
         """Calculate the material value of locked items that have material value."""
         return sum([
             locked_items[item] * progression_items[item].material 
@@ -462,14 +462,14 @@ class CMItemPool:
         return self.items_used[self.world.player].get("Progressive Major To Queen", 0)
 
     def should_remove_item(self, chosen_item: str, material: int, min_material: float,
-                           max_material: float, items: List[Item], my_progression_items: List[str],
-                           locked_items: Dict[str, int], user_event_count: int) -> bool:
+                           max_material: float, items: list[Item], my_progression_items: list[str],
+                           locked_items: dict[str, int], user_event_count: int) -> bool:
         """Delegate item removal decision to ItemRemovalRules."""
         return self.removal_rules.should_remove_item(
             chosen_item, material, min_material, max_material,
             items, my_progression_items, locked_items, user_event_count)
 
-    def chessmen_count(self, items: List[CMItem], pocket_limit: int) -> int:
+    def chessmen_count(self, items: list[CMItem], pocket_limit: int) -> int:
         """Count the number of chessmen in the item pool."""
         pocket_amount = (0 if pocket_limit <= 0 else
                         math.ceil(len([item for item in items if item.name == "Progressive Pocket"]) / pocket_limit))
@@ -477,7 +477,7 @@ class CMItemPool:
         logging.debug("Found {} chessmen and {} pocket men".format(chessmen_amount, pocket_amount))
         return chessmen_amount + pocket_amount
 
-    def lockable_material_value(self, chosen_item: str, items: List[CMItem], locked_items: Dict[str, int]):
+    def lockable_material_value(self, chosen_item: str, items: list[CMItem], locked_items: dict[str, int]):
         '''if this piece was added, it might add more than its own material to the locked pool'''
         material = progression_items[chosen_item].material
         if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:

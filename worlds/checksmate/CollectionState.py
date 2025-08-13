@@ -1,4 +1,3 @@
-from typing import Tuple
 from BaseClasses import CollectionState, Item
 from .Items import item_table
 from .ItemUtils import get_parents, get_children
@@ -94,7 +93,7 @@ class CMCollectionState:
                 
         return False
 
-    def _check_children(self, state: CollectionState, item: Item, item_count: int) -> Tuple[int, bool]:
+    def _check_children(self, state: CollectionState, item: Item, item_count: int) -> int:
         """Check child upgrades and calculate material value."""
         material = 0
         children = get_children(item.name)

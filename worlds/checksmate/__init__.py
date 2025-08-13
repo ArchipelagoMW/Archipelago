@@ -1,4 +1,4 @@
-from typing import List, Dict, ClassVar, Type
+from typing import ClassVar, Type
 
 from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
 from Options import PerGameCommonOptions, OptionError
@@ -42,17 +42,17 @@ class CMWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
-    locked_locations: List[str]
+    locked_locations: list[str]
 
     item_name_groups = item_name_groups
-    items_used: ClassVar[Dict[int, Dict[str, int]]] = {}
-    items_remaining: ClassVar[Dict[int, Dict[str, int]]] = {}
-    armies: ClassVar[Dict[int, List[int]]] = {}
+    items_used: ClassVar[dict[int, dict[str, int]]] = {}
+    items_remaining: ClassVar[dict[int, dict[str, int]]] = {}
+    armies: ClassVar[dict[int, list[int]]] = {}
 
-    item_pool: List[CMItem] = []
-    prefill_items: List[CMItem] = []
+    item_pool: list[CMItem] = []
+    prefill_items: list[CMItem] = []
 
-    piece_types_by_army: Dict[int, Dict[str, int]] = {
+    piece_types_by_army: dict[int, dict[str, int]] = {
         # Vanilla
         0: {"Progressive Minor Piece": 2, "Progressive Major Piece": 1, "Progressive Major To Queen": 1},
         # Colorbound Clobberers (the War Elephant is rather powerful)

@@ -2,7 +2,7 @@ from typing import Any
 
 from .Options import *
 
-checksmate_option_presets: Dict[str, Dict[str, Any]] = {
+checksmate_option_presets: dict[str, dict[str, Any]] = {
     # Standard Chess pieces, moving in standard Chess ways, allowing many combinations of material.
     # Leaves unique features and mixed material on, but all pieces will be recognizable.
     "No Dumb Pieces": {

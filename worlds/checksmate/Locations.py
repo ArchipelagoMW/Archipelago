@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, NamedTuple, Optional
+from typing import NamedTuple
 
 from BaseClasses import Location
 
@@ -14,7 +14,7 @@ class Tactic(Enum):
 
 
 class CMLocationData(NamedTuple):
-    code: Optional[int]
+    code: int | None
     # suggested material required to perform task. generally an upper-end estimate. used to:
     # a. capture individual pieces
     # b. capture series of pieces and pawns within 1 game
@@ -23,7 +23,7 @@ class CMLocationData(NamedTuple):
     # material in grand chess mode
     material_expectations_grand: int
     chessmen_expectations: int = 0
-    is_tactic: Optional[Tactic] = None
+    is_tactic: Tactic | None = None
 
 
 location_table = {
@@ -138,7 +138,7 @@ location_table = {
 
 }
 
-lookup_id_to_name: Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
+lookup_id_to_name: dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
 
 piece_names_small = ["Queen's Rook", "Queen's Knight", "Queen's Bishop", "Queen",
                      "King's Rook", "King's Knight", "King's Bishop"]

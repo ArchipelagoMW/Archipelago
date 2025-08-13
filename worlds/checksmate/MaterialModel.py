@@ -1,4 +1,4 @@
-from typing import Dict, List
+
 
 from .Rules import determine_max_material, determine_min_material
 from .Locations import location_table
@@ -9,7 +9,7 @@ class MaterialModel:
     
     def __init__(self, world):
         self.world = world
-        self.items_used: Dict[int, Dict[str, int]] = {}
+        self.items_used: dict[int, dict[str, int]] = {}
 
     def calculate_current_material(self) -> int:
         """Calculate the total material value of currently used items."""
@@ -18,7 +18,7 @@ class MaterialModel:
             for item in self.items_used[self.world.player] if item in progression_items
         ])
 
-    def calculate_remaining_material(self, locked_items: Dict[str, int]) -> int:
+    def calculate_remaining_material(self, locked_items: dict[str, int]) -> int:
         """Calculate the material value of locked items that have material value."""
         return sum([
             locked_items[item] * progression_items[item].material 
@@ -36,7 +36,7 @@ class MaterialModel:
         max_material -= 50
         return min_material, max_material
     
-    def castling_pieces_in_pool(self, items: List[CMItem], locked_items: Dict[str, int]) -> int:
+    def castling_pieces_in_pool(self, items: list[CMItem], locked_items: dict[str, int]) -> int:
         """Returns the number of castling pieces in the pool."""
         # Count majors in items list
         jacks_in_items = len([item for item in items if item.name == "Progressive Jack"])
@@ -46,7 +46,7 @@ class MaterialModel:
 
         return self.unupgraded_majors_in_pool(items, locked_items) + total_jacks
 
-    def unupgraded_majors_in_pool(self, items: List[CMItem], locked_items: Dict[str, int]) -> int:
+    def unupgraded_majors_in_pool(self, items: list[CMItem], locked_items: dict[str, int]) -> int:
         """Returns the number of unupgraded major pieces in the pool."""
         # Count majors in items list
         majors_in_items = len([item for item in items if item.name == "Progressive Major Piece"])
@@ -62,8 +62,8 @@ class MaterialModel:
 
         return max(0, total_majors - total_upgrades)
 
-    def lockable_material_value(self, chosen_item: str, items: List[CMItem], 
-                              locked_items: Dict[str, int]) -> float:
+    def lockable_material_value(self, chosen_item: str, items: list[CMItem], 
+                              locked_items: dict[str, int]) -> float:
         """Calculate the total material value if this item was added, including cascading effects."""
         material = progression_items[chosen_item].material
         if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:

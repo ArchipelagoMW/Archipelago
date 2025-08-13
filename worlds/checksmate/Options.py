@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Callable, Dict
+from typing import Callable
 
 from Options import Range, Option, Choice, NamedRange, ItemDict, PerGameCommonOptions, OptionSet, DeathLink
 
@@ -423,13 +423,13 @@ class CMOptions(PerGameCommonOptions):
     asymmetric_trades: AsymmetricTrades
 
 
-piece_type_limit_options: Dict[str, Callable[[CMOptions], Option]] = {
+piece_type_limit_options: dict[str, Callable[[CMOptions], Option]] = {
     "Progressive Minor Piece": lambda cmoptions: cmoptions.minor_piece_limit_by_type,
     "Progressive Major Piece": lambda cmoptions: cmoptions.major_piece_limit_by_type,
     "Progressive Major To Queen": lambda cmoptions: cmoptions.queen_piece_limit_by_type,
 }
 
 
-piece_limit_options: Dict[str, Callable[[CMOptions], Option]] = {
+piece_limit_options: dict[str, Callable[[CMOptions], Option]] = {
     "Progressive Major To Queen": lambda cmoptions: cmoptions.queen_piece_limit,
 }
