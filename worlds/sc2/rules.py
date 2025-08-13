@@ -2330,7 +2330,6 @@ class SC2Logic:
                 item_names.KERRIGAN_CRUSHING_GRIP,
                 item_names.KERRIGAN_PSIONIC_SHIFT,
                 item_names.KERRIGAN_SPAWN_BANELINGS,
-                item_names.KERRIGAN_INFEST_BROODLINGS,  # Note(Snarky): Pretty tight, but I got it fairly consistently
                 item_names.KERRIGAN_FURY,
                 item_names.KERRIGAN_APOCALYPSE,
                 item_names.KERRIGAN_DROP_PODS,
@@ -2346,7 +2345,7 @@ class SC2Logic:
             # 
             # phaneros: Technically possible without the levels, but adding them in for safety margin and to hopefully
             # make generation force this branch less often
-            or (state.has(item_names.KERRIGAN_HEROIC_FORTITUDE, self.player)
+            or (state.has_any((item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_INFEST_BROODLINGS), self.player)
                 and self.kerrigan_levels(state, 5)
             )
             # Insufficient: Wild Mutation, Assimilation Aura
