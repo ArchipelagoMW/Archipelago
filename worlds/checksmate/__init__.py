@@ -175,10 +175,6 @@ class CMWorld(World):
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         """Collect an item and update material value."""
-        # Initialize Material tracking if needed
-        if "Material" not in state.prog_items[self.player]:
-            state.prog_items[self.player]["Material"] = 0
-
         # Calculate material value before state change
         material = self._collection_state.collect(state, item)
 
@@ -192,10 +188,6 @@ class CMWorld(World):
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         """Remove an item and update material value."""
-        # Initialize Material tracking if needed
-        if "Material" not in state.prog_items[self.player]:
-            state.prog_items[self.player]["Material"] = 0
-
         # Calculate material value before state change
         material = self._collection_state.remove(state, item)
 
