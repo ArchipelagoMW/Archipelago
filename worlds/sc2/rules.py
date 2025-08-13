@@ -2345,8 +2345,10 @@ class SC2Logic:
             # 
             # phaneros: Technically possible without the levels, but adding them in for safety margin and to hopefully
             # make generation force this branch less often
-            or (state.has(item_names.KERRIGAN_HEROIC_FORTITUDE, self.player) and self.kerrigan_levels(state, 5))
-            # Insufficient: Wild Mutation, Assimilation Aura, Mend
+            or (state.has_any((item_names.KERRIGAN_HEROIC_FORTITUDE, item_names.KERRIGAN_MEND), self.player)
+                and self.kerrigan_levels(state, 5)
+            )
+            # Insufficient: Wild Mutation, Assimilation Aura
         )
 
     def zerg_pass_vents(self, state: CollectionState) -> bool:
