@@ -55,7 +55,7 @@ class CMCollectionState:
 
     def remove(self, state: CollectionState, item: Item) -> int:
         """Calculate the material value lost from removing this item."""
-        item_count = state.prog_items[self.world.player].get(item.name, 0)
+        item_count = state.prog_items[self.world.player][item.name]
         if item_count <= 0:
             return 0
             
