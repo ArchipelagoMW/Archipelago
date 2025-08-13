@@ -1,11 +1,12 @@
 """Verify that NetUtils' enums work correctly with all supported Python versions."""
 
+import pickle
 import unittest
 from enum import Enum
 from typing import Type
 
 from NetUtils import ClientStatus, HintStatus, SlotType
-from Utils import restricted_dumps, restricted_loads
+from Utils import restricted_loads
 
 
 class Base:
