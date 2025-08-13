@@ -1,7 +1,7 @@
 from typing import List, Dict, ClassVar, Type
 
 from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
-from Options import PerGameCommonOptions
+from Options import PerGameCommonOptions, OptionError
 from worlds.AutoWorld import WebWorld, World
 
 from .Options import CMOptions
@@ -96,7 +96,7 @@ class CMWorld(World):
             which_pieces = self.options.fairy_chess_pieces_configure
             if (which_pieces.value is None or which_pieces.value == 'None' or
                     None in which_pieces.value or 'None' in which_pieces.value):
-                raise Exception(
+                raise OptionError(
                     "This ChecksMate YAML is invalid! Add text after fairy_chess_piece_collection_configure.")
             if "FIDE" in which_pieces.value:
                 army_options += [0]
