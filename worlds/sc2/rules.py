@@ -2319,8 +2319,7 @@ class SC2Logic:
         )
     def zerg_any_units_back_in_the_saddle_requirement(self, state: CollectionState) -> bool:
         return (
-            not self.kerrigan_unit_available
-            or self.grant_story_tech == GrantStoryTech.option_grant
+            self.grant_story_tech == GrantStoryTech.option_grant
             or state.has_any((
                 # Cases tested by Snarky
                 item_names.KERRIGAN_KINETIC_BLAST,
