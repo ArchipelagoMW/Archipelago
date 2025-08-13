@@ -2320,6 +2320,9 @@ class SC2Logic:
     def zerg_any_units_back_in_the_saddle_requirement(self, state: CollectionState) -> bool:
         return (
             self.grant_story_tech == GrantStoryTech.option_grant
+            # Note(mm): This check isn't necessary as self.kerrigan_levels cover it,
+            # and it's not fully desirable in future when we support non-grant story tech + kerriganless.
+            # or not self.kerrigan_presence
             or state.has_any((
                 # Cases tested by Snarky
                 item_names.KERRIGAN_KINETIC_BLAST,
@@ -2336,7 +2339,14 @@ class SC2Logic:
             ), self.player)
             or self.kerrigan_levels(state, 20)
             or (self.kerrigan_levels(state, 10) and state.has(item_names.KERRIGAN_CHAIN_REACTION, self.player))
-            # Insufficient: Mend, Heroic Fortitude, Wild Mutation, Assimilation Aura
+            # Tested by THE EV, "facetank with Kerrigan and stutter step to the end with >10s left"
+            # > have to lure the first group of Zerg in the 2nd timed section into the first room of the second area
+            # > (with the heal box) so you can kill them before the timer starts.
+            # 
+            # phaneros: Technically possible without the levels, but adding them in for safety margin and to hopefully
+            # make generation force this branch less often
+            or (state.has(item_names.KERRIGAN_HEROIC_FORTITUDE, self.player) and self.kerrigan_levels(state, 5))
+            # Insufficient: Wild Mutation, Assimilation Aura, Mend
         )
 
     def zerg_pass_vents(self, state: CollectionState) -> bool:
