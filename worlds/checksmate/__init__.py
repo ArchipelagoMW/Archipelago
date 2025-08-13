@@ -35,7 +35,6 @@ class CMWorld(World):
     You win when you checkmate the opposing king!
     """
     game: ClassVar[str] = "ChecksMate"
-    data_version = 0
     web = CMWeb()
     required_chess_client_version = "0.3.1"
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CMOptions
