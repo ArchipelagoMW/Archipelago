@@ -101,7 +101,10 @@ class MrTipChecks(DefaultOnToggle):
     """
     display_name = "Mr. Tip Checks"
 
-
+class Enemysanity(Toggle):
+    """Enemies that can normally be defeated are checks
+    """
+    display_name = "Enemysanity"
 
 class MrHints(Choice):
     """Mr. Tips give AP hints. Default 1.
@@ -285,6 +288,7 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     checkpoint_checks : CheckpointsChecks
     switches_checks : SwitchesChecks
     mr_tip_checks : MrTipChecks
+    enemysanity : Enemysanity
 
     mr_hints : MrHints
     chicken_hints : ChickenHints

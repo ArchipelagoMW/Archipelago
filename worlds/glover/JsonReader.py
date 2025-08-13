@@ -97,7 +97,7 @@ def create_location_data(check_name : str, check_info : list, prefix : str) -> l
         rom_ids.append(int(each_id, 0))
     
     #Enemies that have garibs
-    if "COUNT" in check_info[0].keys():
+    if "COUNT" in check_info[0].keys() and len(ap_ids) > 0:
         #Enemies get the first half of the array, garibs create the second
         garib_ap_ids = []
         garib_rom_ids = []
@@ -317,11 +317,13 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
                 #Tips
                 if not self.options.mr_tip_checks:
                     continue
-
             #case 9:
                 #Misc
+            #case 10:
+                #Enemysanity
+                if not self.options.enemysanity:
+                    continue
                 
-        
         rules_applied : bool = False
 
         #Is this a mono location?
@@ -383,14 +385,29 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
         else:
             #Regular Locations
             address : int | None = None
-            if len(each_location_data.ap_ids) > 0:
+            #Single AP Item
+            if len(each_location_data.ap_ids) == 1:
                 address = each_location_data.ap_ids[0]
-            location : Location = Location(player, each_location_data.name, address, region_for_use)
-            region_for_use.locations.append(location)
-            if not rules_applied:
+                location : Location = Location(player, each_location_data.name, address, region_for_use)
+                region_for_use.locations.append(location)
+                if not rules_applied:
                         access_methods_to_rules(self, each_location_data.methods, location)
-
-            if address == None:
+            #Multiple AP Items
+            elif len(each_location_data.ap_ids) > 1:
+                for each_index in range(len(each_location_data.ap_ids)):
+                    each_ap_id = each_location_data.ap_ids[each_index]
+                    location_name : str = each_location_data.name.removesuffix("s")
+                    location_name += " " + str(each_index + 1)
+                    location : Location = Location(player, location_name, each_ap_id, region_for_use)
+                    region_for_use.locations.append(location)
+                    if not rules_applied:
+                        access_methods_to_rules(self, each_location_data.methods, location)
+            else:
+                #Event Item
+                location : Location = Location(player, each_location_data.name, address, region_for_use)
+                region_for_use.locations.append(location)
+                if not rules_applied:
+                        access_methods_to_rules(self, each_location_data.methods, location)
                 match each_location_data.type:
                     #Switches with no paired level event store their level event 
                     #items as event items rather than AP items.

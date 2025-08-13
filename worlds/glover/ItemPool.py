@@ -429,7 +429,7 @@ filler_table = {
 	}
 
 trap_table = {
-	"Frog Spell" : 								ItemData(BASE_ID + 368, -1,"Trap",None),
+	"Frog Trap" : 								ItemData(BASE_ID + 368, -1,"Trap",None),
     "Cursed Ball" :								ItemData(BASE_ID + 369, -1,"Trap",None),
     "Instant Crystal" :							ItemData(BASE_ID + 370, -1,"Trap",None),
     "Camera Rotate" :							ItemData(BASE_ID + 371, -1,"Trap",None),
@@ -437,52 +437,52 @@ trap_table = {
 	}
 
 garibsanity_world_table = {
-	"Atl1 Garib" : 								ItemData(BASE_ID + 2001, 50,"Garib",None)#,
-	#"Atl2 Garib" : 							ItemData(BASE_ID + 2002, 60,"",None),
-	#"Atl3 Garib" : 							ItemData(BASE_ID + 2003, 80,"",None),
-	#"Atl? Garib" : 							ItemData(BASE_ID + 2004, 25,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 65,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 80,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 80,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 20,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 70,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 60,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 80,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 50,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 80,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 80,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 80,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 60,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 60,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 60,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 70,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 56,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 50,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 50,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 80,"",None),
-	#"4 Garibs" : 								ItemData(BASE_ID + 2004, 50,"",None)
+	"Atl1 Garib" : 								ItemData(BASE_ID + 20001, 50,"Garib",None)#,
+	#"Atl2 Garib" : 							ItemData(BASE_ID + 20002, 60,"Garib",None),
+	#"Atl3 Garib" : 							ItemData(BASE_ID + 20003, 80,"Garib",None),
+	#"Atl? Garib" : 							ItemData(BASE_ID + 20004, 25,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 65,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 80,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 80,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 20,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 70,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 60,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 80,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 50,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 80,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 80,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 80,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 60,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 60,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 60,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 70,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 56,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 50,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 50,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 80,"Garib",None),
+	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 50,"Garib",None)
 	}
 
 #decoupled_garib_table = {
-#	"Garib" : 									ItemData(BASE_ID + 1001, 42,"",None),
-#	"2 Garibs" : 								ItemData(BASE_ID + 1002, 31,"",None),
-#	"3 Garibs" : 								ItemData(BASE_ID + 1003, 61,"",None),
-#	"4 Garibs" : 								ItemData(BASE_ID + 1004, 62,"",None),
-#	"5 Garibs" : 								ItemData(BASE_ID + 1005, 34,"",None),
-#	"6 Garibs" : 								ItemData(BASE_ID + 1006, 21,"",None),
-#	"7 Garibs" : 								ItemData(BASE_ID + 1007, 7,"",None),
-#	"8 Garibs" : 								ItemData(BASE_ID + 1008, 27,"",None),
-#	"9 Garibs" : 								ItemData(BASE_ID + 1009, 5,"",None),
-#	"10 Garibs" : 								ItemData(BASE_ID + 1010, 13,"",None),
-#	"11 Garibs" : 								ItemData(BASE_ID + 1011, 2,"",None),
-#	"12 Garibs" : 								ItemData(BASE_ID + 1012, 7,"",None),
-#	#"13 Garibs" : 								ItemData(BASE_ID + 1013, 0,"",None),
-#	"14 Garibs" : 								ItemData(BASE_ID + 1014, 4,"",None),
-#	"15 Garibs" : 								ItemData(BASE_ID + 1015, 1,"",None),
-#	"16 Garibs" : 								ItemData(BASE_ID + 1016, 3,"",None),
+#	"Garib" : 									ItemData(BASE_ID + 10001, 42,"Garib",None),
+#	"2 Garibs" : 								ItemData(BASE_ID + 10002, 31,"Garib",None),
+#	"3 Garibs" : 								ItemData(BASE_ID + 10003, 61,"Garib",None),
+#	"4 Garibs" : 								ItemData(BASE_ID + 10004, 62,"Garib",None),
+#	"5 Garibs" : 								ItemData(BASE_ID + 10005, 34,"Garib",None),
+#	"6 Garibs" : 								ItemData(BASE_ID + 10006, 21,"Garib",None),
+#	"7 Garibs" : 								ItemData(BASE_ID + 10007, 7,"Garib",None),
+#	"8 Garibs" : 								ItemData(BASE_ID + 10008, 27,"Garib",None),
+#	"9 Garibs" : 								ItemData(BASE_ID + 10009, 5,"Garib",None),
+#	"10 Garibs" : 								ItemData(BASE_ID + 10010, 13,"Garib",None),
+#	"11 Garibs" : 								ItemData(BASE_ID + 10011, 2,"Garib",None),
+#	"12 Garibs" : 								ItemData(BASE_ID + 10012, 7,"Garib",None),
+#	#"13 Garibs" : 								ItemData(BASE_ID + 10013, 0,"Garib",None),
+#	"14 Garibs" : 								ItemData(BASE_ID + 10014, 4,"Garib",None),
+#	"15 Garibs" : 								ItemData(BASE_ID + 10015, 1,"Garib",None),
+#	"16 Garibs" : 								ItemData(BASE_ID + 10016, 3,"Garib",None),
 #}
 #
-#garbinsanity = ItemData(BASE_ID + 1001, 1496,"",None)
+#garbinsanity = ItemData(BASE_ID + 10001, 1496,"Garib",None)
 
 #Atlantis 1
 decoupled_garib_table = {
