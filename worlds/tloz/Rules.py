@@ -12,6 +12,8 @@ def set_rules(tloz_world: "TLoZWorld"):
     player = tloz_world.player
     options = tloz_world.options
 
+    tloz_world.multiworld.completion_condition[player] = lambda state: state.has("Rescued Zelda!", player)
+
     # Boss events for a nicer spoiler log play through
     for level in range(1, 9):
         boss = tloz_world.get_location(f"Level {level} Boss")
