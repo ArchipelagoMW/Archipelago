@@ -46,9 +46,9 @@ class CMWorld(World):
     locked_locations: List[str]
 
     item_name_groups = item_name_groups
-    items_used: Dict[int, Dict[str, int]] = {}
-    items_remaining: Dict[int, Dict[str, int]] = {}
-    armies: Dict[int, List[int]] = {}
+    items_used: ClassVar[Dict[int, Dict[str, int]]] = {}
+    items_remaining: ClassVar[Dict[int, Dict[str, int]]] = {}
+    armies: ClassVar[Dict[int, List[int]]] = {}
 
     item_pool: List[CMItem] = []
     prefill_items: List[CMItem] = []
