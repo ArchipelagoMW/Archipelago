@@ -2317,6 +2317,22 @@ class SC2Logic:
                 )
             )
         )
+    def zerg_any_units_back_in_the_saddle_requirement(self, state: CollectionState) -> bool:
+        return (
+            state.has_any((
+                item_names.KERRIGAN_KINETIC_BLAST,
+                item_names.KERRIGAN_HEROIC_FORTITUDE,
+                item_names.KERRIGAN_LEAPING_STRIKE,
+                item_names.KERRIGAN_CRUSHING_GRIP,
+                item_names.KERRIGAN_CHAIN_REACTION,
+                item_names.KERRIGAN_PSIONIC_SHIFT,
+                item_names.KERRIGAN_SPAWN_BANELINGS,
+                item_names.KERRIGAN_INFEST_BROODLINGS,
+                item_names.KERRIGAN_FURY,
+                # item_names.KERRIGAN_ABILITY_EFFICIENCY,
+                # item_names.KERRIGAN_MEND,
+            ), self.player)
+        )
 
     def zerg_pass_vents(self, state: CollectionState) -> bool:
         return (
