@@ -2321,7 +2321,6 @@ class SC2Logic:
         return (
             state.has_any((
                 item_names.KERRIGAN_KINETIC_BLAST,
-                item_names.KERRIGAN_HEROIC_FORTITUDE,
                 item_names.KERRIGAN_LEAPING_STRIKE,
                 item_names.KERRIGAN_CRUSHING_GRIP,
                 item_names.KERRIGAN_CHAIN_REACTION,
@@ -2329,8 +2328,10 @@ class SC2Logic:
                 item_names.KERRIGAN_SPAWN_BANELINGS,
                 item_names.KERRIGAN_INFEST_BROODLINGS,
                 item_names.KERRIGAN_FURY,
-                # item_names.KERRIGAN_ABILITY_EFFICIENCY,
-                # item_names.KERRIGAN_MEND,
+                item_names.KERRIGAN_APOCALYPSE,
+                item_names.KERRIGAN_DROP_PODS,
+                item_names.KERRIGAN_SPAWN_LEVIATHAN,
+                item_names.KERRIGAN_IMMOBILIZATION_WAVE,
             ), self.player)
         )
 
