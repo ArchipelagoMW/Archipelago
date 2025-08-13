@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from Options import PerGameCommonOptions
+from Options import PerGameCommonOptions, StartInventoryPool
 
 
 @dataclass
 class CCCharlesOptions(PerGameCommonOptions):
-    pass
+    start_inventory_from_pool: StartInventoryPool
