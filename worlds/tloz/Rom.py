@@ -70,6 +70,6 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     return base_rom_bytes
 
 
-def get_base_rom_path(file_name: str = "") -> str:
+def get_base_rom_path() -> str:
     from . import TLoZWorld
     return TLoZWorld.settings.rom_file
