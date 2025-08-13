@@ -1,6 +1,6 @@
 from copy import copy
 
-from . import CMTestBase
+from .bases import CMTestBase
 from ..Rules import determine_difficulty
 from ..Items import item_table
 

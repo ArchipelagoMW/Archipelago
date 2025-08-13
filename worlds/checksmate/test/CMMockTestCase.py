@@ -77,4 +77,4 @@ class CMMockTestCase(unittest.TestCase):
                 """Mock implementation that always returns True."""
                 return True
 
-        return MockWorld() 
+        return MockWorld()

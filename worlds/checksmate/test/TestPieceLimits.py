@@ -1,6 +1,6 @@
 from copy import copy
 
-from . import CMTestBase
+from .bases import CMTestBase
 from .. import Options
 from ..PieceLimitCascade import PieceLimitCascade
 

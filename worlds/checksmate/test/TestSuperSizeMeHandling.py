@@ -1,5 +1,5 @@
 
-from . import CMTestBase
+from .bases import CMTestBase
 from ..ItemPool import CMItemPool
 
 

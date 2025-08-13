@@ -19,4 +19,4 @@ class ChessmenModel:
     def meets_chessmen_expectations(self, count: int, items: List[Item]) -> bool:
         """Check if the current chessmen count meets expectations."""
         current_count = self.count_chessmen(items, self.world.options.pocket_limit_by_pocket.value)
-        return current_count >= count 
+        return current_count >= count

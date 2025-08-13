@@ -73,4 +73,4 @@ class MaterialModel:
                 self.unupgraded_majors_in_pool(items, locked_items) <= 2):
             material += progression_items["Progressive Major Piece"].material
             
-        return material 
+        return material

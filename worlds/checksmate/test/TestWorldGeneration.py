@@ -1,4 +1,4 @@
-from . import CMTestBase
+from .bases import CMTestBase
 
 class TestWorldGeneration(CMTestBase):
     def test_full_generation(self):

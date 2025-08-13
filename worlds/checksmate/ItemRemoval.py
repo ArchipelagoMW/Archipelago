@@ -170,4 +170,4 @@ class ItemRemoval:
         """Calculate the material value of locked items."""
         return sum(locked_items[item] * progression_items[item].material 
                   for item in locked_items 
-                  if item in progression_items and progression_items[item].material > 0) 
+                  if item in progression_items and progression_items[item].material > 0)

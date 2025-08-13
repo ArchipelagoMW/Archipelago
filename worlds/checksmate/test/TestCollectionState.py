@@ -1,6 +1,6 @@
 from BaseClasses import CollectionState, Item, ItemClassification
 from ..Items import item_table
-from . import CMTestBase
+from .bases import CMTestBase
 import random
 
 class TestCollectionState(CMTestBase):

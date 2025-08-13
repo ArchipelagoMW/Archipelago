@@ -1,6 +1,6 @@
 from typing import List, Dict, Set, Tuple
 from BaseClasses import CollectionState, Item, ItemClassification
-from . import CMTestBase
+from .bases import CMTestBase
 from ..Items import item_table, material_items, item_name_groups
 from ..Locations import location_table
 from ..Rules import determine_difficulty
