@@ -746,7 +746,7 @@ class LMContext(CommonContext):
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
         vac_count = len(list(netItem.item for netItem in self.items_received if netItem.item == 8064))
-        vac_speed = min(vac_count - 1, 5)
+        vac_speed = max(min(vac_count - 1, 5),0)
         lm_item_name = self.item_names.lookup_in_game(8064)
         lm_item = ALL_ITEMS_TABLE[lm_item_name]
         for addr_to_update in lm_item.update_ram_addr:
