@@ -390,7 +390,7 @@ class LockedItems(ItemDict):
     display_name = "Locked Items"
 
 
-class Deathlink(DeathLink):
+class ChessDeathLink(DeathLink):
     """
     Whenever you are checkmated or resign (close the game window), everyone who is also on Death Link dies. Whenever
     you receive a Death Link event, your game window closes. (You cannot undo or review.)
@@ -419,7 +419,7 @@ class CMOptions(PerGameCommonOptions):
     queen_piece_limit: QueenPieceLimit
     pocket_limit_by_pocket: PocketLimitByPocket
     locked_items: LockedItems
-    death_link: Deathlink
+    death_link: ChessDeathLink
     asymmetric_trades: AsymmetricTrades
 
 
