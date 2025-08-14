@@ -93,6 +93,10 @@ class Gameboard:
     def ready(self) -> bool:
         return self.content_filled
 
+    @property
+    def size(self) -> tuple[int, int]:
+        return len(self.gameboard[0]), len(self.gameboard)
+
 
 def create_gameboard(hard_mode: bool) -> Gameboard:
     boss_door = ButtonDoor()

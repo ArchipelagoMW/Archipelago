@@ -85,10 +85,7 @@ class SoundManager:
 
     def populate_sounds(self):
         try:
-            self.jingles = {
-                sound_filename: self.load_audio(sound_filename)
-                for sound_filename in ALL_JINGLES
-            }
+            self.jingles = {sound_filename: self.load_audio(sound_filename) for sound_filename in ALL_JINGLES}
         except Exception as e:
             logger.exception(e)
 
@@ -114,7 +111,6 @@ class SoundManager:
 
             elif sound.state == "play":
                 higher_priority_sound_is_playing = True
-
 
     def update_background_music(self):
         if any(sound.state == "play" for sound in self.jingles.values()):

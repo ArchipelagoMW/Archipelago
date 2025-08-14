@@ -53,12 +53,9 @@ class APQuestContext(CommonContext):
     highest_processed_item_index: int = 0
     queued_locations: list[int]
 
-    top_image_grid: list[list[Image]]
-
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-        self.top_image_grid = []
         self.queued_locations = []
         self.slot_data = {}
         self.location_to_item = {}
@@ -133,7 +130,7 @@ class APQuestContext(CommonContext):
 
             self.ap_quest_game = Game(self.hard_mode)
             self.highest_processed_item_index = 0
-            self.initial_render()
+            self.render()
 
             self.connection_status = ConnectionStatus.SCOUTS_NOT_SENT
         if cmd == "LocationInfo":
@@ -152,45 +149,8 @@ class APQuestContext(CommonContext):
         self.connection_status = ConnectionStatus.NOT_CONNECTED
         await super().disconnect(*args, **kwargs)
 
-    def initial_render(self):
-        if self.ui.upper_game_grid.children:
-            return
-
-        self.top_image_grid = []
-
-        for row in self.ap_quest_game.gameboard.gameboard:
-            self.top_image_grid.append([])
-            for _ in row:
-                image = Image(fit_mode="fill", texture=TEXTURES["empty.png"])
-                image.texture.mag_filter = "nearest"
-                self.ui.lower_game_grid.add_widget(image)
-
-                image2 = Image(fit_mode="fill")
-
-                self.ui.upper_game_grid.add_widget(image2)
-
-                self.top_image_grid[-1].append(image2)
-
-        self.render()
-
     def render(self):
-        for gameboard_row, image_row in zip(self.ap_quest_game.render(), self.top_image_grid, strict=False):
-            for graphic, image in zip(gameboard_row, image_row, strict=False):
-                if graphic in PLAYER_GRAPHICS:
-                    image_name = PLAYER_GRAPHICS[graphic].get(self.player_sprite, IMAGE_GRAPHICS[Graphic.UNKNOWN])
-                    if image_name is None:
-                        logger.exception(f"Couldn't find player sprite graphics for player sprite {self.player_sprite}")
-                else:
-                    image_name = IMAGE_GRAPHICS[graphic]
-
-                if image_name is None:
-                    image.opacity = 0
-                    image.texture = None
-                    continue
-
-                image.texture = TEXTURES.get(image_name, TEXTURES[IMAGE_GRAPHICS[Graphic.UNKNOWN]])
-                image.texture.mag_filter = "nearest"
-                image.opacity = 1
+        self.ui.render_gameboard(self.ap_quest_game, self.player_sprite)
 
     def location_checked_side_effects(self, location: int):
         network_item = self.location_to_item[location]
@@ -234,15 +194,75 @@ class APQuestContext(CommonContext):
 
             sound_manager: SoundManager
 
+            bottom_image_grid: list[list[Image]]
+            top_image_grid: list[list[Image]]
+
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
                 self.sound_manager = SoundManager()
+                self.top_image_grid = []
+                self.bottom_image_grid = []
 
             def play_jingle(self, audio_filename: str):
                 self.sound_manager.play_jingle(audio_filename)
 
             def start_background_music(self):
                 self.sound_manager.start_background_music()
+
+            def render(self, game: Game, player_sprite: PlayerSprite):
+                self.setup_game_grid_if_not_setup(game.gameboard.size)
+                self.render_gameboard(game, player_sprite)
+
+            def render_gameboard(self, game: Game, player_sprite: PlayerSprite):
+                rendered_gameboard = game.render()
+
+                for gameboard_row, image_row in zip(rendered_gameboard, self.top_image_grid, strict=False):
+                    for graphic, image in zip(gameboard_row, image_row[:11], strict=False):
+                        if graphic in PLAYER_GRAPHICS:
+                            image_name = PLAYER_GRAPHICS[graphic].get(player_sprite, IMAGE_GRAPHICS[Graphic.UNKNOWN])
+                            if image_name is None:
+                                logger.exception(
+                                    f"Couldn't find player sprite graphics for player sprite {player_sprite}"
+                                )
+                        else:
+                            image_name = IMAGE_GRAPHICS[graphic]
+
+                        if image_name is None:
+                            image.opacity = 0
+                            image.texture = None
+                            continue
+
+                        image.texture = TEXTURES.get(image_name, TEXTURES[IMAGE_GRAPHICS[Graphic.UNKNOWN]])
+                        image.texture.mag_filter = "nearest"
+                        image.opacity = 1
+
+            def setup_game_grid_if_not_setup(self, size: tuple[int, int]):
+                if self.upper_game_grid.children:
+                    return
+
+                self.top_image_grid = []
+
+                for _column in range(size[1]):
+                    self.top_image_grid.append([])
+                    for _row in range(size[0]):
+                        image = Image(fit_mode="fill", texture=TEXTURES["empty.png"])
+                        image.texture.mag_filter = "nearest"
+                        self.lower_game_grid.add_widget(image)
+
+                        image2 = Image(fit_mode="fill")
+
+                        self.upper_game_grid.add_widget(image2)
+
+                        self.top_image_grid[-1].append(image2)
+
+                    # Right side: Inventory
+                    image = Image(fit_mode="fill", color=(0, 0, 0))
+                    self.lower_game_grid.add_widget(image)
+
+                    image2 = Image(fit_mode="fill", color=(0, 0, 0))
+                    self.upper_game_grid.add_widget(image2)
+
+                    self.top_image_grid[-1].append(image2)
 
             def build(self) -> Layout:
                 container = super().build()
@@ -286,8 +306,15 @@ class APQuestContext(CommonContext):
                         super().__init__(**kwargs)
 
                     def check_resize(self, x, y):
-                        side = min(self.parent.size)
-                        self.size = (side, side)
+                        parent_width, parent_height = self.parent.size
+
+                        self_width_according_to_parent_height = parent_height * 12 / 11
+                        self_height_according_to_parent_width = parent_height * 11 / 12
+
+                        if self_width_according_to_parent_height > parent_width:
+                            self.size = parent_width, self_height_according_to_parent_width
+                        else:
+                            self.size = self_width_according_to_parent_height, parent_height
 
                 self.game_view = APQuestGameView()
 
