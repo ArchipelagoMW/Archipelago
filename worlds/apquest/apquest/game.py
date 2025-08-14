@@ -33,7 +33,7 @@ class Game:
         graphics_array = [Graphic.EMPTY] * size
 
         item_back_index = size - 1
-        for item, amount in sorted(self.player.inventory.items(), key=lambda sort_item: sort_item[1].value):
+        for item, amount in sorted(self.player.inventory.items(), key=lambda sort_item: sort_item[0].value):
             for _ in range(amount):
                 if item_back_index == 2:
                     break
