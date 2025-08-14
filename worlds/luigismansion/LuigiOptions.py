@@ -169,7 +169,7 @@ class StartWithBooRadar(Choice):
 
     include: Boo Radar in pool
 
-    exclude: No Boo Radar - Boo Gates and Boosanity will be disabled if excluded
+    exclude: No Boo Radar - generation will fail if excluded while Boo Gates or Boosanity are enabled
     """
     display_name = "Boo Radar"
     internal_name = "boo_radar"
