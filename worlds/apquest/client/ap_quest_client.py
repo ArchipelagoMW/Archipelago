@@ -22,7 +22,7 @@ from ..apquest.game import Game, Input
 from ..apquest.locations import LOCATION_NAME_TO_ID, Location
 from .graphics import PlayerSprite
 from .item_quality import get_quality_for_network_item
-from .sounds import ITEM_JINGLES, VICTORY_JINGLE
+from .sounds import CONFETTI_CANNON, ITEM_JINGLES, VICTORY_JINGLE
 
 
 class ConnectionStatus(Enum):
@@ -189,6 +189,7 @@ class APQuestContext(CommonContext):
                 x = (event.x + 0.5) / gameboard_x
                 y = 1 - (event.y + 0.5) / gameboard_y  # Kivy's y is bottom to top (ew)
 
+                self.ui.play_jingle(CONFETTI_CANNON)
                 self.ui.add_confetti((x, y), (self.slot_data["confetti_explosiveness"] + 1) * 5)
 
     def input_and_rerender(self, input_key: Input) -> None:

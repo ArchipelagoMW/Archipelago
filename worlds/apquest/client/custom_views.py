@@ -103,7 +103,7 @@ class Confetti:
             if self.x_speed > 0:
                 self.x_speed = 0
 
-        if self.y_speed > -1.2:
+        if self.y_speed > -0.03:
             self.y_speed -= 2.7 * dt
             if self.y_speed < -0.03:
                 self.y_speed = -0.03
@@ -226,8 +226,8 @@ class ConfettiView(MDRecycleView):
                 Confetti(
                     initial_position[0],
                     initial_position[1],
-                    random() * 4 - 2 - initial_position[0] * 1.2,
-                    random() * 4 - 1.6 - initial_position[1] * 1.2,
+                    random() * 3.2 - 1.6 - (initial_position[0] - 0.5) * 1.2,
+                    random() * 3.2 - 1.3 - (initial_position[1] - 0.5) * 1.2,
                     choice(CONFETTI_COLORS),
                     3 + i * 0.05,
                 )

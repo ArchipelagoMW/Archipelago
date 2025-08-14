@@ -17,9 +17,11 @@ ITEM_JINGLES = {
     ItemQuality.FILLER: "8bit Filler.wav",
 }
 
+CONFETTI_CANNON = "APQuest Confetti Cannon.wav"
 VICTORY_JINGLE = "8bit Victory.wav"
 
 ALL_JINGLES = [
+    CONFETTI_CANNON,
     VICTORY_JINGLE,
     *ITEM_JINGLES.values(),
 ]
