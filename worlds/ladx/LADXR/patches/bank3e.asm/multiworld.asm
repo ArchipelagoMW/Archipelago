@@ -1,42 +1,51 @@
 ; Handle the multiworld link
 
 MainLoop:
-#IF HARDWARE_LINK
-    call handleSerialLink
-#ENDIF
     ; Check if the gameplay is world
     ld   a, [$DB95]
     cp   $0B
-    ret  nz
+    jr   nz, .clearSafeAndRet
     ; Check if the world subtype is the normal one
     ld   a, [$DB96]
     cp   $07
-    ret  nz
+    jr   nz, .clearSafeAndRet
     ; Check if we are moving between rooms
     ld   a, [$C124]
     and  a
-    ret  nz
+    jr   nz, .clearSafeAndRet
     ; Check if link is in a normal walking/swimming state
     ld   a, [$C11C]
     cp   $02
-    ret  nc
+    jr   nc, .clearSafeAndRet
     ; Check if a dialog is open
     ld   a, [$C19F]
     and  a
-    ret  nz
+    jr   nz, .clearSafeAndRet
     ; Check if interaction is blocked
     ldh  a, [$A1]
     and  a
-    ret  nz
+    jr   z, .gameplayIsSafe
+.clearSafeAndRet:
+    xor  a
+    ld   [wConsecutiveSafe], a
+    ret
 
+.gameplayIsSafe:
+    ; Store consecutive safe frames, up to overflow
+    ld   a, [wConsecutiveSafe]
+    inc  a
+    jr   z, .checkSpawnDelay
+    ld   [wConsecutiveSafe], a
+
+.checkSpawnDelay:
     ld   a, [wLinkSpawnDelay]
     and  a
-    jr   z, .allowSpawn
+    jr   z, .spawnThings
     dec  a
     ld   [wLinkSpawnDelay], a
-    jr   .noSpawn
+    jr   .deathLink ; no spawn
 
-.allowSpawn:
+.spawnThings:
     ld   a, [wZolSpawnCount]
     and  a
     call nz, LinkSpawnSlime
@@ -46,15 +55,81 @@ MainLoop:
     ld   a, [wDropBombSpawnCount]
     and  a
     call nz, LinkSpawnBomb
-.noSpawn:
 
+.deathLink:
+    ld   hl, wMWCommand
+    bit  3, [hl]
+    jr   z, .collect
+    ; require an arbitrary number of consecutive safe frames to kill the player
+    ; the goal is to avoid killing a player after they give up a trade item
+    ; but before they get the item in return
+    ld   a, [wConsecutiveSafe]
+    cp   $10
+    ret  c
+    ld   a, [wHasMedicine]
+    ; set health and health loss to a
+    ; instant kill if no medicine
+    ; kill with damage if medicine (to trigger medicine)
+    ld   [$DB5A], a ; wHealth
+    ld   [$DB94], a ; wSubtractHealthBuffer
+    ; set health gain to zero
+    xor  a
+    ld   [$DB93], a ; wAddHealthBuffer
+
+.collect:
+    ld   hl, wMWCommand
+    bit  2, [hl]
+    jr   z, .giveItem
+    ; get current location value onto b
+    ld   a, [wMWMultipurposeC] ; collect location hi
+    ld   h, a
+    ld   a, [wMWMultipurposeD] ; collect location lo
+    ld   l, a
+    ldh  a, [$F6] ; current room
+    cp   l
+    jr   z, .clearCmdAndRet ; might be in current room
+    ld   a, [hl]
+    ld   b, a
+    ld   a, [wMWMultipurposeE] ; location mask
+    or   b ; apply mask
+    cp   b ; was location already set?
+    jr   z, .clearCmdAndRet ; if so, do nothing else
+    ld   [hl], a
+
+.giveItem:
     ; Have an item to give?
-    ld   hl, wLinkStatusBits
+    ld   hl, wMWCommand
     bit  0, [hl]
-    ret  z
+    jr   z, .clearCmdAndRet
+    ld   hl, wMWCommand
+    bit  1, [hl] ; do recvindex check only if bit set
+    jr   z, .skipRecvIndexCheck
+    ld   a, [wMWRecvIndexHi]
+    ld   b, a
+    ld   a, [wMWMultipurposeC]
+    cp   b
+    jr   nz, .clearCmdAndRet ; failed check on hi
+    ld   a, [wMWRecvIndexLo]
+    ld   b, a
+    ld   a, [wMWMultipurposeD]
+    cp   b
+    jr   nz, .clearCmdAndRet ; failed check on lo
+    ; increment recvindex
+    ld   a, [wMWRecvIndexLo]
+    inc  a
+    ld   [wMWRecvIndexLo], a
+    jr   nz, .skipRecvIndexCheck ; no overflow, done
+    ld   a, [wMWRecvIndexHi]
+    inc  a
+    ld   [wMWRecvIndexHi], a
 
+.skipRecvIndexCheck:
+    ; clear command
+    xor  a
+    ld   hl, wMWCommand
+    ld   [hl], a
     ; Give an item to the player
-    ld   a, [wLinkGiveItem]
+    ld   a, [wMWItemCode]
     ; if zol:
     cp   $22 ; zol item
     jr   z, LinkGiveSlime
@@ -71,25 +146,48 @@ MainLoop:
     ld hl, SpaceFrom
     call MessageCopyString
     ; Paste the player name
-    ld  a, [wLinkGiveItemFrom]
+    ld  a, [wMWItemSenderLo]
     call MessageAddPlayerName
     ld   a, $C9
-    ; hl = $wLinkStatusBits
-    ld   hl, wLinkStatusBits
-    ; clear the 0 bit of *hl
-    res  0, [hl]
     ; OpenDialog()
     jp   $2385 ; Opendialog in $000-$0FF range
+
+.clearCmdAndRet:
+    ; check if trade item should be cleared
+    ; get mask loaded
+    ld   a, [wMWMultipurposeF]
+    ld   b, a
+
+    ; check trade 1
+    ld   hl, wMWCommand
+    bit  4, [hl]
+    jr   z, .checkTrade2
+    ld   a, [wTradeSequenceItem]
+    and  b
+    ld   [wTradeSequenceItem], a
+
+.checkTrade2:
+    ld   hl, wMWCommand
+    bit  5, [hl]
+    jr   z, .actuallyClearCmdAndRet
+    ld   a, [wTradeSequenceItem2]
+    and  b
+    ld   [wTradeSequenceItem2], a
+
+.actuallyClearCmdAndRet:
+    xor  a
+    ld   [wMWCommand], a
+    ret
 
 LinkGiveSlime:
     ld   a, $05
     ld   [wZolSpawnCount], a
-    ld   hl, wLinkStatusBits
+    ld   hl, wMWCommand
     res  0, [hl]
     ret
 
 HandleSpecialItem:
-    ld   hl, wLinkStatusBits
+    ld   hl, wMWCommand
     res  0, [hl]
 
     and  $0F
@@ -98,7 +196,7 @@ HandleSpecialItem:
     dw SpecialCuccoParty
     dw SpecialPieceOfPower
     dw SpecialHealth
-    dw SpecialRandomTeleport
+    dw .ret
     dw .ret
     dw .ret
     dw .ret
@@ -234,122 +332,3 @@ placeRandom:
     ld   [hl], a
     ret
 
-SpecialRandomTeleport:
-    xor  a
-    ; Warp data
-    ld   [$D401], a
-    ld   [$D402], a
-    call $280D ; random number
-    ld   [$D403], a
-    ld   hl, RandomTeleportPositions
-    ld   d, $00
-    ld   e, a
-    add  hl, de
-    ld   e, [hl]
-    ld   a, e
-    and  $0F
-    swap a
-    add  a, $08
-    ld   [$D404], a
-    ld   a, e
-    and  $F0
-    add  a, $10
-    ld   [$D405], a
-
-    ldh  a, [$98]
-    swap a
-    and  $0F
-    ld   e, a
-    ldh  a, [$99]
-    sub  $08
-    and  $F0
-    or   e
-    ld   [$D416], a ; wWarp0PositionTileIndex
-
-    call $0C7D
-    ld   a, $07
-    ld   [$DB96], a ; wGameplaySubtype
-
-    ret
-
-Data_004_7AE5: ; @TODO Palette data
-    db   $33, $62, $1A, $01, $FF, $0F, $FF, $7F
-
-
-Deathlink:
-    ; Spawn the entity
-    ld   a, $CA               ; $7AF3: $3E $CA
-    call $3B86                ; $7AF5: $CD $86 $3B  ;SpawnEntityTrampoline
-    ld   a, $26               ; $7AF8: $3E $26      ;
-    ldh  [$F4], a             ; $7AFA: $E0 $F4      ; set noise
-    ; Set posX = linkX
-    ldh  a, [$98] ; LinkX
-    ld   hl, $C200 ; wEntitiesPosXTable
-    add  hl, de
-    ld   [hl], a
-    ; set posY = linkY - 54
-    ldh  a, [$99] ; LinkY
-    sub  a, 54
-    ld   hl, $C210 ; wEntitiesPosYTable
-    add  hl, de
-    ld   [hl], a
-    ; wEntitiesPrivateState3Table
-    ld   hl, $C2D0          ; $7B0A: $21 $D0 $C2
-    add  hl, de                                   ; $7B0D: $19
-    ld   [hl], $01                                ; $7B0E: $36 $01
-    ; wEntitiesTransitionCountdownTable    
-    ld   hl, $C2E0    ; $7B10: $21 $E0 $C2
-    add  hl, de                                   ; $7B13: $19
-    ld   [hl], $C0                                ; $7B14: $36 $C0
-    ; GetEntityTransitionCountdown             
-    call $0C05             ; $7B16: $CD $05 $0C
-    ld   [hl], $C0                                ; $7B19: $36 $C0
-    ; IncrementEntityState
-    call $3B12                ; $7B1B: $CD $12 $3B
-
-    ; Remove medicine
-    xor  a                                        ; $7B1E: $AF
-    ld   [$DB0D], a           ; $7B1F: $EA $0D $DB ; ld   [wHasMedicine], a
-    ; Reduce health by a lot
-    ld   a, $FF                                   ; $7B22: $3E $FF
-    ld   [$DB94], a           ; $7B24: $EA $94 $DB ; ld   [wSubtractHealthBuffer], a
-
-    ld   hl, $DC88                             ; $7B2C: $21 $88 $DC
-    ; Set palette
-    ld   de, Data_004_7AE5                        ; $7B2F: $11 $E5 $7A
-    
-loop_7B32:
-    ld   a, [de]                                  ; $7B32: $1A
-    ; ld   [hl+], a                                 ; $7B33: $22
-    db $22
-    inc  de                                       ; $7B34: $13
-    ld   a, l                                     ; $7B35: $7D
-    and  $07                                      ; $7B36: $E6 $07
-    jr   nz, loop_7B32                           ; $7B38: $20 $F8
-
-    ld   a, $02                                   ; $7B3A: $3E $02
-    ld   [$DDD1], a                              ; $7B3C: $EA $D1 $DD
-
-    ret
-
-; probalby wants
-;     ld   a, $02                                   ; $7B40: $3E $02
-    ;ldh  [hLinkInteractiveMotionBlocked], a 
-
-RandomTeleportPositions:
-    db $55, $54, $54, $54, $55, $55, $55, $54, $65, $55, $54, $65, $56, $56, $55, $55
-    db $55, $45, $65, $54, $55, $55, $55, $55, $55, $55, $55, $58, $43, $57, $55, $55
-    db $55, $55, $55, $55, $55, $54, $55, $53, $54, $56, $65, $65, $56, $55, $57, $65
-    db $45, $55, $55, $55, $55, $55, $55, $55, $48, $45, $43, $34, $35, $35, $36, $34
-    db $65, $55, $55, $54, $54, $54, $55, $54, $56, $65, $55, $55, $55, $55, $54, $54
-    db $55, $55, $55, $55, $56, $55, $55, $54, $55, $55, $55, $53, $45, $35, $53, $46
-    db $56, $55, $55, $55, $53, $55, $54, $54, $55, $55, $55, $54, $44, $55, $55, $54
-    db $55, $55, $45, $55, $55, $54, $45, $45, $63, $55, $65, $55, $45, $45, $44, $54
-    db $56, $56, $54, $55, $54, $55, $55, $55, $55, $55, $55, $56, $54, $55, $65, $56
-    db $54, $54, $55, $65, $56, $54, $55, $56, $55, $55, $55, $66, $65, $65, $55, $56
-    db $65, $55, $55, $75, $55, $55, $55, $54, $55, $55, $65, $57, $55, $54, $53, $45
-    db $55, $56, $55, $55, $55, $45, $54, $55, $54, $55, $56, $55, $55, $55, $55, $54
-    db $55, $55, $65, $55, $55, $54, $53, $58, $55, $05, $58, $55, $55, $55, $74, $55
-    db $55, $55, $55, $55, $46, $55, $55, $56, $55, $55, $55, $54, $55, $45, $55, $55
-    db $55, $55, $54, $55, $55, $55, $65, $55, $55, $46, $55, $55, $56, $55, $55, $55
-    db $55, $55, $54, $55, $55, $55, $45, $36, $53, $51, $57, $53, $56, $54, $45, $46
