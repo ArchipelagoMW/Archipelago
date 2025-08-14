@@ -479,19 +479,25 @@ def build_data(self) -> List[RegionLevel]:
             assign_locations_to_regions(region_level, map_regions, location_data_list, self)
     return all_levels
 
-def build_location_pairings(base_name : str, ap_ids : list) -> list[list]:
+def build_location_pairings(base_name : str, check_info : dict) -> list[list]:
+    ap_ids : list[str] = check_info["AP_IDS"]
     if len(ap_ids) == 1:
         #If the location data accounts for 1 location
         return [[base_name, ap_ids[0]]]
     output : list[list] = []
     #If the location accounts for multiple locations
     for each_ap_id_index, each_ap_id in enumerate(ap_ids):
-        sublocation_name : str = base_name
-        sublocation_name.removesuffix("s")
-        sublocation_name + " " + str(each_ap_id_index + 1), each_ap_id
+        sublocation_name : str = base_name.removesuffix("s")
+        #Not enemies
+        if check_info["TYPE"] != 10:
+            sublocation_name += " " + str(each_ap_id_index + 1)
+        else:
+            #Enemies
+            if each_ap_id_index < check_info["COUNT"]:
+                sublocation_name += " " + str(each_ap_id_index + 1)
+            else:
+                sublocation_name += " Garib " + str(each_ap_id_index + 1 - check_info["COUNT"])
         output.append([sublocation_name, each_ap_id])
-    #I don't know if garib groups are their own location, but if they are, uncomment this
-    #output.append(list[base_name, ap_ids[0] + 10000])
     return output
 
 def generate_location_name_to_id(world_prefixes, level_prefixes) -> dict:
@@ -507,10 +513,10 @@ def generate_location_name_to_id(world_prefixes, level_prefixes) -> dict:
                     continue
                 #Only locations remain
                 ap_ids : list = level_data[location_name][0]["AP_IDS"]
-                for each_pairing in build_location_pairings(prefix + location_name, ap_ids):
+                for each_pairing in build_location_pairings(prefix + location_name, level_data[location_name][0]):
                     output[each_pairing[0]] = int(each_pairing[1], 0)
                 #Garib Groups
-                if level_data[location_name][0]["TYPE"] == 1:
+                if level_data[location_name][0]["TYPE"] == 1 and len(ap_ids) > 1:
                     ap_ids : list[str] = level_data[location_name][0]["AP_IDS"]
                     ap_ids.sort()
                     group_id : int = int(ap_ids[0], 0) + 10000
