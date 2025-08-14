@@ -658,7 +658,7 @@ class GhostTrapWeight(Range):
 
 class CallMario(Toggle):
     """
-    Let everyone know you're looking for Mario in teh client!
+    Let everyone know you're looking for Mario in the client!
     (CAUTION: THIS CAN EASILY SPAM THE CLIENT WITH MESSAGES)
     """
     display_name = "Press A to Mario"
