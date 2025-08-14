@@ -1,7 +1,10 @@
+import asyncio
 import pkgutil
+from asyncio import Task
 from pathlib import Path
 
 from CommonClient import logger
+from kivy.core.audio import Sound, SoundLoader
 
 from .item_quality import ItemQuality
 from .utils import make_data_directory
@@ -16,34 +19,142 @@ ITEM_JINGLES = {
 
 VICTORY_JINGLE = "8bit Victory.wav"
 
-ALL_SOUNDS = [
-    *ITEM_JINGLES.values(),
+ALL_JINGLES = [
     VICTORY_JINGLE,
+    *ITEM_JINGLES.values(),
+]
+
+BACKGROUND_MUSIC = "APQuest BGM.wav"
+
+ALL_SOUNDS = [
+    *ALL_JINGLES,
+    BACKGROUND_MUSIC,
 ]
 
 
-def ensure_sounds_available() -> dict[str, Path]:
-    # Kivy appears to have no good way of loading audio from bytes. So, we have to extract it out of the .apworld first
+class SoundManager:
+    sound_paths: dict[str, Path]
+    jingles: dict[int, Sound]
+    background_music: Sound
 
-    sound_paths = {}
+    background_music_target_volume: float = 0
 
-    sound_directory = make_data_directory("sounds")
+    background_music_task: Task | None = None
+    background_music_last_position: int = 0
 
-    for sound in ALL_SOUNDS:
-        sound_file_location = sound_directory / sound
+    def __init__(self):
+        self.extract_sounds()
+        self.populate_sounds()
 
-        sound_paths[sound] = sound_file_location
+    async def fade_loop(self):
+        while True:
+            self.update_background_music()
+            self.do_fade()
+            await asyncio.sleep(0.02)
 
-        if sound_file_location.exists():
-            continue
+    def extract_sounds(self):
+        # Kivy appears to have no good way of loading audio from bytes.
+        # So, we have to extract it out of the .apworld first
 
-        with open(sound_file_location, "wb") as sound_file:
-            data = pkgutil.get_data(__name__, f"../apquest/audio/{sound}")
-            if data is None:
-                logger.exception(f"Unable to extract sound {sound} to Archipelago/data")
-            sound_file.write(data)
+        sound_paths = {}
 
-    return sound_paths
+        sound_directory = make_data_directory("sounds")
+
+        for sound in ALL_SOUNDS:
+            sound_file_location = sound_directory / sound
+
+            sound_paths[sound] = sound_file_location
+
+            if sound_file_location.exists():
+                continue
+
+            with open(sound_file_location, "wb") as sound_file:
+                data = pkgutil.get_data(__name__, f"../apquest/audio/{sound}")
+                if data is None:
+                    logger.exception(f"Unable to extract sound {sound} to Archipelago/data")
+                sound_file.write(data)
+
+        self.sound_paths = sound_paths
+
+    def load_audio(self, sound_filename: str):
+        audio_path = self.sound_paths[sound_filename]
+
+        sound_object = SoundLoader.load(str(audio_path.absolute()))
+        sound_object.seek(0)
+        return sound_object
+
+    def populate_sounds(self):
+        try:
+            self.jingles = {
+                sound_filename: self.load_audio(sound_filename)
+                for sound_filename in ALL_JINGLES
+            }
+        except Exception as e:
+            logger.exception(e)
+
+        try:
+            self.background_music = self.load_audio(BACKGROUND_MUSIC)
+            self.background_music.loop = True
+            self.background_music.seek(0)
+        except Exception as e:
+            logger.exception(e)
+
+    def play_jingle(self, audio_filename):
+        higher_priority_sound_is_playing = False
+
+        for sound_name, sound in self.jingles.items():
+            if higher_priority_sound_is_playing:  # jingles are ordered by priority, lower priority gets eaten
+                sound.stop()
+                continue
+
+            if sound_name == audio_filename:
+                sound.play()
+                self.update_background_music()
+                higher_priority_sound_is_playing = True
+
+            elif sound.state == "play":
+                higher_priority_sound_is_playing = True
 
 
-SOUND_PATHS = ensure_sounds_available()
+    def update_background_music(self):
+        if any(sound.state == "play" for sound in self.jingles.values()):
+            self.play_background_music(False)
+        else:
+            self.fade_background_music(True)
+
+    def play_background_music(self, play: bool = True):
+        if play:
+            self.background_music_target_volume = 1
+            self.background_music.volume = 1
+        else:
+            self.background_music_target_volume = 0
+            self.background_music.volume = 0
+
+    def start_background_music(self):
+        if self.background_music_task is None:
+            self.background_music_target_volume = 1
+            self.background_music.volume = 1
+            self.background_music_task = asyncio.create_task(self.fade_loop())
+
+    def fade_background_music(self, fade_in: bool = True):
+        if fade_in:
+            self.background_music_target_volume = 1
+        else:
+            self.background_music_target_volume = 0
+
+    def do_fade(self):
+        if self.background_music.volume > self.background_music_target_volume:
+            self.background_music.volume = max(0.0, self.background_music.volume - 0.02)
+        if self.background_music.volume < self.background_music_target_volume:
+            self.background_music.volume = min(1.0, self.background_music.volume + 0.02)
+
+        if self.background_music.volume == 0:
+            if self.background_music.state == "play":
+                self.background_music_last_position = self.background_music.get_pos()
+                if self.background_music_last_position != 0:  # SDL2 get_pos doesn't work, we just let it continue playing silently
+                    self.background_music.stop()
+        else:
+            if self.background_music.state == "stop":
+                if self.background_music_last_position != 0:  # SDL2 get_pos doesn't work
+                    self.background_music.seek(self.background_music_last_position)
+                self.background_music.play()

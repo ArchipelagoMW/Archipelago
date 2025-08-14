@@ -1,5 +1,4 @@
 # isort: off
-import typing
 
 from kvui import GameManager
 # isort: on
@@ -11,7 +10,6 @@ from typing import Any
 
 import colorama
 from CommonClient import CommonContext, get_base_parser, gui_enabled, handle_url_arg, logger, server_loop
-from kivy.core.audio import Sound, SoundLoader
 from kivy.core.window import Keyboard, Window
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
@@ -25,7 +23,7 @@ from ..apquest.graphics import Graphic
 from ..apquest.locations import LOCATION_NAME_TO_ID
 from .graphics import IMAGE_GRAPHICS, PLAYER_GRAPHICS, TEXTURES, PlayerSprite
 from .item_quality import get_quality_for_network_item
-from .sounds import ALL_SOUNDS, ITEM_JINGLES, SOUND_PATHS, VICTORY_JINGLE
+from .sounds import ITEM_JINGLES, VICTORY_JINGLE, SoundManager
 
 
 class ConnectionStatus(Enum):
@@ -146,6 +144,7 @@ class APQuestContext(CommonContext):
             self.ui.game_view.bind_keyboard()
 
             self.connection_status = ConnectionStatus.GAME_RUNNING
+            self.ui.start_background_music()
 
     async def disconnect(self, *args, **kwargs) -> None:
         self.finished_game = False
@@ -197,10 +196,10 @@ class APQuestContext(CommonContext):
         network_item = self.location_to_item[location]
 
         item_quality = get_quality_for_network_item(network_item)
-        self.play_audio(ITEM_JINGLES[item_quality])
+        self.play_jingle(ITEM_JINGLES[item_quality])
 
-    def play_audio(self, audio_filename: str) -> None:
-        self.ui.play_audio(audio_filename)
+    def play_jingle(self, audio_filename: str) -> None:
+        self.ui.play_jingle(audio_filename)
 
     def handle_game_events(self):
         while self.ap_quest_game.queued_events:
@@ -210,7 +209,7 @@ class APQuestContext(CommonContext):
                 self.queued_locations.append(event.location_id)
 
             if isinstance(event, VictoryEvent):
-                self.play_audio(VICTORY_JINGLE)
+                self.play_jingle(VICTORY_JINGLE)
 
     def input_and_rerender(self, input_key: Input) -> None:
         if self.ap_quest_game is None:
@@ -233,33 +232,17 @@ class APQuestContext(CommonContext):
 
             game_view: MDRecycleView
 
-            sounds: dict[int, list[Sound]]
+            sound_manager: SoundManager
 
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
-                self.sounds = {}
+                self.sound_manager = SoundManager()
 
-            def load_audio(self, sound_filename: str):
-                audio_path = SOUND_PATHS[sound_filename]
+            def play_jingle(self, audio_filename: str):
+                self.sound_manager.play_jingle(audio_filename)
 
-                sound_object = SoundLoader.load(str(audio_path.absolute()))
-                sound_object.seek(0)
-                return sound_object
-
-            def populate_sounds(self):
-                try:
-                    self.sounds = {
-                        sound_filename: [self.load_audio(sound_filename) for _ in range(3)]
-                        for sound_filename in ALL_SOUNDS
-                    }
-                except Exception as e:
-                    logger.exception(e)
-
-            def play_audio(self, audio_filename):
-                preloaded_sound_list = self.sounds.get(audio_filename)
-                sound = preloaded_sound_list.pop(0)
-                sound.play()
-                preloaded_sound_list.append(sound)
+            def start_background_music(self):
+                self.sound_manager.start_background_music()
 
             def build(self) -> Layout:
                 container = super().build()
@@ -318,8 +301,6 @@ class APQuestContext(CommonContext):
 
                 game_container.bind(size=self.lower_game_grid.check_resize)
                 game_container.bind(size=self.upper_game_grid.check_resize)
-
-                self.populate_sounds()
 
                 return container
 
