@@ -99,7 +99,6 @@ local ROM_ITEM_TABLE = {
     "AP_SLAP",
     "AP_THROW",
     "AP_TOSS",
-    "AP_BALLUP",
     "AP_RUBBER_BALL",
     "AP_BOWLING_BALL",
     "AP_POWER_BALL",
@@ -1672,7 +1671,9 @@ function map_handler()
     if CURRENT_HUB == 0x06 then
         if CURRENT_MAP == 0x10 then 
             set_map("AP_ATLANTIS_L1")
-        elseif CURRENT_MAP == 0x11 then set_map("AP_ATLANTIS_L2")
+        elseif CURRENT_MAP == 0x11 then 
+            print("atl2")
+            set_map("AP_ATLANTIS_L2")
         elseif CURRENT_MAP == 0x12 then set_map("AP_ATLANTIS_L3") 
         elseif CURRENT_MAP == 0x13 then set_map("AP_ATLANTIS_BOSS")
         elseif CURRENT_MAP == 0x14 then set_map("AP_ATLANTIS_BONUS") 
