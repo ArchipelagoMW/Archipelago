@@ -288,6 +288,7 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
     # Add new event and csv to our special spawn toad
     lines = get_data(MAIN_PKG_NAME, "data/custom_events/event12.txt").decode('utf-8')
     csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message12.csv").decode('utf-8')
+    lines = lines.replace("{LUIGIMAXHP}", maxhp)
     gcm = __update_custom_event(gcm, "12", True, lines, csv_lines)
 
     #Add various hints to their specific hint spots
