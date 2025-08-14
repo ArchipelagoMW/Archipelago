@@ -319,7 +319,7 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
                     continue
             #case 9:
                 #Misc
-            #case 10:
+            case 10:
                 #Enemysanity
                 if not self.options.enemysanity:
                     continue
