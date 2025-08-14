@@ -9,13 +9,14 @@ from kivy.lang.parser import Parser
 from kivy.core.window import Window
 from kivymd.uix.button import MDButton, MDButtonText
 from kivy.uix.colorpicker import ColorPicker
-from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.menu.menu import MDDropdownMenu, MDDropdownTextItem
+from kivymd.uix.menu.menu import MDDropdownMenu
+from kivymd.uix.textfield import MDTextField
 from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
+from kivy.lang.builder import Builder
+from kivy.properties import ObjectProperty
 from kivy.utils import hex_colormap, get_color_from_hex
-from colorsys import rgb_to_hsv
 
 if __name__ == "__main__":
     import ModuleUpdate
@@ -60,15 +61,29 @@ color_usages: typing.Dict[str, str] = {
 }
 
 
+class ColorButton(MDButton):
+    real_name: str = "white"
+    color_usage: str = "Text"
+    text: MDButtonText = ObjectProperty(None)
+
+    def __init__(self, *args, **kwargs):
+        if "real_name" in kwargs:
+            self.real_name = kwargs.pop("real_name")
+        self.color_usage = color_usages[self.real_name]
+        super().__init__(*args, **kwargs)
+
+
 class ColorPickerApp(ThemedApp):
     base_title: str = "Archipelago Color Picker"
     container: ContainerLayout
     grid: MainLayout
     color_picker: ColorPicker
-    button_layout: MDGridLayout
+    button_layout: MainLayout
     options_layout: MDBoxLayout
     presets_button: MDButton
     preset_dropdown: MDDropdownMenu
+    color_layout: MainLayout
+    theme_layout: MainLayout
     text_colors: dict[str, str] = default_colors.copy()
     dynamic_theme: dict[str, str | float] = default_dynamic_theme.copy()
     buttons: dict[str, MDButton] = {}
@@ -87,21 +102,13 @@ class ColorPickerApp(ThemedApp):
 
     def build(self) -> Widget:
         self.set_colors()
-        self.container = ContainerLayout()
-        self.container.md_bg_color = self.theme_cls.backgroundColor
-        self.grid = MainLayout(cols=1, spacing=20, padding=20)
-        self.container.add_widget(self.grid)
-        self.color_picker = ColorPicker(color=get_color_from_hex(self.text_colors[self.current_color]))
+        self.container = Builder.load_file(Utils.local_path("data/colorpicker.kv"))
+        self.grid = self.container.grid
+        self.color_picker = self.container.color_picker
+        self.color_picker.color = get_color_from_hex(self.text_colors[self.current_color])
         self.color_picker.bind(color=lambda picker, x: self.on_color(picker, x))
-        self.grid.add_widget(self.color_picker)
-        self.options_layout = MDBoxLayout(size_hint_y=None, height=dp(40), orientation="horizontal")
-        defaults_button = MDButton(MDButtonText(text="Restore Defaults"))
-        defaults_button.bind(on_release=lambda _: self.restore_defaults())
-        self.options_layout.add_widget(defaults_button)
-        current_button = MDButton(MDButtonText(text="Restore Current"))
-        current_button.bind(on_release=lambda _: self.restore_current())
-        self.options_layout.add_widget(current_button)
-        self.presets_button = MDButton(MDButtonText(text="Preset Loaded: None"))
+        self.options_layout = self.container.options
+        self.presets_button = self.container.presets
         self.preset_dropdown = MDDropdownMenu(caller=self.presets_button)
 
         def open_dropdown(button: MDButton) -> None:
@@ -110,41 +117,31 @@ class ColorPickerApp(ThemedApp):
 
         self.presets_button.bind(on_release=open_dropdown)
         self.preset_dropdown.bind(on_select=lambda instance, x: self.set_preset(instance, x))
-        self.options_layout.add_widget(self.presets_button)
-        self.grid.add_widget(self.options_layout)
-        self.button_layout = MDGridLayout(cols=2)
-        self.color_layout = MDGridLayout(cols=3)
-        self.color_layout.spacing = 5
-        self.color_layout.padding = (10, 5)
+        self.button_layout = self.container.buttons
+        self.color_layout = self.container.colors
 
         for color in self.text_colors:
-            button_text = MDButtonText(text=color_usages[color], outline_width=1.5)
-            new_button = MDButton(button_text,
-                                  theme_bg_color="Custom",
-                                  md_bg_color=get_color_from_hex(self.text_colors[color]), theme_width="Custom")
-            new_button.text = button_text
-            new_button.real_name = color
+            new_button = ColorButton(real_name=color)
             new_button.bind(on_release=lambda button: self.set_color(button))
             self.buttons[color] = new_button
             self.color_layout.add_widget(new_button)
-        self.button_layout.add_widget(self.color_layout)
-        self.grid.add_widget(self.button_layout)
-        self.theme_layout = MDGridLayout(cols=1, spacing=5, size_hint_x=0.5)
+        self.theme_layout = self.container.theme
 
         def update_dynamic_val(dropdown: MDDropdownMenu, name: str, val: str | float):
             setattr(self.theme_cls, name, val)
             self.dynamic_theme[name] = val
             dropdown.dismiss()
 
-        def open_dynamic_dropdown(dropdown: MDDropdownMenu):
-            dropdown.open()
+        def update_contrast(instance: MDTextField):
+            val = min(1.0, max(0.0, float(instance.text)))
+            self.theme_cls.dynamic_scheme_contrast = val
+            self.dynamic_theme["dynamic_scheme_contrast"] = val
+            instance.text = str(val)
 
-        theme_button = MDButton(MDButtonText(text=f"Theme Style: {self.theme_cls.theme_style}"), theme_width="Custom")
-        palette_button = MDButton(MDButtonText(text=f"Primary Palette: {self.theme_cls.primary_palette}"),
-                                  theme_width="Custom")
-        scheme_button = MDButton(MDButtonText(text=f"Dynamic Scheme: {self.theme_cls.dynamic_scheme_name.title()}"),
-                                 theme_width="Custom")
-        contrast_slider = MDButton(MDButtonText(text="Contrast"))
+        theme_button = self.container.style
+        palette_button = self.container.palette
+        scheme_button = self.container.scheme
+        contrast_input = self.container.contrast
         theme_dropdown = MDDropdownMenu(caller=theme_button, items=[
             {
                 "text": "Light",
@@ -171,11 +168,8 @@ class ColorPickerApp(ThemedApp):
                              "FIDELITY", "CONTENT")
         ])
         scheme_button.bind(on_release=lambda x: scheme_dropdown.open())
-        self.theme_layout.add_widget(theme_button)
-        self.theme_layout.add_widget(palette_button)
-        self.theme_layout.add_widget(scheme_button)
-        self.theme_layout.add_widget(contrast_slider)
-        self.button_layout.add_widget(self.theme_layout)
+        contrast_input.bind(on_text_validate=update_contrast)
+
 
         # Uncomment to re-enable the Kivy console/live editor
         # Ctrl-E to enable it, make sure numlock/capslock is disabled
