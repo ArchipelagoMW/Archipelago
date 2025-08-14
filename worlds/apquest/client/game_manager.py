@@ -14,8 +14,8 @@ from kivy.uix.layout import Layout
 from kivymd.uix.recycleview import MDRecycleView
 
 from ..apquest.game import Game
-from ..apquest.inputs import Input
 from ..apquest.graphics import Graphic
+from ..apquest.inputs import Input
 from .graphics import IMAGE_GRAPHICS, PLAYER_GRAPHICS, TEXTURES, PlayerSprite
 from .sounds import SoundManager
 
@@ -50,8 +50,8 @@ class APQuestManager(GameManager):
     def switch_to_game_tab(self) -> None:
         if self.screens.current_tab == self.game_view_tab:
             return
-        self.screens.switch_screens(self.game_view_tab)
         self.screens.current_tab.active = False
+        self.screens.switch_screens(self.game_view_tab)
         self.game_view_tab.active = True
 
     def start_background_music(self) -> None:
@@ -103,11 +103,17 @@ class APQuestManager(GameManager):
 
         self.top_image_grid = []
 
-        for _column in range(size[1]):
+        for row in range(size[1]):
             self.top_image_grid.append([])
-            for _row in range(size[0]):
-                image = Image(fit_mode="fill", texture=TEXTURES["grass.png"])
-                image.texture.mag_filter = "nearest"
+            for column in range(size[0]):
+                boss_room = (row in (0, 1, 2) and (size[1] - column) in (1, 2, 3)) or (row, column) == (3, size[1] - 2)
+
+                if boss_room:
+                    # "boss room"
+                    image = Image(fit_mode="fill", color=(0.45, 0.35, 0.1))
+                else:
+                    image = Image(fit_mode="fill", texture=TEXTURES["grass.png"])
+                    image.texture.mag_filter = "nearest"
                 self.lower_game_grid.add_widget(image)
 
                 image2 = Image(fit_mode="fill")

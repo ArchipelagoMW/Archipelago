@@ -24,10 +24,12 @@ ALL_JINGLES = [
     *ITEM_JINGLES.values(),
 ]
 
+BACKGROUND_MUSIC_INTRO = "APQuest Intro.wav"
 BACKGROUND_MUSIC = "APQuest BGM.wav"
 
 ALL_SOUNDS = [
     *ALL_JINGLES,
+    BACKGROUND_MUSIC_INTRO,
     BACKGROUND_MUSIC,
 ]
 
@@ -35,6 +37,8 @@ ALL_SOUNDS = [
 class SoundManager:
     sound_paths: dict[str, Path]
     jingles: dict[str, Sound]
+
+    background_music_intro: Sound
     background_music: Sound
 
     background_music_target_volume: float = 0
@@ -50,6 +54,7 @@ class SoundManager:
         while True:
             self.update_background_music()
             self.do_fade()
+            self.background_music_intro.stop()
             await asyncio.sleep(0.02)
 
     def extract_sounds(self) -> None:
@@ -93,6 +98,14 @@ class SoundManager:
             self.background_music = self.load_audio(BACKGROUND_MUSIC)
             self.background_music.loop = True
             self.background_music.seek(0)
+        except Exception as e:
+            logger.exception(e)
+
+        try:
+            self.background_music_intro = self.load_audio(BACKGROUND_MUSIC_INTRO)
+            self.background_music_intro.loop = True
+            self.background_music_intro.seek(0)
+            self.background_music_intro.play()
         except Exception as e:
             logger.exception(e)
 

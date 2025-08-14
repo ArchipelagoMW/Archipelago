@@ -6,14 +6,15 @@ from kvui import GameManager
 
 import asyncio
 import sys
+from collections.abc import Sequence
 from enum import Enum
-from typing import Any, Sequence
+from typing import Any
 
 import colorama
 from CommonClient import CommonContext, get_base_parser, gui_enabled, handle_url_arg, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
-from worlds.apquest.apquest.items import Item
 
+from worlds.apquest.apquest.items import Item
 from worlds.apquest.client.game_manager import APQuestManager
 
 from ..apquest.events import LocationClearedEvent, VictoryEvent
