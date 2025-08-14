@@ -589,7 +589,7 @@ class LMContext(CommonContext):
                 if current_map_id == 2:
                     # If special moving Toad, room_to_check should be the spawn room id
                     if lm_loc_data.code == 617:
-                        room_to_check: int = spawn_locations[self.spawn]["room_no"]
+                        room_to_check: int = spawn_locations[self.spawn]["in_game_room_id"]
                     else:
                         room_to_check = addr_to_update.in_game_room_id if not addr_to_update.in_game_room_id is None \
                             else current_room_id
@@ -671,7 +671,7 @@ class LMContext(CommonContext):
                     # Lastly, update the non-saveable received index with the current last received index.
                     dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
-            elif lm_item.type == "Trap" and last_recv_idx <= non_save_recv_idx:
+            elif lm_item.type == "Trap" and last_recv_idx < non_save_recv_idx:
                 # Skip this trap item to avoid Luigi dying in an infinite trap loop.
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
@@ -746,7 +746,7 @@ class LMContext(CommonContext):
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
         vac_count = len(list(netItem.item for netItem in self.items_received if netItem.item == 8064))
-        vac_speed = min(vac_count - 1, 5)
+        vac_speed = max(min(vac_count - 1, 5),0)
         lm_item_name = self.item_names.lookup_in_game(8064)
         lm_item = ALL_ITEMS_TABLE[lm_item_name]
         for addr_to_update in lm_item.update_ram_addr:

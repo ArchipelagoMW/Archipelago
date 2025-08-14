@@ -366,7 +366,7 @@ class DoorRando(Choice):
 
     Randomized - All doors are randomly locked or unlocked
 
-    Suite Doors - Randomize doors but guarantee the Suite Key Doors remain locked
+    Suit Doors - Randomize doors but guarantee the Suit Key Doors remain locked
 
     All Doors Unlocked - Unlocks all doors in the mansion. Without Boo gates, this will make King Boo immediately accessible.
 
@@ -376,7 +376,7 @@ class DoorRando(Choice):
     internal_name = "door_rando"
     option_off = 0
     option_randomized = 1
-    option_suite_doors = 2
+    option_suit_doors = 2
     option_all_doors_unlocked = 3
     option_all_doors_locked = 4
     default = 0

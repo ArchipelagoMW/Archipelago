@@ -611,7 +611,9 @@ class LMWorld(World):
             elif item == "Progressive Vacuum": # Progressive Vacuums
                     copies_to_place = 6
             copies_to_place = max(0, copies_to_place - exclude.count(item))
-            if item == "Progressive Vacuum" and copies_to_place < 1:
+            curr_player_vac_count = len([vac_item for vac_item in self.multiworld.precollected_items[self.player] if
+                vac_item.name == "Progressive Vacuum"])
+            if item == "Progressive Vacuum" and (curr_player_vac_count+copies_to_place) < 1:
                 raise Options.OptionError(f"{self.player_name} has excluded too many copies of Progressive Vacuum and the seed cannot be completed")
             for _ in range(copies_to_place):
                 item_list.add(item)
