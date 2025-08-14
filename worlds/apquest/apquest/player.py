@@ -79,6 +79,7 @@ class Player:
     def die(self) -> None:
         self.respawn()
         self.gameboard.respawn_final_boss()
+        self.gameboard.heal_alive_enemies()
 
     def location_cleared(self, location_id: int) -> None:
         event = LocationClearedEvent(location_id)

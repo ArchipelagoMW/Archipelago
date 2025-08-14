@@ -213,9 +213,14 @@ class Enemy(Entity, InteractableMixin):
         self.solid = False
 
     def respawn(self) -> None:
-        self.current_health = self.max_health
         self.dead = False
         self.solid = True
+        self.heal_if_not_dead()
+
+    def heal_if_not_dead(self):
+        if self.dead:
+            return
+        self.current_health = self.max_health
 
     def interact(self, player: "Player") -> None:
         if self.dead:

@@ -37,6 +37,7 @@ IMAGE_GRAPHICS = {
 
 BACKGROUND_TILE = "grass.png"
 
+
 class PlayerSprite(Enum):
     HUMAN = 0
     DUCK = 1

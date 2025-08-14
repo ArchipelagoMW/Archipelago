@@ -7,6 +7,7 @@ from .entities import (
     ButtonDoor,
     Chest,
     Empty,
+    Enemy,
     EnemyWithLoot,
     Entity,
     FinalBoss,
@@ -69,6 +70,11 @@ class Gameboard:
         for entity in self.iterate_entities():
             if isinstance(entity, FinalBoss):
                 entity.respawn()
+
+    def heal_alive_enemies(self) -> None:
+        for entity in self.iterate_entities():
+            if isinstance(entity, Enemy):
+                entity.heal_if_not_dead()
 
     def render(self, player: "Player") -> tuple[tuple[Graphic, ...], ...]:
         graphics = []
