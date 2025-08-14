@@ -589,7 +589,7 @@ class LMContext(CommonContext):
                 if current_map_id == 2:
                     # If special moving Toad, room_to_check should be the spawn room id
                     if lm_loc_data.code == 617:
-                        room_to_check: int = spawn_locations[self.spawn]["room_no"]
+                        room_to_check: int = spawn_locations[self.spawn]["in_game_room_id"]
                     else:
                         room_to_check = addr_to_update.in_game_room_id if not addr_to_update.in_game_room_id is None \
                             else current_room_id
