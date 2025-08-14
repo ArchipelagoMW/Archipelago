@@ -259,12 +259,12 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
         current_filter: Sequence[str | Type] | None
         compact: bool = BooleanProperty(False)
 
-        def __init__(self, ctx=None, components=None, args=None):
+        def __init__(self, ctx=None, launch_components=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
             self.favorites = []
-            self.launch_components = components
+            self.launch_components = launch_components
             self.launch_args = args
             self.cards = []
             self.current_filter = (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
@@ -437,7 +437,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
         def toggle_compact(self):
             self.compact = not self.compact
 
-    Launcher(components=launch_components, args=args).run()
+    Launcher(launch_components=launch_components, args=args).run()
 
     # avoiding Launcher reference leak
     # and don't try to do something with widgets after window closed
