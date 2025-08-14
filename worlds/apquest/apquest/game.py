@@ -40,6 +40,7 @@ class Game:
                 if item == Item.HEALTH_UPGRADE:
                     continue
                 graphics_array[item_back_index] = ITEM_TO_GRAPHIC[item]
+                item_back_index -= 1
             else:
                 continue
             break
