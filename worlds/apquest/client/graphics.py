@@ -7,7 +7,7 @@ from kivy.uix.image import CoreImage
 from ..apquest.graphics import Graphic
 
 IMAGE_GRAPHICS = {
-    Graphic.EMPTY: "empty.png",
+    Graphic.EMPTY: None,
     Graphic.WALL: "wall.png",
     Graphic.BUTTON_NOT_ACTIVATED: "button_not_activated.png",
     Graphic.BUTTON_ACTIVATED: "button_activated.png",
@@ -26,12 +26,16 @@ IMAGE_GRAPHICS = {
     Graphic.KEY: "key.png",
     Graphic.SHIELD: "shield.png",
     Graphic.SWORD: "sword.png",
-    Graphic.HEALTH_UPGRADE: "health.png",
+    Graphic.HEART: "full_heart.png",
+    Graphic.HALF_HEART: "half_heart.png",
+    Graphic.EMPTY_HEART: "empty_heart.png",
     Graphic.CONFETTI_CANNON: "confetti_cannon.png",
     Graphic.REMOTE_ITEM: "ap_item.png",
+    Graphic.ITEMS_TEXT: "items_text.png",
     Graphic.UNKNOWN: "unknown.png",
 }
 
+BACKGROUND_TILE = "grass.png"
 
 class PlayerSprite(Enum):
     HUMAN = 0
@@ -49,6 +53,7 @@ PLAYER_GRAPHICS = {
 }
 
 ALL_GRAPHICS = [
+    BACKGROUND_TILE,
     *IMAGE_GRAPHICS.values(),
     *[graphic for sub_dict in PLAYER_GRAPHICS.values() for graphic in sub_dict.values()],
 ]

@@ -26,13 +26,17 @@ class Graphic(Enum):
     PLAYER_LEFT = 32
     PLAYER_RIGHT = 33
 
-    UNKNOWN = -1
-
     KEY = 41
     SWORD = 42
     SHIELD = 43
-    HEALTH_UPGRADE = 44
+    HEART = 44
+    HALF_HEART = 45
+    EMPTY_HEART = 46
 
     CONFETTI_CANNON = 50
 
     REMOTE_ITEM = 60
+
+    ITEMS_TEXT = 70
+
+    UNKNOWN = -1

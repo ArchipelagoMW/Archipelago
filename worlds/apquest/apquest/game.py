@@ -1,9 +1,11 @@
+from math import ceil
+
 from .entities import InteractableMixin
 from .events import ConfettiFired, Event
 from .gameboard import Gameboard, create_gameboard
 from .graphics import Graphic
 from .inputs import Direction, Input
-from .items import Item, RemotelyReceivedItem
+from .items import ITEM_TO_GRAPHIC, Item, RemotelyReceivedItem
 from .locations import Location
 from .player import Player
 
@@ -24,6 +26,38 @@ class Game:
 
     def render(self) -> tuple[tuple[Graphic, ...], ...]:
         return self.gameboard.render(self.player)
+
+    def render_health_and_inventory(self, vertical: bool = False) -> tuple[Graphic, ...]:
+        size = self.gameboard.size[1] if vertical else self.gameboard.size[0]
+
+        graphics_array = [Graphic.EMPTY] * size
+
+        item_back_index = size - 1
+        for item, amount in sorted(self.player.inventory.items(), key=lambda sort_item: sort_item.value):
+            for _ in range(amount):
+                if item_back_index == 2:
+                    break
+                if item == Item.HEALTH_UPGRADE:
+                    continue
+                graphics_array[item_back_index] = ITEM_TO_GRAPHIC[item]
+            else:
+                continue
+            break
+
+        remaining_health = self.player.current_health
+        for i in range(min(item_back_index, ceil(self.player.max_health / 2))):
+            new_remaining_health = max(0, remaining_health - 2)
+            change = remaining_health - new_remaining_health
+            remaining_health = new_remaining_health
+
+            if change == 2:
+                graphics_array[i] = Graphic.HEART
+            elif change == 1:
+                graphics_array[i] = Graphic.HALF_HEART
+            elif change == 0:
+                graphics_array[i] = Graphic.EMPTY_HEART
+
+        return tuple(graphics_array)
 
     def attempt_player_movement(self, direction: Direction) -> None:
         self.player.facing = direction

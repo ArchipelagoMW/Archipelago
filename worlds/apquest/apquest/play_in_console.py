@@ -35,7 +35,7 @@ graphic_to_char = {
     Graphic.KEY: "K",
     Graphic.SHIELD: "X",
     Graphic.SWORD: "S",
-    Graphic.HEALTH_UPGRADE: "H",
+    Graphic.HEART: "H",
     Graphic.CONFETTI_CANNON: "?",
     Graphic.REMOTE_ITEM: "I",
 }

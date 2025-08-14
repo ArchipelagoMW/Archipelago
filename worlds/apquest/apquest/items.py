@@ -27,7 +27,7 @@ ITEM_TO_GRAPHIC = defaultdict(
         Item.KEY: Graphic.KEY,
         Item.SWORD: Graphic.SWORD,
         Item.SHIELD: Graphic.SHIELD,
-        Item.HEALTH_UPGRADE: Graphic.HEALTH_UPGRADE,
+        Item.HEALTH_UPGRADE: Graphic.HEART,
         Item.CONFETTI_CANNON: Graphic.CONFETTI_CANNON,
         Item.REMOTE_ITEM: Graphic.REMOTE_ITEM,
     },
