@@ -18,6 +18,7 @@ IMAGE_GRAPHICS = {
     Graphic.NORMAL_ENEMY_3_HEALTH: "normal_enemy_3.png",
     Graphic.NORMAL_ENEMY_2_HEATLH: "normal_enemy_2.png",
     Graphic.NORMAL_ENEMY_1_HEALTH: "normal_enemy_1.png",
+    Graphic.BOSS_6_HEALTH: "boss_6.png",
     Graphic.BOSS_5_HEALTH: "boss_5.png",
     Graphic.BOSS_4_HEALTH: "boss_4.png",
     Graphic.BOSS_3_HEALTH: "boss_3.png",

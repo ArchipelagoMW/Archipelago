@@ -20,6 +20,7 @@ class Graphic(Enum):
     BOSS_3_HEALTH = 22
     BOSS_4_HEALTH = 23
     BOSS_5_HEALTH = 24
+    BOSS_6_HEALTH = 25
 
     PLAYER_DOWN = 30
     PLAYER_UP = 31

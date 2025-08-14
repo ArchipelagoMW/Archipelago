@@ -275,6 +275,7 @@ class EnemyWithLoot(Enemy, LocationMixin):
 
 class FinalBoss(Enemy):
     enemy_graphic_by_health: ClassVar[dict[int, Graphic]] = {
+        6: Graphic.BOSS_6_HEALTH,
         5: Graphic.BOSS_5_HEALTH,
         4: Graphic.BOSS_4_HEALTH,
         3: Graphic.BOSS_3_HEALTH,
