@@ -514,11 +514,11 @@ def generate_location_name_to_id(world_prefixes, level_prefixes) -> dict:
                     ap_ids : list[str] = level_data[location_name][0]["AP_IDS"]
                     ap_ids.sort()
                     group_id : int = int(ap_ids[0], 0) + 10000
-                    output[location_name] = group_id
+                    output[prefix + location_name] = group_id
                 #Enemy Garib Groups
                 if level_data[location_name][0]["TYPE"] == 10:
                     ap_ids : list[str] = level_data[location_name][0]["AP_IDS"]
                     ap_ids.sort()
                     group_id : int = int(ap_ids[0], 0) + 10000
-                    output[location_name.removesuffix("s") + " Garibs"] = group_id
+                    output[prefix + location_name.removesuffix("s") + " Garibs"] = group_id
     return output
