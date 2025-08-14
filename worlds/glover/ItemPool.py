@@ -437,8 +437,8 @@ trap_table = {
 	}
 
 garibsanity_world_table = {
-	"Atl1 Garib" : 								ItemData(BASE_ID + 20001, 50,"Garib",None)#,
-	#"Atl2 Garib" : 							ItemData(BASE_ID + 20002, 60,"Garib",None),
+	"Atl1 Garib" : 								ItemData(BASE_ID + 20001, 50,"Garib",None),
+	"Atl2 Garib" : 								ItemData(BASE_ID + 20002, 60,"Garib",None)#,
 	#"Atl3 Garib" : 							ItemData(BASE_ID + 20003, 80,"Garib",None),
 	#"Atl? Garib" : 							ItemData(BASE_ID + 20004, 25,"Garib",None),
 	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 65,"Garib",None),
@@ -484,17 +484,19 @@ garibsanity_world_table = {
 #
 #garbinsanity = ItemData(BASE_ID + 10001, 1496,"Garib",None)
 
-#Atlantis 1
+#Atlantis 1&2
 decoupled_garib_table = {
-	"Garib" : 									ItemData(BASE_ID + 10001, 1, "Garib", None),
-	"2 Garibs" : 								ItemData(BASE_ID + 10002, 3, "Garib", None),
-	"3 Garibs" : 								ItemData(BASE_ID + 10003, 1, "Garib", None),
-	"4 Garibs" : 								ItemData(BASE_ID + 10004, 5, "Garib", None),
-	"5 Garibs" : 								ItemData(BASE_ID + 10005, 1, "Garib", None),
+	"Garib" : 									ItemData(BASE_ID + 10001, 2, "Garib", None),
+	"2 Garibs" : 								ItemData(BASE_ID + 10002, 5, "Garib", None),
+	"3 Garibs" : 								ItemData(BASE_ID + 10003, 4, "Garib", None),
+	"4 Garibs" : 								ItemData(BASE_ID + 10004, 6, "Garib", None),
+	"5 Garibs" : 								ItemData(BASE_ID + 10005, 6, "Garib", None),
 	"6 Garibs" : 								ItemData(BASE_ID + 10006, 1, "Garib", None),
+	"7 Garibs" : 								ItemData(BASE_ID + 10007, 1, "Garib", None),
 	"9 Garibs" : 								ItemData(BASE_ID + 10009, 1, "Garib", None),
+	"10 Garibs" : 								ItemData(BASE_ID + 10010, 1, "Garib", None)
 }
-garbinsanity = ItemData(BASE_ID + 10001, 110,"Garib", None)
+garbinsanity = ItemData(BASE_ID + 10001, 110, "Garib", None)
 
 all_items = {
 	**level_event_table, 
