@@ -156,13 +156,13 @@ KEYS_TABLE: dict[str, GrinchItemData] = {
 MISC_ITEMS_TABLE: dict[str, GrinchItemData] = {
     # This item may not function properly if you receive it during a loading screen or in Mount Crumpit
     "Fully Healed Grinch": GrinchItemData("Health Items", 500, IC.filler, [GrinchRamData(0x0E8FDC, value=120)]),
-    "5 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 502, IC.filler, [GrinchRamData(0x010058, value=5)]),
-    "10 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 503, IC.filler, [GrinchRamData(0x010058, value=10)]),
-    "20 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 504, IC.filler, [GrinchRamData(0x010058, value=20)])
+    "5 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 502, IC.filler, [GrinchRamData(0x010058, value=5, update_existing_value=True)]),
+    "10 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 503, IC.filler, [GrinchRamData(0x010058, value=10, update_existing_value=True)]),
+    "20 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 504, IC.filler, [GrinchRamData(0x010058, value=20, update_existing_value=True)])
 }
 
 USEFUL_IC_TABLE: dict[str, GrinchItemData] = {
-    "Heart of Stone": GrinchItemData("Health Items", 501, IC.useful, [GrinchRamData(0x0100ED, value=1)])
+    "Heart of Stone": GrinchItemData("Health Items", 501, IC.useful, [GrinchRamData(0x0100ED, value=1, update_existing_value=True)])
 }
 
 #Traps
@@ -174,7 +174,7 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
 # alias to Slowness Trap for traplink
     # "Tip Toe Trap": GrinchItemData("Traps", 603, IC.trap, [GrinchRamData()]),
 # This item may not function properly if you receive it during a loading screen or in Mount Crumpit
-    "Damage Trap": GrinchItemData("Traps", 604, IC.trap, [GrinchRamData(0x0E8FDC, value=20)]),
+    "Damage Trap": GrinchItemData("Traps", 604, IC.trap, [GrinchRamData(0x0E8FDC, value=-20, update_existing_value=True)]),
     "Depletion Trap": GrinchItemData("Traps", 605, IC.trap, [GrinchRamData(0x010058, value=0)]),
     "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
         [GrinchRamData(0x010000, value=0x05), GrinchRamData(0x08FB94, value=1)]),

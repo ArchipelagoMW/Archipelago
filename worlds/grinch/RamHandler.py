@@ -8,3 +8,4 @@ class GrinchRamData(NamedTuple):
     # Hex uses 0x00, unsigned are base whole numbers
     binary_bit_pos: Optional[int] = None
     bit_size: int = 1
+    update_existing_value: bool = False
