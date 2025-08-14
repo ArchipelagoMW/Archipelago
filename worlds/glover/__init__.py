@@ -352,7 +352,7 @@ class GloverWorld(World):
             "Sticky" : 									self.percent_of(self.options.filler_sticky_weight.value),
 	    }
         trap_percentages : dict = {
-            "Frog Spell" : 								self.percent_of(self.options.frog_trap_weight.value),
+            "Frog Trap" : 								self.percent_of(self.options.frog_trap_weight.value),
             "Cursed Ball" :								self.percent_of(self.options.cursed_ball_trap_weight.value),
             "Instant Crystal" :							self.percent_of(self.options.instant_crystal_trap_weight.value),
             "Camera Rotate" :							self.percent_of(self.options.camera_rotate_trap_weight.value),

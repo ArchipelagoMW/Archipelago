@@ -1429,7 +1429,7 @@ function garib_group_contruction()
         for group_name,group_info in pairs(GARIB_GROUPS_MAP[WORLD_NAME])
         do
             local all_pass = true
-            for garib_id in GARIB_GROUPS_MAP[WORLD_NAME][group_name]["garibs"]
+            for _,garib_id in pairs(GARIB_GROUPS_MAP[WORLD_NAME][group_name]["garibs"])
             do
                 if ADDRESS_MAP[WORLD_NAME]["GARIBS"][garib_id] ~= nil
                     then
