@@ -509,4 +509,16 @@ def generate_location_name_to_id(world_prefixes, level_prefixes) -> dict:
                 ap_ids : list = level_data[location_name][0]["AP_IDS"]
                 for each_pairing in build_location_pairings(prefix + location_name, ap_ids):
                     output[each_pairing[0]] = int(each_pairing[1], 0)
+                #Garib Groups
+                if level_data[location_name][0]["TYPE"] == 1:
+                    ap_ids : list[str] = level_data[location_name][0]["AP_IDS"]
+                    ap_ids.sort()
+                    group_id : int = int(ap_ids[0], 0) + 10000
+                    output[location_name] = group_id
+                #Enemy Garib Groups
+                if level_data[location_name][0]["TYPE"] == 10:
+                    ap_ids : list[str] = level_data[location_name][0]["AP_IDS"]
+                    ap_ids.sort()
+                    group_id : int = int(ap_ids[0], 0) + 10000
+                    output[location_name.removesuffix("s") + " Garibs"] = group_id
     return output

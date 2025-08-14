@@ -423,6 +423,7 @@ class GloverWorld(World):
         options["checkpoint_checks"] = self.options.checkpoint_checks.value
         options["switches_checks"] = self.options.switches_checks.value
         options["mr_tip_checks"] = self.options.mr_tip_checks.value
+        options["enemysanity"] = self.options.enemysanity.value
         options["mr_hints"] = self.options.mr_hints.value
         options["chicken_hints"] = self.options.chicken_hints.value
 
