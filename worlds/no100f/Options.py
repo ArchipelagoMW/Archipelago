@@ -75,7 +75,7 @@ class SnackCount(Range):
     """Sets the number of Scooby Snacks needed if Snack Completion Goal is being used"""
     display_name = "Snack Count"
     range_start = 1
-    range_end = 5287
+    range_end = 5286
     default = 850
 
 

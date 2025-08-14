@@ -126,7 +126,7 @@ upgrade_rules = [
             LocationNames.headless_token_i001: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
 
             # Rooftops
-            LocationNames.witchdoctor_token_r020: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.witchdoctor_token_r020: lambda player: lambda state: (state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1)) or state.has(ItemNames.ProgressiveJump, player, 1),
 
             # Balcony
             LocationNames.creeper_token_o002: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
@@ -214,8 +214,8 @@ upgrade_rules = [
 
         ItemNames.Warps:
             {
-                LocationNames.warp_gate_o001: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1),
-                LocationNames.warp_gate_o006: lambda player: lambda state: state.has(ItemNames.Balc6_Warp, player, 1) or state.can_reach(RegionNames.o008, "Region", player) and (state.can_reach(RegionNames.o005, "Region", player) or state.has(ItemNames.HelmetPower, player, 1))
+                LocationNames.warp_gate_o001: lambda player: lambda state: state.has(ItemNames.Balc1_Warp, player, 1) or state.has(ItemNames.BootsPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1),
+                LocationNames.warp_gate_o006: lambda player: lambda state: state.has(ItemNames.Balc6_Warp, player, 1) or state.can_reach(RegionNames.o008, "Region", player) and (state.can_reach(ConnectionNames.o005_o006, "Entrance", player) or state.has(ItemNames.HelmetPower, player, 1))
             },
 
         ItemNames.victory:
@@ -299,7 +299,7 @@ key_rules = [
         ItemNames.MonsterTokens:
             {
                 # Manor
-                LocationNames.geronimo_token_i005: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.ProgressiveJump, player, 2) and state.has(ItemNames.HelmetPower, player, 1),
+                LocationNames.geronimo_token_i005: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
 
                 # Balcony
                 LocationNames.blackknight_token_o001: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1) or (state.has(ItemNames.Attic_Key, player, 3) and state.has(ItemNames.Knight_Key, player, 4) or state.has(ItemNames.Attic_KeyRing, player, 1) and state.has(ItemNames.Knight_KeyRing, player, 1)),
@@ -547,6 +547,10 @@ snack_rules = [
             LocationNames.e008_SNACK__3322: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and (state.has(ItemNames.GumPower, player, 1) or state.has(ItemNames.SoapPower, player, 1)),
             LocationNames.e008_SNACKBOX__2: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and (state.has(ItemNames.GumPower, player, 1) or state.has(ItemNames.SoapPower, player, 1)),
 
+            LocationNames.e009_SNACK__120: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.e009_SNACK__121: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.e009_SNACK__122: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.e009_SNACK__123: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
             LocationNames.e009_CRATE__SNACKBOX__1: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.e009_CRATE__SNACKBOX__2: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.e009_CRATE__SNACKBOX__3: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
@@ -924,6 +928,7 @@ snack_rules = [
             LocationNames.g003_SNACK__11: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.g003_SNACK__14: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.g003_SNACK__15: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
+            LocationNames.g003_SNACK__16: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2),
             LocationNames.g003_SNACK__050: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.g003_SNACK__060: lambda player:  lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.g003_SNACK__070: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
@@ -937,6 +942,7 @@ snack_rules = [
             LocationNames.g003_SNACK__112: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.g003_SNACK__113: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.g003_SNACK__160: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
+            LocationNames.g003_SNACK__174: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2),
             LocationNames.g003_SNACK__1130: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.g003_SNACK__1131: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
 
@@ -1696,15 +1702,15 @@ snack_rules = [
             LocationNames.r020_SN21: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1),
             LocationNames.r020_SN97: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1),
             LocationNames.r020_SN98: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1),
-            LocationNames.r020_SN84: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
-            LocationNames.r020_SN85: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
-            LocationNames.r020_SN86: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
-            LocationNames.r020_SN87: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
-            LocationNames.r020_SN88: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
-            LocationNames.r020_SN89: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
-            LocationNames.r020_SN90: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
-            LocationNames.r020_SN26: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
-            LocationNames.r020_SN27: lambda player: lambda state: state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1),
+            LocationNames.r020_SN84: lambda player: lambda state: (state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1)) or state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.r020_SN85: lambda player: lambda state: (state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1)) or state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.r020_SN86: lambda player: lambda state: (state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1)) or state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.r020_SN87: lambda player: lambda state: (state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1)) or state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.r020_SN88: lambda player: lambda state: (state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1)) or state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.r020_SN89: lambda player: lambda state: (state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1)) or state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.r020_SN90: lambda player: lambda state: (state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1)) or state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.r020_SN26: lambda player: lambda state: (state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1)) or state.has(ItemNames.ProgressiveJump, player, 1),
+            LocationNames.r020_SN27: lambda player: lambda state: (state.has(ItemNames.PlungerPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1)) or state.has(ItemNames.ProgressiveJump, player, 1),
 
             LocationNames.r021_CRATE__2__PRIZE: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.can_reach(ConnectionNames.r021_r003, "Entrance", player) and state.has(ItemNames.PoundPower, player, 1),
             LocationNames.r021_CRATE__3__PRIZE: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.can_reach(ConnectionNames.r021_r003, "Entrance", player) and state.has(ItemNames.PoundPower, player, 1),
@@ -1814,6 +1820,17 @@ snack_rules = [
             LocationNames.r003_CRATE__2__PRIZE: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
             LocationNames.r003_CRATE__3__PRIZE: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
             LocationNames.r003_SNACKBOX__1: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
+
+            LocationNames.r004_SN95: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
+            LocationNames.r004_SN96: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
+            LocationNames.r004_SN97: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
+            LocationNames.r004_SN98: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
+            LocationNames.r004_SN105: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
+            LocationNames.r004_SN101: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
+            LocationNames.r004_SN102: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
+            LocationNames.r004_SN103: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
+            LocationNames.r004_SN104: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
+            LocationNames.r004_SNACKBOX__2: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1),
 
             LocationNames.r005_SS13: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.r005_SS14: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
@@ -2130,7 +2147,8 @@ snack_rules = [
             LocationNames.s003_SNACK13: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1),
             LocationNames.s003_SNACK15: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1),
             LocationNames.s003_SNACK17: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1),
-            LocationNames.s003_SNACKBOX: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1),
+            LocationNames.s003_SNACKBOX: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1) and
+                                                                              (state.has(ItemNames.GumPower, player, 1) or state.has(ItemNames.SoapPower, player, 1)) ,
 
         },
 
@@ -2158,51 +2176,51 @@ snack_rules = [
             LocationNames.i003_EX__CLUE__SNACKBOX1: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and (state.has(ItemNames.Clamor4_Key, player, 1) or state.has(ItemNames.Clamor4_KeyRing, player, 1)),
             LocationNames.i003_EX__CLUE__SNACKBOX5: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1) and (state.has(ItemNames.Clamor4_Key, player, 1) or state.has(ItemNames.Clamor4_KeyRing, player, 1)),
 
-            LocationNames.i005_BOX__OVER__WITCH: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN13: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN17: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN18: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN25: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN26: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN27: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN30: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN4: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN45: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN46: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN47: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN48: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and (state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1)),
-            LocationNames.i005_SN480: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN5: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN50: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN51: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN53: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN54: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN55: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN6: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN60: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN63: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN64: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN68: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN680: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN6800: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN75: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN76: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN77: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN8: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN80: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN81: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN82: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN83: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN84: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN85: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN86: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN87: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN89: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN9: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN90: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN91: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SN92: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
-            LocationNames.i005_SNACKBOX2: lambda player: lambda state: state.has(ItemNames.MYM_Key, player, 4) or state.has(ItemNames.MYM_KeyRing, player, 1),
+            LocationNames.i005_BOX__OVER__WITCH: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN13: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN17: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN18: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN25: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN26: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN27: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN30: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN4: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN45: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN46: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN47: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN48: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN480: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN5: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN50: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN51: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN53: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN54: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN55: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN6: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN60: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN63: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN64: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN68: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN680: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN6800: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN75: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN76: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN77: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN8: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN80: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN81: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN82: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN83: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN84: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN85: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN86: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN87: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN89: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN9: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN90: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN91: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SN92: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
+            LocationNames.i005_SNACKBOX2: lambda player: lambda state: state.can_reach(RegionNames.i006, "Region", player),
 
             # Rooftops
 
@@ -2291,10 +2309,6 @@ warpgate_rules = [
             },
         ItemNames.MonsterTokens:
             {
-                LocationNames.geronimo_token_i005: lambda player: lambda state: state.has(ItemNames.Manor6_Warp, player, 1) or (state.has(ItemNames.HelmetPower, player, 1)
-                                                                                 and (state.has(ItemNames.Roof3_Warp, player, 1) or state.has(ItemNames.Balc1_Warp, player, 1)
-                                                                                 or state.has(ItemNames.Balc4_Warp, player, 1) or state.has(ItemNames.Balc6_Warp, player, 1))),
-
                 # Balcony
                 LocationNames.blackknight_token_o001: lambda player: lambda state: state.has(ItemNames.Balc1_Warp, player, 1) and (state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1))
             },
@@ -2507,6 +2521,9 @@ def set_rules(multiworld: MultiWorld, options: NO100FOptions, player: int):
             add_rule(multiworld.get_location(LocationNames.i003_EX__CLUE__SNACKBOX1, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 1))
             add_rule(multiworld.get_location(LocationNames.i003_EX__CLUE__SNACKBOX5, player), lambda state: state.has(ItemNames.HelmetPower, player, 1))
             add_rule(multiworld.get_location(LocationNames.i005_SN480, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 1))
+            add_rule(multiworld.get_location(LocationNames.i005_SN48, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 1))
+            add_rule(multiworld.get_location(LocationNames.i005_BOX__OVER__WITCH, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 1))
+            add_rule(multiworld.get_location(LocationNames.i005_SN68, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 1))
 
             add_rule(multiworld.get_location(LocationNames.p002_SNACK12, player), lambda state: state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1))
             add_rule(multiworld.get_location(LocationNames.p002_SNACK120, player), lambda state: state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.HelmetPower, player, 1))

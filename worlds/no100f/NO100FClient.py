@@ -7625,7 +7625,7 @@ SNACK_PICKUP_IDS = {
     (base_id + 400 + 5094): (b'W025', Snacks.SS106.value),
     (base_id + 400 + 5095): (b'W025', Snacks.SS107.value),
     (base_id + 400 + 5096): (b'W025', Snacks.SS110.value),
-    (base_id + 400 + 5097): (b'W025', Snacks.SS111.value),
+    # (base_id + 400 + 5097): (b'W025', Snacks.SS111.value), This is unfortunately also a Sandwich
     (base_id + 400 + 5098): (b'W025', Snacks.SS112.value),
     (base_id + 400 + 5099): (b'W025', Snacks.SS113.value),
     (base_id + 400 + 5100): (b'W025', Snacks.SS114.value),
