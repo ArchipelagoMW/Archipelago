@@ -1,5 +1,5 @@
 # isort: off
-from kivy.input import MotionEvent
+from kivy.clock import Clock
 
 from kvui import GameManager, MDNavigationItemBase
 # isort: on
@@ -7,7 +7,6 @@ from kvui import GameManager, MDNavigationItemBase
 from typing import TYPE_CHECKING
 
 from CommonClient import logger
-from kivy.core.window import Keyboard, Window
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.layout import Layout
@@ -15,7 +14,7 @@ from kivymd.uix.recycleview import MDRecycleView
 
 from ..apquest.game import Game
 from ..apquest.graphics import Graphic
-from ..apquest.inputs import Input
+from .custom_views import APQuestGameView, APQuestGrid, ConfettiView
 from .graphics import IMAGE_GRAPHICS, PLAYER_GRAPHICS, TEXTURES, PlayerSprite
 from .sounds import SoundManager
 
@@ -37,12 +36,19 @@ class APQuestManager(GameManager):
 
     bottom_image_grid: list[list[Image]]
     top_image_grid: list[list[Image]]
+    confetti_view: ConfettiView
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.sound_manager = SoundManager()
         self.top_image_grid = []
         self.bottom_image_grid = []
+
+    def add_confetti(self, position: tuple[float, float], amount: int):
+        self.confetti_view.add_confetti(position, amount)
+
+    def redraw_confetti(self):
+        self.confetti_view.redraw_confetti()
 
     def play_jingle(self, audio_filename: str) -> None:
         self.sound_manager.play_jingle(audio_filename)
@@ -134,71 +140,22 @@ class APQuestManager(GameManager):
     def build(self) -> Layout:
         container = super().build()
 
-        input_and_rerender = self.ctx.input_and_rerender
-
-        class APQuestGameView(MDRecycleView):
-            _keyboard: Keyboard | None = None
-
-            def __init__(self, **kwargs) -> None:
-                super().__init__(**kwargs)
-                self.bind_keyboard()
-
-            def on_touch_down(self, touch: MotionEvent) -> None:
-                self.bind_keyboard()
-
-            def bind_keyboard(self) -> None:
-                if self._keyboard is not None:
-                    return
-                self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
-                self._keyboard.bind(on_key_down=self._on_keyboard_down)
-
-            def _keyboard_closed(self) -> None:
-                if self._keyboard is None:
-                    return
-                self._keyboard.unbind(on_key_down=self._on_keyboard_down)
-                self._keyboard = None
-
-            def _on_keyboard_down(self, _, keycode, _1, _2) -> bool:
-                if keycode[1] == "up":
-                    input_and_rerender(Input.UP)
-                elif keycode[1] == "down":
-                    input_and_rerender(Input.DOWN)
-                elif keycode[1] == "left":
-                    input_and_rerender(Input.LEFT)
-                elif keycode[1] == "right":
-                    input_and_rerender(Input.RIGHT)
-                elif keycode[1] == "spacebar":
-                    input_and_rerender(Input.ACTION)
-                elif keycode[1] == "c":
-                    input_and_rerender(Input.CONFETTI)
-                return True
-
-        class APQuestGrid(GridLayout):
-            def __init__(self, **kwargs) -> None:
-                super().__init__(**kwargs)
-
-            def check_resize(self, _: int, _1: int) -> None:
-                parent_width, parent_height = self.parent.size
-
-                self_width_according_to_parent_height = parent_height * 12 / 11
-                self_height_according_to_parent_width = parent_height * 11 / 12
-
-                if self_width_according_to_parent_height > parent_width:
-                    self.size = parent_width, self_height_according_to_parent_width
-                else:
-                    self.size = self_width_according_to_parent_height, parent_height
-
-        self.game_view = APQuestGameView()
+        self.game_view = APQuestGameView(self.ctx.input_and_rerender)
 
         self.game_view_tab = self.add_client_tab("APQuest", self.game_view)
 
         game_container = self.game_view.ids["game_container"]
         self.lower_game_grid = APQuestGrid()
         self.upper_game_grid = APQuestGrid()
+        self.confetti_view = ConfettiView()
         game_container.add_widget(self.lower_game_grid)
         game_container.add_widget(self.upper_game_grid)
+        game_container.add_widget(self.confetti_view)
 
         game_container.bind(size=self.lower_game_grid.check_resize)
         game_container.bind(size=self.upper_game_grid.check_resize)
+        game_container.bind(size=self.confetti_view.check_resize)
+
+        Clock.schedule_interval(lambda dt: self.confetti_view.redraw_confetti(dt), 1 / 60)
 
         return container

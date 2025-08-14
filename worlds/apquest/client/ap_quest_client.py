@@ -17,7 +17,7 @@ from NetUtils import ClientStatus, NetworkItem
 from worlds.apquest.apquest.items import Item
 from worlds.apquest.client.game_manager import APQuestManager
 
-from ..apquest.events import LocationClearedEvent, VictoryEvent
+from ..apquest.events import ConfettiFired, LocationClearedEvent, VictoryEvent
 from ..apquest.game import Game, Input
 from ..apquest.locations import LOCATION_NAME_TO_ID, Location
 from .graphics import PlayerSprite
@@ -182,6 +182,14 @@ class APQuestContext(CommonContext):
 
             if isinstance(event, VictoryEvent):
                 self.play_jingle(VICTORY_JINGLE)
+
+            if isinstance(event, ConfettiFired):
+                gameboard_x, gameboard_y = self.ap_quest_game.gameboard.size
+                gameboard_x += 1  # vertical item column
+                x = (event.x + 0.5) / gameboard_x
+                y = 1 - (event.y + 0.5) / gameboard_y  # Kivy's y is bottom to top (ew)
+
+                self.ui.add_confetti((x, y), (self.slot_data["confetti_explosiveness"] + 1) * 5)
 
     def input_and_rerender(self, input_key: Input) -> None:
         if self.ap_quest_game is None:
