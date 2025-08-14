@@ -51,7 +51,7 @@ class ProgressiveGadget(Toggle):#DefaultOnToggle
 
 class Supadow(Toggle):
     """Enables completing minigames through the Supadows in Mount Crumpit as checks. (9 locations) [NOT IMPLEMENTED]"""
-    display_name = "Supadow Minigame Locations"#
+    display_name = "Supadow Minigame Locations"
 
 
 class Gifts(Toggle):
@@ -64,8 +64,8 @@ class Movesanity(Toggle):
     display_name = "Movesanity"
 
 
-class UnlimitedRottenEggs(Toggle):
-    """Determine whether or not you run out of rotten eggs when you utilize your gadgets. [NOT IMPLEMENTED]"""
+class UnlimitedEggs(Toggle):
+    """Determine whether or not you run out of rotten eggs when you utilize your gadgets."""
     display_name = "Unlimited Rotten Eggs"
 
 class RingLinkOption(Toggle):
@@ -78,7 +78,7 @@ class TrapLinkOption(Toggle):
 class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     progressive_vacuum: ProgressiveVacuum
     missionsanity: Missionsanity
-    unlimited_rotten_eggs: UnlimitedRottenEggs
+    unlimited_eggs: UnlimitedEggs
     ring_link: RingLinkOption
     trap_link: TrapLinkOption
     minigamesanity: Supadow
