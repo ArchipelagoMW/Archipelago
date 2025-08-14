@@ -37,6 +37,10 @@ local CURRENT_HUB = nil;
 local WORLD_ID = 99;
 local WORLD_NAME = "";
 
+-------------- GARIB LOGIC -----------
+
+local GARIB_GROUPS = false
+
 -------------- TOTALS VARS -----------
 local TOTAL_LIVES = 0;
 local TOTAL_SINGLE_GARIBS = 0;
@@ -716,6 +720,257 @@ local ADDRESS_MAP = {
 	}
 }
 
+local GARIB_GROUPS_MAP = {
+    ["AP_ATLANTIS_L1"] = {
+		["Platform A Garibs"] = {
+			["id"] = 0x271F,
+			["garibs"] = {
+				0x0F,
+				0x10,
+				0x11,
+				0x12
+			}
+		},
+		["Platform B Garibs"] = {
+			["id"] = 0x2723,
+			["garibs"] = {
+				0x13,
+				0x14,
+				0x15,
+				0x16
+			}
+		},
+		["Platform C Garibs"] = {
+			["id"] = 0x272E,
+			["garibs"] = {
+				0x1E,
+				0x1F,
+				0x20,
+				0x21
+			}
+		},
+		["Platform D Garibs"] = {
+			["id"] = 0x2732,
+			["garibs"] = {
+				0x22,
+				0x23,
+				0x24,
+				0x25
+			}
+		},
+		["Platform E Garibs"] = {
+			["id"] = 0x2736,
+			["garibs"] = {
+				0x26,
+				0x27,
+				0x28,
+				0x29
+			}
+		},
+		["Pillar Garibs"] = {
+			["id"] = 0x272B,
+			["garibs"] = {
+				0x1B,
+				0x1C,
+				0x1D
+			}
+		},
+		["Pool Edge Garibs"] = {
+			["id"] = 0x271A,
+			["garibs"] = {
+				0x0A,
+				0x0B,
+				0x0C,
+				0x0D,
+				0x0E
+			}
+		},
+		["Bull Garibs"] = {
+			["id"] = 0x2742,
+			["garibs"] = {
+				0x32
+			}
+		},
+		["Block Garibs"] = {
+			["id"] = 0x2729,
+			["garibs"] = {
+				0x19,
+				0x1A
+			}
+		},
+		["Arch Garibs"] = {
+			["id"] = 0x273C,
+			["garibs"] = {
+				0x2C,
+				0x2D,
+				0x2E,
+				0x2F,
+				0x30,
+				0x31
+			}
+		},
+		["Shark Garibs"] = {
+			["id"] = 0x2711,
+			["garibs"] = {
+				0x01,
+				0x02,
+				0x03,
+				0x04,
+				0x05,
+				0x06,
+				0x07,
+				0x08,
+				0x09
+			}
+		},
+		["Edge Garibs"] = {
+			["id"] = 0x273A,
+			["garibs"] = {
+				0x2A,
+				0x2B
+			}
+		},
+		["Checkers Garibs"] = {
+			["id"] = 0x2727,
+			["garibs"] = {
+				0x17,
+				0x18
+			}
+		}
+	},
+    ["AP_ATLANTIS_L2"] = {
+		["Clifftop Garibs"] = {
+			["id"] = 0x277E,
+			["garibs"] = {
+				0x6E,
+				0x6F,
+				0x70,
+				0x71,
+				0x72,
+				0x73,
+				0x74
+			}
+		},
+		["Arch Garibs"] = {
+			["id"] = 0x2777,
+			["garibs"] = {
+				0x67,
+				0x68,
+				0x69,
+				0x6A,
+				0x6B
+			}
+		},
+		["Roof Garibs"] = {
+			["id"] = 0x2764,
+			["garibs"] = {
+				0x54,
+				0x55,
+				0x56,
+				0x57,
+				0x58
+			}
+		},
+		["Under Roof Garibs"] = {
+			["id"] = 0x275F,
+			["garibs"] = {
+				0x4F,
+				0x50,
+				0x51,
+				0x52,
+				0x53
+			}
+		},
+		["Mesa Garibs"] = {
+			["id"] = 0x2769,
+			["garibs"] = {
+				0x59,
+				0x5A,
+				0x5B
+			}
+		},
+		["Pool Edge Garibs"] = {
+			["id"] = 0x2751,
+			["garibs"] = {
+				0x41,
+				0x42,
+				0x43,
+				0x44
+			}
+		},
+		["Mesa Jar"] = {
+			["id"] = 0x276C,
+			["garibs"] = {
+				0x5C
+			}
+		},
+		["Shark Jars"] = {
+			["id"] = 0x274F,
+			["garibs"] = {
+				0x3F,
+				0x40
+			}
+		},
+		["Bridge A Garibs"] = {
+			["id"] = 0x276D,
+			["garibs"] = {
+				0x5D,
+				0x5E,
+				0x5F,
+				0x60,
+				0x61
+			}
+		},
+		["Bridge B Garibs"] = {
+			["id"] = 0x2772,
+			["garibs"] = {
+				0x62,
+				0x63,
+				0x64,
+				0x65,
+				0x66
+			}
+		},
+		["Wind-Up Garibs"] = {
+			["id"] = 0x2785,
+			["garibs"] = {
+				0x75,
+				0x76,
+				0x77
+			}
+		},
+		["Bull Garibs"] = {
+			["id"] = 0x2788,
+			["garibs"] = {
+				0x78,
+				0x79,
+				0x7A
+			}
+		},
+		["Vault Garibs"] = {
+			["id"] = 0x2755,
+			["garibs"] = {
+				0x45,
+				0x46,
+				0x47,
+				0x48,
+				0x49,
+				0x4A,
+				0x4B,
+				0x4C,
+				0x4D,
+				0x4E
+			}
+		},
+		["Waterfall Garibs"] = {
+			["id"] = 0x277C,
+			["garibs"] = {
+				0x6C,
+				0x6D
+			}
+		}
+	},
+}
 
 local MESSAGE_TABLE = {}
 
@@ -1141,6 +1396,10 @@ function garib_check()
                     checks[loc_id] = GVR:checkLocationFlag(WORLD_ID, "garib", locationTable['offset'], locationTable['id'])
                     -- print(loc_id..":"..tostring(checks[loc_id]))
                 end
+                if GARIB_GROUPS == true
+                then
+                    
+                end
             end
         end
     return checks
@@ -1165,6 +1424,10 @@ function enemy_garib_check()
             end
         end
     return checks
+end
+
+function garib_group_contruction()
+    
 end
 
 function life_check()
@@ -1983,6 +2246,10 @@ function process_slot(block)
     if block['slot_garib_logic'] ~= nil
     then
         GVR:setGaribLogic(block['slot_garib_logic'])
+        if block['slot_garib_logic'] == 1
+        then
+            GARIB_GROUPS = true
+        end
     end
     if block['slot_garib_sorting'] ~= nil
     then
