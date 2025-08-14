@@ -7,7 +7,6 @@ from .entities import (
     ButtonDoor,
     Chest,
     Empty,
-    Enemy,
     EnemyWithLoot,
     Entity,
     FinalBoss,
@@ -66,9 +65,9 @@ class Gameboard:
         for row in self.gameboard:
             yield from row
 
-    def respawn_enemies(self) -> None:
+    def respawn_final_boss(self) -> None:
         for entity in self.iterate_entities():
-            if isinstance(entity, Enemy):
+            if isinstance(entity, FinalBoss):
                 entity.respawn()
 
     def render(self, player: "Player") -> tuple[tuple[Graphic, ...], ...]:

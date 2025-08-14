@@ -151,7 +151,7 @@ class SoundManager:
         if self.background_music.volume == 0:
             if self.background_music.state == "play":
                 self.background_music_last_position = self.background_music.get_pos()
-                if self.background_music_last_position != 0:  # SDL2 get_pos doesn't work, we just let it continue playing silently
+                if self.background_music_last_position != 0:  # SDL2 get_pos doesn't work, just continue playing muted
                     self.background_music.stop()
         else:
             if self.background_music.state == "stop":
