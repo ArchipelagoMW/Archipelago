@@ -10,12 +10,13 @@ from typing import Any
 import colorama
 from CommonClient import CommonContext, get_base_parser, gui_enabled, handle_url_arg, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
+from worlds.apquest.apquest.items import Item
 
 from worlds.apquest.client.game_manager import APQuestManager
 
 from ..apquest.events import LocationClearedEvent, VictoryEvent
 from ..apquest.game import Game, Input
-from ..apquest.locations import LOCATION_NAME_TO_ID
+from ..apquest.locations import LOCATION_NAME_TO_ID, Location
 from .graphics import PlayerSprite
 from .item_quality import get_quality_for_network_item
 from .sounds import ITEM_JINGLES, VICTORY_JINGLE
@@ -133,7 +134,13 @@ class APQuestContext(CommonContext):
         if cmd == "LocationInfo":
             self.location_to_item.update({network_item.location: network_item for network_item in args["locations"]})
 
-            self.ap_quest_game.gameboard.fill_remote_location_content()
+            remote_item_graphic_overrides = {
+                Location(location): Item(network_item.item)
+                for location, network_item in self.location_to_item.items()
+                if self.slot_info[network_item.player].game == self.game
+            }
+
+            self.ap_quest_game.gameboard.fill_remote_location_content(remote_item_graphic_overrides)
             self.render()
             self.ui.game_view.bind_keyboard()
 

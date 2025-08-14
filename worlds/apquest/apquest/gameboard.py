@@ -45,10 +45,10 @@ class Gameboard:
                     entity.content = DEFAULT_CONTENT[entity.location]
         self.content_filled = True
 
-    def fill_remote_location_content(self) -> None:
+    def fill_remote_location_content(self, graphic_overrides: dict[Location, Item]) -> None:
         for entity in self.iterate_entities():
             if isinstance(entity, LocationMixin):
-                entity.content = Item.REMOTE_ITEM
+                entity.content = graphic_overrides.get(entity.location, Item.REMOTE_ITEM)
                 entity.remote = True
                 self.remote_entity_by_location_id[entity.location] = entity
 
