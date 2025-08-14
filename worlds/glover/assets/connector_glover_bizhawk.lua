@@ -723,253 +723,253 @@ local ADDRESS_MAP = {
 local GARIB_GROUPS_MAP = {
     ["AP_ATLANTIS_L1"] = {
 		["Platform A Garibs"] = {
-			["id"] = 0x271F,
+			["id"] = "10015",
 			["garibs"] = {
-				0x0F,
-				0x10,
-				0x11,
-				0x12
+				"15",
+				"16",
+				"17",
+				"18"
 			}
 		},
 		["Platform B Garibs"] = {
-			["id"] = 0x2723,
+			["id"] = "10019",
 			["garibs"] = {
-				0x13,
-				0x14,
-				0x15,
-				0x16
+				"19",
+				"20",
+				"21",
+				"22"
 			}
 		},
 		["Platform C Garibs"] = {
-			["id"] = 0x272E,
+			["id"] = "10030",
 			["garibs"] = {
-				0x1E,
-				0x1F,
-				0x20,
-				0x21
+				"30",
+				"31",
+				"32",
+				"33"
 			}
 		},
 		["Platform D Garibs"] = {
-			["id"] = 0x2732,
+			["id"] = "10034",
 			["garibs"] = {
-				0x22,
-				0x23,
-				0x24,
-				0x25
+				"34",
+				"35",
+				"36",
+				"37"
 			}
 		},
 		["Platform E Garibs"] = {
-			["id"] = 0x2736,
+			["id"] = "10038",
 			["garibs"] = {
-				0x26,
-				0x27,
-				0x28,
-				0x29
+				"38",
+				"39",
+				"40",
+				"41"
 			}
 		},
 		["Pillar Garibs"] = {
-			["id"] = 0x272B,
+			["id"] = "10027",
 			["garibs"] = {
-				0x1B,
-				0x1C,
-				0x1D
+				"27",
+				"28",
+				"29"
 			}
 		},
 		["Pool Edge Garibs"] = {
-			["id"] = 0x271A,
+			["id"] = "10010",
 			["garibs"] = {
-				0x0A,
-				0x0B,
-				0x0C,
-				0x0D,
-				0x0E
+				"10",
+				"11",
+				"12",
+				"13",
+				"14"
 			}
 		},
 		["Bull Garibs"] = {
-			["id"] = 0x2742,
+			["id"] = "10050",
 			["garibs"] = {
-				0x32
+				"50"
 			}
 		},
 		["Block Garibs"] = {
-			["id"] = 0x2729,
+			["id"] = "10025",
 			["garibs"] = {
-				0x19,
-				0x1A
+				"25",
+				"26"
 			}
 		},
 		["Arch Garibs"] = {
-			["id"] = 0x273C,
+			["id"] = "10044",
 			["garibs"] = {
-				0x2C,
-				0x2D,
-				0x2E,
-				0x2F,
-				0x30,
-				0x31
+				"44",
+				"45",
+				"46",
+				"47",
+				"48",
+				"49"
 			}
 		},
 		["Shark Garibs"] = {
-			["id"] = 0x2711,
+			["id"] = "10001",
 			["garibs"] = {
-				0x01,
-				0x02,
-				0x03,
-				0x04,
-				0x05,
-				0x06,
-				0x07,
-				0x08,
-				0x09
+				"1",
+				"2",
+				"3",
+				"4",
+				"5",
+				"6",
+				"7",
+				"8",
+				"9"
 			}
 		},
 		["Edge Garibs"] = {
-			["id"] = 0x273A,
+			["id"] = "10042",
 			["garibs"] = {
-				0x2A,
-				0x2B
+				"42",
+				"43"
 			}
 		},
 		["Checkers Garibs"] = {
-			["id"] = 0x2727,
+			["id"] = "10023",
 			["garibs"] = {
-				0x17,
-				0x18
+				"23",
+				"24"
 			}
 		}
 	},
     ["AP_ATLANTIS_L2"] = {
 		["Clifftop Garibs"] = {
-			["id"] = 0x277E,
+			["id"] = "10110",
 			["garibs"] = {
-				0x6E,
-				0x6F,
-				0x70,
-				0x71,
-				0x72,
-				0x73,
-				0x74
+				"110",
+				"111",
+				"112",
+				"113",
+				"114",
+				"115",
+				"116"
 			}
 		},
 		["Arch Garibs"] = {
-			["id"] = 0x2777,
+			["id"] = "10103",
 			["garibs"] = {
-				0x67,
-				0x68,
-				0x69,
-				0x6A,
-				0x6B
+				"103",
+				"104",
+				"105",
+				"106",
+				"107"
 			}
 		},
 		["Roof Garibs"] = {
-			["id"] = 0x2764,
+			["id"] = "10084",
 			["garibs"] = {
-				0x54,
-				0x55,
-				0x56,
-				0x57,
-				0x58
+				"84",
+				"85",
+				"86",
+				"87",
+				"88"
 			}
 		},
 		["Under Roof Garibs"] = {
-			["id"] = 0x275F,
+			["id"] = "10079",
 			["garibs"] = {
-				0x4F,
-				0x50,
-				0x51,
-				0x52,
-				0x53
+				"79",
+				"80",
+				"81",
+				"82",
+				"83"
 			}
 		},
 		["Mesa Garibs"] = {
-			["id"] = 0x2769,
+			["id"] = "10089",
 			["garibs"] = {
-				0x59,
-				0x5A,
-				0x5B
+				"89",
+				"90",
+				"91"
 			}
 		},
 		["Pool Edge Garibs"] = {
-			["id"] = 0x2751,
+			["id"] = "10065",
 			["garibs"] = {
-				0x41,
-				0x42,
-				0x43,
-				0x44
+				"65",
+				"66",
+				"67",
+				"68"
 			}
 		},
 		["Mesa Jar"] = {
-			["id"] = 0x276C,
+			["id"] = "10092",
 			["garibs"] = {
-				0x5C
+				"92"
 			}
 		},
 		["Shark Jars"] = {
-			["id"] = 0x274F,
+			["id"] = "10063",
 			["garibs"] = {
-				0x3F,
-				0x40
+				"63",
+				"64"
 			}
 		},
 		["Bridge A Garibs"] = {
-			["id"] = 0x276D,
+			["id"] = "10093",
 			["garibs"] = {
-				0x5D,
-				0x5E,
-				0x5F,
-				0x60,
-				0x61
+				"93",
+				"94",
+				"95",
+				"96",
+				"97"
 			}
 		},
 		["Bridge B Garibs"] = {
-			["id"] = 0x2772,
+			["id"] = "10098",
 			["garibs"] = {
-				0x62,
-				0x63,
-				0x64,
-				0x65,
-				0x66
+				"98",
+				"99",
+				"100",
+				"101",
+				"102"
 			}
 		},
 		["Wind-Up Garibs"] = {
-			["id"] = 0x2785,
+			["id"] = "10117",
 			["garibs"] = {
-				0x75,
-				0x76,
-				0x77
+				"117",
+				"118",
+				"119"
 			}
 		},
 		["Bull Garibs"] = {
-			["id"] = 0x2788,
+			["id"] = "10120",
 			["garibs"] = {
-				0x78,
-				0x79,
-				0x7A
+				"120",
+				"121",
+				"122"
 			}
 		},
 		["Vault Garibs"] = {
-			["id"] = 0x2755,
+			["id"] = "10069",
 			["garibs"] = {
-				0x45,
-				0x46,
-				0x47,
-				0x48,
-				0x49,
-				0x4A,
-				0x4B,
-				0x4C,
-				0x4D,
-				0x4E
+				"69",
+				"70",
+				"71",
+				"72",
+				"73",
+				"74",
+				"75",
+				"76",
+				"77",
+				"78"
 			}
 		},
 		["Waterfall Garibs"] = {
-			["id"] = 0x277C,
+			["id"] = "10108",
 			["garibs"] = {
-				0x6C,
-				0x6D
+				"108",
+				"109"
 			}
 		}
-	},
+	}
 }
 
 local MESSAGE_TABLE = {}
@@ -1396,10 +1396,6 @@ function garib_check()
                     checks[loc_id] = GVR:checkLocationFlag(WORLD_ID, "garib", locationTable['offset'], locationTable['id'])
                     -- print(loc_id..":"..tostring(checks[loc_id]))
                 end
-                if GARIB_GROUPS == true
-                then
-                    
-                end
             end
         end
     return checks
@@ -1427,7 +1423,40 @@ function enemy_garib_check()
 end
 
 function garib_group_contruction()
-    
+    local checks = {}
+    if GARIB_GROUPS == true and GARIB_GROUPS_MAP[WORLD_NAME] ~= nil
+    then
+        for group_name,group_info in pairs(GARIB_GROUPS_MAP[WORLD_NAME])
+        do
+            local all_pass = true
+            for garib_id in GARIB_GROUPS_MAP[WORLD_NAME][group_name]["garibs"]
+            do
+                if ADDRESS_MAP[WORLD_NAME]["GARIBS"][garib_id] ~= nil
+                    then
+                    local offset = ADDRESS_MAP[WORLD_NAME]["GARIBS"][garib_id]["offset"]
+                    local num_id = ADDRESS_MAP[WORLD_NAME]["GARIBS"][garib_id]["id"]
+                    if GVR:checkLocationFlag(WORLD_ID, "garib", offset, num_id) == false
+                    then
+                        all_pass = false
+                    end
+                elseif ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"][garib_id] ~= nil
+                then
+                    local offset_list = {}
+                    for loc_id,locationTable in pairs(ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"])
+                    do
+                        offset_list[loc_id] = locationTable["offset"]
+                    end
+                    local object_id = ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"][garib_id]['object_id']
+                    if GVR:checkEnemyGaribLocationFlag(WORLD_ID, offset_list, object_id) == false
+                    then
+                        all_pass = false
+                    end
+                end
+            end
+            checks[group_info["id"]] = all_pass
+        end
+    end
+    return checks
 end
 
 function life_check()
@@ -2131,6 +2160,7 @@ function SendToClient()
     retTable["isDead"] = detect_death;
     retTable["isTag"] = detect_tag;
     retTable["garibs"] = garib_check()
+    retTable["garib_groups"] =  garib_group_contruction()
     retTable["life"] = life_check()
     retTable["tip"] = tip_check()
     retTable["checkpoint"] = checkpoint_check()

@@ -300,6 +300,7 @@ class GloverContext(CommonContext):
 
         self.garib_table = {}
         self.enemy_garib_table = {}
+        self.garib_group_table = {}
         self.life_table = {}
         self.tip_table = {}
         self.checkpoint_table = {}
@@ -587,6 +588,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     demo = payload["DEMO"]
     garibslist = payload["garibs"]
     enemygaribslist = payload["enemy_garibs"]
+    garibgrouplist = payload["garib_groups"]
     lifeslist = payload["life"]
     tipslist = payload["tip"]
     checkpointslist = payload["checkpoint"]
@@ -607,6 +609,8 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         garibslist = {}
     if isinstance(enemygaribslist, list):
         enemygaribslist = {}
+    if isinstance(garibgrouplist, list):
+        garibgrouplist = {}
     if isinstance(lifeslist, list):
         lifeslist = {}
     if isinstance(tipslist, list):
@@ -631,6 +635,11 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         if ctx.enemy_garib_table != enemygaribslist:
             ctx.enemy_garib_table = enemygaribslist
             for locationId, value in enemygaribslist.items():
+                if value == True:
+                    locs1.append(int(locationId))
+        if ctx.garib_group_table != garibgrouplist:
+            ctx.garib_group_table = garibgrouplist
+            for locationId, value in garibgrouplist.items():
                 if value == True:
                     locs1.append(int(locationId))
         if ctx.life_table != lifeslist:
