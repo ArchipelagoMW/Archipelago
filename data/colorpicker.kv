@@ -1,0 +1,105 @@
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+<ColorButton>:
+    theme_bg_color: "Custom"
+    md_bg_color: get_color_from_hex(app.text_colors[self.real_name])
+    theme_width: "Custom"
+    size_hint_x: 1
+    text: text
+
+    MDButtonText:
+        id: text
+        text: self.parent.color_usage
+        outline_width: 1.5
+
+ContainerLayout:
+    md_bg_color: app.theme_cls.backgroundColor
+    grid: grid
+    color_picker: color_picker
+    options: options
+    presets: presets
+    buttons: buttons
+    colors: colors
+    theme: theme
+    style: style
+    palette: palette
+    scheme: scheme
+    contrast: contrast
+
+    MainLayout:
+        id: grid
+        cols: 1
+        spacing: 20
+        padding: 20
+
+        ColorPicker:
+            id: color_picker
+
+        MDBoxLayout:
+            id: options
+            size_hint_y: None
+            height: "40dp"
+            orientation: "horizontal"
+
+            MDButton:
+                on_release: app.restore_defaults()
+                MDButtonText:
+                    text: "Restore Defaults"
+
+            MDButton:
+                on_release: app.restore_current()
+                MDButtonText:
+                    text: "Restore Current"
+
+            MDButton:
+                id: presets
+                text: presets_txt
+                MDButtonText:
+                    id: presets_txt
+                    text: "Preset Loaded: None"
+
+
+        MainLayout:
+            id: buttons
+            cols: 2
+
+            MainLayout:
+                id: colors
+                cols: 3
+                spacing: 5
+                padding: (5, 10)
+
+
+            MainLayout:
+                id: theme
+                cols: 1
+                spacing: 5
+                padding: (5, 10)
+                size_hint_x: 0.5
+
+                MDButton:
+                    id: style
+
+                    MDButtonText:
+                        text: f"Theme Style: {app.theme_cls.theme_style.title()}"
+
+                MDButton:
+                    id: palette
+
+                    MDButtonText:
+                        text: f"Theme Style: {app.theme_cls.primary_palette.title()}"
+
+                MDButton:
+                    id: scheme
+
+                    MDButtonText:
+                        text: f"Dynamic Scheme: {app.theme_cls.dynamic_scheme_name.title()}"
+
+                MDTextField:
+                    id: contrast
+                    required: True
+                    text: "0.0"
+                    input_filter: "float"
+                    multiline: False
+
+                    MDTextFieldHintText:
+                        text: "Dynamic Scheme Contrast"
