@@ -285,8 +285,6 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                     self.compact = persistent["launcher"]["compact"]
             super().__init__()
 
-            components.sort(key=lambda x: x.display_name)
-
         def set_favorite(self, caller):
             if caller.component.display_name in self.favorites:
                 self.favorites.remove(caller.component.display_name)
