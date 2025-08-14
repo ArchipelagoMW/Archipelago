@@ -5,7 +5,7 @@ from .Regions import connect_regions
 from .Rules import set_rules
 
 from .Client import *
-from typing import ClassVar
+from typing import ClassVar, Mapping, Any
 
 from worlds.AutoWorld import World
 
@@ -68,3 +68,9 @@ class GrinchWorld(World):
 
     def get_other_filler_item(self, other_filler: list[str]) -> str:
         return self.random.choices(other_filler)[0]
+
+    def fill_slot_data(self):
+        return {
+            "give_unlimited_eggs": self.options.unlimited_eggs.value,
+
+        }
