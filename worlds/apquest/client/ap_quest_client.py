@@ -1,11 +1,13 @@
 # isort: off
+from argparse import Namespace
+
 from kvui import GameManager
 # isort: on
 
 import asyncio
 import sys
 from enum import Enum
-from typing import Any
+from typing import Any, Sequence
 
 import colorama
 from CommonClient import CommonContext, get_base_parser, gui_enabled, handle_url_arg, logger, server_loop
@@ -63,7 +65,7 @@ class APQuestContext(CommonContext):
         await self.get_username()
         await self.send_connect(game=self.game)
 
-    async def client_loop(self):
+    async def apquest_loop(self) -> None:
         while not self.exit_event.is_set():
             if self.connection_status != ConnectionStatus.GAME_RUNNING:
                 if self.connection_status == ConnectionStatus.SCOUTS_NOT_SENT:
@@ -140,6 +142,7 @@ class APQuestContext(CommonContext):
                 if self.slot_info[network_item.player].game == self.game
             }
 
+            assert self.ap_quest_game is not None
             self.ap_quest_game.gameboard.fill_remote_location_content(remote_item_graphic_overrides)
             self.render()
             self.ui.game_view.bind_keyboard()
@@ -154,10 +157,10 @@ class APQuestContext(CommonContext):
         self.connection_status = ConnectionStatus.NOT_CONNECTED
         await super().disconnect(*args, **kwargs)
 
-    def render(self):
+    def render(self) -> None:
         self.ui.render(self.ap_quest_game, self.player_sprite)
 
-    def location_checked_side_effects(self, location: int):
+    def location_checked_side_effects(self, location: int) -> None:
         network_item = self.location_to_item[location]
 
         item_quality = get_quality_for_network_item(network_item)
@@ -166,7 +169,10 @@ class APQuestContext(CommonContext):
     def play_jingle(self, audio_filename: str) -> None:
         self.ui.play_jingle(audio_filename)
 
-    def handle_game_events(self):
+    def handle_game_events(self) -> None:
+        if self.ap_quest_game is None:
+            return
+
         while self.ap_quest_game.queued_events:
             event = self.ap_quest_game.queued_events.pop(0)
 
@@ -189,7 +195,7 @@ class APQuestContext(CommonContext):
         self.load_kv()
         return APQuestManager
 
-    def load_kv(self):
+    def load_kv(self) -> None:
         import pkgutil
 
         from kivy.lang import Builder
@@ -198,7 +204,7 @@ class APQuestContext(CommonContext):
         Builder.load_string(data)
 
 
-async def main(args):
+async def main(args: Namespace) -> None:
     ctx = APQuestContext(args.connect, args.password)
     ctx.auth = args.name
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
@@ -209,25 +215,25 @@ async def main(args):
     ctx.run_gui()
     ctx.run_cli()
 
-    ctx.client_loop = asyncio.create_task(ctx.client_loop(), name="Client Loop")
+    ctx.client_loop = asyncio.create_task(ctx.apquest_loop(), name="Client Loop")
 
     await ctx.exit_event.wait()
     await ctx.shutdown()
 
 
-def launch_client(*args):
+def launch_client(*args: Sequence[str]) -> None:
     parser = get_base_parser()
     parser.add_argument("--name", default=None, help="Slot Name to connect as.")
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
 
-    args = handle_url_arg(parser.parse_args(args))
+    launch_args = handle_url_arg(parser.parse_args(args))
 
-    if args.nogui:
+    if launch_args.nogui:
         raise RuntimeError("APQuest cannot be played without gui.")
 
     colorama.just_fix_windows_console()
 
-    asyncio.run(main(args))
+    asyncio.run(main(launch_args))
     colorama.deinit()
 
 

@@ -6,7 +6,7 @@ from .items import ITEM_TO_GRAPHIC, Item
 from .locations import Location
 
 if TYPE_CHECKING:
-    from .game import Player
+    from .player import Player
 
 
 class Entity:
@@ -108,6 +108,8 @@ class Chest(Entity, InteractableMixin, LocationMixin):
         if self.has_given_content:
             return Graphic.EMPTY
         if self.is_open:
+            if self.content is None:
+                return Graphic.EMPTY
             return ITEM_TO_GRAPHIC[self.content]
         return Graphic.CHEST
 
@@ -217,7 +219,7 @@ class Enemy(Entity, InteractableMixin):
         self.solid = True
         self.heal_if_not_dead()
 
-    def heal_if_not_dead(self):
+    def heal_if_not_dead(self) -> None:
         if self.dead:
             return
         self.current_health = self.max_health
@@ -263,6 +265,8 @@ class EnemyWithLoot(Enemy, LocationMixin):
     @property
     def graphic(self) -> Graphic:
         if self.dead and not self.has_given_content:
+            if self.content is None:
+                return Graphic.EMPTY
             return ITEM_TO_GRAPHIC[self.content]
         return super().graphic
 

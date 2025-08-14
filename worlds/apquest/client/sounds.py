@@ -34,7 +34,7 @@ ALL_SOUNDS = [
 
 class SoundManager:
     sound_paths: dict[str, Path]
-    jingles: dict[int, Sound]
+    jingles: dict[str, Sound]
     background_music: Sound
 
     background_music_target_volume: float = 0
@@ -42,17 +42,17 @@ class SoundManager:
     background_music_task: Task | None = None
     background_music_last_position: int = 0
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.extract_sounds()
         self.populate_sounds()
 
-    async def fade_loop(self):
+    async def fade_loop(self) -> None:
         while True:
             self.update_background_music()
             self.do_fade()
             await asyncio.sleep(0.02)
 
-    def extract_sounds(self):
+    def extract_sounds(self) -> None:
         # Kivy appears to have no good way of loading audio from bytes.
         # So, we have to extract it out of the .apworld first
 
@@ -76,14 +76,14 @@ class SoundManager:
 
         self.sound_paths = sound_paths
 
-    def load_audio(self, sound_filename: str):
+    def load_audio(self, sound_filename: str) -> Sound:
         audio_path = self.sound_paths[sound_filename]
 
         sound_object = SoundLoader.load(str(audio_path.absolute()))
         sound_object.seek(0)
         return sound_object
 
-    def populate_sounds(self):
+    def populate_sounds(self) -> None:
         try:
             self.jingles = {sound_filename: self.load_audio(sound_filename) for sound_filename in ALL_JINGLES}
         except Exception as e:
@@ -96,7 +96,7 @@ class SoundManager:
         except Exception as e:
             logger.exception(e)
 
-    def play_jingle(self, audio_filename):
+    def play_jingle(self, audio_filename) -> None:
         higher_priority_sound_is_playing = False
 
         for sound_name, sound in self.jingles.items():
@@ -112,13 +112,13 @@ class SoundManager:
             elif sound.state == "play":
                 higher_priority_sound_is_playing = True
 
-    def update_background_music(self):
+    def update_background_music(self) -> None:
         if any(sound.state == "play" for sound in self.jingles.values()):
             self.play_background_music(False)
         else:
             self.fade_background_music(True)
 
-    def play_background_music(self, play: bool = True):
+    def play_background_music(self, play: bool = True) -> None:
         if play:
             self.background_music_target_volume = 1
             self.background_music.volume = 1
@@ -126,19 +126,19 @@ class SoundManager:
             self.background_music_target_volume = 0
             self.background_music.volume = 0
 
-    def start_background_music(self):
+    def start_background_music(self) -> None:
         if self.background_music_task is None:
             self.background_music_target_volume = 1
             self.background_music.volume = 1
             self.background_music_task = asyncio.create_task(self.fade_loop())
 
-    def fade_background_music(self, fade_in: bool = True):
+    def fade_background_music(self, fade_in: bool = True) -> None:
         if fade_in:
             self.background_music_target_volume = 1
         else:
             self.background_music_target_volume = 0
 
-    def do_fade(self):
+    def do_fade(self) -> None:
         if self.background_music.volume > self.background_music_target_volume:
             self.background_music.volume = max(0.0, self.background_music.volume - 0.02)
         if self.background_music.volume < self.background_music_target_volume:

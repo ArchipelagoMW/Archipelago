@@ -1,4 +1,6 @@
 # isort: off
+from kivy.input import MotionEvent
+
 from kvui import GameManager, MDNavigationItemBase
 # isort: on
 
@@ -11,7 +13,8 @@ from kivy.uix.image import Image
 from kivy.uix.layout import Layout
 from kivymd.uix.recycleview import MDRecycleView
 
-from ..apquest.game import Game, Input
+from ..apquest.game import Game
+from ..apquest.inputs import Input
 from ..apquest.graphics import Graphic
 from .graphics import IMAGE_GRAPHICS, PLAYER_GRAPHICS, TEXTURES, PlayerSprite
 from .sounds import SoundManager
@@ -35,31 +38,31 @@ class APQuestManager(GameManager):
     bottom_image_grid: list[list[Image]]
     top_image_grid: list[list[Image]]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.sound_manager = SoundManager()
         self.top_image_grid = []
         self.bottom_image_grid = []
 
-    def play_jingle(self, audio_filename: str):
+    def play_jingle(self, audio_filename: str) -> None:
         self.sound_manager.play_jingle(audio_filename)
 
-    def switch_to_game_tab(self):
+    def switch_to_game_tab(self) -> None:
         if self.screens.current_tab == self.game_view_tab:
             return
         self.screens.switch_screens(self.game_view_tab)
         self.screens.current_tab.active = False
         self.game_view_tab.active = True
 
-    def start_background_music(self):
+    def start_background_music(self) -> None:
         self.sound_manager.start_background_music()
 
-    def render(self, game: Game, player_sprite: PlayerSprite):
+    def render(self, game: Game, player_sprite: PlayerSprite) -> None:
         self.setup_game_grid_if_not_setup(game.gameboard.size)
         self.render_gameboard(game, player_sprite)
         self.render_item_column(game)
 
-    def render_gameboard(self, game: Game, player_sprite: PlayerSprite):
+    def render_gameboard(self, game: Game, player_sprite: PlayerSprite) -> None:
         rendered_gameboard = game.render()
 
         for gameboard_row, image_row in zip(rendered_gameboard, self.top_image_grid, strict=False):
@@ -80,7 +83,7 @@ class APQuestManager(GameManager):
                 image.texture.mag_filter = "nearest"
                 image.opacity = 1
 
-    def render_item_column(self, game: Game):
+    def render_item_column(self, game: Game) -> None:
         rendered_item_column = game.render_health_and_inventory(vertical=True)
         for item_graphic, image_row in zip(rendered_item_column, self.top_image_grid, strict=False):
             image = image_row[-1]
@@ -94,7 +97,7 @@ class APQuestManager(GameManager):
             image.texture.mag_filter = "nearest"
             image.opacity = 1
 
-    def setup_game_grid_if_not_setup(self, size: tuple[int, int]):
+    def setup_game_grid_if_not_setup(self, size: tuple[int, int]) -> None:
         if self.upper_game_grid.children:
             return
 
@@ -130,26 +133,26 @@ class APQuestManager(GameManager):
         class APQuestGameView(MDRecycleView):
             _keyboard: Keyboard | None = None
 
-            def __init__(self, **kwargs):
+            def __init__(self, **kwargs) -> None:
                 super().__init__(**kwargs)
                 self.bind_keyboard()
 
-            def on_touch_down(self, touch):
+            def on_touch_down(self, touch: MotionEvent) -> None:
                 self.bind_keyboard()
 
-            def bind_keyboard(self):
+            def bind_keyboard(self) -> None:
                 if self._keyboard is not None:
                     return
                 self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
                 self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
-            def _keyboard_closed(self):
+            def _keyboard_closed(self) -> None:
                 if self._keyboard is None:
                     return
                 self._keyboard.unbind(on_key_down=self._on_keyboard_down)
                 self._keyboard = None
 
-            def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+            def _on_keyboard_down(self, _, keycode, _1, _2) -> bool:
                 if keycode[1] == "up":
                     input_and_rerender(Input.UP)
                 elif keycode[1] == "down":
@@ -165,10 +168,10 @@ class APQuestManager(GameManager):
                 return True
 
         class APQuestGrid(GridLayout):
-            def __init__(self, **kwargs):
+            def __init__(self, **kwargs) -> None:
                 super().__init__(**kwargs)
 
-            def check_resize(self, x, y):
+            def check_resize(self, _: int, _1: int) -> None:
                 parent_width, parent_height = self.parent.size
 
                 self_width_according_to_parent_height = parent_height * 12 / 11

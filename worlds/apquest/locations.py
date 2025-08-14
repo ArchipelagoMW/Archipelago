@@ -51,7 +51,7 @@ def create_regular_locations(world: "APQuestWorld"):
     # A simpler way to do this is by using the region.add_locations helper.
     # For this, you need to have a dict of location names to their IDs (i.e. a subset of location_name_to_id)
     # You also need to pass your overridden Location class.
-    bottom_right_room_locations = {
+    bottom_right_room_locations: dict[str, int | None] = {
         "Bottom Right Room Left Chest": world.location_name_to_id["Bottom Right Room Left Chest"],
         "Bottom Right Room Right Chest": world.location_name_to_id["Bottom Right Room Right Chest"],
     }

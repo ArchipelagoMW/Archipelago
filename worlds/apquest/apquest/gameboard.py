@@ -20,7 +20,7 @@ from .items import Item
 from .locations import DEFAULT_CONTENT, Location
 
 if TYPE_CHECKING:
-    from .game import Player
+    from .player import Player
 
 
 class Gameboard:
@@ -91,7 +91,7 @@ class Gameboard:
 
         return tuple(graphics)
 
-    def force_clear_location(self, location: Location) -> bool:
+    def force_clear_location(self, location: Location) -> None:
         entity = self.remote_entity_by_location_id[location]
         entity.force_clear()
 
