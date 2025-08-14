@@ -671,7 +671,7 @@ class LMContext(CommonContext):
                     # Lastly, update the non-saveable received index with the current last received index.
                     dme.write_word(NON_SAVE_LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
-            elif lm_item.type == "Trap" and last_recv_idx <= non_save_recv_idx:
+            elif lm_item.type == "Trap" and last_recv_idx < non_save_recv_idx:
                 # Skip this trap item to avoid Luigi dying in an infinite trap loop.
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
