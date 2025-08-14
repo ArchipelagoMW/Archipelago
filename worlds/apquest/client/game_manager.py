@@ -1,5 +1,5 @@
 # isort: off
-from kvui import GameManager
+from kvui import GameManager, MDNavigationItemBase
 # isort: on
 
 from typing import TYPE_CHECKING
@@ -28,6 +28,7 @@ class APQuestManager(GameManager):
     upper_game_grid: GridLayout
 
     game_view: MDRecycleView
+    game_view_tab: MDNavigationItemBase
 
     sound_manager: SoundManager
 
@@ -42,6 +43,13 @@ class APQuestManager(GameManager):
 
     def play_jingle(self, audio_filename: str):
         self.sound_manager.play_jingle(audio_filename)
+
+    def switch_to_game_tab(self):
+        if self.screens.current_tab == self.game_view_tab:
+            return
+        self.screens.switch_screens(self.game_view_tab)
+        self.screens.current_tab.active = False
+        self.game_view_tab.active = True
 
     def start_background_music(self):
         self.sound_manager.start_background_music()
@@ -120,13 +128,18 @@ class APQuestManager(GameManager):
         input_and_rerender = self.ctx.input_and_rerender
 
         class APQuestGameView(MDRecycleView):
-            _keyboard: Keyboard | None
+            _keyboard: Keyboard | None = None
 
             def __init__(self, **kwargs):
                 super().__init__(**kwargs)
                 self.bind_keyboard()
 
+            def on_touch_down(self, touch):
+                self.bind_keyboard()
+
             def bind_keyboard(self):
+                if self._keyboard is not None:
+                    return
                 self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
                 self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
@@ -168,7 +181,7 @@ class APQuestManager(GameManager):
 
         self.game_view = APQuestGameView()
 
-        self.add_client_tab("APQuest", self.game_view)
+        self.game_view_tab = self.add_client_tab("APQuest", self.game_view)
 
         game_container = self.game_view.ids["game_container"]
         self.lower_game_grid = APQuestGrid()

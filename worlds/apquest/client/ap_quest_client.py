@@ -146,6 +146,7 @@ class APQuestContext(CommonContext):
 
             self.connection_status = ConnectionStatus.GAME_RUNNING
             self.ui.start_background_music()
+            self.ui.switch_to_game_tab()
 
     async def disconnect(self, *args, **kwargs) -> None:
         self.finished_game = False
