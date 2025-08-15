@@ -6,6 +6,7 @@ from pathlib import Path
 from CommonClient import logger
 from kivy.core.audio import Sound, SoundLoader
 
+from .. import apquest
 from .item_quality import ItemQuality
 from .utils import make_data_directory
 
@@ -90,7 +91,7 @@ class SoundManager:
                 continue
 
             with open(sound_file_location, "wb") as sound_file:
-                data = pkgutil.get_data(__name__, f"../apquest/audio/{sound}")
+                data = pkgutil.get_data(apquest.__name__, f"audio/{sound}")
                 if data is None:
                     logger.exception(f"Unable to extract sound {sound} to Archipelago/data")
                 sound_file.write(data)

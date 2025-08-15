@@ -12,12 +12,11 @@ from typing import Any
 from CommonClient import CommonContext, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
 
-from worlds.apquest.apquest.items import Item
-from worlds.apquest.client.game_manager import APQuestManager
-
 from ..apquest.events import ConfettiFired, LocationClearedEvent, VictoryEvent
 from ..apquest.game import Game, Input
+from ..apquest.items import Item
 from ..apquest.locations import LOCATION_NAME_TO_ID, Location
+from .game_manager import APQuestManager
 from .graphics import PlayerSprite
 from .item_quality import get_quality_for_network_item
 from .sounds import CONFETTI_CANNON, ITEM_JINGLES, VICTORY_JINGLE
