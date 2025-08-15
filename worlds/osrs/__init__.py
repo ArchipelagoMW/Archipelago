@@ -6,7 +6,7 @@ from worlds.AutoWorld import WebWorld, World
 from Options import OptionError
 from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items, ItemRow, \
     chunksanity_special_region_names
-from .Locations import OSRSLocation, LocationRow
+from .Locations import OSRSLocation, LocationRow, task_types
 from .Rules import *
 from .Options import OSRSOptions, StartingArea
 from .Names import LocationNames, ItemNames, RegionNames
@@ -111,8 +111,6 @@ class OSRSWorld(World):
             re_gen_passthrough = self.multiworld.re_gen_passthrough[self.game] # UT passthrough
             if "starting_area" in re_gen_passthrough:
                 self.starting_area_item = re_gen_passthrough["starting_area"]
-            task_types = ["prayer", "magic", "runecraft", "mining", "crafting",
-                        "smithing", "fishing", "cooking", "firemaking", "woodcutting", "combat"]
             for task_type in task_types:
                 if f"max_{task_type}_level" in re_gen_passthrough:
                     getattr(self.options,f"max_{task_type}_level").value = re_gen_passthrough[f"max_{task_type}_level"]
@@ -219,17 +217,17 @@ class OSRSWorld(World):
             locations_required += item_row.amount
         if self.options.enable_duds: locations_required += self.options.dud_count
 
-        locations_added = 0  # At this point we've already added the starting area, so we start at 1 instead of 0
+        locations_added = 0  # Keep track of the number of locations we add so we don't add more the number of items we're going to make
         # Quests are always added first, before anything else is rolled
         for i, location_row in enumerate(location_rows):
-            if location_row.category in {"quest", "goal"}:
+            if location_row.category in {"quest"}:
                 if self.task_within_skill_levels(location_row.skills):
                     self.create_and_add_location(i)
-                    if location_row.category == "quest":
-                        locations_added += 1
+                    locations_added += 1
             elif location_row.category in {"goal"}:
                 if not self.task_within_skill_levels(location_row.skills):
-                    raise OptionError("Goal location not allowed in skill levels") #it doesn't actually have any, but just in case for future
+                    raise OptionError(f"Goal location for {self.player_name} not allowed in skill levels") #it doesn't actually have any, but just in case for future
+                self.create_and_add_location(i)
 
 
         # Build up the weighted Task Pool
@@ -255,7 +253,8 @@ class OSRSWorld(World):
                 locations_added += 1
                 general_tasks_added += 1
         if general_tasks_added < self.options.minimum_general_tasks:
-            raise OptionError("Not enough general tasks to create required minimum count, raise maximum skill levels")
+            raise OptionError(f"{self.plyaer_name} doens't have enough general tasks to create required minimum count"+
+                              f", raise maximum skill levels or lower minimum general tasks")
 
         general_weight = self.options.general_task_weight if len(general_tasks) > 0 else 0
 
@@ -295,9 +294,9 @@ class OSRSWorld(World):
             all_weights.append(general_weight)
 
         if not generation_is_fake and locations_added > locations_required: #due to minimum general tasks we already have more then needed
-            raise OptionError("Too many locations created, lower the minimum general tasks")
+            raise OptionError(f"Too many locations created for {self.player_name}, lower the minimum general tasks")
 
-        while locations_added < locations_required or (generation_is_fake and (len(all_tasks) > 0 or len(general_tasks) > 0)):
+        while locations_added < locations_required or (generation_is_fake and len(all_tasks) > 0):
             if all_tasks:
                 chosen_task = rnd.choices(all_tasks, all_weights)[0]
                 if chosen_task:
@@ -312,7 +311,7 @@ class OSRSWorld(World):
                     del all_tasks[index]
                     del all_weights[index]
 
-            else:
+            else: # We can ignore general tasks in UT because they will have been cleared already
                 if len(general_tasks) == 0:
                     raise OptionError(f"There are not enough available tasks to fill the remaining pool for OSRS " +
                                     f"Please adjust {self.player_name}'s settings to be less restrictive of tasks.")
@@ -420,9 +419,9 @@ class OSRSWorld(World):
 
         qp = 0
         for qp_event in self.available_QP_locations:
-                qp += int(qp_event[0])
+            qp += int(qp_event[0])
         if qp < self.location_rows_by_name[LocationNames.Q_Dragon_Slayer].qp:
-            raise OptionError("Not enough quests for Goal")
+            raise OptionError(f"{self.player_name} doesn't have enough quests for reach goal, increase maximum skill levels")
 
         # place "Victory" at "Dragon Slayer" and set collection as win condition
         self.multiworld.get_location(LocationNames.Q_Dragon_Slayer, self.player) \
