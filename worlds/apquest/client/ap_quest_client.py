@@ -5,7 +5,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, Any
 
 from CommonClient import CommonContext, gui_enabled, logger, server_loop
-from NetUtils import ClientStatus, NetworkItem
+from NetUtils import ClientStatus
 
 from ..apquest.events import ConfettiFired, LocationClearedEvent, VictoryEvent
 from ..apquest.game import Game, Input
@@ -36,7 +36,6 @@ class APQuestContext(CommonContext):
     last_connected_slot: int | None = None
 
     slot_data: dict[str, Any]
-    location_to_item: dict[int, NetworkItem]
 
     ap_quest_game: Game | None = None
     hard_mode: bool = False
@@ -58,7 +57,6 @@ class APQuestContext(CommonContext):
 
         self.queued_locations = []
         self.slot_data = {}
-        self.location_to_item = {}
         self.delay_intro_song = delay_intro_song
 
     async def server_auth(self, password_requested: bool = False) -> None:
@@ -125,7 +123,6 @@ class APQuestContext(CommonContext):
 
             self.connection_status = ConnectionStatus.NOT_CONNECTED  # for safety, it will get set again later
 
-            self.location_to_item = {}
             self.slot_data = args["slot_data"]
             self.hard_mode = self.slot_data["hard_mode"]
             try:
@@ -140,11 +137,9 @@ class APQuestContext(CommonContext):
 
             self.connection_status = ConnectionStatus.SCOUTS_NOT_SENT
         if cmd == "LocationInfo":
-            self.location_to_item.update({network_item.location: network_item for network_item in args["locations"]})
-
             remote_item_graphic_overrides = {
                 Location(location): Item(network_item.item)
-                for location, network_item in self.location_to_item.items()
+                for location, network_item in self.locations_info.items()
                 if self.slot_info[network_item.player].game == self.game
             }
 
@@ -166,7 +161,7 @@ class APQuestContext(CommonContext):
         self.ui.render(self.ap_quest_game, self.player_sprite)
 
     def location_checked_side_effects(self, location: int) -> None:
-        network_item = self.location_to_item[location]
+        network_item = self.locations_info[location]
 
         item_quality = get_quality_for_network_item(network_item)
         self.play_jingle(ITEM_JINGLES[item_quality])
