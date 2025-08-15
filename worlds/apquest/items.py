@@ -22,9 +22,8 @@ ITEM_CLASSIFICATIONS = {
     "Sword": ItemClassification.progression | ItemClassification.useful,  # Items can have multiple classifications.
     "Shield": ItemClassification.progression,
     "Health Upgrade": ItemClassification.useful,
-    "Confetti Cannon": ItemClassification.filler,  # Your game should have at least one repeatable filler item.
+    "Confetti Cannon": ItemClassification.filler,
 }
-
 
 # It is common practice to override the base Item class to override the "game" field.
 class APQuestItem(Item):

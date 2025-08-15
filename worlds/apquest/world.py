@@ -56,7 +56,8 @@ class APQuestWorld(World):
 
     # For features such as item links and panic-method start inventory, AP may ask your world to create extra filler.
     # The way it does this is by calling get_filler_item_name.
-    # You must override this function and have it return the name of an infinitely repeatable filler item.
+    # For this purpose, your world *must* have at least one infinitely repeatable item (usually filler).
+    # You must override this function and return this infinitely repeatable item's name.
     # If you have multiple repeatable filler items, you can randomly choose one using e.g. self.random.choice(...).
     def get_filler_item_name(self) -> str:
         return "Confetti Cannon"
