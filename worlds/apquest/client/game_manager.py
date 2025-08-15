@@ -1,12 +1,10 @@
 # isort: off
-from kivy.clock import Clock
-
 from kvui import GameManager, MDNavigationItemBase
 # isort: on
-
 from typing import TYPE_CHECKING
 
 from CommonClient import logger
+from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.layout import Layout

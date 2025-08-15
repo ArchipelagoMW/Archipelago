@@ -1,13 +1,8 @@
-# isort: off
-from argparse import Namespace
-
-from kvui import GameManager
-# isort: on
-
 import asyncio
 import sys
+from argparse import Namespace
 from enum import Enum
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from CommonClient import CommonContext, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
@@ -20,6 +15,9 @@ from .game_manager import APQuestManager
 from .graphics import PlayerSprite
 from .item_quality import get_quality_for_network_item
 from .sounds import CONFETTI_CANNON, ITEM_JINGLES, VICTORY_JINGLE
+
+if TYPE_CHECKING:
+    import kvui
 
 
 class ConnectionStatus(Enum):
@@ -207,7 +205,7 @@ class APQuestContext(CommonContext):
         self.handle_game_events()
         self.render()
 
-    def make_gui(self) -> type[GameManager]:
+    def make_gui(self) -> "type[kvui.GameManager]":
         self.load_kv()
         return APQuestManager
 
