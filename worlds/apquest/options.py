@@ -39,8 +39,8 @@ class PlayerSprite(Choice):
 
     option_human = 0
     option_duck = 1
-    option_horse = 2
-    option_cat = 3
+    # option_horse = 2  TODO: Draw Sprites :)
+    # option_cat = 3  TODO: Draw Sprites :)
 
     default = option_human
 
