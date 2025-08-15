@@ -15,7 +15,7 @@ class APQuestWebWorld(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Tioui"],
+        ["NewSoupVi"],
     )
 
     tutorials = [setup]  # noqa: RUF012
