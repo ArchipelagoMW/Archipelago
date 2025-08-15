@@ -169,10 +169,10 @@ Note that the Satisfactory Host/Client does *not* need a copy of your Archipelag
 The mod communicates with the Archipelago Server, which already has your config file,
 to generate the required content at runtime.
 
-Consider enabling Advanced Game Settings to allow dealing with bugs that may arise.
-Within the Advanced Game Settings menus,
-you may wish to switch the "Keep Inventory" setting to "Keep Everything" to avoid dropping items on death,
-although this will never lock you out of progression.
+Consider setting the following options in the "Options" > "Gameplay" section, especially because they are per-user and persist across your game saves:
+
+- **Creature Hostility**: `Default` (the game's default). Some of the mod's Traps involve creatures, and having them Passive or Retaliate cheapens the experience.
+- **Keep Inventory**: `Keep Everything` or `Keep Equipment` (the game's default). Although dying and dropping items will never lock you out of progression, Free Samples and Bundles means you can easily gain items you can't easily replace.
 
 ### Verifying Connection Success
 
