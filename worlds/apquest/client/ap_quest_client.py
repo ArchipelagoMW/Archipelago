@@ -6,12 +6,10 @@ from kvui import GameManager
 
 import asyncio
 import sys
-from collections.abc import Sequence
 from enum import Enum
 from typing import Any
 
-import colorama
-from CommonClient import CommonContext, get_base_parser, gui_enabled, handle_url_arg, logger, server_loop
+from CommonClient import CommonContext, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
 
 from worlds.apquest.apquest.items import Item
@@ -52,17 +50,24 @@ class APQuestContext(CommonContext):
     highest_processed_item_index: int = 0
     queued_locations: list[int]
 
+    delay_intro_song: bool
+
     ui: APQuestManager
 
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(
+        self, server_address: str | None = None, password: str | None = None, delay_intro_song: bool = False
+    ) -> None:
+        super().__init__(server_address, password)
 
         self.queued_locations = []
         self.slot_data = {}
         self.location_to_item = {}
+        self.delay_intro_song = delay_intro_song
 
     async def server_auth(self, password_requested: bool = False) -> None:
-        await super().server_auth(password_requested)
+        if password_requested and not self.password:
+            self.ui.allow_intro_song()
+            await super().server_auth(password_requested)
         await self.get_username()
         await self.send_connect(game=self.game)
 
@@ -111,6 +116,9 @@ class APQuestContext(CommonContext):
             await asyncio.sleep(0.1)
 
     def on_package(self, cmd: str, args: dict) -> None:
+        if cmd == "ConnectionRefused":
+            self.ui.allow_intro_song()
+
         if cmd == "Connected":
             if self.connection_status == ConnectionStatus.GAME_RUNNING:
                 # In a connection loss -> auto reconnect scenario, we can seamlessly keep going
@@ -149,8 +157,7 @@ class APQuestContext(CommonContext):
             self.ui.game_view.bind_keyboard()
 
             self.connection_status = ConnectionStatus.GAME_RUNNING
-            self.ui.start_background_music()
-            self.ui.switch_to_game_tab()
+            self.ui.game_started()
 
     async def disconnect(self, *args, **kwargs) -> None:
         self.finished_game = False
@@ -215,7 +222,10 @@ class APQuestContext(CommonContext):
 
 
 async def main(args: Namespace) -> None:
-    ctx = APQuestContext(args.connect, args.password)
+    # Assume we shouldn't play the intro song. Technically there could still be a password though.
+    delay_intro_song = args.connect and args.name
+
+    ctx = APQuestContext(args.connect, args.password, delay_intro_song=delay_intro_song)
     ctx.auth = args.name
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
@@ -231,21 +241,11 @@ async def main(args: Namespace) -> None:
     await ctx.shutdown()
 
 
-def launch_client(*args: Sequence[str]) -> None:
-    parser = get_base_parser()
-    parser.add_argument("--name", default=None, help="Slot Name to connect as.")
-    parser.add_argument("url", nargs="?", help="Archipelago connection url")
+def launch(*args):
+    from .launch import launch_client
 
-    launch_args = handle_url_arg(parser.parse_args(args))
-
-    if launch_args.nogui:
-        raise RuntimeError("APQuest cannot be played without gui.")
-
-    colorama.just_fix_windows_console()
-
-    asyncio.run(main(launch_args))
-    colorama.deinit()
+    launch_client(*args)
 
 
 if __name__ == "__main__":
-    launch_client(*sys.argv[1:])
+    launch(*sys.argv[1:])

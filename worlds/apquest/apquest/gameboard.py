@@ -117,7 +117,7 @@ def create_gameboard(hard_mode: bool) -> Gameboard:
     bottom_right_room_right_chest = Chest(Location.BOTTOM_RIGHT_ROOM_RIGHT_CHEST)
 
     normal_enemy = EnemyWithLoot(2 if hard_mode else 1, Location.ENEMY_DROP)
-    boss = FinalBoss(6 if hard_mode else 3)
+    boss = FinalBoss(5 if hard_mode else 3)
 
     gameboard = (
         (Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty()),

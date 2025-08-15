@@ -48,12 +48,26 @@ class SoundManager:
     background_music_task: Task | None = None
     background_music_last_position: int = 0
 
+    game_started: bool
+    allow_intro_to_play: bool
+
     def __init__(self) -> None:
         self.extract_sounds()
         self.populate_sounds()
 
-    async def fade_loop(self) -> None:
+        self.game_started = False
+        self.allow_intro_to_play = False
+
+        self.background_music_task = asyncio.create_task(self.sound_manager_loop())
+
+    async def sound_manager_loop(self) -> None:
         while True:
+            if not self.game_started:
+                if self.allow_intro_to_play and self.background_music_intro.state == "stop":
+                    self.background_music_intro.play()
+                await asyncio.sleep(0.02)
+                continue
+
             self.update_background_music()
             self.do_fade()
             self.background_music_intro.stop()
@@ -107,7 +121,6 @@ class SoundManager:
             self.background_music_intro = self.load_audio(BACKGROUND_MUSIC_INTRO)
             self.background_music_intro.loop = True
             self.background_music_intro.seek(0)
-            self.background_music_intro.play()
         except Exception as e:
             logger.exception(e)
 
@@ -140,12 +153,6 @@ class SoundManager:
         else:
             self.background_music_target_volume = 0
             self.background_music.volume = 0
-
-    def start_background_music(self) -> None:
-        if self.background_music_task is None:
-            self.background_music_target_volume = 1
-            self.background_music.volume = 1
-            self.background_music_task = asyncio.create_task(self.fade_loop())
 
     def fade_background_music(self, fade_in: bool = True) -> None:
         if fade_in:

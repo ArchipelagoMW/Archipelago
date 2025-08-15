@@ -41,14 +41,15 @@ class APQuestManager(GameManager):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.sound_manager = SoundManager()
+        self.sound_manager.allow_intro_to_play = not self.ctx.delay_intro_song
         self.top_image_grid = []
         self.bottom_image_grid = []
 
+    def allow_intro_song(self):
+        self.sound_manager.allow_intro_to_play = True
+
     def add_confetti(self, position: tuple[float, float], amount: int):
         self.confetti_view.add_confetti(position, amount)
-
-    def redraw_confetti(self):
-        self.confetti_view.redraw_confetti()
 
     def play_jingle(self, audio_filename: str) -> None:
         self.sound_manager.play_jingle(audio_filename)
@@ -60,8 +61,9 @@ class APQuestManager(GameManager):
         self.screens.switch_screens(self.game_view_tab)
         self.game_view_tab.active = True
 
-    def start_background_music(self) -> None:
-        self.sound_manager.start_background_music()
+    def game_started(self) -> None:
+        self.switch_to_game_tab()
+        self.sound_manager.game_started = True
 
     def render(self, game: Game, player_sprite: PlayerSprite) -> None:
         self.setup_game_grid_if_not_setup(game.gameboard.size)
