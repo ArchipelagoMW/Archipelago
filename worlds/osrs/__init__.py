@@ -1,8 +1,9 @@
 import typing
 
-from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld, CollectionState
+from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld, CollectionState, Location
 from Fill import fill_restrictive, FillError
 from worlds.AutoWorld import WebWorld, World
+from Options import OptionError
 from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items, ItemRow, \
     chunksanity_special_region_names
 from .Locations import OSRSLocation, LocationRow
@@ -47,6 +48,7 @@ class OSRSWorld(World):
     base_id = 0x070000
     data_version = 1
     explicit_indirect_conditions = False
+    ut_can_gen_without_yaml = True
 
     item_name_to_id = {item_rows[i].name: 0x070000 + i for i in range(len(item_rows))}
     location_name_to_id = {location_rows[i].name: 0x070000 + i for i in range(len(location_rows))}
@@ -105,6 +107,20 @@ class OSRSWorld(World):
 
             # Set Starting Chunk
             self.multiworld.push_precollected(self.create_item(self.starting_area_item))
+        elif hasattr(self.multiworld,"re_gen_passthrough") and self.game in self.multiworld.re_gen_passthrough:
+            re_gen_passthrough = self.multiworld.re_gen_passthrough[self.game] # UT passthrough
+            if "starting_area" in re_gen_passthrough:
+                self.starting_area_item = re_gen_passthrough["starting_area"]
+            task_types = ["prayer", "magic", "runecraft", "mining", "crafting",
+                        "smithing", "fishing", "cooking", "firemaking", "woodcutting", "combat"]
+            for task_type in task_types:
+                if f"max_{task_type}_level" in re_gen_passthrough:
+                    getattr(self.options,f"max_{task_type}_level").value = re_gen_passthrough[f"max_{task_type}_level"]
+                max_count = getattr(self.options,f"max_{task_type}_tasks")
+                max_count.value = max_count.range_end
+            self.options.brutal_grinds.value = re_gen_passthrough["brutal_grinds"]
+
+
 
     """
     This function pulls from LogicCSVToPython so that it sends the correct tag of the repository to the client.
@@ -115,20 +131,15 @@ class OSRSWorld(World):
         data = self.options.as_dict("brutal_grinds")
         data["data_csv_tag"] = data_csv_tag
         data["starting_area"] = str(self.starting_area_item) #these aren't actually strings, they just play them on tv
+        task_types = ["prayer", "magic", "runecraft", "mining", "crafting",
+                      "smithing", "fishing", "cooking", "firemaking", "woodcutting", "combat"]
+        for task_type in task_types:
+            data[f"max_{task_type}_level"] = getattr(self.options,f"max_{task_type}_level").value
         return data
 
-    def interpret_slot_data(self, slot_data: typing.Dict[str, typing.Any]) -> None:
-        if "starting_area" in slot_data:
-            self.starting_area_item = slot_data["starting_area"]
-            menu_region = self.multiworld.get_region("Menu",self.player)
-            menu_region.exits.clear() #prevent making extra exits if players just reconnect to a differnet slot
-            if self.starting_area_item in chunksanity_special_region_names:
-                starting_area_region = chunksanity_special_region_names[self.starting_area_item]
-            else:
-                starting_area_region = self.starting_area_item[6:]  # len("Area: ")
-            starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
-            starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
-            starting_entrance.connect(self.region_name_to_data[starting_area_region])
+    @staticmethod
+    def interpret_slot_data(slot_data: typing.Dict[str, typing.Any]) -> typing.Dict[str, typing.Any]:
+        return slot_data
 
     def create_regions(self) -> None:
         """
@@ -195,6 +206,8 @@ class OSRSWorld(World):
         generation_is_fake = hasattr(self.multiworld, "generation_is_fake")  # UT specific override
         locations_required = 0
         for item_row in item_rows:
+            if item_row.name == self.starting_area_item:
+                continue #skip starting area
             # If it's a filler item, set it aside for later
             if item_row.progression == ItemClassification.filler:
                 continue
@@ -206,15 +219,18 @@ class OSRSWorld(World):
             locations_required += item_row.amount
         if self.options.enable_duds: locations_required += self.options.dud_count
 
-        locations_added = 1  # At this point we've already added the starting area, so we start at 1 instead of 0
-
+        locations_added = 0  # At this point we've already added the starting area, so we start at 1 instead of 0
         # Quests are always added first, before anything else is rolled
         for i, location_row in enumerate(location_rows):
-            if location_row.category in {"quest", "points", "goal"}:
+            if location_row.category in {"quest", "goal"}:
                 if self.task_within_skill_levels(location_row.skills):
                     self.create_and_add_location(i)
                     if location_row.category == "quest":
                         locations_added += 1
+            elif location_row.category in {"goal"}:
+                if not self.task_within_skill_levels(location_row.skills):
+                    raise OptionError("Goal location not allowed in skill levels") #it doesn't actually have any, but just in case for future
+
 
         # Build up the weighted Task Pool
         rnd = self.random
@@ -225,10 +241,21 @@ class OSRSWorld(World):
             rnd.shuffle(general_tasks)
         else:
             general_tasks.reverse()
-        for i in range(self.options.minimum_general_tasks):
+        general_tasks_added = 0
+        while general_tasks_added<self.options.minimum_general_tasks and general_tasks:
             task = general_tasks.pop()
-            self.add_location(task)
-            locations_added += 1
+            if self.task_within_skill_levels(task.skills):
+                self.add_location(task)
+                locations_added += 1
+                general_tasks_added += 1
+        while generation_is_fake and len(general_tasks)>0:
+            task = general_tasks.pop()
+            if self.task_within_skill_levels(task.skills):
+                self.add_location(task)
+                locations_added += 1
+                general_tasks_added += 1
+        if general_tasks_added < self.options.minimum_general_tasks:
+            raise OptionError("Not enough general tasks to create required minimum count, raise maximum skill levels")
 
         general_weight = self.options.general_task_weight if len(general_tasks) > 0 else 0
 
@@ -263,11 +290,14 @@ class OSRSWorld(World):
                 all_weights.append(weights_per_task_type[task_type])
 
         # Even after the initial forced generals, they can still be rolled randomly
-        if general_weight > 0:
+        if general_weight > 0 and len(general_tasks)>0:
             all_tasks.append(general_tasks)
             all_weights.append(general_weight)
 
-        while locations_added < locations_required or (generation_is_fake and len(all_tasks) > 0):
+        if not generation_is_fake and locations_added > locations_required: #due to minimum general tasks we already have more then needed
+            raise OptionError("Too many locations created, lower the minimum general tasks")
+
+        while locations_added < locations_required or (generation_is_fake and (len(all_tasks) > 0 or len(general_tasks) > 0)):
             if all_tasks:
                 chosen_task = rnd.choices(all_tasks, all_weights)[0]
                 if chosen_task:
@@ -284,7 +314,7 @@ class OSRSWorld(World):
 
             else:
                 if len(general_tasks) == 0:
-                    raise Exception(f"There are not enough available tasks to fill the remaining pool for OSRS " +
+                    raise OptionError(f"There are not enough available tasks to fill the remaining pool for OSRS " +
                                     f"Please adjust {self.player_name}'s settings to be less restrictive of tasks.")
                 task = general_tasks.pop()
                 self.add_location(task)
@@ -296,7 +326,7 @@ class OSRSWorld(World):
         self.create_and_add_location(index)
 
     def create_items(self) -> None:
-        filler_items = []
+        filler_items:list[ItemRow] = []
         for item_row in item_rows:
             if item_row.name != self.starting_area_item:
                 # If it's a filler item, set it aside for later
@@ -321,7 +351,7 @@ class OSRSWorld(World):
 
     def get_filler_item_name(self) -> str:
         if self.options.enable_duds:
-            return self.random.choice([item for item in item_rows if item.progression == ItemClassification.filler])
+            return self.random.choice([item.name for item in item_rows if item.progression == ItemClassification.filler])
         else:
             return self.random.choice([ItemNames.Progressive_Weapons, ItemNames.Progressive_Magic,
                                        ItemNames.Progressive_Range_Weapon, ItemNames.Progressive_Armor,
@@ -387,6 +417,12 @@ class OSRSWorld(World):
 
                 # Set the access rule for the QP Location
                 add_rule(qp_loc, lambda state, loc=q_loc: (loc.can_reach(state)))
+
+        qp = 0
+        for qp_event in self.available_QP_locations:
+                qp += int(qp_event[0])
+        if qp < self.location_rows_by_name[LocationNames.Q_Dragon_Slayer].qp:
+            raise OptionError("Not enough quests for Goal")
 
         # place "Victory" at "Dragon Slayer" and set collection as win condition
         self.multiworld.get_location(LocationNames.Q_Dragon_Slayer, self.player) \
