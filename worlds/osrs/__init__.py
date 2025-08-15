@@ -129,8 +129,6 @@ class OSRSWorld(World):
         data = self.options.as_dict("brutal_grinds")
         data["data_csv_tag"] = data_csv_tag
         data["starting_area"] = str(self.starting_area_item) #these aren't actually strings, they just play them on tv
-        task_types = ["prayer", "magic", "runecraft", "mining", "crafting",
-                      "smithing", "fishing", "cooking", "firemaking", "woodcutting", "combat"]
         for task_type in task_types:
             data[f"max_{task_type}_level"] = getattr(self.options,f"max_{task_type}_level").value
         return data
@@ -260,9 +258,7 @@ class OSRSWorld(World):
 
         tasks_per_task_type: typing.Dict[str, typing.List[LocationRow]] = {}
         weights_per_task_type: typing.Dict[str, int] = {}
-
-        task_types = ["prayer", "magic", "runecraft", "mining", "crafting",
-                      "smithing", "fishing", "cooking", "firemaking", "woodcutting", "combat"]
+        
         for task_type in task_types:
             max_amount_for_task_type = getattr(self.options, f"max_{task_type}_tasks")
             tasks_for_this_type = [task for task in self.locations_by_category[task_type]
