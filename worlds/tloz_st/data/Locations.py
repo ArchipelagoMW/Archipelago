@@ -9,7 +9,6 @@ LOCATIONS_DATA = {
     "Aboda Clear Rocks": {
         "region_id": "aboda village rocks",
         "vanilla_item": "Red Rupee (20)",
-        "item_override": "Boomerang",
         "stage_id": 0x2F,
         "floor_id": 0,
         "address": 0x265743,
@@ -27,8 +26,9 @@ LOCATIONS_DATA = {
     },
     "Aboda Stamp Station": {
         "region_id": "aboda village stamp station",
-        "vanilla_item": "Aboda Village Stamp",
-        "item_override": "Stamp Book",
+        #"vanilla_item": "Aboda Village Stamp",
+        "vanilla_item": "Red Rupee (20)",
+        #"item_override": "Stamp Book",
         "stage_id": 0x2F,
         "floor_id": 0,
         "stamp": True,
@@ -38,16 +38,17 @@ LOCATIONS_DATA = {
     },
 
     # Castle Town
-    #"Castle Town": {
-    #    "region_id": "castle town stamp station",
-       # "vanilla_item": "Castle Town Stamp",
-        #"stage_id": 11,
-        #"floor_id": 0,
+    "Castle Town Stamp Station": {
+        "region_id": "castle town stamp station",
+        "vanilla_item": "Red Rupee (20)",
+        #"vanilla_item": "Castle Town Stamp",
+        #"item_override": "Stamp Book",
+        "stage_id": 29,
+        "floor_id": 0,
         #"y": 0x1333,
-        # "sram_addr": 0x000EB0,
-        # "sram_value": 1
-    #    "require_item": ["Stamp Book"]
-    # },
+        "stamp": True,
+        "require_item": ["Stamp Book"]
+    },
 
 
     # # Shops
@@ -64,15 +65,16 @@ LOCATIONS_DATA = {
 
     # # ========== Tower of Spirits ==============
 
-    # "TotOK 1F SW Sea Chart Chest": {
-    #     "region_id": "totok 1f chart chest",
-    #     "vanilla_item": "SW Sea Chart",
-    #     "stage_id": 37,
-    #     "floor_id": 0,
-    #     "y": 0x1333,
-    #     'dungeon': "Temple of the Ocean King",
-    #     'set_bit': [(0x1B557D, 2)]
-    # },
+    "ToS Forest Rail Glyph": {
+        "region_id": "goal",
+        "vanilla_item": "Forest Glyph",
+        "stage_id": 13,
+        #"floor_id": 2,
+        #"y": 0x1333,
+        'dungeon': "Tower of Spirits",
+        "require_item": ["Sword (Progressive)"]
+        #'set_bit': [(0x265715, 0x80)]
+    },
     # "TotOK 1F Linebeck Key": {
     #     "region_id": "totok",
     #     "vanilla_item": "Small Key (Temple of the Ocean King)",

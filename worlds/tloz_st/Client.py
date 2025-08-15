@@ -842,6 +842,8 @@ class SpiritTracksClient(BizHawkClient):
         item_data = ITEMS_DATA[item_name]
         item_value = 0
 
+        EQUIPPED_TRAIN_PARTS_ADDR = []
+
         # Increment in-game items received count
         received_item_address = RAM_ADDRS["received_item_index"]
         write_list = [(received_item_address[0], split_bits(num_received_items + 1, 2), received_item_address[2])]
@@ -936,7 +938,7 @@ class SpiritTracksClient(BizHawkClient):
 
         # Set train
         elif "train" in item_data:
-            for addr in EQUIPPED_SHIP_PARTS_ADDR:
+            for addr in EQUIPPED_TRAIN_PARTS_ADDR:
                 write_list.append((addr, [item_data["train"]], "Main RAM"))
 
         # Write the new item to memory!

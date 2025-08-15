@@ -215,7 +215,7 @@ class SpiritTracksWorld(World):
         item_pool_dict = {}
         filler_item_count = 0
         rupee_item_count = 0
-        boss_reward_item_count = self.options.dungeons_required
+        #boss_reward_item_count = self.options.dungeons_required
         for loc_name, loc_data in LOCATIONS_DATA.items():
             print(f"New Location: {loc_name}")
             if not self.location_is_active(loc_name, loc_data):

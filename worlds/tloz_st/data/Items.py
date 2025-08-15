@@ -165,25 +165,25 @@ ITEMS_DATA = {
 
     # ========== Rail Maps ============
 
-    "Forest Realm Rail Map": {
+    "Forest Glyph": {
         'classification': ItemClassification.progression,
         'address': 0x265715,
         'value': 0x80,
         'set_bit': [(0x265716, 0)]
     },
-    "Snow Realm Rail Map": {
+    "Snow Glyph": {
         'classification': ItemClassification.progression,
         'address': 0x265716,
         'value': 0x01,
         'set_bit': [(0x265715, 0x80)]
     },
-    "Ocean Realm Rail Map": {
+    "Ocean Glyph": {
         'classification': ItemClassification.progression,
         'address': 0x265716,
         'value': 0x02,
         'set_bit': [(0x265715, 0x80)]
     },
-    "Fire Realm Rail Map": {
+    "Fire Glyph": {
         'classification': ItemClassification.progression,
         'address': 0x265716,
         'value': 0x04,
@@ -369,89 +369,11 @@ ITEMS_DATA = {
 
     # =========== Keys ============
 
-    "Small Key (Mountain Passage)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 39,
-        'incremental': True
-    },
-    "Small Key (Temple of the Ocean King)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 37,
-        'incremental': True
-    },
-    "Small Key (Temple of Fire)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 0x1C,
-        'incremental': True
-    },
-    "Small Key (Temple of Wind)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 0x1D,
-        'incremental': True
-    },
-    "Small Key (Temple of Courage)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 0x1E,
-        'incremental': True
-    },
-    "Small Key (Temple of Ice)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 0x1F,
-        'incremental': True
-    },
-    "Small Key (Mutoh's Temple)": {
-        'classification': ItemClassification.progression,
-        'dungeon': 0x21,
-        'incremental': True
-    },
-    "Boss Key (Temple of Fire)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True
-    },
-    "Boss Key (Temple of Wind)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': 0x1D,
-        'dummy': True
-    },
-    "Boss Key (Temple of Courage)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True
-    },
-    "Boss Key (Goron Temple)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True
-    },
-    "Boss Key (Temple of Ice)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True
-    },
-    "Boss Key (Mutoh's Temple)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dungeon': True,
-        'dummy': True
-    },
-    "Force Gem (B3)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dummy': True,
-        'dungeon': 37,
-    },
-    "Force Gem (B12)": {
-        'classification': ItemClassification.progression,
-        'force_vanilla': True,
-        'dummy': True,
-        'dungeon': 37,
-    },
+    # "Small Key (Mountain Passage)": {
+    #     'classification': ItemClassification.progression,
+    #     'dungeon': 39,
+    #     'incremental': True
+    # },
     "Regal Necklace": {
         'classification': ItemClassification.progression,
         'address': 0x1B5582,

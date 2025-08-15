@@ -11,8 +11,8 @@ REGIONS = [
 
     # Aboda Village
     "aboda village",
-    "aboda village stamp book",
-    #"aboda village stamp station",
+    #"aboda village stamp book",
+    "aboda village stamp station",
     "aboda village rocks",
     "aboda village bees",
     #"aboda village left tree",
@@ -31,8 +31,8 @@ REGIONS = [
     #"beedle bomb bag",
 
     # Castle Town
-    # "castle town",
-    # "castle town stamp station",
+     "castle town",
+     "castle town stamp station",
     # "castle town spirit flute",
     # "castle town hc guard chest",
     # "castle town hc bottom left chest",
@@ -44,11 +44,11 @@ REGIONS = [
     #"castle town fish gem",
 
     # Tower of Spirits
-    #"tos",
+    "tos",
     #"tos left tear",
     #"tos up tear",
     #"tos right tear",
-    #"tos 1f rail map",
+    "goal",
 
     # Whittleton
     #"whittleton",
