@@ -1,0 +1,102 @@
+import typing
+
+from .Locations import MetroidPrimeLocation
+
+from .data.RoomNames import RoomName
+from BaseClasses import CollectionState, Region
+
+if typing.TYPE_CHECKING:
+    from . import MetroidPrimeWorld
+
+
+def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
+    # create all regions and populate with locations
+    menu = Region("Menu", world.player, world.multiworld)
+    world.multiworld.regions.append(menu)
+
+    for area_data in world.game_region_data.values():
+        area_data.create_world_region(world)
+
+    impact_crater = Region("Impact Crater", world.player, world.multiworld)
+    world.multiworld.regions.append(impact_crater)
+
+    mission_complete = Region("Mission Complete", world.player, world.multiworld)
+    world.multiworld.regions.append(mission_complete)
+
+    assert world.starting_room_data and world.starting_room_data.name
+    starting_room = world.get_region(world.starting_room_data.name)
+    menu.connect(starting_room, "Starting Room")
+
+    if world.options.pre_scan_elevators:
+        # Pre-scanned, so no requirements.
+        can_access_elevator: typing.Optional[typing.Callable[[CollectionState], bool]] = None
+    else:
+        def _can_access_elevator(state: CollectionState) -> bool:
+            return world.logic.can_scan(world, state)
+        can_access_elevator = _can_access_elevator
+
+    for mappings in world.elevator_mapping.values():
+        for elevator, target in mappings.items():
+            source = world.get_region(elevator)
+            destination = world.get_region(target)
+            source.connect(destination, elevator, can_access_elevator)
+
+    artifact_temple = world.get_region(RoomName.Artifact_Temple.value)
+
+    if final_boss_selection == 0 or final_boss_selection == 2:
+        artifact_temple.connect(
+            impact_crater,
+            "Crater Access",
+            lambda state, artifact_count=world.options.required_artifacts.value: (
+                world.logic.can_missile(world, state, 1)
+                and world.logic.has_required_artifact_count(
+                    world, state, artifact_count
+                )
+                and world.logic.can_combat_prime(world, state)
+                and world.logic.can_combat_ridley(world, state)
+                and world.logic.can_phazon(world, state)
+                and world.logic.can_plasma_beam(world, state)
+                and world.logic.can_wave_beam(world, state)
+                and world.logic.can_ice_beam(world, state)
+                and world.logic.can_power_beam(world, state)
+                and world.logic.can_xray(world, state, True)
+                and world.logic.can_thermal(world, state, True)
+            ),
+        )
+        impact_crater.connect(mission_complete, "Mission Complete")
+
+    elif final_boss_selection == 1:
+        artifact_temple.connect(
+            mission_complete,
+            "Mission Complete",
+            lambda state, artifact_count=world.options.required_artifacts.value: world.logic.can_missile(
+                world, state, 1
+            )
+            and world.logic.has_required_artifact_count(world, state, artifact_count)
+            and (
+                world.logic.can_plasma_beam(world, state)
+                or world.logic.can_super_missile(world, state)
+            )
+            and world.logic.can_combat_ridley(world, state),
+        )
+    elif final_boss_selection == 3:
+        artifact_temple.connect(
+            mission_complete,
+            "Mission Complete",
+            lambda state, artifact_count=world.options.required_artifacts.value: (
+                world.logic.can_missile(world, state, 1)
+                and world.logic.has_required_artifact_count(
+                    world, state, artifact_count
+                )
+            ),
+        )
+
+    # Set up the victory condition
+    victory = MetroidPrimeLocation(
+        world.player, "Mission Complete", None, mission_complete
+    )
+    victory.place_locked_item(world.create_event("Mission Complete"))
+    mission_complete.locations.append(victory)
+    world.multiworld.completion_condition[world.player] = lambda state: (
+        state.has("Mission Complete", world.player)
+    )
