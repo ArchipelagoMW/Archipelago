@@ -1,7 +1,6 @@
 import typing
 
-from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld, CollectionState, Location
-from Fill import fill_restrictive, FillError
+from BaseClasses import Item, Tutorial, ItemClassification, Region, MultiWorld
 from worlds.AutoWorld import WebWorld, World
 from Options import OptionError
 from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items, ItemRow, \
@@ -251,10 +250,10 @@ class OSRSWorld(World):
                 locations_added += 1
                 general_tasks_added += 1
         if general_tasks_added < self.options.minimum_general_tasks:
-            raise OptionError(f"{self.plyaer_name} doens't have enough general tasks to create required minimum count"+
+            raise OptionError(f"{self.plyaer_name} doesn't have enough general tasks to create required minimum count"+
                               f", raise maximum skill levels or lower minimum general tasks")
 
-        general_weight = self.options.general_task_weight if len(general_tasks) > 0 else 0
+        general_weight = self.options.general_task_weight.value if len(general_tasks) > 0 else 0
 
         tasks_per_task_type: typing.Dict[str, typing.List[LocationRow]] = {}
         weights_per_task_type: typing.Dict[str, int] = {}
@@ -289,7 +288,7 @@ class OSRSWorld(World):
             all_tasks.append(general_tasks)
             all_weights.append(general_weight)
 
-        if not generation_is_fake and locations_added > locations_required: #due to minimum general tasks we already have more then needed
+        if not generation_is_fake and locations_added > locations_required: #due to minimum general tasks we already have more than needed
             raise OptionError(f"Too many locations created for {self.player_name}, lower the minimum general tasks")
 
         while locations_added < locations_required or (generation_is_fake and len(all_tasks) > 0):
