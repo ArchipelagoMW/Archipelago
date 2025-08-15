@@ -292,42 +292,6 @@ class TestWalletWorth(unittest.TestCase):
         self.assertEqual(test_currencies[CURRENCY_NAME.COINS].get(), 10)
         self.assertEqual(test_currencies[CURRENCY_NAME.BILLS].get(), 15)
 
-    def test_add_amount_to_wallet(self):
-        """Verifies that consumers entering an amount properly allocates currencies."""
-        for amount, expected_currencies in {
-            1:    TEST_DATA.get_test_currencies(coins=1),
-            5000: TEST_DATA.get_test_currencies(diamond=2, gold_diamond=1, ruby=1),
-            250:  TEST_DATA.get_test_currencies(gold_bars=2, ruby=1, small_pearl=1),
-            0:    TEST_DATA.get_test_currencies(),
-        }.items():
-
-            with self.subTest(label=f"test_add_wallet_amount_{amount}"):
-                test_currencies: dict[str, _MockCurrency] = TEST_DATA.get_test_currencies()
-                wallet = Wallet(test_currencies)
-                wallet.add_amount_to_wallet(amount)
-
-                for expected_currency_name, expected_currency_value  in expected_currencies.items():
-                    actual_currency_value = test_currencies[expected_currency_name].get()
-                    self.assertEqual(actual_currency_value, expected_currency_value.current_amount, f" {expected_currency_name} -> expected:{expected_currency_value.current_amount} actual:{actual_currency_value}.")
-
-    def test_remove_amount_from_wallet(self):
-        """Verifies that consumers entering an amount properly removes currencies."""
-        for amount, expected_currencies in {
-            1:    TEST_DATA.get_test_currencies(coins=1),
-            5000: TEST_DATA.get_test_currencies(diamond=2, gold_diamond=1, ruby=1),
-            250:  TEST_DATA.get_test_currencies(gold_bars=2, ruby=1, small_pearl=1),
-        }.items():
-            with self.subTest(label=f"test_remove_amount_from_wallet_{amount}"):
-                test_currencies = TEST_DATA.get_test_currencies()
-                for expected_currency_name, expected_currency_amount in expected_currencies.items():
-                    test_currencies[expected_currency_name].current_amount = expected_currency_amount.current_amount
-                wallet = Wallet(test_currencies)
-                wallet.remove_amount_from_wallet(amount)
-
-                for currency_name in expected_currencies:
-                    actual_amount = test_currencies[currency_name].get()
-                    self.assertEqual(actual_amount, 0, f"{currency_name} -> expected:0 actual:{actual_amount}")
-
     def test_get_calculated_amount_worth(self):
         """Verifies that the lowest worth item is pulled when calculating worth."""
         test_currencies = TEST_DATA.get_test_currencies()

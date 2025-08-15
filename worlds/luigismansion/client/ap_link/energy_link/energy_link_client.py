@@ -70,7 +70,7 @@ class EnergyLinkClient:
                 amount_to_be_sent_to_energy_link += current_diff
 
         calculated_amount = int(amount_to_be_sent_to_energy_link / self._wallet.get_calculated_amount_worth(1))
-        # TODO: find a more elegant solution when failing to remove currency from the wallet.
+        raise Exception("wallet.remove_amount_from_wallet function has been removed and this function should not be run.")
         try:
             self._wallet.remove_amount_from_wallet(calculated_amount)
         except ArithmeticError:
@@ -97,7 +97,7 @@ class EnergyLinkClient:
             return False
 
         request.received_amount = args[_ResponseArgs.ORIGINAL_VALUE] - args[_ResponseArgs.VALUE]
-        self._wallet.add_amount_to_wallet(request.received_amount)
+        _get_currencies_to_be_added(self._wallet, request.received_amount)
 
         request.status = RequestStatus.COMPLETED
         return True
@@ -105,3 +105,27 @@ class EnergyLinkClient:
 def _calc_currency_difference(previous_amount: int, amount: int, percentage: float = 0.25) -> int:
     temp_amount = amount - previous_amount
     return int(temp_amount * percentage)
+
+def _get_currencies_to_be_added(wallet: Wallet, amount_to_add: int):
+    currencies_to_add = _add_currencies(wallet, amount_to_add)
+    wallet.add_to_wallet(currencies_to_add)
+
+def _add_currencies(wallet: Wallet, amount_to_receive: int) -> dict[str, int]:
+    new_amount = amount_to_receive
+    currencies_to_add: dict[str, int] = {}
+
+    for currency_name, currency_type in wallet.get_currencies().items():
+        # If we added the entire amount we want to stop trying to add new currencies.
+        if new_amount == 0:
+            break
+
+        currency_to_add, remainder = divmod(new_amount, currency_type.calc_value)
+        new_amount = remainder
+
+        # If we don't have any amount of a given currency to add we want to skip updating.
+        if currency_to_add <= 0:
+            continue
+
+        currencies_to_add.update({ currency_name: int(currency_to_add) })
+
+    return currencies_to_add
