@@ -126,6 +126,9 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory("Golden Egg"))
     items.append(item_factory(CommunityUpgrade.mr_qi_plane_ride))
 
+    items.append(item_factory(Wallet.mens_locker_key))
+    items.append(item_factory(Wallet.womens_locker_key))
+
     create_sve_special_items(item_factory, content, items)
     create_magic_mod_spells(item_factory, content, items)
     create_deepwoods_pendants(item_factory, content, items)
