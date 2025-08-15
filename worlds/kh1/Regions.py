@@ -9,12 +9,16 @@ class KH1RegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int, options):
+def create_regions(kh1world):
+    multiworld = kh1world.multiworld
+    player     = kh1world.player
+    options    = kh1world.options
+    
     regions: Dict[str, KH1RegionData] = {
-        "Menu":             KH1RegionData([], ["Awakening", "Levels"]),
-        "Awakening":        KH1RegionData([],   ["Destiny Islands"]),
-        "Destiny Islands":  KH1RegionData([],   ["Traverse Town"]),
-        "Traverse Town":    KH1RegionData([],   ["World Map"]),
+        "Menu":             KH1RegionData([], ["Awakening", "Levels", "World Map"]),
+        "Awakening":        KH1RegionData([],   []),
+        "Destiny Islands":  KH1RegionData([],   []),
+        "Traverse Town":    KH1RegionData([],   []),
         "Wonderland":       KH1RegionData([],   []),
         "Olympus Coliseum": KH1RegionData([],   []),
         "Deep Jungle":      KH1RegionData([],   []),
@@ -27,17 +31,27 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         "End of the World": KH1RegionData([],   []),
         "100 Acre Wood":    KH1RegionData([],   []),
         "Levels":           KH1RegionData([],   []),
-        "World Map":        KH1RegionData([],   ["Wonderland", "Olympus Coliseum", "Deep Jungle",
+        "Homecoming":       KH1RegionData([],   []),
+        "World Map":        KH1RegionData([],   ["Destiny Islands", "Traverse Town", 
+                                         "Wonderland", "Olympus Coliseum", "Deep Jungle",
                                          "Agrabah", "Monstro", "Atlantica",
                                          "Halloween Town", "Neverland", "Hollow Bastion",
-                                         "End of the World", "100 Acre Wood"])
+                                         "End of the World", "100 Acre Wood", "Homecoming"])
     }
+    
+    if not options.atlantica:
+        del regions["Atlantica"]
+        regions["World Map"].region_exits.remove("Atlantica")
+    if not options.destiny_islands:
+        del regions["Destiny Islands"]
+        regions["World Map"].region_exits.remove("Destiny Islands")
 
     # Set up locations
     regions["Agrabah"].locations.append("Agrabah Aladdin's House Main Street Entrance Chest")
     regions["Agrabah"].locations.append("Agrabah Aladdin's House Plaza Entrance Chest")
     regions["Agrabah"].locations.append("Agrabah Alley Chest")
     regions["Agrabah"].locations.append("Agrabah Bazaar Across Windows Chest")
+    regions["Agrabah"].locations.append("Agrabah Bazaar Blue Trinity")
     regions["Agrabah"].locations.append("Agrabah Bazaar High Corner Chest")
     regions["Agrabah"].locations.append("Agrabah Cave of Wonders Bottomless Hall Across Chasm Chest")
     regions["Agrabah"].locations.append("Agrabah Cave of Wonders Bottomless Hall Pillar Chest")
@@ -59,6 +73,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Agrabah"].locations.append("Agrabah Cave of Wonders Treasure Room Above Fire Chest")
     regions["Agrabah"].locations.append("Agrabah Cave of Wonders Treasure Room Across Platforms Chest")
     regions["Agrabah"].locations.append("Agrabah Cave of Wonders Treasure Room Large Treasure Pile Chest")
+    regions["Agrabah"].locations.append("Agrabah Cave of Wonders Treasure Room Red Trinity")
     regions["Agrabah"].locations.append("Agrabah Cave of Wonders Treasure Room Small Treasure Pile Chest")
     regions["Agrabah"].locations.append("Agrabah Defeat Jafar Blizzard Event")
     regions["Agrabah"].locations.append("Agrabah Defeat Jafar Genie Ansem's Report 1")
@@ -96,15 +111,11 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Deep Jungle"].locations.append("Deep Jungle Hippo's Lagoon Center Chest")
     regions["Deep Jungle"].locations.append("Deep Jungle Hippo's Lagoon Left Chest")
     regions["Deep Jungle"].locations.append("Deep Jungle Hippo's Lagoon Right Chest")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 10 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 20 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 30 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 40 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 50 Fruits")
     regions["Deep Jungle"].locations.append("Deep Jungle Seal Keyhole Jungle King Event")
     regions["Deep Jungle"].locations.append("Deep Jungle Seal Keyhole Red Trinity Event")
     regions["Deep Jungle"].locations.append("Deep Jungle Tent Chest")
     regions["Deep Jungle"].locations.append("Deep Jungle Tent Protect-G Event")
+    regions["Deep Jungle"].locations.append("Deep Jungle Treetop Green Trinity")
     regions["Deep Jungle"].locations.append("Deep Jungle Tree House Beneath Tree House Chest")
     regions["Deep Jungle"].locations.append("Deep Jungle Tree House Rooftop Chest")
     regions["Deep Jungle"].locations.append("Deep Jungle Tree House Save Gorillas")
@@ -138,7 +149,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["End of the World"].locations.append("End of the World World Terminus Atlantica Chest")
     regions["End of the World"].locations.append("End of the World World Terminus Deep Jungle Chest")
     regions["End of the World"].locations.append("End of the World World Terminus Halloween Town Chest")
-    #regions["End of the World"].locations.append("End of the World World Terminus Hollow Bastion Chest")
+    regions["End of the World"].locations.append("End of the World World Terminus Hollow Bastion Chest")
     regions["End of the World"].locations.append("End of the World World Terminus Neverland Chest")
     regions["End of the World"].locations.append("End of the World World Terminus Olympus Coliseum Chest")
     regions["End of the World"].locations.append("End of the World World Terminus Traverse Town Chest")
@@ -181,6 +192,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Maleficent Donald Cheer Event")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Riku I White Trinity Event")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Riku II Ragnarok Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Dungeon Blue Trinity")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Dungeon By Candles Chest")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Dungeon Corner Chest")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Entrance Hall Emblem Piece (Chest)")
@@ -192,6 +204,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Hollow Bastion"].locations.append("Hollow Bastion Grand Hall Oblivion Chest")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Grand Hall Steps Right Side Chest")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Great Crest After Battle Platform Chest")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Great Crest Blue Trinity")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Great Crest Lower Chest")
     regions["Hollow Bastion"].locations.append("Hollow Bastion High Tower 1st Gravity Chest")
     regions["Hollow Bastion"].locations.append("Hollow Bastion High Tower 2nd Gravity Chest")
@@ -203,6 +216,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Hollow Bastion"].locations.append("Hollow Bastion Library Speak to Belle Divine Rose")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Library Top of Bookshelf Chest")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Library Top of Bookshelf Turn the Carousel Chest")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Lift Stop from Waterway Examine Node")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Lift Stop Heartless Sigil Door Gravity Chest")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Lift Stop Library Node After High Tower Switch Gravity Chest")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Lift Stop Library Node Gravity Chest")
@@ -230,6 +244,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Monstro"].locations.append("Monstro Chamber 3 Platform Above Chamber 2 Entrance Chest")
     regions["Monstro"].locations.append("Monstro Chamber 3 Platform Near Chamber 6 Entrance Chest")
     regions["Monstro"].locations.append("Monstro Chamber 5 Atop Barrel Chest")
+    regions["Monstro"].locations.append("Monstro Chamber 5 Blue Trinity")
     regions["Monstro"].locations.append("Monstro Chamber 5 Low 1st Chest")
     regions["Monstro"].locations.append("Monstro Chamber 5 Low 2nd Chest")
     regions["Monstro"].locations.append("Monstro Chamber 5 Platform Chest")
@@ -240,26 +255,28 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Monstro"].locations.append("Monstro Chamber 6 White Trinity Chest")
     regions["Monstro"].locations.append("Monstro Defeat Parasite Cage I Goofy Cheer Event")
     regions["Monstro"].locations.append("Monstro Defeat Parasite Cage II Stop Event")
+    regions["Monstro"].locations.append("Monstro Mouth Blue Trinity")
     regions["Monstro"].locations.append("Monstro Mouth Boat Deck Chest")
     regions["Monstro"].locations.append("Monstro Mouth Green Trinity Top of Boat Chest")
     regions["Monstro"].locations.append("Monstro Mouth High Platform Across from Boat Chest")
     regions["Monstro"].locations.append("Monstro Mouth High Platform Boat Side Chest")
     regions["Monstro"].locations.append("Monstro Mouth High Platform Near Teeth Chest")
     regions["Monstro"].locations.append("Monstro Mouth Near Ship Chest")
+    regions["Monstro"].locations.append("Monstro Throat Blue Trinity")
     regions["Neverland"].locations.append("Neverland Cabin Chest")
     regions["Neverland"].locations.append("Neverland Captain's Cabin Chest")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 01:00 Door")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 02:00 Door")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 03:00 Door")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 04:00 Door")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 05:00 Door")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 06:00 Door")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 07:00 Door")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 08:00 Door")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 09:00 Door")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 10:00 Door")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 11:00 Door")
-    #regions["Neverland"].locations.append("Neverland Clock Tower 12:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 01:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 02:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 03:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 04:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 05:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 06:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 07:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 08:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 09:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 10:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 11:00 Door")
+    regions["Neverland"].locations.append("Neverland Clock Tower 12:00 Door")
     regions["Neverland"].locations.append("Neverland Clock Tower Chest")
     regions["Neverland"].locations.append("Neverland Defeat Anti Sora Raven's Claw Event")
     regions["Neverland"].locations.append("Neverland Defeat Captain Hook Ars Arcanum Event")
@@ -276,6 +293,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Neverland"].locations.append("Neverland Pirate Ship Deck White Trinity Chest")
     regions["Neverland"].locations.append("Neverland Seal Keyhole Fairy Harp Event")
     regions["Neverland"].locations.append("Neverland Seal Keyhole Glide Event")
+    regions["Neverland"].locations.append("Neverland Seal Keyhole Navi-G Piece Event")
     regions["Neverland"].locations.append("Neverland Seal Keyhole Tinker Bell Event")
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Clear Phil's Training Thunder Event")
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Cloud Sonic Blade Event")
@@ -292,14 +310,16 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Traverse Town"].locations.append("Traverse Town 1st District Accessory Shop Roof Chest")
     #regions["Traverse Town"].locations.append("Traverse Town 1st District Aerith Gift")
     regions["Traverse Town"].locations.append("Traverse Town 1st District Blue Trinity Balcony Chest")
+    regions["Traverse Town"].locations.append("Traverse Town 1st District Blue Trinity by Exit Door")
     regions["Traverse Town"].locations.append("Traverse Town 1st District Candle Puzzle Chest")
-    #regions["Traverse Town"].locations.append("Traverse Town 1st District Leon Gift")
+    regions["Traverse Town"].locations.append("Traverse Town 1st District Leon Gift")
     regions["Traverse Town"].locations.append("Traverse Town 1st District Safe Postcard")
-    regions["Traverse Town"].locations.append("Traverse Town 1st District Speak with Cid Event")
+   #regions["Traverse Town"].locations.append("Traverse Town 1st District Speak with Cid Event")
     regions["Traverse Town"].locations.append("Traverse Town 2nd District Boots and Shoes Awning Chest")
     regions["Traverse Town"].locations.append("Traverse Town 2nd District Gizmo Shop Facade Chest")
     regions["Traverse Town"].locations.append("Traverse Town 2nd District Rooftop Chest")
     regions["Traverse Town"].locations.append("Traverse Town 3rd District Balcony Postcard")
+    regions["Traverse Town"].locations.append("Traverse Town 3rd District Blue Trinity")
     regions["Traverse Town"].locations.append("Traverse Town Accessory Shop Chest")
     regions["Traverse Town"].locations.append("Traverse Town Alleyway Balcony Chest")
     regions["Traverse Town"].locations.append("Traverse Town Alleyway Behind Crates Chest")
@@ -310,6 +330,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Traverse Town"].locations.append("Traverse Town Defeat Guard Armor Dodge Roll Event")
     regions["Traverse Town"].locations.append("Traverse Town Defeat Guard Armor Fire Event")
     regions["Traverse Town"].locations.append("Traverse Town Defeat Opposite Armor Aero Event")
+    regions["Traverse Town"].locations.append("Traverse Town Defeat Opposite Armor Navi-G Piece Event")
     regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Chest")
     regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Geppetto All Summons Reward")
     regions["Traverse Town"].locations.append("Traverse Town Geppetto's House Geppetto Reward 1")
@@ -329,6 +350,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Traverse Town"].locations.append("Traverse Town Item Workshop Right Chest")
     regions["Traverse Town"].locations.append("Traverse Town Kairi Secret Waterway Oathkeeper Event")
     regions["Traverse Town"].locations.append("Traverse Town Leon Secret Waterway Earthshine Event")
+    regions["Traverse Town"].locations.append("Traverse Town Magician's Study Blue Trinity")
     regions["Traverse Town"].locations.append("Traverse Town Magician's Study Obtained All Arts Items")
     regions["Traverse Town"].locations.append("Traverse Town Magician's Study Obtained All LV1 Magic")
     regions["Traverse Town"].locations.append("Traverse Town Magician's Study Obtained All LV3 Magic")
@@ -357,26 +379,62 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 99 Puppies Reward 1")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 99 Puppies Reward 2")
     regions["Traverse Town"].locations.append("Traverse Town Red Room Chest")
+    regions["Traverse Town"].locations.append("Traverse Town Secret Waterway Navi Gummi Event")
     regions["Traverse Town"].locations.append("Traverse Town Secret Waterway Near Stairs Chest")
     regions["Traverse Town"].locations.append("Traverse Town Secret Waterway White Trinity Chest")
-    regions["Traverse Town"].locations.append("Traverse Town Synth Cloth")
-    regions["Traverse Town"].locations.append("Traverse Town Synth Fish")
-    regions["Traverse Town"].locations.append("Traverse Town Synth Log")
-    regions["Traverse Town"].locations.append("Traverse Town Synth Mushroom")
-    regions["Traverse Town"].locations.append("Traverse Town Synth Rope")
-    regions["Traverse Town"].locations.append("Traverse Town Synth Seagull Egg")
+    regions["Traverse Town"].locations.append("Traverse Town Synth 15 Items")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 01")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 02")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 03")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 04")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 05")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 06")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 07")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 08")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 09")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 10")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 11")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 12")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 13")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 14")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 15")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 16")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 17")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 18")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 19")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 20")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 21")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 22")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 23")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 24")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 25")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 26")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 27")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 28")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 29")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 30")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 31")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 32")
+    regions["Traverse Town"].locations.append("Traverse Town Synth Item 33")
+    regions["Wonderland"].locations.append("Wonderland Bizarre Room Examine Flower Pot")
     regions["Wonderland"].locations.append("Wonderland Bizarre Room Green Trinity Chest")
     regions["Wonderland"].locations.append("Wonderland Bizarre Room Lamp Chest")
     regions["Wonderland"].locations.append("Wonderland Bizarre Room Navi-G Piece Event")
     regions["Wonderland"].locations.append("Wonderland Bizarre Room Read Book")
     regions["Wonderland"].locations.append("Wonderland Defeat Trickmaster Blizzard Event")
     regions["Wonderland"].locations.append("Wonderland Defeat Trickmaster Ifrit's Horn Event")
+    regions["Wonderland"].locations.append("Wonderland Lotus Forest Blue Trinity in Alcove")
+    regions["Wonderland"].locations.append("Wonderland Lotus Forest Blue Trinity by Moving Boulder")
     regions["Wonderland"].locations.append("Wonderland Lotus Forest Corner Chest")
     regions["Wonderland"].locations.append("Wonderland Lotus Forest Glide Chest")
     regions["Wonderland"].locations.append("Wonderland Lotus Forest Nut Chest")
+    regions["Wonderland"].locations.append("Wonderland Lotus Forest Red Flower Raise Lily Pads")
+    regions["Wonderland"].locations.append("Wonderland Lotus Forest Red Flowers on the Main Path")
     regions["Wonderland"].locations.append("Wonderland Lotus Forest Through the Painting Thunder Plant Chest")
     regions["Wonderland"].locations.append("Wonderland Lotus Forest Through the Painting White Trinity Chest")
     regions["Wonderland"].locations.append("Wonderland Lotus Forest Thunder Plant Chest")
+    regions["Wonderland"].locations.append("Wonderland Lotus Forest Yellow Elixir Flower Through Painting")
+    regions["Wonderland"].locations.append("Wonderland Lotus Forest Yellow Flowers in Middle Clearing and Through Painting")
     regions["Wonderland"].locations.append("Wonderland Queen's Castle Hedge Left Red Chest")
     regions["Wonderland"].locations.append("Wonderland Queen's Castle Hedge Right Blue Chest")
     regions["Wonderland"].locations.append("Wonderland Queen's Castle Hedge Right Red Chest")
@@ -388,6 +446,11 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Wonderland"].locations.append("Wonderland Tea Party Garden Above Lotus Forest Entrance 2nd Chest")
     regions["Wonderland"].locations.append("Wonderland Tea Party Garden Across From Bizarre Room Entrance Chest")
     regions["Wonderland"].locations.append("Wonderland Tea Party Garden Bear and Clock Puzzle Chest")
+    regions["Wonderland"].locations.append("Wonderland Tea Party Garden Left Cushioned Chair")
+    regions["Wonderland"].locations.append("Wonderland Tea Party Garden Left Gray Chair")
+    regions["Wonderland"].locations.append("Wonderland Tea Party Garden Left Pink Chair")
+    regions["Wonderland"].locations.append("Wonderland Tea Party Garden Right Brown Chair")
+    regions["Wonderland"].locations.append("Wonderland Tea Party Garden Right Yellow Chair")
     if options.hundred_acre_wood:
         regions["100 Acre Wood"].locations.append("100 Acre Wood Meadow Inside Log Chest")
         regions["100 Acre Wood"].locations.append("100 Acre Wood Bouncing Spot Left Cliff Chest")
@@ -440,7 +503,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         regions["Atlantica"].locations.append("Atlantica Undersea Cave Clam")
         regions["Atlantica"].locations.append("Atlantica Sunken Ship Crystal Trident Event")
         regions["Atlantica"].locations.append("Atlantica Defeat Ursula II Ansem's Report 3")
-    if options.cups:
+    if options.cups.current_key != "off":
         regions["Olympus Coliseum"].locations.append("Complete Phil Cup")
         regions["Olympus Coliseum"].locations.append("Complete Phil Cup Solo")
         regions["Olympus Coliseum"].locations.append("Complete Phil Cup Time Trial")
@@ -450,50 +513,84 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         regions["Olympus Coliseum"].locations.append("Complete Hercules Cup")
         regions["Olympus Coliseum"].locations.append("Complete Hercules Cup Solo")
         regions["Olympus Coliseum"].locations.append("Complete Hercules Cup Time Trial")
-        regions["Olympus Coliseum"].locations.append("Complete Hades Cup")
-        regions["Olympus Coliseum"].locations.append("Complete Hades Cup Solo")
-        regions["Olympus Coliseum"].locations.append("Complete Hades Cup Time Trial")
-        regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Cloud and Leon Event")
-        regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Yuffie Event")
-        regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Cerberus Event")
-        regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Behemoth Event")
-        regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Hades Event")
         regions["Olympus Coliseum"].locations.append("Hercules Cup Defeat Cloud Event")
         regions["Olympus Coliseum"].locations.append("Hercules Cup Yellow Trinity Event")
-        regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Hades Ansem's Report 8")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Olympia Chest")
-        regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Ice Titan Diamond Dust Event")
-        regions["Olympus Coliseum"].locations.append("Olympus Coliseum Gates Purple Jar After Defeating Hades")
+        if options.cups.current_key == "hades_cup":
+            regions["Olympus Coliseum"].locations.append("Complete Hades Cup")
+            regions["Olympus Coliseum"].locations.append("Complete Hades Cup Solo")
+            regions["Olympus Coliseum"].locations.append("Complete Hades Cup Time Trial")
+            regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Cloud and Leon Event")
+            regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Yuffie Event")
+            regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Cerberus Event")
+            regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Behemoth Event")
+            regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Hades Event")
+            regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Hades Ansem's Report 8")
+            regions["Olympus Coliseum"].locations.append("Olympus Coliseum Gates Purple Jar After Defeating Hades")
+        if options.cups.current_key == "hades_cup" and options.super_bosses:
+            regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Ice Titan Diamond Dust Event")
     if options.super_bosses:
         regions["Neverland"].locations.append("Neverland Defeat Phantom Stop Event")
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Zantetsuken Event")
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Ansem's Report 11")
-    if options.super_bosses or options.goal.current_key == "sephiroth":
+    if options.super_bosses or options.final_rest_door_key.current_key == "sephiroth":
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth Ansem's Report 12")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event")
-    if options.super_bosses or options.goal.current_key == "unknown":
+    if options.super_bosses or options.final_rest_door_key.current_key == "unknown":
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown EXP Necklace Event")
-    for i in range(options.level_checks):
-        regions["Levels"].locations.append("Level " + str(i+1).rjust(3, '0'))
-    if options.goal.current_key == "final_ansem":
-        regions["End of the World"].locations.append("Final Ansem")
+    if options.jungle_slider:
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 10 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 20 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 30 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 40 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 50 Fruits")
+    for i in range(1,options.level_checks+1):
+        regions["Levels"].locations.append("Level " + str(i+1).rjust(3, '0') + " (Slot 1)")
+        if i+1 in kh1world.get_slot_2_levels():
+            regions["Levels"].locations.append("Level " + str(i+1).rjust(3, '0') + " (Slot 2)")
+    if options.destiny_islands:
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Capture Fish 1 (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Capture Fish 2 (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Capture Fish 3 (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Gather Seagull Egg (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Log on Riku's Island (Day 1)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Log under Bridge (Day 1)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Gather Cloth (Day 1)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Gather Rope (Day 1)")
+       #regions["Destiny Islands"].locations.append("Destiny Islands Seashore Deliver Kairi Items (Day 1)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Secret Place Gather Mushroom (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Cove Gather Mushroom Near Zip Line (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Cove Gather Mushroom in Small Cave (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Cove Talk to Kairi (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Gather Drinking Water (Day 2)")
+       #regions["Destiny Islands"].locations.append("Destiny Islands Cove Deliver Kairi Items (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Chest")
+    regions["Homecoming"].locations.append("Final Ansem")
+    
+    for location in kh1world.get_starting_accessory_locations():
+        regions[location_table[location].category].locations.append(location)
 
     # Set up the regions correctly.
     for name, data in regions.items():
         multiworld.regions.append(create_region(multiworld, player, name, data))
 
-
-def connect_entrances(multiworld: MultiWorld, player: int):
+def connect_entrances(kh1world):
+    multiworld = kh1world.multiworld
+    player     = kh1world.player
+    options    = kh1world.options
+    
     multiworld.get_entrance("Awakening", player).connect(multiworld.get_region("Awakening", player))
-    multiworld.get_entrance("Destiny Islands", player).connect(multiworld.get_region("Destiny Islands", player))
+    if options.destiny_islands:
+        multiworld.get_entrance("Destiny Islands", player).connect(multiworld.get_region("Destiny Islands", player))
     multiworld.get_entrance("Traverse Town", player).connect(multiworld.get_region("Traverse Town", player))
     multiworld.get_entrance("Wonderland", player).connect(multiworld.get_region("Wonderland", player))
     multiworld.get_entrance("Olympus Coliseum", player).connect(multiworld.get_region("Olympus Coliseum", player))
     multiworld.get_entrance("Deep Jungle", player).connect(multiworld.get_region("Deep Jungle", player))
     multiworld.get_entrance("Agrabah", player).connect(multiworld.get_region("Agrabah", player))
     multiworld.get_entrance("Monstro", player).connect(multiworld.get_region("Monstro", player))
-    multiworld.get_entrance("Atlantica", player).connect(multiworld.get_region("Atlantica", player))
+    if options.atlantica:
+        multiworld.get_entrance("Atlantica", player).connect(multiworld.get_region("Atlantica", player))
     multiworld.get_entrance("Halloween Town", player).connect(multiworld.get_region("Halloween Town", player))
     multiworld.get_entrance("Neverland", player).connect(multiworld.get_region("Neverland", player))
     multiworld.get_entrance("Hollow Bastion", player).connect(multiworld.get_region("Hollow Bastion", player))
@@ -501,7 +598,7 @@ def connect_entrances(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("100 Acre Wood", player).connect(multiworld.get_region("100 Acre Wood", player))
     multiworld.get_entrance("World Map", player).connect(multiworld.get_region("World Map", player))
     multiworld.get_entrance("Levels", player).connect(multiworld.get_region("Levels", player))
-
+    multiworld.get_entrance("Homecoming", player).connect(multiworld.get_region("Homecoming", player))
 
 def create_region(multiworld: MultiWorld, player: int, name: str, data: KH1RegionData):
     region = Region(name, player, multiworld)
