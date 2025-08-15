@@ -19,6 +19,7 @@ def get_progression_only_items(multiworld: MultiWorld, player: int, loc, hinted_
     for item in prog_items_no_skip:
         if item.location not in hinted_loc and item.code is not None and (item.player == player or item.location.player == player):
             loc: Location = item.location
+            break
         else:
             continue
     return loc
@@ -29,6 +30,7 @@ def get_other_items(multiworld: MultiWorld, player: int, loc, hinted_loc, other_
     for item in other_items:
         if item.location not in hinted_loc and item.code is not None and (item.player == player or item.location.player == player):
             loc: Location = item.location
+            break
         else:
             continue
     return loc
