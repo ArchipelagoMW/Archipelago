@@ -33,7 +33,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_5",
-        "name": "Ancient Sactuary: Gestral Totem - Base of the totem",
+        "name": "Ancient Sanctuary: Gestral Totem - Base of the totem",
         "location": "Ancient Sanctuary",
         "original_item": "Consumable_LuminaPoint",
         "condition": {
@@ -83,7 +83,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_11",
-        "name": "Ancient Sactuary: Gestral Totem - Ink bottles on the cliff",
+        "name": "Ancient Sanctuary: Gestral Totem - Ink bottles on the cliff",
         "location": "Ancient Sanctuary",
         "original_item": "UpgradeMaterial",
         "condition": {
@@ -101,7 +101,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_13",
-        "name": "Ancient Sactuary: Gestral Totem - In shallow river",
+        "name": "Ancient Sanctuary: Gestral Totem - In shallow river",
         "location": "Ancient Sanctuary",
         "original_item": "PiercingShot",
         "condition": {
@@ -111,7 +111,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_14",
-        "name": "Ancient Sactuary: Gestral Totem - Jump the gaps",
+        "name": "Ancient Sanctuary: Gestral Totem - Jump the gaps",
         "location": "Ancient Sanctuary",
         "original_item": "ChromaPack_ExtraLarge",
         "condition": {
