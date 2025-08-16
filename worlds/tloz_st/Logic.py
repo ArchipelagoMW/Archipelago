@@ -16,14 +16,16 @@ def make_overworld_logic(player: int, origin_name: str, options: SpiritTracksOpt
         #["aboda village", "aboda village stamp book", False, None],
         ["aboda village", "aboda village stamp station", False, lambda state: st_has_stamp_book(state, player)],
         ["aboda village", "aboda village bees", False, None],
-
+        ["aboda village", "forest realm", False, None],
 
         # # ======== Castle Town =========
 
-        ["castle town", "castle town stamp station", False, lambda state: st_has_stamp_book(state, player)],
+        ["forest realm", "castle town", False, None],
+        ["castle town", "castle town stamp station", True, lambda state: st_has_stamp_book(state, player)],
 
         # # ========== ToS ===================
 
+        ["forest realm", "tos", False, None],
         ["tos", "goal", False, lambda state: st_has_sword(state, player)],
 
         # # ============ Shops ====================

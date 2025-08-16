@@ -3,7 +3,7 @@ REGIONS = [
     "beat required dungeons",
 
     # Forest Realm
-    #"forest realm",
+    "forest realm",
     #"forest realm nr rabbitland rabbit",
     #"forest realm s whittleton rabbit",
     #"forest realm w cast town rabbit",
@@ -48,7 +48,7 @@ REGIONS = [
     #"tos left tear",
     #"tos up tear",
     #"tos right tear",
-    "goal",
+    "3f rail map",
 
     # Whittleton
     #"whittleton",

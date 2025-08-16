@@ -12,7 +12,8 @@ LOCATIONS_DATA = {
         "stage_id": 0x2F,
         "floor_id": 0,
         "address": 0x265743,
-        "value": 0x20
+        "value": 0x20,
+        "item_override": "Sword (Progressive)"
     },
     "Aboda Bee Tree": {
         "region_id": "aboda village bees",
@@ -21,18 +22,22 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "x_min": 34192,
         "x_max": 52960,
-        "z_max": -10024,
-        "z_min": -34890
+        "z_min": -34890,
+        "z_max": -10024
     },
     "Aboda Stamp Station": {
         "region_id": "aboda village stamp station",
         #"vanilla_item": "Aboda Village Stamp",
         "vanilla_item": "Red Rupee (20)",
-        #"item_override": "Stamp Book",
+        "item_override": "Stamp Book",
         "stage_id": 0x2F,
         "floor_id": 0,
         "stamp": True,
-        "require_item": ["Stamp Book"]
+        "require_item": ["Stamp Book"],
+        "x_min": -47131,
+        "x_max": -29971,
+        "z_min": -38607,
+        "z_max": -23820
         # 02271CD8 is array of stamp IDs
         # 02271CF4 is bitfield of all stamps found
     },
@@ -42,9 +47,12 @@ LOCATIONS_DATA = {
         "region_id": "castle town stamp station",
         "vanilla_item": "Red Rupee (20)",
         #"vanilla_item": "Castle Town Stamp",
-        #"item_override": "Stamp Book",
-        "stage_id": 29,
+        "stage_id": 0x29,
         "floor_id": 0,
+        "x_min": -104858,
+        "x_max": -86873,
+        "z_min": -76186,
+        "z_max": -58479,
         #"y": 0x1333,
         "stamp": True,
         "require_item": ["Stamp Book"]
@@ -66,9 +74,9 @@ LOCATIONS_DATA = {
     # # ========== Tower of Spirits ==============
 
     "ToS Forest Rail Glyph": {
-        "region_id": "goal",
+        "region_id": "3f rail map",
         "vanilla_item": "Forest Glyph",
-        "stage_id": 13,
+        "stage_id": 0x13,
         #"floor_id": 2,
         #"y": 0x1333,
         'dungeon': "Tower of Spirits",

@@ -425,7 +425,14 @@ class SpiritTracksClient(BizHawkClient):
                     and self.new_stage_loading is None:
                 self.receiving_location = True
                 print("Receiving Item")
+                #if read_result["stamp"]:
+                    #getting_stamp = True
                 await self.process_checked_locations(ctx, None)
+
+            #TODO Read Stamps
+           # if getting_stamp:
+            #    stamp_location = get_stamp_location(scene)
+             #   await self.process_checked_locations(ctx, stamp_location)
 
             # Process received items
             if num_received_items < len(ctx.items_received):

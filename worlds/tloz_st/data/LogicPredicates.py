@@ -516,5 +516,6 @@ def st_train_access(state, player):
 # Goal Stuff
 
 def st_temp_goal(state, player):
-    return all([st_has_glyph(state, player, "Forest"),
-                st_has_sword(state, player)])
+    #return all([st_has_glyph(state, player, "Forest"),
+    #            st_has_sword(state, player)])
+    return True
