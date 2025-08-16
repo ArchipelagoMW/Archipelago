@@ -87,7 +87,7 @@ grinch_locations = {
 #Rotten Egg Launcher Blueprints
         "REL Blueprint - Outside City Hall": GrinchLocationData("Whoville", "Rotten Egg Launcher Blueprints", 700, [GrinchRamData(0x01020B, binary_bit_pos=0)]),
         "REL Blueprint - Outside Clock Tower": GrinchLocationData("Whoville", "Rotten Egg Launcher Blueprints", 701, [GrinchRamData(0x01020B, binary_bit_pos=1)]),
-        "REL Blueprint - Post Office - Front of Silver Door": GrinchLocationData("Post Office", "Rotten Egg Launcher Blueprints", 702, [GrinchRamData(0x01021C, binary_bit_pos=1)]),
+        "REL Blueprint - Post Office - Inside Silver Room": GrinchLocationData("Post Office", "Rotten Egg Launcher Blueprints", 702, [GrinchRamData(0x01021C, binary_bit_pos=1)]),
         "REL Blueprint - Post Office - After Mission Completion": GrinchLocationData("Post Office", "Rotten Egg Launcher Blueprints", 703, [GrinchRamData(0x01021C, binary_bit_pos=2)]),
 #Rocket Spring Blueprints
         "RS Blueprint - Behind Vacuum": GrinchLocationData("Who Forest", "Rocket Spring Blueprints", 800, [GrinchRamData(0x010243, binary_bit_pos=3)]),
