@@ -188,7 +188,7 @@ events: List[InternalEventItemData] = [
     InternalEventItemData(5001, 1912, "Mars Lighthouse - Doom Dragon", "Doom Dragon Defeated"),
     InternalEventItemData(5002, 2219, "Alhafra Briggs", "Briggs defeated"),
     InternalEventItemData(5003, 2431, "Alhafra Prison Briggs", "Briggs escaped"),
-    InternalEventItemData(5004, 2303, "Gabomba Statue Event", "Gabomba Statue Completed"),
+    InternalEventItemData(5004, 2303, "Gabomba Statue Ritual", "Gabomba Statue Completed"),
     InternalEventItemData(5005, 2542, "Gaia Rock - Serpent", "Serpent defeated"),
     InternalEventItemData(5006, 1637, "Sea of Time - Poseidon", "Poseidon defeated"),
     InternalEventItemData(5007, 2367, "Lemurian Ship - Aqua Hydra", "Aqua Hydra defeated"),
@@ -497,6 +497,15 @@ InternalItemData(410, name_by_item_id[410], ItemClassification.useful, 747996, I
 ]
 
 lucky_only: List[InternalItemData] = [
+InternalItemData(250, name_by_item_id[250], ItemClassification.useful, 740956, ItemType.Shirt, False, True),
+InternalItemData(251, name_by_item_id[251], ItemClassification.useful, 741000, ItemType.Shirt, False, True),
+InternalItemData(252, name_by_item_id[252], ItemClassification.useful, 741044, ItemType.Shirt, False, True),
+InternalItemData(256, name_by_item_id[256], ItemClassification.useful, 741220, ItemType.Boots, False, True),
+InternalItemData(257, name_by_item_id[257], ItemClassification.useful, 741264, ItemType.Boots, False, True),
+InternalItemData(258, name_by_item_id[258], ItemClassification.useful, 741308, ItemType.Boots, False, True),
+InternalItemData(262, name_by_item_id[262], ItemClassification.useful, 741484, ItemType.Ring, False, True),
+InternalItemData(263, name_by_item_id[263], ItemClassification.useful, 741528, ItemType.Ring, False, True),
+InternalItemData(264, name_by_item_id[264], ItemClassification.useful, 741572, ItemType.Ring, False, True),
 InternalItemData(280, name_by_item_id[280], ItemClassification.useful, 742276, ItemType.Weapon, False, True),
 InternalItemData(302, name_by_item_id[302], ItemClassification.useful, 743244, ItemType.Weapon, False, True),
 InternalItemData(320, name_by_item_id[320], ItemClassification.useful, 744036, ItemType.Weapon, False, True),
@@ -508,15 +517,6 @@ InternalItemData(364, name_by_item_id[364], ItemClassification.useful, 745972, I
 InternalItemData(380, name_by_item_id[380], ItemClassification.useful, 746676, ItemType.Helm, False, True),
 InternalItemData(387, name_by_item_id[387], ItemClassification.useful, 746984, ItemType.Helm, False, True),
 InternalItemData(395, name_by_item_id[395], ItemClassification.useful, 747336, ItemType.Helm, False, True),
-InternalItemData(256, name_by_item_id[256], ItemClassification.useful, 741220, ItemType.Boots, False, True),
-InternalItemData(257, name_by_item_id[257], ItemClassification.useful, 741264, ItemType.Boots, False, True),
-InternalItemData(258, name_by_item_id[258], ItemClassification.useful, 741308, ItemType.Boots, False, True),
-InternalItemData(250, name_by_item_id[250], ItemClassification.useful, 740956, ItemType.Shirt, False, True),
-InternalItemData(251, name_by_item_id[251], ItemClassification.useful, 741000, ItemType.Shirt, False, True),
-InternalItemData(252, name_by_item_id[252], ItemClassification.useful, 741044, ItemType.Shirt, False, True),
-InternalItemData(262, name_by_item_id[262], ItemClassification.useful, 741484, ItemType.Ring, False, True),
-InternalItemData(263, name_by_item_id[263], ItemClassification.useful, 741528, ItemType.Ring, False, True),
-InternalItemData(264, name_by_item_id[264], ItemClassification.useful, 741572, ItemType.Ring, False, True),
 
 ]
 
@@ -570,6 +570,7 @@ InternalItemData(163, name_by_item_id[163], ItemClassification.useful, 737128, I
 InternalItemData(164, name_by_item_id[164], ItemClassification.useful, 737172, ItemType.Helm, False, True),
 InternalItemData(170, name_by_item_id[170], ItemClassification.useful, 737436, ItemType.Helm, False, True),
 InternalItemData(171, name_by_item_id[171], ItemClassification.useful, 737480, ItemType.Helm, False, True),
+InternalItemData(228, name_by_item_id[228], ItemClassification.filler, 739988, ItemType.Consumable, False, True),
 InternalItemData(265, name_by_item_id[265], ItemClassification.useful, 741616, ItemType.Ring, False, True),
 InternalItemData(267, name_by_item_id[267], ItemClassification.useful, 741704, ItemType.Ring, False, True),
 InternalItemData(268, name_by_item_id[268], ItemClassification.useful, 741748, ItemType.Ring, False, True),
@@ -642,7 +643,6 @@ remainder: List[InternalItemData] = [
     InternalItemData(188, name_by_item_id[188], ItemClassification.filler, 738228, ItemType.Consumable, False, False),
     InternalItemData(226, name_by_item_id[226], ItemClassification.filler, 739900, ItemType.Consumable, False, False),
     InternalItemData(227, name_by_item_id[227], ItemClassification.filler, 739944, ItemType.Consumable, False, False),
-    InternalItemData(228, name_by_item_id[228], ItemClassification.filler, 739988, ItemType.Consumable, False, True),
     InternalItemData(229, name_by_item_id[229], ItemClassification.filler, 740032, ItemType.Consumable, False, True),
     InternalItemData(233, name_by_item_id[233], ItemClassification.filler, 740208, ItemType.Consumable, False, False),
     InternalItemData(236, name_by_item_id[236], ItemClassification.filler, 740340, ItemType.Consumable, False, False),

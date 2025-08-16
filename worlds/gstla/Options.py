@@ -391,7 +391,8 @@ class EnemyEResShuffle(Choice):
     internal_name = "enemy_elemental_resistance"
     display_name = "Enemy Elemental Resistance Shuffle"
     option_vanilla = 0
-    option_shuffle_elemmental_res = 1
+    option_shuffle_elemental_res = 1
+    alias_shuffle_elemmental_res = option_shuffle_elemental_res
     option_randomize_elemental_res = 2
     default = 0
 
