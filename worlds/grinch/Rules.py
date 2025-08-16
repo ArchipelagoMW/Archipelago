@@ -171,7 +171,7 @@ rules_dict: dict[str,list[list[str]]] = {
     "REL Blueprint - Outside Clock Tower": [
         []
     ],
-    "REL Blueprint - Post Office - Front of Silver Door": [
+    "REL Blueprint - Post Office - Inside Silver Room": [
         ["Who Cloak"]
         # ["Who Cloak", "Max"]
     ],
