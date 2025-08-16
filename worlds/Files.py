@@ -248,10 +248,8 @@ class APProcedurePatch(APAutoPatchInterface):
             manifest["compatible_version"] = 5
         return manifest
 
-    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
-        super(APProcedurePatch, self).read_contents(opened_zipfile)
-        with opened_zipfile.open("archipelago.json", "r") as f:
-            manifest = json.load(f)
+    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
+        manifest = super(APProcedurePatch, self).read_contents(opened_zipfile)
         if "procedure" not in manifest:
             # support patching files made before moving to procedures
             self.procedure = [("apply_bsdiff4", ["delta.bsdiff4"])]
@@ -260,6 +258,7 @@ class APProcedurePatch(APAutoPatchInterface):
         for file in opened_zipfile.namelist():
             if file not in ["archipelago.json"]:
                 self.files[file] = opened_zipfile.read(file)
+        return manifest
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         super(APProcedurePatch, self).write_contents(opened_zipfile)
