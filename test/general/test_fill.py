@@ -343,6 +343,52 @@ class TestFillRestrictive(unittest.TestCase):
         self.assertEqual(player2.locations[0].item, player1.prog_items[0])
         self.assertEqual(player2.locations[1].item, player1.prog_items[1])
 
+    def test_cross_world_entrance_rules_fill(self):
+        """Test that entrance rules with cross-world logic can be filled"""
+        multiworld = generate_test_multiworld(2)
+        player1 = generate_player_data(multiworld, 1)
+        player2 = generate_player_data(multiworld, 2, prog_item_count=2)
+        player2_items = player2.prog_items.copy()
+
+        multiworld.completion_condition[player1.id] = lambda state: state.has_all(
+            names(player2_items), player2.id)
+        multiworld.completion_condition[player2.id] = lambda state: state.has_all(
+            names(player2_items), player2.id)
+
+        r1 = player1.generate_region(player1.menu, 1)
+        player1.generate_region(r1, 1, lambda state: state.has(player2_items[0].name, player2.id))
+
+        # player1 is logically dependent on player2's items.
+        multiworld.register_logic_dependency(1, 2)
+
+        locations = multiworld.get_unfilled_locations()
+
+        fill_restrictive(multiworld, multiworld.state,
+                         locations, player2.prog_items)
+
+    def test_cross_world_location_rules_fill(self):
+        """Test that location rules with cross-world logic can be filled"""
+        multiworld = generate_test_multiworld(2)
+        player1 = generate_player_data(multiworld, 1, location_count=2)
+        player2 = generate_player_data(multiworld, 2, prog_item_count=2)
+        player2_items = player2.prog_items.copy()
+
+        multiworld.completion_condition[player1.id] = lambda state: state.has_all(
+            names(player2_items), player2.id)
+        multiworld.completion_condition[player2.id] = lambda state: state.has_all(
+            names(player2_items), player2.id)
+
+        set_rule(player1.locations[1], lambda state: state.has(
+            player2_items[0].name, player2.id))
+
+        # player1 is logically dependent on player2's items.
+        multiworld.register_logic_dependency(1, 2)
+
+        locations = multiworld.get_unfilled_locations()
+
+        fill_restrictive(multiworld, multiworld.state,
+                         locations, player2.prog_items)
+
     def test_restrictive_progress(self):
         """Test that various spheres with different requirements can be filled"""
         multiworld = generate_test_multiworld()
