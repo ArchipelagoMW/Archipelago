@@ -298,6 +298,8 @@ events = [
         5020, True, True, LocationType.Event, LocationRestriction(7), True), # Contigo - Reunion Reunion
     InternalLocationData(1, 1, 5021, 5021, [0], 0,
         5021, True, True, LocationType.Event, LocationRestriction(7), True), # Victory Event Victory
+    InternalLocationData(2655, 2655, 5022, 5022, [0], 0,
+        5022, True, True, LocationType.Event, LocationRestriction(7), True), # Loho - Ship Cannon Ship Cannon
     
 ]
 
