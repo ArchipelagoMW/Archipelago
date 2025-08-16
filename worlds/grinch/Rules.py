@@ -141,6 +141,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "Drilling Holes In Canoes": [
         ["Drill"]
+        # ["Drill", "Max"]
     ],
     "Modifying The Marine Mobile": [
         []
@@ -172,9 +173,11 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "REL Blueprint - Post Office - Front of Silver Door": [
         ["Who Cloak"]
+        # ["Who Cloak", "Max"]
     ],
     "REL Blueprint - Post Office - After Mission Completion": [
         ["Who Cloak"]
+        # ["Who Cloak", "Max"]
     ],
     "RS Blueprint - Behind Vacuum": [
         []
@@ -270,16 +273,20 @@ rules_dict: dict[str,list[list[str]]] = {
         ["Rotten Egg Launcher", "Rocket Spring"]
     ],
     "OCD Blueprint - Guardian's House - Left Side": [
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
+        []
+        # ["Rotten Egg Launcher", "Grinch Copter"],
+        # ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
+        # ["Max"]
     ],
     "OCD Blueprint - Guardian's House - Right Side": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
     ],
     "OCD Blueprint - Inside Guardian's House": [
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
+        []
+        # ["Rotten Egg Launcher", "Grinch Copter"],
+        # ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
+        # ["Max"]
     ],
     "MM Blueprint - South Shore - Bridge to Scout's Hut": [
         []
@@ -320,9 +327,11 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "MM Blueprint - North Shore - Inside Skunk Hut": [
         []
+        # ["Max"]
     ],
     "MM Blueprint - North Shore - Fenced in Area": [
         []
+        # ["Max"]
     ],
     "MM Blueprint - North Shore - Boulder Box near Bridge": [
         []
@@ -353,6 +362,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "GC Blueprint - Who Forest Ski Resort - Max Cave": [
         []
+        # ["Max"]
     ],
     "GC Blueprint - Who Forest Civic Center - Climb across Bat Cave wall": [
         ["Grinch Copter"],
@@ -406,11 +416,14 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "Heart of Stone - Who Dump": [
-        ["Grinch Copter"],
-        ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
+        []
+        # ["Grinch Copter"],
+        # ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
+        # ["Max"]
     ],
     "Heart of Stone - Who Lake": [
         []
+        # ["Max"]
     ],
     "Spin N' Win - Easy": [
         []
