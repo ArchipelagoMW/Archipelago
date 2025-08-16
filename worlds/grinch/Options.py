@@ -5,7 +5,7 @@ from Options import FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, Te
 
 class StartingArea(Choice):
     """
-    Here, you can select which area you'll start the game with.
+    Here, you can select which area you'll start the game with. [NOT IMPLEMENTED]
     Whichever one you pick is the region you'll have access to at the start of the Multiworld.
     """
     option_whoville = 0
@@ -76,14 +76,15 @@ class TrapLinkOption(Toggle):
 
 @dataclass
 class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
+    starting_area: StartingArea
     progressive_vacuum: ProgressiveVacuum
     missionsanity: Missionsanity
+    annoyinglocations: AnnoyingLocations
+    minigamesanity: Supadow
+    progressive_gadget: ProgressiveGadget
+    supadow_minigames: Supadow
+    giftsanity: Gifts
+    movesanity: Movesanity
     unlimited_eggs: UnlimitedEggs
     ring_link: RingLinkOption
     trap_link: TrapLinkOption
-    minigamesanity: Supadow
-    giftsanity: Gifts
-    movesanity: Movesanity
-    starting_area: StartingArea
-    progressive_gadget: ProgressiveGadget
-    annoyinglocations: AnnoyingLocations
