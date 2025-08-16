@@ -78,10 +78,32 @@ class GloverWorld(World):
     #Check/Item Prefixes
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
+    group_lists : list[str] = ["Not Crystal",
+	"Not Bowling",
+	"Not Bowling or Crystal",
+	"Sinks",
+	"Floats",
+	"Ball Up"]
 
     item_name_to_id = generate_item_name_to_id()
     item_name_groups = generate_item_name_groups()
     location_name_to_id = generate_location_name_to_id(world_prefixes, level_prefixes)
+
+    def collect(self, state, item):
+        output = super().collect(state, item)
+        name : str = item.name
+        for each_group in self.group_lists:
+            if state.has_group(each_group, self.player):
+                state.add_item(name, self.player)
+        return output
+
+    def remove(self, state, item):
+        output = super().remove(state, item)
+        name : str = item.name
+        for each_group in self.group_lists:
+            if not state.has_group(each_group, self.player):
+                state.remove_item(name, self.player)
+        return output
 
     def __init__(self, world, player):
         self.version = "V0.1"
@@ -400,8 +422,8 @@ class GloverWorld(World):
                 hubroom.connect(connecting_level, location_name, lambda state: state.can_reach_location(location_name, self.player))
 
     def connect_entrances(self):
-        #self.entrance_randomizer(self)
-        visualize_regions(self.multiworld.get_region("Menu", self.player), "Glover.puml")
+        #Use reachable regions when I need to debug stuff in this ', self.multiworld.blabla)'
+        visualize_regions(self.multiworld.get_region("Menu", self.player), "Glover.puml", regions_to_highlight=self.multiworld.get_all_state().reachable_regions[self.player])
         return super().connect_entrances()
 
     def build_options(self):
