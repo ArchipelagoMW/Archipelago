@@ -9,7 +9,7 @@ from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping, Optional, Any
 from BaseClasses import ItemClassification
 from NetUtils import ClientStatus, NetworkItem
 from worlds._bizhawk.client import BizHawkClient
-from worlds._bizhawk import read, write, guarded_write
+from worlds._bizhawk import read, write, guarded_write, display_message
 from . import items_by_id, ItemType, remote_blacklist
 from .gen.LocationNames import loc_names_by_id, LocationName, option_name_to_goal_name
 from .gen.ItemData import djinn_items, mimics, ItemData, events
@@ -17,7 +17,7 @@ from .gen.LocationData import all_locations, LocationType, djinn_locations, Loca
     event_name_to_data, location_id_to_data, event_id_to_name
 
 if TYPE_CHECKING:
-    from worlds._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor
+    from worlds._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor, TextCategory
 
 logger = logging.getLogger("Client")
 
@@ -124,6 +124,7 @@ class GoalManager:
             ap_id = self.desired_flags.get(flag, None)
             if ap_id is not None:
                 if is_set and ap_id not in server_flags:
+                    await display_message(ctx.bizhawk_ctx, f"{flag} Completed")
                     updated_flags.add(ap_id)
 
         server_djinn = ctx.stored_data.get(client.get_djinn_location_key(ctx), [])
@@ -132,6 +133,11 @@ class GoalManager:
 
         # Always compute difference for pop tracker
         difference = client.checked_djinn.difference(server_djinn)
+
+        if difference:
+            await display_message(ctx.bizhawk_ctx,
+                                  f"Number of Djinn Obtained: {len(client.checked_djinn)}" +
+                                  "" if 'djinn' not in client.goals.count_requirements else f"'/'{str(client.goals.count_requirements.get("djinn",0))}")
 
         if updated_flags or difference:
             # logger.info(f"Flags updated: {updated_flags}")
@@ -308,6 +314,8 @@ class GSTLAClient(BizHawkClient):
                 ctx.command_processor.commands[cmd] = func
         ctx.items_handling = 0b111
         ctx.watcher_timeout = 1  # not sure what a reasonable setting here is; passed to asyncio.wait_for
+        ctx.text_passthrough_categories.add(TextCategory.OUTGOING)
+        ctx.text_passthrough_categories.add(TextCategory.HINT)
         return True
 
     async def set_auth(self, ctx: 'BizHawkClientContext') -> None:
