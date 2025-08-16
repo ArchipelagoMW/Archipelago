@@ -214,15 +214,15 @@ class APQuestContext(CommonContext):
 
 
 async def main(args: Namespace) -> None:
-    # Assume we shouldn't play the intro song. Technically there could still be a password though.
+    if not gui_enabled:
+        raise RuntimeError("APQuest cannot be played without gui.")
+
+    # Assume we shouldn't play the intro song in the auto-connect scenario, because the game will instantly start.
     delay_intro_song = args.connect and args.name
 
     ctx = APQuestContext(args.connect, args.password, delay_intro_song=delay_intro_song)
     ctx.auth = args.name
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
-
-    if not gui_enabled:
-        raise RuntimeError("APQuest cannot be played without gui.")
 
     ctx.run_gui()
     ctx.run_cli()
