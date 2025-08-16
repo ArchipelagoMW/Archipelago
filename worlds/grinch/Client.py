@@ -1,5 +1,7 @@
 import asyncio
 from typing import TYPE_CHECKING
+
+import NetUtils
 from .Locations import grinch_locations
 from .Items import ALL_ITEMS_TABLE
 import worlds._bizhawk as bizhawk
@@ -91,6 +93,8 @@ class GrinchClient(BizHawkClient):
             #     }])
             await self.location_checker(ctx)
             await self.receiving_items_handler(ctx)
+            await self.goal_checker(ctx)
+            await self.constant_address_update(ctx)
 
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
@@ -143,7 +147,8 @@ class GrinchClient(BizHawkClient):
                 if is_binary:
                     current_ram_address_value = (current_ram_address_value | (1 << addr_to_update.binary_bit_pos))
                 elif addr_to_update.update_existing_value:
-                    current_ram_address_value += addr_to_update.value
+                    # Grabs minimum value of a list of numbers and makes sure it does not go above max count possible
+                    current_ram_address_value += min(addr_to_update.value, addr_to_update.max_count)
                 else:
                     current_ram_address_value = addr_to_update.value
 
@@ -152,6 +157,24 @@ class GrinchClient(BizHawkClient):
                     current_ram_address_value.to_bytes(addr_to_update.bit_size, "little"), "MainRAM")])
 
             self.last_received_index += 1
+
+    async def goal_checker(self, ctx: "BizHawkClientContext"):
+        if not ctx.finished_game:
+            goal_loc = grinch_locations["Neutralizing Santa"]
+            goal_ram_address = goal_loc.update_ram_addr[0]
+            current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
+                goal_ram_address.ram_address, goal_ram_address.bit_size, "MainRAM")]))[0], "little")
+            if (current_ram_address_value & (1 << goal_ram_address.binary_bit_pos)) > 0:
+                ctx.finished_game = True
+                await ctx.send_msgs([{
+                    "cmd": "StatusUpdate",
+                    "status": NetUtils.ClientStatus.CLIENT_GOAL,
+                }])
+
+    async def constant_address_update(self, ctx: "BizHawkClientContext"):
+        list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
+        if 42369 in list_recv_itemids and 42371 in list_recv_itemids and 42372 in list_recv_itemids and 42373 in list_recv_itemids:
+            await bizhawk.write(ctx.bizhawk_ctx, [(0x010200, (99).to_bytes(1, "little"), "MainRAM")])
 
     async def ingame_checker(self, ctx: "BizHawkClientContext"):
         demo_mode = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
