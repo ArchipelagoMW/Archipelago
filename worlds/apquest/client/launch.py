@@ -14,9 +14,6 @@ def launch_client(*args: Sequence[str]) -> None:
 
     launch_args = handle_url_arg(parser.parse_args(args))
 
-    if launch_args.nogui:
-        raise RuntimeError("APQuest cannot be played without gui.")
-
     colorama.just_fix_windows_console()
 
     asyncio.run(main(launch_args))
