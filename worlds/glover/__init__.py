@@ -93,16 +93,16 @@ class GloverWorld(World):
         output = super().collect(state, item)
         name : str = item.name
         for each_group in self.group_lists:
-            if state.has_group(each_group, self.player):
-                state.add_item(name, self.player)
+            if name in self.item_name_groups[each_group] and state.count_group(each_group, self.player) == 1:
+                state.add_item(each_group, self.player)
         return output
 
     def remove(self, state, item):
         output = super().remove(state, item)
         name : str = item.name
         for each_group in self.group_lists:
-            if not state.has_group(each_group, self.player):
-                state.remove_item(name, self.player)
+            if name in self.item_name_groups[each_group] and state.count_group(each_group, self.player) == 0:
+                state.remove_item(each_group, self.player)
         return output
 
     def __init__(self, world, player):
@@ -234,8 +234,8 @@ class GloverWorld(World):
         multiworld.regions.append(Region("AtlH", player, multiworld))
         #Replace with a connection to the hubworld rather than Atlantis
         multiworld.get_region("Menu", player).connect(multiworld.get_region("AtlH", player))
-        multiworld.get_region("AtlH", player).connect(multiworld.get_region("Atl1", player))
-        multiworld.get_region("AtlH", player).connect(multiworld.get_region("Atl2", player))
+        multiworld.get_region("AtlH", player).connect(multiworld.get_region("Atl1", player), "Portal 1")
+        multiworld.get_region("AtlH", player).connect(multiworld.get_region("Atl2", player), "Portal 2", lambda state: state.can_reach_location("Atl1: Goal", player))
         end_region : Region = multiworld.get_region("Atl2: End W/Ball", player)
         goal_location : Location = Location(player, "Ending", None, end_region)
         end_region.locations.append(goal_location)

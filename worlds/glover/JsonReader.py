@@ -3,9 +3,9 @@ import pkgutil
 from BaseClasses import Entrance, Location, MultiWorld, Region, CollectionState
 from typing import Any, List, NamedTuple
 from operator import attrgetter
-from .Options import GaribLogic, DifficultyLogic
-from .Rules import move_lookup, switches_to_event_items, all_lookups
-from worlds.generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
+from .Options import GaribLogic
+from .Rules import move_lookup, switches_to_event_items, access_methods_to_rules
+from worlds.generic.Rules import set_rule
 
 #Level name, followed by the region indexes of each checkpoint
 levels_in_order = [
@@ -237,7 +237,7 @@ def create_access_method(info : dict, level_name : str) -> AccessMethod:
     required_moves : list = []
     for each_key, each_result in info.items():
         if each_key.startswith("mv"):
-            required_moves.append(list(move_lookup.keys())[info[each_key]])
+            required_moves.append(move_lookup[info[each_key]])
         if each_key.startswith("ck"):
             required_moves.append(level_name + " " + info[each_key])
     #Combine Not Bowling and Not Crystal into Not Bowling Or Crystal
@@ -250,35 +250,6 @@ def create_access_method(info : dict, level_name : str) -> AccessMethod:
         required_moves.append("Jump")
     #Here's the access method!
     return AccessMethod(info["regionIndex"], info["ballRequirement"], info["trickDifficulty"], required_moves)
-
-def access_methods_to_rules(self, all_methods : list[AccessMethod], spot : Location | Entrance):
-    valid_methods : list[AccessMethod] = []
-    for each_method in all_methods:
-        #Is this method in difficulty for you?
-        match each_method.difficulty:
-            #Intended only
-            case 0:
-                if self.options.difficulty_logic != DifficultyLogic.option_intended:
-                    continue
-            #Easy tricks only
-            case 1:
-                if self.options.difficulty_logic == DifficultyLogic.option_hard_tricks:
-                    continue
-        if len(each_method.required_items) == 0:
-            continue
-        valid_methods.append(each_method)
-    #If there's no valid methods, it must be open
-    if len(valid_methods) == 0:
-        return
-    
-    #Otherwise, go over each valid method and assign
-    for index, each_method in enumerate(valid_methods):
-        #Start with the rule set
-        if index == 0:
-            set_rule(spot, lambda state, required_items = each_method.required_items : state.has_all(required_items, self.player))
-            continue
-        #Otherwise, this is an alternate method
-        add_rule(spot, lambda state, required_items = each_method.required_items : state.has_all(required_items, self.player), "or")
 
 def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[RegionPair], location_data_list : List[LocationData], self, event_prefix : str):
     player : int = self.player
