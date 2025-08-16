@@ -9,3 +9,4 @@ class GrinchRamData(NamedTuple):
     binary_bit_pos: Optional[int] = None
     bit_size: int = 1
     update_existing_value: bool = False
+    max_count: int = 0

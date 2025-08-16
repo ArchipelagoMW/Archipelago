@@ -74,3 +74,7 @@ class GrinchWorld(World):
             "give_unlimited_eggs": self.options.unlimited_eggs.value,
 
         }
+
+    def generate_output(self, output_directory: str) -> None:
+        # print("")
+        pass

@@ -117,15 +117,20 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
 #Sleigh Parts
 SLEIGH_PARTS_TABLE: dict[str, GrinchItemData] = {
     "Exhaust Pipes": GrinchItemData("Sleigh Parts", 300, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=2)]),
+        [GrinchRamData(0x0101FB, binary_bit_pos=2), GrinchRamData(0x0100AA, binary_bit_pos=5),
+         GrinchRamData(0x010200, value=99)]),
     "GPS": GrinchItemData("Sleigh Parts", 301, IC.useful,
-        [GrinchRamData(0x0101FB, binary_bit_pos=5)]),
+        [GrinchRamData(0x0101FB, binary_bit_pos=5), GrinchRamData(0x0100AA, binary_bit_pos=5),
+         GrinchRamData(0x010200, value=99)]),
     "Tires": GrinchItemData("Sleigh Parts", 302, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=4)]),
+        [GrinchRamData(0x0101FB, binary_bit_pos=4), GrinchRamData(0x0100AA, binary_bit_pos=5),
+         GrinchRamData(0x010200, value=99)]),
     "Skis": GrinchItemData("Sleigh Parts", 303, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=3)]),
+        [GrinchRamData(0x0101FB, binary_bit_pos=3), GrinchRamData(0x0100AA, binary_bit_pos=5),
+         GrinchRamData(0x010200, value=99)]),
     "Twin-End Tuba": GrinchItemData("Sleigh Parts", 304, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=6)])
+        [GrinchRamData(0x0101FB, binary_bit_pos=6), GrinchRamData(0x0100AA, binary_bit_pos=5),
+         GrinchRamData(0x010200, value=99)])
 }
 
 #Access Keys
@@ -155,14 +160,19 @@ KEYS_TABLE: dict[str, GrinchItemData] = {
 #Misc Items
 MISC_ITEMS_TABLE: dict[str, GrinchItemData] = {
     # This item may not function properly if you receive it during a loading screen or in Mount Crumpit
-    "Fully Healed Grinch": GrinchItemData("Health Items", 500, IC.filler, [GrinchRamData(0x0E8FDC, value=120)]),
-    "5 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 502, IC.filler, [GrinchRamData(0x010058, value=5, update_existing_value=True)]),
-    "10 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 503, IC.filler, [GrinchRamData(0x010058, value=10, update_existing_value=True)]),
-    "20 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 504, IC.filler, [GrinchRamData(0x010058, value=20, update_existing_value=True)])
+    "Fully Healed Grinch": GrinchItemData("Health Items", 500, IC.filler,
+        [GrinchRamData(0x0E8FDC, value=120)]),
+    "5 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 502, IC.filler,
+        [GrinchRamData(0x010058, value=5, update_existing_value=True, max_count=200)]),
+    "10 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 503, IC.filler,
+        [GrinchRamData(0x010058, value=10, update_existing_value=True, max_count=200)]),
+    "20 Rotten Eggs": GrinchItemData("Rotten Egg Bundles", 504, IC.filler,
+        [GrinchRamData(0x010058, value=20, update_existing_value=True, max_count=200)])
 }
 
 USEFUL_IC_TABLE: dict[str, GrinchItemData] = {
-    "Heart of Stone": GrinchItemData("Health Items", 501, IC.useful, [GrinchRamData(0x0100ED, value=1, update_existing_value=True)])
+    "Heart of Stone": GrinchItemData("Health Items", 501, IC.useful,
+        [GrinchRamData(0x0100ED, value=1, update_existing_value=True, max_count=4)])
 }
 
 #Traps
