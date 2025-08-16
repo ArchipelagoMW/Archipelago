@@ -95,5 +95,5 @@ item_name_groups = {
     #                "Enemy Pawn E", "Enemy Pawn F", "Enemy Pawn G", "Enemy Pawn H"},
     # "Enemy Piece": {"Enemy Piece A", "Enemy Piece B", "Enemy Piece C", "Enemy Piece D",
     #                 "Enemy Piece F", "Enemy Piece G", "Enemy Piece H"},
-    "Chessmen": {"Progressive Pawn", "Progressive Minor Piece", "Progressive Major Piece", "Progressive Consul"},
+    "Chessmen": {"Progressive Pawn", "Progressive Minor Piece", "Progressive Major Piece", "Progressive Jack", "Progressive Consul"},
 }

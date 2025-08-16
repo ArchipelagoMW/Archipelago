@@ -2,6 +2,7 @@ import unittest
 import random
 from ..Options import (EnableTactics, FairyChessArmy, FairyChessPieces, FairyChessPawns,
                       Difficulty, FairyChessPiecesConfigure, Goal, PieceLocations, AsymmetricTrades)
+from unittest.mock import patch
 
 class CMMockTestCase(unittest.TestCase):
     """Base test case that provides a mock world for unit testing."""
@@ -60,14 +61,7 @@ class CMMockTestCase(unittest.TestCase):
                 self.locked_locations = []
                 
                 # Add multiworld attribute with proper push_precollected method
-                self.multiworld = type('MultiWorld', (), {
-                    'precollected_items': {1: []},
-                    'push_precollected': lambda self, item: None,
-                    'get_location': lambda self, name, player: type('Location', (), {
-                        'name': name,
-                        'place_locked_item': lambda self, item: None
-                    })()
-                })()
+                self.multiworld = self._create_mock_multiworld()
 
             def create_item(self, name):
                 """Create a mock item with the given name."""
@@ -76,5 +70,39 @@ class CMMockTestCase(unittest.TestCase):
             def has_prereqs(self, item_name):
                 """Mock implementation that always returns True."""
                 return True
+
+            def _create_mock_multiworld(self):
+                """Create a mock multiworld that supports location rules."""
+                class MockLocation:
+                    def __init__(self, name):
+                        self.name = name
+                        self.access_rule = None
+                        
+                    def place_locked_item(self, item):
+                        pass
+                        
+                    def can_reach(self, state):
+                        """Check if location can be reached with given state."""
+                        if self.access_rule is None:
+                            return True
+                        return self.access_rule(state)
+                
+                class MockMultiWorld:
+                    def __init__(self):
+                        self.precollected_items = {1: []}
+                        self.completion_condition = {}
+                        self._locations = {}
+                    
+                    def push_precollected(self, item):
+                        pass
+                    
+                    def get_location(self, name, player):
+                        """Get or create a mock location."""
+                        key = (name, player)
+                        if key not in self._locations:
+                            self._locations[key] = MockLocation(name)
+                        return self._locations[key]
+                
+                return MockMultiWorld()
 
         return MockWorld()

@@ -457,8 +457,6 @@ class CMItemPool:
         This is used to determine the minimum number of major pieces needed for castling.
         We use the minimum possible number to avoid the 'Oh no, Terraria Hard Mode' problem, where
         getting more items (queen upgrades) could make a location (castling) harder to access."""
-        if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
-            return 0
         return self.items_used[self.world.player].get("Progressive Major To Queen", 0)
 
     def should_remove_item(self, chosen_item: str, material: int, min_material: float,

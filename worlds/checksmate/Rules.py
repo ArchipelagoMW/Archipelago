@@ -3,7 +3,7 @@ from typing import cast
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
 from .Items import progression_items
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import add_rule
 from .Options import CMOptions
 from .Locations import location_table, Tactic
 import logging
@@ -129,9 +129,6 @@ def set_rules(world: World):
 
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
 
-    # Calculate minimum queens for castle requirements
-    max_queens = world._item_pool.calculate_possible_queens()
-
     for name, item in location_table.items():
         if not super_sized and item.material_expectations == -1:
             continue
@@ -183,9 +180,16 @@ def set_rules(world: World):
                 lambda state: has_pin(state, world.player))
 
     # Castle rules
-    add_rule(world.multiworld.get_location("O-O Castle", world.player),
-             lambda state: state.has_from_list(["Progressive Major Piece", "Progressive Jack"], world.player,
-                                   2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))
-    add_rule(world.multiworld.get_location("O-O-O Castle", world.player),
-             lambda state: state.has_from_list(["Progressive Major Piece", "Progressive Jack"], world.player,
-                                   2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))
+    castling_pieces = ["Progressive Major Piece", "Progressive Jack"]
+    is_tracker = hasattr(world.multiworld, "generation_is_fake")
+    if is_tracker:
+        add_rule(world.multiworld.get_location("O-O Castle", world.player),
+                lambda state: state.has_from_list(castling_pieces, world.player, 2 + state.count("Progressive Major To Queen", world.player)))
+        add_rule(world.multiworld.get_location("O-O-O Castle", world.player),
+                lambda state: state.has_from_list(castling_pieces, world.player, 2 + state.count("Progressive Major To Queen", world.player)))
+    else:
+        max_queens = world._item_pool.calculate_possible_queens()
+        add_rule(world.multiworld.get_location("O-O Castle", world.player),
+                lambda state: state.has_from_list(castling_pieces, world.player, 2 + max_queens))
+        add_rule(world.multiworld.get_location("O-O-O Castle", world.player),
+                lambda state: state.has_from_list(castling_pieces, world.player, 2 + max_queens))
