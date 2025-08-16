@@ -23,7 +23,7 @@ from .logic.combat_logic import valid_weapons
 from .logic.logic import StardewLogic
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, \
     NumberOfMovementBuffs, BuildingProgression, EntranceRandomization, FarmType, ToolProgression, BackpackProgression, TrapDistribution, BundlePrice, \
-    BundlePlando, BundlePerRoom
+    BundleWhitelist, BundleBlacklist, BundlePerRoom
 from .options.forced_options import force_change_options_if_incompatible, force_change_options_if_banned
 from .options.jojapocalypse_options import JojaAreYouSure
 from .options.option_groups import sv_option_groups

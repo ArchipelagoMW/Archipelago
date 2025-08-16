@@ -8,7 +8,7 @@ from ..data.bundles_data.bundle_data import all_bundle_items_except_money, quali
     quality_foraging_items, quality_fish_items
 from ..data.bundles_data.meme_bundles import all_cc_meme_bundles
 from ..locations import LocationTags
-from ..options import BundlePlando, BundlePrice
+from ..options import BundleWhitelist, BundleBlacklist, BundlePrice
 from ..strings.bundle_names import BundleName, MemeBundleName, all_meme_bundle_names
 from ..strings.crop_names import Fruit
 from ..strings.quality_names import CropQuality, ForageQuality, FishQuality
@@ -58,23 +58,24 @@ class TestBundles(unittest.TestCase):
 
 
 class TestRemixedPlandoBundles(SVTestBase):
-    plando_bundles = {BundleName.money_2500, BundleName.money_5000, BundleName.money_10000, BundleName.gambler, BundleName.ocean_fish,
-                      BundleName.lake_fish, BundleName.deep_fishing, BundleName.spring_fish, BundleName.legendary_fish, BundleName.bait}
+    whitelist_bundles = {BundleName.money_2500, BundleName.money_5000, BundleName.money_10000, BundleName.gambler, BundleName.ocean_fish,
+                         BundleName.lake_fish, BundleName.deep_fishing, BundleName.spring_fish, BundleName.legendary_fish, BundleName.bait}
+    blacklist_bundles = {BundleName.spring_foraging, BundleName.quality_crops, BundleName.night_fish, BundleName.carnival, BundleName.dye,
+                         BundleName.enchanter}
     options = {
         BundleRandomization: BundleRandomization.option_remixed,
-        BundlePlando: frozenset(plando_bundles)
+        BundleWhitelist: frozenset(whitelist_bundles),
+        BundleBlacklist: frozenset(blacklist_bundles),
     }
 
     def test_all_plando_bundles_are_there(self):
         location_names = {location.name for location in self.multiworld.get_locations()}
-        for bundle_name in self.plando_bundles:
+        for bundle_name in self.whitelist_bundles:
             with self.subTest(f"{bundle_name}"):
                 self.assertIn(bundle_name, location_names)
-        self.assertNotIn(BundleName.money_25000, location_names)
-        self.assertNotIn(BundleName.carnival, location_names)
-        self.assertNotIn(BundleName.night_fish, location_names)
-        self.assertNotIn(BundleName.specialty_fish, location_names)
-        self.assertNotIn(BundleName.specific_bait, location_names)
+        for bundle_name in self.blacklist_bundles:
+            with self.subTest(f"{bundle_name}"):
+                self.assertNotIn(bundle_name, location_names)
 
 
 class TestRemixedAnywhereBundles(SVTestBase):
@@ -82,9 +83,12 @@ class TestRemixedAnywhereBundles(SVTestBase):
                          BundleName.lake_fish, BundleName.river_fish, BundleName.night_fish, BundleName.legendary_fish, BundleName.specialty_fish,
                          BundleName.bait, BundleName.specific_bait, BundleName.crab_pot, BundleName.tackle, BundleName.quality_fish,
                          BundleName.rain_fish, BundleName.master_fisher}
+    blacklist_bundles = {BundleName.spring_foraging, BundleName.quality_crops, BundleName.summer_foraging, BundleName.carnival, BundleName.dye,
+                         BundleName.enchanter, BundleName.fall_crops, BundleName.artisan}
     options = {
         BundleRandomization: BundleRandomization.option_remixed_anywhere,
-        BundlePlando: frozenset(fish_bundle_names)
+        BundleWhitelist: frozenset(fish_bundle_names),
+        BundleBlacklist: frozenset(blacklist_bundles),
     }
 
     def test_all_plando_bundles_are_there(self):
@@ -92,6 +96,9 @@ class TestRemixedAnywhereBundles(SVTestBase):
         for bundle_name in self.fish_bundle_names:
             with self.subTest(f"{bundle_name}"):
                 self.assertIn(bundle_name, location_names)
+        for bundle_name in self.blacklist_bundles:
+            with self.subTest(f"{bundle_name}"):
+                self.assertNotIn(bundle_name, location_names)
 
 
 class TestMemeBundles(SVTestBase):
@@ -147,10 +154,10 @@ class TestMemeBundleContent(SVTestCase):
                 self.assertIn(meme_bundle_name, all_meme_bundles_in_cc)
 
 
-class TestScamBundlePlando(SVTestBase):
+class TestScamBundleWhitelist(SVTestBase):
     options = {
         BundleRandomization: BundleRandomization.option_meme,
-        BundlePlando: frozenset({MemeBundleName.scam})
+        BundleWhitelist: frozenset({MemeBundleName.scam})
     }
 
     def test_scam_bundle_is_there(self):
@@ -162,15 +169,45 @@ class TestScamBundlePlando(SVTestBase):
         self.assertNotIn(MemeBundleName.investment, location_names)
 
 
-class TestInvestmentBundlePlando(SVTestBase):
+class TestInvestmentBundleWhitelist(SVTestBase):
     options = {
         BundleRandomization: BundleRandomization.option_meme,
-        BundlePlando: frozenset({MemeBundleName.scam})
+        BundleWhitelist: frozenset({MemeBundleName.investment})
     }
 
     def test_scam_bundle_is_there(self):
         location_names = {location.name for location in self.multiworld.get_locations()}
         self.assertIn(MemeBundleName.scam, location_names)
+
+    def test_investment_bundle_is_not_there(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn(MemeBundleName.investment, location_names)
+
+
+class TestScamBundleBlacklist(SVTestBase):
+    options = {
+        BundleRandomization: BundleRandomization.option_meme,
+        BundleBlacklist: frozenset({MemeBundleName.scam})
+    }
+
+    def test_scam_bundle_is_not_there(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn(MemeBundleName.scam, location_names)
+
+    def test_investment_bundle_is_not_there(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn(MemeBundleName.investment, location_names)
+
+
+class TestInvestmentBundleBlacklist(SVTestBase):
+    options = {
+        BundleRandomization: BundleRandomization.option_meme,
+        BundleBlacklist: frozenset({MemeBundleName.investment})
+    }
+
+    def test_scam_bundle_is_not_there(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn(MemeBundleName.scam, location_names)
 
     def test_investment_bundle_is_not_there(self):
         location_names = {location.name for location in self.multiworld.get_locations()}

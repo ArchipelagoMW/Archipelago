@@ -1026,11 +1026,25 @@ class Mods(OptionSet):
         valid_keys = all_mods
 
 
-class BundlePlando(OptionSet):
-    """If using Remixed or Meme bundles, this guarantees some of them will show up in your community center.
-    If more bundles are specified than what fits in their parent room, that room will randomly pick from only the plando ones"""
+class BundlePlando(Removed):
+    """Deprecated setting, replaced by BundleWhitelist and BundleBlacklist
+    """
     internal_name = "bundle_plando"
     display_name = "Bundle Plando"
+    default = ""
+    visibility = Visibility.none
+
+    def __init__(self, value: str):
+        if value:
+            raise Exception("Option bunde_plando was replaced by bundle_whitelist and bundle_blacklist, please update your options file")
+        super().__init__(value)
+
+
+class BundleWhitelist(OptionSet):
+    """If using Remixed or Meme bundles, this guarantees some of them will show up in your community center.
+    If more bundles are specified than what fits in their parent room, that room will randomly pick from only the whitelist ones"""
+    internal_name = "bundle_whitelist"
+    display_name = "Bundle Whitelist"
     visibility = Visibility.template | Visibility.spoiler
     valid_keys = set(all_cc_bundle_names)
 
@@ -1038,8 +1052,27 @@ class BundlePlando(OptionSet):
         if self.in_plando(bundle_name):
             return True
         if bundle_name == MemeBundleName.scam:
-            return self.in_plando("Investment")
+            return self.in_plando("Investment Bundle")
         return False
+
+    def in_plando(self, bundle_name) -> bool:
+        return bundle_name in self.value
+
+
+class BundleBlacklist(OptionSet):
+    """If using Remixed or Meme bundles, this guarantees some of them will not show up in your community center.
+    If too many bundles are blacklisted for a given room, that room will pick all the non-blacklist bundles, then random blacklisted ones."""
+    internal_name = "bundle_blacklist"
+    display_name = "Bundle Blacklist"
+    visibility = Visibility.template | Visibility.spoiler
+    valid_keys = set(all_cc_bundle_names)
+
+    def allows(self, bundle_name):
+        if self.in_plando(bundle_name):
+            return False
+        if bundle_name == MemeBundleName.scam:
+            return not self.in_plando("Investment Bundle")
+        return True
 
     def in_plando(self, bundle_name) -> bool:
         return bundle_name in self.value
@@ -1096,7 +1129,8 @@ class StardewValleyOptions(PerGameCommonOptions):
     multiple_day_sleep_cost: MultipleDaySleepCost
     gifting: Gifting
     mods: Mods
-    bundle_plando: BundlePlando
+    bundle_whitelist: BundleWhitelist
+    bundle_blacklist: BundleBlacklist
     death_link: DeathLink
 
     # Jojapocalypse
@@ -1109,3 +1143,4 @@ class StardewValleyOptions(PerGameCommonOptions):
 
     # removed:
     trap_items: TrapItems
+    bundle_plando: BundlePlando
