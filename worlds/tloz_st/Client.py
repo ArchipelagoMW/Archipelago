@@ -13,7 +13,7 @@ from .Util import *
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
 
-#TODO check addresses
+#TODO make goal on location
 ROM_ADDRS = {
     "game_identifier": (0x00000000, 16, "ROM"),
     "slot_name": (0xFFFC0, 64, "ROM"),
@@ -23,7 +23,7 @@ RAM_ADDRS = {
     "game_state": (0x060C48, 1, "Main RAM"), 
     "is_dead": (0xC2EE, 1, "ARM7 System Bus"),
 
-    "received_item_index": (0x265380, 2, "Main RAM"),
+    "received_item_index": (0x265780, 2, "Main RAM"),
     "slot_id": (0x265782, 2, "Main RAM"),
 
     "stage": (0x260A2C, 4, "Main RAM"),
@@ -35,6 +35,7 @@ RAM_ADDRS = {
     "getting_item": (0x04B114, 1, "Main RAM"),
     # "shot_frog": (0x1B7038, 1, "Main RAM"),
     "getting_train_part": (0x11F5E4, 1, "Main RAM"),
+    "menu": (0x260958, 1, "Main RAM"),
 
     "link_x": (0x05CC, 4, "Data TCM"),
     "link_y": (0x05D0, 4, "Data TCM"),
@@ -60,7 +61,7 @@ SMALL_KEY_OFFSET = 0x260
 STAGE_FLAGS_OFFSET = 0x268
 
 # Addresses to read each cycle
-read_keys_always = ["game_state", "received_item_index", "is_dead", "stage", "room", "slot_id"]
+read_keys_always = ["game_state", "received_item_index", "is_dead", "stage", "room", "slot_id", "menu"]
 read_keys_land = ["getting_item", "getting_train_part"]
 #read_keys_sea = ["shot_frog"]
 
@@ -161,6 +162,7 @@ class SpiritTracksClient(BizHawkClient):
         self.location_name_to_id = build_location_name_to_id_dict()
         self.location_area_to_watches = build_location_room_to_watches()
         self.scene_to_dynamic_flag = build_scene_to_dynamic_flag()
+        self.scene_to_stamp = build_scene_to_stamp()
 
         self.local_checked_locations = set()
         self.local_scouted_locations = set()
@@ -240,8 +242,8 @@ class SpiritTracksClient(BizHawkClient):
         write_list = [(RAM_ADDRS["slot_id"][0], [ctx.slot], "Main RAM")]
         print("New game, setting starting flags")
         print(ctx.slot)
-        # for adr, value in STARTING_FLAGS:
-        #     write_list.append((adr, [value], "Main RAM"))
+        for adr, value in STARTING_FLAGS:
+            write_list.append((adr, [value], "Main RAM"))
 
         await bizhawk.write(ctx.bizhawk_ctx, write_list)
 
@@ -306,7 +308,7 @@ class SpiritTracksClient(BizHawkClient):
         print(self.main_read_list)
 
     def get_ending_room(self, ctx):
-        self.goal_room = 0x300
+        self.goal_room = 0x1302
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
 
@@ -329,6 +331,8 @@ class SpiritTracksClient(BizHawkClient):
             in_game = read_result["game_state"]
             slot_memory = read_result["slot_id"]
             current_stage = read_result["stage"]
+            current_menu = read_result["menu"]
+            in_stamp_stand = current_menu == 0x0E
             self.current_stage = current_stage
 
             # If player is not in-game, don't do anything else
@@ -336,6 +340,7 @@ class SpiritTracksClient(BizHawkClient):
                 self.previous_game_state = False
                 print("NOT IN GAME")
                 # Finished game?
+                #TODO location goal
                 if not ctx.finished_game:
                     await self.process_game_completion(ctx, current_stage)
                 return
@@ -362,7 +367,7 @@ class SpiritTracksClient(BizHawkClient):
 
             # This go true when link gets item
             getting_location = read_result.get("getting_item", 0)
-            print(f"getting location? {bool(getting_location)}")
+            #print(f"getting location? {bool(getting_location)}")
 
             # Other game variables
             num_received_items = read_result["received_item_index"]
@@ -425,21 +430,19 @@ class SpiritTracksClient(BizHawkClient):
                     and self.new_stage_loading is None:
                 self.receiving_location = True
                 print("Receiving Item")
-                #if read_result["stamp"]:
-                    #getting_stamp = True
                 await self.process_checked_locations(ctx, None)
 
-            #TODO Read Stamps
-           # if getting_stamp:
-            #    stamp_location = get_stamp_location(scene)
-             #   await self.process_checked_locations(ctx, stamp_location)
+            if in_stamp_stand and not self.receiving_location:
+                self.receiving_location = True
+                stamp_location = self.scene_to_stamp[current_scene]
+                await self.process_checked_locations(ctx, stamp_location)
 
             # Process received items
             if num_received_items < len(ctx.items_received):
                 await self.process_received_items(ctx, num_received_items)
 
             # Exit location received cs
-            if self.receiving_location and not getting_location:
+            if self.receiving_location and not (getting_location or in_stamp_stand):
                 print("Item Received Successfully")
                 self.receiving_location = False
 
@@ -698,7 +701,7 @@ class SpiritTracksClient(BizHawkClient):
         all_checked_locations = ctx.checked_locations
         location = None
 
-        # If sent with a pre-proces kwarg
+        # If sent with a pre-process kwarg
         if pre_process is not None:
             self.receiving_location = True
             loc_id = self.location_name_to_id[pre_process]
@@ -718,7 +721,7 @@ class SpiritTracksClient(BizHawkClient):
                 loc_name, location = loc
                 loc_bytes = self.location_name_to_id[loc_name]
 
-                if "address" in location:
+                if "address" in location or location.get("stamp"):
                     continue
 
                 print(f"Processing locs {loc_name}")

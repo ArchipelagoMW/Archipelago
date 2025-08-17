@@ -120,7 +120,7 @@ def st_has_bomb(state: CollectionState, player: int):
 def st_has_damage(state: CollectionState, player: int):
     return any([
         state.has("Sword (Progressive)", player),
-        st_has_bombs(state, player),
+        state.has("Bombs (Progressive)", player),
         state.has("Bow (Progressive)", player),
         state.has("Whip", player),
         state.has("Hammer", player)
@@ -130,7 +130,7 @@ def st_has_damage(state: CollectionState, player: int):
 def st_has_cave_damage(state: CollectionState, player: int):
     return any([
         state.has("Sword (Progressive)", player),
-        st_has_bombs(state, player),
+        state.has("Bombs (Progressive)", player),
         state.has("Bow (Progressive)", player),
         state.has("Whip", player),
     ])

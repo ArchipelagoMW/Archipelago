@@ -13,7 +13,7 @@ ITEMS_DATA = {
     #   'ammo_address: int                      # address for ammo
     #    },
 
-    # ======= Regular Items========== TODO check addresses and update
+    # ======= Regular Items========== TODO bombs
 
     "Sword (Progressive)": {
         'classification': ItemClassification.progression,
@@ -169,7 +169,7 @@ ITEMS_DATA = {
         'classification': ItemClassification.progression,
         'address': 0x265715,
         'value': 0x80,
-        'set_bit': [(0x265716, 0)]
+        #'set_bit': [(0x265715, 0)]
     },
     "Snow Glyph": {
         'classification': ItemClassification.progression,

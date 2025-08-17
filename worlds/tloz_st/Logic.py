@@ -21,10 +21,10 @@ def make_overworld_logic(player: int, origin_name: str, options: SpiritTracksOpt
         # # ======== Castle Town =========
 
         ["forest realm", "castle town", False, None],
-        ["castle town", "castle town stamp station", True, lambda state: st_has_stamp_book(state, player)],
+        ["castle town", "castle town stamp station", True, lambda state: (st_has_stamp_book(state, player) and st_has_bomb(state, player))],
 
         # # ========== ToS ===================
-
+        #TODO add 3f rail map
         ["forest realm", "tos", False, None],
         ["tos", "goal", False, lambda state: st_has_sword(state, player)],
 

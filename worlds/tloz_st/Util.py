@@ -59,3 +59,13 @@ def build_item_id_to_name_dict() -> Dict[int, str]:
         index = item["id"]
         item_id_to_name[index] = item_name
     return item_id_to_name
+
+# Making a dictionary of stamp scenes
+def build_scene_to_stamp() -> Dict[int, str]:
+    stamp_locations: Dict[int, str] = {}
+    for loc_name, location in LOCATIONS_DATA.items():
+        if location.get("stamp"):
+            scene = location["stage_id"] << 8 + location["room_id"]
+            stamp_locations[scene] = loc_name
+    print(stamp_locations)
+    return stamp_locations
