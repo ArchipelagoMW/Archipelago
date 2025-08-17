@@ -1153,7 +1153,7 @@
             },
             {
                 "name": "Defeat Mutated Xipu Below Nobility Hall", "sections": [{ "name": "ED (Sanctum): Defeat Mutated Xipu Below Nobility Hall" }],
-                "map_locations": [{ "map": "empyrean_district_sanctum", "x": 285, "y": 165 }]
+                "map_locations": [{ "map": "empyrean_district_sanctum", "x": 285, "y": 210 }]
             },
             {
                 "name": "Defeat Mutated Yangfan Below Root Node", "sections": [{ "name": "ED (Sanctum): Defeat Mutated Yangfan Below Root Node" }],
