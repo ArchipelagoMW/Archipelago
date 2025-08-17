@@ -4,17 +4,18 @@ Archipelago init file for Pokepark
 import os
 import zipfile
 from base64 import b64encode
-from typing import Any
+from typing import Any, ClassVar, Callable
 
 import yaml
 
-from BaseClasses import ItemClassification, Tutorial
+from BaseClasses import Tutorial, Region, CollectionState
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
-from .items import FRIENDSHIP_ITEMS, PokeparkItem, UNLOCK_ITEMS, BERRIES, ALL_ITEMS_TABLE, PRISM_ITEM, POWERS, \
-    REGION_UNLOCK, VICTORY
-from .locations import ALL_LOCATIONS_TABLE, REGIONS
+from .items import item_name_groups, PokeparkItem, ITEM_TABLE
+from .locations import LOCATION_TABLE, PokeparkLocation, PokeparkFlag
 from .options import PokeparkOptions, pokepark_option_groups
+from .regions import VANILLA_ENTRANCES_TO_EXITS, REGION_TO_ENTRANCES
+from .rules import set_rules
 from ..Files import APPlayerContainer
 
 
@@ -76,32 +77,45 @@ class PokeparkWorld(World):
 
     web = PokeparkWebWorld()
 
-    item_name_to_id = ALL_ITEMS_TABLE
-    location_name_to_id = ALL_LOCATIONS_TABLE
-    location_name_groups = {
-        "Friendship Locations": [f"{region.display} - {friendship.name}" for region in REGIONS
-                                 for friendship in
-                                 region.friendship_locations],
-        "Unlock Locations": [f"{region.display} - {unlock.name}" for region in REGIONS for unlock
-                             in
-                             region.unlock_location],
-        "Minigame Locations": [f"{region.display} - {minigame.name}" for region in REGIONS for
-                               minigame in
-                               region.minigame_location],
-        "Quest Locations": [f"{region.display} - {ability.name}" for region in REGIONS for
-                            ability in
-                            region.quest_locations]
+    item_name_to_id: ClassVar[dict[str, int]] = {
+        name: PokeparkItem.get_apid(data.code) for name, data in ITEM_TABLE.items() if data.code is not None
     }
-    item_name_groups = {
-        "Friendship Items": FRIENDSHIP_ITEMS.keys(),
-        "Unlock Items": UNLOCK_ITEMS.keys(),
-        "Currency Items": BERRIES.keys(),
-        "Prisma Items": PRISM_ITEM.keys(),
-        "Ability Items": POWERS.keys(),
-        "Entrance Items": REGION_UNLOCK.keys()
+    location_name_to_id = {
+        name: PokeparkItem.get_apid(data.code) for name, data in LOCATION_TABLE.items() if data.code is not None
     }
+    origin_region_name: str = "Treehouse"
 
-    data_version = 1
+    item_name_groups: ClassVar[dict[str, set[str]]] = item_name_groups
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.progress_locations: set[str] = set()
+        self.nonprogress_locations: set[str] = set()
+
+    def _determine_progress_and_nonprogress_locations(self) -> tuple[set[str], set[str]]:
+        """
+        Determine which locations are progress and nonprogress in the world based on the player's options.
+
+        :return: A tuple of two sets, the first containing the names of the progress locations and the second containing
+        the names of the nonprogress locations.
+        """
+        ignore_location: str = ""
+
+        progress_locations: set[str] = set()
+        nonprogress_locations: set[str] = set()
+        for location, data in LOCATION_TABLE.items():
+            if True:
+                progress_locations.add(location)
+            else:
+                nonprogress_locations.add(location)
+        assert progress_locations.isdisjoint(nonprogress_locations)
+
+        return progress_locations, nonprogress_locations
+
+    def generate_early(self) -> None:
+        options = self.options
+        self.progress_locations, self.nonprogress_locations = self._determine_progress_and_nonprogress_locations()
 
     def generate_output(self, output_directory: str) -> None:
         """
@@ -134,97 +148,196 @@ class PokeparkWorld(World):
         aptww.write()
 
     def create_regions(self):
-        from .regions import create_regions
-        create_regions(self)
+        multiworld = self.multiworld
+        player = self.player
+        options = self.options
+
+        ENTRANCE_RULES: dict[str, Callable[[CollectionState], bool]] = {
+            "Treehouse Meadow Zone Gate": lambda state: True,
+            "Treehouse Drifblim Fast Travel Meadow Zone": lambda state: state.has("Meadow Zone Fast Travel", player),
+            "Meadow Zone Main Area - Bulbasaur's Daring Dash Attraction": lambda state: True,
+            "Meadow Zone Main Area - Venusaur's Gate": lambda state: state.has("Bulbasaur Prisma", player),
+            "Meadow Zone Venusaur Area - Venusaur's Vine Swing Attraction": lambda state: True,
+
+            "Treehouse Beach Zone Gate": lambda state: state.has("Venusaur Prisma", player),
+            "Treehouse Drifblim Fast Travel Beach Zone": lambda state: state.has("Beach Zone Fast Travel", player),
+            "Beach Zone Main Area - Pelipper's Circle Circuit Attraction": lambda state: True,
+            "Beach Zone Main Area - Gyarado's Aqua Dash Attraction": lambda state: True,
+
+            "Beach Zone Main Area Lapras Travel": lambda state: state.has("Gyarados Prisma", player),
+            "Treehouse Drifblim Fast Travel Ice Zone": lambda state: state.has("Ice Zone Fast Travel", player),
+            "Ice Zone Main Area Lift": lambda state: state.has("Prinplup Friendship", player),
+            "Ice Zone Main Area Empoleon Gate": lambda state: True,
+            "Ice Zone Empoleon Area - Empoleon's Snow Slide Attraction": lambda state: True,
+
+            "Treehouse Cavern Zone Gate": lambda state: state.has("Empoleon Prisma", player),
+            "Treehouse Drifblim Fast Travel Cavern Zone": lambda state: state.has("Cavern Zone Fast Travel", player),
+            "Cavern Zone Main Area - Bastiodon's Panel Crush Attraction": lambda state: state.count_group(
+                "Friendship Items",
+                player
+            ) > 50,
+
+            "Cavern Zone Magma Zone Gate": lambda state: state.has("Bastiodon Prisma", player),
+            "Treehouse Drifblim Fast Travel Magma Zone": lambda state: state.has("Magma Zone Fast Travel", player),
+            "Magma Zone Main Area - Rhyperior's Bumper Burn Attraction": lambda state: True,
+            "Magma Zone Main Area Blaziken Gate": lambda state: state.has("Rhyperior Prisma", player),
+            "Magma Zone Blaziken Area - Blaziken's Boulder Bash Attraction": lambda state: True,
+
+            "Treehouse Haunted Zone Gate": lambda state: state.has("Blaziken Prisma", player),
+            "Treehouse Drifblim Fast Travel Haunted Zone": lambda state: state.has("Haunted Zone Fast Travel", player),
+            "Haunted Zone Main Area - Tangrowth's Swing-Along Attraction": lambda state: True,
+            "Haunted Zone Mansion Entrance": lambda state: state.has("Tangrowth Prisma", player),
+            "Haunted Zone Mansion Area - Dusknoir's Speed Slam Attraction": lambda state: state.has(
+                "Dusknoir Unlock", player
+            ),
+            "Haunted Zone Mansion Rotom's Hidden Entrance": lambda state: state.has("Dusknoir Prisma", player),
+            "Haunted Zone Rotom Area - Rotom's Spooky Shoot-'em-Up Attraction": lambda state: state.count_group(
+                "Friendship Items",
+                player
+            ) > 65,
+
+            "Treehouse Granite Zone Gate": lambda state: state.has("Rotom Prisma", player),
+            "Treehouse Drifblim Fast Travel Granite Zone": lambda state: state.has("Granite Zone Fast Travel", player),
+            "Granite Zone Main Area - Absol's Hurdle Bounce Attraction": lambda state: True,
+            "Granite Zone Main Area - Salamence's Sky Race Attraction": lambda state: state.count_group(
+                "Friendship Items",
+                player
+            ) > 80,
+
+            "Granite Zone Flower Zone Entrance": lambda state: state.has("Salamence Prisma", player),
+            "Treehouse Drifblim Fast Travel Flower Zone": lambda state: state.has("Flower Zone Fast Travel", player),
+            "Flower Zone Main Area - Rayquaza's Balloon Panic Attraction": lambda state: state.has(
+                "Rayquaza Unlock", player
+            ),
+
+            "Treehouse Piplup Air Balloon": lambda state: state.has("Rayquaza Prisma", player),
+        }
+        treehouse = Region("Treehouse", player, multiworld)
+        multiworld.regions.append(treehouse)
+        unique_region_names = set(VANILLA_ENTRANCES_TO_EXITS.values())
+        for _region_name in unique_region_names:
+            multiworld.regions.append(Region(_region_name, player, multiworld))
+        for region_map, entrances in REGION_TO_ENTRANCES.items():
+            for entrance in entrances:
+                target_region_name = VANILLA_ENTRANCES_TO_EXITS.get(entrance)
+                target_region = multiworld.get_region(target_region_name, player)
+                print(f"{region_map} -> {target_region}")
+                multiworld.get_region(region_map, player).connect(
+                    target_region
+                    , f"{entrance} ->"
+                      f" {target_region_name}", ENTRANCE_RULES[entrance]
+                )
+        for location_name in sorted(self.progress_locations):
+            data = LOCATION_TABLE[location_name]
+
+            region = self.get_region(data.region)
+            location = PokeparkLocation(player, location_name, region, data)
+
+            region.locations.append(location)
+
+    def set_rules(self) -> None:
+        set_rules(self)
+
+    def create_item(self, name: str) -> PokeparkItem:
+        if name in ITEM_TABLE:
+            return PokeparkItem(name, self.player, ITEM_TABLE[name], ITEM_TABLE[name].classification)
+        raise KeyError(f"Invalid item name: {name}")
+
+    def update_pool_with_precollected_items(self) -> tuple[list[str], list[str]]:
+        options = self.options
+        progressive_pool = []
+        precollected_pool = []
+
+        for item_name, data in ITEM_TABLE.items():
+            if data.type == "Item":
+                progressive_pool.extend([item_name] * data.quantity)
+
+        if options.power_randomizer == options.power_randomizer.option_dash:
+            precollected_pool.append("Progressive Dash")
+            progressive_pool.remove("Progressive Dash")
+        if options.power_randomizer == options.power_randomizer.option_thunderbolt:
+            precollected_pool.append("Progressive Thunderbolt")
+            progressive_pool.remove("Progressive Thunderbolt")
+        if options.power_randomizer == options.power_randomizer.option_thunderbolt_dash:
+            precollected_pool.append("Progressive Thunderbolt")
+            progressive_pool.remove("Progressive Thunderbolt")
+            precollected_pool.append("Progressive Dash")
+            progressive_pool.remove("Progressive Dash")
+        if options.power_randomizer == options.power_randomizer.option_full:
+            for i in range(4):
+                precollected_pool.append("Progressive Thunderbolt")
+                progressive_pool.remove("Progressive Thunderbolt")
+                precollected_pool.append("Progressive Dash")
+                progressive_pool.remove("Progressive Dash")
+            for i in range(3):
+                precollected_pool.append("Progressive Iron Tail")
+                progressive_pool.remove("Progressive Iron Tail")
+                precollected_pool.append("Progressive Health")
+                progressive_pool.remove("Progressive Health")
+            precollected_pool.append("Double Dash")
+            progressive_pool.remove("Double Dash")
+
+        if options.starting_zone == options.starting_zone.option_ice_zone:
+            precollected_pool.append("Ice Zone Fast Travel")
+            progressive_pool.remove("Ice Zone Fast Travel")
+
+        if options.starting_zone == options.starting_zone.option_one:
+            fast_travel_items = [
+                "Meadow Zone Fast Travel",
+                "Beach Zone Fast Travel",
+                "Ice Zone Fast Travel",
+                "Cavern Zone Fast Travel",
+                "Magma Zone Fast Travel",
+                "Haunted Zone Fast Travel",
+                "Granite Zone Fast Travel",
+                "Flower Zone Fast Travel",
+            ]
+            self.random.shuffle(fast_travel_items)
+            precollected_fast_travel = self.random.choice(fast_travel_items)
+            precollected_pool.append(precollected_fast_travel)
+            progressive_pool.remove(precollected_fast_travel)
+
+        return progressive_pool, precollected_pool
 
     def create_items(self):
-        pool = []
 
-        # Handle power items
-        self._handle_power_items(pool)
+        progressive_pool, precollected_pool = self.update_pool_with_precollected_items()
 
-        # Handle starting zones
-        self._handle_starting_zones(pool)
+        for item in precollected_pool:
+            self.multiworld.push_precollected(self.create_item(item))
 
-        # Add standard items
-        self._add_standard_items(pool)
+        if self.options.goal == self.options.goal.option_mew:
+            location = self.get_location("Skygarden - Mew Power Competition -- Friendship")
+            location.place_locked_item(
+                self.create_item(
+                    "Victory"
+                )
+            )
+            location.address = None
+        elif self.options.goal == self.options.goal.option_aftergame:
+            location = self.get_location("Skygarden - Prisma Completion -- Completed")
+            location.place_locked_item(
+                self.create_item(
+                    "Victory"
+                )
+            )
+            location.address = None
 
-        # Fill remaining slots with berries
-        self._fill_remaining_slots_with_berries(pool)
-
-        # Add all items to the item pool
-        self.multiworld.itempool.extend(pool)
-
-    def _handle_power_items(self, pool):
-        """Manages power items based on randomizer options."""
-        # For "option_full", all power items are pre-collected
-        if self.options.power_randomizer == self.options.power_randomizer.option_full:
-            for name in POWERS.keys():
-                for _ in range(3):
-                    self.multiworld.push_precollected(self.create_item(name))
-            self.multiworld.push_precollected(self.create_item("Progressive Thunderbolt"))
-            self.multiworld.push_precollected(self.create_item("Progressive Dash"))
-            return
-
-        # Add power items to the pool
-        for name in POWERS.keys():
-            for _ in range(3):
-                pool.append(self.create_item(name))
-
-        # Define which special power items are pre-collected
-        precollect_mapping = {
-            self.options.power_randomizer.option_thunderbolt: ["Progressive Thunderbolt"],
-            self.options.power_randomizer.option_dash: ["Progressive Dash"],
-            self.options.power_randomizer.option_thunderbolt_dash: ["Progressive Thunderbolt", "Progressive Dash"]
-        }
-
-        # Current selected option
-        current_option = self.options.power_randomizer
-
-        # Handle Progressive Thunderbolt and Dash
-        for power_name in ["Progressive Thunderbolt", "Progressive Dash"]:
-            if current_option in precollect_mapping and power_name in precollect_mapping[current_option]:
-                self.multiworld.push_precollected(self.create_item(power_name))
-            else:
-                pool.append(self.create_item(power_name))
-
-    def _handle_starting_zones(self, pool):
-        """Manages starting zones based on selected options."""
-
-    def _add_standard_items(self, pool):
-        """Adds standard item categories to the pool."""
-        # Items excluded from normal unlocks
-        unlock_item_exception = []
-
-        pool.extend([self.create_item(name) for name in FRIENDSHIP_ITEMS.keys()])
-        pool.extend([self.create_item(name) for name in UNLOCK_ITEMS.keys()
-                     if name not in unlock_item_exception])
-        pool.extend([self.create_item(name) for name in PRISM_ITEM.keys()])
-        pool.extend([self.create_item(name) for name in REGION_UNLOCK.keys()])
-
-    def _fill_remaining_slots_with_berries(self, pool):
-        """Fills remaining slots with berry items."""
-        remaining_slots = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
-        berry_items = list(BERRIES.keys())
-
+        remaining_slots = len(self.multiworld.get_unfilled_locations(self.player)) - len(progressive_pool)
         for i in range(remaining_slots):
-            berry_name = berry_items[i % len(berry_items)]
-            pool.append(self.create_item(berry_name))
+            if i % 20 == 0:
+                progressive_pool.append("100 Berries")
+            elif i % 8 == 0:
+                progressive_pool.append("50 Berries")
+            elif i % 4 == 0:
+                progressive_pool.append("20 Berries")
+            else:
+                progressive_pool.append("10 Berries")
 
-    def set_rules(self):
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        self.random.shuffle(progressive_pool)
+        for item in progressive_pool:
+            self.multiworld.itempool.append(self.create_item(item))
 
-    def create_item(self, name: str):
-        if name.__contains__("Bidoof Unlock"):
-            classification = ItemClassification.filler
-        elif name in FRIENDSHIP_ITEMS or name in UNLOCK_ITEMS or name in PRISM_ITEM or name in REGION_UNLOCK or name in POWERS or name in VICTORY:
-            classification = ItemClassification.progression
-        elif name in BERRIES:
-            classification = ItemClassification.filler
-        else:
-            classification = ItemClassification.filler
-
-        return PokeparkItem(name, classification, ALL_ITEMS_TABLE[name], self.player)
 
 
 def launch_client():

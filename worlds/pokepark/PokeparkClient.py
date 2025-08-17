@@ -5,10 +5,10 @@ from typing import Optional, Any
 import dolphin_memory_engine as dme
 
 import ModuleUpdate
-from worlds.pokepark.adresses import \
-    LOCATIONS, \
-    MemoryAddress, ITEMS, PowerItem, POWER_MAP
+from worlds.pokepark import PokeparkItem, LOCATION_TABLE
+from worlds.pokepark.adresses import POWER_MAP, MemoryAddress
 from worlds.pokepark.dme_helper import read_memory
+from worlds.pokepark.items import LOOKUP_ID_TO_NAME, ITEM_TABLE, PokeparkPowerItemClientData
 
 ModuleUpdate.update()
 
@@ -19,9 +19,10 @@ from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProc
     CommonContext, server_loop
 
 SLOT_NAME_ADDR = 0x80001820
-GIVE_ITEM_ADDR = 0x80001804
-OPCODE_ADDR = 0x80001808
-GLOBAL_MANAGER_STRUC_POINTER = 0x80001800
+GLOBAL_MANGAER_PARAMETER1_ADDR = 0x80001800
+GLOBAL_MANGAER_PARAMETER2_ADDR = 0x80001804
+GLOBAL_MANAGER_OPCODE_ADDR = 0x80001808
+GLOBAL_MANAGER_STRUC_POINTER = 0x8000180c
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for Pokepark. Trying again in 5 seconds..."
 )
@@ -74,6 +75,10 @@ class PokeparkContext(CommonContext):
         self.awaiting_rom: bool = False
         self.last_rcvd_index: int = -1
         self.visited_stage_names: Optional[set[str]] = None
+        self.dash_index = 0
+        self.thunderbolt_index = 0
+        self.health_index = 0
+        self.iron_tail_index = 0
 
     async def disconnect(self, allow_autoreconnect: bool = False) -> None:
         """
@@ -85,10 +90,6 @@ class PokeparkContext(CommonContext):
         self.auth = None
         self.current_stage_name = ""
         self.visited_stage_names = None
-        self.dash_index = 0
-        self.thunderbolt_index = 0
-        self.health_index = 0
-        self.iron_tail_index = 0
         await super().disconnect(allow_autoreconnect)
 
     async def server_auth(self, password_requested: bool = False) -> None:
@@ -178,52 +179,44 @@ class PokeparkContext(CommonContext):
             )
 
 
-def _give_item(ctx: PokeparkContext, item_id: int) -> bool:
+def _give_item(ctx: PokeparkContext, item_name: str) -> bool:
     """
     Give an item to the player in-game.
 
     :param ctx: The Pokepark client context.
-    :param item_id: Id of the item to give.
+    :param parameter1: Id of the item to give.
     :return: Whether the item was successfully given.
     """
     if not check_ingame():
         return False
 
-    item_slot = dme.read_word(GIVE_ITEM_ADDR)
-    opcode_slot = dme.read_word(OPCODE_ADDR)
-    if item_id not in ITEMS:
-        return True
-    item = ITEMS[item_id]
+    item_slot = dme.read_word(GLOBAL_MANGAER_PARAMETER1_ADDR)
+    opcode_slot = dme.read_word(GLOBAL_MANAGER_OPCODE_ADDR)
+    item = ITEM_TABLE[item_name].client_data
     if item_slot == 0xFFFFFFFF and opcode_slot == 0xFFFFFFFF:
 
-        if isinstance(item, PowerItem):
-            if item.item_name == "Progressive Dash":
-                index = ctx.dash_index
-                ctx.dash_index += 1
-            elif item.item_name == "Progressive Thunderbolt":
-                index = ctx.thunderbolt_index
-                ctx.thunderbolt_index += 1
-            elif item.item_name == "Progressive Health":
-                index = ctx.health_index
-                ctx.health_index += 1
-            elif item.item_name == "Progressive Iron Tail":
-                index = ctx.iron_tail_index
-                ctx.iron_tail_index += 1
-            else:
-                return False
+        if isinstance(item, PokeparkPowerItemClientData):
+            index = sum(
+                1 for item, idx in ctx.items_received_2
+                if item.item == PokeparkItem.get_apid(ITEM_TABLE[item_name].code)
+            )
 
-            max_index = len(POWER_MAP[item.item_id]) - 1
-            if index <= max_index:
-                item_id = POWER_MAP[item.item_id][index]
-                opcode = item.opcode
-            else:
-                return True
+            max_index = len(POWER_MAP[item_name])
+            if index > max_index:
+                index = max_index
+            parameter1 = sum(POWER_MAP[item_name][:index])
+            parameter2 = item.parameter2
+            opcode = item.opcode
 
         else:
-            item_id = item.item_id
+            parameter1 = item.parameter1
+            parameter2 = item.parameter2
             opcode = item.opcode
-        dme.write_word(OPCODE_ADDR, opcode)
-        dme.write_word(GIVE_ITEM_ADDR, item_id)
+
+        dme.write_word(GLOBAL_MANAGER_OPCODE_ADDR, opcode)
+        dme.write_bytes(item.flag_address, item.flag_name)
+        dme.write_word(GLOBAL_MANGAER_PARAMETER2_ADDR, parameter2)
+        dme.write_word(GLOBAL_MANGAER_PARAMETER1_ADDR, parameter1)  # parameter1 last because it is the trigger
         return True
 
     return False
@@ -241,12 +234,16 @@ async def give_items(ctx: PokeparkContext) -> None:
         # Read the expected index of the player, which is the index of the latest item they've received.
         expected_idx = int.from_bytes(dme.read_bytes(chapter_address, 2), byteorder="big")
 
+        received_items = ctx.items_received
+        if len(received_items) <= expected_idx:
+            return
+
         # Loop through items to give.
-        for item, idx in ctx.items_received_2:
+        for idx, item in enumerate(received_items[expected_idx:], start=expected_idx):
             # If the item's index is greater than the player's expected index, give the player the item.
             if expected_idx <= idx:
                 # Attempt to give the item and increment the expected index.
-                while not _give_item(ctx, item.item):
+                while not _give_item(ctx, LOOKUP_ID_TO_NAME[item.item]):
                     await asyncio.sleep(0.01)
 
                 # Increment the expected index.
@@ -295,15 +292,21 @@ async def check_locations(ctx: PokeparkContext) -> None:
     """
 
     global_manager_data_struc_address = dme.read_word(GLOBAL_MANAGER_STRUC_POINTER)
-    for location in LOCATIONS:
-        expected_value = location.expected_value
+    for location, data in LOCATION_TABLE.items():
+        client_data = data.client_data
+        expected_value = client_data.expected_value
         memory = MemoryAddress(global_manager_data_struc_address,
-                               location.final_offset,
-                               memory_range=location.memory_range)
+                               client_data.final_offset,
+                               memory_range=client_data.memory_range
+                               )
         current_value = read_memory(dme, memory)
-        if (current_value & location.bit_mask) == expected_value:
-            for locationId in location.location_ids:
-                ctx.locations_checked.add(locationId)
+        if (current_value & client_data.bit_mask) == expected_value:
+            if data.code is None:
+                if not ctx.victory:
+                    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                    ctx.victory = True
+            else:
+                ctx.locations_checked.add(PokeparkItem.get_apid(data.code))
 
     # Send the list of newly-checked locations to the server.
     locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
@@ -351,7 +354,7 @@ async def dolphin_sync_task(ctx: PokeparkContext) -> None:
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
                 if not check_ingame():
                     # Reset the give item array while not in the game.
-                    dme.write_bytes(GIVE_ITEM_ADDR, bytes([0xFF] * 8))
+                    dme.write_bytes(GLOBAL_MANGAER_PARAMETER1_ADDR, bytes([0xFF] * 0xC))
                     await asyncio.sleep(0.1)
                     continue
                 if ctx.slot is not None:
@@ -396,23 +399,6 @@ async def dolphin_sync_task(ctx: PokeparkContext) -> None:
             await ctx.disconnect()
             await asyncio.sleep(5)
             continue
-
-
-def check_victory(items: list[NetworkItem], ctx: PokeparkContext):
-    for item in items:
-        if item.item == 999999:
-            send_victory(ctx)
-
-
-def send_victory(ctx: PokeparkContext):
-    if ctx.victory:
-        return
-
-    ctx.victory = True
-    ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-    logger.info("Congratulations")
-    return
-
 
 def main(connect=None, password=None):
     Utils.init_logging("PokeparkClient", exception_logger="Client")
