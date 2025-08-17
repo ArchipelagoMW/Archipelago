@@ -2,7 +2,7 @@
 Archipelago does not have a compiled release on macOS. However, it is possible to run from source code on macOS. This guide expects you to have some experience with running software from the terminal.
 ## Prerequisite Software
 Here is a list of software to install and source code to download.
-1. Python 3.10 "universal2" or newer from the [macOS Python downloads page](https://www.python.org/downloads/macos/).
+1. Python 3.11 "universal2" or newer from the [macOS Python downloads page](https://www.python.org/downloads/macos/).
    **Python 3.13 is not supported yet.**
 2. Xcode from the [macOS App Store](https://apps.apple.com/us/app/xcode/id497799835).
 3. The source code from the [Archipelago releases page](https://github.com/ArchipelagoMW/Archipelago/releases).
@@ -20,9 +20,11 @@ It is generally recommended that you use a virtual environment to run python bas
 3. Run the command `source venv/bin/activate` to activate the virtual environment.
 4. If you want to exit the virtual environment, run the command `deactivate`.
 ## Steps to Run the Clients 
-1. If your game doesn't have a patch file, run the command `python3 SNIClient.py`, changing the filename with the file of the client you want to run.
-2. If your game does have a patch file, move the base rom to the Archipelago directory and run the command `python3 SNIClient.py 'patchfile'` with the filename extension for the patch file (apsm, aplttp, apsmz3, etc.) included and changing the filename with the file of the client you want to run.
-3. Your client should now be running and rom created (where applicable).
+1. Run the command `python3 Launcher.py`.
+2. If your game doesn't have a patch file, just click the desired client in the right side column.
+3. If your game does have a patch file, click the 'Open Patch' button and navigate to your patch file (the filename extension will look something like apsm, aplttp, apsmz3, etc.).
+4. If the patching process needs a rom, but cannot find it, it will ask you to navigate to your legally obtained rom.
+5. Your client should now be running and rom created (where applicable).
 ## Additional Steps for SNES Games
 1. If using RetroArch, the instructions to set up your emulator [here in the Link to the Past setup guide](https://archipelago.gg/tutorial/A%20Link%20to%20the%20Past/multiworld/en) also work on the macOS version of RetroArch.
 2. Double click on the SNI tar.gz download to extract the files to an SNI directory. If it isn't already, rename this directory to SNI to make some steps easier.

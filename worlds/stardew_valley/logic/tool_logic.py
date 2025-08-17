@@ -2,18 +2,11 @@ from typing import Union, Iterable, Tuple
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogicMixin
-from ..mods.logic.magic_logic import MagicLogicMixin
-from ..options import ToolProgression
 from ..stardew_rule import StardewRule, True_, False_
 from ..strings.ap_names.skill_level_names import ModSkillLevel
-from ..strings.region_names import Region
+from ..strings.region_names import Region, LogicRegion
 from ..strings.spells import MagicSpell
-from ..strings.tool_names import ToolMaterial, Tool
+from ..strings.tool_names import ToolMaterial, Tool, APTool
 
 fishing_rod_prices = {
     3: 1800,
@@ -41,7 +34,7 @@ class ToolLogicMixin(BaseLogicMixin):
         self.tool = ToolLogic(*args, **kwargs)
 
 
-class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, MoneyLogicMixin, MagicLogicMixin]]):
+class ToolLogic(BaseLogic):
 
     def has_all_tools(self, tools: Iterable[Tuple[str, str]]):
         return self.logic.and_(*(self.logic.tool.has_tool(tool, material) for tool, material in tools))
@@ -57,10 +50,10 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
         if material == ToolMaterial.basic or tool == Tool.scythe:
             return True_()
 
-        if self.options.tool_progression & ToolProgression.option_progressive:
+        if self.content.features.tool_progression.is_progressive:
             return self.logic.received(f"Progressive {tool}", tool_materials[material])
 
-        can_upgrade_rule = self.logic.has(f"{material} Bar") & self.logic.money.can_spend_at(Region.blacksmith, tool_upgrade_prices[material])
+        can_upgrade_rule = self.logic.tool._can_purchase_upgrade(material)
         if tool == Tool.pan:
             has_base_pan = self.logic.received("Glittering Boulder Removed") & self.logic.region.can_reach(Region.mountain)
             if material == ToolMaterial.copper:
@@ -69,6 +62,20 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
 
         return can_upgrade_rule
 
+    @cache_self1
+    def can_mine_using(self, material: str) -> StardewRule:
+        if material == ToolMaterial.basic:
+            return self.logic.true_
+
+        if self.content.features.tool_progression.is_progressive:
+            return self.logic.received(APTool.pickaxe, tool_materials[material])
+        else:
+            return self.logic.tool._can_purchase_upgrade(material)
+
+    @cache_self1
+    def _can_purchase_upgrade(self, material: str) -> StardewRule:
+        return self.logic.region.can_reach(LogicRegion.blacksmith_upgrade(material))
+
     def can_use_tool_at(self, tool: str, material: str, region: str) -> StardewRule:
         return self.has_tool(tool, material) & self.logic.region.can_reach(region)
 
@@ -76,8 +83,8 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
     def has_fishing_rod(self, level: int) -> StardewRule:
         assert 1 <= level <= 4, "Fishing rod 0 isn't real, it can't hurt you. Training is 1, Bamboo is 2, Fiberglass is 3 and Iridium is 4."
 
-        if self.options.tool_progression & ToolProgression.option_progressive:
-            return self.logic.received(f"Progressive {Tool.fishing_rod}", level)
+        if self.content.features.tool_progression.is_progressive:
+            return self.logic.received(APTool.fishing_rod, level)
 
         if level <= 2:
             # We assume you always have access to the Bamboo pole, because mod side there is a builtin way to get it back.

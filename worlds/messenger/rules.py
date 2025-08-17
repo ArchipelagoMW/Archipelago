@@ -32,7 +32,7 @@ class MessengerRules:
         self.connection_rules = {
             # from ToTHQ
             "Artificer's Portal":
-                lambda state: state.has_all({"Demon King Crown", "Magic Firefly"}, self.player),
+                lambda state: state.has("Demon King Crown", self.player),
             "Shrink Down":
                 lambda state: state.has_all(NOTES, self.player),
             # the shop
@@ -267,6 +267,8 @@ class MessengerRules:
             # tower of time
             "Tower of Time Seal - Time Waster":
                 self.has_dart,
+            # corrupted future
+            "Corrupted Future - Key of Courage": lambda state: state.has("Magic Firefly", self.player),
             # cloud ruins
             "Time Warp Mega Shard":
                 lambda state: self.has_vertical(state) or self.can_dboost(state),
@@ -370,7 +372,7 @@ class MessengerRules:
             add_rule(multiworld.get_entrance("Shrink Down", self.player), self.has_dart)
         multiworld.completion_condition[self.player] = lambda state: state.has("Do the Thing!", self.player)
         if self.world.options.accessibility:  # not locations accessibility
-            set_self_locking_items(self.world, self.player)
+            set_self_locking_items(self.world)
 
 
 class MessengerHardRules(MessengerRules):
@@ -530,9 +532,11 @@ class MessengerOOBRules(MessengerRules):
         self.world.options.accessibility.value = MessengerAccessibility.option_minimal
 
 
-def set_self_locking_items(world: "MessengerWorld", player: int) -> None:
+def set_self_locking_items(world: "MessengerWorld") -> None:
     # locations where these placements are always valid
     allow_self_locking_items(world.get_location("Searing Crags - Key of Strength").parent_region, "Power Thistle")
     allow_self_locking_items(world.get_location("Sunken Shrine - Key of Love"), "Sun Crest", "Moon Crest")
-    allow_self_locking_items(world.get_location("Corrupted Future - Key of Courage").parent_region, "Demon King Crown")
     allow_self_locking_items(world.get_location("Elemental Skylands Seal - Water"), "Currents Master")
+    if not world.options.shuffle_transitions:
+        allow_self_locking_items(world.get_location("Corrupted Future - Key of Courage").parent_region,
+                                 "Demon King Crown")

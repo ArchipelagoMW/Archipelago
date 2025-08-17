@@ -425,46 +425,11 @@ class TrendyGame(Choice):
     default = option_normal
 
 
-class GfxMod(FreeText, LADXROption):
+class GfxMod(DefaultOffToggle):
     """
-    Sets the sprite for link, among other things
-    The option should be the same name as a with sprite (and optional name) file in data/sprites/ladx
+    If enabled, the patcher will prompt the user for a modification file to change sprites in the game and optionally some text.
     """
     display_name = "GFX Modification"
-    ladxr_name = "gfxmod"
-    normal = ''
-    default = 'Link'
-
-    __spriteDir: str = Utils.local_path(os.path.join('data', 'sprites', 'ladx'))
-    __spriteFiles: typing.DefaultDict[str, typing.List[str]] = defaultdict(list)
-
-    extensions = [".bin", ".bdiff", ".png", ".bmp"]
-
-    for file in os.listdir(__spriteDir):
-        name, extension = os.path.splitext(file)
-        if extension in extensions:
-            __spriteFiles[name].append(file)
-
-    def __init__(self, value: str):
-        super().__init__(value)
-
-    def verify(self, world, player_name: str, plando_options) -> None:
-        if self.value == "Link" or self.value in GfxMod.__spriteFiles:
-            return
-        raise Exception(
-            f"LADX Sprite '{self.value}' not found. Possible sprites are: {['Link'] + list(GfxMod.__spriteFiles.keys())}")
-
-    def to_ladxr_option(self, all_options):
-        if self.value == -1 or self.value == "Link":
-            return None, None
-
-        assert self.value in GfxMod.__spriteFiles
-
-        if len(GfxMod.__spriteFiles[self.value]) > 1:
-            logger.warning(
-                f"{self.value} does not uniquely identify a file. Possible matches: {GfxMod.__spriteFiles[self.value]}. Using {GfxMod.__spriteFiles[self.value][0]}")
-
-        return self.ladxr_name, self.__spriteDir + "/" + GfxMod.__spriteFiles[self.value][0]
 
 
 class Palette(Choice):
@@ -527,6 +492,20 @@ class InGameHints(DefaultOnToggle):
     display_name = "In-game Hints"
 
 
+class TarinsGift(Choice):
+    """
+    [Local Progression] Forces Tarin's gift to be an item that immediately opens up local checks.
+    Has little effect in single player games, and isn't always necessary with randomized entrances.
+    [Bush Breaker] Forces Tarin's gift to be an item that can destroy bushes.
+    [Any Item] Tarin's gift can be any item for any world
+    """
+    display_name = "Tarin's Gift"
+    option_local_progression = 0
+    option_bush_breaker = 1
+    option_any_item = 2
+    default = option_local_progression
+
+
 class StabilizeItemPool(DefaultOffToggle):
     """
     By default, rupees in the item pool may be randomly swapped with bombs, arrows, powders, or capacity upgrades. This option disables that swapping, which is useful for plando.
@@ -565,6 +544,7 @@ ladx_option_groups = [
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
+        TarinsGift,
         Overworld,
         TrendyGame,
         InGameHints,
@@ -638,6 +618,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     text_mode: TextMode
     no_flash: NoFlash
     in_game_hints: InGameHints
+    tarins_gift: TarinsGift
     overworld: Overworld
     stabilize_item_pool: StabilizeItemPool
 
