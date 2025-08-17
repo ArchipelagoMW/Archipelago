@@ -958,7 +958,7 @@
                 "map_locations": [{ "map": "central_hall", "x": 240, "y": 150 }]
             },
             {
-                "name": "Examine Launch Memoral", "sections": [{ "name": "Central Hall: Examine Launch Memoral" }],
+                "name": "Examine Launch Memorial", "sections": [{ "name": "Central Hall: Examine Launch Memorial" }],
                 "map_locations": [{ "map": "central_hall", "x": 600, "y": 155 }]
             },
             {
