@@ -36,7 +36,7 @@ COPY intset.h .
 RUN cythonize -b -i _speedups.pyx
 
 # Archipelago
-FROM python:3.12-slim AS archipelago
+FROM python:3.12-slim-bookworm AS archipelago
 ARG TARGETARCH
 ENV VIRTUAL_ENV=/opt/venv
 ENV PYTHONUNBUFFERED=1
