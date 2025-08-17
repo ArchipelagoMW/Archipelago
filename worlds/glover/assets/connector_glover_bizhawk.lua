@@ -1276,6 +1276,14 @@ function GLOVERHACK:setGaribSorting(gsort)
     mainmemory.writebyte(self.garib_sorting + GLOVERHACK:getSettingPointer(), gsort);
 end
 
+function GLOVERHACK:setRandomizeSwitches(switch)
+    mainmemory.writebyte(self.randomize_switches + GLOVERHACK:getSettingPointer(), switch);
+end
+
+function GLOVERHACK:setRandomizeCheckpoint(checkpoint)
+    mainmemory.writebyte(self.randomize_checkpoints + GLOVERHACK:getSettingPointer(), checkpoint);
+end
+
 function GLOVERHACK:getItemsPointer()
     -- print("Checking Items Flags")
     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
@@ -1317,15 +1325,6 @@ function GLOVERHACK:getPCPointer()
     end
 	return GLOVERHACK:dereferencePointer(hackPointerIndex);
 end
-
--- function GLOVERHACK:getPCMsgPointer()
---     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
---     if hackPointerIndex == nil
---     then
---         return nil
---     end
--- 	return GLOVERHACK:dereferencePointer(self.pc_messages + hackPointerIndex);
--- end
 
 -- function GLOVERHACK:getPCDeath()
 --     return mainmemory.readbyte(self:getPCPointer() + self.pc_death_us);
@@ -1374,46 +1373,6 @@ end
 
 -- function GLOVERHACK:getNLocalTag()
 --    return mainmemory.readbyte(GLOVERHACK:getNPointer() + self.n64_tag_us);
--- end
-
--- function GLOVERHACK:setTextQueue(icon_id)
---     self.txt_queue = self.txt_queue + 1
---     GLOVERHACK:setSettingDialogCharacter(icon_id)
---     mainmemory.writebyte(self:getPCPointer() + self.pc_show_txt, self.txt_queue);
--- end
-
--- function GLOVERHACK:getCurrentQueue()
---     local ptr = self:getNPointer()
---     if ptr == nil
---     then
---         return 0
---     end
---     return mainmemory.readbyte(ptr + self.n64_show_text);
--- end
-
--- function GLOVERHACK:getPCQueue()
---     return self.txt_queue
--- end
-
--- function GLOVERHACK:setDialog(message, icon_id)
---     uppcase_text = string.upper(message)
---     local overflow = false
---     local last_char = 0
---     for idx = 0, string.len(uppcase_text)-1 do
---         if idx == 507
---         then
---             overflow = true
---             mainmemory.writebyte(self:getPCMsgPointer() + idx, 0);
---             break;
---         end
---         last_char = last_char + 1;
---         mainmemory.writebyte(self:getPCMsgPointer() + idx, uppcase_text:byte(idx + 1));
---     end
---     if overflow == false
---     then
---         mainmemory.writebyte(self:getPCMsgPointer() + last_char, 0);
---     end
---     self:setTextQueue(icon_id)
 -- end
 
 function GLOVERHACK:getRomVersion()
@@ -1660,6 +1619,18 @@ function received_misc(itemId)
     end
 end
 
+function received_events(itemId)
+    if itemId == 6500009 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L1_GATE"], 1)
+    elseif itemId == 6500010 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L2_RAISE_WATER"], 1)
+    elseif itemId == 6500011 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L2_WATER_DRAIN"], 1)
+    elseif itemId == 6500012 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L2_GATE"], 1)
+    end
+end
+
 ---------------------------------- MAP FUNCTIONS -----------------------------------
 
 function set_map(map)
@@ -1669,10 +1640,9 @@ end
 
 function map_handler()
     if CURRENT_HUB == 0x06 then
-        if CURRENT_MAP == 0x10 then 
+        if CURRENT_MAP == 0x10 then
             set_map("AP_ATLANTIS_L1")
-        elseif CURRENT_MAP == 0x11 then 
-            print("atl2")
+        elseif CURRENT_MAP == 0x11 then
             set_map("AP_ATLANTIS_L2")
         elseif CURRENT_MAP == 0x12 then set_map("AP_ATLANTIS_L3") 
         elseif CURRENT_MAP == 0x13 then set_map("AP_ATLANTIS_BOSS")
@@ -1716,391 +1686,6 @@ function map_handler()
     end
 end
 
----------------------------------- ITEM GET MESSAGES ----------------------------------
-
-
--- function display_item_message(msg_table)
---     -- Cancel if not for this player
---     if msg_table["to_player"] ~= PLAYER
---     then
---         return
---     end
---     -- Select item for current level of progressive move upgrades
---     convert_progressive_move_message(msg_table)
-
---     -- Select text depending on item id
---     local msg_text = get_item_message_text(msg_table["item_id"], msg_table["item"], msg_table["player"])
---     if not msg_text then return end
-
---     -- Select character icon depending on item id
---     local msg_icon = get_item_message_char(msg_table["item_id"]);
---     if not msg_icon then return end
-
---     table.insert(MESSAGE_TABLE, {msg_text, msg_icon});
--- end
-
--- function convert_progressive_move_message(msg_table)
---     local item_id = msg_table["item_id"]
---     if item_id == 1230828 -- Progressive Beak Buster
---     then
---         if GVR:getItem(ITEM_TABLE["AP_ITEM_BDRILL"]) == 1
---         then
---             msg_table["item_id"] = 1230757
---             msg_table["item"] = "Bill Drill"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_BBUST"]) == 1
---         then
---             msg_table["item_id"] = 1230820
---             msg_table["item"] = "Beak Buster"
---         end
---     elseif item_id == 1230829 -- Progressive Eggs
---     then
---         if GVR:getItem(ITEM_TABLE["AP_ITEM_CEGGS"]) == 1
---         then
---             msg_table["item_id"] = 1230767
---             msg_table["item"] = "Clockwork Eggs"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_IEGGS"]) == 1
---         then
---             msg_table["item_id"] = 1230763
---             msg_table["item"] = "Ice Eggs"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_GEGGS"]) == 1
---         then
---             msg_table["item_id"] = 1230759
---             msg_table["item"] = "Grenade Eggs"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_FEGGS"]) == 1
---         then
---             msg_table["item_id"] = 1230756
---             msg_table["item"] = "Fire Eggs"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_BEGGS"]) == 1
---         then
---             msg_table["item_id"] = 1230823
---             msg_table["item"] = "Blue Eggs"
---         end
---     elseif item_id == 1230830 -- Progressive Shoes
---     then
---         if GVR:getItem(ITEM_TABLE["AP_ITEM_CLAWBTS"]) == 1
---         then
---             msg_table["item_id"] = 1230773
---             msg_table["item"] = "Claw Clamber Boots"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_SPRINGB"]) == 1
---         then
---             msg_table["item_id"] = 1230768
---             msg_table["item"] = "Springy Step Shoes"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_TTRAIN"]) == 1
---         then
---             msg_table["item_id"] = 1230821
---             msg_table["item"] = "Turbo Trainers"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_SSTRIDE"]) == 1
---         then
---             msg_table["item_id"] = 1230826
---             msg_table["item"] = "Stilt Stride"
---         end
---     elseif item_id == 1230831 -- Progressive Water Training
---     then
---         if GVR:getItem(ITEM_TABLE["AP_ITEM_FSWIM"]) == 1
---         then
---             msg_table["item_id"] = 1230777
---             msg_table["item"] = "Fast Swimming"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_DAIR"]) == 1
---         then
---             msg_table["item_id"] = 1230778
---             msg_table["item"] = "Double Air"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_DIVE"]) == 1
---         then
---             msg_table["item_id"] = 1230810
---             msg_table["item"] = "Dive"
---         end
---     elseif item_id == 1230832 -- Progressive Bash Attack
---     then
---         if GVR:getItem(ITEM_TABLE["AP_ITEM_BBASH"]) == 1
---         then
---             msg_table["item_id"] = 1230800
---             msg_table["item"] = "Breegull Bash"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_GRAT"]) == 1
---         then
---             msg_table["item_id"] = 1230824
---             msg_table["item"] = "Ground Rat-a-tat Rap"
---         end
---     elseif item_id == 1230782 -- Progressive Flight
---     then
---         if GVR:getItem(ITEM_TABLE["AP_ITEM_AIREAIM"]) == 1
---         then
---             msg_table["item_id"] = 1230760
---             msg_table["item"] = "Airborne Egg Aiming"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_BBOMB"]) == 1
---         then
---             msg_table["item_id"] = 1230827
---             msg_table["item"] = "Beak Bomb"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_FPAD"]) == 1
---         then
---             msg_table["item_id"] = 1230811
---             msg_table["item"] = "Flight Pad"
---         end
---     elseif item_id == 1230783 -- Progressive Egg Aim
---     then
---         if GVR:getItem(ITEM_TABLE["AP_ITEM_EGGAIM"]) == 1
---         then
---             msg_table["item_id"] = 1230755
---             msg_table["item"] = "Egg Aim"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_EGGSHOOT"]) == 1
---         then
---             msg_table["item_id"] = 1230813
---             msg_table["item"] = "Third Person Egg Shooting"
---         end
---     elseif item_id == 1230784 -- Progressive Adv Water Training
---     then
---         if GVR:getItem(ITEM_TABLE["AP_ITEM_FSWIM"]) == 1
---         then
---             msg_table["item_id"] = 1230777
---             msg_table["item"] = "Fast Swimming"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_DAIR"]) == 1
---         then
---             msg_table["item_id"] = 1230778
---             msg_table["item"] = "Double Air"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_TTORP"]) == 1
---         then
---             msg_table["item_id"] = 1230765
---             msg_table["item"] = "Talon Torpedo"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_AUQAIM"]) == 1
---         then
---             msg_table["item_id"] = 1230766
---             msg_table["item"] = "Sub-Aqua Egg Aiming"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_DIVE"]) == 1
---         then
---             msg_table["item_id"] = 1230810
---             msg_table["item"] = "Dive"
---         end
---     elseif item_id == 1230785 -- Progressive Adv Egg Aim
---     then
---         if GVR:getItem(ITEM_TABLE["AP_ITEM_BBLASTER"]) == 1
---         then
---             msg_table["item_id"] = 1230754
---             msg_table["item"] = "Breegull Blaster"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_EGGAIM"]) == 1
---         then
---             msg_table["item_id"] = 1230755
---             msg_table["item"] = "Egg Aim"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_AMAZEOGAZE"]) == 1
---         then
---             msg_table["item_id"] = 1230779
---             msg_table["item"] = "Amaze-O-Gaze"
---         elseif GVR:getItem(ITEM_TABLE["AP_ITEM_EGGSHOOT"]) == 1
---         then
---             msg_table["item_id"] = 1230813
---             msg_table["item"] = "Third Person Egg Shooting"
---         end
---     end
--- end
-
--- function get_item_message_text(item_id, item, player)
---     local own = player == PLAYER
-
---     if (1230753 <= item_id and item_id <= 1230780) -- BT Moves
---         or (1230810 <= item_id and item_id <= 1230827) -- BK Moves
---         or (1230782 <= item_id and item_id <= 1230785) -- Progessive Moves 1
---         or (1230828 <= item_id and item_id <= 1230832) -- Progressive Moves 2
---         or (item_id == 1230800 or item_id == 1230802) -- Stop'n'Swap Moves
---     then
---         return own
---             and string.format("You can now use %s.", item)
---             or string.format("%s taught you how to use %s.", player, item)
---     elseif 1230944 <= item_id and item_id <= 1230952 -- Worlds
---     then
---         return own
---             and string.format("%s is now open!", item)
---             or string.format("%s has just opened %s!", player, item)
---     elseif item_id == 1230796 -- Chuffy
---     then
---         local special = ENABLE_AP_CHUFFY and "\nDon't forget that you can call Chuffy at any unlocked station." or ""
---         return own
---             and string.format("You can now use %s.%s", item, special)
---             or string.format("%s has just repaired %s.%s", player, item, special)
---     elseif 1230790 <= item_id and item_id <= 1230795 -- Stations
---     then
---         return own
---             and string.format("You can now use the %s.", station_names[item_id])
---             or string.format("%s has just opened the %s.", player, station_names[item_id])
---     elseif 1230855 <= item_id and item_id <= 1230863 -- Mumbo Magic
---     then
---         if DIALOG_CHARACTER == 110 or DIALOG_CHARACTER == 8
---         then
---             -- Mumbo flavor text
---             return own
---                 and string.format("Mumbo now use mighty %s spell. Bear go visit Mumbo to try.", magic_names[item_id])
---                 or string.format("%s told Mumbo mighty %s spell. Bear go visit Mumbo to try.", player, magic_names[item_id])
---         else
---             -- Basic text
---             return own
---                 and string.format("Mumbo can now use the %s spell.", magic_names[item_id])
---                 or string.format("%s has just unlocked Mumbo's %s spell.", player, magic_names[item_id])
---         end
---     elseif 1230174 <= item_id and item_id <= 1230182 -- Humba Transformations
---     then
---         if DIALOG_CHARACTER == 110 or DIALOG_CHARACTER == 37
---         then
---             -- Humba flavor text
---             return own
---                 and string.format("Wumba now make bear %s. Very %s!", transformation_names[item_id]["name"], transformation_names[item_id]["attribute"])
---                 or string.format("%s told Wumba how to make bear %s. Very %s!", player, transformation_names[item_id]["name"], transformation_names[item_id]["attribute"])
---         else
---             -- Basic text
---             return own
---                 and string.format("Banjo can now be transformed into a %s.", transformation_names[item_id]["name"])
---                 or string.format("%s has just unlocked the %s transformation.", player, transformation_names[item_id]["name"])
---         end
---     elseif 1230870 <= item_id and item_id <= 1230876 -- Silos
---     then
---         return own
---             and string.format("%s is now open!", item)
---             or string.format("%s has just opened the %s!", player, item)
---     elseif 1230877 <= item_id and item_id <= 1230915 -- Warppads
---     then
---         return own
---             and string.format("You can now use the %s.", item)
---             or string.format("%s has just unlocked the %s.", player, item)
---     elseif 1230917 <= item_id and item_id <= 1230921 -- Cheats
---     then
---         return own
---             and string.format("You can now use the %s.", cheat_names[item_id])
---             or string.format("%s has just sent you the %s.", player, cheat_names[item_id])
---     end
-
---     return nil
--- end
-
--- function get_item_message_char(item_id)
---     -- Default character is used depending on the item
---     if DIALOG_CHARACTER == 110
---     then
---         if 1230753 <= item_id and item_id <= 1230776 -- BT Moves
---         then
---             return 17 -- Jamjars
---         elseif item_id == 1230779 -- Amaze O' Gaze
---         then
---             return 99 -- Goggles
---         elseif item_id == 1230780 -- Roar
---         then
---             return 50 -- Bargasaurus
---         elseif item_id == 1230800 or item_id == 1230802 -- Stop'n'Swap Moves
---         then
---             return 109 -- Heggy
---         elseif 1230810 <= item_id and item_id <= 1230827 -- BK Moves
---         then
---             return 7 -- Bottles
---         elseif (1230777 <= item_id and item_id <= 1230778)
---             or (item_id == 1230831) -- Water Moves
---         then
---             return 56 -- Roysten
---         elseif (1230828 <= item_id and item_id <= 1230830)
---             or (item_id == 1230832)
---             or (1230782 <= item_id and item_id <= 1230785) -- Progressive Moves
---         then
---             return 7 -- Bottles
---         elseif item_id == 1230944 -- Mayahem Temple
---         then
---             return 100 -- Targitzan
---         elseif item_id == 1230945 -- Glitter Gulch Mine
---         then
---             return 39 -- Old King Coal
---         elseif item_id == 1230946 or item_id == 1230795 -- Witchy World
---         then
---             return 31 -- Mr Patch
---         elseif item_id == 1230947 -- Jolly Roger's Lagoon
---         then
---             return 102 -- Lord Woo Fak Fak
---         elseif item_id == 1230948 or item_id == 1230791 -- Terrydactyland
---         then
---             return 49 -- Terry
---         elseif item_id == 1230949 or item_id == 1230790 -- Grunty Industries
---         then
---             return 103 -- Weldar
---         elseif item_id == 1230950 or item_id == 1230793 -- Hailfire Peaks
---         then
---             return 65 -- Chilly Willy
---         elseif item_id == 1230792
---         then
---             return 66
---         elseif item_id == 1230951 -- Cloud Cuckooland
---         then
---             return 27 -- Canary Mary
---         elseif item_id == 1230952 -- Cauldron Keep
---         then
---             return 71 -- Klungo
---         elseif item_id == 1230794 -- Isle O' Hags Station
---         then
---             return 8 -- Mumbo
---         elseif item_id == 1230796 -- Chuffy
---         then
---             return 39 -- Old King Coal
---         elseif 1230855 <= item_id and item_id <= 1230863 -- Mumbo Magic
---         then
---             return 8 -- Mumbo
---         elseif 1230174 <= item_id and item_id <= 1230182 -- Humba Transformations
---         then
---             return 37 -- Humba
---         elseif 1230870 <= item_id and item_id <= 1230876 -- Silos
---         then
---             return 17 -- Jamjars
---         elseif 1230877 <= item_id and item_id <= 1230881 -- Warppad MT
---         then
---             return 100 -- Targitzan
---         elseif 1230882 <= item_id and item_id <= 1230886 -- Warppad GM
---         then
---             return 39 -- Old King Coal
---         elseif 1230887 <= item_id and item_id <= 1230891 -- Warppad WW
---         then
---             return 31 -- Mr Patch
---         elseif 1230892 <= item_id and item_id <= 1230896 -- Warppad JR
---         then
---             return 102 -- Lord Woo Fak Fak
---         elseif 1230897 <= item_id and item_id <= 1230901 -- Warppad TD
---         then
---             return 49 -- Terry
---         elseif 1230902 <= item_id and item_id <= 1230906 -- Warppad GI
---         then
---             return 103 -- Weldar
---         elseif 1230907 <= item_id and item_id <= 1230911 -- Warppad HP
---         then
---             return 65 -- Chilly Willy
---         elseif 1230912 <= item_id and item_id <= 1230915 -- Warppad CC
---         then
---             return 27 -- Canary
---         elseif 1230917 <= item_id and item_id <= 1230921 -- Cheats
---         then
---             return 28 -- Cheato
---         else -- Default
---             return 7 -- Bottles
---         end
-
---     -- Completely random character
---     elseif DIALOG_CHARACTER == 255
---     then
---         return math.random(0, 109)
-
---     -- Fixed dialog character has been selected
---     else
---         return DIALOG_CHARACTER
---     end
--- end
-
--- function messageQueue()
---     local processed = -1;
---     if GVR:getCurrentQueue() == GVR:getPCQueue()
---     then
---         for id, message in pairs(MESSAGE_TABLE)
---         do
---             GVR:setDialog(message[1], message[2])
---             processed = id
---             break
---         end
---         if processed ~= -1
---         then
---             table.remove(MESSAGE_TABLE, processed)
---         else
---             GVR:setSettingDialogCharacter(DIALOG_CHARACTER)
---         end
---     end
--- end
-
 ---------------------- ARCHIPELAGO FUNCTIONS -------------
 
 function processAGIItem(item_list)
@@ -2126,6 +1711,9 @@ function processAGIItem(item_list)
             elseif(6500357 <= memlocation and memlocation <= 6500357) -- Misc
             then
                 received_misc(memlocation)
+            elseif(6500000 <= memlocation and memlocation <= 6500129) -- Events
+            then
+                received_events(memlocation)
             end
             receive_map[tostring(ap_id)] = tostring(memlocation)
         end
@@ -2145,14 +1733,6 @@ function process_block(block)
     then
         processAGIItem(block['items'])
     end
-    -- if next(block['messages']) ~= nil
-    -- then
-    --     local msg = ""
-    --     for k, msg_table in pairs(block['messages'])
-    --     do
-    --         display_item_message(msg_table)
-    --     end
-    -- end
     -- if block['triggerDeath'] == true and DEATH_LINK == true
     -- then
     --     local death = GVR:getAPDeath()
@@ -2338,6 +1918,14 @@ function process_slot(block)
     then
         GVR:setGaribSorting(block['slot_garib_sorting'])
     end
+    if block['slot_switches'] ~= nil and block['slot_switches'] ~= 0
+    then
+        GVR:setRandomizeSwitches(block['slot_switches'])
+    end
+    -- if block['slot_checkpoints'] ~= nil and block['slot_checkpoints'] ~= 0
+    -- then
+    --     GVR:setRandomizeCheckpoint(block['slot_checkpoints'])
+    -- end
     -- if block['slot_deathlink'] ~= nil and block['slot_deathlink'] ~= 0
     -- then
     --     DEATH_LINK = true

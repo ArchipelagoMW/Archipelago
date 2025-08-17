@@ -438,8 +438,6 @@ class GloverWorld(World):
         options["spawning_checkpoint_randomizer"] = self.options.spawning_checkpoint_randomizer.value
         options["bonus_levels"] = self.options.bonus_levels.value
         #options["atlantis_bonus"] = self.options.atlantis_bonus.value
-        options["death_link"] = self.options.death_link.value
-        options["tag_link"] = self.options.tag_link.value
         options["randomize_jump"] = self.options.randomize_jump.value
         options["include_power_ball"] = self.options.include_power_ball.value
         options["checkpoint_checks"] = self.options.checkpoint_checks.value
