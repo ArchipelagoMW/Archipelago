@@ -13,9 +13,7 @@ from typing import Awaitable
 
 # Misc imports
 import colorama
-import pymem
-
-from pymem.exception import ProcessNotFound
+from PyMemoryEditor import OpenProcess, ProcessNotFoundError
 
 # Archipelago imports
 import ModuleUpdate
@@ -25,7 +23,7 @@ from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui
 from NetUtils import ClientStatus
 
 # Jak imports
-from .game_id import jak1_name
+from .game_id import jak1_name, jak1_gk, jak1_goalc
 from .options import EnableOrbsanity
 from .agents.memory_reader import JakAndDaxterMemoryReader
 from .agents.repl_client import JakAndDaxterReplClient
@@ -456,19 +454,18 @@ def find_root_directory(ctx: JakAndDaxterContext):
 async def run_game(ctx: JakAndDaxterContext):
 
     # These may already be running. If they are not running, try to start them.
-    # TODO - Support other OS's. 1: Pymem is Windows-only. 2: on Linux, there's no ".exe."
     gk_running = False
     try:
-        pymem.Pymem("gk.exe")  # The GOAL Kernel
+        OpenProcess(process_name=jak1_gk)  # The GOAL Kernel
         gk_running = True
-    except ProcessNotFound:
+    except ProcessNotFoundError:
         ctx.on_log_warn(logger, "Game not running, attempting to start.")
 
     goalc_running = False
     try:
-        pymem.Pymem("goalc.exe")  # The GOAL Compiler and REPL
+        OpenProcess(process_name=jak1_goalc)  # The GOAL Compiler and REPL
         goalc_running = True
-    except ProcessNotFound:
+    except ProcessNotFoundError:
         ctx.on_log_warn(logger, "Compiler not running, attempting to start.")
 
     try:
@@ -501,8 +498,8 @@ async def run_game(ctx: JakAndDaxterContext):
             return
 
         # Now double-check the existence of the two executables we need.
-        gk_path = os.path.join(root_path, "gk.exe")
-        goalc_path = os.path.join(root_path, "goalc.exe")
+        gk_path = os.path.join(root_path, jak1_gk)
+        goalc_path = os.path.join(root_path, jak1_goalc)
         if not os.path.exists(gk_path) or not os.path.exists(goalc_path):
             msg = (f"The Game and Compiler could not be found in the ArchipelaGOAL root directory.\n"
                    f"Please check your host.yaml file.\n"

@@ -4,14 +4,12 @@ import struct
 import sys
 from typing import ByteString, Callable
 import json
-import pymem
-from pymem import pattern
-from pymem.exception import ProcessNotFound, ProcessError, MemoryReadError, WinAPIError
-from PyMemoryEditor import OpenProcess
-from PyMemoryEditor import ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
+from pymem import pattern, Pymem
+from PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
 from dataclasses import dataclass
 
 import Utils
+from ..game_id import jak1_gk
 from ..locs import (orb_locations as orbs,
                     cell_locations as cells,
                     scout_locations as flies,
@@ -231,7 +229,9 @@ class JakAndDaxterMemoryReader:
 
         if self.connected:
             try:
-                self.gk_process.read_process_memory(0, bytes, 1)  # Ping to see if it's alive.
+                # TODO - When PyMemoryEditor issue #15 is resolved, swap out this line for the commented one.
+                # self.gk_process.read_process_memory(0, bytes, 1)  # Ping to see if it's alive.
+                OpenProcess(process_name=jak1_gk)
             except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess):
                 msg = (f"Error reading game memory! (Did the game crash?)\n"
                        f"Please close all open windows and reopen the Jak and Daxter Client "
@@ -276,7 +276,7 @@ class JakAndDaxterMemoryReader:
 
     async def connect(self):
         try:
-            self.gk_process = OpenProcess(process_name="gk.exe")  # The GOAL Kernel
+            self.gk_process = OpenProcess(process_name=jak1_gk)  # The GOAL Kernel
             logger.debug(f"Found the gk process: {self.gk_process.pid}")
         except ProcessNotFoundError:
             self.log_error(logger, "Could not find the game process.")
@@ -287,7 +287,7 @@ class JakAndDaxterMemoryReader:
         # what it is. So we will use a temporary Pymem object to find the address on Windows, while on Linux we will
         # use the real instance of PME's OpenProcess.
         if Utils.is_windows:
-            gk_pymem = pymem.Pymem("gk.exe")  # The GOAL Kernel
+            gk_pymem = Pymem(jak1_gk)  # The GOAL Kernel
 
             # If we don't find the marker in the first loaded module, we've failed.
             modules = list(gk_pymem.list_modules())

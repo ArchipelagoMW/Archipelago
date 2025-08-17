@@ -8,14 +8,13 @@ from dataclasses import dataclass
 from queue import Queue
 from typing import Callable
 
-import pymem
-from pymem.exception import ProcessNotFound, ProcessError
+from PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
 
 import asyncio
 from asyncio import StreamReader, StreamWriter, Lock
 
 from NetUtils import NetworkItem
-from ..game_id import jak1_id, jak1_max
+from ..game_id import jak1_id, jak1_max, jak1_gk, jak1_goalc
 from ..items import item_table, trap_item_table
 from ..locs import (
     orb_locations as orbs,
@@ -66,8 +65,8 @@ class JakAndDaxterReplClient:
 
     # The REPL client needs the REPL/compiler process running, but that process
     # also needs the game running. Therefore, the REPL client needs both running.
-    gk_process: pymem.process = None
-    goalc_process: pymem.process = None
+    gk_process: OpenProcess = None
+    goalc_process: OpenProcess = None
 
     item_inbox: dict[int, NetworkItem] = {}
     inbox_index = 0
@@ -102,8 +101,10 @@ class JakAndDaxterReplClient:
 
         if self.connected:
             try:
-                self.gk_process.read_bool(self.gk_process.base_address)  # Ping to see if it's alive.
-            except ProcessError:
+                # TODO - When PyMemoryEditor issue #15 is resolved, swap out this line for the commented one.
+                # self.gk_process.read_process_memory(0, bytes, 1)  # Ping to see if it's alive.
+                OpenProcess(process_name=jak1_gk)
+            except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess):
                 msg = (f"Error reading game memory! (Did the game crash?)\n"
                        f"Please close all open windows and reopen the Jak and Daxter Client "
                        f"from the Archipelago Launcher.\n"
@@ -115,8 +116,10 @@ class JakAndDaxterReplClient:
                 self.log_error(logger, msg)
                 self.connected = False
             try:
-                self.goalc_process.read_bool(self.goalc_process.base_address)  # Ping to see if it's alive.
-            except ProcessError:
+                # TODO - When PyMemoryEditor issue #15 is resolved, swap out this line for the commented one.
+                # self.goalc_process.read_process_memory(0, bytes, 1)  # Ping to see if it's alive.
+                OpenProcess(process_name=jak1_goalc)
+            except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess):
                 msg = (f"Error sending data to compiler! (Did the compiler crash?)\n"
                        f"Please close all open windows and reopen the Jak and Daxter Client "
                        f"from the Archipelago Launcher.\n"
@@ -177,16 +180,16 @@ class JakAndDaxterReplClient:
 
     async def connect(self):
         try:
-            self.gk_process = pymem.Pymem("gk.exe")  # The GOAL Kernel
-            logger.debug("Found the gk process: " + str(self.gk_process.process_id))
-        except ProcessNotFound:
+            self.gk_process = OpenProcess(process_name=jak1_gk)  # The GOAL Kernel
+            logger.debug("Found the gk process: " + str(self.gk_process.pid))
+        except ProcessNotFoundError:
             self.log_error(logger, "Could not find the game process.")
             return
 
         try:
-            self.goalc_process = pymem.Pymem("goalc.exe")  # The GOAL Compiler and REPL
-            logger.debug("Found the goalc process: " + str(self.goalc_process.process_id))
-        except ProcessNotFound:
+            self.goalc_process = OpenProcess(process_name=jak1_goalc)  # The GOAL Compiler and REPL
+            logger.debug("Found the goalc process: " + str(self.goalc_process.pid))
+        except ProcessNotFoundError:
             self.log_error(logger, "Could not find the compiler process.")
             return
 
@@ -251,8 +254,8 @@ class JakAndDaxterReplClient:
             self.log_success(logger, "The REPL is ready!")
 
     async def print_status(self):
-        gc_proc_id = str(self.goalc_process.process_id) if self.goalc_process else "None"
-        gk_proc_id = str(self.gk_process.process_id) if self.gk_process else "None"
+        gc_proc_id = str(self.goalc_process.pid) if self.goalc_process else "None"
+        gk_proc_id = str(self.gk_process.pid) if self.gk_process else "None"
         msg = (f"REPL Status:\n"
                f"   REPL process ID: {gc_proc_id}\n"
                f"   Game process ID: {gk_proc_id}\n")
