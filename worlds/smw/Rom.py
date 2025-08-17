@@ -3,7 +3,7 @@ from worlds.AutoWorld import World
 from worlds.Files import APDeltaPatch
 from .Aesthetics import generate_shuffled_header_data, generate_shuffled_ow_palettes, generate_curated_level_palette_data, generate_curated_map_palette_data, generate_shuffled_sfx
 from .Levels import level_info_dict, full_bowser_rooms, standard_bowser_rooms, submap_boss_rooms, ow_boss_rooms
-from .Names.TextBox import generate_goal_text, title_text_mapping, generate_text_box, generate_credits
+from .Names.TextBox import generate_goal_text, title_text_mapping, stage_text_mapping, generate_text_box, generate_credits
 
 USHASH = 'cdd3c8c37322978ca8669b34bc89c804'
 ROM_PLAYER_LIMIT = 65535
@@ -2946,6 +2946,72 @@ def handle_boss_shuffle(rom, world: World):
 
             if ow_boss_rooms[i].exitAddressAlt is not None:
                 rom.write_byte(ow_boss_rooms[i].exitAddressAlt, chosen_ow_boss.roomID)
+
+
+name_pieces_map: dict[int, list[str]] = {
+    0x21AC5: ["YOSHI'S ", "MARIO'S ", "LUIGI'S ", "WARIO'S ", "BOSHI'S ", "PEACH'S ", "DAISY'S ", "YOBBY'S ", "ROY'S " ],
+    0x21ACD: ["STAR ", "MOON ", "SUN ", "MARS ", "MILK ", "RICE ", "CORN" ],
+    0x21AD2: ["#1 IGGY'S ", "#1 JACK'S ", "#3 BACH'S ", "#2 ALEX'S ", "	#7 KATY'S ", "#1 KOJI'S ", "#5 TOBY'S " ],
+    0x21ADC: ["#2 MORTON'S ", "#0118 ROY'S ", "#1 TAYLOR'S ", "#3 BILLIE'S ", "#3 JOHANN'S ", "#6 ARIANA'S ", "#64 GRANT'S " ],
+    0x21AE8: ["#3 LEMMY'S ", "#5 BRUNO'S ", "#8 SLASH'S ", "#4 PYOTR'S ", "#5 FELIX'S ", "#2 DAVID'S ", "#9 JASON'S " ],
+    0x21AF3: ["#4 LUDWIG'S ", "#2 MOZART'S ", "#5 GUSTAV'S ", "#7 DMITRI'S ", "#6 SERGEI'S ", "#4 RALPH'S ", "#1 JOSEPH'S ", "NOT ROY'S " ],
+    0x21AFF: ["#5 ROY'S ", "#2 SAM'S ", "#1 BIG'S ", "#5 BTS'S ", "#2 JUN'S ", "#3 GO'S ", "#5 BOB'S " ],
+    0x21B08: ["#6 WENDY'S ", "#7 CLARA'S ", "#4 ADELE'S ", "#1 LENA'S ", "#5 GAGA'S ", "#3 YOKO'S ", "#2 PINK'S " ],
+    0x21B13: ["#7 LARRY'S ", "#2 KEVIN'S ", "#7 NOBUO'S ", "#8 FRANZ'S ", "#6 KENJI'S ", "#2 LUIGI'S ", "#5 FRANK'S " ],
+    0x21B1E: ["DONUT ", "PIZZA ", "BAGEL ", "PASTA ", "PINNA ", "CREAM ", "LEMON ", "VINE " ],
+    0x21B24: ["GREEN ", "AZURE ", "BROWN ", "CREAM ", "IVORY ", "MAUVE ", "STRAW " ],
+    0x21B2A: ["TOP SECRET AREA ", "HUSH HUSH PLACE ", "THE QUIET PLACE ", "SOMEWHERE ", "NEXT TO NOWHERE ", "HERE ", "REFILL SPOT " ],
+    0x21B3A: ["VANILLA ", "CHERRY ", "GELATO ", "BIANCO ", "PIANTA ", "BROWNIE ", "BANANA ", "PUMPKIN ", "GLOOMY " ],
+    0x21B42: ["\x38\x39\x3A\x3B\x3C ", "WHITE ", "SEPIA ", "LEMON ", "FLAME ", "KHAKI ", "LILAC " ],
+    0x21B48: ["RED ", "RGB ", "SKY ", "JET ", "CAR ", "TAN ", "LED " ],
+    0x21B4C: ["BLUE ", "PINK 	ROSE 	PAUA 	PEAR 	PLUM 	LAVA " ],
+    0x21B51: ["BUTTER BRIDGE ", "MARGARINE WAY ", "MARIO CIRCUIT ", "KOOPA BEACH ", "RAINBOW ROAD ", "TOAD TURNPIKE ", "YOSHI FALLS " ],
+    0x21B5F: ["CHEESE BRIDGE ", "WATERMELON ", "CHEDDAR ROAD ", "YOGURT YARD ", "FISH CLIFF ", "BRIE BLUFF ", "FETA FOOTHILL " ],
+    0x21B6D: ["SODA LAKE ", "MINT POOL ", "POP OCEAN ", "PACIFICA ", "WATER SEA ", "DIRE DOCK ", "NOKI BAY " ],
+    0x21B77: ["COOKIE MOUNTAIN ", "BROWNIE CLIFF ", "CHEESECAKE HIKE ", "CANDY CLIFFSIDE ", "SUGAR SUMMIT ", "PANCAKE PEAK ", "ROCK CANDY RIDGE " ],
+    0x21B87: ["FOREST ", "WOODS ", "PLAINS ", "FIELDS ", "LAND ", "GALAXY ", "LAKE ", "CANYON ", "RAVINE ", "CHASM ", "PIT ", "PRISON ", "CAGE ", "CAVERN" ],
+    0x21B8E: ["CHOCOLATE ", "RASPBERRY ", "PEPPERONI ", "PISTACHIO ", "TALL TALL ", "SNOWMAN'S ", "ICE CREAM ", "MUSHROOM ", "CILANTRO " ],
+    0x21B98: ["CHOCO-GHOST HOUSE", "MAYONNAISE MANOR ", "COCONUT MALL ", "LUIGI'S MANSION ", "BOLOGNA BUILDING ", "VIM FACTORY ", "BIG BOO'S HAUNT ", "CREEPY STEEPLE ", "HOTEL DELPHINO " ],
+    0x21BAA: ["SUNKEN GHOST SHIP ", "WRECKED SHIP ", "GANGPLANK GALLEON ", "DAISY CRUISER ", "SS CHUCKOLA	SS FLAVION ", "KING OF RED LIONS ", "THE BURNING BLADE ", "THE GREAT FOX " ],
+    0x21BBC: ["VALLEY ", "CANYON ", "RAVINE ", "CHASM ", "PIT ", "PRISON ", "CAGE ", "WOODS ", "PLAINS ", "FIELDS ", "LAND ", "GALAXY ", "LAKE ", "CAVERN " ],
+    0x21BC3: ["BACK DOOR " ],
+    0x21BCD: ["FRONT DOOR " ],
+    0x21BD8: ["GNARLY ", "BULLY ", "FAR OUT ", "SKIBIDI ", "AND HOW ", "FETCH ", "BASED" ],
+    0x21BDF: ["TUBULAR ", "POGGERS ", "ON FLEEK ", "STELLAR ", "CAPITAL ", "GOATED ", "GROOVY" ],
+    0x21BE7: ["WAY COOL ", "BODACIOUS ", "RIGHTEOUS ", "SCHWIFTY ", "DRIPPIN ", "FANTASTIC ", "BEAUTIFUL" ],
+
+    0x21BF0: ["HOUSE ", "ROOM ", "ROOF ", "HOME ", "PLACE ", "ABODE ", "HOVEL ", "CABIN ", "BARN ", "VILLA ", "LAB ", "SHACK ", "HUT " ],
+    0x21BF6: ["ISLAND ", "HILLS ", "SHIRE ", "PLANET ", "SAVANA ", "TUNDRA ", "RIDGE ", "VALLEY ", "GULCH ", "CAVERN ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "LAGOON ", "CANYON ", "HARBOR ", "GARDEN ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK " ],
+    0x21BFD: ["SWITCH PALACE ", "ARCHIPELAGO ", "YUMP ATTEMPT ", "BLOCK UNLOCK ", "SKYSCRAPER ", "FACTORY ", "OBSERVATORY ", "BLOCKHOUSE ", "SHIPYARD ", "GARAGE" ],
+    0x21C0B: ["CASTLE ", "PARLOR ", "CASINO ", "HOTEL ", "CINEMA ", "SCHOOL ", "BANK ", "ARENA ", "FORT ", "PAGODA ", "VILLA ", "KEEP ", "TOWN ", "CITY ", "ENGINE " ],
+    0x21C12: ["PLAINS ", "HILLS ", "SHIRE ", "PLANET ", "SAVANA ", "TUNDRA ", "RIDGE ", "VALLEY ", "GULCH ", "CAVERN ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "LAGOON ", "CANYON ", "HARBOR ", "GARDEN ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK " ],
+    0x21C19: ["GHOST HOUSE ", "GAS STATION ", "OFFICE ", "FACTORY ", "STADIUM ", "MUSEUM ", "AQUARIUM ", "ORPHANAGE ", "BUNKER ", "LIGHTHOUSE " ],
+    0x21C25: ["SECRET ", "HIDDEN ", "LOST ", "BORING ", "HILLS ", "SHIRE ", "PLANET ", "SAVANA ", "TUNDRA ", "RIDGE ", "VALLEY ", "GULCH ", "CAVERN ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "LAGOON  ", "CANYON ", "HARBOR ", "GARDEN ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK " ],
+    0x21C2C: ["DOME ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK " ],
+    0x21C31: ["FORTRESS ", "CIRCUIT ", "FESTIVAL ", "DUNGEON ", "CITADEL ", "PARLOR ", "CASINO ", "HOTEL ", "CINEMA ", "SCHOOL ", "BANK ", "ARENA ", "FORT ", "PAGODA ", "VILLA ", "KEEP ", "TOWN ", "CITY ", "ENGINE " ],
+    0x21C3A: ["OF\x32\x33\x34\x35\x36\x37ON ", "OF KOOPERS ", "OF HEROES ", "OF SPIDERS ", "OF ROY ", "OF LUDWIG ", "OF DOOM ", "OF EGGMAN ", "OF MARIO ", "OF SPOOKS ", "OF TRIALS ", "OF REPOSE " ],
+    0x21C45: ["OF BOWSER ", "OF ROY ", "OF LUDWIG ", "OF DOOM ", "OF EGGMAN ", "OF MARIO ", "OF SPOOKS ", "OF TRIALS ", "OF REPOSE ", "OF HEROES" ],
+    0x21C4F: ["ROAD ", "LANE ", "WAY ", "TRAIN ", "CAR ", "PATH ", "ALLEY ", "PASS ", "LANE ", "ROUTE" ],
+    0x21C54: ["WORLD ", "ROAD ", "HILLS ", "SHIRE ", "RIDGE ", "GULCH ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK " ],
+    0x21C5A: ["AWESOME ", "RADICAL ", "ALL THAT ", "VICIOUS ", "HUZZAH ", "SIGMA ", "COOL" ],
+
+    0x21C62: ["1", "0 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 ", "9 ", "A ", "B ", "C" ],
+    0x21C63: ["2", "0 ", "1 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 ", "9 ", "A ", "B ", "C" ],
+    0x21C64: ["3", "0 ", "1 ", "2 ", "4 ", "5 ", "6 ", "7 ", "8 ", "9 ", "A ", "B ", "C" ],
+    0x21C65: ["4", "0 ", "1 ", "2 ", "3 ", "5 ", "6 ", "7 ", "8 ", "9 ", "A ", "B ", "C" ],
+    0x21C66: ["5", "0 ", "1 ", "2 ", "3 ", "4 ", "6 ", "7 ", "8 ", "9 ", "A ", "B ", "C" ],
+    0x21C67: ["PALACE" ],
+    0x21C6D: ["AREA", "ZONE", "LAIR", "LAND", "HILL", "HOLE", "WELL", "HALL", "MILL", "PARK" ],
+    0x21C71: ["GROOVY", "NEATO", "FUNKY", "ZOOLY", "WICKED", "BALLER", "POPPIN" ],
+    0x21C77: ["MONDO", "PHAT", "HOT", "HIP", "DOPE", "SWEET", "GUCCI" ],
+    0x21C7C: ["OUTRAGEOUS", "PRETTY FLY", "CAT'S MEOW", "DA BOMB", "SICK NASTY", "MARVELOUS", "FIRE" ],
+    0x21C86: ["FUNKY", "NIFTY", "LIT", "BOSS", "TIGHT", "DANK", "BAD" ],
+    0x21C8B: ["HOUSE", "LAB", "ROOM", "ROOF", "HOME", "PLACE", "ABODE", "HOVEL", "CABIN", "BARN", "VILLA", "SHACK", "HUT" ],
+}
+
+def generate_level_names(world: World, rom: LocalRom):
+    if world.options.level_name_shuffle == "consistent" or world.options.level_name_shuffle == "chaos":
+        pass
 
 
 def patch_rom(world: World, rom, player, active_level_dict):
