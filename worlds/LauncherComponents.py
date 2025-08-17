@@ -274,6 +274,8 @@ if not is_frozen():
                                  compresslevel=9) as zf:
                 for path in pathlib.Path(world_directory).rglob("*.*"):
                     relative_path = os.path.join(*path.parts[path.parts.index("worlds") + 1:])
+                    if "__MACOSX" in relative_path or ".DS_STORE" in relative_path or "__pycache__" in relative_path:
+                        continue
                     if not relative_path.endswith("archipelago.json"):
                         zf.write(path, relative_path)
                 zf.writestr(apworld.manifest_path, json.dumps(manifest))
