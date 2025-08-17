@@ -79,7 +79,7 @@ class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     starting_area: StartingArea
     progressive_vacuum: ProgressiveVacuum
     missionsanity: Missionsanity
-    annoyinglocations: AnnoyingLocations
+    annoying_locations: AnnoyingLocations
     minigamesanity: Supadow
     progressive_gadget: ProgressiveGadget
     supadow_minigames: Supadow
