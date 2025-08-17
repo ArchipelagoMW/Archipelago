@@ -1,3 +1,5 @@
+import orjson
+import pkgutil
 from typing import Any, ClassVar
 
 from BaseClasses import Tutorial
@@ -101,8 +103,9 @@ class NineSolsWorld(World):
             'skip_soulscape_platforming',  # implemented by client/mod code,
                                            # and affects logic/trackers
         )
-        # Archipelago does not yet have apworld versions (data_version is deprecated),
-        # so we have to roll our own with slot_data for the time being
-        slot_data["apworld_version"] = "0.1.5"
+        # apworld versions are not yet stored in the generated multiworld and exposed by AP servers,
+        # so we have to transmit this to the client/mod using slot_data for the time being.
+        apworld_manifest = orjson.loads(pkgutil.get_data(__name__, "archipelago.json").decode("utf-8"))
+        slot_data["apworld_version"] = apworld_manifest["world_version"]
         return slot_data
 
