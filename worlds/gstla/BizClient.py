@@ -17,7 +17,7 @@ from .gen.LocationData import all_locations, LocationType, djinn_locations, Loca
     event_name_to_data, location_id_to_data, event_id_to_name
 
 if TYPE_CHECKING:
-    from worlds._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor, TextCategory
+    from worlds._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor
 
 logger = logging.getLogger("Client")
 
@@ -85,6 +85,9 @@ class GoalManager:
             LocationName.Anemos_Inner_Sanctum_Dullahan,
         ]
     }
+    flag_to_name: dict[int, str] = {
+        v: k for k,v in supported_flags.items()
+    }
 
     def __init__(self):
         self.flag_requirements: Set[str] = set()
@@ -124,7 +127,7 @@ class GoalManager:
             ap_id = self.desired_flags.get(flag, None)
             if ap_id is not None:
                 if is_set and ap_id not in server_flags:
-                    await display_message(ctx.bizhawk_ctx, f"{flag} Completed")
+                    await display_message(ctx.bizhawk_ctx, f"{GoalManager.flag_to_name.get(flag, "Unknown")} Completed")
                     updated_flags.add(ap_id)
 
         server_djinn = ctx.stored_data.get(client.get_djinn_location_key(ctx), [])
@@ -137,7 +140,7 @@ class GoalManager:
         if difference:
             await display_message(ctx.bizhawk_ctx,
                                   f"Number of Djinn Obtained: {len(client.checked_djinn)}" +
-                                  "" if 'djinn' not in client.goals.count_requirements else f"'/'{str(client.goals.count_requirements.get("djinn",0))}")
+                                  ("" if 'djinn' not in client.goals.count_requirements else f"/{str(client.goals.count_requirements.get("djinn",0))}"))
 
         if updated_flags or difference:
             # logger.info(f"Flags updated: {updated_flags}")
@@ -232,8 +235,8 @@ def cmd_print_progress(self: 'BizHawkClientCommandProcessor') -> None:
     flags: List[int] = self.ctx.stored_data.get(client.get_goal_flags_key(self.ctx))
     if flags is not None and len(flags) != 0:
         logger.info("Objectives Completed: ")
-        for flag in flags:
-            event_name = event_id_to_name
+        for ap_id in flags:
+            event_name = event_id_to_name[ap_id]
             logger.info(event_name)
 
     djinn_count: List[int] = self.ctx.stored_data.get(client.get_djinn_location_key(self.ctx))
@@ -292,6 +295,7 @@ class GSTLAClient(BizHawkClient):
         self.goals = GoalManager()
 
     async def validate_rom(self, ctx: 'BizHawkClientContext'):
+        from worlds._bizhawk.context import TextCategory
         game_name = await read(ctx.bizhawk_ctx, [(0xA0, 0x12, _MemDomain.ROM)])
         game_name = game_name[0].decode('ascii')
         logger.debug("Game loaded: %s", game_name)
