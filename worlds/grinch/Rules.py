@@ -121,7 +121,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "Shaving Who Dump Guardian": [
         ["Scissors", "Grinch Copter"],
-        ["Scissors", "Slime Shooter", "Rotten Egg Launcher", "Rocket Spring"]
+        ["Scissors", "Slime Shooter", "Rocket Spring"]
     ],
     "Short-Circuiting Power-Plant": [
         ["Rotten Egg Launcher", "Grinch Copter"],
@@ -280,7 +280,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "OCD Blueprint - Guardian's House - Right Side": [
         ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
+        ["Slime Shooter", "Rocket Spring"]
     ],
     "OCD Blueprint - Inside Guardian's House": [
         []
