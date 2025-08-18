@@ -310,7 +310,7 @@ class GloverWorld(World):
                     garib_items = list(decoupled_garib_table.keys())
             #Individual Garibs
             case GaribLogic.option_garibsanity:
-                if self.options.garib_logic.value == GaribSorting.option_by_level:
+                if self.options.garib_sorting == GaribSorting.option_by_level:
                     garib_items = list(garibsanity_world_table.keys())
                 else:
                     garib_items = ["Garibsanity"]
