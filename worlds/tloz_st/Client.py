@@ -75,6 +75,8 @@ def split_bits(value, size):
         value = (value & f) >> 8
     return ret
 
+def item_count(ctx, item_name):
+    return sum([1 for i in ctx.items_received if i.item == ITEMS_DATA[item_name]["id"]])
 
 # Read list of address data
 async def read_memory_values(ctx, read_list: dict[str, tuple[int, int, str]], signed=False) -> dict[str, int]:
@@ -196,6 +198,7 @@ class SpiritTracksClient(BizHawkClient):
         self.entering_from = None
         self.entering_dungeon = None
         self.unset_dynamic_watches = []
+        self.dynamic_flags_to_reset = []  # Dynamic flags to reset on entering a new scene
         self.stage_address = 0
         self.new_stage_loading = None
         self.at_sea = False
@@ -388,6 +391,7 @@ class SpiritTracksClient(BizHawkClient):
                     self.get_main_read_list(None)  # Sometimes stage loading causes false item reads
 
                 # Set dynamic flags on scene
+                await self.reset_dynamic_flags(ctx)
                 await self.set_dynamic_flags(ctx, current_scene)
 
                 # Check if entering dungeon
@@ -494,8 +498,7 @@ class SpiritTracksClient(BizHawkClient):
             print("Couldn't read data")
 
     # Processes events defined in data\dynamic_flags.py
-    async def set_dynamic_flags(self, ctx, scene):
-        # Check item conditions
+    async def has_dynamic_requirements(self, ctx, data) -> bool:
         def check_items(d):
             if "has_items" in d:
                 counter = [0] * len(d["has_items"])
@@ -543,6 +546,9 @@ class SpiritTracksClient(BizHawkClient):
             for i in d.get("not_last_scenes", []):
                 if self.last_scene == i:
                     return False
+            for i in d.get("last_scenes", []):
+                if self.last_scene != i:
+                    return False
             return True
 
         # Read a dict of addresses to see if they match value
@@ -555,64 +561,105 @@ class SpiritTracksClient(BizHawkClient):
                         return False
             return True
 
+        # Special case of metals (change to sources?)
+        def check_metals(d):
+            if "zauz_metals" in d or "goal_requirement" in d:
+                metals_ids = [ITEMS_DATA[metal]["id"] for metal in ITEM_GROUPS["Metals"]]
+                current_metals = sum([1 for i in ctx.items_received if i.item in metals_ids])
+                print(f"Metal check: {current_metals} metals out of {ctx.slot_data['zauz_required_metals']}")
+
+                # Zauz Check
+                if "zauz_metals" in d:
+                    if current_metals < ctx.slot_data["zauz_required_metals"]:
+                        if d["zauz_metals"]:
+                            return False
+                    else:
+                        if not d["zauz_metals"]:
+                            return False
+
+                # Goal Check
+                if "goal_requirement" in d:
+                    return current_metals >= ctx.slot_data["required_metals"]
+            return True
+
+        if not check_items(data):
+            print(f"\t{data['name']} does not have item reqs")
+            return False
+        if not check_locations(data):
+            print(f"\t{data['name']} does not have location reqs")
+            return False
+        if not check_slot_data(data):
+            print(f"\t{data['name']} does not have slot data reqs")
+            return False
+        if not check_last_room(data):
+            print(f"\t{data['name']} came from wrong room {hex(self.last_scene)}")
+            return False
+        if not await check_bits(data):
+            print(f"\t{data['name']} is missing bits")
+            return False
+        if not check_metals(data):
+            print(f"\t{data['name']} does not have enough metals")
+            return False
+
+        return True
+
+    async def process_dynamic_flags(self, ctx, flag_list, reset=False):
+        read_addr = set()
+        set_bits, unset_bits = {}, {}
+        for data in flag_list:
+
+            # Items, locations, slot data
+            if not await self.has_dynamic_requirements(ctx, data):
+                continue
+
+            # Create read/write lists
+            for a, v in data.get("set_if_true", []):
+                read_addr.add(a)
+                # You can add an item name as a value, and it will set the value to it's count
+                if type(v) is str:
+                    v = item_count(ctx, v)
+                set_bits[a] = set_bits.get(a, 0) | v
+                print(f"\tsetting bit for {data['name']}")
+            for a, v in data.get("unset_if_true", []):
+                read_addr.add(a)
+                unset_bits[a] = unset_bits.get(a, 0) | v
+                print(f"\tunsetting bit for {data['name']}")
+
+            # Create list of flags to reset
+            if reset:
+                self.dynamic_flags_to_reset += data.get("reset_flags", [])
+
+        # Write dynamic flags to memory
+        read_list = {a: (a, 1, "Main RAM") for a in read_addr}
+        prev = await read_memory_values(ctx, read_list)
+        print(f"{[[hex(int(a)), hex(v)] for a, v in prev.items()]}")
+
+        # Calculate values to write
+        for a, v in set_bits.items():
+            prev[a] = prev[a] | v
+        for a, v in unset_bits.items():
+            prev[a] = prev[a] & (~v)
+
+        # Write
+        write_list = [(int(a), [v], "Main RAM") for a, v in prev.items()]
+        print(f"Dynaflags writes: {prev}")
+        await bizhawk.write(ctx.bizhawk_ctx, write_list)
+        return write_list
+
+    # Processes events defined in data\dynamic_flags.py
+    async def set_dynamic_flags(self, ctx, scene):
         # Loop dynamic flags in scene
         if scene in self.scene_to_dynamic_flag:
-            read_addr = set()
-            set_bits, unset_bits = {}, {}
             print(f"Flags on Scene: {[i['name'] for i in self.scene_to_dynamic_flag[scene]]}")
-            for data in self.scene_to_dynamic_flag[scene]:
-                # Special case for having goal requirements
-                if "goal_requirement" in data:
-                    if data["goal_requirement"]:
-                        data["has_items"] = data.get("has_items", [])
-                        boss_items = {}
-                        for boss_reward in ctx.slot_data["boss_rewards"]:
-                            boss_items[boss_reward] = boss_items.get(boss_reward, 0) + 1
-                        data["has_items"] += boss_items.items()
-                        print(f"Boss Items: {boss_items.items()}")
+            return await self.process_dynamic_flags(ctx, self.scene_to_dynamic_flag[scene], True)
+        return []
 
-                # Items, locations, slot data
-                if not check_items(data):
-                    print(f"{data['name']} does not have item reqs")
-                    continue
-                if not check_locations(data):
-                    print(f"{data['name']} does not have location reqs")
-                    continue
-                if not check_slot_data(data):
-                    print(f"{data['name']} does not have slot data reqs")
-                    continue
-                if not check_last_room(data):
-                    print(f"{data['name']} came from wrong room {hex(self.last_scene)}")
-                    continue
-                if not await check_bits(data):
-                    print(f"{data['name']} is missing bits")
-                    continue
-
-                # Create read/write lists
-                for a, v in data.get("set_if_true", []):
-                    read_addr.add(a)
-                    set_bits[a] = set_bits.get(a, 0) | v
-                    print(f"setting bit for {data['name']}")
-                for a, v in data.get("unset_if_true", []):
-                    read_addr.add(a)
-                    unset_bits[a] = unset_bits.get(a, 0) | v
-                    print(f"unsetting bit for {data['name']}")
-
-            # Read all values for all dynamic flags in scene
-            read_list = {a: (a, 1, "Main RAM") for a in read_addr}
-            prev = await read_memory_values(ctx, read_list)
-            print(f"{[[hex(int(a)), hex(v)] for a, v in prev.items()]}")
-
-            # Calculate values to write
-            for a, v in set_bits.items():
-                prev[a] = prev[a] | v
-            for a, v in unset_bits.items():
-                prev[a] = prev[a] & (~v)
-
-            # Write
-            write_list = [(int(a), [v], "Main RAM") for a, v in prev.items()]
-            print(f"Dynaflags writes: {prev}")
-            await bizhawk.write(ctx.bizhawk_ctx, write_list)
+    async def reset_dynamic_flags(self, ctx):
+        print(f"resetting flags {self.dynamic_flags_to_reset}")
+        reset_data = [DYNAMIC_FLAGS[n] for n in self.dynamic_flags_to_reset]
+        res = await self.process_dynamic_flags(ctx, reset_data)
+        self.dynamic_flags_to_reset.clear()
+        return res
 
     # Called when a stage has fully loaded
     async def enter_stage(self, ctx, stage, scene_id):
