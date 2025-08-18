@@ -1020,9 +1020,8 @@ GLOVERHACK = {
 
     base_pointer = 0x400000,
     pc = 0x0,
-    text_size = 27,
     ap_items = 0x8A,
-    ap_world = 0x11C,
+    ap_world = 0x708,
       hub_entrance = 0x0,
       door_number = 0x1,
       garib_locations = 0x4,
@@ -1064,15 +1063,13 @@ GLOVERHACK = {
       taglink = 0x5,
     hub_map = 0x6,
     world_map = 0x7,
-    pc_deathlink = 0xDF,
-    n64_deathlink = 0xE2,
-    pc_taglink = 0xE0,
-    n64_taglink = 0xE3,
-    ROM_MAJOR_VERSION = 0x116,
-    ROM_MINOR_VERSION = 0x117,
-    ROM_PATCH_VERSION = 0x118,
-
-    txt_queue = 0
+    pc_deathlink = 0x6CE,
+    n64_deathlink = 0x6D1,
+    pc_taglink = 0x6CF,
+    n64_taglink = 0x6D2,
+    ROM_MAJOR_VERSION = 0x705,
+    ROM_MINOR_VERSION = 0x706,
+    ROM_PATCH_VERSION = 0x707,
 }
 
 function GLOVERHACK:new(t)
@@ -1131,6 +1128,10 @@ function GLOVERHACK:getOffsetLocation(location_addr, offset, type)
     elseif type == "tip"
     then
         offset_size = self.tip_size
+    end
+    elseif type == "enemy"
+    then
+        offset_size = self.enemy_size
     end
 
     if offset == 0
@@ -1232,6 +1233,21 @@ function GLOVERHACK:checkLocationFlag(world_id, type, offset, item_id)
             print(item_id)
         end
         local check_value = mainmemory.readbyte(world_address + offset_location + self.tip_collected)
+        if check_value == 0x0
+        then
+            return false
+        else
+            return true
+        end
+    elseif type == "enemy"
+    then
+        local offset_location = GLOVERHACK:getOffsetLocation(self.enemy_locations, offset, type)
+        local check_id = mainmemory.read_u16_be(world_address + offset_location + self.enemy_id)
+        if check_id ~= item_id then
+            print("ENEMY Item ID DOES NOT MATCH! CHECK OFFSET FOR ID")
+            print(item_id)
+        end
+        local check_value = mainmemory.readbyte(world_address + offset_location + self.enemy_collected)
         if check_value == 0x0
         then
             return false
@@ -1533,6 +1549,22 @@ function tip_check()
     return checks
 end
 
+function enemy_check()
+    local checks = {}
+        if ADDRESS_MAP[WORLD_NAME] ~= nil
+        then
+            if ADDRESS_MAP[WORLD_NAME]["ENEMIES"] ~= nil
+            then
+                for loc_id,locationTable in pairs(ADDRESS_MAP[WORLD_NAME]["ENEMIES"])
+                do
+                    checks[loc_id] = GVR:checkLocationFlag(WORLD_ID, "enemy", locationTable['offset'], locationTable['id'])
+                    -- print(loc_id..":"..tostring(checks[loc_id]))
+                end
+            end
+        end
+    return checks
+end
+
 function received_garibs(itemId)
     if 6501001 <= itemId and itemId <= 6501009 then
         TOTAL_SINGLE_GARIBS = TOTAL_SINGLE_GARIBS + (itemId - 6501000)
@@ -1799,6 +1831,7 @@ function SendToClient()
     retTable["checkpoint"] = checkpoint_check()
     retTable["switch"] = switch_check()
     retTable["enemy_garibs"] = enemy_garib_check()
+    retTable["enemy"] = enemy_check()
 
     retTable["DEMO"] = false;
     retTable["sync_ready"] = "true"
