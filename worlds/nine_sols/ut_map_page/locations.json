@@ -603,7 +603,7 @@
                 "name": "Sky Tower",
                 "sections": [
                     { "name": "Sky Tower: Above Lower Elevator" },
-                    { "name": "Sky Tower: Wall Climb Platform" },
+                    { "name": "Sky Tower: Middle Right Chest" },
                     { "name": "Sky Tower: Surrounded By Hazards" },
                     { "name": "Sky Tower: Ropes Below Root Node" },
                     { "name": "Sky Tower: Stowaway's Tianhuo Flower" },
@@ -1939,7 +1939,7 @@
                 "map_locations": [{ "map": "sky_tower", "x": 210, "y": 660 }]
             },
             {
-                "name": "Wall Climb Platform", "sections": [{ "name": "Sky Tower: Wall Climb Platform" }],
+                "name": "Middle Right Chest", "sections": [{ "name": "Sky Tower: Middle Right Chest" }],
                 "map_locations": [{ "map": "sky_tower", "x": 360, "y": 520 }]
             },
             {
