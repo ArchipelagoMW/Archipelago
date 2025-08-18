@@ -116,7 +116,8 @@ class HexcellsInfiniteWorld(World):
                   "RequirePerfectClears":     self.options.RequirePerfectClears.value,
                   "PuzzleOptions":            self.options.PuzzleOptions.value,
                   "EnableShields":            self.options.EnableShields.value,
-                  "LevelUnlockType":          self.options.LevelUnlockType.value
+                  "LevelUnlockType":          self.options.LevelUnlockType.value,
+                  "HardGeneration":           self.options.HardGeneration.value
             },
             "Seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "Slot": self.multiworld.player_name[self.player],  # to connect to server

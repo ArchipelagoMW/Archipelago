@@ -101,6 +101,12 @@ class LevelUnlockType(Choice):
     option_individual = 2
     default = 1
 
+class HardGeneration(Toggle):
+    """
+    When enabled, puzzle will be generated with harder sets. Does not affect "Vanilla" under "Puzzle Options". 
+    """
+    display_name = "Hard Generation"
+
 @dataclass
 class HexcellsInfiniteOptions(PerGameCommonOptions):
 
@@ -113,11 +119,12 @@ class HexcellsInfiniteOptions(PerGameCommonOptions):
     PuzzleOptions:                PuzzleOptions
     EnableShields:                EnableShields
     LevelUnlockType:              LevelUnlockType
+    HardGeneration:               HardGeneration
 
 
 # # This is where you organize your options
 # # Its entirely up to you how you want to organize it
 hexcells_infinite_option_groups: Dict[str, List[Any]] = {
-    "General Options": [RequirePerfectClears, PuzzleOptions, EnableShields, LevelUnlockType],
+    "General Options": [RequirePerfectClears, PuzzleOptions, EnableShields, LevelUnlockType, HardGeneration],
     # "Trap Options": [TrapChance, ForcefemTrapWeight, SpeedChangeTrapWeight]
 }
