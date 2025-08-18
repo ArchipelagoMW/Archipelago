@@ -1050,8 +1050,12 @@ GLOVERHACK = {
         switch_id = 0x4,
         switch_collected = 0x6,
       switch_size = 0xC,
-      goals = 0x4E8,
-    ap_world_offset = 0x4F0,
+      potion_locations = 0x4E8,
+        potion_id = 0x4,
+        potion_collected = 0x6,
+      potion_size = 0x8,
+      goals = 0x518,
+    ap_world_offset = 0x520,
     ap_hub_order = 0x0,
     garib_totals = 0xC,
     settings = 0x84,
@@ -1131,6 +1135,10 @@ function GLOVERHACK:getOffsetLocation(location_addr, offset, type)
         offset_size = self.tip_size
     end
     elseif type == "enemy"
+    then
+        offset_size = self.enemy_size
+    end
+    elseif type == "potion"
     then
         offset_size = self.enemy_size
     end
@@ -1249,6 +1257,21 @@ function GLOVERHACK:checkLocationFlag(world_id, type, offset, item_id)
             print(item_id)
         end
         local check_value = mainmemory.readbyte(world_address + offset_location + self.enemy_collected)
+        if check_value == 0x0
+        then
+            return false
+        else
+            return true
+        end
+    elseif type == "potion"
+    then
+        local offset_location = GLOVERHACK:getOffsetLocation(self.potion_locations, offset, type)
+        local check_id = mainmemory.read_u16_be(world_address + offset_location + self.potion_id)
+        if check_id ~= item_id then
+            print("POTION Item ID DOES NOT MATCH! CHECK OFFSET FOR ID")
+            print(item_id)
+        end
+        local check_value = mainmemory.readbyte(world_address + offset_location + self.potion_collected)
         if check_value == 0x0
         then
             return false
@@ -1566,6 +1589,22 @@ function enemy_check()
     return checks
 end
 
+function potion_check()
+    local checks = {}
+        if ADDRESS_MAP[WORLD_NAME] ~= nil
+        then
+            if ADDRESS_MAP[WORLD_NAME]["POTIONS"] ~= nil
+            then
+                for loc_id,locationTable in pairs(ADDRESS_MAP[WORLD_NAME]["POTIONS"])
+                do
+                    checks[loc_id] = GVR:checkLocationFlag(WORLD_ID, "potion", locationTable['offset'], locationTable['id'])
+                    -- print(loc_id..":"..tostring(checks[loc_id]))
+                end
+            end
+        end
+    return checks
+end
+
 function received_garibs(itemId)
     if 6501001 <= itemId and itemId <= 6501009 then
         TOTAL_SINGLE_GARIBS = TOTAL_SINGLE_GARIBS + (itemId - 6501000)
@@ -1833,6 +1872,7 @@ function SendToClient()
     retTable["switch"] = switch_check()
     retTable["enemy_garibs"] = enemy_garib_check()
     retTable["enemy"] = enemy_check()
+    retTable["potions"] = potion_check()
 
     retTable["DEMO"] = false;
     retTable["sync_ready"] = "true"

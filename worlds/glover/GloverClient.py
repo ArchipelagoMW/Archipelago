@@ -65,7 +65,7 @@ bt_loc_name_to_id = network_data_package["games"]["Glover"]["location_name_to_id
 bt_itm_name_to_id = network_data_package["games"]["Glover"]["item_name_to_id"]
 script_version: int = 1
 version: str = "V0.1"
-patch_md5: str = "060d26913ba74a3f14c381f84ffcc4e6"
+patch_md5: str = "1dcee813da21e0530238634518727f8f"
 gvr_options = settings.get_settings().glover_options
 program = None
 
@@ -301,6 +301,7 @@ class GloverContext(CommonContext):
         self.garib_table = {}
         self.enemy_garib_table = {}
         self.enemy_table = {}
+        self.potion_table = {}
         self.garib_group_table = {}
         self.life_table = {}
         self.tip_table = {}
@@ -593,6 +594,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     garibslist = payload["garibs"]
     enemygaribslist = payload["enemy_garibs"]
     enemylist = payload["enemy"]
+    potionlist = payload["potions"]
     garibgrouplist = payload["garib_groups"]
     lifeslist = payload["life"]
     tipslist = payload["tip"]
@@ -616,6 +618,8 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         enemygaribslist = {}
     if isinstance(enemylist, list):
         enemylist = {}
+    if isinstance(potionlist, list):
+        potionlist = {}
     if isinstance(garibgrouplist, list):
         garibgrouplist = {}
     if isinstance(lifeslist, list):
@@ -647,6 +651,11 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         if ctx.enemy_table != enemylist:
             ctx.enemy_table = enemylist
             for locationId, value in enemylist.items():
+                if value == True:
+                    locs1.append(int(locationId))
+        if ctx.potion_table != potionlist:
+            ctx.potion_table = potionlist
+            for locationId, value in potionlist.items():
                 if value == True:
                     locs1.append(int(locationId))
         if ctx.garib_group_table != garibgrouplist:
