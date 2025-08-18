@@ -56,7 +56,7 @@ class GrinchWorld(World):
                     self_itempool.append(self.create_item(item))
 
         #Get number of current unfilled locations
-        unfilled_locations: int = len(self.multiworld.get_unfilled_locations(self.player))
+        unfilled_locations: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(ALL_ITEMS_TABLE.keys()) - 3
 
         for _ in range(unfilled_locations):
             self_itempool.append(self.create_item((self.get_other_filler_item(list(MISC_ITEMS_TABLE.keys())))))
