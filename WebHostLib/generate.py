@@ -1,12 +1,12 @@
 import concurrent.futures
 import json
 import os
-import pickle
 import random
 import tempfile
 import zipfile
 from collections import Counter
-from typing import Any, Dict, List, Optional, Union, Set
+from pickle import PicklingError
+from typing import Any
 
 from flask import flash, redirect, render_template, request, session, url_for
 from pony.orm import commit, db_session
@@ -14,7 +14,7 @@ from pony.orm import commit, db_session
 from BaseClasses import get_seed, seeddigits
 from Generate import PlandoOptions, handle_name
 from Main import main as ERmain
-from Utils import __version__
+from Utils import __version__, restricted_dumps
 from WebHostLib import app
 from settings import ServerOptions, GeneratorOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
@@ -23,8 +23,8 @@ from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
 from .upload import upload_zip_to_db
 
 
-def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[str], Dict[str, Any]]]:
-    plando_options: Set[str] = set()
+def get_meta(options_source: dict, race: bool = False) -> dict[str, list[str] | dict[str, Any]]:
+    plando_options: set[str] = set()
     for substr in ("bosses", "items", "connections", "texts"):
         if options_source.get(f"plando_{substr}", substr in GeneratorOptions.plando_options):
             plando_options.add(substr)
@@ -73,7 +73,7 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
-def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any]):
+def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
     results, gen_options = roll_options(options, set(meta["plando_options"]))
 
     if any(type(result) == str for result in results.values()):
@@ -83,12 +83,18 @@ def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any])
               f"If you have a larger group, please generate it yourself and upload it.")
         return redirect(url_for(request.endpoint, **(request.view_args or {})))
     elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
-        gen = Generation(
-            options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
-            # convert to json compatible
-            meta=json.dumps(meta),
-            state=STATE_QUEUED,
-            owner=session["_id"])
+        try:
+            gen = Generation(
+                options=restricted_dumps({name: vars(options) for name, options in gen_options.items()}),
+                # convert to json compatible
+                meta=json.dumps(meta),
+                state=STATE_QUEUED,
+                owner=session["_id"])
+        except PicklingError as e:
+            from .autolauncher import handle_generation_failure
+            handle_generation_failure(e)
+            return render_template("seedError.html", seed_error=("PicklingError: " + str(e)))
+
         commit()
 
         return redirect(url_for("wait_seed", seed=gen.id))
@@ -104,9 +110,9 @@ def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any])
         return redirect(url_for("view_seed", seed=seed_id))
 
 
-def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
-    if not meta:
-        meta: Dict[str, Any] = {}
+def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, sid=None):
+    if meta is None:
+        meta = {}
 
     meta.setdefault("server_options", {}).setdefault("hint_cost", 10)
     race = meta.setdefault("generator_options", {}).setdefault("race", False)
@@ -135,6 +141,7 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
                                                                        {"bosses", "items", "connections", "texts"}))
         erargs.skip_prog_balancing = False
         erargs.skip_output = False
+        erargs.spoiler_only = False
         erargs.csv_output = False
 
         name_counter = Counter()

@@ -4,17 +4,19 @@ checking or launching the client, otherwise it will probably cause circular impo
 """
 
 import asyncio
+import copy
 import enum
 import subprocess
 import time
 from typing import Any
 
+import settings
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
 import Patch
 import Utils
 
 from . import BizHawkContext, ConnectionStatus, NotConnectedError, RequestFailedError, connect, disconnect, get_hash, \
-    get_script_version, get_system, ping
+    get_script_version, get_system, ping, display_message
 from .client import BizHawkClient, AutoBizHawkClientRegister
 
 
@@ -27,7 +29,17 @@ class AuthStatus(enum.IntEnum):
     PENDING = 2
     AUTHENTICATED = 3
 
+    
+class TextCategory(str, enum.Enum):
+    ALL = "all"
+    INCOMING = "incoming"
+    OUTGOING = "outgoing"
+    OTHER = "other"
+    HINT = "hint"
+    CHAT = "chat"
+    SERVER = "server"
 
+    
 class DeathState(enum.IntEnum):
     killing_player = 1
     alive = 2
@@ -37,17 +49,84 @@ class DeathState(enum.IntEnum):
 class BizHawkClientCommandProcessor(ClientCommandProcessor):
     def _cmd_bh(self):
         """Shows the current status of the client's connection to BizHawk"""
-        if isinstance(self.ctx, BizHawkClientContext):
-            if self.ctx.bizhawk_ctx.connection_status == ConnectionStatus.NOT_CONNECTED:
-                logger.info("BizHawk Connection Status: Not Connected")
-            elif self.ctx.bizhawk_ctx.connection_status == ConnectionStatus.TENTATIVE:
-                logger.info("BizHawk Connection Status: Tentatively Connected")
-            elif self.ctx.bizhawk_ctx.connection_status == ConnectionStatus.CONNECTED:
-                logger.info("BizHawk Connection Status: Connected")
+        assert isinstance(self.ctx, BizHawkClientContext)
+
+        if self.ctx.bizhawk_ctx.connection_status == ConnectionStatus.NOT_CONNECTED:
+            logger.info("BizHawk Connection Status: Not Connected")
+        elif self.ctx.bizhawk_ctx.connection_status == ConnectionStatus.TENTATIVE:
+            logger.info("BizHawk Connection Status: Tentatively Connected")
+        elif self.ctx.bizhawk_ctx.connection_status == ConnectionStatus.CONNECTED:
+            logger.info("BizHawk Connection Status: Connected")
+
+    def _cmd_toggle_text(self, category: str | None = None, toggle: str | None = None):
+        """Sets types of incoming messages to forward to the emulator"""
+        assert isinstance(self.ctx, BizHawkClientContext)
+
+        if category is None:
+            logger.info("Usage: /toggle_text category [toggle]\n\n"
+                        "category: incoming, outgoing, other, hint, chat, and server\n"
+                        "Or \"all\" to toggle all categories at once\n\n"
+                        "toggle: on, off, true, or false\n"
+                        "Or omit to set it to the opposite of its current state\n\n"
+                        "Example: /toggle_text outgoing on")
+            return
+
+        category = category.lower()
+        value: bool | None
+        if toggle is None:
+            value = None
+        elif toggle.lower() in ("on", "true"):
+            value = True
+        elif toggle.lower() in ("off", "false"):
+            value = False
+        else:
+            logger.info(f'Unknown value "{toggle}", should be on|off|true|false')
+            return
+
+        valid_categories = (
+            TextCategory.ALL,
+            TextCategory.OTHER,
+            TextCategory.INCOMING,
+            TextCategory.OUTGOING,
+            TextCategory.HINT,
+            TextCategory.CHAT,
+            TextCategory.SERVER,
+        )
+        if category not in valid_categories:
+            logger.info(f'Unknown value "{category}", should be {"|".join(valid_categories)}')
+            return
+
+        if category == TextCategory.ALL:
+            if value is None:
+                logger.info('Must specify "on" or "off" for category "all"')
+                return
+            
+            if value:
+                self.ctx.text_passthrough_categories.update((
+                    TextCategory.OTHER,
+                    TextCategory.INCOMING,
+                    TextCategory.OUTGOING,
+                    TextCategory.HINT,
+                    TextCategory.CHAT,
+                    TextCategory.SERVER,
+                ))
+            else:
+                self.ctx.text_passthrough_categories.clear()
+        else:
+            if value is None:
+                value = category not in self.ctx.text_passthrough_categories
+
+            if value:
+                self.ctx.text_passthrough_categories.add(category)
+            else:
+                self.ctx.text_passthrough_categories.remove(category)
+
+        logger.info(f"Currently Showing Categories: {', '.join(self.ctx.text_passthrough_categories)}")
 
 
 class BizHawkClientContext(CommonContext):
     command_processor = BizHawkClientCommandProcessor
+    text_passthrough_categories: set[str]
     server_seed_name: str | None = None
     auth_status: AuthStatus
     password_requested: bool
@@ -63,6 +142,7 @@ class BizHawkClientContext(CommonContext):
 
     def __init__(self, server_address: str | None, password: str | None):
         super().__init__(server_address, password)
+        self.text_passthrough_categories = set()
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         self.password_requested = False
         self.client_handler = None
@@ -70,6 +150,26 @@ class BizHawkClientContext(CommonContext):
         self.watcher_timeout = 0.5
         self.death_state = DeathState.alive
         self.killing_player_task = None
+
+    def _categorize_text(self, args: dict) -> TextCategory:
+        if "type" not in args or args["type"] in {"Hint", "Join", "Part", "TagsChanged", "Goal", "Release", "Collect",
+                                                  "Countdown", "ServerChat", "ItemCheat"}:
+            return TextCategory.SERVER
+        elif args["type"] == "Chat":
+            return TextCategory.CHAT
+        elif args["type"] == "ItemSend":
+            if args["item"].player == self.slot:
+                return TextCategory.OUTGOING
+            elif args["receiving"] == self.slot:
+                return TextCategory.INCOMING
+            else:
+                return TextCategory.OTHER
+
+    def on_print_json(self, args: dict):
+        super().on_print_json(args)
+        if self.bizhawk_ctx.connection_status == ConnectionStatus.CONNECTED:
+            if self._categorize_text(args) in self.text_passthrough_categories:
+                Utils.async_start(display_message(self.bizhawk_ctx, self.rawjsontotextparser(copy.deepcopy(args["data"]))))
 
     def make_gui(self):
         ui = super().make_gui()
@@ -249,10 +349,10 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
 async def _run_game(rom: str):
     import os
-    auto_start = Utils.get_settings().bizhawkclient_options.rom_start
+    auto_start = settings.get_settings().bizhawkclient_options.rom_start
 
     if auto_start is True:
-        emuhawk_path = Utils.get_settings().bizhawkclient_options.emuhawk_path
+        emuhawk_path = settings.get_settings().bizhawkclient_options.emuhawk_path
         subprocess.Popen(
             [
                 emuhawk_path,
@@ -320,6 +420,6 @@ def launch(*launch_args: str) -> None:
 
     Utils.init_logging("BizHawkClient", exception_logger="Client")
     import colorama
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()

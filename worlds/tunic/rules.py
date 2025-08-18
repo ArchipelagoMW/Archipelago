@@ -1,5 +1,4 @@
 from typing import Dict, TYPE_CHECKING
-from decimal import Decimal, ROUND_HALF_UP
 
 from worlds.generic.Rules import set_rule, forbid_item, add_rule
 from BaseClasses import CollectionState
@@ -125,7 +124,8 @@ def set_region_rules(world: "TunicWorld") -> None:
                        # there's some boxes in the way
                        and (has_melee(state, player) or state.has_any((gun, grapple, fire_wand), player)))
     world.get_entrance("Ruined Atoll -> Library").access_rule = \
-        lambda state: state.has_any({grapple, laurels}, player) and has_ability(prayer, state, world)
+        lambda state: (state.has_any({grapple, laurels}, player) and has_ability(prayer, state, world)
+                       and (has_sword(state, player) or state.has_any((fire_wand, gun), player)))
     world.get_entrance("Overworld -> Quarry").access_rule = \
         lambda state: (has_sword(state, player) or state.has(fire_wand, player)) \
         and (state.has_any({grapple, laurels, gun}, player) or can_ladder_storage(state, world))
@@ -141,7 +141,7 @@ def set_region_rules(world: "TunicWorld") -> None:
     world.get_entrance("Lower Quarry -> Rooted Ziggurat").access_rule = \
         lambda state: state.has(grapple, player) and has_ability(prayer, state, world)
     world.get_entrance("Swamp -> Cathedral").access_rule = \
-        lambda state: (state.has(laurels, player) and has_ability(prayer, state, world)) \
+        lambda state: (state.has(laurels, player) and has_ability(prayer, state, world) and has_sword(state, player)) \
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
     world.get_entrance("Overworld -> Spirit Arena").access_rule = \
         lambda state: ((state.has(gold_hexagon, player, options.hexagon_goal.value) if options.hexagon_quest.value
@@ -156,8 +156,8 @@ def set_region_rules(world: "TunicWorld") -> None:
 
     if options.ladder_storage >= LadderStorage.option_medium:
         # ls at any ladder in a safe spot in quarry to get to the monastery rope entrance
-        world.get_region("Quarry Back").connect(world.get_region("Monastery"),
-                                                rule=lambda state: can_ladder_storage(state, world))
+        add_rule(world.get_entrance(entrance_name="Quarry Back -> Monastery"),
+                 rule=lambda state: can_ladder_storage(state, world))
 
 
 def set_location_rules(world: "TunicWorld") -> None:
