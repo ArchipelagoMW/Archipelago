@@ -24,7 +24,8 @@
                     { "name": "AF (Elevator): Moving Boxes" },
                     { "name": "AF (Elevator): Elevator Shaft" },
                     { "name": "AF (Elevator): Defeat Red Tiger Elite: Baichang" },
-                    { "name": "AF (Elevator): Hack Statue" }
+                    { "name": "AF (Elevator): Hack Statue" },
+                    { "name": "AF (Elevator): Over Electrified Floor" }
                 ],
                 "map_locations": [{
                     "map": "world_map",
