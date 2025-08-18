@@ -1,5 +1,7 @@
 from typing import Callable
 
+import inspect
+
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule
@@ -12,6 +14,18 @@ def set_rules(world: World):
         rule_list = interpret_rule(loc_rules, world.player)
         for access_rule in rule_list:
             add_rule(location, access_rule)
+
+def interpret_rule(rule_set: list[list[str]], player: int):
+    # If a region/location does not have any items required, make the section(s) return no logic.
+    if len(rule_set) < 1:
+        return True
+
+    # Otherwise, if a region/location DOES have items required, make the section(s) return list of logic.
+
+    access_list: list[Callable[[CollectionState], bool]] = []
+    for item_set in rule_set:
+        access_list.append(lambda state: state.has_all(item_set, player))
+    return access_list
 
     #Each item in the list is a separate list of rules. Each separate list is just an "OR" condition.
 rules_dict: dict[str,list[list[str]]] = {
@@ -542,15 +556,3 @@ access_rules_dict: dict[str,list[list[str]]] = {
         # ["Progressive Supadow Door Unlock: 4"]
     ]
 }
-
-def interpret_rule(rule_set: list[list[str]], player: int):
-    #If a region/location does not have any items required, make the section(s) return no logic.
-    if len(rule_set) < 1:
-        return True
-
-    #Otherwise, if a region/location DOES have items required, make the section(s) return list of logic.
-
-    access_list: list[Callable[[CollectionState], bool]] = []
-    for item_set in rule_set:
-        access_list.append(lambda state: state.has_all(item_set, player))
-    return access_list
