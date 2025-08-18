@@ -1,8 +1,9 @@
 import asyncio
+from os import write
 from typing import TYPE_CHECKING
 
 import NetUtils
-from .Locations import grinch_locations
+from .Locations import grinch_locations, GrinchLocation
 from .Items import ALL_ITEMS_TABLE
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
@@ -103,11 +104,13 @@ class GrinchClient(BizHawkClient):
     async def location_checker(self, ctx: "BizHawkClientContext"):
         # Update the AP Server to know what locations are not checked yet.
         local_locations_checked: list[int] = []
-        for missing_location in ctx.missing_locations:
-            local_location = ctx.location_names.lookup_in_game(missing_location)
+        for missing_location in grinch_locations.keys():
+            # local_location = ctx.location_names.lookup_in_game(missing_location)
             # Missing location is the AP ID & we need to convert it back to a location name within our game.
             # Using the location name, we can then get the Grinch ram data from there.
-            grinch_loc_ram_data = grinch_locations[local_location]
+            grinch_loc_ram_data = grinch_locations[missing_location]
+            if not GrinchLocation.get_apid(grinch_loc_ram_data.id) in ctx.missing_locations:
+                continue
 
             # Grinch ram data may have more than one address to update, so we are going to loop through all addresses in a location
             for addr_to_update in grinch_loc_ram_data.update_ram_addr:
@@ -148,13 +151,15 @@ class GrinchClient(BizHawkClient):
                     current_ram_address_value = (current_ram_address_value | (1 << addr_to_update.binary_bit_pos))
                 elif addr_to_update.update_existing_value:
                     # Grabs minimum value of a list of numbers and makes sure it does not go above max count possible
-                    current_ram_address_value += min(addr_to_update.value, addr_to_update.max_count)
+                    current_ram_address_value += addr_to_update.value
+                    current_ram_address_value = min(current_ram_address_value, addr_to_update.max_count)
                 else:
                     current_ram_address_value = addr_to_update.value
 
                 # Write the updated value back into RAM
-                await bizhawk.write(ctx.bizhawk_ctx, [(addr_to_update.ram_address,
-                    current_ram_address_value.to_bytes(addr_to_update.bit_size, "little"), "MainRAM")])
+                await self.update_and_validate_address(ctx, addr_to_update.ram_address, current_ram_address_value, addr_to_update.bit_size)
+                # await bizhawk.write(ctx.bizhawk_ctx, [(addr_to_update.ram_address,
+                #     current_ram_address_value.to_bytes(addr_to_update.bit_size, "little"), "MainRAM")])
 
             self.last_received_index += 1
 
@@ -192,3 +197,9 @@ class GrinchClient(BizHawkClient):
         if self.loc_unlimited_eggs:
             max_eggs: int = 200
             await bizhawk.write(ctx.bizhawk_ctx, [(0x010058, max_eggs.to_bytes(1,"little"), "MainRAM")])
+
+    async def update_and_validate_address(self, ctx: "BizHawkClientContext", address_to_validate: int, expected_value: int, byte_size: int):
+        await bizhawk.write(ctx.bizhawk_ctx, [(address_to_validate, expected_value.to_bytes(byte_size, "little"), "MainRAM")])
+        current_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(address_to_validate, byte_size, "MainRAM")]))[0], "little")
+        if not current_value == expected_value:
+            raise Exception("Unable to update address as expected. Address: "+ str(address_to_validate)+"; Expected Value: "+str(expected_value))
