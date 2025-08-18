@@ -476,7 +476,7 @@ class KH1World(World):
     
     def get_keyblade_stats(self):
         # Create keyblade stat array from vanilla
-        keyblade_stats = VANILLA_KEYBLADE_STATS.copy()
+        keyblade_stats = [x.copy() for x in VANILLA_KEYBLADE_STATS]
         # Handle shuffling keyblade stats
         if self.options.keyblade_stats != "vanilla":
             if self.options.keyblade_stats == "randomize":
