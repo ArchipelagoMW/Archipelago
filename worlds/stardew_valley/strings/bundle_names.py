@@ -128,6 +128,7 @@ class BundleName:
 
 
 class MemeBundleName:
+    square_hole = meme_bundle("Square Hole")
     hairy = meme_bundle("Hairy")
     stanley = meme_bundle("Stanley")
     very_sticky = meme_bundle("Very Sticky")

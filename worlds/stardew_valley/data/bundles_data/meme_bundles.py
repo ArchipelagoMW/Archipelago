@@ -241,6 +241,9 @@ doctor_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.d
 very_sticky_items = [sap.as_amount(125), sap.as_amount(125), sap.as_amount(125), sap.as_amount(125)]
 very_sticky_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.very_sticky, very_sticky_items, 4, 4)
 
+square_hole_items = [*all_simple_items]
+square_hole_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.square_hole, square_hole_items, 4, 4)
+
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.blood, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
 tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 1440))
@@ -276,13 +279,37 @@ hairy_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.hai
 
 # Todo Bundles
 #   Acrostic Bundle     (Asks for a specific word, you need to donate an item for each letter)
+#   ADHD Bundle (from Cap's chat)
+#   Bubbles Bundle
 #   Cipher Bundle       (Some sort of code?)
+#   Colored Crystals
+#   DLC Bundle
+#   Doom Bundle
+#   Dragonball Bundle
+#   Dr Seuss Bundle (1 fish, 2 fish...)
+#   Empty Bundle (donate empty inventory spot)
 #   Friendship Bundle   (Show some NPCs, gotta donate a loved gift for each of them)
+#   GeoGessr Bundle
+#   Ghost Bundle (it ghosts you)
+#   Goat Sacrifice Bundle
+#   Hint Bundle
+#   Joja/Morris Bundle
 #   Leaf Blower Bundle  (Leaf Blower Minigame, similar to the cookie clicker one)
+#   Lingo Bundle
+#   Maguffin Bundle (Ap items)
+#   Millibelle Bundle (money, run away, find at spa)
+#   Minesweeper bundle (donate bombs on correct spots)
+#   Pico-8 Bundle
+#   Pollution Bundle
 #   QA Bundle           (Some sort of bug, not sure yet)
 #   Relay Bundle        (Relay Stick passed around the multiworld)
+#   Robin's Lost Axe Bundle (Give your axe, then Robin brings it back to you)
 #   Scavenger Bundle    (The bundle moves around the map and you need to keep finding it)
 #   Side Quest Bundle   (Sends you on side quests to talk to random NPCs several times)
+#   Therapy Bundle
+#   Torrent Bundle
+#   Witness Bundle
+#   Change Cap Bundle to forgetting something at home
 
 
 # Bundles that need special Mod Handling:
@@ -306,7 +333,7 @@ boiler_room_meme = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_me
 
 bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_revenge_bundle, smapi_bundle, sappy_bundle, hats_off_to_you_bundle,
                                snitch_bundle, commitment_bundle_bundle, journalist_bundle, trap_bundle, off_your_back_bundle, vocaloid_bundle, fruit_bundle,
-                               celeste_bundle, cap_bundle, emmalution_bundle, joetg_bundle, honeywell_bundle, cooperation_bundle,
+                               celeste_bundle, cap_bundle, emmalution_bundle, joetg_bundle, honeywell_bundle, cooperation_bundle, square_hole_bundle,
                                ministry_bundle, loser_club_bundle, frazzleduck_bundle, argonmatrix_bundle, pomnut_bundle, blossom_garden_bundle, doctor_bundle]
 bulletin_board_meme = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_meme, 5)
 
