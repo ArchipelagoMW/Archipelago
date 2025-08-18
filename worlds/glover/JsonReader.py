@@ -341,7 +341,10 @@ def assign_locations_to_regions(region_level : RegionLevel, map_regions : List[R
             #Garib Groups
             else:
                 #Regular Locations
-                location : Location = Location(player, each_location_data.name, each_location_data.ap_ids[0] + 10000, region_for_use)
+                group_offset : int = each_location_data.ap_ids[0]
+                if len(ap_ids) > 1:
+                    group_offset += 10000
+                location : Location = Location(player, each_location_data.name, group_offset, region_for_use)
                 region_for_use.locations.append(location)
                 if not rules_applied:
                         access_methods_to_rules(self, each_location_data.methods, location)
