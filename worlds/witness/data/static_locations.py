@@ -18,6 +18,7 @@ GENERAL_LOCATIONS = {
     "Outside Tutorial Outpost Entry Panel",
     "Outside Tutorial Outpost Exit Panel",
 
+    "Glass Factory Entry Panel",
     "Glass Factory Discard",
     "Glass Factory Back Wall 5",
     "Glass Factory Front 3",

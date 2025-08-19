@@ -46,7 +46,9 @@ requires:
 
 {{ yaml_dump(game) }}:
   {%- for group_name, group_options in option_groups.items() %}
-  # {{ group_name }}
+  ##{% for _ in group_name %}#{% endfor %}##
+  # {{ group_name }} #
+  ##{% for _ in group_name %}#{% endfor %}##
 
   {%- for option_key, option in group_options.items() %}
   {{ option_key }}:

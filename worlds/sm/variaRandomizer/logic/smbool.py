@@ -66,6 +66,14 @@ class SMBool:
     def __copy__(self):
         return SMBool(self.bool, self.difficulty, self._knows, self._items)
 
+    def __deepcopy__(self, memodict):
+        # `bool` and `difficulty` are a `bool` and `int`, so do not need to be copied.
+        # The `_knows` list is never mutated, so does not need to be copied.
+        # The `_items` list is a `list[str | list[str]]` (copied to a flat `list[str]` when accessed through the `items`
+        # property) that is mutated by code in helpers.py, so needs to be copied. Because there could be lists within
+        # the list, it is copied using the `flatten()` helper function.
+        return SMBool(self.bool, self.difficulty, self._knows, flatten(self._items))
+
     def json(self):
         # as we have slots instead of dict
         return {'bool': self.bool, 'difficulty': self.difficulty, 'knows': self.knows, 'items': self.items}

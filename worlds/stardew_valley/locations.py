@@ -279,6 +279,9 @@ def extend_festival_locations(randomized_locations: List[LocationData], options:
         return
 
     festival_locations = locations_by_tag[LocationTags.FESTIVAL]
+    if not options.museumsanity:
+        festival_locations = [location for location in festival_locations if location.name not in ("Rarecrow #7 (Tanuki)", "Rarecrow #8 (Tribal Mask)")]
+
     randomized_locations.extend(festival_locations)
     extend_hard_festival_locations(randomized_locations, options)
     extend_desert_festival_chef_locations(randomized_locations, options, random)
