@@ -19,7 +19,7 @@ from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerItem, MessengerRegion, MessengerShopLocation
 from .transitions import disconnect_entrances, shuffle_transitions
-from .universal_tracker import reverse_portal_exists_into_portal_plando, reverse_transitions_into_plando_connections
+from .universal_tracker import reverse_portal_exits_into_portal_plando, reverse_transitions_into_plando_connections
 
 components.append(
     Component(
@@ -153,7 +153,8 @@ class MessengerWorld(World):
     reachable_locs: bool = False
     filler: dict[str, int]
 
-    def interpret_slot_data(self, slot_data: dict[str, Any]) -> dict[str, Any]:
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
         return slot_data
 
     def generate_early(self) -> None:
@@ -292,7 +293,7 @@ class MessengerWorld(World):
         slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get(self.game)
         if slot_data:
             self.multiworld.plando_options |= PlandoOptions.connections
-            self.options.portal_plando.value = reverse_portal_exists_into_portal_plando(slot_data["portal_exits"])
+            self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
             self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
 
         add_closed_portal_reqs(self)
