@@ -140,7 +140,7 @@ class GoalManager:
         if difference:
             await display_message(ctx.bizhawk_ctx,
                                   f"Number of Djinn Obtained: {len(client.checked_djinn)}" +
-                                  ("" if 'djinn' not in client.goals.count_requirements else f"/{str(client.goals.count_requirements.get("djinn",0))}"))
+                                  ("" if 'djinn' not in client.goals.count_requirements else "/" + str(client.goals.count_requirements.get("djinn",0))))
 
         if updated_flags or difference:
             # logger.info(f"Flags updated: {updated_flags}")
@@ -375,10 +375,10 @@ class GSTLAClient(BizHawkClient):
             for bit in range(16):
                 if part_int & 1 > 0:
                     flag = i * 8 + bit
-                    # original_flag = flag + _DataLocations.DJINN_FLAGS.initial_flag
-                    if flag not in self.possessed_djinn:
-                        self.possessed_djinn.add(flag + _DataLocations.DJINN_FLAGS.initial_flag)
-                    shuffled_flag = self.djinn_ram_to_rom[flag + _DataLocations.DJINN_FLAGS.initial_flag]
+                    original_flag = flag + _DataLocations.DJINN_FLAGS.initial_flag
+                    if original_flag not in self.possessed_djinn:
+                        self.possessed_djinn.add(original_flag)
+                    shuffled_flag = self.djinn_ram_to_rom[original_flag]
                     # original_djinn = self.djinn_flag_map[original_flag]
                     # shuffled_djinn = self.djinn_flag_map[shuffled_flag]
                     # TODO: this may be wrong once djinn are events
@@ -570,6 +570,7 @@ class GSTLAClient(BizHawkClient):
 
         if self.djinn_last_count != len(self.possessed_djinn):
             if self.possessed_djinn:
+                logger.debug(f"Possesed djinn: {self.possessed_djinn}")
                 await ctx.send_msgs([{
                     "cmd": "Set",
                     "operation": "update",
