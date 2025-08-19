@@ -598,6 +598,10 @@ class OpenRCT2World(World):
         slot_data["location_prices"] = self.location_prices
         # print("Here's all the rules!")
         # print(self.multiworld.rules)
+        print(self.options.scenario.value)
+        if self.options.scenario.value == 31 or self.options.scenario.value == 129 or self.options.scenario.value == 130:
+            raise Exception("Invalid scenario selected. What the p*ck past Colby?")
+        # if Scenario == "jolly"
         return slot_data
 
     def create_item(self, item: str) -> OpenRCT2Item:
