@@ -9,6 +9,7 @@ class GrinchLocationData(NamedTuple):
     location_group: str
     id: Optional[int]
     update_ram_addr: list[GrinchRamData]
+    reset_addr: Optional[list[GrinchRamData]] = None # Addresses to update once we find the item
 
 class GrinchLocation(Location):
     game: str = "The Grinch"
@@ -26,6 +27,7 @@ class GrinchLocation(Location):
         self.region = data.region
         self.type = data.location_group
         self.address = self.address
+
 grinch_locations = {
 #Going to use current map id as indicator whether or not you visited a location
 #Visitsanity
