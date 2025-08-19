@@ -2,7 +2,7 @@ import logging
 from typing import Any, ClassVar, TextIO
 
 from BaseClasses import CollectionState, Entrance, EntranceType, Item, ItemClassification, MultiWorld, Tutorial, PlandoOptions
-from Options import Accessibility, PlandoConnection
+from Options import Accessibility
 from Utils import output_path
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
@@ -18,6 +18,7 @@ from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerItem, MessengerRegion, MessengerShopLocation
 from .transitions import disconnect_entrances, shuffle_transitions
+from .universal_tracker import reverse_portal_exists_into_portal_plando, reverse_transitions_into_plando_connections
 
 components.append(
     Component(
@@ -290,21 +291,8 @@ class MessengerWorld(World):
         slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get(self.game)
         if slot_data:
             self.multiworld.plando_options |= PlandoOptions.connections
-            self.options.portal_plando.value = [
-                PlandoConnection("Autumn Hills", find_spot(slot_data["portal_exits"][0]), "both"),
-                PlandoConnection("Riviere Turquoise", find_spot(slot_data["portal_exits"][1]), "both"),
-                PlandoConnection("Howling Grotto", find_spot(slot_data["portal_exits"][2]), "both"),
-                PlandoConnection("Sunken Shrine", find_spot(slot_data["portal_exits"][3]), "both"),
-                PlandoConnection("Searing Crags", find_spot(slot_data["portal_exits"][4]), "both"),
-                PlandoConnection("Glacial Peak", find_spot(slot_data["portal_exits"][5]), "both"),
-            ]
-            self.options.plando_connections.value = []
-            for connection in [
-                PlandoConnection(REVERSED_RANDOMIZED_CONNECTIONS[TRANSITIONS[transition[0]]], TRANSITIONS[transition[1]], "both")
-                for transition in slot_data["transitions"]
-            ]:
-                if connection.exit in {con.entrance for con in self.options.plando_connections.value}: continue
-                self.options.plando_connections.value.append(connection)
+            self.options.portal_plando.value = reverse_portal_exists_into_portal_plando(slot_data["portal_exits"])
+            self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
 
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
