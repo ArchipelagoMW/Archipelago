@@ -1,5 +1,5 @@
 from enum import IntEnum
-from Options import DefaultOnToggle, Toggle, Range, Choice, PerGameCommonOptions, OptionGroup
+from Options import DefaultOnToggle, Toggle, Range, Choice, PerGameCommonOptions, OptionGroup, Visibility as OptionVisibility
 from dataclasses import dataclass
 
 class Scenario(IntEnum):
@@ -712,13 +712,13 @@ class RequiredUniqueRides(Range):
     default = 5
 
 class LocalityOfUniqueRides(Choice):
-    """Whether the unique rides should be local, remote, or anywhere."""
+    """No-op; still here to prevent old YAMLs from breaking"""
     display_name = "Placement of Unique Rides"
     option_off = 0
     option_local = 1
     option_remote = 2
     default = 0
-
+    visibility = OptionVisibility.none
 
 class ParkRatingObjective(Range):
     """If enabled, choose the minimum park rating needed to beat the scenario."""
