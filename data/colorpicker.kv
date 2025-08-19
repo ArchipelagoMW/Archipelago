@@ -66,7 +66,7 @@ ContainerLayout:
             size_hint_y: None
             height: "40dp"
             orientation: "horizontal"
-
+            Widget:
             MDButton:
                 on_release: app.restore_defaults()
                 MDButtonText:
@@ -83,6 +83,7 @@ ContainerLayout:
                 MDButtonText:
                     id: presets_txt
                     text: "Preset Loaded: None"
+            Widget:
 
 
         MainLayout:
