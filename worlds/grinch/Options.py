@@ -39,7 +39,7 @@ class Missionsanity(Choice):
     option_both = 3
     default = 1
 
-class AnnoyingLocations(Toggle):
+class AnnoyingLocations(DefaultOnToggle):
     """Makes certain long, annoying, and tedious checks to be excluded [NOT IMPLEMENTED]"""
     display_name = "Annoying Locations"
 
