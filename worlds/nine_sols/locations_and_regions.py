@@ -115,6 +115,29 @@ location_name_groups = {
     "EDLA": edla, "ED (Living Area)": edla, "Empyrean District (Living Area)": edla,
     "EDS": eds, "ED (Sanctum)": eds, "Empyrean District (Sanctum)": eds,
     "TRC": trc, "Tiandao Research Center": trc,
+
+    # Manually curated groups
+    "Sol Seal Locations": {
+        "Kuafu's Vital Sanctum",
+        "Goumang's Vital Sanctum",
+        "Yanlao's Vital Sanctum",
+        "Jiequan's Vital Sanctum",
+        "Cortex Center: Defeat Lady Ethereal",
+        "Ji's Vital Sanctum",
+        "ED (Living Area): Fuxi's Vital Sanctum",
+        "Nuwa's Vital Sanctum",
+    },
+    "Sol Fight Rewards": {
+        "Kuafu's Vital Sanctum", "Defeat General Yingzhao",
+        "Goumang's Vital Sanctum", "Chest After Goumang (1st Reward)", "Chest After Goumang (2nd Reward)",
+        "Yanlao's Vital Sanctum", "Yanlao's Tianhuo Flower", "BR: Vault 1st Chest", "BR: Vault 2nd Chest",
+        "BR: Examine Vault Scroll", "BR: Vault 3rd Chest", "BR: Vault 4th Chest",
+        "Jiequan's Vital Sanctum", "Jiequan's Tianhuo Flower", "Chest After Jiequan",
+        "Cortex Center: Defeat Lady Ethereal", "Cortex Center: Tianhuo Flower After Soulscape",
+        "Cortex Center: Retrieve Chip From Shanhai 9000",
+        "Nuwa's Vital Sanctum", "Chest After Fengs", "Nuwa's Tianhuo Flower",
+        "Examine Ji", "Ji's Vital Sanctum", "Retrieve Chip From Shanhai 1000",
+    }
 }
 
 
