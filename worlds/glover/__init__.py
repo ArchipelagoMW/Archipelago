@@ -213,14 +213,14 @@ class GloverWorld(World):
                 ball_options = ["Rubber Ball",
 	            "Bowling Ball",
 	            "Ball Bearing",
-	            "Crystal",
-	            "Power Ball"]
+	            "Crystal"]
                 self.starting_ball = self.random.choice(ball_options)
             case StartingBall.option_random_any:
                 ball_options = ["Rubber Ball",
 	            "Bowling Ball",
 	            "Ball Bearing",
-	            "Crystal"]
+	            "Crystal",
+	            "Power Ball"]
                 self.starting_ball = self.random.choice(ball_options)
         self.multiworld.push_precollected(self.create_item(self.starting_ball))
         if not self.options.randomize_jump:
@@ -403,18 +403,23 @@ class GloverWorld(World):
         #Menu loads into the hubworld
         hubworld : Region = multiworld.get_region("Hubworld", player)
         multiworld.get_region("Menu", player).connect(hubworld)
-        hubworld.connect(multiworld.get_region("Castle Cave", player))
+        hubworld.connect(multiworld.get_region("Hubworld: Main W/Ball", player))
+        castle_cave : Region = multiworld.get_region("Castle Cave", player)
+        hubworld.connect(castle_cave)
+        castle_cave.connect(multiworld.get_region("Castle Cave: Main W/Ball", player))
 
         #Apply wayroom entrances
         for world_index, each_world_prefix in enumerate(self.world_prefixes):
             world_offset : int  = world_index * 5
             wayroom_name : str = each_world_prefix + "H"
             hubroom : Region = multiworld.get_region(wayroom_name, player)
+            hubroom.connect(multiworld.get_region(wayroom_name + ": Main W/Ball", player))
             for entry_index, each_entry_suffix in enumerate(entry_name):
                 offset : int = world_offset + entry_index
                 location_name : str = wayroom_name + ": Entry " + each_entry_suffix
                 connecting_level : Region = multiworld.get_region(self.wayroom_entrances[offset], player)
-                hubroom.connect(connecting_level, location_name, lambda state: state.can_reach_location(location_name, player))
+                entry_region : Region = multiworld.get_location(location_name, player).parent_region
+                entry_region.connect(connecting_level, location_name, lambda state, each_location = location_name: state.can_reach_location(each_location, player))
         
         #Entry Names
         hub_entry_names : list[str] = [
@@ -434,7 +439,10 @@ class GloverWorld(World):
             if entrance_name == "Well":
                 connecting_name = self.wayroom_entrances[len(self.wayroom_entrances) - 1]
             connecting_level : Region = multiworld.get_region(connecting_name, player)
-            hubworld.connect(connecting_level, loading_zone, lambda state: state.can_reach_location("Hubworld: " + loading_zone, player))
+            reaching_location : str = "Hubworld: " + loading_zone
+            reaching_region : Region = multiworld.get_location(reaching_location, player).parent_region
+            reaching_region.connect(connecting_level, loading_zone, lambda state, each_location = reaching_location: state.can_reach_location(each_location, player))
+
         end_region : Region = multiworld.get_region("Atl2: End W/Ball", player)
         goal_location : Location = Location(player, "Ending", None, end_region)
         end_region.locations.append(goal_location)

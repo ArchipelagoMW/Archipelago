@@ -179,12 +179,14 @@ def create_region_pair(self : GloverWorld, check_info : dict, check_name : str, 
     if valid_methods_exist(self, ball_region_methods):
         multiworld.regions.append(ball_region)
         ball_region_exists = True
+        ball_region_methods = list(filter(lambda a, this_index = base_id : len(a.required_items) > 0 or a.region_index != this_index, ball_region_methods))
     
     #No ball regions that exist
     no_ball_region_exists : bool = False
     if valid_methods_exist(self, no_ball_region_methods):
         multiworld.regions.append(no_ball_region)
         no_ball_region_exists = True
+        ball_region_methods = list(filter(lambda a, this_index = base_id : len(a.required_items) > 0 or a.region_index != this_index, no_ball_region_methods))
     
     return RegionPair(region_name, base_id, ball_region_methods, no_ball_region_methods, ball_region_exists, no_ball_region_exists)
 

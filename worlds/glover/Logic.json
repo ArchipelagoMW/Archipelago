@@ -39,7 +39,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "3 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -54,7 +53,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Bonus Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -69,7 +67,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Boss Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -3077,7 +3074,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "2 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -3092,7 +3088,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "3 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -3107,7 +3102,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Bonus Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -3122,7 +3116,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Boss Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -5811,7 +5804,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "2 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -5826,7 +5818,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "3 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -5841,7 +5832,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Bonus Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -5856,7 +5846,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Boss Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -8942,7 +8931,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "2 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -8957,7 +8945,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "3 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -8972,7 +8959,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Bonus Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -8987,7 +8973,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Boss Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -11695,7 +11680,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "2 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -11710,7 +11694,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "3 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -11725,7 +11708,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Bonus Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -11740,7 +11722,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Boss Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -14362,7 +14343,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "2 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -14377,7 +14357,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "3 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -14392,7 +14371,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Bonus Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -14407,7 +14385,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"ck0": "Boss Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
