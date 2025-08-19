@@ -2,7 +2,7 @@ import gc
 import math
 from typing import Any, Dict
 
-from BaseClasses import ItemClassification, Location, Tutorial, Item, Region
+from BaseClasses import ItemClassification, Location, MultiWorld, Tutorial, Item, Region
 import settings
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
@@ -125,7 +125,7 @@ class GloverWorld(World):
                     self.overworld_entrances.append(each_entrance)
                 else:
                     self.wayroom_entrances.append(each_entrance)
-        self.wayroom_entrances.append("Tutorial")
+        self.wayroom_entrances.append("Training")
         self.overworld_entrances.append("Well")
         #Garib level order table
         self.garib_level_order = [
@@ -231,17 +231,6 @@ class GloverWorld(World):
         player = self.player
         build_data(self)
         multiworld.regions.append(Region("Menu", player, multiworld))
-        multiworld.regions.append(Region("AtlH", player, multiworld))
-        #Replace with a connection to the hubworld rather than Atlantis
-        multiworld.get_region("Menu", player).connect(multiworld.get_region("AtlH", player))
-        multiworld.get_region("AtlH", player).connect(multiworld.get_region("Atl1", player), "Portal 1")
-        multiworld.get_region("AtlH", player).connect(multiworld.get_region("Atl2", player), "Portal 2", lambda state: state.can_reach_location("Atl1: Goal", player))
-        end_region : Region = multiworld.get_region("Atl2: End W/Ball", player)
-        goal_location : Location = Location(player, "Ending", None, end_region)
-        end_region.locations.append(goal_location)
-        goal_location.place_locked_item(self.create_event("Victory"))
-        add_rule(goal_location, lambda state: state.can_reach_location("Atl2: Goal", player))
-        multiworld.completion_condition[player] = lambda state: state.has("Victory", player) 
 
     def create_event(self, event : str) -> GloverItem:
         return GloverItem(event, ItemClassification.progression, None, self.player)
@@ -408,21 +397,55 @@ class GloverWorld(World):
 
     def entrance_randomizer(self):
         entry_name : list[str] = ["1", "2", "3", "Boss", "Bonus"]
-        #Apply level entrances and hubworld entrances
+        multiworld : MultiWorld = self.multiworld
+        player : int = self.player
+
+        #Menu loads into the hubworld
+        hubworld : Region = multiworld.get_region("Hubworld", player)
+        multiworld.get_region("Menu", player).connect(hubworld)
+        hubworld.connect(multiworld.get_region("Castle Cave", player))
+
+        #Apply wayroom entrances
         for world_index, each_world_prefix in enumerate(self.world_prefixes):
             world_offset : int  = world_index * 5
             wayroom_name : str = each_world_prefix + "H"
-            hubroom : Region = self.multiworld.get_region(wayroom_name, self.player)
+            hubroom : Region = multiworld.get_region(wayroom_name, player)
             for entry_index, each_entry_suffix in enumerate(entry_name):
                 offset : int = world_offset + entry_index
                 location_name : str = wayroom_name + ": Entry " + each_entry_suffix
-                required_location : Location = self.multiworld.get_location(location_name, self.player)
-                required_location.place_locked_item(self.wayroom_entrances[offset] + "Entry")
-                connecting_level : Region = self.multiworld.get_region(self.wayroom_entrances[offset], self.player)
-                hubroom.connect(connecting_level, location_name, lambda state: state.can_reach_location(location_name, self.player))
+                connecting_level : Region = multiworld.get_region(self.wayroom_entrances[offset], player)
+                hubroom.connect(connecting_level, location_name, lambda state: state.can_reach_location(location_name, player))
+        
+        #Entry Names
+        hub_entry_names : list[str] = [
+            "Atlantis Hub Entry",
+            "Carnival Hub Entry",
+            "Pirates Hub Entry",
+            "Prehistoric Hub Entry",
+            "Fear Hub Entry",
+            "OotW Hub Entry",
+            "Well Entry"
+        ]
+
+        #Apply hubworld entrances
+        for entrance_index, entrance_name in enumerate(self.overworld_entrances):
+            loading_zone : str = hub_entry_names[entrance_index]
+            connecting_name : str  = entrance_name
+            if entrance_name == "Well":
+                connecting_name = self.wayroom_entrances[len(self.wayroom_entrances) - 1]
+            connecting_level : Region = multiworld.get_region(connecting_name, player)
+            hubworld.connect(connecting_level, loading_zone, lambda state: state.can_reach_location("Hubworld: " + loading_zone, player))
+        end_region : Region = multiworld.get_region("Atl2: End W/Ball", player)
+        goal_location : Location = Location(player, "Ending", None, end_region)
+        end_region.locations.append(goal_location)
+        goal_location.place_locked_item(self.create_event("Victory"))
+        add_rule(goal_location, lambda state: state.can_reach_location("Atl2: Goal", player))
+        multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
+
 
     def connect_entrances(self):
         #Use reachable regions when I need to debug stuff in this ', self.multiworld.blabla)'
+        self.entrance_randomizer()
         visualize_regions(self.multiworld.get_region("Menu", self.player), "Glover.puml", regions_to_highlight=self.multiworld.get_all_state().reachable_regions[self.player])
         return super().connect_entrances()
 

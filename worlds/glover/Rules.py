@@ -2,6 +2,7 @@ from BaseClasses import Entrance, Location
 from worlds.generic.Rules import add_rule, set_rule
 from .Options import DifficultyLogic
 #from .JsonReader import AccessMethod
+#from . import GloverWorld
 
 move_lookup = [
     "Cartwheel",
