@@ -11,6 +11,33 @@
         text: self.parent.color_usage
         outline_width: 1.5
 
+<SavePresetDialog>:
+    file_name: text
+    save: save
+    cancel: cancel
+    MDDialogHeadlineText:
+        text: "Save Preset As..."
+
+    MDDialogContentContainer:
+        orientation: "vertical"
+        spacing: 10
+        MDDivider:
+        MDTextField:
+            id: text
+            MDTextFieldHintText:
+                text: "Preset Name"
+    MDDialogButtonContainer:
+        spacing: 5
+        Widget:
+        MDButton:
+            id: save
+            MDButtonText:
+                text: "Save"
+        MDButton:
+            id: cancel
+            MDButtonText:
+                text: "Cancel"
+
 ContainerLayout:
     md_bg_color: app.theme_cls.backgroundColor
     grid: grid
@@ -78,28 +105,39 @@ ContainerLayout:
 
                 MDButton:
                     id: style
+                    text: "Theme Style:"
 
                     MDButtonText:
-                        text: f"Theme Style: {app.theme_cls.theme_style.title()}"
+                        text: f"{self.parent.text} {self.theme_cls.theme_style.title()}"
 
                 MDButton:
                     id: palette
+                    text: "Primary Palette:"
 
                     MDButtonText:
-                        text: f"Theme Style: {app.theme_cls.primary_palette.title()}"
+                        text: f"{self.parent.text} {self.theme_cls.primary_palette.title()}"
 
                 MDButton:
                     id: scheme
+                    text: "Dynamic Scheme:"
 
                     MDButtonText:
-                        text: f"Dynamic Scheme: {app.theme_cls.dynamic_scheme_name.title()}"
+                        text: f"{self.parent.text} {self.theme_cls.dynamic_scheme_name.title()}"
 
-                MDTextField:
-                    id: contrast
-                    required: True
-                    text: "0.0"
-                    input_filter: "float"
-                    multiline: False
+                MDBoxLayout:
+                    orientation: "vertical"
 
-                    MDTextFieldHintText:
-                        text: "Dynamic Scheme Contrast"
+                    MDLabel:
+                        text: "Dynamic Scheme Contrast:"
+                        theme_text_color: "Custom"
+                        text_color: self.theme_cls.primaryColor
+
+                    MDSlider:
+                        id: contrast
+                        min: 0
+                        max: 100
+
+                        MDSliderHandle:
+
+                        MDSliderValueLabel:
+                        

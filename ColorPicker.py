@@ -3,8 +3,6 @@ import os
 import Utils
 import typing
 from kvui import ContainerLayout, MainLayout, KivyJSONtoTextParser, ThemedApp
-from kivy.metrics import dp
-from kivy.uix.textinput import TextInput
 from kivy.lang.parser import Parser
 from kivy.core.window import Window
 from kivymd.uix.button import MDButton, MDButtonText
@@ -12,8 +10,9 @@ from kivy.uix.colorpicker import ColorPicker
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu.menu import MDDropdownMenu
 from kivymd.uix.textfield import MDTextField
-from kivy.uix.popup import Popup
+from kivymd.uix.dialog import MDDialog
 from kivy.uix.widget import Widget
+from kivymd.uix.slider import MDSlider
 from kivy.lang.builder import Builder
 from kivy.properties import ObjectProperty
 from kivy.utils import hex_colormap, get_color_from_hex
@@ -73,6 +72,12 @@ class ColorButton(MDButton):
         super().__init__(*args, **kwargs)
 
 
+class SavePresetDialog(MDDialog):
+    file_name: MDTextField = ObjectProperty(None)
+    save: MDButton = ObjectProperty(None)
+    cancel: MDButton = ObjectProperty(None)
+
+
 class ColorPickerApp(ThemedApp):
     base_title: str = "Archipelago Color Picker"
     container: ContainerLayout
@@ -87,6 +92,7 @@ class ColorPickerApp(ThemedApp):
     text_colors: dict[str, str] = default_colors.copy()
     dynamic_theme: dict[str, str | float] = default_dynamic_theme.copy()
     buttons: dict[str, MDButton] = {}
+    dynamic_controls: dict[str, MDButton | MDSlider] = {}
     current_color: str = "red"
 
     def __init__(self, ctx=None) -> None:
@@ -102,6 +108,7 @@ class ColorPickerApp(ThemedApp):
 
     def build(self) -> Widget:
         self.set_colors()
+        self.theme_cls.theme_style_switch_animation = False
         self.container = Builder.load_file(Utils.local_path("data/colorpicker.kv"))
         self.grid = self.container.grid
         self.color_picker = self.container.color_picker
@@ -127,54 +134,56 @@ class ColorPickerApp(ThemedApp):
             self.color_layout.add_widget(new_button)
         self.theme_layout = self.container.theme
 
-        def update_dynamic_val(dropdown: MDDropdownMenu, name: str, val: str | float):
+        def update_dynamic_val(dropdown: MDDropdownMenu, name: str, val: str, button: MDButton):
+            button._button_text.text = f"{button.text} {val.replace('_',' ').title()}"
             setattr(self.theme_cls, name, val)
             self.dynamic_theme[name] = val
             dropdown.dismiss()
 
-        def update_contrast(instance: MDTextField):
-            val = min(1.0, max(0.0, float(instance.text)))
+        def update_contrast(instance: MDSlider, value):
+            val = instance.value_normalized
             self.theme_cls.dynamic_scheme_contrast = val
             self.dynamic_theme["dynamic_scheme_contrast"] = val
-            instance.text = str(val)
 
-        theme_button = self.container.style
-        palette_button = self.container.palette
-        scheme_button = self.container.scheme
-        contrast_input = self.container.contrast
+        self.dynamic_controls["theme_style"] = theme_button = self.container.style
+        self.dynamic_controls["primary_palette"] = palette_button = self.container.palette
+        self.dynamic_controls["dynamic_scheme_name"] = scheme_button = self.container.scheme
+        self.dynamic_controls["dynamic_scheme_contrast"] = contrast_input = self.container.contrast
         theme_dropdown = MDDropdownMenu(caller=theme_button, items=[
             {
                 "text": "Light",
-                "on_release": lambda: update_dynamic_val(theme_dropdown, "theme_style", "Light")
+                "on_release": lambda: update_dynamic_val(theme_dropdown, "theme_style", "Light", theme_button)
             },
             {
                 "text": "Dark",
-                "on_release": lambda: update_dynamic_val(theme_dropdown, "theme_style", "Dark")
+                "on_release": lambda: update_dynamic_val(theme_dropdown, "theme_style", "Dark", theme_button)
             }
         ])
         theme_button.bind(on_release=lambda x: theme_dropdown.open())
         palette_dropdown = MDDropdownMenu(caller=palette_button, items=[
             {
                 "text": color.title(),
-                "on_release": lambda col=color.title(): update_dynamic_val(palette_dropdown, "primary_palette", col)
+                "on_release": lambda col=color.title(): update_dynamic_val(palette_dropdown, "primary_palette", col,
+                                                                           palette_button)
             } for color in hex_colormap
         ])
         palette_button.bind(on_press=lambda x: palette_dropdown.open())
         scheme_dropdown = MDDropdownMenu(caller=scheme_button, items=[
             {
-                "text": scheme.title(),
-                "on_release": lambda sch=scheme.upper(): update_dynamic_val(scheme_dropdown, "dynamic_scheme_name", sch)
+                "text": scheme.replace("_", " ").title(),
+                "on_release": lambda sch=scheme.upper(): update_dynamic_val(scheme_dropdown, "dynamic_scheme_name", sch,
+                                                                            scheme_button)
             } for scheme in ("TONAL_SPOT", "SPRITZ", "VIBRANT", "EXPRESSIVE", "FRUIT_SALAD", "RAINBOW", "MONOCHROME",
                              "FIDELITY", "CONTENT")
         ])
         scheme_button.bind(on_release=lambda x: scheme_dropdown.open())
-        contrast_input.bind(on_text_validate=update_contrast)
-
+        contrast_input.value = int(self.theme_cls.dynamic_scheme_contrast * 100)
+        contrast_input.bind(value=update_contrast)
 
         # Uncomment to re-enable the Kivy console/live editor
         # Ctrl-E to enable it, make sure numlock/capslock is disabled
-        from kivy.modules.console import create_console
-        create_console(Window, self.container)
+        # from kivy.modules.console import create_console
+        # create_console(Window, self.container)
 
         return self.container
 
@@ -191,12 +200,13 @@ class ColorPickerApp(ThemedApp):
                     })
         dropdown.items.append({
             "text": "Save as new Preset?",
-            "on_release": lambda: self.save_preset_menu()
+            "on_release": lambda: self.save_preset_menu(dropdown)
         })
 
-    def set_preset(self, _: MDDropdownMenu, path: str) -> None:
+    def set_preset(self, dropdown: MDDropdownMenu, path: str) -> None:
+        dropdown.dismiss()
         preset_name, _ = os.path.splitext(os.path.basename(path))
-        setattr(self.presets_button, "text", f"Preset Loaded: {preset_name}")
+        self.presets_button._button_text.text = f"Preset Loaded: {preset_name}"
         self.parse_preset_kv(path)
 
     def set_color(self, button: MDButton):
@@ -212,12 +222,12 @@ class ColorPickerApp(ThemedApp):
 
     def restore_defaults(self):
         self.set_text_colors(default_colors, default_dynamic_theme)
-        setattr(self.presets_button, "text", "Preset Loaded: None")
+        self.presets_button._button_text.text = f"Preset Loaded: None"
 
     def restore_current(self):
         user_colors = Utils.local_path("data", "user.kv")
         self.parse_preset_kv(user_colors)
-        setattr(self.presets_button, "text", "Preset Loaded: None")
+        self.presets_button._button_text.text = f"Preset Loaded: None"
 
     def set_text_colors(self, colors, dynamic):
         self.text_colors = colors.copy()
@@ -225,6 +235,13 @@ class ColorPickerApp(ThemedApp):
         for button in self.buttons:
             self.buttons[button].md_bg_color = get_color_from_hex(self.text_colors[button])
         self.color_picker.set_color(get_color_from_hex(self.text_colors[self.current_color]))
+        for option, val in self.dynamic_theme.items():
+            setattr(self.theme_cls, option, val)
+            if isinstance(self.dynamic_controls[option], MDSlider):
+                self.dynamic_controls[option].value = int(val * 100)
+            else:
+                self.dynamic_controls[option]._button_text.text = f"{self.dynamic_controls[option].text} " \
+                                                                   f"{val.replace('_',' ').title()}"
 
     def parse_preset_kv(self, path):
         colors = default_colors.copy()
@@ -242,35 +259,26 @@ class ColorPickerApp(ThemedApp):
                         dynamic[prop] = rule.properties[prop].co_value
         self.set_text_colors(colors, dynamic)
 
-    def save_preset_menu(self):
-        save: bool = False
-        outer_box = MDBoxLayout(orientation="vertical", spacing=10)
-        preset_name = TextInput(size_hint_y=None, height=50)
-        inner_box = MDBoxLayout(orientation="horizontal", spacing=10)
-        outer_box.add_widget(preset_name)
-        outer_box.add_widget(inner_box)
-        cancel = MDButton(MDButtonText(text="Cancel"), size_hint_y=None, height=50)
-        confirm = MDButton(MDButtonText(text="Confirm"), size_hint_y=None, height=50)
-        inner_box.add_widget(cancel)
-        inner_box.add_widget(confirm)
-        popup = Popup(title="Save Preset As...",
-                      content=outer_box, size_hint=(0.5, 0.3))
+    def save_preset_menu(self, dropdown: MDDropdownMenu):
+        dropdown.dismiss()
+        popup = SavePresetDialog()
 
         def on_close(res):
             if res:
-                name = preset_name.text
+                name = popup.file_name.text
                 if name:
                     popup.dismiss()
                     file_name = f"{name}.kv" if not name.endswith(".kv") else name
-                    file_path = os.path.join(Utils.local_path("data", "presets", file_name))
+                    file_path = os.path.join(Utils.local_path("data", "presets", Utils.get_file_safe_name(file_name)))
                     if not os.path.exists(os.path.dirname(file_path)):
                         os.mkdir(os.path.dirname(file_path))
                     self.write_color_file(open(file_path, 'w'), self.text_colors, self.dynamic_theme)
+                    self.presets_button._button_text.text = f"Preset Loaded: {Utils.get_file_safe_name(file_name)[:-3]}"
             else:
                 popup.dismiss()
 
-        cancel.bind(on_release=lambda button: on_close(False))
-        confirm.bind(on_release=lambda button: on_close(True))
+        popup.cancel.bind(on_release=lambda button: on_close(False))
+        popup.save.bind(on_release=lambda button: on_close(True))
         popup.open()
 
     @staticmethod
@@ -283,7 +291,7 @@ class ColorPickerApp(ThemedApp):
                 file.write(f"\t{val}: {dynamic[val]}\n")
             else:
                 file.write(f"\t{val}: \"{dynamic[val]}\"\n")
-        file.write(f"<SelectableLabel>:\n\ttext_color: \"{colors['white']}\"")
+        file.write(f"<TooltipLabel>:\n\ttext_color: \"{colors['white']}\"")
 
     def on_stop(self):
         user_colors = open(Utils.user_path("data", "user.kv"), 'w')
