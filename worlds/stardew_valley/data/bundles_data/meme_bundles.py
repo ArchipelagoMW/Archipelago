@@ -242,7 +242,7 @@ very_sticky_items = [sap.as_amount(125), sap.as_amount(125), sap.as_amount(125),
 very_sticky_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.very_sticky, very_sticky_items, 4, 4)
 
 square_hole_items = [*all_simple_items]
-square_hole_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.square_hole, square_hole_items, 4, 4)
+square_hole_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.square_hole, square_hole_items, 6, 6)
 
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.blood, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
