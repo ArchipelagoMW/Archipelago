@@ -4,7 +4,7 @@ from .portals import find_spot
 from .transitions import TRANSITIONS
 
 
-def reverse_portal_exists_into_portal_plando(portal_exists: dict) -> list[PlandoConnection]:
+def reverse_portal_exists_into_portal_plando(portal_exists: list[int]) -> list[PlandoConnection]:
     return [
         PlandoConnection("Autumn Hills", find_spot(portal_exists[0]), "both"),
         PlandoConnection("Riviere Turquoise", find_spot(portal_exists[1]), "both"),
@@ -15,7 +15,7 @@ def reverse_portal_exists_into_portal_plando(portal_exists: dict) -> list[Plando
     ]
 
 
-def reverse_transitions_into_plando_connections(transitions: dict) -> list[PlandoConnection]:
+def reverse_transitions_into_plando_connections(transitions: list[list[int]]) -> list[PlandoConnection]:
     plando_connections = []
 
     for connection in [

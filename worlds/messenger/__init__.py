@@ -153,7 +153,7 @@ class MessengerWorld(World):
     reachable_locs: bool = False
     filler: dict[str, int]
 
-    def interpret_slot_data(self, slot_data: dict[str, Any]) -> int | None:
+    def interpret_slot_data(self, slot_data: dict[str, Any]) -> dict[str, Any]:
         return slot_data
 
     def generate_early(self) -> None:
