@@ -4585,7 +4585,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_3",
-        "name": "Yellow Harvest: Harvester' Hollow - Exit of crimson cave",
+        "name": "Yellow Harvest: Harvester's Hollow - Exit of crimson cave",
         "location": "Yellow Forest",
         "original_item": "ChromaPack_ExtraLarge",
         "condition": {},
@@ -4593,7 +4593,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_4",
-        "name": "Yellow Harvest: Harvester' Hollow - Peninsula facing sunken building",
+        "name": "Yellow Harvest: Harvester's Hollow - Peninsula facing sunken building",
         "location": "Yellow Forest",
         "original_item": "ChromaPack_Large",
         "condition": {},
@@ -4601,7 +4601,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_5",
-        "name": "Yellow Harvest: Harvester' Hollow - On balcony of sunken building",
+        "name": "Yellow Harvest: Harvester's Hollow - On balcony of sunken building",
         "location": "Yellow Forest",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -4609,7 +4609,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_6",
-        "name": "Yellow Harvest: Harvester' Hollow - Near tent by sunken building",
+        "name": "Yellow Harvest: Harvester's Hollow - Near tent by sunken building",
         "location": "Yellow Forest",
         "original_item": "DeathBombPhysical",
         "condition": {},
