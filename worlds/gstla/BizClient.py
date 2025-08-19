@@ -127,7 +127,7 @@ class GoalManager:
             ap_id = self.desired_flags.get(flag, None)
             if ap_id is not None:
                 if is_set and ap_id not in server_flags:
-                    await display_message(ctx.bizhawk_ctx, f"{GoalManager.flag_to_name.get(flag, "Unknown")} Completed")
+                    await display_message(ctx.bizhawk_ctx, GoalManager.flag_to_name.get(flag, "Unknown") + " Completed")
                     updated_flags.add(ap_id)
 
         server_djinn = ctx.stored_data.get(client.get_djinn_location_key(ctx), [])
