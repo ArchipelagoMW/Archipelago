@@ -387,7 +387,7 @@ def patchVarious(rom, settings):
 
     # Boomerang trade guy
     # if settings.boomerang not in {'trade', 'gift'} or settings.overworld in {'normal', 'nodungeons'}:
-    if settings.tradequest:
+    if settings["tradequest"]:
         # Update magnifier checks
         rom.patch(0x19, 0x05EC, ASM("ld a, [wTradeSequenceItem]\ncp $0E\njp nz, $7E61"), ASM("ld a, [wTradeSequenceItem2]\nand $20\njp z, $7E61"))  # show the guy
         rom.patch(0x00, 0x3199, ASM("ld a, [wTradeSequenceItem]\ncp $0E\njr nz, $06"), ASM("ld a, [wTradeSequenceItem2]\nand $20\njr z, $06"))  # load the proper room layout

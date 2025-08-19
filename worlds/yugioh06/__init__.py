@@ -56,7 +56,7 @@ class Yugioh06Web(WebWorld):
         "A guide to setting up Yu-Gi-Oh! - Ultimate Masters Edition - World Championship Tournament 2006 "
         "for Archipelago on your computer.",
         "English",
-        "docs/setup_en.md",
+        "setup_en.md",
         "setup/en",
         ["Rensen"],
     )

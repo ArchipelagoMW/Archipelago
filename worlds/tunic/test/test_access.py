@@ -1,5 +1,5 @@
-from . import TunicTestBase
 from .. import options
+from .bases import TunicTestBase
 
 
 class TestAccess(TunicTestBase):

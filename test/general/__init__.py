@@ -3,7 +3,7 @@ from typing import List, Optional, Tuple, Type, Union
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from worlds import network_data_package
-from worlds.AutoWorld import World, call_all
+from worlds.AutoWorld import World, WebWorld, call_all
 
 gen_steps = (
     "generate_early",
@@ -17,7 +17,7 @@ gen_steps = (
 
 
 def setup_solo_multiworld(
-    world_type: Type[World], steps: Tuple[str, ...] = gen_steps, seed: Optional[int] = None
+        world_type: Type[World], steps: Tuple[str, ...] = gen_steps, seed: Optional[int] = None
 ) -> MultiWorld:
     """
     Creates a multiworld with a single player of `world_type`, sets default options, and calls provided gen steps.
@@ -62,11 +62,16 @@ def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple
     return multiworld
 
 
+class TestWebWorld(WebWorld):
+    tutorials = []
+
+
 class TestWorld(World):
     game = f"Test Game"
     item_name_to_id = {}
     location_name_to_id = {}
     hidden = True
+    web = TestWebWorld()
 
 
 # add our test world to the data package, so we can test it later

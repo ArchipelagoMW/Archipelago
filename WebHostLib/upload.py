@@ -1,4 +1,3 @@
-import base64
 import json
 import pickle
 import typing
@@ -14,9 +13,8 @@ from pony.orm.core import TransactionIntegrityError
 import schema
 
 import MultiServer
-from NetUtils import SlotType
+from NetUtils import GamesPackage, SlotType
 from Utils import VersionException, __version__
-from worlds import GamesPackage
 from worlds.Files import AutoPatchRegister
 from worlds.AutoWorld import data_package_checksum
 from . import app

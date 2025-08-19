@@ -344,7 +344,7 @@ names, and `def can_place_boss`, which passes a boss and location, allowing you 
 your game. When this function is called, `bosses`, `locations`, and the passed strings will all be lowercase. There is
 also a `duplicate_bosses` attribute allowing you to define if a boss can be placed multiple times in your world. False
 by default, and will reject duplicate boss names from the user. For an example of using this class, refer to
-`worlds.alttp.options.py`
+`worlds/alttp/Options.py`
 
 ### OptionDict
 This option returns a dictionary. Setting a default here is recommended as it will output the dictionary to the
