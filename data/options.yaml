@@ -46,15 +46,16 @@ requires:
 
 {{ yaml_dump(game) }}:
   {%- for group_name, group_options in option_groups.items() %}
-  # {{ group_name }}
+  ##{% for _ in group_name %}#{% endfor %}##
+  # {{ group_name }} #
+  ##{% for _ in group_name %}#{% endfor %}##
 
   {%- for option_key, option in group_options.items() %}
   {{ option_key }}:
     {%- if option.__doc__ %}
-    # {{ option.__doc__
+    # {{ cleandoc(option.__doc__)
         | trim
-        | replace('\n\n', '\n    \n')
-        | replace('\n    ', '\n# ')
+        | replace('\n', '\n# ')
         | indent(4, first=False)
       }}
     {%- endif -%}
