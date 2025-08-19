@@ -128,97 +128,97 @@
   {
     "type": "Quest item",
     "name": "Bourgeon Skin",
+    "internal_name": "Quest_BourgeonSkin",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_BourgeonSkin"
+    "progressive": 1
   },
   {
     "type": "Quest item",
     "name": "Eternal Ice",
+    "internal_name": "Quest_EternalIce",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_EternalIce"
+    "progressive": 1
   },
   {
     "type": "Quest item",
     "name": "Intact Mine",
+    "internal_name": "Quest_Mine",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_Mine"
+    "progressive": 1
   },
   {
     "type": "Quest item",
     "name": "Manor Family Canvas",
+    "internal_name": "Quest_ManorFamilyCanvas",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_ManorFamilyCanvas"
+    "progressive": 1
   },
   {
     "type": "Quest item",
     "name": "Mushroom",
+    "internal_name": "Quest_Mushroom",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_Mushroom"
+    "progressive": 1
   },
   {
     "type": "Quest item",
     "name": "Old Key",
+    "internal_name": "Quest_OldKey",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_OldKey"
+    "progressive": 1
   },
   {
     "type": "Quest item",
     "name": "Resin",
+    "internal_name": "Quest_Resin",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_Resin"
+    "progressive": 1
   },
   {
     "type": "Quest item",
     "name": "Rock Crystal",
+    "internal_name": "Quest_HexgaRock",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_HexgaRock"
+    "progressive": 1
   },
   {
     "type": "Quest item",
     "name": "Weird Pictos",
+    "internal_name": "Quest_WeirdPictos",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_WeirdPictos"
+    "progressive": 1
   },
   {
     "type": "Quest item",
     "name": "Wood Boards",
+    "internal_name": "Quest_WoodBoards",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_WoodBoards"
+    "progressive": 1
   },
   {
     "type": "Quest item",
     "name": "Wooden Stick",
+    "internal_name": "Quest_WoodenStick",
     "quantity": 1,
-    "progressive": 0,
-    "internal_name": "Quest_WoodenStick"
+    "progressive": 0
   },
   {
     "type": "Quest item",
     "name": "Colour of the Beast",
+    "internal_name": "Quest_CleaWorkshop_Part1",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_CleaWorkshop_Part1"
+    "progressive": 1
   },
   {
     "type": "Quest item",
     "name": "Shape of the Beast",
+    "internal_name": "Quest_CleaWorkshop_Part2",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Quest_CleaWorkshop_Part2"
+    "progressive": 1
   },
   {
-    "name": "Light of the Beast",
     "type": "Quest item",
+    "name": "Light of the Beast",
     "internal_name": "Quest_CleaWorkshop_Part3",
     "quantity": 1,
     "progressive": 1
@@ -499,9 +499,9 @@
   {
     "type": "Journal",
     "name": "Journal - Expedition 37",
+    "internal_name": "Journal_Exp37",
     "quantity": 1,
-    "progressive": 0,
-    "internal_name": "Journal_Exp37"
+    "progressive": 0
   },
   {
     "type": "Journal",
@@ -540,10 +540,10 @@
   },
   {
     "type": "Journal",
+    "name": "Journal - Unknown (Visages)",
     "internal_name": "Journal_RenoirVisages",
     "quantity": 1,
-    "progressive": 0,
-    "name": "Journal - Unknown (Visages)"
+    "progressive": 0
   },
   {
     "type": "Journal",
@@ -566,376 +566,369 @@
     "quantity": 1,
     "progressive": 0
   },
-  {
-    "type": "Journal",
-    "name": "Journal - Verso",
-    "internal_name": "Journal_Verso",
-    "quantity": 1,
-    "progressive": 0
-  },
-  {
+    {
     "type": "Picto",
     "name": "Energy Master",
     "internal_name": "DoubleAP",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Turn",
     "internal_name": "AP+1TurnStart",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Attack I",
     "internal_name": "AP+1Attack",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Parry",
     "internal_name": "AP+1Parry",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Augmented First Strike",
     "internal_name": "Augmented1stStrike",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Survivor",
     "internal_name": "Survivor",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Aegis Revival",
     "internal_name": "AegisRevival",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Recovery",
     "internal_name": "Recovery",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Augmented Counter I",
     "internal_name": "CounterUpdragdeA",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Augmented Counter II",
     "internal_name": "CounterUpdragdeB",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Augmented Counter III",
     "internal_name": "CounterUpdragdeC",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Second Chance",
     "internal_name": "SecondChance",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "First Strike",
     "internal_name": "FirstStrike",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Solo Fighter",
     "internal_name": "SoloFighter",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Teamwork",
     "internal_name": "Teamwork",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Sweet Kill",
     "internal_name": "SweetKill",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Augmented Attack",
     "internal_name": "AugmentedAttack",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Attack Lifesteal",
     "internal_name": "AttackLifesteal",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Augmented Aim",
     "internal_name": "AugmentedAim",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Combo Attack I",
     "internal_name": "ComboAttack1",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Healing Parry",
     "internal_name": "HealingParry",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Auto Powerful",
     "internal_name": "AutoPowerful",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Auto Shell",
     "internal_name": "AutoShell",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Auto Rush",
     "internal_name": "AutoRush",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Auto Regen",
     "internal_name": "AutoRegen",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Anti-Burn",
     "internal_name": "AntiBurn",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Anti-Freeze",
     "internal_name": "AntiFrozen",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Anti-Stun",
     "internal_name": "AntiStun",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Dodger",
     "internal_name": "Dodger",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Start I",
     "internal_name": "InitialAp+1A",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Start II",
     "internal_name": "InitialAp+1B",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Start III",
     "internal_name": "InitialAp+1C",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Start IV",
     "internal_name": "InitialAp+1D",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Perilous Parry",
     "internal_name": "ManOfParry",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Confident",
     "internal_name": "Confident",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Revive",
     "internal_name": "ReviveCheer",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Rejuvenating Revive",
     "internal_name": "ReviveWithRegen",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Powerful Revive",
     "internal_name": "ReviveWithPower",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Solidifying",
     "internal_name": "Solidifying",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "The One",
     "internal_name": "TheOne",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Dead Energy II",
     "internal_name": "BootyHunter",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Piercing Shot",
     "internal_name": "PiercingShot",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Death Bomb",
     "internal_name": "DeathBombPhysical",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Death",
     "internal_name": "EnergyDeath",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Shielding Death",
     "internal_name": "ShieldingDeath",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Protecting Death",
     "internal_name": "ProtectingDeath",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Burn Affinity",
     "internal_name": "BurnAffinity",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Inverted Affinity",
     "internal_name": "InvertedAffinity",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Exhaust Affinity",
     "internal_name": "ExhaustAffinity",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Auto Death",
     "internal_name": "AutoDeath",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "At Death's Door",
     "internal_name": "LastStand",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Full Strength",
     "internal_name": "Stand",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
@@ -949,294 +942,294 @@
     "name": "SOS Shell",
     "internal_name": "SosShell",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "SOS Power",
     "internal_name": "SosPower",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "SOS Rush",
     "internal_name": "SosRush",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Double Burn",
     "internal_name": "DoubleBurn",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Healing Fire",
     "internal_name": "HealingFire",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Rewarding Mark",
     "internal_name": "RewardingMark",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Double Mark",
     "internal_name": "DoubleMark",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Stun Boost",
     "internal_name": "StunBoost",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Sniper",
     "internal_name": "Sniper",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Attack II",
     "internal_name": "Energy",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Cheater",
     "internal_name": "Cheater",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Healing Counter",
     "internal_name": "HealingCounter",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Powerful Shield",
     "internal_name": "PowerfulShield",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Base Shield",
     "internal_name": "BaseShield",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "In Media Res",
     "internal_name": "InMediasRes",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Shield Affinity",
     "internal_name": "ShieldAffinity",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Critical Moment",
     "internal_name": "CriticalMoment",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Faster Than Strong",
     "internal_name": "FasterThanStrong",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Warming Up",
     "internal_name": "Warming",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Shortcut",
     "internal_name": "Shortcut",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Random Defense",
     "internal_name": "RandomDefense",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Glass Cannon",
     "internal_name": "GlassCanon",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Defensive Mode",
     "internal_name": "DefensiveMode",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Greater Powerful",
     "internal_name": "GreaterPowerful",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Greater Rush",
     "internal_name": "GreaterSpeed",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Greater Shell",
     "internal_name": "GreaterShell",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Last Stand Critical",
     "internal_name": "LastStandCritical",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Revive Paradox",
     "internal_name": "ReviveParadox",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Effective Heal",
     "internal_name": "EffectiveHeal",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Shared Care",
     "internal_name": "SharedCare",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Heal",
     "internal_name": "EnergizingHeal",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Powerful Heal",
     "internal_name": "PowerfulHeal",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Protecting Heal",
     "internal_name": "ProtectingHeal",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Accelerating Heal",
     "internal_name": "AcceleratorHeal",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Confident Fighter",
     "internal_name": "ConfidentFighter",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Healing Share",
     "internal_name": "HealingShare",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Weakness Gain",
     "internal_name": "WeaknessGain",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Dead Energy I",
     "internal_name": "DeadEnergy",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Effective Support",
     "internal_name": "EffectivSupport",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energetic Healer",
     "internal_name": "VersatileHealer",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Beneficial Contamination",
     "internal_name": "BeneficialContamination",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Roulette",
     "internal_name": "Roulette",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
@@ -1250,672 +1243,679 @@
     "name": "Immaculate",
     "internal_name": "Immaculate",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Tainted",
     "internal_name": "Tainted",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "First Offensive",
     "internal_name": "FirstOffensive",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Pro Retreat",
     "internal_name": "ProRetreat",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Enfeebling Mark",
     "internal_name": "WeakeningMark",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Burning Mark",
     "internal_name": "BurningMark",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Powerful Mark",
     "internal_name": "PowerfulMark",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Healing Mark",
     "internal_name": "HealingMark",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Stay Marked",
     "internal_name": "StayMarked",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Burning Shots",
     "internal_name": "FreeAimBurnShot",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Marking Shots",
     "internal_name": "FreeAimMarkingShot",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Powerful Shots",
     "internal_name": "FreeAimPowerful",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Protecting Shots",
     "internal_name": "FreeAimShell",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Accelerating Shots",
     "internal_name": "FreeAimSpeed",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Shots",
     "internal_name": "FreeAimEnergy",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Versatile",
     "internal_name": "Versatile",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Empowering Attack",
     "internal_name": "PowerfulStrike",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Protecting Attack",
     "internal_name": "ShellStrike",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Enfeebling Attack",
     "internal_name": "PowerlessStrike",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Exposing Attack",
     "internal_name": "DefenslessStrike",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Empowering Parry",
     "internal_name": "ReinforcementParade",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Accelerating Last Stand",
     "internal_name": "LastStandSpeed",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Empowering Last Stand",
     "internal_name": "LastStandPowerful",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Protecting Last Stand",
     "internal_name": "LastStandShell",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Pain",
     "internal_name": "PowerOfPain",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Jump",
     "internal_name": "JumpRecovery",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Powered Attack",
     "internal_name": "FullEnergyAttack",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Combo Attack II",
     "internal_name": "ComboAttack2",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Combo Attack III",
     "internal_name": "ComboAttack3",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Breaker",
     "internal_name": "Breaker",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Staggering Attack",
     "internal_name": "SimpleBreaker",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Break",
     "internal_name": "EnergyBreak",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Quick Break",
     "internal_name": "BreakMomentum",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Empowering Break",
     "internal_name": "BreakingStrong",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Stun",
     "internal_name": "StunEnergy",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Healing Stun",
     "internal_name": "HealingStun",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Burning Break",
     "internal_name": "BurningBreak",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Critical Stun",
     "internal_name": "CriticalBreak",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Breaking Counter",
     "internal_name": "BreakingCounter",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Gradient Break",
     "internal_name": "GradientBreak",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Breaking Shots",
     "internal_name": "BreakShot",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Fueling Break",
     "internal_name": "GreatFireBreak",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Gradient Fighter",
     "internal_name": "GradientFighter",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Gradient",
     "internal_name": "GradientEnergy",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Charging Attack",
     "internal_name": "GradientStacker",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Gradient Breaker",
     "internal_name": "GradientBreaker",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Charging Counter",
     "internal_name": "GradientCounterCharge",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Charging Weakness",
     "internal_name": "GradientWeakness",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Charging Mark",
     "internal_name": "GradientMark",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Revive Tint Energy",
     "internal_name": "ReviveTintEnergy",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Healing Tint Energy",
     "internal_name": "HealingTintEnergy",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Empowering Tint",
     "internal_name": "PowerfulTint",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Protecting Tint",
     "internal_name": "ShellTint",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Shielding Tint",
     "internal_name": "ShieldingTint",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Accelerating Tint",
     "internal_name": "SpeedTint",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Cleansing Tint",
     "internal_name": "CleansingTint",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Charging Tint",
     "internal_name": "GradientTint",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Time Tint",
     "internal_name": "TimeTint",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Burn",
     "internal_name": "APOnBurn",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Breaking Burn",
     "internal_name": "BreakDamageOnBurn",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Critical Burn",
     "internal_name": "CritChanceBurn",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Burning Death",
     "internal_name": "BurningDeath",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Longer Burn",
     "internal_name": "BurnDurationIncrease",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Critical Break",
     "internal_name": "BreakDamageOnCrit",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Critical Weakness",
     "internal_name": "CritChanceOnWeak",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Critical Vulnerability",
     "internal_name": "CritChanceOnDefenseless",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Empowering Dodge",
     "internal_name": "PowerDodgeCombo",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Marking Break",
     "internal_name": "MarkOnBreak",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Slowing Break",
     "internal_name": "SlowOnBreak",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Exposing Break",
     "internal_name": "DefenselessOnBreak",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Break Specialist",
     "internal_name": "BreakSpecialist",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Breaking Death",
     "internal_name": "BreakingDeath",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Breaking Slow",
     "internal_name": "BreakDamageOnSlow",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Longer Powerful",
     "internal_name": "LongerPowerful",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Longer Shell",
     "internal_name": "LongerShell",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Longer Rush",
     "internal_name": "LongerRush",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Powerful On Shell",
     "internal_name": "PowerfulOnShell",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Rush On Powerful",
     "internal_name": "RushOnPowerful",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Shell On Rush",
     "internal_name": "ShellOnRush",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Powerful",
     "internal_name": "APOnPowerful",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Shell",
     "internal_name": "APOnShell",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Rush",
     "internal_name": "APOnRush",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Healing Boon",
     "internal_name": "HealOnBuff",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Greater Powerless",
     "internal_name": "GreaterPowerless",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Greater Defenceless",
     "internal_name": "GreaterDefenseless",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Greater Slow",
     "internal_name": "GreaterSlow",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Energising Cleanse",
     "internal_name": "AutoDispelEnergy",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Draining Cleanse",
     "internal_name": "DispelOnAPConsume",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Anti-Blight",
     "internal_name": "AntiBlight",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Charging Critical",
     "internal_name": "GradientOnCrit",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Charging Burn",
     "internal_name": "GradientOnBurn",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Charging Stun",
     "internal_name": "GradientOnStun",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Charging Alteration",
     "internal_name": "GradientOnBuff",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Breaking Attack",
     "internal_name": "BreakingAttack",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
     "name": "Anti-Charm",
     "internal_name": "AntiCharm",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 1
   },
   {
     "type": "Picto",
+    "name": "Clea's Life",
     "internal_name": "CleasLife",
     "quantity": 1,
-    "progressive": 2,
-    "name": "Clea's Life"
+    "progressive": 1
+  },
+  {
+    "type": "Journal",
+    "name": "Journal - Verso",
+    "internal_name": "Journal_Verso",
+    "quantity": 1,
+    "progressive": 0
   },
   {
     "type": "Weapon",
@@ -2262,10 +2262,10 @@
   },
   {
     "type": "Weapon",
+    "name": "Duenum",
     "internal_name": "Duenum",
     "quantity": 1,
-    "progressive": 2,
-    "name": "Duenum"
+    "progressive": 2
   },
   {
     "type": "Weapon",
@@ -2641,211 +2641,211 @@
   {
     "type": "Weapon",
     "name": "Baguette (Gustave)",
+    "internal_name": "DebugVerso",
     "quantity": 1,
-    "progressive": 2,
-    "internal_name": "DebugVerso"
+    "progressive": 2
   },
   {
     "type": "Weapon",
     "name": "Baguette (Lune)",
+    "internal_name": "DebugLune",
     "quantity": 1,
-    "progressive": 2,
-    "internal_name": "DebugLune"
+    "progressive": 2
   },
   {
     "type": "Weapon",
     "name": "Baguette (Maelle)",
+    "internal_name": "DebugMaelle",
     "quantity": 1,
-    "progressive": 2,
-    "internal_name": "DebugMaelle"
+    "progressive": 2
   },
   {
     "type": "Weapon",
     "name": "Baguette (Monoco)",
+    "internal_name": "DebugMonoco",
     "quantity": 1,
-    "progressive": 2,
-    "internal_name": "DebugMonoco"
+    "progressive": 2
   },
   {
     "type": "Weapon",
     "name": "Baguette (Sciel)",
+    "internal_name": "DebugSciel",
     "quantity": 1,
-    "progressive": 2,
-    "internal_name": "DebugSciel"
+    "progressive": 2
   },
   {
     "type": "Character",
     "name": "Character - Maelle",
+    "internal_name": "Maelle",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Maelle"
+    "progressive": 1
   },
   {
     "type": "Character",
     "name": "Character - Lune",
+    "internal_name": "Lune",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Lune"
+    "progressive": 1
   },
   {
     "type": "Character",
     "name": "Character - Sciel",
+    "internal_name": "Sciel",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Sciel"
+    "progressive": 1
   },
   {
     "type": "Character",
     "name": "Character - Monoco",
+    "internal_name": "Monoco",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Monoco"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Flying Waters",
+    "internal_name": "GoblusLair",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "GoblusLair"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Ancient Sanctuary",
+    "internal_name": "AncientSanctuary",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "AncientSanctuary"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Crimson Forest",
+    "internal_name": "SideLevel_RedForest",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "SideLevel_RedForest"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Esquie's Nest",
+    "internal_name": "EsquieNest",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "EsquieNest"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Falling Leaves",
+    "internal_name": "SideLevel_OrangeForest",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "SideLevel_OrangeForest"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Flying Manor",
+    "internal_name": "SideLevel_CleasFlyingHouse",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "SideLevel_CleasFlyingHouse"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Forgotten Battlefield",
+    "internal_name": "ForgottenBattlefield",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "ForgottenBattlefield"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Frozen Hearts",
+    "internal_name": "SidelLevel_FrozenHearts",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "SidelLevel_FrozenHearts"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Gestral Village",
+    "internal_name": "GestralVillage",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "GestralVillage"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Monoco's Station",
+    "internal_name": "MonocoStation",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "MonocoStation"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Lumiere",
+    "internal_name": "Lumiere",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Lumiere"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - The Monolith",
+    "internal_name": "Monolith_Interior_PaintressIntro",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Monolith_Interior_PaintressIntro"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Old Lumiere",
+    "internal_name": "OldLumiere",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "OldLumiere"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - The Reacher",
+    "internal_name": "SideLevel_Reacher",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "SideLevel_Reacher"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Renoir's Drafts",
+    "internal_name": "SideLevel_AxonPath",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "SideLevel_AxonPath"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Stone Wave Cliffs",
+    "internal_name": "SeaCliff",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "SeaCliff"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Sirene",
+    "internal_name": "Sirene",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Sirene"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Endless Night Sanctuary",
+    "internal_name": "SideLevel_TwilightSanctuary",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "SideLevel_TwilightSanctuary"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Visages",
+    "internal_name": "Visages",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "Visages"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Yellow Harvest",
+    "internal_name": "SideLevel_YellowForest",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "SideLevel_YellowForest"
+    "progressive": 1
   },
   {
-    "type": "Area ticket",
+    "type": "Area",
     "name": "Area - Endless Tower",
+    "internal_name": "SideLevel_CleasTower_Entrance",
     "quantity": 1,
-    "progressive": 1,
-    "internal_name": "SideLevel_CleasTower_Entrance"
+    "progressive": 1
   }
 ]
