@@ -3,7 +3,7 @@ import typing
 from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
-from Utils import restricted_loads
+from Utils import restricted_loads, Version, version_tuple
 from .should_generate import should_generate
 
 if typing.TYPE_CHECKING:
@@ -26,10 +26,14 @@ items_data = restricted_loads(pickled_data)["ITEMS"]
 
 item_types_map = {
     "progression": ItemClassification.progression,
-    "progression_skip_balancing": ItemClassification.progression_skip_balancing,
     "useful": ItemClassification.useful,
     "filler": ItemClassification.filler,
-    "trap": ItemClassification.trap
+    "trap": ItemClassification.trap,
+    # Nine Sols currently has no use case for skip_balancing xor deprioritized flags,
+    # just "low value" progression where both flags make sense.
+    "weak_progression": ItemClassification.progression_skip_balancing
+    if version_tuple < Version(0, 6, 3)
+    else ItemClassification.progression_deprioritized_skip_balancing,
 }
 
 item_data_table: dict[str, NineSolsItemData] = {}
@@ -46,8 +50,7 @@ all_non_event_items_table = {name: data.code for name, data in item_data_table.i
 item_names: set[str] = set(entry["name"] for entry in items_data)
 
 prog_items = set(entry["name"] for entry in items_data
-                 if (entry["type"] == "progression" or entry["type"] == "progression_skip_balancing")
-                 and entry["code"] is not None)
+                 if "progression" in entry["type"] and entry["code"] is not None)
 
 item_name_groups = {
     # Auto-generated groups
