@@ -4648,12 +4648,12 @@
         "type": "Chest"
     },
     {
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "name": "World Map: Dive - East of Lumiere",
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "World Map: Second Continent - On broken bridge near Chromatic miniboss",
         "location": "World Map",
-        "original_item": "Consumable_LuminaPoint",
+        "original_item": "ChromaPack_Large",
         "condition": {},
-        "type": "Dive"
+        "type": "Chest"
     },
     {
         "internal_name": "Chest_Generic_Chroma",
@@ -4662,6 +4662,14 @@
         "original_item": "ChromaPack_Large",
         "condition": {},
         "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - East of Lumiere",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -4750,14 +4758,6 @@
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
         "type": "Dive"
-    },
-    {
-        "internal_name": "Chest_Generic_Chroma",
-        "name": "World Map: Second Continent - On broken bridge near Chromatic miniboss",
-        "location": "World Map",
-        "original_item": "ChromaPack_Large",
-        "condition": {},
-        "type": "Chest"
     },
     {
         "name": "Ancient Sanctuary: Ultimate Sakapatate",
