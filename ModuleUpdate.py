@@ -74,7 +74,7 @@ def update_command():
 def install_pkg_resources(yes=False):
     try:
         import pkg_resources  # noqa: F401
-    except ImportError:
+    except (AttributeError, ImportError):
         check_pip()
         if not yes:
             confirm("pkg_resources not found, press enter to install it")
