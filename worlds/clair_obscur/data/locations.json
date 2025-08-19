@@ -4616,6 +4616,142 @@
         "type": "Chest"
     },
     {
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "Esquies Nest: Get Outta My Way! - Go right from Sunniso",
+        "location": "Esquies Nest",
+        "original_item": "ChromaPack_Large",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_Lumina",
+        "name": "Camp: Gestrals - Break Paint Spike",
+        "location": "Camps",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {"Paint Break": 1},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "Monolith: Tower Peak - Left before Expedition Flag (This might be in the void)",
+        "location": "The Monolith",
+        "original_item": "ChromaPack_Large",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "Spring Meadows: Entrance - In the waterfall behind start",
+        "location": "Spring Meadows",
+        "original_item": "ChromaPack_Large",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - East of Lumiere",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "World Map: Second Continent - On broken bridge near Chromatic miniboss",
+        "location": "World Map",
+        "original_item": "ChromaPack_Large",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near The Meadows",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near Gestral Beach Tower",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Under Serpenphare",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - NE of White Sands",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below The Chosen Path",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - N of Sirene",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near SE Manor Door",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below Endless Tower",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below Floating Sanctuary",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - S of Sinister Cave",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near The Crows",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
         "name": "Ancient Sanctuary: Ultimate Sakapatate",
         "internal_name": "AS_PotatoBag_Boss",
         "location": "Ancient Sanctuary",
@@ -6090,7 +6226,8 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
+
     },
     {
         "internal_name": "Chest_Generic_Chroma",
@@ -6098,7 +6235,7 @@
         "location": "World Map",
         "original_item": "ChromaPack_Large",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -6106,7 +6243,7 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -6114,7 +6251,7 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -6122,7 +6259,7 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -6130,7 +6267,7 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -6138,7 +6275,7 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -6146,7 +6283,7 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -6154,7 +6291,7 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -6162,7 +6299,7 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -6170,7 +6307,7 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -6178,7 +6315,7 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     },
     {
         "internal_name": "Chest_Generic_5xLuminaPoint",
@@ -6186,6 +6323,6 @@
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "type": "Chest"
+        "type": "Dive"
     }
 ]
