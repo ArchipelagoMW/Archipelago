@@ -33,7 +33,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_5",
-        "name": "Ancient Sactuary: Gestral Totem - Base of the totem",
+        "name": "Ancient Sanctuary: Gestral Totem - Base of the totem",
         "location": "Ancient Sanctuary",
         "original_item": "Consumable_LuminaPoint",
         "condition": {
@@ -83,7 +83,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_11",
-        "name": "Ancient Sactuary: Gestral Totem - Ink bottles on the cliff",
+        "name": "Ancient Sanctuary: Gestral Totem - Ink bottles on the cliff",
         "location": "Ancient Sanctuary",
         "original_item": "UpgradeMaterial",
         "condition": {
@@ -101,7 +101,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_13",
-        "name": "Ancient Sactuary: Gestral Totem - In shallow river",
+        "name": "Ancient Sanctuary: Gestral Totem - In shallow river",
         "location": "Ancient Sanctuary",
         "original_item": "PiercingShot",
         "condition": {
@@ -111,7 +111,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_14",
-        "name": "Ancient Sactuary: Gestral Totem - Jump the gaps",
+        "name": "Ancient Sanctuary: Gestral Totem - Jump the gaps",
         "location": "Ancient Sanctuary",
         "original_item": "ChromaPack_ExtraLarge",
         "condition": {
@@ -4617,7 +4617,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_3",
-        "name": "Yellow Harvest: Harvester' Hollow - Exit of crimson cave",
+        "name": "Yellow Harvest: Harvester's Hollow - Exit of crimson cave",
         "location": "Yellow Forest",
         "original_item": "ChromaPack_ExtraLarge",
         "condition": {},
@@ -4625,7 +4625,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_4",
-        "name": "Yellow Harvest: Harvester' Hollow - Peninsula facing sunken building",
+        "name": "Yellow Harvest: Harvester's Hollow - Peninsula facing sunken building",
         "location": "Yellow Forest",
         "original_item": "ChromaPack_Large",
         "condition": {},
@@ -4633,7 +4633,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_5",
-        "name": "Yellow Harvest: Harvester' Hollow - On balcony of sunken building",
+        "name": "Yellow Harvest: Harvester's Hollow - On balcony of sunken building",
         "location": "Yellow Forest",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -4641,7 +4641,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_6",
-        "name": "Yellow Harvest: Harvester' Hollow - Near tent by sunken building",
+        "name": "Yellow Harvest: Harvester's Hollow - Near tent by sunken building",
         "location": "Yellow Forest",
         "original_item": "DeathBombPhysical",
         "condition": {},
@@ -6244,80 +6244,107 @@
         "type": "Quest reward"
     },
     {
-        "name": "Underwater item 1",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - East of Lumiere",
         "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "original_item": "",
         "type": "Dive"
     },
     {
-        "name": "Underwater item 2",
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "World Map: Second Continent - On broken bridge near Chromatic miniboss",
         "location": "World Map",
+        "original_item": "ChromaPack_Large",
         "condition": {},
-        "original_item": "",
         "type": "Dive"
     },
     {
-        "name": "Underwater item 3",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near The Meadows",
         "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "original_item": "",
         "type": "Dive"
     },
     {
-        "name": "Underwater item 4",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near Gestral Beach Tower",
         "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "original_item": "",
         "type": "Dive"
     },
     {
-        "name": "Underwater item 5",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Under Serpenphare",
         "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "original_item": "",
         "type": "Dive"
     },
     {
-        "name": "Underwater item 6",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - NE of White Sands",
         "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "original_item": "",
         "type": "Dive"
     },
     {
-        "name": "Underwater item 7",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below The Chosen Path",
         "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "original_item": "",
         "type": "Dive"
     },
     {
-        "name": "Underwater item 8",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - N of Sirene",
         "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "original_item": "",
         "type": "Dive"
     },
     {
-        "name": "Underwater item 9",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near SE Manor Door",
         "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "original_item": "",
         "type": "Dive"
     },
     {
-        "name": "Underwater item 10",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below Endless Tower",
         "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "original_item": "",
         "type": "Dive"
     },
     {
-        "name": "Underwater item 11",
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below Floating Sanctuary",
         "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
         "condition": {},
-        "original_item": "",
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - S of Sinister Cave",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near The Crows",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
         "type": "Dive"
     }
 ]
