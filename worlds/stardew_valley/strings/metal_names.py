@@ -58,7 +58,7 @@ class Mineral:
 
 
 class Artifact:
-    prehistoric_handaxe = "Prehistoric Handaxe"
+    prehistoric_handaxe = artifact("Prehistoric Handaxe")
     dwarf_gadget = artifact("Dwarf Gadget")
     ancient_seed = artifact("Ancient Seed")
     glass_shards = artifact("Glass Shards")
@@ -82,7 +82,6 @@ class Artifact:
     golden_mask = artifact("Golden Mask")
     golden_relic = artifact("Golden Relic")
     ornamental_fan = artifact("Ornamental Fan")
-    prehistoric_hammer = artifact("Prehistoric Handaxe")
     prehistoric_tool = artifact("Prehistoric Tool")
     rusty_spoon = artifact("Rusty Spoon")
     rusty_spur = artifact("Rusty Spur")
@@ -104,13 +103,12 @@ class Fossil:
     mummified_frog = fossil("Mummified Frog")
     nautilus_fossil = fossil("Nautilus Fossil")
     palm_fossil = fossil("Palm Fossil")
-    prehistoric_hand = fossil("Skeletal Hand")
     prehistoric_rib = fossil("Prehistoric Rib")
     prehistoric_scapula = fossil("Prehistoric Scapula")
     prehistoric_skull = fossil("Prehistoric Skull")
     prehistoric_tibia = fossil("Prehistoric Tibia")
     prehistoric_vertebra = fossil("Prehistoric Vertebra")
-    skeletal_hand = "Skeletal Hand"
+    skeletal_hand = fossil("Skeletal Hand")
     skeletal_tail = fossil("Skeletal Tail")
     snake_skull = fossil("Snake Skull")
     snake_vertebrae = fossil("Snake Vertebrae")
