@@ -6085,91 +6085,107 @@
         "type": "Quest reward"
     },
     {
-        "name": "Underwater item 1",
         "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - East of Lumiere",
         "location": "World Map",
-        "condition": {},
         "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
+        "condition": {},
+        "type": "Chest"
     },
     {
-        "name": "Underwater item 2",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "World Map: Second Continent - On broken bridge near Chromatic miniboss",
         "location": "World Map",
+        "original_item": "ChromaPack_Large",
         "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
+        "type": "Chest"
     },
     {
-        "name": "Underwater item 3",
         "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near The Meadows",
         "location": "World Map",
-        "condition": {},
         "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
+        "condition": {},
+        "type": "Chest"
     },
     {
-        "name": "Underwater item 4",
         "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near Gestral Beach Tower",
         "location": "World Map",
-        "condition": {},
         "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
+        "condition": {},
+        "type": "Chest"
     },
     {
-        "name": "Underwater item 5",
         "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Under Serpenphare",
         "location": "World Map",
-        "condition": {},
         "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
+        "condition": {},
+        "type": "Chest"
     },
     {
-        "name": "Underwater item 6",
         "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - NE of White Sands",
         "location": "World Map",
-        "condition": {},
         "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
+        "condition": {},
+        "type": "Chest"
     },
     {
-        "name": "Underwater item 7",
         "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below The Chosen Path",
         "location": "World Map",
-        "condition": {},
         "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
+        "condition": {},
+        "type": "Chest"
     },
     {
-        "name": "Underwater item 8",
         "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - N of Sirene",
         "location": "World Map",
-        "condition": {},
         "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
+        "condition": {},
+        "type": "Chest"
     },
     {
-        "name": "Underwater item 9",
         "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near SE Manor Door",
         "location": "World Map",
-        "condition": {},
         "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
+        "condition": {},
+        "type": "Chest"
     },
     {
-        "name": "Underwater item 10",
         "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below Endless Tower",
         "location": "World Map",
-        "condition": {},
         "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
+        "condition": {},
+        "type": "Chest"
     },
     {
-        "name": "Underwater item 11",
         "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below Floating Sanctuary",
         "location": "World Map",
-        "condition": {},
         "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - S of Sinister Cave",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near The Crows",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Chest"
     }
 ]
