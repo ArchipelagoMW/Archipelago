@@ -208,7 +208,7 @@
     {
         "address": null, "name": "Victory - Eggnog",
         "region": "CH - Center", "requires": [
-            { "item_group": "Sol Seals", "count": 8 },
+            { "item_group": "Sol Seals", "count_option": "seals_for_eigong" },
             // the Eigong fight itself requires AD OR CL just for the judgement cut w/ crimson 3rd slash
             { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] } // combat logic
         ]
@@ -238,14 +238,14 @@
     {
         "address": null, "name": "Event - Jiequan 1 Fight Unlocked",
         "region": "FGH - Lower Levels, Root Node & Right Exit", "requires": [
-            { "item_group": "Sol Seals", "count": 3 },
+            { "item_group": "Sol Seals", "count_option": "seals_for_prison" },
             { "item": "Mystic Nymph: Scout Mode" }
             // AND grapple
         ]
     },
     {
         "address": null, "name": "Event - Lady Ethereal Soulscape Unlocked",
-        "region": "CC - Root Node", "requires": [ { "item_group": "Sol Seals", "count": 4 } ]
+        "region": "CC - Root Node", "requires": [ { "item_group": "Sol Seals", "count_option": "seals_for_ethereal" } ]
     },
 
     // Cortex Center

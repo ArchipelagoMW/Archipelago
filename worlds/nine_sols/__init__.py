@@ -100,8 +100,10 @@ class NineSolsWorld(World):
 
     def fill_slot_data(self):
         slot_data = self.options.as_dict(
-            'skip_soulscape_platforming',  # implemented by client/mod code,
-                                           # and affects logic/trackers
+            'skip_soulscape_platforming',  # implemented by client/mod code, and affects logic/trackers
+            'seals_for_eigong',
+            'seals_for_ethereal',
+            'seals_for_prison',
         )
         # apworld versions are not yet stored in the generated multiworld and exposed by AP servers,
         # so we have to transmit this to the client/mod using slot_data for the time being.

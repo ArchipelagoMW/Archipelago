@@ -6,6 +6,7 @@ from typing import Any, NamedTuple
 from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
 from worlds.generic.Rules import set_rule
+from .options import NineSolsGameOptions
 from .should_generate import should_generate
 
 if typing.TYPE_CHECKING:
@@ -190,7 +191,7 @@ def create_regions(world: "NineSolsWorld") -> None:
                     {"item": "Event - Lady Ethereal Soulscape Unlocked"},
                     {"item": "Air Dash"}
                 ]
-            rule = None if len(requires) == 0 else lambda state, r=requires: eval_rule(state, p, r)  # noqa
+            rule = None if len(requires) == 0 else lambda state, r=requires: eval_rule(state, p, options, r)  # noqa
             entrance = region.connect(mw.get_region(to, p), None, rule)
             indirect_region_names = regions_referenced_by_rule(requires)
             for indirect_region_name in indirect_region_names:
@@ -200,7 +201,7 @@ def create_regions(world: "NineSolsWorld") -> None:
     for ld in locations_data:
         if ld["name"] in locations_to_create and len(ld["requires"]) > 0:
             set_rule(mw.get_location(ld["name"], p),
-                     lambda state, r=ld["requires"]: eval_rule(state, p, r))  # noqa
+                     lambda state, r=ld["requires"]: eval_rule(state, p, options, r))  # noqa
 
     world.origin_region_name = "FSP - Root Node"
     # add dynamic logic, i.e. connections based on player options
@@ -215,13 +216,13 @@ def create_regions(world: "NineSolsWorld") -> None:
 
 # In particular: this eval_rule() function is the main piece of code which will have to
 # be implemented in both languages, so it's important we keep the implementations in sync
-def eval_rule(state: CollectionState, p: int, rule: list[Any]) -> bool:
-    return all(eval_criterion(state, p, criterion) for criterion in rule)
+def eval_rule(state: CollectionState, p: int, options: NineSolsGameOptions, rule: list[Any]) -> bool:
+    return all(eval_criterion(state, p, options, criterion) for criterion in rule)
 
 
-def eval_criterion(state: CollectionState, p: int, criterion: Any) -> bool:
+def eval_criterion(state: CollectionState, p: int, options: NineSolsGameOptions, criterion: Any) -> bool:
     if isinstance(criterion, list):
-        return all(eval_criterion(state, p, sub_criterion) for sub_criterion in criterion)
+        return all(eval_criterion(state, p, options, sub_criterion) for sub_criterion in criterion)
 
     if isinstance(criterion, dict):
         key, value = next(iter(criterion.items()))
@@ -229,8 +230,10 @@ def eval_criterion(state: CollectionState, p: int, criterion: Any) -> bool:
         # { "item": "..." } and { "anyOf": [ ... ] } and { "location": "foo" } and { "region": "bar" }
         # mean exactly what they sound like, and those are the only kinds of criteria.
         if key == "item" and isinstance(value, str):
-            if "count" in criterion:
+            if "count" in criterion:  # technically no longer in use, but I still want it to be part of the format
                 return state.has(value, p, criterion["count"])
+            if "count_option" in criterion:
+                return state.has(value, p, getattr(options, criterion["count_option"]).value)
             return state.has(value, p)
         elif key == "item_group" and isinstance(value, str):
             if "count" in criterion:
@@ -239,7 +242,7 @@ def eval_criterion(state: CollectionState, p: int, criterion: Any) -> bool:
         elif key == "count":
             raise ValueError("Apparently dict iteration can hit 'count' first?: " + json.dumps(criterion))
         elif key == "anyOf" and isinstance(value, list):
-            return any(eval_criterion(state, p, sub_criterion) for sub_criterion in value)
+            return any(eval_criterion(state, p, options, sub_criterion) for sub_criterion in value)
         elif key == "location" and isinstance(value, str):
             return state.can_reach(value, "Location", p)
         elif key == "region" and isinstance(value, str):
