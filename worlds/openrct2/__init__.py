@@ -44,9 +44,10 @@ messages = ["OpenRCT2 is a really good value!", "OpenRCT2 looks too intense for 
     "more thrilling than OpenRCT2.","Just looking at OpenRCT2 makes me feel sick.","I'm not paying that much to "
     "go on OpenRCT2!", "I want to go home.", "Help! I'm drowning!", "OpenRCT2 was great!", "I've been queuing for "
     "OpenRCT2 for ages!", "I'm not paying that much to go on OpenRCT2!","I'm not going on OpenRCT2 - it isn't safe.",
-    "I'm not paying that much to use the bathroom!", "OpenRCT2 has crashed!", "OpenRCT2 has broken down."]
+    "I'm not paying that much to use the bathroom!", "OpenRCT2 has crashed!", "OpenRCT2 has broken down.", "This on-"
+    "Ride Photo from OpenRCT2 is a really good value!"]
 
-LauncherComponents.components.append(
+try: LauncherComponents.components.append(
     LauncherComponents.Component(
         "OpenRCT2 Client",
         func=launch_client,
@@ -57,7 +58,18 @@ LauncherComponents.components.append(
         description="Open the OpenRCT2 client to connect your game to the multiworld!\n"
             + random_message(messages)
     )
+) # On older versions of Archipelago, having description text breaks the program.
+except: LauncherComponents.components.append(
+    LauncherComponents.Component(
+        "OpenRCT2 Client",
+        func=launch_client,
+        component_type=LauncherComponents.Type.CLIENT,
+        # OpenRCT2 icon credit to the OpenRCT2 team: 
+        # https://github.com/OpenRCT2/OpenRCT2/blob/develop/resources/logo/icon_x96.png
+        icon='openrct2icon',
+    )
 )
+
 
 
 LauncherComponents.icon_paths['openrct2icon'] = f"ap:{__name__}/icons/openrct2icon.png"
