@@ -33,7 +33,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_5",
-        "name": "Ancient Sactuary: Gestral Totem - Base of the totem",
+        "name": "Ancient Sanctuary: Gestral Totem - Base of the totem",
         "location": "Ancient Sanctuary",
         "original_item": "Consumable_LuminaPoint",
         "condition": {
@@ -83,7 +83,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_11",
-        "name": "Ancient Sactuary: Gestral Totem - Ink bottles on the cliff",
+        "name": "Ancient Sanctuary: Gestral Totem - Ink bottles on the cliff",
         "location": "Ancient Sanctuary",
         "original_item": "UpgradeMaterial",
         "condition": {
@@ -101,7 +101,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_13",
-        "name": "Ancient Sactuary: Gestral Totem - In shallow river",
+        "name": "Ancient Sanctuary: Gestral Totem - In shallow river",
         "location": "Ancient Sanctuary",
         "original_item": "PiercingShot",
         "condition": {
@@ -111,7 +111,7 @@
     },
     {
         "internal_name": "Chest_AncientSanctuary_14",
-        "name": "Ancient Sactuary: Gestral Totem - Jump the gaps",
+        "name": "Ancient Sanctuary: Gestral Totem - Jump the gaps",
         "location": "Ancient Sanctuary",
         "original_item": "ChromaPack_ExtraLarge",
         "condition": {
@@ -1417,7 +1417,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_1",
-        "name": "Lumiere (Act 3): Lumiere's Garden - On building railing in Paint Spike",
+        "name": "Lumiere (Act 3): Opera House - On building railing in Paint Spike",
         "location": "Lumiere",
         "original_item": "ChromaPack_Large",
         "condition": {"Paint Break": 1},
@@ -1433,7 +1433,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_3",
-        "name": "Lumiere (Act 3): Central Plaza - Start of the game",
+        "name": "Lumiere (Act 3): Entrance - Start of the game",
         "location": "Lumiere",
         "original_item": "APOnPowerful",
         "condition": {},
@@ -1481,7 +1481,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_9",
-        "name": "Lumiere (Act 3): Shattered Alley - Near fountain",
+        "name": "Lumiere (Act 3): Central Plaza - Near fountain",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1489,7 +1489,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_10",
-        "name": "Lumiere (Act 3): Shattered Alley - Next to fountain",
+        "name": "Lumiere (Act 3): Central Plaza - Next to fountain",
         "location": "Lumiere",
         "original_item": "UpgradeMaterial",
         "condition": {},
@@ -1497,7 +1497,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_11",
-        "name": "Lumiere (Act 3): Shattered Alley - Before fountain",
+        "name": "Lumiere (Act 3): Central Plaza - Hallway after fountain",
         "location": "Lumiere",
         "original_item": "UpgradeMaterial",
         "condition": {},
@@ -1505,7 +1505,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_12",
-        "name": "Lumiere (Act 3): Shattered Alley - Near boxes",
+        "name": "Lumiere (Act 3): Central Plaza - Near boxes",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1537,7 +1537,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_16",
-        "name": "Lumiere (Act 3): Opera - Under impaled building",
+        "name": "Lumiere (Act 3): Shattered Alley - Under impaled building",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1553,7 +1553,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_18",
-        "name": "Lumiere (Act 3): Opera - Behind Chromatic miniboss",
+        "name": "Lumiere (Act 3): Shattered Alley - Behind Chromatic miniboss",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1561,7 +1561,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_19",
-        "name": "Lumiere (Act 3): Opera - Next to Chromatic miniboss",
+        "name": "Lumiere (Act 3): Shattered Alley - Next to Chromatic miniboss",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1569,7 +1569,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_20",
-        "name": "Lumiere (Act 3): Opera - Near boat before Opera House",
+        "name": "Lumiere (Act 3): Shattered Alley - Near boat before Opera House",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1577,7 +1577,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_21",
-        "name": "Lumiere (Act 3): Opera - Before Opera House",
+        "name": "Lumiere (Act 3): Shattered Alley - Before Opera House",
         "location": "Lumiere",
         "original_item": "ChromaPack_Regular",
         "condition": {},
@@ -1585,7 +1585,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_22",
-        "name": "Lumiere (Act 3): Lumina 9",
+        "name": "Lumiere (Act 3): Lumiere's Garden - First right up stairs",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1593,7 +1593,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_23",
-        "name": "Lumiere (Act 3): Opera - Top of stairs",
+        "name": "Lumiere (Act 3): Opera House - Top of stairs",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1601,7 +1601,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_24",
-        "name": "Lumiere (Act 3): Lumiere's Garden - Under festival decorations",
+        "name": "Lumiere (Act 3): Opera House - Under festival decorations",
         "location": "Lumiere",
         "original_item": "UpgradeMaterial",
         "condition": {},
@@ -1609,7 +1609,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_25",
-        "name": "Lumiere (Act 3): Opera House - Near three Nevrons",
+        "name": "Lumiere (Act 3): Opera House - In between buildings",
         "location": "Lumiere",
         "original_item": "HealingStun",
         "condition": {},
@@ -1625,7 +1625,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_27",
-        "name": "Lumiere (Act 3): Lumiere's Garden - Cliffside overlooking ruined Lumiere",
+        "name": "Lumiere (Act 3): Opera House - Cliffside overlooking ruined Lumiere",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1633,7 +1633,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_28",
-        "name": "Lumiere (Act 3): Lumiere's Garden - Near Cribappa",
+        "name": "Lumiere (Act 3): Opera House - Near Cribappa",
         "location": "Lumiere",
         "original_item": "ChromaPack_Regular",
         "condition": {},
@@ -1641,7 +1641,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_29",
-        "name": "Lumiere (Act 3): Lumiere's Garden - Near Young Boy",
+        "name": "Lumiere (Act 3): Opera House - Near Young Boy",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1657,7 +1657,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_31",
-        "name": "Lumiere (Act 3): Central Plaza - Inside ruined statue item 3",
+        "name": "Lumiere (Act 3): Lumiere's Garden - Inside ruined statue item 3",
         "location": "Lumiere",
         "original_item": "Consumable_Respec",
         "condition": {},
@@ -1665,7 +1665,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_32",
-        "name": "Lumiere (Act 3): Central Plaza - By dead giant Obscur",
+        "name": "Lumiere (Act 3): Lumiere's Garden - By dead giant Obscur",
         "location": "Lumiere",
         "original_item": "Consumable_Respec",
         "condition": {},
@@ -1673,7 +1673,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_33",
-        "name": "Lumiere (Act 3): Central Plaza - Near ruined statue",
+        "name": "Lumiere (Act 3): Lumiere's Garden - Near ruined statue",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1681,7 +1681,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_34",
-        "name": "Lumiere (Act 3): Central Plaza - Inside ruined statue item 2",
+        "name": "Lumiere (Act 3): Lumiere's Garden - Inside ruined statue item 2",
         "location": "Lumiere",
         "original_item": "Consumable_Respec",
         "condition": {},
@@ -1697,7 +1697,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_36",
-        "name": "Lumiere (Act 3): Central Plaza - Behind hedge",
+        "name": "Lumiere (Act 3): Lumiere's Garden - Behind hedge",
         "location": "Lumiere",
         "original_item": "ChromaPack_Regular",
         "condition": {},
@@ -1705,7 +1705,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_37",
-        "name": "Lumiere (Act 3): Central Plaza - On bench",
+        "name": "Lumiere (Act 3): Lumiere's Garden - On bench",
         "location": "Lumiere",
         "original_item": "Consumable_Respec",
         "condition": {},
@@ -1713,7 +1713,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_38",
-        "name": "Lumiere (Act 3): Central Plaza - Left side up stairs",
+        "name": "Lumiere (Act 3): Lumiere's Garden - Left side up stairs",
         "location": "Lumiere",
         "original_item": "GradientFighter",
         "condition": {},
@@ -1729,7 +1729,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_40",
-        "name": "Lumiere (Act 3): Opera - Near Chromatic miniboss",
+        "name": "Lumiere (Act 3): Opera House - Near Chromatic miniboss",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1745,7 +1745,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_42",
-        "name": "Lumiere (Act 3): Central Plaza - Right side up stairs",
+        "name": "Lumiere (Act 3): Lumiere's Garden - Right side up stairs",
         "location": "Lumiere",
         "original_item": "ChromaPack_Regular",
         "condition": {},
@@ -1753,7 +1753,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_43",
-        "name": "Lumiere (Act 3): Central Plaza - Inside ruined statue item 1",
+        "name": "Lumiere (Act 3): Lumiere's Garden - Inside ruined statue item 1",
         "location": "Lumiere",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -1761,7 +1761,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_44",
-        "name": "Lumiere (Act 3): Opera - Near piano",
+        "name": "Lumiere (Act 3): Opera House - Near piano",
         "location": "Lumiere",
         "original_item": "MusicRecord_2",
         "condition": {},
@@ -4569,7 +4569,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_1",
-        "name": "Yellow Forest: Entrance - Near broken fountain",
+        "name": "Yellow Harvest: Entrance - Near broken fountain",
         "location": "Yellow Forest",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -4577,7 +4577,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_2",
-        "name": "Yellow Forest: Entrance - Path to sunken building",
+        "name": "Yellow Harvest: Entrance - Path to sunken building",
         "location": "Yellow Forest",
         "original_item": "ChromaPack_Regular",
         "condition": {},
@@ -4585,7 +4585,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_3",
-        "name": "Yellow Forest: Harvester' Hollow - Exit of crimson cave",
+        "name": "Yellow Harvest: Harvester's Hollow - Exit of crimson cave",
         "location": "Yellow Forest",
         "original_item": "ChromaPack_ExtraLarge",
         "condition": {},
@@ -4593,7 +4593,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_4",
-        "name": "Yellow Forest: Harvester' Hollow - Peninsula facing sunken building",
+        "name": "Yellow Harvest: Harvester's Hollow - Peninsula facing sunken building",
         "location": "Yellow Forest",
         "original_item": "ChromaPack_Large",
         "condition": {},
@@ -4601,7 +4601,7 @@
     },
     {
         "internal_name": "Chest_YellowForest_5",
-        "name": "Yellow Forest: Harvester' Hollow - On balcony of sunken building",
+        "name": "Yellow Harvest: Harvester's Hollow - On balcony of sunken building",
         "location": "Yellow Forest",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -4609,11 +4609,155 @@
     },
     {
         "internal_name": "Chest_YellowForest_6",
-        "name": "Yellow Forest: Harvester' Hollow - Near tent by sunken building",
+        "name": "Yellow Harvest: Harvester's Hollow - Near tent by sunken building",
         "location": "Yellow Forest",
         "original_item": "DeathBombPhysical",
         "condition": {},
         "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "Esquies Nest: Get Outta My Way! - Go right from Sunniso",
+        "location": "Esquies Nest",
+        "original_item": "ChromaPack_Large",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_Lumina",
+        "name": "Camp: Gestrals - Break Paint Spike",
+        "location": "Camps",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {"Paint Break": 1},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "Monolith: Tower Peak - Left before Expedition Flag (This might be in the void)",
+        "location": "The Monolith",
+        "original_item": "ChromaPack_Large",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "Spring Meadows: Entrance - In the waterfall behind start",
+        "location": "Spring Meadows",
+        "original_item": "ChromaPack_Large",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "World Map: Second Continent - On broken bridge near Chromatic miniboss",
+        "location": "World Map",
+        "original_item": "ChromaPack_Large",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_Chroma",
+        "name": "World Map: Second Continent - On broken bridge near Chromatic miniboss",
+        "location": "World Map",
+        "original_item": "ChromaPack_Large",
+        "condition": {},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - East of Lumiere",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near The Meadows",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near Gestral Beach Tower",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Under Serpenphare",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - NE of White Sands",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below The Chosen Path",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - N of Sirene",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near SE Manor Door",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below Endless Tower",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Below Floating Sanctuary",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - S of Sinister Cave",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
+    },
+    {
+        "internal_name": "Chest_Generic_5xLuminaPoint",
+        "name": "World Map: Dive - Near The Crows",
+        "location": "World Map",
+        "original_item": "Consumable_LuminaPoint",
+        "condition": {},
+        "type": "Dive"
     },
     {
         "name": "Ancient Sanctuary: Ultimate Sakapatate",
@@ -4794,7 +4938,7 @@
     {
         "name": "Endless Night Sanctuary: Chromatic Crluer",
         "internal_name": "GO_CrulerALPHA*1_0",
-        "location": "Endless Night Sactuary",
+        "location": "Endless Night Sanctuary",
         "original_item": "",
         "condition": {},
         "type": "Boss",
@@ -5869,7 +6013,7 @@
     {
         "name": "Endless Night Sanctuary: Petank",
         "internal_name": "Petank_Violet",
-        "location": "Endless Night Sactuary",
+        "location": "Endless Night Sanctuary",
         "original_item": "",
         "condition": {},
         "type": "Boss",
@@ -6084,92 +6228,4 @@
         "original_item": "",
         "type": "Quest reward"
     },
-    {
-        "name": "Underwater item 1",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
-    },
-    {
-        "name": "Underwater item 2",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
-    },
-    {
-        "name": "Underwater item 3",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
-    },
-    {
-        "name": "Underwater item 4",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
-    },
-    {
-        "name": "Underwater item 5",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
-    },
-    {
-        "name": "Underwater item 6",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
-    },
-    {
-        "name": "Underwater item 7",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
-    },
-    {
-        "name": "Underwater item 8",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
-    },
-    {
-        "name": "Underwater item 9",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
-    },
-    {
-        "name": "Underwater item 10",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
-    },
-    {
-        "name": "Underwater item 11",
-        "internal_name": "Chest_Generic_5xLuminaPoint",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "Consumable_LuminaPoint",
-        "type": "Dive"
-    }
 ]
