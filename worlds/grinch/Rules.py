@@ -418,10 +418,10 @@ rules_dict: dict[str,list[list[str]]] = {
         ["Rotten Egg Launcher", "Rocket Spring"]
     ],
     "Stealing All Gifts": [
-        []
+        ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
     ],
     "Neutralizing Santa": [
-        []
+        ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
     ],
     "Heart of Stone - Whoville": [
         []
@@ -537,7 +537,7 @@ access_rules_dict: dict[str,list[list[str]]] = {
         ["Marine Mobile"]
     ],
     "Sleigh Room": [
-        ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
+        ["Sleigh Room Key"]
     ],
     "Spin N' Win Supadow": [
         ["Spin N' Win Door Unlock"],
@@ -552,7 +552,7 @@ access_rules_dict: dict[str,list[list[str]]] = {
         # ["Progressive Supadow Door Unlock: 3"]
     ],
     "Bike Race": [
-        ["Bike Race Door Unlock"],
+        ["Bike Race Access"],
         # ["Progressive Supadow Door Unlock: 4"]
     ]
 }

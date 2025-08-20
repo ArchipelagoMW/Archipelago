@@ -188,10 +188,10 @@ class GrinchClient(BizHawkClient):
                     "status": NetUtils.ClientStatus.CLIENT_GOAL,
                 }])
 
-    async def constant_address_update(self, ctx: "BizHawkClientContext"):
-        list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
-        if 42369 in list_recv_itemids and 42371 in list_recv_itemids and 42372 in list_recv_itemids and 42373 in list_recv_itemids:
-            await bizhawk.write(ctx.bizhawk_ctx, [(0x010200, (99).to_bytes(1, "little"), "MainRAM")])
+    # async def constant_address_update(self, ctx: "BizHawkClientContext"):
+    #     list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
+    #     if 42369 in list_recv_itemids and 42371 in list_recv_itemids and 42372 in list_recv_itemids and 42373 in list_recv_itemids:
+    #         await bizhawk.write(ctx.bizhawk_ctx, [(0x010200, (99).to_bytes(1, "little"), "MainRAM")])
 
     async def ingame_checker(self, ctx: "BizHawkClientContext"):
         demo_mode = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(

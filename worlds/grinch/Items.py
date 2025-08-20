@@ -117,20 +117,15 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
 #Sleigh Parts
 SLEIGH_PARTS_TABLE: dict[str, GrinchItemData] = {
     "Exhaust Pipes": GrinchItemData("Sleigh Parts", 300, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=2), GrinchRamData(0x0100AA, binary_bit_pos=5),
-         GrinchRamData(0x010200, value=99)]),
+        [GrinchRamData(0x0101FB, binary_bit_pos=2)]),
     "GPS": GrinchItemData("Sleigh Parts", 301, IC.useful,
-        [GrinchRamData(0x0101FB, binary_bit_pos=5), GrinchRamData(0x0100AA, binary_bit_pos=5),
-         GrinchRamData(0x010200, value=99)]),
+        [GrinchRamData(0x0101FB, binary_bit_pos=5)]),
     "Tires": GrinchItemData("Sleigh Parts", 302, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=4), GrinchRamData(0x0100AA, binary_bit_pos=5),
-         GrinchRamData(0x010200, value=99)]),
+        [GrinchRamData(0x0101FB, binary_bit_pos=4)]),
     "Skis": GrinchItemData("Sleigh Parts", 303, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=3), GrinchRamData(0x0100AA, binary_bit_pos=5),
-         GrinchRamData(0x010200, value=99)]),
+        [GrinchRamData(0x0101FB, binary_bit_pos=3)]),
     "Twin-End Tuba": GrinchItemData("Sleigh Parts", 304, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=6), GrinchRamData(0x0100AA, binary_bit_pos=5),
-         GrinchRamData(0x010200, value=99)])
+        [GrinchRamData(0x0101FB, binary_bit_pos=6)])
 }
 
 #Access Keys
@@ -153,8 +148,10 @@ KEYS_TABLE: dict[str, GrinchItemData] = {
     #     [GrinchRamData()]),
     # "Progressive Supadow Door Unlock": GrinchItemData("Supadow Door Unlocks", 408, IC.progression,
     #     [GrinchRamData()]),
-    # "Bike Race Door Unlock": GrinchItemData("Supadow Door Unlocks", 409, IC.progression,
+    # "Bike Race Access": GrinchItemData("Supadow Door Unlocks", 409, IC.progression,
     #     [GrinchRamData()])
+    "Sleigh Room Key": GrinchItemData("Sleigh Room", 410, IC.progression_skip_balancing,
+        [GrinchRamData(0x010200, value=99), GrinchRamData(0x0100AA, binary_bit_pos=5)])
 }
 
 #Misc Items
