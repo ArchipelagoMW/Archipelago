@@ -12,10 +12,16 @@ class TestDefaultWorld(NineSolsTestBase):
         slot_data = self.world.fill_slot_data()
         self.assertSetEqual(set(slot_data.keys()), {
             'apworld_version',
-            'skip_soulscape_platforming'
+            'skip_soulscape_platforming',
+            'seals_for_eigong',
+            'seals_for_ethereal',
+            'seals_for_prison',
         })
         # now for the "real" slot_data tests on our default world:
         self.assertEqual(slot_data['skip_soulscape_platforming'], 0)
+        self.assertEqual(slot_data['seals_for_eigong'], 8)
+        self.assertEqual(slot_data['seals_for_ethereal'], 4)
+        self.assertEqual(slot_data['seals_for_prison'], 3)
 
         # breathing tests for logic assertion helpers
         self.assertReachableWith("Central Hall: Examine Launch Memorial", [])
@@ -43,7 +49,7 @@ class TestShuffleSolSealsOff(NineSolsTestBase):
         "shuffle_sol_seals": False
     }
 
-    def test_default_world(self):
+    def test_shuffle_sol_seals_false(self):
         self.assertEqual(
             self.multiworld.get_location("Kuafu's Vital Sanctum", self.player).item.name,
             "Seal of Kuafu"
@@ -55,7 +61,7 @@ class TestSkipSoulscapePlatforming(NineSolsTestBase):
         "skip_soulscape_platforming": True
     }
 
-    def test_default_world(self):
+    def test_skip_soulscape_platforming(self):
         # when the soulscape is skipped, TCK is no longer logically necessary to reach Lady E
         self.assertNotReachableWith("Cortex Center: Defeat Lady Ethereal", [])
         self.assertNotReachableWith("Cortex Center: Defeat Lady Ethereal", [
@@ -67,4 +73,23 @@ class TestSkipSoulscapePlatforming(NineSolsTestBase):
             "Mystic Nymph: Scout Mode", "Charged Strike",  # to reach CC
             "Seal of Kuafu", "Seal of Goumang", "Seal of Yanlao", "Seal of Jiequan",  # to trigger Lady E
             "Event - Lady Ethereal Soulscape Unlocked", "Air Dash"  # to reach and defeat Lady E
+        ])
+
+
+class TestSolSealCounts(NineSolsTestBase):
+    options = {
+        "seals_for_ethereal": 1,
+        "skip_soulscape_platforming": True,  # to make the relevant logic slightly simpler
+    }
+
+    def test_seals_for_ethereal_one(self):
+        self.assertNotReachableWith("Cortex Center: Defeat Lady Ethereal", [])
+        self.assertNotReachableWith("Cortex Center: Defeat Lady Ethereal", [
+            "Mystic Nymph: Scout Mode", "Charged Strike",  # to reach CC
+            "Event - Lady Ethereal Soulscape Unlocked", "Air Dash",  # to reach and defeat Lady E
+        ])
+        self.assertReachableWith("Cortex Center: Defeat Lady Ethereal", [
+            "Mystic Nymph: Scout Mode", "Charged Strike",  # to reach CC
+            "Event - Lady Ethereal Soulscape Unlocked", "Air Dash",  # to reach and defeat Lady E
+            "Seal of Kuafu",  # only 1 seal to trigger Lady E
         ])
