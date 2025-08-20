@@ -2077,6 +2077,42 @@
 						"NEEDS_BALL": true,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 25,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 26,
+						"mv2": 27,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 25,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 0,
+						"mv1": 10,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 0,
+						"mv1": 12,
+						"regionIndex": 12,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2086,6 +2122,25 @@
 						"NEEDS_BALL": false,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Cave Platforms",
+						"mv0": 25,
+						"regionIndex": 14,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 13
@@ -2097,10 +2152,19 @@
 						"0x090",
 						"0x091"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x9B",
+						"0x9D",
+						"0x9C"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Balcony Garibs": [
@@ -2113,10 +2177,22 @@
 						"0x096",
 						"0x097"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x12C",
+						"0x12D",
+						"0x12E",
+						"0x12F",
+						"0x130",
+						"0x12B"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 6,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 6,
+					"trickDifficulty": 0
 				}
 			],
 			"Beside Pyramid": {
@@ -2127,6 +2203,44 @@
 						"NEEDS_BALL": true,
 						"REGION": 5,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 31,
+						"mv1": 25,
+						"mv2": 26,
+						"mv3": 27,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 25,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 25,
+						"regionIndex": 5,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2136,6 +2250,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 5,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 5,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 7
@@ -2148,6 +2268,22 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 9,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2157,6 +2293,21 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 1,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 0
@@ -2169,6 +2320,20 @@
 						"NEEDS_BALL": true,
 						"REGION": 13,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Cave Platforms",
+						"mv0": 11,
+						"regionIndex": 13,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Cave Platforms",
+						"mv0": 26,
+						"regionIndex": 13,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2178,6 +2343,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 13,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Cave Platforms",
+						"regionIndex": 13,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 14
@@ -2191,10 +2362,21 @@
 						"0x09B",
 						"0x09C"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x87",
+						"0x8D",
+						"0x8C",
+						"0x89",
+						"0x88"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 14,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 14,
+					"trickDifficulty": 0
 				}
 			],
 			"Cave Life": [
@@ -2202,10 +2384,24 @@
 					"AP_IDS": [
 						"0x0ED"
 					],
-					"IDS": [],
+					"IDS": [
+						"0xA5"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 14,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 14,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 14,
+					"regionIndex": 14,
+					"trickDifficulty": 0
 				}
 			],
 			"Cave Wind-Ups": [
@@ -2218,14 +2414,20 @@
 					],
 					"COUNT": 2,
 					"IDS": [
-						"",
-						"",
-						"",
-						""
+						"0x20D",
+						"0x21D",
+						"0x20D",
+						"0x21D"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 14,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 14,
+					"trickDifficulty": 0
 				}
 			],
 			"Ceiling Garibs": [
@@ -2240,10 +2442,25 @@
 						"0x0A3",
 						"0x0A4"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x2C",
+						"0x36",
+						"0x31",
+						"0x2D",
+						"0x35",
+						"0x2F",
+						"0x30",
+						"0x2E"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 15,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 23,
+					"regionIndex": 15,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 1": [
@@ -2251,10 +2468,18 @@
 					"AP_IDS": [
 						"0x0F2"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x2C"
+					],
 					"NEEDS_BALL": true,
 					"REGION": 0,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 31,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 2": [
@@ -2262,10 +2487,18 @@
 					"AP_IDS": [
 						"0x0F3"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x41"
+					],
 					"NEEDS_BALL": true,
 					"REGION": 3,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 31,
+					"regionIndex": 3,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 3": [
@@ -2273,10 +2506,18 @@
 					"AP_IDS": [
 						"0x0F4"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x48"
+					],
 					"NEEDS_BALL": true,
 					"REGION": 10,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 31,
+					"regionIndex": 10,
+					"trickDifficulty": 0
 				}
 			],
 			"Cliff Ball Switch": [
@@ -2284,10 +2525,17 @@
 					"AP_IDS": [
 						"0x0F5"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x0204"
+					],
 					"NEEDS_BALL": true,
 					"REGION": 13,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 13,
+					"trickDifficulty": 0
 				}
 			],
 			"Cliff Garibs": [
@@ -2302,10 +2550,24 @@
 						"0x0AB",
 						"0x0AC"
 					],
-					"IDS": [],
+					"IDS": [
+						"0xEF",
+						"0xF6",
+						"0xF5",
+						"0xF4",
+						"0xF3",
+						"0xF2",
+						"0xF1",
+						"0xF0"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 12,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 12,
+					"trickDifficulty": 0
 				}
 			],
 			"Cliff Slide Life": [
@@ -2313,10 +2575,17 @@
 					"AP_IDS": [
 						"0x0EE"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x116"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 9,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 9,
+					"trickDifficulty": 0
 				}
 			],
 			"Cliff Wind-Up": [
@@ -2327,12 +2596,18 @@
 					],
 					"COUNT": 1,
 					"IDS": [
-						"",
-						""
+						"0x238",
+						"0x238"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Cliffs": {
@@ -2343,6 +2618,12 @@
 						"NEEDS_BALL": true,
 						"REGION": 11,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2352,6 +2633,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 11,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 12
@@ -2364,12 +2650,18 @@
 					],
 					"COUNT": 2,
 					"IDS": [
-						"",
-						""
+						"0x019B",
+						"0x0187"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 11,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 11,
+					"trickDifficulty": 0
 				}
 			],
 			"General Wu": [
@@ -2379,7 +2671,7 @@
 					],
 					"COUNT": 1,
 					"IDS": [
-						""
+						"0x22D"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
@@ -2395,6 +2687,11 @@
 					"NEEDS_BALL": true,
 					"REGION": 16,
 					"TYPE": 5
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 16,
+					"trickDifficulty": 0
 				}
 			],
 			"Island Garibs": [
@@ -2409,10 +2706,24 @@
 						"0x0B3",
 						"0x0B4"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x122",
+						"0x127",
+						"0x125",
+						"0x124",
+						"0x123",
+						"0x126",
+						"0x128",
+						"0x129"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Jetstream": {
@@ -2423,6 +2734,13 @@
 						"NEEDS_BALL": true,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 22,
+						"mv1": 27,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2432,6 +2750,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 4
@@ -2453,6 +2776,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 5,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 5,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 6
@@ -2465,6 +2793,11 @@
 						"NEEDS_BALL": true,
 						"REGION": 4,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 4,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2474,6 +2807,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 4,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 4,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 5
@@ -2486,10 +2824,20 @@
 						"0x0B7",
 						"0x0B8"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x114",
+						"0x112",
+						"0x110",
+						"0x10E"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 1,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 1,
+					"trickDifficulty": 0
 				}
 			],
 			"Path Wind-Up": [
@@ -2500,12 +2848,18 @@
 					],
 					"COUNT": 1,
 					"IDS": [
-						"",
-						""
+						"0x290",
+						"0x290"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 1,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 1,
+					"trickDifficulty": 0
 				}
 			],
 			"Pit Life 1": [
@@ -2513,10 +2867,18 @@
 					"AP_IDS": [
 						"0x0EF"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x6B"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 15,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 15,
+					"trickDifficulty": 0
 				}
 			],
 			"Pit Life 2": [
@@ -2524,10 +2886,18 @@
 					"AP_IDS": [
 						"0x0F0"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x5F"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 15,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 15,
+					"trickDifficulty": 0
 				}
 			],
 			"Pool": {
@@ -2538,6 +2908,11 @@
 						"NEEDS_BALL": true,
 						"REGION": 10,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 10,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2547,6 +2922,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 10,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 10,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 11
@@ -2564,10 +2944,25 @@
 						"0x0C0",
 						"0x0C1"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x119",
+						"0x11C",
+						"0x11F",
+						"0x120",
+						"0x11D",
+						"0x11A",
+						"0x11B",
+						"0x11E",
+						"0x118"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 11,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 11,
+					"trickDifficulty": 0
 				}
 			],
 			"Pyramid Ball Switch": [
@@ -2575,10 +2970,17 @@
 					"AP_IDS": [
 						"0x0F6"
 					],
-					"IDS": [],
-					"NEEDS_BALL": false,
+					"IDS": [
+						"0x01EA"
+					],
+					"NEEDS_BALL": true,
 					"REGION": 7,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 7,
+					"trickDifficulty": 0
 				}
 			],
 			"Raceway": {
@@ -2589,6 +2991,17 @@
 						"NEEDS_BALL": true,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Waterwheel",
+						"regionIndex": 8,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2598,6 +3011,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 3
@@ -2619,6 +3038,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 14,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 14,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 15
@@ -2631,10 +3055,20 @@
 						"0x0C4",
 						"0x0C5"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x82",
+						"0x85",
+						"0x84",
+						"0x83"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Speed Potion": [
@@ -2642,10 +3076,17 @@
 					"AP_IDS": [
 						"0x0F8"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x1E7"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 3,
 					"TYPE": 4
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 3,
+					"trickDifficulty": 0
 				}
 			],
 			"Speed Wind-Ups": [
@@ -2662,18 +3103,24 @@
 					],
 					"COUNT": 4,
 					"IDS": [
-						"",
-						"",
-						"",
-						"",
-						"",
-						"",
-						"",
-						""
+						"0x1AF",
+						"0x1DA",
+						"0x1BA",
+						"0x1CA",
+						"0x1AF",
+						"0x1DA",
+						"0x1BA",
+						"0x1CA"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 3,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 3,
+					"trickDifficulty": 0
 				}
 			],
 			"Stairs": {
@@ -2684,6 +3131,50 @@
 						"NEEDS_BALL": true,
 						"REGION": 1,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 31,
+						"mv1": 27,
+						"mv2": 26,
+						"mv3": 25,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 25,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 25,
+						"mv1": 11,
+						"mv2": 26,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2693,6 +3184,17 @@
 						"NEEDS_BALL": false,
 						"REGION": 1,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 2
@@ -2706,10 +3208,21 @@
 						"0x0C9",
 						"0x0CA"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x10C",
+						"0x10A",
+						"0x108",
+						"0x106",
+						"0x104"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 2,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 2,
+					"trickDifficulty": 0
 				}
 			],
 			"Stalagmite": {
@@ -2720,6 +3233,32 @@
 						"NEEDS_BALL": true,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 10,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"regionIndex": 10,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2729,6 +3268,17 @@
 						"NEEDS_BALL": false,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 2,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 10,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 9
@@ -2738,10 +3288,17 @@
 					"AP_IDS": [
 						"0x0F9"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x28A"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 15,
 					"TYPE": 4
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 15,
+					"trickDifficulty": 0
 				}
 			],
 			"Under Waterfall Garibs": [
@@ -2752,10 +3309,20 @@
 						"0x0CD",
 						"0x0CE"
 					],
-					"IDS": [],
+					"IDS": [
+						"0xE3",
+						"0xE8",
+						"0xE4",
+						"0xE9"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Under Waterfall Life": [
@@ -2763,10 +3330,17 @@
 					"AP_IDS": [
 						"0x0F1"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x99"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Walkway": {
@@ -2777,6 +3351,30 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2786,6 +3384,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 1
@@ -2798,6 +3401,12 @@
 						"NEEDS_BALL": true,
 						"REGION": 8,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 8,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2807,6 +3416,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 8,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Waterwheel",
+						"regionIndex": 8,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 10
@@ -2820,10 +3435,21 @@
 						"0x0D2",
 						"0x0D3"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x9F",
+						"0xA3",
+						"0xA2",
+						"0xA1",
+						"0xA0"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 10,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 10,
+					"trickDifficulty": 0
 				}
 			],
 			"Waterfall Wind-Ups": [
@@ -2838,16 +3464,22 @@
 					],
 					"COUNT": 3,
 					"IDS": [
-						"",
-						"",
-						"",
-						"",
-						"",
-						""
+						"0x248",
+						"0x258",
+						"0x268",
+						"0x248",
+						"0x258",
+						"0x268"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 10,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 10,
+					"trickDifficulty": 0
 				}
 			],
 			"Waterwheel": {
@@ -2858,6 +3490,11 @@
 						"NEEDS_BALL": true,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2867,6 +3504,18 @@
 						"NEEDS_BALL": false,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Waterwheel",
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Waterwheel",
+						"regionIndex": 10,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 8
@@ -2879,6 +3528,11 @@
 						"NEEDS_BALL": true,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 12,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -2888,6 +3542,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 12,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 16

@@ -130,8 +130,8 @@ class GloverWorld(World):
         #Garib level order table
         self.garib_level_order = [
             ["Atl1", 50],
-            ["Atl2", 60]#,
-            #["Atl3", 80],
+            ["Atl2", 60],
+            ["Atl3", 80]#,
             #["Atl?", 25],
             #["Crn1", 65],
             #["Crn2", 80],
@@ -443,11 +443,12 @@ class GloverWorld(World):
             reaching_region : Region = multiworld.get_location(reaching_location, player).parent_region
             reaching_region.connect(connecting_level, loading_zone, lambda state, each_location = reaching_location: state.can_reach_location(each_location, player))
 
-        end_region : Region = multiworld.get_region("Atl2: End W/Ball", player)
+        goal_location_name : str = "Atl3: Goal"
+        end_region : Region = multiworld.get_location(goal_location_name, player).parent_region
         goal_location : Location = Location(player, "Ending", None, end_region)
         end_region.locations.append(goal_location)
+        add_rule(goal_location, lambda state: state.can_reach_location(goal_location_name, player))
         goal_location.place_locked_item(self.create_event("Victory"))
-        add_rule(goal_location, lambda state: state.can_reach_location("Atl2: Goal", player))
         multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
 

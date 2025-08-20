@@ -19,7 +19,7 @@ levels_in_order = [
     ["AtlH", 0],
     ["Atl1", 0, 0],
     ["Atl2", 0, 4, 8],
-    ["Atl3", 0],
+    ["Atl3", 0, 3, 10],
     ["Atl!", 0],
     ["Atl?", 0],
     ["CrnH", 0],
@@ -179,16 +179,19 @@ def create_region_pair(self : GloverWorld, check_info : dict, check_name : str, 
     if valid_methods_exist(self, ball_region_methods):
         multiworld.regions.append(ball_region)
         ball_region_exists = True
-        ball_region_methods = list(filter(lambda a, this_index = base_id : len(a.required_items) > 0 or a.region_index != this_index, ball_region_methods))
+        ball_region_methods = list(filter(lambda a, b = base_id, c = True: self_ref_region(a, b, c), ball_region_methods))
     
     #No ball regions that exist
     no_ball_region_exists : bool = False
     if valid_methods_exist(self, no_ball_region_methods):
         multiworld.regions.append(no_ball_region)
         no_ball_region_exists = True
-        ball_region_methods = list(filter(lambda a, this_index = base_id : len(a.required_items) > 0 or a.region_index != this_index, no_ball_region_methods))
+        no_ball_region_methods = list(filter(lambda a, b = base_id, c = True: self_ref_region(a, b, c), no_ball_region_methods))
     
     return RegionPair(region_name, base_id, ball_region_methods, no_ball_region_methods, ball_region_exists, no_ball_region_exists)
+
+def self_ref_region(check_method : AccessMethod, base_region : int, base_ball : bool) -> bool:
+    return len(check_method.required_items) > 0 or check_method.region_index != base_region or check_method.ball_in_region != base_ball
 
 def connect_region_pairs(self : GloverWorld, pairs : List[RegionPair]):
     multiworld : MultiWorld = self.multiworld

@@ -58,9 +58,9 @@ level_event_table = {
 	"Atl1 Gate" : 							ItemData(BASE_ID + 9, 1, "Progression", "Atl1: Glover Switch"),
 	"Atl2 Elevator" : 						ItemData(BASE_ID + 10, 1, "Progression", "Atl2: Drain Block"),
 	"Atl2 Ball Switch Drain" : 				ItemData(BASE_ID + 11, 1, "Progression", "Atl2: Ball Switch"),
-	"Atl2 Gate" : 							ItemData(BASE_ID + 12, 1, "Progression", "Atl2: Glover Switch")#,
-	#"Atl3 Waterwheel" : 					ItemData(BASE_ID + 13, 1, "Progression", ),
-	#"Atl3 Cave Platforms" : 				ItemData(BASE_ID + 14, 1, "Progression", ),
+	"Atl2 Gate" : 							ItemData(BASE_ID + 12, 1, "Progression", "Atl2: Glover Switch"),
+	"Atl3 Waterwheel" : 					ItemData(BASE_ID + 13, 1, "Progression", "Atl3: Pyramid Ball Switch"),
+	"Atl3 Cave Platforms" : 				ItemData(BASE_ID + 14, 1, "Progression", "Atl3: Cliff Ball Switch")#,
 	#"CrnH 1 Star" : 						ItemData(BASE_ID + 15, 1, "Progression", ),
 	#"CrnH 2 Gate" : 						ItemData(BASE_ID + 16, 1, "Progression", ),
 	#"CrnH 2 Star" : 						ItemData(BASE_ID + 17, 1, "Progression", ),
@@ -183,10 +183,10 @@ checkpoint_table = {
 	"Atl1 Checkpoint 2" : 						ItemData(BASE_ID + 131, 1, "Progression", "Atl1: Checkpoint 2"),
 	"Atl2 Checkpoint 1" : 						ItemData(BASE_ID + 132, 1, "Progression", "Atl2: Checkpoint 1"),
 	"Atl2 Checkpoint 2" : 						ItemData(BASE_ID + 133, 1, "Progression", "Atl2: Checkpoint 2"),
-	"Atl2 Checkpoint 3" : 						ItemData(BASE_ID + 134, 1, "Progression", "Atl2: Checkpoint 3")#,
-	#"Atl3 Checkpoint 1" : 						ItemData(BASE_ID + 135, 1, "Progression", "Atl3: Checkpoint 1"),
-	#"Atl3 Checkpoint 2" : 						ItemData(BASE_ID + 136, 1, "Progression", "Atl3: Checkpoint 2"),
-	#"Atl3 Checkpoint 3" : 						ItemData(BASE_ID + 137, 1, "Progression", "Atl3: Checkpoint 3"),
+	"Atl2 Checkpoint 3" : 						ItemData(BASE_ID + 134, 1, "Progression", "Atl2: Checkpoint 3"),
+	"Atl3 Checkpoint 1" : 						ItemData(BASE_ID + 135, 1, "Progression", "Atl3: Checkpoint 1"),
+	"Atl3 Checkpoint 2" : 						ItemData(BASE_ID + 136, 1, "Progression", "Atl3: Checkpoint 2"),
+	"Atl3 Checkpoint 3" : 						ItemData(BASE_ID + 137, 1, "Progression", "Atl3: Checkpoint 3")#,
 	#"Crn1 Checkpoint 1" : 						ItemData(BASE_ID + 138, 1, "Progression", "Crn1: Checkpoint 1"),
 	#"Crn1 Checkpoint 2" : 						ItemData(BASE_ID + 139, 1, "Progression", "Crn1: Checkpoint 2"),
 	#"Crn1 Checkpoint 3" : 						ItemData(BASE_ID + 140, 1, "Progression", "Crn1: Checkpoint 3"),
@@ -255,15 +255,15 @@ world_garib_table = {
 	"Atl2 4 Garibs" : 							ItemData(BASE_ID + 200, 1, "Garib", None),
 	"Atl2 5 Garibs" : 							ItemData(BASE_ID + 201, 5, "Garib", None),
 	"Atl2 7 Garibs" : 							ItemData(BASE_ID + 202, 1, "Garib", None),
-	"Atl2 10 Garibs" : 							ItemData(BASE_ID + 203, 1, "Garib", None)
-	#"Atl3 1 Garibs" : 							ItemData(2,,)
-	#"Atl3 2 Garibs" : 							ItemData(1,"",None),
-	#"Atl3 3 Garibs" : 							ItemData(2,,)
-	#"Atl3 4 Garibs" : 							ItemData(4,,)
-	#"Atl3 5 Garibs" : 							ItemData(3,,)
-	#"Atl3 6 Garibs" : 							ItemData(1,"",None),
-	#"Atl3 8 Garibs" : 							ItemData(3,,)
-	#"Atl3 9 Garibs" : 							ItemData(1,"",None),
+	"Atl2 10 Garibs" : 							ItemData(BASE_ID + 203, 1, "Garib", None),
+	"Atl3 1 Garibs" : 							ItemData(BASE_ID + 204, 2, "Garib", None),
+	"Atl3 2 Garibs" : 							ItemData(BASE_ID + 205, 1, "Garib", None),
+	"Atl3 3 Garibs" : 							ItemData(BASE_ID + 206, 2, "Garib", None),
+	"Atl3 4 Garibs" : 							ItemData(BASE_ID + 207, 4, "Garib", None),
+	"Atl3 5 Garibs" : 							ItemData(BASE_ID + 208, 3, "Garib", None),
+	"Atl3 6 Garibs" : 							ItemData(BASE_ID + 209, 1, "Garib", None),
+	"Atl3 8 Garibs" : 							ItemData(BASE_ID + 210, 3, "Garib", None),
+	"Atl3 9 Garibs" : 							ItemData(BASE_ID + 211, 1, "Garib", None)#,
 	#"Atl? 5 Garibs" : 							ItemData(5,,)
 	#"Crn1 1 Garibs" : 							ItemData(1,"",None),
 	#"Crn1 4 Garibs" : 							ItemData(3,,)
@@ -403,9 +403,9 @@ ability_table = {
 #	"Helicopter Potion" : 						ItemData(BASE_ID + 345, 1,"Progression",None),
 #	"Frog Potion" : 							ItemData(BASE_ID + 346, 1,"Useful",None),
 #	"Boomerang Ball" : 							ItemData(BASE_ID + 347, 1,"Progression",None),
-#	"Speed Potion" : 							ItemData(BASE_ID + 348, 1,"Progression",None),
-#	"Sticky Potion" : 							ItemData(BASE_ID + 349, 1,"Progression",None),
-#	"Hercules Potion" : 						ItemData(BASE_ID + 350, 1,"Progression",None),
+	"Speed Potion" : 							ItemData(BASE_ID + 348, 1,"Progression",None),
+	"Sticky Potion" : 							ItemData(BASE_ID + 349, 1,"Progression",None),
+	"Hercules Potion" : 						ItemData(BASE_ID + 350, 1,"Progression",None),
 #	"Grab" : 									ItemData(BASE_ID + 351, 1,"Progression",None),
 	"Rubber Ball" : 							ItemData(BASE_ID + 352, 1,"Progression",None),
 	"Bowling Ball" : 							ItemData(BASE_ID + 353, 1,"Progression",None),
@@ -438,8 +438,8 @@ trap_table = {
 
 garibsanity_world_table = {
 	"Atl1 Garib" : 								ItemData(BASE_ID + 20001, 50,"Garib",None),
-	"Atl2 Garib" : 								ItemData(BASE_ID + 20002, 60,"Garib",None)#,
-	#"Atl3 Garib" : 							ItemData(BASE_ID + 20003, 80,"Garib",None),
+	"Atl2 Garib" : 								ItemData(BASE_ID + 20002, 60,"Garib",None),
+	"Atl3 Garib" : 								ItemData(BASE_ID + 20003, 80,"Garib",None)#,
 	#"Atl? Garib" : 							ItemData(BASE_ID + 20004, 25,"Garib",None),
 	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 65,"Garib",None),
 	#"4 Garibs" : 								ItemData(BASE_ID + 20004, 80,"Garib",None),
