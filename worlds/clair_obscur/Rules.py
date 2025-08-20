@@ -4,9 +4,9 @@ from worlds.generic.Rules import set_rule, add_rule
 
 def set_rules(world):
     player = world.player
-    world = world.multiworld
+    mw = world.multiworld
 
-    goal = 1
+    goal = world.options.goal
     goal_loc = ""
     match goal:
         case 0:
@@ -18,13 +18,13 @@ def set_rules(world):
         case 3:
             goal_loc = "The Abyss: Simon"
 
-    world.completion_condition[player] = (
+    mw.completion_condition[player] = (
         lambda state: state.can_reach_location(goal_loc, player)
     )
 
     #Major map connections- the playthrough will always go through these.
-    major_connection_1 = world.get_entrance("WM: First Continent South -> WM: South Sea", player)
-    major_connection_2 = world.get_entrance("WM: South Sea -> WM: North Sea", player)
+    major_connection_1 = mw.get_entrance("WM: First Continent South -> WM: South Sea", player)
+    major_connection_2 = mw.get_entrance("WM: South Sea -> WM: North Sea", player)
 
     #paint break reqs
 
