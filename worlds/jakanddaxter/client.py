@@ -14,12 +14,14 @@ from typing import Awaitable
 # Misc imports
 import colorama
 from PyMemoryEditor import OpenProcess, ProcessNotFoundError
+from psutil import NoSuchProcess
 
 # Archipelago imports
 import ModuleUpdate
 import Utils
 
 from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui_enabled
+from Launcher import launch as program_launch
 from NetUtils import ClientStatus
 
 # Jak imports
@@ -338,10 +340,13 @@ class JakAndDaxterContext(CommonContext):
             await asyncio.sleep(0.1)
 
     async def run_memr_loop(self):
-        while True:
-            await self.memr.main_tick()
-            await asyncio.sleep(0.1)
-
+        try:
+            while True:
+                await self.memr.main_tick()
+                await asyncio.sleep(0.1)
+        # This catch re-engages the memr loop, enabling the client to re-connect on losing the process
+        except NoSuchProcess:
+            await self.run_memr_loop()
 
 def find_root_directory(ctx: JakAndDaxterContext):
 
@@ -452,7 +457,6 @@ def find_root_directory(ctx: JakAndDaxterContext):
 
 
 async def run_game(ctx: JakAndDaxterContext):
-
     # These may already be running. If they are not running, try to start them.
     gk_running = False
     try:
@@ -527,13 +531,27 @@ async def run_game(ctx: JakAndDaxterContext):
             log_path = os.path.join(Utils.user_path("logs"), f"JakAndDaxterGame_{timestamp}.txt")
             log_path = os.path.normpath(log_path)
             with open(log_path, "w") as log_file:
-                gk_process = subprocess.Popen(
-                    [gk_path, "--game", "jak1",
-                     "--config-path", config_path,
-                     "--", "-v", "-boot", "-fakeiso", "-debug"],
-                    stdout=log_file,
-                    stderr=log_file,
-                    creationflags=subprocess.CREATE_NO_WINDOW)
+                gk_args = [
+                    gk_path,
+                    "--game", "jak1",
+                    "--config-path", config_path,
+                    "--", "-v", "-boot", "-fakeiso", "-debug"
+                ]
+                
+                if Utils.is_windows:
+                    gk_process = subprocess.Popen(
+                        gk_args,
+                        stdout=log_file,
+                        stderr=log_file,
+                        creationflags=subprocess.CREATE_NO_WINDOW
+                    )
+                else:
+                    gk_process = subprocess.Popen(
+                        gk_args,
+                        stdout=log_file,
+                        stderr=log_file
+                    )
+
 
         if not goalc_running:
             # For the OpenGOAL Compiler, the existence of the "data" subfolder indicates you are running it from
@@ -583,7 +601,15 @@ async def run_game(ctx: JakAndDaxterContext):
                 goalc_args = [goalc_path, "--game", "jak1"]
 
             # This needs to be a new console. The REPL console cannot share a window with any other process.
-            goalc_process = subprocess.Popen(goalc_args, creationflags=subprocess.CREATE_NEW_CONSOLE)
+            
+            if Utils.is_windows:
+                goalc_process = subprocess.Popen(goalc_args, creationflags=subprocess.CREATE_NEW_CONSOLE)
+            elif Utils.is_linux:
+                # Here, program_launch is imported from archipelago to run executatbles, including terminal ones. 
+                goalc_process = program_launch(goalc_args, in_terminal=True)
+            elif Utils.is_macos:
+                # Here, program_launch is imported from archipelago to run executatbles, including terminal ones. 
+                goalc_process = program_launch(goalc_args, in_terminal=True)
 
     except AttributeError as e:
         if " " in e.args[0]:
