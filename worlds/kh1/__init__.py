@@ -167,7 +167,8 @@ class KH1World(World):
             elif self.options.halloween_town_key_item_bundle and name == "Jack-In-The-Box":
                 continue
             elif name == "Puppy":
-                item_pool += [self.create_item(name) for _ in range(ceil(99/self.options.puppy_value.value))]
+                if self.options.randomize_puppies:
+                    item_pool += [self.create_item(name) for _ in range(ceil(99/self.options.puppy_value.value))]
             elif name == "Atlantica":
                 if self.options.atlantica:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
@@ -266,8 +267,9 @@ class KH1World(World):
             self.get_location("Traverse Town 2nd District Boots and Shoes Awning Chest").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town 1st District Blue Trinity Balcony Chest").place_locked_item(self.create_item("Postcard"))
         if not self.options.randomize_puppies:
-            self.options.puppy_value.value = 3
-            logging.info(f"{self.player_name}'s value of {self.options.puppy_value.value} for puppy value was changed to 3 as Randomize Puppies is OFF")
+            if self.options.puppy_value.value != 3:
+                self.options.puppy_value.value = 3
+                logging.info(f"{self.player_name}'s value of {self.options.puppy_value.value} for puppy value was changed to 3 as Randomize Puppies is OFF")
             for i, location in enumerate(VANILLA_PUPPY_LOCATIONS):
                 self.get_location(location).place_locked_item(self.create_item("Puppy"))
 
