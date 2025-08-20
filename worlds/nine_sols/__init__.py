@@ -52,6 +52,9 @@ class NineSolsWorld(World):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 if "Nine Sols" in self.multiworld.re_gen_passthrough:
                     slot_data = self.multiworld.re_gen_passthrough["Nine Sols"]
+                    self.options.seals_for_eigong = slot_data['seals_for_eigong']
+                    self.options.seals_for_prison = slot_data['seals_for_prison']
+                    self.options.seals_for_ethereal = slot_data['seals_for_ethereal']
                     self.options.skip_soulscape_platforming = slot_data['skip_soulscape_platforming']
                     # TODO: alternate spawns, etc
             return
@@ -102,8 +105,8 @@ class NineSolsWorld(World):
         slot_data = self.options.as_dict(
             'skip_soulscape_platforming',  # implemented by client/mod code, and affects logic/trackers
             'seals_for_eigong',
-            'seals_for_ethereal',
             'seals_for_prison',
+            'seals_for_ethereal',
         )
         # apworld versions are not yet stored in the generated multiworld and exposed by AP servers,
         # so we have to transmit this to the client/mod using slot_data for the time being.
