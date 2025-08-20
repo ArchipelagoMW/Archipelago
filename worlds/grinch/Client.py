@@ -102,7 +102,7 @@ class GrinchClient(BizHawkClient):
             await self.location_checker(ctx)
             await self.receiving_items_handler(ctx)
             await self.goal_checker(ctx)
-            await self.constant_address_update(ctx)
+            # await self.constant_address_update(ctx)
             await self.option_handler(ctx)
 
         except bizhawk.RequestFailedError:
