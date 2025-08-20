@@ -568,7 +568,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
 
 class SC2JSONtoTextParser(JSONtoTextParser):
-    def __init__(self, ctx) -> None:
+    def __init__(self, ctx: SC2Context) -> None:
         self.handlers = {
             "ItemSend": self._handle_color,
             "ItemCheat": self._handle_color,
@@ -582,9 +582,10 @@ class SC2JSONtoTextParser(JSONtoTextParser):
         return buffer + self._handle_text(node) + '</c>'
     
     def _handle_item_name(self, node: JSONMessagePart) -> str:
-        annotation = ITEM_NAME_ANNOTATIONS.get(node["text"])
-        if annotation is not None:
-            node["text"] += f" {annotation}"
+        if self.ctx.slot_info[node["player"]].game == STARCRAFT2:
+            annotation = ITEM_NAME_ANNOTATIONS.get(node["text"])
+            if annotation is not None:
+                node["text"] += f" {annotation}"
         return super()._handle_item_name(node)
 
     def color_code(self, code: str) -> str:

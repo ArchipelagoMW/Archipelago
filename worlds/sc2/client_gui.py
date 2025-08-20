@@ -18,7 +18,7 @@ from kivymd.uix.tooltip import MDTooltip
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty, BooleanProperty, NumericProperty
 
-from .client import SC2Context, calc_unfinished_nodes, is_mission_available, compute_received_items
+from .client import SC2Context, calc_unfinished_nodes, is_mission_available, compute_received_items, STARCRAFT2
 from .item.item_descriptions import item_descriptions
 from .item.item_annotations import ITEM_NAME_ANNOTATIONS
 from .mission_order.entry_rules import RuleData, SubRuleRuleData, ItemRuleData
@@ -94,7 +94,7 @@ class MissionCategory(GridLayout):
 class SC2JSONtoKivyParser(KivyJSONtoTextParser):
     def _handle_item_name(self, node: JSONMessagePart):
         item_name = node["text"]
-        if item_name not in item_descriptions:
+        if self.ctx.slot_info[node["player"]].game != STARCRAFT2 or item_name not in item_descriptions:
             return super()._handle_item_name(node)
 
         flags = node.get("flags", 0)
