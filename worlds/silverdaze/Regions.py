@@ -5,7 +5,8 @@ from BaseClasses import CollectionState, ItemClassification, Region
 from BaseClasses import MultiWorld
 
 from .Items import item_table
-from .Locations import location_table
+from .Locations import location_table, SDLocation, SDLocationData
+from .Options import SilverDazeOptions
 
 if TYPE_CHECKING:
     from . import SDWorld
@@ -16,7 +17,7 @@ def link_sd_areas(world: MultiWorld, player: int):
 
 
 sd_regions = [
-    #Name of region, any exits
+    #Name of region, any exits (exits are Entrance types)
     ("Menu", ["New_Game"]),
     ("Geo_Room", ["Leave_Geo_Room"]),
     ("Cotton",  ["Door_To_Hub2"]),
@@ -26,7 +27,7 @@ sd_regions = [
     ]
 #Sawyer: Add new regions when the time comes
 mandatory_connections = [
-    #Name of entrance, region where it leads
+    #Name of Entrance, Region where it leads
     ("New_Game", "Geo_Room"),
     ("Leave_Geo_Room", "Cotton"),
     ("Door_To_Hub2", "GreyHub2"),
@@ -34,3 +35,7 @@ mandatory_connections = [
     ("Red2_Demo_Entrance", "Red2"),
 
 ]
+
+
+    
+    

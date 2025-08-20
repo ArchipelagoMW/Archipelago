@@ -6,115 +6,134 @@ from Locations import location_table
 from worlds.generic.Rules import add_rule, set_rule
 from worlds.generic.Rules import add_rule, forbid_item
 
+from . import Items
+
 if TYPE_CHECKING:
     from . import SDWorld
+
+
+
+
+
+
+
+
+
 
 def set_rules(world: "SDWorld") -> None:
     player = world.player
     multiworld = world.multiworld
 
+    # Custom rules
 
-    def party(state: CollectionState, n: int) -> bool:
-        return state.has_from_list_unique([
-            "Pinn",
-            "Kani",
-            "Geo",
-        ], player, n)
+    def sd_party_size_meets(state: CollectionState, size: int) -> bool:
+        # party_members is all items that are party members
+        # keys is just the strings, which are item names
+        return state.has_from_list_unique(Items.party_members.keys(), player, size)
 
-    def key(state: CollectionState, name: str) -> bool:
-        return state.has(name, player)
-
-    def boss(state: CollectionState) -> bool:
-        return party(state,2)
-
+    def sd_has_key(state: CollectionState, color:str) -> bool:
+        return state.has(Items.get_key_from_color(color))
+    
+    def sd_can_fight_demo_boss(state: CollectionState) -> bool:
+        return sd_party_size_meets(state, 2)
+    
+    # Nat: What does this do?
     def chaos(state: CollectionState) -> bool:
-        return party(state,4)
+        return sd_party_size_meets(state, 4)
 
     #Sawyer: In the full game, add checks for all Wardens, glitches,etc.
 
+    # Shorthands
+    
     def get_entrance(entrance: str):
         return multiworld.get_entrance(entrance, player)
 
     def get_location(location: str):
-        if location in location_table:
-            location = location_table[location]
-
         return multiworld.get_location(location, player)
-#You can't leave Geo's without a party member.
+    # def get_location(location: str):
+    #     if location in location_table:
+    #         location = location_table[location]
+    #     return multiworld.get_location(location, player)
+
+    # Rules!
+
+    #You can't leave Geo's without a party member.
     set_rule(
         get_entrance("Leave_Geo_Room"),
-        lambda state: party(state,1)
+        lambda state: sd_party_size_meets(state,1)
     )
-#Demo entrances!
+    
+    #Demo entrances!
+    
     set_rule(
         get_entrance("Red_Demo_Entrance"),
-        lambda state: key(state, "Yellow Key")
+        lambda state: sd_has_key(state, "yellow")
     )
 
     set_rule(
         get_entrance("Red2_Demo_Entrance"),
-        lambda state: key(state, "Yellow Key") and boss(state)
+        lambda state: sd_has_key(state, "yellow") and sd_can_fight_demo_boss(state)
     )
 
     set_rule(
         get_entrance("Demo_End"),
-        lambda state: party(state, 3)
+        lambda state: sd_party_size_meets(state, 3)
     )
 
-#Sawyer: Location Rules
+    #Sawyer: Location Rules
+    
     #Yellow Key
-    set_rule(multiworld.get_location("Hub2Chest1", player),
-        lambda state: key(state, "Yellow Key")
+    set_rule(get_location("Hub2Chest1"),
+        lambda state: sd_has_key(state, "yellow")
     )
 
 
     #Red Key
-    set_rule(multiworld.get_location("Red1Chest", player),
-        lambda state: key(state, "Red Key")
+    set_rule(get_location("Red1Chest"),
+        lambda state: sd_has_key(state, "red")
     )
-    set_rule(multiworld.get_location("RedChasm2Chest1", player),
-        lambda state: key(state, "Red Key")
+    set_rule(get_location("RedChasm2Chest1"),
+        lambda state: sd_has_key(state, "red")
     )
-    set_rule(multiworld.get_location("Red3_BackdoorChest", player),
-        lambda state: key(state, "Red Key")
+    set_rule(get_location("Red3_BackdoorChest"),
+        lambda state: sd_has_key(state, "red")
     )
-    set_rule(multiworld.get_location("Hub2Chest2", player),
-        lambda state: key(state, "Red Key")
+    set_rule(get_location("Hub2Chest2"),
+        lambda state: sd_has_key(state, "red")
     )
 
 
     #Boss
-    set_rule(multiworld.get_location("Nyx", player),
-        lambda state: boss(state)
+    set_rule(get_location("Nyx"),
+        lambda state: sd_can_fight_demo_boss(state)
     )
-    set_rule(multiworld.get_location("Nyx1", player),
-        lambda state: boss(state)
+    set_rule(get_location("Nyx1"),
+        lambda state: sd_can_fight_demo_boss(state)
     )
-    set_rule(multiworld.get_location("Nyx2", player),
-        lambda state: boss(state)
+    set_rule(get_location("Nyx2"),
+        lambda state: sd_can_fight_demo_boss(state)
     )
-    set_rule(multiworld.get_location("Nyx3", player),
-        lambda state: boss(state)
+    set_rule(get_location("Nyx3"),
+        lambda state: sd_can_fight_demo_boss(state)
     )
-    set_rule(multiworld.get_location("QuoDefender1", player),
-        lambda state: boss(state)
+    set_rule(get_location("QuoDefender1"),
+        lambda state: sd_can_fight_demo_boss(state)
     )
-    set_rule(multiworld.get_location("QuoDefender2", player),
-        lambda state: boss(state)
+    set_rule(get_location("QuoDefender2"),
+        lambda state: sd_can_fight_demo_boss(state)
     )
-    set_rule(multiworld.get_location("QuoDefender3", player),
-        lambda state: boss(state)
+    set_rule(get_location("QuoDefender3"),
+        lambda state: sd_can_fight_demo_boss(state)
     )
-    set_rule(multiworld.get_location("Kingoose1", player),
-        lambda state: boss(state)
+    set_rule(get_location("Kingoose1"),
+        lambda state: sd_can_fight_demo_boss(state)
     )
-    set_rule(multiworld.get_location("Kingoose2", player),
-        lambda state: boss(state)
+    set_rule(get_location("Kingoose2"),
+        lambda state: sd_can_fight_demo_boss(state)
     )
-    set_rule(multiworld.get_location("Kingoose3", player),
-        lambda state: boss(state)
+    set_rule(get_location("Kingoose3"),
+        lambda state: sd_can_fight_demo_boss(state)
     )
-
 
     #Chaos Warden
 
