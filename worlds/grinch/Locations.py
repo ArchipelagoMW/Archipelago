@@ -54,7 +54,7 @@ grinch_locations = {
         "Smashing Snowmen": GrinchLocationData("Whoville", "Whoville Missions", 200, [GrinchRamData(0x0100C5, value=10)]),
         "Painting The Mayor's Posters": GrinchLocationData("Whoville", "Whoville Missions", 202, [GrinchRamData(0x0100C6, value=10)]),
         "Launching Eggs Into Houses": GrinchLocationData("Whoville", "Whoville Missions", 203, [GrinchRamData(0x0100C7, value=10)]),
-        "Modifying The Mayor's Statue": GrinchLocationData("City Hall", "Whoville Missions", 204, [GrinchRamData(0x0100BE, binary_bit_pos=3)]),
+        "Modifying The Mayor's Statue": GrinchLocationData("City Hall", "Whoville Missions", 204, [GrinchRamData(0x0100BE, binary_bit_pos=1)]),
         "Advancing The Countdown-To-Xmas Clock": GrinchLocationData("Countdown to X-Mas Clock Tower", "Whoville Missions", 205, [GrinchRamData(0x0100BE, binary_bit_pos=2)]),
         "Squashing All Gifts in Whoville": GrinchLocationData("Whoville", "Whoville Missions", 206, [GrinchRamData(0x01005C, value=500)]),
 #Who Forest Missions
