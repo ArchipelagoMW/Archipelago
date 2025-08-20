@@ -4936,7 +4936,7 @@
         "boss_type": "Chromatic"
     },
     {
-        "name": "Endless Night Sanctuary: Chromatic Crluer",
+        "name": "Endless Night Sanctuary: Chromatic Cruler",
         "internal_name": "GO_CrulerALPHA*1_0",
         "location": "Endless Night Sanctuary",
         "original_item": "",
@@ -6227,5 +6227,5 @@
         },
         "original_item": "",
         "type": "Quest reward"
-    },
+    }
 ]
