@@ -537,6 +537,7 @@ class InternalItemName:
     Reunion = "Reunion"
     Victory = "Victory"
     Ship_Cannon = "Ship Cannon"
+    Mars_Lighthouse_Heated = "Mars Lighthouse Heated"
     
 
     # Characters
@@ -985,6 +986,7 @@ item_id_by_py_name: Dict[str, int] = {
     "Reunion": 5020,
     "Victory": 5021,
     "Ship_Cannon": 5022,
+    "Mars_Lighthouse_Heated": 5023,
     "Flint": 16384000,
     "Granite": 16384002,
     "Quartz": 16384004,

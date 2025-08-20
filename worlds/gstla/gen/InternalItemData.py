@@ -207,6 +207,7 @@ events: List[InternalEventItemData] = [
     InternalEventItemData(5020, 2593, "Contigo - Reunion", "Reunion"),
     InternalEventItemData(5021, 1, "Victory Event", "Victory"),
     InternalEventItemData(5022, 2655, "Loho - Ship Cannon", "Ship Cannon"),
+    InternalEventItemData(5023, 2608, "Mars Lighthouse - Heated", "Mars Lighthouse Heated"),
     
 ]
 

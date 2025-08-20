@@ -300,6 +300,8 @@ events = [
         5021, True, True, LocationType.Event, LocationRestriction(7), True), # Victory Event Victory
     InternalLocationData(2655, 2655, 5022, 5022, [0], 0,
         5022, True, True, LocationType.Event, LocationRestriction(7), True), # Loho - Ship Cannon Ship Cannon
+    InternalLocationData(2608, 2608, 5023, 5023, [0], 0,
+        5023, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Heated Mars Lighthouse Heated
     
 ]
 

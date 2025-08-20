@@ -255,6 +255,7 @@ class InternalLocationName:
     Contigo_Reunion = "Contigo - Reunion"
     Victory_Event = "Victory Event"
     Loho_Ship_Cannon = "Loho - Ship Cannon"
+    Mars_Lighthouse_Heated = "Mars Lighthouse - Heated"
     
 
     ##remainder
@@ -536,6 +537,7 @@ ids_by_loc_name: Dict[str, int] = {
     InternalLocationName.Contigo_Reunion: 5020,
     InternalLocationName.Victory_Event: 5021,
     InternalLocationName.Loho_Ship_Cannon: 5022,
+    InternalLocationName.Mars_Lighthouse_Heated: 5023,
     InternalLocationName.Daila_Herb: 991776,
     InternalLocationName.Daila_Smoke_Bomb: 991784,
     InternalLocationName.Daila_Psy_Crystal: 991812,
@@ -953,6 +955,7 @@ ids_by_py_name: Dict[str, int] = {
     "Contigo_Reunion": 5020,
     "Victory_Event": 5021,
     "Loho_Ship_Cannon": 5022,
+    "Mars_Lighthouse_Heated": 5023,
     "Daila_Herb": 991776,
     "Daila_Smoke_Bomb": 991784,
     "Daila_Psy_Crystal": 991812,
@@ -1370,6 +1373,7 @@ loc_names_by_id: Dict[int, str] = {
     5020: InternalLocationName.Contigo_Reunion,
     5021: InternalLocationName.Victory_Event,
     5022: InternalLocationName.Loho_Ship_Cannon,
+    5023: InternalLocationName.Mars_Lighthouse_Heated,
     991776: InternalLocationName.Daila_Herb,
     991784: InternalLocationName.Daila_Smoke_Bomb,
     991812: InternalLocationName.Daila_Psy_Crystal,
