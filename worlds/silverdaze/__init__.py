@@ -37,7 +37,7 @@ class SDWorld(World):
     }
       
     def get_filler_item_name(self):
-        return "Heal Token"
+        return "Evade Token"
       
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]

@@ -12,6 +12,12 @@ class StartingPartyMember(Choice):
     option_kani = 1
     default = 0
 
+class IncludeShops(Toggle):
+    """
+    This toggles whether or not shops can have important items.
+    """
+    display_name = "Include Shops"
+    default = 1
 
 @dataclass
 class SilverDazeOptions(PerGameCommonOptions):
