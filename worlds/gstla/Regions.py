@@ -801,6 +801,7 @@ regions: Dict[str, RegionData] = {
         LocationName.Mars_Lighthouse_Flame_Dragons,
         LocationName.Mars_Lighthouse_Teleport_Lapis,
         LocationName.Balm,
+        LocationName.Mars_Lighthouse_Heated,
     ],
     [
         EntranceName.MarsLighthouseToMarsLighthouse_Activated
