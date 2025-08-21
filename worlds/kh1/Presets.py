@@ -14,8 +14,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_puppies": 99,
         "destiny_islands": True,
         "day_2_materials": 4,
-        "homecoming_materials": 14,
-        "materials_in_pool": 16,
+        "homecoming_materials": 10,
+        "materials_in_pool": 13,
         
         "super_bosses": False,
         "atlantica": False,
@@ -100,8 +100,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_puppies": 99,
         "destiny_islands": False,
         "day_2_materials": 4,
-        "homecoming_materials": 14,
-        "materials_in_pool": 16,
+        "homecoming_materials": 10,
+        "materials_in_pool": 13,
         
         "super_bosses": False,
         "atlantica": False,
@@ -186,8 +186,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_puppies": 99,
         "destiny_islands": True,
         "day_2_materials": 4,
-        "homecoming_materials": 14,
-        "materials_in_pool": 16,
+        "homecoming_materials": 10,
+        "materials_in_pool": 13,
         
         "super_bosses": True,
         "atlantica": True,
@@ -272,8 +272,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "required_puppies": 99,
         "destiny_islands": True,
         "day_2_materials": 4,
-        "homecoming_materials": 14,
-        "materials_in_pool": 16,
+        "homecoming_materials": 10,
+        "materials_in_pool": 13,
         
         "super_bosses": False,
         "atlantica": False,

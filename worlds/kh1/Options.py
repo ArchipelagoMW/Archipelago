@@ -755,7 +755,7 @@ class HomecomingMaterials(Range):
     The amount of Raft Materials required to access Homecoming.
     """
     display_name = "Homecoming Materials"
-    default = 14
+    default = 10
     range_start = 0
     range_end = 20
 
