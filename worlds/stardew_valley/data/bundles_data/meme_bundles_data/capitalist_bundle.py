@@ -52,6 +52,7 @@ capitalist_items = [
     *get_capitalist_items(pineapple_wine, pineapple_wines),
 
     get_capitalist_item(dried_pineapple, ArtisanQuality.basic, 3185),
+    get_capitalist_item(dried_banana, ArtisanQuality.basic, 1610),
     get_capitalist_item(strawberry_wine, ArtisanQuality.iridium, 1008),
     get_capitalist_item(dried_strawberry, ArtisanQuality.basic, 1295),
 
