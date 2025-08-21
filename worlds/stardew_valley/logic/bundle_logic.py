@@ -6,6 +6,7 @@ from ..bundles.bundle import Bundle
 from ..stardew_rule import StardewRule, True_
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.building_names import Building
+from ..strings.bundle_names import MemeBundleName
 from ..strings.currency_names import Currency
 from ..strings.machine_names import Machine
 from ..strings.quality_names import CropQuality, ForageQuality, FishQuality, ArtisanQuality
@@ -43,7 +44,13 @@ class BundleLogic(BaseLogic):
         quality_rules = self.get_quality_rules(qualities)
         item_rules = self.logic.has_n(*item_rules, count=number_items_required)
         time_rule = self.logic.time.has_lived_months(time_to_grind)
-        return can_speak_junimo & item_rules & quality_rules & time_rule & building_rule
+        special_rule = self.get_special_bundle_requirement(bundle)
+        return can_speak_junimo & item_rules & quality_rules & time_rule & building_rule & special_rule
+
+    def get_special_bundle_requirement(self, bundle: Bundle) -> StardewRule:
+        if bundle.name == MemeBundleName.pomnut:
+            return self.logic.building.has_building(Building.stable)
+        return self.logic.true_
 
     def get_quality_rules(self, qualities: List[str]) -> StardewRule:
         crop_quality = CropQuality.get_highest(qualities)
