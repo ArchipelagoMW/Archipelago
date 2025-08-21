@@ -185,7 +185,7 @@ local ROM_WORLDS_TABLE = {
 
 for index, item in pairs(ROM_WORLDS_TABLE)
 do
-    WORLDS_TABLE[item] = index - 1
+    WORLDS_TABLE[item] = index
 end
 
 

@@ -184,6 +184,8 @@ class GloverWorld(World):
         #Garib Sorting Order
         if self.options.garib_sorting == GaribLogic.option_garibsanity:
             self.random.shuffle(self.garib_level_order)
+            #if not self.options.bonus_levels:
+            #    print("YIPEE")
         #Setup the spawning checkpoints
         if self.options.spawning_checkpoint_randomizer:
             #If randomized, pick a number from it's assigned value to the current value
@@ -251,7 +253,7 @@ class GloverWorld(World):
             case "Trap":
                 item_classification = ItemClassification.trap
             case "Garib":
-                if self.options.bonus_levels == 1 or self.options.difficulty_logic.value > 0:
+                if self.options.bonus_levels or self.options.difficulty_logic.value > 0:
                     item_classification = ItemClassification.progression_deprioritized
                 else:
                     item_classification = ItemClassification.filler
