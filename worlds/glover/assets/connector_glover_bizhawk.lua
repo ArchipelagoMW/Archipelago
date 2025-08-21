@@ -2361,50 +2361,73 @@ function set_map(map)
 end
 
 function map_handler()
-    if CURRENT_HUB == 0x06 then
-        if CURRENT_MAP == 0x10 then
-            set_map("AP_ATLANTIS_L1")
-        elseif CURRENT_MAP == 0x11 then
-            set_map("AP_ATLANTIS_L2")
-        elseif CURRENT_MAP == 0x12 then set_map("AP_ATLANTIS_L3") 
-        elseif CURRENT_MAP == 0x13 then set_map("AP_ATLANTIS_BOSS")
-        elseif CURRENT_MAP == 0x14 then set_map("AP_ATLANTIS_BONUS") 
-        end
-    elseif CURRENT_HUB == 0x07 then
-        if CURRENT_MAP == 0x10 then set_map("AP_CARNIVAL_L1")
-        elseif CURRENT_MAP == 0x11 then set_map("AP_CARNIVAL_L2")
-        elseif CURRENT_MAP == 0x12 then set_map("AP_CARNIVAL_L3") 
-        elseif CURRENT_MAP == 0x13 then set_map("AP_CARNIVAL_BOSS")
-        elseif CURRENT_MAP == 0x14 then set_map("AP_CARNIVAL_BONUS") 
-        end
-    elseif CURRENT_HUB == 0x08 then
-        if CURRENT_MAP == 0x10 then set_map("AP_PIRATES_L1")
-        elseif CURRENT_MAP == 0x11 then set_map("AP_PIRATES_L2")
-        elseif CURRENT_MAP == 0x12 then set_map("AP_PIRATES_L3") 
-        elseif CURRENT_MAP == 0x13 then set_map("AP_PIRATES_BOSS")
-        elseif CURRENT_MAP == 0x14 then set_map("AP_PIRATES_BONUS") 
-        end
-    elseif CURRENT_HUB == 0x09 then
-        if CURRENT_MAP == 0x10 then set_map("AP_PREHISTORIC_L1")
-        elseif CURRENT_MAP == 0x11 then set_map("AP_PREHISTORIC_L2")
-        elseif CURRENT_MAP == 0x12 then set_map("AP_PREHISTORIC_L3") 
-        elseif CURRENT_MAP == 0x13 then set_map("AP_PREHISTORIC_BOSS")
-        elseif CURRENT_MAP == 0x14 then set_map("AP_PREHISTORIC_BONUS") 
-        end
-    elseif CURRENT_HUB == 0x0A then
-        if CURRENT_MAP == 0x10 then set_map("AP_FORTRESS_L1")
-        elseif CURRENT_MAP == 0x11 then set_map("AP_FORTRESS_L2")
-        elseif CURRENT_MAP == 0x12 then set_map("AP_FORTRESS_L3") 
-        elseif CURRENT_MAP == 0x13 then set_map("AP_FORTRESS_BOSS")
-        elseif CURRENT_MAP == 0x14 then set_map("AP_FORTRESS_BONUS") 
-        end
-    elseif CURRENT_HUB == 0x0B then
-        if CURRENT_MAP == 0x10 then set_map("AP_SPACE_L1")
-        elseif CURRENT_MAP == 0x11 then set_map("AP_SPACE_L2")
-        elseif CURRENT_MAP == 0x12 then set_map("AP_SPACE_L3") 
-        elseif CURRENT_MAP == 0x13 then set_map("AP_SPACE_BOSS")
-        elseif CURRENT_MAP == 0x14 then set_map("AP_SPACE_BONUS") 
-        end
+    if CURRENT_MAP == 0x09 then
+        set_map("AP_TRAINING_WORLD")
+    elseif CURRENT_MAP == 0x0A then
+        set_map("AP_ATLANTIS_L1")
+    elseif CURRENT_MAP == 0x0B then
+        set_map("AP_ATLANTIS_L2")
+    elseif CURRENT_MAP == 0x0C then
+        set_map("AP_ATLANTIS_L3")
+    elseif CURRENT_MAP == 0x0D then
+        set_map("AP_ATLANTIS_BOSS")
+    elseif CURRENT_MAP == 0x0E then
+        set_map("AP_ATLANTIS_BONUS")
+
+    elseif CURRENT_MAP == 0x0F then
+        set_map("AP_CARNIVAL_L1")
+    elseif CURRENT_MAP == 0x10 then
+        set_map("AP_CARNIVAL_L2")
+    elseif CURRENT_MAP == 0x11 then
+        set_map("AP_CARNIVAL_L3")
+    elseif CURRENT_MAP == 0x12 then
+        set_map("AP_CARNIVAL_BOSS")
+    elseif CURRENT_MAP == 0x13 then
+        set_map("AP_CARNIVAL_BONUS")
+    
+    elseif CURRENT_MAP == 0x14 then
+        set_map("AP_PIRATES_L1")
+    elseif CURRENT_MAP == 0x15 then
+        set_map("AP_PIRATES_L2")
+    elseif CURRENT_MAP == 0x16 then
+        set_map("AP_PIRATES_L3")
+    elseif CURRENT_MAP == 0x17 then
+        set_map("AP_PIRATES_BOSS")
+    elseif CURRENT_MAP == 0x18 then
+        set_map("AP_PIRATES_BONUS")
+
+    elseif CURRENT_MAP == 0x19 then
+        set_map("AP_PREHISTOIC_L1")
+    elseif CURRENT_MAP == 0x1A then
+        set_map("AP_PREHISTOIC_L2")
+    elseif CURRENT_MAP == 0x1B then
+        set_map("AP_PREHISTOIC_L3")
+    elseif CURRENT_MAP == 0x1C then
+        set_map("AP_PREHISTOIC_BOSS")
+    elseif CURRENT_MAP == 0x1D then
+        set_map("AP_PREHISTOIC_BONUS")
+
+    elseif CURRENT_MAP == 0x1E then
+        set_map("AP_FORTRESS_L1")
+    elseif CURRENT_MAP == 0x1F then
+        set_map("AP_FORTRESS_L2")
+    elseif CURRENT_MAP == 0x20 then
+        set_map("AP_FORTRESS_L3")
+    elseif CURRENT_MAP == 0x21 then
+        set_map("AP_FORTRESS_BOSS")
+    elseif CURRENT_MAP == 0x22 then
+        set_map("AP_FORTRESS_BONUS")
+
+    elseif CURRENT_MAP == 0x23 then
+        set_map("AP_SPACE_L1")
+    elseif CURRENT_MAP == 0x24 then
+        set_map("AP_SPACE_L2")
+    elseif CURRENT_MAP == 0x25 then
+        set_map("AP_SPACE_L3")
+    elseif CURRENT_MAP == 0x26 then
+        set_map("AP_SPACE_BOSS")
+    elseif CURRENT_MAP == 0x29 then
+        set_map("AP_SPACE_BONUS")
     end
 end
 
