@@ -278,8 +278,7 @@ async def game_watcher(ctx: KH1Context):
                         }])
                         ctx.hinted_location_ids.append(hint_location_id)
         ctx.locations_checked = sending
-        message = [{"cmd": 'LocationChecks', "locations": sending}]
-        await ctx.send_msgs(message)
+        await ctx.check_locations(sending)
         if not ctx.finished_game and victory:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
