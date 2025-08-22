@@ -459,6 +459,13 @@ final_levels = [
         location_rules={"Dementia Castle: Victory":
                             lambda player: lambda state: state.has_all(("Merfolk", "Mage", "Golem", "Harpy"), player)}
     ),
+    Wargroove2Level(
+        name="Requiem's Power",
+        file_name="Requiems_Power.json",
+        location_rules={"Requiem's Power: Victory":
+                            lambda player: lambda state: state.has("Mage", player) and
+                                                         state.has_any(("Dragon", "Harpy"), player)}
+    ),
 ]
 
 low_victory_checks_levels = [

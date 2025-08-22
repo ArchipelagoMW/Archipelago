@@ -519,6 +519,7 @@ location_table: Dict[str, Optional[int]] = {
     "Dark Mirror: Victory": None,
     "Doomed Metropolis: Victory": None,
     "Dementia Castle: Victory": None,
+    "Requiem's Power: Victory": None,
     "Skipped Finale #1: Victory": None,
     "Skipped Finale #2: Victory": None,
     "Skipped Finale #3: Victory": None,
