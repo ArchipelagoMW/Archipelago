@@ -377,7 +377,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, TALL_TALL_HEIGHTS, [SALMON_RIVER, GREENSHIRE_REPRISE, LANDS_END, SEQUOIA_ATHENAEUM, NORTHERN_STRETCH, CASTLE_RAMPARTS, THE_CHALICE_OF_TAR, THE_PALE_GROTTO, NORTHERN_CAVE],
                     {LANDS_END: lambda state: logic.has_vertical_movement(state),
                     SEQUOIA_ATHENAEUM: lambda state: state.has(VERMILLION_BOOK, player) and state.has(VIRIDIAN_BOOK, player) and state.has(CERULEAN_BOOK, player),
-                    NORTHERN_STRETCH: lambda state: logic.has_glide(state),
+                    NORTHERN_STRETCH: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state),
                     CASTLE_RAMPARTS: lambda state: logic.has_vertical_movement(state),
                     THE_PALE_GROTTO: lambda state: logic.has_swimming(state),
                     THE_CHALICE_OF_TAR: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state)})
