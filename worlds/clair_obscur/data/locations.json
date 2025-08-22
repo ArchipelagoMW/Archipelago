@@ -3236,7 +3236,7 @@
         "name": "Small Bourgeon: Feed the White Nevron and loot his vomit",
         "location": "Small Level Goblus Lair 02",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {},
+        "condition": {"Bourgeon Skin":  1},
         "type": "Chest"
     },
     {
@@ -3481,7 +3481,7 @@
     },
     {
         "internal_name": "Chest_SmallLevel_SpringMeadows_1",
-        "name": "Spring Meadows: In front of White Nevron",
+        "name": "The Fountain: In front of Blanche",
         "location": "Small Level Spring Meadows",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -4561,7 +4561,7 @@
     },
     {
         "internal_name": "Chest_Generic_Chroma",
-        "name": "World Map: Second Continent - On the ruined bridge",
+        "name": "World Map: Second Continent - On broken bridge near Chromatic Demineur",
         "location": "World Map",
         "original_item": "ChromaPack_Regular",
         "condition": {},
@@ -5008,7 +5008,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level":  28
     },
     {
         "name": "World Map: Chromatic Bruler",
@@ -5017,7 +5018,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level":  8
     },
     {
         "name": "World Map: Chromatic Demineur",
@@ -5026,7 +5028,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level":  24
     },
     {
         "name": "Stone Wave Cliffs: Chromatic Gault",
@@ -5037,7 +5040,8 @@
             "Paint Break": 1
         },
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level":  28
     },
     {
         "name": "World Map: Chromatic Goblu",
@@ -5046,7 +5050,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level":  30
     },
     {
         "name": "World Map: Chromatic Moissoneuse",
@@ -5055,7 +5060,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level":  17
     },
     {
         "name": "World Map: Chromatic Petank",
@@ -5064,7 +5070,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level":  29
     },
     {
         "name": "Sky Island: Chromatic Glaise",
@@ -5082,7 +5089,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level":  13
     },
     {
         "name": "Yellow Harvest: Chromatic Orphelin",
@@ -5100,7 +5108,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level":  12
     },
     {
         "name": "World Map: Chromatic Portier",
@@ -5109,7 +5118,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level":  24
     },
     {
         "name": "Ancient Sanctuary: Mime",
@@ -5739,7 +5749,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Normal"
+        "boss_type": "Normal",
+        "pictos_level":  17
     },
     {
         "name": "World Map: Thunder Eveque",
@@ -5748,7 +5759,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Normal"
+        "boss_type": "Normal",
+        "pictos_level":  29
     },
     {
         "name": "World Map: Grosse Tete",
@@ -5757,7 +5769,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Normal"
+        "boss_type": "Normal",
+        "pictos_level":  15
     },
     {
         "name": "World Map: Serpenphare",
@@ -5766,7 +5779,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Normal"
+        "boss_type": "Normal",
+        "pictos_level":  30
     },
     {
         "name": "World Map: Sprong",
@@ -5775,7 +5789,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Normal"
+        "boss_type": "Normal",
+        "pictos_level":  24
     },
     {
         "name": "Yellow Harvest: Glaise",
@@ -5810,7 +5825,8 @@
         "location": "Sacred River",
         "original_item": "",
         "condition": {
-            "Painted Power": 1
+            "Painted Power": 1,
+            "Character - Monoco": 1
         },
         "type": "Boss",
         "boss_type": "Normal"
