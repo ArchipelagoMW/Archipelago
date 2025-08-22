@@ -1858,6 +1858,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             await ctx.send_msgs(client, reply)
 
     elif cmd == "GetDataPackage":
+        if not any(isinstance(extension, PerMessageDeflate) for extension in client.socket.extensions):
+            ctx.notify_client(client, "Warning: your client does not support compressed websocket connections! "
+                                      "DataPackage (item and location names) were rejected to be transferred.")
+            return
         exclusions = args.get("exclusions", [])
         if "games" in args:
             games = {name: game_data for name, game_data in ctx.gamespackage.items()
