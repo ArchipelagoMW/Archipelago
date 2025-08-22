@@ -25,20 +25,19 @@ def create_regions(world: ClairObscurWorld) -> dict[str, Region]:
 def connect_regions(world: ClairObscurWorld):
     player = world.player
 
-    def convert_pictos(pictos_level: int):
-        #Converts the connection destination's pictos level into an amount of pictos required to reach that level with
-        #scale-by-order-received.
-        return ceil((pictos_level - 1) * 5.8)
-
     for connection in data.connections:
         origin = world.multiworld.get_region(connection.origin_region, player)
         destination = world.multiworld.get_region(connection.destination_region, player)
         entrance = origin.connect(destination)
+
+        #Connection condition: usually area item or rock count, but sometimes barrier breaker or painted power
         if connection.condition:
             for cond in connection.condition.keys():
                 amount = connection.condition[cond]
                 add_rule(entrance, lambda state, con = cond, pl = player, am=amount: state.has(con, pl, am))
+
+        #Pictos amount condition
         if connection.pictos_level > 1:
-            pictos_amount = convert_pictos(connection.pictos_level)
+            pictos_amount = world.convert_pictos(connection.pictos_level)
             add_rule(entrance, lambda state, pl = player, pic = pictos_amount: state.has_group(
                 "Picto", pl, pic))

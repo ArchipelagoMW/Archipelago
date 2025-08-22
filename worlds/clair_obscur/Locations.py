@@ -40,11 +40,17 @@ def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> N
                 region,
                 location_data.default_item
             )
-            conditions = data.locations[location_name].condition
+            conditions = location_data.condition
             if conditions:
                 for cond in conditions:
                     amount = conditions[cond]
                     add_rule(location, lambda state, con=cond, pl=world.player, am=amount: state.has(con, pl, am))
+
+            pictos = location_data.pictos_level
+            if pictos > 1:
+                pictos = world.convert_pictos(pictos)
+                add_rule(location, lambda state, pl=world.player, pic=pictos: state.has_group("Picto", pl, pic))
+
             region.locations.append(location)
             code += 1
 
