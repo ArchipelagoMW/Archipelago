@@ -1,4 +1,5 @@
 import typing
+from math import ceil
 from typing import List, Mapping, Any
 
 from BaseClasses import Tutorial, Group, CollectionState
@@ -57,6 +58,10 @@ class ClairObscurWorld(World):
 
     settings: typing.ClassVar[ClairObscurSettings]
 
+    def convert_pictos(self, pictos_level: int):
+        #Converts the connection destination's pictos level into an amount of pictos required to reach that level with
+        #scale-by-order-received.
+        return ceil((pictos_level - 1) * 5.8)
 
     def create_items(self) -> None:
 
@@ -66,10 +71,6 @@ class ClairObscurWorld(World):
             "Progressive Rock": 5,
             "Rock Crystal": 3,
             "Lost Gestral": 9,
-            "Chroma Catalyst": 10,
-            "Polished Chroma Catalyst": 30,
-            "Resplendent Chroma Catalyst": 40,
-            "Grandiose Chroma Catalyst": 30,
             "Shape of Health": 2,
             "Shape of Life": 2,
             "Shape of Energy": 2,
@@ -97,7 +98,6 @@ class ClairObscurWorld(World):
 
         #Add filler to match the amount of locations
 
-
         location_count = len(data.locations)
 
         remaining_items_to_generate = location_count - len(self.item_pool)
@@ -105,13 +105,28 @@ class ClairObscurWorld(World):
         #TODO- proper filler generation. Add proportional amounts of upgrade mats to an array i.e. Polished, Polished,
         #Polished, Polished 3-pack - and modulo iterate through them
 
-        #filler_item_sequence = []
-        # for i in range(0, remaining_items_to_generate):
-            #i modulo filler_item_sequence length
+        #Based on the amount of materials normally needed to upgrade a weapon from level 1 to 32; 4 : 12 : 27 : 35
+        filler_amounts = {
+            "Chroma Catalyst (5)": 1,
+            "Polished Chroma Catalyst (5)": 2,
+            "Resplendent Chroma Catalyst (5)": 3,
+            "Grandiose Chroma Catalyst (5)": 4,
+            "Colour of Lumina (5)": 10
+        }
 
+        filler_item_sequence: List[str] = []
+        for item, amount in filler_amounts.items():
+            filler_item_sequence += [item] * amount
+
+        sequence_length = len(filler_item_sequence)
         for i in range(0, remaining_items_to_generate):
-            item = self.create_item("Resplendent Chroma Catalyst")
-            self.item_pool.append(item)
+            item_name = filler_item_sequence[i % sequence_length]
+            self.item_pool.append(self.create_item(item_name))
+            # i modulo filler_item_sequence length
+
+        # for i in range(0, remaining_items_to_generate):
+        #     item = self.create_item("Resplendent Chroma Catalyst (3)")
+        #     self.item_pool.append(item)
         self.multiworld.itempool += self.item_pool
 
     def fill_slot_data(self) -> typing.Dict[str, Any]:
@@ -140,7 +155,7 @@ class ClairObscurWorld(World):
         return [self.create_item(self.get_filler_item_name())]
 
     def get_filler_item_name(self) -> str:
-        return "Resplendent Chroma Catalyst"
+        return "Colour of Lumina (5)"
 
     def create_regions(self) -> None:
         from .Regions import create_regions, connect_regions
