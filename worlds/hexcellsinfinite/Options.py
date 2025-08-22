@@ -75,6 +75,7 @@ class PuzzleOptions(Choice):
     Vanilla: No puzzle randomization, all puzzles are as they are in the base game.
     Randomized: Every level has a randomly generated puzzle.
     True Randomized: Every level has a randomly generated puzzle, that is re-randomized if you leave the level.
+    NOT CURRENTLY IMPLEMENTED 
     """
     display_name = "Puzzle Options"
     option_vanilla = 1
@@ -95,6 +96,7 @@ class LevelUnlockType(Choice):
     This determines how levels will be unlocked.
     Vanilla: Levels are unlocked in groups of 6, with 6 groups total.
     Individual: Levels are unlocked individually, with individual gem amount requirements.
+    NOT CURRENTLY IMPLEMENTED 
     """
     display_name = "Level Unlock Type"
     option_vanilla = 1
@@ -103,7 +105,8 @@ class LevelUnlockType(Choice):
 
 class HardGeneration(Toggle):
     """
-    When enabled, puzzle will be generated with harder sets. Does not affect "Vanilla" under "Puzzle Options". 
+    When enabled, puzzle will be generated with harder sets. Does not affect "Vanilla" under "Puzzle Options".
+    NOT CURRENTLY IMPLEMENTED 
     """
     display_name = "Hard Generation"
 
