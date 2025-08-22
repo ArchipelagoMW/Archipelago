@@ -130,11 +130,10 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No missing location checks found.")
         return True
 
-    def output_datapackage_part(self, name: str) -> bool:
+    def output_datapackage_part(self, name: typing.Literal["Item Names", "Location Names"]) -> bool:
         """
         Helper to digest a specific section of this game's datapackage.
 
-        :param key: The dictionary key in the datapackage.
         :param name: Printed to the user as context for the part.
 
         :return: Whether the process was successful.
