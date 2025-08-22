@@ -124,7 +124,7 @@ def create_multiple_items(world: "HexcellsInfiniteWorld", name: str, count: int,
 # I've seen some games that dynamically add item codes such as DOOM as well
 hexcells_infinite_items = {
     # Progression items
-    "Gem": ItemData(6565, ItemClassification.progression),
+    "Gem": ItemData(1, ItemClassification.progression),
 }
 
 # I like to split up the items so that its easier to look at and since sometimes you only need to look at one specific type of list

@@ -17,7 +17,7 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can customize your options by visiting the [Hexcells Infionite Options Page](/games/Hexcells%20Infinite/player-options).
+You can customize your options by visiting the [Hexcells Infinite Options Page](/games/Hexcells%20Infinite/player-options).
 
 ### Connect to the MultiServer
 
