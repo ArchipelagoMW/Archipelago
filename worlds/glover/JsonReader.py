@@ -319,6 +319,10 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                 #As Events
                 if not self.options.checkpoint_checks:
                     ap_ids.clear()
+            case 5:
+                #Goals
+                if not self.options.portalsanity:
+                    ap_ids.clear()
             case 6:
                 #Tip hints
                 if self.options.mr_hints:
@@ -461,6 +465,8 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
         world_prefix : str = create_world_prefix(self.world_prefixes, world_index)
         #Go over the Glover worlds
         for level_index, level_key in enumerate(each_world):
+            if level_index == 5 and not self.options.bonus_levels:
+                continue
             each_level = each_world[level_key]
             checkpoint_entry_pairs : list = levels_in_order[loc_con_index]
             loc_con_index += 1
@@ -469,22 +475,23 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
             prefix : str = level_name + ": "
             map_regions : List[RegionPair] = []
             location_data_list : List[LocationData] = []
-            #Get the check name
-            for check_name in each_level:
-                check_info = each_level[check_name]
-                #Location
-                if type(check_info) is list:
-                    location_data_list.extend(create_location_data(self, check_name, check_info, level_name))
-                #In-Level Region
-                if type(check_info) is dict:
-                    new_region_pair = create_region_pair(self, check_info, check_name, level_name)
-                    map_regions.append(new_region_pair)
-                    #You get the one from checkpoints by default
-                    region_checkpoints = []
-                    for check_index in range(1, len(checkpoint_entry_pairs)):
-                        matching_name = checkpoint_entry_pairs[check_index]
-                        if matching_name == check_name:
-                            region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
+            #Bonus levels are off by default
+            if not (level_index == 5 and not self.options.bonus_levels):
+                for check_name in each_level:
+                    check_info = each_level[check_name]
+                    #Location
+                    if type(check_info) is list:
+                        location_data_list.extend(create_location_data(self, check_name, check_info, level_name))
+                    #In-Level Region
+                    if type(check_info) is dict:
+                        new_region_pair = create_region_pair(self, check_info, check_name, level_name)
+                        map_regions.append(new_region_pair)
+                        #You get the one from checkpoints by default
+                        region_checkpoints = []
+                        for check_index in range(1, len(checkpoint_entry_pairs)):
+                            matching_name = checkpoint_entry_pairs[check_index]
+                            if matching_name == check_name:
+                                region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
             #Sort the in-level regions
             map_regions = sorted(map_regions, key=attrgetter('base_id'))
             connect_region_pairs(self, map_regions)

@@ -55,6 +55,11 @@ class EntranceRandomizer(DefaultOnToggle):
     """
     display_name = "Entrance Randomizer"
 
+class Portalsanity(Toggle):
+    """Goals and All Garibs in Level are checks. Portals and garib completion marks are items. Default off.
+    """
+    display_name = "Portalsanity"
+
 class SpawningCheckpointRandomizer(Toggle):
     """Spawning checkpoints are randomized. Default off.
     """
@@ -279,6 +284,7 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     garib_logic : GaribLogic
     garib_sorting : GaribSorting
     entrance_randomizer : EntranceRandomizer
+    portalsanity : Portalsanity
     spawning_checkpoint_randomizer : SpawningCheckpointRandomizer
     bonus_levels : EnableBonuses
     tag_link : TagLink

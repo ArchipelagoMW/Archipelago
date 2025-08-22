@@ -182,10 +182,16 @@ class GloverWorld(World):
 
     def generate_early(self):
         #Garib Sorting Order
-        if self.options.garib_sorting == GaribLogic.option_garibsanity:
+        if self.options.garib_sorting == GaribSorting.option_random_order:
             self.random.shuffle(self.garib_level_order)
-            #if not self.options.bonus_levels:
-            #    print("YIPEE")
+            #Bonus levels all go at the end if they're disabled
+            if not self.options.bonus_levels:
+                self.garib_level_order.append(self.garib_level_order.pop(["Atl?", 25]))
+                #self.garib_level_order.append(self.garib_level_order.pop(["Crn?", 20]))
+                #self.garib_level_order.append(self.garib_level_order.pop(["Prt?", 50]))
+                #self.garib_level_order.append(self.garib_level_order.pop(["Pht?", 60]))
+                #self.garib_level_order.append(self.garib_level_order.pop(["FoF?", 56]))
+                #self.garib_level_order.append(self.garib_level_order.pop(["Otw?", 50]))
         #Setup the spawning checkpoints
         if self.options.spawning_checkpoint_randomizer:
             #If randomized, pick a number from it's assigned value to the current value
@@ -199,6 +205,19 @@ class GloverWorld(World):
         if self.options.entrance_randomizer:
             self.random.shuffle(self.wayroom_entrances)
             self.random.shuffle(self.overworld_entrances)
+            if not self.options.bonus_levels:
+                self.wayroom_entrances.remove("Atl?")
+                self.wayroom_entrances.remove("Crn?")
+                self.wayroom_entrances.remove("Prt?")
+                self.wayroom_entrances.remove("Pht?")
+                self.wayroom_entrances.remove("FoF?")
+                self.wayroom_entrances.remove("Otw?")
+                self.wayroom_entrances.insert(4, "Atl?")
+                self.wayroom_entrances.insert(9, "Crn?")
+                self.wayroom_entrances.insert(14, "Prt?")
+                self.wayroom_entrances.insert(19, "Pht?")
+                self.wayroom_entrances.insert(24, "FoF?")
+                self.wayroom_entrances.insert(29, "Otw?")
         #Set the starting ball
         match self.options.starting_ball:
             case StartingBall.option_rubber_ball:
@@ -402,6 +421,17 @@ class GloverWorld(World):
         multiworld : MultiWorld = self.multiworld
         player : int = self.player
 
+        #TEMP LEVEL ORDER
+        multiworld.get_location("Atl1: Goal", player).place_locked_item(self.create_event("AtlH 2 Gate"))
+        multiworld.get_location("Atl2: Goal", player).place_locked_item(self.create_event("AtlH 3 Gate"))
+        goal_location_name : str = "Atl3: Goal"
+        end_region : Region = multiworld.get_location(goal_location_name, player).parent_region
+        goal_location : Location = Location(player, "Ending", None, end_region)
+        end_region.locations.append(goal_location)
+        add_rule(goal_location, lambda state: state.can_reach_location(goal_location_name, player))
+        goal_location.place_locked_item(self.create_event("Victory"))
+        multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
+
         #Menu loads into the hubworld
         hubworld : Region = multiworld.get_region("Hubworld", player)
         multiworld.get_region("Menu", player).connect(hubworld)
@@ -445,15 +475,6 @@ class GloverWorld(World):
             reaching_region : Region = multiworld.get_location(reaching_location, player).parent_region
             reaching_region.connect(connecting_level, loading_zone, lambda state, each_location = reaching_location: state.can_reach_location(each_location, player))
 
-        goal_location_name : str = "Atl3: Goal"
-        end_region : Region = multiworld.get_location(goal_location_name, player).parent_region
-        goal_location : Location = Location(player, "Ending", None, end_region)
-        end_region.locations.append(goal_location)
-        add_rule(goal_location, lambda state: state.can_reach_location(goal_location_name, player))
-        goal_location.place_locked_item(self.create_event("Victory"))
-        multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
-
-
     def connect_entrances(self):
         #Use reachable regions when I need to debug stuff in this ', self.multiworld.blabla)'
         self.entrance_randomizer()
@@ -469,6 +490,7 @@ class GloverWorld(World):
         options["garib_logic"] = self.options.garib_logic.value
         options["garib_sorting"] = self.options.garib_sorting.value
         options["entrance_randomizer"] = self.options.entrance_randomizer.value
+        options["portalsanity"] = self.options.portalsanity.value
         options["spawning_checkpoint_randomizer"] = self.options.spawning_checkpoint_randomizer.value
         options["bonus_levels"] = self.options.bonus_levels.value
         #options["atlantis_bonus"] = self.options.atlantis_bonus.value
