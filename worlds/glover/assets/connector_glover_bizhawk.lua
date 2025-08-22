@@ -72,6 +72,7 @@ local TOTAL_SPACE_BONUS_GARIBS = 0;
 --------------- DEATH LINK ----------------------
 local DEATH_LINK_TRIGGERED = false;
 local DEATH_LINK = false
+local DEATH_MESSAGE = "You Died :3"
 
 --------------- TAG LINK ------------------------
 local TAG_LINK_TRIGGERED = false
@@ -2006,31 +2007,25 @@ function GLOVERHACK:getHubMap()
     return mainmemory.readbyte(hackPointerIndex + self.hub_map)
 end
 
-function GLOVERHACK:getPCPointer()
-    -- print("GetPCPtr")
-    local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
-    if hackPointerIndex == nil
-    then
-        return nil
-    end
-	return GLOVERHACK:dereferencePointer(hackPointerIndex);
+function GLOVERHACK:getPCDeath()
+	local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
+    return mainmemory.readbyte(hackPointerIndex + self.pc_deathlink);
 end
 
--- function GLOVERHACK:getPCDeath()
---     return mainmemory.readbyte(self:getPCPointer() + self.pc_death_us);
--- end
+function GLOVERHACK:getPCTag()
+	local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
+    return mainmemory.readbyte(hackPointerIndex + self.pc_taglink);
+end
 
--- function GLOVERHACK:getPCTag()
---     return mainmemory.readbyte(self:getPCPointer() + self.pc_tag_us);
--- end
+function GLOVERHACK:setPCDeath(DEATH_COUNT)
+	local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
+    mainmemory.writebyte(hackPointerIndex + self.pc_deathlink, DEATH_COUNT);
+end
 
--- function GLOVERHACK:setPCDeath(DEATH_COUNT)
---     mainmemory.writebyte(self:getPCPointer() + self.pc_death_us, DEATH_COUNT);
--- end
-
--- function GLOVERHACK:setPCTag(TAG_COUNT)
---     mainmemory.writebyte(self:getPCPointer() + self.pc_tag_us, TAG_COUNT);
--- end
+function GLOVERHACK:setPCTag(TAG_COUNT)
+	local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
+    mainmemory.writebyte(hackPointerIndex + self.pc_taglink, TAG_COUNT);
+end
 
 -- function GLOVERHACK:getAPDeath()
 --    return mainmemory.readbyte(self:getPCPointer() + self.pc_death_ap);
@@ -2057,13 +2052,15 @@ end
 -- 	return GLOVERHACK:dereferencePointer(self.n64 + hackPointerIndex);
 -- end
 
--- function GLOVERHACK:getNLocalDeath()
---    return mainmemory.readbyte(GLOVERHACK:getNPointer() + self.n64_death_us);
--- end
+function GLOVERHACK:getNLocalDeath()
+	local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
+    return mainmemory.readbyte(self.n64_deathlink + hackPointerIndex);
+end
 
--- function GLOVERHACK:getNLocalTag()
---    return mainmemory.readbyte(GLOVERHACK:getNPointer() + self.n64_tag_us);
--- end
+function GLOVERHACK:getNLocalTag()
+	local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
+   return mainmemory.readbyte(hackPointerIndex + self.n64_taglink);
+end
 
 function GLOVERHACK:getRomVersion()
     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
@@ -2478,59 +2475,77 @@ function process_block(block)
     then
         processAGIItem(block['items'])
     end
-    -- if block['triggerDeath'] == true and DEATH_LINK == true
-    -- then
-    --     local death = GVR:getAPDeath()
-    --     GVR:setAPDeath(death + 1)
-    --     local randomDeathMsg = DEATH_MESSAGES[math.random(1, #DEATH_MESSAGES)]["message"]
-    --     table.insert(MESSAGE_TABLE, {randomDeathMsg, 15})
-    -- end
-    -- if block['triggerTag'] == true and TAG_LINK == true
-    -- then
-    --     local tag = GVR:getAPTag()
-    --     GVR:setAPTag(tag + 1)
-    -- end
+	if block['triggerDeath'] ~= nil
+	then
+    	if block['triggerDeath'] == true and DEATH_LINK == true
+    	then
+			print("Death")
+    	    -- local death = GVR:getAPDeath()
+    	    -- GVR:setAPDeath(death + 1)
+    	    table.insert(MESSAGE_TABLE, {DEATH_MESSAGE, 15})
+    	end
+	end
+    if block['triggerTag'] ~= nil
+	then
+		if block['triggerTag'] == true and TAG_LINK == true
+    	then
+			print("Tag")
+    	    -- local tag = GVR:getAPTag()
+    	    -- GVR:setAPTag(tag + 1)
+    	end
+	end
 end
 
 function SendToClient()
     local retTable = {}
     local detect_death = false
     local detect_tag = false
-    -- print(GVR:getNLocalDeath())
-    -- print(GVR:getPCDeath())
-    -- if GVR:getPCDeath() ~= GVR:getNLocalDeath() and DEATH_LINK == false
-    -- then
-    --     local randomDeathMsg = DEATH_MESSAGES[math.random(1, #DEATH_MESSAGES)]["message"]
-    --     table.insert(MESSAGE_TABLE, {randomDeathMsg, 15})
-    --     local died = GVR:getPCDeath()
-    --     GVR:setPCDeath(died + 1)
-    -- end
-    -- if GVR:getPCDeath() ~= GVR:getNLocalDeath() and DEATH_LINK == true and DEATH_LINK_TRIGGERED == false
-    -- then
-    --     detect_death = true
-    --     local died = GVR:getPCDeath()
-    --     GVR:setPCDeath(died + 1)
-    --     DEATH_LINK_TRIGGERED = true
-    --     local randomDeathMsg = DEATH_MESSAGES[math.random(1, #DEATH_MESSAGES)]["message"]
-    --     table.insert(MESSAGE_TABLE, {randomDeathMsg, 15})
-    -- else
-    --     DEATH_LINK_TRIGGERED = false
-    -- end
+	local deathAp = GVR:getPCDeath()
+	local death64 = GVR:getNLocalDeath()
+    if deathAp ~= death64
+    then
+		if DEATH_LINK == true
+		then
+			if DEATH_LINK_TRIGGERED == false
+			then
+            	detect_death = true
+            	GVR:setPCDeath(deathAp + 1)
+            	DEATH_LINK_TRIGGERED = true
+				print(deathAp)
+				print(death64)
+            	table.insert(MESSAGE_TABLE, {DEATH_MESSAGE, 15})
+			end
+		else
+            -- table.insert(MESSAGE_TABLE, {DEATH_MESSAGE, 15})
+            local died = GVR:getPCDeath()
+            GVR:setPCDeath(died + 1)
+		end
+    else
+        DEATH_LINK_TRIGGERED = false
+    end
 
-    -- if GVR:getPCTag() ~= GVR:getNLocalTag() and TAG_LINK == false
-    -- then
-    --     local tag = GVR:getPCTag()
-    --     GVR:setPCTag(tag + 1)
-    -- end
-    -- if GVR:getPCTag() ~= GVR:getNLocalTag() and TAG_LINK == true and TAG_LINK_TRIGGERED == false
-    -- then
-    --     detect_tag = true
-    --     local tag = GVR:getPCTag()
-    --     GVR:setPCTag(tag + 1)
-    --     TAG_LINK_TRIGGERED = true
-    -- else
-    --     TAG_LINK_TRIGGERED = false
-    -- end
+	
+    if GVR:getPCTag() ~= GVR:getNLocalTag()
+    then
+		if TAG_LINK == true
+		then
+			if TAG_LINK_TRIGGERED == false
+			then
+        		detect_tag = true
+        		local tag = GVR:getPCTag()
+        		GVR:setPCTag(tag + 1)
+        		TAG_LINK_TRIGGERED = true
+			else
+        		TAG_LINK_TRIGGERED = false
+			end
+		else
+        	local tag = GVR:getPCTag()
+        	GVR:setPCTag(tag + 1)
+        	TAG_LINK_TRIGGERED = false
+		end
+	else
+        TAG_LINK_TRIGGERED = false
+    end
     retTable["scriptVersion"] = SCRIPT_VERSION;
     retTable["playerName"] = PLAYER;
     retTable["deathlinkActive"] = DEATH_LINK;
@@ -2570,10 +2585,14 @@ function SendToClient()
         PRINT_GOAL = true;
         CUR_STATE = STATE_OK
     end
-    -- if DETECT_DEATH == true
-    -- then
-    --     DETECT_DEATH = false
-    -- end
+    if detect_death == true
+    then
+        detect_death = false
+    end
+	if detect_tag == true
+	then
+		detect_tag = false
+	end
 end
 
 function receive()
@@ -2673,14 +2692,14 @@ function process_slot(block)
     -- then
     --     GVR:setRandomizeCheckpoint(block['slot_checkpoints'])
     -- end
-    -- if block['slot_deathlink'] ~= nil and block['slot_deathlink'] ~= 0
-    -- then
-    --     DEATH_LINK = true
-    -- end
-    -- if block['slot_taglink'] ~= nil and block['slot_taglink'] ~= 0
-    -- then
-    --     TAG_LINK = true
-    -- end
+    if block['slot_deathlink'] ~= nil and block['slot_deathlink'] ~= 0
+    then
+        DEATH_LINK = true
+    end
+    if block['slot_taglink'] ~= nil and block['slot_taglink'] ~= 0
+    then
+        TAG_LINK = true
+    end
     if block['slot_version'] ~= nil and block['slot_version'] ~= ""
     then
         CLIENT_VERSION = block['slot_version']
