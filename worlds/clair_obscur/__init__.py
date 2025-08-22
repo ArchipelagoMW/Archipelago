@@ -1,4 +1,5 @@
 import typing
+from math import ceil
 from typing import List, Mapping, Any
 
 from BaseClasses import Tutorial, Group, CollectionState
@@ -57,6 +58,10 @@ class ClairObscurWorld(World):
 
     settings: typing.ClassVar[ClairObscurSettings]
 
+    def convert_pictos(self, pictos_level: int):
+        #Converts the connection destination's pictos level into an amount of pictos required to reach that level with
+        #scale-by-order-received.
+        return ceil((pictos_level - 1) * 5.8)
 
     def create_items(self) -> None:
 

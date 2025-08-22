@@ -18,6 +18,8 @@ class ClairObscurLocationData(NamedTuple):
     region: str
     default_item: str
     condition: Dict[str, int]
+    pictos_level: int
+
 
 class ClairObscurRegionData:
     name: str
@@ -67,12 +69,14 @@ def populate_data_locations() -> Dict[str, ClairObscurLocationData]:
     for location in locations_json:
         location_name: str = location["name"]
         location_condition = location["condition"]
+        pictos = location["pictos_level"] if location.get("pictos_level") else 1
 
         new_location = ClairObscurLocationData(
             location_name,
             location["location"],
             location["original_item"],
-            location_condition
+            location_condition,
+            pictos
         )
 
         locations[location_name] = new_location
