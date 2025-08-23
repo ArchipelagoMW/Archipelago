@@ -73,6 +73,10 @@ class APQuestContext(CommonContext):
         await self.get_username()
         await self.send_connect(game=self.game)
 
+    def handle_connection_loss(self, msg: str):
+        self.ui.allow_intro_song()
+        super().handle_connection_loss(msg)
+
     async def apquest_loop(self) -> None:
         while not self.exit_event.is_set():
             if self.connection_status != ConnectionStatus.GAME_RUNNING:
