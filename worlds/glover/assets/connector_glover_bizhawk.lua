@@ -71,12 +71,11 @@ local TOTAL_SPACE_BONUS_GARIBS = 0;
 
 --------------- DEATH LINK ----------------------
 local DEATH_LINK_TRIGGERED = false;
-local DEATH_LINK = false
-local DEATH_MESSAGE = "You Died :3"
+local DEATH_LINK = true
 
 --------------- TAG LINK ------------------------
 local TAG_LINK_TRIGGERED = false
-local TAG_LINK = false
+local TAG_LINK = true
 
 
 
@@ -1976,6 +1975,14 @@ function GLOVERHACK:setRandomizeCheckpoint(checkpoint)
     mainmemory.writebyte(self.randomize_checkpoints + GLOVERHACK:getSettingPointer(), checkpoint);
 end
 
+function GLOVERHACK:setDeathlinkEnabled(newState)
+    mainmemory.writebyte(self.deathlink + GLOVERHACK:getSettingPointer(), newState);
+end
+
+function GLOVERHACK:setTaglinkEnabled(newState)
+    mainmemory.writebyte(self.taglink + GLOVERHACK:getSettingPointer(), newState);
+end
+
 function GLOVERHACK:getItemsPointer()
     -- print("Checking Items Flags")
     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
@@ -2593,6 +2600,8 @@ function receive()
     if PLAYER == "" and SEED == 0
     then
         getSlotData()
+		GVR:setDeathlinkEnabled(true)
+    	GVR:setTaglinkEnabled(true)
     else
         -- Send the message
         SendToClient()
@@ -2682,14 +2691,6 @@ function process_slot(block)
     -- then
     --     GVR:setRandomizeCheckpoint(block['slot_checkpoints'])
     -- end
-    if block['slot_deathlink'] ~= nil and block['slot_deathlink'] ~= 0
-    then
-        DEATH_LINK = true
-    end
-    if block['slot_taglink'] ~= nil and block['slot_taglink'] ~= 0
-    then
-        TAG_LINK = true
-    end
     if block['slot_version'] ~= nil and block['slot_version'] ~= ""
     then
         CLIENT_VERSION = block['slot_version']
