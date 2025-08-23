@@ -117,9 +117,9 @@ def set_entrance_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Whirlwind, player) or state.has_all([ItemName.Lifting_Gem, ItemName.Frost_Jewel], player))
 
     add_rule(world.get_entrance(EntranceName.WesternSeaToProx),
-             lambda state: state.has(ItemName.Magma_Ball, player))
+             lambda state: state.has(ItemName.Ship_Cannon, player))
     add_rule(world.get_entrance(EntranceName.MarsLighthouseToMarsLighthouse_Activated),
-            lambda state: state.has(ItemName.Flame_Dragons_defeated, player) and state.has(ItemName.Mars_Star, player))
+            lambda state: state.has(ItemName.Mars_Lighthouse_Heated, player))
     
     if world.options.lemurian_ship == 0:
         add_rule(world.get_entrance(EntranceName.MadraToLemurianShip),
@@ -421,7 +421,7 @@ def set_access_rules(world: 'GSTLAWorld'):
 
 
     #Gabomba Statue
-    add_rule(world.get_location(LocationName.Gabomba_Statue_Event),
+    add_rule(world.get_location(LocationName.Gabomba_Statue_Ritual),
              lambda state: state.has(ItemName.Pound_Cube, player))
 
     add_rule(world.get_location(LocationName.Steel),
@@ -738,12 +738,14 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Whirlwind, player))
 
     #Loho
-    add_rule(world.get_location(LocationName.Loho_Golem_Core),
-             lambda state: state.has(ItemName.Magma_Ball, player) and state.has(ItemName.Scoop_Gem, player))
-    add_rule(world.get_location(LocationName.Loho_Golem_Core_Two),
-             lambda state: state.has(ItemName.Magma_Ball, player) and state.has(ItemName.Scoop_Gem, player) and state.has(ItemName.Lifting_Gem, player))
-    add_rule(world.get_location(LocationName.Lull),
+    add_rule(world.get_location(LocationName.Loho_Ship_Cannon),
              lambda state: state.has(ItemName.Magma_Ball, player))
+    add_rule(world.get_location(LocationName.Loho_Golem_Core),
+             lambda state: state.has(ItemName.Ship_Cannon, player) and state.has(ItemName.Scoop_Gem, player))
+    add_rule(world.get_location(LocationName.Loho_Golem_Core_Two),
+             lambda state: state.has(ItemName.Ship_Cannon, player) and state.has(ItemName.Scoop_Gem, player) and state.has(ItemName.Lifting_Gem, player))
+    add_rule(world.get_location(LocationName.Lull),
+             lambda state: state.has(ItemName.Ship_Cannon, player))
 
     #Angara Cavern
     add_rule(world.get_location(LocationName.Angara_Cavern_Haures),
@@ -776,6 +778,9 @@ def set_access_rules(world: 'GSTLAWorld'):
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Mars_Star),
              lambda state: state.has(ItemName.Flame_Dragons_defeated, player))
+
+    add_rule(world.get_location(LocationName.Mars_Lighthouse_Heated),
+             lambda state: state.has(ItemName.Flame_Dragons_defeated, player) and state.has(ItemName.Mars_Star, player))
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Orihalcon),
              lambda state: state.has(ItemName.Pound_Cube, player) and state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Blaze, player) and state.has(ItemName.Grindstone, player))
@@ -982,7 +987,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Cyclone_Chip, player))
         
         add_rule(world.get_location(LocationName.Loho_Mythril_Silver),
-             lambda state: state.has(ItemName.Magma_Ball, player) and state.has(ItemName.Scoop_Gem, player))
+             lambda state: state.has(ItemName.Ship_Cannon, player) and state.has(ItemName.Scoop_Gem, player))
 
         if world.options.reveal_hidden_item == 1:
                 for loc in location_type_to_data[LocationType.Hidden]:

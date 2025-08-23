@@ -553,6 +553,8 @@ class GameData:
             # with the reunion flag
             EventDatum(event_offset + 20, 0xA21, "Contigo - Reunion", "Reunion"),
             EventDatum(event_offset + 21, 0x1, "Victory Event", "Victory"),
+            EventDatum(event_offset + 22, 0xA5F, "Loho - Ship Cannon", "Ship Cannon"),
+            EventDatum(event_offset + 23, 0xA30, "Mars Lighthouse - Heated", "Mars Lighthouse Heated"),
             # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Karst", "Karst defeated"),
             # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Agatio", "Agatio defeated"),
         ]

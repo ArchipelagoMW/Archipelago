@@ -236,7 +236,7 @@ class InternalLocationName:
     Mars_Lighthouse_Doom_Dragon = "Mars Lighthouse - Doom Dragon"
     Alhafra_Briggs = "Alhafra Briggs"
     Alhafra_Prison_Briggs = "Alhafra Prison Briggs"
-    Gabomba_Statue_Event = "Gabomba Statue Event"
+    Gabomba_Statue_Ritual = "Gabomba Statue Ritual"
     Gaia_Rock_Serpent = "Gaia Rock - Serpent"
     Sea_of_Time_Poseidon = "Sea of Time - Poseidon"
     Lemurian_Ship_Aqua_Hydra = "Lemurian Ship - Aqua Hydra"
@@ -254,6 +254,8 @@ class InternalLocationName:
     Anemos_Inner_Sanctum_Dullahan = "Anemos Inner Sanctum - Dullahan"
     Contigo_Reunion = "Contigo - Reunion"
     Victory_Event = "Victory Event"
+    Loho_Ship_Cannon = "Loho - Ship Cannon"
+    Mars_Lighthouse_Heated = "Mars Lighthouse - Heated"
     
 
     ##remainder
@@ -516,7 +518,7 @@ ids_by_loc_name: Dict[str, int] = {
     InternalLocationName.Mars_Lighthouse_Doom_Dragon: 5001,
     InternalLocationName.Alhafra_Briggs: 5002,
     InternalLocationName.Alhafra_Prison_Briggs: 5003,
-    InternalLocationName.Gabomba_Statue_Event: 5004,
+    InternalLocationName.Gabomba_Statue_Ritual: 5004,
     InternalLocationName.Gaia_Rock_Serpent: 5005,
     InternalLocationName.Sea_of_Time_Poseidon: 5006,
     InternalLocationName.Lemurian_Ship_Aqua_Hydra: 5007,
@@ -534,6 +536,8 @@ ids_by_loc_name: Dict[str, int] = {
     InternalLocationName.Anemos_Inner_Sanctum_Dullahan: 5019,
     InternalLocationName.Contigo_Reunion: 5020,
     InternalLocationName.Victory_Event: 5021,
+    InternalLocationName.Loho_Ship_Cannon: 5022,
+    InternalLocationName.Mars_Lighthouse_Heated: 5023,
     InternalLocationName.Daila_Herb: 991776,
     InternalLocationName.Daila_Smoke_Bomb: 991784,
     InternalLocationName.Daila_Psy_Crystal: 991812,
@@ -932,7 +936,7 @@ ids_by_py_name: Dict[str, int] = {
     "Mars_Lighthouse_Doom_Dragon": 5001,
     "Alhafra_Briggs": 5002,
     "Alhafra_Prison_Briggs": 5003,
-    "Gabomba_Statue_Event": 5004,
+    "Gabomba_Statue_Ritual": 5004,
     "Gaia_Rock_Serpent": 5005,
     "Sea_of_Time_Poseidon": 5006,
     "Lemurian_Ship_Aqua_Hydra": 5007,
@@ -950,6 +954,8 @@ ids_by_py_name: Dict[str, int] = {
     "Anemos_Inner_Sanctum_Dullahan": 5019,
     "Contigo_Reunion": 5020,
     "Victory_Event": 5021,
+    "Loho_Ship_Cannon": 5022,
+    "Mars_Lighthouse_Heated": 5023,
     "Daila_Herb": 991776,
     "Daila_Smoke_Bomb": 991784,
     "Daila_Psy_Crystal": 991812,
@@ -1348,7 +1354,7 @@ loc_names_by_id: Dict[int, str] = {
     5001: InternalLocationName.Mars_Lighthouse_Doom_Dragon,
     5002: InternalLocationName.Alhafra_Briggs,
     5003: InternalLocationName.Alhafra_Prison_Briggs,
-    5004: InternalLocationName.Gabomba_Statue_Event,
+    5004: InternalLocationName.Gabomba_Statue_Ritual,
     5005: InternalLocationName.Gaia_Rock_Serpent,
     5006: InternalLocationName.Sea_of_Time_Poseidon,
     5007: InternalLocationName.Lemurian_Ship_Aqua_Hydra,
@@ -1366,6 +1372,8 @@ loc_names_by_id: Dict[int, str] = {
     5019: InternalLocationName.Anemos_Inner_Sanctum_Dullahan,
     5020: InternalLocationName.Contigo_Reunion,
     5021: InternalLocationName.Victory_Event,
+    5022: InternalLocationName.Loho_Ship_Cannon,
+    5023: InternalLocationName.Mars_Lighthouse_Heated,
     991776: InternalLocationName.Daila_Herb,
     991784: InternalLocationName.Daila_Smoke_Bomb,
     991812: InternalLocationName.Daila_Psy_Crystal,

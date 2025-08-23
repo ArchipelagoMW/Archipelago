@@ -354,7 +354,7 @@ regions: Dict[str, RegionData] = {
         LocationName.Gabomba_Statue_Mimic,
         LocationName.Gabomba_Statue_Elixir,
         LocationName.Gabomba_Statue_Bone_Armlet,
-        LocationName.Gabomba_Statue_Event,
+        LocationName.Gabomba_Statue_Ritual,
         LocationName.Steel
     ],
     [
@@ -767,7 +767,8 @@ regions: Dict[str, RegionData] = {
         LocationName.Loho_Mythril_Silver,
         LocationName.Loho_Golem_Core,
         LocationName.Loho_Golem_Core_Two,
-        LocationName.Lull
+        LocationName.Lull,
+        LocationName.Loho_Ship_Cannon,
     ]),
     RegionName.AngaraCavern: RegionData(RegionName.AngaraCavern,
     [
@@ -800,6 +801,7 @@ regions: Dict[str, RegionData] = {
         LocationName.Mars_Lighthouse_Flame_Dragons,
         LocationName.Mars_Lighthouse_Teleport_Lapis,
         LocationName.Balm,
+        LocationName.Mars_Lighthouse_Heated,
     ],
     [
         EntranceName.MarsLighthouseToMarsLighthouse_Activated

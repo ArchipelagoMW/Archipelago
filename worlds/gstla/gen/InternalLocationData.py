@@ -263,7 +263,7 @@ events = [
     InternalLocationData(2431, 2431, 5003, 5003, [0], 0,
         5003, True, True, LocationType.Event, LocationRestriction(7), True), # Alhafra Prison Briggs Briggs escaped
     InternalLocationData(2303, 2303, 5004, 5004, [0], 0,
-        5004, True, True, LocationType.Event, LocationRestriction(7), True), # Gabomba Statue Event Gabomba Statue Completed
+        5004, True, True, LocationType.Event, LocationRestriction(7), True), # Gabomba Statue Ritual Gabomba Statue Completed
     InternalLocationData(2542, 2542, 5005, 5005, [0], 0,
         5005, True, True, LocationType.Event, LocationRestriction(7), True), # Gaia Rock - Serpent Serpent defeated
     InternalLocationData(1637, 1637, 5006, 5006, [0], 0,
@@ -298,6 +298,10 @@ events = [
         5020, True, True, LocationType.Event, LocationRestriction(7), True), # Contigo - Reunion Reunion
     InternalLocationData(1, 1, 5021, 5021, [0], 0,
         5021, True, True, LocationType.Event, LocationRestriction(7), True), # Victory Event Victory
+    InternalLocationData(2655, 2655, 5022, 5022, [0], 0,
+        5022, True, True, LocationType.Event, LocationRestriction(7), True), # Loho - Ship Cannon Ship Cannon
+    InternalLocationData(2608, 2608, 5023, 5023, [0], 0,
+        5023, True, True, LocationType.Event, LocationRestriction(7), True), # Mars Lighthouse - Heated Mars Lighthouse Heated
     
 ]
 

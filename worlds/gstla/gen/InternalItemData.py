@@ -188,7 +188,7 @@ events: List[InternalEventItemData] = [
     InternalEventItemData(5001, 1912, "Mars Lighthouse - Doom Dragon", "Doom Dragon Defeated"),
     InternalEventItemData(5002, 2219, "Alhafra Briggs", "Briggs defeated"),
     InternalEventItemData(5003, 2431, "Alhafra Prison Briggs", "Briggs escaped"),
-    InternalEventItemData(5004, 2303, "Gabomba Statue Event", "Gabomba Statue Completed"),
+    InternalEventItemData(5004, 2303, "Gabomba Statue Ritual", "Gabomba Statue Completed"),
     InternalEventItemData(5005, 2542, "Gaia Rock - Serpent", "Serpent defeated"),
     InternalEventItemData(5006, 1637, "Sea of Time - Poseidon", "Poseidon defeated"),
     InternalEventItemData(5007, 2367, "Lemurian Ship - Aqua Hydra", "Aqua Hydra defeated"),
@@ -206,6 +206,8 @@ events: List[InternalEventItemData] = [
     InternalEventItemData(5019, 1754, "Anemos Inner Sanctum - Dullahan", "Dullahan defeated"),
     InternalEventItemData(5020, 2593, "Contigo - Reunion", "Reunion"),
     InternalEventItemData(5021, 1, "Victory Event", "Victory"),
+    InternalEventItemData(5022, 2655, "Loho - Ship Cannon", "Ship Cannon"),
+    InternalEventItemData(5023, 2608, "Mars Lighthouse - Heated", "Mars Lighthouse Heated"),
     
 ]
 
@@ -497,6 +499,15 @@ InternalItemData(410, name_by_item_id[410], ItemClassification.useful, 747996, I
 ]
 
 lucky_only: List[InternalItemData] = [
+InternalItemData(250, name_by_item_id[250], ItemClassification.useful, 740956, ItemType.Shirt, False, True),
+InternalItemData(251, name_by_item_id[251], ItemClassification.useful, 741000, ItemType.Shirt, False, True),
+InternalItemData(252, name_by_item_id[252], ItemClassification.useful, 741044, ItemType.Shirt, False, True),
+InternalItemData(256, name_by_item_id[256], ItemClassification.useful, 741220, ItemType.Boots, False, True),
+InternalItemData(257, name_by_item_id[257], ItemClassification.useful, 741264, ItemType.Boots, False, True),
+InternalItemData(258, name_by_item_id[258], ItemClassification.useful, 741308, ItemType.Boots, False, True),
+InternalItemData(262, name_by_item_id[262], ItemClassification.useful, 741484, ItemType.Ring, False, True),
+InternalItemData(263, name_by_item_id[263], ItemClassification.useful, 741528, ItemType.Ring, False, True),
+InternalItemData(264, name_by_item_id[264], ItemClassification.useful, 741572, ItemType.Ring, False, True),
 InternalItemData(280, name_by_item_id[280], ItemClassification.useful, 742276, ItemType.Weapon, False, True),
 InternalItemData(302, name_by_item_id[302], ItemClassification.useful, 743244, ItemType.Weapon, False, True),
 InternalItemData(320, name_by_item_id[320], ItemClassification.useful, 744036, ItemType.Weapon, False, True),
@@ -508,15 +519,6 @@ InternalItemData(364, name_by_item_id[364], ItemClassification.useful, 745972, I
 InternalItemData(380, name_by_item_id[380], ItemClassification.useful, 746676, ItemType.Helm, False, True),
 InternalItemData(387, name_by_item_id[387], ItemClassification.useful, 746984, ItemType.Helm, False, True),
 InternalItemData(395, name_by_item_id[395], ItemClassification.useful, 747336, ItemType.Helm, False, True),
-InternalItemData(256, name_by_item_id[256], ItemClassification.useful, 741220, ItemType.Boots, False, True),
-InternalItemData(257, name_by_item_id[257], ItemClassification.useful, 741264, ItemType.Boots, False, True),
-InternalItemData(258, name_by_item_id[258], ItemClassification.useful, 741308, ItemType.Boots, False, True),
-InternalItemData(250, name_by_item_id[250], ItemClassification.useful, 740956, ItemType.Shirt, False, True),
-InternalItemData(251, name_by_item_id[251], ItemClassification.useful, 741000, ItemType.Shirt, False, True),
-InternalItemData(252, name_by_item_id[252], ItemClassification.useful, 741044, ItemType.Shirt, False, True),
-InternalItemData(262, name_by_item_id[262], ItemClassification.useful, 741484, ItemType.Ring, False, True),
-InternalItemData(263, name_by_item_id[263], ItemClassification.useful, 741528, ItemType.Ring, False, True),
-InternalItemData(264, name_by_item_id[264], ItemClassification.useful, 741572, ItemType.Ring, False, True),
 
 ]
 

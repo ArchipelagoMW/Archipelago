@@ -9,7 +9,7 @@ from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping, Optional, Any
 from BaseClasses import ItemClassification
 from NetUtils import ClientStatus, NetworkItem
 from worlds._bizhawk.client import BizHawkClient
-from worlds._bizhawk import read, write, guarded_write
+from worlds._bizhawk import read, write, guarded_write, display_message
 from . import items_by_id, ItemType, remote_blacklist
 from .gen.LocationNames import loc_names_by_id, LocationName, option_name_to_goal_name
 from .gen.ItemData import djinn_items, mimics, ItemData, events
@@ -85,6 +85,9 @@ class GoalManager:
             LocationName.Anemos_Inner_Sanctum_Dullahan,
         ]
     }
+    flag_to_name: dict[int, str] = {
+        v: k for k,v in supported_flags.items()
+    }
 
     def __init__(self):
         self.flag_requirements: Set[str] = set()
@@ -124,6 +127,7 @@ class GoalManager:
             ap_id = self.desired_flags.get(flag, None)
             if ap_id is not None:
                 if is_set and ap_id not in server_flags:
+                    await display_message(ctx.bizhawk_ctx, GoalManager.flag_to_name.get(flag, "Unknown") + " Completed")
                     updated_flags.add(ap_id)
 
         server_djinn = ctx.stored_data.get(client.get_djinn_location_key(ctx), [])
@@ -132,6 +136,11 @@ class GoalManager:
 
         # Always compute difference for pop tracker
         difference = client.checked_djinn.difference(server_djinn)
+
+        if difference:
+            await display_message(ctx.bizhawk_ctx,
+                                  f"Number of Djinn Obtained: {len(client.checked_djinn)}" +
+                                  ("" if 'djinn' not in client.goals.count_requirements else "/" + str(client.goals.count_requirements.get("djinn",0))))
 
         if updated_flags or difference:
             # logger.info(f"Flags updated: {updated_flags}")
@@ -226,8 +235,8 @@ def cmd_print_progress(self: 'BizHawkClientCommandProcessor') -> None:
     flags: List[int] = self.ctx.stored_data.get(client.get_goal_flags_key(self.ctx))
     if flags is not None and len(flags) != 0:
         logger.info("Objectives Completed: ")
-        for flag in flags:
-            event_name = event_id_to_name
+        for ap_id in flags:
+            event_name = event_id_to_name[ap_id]
             logger.info(event_name)
 
     djinn_count: List[int] = self.ctx.stored_data.get(client.get_djinn_location_key(self.ctx))
@@ -286,6 +295,7 @@ class GSTLAClient(BizHawkClient):
         self.goals = GoalManager()
 
     async def validate_rom(self, ctx: 'BizHawkClientContext'):
+        from worlds._bizhawk.context import TextCategory
         game_name = await read(ctx.bizhawk_ctx, [(0xA0, 0x12, _MemDomain.ROM)])
         game_name = game_name[0].decode('ascii')
         logger.debug("Game loaded: %s", game_name)
@@ -308,6 +318,8 @@ class GSTLAClient(BizHawkClient):
                 ctx.command_processor.commands[cmd] = func
         ctx.items_handling = 0b111
         ctx.watcher_timeout = 1  # not sure what a reasonable setting here is; passed to asyncio.wait_for
+        ctx.text_passthrough_categories.add(TextCategory.OUTGOING)
+        ctx.text_passthrough_categories.add(TextCategory.HINT)
         return True
 
     async def set_auth(self, ctx: 'BizHawkClientContext') -> None:
@@ -363,10 +375,10 @@ class GSTLAClient(BizHawkClient):
             for bit in range(16):
                 if part_int & 1 > 0:
                     flag = i * 8 + bit
-                    # original_flag = flag + _DataLocations.DJINN_FLAGS.initial_flag
-                    if flag not in self.possessed_djinn:
-                        self.possessed_djinn.add(flag + _DataLocations.DJINN_FLAGS.initial_flag)
-                    shuffled_flag = self.djinn_ram_to_rom[flag + _DataLocations.DJINN_FLAGS.initial_flag]
+                    original_flag = flag + _DataLocations.DJINN_FLAGS.initial_flag
+                    if original_flag not in self.possessed_djinn:
+                        self.possessed_djinn.add(original_flag)
+                    shuffled_flag = self.djinn_ram_to_rom[original_flag]
                     # original_djinn = self.djinn_flag_map[original_flag]
                     # shuffled_djinn = self.djinn_flag_map[shuffled_flag]
                     # TODO: this may be wrong once djinn are events
@@ -558,6 +570,7 @@ class GSTLAClient(BizHawkClient):
 
         if self.djinn_last_count != len(self.possessed_djinn):
             if self.possessed_djinn:
+                logger.debug(f"Possesed djinn: {self.possessed_djinn}")
                 await ctx.send_msgs([{
                     "cmd": "Set",
                     "operation": "update",
