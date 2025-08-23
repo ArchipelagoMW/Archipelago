@@ -73,8 +73,8 @@ grinch_locations = {
         "Short-Circuiting Power-Plant": GrinchLocationData("Generator Building", "Who Dump Missions", 405, [GrinchRamData(0x0100BF, binary_bit_pos=1)]),
         "Squashing All Gifts in Who Dump": GrinchLocationData("Who Dump", "Who Dump Missions", 406, [GrinchRamData(0x010060, value=750)]),
 #Who Lake Missions
-        "Putting Thistles In Shorts": GrinchLocationData("Who Lake", "Who Lake Missions", 500, [GrinchRamData(0x0100E6, value=10)]),
-        "Sabotaging The Tents": GrinchLocationData("Who Lake", "Who Lake Missions", 501, [GrinchRamData(0x0100E5, value=10)]),
+        "Putting Thistles In Shorts": GrinchLocationData("Who Lake", "Who Lake Missions", 500, [GrinchRamData(0x0100E5, value=10)]),
+        "Sabotaging The Tents": GrinchLocationData("Who Lake", "Who Lake Missions", 501, [GrinchRamData(0x0100E6, value=10)]),
         "Drilling Holes In Canoes": GrinchLocationData("North Shore", "Who Lake Missions", 502, [GrinchRamData(0x0100EE, value=10)]),
         "Modifying The Marine Mobile": GrinchLocationData("Submarine World", "Who Lake Missions", 503, [GrinchRamData(0x0100BF, binary_bit_pos=4)]),
         "Hooking The Mayor's Bed To The Motorboat": GrinchLocationData("Mayor's Villa", "Who Lake Missions", 504, [GrinchRamData(0x0100BF, binary_bit_pos=3)]),
