@@ -2518,17 +2518,19 @@ function SendToClient()
     local detect_tag = false
 	local deathAp = GVR:getPCDeath()
 	local death64 = GVR:getNLocalDeath()
-    if deathAp ~= death64
+	-- Send the deathlink only when you're the cause
+    if death64 > deathAp
     then
 		if DEATH_LINK == true
 		then
 			if DEATH_LINK_TRIGGERED == false
 			then
-            	detect_death = true
+				detect_death = true
             	GVR:setPCDeath(deathAp + 1)
             	DEATH_LINK_TRIGGERED = true
 			end
 		else
+			DEATH_LINK_TRIGGERED = false
             local died = GVR:getPCDeath()
             GVR:setPCDeath(died + 1)
 		end
@@ -2597,14 +2599,6 @@ function SendToClient()
         PRINT_GOAL = true;
         CUR_STATE = STATE_OK
     end
-    if detect_death == true
-    then
-        detect_death = false
-    end
-	if detect_tag == true
-	then
-		detect_tag = false
-	end
 end
 
 function receive()
