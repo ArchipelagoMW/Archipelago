@@ -1,5 +1,6 @@
 # isort: off
 from kvui import GameManager, MDNavigationItemBase
+
 # isort: on
 from typing import TYPE_CHECKING
 

@@ -25,6 +25,7 @@ ITEM_CLASSIFICATIONS = {
     "Confetti Cannon": ItemClassification.filler,
 }
 
+
 # It is common practice to override the base Item class to override the "game" field.
 class APQuestItem(Item):
     game = "APQuest"

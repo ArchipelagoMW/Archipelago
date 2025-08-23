@@ -1,0 +1,11 @@
+This apworld is meant as a learning tool for new apworld devs.
+
+You'll want to start with __init__.py, then move to world.py.
+If you also want to learn how to write unit tests, go to test/__init__.py.
+
+You can ignore the apquest/ folder, it contains the actual game code, graphics and music.
+
+The client/ folder is NOT meant for teaching.
+While the client was written to the best of its author's ability, it does not meet the same standard as the world code.
+The client code is also lacking the explanatory comments.
+Copy from it at your own risk.
