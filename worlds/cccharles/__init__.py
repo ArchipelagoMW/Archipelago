@@ -1,8 +1,8 @@
 from .Items import CCCharlesItem, unique_item_dict, full_item_list, item_groups
-from .Locations import CCCharlesLocation, location_table
+from .Locations import location_table
 from .Options import CCCharlesOptions
 from .Rules import set_rules
-from .Regions import CCCharlesRegion, create_regions
+from .Regions import create_regions
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 
@@ -61,98 +61,98 @@ class CCCharlesWorld(World):
     # Typing hints for all the options we defined
     options: CCCharlesOptions
 
-    topology_present = True  # show path to required location checks in spoiler
+    topology_present = True  # Show path to required location checks in spoiler
 
-    def create_regions(self) -> None :
+    def create_regions(self) -> None:
         create_regions(self.multiworld, self.options, self.player)
 
     def create_item(self, name: str) -> CCCharlesItem:
         item_id = unique_item_dict[name]
 
         match name:
-            case "Scraps" :
+            case "Scraps":
                 classification = ItemClassification.useful
-            case "30 Scraps Reward" :
+            case "30 Scraps Reward":
                 classification = ItemClassification.useful
-            case "25 Scraps Reward" :
+            case "25 Scraps Reward":
                 classification = ItemClassification.useful
-            case "35 Scraps Reward" :
+            case "35 Scraps Reward":
                 classification = ItemClassification.useful
-            case "40 Scraps Reward" :
+            case "40 Scraps Reward":
                 classification = ItemClassification.useful
-            case "South Mine Key" :
+            case "South Mine Key":
                 classification = ItemClassification.progression
-            case "North Mine Key" :
+            case "North Mine Key":
                 classification = ItemClassification.progression
-            case "Mountain Ruin Key" :
+            case "Mountain Ruin Key":
                 classification = ItemClassification.progression
-            case "Barn Key" :
+            case "Barn Key":
                 classification = ItemClassification.progression
-            case "Candice's Key" :
+            case "Candice's Key":
                 classification = ItemClassification.progression
-            case "Dead Fish" :
+            case "Dead Fish":
                 classification = ItemClassification.progression
-            case "Lockpicks" :
+            case "Lockpicks":
                 classification = ItemClassification.progression
-            case "Ancient Tablet" :
+            case "Ancient Tablet":
                 classification = ItemClassification.progression
-            case "Blue Box" :
+            case "Blue Box":
                 classification = ItemClassification.progression
-            case "Page Drawing" :
+            case "Page Drawing":
                 classification = ItemClassification.progression
-            case "Journal" :
+            case "Journal":
                 classification = ItemClassification.progression
-            case "Timed Dynamite" :
+            case "Timed Dynamite":
                 classification = ItemClassification.progression
-            case "Box of Rockets" :
+            case "Box of Rockets":
                 classification = ItemClassification.progression
-            case "Breaker" :
+            case "Breaker":
                 classification = ItemClassification.progression
-            case "Broken Bob" :
+            case "Broken Bob":
                 classification = ItemClassification.progression
-            case "Employment Contracts" :
+            case "Employment Contracts":
                 classification = ItemClassification.progression
-            case "Mob Camp Key" :
+            case "Mob Camp Key":
                 classification = ItemClassification.progression
-            case "Jar of Pickles" :
+            case "Jar of Pickles":
                 classification = ItemClassification.progression
-            case "Orange Paint Can" :
+            case "Orange Paint Can":
                 classification = ItemClassification.filler
-            case "Green Paint Can" :
+            case "Green Paint Can":
                 classification = ItemClassification.filler
-            case "White Paint Can" :
+            case "White Paint Can":
                 classification = ItemClassification.filler
-            case "Pink Paint Can" :
+            case "Pink Paint Can":
                 classification = ItemClassification.filler
-            case "Grey Paint Can" :
+            case "Grey Paint Can":
                 classification = ItemClassification.filler
-            case "Blue Paint Can" :
+            case "Blue Paint Can":
                 classification = ItemClassification.filler
-            case "Black Paint Can" :
+            case "Black Paint Can":
                 classification = ItemClassification.filler
-            case "Lime Paint Can" :
+            case "Lime Paint Can":
                 classification = ItemClassification.filler
-            case "Teal Paint Can" :
+            case "Teal Paint Can":
                 classification = ItemClassification.filler
-            case "Red Paint Can" :
+            case "Red Paint Can":
                 classification = ItemClassification.filler
-            case "Purple Paint Can" :
+            case "Purple Paint Can":
                 classification = ItemClassification.filler
-            case "The Boomer" :
+            case "The Boomer":
                 classification = ItemClassification.filler
-            case "Bob" :
+            case "Bob":
                 classification = ItemClassification.filler
-            case "Green Egg" :
+            case "Green Egg":
                 classification = ItemClassification.progression
-            case "Blue Egg" :
+            case "Blue Egg":
                 classification = ItemClassification.progression
-            case "Red Egg" :
+            case "Red Egg":
                 classification = ItemClassification.progression
-            case "Remote Explosive" :
+            case "Remote Explosive":
                 classification = ItemClassification.progression
-            case "Remote Explosive x8" :
+            case "Remote Explosive x8":
                 classification = ItemClassification.progression
-            case "Temple Key" :
+            case "Temple Key":
                 classification = ItemClassification.progression
             case "Bug spray":
                 classification = ItemClassification.progression
@@ -160,7 +160,7 @@ class CCCharlesWorld(World):
                 classification = ItemClassification.filler
 
         return CCCharlesItem(name, classification, item_id, self.player)
-    
+
     def create_items(self) -> None:
         self.multiworld.itempool += [self.create_item(item) for item in full_item_list]
 

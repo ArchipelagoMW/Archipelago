@@ -10,7 +10,7 @@ This page is a simplified guide of the [Choo-Choo Charles Multiworld Randomizer 
 To install the Mod, open the [Choo-Choo Charles Multiworld Randomizer Mod page](https://github.com/lgbarrere/CCCharles-Random) page and follow the steps below.
 
 ### Game Setup
-The releases of this game are currently unofficial. However, the Mod can be installed and played by following these instructions :
+The releases of this game are currently unofficial. However, the Mod can be installed and played by following these instructions:
 1. Click the green "<> Code" button
 2. Click "Download ZIP" and unzip the downloaded archive or clone this project
 3. From this folder, in **Release/**, copy the **Obscure/** folder to **\<GameFolder\>** (where the **Obscure/** folder and **Obscure.exe** are placed)
@@ -34,7 +34,7 @@ See **[Game Setup](setup_en#game-setup)** section to have the **Release/** folde
 
 In this section, **Archipelago/** refers to the path where [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) is installed locally.
 
-Follow these steps to host a remote multiplayer or a local single-player session :
+Follow these steps to host a remote multiplayer or a local single-player session:
 1. Double-click the **cccharles.apworld** in **Release/** to automatically install the world randomization logic
 2. Put the **CCCharles.yaml** from **Release/** to **Archipelago/Players/** with the YAML of each player to host
 3. Launch the Archipelago launcher and click "Generate" to configure a game with the YAML in **Archipelago/output/**
@@ -49,6 +49,6 @@ For a local single-player session, click "Host" in the Archipelago launcher by u
 * If the player receives the **Box of Rockets**, the bunker at the **Training Explosive** region will be opened once loaded. It may be possible to break the mission state if the player interacts with elements in unexpected order.
 
 ### Minor issues
-* The current version of the command parser does not accept console commands with a player names containing whitespaces. It is recommended to use underscores "_" instead, for instance : CCCharles_Player_1.
+* The current version of the command parser does not accept console commands with a player names containing whitespaces. It is recommended to use underscores "_" instead, for instance: CCCharles_Player_1.
 * Sometimes, an item reception or sending a location can fail (rare cases). Reloading the game is supposed to respawn all items on the ground and restarting a new game retrieves all unlocked items from Archipelago, that can be used as workarounds.
 * When an egg is received, if the player goes to one of the three mine exits before talking to the NPC who gives its entrance key, the player will no longer be able to interact with this NPC. Make sure to talk to them before approaching their respective mines. Restart a new game otherwise.

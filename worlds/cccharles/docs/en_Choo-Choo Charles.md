@@ -15,7 +15,7 @@ Beating the evil train from Hell named "Charles".
 ## How is the game managed in Nightmare mode?
 At death, the player has to restart a brand-new game, giving him the choice to stay under the Nightmare mode or continuing with the Normal mode if considered too hard.
 In this case, all collected items will be redistributed in the inventory and the missions states will be kept.
-The Deathlink is not implemented yet. When this option will be available, a choice will be provided to :
+The Deathlink is not implemented yet. When this option will be available, a choice will be provided to:
 * Disable the Deathlink
 * Enable the soft Deathlink with respawn at Player Train when a Deathlink event is received
 * Enable the hard Deathlink with removal of the game save when a Deathlink event is received
@@ -30,9 +30,9 @@ The same method is used for hints.
 
 ## Is it possible to use hints in the game?
 No, this is a work in progress.
-The following options will be possible once the implementations are available :
+The following options will be possible once the implementations are available:
 
-At any moment, the player can press one of the following keys to display a console in the game :
+At any moment, the player can press one of the following keys to display a console in the game:
 * "~" or "`" (qwerty)
 * "²" (azerty)
 * "F10"

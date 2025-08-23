@@ -2,7 +2,7 @@ from BaseClasses import MultiWorld
 from ..generic.Rules import set_rule
 from .Options import CCCharlesOptions
 
-# Go mode : Green Egg + Blue Egg + Ref Egg + Temple Key + Bug Spray (+ Remote Explosive x8 but the base game ignores it)
+# Go mode: Green Egg + Blue Egg + Ref Egg + Temple Key + Bug Spray (+ Remote Explosive x8 but the base game ignores it)
 
 def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None:
     # Tony Tiddle
@@ -108,7 +108,7 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
     # Paul
     set_rule(world.get_location("Museum Paul Mission End", player),
         lambda state: state.has("Remote Explosive x8", player))
-        # lambda state: state.has("Remote Explosive", player, 8)) # TODO : Add an option to split remote explosives
+        # lambda state: state.has("Remote Explosive", player, 8)) # TODO: Add an option to split remote explosives
 
     # West Beach
     set_rule(world.get_location("West Beach Chest Scraps 1", player),

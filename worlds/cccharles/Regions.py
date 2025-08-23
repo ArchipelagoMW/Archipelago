@@ -1,5 +1,5 @@
 from BaseClasses import MultiWorld, Region, ItemClassification
-from . import CCCharlesItem
+from .Items import CCCharlesItem
 from .Options import CCCharlesOptions
 from .Locations import (
     CCCharlesLocation, loc_start_camp, loc_tony_tiddle_mission, loc_barn, loc_candice_mission, \
@@ -16,10 +16,7 @@ from .Locations import (
 )
 
 
-class CCCharlesRegion(Region):
-    regions = []
-
-def create_regions(world: MultiWorld, options: CCCharlesOptions, player: int):
+def create_regions(world: MultiWorld, options: CCCharlesOptions, player: int) -> None:
     menu_region = Region("Menu", player, world, "Aranearum")
     world.regions.append(menu_region)
 
