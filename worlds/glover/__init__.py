@@ -356,17 +356,19 @@ class GloverWorld(World):
         all_core_items.extend(checkpoint_items)
         all_core_items.extend(ability_items)
         all_core_items.extend(event_items)
+        core_item_count = 0
         #Core Items
         for each_item in all_core_items:
             for total_items in range(find_item_data(self, each_item).qty):
                 self.multiworld.itempool.append(self.create_item(each_item))
+                core_item_count += 1
         #Event Items
         #for each_item in event_items:
         #    self.multiworld.itempool.append(self.create_event(each_item))
 
         #Calculate the amount of trap filler and the amount of regular filler
         total_locations : int = len(self.multiworld.get_unfilled_locations(self.player))
-        total_core_items : int = len(self.multiworld.itempool) + len(self.get_pre_fill_items())
+        total_core_items : int = core_item_count + len(self.get_pre_fill_items())
         total_filler_items : int = int(total_locations - total_core_items)
         total_trap_items : int = int(self.percent_of(self.options.trap_percentage.value) * total_filler_items)
         total_filler_items -= total_trap_items

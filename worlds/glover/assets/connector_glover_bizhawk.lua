@@ -1232,14 +1232,18 @@ local ADDRESS_MAP = {
 				['id'] = 0x0F6,
 				['offset'] = 1,
 			},
+			["247"] = {
+				['id'] = 0x0F7,
+				['offset'] = 2,
+			},
 		},
 		["POTIONS"] = {
-			["248"] = {
-				['id'] = 0x0F8,
-				['offset'] = 0,
-			},
 			["249"] = {
 				['id'] = 0x0F9,
+				['offset'] = 0,
+			},
+			["250"] = {
+				['id'] = 0x0FA,
 				['offset'] = 1,
 			},
 		},
@@ -1664,9 +1668,6 @@ local GARIB_GROUPS_MAP = {
 		},
 	}
 }
-
-local MESSAGE_TABLE = {}
-
 
 GLOVERHACK = {
     RDRAMBase = 0x80000000,
@@ -2479,19 +2480,16 @@ function process_block(block)
 	then
     	if block['triggerDeath'] == true and DEATH_LINK == true
     	then
-			print("Death")
-    	    -- local death = GVR:getAPDeath()
-    	    -- GVR:setAPDeath(death + 1)
-    	    table.insert(MESSAGE_TABLE, {DEATH_MESSAGE, 15})
+    	    local death = GVR:getPCDeath()
+    	    GVR:setPCDeath(death + 1)
     	end
 	end
     if block['triggerTag'] ~= nil
 	then
 		if block['triggerTag'] == true and TAG_LINK == true
     	then
-			print("Tag")
-    	    -- local tag = GVR:getAPTag()
-    	    -- GVR:setAPTag(tag + 1)
+    	    local tag = GVR:getPCTag()
+    	    GVR:setPCTag(tag + 1)
     	end
 	end
 end
@@ -2511,12 +2509,8 @@ function SendToClient()
             	detect_death = true
             	GVR:setPCDeath(deathAp + 1)
             	DEATH_LINK_TRIGGERED = true
-				print(deathAp)
-				print(death64)
-            	table.insert(MESSAGE_TABLE, {DEATH_MESSAGE, 15})
 			end
 		else
-            -- table.insert(MESSAGE_TABLE, {DEATH_MESSAGE, 15})
             local died = GVR:getPCDeath()
             GVR:setPCDeath(died + 1)
 		end
@@ -2607,7 +2601,6 @@ function receive()
         -- Handle incoming message
         if e == 'closed' then
             if CUR_STATE == STATE_OK then
-                table.insert(MESSAGE_TABLE, {"Archipelago Connection Closed", 86});
                 print("Connection closed")
             end
             CUR_STATE = STATE_UNINITIALIZED
@@ -2616,7 +2609,6 @@ function receive()
             AP_TIMEOUT_COUNTER = AP_TIMEOUT_COUNTER + 1
             if AP_TIMEOUT_COUNTER == 5
             then
-                table.insert(MESSAGE_TABLE, {"Archipelago Timeout", 86});
                 AP_TIMEOUT_COUNTER = 0
             end
             print("timeout")
@@ -2640,7 +2632,6 @@ function getSlotData()
     -- Handle incoming message
     if e == 'closed' then
         if CUR_STATE == STATE_OK then
-            table.insert(MESSAGE_TABLE, {"Archipelago Connection Closed", 86});
             print("Connection closed")
         end
         CUR_STATE = STATE_UNINITIALIZED
@@ -2649,7 +2640,6 @@ function getSlotData()
         AP_TIMEOUT_COUNTER = AP_TIMEOUT_COUNTER + 1
         if AP_TIMEOUT_COUNTER == 10
         then
-            table.insert(MESSAGE_TABLE, {"Archipelago Timeout", 86});
             AP_TIMEOUT_COUNTER = 0
         end
         print("timeout")
