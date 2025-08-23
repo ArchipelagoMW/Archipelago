@@ -486,7 +486,14 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             if required_plando_options:
                 raise Exception(f"Settings reports required plando module {str(required_plando_options)}, "
                                 f"which is not enabled.")
-
+        games = requirements.get("game", {})
+        for game, version in games.items():
+            if game not in AutoWorldRegister.world_types:
+                raise Exception(f"Settings reports required world \"{game}\", which is not present")
+            if tuplize_version(version) > AutoWorldRegister.world_types[game].world_version:
+                raise Exception(f"Settings reports required version of world \"{game}\" is at least {version}, "
+                                f"however world is of version "
+                                f"{AutoWorldRegister.world_types[game].world_version.as_simple_string()}")
     ret = argparse.Namespace()
     for option_key in Options.PerGameCommonOptions.type_hints:
         if option_key in weights and option_key not in Options.CommonOptions.type_hints:

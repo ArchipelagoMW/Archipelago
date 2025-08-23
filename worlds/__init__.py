@@ -164,6 +164,9 @@ if apworlds:
                            add_as_failed_to_load=False)
             else:
                 apworld_source.load()
+                if apworld.game in AutoWorldRegister.world_types:
+                    # world could fail to load at this point
+                    AutoWorldRegister.world_types[apworld.game].world_version = apworld.world_version
     load_apworlds()
     del load_apworlds
 
