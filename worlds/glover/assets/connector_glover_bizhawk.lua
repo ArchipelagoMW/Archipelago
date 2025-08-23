@@ -1976,11 +1976,22 @@ function GLOVERHACK:setRandomizeCheckpoint(checkpoint)
 end
 
 function GLOVERHACK:setDeathlinkEnabled(newState)
-    mainmemory.writebyte(self.deathlink + GLOVERHACK:getSettingPointer(), newState);
+	if newState
+	then
+		mainmemory.writebyte(self.deathlink + GLOVERHACK:getSettingPointer(), 1);
+	else
+		mainmemory.writebyte(self.deathlink + GLOVERHACK:getSettingPointer(), 0);
+	end
+    
 end
 
 function GLOVERHACK:setTaglinkEnabled(newState)
-    mainmemory.writebyte(self.taglink + GLOVERHACK:getSettingPointer(), newState);
+	if newState
+	then
+		mainmemory.writebyte(self.taglink + GLOVERHACK:getSettingPointer(), 1);
+	else
+		mainmemory.writebyte(self.taglink + GLOVERHACK:getSettingPointer(), 0);
+	end
 end
 
 function GLOVERHACK:getItemsPointer()
