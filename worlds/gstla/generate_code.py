@@ -273,6 +273,7 @@ def generate_item_data(env: Environment, data: GameData):
         misc = []
         remainder = []
         vanilla_item_ids = { x.vanilla_contents for x in data.raw_location_data if x.vanilla_name != 'Mimic'}
+        vanilla_item_ids.add(228) # Game Ticket
         misc_ids = {
             0, # Empty
             231, # Bone
