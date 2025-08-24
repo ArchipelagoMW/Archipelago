@@ -31,7 +31,7 @@ from rule_builder import (
 from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
 from worlds import network_data_package
-from worlds.AutoWorld import World
+from worlds.AutoWorld import WebWorld, World
 
 
 class ToggleOption(Toggle):
@@ -63,8 +63,13 @@ class RuleBuilderLocation(Location):
     game: str = GAME
 
 
+class RuleBuilderWebWorld(WebWorld):
+    tutorials = []  # noqa: RUF012  # pyright: ignore[reportUnannotatedClassAttribute]
+
+
 class RuleBuilderWorld(RuleWorldMixin, World):  # pyright: ignore[reportUnsafeMultipleInheritance]
     game: ClassVar[str] = GAME
+    web: ClassVar[WebWorld] = RuleBuilderWebWorld()
     item_name_to_id: ClassVar[dict[str, int]] = {f"Item {i}": i for i in range(1, LOC_COUNT + 1)}
     location_name_to_id: ClassVar[dict[str, int]] = {f"Location {i}": i for i in range(1, LOC_COUNT + 1)}
     item_name_groups: ClassVar[dict[str, set[str]]] = {
