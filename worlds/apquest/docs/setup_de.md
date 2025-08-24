@@ -42,7 +42,7 @@ Der APQuest Client kann zwischen verschiedenen Slots wechseln, ohne neugestartet
 
 Klicke einfach den "Disconnect"-Knopf. Dann verbinde dich mit dem anderen Raum / Slot.
 
-## Music / Volume
+## Musik / Lautstärke
 
 Der APQuest Client hat im Moment keinen eigenen Lautstärkeregler.  
 Du kannst den Lautstärker-Mixer deines Betriebssystems benutzen, um die Lautstärke einzustellen.
