@@ -367,6 +367,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "GC Blueprint - Whoville Clock Tower - Before Bells": [
         ["Rocket Spring"]
+    #   ["Max", "Rocket Spring"]
     ],
     "GC Blueprint - Whoville Clock Tower - After Bells": [
         ["Rocket Spring"]
@@ -390,10 +391,12 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "GC Blueprint - Who Dump Power Plant - Max Cave": [
         []
+        # ["Max"]
     ],
     "GC Blueprint - Who Dump Power Plant - After First Gate": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Grinch Copter"]
+    #   ["Max", "Rotten Egg Launcher", "Rocket Spring"]
     ],
     "GC Blueprint - Who Dump Generator Building - Before Mission": [
         ["Rotten Egg Launcher", "Grinch Copter"],
