@@ -192,6 +192,7 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
     # "Cutscene Trap": GrinchItemData("Traps", 609, IC.trap, [GrinchRamData()]),
     # "No Vac Trap": GrinchItemData("Traps", 610, IC.trap, [GrinchRamData(0x0102DA, value=0]),
     # "Invisible Trap": GrinchItemData("Traps", 611, IC.trap, [GrinchRamData(0x0102DA, value=0, bit_size=4)])
+    # "Child Trap": GrinchItemData("Traps", 612, IC.trap,[GrinchRamData()])
 }
 
 #Movesets
@@ -216,12 +217,13 @@ ALL_ITEMS_TABLE: dict[str, GrinchItemData] = {
 
 # Psuedocoding traplink table
 # BEE_TRAP_EQUIV = ["Army Trap", "Buyon Trap", "Ghost", "Gooey Bag", "OmoTrap", "Police Trap"]
-# ICE_TRAP_EQUIV = ["Chaos Control Trap", "Freeze Trap", "Frozen Trap", "Honey Trap", "Paralyze Trap", "Stun Trap"]
-# DAMAGE_TRAP_EQUIV = ["Banana Trap", "Bomb", "Bonk Trap", "Fire Trap", "Laughter Trap", "Nut Trap", "Push Trap", "Squash Trap", "Thwimp Trap", "TNT Barrel Trap"]
+# ICE_TRAP_EQUIV = ["Chaos Control Trap", "Freeze Trap", "Frozen Trap", "Honey Trap", "Paralyze Trap", "Stun Trap", "Bubble Trap"]
+# DAMAGE_TRAP_EQUIV = ["Banana Trap", "Bomb", "Bonk Trap", "Fire Trap", "Laughter Trap", "Nut Trap", "Push Trap", "Squash Trap", "Thwimp Trap", "TNT Barrel Trap", "Meteor Trap"]
 # SPRING_TRAP_EQUIV = ["Eject Ability", "Hiccup Trap", "Jump Trap", "Jumping Jacks Trap", "Whoops! Trap"]
 # HOME_TRAP_EQUIV = ["Blue Balls Curse", "Instant Death Trap"]
 # SLOWNESS_TRAP_EQUIV = ["Iron Boots Trap", "Slow Trap", "Sticky Floor Trap"]
 # CUTSCENE_TRAP_EQUIV = ["Phone Trap"]
+# ELEC_TRAP_EQUIV = []
 
 def grinch_items_to_id() -> dict[str, int]:
     item_mappings: dict[str, int] = {}
