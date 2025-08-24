@@ -285,6 +285,13 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
         else:
             return self.value * other
 
+    def __imul__(self, other: typing.Any) -> Self:
+        if isinstance(other, NumericOption):
+            self.value *= other.value
+        else:
+            self.value *= other
+        return self
+
     def __rmul__(self, other: typing.Any) -> typing.Any:
         if isinstance(other, NumericOption):
             return other.value * self.value
@@ -297,6 +304,13 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
         else:
             return self.value - other
 
+    def __isub__(self, other: typing.Any) -> Self:
+        if isinstance(other, NumericOption):
+            self.value -= other.value
+        else:
+            self.value -= other
+        return self
+
     def __rsub__(self, left: typing.Any) -> typing.Any:
         if isinstance(left, NumericOption):
             return left.value - self.value
@@ -308,6 +322,13 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
             return self.value + other.value
         else:
             return self.value + other
+
+    def __iadd__(self, other: typing.Any) -> Self:
+        if isinstance(other, NumericOption):
+            self.value += other.value
+        else:
+            self.value += other
+        return self
 
     def __radd__(self, left: typing.Any) -> typing.Any:
         if isinstance(left, NumericOption):
@@ -341,6 +362,41 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
 
     def __floordiv__(self, other: typing.Any) -> int:
         return self.value // int(other)
+
+    def __iand__(self, other: typing.Any) -> Self:
+        self.value &= int(other)
+        return self
+
+    def __ifloordiv__(self, other: typing.Any) -> Self:
+        self.value //= int(other)
+        return self
+
+    def __ilshift__(self, other: typing.Any) -> Self:
+        self.value <<= int(other)
+        return self
+
+    def __imod__(self, other: typing.Any) -> Self:
+        self.value %= int(other)
+        return self
+
+    def __ior__(self, other: typing.Any) -> Self:
+        self.value |= int(other)
+        return self
+
+    def __ipow__(self, exponent: numbers.Complex, modulus: numbers.Integral | None = None) -> Self:
+        if modulus is not None:
+            assert isinstance(exponent, numbers.Integral)
+            self.value = pow(self.value, exponent, modulus)  # type: ignore
+        self.value **= exponent  # type: ignore
+        return self
+
+    def __irshift__(self, other: typing.Any) -> Self:
+        self.value >>= int(other)
+        return self
+
+    def __ixor__(self, other: typing.Any) -> Self:
+        self.value ^= int(other)
+        return self
 
     def __invert__(self) -> int:
         return ~(self.value)
