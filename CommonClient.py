@@ -108,6 +108,9 @@ class ClientCommandProcessor(CommandProcessor):
         if not self.ctx.game:
             return {}
         checksum = self.ctx.checksums[self.ctx.game]
+        if checksum == network_data_package["games"][self.ctx.game]["checksum"]:
+            # datapackages in local install may not be cached, so load them directly
+            return network_data_package["games"][self.ctx.game]
         return Utils.load_data_package_for_checksum(self.ctx.game, checksum)
 
     def _cmd_missing(self, filter_text = "") -> bool:
