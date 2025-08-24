@@ -705,6 +705,8 @@ def get_compact_hint_args(hint: WitnessWordedHint, local_player_number: int) -> 
 
     Area Hint: 1st Arg is the amount of area progression and hunt panels. 2nd Arg is the name of the area.
     Location Hint: 1st Arg is the location's address, second arg is the player number the location belongs to.
+                   In case of a local vague hint, the second arg is a string with the containing location group.
+                   In case of a nonlocal vague hint, the second arg is the *negative* player number.
     Junk Hint: 1st Arg is -1, second arg is this slot's player number.
     """
 
