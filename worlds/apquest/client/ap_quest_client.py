@@ -77,6 +77,10 @@ class APQuestContext(CommonContext):
         self.ui.allow_intro_song()
         super().handle_connection_loss(msg)
 
+    async def connect(self, address: str | None = None) -> None:
+        self.ui.switch_to_regular_tab()
+        await super().connect(address)
+
     async def apquest_loop(self) -> None:
         while not self.exit_event.is_set():
             if self.connection_status != ConnectionStatus.GAME_RUNNING:

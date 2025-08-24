@@ -53,12 +53,18 @@ class APQuestManager(GameManager):
     def play_jingle(self, audio_filename: str) -> None:
         self.sound_manager.play_jingle(audio_filename)
 
-    def switch_to_game_tab(self) -> None:
-        if self.screens.current_tab == self.game_view_tab:
+    def switch_to_tab(self, desired_tab: MDNavigationItemBase) -> None:
+        if self.screens.current_tab == desired_tab:
             return
         self.screens.current_tab.active = False
-        self.screens.switch_screens(self.game_view_tab)
-        self.game_view_tab.active = True
+        self.screens.switch_screens(desired_tab)
+        desired_tab.active = True
+
+    def switch_to_game_tab(self) -> None:
+        self.switch_to_tab(self.game_view_tab)
+
+    def switch_to_regular_tab(self) -> None:
+        self.switch_to_tab(self.tabs.children[-1])
 
     def game_started(self) -> None:
         self.switch_to_game_tab()

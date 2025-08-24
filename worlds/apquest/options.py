@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from Options import Choice, OptionGroup, PerGameCommonOptions, Range, Toggle
 
 # In this file, we define the options the player can pick.
-# The most common type of options are Toggle, Range and Choice.
+# The most common types of options are Toggle, Range and Choice.
 
 
 # A toggle is an option that can either be on or off. This will be represented by a checkbox on the website.
