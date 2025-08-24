@@ -249,25 +249,25 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
         else:
             return typing.cast(bool, self.value == other)
 
-    def __lt__(self, other: typing.Union[int, NumericOption]) -> bool:
+    def __lt__(self, other: int | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value < other.value
         else:
             return self.value < other
 
-    def __le__(self, other: typing.Union[int, NumericOption]) -> bool:
+    def __le__(self, other: int | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value <= other.value
         else:
             return self.value <= other
 
-    def __gt__(self, other: typing.Union[int, NumericOption]) -> bool:
+    def __gt__(self, other: int | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value > other.value
         else:
             return self.value > other
 
-    def __ge__(self, other: typing.Union[int, NumericOption]) -> bool:
+    def __ge__(self, other: int | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value >= other.value
         else:
@@ -416,8 +416,8 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
     def __pos__(self) -> int:
         return +(self.value)
 
-    def __pow__(self, exponent: numbers.Complex, modulus: typing.Optional[numbers.Integral] = None) -> int:
-        if not (modulus is None):
+    def __pow__(self, exponent: numbers.Complex, modulus: numbers.Integral | None = None) -> int:
+        if modulus is not None:
             assert isinstance(exponent, numbers.Integral)
             return pow(self.value, exponent, modulus)  # type: ignore
         return self.value ** exponent  # type: ignore
@@ -437,7 +437,7 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
     def __ror__(self, other: typing.Any) -> int:
         return int(other) | self.value
 
-    def __round__(self, ndigits: typing.Optional[int] = None) -> int:
+    def __round__(self, ndigits: int | None = None) -> int:
         return round(self.value, ndigits)
 
     def __rpow__(self, base: typing.Any) -> typing.Any:
