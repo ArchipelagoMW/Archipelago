@@ -54,9 +54,9 @@ class TestProgressiveToolsLogic(SVTestBase):
     def test_old_master_cannoli(self):
         self.multiworld.state.prog_items = {1: Counter()}
 
-        self.multiworld.state.collect(self.create_item("Progressive Axe"))
-        self.multiworld.state.collect(self.create_item("Progressive Axe"))
-        self.multiworld.state.collect(self.create_item("Summer"))
+        self.collect("Progressive Axe")
+        self.collect("Progressive Axe")
+        self.collect("Summer")
         self.collect_lots_of_money()
 
         location = "Old Master Cannoli"
@@ -109,7 +109,7 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
             for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
                 self.assert_rule_false(self.world.logic.tool.has_tool(tool, material))
 
-        self.multiworld.state.collect(self.create_item(railroad_item))
+        self.collect(railroad_item)
 
         for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
             for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
@@ -119,13 +119,15 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
         railroad_item = "Railroad Boulder Removed"
         place_region_at_entrance(self.multiworld, self.player, Region.fish_shop, Entrance.enter_bathhouse_entrance)
         self.collect_all_except(railroad_item)
+        self.collect("Fishing Level", 10)
+        self.collect("Fishing Mastery")
 
-        for fishing_rod in [FishingRod.fiberglass, FishingRod.iridium]:
+        for fishing_rod in [FishingRod.training, FishingRod.bamboo, FishingRod.fiberglass, FishingRod.iridium, FishingRod.advanced_iridium]:
             self.assert_rule_false(self.world.logic.tool.has_fishing_rod(fishing_rod))
 
-        self.multiworld.state.collect(self.create_item(railroad_item))
+        self.collect(railroad_item)
 
-        for fishing_rod in [FishingRod.fiberglass, FishingRod.iridium]:
+        for fishing_rod in [FishingRod.training, FishingRod.bamboo, FishingRod.fiberglass, FishingRod.iridium, FishingRod.advanced_iridium]:
             self.assert_rule_true(self.world.logic.tool.has_fishing_rod(fishing_rod))
 
 
@@ -137,3 +139,51 @@ def place_region_at_entrance(multiworld, player, region, entrance):
     region_to_switch = entrance_to_place_region.connected_region
     entrance_to_switch.connect(region_to_switch)
     entrance_to_place_region.connect(region_to_place)
+
+
+class TestVanillaFishingRodsRequiresLevelsAndMasteries(SVTestBase):
+    options = {
+        options.SeasonRandomization: options.SeasonRandomization.option_disabled,
+        options.Cropsanity: options.Cropsanity.option_disabled,
+        options.SkillProgression: options.SkillProgression.option_progressive_with_masteries,
+        options.ToolProgression: options.ToolProgression.option_vanilla,
+    }
+
+    def test_cannot_get_fishing_rods_without_their_unlock_conditions(self):
+        self.collect_lots_of_money()
+
+        rods = [FishingRod.training, FishingRod.bamboo, FishingRod.fiberglass, FishingRod.iridium, FishingRod.advanced_iridium]
+        reachable = 2
+        for i in range(len(rods)):
+            if i < reachable:
+                self.assert_rule_true(self.world.logic.tool.has_fishing_rod(rods[i]))
+            else:
+                self.assert_rule_false(self.world.logic.tool.has_fishing_rod(rods[i]))
+
+        self.collect("Fishing Level", 2)
+        reachable = 3
+        for i in range(len(rods)):
+            if i < reachable:
+                self.assert_rule_true(self.world.logic.tool.has_fishing_rod(rods[i]))
+            else:
+                self.assert_rule_false(self.world.logic.tool.has_fishing_rod(rods[i]))
+
+        self.collect("Fishing Level", 4)
+        reachable = 4
+        for i in range(len(rods)):
+            if i < reachable:
+                self.assert_rule_true(self.world.logic.tool.has_fishing_rod(rods[i]))
+            else:
+                self.assert_rule_false(self.world.logic.tool.has_fishing_rod(rods[i]))
+
+        self.collect("Fishing Level", 4)
+        reachable = 4
+        for i in range(len(rods)):
+            if i < reachable:
+                self.assert_rule_true(self.world.logic.tool.has_fishing_rod(rods[i]))
+            else:
+                self.assert_rule_false(self.world.logic.tool.has_fishing_rod(rods[i]))
+
+        self.collect("Fishing Mastery")
+        for rod in rods:
+            self.assert_rule_true(self.world.logic.tool.has_fishing_rod(rod))
