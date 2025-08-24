@@ -724,10 +724,13 @@ def get_compact_hint_args(hint: WitnessWordedHint, local_player_number: int) -> 
 
     # Is location hint
     if location and location.address is not None:
-        if hint.vague_location_hint and location.player == local_player_number:
-            assert hint.area is not None  # A local vague location hint should have an area argument
-            return location.address, "containing_area:" + hint.area
-        return location.address, location.player  # Scouting does not matter for other players (currently)
+        if hint.vague_location_hint:
+            if location.player == local_player_number:
+                assert hint.area is not None  # A local vague location hint should have an area argument
+                return location.address, "containing_area:" + hint.area
+            return location.address, - location.player  # Encode non-local vague hint as negative player number
+
+        return location.address, location.player
 
     # Is junk / undefined hint
     return -1, local_player_number
