@@ -1577,7 +1577,7 @@ class ItemClassification(IntFlag):
 
     def as_flag(self) -> int:
         """As Network API flag int."""
-        return int(self & 0b0111)
+        return int(self & 0b00111)
 
 
 class Item:
@@ -1905,7 +1905,8 @@ class Spoiler:
             if self.unreachables:
                 outfile.write('\n\nUnreachable Progression Items:\n\n')
                 outfile.write(
-                    '\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.unreachables]))
+                    '\n'.join(['%s: %s' % (unreachable.item, unreachable)
+                               for unreachable in sorted(self.unreachables)]))
 
             if self.paths:
                 outfile.write('\n\nPaths:\n\n')
@@ -1932,7 +1933,7 @@ class Tutorial(NamedTuple):
     description: str
     language: str
     file_name: str
-    link: str
+    link: str  # unused
     authors: List[str]
 
 
