@@ -30,6 +30,9 @@ class APQuestWebWorld(WebWorld):
         ["NewSoupVi"],
     )
     # Let's have our setup guide in German as well.
+    # Do not translate the title and description!
+    # WebHost needs them to be the same to identify that it is the same tutorial.
+    # This lets it display the tutorials more compactly.
     setup_de = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up APQuest for MultiWorld.",
