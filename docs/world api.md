@@ -257,6 +257,14 @@ another flag like "progression", it means "an especially useful progression item
   combined with `progression`; see below)
 * `progression_skip_balancing`: the combination of `progression` and `skip_balancing`, i.e., a progression item that
   will not be moved around by progression balancing; used, e.g., for currency or tokens, to not flood early spheres
+* `deprioritized`: denotes that an item should not be placed on priority locations
+  (to be combined with `progression`; see below)
+* `progression_deprioritized`: the combination of `progression` and `deprioritized`, i.e. a progression item that
+  should not be placed on priority locations, despite being progression;
+  like skip_balancing, this is commonly used for currency or tokens.
+* `progression_deprioritized_skip_balancing`: the combination of `progression`, `deprioritized` and `skip_balancing`.
+  Since there is overlap between the kind of items that want `skip_balancing` and `deprioritized`,
+  this combined classification exists for convenience
 
 ### Regions
 
