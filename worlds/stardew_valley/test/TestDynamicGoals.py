@@ -22,6 +22,8 @@ def collect_fishing_abilities(tester: SVTestBase):
         tester.multiworld.state.collect(tester.world.create_item("Mining Level"), prevent_sweep=False)
     for i in range(17):
         tester.multiworld.state.collect(tester.world.create_item("Progressive Mine Elevator"), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Shipping Bin"), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Fishing Mastery"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Landslide Removed"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Spring"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Summer"), prevent_sweep=False)
