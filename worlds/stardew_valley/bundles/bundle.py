@@ -161,6 +161,8 @@ class CurrencyBundleTemplate(BundleTemplate):
         return currency_amount
 
     def can_appear(self, options: StardewValleyOptions) -> bool:
+        if not super().can_appear(options):
+            return False
         if options.exclude_ginger_island == ExcludeGingerIsland.option_true:
             if self.item.item_name == Currency.qi_gem or self.item.item_name == Currency.golden_walnut or self.item.item_name == Currency.cinder_shard:
                 return False
@@ -211,11 +213,15 @@ class MoneyBundleTemplate(CurrencyBundleTemplate):
 
 class IslandBundleTemplate(BundleTemplate):
     def can_appear(self, options: StardewValleyOptions) -> bool:
+        if not super().can_appear(options):
+            return False
         return options.exclude_ginger_island == ExcludeGingerIsland.option_false
 
 
 class FestivalBundleTemplate(BundleTemplate):
     def can_appear(self, options: StardewValleyOptions) -> bool:
+        if not super().can_appear(options):
+            return False
         return options.festival_locations != FestivalLocations.option_disabled
 
 
