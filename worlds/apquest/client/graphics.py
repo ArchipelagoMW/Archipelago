@@ -47,10 +47,30 @@ class PlayerSprite(Enum):
 
 
 PLAYER_GRAPHICS = {
-    Graphic.PLAYER_DOWN: {PlayerSprite.HUMAN: "human_down.png", PlayerSprite.DUCK: "duck_down.png"},
-    Graphic.PLAYER_UP: {PlayerSprite.HUMAN: "human_up.png", PlayerSprite.DUCK: "duck_up.png"},
-    Graphic.PLAYER_LEFT: {PlayerSprite.HUMAN: "human_left.png", PlayerSprite.DUCK: "duck_left.png"},
-    Graphic.PLAYER_RIGHT: {PlayerSprite.HUMAN: "human_right.png", PlayerSprite.DUCK: "duck_right.png"},
+    Graphic.PLAYER_DOWN: {
+        PlayerSprite.HUMAN: "human_down.png",
+        PlayerSprite.DUCK: "duck_down.png",
+        PlayerSprite.HORSE: "horse_down.png",
+        PlayerSprite.CAT: "cat_down.png",
+    },
+    Graphic.PLAYER_UP: {
+        PlayerSprite.HUMAN: "human_up.png",
+        PlayerSprite.DUCK: "duck_up.png",
+        PlayerSprite.HORSE: "horse_up.png",
+        PlayerSprite.CAT: "cat_up.png",
+    },
+    Graphic.PLAYER_LEFT: {
+        PlayerSprite.HUMAN: "human_left.png",
+        PlayerSprite.DUCK: "duck_left.png",
+        PlayerSprite.HORSE: "horse_left.png",
+        PlayerSprite.CAT: "cat_left.png",
+    },
+    Graphic.PLAYER_RIGHT: {
+        PlayerSprite.HUMAN: "human_right.png",
+        PlayerSprite.DUCK: "duck_right.png",
+        PlayerSprite.HORSE: "horse_right.png",
+        PlayerSprite.CAT: "cat_right.png",
+    },
 }
 
 ALL_GRAPHICS = [
