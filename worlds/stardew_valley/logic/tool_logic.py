@@ -10,8 +10,11 @@ from ..strings.spells import MagicSpell
 from ..strings.tool_names import ToolMaterial, Tool, FishingRod
 
 fishing_rod_prices = {
+    FishingRod.training: 25,
+    FishingRod.bamboo: 500,
     FishingRod.fiberglass: 1800,
     FishingRod.iridium: 7500,
+    FishingRod.advanced_iridium: 25000,
 }
 
 tool_materials = {
