@@ -4,6 +4,7 @@ from worlds.AutoWorld import WebWorld
 
 from .options import option_groups, option_presets
 
+
 # For our game to display correctly on the archipelago.gg website, we need to define a WebWorld subclass.
 class APQuestWebWorld(WebWorld):
     # We need to override the "game" field of the WebWorld superclass.
@@ -35,7 +36,7 @@ class APQuestWebWorld(WebWorld):
         "German",
         "setup_de.md",
         "setup/de",
-        ["NewSoupVi"]
+        ["NewSoupVi"],
     )
 
     # We add these tutorials to our WebWorld by overriding the "tutorials" field.

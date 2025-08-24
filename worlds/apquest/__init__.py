@@ -5,6 +5,7 @@ from .world import APQuestWorld as APQuestWorld
 
 # Client stuff - Don't worry about this.
 
+
 def run_client(*args) -> None:
     from .client.launch import launch_client  # lazy import
 
