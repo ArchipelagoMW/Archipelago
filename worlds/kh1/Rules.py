@@ -131,7 +131,6 @@ def has_oogie_manor(state: CollectionState, player: int, logic_difficulty: int) 
 def has_item_workshop(state: CollectionState, player: int, logic_difficulty: int) -> bool:
     return (
             state.has("Green Trinity", player)
-            or (logic_difficulty > LOGIC_BEGINNER and state.has("High Jump", player, 3))
             or (logic_difficulty > LOGIC_NORMAL and state.has("High Jump", player, 2))
         )
 

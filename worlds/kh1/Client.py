@@ -13,9 +13,6 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 import Utils
-death_link = False
-item_num = 1
-remote_location_ids = []
 
 logger = logging.getLogger("Client")
 
@@ -45,12 +42,11 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
         """If your Death Link setting is set to "Toggle", use this command to turn Death Link on and off."""
         if "death_link" in self.ctx.slot_data.keys():
             if self.ctx.slot_data["death_link"] == "toggle":
-                global death_link
-                if death_link:
-                    death_link = False
+                if self.ctx.death_link:
+                    self.ctx.death_link = False
                     self.output(f"Death Link turned off")
                 else:
-                    death_link = True
+                    self.ctx.death_link = True
                     self.output(f"Death Link turned on")
             else:
                 self.output(f"'death_link' is not set to 'toggle' for this seed.")
@@ -79,8 +75,14 @@ class KH1Context(CommonContext):
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
-        self.hinted_location_ids = []
-        self.slot_data = {}
+        self.hinted_location_ids: list[int] = []
+        self.slot_data: dict = {}
+
+        # Moved globals into instance attributes
+        self.death_link: bool = False
+        self.item_num: int = 1
+        self.remote_location_ids: list[int] = []
+
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%/KH1FM")
@@ -109,8 +111,7 @@ class KH1Context(CommonContext):
             for file in files:
                 if file.find("obtain") <= -1:
                     os.remove(root + "/" + file)
-        global item_num
-        item_num = 1
+        self.item_num = 1
 
     @property
     def endpoints(self):
@@ -125,11 +126,9 @@ class KH1Context(CommonContext):
             for file in files:
                 if file.find("obtain") <= -1:
                     os.remove(root+"/"+file)
-        global item_num
-        item_num = 1
+        self.item_num = 1
 
     def on_package(self, cmd: str, args: dict):
-        global remote_location_ids
         if cmd in {"Connected"}:
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
@@ -138,36 +137,34 @@ class KH1Context(CommonContext):
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
             
-            #Handle Slot Data
+            # Handle Slot Data
             self.slot_data = args['slot_data']
             for key in list(args['slot_data'].keys()):
                 with open(os.path.join(self.game_communication_path, key + ".cfg"), 'w') as f:
                     f.write(str(args['slot_data'][key]))
                     f.close()
                 if key == "remote_location_ids":
-                    remote_location_ids = args['slot_data'][key]
+                    self.remote_location_ids = args['slot_data'][key]
                 if key == "death_link":
                     if args['slot_data']["death_link"] != "off":
-                        global death_link
-                        death_link = True
-            #End Handle Slot Data
+                        self.death_link = True
+            # End Handle Slot Data
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):
-                global item_num
                 for item in args['items']:
                     found = False
-                    item_filename = f"AP_{str(item_num)}.item"
+                    item_filename = f"AP_{str(self.item_num)}.item"
                     for filename in os.listdir(self.game_communication_path):
                         if filename == item_filename:
                             found = True
                     if not found:
-                        if (NetworkItem(*item).player == self.slot and (NetworkItem(*item).location in remote_location_ids) or (NetworkItem(*item).location < 0)) or NetworkItem(*item).player != self.slot:
+                        if (NetworkItem(*item).player == self.slot and (NetworkItem(*item).location in self.remote_location_ids) or (NetworkItem(*item).location < 0)) or NetworkItem(*item).player != self.slot:
                             with open(os.path.join(self.game_communication_path, item_filename), 'w') as f:
                                 f.write(str(NetworkItem(*item).item) + "\n" + str(NetworkItem(*item).location) + "\n" + str(NetworkItem(*item).player))
                                 f.close()
-                                item_num = item_num + 1
+                                self.item_num += 1
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
@@ -193,7 +190,7 @@ class KH1Context(CommonContext):
                         message = "From " + senderName + "\n" + itemName
                     elif senderID == self.slot and receiverID != senderID: # Item sent to someone else
                         message = itemName + "\nTo " + receiverName
-                    elif locationID in remote_location_ids: # Found a remote item
+                    elif locationID in self.remote_location_ids: # Found a remote item
                         message = itemName
                     filename = "msg"
                     if message != "":
@@ -242,12 +239,11 @@ class KH1Context(CommonContext):
 async def game_watcher(ctx: KH1Context):
     from .Locations import lookup_id_to_name
     while not ctx.exit_event.is_set():
-        global death_link
-        if death_link and "DeathLink" not in ctx.tags:
-            await ctx.update_death_link(death_link)
-        if not death_link and "DeathLink" in ctx.tags:
-            await ctx.update_death_link(death_link)
-        if ctx.syncing == True:
+        if ctx.death_link and "DeathLink" not in ctx.tags:
+            await ctx.update_death_link(ctx.death_link)
+        if not ctx.death_link and "DeathLink" in ctx.tags:
+            await ctx.update_death_link(ctx.death_link)
+        if ctx.syncing is True:
             sync_msg = [{'cmd': 'Sync'}]
             if ctx.locations_checked:
                 sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
