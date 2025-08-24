@@ -21,6 +21,9 @@ You can customize your options by visiting the [Hexcells Infinite Options Page](
 
 ### Connect to the MultiServer
 
+## IMPORTANT
+### Move/Delete existing slotAP.save files in the Hexcells Infinite/saves directory before connecting to a new multiworld!
+
 1. Run the game once to load all necessary game files, then close the game.
 
 2. Install BepInEx by dragging the files over to the Hexcells Infinite game directory.
