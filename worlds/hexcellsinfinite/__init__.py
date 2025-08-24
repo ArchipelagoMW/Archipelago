@@ -15,11 +15,13 @@ import logging
 from BaseClasses import MultiWorld, Item, Tutorial
 from worlds.AutoWorld import World, CollectionState, WebWorld
 from typing import Dict
+from Utils import visualize_regions
 
 from .Locations import get_location_names, get_total_locations
 from .Items import create_item, create_itempool, item_table
 from .Options import HexcellsInfiniteOptions
 from .Regions import create_regions
+from .Rules import set_rules
 # from .Types import ChapterType, chapter_type_to_name
 
 # This is where you setup the page on the site!
@@ -46,7 +48,7 @@ class HexcellsInfiniteWorld(World):
     """
     Hexcells Infinite is a deterministic minesweeper puzzle game. \nIf you like Minesweeper, but hate guessing, this is the game for you.
     """
-
+    
     # You want to put the full name of the game here. If you shortened the name for the folder and class names, dont do that here
     game = "Hexcells Infinite"
     # The item_table will be setup in  your Items.py. This line gets all the items you put into item_table and puts it in a way that AP can understand it
@@ -86,11 +88,19 @@ class HexcellsInfiniteWorld(World):
     def create_regions(self):
         # This function comes from your Regions.py and dont worry that it matches the function that its in
         create_regions(self)
+        
+        
 
         # You can also use this space to do other location creation activities
         # Like if an option is enabled to add extra locations
         # Or the opposite, whatever it is. Just be careful that you arent duplicating locations
 
+    def set_rules(self):
+        set_rules(self)
+
+        state = self.multiworld.get_all_state(False)
+        state.update_reachable_regions(self.player)
+        visualize_regions(self.get_region("Menu"), "my_world.puml", show_entrance_names=True,regions_to_highlight=state.reachable_regions[self.player])
     # These are some examples of creating items. The create_itempool(self) function is coming from Items.py in this instance
     # The important part is that the items get into the self.multiworld.itempool as a list of Items
     # Ill try to explain better in the Items.py file 
