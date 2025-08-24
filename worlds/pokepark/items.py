@@ -91,6 +91,9 @@ class PokeparkItem(Item):
         return base_id + code
 
 
+def generate_flagname(flag: str) -> bytes:
+    return flag.encode('ascii') + b'\x00'
+
 ITEM_TABLE: dict[str, PokeparkItemData] = {
     "Chatot Friendship": PokeparkItemData(
         "Item", IC.progression, 0, 1, PokeparkFriendshipItemClientData(
@@ -1454,22 +1457,22 @@ ITEM_TABLE: dict[str, PokeparkItemData] = {
         )
     ),
     "Celebi Unlock": PokeparkItemData(
-        "Item", IC.progression, 272, 1, PokeparkUnlockItemClientData(
+        "Item", IC.filler, 272, 1, PokeparkUnlockItemClientData(
             parameter1=0xa5
         )
     ),
     "Darkrai Unlock": PokeparkItemData(
-        "Item", IC.progression, 273, 1, PokeparkUnlockItemClientData(
+        "Item", IC.filler, 273, 1, PokeparkUnlockItemClientData(
             parameter1=0xa4
         )
     ),
     "Groudon Unlock": PokeparkItemData(
-        "Item", IC.progression, 274, 1, PokeparkUnlockItemClientData(
+        "Item", IC.filler, 274, 1, PokeparkUnlockItemClientData(
             parameter1=0x9f
         )
     ),
     "Jirachi Unlock": PokeparkItemData(
-        "Item", IC.progression, 275, 1, PokeparkUnlockItemClientData(
+        "Item", IC.filler, 275, 1, PokeparkUnlockItemClientData(
             parameter1=0xa6
         )
     ),
@@ -1589,65 +1592,90 @@ ITEM_TABLE: dict[str, PokeparkItemData] = {
         )
     ),
     "Progressive Health": PokeparkItemData(
-        "Item", IC.progression, 299, 3, PokeparkPowerItemClientData(
+        "Item", IC.useful, 299, 3, PokeparkPowerItemClientData(
             parameter1=0x03
         )
     ),
     "Progressive Iron Tail": PokeparkItemData(
-        "Item", IC.progression, 300, 3, PokeparkPowerItemClientData(
+        "Item", IC.useful, 300, 3, PokeparkPowerItemClientData(
             parameter1=0x04
         )
     ),
     "Double Dash": PokeparkItemData(
-        "Item", IC.progression, 301, 1, PokeparkPowerItemClientData(
+        "Item", IC.useful, 301, 1, PokeparkPowerItemClientData(
             parameter1=0x05
         )
     ),
     "Meadow Zone Fast Travel": PokeparkItemData(
         "Item", IC.useful, 302, 1, PokeparkFlagItemClientData(
-            flag_name="f0101FuwarideTaxiStop".encode('ascii'),
+            flag_name=generate_flagname("f0101FuwarideTaxiStop"),
             parameter1=0x80001860
         )
     ),
     "Beach Zone Fast Travel": PokeparkItemData(
         "Item", IC.progression, 303, 1, PokeparkFlagItemClientData(
-            flag_name="f0301FuwarideTaxiStop".encode('ascii'),
+            flag_name=generate_flagname("f0301FuwarideTaxiStop"),
             parameter1=0x80001860
         )
     ),
     "Ice Zone Fast Travel": PokeparkItemData(
         "Item", IC.progression, 304, 1, PokeparkFlagItemClientData(
-            flag_name="f0302FuwarideTaxiStop".encode('ascii'),
+            flag_name=generate_flagname("f0302FuwarideTaxiStop"),
             parameter1=0x80001860
         )
     ),
     "Cavern Zone Fast Travel": PokeparkItemData(
         "Item", IC.progression, 305, 1, PokeparkFlagItemClientData(
-            flag_name="f0401FuwarideTaxiStop".encode('ascii'),
+            flag_name=generate_flagname("f0401FuwarideTaxiStop"),
             parameter1=0x80001860
         )
     ),
     "Magma Zone Fast Travel": PokeparkItemData(
         "Item", IC.progression, 306, 1, PokeparkFlagItemClientData(
-            flag_name="f0402FuwarideTaxiStop".encode('ascii'),
+            flag_name=generate_flagname("f0402FuwarideTaxiStop"),
             parameter1=0x80001860
         )
     ),
     "Haunted Zone Fast Travel": PokeparkItemData(
         "Item", IC.progression, 307, 1, PokeparkFlagItemClientData(
-            flag_name="f0501FuwarideTaxiStop".encode('ascii'),
+            flag_name=generate_flagname("f0501FuwarideTaxiStop"),
             parameter1=0x80001860
         )
     ),
     "Granite Zone Fast Travel": PokeparkItemData(
         "Item", IC.progression, 308, 1, PokeparkFlagItemClientData(
-            flag_name="f0601FuwarideTaxiStop".encode('ascii'),
+            flag_name=generate_flagname("f0601FuwarideTaxiStop"),
             parameter1=0x80001860
         )
     ),
     "Flower Zone Fast Travel": PokeparkItemData(
         "Item", IC.progression, 309, 1, PokeparkFlagItemClientData(
-            flag_name="f0602FuwarideTaxiStop".encode('ascii'),
+            flag_name=generate_flagname("f0602FuwarideTaxiStop"),
+            parameter1=0x80001860
+        )
+    ),
+
+    "Beach Bridge 1 Unlock": PokeparkItemData(
+        "Item", IC.progression, 310, 1, PokeparkFlagItemClientData(
+            flag_name=generate_flagname("fMap0301Bridge1Build"),
+            parameter1=0x80001860
+        )
+    ),
+    "Beach Bridge 2 Unlock": PokeparkItemData(
+        "Item", IC.progression, 311, 1, PokeparkFlagItemClientData(
+            flag_name=generate_flagname("fMap0301Bridge3Build"),
+            parameter1=0x80001860
+        )
+    ),
+    "Magma Zone Fire Wall Unlock": PokeparkItemData(
+        "Item", IC.progression, 312, 1, PokeparkFlagItemClientData(
+            flag_name=generate_flagname("f0402FireWallA"),
+            parameter1=0x80001860
+        )
+    ),
+    "Haunted Zone Mansion Doors Unlock": PokeparkItemData(
+        "Item", IC.progression, 315, 1, PokeparkFlagItemClientData(
+            flag_name=generate_flagname("f0502DoorA"),
             parameter1=0x80001860
         )
     ),
@@ -1665,6 +1693,8 @@ item_name_groups = {
 _simple_groups = {
     ("Friendship Items", "Friendship"),
     ("Unlock Items", "Unlock"),
+    ("Prisma Items", "Prisma"),
+    ("Fast Travel Items", "Fast Travel")
 }
 
 for basename, substring in _simple_groups:
