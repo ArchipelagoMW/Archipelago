@@ -6,7 +6,7 @@
 - Die [APQuest-apworld](https://github.com/NewSoupVi/Archipelago/releases), 
   falls diese nicht mit deiner Version von Archipelago gebündelt ist.
 
-## How to play
+## Wie man spielt
 
 Zuerst brauchst du einen Raum, mit dem du dich verbinden kannst.
 Dafür musst du oder jemand den du kennst ein Spiel generieren.  
