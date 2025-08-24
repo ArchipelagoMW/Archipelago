@@ -1,6 +1,9 @@
 from itertools import groupby
-from typing import Dict, List, Set, NamedTuple, Optional
+from typing import NamedTuple
+
 from BaseClasses import ItemClassification as IC
+
+from .constants import base_id
 
 
 class TunicItemData(NamedTuple):
@@ -9,12 +12,10 @@ class TunicItemData(NamedTuple):
     item_id_offset: int
     item_group: str = ""
     # classification if combat logic is on
-    combat_ic: Optional[IC] = None
+    combat_ic: None | IC = None
 
 
-item_base_id = 509342400
-
-item_table: Dict[str, TunicItemData] = {
+item_table: dict[str, TunicItemData] = {
     "Firecracker x2": TunicItemData(IC.filler, 3, 0, "Bombs"),
     "Firecracker x3": TunicItemData(IC.filler, 3, 1, "Bombs"),
     "Firecracker x4": TunicItemData(IC.filler, 3, 2, "Bombs"),
@@ -175,7 +176,7 @@ item_table: Dict[str, TunicItemData] = {
 }
 
 # items to be replaced by fool traps
-fool_tiers: List[List[str]] = [
+fool_tiers: list[list[str]] = [
     [],
     ["Money x1", "Money x10", "Money x15", "Money x16"],
     ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20"],
@@ -214,25 +215,25 @@ slot_data_item_names = [
     "Gold Questagon",
 ]
 
-combat_items: List[str] = [name for name, data in item_table.items()
+combat_items: list[str] = [name for name, data in item_table.items()
                            if data.combat_ic and IC.progression in data.combat_ic]
 combat_items.extend(["Stick", "Sword", "Sword Upgrade", "Magic Wand", "Hero's Laurels", "Gun"])
 
-item_name_to_id: Dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}
+item_name_to_id: dict[str, int] = {name: base_id + data.item_id_offset for name, data in item_table.items()}
 
-filler_items: List[str] = [name for name, data in item_table.items() if data.classification == IC.filler and name != "Grass"]
+filler_items: list[str] = [name for name, data in item_table.items() if data.classification == IC.filler and name != "Grass"]
 
 
 def get_item_group(item_name: str) -> str:
     return item_table[item_name].item_group
 
 
-item_name_groups: Dict[str, Set[str]] = {
+item_name_groups: dict[str, set[str]] = {
     group: set(item_names) for group, item_names in groupby(sorted(item_table, key=get_item_group), get_item_group) if group != ""
 }
 
 # extra groups for the purpose of aliasing items
-extra_groups: Dict[str, Set[str]] = {
+extra_groups: dict[str, set[str]] = {
     "Laurels": {"Hero's Laurels"},
     "Orb": {"Magic Orb"},
     "Dagger": {"Magic Dagger"},
