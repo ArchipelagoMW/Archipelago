@@ -121,17 +121,19 @@ class GrinchClient(BizHawkClient):
                 continue
 
             # Grinch ram data may have more than one address to update, so we are going to loop through all addresses in a location
+            # We use a list here to keep track of all our checks. If they are all true, then and only then do we mark that location as checked.
+            ram_checked_list: list[bool] = []
             for addr_to_update in grinch_loc_ram_data.update_ram_addr:
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
                 current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
                     addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
                 if is_binary:
-                    if (current_ram_address_value & (1 << addr_to_update.binary_bit_pos)) > 0:
-                        local_locations_checked.append(GrinchLocation.get_apid(grinch_loc_ram_data.id))
+                    ram_checked_list.append((current_ram_address_value & (1 << addr_to_update.binary_bit_pos)) > 0)
                 else:
                     expected_int_value = addr_to_update.value
-                    if expected_int_value == current_ram_address_value:
-                        local_locations_checked.append(GrinchLocation.get_apid(grinch_loc_ram_data.id))
+                    ram_checked_list.append(expected_int_value == current_ram_address_value)
+                if all(ram_checked_list):
+                    local_locations_checked.append(GrinchLocation.get_apid(grinch_loc_ram_data.id))
 
         # Update the AP server with the locally checked list of locations (In other words, locations I found in Grinch)
         await ctx.check_locations(local_locations_checked)
