@@ -20,6 +20,7 @@ graphic_to_char = {
     Graphic.BUTTON_DOOR: "?",
     Graphic.CHEST: "C",
     Graphic.BUSH: "T",
+    Graphic.BREAKABLE_BLOCK: "~",
     Graphic.NORMAL_ENEMY_2_HEATLH: "2",
     Graphic.NORMAL_ENEMY_1_HEALTH: "1",
     Graphic.BOSS_5_HEALTH: "5",
@@ -34,7 +35,8 @@ graphic_to_char = {
     Graphic.KEY: "K",
     Graphic.SHIELD: "X",
     Graphic.SWORD: "S",
-    Graphic.HEART: "H",
+    Graphic.HAMMER: "H",
+    Graphic.HEART: "♡",
     Graphic.CONFETTI_CANNON: "?",
     Graphic.REMOTE_ITEM: "I",
 }
@@ -70,8 +72,10 @@ def render_to_text(game: Game) -> str:
 
 if __name__ == "__main__":
     hard_mode = input("Do you want to play hard mode? (Y/N)").lower().strip() in ("y", "yes")
+    hammer_exists = input("Do you want the hammer to exist in the game? (Y/N)").lower().strip() in ("y", "yes")
+    extra_chest = input("Do you want the extra starting chest to exist in the game?").lower().strip() in ("y", "yes")
 
-    game = Game(hard_mode)
+    game = Game(hard_mode, hammer_exists, extra_chest)
     game.gameboard.fill_default_location_content()
 
     def input_and_rerender(input_key: Input) -> None:

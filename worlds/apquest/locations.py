@@ -8,13 +8,15 @@ if TYPE_CHECKING:
     from .world import APQuestWorld
 
 # Every location must have a unique integer ID associated with it.
-# Even if a location doesn't exist on specific options, it must be present in location_name_to_id.
+# We will have a lookup from location name to ID here that, in world.py, we will import and bind to the world class.
+# Even if a location doesn't exist on specific options, it must be present in this lookup.
 LOCATION_NAME_TO_ID = {
     "Top Left Room Chest": 1,
     "Top Middle Chest": 2,
     "Bottom Left Chest": 3,
-    "Bottom Right Room Left Chest": 4,
-    "Bottom Right Room Right Chest": 5,
+    "Bottom Left Extra Chest": 4,
+    "Bottom Right Room Left Chest": 5,
+    "Bottom Right Room Right Chest": 6,
     "Right Room Enemy Drop": 10,  # Location IDs don't need to be sequential, as long as they're unique
 }
 
@@ -66,6 +68,17 @@ def create_regular_locations(world: "APQuestWorld"):
         "Right Room Enemy Drop": world.location_name_to_id["Right Room Enemy Drop"],
     }
     right_room.add_locations(right_room_locations, APQuestLocation)
+
+    # Locations may exist only if the player enables certain options.
+    # In our case, the extra_starting_chest option adds the Bottom Left Extra Chest location.
+    if world.options.extra_starting_chest:
+        # Once again, it is important to stress that even though the Bottom Left Extra Chest location doesn't always
+        # exist, it must still always be present in the world's location_name_to_id.
+        # Whether the location actually exists in the seed is purely determined by whether we create and add it here.
+        bottom_left_extra_chest = APQuestLocation(
+            world.player, "Bottom Left Extra Chest", world.location_name_to_id["Bottom Left Extra Chest"], overworld
+        )
+        overworld.locations.append(bottom_left_extra_chest)
 
 
 def create_events(world: "APQuestWorld"):

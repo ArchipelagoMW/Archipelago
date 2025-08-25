@@ -2,6 +2,7 @@ from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
 from .entities import (
+    BreakableBlock,
     Bush,
     Button,
     ButtonDoor,
@@ -26,15 +27,17 @@ if TYPE_CHECKING:
 class Gameboard:
     gameboard: tuple[tuple[Entity, ...], ...]
 
+    hammer_exists: bool
     content_filled: bool
 
     remote_entity_by_location_id: dict[Location, LocationMixin]
 
-    def __init__(self, gameboard: tuple[tuple[Entity, ...], ...]) -> None:
+    def __init__(self, gameboard: tuple[tuple[Entity, ...], ...], hammer_exists: bool) -> None:
         assert gameboard, "Gameboard is empty"
         assert all(len(row) == len(gameboard[0]) for row in gameboard), "Not all rows have the same size"
 
         self.gameboard = gameboard
+        self.hammer_exists = hammer_exists
         self.content_filled = False
         self.remote_entity_by_location_id = {}
 
@@ -42,7 +45,11 @@ class Gameboard:
         for entity in self.iterate_entities():
             if isinstance(entity, LocationMixin):
                 if entity.location in DEFAULT_CONTENT:
-                    entity.content = DEFAULT_CONTENT[entity.location]
+                    content = DEFAULT_CONTENT[entity.location]
+                    if content == Item.HAMMER and not self.hammer_exists:
+                        content = Item.CONFETTI_CANNON
+                    entity.content = content
+
         self.content_filled = True
 
     def fill_remote_location_content(self, graphic_overrides: dict[Location, Item]) -> None:
@@ -104,7 +111,7 @@ class Gameboard:
         return len(self.gameboard[0]), len(self.gameboard)
 
 
-def create_gameboard(hard_mode: bool) -> Gameboard:
+def create_gameboard(hard_mode: bool, hammer_exists: bool, extra_chest: bool) -> Gameboard:
     boss_door = ButtonDoor()
     boss_door_button = Button(boss_door)
 
@@ -115,6 +122,10 @@ def create_gameboard(hard_mode: bool) -> Gameboard:
     bottom_left_chest = Chest(Location.BOTTOM_LEFT_CHEST)
     bottom_right_room_left_chest = Chest(Location.BOTTOM_RIGHT_ROOM_LEFT_CHEST)
     bottom_right_room_right_chest = Chest(Location.BOTTOM_RIGHT_ROOM_RIGHT_CHEST)
+
+    bottom_left_extra_chest = Chest(Location.BOTTOM_LEFT_EXTRA_CHEST) if extra_chest else Empty()
+    wall_if_hammer = Wall() if hammer_exists else Empty()
+    breakable_block = BreakableBlock() if hammer_exists else Empty()
 
     normal_enemy = EnemyWithLoot(2 if hard_mode else 1, Location.ENEMY_DROP)
     boss = FinalBoss(5 if hard_mode else 3)
@@ -135,11 +146,23 @@ def create_gameboard(hard_mode: bool) -> Gameboard:
             Empty(),
         ),
         (Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty()),
-        (Empty(), left_room_chest, Empty(), Wall(), Empty(), Empty(), Empty(), Wall(), Wall(), boss_door, Wall()),
+        (
+            Empty(),
+            left_room_chest,
+            Empty(),
+            Wall(),
+            wall_if_hammer,
+            breakable_block,
+            wall_if_hammer,
+            Wall(),
+            Wall(),
+            boss_door,
+            Wall(),
+        ),
         (Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty()),
         (Wall(), key_door, Wall(), Wall(), Empty(), Empty(), Empty(), Empty(), Empty(), normal_enemy, Empty()),
         (Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty()),
-        (Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall(), Wall(), Wall(), Wall(), Wall()),
+        (Empty(), bottom_left_extra_chest, Empty(), Empty(), Empty(), Empty(), Wall(), Wall(), Wall(), Wall(), Wall()),
         (Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty(), Empty()),
         (
             Empty(),
@@ -157,4 +180,4 @@ def create_gameboard(hard_mode: bool) -> Gameboard:
         (Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty(), Empty()),
     )
 
-    return Gameboard(gameboard)
+    return Gameboard(gameboard, hammer_exists)

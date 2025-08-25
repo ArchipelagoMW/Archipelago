@@ -10,6 +10,7 @@ class Item(Enum):
     KEY = ITEM_NAME_TO_ID["Key"]
     SWORD = ITEM_NAME_TO_ID["Sword"]
     SHIELD = ITEM_NAME_TO_ID["Shield"]
+    HAMMER = ITEM_NAME_TO_ID["Hammer"]
     HEALTH_UPGRADE = ITEM_NAME_TO_ID["Health Upgrade"]
     CONFETTI_CANNON = ITEM_NAME_TO_ID["Confetti Cannon"]
     REMOTE_ITEM = -1
@@ -27,6 +28,7 @@ ITEM_TO_GRAPHIC = defaultdict(
         Item.KEY: Graphic.KEY,
         Item.SWORD: Graphic.SWORD,
         Item.SHIELD: Graphic.SHIELD,
+        Item.HAMMER: Graphic.HAMMER,
         Item.HEALTH_UPGRADE: Graphic.HEART,
         Item.CONFETTI_CANNON: Graphic.CONFETTI_CANNON,
         Item.REMOTE_ITEM: Graphic.REMOTE_ITEM,

@@ -48,6 +48,13 @@ def set_all_entrance_rules(world: "APQuestWorld") -> None:
     # Conditions can depend on event items.
     set_rule(right_room_to_final_boss_room, lambda state: state.has("Top Left Room Button Pressed", world.player))
 
+    # Some entrance rules may only apply if the player enabled certain options.
+    # In our case, if the hammer option is enabled, we need to add the Hammer requirement to the Entrance from
+    # Overworld to the Top Middle Room.
+    if world.options.hammer:
+        overworld_to_top_middle_room = world.get_entrance("Overworld to Top Middle Room")
+        set_rule(overworld_to_top_middle_room, lambda state: state.has("Hammer", world.player))
+
 
 def set_all_location_rules(world: "APQuestWorld") -> None:
     # Location rules work no differently from Entrance rules.

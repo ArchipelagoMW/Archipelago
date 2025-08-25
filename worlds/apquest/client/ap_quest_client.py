@@ -10,7 +10,7 @@ from NetUtils import ClientStatus
 from ..apquest.events import ConfettiFired, LocationClearedEvent, VictoryEvent
 from ..apquest.game import Game, Input
 from ..apquest.items import Item
-from ..apquest.locations import LOCATION_NAME_TO_ID, Location
+from ..apquest.locations import Location
 from .game_manager import APQuestManager
 from .graphics import PlayerSprite
 from .item_quality import get_quality_for_network_item
@@ -46,6 +46,8 @@ class APQuestContext(CommonContext):
 
     ap_quest_game: Game | None = None
     hard_mode: bool = False
+    hammer: bool = False
+    extra_starting_chest: bool = (False,)
     player_sprite: PlayerSprite = PlayerSprite.HUMAN
 
     connection_status: ConnectionStatus = ConnectionStatus.NOT_CONNECTED
@@ -85,7 +87,7 @@ class APQuestContext(CommonContext):
         while not self.exit_event.is_set():
             if self.connection_status != ConnectionStatus.GAME_RUNNING:
                 if self.connection_status == ConnectionStatus.SCOUTS_NOT_SENT:
-                    await self.send_msgs([{"cmd": "LocationScouts", "locations": list(LOCATION_NAME_TO_ID.values())}])
+                    await self.send_msgs([{"cmd": "LocationScouts", "locations": self.server_locations}])
                     self.connection_status = ConnectionStatus.SCOUTS_SENT
 
                 await asyncio.sleep(0.1)
@@ -140,13 +142,15 @@ class APQuestContext(CommonContext):
 
             self.slot_data = args["slot_data"]
             self.hard_mode = self.slot_data["hard_mode"]
+            self.hammer = self.slot_data["hammer"]
+            self.extra_starting_chest = self.slot_data["extra_starting_chest"]
             try:
                 self.player_sprite = PlayerSprite(self.slot_data["player_sprite"])
             except Exception as e:
                 logger.exception(e)
                 self.player_sprite = PlayerSprite.UNKNOWN
 
-            self.ap_quest_game = Game(self.hard_mode)
+            self.ap_quest_game = Game(self.hard_mode, self.hammer, self.extra_starting_chest)
             self.highest_processed_item_index = 0
             self.render()
 

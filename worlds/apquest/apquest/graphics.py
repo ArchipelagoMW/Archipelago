@@ -10,6 +10,7 @@ class Graphic(Enum):
     BUTTON_DOOR = 5
     CHEST = 6
     BUSH = 7
+    BREAKABLE_BLOCK = 8
 
     NORMAL_ENEMY_1_HEALTH = 10
     NORMAL_ENEMY_2_HEATLH = 11
@@ -28,14 +29,16 @@ class Graphic(Enum):
     KEY = 41
     SWORD = 42
     SHIELD = 43
-    HEART = 44
-    HALF_HEART = 45
-    EMPTY_HEART = 46
+    HAMMER = 44
 
-    CONFETTI_CANNON = 50
+    HEART = 50
+    HALF_HEART = 51
+    EMPTY_HEART = 52
 
-    REMOTE_ITEM = 60
+    CONFETTI_CANNON = 60
 
-    ITEMS_TEXT = 70
+    REMOTE_ITEM = 70
+
+    ITEMS_TEXT = 80
 
     UNKNOWN = -1

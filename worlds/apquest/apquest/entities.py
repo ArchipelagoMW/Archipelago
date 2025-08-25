@@ -147,6 +147,21 @@ class KeyDoor(Door, InteractableMixin):
         self.open()
 
 
+class BreakableBlock(Door, InteractableMixin):
+    closed_graphic = Graphic.BREAKABLE_BLOCK
+
+    def interact(self, player: "Player") -> None:
+        if self.is_open:
+            return
+
+        if not player.has_item(Item.HAMMER):
+            return
+
+        player.remove_item(Item.HAMMER)
+
+        self.open()
+
+
 class Bush(Door, InteractableMixin):
     closed_graphic = Graphic.BUSH
 

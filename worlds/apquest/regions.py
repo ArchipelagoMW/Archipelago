@@ -19,8 +19,17 @@ def create_all_regions(world: "APQuestWorld"):
     right_room = Region("Right Room", world.player, world.multiworld)
     final_boss_room = Region("Final Boss Room", world.player, world.multiworld)
 
+    # Let's put all these regions in a list.
+    regions = [overworld, top_left_room, bottom_right_room, right_room, final_boss_room]
+
+    # Some regions may only exist if the player enables certain options.
+    # In our case, the Hammer locks the top middle chest in its own room if the hammer option is enabled.
+    if world.options.hammer:
+        top_middle_room = Region("Top Middle Room", world.player, world.multiworld)
+        regions.append(top_middle_room)
+
     # We now need to add these regions to multiworld.regions so that AP knows about their existence.
-    world.multiworld.regions += [overworld, top_left_room, bottom_right_room, right_room, final_boss_room]
+    world.multiworld.regions += regions
 
 
 def connect_regions(world: "APQuestWorld"):
@@ -50,3 +59,12 @@ def connect_regions(world: "APQuestWorld"):
     # The region.connect helper even allows adding a rule immediately.
     # We'll talk more about rule creation in the set_all_rules() function in rules.py.
     overworld.connect(top_left_room, "Overworld to Top Left Room", lambda state: state.has("Key", world.player))
+
+    # Some Entrances may only exist if the player enables certain options.
+    # In our case, the Hammer locks the top middle chest in its own room if the hammer option is enabled.
+    # In this case, we previously created an extra "Top Middle Room" region that we now need to connect to Overworld.
+    if world.options.hammer:
+        top_middle_room = world.get_region("Top Middle Room")
+        overworld.connect(
+            top_middle_room, "Overworld to Top Middle Room", lambda state: state.has("Hammer", world.player)
+        )

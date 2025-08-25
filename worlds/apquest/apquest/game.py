@@ -18,9 +18,9 @@ class Game:
 
     remotely_received_items: set[tuple[int, int, int]]
 
-    def __init__(self, hard_mode: bool) -> None:
+    def __init__(self, hard_mode: bool, hammer_exists, extra_chest: bool) -> None:
         self.queued_events = []
-        self.gameboard = create_gameboard(hard_mode)
+        self.gameboard = create_gameboard(hard_mode, hammer_exists, extra_chest)
         self.player = Player(self.gameboard, self.queued_events.append)
         self.remotely_received_items = set()
 

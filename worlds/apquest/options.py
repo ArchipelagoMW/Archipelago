@@ -13,7 +13,26 @@ class HardMode(Toggle):
     The Health Upgrades become progression, as they are now required to beat the final boss.
     """
 
+    # The docstring of an option is used as the description on the website and in the template yaml.
+    # You'll also want to set a display name, which will determine what the option is called on the website.
     display_name = "Hard Mode"
+
+
+class Hammer(Toggle):
+    """
+    Adds another item to the itempool: The Hammer.
+    The top middle chest will now be locked behind a breakable wall, requiring the Hammer.
+    """
+
+    display_name = "Hammer"
+
+
+class ExtraStartingChest(Toggle):
+    """
+    Adds an extra chest in the bottom left, making room for an extra Confetti Cannon.
+    """
+
+    display_name = "Extra Starting Chest"
 
 
 # A range is a numeric option with a min and max value. This will be represented by a slider on the website.
@@ -46,9 +65,12 @@ class PlayerSprite(Choice):
 
 
 # We must now define a dataclass inheriting from PerGameCommonOptions that we put all our options in.
+# This is in the format "option_name_in_snake_case: OptionClassName".
 @dataclass
 class APQuestOptions(PerGameCommonOptions):
     hard_mode: HardMode
+    hammer: Hammer
+    extra_starting_chest: ExtraStartingChest
     confetti_explosiveness: ConfettiExplosiveness
     player_sprite: PlayerSprite
 
@@ -57,7 +79,7 @@ class APQuestOptions(PerGameCommonOptions):
 option_groups = [
     OptionGroup(
         "Gameplay Options",
-        [HardMode],
+        [HardMode, Hammer, ExtraStartingChest],
     ),
     OptionGroup(
         "Aesthetic Options",
@@ -69,11 +91,15 @@ option_groups = [
 option_presets = {
     "boring": {
         "hard_mode": False,
+        "hammer": False,
+        "extra_starting_chest": False,
         "confetti_explosiveness": ConfettiExplosiveness.range_start,
         "player_sprite": PlayerSprite.option_human,
     },
     "the true way to play": {
         "hard_mode": True,
+        "hammer": True,
+        "extra_starting_chest": True,
         "confetti_explosiveness": ConfettiExplosiveness.range_end,
         "player_sprite": PlayerSprite.option_duck,
     },
