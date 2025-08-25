@@ -590,11 +590,9 @@ class SMZ3World(World):
 
     def JunkFillGT(self, factor):
         poolLength = len(self.multiworld.itempool)
-        junkPoolIdx = [i for i in range(0, poolLength)
-                    if self.multiworld.itempool[i].player == self.player and not self.multiworld.itempool[i].advancement]
+        junkPoolIdx = [idx for idx, i in enumerate(self.multiworld.itempool) if i.player == self.player and not i.advancement]
         self.random.shuffle(junkPoolIdx)
-        junkLocations = [loc for loc in self.locations.values()
-                    if loc.name in self.locationNamesGT and loc.item is None]
+        junkLocations = [loc for loc in self.locations.values() if loc.name in self.locationNamesGT and loc.item is None]
         self.random.shuffle(junkLocations)
         toRemove = []
         requireFiller = True
@@ -630,15 +628,15 @@ class SMZ3World(World):
             raise Exception(f"Tried to place item {itemType} at {location.Name}, but there is no such item in the item pool")
         else:
             location.Item = itemToPlace
-            itemFromPool = next((i for i in self.multiworld.itempool if i.player == self.player and i.name == itemToPlace.Type.name), None)
-            if itemFromPool is not None:
+            itemPoolIdx = next((idx for idx, i in enumerate(self.multiworld.itempool) if i.player == self.player and i.name == itemToPlace.Type.name), None)
+            if itemPoolIdx is not None:
+                itemFromPool = self.multiworld.itempool.pop(itemPoolIdx)
                 self.multiworld.get_location(location.Name, self.player).place_locked_item(itemFromPool)
-                self.multiworld.itempool.remove(itemFromPool)
             else:
-                itemFromPool = next((i for i in self.smz3DungeonItems if i.player == self.player and i.name == itemToPlace.Type.name), None)
-                if itemFromPool is not None:
+                itemPoolIdx = next((idx for idx, i in enumerate(self.smz3DungeonItems) if i.player == self.player and i.name == itemToPlace.Type.name), None)
+                if itemPoolIdx is not None:
+                    itemFromPool = self.smz3DungeonItems.pop(itemPoolIdx)
                     self.multiworld.get_location(location.Name, self.player).place_locked_item(itemFromPool)
-                    self.smz3DungeonItems.remove(itemFromPool)
         itemPool.remove(itemToPlace)
 
     def FrontFillItemInOwnWorld(self, itemPool, itemType):
@@ -648,10 +646,10 @@ class SMZ3World(World):
             raise Exception(f"Tried to front fill {item.Name} in, but no location was available")
         
         location.Item = item
-        itemFromPool = next((i for i in self.multiworld.itempool if i.player == self.player and i.name == item.Type.name and i.advancement == item.Progression), None)
-        if itemFromPool is not None:
+        itemPoolIdx = next((idx for idx, i in enumerate(self.multiworld.itempool) if i.player == self.player and i.name == item.Type.name and i.advancement == item.Progression), None)
+        if itemPoolIdx is not None:
+            itemFromPool = self.multiworld.itempool.pop(itemPoolIdx)
             self.multiworld.get_location(location.Name, self.player).place_locked_item(itemFromPool)
-            self.multiworld.itempool.remove(itemFromPool)
         itemPool.remove(item)
 
     def InitialFillInOwnWorld(self):
