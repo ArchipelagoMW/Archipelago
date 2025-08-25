@@ -75,6 +75,9 @@ def set_rules(multiworld, world, player):
         "Vermilion Dock - Legendary Pokemon": lambda state: logic.can_surf(state, world, player),
         "Cerulean Cave B1F - Legendary Pokemon": lambda state: logic.can_surf(state, world, player),
 
+        "Saffron Fighting Dojo - Gift 1": lambda state: state.has("Defeat Sabrina", player),
+        "Saffron Fighting Dojo - Gift 2": lambda state: state.has("Defeat Sabrina", player),
+
         **{f"Pokemon Tower {floor}F - Wild Pokemon - {slot}": lambda state: state.has("Silph Scope", player) for floor in range(3, 8) for slot in range(1, 11)},
         "Pokemon Tower 6F - Restless Soul": lambda state: state.has("Silph Scope", player),  # just for level scaling
 
@@ -92,6 +95,7 @@ def set_rules(multiworld, world, player):
         "Vermilion Trade House - Dux Trade": lambda state: state.can_reach("Route 3 - Wild Pokemon - 2", "Location", player),
         "Cerulean Trade House - Lola Trade": lambda state: state.can_reach("Route 10/Celadon Fishing - Super Rod Pokemon - 1", "Location", player),
 
+        "Route 22 - Rival 1": lambda state: state.has("Oak's Parcel", player),
         "Route 22 - Trainer Parties": lambda state: state.has("Oak's Parcel", player),
 
         "Victory Road 1F - Top Item": lambda state: logic.can_strength(state, world, player),
