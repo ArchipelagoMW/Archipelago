@@ -136,6 +136,8 @@ def create_location_data(self : GloverWorld, check_name : str, check_info : list
         for _ in range(check_info[0]["COUNT"]):
             garib_ap_ids.append(ap_ids.pop())
             garib_rom_ids.append(rom_ids.pop())
+        garib_ap_ids.reverse()
+        garib_rom_ids.reverse()
         outputs.append(LocationData(prefix + check_name.removesuffix("s") + " Garibs", 1, check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], garib_ap_ids, garib_rom_ids, methods))
         outputs.append(LocationData(prefix + check_name, 10, check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], ap_ids, rom_ids, methods))
     #All other checks
@@ -475,6 +477,7 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
             prefix : str = level_name + ": "
             map_regions : List[RegionPair] = []
             location_data_list : List[LocationData] = []
+            
             #Bonus levels are off by default
             if not (level_index == 5 and not self.options.bonus_levels):
                 for check_name in each_level:
@@ -492,25 +495,54 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
                             matching_name = checkpoint_entry_pairs[check_index]
                             if matching_name == check_name:
                                 region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
+            
             #Sort the in-level regions
             map_regions = sorted(map_regions, key=attrgetter('base_id'))
             connect_region_pairs(self, map_regions)
+            
             #Create the level info attached to it
             checkpoint_for_use : int | None = None
             if level_index > 0 and level_index < 4 and world_index < 6:
                 checkpoint_for_use = self.spawn_checkpoint[(world_index * 3) + (level_index - 1)]
             region_level : RegionLevel = create_region_level(self, level_name, checkpoint_for_use, checkpoint_entry_pairs, map_regions)
-            all_levels.append(region_level)
+            
             #Attach the locations to the regions
             assign_locations_to_regions(self, region_level, map_regions, location_data_list)
+            
+            #Aside from the wayrooms, the hubworld and the castle cave
+            if (world_index < 6 and not level_index == 0) or level_index == 2:
+                #Does this location have a star mark?
+                star_mark_ap_id : int | None = None
+                if self.options.portalsanity:
+                    #They contain a random item
+                    star_mark_ap_id = 3000 + level_index + (world_index * 10)
+                secondary_condition : str
+                #Does this location have garibs?
+                if level_index == 4 or world_index >= 6:
+                    #No
+                    secondary_condition = "Completion"
+                else:
+                    #Yes
+                    secondary_condition = "All Garibs"
+                #Otherwise, they contain the star marks
+                level_base_region : Region = self.multiworld.get_region(level_name, self.player)
+                star_mark_location = Location(self.player, prefix + secondary_condition, star_mark_ap_id, level_base_region)
+                level_base_region.locations.append(star_mark_location)
+            all_levels.append(region_level)
+
     return all_levels
 
 def build_location_pairings(base_name : str, check_info : dict, ap_ids : list[str]) -> list[list]:
+    #Nothing at all
     if len(ap_ids) == 0:
         return []
+    #If the location data accounts for 1 location
     if len(ap_ids) == 1:
-        #If the location data accounts for 1 location
         return [[base_name, ap_ids[0]]]
+    #A single enemy
+    if len(ap_ids) == 2 and check_info["TYPE"] == 10:
+        if check_info["COUNT"] == 1:
+            return [[base_name, ap_ids[0]], [base_name + " Garib", ap_ids[1]]]
     output : list[list] = []
     #If the location accounts for multiple locations
     for each_ap_id_index, each_ap_id in enumerate(ap_ids):
@@ -567,12 +599,23 @@ def generate_location_name_to_id(world_prefixes : list[str], level_prefixes : li
                     output[each_pairing[0]] = int(each_pairing[1], 0)
                 #Garib Groups
                 if level_data[location_name][0]["TYPE"] == 1 and len(ap_ids) > 1:
-                    ap_ids.sort()
                     group_id : int = int(ap_ids[0], 0) + 10000
                     output[prefix + location_name] = group_id
                 #Enemy Garib Groups
-                if level_data[location_name][0]["TYPE"] == 10 and len(ap_ids) > 0:
-                    ap_ids.sort()
-                    group_id : int = int(ap_ids[0], 0) + 10000
-                    output[prefix + location_name.removesuffix("s") + " Garibs"] = group_id
+                if level_data[location_name][0]["TYPE"] == 10:
+                    enemy_count = level_data[location_name][0]["COUNT"]
+                    if enemy_count < len(ap_ids):
+                        group_id : int = int(ap_ids[enemy_count], 0) + 10000
+                        output[prefix + location_name.removesuffix("s") + " Garibs"] = group_id
+            #Levels with garibs in them
+            if each_world_index < 6:
+                match level_key:
+                    case "l1":
+                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 1
+                    case "l2":
+                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 2
+                    case "l3":
+                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 3
+                    case "l5":
+                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 5
     return output

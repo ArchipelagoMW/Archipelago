@@ -185,8 +185,8 @@ class GloverWorld(World):
         if self.options.garib_sorting == GaribSorting.option_random_order:
             self.random.shuffle(self.garib_level_order)
             #Bonus levels all go at the end if they're disabled
-            if not self.options.bonus_levels:
-                self.garib_level_order.append(self.garib_level_order.pop(["Atl?", 25]))
+            #if not self.options.bonus_levels:
+                #self.garib_level_order.append(self.garib_level_order.pop(["Atl?", 25]))
                 #self.garib_level_order.append(self.garib_level_order.pop(["Crn?", 20]))
                 #self.garib_level_order.append(self.garib_level_order.pop(["Prt?", 50]))
                 #self.garib_level_order.append(self.garib_level_order.pop(["Pht?", 60]))
@@ -250,8 +250,12 @@ class GloverWorld(World):
     def create_regions(self):
         multiworld = self.multiworld
         player = self.player
+        #Build all the game locations, and the locations contained under them
         build_data(self)
         multiworld.regions.append(Region("Menu", player, multiworld))
+        
+        #Randomize the entrances for those remaining regions
+        self.entrance_randomizer()
 
     def create_event(self, event : str) -> GloverItem:
         return GloverItem(event, ItemClassification.progression, None, self.player)
@@ -424,14 +428,12 @@ class GloverWorld(World):
         player : int = self.player
 
         #TEMP LEVEL ORDER
-        multiworld.get_location("Atl1: Goal", player).place_locked_item(self.create_event("AtlH 2 Gate"))
-        multiworld.get_location("Atl2: Goal", player).place_locked_item(self.create_event("AtlH 3 Gate"))
-        goal_location_name : str = "Atl3: Goal"
-        end_region : Region = multiworld.get_location(goal_location_name, player).parent_region
-        goal_location : Location = Location(player, "Ending", None, end_region)
-        end_region.locations.append(goal_location)
-        add_rule(goal_location, lambda state: state.can_reach_location(goal_location_name, player))
-        goal_location.place_locked_item(self.create_event("Victory"))
+        final_location_name : str = "Atl3: Goal"
+        end_region : Region = multiworld.get_location(final_location_name, player).parent_region
+        final_location : Location = Location(player, "Ending", None, end_region)
+        end_region.locations.append(final_location)
+        add_rule(final_location, lambda state: state.can_reach_location(final_location_name, player))
+        final_location.place_locked_item(self.create_event("Victory"))
         multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
         #Menu loads into the hubworld
@@ -449,12 +451,18 @@ class GloverWorld(World):
             hubroom : Region = multiworld.get_region(wayroom_name, player)
             hubroom.connect(multiworld.get_region(wayroom_name + ": Main W/Ball", player))
             for entry_index, each_entry_suffix in enumerate(entry_name):
+                #Connect hubs to the right location
                 offset : int = world_offset + entry_index
                 location_name : str = wayroom_name + ": Entry " + each_entry_suffix
-                connecting_level : Region = multiworld.get_region(self.wayroom_entrances[offset], player)
+                connecting_level_name : str = self.wayroom_entrances[offset]
+                connecting_level : Region = multiworld.get_region(connecting_level_name, player)
                 entry_region : Region = multiworld.get_location(location_name, player).parent_region
                 entry_region.connect(connecting_level, location_name, lambda state, each_location = location_name: state.can_reach_location(each_location, player))
-        
+                
+                #Default portal and star positions
+                if not self.options.portalsanity:
+                    self.populate_goals_and_marks(connecting_level_name, wayroom_name, entry_index)
+
         #Entry Names
         hub_entry_names : list[str] = [
             "Atlantis Hub Entry",
@@ -472,14 +480,58 @@ class GloverWorld(World):
             connecting_name : str  = entrance_name
             if entrance_name == "Well":
                 connecting_name = self.wayroom_entrances[len(self.wayroom_entrances) - 1]
+                #Plug the well's completions up so they do nothing
+                if not self.options.portalsanity:
+                    self.populate_goals_and_marks(connecting_name, "Well", -1)
             connecting_level : Region = multiworld.get_region(connecting_name, player)
             reaching_location : str = "Hubworld: " + loading_zone
             reaching_region : Region = multiworld.get_location(reaching_location, player).parent_region
             reaching_region.connect(connecting_level, loading_zone, lambda state, each_location = reaching_location: state.can_reach_location(each_location, player))
 
+    #Lacking Portalsanity Gates and Marks
+    def populate_goals_and_marks(self, connecting_level_name : str, wayroom_name : str, entry_index : int):
+        player = self.player
+        #Map Generation
+        goal_item : Item
+        all_garibs_item : Item
+        #What fixed item is there?
+        match entry_index:
+            case -1:
+                goal_item = self.create_event(wayroom_name + " Finished")
+                all_garibs_item  = self.create_event(wayroom_name + " Completed")
+            case 0:
+                goal_item = self.create_event(wayroom_name + " 2 Gate")
+                all_garibs_item  = self.create_event(wayroom_name + " 1 Star")
+            case 1:
+                goal_item = self.create_event(wayroom_name + " 3 Gate")
+                all_garibs_item  = self.create_event(wayroom_name + " 2 Star")
+            case 2:
+                goal_item = self.create_event(wayroom_name + " Boss Gate")
+                all_garibs_item  = self.create_event(wayroom_name + " 3 Star")
+            case 3:
+                goal_item = self.create_event(wayroom_name + " Ball")
+                all_garibs_item  = self.create_event(wayroom_name + " Boss Star")
+            case 4:
+                goal_item = self.create_event(wayroom_name + " Bonus Complete")
+                all_garibs_item  = self.create_event(wayroom_name + " Bonus Star")
+        #What kind of level is this?
+        
+        #TEMP: REMOVE IF SATEMENTS ONCE GAME'S CONSTRUCTED
+        if connecting_level_name == "Atl1" or connecting_level_name == "Atl2":
+            goal_location : Location = self.multiworld.get_location(connecting_level_name + ": Goal", player)
+            goal_location.place_locked_item(goal_item)
+        
+        garibs_location : Location
+        #Levels with garibs
+        if connecting_level_name.endswith(('1','2','3','?')):
+            garibs_location = self.multiworld.get_location(connecting_level_name + ": All Garibs", player)
+        #Levels without garibs
+        else:
+            garibs_location = self.multiworld.get_location(connecting_level_name + ": Completion", player)
+        #Place them
+        garibs_location.place_locked_item(all_garibs_item)
+
     def connect_entrances(self):
-        #Use reachable regions when I need to debug stuff in this ', self.multiworld.blabla)'
-        self.entrance_randomizer()
         visualize_regions(self.multiworld.get_region("Menu", self.player), "Glover.puml", regions_to_highlight=self.multiworld.get_all_state().reachable_regions[self.player])
         return super().connect_entrances()
 

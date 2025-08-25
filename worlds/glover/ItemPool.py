@@ -53,12 +53,12 @@ def find_item_data(self, name : str) -> ItemData:
 BASE_ID = 6500000
 
 portalsanity_table = {
-	#"AtlH 1 Star" : 						ItemData(BASE_ID + 0, 1, "Progression", "Atl1: All Garibs"),
+	"AtlH 1 Star" : 						ItemData(BASE_ID + 0, 1, "Progression", "Atl1: All Garibs"),
 	"AtlH 2 Gate" : 						ItemData(BASE_ID + 1, 1, "Progression", "Atl1: Goal"),
-	#"AtlH 2 Star" : 						ItemData(BASE_ID + 2, 1, "Progression", "Atl2: All Garibs"),
-	"AtlH 3 Gate" : 						ItemData(BASE_ID + 3, 1, "Progression", "Atl2: Goal")#,
-	#"AtlH 3 Star" : 						ItemData(BASE_ID + 4, 1, "Progression", "Atl3: All Garibs"),
-	#"AtlH Boss Gate" : 						ItemData(BASE_ID + 5, 1, "Progression", "Atl3: Goal"),
+	"AtlH 2 Star" : 						ItemData(BASE_ID + 2, 1, "Progression", "Atl2: All Garibs"),
+	"AtlH 3 Gate" : 						ItemData(BASE_ID + 3, 1, "Progression", "Atl2: Goal"),
+	"AtlH 3 Star" : 						ItemData(BASE_ID + 4, 1, "Progression", "Atl3: All Garibs"),
+	"AtlH Boss Gate" : 						ItemData(BASE_ID + 5, 1, "Progression", "Atl3: Goal")#,
 	#"AtlH Boss Star" : 						ItemData(BASE_ID + 6, 1, "Progression", "Atl!: Goal"),
 	#"AtlH Bonus Gate" : 					ItemData(BASE_ID + 7, 1, "Progression", "AtlH: Bonus Unlock"),
 	#"AtlH Bonus Star" : 					ItemData(BASE_ID + 8, 1, "Progression", "Atl?: All Garibs"),
