@@ -182,13 +182,13 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
     # "Tip Toe Trap": GrinchItemData("Traps", 603, IC.trap, [GrinchRamData()]),
 # This item may not function properly if you receive it during a loading screen or in Mount Crumpit
 #     "Damage Trap": GrinchItemData("Traps", 604, IC.trap, [GrinchRamData(0x0E8FDC, value=-20, update_existing_value=True)]),
-#     "Depletion Trap": GrinchItemData("Traps", 605, IC.trap, [GrinchRamData(0x010058, value=0, bit_size=2)]),
-    # "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
-    #     [GrinchRamData(0x010000, value=0x05), GrinchRamData(0x08FB94, value=1)])
+    "Depletion Trap": GrinchItemData("Traps", 605, IC.trap, [GrinchRamData(0x010058, value=0, bit_size=2)]),
+    "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
+        [GrinchRamData(0x010000, value=0x05), GrinchRamData(0x08FB94, value=1)]),
 #alias to Spring Trap for traplink
     # "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]),
 #alias to Home Trap for traplink
-    # "Who sent me back?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x08FB94, value=1)]),
+    "Who sent me back?": GrinchItemData("Traps", 608, IC.trap, [GrinchRamData(0x08FB94, value=1)]),
     # "Cutscene Trap": GrinchItemData("Traps", 609, IC.trap, [GrinchRamData()]),
     # "No Vac Trap": GrinchItemData("Traps", 610, IC.trap, [GrinchRamData(0x0102DA, value=0]),
     # "Invisible Trap": GrinchItemData("Traps", 611, IC.trap, [GrinchRamData(0x0102DA, value=0, bit_size=4)])

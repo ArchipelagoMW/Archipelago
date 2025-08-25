@@ -216,4 +216,6 @@ class GrinchClient(BizHawkClient):
         await bizhawk.write(ctx.bizhawk_ctx, [(address_to_validate, expected_value.to_bytes(byte_size, "little"), "MainRAM")])
         current_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(address_to_validate, byte_size, "MainRAM")]))[0], "little")
         if not current_value == expected_value:
+            if address_to_validate == 0x010000 or address_to_validate == 0x08FB94:
+                return
             raise Exception("Unable to update address as expected. Address: "+ str(address_to_validate)+"; Expected Value: "+str(expected_value))
