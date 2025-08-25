@@ -2302,7 +2302,6 @@ function received_garibs(itemId)
     elseif itemId == 6500196 then
         TOTAL_ATLANTIS_1_GARIBS = TOTAL_ATLANTIS_1_GARIBS + 9
         GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L1_GARIBS"], TOTAL_ATLANTIS_1_GARIBS)
-        GVR:setItem(ITEM_TABLE["AP_ITEM_BBOMB"], 1)
     end
 end
 

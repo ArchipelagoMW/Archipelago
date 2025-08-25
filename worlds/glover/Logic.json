@@ -55,6 +55,7 @@
 				},
 				{
 					"ballRequirement": false,
+					"ck0": "Bonus Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -69,6 +70,7 @@
 				},
 				{
 					"ballRequirement": false,
+					"ck0": "Boss Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -3584,6 +3586,22 @@
 					"NEEDS_BALL": true,
 					"REGION": 0,
 					"TYPE": 5
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 10,
+					"mv1": 14,
+					"mv2": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 14,
+					"mv1": 12,
+					"mv2": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Main": {
@@ -3594,6 +3612,11 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [

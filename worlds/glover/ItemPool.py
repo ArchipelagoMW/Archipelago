@@ -58,10 +58,10 @@ portalsanity_table = {
 	"AtlH 2 Star" : 						ItemData(BASE_ID + 2, 1, "Progression", "Atl2: All Garibs"),
 	"AtlH 3 Gate" : 						ItemData(BASE_ID + 3, 1, "Progression", "Atl2: Goal"),
 	"AtlH 3 Star" : 						ItemData(BASE_ID + 4, 1, "Progression", "Atl3: All Garibs"),
-	"AtlH Boss Gate" : 						ItemData(BASE_ID + 5, 1, "Progression", "Atl3: Goal")#,
-	#"AtlH Boss Star" : 						ItemData(BASE_ID + 6, 1, "Progression", "Atl!: Goal"),
-	#"AtlH Bonus Gate" : 					ItemData(BASE_ID + 7, 1, "Progression", "AtlH: Bonus Unlock"),
-	#"AtlH Bonus Star" : 					ItemData(BASE_ID + 8, 1, "Progression", "Atl?: All Garibs"),
+	"AtlH Boss Gate" : 						ItemData(BASE_ID + 5, 1, "Progression", "Atl3: Goal"),
+	"AtlH Boss Star" : 						ItemData(BASE_ID + 6, 1, "Progression", "Atl!: Goal"),
+	"AtlH Bonus Gate" : 					ItemData(BASE_ID + 7, 1, "Progression", "AtlH: Bonus Unlock"),
+	"AtlH Bonus Star" : 					ItemData(BASE_ID + 8, 1, "Progression", "Atl?: All Garibs")#,
 	#"CrnH 1 Star" : 						ItemData(BASE_ID + 15, 1, "Progression", ),
 	#"CrnH 2 Gate" : 						ItemData(BASE_ID + 16, 1, "Progression", ),
 	#"CrnH 2 Star" : 						ItemData(BASE_ID + 17, 1, "Progression", ),
@@ -274,123 +274,123 @@ world_garib_table = {
 	"Atl3 6 Garibs" : 							ItemData(BASE_ID + 209, 1, "Garib", None),
 	"Atl3 8 Garibs" : 							ItemData(BASE_ID + 210, 3, "Garib", None),
 	"Atl3 9 Garibs" : 							ItemData(BASE_ID + 211, 1, "Garib", None)#,
-	#"Atl? 5 Garibs" : 							ItemData(5,,)
-	#"Crn1 1 Garibs" : 							ItemData(1,"",None),
-	#"Crn1 4 Garibs" : 							ItemData(3,,)
-	#"Crn1 7 Garibs" : 							ItemData(1,"",None),
-	#"Crn1 8 Garibs" : 							ItemData(3,,)
-	#"Crn1 10 Garibs" : 						ItemData(1,"",None),
-	#"Crn1 11 Garibs" : 						ItemData(1,"",None),
-	#"Crn2 1 Garibs" : 							ItemData(3,,)
-	#"Crn2 2 Garibs" : 							ItemData(1,"",None),
-	#"Crn2 3 Garibs" : 							ItemData(1,"",None),
-	#"Crn2 4 Garibs" : 							ItemData(4,,)
-	#"Crn2 6 Garibs" : 							ItemData(3,,)
-	#"Crn2 8 Garibs" : 							ItemData(2,,)
-	#"Crn2 10 Garibs" : 						ItemData(1,"",None),
-	#"Crn2 12 Garibs" : 						ItemData(1,"",None),
-	#"Crn3 1 Garibs" : 							ItemData(1,"",None),
-	#"Crn3 2 Garibs" : 							ItemData(1,"",None),
-	#"Crn3 3 Garibs" : 							ItemData("6",,)
-	#"Crn3 4 Garibs" : 							ItemData("6",,)
-	#"Crn3 6 Garibs" : 							ItemData(1,"",None),
-	#"Crn3 8 Garibs" : 							ItemData(1,"",None),
-	#"Crn3 9 Garibs" : 							ItemData(1,"",None),
-	#"Crn3 12 Garibs" : 						ItemData(1,"",None),
-	#"Crn? 8 Garibs" : 							ItemData(1,"",None),
-	#"Crn? 12 Garibs" : 						ItemData(1,"",None),
-	#"Prt1 1 Garibs" : 							ItemData(4,,)
-	#"Prt1 4 Garibs" : 							ItemData("7",,)
-	#"Prt1 5 Garibs" : 							ItemData(1,"",None),
-	#"Prt1 6 Garibs" : 							ItemData(3,,)
-	#"Prt1 7 Garibs" : 							ItemData(1,"",None),
-	#"Prt1 8 Garibs" : 							ItemData(1,"",None),
-	#"Prt2 1 Garibs" : 							ItemData("6",,)
-	#"Prt2 2 Garibs" : 							ItemData(1,"",None),
-	#"Prt2 3 Garibs" : 							ItemData(1,"",None),
-	#"Prt2 4 Garibs" : 							ItemData(5,,)
-	#"Prt2 8 Garibs" : 							ItemData(1,"",None),
-	#"Prt2 9 Garibs" : 							ItemData(1,"",None),
-	#"Prt2 12 Garibs" : 						ItemData(1,"",None),
-	#"Prt3 1 Garibs" : 							ItemData(3,,)
-	#"Prt3 2 Garibs" : 							ItemData(5,,)
-	#"Prt3 3 Garibs" : 							ItemData(3,,)
-	#"Prt3 4 Garibs" : 							ItemData("7",,)
-	#"Prt3 6 Garibs" : 							ItemData(1,"",None),
-	#"Prt3 8 Garibs" : 							ItemData(1,"",None),
-	#"Prt3 16 Garibs" : 						ItemData(1,"",None),
-	#"Prt? 3 Garibs" : 							ItemData("15",,)
-	#"Prt? 5 Garibs" : 							ItemData(1,"",None),
-	#"Pht1 1 Garibs" : 							ItemData(1,"",None),
-	#"Pht1 2 Garibs" : 							ItemData(5,,)
-	#"Pht1 3 Garibs" : 							ItemData("6",,)
-	#"Pht1 4 Garibs" : 							ItemData(1,"",None),
-	#"Pht1 5 Garibs" : 							ItemData(1,"",None),
-	#"Pht1 6 Garibs" : 							ItemData(1,"",None),
-	#"Pht1 8 Garibs" : 							ItemData(3,,)
-	#"Pht1 12 Garibs" : 						ItemData(1,"",None),
-	#"Pht2 1 Garibs" : 							ItemData("6",,)
-	#"Pht2 2 Garibs" : 							ItemData(1,"",None),
-	#"Pht2 3 Garibs" : 							ItemData(3,,)
-	#"Pht2 4 Garibs" : 							ItemData("6",,)
-	#"Pht2 5 Garibs" : 							ItemData(4,,)
-	#"Pht2 8 Garibs" : 							ItemData(1,"",None),
-	#"Pht2 11 Garibs" : 						ItemData(1,"",None),
-	#"Pht3 1 Garibs" : 							ItemData(1,"",None),
-	#"Pht3 2 Garibs" : 							ItemData(2,,)
-	#"Pht3 3 Garibs" : 							ItemData(2,,)
-	#"Pht3 5 Garibs" : 							ItemData(1,"",None),
-	#"Pht3 7 Garibs" : 							ItemData(1,"",None),
-	#"Pht3 8 Garibs" : 							ItemData(2,,)
-	#"Pht3 10 Garibs" : 						ItemData(1,"",None),
-	#"Pht3 15 Garibs" : 						ItemData(1,"",None),
-	#"Pht3 16 Garibs" : 						ItemData(1,"",None),
-	#"Pht? 10 Garibs" : 						ItemData("6",,)
-	#"FoF1 1 Garibs" : 							ItemData(4,,)
-	#"FoF1 2 Garibs" : 							ItemData(1,"",None),
-	#"FoF1 3 Garibs" : 							ItemData(4,,)
-	#"FoF1 4 Garibs" : 							ItemData(3,,)
-	#"FoF1 5 Garibs" : 							ItemData(2,,)
-	#"FoF1 6 Garibs" : 							ItemData(2,,)
-	#"FoF1 8 Garibs" : 							ItemData(1,"",None),
-	#"FoF2 1 Garibs" : 							ItemData(1,"",None),
-	#"FoF2 2 Garibs" : 							ItemData(1,"",None),
-	#"FoF2 3 Garibs" : 							ItemData(3,,)
-	#"FoF2 5 Garibs" : 							ItemData(5,,)
-	#"FoF2 6 Garibs" : 							ItemData(1,"",None),
-	#"FoF2 7 Garibs" : 							ItemData(1,"",None),
-	#"FoF2 10 Garibs" : 						ItemData(1,"",None),
-	#"FoF3 1 Garibs" : 							ItemData(1,"",None),
-	#"FoF3 2 Garibs" : 							ItemData(4,,)
-	#"FoF3 3 Garibs" : 							ItemData(4,,)
-	#"FoF3 4 Garibs" : 							ItemData(3,,)
-	#"FoF3 5 Garibs" : 							ItemData(1,"",None),
-	#"FoF3 6 Garibs" : 							ItemData(1,"",None),
-	#"FoF3 8 Garibs" : 							ItemData(2,,)
-	#"FoF3 10 Garibs" : 						ItemData(1,"",None),
-	#"FoF? 14 Garibs" : 						ItemData(4,,)
-	#"Otw1 1 Garibs" : 							ItemData("6",,)
-	#"Otw1 2 Garibs" : 							ItemData(1,"",None),
-	#"Otw1 3 Garibs" : 							ItemData(4,,)
-	#"Otw1 4 Garibs" : 							ItemData(1,"",None),
-	#"Otw1 10 Garibs" : 						ItemData(1,"",None),
-	#"Otw1 16 Garibs" : 						ItemData(1,"",None),
-	#"Otw2 2 Garibs" : 							ItemData(2,,)
-	#"Otw2 3 Garibs" : 							ItemData(2,,)
-	#"Otw2 4 Garibs" : 							ItemData(3,,)
-	#"Otw2 5 Garibs" : 							ItemData(2,,)
-	#"Otw2 6 Garibs" : 							ItemData(1,"",None),
-	#"Otw2 12 Garibs" : 						ItemData(1,"",None),
-	#"Otw3 3 Garibs" : 							ItemData(1,"",None),
-	#"Otw3 4 Garibs" : 							ItemData(3,,)
-	#"Otw3 5 Garibs" : 							ItemData(2,,)
-	#"Otw3 6 Garibs" : 							ItemData(2,,)
-	#"Otw3 7 Garibs" : 							ItemData(2,,)
-	#"Otw3 8 Garibs" : 							ItemData(1,"",None),
-	#"Otw3 9 Garibs" : 							ItemData(1,"",None),
-	#"Otw3 12 Garibs" : 						ItemData(1,"",None),
-	#"Otw? 6 Garibs" : 							ItemData(3,,),
-	#"Otw? 8 Garibs" : 							ItemData(4,,)
+	#"Atl? 5 Garibs" : 							ItemData(BASE_ID + 212, 5,,)
+	#"Crn1 1 Garibs" : 							ItemData(BASE_ID + 213, 1,"",None),
+	#"Crn1 4 Garibs" : 							ItemData(BASE_ID + 214, 3,,)
+	#"Crn1 7 Garibs" : 							ItemData(BASE_ID + 215, 1,"",None),
+	#"Crn1 8 Garibs" : 							ItemData(BASE_ID + 216, 3,,)
+	#"Crn1 10 Garibs" : 						ItemData(BASE_ID + 217, 1,"",None),
+	#"Crn1 11 Garibs" : 						ItemData(BASE_ID + 218, 1,"",None),
+	#"Crn2 1 Garibs" : 							ItemData(BASE_ID + 219, 3,,)
+	#"Crn2 2 Garibs" : 							ItemData(BASE_ID + 220, 1,"",None),
+	#"Crn2 3 Garibs" : 							ItemData(BASE_ID + 221, 1,"",None),
+	#"Crn2 4 Garibs" : 							ItemData(BASE_ID + 222, 4,,)
+	#"Crn2 6 Garibs" : 							ItemData(BASE_ID + 223, 3,,)
+	#"Crn2 8 Garibs" : 							ItemData(BASE_ID + 224, 2,,)
+	#"Crn2 10 Garibs" : 						ItemData(BASE_ID + 225, 1,"",None),
+	#"Crn2 12 Garibs" : 						ItemData(BASE_ID + 226, 1,"",None),
+	#"Crn3 1 Garibs" : 							ItemData(BASE_ID + 227, 1,"",None),
+	#"Crn3 2 Garibs" : 							ItemData(BASE_ID + 228, 1,"",None),
+	#"Crn3 3 Garibs" : 							ItemData(BASE_ID + 229, "6",,)
+	#"Crn3 4 Garibs" : 							ItemData(BASE_ID + 230, "6",,)
+	#"Crn3 6 Garibs" : 							ItemData(BASE_ID + 231, 1,"",None),
+	#"Crn3 8 Garibs" : 							ItemData(BASE_ID + 232, 1,"",None),
+	#"Crn3 9 Garibs" : 							ItemData(BASE_ID + 233, 1,"",None),
+	#"Crn3 12 Garibs" : 						ItemData(BASE_ID + 234, 1,"",None),
+	#"Crn? 8 Garibs" : 							ItemData(BASE_ID + 235, 1,"",None),
+	#"Crn? 12 Garibs" : 						ItemData(BASE_ID + 236, 1,"",None),
+	#"Prt1 1 Garibs" : 							ItemData(BASE_ID + 237, 4,,)
+	#"Prt1 4 Garibs" : 							ItemData(BASE_ID + 238, "7",,)
+	#"Prt1 5 Garibs" : 							ItemData(BASE_ID + 239, 1,"",None),
+	#"Prt1 6 Garibs" : 							ItemData(BASE_ID + 240, 3,,)
+	#"Prt1 7 Garibs" : 							ItemData(BASE_ID + 241, 1,"",None),
+	#"Prt1 8 Garibs" : 							ItemData(BASE_ID + 242, 1,"",None),
+	#"Prt2 1 Garibs" : 							ItemData(BASE_ID + 243, "6",,)
+	#"Prt2 2 Garibs" : 							ItemData(BASE_ID + 244, 1,"",None),
+	#"Prt2 3 Garibs" : 							ItemData(BASE_ID + 245, 1,"",None),
+	#"Prt2 4 Garibs" : 							ItemData(BASE_ID + 246, 5,,)
+	#"Prt2 8 Garibs" : 							ItemData(BASE_ID + 247, 1,"",None),
+	#"Prt2 9 Garibs" : 							ItemData(BASE_ID + 248, 1,"",None),
+	#"Prt2 12 Garibs" : 						ItemData(BASE_ID + 249, 1,"",None),
+	#"Prt3 1 Garibs" : 							ItemData(BASE_ID + 250, 3,,)
+	#"Prt3 2 Garibs" : 							ItemData(BASE_ID + 251, 5,,)
+	#"Prt3 3 Garibs" : 							ItemData(BASE_ID + 252, 3,,)
+	#"Prt3 4 Garibs" : 							ItemData(BASE_ID + 253, "7",,)
+	#"Prt3 6 Garibs" : 							ItemData(BASE_ID + 254, 1,"",None),
+	#"Prt3 8 Garibs" : 							ItemData(BASE_ID + 255, 1,"",None),
+	#"Prt3 16 Garibs" : 						ItemData(BASE_ID + 256, 1,"",None),
+	#"Prt? 3 Garibs" : 							ItemData(BASE_ID + 257, "15",,)
+	#"Prt? 5 Garibs" : 							ItemData(BASE_ID + 258, 1,"",None),
+	#"Pht1 1 Garibs" : 							ItemData(BASE_ID + 259, 1,"",None),
+	#"Pht1 2 Garibs" : 							ItemData(BASE_ID + 260, 5,,)
+	#"Pht1 3 Garibs" : 							ItemData(BASE_ID + 261, "6",,)
+	#"Pht1 4 Garibs" : 							ItemData(BASE_ID + 262, 1,"",None),
+	#"Pht1 5 Garibs" : 							ItemData(BASE_ID + 263, 1,"",None),
+	#"Pht1 6 Garibs" : 							ItemData(BASE_ID + 264, 1,"",None),
+	#"Pht1 8 Garibs" : 							ItemData(BASE_ID + 265, 3,,)
+	#"Pht1 12 Garibs" : 						ItemData(BASE_ID + 266, 1,"",None),
+	#"Pht2 1 Garibs" : 							ItemData(BASE_ID + 267, "6",,)
+	#"Pht2 2 Garibs" : 							ItemData(BASE_ID + 268, 1,"",None),
+	#"Pht2 3 Garibs" : 							ItemData(BASE_ID + 269, 3,,)
+	#"Pht2 4 Garibs" : 							ItemData(BASE_ID + 270, "6",,)
+	#"Pht2 5 Garibs" : 							ItemData(BASE_ID + 271, 4,,)
+	#"Pht2 8 Garibs" : 							ItemData(BASE_ID + 272, 1,"",None),
+	#"Pht2 11 Garibs" : 						ItemData(BASE_ID + 273, 1,"",None),
+	#"Pht3 1 Garibs" : 							ItemData(BASE_ID + 274, 1,"",None),
+	#"Pht3 2 Garibs" : 							ItemData(BASE_ID + 275, 2,,)
+	#"Pht3 3 Garibs" : 							ItemData(BASE_ID + 276, 2,,)
+	#"Pht3 5 Garibs" : 							ItemData(BASE_ID + 277, 1,"",None),
+	#"Pht3 7 Garibs" : 							ItemData(BASE_ID + 278, 1,"",None),
+	#"Pht3 8 Garibs" : 							ItemData(BASE_ID + 279, 2,,)
+	#"Pht3 10 Garibs" : 						ItemData(BASE_ID + 280, 1,"",None),
+	#"Pht3 15 Garibs" : 						ItemData(BASE_ID + 281, 1,"",None),
+	#"Pht3 16 Garibs" : 						ItemData(BASE_ID + 282, 1,"",None),
+	#"Pht? 10 Garibs" : 						ItemData(BASE_ID + 283, "6",,)
+	#"FoF1 1 Garibs" : 							ItemData(BASE_ID + 284, 4,,)
+	#"FoF1 2 Garibs" : 							ItemData(BASE_ID + 285, 1,"",None),
+	#"FoF1 3 Garibs" : 							ItemData(BASE_ID + 286, 4,,)
+	#"FoF1 4 Garibs" : 							ItemData(BASE_ID + 287, 3,,)
+	#"FoF1 5 Garibs" : 							ItemData(BASE_ID + 288, 2,,)
+	#"FoF1 6 Garibs" : 							ItemData(BASE_ID + 289, 2,,)
+	#"FoF1 8 Garibs" : 							ItemData(BASE_ID + 290, 1,"",None),
+	#"FoF2 1 Garibs" : 							ItemData(BASE_ID + 291, 1,"",None),
+	#"FoF2 2 Garibs" : 							ItemData(BASE_ID + 292, 1,"",None),
+	#"FoF2 3 Garibs" : 							ItemData(BASE_ID + 293, 3,,)
+	#"FoF2 5 Garibs" : 							ItemData(BASE_ID + 294, 5,,)
+	#"FoF2 6 Garibs" : 							ItemData(BASE_ID + 295, 1,"",None),
+	#"FoF2 7 Garibs" : 							ItemData(BASE_ID + 296, 1,"",None),
+	#"FoF2 10 Garibs" : 						ItemData(BASE_ID + 297, 1,"",None),
+	#"FoF3 1 Garibs" : 							ItemData(BASE_ID + 298, 1,"",None),
+	#"FoF3 2 Garibs" : 							ItemData(BASE_ID + 299, 4,,)
+	#"FoF3 3 Garibs" : 							ItemData(BASE_ID + 300, 4,,)
+	#"FoF3 4 Garibs" : 							ItemData(BASE_ID + 301, 3,,)
+	#"FoF3 5 Garibs" : 							ItemData(BASE_ID + 302, 1,"",None),
+	#"FoF3 6 Garibs" : 							ItemData(BASE_ID + 303, 1,"",None),
+	#"FoF3 8 Garibs" : 							ItemData(BASE_ID + 304, 2,,)
+	#"FoF3 10 Garibs" : 						ItemData(BASE_ID + 305, 1,"",None),
+	#"FoF? 14 Garibs" : 						ItemData(BASE_ID + 306, 4,,)
+	#"Otw1 1 Garibs" : 							ItemData(BASE_ID + 307, "6",,)
+	#"Otw1 2 Garibs" : 							ItemData(BASE_ID + 308, 1,"",None),
+	#"Otw1 3 Garibs" : 							ItemData(BASE_ID + 309, 4,,)
+	#"Otw1 4 Garibs" : 							ItemData(BASE_ID + 310, 1,"",None),
+	#"Otw1 10 Garibs" : 						ItemData(BASE_ID + 311, 1,"",None),
+	#"Otw1 16 Garibs" : 						ItemData(BASE_ID + 312, 1,"",None),
+	#"Otw2 2 Garibs" : 							ItemData(BASE_ID + 313, 2,,)
+	#"Otw2 3 Garibs" : 							ItemData(BASE_ID + 314, 2,,)
+	#"Otw2 4 Garibs" : 							ItemData(BASE_ID + 315, 3,,)
+	#"Otw2 5 Garibs" : 							ItemData(BASE_ID + 316, 2,,)
+	#"Otw2 6 Garibs" : 							ItemData(BASE_ID + 317, 1,"",None),
+	#"Otw2 12 Garibs" : 						ItemData(BASE_ID + 318, 1,"",None),
+	#"Otw3 3 Garibs" : 							ItemData(BASE_ID + 319, 1,"",None),
+	#"Otw3 4 Garibs" : 							ItemData(BASE_ID + 320, 3,,)
+	#"Otw3 5 Garibs" : 							ItemData(BASE_ID + 321, 2,,)
+	#"Otw3 6 Garibs" : 							ItemData(BASE_ID + 322, 2,,)
+	#"Otw3 7 Garibs" : 							ItemData(BASE_ID + 323, 2,,)
+	#"Otw3 8 Garibs" : 							ItemData(BASE_ID + 324, 1,"",None),
+	#"Otw3 9 Garibs" : 							ItemData(BASE_ID + 325, 1,"",None),
+	#"Otw3 12 Garibs" : 						ItemData(BASE_ID + 326, 1,"",None),
+	#"Otw? 6 Garibs" : 							ItemData(BASE_ID + 327, 3,,),
+	#"Otw? 8 Garibs" : 							ItemData(BASE_ID + 328, 4,,)
 	}
 
 ability_table = {

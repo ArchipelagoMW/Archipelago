@@ -263,11 +263,11 @@ def create_region_level(self : GloverWorld, level_name : str, checkpoint_for_use
             if each_region_pair.base_id == checkpoint_entry_pairs[checkpoint_number]:
                 if start_without_ball:
                     #And it exists
-                    if each_region_pair.no_ball_region_methods:
+                    if each_region_pair.no_ball_region_exists:
                         connecting_region = multiworld.get_region(each_region_pair.name, player)
                 else:
                     #And it exists
-                    if each_region_pair.ball_region_methods:
+                    if each_region_pair.ball_region_exists:
                         connecting_region = multiworld.get_region(each_region_pair.name + " W/Ball", player)
                 break
         

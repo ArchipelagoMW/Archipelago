@@ -6,7 +6,7 @@ from BaseClasses import ItemClassification, Location, MultiWorld, Tutorial, Item
 import settings
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-from worlds.generic.Rules import add_rule
+from worlds.generic.Rules import add_rule, set_rule
 
 from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall
 from .JsonReader import build_data, generate_location_name_to_id
@@ -427,7 +427,7 @@ class GloverWorld(World):
         multiworld : MultiWorld = self.multiworld
         player : int = self.player
 
-        #TEMP LEVEL ORDER
+        #TEMP ENDING
         final_location_name : str = "Atl3: Goal"
         end_region : Region = multiworld.get_location(final_location_name, player).parent_region
         final_location : Location = Location(player, "Ending", None, end_region)
@@ -450,6 +450,7 @@ class GloverWorld(World):
             wayroom_name : str = each_world_prefix + "H"
             hubroom : Region = multiworld.get_region(wayroom_name, player)
             hubroom.connect(multiworld.get_region(wayroom_name + ": Main W/Ball", player))
+            #Entries
             for entry_index, each_entry_suffix in enumerate(entry_name):
                 #Connect hubs to the right location
                 offset : int = world_offset + entry_index
@@ -462,6 +463,17 @@ class GloverWorld(World):
                 #Default portal and star positions
                 if not self.options.portalsanity:
                     self.populate_goals_and_marks(connecting_level_name, wayroom_name, entry_index)
+            
+            #Getting a star on all 4 other levels
+            bonus_unlock_address : int | None = None
+            if self.options.portalsanity:
+                bonus_unlock_address = 3100 + (world_index * 100)
+            bonus_unlock : Location = Location(player, wayroom_name + ": Bonus Unlock", bonus_unlock_address, hubroom)
+            hubroom.locations.append(bonus_unlock)
+            #Unlocks the bonus level
+            if not self.options.portalsanity:
+               bonus_unlock.place_locked_item(self.create_event(wayroom_name + " Bonus Gate"))
+            set_rule(bonus_unlock, lambda state: state.has_all([wayroom_name + " 1 Star", wayroom_name + " 2 Star", wayroom_name + " 3 Star", wayroom_name + " Boss Star"], player))
 
         #Entry Names
         hub_entry_names : list[str] = [
@@ -491,6 +503,10 @@ class GloverWorld(World):
     #Lacking Portalsanity Gates and Marks
     def populate_goals_and_marks(self, connecting_level_name : str, wayroom_name : str, entry_index : int):
         player = self.player
+        
+        #DELETE THIS ONCE IT'S FINISHED
+        existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!"]
+        
         #Map Generation
         goal_item : Item
         all_garibs_item : Item
@@ -517,8 +533,11 @@ class GloverWorld(World):
         #What kind of level is this?
         
         #TEMP: REMOVE IF SATEMENTS ONCE GAME'S CONSTRUCTED
-        if connecting_level_name == "Atl1" or connecting_level_name == "Atl2":
-            goal_location : Location = self.multiworld.get_location(connecting_level_name + ": Goal", player)
+        if connecting_level_name in existing_levels:
+            goal_or_boss : str = ": Goal"
+            if connecting_level_name.endswith('!'):
+                goal_or_boss = ": Boss"
+            goal_location : Location = self.multiworld.get_location(connecting_level_name + goal_or_boss, player)
             goal_location.place_locked_item(goal_item)
         
         garibs_location : Location
