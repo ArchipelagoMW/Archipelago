@@ -1674,8 +1674,20 @@ ITEM_TABLE: dict[str, PokeparkItemData] = {
         )
     ),
     "Haunted Zone Mansion Doors Unlock": PokeparkItemData(
-        "Item", IC.progression, 315, 1, PokeparkFlagItemClientData(
+        "Item", IC.progression, 313, 1, PokeparkFlagItemClientData(
             flag_name=generate_flagname("f0502DoorA"),
+            parameter1=0x80001860
+        )
+    ),
+    "Ice Zone Frozen Lake Unlock": PokeparkItemData(
+        "Item", IC.progression, 314, 1, PokeparkFlagItemClientData(
+            flag_name=generate_flagname("fPondFreeze"),
+            parameter1=0x80001860
+        )
+    ),
+    "Ice Zone Lift Unlock": PokeparkItemData(
+        "Item", IC.progression, 315, 1, PokeparkFlagItemClientData(
+            flag_name=generate_flagname("f0302Lift"),
             parameter1=0x80001860
         )
     ),

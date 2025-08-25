@@ -292,7 +292,9 @@ class PokeparkWorld(World):
                 "Beach Bridge 1 Unlock",
                 "Beach Bridge 2 Unlock",
                 "Magma Zone Fire Wall Unlock",
-                "Haunted Zone Mansion Doors Unlock"
+                "Haunted Zone Mansion Doors Unlock",
+                "Ice Zone Lift Unlock",
+                "Ice Zone Frozen Lake Unlock",
             ]
             for item in road_block_items:
                 precollected_pool.append(item)
@@ -320,8 +322,6 @@ class PokeparkWorld(World):
             "Salamence Prisma",
             "Rayquaza Prisma",
 
-            "Prinplup Friendship",  # Lower Lift Area
-
             "Beach Zone Fast Travel",
             "Ice Zone Fast Travel",
             "Cavern Zone Fast Travel",
@@ -334,6 +334,8 @@ class PokeparkWorld(World):
             "Beach Bridge 2 Unlock",
             "Magma Zone Fire Wall Unlock",
             "Haunted Zone Mansion Doors Unlock",
+            "Ice Zone Lift Unlock",
+            "Ice Zone Frozen Lake Unlock",
 
             "Progressive Dash",
             "Progressive Thunderbolt",

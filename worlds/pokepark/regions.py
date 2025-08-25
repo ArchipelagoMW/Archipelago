@@ -30,7 +30,7 @@ REGION_TO_ENTRANCES: dict[str, List[str]] = {
     "Beach Zone Main Area": ["Beach Zone Main Area - Pelipper's Circle Circuit Attraction",
                              "Beach Zone Main Area Lapras Travel", "Beach Zone Bridge 2", "Beach Zone Bridge 1"],
     "Beach Zone Recycle Area": ["Beach Zone Recycle Area - Gyarado's Aqua Dash Attraction"],
-    "Ice Zone Main Area": ["Ice Zone Main Area Lift", "Ice Zone Main Area Empoleon Gate"],
+    "Ice Zone Main Area": ["Ice Zone Main Area Lift", "Ice Zone Main Area Empoleon Gate", "Ice Zone Frozen Lake"],
     "Ice Zone Empoleon Area": ["Ice Zone Empoleon Area - Empoleon's Snow Slide Attraction"],
     "Cavern Zone Main Area": ["Cavern Zone Main Area - Bastiodon's Panel Crush Attraction",
                               "Cavern Zone Magma Zone Gate"],
@@ -167,6 +167,7 @@ VANILLA_ENTRANCES_TO_EXITS: dict[str, str] = {
     "Beach Zone Main Area Lapras Travel": "Ice Zone Main Area",
     "Treehouse Drifblim Fast Travel Ice Zone": "Ice Zone Main Area",
     "Ice Zone Main Area Lift": "Ice Zone Lower Lift Area",
+    "Ice Zone Frozen Lake": "Ice Zone Frozen Lake Area",
     "Ice Zone Main Area Empoleon Gate": "Ice Zone Empoleon Area",
     "Ice Zone Empoleon Area - Empoleon's Snow Slide Attraction": "Empoleon's Snow Slide Attraction",
 
@@ -336,8 +337,9 @@ def get_entrance_rules(player: int, options: PokeparkOptions):
             state,
             player
         ),
-        "Ice Zone Main Area Lift": lambda state: state.has("Prinplup Friendship", player),
-        "Ice Zone Main Area Empoleon Gate": lambda state: True,
+        "Ice Zone Main Area Lift": lambda state: state.has("Ice Zone Lift Unlock", player),
+        "Ice Zone Frozen Lake": lambda state: state.has("Ice Zone Frozen Lake Unlock", player),
+        "Ice Zone Main Area Empoleon Gate": lambda state: state.has("Gyarados Prisma", player),
         "Ice Zone Empoleon Area - Empoleon's Snow Slide Attraction": lambda state: True,
 
         "Treehouse Cavern Zone Gate": lambda state: state.has("Empoleon Prisma", player),

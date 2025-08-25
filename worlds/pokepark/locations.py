@@ -1793,7 +1793,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Ice Zone Main Area - Mamoswine Power Competition -- Friendship": PokeparkLocationData(
-        194, PokeparkFlag.BATTLE, "Ice Zone Main Area", 0x0302, PokeparkFriendshipClientLocationData(
+        194, PokeparkFlag.BATTLE, "Ice Zone Frozen Lake Area", 0x0302, PokeparkFriendshipClientLocationData(
             structure_position=77,
             memory_range=MemoryRange.BYTE
         ),
