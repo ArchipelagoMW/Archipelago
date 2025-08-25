@@ -135,10 +135,6 @@ def tree_zone_5_boss(state, player):
 def tree_zone_5_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Tree Zone 5")
     reachable_coins = 0
-    # Not actually sure if these platforms can be randomized / can make the coin blocks unreachable from below
-    if ((not state.multiworld.worlds[player].options.randomize_platforms)
-            or state.has_any(["Mushroom", "Fire Flower"], player)):
-        reachable_coins += 2
     if state.has_any(["Mushroom", "Fire Flower"], player):
         reachable_coins += 2
     if state.has("Carrot", player):
