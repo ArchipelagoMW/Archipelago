@@ -611,14 +611,15 @@ class SMZ3World(World):
                 requireFiller = False
 
             poolLength = len(junkPoolIdx)
+            itemFromPool = None
             for i in range(0, poolLength):
                 candidate = self.multiworld.itempool[junkPoolIdx[i]]
                 if not (requireFiller and not candidate.filler) and loc.can_fill(self.multiworld.state, candidate, False):
                     itemFromPool = candidate
                     toRemove.append(junkPoolIdx.pop(i))
                     break
-            assert itemFromPool is not None, "Can't find anymore item(s) to pre fill GT"
-            self.multiworld.push_item(loc, itemFromPool, False)
+            if itemFromPool is not None:
+                self.multiworld.push_item(loc, itemFromPool, False)
         toRemove.sort(reverse = True)
         for i in toRemove: 
             self.multiworld.itempool.pop(i)
