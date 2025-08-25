@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import NetUtils
 from .Locations import grinch_locations, GrinchLocation
-from .Items import ALL_ITEMS_TABLE
+from .Items import ALL_ITEMS_TABLE, SLEIGH_PARTS_TABLE, MISSION_ITEMS_TABLE, GADGETS_TABLE, KEYS_TABLE, GrinchItemData
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 from worlds.Files import APDeltaPatch
@@ -102,7 +102,7 @@ class GrinchClient(BizHawkClient):
             await self.location_checker(ctx)
             await self.receiving_items_handler(ctx)
             await self.goal_checker(ctx)
-            # await self.constant_address_update(ctx)
+            await self.constant_address_update(ctx)
             await self.option_handler(ctx)
 
         except bizhawk.RequestFailedError:
@@ -190,10 +190,25 @@ class GrinchClient(BizHawkClient):
                     "status": NetUtils.ClientStatus.CLIENT_GOAL,
                 }])
 
-    # async def constant_address_update(self, ctx: "BizHawkClientContext"):
-    #     list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
-    #     if 42369 in list_recv_itemids and 42371 in list_recv_itemids and 42372 in list_recv_itemids and 42373 in list_recv_itemids:
-    #         await bizhawk.write(ctx.bizhawk_ctx, [(0x010200, (99).to_bytes(1, "little"), "MainRAM")])
+    async def constant_address_update(self, ctx: "BizHawkClientContext"):
+        list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
+        items_to_check: dict[str, GrinchItemData] = {**SLEIGH_PARTS_TABLE, **MISSION_ITEMS_TABLE, **GADGETS_TABLE, **KEYS_TABLE}
+
+        for (item_name, item_data) in items_to_check.items():
+            # If item is an event or already been received, ignore.
+            if item_data.id is None or GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
+                continue
+
+            # This assumes we don't have the item so we must set all the data to 0
+            for addr_to_update in item_data.update_ram_addr:
+                is_binary = True if not addr_to_update.binary_bit_pos is None else False
+                current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
+                    addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
+                if is_binary:
+                    await self.update_and_validate_address(ctx, addr_to_update.ram_address,
+                        current_ram_address_value | (1 << addr_to_update.binary_bit_pos), 1)
+                else:
+                    await self.update_and_validate_address(ctx, addr_to_update.ram_address, 0, 1)
 
     async def ingame_checker(self, ctx: "BizHawkClientContext"):
         demo_mode = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
@@ -216,6 +231,6 @@ class GrinchClient(BizHawkClient):
         await bizhawk.write(ctx.bizhawk_ctx, [(address_to_validate, expected_value.to_bytes(byte_size, "little"), "MainRAM")])
         current_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(address_to_validate, byte_size, "MainRAM")]))[0], "little")
         if not current_value == expected_value:
-            if address_to_validate == 0x010000 or address_to_validate == 0x08FB94:
+            if address_to_validate == 0x010000 or address_to_validate == 0x08FB94: # TODO Temporairly skips teleportation addresses; to be changed later on.
                 return
             raise Exception("Unable to update address as expected. Address: "+ str(address_to_validate)+"; Expected Value: "+str(expected_value))
