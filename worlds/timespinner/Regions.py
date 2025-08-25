@@ -28,9 +28,11 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
         create_region(world, player, locations_per_region, 'Sealed Caves (Sirens)'),
         create_region(world, player, locations_per_region, 'Military Fortress'),
         create_region(world, player, locations_per_region, 'Military Fortress (hangar)'),
-        create_region(world, player, locations_per_region, 'The lab'),
-        create_region(world, player, locations_per_region, 'The lab (power off)'),
+        create_region(world, player, locations_per_region, 'Lab Entrance'),
+        create_region(world, player, locations_per_region, 'Main Lab'),
+        create_region(world, player, locations_per_region, 'Lab Research'),
         create_region(world, player, locations_per_region, 'The lab (upper)'),
+        create_region(world, player, locations_per_region, 'Emperors tower (courtyard)'),
         create_region(world, player, locations_per_region, 'Emperors tower'),
         create_region(world, player, locations_per_region, 'Skeleton Shaft'),
         create_region(world, player, locations_per_region, 'Sealed Caves (Xarion)'),
@@ -41,6 +43,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
         create_region(world, player, locations_per_region, 'Lower Lake Serene'),
         create_region(world, player, locations_per_region, 'Caves of Banishment (upper)'),
         create_region(world, player, locations_per_region, 'Caves of Banishment (Maw)'),
+        create_region(world, player, locations_per_region, 'Caves of Banishment (Flooded)'),
         create_region(world, player, locations_per_region, 'Caves of Banishment (Sirens)'),
         create_region(world, player, locations_per_region, 'Castle Ramparts'),
         create_region(world, player, locations_per_region, 'Castle Keep'),
@@ -109,16 +112,19 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Military Fortress', 'Temporal Gyre', lambda state: state.has('Timespinner Wheel', player) and logic.can_kill_all_3_bosses(state))
     connect(world, player, 'Military Fortress', 'Military Fortress (hangar)', logic.has_doublejump)
     connect(world, player, 'Military Fortress (hangar)', 'Military Fortress')
-    connect(world, player, 'Military Fortress (hangar)', 'The lab', lambda state: logic.has_keycard_B(state) and (state.has('Water Mask', player) if flooded.flood_lab else logic.has_doublejump(state)))
+    connect(world, player, 'Military Fortress (hangar)', 'Lab Entrance', lambda state: state.has('Water Mask', player) if flooded.flood_lab else logic.has_doublejump(state))
+    connect(world, player, 'Lab Entrance', 'Main Lab', lambda state: logic.has_keycard_B(state))
+    connect(world, player, 'Main Lab', 'Lab Entrance')
+    connect(world, player, 'Lab Entrance', 'Military Fortress (hangar)')
     connect(world, player, 'Temporal Gyre', 'Military Fortress')
-    connect(world, player, 'The lab', 'Military Fortress')
-    connect(world, player, 'The lab', 'The lab (power off)', lambda state: options.lock_key_amadeus or logic.has_doublejump_of_npc(state))
-    connect(world, player, 'The lab (power off)', 'The lab', lambda state: not flooded.flood_lab or state.has('Water Mask', player))
-    connect(world, player, 'The lab (power off)', 'The lab (upper)', lambda state: logic.has_forwarddash_doublejump(state) and ((not options.lock_key_amadeus) or state.has('Lab Access Genza', player)))
-    connect(world, player, 'The lab (upper)', 'The lab (power off)', lambda state: options.lock_key_amadeus and state.has('Lab Access Genza', player))
-    connect(world, player, 'The lab (upper)', 'Emperors tower', logic.has_forwarddash_doublejump)
+    connect(world, player, 'Main Lab', 'Lab Research', lambda state: state.has('Lab Access Research', player) if options.lock_key_amadeus else logic.has_doublejump_of_npc(state))
+    connect(world, player, 'Main Lab', 'The lab (upper)', lambda state: logic.has_forwarddash_doublejump(state) and ((not options.lock_key_amadeus) or state.has('Lab Access Genza', player)))
+    connect(world, player, 'The lab (upper)', 'Main Lab', lambda state: options.lock_key_amadeus and state.has('Lab Access Genza', player))
+    connect(world, player, 'The lab (upper)', 'Emperors tower (courtyard)', logic.has_forwarddash_doublejump)
     connect(world, player, 'The lab (upper)', 'Ancient Pyramid (entrance)', lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player))
-    connect(world, player, 'Emperors tower', 'The lab (upper)')
+    connect(world, player, 'Emperors tower (courtyard)', 'The lab (upper)')
+    connect(world, player, 'Emperors tower (courtyard)', 'Emperors tower', logic.has_doublejump)
+    connect(world, player, 'Emperors tower', 'Emperors tower (courtyard)')
     connect(world, player, 'Skeleton Shaft', 'Lake desolation')
     connect(world, player, 'Skeleton Shaft', 'Sealed Caves (Xarion)', logic.has_keycard_A)
     connect(world, player, 'Skeleton Shaft', 'Space time continuum', logic.has_teleport)
@@ -145,6 +151,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Caves of Banishment (upper)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (upper)', lambda state: logic.has_doublejump(state) if not flooded.flood_maw else state.has('Water Mask', player))
     connect(world, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (Sirens)', lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player) )
+    connect(world, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (Flooded)', lambda state: flooded.flood_maw or state.has('Water Mask', player))
     connect(world, player, 'Caves of Banishment (Maw)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Caves of Banishment (Sirens)', 'Forest')
     connect(world, player, 'Castle Ramparts', 'Forest')
