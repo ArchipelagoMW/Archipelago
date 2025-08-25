@@ -1,0 +1,221 @@
+{% set icons = {
+    "Monster Candy"     : "https://static.wikia.nocookie.net/undertale/images/5/53/Monster_Candy_item.png",
+    "Spider Donut"      : "https://static.wikia.nocookie.net/undertale/images/3/3e/Spider_Donut_item.png",
+    "Butterscotch Pie"  : "https://static.wikia.nocookie.net/undertale/images/e/ee/Butterscotch_Pie_item_slice.png",
+    "Snowman Piece"     : "https://static.wikia.nocookie.net/undertale/images/7/76/Snowman_overworld.png",
+    "Astronaut Food"    : "https://static.wikia.nocookie.net/undertale/images/5/59/Astronaut_Food_item.png",
+    "Starfait"          : "https://static.wikia.nocookie.net/undertale/images/4/43/Starfait_item.png",
+    "Glamburger"        : "https://static.wikia.nocookie.net/undertale/images/4/4c/Glamburger_item.png",
+    "Legendary Hero"    : "https://static.wikia.nocookie.net/undertale/images/d/d4/Legendary_Hero_item.png",
+    "Face Steak"        : "https://static.wikia.nocookie.net/undertale/images/4/4c/Steak_in_the_Shape_of_Mettaton%27s_Face_item.png",
+
+    "Toy Knife"         : "https://static.wikia.nocookie.net/undertale/images/b/b2/Toy_Knife_item.png",
+    "Tough Glove"       : "https://static.wikia.nocookie.net/undertale/images/b/b3/Tough_Glove_item.png",
+    "Ballet Shoes"      : "https://static.wikia.nocookie.net/undertale/images/6/61/Ballet_Shoes_item.png",
+    "Torn Notebook"     : "https://static.wikia.nocookie.net/undertale/images/d/d3/Torn_Notebook_item.png",
+    "Burnt Pan"         : "https://static.wikia.nocookie.net/undertale/images/8/8c/Burnt_Pan_item.png",
+    "Empty Gun"         : "https://static.wikia.nocookie.net/undertale/images/c/cf/Empty_Gun_item.png",
+    "Real Knife"        : "https://static.wikia.nocookie.net/undertale/images/5/5d/Real_Knife_item.png",
+
+    "Faded Ribbon"      : "https://static.wikia.nocookie.net/undertale/images/b/b3/Faded_Ribbon_item.png",
+    "Old Tutu"          : "https://static.wikia.nocookie.net/undertale/images/e/e0/Old_Tutu_item.png",
+    "Stained Apron"     : "https://static.wikia.nocookie.net/undertale/images/a/a3/Stained_Apron_item.png",
+
+    "Punch Card"        : "https://static.wikia.nocookie.net/undertale/images/f/fb/Punch_Card_item.png",
+    "Dog Residue"       : "https://static.wikia.nocookie.net/undertale/images/2/20/Dog_Residue_item.png"
+} %}
+
+{% set multi_image_icons = {
+    "Ruins Key"         : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyRuins.png?raw=true",
+    "No Ruins Key"      : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/inactive/KeyRuins.png?raw=true",
+    "Snowdin Key"       : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeySnowdin.png?raw=true",
+    "No Snowdin Key"    : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/inactive/KeySnowdin.png?raw=true",
+    "Waterfall Key"     : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyWaterfall.png?raw=true",
+    "No Waterfall Key"  : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/inactive/KeyWaterfall.png?raw=true",
+    "Hotland Key"       : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyHotland.png?raw=true",
+    "No Hotland Key"    : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/inactive/KeyHotland.png?raw=true",
+    "Core Key"          : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyCore.png?raw=true",
+    "No Core Key"       : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/inactive/KeyCore.png?raw=true",
+    "New Home Key"      : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyNewHome.png?raw=true",
+    "No Home Key"       : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/inactive/KeyNewHome.png?raw=true",
+    "Left Home Key"     : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyNewHomeLeft.png?raw=true",
+    "Right Home Key"    : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyNewHomeRight.png?raw=true",
+    "Has Key Pieces"    : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/active/KeyPiece.png?raw=true",
+    "No Key Pieces"     : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Keys/inactive/KeyPiece.png?raw=true",
+
+    "Manly Bandanna"    : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Armors/active/ManlyBandana.png?raw=true",
+    "No Manly Bandanna" : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Armors/inactive/ManlyBandana.png?raw=true",
+    "Cloudy Glasses"    : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Armors/active/CloudyGlasses.png?raw=true",
+    "No Cloudy Glasses" : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Armors/inactive/CloudyGlasses.png?raw=true",
+    "Cowboy Hat"        : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Armors/active/CowboyHat.png?raw=true",
+    "No Cowboy Hat"     : "https://github.com/mrkssr/ap-icons/blob/main/Undertale%20Tracker/Armors/inactive/CowboyHat.png?raw=true"
+} %}
+
+{% set route = slot_data["route"] %}
+
+{# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
+{% set progressive_order = {
+    "Progressive Knife"             : ["Real Knife" if route == "genocide" else "Worn Dagger", "Worn Dagger", "Real Knife"],
+    "Progressive Weapons"           : ["Toy Knife", "Toy Knife", "Tough Glove", "Ballet Shoes", "Torn Notebook", "Burnt Pan", "Empty Gun", "Progressive Knife"],
+
+    "Progressive Manly Bandanna"    : ["No Manly Bandanna", "Manly Bandanna"],
+    "Progressive Cloudy Glasses"    : ["No Cloudy Glasses", "Cloudy Glasses"],
+    "Progressive Cowboy Hat"        : ["No Cowboy Hat", "Cowboy Hat"],
+    "Progressive Locket"            : ["The Locket" if route == "genocide" else "Heart Locket", "Heart Locket", "The Locket"],
+    "Progressive Armor"             : ["Faded Ribbon", "Faded Ribbon", "Progressive Manly Bandanna", "Old Tutu", "Progressive Cloudy Glasses", "Stained Apron", "Progressive Cowboy Hat", "Progressive Locket", "temy armor"],
+
+    "Progressive Ruins Key"         : ["No Ruins Key", "Ruins Key"],
+    "Progressive Snowdin Key"       : ["No Snowdin Key", "Snowdin Key"],
+    "Progressive Waterfall Key"     : ["No Waterfall Key", "Waterfall Key"],
+    "Progressive Hotland Key"       : ["No Hotland Key", "Hotland Key"],
+    "Progressive Core Key"          : ["No Core Key", "Core Key"],
+    "Progressive New Home Key"      : ["No Home Key", "No Key Pieces", "Left Home Key", "Right Home Key", "Has Key Pieces", "New Home Key"]
+} %}
+
+{% if route == "genocide" %}
+    {% set stainedApronIndex = progressive_order["Progressive Armor"].index("Stained Apron") %}
+    {% set poppedOut = progressive_order["Progressive Armor"].pop(stainedApronIndex) %}
+{% endif %}
+
+{% set multi_items = [
+    "LOVE",
+    "ATK Up",
+    "DEF Up",
+    "HP Up",
+    "Has Key Pieces",
+    "Punch Card"
+] %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ player_name }}&apos;s Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/globalStyles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tracker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/themes/dirt.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/themes/base.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tracker__Undertale.css') }}">
+</head>
+
+<body>
+    <header id="base-header">
+        <div id="base-header-left">
+            <a id="site-title" href="#">{{ player_name }}'s Tracker</a>
+        </div>
+    </header>
+
+    <div id="tracker-navigation">
+        <div class="tracker-navigation-bar">
+            <a class="tracker-navigation-button" href="{{ url_for("get_generic_game_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}"> 🡸 Switch To Generic Tracker </a>
+        </div>
+    </div>
+
+    {# Inventory Grid #}
+    <div class="tracker-container">
+        {% for (category, items) in inventory_order.items() %}
+            {% if items | length > 0 %}
+                <div class="inventory-grid">
+                    {% for item in items %}
+                        {% set non_prog_item = item %}
+
+                        {% if non_prog_item in progressive_order %}
+                            {% set non_prog_item = progressive_order[non_prog_item][inventory[non_prog_item]] %}
+
+                            {% if non_prog_item in progressive_order %}
+                                {% set non_prog_item = progressive_order[non_prog_item][inventory[non_prog_item]] %}
+                            {% endif %}
+                        {% endif %}
+
+                        <div class="item">
+                            {% if non_prog_item in icons %}
+                                <img
+                                    src="{{ icons[non_prog_item] }}"
+                                    alt="{{ non_prog_item }}"
+                                    title="{{ non_prog_item }}"
+                                    class="{{ 'missing' if (non_prog_item not in inventory or inventory[non_prog_item] == 0) }}"
+                                />
+                            {% elif non_prog_item in multi_image_icons %}
+                                <img
+                                    src="{{ multi_image_icons[non_prog_item] }}"
+                                    alt="{{ non_prog_item }}"
+                                    title="{{ non_prog_item }}"
+                                />
+                            {% else %}
+                                <div class="{{ 'missing' if (non_prog_item not in inventory or inventory[non_prog_item] == 0) else 'collected' }}">
+                                    {{ non_prog_item }}
+                                </div>
+                            {% endif %}
+
+                            {% if non_prog_item in multi_items %}
+                                <div class="quantity">{{ inventory[non_prog_item] }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% for region_name in known_regions %}
+            {% set region_data = regions[region_name] %}
+            {% if region_data["locations"] | length > 0 %}
+                <div class="regions-list">
+                    <details class="region-details">
+                        <summary>
+                            <div class="region">
+                                    <span>{{ region_name }}</span>
+                                    <span>{{ region_data["checked"] }} / {{ region_data["locations"] | length }}</span>
+                                    <span>
+                                        {% if region_data["checked"] == (region_data["locations"] | length) %}
+                                            ✔
+                                        {% else %}
+                                            &mdash;
+                                        {% endif %}
+                                    </span>
+                                </div>
+                        </summary>
+
+                        <div class="location-rows">
+                            {% for location, checked in region_data["locations"] %}
+                                <div>{{ location }}</div>
+                                <div>{% if checked %}✔{% endif %}</div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <script>
+        const parser = new DOMParser();
+        const interval = 15_000;
+
+        window.addEventListener("load", () => {
+            setInterval(() => updateTracker()
+                .then(() => console.log("Refreshed tracker."))
+                .catch(console.error), interval);
+        });
+
+        async function updateTracker() {
+            const response = await fetch(`${window.location}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tracker update from ${window.location}. Received response: ${response.statusText}`);
+            }
+
+            const fakeDOM = parser.parseFromString(await response.text(), "text/html");
+            document.querySelector(".inventory-grid").innerHTML = fakeDOM.querySelector(".inventory-grid").innerHTML;
+
+            const regionDetailElements = document.querySelectorAll(".region-details");
+            const fakeDetailElements = fakeDOM.querySelectorAll(".region-details");
+
+            for (let i = 0; i < regionDetailElements.length; ++i) {
+                const isOpen = regionDetailElements[i].open;
+                regionDetailElements[i].innerHTML = fakeDetailElements[i].innerHTML;
+                regionDetailElements[i].open = isOpen;
+            }
+        }
+    </script>
+</body>
+</html>
