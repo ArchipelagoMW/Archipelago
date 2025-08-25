@@ -5,7 +5,7 @@ from .Regions import connect_regions
 from .Rules import set_rules
 
 from .Client import *
-from typing import ClassVar, Mapping, Any
+from typing import ClassVar
 
 from worlds.AutoWorld import World
 

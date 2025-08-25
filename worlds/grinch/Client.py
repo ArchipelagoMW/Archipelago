@@ -1,5 +1,3 @@
-import asyncio
-from os import write
 from typing import TYPE_CHECKING
 
 import NetUtils
@@ -7,7 +5,6 @@ from .Locations import grinch_locations, GrinchLocation
 from .Items import ALL_ITEMS_TABLE, SLEIGH_PARTS_TABLE, MISSION_ITEMS_TABLE, GADGETS_TABLE, KEYS_TABLE, GrinchItemData
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
-from worlds.Files import APDeltaPatch
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext

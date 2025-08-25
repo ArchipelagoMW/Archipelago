@@ -1,7 +1,5 @@
 from typing import Callable
 
-import inspect
-
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule
