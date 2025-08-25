@@ -12,7 +12,7 @@ The following unlocks are randomized as items:
 1. Your ability to build any non-worker unit.
 2. Unit specific upgrades including some combinations not available in the vanilla campaigns, such as both strain 
 choices simultaneously for Zerg and every Spear of Adun upgrade simultaneously for Protoss!
-3. Your ability to get the generic unit upgrades, such as attack and armour upgrades.
+3. Your ability to get the generic unit upgrades, such as attack and armor upgrades.
 4. Other miscellaneous upgrades such as laboratory upgrades and mercenaries for Terran, Kerrigan levels and upgrades 
 for Zerg, and Spear of Adun upgrades for Protoss.
 5. Small boosts to your starting mineral, vespene gas, and supply totals on each mission.
@@ -94,22 +94,31 @@ Will overwrite existing files
     * Run without arguments to list all factions and colors that are available.
 * `/option [option_name] [option_value]` Sets an option normally controlled by your yaml after generation.
     * Run without arguments to list all options.
+    * Run without `option_value` to check the current value of the option
     * Options pertain to automatic cutscene skipping, Kerrigan presence, Spear of Adun presence, starting resource 
     amounts, controlling AI allies, etc.
 * `/disable_mission_check` Disables the check to see if a mission is available to play. 
 Meant for co-op runs where one player can play the next mission in a chain the other player is doing.
-* `/play [mission_id]` Starts a StarCraft 2 mission based off of the mission_id provided
-* `/available` Get what missions are currently available to play
-* `/unfinished` Get what missions are currently available to play and have not had all locations checked
 * `/set_path [path]` Manually set the SC2 install directory (if the automatic detection fails)
+* `/windowed_mode [true|false]` to toggle whether the game will start in windowed mode.
 
 Note that the behavior of the command `/received` was modified in the StarCraft 2 client.
-In the Common client of Archipelago, the command returns the list of items received in the reverse order they were 
-received.
-In the StarCraft 2 client, the returned list will be divided by races (i.e., Any, Protoss, Terran, and Zerg).
-Additionally, upgrades are grouped beneath their corresponding units or buildings.
-A filter parameter can be provided, e.g., `/received Thor`, to limit the number of items shown.
-Every item whose name, race, or group name contains the provided parameter will be shown.
+
+* In the Common client of Archipelago, the command returns the list of items received in the reverse order they were 
+  received.
+* In the StarCraft 2 client, the returned list will be divided by races (i.e., Any, Protoss, Terran, and Zerg).
+  Additionally, upgrades are grouped beneath their corresponding units or buildings.
+* A filter parameter can be provided, e.g., `/received Thor`, to limit the number of items shown.
+  * Every item whose name, race, or group name contains the provided parameter will be shown.
+* Use `/received recent [amount]` to display the last `amount` items received in chronological order
+  * `amount` defaults to 20 if not specified
+
+## Client-side settings
+Some settings can be set or overridden on the client side rather than within a world's options.
+This can allow, for example, overriding difficulty to always be `hard` no matter what the world specified.
+It can also modify display properties, like the client's window size on startup or the launcher button colours.
+
+Modify these within the `sc2_options` section of the host.yaml file within the Archipelago directory.
 
 ## Particularities in a multiworld
 
@@ -118,9 +127,9 @@ Every item whose name, race, or group name contains the provided parameter will 
 One of the default options of multiworlds is that once a world has achieved its goal, it collects its items from all 
 other worlds. 
 If you do not want this to happen, you should ask the person generating the multiworld to set the `Collect Permission` 
-option to something else, e.g., manual. 
+option to something else, such as "Manual" or "Allow on goal completion."
 If the generation is not done via the website, the person that does the generation should modify the `collect_mode` 
-option in their `host.yaml` file prior to generation. 
+option in their `host.yaml` file prior to generation.
 If the multiworld has already been generated, the host can use the command `/option collect_mode [value]` to change 
 this option.
 
@@ -135,4 +144,6 @@ This does not affect the game and can be ignored.
 - Currently, the StarCraft 2 client uses the Victory locations to determine which missions have been completed. 
 As a result, the Archipelago collect feature can sometime grant access to missions that are connected to a mission that 
 you did not complete.
+  - If all victory locations are collected in this manner, victory is not sent until the player replays a final mission
+    and recollects the victory location.
 
