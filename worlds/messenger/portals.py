@@ -112,7 +112,6 @@ SHOP_POINTS: dict[str, list[str]] = {
     ]
 }
 
-
 CHECKPOINTS: dict[str, list[str]] = {
     "Autumn Hills": [
         "Hope Latch",
@@ -185,7 +184,6 @@ CHECKPOINTS: dict[str, list[str]] = {
     ]
 }
 
-
 REGION_ORDER: list[str] = [
     "Autumn Hills",
     "Forlorn Temple",
@@ -202,6 +200,16 @@ REGION_ORDER: list[str] = [
     "Elemental Skylands",
     "Sunken Shrine",
 ]
+
+
+def find_spot(portal_key: int) -> str:
+    """finds the spot associated with the portal key"""
+    parent = REGION_ORDER[portal_key // 100]
+    if portal_key % 100 == 0:
+        return f"{parent} Portal"
+    if portal_key % 100 // 10 == 1:
+        return SHOP_POINTS[parent][portal_key % 10]
+    return CHECKPOINTS[parent][portal_key % 10]
 
 
 def shuffle_portals(world: "MessengerWorld") -> None:
