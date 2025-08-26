@@ -413,6 +413,14 @@ class Context:
         self.logger.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
         async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}]))
 
+    def notify_client_without_auth(self, client: Client, text: str, additional_arguments: dict = {}):
+        if client.auth:
+            return self.notify_client(client, text, additional_arguments)
+        if client.no_text:
+            return
+        self.logger.info("Notice (Unauthenticated Player): " + text)
+        async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}]))
+
     def notify_client_multiple(self, client: Client, texts: typing.List[str], additional_arguments: dict = {}):
         if not client.auth or client.no_text:
             return
@@ -1859,8 +1867,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
     elif cmd == "GetDataPackage":
         if not any(isinstance(extension, PerMessageDeflate) for extension in client.socket.extensions):
-            ctx.notify_client(client, "Warning: your client does not support compressed websocket connections! "
-                                      "DataPackage (item and location names) were rejected to be transferred.")
+            ctx.notify_client_without_auth(
+                client,
+                "Warning: your client does not support compressed websocket connections! "
+                "DataPackage (item and location names) were rejected to be transferred."
+            )
             return
         exclusions = args.get("exclusions", [])
         if "games" in args:
