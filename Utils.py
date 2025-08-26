@@ -940,15 +940,15 @@ class DeprecateDict(dict):
 
 
 def _extend_freeze_support() -> None:
-    """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
-    # upstream issue: https://github.com/python/cpython/issues/76327
+    """Extend multiprocessing.freeze_support() to also work on Non-Windows and without setting spawn method first."""
+    # original upstream issue: https://github.com/python/cpython/issues/76327
     # code based on https://github.com/pyinstaller/pyinstaller/blob/develop/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py#L26
     import multiprocessing
     import multiprocessing.spawn
 
     def _freeze_support() -> None:
         """Minimal freeze_support. Only apply this if frozen."""
-        from subprocess import _args_from_interpreter_flags
+        from subprocess import _args_from_interpreter_flags  # noqa
 
         # Prevent `spawn` from trying to read `__main__` in from the main script
         multiprocessing.process.ORIGINAL_DIR = None
@@ -975,15 +975,21 @@ def _extend_freeze_support() -> None:
             multiprocessing.spawn.spawn_main(**kwargs)
             sys.exit()
 
-    if not is_windows and is_frozen():
-        multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support
+    def _noop() -> None:
+        pass
+
+    multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support if is_frozen() else _noop
 
 
 def freeze_support() -> None:
-    """This behaves like multiprocessing.freeze_support but also works on Non-Windows."""
+    """This now only calls multiprocessing.freeze_support since we are patching freeze_support on module load."""
     import multiprocessing
-    _extend_freeze_support()
+
+    deprecate("Use multiprocessing.freeze_support() instead")
     multiprocessing.freeze_support()
+
+
+_extend_freeze_support()
 
 
 def visualize_regions(root_region: Region, file_name: str, *,
