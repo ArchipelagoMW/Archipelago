@@ -1021,6 +1021,9 @@ class SC2Context(CommonContext):
         await super(SC2Context, self).shutdown()
         if self.last_bot:
             self.last_bot.want_close = True
+            # If the client is not set up yet, the game is not done loading and must be force-closed
+            if not hasattr(self.last_bot, "client"):
+                bot.sc2process.kill_switch.kill_all()
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
 
