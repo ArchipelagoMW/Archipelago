@@ -615,6 +615,12 @@ def set_rules(world: "PokeparkWorld") -> None:
         "Beach Zone Main Area - Pelipper -- Friendship",
         lambda state: state.has("Pelipper Prisma", player)
     )
+
+    set_rule_if_exists(
+        "Beach Zone Recycle Area - Gyarados -- Friendship",
+        lambda state: state.has("Gyarados Prisma", player)
+    )
+
     # Pelipper's Circle Circuit Attraction
     set_rule_if_exists(
         "Pelipper's Circle Circuit Attraction -- Prisma",
