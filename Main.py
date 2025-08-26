@@ -320,8 +320,8 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
                     if current_sphere:
                         spheres.append(dict(current_sphere))
-                #print ("the number of spheres is....")
-                #print (len(spheres))
+                print ("the number of spheres is....")
+                print (len(spheres))
                 #multidata = {
                 multidata: NetUtils.MultiData | bytes = {
                     "slot_data": slot_data,
