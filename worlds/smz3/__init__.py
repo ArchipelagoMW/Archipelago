@@ -260,12 +260,18 @@ class SMZ3World(World):
                     l.always_allow = lambda state, item, loc=loc: \
                         item.game == "SMZ3" and \
                         loc.alwaysAllow(item.item, state.smz3state[self.player])
-                old_rule = l.item_rule
-                l.item_rule = lambda item, loc=loc, region=region: (\
+                l.item_rule = lambda item, loc=loc, region=region, old_rule=l.item_rule: (\
                     item.game != "SMZ3" or \
                     loc.allow(item.item, None) and \
                         region.CanFill(item.item)) and old_rule(item)
                 set_rule(l, lambda state, loc=loc: loc.Available(state.smz3state[self.player]))
+
+        # In multiworlds, GT is disallowed from having progression items.
+        # This item rule replicates this behavior for non-SMZ3 games
+        for loc in self.smz3World.GetRegion("Ganon's Tower").Locations:
+            l = self.locations[loc.Name]
+            l.item_rule = lambda item, old_rule=l.item_rule: \
+                (item.game == "SMZ3" or not item.advancement) and old_rule(item)
 
     def create_regions(self):
         self.create_locations(self.player)
@@ -589,35 +595,18 @@ class SMZ3World(World):
         ]))
 
     def JunkFillGT(self, factor):
-        poolLength = len(self.multiworld.itempool)
-        junkPoolIdx = [idx for idx, i in enumerate(self.multiworld.itempool) if i.player == self.player and not i.advancement]
+        junkPoolIdx = [idx for idx, i in enumerate(self.multiworld.itempool) if i.excludable]
         self.random.shuffle(junkPoolIdx)
         junkLocations = [loc for loc in self.locations.values() if loc.name in self.locationNamesGT and loc.item is None]
         self.random.shuffle(junkLocations)
         toRemove = []
-        requireFiller = True
         for loc in junkLocations:
-            # Because of how item rules work in SMZ3, we replicate how upstream fills GT here:
-            # - All items placed in GT must be for yourself.
-            # - Until 50% (by default) of GT is filled, all placed items must be filler.
-            # - In a multiworld, after the above condition is met, items can be useful, but not progression.
-            # - Else, after the above condition is met, all items may be placed.
-            #   (In this case, we stop working and let fill handle it normally.)
-            if len(toRemove) >= int(len(junkLocations) * factor * self.smz3World.TowerCrystals / 7):
-                if self.config.SingleWorld:
-                    break
-                requireFiller = False
-
-            poolLength = len(junkPoolIdx)
-            itemFromPool = None
-            for i in range(0, poolLength):
-                candidate = self.multiworld.itempool[junkPoolIdx[i]]
-                if not (requireFiller and not candidate.filler) and loc.can_fill(self.multiworld.state, candidate, False):
-                    itemFromPool = candidate
-                    toRemove.append(junkPoolIdx.pop(i))
-                    break
-            if itemFromPool is not None:
-                self.multiworld.push_item(loc, itemFromPool, False)
+            # Note: Upstream GT junk fill uses FastFill, which ignores item rules
+            if len(junkPoolIdx) == 0 or len(toRemove) >= int(len(junkLocations) * factor * self.smz3World.TowerCrystals / 7):
+                break
+            itemFromPool = self.multiworld.itempool[junkPoolIdx[0]]
+            toRemove.append(junkPoolIdx.pop(0))
+            loc.place_locked_item(itemFromPool)
         toRemove.sort(reverse = True)
         for i in toRemove: 
             self.multiworld.itempool.pop(i)
