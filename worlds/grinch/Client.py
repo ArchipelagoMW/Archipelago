@@ -189,16 +189,16 @@ class GrinchClient(BizHawkClient):
 
     async def constant_address_update(self, ctx: "BizHawkClientContext"):
         list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
-        items_to_check: dict[str, GrinchItemData] = {**SLEIGH_PARTS_TABLE, **MISSION_ITEMS_TABLE, **GADGETS_TABLE, **KEYS_TABLE}
+        items_to_check: dict[str, GrinchItemData] = {**SLEIGH_PARTS_TABLE, **MISSION_ITEMS_TABLE} #, **GADGETS_TABLE, **KEYS_TABLE
         heart_count = len(list(item_id for item_id in list_recv_itemids if item_id == 42570))
         heart_item_data = ALL_ITEMS_TABLE["Heart of Stone"]
         await self.update_and_validate_address(ctx, heart_item_data.update_ram_addr[0].ram_address, min(heart_count, 4), 1)
 
-        has_sleigh_key = any(list(item_id for item_id in list_recv_itemids if item_id == 42479))
-        if not has_sleigh_key:
-            sleigh_key_item_data = ALL_ITEMS_TABLE["Sleigh Room Key"]
-            # TODO Game sets value to 3 at some point. If this breaks at some point, go back into this.
-            await self.update_and_validate_address(ctx, sleigh_key_item_data.update_ram_addr[0].ram_address, 0, 1)
+        # has_sleigh_key = any(list(item_id for item_id in list_recv_itemids if item_id == 42479))
+        # if not has_sleigh_key:
+        #     sleigh_key_item_data = ALL_ITEMS_TABLE["Sleigh Room Key"]
+        #     # TODO Game sets value to 3 at some point. If this breaks at some point, go back into this.
+        #     await self.update_and_validate_address(ctx, sleigh_key_item_data.update_ram_addr[0].ram_address, 3, 1)
 
         for (item_name, item_data) in items_to_check.items():
             # If item is an event or already been received, ignore.
@@ -212,11 +212,12 @@ class GrinchClient(BizHawkClient):
                     addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
                 if is_binary:
                     await self.update_and_validate_address(ctx, addr_to_update.ram_address,
-                        current_ram_address_value | (1 << addr_to_update.binary_bit_pos), 1)
+                        0, 1)
                 else:
                     await self.update_and_validate_address(ctx, addr_to_update.ram_address, 0, 1)
 
     async def ingame_checker(self, ctx: "BizHawkClientContext"):
+        # TODO Demo detection no worky
         demo_mode = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
             0x01008A, 1, "MainRAM")]))[0], "little")
         if demo_mode == 1:
