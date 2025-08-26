@@ -9,7 +9,7 @@ Cette page est un guide simplifié de la [page du Mod Randomiseur Multiworld de 
 ## Installation du Mod pour jouer
 ### Téléchargement du Mod
 Tous les fichiers nécessaires du Mod se trouvent dans les [Releases](https://github.com/lgbarrere/CCCharles-Random/releases).
-Pour utiliser le Mod, télécharger et désarchiver **CCCharles_Random.zip** à un endroit sûr, puis suivre les instructions dans les sections suivantes de ce guide. Cette archive contient:
+Pour utiliser le Mod, télécharger et désarchiver **CCCharles_Random.zip** à un endroit sûr, puis suivre les instructions dans les sections suivantes de ce guide. Cette archive contient :
 * Le dossier **Obscure/** qui charge le Mod lui-même, il lance le code qui gère tous les éléments randomisés
 * Le fichier **cccharles.apworld** qui contient la logique de randomisation, utilisé par l'hôte pour générer une graine aléatoire avec les autres jeux
 

@@ -1,2 +1,2 @@
 # CCCharles base ID
-base_id = 6660000000
+base_id = 66600000
