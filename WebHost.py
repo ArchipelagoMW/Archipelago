@@ -54,16 +54,15 @@ def get_app() -> "Flask":
     return app
 
 
-def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]:
-    import json
+def copy_tutorials_files_to_static() -> None:
     import shutil
     import zipfile
+    from werkzeug.utils import secure_filename
 
     zfile: zipfile.ZipInfo
 
     from worlds.AutoWorld import AutoWorldRegister
     worlds = {}
-    data = []
     for game, world in AutoWorldRegister.world_types.items():
         if hasattr(world.web, 'tutorials') and (not world.hidden or game == 'Archipelago'):
             worlds[game] = world
@@ -72,7 +71,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
     shutil.rmtree(base_target_path, ignore_errors=True)
     for game, world in worlds.items():
         # copy files from world's docs folder to the generated folder
-        target_path = os.path.join(base_target_path, get_file_safe_name(game))
+        target_path = os.path.join(base_target_path, secure_filename(game))
         os.makedirs(target_path, exist_ok=True)
 
         if world.zip_path:
@@ -85,45 +84,14 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
                 for zfile in zf.infolist():
                     if not zfile.is_dir() and "/docs/" in zfile.filename:
                         zfile.filename = os.path.basename(zfile.filename)
-                        zf.extract(zfile, target_path)
+                        with open(os.path.join(target_path, secure_filename(zfile.filename)), "wb") as f:
+                            f.write(zf.read(zfile))
         else:
             source_path = Utils.local_path(os.path.dirname(world.__file__), "docs")
             files = os.listdir(source_path)
             for file in files:
-                shutil.copyfile(Utils.local_path(source_path, file), Utils.local_path(target_path, file))
-
-        # build a json tutorial dict per game
-        game_data = {'gameTitle': game, 'tutorials': []}
-        for tutorial in world.web.tutorials:
-            # build dict for the json file
-            current_tutorial = {
-                'name': tutorial.tutorial_name,
-                'description': tutorial.description,
-                'files': [{
-                    'language': tutorial.language,
-                    'filename': game + '/' + tutorial.file_name,
-                    'link': f'{game}/{tutorial.link}',
-                    'authors': tutorial.authors
-                }]
-            }
-
-            # check if the name of the current guide exists already
-            for guide in game_data['tutorials']:
-                if guide and tutorial.tutorial_name == guide['name']:
-                    guide['files'].append(current_tutorial['files'][0])
-                    break
-            else:
-                game_data['tutorials'].append(current_tutorial)
-
-        data.append(game_data)
-    with open(Utils.local_path("WebHostLib", "static", "generated", "tutorials.json"), 'w', encoding='utf-8-sig') as json_target:
-        generic_data = {}
-        for games in data:
-            if 'Archipelago' in games['gameTitle']:
-                generic_data = data.pop(data.index(games))
-        sorted_data = [generic_data] + Utils.title_sorted(data, key=lambda entry: entry["gameTitle"])
-        json.dump(sorted_data, json_target, indent=2, ensure_ascii=False)
-    return sorted_data
+                shutil.copyfile(Utils.local_path(source_path, file),
+                                Utils.local_path(target_path, secure_filename(file)))
 
 
 if __name__ == "__main__":
@@ -142,7 +110,7 @@ if __name__ == "__main__":
         logging.warning("Could not update LttP sprites.")
     app = get_app()
     create_options_files()
-    create_ordered_tutorials_file()
+    copy_tutorials_files_to_static()
     if app.config["SELFLAUNCH"]:
         autohost(app.config)
     if app.config["SELFGEN"]:

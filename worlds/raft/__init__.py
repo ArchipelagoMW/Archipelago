@@ -93,7 +93,7 @@ class RaftWorld(World):
             dupeItemPool = list(dupeItemPool)
             # Finally, add items as necessary
             for item in dupeItemPool:
-                self.extraItemNamePool.append(self.replace_item_name_as_necessary(item))
+                self.extraItemNamePool.append(self.replace_item_name_as_necessary(item["name"]))
             
         assert self.extraItemNamePool, f"Don't know what extra items to create for {self.player_name}."
 

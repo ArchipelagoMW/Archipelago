@@ -1,5 +1,3 @@
-from typing import Dict, Tuple, List
-
 from BaseClasses import Region, MultiWorld, LocationProgressType, ItemClassification, CollectionState
 from .items import ShapezItem
 from .locations import ShapezLocation
@@ -102,7 +100,7 @@ def has_x_belt_multiplier(state: CollectionState, player: int, needed: float) ->
     return multiplier >= needed
 
 
-def has_logic_list_building(state: CollectionState, player: int, buildings: List[str], index: int,
+def has_logic_list_building(state: CollectionState, player: int, buildings: list[str], index: int,
                             includeuseful: bool) -> bool:
 
     # Includes balancer, tunnel, and trash in logic in order to make them appear in earlier spheres
@@ -126,11 +124,11 @@ def has_logic_list_building(state: CollectionState, player: int, buildings: List
 
 
 def create_shapez_regions(player: int, multiworld: MultiWorld, floating: bool,
-                          included_locations: Dict[str, Tuple[str, LocationProgressType]],
-                          location_name_to_id: Dict[str, int], level_logic_buildings: List[str],
-                          upgrade_logic_buildings: List[str], early_useful: str, goal: str) -> List[Region]:
+                          included_locations: dict[str, tuple[str, LocationProgressType]],
+                          location_name_to_id: dict[str, int], level_logic_buildings: list[str],
+                          upgrade_logic_buildings: list[str], early_useful: str, goal: str) -> list[Region]:
     """Creates and returns a list of all regions with entrances and all locations placed correctly."""
-    regions: Dict[str, Region] = {name: Region(name, player, multiworld) for name in all_regions}
+    regions: dict[str, Region] = {name: Region(name, player, multiworld) for name in all_regions}
 
     # Creates ShapezLocations for every included location and puts them into the correct region
     for name, data in included_locations.items():

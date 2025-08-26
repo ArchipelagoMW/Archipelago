@@ -654,4 +654,11 @@ SONG_DATA: Dict[str, SongData] = {
     "#YamiKawa": SongData(2900778, "43-65", "MD Plus Project", False, 5, 7, 10),
     "Rainy Step": SongData(2900779, "43-66", "MD Plus Project", False, 2, 5, 8),
     "OHOSHIKATSU": SongData(2900780, "43-67", "MD Plus Project", False, 5, 7, 10),
+    "Dreamy Day": SongData(2900781, "87-0", "Aim to Be a Rhythm Master!", False, 2, 5, 7),
+    "Futropolis": SongData(2900782, "87-1", "Aim to Be a Rhythm Master!", False, 4, 7, 9),
+    "Quo Vadis": SongData(2900783, "87-2", "Aim to Be a Rhythm Master!", False, 5, 7, 10),
+    "REANIMATE": SongData(2900784, "87-3", "Aim to Be a Rhythm Master!", False, 5, 7, 10),
+    "Ineffabilis": SongData(2900785, "87-4", "Aim to Be a Rhythm Master!", False, 3, 7, 10),
+    "DaJiaHao": SongData(2900786, "87-5", "Aim to Be a Rhythm Master!", False, 5, 7, 10),
+    "Echoes of SeraphiM": SongData(2900787, "87-6", "Aim to Be a Rhythm Master!", False, 5, 8, 10),
 }
