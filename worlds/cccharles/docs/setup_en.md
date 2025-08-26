@@ -7,16 +7,16 @@ This page is a simplified guide of the [Choo-Choo Charles Multiworld Randomizer 
 * A legal copy of the Choo-Choo Charles original game (can be found on [Steam](https://store.steampowered.com/app/1766740/ChooChoo_Charles/))
 
 ## Mod Installation for playing
-To install the Mod, open the [Choo-Choo Charles Multiworld Randomizer Mod page](https://github.com/lgbarrere/CCCharles-Random) page and follow the steps below.
+### Mod Download
+All the required files of the Mod can be found in the [Releases](https://github.com/lgbarrere/CCCharles-Random/releases).
+To use the Mod, download and unzip **CCCharles_Random.zip** somewhere safe, then follow the instructions in the next sections of this guide. This archive contains:
+* The **Obscure/** folder loading the Mod itself, it runs the code handling all the randomized elements
+* The **cccharles.apworld** file containing the randomization logic, used by the host to generate a random seed with the others games
 
 ### Game Setup
-The releases of this game are currently unofficial. However, the Mod can be installed and played by following these instructions:
-1. Click the green "<> Code" button
-2. Click "Download ZIP" and unzip the downloaded archive or clone this project
-3. From this folder, in **Release/**, copy the **Obscure/** folder to **\<GameFolder\>** (where the **Obscure/** folder and **Obscure.exe** are placed)
-4. Launch the game, if "OFFLINE" is written in the upper-right corner of the screen, the Mod is working
-
-The content from the **Release/** folder can be manually placed while the paths to files are respected.
+The Mod can be installed and played by following these steps (see the [Mod Download](setup_en#mod-download) section to get **CCCharles_Random.zip**):
+1. Copy the **Obscure/** folder from **CCCharles_Random.zip** to **\<GameFolder\>** (where the **Obscure/** folder and **Obscure.exe** are placed)
+2. Launch the game, if "OFFLINE" is visible in the upper-right corner of the screen, the Mod is working
 
 ### Create a Config (.yaml) File
 The purpose of a YAML file is described in the [Basic Multiworld Setup Guide](https://archipelago.gg/tutorial/Archipelago/setup/en#generating-a-game).
@@ -30,14 +30,14 @@ Before playing, it is highly recommended to check out the **[Known Issues](setup
 * Disconnection is automatic at game closure but can be manually done with ``/disconnect``
 
 ## Hosting a MultiWorld or Single-Player Game
-See **[Game Setup](setup_en#game-setup)** section to have the **Release/** folder downloaded.
+See the [Mod Download](setup_en#mod-download) section to get the **cccharles.apworld** file.
 
 In this section, **Archipelago/** refers to the path where [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) is installed locally.
 
 Follow these steps to host a remote multiplayer or a local single-player session:
-1. Double-click the **cccharles.apworld** in **Release/** to automatically install the world randomization logic
-2. Put the **CCCharles.yaml** from **Release/** to **Archipelago/Players/** with the YAML of each player to host
-3. Launch the Archipelago launcher and click "Generate" to configure a game with the YAML in **Archipelago/output/**
+1. Double-click the **cccharles.apworld** to automatically install the world randomization logic
+2. Put the **CCCharles.yaml** to **Archipelago/Players/** with the YAML of each player to host
+3. Launch the Archipelago launcher and click "Generate" to configure a game with the YAMLs in **Archipelago/output/**
 4. For a multiplayer session, go to the [Archipelago HOST GAME page](https://archipelago.gg/uploads)
 5. Click "Upload File" and select the generated **AP_\<seed\>.zip** in **Archipelago/output/**
 6. Send the generated room page to each player
@@ -46,9 +46,7 @@ For a local single-player session, click "Host" in the Archipelago launcher by u
 
 ## Known Issues
 ### Major issues
-* If the player receives the **Box of Rockets**, the bunker at the **Training Explosive** region will be opened once loaded. It may be possible to break the mission state if the player interacts with elements in unexpected order.
+No major issue found.
 
 ### Minor issues
 * The current version of the command parser does not accept console commands with a player names containing whitespaces. It is recommended to use underscores "_" instead, for instance: CCCharles_Player_1.
-* Sometimes, an item reception or sending a location can fail (rare cases). Reloading the game is supposed to respawn all items on the ground and restarting a new game retrieves all unlocked items from Archipelago, that can be used as workarounds.
-* When an egg is received, if the player goes to one of the three mine exits before talking to the NPC who gives its entrance key, the player will no longer be able to interact with this NPC. Make sure to talk to them before approaching their respective mines. Restart a new game otherwise.
