@@ -4350,4 +4350,11 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
         each_zone=MultiZoneFlag.SINGLE
     ),
+
+    "Beach Zone Main Area - Pelipper -- Friendship": PokeparkLocationData(
+        556, PokeparkFlag.FRIENDSHIP, "Magma Zone Circle Area", 0x0301, PokeparkFriendshipClientLocationData(
+            structure_position=63,
+            memory_range=MemoryRange.BYTE
+        ),
+    ),
 }

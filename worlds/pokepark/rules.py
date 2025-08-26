@@ -611,6 +611,10 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: can_play_catch(state, player)
     )
 
+    set_rule_if_exists(
+        "Beach Zone Main Area - Pelipper -- Friendship",
+        lambda state: state.has("Pelipper Prisma", player)
+    )
     # Pelipper's Circle Circuit Attraction
     set_rule_if_exists(
         "Pelipper's Circle Circuit Attraction -- Prisma",
