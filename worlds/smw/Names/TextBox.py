@@ -33,7 +33,9 @@ stage_text_mapping = {
     "k": 0x4A, "l": 0x4B, "m": 0x4C, "n": 0x4D, "o": 0x4E, "p": 0x4F, "q": 0x50, "r": 0x51, "s": 0x52, "t": 0x53,
     "u": 0x54, "v": 0x55, "w": 0x56, "x": 0x57, "y": 0x58, "z": 0x59,
 
-    "#": 0x5A, "(": 0x5B, ")": 0x5C, "'": 0x5D
+    "#": 0x5A, "(": 0x5B, ")": 0x5C, "'": 0x5D,
+
+    "@32": 0x32, "@33": 0x33, "@34": 0x34, "@35": 0x35, "@36": 0x36, "@37": 0x37, "@38": 0x38, "@39": 0x39, "@3A": 0x3A, "@3B": 0x3B, "@3C": 0x3C,
 }
 
 title_text_mapping = {
@@ -239,6 +241,13 @@ def generate_credits() -> bytearray:
     ]
 
     special_thanks: list[str] = [
+        "ANONIMATO",
+        "BIG BRAWLER",
+        "IVAN SWORD",
+        "MENTHOLEUS",
+        "M.",
+        "SHINY",
+        "VASH VARKET",
         "RASPBERRYSPACEJAM",
         "THEBULBLAXEMPIRE",
     ]

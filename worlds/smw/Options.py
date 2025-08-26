@@ -187,6 +187,30 @@ class SwapDonutGhostHouseExits(Toggle):
     display_name = "Swap Donut GH Exits"
 
 
+class LevenNameShuffle(Choice):
+    """
+    How level names are shuffled, when viewed on the world map in-game
+    NOTE: Location names are not affected by this option. They will still use the vanilla level names.
+
+    Vanilla: Level Names are not shuffled
+
+    Consistent: Each piece of a level name is randomly changed to something new, meaning levels from the same vanilla world will have the same starting word(s)
+
+    Sane: Levels from the same vanilla world may have entirely unrelated names, but no levels will have exactly the same name
+
+    Full: Level names will be fully randomized, with no guarantee that two levels do not share a name
+
+    Singularity: Every level will have the same name
+    """
+    display_name = "Level Name Shuffle"
+    option_vanilla = 0
+    option_consistent = 1
+    option_sane = 2
+    option_full = 3
+    option_singularity = 4
+    default = 0
+
+
 class DisplayReceivedItemPopups(Choice):
     """
     What messages to display in-game for items received
@@ -433,6 +457,7 @@ smw_option_groups = [
         BowserCastleRooms,
         BossShuffle,
         SwapDonutGhostHouseExits,
+        LevenNameShuffle,
     ]),
     OptionGroup("Junk and Traps", [
         JunkFillPercentage,
@@ -478,6 +503,7 @@ class SMWOptions(PerGameCommonOptions):
     exclude_special_zone: ExcludeSpecialZone
     boss_shuffle: BossShuffle
     swap_donut_gh_exits: SwapDonutGhostHouseExits
+    level_name_shuffle: LevenNameShuffle
     display_received_item_popups: DisplayReceivedItemPopups
     junk_fill_percentage: JunkFillPercentage
     trap_fill_percentage: TrapFillPercentage

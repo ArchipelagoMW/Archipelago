@@ -667,6 +667,144 @@ def handle_level_shuffle(rom, active_level_dict):
         rom.write_byte(0x37F00 + tile_id, level_id)
 
 
+def shuffle_level_name_pieces(rom, world: World, allow_duplicates: bool) -> list[str]:
+    from .Levels import level_name_data
+
+    used_name_pieces: list[str] = []
+
+    for level_name in level_name_data:
+        if level_name.possible_names[0] == " ":
+            used_name_pieces.append("")
+            continue
+        shuffled_piece_bytes = bytearray()
+
+        loop_guard = 0
+        shuffled_piece = ""
+        while True:
+            shuffled_piece = world.random.choice(level_name.possible_names)
+            loop_guard += 1
+            if shuffled_piece not in used_name_pieces or allow_duplicates or loop_guard >= 50:
+                break
+
+        used_name_pieces.append(shuffled_piece)
+
+        i = 0
+        while i < len(shuffled_piece):
+            if shuffled_piece[i] == "@":
+                # Do weird thing with special characters
+                shuffled_piece_bytes.append(int(shuffled_piece[i+1:i+3], 16))
+                i += 2
+            else:
+                shuffled_piece_bytes.append(stage_text_mapping[shuffled_piece[i]])
+            i += 1
+
+        shuffled_piece_bytes[-1] += 0x80
+
+        rom.write_bytes(level_name.address, shuffled_piece_bytes)
+
+    return used_name_pieces
+
+
+def build_names(rom, world: World, allow_duplicates: bool, used_name_pieces: list[str]):
+    used_names: list[str] = []
+
+    for i in range(0x5D):
+        if i == 0x31 or i == 0x32:
+            # Don't shuffle Front/Back Door names
+            continue
+        loop_guard = 0
+        while True:
+            loop_guard += 1
+            if loop_guard >= 50:
+                break
+
+            part_1 = world.random.randint(0, 0x1E)
+            part_2 = world.random.randint(0, 0xE)
+            part_3 = world.random.randint(0, 0xC)
+
+            part_1_str = used_name_pieces[part_1]
+            part_2_str = used_name_pieces[0x1F + part_2]
+            part_3_str = used_name_pieces[0x2E + part_3]
+
+            full_name = part_1_str + part_2_str + part_3_str
+
+            name_length = len(full_name) - (full_name.count("@") * 2)
+            if name_length == 0 or name_length > 19:
+                continue
+
+            if full_name in used_names and not allow_duplicates:
+                break
+
+            used_names.append(full_name)
+            name_index = bytearray([(part_2 << 4) | part_3, part_1])
+            rom.write_bytes(0x220FC + i*2, name_index)
+
+            break
+
+
+def build_names_singularity(rom, world: World, used_name_pieces: list[str]):
+    used_names: list[str] = []
+
+    name_index = bytearray()
+    loop_guard = 0
+    while True:
+        loop_guard += 1
+        if loop_guard >= 50:
+            name_index.append(0x20)
+            name_index.append(0x0D)
+            break
+
+        part_1 = world.random.randint(0, 0x1E)
+        part_2 = world.random.randint(0, 0xE)
+        part_3 = world.random.randint(0, 0xC)
+
+        part_1_str = used_name_pieces[part_1]
+        part_2_str = used_name_pieces[0x1F + part_2]
+        part_3_str = used_name_pieces[0x2E + part_3]
+
+        full_name = part_1_str + part_2_str + part_3_str
+
+        name_length = len(full_name) - (full_name.count("@") * 2)
+        if name_length > 0 and name_length <= 19:
+            name_index.append((part_2 << 4) | part_3)
+            name_index.append(part_1)
+            break
+
+    for i in range(0x5D):
+        if i == 0x31 or i == 0x32:
+            # Don't shuffle Front/Back Door names
+            continue
+        rom.write_bytes(0x220FC + i*2, name_index)
+
+
+def handle_level_name_shuffle(rom, world: World):
+    if world.options.level_name_shuffle.value == 0:
+        rom.write_bytes(0x220FC + 0x58, bytearray([0xC1, 0x02]))
+        rom.write_bytes(0x220FC + 0x54, bytearray([0xC2, 0x02]))
+        rom.write_bytes(0x220FC + 0x56, bytearray([0xC3, 0x02]))
+        rom.write_bytes(0x220FC + 0x59, bytearray([0xC4, 0x02]))
+        rom.write_bytes(0x220FC + 0x5A, bytearray([0xC5, 0x02]))
+    elif world.options.level_name_shuffle.value == 1:
+        # Consistent
+        # Randomize just the name piece strings, checking for duplicate pieces
+        used_name_pieces = shuffle_level_name_pieces(rom, world, False)
+    elif world.options.level_name_shuffle.value == 2:
+        # Sane
+        # Randomize the name piece strings, checking for duplicate pieces, and the name offsets, checking for duplicate full names
+        used_name_pieces = shuffle_level_name_pieces(rom, world, False)
+        build_names(rom, world, False, used_name_pieces)
+    elif world.options.level_name_shuffle.value == 3:
+        # Full
+        # Randomize the name piece strings, and the name offsets
+        used_name_pieces = shuffle_level_name_pieces(rom, world, True)
+        build_names(rom, world, True, used_name_pieces)
+    elif world.options.level_name_shuffle.value == 4:
+        # Singularity
+        # Randomize the name piece strings, and set all the name offsets the same
+        used_name_pieces = shuffle_level_name_pieces(rom, world, True)
+        build_names_singularity(rom, world, used_name_pieces)
+
+
 def handle_collected_paths(rom):
     rom.write_bytes(0x1F5B, bytearray([0x22, 0x30, 0xBC, 0x03])) # JSL $03BC30
     rom.write_bytes(0x1F5F, bytearray([0xEA] * 0x02))
@@ -3189,6 +3327,7 @@ def patch_rom(world: World, rom, player, active_level_dict):
 
     # Handle Level Shuffle
     handle_level_shuffle(rom, active_level_dict)
+    handle_level_name_shuffle(rom, world)
 
     # Handle Music Shuffle
     if world.options.music_shuffle != "none":

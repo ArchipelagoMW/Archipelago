@@ -1366,3 +1366,73 @@ def generate_level_list(world: World):
     shuffled_level_list.append(0x48)
 
     return shuffled_level_list
+
+class SMWLevelName():
+    address: int
+    possible_names: list[str]
+
+    def __init__(self, address: int, possible_names: list[str]):
+        self.address        = address
+        self.possible_names = possible_names
+
+level_name_data: list[SMWLevelName] = [
+    SMWLevelName(0x21C90, [" " ]),
+    SMWLevelName(0x21AC5, ["YOSHI'S ", "MARIO'S ", "LUIGI'S ", "WARIO'S ", "BOSHI'S ", "PEACH'S ", "DAISY'S ", "YOBBY'S ", "ROY'S " ]),
+    SMWLevelName(0x21ACD, ["STAR ", "MOON ", "SUN ", "MARS ", "MILK ", "RICE ", "CORN "]),
+    SMWLevelName(0x21AD2, ["#1 IGGY'S ", "#1 JACK'S ", "#3 BACH'S ", "#2 ALEX'S ", "#7 KATY'S ", "#1 KOJI'S ", "#5 TOBY'S "]),
+    SMWLevelName(0x21ADC, ["#2 MORTON'S ", "#0118 ROY'S ", "#1 TAYLOR'S ", "#3 BILLIE'S ", "#3 JOHANN'S ", "#6 ARIANA'S ", "#64 GRANT'S "]),
+    SMWLevelName(0x21AE8, ["#3 LEMMY'S ", "#5 BRUNO'S ", "#8 SLASH'S ", "#4 PYOTR'S ", "#5 FELIX'S ", "#2 DAVID'S ", "#9 JASON'S "]),
+    SMWLevelName(0x21AF3, ["#4 LUDWIG'S ", "#2 MOZART'S ", "#5 GUSTAV'S ", "#7 DMITRI'S ", "#6 SERGEI'S ", "#4 RALPH'S ", "#1 JOSEPH'S ", "NOT ROY'S "]),
+    SMWLevelName(0x21AFF, ["#5 ROY'S ", "#2 SAM'S ", "#1 BIG'S ", "#5 BTS'S ", "#2 JUN'S ", "#3 GO'S ", "#5 BOB'S "]),
+    SMWLevelName(0x21B08, ["#6 WENDY'S ", "#7 CLARA'S ", "#4 ADELE'S ", "#1 LENA'S ", "#5 GAGA'S ", "#3 YOKO'S ", "#2 PINK'S "]),
+    SMWLevelName(0x21B13, ["#7 LARRY'S ", "#2 KEVIN'S ", "#7 NOBUO'S ", "#8 FRANZ'S ", "#6 KENJI'S ", "#2 LUIGI'S ", "#5 FRANK'S "]),
+    SMWLevelName(0x21B1E, ["DONUT ", "PIZZA ", "BAGEL ", "PASTA ", "PINNA ", "CREAM ", "LEMON ", "VINE "]),
+    SMWLevelName(0x21B24, ["GREEN ", "AZURE ", "BROWN ", "CREAM ", "IVORY ", "MAUVE ", "STRAW "]),
+    SMWLevelName(0x21B2A, ["TOP SECRET AREA ", "HUSH HUSH PLACE ", "THE QUIET PLACE ", "SOMEWHERE ", "NEXT TO NOWHERE ", "HERE ", "REFILL SPOT "]),
+    SMWLevelName(0x21B3A, ["VANILLA ", "CHERRY ", "GELATO ", "BIANCO ", "PIANTA ", "BROWNIE ", "BANANA ", "PUMPKIN ", "GLOOMY "]),
+    SMWLevelName(0x21B42, ["@38@39@3A@3B@3C ", "WHITE ", "SEPIA ", "LEMON ", "FLAME ", "KHAKI ", "LILAC "]),
+    SMWLevelName(0x21B48, ["RED ", "RGB ", "SKY ", "JET ", "CAR ", "TAN ", "LED "]),
+    SMWLevelName(0x21B4C, ["BLUE ", "PINK ", "ROSE ", "PAUA ", "PEAR ", "PLUM ", "LAVA "]),
+    SMWLevelName(0x21B51, ["BUTTER BRIDGE ", "MARGARINE WAY ", "MARIO CIRCUIT ", "KOOPA BEACH ", "RAINBOW ROAD ", "TOAD TURNPIKE ", "YOSHI FALLS "]),
+    SMWLevelName(0x21B5F, ["CHEESE BRIDGE ", "WATERMELON ", "CHEDDAR ROAD ", "YOGURT YARD ", "FISH CLIFF ", "BRIE BLUFF ", "FETA FOOTHILL "]),
+    SMWLevelName(0x21B6D, ["SODA LAKE ", "MINT POOL ", "POP OCEAN ", "PACIFICA ", "WATER SEA ", "DIRE DOCK ", "NOKI BAY "]),
+    SMWLevelName(0x21B77, ["COOKIE MOUNTAIN ", "BROWNIE CLIFF ", "CHEESECAKE HIKE ", "CANDY CLIFFSIDE ", "SUGAR SUMMIT ", "PANCAKE PEAK ", "ROCK CANDY RIDGE"]),
+    SMWLevelName(0x21B87, ["FOREST ", "WOODS ", "PLAINS ", "FIELDS ", "LAND ", "GALAXY ", "LAKE ", "CANYON ", "RAVINE ", "CHASM ", "PIT ", "PRISON ", "CAGE ", "CAVERN "]),
+    SMWLevelName(0x21B8E, ["CHOCOLATE ", "RASPBERRY ", "PEPPERONI ", "PISTACHIO ", "TALL TALL ", "SNOWMAN'S ", "ICE CREAM ", "MUSHROOM ", "CILANTRO "]),
+    SMWLevelName(0x21B98, ["CHOCO-GHOST HOUSE ", "MAYONNAISE MANOR ", "COCONUT MALL ", "LUIGI'S MANSION ", "BOLOGNA BUILDING ", "VIM FACTORY ", "BIG BOO'S HAUNT ", "CREEPY STEEPLE ", "HOTEL DELPHINO "]),
+    SMWLevelName(0x21BAA, ["SUNKEN GHOST SHIP ", "WRECKED SHIP ", "GANGPLANK GALLEON ", "DAISY CRUISER ", "SS CHUCKOLA ", "SS FLAVION ", "KING OF RED LIONS ", "THE BURNING BLADE ", "THE GREAT FOX "]),
+    SMWLevelName(0x21BBC, ["VALLEY ", "CANYON ", "RAVINE ", "CHASM ", "PIT ", "PRISON ", "CAGE ", "WOODS ", "PLAINS ", "FIELDS ", "LAND ", "GALAXY ", "LAKE ", "CAVERN "]),
+    SMWLevelName(0x21BC3, ["BACK DOOR "]),
+    SMWLevelName(0x21BCD, ["FRONT DOOR "]),
+    SMWLevelName(0x21BD8, ["GNARLY ", "BULLY ", "FETCH ", "BASED ", "FIRE ", "POPPIN ", "MONDO "]),
+    SMWLevelName(0x21BDF, ["TUBULAR ", "POGGERS ", "STELLAR ", "CAPITAL ", "GOATED ", "SKIBIDI ", "GROOVY "]),
+    SMWLevelName(0x21BE7, ["WAY COOL ", "SCHWIFTY ", "DRIPPIN ", "ALL THAT ", "ON FLEEK ", "DA BOMB ", "FAR OUT "]),
+    SMWLevelName(0x21C90, [" " ]),
+    SMWLevelName(0x21BF0, ["HOUSE ", "ROOM ", "ROOF ", "HOME ", "PLACE ", "ABODE ", "HOVEL ", "CABIN ", "BARN ", "VILLA ", "LAB ", "SHACK ", "HUT "]),
+    SMWLevelName(0x21BF6, ["ISLAND ", "HILLS ", "SHIRE ", "PLANET ", "SAVANA ", "TUNDRA ", "RIDGE ", "VALLEY ", "GULCH ", "CAVERN ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "LAGOON ", "CANYON ", "HARBOR ", "GARDEN ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK "]),
+    SMWLevelName(0x21BFD, ["SWITCH PALACE ", "ARCHIPELAGO ", "YUMP ATTEMPT ", "BLOCK UNLOCK ", "SKYSCRAPER ", "FACTORY ", "OBSERVATORY ", "BLOCKHOUSE ", "SHIPYARD ", "GARAGE "]),
+    SMWLevelName(0x21C0B, ["CASTLE ", "PARLOR ", "CASINO ", "HOTEL ", "CINEMA ", "SCHOOL ", "BANK ", "ARENA ", "FORT ", "PAGODA ", "VILLA ", "KEEP ", "TOWN ", "CITY ", "ENGINE "]),
+    SMWLevelName(0x21C12, ["PLAINS ", "HILLS ", "SHIRE ", "PLANET ", "SAVANA ", "TUNDRA ", "RIDGE ", "VALLEY ", "GULCH ", "CAVERN ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "LAGOON ", "CANYON ", "HARBOR ", "GARDEN ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK "]),
+    SMWLevelName(0x21C19, ["GHOST HOUSE ", "GAS STATION ", "OFFICE ", "FACTORY ", "STADIUM ", "MUSEUM ", "AQUARIUM ", "ORPHANAGE ", "BUNKER ", "LIGHTHOUSE "]),
+    SMWLevelName(0x21C25, ["SECRET ", "HIDDEN ", "LOST ", "BORING ", "HILLS ", "SHIRE ", "PLANET ", "SAVANA ", "TUNDRA ", "RIDGE ", "VALLEY ", "GULCH ", "CAVERN ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "LAGOON ", "CANYON ", "HARBOR ", "GARDEN ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK "]),
+    SMWLevelName(0x21C2C, ["DOME ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK "]),
+    SMWLevelName(0x21C31, ["FORTRESS ", "CIRCUIT ", "FESTIVAL ", "DUNGEON ", "CITADEL ", "PARLOR ", "CASINO ", "HOTEL ", "CINEMA ", "SCHOOL ", "BANK ", "ARENA ", "FORT ", "PAGODA ", "VILLA ", "KEEP ", "TOWN ", "CITY ", "ENGINE "]),
+    SMWLevelName(0x21C3A, ["OF@32@33@34@35@36@37ON ", "OF KOOPERS ", "OF HEROES ", "OF SPIDERS ", "OF ROY ", "OF LUDWIG ", "OF DOOM ", "OF EGGMAN ", "OF MARIO ", "OF SPOOKS ", "OF TRIALS ", "OF REPOSE "]),
+    SMWLevelName(0x21C45, ["OF BOWSER ", "OF ROY ", "OF LUDWIG ", "OF DOOM ", "OF EGGMAN ", "OF MARIO ", "OF SPOOKS ", "OF TRIALS ", "OF REPOSE ", "OF HEROES "]),
+    SMWLevelName(0x21C4F, ["ROAD ", "LANE ", "WAY ", "CAR ", "PATH ", "PASS ", "LANE "]),
+    SMWLevelName(0x21C54, ["WORLD ", "ROAD ", "HILLS ", "SHIRE ", "RIDGE ", "GULCH ", "ABYSS ", "GROVE ", "MARSH ", "BAYOU ", "HILL ", "HOLE ", "ZONE ", "WELL ", "LAIR ", "LAND ", "HALL ", "MILL ", "PARK ", "ALLEY ", "TRAIN ", "ROUTE "]),
+    SMWLevelName(0x21C5A, ["AWESOME ", "RADICAL ", "VICIOUS ", "HUZZAH ", "SIGMA ", "COOL ", "AND HOW "]),
+    SMWLevelName(0x21C90, [" " ]),
+    SMWLevelName(0x21C62, ["1", "0", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C"]),
+    SMWLevelName(0x21C63, ["2", "0", "1", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C"]),
+    SMWLevelName(0x21C64, ["3", "0", "1", "2", "4", "5", "6", "7", "8", "9", "A", "B", "C"]),
+    SMWLevelName(0x21C65, ["4", "0", "1", "2", "3", "5", "6", "7", "8", "9", "A", "B", "C"]),
+    SMWLevelName(0x21C66, ["5", "0", "1", "2", "3", "4", "6", "7", "8", "9", "A", "B", "C"]),
+    SMWLevelName(0x21C67, ["PALACE"]),
+    SMWLevelName(0x21C6D, ["AREA", "ZONE", "LAIR", "LAND", "HILL", "HOLE", "WELL", "HALL", "MILL", "PARK"]),
+    SMWLevelName(0x21C71, ["GROOVY", "NEATO", "FUNKY", "ZOOLY", "WICKED", "BALLER", "GNARLY"]),
+    SMWLevelName(0x21C77, ["MONDO", "PHAT", "HOT", "HIP", "DOPE", "SWEET", "GUCCI"]),
+    SMWLevelName(0x21C7C, ["OUTRAGEOUS", "PRETTY FLY", "CAT'S MEOW", "SICK NASTY", "MARVELOUS", "FANTASTIC", "BEAUTIFUL", "RIGHTEOUS", "BODACIOUS"]),
+    SMWLevelName(0x21C86, ["FUNKY", "NIFTY", "LIT", "BOSS", "TIGHT", "DANK", "BAD"]),
+    SMWLevelName(0x21C8B, ["HOUSE", "LAB", "ROOM", "ROOF", "HOME", "PLACE", "ABODE", "HOVEL", "CABIN", "BARN", "VILLA", "SHACK", "HUT"]),
+]
