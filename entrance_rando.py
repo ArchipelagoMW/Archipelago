@@ -74,7 +74,7 @@ class EntranceLookup:
         if entrance in self._expands_graph_cache:
             return self._expands_graph_cache[entrance]
 
-        visited = {entrance.connected_region}
+        seen = {entrance.connected_region}
         q: deque[Region] = deque()
         q.append(entrance.connected_region)
 
@@ -102,8 +102,8 @@ class EntranceLookup:
                         and exit_ in self._usable_exits):
                     self._expands_graph_cache[entrance] = True
                     return True
-                elif exit_.connected_region and exit_.connected_region not in visited:
-                    visited.add(exit_.connected_region)
+                elif exit_.connected_region and exit_.connected_region not in seen:
+                    seen.add(exit_.connected_region)
                     q.append(exit_.connected_region)
 
         self._expands_graph_cache[entrance] = False
