@@ -416,8 +416,6 @@ class Context:
     def notify_client_without_auth(self, client: Client, text: str, additional_arguments: dict = {}):
         if client.auth:
             return self.notify_client(client, text, additional_arguments)
-        if client.no_text:
-            return
         self.logger.info("Notice (Unauthenticated Player): " + text)
         async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}]))
 
