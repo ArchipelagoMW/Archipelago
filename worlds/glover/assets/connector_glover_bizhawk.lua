@@ -2461,7 +2461,7 @@ function received_garibs(itemId)
 		--Index of the level the garibs coming from
 		GARIB_LEVEL_INDEX = itemId % 10
 		--Name of the specific garibs
-		GARIB_WORLD_NAME = WORLDS_TABLE[GARIB_WORLD_INDEX + GARIB_LEVEL_INDEX] + "_GARIBS"
+		GARIB_WORLD_NAME = ROM_WORLDS_TABLE[GARIB_WORLD_INDEX + GARIB_LEVEL_INDEX] .. "_GARIBS"
         TOTAL_WORLD_GARIBS[GARIB_WORLD_NAME] = TOTAL_WORLD_GARIBS[GARIB_WORLD_NAME] + 1
         GVR:setItem(ITEM_TABLE[GARIB_WORLD_NAME], TOTAL_WORLD_GARIBS[GARIB_WORLD_NAME])
 	elseif 6530000 <= itemId and itemId <= 6539999 then
@@ -2471,7 +2471,7 @@ function received_garibs(itemId)
 		--Index of the level the garibs coming from
 		GARIB_LEVEL_INDEX = getDigit(itemId, 3)
 		--Name of the specific garibs
-		GARIB_WORLD_NAME = WORLDS_TABLE[GARIB_WORLD_INDEX + GARIB_LEVEL_INDEX] + "_GARIBS"
+		GARIB_WORLD_NAME = ROM_WORLDS_TABLE[GARIB_WORLD_INDEX + GARIB_LEVEL_INDEX] .. "_GARIBS"
 		--Amount the garibs increase by
 		TOTAL_ADDED_GARIBS = itemId % 100
 		--Apply it
