@@ -310,10 +310,6 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                 #Switches
                 if not self.options.switches_checks:
                     ap_ids.clear()
-            case 1:
-                #Garibs
-                if self.options.garib_logic == GaribLogic.option_level_garibs:
-                    continue
             case 3:
                 #Checkpoints don't give their starting location
                 if region_level.starting_checkpoint == int(each_location_data.name[-1]):
@@ -332,11 +328,21 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                 #Tips
                 if not self.options.mr_tip_checks:
                     continue
+            case 7:
+                #Loading Zones
+                if not self.options.bonus_levels:
+                    #Bonus loading zones
+                    if each_location_data.name.endswith("Entry Bonus"):
+                        continue
             #case 9:
                 #Misc
             case 10:
                 #Enemysanity
                 if not self.options.enemysanity:
+                    continue
+            case 11:
+                #Insectity
+                if not self.options.insectity:
                     continue
                 
         rules_applied : bool = False
@@ -400,7 +406,7 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                     if not rules_applied:
                         access_methods_to_rules(self, each_location_data.methods, location)
             #Garib Groups
-            else:
+            elif self.options.garib_logic == GaribLogic.option_garib_groups:
                 #Regular Locations
                 group_offset : int = each_location_data.ap_ids[0]
                 if len(ap_ids) > 1:
@@ -409,6 +415,15 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                 region_for_use.locations.append(location)
                 if not rules_applied:
                     access_methods_to_rules(self, each_location_data.methods, location)
+            #All Garibs in Level
+            else:
+                #It's an event location, with an event item
+                location : Location = Location(player, each_location_data.name, None, region_for_use)
+                region_for_use.locations.append(location)
+                if not rules_applied:
+                    access_methods_to_rules(self, each_location_data.methods, location)
+                #These are used to create star gate unlock logic
+                location.place_locked_item(self.create_event(each_location_data.name + " Reached"))
         else:
             #Regular Locations
             address : int | None = None
@@ -457,6 +472,7 @@ def get_region_from_method(multiworld : MultiWorld, player : int, region_pairs :
             lookup_name += " W/Ball"
         if each_pair.base_id == method.region_index:
             return multiworld.get_region(lookup_name, player)
+    raise IndexError(region_pairs[0].name.split(':')[0] + " method calls for region indexed " + str(method.region_index) + " that does not exist!")
 
 def build_data(self : GloverWorld) -> List[RegionLevel]:
     all_levels : List[RegionLevel] = []
@@ -509,28 +525,60 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
             #Attach the locations to the regions
             assign_locations_to_regions(self, region_level, map_regions, location_data_list)
             
-            #Aside from the wayrooms, the hubworld and the castle cave
+            #Aside from the wayrooms, the hubworld and the castle cave, levels have star marks
             if (world_index < 6 and not level_index == 0) or level_index == 2:
-                #Does this location have a star mark?
-                star_mark_ap_id : int | None = None
-                if self.options.portalsanity:
-                    #They contain a random item
-                    star_mark_ap_id = 3000 + level_index + (world_index * 10)
-                secondary_condition : str
-                #Does this location have garibs?
-                if level_index == 4 or world_index >= 6:
-                    #No
-                    secondary_condition = "Completion"
-                else:
-                    #Yes
-                    secondary_condition = "All Garibs"
-                #Otherwise, they contain the star marks
-                level_base_region : Region = self.multiworld.get_region(level_name, self.player)
-                star_mark_location = Location(self.player, prefix + secondary_condition, star_mark_ap_id, level_base_region)
-                level_base_region.locations.append(star_mark_location)
+                create_star_mark(self, level_index, world_index, level_name, prefix, location_data_list)
+            
+            #Append it to the level list
             all_levels.append(region_level)
 
     return all_levels
+
+def create_star_mark(self, level_index : int, world_index : int, level_name : str, prefix : str, location_data_list : List[LocationData]):
+    player : int = self.player
+    
+    #Does this location have a star mark item, or a random one?
+    star_mark_ap_id : int | None = None
+    if self.options.portalsanity:
+        #They contain a random item
+        star_mark_ap_id = 3000 + level_index + (world_index * 10)
+    secondary_condition : str
+    #Does it unlock via garibs?
+    level_has_garibs : bool = level_index != 4 and world_index < 6
+    if level_has_garibs:
+        #Yes
+        secondary_condition = "All Garibs"
+    else:
+        #No
+        secondary_condition = "Completion"
+    #Otherwise, they contain the star marks
+    level_base_region : Region = self.multiworld.get_region(level_name, player)
+    star_mark_location = Location(player, prefix + secondary_condition, star_mark_ap_id, level_base_region)
+    #Boss levels and the well just give you it if you reach the goal
+    if not level_has_garibs:
+        goal_location : Location
+        #Boss levels look for the location 'Boss'
+        if level_index == 4:
+            goal_location = self.multiworld.get_location(prefix + "Boss", player)
+        else:
+        #The tutorial well looks for the locaiton 'Goal'
+            goal_location = self.multiworld.get_location(prefix + "Goal", player)
+        set_rule(star_mark_location, lambda state, for_completion = goal_location: state.can_reach(for_completion, player))
+    #Level garibs means you take all garib methods from before
+    elif self.options.garib_logic == GaribLogic.option_level_garibs:
+        all_garibs_rule(self, star_mark_location, location_data_list)
+    level_base_region.locations.append(star_mark_location)
+
+def all_garibs_rule(self, star_mark_location : Location, location_data_list : List[LocationData]):
+    #If it's all garibs in level logic, logic construction looks diffrent
+    garib_location_names : List[str] = []
+    for each_garib_location in location_data_list:
+        #Skip non-garibs obviously
+        if not each_garib_location.type == 1:
+            continue
+        garib_location_names.append(each_garib_location.name + " Reached")
+    set_rule(star_mark_location, lambda state, required_garibs = garib_location_names: state.has_all(required_garibs, self.player))
+
 
 def build_location_pairings(base_name : str, check_info : dict, ap_ids : list[str]) -> list[list]:
     #Nothing at all

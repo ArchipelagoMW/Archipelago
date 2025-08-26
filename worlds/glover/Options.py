@@ -107,9 +107,14 @@ class MrTipChecks(DefaultOnToggle):
     display_name = "Mr. Tip Checks"
 
 class Enemysanity(Toggle):
-    """Enemies that can normally be defeated are checks
+    """Enemies that can normally be defeated are checks.
     """
     display_name = "Enemysanity"
+
+class Insectity(Toggle):
+    """Defeating insects are checks.
+    """
+    display_name = "Insectity"
 
 class MrHints(Choice):
     """Mr. Tips give AP hints. Default 1.
@@ -137,10 +142,17 @@ class ChickenHints(Choice):
     option_progression = 6
     default = 3
 
+class ExtraGaribsValue(Range):
+    """How many Garibs 'Extra Garibs' are worth. Only applies if Garib Sorting is not By Level.
+    """
+    display_name = "Bonus Garib"
+    range_start = 1
+    range_end = 20
+    default = 4
 
 
 class FillerExtraGaribsWeight(Range):
-    """What percentage of filler items are extra Garibs. Default is 0.
+    """What percentage of filler items are Extra Garibs. Default is 0.
     """
     display_name = "Extra Garibs Weight"
     range_start = 0
@@ -295,9 +307,11 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     switches_checks : SwitchesChecks
     mr_tip_checks : MrTipChecks
     enemysanity : Enemysanity
+    insectity : Insectity
 
     mr_hints : MrHints
     chicken_hints : ChickenHints
+    extra_garibs_value : ExtraGaribsValue
 
     filler_extra_garibs_weight : FillerExtraGaribsWeight
     filler_chicken_sound_weight : FillerChickenSoundWeight

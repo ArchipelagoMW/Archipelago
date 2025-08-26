@@ -92,17 +92,37 @@ class GloverWorld(World):
     def collect(self, state, item):
         output = super().collect(state, item)
         name : str = item.name
+        #Item group lists
         for each_group in self.group_lists:
             if name in self.item_name_groups[each_group] and state.count_group(each_group, self.player) == 1:
                 state.add_item(each_group, self.player)
+        #Garib counting
+        if name.endswith("Garib"):
+            state.add_item("Total Garibs", self.player)
+        elif name == "Extra Garibs":
+            state.add_item("Total Garibs", self.player, self.options.extra_garibs_value.value)
+        elif name.endswith("Garibs"):
+            split_name : list[str] = name.split(" ")
+            garibs_number : int = int(split_name[len(split_name) - 2])
+            state.add_item("Total Garibs", self.player, garibs_number)
         return output
 
     def remove(self, state, item):
         output = super().remove(state, item)
         name : str = item.name
+        #Item group lists
         for each_group in self.group_lists:
             if name in self.item_name_groups[each_group] and state.count_group(each_group, self.player) == 0:
                 state.remove_item(each_group, self.player)
+        #Garib counting
+        if name.endswith("Garib"):
+            state.remove_item("Total Garibs", self.player)
+        elif name == "Extra Garibs":
+            state.remove_item("Total Garibs", self.player, self.options.extra_garibs_value.value)
+        elif name.endswith("Garibs"):
+            split_name : list[str] = name.split(" ")
+            garibs_number : int = int(split_name[len(split_name) - 2])
+            state.remove_item("Total Garibs", self.player, garibs_number)
         return output
 
     def __init__(self, world, player):
@@ -131,8 +151,8 @@ class GloverWorld(World):
         self.garib_level_order = [
             ["Atl1", 50],
             ["Atl2", 60],
-            ["Atl3", 80]#,
-            #["Atl?", 25],
+            ["Atl3", 80],
+            ["Atl?", 25]#,
             #["Crn1", 65],
             #["Crn2", 80],
             #["Crn3", 80],
@@ -185,8 +205,8 @@ class GloverWorld(World):
         if self.options.garib_sorting == GaribSorting.option_random_order:
             self.random.shuffle(self.garib_level_order)
             #Bonus levels all go at the end if they're disabled
-            #if not self.options.bonus_levels:
-                #self.garib_level_order.append(self.garib_level_order.pop(["Atl?", 25]))
+            if not self.options.bonus_levels:
+                self.garib_level_order.append(self.garib_level_order.pop(["Atl?", 25]))
                 #self.garib_level_order.append(self.garib_level_order.pop(["Crn?", 20]))
                 #self.garib_level_order.append(self.garib_level_order.pop(["Prt?", 50]))
                 #self.garib_level_order.append(self.garib_level_order.pop(["Pht?", 60]))
@@ -257,6 +277,9 @@ class GloverWorld(World):
         #Randomize the entrances for those remaining regions
         self.entrance_randomizer()
 
+        #Create the rules for garibs now, so filler generation works correct
+        self.garib_item_rules()
+
     def create_event(self, event : str) -> GloverItem:
         return GloverItem(event, ItemClassification.progression, None, self.player)
 
@@ -276,10 +299,7 @@ class GloverWorld(World):
             case "Trap":
                 item_classification = ItemClassification.trap
             case "Garib":
-                if self.options.bonus_levels or self.options.difficulty_logic.value > 0:
-                    item_classification = ItemClassification.progression_deprioritized
-                else:
-                    item_classification = ItemClassification.filler
+                item_classification = ItemClassification.progression_deprioritized
         name_for_use = name
         if name == "Garibsanity":
             name_for_use = "Garib"
@@ -320,12 +340,16 @@ class GloverWorld(World):
             case GaribLogic.option_garib_groups:
                 if self.options.garib_sorting == GaribSorting.option_by_level:
                     garib_items = list(world_garib_table.keys())
+                    if not self.options.bonus_levels:
+                        garib_items = list(filter(lambda a: a[3:4] != "?", garib_items))
                 else:
                     garib_items = list(decoupled_garib_table.keys())
             #Individual Garibs
             case GaribLogic.option_garibsanity:
                 if self.options.garib_sorting == GaribSorting.option_by_level:
                     garib_items = list(garibsanity_world_table.keys())
+                    if not self.options.bonus_levels:
+                        garib_items = list(filter(lambda a: a[3:4] != "?", garib_items))
                 else:
                     garib_items = ["Garibsanity"]
         
@@ -363,7 +387,7 @@ class GloverWorld(World):
         core_item_count = 0
         #Core Items
         for each_item in all_core_items:
-            for total_items in range(find_item_data(self, each_item).qty):
+            for _ in range(find_item_data(self, each_item).qty):
                 self.multiworld.itempool.append(self.create_item(each_item))
                 core_item_count += 1
         #Event Items
@@ -422,6 +446,60 @@ class GloverWorld(World):
         for each_item in all_filler_items:
             self.multiworld.itempool.append(self.create_item(each_item))
 
+    def garib_item_rules(self):
+        #Garib items now combine with the garib sorting type and garib rules to create rules
+        player : int = self.player
+
+        #Unless you've set it to level garibs, in which case it's so straight forward it's done in JsonReader
+        if self.options.garib_logic == GaribLogic.option_level_garibs:
+            return
+        #Otherwise, start by the sorting method, since it has the most major effect on how garib rules act
+        if self.options.garib_sorting == GaribSorting.option_by_level:
+            #Garibs are sent to specific levels
+            garib_level_suffixes = ["1", "2", "3", "?"]
+            if not self.options.bonus_levels:
+                garib_level_suffixes.remove("?")
+            
+            #The table for use
+            table_for_use : dict
+            match self.options.garib_logic:
+                case GaribLogic.option_garib_groups:
+                    table_for_use = world_garib_table
+                case GaribLogic.option_garibsanity:
+                    table_for_use = garibsanity_world_table
+           
+            #Go over all relevant levels
+            for world_prefix in self.world_prefixes:
+                for garib_level_suffix in garib_level_suffixes:
+                    world_name = world_prefix + garib_level_suffix
+                    #Get the "All Garibs" location to set rules for
+                    level_all_garibs : Location = self.multiworld.get_location(world_name + ": All Garibs", player)
+                    #Get all garibs groups that belong to the given world
+                    garib_item_names : list[str] = []
+                    garib_item_count : int = 0
+                    for each_key, each_item in table_for_use.items():
+                        if each_key.startswith(world_name):
+                            garib_item_names.append(each_key)
+                            garib_item_count += each_item.qty
+                    #With world garibs, Extra Garibs counts as 1 group from each world
+                    #garib_item_names.append("Extra Garibs")
+                    #With the total number of garib items you need
+                    if len(garib_item_names) > 0:
+                        set_rule(level_all_garibs, lambda state, required_groups = garib_item_names, required_group_count = garib_item_count: state.has_from_list(required_groups, player, required_group_count))
+        else:
+            #If they're decoupled from levels, count directly
+            total_required_garibs : int = 0
+            #Garibs are collected in the given order
+            for each_level in self.garib_level_order:
+                #Ignore bonus levels if it's disabled
+                if each_level[0].endswith("?") and not self.options.bonus_levels:
+                    continue
+                #At the next level
+                level_all_garibs : Location = self.multiworld.get_location(each_level[0] + ": All Garibs", player)
+                #Require the cumulative garib count of all garib completions before this one
+                total_required_garibs += each_level[1]
+                set_rule(level_all_garibs, lambda state, cumulative_garib_requirement = total_required_garibs: state.has("Total Garibs", player, cumulative_garib_requirement))
+
     def entrance_randomizer(self):
         entry_name : list[str] = ["1", "2", "3", "Boss", "Bonus"]
         multiworld : MultiWorld = self.multiworld
@@ -456,6 +534,8 @@ class GloverWorld(World):
                 offset : int = world_offset + entry_index
                 location_name : str = wayroom_name + ": Entry " + each_entry_suffix
                 connecting_level_name : str = self.wayroom_entrances[offset]
+                if connecting_level_name.endswith('?') and not self.options.bonus_levels:
+                    continue
                 connecting_level : Region = multiworld.get_region(connecting_level_name, player)
                 entry_region : Region = multiworld.get_location(location_name, player).parent_region
                 entry_region.connect(connecting_level, location_name, lambda state, each_location = location_name: state.can_reach_location(each_location, player))
@@ -465,15 +545,17 @@ class GloverWorld(World):
                     self.populate_goals_and_marks(connecting_level_name, wayroom_name, entry_index)
             
             #Getting a star on all 4 other levels
-            bonus_unlock_address : int | None = None
-            if self.options.portalsanity:
-                bonus_unlock_address = 3100 + (world_index * 100)
-            bonus_unlock : Location = Location(player, wayroom_name + ": Bonus Unlock", bonus_unlock_address, hubroom)
-            hubroom.locations.append(bonus_unlock)
-            #Unlocks the bonus level
-            if not self.options.portalsanity:
-               bonus_unlock.place_locked_item(self.create_event(wayroom_name + " Bonus Gate"))
-            set_rule(bonus_unlock, lambda state: state.has_all([wayroom_name + " 1 Star", wayroom_name + " 2 Star", wayroom_name + " 3 Star", wayroom_name + " Boss Star"], player))
+            if self.options.bonus_levels:
+                bonus_unlock_address : int | None = None
+                if self.options.portalsanity:
+                    bonus_unlock_address = 3100 + (world_index * 100)
+                bonus_unlock : Location = Location(player, wayroom_name + ": Bonus Unlock", bonus_unlock_address, hubroom)
+                hubroom.locations.append(bonus_unlock)
+                #Unlocks the bonus level
+                if not self.options.portalsanity:
+                   bonus_unlock.place_locked_item(self.create_event(wayroom_name + " Bonus Gate"))
+                world_star_marks : list[str] = [wayroom_name + " 1 Star", wayroom_name + " 2 Star", wayroom_name + " 3 Star", wayroom_name + " Boss Star"]
+                set_rule(bonus_unlock, lambda state, required_star_marks = world_star_marks: state.has_all(required_star_marks, player))
 
         #Entry Names
         hub_entry_names : list[str] = [
@@ -504,8 +586,12 @@ class GloverWorld(World):
     def populate_goals_and_marks(self, connecting_level_name : str, wayroom_name : str, entry_index : int):
         player = self.player
         
+        #Disable bonus levels
+        if connecting_level_name.endswith('?') and not self.options.bonus_levels:
+            return
+
         #DELETE THIS ONCE IT'S FINISHED
-        existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!"]
+        existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn!", "Prt!", "Pht!", "FoF!", "Otw!", "Training"]
         
         #Map Generation
         goal_item : Item
@@ -573,8 +659,10 @@ class GloverWorld(World):
         options["switches_checks"] = self.options.switches_checks.value
         options["mr_tip_checks"] = self.options.mr_tip_checks.value
         options["enemysanity"] = self.options.enemysanity.value
+        options["insectity"] = self.options.insectity.value
         options["mr_hints"] = self.options.mr_hints.value
         options["chicken_hints"] = self.options.chicken_hints.value
+        options["extra_garibs_value"] = self.options.extra_garibs_value.value
 
         options["player_name"] = self.multiworld.player_name[self.player]
         options["seed"] = self.random.randint(-6500000, 6500000)

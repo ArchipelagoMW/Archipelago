@@ -1,5 +1,5 @@
 -- Glover Connector Lua
--- Created by Mike Jackson (jjjj12212)
+-- Created by Mike Jackson (jjjj12212) and Smg065
 
 local socket_loaded, socket = pcall(require, "socket")
 if not socket_loaded then
@@ -44,30 +44,32 @@ local GARIB_GROUPS = false
 -------------- TOTALS VARS -----------
 local TOTAL_LIVES = 0;
 local TOTAL_SINGLE_GARIBS = 0;
-local TOTAL_ATLANTIS_1_GARIBS = 0;
-local TOTAL_ATLANTIS_2_GARIBS = 0;
-local TOTAL_ATLANTIS_3_GARIBS = 0;
-local TOTAL_ATLANTIS_BONUS_GARIBS = 0;
-local TOTAL_CARNIVAL_1_GARIBS = 0;
-local TOTAL_CARNIVAL_2_GARIBS = 0;
-local TOTAL_CARNIVAL_3_GARIBS = 0;
-local TOTAL_CARNIVAL_BONUS_GARIBS = 0;
-local TOTAL_PIRATES_1_GARIBS = 0;
-local TOTAL_PIRATES_2_GARIBS = 0;
-local TOTAL_PIRATES_3_GARIBS = 0;
-local TOTAL_PIRATES_BONUS_GARIBS = 0;
-local TOTAL_PREHISTORIC_1_GARIBS = 0;
-local TOTAL_PREHISTORIC_2_GARIBS = 0;
-local TOTAL_PREHISTORIC_3_GARIBS = 0;
-local TOTAL_PREHISTORIC_BONUS_GARIBS = 0;
-local TOTAL_FORTRESS_1_GARIBS = 0;
-local TOTAL_FORTRESS_2_GARIBS = 0;
-local TOTAL_FORTRESS_3_GARIBS = 0;
-local TOTAL_FORTRESS_BONUS_GARIBS = 0;
-local TOTAL_SPACE_1_GARIBS = 0;
-local TOTAL_SPACE_2_GARIBS = 0;
-local TOTAL_SPACE_3_GARIBS = 0;
-local TOTAL_SPACE_BONUS_GARIBS = 0;
+local TOTAL_WORLD_GARIBS = {
+	['AP_ATLANTIS_L1_GARIBS'] = 0,
+	['AP_ATLANTIS_L2_GARIBS'] = 0,
+	['AP_ATLANTIS_L3_GARIBS'] = 0,
+	['AP_ATLANTIS_BONUS_GARIBS'] = 0,
+	['AP_CARNIVAL_L1_GARIBS'] = 0,
+	['AP_CARNIVAL_L2_GARIBS'] = 0,
+	['AP_CARNIVAL_L3_GARIBS'] = 0,
+	['AP_CARNIVAL_BONUS_GARIBS'] = 0,
+	['AP_PIRATES_L1_GARIBS'] = 0,
+	['AP_PIRATES_L2_GARIBS'] = 0,
+	['AP_PIRATES_L3_GARIBS'] = 0,
+	['AP_PIRATES_BONUS_GARIBS'] = 0,
+	['AP_PREHISTORIC_L1_GARIBS'] = 0,
+	['AP_PREHISTORIC_L2_GARIBS'] = 0,
+	['AP_PREHISTORIC_L3_GARIBS'] = 0,
+	['AP_PREHISTORIC_BONUS_GARIBS'] = 0,
+	['AP_FORTRESS_L1_GARIBS'] = 0,
+	['AP_FORTRESS_L2_GARIBS'] = 0,
+	['AP_FORTRESS_L3_GARIBS'] = 0,
+	['AP_FORTRESS_BONUS_GARIBS'] = 0,
+	['AP_SPACE_L1_GARIBS'] = 0,
+	['AP_SPACE_L2_GARIBS'] = 0,
+	['AP_SPACE_L3_GARIBS'] = 0,
+	['AP_SPACE_BONUS_GARIBS'] = 0
+};
 
 --------------- DEATH LINK ----------------------
 local DEATH_LINK_TRIGGERED = false;
@@ -1246,6 +1248,130 @@ local ADDRESS_MAP = {
 				['offset'] = 1,
 			},
 		},
+	},
+	["AP_ATLANTIS_BONUS"] = {
+		["GARIBS"] = {
+			["252"] = {
+				['id'] = 0x0FC,
+				['offset'] = 0,
+			},
+			["253"] = {
+				['id'] = 0x0FD,
+				['offset'] = 1,
+			},
+			["254"] = {
+				['id'] = 0x0FE,
+				['offset'] = 2,
+			},
+			["255"] = {
+				['id'] = 0x0FF,
+				['offset'] = 3,
+			},
+			["256"] = {
+				['id'] = 0x100,
+				['offset'] = 4,
+			},
+			["257"] = {
+				['id'] = 0x101,
+				['offset'] = 5,
+			},
+			["258"] = {
+				['id'] = 0x102,
+				['offset'] = 6,
+			},
+			["259"] = {
+				['id'] = 0x103,
+				['offset'] = 7,
+			},
+			["260"] = {
+				['id'] = 0x104,
+				['offset'] = 8,
+			},
+			["261"] = {
+				['id'] = 0x105,
+				['offset'] = 9,
+			},
+			["262"] = {
+				['id'] = 0x106,
+				['offset'] = 10,
+			},
+			["263"] = {
+				['id'] = 0x107,
+				['offset'] = 11,
+			},
+			["264"] = {
+				['id'] = 0x108,
+				['offset'] = 12,
+			},
+			["265"] = {
+				['id'] = 0x109,
+				['offset'] = 13,
+			},
+			["266"] = {
+				['id'] = 0x10A,
+				['offset'] = 14,
+			},
+			["267"] = {
+				['id'] = 0x10B,
+				['offset'] = 15,
+			},
+			["268"] = {
+				['id'] = 0x10C,
+				['offset'] = 16,
+			},
+			["269"] = {
+				['id'] = 0x10D,
+				['offset'] = 17,
+			},
+			["270"] = {
+				['id'] = 0x10E,
+				['offset'] = 18,
+			},
+			["271"] = {
+				['id'] = 0x10F,
+				['offset'] = 19,
+			},
+			["272"] = {
+				['id'] = 0x110,
+				['offset'] = 20,
+			},
+			["273"] = {
+				['id'] = 0x111,
+				['offset'] = 21,
+			},
+			["274"] = {
+				['id'] = 0x112,
+				['offset'] = 22,
+			},
+			["275"] = {
+				['id'] = 0x113,
+				['offset'] = 23,
+			},
+			["276"] = {
+				['id'] = 0x114,
+				['offset'] = 24,
+			},
+		},
+		["ENEMIES"] = {
+			["277"] = {
+				['id'] = 0x115,
+				['offset'] = 0,
+			},
+			["278"] = {
+				['id'] = 0x116,
+				['offset'] = 1,
+			},
+			["279"] = {
+				['id'] = 0x117,
+				['offset'] = 2,
+			},
+		},
+		["LIFE"] = {
+			["280"] = {
+				['id'] = 0x118,
+				['offset'] = 0,
+			},
+		},
 	}
 }
 
@@ -1663,6 +1789,58 @@ local GARIB_GROUPS_MAP = {
 				"220",
 				"221",
 				"222"
+			}
+		},
+	},
+	["AP_ATLANTIS_BONUS"] = {
+		["Garibs A"] = {
+			["id"] = "10252",
+			["garibs"] = {
+				"252",
+				"253",
+				"254",
+				"255",
+				"256"
+			}
+		},
+		["Garibs B"] = {
+			["id"] = "10257",
+			["garibs"] = {
+				"257",
+				"258",
+				"259",
+				"260",
+				"261"
+			}
+		},
+		["Garibs C"] = {
+			["id"] = "10262",
+			["garibs"] = {
+				"262",
+				"263",
+				"264",
+				"265",
+				"266"
+			}
+		},
+		["Garibs D"] = {
+			["id"] = "10267",
+			["garibs"] = {
+				"267",
+				"268",
+				"269",
+				"270",
+				"271"
+			}
+		},
+		["Garibs E"] = {
+			["id"] = "10272",
+			["garibs"] = {
+				"272",
+				"273",
+				"274",
+				"275",
+				"276"
 			}
 		},
 	}
@@ -2272,37 +2450,34 @@ function potion_check()
 end
 
 function received_garibs(itemId)
-    if 6501001 <= itemId and itemId <= 6501009 then
-        TOTAL_SINGLE_GARIBS = TOTAL_SINGLE_GARIBS + (itemId - 6501000)
+    --Decoupled Garib Groups and Garibsanity
+	if 6510000 <= itemId and itemId <= 6519999 then
+        TOTAL_SINGLE_GARIBS = TOTAL_SINGLE_GARIBS + (itemId - 6510000)
         GVR:setItem(ITEM_TABLE["AP_SINGLE_GARIB"], TOTAL_SINGLE_GARIBS)
-    elseif itemId == 6510001 then
-        TOTAL_SINGLE_GARIBS = TOTAL_SINGLE_GARIBS + 1
-        GVR:setItem(ITEM_TABLE["AP_SINGLE_GARIB"], TOTAL_SINGLE_GARIBS)
-    elseif itemId == 6502001 then
-        TOTAL_ATLANTIS_1_GARIBS = TOTAL_ATLANTIS_1_GARIBS + 1
-        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L1_GARIBS"], TOTAL_ATLANTIS_1_GARIBS)
-    elseif itemId == 6500190 then
-        TOTAL_ATLANTIS_1_GARIBS = TOTAL_ATLANTIS_1_GARIBS + 1
-        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L1_GARIBS"], TOTAL_ATLANTIS_1_GARIBS)
-    elseif itemId == 6500191 then
-        TOTAL_ATLANTIS_1_GARIBS = TOTAL_ATLANTIS_1_GARIBS + 2
-        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L1_GARIBS"], TOTAL_ATLANTIS_1_GARIBS)
-    elseif itemId == 6500192 then
-        TOTAL_ATLANTIS_1_GARIBS = TOTAL_ATLANTIS_1_GARIBS + 3
-        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L1_GARIBS"], TOTAL_ATLANTIS_1_GARIBS)
-    elseif itemId == 6500193 then
-        TOTAL_ATLANTIS_1_GARIBS = TOTAL_ATLANTIS_1_GARIBS + 4
-        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L1_GARIBS"], TOTAL_ATLANTIS_1_GARIBS)
-    elseif itemId == 6500194 then
-        TOTAL_ATLANTIS_1_GARIBS = TOTAL_ATLANTIS_1_GARIBS + 5
-        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L1_GARIBS"], TOTAL_ATLANTIS_1_GARIBS)
-    elseif itemId == 6500195 then
-        TOTAL_ATLANTIS_1_GARIBS = TOTAL_ATLANTIS_1_GARIBS + 6
-        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L1_GARIBS"], TOTAL_ATLANTIS_1_GARIBS)
-    elseif itemId == 6500196 then
-        TOTAL_ATLANTIS_1_GARIBS = TOTAL_ATLANTIS_1_GARIBS + 9
-        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L1_GARIBS"], TOTAL_ATLANTIS_1_GARIBS)
-    end
+    elseif 6520000 <= itemId and itemId <= 6529999 then
+		--Level Garibsanity
+		--Index of the world the garibs coming from
+		GARIB_WORLD_INDEX = getDigit(itemId, 2) * 5
+		--Index of the level the garibs coming from
+		GARIB_LEVEL_INDEX = itemId % 10
+		--Name of the specific garibs
+		GARIB_WORLD_NAME = WORLDS_TABLE[GARIB_WORLD_INDEX + GARIB_LEVEL_INDEX] + "_GARIBS"
+        TOTAL_WORLD_GARIBS[GARIB_WORLD_NAME] = TOTAL_WORLD_GARIBS[GARIB_WORLD_NAME] + 1
+        GVR:setItem(ITEM_TABLE[GARIB_WORLD_NAME], TOTAL_WORLD_GARIBS[GARIB_WORLD_NAME])
+	elseif 6530000 <= itemId and itemId <= 6539999 then
+		--Level Garib Groups
+		--Index of the world the garibs coming from
+		GARIB_WORLD_INDEX = getDigit(itemId, 4) * 5
+		--Index of the level the garibs coming from
+		GARIB_LEVEL_INDEX = getDigit(itemId, 3)
+		--Name of the specific garibs
+		GARIB_WORLD_NAME = WORLDS_TABLE[GARIB_WORLD_INDEX + GARIB_LEVEL_INDEX] + "_GARIBS"
+		--Amount the garibs increase by
+		TOTAL_ADDED_GARIBS = itemId % 100
+		--Apply it
+		TOTAL_WORLD_GARIBS[GARIB_WORLD_NAME] = TOTAL_WORLD_GARIBS[GARIB_WORLD_NAME] + TOTAL_ADDED_GARIBS
+		GVR:setItem(ITEM_TABLE[GARIB_WORLD_NAME], TOTAL_WORLD_GARIBS[GARIB_WORLD_NAME])
+	end
 end
 
 function received_moves(itemId)
@@ -2454,15 +2629,7 @@ function processAGIItem(item_list)
         -- print(receive_map)
         if receive_map[tostring(ap_id)] == nil
         then
-            if(6501001 <= memlocation and memlocation <= 6501009) -- Single Garibs
-            then
-                received_garibs(memlocation)
-            elseif memlocation == 6510001 then -- Garibsanity
-                received_garibs(memlocation)
-            elseif(memlocation == 6502001) -- Atlantis 1 Single Garibs
-            then
-                received_garibs(memlocation)
-            elseif(6500190 <= memlocation and memlocation <= 6500196) -- Atlantis 1 Garib Packs
+            if(6510000 <= memlocation and memlocation <= 6539999) -- Garibs
             then
                 received_garibs(memlocation)
             elseif(6500190 <= memlocation and memlocation <= 6501906) -- Moves and Balls
@@ -2720,6 +2887,10 @@ function process_slot(block)
         end
     end
     return true
+end
+
+function getDigit(number, digit)
+	return number % (10^digit) // (10^(digit - 1))
 end
 
 ---------------------- MAIN LUA LOOP -------------------------
