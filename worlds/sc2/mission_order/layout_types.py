@@ -104,7 +104,7 @@ class Grid(LayoutType):
     # 6 7 8
 
     def set_options(self, options: Dict[str, Any]) -> Dict[str, Any]:
-        self.two_start_positions = options.pop("two_start_positions", False)
+        self.two_start_positions = options.pop("two_start_positions", False) and self.size >= 2
         if self.two_start_positions:
             self.size += 1
         width: int = options.pop("width", 0)
@@ -402,7 +402,7 @@ class Hopscotch(LayoutType):
     #     7
 
     def set_options(self, options: Dict[str, Any]) -> Dict[str, Any]:
-        self.two_start_positions = options.pop("two_start_positions", False)
+        self.two_start_positions = options.pop("two_start_positions", False) and self.size >= 2
         if self.two_start_positions:
             self.size += 1
         width: int = options.pop("width", 7)
