@@ -36,7 +36,7 @@ class CatQuestWorld(World):
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CatQuestOptions
     options: CatQuestOptions
 
-    required_client_version = (0, 4, 0)
+    required_client_version = (0, 5, 0)
 
     def __init__(self, multiworld, player):
         super(CatQuestWorld, self).__init__(multiworld, player)
@@ -64,19 +64,14 @@ class CatQuestWorld(World):
         self.multiworld.itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
 
     def create_regions(self) -> None:
-        menu_region = Region("Menu", self.player, self.multiworld)
-        self.multiworld.regions.append(menu_region)
-        
-        main_region = Region("Felingard", self.player, self.multiworld)
+        menu = Region("Menu", self.player, self.multiworld)
 
         for loc in self.location_name_to_id.keys():
-            cqloc = CatQuestLocation(self.player, loc, self.location_name_to_id[loc], main_region)
-            cqloc.progress_type = self.location_name_to_progress_type[loc]
-            main_region.locations.append(cqloc)
+            menu.locations.append(
+                CatQuestLocation(self.player, loc, self.location_name_to_id[loc], menu)
+            )
 
-        self.multiworld.regions.append(main_region)
-
-        menu_region.connect(main_region)
+        self.multiworld.regions.append(menu)
 
         self.multiworld.completion_condition[self.player] = lambda state: (state.has("Royal Art of Water Walking", self.player) and state.has("Royal Art of Flight", self.player))
 

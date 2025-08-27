@@ -18,6 +18,6 @@ def create_rules(self, locations):
             add_rule(multiworld.get_location(loc["name"], player),
             lambda state: state.has("Royal Art of Flight", player) or state.has("Royal Art of Water Walking", player))
         
-        if loc["hasFist"] == True:
+        if loc["hasFist"]:
             add_rule(multiworld.get_location(loc["name"], player),
-            lambda state: state.has("Flamepurr", player) or state.has("Lightnyan", player) or state.has("Freezepaw", player) or state.has("Cattrap", player) or state.has("Astropaw", player))
+            lambda state: state.has("Flamepurr", player, 1) or state.has("Lightnyan", player, 1) or state.has("Freezepaw", player, 1) or state.has("Cattrap", player, 1) or state.has("Astropaw", player, 1))

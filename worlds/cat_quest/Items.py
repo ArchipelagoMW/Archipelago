@@ -16,13 +16,13 @@ items: List[Item] = [
     {"name": "Royal Art of Flight", "id": base_id + 2, "inGameId": "art.flight", "count": 1, "classification": ItemClassification.progression},
 
     # Skills
-    {"name": "Flamepurr", "id": base_id + 3, "inGameId": "skill.flamepurr", "count": 1, "classification": ItemClassification.useful},
+    {"name": "Flamepurr", "id": base_id + 3, "inGameId": "skill.flamepurr", "count": 1, "classification": ItemClassification.progression},
     {"name": "Healing Paw", "id": base_id + 4, "inGameId": "skill.healing_paw", "count": 1, "classification": ItemClassification.useful},
-    {"name": "Lightnyan", "id": base_id + 5, "inGameId": "skill.lightnyan", "count": 1, "classification": ItemClassification.useful},
-    {"name": "Cattrap", "id": base_id + 6, "inGameId": "skill.cattrap", "count": 1, "classification": ItemClassification.useful},
+    {"name": "Lightnyan", "id": base_id + 5, "inGameId": "skill.lightnyan", "count": 1, "classification": ItemClassification.progression},
+    {"name": "Cattrap", "id": base_id + 6, "inGameId": "skill.cattrap", "count": 1, "classification": ItemClassification.progression},
     {"name": "Purrserk", "id": base_id + 7, "inGameId": "skill.purrserk", "count": 1, "classification": ItemClassification.useful},
-    {"name": "Astropaw", "id": base_id + 8, "inGameId": "skill.astropaw", "count": 1, "classification": ItemClassification.useful},
-    {"name": "Freezepaw", "id": base_id + 9, "inGameId": "skill.freezepaw", "count": 1, "classification": ItemClassification.useful},
+    {"name": "Astropaw", "id": base_id + 8, "inGameId": "skill.astropaw", "count": 1, "classification": ItemClassification.progression},
+    {"name": "Freezepaw", "id": base_id + 9, "inGameId": "skill.freezepaw", "count": 1, "classification": ItemClassification.progression},
     
     # Golden Key
     {"name": "Golden Key", "id": base_id + 10, "inGameId": "key.golden", "count": 1, "classification": ItemClassification.useful},
