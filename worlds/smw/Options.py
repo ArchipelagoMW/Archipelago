@@ -187,6 +187,13 @@ class LevelShuffle(Toggle):
     display_name = "Level Shuffle"
 
 
+class CastlesAnywhere(Toggle):
+    """
+    Whether Castles and Fortresses can appear in any overworld tile when levels are shuffled, or only on Castle/Fortress tiles
+    """
+    display_name = "Castles Anywhere"
+
+
 class ExcludeSpecialZone(Toggle):
     """
     If active, this option will prevent any progression items from being placed in Special Zone levels.
@@ -472,6 +479,7 @@ smw_option_groups = [
     ]),
     OptionGroup("Level Shuffling", [
         LevelShuffle,
+        CastlesAnywhere,
         ExcludeSpecialZone,
         BowserCastleDoors,
         BowserCastleRooms,
@@ -524,6 +532,7 @@ class SMWOptions(PerGameCommonOptions):
     bowser_castle_doors: BowserCastleDoors
     bowser_castle_rooms: BowserCastleRooms
     level_shuffle: LevelShuffle
+    castles_anywhere: CastlesAnywhere
     exclude_special_zone: ExcludeSpecialZone
     boss_shuffle: BossShuffle
     koopaling_health: KoopalingHealth
