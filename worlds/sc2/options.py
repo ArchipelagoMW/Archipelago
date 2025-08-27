@@ -1548,7 +1548,7 @@ def get_option_value(world: Union['SC2World', None], name: str) -> int:
 
 
 def get_enabled_races(world: Optional['SC2World']) -> Set[SC2Race]:
-    race_names = world.options.selected_races.value if world else SelectRaces.default
+    race_names = world.options.selected_races.value if world and len(world.options.selected_races.value) > 0 else SelectRaces.default
     return {race for race in SC2Race if race.get_title() in race_names}
 
 
@@ -1558,7 +1558,7 @@ def get_enabled_campaigns(world: Optional['SC2World']) -> Set[SC2Campaign]:
     campaign_names = world.options.enabled_campaigns
     campaigns = {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
     if (world.options.mission_order.value == MissionOrder.option_vanilla
-        and world.options.selected_races.value != SelectRaces.valid_keys
+        and get_enabled_races(world) != SelectRaces.valid_keys
         and SC2Campaign.EPILOGUE in campaigns
     ):
         campaigns.remove(SC2Campaign.EPILOGUE)
