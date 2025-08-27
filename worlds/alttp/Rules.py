@@ -147,7 +147,6 @@ def set_defeat_dungeon_boss_rule(location):
     add_rule(location, lambda state: location.parent_region.dungeon.boss.can_defeat(state))
 
 
-
 def set_always_allow(spot, rule):
     spot.always_allow = rule
 
@@ -980,18 +979,19 @@ def check_is_dark_world(region):
     return False
 
 
-def add_conditional_lamps(world, player):
+def add_conditional_lamps(multiworld, player):
     # Light cones in standard depend on which world we actually are in, not which one the location would normally be
     # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
+    local_world = multiworld.worlds[player]
 
     def add_conditional_lamp(spot, region, spottype='Location', accessible_torch=False):
-        if (not world.dark_world_light_cone and check_is_dark_world(world.get_region(region, player))) or (
-                not world.light_world_light_cone and not check_is_dark_world(world.get_region(region, player))):
+        if (not local_world.dark_world_light_cone and check_is_dark_world(local_world.get_region(region))) or (
+                not local_world.light_world_light_cone and not check_is_dark_world(local_world.get_region(region))):
             if spottype == 'Location':
-                spot = world.get_location(spot, player)
+                spot = local_world.get_location(spot)
             else:
-                spot = world.get_entrance(spot, player)
-            add_lamp_requirement(world, spot, player, accessible_torch)
+                spot = local_world.get_entrance(spot)
+            add_lamp_requirement(multiworld, spot, player, accessible_torch)
 
     add_conditional_lamp('Misery Mire (Vitreous)', 'Misery Mire (Entrance)', 'Entrance')
     add_conditional_lamp('Turtle Rock (Dark Room) (North)', 'Turtle Rock (Entrance)', 'Entrance')
@@ -1002,7 +1002,7 @@ def add_conditional_lamps(world, player):
                          'Location', True)
     add_conditional_lamp('Palace of Darkness - Dark Basement - Right', 'Palace of Darkness (Entrance)',
                          'Location', True)
-    if world.worlds[player].options.mode != 'inverted':
+    if multiworld.worlds[player].options.mode != 'inverted':
         add_conditional_lamp('Agahnim 1', 'Agahnims Tower', 'Entrance')
         add_conditional_lamp('Castle Tower - Dark Maze', 'Agahnims Tower')
         add_conditional_lamp('Castle Tower - Dark Archer Key Drop', 'Agahnims Tower')
@@ -1024,10 +1024,10 @@ def add_conditional_lamps(world, player):
     add_conditional_lamp('Eastern Palace - Boss', 'Eastern Palace', 'Location', True)
     add_conditional_lamp('Eastern Palace - Prize', 'Eastern Palace', 'Location', True)
 
-    if not world.worlds[player].options.mode == "standard":
-        add_lamp_requirement(world, world.get_location('Sewers - Dark Cross', player), player)
-        add_lamp_requirement(world, world.get_entrance('Sewers Back Door', player), player)
-        add_lamp_requirement(world, world.get_entrance('Throne Room', player), player)
+    if not multiworld.worlds[player].options.mode == "standard":
+        add_lamp_requirement(multiworld, local_world.get_location("Sewers - Dark Cross"), player)
+        add_lamp_requirement(multiworld, local_world.get_entrance("Sewers Back Door"), player)
+        add_lamp_requirement(multiworld, local_world.get_entrance("Throne Room"), player)
 
 
 def open_rules(world, player):
