@@ -1,5 +1,5 @@
 from ..options import ElevatorsComeToYou
-from ..test import WitnessTestBase
+from ..test.bases import WitnessTestBase
 
 # These are just some random options combinations, just to catch whether I broke anything obvious
 
@@ -61,4 +61,11 @@ class TestPostgameGroupedDoors(WitnessTestBase):
         "shuffle_doors": "doors",
         "door_groupings": "regional",
         "victory_condition": "elevator",
+    }
+
+
+class TestPostgamePanels(WitnessTestBase):
+    options = {
+        "victory_condition": "mountain_box_long",
+        "shuffle_postgame": True
     }

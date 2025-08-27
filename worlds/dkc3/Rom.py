@@ -1,8 +1,8 @@
+
 import Utils
 from Utils import read_snes_rom
 from worlds.AutoWorld import World
 from worlds.Files import APDeltaPatch
-from .Locations import lookup_id_to_name, all_locations
 from .Levels import level_list, level_dict
 
 USHASH = '120abf304f0c40fe059f6a192ed4f947'
@@ -436,7 +436,7 @@ level_music_ids = [
 
 class LocalRom:
 
-    def __init__(self, file, patch=True, vanillaRom=None, name=None, hash=None):
+    def __init__(self, file, name=None, hash=None):
         self.name = name
         self.hash = hash
         self.orig_buffer = None
@@ -736,9 +736,9 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     return base_rom_bytes
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
     if not file_name:
-        file_name = options["dkc3_options"]["rom_file"]
+        from settings import get_settings
+        file_name = get_settings()["dkc3_options"]["rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
