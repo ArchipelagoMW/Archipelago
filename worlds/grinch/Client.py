@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-
+import asyncio
 import NetUtils
 from .Locations import grinch_locations, GrinchLocation
 from .Items import ALL_ITEMS_TABLE, SLEIGH_PARTS_TABLE, MISSION_ITEMS_TABLE, GADGETS_TABLE, KEYS_TABLE, GrinchItemData
@@ -15,11 +15,17 @@ if TYPE_CHECKING:
 RECV_ITEM_ADDR = 0x010064
 RECV_ITEM_BITSIZE = 4
 
+# Maximum number of times we check if we are in demo mode or not
+MAX_DEMO_MODE_CHECK = 30
+
 class GrinchClient(BizHawkClient):
     game = "The Grinch"
     system = "PSX"
     patch_suffix = ".apgrinch"
     items_handling = 0b111
+    demo_mode_buffer = 0
+    last_map_location = -1
+    ingame_log = False
 
     def __init__(self):
         super().__init__()
@@ -77,25 +83,7 @@ class GrinchClient(BizHawkClient):
         try:
             if not await self.ingame_checker(ctx):
                 return
-            # # Read save data
-            # save_data = await bizhawk.read(
-            #     ctx.bizhawk_ctx,
-            #     [(0x3000100, 20, "System Bus")]
-            # )[0]
-            #
-            # # Check locations
-            # if save_data[2] & 0x04:
-            #     await ctx.send_msgs([{
-            #         "cmd": "LocationChecks",
-            #         "locations": [23]
-            #     }])
-            #
-            # # Send game clear
-            # if not ctx.finished_game and (save_data[5] & 0x01):
-            #     await ctx.send_msgs([{
-            #         "cmd": "StatusUpdate",
-            #         "status": ClientStatus.CLIENT_GOAL
-            #     }])
+
             await self.location_checker(ctx)
             await self.receiving_items_handler(ctx)
             await self.goal_checker(ctx)
@@ -217,16 +205,30 @@ class GrinchClient(BizHawkClient):
                     await self.update_and_validate_address(ctx, addr_to_update.ram_address, 0, 1)
 
     async def ingame_checker(self, ctx: "BizHawkClientContext"):
-        # TODO Demo detection no worky
+        ingame_map_id = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
+            0x010000, 1, "MainRAM")]))[0], "little")
+        if not ingame_map_id == self.last_map_location:
+            self.last_map_location = ingame_map_id
+            self.demo_mode_buffer = 0
+            self.ingame_log = False
+            return False
+
         demo_mode = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
             0x01008A, 1, "MainRAM")]))[0], "little")
         if demo_mode == 1:
             return False
 
-        is_not_ingame = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
-            0x010000, 1, "MainRAM")]))[0], "little")
-        if is_not_ingame <= 0x04 or is_not_ingame >= 0x35:
+        if ingame_map_id <= 0x04 or ingame_map_id >= 0x35:
             return False
+
+        if not self.demo_mode_buffer == MAX_DEMO_MODE_CHECK:
+            await asyncio.sleep(0.1)
+            self.demo_mode_buffer += 1
+            return False
+
+        if not self.ingame_log:
+            print("You can now start sending locations to the Grinch!")
+            self.ingame_log = True
         return True
 
     async def option_handler(self, ctx: "BizHawkClientContext"):
