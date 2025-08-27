@@ -779,11 +779,11 @@ def build_names_singularity(rom, world: World, used_name_pieces: list[str]):
 
 def handle_level_name_shuffle(rom, world: World):
     if world.options.level_name_shuffle.value == 0:
-        rom.write_bytes(0x220FC + 0x58, bytearray([0xC1, 0x02]))
-        rom.write_bytes(0x220FC + 0x54, bytearray([0xC2, 0x02]))
-        rom.write_bytes(0x220FC + 0x56, bytearray([0xC3, 0x02]))
-        rom.write_bytes(0x220FC + 0x59, bytearray([0xC4, 0x02]))
-        rom.write_bytes(0x220FC + 0x5A, bytearray([0xC5, 0x02]))
+        rom.write_bytes(0x220FC + (0x58 * 2), bytearray([0xC1, 0x02]))
+        rom.write_bytes(0x220FC + (0x54 * 2), bytearray([0xC2, 0x02]))
+        rom.write_bytes(0x220FC + (0x56 * 2), bytearray([0xC3, 0x02]))
+        rom.write_bytes(0x220FC + (0x59 * 2), bytearray([0xC4, 0x02]))
+        rom.write_bytes(0x220FC + (0x5A * 2), bytearray([0xC5, 0x02]))
     elif world.options.level_name_shuffle.value == 1:
         # Consistent
         # Randomize just the name piece strings, checking for duplicate pieces
