@@ -160,6 +160,26 @@ class BossShuffle(Choice):
     default = 0
 
 
+class KoopalingHealth(Range):
+    """
+    How many hits Morton, Lemmy, Ludwig, Roy, and Wendy take to kill
+    """
+    display_name = "Koopaling Health"
+    range_start = 1
+    range_end = 9
+    default = 3
+
+
+class BowserHealth(Range):
+    """
+    How many hits Bowser takes to kill, per phase
+    """
+    display_name = "Bowser Health"
+    range_start = 1
+    range_end = 5
+    default = 2
+
+
 class LevelShuffle(Toggle):
     """
     Whether levels are shuffled
@@ -455,9 +475,13 @@ smw_option_groups = [
         ExcludeSpecialZone,
         BowserCastleDoors,
         BowserCastleRooms,
-        BossShuffle,
         SwapDonutGhostHouseExits,
         LevenNameShuffle,
+    ]),
+    OptionGroup("Bosses", [
+        BossShuffle,
+        KoopalingHealth,
+        BowserHealth,
     ]),
     OptionGroup("Junk and Traps", [
         JunkFillPercentage,
@@ -502,6 +526,8 @@ class SMWOptions(PerGameCommonOptions):
     level_shuffle: LevelShuffle
     exclude_special_zone: ExcludeSpecialZone
     boss_shuffle: BossShuffle
+    koopaling_health: KoopalingHealth
+    bowser_health: BowserHealth
     swap_donut_gh_exits: SwapDonutGhostHouseExits
     level_name_shuffle: LevenNameShuffle
     display_received_item_popups: DisplayReceivedItemPopups

@@ -778,28 +778,24 @@ def build_names_singularity(rom, world: World, used_name_pieces: list[str]):
 
 
 def handle_level_name_shuffle(rom, world: World):
-    if world.options.level_name_shuffle.value == 0:
+    if world.options.level_name_shuffle == "vanilla":
         rom.write_bytes(0x220FC + (0x58 * 2), bytearray([0xC1, 0x02]))
         rom.write_bytes(0x220FC + (0x54 * 2), bytearray([0xC2, 0x02]))
         rom.write_bytes(0x220FC + (0x56 * 2), bytearray([0xC3, 0x02]))
         rom.write_bytes(0x220FC + (0x59 * 2), bytearray([0xC4, 0x02]))
         rom.write_bytes(0x220FC + (0x5A * 2), bytearray([0xC5, 0x02]))
-    elif world.options.level_name_shuffle.value == 1:
-        # Consistent
+    elif world.options.level_name_shuffle == "consistent":
         # Randomize just the name piece strings, checking for duplicate pieces
         used_name_pieces = shuffle_level_name_pieces(rom, world, False)
-    elif world.options.level_name_shuffle.value == 2:
-        # Sane
+    elif world.options.level_name_shuffle == "sane":
         # Randomize the name piece strings, checking for duplicate pieces, and the name offsets, checking for duplicate full names
         used_name_pieces = shuffle_level_name_pieces(rom, world, False)
         build_names(rom, world, False, used_name_pieces)
-    elif world.options.level_name_shuffle.value == 3:
-        # Full
+    elif world.options.level_name_shuffle == "full":
         # Randomize the name piece strings, and the name offsets
         used_name_pieces = shuffle_level_name_pieces(rom, world, True)
         build_names(rom, world, True, used_name_pieces)
-    elif world.options.level_name_shuffle.value == 4:
-        # Singularity
+    elif world.options.level_name_shuffle == "singularity":
         # Randomize the name piece strings, and set all the name offsets the same
         used_name_pieces = shuffle_level_name_pieces(rom, world, True)
         build_names_singularity(rom, world, used_name_pieces)
@@ -3086,6 +3082,17 @@ def handle_boss_shuffle(rom, world: World):
                 rom.write_byte(ow_boss_rooms[i].exitAddressAlt, chosen_ow_boss.roomID)
 
 
+def handle_boss_health(rom, world: World):
+    # Bowser
+    rom.write_byte(0x1A10B, world.options.bowser_health.value)
+    rom.write_byte(0x1A683, world.options.bowser_health.value)
+
+    # Koopalings
+    rom.write_byte(0xCFCD, world.options.koopaling_health.value)
+    rom.write_byte(0xD3FF, world.options.koopaling_health.value * 4)
+    rom.write_byte(0x1CE1A, world.options.koopaling_health.value)
+
+
 name_pieces_map: dict[int, list[str]] = {
     0x21AC5: ["YOSHI'S ", "MARIO'S ", "LUIGI'S ", "WARIO'S ", "BOSHI'S ", "PEACH'S ", "DAISY'S ", "YOBBY'S ", "ROY'S " ],
     0x21ACD: ["STAR ", "MOON ", "SUN ", "MARS ", "MILK ", "RICE ", "CORN" ],
@@ -3166,6 +3173,7 @@ def patch_rom(world: World, rom, player, active_level_dict):
 
     handle_bowser_rooms(rom, world)
     handle_boss_shuffle(rom, world)
+    handle_boss_health(rom, world)
 
     # Handle ROM expansion
     rom.write_bytes(0x07FD7, bytearray([0x0A]))
