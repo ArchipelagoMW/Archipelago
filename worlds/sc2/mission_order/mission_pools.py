@@ -1,6 +1,7 @@
 from enum import IntEnum
 from typing import TYPE_CHECKING, Dict, Set, List, Iterable
 
+from Options import OptionError
 from ..mission_tables import SC2Mission, lookup_id_to_mission, MissionFlag, SC2Campaign
 from worlds.AutoWorld import World
 
@@ -203,6 +204,9 @@ class SC2MOGenMissionPools:
             diff: sorted(pool.intersection(self.difficulty_pools[diff]))
             for diff in Difficulty if diff != Difficulty.RELATIVE
         }
+
+        if len(pool) == 0:
+            raise OptionError(f"No available mission to be picked for slot {slot.get_address_to_node()}.")
 
         desired_difficulty = slot.option_difficulty
         if prefer_close_difficulty:
