@@ -954,30 +954,13 @@ if "Timespinner" in network_data_package["games"]:
             "Lab Glasses":         "https://timespinnerwiki.com/mediawiki/images/4/4a/Lab_Glasses.png",
             "Eye Orb":             "https://timespinnerwiki.com/mediawiki/images/a/a4/Eye_Orb.png",
             "Lab Coat":            "https://timespinnerwiki.com/mediawiki/images/5/51/Lab_Coat.png", 
-            "Demon":               "https://timespinnerwiki.com/mediawiki/images/f/f8/Familiar_Demon.png", 
+            "Demon":               "https://timespinnerwiki.com/mediawiki/images/f/f8/Familiar_Demon.png",
+            "Cube of Bodie":       "https://timespinnerwiki.com/mediawiki/images/1/14/Menu_Icon_Stats.png"
         }
 
         timespinner_location_ids = {
-            "Present":         [
-                1337000, 1337001, 1337002, 1337003, 1337004, 1337005, 1337006, 1337007, 1337008, 1337009,
-                1337010, 1337011, 1337012, 1337013, 1337014, 1337015, 1337016, 1337017, 1337018, 1337019,
-                1337020, 1337021, 1337022, 1337023, 1337024, 1337025, 1337026, 1337027, 1337028, 1337029,
-                1337030, 1337031, 1337032, 1337033, 1337034, 1337035, 1337036, 1337037, 1337038, 1337039,
-                1337040, 1337041, 1337042, 1337043, 1337044, 1337045, 1337046, 1337047, 1337048, 1337049,
-                1337050, 1337051, 1337052, 1337053, 1337054, 1337055, 1337056, 1337057, 1337058, 1337059,
-                1337060, 1337061, 1337062, 1337063, 1337064, 1337065, 1337066, 1337067, 1337068, 1337069,
-                1337070, 1337071, 1337072, 1337073, 1337074, 1337075, 1337076, 1337077, 1337078, 1337079,
-                1337080, 1337081, 1337082, 1337083, 1337084, 1337085],
-            "Past":            [
-                1337086, 1337087, 1337088, 1337089,
-                1337090, 1337091, 1337092, 1337093, 1337094, 1337095, 1337096, 1337097, 1337098, 1337099,
-                1337100, 1337101, 1337102, 1337103, 1337104, 1337105, 1337106, 1337107, 1337108, 1337109,
-                1337110, 1337111, 1337112, 1337113, 1337114, 1337115, 1337116, 1337117, 1337118, 1337119,
-                1337120, 1337121, 1337122, 1337123, 1337124, 1337125, 1337126, 1337127, 1337128, 1337129,
-                1337130, 1337131, 1337132, 1337133, 1337134, 1337135, 1337136, 1337137, 1337138, 1337139,
-                1337140, 1337141, 1337142, 1337143, 1337144, 1337145, 1337146, 1337147, 1337148, 1337149,
-                1337150, 1337151, 1337152, 1337153, 1337154, 1337155,
-                1337171, 1337172, 1337173, 1337174, 1337175],
+            "Present": list(range(1337000, 1337085)),
+            "Past": list(range(1337086, 1337175)),
             "Ancient Pyramid": [
                 1337236,
                 1337246, 1337247, 1337248, 1337249]
@@ -985,26 +968,23 @@ if "Timespinner" in network_data_package["games"]:
 
         slot_data = tracker_data.get_slot_data(team, player)
         if (slot_data["DownloadableItems"]):
-            timespinner_location_ids["Present"] += [
-                1337156, 1337157, 1337159,
-                1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169,
-                1337170]
+            timespinner_location_ids["Present"] += [1337156, 1337157] + list(range(1337159, 1337170))
         if (slot_data["Cantoran"]):
             timespinner_location_ids["Past"].append(1337176)
         if (slot_data["LoreChecks"]):
-            timespinner_location_ids["Present"] += [
-                1337177, 1337178, 1337179,
-                1337180, 1337181, 1337182, 1337183, 1337184, 1337185, 1337186, 1337187]
-            timespinner_location_ids["Past"] += [
-                1337188, 1337189,
-                1337190, 1337191, 1337192, 1337193, 1337194, 1337195, 1337196, 1337197, 1337198]
+            timespinner_location_ids["Present"] += list(range(1337177, 1337187))
+            timespinner_location_ids["Past"] += list(range(1337188, 1337198))
         if (slot_data["GyreArchives"]):
-            timespinner_location_ids["Ancient Pyramid"] += [
-                1337237, 1337238, 1337239,
-                1337240, 1337241, 1337242, 1337243, 1337244, 1337245]
+            timespinner_location_ids["Ancient Pyramid"] += list(range(1337237, 1337245))
         if (slot_data["PyramidStart"]):
             timespinner_location_ids["Ancient Pyramid"] += [
                 1337233, 1337234, 1337235]
+        if (slot_data["PureTorcher"]):
+            timespinner_location_ids["Present"] += list(range(1337250, 1337352)) + list(range(1337422, 1337496)) + [1337506] + list(range(1337712, 1337779)) + [1337781, 1337782]
+            timespinner_location_ids["Past"] += list(range(1337497, 1337505)) + list(range(1337507, 1337711)) + [1337780]
+            timespinner_location_ids["Ancient Pyramid"] += list(range(1337369, 1337421))
+            if (slot_data["GyreArchives"]):
+                timespinner_location_ids["Ancient Pyramid"] += list(range(1337353, 1337368))
 
         display_data = {}
 
