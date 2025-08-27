@@ -11,15 +11,15 @@ from .item_quality import ItemQuality
 from .utils import make_data_directory
 
 ITEM_JINGLES = {
-    ItemQuality.PROGUSEFUL: "8bit ProgUseful.wav",
-    ItemQuality.PROGRESSION: "8bit Progression.wav",
-    ItemQuality.USEFUL: "8bit Useful.wav",
-    ItemQuality.TRAP: "8bit Trap.wav",
-    ItemQuality.FILLER: "8bit Filler.wav",
+    ItemQuality.PROGUSEFUL: "8bit ProgUseful.ogg",
+    ItemQuality.PROGRESSION: "8bit Progression.ogg",
+    ItemQuality.USEFUL: "8bit Useful.ogg",
+    ItemQuality.TRAP: "8bit Trap.ogg",
+    ItemQuality.FILLER: "8bit Filler.ogg",
 }
 
-CONFETTI_CANNON = "APQuest Confetti Cannon.wav"
-VICTORY_JINGLE = "8bit Victory.wav"
+CONFETTI_CANNON = "APQuest Confetti Cannon.ogg"
+VICTORY_JINGLE = "8bit Victory.ogg"
 
 ALL_JINGLES = [
     CONFETTI_CANNON,
@@ -27,8 +27,8 @@ ALL_JINGLES = [
     *ITEM_JINGLES.values(),
 ]
 
-BACKGROUND_MUSIC_INTRO = "APQuest Intro.wav"
-BACKGROUND_MUSIC = "APQuest BGM.wav"
+BACKGROUND_MUSIC_INTRO = "APQuest Intro.ogg"
+BACKGROUND_MUSIC = "APQuest BGM.ogg"
 
 ALL_SOUNDS = [
     *ALL_JINGLES,
