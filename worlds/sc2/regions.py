@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, List, Dict, Any, Tuple, Optional
 
+from Options import OptionError
 from .locations import LocationData, Location
 from .mission_tables import (
     SC2Mission, SC2Campaign, MissionFlag, get_campaign_goal_priority,
@@ -325,7 +326,7 @@ def force_final_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, A
                     candidate_missions.extend(raceswap_candidates)
                 candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
                 if len(candidate_missions) == 0:
-                    raise Exception(f"There are no valid goal missions for campaign {goal_campaign.campaign_name}. Please exclude fewer missions.")
+                    raise OptionError(f"There are no valid goal missions for campaign {goal_campaign.campaign_name}. Please exclude fewer missions.")
                 goal_mission = world.random.choice(candidate_missions)
             else:
                 goal_mission = primary_goal.mission
@@ -352,7 +353,7 @@ def remove_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, Any]],
         allowed_missions = mission_pools.count_allowed_missions(campaign)
         removal_count = campaign_size - allowed_missions
         if removal_count > len(removal_priorities[campaign]):
-            raise Exception(f"Too many missions of campaign {campaign.campaign_name} excluded, cannot fill vanilla shuffled mission order.")
+            raise OptionError(f"Too many missions of campaign {campaign.campaign_name} excluded, cannot fill vanilla shuffled mission order.")
         for layout in removal_priorities[campaign][:removal_count]:
             removed_counts.setdefault(campaign, {}).setdefault(layout, 0)
             removed_counts[campaign][layout] += 1

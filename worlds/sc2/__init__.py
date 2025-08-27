@@ -4,7 +4,7 @@ import logging
 from typing import *
 from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification, CollectionState
-from Options import Accessibility
+from Options import Accessibility, OptionError
 from worlds.AutoWorld import WebWorld, World
 from . import location_groups
 from .item.item_groups import unreleased_items, war_council_upgrades
@@ -746,7 +746,7 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
                 and ((ItemFilterFlags.Plando|ItemFilterFlags.UserExcluded|ItemFilterFlags.FilterExcluded) & possible_starter_items[nco_support_items[item.name]].flags) == 0
             ]
         if not basic_unit_options:
-            raise Exception("Early Unit: At least one basic unit must be included")
+            raise OptionError("Early Unit: At least one basic unit must be included")
         local_basic_unit = [item for item in basic_unit_options if ItemFilterFlags.NonLocal not in item.flags]
         if local_basic_unit:
             basic_unit_options = local_basic_unit
