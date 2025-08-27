@@ -58,7 +58,7 @@ class TLoZDeltaPatch(APDeltaPatch):
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
-        file_name = get_base_rom_path(file_name)
+        file_name = get_base_rom_path()
         base_rom_bytes = bytes(Utils.read_snes_rom(open(file_name, "rb")))
 
         basemd5 = hashlib.md5()
