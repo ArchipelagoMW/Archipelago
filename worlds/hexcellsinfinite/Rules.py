@@ -15,18 +15,6 @@ def set_rules(world: "HexcellsInfiniteWorld"):
     player = world.player
     options = world.options
 
-    # # Chapter Access
-    # add_rule(world.multiworld.get_entrance("Menu -> Green Hill Zone", player),
-    #          lambda state: state.has("Green Hill Zone", player))
-    # add_rule(world.multiworld.get_entrance("Menu -> Romania", player),
-    #          lambda state: state.has("Romania", player))
-    # add_rule(world.multiworld.get_entrance("Menu -> The Sewer", player),
-    #          lambda state: state.has("The Sewer", player))
-    
-    # add_rule(world.multiworld.get_entrance("The Sewer -> Big Hole in the Floor", player),
-    #          lambda state: state.has("A cute rat") and state.has("Estrogen") and state.has("Testosterone"))
-
-
     add_rule(world.multiworld.get_entrance("Level Group 1 -> Level Group 2", player), lambda state: state.has("Gem", player, 6))
     add_rule(world.multiworld.get_entrance("Level Group 2 -> Level Group 3", player), lambda state: state.has("Gem", player, 12))
     add_rule(world.multiworld.get_entrance("Level Group 3 -> Level Group 4", player), lambda state: state.has("Gem", player, 18))
@@ -34,7 +22,3 @@ def set_rules(world: "HexcellsInfiniteWorld"):
     add_rule(world.multiworld.get_entrance("Level Group 5 -> Level Group 6", player), lambda state: state.has("Gem", player, 30))
     
     world.multiworld.completion_condition[player] = lambda state: state.has("Gem", player, 36)
-
-    
-    # # Victory condition rule!
-    # world.multiworld.completion_condition[player] = lambda state: state.has("Victory", player)

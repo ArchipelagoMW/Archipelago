@@ -13,19 +13,6 @@ class HexcellsInfiniteLocation(Location):
 class HexcellsInfiniteItem(Item):
     game = "HexcellsInfinite"
 
-# I use these next 2 to convert the number you get from the options into a name
-# Mainly used in Items.py for starting chapter
-# Not important for a lot of games
-# class ChapterType(IntEnum):
-#     GreenHillZone = 1
-#     Romania = 2
-#     Sewer = 3
-
-# chapter_type_to_name = {
-#     ChapterType.GreenHillZone:  "Green Hill Zone",
-#     ChapterType.Romania:        "Romania",
-#     ChapterType.Sewer:          "The Sewer"
-# }
 
 # Here is where all the stuff from the Items.py comes from
 # You can add or take away anything you want but ap_code and classification are pretty important

@@ -22,7 +22,6 @@ from .Items import create_item, create_itempool, item_table
 from .Options import HexcellsInfiniteOptions
 from .Regions import create_regions
 from .Rules import set_rules
-# from .Types import ChapterType, chapter_type_to_name
 
 # This is where you setup the page on the site!
 # Typically is the name of your game with web
@@ -98,9 +97,6 @@ class HexcellsInfiniteWorld(World):
     def set_rules(self):
         set_rules(self)
 
-        state = self.multiworld.get_all_state(False)
-        state.update_reachable_regions(self.player)
-        visualize_regions(self.get_region("Menu"), "my_world.puml", show_entrance_names=True,regions_to_highlight=state.reachable_regions[self.player])
     # These are some examples of creating items. The create_itempool(self) function is coming from Items.py in this instance
     # The important part is that the items get into the self.multiworld.itempool as a list of Items
     # Ill try to explain better in the Items.py file 
@@ -118,11 +114,6 @@ class HexcellsInfiniteWorld(World):
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {
             "options": {
-            #     "StartingPlace":            self.options.StartingChapter.value,
-            #     "ExtraLocations":           self.options.ExtraLocations.value,
-            #     "TrapChance":               self.options.TrapChance.value,
-            #     "ForcefemTrapWeight":       self.options.ForcefemTrapWeight.value,
-            #     "SpeedChangeTrapWeight":    self.options.SpeedChangeTrapWeight.value
                   "RequirePerfectClears":     self.options.RequirePerfectClears.value,
                   "PuzzleOptions":            self.options.PuzzleOptions.value,
                   "EnableShields":            self.options.EnableShields.value,

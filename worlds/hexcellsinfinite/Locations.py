@@ -7,10 +7,6 @@ from .Types import LocData
 if TYPE_CHECKING:
     from . import HexcellsInfiniteWorld
 
-# This is technique in programming to make things more readable for booleans
-# A boolean is true or false
-# def did_include_extra_locations(world: "HexcellsInfiniteWorld") -> bool:
-#     return bool(world.options.ExtraLocations)
 
 # This is used by ap and in Items.py
 # Theres a multitude of reasons to need to grab how many locations there are
@@ -18,12 +14,6 @@ def get_total_locations(world: "HexcellsInfiniteWorld") -> int:
     # This is the total that we'll keep updating as we count how many locations there are
     total = 0
     for name in location_table:
-        # If we did not turn on extra locations (see how readable it is with that thing from the top)
-        # AND the name of it is found in our extra locations table, then that means we dont want to count it
-        # So continue moves onto the next name in the table
-        # if not did_include_extra_locations(world) and name in extra_locations:
-        #     continue
-
         # If the location is valid though, count it
         if is_valid_location(world, name):
             total += 1
@@ -41,11 +31,6 @@ def get_location_names() -> Dict[str, int]:
 # I know it looks like the same as when we counted it but thats because this is an example
 # Things get complicated fast so having a back up is nice
 def is_valid_location(world: "HexcellsInfiniteWorld", name) -> bool:
-    # if not did_include_extra_locations(world) and name in extra_locations:
-    #     return False
-    # if not did_include_extra_locations(world):
-    #     return False
-    
     return True
 
 # You might need more functions as well so be liberal with them
@@ -61,15 +46,7 @@ hexcells_infinite_locations = {
     # Regions will be explained more in Regions.py
     # But just know that it's mostly about organization
     # Place locations together based on where they are in the game and what is needed to get there
-    # "A Fake Location Name": LocData(20050100, "Bucharest"),
-    # "A really good restaurant": LocData(20050101, "Brașov"),
-    # "Nuketown": LocData(20050103, "Green Hill Zone - Act 1"),
-    # "Nuketown 2": LocData(20050104, "Green Hill Zone - Act 1"),
-    # "Talk to Sonic": LocData(20050105, "Green Hill Zone - Act 2"),
-    # "Talk to Captain Price": LocData(20050106, "Green Hill Zone - Act 3"),
-    # "TMNT Hangout Spot": LocData(20050107, "The Sewer"),
-    # "Above TMNT Hangout Spot": LocData(20050108, "The Sewer"),
-    # "Coughing Baby Pickup": LocData(20050109, "The Sewer"), 
+
     "1-1": LocData(1, "Level Group 1"),
     "1-2": LocData(2, "Level Group 1"),
     "1-3": LocData(3, "Level Group 1"),
@@ -114,14 +91,6 @@ hexcells_infinite_locations = {
 
 }
 
-# extra_locations = {
-#     "ml7's house": LocData(20050102, "Sibiu"),
-# }
-
-# Like in Items.py, breaking up the different locations to help with organization and if something special needs to happen to them
-# event_locations = {
-#     "Beat Final Boss": LocData(20050110, "Big Hole in the Floor")
-# }
 
 # Also like in Items.py, this collects all the dictionaries together
 # Its important to note that locations MUST be bigger than progressive item count and should be bigger than total item count
@@ -129,6 +98,4 @@ hexcells_infinite_locations = {
 # But important to note
 location_table = {
     **hexcells_infinite_locations,
-    # **extra_locations,
-    # **event_locations
 }

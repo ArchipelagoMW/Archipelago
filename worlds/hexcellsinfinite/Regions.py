@@ -24,25 +24,7 @@ def create_regions(world: "HexcellsInfiniteWorld"):
     lvlgroup4 = create_region_and_connect(world, "Level Group 4", "Level Group 3 -> Level Group 4", lvlgroup3)
     lvlgroup5 = create_region_and_connect(world, "Level Group 5", "Level Group 4 -> Level Group 5", lvlgroup4)
     lvlgroup6 = create_region_and_connect(world, "Level Group 6", "Level Group 5 -> Level Group 6", lvlgroup5)
-    # greenhillzone = create_region_and_connect(world, "Green Hill Zone", "Menu -> Green Hill Zone", menu)
-    # romania = create_region_and_connect(world, "Romania", "Menu -> Romania", menu)
-    # sewer = create_region_and_connect(world, "The Sewer", "Menu -> The Sewer", menu)
-
-    # # ---------------------------------- Green Hill Zone ----------------------------------
-    # greenhillzone1 = create_region_and_connect(world, "Green Hill Zone - Act 1", "Green Hill Zone -> Green Hill Zone - Act 1", greenhillzone)
-    # greenhillzone2 = create_region_and_connect(world, "Green Hill Zone - Act 2", "Green Hill Zone - Act 1 -> Green Hill Zone - Act 2", greenhillzone1)
-    # create_region_and_connect(world, "Green Hill Zone - Act 3", "Green Hill Zone - Act 2 -> Green Hill Zone - Act 3", greenhillzone2)
-
-    # # ---------------------------------- Romania ------------------------------------------
-    # bucharest = create_region_and_connect(world, "Bucharest", "Romania -> Bucharest", romania)
-    # sibiu = create_region_and_connect(world, "Sibiu", "Romania -> Sibiu", romania)
-    # brașov = create_region_and_connect(world, "Brașov", "Romania -> Brașov", romania)
-    # bucharest.connect(sibiu, "Bucharest -> Sibiu")
-    # sibiu.connect(brașov, "Sibiu -> Brașov")
-    # brașov.connect(bucharest, "Brașov, Bucharest")
-
-    # # ---------------------------------- The Sewer ----------------------------------------
-    # create_region_and_connect(world, "Big Hole in the Floor", "The Sewer -> Big Hole in the Floor", sewer)
+  
 
 def create_region(world: "HexcellsInfiniteWorld", name: str) -> Region:
     reg = Region(name, world.player, world.multiworld)
