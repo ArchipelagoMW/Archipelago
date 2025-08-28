@@ -40,6 +40,7 @@ local WORLD_NAME = "";
 -------------- GARIB LOGIC -----------
 
 local GARIB_GROUPS = false
+local GARIB_ORDER = {}
 
 -------------- TOTALS VARS -----------
 local TOTAL_LIVES = 0;
@@ -70,6 +71,33 @@ local TOTAL_WORLD_GARIBS = {
 	['AP_SPACE_L3_GARIBS'] = 0,
 	['AP_SPACE_BONUS_GARIBS'] = 0
 };
+local MAX_WORLD_GARIBS = {
+	['AP_ATLANTIS_L1_GARIBS'] = 50,
+	['AP_ATLANTIS_L2_GARIBS'] = 60,
+	['AP_ATLANTIS_L3_GARIBS'] = 80,
+	['AP_ATLANTIS_BONUS_GARIBS'] = 25,
+	['AP_CARNIVAL_L1_GARIBS'] = 65,
+	['AP_CARNIVAL_L2_GARIBS'] = 80,
+	['AP_CARNIVAL_L3_GARIBS'] = 80,
+	['AP_CARNIVAL_BONUS_GARIBS'] = 20,
+	['AP_PIRATES_L1_GARIBS'] = 70,
+	['AP_PIRATES_L2_GARIBS'] = 60,
+	['AP_PIRATES_L3_GARIBS'] = 80,
+	['AP_PIRATES_BONUS_GARIBS'] = 50,
+	['AP_PREHISTORIC_L1_GARIBS'] = 80,
+	['AP_PREHISTORIC_L2_GARIBS'] = 80,
+	['AP_PREHISTORIC_L3_GARIBS'] = 80,
+	['AP_PREHISTORIC_BONUS_GARIBS'] = 60,
+	['AP_FORTRESS_L1_GARIBS'] = 60,
+	['AP_FORTRESS_L2_GARIBS'] = 60,
+	['AP_FORTRESS_L3_GARIBS'] = 70,
+	['AP_FORTRESS_BONUS_GARIBS'] = 56,
+	['AP_SPACE_L1_GARIBS'] = 50,
+	['AP_SPACE_L2_GARIBS'] = 50,
+	['AP_SPACE_L3_GARIBS'] = 80,
+	['AP_SPACE_BONUS_GARIBS'] = 50
+};
+
 
 --------------- DEATH LINK ----------------------
 local DEATH_LINK_TRIGGERED = false;
@@ -396,7 +424,7 @@ local ADDRESS_MAP = {
 			["50"] = {
 				['id'] = 0x032,
 				['offset'] = 49,
-				['object_id'] = 0xC7,
+				['object_id'] = 0x033,
 			},
 		},
 		["ENEMIES"] = {
@@ -470,7 +498,7 @@ local ADDRESS_MAP = {
 			},
 		},
 	},
-    ["AP_ATLANTIS_L2"] = {
+	["AP_ATLANTIS_L2"] = {
 		["GARIBS"] = {
 			["67"] = {
 				['id'] = 0x043,
@@ -693,32 +721,32 @@ local ADDRESS_MAP = {
 			["121"] = {
 				['id'] = 0x079,
 				['offset'] = 54,
-				['object_id'] = 0x012E,
+				['object_id'] = 0x07F,
 			},
 			["122"] = {
 				['id'] = 0x07A,
 				['offset'] = 55,
-				['object_id'] = 0x0107,
+				['object_id'] = 0x080,
 			},
 			["123"] = {
 				['id'] = 0x07B,
 				['offset'] = 56,
-				['object_id'] = 0x0116,
+				['object_id'] = 0x081,
 			},
 			["124"] = {
 				['id'] = 0x07C,
 				['offset'] = 57,
-				['object_id'] = 0x0146,
+				['object_id'] = 0x082,
 			},
 			["125"] = {
 				['id'] = 0x07D,
 				['offset'] = 58,
-				['object_id'] = 0x0151,
+				['object_id'] = 0x083,
 			},
 			["126"] = {
 				['id'] = 0x07E,
 				['offset'] = 59,
-				['object_id'] = 0x0165,
+				['object_id'] = 0x084,
 			},
 		},
 		["ENEMIES"] = {
@@ -1077,57 +1105,57 @@ local ADDRESS_MAP = {
 			["212"] = {
 				['id'] = 0x0D4,
 				['offset'] = 69,
-				['object_id'] = 0x20D,
+				['object_id'] = 0x0DF,
 			},
 			["213"] = {
 				['id'] = 0x0D5,
 				['offset'] = 70,
-				['object_id'] = 0x21D,
+				['object_id'] = 0x0E0,
 			},
 			["214"] = {
 				['id'] = 0x0D6,
 				['offset'] = 71,
-				['object_id'] = 0x238,
+				['object_id'] = 0x0E1,
 			},
 			["215"] = {
 				['id'] = 0x0D7,
 				['offset'] = 72,
-				['object_id'] = 0x290,
+				['object_id'] = 0x0E5,
 			},
 			["216"] = {
 				['id'] = 0x0D8,
 				['offset'] = 73,
-				['object_id'] = 0x1AF,
+				['object_id'] = 0x0E6,
 			},
 			["217"] = {
 				['id'] = 0x0D9,
 				['offset'] = 74,
-				['object_id'] = 0x1DA,
+				['object_id'] = 0x0E7,
 			},
 			["218"] = {
 				['id'] = 0x0DA,
 				['offset'] = 75,
-				['object_id'] = 0x1BA,
+				['object_id'] = 0x0E8,
 			},
 			["219"] = {
 				['id'] = 0x0DB,
 				['offset'] = 76,
-				['object_id'] = 0x1CA,
+				['object_id'] = 0x0E9,
 			},
 			["220"] = {
 				['id'] = 0x0DC,
 				['offset'] = 77,
-				['object_id'] = 0x248,
+				['object_id'] = 0x0EA,
 			},
 			["221"] = {
 				['id'] = 0x0DD,
 				['offset'] = 78,
-				['object_id'] = 0x258,
+				['object_id'] = 0x0EB,
 			},
 			["222"] = {
 				['id'] = 0x0DE,
 				['offset'] = 79,
-				['object_id'] = 0x268,
+				['object_id'] = 0x0EC,
 			},
 		},
 		["ENEMIES"] = {
@@ -2452,8 +2480,7 @@ end
 function received_garibs(itemId)
     --Decoupled Garib Groups and Garibsanity
 	if 6510000 <= itemId and itemId <= 6519999 then
-        TOTAL_SINGLE_GARIBS = TOTAL_SINGLE_GARIBS + (itemId - 6510000)
-        GVR:setItem(ITEM_TABLE["AP_SINGLE_GARIB"], TOTAL_SINGLE_GARIBS)
+		updateDecoupledGaribs(itemId - 6510000)
     elseif 6520000 <= itemId and itemId <= 6529999 then
 		--Level Garibsanity
 		--Index of the world the garibs coming from
@@ -2480,9 +2507,40 @@ function received_garibs(itemId)
 	end
 end
 
+function updateDecoupledGaribs(incoming_garibs)
+	TOTAL_SINGLE_GARIBS = TOTAL_SINGLE_GARIBS + incoming_garibs
+	-- How many garibs are left to fill into worlds
+	local garib_fill_counter = TOTAL_SINGLE_GARIBS
+	-- What garib level index you are at
+	local garib_level_index = 0
+	while garib_fill_counter > 0 do
+		-- If you have less garibs than the total needed to fill the world
+		local garib_world = GARIB_ORDER[tostring(garib_level_index)]
+		if garib_world == nil
+		then
+			-- If you're out of worlds, don't fill anything else
+			garib_fill_counter = 0
+		else
+			-- If you have more garibs than the max of this world
+			if garib_fill_counter > MAX_WORLD_GARIBS[garib_world]
+			then
+				-- Set it to the max and go to the next garib level
+				garib_fill_counter = garib_fill_counter - MAX_WORLD_GARIBS[garib_world]
+				TOTAL_WORLD_GARIBS[garib_world] = MAX_WORLD_GARIBS[garib_world]
+				GVR:setItem(ITEM_TABLE[garib_world], TOTAL_WORLD_GARIBS[garib_world])
+				garib_level_index = garib_level_index + 1
+			else
+				-- Otherwise, the remaining garibs go to this world
+				TOTAL_WORLD_GARIBS[garib_world] = garib_fill_counter
+				GVR:setItem(ITEM_TABLE[garib_world], TOTAL_WORLD_GARIBS[garib_world])
+				garib_fill_counter = 0
+			end
+		end
+	end
+end
+
 function received_moves(itemId)
     if itemId == 6500329 then
-        -- print("Got Jump")
         GVR:setItem(ITEM_TABLE["AP_JUMP"], 1)
     elseif itemId == 6500330 then
         GVR:setItem(ITEM_TABLE["AP_CARTWHEEL"], 1)
@@ -2510,7 +2568,24 @@ function received_moves(itemId)
         GVR:setItem(ITEM_TABLE["AP_THROW"], 1)
     elseif itemId == 6500342 then
         GVR:setItem(ITEM_TABLE["AP_TOSS"], 1)
-        
+    --elseif itemId == 6500343 then
+    --    GVR:setItem(ITEM_TABLE["AP_BEACHBALL_POTION"], 1)
+    --elseif itemId == 6500344 then
+    --    GVR:setItem(ITEM_TABLE["AP_DEATH_POTION"], 1)
+    --elseif itemId == 6500345 then
+    --    GVR:setItem(ITEM_TABLE["AP_HELICOPTER_POTION"], 1)
+    --elseif itemId == 6500346 then
+    --    GVR:setItem(ITEM_TABLE["AP_FROG_POTION"], 1)
+    --elseif itemId == 6500347 then
+    --    GVR:setItem(ITEM_TABLE["AP_BOOMERANG_POTION"], 1)
+    elseif itemId == 6500348 then
+        GVR:setItem(ITEM_TABLE["AP_HERCULES_POTION"], 1)
+    elseif itemId == 6500349 then
+        GVR:setItem(ITEM_TABLE["AP_SPEED_POTION"], 1)
+    elseif itemId == 6500350 then
+        GVR:setItem(ITEM_TABLE["AP_STICKY_POTION"], 1)
+    --elseif itemId == 6500351 then
+    --    GVR:setItem(ITEM_TABLE["AP_GRAB"], 1)
     elseif itemId == 6500352 then
         GVR:setItem(ITEM_TABLE["AP_RUBBER_BALL"], 1)
     elseif itemId == 6500353 then
@@ -2619,6 +2694,29 @@ function map_handler()
     elseif CURRENT_MAP == 0x29 then
         set_map("AP_SPACE_BONUS")
     end
+end
+
+function setRandomizedWorlds(WORLD_LOOKUP)
+	for world_names, loading_zone_info in pairs(WORLD_LOOKUP)
+	do
+		local hub_number = getDigit(loading_zone_info, 2)
+		local door_number = loading_zone_info % 10
+		local world_id = WORLDS_TABLE[world_names]
+		if world_id == nil
+		then
+			print("!" .. world_names .. "!")
+		end
+		setWorldInfo(world_id, hub_number, door_number)
+	end
+end
+
+function setWorldInfo(world_id, hub_number, door_number)
+    local hackPointerIndex = GLOVERHACK:dereferencePointer(GLOVERHACK.base_pointer);
+    local world_address = hackPointerIndex + GLOVERHACK:getWorldOffset(world_id)
+	local hub_address = world_address + GLOVERHACK.hub_entrance
+	local door_address = world_address + GLOVERHACK.door_number
+	mainmemory.writebyte(hub_address, hub_number)
+	mainmemory.writebyte(door_address, door_number)
 end
 
 ---------------------- ARCHIPELAGO FUNCTIONS -------------
@@ -2854,6 +2952,14 @@ function process_slot(block)
     then
         GVR:setGaribSorting(block['slot_garib_sorting'])
     end
+	if block['slot_garib_order'] ~= nil
+	then
+		GARIB_ORDER = block['slot_garib_order']
+	end
+	if block['slot_world_lookup'] ~= nil
+	then
+		setRandomizedWorlds(block['slot_world_lookup'])
+	end
     if block['slot_switches'] ~= nil and block['slot_switches'] ~= 0
     then
         GVR:setRandomizeSwitches(block['slot_switches'])

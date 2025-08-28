@@ -78,6 +78,8 @@ class GloverWorld(World):
     #Check/Item Prefixes
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
+    #DELETE THIS ONCE IT'S FINISHED
+    existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn!", "Prt!", "Pht!", "FoF!", "Otw!", "Training"]
     group_lists : list[str] = ["Not Crystal",
 	"Not Bowling",
 	"Not Bowling or Crystal",
@@ -101,6 +103,8 @@ class GloverWorld(World):
             state.add_item("Total Garibs", self.player)
         elif name == "Extra Garibs":
             state.add_item("Total Garibs", self.player, self.options.extra_garibs_value.value)
+        elif name == "Locate Garibs":
+            return output
         elif name.endswith("Garibs"):
             split_name : list[str] = name.split(" ")
             garibs_number : int = int(split_name[len(split_name) - 2])
@@ -119,6 +123,8 @@ class GloverWorld(World):
             state.remove_item("Total Garibs", self.player)
         elif name == "Extra Garibs":
             state.remove_item("Total Garibs", self.player, self.options.extra_garibs_value.value)
+        elif name == "Locate Garibs":
+            return output
         elif name.endswith("Garibs"):
             split_name : list[str] = name.split(" ")
             garibs_number : int = int(split_name[len(split_name) - 2])
@@ -223,8 +229,23 @@ class GloverWorld(World):
                 self.spawn_checkpoint[each_item] = 1
         #Level entry randomization
         if self.options.entrance_randomizer:
-            self.random.shuffle(self.wayroom_entrances)
-            self.random.shuffle(self.overworld_entrances)
+            #When all levels exist, you can just shuffle this
+            #self.random.shuffle(self.wayroom_entrances)
+
+            #TEMP: While only certain levels exist, randomize only those.
+            randomizable_existing_levels = self.existing_levels.copy()
+            randomizable_existing_levels.remove("Crn!")
+            randomizable_existing_levels.remove("Prt!")
+            randomizable_existing_levels.remove("Pht!")
+            randomizable_existing_levels.remove("FoF!")
+            randomizable_existing_levels.remove("Otw!")
+            shuffled_existing_levels = randomizable_existing_levels.copy()
+            self.random.shuffle(shuffled_existing_levels)
+            for level_index, level_name in enumerate(randomizable_existing_levels):
+                replaced_index = self.wayroom_entrances.index(level_name)
+                self.wayroom_entrances[replaced_index] = shuffled_existing_levels[level_index]
+
+            #self.random.shuffle(self.overworld_entrances)
             if not self.options.bonus_levels:
                 self.wayroom_entrances.remove("Atl?")
                 self.wayroom_entrances.remove("Crn?")
@@ -404,14 +425,14 @@ class GloverWorld(World):
             "Extra Garibs" : 							self.percent_of(self.options.filler_extra_garibs_weight.value),
             "Chicken Sound" : 							self.percent_of(self.options.filler_chicken_sound_weight.value),
 	        "Life" : 									self.percent_of(self.options.filler_life_weight.value),
-            "Boomerang" : 								self.percent_of(self.options.filler_boomerang_weight.value),
-            "Beachball" : 								self.percent_of(self.options.filler_beachball_weight.value),
-            "Hercules" : 								self.percent_of(self.options.filler_hercules_weight.value),
-            "Helicopter" : 								self.percent_of(self.options.filler_helicopter_weight.value),
-            "Speed" : 									self.percent_of(self.options.filler_speed_weight.value),
-            "Frog" : 									self.percent_of(self.options.filler_frog_weight.value),
-            "Death" : 									self.percent_of(self.options.filler_death_weight.value),
-            "Sticky" : 									self.percent_of(self.options.filler_sticky_weight.value),
+            "Boomerang Spell" : 								self.percent_of(self.options.filler_boomerang_weight.value),
+            "Beachball Spell" : 								self.percent_of(self.options.filler_beachball_weight.value),
+            "Hercules Spell" : 								self.percent_of(self.options.filler_hercules_weight.value),
+            "Helicopter Spell" : 								self.percent_of(self.options.filler_helicopter_weight.value),
+            "Speed Spell" : 									self.percent_of(self.options.filler_speed_weight.value),
+            "Frog Spell" : 									self.percent_of(self.options.filler_frog_weight.value),
+            "Death Spell" : 									self.percent_of(self.options.filler_death_weight.value),
+            "Sticky Spell" : 									self.percent_of(self.options.filler_sticky_weight.value),
 	    }
         trap_percentages : dict = {
             "Frog Trap" : 								self.percent_of(self.options.frog_trap_weight.value),
@@ -554,8 +575,8 @@ class GloverWorld(World):
                 #Unlocks the bonus level
                 if not self.options.portalsanity:
                    bonus_unlock.place_locked_item(self.create_event(wayroom_name + " Bonus Gate"))
-                world_star_marks : list[str] = [wayroom_name + " 1 Star", wayroom_name + " 2 Star", wayroom_name + " 3 Star", wayroom_name + " Boss Star"]
-                set_rule(bonus_unlock, lambda state, required_star_marks = world_star_marks: state.has_all(required_star_marks, player))
+                main_star_marks : list[str] = [wayroom_name + " 1 Star", wayroom_name + " 2 Star", wayroom_name + " 3 Star"]
+                set_rule(bonus_unlock, lambda state, required_star_marks = main_star_marks: state.has_all(required_star_marks, player))
 
         #Entry Names
         hub_entry_names : list[str] = [
@@ -589,9 +610,6 @@ class GloverWorld(World):
         #Disable bonus levels
         if connecting_level_name.endswith('?') and not self.options.bonus_levels:
             return
-
-        #DELETE THIS ONCE IT'S FINISHED
-        existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn!", "Prt!", "Pht!", "FoF!", "Otw!", "Training"]
         
         #Map Generation
         goal_item : Item
@@ -619,7 +637,7 @@ class GloverWorld(World):
         #What kind of level is this?
         
         #TEMP: REMOVE IF SATEMENTS ONCE GAME'S CONSTRUCTED
-        if connecting_level_name in existing_levels:
+        if connecting_level_name in self.existing_levels:
             goal_or_boss : str = ": Goal"
             if connecting_level_name.endswith('!'):
                 goal_or_boss = ": Boss"
@@ -676,8 +694,40 @@ class GloverWorld(World):
         #Chicken Hints
         self.chicken_hints = hint_groups[1]
 
+    def lua_world_name(self, original_name):
+        lua_prefixes = ["AP_ATLANTIS", "AP_CARNIVAL", "AP_PIRATES", "AP_PREHISTORIC", "AP_FORTRESS", "AP_SPACE", "AP_TRAINING"]
+        lua_suffixes = ["_L1", "_L2", "_L3", "_BOSS", "_BONUS", "_WORLD"]
+        world_index : int = self.world_from_string(original_name)
+        level_index : int = self.level_from_string(original_name) - 1
+        if world_index >= 6:
+            level_index = 5
+        lua_prefix = lua_prefixes[world_index]
+        lua_suffix = lua_suffixes[level_index]
+        return lua_prefix + lua_suffix
+
+    def lua_decoupled_garib_order(self) -> dict[str, str]:
+        output = {}
+        for level_index, each_level in enumerate(self.garib_level_order):
+            lua_name = self.lua_world_name(each_level[0])
+            output[str(level_index)] = lua_name + "_GARIBS"
+        return output
+
+    def lua_world_entry_lookup_table(self) -> dict[str, str]:
+        output = {}
+        for each_wayroom_index, each_wayroom_entrance in enumerate(self.wayroom_entrances):
+            #Wayroom info
+            wayroom_orign = int(each_wayroom_index / 5) + 1
+            wayroom_door = (each_wayroom_index % 5) + 1
+            #Hub
+            if wayroom_orign >= 7:
+                wayroom_door = 0
+            #Table entry with original world as a key, and the data entries as
+            output[self.lua_world_name(each_wayroom_entrance)] = (wayroom_orign * 10) + wayroom_door
+        return output
+
     def fill_slot_data(self) -> Dict[str, Any]:
         self.generate_hints()
         options = self.build_options()
-        
+        options["world_lookup"] = self.lua_world_entry_lookup_table()
+        options["garib_order"] = self.lua_decoupled_garib_order()
         return options
