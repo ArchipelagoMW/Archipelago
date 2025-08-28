@@ -162,7 +162,7 @@ grinch_locations = {
         "Heart of Stone - Whoville": GrinchLocationData("Post Office", "Heart of Stones", 1400, [GrinchRamData(0x0101FA, binary_bit_pos=6)]),
         "Heart of Stone - Who Forest": GrinchLocationData("Ski Resort", "Heart of Stones", 1401, [GrinchRamData(0x0101FA, binary_bit_pos=7)]),
         "Heart of Stone - Who Dump": GrinchLocationData("Minefield", "Heart of Stones", 1402, [GrinchRamData(0x0101FB, binary_bit_pos=0)]),
-        "Heart of Stone - Who Lake": GrinchLocationData("North Shore", "Heart of Stones", 1402, [GrinchRamData(0x0101FB, binary_bit_pos=1)]),
+        "Heart of Stone - Who Lake": GrinchLocationData("North Shore", "Heart of Stones", 1403, [GrinchRamData(0x0101FB, binary_bit_pos=1)]),
 #Supadow Minigames
         # "Spin N' Win - Easy": GrinchLocationData("Spin N' Win Supadow", "Supadow Minigames", 1500, [GrinchRamData()]),
         # "Spin N' Win - Hard": GrinchLocationData("Spin N' Win Supadow", "Supadow Minigames", 1501, [GrinchRamData()]),
