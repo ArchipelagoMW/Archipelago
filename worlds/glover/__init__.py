@@ -665,7 +665,7 @@ class GloverWorld(World):
         options["tag_link"] = self.options.tag_link.value
         options["starting_ball"] = self.options.starting_ball.value
         options["garib_logic"] = self.options.garib_logic.value
-        options["garib_sorting"] = self.options.garib_sorting.value
+        #options["garib_sorting"] = self.options.garib_sorting.value
         options["entrance_randomizer"] = self.options.entrance_randomizer.value
         options["portalsanity"] = self.options.portalsanity.value
         options["spawning_checkpoint_randomizer"] = self.options.spawning_checkpoint_randomizer.value

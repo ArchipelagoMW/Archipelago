@@ -134,7 +134,6 @@ local ROM_ITEM_TABLE = {
     "AP_POWER_BALL",
     "AP_BEARING_BALL",
     "AP_CRYSTAL_BALL",
-    "AP_SINGLE_GARIB",
     "AP_ATLANTIS_L1_GARIBS",
     "AP_ATLANTIS_L2_GARIBS",
     "AP_ATLANTIS_L3_GARIBS",
@@ -2169,9 +2168,9 @@ function GLOVERHACK:setGaribLogic(glogic)
     mainmemory.writebyte(self.garib_logic + GLOVERHACK:getSettingPointer(), glogic);
 end
 
-function GLOVERHACK:setGaribSorting(gsort)
-    mainmemory.writebyte(self.garib_sorting + GLOVERHACK:getSettingPointer(), gsort);
-end
+-- function GLOVERHACK:setGaribSorting(gsort)
+--     mainmemory.writebyte(self.garib_sorting + GLOVERHACK:getSettingPointer(), gsort);
+-- end
 
 function GLOVERHACK:setRandomizeSwitches(switch)
     mainmemory.writebyte(self.randomize_switches + GLOVERHACK:getSettingPointer(), switch);
@@ -2948,10 +2947,10 @@ function process_slot(block)
             GARIB_GROUPS = true
         end
     end
-    if block['slot_garib_sorting'] ~= nil
-    then
-        GVR:setGaribSorting(block['slot_garib_sorting'])
-    end
+    --if block['slot_garib_sorting'] ~= nil
+    --then
+    --    GVR:setGaribSorting(block['slot_garib_sorting'])
+    --end
 	if block['slot_garib_order'] ~= nil
 	then
 		GARIB_ORDER = block['slot_garib_order']
