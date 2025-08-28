@@ -431,10 +431,8 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "Heart of Stone - Who Dump": [
-        []
-        # ["Grinch Copter"],
-        # ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
-        # ["Max"]
+        ["Grinch Copter"],
+        ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
     ],
     "Heart of Stone - Who Lake": [
         []
