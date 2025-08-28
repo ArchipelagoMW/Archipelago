@@ -333,7 +333,7 @@ within the world.
 ### TextChoice
 Like choice allows you to predetermine options and has all of the same comparison methods and handling. Also accepts any
 user defined string as a valid option, so will either need to be validated by adding a validation step to the option
-class or within world, if necessary. Value for this class is `Union[str, int]` so if you need the value at a specified
+class or within world, if necessary. Value for this class is `str | int` so if you need the value at a specified
 point, `self.options.my_option.current_key` will always return a string.
 
 ### PlandoBosses
@@ -344,7 +344,7 @@ names, and `def can_place_boss`, which passes a boss and location, allowing you 
 your game. When this function is called, `bosses`, `locations`, and the passed strings will all be lowercase. There is
 also a `duplicate_bosses` attribute allowing you to define if a boss can be placed multiple times in your world. False
 by default, and will reject duplicate boss names from the user. For an example of using this class, refer to
-`worlds.alttp.options.py`
+`worlds/alttp/Options.py`
 
 ### OptionDict
 This option returns a dictionary. Setting a default here is recommended as it will output the dictionary to the
@@ -352,8 +352,15 @@ template. If you set a [Schema](https://pypi.org/project/schema/) on the class w
 options system will automatically validate the user supplied data against the schema to ensure it's in the correct
 format.
 
+### OptionCounter
+This is a special case of OptionDict where the dictionary values can only be integers.  
+It returns a [collections.Counter](https://docs.python.org/3/library/collections.html#collections.Counter).
+This means that if you access a key that isn't present, its value will be 0.  
+The upside of using an OptionCounter (instead of an OptionDict with integer values) is that an OptionCounter can be
+displayed on the Options page on WebHost.
+
 ### ItemDict
-Like OptionDict, except this will verify that every key in the dictionary is a valid name for an item for your world.
+An OptionCounter that will verify that every key in the dictionary is a valid name for an item for your world.
 
 ### OptionList
 This option defines a List, where the user can add any number of strings to said list, allowing duplicate values. You

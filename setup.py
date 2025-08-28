@@ -1,25 +1,28 @@
 import base64
 import datetime
+import io
+import json
 import os
 import platform
 import shutil
+import subprocess
 import sys
 import sysconfig
+import threading
+import urllib.error
+import urllib.request
 import warnings
 import zipfile
-import urllib.request
-import io
-import json
-import threading
-import subprocess
-
+from collections.abc import Iterable, Sequence
 from hashlib import sha3_512
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple, Union
+
+
+SNI_VERSION = "v0.0.100"  # change back to "latest" once tray icon issues are fixed
 
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
-requirement = 'cx-Freeze==7.2.0'
+requirement = 'cx-Freeze==8.0.0'
 try:
     import pkg_resources
     try:
@@ -27,7 +30,7 @@ try:
         install_cx_freeze = False
     except pkg_resources.ResolutionError:
         install_cx_freeze = True
-except ImportError:
+except (AttributeError, ImportError):
     install_cx_freeze = True
     pkg_resources = None  # type: ignore[assignment]
 
@@ -59,29 +62,22 @@ from Utils import version_tuple, is_windows, is_linux
 from Cython.Build import cythonize
 
 
-# On  Python < 3.10 LogicMixin is not currently supported.
-non_apworlds: Set[str] = {
+non_apworlds: set[str] = {
     "A Link to the Past",
     "Adventure",
     "ArchipIDLE",
     "Archipelago",
-    "Clique",
-    "Final Fantasy",
     "Lufia II Ancient Cave",
     "Meritous",
     "Ocarina of Time",
     "Overcooked! 2",
     "Raft",
-    "Slay the Spire",
     "Sudoku",
     "Super Mario 64",
     "VVVVVV",
     "Wargroove",
 }
 
-# LogicMixin is broken before 3.10 import revamp
-if sys.version_info < (3,10):
-    non_apworlds.add("Hollow Knight")
 
 def download_SNI() -> None:
     print("Updating SNI")
@@ -94,7 +90,8 @@ def download_SNI() -> None:
     machine_name = platform.machine().lower()
     # force amd64 on macos until we have universal2 sni, otherwise resolve to GOARCH
     machine_name = "universal" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
-    with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
+    sni_version_ref = "latest" if SNI_VERSION == "latest" else f"tags/{SNI_VERSION}"
+    with urllib.request.urlopen(f"https://api.github.com/repos/alttpo/SNI/releases/{sni_version_ref}") as request:
         data = json.load(request)
     files = data["assets"]
 
@@ -108,8 +105,8 @@ def download_SNI() -> None:
             # prefer "many" builds
             if "many" in download_url:
                 break
-            # prefer the correct windows or windows7 build
-            if platform_name == "windows" and ("windows7" in download_url) == (sys.version_info < (3, 9)):
+            # prefer non-windows7 builds to get up-to-date dependencies
+            if platform_name == "windows" and "windows7" not in download_url:
                 break
 
     if source_url and source_url.endswith(".zip"):
@@ -148,15 +145,16 @@ def download_SNI() -> None:
         print(f"No SNI found for system spec {platform_name} {machine_name}")
 
 
-signtool: Optional[str]
-if os.path.exists("X:/pw.txt"):
-    print("Using signtool")
-    with open("X:/pw.txt", encoding="utf-8-sig") as f:
-        pw = f.read()
-    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + \
-               r'" /fd sha256 /tr http://timestamp.digicert.com/ '
-else:
-    signtool = None
+signtool: str | None = None
+try:
+    with urllib.request.urlopen('http://192.168.206.4:12345/connector/status') as response:
+        html = response.read()
+    if b"status=OK\n" in html:
+        signtool = (r'signtool sign /sha1 6df76fe776b82869a5693ddcb1b04589cffa6faf /fd sha256 /td sha256 '
+                    r'/tr http://timestamp.digicert.com/ ')
+        print("Using signtool")
+except (ConnectionError, TimeoutError, urllib.error.URLError) as e:
+    pass
 
 
 build_platform = sysconfig.get_platform()
@@ -201,12 +199,13 @@ extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
 def remove_sprites_from_folder(folder: Path) -> None:
-    for file in os.listdir(folder):
-        if file != ".gitignore":
-            os.remove(folder / file)
+    if os.path.isdir(folder):
+        for file in os.listdir(folder):
+            if file != ".gitignore":
+                os.remove(folder / file)
 
 
-def _threaded_hash(filepath: Union[str, Path]) -> str:
+def _threaded_hash(filepath: str | Path) -> str:
     hasher = sha3_512()
     hasher.update(open(filepath, "rb").read())
     return base64.b85encode(hasher.digest()).decode()
@@ -256,7 +255,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         self.libfolder = Path(self.buildfolder, "lib")
         self.library = Path(self.libfolder, "library.zip")
 
-    def installfile(self, path: Path, subpath: Optional[Union[str, Path]] = None, keep_content: bool = False) -> None:
+    def installfile(self, path: Path, subpath: str | Path | None = None, keep_content: bool = False) -> None:
         folder = self.buildfolder
         if subpath:
             folder /= subpath
@@ -375,11 +374,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         from worlds.AutoWorld import AutoWorldRegister
         assert not non_apworlds - set(AutoWorldRegister.world_types), \
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
-        folders_to_remove: List[str] = []
-        disabled_worlds_folder = "worlds_disabled"
-        for entry in os.listdir(disabled_worlds_folder):
-            if os.path.isdir(os.path.join(disabled_worlds_folder, entry)):
-                folders_to_remove.append(entry)
+        folders_to_remove: list[str] = []
         generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
         for worldname, worldtype in AutoWorldRegister.world_types.items():
             if worldname not in non_apworlds:
@@ -416,13 +411,14 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 os.system(signtool + os.path.join(self.buildfolder, "lib", "worlds", "oot", "data", *exe_path))
 
         remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttpr")
+        remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttp" / "remote")
 
         self.create_manifest()
 
         if is_windows:
             # Inno setup stuff
             with open("setup.ini", "w") as f:
-                min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
+                min_supported_windows = "6.2.9200"
                 f.write(f"[Data]\nsource_path={self.buildfolder}\nmin_windows={min_supported_windows}\n")
             with open("installdelete.iss", "w") as f:
                 f.writelines("Type: filesandordirs; Name: \"{app}\\lib\\worlds\\"+world_directory+"\"\n"
@@ -447,12 +443,12 @@ class AppImageCommand(setuptools.Command):
         ("app-exec=", None, "The application to run inside the image."),
         ("yes", "y", 'Answer "yes" to all questions.'),
     ]
-    build_folder: Optional[Path]
-    dist_file: Optional[Path]
-    app_dir: Optional[Path]
+    build_folder: Path | None
+    dist_file: Path | None
+    app_dir: Path | None
     app_name: str
-    app_exec: Optional[Path]
-    app_icon: Optional[Path]  # source file
+    app_exec: Path | None
+    app_icon: Path | None  # source file
     app_id: str  # lower case name, used for icon and .desktop
     yes: bool
 
@@ -489,12 +485,12 @@ tmp="${{exe#*/}}"
 if [ ! "${{#tmp}}" -lt "${{#exe}}" ]; then
     exe="{default_exe.parent}/$exe"
 fi
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$APPDIR/{default_exe.parent}/lib"
+export LD_LIBRARY_PATH="${{LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}}$APPDIR/{default_exe.parent}/lib"
 $APPDIR/$exe "$@"
 """)
         launcher_filename.chmod(0o755)
 
-    def install_icon(self, src: Path, name: Optional[str] = None, symlink: Optional[Path] = None) -> None:
+    def install_icon(self, src: Path, name: str | None = None, symlink: Path | None = None) -> None:
         assert self.app_dir, "Invalid app_dir"
         try:
             from PIL import Image
@@ -557,7 +553,7 @@ $APPDIR/$exe "$@"
         subprocess.call(f'ARCH={build_arch} ./appimagetool -n "{self.app_dir}" "{self.dist_file}"', shell=True)
 
 
-def find_libs(*args: str) -> Sequence[Tuple[str, str]]:
+def find_libs(*args: str) -> Sequence[tuple[str, str]]:
     """Try to find system libraries to be included."""
     if not args:
         return []
@@ -565,7 +561,7 @@ def find_libs(*args: str) -> Sequence[Tuple[str, str]]:
     arch = build_arch.replace('_', '-')
     libc = 'libc6'  # we currently don't support musl
 
-    def parse(line: str) -> Tuple[Tuple[str, str, str], str]:
+    def parse(line: str) -> tuple[tuple[str, str, str], str]:
         lib, path = line.strip().split(' => ')
         lib, typ = lib.split(' ', 1)
         for test_arch in ('x86-64', 'i386', 'aarch64'):
@@ -590,8 +586,8 @@ def find_libs(*args: str) -> Sequence[Tuple[str, str]]:
             k: v for k, v in (parse(line) for line in data if "=>" in line)
         }
 
-    def find_lib(lib: str, arch: str, libc: str) -> Optional[str]:
-        cache: Dict[Tuple[str, str, str], str] = getattr(find_libs, "cache")
+    def find_lib(lib: str, arch: str, libc: str) -> str | None:
+        cache: dict[tuple[str, str, str], str] = getattr(find_libs, "cache")
         for k, v in cache.items():
             if k == (lib, arch, libc):
                 return v
@@ -600,7 +596,7 @@ def find_libs(*args: str) -> Sequence[Tuple[str, str]]:
                 return v
         return None
 
-    res: List[Tuple[str, str]] = []
+    res: list[tuple[str, str]] = []
     for arg in args:
         # try exact match, empty libc, empty arch, empty arch and libc
         file = find_lib(arg, arch, libc)
@@ -629,12 +625,13 @@ cx_Freeze.setup(
     ext_modules=cythonize("_speedups.pyx"),
     options={
         "build_exe": {
-            "packages": ["worlds", "kivy", "cymem", "websockets"],
+            "packages": ["worlds", "kivy", "cymem", "websockets", "kivymd"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
-                         "pandas", "zstandard"],
+                         "pandas"],
+            "zip_includes": [],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": ["worlds", "sc2"],
+            "zip_exclude_packages": ["worlds", "sc2", "kivymd"],
             "include_files": [],  # broken in cx 6.14.0, we use more special sauce now
             "include_msvcr": False,
             "replace_paths": ["*."],
