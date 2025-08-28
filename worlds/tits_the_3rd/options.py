@@ -12,6 +12,20 @@ class NameSpoilerOption(Toggle):
     display_name = "Hide Spoiler Names"
 
 
+# class VictoryConditionOption(Choice):
+#     """
+#     Determine the victory condition
+
+#     - Chapter 1: Defeat Bennu in the Jade Corridor
+#     - Chapter 2: Find Kloe in Grancel Castle
+#     """
+
+#     display_name = "Victory Condition"
+#     default = 1
+#     option_chapter_1 = 0
+#     option_chapter_2 = 1
+
+
 class ChestItemPoolOptions(Choice):
     """
     Determine the treasure chest item pool
@@ -131,6 +145,7 @@ class CraftPlacement(Choice):
 class TitsThe3rdOptions(PerGameCommonOptions):
     """Trails in the Sky the 3rd options Definition"""
     name_spoiler_option: NameSpoilerOption
+    # victory_condition_option: VictoryConditionOption
     chest_itempool_option: ChestItemPoolOptions
     starting_character_option: StartingCharactersOptions
     first_starting_character: FirstStartingCharacter

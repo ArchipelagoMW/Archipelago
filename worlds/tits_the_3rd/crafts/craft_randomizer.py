@@ -116,10 +116,10 @@ def _shuffle_crafts(characters: List[Character], rng: Random) -> List[Character]
     Returns:
         List[Character]: The characters with their shuffled crafts.
     """
-    fixed_normal_craft_table_copy = fixed_normal_craft_table.copy()
-    fixed_scraft_table_copy = fixed_scraft_table.copy()
-    upgradable_normal_craft_table_copy = upgradable_normal_craft_table.copy()
-    upgradable_scraft_table_copy = upgradable_scraft_table.copy()
+    fixed_normal_craft_table_copy = deepcopy(fixed_normal_craft_table)
+    fixed_scraft_table_copy = deepcopy(fixed_scraft_table)
+    upgradable_normal_craft_table_copy = deepcopy(upgradable_normal_craft_table)
+    upgradable_scraft_table_copy = deepcopy(upgradable_scraft_table)
 
     rng.shuffle(fixed_normal_craft_table_copy)
     rng.shuffle(fixed_scraft_table_copy)

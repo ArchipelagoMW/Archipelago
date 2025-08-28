@@ -117,17 +117,30 @@ quartz_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.hp_1: TitsThe3rdItemData(600, ItemClassification.useful),
     ItemName.hp_2: TitsThe3rdItemData(601, ItemClassification.useful),
     ItemName.hp_3: TitsThe3rdItemData(602, ItemClassification.useful),
+    ItemName.ep_1: TitsThe3rdItemData(603, ItemClassification.useful),
+    ItemName.ep_2: TitsThe3rdItemData(604, ItemClassification.useful),
     ItemName.attack_1: TitsThe3rdItemData(606, ItemClassification.useful),
     ItemName.attack_2: TitsThe3rdItemData(607, ItemClassification.useful),
     ItemName.attack_3: TitsThe3rdItemData(608, ItemClassification.useful),
+    ItemName.defend_1: TitsThe3rdItemData(609, ItemClassification.useful),
+    ItemName.defend_2: TitsThe3rdItemData(610, ItemClassification.useful),
+    ItemName.mind_1: TitsThe3rdItemData(612, ItemClassification.useful),
+    ItemName.mind_2: TitsThe3rdItemData(613, ItemClassification.useful),
     ItemName.shield_1: TitsThe3rdItemData(615, ItemClassification.useful),
     ItemName.shield_2: TitsThe3rdItemData(616, ItemClassification.useful),
     ItemName.hit_1: TitsThe3rdItemData(618, ItemClassification.useful),
     ItemName.hit_2: TitsThe3rdItemData(619, ItemClassification.useful),
+    ItemName.evade_1: TitsThe3rdItemData(621, ItemClassification.useful),
+    ItemName.evade_2: TitsThe3rdItemData(622, ItemClassification.useful),
     ItemName.move_1: TitsThe3rdItemData(624, ItemClassification.useful),
     ItemName.action_1: TitsThe3rdItemData(627, ItemClassification.useful),
+    ItemName.action_2: TitsThe3rdItemData(628, ItemClassification.useful),
     ItemName.range_1: TitsThe3rdItemData(630, ItemClassification.useful),
+    ItemName.poison: TitsThe3rdItemData(637, ItemClassification.useful),
     ItemName.information: TitsThe3rdItemData(657, ItemClassification.useful),
+    ItemName.cast_1: TitsThe3rdItemData(710, ItemClassification.useful),
+    ItemName.cast_2: TitsThe3rdItemData(711, ItemClassification.useful),
+    ItemName.ep_cut_1: TitsThe3rdItemData(712, ItemClassification.useful),
     ItemName.ep_cut_2: TitsThe3rdItemData(713, ItemClassification.useful),
     ItemName.scent: TitsThe3rdItemData(720, ItemClassification.useful),
     ItemName.eagle_eye: TitsThe3rdItemData(721, ItemClassification.useful),
@@ -163,12 +176,29 @@ character_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.ries: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 14, ItemClassification.progression),
     ItemName.tita: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 6, ItemClassification.progression),
     ItemName.julia: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 13, ItemClassification.progression),
+    ItemName.mueller: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 12, ItemClassification.progression),
+    ItemName.josette: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 10, ItemClassification.progression),
+    ItemName.joshua: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 1, ItemClassification.progression),
 }
 
 area_unlock_table: Dict[str, TitsThe3rdItemData] = {  # Item ID is 200000 + flag number
     ItemName.jade_corridor_unlock_1: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 256, ItemClassification.progression),
     ItemName.jade_corridor_unlock_2: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 257, ItemClassification.progression),
     ItemName.jade_corridor_arseille_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 258, ItemClassification.progression),
+    ItemName.day_grancel_south_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 259, ItemClassification.progression),
+    ItemName.day_grancel_north_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 260, ItemClassification.progression),
+    ItemName.day_grancel_east_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 261, ItemClassification.progression),
+    ItemName.day_grancel_west_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 262, ItemClassification.progression),
+    ItemName.day_grancel_port_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 270, ItemClassification.progression),
+    ItemName.bobcat_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 267, ItemClassification.progression),
+    ItemName.night_grancel_south_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 263, ItemClassification.progression),
+    ItemName.night_grancel_north_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 264, ItemClassification.progression),
+    ItemName.night_grancel_east_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 265, ItemClassification.progression),
+    ItemName.night_grancel_west_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 266, ItemClassification.progression),
+    ItemName.night_grancel_port_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 271, ItemClassification.progression),
+    ItemName.grancel_arena_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 269, ItemClassification.progression),
+    ItemName.grancel_castle_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 268, ItemClassification.progression),
+    ItemName.grancel_castle_basement_unlock: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 273, ItemClassification.progression),
 }
 
 craft_unlock_table: Dict[str, TitsThe3rdItemData] = { # Item ID is 400000 + character ID
@@ -192,6 +222,7 @@ craft_unlock_table: Dict[str, TitsThe3rdItemData] = { # Item ID is 400000 + char
 
 key_item_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.bennu_defeat: TitsThe3rdItemData(500000, ItemClassification.progression),
+    ItemName.kloe_rescue: TitsThe3rdItemData(500001, ItemClassification.progression),
     ItemName.entrance_exam_results: TitsThe3rdItemData(831, ItemClassification.progression),
 }
 
@@ -229,7 +260,6 @@ filler_items: List[str] = list(
 )
 
 item_table: Dict[str, int] = {name: data.code for name, data in item_data_table.items()}
-
 default_item_pool: Counter[str] = Counter()
 default_chest_pool: Counter[str] = Counter()
 default_character_quartz_pool: Counter[str] = Counter()
@@ -238,17 +268,26 @@ default_craft_pool: Counter[str] = Counter()
 # obviously ignores commented lines, just uncomment them to add them to the pools
 for location in location_table:
     if location_table[location].vanilla_item != "":
+        item = {location_table[location].vanilla_item: 1}
         match location_table[location].check_type:
             case CheckTypeName.chest:
-                default_chest_pool[location_table[location].vanilla_item] += 1
+                default_chest_pool.update(item)
             case CheckTypeName.character_quartz:
-                default_character_quartz_pool[location_table[location].vanilla_item] += 1
+                default_character_quartz_pool.update(item)
             case CheckTypeName.area_unlock:
-                default_item_pool[location_table[location].vanilla_item] += 1
+                default_item_pool.update(item)
             case CheckTypeName.craft:
-                default_craft_pool[location_table[location].vanilla_item] += 1
+                default_craft_pool.update(item)
 
 default_character_to_location = {
     ItemName.tita: LocationName.sealing_stone_tita,
     ItemName.julia: LocationName.sealing_stone_julia,
+    ItemName.mueller: LocationName.sealing_stone_mueller,
+    ItemName.josette: LocationName.sealing_stone_josette,
+    ItemName.joshua: LocationName.sealing_stone_joshua,
+}
+
+area_flag_to_name = {area_flag.code - meta_data_table[ItemName.area_min_id].code: area_name.replace("Area Expansion: ", "") for area_name, area_flag in area_unlock_table.items()}
+character_id_to_name = {
+    character_id.code - meta_data_table[ItemName.character_min_id].code: character_name.replace("Area Expansion: ", "") for character_name, character_id in character_table.items()
 }

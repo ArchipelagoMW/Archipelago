@@ -4,6 +4,7 @@ Constants for location names.
 
 class LocationName:
     """Constants for location names."""
+    # Lusitania/Jade Corridor (Chapter 1)
     lusitania_chest_bedroom_beside_banquet = "Lusitania Chest (Bedroom Beside Banquet)" # 9720
     lusitania_chest_bedroom_past_library = "Lusitania Chest (Bedroom Past Library)" # 9721
     lusitania_chest_bedroom_past_casino_left = "Lusitania Chest (Bedroom Past Casino Left)" # 9722
@@ -26,14 +27,50 @@ class LocationName:
     jade_corridor_chest_left_from_checkpoint_third_chest = "Jade Corridor Chest (Left From Checkpoint Third Chest)" # 9884
     jade_corridor_chest_left_from_checkpoint_fourth_chest = "Jade Corridor Chest (Left From Checkpoint Fourth Chest)" # 9885
 
+    # Bosses/Key Items
     chapter1_boss_defeated = "Defeat Bennu (Chapter 1 Boss)"  # 9757
+    chapter1_boss_day_grancel_south_unlock = "Bennu - Unlock Day Grancel South"  # 2259
+    chapter1_boss_day_grancel_north_unlock = "Bennu - Unlock Day Grancel North"  # 2260
 
+    miniboss_day_grancel_east_unlock = "Miniboss - Unlock Day Grancel East"
+    miniboss_bobcat_unlock = "Miniboss - Unlock Bobcat"
+    chapter2_grancel_basement_unlock = "Grancel Castle - Unlock Basement"
+    chapter2_boss_defeated = "Defeat Rostrum (Chapter 2 Boss)"
+
+    # Sealing Stones
     sealing_stone_tita = "Sealing Stone - Tita"  # 9740
     sealing_stone_jade_corridor_1_unlock = "Sealing Stone - Unlock Jade Corridor 1"  # 2256
     sealing_stone_arseille_unlock = "Sealing Stone - Unlock Arseille"  # 2258
 
     sealing_stone_julia = "Sealing Stone - Julia"  # 9753
     sealing_stone_jade_corridor_2_unlock = "Sealing Stone - Unlock Jade Corridor 2"  # 2257
+
+    sealing_stone_mueller = "Sealing Stone - Mueller"
+    sealing_stone_day_grancel_west_unlock = "Sealing Stone - Unlock Day Grancel West"
+    sealing_stone_day_grancel_port_unlock = "Sealing Stone - Unlock Day Grancel Port"
+
+    sealing_stone_josette = "Sealing Stone - Josette"
+    sealing_stone_night_grancel_south_unlock = "Sealing Stone - Unlock Night Grancel South"
+    sealing_stone_night_grancel_north_unlock = "Sealing Stone - Unlock Night Grancel North"
+    sealing_stone_night_grancel_east_unlock = "Sealing Stone - Unlock Night Grancel East"
+    sealing_stone_night_grancel_west_unlock = "Sealing Stone - Unlock Night Grancel West"
+    sealing_stone_night_grancel_port_unlock = "Sealing Stone - Unlock Night Grancel Port"
+    sealing_stone_grancel_arena_unlock = "Sealing Stone - Unlock Grancel Arena"
+
+    sealing_stone_joshua = "Sealing Stone - Joshua"
+    sealing_stone_grancel_castle_unlock = "Sealing Stone - Unlock Grancel Castle"
+
+    # Joshua
+    joshua_initial_weapon = "Joshua's Initial Equipment - Weapon"
+    joshua_initial_armor = "Joshua's Initial Equipment - Armor"
+    joshua_initial_boots = "Joshua's Initial Equipment - Boots"
+    joshua_orbment_item_1 = "Joshua's Orbment - Quartz 1"
+    joshua_orbment_item_2 = "Joshua's Orbment - Quartz 2"
+    joshua_orbment_item_3 = "Joshua's Orbment - Quartz 3"
+    joshua_orbment_item_4 = "Joshua's Orbment - Quartz 4"
+    joshua_orbment_item_5 = "Joshua's Orbment - Quartz 5"
+    joshua_orbment_item_6 = "Joshua's Orbment - Quartz 6"
+    joshua_orbment_item_7 = "Joshua's Orbment - Quartz 7"
 
     # Tita
     tita_initial_weapon = "Tita's Initial Equipment - Weapon"  # 1160
@@ -48,6 +85,30 @@ class LocationName:
     kevin_initial_weapon = "Kevin's Initial Equipment - Weapon"  # 1180
     kevin_initial_armor = "Kevin's Initial Equipment - Armor"  # 1181
     kevin_initial_boots = "Kevin's Initial Equipment - Boots"  # 1182
+
+    # Josette
+    josette_initial_weapon = "Josette's Initial Equipment - Weapon"
+    josette_initial_armor = "Josette's Initial Equipment - Armor"
+    josette_initial_boots = "Josette's Initial Equipment - Boots"
+    josette_orbment_item_1 = "Josette's Orbment - Quartz 1"
+    josette_orbment_item_2 = "Josette's Orbment - Quartz 2"
+    josette_orbment_item_3 = "Josette's Orbment - Quartz 3"
+    josette_orbment_item_4 = "Josette's Orbment - Quartz 4"
+    josette_orbment_item_5 = "Josette's Orbment - Quartz 5"
+    josette_orbment_item_6 = "Josette's Orbment - Quartz 6"
+    josette_orbment_item_7 = "Josette's Orbment - Quartz 7"
+
+    # Mueller
+    mueller_initial_weapon = "Mueller's Initial Equipment - Weapon"
+    mueller_initial_armor = "Mueller's Initial Equipment - Armor"
+    mueller_initial_boots = "Mueller's Initial Equipment - Boots"
+    mueller_orbment_item_1 = "Mueller's Orbment - Quartz 1"
+    mueller_orbment_item_2 = "Mueller's Orbment - Quartz 2"
+    mueller_orbment_item_3 = "Mueller's Orbment - Quartz 3"
+    mueller_orbment_item_4 = "Mueller's Orbment - Quartz 4"
+    mueller_orbment_item_5 = "Mueller's Orbment - Quartz 5"
+    mueller_orbment_item_6 = "Mueller's Orbment - Quartz 6"
+    mueller_orbment_item_7 = "Mueller's Orbment - Quartz 7"
 
     # Julia
     julia_initial_weapon = "Julia's Initial Equipment - Weapon"  # 1230
@@ -66,6 +127,7 @@ class LocationName:
     ries_initial_armor = "Ries' Initial Equipment - Armor"  # 1241
     ries_initial_boots = "Ries' Initial Equipment - Boots"  # 1242
 
+    # Grancel (Chapter 2)
     day_grancel_south_orbment_store = "Day Grancel South Chest (Orbment Store)" # 10119
     day_grancel_south_arms_dealer = "Day Grancel South Chest (Arms Dealer)" # 10116
     day_grancel_south_house_behind_arms_dealer = "Day Grancel South Chest (House Behind Arms Dealer)" # 10113
@@ -143,6 +205,7 @@ class LocationName:
     grancel_castle_balcony_south_chest = "Grancel Castle Chest (Balcony South Chest)" # 10137
     grancel_castle_queens_bedroom = "Grancel Castle Chest (Queen's Bedroom)" # 10152
 
+    # Silver/Golden Road (Chapter 3)
     silver_road_1_left_of_entrance = "Silver Road 1 (Left of Entrance)" # 10384
     silver_road_1_before_triple ="Silver Road 1 (Before Triple)" # 10391
     silver_road_1_triple_left ="Silver Road 1 (Triple Left)" # 10389
@@ -177,6 +240,9 @@ class LocationName:
     sealing_stone_locations = [
         sealing_stone_tita,
         sealing_stone_julia,
+        sealing_stone_mueller,
+        sealing_stone_josette,
+        sealing_stone_joshua,
     ]
 
     estelle_craft_unlock_level_1_morale = "Estelle Craft Unlock (Level 1) - Morale" # 100000
@@ -361,4 +427,3 @@ class LocationName:
     renne_craft_unlock_level_124_calamity_throw_2 = "Renne Craft Unlock (Level 124) - Calamity Throw 2" # 100170
     renne_craft_unlock_level_129_chain_3 = "Renne Craft Unlock (Level 129) - Chain 3" # 100171
     renne_craft_unlock_star_door_10_pater_mater = "Renne Craft Unlock (Star Door 10) - Pater-Mater" # 100172
-
