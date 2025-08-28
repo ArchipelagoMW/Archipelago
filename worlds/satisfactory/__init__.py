@@ -1,6 +1,5 @@
 from typing import TextIO, ClassVar, Any
 from BaseClasses import Item, ItemClassification, CollectionState
-from collections.abc import Sequence
 from .GameLogic import GameLogic
 from .Items import Items
 from .Locations import Locations, LocationData
@@ -11,6 +10,7 @@ from .CriticalPathCalculator import CriticalPathCalculator
 from .Web import SatisfactoryWebWorld
 from ..AutoWorld import World
 from NetUtils import Hint
+from BaseClasses import ItemClassification
 
 
 class SatisfactoryWorld(World):
@@ -42,21 +42,21 @@ class SatisfactoryWorld(World):
     item_name_groups = Items.get_item_names_per_category(game_logic)
 
     def generate_early(self) -> None:
-        self.interpret_slot_data(None)
+        self.process_universal_tracker_slot_data_if_available()
 
-        if not self.critical_path_seed:
+        if self.critical_path_seed == None:
             self.critical_path_seed = self.random.random()
 
         if self.options.mam_logic_placement.value == Placement.starting_inventory:
-            self.push_precollected("Building: MAM")
+            self.push_precollected_by_name("Building: MAM")
         if self.options.awesome_logic_placement.value == Placement.starting_inventory:
-            self.push_precollected("Building: AWESOME Sink")
-            self.push_precollected("Building: AWESOME Shop")
+            self.push_precollected_by_name("Building: AWESOME Sink")
+            self.push_precollected_by_name("Building: AWESOME Shop")
         if self.options.energy_link_logic_placement.value == Placement.starting_inventory:
-            self.push_precollected("Building: Power Storage")
+            self.push_precollected_by_name("Building: Power Storage")
         if self.options.splitter_placement == Placement.starting_inventory:
-            self.push_precollected("Building: Conveyor Splitter")
-            self.push_precollected("Building: Conveyor Merger")
+            self.push_precollected_by_name("Building: Conveyor Splitter")
+            self.push_precollected_by_name("Building: Conveyor Merger")
 
         if not self.options.trap_selection_override.value:
             self.options.trap_selection_override.value = self.options.trap_selection_preset.get_selected_list()
@@ -69,7 +69,7 @@ class SatisfactoryWorld(World):
 
         starting_inventory: list[str] = self.options.starting_inventory_preset.get_selected_list()
         for item_name in starting_inventory:
-            self.push_precollected(item_name)
+            self.push_precollected_by_name(item_name)
 
 
     def create_regions(self) -> None:
@@ -167,18 +167,24 @@ class SatisfactoryWorld(World):
         }
 
 
-    def interpret_slot_data(self, slot_data: dict[str, Any] | None) -> dict[str, Any] | None:
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, Any] | None) -> dict[str, Any] | None:
+        """Used by Universal Tracker, return value is passed to self.multiworld.re_gen_passthrough"""
+        return slot_data
+
+
+    def process_universal_tracker_slot_data_if_available(self) -> None:
         """Used by Universal Tracker to correctly rebuild state"""
 
-        if not slot_data \
-            and hasattr(self.multiworld, "re_gen_passthrough") \
+        slot_data: dict[str, Any] | None = None
+        if hasattr(self.multiworld, "re_gen_passthrough") \
             and isinstance(self.multiworld.re_gen_passthrough, dict) \
             and "Satisfactory" in self.multiworld.re_gen_passthrough:
                 slot_data = self.multiworld.re_gen_passthrough["Satisfactory"]
 
         if not slot_data:
-            return None
-        
+            return
+
         if (slot_data["Data"]["SlotDataVersion"] != 1):
             raise Exception("The slot_data version mismatch, the UT's Satisfactory .apworld is different from the one used during generation")
 
@@ -203,8 +209,6 @@ class SatisfactoryWorld(World):
         self.critical_path_seed = slot_data["Data"]["UT"]["Seed"]
         self.options.randomize_starter_recipes.value = slot_data["Data"]["UT"]["RandomizeTier0"]
 
-        return slot_data
-
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.randomize_starter_recipes:
@@ -213,7 +217,7 @@ class SatisfactoryWorld(World):
 
     def setup_events(self) -> None:
         location: SatisfactoryLocation
-        for location in self.multiworld.get_locations(self.player):
+        for location in self.get_locations():
             if location.address == EventId:
                 item_name = location.event_name
 
@@ -238,14 +242,14 @@ class SatisfactoryWorld(World):
 
 
     def modify_multidata(self, multidata: dict[str, Any]) -> None: 
-        locations_visible_from_start: list[int] = list(range(1338000, 1338099)) # ids of Hub 1-1,1 to 2-5,10
+        locations_visiable_from_start: list[int] = list(range(1338000, 1338099)) # ids of Hub 1-1,1 to 2-5,10
 
         if "Building: AWESOME Shop" in self.options.start_inventory \
                 or "Building: AWESOME Shop" in self.options.start_inventory_from_pool \
                 or 1338622 in multidata["precollected_items"][self.player]: # id of Building: AWESOME Shop
-            locations_visible_from_start.extend(range(1338700, 1338709)) # ids of shop locations 1 to 10
+            locations_visiable_from_start.extend(range(1338700, 1338709)) # ids of shop locations 1 to 10
 
-        for location_id in locations_visible_from_start:
+        for location_id in locations_visiable_from_start:
             if location_id in multidata["locations"][self.player]:
                 item_id, player_id, flags = multidata["locations"][self.player][location_id]
 
@@ -254,9 +258,9 @@ class SatisfactoryWorld(World):
                     multidata["precollected_hints"][self.player].add(hint)
 
 
-    def push_precollected(self, item_name: str) -> None:
+    def push_precollected_by_name(self, item_name: str) -> None:
         item = self.create_item(item_name)
-        self.multiworld.push_precollected(item)
+        self.push_precollected(item)
 
 
     def item_id_str(self, item_name: str) -> str:
