@@ -1881,7 +1881,6 @@ GLOVERHACK = {
     pc = 0x0,
     ap_items = 0x91,
     ap_world = 0x718,
-    ap_world = 0xC7C,
       hub_entrance = 0x0,
       door_number = 0x1,
       garib_locations = 0x4,
