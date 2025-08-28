@@ -43,7 +43,7 @@ class SatisfactoryWorld(World):
     item_name_groups = Items.get_item_names_per_category(game_logic)
 
     def generate_early(self) -> None:
-        self.interpret_slot_data(None)
+        self.process_universal_tracker_slot_data_if_available()
 
         if self.critical_path_seed == None:
             self.critical_path_seed = self.random.random()
@@ -168,18 +168,24 @@ class SatisfactoryWorld(World):
         }
 
 
-    def interpret_slot_data(self, slot_data: dict[str, Any] | None) -> dict[str, Any] | None:
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, Any] | None) -> dict[str, Any] | None:
+        """Used by Universal Tracker, return value is passed to self.multiworld.re_gen_passthrough"""
+        return slot_data
+
+
+    def process_universal_tracker_slot_data_if_available(self) -> None:
         """Used by Universal Tracker to correctly rebuild state"""
 
-        if not slot_data \
-            and hasattr(self.multiworld, "re_gen_passthrough") \
+        slot_data: dict[str, Any] | None
+        if hasattr(self.multiworld, "re_gen_passthrough") \
             and isinstance(self.multiworld.re_gen_passthrough, dict) \
             and "Satisfactory" in self.multiworld.re_gen_passthrough:
                 slot_data = self.multiworld.re_gen_passthrough["Satisfactory"]
 
         if not slot_data:
-            return None
-        
+            return
+
         if (slot_data["Data"]["SlotDataVersion"] != 1):
             raise Exception("The slot_data version mismatch, the UT's Satisfactory .apworld is different from the one used during generation")
 
@@ -203,8 +209,6 @@ class SatisfactoryWorld(World):
         
         self.critical_path_seed = slot_data["Data"]["UT"]["Seed"]
         self.options.randomize_starter_recipes.value = slot_data["Data"]["UT"]["RandomizeTier0"]
-
-        return slot_data
 
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
