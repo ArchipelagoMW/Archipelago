@@ -4363,4 +4363,19 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             memory_range=MemoryRange.BYTE
         ),
     ),
+
+    "Ice Zone Frozen Lake Area - Frozen Mamoswine -- Ice Rescue": PokeparkLocationData(
+        558, PokeparkFlag.POKEMON_UNLOCK, "Ice Zone Frozen Lake Area", 0x0301, PokeparkMewChallengeClientData(
+            structure_position=0,
+            memory_range=MemoryRange.BYTE,
+            _expected_value=0b00100000,
+            _bit_mask=0b00100000
+        )
+    ),
+    "Ice Zone Lower Lift Area - Froslass Power Competition -- Friendship": PokeparkLocationData(
+        559, PokeparkFlag.FRIENDSHIP, "Ice Zone Lower Lift Area", 0x0301, PokeparkFriendshipClientLocationData(
+            structure_position=75,
+            memory_range=MemoryRange.BYTE
+        )
+    ),
 }

@@ -137,14 +137,14 @@ class PokeparkWorld(World):
     def generate_early(self) -> None:
         options = self.options
         if options.goal == options.goal.option_postgame:
-            self.options.remove_attraction_locations.value = self.options.remove_attraction_locations.option_true
-        if not options.remove_attraction_locations:
-            self.options.remove_chase_power_comp_locations.value = self.options.remove_chase_power_comp_locations.option_true
-            self.options.remove_battle_power_comp_locations.value = self.options.remove_battle_power_comp_locations.option_true
-            self.options.remove_hide_and_seek_power_comp_locations.value = self.options.remove_hide_and_seek_power_comp_locations.option_true
-            self.options.remove_errand_power_comp_locations.value = self.options.remove_errand_power_comp_locations.option_true
-            self.options.remove_misc_power_comp_locations.value = self.options.remove_misc_power_comp_locations.option_true
-            self.options.remove_quest_locations.value = self.options.remove_quest_locations.option_true
+            self.options.remove_attraction_locations.value = self.options.remove_attraction_locations.option_false
+        if options.remove_attraction_locations.value:
+            self.options.remove_chase_power_comp_locations.value = self.options.remove_chase_power_comp_locations.option_false
+            self.options.remove_battle_power_comp_locations.value = self.options.remove_battle_power_comp_locations.option_false
+            self.options.remove_hide_and_seek_power_comp_locations.value = self.options.remove_hide_and_seek_power_comp_locations.option_false
+            self.options.remove_errand_power_comp_locations.value = self.options.remove_errand_power_comp_locations.option_false
+            self.options.remove_misc_power_comp_locations.value = self.options.remove_misc_power_comp_locations.option_false
+            self.options.remove_quest_locations.value = self.options.remove_quest_locations.option_false
 
         self.locations = self._determine_locations()
 
@@ -287,7 +287,7 @@ class PokeparkWorld(World):
                 precollected_pool.append(item)
                 progressive_pool.remove(item)
 
-        if not options.in_zone_road_blocks:
+        if options.in_zone_road_blocks:
             road_block_items = [
                 "Beach Bridge 1 Unlock",
                 "Beach Bridge 2 Unlock",
@@ -343,7 +343,7 @@ class PokeparkWorld(World):
             "Victory"
         ]
 
-        if not options.remove_attraction_locations:
+        if not options.remove_attraction_locations.value:
             min_required_friendship_count = max(min_required_friendship_count, 80)
 
             progressive = [
@@ -516,7 +516,7 @@ class PokeparkWorld(World):
             ]
             progressive_items.extend(progressive)
 
-        if not options.remove_battle_power_comp_locations:
+        if not options.remove_battle_power_comp_locations.value:
             min_required_friendship_count = max(min_required_friendship_count, 60)
             progressive = [
                 "Lotad Unlock",
@@ -563,7 +563,7 @@ class PokeparkWorld(World):
             ]
             progressive_items.extend(progressive)
 
-        if not options.remove_chase_power_comp_locations:
+        if not options.remove_chase_power_comp_locations.value:
             min_required_friendship_count = max(min_required_friendship_count, 100)
 
             progressive = [
@@ -590,10 +590,10 @@ class PokeparkWorld(World):
             ]
             progressive_items.extend(progressive)
 
-        if not options.remove_quiz_power_comp_locations:
+        if not options.remove_quiz_power_comp_locations.value:
             min_required_friendship_count = max(min_required_friendship_count, 0)
 
-        if not options.remove_hide_and_seek_power_comp_locations:
+        if not options.remove_hide_and_seek_power_comp_locations.value:
             min_required_friendship_count = max(min_required_friendship_count, 0)
             progressive = [
                 "Bonsly Unlock",
@@ -602,14 +602,14 @@ class PokeparkWorld(World):
             ]
             progressive_items.extend(progressive)
 
-        if not options.remove_errand_power_comp_locations:
+        if not options.remove_errand_power_comp_locations.value:
             min_required_friendship_count = max(min_required_friendship_count, 0)
             progressive = [
                 "Tropius Unlock",
             ]
             progressive_items.extend(progressive)
 
-        if not options.remove_misc_power_comp_locations:
+        if not options.remove_misc_power_comp_locations.value:
             min_required_friendship_count = max(min_required_friendship_count, 0)
 
             progressive = [
@@ -622,7 +622,7 @@ class PokeparkWorld(World):
             ]
             progressive_items.extend(progressive)
 
-        if not options.remove_quest_locations:
+        if not options.remove_quest_locations.value:
             min_required_friendship_count = max(min_required_friendship_count, 0)
 
             progressive = [
