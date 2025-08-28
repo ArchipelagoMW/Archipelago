@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from queue import Queue
 from typing import Callable
 
-from PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
+from .PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
 
 import asyncio
 from asyncio import StreamReader, StreamWriter, Lock

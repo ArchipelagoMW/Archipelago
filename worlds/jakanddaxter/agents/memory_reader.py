@@ -5,7 +5,7 @@ import sys
 from typing import ByteString, Callable
 import json
 from pymem import pattern, Pymem
-from PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
+from .PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
 from dataclasses import dataclass
 
 import Utils
