@@ -18,6 +18,7 @@ class ClairObscurLocationData(NamedTuple):
     region: str
     default_item: str
     condition: Dict[str, int]
+    type: str
     pictos_level: int
 
 
@@ -76,6 +77,7 @@ def populate_data_locations() -> Dict[str, ClairObscurLocationData]:
             location["location"],
             location["original_item"],
             location_condition,
+            location["type"],
             pictos
         )
 

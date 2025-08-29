@@ -6142,90 +6142,72 @@
         "name": "Lost Gestral reward 1",
         "internal_name": "",
         "location": "Camp",
-        "condition": {
-            "Lost Gestral": 1
-        },
+        "condition": {},
         "original_item": "",
-        "type": "Quest reward"
+        "type": "Lost Gestral reward"
     },
     {
         "name": "Lost Gestral reward 2",
         "internal_name": "",
         "location": "Camp",
-        "condition": {
-            "Lost Gestral": 2
-        },
+        "condition": {},
         "original_item": "",
-        "type": "Quest reward"
+        "type": "Lost Gestral reward"
     },
     {
         "name": "Lost Gestral reward 3",
         "internal_name": "",
         "location": "Camp",
-        "condition": {
-            "Lost Gestral": 3
-        },
+        "condition": {},
         "original_item": "",
-        "type": "Quest reward"
+        "type": "Lost Gestral reward"
     },
     {
         "name": "Lost Gestral reward 4",
         "internal_name": "",
         "location": "Camp",
-        "condition": {
-            "Lost Gestral": 4
-        },
+        "condition": {},
         "original_item": "",
-        "type": "Quest reward"
+        "type": "Lost Gestral reward"
     },
     {
         "name": "Lost Gestral reward 5",
         "internal_name": "",
         "location": "Camp",
-        "condition": {
-            "Lost Gestral": 5
-        },
+        "condition": {},
         "original_item": "",
-        "type": "Quest reward"
+        "type": "Lost Gestral reward"
     },
     {
         "name": "Lost Gestral reward 6",
         "internal_name": "",
         "location": "Camp",
-        "condition": {
-            "Lost Gestral": 6
-        },
+        "condition": {},
         "original_item": "",
-        "type": "Quest reward"
+        "type": "Lost Gestral reward"
     },
     {
         "name": "Lost Gestral reward 7",
         "internal_name": "",
         "location": "Camp",
-        "condition": {
-            "Lost Gestral": 7
-        },
+        "condition": {},
         "original_item": "",
-        "type": "Quest reward"
+        "type": "Lost Gestral reward"
     },
     {
         "name": "Lost Gestral reward 8",
         "internal_name": "",
         "location": "Camp",
-        "condition": {
-            "Lost Gestral": 8
-        },
+        "condition": {},
         "original_item": "",
-        "type": "Quest reward"
+        "type": "Lost Gestral reward"
     },
     {
         "name": "Lost Gestral reward 9",
         "internal_name": "",
         "location": "Camp",
-        "condition": {
-            "Lost Gestral": 9
-        },
+        "condition": {},
         "original_item": "",
-        "type": "Quest reward"
+        "type": "Lost Gestral reward"
     }
 ]
