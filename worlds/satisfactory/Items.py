@@ -471,8 +471,9 @@ class Items:
         "Recipe: Nobelisk Detonator": ItemData(G.Recipe, 1338465, C.progression),
         "Recipe: Portable Miner": ItemData(G.Recipe, 1338466, C.progression),
 # 
+        "Recipe: Dark Matter Residue": ItemData(G.Recipe, 1338467, C.progression),
 
-        #1338467 - 1338599 Reserved for future recipes
+        #1338468 - 1338599 Reserved for future recipes
         #1338400 - 1338899 buildings / others
         "Building: Constructor": ItemData(G.Building, 1338600, C.progression), # unlocked by default
         "Building: Assembler": ItemData(G.Building, 1338601, C.progression),

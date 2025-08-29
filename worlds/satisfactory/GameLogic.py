@@ -575,7 +575,8 @@ class GameLogic:
             #Recipe("Ficsonium", "Particle Accelerator", ("Plutonium Waste", "Singularity Cell"), additional_outputs=("Ficsonium", )),
             Recipe("Dark Matter Crystal", "Particle Accelerator", ("Diamonds", ), additional_outputs=("Dark Matter Crystal", )),
             Recipe("Dark Matter Crystallization", "Particle Accelerator", additional_outputs=("Dark Matter Crystal", )),
-            Recipe("Dark Matter Trap", "Particle Accelerator", ("Time Crystal", ), additional_outputs=("Dark Matter Crystal", ))),
+            Recipe("Dark Matter Trap", "Particle Accelerator", ("Time Crystal", ), additional_outputs=("Dark Matter Crystal", )),
+            Recipe("Dark Matter Residue", "Converter", ("Reanimated SAM", ) )),
         "Superposition Oscillator": (
             Recipe("Superposition Oscillator", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Dark Matter Crystal", "Crystal Oscillator", "Alclad Aluminum Sheet")), ),
         "Neural-Quantum Processor": (
