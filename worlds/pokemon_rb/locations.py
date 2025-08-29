@@ -1,8 +1,9 @@
-
-from BaseClasses import Location
+from collections import defaultdict
+from BaseClasses import Location, ItemClassification
+from .items import item_table
 from .rom_addresses import rom_addresses
 from . import poke_data
-loc_id_start = 172000000
+loc_id_start = 1
 
 
 def trainersanity(world, player):
@@ -68,6 +69,9 @@ class LocationData:
             self.level_address = rom_address - 1
         else:
             self.level_address = None
+
+    def __repr__(self):
+        return "LocationData: " + self.name
 
 
 class EventFlag:
@@ -172,7 +176,7 @@ location_data = [
     LocationData("Fossil", "Choice B", "Helix Fossil", [rom_addresses["Event_Helix_Fossil"], rom_addresses["Event_Helix_Fossil_B"],
                   rom_addresses["Helix_Fossil_Text"]], EventFlag(0x57F)),
 
-    LocationData("Cerulean City-Outskirts", "Rocket Thief", "TM28 Dig", rom_addresses["Event_Rocket_Thief"],
+    LocationData("Cerulean City-Outskirts", "Stolen Item", "TM28 Dig", rom_addresses["Event_Rocket_Thief"],
                  Missable(6)),
     LocationData("Route 2-SE", "South Item", "Moon Stone", rom_addresses["Missable_Route_2_Item_1"],
                  Missable(25)),
@@ -281,7 +285,7 @@ location_data = [
                  rom_addresses["Missable_Rocket_Hideout_B4F_Item_2"], Missable(133)),
     LocationData("Rocket Hideout B4F", "Southwest Item", "Iron", rom_addresses["Missable_Rocket_Hideout_B4F_Item_3"],
                  Missable(134)),
-    LocationData("Rocket Hideout B4F", "Giovanni Item", "Silph Scope",
+    LocationData("Rocket Hideout B4F", "Giovanni Dropped Item", "Silph Scope",
                  rom_addresses["Missable_Rocket_Hideout_B4F_Item_4"], [EventFlag(0x6A7), Missable(135)]),
     LocationData("Rocket Hideout B4F-NW", "Rocket Grunt Item", "Lift Key", rom_addresses["Missable_Rocket_Hideout_B4F_Item_5"],
                  [EventFlag(0x6A6), Missable(136)]),
@@ -785,6 +789,21 @@ location_data = [
     LocationData("Silph Co 9F-SW", "Nurse", "Card Key 9F", rom_addresses["Event_SKC9F"], EventFlag(0x1c6), inclusion=split_card_key),
     LocationData("Silph Co 10F-SE", "Hostage", "Card Key 10F", rom_addresses["Event_SKC10F"], EventFlag(0x1c7), inclusion=split_card_key),
     LocationData("Silph Co 11F-C", "Secretary", "Card Key 11F", rom_addresses["Event_SKC11F"], EventFlag(0x1c8), inclusion=split_card_key),
+
+    LocationData("Silph Co 11F-C", "Giovanni", None, rom_addresses["Trainersanity_EVENT_BEAT_SILPH_CO_GIOVANNI_ITEM"], EventFlag(44), inclusion=trainersanity),
+    LocationData("Silph Co 7F-NW", "Rival", None, rom_addresses["Trainersanity_EVENT_BEAT_SILPH_CO_RIVAL_ITEM"], EventFlag(61), inclusion=trainersanity),
+    LocationData("Rocket Hideout B4F", "Giovanni", None, rom_addresses["Trainersanity_EVENT_BEAT_ROCKET_HIDEOUT_GIOVANNI_ITEM"], EventFlag(78), inclusion=trainersanity),
+    LocationData("Mt Moon B2F", "Super Nerd", None, rom_addresses["Trainersanity_EVENT_BEAT_MT_MOON_EXIT_SUPER_NERD_ITEM"], EventFlag(129), inclusion=trainersanity),
+    LocationData("Route 22", "Rival 1", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE22_RIVAL_1ST_BATTLE_ITEM"], EventFlag(164), inclusion=trainersanity),
+    LocationData("Route 22-F", "Rival 2", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE22_RIVAL_2ND_BATTLE_ITEM"], EventFlag(163), inclusion=trainersanity),
+    LocationData("Pokemon Tower 2F", "Rival", None, rom_addresses["Trainersanity_EVENT_BEAT_POKEMON_TOWER_RIVAL_ITEM"], EventFlag(418), inclusion=trainersanity),
+    LocationData("Cerulean City-Outskirts", "Rocket", None, rom_addresses["Trainersanity_EVENT_BEAT_CERULEAN_ROCKET_THIEF_ITEM"], EventFlag(422), inclusion=trainersanity),
+    LocationData("Cerulean City", "Rival", None, rom_addresses["Trainersanity_EVENT_BEAT_CERULEAN_RIVAL_ITEM"], EventFlag(423), inclusion=trainersanity),
+    LocationData("Oak's Lab", "Rival", None, rom_addresses["Trainersanity_EVENT_BEAT_LAB_RIVAL_ITEM"], EventFlag(458), inclusion=trainersanity),
+    LocationData("Celadon Game Corner", "Rocket", None, rom_addresses["Trainersanity_EVENT_BEAT_GAME_CORNER_ROCKET_ITEM"], EventFlag(459), inclusion=trainersanity),
+    LocationData("Route 24", "Rocket", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_24_LEADER_ITEM"], EventFlag(460), inclusion=trainersanity),
+    LocationData("S.S. Anne 2F", "Rival", None, rom_addresses["Trainersanity_EVENT_BEAT_RIVAL_SS_ANNE_ITEM"], EventFlag(462), inclusion=trainersanity),
+    LocationData("Saffron Fighting Dojo", "Blackbelt 5", None, rom_addresses["Trainersanity_EVENT_DEFEATED_FIGHTING_DOJO_ITEM"], EventFlag(860), inclusion=trainersanity),
 
     LocationData("Celadon Game Corner", "", "Game Corner", event=True),
     LocationData("Cinnabar Island", "", "Cinnabar Island", event=True),
@@ -2029,64 +2048,60 @@ location_data = [
     LocationData("Old Rod Fishing", "Old Rod Pokemon", "Magikarp", rom_addresses["Wild_Old_Rod"] + 1, None,
                  event=True, type="Wild Encounter", level=5, level_address=rom_addresses["Wild_Old_Rod"] + 2), #, level=5, level_after=True),
 
-
-    # "Wild encounters" means a Pokemon you cannot miss or release and lose - re-use it for these
     LocationData("Celadon Prize Corner", "Pokemon Prize - 1", "Abra", [rom_addresses["Prize_Mon_A"],
                                                                        rom_addresses["Prize_Mon_A2"]], None, event=True,
-                 type="Wild Encounter"),
+                 type="Static Repeatable Pokemon"),
     LocationData("Celadon Prize Corner", "Pokemon Prize - 2", "Clefairy", [rom_addresses["Prize_Mon_B"],
                                                                            rom_addresses["Prize_Mon_B2"]], None,
-                 event=True, type="Wild Encounter"),
+                 event=True, type="Static Repeatable Pokemon"),
     LocationData("Celadon Prize Corner", "Pokemon Prize - 3", ["Nidorina", "Nidorino"], [rom_addresses["Prize_Mon_C"],
                                                                                          rom_addresses["Prize_Mon_C2"]],
                  None,
-                 event=True, type="Wild Encounter"),
+                 event=True, type="Static Repeatable Pokemon"),
     LocationData("Celadon Prize Corner", "Pokemon Prize - 4", ["Dratini", "Pinsir"], [rom_addresses["Prize_Mon_D"],
                                                                                       rom_addresses["Prize_Mon_D2"]],
-                 None, event=True, type="Wild Encounter"),
+                 None, event=True, type="Static Repeatable Pokemon"),
     LocationData("Celadon Prize Corner", "Pokemon Prize - 5", ["Scyther", "Dratini"], [rom_addresses["Prize_Mon_E"],
                                                                                        rom_addresses["Prize_Mon_E2"]],
-                 None, event=True, type="Wild Encounter"),
+                 None, event=True, type="Static Repeatable Pokemon"),
     LocationData("Celadon Prize Corner", "Pokemon Prize - 6", "Porygon", [rom_addresses["Prize_Mon_F"],
                                                                           rom_addresses["Prize_Mon_F2"]], None,
-                 event=True, type="Wild Encounter"),
+                 event=True, type="Static Repeatable Pokemon"),
 
-    # counted for pokedex, because they cannot be permanently "missed" but not for HMs since they can be released
-    # or evolved forms may not be able to learn the same HMs
     LocationData("Celadon Mansion Roof House", "Celadon Mansion Pokemon", "Eevee", rom_addresses["Gift_Eevee"], None,
                  event=True, type="Static Pokemon", level=25),
     LocationData("Silph Co 7F-NW", "Gift Pokemon", "Lapras", rom_addresses["Gift_Lapras"], None,
                  event=True, type="Static Pokemon", level=15),
     LocationData("Route 4 Pokemon Center", "Pokemon For Sale", "Magikarp", rom_addresses["Gift_Magikarp"], None,
-                 event=True, type="Static Pokemon", level=5),
+                 event=True, type="Static Repeatable Pokemon", level=5),
 
     # Currently, all Fossil Pokemon's levels are set from the same byte in-game, so they are handled in a hacky way
     # as a Trainer Party
     LocationData("Cinnabar Lab Fossil Room", "Old Amber Pokemon", "Aerodactyl", rom_addresses["Gift_Aerodactyl"], None,
-                 event=True, type="Static Pokemon"),
+                 event=True, type="Static Repeatable Pokemon"),
     LocationData("Cinnabar Lab Fossil Room", "Helix Fossil Pokemon", "Omanyte", rom_addresses["Gift_Omanyte"], None,
-                 event=True, type="Static Pokemon"),
+                 event=True, type="Static Repeatable Pokemon"),
     LocationData("Cinnabar Lab Fossil Room", "Dome Fossil Pokemon", "Kabuto", rom_addresses["Gift_Kabuto"], None,
-                 event=True, type="Static Pokemon"),
+                 event=True, type="Static Repeatable Pokemon"),
 
     LocationData("Route 2 Trade House", "Marcel Trade", "Mr Mime", rom_addresses["Trade_Marcel"] + 1, None, event=True,
-                 type="Static Pokemon"),
+                 type="Static Repeatable Pokemon"),
     LocationData("Underground Path Route 5", "Spot Trade", "Nidoran F", rom_addresses["Trade_Spot"] + 1, None,
-                 event=True, type="Static Pokemon"),
+                 event=True, type="Static Repeatable Pokemon"),
     LocationData("Route 11 Gate 2F", "Terry Trade", "Nidorina", rom_addresses["Trade_Terry"] + 1, None, event=True,
-                 type="Static Pokemon"),
+                 type="Static Repeatable Pokemon"),
     LocationData("Route 18 Gate 2F", "Marc Trade", "Lickitung", rom_addresses["Trade_Marc"] + 1, None, event=True,
-                 type="Static Pokemon"),
+                 type="Static Repeatable Pokemon"),
     LocationData("Cinnabar Lab Fossil Room", "Sailor Trade", "Seel", rom_addresses["Trade_Sailor"] + 1, None, event=True,
-                 type="Static Pokemon"),
+                 type="Static Repeatable Pokemon"),
     LocationData("Cinnabar Lab Trade Room", "Crinkles Trade", "Tangela", rom_addresses["Trade_Crinkles"] + 1, None,
-                 event=True, type="Static Pokemon"),
+                 event=True, type="Static Repeatable Pokemon"),
     LocationData("Cinnabar Lab Trade Room", "Doris Trade", "Electrode", rom_addresses["Trade_Doris"] + 1, None,
-                 event=True, type="Static Pokemon"),
+                 event=True, type="Static Repeatable Pokemon"),
     LocationData("Vermilion Trade House", "Dux Trade", "Farfetchd", rom_addresses["Trade_Dux"] + 1, None, event=True,
-                 type="Static Pokemon"),
+                 type="Static Repeatable Pokemon"),
     LocationData("Cerulean Trade House", "Lola Trade", "Jynx", rom_addresses["Trade_Lola"] + 1, None, event=True,
-                 type="Static Pokemon"),
+                 type="Static Repeatable Pokemon"),
 
     LocationData("Power Plant", "Fake Pokeball Battle 1", "Voltorb", [rom_addresses["Static_Encounter_Voltorb_A"], rom_addresses["Reset_C"]],
                  None, event=True, type="Static Pokemon", level=40, level_address=rom_addresses["Static_Encounter_Voltorb_A"] + 1),
@@ -2119,9 +2134,9 @@ location_data = [
                  None, event=True, type="Static Pokemon", level=30, level_address=rom_addresses["Static_Encounter_Snorlax_B_Level"]),
 
     LocationData("Saffron Fighting Dojo", "Gift 1", "Hitmonlee", rom_addresses["Gift_Hitmonlee"],
-                 None, event=True, type="Missable Pokemon", level=30, level_address=rom_addresses["Gift_Hitmonlee_Level"]),
+                 None, event=True, type="Static Pokemon", level=30, level_address=rom_addresses["Gift_Hitmonlee_Level"]),
     LocationData("Saffron Fighting Dojo", "Gift 2", "Hitmonchan", rom_addresses["Gift_Hitmonchan"],
-                 None, event=True, type="Missable Pokemon", level=30, level_address=rom_addresses["Gift_Hitmonchan_Level"]),
+                 None, event=True, type="Static Pokemon", level=30, level_address=rom_addresses["Gift_Hitmonchan_Level"]),
 
     LocationData("Oak's Lab", "Starter 1", "Charmander",
                  [rom_addresses["Starter1_A"], rom_addresses["Starter1_B"], rom_addresses["Starter1_C"],
@@ -2324,21 +2339,29 @@ trainer_data = {
         {'level': 21, 'party': ['Geodude', 'Onix'], 'party_address': 'Trainer_Party_Route_10_Hiker_A'},
         {'level': 19, 'party': ['Onix', 'Graveler'], 'party_address': 'Trainer_Party_Route_10_Hiker_B'}],
     'Rock Tunnel B1F-W': [{'level': 21, 'party': ['Jigglypuff', 'Pidgey', 'Meowth'],
-                         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_JrTrainerF_A'},
+                         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_JrTrainerF_A',
+                           "location_name": "Rock Tunnel B1F - Jr Trainer F 2"},
                         {'level': 20, 'party': ['Slowpoke', 'Slowpoke', 'Slowpoke'],
-                         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Pokemaniac_A'},
+                         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Pokemaniac_A',
+                         "location_name": "Rock Tunnel B1F - PokeManiac 3"},
                         {'level': 21, 'party': ['Geodude', 'Geodude', 'Graveler'],
-                         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Hiker_A'},],
+                         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Hiker_A',
+                          "location_name": "Rock Tunnel B1F - Hiker 3"}],
     'Rock Tunnel B1F-E': [
         {'level': 22, 'party': ['Oddish', 'Bulbasaur'],
-         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_JrTrainerF_B'},
+         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_JrTrainerF_B',
+         "location_name": "Rock Tunnel B1F - Jr Trainer F 1"},
         {'level': 22, 'party': ['Charmander', 'Cubone'],
-         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Pokemaniac_B'},
+         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Pokemaniac_B',
+         "location_name": "Rock Tunnel B1F - PokeManiac 2"},
         {'level': 25, 'party': ['Slowpoke'],
-         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Pokemaniac_C'},
-        {'level': 25, 'party': ['Geodude'], 'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Hiker_B'},
+         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Pokemaniac_C',
+         "location_name": "Rock Tunnel B1F - PokeManiac 1"},
+        {'level': 25, 'party': ['Geodude'], 'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Hiker_B',
+         "location_name": "Rock Tunnel B1F - Hiker 2"},
         {'level': 20, 'party': ['Machop', 'Onix'],
-         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Hiker_D'}],
+         'party_address': 'Trainer_Party_Rock_Tunnel_B1F_Hiker_D',
+         "location_name": "Rock Tunnel B1F - Hiker 1"}],
     'Route 13-E': [
         {'level': 28, 'party': ['Goldeen', 'Poliwag', 'Horsea'],
          'party_address': 'Trainer_Party_Route_13_JrTrainerF_D'},
@@ -2379,20 +2402,27 @@ trainer_data = {
                  {'level': 31, 'party': ['Poliwag', 'Seaking'], 'party_address': 'Trainer_Party_Route_20_Beauty_C'},
 
                  {'level': 30, 'party': ['Fearow', 'Fearow', 'Pidgeotto'],
-                  'party_address': 'Trainer_Party_Route_20_BirdKeeper_A'}], 'Rock Tunnel 1F-S': [ ###
+                  'party_address': 'Trainer_Party_Route_20_BirdKeeper_A'}], 'Rock Tunnel 1F-S': [
         {'level': 22, 'party': ['Bellsprout', 'Clefairy'],
-         'party_address': 'Trainer_Party_Rock_Tunnel_1F_JrTrainerF_A'},
+         'party_address': 'Trainer_Party_Rock_Tunnel_1F_JrTrainerF_A',
+         "location_name": "Rock Tunnel B1F - Jr Trainer F 1"},
         {'level': 20, 'party': ['Meowth', 'Oddish', 'Pidgey'],
-         'party_address': 'Trainer_Party_Rock_Tunnel_1F_JrTrainerF_B'},
+         'party_address': 'Trainer_Party_Rock_Tunnel_1F_JrTrainerF_B',
+         "location_name": "Rock Tunnel B1F - Jr Trainer F 2"},
         {'level': 19, 'party': ['Pidgey', 'Rattata', 'Rattata', 'Bellsprout'],
-         'party_address': 'Trainer_Party_Rock_Tunnel_1F_JrTrainerF_C'}],
+         'party_address': 'Trainer_Party_Rock_Tunnel_1F_JrTrainerF_C',
+         "location_name": "Rock Tunnel B1F - Jr Trainer F 3"}],
     'Rock Tunnel 1F-NE': [
-        {'level': 23, 'party': ['Cubone', 'Slowpoke'], 'party_address': 'Trainer_Party_Rock_Tunnel_1F_Pokemaniac_A'}],
+        {'level': 23, 'party': ['Cubone', 'Slowpoke'], 'party_address': 'Trainer_Party_Rock_Tunnel_1F_Pokemaniac_A',
+         "location_name": "Rock Tunnel 1F - PokeManiac"}],
     'Rock Tunnel 1F-NW': [
         {'level': 19, 'party': ['Geodude', 'Machop', 'Geodude', 'Geodude'],
-         'party_address': 'Trainer_Party_Rock_Tunnel_1F_Hiker_A'},
-        {'level': 20, 'party': ['Onix', 'Onix', 'Geodude'], 'party_address': 'Trainer_Party_Rock_Tunnel_1F_Hiker_B'},
-        {'level': 21, 'party': ['Geodude', 'Graveler'], 'party_address': 'Trainer_Party_Rock_Tunnel_1F_Hiker_C'}],
+         'party_address': 'Trainer_Party_Rock_Tunnel_1F_Hiker_A',
+         "location_name": "Rock Tunnel 1F - Hiker 1"},
+        {'level': 20, 'party': ['Onix', 'Onix', 'Geodude'], 'party_address': 'Trainer_Party_Rock_Tunnel_1F_Hiker_B',
+         "location_name": "Rock Tunnel 1F - Hiker 2"},
+        {'level': 21, 'party': ['Geodude', 'Graveler'], 'party_address': 'Trainer_Party_Rock_Tunnel_1F_Hiker_C',
+         "location_name": "Rock Tunnel 1F - Hiker 3"}],
     'Route 15-N': [
         {'level': 33, 'party': ['Clefairy'], 'party_address': 'Trainer_Party_Route_15_JrTrainerF_C'}],
     'Route 15': [
@@ -2789,3 +2819,16 @@ class PokemonRBLocation(Location):
         elif type == "Wild Encounter" or "Pokemon" in type:
             self.item_rule = lambda i: (i.player == player and i.name in poke_data.pokemon_data or
                                         " ".join(i.name.split(" ")[1:]) in poke_data.pokemon_data)
+
+
+location_groups = defaultdict(list)
+for location in location_data:
+    if not location.event:
+        if "-" in location.name:
+            location_groups[location.name.split(" -")[0]].append(location.name)
+            if location.name[-1] == "F" and location.name[-2].isdigit():
+                location_groups[" ".join(location.name.split(" -")[0].split(" ")[0:-1])].append(location.name)
+        if isinstance(location.original_item, str):
+            for item_group in item_table[location.original_item].groups:
+                if not item_group.startswith("HM0"):  # these are intended as aliases, not for using as actual groups
+                    location_groups[item_group].append(location.name)
