@@ -35,12 +35,13 @@ class OptionError(ValueError):
 
 
 class Visibility(enum.IntFlag):
-    none = 0b0000
-    template = 0b0001
-    simple_ui = 0b0010  # show option in simple menus, such as player-options
-    complex_ui = 0b0100  # show option in complex menus, such as weighted-options
-    spoiler = 0b1000
-    all = 0b1111
+    none = 0b00000
+    template = 0b10001
+    simple_ui = 0b10010  # show option in simple menus, such as player-options
+    complex_ui = 0b10100  # show option in complex menus, such as weighted-options
+    options_dump = 0b01000  # output option into csv
+    spoiler = 0b11000  # output option to spoiler log. Implies options_dump
+    all = 0b11111
 
 
 class AssembleOptions(abc.ABCMeta):
@@ -1786,7 +1787,7 @@ def dump_player_options(multiworld: MultiWorld) -> None:
             }
             output.append(player_output)
             for option_key, option in world.options_dataclass.type_hints.items():
-                if option.visibility == Visibility.none:
+                if not Visibility.options_dump in option.visibility:
                     continue
                 display_name = getattr(option, "display_name", option_key)
                 player_output[display_name] = getattr(world.options, option_key).current_option_name
