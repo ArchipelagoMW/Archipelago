@@ -645,7 +645,16 @@ class Version(NamedTuple):
     major: int
     minor: int
     build: int
-    class: "Version"
+```
+
+If constructing version information as a Dict for a custom client rather than as a NamedTuple built into the CommonClient, you must use add the `class` key to allow Archipelago to compare version support.
+```
+"version": {
+      "class": "Version",
+      "build": X,
+      "major": Y,
+      "minor": Z
+    }
 ```
 
 ### SlotType
