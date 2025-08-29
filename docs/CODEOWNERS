@@ -136,6 +136,9 @@
 # Overcooked! 2
 /worlds/overcooked2/ @toasterparty
 
+# Paint
+/worlds/paint/ @MarioManTAW
+
 # Pokemon Emerald
 /worlds/pokemon_emerald/ @Zunawe
 
@@ -197,7 +200,7 @@
 /worlds/timespinner/ @Jarno458
 
 # The Legend of Zelda (1)
-/worlds/tloz/ @Rosalie-A @t3hf1gm3nt
+/worlds/tloz/ @Rosalie-A
 
 # TUNIC
 /worlds/tunic/ @silent-destroyer @ScipioWright
