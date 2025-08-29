@@ -1897,7 +1897,7 @@
     },
     {
         "internal_name": "Chest_Monolith_2",
-        "name": "Monolith: Tainted Meadows - After Aline memory",
+        "name": "Monolith: Tainted Cliffs - In front of bastard Mime room zipline",
         "location": "Monolith",
         "original_item": "ChromaPack_Large",
         "condition": {},
@@ -1905,7 +1905,7 @@
     },
     {
         "internal_name": "Chest_Monolith_3",
-        "name": "Monolith: Tainted Cliffs - Paint Cage",
+        "name": "Monolith: Tainted Meadows - Paint Cage",
         "location": "Monolith",
         "original_item": "ReviveTint_Shard",
         "condition": {},
@@ -1913,7 +1913,7 @@
     },
     {
         "internal_name": "Chest_Monolith_4",
-        "name": "Monolith: Tainted Cliffs - In front of bastard Mime room zipline",
+        "name": "Monolith: Tainted Meadows - After Aline memory",
         "location": "Monolith",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
