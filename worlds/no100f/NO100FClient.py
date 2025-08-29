@@ -214,6 +214,7 @@ class Snacks(Enum):
     CRATE_SNACK09                    = 0x2C5EAF4B
     CRATE_SSBOX07                    = 0x2920E992
     DIG__2__SNACKBOX                 = 0x7433780D
+    DIG__2__POWERUP                  = 0x5AE6DE74
     DRYER__SNACKBOX__1               = 0x12E62152
     DRYER__SNACKBOX__2               = 0x12E62153
     EX__CLUE__SNACK__BOX__1          = 0x5D5D7730
@@ -1094,7 +1095,7 @@ class Snacks(Enum):
     SNACK__530                       = 0x5F6F8000
     SNACK__531                       = 0x5F6F8001
     SNACK__6                         = 0xB640D2C0
-    SNACK__60                        = 0x432BD76B
+    SNACK__60                        = 0x432BD870
     SNACK__600                       = 0x5F6FC180
     SNACK__602                       = 0x5F6FC182
     SNACK__603                       = 0x5F6FC183
@@ -1377,9 +1378,9 @@ class Snacks(Enum):
     SNACKBOX__0                      = 0x2E6640CD
     SNACKBOX__1                      = 0x2E6640CE
     SNACKBOX__1__1                   = 0x648E41CF
-    SNACKBOX__1__10                  = 0x74EDFAB8
-    SNACKBOX__1__11                  = 0x74EDFAB9
-    SNACKBOX__1__12                  = 0x74EDFABA
+    SNACKBOX__1__10                  = 0x74CBAD1D
+    SNACKBOX__1__11                  = 0x74CBAD1E
+    SNACKBOX__1__12                  = 0x74CBAD1F
     SNACKBOX__2                      = 0x2E6640CF
     SNACKBOX__2__1                   = 0x648E84D8
     SNACKBOX__2__10                  = 0x74EDFAB8
@@ -2363,6 +2364,8 @@ class Snacks(Enum):
     UPPER_SS10                       = 0x4EC52E70
     URN__1__PRIZE                    = 0x1D62FF04
     URN__2__PRIZE                    = 0xD2159ADD
+    CRATE_SANDWICH                   = 0x6049890F
+    LOW__BOX                         = 0x3E5DA6E7
 
 
 base_id = 1495000
@@ -5271,7 +5274,7 @@ SNACK_PICKUP_IDS = {
     (base_id + 400 + 2775): (b'I005', Snacks.SN90.value),
     (base_id + 400 + 2776): (b'I005', Snacks.SN91.value),
     (base_id + 400 + 2777): (b'I005', Snacks.SN92.value),
-    (base_id + 400 + 2778): (b'I005', Snacks.SNACKBOX2.value),
+    (base_id + 400 + 2778): (b'I005', Snacks.CRATE_SANDWICH.value),
 
     (base_id + 400 + 2779): (b'I006', Snacks.SN1.value),
     (base_id + 400 + 2780): (b'I006', Snacks.SN10.value),
@@ -7928,6 +7931,8 @@ SNACK_PICKUP_IDS = {
     (base_id + 400 + 5393): (b'O001', Snacks.SSBOX02.value),
     (base_id + 400 + 5394): (b'O001', Snacks.SSBOX03.value),
     (base_id + 400 + 5395): (b'O001', Snacks.SSBOX04.value),
+    (base_id + 400 + 5396): (b'f010', Snacks.LOW__BOX.value),
+    (base_id + 400 + 5397): (b'e003', Snacks.DIG__2__POWERUP.value),
 }
 
 valid_scenes = [

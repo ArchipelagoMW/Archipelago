@@ -243,7 +243,7 @@ class NightOf100FrightsWorld(World):
         itempool += [ItemNames.SoapAmmoUpgrade] * 8
         itempool += [ItemNames.GumAmmoUpgrade] * 7
         if self.options.include_snacks:
-            itempool += [ItemNames.Snack] * 5286
+            itempool += [ItemNames.Snack] * 5288
         if self.options.include_monster_tokens:
             itempool += [ItemNames.MT_PROGRESSIVE] * 21
         if self.options.include_keys == 1:

@@ -2851,7 +2851,7 @@ snack_location_table = {
     LocationNames.i005_SN90: base_id + 400 + 2775,
     LocationNames.i005_SN91: base_id + 400 + 2776,
     LocationNames.i005_SN92: base_id + 400 + 2777,
-    LocationNames.i005_SNACKBOX2: base_id + 400 + 2778,
+    LocationNames.i005_CRATE_SANDWICH: base_id + 400 + 2778,
     LocationNames.i006_SN1: base_id + 400 + 2779,
     LocationNames.i006_SN10: base_id + 400 + 2780,
     LocationNames.i006_SN100: base_id + 400 + 2781,
@@ -5470,6 +5470,8 @@ snack_location_table = {
     LocationNames.o001_SSBOX02: base_id + 400 + 5393,
     LocationNames.o001_SSBOX03: base_id + 400 + 5394,
     LocationNames.o001_SSBOX04: base_id + 400 + 5395,
+    LocationNames.f010_LOW__BOX: base_id + 400 + 5396,
+    LocationNames.e003_DIG__2__POWERUP: base_id + 400 + 5397,
 }
 
 location_table: typing.Dict[str, typing.Optional[int]] = {
