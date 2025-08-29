@@ -30,17 +30,12 @@ class ExcludeLocations(Choice):
     option_both = 3
     default = 3
 
-class ShuffleLostGestrals(Choice):
+class ShuffleLostGestrals(Toggle):
     """
-    Unimplemented
-    Shuffles the lost gestrals and/or their rewards into the pool as items and locations.
+    Shuffles the lost gestrals into the item pool.
     """
     internal_name = "shuffle_lost_gestrals"
     display_name = "Shuffle Lost Gestrals"
-    option_false = 0
-    option_gestrals = 1
-    option_rewards = 2
-    option_both = 3
 
 class AreaLogic(Choice):
     """
@@ -52,10 +47,25 @@ class AreaLogic(Choice):
     No Logic: Areas could be anywhere. You may need to grind world map enemies for a long time.
     """
     internal_name = "area_logic"
-    display_name = "Area Logic"
+    display_name = "Area logic"
     option_normal = 0
     option_hard = 1
     option_no_logic = 2
+    default = 0
+
+class ShuffleCharacters(Toggle):
+    """Shuffles characters into the item pool."""
+    display_name = "Shuffle characters"
+
+class StartingCharacter(Choice):
+    """Determines which character you start with. Does nothing if Shuffle Characters is set to false."""
+    internal_name = "starting_character"
+    display_name = "Starting character"
+    option_gustave = 0
+    option_lune = 1
+    option_maelle = 2
+    option_sciel = 3
+    option_monoco = 4
     default = 0
 
 class ClairObscurStartInventory(StartInventory):
@@ -66,6 +76,9 @@ class ClairObscurStartInventory(StartInventory):
 @dataclass
 class ClairObscurOptions(PerGameCommonOptions):
     goal: Goal
+    char_shuffle: ShuffleCharacters
+    gestral_shuffle: ShuffleLostGestrals
+    starting_char: StartingCharacter
 
     start_inventory: ClairObscurStartInventory
 

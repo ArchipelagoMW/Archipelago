@@ -1,8 +1,8 @@
-from typing import Dict, Optional, TYPE_CHECKING
+from typing import Dict, Optional, TYPE_CHECKING, Set
 
 from BaseClasses import Location, Region
 from worlds.clair_obscur.Const import BASE_OFFSET, LOCATION_OFFSET
-from worlds.clair_obscur.Data import data
+from worlds.clair_obscur.Data import data, ClairObscurLocationData
 from ..generic.Rules import add_rule
 
 if TYPE_CHECKING:
@@ -25,13 +25,21 @@ class ClairObscurLocation(Location):
 
 def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> None:
     code = 0
+
+    excluded_types = []
+    if not world.options.gestral_shuffle:
+        excluded_types.append("Lost Gestral")
+
     for region_name, region in regions.items():
         if region_name == "Menu": continue
 
         region_data = data.regions[region_name]
 
         for location_name in region_data.locations:
+
             location_data = data.locations[location_name]
+            if location_data.type in excluded_types:
+                continue
 
             location = ClairObscurLocation(
                 world.player,
@@ -79,3 +87,18 @@ def create_location_name_to_ap_id() -> Dict[str, int]:
         index += 1
 
     return name_to_ap_id
+
+def create_location_groups(locations: Dict[int, ClairObscurLocationData]):
+    location_groups: Dict[str, Set[str]] = {
+        "Chest": set(),
+        "Boss": set(),
+        "Tower": set(),
+        "Lost Gestral": set(),
+        "Lost Gestral reward": set(),
+        "Quest reward": set()
+    }
+
+    for loc in locations.keys():
+        location_groups[locations[loc].type].add(locations[loc].name)
+
+    return location_groups
