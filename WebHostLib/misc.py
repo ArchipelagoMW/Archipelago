@@ -28,7 +28,8 @@ def get_world_theme(game_name: str) -> str:
     if game_name not in AutoWorldRegister.world_types:
         return "grass"
     chosen_theme = AutoWorldRegister.world_types[game_name].web.theme
-    if chosen_theme not in WebWorldTheme:
+    available_themes = [theme.value for theme in WebWorldTheme]
+    if chosen_theme not in available_themes:
         warnings.warn(f"Theme '{chosen_theme}' for {game_name} not valid, switching to default 'grass' theme.")
         return "grass"
     return chosen_theme
