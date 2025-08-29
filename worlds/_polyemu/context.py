@@ -7,7 +7,7 @@ import Patch
 import Utils
 
 from .client import PolyEmuClient, AutoPolyEmuClientRegister
-from .core import DEFAULT_DEVICE_ID, AutoConnectorRegister, PolyEmuBaseError, NoSuchDeviceError, PolyEmuContext, no_op, list_devices, get_platform
+from .core import DEFAULT_DEVICE_ID, AutoAdapterRegister, PolyEmuBaseError, NoSuchDeviceError, PolyEmuContext, no_op, list_devices, get_platform
 
 
 __all__ = [
@@ -26,7 +26,7 @@ class PolyEmuClientCommandProcessor(ClientCommandProcessor):
     def _cmd_emu(self):
         """Shows the current status of the client's connection to the emulator"""
         if isinstance(self.ctx, PolyEmuClientContext):
-            status = "Connected" if self.ctx.polyemu_ctx.connector.is_connected() else "Not Connected"
+            status = "Connected" if self.ctx.polyemu_ctx.adapter.is_connected() else "Not Connected"
             logger.info(f"Emulator Connection Status: {status}")
 
 
@@ -48,8 +48,8 @@ class PolyEmuClientContext(CommonContext):
         self.password_requested = False
         self.client_handler = None
         # TODO: Add a way to swap these based on a user command or something
-        self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("Default Connector"))
-        # self.polyemu_ctx = PolyEmuContext(AutoConnectorRegister.get_connector("SNI Connector"))
+        self.polyemu_ctx = PolyEmuContext(AutoAdapterRegister.get_adapter("Default Adapter"))
+        # self.polyemu_ctx = PolyEmuContext(AutoAdapterRegister.get_adapter("SNI Adapter"))
         self.watcher_timeout = 0.5
 
     def make_gui(self):
@@ -68,7 +68,7 @@ class PolyEmuClientContext(CommonContext):
     async def server_auth(self, password_requested: bool=False):
         self.password_requested = password_requested
 
-        if not self.polyemu_ctx.connector.is_connected():
+        if not self.polyemu_ctx.adapter.is_connected():
             logger.info("Awaiting connection to Emulator before authenticating")
             return
 
@@ -111,7 +111,7 @@ async def _game_watcher(ctx: PolyEmuClientContext):
         ctx.watcher_event.clear()
 
         try:
-            if not ctx.polyemu_ctx.connector.is_connected():
+            if not ctx.polyemu_ctx.adapter.is_connected():
                 showed_connected_message = False
 
                 if not showed_connecting_message:
@@ -120,7 +120,7 @@ async def _game_watcher(ctx: PolyEmuClientContext):
 
                 # Since a call to `connect` can take a while to return, this will cancel connecting
                 # if the user has decided to close the client.
-                connect_task = asyncio.create_task(ctx.polyemu_ctx.connector.connect(), name="EmuConnect")
+                connect_task = asyncio.create_task(ctx.polyemu_ctx.adapter.connect(), name="EmuConnect")
                 exit_task = asyncio.create_task(ctx.exit_event.wait(), name="ExitWait")
                 await asyncio.wait([connect_task, exit_task], return_when=asyncio.FIRST_COMPLETED)
 

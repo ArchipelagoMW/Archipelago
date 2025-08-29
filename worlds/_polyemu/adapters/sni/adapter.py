@@ -16,7 +16,7 @@ from . import sni_pb2 as sni
 
 
 __all__ = [
-    "SNIConnector",
+    "SNIAdapter",
 ]
 
 DOMAIN_ID_TO_FXPACK_BASE = {
@@ -31,8 +31,8 @@ DOMAIN_ID_TO_FXPACK_BASE = {
 }
 
 
-class SNIConnector(polyemu.Connector):
-    name = "SNI Connector"
+class SNIAdapter(polyemu.Adapter):
+    name = "SNI Adapter"
 
     _channel: grpc.aio.Channel | None
     _devices_stub: sni_grpc.DevicesStub | None
@@ -85,7 +85,7 @@ class SNIConnector(polyemu.Connector):
 
         responses: dict[int, polyemu.Response] = {}
         if chain.header.device_id == polyemu.DEFAULT_DEVICE_ID:
-            # Handle requests to this connector
+            # Handle requests to this adapter
             for i, request in enumerate(chain.requests):
                 match request:
                     case polyemu.NoOpRequest():

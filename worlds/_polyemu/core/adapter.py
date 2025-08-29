@@ -5,31 +5,31 @@ from typing import Any, ClassVar
 
 
 __all__ = [
-    "AutoConnectorRegister", "Connector",
+    "AutoAdapterRegister", "Adapter",
 ]
 
 
-class AutoConnectorRegister(abc.ABCMeta):
-    connector_types: ClassVar[dict[str, Connector]] = {}
+class AutoAdapterRegister(abc.ABCMeta):
+    adapter_types: ClassVar[dict[str, Adapter]] = {}
 
-    def __new__(cls, name: str, bases: tuple[type, ...], namespace: dict[str, Any]) -> AutoConnectorRegister:
+    def __new__(cls, name: str, bases: tuple[type, ...], namespace: dict[str, Any]) -> AutoAdapterRegister:
         new_class = super().__new__(cls, name, bases, namespace)
 
         # Register request type
         if "name" in namespace:
-            AutoConnectorRegister.connector_types[namespace["name"]] = new_class
+            AutoAdapterRegister.adapter_types[namespace["name"]] = new_class
 
         return new_class
 
     @staticmethod
-    def get_connector(name: str) -> type[Connector]:
+    def get_adapter(name: str) -> type[Adapter]:
         try:
-            return AutoConnectorRegister.connector_types[name]
+            return AutoAdapterRegister.adapter_types[name]
         except KeyError:
-            raise KeyError(f"Connector type not registered: {name}")
+            raise KeyError(f"Adapter type not registered: {name}")
 
 
-class Connector(abc.ABC, metaclass=AutoConnectorRegister):
+class Adapter(abc.ABC, metaclass=AutoAdapterRegister):
     name: ClassVar[str]
 
     @abc.abstractmethod

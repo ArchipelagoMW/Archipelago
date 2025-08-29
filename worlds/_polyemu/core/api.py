@@ -1,7 +1,7 @@
 import sys
 from typing import Sequence
 
-from .connector import Connector
+from .adapter import Adapter
 from .errors import AutoPolyEmuErrorRegister, PolyEmuError
 from .requests import Request, NoOpRequest, ListDevicesRequest, ReadRequest, WriteRequest, GuardRequest, LockRequest, UnlockRequest, SupportedOperationsRequest, PlatformRequest, MemorySizeRequest, DisplayMessageRequest
 from .responses import ResponseType, Response, ResponseChain, ErrorResponse, ListDevicesResponse, ReadResponse, WriteResponse, GuardResponse, MemorySizeResponse, SupportedOperationsResponse, LockResponse, UnlockResponse, PlatformResponse, DisplayMessageResponse
@@ -18,11 +18,11 @@ DEFAULT_DEVICE_ID = b"\x00\x00\x00\x00\x00\x00\x00\x00"
 
 
 class PolyEmuContext:
-    connector: Connector
+    adapter: Adapter
     selected_device_id: bytes
 
-    def __init__(self, connector_type: type[Connector]):
-        self.connector = connector_type()
+    def __init__(self, adapter_type: type[Adapter]):
+        self.adapter = adapter_type()
         self.selected_device_id = DEFAULT_DEVICE_ID
 
 
@@ -32,7 +32,7 @@ async def send_requests(ctx: PolyEmuContext, request_list: list[Request]) -> lis
         message += request.to_bytes()
     message = ctx.selected_device_id + message
 
-    received = await ctx.connector.send_message(message)
+    received = await ctx.adapter.send_message(message)
     response_list = ResponseChain.from_bytes(received).responses
 
     error_list: list[PolyEmuError] = []
