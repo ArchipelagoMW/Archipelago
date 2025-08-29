@@ -79,6 +79,14 @@ sm64_secrets_to_level = {secret: level for (level,secret) in sm64_level_to_secre
 sm64_entrances_to_level = {**sm64_paintings_to_level, **sm64_secrets_to_level }
 sm64_level_to_entrances = {**sm64_level_to_paintings, **sm64_level_to_secrets }
 
+# Levels with at least one star without a movement rule
+# Currently excluding WF, HMC, WDW, TTM, THI, TTC, and RR
+valid_move_randomizer_start_courses = [
+    "Bob-omb Battlefield", "Jolly Roger Bay", "Cool, Cool Mountain",
+    "Big Boo's Haunt", "Lethal Lava Land", "Shifting Sand Land",
+    "Dire, Dire Docks", "Snowman's Land"
+]
+
 def create_regions(world: MultiWorld, options: SM64Options, player: int):
     regSS = Region("Menu", player, world, "Castle Area")
     create_default_locs(regSS, locSS_table)
