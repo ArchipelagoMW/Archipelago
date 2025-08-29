@@ -572,7 +572,7 @@ class GloverWorld(World):
             hubroom : Region = multiworld.get_region(wayroom_name, player)
             hubroom.connect(multiworld.get_region(wayroom_name + ": Main W/Ball", player))
             #Unlocking the bonus level doesn't ACTUALLY care about the star marks; it cares about all garibs in level
-            levels_with_garibs : list[str] = []
+            all_garib_locations : list[Location] = []
             #Entries
             for entry_index, each_entry_suffix in enumerate(entry_name):
                 #Connect hubs to the right location
@@ -590,8 +590,8 @@ class GloverWorld(World):
                     self.populate_goals_and_marks(connecting_level_name, wayroom_name, entry_index)
                 
                 #Bonus unlocks require all levels with garibs
-                if connecting_level_name.endswith(('1','2','3','?')) and offset < 5:
-                    levels_with_garibs.append(connecting_level_name)
+                if connecting_level_name.endswith(('1','2','3','?')) and entry_index < 4:
+                    all_garib_locations.append(multiworld.get_location(connecting_level_name + ": All Garibs", player))
             
             #Getting all garibs from non-boss levels
             if self.options.bonus_levels:
@@ -604,7 +604,8 @@ class GloverWorld(World):
                 if not self.options.portalsanity:
                    bonus_unlock.place_locked_item(self.create_event(wayroom_name + " Bonus Gate"))
                 #Only require marks from levels that require garibs
-                set_rule(bonus_unlock, lambda state, required_star_marks = levels_with_garibs: state.has_all(required_star_marks, player))
+                for each_all_garib_location in all_garib_locations:
+                    add_rule(bonus_unlock, lambda state, required_garib_completion = each_all_garib_location.name: state.can_reach_location(required_garib_completion, player))
 
         #Entry Names
         hub_entry_names : list[str] = [
