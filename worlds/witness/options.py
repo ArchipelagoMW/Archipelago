@@ -167,7 +167,7 @@ class EasterEggHunt(Choice):
     It is recommended that you play this mode together with Door Shuffle. Without it, more than half of the Easter Eggs will be in sphere 1.
     """
 
-    visibility = Visibility.all if is_easter_time() else Visibility.none
+    visibility = Visibility.all if is_easter_time() else Visibility.options_dump
 
     display_name = "Easter Egg Hunt"
     option_off = 0
