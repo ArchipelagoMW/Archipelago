@@ -1,6 +1,6 @@
 import typing
 from math import ceil
-from typing import List, Mapping, Any
+from typing import List, Any, Dict
 
 from BaseClasses import Tutorial, Group, CollectionState
 from worlds.AutoWorld import WebWorld, World
@@ -45,7 +45,7 @@ class ClairObscurWorld(World):
     item_pool: typing.List[ClairObscurItem]
 
     options_dataclass = ClairObscurOptions
-    options = ClairObscurOptions
+    options: ClairObscurOptions
 
     allow_surplus_items = True
 
@@ -81,14 +81,16 @@ class ClairObscurWorld(World):
 
         self.item_pool = []
 
-        #TODO- Populate this from options
-        excluded = ["Journal"]
+        excluded_types = ["Journal", "Character"]
+        excluded_names = []
+        if not self.options.gestral_shuffle:
+            excluded_names.append("Lost Gestral")
 
         for item_id, item_data in data.items.items():
             amount = 1
 
 
-            if item_data.type in excluded:
+            if item_data.type in excluded_types or item_data.name in excluded_names:
                 continue
             if item_data.name in amounts:
                 amount = amounts[item_data.name]
@@ -96,14 +98,22 @@ class ClairObscurWorld(World):
                 item = self.create_item_by_id(item_id)
                 self.item_pool.append(item)
 
+        if self.options.char_shuffle:
+            #Create items for characters if character shuffle is on.
+            chars = ["Gustave", "Maelle", "Lune", "Sciel", "Monoco"]
+            starting_char = self.options.starting_char.current_option_name
+            for char in chars:
+                char_item = self.create_item(char)
+                if char == starting_char:
+                    self.push_precollected(char_item)
+                else:
+                    self.item_pool.append(char_item)
+
         #Add filler to match the amount of locations
 
         location_count = len(data.locations)
 
         remaining_items_to_generate = location_count - len(self.item_pool)
-
-        #TODO- proper filler generation. Add proportional amounts of upgrade mats to an array i.e. Polished, Polished,
-        #Polished, Polished 3-pack - and modulo iterate through them
 
         #Based on the amount of materials normally needed to upgrade a weapon from level 1 to 32; 4 : 12 : 27 : 35
         filler_amounts = {
@@ -129,9 +139,9 @@ class ClairObscurWorld(World):
         #     self.item_pool.append(item)
         self.multiworld.itempool += self.item_pool
 
-    def fill_slot_data(self) -> typing.Dict[str, Any]:
+    def fill_slot_data(self) -> Dict[str, Any]:
         return self.options.as_dict(
-            "goal"
+            "goal", "char_shuffle", "starting_char", "gestral_shuffle"
         )
 
     def create_item(self, name: str) -> ClairObscurItem:

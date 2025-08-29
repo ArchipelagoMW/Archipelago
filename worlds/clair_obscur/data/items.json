@@ -1,37 +1,9 @@
 [
   {
     "type": "Upgrade material",
-    "name": "Chroma Catalyst (1)",
-    "internal_name": "UpgradeMaterial_Level1",
-    "quantity": 1,
-    "progressive": 2
-  },
-  {
-    "type": "Upgrade material",
-    "name": "Chroma Catalyst (3)",
-    "internal_name": "UpgradeMaterial_Level1",
-    "quantity": 3,
-    "progressive": 2
-  },
-  {
-    "type": "Upgrade material",
     "name": "Chroma Catalyst (5)",
     "internal_name": "UpgradeMaterial_Level1",
     "quantity": 5,
-    "progressive": 2
-  },
-  {
-    "type": "Upgrade material",
-    "name": "Polished Chroma Catalyst (1)",
-    "internal_name": "UpgradeMaterial_Level2",
-    "quantity": 1,
-    "progressive": 2
-  },
-  {
-    "type": "Upgrade material",
-    "name": "Polished Chroma Catalyst (3)",
-    "internal_name": "UpgradeMaterial_Level2",
-    "quantity": 3,
     "progressive": 2
   },
   {
@@ -43,37 +15,9 @@
   },
   {
     "type": "Upgrade material",
-    "name": "Resplendent Chroma Catalyst (1)",
-    "internal_name": "UpgradeMaterial_Level3",
-    "quantity": 1,
-    "progressive": 2
-  },
-  {
-    "type": "Upgrade material",
-    "name": "Resplendent Chroma Catalyst (3)",
-    "internal_name": "UpgradeMaterial_Level3",
-    "quantity": 3,
-    "progressive": 2
-  },
-  {
-    "type": "Upgrade material",
     "name": "Resplendent Chroma Catalyst (5)",
     "internal_name": "UpgradeMaterial_Level3",
     "quantity": 5,
-    "progressive": 2
-  },
-  {
-    "type": "Upgrade material",
-    "name": "Grandiose Chroma Catalyst (1)",
-    "internal_name": "UpgradeMaterial_Level4",
-    "quantity": 1,
-    "progressive": 2
-  },
-  {
-    "type": "Upgrade material",
-    "name": "Grandiose Chroma Catalyst (3)",
-    "internal_name": "UpgradeMaterial_Level4",
-    "quantity": 3,
     "progressive": 2
   },
   {
@@ -129,13 +73,6 @@
     "type": "Upgrade material",
     "name": "Revive Tint Shard",
     "internal_name": "ReviveTint_Shard",
-    "quantity": 1,
-    "progressive": 2
-  },
-  {
-    "type": "Upgrade material",
-    "name": "Recoat",
-    "internal_name": "Consumable_Respec",
     "quantity": 1,
     "progressive": 2
   },
@@ -2724,28 +2661,35 @@
   },
   {
     "type": "Character",
-    "name": "Character - Maelle",
+    "name": "Gustave",
+    "internal_name": "Frey",
+    "quantity": 1,
+    "progressive": 1
+  },
+  {
+    "type": "Character",
+    "name": "Maelle",
     "internal_name": "Maelle",
     "quantity": 1,
     "progressive": 1
   },
   {
     "type": "Character",
-    "name": "Character - Lune",
+    "name": "Lune",
     "internal_name": "Lune",
     "quantity": 1,
     "progressive": 1
   },
   {
     "type": "Character",
-    "name": "Character - Sciel",
+    "name": "Sciel",
     "internal_name": "Sciel",
     "quantity": 1,
     "progressive": 1
   },
   {
     "type": "Character",
-    "name": "Character - Monoco",
+    "name": "Monoco",
     "internal_name": "Monoco",
     "quantity": 1,
     "progressive": 1
