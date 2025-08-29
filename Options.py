@@ -36,9 +36,9 @@ class OptionError(ValueError):
 
 class Visibility(enum.IntFlag):
     none = 0b00000
-    template = 0b10001
-    simple_ui = 0b10010  # show option in simple menus, such as player-options
-    complex_ui = 0b10100  # show option in complex menus, such as weighted-options
+    template = 0b00001
+    simple_ui = 0b00010  # show option in simple menus, such as player-options
+    complex_ui = 0b00100  # show option in complex menus, such as weighted-options
     options_dump = 0b01000  # output option into csv
     spoiler = 0b11000  # output option to spoiler log. Implies options_dump
     all = 0b11111
