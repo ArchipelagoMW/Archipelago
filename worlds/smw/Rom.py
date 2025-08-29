@@ -3185,9 +3185,9 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
     if not file_name:
-        file_name = options["smw_options"]["rom_file"]
+        from settings import get_settings
+        file_name = get_settings()["smw_options"]["rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
