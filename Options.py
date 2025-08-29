@@ -39,7 +39,7 @@ class Visibility(enum.IntFlag):
     template = 0b00001
     simple_ui = 0b00010  # show option in simple menus, such as player-options
     complex_ui = 0b00100  # show option in complex menus, such as weighted-options
-    options_dump = 0b01000  # output option into csv
+    options_dump = 0b01000  # output option into csv when --csv_output is set
     spoiler = 0b11000  # output option to spoiler log. Implies options_dump
     all = 0b11111
 
