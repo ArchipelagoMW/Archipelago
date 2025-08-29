@@ -878,6 +878,18 @@ def set_rules(world: "PokeparkWorld") -> None:
                       state.has("Smoochum Friendship", player) and
                       state.has("Smoochum Unlock", player)
     )
+    set_rule_if_exists(
+        "Ice Zone Frozen Lake Area - Frozen Mamoswine -- Ice Rescue",
+        lambda state: state.has("Ice Zone Frozen Lake Unlock", player) and can_dash_overworld(state, player)
+    )
+    set_rule_if_exists(
+        "Ice Zone Lower Lift Area - Froslass Power Competition -- Friendship",
+        lambda state: state.has("Ice Zone Lift Unlock", player) and can_battle(state, player)
+    )
+    set_rule_if_exists(
+        "Ice Zone Empoleon Area - Empoleon -- Friendship",
+        lambda state: state.has("Empoleon Prisma", player)
+    )
 
     set_rule_if_exists(
         "Ice Zone Lower Lift Area - Quagsire -- Friendship",

@@ -4378,4 +4378,10 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             memory_range=MemoryRange.BYTE
         )
     ),
+    "Ice Zone Empoleon Area - Empoleon -- Friendship": PokeparkLocationData(
+        560, PokeparkFlag.FRIENDSHIP, "Ice Zone Empoleon Area", 0x0301, PokeparkFriendshipClientLocationData(
+            structure_position=80,
+            memory_range=MemoryRange.BYTE
+        )
+    ),
 }
