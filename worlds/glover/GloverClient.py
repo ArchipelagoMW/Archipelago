@@ -61,8 +61,8 @@ deathlink_sent_this_death: we interacted with the multiworld on this death, wait
 
 """
 
-bt_loc_name_to_id = network_data_package["games"]["Glover"]["location_name_to_id"]
-bt_itm_name_to_id = network_data_package["games"]["Glover"]["item_name_to_id"]
+loc_name_to_id = network_data_package["games"]["Glover"]["location_name_to_id"]
+itm_name_to_id = network_data_package["games"]["Glover"]["item_name_to_id"]
 script_version: int = 1
 version: str = "V0.1"
 patch_md5: str = "0e897099ea9c45f14040485dfcb3dc4c"
@@ -185,7 +185,7 @@ class GloverItemTracker:
 
   def __init__(self, ctx):
     self.ctx = ctx
-    self.items = {item_name: 0 for item_name in bt_itm_name_to_id}
+    self.items = {item_name: 0 for item_name in itm_name_to_id}
     self.refresh_items()
 
   def refresh_items(self):
@@ -441,7 +441,7 @@ class GloverContext(CommonContext):
                         if i == item.player:
                             player = name
                             break
-                    for (name, i) in bt_itm_name_to_id.items():
+                    for (name, i) in itm_name_to_id.items():
                         if item.item == i:
                             item_name = name
                             break
@@ -639,6 +639,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     if demo == False and ctx.sync_ready == True:
         locs1 = []
         scouts1 = []
+        scoutsVague = []
         if ctx.garib_table != garibslist:
             ctx.garib_table = garibslist
             for locationId, value in garibslist.items():
@@ -671,9 +672,27 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                     locs1.append(int(locationId))
         if ctx.tip_table != tipslist:
             ctx.tip_table = tipslist
+            tip_hints = ctx.slot_data["mr_hints_locations"]
+            tip_hints_type = ctx.slot_data["mr_hints"]
             for locationId, value in tipslist.items():
                 if value == True:
                     locs1.append(int(locationId))
+                    #Mr. Tip Hints
+                    hint = tip_hints.get(str(locationId), None)
+                    #If the hint should render
+                    if not hint == None and tip_hints_type != 0:
+                        #And you are aware of the player
+                        if ctx.slot_concerns_self(hint["player_id"]):
+                            id = hint['location_id']
+                            #If the log's not vauge, make it an actual hint
+                            if tip_hints_type != 2:
+                                if not id in ctx.handled_scouts:
+                                    scouts1.append(id)
+                            #Log the vauge hint instead
+                            else:
+                                if not id in ctx.handled_scouts:
+                                    scoutsVague.append(id)
+                                    logger.info(hint['vague_hint'])
         if ctx.checkpoint_table != checkpointslist:
             ctx.checkpoint_table = checkpointslist
             for locationId, value in checkpointslist.items():
@@ -716,6 +735,14 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
             }])
             ctx.handled_scouts.extend(scouts1)
 
+        if len(scoutsVague) > 0:
+            await ctx.send_msgs([{
+                "cmd": "LocationScouts",
+                "locations": scoutsVague,
+                "create_as_hint": 0
+            }])
+            ctx.handled_scouts.extend(scoutsVague)
+        
         #GAME VICTORY
         # if hag == True and (ctx.slot_data["victory_condition"] == 0 or ctx.slot_data["victory_condition"] == 4 or\
         #     ctx.slot_data["victory_condition"] == 6) and not ctx.finished_game:

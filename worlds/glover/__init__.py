@@ -10,7 +10,7 @@ from worlds.generic.Rules import add_rule, set_rule
 
 from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall
 from .JsonReader import build_data, generate_location_name_to_id
-from .ItemPool import generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, filler_table, trap_table
+from .ItemPool import create_trap_name_table, generate_item_name_to_id, generate_item_name_groups, find_item_data, select_trap_item_name, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, filler_table, trap_table
 from Utils import visualize_regions
 from .Hints import create_hints
 
@@ -48,7 +48,21 @@ class GloverSettings(settings.Group):
 
 class GloverItem(Item):
 	#Start at 650000
-	game: str = "Glover"
+    game: str = "Glover"
+    #Fake names for traps
+    fake_name : str | None = None
+    @property
+    def hint_text(self) -> str:
+        name_for_use = self.name
+        if self.fake_name != None:
+            name_for_use = self.fake_name
+        return getattr(self, "_hint_text", name_for_use.replace("_", " ").replace("-", " "))
+    @property
+    def pedestal_hint_text(self) -> str:
+        name_for_use = self.name
+        if self.fake_name != None:
+            name_for_use = self.fake_name
+        return getattr(self, "_pedestal_hint_text", name_for_use.replace("_", " ").replace("-", " "))
 
 class GloverLocation(Location):
     game : str = "Glover"
@@ -184,8 +198,10 @@ class GloverWorld(World):
         #Grab Mr. Tips for hints
         self.tip_locations : list[str] = []
         #Speaking of hints
-        self.mr_hints : dict[str, Location] = {}
-        self.chicken_hints : dict[str, Location] = {}
+        self.mr_hints = {}
+        self.chicken_hints = {}
+        #Fake item names
+        self.fake_item_names = []
         super(GloverWorld, self).__init__(world, player)
 
     def level_from_string(self, name : str) -> int:
@@ -287,6 +303,7 @@ class GloverWorld(World):
         self.multiworld.push_precollected(self.create_item(self.starting_ball))
         if not self.options.randomize_jump:
             self.multiworld.push_precollected(self.create_item("Jump"))
+        self.fake_item_names = create_trap_name_table(self)
 
     def create_regions(self):
         multiworld = self.multiworld
@@ -324,7 +341,12 @@ class GloverWorld(World):
         name_for_use = name
         if name == "Garibsanity":
             name_for_use = "Garib"
-        item_output = GloverItem(name_for_use, item_classification, item_id, self.player)
+        item_output : GloverItem = GloverItem(name_for_use, item_classification, item_id, self.player)
+        #Rename traps on pedestals
+        if item_data.type == "Trap":
+            fake_item_name = select_trap_item_name(self, name_for_use)
+            item_output.fake_name = fake_item_name
+            print(item_output.hint_text)
         return item_output
 
     def percent_of(self, percent : int) -> float:
@@ -436,9 +458,9 @@ class GloverWorld(World):
 	    }
         trap_percentages : dict = {
             "Frog Trap" : 								self.percent_of(self.options.frog_trap_weight.value),
-            "Cursed Ball" :								self.percent_of(self.options.cursed_ball_trap_weight.value),
-            "Instant Crystal" :							self.percent_of(self.options.instant_crystal_trap_weight.value),
-            "Camera Rotate" :							self.percent_of(self.options.camera_rotate_trap_weight.value),
+            "Cursed Ball Trap" :								self.percent_of(self.options.cursed_ball_trap_weight.value),
+            "Instant Crystal Trap" :							self.percent_of(self.options.instant_crystal_trap_weight.value),
+            "Camera Rotate Trap" :							self.percent_of(self.options.camera_rotate_trap_weight.value),
             "Tip Trap" :								self.percent_of(self.options.tip_trap_weight.value)
         }
         
@@ -665,7 +687,7 @@ class GloverWorld(World):
         options["tag_link"] = self.options.tag_link.value
         options["starting_ball"] = self.options.starting_ball.value
         options["garib_logic"] = self.options.garib_logic.value
-        #options["garib_sorting"] = self.options.garib_sorting.value
+        options["garib_sorting"] = self.options.garib_sorting.value
         options["entrance_randomizer"] = self.options.entrance_randomizer.value
         options["portalsanity"] = self.options.portalsanity.value
         options["spawning_checkpoint_randomizer"] = self.options.spawning_checkpoint_randomizer.value
@@ -692,6 +714,7 @@ class GloverWorld(World):
         #Mr. Tip Hints
         self.mr_hints = hint_groups[0]
         #Chicken Hints
+        self.player_name
         self.chicken_hints = hint_groups[1]
 
     def lua_world_name(self, original_name):
@@ -726,8 +749,10 @@ class GloverWorld(World):
         return output
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        self.generate_hints()
         options = self.build_options()
+        self.generate_hints()
+        options["mr_hints_locations"] = self.mr_hints
+        options["chicken_hints_locations"] = self.chicken_hints
         options["world_lookup"] = self.lua_world_entry_lookup_table()
         options["garib_order"] = self.lua_decoupled_garib_order()
         return options
