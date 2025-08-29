@@ -31,6 +31,12 @@ share a world that way, usually with only one player connected to the multiworld
 * On the programming side, a world typically represents the package that integrates Archipelago with a
 particular game. For example this could be the entire `worlds/factorio` directory.
 
+## Core Verified / Custom
+A Core Verified world is an integration that is included by default with Archipelago in the `worlds` folder,
+and able to be generated on the main archipelago.gg website. There are also many other games playable in
+Archipelago using separately installable "Custom" worlds. These types of worlds are also sometimes referred
+to as "Supported" and "Unsupported" respectively.
+
 ## RNG
 Acronym for "Random Number Generator." Archipelago uses its own custom Random object with a unique seed per generation,
 or, if running from source, a seed can be supplied and this seed will control all randomization during generation as all
