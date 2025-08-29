@@ -1,5 +1,6 @@
 from typing import TextIO, ClassVar, Any
 from BaseClasses import Item, ItemClassification, CollectionState
+from NetUtils import Hint
 from .GameLogic import GameLogic
 from .Items import Items
 from .Locations import Locations, LocationData
@@ -9,8 +10,6 @@ from .Regions import SatisfactoryLocation, create_regions_and_return_locations
 from .CriticalPathCalculator import CriticalPathCalculator
 from .Web import SatisfactoryWebWorld
 from ..AutoWorld import World
-from NetUtils import Hint
-from BaseClasses import ItemClassification
 
 
 class SatisfactoryWorld(World):
@@ -44,7 +43,7 @@ class SatisfactoryWorld(World):
     def generate_early(self) -> None:
         self.process_universal_tracker_slot_data_if_available()
 
-        if self.critical_path_seed == None:
+        if not self.critical_path_seed:
             self.critical_path_seed = self.random.random()
 
         if self.options.mam_logic_placement.value == Placement.starting_inventory:
@@ -169,7 +168,7 @@ class SatisfactoryWorld(World):
 
     @staticmethod
     def interpret_slot_data(slot_data: dict[str, Any] | None) -> dict[str, Any] | None:
-        """Used by Universal Tracker, return value is passed to self.multiworld.re_gen_passthrough"""
+        """Used by Universal Tracker, return value is passed to self.multiworld.re_gen_passthrough["Satisfactory"]"""
         return slot_data
 
 
@@ -242,14 +241,14 @@ class SatisfactoryWorld(World):
 
 
     def modify_multidata(self, multidata: dict[str, Any]) -> None: 
-        locations_visiable_from_start: list[int] = list(range(1338000, 1338099)) # ids of Hub 1-1,1 to 2-5,10
+        locations_visible_from_start: list[int] = list(range(1338000, 1338099)) # ids of Hub 1-1,1 to 2-5,10
 
         if "Building: AWESOME Shop" in self.options.start_inventory \
                 or "Building: AWESOME Shop" in self.options.start_inventory_from_pool \
                 or 1338622 in multidata["precollected_items"][self.player]: # id of Building: AWESOME Shop
-            locations_visiable_from_start.extend(range(1338700, 1338709)) # ids of shop locations 1 to 10
+            locations_visible_from_start.extend(range(1338700, 1338709)) # ids of shop locations 1 to 10
 
-        for location_id in locations_visiable_from_start:
+        for location_id in locations_visible_from_start:
             if location_id in multidata["locations"][self.player]:
                 item_id, player_id, flags = multidata["locations"][self.player][location_id]
 
