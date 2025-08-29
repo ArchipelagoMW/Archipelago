@@ -1,7 +1,8 @@
 import datetime
 import os
 import warnings
-from typing import Any, IO, Dict, Iterator, List, Tuple, Union, Literal, get_args
+from enum import StrEnum
+from typing import Any, IO, Dict, Iterator, List, Tuple, Union
 
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
@@ -13,13 +14,21 @@ from . import app, cache
 from .models import Seed, Room, Command, UUID, uuid4
 from Utils import title_sorted
 
+class WebWorldTheme(StrEnum):
+    DIRT = "dirt"
+    GRASS = "grass"
+    GRASS_FLOWERS = "grassFlowers"
+    ICE = "ice"
+    JUNGLE = "jungle"
+    OCEAN = "ocean"
+    PARTY_TIME = "partyTime"
+    STONE = "stone"
 
 def get_world_theme(game_name: str) -> str:
     if game_name not in AutoWorldRegister.world_types:
         return "grass"
-    available = Literal["dirt", "grass", "grassFlowers", "ice", "jungle", "ocean", "partyTime", "stone"]
     chosen_theme = AutoWorldRegister.world_types[game_name].web.theme
-    if chosen_theme not in get_args(available):
+    if chosen_theme not in WebWorldTheme:
         warnings.warn(f"Theme '{chosen_theme}' for {game_name} not valid, switching to default 'grass' theme.")
         return "grass"
     return chosen_theme
