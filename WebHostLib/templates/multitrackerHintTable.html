@@ -1,5 +1,16 @@
 {% for team, hints in hints.items() %}
     <div class="table-wrapper">
+        <!-- Hint visibility controls -->
+        <div class="hint-controls" style="margin-bottom: 10px;">
+            <label>
+                <input type="checkbox" id="hide-completed-hints" />
+                Hide completed hints
+            </label>
+            <label style="margin-left: 15px;">
+                <input type="checkbox" id="hide-external-items" />
+                Hide items found outside your game
+            </label>
+        </div>
         <table id="hints-table" class="table non-unique-item-table" data-order='[[5, "asc"], [0, "asc"]]'>
             <thead>
             <tr>
@@ -20,7 +31,7 @@
                         games[(team, hint.receiving_player)] == current_tracker
                     )
                 -%}
-                    <tr>
+                    <tr class="hint-row{% if hint.found %} hint-completed{% endif %}{% if games[(team, hint.finding_player)] != current_tracker and games[(team, hint.receiving_player)] != current_tracker %} hint-external{% endif %}">
                         <td>
                             {% if get_slot_info(team, hint.finding_player).type == 2 %}
                                 <i>{{ player_names_with_alias[(team, hint.finding_player)] }}</i>
