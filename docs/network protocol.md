@@ -645,6 +645,7 @@ class Version(NamedTuple):
     major: int
     minor: int
     build: int
+    class: "Version"
 ```
 
 ### SlotType
