@@ -571,6 +571,8 @@ class GloverWorld(World):
             wayroom_name : str = each_world_prefix + "H"
             hubroom : Region = multiworld.get_region(wayroom_name, player)
             hubroom.connect(multiworld.get_region(wayroom_name + ": Main W/Ball", player))
+            #Unlocking the bonus level doesn't ACTUALLY care about the star marks; it cares about all garibs in level
+            levels_with_garibs : list[str] = []
             #Entries
             for entry_index, each_entry_suffix in enumerate(entry_name):
                 #Connect hubs to the right location
@@ -586,19 +588,23 @@ class GloverWorld(World):
                 #Default portal and star positions
                 if not self.options.portalsanity:
                     self.populate_goals_and_marks(connecting_level_name, wayroom_name, entry_index)
+                
+                #Bonus unlocks require all levels with garibs
+                if connecting_level_name.endswith(('1','2','3','?')) and offset < 5:
+                    levels_with_garibs.append(connecting_level_name)
             
-            #Getting a star on all 4 other levels
+            #Getting all garibs from non-boss levels
             if self.options.bonus_levels:
                 bonus_unlock_address : int | None = None
                 if self.options.portalsanity:
                     bonus_unlock_address = 3100 + (world_index * 100)
                 bonus_unlock : Location = Location(player, wayroom_name + ": Bonus Unlock", bonus_unlock_address, hubroom)
                 hubroom.locations.append(bonus_unlock)
-                #Unlocks the bonus level
+                #Makes bonus unlocks happen as vanilla
                 if not self.options.portalsanity:
                    bonus_unlock.place_locked_item(self.create_event(wayroom_name + " Bonus Gate"))
-                main_star_marks : list[str] = [wayroom_name + " 1 Star", wayroom_name + " 2 Star", wayroom_name + " 3 Star"]
-                set_rule(bonus_unlock, lambda state, required_star_marks = main_star_marks: state.has_all(required_star_marks, player))
+                #Only require marks from levels that require garibs
+                set_rule(bonus_unlock, lambda state, required_star_marks = levels_with_garibs: state.has_all(required_star_marks, player))
 
         #Entry Names
         hub_entry_names : list[str] = [

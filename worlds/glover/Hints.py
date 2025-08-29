@@ -10,7 +10,7 @@ def create_hints(self):
     valid_chicken_items = get_valid_items(self, chicken_catagories)
 
     #Get Mr. Tip Hints First
-    tips_pair = create_hint_lookup(self, self.tip_locations, valid_tip_items, tip_catagories, self.options.mr_hints == 2)
+    tips_pair = create_hint_lookup(self, self.tip_locations, valid_tip_items, tip_catagories, self.options.mr_hints == 2, "Mr. Tip Says:\n\t")
     #Remove any items you've already gotten from being hints from the chicken
     for each_item in tips_pair[0]:
         if each_item in valid_chicken_items:
@@ -19,12 +19,12 @@ def create_hints(self):
     chicken_locations = []
     for each_index in range(7):
         chicken_locations.append("Chicken Hint " + str(each_index + 1))
-    chicken_hints = create_hint_lookup(self, chicken_locations, valid_chicken_items, chicken_catagories, self.options.chicken_hints == 2)[1]
+    chicken_hints = create_hint_lookup(self, chicken_locations, valid_chicken_items, chicken_catagories, self.options.chicken_hints == 2, "Cheat Chicken Says:\n\t")[1]
     
     #Apply the hints to the world
     return [tips_pair[1], chicken_hints]
 
-def create_hint_lookup(self, hint_locations : list[str], valid_items : list[Item], valid_catagories : list [ItemClassification], vague_hint : bool):
+def create_hint_lookup(self, hint_locations : list[str], valid_items : list[Item], valid_catagories : list [ItemClassification], vague_hint : bool, vauge_prefix : str):
     hint_lookup : dict[str, dict[str,int]] = {}
     newly_chosen_items : list[Item] = []
     #If there's multiple valid catagories, we're in balanced mode
@@ -47,7 +47,7 @@ def create_hint_lookup(self, hint_locations : list[str], valid_items : list[Item
                 valid_item_catagories[current_catagory].remove(next_item)
                 newly_chosen_items.append(next_item)
                 to_scout : Location = next_item.location
-                hint_lookup[location_name_to_address(self, each_tip_spot)] = location_to_hint_info(self, vague_hint, to_scout, next_item)
+                hint_lookup[location_name_to_address(self, each_tip_spot)] = location_to_hint_info(self, vague_hint, to_scout, next_item, vauge_prefix)
                 grabbed_from_catagory[current_catagory] += 1
             else:
                 #If this catagory has no more items, remove it
@@ -63,12 +63,12 @@ def create_hint_lookup(self, hint_locations : list[str], valid_items : list[Item
             valid_items.remove(next_item)
             newly_chosen_items.append(next_item)
             to_scout : Location = next_item.location
-            hint_lookup[location_name_to_address(self, each_tip_spot)] = location_to_hint_info(self, vague_hint, to_scout, next_item)
+            hint_lookup[location_name_to_address(self, each_tip_spot)] = location_to_hint_info(self, vague_hint, to_scout, next_item, vauge_prefix)
         else:
             break
     return [newly_chosen_items, hint_lookup]
 
-def location_to_hint_info(self, vague_hint : bool, in_location : Location, in_item : Item) -> dict[str:str]:
+def location_to_hint_info(self, vague_hint : bool, in_location : Location, in_item : Item, vauge_prefix : str) -> dict[str:str]:
     hint : dict[str:str] = {
         "player_id" : in_location.player,
         "location_id" : in_location.address
@@ -103,7 +103,7 @@ def location_to_hint_info(self, vague_hint : bool, in_location : Location, in_it
             
             case 17:
                 item_class = " is good for "
-        hint["vague_hint"] = "Mr. Tip Says:\n" + locations_owner + "'s " + hint_text + item_class + item_owner
+        hint["vague_hint"] = vauge_prefix + locations_owner + "'s " + hint_text + item_class + item_owner
     return hint
 
 def location_name_to_address(self, location_name : str) -> str:

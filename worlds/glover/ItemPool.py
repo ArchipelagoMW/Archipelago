@@ -726,7 +726,9 @@ def create_trap_name_table(self) -> list[str]:
 			"Otw3 Second Magnet",
 			"Training Wheel"
 		])
-	
+	else:
+		trap_name_table.extend(level_event_table.keys())
+
 	#Fake Checkpoints
 	if not self.options.checkpoint_checks:
 		trap_name_table.extend(checkpoint_table.keys())
@@ -767,9 +769,6 @@ def create_trap_name_table(self) -> list[str]:
 				trap_name_table.extend(world_garib_table.keys())
 				trap_name_table.extend(decoupled_garib_table.keys())
 				trap_name_table.remove("Garib")
-	#'Power Ball'
-	if not self.options.include_power_ball:
-		trap_name_table.append("Power Ball")
 	#'Jump'
 	if not self.options.randomize_jump:
 		trap_name_table.append("Jump")
