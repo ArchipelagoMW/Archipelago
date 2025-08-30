@@ -1300,7 +1300,7 @@ class CommandProcessor(metaclass=CommandMeta):
                         argname += "=" + parameter.default
                 argtext += argname
                 argtext += " "
-            s += f"{self.marker}{command} {argtext}\n    {method.__doc__}\n"
+            s += f"{self.marker}{command} {argtext}\n    {'\n    '.join(inspect.getdoc(method).split('\n'))}\n"
         return s
 
     def _cmd_help(self):
