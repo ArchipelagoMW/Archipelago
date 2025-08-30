@@ -5,7 +5,7 @@ from copy import deepcopy
 from typing import ClassVar, Counter, Dict, Set, Any
 
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, components, launch_subprocess, Type
+from worlds.LauncherComponents import Component, components, launch as launch_component, Type
 from worlds.tits_the_3rd.names.item_name import ItemName
 from worlds.tits_the_3rd.names.location_name import LocationName
 from .items import (
@@ -33,11 +33,12 @@ from .tables import location_list
 from .crafts.craft_randomizer import shuffle_crafts_main
 from .spoiler_mapping import scrub_spoiler_data
 
-def launch_client():
+
+def launch_client(*args: str):
     """Launch a Trails in the Sky the 3rd client instance"""
     from worlds.tits_the_3rd.client.client import launch
 
-    launch_subprocess(launch, name="TitsThe3rdClient")
+    launch_component(launch, name="TitsThe3rdClient", args=args)
 
 
 components.append(Component("Trails in the Sky the 3rd Client", "TitsThe3rdClient", func=launch_client, component_type=Type.CLIENT))

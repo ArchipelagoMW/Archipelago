@@ -229,13 +229,6 @@ def connect_regions(multiworld: MultiWorld, player: int):
         RegionName.grancel_bobcat,
         lambda state: state.has(ItemName.bobcat_unlock, player, 1)
     )
-    connect_region(
-        multiworld,
-        player,
-        RegionName.grancel_bobcat,
-        RegionName.day_grancel_west,
-        lambda state: state.has(ItemName.day_grancel_west_unlock, player, 1)
-    )
 
     connect_region(
         multiworld,
@@ -392,13 +385,6 @@ def connect_regions(multiworld: MultiWorld, player: int):
         RegionName.night_grancel_west,
         RegionName.grancel_bobcat,
         lambda state: state.has(ItemName.bobcat_unlock, player, 1)
-    )
-    connect_region(
-        multiworld,
-        player,
-        RegionName.grancel_bobcat,
-        RegionName.night_grancel_west,
-        lambda state: state.has(ItemName.night_grancel_west_unlock, player, 1)
     )
 
     connect_region(

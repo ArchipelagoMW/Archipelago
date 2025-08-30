@@ -1,10 +1,10 @@
 """
 This module contains the classes and logic for the craft randomization.
 """
+from dataclasses import dataclass
 from enum import Enum
 from typing import Optional, List
 
-import attrs
 
 class CraftCategory(Enum):
     """
@@ -20,7 +20,8 @@ class CraftCategory(Enum):
     UPGRADABLE_SCRAFT = 4
     CHAIN_CRAFT = 5
 
-@attrs.define
+
+@dataclass
 class Craft:
     """Represents a craft that can be randomized."""
     base_craft_name: str
@@ -28,67 +29,24 @@ class Craft:
     base_craft_level_acquired: int
     category: CraftCategory
     animation_size_bytes: int
-    base_as_function_name: Optional[str] = attrs.field(
-        default=None,
-        validator=attrs.validators.optional(
-            attrs.validators.instance_of(str)
-        )
-    )
+    base_as_function_name: Optional[str] = None
+    upgraded_craft_name: Optional[str] = None
+    upgraded_craft_id: Optional[int] = None
+    upgraded_craft_level_acquired: Optional[int] = None
 
-    upgraded_craft_name: Optional[str] = attrs.field(
-        default=None,
-        validator=attrs.validators.optional(
-            attrs.validators.instance_of(str)
-        )
-    )
-    upgraded_craft_id: Optional[int] = attrs.field(
-        default=None,
-        validator=attrs.validators.optional(
-            attrs.validators.instance_of(int)
-        )
-    )
-    upgraded_craft_level_acquired: Optional[int] = attrs.field(
-        default=None,
-        validator=attrs.validators.optional(
-            attrs.validators.instance_of(int)
-        )
-    )
-
-    def _validate_upgraded_field(self, field_name: str, value):
-        """
-        Shared validator for upgraded fields.
-        If the craft is upgradable, the field must be populated.
-        If the craft is not upgradable, the field must not be populated.
-        """
+    def __post_init__(self):
+        if not self.base_as_function_name and self.category != CraftCategory.CHAIN_CRAFT:
+            raise ValueError("base_as_function_name must be populated for non chain craft.")
         is_upgradable = self.category in [CraftCategory.UPGRADABLE_NORMAL_CRAFT, CraftCategory.UPGRADABLE_SCRAFT]
+        if is_upgradable:
+            if not (self.upgraded_craft_name and self.upgraded_craft_id and self.upgraded_craft_level_acquired):
+                raise ValueError("All upgradable categories must be populated for upgradable craft")
+        else:
+            if self.upgraded_craft_name or self.upgraded_craft_id or self.upgraded_craft_level_acquired:
+                raise ValueError("All upgradable categories must not be populated for non upgradable craft")
 
-        if is_upgradable and value is None:
-            raise ValueError(f"{field_name} must be populated for upgradable category {self.category}")
-        elif not is_upgradable and value is not None:
-            raise ValueError(f"{field_name} must not be populated for non-upgradable category {self.category}")
 
-    @upgraded_craft_name.validator
-    def validate_upgraded_craft_name(self, _, value):
-        """Validate that upgraded_craft_name is populated for upgradable crafts and not populated for non-upgradable crafts."""
-        self._validate_upgraded_field("upgraded_craft_name", value)
-
-    @upgraded_craft_id.validator
-    def validate_upgraded_craft_id(self, _, value):
-        """Validate that upgraded_craft_id is populated for upgradable crafts and not populated for non-upgradable crafts."""
-        self._validate_upgraded_field("upgraded_craft_id", value)
-
-    @upgraded_craft_level_acquired.validator
-    def validate_upgraded_craft_level_acquired(self, _, value):
-        """Validate that upgraded_craft_level_acquired is populated for upgradable crafts and not populated for non-upgradable crafts."""
-        self._validate_upgraded_field("upgraded_craft_level_acquired", value)
-
-    @base_as_function_name.validator
-    def validate_base_as_function_name(self, _, value):
-        """Validate that base_as_function_name is populated for fixed crafts and not populated for upgradable crafts."""
-        if not value and self.category != CraftCategory.CHAIN_CRAFT:
-            raise ValueError("base_as_function_name must not be populated.")
-
-@attrs.define
+@dataclass
 class Character:
     """Represents a character who can have their crafts randomized."""
     name: str
