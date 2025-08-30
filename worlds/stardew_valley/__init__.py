@@ -240,22 +240,20 @@ class StardewValleyWorld(World):
 
     def precollect_early_keys(self):
         # Very small worlds might be unable to escape early spheres without some of these items
-        early_keys = ["Community Center Key", "Wizard Invitation", "Forest Magic", "Landslide Removed"]
-        number_locations = len([location for location in self.get_locations()])
-        if number_locations < 80:
-            number_precollected = 4
-        elif number_locations < 90:
+
+        num_unique_games = len(set([world.game for world in self.multiworld.worlds.values()]))
+
+        early_keys = ["Landslide Removed", "Community Center Key", "Forest Magic"]
+        # number_locations = len([location for location in self.get_locations()])
+        if num_unique_games <= 1:
             number_precollected = 3
-        elif number_locations < 100:
+        elif num_unique_games <= 2:
             number_precollected = 2
-        elif number_locations < 120:
-            number_precollected = 1
         else:
             return
 
-        starting_keys = self.random.sample(early_keys, number_precollected)
-        for starting_key in starting_keys:
-            self.multiworld.push_precollected(self.create_item(starting_key))
+        for i in range(number_precollected):
+            self.multiworld.push_precollected(self.create_item(early_keys[i]))
 
     def precollect_starting_season(self):
         if self.options.season_randomization == SeasonRandomization.option_progressive:
