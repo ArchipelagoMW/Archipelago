@@ -220,7 +220,8 @@ class EntranceRandomization(Choice):
 
 
 class StartWithout(OptionSet):
-    """ Items that, in vanilla, you generally start with (or get very quickly), but in Archipelago, you would rather start without them
+    """ Items that, in vanilla, you generally start with (or get very quickly), but in Archipelago, you would rather start without them.
+    If the relevant item is not randomized, this option will do nothing.
     Tools: Start without an Axe, Pickaxe, Hoe, Watering can and Scythe
     Backpack: Start with 4 backpack slots, instead of 12, if your backpack size allows it
     Landslide: Start without the landslide that leads to the mines
