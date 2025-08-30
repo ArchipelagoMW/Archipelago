@@ -1,6 +1,6 @@
 from typing import *
 
-from test.TestBase import WorldTestBase
+from test.bases import WorldTestBase
 from .. import SC2World
 from .. import Client
 
