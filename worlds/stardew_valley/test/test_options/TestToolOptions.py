@@ -2,7 +2,7 @@ import itertools
 from collections import Counter
 
 from BaseClasses import ItemClassification
-from ...options import ToolProgression
+from ...options import ToolProgression, StartWithout
 from ...strings.tool_names import ToolMaterial, Tool, APTool
 from ...test.bases import SVTestBase
 
@@ -12,6 +12,7 @@ TOOLS = {"Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can", "Fishing Rod"}
 class TestToolProgression(SVTestBase):
     options = {
         ToolProgression.internal_name: ToolProgression.option_progressive,
+        StartWithout.internal_name: StartWithout.preset_none,
     }
 
     def test_given_progressive_when_generate_then_tool_upgrades_are_locations(self):

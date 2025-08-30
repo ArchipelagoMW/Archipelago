@@ -1,5 +1,5 @@
 from .bases import SVTestBase
-from .. import options
+from .. import options, StartWithoutOptionName
 
 
 class TestBackpackBase(SVTestBase):
@@ -136,7 +136,7 @@ class TestBackpackSplit6(TestBackpackBase):
 class TestStartWithoutBackpackSize1(TestBackpackBase):
     options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
                options.BackpackSize.internal_name: options.BackpackSize.option_1,
-               options.ToolProgression.internal_name: options.ToolProgression.option_progressive_no_tool_start}
+               options.StartWithout.internal_name: frozenset({StartWithoutOptionName.backpack})}
     expected_starting_backpacks = 4
     expected_total_backpacks = 36
 
@@ -154,7 +154,7 @@ class TestStartWithoutBackpackSize1(TestBackpackBase):
 class TestStartWithoutBackpackSize3(TestBackpackBase):
     options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
                options.BackpackSize.internal_name: options.BackpackSize.option_3,
-               options.ToolProgression.internal_name: options.ToolProgression.option_progressive_no_tool_start}
+               options.StartWithout.internal_name: frozenset({StartWithoutOptionName.backpack})}
     expected_starting_backpacks = 2
     expected_total_backpacks = 12
 
@@ -176,7 +176,7 @@ class TestStartWithoutBackpackSize3(TestBackpackBase):
 class TestStartWithoutBackpackSize4(TestBackpackBase):
     options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
                options.BackpackSize.internal_name: options.BackpackSize.option_4,
-               options.ToolProgression.internal_name: options.ToolProgression.option_progressive_no_tool_start}
+               options.StartWithout.internal_name: frozenset({StartWithoutOptionName.backpack})}
     expected_starting_backpacks = 1
     expected_total_backpacks = 9
 
@@ -198,7 +198,7 @@ class TestStartWithoutBackpackSize4(TestBackpackBase):
 class TestStartWithoutBackpackSize12(TestBackpackBase):
     options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
                options.BackpackSize.internal_name: options.BackpackSize.option_12,
-               options.ToolProgression.internal_name: options.ToolProgression.option_progressive_no_tool_start}
+               options.StartWithout.internal_name: frozenset({StartWithoutOptionName.backpack})}
     expected_starting_backpacks = 1
     expected_total_backpacks = 3
 

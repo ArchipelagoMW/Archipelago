@@ -1,11 +1,14 @@
 from ..bases import SVTestBase
-from ...options import SeasonRandomization, Fishsanity, ExcludeGingerIsland, SkillProgression, ToolProgression, ElevatorProgression, SpecialOrderLocations
+from ... import StartWithoutOptionName
+from ...options import SeasonRandomization, Fishsanity, ExcludeGingerIsland, SkillProgression, ToolProgression, ElevatorProgression, SpecialOrderLocations, \
+    StartWithout
 from ...strings.ap_names.transport_names import Transportation
 from ...strings.fish_names import Fish
 
 
 class TestNeedRegionToCatchFish(SVTestBase):
     options = {
+        StartWithout: frozenset({StartWithoutOptionName.landslide, StartWithoutOptionName.community_center}),
         SeasonRandomization.internal_name: SeasonRandomization.option_disabled,
         ElevatorProgression.internal_name: ElevatorProgression.option_vanilla,
         SkillProgression.internal_name: SkillProgression.option_vanilla,

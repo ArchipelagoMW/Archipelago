@@ -33,6 +33,7 @@ from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions, prepare_mod_data
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent
+from .strings.ap_names.ap_option_names import StartWithoutOptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.event_names import Event
 from .strings.goal_names import Goal as GoalName
@@ -239,21 +240,12 @@ class StardewValleyWorld(World):
         self.total_progression_items -= 1  # -1 for the victory event
 
     def precollect_early_keys(self):
-        # Very small worlds might be unable to escape early spheres without some of these items
-
-        num_unique_games = len(set([world.game for world in self.multiworld.worlds.values()]))
-
-        early_keys = ["Landslide Removed", "Community Center Key", "Forest Magic"]
-        # number_locations = len([location for location in self.get_locations()])
-        if num_unique_games <= 1:
-            number_precollected = 3
-        elif num_unique_games <= 2:
-            number_precollected = 2
-        else:
-            return
-
-        for i in range(number_precollected):
-            self.multiworld.push_precollected(self.create_item(early_keys[i]))
+        if StartWithoutOptionName.landslide not in self.options.start_without:
+            self.multiworld.push_precollected(self.create_item("Landslide Removed"))
+        if StartWithoutOptionName.community_center not in self.options.start_without:
+            self.multiworld.push_precollected(self.create_item("Community Center Key"))
+            self.multiworld.push_precollected(self.create_item("Forest Magic"))
+            self.multiworld.push_precollected(self.create_item("Wizard Invitation"))
 
     def precollect_starting_season(self):
         if self.options.season_randomization == SeasonRandomization.option_progressive:
@@ -289,7 +281,7 @@ class StardewValleyWorld(World):
                 self.multiworld.push_precollected(self.create_item(item))
 
     def precollect_starting_backpacks(self):
-        if self.options.backpack_progression != BackpackProgression.option_vanilla and self.options.tool_progression & ToolProgression.value_no_starting_tools:
+        if self.options.backpack_progression != BackpackProgression.option_vanilla and StartWithoutOptionName.backpack in self.options.start_without:
             num_starting_slots = max(4, self.options.backpack_size.value)
             num_starting_backpacks = math.ceil(num_starting_slots / self.options.backpack_size.value)
             num_already_starting_backpacks = 0

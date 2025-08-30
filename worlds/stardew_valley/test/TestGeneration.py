@@ -2,7 +2,7 @@ from typing import List
 
 from BaseClasses import ItemClassification, Item
 from .bases import SVTestBase
-from .. import location_table, options, items
+from .. import location_table, options, items, StartWithoutOptionName
 from ..content.content_packs import vanilla_content_pack_names
 from ..items import Group, ItemData, item_data
 from ..locations import LocationTags
@@ -133,6 +133,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
 
 class TestProgressiveElevator(SVTestBase):
     options = {
+        options.StartWithout: frozenset({StartWithoutOptionName.landslide}),
         options.ElevatorProgression.internal_name: options.ElevatorProgression.option_progressive,
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
@@ -171,6 +172,7 @@ class TestProgressiveElevator(SVTestBase):
 
 class TestSkullCavernLogic(SVTestBase):
     options = {
+        options.StartWithout: frozenset({StartWithoutOptionName.landslide}),
         options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,

@@ -1,7 +1,8 @@
 from worlds.stardew_valley import BackpackProgression, ToolProgression, SeasonRandomization
 from worlds.stardew_valley.mods.mod_data import ModNames
-from worlds.stardew_valley.options import BackpackSize, Mods, QuestLocations, SkillProgression, Secretsanity, Museumsanity, Booksanity, Hatsanity, Cropsanity
-from worlds.stardew_valley.strings.ap_names.ap_option_names import SecretsanityOptionName
+from worlds.stardew_valley.options import BackpackSize, Mods, QuestLocations, SkillProgression, Secretsanity, Museumsanity, Booksanity, Hatsanity, Cropsanity, \
+    StartWithout
+from worlds.stardew_valley.strings.ap_names.ap_option_names import SecretsanityOptionName, StartWithoutOptionName
 from worlds.stardew_valley.test.bases import SVTestBase
 
 
@@ -11,7 +12,7 @@ class TestAvailableBackpacksSize1(SVTestBase):
         Cropsanity: Cropsanity.option_disabled,
         BackpackProgression: BackpackProgression.option_progressive,
         BackpackSize: 1,
-        ToolProgression: ToolProgression.option_progressive_no_tool_start,
+        StartWithout: frozenset({StartWithoutOptionName.backpack}),
         Mods: frozenset({ModNames.big_backpack}),
     }
 
@@ -45,7 +46,7 @@ class TestAvailableBackpacksSize4(SVTestBase):
         Cropsanity: Cropsanity.option_disabled,
         BackpackProgression: BackpackProgression.option_progressive,
         BackpackSize: 4,
-        ToolProgression: ToolProgression.option_progressive_no_tool_start,
+        StartWithout: frozenset({StartWithoutOptionName.backpack}),
         Mods: frozenset({ModNames.big_backpack}),
     }
 
@@ -77,6 +78,7 @@ class TestAvailableBackpacksSize4(SVTestBase):
 class TestBeachBridgeWithStartingToolsRequiresNothing(SVTestBase):
     options = {
         ToolProgression: ToolProgression.option_progressive,
+        StartWithout: StartWithout.preset_none,
     }
 
     def test_beach_bridge_requires_axe(self):
@@ -86,7 +88,8 @@ class TestBeachBridgeWithStartingToolsRequiresNothing(SVTestBase):
 
 class TestBeachBridgeWithoutStartingToolsRequiresAxe(SVTestBase):
     options = {
-        ToolProgression: ToolProgression.option_progressive_no_tool_start,
+        ToolProgression: ToolProgression.option_progressive,
+        StartWithout: frozenset({StartWithoutOptionName.tools}),
     }
 
     def test_beach_bridge_requires_axe(self):
@@ -99,6 +102,7 @@ class TestBeachBridgeWithoutStartingToolsRequiresAxe(SVTestBase):
 class TestGrimReaperWithStartingToolsRequiresQuarryAndWeapon(SVTestBase):
     options = {
         ToolProgression: ToolProgression.option_progressive,
+        StartWithout: StartWithout.preset_none,
     }
 
     def test_grim_reaper_requires_weapon(self):
@@ -113,7 +117,8 @@ class TestGrimReaperWithStartingToolsRequiresQuarryAndWeapon(SVTestBase):
 
 class TestGrimRepairWithoutStartingToolsRequiresQuarryAndPickaxeAndWeapon(SVTestBase):
     options = {
-        ToolProgression: ToolProgression.option_progressive_no_tool_start,
+        ToolProgression: ToolProgression.option_progressive,
+        StartWithout: frozenset({StartWithoutOptionName.tools}),
     }
 
     def test_grim_reaper_requires_weapon_and_pickaxe(self):
@@ -131,6 +136,7 @@ class TestGrimRepairWithoutStartingToolsRequiresQuarryAndPickaxeAndWeapon(SVTest
 class TestGatheringQuestsWithStartingToolsRequiresMinesAccess(SVTestBase):
     options = {
         ToolProgression: ToolProgression.option_progressive,
+        StartWithout: frozenset({StartWithoutOptionName.landslide}),
         QuestLocations: 7,
     }
 
@@ -143,7 +149,8 @@ class TestGatheringQuestsWithStartingToolsRequiresMinesAccess(SVTestBase):
 
 class TestGatheringQuestsWithoutStartingToolsRequiresMinesAndAxeAndPickaxe(SVTestBase):
     options = {
-        ToolProgression: ToolProgression.option_progressive_no_tool_start,
+        ToolProgression: ToolProgression.option_progressive,
+        StartWithout: frozenset({StartWithoutOptionName.tools, StartWithoutOptionName.landslide}),
         QuestLocations: 7,
     }
 
@@ -163,7 +170,8 @@ class TestGatheringQuestsWithoutStartingToolsRequiresMinesAndAxeAndPickaxe(SVTes
 
 class TestPrizeTicketAndHelpWanted(SVTestBase):
     options = {
-        ToolProgression: ToolProgression.option_progressive_no_tool_start,
+        ToolProgression: ToolProgression.option_progressive,
+        StartWithout: frozenset({StartWithoutOptionName.tools, StartWithoutOptionName.landslide}),
         QuestLocations: 7,
         Booksanity: Booksanity.option_all,
         Hatsanity: Hatsanity.option_post_perfection,
@@ -192,7 +200,8 @@ class TestPrizeTicketAndHelpWanted(SVTestBase):
 class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
     options = {
         SkillProgression: SkillProgression.option_progressive_with_masteries,
-        ToolProgression: ToolProgression.option_progressive_no_tool_start,
+        ToolProgression: ToolProgression.option_progressive,
+        StartWithout: frozenset({StartWithoutOptionName.tools}),
         Secretsanity: frozenset([SecretsanityOptionName.fishing]),
     }
 
@@ -261,7 +270,8 @@ class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
 
 class TestArtifactSpotDonationsRequireHoe(SVTestBase):
     options = {
-        ToolProgression: ToolProgression.option_progressive_no_tool_start,
+        ToolProgression: ToolProgression.option_progressive,
+        StartWithout: frozenset({StartWithoutOptionName.tools}),
         Museumsanity: Museumsanity.option_all,
     }
 

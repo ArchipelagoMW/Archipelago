@@ -3,6 +3,7 @@ from .feature import cropsanity, friendsanity, fishsanity, booksanity, building_
 from .game_content import ContentPack, StardewContent, StardewFeatures
 from .unpacking import unpack_content
 from .. import options
+from ..strings.ap_names.ap_option_names import StartWithoutOptionName
 from ..strings.building_names import Building
 
 
@@ -37,7 +38,7 @@ def choose_features(player_options: options.StardewValleyOptions) -> StardewFeat
         choose_hatsanity(player_options.hatsanity),
         choose_museumsanity(player_options.museumsanity),
         choose_skill_progression(player_options.skill_progression),
-        choose_tool_progression(player_options.tool_progression, player_options.skill_progression),
+        choose_tool_progression(player_options.tool_progression, player_options.skill_progression, player_options.start_without),
     )
 
 
@@ -200,7 +201,7 @@ def choose_skill_progression(skill_progression_option: options.SkillProgression)
     return skill_progression_feature
 
 
-def choose_tool_progression(tool_option: options.ToolProgression, skill_option: options.SkillProgression) -> tool_progression.ToolProgressionFeature:
+def choose_tool_progression(tool_option: options.ToolProgression, skill_option: options.SkillProgression, start_without_option: options.StartWithout) -> tool_progression.ToolProgressionFeature:
     if tool_option.is_vanilla:
         return tool_progression.ToolProgressionVanilla()
 
@@ -208,7 +209,7 @@ def choose_tool_progression(tool_option: options.ToolProgression, skill_option: 
         starting_tools, tools_distribution = tool_progression.get_tools_distribution(
             progressive_tools_enabled=True,
             skill_masteries_enabled=skill_option == options.SkillProgression.option_progressive_with_masteries,
-            no_starting_tools_enabled=bool(tool_option & options.ToolProgression.value_no_starting_tools),
+            no_starting_tools_enabled=bool(StartWithoutOptionName.tools in start_without_option),
         )
 
         return tool_progression.ToolProgressionProgressive(starting_tools, tools_distribution)

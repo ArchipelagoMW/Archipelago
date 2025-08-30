@@ -7,7 +7,8 @@ from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonO
     Visibility, Removed, OptionCounter
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..mods.mod_data import ModNames, invalid_mod_combinations
-from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName
+from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
+    StartWithoutOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
 from ..strings.trap_names import all_traps
 
@@ -218,6 +219,33 @@ class EntranceRandomization(Choice):
     # option_chaos_one_way = 8
 
 
+class StartWithout(OptionSet):
+    """ Items that, in vanilla, you generally start with (or get very quickly), but in Archipelago, you would rather start without them
+    Tools: Start without an Axe, Pickaxe, Hoe, Watering can and Scythe
+    Backpack: Start with 4 backpack slots, instead of 12, if your backpack size allows it
+    Landslide: Start without the landslide that leads to the mines
+    Community Center: Start without the key to the Community Center, and the Forest Magic to allow reading the bundles
+    """
+    internal_name = "start_without"
+    display_name = "Start Without"
+    valid_keys = frozenset({
+        StartWithoutOptionName.tools, StartWithoutOptionName.backpack,
+        StartWithoutOptionName.landslide, StartWithoutOptionName.community_center,
+    })
+    preset_none = frozenset()
+    preset_easy = frozenset({StartWithoutOptionName.landslide, StartWithoutOptionName.community_center})
+    preset_all = valid_keys
+    default = preset_none
+
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, OptionSet):
+            return set(self.value) == other.value
+        if isinstance(other, OptionList):
+            return set(self.value) == set(other.value)
+        else:
+            return typing.cast(bool, self.value == other)
+
+
 class SeasonRandomization(Choice):
     """Should seasons be randomized?
     Disabled: Start in Spring with all seasons unlocked.
@@ -266,7 +294,8 @@ class BackpackSize(Choice):
     """Customize the granularity of the backpack upgrades
     This works with vanilla and progressive backpack.
     Default size is 12, which means you start with one backpack (12 slots), and get 2 more upgrades up to 36 slots.
-    If you pick 4, then you start with 3 backpacks (12 slots), and get 6 more upgrades up to 36 slots"""
+    If you pick 4, then you start with 3 backpacks (12 slots), and get 6 more upgrades up to 36 slots.
+    If you picked "Start Without Backpack", you will only be provided start upgrades up to 4 slots, instead of up to 12"""
     internal_name = "backpack_size"
     option_1 = 1
     option_2 = 2
@@ -296,10 +325,6 @@ class ToolProgression(Choice):
     option_vanilla_very_cheap = 0b0100  # 4
     option_progressive_cheap = 0b0011  # 3
     option_progressive_very_cheap = 0b0101  # 5
-    value_no_starting_tools = 0b1000  # 8
-    option_progressive_no_tool_start = option_progressive | value_no_starting_tools  # 9
-    option_progressive_cheap_no_tool_start = option_progressive_cheap | value_no_starting_tools  # 11
-    option_progressive_very_cheap_no_tool_start = option_progressive_very_cheap | value_no_starting_tools  # 13
 
     @property
     def is_vanilla(self):
@@ -1073,6 +1098,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     bundle_price: BundlePrice
     bundle_per_room: BundlePerRoom
     entrance_randomization: EntranceRandomization
+    start_without: StartWithout
     season_randomization: SeasonRandomization
     cropsanity: Cropsanity
     backpack_progression: BackpackProgression

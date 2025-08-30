@@ -41,3 +41,10 @@ class ChefsanityOptionName:
     purchases = "Purchases"
     skills = "Skills"
     friendship = "Friendship"
+
+
+class StartWithoutOptionName:
+    tools = "Tools"
+    backpack = "Backpack"
+    landslide = "Landslide"
+    community_center = "Community Center"
