@@ -1,14 +1,11 @@
-import pkgutil
-
 from kvui import (ThemedApp, ScrollBox, MainLayout, ContainerLayout, dp, Widget, MDBoxLayout, TooltipLabel, MDLabel,
                   ToggleButton, MarkupDropdown, ResizableTextField)
-from kivy.animation import Animation
 from kivy.uix.behaviors.button import ButtonBehavior
 from kivymd.uix.behaviors import RotateBehavior
 from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelContent, MDExpansionPanelHeader
 from kivymd.uix.list import MDListItem, MDListItemTrailingIcon, MDListItemSupportingText
-from kivymd.uix.slider import MDSlider, MDSliderHandle, MDSliderValueLabel
+from kivymd.uix.slider import MDSlider
 from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.button import MDButton, MDButtonText, MDIconButton
@@ -26,7 +23,7 @@ import re
 from urllib.parse import urlparse
 from worlds.AutoWorld import AutoWorldRegister, World
 from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList, Removed,
-                     OptionCounter, Visibility, VerifyKeys, PlandoTexts, PlandoConnections, ItemLinks)
+                     OptionCounter, Visibility)
 
 
 def validate_url(x):
@@ -68,7 +65,7 @@ class TrailingPressedIconButton(ButtonBehavior, RotateBehavior, MDListItemTraili
     pass
 
 
-class WorldButton(FunctionalToggle):
+class WorldButton(ToggleButton):
     world_cls: typing.Type[World]
 
 
