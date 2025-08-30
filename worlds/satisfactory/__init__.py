@@ -177,7 +177,7 @@ class SatisfactoryWorld(World):
     def process_universal_tracker_slot_data_if_available(self) -> None:
         """Used by Universal Tracker to correctly rebuild state"""
 
-        slot_data: dict[str, Any] | None
+        slot_data: dict[str, Any] | None = None
         if hasattr(self.multiworld, "re_gen_passthrough") \
             and isinstance(self.multiworld.re_gen_passthrough, dict) \
             and "Satisfactory" in self.multiworld.re_gen_passthrough:
