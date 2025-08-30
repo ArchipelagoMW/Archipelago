@@ -3,6 +3,10 @@
     spacing: 15
     orientation: "horizontal"
     slider: slider
+    tag: tag
+    MDLabel:
+        id: tag
+        text: str(this.option.default) if this.option.default != "random" else this.option.range_start
     MDSlider:
         id: slider
         min: this.option.range_start
