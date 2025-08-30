@@ -81,7 +81,7 @@ def location_to_hint_info(self, vague_hint : bool, in_location : Location, in_it
         match in_item.classification.value:
             #Filler
             case 0:
-                item_class = " won't do much for "
+                item_class = " belongs to "
             #Progression
             case 1:
                 item_class = " is important for "

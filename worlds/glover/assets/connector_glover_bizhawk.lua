@@ -2621,10 +2621,38 @@ function received_moves(itemId)
 end
 
 function received_misc(itemId)
-    if itemId == 6500357 then
+    --if itemId == 6500358 then
+    --    TOTAL_LIVES = TOTAL_LIVES + 1
+    --    GVR:setItem(ITEM_TABLE["Chicken Sound"], TOTAL_LIVES)
+    if itemId == 6500359 then
         TOTAL_LIVES = TOTAL_LIVES + 1
         GVR:setItem(ITEM_TABLE["AP_LIFE_UP"], TOTAL_LIVES)
     end
+    --elseif itemId == 6500360 then
+    --    TOTAL_LIVES = TOTAL_LIVES + 1
+    --    GVR:setItem(ITEM_TABLE["Boomerang Spell"], TOTAL_LIVES)
+    --elseif itemId == 6500361 then
+    --    TOTAL_LIVES = TOTAL_LIVES + 1
+    --    GVR:setItem(ITEM_TABLE["Beachball Spell"], TOTAL_LIVES)
+    --elseif itemId == 6500362 then
+    --    TOTAL_LIVES = TOTAL_LIVES + 1
+    --    GVR:setItem(ITEM_TABLE["Hercules Spell"], TOTAL_LIVES)
+    --elseif itemId == 6500363 then
+    --    TOTAL_LIVES = TOTAL_LIVES + 1
+    --    GVR:setItem(ITEM_TABLE["Helicopter Spell"], TOTAL_LIVES)
+    --elseif itemId == 6500364 then
+    --    TOTAL_LIVES = TOTAL_LIVES + 1
+    --    GVR:setItem(ITEM_TABLE["Speed Spell"], TOTAL_LIVES)
+    --elseif itemId == 6500365 then
+    --    TOTAL_LIVES = TOTAL_LIVES + 1
+    --    GVR:setItem(ITEM_TABLE["Frog Spell"], TOTAL_LIVES)
+    --elseif itemId == 6500366 then
+    --    TOTAL_LIVES = TOTAL_LIVES + 1
+    --    GVR:setItem(ITEM_TABLE["Death Spell"], TOTAL_LIVES)
+    --elseif itemId == 6500367 then
+    --    TOTAL_LIVES = TOTAL_LIVES + 1
+    --    GVR:setItem(ITEM_TABLE["Sticky Spell"], TOTAL_LIVES)
+    --end
 end
 
 function received_events(itemId)
@@ -2899,7 +2927,14 @@ function processAGIItem(item_list)
 end
 
 function flagCheckedLocations(location_list)
-	
+	if location_list ~= nil
+	then
+		for each_key, each_location in pairs(location_list)
+		do
+			print(each_key)
+			print(each_location)
+		end
+	end
 end
 
 function process_block(block)
