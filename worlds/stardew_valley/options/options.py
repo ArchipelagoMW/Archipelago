@@ -226,12 +226,14 @@ class StartWithout(OptionSet):
     Backpack: Start with 4 backpack slots, instead of 12, if your backpack size allows it
     Landslide: Start without the landslide that leads to the mines
     Community Center: Start without the key to the Community Center, and the Forest Magic to allow reading the bundles
+    Buildings: Start without the Shipping Bin and Pet Bowl
     """
     internal_name = "start_without"
     display_name = "Start Without"
     valid_keys = frozenset({
         StartWithoutOptionName.tools, StartWithoutOptionName.backpack,
         StartWithoutOptionName.landslide, StartWithoutOptionName.community_center,
+        StartWithoutOptionName.buildings,
     })
     preset_none = frozenset()
     preset_easy = frozenset({StartWithoutOptionName.landslide, StartWithoutOptionName.community_center})

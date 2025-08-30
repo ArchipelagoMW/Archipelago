@@ -34,7 +34,6 @@ all_random_settings = {
     options.Monstersanity.internal_name:                "random",
     options.Shipsanity.internal_name:                   "random",
     options.Cooksanity.internal_name:                   "random",
-    options.Chefsanity.internal_name:                   "random",
     options.Craftsanity.internal_name:                  "random",
     options.Friendsanity.internal_name:                 "random",
     options.FriendsanityHeartSize.internal_name:        "random",

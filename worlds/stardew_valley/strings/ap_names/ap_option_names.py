@@ -48,3 +48,4 @@ class StartWithoutOptionName:
     backpack = "Backpack"
     landslide = "Landslide"
     community_center = "Community Center"
+    buildings = "Buildings"

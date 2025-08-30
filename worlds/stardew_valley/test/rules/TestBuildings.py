@@ -1,10 +1,11 @@
 from ..bases import SVTestBase
-from ... import SeasonRandomization
-from ...options import BuildingProgression, FarmType, ToolProgression
+from ... import SeasonRandomization, StartWithoutOptionName
+from ...options import BuildingProgression, FarmType, ToolProgression, StartWithout
 
 
 class TestBuildingLogic(SVTestBase):
     options = {
+        StartWithout.internal_name: frozenset({StartWithoutOptionName.landslide}),
         SeasonRandomization.internal_name: SeasonRandomization.option_disabled,
         FarmType.internal_name: FarmType.option_standard,
         BuildingProgression.internal_name: BuildingProgression.option_progressive,

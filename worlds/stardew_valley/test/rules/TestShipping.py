@@ -1,6 +1,7 @@
 from ..bases import SVTestBase
+from ... import StartWithoutOptionName
 from ...locations import LocationTags, location_table
-from ...options import BuildingProgression, Shipsanity
+from ...options import BuildingProgression, Shipsanity, StartWithout
 
 
 class TestShipsanityNone(SVTestBase):
@@ -62,6 +63,7 @@ class TestShipsanityFullShipmentWithFish(SVTestBase):
 
 class TestShipsanityEverything(SVTestBase):
     options = {
+        StartWithout.internal_name: frozenset({StartWithoutOptionName.buildings}),
         Shipsanity.internal_name: Shipsanity.option_everything,
         BuildingProgression.internal_name: BuildingProgression.option_progressive
     }

@@ -1,11 +1,12 @@
 from ..bases import SVTestBase
-from ... import options, SeasonRandomization
-from ...options import BundleRandomization
+from ... import options, SeasonRandomization, StartWithoutOptionName
+from ...options import BundleRandomization, StartWithout
 from ...strings.bundle_names import BundleName
 
 
 class TestBundlesLogic(SVTestBase):
     options = {
+        StartWithout.internal_name: frozenset({StartWithoutOptionName.community_center, StartWithoutOptionName.buildings}),
         options.SeasonRandomization: SeasonRandomization.option_disabled,
         options.BundleRandomization: BundleRandomization.option_vanilla,
         options.BundlePrice: options.BundlePrice.default,
@@ -16,12 +17,14 @@ class TestBundlesLogic(SVTestBase):
 
         self.collect("Community Center Key")
         self.collect("Forest Magic")
+        self.assert_cannot_reach_location("2,500g Bundle")
         self.collect_lots_of_money()
         self.assert_can_reach_location("2,500g Bundle")
 
 
 class TestRemixedBundlesLogic(SVTestBase):
     options = {
+        StartWithout.internal_name: frozenset({StartWithoutOptionName.community_center}),
         options.SeasonRandomization: SeasonRandomization.option_disabled,
         options.BundleRandomization: BundleRandomization.option_remixed,
         options.BundlePrice: options.BundlePrice.default,
@@ -33,6 +36,7 @@ class TestRemixedBundlesLogic(SVTestBase):
 
         self.collect("Community Center Key")
         self.collect("Forest Magic")
+        self.assert_cannot_reach_location("Sticky Bundle")
         self.collect_all_the_money()
         self.assert_can_reach_location("Sticky Bundle")
 

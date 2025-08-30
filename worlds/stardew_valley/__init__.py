@@ -202,7 +202,7 @@ class StardewValleyWorld(World):
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
-        self.precollect_early_keys()
+        self.precollect_start_without_items()
         self.precollect_starting_season()
         self.precollect_building_items()
         self.precollect_starting_backpacks()
@@ -239,13 +239,16 @@ class StardewValleyWorld(World):
         self.total_progression_items += sum(1 for i in created_items if i.advancement)
         self.total_progression_items -= 1  # -1 for the victory event
 
-    def precollect_early_keys(self):
+    def precollect_start_without_items(self):
         if StartWithoutOptionName.landslide not in self.options.start_without:
             self.multiworld.push_precollected(self.create_item("Landslide Removed"))
         if StartWithoutOptionName.community_center not in self.options.start_without:
             self.multiworld.push_precollected(self.create_item("Community Center Key"))
             self.multiworld.push_precollected(self.create_item("Forest Magic"))
             self.multiworld.push_precollected(self.create_item("Wizard Invitation"))
+        if StartWithoutOptionName.buildings not in self.options.start_without:
+            self.multiworld.push_precollected(self.create_item("Shipping Bin"))
+            self.multiworld.push_precollected(self.create_item("Pet Bowl"))
 
     def precollect_starting_season(self):
         if self.options.season_randomization == SeasonRandomization.option_progressive:

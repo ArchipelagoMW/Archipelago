@@ -1,10 +1,12 @@
 from ..bases import SVTestBase
-from ... import options
+from ... import options, StartWithoutOptionName
 from ...data.craftable_data import all_crafting_recipes_by_name
+from ...options import StartWithout
 
 
 class TestCraftsanityLogic(SVTestBase):
     options = {
+        StartWithout.internal_name: frozenset({StartWithoutOptionName.buildings}),
         options.SeasonRandomization.internal_name: options.SeasonRandomization.option_disabled,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
         options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
