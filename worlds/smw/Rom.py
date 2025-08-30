@@ -2,7 +2,7 @@ import Utils
 from worlds.AutoWorld import World
 from worlds.Files import APDeltaPatch
 from .Aesthetics import generate_shuffled_header_data, generate_shuffled_ow_palettes, generate_curated_level_palette_data, generate_curated_map_palette_data, generate_shuffled_sfx
-from .Levels import level_info_dict, full_bowser_rooms, standard_bowser_rooms, submap_boss_rooms, ow_boss_rooms
+from .Levels import level_info_dict, tile_types, offscreen_events, full_bowser_rooms, standard_bowser_rooms, submap_boss_rooms, ow_boss_rooms
 from .Names.TextBox import generate_goal_text, title_text_mapping, stage_text_mapping, generate_text_box, generate_credits
 
 USHASH = 'cdd3c8c37322978ca8669b34bc89c804'
@@ -602,7 +602,7 @@ def handle_bowser_damage(rom):
     return
 
 
-def handle_level_shuffle(rom, active_level_dict):
+def handle_level_shuffle(rom, world: World, active_level_dict):
     rom.write_bytes(0x37600, bytearray([0x00] * 0x800)) # Duplicate Level Table
 
     rom.write_bytes(0x2D89C, bytearray([0x00, 0xF6, 0x06])) # Level Load Pointer
@@ -649,6 +649,23 @@ def handle_level_shuffle(rom, active_level_dict):
     rom.write_bytes(SNAKE_BLOCKS_SUB_ADDR + 0x10, bytearray([0x60]))                   # RTS
     ### End Fix Snake Blocks
 
+    ### Allow Re-entering Switch Palaces
+    rom.write_bytes(0x2114C, bytearray([0x5C, 0x17, 0xDD, 0x05])) # JML $05DD17
+
+    SWITCH_PALACE_SUB_ADDR = 0x02DD17
+    rom.write_bytes(SWITCH_PALACE_SUB_ADDR + 0x00, bytearray([0x08]))                   # PHP
+    rom.write_bytes(SWITCH_PALACE_SUB_ADDR + 0x01, bytearray([0xC9, 0x81]))             # CMP #81
+    rom.write_bytes(SWITCH_PALACE_SUB_ADDR + 0x03, bytearray([0xF0, 0x0D]))             # BEQ +0x0D
+    rom.write_bytes(SWITCH_PALACE_SUB_ADDR + 0x05, bytearray([0xC9, 0x85]))             # CMP #85
+    rom.write_bytes(SWITCH_PALACE_SUB_ADDR + 0x07, bytearray([0xF0, 0x09]))             # BEQ +0x09
+    rom.write_bytes(SWITCH_PALACE_SUB_ADDR + 0x09, bytearray([0xC9, 0x86]))             # CMP #86
+    rom.write_bytes(SWITCH_PALACE_SUB_ADDR + 0x0B, bytearray([0xF0, 0x05]))             # BEQ +0x05
+    rom.write_bytes(SWITCH_PALACE_SUB_ADDR + 0x0D, bytearray([0x28]))                   # PLP
+    rom.write_bytes(SWITCH_PALACE_SUB_ADDR + 0x0E, bytearray([0x5C, 0x50, 0x91, 0x04])) # JML $049150
+    rom.write_bytes(SWITCH_PALACE_SUB_ADDR + 0x12, bytearray([0x28]))                   # PLP
+    rom.write_bytes(SWITCH_PALACE_SUB_ADDR + 0x13, bytearray([0x5C, 0x9F, 0x91, 0x04])) # JML $04919F
+    ### End Allow Re-entering Switch Palaces
+
     for level_id, level_data in level_info_dict.items():
         if level_id not in active_level_dict.keys():
             continue
@@ -662,9 +679,61 @@ def handle_level_shuffle(rom, active_level_dict):
         rom.write_byte(tile_data.levelIDAddress, level_id)
         rom.write_byte(0x2D608 + level_id, tile_data.eventIDValue)
 
+    tiles_o = list(tile_types.keys())
+    tiles_s = tiles_o.copy()
+    world.random.shuffle(tiles_s)
+    consistent_tile_mapping: dict[int, int] = dict(zip(tiles_o, tiles_s))
+    singularity_tile = world.random.choice(tiles_o)
+    singularity_tile = world.random.choice(tiles_o)
+
     for level_id, tile_id in active_level_dict.items():
         rom.write_byte(0x37F70 + level_id, tile_id)
         rom.write_byte(0x37F00 + tile_id, level_id)
+
+        tile_tile_data = level_info_dict[tile_id].tile_data
+        if tile_tile_data is None:
+            continue
+        start_revealed: bool = tile_tile_data.start_revealed
+        level_tile_data = level_info_dict[level_id].tile_data
+        if level_tile_data is None:
+            continue
+
+        tile_x = tile_tile_data.coords[0]
+        tile_y = tile_tile_data.coords[1]
+
+        address = 0x0677DF + ((tile_y >> 4) * 2 + (tile_x >> 4)) * 0x100 + (tile_y & 0xF) * 0x010 + (tile_x & 0xF) - (tile_y >=0x20)
+
+        new_tile_type: int = tile_tile_data.original_tile
+        if world.options.level_tile_shuffle == "vanilla":
+            new_tile_type = tile_tile_data.original_tile
+        elif world.options.level_tile_shuffle == "matching":
+            new_tile_type = level_tile_data.original_tile
+        elif world.options.level_tile_shuffle == "consistent_vanilla":
+            new_tile_type = consistent_tile_mapping[tile_tile_data.original_tile]
+        elif world.options.level_tile_shuffle == "consistent_matching":
+            new_tile_type = consistent_tile_mapping[level_tile_data.original_tile]
+        elif world.options.level_tile_shuffle == "full":
+            new_tile_type = world.random.choice(tiles_o)
+        elif world.options.level_tile_shuffle == "singularity":
+            new_tile_type = singularity_tile
+
+        # TODO: REMOVE
+        #print(f"Tile 0x{tile_id:02x} (Level 0x{level_id:02x}) at coords 0x{tile_x:02x}:0x{tile_y:02x} (address 0x{address:05x}) set to tile type 0x{new_tile_type:02x}")
+
+        # Remove and add Castle Top pieces
+        if new_tile_type == 0x5D:
+            rom.write_byte(address - 0x10, 0x4C)
+        elif tile_tile_data.original_tile == 0x5D:
+            rom.write_byte(address - 0x10, 0x10)
+
+        # Handle Offscreen event tiles
+        if tile_id in offscreen_events:
+            rom.write_byte(0x26994 + (offscreen_events[tile_id] * 2), tile_types[new_tile_type])
+
+        if tile_tile_data.start_revealed:
+            new_tile_type = tile_types[new_tile_type]
+
+        rom.write_byte(address, new_tile_type)
 
 
 def shuffle_level_name_pieces(rom, world: World, allow_duplicates: bool) -> list[str]:
@@ -3334,7 +3403,7 @@ def patch_rom(world: World, rom, player, active_level_dict):
     rom.write_bytes(0x0116A, text_data_bottom_props)
 
     # Handle Level Shuffle
-    handle_level_shuffle(rom, active_level_dict)
+    handle_level_shuffle(rom, world, active_level_dict)
     handle_level_name_shuffle(rom, world)
 
     # Handle Music Shuffle

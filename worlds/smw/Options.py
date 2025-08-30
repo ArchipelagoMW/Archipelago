@@ -214,7 +214,7 @@ class SwapDonutGhostHouseExits(Toggle):
     display_name = "Swap Donut GH Exits"
 
 
-class LevenNameShuffle(Choice):
+class LevelNameShuffle(Choice):
     """
     How level names are shuffled, when viewed on the world map in-game
     NOTE: Location names are not affected by this option. They will still use the vanilla level names.
@@ -236,6 +236,32 @@ class LevenNameShuffle(Choice):
     option_full = 3
     option_singularity = 4
     default = 0
+
+
+class LevelTileShuffle(Choice):
+    """
+    How level tiles on the overworld map are shuffled
+
+    Vanilla: Level tiles indicate the vanilla contents of that level tile
+
+    Matching: Level tiles indicate the randomized contents of that level tile
+
+    Consistent Vanilla: Level tiles indicate the vanilla contents of that level tile, but with the tile types consistently shuffled to other tile types
+
+    Consistent Matching: Level tiles indicate the randomized contents of that level tile, but with the tile types consistently shuffled to other tile types
+
+    Full: Every level tile is randomly selected, indepent of all other level tiles
+
+    Singularity: Every level tile will be the same tile type
+    """
+    display_name = "Level Tile Shuffle"
+    option_vanilla = 0
+    option_matching = 1
+    option_consistent_vanilla = 2
+    option_consistent_matching = 3
+    option_full = 4
+    option_singularity = 5
+    default = 1
 
 
 class DisplayReceivedItemPopups(Choice):
@@ -484,7 +510,8 @@ smw_option_groups = [
         BowserCastleDoors,
         BowserCastleRooms,
         SwapDonutGhostHouseExits,
-        LevenNameShuffle,
+        LevelNameShuffle,
+        LevelTileShuffle,
     ]),
     OptionGroup("Bosses", [
         BossShuffle,
@@ -538,7 +565,8 @@ class SMWOptions(PerGameCommonOptions):
     koopaling_health: KoopalingHealth
     bowser_health: BowserHealth
     swap_donut_gh_exits: SwapDonutGhostHouseExits
-    level_name_shuffle: LevenNameShuffle
+    level_name_shuffle: LevelNameShuffle
+    level_tile_shuffle: LevelTileShuffle
     display_received_item_popups: DisplayReceivedItemPopups
     junk_fill_percentage: JunkFillPercentage
     trap_fill_percentage: TrapFillPercentage

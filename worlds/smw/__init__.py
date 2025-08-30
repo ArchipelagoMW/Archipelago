@@ -110,6 +110,7 @@ class SMWWorld(World):
 
         connect_regions(self, self.active_level_dict)
 
+        # TODO: Fix for Castles Anywhere
         # Add Boss Token amount requirements for Worlds
         add_rule(self.multiworld.get_region(LocationName.donut_plains_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 1))
         add_rule(self.multiworld.get_region(LocationName.vanilla_dome_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 2))
