@@ -50,6 +50,7 @@ def create_regions(world: "GrinchWorld"):
         #Each area in supadow, create a region for the given player
         world.multiworld.regions.append(Region(supadow, world.player, world.multiworld))
 
+# TODO Optimize this function
 def grinchconnect(world: "GrinchWorld", current_region_name: str, connected_region_name: str):
     current_region = world.get_region(current_region_name)
     connected_region = world.get_region(connected_region_name)
@@ -63,11 +64,17 @@ def grinchconnect(world: "GrinchWorld", current_region_name: str, connected_regi
         for region_entrance in current_region.entrances:
             if region_entrance.connected_region.name == current_region_name and \
                 region_entrance.parent_region.name == connected_region_name:
-                add_rule(region_entrance, access_rule)
+                if rule_list.index(access_rule) == 0:
+                    add_rule(region_entrance, access_rule)
+                else:
+                    add_rule(region_entrance, access_rule, combine="or")
         for region_entrance in connected_region.entrances:
             if region_entrance.connected_region.name == connected_region_name and \
                     region_entrance.parent_region.name == current_region_name:
-                add_rule(region_entrance, access_rule)
+                if rule_list.index(access_rule) == 0:
+                    add_rule(region_entrance, access_rule)
+                else:
+                    add_rule(region_entrance, access_rule, combine="or")
 
 #What regions are connected to each other
 def connect_regions(world: "GrinchWorld"):

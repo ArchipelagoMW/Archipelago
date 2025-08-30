@@ -2,7 +2,7 @@ from BaseClasses import Region, Item, ItemClassification
 from .Locations import grinch_locations_to_id, grinch_locations, GrinchLocation
 from .Items import grinch_items_to_id, GrinchItem, ALL_ITEMS_TABLE, MISC_ITEMS_TABLE
 from .Regions import connect_regions
-from .Rules import set_rules
+from .Rules import set_location_rules
 
 from .Client import *
 from typing import ClassVar
@@ -64,7 +64,7 @@ class GrinchWorld(World):
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Goal", self.player)
-        set_rules(self)
+        set_location_rules(self)
 
     def get_other_filler_item(self, other_filler: list[str]) -> str:
         return self.random.choices(other_filler)[0]

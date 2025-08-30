@@ -1,17 +1,21 @@
 from typing import Callable
 
+import Utils
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule
 
 #Adds all rules from access_rules_dict to locations
-def set_rules(world: World):
+def set_location_rules(world: World):
     all_locations = world.get_locations()
     for location in all_locations:
         loc_rules = rules_dict[location.name]
         rule_list = interpret_rule(loc_rules, world.player)
         for access_rule in rule_list:
-            add_rule(location, access_rule)
+            if rule_list.index(access_rule) == 0:
+                add_rule(location, access_rule)
+            else:
+                add_rule(location, access_rule, "or")
 
 def interpret_rule(rule_set: list[list[str]], player: int):
     # If a region/location does not have any items required, make the section(s) return no logic.
