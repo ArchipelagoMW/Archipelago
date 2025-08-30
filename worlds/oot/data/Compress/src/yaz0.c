@@ -58,7 +58,7 @@ uint32_t RabinKarp(uint8_t* src, int srcSize, int srcPos, uint32_t* matchPos)
         /* Scoot over 1 byte */
         curHash = (curHash << 8 | src[i + 3]) & 0x00FFFFFF;
     }
-    
+
     /* Set match position, return the size of the match */
     *matchPos = bestPos;
     return(bestSize);
@@ -115,7 +115,7 @@ int yaz0_internal(uint8_t* src, int srcSize, uint8_t* dst)
         if(numBytes < 3)
         {
             dst[dstPos++] = src[srcPos++];
-            codeByte |= bitmask; 
+            codeByte |= bitmask;
         }
 
         /* Three byte encoding */
@@ -139,11 +139,11 @@ int yaz0_internal(uint8_t* src, int srcSize, uint8_t* dst)
         else
         {
             dist = srcPos - matchPos - 1;
-            
+
             /* Copy over NR RR */
             dst[dstPos++] = ((numBytes - 2) << 4) | (dist >> 8);
             dst[dstPos++] = dist & 0xFF;
-            
+
             srcPos += numBytes;
         }
 
