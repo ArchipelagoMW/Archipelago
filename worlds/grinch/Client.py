@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 import asyncio
 import NetUtils
+import copy
 from .Locations import grinch_locations, GrinchLocation
 from .Items import ALL_ITEMS_TABLE, SLEIGH_PARTS_TABLE, MISSION_ITEMS_TABLE, GADGETS_TABLE, KEYS_TABLE, GrinchItemData
 import worlds._bizhawk as bizhawk
@@ -88,7 +89,7 @@ class GrinchClient(BizHawkClient):
             if not await self.ingame_checker(ctx):
                 return
 
-            await self.constant_address_update(ctx)
+            # await self.constant_address_update(ctx)
             await self.location_checker(ctx)
             await self.receiving_items_handler(ctx)
             await self.goal_checker(ctx)
@@ -100,15 +101,16 @@ class GrinchClient(BizHawkClient):
             pass
 
     async def location_checker(self, ctx: "BizHawkClientContext"):
+        from CommonClient import logger
         # Update the AP Server to know what locations are not checked yet.
         local_locations_checked: list[int] = []
-        for missing_location in grinch_locations.keys():
+        local_ap_locations: set[int] = copy.deepcopy(ctx.missing_locations)
+        for missing_location in local_ap_locations:
             # local_location = ctx.location_names.lookup_in_game(missing_location)
             # Missing location is the AP ID & we need to convert it back to a location name within our game.
             # Using the location name, we can then get the Grinch ram data from there.
-            grinch_loc_ram_data = grinch_locations[missing_location]
-            if grinch_loc_ram_data.id is None or not GrinchLocation.get_apid(grinch_loc_ram_data.id) in ctx.missing_locations:
-                continue
+            grinch_loc_name = ctx.location_names.lookup_in_game(missing_location)
+            grinch_loc_ram_data = grinch_locations[grinch_loc_name]
 
             # Grinch ram data may have more than one address to update, so we are going to loop through all addresses in a location
             # We use a list here to keep track of all our checks. If they are all true, then and only then do we mark that location as checked.
@@ -126,7 +128,9 @@ class GrinchClient(BizHawkClient):
                     local_locations_checked.append(GrinchLocation.get_apid(grinch_loc_ram_data.id))
 
         # Update the AP server with the locally checked list of locations (In other words, locations I found in Grinch)
-        await ctx.check_locations(local_locations_checked)
+        locations_sent_to_ap: set[int] = await ctx.check_locations(local_locations_checked)
+        if len(locations_sent_to_ap) > 0:
+            await self.constant_address_update(ctx)
         ctx.locations_checked = set(local_locations_checked)
 
     async def receiving_items_handler(self, ctx: "BizHawkClientContext"):
