@@ -102,7 +102,7 @@ class TestEatsanityCrops(SVEatsanityTestBase):
 class TestEatsanityCooking(SVEatsanityTestBase):
     options = {
         SeasonRandomization: SeasonRandomization.option_randomized,
-        Chefsanity: Chefsanity.option_all,
+        Chefsanity: Chefsanity.preset_all,
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Eatsanity: frozenset({EatsanityOptionName.cooking}),
         "start_inventory": {"Winter": 1}

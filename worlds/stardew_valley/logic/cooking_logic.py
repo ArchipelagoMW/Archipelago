@@ -7,6 +7,7 @@ from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSou
 from ..data.recipe_source import CutsceneSource, ShopTradeSource
 from ..options import Chefsanity
 from ..stardew_rule import StardewRule, True_, False_
+from ..strings.ap_names.ap_option_names import ChefsanityOptionName
 from ..strings.building_names import Building
 from ..strings.craftable_names import Craftable
 from ..strings.region_names import LogicRegion
@@ -38,23 +39,23 @@ class CookingLogic(BaseLogic):
 
     # Should be cached
     def knows_recipe(self, source: RecipeSource, meal_name: str) -> StardewRule:
-        if self.options.chefsanity == Chefsanity.option_none:
+        if self.options.chefsanity == Chefsanity.preset_none:
             return self.logic.cooking.can_learn_recipe(source)
         if isinstance(source, StarterSource):
             return self.logic.cooking.received_recipe(meal_name)
-        if isinstance(source, ShopTradeSource) and self.options.chefsanity & Chefsanity.option_purchases:
+        if isinstance(source, ShopTradeSource) and ChefsanityOptionName.purchases in self.options.chefsanity:
             return self.logic.cooking.received_recipe(meal_name)
-        if isinstance(source, ShopSource) and self.options.chefsanity & Chefsanity.option_purchases:
+        if isinstance(source, ShopSource) and ChefsanityOptionName.purchases in self.options.chefsanity:
             return self.logic.cooking.received_recipe(meal_name)
-        if isinstance(source, SkillSource) and self.options.chefsanity & Chefsanity.option_skills:
+        if isinstance(source, SkillSource) and ChefsanityOptionName.skills in self.options.chefsanity:
             return self.logic.cooking.received_recipe(meal_name)
-        if isinstance(source, CutsceneSource) and self.options.chefsanity & Chefsanity.option_friendship:
+        if isinstance(source, CutsceneSource) and ChefsanityOptionName.friendship in self.options.chefsanity:
             return self.logic.cooking.received_recipe(meal_name)
-        if isinstance(source, FriendshipSource) and self.options.chefsanity & Chefsanity.option_friendship:
+        if isinstance(source, FriendshipSource) and ChefsanityOptionName.friendship in self.options.chefsanity:
             return self.logic.cooking.received_recipe(meal_name)
-        if isinstance(source, QueenOfSauceSource) and self.options.chefsanity & Chefsanity.option_queen_of_sauce:
+        if isinstance(source, QueenOfSauceSource) and ChefsanityOptionName.queen_of_sauce in self.options.chefsanity:
             return self.logic.cooking.received_recipe(meal_name)
-        if isinstance(source, ShopFriendshipSource) and self.options.chefsanity & Chefsanity.option_purchases:
+        if isinstance(source, ShopFriendshipSource) and ChefsanityOptionName.purchases in self.options.chefsanity:
             return self.logic.cooking.received_recipe(meal_name)
         return self.logic.cooking.can_learn_recipe(source)
 

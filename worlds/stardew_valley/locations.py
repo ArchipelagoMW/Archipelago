@@ -16,7 +16,7 @@ from .options import ArcadeMachineLocations, SpecialOrderLocations, Museumsanity
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .options.options import BackpackSize, Moviesanity, Eatsanity, IncludeEndgameLocations, Friendsanity, ToolProgression
-from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
+from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName
 from .strings.backpack_tiers import Backpack
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest, Quest
@@ -486,18 +486,18 @@ def extend_cooksanity_locations(randomized_locations: List[LocationData], option
 
 def extend_chefsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     chefsanity = options.chefsanity
-    if chefsanity == Chefsanity.option_none:
+    if chefsanity == Chefsanity.preset_none:
         return
 
     chefsanity_locations_by_name = {}  # Dictionary to not make duplicates
 
-    if chefsanity & Chefsanity.option_queen_of_sauce:
+    if ChefsanityOptionName.queen_of_sauce in chefsanity:
         chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_QOS]})
-    if chefsanity & Chefsanity.option_purchases:
+    if ChefsanityOptionName.purchases in chefsanity:
         chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_PURCHASE]})
-    if chefsanity & Chefsanity.option_friendship:
+    if ChefsanityOptionName.friendship in chefsanity:
         chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_FRIENDSHIP]})
-    if chefsanity & Chefsanity.option_skills:
+    if ChefsanityOptionName.skills in chefsanity:
         chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_SKILL]})
 
     filtered_chefsanity_locations = filter_disabled_locations(options, content, list(chefsanity_locations_by_name.values()))

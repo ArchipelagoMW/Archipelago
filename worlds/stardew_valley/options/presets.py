@@ -4,7 +4,7 @@ import Options as ap_options
 from . import options
 # @formatter:off
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
-from ..strings.ap_names.ap_option_names import EatsanityOptionName
+from ..strings.ap_names.ap_option_names import EatsanityOptionName, ChefsanityOptionName
 
 all_random_settings = {
     "progression_balancing":                            "random",
@@ -88,7 +88,7 @@ easy_settings = {
     options.Monstersanity.internal_name:                options.Monstersanity.option_one_per_category,
     options.Shipsanity.internal_name:                   options.Shipsanity.option_none,
     options.Cooksanity.internal_name:                   options.Cooksanity.option_none,
-    options.Chefsanity.internal_name:                   options.Chefsanity.option_none,
+    options.Chefsanity.internal_name:                   options.Chefsanity.preset_none,
     options.Craftsanity.internal_name:                  options.Craftsanity.option_none,
     options.Friendsanity.internal_name:                 options.Friendsanity.option_none,
     options.FriendsanityHeartSize.internal_name:        4,
@@ -146,7 +146,7 @@ medium_settings = {
     options.Monstersanity.internal_name:                options.Monstersanity.option_one_per_monster,
     options.Shipsanity.internal_name:                   options.Shipsanity.option_none,
     options.Cooksanity.internal_name:                   options.Cooksanity.option_none,
-    options.Chefsanity.internal_name:                   options.Chefsanity.option_queen_of_sauce,
+    options.Chefsanity.internal_name:                   frozenset([ChefsanityOptionName.queen_of_sauce]),
     options.Craftsanity.internal_name:                  options.Craftsanity.option_none,
     options.Friendsanity.internal_name:                 options.Friendsanity.option_starting_npcs,
     options.FriendsanityHeartSize.internal_name:        4,
@@ -204,7 +204,7 @@ hard_settings = {
     options.Monstersanity.internal_name:                options.Monstersanity.option_progressive_goals,
     options.Shipsanity.internal_name:                   options.Shipsanity.option_crops,
     options.Cooksanity.internal_name:                   options.Cooksanity.option_queen_of_sauce,
-    options.Chefsanity.internal_name:                   options.Chefsanity.option_qos_and_purchases,
+    options.Chefsanity.internal_name:                   frozenset([ChefsanityOptionName.queen_of_sauce, ChefsanityOptionName.purchases]),
     options.Craftsanity.internal_name:                  options.Craftsanity.option_none,
     options.Friendsanity.internal_name:                 options.Friendsanity.option_all,
     options.FriendsanityHeartSize.internal_name:        4,
@@ -262,7 +262,7 @@ nightmare_settings = {
     options.Monstersanity.internal_name:                options.Monstersanity.option_split_goals,
     options.Shipsanity.internal_name:                   options.Shipsanity.option_full_shipment_with_fish,
     options.Cooksanity.internal_name:                   options.Cooksanity.option_queen_of_sauce,
-    options.Chefsanity.internal_name:                   options.Chefsanity.option_qos_and_purchases,
+    options.Chefsanity.internal_name:                   frozenset([ChefsanityOptionName.queen_of_sauce, ChefsanityOptionName.purchases]),
     options.Craftsanity.internal_name:                  options.Craftsanity.option_none,
     options.Friendsanity.internal_name:                 options.Friendsanity.option_all_with_marriage,
     options.FriendsanityHeartSize.internal_name:        4,
@@ -320,7 +320,7 @@ short_settings = {
     options.Monstersanity.internal_name:                options.Monstersanity.option_none,
     options.Shipsanity.internal_name:                   options.Shipsanity.option_none,
     options.Cooksanity.internal_name:                   options.Cooksanity.option_none,
-    options.Chefsanity.internal_name:                   options.Chefsanity.option_none,
+    options.Chefsanity.internal_name:                   options.Chefsanity.preset_none,
     options.Craftsanity.internal_name:                  options.Craftsanity.option_none,
     options.Friendsanity.internal_name:                 options.Friendsanity.option_none,
     options.FriendsanityHeartSize.internal_name:        4,
@@ -378,7 +378,7 @@ minsanity_settings = {
     options.Monstersanity.internal_name:                options.Monstersanity.option_none,
     options.Shipsanity.internal_name:                   options.Shipsanity.option_none,
     options.Cooksanity.internal_name:                   options.Cooksanity.option_none,
-    options.Chefsanity.internal_name:                   options.Chefsanity.option_none,
+    options.Chefsanity.internal_name:                   options.Chefsanity.preset_none,
     options.Craftsanity.internal_name:                  options.Craftsanity.option_none,
     options.Friendsanity.internal_name:                 options.Friendsanity.option_none,
     options.FriendsanityHeartSize.internal_name:        options.FriendsanityHeartSize.default,
@@ -436,7 +436,7 @@ allsanity_settings = {
     options.Monstersanity.internal_name:                options.Monstersanity.option_progressive_goals,
     options.Shipsanity.internal_name:                   options.Shipsanity.option_everything,
     options.Cooksanity.internal_name:                   options.Cooksanity.option_all,
-    options.Chefsanity.internal_name:                   options.Chefsanity.option_all,
+    options.Chefsanity.internal_name:                   options.Chefsanity.preset_all,
     options.Craftsanity.internal_name:                  options.Craftsanity.option_all,
     options.Friendsanity.internal_name:                 options.Friendsanity.option_all,
     options.FriendsanityHeartSize.internal_name:        1,

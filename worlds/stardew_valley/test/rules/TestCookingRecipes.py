@@ -31,7 +31,7 @@ class TestRecipeLearnLogic(SVTestBase):
         options.BuildingProgression: options.BuildingProgression.option_progressive,
         options.Cropsanity: options.Cropsanity.option_enabled,
         options.Cooksanity: options.Cooksanity.option_all,
-        options.Chefsanity: options.Chefsanity.option_none,
+        options.Chefsanity: options.Chefsanity.preset_none,
         options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true,
     }
 
@@ -55,7 +55,7 @@ class TestRecipeReceiveLogic(SVTestBase):
         options.BuildingProgression: options.BuildingProgression.option_progressive,
         options.Cropsanity: options.Cropsanity.option_enabled,
         options.Cooksanity: options.Cooksanity.option_all,
-        options.Chefsanity: options.Chefsanity.option_all,
+        options.Chefsanity: options.Chefsanity.preset_all,
         options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true,
     }
 

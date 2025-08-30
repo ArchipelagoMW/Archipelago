@@ -3,6 +3,7 @@ from random import Random
 from .. import options as stardew_options
 from ..content import StardewContent
 from ..content.vanilla.ginger_island import ginger_island_content_pack
+from ..strings.ap_names.ap_option_names import ChefsanityOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.transport_names import Transportation
 from ..strings.building_names import Building
@@ -49,7 +50,7 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
     if options.special_order_locations & stardew_options.SpecialOrderLocations.option_board:
         early_candidates.append("Special Order Board")
 
-    if options.cooksanity != stardew_options.Cooksanity.option_none or options.chefsanity & stardew_options.Chefsanity.option_queen_of_sauce:
+    if options.cooksanity != stardew_options.Cooksanity.option_none or ChefsanityOptionName.queen_of_sauce in options.chefsanity:
         early_candidates.append(Channel.queen_of_sauce)
 
     if options.craftsanity != stardew_options.Craftsanity.option_none:

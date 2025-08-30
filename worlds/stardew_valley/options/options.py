@@ -7,7 +7,7 @@ from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonO
     Visibility, Removed, OptionCounter
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..mods.mod_data import ModNames, invalid_mod_combinations
-from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
+from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
 from ..strings.trap_names import all_traps
 
@@ -545,9 +545,9 @@ class Cooksanity(Choice):
     option_all = 2
 
 
-class Chefsanity(NamedRange):
+class Chefsanity(OptionSet):
     """Locations for learning cooking recipes?
-    Vanilla: All cooking recipes are learned normally
+    None: All cooking recipes are learned normally
     Queen of Sauce: Every Queen of Sauce episode is a check, all Queen of Sauce recipes are items
     Purchases: Every purchasable recipe is a check
     Friendship: Recipes obtained from friendship are checks
@@ -556,27 +556,22 @@ class Chefsanity(NamedRange):
     """
     internal_name = "chefsanity"
     display_name = "Chefsanity"
-    default = 0
-    range_start = 0
-    range_end = 15
 
-    option_none = 0b0000  # 0
-    option_queen_of_sauce = 0b0001  # 1
-    option_purchases = 0b0010  # 2
-    option_qos_and_purchases = 0b0011  # 3
-    option_skills = 0b0100  # 4
-    option_friendship = 0b1000  # 8
-    option_all = 0b1111  # 15
+    valid_keys = frozenset({
+        ChefsanityOptionName.queen_of_sauce, ChefsanityOptionName.purchases,
+        ChefsanityOptionName.skills, ChefsanityOptionName.friendship,
+    })
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = preset_none
 
-    special_range_names = {
-        "none": 0b0000,  # 0
-        "queen_of_sauce": 0b0001,  # 1
-        "purchases": 0b0010,  # 2
-        "qos_and_purchases": 0b0011,  # 3
-        "skills": 0b0100,  # 4
-        "friendship": 0b1000,  # 8
-        "all": 0b1111,  # 15
-    }
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, OptionSet):
+            return set(self.value) == other.value
+        if isinstance(other, OptionList):
+            return set(self.value) == set(other.value)
+        else:
+            return typing.cast(bool, self.value == other)
 
 
 class Craftsanity(Choice):

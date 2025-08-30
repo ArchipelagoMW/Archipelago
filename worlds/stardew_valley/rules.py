@@ -871,7 +871,7 @@ def set_cooksanity_rules(all_location_names: Set[str], logic: StardewLogic, rule
 
 def set_chefsanity_rules(all_location_names: Set[str], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
     chefsanity_option = world_options.chefsanity
-    if chefsanity_option == Chefsanity.option_none:
+    if chefsanity_option == Chefsanity.preset_none:
         return
 
     chefsanity_suffix = " Recipe"

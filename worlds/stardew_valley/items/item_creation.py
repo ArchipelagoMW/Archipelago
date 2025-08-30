@@ -16,7 +16,7 @@ from ..options import StardewValleyOptions, FestivalLocations, SpecialOrderLocat
     ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, Moviesanity
 from ..options.options import IncludeEndgameLocations, Friendsanity, ToolProgression
-from ..strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
+from ..strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -490,18 +490,18 @@ def create_crafting_recipes(item_factory: StardewItemFactory, options: StardewVa
 
 def create_cooking_recipes(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
     chefsanity = options.chefsanity
-    if chefsanity == Chefsanity.option_none:
+    if chefsanity == Chefsanity.preset_none:
         return
 
     chefsanity_recipes_by_name = {recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_STARTER]}  # Dictionary to not make duplicates
 
-    if chefsanity & Chefsanity.option_queen_of_sauce:
+    if ChefsanityOptionName.queen_of_sauce in chefsanity:
         chefsanity_recipes_by_name.update({recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_QOS]})
-    if chefsanity & Chefsanity.option_purchases:
+    if ChefsanityOptionName.purchases in chefsanity:
         chefsanity_recipes_by_name.update({recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_PURCHASE]})
-    if chefsanity & Chefsanity.option_friendship:
+    if ChefsanityOptionName.friendship in chefsanity:
         chefsanity_recipes_by_name.update({recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_FRIENDSHIP]})
-    if chefsanity & Chefsanity.option_skills:
+    if ChefsanityOptionName.skills in chefsanity:
         chefsanity_recipes_by_name.update({recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_SKILL]})
 
     filtered_chefsanity_recipes = remove_excluded(list(chefsanity_recipes_by_name.values()), content, options)

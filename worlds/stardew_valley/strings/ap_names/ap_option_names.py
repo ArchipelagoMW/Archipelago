@@ -34,3 +34,10 @@ class EatsanityOptionName:
     shop = "Shop"
     poisonous = "Poisonous"
     lock_effects = "Lock Effects"
+
+
+class ChefsanityOptionName:
+    queen_of_sauce = "Queen of Sauce"
+    purchases = "Purchases"
+    skills = "Skills"
+    friendship = "Friendship"
