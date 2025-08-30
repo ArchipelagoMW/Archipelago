@@ -5,6 +5,7 @@ from ..strings.generic_names import Generic
 from ..strings.geode_names import Geode
 from ..strings.metal_names import Mineral
 from ..strings.region_names import Region
+from ..strings.season_names import Season
 from ..strings.tv_channel_names import Channel
 
 
@@ -22,7 +23,7 @@ class ActionLogic(BaseLogic):
             return tv_rule
         if channel == Channel.sinister_signal:
             sacrifice_rule = self.logic.relationship.has_children(1) & self.logic.region.can_reach(Region.witch_hut) & self.logic.has(Mineral.prismatic_shard)
-            return self.logic.received(channel) & tv_rule & sacrifice_rule
+            return self.logic.received(channel) & tv_rule & sacrifice_rule & self.logic.season.has(Season.fall)
         return self.logic.received(channel) & tv_rule
 
     def can_pan_at(self, region: str, material: str) -> StardewRule:
