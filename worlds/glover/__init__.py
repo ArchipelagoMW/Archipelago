@@ -112,6 +112,9 @@ class GloverWorld(World):
         for each_group in self.group_lists:
             if name in self.item_name_groups[each_group] and state.count_group(each_group, self.player) == 1:
                 state.add_item(each_group, self.player)
+        #You've gotten a ball by beating the level in the 4th gate
+        if name.endswith("H Ball") and name.startswith(tuple(self.world_prefixes)) and item.code == None:
+            state.add_item("Returned Balls", self.player)
         #Garib counting
         if name.endswith("Garib"):
             state.add_item("Total Garibs", self.player)
@@ -132,6 +135,9 @@ class GloverWorld(World):
         for each_group in self.group_lists:
             if name in self.item_name_groups[each_group] and state.count_group(each_group, self.player) == 0:
                 state.remove_item(each_group, self.player)
+        #You've gotten a ball by beating the level in the 4th gate
+        if name.endswith("H Ball") and name.startswith(tuple(self.world_prefixes)) and item.code == None:
+            state.remove_item("Returned Balls", self.player)
         #Garib counting
         if name.endswith("Garib"):
             state.remove_item("Total Garibs", self.player)
@@ -548,15 +554,6 @@ class GloverWorld(World):
         multiworld : MultiWorld = self.multiworld
         player : int = self.player
 
-        #TEMP ENDING
-        final_location_name : str = "Atl3: Goal"
-        end_region : Region = multiworld.get_location(final_location_name, player).parent_region
-        final_location : Location = Location(player, "Ending", None, end_region)
-        end_region.locations.append(final_location)
-        add_rule(final_location, lambda state: state.can_reach_location(final_location_name, player))
-        final_location.place_locked_item(self.create_event("Victory"))
-        multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
-
         #Menu loads into the hubworld
         hubworld : Region = multiworld.get_region("Hubworld", player)
         multiworld.get_region("Menu", player).connect(hubworld)
@@ -564,6 +561,11 @@ class GloverWorld(World):
         castle_cave : Region = multiworld.get_region("Castle Cave", player)
         hubworld.connect(castle_cave)
         castle_cave.connect(multiworld.get_region("Castle Cave: Main W/Ball", player))
+
+        #Ending
+        final_location : Location = self.returning_crystal(castle_cave, 7)
+        final_location.place_locked_item(self.create_event("Victory"))
+        multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
         #Apply wayroom entrances
         for world_index, each_world_prefix in enumerate(self.world_prefixes):
@@ -618,6 +620,15 @@ class GloverWorld(World):
             "Well Entry"
         ]
 
+        hub_gates : list[str] = [
+            "Hubworld Atlantis Gate",
+            "Hubworld Carnival Gate",
+            "Hubworld Pirate's Cove Gate",
+            "Hubworld Prehistoric Gate",
+            "Hubworld Fortress of Fear Gate",
+            "Hubworld Out of This World Gate"
+        ]
+
         #Apply hubworld entrances
         for entrance_index, entrance_name in enumerate(self.overworld_entrances):
             loading_zone : str = hub_entry_names[entrance_index]
@@ -631,6 +642,41 @@ class GloverWorld(World):
             reaching_location : str = "Hubworld: " + loading_zone
             reaching_region : Region = multiworld.get_location(reaching_location, player).parent_region
             reaching_region.connect(connecting_level, loading_zone, lambda state, each_location = reaching_location: state.can_reach_location(each_location, player))
+            
+            #Make the hubworld operate normally while portalsanity's off
+            if not self.options.portalsanity:
+                #The Thing
+                crystal_location : Location | None = None
+                match entrance_index:
+                    case 0:
+                        #Requires 1/7 Balls Returned
+                        crystal_location = self.returning_crystal(castle_cave, 1)
+                    case 1:
+                        #Requires 2/7 Balls Returned
+                        crystal_location = self.returning_crystal(castle_cave, 2, "A")
+                    case 2:
+                        #Requires 2/7 Balls Returned
+                        crystal_location = self.returning_crystal(castle_cave, 2, "B")
+                    case 3:
+                        #Requires 4/7 Balls Returned
+                        crystal_location = self.returning_crystal(castle_cave, 4, "A")
+                    case 4:
+                        #Requires 4/7 Balls Returned
+                        crystal_location = self.returning_crystal(castle_cave, 4, "B")
+                    case 5:
+                        #Requires 6/7 Balls Returned
+                        crystal_location = self.returning_crystal(castle_cave, 6)
+                #Put the gate to it at the crystal location
+                if crystal_location != None:
+                    crystal_location.place_locked_item(self.create_event(hub_gates[entrance_index]))
+
+    #Crystal return locations
+    def returning_crystal(self, castle_cave : Region, required_balls : int, suffix : str = "") -> Location:
+        player = self.player
+        crystal_return_location : Location = Location(player, "Ball Turn-In " + str(required_balls) + suffix, None, castle_cave)
+        castle_cave.locations.append(crystal_return_location)
+        set_rule(crystal_return_location, lambda state, returned_balls_needed = required_balls - 1: state.has("Returned Balls", player, returned_balls_needed))
+        return crystal_return_location
 
     #Lacking Portalsanity Gates and Marks
     def populate_goals_and_marks(self, connecting_level_name : str, wayroom_name : str, entry_index : int):
@@ -671,7 +717,10 @@ class GloverWorld(World):
             if connecting_level_name.endswith('!'):
                 goal_or_boss = ": Boss"
             goal_location : Location = self.multiworld.get_location(connecting_level_name + goal_or_boss, player)
-            goal_location.place_locked_item(goal_item)
+            psudo_goal_location : Location = Location(player, connecting_level_name + goal_or_boss + " Reached", None, goal_location.parent_region)
+            goal_location.parent_region.locations.append(psudo_goal_location)
+            set_rule(psudo_goal_location, lambda state, psudo_goal = goal_location.name: state.can_reach_location(psudo_goal, player))
+            psudo_goal_location.place_locked_item(goal_item)
         
         garibs_location : Location
         #Levels with garibs

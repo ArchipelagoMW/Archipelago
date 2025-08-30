@@ -15,7 +15,7 @@ local GVR_VERSION = "V0.1"
 local PLAYER = ""
 local SEED = 0
 
-local BT_SOCK = nil
+local GLV_SOCK = nil
 
 local STATE_OK = "Ok"
 local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
@@ -221,6 +221,7 @@ end
 -- Address Map for Glover
 local ADDRESS_MAP = {
 	["AP_ATLANTIS_L1"] = {
+		["GOAL"] = "66",
 		["GARIBS"] = {
 			["1"] = {
 				['id'] = 0x001,
@@ -498,6 +499,7 @@ local ADDRESS_MAP = {
 		},
 	},
 	["AP_ATLANTIS_L2"] = {
+		["GOAL"] = "141",
 		["GARIBS"] = {
 			["67"] = {
 				['id'] = 0x043,
@@ -822,6 +824,7 @@ local ADDRESS_MAP = {
 		},
 	},
 	["AP_ATLANTIS_L3"] = {
+		["GOAL"] = "248",
 		["GARIBS"] = {
 			["143"] = {
 				['id'] = 0x08F,
@@ -1276,7 +1279,11 @@ local ADDRESS_MAP = {
 			},
 		},
 	},
+	["AP_ATLANTIS_BOSS"] = {
+		["GOAL"] = "251",
+	},
 	["AP_ATLANTIS_BONUS"] = {
+		["GOAL"] = "281",
 		["GARIBS"] = {
 			["252"] = {
 				['id'] = 0x0FC,
@@ -2475,6 +2482,22 @@ function potion_check()
     return checks
 end
 
+function goal_check()
+    local check = {}
+        if ADDRESS_MAP[WORLD_NAME] ~= nil
+        then
+            if ADDRESS_MAP[WORLD_NAME]["GOAL"] ~= nil
+            then
+    			local hackPointerIndex = GLOVERHACK:dereferencePointer(GVR.base_pointer);
+    			local world_address = hackPointerIndex + GVR:getWorldOffset(WORLD_ID)
+				local goal_address = world_address + GVR.goal
+    			local check_value = mainmemory.readbyte(goal_address)
+    			check[ADDRESS_MAP[WORLD_NAME]["GOAL"]] = check_value ~= 0x0
+			end
+		end
+	return check
+end
+
 function received_garibs(itemId)
     --Decoupled Garib Groups and Garibsanity
 	if 6510000 <= itemId and itemId <= 6519999 then
@@ -2875,6 +2898,10 @@ function processAGIItem(item_list)
     end
 end
 
+function flagCheckedLocations(location_list)
+	
+end
+
 function process_block(block)
     -- Sometimes the block is nothing, if this is the case then quietly stop processing
     if block == nil then
@@ -2888,6 +2915,10 @@ function process_block(block)
     then
         processAGIItem(block['items'])
     end
+	if block['checkedLocations'] ~= nil
+	then
+    	flagCheckedLocations(block['checkedLocations'])
+	end
 	if block['triggerDeath'] ~= nil
 	then
     	if block['triggerDeath'] == true and DEATH_LINK == true
@@ -2969,6 +3000,7 @@ function SendToClient()
     retTable["enemy_garibs"] = enemy_garib_check()
     retTable["enemy"] = enemy_check()
     retTable["potions"] = potion_check()
+	retTable["goal"] = goal_check()
 
     retTable["DEMO"] = false;
     retTable["sync_ready"] = "true"
@@ -2983,7 +3015,7 @@ function SendToClient()
     end
 
     local msg = json.encode(retTable).."\n"
-    local ret, error = BT_SOCK:send(msg)
+    local ret, error = GLV_SOCK:send(msg)
     if ret == nil then
         print(error)
     elseif CUR_STATE == STATE_INITIAL_CONNECTION_MADE then
@@ -3005,7 +3037,7 @@ function receive()
         -- Send the message
         SendToClient()
 
-        l, e = BT_SOCK:receive()
+        l, e = GLV_SOCK:receive()
         -- Handle incoming message
         if e == 'closed' then
             if CUR_STATE == STATE_OK then
@@ -3035,8 +3067,8 @@ function getSlotData()
     local retTable = {}
     retTable["getSlot"] = true;
     local msg = json.encode(retTable).."\n"
-    local ret, error = BT_SOCK:send(msg)
-    l, e = BT_SOCK:receive()
+    local ret, error = GLV_SOCK:send(msg)
+    l, e = GLV_SOCK:receive()
     -- Handle incoming message
     if e == 'closed' then
         if CUR_STATE == STATE_OK then
@@ -3190,8 +3222,8 @@ function main()
                 if timeout == nil then
                     print('Initial Connection Made')
                     CUR_STATE = STATE_INITIAL_CONNECTION_MADE
-                    BT_SOCK = client
-                    BT_SOCK:settimeout(0)
+                    GLV_SOCK = client
+                    GLV_SOCK:settimeout(0)
                 end
             end
         end

@@ -10,7 +10,7 @@ def create_hints(self):
     valid_chicken_items = get_valid_items(self, chicken_catagories)
 
     #Get Mr. Tip Hints First
-    tips_pair = create_hint_lookup(self, self.tip_locations, valid_tip_items, tip_catagories, self.options.mr_hints == 2, "Mr. Tip Says:\n\t")
+    tips_pair = create_hint_lookup(self, self.tip_locations, valid_tip_items, tip_catagories, self.options.mr_hints == 2, "Mr. Tip Says:\n")
     #Remove any items you've already gotten from being hints from the chicken
     for each_item in tips_pair[0]:
         if each_item in valid_chicken_items:
@@ -19,7 +19,7 @@ def create_hints(self):
     chicken_locations = []
     for each_index in range(7):
         chicken_locations.append("Chicken Hint " + str(each_index + 1))
-    chicken_hints = create_hint_lookup(self, chicken_locations, valid_chicken_items, chicken_catagories, self.options.chicken_hints == 2, "Cheat Chicken Says:\n\t")[1]
+    chicken_hints = create_hint_lookup(self, chicken_locations, valid_chicken_items, chicken_catagories, self.options.chicken_hints == 2, "Cheat Chicken Says:\n")[1]
     
     #Apply the hints to the world
     return [tips_pair[1], chicken_hints]

@@ -47,6 +47,7 @@ Payload: lua -> client
 Payload: client -> lua
 {
     items: list,
+    checkedLocations: list
     playerNames: list,
     triggerDeath: bool,
     triggerTag: bool,
@@ -181,6 +182,9 @@ async def patch_and_run(show_path):
 def get_item_value(ap_id):
     return ap_id
 
+def get_location_value(ap_id):
+    return ap_id
+
 class GloverItemTracker:
 
   def __init__(self, ctx):
@@ -307,6 +311,7 @@ class GloverContext(CommonContext):
         self.tip_table = {}
         self.checkpoint_table = {}
         self.switch_table = {}
+        self.goal_table = {}
 
         self.current_world = 0
         self.current_hub = 0
@@ -524,6 +529,7 @@ def get_payload(ctx: GloverContext):
         ctx.startup = True
         payload = json.dumps({
                 "items": [get_item_value(item.item) for item in ctx.items_received],
+                "checkedLocations": [get_location_value(locations) for locations in ctx.locations_checked],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
                 "triggerDeath": trigger_death,
                 "triggerTag": trigger_tag,
@@ -532,6 +538,7 @@ def get_payload(ctx: GloverContext):
     else:
         payload = json.dumps({
                 "items": [],
+                "checkedLocations": [],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
                 "triggerDeath": trigger_death,
                 "triggerTag": trigger_tag,
@@ -596,6 +603,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     enemygaribslist = payload["enemy_garibs"]
     enemylist = payload["enemy"]
     potionlist = payload["potions"]
+    goallist = payload["goal"]
     garibgrouplist = payload["garib_groups"]
     lifeslist = payload["life"]
     tipslist = payload["tip"]
@@ -635,7 +643,9 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         glover_world = 0
     if isinstance(glover_hub, int) == False:
         glover_hub = 0
-
+    if isinstance(goallist, list):
+        goallist = {}
+    
     if demo == False and ctx.sync_ready == True:
         locs1 = []
         scouts1 = []
@@ -703,23 +713,11 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
             for locationId, value in switchslist.items():
                 if value == True:
                     locs1.append(int(locationId))
-        # if ctx.current_map != banjo_map:  #Fix for not resending activated Hints
-        #     ctx.signpost_table = signposts #sets only when transistioning on a new map
-        # if ctx.signpost_table != signposts:
-        #         ctx.signpost_table = signposts
-        #         actual_hints = ctx.slot_data["hints"]
-        #         for locationId, value in signposts.items():
-        #             if value == True:
-        #                 locs1.append(int(locationId))
-        #                 hint = actual_hints.get(str(locationId), None)
-
-        #                 if not hint is None and hint.get('should_add_hint')\
-        #                   and not hint.get('location_id') is None\
-        #                   and not hint.get('location_player_id') is None\
-        #                   and ctx.slot_concerns_self(hint['location_player_id']):
-        #                     id = hint['location_id']
-        #                     if not id in ctx.handled_scouts:
-        #                         scouts1.append(id)
+        if ctx.goal_table != goallist:
+            ctx.goal_table = goallist
+            for locationId, value in goallist.items():
+                if value == True:
+                    locs1.append(int(locationId))
 
         if len(locs1) > 0:
             await ctx.send_msgs([{

@@ -317,10 +317,6 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                 #As Events
                 if not self.options.checkpoint_checks:
                     ap_ids.clear()
-            case 5:
-                #Goals
-                if not self.options.portalsanity:
-                    ap_ids.clear()
             case 6:
                 #Tip hints
                 if self.options.mr_hints:
