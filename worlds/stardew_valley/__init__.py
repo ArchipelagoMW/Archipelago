@@ -239,6 +239,9 @@ class StardewValleyWorld(World):
         self.total_progression_items += sum(1 for i in created_items if i.advancement)
         self.total_progression_items -= 1  # -1 for the victory event
 
+        player_state = self.multiworld.state.prog_items[self.player]
+        self.update_received_progression_percent(player_state)
+
     def precollect_start_without_items(self):
         if StartWithoutOptionName.landslide not in self.options.start_without:
             self.multiworld.push_precollected(self.create_item("Landslide Removed"))
@@ -496,11 +499,7 @@ class StardewValleyWorld(World):
         player_state = state.prog_items[self.player]
         player_state.update(item.events_to_collect)
 
-        if self.total_progression_items:
-            received_progression_count = player_state[Event.received_progression_item]
-            # Total progression items is not set until all items are created, but collect will be called during the item creation when an item is precollected.
-            # We can't update the percentage if we don't know the total progression items, can't divide by 0.
-            player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
+        self.update_received_progression_percent(player_state)
 
         if item.name in APWeapon.all_weapons:
             player_state[Event.received_progressive_weapon] = max(player_state[Event.received_progressive_weapon], player_state[item.name])
@@ -515,13 +514,16 @@ class StardewValleyWorld(World):
         player_state = state.prog_items[self.player]
         player_state.subtract(item.events_to_collect)
 
-        if self.total_progression_items:
-            received_progression_count = player_state[Event.received_progression_item]
-            # Total progression items is not set until all items are created, but collect will be called during the item creation when an item is precollected.
-            # We can't update the percentage if we don't know the total progression items, can't divide by 0.
-            player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
+        self.update_received_progression_percent(player_state)
 
         if item.name in APWeapon.all_weapons:
             player_state[Event.received_progressive_weapon] = max(player_state[weapon] for weapon in APWeapon.all_weapons)
 
         return True
+
+    def update_received_progression_percent(self, player_state: Counter[str]) -> None:
+        if self.total_progression_items:
+            received_progression_count = player_state[Event.received_progression_item]
+            # Total progression items is not set until all items are created, but collect will be called during the item creation when an item is precollected.
+            # We can't update the percentage if we don't know the total progression items, can't divide by 0.
+            player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
