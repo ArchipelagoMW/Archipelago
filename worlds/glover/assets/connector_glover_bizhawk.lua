@@ -107,7 +107,9 @@ local DEATH_LINK = true
 local TAG_LINK_TRIGGERED = false
 local TAG_LINK = true
 
-
+local checked_map = { -- [ap_id] = location_id; -- Stores locations you've already checked
+	["NA"] = "NA"
+}
 
 local receive_map = { -- [ap_id] = item_id; --  Required for Async Items
     ["NA"] = "NA"
@@ -2622,36 +2624,41 @@ end
 
 function received_misc(itemId)
     --if itemId == 6500358 then
-    --    TOTAL_LIVES = TOTAL_LIVES + 1
     --    GVR:setItem(ITEM_TABLE["Chicken Sound"], TOTAL_LIVES)
     if itemId == 6500359 then
         TOTAL_LIVES = TOTAL_LIVES + 1
         GVR:setItem(ITEM_TABLE["AP_LIFE_UP"], TOTAL_LIVES)
     end
     --elseif itemId == 6500360 then
-    --    TOTAL_LIVES = TOTAL_LIVES + 1
     --    GVR:setItem(ITEM_TABLE["Boomerang Spell"], TOTAL_LIVES)
     --elseif itemId == 6500361 then
-    --    TOTAL_LIVES = TOTAL_LIVES + 1
     --    GVR:setItem(ITEM_TABLE["Beachball Spell"], TOTAL_LIVES)
     --elseif itemId == 6500362 then
-    --    TOTAL_LIVES = TOTAL_LIVES + 1
     --    GVR:setItem(ITEM_TABLE["Hercules Spell"], TOTAL_LIVES)
     --elseif itemId == 6500363 then
-    --    TOTAL_LIVES = TOTAL_LIVES + 1
     --    GVR:setItem(ITEM_TABLE["Helicopter Spell"], TOTAL_LIVES)
     --elseif itemId == 6500364 then
-    --    TOTAL_LIVES = TOTAL_LIVES + 1
     --    GVR:setItem(ITEM_TABLE["Speed Spell"], TOTAL_LIVES)
     --elseif itemId == 6500365 then
-    --    TOTAL_LIVES = TOTAL_LIVES + 1
     --    GVR:setItem(ITEM_TABLE["Frog Spell"], TOTAL_LIVES)
     --elseif itemId == 6500366 then
-    --    TOTAL_LIVES = TOTAL_LIVES + 1
     --    GVR:setItem(ITEM_TABLE["Death Spell"], TOTAL_LIVES)
     --elseif itemId == 6500367 then
-    --    TOTAL_LIVES = TOTAL_LIVES + 1
     --    GVR:setItem(ITEM_TABLE["Sticky Spell"], TOTAL_LIVES)
+    --end
+end
+
+function received_traps(itemId)
+	--if itemId == 6500368 then
+    --    GVR:setItem(ITEM_TABLE["Frog Trap"], TOTAL_LIVES)
+    --elseif itemId == 6500369 then
+    --    GVR:setItem(ITEM_TABLE["Cursed Ball Trap"], TOTAL_LIVES)
+    --elseif itemId == 6500370 then
+    --    GVR:setItem(ITEM_TABLE["Instant Crystal Trap"], TOTAL_LIVES)
+    --elseif itemId == 6500371 then
+    --    GVR:setItem(ITEM_TABLE["Camera Rotate Trap"], TOTAL_LIVES)
+    --elseif itemId == 6500372 then
+    --    GVR:setItem(ITEM_TABLE["Tip Trap"], TOTAL_LIVES)
     --end
 end
 
@@ -2914,9 +2921,12 @@ function processAGIItem(item_list)
             elseif(6500190 <= memlocation and memlocation <= 6501906) -- Moves and Balls
             then
                 received_moves(memlocation)
-            elseif(6500357 <= memlocation and memlocation <= 6500357) -- Misc
+            elseif(6500358 <= memlocation and memlocation <= 6500367) -- Misc
             then
                 received_misc(memlocation)
+            elseif(6500368 <= memlocation and memlocation <= 6500372) -- Traps
+            then
+                received_traps(memlocation)
             elseif(6500000 <= memlocation and memlocation <= 6500129) -- Events
             then
                 received_events(memlocation)
@@ -2927,12 +2937,16 @@ function processAGIItem(item_list)
 end
 
 function flagCheckedLocations(location_list)
-	if location_list ~= nil
-	then
-		for each_key, each_location in pairs(location_list)
-		do
-			print(each_key)
-			print(each_location)
+	for ap_id, memlocation in pairs(location_list)
+	do
+		-- Update any checked locations to be remembered
+		if checked_map[tostring(ap_id)] == nil
+		then
+			--
+			print("AP ID: " .. tostring(ap_id))
+			print("Memlocation: " .. tostring(memlocation))
+			--
+        	checked_map[tostring(ap_id)] = tostring(memlocation)
 		end
 	end
 end

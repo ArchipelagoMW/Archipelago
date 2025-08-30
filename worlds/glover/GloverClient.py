@@ -529,7 +529,7 @@ def get_payload(ctx: GloverContext):
         ctx.startup = True
         payload = json.dumps({
                 "items": [get_item_value(item.item) for item in ctx.items_received],
-                "checkedLocations": [get_location_value(locations) for locations in ctx.locations_checked],
+                "checkedLocations": [get_location_value(locations) for locations in ctx.checked_locations],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
                 "triggerDeath": trigger_death,
                 "triggerTag": trigger_tag,
