@@ -523,7 +523,9 @@ def create_booksanity_items(item_factory: StardewItemFactory, content: StardewCo
 
     items.extend(item_factory(item_table[booksanity.to_item_name(book.name)]) for book in content.find_tagged_items(ItemTag.BOOK_POWER))
     progressive_lost_book = item_table[booksanity.progressive_lost_book]
-    items.extend(item_factory(progressive_lost_book) for _ in content.features.booksanity.get_randomized_lost_books())
+    # We do -1 here because the first lost book spawns freely in the museum
+    num_lost_books = len([book for book in content.features.booksanity.get_randomized_lost_books()]) - 1
+    items.extend(item_factory(progressive_lost_book) for _ in range(num_lost_books))
 
 
 def create_movie_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
