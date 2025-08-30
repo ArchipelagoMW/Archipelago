@@ -991,11 +991,12 @@ def set_access_rules(world: 'GSTLAWorld'):
 
         if world.options.reveal_hidden_item == 1:
                 for loc in location_type_to_data[LocationType.Hidden]:
+                        loc_name = loc_names_by_id[loc.ap_id]
                         #for all hidden items that are not eventype 131 (these are scoopable or cyclone places), we require reveal
-                        if (loc.event_type != 131 or loc_names_by_id[loc.ap_id] == LocationName.Daila_Psy_Crystal or loc_names_by_id[loc.ap_id] == LocationName.Loho_Mythril_Silver or
-                            loc_names_by_id[loc.ap_id] == LocationName.Lemuria_Lucky_Medal or loc_names_by_id[loc.ap_id] == LocationName.Lemuria_Rusty_Sword or
-                            loc_names_by_id[loc.ap_id] == LocationName.Lemuria_Bone or loc_names_by_id[loc.ap_id] == LocationName.Lemuria_Star_Dust):
-                                add_rule(world.get_location(loc_names_by_id[loc.ap_id]),
+                        if (loc.event_type != 131 or loc_name == LocationName.Daila_Psy_Crystal or loc_name== LocationName.Loho_Mythril_Silver or
+                            loc_name == LocationName.Lemuria_Lucky_Medal or loc_name == LocationName.Lemuria_Rusty_Sword or
+                            loc_name == LocationName.Lemuria_Bone or loc_name == LocationName.Lemuria_Star_Dust):
+                                add_rule(world.get_location(loc_name),
                                         lambda state: state.has(ItemName.Reveal, player))
 
 class _RestrictionRule:
