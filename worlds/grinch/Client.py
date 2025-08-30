@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
     from CommonClient import logger
 
+
 # Stores received index of last item received in PS1 memory card save data
 # By storing this index, it will remember the last item received and prevent item duplication loops
 RECV_ITEM_ADDR = 0x010068
@@ -17,6 +18,9 @@ RECV_ITEM_BITSIZE = 4
 
 # Maximum number of times we check if we are in demo mode or not
 MAX_DEMO_MODE_CHECK = 30
+
+# List of Menu Map IDs
+MENU_MAP_IDS: list[int] = [0x00, 0x02, 0x35, 0x36, 0x37]
 
 class GrinchClient(BizHawkClient):
     game = "The Grinch"
@@ -35,7 +39,6 @@ class GrinchClient(BizHawkClient):
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
-
         # TODO Check the ROM data to see if it matches against bytes expected
         grinch_identifier_ram_address: int = 0x00928C
         bios_identifier_ram_address: int = 0x097F30
@@ -61,7 +64,7 @@ class GrinchClient(BizHawkClient):
         ctx.game = self.game
         ctx.items_handling = self.items_handling
         ctx.want_slot_data = True
-        ctx.watcher_timeout = 0.125
+        ctx.watcher_timeout = 0.25
         self.loading_bios_msg = False
 
         return True
@@ -76,6 +79,7 @@ class GrinchClient(BizHawkClient):
         await ctx.get_username()
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
+        from CommonClient import  logger
         #If the player is not connected to an AP Server, or their connection was disconnected.
         if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
             return
@@ -90,8 +94,9 @@ class GrinchClient(BizHawkClient):
             await self.goal_checker(ctx)
             await self.option_handler(ctx)
 
-        except bizhawk.RequestFailedError:
+        except bizhawk.RequestFailedError as ex:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
+            logger.error("Failure to connect / authenticate the grinch. Error details: " + str(ex))
             pass
 
     async def location_checker(self, ctx: "BizHawkClientContext"):
@@ -130,7 +135,7 @@ class GrinchClient(BizHawkClient):
         # Otherwise, we will get the new items and give them to the player.
 
         self.last_received_index = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
-                    RECV_ITEM_ADDR, RECV_ITEM_BITSIZE, "MainRAM")]))[0], "little")
+            RECV_ITEM_ADDR, RECV_ITEM_BITSIZE, "MainRAM")]))[0], "little")
         if len(ctx.items_received) == self.last_received_index:
             return
 
@@ -175,6 +180,7 @@ class GrinchClient(BizHawkClient):
                     "status": NetUtils.ClientStatus.CLIENT_GOAL,
                 }])
 
+    # This function's entire purpose is to take away items we physically received ingame, but have not received from AP
     async def constant_address_update(self, ctx: "BizHawkClientContext"):
         list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
         items_to_check: dict[str, GrinchItemData] = {**SLEIGH_PARTS_TABLE, **MISSION_ITEMS_TABLE, **GADGETS_TABLE, **KEYS_TABLE}
@@ -192,17 +198,36 @@ class GrinchClient(BizHawkClient):
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
                 if is_binary:
                     await self.update_and_validate_address(ctx, addr_to_update.ram_address,
-                        0, 1)
+                                                           0, 1)
                 else:
                     await self.update_and_validate_address(ctx, addr_to_update.ram_address, 0, 1)
 
     async def ingame_checker(self, ctx: "BizHawkClientContext"):
+        from CommonClient import logger
+
         ingame_map_id = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
             0x010000, 1, "MainRAM")]))[0], "little")
+
+        #If not in game or at a menu, or loading the publisher logos
+        if ingame_map_id <= 0x04 or ingame_map_id >= 0x35:
+            return False
+
+        #If grinch has changed maps
         if not ingame_map_id == self.last_map_location:
+            # If the last "map" we were on was a menu or a publisher logo
+            if self.last_map_location in MENU_MAP_IDS:
+                # Reset our demo mode checker just in case the game is in demo mode.
+                self.demo_mode_buffer = 0
+                self.ingame_log = False
+                return False
+
+            # Update the previosu map we were on to be the current map.
             self.last_map_location = ingame_map_id
-            self.demo_mode_buffer = 0
-            self.ingame_log = False
+
+        # Use this as a delayed check to make sure we are in game
+        if not self.demo_mode_buffer == MAX_DEMO_MODE_CHECK:
+            await asyncio.sleep(0.1)
+            self.demo_mode_buffer += 1
             return False
 
         demo_mode = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
@@ -210,16 +235,8 @@ class GrinchClient(BizHawkClient):
         if demo_mode == 1:
             return False
 
-        if ingame_map_id <= 0x04 or ingame_map_id >= 0x35:
-            return False
-
-        if not self.demo_mode_buffer == MAX_DEMO_MODE_CHECK:
-            await asyncio.sleep(0.1)
-            self.demo_mode_buffer += 1
-            return False
-
         if not self.ingame_log:
-            print("You can now start sending locations to the Grinch!")
+            logger.info("You can now start sending locations from the Grinch!")
             self.ingame_log = True
         return True
 
