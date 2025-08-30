@@ -89,11 +89,11 @@ class GrinchClient(BizHawkClient):
             if not await self.ingame_checker(ctx):
                 return
 
-            # await self.constant_address_update(ctx)
             await self.location_checker(ctx)
             await self.receiving_items_handler(ctx)
             await self.goal_checker(ctx)
             await self.option_handler(ctx)
+            await self.constant_address_update(ctx)
 
         except bizhawk.RequestFailedError as ex:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
@@ -130,7 +130,7 @@ class GrinchClient(BizHawkClient):
         # Update the AP server with the locally checked list of locations (In other words, locations I found in Grinch)
         locations_sent_to_ap: set[int] = await ctx.check_locations(local_locations_checked)
         if len(locations_sent_to_ap) > 0:
-            await self.constant_address_update(ctx)
+            await self.remove_physical_items(ctx)
         ctx.locations_checked = set(local_locations_checked)
 
     async def receiving_items_handler(self, ctx: "BizHawkClientContext"):
@@ -185,9 +185,9 @@ class GrinchClient(BizHawkClient):
                 }])
 
     # This function's entire purpose is to take away items we physically received ingame, but have not received from AP
-    async def constant_address_update(self, ctx: "BizHawkClientContext"):
+    async def remove_physical_items(self, ctx: "BizHawkClientContext"):
         list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
-        items_to_check: dict[str, GrinchItemData] = {**SLEIGH_PARTS_TABLE, **MISSION_ITEMS_TABLE, **GADGETS_TABLE, **KEYS_TABLE}
+        items_to_check: dict[str, GrinchItemData] = {**SLEIGH_PARTS_TABLE, **MISSION_ITEMS_TABLE, **GADGETS_TABLE}
         heart_count = len(list(item_id for item_id in list_recv_itemids if item_id == 42570))
         heart_item_data = ALL_ITEMS_TABLE["Heart of Stone"]
         await self.update_and_validate_address(ctx, heart_item_data.update_ram_addr[0].ram_address, min(heart_count, 4), 1)
@@ -201,8 +201,31 @@ class GrinchClient(BizHawkClient):
             for addr_to_update in item_data.update_ram_addr:
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
                 if is_binary:
-                    await self.update_and_validate_address(ctx, addr_to_update.ram_address,
-                                                           0, 1)
+                    current_bin_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
+                        addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
+                    current_bin_value &= ~(1 << addr_to_update.binary_bit_pos)
+                    await self.update_and_validate_address(ctx, addr_to_update.ram_address, current_bin_value, 1)
+                else:
+                    await self.update_and_validate_address(ctx, addr_to_update.ram_address, 0, 1)
+
+    # Removes the regional access until you actually received it from AP.
+    async def constant_address_update(self, ctx: "BizHawkClientContext"):
+        list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
+        items_to_check: dict[str, GrinchItemData] = {**KEYS_TABLE}
+
+        for (item_name, item_data) in items_to_check.items():
+            # If item is an event or already been received, ignore.
+            if item_data.id is None or GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
+                continue
+
+            # This assumes we don't have the item so we must set all the data to 0
+            for addr_to_update in item_data.update_ram_addr:
+                is_binary = True if not addr_to_update.binary_bit_pos is None else False
+                if is_binary:
+                    current_bin_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
+                        addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
+                    current_bin_value &= ~(1 << addr_to_update.binary_bit_pos)
+                    await self.update_and_validate_address(ctx, addr_to_update.ram_address, current_bin_value, 1)
                 else:
                     await self.update_and_validate_address(ctx, addr_to_update.ram_address, 0, 1)
 
