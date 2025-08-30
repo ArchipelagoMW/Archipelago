@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 # Stores received index of last item received in PS1 memory card save data
 # By storing this index, it will remember the last item received and prevent item duplication loops
-RECV_ITEM_ADDR = 0x010064
+RECV_ITEM_ADDR = 0x010068
 RECV_ITEM_BITSIZE = 4
 
 # Maximum number of times we check if we are in demo mode or not
@@ -84,10 +84,10 @@ class GrinchClient(BizHawkClient):
             if not await self.ingame_checker(ctx):
                 return
 
+            await self.constant_address_update(ctx)
             await self.location_checker(ctx)
             await self.receiving_items_handler(ctx)
             await self.goal_checker(ctx)
-            await self.constant_address_update(ctx)
             await self.option_handler(ctx)
 
         except bizhawk.RequestFailedError:
@@ -190,8 +190,6 @@ class GrinchClient(BizHawkClient):
             # This assumes we don't have the item so we must set all the data to 0
             for addr_to_update in item_data.update_ram_addr:
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
-                current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
-                    addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
                 if is_binary:
                     await self.update_and_validate_address(ctx, addr_to_update.ram_address,
                         0, 1)
