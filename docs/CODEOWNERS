@@ -15,6 +15,10 @@
 # A Link to the Past
 /worlds/alttp/ @Berserker66
 
+# APQuest
+# NewSoupVi is acting maintainer, but world belongs to core with the exception of the music
+/worlds/apquest/ @NewSoupVi
+
 # Sudoku (APSudoku)
 /worlds/apsudoku/ @EmilyV99
 
