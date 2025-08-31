@@ -125,18 +125,18 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
 }
 
 #Sleigh Parts
-SLEIGH_PARTS_TABLE: dict[str, GrinchItemData] = {
-    "Exhaust Pipes": GrinchItemData("Sleigh Parts", 300, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=2)]),
-    "GPS": GrinchItemData("Sleigh Parts", 301, IC.useful,
-        [GrinchRamData(0x0101FB, binary_bit_pos=5)]),
-    "Tires": GrinchItemData("Sleigh Parts", 302, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=4)]),
-    "Skis": GrinchItemData("Sleigh Parts", 303, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=3)]),
-    "Twin-End Tuba": GrinchItemData("Sleigh Parts", 304, IC.progression_skip_balancing,
-        [GrinchRamData(0x0101FB, binary_bit_pos=6)])
-}
+# SLEIGH_PARTS_TABLE: dict[str, GrinchItemData] = {
+#     "Exhaust Pipes": GrinchItemData("Sleigh Parts", 300, IC.progression_skip_balancing,
+#         [GrinchRamData(0x0101FB, binary_bit_pos=2)]),
+#     "GPS": GrinchItemData("Sleigh Parts", 301, IC.useful,
+#         [GrinchRamData(0x0101FB, binary_bit_pos=5)]),
+#     "Tires": GrinchItemData("Sleigh Parts", 302, IC.progression_skip_balancing,
+#         [GrinchRamData(0x0101FB, binary_bit_pos=4)]),
+#     "Skis": GrinchItemData("Sleigh Parts", 303, IC.progression_skip_balancing,
+#         [GrinchRamData(0x0101FB, binary_bit_pos=3)]),
+#     "Twin-End Tuba": GrinchItemData("Sleigh Parts", 304, IC.progression_skip_balancing,
+#         [GrinchRamData(0x0101FB, binary_bit_pos=6)])
+# }
 
 #Access Keys
 KEYS_TABLE: dict[str, GrinchItemData] = {
@@ -217,12 +217,12 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
 ALL_ITEMS_TABLE: dict[str, GrinchItemData] = {
     **GADGETS_TABLE,
     **MISSION_ITEMS_TABLE,
-    **SLEIGH_PARTS_TABLE,
     **KEYS_TABLE,
     **MISC_ITEMS_TABLE,
     **TRAPS_TABLE,
-    **USEFUL_IC_TABLE
-    # **MOVES_TABLE
+    **USEFUL_IC_TABLE,
+    # **SLEIGH_PARTS_TABLE,
+    # **MOVES_TABLE,
 }
 
 # Psuedocoding traplink table
