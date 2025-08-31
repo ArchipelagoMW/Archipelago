@@ -482,7 +482,7 @@ class MessengerWorld(World):
             "loc_data": {loc.address: {loc.item.name: [loc.item.code, loc.item.flags]}
                          for loc in multiworld.get_filled_locations() if loc.address},
         }
-
+    
         output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
         with open(out_path, "wb") as f:
             f.write(output)

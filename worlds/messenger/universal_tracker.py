@@ -1,7 +1,10 @@
 from Options import PlandoConnection
-from .connections import REVERSED_RANDOMIZED_CONNECTIONS
+from .connections import RANDOMIZED_CONNECTIONS
 from .portals import REGION_ORDER, SHOP_POINTS, CHECKPOINTS
 from .transitions import TRANSITIONS
+
+
+REVERSED_RANDOMIZED_CONNECTIONS = {v: k for k, v in RANDOMIZED_CONNECTIONS.items()}
 
 
 def find_spot(portal_key: int) -> str:
