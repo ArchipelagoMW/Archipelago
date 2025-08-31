@@ -194,9 +194,10 @@ class MessengerWorld(World):
         self.spoiler_portal_mapping = {}
         self.transitions = []
 
-        slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get(self.game)
-        if slot_data:
-            self.starting_portals = slot_data["starting_portals"]
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            slot_data = self.multiworld.re_gen_passthrough.get(self.game)
+            if slot_data:
+                self.starting_portals = slot_data["starting_portals"]
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
@@ -290,11 +291,12 @@ class MessengerWorld(World):
         if self.options.shuffle_transitions:
             disconnect_entrances(self)
 
-        slot_data = getattr(self.multiworld, "re_gen_passthrough", {}).get(self.game)
-        if slot_data:
-            self.multiworld.plando_options |= PlandoOptions.connections
-            self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
-            self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            slot_data = self.multiworld.re_gen_passthrough.get(self.game)
+            if slot_data:
+                self.multiworld.plando_options |= PlandoOptions.connections
+                self.options.portal_plando.value = reverse_portal_exits_into_portal_plando(slot_data["portal_exits"])
+                self.options.plando_connections.value = reverse_transitions_into_plando_connections(slot_data["transitions"])
 
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
@@ -480,6 +482,7 @@ class MessengerWorld(World):
             "loc_data": {loc.address: {loc.item.name: [loc.item.code, loc.item.flags]}
                          for loc in multiworld.get_filled_locations() if loc.address},
         }
+
         output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
         with open(out_path, "wb") as f:
             f.write(output)
