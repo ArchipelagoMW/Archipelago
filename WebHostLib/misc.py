@@ -133,6 +133,15 @@ def tutorial(game: str, file: str):
         return abort(404)
 
 
+@app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
+def tutorial_redirect(game: str, file: str, lang: str):
+    """
+    Permanent redirect old tutorial URLs to new ones to keep search engines happy.
+    e.g. /tutorial/Archipelago/setup/en -> /tutorial/Archipelago/setup_en
+    """
+    return redirect(url_for("tutorial", game=game, file=f"{file}_{lang}"), code=301)
+
+
 @app.route('/tutorial/')
 @cache.cached()
 def tutorial_landing():
