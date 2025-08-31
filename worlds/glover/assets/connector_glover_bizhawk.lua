@@ -160,16 +160,95 @@ local ROM_ITEM_TABLE = {
     "AP_SPACE_L2_GARIBS",
     "AP_SPACE_L3_GARIBS",
     "AP_SPACE_BONUS_GARIBS",
+	--"AP_CHICKEN_SOUND",
     "AP_LIFE_UP",
+	--"AP_BOOMERANG_SPELL",
+	--"AP_BEACHBALL_SPELL",
+	--"AP_HERCULES_SPELL",
+	--"AP_HELICOPTER_SPELL",
+	--"AP_SPEED_SPELL",
+	--"AP_FROG_SPELL",
+	--"AP_DEATH_SPELL",
+	--"AP_STICKY_SPELL",
     "AP_HERCULES_POTION",
     "AP_SPEED_POTION",
     "AP_STICKY_POTION",
+    --"AP_BEACHBALL_POTION",
+    --"AP_DEATH_POTION",
+    --"AP_HELICOPTER_POTION",
+    --"AP_FROG_POTION",
+    --"AP_BOOMERANG_POTION",
+	--"AP_GRAB",
     "AP_ATLANTIS_L1_GATE",
     "AP_ATLANTIS_L2_RAISE_WATER",
     "AP_ATLANTIS_L2_WATER_DRAIN",
     "AP_ATLANTIS_L2_GATE",
     "AP_ATLANTIS_L3_SPIN_WHEEL",
     "AP_ATLANTIS_L3_CAVE",
+	--"AP_CARNIVAL_L1_ELEVATOR",
+	--"AP_CARNIVAL_L1_GATE",
+	--"AP_CARNIVAL_L1_DOOR_A",
+	--"AP_CARNIVAL_L1_DOOR_B",
+	--"AP_CARNIVAL_L1_DOOR_C",
+	--"AP_CARNIVAL_L1_ROCKET_1",
+	--"AP_CARNIVAL_L1_ROCKET_2",
+	--"AP_CARNIVAL_L1_ROCKET_3",
+	--"AP_CARNIVAL_L2_DROP_GARIBS",
+	--"AP_CARNIVAL_L2_FAN",
+	--"AP_CARNIVAL_L3_SPIN_DOOR",
+	--"AP_CARNIVAL_L3_HANDS",
+	--"AP_PIRATES_L1_RAISE_BEACH",
+	--"AP_PIRATES_L1_ELEVATOR",
+	--"AP_PIRATES_L1_CHEST",
+	--"AP_PIRATES_L1_SANDPILE",
+	--"AP_PIRATES_L1_WATERSPOUT",
+	--"AP_PIRATES_L1_LIGHTHOUSE",
+	--"AP_PIRATES_L1_RAISE_SHIP",
+	--"AP_PIRATES_L1_BRIDGE",
+	--"AP_PIRATES_L2_LOWER_WATER",
+	--"AP_PIRATES_L2_RAMP",
+	--"AP_PIRATES_L2_GATE",
+	--"AP_PIRATES_L3_PLATFORM_SPIN",
+	--"AP_PIRATES_L3_TRAMPOLINE",
+	--"AP_PIRATES_L3_STAIRS",
+	--"AP_PIRATES_L3_ELEVATOR",
+	--"AP_PREHISTORIC_L1_LIFE_DROP",
+	--"AP_PREHISTORIC_L2_PLATFORM_1",
+	--"AP_PREHISTORIC_L2_PLATFORM_2",
+	--"AP_PREHISTORIC_L2_LOWER_BALL_SWITCH",
+	--"AP_PREHISTORIC_L3_DROP_GARIBS",
+	--"AP_PREHISTORIC_L3_SPIN_STONES",
+	--"AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_1",
+	--"AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_2",
+	--"AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_3",
+	--"AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_4",
+	--"AP_PREHISTORIC_L3_FLOATING_PLATFORMS",
+	--"AP_PREHISTORIC_L3_LAVA_SPINNING",
+	--"AP_PREHISTORIC_L3_DIRT_ELEVATOR",
+	--"AP_FORTRESS_L1_COFFIN",
+	--"AP_FORTRESS_L1_DOORWAY",
+	--"AP_FORTRESS_L1_DRAWBRIDGE",
+	--"AP_FORTRESS_L2_GARIBS_FALL",
+	--"AP_FORTRESS_L2_CHECKPOINT_GATES",
+	--"AP_FORTRESS_L2_MUMMY_GATE",
+	--"AP_FORTRESS_L3_GATE",
+	--"AP_FORTRESS_L3_SPIKES",
+	--"AP_SPACE_L1_ALIENS",
+	--"AP_SPACE_L1_FANS",
+	--"AP_SPACE_L1_FLYING_PLATFORMS",
+	--"AP_SPACE_L1_GOO_PLATFORMS",
+	--"AP_SPACE_L1_UFO",
+	--"AP_SPACE_L1_MISSILE",
+	--"AP_SPACE_L2_MASHERS",
+	--"AP_SPACE_L2_RAMP",
+	--"AP_SPACE_L3_HAZARD_GATE",
+	--"AP_SPACE_L3_SIGN",
+	--"AP_SPACE_L3_FAN",
+	--"AP_SPACE_L3_BRIDGE",
+	--"AP_SPACE_L3_GLASS_GATE",
+	--"AP_TRAINING_WORLD_SANDPIT",
+	--"AP_TRAINING_WORLD_LOWER_TARGET",
+	--"AP_TRAINING_WORLD_STAIRS",
     "AP_MAX_ITEM"
 };
 
@@ -2624,28 +2703,27 @@ end
 
 function received_misc(itemId)
     --if itemId == 6500358 then
-    --    GVR:setItem(ITEM_TABLE["Chicken Sound"], TOTAL_LIVES)
+    --    GVR:setItem(ITEM_TABLE["AP_CHICKEN_SOUND"], TOTAL_LIVES)
     if itemId == 6500359 then
         TOTAL_LIVES = TOTAL_LIVES + 1
         GVR:setItem(ITEM_TABLE["AP_LIFE_UP"], TOTAL_LIVES)
-    end
     --elseif itemId == 6500360 then
-    --    GVR:setItem(ITEM_TABLE["Boomerang Spell"], TOTAL_LIVES)
+    --    GVR:setItem(ITEM_TABLE["AP_BOOMERANG_SPELL"], TOTAL_LIVES)
     --elseif itemId == 6500361 then
-    --    GVR:setItem(ITEM_TABLE["Beachball Spell"], TOTAL_LIVES)
+    --    GVR:setItem(ITEM_TABLE["AP_BEACHBALL_SPELL"], TOTAL_LIVES)
     --elseif itemId == 6500362 then
-    --    GVR:setItem(ITEM_TABLE["Hercules Spell"], TOTAL_LIVES)
+    --    GVR:setItem(ITEM_TABLE["AP_HERCULES_SPELL"], TOTAL_LIVES)
     --elseif itemId == 6500363 then
-    --    GVR:setItem(ITEM_TABLE["Helicopter Spell"], TOTAL_LIVES)
+    --    GVR:setItem(ITEM_TABLE["AP_HELICOPTER_SPELL"], TOTAL_LIVES)
     --elseif itemId == 6500364 then
-    --    GVR:setItem(ITEM_TABLE["Speed Spell"], TOTAL_LIVES)
+    --    GVR:setItem(ITEM_TABLE["AP_SPEED_SPELL"], TOTAL_LIVES)
     --elseif itemId == 6500365 then
-    --    GVR:setItem(ITEM_TABLE["Frog Spell"], TOTAL_LIVES)
+    --    GVR:setItem(ITEM_TABLE["AP_FROG_SPELL"], TOTAL_LIVES)
     --elseif itemId == 6500366 then
-    --    GVR:setItem(ITEM_TABLE["Death Spell"], TOTAL_LIVES)
+    --    GVR:setItem(ITEM_TABLE["AP_DEATH_SPELL"], TOTAL_LIVES)
     --elseif itemId == 6500367 then
-    --    GVR:setItem(ITEM_TABLE["Sticky Spell"], TOTAL_LIVES)
-    --end
+    --    GVR:setItem(ITEM_TABLE["AP_STICKY_SPELL"], TOTAL_LIVES)
+    end
 end
 
 function received_traps(itemId)
@@ -2675,134 +2753,134 @@ function received_events(itemId)
         GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L3_SPIN_WHEEL"], 1)
     elseif itemId == 6500014 then
         GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L3_CAVE"], 1)
-	--elseif itemId == 6500024 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1 Elevator"], 1)
-	--elseif itemId == 6500025 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1 Gate"], 1)
-	--elseif itemId == 6500026 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1 Door A"], 1)
-	--elseif itemId == 6500027 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1 Door B"], 1)
-	--elseif itemId == 6500028 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1 Door C"], 1)
-	--elseif itemId == 6500029 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1 Rocket 1"], 1)
-	--elseif itemId == 6500030 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1 Rocket 2"], 1)
-	--elseif itemId == 6500031 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1 Rocket 3"], 1)
-	--elseif itemId == 6500032 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L2 Drop Garibs"], 1)
-	--elseif itemId == 6500033 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L2 Fan"], 1)
-	--elseif itemId == 6500034 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L3 Spin Door"], 1)
-	--elseif itemId == 6500035 then
-	--    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L3 Hands"], 1)
-	--elseif itemId == 6500045 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1 Raise Beach"], 1)
-	--elseif itemId == 6500046 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1 Elevator"], 1)
-	--elseif itemId == 6500047 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1 Chest"], 1)
-	--elseif itemId == 6500048 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1 Sandpile"], 1)
-	--elseif itemId == 6500049 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1 Waterspout"], 1)
-	--elseif itemId == 6500050 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1 Lighthouse"], 1)
-	--elseif itemId == 6500051 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1 Raise Ship"], 1)
-	--elseif itemId == 6500052 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1 Bridge"], 1)
-	--elseif itemId == 6500053 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L2 Lower Water"], 1)
-	--elseif itemId == 6500054 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L2 Ramp"], 1)
-	--elseif itemId == 6500055 then
-	--    GVR:setItem(ITEM_TABLE[""AP_PIRATES_L2 Gate], 1)
-	--elseif itemId == 6500056 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L3 Platform Spin"], 1)
-	--elseif itemId == 6500057 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L3 Trampoline"], 1)
-	--elseif itemId == 6500058 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L3 Stairs"], 1)
-	--elseif itemId == 6500059 then
-	--    GVR:setItem(ITEM_TABLE["AP_PIRATES_L3 Elevator"], 1)
-	--elseif itemId == 6500069 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L1 Life Drop"], 1)
-	--elseif itemId == 6500070 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L2 Platform 1"], 1)
-	--elseif itemId == 6500071 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L2 Platform 2"], 1)
-	--elseif itemId == 6500072 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L2 Lower Ball Switch"], 1)
-	--elseif itemId == 6500073 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3 Drop Garibs"], 1)
-	--elseif itemId == 6500074 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3 Spin Stones"], 1)
-	--elseif itemId == 6500075 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3 Progressive Lower Monolith 1"], 1)
-	--elseif itemId == 6500076 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3 Progressive Lower Monolith 2"], 1)
-	--elseif itemId == 6500077 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3 Progressive Lower Monolith 3"], 1)
-	--elseif itemId == 6500078 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3 Progressive Lower Monolith 4"], 1)
-	--elseif itemId == 6500079 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3 Floating Platforms"], 1)
-	--elseif itemId == 6500089 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3 Lava Spinning"], 1)
-	--elseif itemId == 6500081 then
-	--    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3 Dirt Elevator"], 1)
-	--elseif itemId == 6500091 then
-	--    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L1 Coffin"], 1)
-	--elseif itemId == 6500092 then
-	--    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L1 Doorway"], 1)
-	--elseif itemId == 6500093 then
-	--    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L1 Drawbridge"], 1)
-	--elseif itemId == 6500094 then
-	--    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L2 Garibs Fall"], 1)
-	--elseif itemId == 6500095 then
-	--    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L2 Checkpoint Gates"], 1)
-	--elseif itemId == 6500096 then
-	--    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L2 Mummy Gate"], 1)
-	--elseif itemId == 6500097 then
-	--    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L3 Gate"], 1)
-	--elseif itemId == 6500098 then
-	--    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L3 Spikes"], 1)
-	--elseif itemId == 6500108 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L1 Aliens"], 1)
-	--elseif itemId == 6500109 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L1 Fans"], 1)
-	--elseif itemId == 6500110 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L1 Flying Platforms"], 1)
-	--elseif itemId == 6500111 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L1 Goo Platforms"], 1)
-	--elseif itemId == 6500112 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L1 UFO"], 1)
-	--elseif itemId == 6500113 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L1 Missile"], 1)
-	--elseif itemId == 6500114 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L2 Mashers"], 1)
-	--elseif itemId == 6500115 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L2 Ramp"], 1)
-	--elseif itemId == 6500116 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L3 Hazard Gate"], 1)
-	--elseif itemId == 6500117 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L3 Sign"], 1)
-	--elseif itemId == 6500118 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L3 Fan"], 1)
-	--elseif itemId == 6500119 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L3 Bridge"], 1)
-	--elseif itemId == 6500120 then
-	--    GVR:setItem(ITEM_TABLE["AP_SPACE_L3 Glass Gate"], 1)
-	--elseif itemId == 6500127 then
-	--    GVR:setItem(ITEM_TABLE["AP_TRAINING_WORLD Sandpit"], 1)
-	--elseif itemId == 6500128 then
-	--    GVR:setItem(ITEM_TABLE["AP_TRAINING_WORLD Lower Target"], 1)
-	--elseif itemId == 6500129 then
-	--    GVR:setItem(ITEM_TABLE["AP_TRAINING_WORLD Stairs"], 1)
+	elseif itemId == 6500024 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_ELEVATOR"], 1)
+	elseif itemId == 6500025 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_GATE"], 1)
+	elseif itemId == 6500026 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_DOOR_A"], 1)
+	elseif itemId == 6500027 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_DOOR_B"], 1)
+	elseif itemId == 6500028 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_DOOR_C"], 1)
+	elseif itemId == 6500029 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_ROCKET_1"], 1)
+	elseif itemId == 6500030 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_ROCKET_2"], 1)
+	elseif itemId == 6500031 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_ROCKET_3"], 1)
+	elseif itemId == 6500032 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L2_DROP_GARIBS"], 1)
+	elseif itemId == 6500033 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L2_FAN"], 1)
+	elseif itemId == 6500034 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L3_SPIN_DOOR"], 1)
+	elseif itemId == 6500035 then
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L3_HANDS"], 1)
+	elseif itemId == 6500045 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1_RAISE_BEACH"], 1)
+	elseif itemId == 6500046 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1_ELEVATOR"], 1)
+	elseif itemId == 6500047 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1_CHEST"], 1)
+	elseif itemId == 6500048 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1_SANDPILE"], 1)
+	elseif itemId == 6500049 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1_WATERSPOUT"], 1)
+	elseif itemId == 6500050 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1_LIGHTHOUSE"], 1)
+	elseif itemId == 6500051 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1_RAISE_SHIP"], 1)
+	elseif itemId == 6500052 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L1_BRIDGE"], 1)
+	elseif itemId == 6500053 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L2_LOWER_WATER"], 1)
+	elseif itemId == 6500054 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L2_RAMP"], 1)
+	elseif itemId == 6500055 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L2_GATE"], 1)
+	elseif itemId == 6500056 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L3_PLATFORM_SPIN"], 1)
+	elseif itemId == 6500057 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L3_TRAMPOLINE"], 1)
+	elseif itemId == 6500058 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L3_STAIRS"], 1)
+	elseif itemId == 6500059 then
+	    GVR:setItem(ITEM_TABLE["AP_PIRATES_L3_ELEVATOR"], 1)
+	elseif itemId == 6500069 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L1_LIFE_DROP"], 1)
+	elseif itemId == 6500070 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L2_PLATFORM_1"], 1)
+	elseif itemId == 6500071 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L2_PLATFORM_2"], 1)
+	elseif itemId == 6500072 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L2_LOWER_BALL_SWITCH"], 1)
+	elseif itemId == 6500073 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3_DROP_GARIBS"], 1)
+	elseif itemId == 6500074 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3_SPIN_STONES"], 1)
+	elseif itemId == 6500075 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_1"], 1)
+	elseif itemId == 6500076 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_2"], 1)
+	elseif itemId == 6500077 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_3"], 1)
+	elseif itemId == 6500078 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_4"], 1)
+	elseif itemId == 6500079 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3_FLOATING_PLATFORMS"], 1)
+	elseif itemId == 6500089 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3_LAVA_SPINNING"], 1)
+	elseif itemId == 6500081 then
+	    GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_L3_DIRT_ELEVATOR"], 1)
+	elseif itemId == 6500091 then
+	    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L1_COFFIN"], 1)
+	elseif itemId == 6500092 then
+	    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L1_DOORWAY"], 1)
+	elseif itemId == 6500093 then
+	    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L1_DRAWBRIDGE"], 1)
+	elseif itemId == 6500094 then
+	    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L2_GARIBS_FALL"], 1)
+	elseif itemId == 6500095 then
+	    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L2_CHECKPOINT_GATES"], 1)
+	elseif itemId == 6500096 then
+	    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L2_MUMMY_GATE"], 1)
+	elseif itemId == 6500097 then
+	    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L3_GATE"], 1)
+	elseif itemId == 6500098 then
+	    GVR:setItem(ITEM_TABLE["AP_FORTRESS_L3_SPIKES"], 1)
+	elseif itemId == 6500108 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L1_ALIENS"], 1)
+	elseif itemId == 6500109 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L1_FANS"], 1)
+	elseif itemId == 6500110 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L1_FLYING_PLATFORMS"], 1)
+	elseif itemId == 6500111 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L1_GOO_PLATFORMS"], 1)
+	elseif itemId == 6500112 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L1_UFO"], 1)
+	elseif itemId == 6500113 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L1_MISSILE"], 1)
+	elseif itemId == 6500114 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L2_MASHERS"], 1)
+	elseif itemId == 6500115 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L2_RAMP"], 1)
+	elseif itemId == 6500116 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L3_HAZARD_GATE"], 1)
+	elseif itemId == 6500117 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L3_SIGN"], 1)
+	elseif itemId == 6500118 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L3_FAN"], 1)
+	elseif itemId == 6500119 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L3_BRIDGE"], 1)
+	elseif itemId == 6500120 then
+	    GVR:setItem(ITEM_TABLE["AP_SPACE_L3_GLASS_GATE"], 1)
+	elseif itemId == 6500127 then
+	    GVR:setItem(ITEM_TABLE["AP_TRAINING_WORLD_SANDPIT"], 1)
+	elseif itemId == 6500128 then
+	    GVR:setItem(ITEM_TABLE["AP_TRAINING_WORLD_LOWER_TARGET"], 1)
+	elseif itemId == 6500129 then
+	    GVR:setItem(ITEM_TABLE["AP_TRAINING_WORLD_STAIRS"], 1)
     end
 end
 
