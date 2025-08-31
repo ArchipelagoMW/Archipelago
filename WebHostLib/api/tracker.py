@@ -167,7 +167,7 @@ class PlayerSlotData(TypedDict):
 
 @api_endpoints.route("/static_tracker/<suuid:tracker>")
 @cache.memoize(timeout=300)
-def get_static_tracker_data(tracker: UUID) -> dict[str, Any]:
+def static_tracker_data(tracker: UUID) -> dict[str, Any]:
     """
     Outputs json data to <root_path>/api/static_tracker/<id of current session tracker>.
 
@@ -205,7 +205,7 @@ def get_static_tracker_data(tracker: UUID) -> dict[str, Any]:
 # It should be exceedingly rare that slot data is needed, so it's separated out.
 @api_endpoints.route("/slot_data_tracker/<suuid:tracker>")
 @cache.memoize(timeout=300)
-def get_tracker_slot_data(tracker: UUID) -> list[PlayerSlotData]:
+def tracker_slot_data(tracker: UUID) -> list[PlayerSlotData]:
     """
     Outputs json data to <root_path>/api/slot_data_tracker/<id of current session tracker>.
 
