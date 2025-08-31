@@ -172,6 +172,20 @@ class CandyBox2RulesPackageRuleRoomExpression(CandyBox2RulesPackageRuleExpressio
     def default(self):
         return ["room", self.room.value]
 
+class CandyBox2RulesPackageRuleLocationExpression(CandyBox2RulesPackageRuleExpression):
+    location: "CandyBox2LocationName"
+    id: int
+
+    def __init__(self, location: "CandyBox2LocationName"):
+        super().__init__()
+        self.location = location
+
+    def evaluate(self, world: "CandyBox2World", state: CollectionState, player: int) -> bool:
+        return state.can_reach_location(self.location, player)
+
+    def default(self):
+        return ["location", locations[self.location].id]
+
 class CandyBox2RulesPackageRuleCountExpression(CandyBox2RulesPackageRuleExpression):
     class RuleCountInequality(IntEnum):
         LESS_THAN = 0
@@ -355,6 +369,9 @@ def rule_item(item: "CandyBox2ItemName", count: int = 1):
 def rule_room(room: "CandyBox2Room"):
     return CandyBox2RulesPackageRuleRoomExpression(room)
 
+def rule_location(location: "CandyBox2LocationName"):
+    return CandyBox2RulesPackageRuleLocationExpression(location)
+
 def no_conditions():
     return None
 
@@ -454,12 +471,10 @@ def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_location_rule(CandyBox2LocationName.HP_BAR_UNLOCK, can_farm_candies(), None)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_LOLLIPOP_ON_EXHAUST_CHUTE, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_WOODEN_SWORD, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_IRON_AXE, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_POLISHED_SILVER_SWORD, can_farm_candies(), CandyBox2Room.VILLAGE_FORGE)
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_LIGHTWEIGHT_BODY_ARMOUR, can_farm_candies() & rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 3), CandyBox2Room.VILLAGE_FORGE)
-
-    # TODO: Forge locations should depend on previous forge location where applicable
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_SCYTHE, can_farm_candies() & rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 3) & rule_room(CandyBox2Room.DRAGON), CandyBox2Room.VILLAGE_FORGE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_IRON_AXE, rule_location(CandyBox2LocationName.VILLAGE_FORGE_BUY_WOODEN_SWORD), CandyBox2Room.VILLAGE_FORGE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_POLISHED_SILVER_SWORD, can_farm_candies() & rule_location(CandyBox2LocationName.VILLAGE_FORGE_BUY_IRON_AXE), CandyBox2Room.VILLAGE_FORGE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_LIGHTWEIGHT_BODY_ARMOUR, can_farm_candies() & rule_location(CandyBox2LocationName.CAVE_EXIT) & rule_location(CandyBox2LocationName.VILLAGE_FORGE_BUY_POLISHED_SILVER_SWORD), CandyBox2Room.VILLAGE_FORGE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_SCYTHE, can_farm_candies() & rule_room(CandyBox2Room.DRAGON) & rule_location(CandyBox2LocationName.VILLAGE_FORGE_BUY_LIGHTWEIGHT_BODY_ARMOUR), CandyBox2Room.VILLAGE_FORGE)
 
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_ON_THE_BOOKSHELF, no_conditions(), CandyBox2Room.VILLAGE_FURNISHED_HOUSE)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_IN_THE_BOOKSHELF, no_conditions(), CandyBox2Room.VILLAGE_FURNISHED_HOUSE)
