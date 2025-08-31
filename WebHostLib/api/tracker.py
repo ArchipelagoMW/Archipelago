@@ -160,18 +160,6 @@ class PlayerGroups(TypedDict):
     members: list[int]
 
 
-class PlayerName(TypedDict):
-    team: int
-    player: int
-    name: str
-
-
-class PlayerGame(TypedDict):
-    team: int
-    player: int
-    game: str
-
-
 class PlayerSlotData(TypedDict):
     team: int
     player: int
@@ -209,18 +197,6 @@ def get_static_tracker_data(tracker: UUID) -> dict[str, Any]:
                     "name": slot_info.name,
                     "members": list(slot_info.group_members),
                 })
-
-    player_names: list[PlayerName] = []
-    """Slot names of all players."""
-    for team, players in all_players.items():
-        for player in players:
-            player_names.append({"team": team, "player": player, "name": tracker_data.get_player_name(team, player)})
-
-    games: list[PlayerGame] = []
-    """The game each player is playing."""
-    for team, players in all_players.items():
-        for player in players:
-            games.append({"team": team, "player": player, "game": tracker_data.get_player_game(team, player)})
 
     return {
         "groups": groups,
