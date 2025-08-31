@@ -2602,11 +2602,11 @@ function received_moves(itemId)
     --elseif itemId == 6500347 then
     --    GVR:setItem(ITEM_TABLE["AP_BOOMERANG_POTION"], 1)
     elseif itemId == 6500348 then
-        GVR:setItem(ITEM_TABLE["AP_HERCULES_POTION"], 1)
-    elseif itemId == 6500349 then
         GVR:setItem(ITEM_TABLE["AP_SPEED_POTION"], 1)
-    elseif itemId == 6500350 then
+    elseif itemId == 6500349 then
         GVR:setItem(ITEM_TABLE["AP_STICKY_POTION"], 1)
+    elseif itemId == 6500350 then
+        GVR:setItem(ITEM_TABLE["AP_HERCULES_POTION"], 1)
     --elseif itemId == 6500351 then
     --    GVR:setItem(ITEM_TABLE["AP_GRAB"], 1)
     elseif itemId == 6500352 then
