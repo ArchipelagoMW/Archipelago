@@ -71,10 +71,12 @@ class GrinchClient(BizHawkClient):
         return True
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
+        from CommonClient import logger
         super().on_package(ctx, cmd, args)
         match cmd:
             case "Connected":  # On Connect
                 self.loc_unlimited_eggs = bool(ctx.slot_data["give_unlimited_eggs"])
+                logger.info("You are now connected to the client. Please wait a few seconds for the client to detect you are ingame.")
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         await ctx.get_username()
@@ -251,7 +253,7 @@ class GrinchClient(BizHawkClient):
                 self.ingame_log = False
                 return False
 
-            # Update the previosu map we were on to be the current map.
+            # Update the previous map we were on to be the current map.
             self.last_map_location = ingame_map_id
 
         # Use this as a delayed check to make sure we are in game
