@@ -438,7 +438,12 @@ class GoalSelection(OptionSet):
     """
     What will be your goal(s)?
     Configure them further with other options.
-    Possible values are "Space Elevator Tier", "AWESOME Sink Points (total)", "AWESOME Sink Points (per minute)", and "Exploration Collectables".
+
+    Possible values are:
+    - **Space Elevator Tier**
+    - **AWESOME Sink Points (total)**
+    - **AWESOME Sink Points (per minute)**
+    - **Exploration Collectables**
     """
     display_name = "Select your Goals"
     valid_keys = {
