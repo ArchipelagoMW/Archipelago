@@ -115,10 +115,6 @@ def _api_sphere_tracker_cached(tracker, expand: int):
     Memoized version whose key includes `expand`.
     """
     room = Room.get(tracker=tracker)
-    if not room:
-        # Clear JSON instead of an HTML "Page not found"
-        return jsonify({"error": "tracker_not_found", "tracker": str(tracker)}), 404
-
     td = TrackerData(room)
     used_pairs_by_team, used_loc_ids_by_game, used_item_flags_by_game = _collect_used_data(td)
 
