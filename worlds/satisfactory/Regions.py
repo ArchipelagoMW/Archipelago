@@ -1,5 +1,5 @@
 from typing import Optional
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from BaseClasses import MultiWorld, Region, Location, Item, CollectionState
 from .Locations import LocationData
 from .GameLogic import GameLogic, PowerInfrastructureLevel
@@ -118,7 +118,7 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
     connect(regions, "Overworld", "AWESOME Shop", lambda state:
                                 state_logic.can_build_all(state, ("AWESOME Shop", "AWESOME Sink")))
 
-    def can_produce_all_allowing_handcrafting(parts: tuple[str, ...]) -> Callable[[CollectionState], bool]:
+    def can_produce_all_allowing_handcrafting(parts: Iterable[str]) -> Callable[[CollectionState], bool]:
         def logic_rule(state: CollectionState):
             return state_logic.can_produce_all_allowing_handcrafting(state, game_logic, parts)
 
