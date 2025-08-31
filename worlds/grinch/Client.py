@@ -187,10 +187,13 @@ class GrinchClient(BizHawkClient):
     # This function's entire purpose is to take away items we physically received ingame, but have not received from AP
     async def remove_physical_items(self, ctx: "BizHawkClientContext"):
         list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
-        items_to_check: dict[str, GrinchItemData] = {**SLEIGH_PARTS_TABLE, **MISSION_ITEMS_TABLE, **GADGETS_TABLE}
+        items_to_check: dict[str, GrinchItemData] = {**GADGETS_TABLE} #, **SLEIGH_PARTS_TABLE
         heart_count = len(list(item_id for item_id in list_recv_itemids if item_id == 42570))
         heart_item_data = ALL_ITEMS_TABLE["Heart of Stone"]
         await self.update_and_validate_address(ctx, heart_item_data.update_ram_addr[0].ram_address, min(heart_count, 4), 1)
+
+        # Setting Who Lake Mission Count back to 0 to prevent warping after completing 3 missions
+        await self.update_and_validate_address(ctx,0x0100F3, 0, 1)
 
         for (item_name, item_data) in items_to_check.items():
             # If item is an event or already been received, ignore.
@@ -211,7 +214,7 @@ class GrinchClient(BizHawkClient):
     # Removes the regional access until you actually received it from AP.
     async def constant_address_update(self, ctx: "BizHawkClientContext"):
         list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
-        items_to_check: dict[str, GrinchItemData] = {**KEYS_TABLE}
+        items_to_check: dict[str, GrinchItemData] = {**KEYS_TABLE, **MISSION_ITEMS_TABLE}
 
         for (item_name, item_data) in items_to_check.items():
             # If item is an event or already been received, ignore.
