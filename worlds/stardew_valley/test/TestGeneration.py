@@ -137,7 +137,7 @@ class TestProgressiveElevator(SVTestBase):
 
         self.collect(last_elevator)
 
-        self.assert_can_reach_region("The Mines - Floor 120")
+        self.assert_can_reach_region(Region.mines_floor_120)
 
     def generate_items_for_mine_115(self) -> List[Item]:
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2
