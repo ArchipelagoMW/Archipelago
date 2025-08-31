@@ -117,7 +117,7 @@ class FF1Client(BizHawkClient):
         auth_raw = (await bizhawk.read(
             ctx.bizhawk_ctx,
             [(player_name_location, 0x10, self.rom)]))[0]
-        ctx.auth = str(auth_raw, "ascii").replace("\x00", "")
+        ctx.auth = str(auth_raw, "ascii").replace("\x00", "").strip()
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         if ctx.server is None:
