@@ -63,7 +63,7 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
             if node.minimal_tier <= options.final_elevator_package:
                 region_names.append(f"{tree_name}: {node.name}")
 
-    locations_per_region: dict[str, LocationData] = get_locations_per_region(locations)
+    locations_per_region: dict[str, list[LocationData]] = get_locations_per_region(locations)
     regions: dict[str, Region] = create_regions(multiworld, player, locations_per_region, region_names)
 
     if __debug__:
@@ -135,7 +135,7 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
     for building_name, building in game_logic.buildings.items():
         if building.can_produce and building_name in critical_path.required_buildings:
             connect(regions, "Overworld", building_name,
-                lambda state, building_name=building_name: state_logic.can_build(state, building_name))
+                    lambda state, name=building_name: state_logic.can_build(state, name))
         
     for tree_name, tree in game_logic.man_trees.items():
         connect(regions, "Mam", tree_name)

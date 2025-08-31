@@ -96,7 +96,7 @@ class Building(Recipe):
         self.implicitly_unlocked = implicitly_unlocked
 
 
-class MamNode():
+class MamNode:
     name: str
     unlock_cost: dict[str, int]
     """All game items must be submitted to purchase this MamNode"""

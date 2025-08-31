@@ -122,12 +122,12 @@ class SatisfactoryWorld(World):
         for tier, milestones in enumerate(self.game_logic.hub_layout, 1):
             slot_hub_layout.append([])
             for milestone, parts in enumerate(milestones, 1):
-                 slot_hub_layout[tier - 1].append({})
-                 for part, amount in parts.items():
+                slot_hub_layout[tier - 1].append({})
+                for part, amount in parts.items():
                     multiplied_amount = int(max(amount * (self.options.milestone_cost_multiplier / 100), 1))
                     slot_hub_layout[tier-1][milestone-1][self.item_id_str(part)] = multiplied_amount
 
-        starting_recipes: tuple[int] = tuple(
+        starting_recipes: tuple[int, ...] = tuple(
             self.item_name_to_id[recipe_name] 
             for recipe_name in self.critical_path.tier_0_recipes
         )
@@ -176,10 +176,10 @@ class SatisfactoryWorld(World):
         """Used by Universal Tracker to correctly rebuild state"""
 
         slot_data: dict[str, Any] | None = None
-        if hasattr(self.multiworld, "re_gen_passthrough") \
-            and isinstance(self.multiworld.re_gen_passthrough, dict) \
-            and "Satisfactory" in self.multiworld.re_gen_passthrough:
-                slot_data = self.multiworld.re_gen_passthrough["Satisfactory"]
+        if (hasattr(self.multiworld, "re_gen_passthrough") 
+                and isinstance(self.multiworld.re_gen_passthrough, dict) 
+                and "Satisfactory" in self.multiworld.re_gen_passthrough):
+            slot_data = self.multiworld.re_gen_passthrough["Satisfactory"]
 
         if not slot_data:
             return

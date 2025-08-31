@@ -242,7 +242,8 @@ class CriticalPathCalculator:
                 self.tier_0_recipes.add(self.random.choice(("Recipe: Silica", "Recipe: Cheap Silica")))
 
             selected_recipe = self.random.choice(
-                ("Recipe: Screw", "Recipe: Screw","Recipe: Cast Screw", "Recipe: Cast Screw", "Recipe: Steel Screw"))
+                ("Recipe: Screw", "Recipe: Screw", "Recipe: Cast Screw", "Recipe: Cast Screw", "Recipe: Steel Screw"))
+
             self.tier_0_recipes.add(selected_recipe)
             if selected_recipe == "Recipe: Steel Screw":
                 # add Steel Beam and steel Ingot

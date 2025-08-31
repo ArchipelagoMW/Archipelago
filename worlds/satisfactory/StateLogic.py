@@ -42,7 +42,7 @@ class StateLogic:
         return power_level is None or state.has(building_event_prefix + power_level.to_name(), self.player)
 
     def can_produce_all(self, state: CollectionState, parts: Optional[Iterable[str]]) -> bool:
-       return parts is None or \
+        return parts is None or \
             state.has_all(map(self.to_part_event, parts), self.player)
 
     def can_produce_all_allowing_handcrafting(self, state: CollectionState, logic: GameLogic, 

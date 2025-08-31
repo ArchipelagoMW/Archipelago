@@ -859,7 +859,7 @@ class Items:
         "Single: Gas Filter": ItemData(G.Equipment, 1339187, count=0)
     }
 
-    item_names_and_ids: ClassVar[dict[str, int]] = {name: item_data.code for name, item_data in item_data.items()}
+    item_names_and_ids: ClassVar[dict[str, int]] = {name: data.code for name, data in item_data.items()}
     filler_items: ClassVar[tuple[str, ...]] = tuple(item for item, details in item_data.items() 
                                                     if details.count > 0 and details.category & (G.Parts | G.Ammo))
 
@@ -893,7 +893,7 @@ class Items:
     critical_path: CriticalPathCalculator
 
     trap_chance: int 
-    enabled_traps: tuple[str]
+    enabled_traps: tuple[str, ...]
 
     def __init__(self, player: Optional[int], logic: GameLogic, random: Random,
                   options: SatisfactoryOptions, critical_path: CriticalPathCalculator):

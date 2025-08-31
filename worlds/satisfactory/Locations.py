@@ -325,8 +325,8 @@ class Locations():
 
         location_table = self.get_base_location_table(max_tier_for_game)
         location_table.extend(self.get_hub_locations(False, max_tier_for_game))
-        location_table.extend(self.get_hard_drive_locations(False, max_tier_for_game,self.critical_path.required_parts))
-        location_table.extend(self.get_logical_event_locations(self.options.final_elevator_package))
+        location_table.extend(self.get_hard_drive_locations(False, max_tier_for_game, self.critical_path.required_parts))
+        location_table.extend(self.get_logical_event_locations(self.options.final_elevator_package.value))
 
         return location_table
 
@@ -334,8 +334,8 @@ class Locations():
         location_table: list[LocationData] = []
 
         number_of_slots_per_milestone_for_game: int
-        if (for_data_package):
-           number_of_slots_per_milestone_for_game = self.max_slots
+        if for_data_package:
+            number_of_slots_per_milestone_for_game = self.max_slots
         else:
             if self.options.final_elevator_package <= 2:
                 number_of_slots_per_milestone_for_game = self.max_slots
@@ -363,7 +363,7 @@ class Locations():
         location_table: list[LocationData] = []
 
         # for performance plan is to upfront calculated everything we need
-        # and than create one massive state.has_all for each logical gate (hub tiers, elevator tiers)
+        # and then create one massive state.has_all for each logical gate (hub tiers, elevator tiers)
 
         location_table.extend(
             ElevatorTier(index, self.state_logic, self.game_logic) 
@@ -398,7 +398,7 @@ class Locations():
             bucket_size = floor((self.drop_pod_location_id_end - self.drop_pod_location_id_start) / max_tier)
             drop_pod_data: list[DropPodData] = self.game_logic.drop_pods
             # sort, easily obtainable first, should be deterministic
-            drop_pod_data.sort(key = lambda data: ("!" if data.item == None else data.item) + str(data.x - data.z))
+            drop_pod_data.sort(key=lambda data: ("!" if data.item is None else data.item) + str(data.x - data.z))
 
         for location_id in range(self.drop_pod_location_id_start, self.drop_pod_location_id_end + 1):
             if for_data_package:
