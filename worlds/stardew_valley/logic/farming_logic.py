@@ -3,11 +3,6 @@ from typing import Union, Tuple
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogicMixin
-from .tool_logic import ToolLogicMixin
 from .. import options
 from ..stardew_rule import StardewRule, True_, false_
 from ..strings.fertilizer_names import Fertilizer
@@ -29,7 +24,7 @@ class FarmingLogicMixin(BaseLogicMixin):
         self.farming = FarmingLogic(*args, **kwargs)
 
 
-class FarmingLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, ToolLogicMixin, FarmingLogicMixin]]):
+class FarmingLogic(BaseLogic):
 
     @cached_property
     def has_farming_tools(self) -> StardewRule:
@@ -44,6 +39,8 @@ class FarmingLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogi
             return self.logic.has(Fertilizer.quality)
         if tier >= 3:
             return self.logic.has(Fertilizer.deluxe)
+
+        return self.logic.false_
 
     @cache_self1
     def can_plant_and_grow_item(self, seasons: Union[str, Tuple[str]]) -> StardewRule:

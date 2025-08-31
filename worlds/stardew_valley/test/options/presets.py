@@ -16,6 +16,7 @@ def default_6_x_x():
         options.ElevatorProgression.internal_name: options.ElevatorProgression.default,
         options.EntranceRandomization.internal_name: options.EntranceRandomization.default,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.default,
+        options.FarmType.internal_name: options.FarmType.default,
         options.FestivalLocations.internal_name: options.FestivalLocations.default,
         options.Fishsanity.internal_name: options.Fishsanity.default,
         options.Friendsanity.internal_name: options.Friendsanity.default,
@@ -52,6 +53,7 @@ def allsanity_no_mods_6_x_x():
         options.ElevatorProgression.internal_name: options.ElevatorProgression.option_progressive,
         options.EntranceRandomization.internal_name: options.EntranceRandomization.option_disabled,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
+        options.FarmType.internal_name: options.FarmType.option_standard,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_hard,
         options.Fishsanity.internal_name: options.Fishsanity.option_all,
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
@@ -68,7 +70,7 @@ def allsanity_no_mods_6_x_x():
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
-        options.TrapItems.internal_name: options.TrapItems.option_nightmare,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.option_nightmare,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_all
     }
 
@@ -100,6 +102,7 @@ def get_minsanity_options():
         options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
         options.EntranceRandomization.internal_name: options.EntranceRandomization.option_disabled,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        options.FarmType.internal_name: options.FarmType.option_meadowlands,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_disabled,
         options.Fishsanity.internal_name: options.Fishsanity.option_none,
         options.Friendsanity.internal_name: options.Friendsanity.option_none,
@@ -116,7 +119,7 @@ def get_minsanity_options():
         options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_vanilla,
         options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-        options.TrapItems.internal_name: options.TrapItems.option_no_traps,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.option_no_traps,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_none
     }
 
@@ -136,6 +139,7 @@ def minimal_locations_maximal_items():
         options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
         options.EntranceRandomization.internal_name: options.EntranceRandomization.option_disabled,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        options.FarmType.internal_name: options.FarmType.option_meadowlands,
         options.FestivalLocations.internal_name: options.FestivalLocations.option_disabled,
         options.Fishsanity.internal_name: options.Fishsanity.option_none,
         options.Friendsanity.internal_name: options.Friendsanity.option_none,
@@ -152,7 +156,7 @@ def minimal_locations_maximal_items():
         options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_vanilla,
         options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-        options.TrapItems.internal_name: options.TrapItems.option_nightmare,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.option_nightmare,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_none
     }
     return min_max_options
