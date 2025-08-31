@@ -428,17 +428,17 @@ rules_dict: dict[str,list[list[str]]] = {
     "Neutralizing Santa": [
         ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
     ],
-    "Heart of Stone - Whoville": [
+    "Heart of Stone - Whoville's Post Office": [
         []
     ],
-    "Heart of Stone - Who Forest": [
+    "Heart of Stone - Who Forest's Ski Resort": [
         []
     ],
-    "Heart of Stone - Who Dump": [
+    "Heart of Stone - Who Dump's Minefield": [
         ["Grinch Copter"],
         ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
     ],
-    "Heart of Stone - Who Lake": [
+    "Heart of Stone - Who Lake's North Shore": [
         []
         # ["Max"]
     ],
@@ -477,6 +477,22 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "Bike Race - Top 3": [
         []
+    ],
+    "Exhaust Pipes in Whoville": [
+        ["Rotten Egg Launcher"]
+    ],
+    "Skis in Who Forest": [
+        ["Who Forest Vacuum Access"]
+    ],
+    "Tires in Who Dump": [
+        ["Who Dump Vacuum Access", "Rocket Spring", "Rotten Egg Launcher"],
+        ["Who Dump Vacuum Access", "Rocket Spring", "Slime Shooter"]
+    ],
+    "Twin-End Tuba in Submarine World": [
+        ["Who Lake Vacuum Access", "Marine Mobile"]
+    ],
+    "GPS in Who Lake": [
+        ["Who Lake Vacuum Access", "Rotten Egg Launcher"]
     ],
 }
 

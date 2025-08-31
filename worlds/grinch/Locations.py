@@ -159,10 +159,10 @@ grinch_locations = {
         "Stealing All Gifts": GrinchLocationData("Sleigh Room", "Sleigh Ride", 1300, [GrinchRamData(0x0100BF, binary_bit_pos=6)]),
         "Neutralizing Santa": GrinchLocationData("Sleigh Room", "Sleigh Ride", None, [GrinchRamData(0x0100BF, binary_bit_pos=7)]),
 #Heart of Stones
-        "Heart of Stone - Whoville": GrinchLocationData("Post Office", "Heart of Stones", 1400, [GrinchRamData(0x0101FA, binary_bit_pos=6)]),
-        "Heart of Stone - Who Forest": GrinchLocationData("Ski Resort", "Heart of Stones", 1401, [GrinchRamData(0x0101FA, binary_bit_pos=7)]),
-        "Heart of Stone - Who Dump": GrinchLocationData("Minefield", "Heart of Stones", 1402, [GrinchRamData(0x0101FB, binary_bit_pos=0)]),
-        "Heart of Stone - Who Lake": GrinchLocationData("North Shore", "Heart of Stones", 1403, [GrinchRamData(0x0101FB, binary_bit_pos=1)]),
+        "Heart of Stone - Whoville's Post Office": GrinchLocationData("Post Office", "Heart of Stones", 1400, [GrinchRamData(0x0101FA, binary_bit_pos=6)]),
+        "Heart of Stone - Who Forest's Ski Resort": GrinchLocationData("Ski Resort", "Heart of Stones", 1401, [GrinchRamData(0x0101FA, binary_bit_pos=7)]),
+        "Heart of Stone - Who Dump's Minefield": GrinchLocationData("Minefield", "Heart of Stones", 1402, [GrinchRamData(0x0101FB, binary_bit_pos=0)]),
+        "Heart of Stone - Who Lake's North Shore": GrinchLocationData("North Shore", "Heart of Stones", 1403, [GrinchRamData(0x0101FB, binary_bit_pos=1)]),
 #Supadow Minigames
         # "Spin N' Win - Easy": GrinchLocationData("Spin N' Win Supadow", "Supadow Minigames", 1500, [GrinchRamData()]),
         # "Spin N' Win - Hard": GrinchLocationData("Spin N' Win Supadow", "Supadow Minigames", 1501, [GrinchRamData()]),
@@ -176,6 +176,12 @@ grinch_locations = {
         # "Bike Race - 1st Place":  GrinchLocationData("Bike Race", "Supadow Minigames", 1509, [GrinchRamData()]),
         # "Bike Race - Top 2": GrinchLocationData("Bike Race", "Supadow Minigames", 1510, [GrinchRamData()]),
         # "Bike Race - Top 3": GrinchLocationData("Bike Race", "Supadow Minigames", 1511, [GrinchRamData()]),
+# Sleigh Part Locations
+        "Exhaust Pipes in Whoville": GrinchLocationData("Sleigh Room", "Sleigh Ride", 1600, [GrinchRamData(0x0101FB, binary_bit_pos=2)]),
+        "Skis in Who Forest": GrinchLocationData("Sleigh Room", "Sleigh Ride", 1601, [GrinchRamData(0x0101FB, binary_bit_pos=3)]),
+        "Tires in Who Dump": GrinchLocationData("Sleigh Room", "Sleigh Ride", 1602, [GrinchRamData(0x0101FB, binary_bit_pos=4)]),
+        "Twin-End Tuba in Submarine World": GrinchLocationData("Sleigh Room", "Sleigh Ride", 1603, [GrinchRamData(0x0101FB, binary_bit_pos=6)]),
+        "GPS in Who Lake": GrinchLocationData("Sleigh Room", "Sleigh Ride", 1604, [GrinchRamData(0x0101FB, binary_bit_pos=5)]),
 }
 
 def grinch_locations_to_id() -> dict[str,int]:
