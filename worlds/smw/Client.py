@@ -360,6 +360,34 @@ class SMWSNIClient(SNIClient):
                     snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0], bytes([0x01]))
                     snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0] + 1, bytes([0x00]))
                     snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0] + 2, bytes([0x00]))
+            elif next_trap.item == 0xBC001F:
+                # Timer Untrap
+                if trap_active[0] > 0 or (trap_active[0] == 0 and trap_active[1] == 0 and trap_active[2] == 0):
+                    # "Trap" already active
+                    if from_queue:
+                        self.add_trap_to_queue(next_trap, message)
+                    return
+                else:
+                    if len(message_str) > 0:
+                        snes_logger.info(message_str)
+
+                    snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0], bytes([0x03]))
+                    snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0] + 1, bytes([0x00]))
+                    snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0] + 2, bytes([0x00]))
+                    snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([trap_rom_data[next_trap.item][2]]))
+            elif next_trap.item == 0xBC001E or next_trap.item == 0xBC0020:
+                if trap_active[0] == 0:
+                    # "Trap" already active
+                    if from_queue:
+                        self.add_trap_to_queue(next_trap, message)
+                    return
+                else:
+                    verify_game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
+                    if verify_game_state[0] == 0x14 and len(trap_rom_data[next_trap.item]) > 2:
+                        snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([trap_rom_data[next_trap.item][2]]))
+
+                    new_item_count = trap_rom_data[next_trap.item][1]
+                    snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0], bytes([new_item_count]))
             else:
                 if trap_active[0] > 0:
                     # Trap already active

@@ -178,10 +178,13 @@ class SMWWorld(World):
         junk_count = total_required_locations - len(itempool)
         trap_weights = []
         trap_weights += ([ItemName.ice_trap] * self.options.ice_trap_weight.value)
+        trap_weights += ([ItemName.ice_untrap] * min(self.options.ice_trap_weight.value, self.options.ice_untrap_weight.value))
         trap_weights += ([ItemName.stun_trap] * self.options.stun_trap_weight.value)
         trap_weights += ([ItemName.literature_trap] * self.options.literature_trap_weight.value)
         trap_weights += ([ItemName.timer_trap] * self.options.timer_trap_weight.value)
+        trap_weights += ([ItemName.timer_untrap] * min(self.options.timer_trap_weight.value, self.options.timer_untrap_weight.value))
         trap_weights += ([ItemName.reverse_controls_trap] * self.options.reverse_trap_weight.value)
+        trap_weights += ([ItemName.reverse_controls_untrap] * min(self.options.reverse_trap_weight.value, self.options.reverse_untrap_weight.value))
         trap_weights += ([ItemName.thwimp_trap] * self.options.thwimp_trap_weight.value)
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.options.trap_fill_percentage.value / 100.0))
         junk_count -= trap_count

@@ -57,6 +57,10 @@ trap_table = {
     ItemName.timer_trap:            ItemData(0xBC0016, False, True),
     ItemName.reverse_controls_trap: ItemData(0xBC001C, False, True),
     ItemName.thwimp_trap:           ItemData(0xBC001D, False, True),
+
+    ItemName.ice_untrap:              ItemData(0xBC001E, False),
+    ItemName.timer_untrap:            ItemData(0xBC001F, False),
+    ItemName.reverse_controls_untrap: ItemData(0xBC0020, False),
 }
 
 event_table = {

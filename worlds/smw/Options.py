@@ -340,14 +340,35 @@ class ReverseTrapWeight(BaseTrapWeight):
     Likelihood of a receiving a trap which causes the controls to be reversed in the current level
     """
     display_name = "Reverse Trap Weight"
-    
-    
+
+
 class ThwimpTrapWeight(BaseTrapWeight):
     """
     Likelihood of a receiving a trap which causes a Thwimp to spawn above the player
     """
     display_name = "Thwimp Trap Weight"
-    
+
+
+class IceUntrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving an untrap which causes the level to stop being slippery
+    """
+    display_name = "Ice Untrap Weight"
+
+
+class TimerUntrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving an untrap which causes the timer to run high
+    """
+    display_name = "Timer Untrap Weight"
+
+
+class ReverseUntrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving an untrap which causes the controls to stop being reversed
+    """
+    display_name = "Reverse Untrap Weight"
+
 
 class Autosave(DefaultOnToggle):
     """
@@ -527,6 +548,9 @@ smw_option_groups = [
         TimerTrapWeight,
         ReverseTrapWeight,
         ThwimpTrapWeight,
+        IceUntrapWeight,
+        TimerUntrapWeight,
+        ReverseUntrapWeight,
     ]),
     OptionGroup("Aesthetics", [
         DisplayReceivedItemPopups,
@@ -576,6 +600,9 @@ class SMWOptions(PerGameCommonOptions):
     timer_trap_weight: TimerTrapWeight
     reverse_trap_weight: ReverseTrapWeight
     thwimp_trap_weight: ThwimpTrapWeight
+    ice_untrap_weight: IceUntrapWeight
+    timer_untrap_weight: TimerUntrapWeight
+    reverse_untrap_weight: ReverseUntrapWeight
     autosave: Autosave
     early_climb: EarlyClimb
     overworld_speed: OverworldSpeed

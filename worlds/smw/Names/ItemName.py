@@ -1,9 +1,9 @@
 # Junk Definitions
-one_up_mushroom  = "1-Up Mushroom"
-one_coin = "1 coin"
-five_coins = "5 coins"
-ten_coins = "10 coins"
-fifty_coins = "50 coins"
+one_up_mushroom = "1-Up Mushroom"
+one_coin        = "1 coin"
+five_coins      = "5 coins"
+ten_coins       = "10 coins"
+fifty_coins     = "50 coins"
 
 # Collectable Definitions
 yoshi_egg = "Yoshi Egg"
@@ -36,6 +36,10 @@ literature_trap       = "Literature Trap"
 timer_trap            = "Timer Trap"
 reverse_controls_trap = "Reverse Trap"
 thwimp_trap           = "Thwimp Trap"
+
+ice_untrap              = "Ice Untrap"
+timer_untrap            = "Timer Untrap"
+reverse_controls_untrap = "Reverse Untrap"
 
 # Other Definitions
 victory   = "The Princess"
