@@ -209,7 +209,6 @@ class LogicRegion:
     raccoon_request_8 = "Raccoon Request 8"
     raccoon_shop = "Raccoon Shop"
     bookseller = "Bookseller"
-    bookseller_unique = "Bookseller Unique Books"
     bookseller_permanent = "Bookseller Permanent Books"
     bookseller_rare = "Bookseller Rare Books"
     bookseller_experience = "Bookseller Experience Books"

@@ -252,7 +252,6 @@ class LogicEntrance:
     attend_winter_star = "Attend Feast of the Winter Star"
     attend_squidfest = "Attend SquidFest"
     buy_books = "Buy from the bookseller"
-    buy_unique_books = "Buy Unique Books"
     buy_permanent_books = "Buy Permanent Books"
     buy_rare_books = "Buy Rare Books"
     buy_experience_books = "Buy Experience Books"

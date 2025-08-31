@@ -539,7 +539,6 @@ def create_bookseller_items(item_factory: StardewItemFactory, options: StardewVa
     book_items.extend(item_factory(item_table[Bookseller.days]) for _ in range(4 if needs_books else 1))
     if not needs_books:
         book_items.extend(item_factory(item_table[Bookseller.days], classification_pre_fill=ItemClassification.filler) for _ in range(3))
-    book_items.append(item_factory(item_table[Bookseller.stock_unique_books]))
     book_items.extend(item_factory(item_table[Bookseller.stock_rare_books]) for _ in range(2 if needs_books else 1))
     book_items.append(item_factory(item_table[Bookseller.stock_permanent_books]))
     book_items.append(item_factory(item_table[Bookseller.stock_experience_books]))

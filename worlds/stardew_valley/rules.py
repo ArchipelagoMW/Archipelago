@@ -315,7 +315,6 @@ def set_bookseller_rules(logic, rule_collector):
     rule_collector.set_entrance_rule(LogicEntrance.buy_books, logic.received(Bookseller.days))
     rule_collector.set_entrance_rule(LogicEntrance.buy_experience_books, logic.received(Bookseller.stock_experience_books))
     rule_collector.set_entrance_rule(LogicEntrance.buy_permanent_books, logic.received(Bookseller.stock_permanent_books))
-    rule_collector.set_entrance_rule(LogicEntrance.buy_unique_books, logic.received(Bookseller.stock_unique_books))
     rare_books_rule = (logic.received(Bookseller.days, 4) & logic.received(Bookseller.stock_rare_books)) | \
                       (logic.received(Bookseller.days, 2) & logic.received(Bookseller.stock_rare_books, 2))
     rule_collector.set_entrance_rule(LogicEntrance.buy_rare_books, rare_books_rule)

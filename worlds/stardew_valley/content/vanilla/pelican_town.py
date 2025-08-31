@@ -314,7 +314,7 @@ pelican_town = ContentPack(
         # Experience Books
         Book.book_of_stars: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
-            ShopSource(price=5000, shop_region=LogicRegion.bookseller_unique),),
+            ShopSource(price=5000, shop_region=LogicRegion.bookseller_permanent),),
         Book.bait_and_bobber: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
             ShopSource(price=5000, shop_region=LogicRegion.bookseller_experience),),
