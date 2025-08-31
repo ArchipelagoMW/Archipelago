@@ -529,7 +529,6 @@ def get_payload(ctx: GloverContext):
         ctx.startup = True
         payload = json.dumps({
                 "items": [get_item_value(item.item) for item in ctx.items_received],
-                "checkedLocations": [get_location_value(locations) for locations in ctx.checked_locations],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
                 "triggerDeath": trigger_death,
                 "triggerTag": trigger_tag,
@@ -538,7 +537,6 @@ def get_payload(ctx: GloverContext):
     else:
         payload = json.dumps({
                 "items": [],
-                "checkedLocations": [],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
                 "triggerDeath": trigger_death,
                 "triggerTag": trigger_tag,
@@ -562,6 +560,7 @@ def get_slot_payload(ctx: GloverContext):
             "slot_world_lookup": ctx.slot_data["world_lookup"],
             "slot_switches": ctx.slot_data["switches_checks"],
             "slot_checkpoints": ctx.slot_data["checkpoint_checks"],
+            "slot_checked_locations": [get_location_value(locations) for locations in ctx.locations_checked],
         })
     ctx.sendSlot = False
     return payload

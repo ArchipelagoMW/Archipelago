@@ -2964,10 +2964,6 @@ function process_block(block)
     then
         processAGIItem(block['items'])
     end
-	if block['checkedLocations'] ~= nil
-	then
-    	flagCheckedLocations(block['checkedLocations'])
-	end
 	if block['triggerDeath'] ~= nil
 	then
     	if block['triggerDeath'] == true and DEATH_LINK == true
@@ -3179,6 +3175,9 @@ function process_slot(block)
     -- then
     --     GVR:setRandomizeCheckpoint(block['slot_checkpoints'])
     -- end
+	if block['checkedLocations'] ~= nil then
+		flagCheckedLocations(block['checkedLocations'])
+	end
     if block['slot_version'] ~= nil and block['slot_version'] ~= ""
     then
         CLIENT_VERSION = block['slot_version']
