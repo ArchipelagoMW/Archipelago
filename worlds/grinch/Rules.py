@@ -423,10 +423,12 @@ rules_dict: dict[str,list[list[str]]] = {
         ["Rotten Egg Launcher", "Rocket Spring"]
     ],
     "Stealing All Gifts": [
-        ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
+        # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
+        ["Rotten Egg Launcher", "Who Forest Vacuum Access", "Who Dump Vacuum Access", "Who Lake Vacuum Access", "Rocket Spring", "Marine Mobile"]
     ],
     "Neutralizing Santa": [
-        ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
+        # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
+        ["Rotten Egg Launcher", "Who Forest Vacuum Access", "Who Dump Vacuum Access", "Who Lake Vacuum Access", "Rocket Spring", "Marine Mobile"]
     ],
     "Heart of Stone - Whoville's Post Office": [
         []
@@ -485,8 +487,7 @@ rules_dict: dict[str,list[list[str]]] = {
         ["Who Forest Vacuum Access"]
     ],
     "Tires in Who Dump": [
-        ["Who Dump Vacuum Access", "Rocket Spring", "Rotten Egg Launcher"],
-        ["Who Dump Vacuum Access", "Rocket Spring", "Slime Shooter"]
+        ["Who Dump Vacuum Access", "Rocket Spring", "Rotten Egg Launcher"]
     ],
     "Twin-End Tuba in Submarine World": [
         ["Who Lake Vacuum Access", "Marine Mobile"]
