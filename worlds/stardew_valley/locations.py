@@ -1,5 +1,6 @@
 import csv
 import enum
+import logging
 from dataclasses import dataclass
 from random import Random
 from typing import Optional, Dict, Protocol, List, Iterable
@@ -24,6 +25,8 @@ from .strings.region_names import Region, LogicRegion
 from .strings.villager_names import NPC
 
 LOCATION_CODE_OFFSET = 717000
+
+logger = logging.getLogger(__name__)
 
 
 class LocationTags(enum.Enum):
@@ -649,6 +652,21 @@ def extend_endgame_locations(randomized_locations: List[LocationData], options: 
     randomized_locations.extend(endgame_locations)
 
 
+def extend_filler_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    i = 1
+    while len(randomized_locations) < 90:
+        location_name = f"Traveling Merchant Sunday Item {i}"
+        while any(location.name == location_name for location in randomized_locations):
+            i += 1
+            location_name = f"Traveling Merchant Sunday Item {i}"
+        logger.debug(f"Player too few locations, adding Traveling Merchant Items #{i}")
+        for day in days:
+            location_name = f"Traveling Merchant {day} Item {i}"
+            randomized_locations.append(location_table[location_name])
+
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      bundle_rooms: List[BundleRoom],
                      trash_bear_requests: Dict[str, List[str]],
@@ -707,6 +725,8 @@ def create_locations(location_collector: StardewLocationCollector,
 
     # Mods
     extend_situational_quest_locations(randomized_locations, options, content)
+
+    extend_filler_locations(randomized_locations, options, content)
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)

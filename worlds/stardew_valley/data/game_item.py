@@ -54,6 +54,11 @@ class GenericSource(Source):
     """No region means it's available everywhere."""
 
 
+@dataclass(frozen=True, kw_only=True)
+class AllRegionsSource(Source):
+    regions: tuple[str, ...] = ()
+
+
 @dataclass(frozen=True)
 class CustomRuleSource(Source):
     """Hopefully once everything is migrated to sources, we won't need these custom logic anymore."""

@@ -52,6 +52,7 @@ class TestRecipeLearnLogic(SVTestBase):
 
 class TestRecipeReceiveLogic(SVTestBase):
     options = {
+        options.StartWithout: options.StartWithout.preset_none,
         options.BuildingProgression: options.BuildingProgression.option_progressive,
         options.Cropsanity: options.Cropsanity.option_enabled,
         options.Cooksanity: options.Cooksanity.option_all,

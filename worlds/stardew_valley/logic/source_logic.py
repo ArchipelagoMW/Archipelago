@@ -6,7 +6,7 @@ from .tailoring_logic import TailoringSource
 from ..data.animal import IncubatorSource, OstrichIncubatorSource
 from ..data.artisan import MachineSource
 from ..data.fish_data import FishingSource
-from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource
+from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource, AllRegionsSource
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
 from ..data.monster_data import MonsterSource
@@ -42,6 +42,10 @@ class SourceLogic(BaseLogic):
     @has_access_to.register
     def _(self, source: GenericSource):
         return self.logic.region.can_reach_any(*source.regions) if source.regions else self.logic.true_
+
+    @has_access_to.register
+    def _(self, source: AllRegionsSource):
+        return self.logic.region.can_reach_all(*source.regions) if source.regions else self.logic.true_
 
     @has_access_to.register
     def _(self, source: CustomRuleSource):

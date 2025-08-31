@@ -33,7 +33,7 @@ from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
 from .strings.animal_product_names import AnimalProduct
 from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, StartWithoutOptionName
-from .strings.ap_names.community_upgrade_names import CommunityUpgrade
+from .strings.ap_names.community_upgrade_names import CommunityUpgrade, Bookseller
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
@@ -291,9 +291,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
                                      logic.quest.has_magnifying_glass() & (logic.ability.can_chop_trees() | logic.mine.can_mine_in_the_mines_floor_1_40()))
     rule_collector.set_entrance_rule(LogicEntrance.watch_queen_of_sauce, logic.action.can_watch(Channel.queen_of_sauce))
     rule_collector.set_entrance_rule(Entrance.forest_to_mastery_cave, logic.skill.can_enter_mastery_cave)
-    rule_collector.set_entrance_rule(LogicEntrance.buy_experience_books, logic.time.has_lived_months(2))
-    rule_collector.set_entrance_rule(LogicEntrance.buy_year1_books, logic.time.has_year_two)
-    rule_collector.set_entrance_rule(LogicEntrance.buy_year3_books, logic.time.has_year_three)
+    set_bookseller_rules(logic, rule_collector)
     rule_collector.set_entrance_rule(Entrance.adventurer_guild_to_bedroom, logic.monster.can_kill_max(Generic.any))
     if world_options.include_endgame_locations == IncludeEndgameLocations.option_true:
         rule_collector.set_entrance_rule(LogicEntrance.purchase_wizard_blueprints, logic.quest.has_magic_ink())
@@ -311,6 +309,16 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
 
     rule_collector.set_entrance_rule(Entrance.enter_mens_locker_room, logic.wallet.has_mens_locker_key())
     rule_collector.set_entrance_rule(Entrance.enter_womens_locker_room, logic.wallet.has_mens_locker_key())
+
+
+def set_bookseller_rules(logic, rule_collector):
+    rule_collector.set_entrance_rule(LogicEntrance.buy_books, logic.received(Bookseller.days))
+    rule_collector.set_entrance_rule(LogicEntrance.buy_experience_books, logic.received(Bookseller.stock_experience_books))
+    rule_collector.set_entrance_rule(LogicEntrance.buy_permanent_books, logic.received(Bookseller.stock_permanent_books))
+    rule_collector.set_entrance_rule(LogicEntrance.buy_unique_books, logic.received(Bookseller.stock_unique_books))
+    rare_books_rule = (logic.received(Bookseller.days, 4) & logic.received(Bookseller.stock_rare_books)) | \
+                      (logic.received(Bookseller.days, 2) & logic.received(Bookseller.stock_rare_books, 2))
+    rule_collector.set_entrance_rule(LogicEntrance.buy_rare_books, rare_books_rule)
 
 
 def set_raccoon_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, bundle_rooms: List[BundleRoom], world_options: StardewValleyOptions):

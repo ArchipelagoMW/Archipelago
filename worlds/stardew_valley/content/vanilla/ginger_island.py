@@ -90,7 +90,7 @@ ginger_island_content_pack = GingerIslandContentPack(
         ),
         Book.queen_of_sauce_cookbook: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
-            ShopSource(price=50000, shop_region=LogicRegion.bookseller_2, other_requirements=(WalnutRequirement(100),)),),  # Worst book ever
+            ShopSource(price=50000, shop_region=LogicRegion.bookseller_unique, other_requirements=(WalnutRequirement(100),)),),  # Worst book ever
     },
     fishes=(
         # TODO override region so no need to add inaccessible regions in logic
