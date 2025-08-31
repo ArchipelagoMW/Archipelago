@@ -28,7 +28,7 @@ COPY requirements.txt WebHostLib/requirements.txt
 
 RUN pip install --no-cache-dir -r \
     WebHostLib/requirements.txt \
-    setuptools
+    "setuptools>=75,<81"
 
 COPY _speedups.pyx .
 COPY intset.h .
@@ -36,7 +36,7 @@ COPY intset.h .
 RUN cythonize -b -i _speedups.pyx
 
 # Archipelago
-FROM python:3.12-slim AS archipelago
+FROM python:3.12-slim-bookworm AS archipelago
 ARG TARGETARCH
 ENV VIRTUAL_ENV=/opt/venv
 ENV PYTHONUNBUFFERED=1
@@ -86,7 +86,7 @@ COPY --from=enemizer /release/EnemizerCLI /tmp/EnemizerCLI
 
 # No release for arm architecture. Skip.
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
-    cp /tmp/EnemizerCLI EnemizerCLI; \
+    cp -r /tmp/EnemizerCLI EnemizerCLI; \
     fi; \
     rm -rf /tmp/EnemizerCLI
 
@@ -94,5 +94,7 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:${PORT:-80} || exit 1
 
+# Ensure no runtime ModuleUpdate.
 ENV SKIP_REQUIREMENTS_UPDATE=true
+
 ENTRYPOINT [ "python", "WebHost.py" ]

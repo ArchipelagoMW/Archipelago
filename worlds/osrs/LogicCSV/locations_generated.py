@@ -77,7 +77,7 @@ location_rows = [
 	LocationRow('Bake a Redberry Pie', 'cooking', ['Redberry Bush', 'Wheat', 'Windmill', 'Pie Dish', ], [SkillRequirement('Cooking', 10), ], [], 0),
 	LocationRow('Cook some Stew', 'cooking', ['Bowl', 'Meat', 'Potato', ], [SkillRequirement('Cooking', 25), ], [], 0),
 	LocationRow('Bake an Apple Pie', 'cooking', ['Cooking Apple', 'Wheat', 'Windmill', 'Pie Dish', ], [SkillRequirement('Cooking', 32), ], [], 2),
-	LocationRow('Enter the Cook\'s Guild', 'cooking', ['Cook\'s Guild', ], [], [], 0),
+	LocationRow('Enter the Cook\'s Guild', 'cooking', ['Cook\'s Guild', ], [SkillRequirement('Cooking', 32), ], [], 0),
 	LocationRow('Bake a Cake', 'cooking', ['Wheat', 'Windmill', 'Egg', 'Milk', 'Cake Tin', ], [SkillRequirement('Cooking', 40), ], [], 6),
 	LocationRow('Bake a Meat Pizza', 'cooking', ['Wheat', 'Windmill', 'Cheese', 'Tomato', 'Meat', ], [SkillRequirement('Cooking', 45), ], [], 8),
 	LocationRow('Burn a Log', 'firemaking', [], [SkillRequirement('Firemaking', 1), SkillRequirement('Woodcutting', 1), ], [], 0),
