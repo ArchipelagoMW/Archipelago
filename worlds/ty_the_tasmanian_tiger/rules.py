@@ -496,7 +496,7 @@ def get_rules(world):
             "Two Up - Time Attack Challenge":
                 lambda state:
                     state.can_reach_location("Two Up - Time Attack", world.player)
-                    and has_rang(world, state, Ty1Rang.DIVE) if world.options.logic_difficulty != 0 else True,
+                    and (has_rang(world, state, Ty1Rang.DIVE) if world.options.logic_difficulty != 0 else True),
             "WitP - Time Attack Challenge":
                 lambda state:
                     state.can_reach_location("WitP - Wombat Race", world.player),
@@ -507,7 +507,7 @@ def get_rules(world):
             "BotRT - Time Attack Challenge":
                 lambda state:
                     state.can_reach_location("BotRT - Time Attack", world.player)
-                    and can_go_water(world, state) if world.options.logic_difficulty != 0 else True,
+                    and (can_go_water(world, state) if world.options.logic_difficulty != 0 else True),
             "Snow Worries - Time Attack Challenge":
                 lambda state:
                     state.can_reach_location("Snow Worries - Time Attack", world.player),
