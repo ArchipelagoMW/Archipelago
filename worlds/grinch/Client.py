@@ -196,7 +196,7 @@ class GrinchClient(BizHawkClient):
         await self.update_and_validate_address(ctx, heart_item_data.update_ram_addr[0].ram_address, min(heart_count, 4), 1)
 
         # Setting Who Lake Mission Count back to 0 to prevent warping after completing 3 missions
-        await self.update_and_validate_address(ctx,0x0100F3, 0, 1)
+        await self.update_and_validate_address(ctx,0x0100F0, 0, 4)
 
         for (item_name, item_data) in items_to_check.items():
             # If item is an event or already been received, ignore.
