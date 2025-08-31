@@ -84,7 +84,7 @@ class SC2Campaign(Enum):
     GLOBAL = 0, "Global", SC2CampaignGoalPriority.NONE, SC2Race.ANY
     WOL = 1, "Wings of Liberty", SC2CampaignGoalPriority.VERY_HARD, SC2Race.TERRAN
     PROPHECY = 2, "Prophecy", SC2CampaignGoalPriority.MINI_CAMPAIGN, SC2Race.PROTOSS
-    HOTS = 3, "Heart of the Swarm", SC2CampaignGoalPriority.HARD, SC2Race.ZERG
+    HOTS = 3, "Heart of the Swarm", SC2CampaignGoalPriority.VERY_HARD, SC2Race.ZERG
     PROLOGUE = 4, "Whispers of Oblivion (Legacy of the Void: Prologue)", SC2CampaignGoalPriority.MINI_CAMPAIGN, SC2Race.PROTOSS
     LOTV = 5, "Legacy of the Void", SC2CampaignGoalPriority.VERY_HARD, SC2Race.PROTOSS
     EPILOGUE = 6, "Into the Void (Legacy of the Void: Epilogue)", SC2CampaignGoalPriority.EPILOGUE, SC2Race.ANY
