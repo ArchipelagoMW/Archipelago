@@ -76,7 +76,8 @@ class GrinchClient(BizHawkClient):
         match cmd:
             case "Connected":  # On Connect
                 self.loc_unlimited_eggs = bool(ctx.slot_data["give_unlimited_eggs"])
-                logger.info("You are now connected to the client. Please wait a few seconds for the client to detect you are ingame.")
+                logger.info("You are now connected to the client. "+
+                    "There may be a slight delay to check you are not in demo mode before locations start to send.")
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         await ctx.get_username()
