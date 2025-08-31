@@ -169,9 +169,6 @@ class TestSkullCavernLogic(SVTestBase):
         items_for_skull_50 = self.generate_items_for_skull_50()
         items_for_skull_100 = self.generate_items_for_skull_100()
         self.collect(items_for_115)
-        floor_115 = self.multiworld.get_region(Region.mines_floor_115, self.player)
-        skull_25 = self.multiworld.get_region(Region.skull_cavern_25, self.player)
-        skull_75 = self.multiworld.get_region(Region.skull_cavern_75, self.player)
 
         self.assert_can_reach_region(Region.mines_floor_115)
         self.assert_cannot_reach_region(Region.skull_cavern_25)
