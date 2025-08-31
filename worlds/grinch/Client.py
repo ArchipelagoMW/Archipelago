@@ -3,7 +3,7 @@ import asyncio
 import NetUtils
 import copy
 from .Locations import grinch_locations, GrinchLocation
-from .Items import ALL_ITEMS_TABLE, SLEIGH_PARTS_TABLE, MISSION_ITEMS_TABLE, GADGETS_TABLE, KEYS_TABLE, GrinchItemData
+from .Items import ALL_ITEMS_TABLE, MISSION_ITEMS_TABLE, GADGETS_TABLE, KEYS_TABLE, GrinchItemData #, SLEIGH_PARTS_TABLE
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
