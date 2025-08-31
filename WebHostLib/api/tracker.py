@@ -115,10 +115,11 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
         for player in players:
             activity_timers.append({"team": team, "player": player, "time": None})
 
-    client_activity_timers: list[tuple[tuple[int, int], float]] = tracker_data._multisave.get("client_activity_timers",
-                                                                                              [])
-    for (team, player), timestamp in client_activity_timers:
-        connection_timers[team]["players"][player - 1]["time"] = datetime.fromtimestamp(timestamp, timezone.utc)
+    for (team, player), timestamp in tracker_data._multisave.get("client_activity_timers", []):
+        for entry in activity_timers:
+            if entry["team"] == team and entry["player"] == player:
+                entry["time"] = datetime.fromtimestamp(timestamp, timezone.utc)
+                break
 
     connection_timers: list[PlayerTimer] = []
     """Time of last connection per player. Returned as RFC 1123 format and null if no connection has been made."""
@@ -126,9 +127,7 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
         for player in players:
             connection_timers.append({"team": team, "player": player, "time": None})
 
-    client_connection_timers: list[tuple[tuple[int, int], float]] = tracker_data._multisave.get(
-        "client_connection_timers", [])
-    for (team, player), timestamp in client_connection_timers:
+    for (team, player), timestamp in tracker_data._multisave.get("client_connection_timers", []):
         # find the matching entry
         for entry in connection_timers:
             if entry["team"] == team and entry["player"] == player:

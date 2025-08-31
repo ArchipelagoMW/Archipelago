@@ -18,6 +18,8 @@ Current endpoints:
     - [`/room_status/<suuid:room_id>`](#roomstatus)
 - Tracker API
     - [`/tracker/<suuid:tracker>`](#tracker)
+    - [`/static_tracker/<suuid:tracker>`](#statictracker)
+    - [`/slot_data_tracker/<suuid:tracker>`](#slotdatatracker)
 - User API
     - [`/get_rooms`](#getrooms)
     - [`/get_seeds`](#getseeds)
@@ -254,8 +256,6 @@ can either be viewed while on a room tracker page, or from the [room's endpoint]
 <a name=tracker></a>
 Will provide a dict of tracker data with the following keys:
 
-- item_link groups and their players (`groups`)
-- Each player's slot_data (`slot_data`)
 - Each player's current alias (`aliases`)
   - Will return the name if there is none
 - A list of items each player has received as a NetworkItem (`player_items_received`)
@@ -265,111 +265,55 @@ Will provide a dict of tracker data with the following keys:
 - The time of last activity of each player in RFC 1123 format (`activity_timers`)
 - The time of last active connection of each player in RFC 1123 format (`connection_timers`)
 - The current client status of each player (`player_status`)
-- The datapackage hash for each player (`datapackage`)
-  - This hash can then be sent to the datapackage API to receive the appropriate datapackage as necessary
-
 
 Example:
 ```json
 {
-  "groups": [
-    {
-      "team": 0,
-      "groups": [
-        {
-          "slot": 5,
-          "name": "testGroup",
-          "members": [
-            1,
-            2
-          ]
-        },
-        {
-          "slot": 6,
-          "name": "myCoolLink",
-          "members": [
-            3,
-            4
-          ]
-        }
-      ]
-    }
-  ],
-  "slot_data": [
-    {
-      "team": 0,
-      "players": [
-        {
-          "player": 1,
-          "slot_data": {
-            "example_option": 1,
-            "other_option": 3
-          }
-        },
-        {
-          "player": 2,
-          "slot_data": {
-            "example_option": 1,
-            "other_option": 2
-          }
-        }
-      ]
-    }
-  ],
   "aliases": [
     {
       "team": 0,
-      "players": [
-        {
-          "player": 1,
-          "alias": "Incompetence"
-        },
-        {
-          "player": 2,
-          "alias": "Slot_Name_2"
-        }
-      ]
+      "player": 1,
+      "alias": "Incompetence"
+    },
+    {
+      "team": 0,
+      "player": 2,
+      "alias": "Slot_Name_2"
     }
   ],
   "player_items_received": [
     {
       "team": 0,
-      "players": [
-        {
-          "player": 1,
-          "items": [
-            [1, 1, 1, 0],
-            [2, 2, 2, 1]
-          ]
-        },
-        {
-          "player": 2,
-          "items": [
-            [1, 1, 1, 2],
-            [2, 2, 2, 0]
-          ]
-        }
+      "player": 1,
+      "items": [
+        [1, 1, 1, 0],
+        [2, 2, 2, 1]
+      ]
+    },
+    {
+      "team": 0,
+      "player": 2,
+      "items": [
+        [1, 1, 1, 2],
+        [2, 2, 2, 0]
       ]
     }
   ],
   "player_checks_done": [
     {
       "team": 0,
-      "players": [
-        {
-          "player": 1,
-          "locations": [
-            1,
-            2
-          ]
-        },
-        {
-          "player": 2,
-          "locations": [
-            1,
-            2
-          ]
-        }
+      "player": 1,
+      "locations": [
+        1,
+        2
+      ]
+    },
+    {
+      "team": 0,
+      "player": 2,
+      "locations": [
+        1,
+        2
       ]
     }
   ],
@@ -382,62 +326,84 @@ Example:
   "hints": [
     {
       "team": 0,
-      "players": [
-        {
-          "player": 1,
-          "hints": [
-            [1, 2, 4, 6, 0, "", 4, 0]
-          ]
-        },
-        {
-          "player": 2,
-          "hints": []
-        }
+      "player": 1,
+      "hints": [
+        [1, 2, 4, 6, 0, "", 4, 0]
       ]
+    },
+    {
+      "team": 0,
+      "player": 2,
+      "hints": []
     }
   ],
   "activity_timers": [
     {
       "team": 0,
-      "players": [
-        {
-          "player": 1,
-          "time": "Fri, 18 Apr 2025 20:35:45 GMT"
-        },
-        {
-          "player": 2,
-          "time": "Fri, 18 Apr 2025 20:42:46 GMT"
-        }
-      ]
+      "player": 1,
+      "time": "Fri, 18 Apr 2025 20:35:45 GMT"
+    },
+    {
+      "team": 0,
+      "player": 2,
+      "time": "Fri, 18 Apr 2025 20:42:46 GMT"
     }
   ],
   "connection_timers": [
     {
       "team": 0,
-      "players": [
-        {
-          "player": 1,
-          "time": "Fri, 18 Apr 2025 20:38:25 GMT"
-        },
-        {
-          "player": 2,
-          "time": "Fri, 18 Apr 2025 21:03:00 GMT"
-        }
-      ]
+      "player": 1,
+      "time": "Fri, 18 Apr 2025 20:38:25 GMT"
+    },
+    {
+      "team": 0,
+      "player": 2,
+      "time": "Fri, 18 Apr 2025 21:03:00 GMT"
     }
   ],
   "player_status": [
     {
       "team": 0,
-      "players": [
-        {
-          "player": 1,
-          "status": 0
-        },
-        {
-          "player": 2,
-          "status": 0
-        }
+      "player": 1,
+      "status": 0
+    },
+    {
+      "team": 0,
+      "player": 2,
+      "status": 0
+    }
+  ]
+}
+```
+
+### `/static_tracker/<suuid:tracker>`
+<a name=statictracker></a>
+Will provide a dict of static tracker data with the following keys:
+
+- item_link groups and their players (`groups`)
+- The datapackage hash for each player (`datapackage`)
+  - This hash can then be sent to the datapackage API to receive the appropriate datapackage as necessary
+
+Example:
+```json
+{
+  "groups": [
+    {
+      "team": 0,
+      "slot": 5,
+      "name": "testGroup",
+      "members": [
+        1,
+        2
+      ]
+    },
+    {
+      "team": 0,
+      "slot": 6,
+      "name": "myCoolLink",
+      "members": [
+        3,
+        4
       ]
     }
   ],
@@ -452,6 +418,32 @@ Example:
     }
   }
 }
+```
+
+### `/slot_data_tracker/<suuid:tracker>`
+<a name=slotdatatracker></a>
+Will provide a list of each player's slot_data.
+
+Example:
+```json
+[
+  {
+    "team": 0,
+    "player": 1,
+    "slot_data": {
+      "example_option": 1,
+      "other_option": 3
+    }
+  },
+  {
+    "team": 0,
+    "player": 2,
+    "slot_data": {
+      "example_option": 1,
+      "other_option": 2
+    }
+  }
+]
 ```
 
 ## User Endpoints
