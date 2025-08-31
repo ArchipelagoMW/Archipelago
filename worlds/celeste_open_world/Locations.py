@@ -27,7 +27,7 @@ class CelesteLocationData(NamedTuple):
 checkpoint_location_data_table: dict[str, CelesteLocationData] = {}
 key_location_data_table: dict[str, CelesteLocationData] = {}
 
-location_id_offsets: dict[LocationType, int] = {
+location_id_offsets: dict[LocationType, int | None] = {
     LocationType.strawberry:        celeste_base_id,
     LocationType.golden_strawberry: celeste_base_id + 0x1000,
     LocationType.cassette:          celeste_base_id + 0x2000,
@@ -139,13 +139,23 @@ def create_regions_and_locations(world: CelesteOpenWorld):
                         world.active_gem_names.append(level_location.display_name)
 
                     location_rule = None
-                    if len(level_location.possible_access) > 0:
+                    if len(level_location.possible_access) == 1:
+                        only_access = level_location.possible_access[0]
+                        if len(only_access) == 1:
+                            only_item = level_location.possible_access[0][0]
+                            def location_rule_func(state, only_item=only_item):
+                                return state.has(only_item, world.player)
+                            location_rule = location_rule_func
+                        else:
+                            def location_rule_func(state, only_access=only_access):
+                                return state.has_all(only_access, world.player)
+                            location_rule = location_rule_func
+                    elif len(level_location.possible_access) > 0:
                         def location_rule_func(state, level_location=level_location):
                             for sublist in level_location.possible_access:
                                 if state.has_all(sublist, world.player):
                                     return True
                             return False
-
                         location_rule = location_rule_func
 
                     if level_location.loc_type == LocationType.clutter:
@@ -165,11 +175,23 @@ def create_regions_and_locations(world: CelesteOpenWorld):
                 region = world.get_region(pre_region.name)
                 for connection in pre_region.connections:
                     connection_rule = None
-                    if len(connection.possible_access) > 0:
+                    if len(connection.possible_access) == 1:
+                        only_access = connection.possible_access[0]
+                        if len(only_access) == 1:
+                            only_item = connection.possible_access[0][0]
+                            def connection_rule_func(state, only_item=only_item):
+                                return state.has(only_item, world.player)
+                            connection_rule = connection_rule_func
+                        else:
+                            def connection_rule_func(state, only_access=only_access):
+                                return state.has_all(only_access, world.player)
+                            connection_rule = connection_rule_func
+                    elif len(connection.possible_access) > 0:
                         def connection_rule_func(state, connection=connection):
                             for sublist in connection.possible_access:
                                 if state.has_all(sublist, world.player):
                                     return True
+                            return False
 
                         connection_rule = connection_rule_func
 
