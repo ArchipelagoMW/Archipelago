@@ -160,7 +160,7 @@ KEYS_TABLE: dict[str, GrinchItemData] = {
     #     [GrinchRamData()]),
     # "Bike Race Access": GrinchItemData("Supadow Door Unlocks", 409, IC.progression,
     #     [GrinchRamData()])
-    "Sleigh Room Key": GrinchItemData("Sleigh Room", 410, IC.progression_skip_balancing,
+    "Sleigh Room Key": GrinchItemData("Sleigh Room", 410, IC.progression,
         [GrinchRamData(0x010200, binary_bit_pos=6), GrinchRamData(0x0100AA, binary_bit_pos=5)])
 }
 
