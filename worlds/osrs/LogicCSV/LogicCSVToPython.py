@@ -8,7 +8,7 @@ import requests
 # The CSVs are updated at this repository to be shared between generator and client.
 data_repository_address = "https://raw.githubusercontent.com/digiholic/osrs-archipelago-logic/"
 # The Github tag of the CSVs this was generated with
-data_csv_tag = "v2.0.4"
+data_csv_tag = "v2.0.5"
 # If true, generate using file names in the repository
 debug = False
 
