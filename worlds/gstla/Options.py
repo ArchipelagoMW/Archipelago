@@ -718,6 +718,22 @@ class DisableShopGameTickets(Toggle):
     display_name = "Disable Shopkeeper Gametickets"
     default = 1
 
+
+class ShortcutMarsLighthouse(Toggle):
+    """Removes the requirement to heat up the lighthouse to be able to do the 4 elemental wing puzzles that unlocked the teleporter to the Aerie of Mars Lighthouse.
+    Note the lighthouse is still frozen so the Mars Djinni Fugue is still inaccessible and requires heating up the lighthouse."""
+    internal_name = "shortcut_mars_lighthouse"
+    display_name = "Shortcut Mars Lighthouse"
+    default = 0
+
+
+class ShortcutMagmaRock(Toggle):
+    """The pushable pillars at the groundfloor and 1st floor in Magma Rock are pushed downwards allowing you to access the Interior immediately without navigating the exterior.
+    Note that you can not leave Magma Rock interior from the top to get outside at the top of Magma Rock exterior."""
+    internal_name = "shortcut_magma_rock"
+    display_name = "Shortcut Magma Rock"
+    default = 0
+
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
     #Pool and Logic settings
@@ -728,6 +744,8 @@ class GSTLAOptions(PerGameCommonOptions):
     item_shuffle: ItemShuffle
     reveal_hidden_item: RevealHiddenItem
     omit_locations: OmitLocations
+    shortcut_mars_lighthouse: ShortcutMarsLighthouse
+    shortcut_magma_rock: ShortcutMagmaRock
     add_elvenshirt_clericsring: AddGs1Items
     add_non_obtainable_items: AddDummyItems
 

@@ -95,8 +95,10 @@ def set_entrance_rules(world: 'GSTLAWorld'):
 
     add_rule(world.get_entrance(EntranceName.WesternSeaToMagmaRock),
              lambda state: state.has(ItemName.Lifting_Gem, player))
-    add_rule(world.get_entrance(EntranceName.MagmaRockToMagmaRockInterior),
-             lambda state: state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Growth, player) and state.has(ItemName.Lash_Pebble, player))
+    
+    if world.options.shortcut_magma_rock == 0:
+        add_rule(world.get_entrance(EntranceName.MagmaRockToMagmaRockInterior),
+                lambda state: state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Growth, player) and state.has(ItemName.Lash_Pebble, player))
 
     add_rule(world.get_entrance(EntranceName.ContigoToAnemosInnerSanctum),
                 lambda state: state.has(ItemName.Teleport_Lapis, player))
@@ -118,8 +120,14 @@ def set_entrance_rules(world: 'GSTLAWorld'):
 
     add_rule(world.get_entrance(EntranceName.WesternSeaToProx),
              lambda state: state.has(ItemName.Ship_Cannon, player))
-    add_rule(world.get_entrance(EntranceName.MarsLighthouseToMarsLighthouse_Activated),
-            lambda state: state.has(ItemName.Mars_Lighthouse_Heated, player))
+    
+
+    if world.options.shortcut_mars_lighthouse:
+        add_rule(world.get_entrance(EntranceName.MarsLighthouseToMarsLighthouse_Activated),
+                lambda state: state.has(ItemName.Mars_Star, player))
+    else:
+        add_rule(world.get_entrance(EntranceName.MarsLighthouseToMarsLighthouse_Activated),
+                lambda state: state.has(ItemName.Mars_Lighthouse_Heated, player))
     
     if world.options.lemurian_ship == 0:
         add_rule(world.get_entrance(EntranceName.MadraToLemurianShip),
@@ -726,16 +734,27 @@ def set_access_rules(world: 'GSTLAWorld'):
 
     #Magma Rock Interior
     add_rule(world.get_location(LocationName.Magma_Rock_Magma_Ball),
-             lambda state: state.has(ItemName.Whirlwind, player) and state.has(ItemName.Blaze, player))
-
-    add_rule(world.get_location(LocationName.Magma_Rock_Blaze),
-             lambda state: state.has(ItemName.Whirlwind, player))
-
-    add_rule(world.get_location(LocationName.Magma_Rock_Salamander_Tail_Two),
-             lambda state: state.has(ItemName.Whirlwind, player))
+             lambda state: state.has(ItemName.Blaze, player))
 
     add_rule(world.get_location(LocationName.Magma_Rock_Golem_Core),
              lambda state: state.has(ItemName.Whirlwind, player))
+
+    if world.options.shortcut_magma_rock:
+        add_rule(world.get_location(LocationName.Magma_Rock_Lucky_Medal),
+                 lambda state: state.has(ItemName.Burst_Brooch, player))
+        add_rule(world.get_location(LocationName.Magma_Rock_Mist_Potion),
+                 lambda state: state.has(ItemName.Burst_Brooch, player))
+        add_rule(world.get_location(LocationName.Magma_Rock_Salamander_Tail_Two),
+                 lambda state: state.has(ItemName.Burst_Brooch, player))
+        add_rule(world.get_location(LocationName.Magma_Rock_Golem_Core),
+                 lambda state: state.has(ItemName.Burst_Brooch, player))
+    else:
+        add_rule(world.get_location(LocationName.Magma_Rock_Salamander_Tail_Two),
+                 lambda state: state.has(ItemName.Whirlwind, player))
+        add_rule(world.get_location(LocationName.Magma_Rock_Blaze),
+                 lambda state: state.has(ItemName.Whirlwind, player))
+        add_rule(world.get_location(LocationName.Magma_Rock_Magma_Ball),
+                 lambda state: state.has(ItemName.Whirlwind, player))
 
     #Loho
     add_rule(world.get_location(LocationName.Loho_Ship_Cannon),
@@ -799,9 +818,12 @@ def set_access_rules(world: 'GSTLAWorld'):
 
 
     #Mars Lighthouse activated
+    if world.options.shortcut_mars_lighthouse == 0:
+        add_rule(world.get_location(LocationName.Fugue),
+                lambda state: state.has(ItemName.Mars_Lighthouse_Heated, player))
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Psy_Crystal),
-             lambda state: state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Hover_Jade, player))
+             lambda state: state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Hover_Jade, player) and state.has(ItemName.Reveal, player))
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Doom_Dragon),
              lambda state: state.count_group(ItemType.Character.name, player) >= 3 and state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Hover_Jade, player) and

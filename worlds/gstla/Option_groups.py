@@ -16,7 +16,7 @@ from .Options import (ItemShuffle, RevealHiddenItem, OmitLocations, AddGs1Items,
                       ForgedEquipmentFillerWeight, LuckyEquipmentFillerWeight, ShopEquipmentFillerWeight,
                       CoinsFillerWeight, CommonConsumablesFillerWeight, AutoRun, ScaleMimics, ScaleCharacters,
                       MaxScaledLevel, ForgeMaterialsAreFiller, ArtifactsAreFiller, DisableShopGameTickets,
-                      Goal, RandomGoals, DjinnHuntCount, SummonHuntCount)
+                      Goal, RandomGoals, DjinnHuntCount, SummonHuntCount, ShortcutMarsLighthouse, ShortcutMagmaRock)
 
 from Options import OptionGroup
 
@@ -40,7 +40,9 @@ gstla_option_groups = [
         ShipWings,
         AnemosAccess,
         DjinnLogic,
-        NamedPuzzles
+        NamedPuzzles,
+        ShortcutMarsLighthouse,
+        ShortcutMagmaRock
     ]),
     OptionGroup("Character Changes", [
         CharacterShuffle,

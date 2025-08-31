@@ -527,10 +527,10 @@ class GSTLAWorld(World):
         write_me = 0
         write_me += self.options.lemurian_ship << 6 #ship
         debug_file.write('Starter Ship: ' + self.options.lemurian_ship.name_lookup[self.options.lemurian_ship] + '\n')
-        #write_me += 0 << 5 #skips-basic, require logic changes
+        #write_me += 0 << 5 #skips-sq, require logic changes
         debug_file.write('Skips Basic: false\n')
         #write_me += 0 << 4 #skips-oob-easy, require logic changes
-        debug_file.write('Skips Oob Easy: false\n')
+        debug_file.write('Skips Save and Quit: false\n')
         #write_me += 0 << 3 #skips-maze, require logic changes
         debug_file.write('Skips Maze: false\n')
         if self.options.djinn_logic == 0:
@@ -548,8 +548,8 @@ class GSTLAWorld(World):
         debug_file.write('Adv Equip: false\n')        
         write_me += self.options.add_non_obtainable_items << 6 #dummy-items
         debug_file.write('Non Obtainabble Items: ' + self.options.add_non_obtainable_items.name_lookup[self.options.add_non_obtainable_items] + '\n')
-        #write_me += 0 << 5 #skips-oob-hard, require logic changes
-        debug_file.write('Skips Oob Hard: false\n')
+        #write_me += 0 << 5 #skips-sanctum, require logic changes
+        debug_file.write('Skips Sanctum: false\n')
         write_me += self.options.shuffle_weapon_attack << 4 #equip-attack
         debug_file.write('Equip Attack: ' + self.options.shuffle_weapon_attack.name_lookup[self.options.shuffle_weapon_attack] + '\n')
         #write_me += 0 << 3 #qol-hints, not supported yet
@@ -628,12 +628,28 @@ class GSTLAWorld(World):
         debug_file.write('Anemos Inner Sanctum Access: ' + self.options.anemos_inner_sanctum_access.name_lookup[self.options.anemos_inner_sanctum_access] + '\n')
         write_me += 1 << 1 #char shuffle always on to ensure game understands character items in case of players creating duplicates / plando in weird places
         debug_file.write('Character Shuffle: true\n')
-        write_me += 0 #unused
+        write_me += 0 # skips-oob
+        debug_file.write('Skips Oob: false\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
         write_me = 0
-        # Placeholder in case we need more flags
-        rando_file.write(write_me.to_bytes(length=4, byteorder='big'))
+        #write_me += 0 << 7 #skips-sand
+        debug_file.write('Skips Sand: false\n')
+        #write_me += 0 << 6 #skips-sand
+        debug_file.write('Skips Storage: false\n')
+        #write_me += 0 << 5 #remove-mimics
+        debug_file.write('Remove Mimics: false\n')
+        write_me += self.options.shortcut_mars_lighthouse << 4 #shortcut-mars-lighthouse
+        debug_file.write('Shortcut Mars Lighthouse: ' + self.options.shortcut_mars_lighthouse.name_lookup[self.options.shortcut_mars_lighthouse] + '\n')
+        write_me += self.options.shortcut_magma_rock << 3 #shortcut-magma-rock
+        debug_file.write('Shortcut Magma Rock: ' + self.options.shortcut_magma_rock.name_lookup[self.options.shortcut_magma_rock] + '\n')
+        #write_me += 0 #door-shuffle
+        debug_file.write('Door Shufflek: disabled\n')
+        rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
+
+        
+        write_me = 0 #place holder for when we have more settings
+        rando_file.write(write_me.to_bytes(length=3, byteorder='big'))
 
     def create_item(self, name: str) -> "Item":
         return create_item(name, self.player)
