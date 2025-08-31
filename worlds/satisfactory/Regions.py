@@ -67,7 +67,7 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
     regions: dict[str, Region] = create_regions(multiworld, player, locations_per_region, region_names)
 
     if __debug__:
-        throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region.keys())
+        throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region)
         
     multiworld.regions += regions.values()
 
@@ -130,7 +130,7 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
 
         for milestone, parts_per_milestone in enumerate(milestones_per_hub_tier, 1):
             connect(regions, f"Hub Tier {hub_tier}", f"Hub {hub_tier}-{milestone}",
-                can_produce_all_allowing_handcrafting(parts_per_milestone.keys()))
+                can_produce_all_allowing_handcrafting(parts_per_milestone))
             
     for building_name, building in game_logic.buildings.items():
         if building.can_produce and building_name in critical_path.required_buildings:
@@ -146,19 +146,20 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
 
             if not node.depends_on:
                 connect(regions, tree_name, f"{tree_name}: {node.name}",
-                    lambda state, parts=node.unlock_cost.keys(): state_logic.can_produce_all(state, parts))
+                    lambda state, parts=node.unlock_cost: state_logic.can_produce_all(state, parts))
             else:
                 for parent in node.depends_on:
                     if f"{tree_name}: {parent}" in region_names:
                         connect(regions, f"{tree_name}: {parent}", f"{tree_name}: {node.name}", 
-                            lambda state, parts=node.unlock_cost.keys(): state_logic.can_produce_all(state, parts))
+                            lambda state, parts=node.unlock_cost: state_logic.can_produce_all(state, parts))
 
 
-def throwIfAnyLocationIsNotAssignedToARegion(regions: dict[str, Region], regionNames: set[str]):
-    existingRegions = set(regions.keys())
+def throwIfAnyLocationIsNotAssignedToARegion(regions: dict[str, Region], regionNames: dict[str, LocationData]):
+    existingRegions = set(regions)
+    existingRegionNames = set(regionNames)
 
-    if (regionNames - existingRegions):
-        raise Exception(f"Satisfactory: the following regions are used in locations: {regionNames - existingRegions}, but no such region exists")
+    if (existingRegionNames - existingRegions):
+        raise Exception(f"Satisfactory: the following regions are used in locations: {existingRegionNames - existingRegions}, but no such region exists")
 
 
 def create_region(multiworld: MultiWorld, player: int, 

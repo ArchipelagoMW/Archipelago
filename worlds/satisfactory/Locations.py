@@ -93,7 +93,7 @@ class ElevatorTier(LocationData):
     def __init__(self, tier: int, state_logic: StateLogic, game_logic: GameLogic):
         super().__init__("Overworld", f"Elevator Tier {tier + 1}", EventId,
             rule = lambda state: state_logic.can_build(state, "Space Elevator") and \
-                                 state_logic.can_produce_all(state, game_logic.space_elevator_tiers[tier].keys()))
+                                 state_logic.can_produce_all(state, game_logic.space_elevator_tiers[tier]))
 
 
 class HubSlot(LocationData):

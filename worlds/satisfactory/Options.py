@@ -26,7 +26,7 @@ class PlacementLogic(Choice, metaclass=PlacementLogicMeta):
 class ChoiceMapMeta(AssembleOptions):
     def __new__(mcs, name: str, bases: tuple[type], attrs: dict[Any, Any]) -> "ChoiceMapMeta":
         if "choices" in attrs:
-            for index, choice in enumerate(attrs["choices"].keys()):
+            for index, choice in enumerate(attrs["choices"]):
                 option_name = "option_" + choice.replace(' ', '_')
                 attrs[option_name] = index
 
@@ -40,10 +40,9 @@ class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
     choices: ClassVar[dict[str, list[str]]]
 
     def get_selected_list(self) -> list[str]:
-        for index, choice in enumerate(self.choices.keys()):
+        for index, choice in enumerate(self.choices):
             if index == self.value:
                 return self.choices[choice]
-
 class ElevatorTier(NamedRange):
     """
     Put these Shipments to Space Elevator packages in logic.

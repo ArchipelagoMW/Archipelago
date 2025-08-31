@@ -93,7 +93,7 @@ class SatisfactoryWorld(World):
         resource_sink_goal: bool = "AWESOME Sink Points (total)" in self.options.goal_selection \
                                 or "AWESOME Sink Points (per minute)" in self.options.goal_selection
 
-        required_parts = set(self.game_logic.space_elevator_tiers[self.options.final_elevator_package.value - 1].keys())
+        required_parts = set(self.game_logic.space_elevator_tiers[self.options.final_elevator_package.value - 1])
 
         if resource_sink_goal:
             required_parts.union(self.game_logic.buildings["AWESOME Sink"].inputs)

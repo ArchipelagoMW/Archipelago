@@ -588,8 +588,6 @@ class GameLogic:
         #For exclusion logic
         "Hoverpack": (
             Recipe("Hoverpack", "Equipment Workshop", ("Motor", "Heavy Modular Frame", "Computer", "Alclad Aluminum Sheet")), ),
-        "Rifle Ammo": (
-            Recipe("Rifle Ammo", "Assembler", ("Copper Sheet", "Smokeless Powder"), minimal_belt_speed=2), ),
         "Turbo Rifle Ammo": (
             Recipe("Turbo Rifle Ammo", "Blender", ("Rifle Ammo", "Aluminum Casing", "Turbofuel"), minimal_belt_speed=3),
             Recipe("Turbo Rifle Ammo (Packaged)", "Manufacturer", ("Rifle Ammo", "Aluminum Casing", "Packaged Turbofuel"), minimal_belt_speed=2, minimal_tier=2)),

@@ -41,7 +41,7 @@ class CriticalPathCalculator:
         self.configure_implicitly_unlocked_and_handcraftable_parts()
 
         self.select_minimal_required_parts_for(
-            self.logic.space_elevator_tiers[self.final_elevator_package-1].keys())
+            self.logic.space_elevator_tiers[self.final_elevator_package-1])
 
         for tree in self.logic.man_trees.values():
             self.select_minimal_required_parts_for(tree.access_items)
@@ -50,7 +50,7 @@ class CriticalPathCalculator:
                 if node.minimal_tier > self.final_elevator_package:
                     continue
 
-                self.select_minimal_required_parts_for(node.unlock_cost.keys())
+                self.select_minimal_required_parts_for(node.unlock_cost)
 
         self.select_minimal_required_parts_for_building("MAM")
         self.select_minimal_required_parts_for_building("AWESOME Sink")

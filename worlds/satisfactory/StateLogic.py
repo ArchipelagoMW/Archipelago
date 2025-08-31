@@ -46,7 +46,7 @@ class StateLogic:
             state.has_all(map(self.to_part_event, parts), self.player)
 
     def can_produce_all_allowing_handcrafting(self, state: CollectionState, logic: GameLogic, 
-            parts: Optional[tuple[str, ...]]) -> bool:
+            parts: Optional[Iterable[str]]) -> bool:
         
         def can_handcraft_part(part: str) -> bool:
             if self.can_produce(state, part):
