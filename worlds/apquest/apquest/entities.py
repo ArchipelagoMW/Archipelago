@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import abstractmethod
 from typing import TYPE_CHECKING, ClassVar
 
@@ -16,13 +18,13 @@ class Entity:
 
 class InteractableMixin:
     @abstractmethod
-    def interact(self, player: "Player") -> None:
+    def interact(self, player: Player) -> None:
         pass
 
 
 class ActivatableMixin:
     @abstractmethod
-    def activate(self, player: "Player") -> None:
+    def activate(self, player: Player) -> None:
         pass
 
 
@@ -39,7 +41,7 @@ class LocationMixin:
         self.has_given_content = True
         self.content_success()
 
-    def give_content(self, player: "Player") -> None:
+    def give_content(self, player: Player) -> None:
         if self.has_given_content:
             return
 
@@ -87,7 +89,7 @@ class Chest(Entity, InteractableMixin, LocationMixin):
         self.is_open = True
         self.update_solidity()
 
-    def interact(self, player: "Player") -> None:
+    def interact(self, player: Player) -> None:
         if self.has_given_content:
             return
 
@@ -135,7 +137,7 @@ class Door(Entity):
 class KeyDoor(Door, InteractableMixin):
     closed_graphic = Graphic.KEY_DOOR
 
-    def interact(self, player: "Player") -> None:
+    def interact(self, player: Player) -> None:
         if self.is_open:
             return
 
@@ -150,7 +152,7 @@ class KeyDoor(Door, InteractableMixin):
 class BreakableBlock(Door, InteractableMixin):
     closed_graphic = Graphic.BREAKABLE_BLOCK
 
-    def interact(self, player: "Player") -> None:
+    def interact(self, player: Player) -> None:
         if self.is_open:
             return
 
@@ -165,7 +167,7 @@ class BreakableBlock(Door, InteractableMixin):
 class Bush(Door, InteractableMixin):
     closed_graphic = Graphic.BUSH
 
-    def interact(self, player: "Player") -> None:
+    def interact(self, player: Player) -> None:
         if self.is_open:
             return
 
@@ -184,7 +186,7 @@ class Button(Entity, InteractableMixin):
     def __init__(self, activates: ActivatableMixin) -> None:
         self.activates = activates
 
-    def interact(self, player: "Player") -> None:
+    def interact(self, player: Player) -> None:
         if self.activated:
             return
 
@@ -201,7 +203,7 @@ class Button(Entity, InteractableMixin):
 class ButtonDoor(Door, ActivatableMixin):
     closed_graphic = Graphic.BUTTON_DOOR
 
-    def activate(self, player: "Player") -> None:
+    def activate(self, player: Player) -> None:
         self.is_open = True
         self.solid = False
 
@@ -238,7 +240,7 @@ class Enemy(Entity, InteractableMixin):
             return
         self.current_health = self.max_health
 
-    def interact(self, player: "Player") -> None:
+    def interact(self, player: Player) -> None:
         if self.dead:
             return
 
@@ -268,7 +270,7 @@ class EnemyWithLoot(Enemy, LocationMixin):
         self.dead = True
         self.solid = not self.has_given_content
 
-    def interact(self, player: "Player") -> None:
+    def interact(self, player: Player) -> None:
         if self.dead:
             if not self.has_given_content:
                 self.give_content(player)
@@ -301,7 +303,7 @@ class FinalBoss(Enemy):
     }
     enemy_default_graphic = Graphic.BOSS_1_HEALTH
 
-    def interact(self, player: "Player") -> None:
+    def interact(self, player: Player) -> None:
         dead_before = self.dead
 
         super().interact(player)

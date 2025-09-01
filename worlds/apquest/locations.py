@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 from BaseClasses import ItemClassification, Location
@@ -26,12 +28,12 @@ class APQuestLocation(Location):
     game = "APQuest"
 
 
-def create_all_locations(world: "APQuestWorld") -> None:
+def create_all_locations(world: APQuestWorld) -> None:
     create_regular_locations(world)
     create_events(world)
 
 
-def create_regular_locations(world: "APQuestWorld") -> None:
+def create_regular_locations(world: APQuestWorld) -> None:
     # Finally, we need to put the Locations ("checks") into their regions.
     # Once again, before we do anything, we can grab our regions we created by using world.get_region()
     overworld = world.get_region("Overworld")
@@ -89,7 +91,7 @@ def create_regular_locations(world: "APQuestWorld") -> None:
         overworld.locations.append(bottom_left_extra_chest)
 
 
-def create_events(world: "APQuestWorld") -> None:
+def create_events(world: APQuestWorld) -> None:
     # Sometimes, the player may perform in-game actions that allow them to progress which are not related to Items.
     # In our case, the player must press a button in the top left room to open the final boss door.
     # AP has something for this purpose: "Event locations" and "Event items".

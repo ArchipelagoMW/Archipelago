@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
@@ -6,12 +8,12 @@ if TYPE_CHECKING:
     from .world import APQuestWorld
 
 
-def create_and_connect_regions(world: "APQuestWorld") -> None:
+def create_and_connect_regions(world: APQuestWorld) -> None:
     create_all_regions(world)
     connect_regions(world)
 
 
-def create_all_regions(world: "APQuestWorld") -> None:
+def create_all_regions(world: APQuestWorld) -> None:
     # Creating a region is as simple as calling its constructor.
     overworld = Region("Overworld", world.player, world.multiworld)
     top_left_room = Region("Top Left Room", world.player, world.multiworld)
@@ -32,7 +34,7 @@ def create_all_regions(world: "APQuestWorld") -> None:
     world.multiworld.regions += regions
 
 
-def connect_regions(world: "APQuestWorld") -> None:
+def connect_regions(world: APQuestWorld) -> None:
     # We have regions now, but still need to connect them to each other.
     # But wait, we no longer have access to the region variables we created in create_all_regions()!
     # Luckily, once you've submitted your regions to multiworld.regions,

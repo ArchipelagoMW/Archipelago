@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # isort: off
 from kvui import GameManager, MDNavigationItemBase
 
@@ -23,7 +25,7 @@ if TYPE_CHECKING:
 
 class APQuestManager(GameManager):
     base_title = "APQuest for AP version"
-    ctx: "APQuestContext"
+    ctx: APQuestContext
 
     lower_game_grid: GridLayout
     upper_game_grid: GridLayout

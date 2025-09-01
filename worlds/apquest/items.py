@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
@@ -37,7 +39,7 @@ class APQuestItem(Item):
     game = "APQuest"
 
 
-def create_all_items(world: "APQuestWorld") -> None:
+def create_all_items(world: APQuestWorld) -> None:
     # This is the function in which we will create all the items that this world submits to the multiworld item pool.
     # There must be exactly as many items as there are locations.
     # In our case, there are either six or seven locations.
@@ -79,7 +81,7 @@ def create_all_items(world: "APQuestWorld") -> None:
     # The amount of locations is also easy to determine, but we have to be careful.
     # Just calling len(world.get_locations()) would report an incorrect number, because of our *event locations*.
     # What we actually want is the amount of *unfilled* locations. Luckily, there is a helper method for this:
-    amount_of_unfilled_locations = world.multiworld.get_unfilled_locations(world.player)
+    amount_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
 
     # Now, we just subtract the amount of items from the amount of locations to get the number of empty item slots.
     needed_amount_of_filler = amount_of_unfilled_locations - amount_of_items
@@ -93,7 +95,7 @@ def create_all_items(world: "APQuestWorld") -> None:
     world.multiworld.itempool += itempool
 
 
-def create_item_with_correct_classification(world: "APQuestWorld", name: str) -> APQuestItem:
+def create_item_with_correct_classification(world: APQuestWorld, name: str) -> APQuestItem:
     # Our world class must have a create_item() function that can create any of our items by name at any time.
     # So, we make this helper function that creates the item by name with the correct classification.
     # Note: This function's content could just be the contents of world.create_item in world.py directly,

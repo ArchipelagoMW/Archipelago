@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
@@ -83,7 +85,7 @@ class Gameboard:
             if isinstance(entity, Enemy):
                 entity.heal_if_not_dead()
 
-    def render(self, player: "Player") -> tuple[tuple[Graphic, ...], ...]:
+    def render(self, player: Player) -> tuple[tuple[Graphic, ...], ...]:
         graphics = []
 
         for y, row in enumerate(self.gameboard):
