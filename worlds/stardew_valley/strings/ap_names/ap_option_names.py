@@ -59,3 +59,21 @@ class HatsanityOptionName:
     rng = "RNG"
     near_perfection = "Near Perfection"
     post_perfection = "Post Perfection"
+
+
+class AllowedFillerOptionName:
+    farming = "Farming Items"
+    fishing = "Fishing Items"
+    fruit_trees = "Fruit Trees"
+    food = "Food"
+    buff_food = "Buff Food"
+    consumables = "Consumables"
+    machines = "Machines"
+    storage = "Storage"
+    quality_of_life = "Quality Of Life"
+    materials = "Materials"
+    currencies = "Currencies"
+    money = "Money"
+    hats = "Hats"
+    decorations = "Decorations"
+    rings = "Rings"

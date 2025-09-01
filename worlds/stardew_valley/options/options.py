@@ -8,7 +8,7 @@ from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonO
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..mods.mod_data import ModNames, invalid_mod_combinations
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
-    StartWithoutOptionName, HatsanityOptionName
+    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
 from ..strings.trap_names import all_traps
 
@@ -1105,6 +1105,37 @@ class BundleBlacklist(OptionSet):
         return bundle_name in self.value
 
 
+class AllowedFillerItems(OptionSet):
+    """Types of filler items that can be generated for this slot. All allowed filler has the same odds, and duplicates can roll
+    Farming Items: Items to help with farming. Fertilizers, sprinklers...
+    Fishing Items: Items to help with fishing. Baits, Bobbers...
+    Fruit Trees: Extra Fruit Trees
+    Food: Food that doesn't give buffs
+    Buff Food: Food that gives buffs
+    Consumables: Other consumables. Warp Totems, Staircases...
+    Machines: Various machines. Enables a lot of OoL
+    Storage: Storage items. Chests, Big Chests...
+    Quality Of Life: Items that are nice to have. Key to the town, Horse Flute...
+    Materials: Construction Materials. Wood, Stone...
+    Money: Packs of money
+    Currencies: Packs of other currencies. Walnuts, Qi Gems, Calico eggs...
+    Rings: Various rings
+    Hats: Various hats.
+    Decorations: Various decorations and furniture
+    """
+    internal_name = "allowed_filler_items"
+    display_name = "Allowed Filler Items"
+    visibility = Visibility.template | Visibility.spoiler
+    valid_keys = frozenset({AllowedFillerOptionName.farming, AllowedFillerOptionName.fishing, AllowedFillerOptionName.fruit_trees,
+                            AllowedFillerOptionName.food, AllowedFillerOptionName.buff_food, AllowedFillerOptionName.consumables,
+                            AllowedFillerOptionName.machines, AllowedFillerOptionName.storage, AllowedFillerOptionName.quality_of_life,
+                            AllowedFillerOptionName.materials, AllowedFillerOptionName.currencies, AllowedFillerOptionName.money,
+                            AllowedFillerOptionName.hats, AllowedFillerOptionName.decorations, AllowedFillerOptionName.rings})
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = preset_all
+
+
 @dataclass
 class StardewValleyOptions(PerGameCommonOptions):
     goal: Goal
@@ -1159,6 +1190,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     mods: Mods
     bundle_whitelist: BundleWhitelist
     bundle_blacklist: BundleBlacklist
+    allowed_filler_items: AllowedFillerItems
     death_link: DeathLink
 
     # Jojapocalypse

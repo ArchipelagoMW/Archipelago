@@ -18,6 +18,7 @@ from .content.feature.special_order_locations import get_qi_gem_amount
 from .content.feature.walnutsanity import get_walnut_amount
 from .items import item_table, ItemData, Group, items_by_group, create_items, generate_filler_choice_pool, \
     setup_early_items
+from .items.item_data import FILLER_GROUPS
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.combat_logic import valid_weapons
 from .logic.logic import StardewLogic
@@ -209,7 +210,7 @@ class StardewValleyWorld(World):
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
                             if item_table[excluded_items.name].has_any_group(Group.MAXIMUM_ONE)
-                            or not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK, Group.FRIENDSHIP_PACK)]
+                            or not item_table[excluded_items.name].has_any_group(*FILLER_GROUPS, Group.FRIENDSHIP_PACK)]
 
         if self.options.season_randomization == SeasonRandomization.option_disabled:
             items_to_exclude = [item for item in items_to_exclude

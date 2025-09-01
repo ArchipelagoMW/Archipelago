@@ -6,8 +6,26 @@ from .filters import remove_excluded, remove_limited_amount_resource_packs, remo
 from .item_data import items_by_group, Group, ItemData, StardewItemFactory, item_table
 from ..content.game_content import StardewContent
 from ..options import StardewValleyOptions, FestivalLocations
-from ..strings.ap_names.ap_option_names import BuffOptionName
+from ..strings.ap_names.ap_option_names import BuffOptionName, AllowedFillerOptionName
 from ..strings.ap_names.buff_names import Buff
+
+AllowedFillerTypesMap = {
+    AllowedFillerOptionName.farming: Group.FILLER_FARMING,
+    AllowedFillerOptionName.fishing: Group.FILLER_FISHING,
+    AllowedFillerOptionName.fruit_trees: Group.FILLER_FRUIT_TREES,
+    AllowedFillerOptionName.food: Group.FILLER_FOOD,
+    AllowedFillerOptionName.buff_food: Group.FILLER_BUFF_FOOD,
+    AllowedFillerOptionName.consumables: Group.FILLER_CONSUMABLE,
+    AllowedFillerOptionName.machines: Group.FILLER_MACHINE,
+    AllowedFillerOptionName.storage: Group.FILLER_STORAGE,
+    AllowedFillerOptionName.quality_of_life: Group.FILLER_QUALITY_OF_LIFE,
+    AllowedFillerOptionName.materials: Group.FILLER_MATERIALS,
+    AllowedFillerOptionName.currencies: Group.FILLER_CURRENCY,
+    AllowedFillerOptionName.money: Group.FILLER_MONEY,
+    AllowedFillerOptionName.hats: Group.FILLER_HAT,
+    AllowedFillerOptionName.decorations: Group.FILLER_DECORATION,
+    AllowedFillerOptionName.rings: Group.FILLER_RING,
+}
 
 
 def generate_filler_choice_pool(options: StardewValleyOptions, content: StardewContent) -> list[str]:
@@ -19,8 +37,12 @@ def generate_filler_choice_pool(options: StardewValleyOptions, content: StardewC
 
 
 def get_all_filler_items(options: StardewValleyOptions) -> list[ItemData]:
-    all_filler_items = [pack for pack in items_by_group[Group.RESOURCE_PACK]]
+    all_filler_items = []
+    for allowed_filler_type in options.allowed_filler_items:
+        allowed_filler_group = AllowedFillerTypesMap[allowed_filler_type]
+        all_filler_items.extend([pack for pack in items_by_group[allowed_filler_group]])
     all_filler_items.extend(items_by_group[Group.TRASH])
+    all_filler_items.extend(get_player_buffs(options))
     all_filler_items.extend(get_traps(options))
 
     return all_filler_items
@@ -84,7 +106,6 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
     already_added_items_names |= {priority_item.name for priority_item in priority_fillers}
 
     all_fillers = get_all_filler_items(options)
-    all_fillers.extend(get_player_buffs(options))
     all_fillers = remove_excluded(all_fillers, content, options)
     all_fillers = remove_already_included(all_fillers, already_added_items_names)
 
@@ -114,11 +135,10 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
 
 
 def get_priority_fillers(options: StardewValleyOptions) -> list[ItemData]:
-    useful_resource_packs = items_by_group[Group.RESOURCE_PACK_USEFUL]
     buffs = get_player_buffs(options)
     traps = get_traps(options)
 
-    return useful_resource_packs + buffs + traps
+    return buffs + traps
 
 
 def get_player_buffs(options: StardewValleyOptions) -> List[ItemData]:

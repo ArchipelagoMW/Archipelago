@@ -4,6 +4,7 @@ from .options.presets import default_7_x_x, allsanity_no_mods_7_x_x, get_minsani
     minimal_locations_maximal_items, minimal_locations_maximal_items_with_island, allsanity_mods_7_x_x_exclude_disabled
 from .. import location_table
 from ..items import Group, item_table
+from ..items.item_data import FILLER_GROUPS
 
 
 class TestLocationGeneration(SVTestBase):
@@ -20,7 +21,7 @@ class TestMinLocationAndMaxItem(SVTestBase):
         valid_locations = self.get_real_locations()
         number_locations = len(valid_locations)
         number_items = len([item for item in self.multiworld.itempool
-                            if Group.RESOURCE_PACK not in item_table[item.name].groups and Group.TRAP not in item_table[item.name].groups])
+                            if all(filler_group not in item_table[item.name].groups for filler_group in FILLER_GROUPS) and Group.TRAP not in item_table[item.name].groups])
         print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items} [ISLAND EXCLUDED]")
         self.assertGreaterEqual(number_locations, number_items)
 
@@ -32,7 +33,7 @@ class TestMinLocationAndMaxItemWithIsland(SVTestBase):
         valid_locations = self.get_real_locations()
         number_locations = len(valid_locations)
         number_items = len([item for item in self.multiworld.itempool
-                            if Group.RESOURCE_PACK not in item_table[item.name].groups and Group.TRAP not in item_table[item.name].groups and (item.classification & ItemClassification.progression)])
+                            if all(filler_group not in item_table[item.name].groups for filler_group in FILLER_GROUPS) and Group.TRAP not in item_table[item.name].groups and (item.classification & ItemClassification.progression)])
         print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items} [ISLAND INCLUDED]")
         self.assertGreaterEqual(number_locations, number_items)
 

@@ -26,14 +26,11 @@ class StardewItemFactory(Protocol):
 
 
 class Group(enum.Enum):
-    RESOURCE_PACK = enum.auto()
     FRIENDSHIP_PACK = enum.auto()
     COMMUNITY_REWARD = enum.auto()
     TRASH_BEAR = enum.auto()
     TRASH = enum.auto()
     FOOTWEAR = enum.auto()
-    HAT = enum.auto()
-    RING = enum.auto()
     WEAPON = enum.auto()
     WEAPON_GENERIC = enum.auto()
     WEAPON_SWORD = enum.auto()
@@ -66,7 +63,6 @@ class Group(enum.Enum):
     MAXIMUM_ONE = enum.auto()
     AT_LEAST_TWO = enum.auto()
     DEPRECATED = enum.auto()
-    RESOURCE_PACK_USEFUL = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
     BABY = enum.auto()
@@ -93,9 +89,32 @@ class Group(enum.Enum):
     ENDGAME_LOCATION_ITEMS = enum.auto()
     REQUIRES_FRIENDSANITY_MARRIAGE = enum.auto()
     BOOKSELLER = enum.auto()
+
+    # Types of filler
+    FILLER_FARMING = enum.auto()
+    FILLER_FISHING = enum.auto()
+    FILLER_FRUIT_TREES = enum.auto()
+    FILLER_FOOD = enum.auto()
+    FILLER_BUFF_FOOD = enum.auto()
+    FILLER_CONSUMABLE = enum.auto()
+    FILLER_MACHINE = enum.auto()
+    FILLER_STORAGE = enum.auto()
+    FILLER_QUALITY_OF_LIFE = enum.auto()
+    FILLER_MATERIALS = enum.auto()
+    FILLER_CURRENCY = enum.auto()
+    FILLER_MONEY = enum.auto()
+    FILLER_HAT = enum.auto()
+    FILLER_DECORATION = enum.auto()
+    FILLER_RING = enum.auto()
+
     # Mods
     MAGIC_SPELL = enum.auto()
     MOD_WARP = enum.auto()
+
+
+FILLER_GROUPS = [Group.FILLER_FARMING, Group.FILLER_FISHING, Group.FILLER_FRUIT_TREES, Group.FILLER_FOOD, Group.FILLER_BUFF_FOOD,
+                 Group.FILLER_CONSUMABLE, Group.FILLER_MACHINE, Group.FILLER_STORAGE, Group.FILLER_QUALITY_OF_LIFE, Group.FILLER_MATERIALS,
+                 Group.FILLER_CURRENCY, Group.FILLER_MONEY, Group.FILLER_HAT, Group.FILLER_DECORATION, Group.FILLER_RING, ]
 
 
 @dataclass(frozen=True)

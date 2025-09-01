@@ -171,9 +171,7 @@ def create_weapons(item_factory: StardewItemFactory, options: StardewValleyOptio
     monstersanity = options.monstersanity
 
     ring_classification = ItemClassification.progression if options.bundle_randomization == BundleRandomization.option_meme else ItemClassification.useful
-    rings_items = items_by_group[Group.RING]
-    if not content.is_enabled(ginger_island_content_pack):
-        rings_items = [item for item in rings_items if item.classification is not ItemClassification.filler]
+    rings_items = [item for item in items_by_group[Group.FILLER_RING] if item.classification is not ItemClassification.filler]
 
     if monstersanity == Monstersanity.option_none:  # Without monstersanity, might not be enough checks to split the weapons
         items.extend(item_factory(item) for item in [APWeapon.weapon] * weapons)
@@ -561,8 +559,8 @@ def create_secrets_items(item_factory: StardewItemFactory, content: StardewConte
     secret_items = []
     if SecretsanityOptionName.easy in options.secretsanity:
         secret_items.extend(items_by_group[Group.EASY_SECRET])
-    if SecretsanityOptionName.fishing in options.secretsanity:
-        secret_items.extend(items_by_group[Group.FISHING_SECRET])
+    # if SecretsanityOptionName.fishing in options.secretsanity:
+    #     secret_items.extend(items_by_group[Group.FISHING_SECRET]) # There are no longer any of these items, they are now part of FILLER_DECORATION
     # if SecretsanityOptionName.difficult in options.secretsanity:
     #     items.extend(item_factory(item) for item in items_by_group[Group.DIFFICULT_SECRET])
     if SecretsanityOptionName.secret_notes in options.secretsanity:
