@@ -2564,7 +2564,7 @@ id,region,name,tags,content_packs
 4286,Secret Notes,Secret Note #25: Ornate Necklace,"SECRETSANITY,SECRET_NOTE",
 4287,Secret Notes,Secret Note #26: Ancient Farming Secrets,"SECRETSANITY,SECRET_NOTE",
 4288,Secret Notes,Secret Note #27: A Compendium Of My Greatest Discoveries,"SECRETSANITY,SECRET_NOTE",
-4289,Farm,Obtain my precious fruit whenever you like,"SECRETSANITY,EASY_SECRET",
+4289,Farm,Obtain my precious fruit whenever you like,"SECRETSANITY,EASY_SECRET,GINGER_ISLAND,REQUIRES_QI_ORDERS",
 4301,Movie Theater,Watch A Movie,"ANY_MOVIE",
 4302,Movie Theater,Watch The Brave Little Sapling,"MOVIE",
 4303,Movie Theater,Watch Journey Of The Prairie King: The Motion Picture,"MOVIE",

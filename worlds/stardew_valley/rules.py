@@ -1012,8 +1012,10 @@ def set_secrets_rules(logic: StardewLogic, rule_collector: StardewRuleCollector,
         rule_collector.set_location_rule("A gift of lovely perfume", logic.gifts.can_gift_to(NPC.krobus, Consumable.monster_musk))
         rule_collector.set_location_rule("Where exactly does this juice come from?", logic.gifts.can_gift_to(NPC.dwarf, AnimalProduct.cow_milk))
         rule_collector.set_location_rule("Thank the Devs", logic.received("Stardrop") & logic.money.can_spend_at(Region.wizard_basement, 500))
-        rule_collector.set_location_rule("Obtain my precious fruit whenever you like", logic.special_order.can_complete_special_order(SpecialOrder.qis_crop) &
-                                         logic.tool.has_tool(Tool.axe))
+        if content.is_enabled(ginger_island_content_pack) and content.is_enabled(qi_board_content_pack):
+            rule_collector.set_location_rule("Obtain my precious fruit whenever you like",
+                                             logic.special_order.can_complete_special_order(SpecialOrder.qis_crop) &
+                                             logic.tool.has_tool(Tool.axe))
 
     if SecretsanityOptionName.fishing in world_options.secretsanity:
         if world_options.farm_type == FarmType.option_beach:
