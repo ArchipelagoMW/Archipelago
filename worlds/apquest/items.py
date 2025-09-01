@@ -26,6 +26,9 @@ ITEM_CLASSIFICATIONS = {
     "Hammer": ItemClassification.progression,
     "Health Upgrade": ItemClassification.useful,
     "Confetti Cannon": ItemClassification.filler,
+    # There is a fourth classification: ItemClassification.trap, for items that have a negative effect.
+    # APQuest doesn't have any of these items, but an example would be:
+    # "Slowness Trap": ItemClassification.trap
 }
 
 
@@ -60,16 +63,33 @@ def create_all_items(world: "APQuestWorld") -> None:
         # it must be present in the worlds location_name_to_id.
         # Whether it is actually in the itempool is determined purely by whether we create and add the item here.
         itempool.append(world.create_item("Hammer"))
-    else:
-        itempool.append(world.create_item("Confetti Cannon"))
 
-    # If the extra_starting_chest option is on, we have an extra location - seven instead of six.
-    # In this case, we must add a seventh item so that the counts are equal.
-    if world.options.extra_starting_chest:
-        itempool.append(world.create_item("Confetti Cannon"))
+    # Archipelago requires that each world submits as many locations as it submits items.
+    # This is what filler is for. In our case, that's the Confetti Cannon.
+    # Creating filler items works the same as any other item. But there is a question:
+    # How many Confetti Cannons do we actually need to create?
+    # In regions.py, we created either six or seven locations depending on the "extra_starting_chest" option.
+    # In this function, we have created five or six items depending on whether the "hammer" option is enabled.
+    # We *could* have a really complicated if-else tree checking the options again, but there is a better way.
+    # We can compare the size of our itempool so far to the amount of locations in our world.
 
-    # Finally we must append our list of items to the multiworld's itempool.
-    # Note: We do not need to make our itempool have a random order. Archipelago will take care of the shuffling itself.
+    # The length of our itempool is easy to determine, since we have it as a list.
+    amount_of_items = len(itempool)
+
+    # The amount of locations is also easy to determine, but we have to be careful.
+    # Just calling len(world.get_locations()) would report an incorrect number, because of our *event locations*.
+    # What we actually want is the amount of *unfilled* locations. Luckily, there is a helper method for this:
+    amount_of_unfilled_locations = world.multiworld.get_unfilled_locations(world.player)
+
+    # Now, we just subtract the amount of items from the amount of locations to get the number of empty item slots.
+    needed_amount_of_filler = amount_of_unfilled_locations - amount_of_items
+
+    # Finally, we create that many filler items and add them to the itempool.
+    # Important: Make sure you're actually submitting different instances of the item!
+    # In Python, it can be easy to accidentally submit two references to the same object rather than two objects.
+    itempool += [world.create_item("Confetti Cannon") for _ in range(needed_amount_of_filler)]
+
+    # Finally, we just have append our itempool to the multiworld itempool.
     world.multiworld.itempool += itempool
 
 
