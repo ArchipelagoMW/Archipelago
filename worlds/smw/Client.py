@@ -230,6 +230,7 @@ class SMWSNIClient(SNIClient):
 
         if ctx.rom != rom_name:
             ctx.current_sublevel_value = 0
+            ctx.visited_levels = []
 
         ctx.rom = rom_name
 
@@ -518,6 +519,7 @@ class SMWSNIClient(SNIClient):
             # We haven't loaded a save file
             ctx.message_queue = []
             ctx.current_sublevel_value = 0
+            ctx.visited_levels = []
             return
         elif mario_state[0] in SMW_INVALID_MARIO_STATES:
             # Mario can't come to the phone right now
@@ -705,6 +707,25 @@ class SMWSNIClient(SNIClient):
                     }
                 ]
             )
+
+            if ctx.current_sublevel_value not in ctx.visited_levels:
+                ctx.visited_levels.append(ctx.current_sublevel_value)
+                await ctx.send_msgs(
+                    [
+                        {
+                            "cmd": "Set",
+                            "key": f"smw_visitedlevels_{ctx.team}_{ctx.slot}",
+                            "default": [],
+                            "want_reply": False,
+                            "operations": [
+                                {
+                                    "operation": "update",
+                                    "value": ctx.visited_levels,
+                                }
+                            ],
+                        }
+                    ]
+                )
 
         if game_state[0] != 0x14:
             # Don't receive items or collect locations outside of in-level mode
