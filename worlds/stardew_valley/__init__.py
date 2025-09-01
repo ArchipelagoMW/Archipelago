@@ -473,7 +473,7 @@ class StardewValleyWorld(World):
                 for i, item in enumerate(bundle.items):
                     bundles[room.name][bundle.name][i] = f"{item.get_item()}|{item.amount}|{item.quality}"
 
-        excluded_options = [BundleRandomization, BundlePrice, BundlePerRoom, NumberOfMovementBuffs,
+        excluded_options = [BundleRandomization, BundlePerRoom, NumberOfMovementBuffs,
                             EnabledFillerBuffs, TrapDistribution, BundleWhitelist, BundleBlacklist, JojaAreYouSure]
         excluded_option_names = [option.internal_name for option in excluded_options]
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
@@ -486,7 +486,7 @@ class StardewValleyWorld(World):
             "randomized_entrances": self.randomized_entrances,
             "trash_bear_requests": self.trash_bear_requests,
             "modified_bundles": bundles,
-            "client_version": "7.0.0",
+            "client_version": "7.2.0",
         })
 
         return slot_data
