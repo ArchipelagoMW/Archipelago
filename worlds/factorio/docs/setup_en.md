@@ -209,3 +209,4 @@ in Archipelago.
   Umenen: [Factorio (Steam) Archipelago Setup Guide for Windows](https://docs.google.com/document/d/1yZPAaXB-QcetD8FJsmsFrenAHO5V6Y2ctMAyIoT9jS4)
 - Factorio Speedrun Guide: [Factorio Speedrun Guide by Nefrums](https://www.youtube.com/watch?v=ExLrmK1c7tA)
 - Factorio Wiki: [Factorio Official Wiki](https://wiki.factorio.com/)
+- [Archipelago Factorio Cheat Sheet](https://docs.google.com/spreadsheets/d/1317PZU957IVWCG9jUUklyHAl82BhrKIriynSZJ0AGNg/edit?gid=0#gid=0)
