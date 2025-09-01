@@ -786,7 +786,7 @@ class Hatsanity(OptionSet):
     })
     preset_none = frozenset()
     preset_simple = frozenset({
-        HatsanityOptionName.tailoring, HatsanityOptionName.easy, HatsanityOptionName.medium,
+        HatsanityOptionName.tailoring, HatsanityOptionName.easy,
     })
     preset_difficult = frozenset({
         HatsanityOptionName.tailoring, HatsanityOptionName.easy, HatsanityOptionName.medium, HatsanityOptionName.difficult,
