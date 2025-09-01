@@ -253,5 +253,17 @@
   "CubeBot": 529,
   "Sarda": 525,
   "Fairy": 531,
-  "Lefein": 527
+  "Lefein": 527,
+  "DeepDungeon32B_Chest144": 401,
+  "DeepDungeon30B_Chest145": 402,
+  "DeepDungeon29B_Chest146": 403,
+  "DeepDungeon29B_Chest147": 404,
+  "DeepDungeon40B_Chest186": 443,
+  "DeepDungeon38B_Chest188": 445,
+  "DeepDungeon36B_Chest189": 446,
+  "DeepDungeon33B_Chest190": 447,
+  "DeepDungeon40B_Chest191": 448,
+  "DeepDungeon41B_Chest192": 449,
+  "DeepDungeon34B_Chest193": 450,
+  "DeepDungeon39B_Chest194": 451
 }
