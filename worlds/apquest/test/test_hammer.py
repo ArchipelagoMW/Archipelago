@@ -2,8 +2,8 @@ from typing import cast
 
 from test.general import gen_steps, setup_multiworld
 from test.multiworld.test_multiworlds import MultiworldTestBase
-from ..items import APQuestItem
 
+from ..items import APQuestItem
 from ..world import APQuestWorld
 
 

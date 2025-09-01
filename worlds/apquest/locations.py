@@ -26,12 +26,12 @@ class APQuestLocation(Location):
     game = "APQuest"
 
 
-def create_all_locations(world: "APQuestWorld"):
+def create_all_locations(world: "APQuestWorld") -> None:
     create_regular_locations(world)
     create_events(world)
 
 
-def create_regular_locations(world: "APQuestWorld"):
+def create_regular_locations(world: "APQuestWorld") -> None:
     # Finally, we need to put the Locations ("checks") into their regions.
     # Once again, before we do anything, we can grab our regions we created by using world.get_region()
     overworld = world.get_region("Overworld")
@@ -56,19 +56,19 @@ def create_regular_locations(world: "APQuestWorld"):
     }
     bottom_right_room.add_locations(bottom_right_room_locations, APQuestLocation)
 
-    top_left_room_locations = {
+    top_left_room_locations: dict[str, int | None] = {
         "Top Left Room Chest": world.location_name_to_id["Top Left Room Chest"],
     }
     top_left_room.add_locations(top_left_room_locations, APQuestLocation)
 
-    right_room_locations = {
+    right_room_locations: dict[str, int | None] = {
         "Right Room Enemy Drop": world.location_name_to_id["Right Room Enemy Drop"],
     }
     right_room.add_locations(right_room_locations, APQuestLocation)
 
     # Locations may be in different regions depending on the player's options.
     # In our case, the hammer option puts the Top Middle Chest into its own room called Top Middle Room.
-    top_middle_room_locations = {
+    top_middle_room_locations: dict[str, int | None] = {
         "Top Middle Chest": world.location_name_to_id["Top Middle Chest"],
     }
     if world.options.hammer:
@@ -89,7 +89,7 @@ def create_regular_locations(world: "APQuestWorld"):
         overworld.locations.append(bottom_left_extra_chest)
 
 
-def create_events(world: "APQuestWorld"):
+def create_events(world: "APQuestWorld") -> None:
     # Sometimes, the player may perform in-game actions that allow them to progress which are not related to Items.
     # In our case, the player must press a button in the top left room to open the final boss door.
     # AP has something for this purpose: "Event locations" and "Event items".

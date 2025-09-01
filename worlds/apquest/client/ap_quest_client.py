@@ -252,7 +252,7 @@ async def main(args: Namespace) -> None:
     await ctx.shutdown()
 
 
-def launch(*args):
+def launch(*args) -> None:
     from .launch import launch_client
 
     launch_client(*args)
