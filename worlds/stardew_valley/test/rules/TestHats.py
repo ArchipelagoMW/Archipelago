@@ -5,6 +5,7 @@ from ...content.feature.hatsanity import to_location_name
 from ...data.hats_data import Hats
 from ...locations import LocationTags
 from ...options import Hatsanity, SeasonRandomization, FestivalLocations, Shipsanity, Eatsanity, Cooksanity, Fishsanity, Craftsanity
+from ...strings.ap_names.ap_option_names import HatsanityOptionName
 
 
 class TestHatsLogic(SVTestBase):
@@ -82,3 +83,56 @@ class TestHatLocations(SVTestBase):
                     self.assertNotIn(hat_location.name, location_names, "The Panda Hat cannot be obtained on the standard edition of the game")
                 else:
                     self.assertIn(hat_location.name, location_names)
+
+
+class TestComboHatsNone(SVTestBase):
+    options = {
+        Hatsanity.internal_name: Hatsanity.preset_none,
+    }
+
+    def test_all_hat_locations_are_added(self):
+        combo_hats = [Hats.bridal_veil, Hats.golden_mask, Hats.hair_bone, Hats.pirate_hat, Hats.wearable_dwarf_helm, Hats.dinosaur_hat]
+        location_names = [location.name for location in self.multiworld.get_locations()]
+        for hat in combo_hats:
+            with self.subTest(f"{hat} is absent on Hatsanity: None"):
+                self.assertNotIn(to_location_name(hat), location_names)
+
+
+class TestComboHatsTailoring(SVTestBase):
+    options = {
+        Hatsanity.internal_name: frozenset([HatsanityOptionName.tailoring]),
+    }
+
+    def test_all_hat_locations_are_added(self):
+        combo_hats = [Hats.bridal_veil, Hats.golden_mask, Hats.hair_bone, Hats.pirate_hat, Hats.wearable_dwarf_helm, Hats.dinosaur_hat]
+        location_names = [location.name for location in self.multiworld.get_locations()]
+        for hat in combo_hats:
+            with self.subTest(f"{hat} is absent on Hatsanity: Tailoring"):
+                self.assertNotIn(to_location_name(hat), location_names)
+
+
+class TestComboHatsRNG(SVTestBase):
+    options = {
+        Hatsanity.internal_name: frozenset([HatsanityOptionName.rng]),
+    }
+
+    def test_all_hat_locations_are_added(self):
+        combo_hats = [Hats.bridal_veil, Hats.golden_mask, Hats.hair_bone, Hats.pirate_hat, Hats.wearable_dwarf_helm, Hats.dinosaur_hat]
+        location_names = [location.name for location in self.multiworld.get_locations()]
+        for hat in combo_hats:
+            with self.subTest(f"{hat} is absent on Hatsanity: RNG"):
+                self.assertNotIn(to_location_name(hat), location_names)
+
+
+class TestComboHatsTailoringRNG(SVTestBase):
+    options = {
+        Hatsanity.internal_name: frozenset([HatsanityOptionName.tailoring, HatsanityOptionName.rng]),
+    }
+
+    def test_all_hat_locations_are_added(self):
+        combo_hats = [Hats.bridal_veil, Hats.golden_mask, Hats.hair_bone, Hats.pirate_hat, Hats.wearable_dwarf_helm, Hats.dinosaur_hat]
+        location_names = [location.name for location in self.multiworld.get_locations()]
+        for hat in combo_hats:
+            with self.subTest(f"{hat} is present on Hatsanity: Tailoring + RNG"):
+                self.assertIn(to_location_name(hat), location_names)
+

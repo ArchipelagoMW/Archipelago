@@ -46,4 +46,7 @@ class HatsanityHats(HatsanityFeature):
     enabled_hats: frozenset[str]
 
     def is_included(self, hat: HatItem) -> bool:
-        return hat.difficulty in self.enabled_hats
+        for difficulty in hat.difficulty:
+            if difficulty not in self.enabled_hats:
+                return False
+        return True
