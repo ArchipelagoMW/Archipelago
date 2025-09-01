@@ -128,7 +128,7 @@ class Confetti:
         self.x_pos += self.x_speed * dt
         self.y_pos += self.y_speed * dt
 
-    def render(self, offset_x, offset_y, max_x, max_y) -> tuple[list[float], list[float]]:
+    def render(self, offset_x, offset_y, max_x, max_y) -> None:
         if self.x_speed == 0 and self.y_speed == 0:
             x_normalized, y_normalized = 0, 1
         else:
