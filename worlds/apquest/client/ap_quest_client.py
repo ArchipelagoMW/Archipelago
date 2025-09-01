@@ -47,7 +47,7 @@ class APQuestContext(CommonContext):
     ap_quest_game: Game | None = None
     hard_mode: bool = False
     hammer: bool = False
-    extra_starting_chest: bool = (False,)
+    extra_starting_chest: bool = False
     player_sprite: PlayerSprite = PlayerSprite.HUMAN
 
     connection_status: ConnectionStatus = ConnectionStatus.NOT_CONNECTED
