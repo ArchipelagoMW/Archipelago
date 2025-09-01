@@ -127,8 +127,8 @@ class GrinchClient(BizHawkClient):
                 else:
                     expected_int_value = addr_to_update.value
                     ram_checked_list.append(expected_int_value == current_ram_address_value)
-                if all(ram_checked_list):
-                    local_locations_checked.append(GrinchLocation.get_apid(grinch_loc_ram_data.id))
+            if all(ram_checked_list):
+                local_locations_checked.append(GrinchLocation.get_apid(grinch_loc_ram_data.id))
 
         # Update the AP server with the locally checked list of locations (In other words, locations I found in Grinch)
         locations_sent_to_ap: set[int] = await ctx.check_locations(local_locations_checked)
