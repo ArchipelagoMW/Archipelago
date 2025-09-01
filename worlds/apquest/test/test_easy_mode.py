@@ -23,7 +23,7 @@ class TestEasyModeLogic(APQuestTestBase):
 
     # This is already useful, but we also want to do our own tests.
     # A test is a function whose name starts with "test".
-    def test_easy_mode_access(self):
+    def test_easy_mode_access(self) -> None:
         # Inside a test, we can manually collect items, check access rules, etc.
         # For example, we could check that the two early chests are already accessible despite us having no items.
         # For the sake of structure, let's have every test item in its own subtest.
@@ -87,7 +87,7 @@ class TestEasyModeLogic(APQuestTestBase):
                 only_check_listed=True,
             )
 
-    def test_easy_mode_health_upgrades(self):
+    def test_easy_mode_health_upgrades(self) -> None:
         # For our second test, let's make sure that we have two Health Upgrades with the correct classification.
 
         # We can find the Health Upgrades in the itempool like this:

@@ -6,7 +6,7 @@ class TestHardMode(APQuestTestBase):
         "hard_mode": True,
     }
 
-    def test_hard_mode_access(self):
+    def test_hard_mode_access(self) -> None:
         # For the sake of brevity, we won't repeat anything we tested in easy mode.
         # Instead, let's use this opportunity to talk a bit more about assertAccessDependency.
 
@@ -91,7 +91,7 @@ class TestHardMode(APQuestTestBase):
         # meaning it is not collected into state.
         # Thus, this term cannot be simplified any further without testing something different to what we want to test.
 
-    def test_hard_mode_health_upgrades(self):
+    def test_hard_mode_health_upgrades(self) -> None:
         # We'll also repeat our Health Upgrade test from the Easy Mode test case, but modified for Hard Mode.
         # This will not be explained again here.
 

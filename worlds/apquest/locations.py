@@ -43,12 +43,9 @@ def create_regular_locations(world: "APQuestWorld"):
     bottom_left_chest = APQuestLocation(
         world.player, "Bottom Left Chest", world.location_name_to_id["Bottom Left Chest"], overworld
     )
-    top_middle_chest = APQuestLocation(
-        world.player, "Top Middle Chest", world.location_name_to_id["Top Middle Chest"], overworld
-    )
 
     # You can then add them to the region.
-    overworld.locations += [bottom_left_chest, top_middle_chest]
+    overworld.locations.append(bottom_left_chest)
 
     # A simpler way to do this is by using the region.add_locations helper.
     # For this, you need to have a dict of location names to their IDs (i.e. a subset of location_name_to_id)
@@ -68,6 +65,17 @@ def create_regular_locations(world: "APQuestWorld"):
         "Right Room Enemy Drop": world.location_name_to_id["Right Room Enemy Drop"],
     }
     right_room.add_locations(right_room_locations, APQuestLocation)
+
+    # Locations may be in different regions depending on the player's options.
+    # In our case, the hammer option puts the Top Middle Chest into its own room called Top Middle Room.
+    top_middle_room_locations = {
+        "Top Middle Chest": world.location_name_to_id["Top Middle Chest"],
+    }
+    if world.options.hammer:
+        top_middle_room = world.get_region("Top Middle Room")
+        top_middle_room.add_locations(top_middle_room_locations, APQuestLocation)
+    else:
+        overworld.add_locations(top_middle_room_locations, APQuestLocation)
 
     # Locations may exist only if the player enables certain options.
     # In our case, the extra_starting_chest option adds the Bottom Left Extra Chest location.
