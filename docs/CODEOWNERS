@@ -42,6 +42,9 @@
 # Celeste 64
 /worlds/celeste64/ @PoryGone
 
+# Celeste (Open World)
+/worlds/celeste_open_world/ @PoryGone
+
 # ChecksFinder
 /worlds/checksfinder/ @SunCatMC
 
