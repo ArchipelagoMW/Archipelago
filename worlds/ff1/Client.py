@@ -113,10 +113,9 @@ class FF1Client(BizHawkClient):
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
-        import base64
         auth_raw = (await bizhawk.read(
             ctx.bizhawk_ctx,
-            [(player_name_location, 0x10, self.rom)]))[0]
+            [(player_name_location, 0x40, self.rom)]))[0]
         ctx.auth = str(auth_raw, "utf-8").replace("\x00", "").strip()
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
