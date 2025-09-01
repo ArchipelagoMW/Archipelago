@@ -63,6 +63,7 @@ from .strings.region_names import Region, LogicRegion
 from .strings.season_names import Season
 from .strings.skill_names import Skill
 from .strings.special_item_names import SpecialItem
+from .strings.special_order_names import SpecialOrder
 from .strings.tool_names import Tool, ToolMaterial, FishingRod
 from .strings.tv_channel_names import Channel
 from .strings.villager_names import NPC, ModNPC
@@ -1011,6 +1012,8 @@ def set_secrets_rules(logic: StardewLogic, rule_collector: StardewRuleCollector,
         rule_collector.set_location_rule("A gift of lovely perfume", logic.gifts.can_gift_to(NPC.krobus, Consumable.monster_musk))
         rule_collector.set_location_rule("Where exactly does this juice come from?", logic.gifts.can_gift_to(NPC.dwarf, AnimalProduct.cow_milk))
         rule_collector.set_location_rule("Thank the Devs", logic.received("Stardrop") & logic.money.can_spend_at(Region.wizard_basement, 500))
+        rule_collector.set_location_rule("Obtain my precious fruit whenever you like", logic.special_order.can_complete_special_order(SpecialOrder.qis_crop) &
+                                         logic.tool.has_tool(Tool.axe))
 
     if SecretsanityOptionName.fishing in world_options.secretsanity:
         if world_options.farm_type == FarmType.option_beach:
