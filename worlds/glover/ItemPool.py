@@ -512,7 +512,7 @@ garibsanity_world_table = {
 
 #Atlantis
 decoupled_garib_table = {
-	"Garib" : 									ItemData(BASE_ID + 10001, 4, "Garib", None),
+	"1 Garib" : 								ItemData(BASE_ID + 10001, 4, "Garib", None),
 	"2 Garibs" : 								ItemData(BASE_ID + 10002, 6, "Garib", None),
 	"3 Garibs" : 								ItemData(BASE_ID + 10003, 6, "Garib", None),
 	"4 Garibs" : 								ItemData(BASE_ID + 10004, 10, "Garib", None),
@@ -826,3 +826,36 @@ def create_trap_name_table(self) -> list[str]:
 					"Powerball"
 				])
 	return trap_name_table
+
+def convert_extra_garibs(self) -> list:
+	#Level garibs shouldn't show up
+	if self.options.garib_logic == GaribLogic.option_level_garibs:
+		raise ValueError("Extra garibs cannot show up while garib logic is by level! Set your Filler Extra Garibs to 0.")
+	#Get the garib count
+	extra_garibs_value : int = self.options.extra_garibs_value.value
+	if self.options.garib_sorting != GaribSorting.option_by_level:
+		#Deoupled Garib Groups
+		if self.options.garib_logic == GaribLogic.option_garib_groups:
+			#"Garibs" or "Garib"?
+			garib_name = " Garibs"
+			if extra_garibs_value == 1:
+				garib_name = " Garib"
+			#Index to name
+			return [BASE_ID + 10000 + extra_garibs_value, str(extra_garibs_value) + garib_name]
+		#Decoupled Garibsanity
+		else:
+			return [BASE_ID + 10001, "Garib"]
+	#Level Garibsanity
+	elif self.options.garib_logic == GaribLogic.option_garibsanity:
+		world_offset = 10
+		level_offset = 1
+		return [BASE_ID + 20000 + world_offset + level_offset,]
+	#Level Garib Groups
+	else:
+		#"Garibs" or "Garib"?
+		garib_name = " Garibs"
+		if extra_garibs_value == 1:
+			garib_name = " Garib"
+		world_offset = 1000
+		level_offset = 100
+		return [BASE_ID + 30000 + world_offset + level_offset + extra_garibs_value, " " + str(extra_garibs_value) + " " + garib_name]

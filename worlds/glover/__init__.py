@@ -118,9 +118,7 @@ class GloverWorld(World):
         #Garib counting
         if name.endswith("Garib"):
             state.add_item("Total Garibs", self.player)
-        elif name == "Extra Garibs":
-            state.add_item("Total Garibs", self.player, self.options.extra_garibs_value.value)
-        elif name == "Locate Garibs":
+        elif name == "Locate Garibs" or name == "Extra Garibs":
             return output
         elif name.endswith("Garibs"):
             split_name : list[str] = name.split(" ")
@@ -141,9 +139,7 @@ class GloverWorld(World):
         #Garib counting
         if name.endswith("Garib"):
             state.remove_item("Total Garibs", self.player)
-        elif name == "Extra Garibs":
-            state.remove_item("Total Garibs", self.player, self.options.extra_garibs_value.value)
-        elif name == "Locate Garibs":
+        elif name == "Locate Garibs" or name == "Extra Garibs":
             return output
         elif name.endswith("Garibs"):
             split_name : list[str] = name.split(" ")
@@ -306,6 +302,9 @@ class GloverWorld(World):
 	            "Crystal",
 	            "Power Ball"]
                 self.starting_ball = self.random.choice(ball_options)
+        #Powerball should not show up if you
+        if not self.options.include_power_ball and self.starting_ball == "Power Ball":
+            raise ValueError("You cannot start with Power Ball while Include Power Ball is disabled!")
         self.multiworld.push_precollected(self.create_item(self.starting_ball))
         if not self.options.randomize_jump:
             self.multiworld.push_precollected(self.create_item("Jump"))
@@ -345,8 +344,12 @@ class GloverWorld(World):
             case "Garib":
                 item_classification = ItemClassification.progression_deprioritized
         name_for_use = name
+        #Garibsanity is just Garib
         if name == "Garibsanity":
             name_for_use = "Garib"
+        #Convert Extra Garibs into other types
+        #if name == "Extra Garibs":
+        #    name_for_use = convert_extra_garibs(self)
         item_output : GloverItem = GloverItem(name_for_use, item_classification, item_id, self.player)
         #Rename traps on pedestals
         if item_data.type == "Trap":
@@ -530,8 +533,6 @@ class GloverWorld(World):
                         if each_key.startswith(world_name):
                             garib_item_names.append(each_key)
                             garib_item_count += each_item.qty
-                    #With world garibs, Extra Garibs counts as 1 group from each world
-                    #garib_item_names.append("Extra Garibs")
                     #With the total number of garib items you need
                     if len(garib_item_names) > 0:
                         set_rule(level_all_garibs, lambda state, required_groups = garib_item_names, required_group_count = garib_item_count: state.has_from_list(required_groups, player, required_group_count))
