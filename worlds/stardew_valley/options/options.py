@@ -1106,7 +1106,7 @@ class BundleBlacklist(OptionSet):
 
 
 class AllowedFillerItems(OptionSet):
-    """Types of filler items that can be generated for this slot. All allowed filler has the same odds, and duplicates can roll
+    """Types of filler items that can be generated for this slot. All allowed fillers have the same odds, and duplicates can roll
     Farming Items: Items to help with farming. Fertilizers, sprinklers...
     Fishing Items: Items to help with fishing. Baits, Bobbers...
     Fruit Trees: Extra Fruit Trees
