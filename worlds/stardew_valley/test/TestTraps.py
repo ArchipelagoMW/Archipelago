@@ -71,7 +71,7 @@ class TestDistributionIsRespectedAllTraps(WorldAssertMixin, SVTestBase):
         options.Booksanity.internal_name: options.Booksanity.option_all,
         options.Moviesanity.internal_name: options.Moviesanity.option_all_movies_and_all_loved_snacks,
         options.Secretsanity.internal_name: frozenset(options.Secretsanity.valid_keys),
-        options.Hatsanity.internal_name: options.Hatsanity.option_post_perfection,
+        options.Hatsanity.internal_name: options.Hatsanity.preset_all,
         options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_true,
         options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,

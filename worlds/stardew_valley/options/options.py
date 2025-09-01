@@ -8,7 +8,7 @@ from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonO
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..mods.mod_data import ModNames, invalid_mod_combinations
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
-    StartWithoutOptionName
+    StartWithoutOptionName, HatsanityOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
 from ..strings.trap_names import all_traps
 
@@ -767,28 +767,40 @@ class Secretsanity(OptionSet):
             return typing.cast(bool, self.value == other)
 
 
-class Hatsanity(Choice):
+class Hatsanity(OptionSet):
     """Add checks for wearing hats?
-    None: No hat locations
-    Easy: Locations for wearing the easily obtainable hats
     Tailoring: Locations for wearing the hats created through tailoring
-    Easy Tailoring: Both Easy and Tailoring Hats
-    Medium: Locations for wearing the harder to obtain hats, plus every previous hat
-    Difficult: Locations for wearing hats that are very difficult to obtain or require some unlikely RNG, plus every previous hat
-    Near Perfection: Locations for wearing hats that are late game and generally obtained by doing the equivalent of a perfection task, plus every previous hat
+    Easy: Locations for wearing the easily obtainable hats
+    Medium: Locations for wearing the hats that are obtainable through a task that requires a bit of effort
+    Difficult: Locations for wearing hats that are difficult to obtain
+    RNG: Locations for wearing hats that are extremely rng-dependent to obtain. Generally an unpleasant grind.
+    Near Perfection: Locations for wearing hats that are late game and generally obtained by doing the equivalent of a perfection task
     Post Perfection: Locations for wearing all hats, including the hyper-late game ones that require more work than perfection itself
     """
     internal_name = "hatsanity"
     display_name = "Hatsanity"
-    default = 0
-    option_none = 0
-    option_easy = 1
-    option_tailoring = 2
-    option_easy_tailoring = 3
-    option_medium = 4
-    option_difficult = 5
-    option_near_perfection = 6
-    option_post_perfection = 7
+
+    valid_keys = frozenset({
+        HatsanityOptionName.tailoring, HatsanityOptionName.easy, HatsanityOptionName.medium, HatsanityOptionName.difficult,
+        HatsanityOptionName.rng, HatsanityOptionName.near_perfection, HatsanityOptionName.post_perfection
+    })
+    preset_none = frozenset()
+    preset_simple = frozenset({
+        HatsanityOptionName.tailoring, HatsanityOptionName.easy, HatsanityOptionName.medium,
+    })
+    preset_difficult = frozenset({
+        HatsanityOptionName.tailoring, HatsanityOptionName.easy, HatsanityOptionName.medium, HatsanityOptionName.difficult,
+    })
+    preset_all = valid_keys
+    default = preset_none
+
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, OptionSet):
+            return set(self.value) == other.value
+        if isinstance(other, OptionList):
+            return set(self.value) == set(other.value)
+        else:
+            return typing.cast(bool, self.value == other)
 
 
 class IncludeEndgameLocations(Toggle):

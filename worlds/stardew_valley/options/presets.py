@@ -4,7 +4,7 @@ import Options as ap_options
 from . import options
 # @formatter:off
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
-from ..strings.ap_names.ap_option_names import EatsanityOptionName, ChefsanityOptionName
+from ..strings.ap_names.ap_option_names import EatsanityOptionName, ChefsanityOptionName, HatsanityOptionName
 
 all_random_settings = {
     "progression_balancing":                            "random",
@@ -97,7 +97,7 @@ easy_settings = {
     options.Walnutsanity.internal_name:                 options.Walnutsanity.preset_none,
     options.Moviesanity.internal_name:                  options.Moviesanity.option_none,
     options.Secretsanity.internal_name:                 options.Secretsanity.preset_none,
-    options.Hatsanity.internal_name:                    options.Hatsanity.option_none,
+    options.Hatsanity.internal_name:                    options.Hatsanity.preset_none,
     options.IncludeEndgameLocations.internal_name:      options.IncludeEndgameLocations.option_false,
     options.NumberOfMovementBuffs.internal_name:        8,
     options.EnabledFillerBuffs.internal_name:           options.EnabledFillerBuffs.preset_all,
@@ -156,7 +156,7 @@ medium_settings = {
     options.Walnutsanity.internal_name:                 options.Walnutsanity.preset_none,
     options.Moviesanity.internal_name:                  options.Moviesanity.option_none,
     options.Secretsanity.internal_name:                 options.Secretsanity.preset_none,
-    options.Hatsanity.internal_name:                    options.Hatsanity.option_easy,
+    options.Hatsanity.internal_name:                    frozenset([HatsanityOptionName.easy]),
     options.IncludeEndgameLocations.internal_name:      options.IncludeEndgameLocations.option_false,
     options.NumberOfMovementBuffs.internal_name:        6,
     options.EnabledFillerBuffs.internal_name:           options.EnabledFillerBuffs.preset_all,
@@ -215,7 +215,7 @@ hard_settings = {
     options.Walnutsanity.internal_name:                 options.Walnutsanity.preset_all,
     options.Moviesanity.internal_name:                  options.Moviesanity.option_all_movies,
     options.Secretsanity.internal_name:                 options.Secretsanity.preset_simple,
-    options.Hatsanity.internal_name:                    options.Hatsanity.option_medium,
+    options.Hatsanity.internal_name:                    options.Hatsanity.preset_simple,
     options.IncludeEndgameLocations.internal_name:      options.IncludeEndgameLocations.option_false,
     options.NumberOfMovementBuffs.internal_name:        4,
     options.EnabledFillerBuffs.internal_name:           options.EnabledFillerBuffs.default,
@@ -274,7 +274,7 @@ nightmare_settings = {
     options.Walnutsanity.internal_name:                 options.Walnutsanity.preset_all,
     options.Moviesanity.internal_name:                  options.Moviesanity.option_all_movies_and_all_loved_snacks,
     options.Secretsanity.internal_name:                 options.Secretsanity.preset_all,
-    options.Hatsanity.internal_name:                    options.Hatsanity.option_difficult,
+    options.Hatsanity.internal_name:                    options.Hatsanity.preset_difficult,
     options.IncludeEndgameLocations.internal_name:      options.IncludeEndgameLocations.option_true,
     options.NumberOfMovementBuffs.internal_name:        2,
     options.EnabledFillerBuffs.internal_name:           options.EnabledFillerBuffs.preset_none,
@@ -333,7 +333,7 @@ short_settings = {
     options.Walnutsanity.internal_name:                 options.Walnutsanity.preset_none,
     options.Moviesanity.internal_name:                  options.Moviesanity.option_none,
     options.Secretsanity.internal_name:                 options.Secretsanity.preset_none,
-    options.Hatsanity.internal_name:                    options.Hatsanity.option_none,
+    options.Hatsanity.internal_name:                    options.Hatsanity.preset_none,
     options.IncludeEndgameLocations.internal_name:      options.IncludeEndgameLocations.option_false,
     options.NumberOfMovementBuffs.internal_name:        10,
     options.EnabledFillerBuffs.internal_name:           options.EnabledFillerBuffs.preset_all,
@@ -392,7 +392,7 @@ minsanity_settings = {
     options.Walnutsanity.internal_name:                 options.Walnutsanity.preset_none,
     options.Moviesanity.internal_name:                  options.Moviesanity.option_none,
     options.Secretsanity.internal_name:                 options.Secretsanity.preset_none,
-    options.Hatsanity.internal_name:                    options.Hatsanity.option_none,
+    options.Hatsanity.internal_name:                    options.Hatsanity.preset_none,
     options.IncludeEndgameLocations.internal_name:      options.IncludeEndgameLocations.option_false,
     options.NumberOfMovementBuffs.internal_name:        options.NumberOfMovementBuffs.default,
     options.EnabledFillerBuffs.internal_name:           options.EnabledFillerBuffs.default,
@@ -451,7 +451,7 @@ allsanity_settings = {
     options.Walnutsanity.internal_name:                 options.Walnutsanity.preset_all,
     options.Moviesanity.internal_name:                  options.Moviesanity.option_all_movies_and_all_loved_snacks,
     options.Secretsanity.internal_name:                 options.Secretsanity.preset_all,
-    options.Hatsanity.internal_name:                    options.Hatsanity.option_post_perfection,
+    options.Hatsanity.internal_name:                    options.Hatsanity.preset_all,
     options.IncludeEndgameLocations.internal_name:      options.IncludeEndgameLocations.option_true,
     options.NumberOfMovementBuffs.internal_name:        12,
     options.EnabledFillerBuffs.internal_name:           options.EnabledFillerBuffs.preset_all,

@@ -174,7 +174,7 @@ class TestPrizeTicketAndHelpWanted(SVTestBase):
         StartWithout: frozenset({StartWithoutOptionName.tools, StartWithoutOptionName.landslide}),
         QuestLocations: 7,
         Booksanity: Booksanity.option_all,
-        Hatsanity: Hatsanity.option_post_perfection,
+        Hatsanity: Hatsanity.preset_all,
     }
 
     def test_prize_tickets_requires_all_help_wanteds_help_wanted(self):

@@ -10,7 +10,7 @@ def remove_excluded(items: Iterable[ItemData], content: StardewContent, options:
         item for item in items
         if Group.DEPRECATED not in item.groups and content.are_all_enabled(item.content_packs)
     ]
-    if options.hatsanity == Hatsanity.option_none:
+    if options.hatsanity == Hatsanity.preset_none:
         return filtered_items
     return [item for item in filtered_items if Group.HAT not in item.groups]
 

@@ -49,3 +49,13 @@ class StartWithoutOptionName:
     landslide = "Landslide"
     community_center = "Community Center"
     buildings = "Buildings"
+
+
+class HatsanityOptionName:
+    tailoring = "Tailoring"
+    easy = "Easy"
+    medium = "Medium"
+    difficult = "Difficult"
+    rng = "RNG"
+    near_perfection = "Near Perfection"
+    post_perfection = "Post Perfection"

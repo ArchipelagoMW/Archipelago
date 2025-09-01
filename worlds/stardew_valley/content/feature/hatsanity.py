@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import ClassVar
 
 from .base import FeatureBase
-from ...data.hats_data import HatItem, HatDifficulty
+from ...data.hats_data import HatItem
 
 wear_prefix = "Wear "
 
@@ -40,50 +40,10 @@ class HatsanityNone(HatsanityFeature):
         return False
 
 
-class HatsanityEasy(HatsanityFeature):
+@dataclass(frozen=True)
+class HatsanityHats(HatsanityFeature):
     is_enabled = True
+    enabled_hats: frozenset[str]
 
     def is_included(self, hat: HatItem) -> bool:
-        return hat.difficulty == HatDifficulty.easy
-
-
-class HatsanityTailoring(HatsanityFeature):
-    is_enabled = True
-
-    def is_included(self, hat: HatItem) -> bool:
-        return hat.difficulty == HatDifficulty.tailoring
-
-
-class HatsanityEasyTailoring(HatsanityFeature):
-    is_enabled = True
-
-    def is_included(self, hat: HatItem) -> bool:
-        return hat.difficulty < HatDifficulty.medium
-
-
-class HatsanityMedium(HatsanityFeature):
-    is_enabled = True
-
-    def is_included(self, hat: HatItem) -> bool:
-        return hat.difficulty <= HatDifficulty.medium
-
-
-class HatsanityDifficult(HatsanityFeature):
-    is_enabled = True
-
-    def is_included(self, hat: HatItem) -> bool:
-        return hat.difficulty <= HatDifficulty.difficult_or_rng
-
-
-class HatsanityNearPerfection(HatsanityFeature):
-    is_enabled = True
-
-    def is_included(self, hat: HatItem) -> bool:
-        return hat.difficulty <= HatDifficulty.near_perfection
-
-
-class HatsanityPostPerfection(HatsanityFeature):
-    is_enabled = True
-
-    def is_included(self, hat: HatItem) -> bool:
-        return hat.difficulty <= HatDifficulty.post_perfection
+        return hat.difficulty in self.enabled_hats

@@ -142,31 +142,10 @@ def choose_friendsanity(friendsanity_option: options.Friendsanity, heart_size: o
 
 
 def choose_hatsanity(hat_option: options.Hatsanity) -> hatsanity.HatsanityFeature:
-    if hat_option == options.Hatsanity.option_none:
+    if hat_option == options.Hatsanity.preset_none:
         return hatsanity.HatsanityNone()
 
-    if hat_option == options.Hatsanity.option_easy:
-        return hatsanity.HatsanityEasy()
-
-    if hat_option == options.Hatsanity.option_tailoring:
-        return hatsanity.HatsanityTailoring()
-
-    if hat_option == options.Hatsanity.option_easy_tailoring:
-        return hatsanity.HatsanityEasyTailoring()
-
-    if hat_option == options.Hatsanity.option_medium:
-        return hatsanity.HatsanityMedium()
-
-    if hat_option == options.Hatsanity.option_difficult:
-        return hatsanity.HatsanityDifficult()
-
-    if hat_option == options.Hatsanity.option_near_perfection:
-        return hatsanity.HatsanityNearPerfection()
-
-    if hat_option == options.Hatsanity.option_post_perfection:
-        return hatsanity.HatsanityPostPerfection()
-
-    raise ValueError(f"No hatsanity feature mapped to {str(hat_option.value)}")
+    return hatsanity.HatsanityHats(enabled_hats=frozenset(hat_option.value))
 
 
 def choose_museumsanity(museumsanity_option: options.Museumsanity) -> museumsanity.MuseumsanityFeature:

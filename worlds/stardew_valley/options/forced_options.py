@@ -96,10 +96,10 @@ def force_eatsanity_no_enzymes_if_no_other_eatsanity(world_options: options.Star
 
 def force_hatsanity_when_goal_is_mad_hatter(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
     goal_is_mad_hatter = world_options.goal == options.Goal.option_mad_hatter
-    hatsanity_is_disabled = world_options.hatsanity == options.Hatsanity.option_none
+    hatsanity_is_disabled = world_options.hatsanity == options.Hatsanity.preset_none
 
     if goal_is_mad_hatter and hatsanity_is_disabled:
-        world_options.hatsanity.value = options.Hatsanity.option_easy_tailoring
+        world_options.hatsanity.value = options.Hatsanity.preset_simple
         goal_name = world_options.goal.current_option_name
         logger.warning(f"Goal '{goal_name}' requires Requires Hatsanity. "
                        f"Hatsanity option forced to 'Easy+Tailoring' for player {player} ({player_name})")

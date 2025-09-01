@@ -12,7 +12,7 @@ class TestHatsLogic(SVTestBase):
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
         FestivalLocations.internal_name: FestivalLocations.option_hard,
         Shipsanity.internal_name: Shipsanity.option_everything,
-        Hatsanity.internal_name: Hatsanity.option_post_perfection,
+        Hatsanity.internal_name: Hatsanity.preset_all,
         "start_inventory": {"Fall": 1}
     }
 
@@ -59,7 +59,7 @@ class TestNoHatsLogic(SVTestBase):
         Cooksanity.internal_name: Cooksanity.option_all,
         Craftsanity.internal_name: Craftsanity.option_all,
         Eatsanity.internal_name: Eatsanity.preset_all,
-        Hatsanity.internal_name: Hatsanity.option_none,
+        Hatsanity.internal_name: Hatsanity.preset_none,
         "start_inventory": {"Fall": 1}
     }
 
