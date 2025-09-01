@@ -93,6 +93,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Todo NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
         #Todo NPCs Player Options: do we want a filter option to add the guy who fishes things up for you (Z2_FisherOnDock ID 121 (166, 133, -208))
         LocationData(DELENDE, "Delende NPC - Cartographer", 1153 + npc_index_offset), #guy who gives you a map of Delende if you don't have one (Z2_MapMan (198, 131, -74)) Fixed Missable
+        LocationData(DELENDE, "Delende NPC - Fish at the hatchery", 121 + npc_index_offset, lambda state: state.has("Item - Flimsy Rod", player) and state.has("Item - Plug Lure", player)),  # Fisher
         #Todo NPCs Shortcuts: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
 
         #Grans House (Delende)
