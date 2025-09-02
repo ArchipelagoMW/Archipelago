@@ -24,17 +24,25 @@ The materials required for constructing Assemblers and Foundries is altered to i
 
 The player can choose from a number of goals using their YAML settings:
 
-- Complete a certain [Space Elevator](https://satisfactory.wiki.gg/wiki/Space_Elevator) tier.
+- Complete the selected number of **[Space Elevator](https://satisfactory.wiki.gg/wiki/Space_Elevator) packages**.
+  - The goal completes upon submitting the final Space Elevator package. Any other progression you may have access to (HUB, MAM, AWESOME Shop) is not required for goal completion.
   - Expect 1 package to take ~3 hours to finish, 2 packages to take ~8 hours, 3 packages to take ~2 days, and 4 packages to take ~1 week on default settings.
 - Supply items to the [AWESOME Sink](https://satisfactory.wiki.gg/wiki/AWESOME_Sink) **totalling a configurable amount of points** to finish.
+  - The goal is tracked in the background and completes once the points total is reached.
+  - Your selected point total can be reviewed in the AWESOME Sink graph.
   - Time to finish this goal varies significantly depending on your goal level and Free Sample settings, and can technically be reached by AFKing at any point after you unlock the Sink.
 - Supply items to the [AWESOME Sink](https://satisfactory.wiki.gg/wiki/AWESOME_Sink) **maintaining a configurable level of points per minute** to finish.
-  - This goal requires establishing a more robust factory since it can't be AFKed like the points total goal.
-  - Time to finish this goal varies significantly depending on your Space Elevator shipments in logic and the resource sink point improvement ratios of the recipes you have access to.
+  - The goal is tracked in the background and completes once you have maintained the selected sink points rate for 10 minutes.
+  - This goal requires establishing a more robust factory since it can't be AFKed like the points total or elevator goals.
+  - Your selected points rate can be reviewed in the AWESOME Sink graph.
+  - Time to finish this goal varies significantly depending on your Space Elevator packages in logic and the resource sink point improvement ratios of the recipes you have access to.
 - **Explore the world to gather exotic items** and submit them in the HUB.
+  - The goal completes upon submitting the HUB milestone.
+  - There is no partial progress system for this goal - combining it with another goal is recommended.
   - Time to finish this goal varies significantly depending on your map knowledge, equipment, and movement skills.
 
-You can select whether completing your slot requires *one* or *all* goals to be met.
+You can also configure whether completing your slot requires *any one* goal or *all* goals to be met.
+
 
 ## What Satisfactory items can appear in other players' worlds?
 
