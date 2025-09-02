@@ -10,7 +10,7 @@ from worlds.generic.Rules import add_rule, set_rule
 
 from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall
 from .JsonReader import build_data, generate_location_name_to_id
-from .ItemPool import create_trap_name_table, generate_item_name_to_id, generate_item_name_groups, find_item_data, select_trap_item_name, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, filler_table, trap_table
+from .ItemPool import construct_blank_world_garibs, create_trap_name_table, generate_item_name_to_id, generate_item_name_groups, find_item_data, select_trap_item_name, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, filler_table, trap_table
 from Utils import visualize_regions
 from .Hints import create_hints
 
@@ -101,7 +101,7 @@ class GloverWorld(World):
 	"Floats",
 	"Ball Up"]
 
-    item_name_to_id = generate_item_name_to_id()
+    item_name_to_id = generate_item_name_to_id(world_prefixes, level_prefixes)
     item_name_groups = generate_item_name_groups()
     location_name_to_id = generate_location_name_to_id(world_prefixes, level_prefixes)
 
@@ -196,6 +196,33 @@ class GloverWorld(World):
             #["Otw3", 80],
             #["Otw?", 50]
         ]
+        #Extra garib placements
+        self.extra_garib_levels = [
+            ["Atl1", 0],
+            ["Atl2", 0],
+            ["Atl3", 0],
+            ["Atl?", 0]#,
+            #["Crn1", 0],
+            #["Crn2", 0],
+            #["Crn3", 0],
+            #["Crn?", 0],
+            #["Prt1", 0],
+            #["Prt2", 0],
+            #["Prt3", 0],
+            #["Prt?", 0],
+            #["Pht1", 0],
+            #["Pht2", 0],
+            #["Pht3", 0],
+            #["Pht?", 0],
+            #["FoF1", 0],
+            #["FoF2", 0],
+            #["FoF3", 0],
+            #["FoF?", 0],
+            #["Otw1", 0],
+            #["Otw2", 0],
+            #["Otw3", 0],
+            #["Otw?", 0]
+        ]
         self.starting_ball : str = "Rubber Ball"
         #Grab Mr. Tips for hints
         self.tip_locations : list[str] = []
@@ -204,6 +231,10 @@ class GloverWorld(World):
         self.chicken_hints = {}
         #Fake item names
         self.fake_item_names = []
+
+        #Create null items for the table
+        world_garib_table.update(construct_blank_world_garibs(self.world_prefixes, self.level_prefixes))
+
         super(GloverWorld, self).__init__(world, player)
 
     def level_from_string(self, name : str) -> int:
@@ -475,9 +506,9 @@ class GloverWorld(World):
         
         #Apply the filler
         if not self.percents_sum_100(filler_percentages):
-            print("The total of filler percentages isn't 100!")
+            raise ValueError("The total of filler percentages isn't 100!")
         if not self.percents_sum_100(trap_percentages):
-            print("The total of trap percentages isn't 100!")
+            raise ValueError("The total of trap percentages isn't 100!")
         
         #Filler begins
         all_filler_items = []
@@ -485,18 +516,54 @@ class GloverWorld(World):
         #Filler Item Count
         for each_item in range(int(total_filler_items)):
             item_key : str = self.highest_dict_value(filler_percentages)
-            filler_percentages[item_key] -= total_filler_items / 100.0
+            filler_percentages[item_key] -= 1.0 / total_filler_items
             all_filler_items.append(item_key)
         
         #Trap Count
         for each_item in range(int(total_trap_items)):
             item_key : str = self.highest_dict_value(trap_percentages)
-            trap_percentages[item_key] -= total_filler_items / 100.0
+            trap_percentages[item_key] -= 1.0 / total_trap_items
             all_filler_items.append(item_key)
 
         #Create the filler items
         for each_item in all_filler_items:
             self.multiworld.itempool.append(self.create_item(each_item))
+
+    def next_garib_level(self) -> str:
+        lowest_extra_garibs : int = 999
+        levels_from_lowest_extras : list = []
+        #Get the levels with the least extra garibs
+        for each_garib_level in self.extra_garib_levels:
+            #If it's the same number as the lowest extra garibs, append it
+            if each_garib_level[1] == lowest_extra_garibs:
+                levels_from_lowest_extras.append(each_garib_level)
+            #If it's lower, it's the new standard
+            elif each_garib_level[1] < lowest_extra_garibs:
+                lowest_extra_garibs = each_garib_level[1]
+                levels_from_lowest_extras = [each_garib_level]
+        
+        #Going with garibs of this name
+        lowest_garib_count : int = 999
+        levels_from_lowest_count : list = []
+        for each_lowest_levels in levels_from_lowest_extras:
+            for each_entry in self.garib_level_order:
+                #Get the coresponding level order entry
+                if each_entry[0] == each_lowest_levels[0]:
+                    #Get the levels with the least garibs
+                    if each_entry[1] < lowest_garib_count:
+                        lowest_garib_count = each_entry[1]
+                        levels_from_lowest_count = [each_lowest_levels]
+                    elif each_entry[1] == lowest_garib_count:
+                        levels_from_lowest_count.append(each_lowest_levels)
+        
+        #Now finally, from the levels with the least garibs and the least extra garib items, pick one at random
+        chosen_level = self.random.choice(levels_from_lowest_count)
+        #Get the index of it
+        chosen_index : int = self.extra_garib_levels.index(chosen_level)
+
+        #Note that you got a garib there, and return the name for use
+        self.extra_garib_levels[chosen_index][1] += 1
+        return self.extra_garib_levels[chosen_index][0]
 
     def garib_item_rules(self):
         #Garib items now combine with the garib sorting type and garib rules to create rules
@@ -530,6 +597,8 @@ class GloverWorld(World):
                     garib_item_names : list[str] = []
                     garib_item_count : int = 0
                     for each_key, each_item in table_for_use.items():
+                        if each_item.qty <= 0:
+                            continue
                         if each_key.startswith(world_name):
                             garib_item_names.append(each_key)
                             garib_item_count += each_item.qty

@@ -32,7 +32,12 @@ def find_item_data(self, name : str) -> ItemData:
 		else:
 			#Remove bonus level garibs from the count
 			return ItemData(garbinsanity.glid, garbinsanity.qty - garbinsanity_bonus_count, garbinsanity.type, garbinsanity.default_location)
-	
+	#Extra garibs become other items
+	if name == "Extra Garibs":
+		modified_item = convert_extra_garibs(self)
+		#But filler
+		return ItemData(modified_item.glid, modified_item.qty, "Filler", modified_item.default_location)
+
 	#Core
 	if name in portalsanity_table:
 		#As event item?
@@ -409,6 +414,31 @@ world_garib_table = {
 	#"Otw? 8 Garibs" : 							ItemData(BASE_ID + 35508, 4,,)
 	}
 
+def construct_blank_world_garibs(world_prefixes : list[str], level_prefixes : list[str]):
+	output_table : dict[str, ItemData] = {}
+	levels_with_garibs = []
+
+	#World/Level prefix constructor
+	for world_prefix in world_prefixes:
+		for level_prefix in level_prefixes:
+			if level_prefix != "H" and level_prefix != "!":
+				levels_with_garibs.append(world_prefix + level_prefix)
+
+	#Go over all the garibs
+	for garib_level in levels_with_garibs:
+		for garib_count in range(1, 17):
+			#Get the text prefix for all garib counts
+			garib_suffix : str = " 1 Garib"
+			if garib_count > 1:
+				garib_suffix : str = " " + str(garib_count) + " Garibs"
+			#If a level doesn't have that count of garibs
+			if not (garib_level + garib_suffix in world_garib_table.keys()):
+				world_offset = 1000 * world_prefixes.index(garib_level[:3])
+				level_offset = 100 * level_prefixes.index(garib_level[3:4])
+				item_id = BASE_ID + 30000 + world_offset + level_offset + garib_count
+				output_table[garib_level + garib_suffix] = ItemData(item_id, 0, "Filler", None)
+	return output_table
+
 ability_table = {
 	"Jump" : 									ItemData(BASE_ID + 329, 1, "Progression", None),
 	"Cartwheel" : 								ItemData(BASE_ID + 330, 1, "Progression", None),
@@ -502,7 +532,7 @@ garibsanity_world_table = {
 #	"10 Garibs" : 								ItemData(BASE_ID + 10010, 13, "Garib", None),
 #	"11 Garibs" : 								ItemData(BASE_ID + 10011, 2, "Garib", None),
 #	"12 Garibs" : 								ItemData(BASE_ID + 10012, 7, "Garib", None),
-#	#"13 Garibs" : 								ItemData(BASE_ID + 10013, 0, "Garib", None),
+#	"13 Garibs" : 								ItemData(BASE_ID + 10013, 0, "Garib", None),
 #	"14 Garibs" : 								ItemData(BASE_ID + 10014, 4, "Garib", None),
 #	"15 Garibs" : 								ItemData(BASE_ID + 10015, 1, "Garib", None),
 #	"16 Garibs" : 								ItemData(BASE_ID + 10016, 3, "Garib", None),
@@ -546,8 +576,9 @@ all_items = {
 	**decoupled_garib_table
 }
 
-def generate_item_name_to_id() -> dict:
+def generate_item_name_to_id(world_prefixes : list[str], level_prefixes : list[str]) -> dict:
 	output : dict = {}
+	all_items.update(construct_blank_world_garibs(world_prefixes, level_prefixes))
 	for name, data in all_items.items():
 		output[name] = data.glid
 	return output
@@ -768,7 +799,6 @@ def create_trap_name_table(self) -> list[str]:
 				trap_name_table.extend(garibsanity_world_table.keys())
 				trap_name_table.extend(world_garib_table.keys())
 				trap_name_table.extend(decoupled_garib_table.keys())
-				trap_name_table.remove("Garib")
 	#'Jump'
 	if not self.options.randomize_jump:
 		trap_name_table.append("Jump")
@@ -827,35 +857,25 @@ def create_trap_name_table(self) -> list[str]:
 				])
 	return trap_name_table
 
-def convert_extra_garibs(self) -> list:
+def convert_extra_garibs(self) -> ItemData:
 	#Level garibs shouldn't show up
 	if self.options.garib_logic == GaribLogic.option_level_garibs:
 		raise ValueError("Extra garibs cannot show up while garib logic is by level! Set your Filler Extra Garibs to 0.")
 	#Get the garib count
 	extra_garibs_value : int = self.options.extra_garibs_value.value
 	if self.options.garib_sorting != GaribSorting.option_by_level:
-		#Deoupled Garib Groups
-		if self.options.garib_logic == GaribLogic.option_garib_groups:
-			#"Garibs" or "Garib"?
-			garib_name = " Garibs"
-			if extra_garibs_value == 1:
-				garib_name = " Garib"
-			#Index to name
-			return [BASE_ID + 10000 + extra_garibs_value, str(extra_garibs_value) + garib_name]
-		#Decoupled Garibsanity
-		else:
-			return [BASE_ID + 10001, "Garib"]
-	#Level Garibsanity
-	elif self.options.garib_logic == GaribLogic.option_garibsanity:
-		world_offset = 10
-		level_offset = 1
-		return [BASE_ID + 20000 + world_offset + level_offset,]
+		#"Garibs" or "Garib"?
+		garib_name = " Garibs"
+		if extra_garibs_value == 1:
+			garib_name = " Garib"
+		#Index to name
+		return decoupled_garib_table[str(extra_garibs_value) + garib_name]
 	#Level Garib Groups
 	else:
 		#"Garibs" or "Garib"?
 		garib_name = " Garibs"
 		if extra_garibs_value == 1:
 			garib_name = " Garib"
-		world_offset = 1000
-		level_offset = 100
-		return [BASE_ID + 30000 + world_offset + level_offset + extra_garibs_value, " " + str(extra_garibs_value) + " " + garib_name]
+		#Pick the next valid garib level
+		level_name = self.next_garib_level()
+		return world_garib_table[level_name + " " + str(extra_garibs_value) + garib_name]

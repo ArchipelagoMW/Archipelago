@@ -27,6 +27,9 @@ def create_hints(self):
 def create_hint_lookup(self, hint_locations : list[str], valid_items : list[Item], valid_catagories : list [ItemClassification], vague_hint : bool, vauge_prefix : str):
     hint_lookup : dict[str, dict[str,int]] = {}
     newly_chosen_items : list[Item] = []
+    #If nothing's valid, give an empty array
+    if valid_catagories == None:
+        return [[],[]]
     #If there's multiple valid catagories, we're in balanced mode
     if len(valid_catagories) > 1:
         valid_item_catagories : dict[ItemClassification:list[Item]] = {}
@@ -42,7 +45,7 @@ def create_hint_lookup(self, hint_locations : list[str], valid_items : list[Item
                 if catagory_value < lowest_value:
                     lowest_value = catagory_value
                     current_catagory = each_catagory
-            if len([valid_item_catagories[current_catagory]]) > 0:
+            if len(valid_item_catagories[current_catagory]) > 0:
                 next_item : Item = self.random.choice(valid_item_catagories[current_catagory])
                 valid_item_catagories[current_catagory].remove(next_item)
                 newly_chosen_items.append(next_item)
@@ -137,7 +140,7 @@ def get_catagories(set_option, option_origin) -> list[ItemClassification] | None
 
 def get_valid_items(self, item_classes : list[ItemClassification] | None) -> list[Item]:
     #No items
-    if item_classes == None:
+    if item_classes == None or not self.options.mr_tip_checks:
         return []
     #All items are valid choices
     if item_classes == []:
