@@ -93,7 +93,7 @@ class GloverWorld(World):
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
     #DELETE THIS ONCE IT'S FINISHED
-    existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn!", "Prt!", "Pht!", "FoF!", "Otw!", "Training"]
+    existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn1", "Crn!", "Prt!", "Pht!", "FoF!", "Otw!", "Training"]
     group_lists : list[str] = ["Not Crystal",
 	"Not Bowling",
 	"Not Bowling or Crystal",
