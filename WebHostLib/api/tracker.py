@@ -4,7 +4,7 @@ from uuid import UUID
 
 from flask import abort
 
-from NetUtils import ClientStatus, Hint, NetworkItem, SlotType
+from NetUtils import ClientStatus, Hint, NetworkItem, SlotType, _scan_for_TypedTuples
 from WebHostLib import cache
 from WebHostLib.api import api_endpoints
 from WebHostLib.models import Room
@@ -228,5 +228,5 @@ def get_static_tracker_data(room: Room) -> dict[str, Any]:
 
     return {
         "groups": groups,
-        "slot_data": slot_data,
+        "slot_data": _scan_for_TypedTuples(slot_data),
     }
