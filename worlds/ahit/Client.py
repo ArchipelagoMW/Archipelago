@@ -1,4 +1,6 @@
 import asyncio
+import time
+
 import Utils
 import websockets
 import functools
@@ -207,6 +209,9 @@ async def proxy(websocket, path: str = "/", ctx: AHITContext = None):
 
                     if not ctx.is_proxy_connected():
                         break
+
+                    if msg["cmd"] == "Bounce" and msg.get("tags") == ["DeathLink"] and "data" in msg:
+                        msg["data"]["time"] = time.time()
 
                     await ctx.send_msgs([msg])
 
