@@ -549,10 +549,12 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if prioritylocations and regular_progression:
             # retry with one_item_per_player off because some priority fills can fail to fill with that optimization
             # deprioritized items are still not in the mix, so they need to be collected into state first.
+            # allow_partial should only be set if there is deprioritized progression to fall back on.
             priority_retry_state = sweep_from_pool(multiworld.state, deprioritized_progression)
             fill_restrictive(multiworld, priority_retry_state, prioritylocations, regular_progression,
                              single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                             name="Priority Retry", one_item_per_player=False, allow_partial=True)
+                             name="Priority Retry", one_item_per_player=False,
+                             allow_partial=bool(deprioritized_progression))
 
         if prioritylocations and deprioritized_progression:
             # There are no more regular progression items that can be placed on any priority locations.
