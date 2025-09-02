@@ -50,6 +50,7 @@ def create_regions(world: World, active_locations):
                                          [LocationName.yoshis_island_castle, LocationName.yoshis_island_koopaling])
 
     yellow_switch_palace_tile = create_region(multiworld, player, active_locations, LocationName.yellow_switch_palace_tile, None)
+    yellow_switch_palace_region = create_region(multiworld, player, active_locations, LocationName.yellow_switch_palace_region, None)
     yellow_switch_palace = create_region(multiworld, player, active_locations, LocationName.yellow_switch_palace,
                                          [LocationName.yellow_switch_palace])
 
@@ -110,6 +111,7 @@ def create_regions(world: World, active_locations):
                                         [LocationName.donut_plains_castle, LocationName.donut_plains_koopaling])
 
     green_switch_palace_tile = create_region(multiworld, player, active_locations, LocationName.green_switch_palace_tile, None)
+    green_switch_palace_region = create_region(multiworld, player, active_locations, LocationName.green_switch_palace_region, None)
     green_switch_palace = create_region(multiworld, player, active_locations, LocationName.green_switch_palace,
                                         [LocationName.green_switch_palace])
 
@@ -174,6 +176,7 @@ def create_regions(world: World, active_locations):
                                         [LocationName.vanilla_dome_castle, LocationName.vanilla_dome_koopaling])
 
     red_switch_palace_tile = create_region(multiworld, player, active_locations, LocationName.red_switch_palace_tile, None)
+    red_switch_palace_region = create_region(multiworld, player, active_locations, LocationName.red_switch_palace_region, None)
     red_switch_palace = create_region(multiworld, player, active_locations, LocationName.red_switch_palace,
                                       [LocationName.red_switch_palace])
 
@@ -262,6 +265,7 @@ def create_regions(world: World, active_locations):
                                   [LocationName.forest_castle, LocationName.forest_koopaling])
 
     blue_switch_palace_tile = create_region(multiworld, player, active_locations, LocationName.blue_switch_palace_tile, None)
+    blue_switch_palace_region = create_region(multiworld, player, active_locations, LocationName.blue_switch_palace_region, None)
     blue_switch_palace = create_region(multiworld, player, active_locations, LocationName.blue_switch_palace,
                                        [LocationName.blue_switch_palace])
 
@@ -485,6 +489,7 @@ def create_regions(world: World, active_locations):
         yoshis_island_castle_region,
         yoshis_island_castle,
         yellow_switch_palace_tile,
+        yellow_switch_palace_region,
         yellow_switch_palace,
         donut_plains_1_tile,
         donut_plains_1_region,
@@ -519,6 +524,7 @@ def create_regions(world: World, active_locations):
         donut_plains_castle_region,
         donut_plains_castle,
         green_switch_palace_tile,
+        green_switch_palace_region,
         green_switch_palace,
         donut_plains_top_secret_tile,
         donut_plains_top_secret,
@@ -556,6 +562,7 @@ def create_regions(world: World, active_locations):
         vanilla_dome_castle_region,
         vanilla_dome_castle,
         red_switch_palace_tile,
+        red_switch_palace_region,
         red_switch_palace,
         butter_bridge_1_tile,
         butter_bridge_1_region,
@@ -606,6 +613,7 @@ def create_regions(world: World, active_locations):
         forest_castle_region,
         forest_castle,
         blue_switch_palace_tile,
+        blue_switch_palace_region,
         blue_switch_palace,
         chocolate_island_1_tile,
         chocolate_island_1_region,
@@ -1867,6 +1875,7 @@ def connect_regions(world: World, level_to_tile_dict):
     connect(world, LocationName.yoshis_island_4_region, LocationName.yoshis_island_4_exit_1)
     connect(world, LocationName.yoshis_island_castle_region, LocationName.yoshis_island_castle,
             lambda state: (state.has(ItemName.mario_climb, player)))
+    connect(world, LocationName.yellow_switch_palace_region, LocationName.yellow_switch_palace)
 
     connect(world, LocationName.donut_plains_1_region, LocationName.donut_plains_1_exit_1)
     connect(world, LocationName.donut_plains_1_region, LocationName.donut_plains_1_exit_2,
@@ -1879,6 +1888,7 @@ def connect_regions(world: World, level_to_tile_dict):
             lambda state: (state.has(ItemName.mario_carry, player) and
                            (state.has(ItemName.yoshi_activate, player) or
                            (state.has(ItemName.mario_spin_jump, player) and state.has(ItemName.mario_climb, player) and state.has(ItemName.progressive_powerup, player, 1)))))
+    connect(world, LocationName.green_switch_palace_region, LocationName.green_switch_palace)
     connect(world, LocationName.donut_secret_1_region, LocationName.donut_secret_1_exit_1,
             lambda state: state.has(ItemName.mario_swim, player))
     connect(world, LocationName.donut_secret_1_region, LocationName.donut_secret_1_exit_2,
@@ -1918,6 +1928,7 @@ def connect_regions(world: World, level_to_tile_dict):
                            state.has(ItemName.p_switch, player) and
                            state.has(ItemName.mario_carry, player) and
                            (state.has(ItemName.mario_climb, player) or state.has(ItemName.yoshi_activate, player))))
+    connect(world, LocationName.red_switch_palace_region, LocationName.red_switch_palace)
     connect(world, LocationName.vanilla_secret_1_region, LocationName.vanilla_secret_1_exit_1,
             lambda state: state.has(ItemName.mario_climb, player))
     connect(world, LocationName.vanilla_secret_1_region, LocationName.vanilla_secret_1_exit_2,
@@ -1958,6 +1969,7 @@ def connect_regions(world: World, level_to_tile_dict):
     connect(world, LocationName.forest_of_illusion_2_region, LocationName.forest_of_illusion_2_exit_2,
             lambda state: (state.has(ItemName.mario_swim, player) and
                            state.has(ItemName.mario_carry, player)))
+    connect(world, LocationName.blue_switch_palace_region, LocationName.blue_switch_palace)
     connect(world, LocationName.forest_of_illusion_3_region, LocationName.forest_of_illusion_3_exit_1,
             lambda state: (state.has(ItemName.mario_carry, player) or
                            state.has(ItemName.yoshi_activate, player)))

@@ -249,7 +249,7 @@ class SMWLevel():
 level_info_dict = {
     0x28: SMWLevel(LocationName.yoshis_house, 0x37A76, 0x00, OWTile([0x07, 0x27], 0x56, True)),
     0x29: SMWLevel(LocationName.yoshis_island_1_region, 0x37A83, 0x01, OWTile([0x04, 0x28], 0x6E, True), SMWPath(0x08, 0x14, 0x04)),
-    0x14: SMWLevel(LocationName.yellow_switch_palace, 0x37812, 0x02, OWTile([0x02, 0x11], 0x76)),
+    0x14: SMWLevel(LocationName.yellow_switch_palace_region, 0x37812, 0x02, OWTile([0x02, 0x11], 0x76)),
     0x2A: SMWLevel(LocationName.yoshis_island_2_region, 0x37A89, 0x03, OWTile([0x0A, 0x28], 0x6E, True), SMWPath(0x08, 0x27, 0x04)),
     0x27: SMWLevel(LocationName.yoshis_island_3_region, 0x37A69, 0x04, OWTile([0x0A, 0x26], 0x6E), SMWPath(0x01, 0x26, 0x04)),
     0x26: SMWLevel(LocationName.yoshis_island_4_region, 0x37A4B, 0x05, OWTile([0x0C, 0x24], 0x72), SMWPath(0x08, 0x25, 0x01)),
@@ -258,7 +258,7 @@ level_info_dict = {
     0x15: SMWLevel(LocationName.donut_plains_1_region, 0x37815, 0x07, OWTile([0x05, 0x11], 0x70), SMWPath(0x02, 0x09, 0x04), SMWPath(0x08, 0x0A, 0x04)),
     0x09: SMWLevel(LocationName.donut_plains_2_region, 0x376D3, 0x09, OWTile([0x03, 0x0D], 0x7B), SMWPath(0x08, 0x04, 0x02), SMWPath(0x02, 0x08, 0x01)),
     0x0A: SMWLevel(LocationName.donut_secret_1_region, 0x376E5, 0x10, OWTile([0x05, 0x0E], 0x74), SMWPath(0x08, 0x04, 0x04), SMWPath(0x01, 0x13, 0x08)),
-    0x08: SMWLevel(LocationName.green_switch_palace, 0x376D1, 0x28, OWTile([0x01, 0x0D], 0x76)),
+    0x08: SMWLevel(LocationName.green_switch_palace_region, 0x376D1, 0x28, OWTile([0x01, 0x0D], 0x76)),
     0x04: SMWLevel(LocationName.donut_ghost_house_region, 0x376A5, 0x0B, OWTile([0x05, 0x0A], 0x7A, False), SMWPath(0x08, 0x03, 0x04), SMWPath(0x01, 0x05, 0x02)),
     0x13: SMWLevel(LocationName.donut_secret_house_region, 0x37807, 0x12, OWTile([0x07, 0x10], 0x7A, False), SMWPath(0x01, 0x2F, 0x04), SMWPath(0x04, 0x16, 0x08)), # SMW_TODO: Check this wrt pipe behavior
     0x05: SMWLevel(LocationName.donut_plains_3_region, 0x376A9, 0x0D, OWTile([0x09, 0x0A], 0x6E), SMWPath(0x01, 0x06, 0x08)),
@@ -274,7 +274,7 @@ level_info_dict = {
     0x2B: SMWLevel(LocationName.vanilla_ghost_house_region, 0x37AC8, 0x19, OWTile([0x09, 0x2C], 0x7A, False), SMWPath(0x01, 0x2E, 0x08)),
     0x2E: SMWLevel(LocationName.vanilla_dome_3_region, 0x37AEC, 0x1A, OWTile([0x0D, 0x2E], 0x6E), SMWPath(0x04, 0x3D, 0x08)),
     0x3D: SMWLevel(LocationName.vanilla_dome_4_region, 0x37C0C, 0x1B, OWTile([0x0D, 0x30], 0x6E), SMWPath(0x04, 0x40, 0x08)),
-    0x3F: SMWLevel(LocationName.red_switch_palace, 0x37C2A, 0x29, OWTile([0x0B, 0x32], 0x78)),
+    0x3F: SMWLevel(LocationName.red_switch_palace_region, 0x37C2A, 0x29, OWTile([0x0B, 0x32], 0x78)),
     0x01: SMWLevel(LocationName.vanilla_secret_2_region, 0x3763C, 0x1F, OWTile([0x0C, 0x03], 0x6E), SMWPath(0x01, 0x02, 0x02)),
     0x02: SMWLevel(LocationName.vanilla_secret_3_region, 0x3763E, 0x20, OWTile([0x0E, 0x03], 0x6E), SMWPath(0x01, 0x0B, 0x02)),
     0x0B: SMWLevel(LocationName.vanilla_fortress_region, 0x37730, 0x21, OWTile([0x10, 0x03], 0x58, False), SMWPath(0x01, 0x0C, 0x02)),
@@ -295,7 +295,7 @@ level_info_dict = {
     0x43: SMWLevel(LocationName.forest_of_illusion_4_region, 0x37CA4, 0x32, OWTile([0x05, 0x3A], 0x70), SMWPath(0x01, 0x44, 0x02), SMWPath(0x04, 0x46, 0x08)),
     0x41: SMWLevel(LocationName.forest_ghost_house_region, 0x37C76, 0x30, OWTile([0x07, 0x37], 0x7A), SMWPath(0x01, 0x42, 0x02), SMWPath(0x02, 0x43, 0x08)),
     0x46: SMWLevel(LocationName.forest_secret_region, 0x37CC4, 0x34, OWTile([0x05, 0x3C], 0x6E), SMWPath(0x04, 0x1F, 0x01)),
-    0x45: SMWLevel(LocationName.blue_switch_palace, 0x37CAC, 0x37, OWTile([0x0D, 0x3A], 0x78)),
+    0x45: SMWLevel(LocationName.blue_switch_palace_region, 0x37CAC, 0x37, OWTile([0x0D, 0x3A], 0x78)),
     0x1F: SMWLevel(LocationName.forest_fortress_region, 0x37906, 0x35, OWTile([0x16, 0x10], 0x58, True), SMWPath(0x02, 0x1E, 0x01)),
     0x20: SMWLevel(LocationName.forest_castle_region, 0x37928, 0x61, OWTile([0x18, 0x12], 0x5D, True), SMWPath(0x04, 0x22, 0x08)),
     0x1E: SMWLevel(LocationName.forest_star_road, 0x37904, 0x36),
@@ -412,6 +412,11 @@ easy_single_levels = [
     0x0D,
     0x46,
     0x1D,
+
+    0x14,
+    0x08,
+    0x3F,
+    0x45,
 ]
 
 hard_single_levels = [
@@ -1298,7 +1303,7 @@ def generate_level_list(world: World):
     # Yoshi's Island
     shuffled_level_list.append(0x03)
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
-    shuffled_level_list.append(0x14)
+    shuffled_level_list.append(easy_single_levels_copy.pop(0))
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
@@ -1311,7 +1316,7 @@ def generate_level_list(world: World):
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
-    shuffled_level_list.append(0x08)
+    shuffled_level_list.append(easy_single_levels_copy.pop(0))
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
     shuffled_level_list.append(easy_double_levels_copy.pop(0))
     shuffled_level_list.append(easy_single_levels_copy.pop(0))
@@ -1343,7 +1348,7 @@ def generate_level_list(world: World):
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(0x3F)
+    shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
     if world.options.castles_anywhere:
@@ -1373,7 +1378,7 @@ def generate_level_list(world: World):
     shuffled_level_list.append(double_levels_copy.pop(0))
     shuffled_level_list.append(double_levels_copy.pop(0))
     shuffled_level_list.append(single_levels_copy.pop(0))
-    shuffled_level_list.append(0x45)
+    shuffled_level_list.append(single_levels_copy.pop(0))
     if world.options.castles_anywhere:
         shuffled_level_list.append(single_levels_copy.pop(0))
         shuffled_level_list.append(single_levels_copy.pop(0))
