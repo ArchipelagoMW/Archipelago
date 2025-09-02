@@ -5,7 +5,7 @@ from . import options
 from .jojapocalypse_options import Jojapocalypse, JojaAreYouSure
 from ..mods.mod_data import ModNames, mod_combination_is_valid, get_invalid_mod_combination
 from ..options.settings import StardewSettings
-from ..strings.ap_names.ap_option_names import EatsanityOptionName
+from ..strings.ap_names.ap_option_names import EatsanityOptionName, HatsanityOptionName
 
 logger = logging.getLogger(__name__)
 
@@ -95,13 +95,18 @@ def force_eatsanity_no_enzymes_if_no_other_eatsanity(world_options: options.Star
 
 
 def force_hatsanity_when_goal_is_mad_hatter(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
+    if world_options.exclude_ginger_island.value and HatsanityOptionName.post_perfection in world_options.hatsanity:
+        world_options.hatsanity.value.remove(HatsanityOptionName.post_perfection)
+        logger.warning(f"Hatsanity '{HatsanityOptionName.post_perfection}' requires ginger island "
+                       f"'{HatsanityOptionName.post_perfection}' force-removed from Hatsanity")
+
     goal_is_mad_hatter = world_options.goal == options.Goal.option_mad_hatter
     hatsanity_is_disabled = world_options.hatsanity == options.Hatsanity.preset_none
 
     if goal_is_mad_hatter and hatsanity_is_disabled:
         world_options.hatsanity.value = options.Hatsanity.preset_simple
         goal_name = world_options.goal.current_option_name
-        logger.warning(f"Goal '{goal_name}' requires Requires Hatsanity. "
+        logger.warning(f"Goal '{goal_name}' requires Hatsanity. "
                        f"Hatsanity option forced to 'Easy+Tailoring' for player {player} ({player_name})")
 
 
