@@ -2,7 +2,7 @@ from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Region, Item, ItemClassification, Tutorial
 from typing import List, ClassVar, Type, Set
 from math import floor
-from Options import PerGameCommonOptions
+from Options import PerGameCommonOptions, OptionError
 
 from .Options import MuseDashOptions, md_option_groups
 from .Items import MuseDashSongItem, MuseDashFixedItem
@@ -102,7 +102,8 @@ class MuseDashWorld(World):
             # If the above fails, we want to adjust the difficulty thresholds.
             # Easier first, then harder
             if lower_diff_threshold <= 1 and higher_diff_threshold >= 11:
-                raise Exception("Failed to find enough songs, even with maximum difficulty thresholds.")
+                raise OptionError("Failed to find enough songs, even with maximum difficulty thresholds. "
+                                  "Too many songs have been excluded or set to be starter songs.")
             elif lower_diff_threshold <= 1:
                 higher_diff_threshold += 1
             else:
