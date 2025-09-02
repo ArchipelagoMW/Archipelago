@@ -313,7 +313,7 @@ class HardMode(Choice, LADXROption):
 
     **Hero:** Switch version hero mode, double damage, no heart/fairy drops.
 
-    **One hit KO:** You die on a single hit, always.
+    **OHKO:** You die on a single hit, always.
     """
     display_name = "Hard Mode"
     ladxr_name = "hardmode"
@@ -321,8 +321,7 @@ class HardMode(Choice, LADXROption):
     option_none = 0
     option_oracle = 1
     option_hero = 2
-    option_one_hit_ko = 3
-    alias_ohko = 3
+    option_ohko = 3
     default = option_none
 
 
