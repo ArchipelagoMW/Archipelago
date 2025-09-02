@@ -532,7 +532,7 @@ def create_booksanity_items(item_factory: StardewItemFactory, options: StardewVa
 
 
 def create_bookseller_items(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
-    needs_books = options.shipsanity == Shipsanity.option_everything or content.features.booksanity.is_enabled
+    needs_books = options.shipsanity == Shipsanity.option_everything or content.features.booksanity.is_enabled or content.features.hatsanity.is_enabled
     book_items = []
     book_items.extend(item_factory(item_table[Bookseller.days]) for _ in range(4 if needs_books else 1))
     if not needs_books:

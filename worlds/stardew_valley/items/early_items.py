@@ -63,6 +63,7 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
 
     if content.is_enabled(ginger_island_content_pack):
         early_candidates.append(Transportation.island_obelisk)
+        early_candidates.append(Transportation.boat_repair)
 
         if options.walnutsanity.value:
             early_candidates.append("Island North Turtle")
