@@ -281,11 +281,7 @@
     // Central Transport Hub
     {
         "address": 701, "name": "CTH: Large Elevator Shaft",
-        // you can get it for free on the way down, but we can't assume the player
-        // remembered to do that, or even entered CTH from above to get that chance
-        "region": "CTH - Bottom of Large Shaft", "requires": [
-            { "item": "Air Dash" }, { "item": "Cloud Leap" } // AND wall climb
-        ]
+        "region": "CTH - Elevator Shaft Alcove", "requires": []
     },
     {
         "address": 702, "name": "CTH: Defeat Red Tiger Elite: Yanren",
@@ -577,9 +573,7 @@
     },
     {
         "address": 1604, "name": "Yinglong Canal: Climbing Puzzle Above Farmland Markings",
-        "region": "YC - Farmland Markings", "requires": [ { "anyOf": [
-            { "item": "Air Dash" }, { "item": "Cloud Leap" }
-        ] } ] // wall climb AND (djump OR airdash OR bow)
+        "region": "YC - Farmland Markings", "requires": []
     },
     {
         "address": 1605, "name": "Yinglong Canal: Between Egg Cave and Farmland Markings",

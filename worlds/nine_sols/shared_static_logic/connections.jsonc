@@ -142,6 +142,10 @@
 
     // Central Transport Hub
     { "from": "CTH - Upper Left Exit", "to": "CTH - Bottom of Large Shaft", "requires": [] }, // elevator combat gauntlet
+    { "from": "CTH - Upper Left Exit", "to": "CTH - Elevator Shaft Alcove", "requires": [] }, // elevator combat gauntlet (or coming back and falling)
+    { "from": "CTH - Bottom of Large Shaft", "to": "CTH - Elevator Shaft Alcove", "requires": [ // if you must climb up to it
+        { "item": "Air Dash" }, { "item": "Cloud Leap" } // AND wall climb
+    ] },
     { "from": "CTH - Bottom of Large Shaft", "to": "CTH - Yanren Arena", "requires": [
         { "item": "Mystic Nymph: Scout Mode" },
         { "anyOf": [ { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
