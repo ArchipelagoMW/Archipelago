@@ -267,6 +267,10 @@ class DarkSouls3World(World):
                 # Don't allow missable duplicates of progression items to be expected progression.
                 if location.name in self.missable_dupe_prog_locs: continue
 
+                # Don't create DLC and NGP locations if those are disabled
+                if location.dlc and not self.options.enable_dlc: continue
+                if location.ngp and not self.options.enable_ngp: continue
+
                 # Replace non-randomized items with events that give the default item
                 event_item = (
                     self.create_item(location.default_item_name) if location.default_item_name
