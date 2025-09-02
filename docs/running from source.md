@@ -7,7 +7,7 @@ use that version. These steps are for developers or platforms without compiled r
 ## General
 
 What you'll need:
- * [Python 3.10.11 or newer](https://www.python.org/downloads/), not the Windows Store version
+ * [Python 3.11.9 or newer](https://www.python.org/downloads/), not the Windows Store version
    * On Windows, please consider only using the latest supported version in production environments since security
      updates for older versions are not easily available.
    * Python 3.12.x is currently the newest supported version
