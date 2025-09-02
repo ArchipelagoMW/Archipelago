@@ -59,10 +59,10 @@ class SDWorld(World):
     def create_regions(self):
         player = self.player
         for (region_name, exit_names) in sd_regions:
-            region = Region(region_name, player, self)
+            region = Region(region_name, self.player, self.multiworld)
             
             # add internal locations as SDLocations
-            region.locations += [SDLocation(player, name, self.location_name_to_id[name], region)
+            region.locations += [SDLocation(self.player, name, self.location_name_to_id[name], region)
                                  for name, data in location_table if data.region == region_name]
             # same, maybe slower:
             # for (name, data) in location_table:

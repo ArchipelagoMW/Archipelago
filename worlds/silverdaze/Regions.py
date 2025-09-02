@@ -5,7 +5,7 @@ from BaseClasses import CollectionState, ItemClassification, Region
 from BaseClasses import MultiWorld
 
 from .Items import item_table
-from .Locations import location_table, SDLocation, SDLocationData
+#from .Locations import location_table, SDLocation, SDLocationData
 from .Options import SilverDazeOptions
 
 if TYPE_CHECKING:

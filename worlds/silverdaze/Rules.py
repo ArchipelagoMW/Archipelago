@@ -2,7 +2,7 @@ from typing import Dict, NamedTuple, Optional, Set
 
 from BaseClasses import CollectionState
 from typing import TYPE_CHECKING
-from Locations import location_table
+from .Locations import location_table
 from worlds.generic.Rules import add_rule, set_rule
 from worlds.generic.Rules import add_rule, forbid_item
 

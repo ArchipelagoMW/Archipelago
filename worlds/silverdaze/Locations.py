@@ -1,7 +1,6 @@
 from typing import Dict, NamedTuple, Optional
 from BaseClasses import Location
 import typing
-from .Rules import set_rules
 from .Regions import sd_regions
 
 
