@@ -104,7 +104,7 @@ def create_events(world: APQuestWorld) -> None:
 
     # One way to create an event is simply to use one of the normal methods of creating a location.
     button_in_top_left_room = Location(world.player, "Top Left Room Button", None, top_left_room)
-    top_left_room.locations += [button_in_top_left_room]
+    top_left_room.locations.append(button_in_top_left_room)
 
     # We then need to put an event item onto the location. Item creation is discussed more in create_items().
     button_item = items.APQuestItem("Top Left Room Button Pressed", ItemClassification.progression, None, world.player)
