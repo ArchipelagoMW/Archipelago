@@ -47,7 +47,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.2"
+__version__ = "0.6.4"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -166,6 +166,10 @@ def home_path(*path: str) -> str:
                 os.symlink(home_path.cached_path, legacy_home_path)
             else:
                 os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
+    elif sys.platform == 'darwin':
+        import platformdirs
+        home_path.cached_path = platformdirs.user_data_dir("Archipelago", False)
+        os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
     else:
         # not implemented
         home_path.cached_path = local_path()  # this will generate the same exceptions we got previously
@@ -177,7 +181,7 @@ def user_path(*path: str) -> str:
     """Returns either local_path or home_path based on write permissions."""
     if hasattr(user_path, "cached_path"):
         pass
-    elif os.access(local_path(), os.W_OK):
+    elif os.access(local_path(), os.W_OK) and not (is_macos and is_frozen()):
         user_path.cached_path = local_path()
     else:
         user_path.cached_path = home_path()
@@ -409,13 +413,26 @@ def get_adjuster_settings(game_name: str) -> Namespace:
 
 @cache_argsless
 def get_unique_identifier():
-    uuid = persistent_load().get("client", {}).get("uuid", None)
+    common_path = cache_path("common.json")
+    try:
+        with open(common_path) as f:
+            common_file = json.load(f)
+            uuid = common_file.get("uuid", None)
+    except FileNotFoundError:
+        common_file = {}
+        uuid = None
+
     if uuid:
         return uuid
 
-    import uuid
-    uuid = uuid.getnode()
-    persistent_store("client", "uuid", uuid)
+    from uuid import uuid4
+    uuid = str(uuid4())
+    common_file["uuid"] = uuid
+
+    cache_folder = os.path.dirname(common_path)
+    os.makedirs(cache_folder, exist_ok=True)
+    with open(common_path, "w") as f:
+        json.dump(common_file, f, separators=(",", ":"))
     return uuid
 
 
@@ -438,6 +455,7 @@ class RestrictedUnpickler(pickle.Unpickler):
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
         # used by OptionCounter
+        # necessary because the actual Options class instances are pickled when transfered to WebHost generation pool
         if module == "collections" and name == "Counter":
             return collections.Counter
         # used by MultiServer -> savegame/multidata
@@ -466,6 +484,18 @@ class RestrictedUnpickler(pickle.Unpickler):
 def restricted_loads(s: bytes) -> Any:
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
+
+
+def restricted_dumps(obj: Any) -> bytes:
+    """Helper function analogous to pickle.dumps()."""
+    s = pickle.dumps(obj)
+    # Assert that the string can be successfully loaded by restricted_loads
+    try:
+        restricted_loads(s)
+    except pickle.UnpicklingError as e:
+        raise pickle.PicklingError(e) from e
+
+    return s
 
 
 class ByValue:
@@ -873,7 +903,7 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     Use this to start a task when you don't keep a reference to it or immediately await it,
     to prevent early garbage collection. "fire-and-forget"
     """
-    # https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+    # https://docs.python.org/3.11/library/asyncio-task.html#asyncio.create_task
     # Python docs:
     # ```
     # Important: Save a reference to the result of [asyncio.create_task],
@@ -910,15 +940,15 @@ class DeprecateDict(dict):
 
 
 def _extend_freeze_support() -> None:
-    """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
-    # upstream issue: https://github.com/python/cpython/issues/76327
+    """Extend multiprocessing.freeze_support() to also work on Non-Windows and without setting spawn method first."""
+    # original upstream issue: https://github.com/python/cpython/issues/76327
     # code based on https://github.com/pyinstaller/pyinstaller/blob/develop/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py#L26
     import multiprocessing
     import multiprocessing.spawn
 
     def _freeze_support() -> None:
         """Minimal freeze_support. Only apply this if frozen."""
-        from subprocess import _args_from_interpreter_flags
+        from subprocess import _args_from_interpreter_flags  # noqa
 
         # Prevent `spawn` from trying to read `__main__` in from the main script
         multiprocessing.process.ORIGINAL_DIR = None
@@ -926,8 +956,7 @@ def _extend_freeze_support() -> None:
         # Handle the first process that MP will create
         if (
             len(sys.argv) >= 2 and sys.argv[-2] == '-c' and sys.argv[-1].startswith((
-                'from multiprocessing.semaphore_tracker import main',  # Py<3.8
-                'from multiprocessing.resource_tracker import main',  # Py>=3.8
+                'from multiprocessing.resource_tracker import main',
                 'from multiprocessing.forkserver import main'
             )) and set(sys.argv[1:-2]) == set(_args_from_interpreter_flags())
         ):
@@ -946,15 +975,21 @@ def _extend_freeze_support() -> None:
             multiprocessing.spawn.spawn_main(**kwargs)
             sys.exit()
 
-    if not is_windows and is_frozen():
-        multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support
+    def _noop() -> None:
+        pass
+
+    multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support if is_frozen() else _noop
 
 
 def freeze_support() -> None:
-    """This behaves like multiprocessing.freeze_support but also works on Non-Windows."""
+    """This now only calls multiprocessing.freeze_support since we are patching freeze_support on module load."""
     import multiprocessing
-    _extend_freeze_support()
+
+    deprecate("Use multiprocessing.freeze_support() instead")
     multiprocessing.freeze_support()
+
+
+_extend_freeze_support()
 
 
 def visualize_regions(root_region: Region, file_name: str, *,

@@ -116,6 +116,13 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
             else:
                 # we filled all reachable spots.
                 if swap:
+                    # Keep a cache of previous safe swap states that might be usable to sweep from to produce the next
+                    # swap state, instead of sweeping from `base_state` each time.
+                    previous_safe_swap_state_cache: typing.Deque[CollectionState] = deque()
+                    # Almost never are more than 2 states needed. The rare cases that do are usually highly restrictive
+                    # single_player_placement=True pre-fills which can go through more than 10 states in some seeds.
+                    max_swap_base_state_cache_length = 3
+
                     # try swapping this item with previously placed items in a safe way then in an unsafe way
                     swap_attempts = ((i, location, unsafe)
                                      for unsafe in (False, True)
@@ -130,9 +137,30 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
                         location.item = None
                         placed_item.location = None
-                        swap_state = sweep_from_pool(base_state, [placed_item, *item_pool] if unsafe else item_pool,
-                                                     multiworld.get_filled_locations(item.player)
-                                                     if single_player_placement else None)
+
+                        for previous_safe_swap_state in previous_safe_swap_state_cache:
+                            # If a state has already checked the location of the swap, then it cannot be used.
+                            if location not in previous_safe_swap_state.advancements:
+                                # Previous swap states will have collected all items in `item_pool`, so the new
+                                # `swap_state` can skip having to collect them again.
+                                # Previous swap states will also have already checked many locations, making the sweep
+                                # faster.
+                                swap_state = sweep_from_pool(previous_safe_swap_state, (placed_item,) if unsafe else (),
+                                                             multiworld.get_filled_locations(item.player)
+                                                             if single_player_placement else None)
+                                break
+                        else:
+                            # No previous swap_state was usable as a base state to sweep from, so create a new one.
+                            swap_state = sweep_from_pool(base_state, [placed_item, *item_pool] if unsafe else item_pool,
+                                                         multiworld.get_filled_locations(item.player)
+                                                         if single_player_placement else None)
+                            # Unsafe states should not be added to the cache because they have collected `placed_item`.
+                            if not unsafe:
+                                if len(previous_safe_swap_state_cache) >= max_swap_base_state_cache_length:
+                                    # Remove the oldest cached state.
+                                    previous_safe_swap_state_cache.pop()
+                                # Add the new state to the start of the cache.
+                                previous_safe_swap_state_cache.appendleft(swap_state)
                         # unsafe means swap_state assumes we can somehow collect placed_item before item_to_place
                         # by continuing to swap, which is not guaranteed. This is unsafe because there is no mechanic
                         # to clean that up later, so there is a chance generation fails.
@@ -330,7 +358,12 @@ def fast_fill(multiworld: MultiWorld,
     return item_pool[placing:], fill_locations[placing:]
 
 
-def accessibility_corrections(multiworld: MultiWorld, state: CollectionState, locations, pool=[]):
+def accessibility_corrections(multiworld: MultiWorld,
+                              state: CollectionState,
+                              locations: list[Location],
+                              pool: list[Item] | None = None) -> None:
+    if pool is None:
+        pool = []
     maximum_exploration_state = sweep_from_pool(state, pool)
     minimal_players = {player for player in multiworld.player_ids if
                        multiworld.worlds[player].options.accessibility == "minimal"}
@@ -450,6 +483,12 @@ def distribute_early_items(multiworld: MultiWorld,
 
 def distribute_items_restrictive(multiworld: MultiWorld,
                                  panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap") -> None:
+    assert all(item.location is None for item in multiworld.itempool), (
+        "At the start of distribute_items_restrictive, "
+        "there are items in the multiworld itempool that are already placed on locations:\n"
+        f"{[(item.location, item) for item in multiworld.itempool if item.location is not None]}"
+    )
+
     fill_locations = sorted(multiworld.get_unfilled_locations())
     multiworld.random.shuffle(fill_locations)
     # get items to distribute
@@ -492,18 +531,50 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     single_player = multiworld.players == 1 and not multiworld.groups
 
     if prioritylocations:
+        regular_progression = []
+        deprioritized_progression = []
+        for item in progitempool:
+            if item.deprioritized:
+                deprioritized_progression.append(item)
+            else:
+                regular_progression.append(item)
+
         # "priority fill"
-        maximum_exploration_state = sweep_from_pool(multiworld.state)
-        fill_restrictive(multiworld, maximum_exploration_state, prioritylocations, progitempool,
+        # try without deprioritized items in the mix at all. This means they need to be collected into state first.
+        priority_fill_state = sweep_from_pool(multiworld.state, deprioritized_progression)
+        fill_restrictive(multiworld, priority_fill_state, prioritylocations, regular_progression,
                          single_player_placement=single_player, swap=False, on_place=mark_for_locking,
                          name="Priority", one_item_per_player=True, allow_partial=True)
 
-        if prioritylocations:
+        if prioritylocations and regular_progression:
             # retry with one_item_per_player off because some priority fills can fail to fill with that optimization
-            maximum_exploration_state = sweep_from_pool(multiworld.state)
-            fill_restrictive(multiworld, maximum_exploration_state, prioritylocations, progitempool,
-                            single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                            name="Priority Retry", one_item_per_player=False)
+            # deprioritized items are still not in the mix, so they need to be collected into state first.
+            # allow_partial should only be set if there is deprioritized progression to fall back on.
+            priority_retry_state = sweep_from_pool(multiworld.state, deprioritized_progression)
+            fill_restrictive(multiworld, priority_retry_state, prioritylocations, regular_progression,
+                             single_player_placement=single_player, swap=False, on_place=mark_for_locking,
+                             name="Priority Retry", one_item_per_player=False,
+                             allow_partial=bool(deprioritized_progression))
+
+        if prioritylocations and deprioritized_progression:
+            # There are no more regular progression items that can be placed on any priority locations.
+            # We'd still prefer to place deprioritized progression items on priority locations over filler items.
+            # Since we're leaving out the remaining regular progression now, we need to collect it into state first.
+            priority_retry_2_state = sweep_from_pool(multiworld.state, regular_progression)
+            fill_restrictive(multiworld, priority_retry_2_state, prioritylocations, deprioritized_progression,
+                             single_player_placement=single_player, swap=False, on_place=mark_for_locking,
+                             name="Priority Retry 2", one_item_per_player=True, allow_partial=True)
+
+        if prioritylocations and deprioritized_progression:
+            # retry with deprioritized items AND without one_item_per_player optimisation
+            # Since we're leaving out the remaining regular progression now, we need to collect it into state first.
+            priority_retry_3_state = sweep_from_pool(multiworld.state, regular_progression)
+            fill_restrictive(multiworld, priority_retry_3_state, prioritylocations, deprioritized_progression,
+                             single_player_placement=single_player, swap=False, on_place=mark_for_locking,
+                             name="Priority Retry 3", one_item_per_player=False)
+
+        # restore original order of progitempool
+        progitempool[:] = [item for item in progitempool if not item.location]
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
@@ -890,7 +961,7 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
                 worlds = set()
                 for listed_world in target_world:
                     if listed_world not in world_name_lookup:
-                        failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                        failed(f"Cannot place item to {listed_world}'s world as that world does not exist.",
                                block.force)
                         continue
                     worlds.add(world_name_lookup[listed_world])
@@ -923,9 +994,9 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
             if isinstance(locations, str):
                 locations = [locations]
 
-            locations_from_groups: list[str] = []
             resolved_locations: list[Location] = []
             for target_player in worlds:
+                locations_from_groups: list[str] = []
                 world_locations = multiworld.get_unfilled_locations(target_player)
                 for group in multiworld.worlds[target_player].location_name_groups:
                     if group in locations:
@@ -937,13 +1008,16 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
 
             count = block.count
             if not count:
-                count = len(new_block.items)
+                count = (min(len(new_block.items), len(new_block.resolved_locations))
+                         if new_block.resolved_locations else len(new_block.items))
             if isinstance(count, int):
                 count = {"min": count, "max": count}
             if "min" not in count:
                 count["min"] = 0
             if "max" not in count:
-                count["max"] = len(new_block.items)
+                count["max"] = (min(len(new_block.items), len(new_block.resolved_locations))
+                                if new_block.resolved_locations else len(new_block.items))
+
 
             new_block.count = count
             plando_blocks[player].append(new_block)
