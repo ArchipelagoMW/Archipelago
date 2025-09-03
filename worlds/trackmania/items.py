@@ -113,25 +113,25 @@ def get_filler_item_name(world: "TrackmaniaWorld") -> str:
 def get_medal_enabled(world: "TrackmaniaWorld", medal: str) -> bool:
     match medal:
         case "Bronze Medal":
-            return world.options.disable_bronze <= 0
+            return world.options.disable_bronze_medals <= 0
         case "Silver Medal":
-            return world.options.disable_silver <= 0
+            return world.options.disable_silver_medals <= 0
         case "Gold Medal":
-            return world.options.disable_gold <= 0
+            return world.options.disable_gold_medals <= 0
         case "Author Medal":
-            return world.options.disable_author <= 0
+            return True
         case _:
             return True
 
 def get_locations_per_map(world: "TrackmaniaWorld") -> int:
     checks: int = 1
-    if world.options.disable_bronze <= 0:
+    if world.options.target_time < 100 or world.options.disable_bronze_locations <= 0:
         checks += 1
-    if world.options.target_time >=100 and world.options.disable_silver <= 0:
+    if world.options.target_time >=100 and world.options.disable_silver_locations <= 0:
         checks += 1
-    if world.options.target_time >=200 and world.options.disable_gold <= 0:
+    if world.options.target_time >=200 and world.options.disable_gold_locations <= 0:
         checks += 1
-    if world.options.target_time >=300 and world.options.disable_author <= 0:
+    if world.options.target_time >=300 and world.options.disable_author_locations <= 0:
         checks += 1
     return checks
     

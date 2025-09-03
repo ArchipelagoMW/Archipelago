@@ -86,19 +86,28 @@ class SkipPercentage(Range):
 class DiscountPercentage(Range):
     """The number of target time discounts in the item pool, calculated as a percentage of the total number of maps.
     
-    This item decreases your personal best time used by this plugin by 1.5%. That might not sound like a lot, but it helps!
+    This item decreases your personal best time used by this plugin by 1.5% (by default). That might not sound like a lot, but it helps!
     """
     display_name = "PB Discount Item Percentage"
     range_start = 0
     range_end = 100
     default = 20
 
+
+class DiscountAmount(Range):
+    """The strength of PB Discount Items. The discount is calculated by dividing this setting by 10 and multiplying it by the author time. For example, the default setting of 15 becomes 1.5% of the author time.
+    """
+    display_name = "PB Discount Item Strength"
+    range_start = 1
+    range_end = 100
+    default = 15
+
 class ProgressiveTargetTimeChance(Range):
     """Percentage chance that the item received for beating the target time is guaranteed to be a progression item"""
     display_name = "Target Time Progression Item Chance"
     range_start = 0
     range_end = 100
-    default = 40
+    default = 20
 
 class MapTags(OptionSet):
     """Tags that maps from Trackmania Exchange are allowed to have. If none of these tags are checked, 
@@ -122,26 +131,59 @@ class MapDifficulties(OptionSet):
     valid_keys = get_all_map_difficulties()
     default = get_default_map_difficulties()
 
+
+class MapMaximumLength(Range):
+    """The maximum length a map can be in seconds.
+    """
+    display_name = "Maximum Map Length"
+    range_start = 1
+    range_end = 2000
+    default = 300
+
+class MapMinimumLength(Range):
+    """The minimum length a map can be in seconds.
+    """
+    display_name = "Minimum Map Length"
+    range_start = 0
+    range_end = 2000
+    default = 0
+
 class HasAward(Toggle):
     """Enable to guarantee every rolled track will have at least one award on Trackmania Exchange."""
     display_name = "Must Be Awarded"
 
 class DisableBronzeLocations(Toggle):
-    """Disable Bronze Medal times from counting as locations, and remove all Bronze Medals from the Item Pool (unless it is the progression medal)."""
+    """Disable Bronze Medal times from counting as locations."""
+    display_name = "Remove Bronze Locations"
+
+class DisableBronzeMedals(Toggle):
+    """Remove all Bronze Medals from the Item Pool (unless it is the progression medal)."""
     display_name = "Remove Bronze Medals"
 
+
 class DisableSilverLocations(Toggle):
-    """Disable Silver Medal times from counting as locations, and remove all Silver Medals from the Item Pool (unless it is the progression medal)."""
+    """Disable Silver Medal times from counting as locations."""
+    display_name = "Remove Silver Locations"
+
+
+class DisableSilverMedals(Toggle):
+    """Remove all Silver Medals from the Item Pool (unless it is the progression medal)."""
     display_name = "Remove Silver Medals"
 
+
 class DisableGoldLocations(Toggle):
-    """Disable Gold Medal times from counting as locations, and remove all Gold Medals from the Item Pool (unless it is the progression medal)."""
+    """Disable Gold Medal times from counting as locations."""
+    display_name = "Remove Gold Locations"
+
+
+class DisableGoldMedals(Toggle):
+    """Remove all Gold Medals from the Item Pool (unless it is the progression medal)."""
     display_name = "Remove Gold Medals"
 
-class DisableAuthorLocations(Toggle):
-    """Disable Author Medal times from counting as locations, and remove all Author Medals from the Item Pool (unless it is the progression medal)."""
-    display_name = "Remove Author Medals"
 
+class DisableAuthorLocations(Toggle):
+    """Disable Author Medal times from counting as locations."""
+    display_name = "Remove Bronze Locations"
 
 # Schema for custom series options below.
 LuaBool = Or(bool, And(int, lambda v: v in (0, 1)))
@@ -229,25 +271,31 @@ class TrackmaniaOptions(PerGameCommonOptions):
     medal_requirement: MedalRequirement
     skip_percentage: SkipPercentage
     discount_percentage: DiscountPercentage
+    discount_amount: DiscountAmount
     target_progression_chance : ProgressiveTargetTimeChance
     map_tags: MapTags
     map_tags_inclusive: MapTagsInclusive
     map_etags: MapETags
+    map_max_length: MapMaximumLength
+    map_min_length: MapMinimumLength
     difficulties: MapDifficulties
     has_award: HasAward
-    disable_bronze: DisableBronzeLocations
-    disable_silver: DisableSilverLocations
-    disable_gold: DisableGoldLocations
-    disable_author: DisableAuthorLocations
+    disable_bronze_locations: DisableBronzeLocations
+    disable_bronze_medals: DisableBronzeMedals
+    disable_silver_locations: DisableSilverLocations
+    disable_silver_medals: DisableSilverMedals
+    disable_gold_locations: DisableGoldLocations
+    disable_gold_medals: DisableGoldMedals
+    disable_author_locations: DisableAuthorLocations
 
     custom_series: CustomSeries
 
 option_groups: Dict[str, List[Any]] = {
     "Generation":[ProgressionBalancing, Accessibility],
-    "Difficulty":[TargetTime, SkipPercentage, DiscountPercentage, MapDifficulties],
+    "Difficulty":[TargetTime, SkipPercentage, DiscountPercentage, DiscountAmount, MapDifficulties],
     "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber],
-    "Map Search Settings":[MapTagsInclusive, RandomSeriesTags, HasAward, MapTags, MapETags],
-    "Advanced":[FirstSeriesSize, DisableBronzeLocations, DisableSilverLocations, DisableGoldLocations, DisableAuthorLocations, CustomSeries]#, PlandoItems]
+    "Map Search Settings":[MapTags, MapETags, MapTagsInclusive, RandomSeriesTags, HasAward, MapMinimumLength, MapMaximumLength],
+    "Advanced":[FirstSeriesSize, DisableBronzeLocations, DisableBronzeMedals, DisableSilverLocations, DisableSilverMedals, DisableGoldLocations, DisableGoldMedals, DisableAuthorLocations, CustomSeries]#, PlandoItems]
 }
 
 def create_option_groups() -> List[OptionGroup]:

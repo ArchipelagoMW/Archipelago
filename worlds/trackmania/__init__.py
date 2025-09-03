@@ -76,6 +76,9 @@ class TrackmaniaWorld(World):
             self.options.series_minimum_map_number.value = self.options.series_maximum_map_number.value
             self.options.series_maximum_map_number.value = temp
 
+        if self.options.map_min_length > self.options.map_max_length:
+            self.options.map_max_length = self.options.map_min_length+1
+
         for series in range(1, self.options.series_number.value + 1):
             map_count: int = self.random.randint(self.options.series_minimum_map_number.value,
                                             self.options.series_maximum_map_number.value)
@@ -106,7 +109,10 @@ class TrackmaniaWorld(World):
                 search_criteria["difficulties"] = list(self.options.difficulties.value)
 
             if "max_length" not in search_criteria:
-                search_criteria["max_length"] = 5*60*1000  # Enforce a default 5 minute upper limit
+                search_criteria["max_length"] = self.options.map_max_length * 1000
+
+            if "min_length" not in search_criteria:
+                search_criteria["min_length"] = self.options.map_min_length * 1000
 
             if "has_award" not in search_criteria:
                 search_criteria["has_award"] = self.options.has_award.value
@@ -119,11 +125,12 @@ class TrackmaniaWorld(World):
     def fill_slot_data(self) -> dict:
         return {
             "TargetTimeSetting": (float(self.options.target_time.value) / 100.0),
+            "DiscountAmount": (float(self.options.discount_amount) / 1000.0),
             "SeriesNumber": self.options.series_number.value,
-            "DisableBronze": self.options.disable_bronze.value,
-            "DisableSilver": self.options.disable_silver.value,
-            "DisableGold": self.options.disable_gold.value,
-            "DisableAuthor": self.options.disable_author.value,
+            "DisableBronze": self.options.disable_bronze_locations.value,
+            "DisableSilver": self.options.disable_silver_locations.value,
+            "DisableGold": self.options.disable_gold_locations.value,
+            "DisableAuthor": self.options.disable_author_locations.value,
             "SeriesData": self.series_data
         }
 

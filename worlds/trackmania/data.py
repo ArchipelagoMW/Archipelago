@@ -119,7 +119,6 @@ filler_item_names = [
     "Woogles",
     "Very Useful Item Yeppers",
     "pwogweshon mehdol",
-    "Copy of \"Updated Royal Gamemode for Dummies\" Vol-3",
     "\"just dont slide\" Fullspeed Advice",
     "\"just tap brake\" Iceslide Advice",
     "\"just dont steer\" Dirt Gears Advice",
@@ -127,7 +126,7 @@ filler_item_names = [
     "\"just commit to turns\" Tech Advice",
     "Nosebug Chain",
     "Noseboost World Record",
-    "Fast Learning Skills. Just kidding, those don't exist.",
+    "Fast Learning Skills",
     "Nostalgia for Two Years Ago",
     "Steve Car Skin",
     "Lighting Calculations",
@@ -148,7 +147,13 @@ filler_item_names = [
     "borpaspin",
     "Blind Jump",
     "Loop Cut",
-    "First Connection in 9999999 Days!"
+    "First Connection in 9999999 Days!",
+    "Royal Obituary",
+    "Snowo Dance",
+    "Gear Bug",
+    "Tower Map Spinoff",
+
+
 ]
 
 def get_all_map_tags() -> list[str]:
