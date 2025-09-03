@@ -170,7 +170,7 @@ class TwoStartPositions(Toggle):
     If turned on and 'grid', 'hopscotch', or 'golden_path' mission orders are selected,
     removes the first mission and allows both of the next two missions to be played from the start.
     """
-    display_name = "Start with two unlocked missions on grid"
+    display_name = "Two start missions"
     default = Toggle.option_false
 
 
@@ -1053,7 +1053,7 @@ class VictoryCache(Range):
     Controls how many additional checks are awarded for completing a mission.
     Goal missions are unaffected by this option.
     """
-    display_name = "Victory Checks"
+    display_name = "Victory Cache"
     range_start = 0
     range_end = 10
     default = 0
