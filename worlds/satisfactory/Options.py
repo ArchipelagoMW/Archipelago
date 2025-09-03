@@ -5,10 +5,12 @@ from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, Optio
 from Options import Range, NamedRange, Toggle, DefaultOnToggle, OptionSet, StartInventoryPool, Choice
 from schema import Schema, And
 
+
 class Placement(IntEnum):
     starting_inventory = 0
     early = 1
     somewhere = 2
+
 
 class PlacementLogicMeta(AssembleOptions):
     def __new__(mcs, name: str, bases: tuple[type], attrs: dict[Any, Any]) -> "PlacementLogicMeta":
@@ -18,10 +20,12 @@ class PlacementLogicMeta(AssembleOptions):
         cls = super(PlacementLogicMeta, mcs).__new__(mcs, name, bases, attrs)
         return cast(PlacementLogicMeta, cls)
 
+
 class PlacementLogic(Choice, metaclass=PlacementLogicMeta):
     option_unlocked_from_start = Placement.starting_inventory.value
     option_early_game = Placement.early.value
     option_somewhere = Placement.somewhere.value
+
 
 class ChoiceMapMeta(AssembleOptions):
     def __new__(mcs, name: str, bases: tuple[type], attrs: dict[Any, Any]) -> "ChoiceMapMeta":
@@ -36,6 +40,7 @@ class ChoiceMapMeta(AssembleOptions):
         cls = super(ChoiceMapMeta, mcs).__new__(mcs, name, bases, attrs)
         return cast(ChoiceMapMeta, cls)
 
+
 class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
     choices: ClassVar[dict[str, list[str]]]
     default: str
@@ -46,6 +51,7 @@ class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
                 return self.choices[choice]
             
         raise Exception(f"ChoiceMap: selected choice {self.value} is not valid, valid choices are: {self.choices.keys()}")
+
 
 class ElevatorTier(NamedRange):
     """
@@ -72,6 +78,7 @@ class ElevatorTier(NamedRange):
         "four packages (tiers 1-8)": 4,
         "five packages (tiers 1-9)": 5,
     }
+
 
 class ResourceSinkPointsTotal(NamedRange):
     """
@@ -114,6 +121,7 @@ class ResourceSinkPointsTotal(NamedRange):
         "1000 coupons (~18b points)": 18436379500
     }
 
+
 class ResourceSinkPointsPerMinute(NamedRange):
     """
     Does nothing if *AWESOME Sink Points (per minute)* goal is not enabled.
@@ -146,6 +154,7 @@ class ResourceSinkPointsPerMinute(NamedRange):
         "~4 ballistic warp drive/min": 10000000,
     }
 
+
 class HardDriveProgressionLimit(Range):
     """
     How many Hard Drives can contain progression items.
@@ -158,6 +167,7 @@ class HardDriveProgressionLimit(Range):
     range_start = 0
     range_end = 100
 
+
 class FreeSampleEquipment(Range):
     """
     How many free sample Equipment items are given when they are unlocked.
@@ -168,6 +178,7 @@ class FreeSampleEquipment(Range):
     default = 1
     range_start = 0
     range_end = 10
+
 
 class FreeSampleBuildings(Range):
     """
@@ -180,6 +191,7 @@ class FreeSampleBuildings(Range):
     default = 5
     range_start = 0
     range_end = 10
+
 
 class FreeSampleParts(NamedRange):
     """
@@ -205,12 +217,14 @@ class FreeSampleParts(NamedRange):
         "500": 500,
     }
 
+
 class FreeSampleRadioactive(Toggle):
     """
     Allow free samples to include radioactive parts.
     Remember, they are delivered directly to your player inventory.
     """
     display_name = "Free Samples: Radioactive"
+
 
 class TrapChance(Range):
     """
@@ -224,6 +238,7 @@ class TrapChance(Range):
     range_start = 0
     range_end = 100
     default = 10
+
 
 _trap_types = {
         "Trap: Doggo with Pulse Nobelisk", 
@@ -260,6 +275,7 @@ _trap_types = {
         "Bundle: Ficsonium Fuel Rod"
     }
 
+
 class TrapSelectionPreset(ChoiceMap):
     """
     Themed presets of trap types to enable.
@@ -278,7 +294,8 @@ class TrapSelectionPreset(ChoiceMap):
         "Nicholas Cage": ["Trap: Hatcher", "Trap: Elite Hatcher", "Trap: Not the Bees"],
         "Fallout": ["Trap: Doggo with Nuke Nobelisk", "Trap: Nuclear Hog", "Trap: Nuclear Waste Drop", "Trap: Plutonium Waste Drop", "Bundle: Uranium", "Bundle: Uranium Fuel Rod", "Bundle: Uranium Waste", "Bundle: Plutonium Fuel Rod", "Bundle: Plutonium Waste", "Bundle: Ficsonium", "Bundle: Ficsonium Fuel Rod"],
     }
-    default="Normal"
+    default = "Normal"
+
 
 class TrapSelectionOverride(OptionSet):
     """
@@ -288,12 +305,14 @@ class TrapSelectionOverride(OptionSet):
     display_name = "Trap Override"
     valid_keys = _trap_types
 
+
 class EnergyLink(DefaultOnToggle):
     """
     Allow transferring energy to and from other worlds using the Power Storage building.
     No energy is lost in the transfer on Satisfactory's side, but other worlds may have other settings.
     """
     display_name = "EnergyLink"
+
 
 class MamLogic(PlacementLogic):
     """
@@ -303,6 +322,7 @@ class MamLogic(PlacementLogic):
     display_name = "MAM Placement"
     default = Placement.early.value
 
+
 class AwesomeLogic(PlacementLogic):
     """
     Where to place the AWESOME Shop and Sink buildings in logic.
@@ -310,6 +330,7 @@ class AwesomeLogic(PlacementLogic):
     """
     display_name = "AWESOME Stuff Placement"
     default = Placement.early.value
+
 
 class EnergyLinkLogic(PlacementLogic):
     """
@@ -319,6 +340,7 @@ class EnergyLinkLogic(PlacementLogic):
     display_name = "EnergyLink Placement"
     default = Placement.early.value
 
+
 class SplitterLogic(PlacementLogic):
     """
     Where to place the Conveyor Splitter and Merger buildings in logic.
@@ -326,6 +348,7 @@ class SplitterLogic(PlacementLogic):
     """
     display_name = "Splitter and Merger Placement"
     default = Placement.starting_inventory.value
+
 
 _skip_tutorial_starting_items = [
     # https://satisfactory.wiki.gg/wiki/Onboarding
@@ -381,6 +404,7 @@ _foundation_lover_starting_items = _default_plus_foundations_starting_items + [
     "Bundle: Concrete", "Bundle: Concrete", "Bundle: Concrete"
 ]
 
+
 class StartingInventoryPreset(ChoiceMap):
     """
     What resources (and buildings) the player should start with in their inventory.
@@ -395,7 +419,7 @@ class StartingInventoryPreset(ChoiceMap):
     """
     display_name = "Starting Goodies Presets"
     choices = {
-        "Barebones": [], # Nothing but the xeno zapper
+        "Barebones": [],  # Nothing but the xeno zapper
         "Skip Tutorial Inspired": _skip_tutorial_starting_items,
         "Archipelago": _default_starting_items,
         "Foundations": _default_plus_foundations_starting_items,
@@ -403,6 +427,7 @@ class StartingInventoryPreset(ChoiceMap):
         "Explorer": _explorer_starting_items
     }
     default = "Archipelago"
+
 
 class ExplorationCollectableCount(Range):
     """
@@ -422,6 +447,7 @@ class ExplorationCollectableCount(Range):
     range_start = 5
     range_end = 100
 
+
 class MilestoneCostMultiplier(Range):
     """
     Multiplies the amount of resources needed to unlock a Milestone by this factor.
@@ -436,6 +462,7 @@ class MilestoneCostMultiplier(Range):
     default = 100
     range_start = 1
     range_end = 500
+
 
 class GoalSelection(OptionSet):
     """
@@ -458,7 +485,8 @@ class GoalSelection(OptionSet):
     }
     default = {"Space Elevator Tier"}
     schema = Schema(And(set, len), 
-                    error = "yaml does not specify a goal, the Satisfactory option `goal_selection` is empty")
+                    error="yaml does not specify a goal, the Satisfactory option `goal_selection` is empty")
+
 
 class GoalRequirement(Choice):
     """
@@ -469,6 +497,7 @@ class GoalRequirement(Choice):
     option_require_all_goals = 1
     default = 0
 
+
 class RandomizeTier0(DefaultOnToggle):
     """
     Randomizes what recipes you use to craft the default unlocked parts:
@@ -478,6 +507,7 @@ class RandomizeTier0(DefaultOnToggle):
     * Could require other ores to be mixed in via alt recipes (which will become hand-craftable if needed)
     """
     display_name = "Randomize Default Part Recipes"
+
 
 @dataclass
 class SatisfactoryOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -505,6 +535,7 @@ class SatisfactoryOptions(PerGameCommonOptions, DeathLinkMixin):
     start_inventory_from_pool: StartInventoryPool
     randomize_starter_recipes: RandomizeTier0
 
+
 option_groups = [
     OptionGroup("Game Scope", [
         ElevatorTier,
@@ -524,18 +555,18 @@ option_groups = [
         AwesomeLogic,
         SplitterLogic,
         EnergyLinkLogic
-    ], start_collapsed = True),
+    ], start_collapsed=True),
     OptionGroup("Free Samples", [
         FreeSampleEquipment,
         FreeSampleBuildings,
         FreeSampleParts,
         FreeSampleRadioactive
-    ], start_collapsed = True),
+    ], start_collapsed=True),
     OptionGroup("Traps", [
         TrapChance,
         TrapSelectionPreset,
         TrapSelectionOverride
-    ], start_collapsed = True)
+    ], start_collapsed=True)
 ]
 
 option_presets: dict[str, dict[str, Any]] = {
@@ -543,40 +574,40 @@ option_presets: dict[str, dict[str, Any]] = {
         "final_elevator_package": 1,
         "goal_selection": {"Space Elevator Tier", "AWESOME Sink Points (total)"},
         "goal_requirement": GoalRequirement.option_require_any_one_goal,
-        "goal_awesome_sink_points_total": 17804500, # 100 coupons
+        "goal_awesome_sink_points_total": 17804500,  # 100 coupons
         "hard_drive_progression_limit": 20,
-        "starting_inventory_preset": 3, # "Foundations"
+        "starting_inventory_preset": 3,  # "Foundations"
         "randomize_starter_recipes": False,
         "mam_logic_placement": Placement.starting_inventory.value,
         "awesome_logic_placement": Placement.starting_inventory.value,
         "energy_link_logic_placement": Placement.starting_inventory.value,
         "splitter_placement": Placement.starting_inventory.value,
         "milestone_cost_multiplier": 50,
-        "trap_selection_preset": 1 # Gentle
+        "trap_selection_preset": 1  # Gentle
     },
     "Long": {
         "final_elevator_package": 3,
         "goal_selection": {"Space Elevator Tier", "AWESOME Sink Points (per minute)"},
         "goal_requirement": GoalRequirement.option_require_all_goals,
-        "goal_awesome_sink_points_per_minute": 100000, # ~10 heavy modular frame/min
+        "goal_awesome_sink_points_per_minute": 100000,  # ~10 heavy modular frame/min
         "hard_drive_progression_limit": 60,
         "mam_logic_placement": Placement.somewhere.value,
         "awesome_logic_placement": Placement.somewhere.value,
         "energy_link_logic_placement": Placement.somewhere.value,
         "splitter_placement": Placement.somewhere.value,
-        "trap_selection_preset": 3 # Harder
+        "trap_selection_preset": 3  # Harder
     },
     "Extra Long": {
         "final_elevator_package": 5,
         "goal_selection": {"Space Elevator Tier", "AWESOME Sink Points (per minute)"},
         "goal_requirement": GoalRequirement.option_require_all_goals,
-        "goal_awesome_sink_points_per_minute": 625000, # ~10 fused modular frame/min
+        "goal_awesome_sink_points_per_minute": 625000,  # ~10 fused modular frame/min
         "hard_drive_progression_limit": 100,
         "mam_logic_placement": Placement.somewhere.value,
         "awesome_logic_placement": Placement.somewhere.value,
         "energy_link_logic_placement": Placement.somewhere.value,
         "splitter_placement": Placement.somewhere.value,
         "milestone_cost_multiplier": 300,
-        "trap_selection_preset": 4 # All
+        "trap_selection_preset": 4  # All
     }
 } 

@@ -10,6 +10,7 @@ EventId: Optional[int] = None
 part_event_prefix = "Can Produce: "
 building_event_prefix = "Can Build: "
 
+
 class StateLogic:
     player: int
     options: SatisfactoryOptions
@@ -45,8 +46,8 @@ class StateLogic:
         return parts is None or \
             state.has_all(map(self.to_part_event, parts), self.player)
 
-    def can_produce_all_allowing_handcrafting(self, state: CollectionState, logic: GameLogic, 
-            parts: Optional[Iterable[str]]) -> bool:
+    def can_produce_all_allowing_handcrafting(self, state: CollectionState, logic: GameLogic,
+                                              parts: Optional[Iterable[str]]) -> bool:
         
         def can_handcraft_part(part: str) -> bool:
             if self.can_produce(state, part):
@@ -56,8 +57,8 @@ class StateLogic:
 
             recipes: list[Recipe] = self.critical_path.handcraftable_parts[part]
             return any(
-                self.has_recipe(state, recipe) 
-                    and (not recipe.inputs or self.can_produce_all_allowing_handcrafting(state, logic, recipe.inputs))
+                self.has_recipe(state, recipe)
+                and (not recipe.inputs or self.can_produce_all_allowing_handcrafting(state, logic, recipe.inputs))
                 for recipe in recipes)
 
         return not parts or all(can_handcraft_part(part) for part in parts)

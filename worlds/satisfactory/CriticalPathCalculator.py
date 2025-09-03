@@ -4,6 +4,7 @@ from collections.abc import Iterable
 from .GameLogic import GameLogic, Recipe
 from .Options import SatisfactoryOptions
 
+
 class CriticalPathCalculator:
     logic: GameLogic
     random: Random
@@ -32,8 +33,8 @@ class CriticalPathCalculator:
         self.randomize_starter_recipes = bool(options.randomize_starter_recipes.value)
 
     def calculate(self) -> None:
-        self.required_parts = set()
-        self.required_buildings = set()
+        self.required_parts = set[str]()
+        self.required_buildings = set[str]()
         self.required_power_level: int = 1
 
         self.__potential_required_belt_speed = 1
@@ -41,7 +42,7 @@ class CriticalPathCalculator:
         self.configure_implicitly_unlocked_and_handcraftable_parts()
 
         self.select_minimal_required_parts_for(
-            self.logic.space_elevator_tiers[self.final_elevator_package-1])
+            self.logic.space_elevator_tiers[self.final_elevator_package - 1])
 
         for tree in self.logic.man_trees.values():
             self.select_minimal_required_parts_for(tree.access_items)
@@ -80,21 +81,19 @@ class CriticalPathCalculator:
             self.select_minimal_required_parts_for_building(power_recipe.building)
 
         self.required_item_names = {
-            recipe.name 
+            recipe.name
             for part in self.required_parts
             for recipe in self.logic.recipes[part]
             if recipe.minimal_tier <= self.final_elevator_package
         }
-        self.required_item_names.update({"Building: "+ building for building in self.required_buildings})
+        self.required_item_names.update({"Building: " + building for building in self.required_buildings})
 
         self.calculate_excluded_things()
         self.select_starter_recipes()
 
-
     def select_minimal_required_parts_for_building(self, building: str) -> None:
         self.select_minimal_required_parts_for(self.logic.buildings[building].inputs)
         self.required_buildings.add(building)
-
 
     def select_minimal_required_parts_for(self, parts: Optional[Iterable[str]]) -> None:
         if parts is None:
@@ -121,9 +120,8 @@ class CriticalPathCalculator:
 
                     if self.logic.buildings[recipe.building].power_requirement:
                         self.required_power_level = \
-                            max(self.required_power_level, 
+                            max(self.required_power_level,
                                 self.logic.buildings[recipe.building].power_requirement)
-
 
     def calculate_excluded_things(self) -> None:
         self.parts_to_exclude = set()
@@ -154,8 +152,8 @@ class CriticalPathCalculator:
                 new_buildings_to_exclude = {
                     building_name
                     for building_name, building in self.logic.buildings.items()
-                    if building_name not in self.buildings_to_exclude 
-                        and building.inputs and any(input in self.parts_to_exclude for input in building.inputs)
+                    if building_name not in self.buildings_to_exclude
+                       and building.inputs and any(input in self.parts_to_exclude for input in building.inputs)
                 }
 
                 self.recipes_to_exclude.update({
@@ -173,16 +171,15 @@ class CriticalPathCalculator:
                 break
             excluded_count = new_length
 
-
     def configure_implicitly_unlocked_and_handcraftable_parts(self) -> None:
-        self.implicitly_unlocked: set[str] = { 
+        self.implicitly_unlocked: set[str] = {
             recipe.name
             for recipes_per_part in self.logic.recipes.values()
-            for recipe in recipes_per_part if recipe.implicitly_unlocked 
+            for recipe in recipes_per_part if recipe.implicitly_unlocked
         }
-        self.implicitly_unlocked.update({ 
+        self.implicitly_unlocked.update({
             building.name
-            for building in self.logic.buildings.values() if building.implicitly_unlocked 
+            for building in self.logic.buildings.values() if building.implicitly_unlocked
         })
 
         self.handcraftable_parts: dict[str, list[Recipe]] = {}
@@ -190,7 +187,6 @@ class CriticalPathCalculator:
             for recipe in recipes_per_part:
                 if recipe.handcraftable:
                     self.handcraftable_parts.setdefault(part, []).append(recipe)
-
 
     def select_starter_recipes(self) -> None:
         # cable is left unaffected as all its alternative recipes require refinery
@@ -213,7 +209,7 @@ class CriticalPathCalculator:
 
             self.tier_0_recipes.add(self.random.choice(
                 ("Recipe: Iron Ingot", "Recipe: Basic Iron Ingot", "Recipe: Iron Alloy Ingot")))
-            
+
             selected_recipe = self.random.choice(
                 ("Recipe: Iron Plate", "Recipe: Iron Plate", "Recipe: Iron Plate", "Recipe: Steel Cast Plate"))
             self.tier_0_recipes.add(selected_recipe)
@@ -225,9 +221,9 @@ class CriticalPathCalculator:
             self.tier_0_recipes.add(selected_recipe)
             if selected_recipe == "Recipe: Steel Rod":
                 self.add_steel_ingot_to_starter_recipes()
-            
+
             self.tier_0_recipes.add(self.random.choice(("Recipe: Copper Ingot", "Recipe: Copper Alloy Ingot")))
-            
+
             selected_recipe = self.random.choice(
                 ("Recipe: Wire", "Recipe: Caterium Wire", "Recipe: Fused Wire", "Recipe: Iron Wire"))
             self.tier_0_recipes.add(selected_recipe)
@@ -249,7 +245,7 @@ class CriticalPathCalculator:
                 # add Steel Beam and steel Ingot
                 self.add_steel_ingot_to_starter_recipes()
                 self.tier_0_recipes.add(self.random.choice(("Recipe: Steel Beam", "Recipe: Molded Beam")))
-            
+
             self.tier_0_recipes.add(self.random.choice(
                 ("Recipe: Reinforced Iron Plate", "Recipe: Bolted Iron Plate", "Recipe: Stitched Iron Plate")))
 
@@ -266,12 +262,12 @@ class CriticalPathCalculator:
 
     def add_steel_ingot_to_starter_recipes(self) -> None:
         if "Recipe: Steel Ingot" not in self.tier_0_recipes \
-                    and "Recipe: Compacted Steel Ingot" not in self.tier_0_recipes \
-                    and "Recipe: Solid Steel Ingot" not in self.tier_0_recipes:
-            
+                and "Recipe: Compacted Steel Ingot" not in self.tier_0_recipes \
+                and "Recipe: Solid Steel Ingot" not in self.tier_0_recipes:
+
             selected_recipe = self.random.choice(
                 ("Recipe: Steel Ingot", "Recipe: Compacted Steel Ingot", "Recipe: Solid Steel Ingot"))
-            
+
             self.tier_0_recipes.add(selected_recipe)
 
             if selected_recipe == "Recipe: Compacted Steel Ingot":

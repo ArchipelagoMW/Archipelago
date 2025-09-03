@@ -13,6 +13,7 @@ class PowerInfrastructureLevel(IntEnum):
 
         return "Power level: " + self.name
 
+
 liquids: set[str] = {
     "Water",
     "Liquid Biofuel",
@@ -45,6 +46,7 @@ radio_actives: set[str] = {
     "Ficsonium Fuel Rod"
 }
 
+
 class Recipe:
     """
     Relationship between components and what is required to produce them (input ingredients, production building, etc.)
@@ -56,7 +58,8 @@ class Recipe:
     minimal_belt_speed: int
     handcraftable: bool
     implicitly_unlocked: bool
-    """No explicit location/item is needed to unlock this recipe, you have access as soon as dependencies are met (ex. Water, Leaves, tutorial starting items)"""
+    """No explicit location/item is needed to unlock this recipe, you have access as soon as dependencies are met 
+    (ex. Water, Leaves, tutorial starting items)"""
     additional_outputs: Optional[tuple[str, ...]]
     minimal_tier: int
 
@@ -64,8 +67,8 @@ class Recipe:
     is_radio_active: bool
 
     def __init__(self, name: str, building: Optional[str] = None, inputs: Optional[tuple[str, ...]] = None,
-            minimal_belt_speed: int = 1, handcraftable: bool = False, implicitly_unlocked: bool = False,
-            additional_outputs: Optional[tuple[str, ...]] = None, minimal_tier: Optional[int] = 1):
+                 minimal_belt_speed: int = 1, handcraftable: bool = False, implicitly_unlocked: bool = False,
+                 additional_outputs: Optional[tuple[str, ...]] = None, minimal_tier: Optional[int] = 1):
         self.name = "Recipe: " + name
         self.building = building
         self.inputs = inputs
@@ -84,13 +87,14 @@ class Recipe:
         self.needs_pipes = not liquids.isdisjoint(all_parts)
         self.is_radio_active = not radio_actives.isdisjoint(all_parts)
 
+
 class Building(Recipe):
     power_requirement: Optional[PowerInfrastructureLevel]
     can_produce: bool
 
     def __init__(self, name: str, inputs: Optional[tuple[str, ...]] = None,
-            power_requirement: Optional[PowerInfrastructureLevel] = None, can_produce: bool = True,
-            implicitly_unlocked: bool = False):
+                 power_requirement: Optional[PowerInfrastructureLevel] = None, can_produce: bool = True,
+                 implicitly_unlocked: bool = False):
         super().__init__(name, None, inputs, handcraftable=True, implicitly_unlocked=implicitly_unlocked)
         self.name = "Building: " + name
         self.power_requirement = power_requirement
@@ -208,7 +212,7 @@ class GameLogic:
         # Special Items
         "Uranium Waste": (
             Recipe("Uranium Waste", "Nuclear Power Plant", ("Uranium Fuel Rod", "Water"), implicitly_unlocked=True, minimal_tier=2), ),
-        #"Plutonium Waste": (
+        # "Plutonium Waste": (
         #    Recipe("Plutonium Waste", "Nuclear Power Plant", ("Plutonium Fuel Rod", "Water"), implicitly_unlocked=True), ),
 
         # Recipes
@@ -521,13 +525,13 @@ class GameLogic:
             Recipe("Power Shard (1)", "Constructor", ("Blue Power Slug", ), handcraftable=True),
             Recipe("Power Shard (2)", "Constructor", ("Yellow Power Slug", ), handcraftable=True),
             Recipe("Power Shard (5)", "Constructor", ("Purple Power Slug", ), handcraftable=True),
-            Recipe("Synthetic Power Shard", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Time Crystal", "Dark Matter Crystal", "Quartz Crystal"), minimal_tier=4)), # 1.0
+            Recipe("Synthetic Power Shard", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Time Crystal", "Dark Matter Crystal", "Quartz Crystal"), minimal_tier=4)),  # 1.0
         "Object Scanner": (
             Recipe("Object Scanner", "Equipment Workshop", ("Reinforced Iron Plate", "Wire", "Screw"), handcraftable=True), ),
         "Xeno-Zapper": (
             Recipe("Xeno-Zapper", "Equipment Workshop", ("Iron Rod", "Reinforced Iron Plate", "Cable", "Wire"), handcraftable=True, implicitly_unlocked=True), ),
 
-#1.0
+# 1.0
         "Rocket Fuel": (
             Recipe("Rocket Fuel", "Blender", ("Turbofuel", "Nitric Acid"), additional_outputs=("Compacted Coal", ), minimal_tier=2),
             Recipe("Nitro Rocket Fuel", "Blender", ("Fuel", "Nitrogen Gas", "Sulfur", "Coal"), minimal_belt_speed=2, additional_outputs=("Compacted Coal", ), minimal_tier=2)),
@@ -574,11 +578,11 @@ class GameLogic:
 
         # All Quantum Encoder recipes have `Dark Matter Residue` set as an input, this hack makes the logic make sure you can get rid of it
         "Dark Matter Residue": (
-            #Recipe("Ficsonium", "Particle Accelerator", ("Plutonium Waste", "Singularity Cell"), additional_outputs=("Ficsonium", )),
+            # Recipe("Ficsonium", "Particle Accelerator", ("Plutonium Waste", "Singularity Cell"), additional_outputs=("Ficsonium", )),
             Recipe("Dark Matter Crystal", "Particle Accelerator", ("Diamonds", ), additional_outputs=("Dark Matter Crystal", )),
             Recipe("Dark Matter Crystallization", "Particle Accelerator", additional_outputs=("Dark Matter Crystal", )),
             Recipe("Dark Matter Trap", "Particle Accelerator", ("Time Crystal", ), additional_outputs=("Dark Matter Crystal", )),
-            Recipe("Dark Matter Residue", "Converter", ("Reanimated SAM", ) )),
+            Recipe("Dark Matter Residue", "Converter", ("Reanimated SAM", ))),
         "Superposition Oscillator": (
             Recipe("Superposition Oscillator", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Dark Matter Crystal", "Crystal Oscillator", "Alclad Aluminum Sheet")), ),
         "Neural-Quantum Processor": (
@@ -586,8 +590,8 @@ class GameLogic:
         "AI Expansion Server": (
             Recipe("AI Expansion Server", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Magnetic Field Generator", "Neural-Quantum Processor", "Superposition Oscillator"), minimal_tier=5), ),
         ###
-#1.0
-        #For exclusion logic
+# 1.0
+        # For exclusion logic
         "Hoverpack": (
             Recipe("Hoverpack", "Equipment Workshop", ("Motor", "Heavy Modular Frame", "Computer", "Alclad Aluminum Sheet")), ),
         "Turbo Rifle Ammo": (
@@ -600,7 +604,7 @@ class GameLogic:
 
     buildings: dict[str, Building] = {
         "Constructor": Building("Constructor", ("Reinforced Iron Plate", "Cable"), PowerInfrastructureLevel.Basic),
-        "Assembler": Building("Assembler", ("Reinforced Iron Plate", "Iron Rod", "Cable"), PowerInfrastructureLevel.Basic), # Simplified , used ("Reinforced Iron Plate", "Rotor", "Cable")
+        "Assembler": Building("Assembler", ("Reinforced Iron Plate", "Iron Rod", "Cable"), PowerInfrastructureLevel.Basic),  # Simplified , used ("Reinforced Iron Plate", "Rotor", "Cable")
         "Manufacturer": Building("Manufacturer", ("Motor", "Heavy Modular Frame", "Cable", "Plastic"), PowerInfrastructureLevel.Advanced),
         "Packager": Building("Packager", ("Steel Beam", "Rubber", "Plastic"), PowerInfrastructureLevel.Basic),
         "Refinery": Building("Refinery", ("Motor", "Encased Industrial Beam", "Steel Pipe", "Copper Sheet"), PowerInfrastructureLevel.Automated),
@@ -617,8 +621,8 @@ class GameLogic:
         "Oil Extractor": Building("Oil Extractor", ("Motor", "Encased Industrial Beam", "Cable")),
         "Water Extractor": Building("Water Extractor", ("Copper Sheet", "Reinforced Iron Plate", "Rotor")),
         "Smelter": Building("Smelter", ("Iron Rod", "Wire"), PowerInfrastructureLevel.Basic),
-        "Foundry": Building("Foundry", ("Reinforced Iron Plate", "Iron Rod", "Concrete"), PowerInfrastructureLevel.Basic), # Simplified, used ("Modular Frame", "Rotor", "Concrete")
-        "Resource Well Pressurizer": Building("Resource Well Pressurizer", ("Steel Pipe", "Heavy Modular Frame", "Motor", "Reinforced Iron Plate", "Copper Sheet", "Steel Beam"), PowerInfrastructureLevel.Advanced), # Simplified, used ("Radio Control Unit", "Heavy Modular Frame", "Motor", "Alclad Aluminum Sheet", "Rubber", "Steel Beam", "Aluminum Casing")
+        "Foundry": Building("Foundry", ("Reinforced Iron Plate", "Iron Rod", "Concrete"), PowerInfrastructureLevel.Basic),  # Simplified, used ("Modular Frame", "Rotor", "Concrete")
+        "Resource Well Pressurizer": Building("Resource Well Pressurizer", ("Steel Pipe", "Heavy Modular Frame", "Motor", "Reinforced Iron Plate", "Copper Sheet", "Steel Beam"), PowerInfrastructureLevel.Advanced),  # Simplified, used ("Radio Control Unit", "Heavy Modular Frame", "Motor", "Alclad Aluminum Sheet", "Rubber", "Steel Beam", "Aluminum Casing")
         "Equipment Workshop": Building("Equipment Workshop", ("Iron Plate", "Iron Rod"), implicitly_unlocked=True),
         "AWESOME Sink": Building("AWESOME Sink", ("Reinforced Iron Plate", "Cable", "Concrete"), can_produce=False),
         "AWESOME Shop": Building("AWESOME Shop", ("Screw", "Iron Plate", "Cable"), can_produce=False),
@@ -637,20 +641,20 @@ class GameLogic:
         "Conveyor Mk.6": Building("Conveyor Mk.6", ("Ficsite Trigon", "Time Crystal", "Iron Plate", "Iron Rod", "Concrete"), can_produce=False),
         "Power Pole Mk.1": Building("Power Pole Mk.1", ("Iron Plate", "Iron Rod", "Concrete"), can_produce=False, implicitly_unlocked=True),
         # higher level power poles arent in logic (yet)
-        #"Power Pole Mk.2": Building("Power Pole Mk.2", ("Quickwire", "Iron Rod", "Concrete"), False),
-        #"Power Pole Mk.3": Building("Power Pole Mk.3", ("High-Speed Connector", "Steel Pipe", "Rubber"), False),
+        # "Power Pole Mk.2": Building("Power Pole Mk.2", ("Quickwire", "Iron Rod", "Concrete"), False),
+        # "Power Pole Mk.3": Building("Power Pole Mk.3", ("High-Speed Connector", "Steel Pipe", "Rubber"), False),
         "Power Storage": Building("Power Storage", ("Wire", "Modular Frame", "Stator"), can_produce=False),
         "Foundation": Building("Foundation", ("Iron Plate", "Concrete"), can_produce=False),
         "Walls Orange": Building("Walls Orange", ("Iron Plate", "Concrete"), can_produce=False),
         "Space Elevator": Building("Space Elevator", ("Concrete", "Iron Plate", "Iron Rod", "Wire"), can_produce=False),
 
-#1.0
+# 1.0
         "Converter": Building("Converter", ("Fused Modular Frame", "Cooling System", "Radio Control Unit", "SAM Fluctuator"), PowerInfrastructureLevel.Complex),
         "Quantum Encoder": Building("Quantum Encoder", ("Turbo Motor", "Supercomputer", "Cooling System", "Time Crystal", "Ficsite Trigon"), PowerInfrastructureLevel.Complex),
         "Alien Power Augmenter": Building("Alien Power Augmenter", ("SAM Fluctuator", "Cable", "Encased Industrial Beam", "Motor", "Computer")),
-#1.0
+# 1.0
 
-        #For exclusion logic
+        # For exclusion logic
         "Portal": Building("Portal", ("Turbo Motor", "Radio Control Unit", "Superposition Oscillator", "SAM Fluctuator", "Ficsite Trigon", "Singularity Cell"), PowerInfrastructureLevel.Advanced),
         ###
     }
@@ -662,24 +666,24 @@ class GameLogic:
         ),
         PowerInfrastructureLevel.Automated: (
             Recipe("Biomass Power (Solid Biofuel)", "Biomass Burner", ("Solid Biofuel", ), implicitly_unlocked=True),
-            #Recipe("Coal Generator Power (Petroleum Coke)", "Coal Generator", ("Petroleum Coke", "Water"), implicitly_unlocked=True),
+            # Recipe("Coal Generator Power (Petroleum Coke)", "Coal Generator", ("Petroleum Coke", "Water"), implicitly_unlocked=True),
             Recipe("Coal Generator Power (Coal)", "Coal Generator", ("Coal", "Water"), implicitly_unlocked=True),
         ),
         PowerInfrastructureLevel.Advanced: (
             Recipe("Coal Generator Power (Compacted Coal)", "Coal Generator", ("Compacted Coal", "Water"), implicitly_unlocked=True),
             Recipe("Geothermal Generator Power", "Geothermal Generator", implicitly_unlocked=True),
-            Recipe("Fuel Generator Power (Liquid Biofuel)","Fuel Generator", ("Liquid Biofuel", ), implicitly_unlocked=True),
-            Recipe("Fuel Generator Power (Fuel)","Fuel Generator", ("Fuel", ), implicitly_unlocked=True),
-            Recipe("Alien Power Augmenter Power","Alien Power Augmenter", implicitly_unlocked=True),
+            Recipe("Fuel Generator Power (Liquid Biofuel)", "Fuel Generator", ("Liquid Biofuel", ), implicitly_unlocked=True),
+            Recipe("Fuel Generator Power (Fuel)", "Fuel Generator", ("Fuel", ), implicitly_unlocked=True),
+            Recipe("Alien Power Augmenter Power", "Alien Power Augmenter", implicitly_unlocked=True),
         ),
         PowerInfrastructureLevel.Complex: (
-            Recipe("Fuel Generator Power (Turbofuel)","Fuel Generator", ("Turbofuel", ), implicitly_unlocked=True),
-            #Recipe("Fuel Generator Power (Rocket Fuel)","Fuel Generator", ("Rocket Fuel", ), implicitly_unlocked=True),
-            #Recipe("Fuel Generator Power (Ionized Fuel)","Fuel Generator", ("Ionized Fuel", ), implicitly_unlocked=True),
-            Recipe("Nuclear Power Plant Power (Uranium)","Nuclear Power Plant", ("Uranium Fuel Rod", "Water"), implicitly_unlocked=True),
-            #Recipe("Nuclear Power Plant Power (Plutonium)","Nuclear Power Plant", ("Plutonium Fuel Rod", "Water"), implicitly_unlocked=True),
-            #Recipe("Nuclear Power Plant Power (Ficsonium)","Nuclear Power Plant", ("Ficsonium Fuel Rod", "Water"), implicitly_unlocked=True),
-            #Recipe("Alien Power Augmenter Power (Alien Power Matrix)","Alien Power Augmenter", ("Alien Power Matrix"), implicitly_unlocked=True),
+            Recipe("Fuel Generator Power (Turbofuel)", "Fuel Generator", ("Turbofuel", ), implicitly_unlocked=True),
+            # Recipe("Fuel Generator Power (Rocket Fuel)", "Fuel Generator", ("Rocket Fuel", ), implicitly_unlocked=True),
+            # Recipe("Fuel Generator Power (Ionized Fuel)", "Fuel Generator", ("Ionized Fuel", ), implicitly_unlocked=True),
+            Recipe("Nuclear Power Plant Power (Uranium)", "Nuclear Power Plant", ("Uranium Fuel Rod", "Water"), implicitly_unlocked=True),
+            # Recipe("Nuclear Power Plant Power (Plutonium)", "Nuclear Power Plant", ("Plutonium Fuel Rod", "Water"), implicitly_unlocked=True),
+            # Recipe("Nuclear Power Plant Power (Ficsonium)", "Nuclear Power Plant", ("Ficsonium Fuel Rod", "Water"), implicitly_unlocked=True),
+            # Recipe("Alien Power Augmenter Power (Alien Power Matrix)", "Alien Power Augmenter", ("Alien Power Matrix"), implicitly_unlocked=True),
         )
     }
 
@@ -687,61 +691,61 @@ class GameLogic:
 
     hub_layout: tuple[tuple[dict[str, int], ...], ...] = (
         # Regenerate via /Script/Engine.Blueprint'/Archipelago/Debug/CC_BuildHubData.CC_BuildHubData'
-        ( # Tier 1
-            {"Concrete":200, "Iron Plate":100, "Iron Rod":100, }, # Schematic: Base Building (Schematic_1-1_C)
-            {"Iron Plate":150, "Iron Rod":150, "Wire":300, }, # Schematic: Logistics (Schematic_1-2_C)
-            {"Wire":300, "Screw":300, "Iron Plate":100, }, # Schematic: Field Research (Schematic_1-3_C)
-            {"Wire":100, "Screw":200, "Concrete":200, }, # Schematic: Archipelago Additional Tier1 (Schem_ApExtraTier1_C)
+        (  # Tier 1
+            {"Concrete":200, "Iron Plate":100, "Iron Rod":100, },  # Schematic: Base Building (Schematic_1-1_C)
+            {"Iron Plate":150, "Iron Rod":150, "Wire":300, },  # Schematic: Logistics (Schematic_1-2_C)
+            {"Wire":300, "Screw":300, "Iron Plate":100, },  # Schematic: Field Research (Schematic_1-3_C)
+            {"Wire":100, "Screw":200, "Concrete":200, },  # Schematic: Archipelago Additional Tier1 (Schem_ApExtraTier1_C)
         ),
-        ( # Tier 2
-            {"Cable":200, "Iron Rod":200, "Screw":500, "Iron Plate":300, }, # Schematic: Part Assembly (Schematic_2-1_C)
-            {"Screw":500, "Cable":100, "Concrete":100, }, # Schematic: Obstacle Clearing (Schematic_2-2_C)
-            {"Rotor":50, "Iron Plate":300, "Cable":150, }, # Schematic: Jump Pads (Schematic_2-3_C)
-            {"Concrete":400, "Wire":500, "Iron Rod":200, "Iron Plate":200, }, # Schematic: Resource Sink Bonus Program (Schematic_2-5_C)
-            {"Reinforced Iron Plate":50, "Concrete":200, "Iron Rod":300, "Iron Plate":300, }, # Schematic: Logistics Mk.2 (Schematic_3-2_C)
+        (  # Tier 2
+            {"Cable":200, "Iron Rod":200, "Screw":500, "Iron Plate":300, },  # Schematic: Part Assembly (Schematic_2-1_C)
+            {"Screw":500, "Cable":100, "Concrete":100, },  # Schematic: Obstacle Clearing (Schematic_2-2_C)
+            {"Rotor":50, "Iron Plate":300, "Cable":150, },  # Schematic: Jump Pads (Schematic_2-3_C)
+            {"Concrete":400, "Wire":500, "Iron Rod":200, "Iron Plate":200, },  # Schematic: Resource Sink Bonus Program (Schematic_2-5_C)
+            {"Reinforced Iron Plate":50, "Concrete":200, "Iron Rod":300, "Iron Plate":300, },  # Schematic: Logistics Mk.2 (Schematic_3-2_C)
         ),
-        ( # Tier 3
-            {"Reinforced Iron Plate":150, "Rotor":50, "Cable":500, }, # Schematic: Coal Power (Schematic_3-1_C)
-            {"Modular Frame":25, "Rotor":100, "Cable":100, "Iron Plate":400, }, # Schematic: Vehicular Transport (Schematic_3-3_C)
-            {"Modular Frame":50, "Rotor":150, "Concrete":500, "Wire":1000, }, # Schematic: Basic Steel Production (Schematic_3-4_C)
-            {"Reinforced Iron Plate":100, "Iron Rod":600, "Wire":1500, }, # Schematic: Improved Melee Combat (Schematic_4-2_C)
+        (  # Tier 3
+            {"Reinforced Iron Plate":150, "Rotor":50, "Cable":500, },  # Schematic: Coal Power (Schematic_3-1_C)
+            {"Modular Frame":25, "Rotor":100, "Cable":100, "Iron Plate":400, },  # Schematic: Vehicular Transport (Schematic_3-3_C)
+            {"Modular Frame":50, "Rotor":150, "Concrete":500, "Wire":1000, },  # Schematic: Basic Steel Production (Schematic_3-4_C)
+            {"Reinforced Iron Plate":100, "Iron Rod":600, "Wire":1500, },  # Schematic: Improved Melee Combat (Schematic_4-2_C)
         ),
-        ( # Tier 4
-            {"Modular Frame":100, "Steel Beam":200, "Cable":500, "Concrete":1000, }, # Schematic: FICSIT Blueprints (Schematic_4-5_C)
-            {"Steel Beam":200, "Steel Pipe":200, "Reinforced Iron Plate":400, }, # Schematic: Logistics Mk.3 (Schematic_5-3_C)
-            {"Steel Pipe":100, "Modular Frame":100, "Rotor":200, "Concrete":500, }, # Schematic: Advanced Steel Production (Schematic_4-1_C)
-            {"Encased Industrial Beam":50, "Steel Beam":100, "Modular Frame":200, "Wire":2000 }, # Schematic: Expanded Power Infrastructure (Schematic_4-3_C)
-            {"Copper Sheet":500, "Steel Pipe":300, "Encased Industrial Beam":50, }, # Schematic: Hypertubes (Schematic_4-4_C)
+        (  # Tier 4
+            {"Modular Frame":100, "Steel Beam":200, "Cable":500, "Concrete":1000, },  # Schematic: FICSIT Blueprints (Schematic_4-5_C)
+            {"Steel Beam":200, "Steel Pipe":200, "Reinforced Iron Plate":400, },  # Schematic: Logistics Mk.3 (Schematic_5-3_C)
+            {"Steel Pipe":100, "Modular Frame":100, "Rotor":200, "Concrete":500, },  # Schematic: Advanced Steel Production (Schematic_4-1_C)
+            {"Encased Industrial Beam":50, "Steel Beam":100, "Modular Frame":200, "Wire":2000 },  # Schematic: Expanded Power Infrastructure (Schematic_4-3_C)
+            {"Copper Sheet":500, "Steel Pipe":300, "Encased Industrial Beam":50, },  # Schematic: Hypertubes (Schematic_4-4_C)
         ),
-        ( # Tier 5
-            {"Motor":50, "Cable":100, "Iron Plate":500 }, # Something jetpack
-            {"Motor":50, "Encased Industrial Beam":100, "Steel Pipe":500, "Copper Sheet":500, }, # Schematic: Oil Processing (Schematic_5-1_C)
+        (  # Tier 5
+            {"Motor":50, "Cable":100, "Iron Plate":500 },  # Something jetpack
+            {"Motor":50, "Encased Industrial Beam":100, "Steel Pipe":500, "Copper Sheet":500, },  # Schematic: Oil Processing (Schematic_5-1_C)
             {"Rubber":200, "Encased Industrial Beam":300, "Modular Frame":400, }, 
-            {"Plastic":200, "Steel Beam":400, "Copper Sheet":1000, }, # Schematic: Alternative Fluid Transport (Schematic_5-4_C)
-            {"Motor":100, "Encased Industrial Beam":100, "Plastic":200, "Rubber":200, }, # Schematic: Industrial Manufacturing (Schematic_5-2_C)
+            {"Plastic":200, "Steel Beam":400, "Copper Sheet":1000, },  # Schematic: Alternative Fluid Transport (Schematic_5-4_C)
+            {"Motor":100, "Encased Industrial Beam":100, "Plastic":200, "Rubber":200, },  # Schematic: Industrial Manufacturing (Schematic_5-2_C)
         ),
-        ( # Tier 6
-            {"Motor":200, "Modular Frame":200, "Plastic":400, "Cable":1000, }, # Schematic: Industrial Manufacturing (Schematic_5-2_C)
-            {"Motor":250, "Encased Industrial Beam":500, "Steel Pipe":1000, "Steel Beam":1000, }, # Schematic: Monorail Train Technology (Schematic_6-3_C)
+        (  # Tier 6
+            {"Motor":200, "Modular Frame":200, "Plastic":400, "Cable":1000, },  # Schematic: Industrial Manufacturing (Schematic_5-2_C)
+            {"Motor":250, "Encased Industrial Beam":500, "Steel Pipe":1000, "Steel Beam":1000, },  # Schematic: Monorail Train Technology (Schematic_6-3_C)
             {"Computer":50, "Steel Pipe":4000, "Copper Sheet":1000, }, 
-            {"Heavy Modular Frame":50, "Plastic":1000, "Rubber":1000, }, # Schematic: Pipeline Engineering Mk.2 (Schematic_6-5_C)
+            {"Heavy Modular Frame":50, "Plastic":1000, "Rubber":1000, },  # Schematic: Pipeline Engineering Mk.2 (Schematic_6-5_C)
             {"Heavy Modular Frame":50, "Computer":100, "Rubber":400, "Concrete": 1000, }, 
         ),
-        ( # Tier 7
-            {"Computer":100, "Heavy Modular Frame":100, "Motor":250, "Rubber":500, }, # Schematic: Bauxite Refinement (Schematic_7-1_C)
-            {"Alclad Aluminum Sheet":100, "Heavy Modular Frame":100, "Computer":100, "Motor":250, }, # Schematic: Hover Pack (Schematic_8-3_C)
-            {"Alclad Aluminum Sheet":200, "Encased Industrial Beam":400, "Reinforced Iron Plate":600, }, # Schematic: Logistics Mk.5 (Schematic_7-2_C)
-            {"Gas Filter":50, "Aluminum Casing":100, "Quickwire":500, }, # Schematic: Hazmat Suit (Schematic_7-3_C)
-            {"Alclad Aluminum Sheet":200, "Aluminum Casing":400, "Computer":200, "Plastic": 1000, }, # Schematic: Aeronautical Engineering (Schematic_7-4_C)
+        (  # Tier 7
+            {"Computer":100, "Heavy Modular Frame":100, "Motor":250, "Rubber":500, },  # Schematic: Bauxite Refinement (Schematic_7-1_C)
+            {"Alclad Aluminum Sheet":100, "Heavy Modular Frame":100, "Computer":100, "Motor":250, },  # Schematic: Hover Pack (Schematic_8-3_C)
+            {"Alclad Aluminum Sheet":200, "Encased Industrial Beam":400, "Reinforced Iron Plate":600, },  # Schematic: Logistics Mk.5 (Schematic_7-2_C)
+            {"Gas Filter":50, "Aluminum Casing":100, "Quickwire":500, },  # Schematic: Hazmat Suit (Schematic_7-3_C)
+            {"Alclad Aluminum Sheet":200, "Aluminum Casing":400, "Computer":200, "Plastic": 1000, },  # Schematic: Aeronautical Engineering (Schematic_7-4_C)
         ),
-        ( # Tier 8
-            {"Radio Control Unit": 50, "Alclad Aluminum Sheet":100, "Aluminum Casing":200, "Motor": 300, }, # Schematic: Aeronautical Engineering (Schematic_7-4_C)
-            {"Supercomputer":50, "Heavy Modular Frame":200, "Cable":1000, "Concrete":2000, }, # Schematic: Nuclear Power (Schematic_8-1_C)
-            {"Radio Control Unit":50, "Aluminum Casing":200, "Alclad Aluminum Sheet":400, "Wire":3000, }, # Schematic: Advanced Aluminum Production (Schematic_8-2_C)
-            {"Fused Modular Frame":50, "Supercomputer":100, "Steel Pipe":1000, }, # Schematic: Leading-edge Production (Schematic_8-4_C)
-            {"Turbo Motor":50, "Fused Modular Frame":100,  "Cooling System":200, "Quickwire":2500, }, # Schematic: Particle Enrichment (Schematic_8-5_C)
+        (  # Tier 8
+            {"Radio Control Unit": 50, "Alclad Aluminum Sheet":100, "Aluminum Casing":200, "Motor": 300, },  # Schematic: Aeronautical Engineering (Schematic_7-4_C)
+            {"Supercomputer":50, "Heavy Modular Frame":200, "Cable":1000, "Concrete":2000, },  # Schematic: Nuclear Power (Schematic_8-1_C)
+            {"Radio Control Unit":50, "Aluminum Casing":200, "Alclad Aluminum Sheet":400, "Wire":3000, },  # Schematic: Advanced Aluminum Production (Schematic_8-2_C)
+            {"Fused Modular Frame":50, "Supercomputer":100, "Steel Pipe":1000, },  # Schematic: Leading-edge Production (Schematic_8-4_C)
+            {"Turbo Motor":50, "Fused Modular Frame":100,  "Cooling System":200, "Quickwire":2500, },  # Schematic: Particle Enrichment (Schematic_8-5_C)
         ),
-        ( # Tier 9
+        (  # Tier 9
             {"Fused Modular Frame":100, "Radio Control Unit":250, "Cooling System":500, },
             {"Time Crystal":50, "Ficsite Trigon":100, "Turbo Motor":200, "Supercomputer":400, },
             {"Neural-Quantum Processor":100, "Time Crystal":250, "Ficsite Trigon":500, "Fused Modular Frame":500, }, 
@@ -752,28 +756,28 @@ class GameLogic:
 
     # Values from /Game/FactoryGame/Schematics/Progression/BP_GamePhaseManager.BP_GamePhaseManager
     space_elevator_tiers: tuple[dict[str, int], ...] = (
-        { "Smart Plating": 50 },
-        { "Smart Plating": 500, "Versatile Framework": 500, "Automated Wiring": 100 },
-        { "Versatile Framework": 2500, "Modular Engine": 500, "Adaptive Control Unit": 100 },
-        { "Assembly Director System": 4000, "Magnetic Field Generator": 4000, "Nuclear Pasta": 1000, "Thermal Propulsion Rocket": 1000 },
-        { "Nuclear Pasta": 1000, "Biochemical Sculptor": 1000, "AI Expansion Server": 256, "Ballistic Warp Drive": 200 }
+        {"Smart Plating": 50},
+        {"Smart Plating": 500, "Versatile Framework": 500, "Automated Wiring": 100},
+        {"Versatile Framework": 2500, "Modular Engine": 500, "Adaptive Control Unit": 100},
+        {"Assembly Director System": 4000, "Magnetic Field Generator": 4000, "Nuclear Pasta": 1000, "Thermal Propulsion Rocket": 1000},
+        {"Nuclear Pasta": 1000, "Biochemical Sculptor": 1000, "AI Expansion Server": 256, "Ballistic Warp Drive": 200}
     )
 
     # Do not regenerate as format got changed
     # Regenerate via /Script/Engine.Blueprint'/Archipelago/Debug/CC_BuildMamData.CC_BuildMamData'
     man_trees: dict[str, MamTree] = {
-        "Alien Organisms": MamTree(("Hog Remains", "Plasma Spitter Remains", "Stinger Remains", "Hatcher Remains"), ( # Alien Organisms (BPD_ResearchTree_AlienOrganisms_C)
-            MamNode("Inflated Pocket Dimension", {"Alien Protein":3,"Cable":1000,}, depends_on=("Bio-Organic Properties", )), #(Research_AOrgans_3_C)
-            MamNode("Hostile Organism Detection", {"Alien DNA Capsule":10,"Crystal Oscillator":5,"High-Speed Connector":5,}, depends_on=("Bio-Organic Properties", )), #(Research_AOrganisms_2_C)
-            MamNode("Expanded Toolbelt", {"Alien DNA Capsule":5,"Steel Beam":500,}, depends_on=("Inflated Pocket Dimension", )), #(Research_ACarapace_3_C)
-            MamNode("Bio-Organic Properties", {"Alien Protein":5,}, depends_on=("Spitter Research", "Hog Research", "Hatcher Research", "Stinger Research")), #(Research_AO_DNACapsule_C)
-            MamNode("Stinger Research", {"Stinger Remains":1,}, depends_on=tuple()), #(Research_AO_Stinger_C)
-            MamNode("Hatcher Research", {"Hatcher Remains":1,}, depends_on=tuple()), #(Research_AO_Hatcher_C)
-            MamNode("Hog Research", {"Hog Remains":1,}, depends_on=tuple()), #(Research_ACarapace_0_C)
-            MamNode("Spitter Research", {"Plasma Spitter Remains":1,}, depends_on=tuple()), #(Research_AOrgans_0_C)
-            MamNode("Structural Analysis", {"Alien DNA Capsule":5,"Iron Rod":100,}, depends_on=("Bio-Organic Properties", )), #(Research_AO_Pre_Rebar_C)
-            MamNode("Protein Inhaler", {"Alien Protein":2,"Beryl Nut":20,"Rotor":50,}, depends_on=("Bio-Organic Properties", )), #(Research_AOrgans_2_C)
-            MamNode("The Rebar Gun", {"Rotor":25,"Reinforced Iron Plate":50,"Screw":500,}, depends_on=("Structural Analysis", )), #(Research_ACarapace_2_C)
+        "Alien Organisms": MamTree(("Hog Remains", "Plasma Spitter Remains", "Stinger Remains", "Hatcher Remains"), (  # Alien Organisms (BPD_ResearchTree_AlienOrganisms_C)
+            MamNode("Inflated Pocket Dimension", {"Alien Protein":3,"Cable":1000,}, depends_on=("Bio-Organic Properties", )),  # (Research_AOrgans_3_C)
+            MamNode("Hostile Organism Detection", {"Alien DNA Capsule":10,"Crystal Oscillator":5,"High-Speed Connector":5,}, depends_on=("Bio-Organic Properties", )),  # (Research_AOrganisms_2_C)
+            MamNode("Expanded Toolbelt", {"Alien DNA Capsule":5,"Steel Beam":500,}, depends_on=("Inflated Pocket Dimension", )),  # (Research_ACarapace_3_C)
+            MamNode("Bio-Organic Properties", {"Alien Protein":5,}, depends_on=("Spitter Research", "Hog Research", "Hatcher Research", "Stinger Research")),  # (Research_AO_DNACapsule_C)
+            MamNode("Stinger Research", {"Stinger Remains":1,}, depends_on=tuple()),  # (Research_AO_Stinger_C)
+            MamNode("Hatcher Research", {"Hatcher Remains":1,}, depends_on=tuple()),  # (Research_AO_Hatcher_C)
+            MamNode("Hog Research", {"Hog Remains":1,}, depends_on=tuple()),  # (Research_ACarapace_0_C)
+            MamNode("Spitter Research", {"Plasma Spitter Remains":1,}, depends_on=tuple()),  # (Research_AOrgans_0_C)
+            MamNode("Structural Analysis", {"Alien DNA Capsule":5,"Iron Rod":100,}, depends_on=("Bio-Organic Properties", )),  # (Research_AO_Pre_Rebar_C)
+            MamNode("Protein Inhaler", {"Alien Protein":2,"Beryl Nut":20,"Rotor":50,}, depends_on=("Bio-Organic Properties", )),  # (Research_AOrgans_2_C)
+            MamNode("The Rebar Gun", {"Rotor":25,"Reinforced Iron Plate":50,"Screw":500,}, depends_on=("Structural Analysis", )),  # (Research_ACarapace_2_C)
         )),
         # 1.0
         "Alien Technology": MamTree(("SAM", "Mercer Sphere", "Somersloop"), (
@@ -798,194 +802,192 @@ class GameLogic:
             MamNode("Alien Power Matrix", {"Singularity Cell":50,"Power Shard":100,"SAM Fluctuator":500}, depends_on=("Power Augmenter",), minimal_tier=4),
         )),
         # 1.0
-        "Caterium": MamTree(("Caterium Ore", ), ( # Caterium (BPD_ResearchTree_Caterium_C)
-            MamNode("Caterium Electronics", {"Quickwire":100,}, depends_on=("Quickwire", )), #(Research_Caterium_3_C)
-            MamNode("Bullet Guidance System", {"High-Speed Connector":10,"Rifle Ammo":500,}, depends_on=("High-Speed Connector", )), #(Research_Caterium_6_3_C)
-            MamNode("High-Speed Connector", {"Quickwire":500,"Plastic":50,}, depends_on=("Caterium Electronics", )), #(Research_Caterium_5_C)
-            MamNode("Caterium", {"Caterium Ore":10,}, depends_on=tuple()), #(Research_Caterium_0_C)
-            MamNode("Caterium Ingots", {"Caterium Ore":50,}, depends_on=("Caterium", )), #(Research_Caterium_1_C)
-            MamNode("Quickwire", {"Caterium Ingot":50,}, depends_on=("Caterium Ingots", )), #(Research_Caterium_2_C)
-            MamNode("Power Switch", {"Steel Beam":100,"AI Limiter":50,}, depends_on=("AI Limiter", )), #(Research_Caterium_4_1_2_C)
-            MamNode("Priority Power Switch", {"High-Speed Connector":25,"Quickwire":500,}, depends_on=("High-Speed Connector", )), # 1.0
-            MamNode("Power Poles Mk.2", {"Quickwire":300,}, depends_on=("Caterium Electronics", )), #(Research_Caterium_4_2_C)
-            MamNode("AI Limiter", {"Quickwire":200,"Copper Sheet":50,}, depends_on=("Caterium Electronics", )), #(Research_Caterium_4_1_C)
-            MamNode("Smart Splitter", {"AI Limiter":10,"Reinforced Iron Plate":50,}, depends_on=("AI Limiter", )), #(Research_Caterium_4_1_1_C)
-            MamNode("Programmable Splitter", {"AI Limiter":100, "Computer":50,"Heavy Modular Frame":50,}, depends_on=("AI Limiter", "High-Speed Connector")), #(Research_Caterium_7_1_C) # 1.0
-            MamNode("Zipline", {"Quickwire":100,"Cable":50,}, depends_on=("Quickwire", )), #(Research_Caterium_2_1_C)
-            MamNode("Geothermal Generator", {"High-Speed Connector":100,"Quickwire":1000,"Motor":50,}, depends_on=("AI Limiter", "High-Speed Connector")), #(Research_Caterium_7_2_C) # 1.0
-            MamNode("Stun Rebar", {"Quickwire":50,"Iron Rebar":10,}, depends_on=("Quickwire", )), #(Research_Caterium_3_2_C)
-            MamNode("Power Poles Mk.3", {"High-Speed Connector":50,"Steel Pipe":200,}, depends_on=("Power Poles Mk.2", )), #(Research_Caterium_6_2_C) # 1.0
+        "Caterium": MamTree(("Caterium Ore", ), (  # Caterium (BPD_ResearchTree_Caterium_C)
+            MamNode("Caterium Electronics", {"Quickwire":100,}, depends_on=("Quickwire", )),  # (Research_Caterium_3_C)
+            MamNode("Bullet Guidance System", {"High-Speed Connector":10,"Rifle Ammo":500,}, depends_on=("High-Speed Connector", )),  # (Research_Caterium_6_3_C)
+            MamNode("High-Speed Connector", {"Quickwire":500,"Plastic":50,}, depends_on=("Caterium Electronics", )),  # (Research_Caterium_5_C)
+            MamNode("Caterium", {"Caterium Ore":10,}, depends_on=tuple()),  # (Research_Caterium_0_C)
+            MamNode("Caterium Ingots", {"Caterium Ore":50,}, depends_on=("Caterium", )),  # (Research_Caterium_1_C)
+            MamNode("Quickwire", {"Caterium Ingot":50,}, depends_on=("Caterium Ingots", )),  # (Research_Caterium_2_C)
+            MamNode("Power Switch", {"Steel Beam":100,"AI Limiter":50,}, depends_on=("AI Limiter", )),  # (Research_Caterium_4_1_2_C)
+            MamNode("Priority Power Switch", {"High-Speed Connector":25,"Quickwire":500,}, depends_on=("High-Speed Connector", )),  # 1.0
+            MamNode("Power Poles Mk.2", {"Quickwire":300,}, depends_on=("Caterium Electronics", )),  # (Research_Caterium_4_2_C)
+            MamNode("AI Limiter", {"Quickwire":200,"Copper Sheet":50,}, depends_on=("Caterium Electronics", )),  # (Research_Caterium_4_1_C)
+            MamNode("Smart Splitter", {"AI Limiter":10,"Reinforced Iron Plate":50,}, depends_on=("AI Limiter", )),  # (Research_Caterium_4_1_1_C)
+            MamNode("Programmable Splitter", {"AI Limiter":100, "Computer":50,"Heavy Modular Frame":50,}, depends_on=("AI Limiter", "High-Speed Connector")),  # (Research_Caterium_7_1_C) # 1.0
+            MamNode("Zipline", {"Quickwire":100,"Cable":50,}, depends_on=("Quickwire", )),  # (Research_Caterium_2_1_C)
+            MamNode("Geothermal Generator", {"High-Speed Connector":100,"Quickwire":1000,"Motor":50,}, depends_on=("AI Limiter", "High-Speed Connector")),  # (Research_Caterium_7_2_C) # 1.0
+            MamNode("Stun Rebar", {"Quickwire":50,"Iron Rebar":10,}, depends_on=("Quickwire", )),  # (Research_Caterium_3_2_C)
+            MamNode("Power Poles Mk.3", {"High-Speed Connector":50,"Steel Pipe":200,}, depends_on=("Power Poles Mk.2", )),  # (Research_Caterium_6_2_C) # 1.0
         )),
-        "Mycelia": MamTree(("Mycelia", ), ( # Mycelia (BPD_ResearchTree_Mycelia_C)
-            MamNode("Therapeutic Inhaler", {"Mycelia":15,"Bacon Agaric":1,"Alien Protein":1,}, depends_on=("Medical Properties", )), #(Research_Mycelia_6_C)
-            MamNode("Expanded Toolbelt", {"Fabric":50,"Rotor":100,}, depends_on=("Fabric", )), #(Research_Mycelia_7_C)
-            MamNode("Mycelia", {"Mycelia":5,}, depends_on=tuple()), #(Research_Mycelia_1_C)
-            MamNode("Fabric", {"Mycelia":25,"Biomass":100,}, depends_on=("Mycelia", )), #(Research_Mycelia_2_C)
-            MamNode("Medical Properties", {"Mycelia":25,"Stator":10,}, depends_on=("Mycelia", )), #(Research_Mycelia_4_C)
-            MamNode("Toxic Cellular Modification", {"Nobelisk":10,"Mycelia":100,"Biomass":200,}, depends_on=("Mycelia", )), #(Research_Mycelia_8_C)
-            MamNode("Vitamin Inhaler", {"Mycelia":10,"Paleberry":5,}, depends_on=("Medical Properties", )), #(Research_Mycelia_5_C)
-            MamNode("Parachute", {"Fabric":10,"Cable":50,}, depends_on=("Fabric", )), #(Research_Mycelia_3_C)
-            MamNode("Synthethic Polyester Fabric", {"Fabric":25,"Polymer Resin":100,}, depends_on=("Fabric", )), #(Research_Mycelia_2_1_C)
-            MamNode("Gas Mask", {"Coal":10,"Fabric":50,"Steel Pipe":50}, depends_on=("Fabric", )), # 1.0
+        "Mycelia": MamTree(("Mycelia", ), (  # Mycelia (BPD_ResearchTree_Mycelia_C)
+            MamNode("Therapeutic Inhaler", {"Mycelia":15,"Bacon Agaric":1,"Alien Protein":1,}, depends_on=("Medical Properties", )),  # (Research_Mycelia_6_C)
+            MamNode("Expanded Toolbelt", {"Fabric":50,"Rotor":100,}, depends_on=("Fabric", )),  # (Research_Mycelia_7_C)
+            MamNode("Mycelia", {"Mycelia":5,}, depends_on=tuple()),  # (Research_Mycelia_1_C)
+            MamNode("Fabric", {"Mycelia":25,"Biomass":100,}, depends_on=("Mycelia", )),  # (Research_Mycelia_2_C)
+            MamNode("Medical Properties", {"Mycelia":25,"Stator":10,}, depends_on=("Mycelia", )),  # (Research_Mycelia_4_C)
+            MamNode("Toxic Cellular Modification", {"Nobelisk":10,"Mycelia":100,"Biomass":200,}, depends_on=("Mycelia", )),  # (Research_Mycelia_8_C)
+            MamNode("Vitamin Inhaler", {"Mycelia":10,"Paleberry":5,}, depends_on=("Medical Properties", )),  # (Research_Mycelia_5_C)
+            MamNode("Parachute", {"Fabric":10,"Cable":50,}, depends_on=("Fabric", )),  # (Research_Mycelia_3_C)
+            MamNode("Synthethic Polyester Fabric", {"Fabric":25,"Polymer Resin":100,}, depends_on=("Fabric", )),  # (Research_Mycelia_2_1_C)
+            MamNode("Gas Mask", {"Coal":10,"Fabric":50,"Steel Pipe":50}, depends_on=("Fabric", )),  # 1.0
         )),
-        "Nutrients": MamTree(("Paleberry", "Beryl Nut", "Bacon Agaric"), ( # Nutrients (BPD_ResearchTree_Nutrients_C)
-            MamNode("Bacon Agaric", {"Bacon Agaric":1,}, depends_on=tuple()), #(Research_Nutrients_2_C)
-            MamNode("Beryl Nut", {"Beryl Nut":5,}, depends_on=tuple()), #(Research_Nutrients_1_C)
-            MamNode("Paleberry", {"Paleberry":2,}, depends_on=tuple()), #(Research_Nutrients_0_C)
-            MamNode("Nutritional Processor", {"Modular Frame":25,"Steel Pipe":50,"Wire":500,}, depends_on=("Beryl Nut", "Bacon Agaric", "Paleberry")), #(Research_Nutrients_3_C)
-            MamNode("Nutritional Inhaler", {"Bacon Agaric":2,"Paleberry":4,"Beryl Nut":10,}, depends_on=("Nutritional Processor", )), #(Research_Nutrients_4_C)
+        "Nutrients": MamTree(("Paleberry", "Beryl Nut", "Bacon Agaric"), (  # Nutrients (BPD_ResearchTree_Nutrients_C)
+            MamNode("Bacon Agaric", {"Bacon Agaric":1,}, depends_on=tuple()),  # (Research_Nutrients_2_C)
+            MamNode("Beryl Nut", {"Beryl Nut":5,}, depends_on=tuple()),  # (Research_Nutrients_1_C)
+            MamNode("Paleberry", {"Paleberry":2,}, depends_on=tuple()),  # (Research_Nutrients_0_C)
+            MamNode("Nutritional Processor", {"Modular Frame":25,"Steel Pipe":50,"Wire":500,}, depends_on=("Beryl Nut", "Bacon Agaric", "Paleberry")),  # (Research_Nutrients_3_C)
+            MamNode("Nutritional Inhaler", {"Bacon Agaric":2,"Paleberry":4,"Beryl Nut":10,}, depends_on=("Nutritional Processor", )),  # (Research_Nutrients_4_C)
         )),
-        "Power Slugs": MamTree(("Blue Power Slug", ), ( # Power Slugs (BPD_ResearchTree_PowerSlugs_C)
-            MamNode("Slug Scanning", {"Iron Rod":50,"Wire":100,"Screw":200,}, depends_on=("Blue Power Slugs", )), #(Research_PowerSlugs_3_C)
-            MamNode("Blue Power Slugs", {"Blue Power Slug":1,}, depends_on=tuple()), #(Research_PowerSlugs_1_C)
-            MamNode("Yellow Power Shards", {"Yellow Power Slug":1,"Rotor":25,"Cable":100,}, depends_on=("Blue Power Slugs", )), #(Research_PowerSlugs_4_C)
-            MamNode("Purple Power Shards", {"Purple Power Slug":1,"Modular Frame":25,"Copper Sheet":100,}, depends_on=("Yellow Power Shards", )), #(Research_PowerSlugs_5_C)
-            MamNode("Overclock Production", {"Power Shard":1,"Iron Plate":50,"Wire":50,}, depends_on=("Blue Power Slugs", )), #(Research_PowerSlugs_2_C)
-            MamNode("Synthetic Power Shards", {"Power Shard":10,"Time Crystal":100,"Quartz Crystal":200,}, depends_on=("Purple Power Shards", ), minimal_tier=4), # 1.0
+        "Power Slugs": MamTree(("Blue Power Slug", ), (  # Power Slugs (BPD_ResearchTree_PowerSlugs_C)
+            MamNode("Slug Scanning", {"Iron Rod":50,"Wire":100,"Screw":200,}, depends_on=("Blue Power Slugs", )),  # (Research_PowerSlugs_3_C)
+            MamNode("Blue Power Slugs", {"Blue Power Slug":1,}, depends_on=tuple()),  # (Research_PowerSlugs_1_C)
+            MamNode("Yellow Power Shards", {"Yellow Power Slug":1,"Rotor":25,"Cable":100,}, depends_on=("Blue Power Slugs", )),  # (Research_PowerSlugs_4_C)
+            MamNode("Purple Power Shards", {"Purple Power Slug":1,"Modular Frame":25,"Copper Sheet":100,}, depends_on=("Yellow Power Shards", )),  # (Research_PowerSlugs_5_C)
+            MamNode("Overclock Production", {"Power Shard":1,"Iron Plate":50,"Wire":50,}, depends_on=("Blue Power Slugs", )),  # (Research_PowerSlugs_2_C)
+            MamNode("Synthetic Power Shards", {"Power Shard":10,"Time Crystal":100,"Quartz Crystal":200,}, depends_on=("Purple Power Shards", ), minimal_tier=4),  # 1.0
         )),
-        "Quartz": MamTree(("Raw Quartz", ), ( # Quartz (BPD_ResearchTree_Quartz_C)
-            MamNode("Crystal Oscillator", {"Quartz Crystal":100,"Reinforced Iron Plate":50,}, depends_on=("Quartz Crystals", )), #(Research_Quartz_2_C)
-            MamNode("Quartz Crystals", {"Raw Quartz":20,}, depends_on=("Quartz", )), #(Research_Quartz_1_1_C)
-            MamNode("Quartz", {"Raw Quartz":10,}, depends_on=tuple()), #(Research_Quartz_0_C)
-            MamNode("Shatter Rebar", {"Quartz Crystal":30,"Iron Rebar":150,}, depends_on=("Quartz Crystals", )), #(Research_Quartz_2_1_C)
-            MamNode("Silica", {"Raw Quartz":20,}, depends_on=("Quartz", )), #(Research_Quartz_1_2_C)
-            MamNode("Explosive Resonance Application", {"Crystal Oscillator":5,"Nobelisk":100,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_3_4_C)
-            MamNode("Blade Runners", {"Silica":50,"Modular Frame":10,}, depends_on=("Silica", )), #(Research_Caterium_4_3_C)
-            MamNode("The Explorer", {"Crystal Oscillator":10,"Modular Frame":100,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_3_1_C)
-            MamNode("Material Resonance Screening", {"Crystal Oscillator":15,"Reinforced Iron Plate":100,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_PriorityMerger_C)
-            MamNode("Radio Signal Scanning", {"Crystal Oscillator":100,"Motor":100,"Object Scanner":1,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_4_1_C)
-            MamNode("Inflated Pocket Dimension", {"Silica":200,}, depends_on=("Silica", )), #(Research_Caterium_3_1_C)
-            MamNode("Radar Technology", {"Crystal Oscillator":50,"Heavy Modular Frame":50,"Computer":50,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_4_C) # 1.0
+        "Quartz": MamTree(("Raw Quartz", ), (  # Quartz (BPD_ResearchTree_Quartz_C)
+            MamNode("Crystal Oscillator", {"Quartz Crystal":100,"Reinforced Iron Plate":50,}, depends_on=("Quartz Crystals", )),  # (Research_Quartz_2_C)
+            MamNode("Quartz Crystals", {"Raw Quartz":20,}, depends_on=("Quartz", )),  # (Research_Quartz_1_1_C)
+            MamNode("Quartz", {"Raw Quartz":10,}, depends_on=tuple()),  # (Research_Quartz_0_C)
+            MamNode("Shatter Rebar", {"Quartz Crystal":30,"Iron Rebar":150,}, depends_on=("Quartz Crystals", )),  # (Research_Quartz_2_1_C)
+            MamNode("Silica", {"Raw Quartz":20,}, depends_on=("Quartz", )),  # (Research_Quartz_1_2_C)
+            MamNode("Explosive Resonance Application", {"Crystal Oscillator":5,"Nobelisk":100,}, depends_on=("Crystal Oscillator", )),  # (Research_Quartz_3_4_C)
+            MamNode("Blade Runners", {"Silica":50,"Modular Frame":10,}, depends_on=("Silica", )),  # (Research_Caterium_4_3_C)
+            MamNode("The Explorer", {"Crystal Oscillator":10,"Modular Frame":100,}, depends_on=("Crystal Oscillator", )),  # (Research_Quartz_3_1_C)
+            MamNode("Material Resonance Screening", {"Crystal Oscillator":15,"Reinforced Iron Plate":100,}, depends_on=("Crystal Oscillator", )),  # (Research_Quartz_PriorityMerger_C)
+            MamNode("Radio Signal Scanning", {"Crystal Oscillator":100,"Motor":100,"Object Scanner":1,}, depends_on=("Crystal Oscillator", )),  # (Research_Quartz_4_1_C)
+            MamNode("Inflated Pocket Dimension", {"Silica":200,}, depends_on=("Silica", )),  # (Research_Caterium_3_1_C)
+            MamNode("Radar Technology", {"Crystal Oscillator":50,"Heavy Modular Frame":50,"Computer":50,}, depends_on=("Crystal Oscillator", )),  # (Research_Quartz_4_C) # 1.0
         )),
-        "Sulfur": MamTree(("Sulfur", ), ( # Sulfur (BPD_ResearchTree_Sulfur_C)
-            MamNode("The Nobelisk Detonator", {"Black Powder":50,"Steel Pipe":100,"Cable":200,}, depends_on=("Black Powder", )), #(Research_Sulfur_3_1_C)
-            MamNode("Smokeless Powder", {"Black Powder":100,"Plastic":50,}, depends_on=("Black Powder", )), #(Research_Sulfur_3_C)
-            MamNode("Sulfur", {"Sulfur":10,}, depends_on=tuple()), #(Research_Sulfur_0_C)
-            MamNode("Inflated Pocket Dimension", {"Smokeless Powder":50,"Computer":50,}, depends_on=("Nuclear Deterrent Development", "Turbo Rifle Ammo", "Cluster Nobelisk", "The Rifle")), #(Research_Sulfur_6_C)
-            MamNode("The Rifle", {"Smokeless Powder":50,"Motor":100,"Rubber":200,}, depends_on=("Smokeless Powder", )), #(Research_Sulfur_4_1_C)
-            MamNode("Compacted Coal", {"Hard Drive":1,"Sulfur":25,"Coal":25,}, depends_on=("Experimental Power Generation", )), #(Research_Sulfur_CompactedCoal_C)
-            MamNode("Black Powder", {"Sulfur":50,"Coal":25,}, depends_on=("Sulfur", )), #(Research_Sulfur_1_C)
-            MamNode("Explosive Rebar", {"Smokeless Powder":200,"Iron Rebar":200,"Steel Beam":200,}, depends_on=("Smokeless Powder", )), #(Research_Sulfur_4_2_C)
-            MamNode("Cluster Nobelisk", {"Smokeless Powder":100,"Nobelisk":200,}, depends_on=("Smokeless Powder", )), #(Research_Sulfur_4_C)
-            MamNode("Experimental Power Generation", {"Sulfur":25,"Modular Frame":50,"Rotor":100,}, depends_on=("Sulfur", )), #(Research_Sulfur_ExperimentalPower_C)
-            MamNode("Turbo Rifle Ammo", {"Rifle Ammo":1000,"Packaged Turbofuel":50,"Aluminum Casing":100,}, depends_on=("The Rifle", ), minimal_tier=2), #(Research_Sulfur_5_2_C) # 1.0
-            MamNode("Turbo Fuel", {"Hard Drive":1,"Compacted Coal":15,"Packaged Fuel":50,}, depends_on=("Experimental Power Generation", )), #(Research_Sulfur_TurboFuel_C)
-            MamNode("Expanded Toolbelt", {"Black Powder":100,"Encased Industrial Beam":50,}, depends_on=("Black Powder", )), #(Research_Sulfur_5_C)
-            MamNode("Nuclear Deterrent Development", {"Nobelisk":500,"Encased Uranium Cell":10,"AI Limiter":100,}, depends_on=("Cluster Nobelisk", ), minimal_tier=2), #(Research_Sulfur_5_1_C) # 1.0
-            MamNode("Rocket Fuel", {"Hard Drive":1,"Empty Fluid Tank":10,"Packaged Turbofuel":100,}, depends_on=("Turbo Fuel", ), minimal_tier=3), # 1.0
-            MamNode("Ionized Fuel", {"Hard Drive":1,"Power Shard":100,"Packaged Rocket Fuel":200,}, depends_on=("Turbo Fuel", ), minimal_tier=4), # 1.0
+        "Sulfur": MamTree(("Sulfur", ), (  # Sulfur (BPD_ResearchTree_Sulfur_C)
+            MamNode("The Nobelisk Detonator", {"Black Powder":50,"Steel Pipe":100,"Cable":200,}, depends_on=("Black Powder", )),  # (Research_Sulfur_3_1_C)
+            MamNode("Smokeless Powder", {"Black Powder":100,"Plastic":50,}, depends_on=("Black Powder", )),  # (Research_Sulfur_3_C)
+            MamNode("Sulfur", {"Sulfur":10,}, depends_on=tuple()),  # (Research_Sulfur_0_C)
+            MamNode("Inflated Pocket Dimension", {"Smokeless Powder":50,"Computer":50,}, depends_on=("Nuclear Deterrent Development", "Turbo Rifle Ammo", "Cluster Nobelisk", "The Rifle")),  # (Research_Sulfur_6_C)
+            MamNode("The Rifle", {"Smokeless Powder":50,"Motor":100,"Rubber":200,}, depends_on=("Smokeless Powder", )),  # (Research_Sulfur_4_1_C)
+            MamNode("Compacted Coal", {"Hard Drive":1,"Sulfur":25,"Coal":25,}, depends_on=("Experimental Power Generation", )),  # (Research_Sulfur_CompactedCoal_C)
+            MamNode("Black Powder", {"Sulfur":50,"Coal":25,}, depends_on=("Sulfur", )),  # (Research_Sulfur_1_C)
+            MamNode("Explosive Rebar", {"Smokeless Powder":200,"Iron Rebar":200,"Steel Beam":200,}, depends_on=("Smokeless Powder", )),  # (Research_Sulfur_4_2_C)
+            MamNode("Cluster Nobelisk", {"Smokeless Powder":100,"Nobelisk":200,}, depends_on=("Smokeless Powder", )),  # (Research_Sulfur_4_C)
+            MamNode("Experimental Power Generation", {"Sulfur":25,"Modular Frame":50,"Rotor":100,}, depends_on=("Sulfur", )),  # (Research_Sulfur_ExperimentalPower_C)
+            MamNode("Turbo Rifle Ammo", {"Rifle Ammo":1000,"Packaged Turbofuel":50,"Aluminum Casing":100,}, depends_on=("The Rifle", ), minimal_tier=2),  # (Research_Sulfur_5_2_C) # 1.0
+            MamNode("Turbo Fuel", {"Hard Drive":1,"Compacted Coal":15,"Packaged Fuel":50,}, depends_on=("Experimental Power Generation", )),  # (Research_Sulfur_TurboFuel_C)
+            MamNode("Expanded Toolbelt", {"Black Powder":100,"Encased Industrial Beam":50,}, depends_on=("Black Powder", )),  # (Research_Sulfur_5_C)
+            MamNode("Nuclear Deterrent Development", {"Nobelisk":500,"Encased Uranium Cell":10,"AI Limiter":100,}, depends_on=("Cluster Nobelisk", ), minimal_tier=2),  # (Research_Sulfur_5_1_C) # 1.0
+            MamNode("Rocket Fuel", {"Hard Drive":1,"Empty Fluid Tank":10,"Packaged Turbofuel":100,}, depends_on=("Turbo Fuel", ), minimal_tier=3),  # 1.0
+            MamNode("Ionized Fuel", {"Hard Drive":1,"Power Shard":100,"Packaged Rocket Fuel":200,}, depends_on=("Turbo Fuel", ), minimal_tier=4),  # 1.0
         ))
     }
 
     drop_pods: list[DropPodData] = [
         # Regenerate via /Script/Engine.Blueprint'/Archipelago/Debug/CC_BuildDropPodLocations.CC_BuildDropPodLocations' 
-        DropPodData(-29068, -22640, 17384,  "Encased Industrial Beam", 0), # Unlocks with: 4 x Desc_SteelPlateReinforced_C
-        DropPodData(-33340, 5176,   23519,  "Crystal Oscillator", 0), # Unlocks with: 5 x Desc_CrystalOscillator_C
-        DropPodData(8680,   -41777, 13053,  "Steel Pipe", 0), # Unlocks with: 7 x Desc_SteelPipe_C
-        DropPodData(35082,  16211,  22759,  "Supercomputer", 0), # Unlocks with: 7 x Desc_ComputerSuper_C
-        #DropPodData(-3511, 62314,  22109,  "Quantum Computer", 0), # Unlocks with: 1 x Desc_ComputerQuantum_C
-        DropPodData(66652,  -13642, 13420,  "Encased Industrial Beam", 50), # Unlocks with: 3 x Desc_SteelPlateReinforced_C
-        DropPodData(55247,  -51316, 14363,  None, 25), # Unlocks with: (No Item)
-        DropPodData(-4706,  -76301, 13618,  "Black Powder", 0), # Unlocks with: 10 x Desc_Gunpowder_C
-        DropPodData(-40194,62956,  26261,  "Superposition Oscillator", 138), # Unlocks with: 2 x Desc_QuantumOscillator_C
-        DropPodData(80980,  -44100, 8303,   "Rotor", 0), # Unlocks with: 3 x Desc_Rotor_C
-        DropPodData(-56144, -72864, 27668,  "Quartz Crystal", 0), # Unlocks with: 2 x Desc_QuartzCrystal_C
-        DropPodData(-95228, 6970,   25142,  "High-Speed Connector", 112), # Unlocks with: 11 x Desc_HighSpeedConnector_C
-        DropPodData(-89284, -50630, 16019,  None, 50), # Unlocks with: (No Item)
-        DropPodData(-94708, 40337,  19832,  "Heat Sink", 138), # Unlocks with: 2 x Desc_AluminumPlateReinforced_C
-        DropPodData(94267,  47237,  9435,   "Motor", 0), # Unlocks with: 1 x Desc_Motor_C
-        DropPodData(87739,  -62975, 13444,  None, 30), # Unlocks with: (No Item)
-        DropPodData(12249,  114177, 26721,  "AI Limiter", 267), # Unlocks with: 9 x Desc_CircuitBoardHighSpeed_C
-        DropPodData(115978, 21424,  15519,  None, 0), # Unlocks with: (No Item)
-        DropPodData(-78236, 90857,  20305,  "Radio Control Unit", 0), # Unlocks with: 6 x Desc_ModularFrameLightweight_C
-        DropPodData(-35359, 116594, 21827,  "Turbo Motor", 0), # Unlocks with: 6 x Desc_MotorLightweight_C
-        DropPodData(111479, -54515, 17081,  "Stator", 20), # Unlocks with: 1 x Desc_Stator_C
-        DropPodData(121061, 45324,  17373,  None, 0), # Unlocks with: (No Item)
-        DropPodData(125497, -34949, 8220,   None, 50), # Unlocks with: (No Item)
-        DropPodData(-26327, -129047,7780,   "Modular Frame", 0), # Unlocks with: 1 x Desc_ModularFrame_C
-        DropPodData(21373,  132336, 2510,   "Motor", 20), # Unlocks with: 2 x Desc_Motor_C
-        DropPodData(17807,  -136922,13621,  "Rotor", 0), # Unlocks with: 1 x Desc_Rotor_C
-        DropPodData(-118480,74929,  16995,  None, 420), # Unlocks with: (No Item)
-        DropPodData(94940,  105482, 9860,   "Heavy Modular Frame", 0), # Unlocks with: 1 x Desc_ModularFrameHeavy_C
-        DropPodData(-129115,60165,  4800,   None, 53), # Unlocks with: (No Item)
-        DropPodData(-142000,23970,  32660,  None, 0), # Unlocks with: (No Item)
-        DropPodData(46048,  141933, 13064,  None, 40), # Unlocks with: (No Item)
-        DropPodData(144456, 36294,  17301,  "Circuit Board", 48), # Unlocks with: 20 x Desc_CircuitBoard_C
-        DropPodData(-43144, 145820, 7472,   "Modular Frame", 0), # Unlocks with: 5 x Desc_ModularFrame_C
-        DropPodData(-108774,107811, 10154,  "Crystal Oscillator", 0), # Unlocks with: 1 x Desc_CrystalOscillator_C
-        DropPodData(-56987, -144603,2072,   "Rotor", 10), # Unlocks with: 1 x Desc_Rotor_C
-        DropPodData(-152676,33864,  19283,  None, 256), # Unlocks with: (No Item)
-        DropPodData(90313,  129583, 9112,   "Crystal Oscillator", 20), # Unlocks with: 2 x Desc_CrystalOscillator_C
-        DropPodData(111212, -113040,12036,  "Screw", 10), # Unlocks with: 15 x Desc_IronScrew_C
-        DropPodData(-157077,-6312,  25128,  "Turbo Motor", 0), # Unlocks with: 8 x Desc_MotorLightweight_C
-        DropPodData(157249, -40206, 13694,  "High-Speed Connector", 0), # Unlocks with: 2 x Desc_HighSpeedConnector_C
-        DropPodData(-151842,72468,  9945,   "Encased Industrial Beam", 0), # Unlocks with: 3 x Desc_SteelPlateReinforced_C
-        DropPodData(64696,  156038, 14067,  "Modular Frame", 0), # Unlocks with: 6 x Desc_ModularFrame_C
-        DropPodData(-157080,-67028, 11766,  "Rotor", 0), # Unlocks with: 4 x Desc_Rotor_C
-        DropPodData(170057, -10579, 18823,  None, 50), # Unlocks with: (No Item)
-        DropPodData(143671, 92573,  24990,  "Crystal Oscillator", 20), # Unlocks with: 2 x Desc_CrystalOscillator_C
-        DropPodData(127215, -116866,-1397,  "Rubber", 0), # Unlocks with: 10 x Desc_Rubber_C
-        DropPodData(163999, 61333,  21481,  "AI Limiter", 0), # Unlocks with: 3 x Desc_CircuitBoardHighSpeed_C
-        DropPodData(98306,  -149781,2552,   None, 40), # Unlocks with: (No Item)
-        DropPodData(5302,   -187090,-1608,  None, 0), # Unlocks with: (No Item)
-        DropPodData(188304, 17059,  12949,  None, 0), # Unlocks with: (No Item)
-        DropPodData(84256,  -171122,-290,   None, 0), # Unlocks with: (No Item)
-        DropPodData(191366, 37694,  5676,   "Computer", 0), # Unlocks with: 4 x Desc_Computer_C
-        DropPodData(28695,  193441, 17459,  "Quickwire", 0), # Unlocks with: 9 x Desc_HighSpeedWire_C
-        DropPodData(-146044,-137047,2357,   "Modular Frame", 0), # Unlocks with: 9 x Desc_ModularFrame_C
-        DropPodData(-200203,-17766, 12193,  "Solid Biofuel", 0), # Unlocks with: 10 x Desc_Biofuel_C
-        DropPodData(47834,  195703, 2943,   "Black Powder", 0), # Unlocks with: 4 x Desc_Gunpowder_C
-        DropPodData(198418, -41186, 13786,  None, 0), # Unlocks with: (No Item)
-        DropPodData(-195756,-59210, -84,    None, 30), # Unlocks with: (No Item)
-        DropPodData(-121994,166916, -49,    "Steel Beam", 20), # Unlocks with: 4 x Desc_SteelPlate_C
-        DropPodData(88323,  188913, 1420,   None, 30), # Unlocks with: (No Item)
-        DropPodData(-123677,-167107,29710,  "Motor", 0), # Unlocks with: 4 x Desc_Motor_C
-        DropPodData(150633, 146698, 7727,   "Crystal Oscillator", 20), # Unlocks with: 2 x Desc_CrystalOscillator_C
-        DropPodData(-55111, -204857,7844,   "Motor", 0), # Unlocks with: 30 x Desc_Motor_C
-        DropPodData(216096, -268,   -1592,  "Heat Sink", 0), # Unlocks with: 7 x Desc_AluminumPlateReinforced_C
-        DropPodData(159088, -145116,23164,  "Motor", 0), # Unlocks with: 30 x Desc_Motor_C
-        DropPodData(207683, -68352, 3927,   "Encased Industrial Beam", 20), # Unlocks with: 27 x Desc_SteelPlateReinforced_C
-        DropPodData(-189258,116331, -1764,  None, 0), # Unlocks with: (No Item)
-        DropPodData(46951,  221859, 5917,   None, 20), # Unlocks with: (No Item)
-        DropPodData(-9988,  227625, -1017,  None, 40), # Unlocks with: (No Item)
-        DropPodData(232515, -20519, 8979,   "Crystal Oscillator", 15), # Unlocks with: 2 x Desc_CrystalOscillator_C
-        DropPodData(232138,27191,  -1629,  "Supercomputer", 0), # Unlocks with: 5 x Desc_ComputerSuper_C
-        DropPodData(-135,   -237257,-1760,  None, 0), # Unlocks with: (No Item)
-        DropPodData(-232498,-51432, -386,   "Rotor", 0), # Unlocks with: 21 x Desc_Rotor_C
-        DropPodData(-238333,17321,  19741,  "Heat Sink", 0), # Unlocks with: 3 x Desc_AluminumPlateReinforced_C
-        DropPodData(200510, 131912, 6341,   "Motor", 0), # Unlocks with: 30 x Desc_Motor_C
-        DropPodData(-108812,214051, 3200,   "Quickwire", 0), # Unlocks with: 1 x Desc_HighSpeedWire_C
-        DropPodData(232255, 79925,  -1275,  "Turbo Motor", 67), # Unlocks with: 2 x Desc_MotorLightweight_C
-        DropPodData(226418, 98109,  7339,   None, 200), # Unlocks with: (No Item)
-        DropPodData(156569, 191767, -9312,  "Rubber", 0), # Unlocks with: 4 x Desc_Rubber_C
-        DropPodData(44579,  -244343,-874,   None, 0), # Unlocks with: (No Item)
-        DropPodData(118349, 221905, -7063,  "Encased Industrial Beam", 0), # Unlocks with: 6 x Desc_SteelPlateReinforced_C
-        #DropPodData(249919,59534,  2430,   "Quantum Computer", 0), # Unlocks with: 1 x Desc_ComputerQuantum_C
-        DropPodData(188233, 177201, 9608,   "Quickwire", 0), # Unlocks with: 12 x Desc_HighSpeedWire_C
-        DropPodData(-174494,-197134,-1538,  None, 30), # Unlocks with: (No Item)
-        DropPodData(-50655, -259272,-1667,  None, 0), # Unlocks with: (No Item)
-        DropPodData(30383,  266975, -987,   "Screw", 0), # Unlocks with: 12 x Desc_IronScrew_C
-        DropPodData(272715, 28087,  -1586,  "Supercomputer", 0), # Unlocks with: 2 x Desc_ComputerSuper_C
-        DropPodData(-152279,229520,1052,   "Modular Frame", 0), # Unlocks with: 5 x Desc_ModularFrame_C
-        DropPodData(241532, 131343, 17157,  None, 0), # Unlocks with: (No Item)
-        DropPodData(-259577,105048, -1548,  None, 0), # Unlocks with: (No Item)
-        DropPodData(275070, -52585, 5980,   None, 0), # Unlocks with: (No Item)
-        DropPodData(-247303,-142348,4524,   "Rotor", 0), # Unlocks with: 4 x Desc_Rotor_C
-        DropPodData(261797, 124616, -2597,  "AI Limiter", 73), # Unlocks with: 3 x Desc_CircuitBoardHighSpeed_C
-        DropPodData(187056, 223656, -3215,  None, 42), # Unlocks with: (No Item)
-        DropPodData(293299, 51,     522,    "Crystal Oscillator", 42), # Unlocks with: 8 x Desc_CrystalOscillator_C
-        DropPodData(219146, -199880,6503,   "Rotor", 0), # Unlocks with: 10 x Desc_Rotor_C
-        DropPodData(176423, 243273, -9780,  "Motor", 19), # Unlocks with: 3 x Desc_Motor_C
-        DropPodData(291821, 74782, -1574,  "Superposition Oscillator", 0), # Unlocks with: 5 x Desc_QuantumOscillator_C
-        DropPodData(-78884, 292640, -4763,  "Modular Frame", 0), # Unlocks with: 5 x Desc_ModularFrame_C
-        DropPodData(174948, -276436,21151,  "Motor", 0), # Unlocks with: 30 x Desc_Motor_C
-        DropPodData(295166, -173139,8083,   None, 0), # Unlocks with: (No Item)
-        DropPodData(349295, -38831, -1485,  "Motor", 0), # Unlocks with: 10 x Desc_Motor_C
-        DropPodData(360114, -106614,11815,  "Motor", 0), # Unlocks with: 35 x Desc_Motor_C
-        DropPodData(303169, -246169,5487,   None, 50), # Unlocks with: (No Item)
-        DropPodData(236508, -312236,9971,   "Motor", 0), # Unlocks with: 30 x Desc_Motor_C
-        DropPodData(360285, -217558,3900,   None, 70), # Unlocks with: (No Item)
-        DropPodData(366637, -303548,-7288,  None, 0), # Unlocks with: (No Item)
+        DropPodData(-29068, -22640, 17384,  "Encased Industrial Beam", 0),  # Unlocks with: 4 x Desc_SteelPlateReinforced_C
+        DropPodData(-33340, 5176,   23519,  "Crystal Oscillator", 0),  # Unlocks with: 5 x Desc_CrystalOscillator_C
+        DropPodData(8680,   -41777, 13053,  "Steel Pipe", 0),  # Unlocks with: 7 x Desc_SteelPipe_C
+        DropPodData(35082,  16211,  22759,  "Supercomputer", 0),  # Unlocks with: 7 x Desc_ComputerSuper_C
+        # DropPodData(-3511, 62314,  22109,  "Quantum Computer", 0),  # Unlocks with: 1 x Desc_ComputerQuantum_C
+        DropPodData(66652,  -13642, 13420,  "Encased Industrial Beam", 50),  # Unlocks with: 3 x Desc_SteelPlateReinforced_C
+        DropPodData(55247,  -51316, 14363,  None, 25),  # Unlocks with: (No Item)
+        DropPodData(-4706,  -76301, 13618,  "Black Powder", 0),  # Unlocks with: 10 x Desc_Gunpowder_C
+        DropPodData(-40194,62956,  26261,  "Superposition Oscillator", 138),  # Unlocks with: 2 x Desc_QuantumOscillator_C
+        DropPodData(80980,  -44100, 8303,   "Rotor", 0),  # Unlocks with: 3 x Desc_Rotor_C
+        DropPodData(-56144, -72864, 27668,  "Quartz Crystal", 0),  # Unlocks with: 2 x Desc_QuartzCrystal_C
+        DropPodData(-95228, 6970,   25142,  "High-Speed Connector", 112),  # Unlocks with: 11 x Desc_HighSpeedConnector_C
+        DropPodData(-89284, -50630, 16019,  None, 50),  # Unlocks with: (No Item)
+        DropPodData(-94708, 40337,  19832,  "Heat Sink", 138),  # Unlocks with: 2 x Desc_AluminumPlateReinforced_C
+        DropPodData(94267,  47237,  9435,   "Motor", 0),  # Unlocks with: 1 x Desc_Motor_C
+        DropPodData(87739,  -62975, 13444,  None, 30),  # Unlocks with: (No Item)
+        DropPodData(12249,  114177, 26721,  "AI Limiter", 267),  # Unlocks with: 9 x Desc_CircuitBoardHighSpeed_C
+        DropPodData(115978, 21424,  15519,  None, 0),  # Unlocks with: (No Item)
+        DropPodData(-78236, 90857,  20305,  "Radio Control Unit", 0),  # Unlocks with: 6 x Desc_ModularFrameLightweight_C
+        DropPodData(-35359, 116594, 21827,  "Turbo Motor", 0),  # Unlocks with: 6 x Desc_MotorLightweight_C
+        DropPodData(111479, -54515, 17081,  "Stator", 20),  # Unlocks with: 1 x Desc_Stator_C
+        DropPodData(121061, 45324,  17373,  None, 0),  # Unlocks with: (No Item)
+        DropPodData(125497, -34949, 8220,   None, 50),  # Unlocks with: (No Item)
+        DropPodData(-26327, -129047,7780,   "Modular Frame", 0),  # Unlocks with: 1 x Desc_ModularFrame_C
+        DropPodData(21373,  132336, 2510,   "Motor", 20),  # Unlocks with: 2 x Desc_Motor_C
+        DropPodData(17807,  -136922,13621,  "Rotor", 0),  # Unlocks with: 1 x Desc_Rotor_C
+        DropPodData(-118480,74929,  16995,  None, 420),  # Unlocks with: (No Item)
+        DropPodData(94940,  105482, 9860,   "Heavy Modular Frame", 0),  # Unlocks with: 1 x Desc_ModularFrameHeavy_C
+        DropPodData(-129115,60165,  4800,   None, 53),  # Unlocks with: (No Item)
+        DropPodData(-142000,23970,  32660,  None, 0),  # Unlocks with: (No Item)
+        DropPodData(46048,  141933, 13064,  None, 40),  # Unlocks with: (No Item)
+        DropPodData(144456, 36294,  17301,  "Circuit Board", 48),  # Unlocks with: 20 x Desc_CircuitBoard_C
+        DropPodData(-43144, 145820, 7472,   "Modular Frame", 0),  # Unlocks with: 5 x Desc_ModularFrame_C
+        DropPodData(-108774,107811, 10154,  "Crystal Oscillator", 0),  # Unlocks with: 1 x Desc_CrystalOscillator_C
+        DropPodData(-56987, -144603,2072,   "Rotor", 10),  # Unlocks with: 1 x Desc_Rotor_C
+        DropPodData(-152676,33864,  19283,  None, 256),  # Unlocks with: (No Item)
+        DropPodData(90313,  129583, 9112,   "Crystal Oscillator", 20),  # Unlocks with: 2 x Desc_CrystalOscillator_C
+        DropPodData(111212, -113040,12036,  "Screw", 10),  # Unlocks with: 15 x Desc_IronScrew_C
+        DropPodData(-157077,-6312,  25128,  "Turbo Motor", 0),  # Unlocks with: 8 x Desc_MotorLightweight_C
+        DropPodData(157249, -40206, 13694,  "High-Speed Connector", 0),  # Unlocks with: 2 x Desc_HighSpeedConnector_C
+        DropPodData(-151842,72468,  9945,   "Encased Industrial Beam", 0),  # Unlocks with: 3 x Desc_SteelPlateReinforced_C
+        DropPodData(64696,  156038, 14067,  "Modular Frame", 0),  # Unlocks with: 6 x Desc_ModularFrame_C
+        DropPodData(-157080,-67028, 11766,  "Rotor", 0),  # Unlocks with: 4 x Desc_Rotor_C
+        DropPodData(170057, -10579, 18823,  None, 50),  # Unlocks with: (No Item)
+        DropPodData(143671, 92573,  24990,  "Crystal Oscillator", 20),  # Unlocks with: 2 x Desc_CrystalOscillator_C
+        DropPodData(127215, -116866,-1397,  "Rubber", 0),  # Unlocks with: 10 x Desc_Rubber_C
+        DropPodData(163999, 61333,  21481,  "AI Limiter", 0),  # Unlocks with: 3 x Desc_CircuitBoardHighSpeed_C
+        DropPodData(98306,  -149781,2552,   None, 40),  # Unlocks with: (No Item)
+        DropPodData(5302,   -187090,-1608,  None, 0),  # Unlocks with: (No Item)
+        DropPodData(188304, 17059,  12949,  None, 0),  # Unlocks with: (No Item)
+        DropPodData(84256,  -171122,-290,   None, 0),  # Unlocks with: (No Item)
+        DropPodData(191366, 37694,  5676,   "Computer", 0),  # Unlocks with: 4 x Desc_Computer_C
+        DropPodData(28695,  193441, 17459,  "Quickwire", 0),  # Unlocks with: 9 x Desc_HighSpeedWire_C
+        DropPodData(-146044,-137047,2357,   "Modular Frame", 0),  # Unlocks with: 9 x Desc_ModularFrame_C
+        DropPodData(-200203,-17766, 12193,  "Solid Biofuel", 0),  # Unlocks with: 10 x Desc_Biofuel_C
+        DropPodData(47834,  195703, 2943,   "Black Powder", 0),  # Unlocks with: 4 x Desc_Gunpowder_C
+        DropPodData(198418, -41186, 13786,  None, 0),  # Unlocks with: (No Item)
+        DropPodData(-195756,-59210, -84,    None, 30),  # Unlocks with: (No Item)
+        DropPodData(-121994,166916, -49,    "Steel Beam", 20),  # Unlocks with: 4 x Desc_SteelPlate_C
+        DropPodData(88323,  188913, 1420,   None, 30),  # Unlocks with: (No Item)
+        DropPodData(-123677,-167107,29710,  "Motor", 0),  # Unlocks with: 4 x Desc_Motor_C
+        DropPodData(150633, 146698, 7727,   "Crystal Oscillator", 20),  # Unlocks with: 2 x Desc_CrystalOscillator_C
+        DropPodData(-55111, -204857,7844,   "Motor", 0),  # Unlocks with: 30 x Desc_Motor_C
+        DropPodData(216096, -268,   -1592,  "Heat Sink", 0),  # Unlocks with: 7 x Desc_AluminumPlateReinforced_C
+        DropPodData(159088, -145116,23164,  "Motor", 0),  # Unlocks with: 30 x Desc_Motor_C
+        DropPodData(207683, -68352, 3927,   "Encased Industrial Beam", 20),  # Unlocks with: 27 x Desc_SteelPlateReinforced_C
+        DropPodData(-189258,116331, -1764,  None, 0),  # Unlocks with: (No Item)
+        DropPodData(46951,  221859, 5917,   None, 20),  # Unlocks with: (No Item)
+        DropPodData(-9988,  227625, -1017,  None, 40),  # Unlocks with: (No Item)
+        DropPodData(232515, -20519, 8979,   "Crystal Oscillator", 15),  # Unlocks with: 2 x Desc_CrystalOscillator_C
+        DropPodData(232138,27191,  -1629,  "Supercomputer", 0),  # Unlocks with: 5 x Desc_ComputerSuper_C
+        DropPodData(-135,   -237257,-1760,  None, 0),  # Unlocks with: (No Item)
+        DropPodData(-232498,-51432, -386,   "Rotor", 0),  # Unlocks with: 21 x Desc_Rotor_C
+        DropPodData(-238333,17321,  19741,  "Heat Sink", 0),  # Unlocks with: 3 x Desc_AluminumPlateReinforced_C
+        DropPodData(200510, 131912, 6341,   "Motor", 0),  # Unlocks with: 30 x Desc_Motor_C
+        DropPodData(-108812,214051, 3200,   "Quickwire", 0),  # Unlocks with: 1 x Desc_HighSpeedWire_C
+        DropPodData(232255, 79925,  -1275,  "Turbo Motor", 67),  # Unlocks with: 2 x Desc_MotorLightweight_C
+        DropPodData(226418, 98109,  7339,   None, 200),  # Unlocks with: (No Item)
+        DropPodData(156569, 191767, -9312,  "Rubber", 0),  # Unlocks with: 4 x Desc_Rubber_C
+        DropPodData(44579,  -244343,-874,   None, 0),  # Unlocks with: (No Item)
+        DropPodData(118349, 221905, -7063,  "Encased Industrial Beam", 0),  # Unlocks with: 6 x Desc_SteelPlateReinforced_C
+        # DropPodData(249919,59534,  2430,   "Quantum Computer", 0), # Unlocks with: 1 x Desc_ComputerQuantum_C
+        DropPodData(188233, 177201, 9608,   "Quickwire", 0),  # Unlocks with: 12 x Desc_HighSpeedWire_C
+        DropPodData(-174494,-197134,-1538,  None, 30),  # Unlocks with: (No Item)
+        DropPodData(-50655, -259272,-1667,  None, 0),  # Unlocks with: (No Item)
+        DropPodData(30383,  266975, -987,   "Screw", 0),  # Unlocks with: 12 x Desc_IronScrew_C
+        DropPodData(272715, 28087,  -1586,  "Supercomputer", 0),  # Unlocks with: 2 x Desc_ComputerSuper_C
+        DropPodData(-152279,229520,1052,   "Modular Frame", 0),  # Unlocks with: 5 x Desc_ModularFrame_C
+        DropPodData(241532, 131343, 17157,  None, 0),  # Unlocks with: (No Item)
+        DropPodData(-259577,105048, -1548,  None, 0),  # Unlocks with: (No Item)
+        DropPodData(275070, -52585, 5980,   None, 0),  # Unlocks with: (No Item)
+        DropPodData(-247303,-142348,4524,   "Rotor", 0),  # Unlocks with: 4 x Desc_Rotor_C
+        DropPodData(261797, 124616, -2597,  "AI Limiter", 73),  # Unlocks with: 3 x Desc_CircuitBoardHighSpeed_C
+        DropPodData(187056, 223656, -3215,  None, 42),  # Unlocks with: (No Item)
+        DropPodData(293299, 51,     522,    "Crystal Oscillator", 42),  # Unlocks with: 8 x Desc_CrystalOscillator_C
+        DropPodData(219146, -199880,6503,   "Rotor", 0),  # Unlocks with: 10 x Desc_Rotor_C
+        DropPodData(176423, 243273, -9780,  "Motor", 19),  # Unlocks with: 3 x Desc_Motor_C
+        DropPodData(291821, 74782, -1574,  "Superposition Oscillator", 0),  # Unlocks with: 5 x Desc_QuantumOscillator_C
+        DropPodData(-78884, 292640, -4763,  "Modular Frame", 0),  # Unlocks with: 5 x Desc_ModularFrame_C
+        DropPodData(174948, -276436,21151,  "Motor", 0),  # Unlocks with: 30 x Desc_Motor_C
+        DropPodData(295166, -173139,8083,   None, 0),  # Unlocks with: (No Item)
+        DropPodData(349295, -38831, -1485,  "Motor", 0),  # Unlocks with: 10 x Desc_Motor_C
+        DropPodData(360114, -106614,11815,  "Motor", 0),  # Unlocks with: 35 x Desc_Motor_C
+        DropPodData(303169, -246169,5487,   None, 50),  # Unlocks with: (No Item)
+        DropPodData(236508, -312236,9971,   "Motor", 0),  # Unlocks with: 30 x Desc_Motor_C
+        DropPodData(360285, -217558,3900,   None, 70),  # Unlocks with: (No Item)
+        DropPodData(366637, -303548,-7288,  None, 0),  # Unlocks with: (No Item)
     ]
-
-

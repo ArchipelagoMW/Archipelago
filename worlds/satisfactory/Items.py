@@ -7,6 +7,7 @@ from .Options import SatisfactoryOptions
 from .ItemData import ItemData, ItemGroups as G
 from .CriticalPathCalculator import CriticalPathCalculator
 
+
 class Items:
     item_data: ClassVar[dict[str, ItemData]] = {
         # Resource Bundles
@@ -24,7 +25,7 @@ class Items:
         "Bundle: Automated Wiring": ItemData(G.Parts, 1338011, count=0),
         "Bundle: Battery": ItemData(G.Parts, 1338012),
         "Bundle: Bauxite": ItemData(G.Parts, 1338013),
-        "Bundle: Neural-Quantum Processor": ItemData(G.Parts, 1338014), #1.0
+        "Bundle: Neural-Quantum Processor": ItemData(G.Parts, 1338014),  # 1.0
         "Bundle: Biomass": ItemData(G.Parts, 1338015),
         "Bundle: Black Powder": ItemData(G.Parts, 1338016),
         "Bundle: Cable": ItemData(G.Parts, 1338017),
@@ -32,7 +33,7 @@ class Items:
         "Bundle: Caterium Ore": ItemData(G.Parts, 1338019),
         "Bundle: Circuit Board": ItemData(G.Parts, 1338020),
         "Bundle: Coal": ItemData(G.Parts, 1338021),
-        "Bundle: Singularity Cell": ItemData(G.Parts, 1338022), #1.0
+        "Bundle: Singularity Cell": ItemData(G.Parts, 1338022),  # 1.0
         "Bundle: Compacted Coal": ItemData(G.Parts, 1338023),
         "Bundle: Computer": ItemData(G.Parts, 1338024),
         "Bundle: Concrete": ItemData(G.Parts, 1338025),
@@ -51,7 +52,7 @@ class Items:
         "Bundle: Encased Uranium Cell": ItemData(G.Trap, 1338038, C.trap),
         "Bundle: Fabric": ItemData(G.Parts, 1338039),
         "Bundle: FICSIT Coupon": ItemData(G.Parts, 1338040, count=0),
-        "Bundle: AI Expansion Server": ItemData(G.Parts, 1338041, count=0), #1.0
+        "Bundle: AI Expansion Server": ItemData(G.Parts, 1338041, count=0),  # 1.0
         "Bundle: Fused Modular Frame": ItemData(G.Parts, 1338042),
         "Bundle: Hard Drive": ItemData(G.Parts, 1338043, count=0),
         "Bundle: Heat Sink": ItemData(G.Parts, 1338044),
@@ -95,7 +96,7 @@ class Items:
         "Bundle: Power Shard": ItemData(G.Parts, 1338082, count=0),
         "Bundle: Confusing Creature Statue": ItemData(G.Parts, 1338083),
         "Bundle: Pressure Conversion Cube": ItemData(G.Parts, 1338084),
-        "Bundle: Alien Power Matrix": ItemData(G.Parts, 1338085), #1.0
+        "Bundle: Alien Power Matrix": ItemData(G.Parts, 1338085),  # 1.0
         "Bundle: Quartz Crystal": ItemData(G.Parts, 1338086),
         "Bundle: Quickwire": ItemData(G.Parts, 1338087),
         "Bundle: Radio Control Unit": ItemData(G.Parts, 1338088),
@@ -103,7 +104,7 @@ class Items:
         "Bundle: Reinforced Iron Plate": ItemData(G.Parts, 1338090),
         "Bundle: Rotor": ItemData(G.Parts, 1338091),
         "Bundle: Rubber": ItemData(G.Parts, 1338092),
-        "Bundle: SAM": ItemData(G.Parts, 1338093), # 1.0
+        "Bundle: SAM": ItemData(G.Parts, 1338093),  # 1.0
         "Bundle: Screw": ItemData(G.Parts, 1338094),
         "Bundle: Silica": ItemData(G.Parts, 1338095),
         "Bundle: Smart Plating": ItemData(G.Parts, 1338096, count=0),
@@ -144,15 +145,15 @@ class Items:
         "Bundle: Packaged Rocket Fuel": ItemData(G.Parts, 1338131),
         "Bundle: Packaged Ionized Fuel": ItemData(G.Parts, 1338132),
         "Bundle: Dark Matter Crystal": ItemData(G.Parts, 1338133),
-        #1338134 - 1338149 Reserved for future parts
-        #1338150 - 1338199 Equipment / Ammo
+        # 1338134 - 1338149 Reserved for future parts
+        # 1338150 - 1338199 Equipment / Ammo
         "Bundle: Bacon Agaric": ItemData(G.Ammo, 1338150, count=0),
         "Bundle: Beryl Nut": ItemData(G.Ammo, 1338151, count=0),
         "Bundle: Blade Runners": ItemData(G.Equipment, 1338152, count=0),
         "Bundle: Boom Box": ItemData(G.Equipment, 1338153, count=0),
         "Bundle: Chainsaw": ItemData(G.Equipment, 1338154, count=0),
         "Bundle: Cluster Nobelisk": ItemData(G.Ammo, 1338155),
-        "Bundle: Iodine-Infused Filter": ItemData(G.Equipment, 1338156, count=3), #1.1
+        "Bundle: Iodine-Infused Filter": ItemData(G.Equipment, 1338156, count=3),  # 1.1
         "Bundle: Cup": ItemData(G.Equipment, 1338157, count=0),
         "Bundle: Cup (gold)": ItemData(G.Equipment, 1338158, count=0),
         "Bundle: Explosive Rebar": ItemData(G.Ammo, 1338159),
@@ -195,9 +196,9 @@ class Items:
         "Bundle of Four: Somersloops": ItemData(G.Parts, 1338194),
         "Bundle of Three: Hard Drives": ItemData(G.Parts, 1338195),
 #
-        #1338196 - 1338199 Reserved for future equipment/ammo
+        # 1338196 - 1338199 Reserved for future equipment/ammo
 
-        #1338200+ Recipes / buildings / schematics
+        # 1338200+ Recipes / buildings / schematics
         "Recipe: Reinforced Iron Plate": ItemData(G.Recipe, 1338200, C.progression),
         "Recipe: Adhered Iron Plate": ItemData(G.Recipe, 1338201, C.progression),
         "Recipe: Bolted Iron Plate": ItemData(G.Recipe, 1338202, C.progression),
@@ -215,7 +216,7 @@ class Items:
         "Recipe: Recycled Rubber": ItemData(G.Recipe, 1338214, C.progression),
         "Recipe: Iron Plate": ItemData(G.Recipe, 1338215, C.progression),
         "Recipe: Coated Iron Plate": ItemData(G.Recipe, 1338216, C.progression),
-        "Recipe: Steel Cast Plate": ItemData(G.Recipe, 1338217, C.progression), # 1.0
+        "Recipe: Steel Cast Plate": ItemData(G.Recipe, 1338217, C.progression),  # 1.0
         "Recipe: Iron Rod": ItemData(G.Recipe, 1338218, C.progression),
         "Recipe: Steel Rod": ItemData(G.Recipe, 1338219, C.progression),
         "Recipe: Screw": ItemData(G.Recipe, 1338220, C.progression),
@@ -235,13 +236,13 @@ class Items:
         "Recipe: Steamed Copper Sheet": ItemData(G.Recipe, 1338234, C.progression),
         "Recipe: Steel Pipe": ItemData(G.Recipe, 1338235, C.progression),
         "Recipe: Steel Beam": ItemData(G.Recipe, 1338236, C.progression),
-        "Recipe: Neural-Quantum Processor": ItemData(G.Recipe, 1338237, C.progression), # 1.0
+        "Recipe: Neural-Quantum Processor": ItemData(G.Recipe, 1338237, C.progression),  # 1.0
         "Recipe: Heavy Oil Residue": ItemData(G.Recipe, 1338238, C.progression),
         "Recipe: Polymer Resin": ItemData(G.Recipe, 1338239, C.progression),
         "Recipe: Fuel": ItemData(G.Recipe, 1338240, C.progression),
         "Recipe: Residual Fuel": ItemData(G.Recipe, 1338241, C.progression),
         "Recipe: Diluted Packaged Fuel": ItemData(G.Recipe, 1338242, C.progression),
-        "Recipe: AI Expansion Server": ItemData(G.Recipe, 1338243, C.progression), # 1.0
+        "Recipe: AI Expansion Server": ItemData(G.Recipe, 1338243, C.progression),  # 1.0
         "Recipe: Concrete": ItemData(G.Recipe, 1338244, C.progression),
         "Recipe: Rubber Concrete": ItemData(G.Recipe, 1338245, C.progression),
         "Recipe: Wet Concrete": ItemData(G.Recipe, 1338246, C.progression),
@@ -262,13 +263,13 @@ class Items:
         "Recipe: Pure Copper Ingot": ItemData(G.Recipe, 1338261, C.progression),
         "Recipe: Caterium Ingot": ItemData(G.Recipe, 1338262, C.progression),
         "Recipe: Pure Caterium Ingot": ItemData(G.Recipe, 1338263, C.progression),
-        "Recipe: Alien Power Matrix": ItemData(G.Recipe, 1338264), # 1.0
-        "Recipe: Ficsite Ingot (Aluminum)": ItemData(G.Recipe, 1338265, C.progression), # 1.0
-        "Recipe: Ficsite Ingot (Caterium)": ItemData(G.Recipe, 1338266, C.progression), # 1.0
-        "Recipe: Ficsite Ingot (Iron)": ItemData(G.Recipe, 1338267, C.progression), # 1.0
-        "Recipe: Ficsite Trigon": ItemData(G.Recipe, 1338268, C.progression), # 1.0
-        "Recipe: Reanimated SAM": ItemData(G.Recipe, 1338269, C.progression), # 1.0
-        "Recipe: SAM Fluctuator": ItemData(G.Recipe, 1338270, C.progression), # 1.0
+        "Recipe: Alien Power Matrix": ItemData(G.Recipe, 1338264),  # 1.0
+        "Recipe: Ficsite Ingot (Aluminum)": ItemData(G.Recipe, 1338265, C.progression),  # 1.0
+        "Recipe: Ficsite Ingot (Caterium)": ItemData(G.Recipe, 1338266, C.progression),  # 1.0
+        "Recipe: Ficsite Ingot (Iron)": ItemData(G.Recipe, 1338267, C.progression),  # 1.0
+        "Recipe: Ficsite Trigon": ItemData(G.Recipe, 1338268, C.progression),  # 1.0
+        "Recipe: Reanimated SAM": ItemData(G.Recipe, 1338269, C.progression),  # 1.0
+        "Recipe: SAM Fluctuator": ItemData(G.Recipe, 1338270, C.progression),  # 1.0
         "Recipe: Petroleum Coke": ItemData(G.Recipe, 1338271, C.progression),
         "Recipe: Compacted Coal": ItemData(G.Recipe, 1338272, C.progression),
         "Recipe: Motor": ItemData(G.Recipe, 1338273, C.progression),
@@ -307,7 +308,7 @@ class Items:
         "Recipe: Diluted Fuel": ItemData(G.Recipe, 1338306, C.progression),
         "Recipe: Alumina Solution": ItemData(G.Recipe, 1338307, C.progression),
         "Recipe: Automated Miner": ItemData(G.Recipe, 1338308, C.progression),
-        "Recipe: Singularity Cell": ItemData(G.Recipe, 1338309, C.progression), # 1.0
+        "Recipe: Singularity Cell": ItemData(G.Recipe, 1338309, C.progression),  # 1.0
         "Recipe: Aluminum Scrap": ItemData(G.Recipe, 1338310, C.progression),
         "Recipe: Electrode Aluminum Scrap": ItemData(G.Recipe, 1338311, C.progression),
         "Recipe: Instant Scrap": ItemData(G.Recipe, 1338312, C.progression),
@@ -336,16 +337,16 @@ class Items:
         "Recipe: Supercomputer": ItemData(G.Recipe, 1338335, C.progression),
         "Recipe: OC Supercomputer": ItemData(G.Recipe, 1338336, C.progression),
         "Recipe: Super-State Computer": ItemData(G.Recipe, 1338337, C.progression),
-        "Recipe: Biochemical Sculptor": ItemData(G.Recipe, 1338338, C.progression), # 1.0
+        "Recipe: Biochemical Sculptor": ItemData(G.Recipe, 1338338, C.progression),  # 1.0
         "Recipe: Sulfuric Acid": ItemData(G.Recipe, 1338339, C.progression),
-        "Recipe: Ballistic Warp Drive": ItemData(G.Recipe, 1338340, C.progression), # 1.0
+        "Recipe: Ballistic Warp Drive": ItemData(G.Recipe, 1338340, C.progression),  # 1.0
         "Recipe: Encased Uranium Cell": ItemData(G.Recipe, 1338341, C.progression),
         "Recipe: Infused Uranium Cell": ItemData(G.Recipe, 1338342, C.progression),
         "Recipe: Uranium Fuel Rod": ItemData(G.Recipe, 1338343, C.progression),
         "Recipe: Uranium Fuel Unit": ItemData(G.Recipe, 1338344, C.progression),
-        "Recipe: Aluminum Beam": ItemData(G.Recipe, 1338345, C.progression), # 1.0
-        "Recipe: Aluminum Rod": ItemData(G.Recipe, 1338346, C.progression), # 1.0
-        "Recipe: Basic Iron Ingot": ItemData(G.Recipe, 1338347, C.progression), # 1.0
+        "Recipe: Aluminum Beam": ItemData(G.Recipe, 1338345, C.progression),  # 1.0
+        "Recipe: Aluminum Rod": ItemData(G.Recipe, 1338346, C.progression),  # 1.0
+        "Recipe: Basic Iron Ingot": ItemData(G.Recipe, 1338347, C.progression),  # 1.0
         "Recipe: Non-fissile Uranium": ItemData(G.Recipe, 1338348, C.progression),
         "Recipe: Fertile Uranium": ItemData(G.Recipe, 1338349, C.progression),
         "Recipe: Plutonium Pellet": ItemData(G.Recipe, 1338350),
@@ -360,11 +361,11 @@ class Items:
         "Recipe: Copper Powder": ItemData(G.Recipe, 1338359, C.progression),
         "Recipe: Nuclear Pasta": ItemData(G.Recipe, 1338360, C.progression),
         "Recipe: Thermal Propulsion Rocket": ItemData(G.Recipe, 1338361, C.progression),
-        "Recipe: Ficsonium": ItemData(G.Recipe, 1338362), # 1.0
-        "Recipe: Ficsonium Fuel Rod": ItemData(G.Recipe, 1338363), # 1.0
-        "Recipe: Dark Matter Crystal": ItemData(G.Recipe, 1338364, C.progression), # 1.0
-        "Recipe: Dark Matter Crystallization": ItemData(G.Recipe, 1338365, C.progression), # 1.0
-        "Recipe: Dark Matter Trap": ItemData(G.Recipe, 1338366, C.progression), # 1.0
+        "Recipe: Ficsonium": ItemData(G.Recipe, 1338362),  # 1.0
+        "Recipe: Ficsonium Fuel Rod": ItemData(G.Recipe, 1338363),  # 1.0
+        "Recipe: Dark Matter Crystal": ItemData(G.Recipe, 1338364, C.progression),  # 1.0
+        "Recipe: Dark Matter Crystallization": ItemData(G.Recipe, 1338365, C.progression),  # 1.0
+        "Recipe: Dark Matter Trap": ItemData(G.Recipe, 1338366, C.progression),  # 1.0
         "Recipe: Pulse Nobelisk":  ItemData(G.Recipe, 1338367, C.useful),
         "Recipe: Hatcher Protein": ItemData(G.Recipe, 1338368, C.progression),
         "Recipe: Hog Protein": ItemData(G.Recipe, 1338369, C.progression),
@@ -385,7 +386,7 @@ class Items:
         "Recipe: Empty Fluid Tank": ItemData(G.Recipe, 1338384, C.progression),
         "Recipe: Packaged Alumina Solution": ItemData(G.Recipe, 1338385, C.progression),
         "Recipe: Packaged Fuel": ItemData(G.Recipe, 1338386, C.progression),
-        #"Recipe: Diluted Packaged Fuel": ItemData(G.Recipe, 1338387, C.progression), # Duplicated
+        # "Recipe: Diluted Packaged Fuel": ItemData(G.Recipe, 1338387, C.progression),  # Duplicated
         "Recipe: Packaged Heavy Oil Residue": ItemData(G.Recipe, 1338388, C.progression),
         "Recipe: Packaged Liquid Biofuel": ItemData(G.Recipe, 1338389, C.progression),
         "Recipe: Packaged Nitric Acid": ItemData(G.Recipe, 1338390, C.progression),
@@ -442,7 +443,7 @@ class Items:
         "Recipe: Turbo Diamonds": ItemData(G.Recipe, 1338439, C.progression),
         "Recipe: Time Crystal": ItemData(G.Recipe, 1338440, C.progression),
         "Recipe: Superposition Oscillator": ItemData(G.Recipe, 1338441, C.progression),
-        #"Recipe: Excited Photonic Matter": ItemData(G.Recipe, 1338442, C.progression), unlocked with converter
+        # "Recipe: Excited Photonic Matter": ItemData(G.Recipe, 1338442, C.progression), unlocked with converter
         "Recipe: Rocket Fuel": ItemData(G.Recipe, 1338443, C.progression),
         "Recipe: Nitro Rocket Fuel": ItemData(G.Recipe, 1338444, C.progression),
         "Recipe: Ionized Fuel": ItemData(G.Recipe, 1338445, C.useful),
@@ -473,25 +474,25 @@ class Items:
 # 
         "Recipe: Dark Matter Residue": ItemData(G.Recipe, 1338467, C.progression),
 
-        #1338468 - 1338599 Reserved for future recipes
-        #1338400 - 1338899 buildings / others
-        "Building: Constructor": ItemData(G.Building, 1338600, C.progression), # unlocked by default
+        # 1338468 - 1338599 Reserved for future recipes
+        # 1338400 - 1338899 buildings / others
+        "Building: Constructor": ItemData(G.Building, 1338600, C.progression),  # unlocked by default
         "Building: Assembler": ItemData(G.Building, 1338601, C.progression),
         "Building: Manufacturer": ItemData(G.Building, 1338602, C.progression),
         "Building: Packager": ItemData(G.Building, 1338603, C.progression),
         "Building: Refinery": ItemData(G.Building, 1338604, C.progression),
         "Building: Blender": ItemData(G.Building, 1338605, C.progression),
         "Building: Particle Accelerator": ItemData(G.Building, 1338606, C.progression),
-        "Building: Biomass Burner": ItemData(G.Building, 1338607, C.progression), # unlocked by default
+        "Building: Biomass Burner": ItemData(G.Building, 1338607, C.progression),  # unlocked by default
         "Building: Coal Generator": ItemData(G.Building, 1338608, C.progression),
         "Building: Geothermal Generator": ItemData(G.Building, 1338609, C.progression),
         "Building: Nuclear Power Plant": ItemData(G.Building, 1338610, C.progression),
-        "Building: Miner Mk.1": ItemData(G.Building, 1338611, C.progression), # unlocked by default
+        "Building: Miner Mk.1": ItemData(G.Building, 1338611, C.progression),  # unlocked by default
         "Building: Miner Mk.2": ItemData(G.Building, 1338612, C.progression),
         "Building: Miner Mk.3": ItemData(G.Building, 1338613, C.progression),
         "Building: Oil Extractor": ItemData(G.Building, 1338614, C.progression),
         "Building: Water Extractor": ItemData(G.Building, 1338615, C.progression),
-        "Building: Smelter": ItemData(G.Building, 1338616, C.progression), # unlocked by default
+        "Building: Smelter": ItemData(G.Building, 1338616, C.progression),  # unlocked by default
         "Building: Foundry": ItemData(G.Building, 1338617, C.progression),
         "Building: Fuel Generator": ItemData(G.Building, 1338618, C.progression),
         "Building: Resource Well Pressurizer": ItemData(G.Building, 1338619, C.progression),
@@ -499,7 +500,7 @@ class Items:
         "Building: AWESOME Sink": ItemData(G.Building | G.NeverExclude, 1338621, C.progression),
         "Building: AWESOME Shop": ItemData(G.Building | G.NeverExclude, 1338622, C.progression),
         "Building: Structural Beam Pack": ItemData(G.Beams, 1338623, C.filler),
-        "Building: Blueprint Designer": ItemData(G.Building, 1338624, C.filler, 0), # unlocked by default
+        "Building: Blueprint Designer": ItemData(G.Building, 1338624, C.filler, 0),  # unlocked by default
         "Building: Fluid Buffer": ItemData(G.Building | G.NeverExclude, 1338625, C.useful),
         "Building: Industrial Fluid Buffer": ItemData(G.Building | G.NeverExclude, 1338626, C.useful),
         "Building: Jump Pad": ItemData(G.Building, 1338627, C.filler),
@@ -512,13 +513,13 @@ class Items:
         "Building: Priority Power Switch": ItemData(G.Building | G.NeverExclude, 1338634, C.useful),
         "Building: Storage Container": ItemData(G.Building, 1338635, C.useful, 0),
         "Building: Lookout Tower": ItemData(G.Building, 1338636, C.filler),
-        #"Building: Power Pole Mk.1": ItemData(G.Building, 1338637, C.progression), # unlocked by default
+        # "Building: Power Pole Mk.1": ItemData(G.Building, 1338637, C.progression), # unlocked by default
         "Building: Power Pole Mk.2": ItemData(G.Building | G.NeverExclude, 1338638, C.useful),
         "Building: Power Pole Mk.3": ItemData(G.Building | G.NeverExclude, 1338639, C.useful),
         "Building: Industrial Storage Container": ItemData(G.Building | G.NeverExclude, 1338640, C.useful),
         "Building: Conveyor Merger": ItemData(G.Building | G.NeverExclude, 1338641, C.progression),
         "Building: Conveyor Splitter": ItemData(G.Building | G.NeverExclude, 1338642, C.progression),
-        "Building: Conveyor Mk.1": ItemData(G.Building | G.ConveyorMk1, 1338643, C.progression), # unlocked by default
+        "Building: Conveyor Mk.1": ItemData(G.Building | G.ConveyorMk1, 1338643, C.progression),  # unlocked by default
         "Building: Conveyor Mk.2": ItemData(G.Building | G.ConveyorMk2, 1338644, C.progression),
         "Building: Conveyor Mk.3": ItemData(G.Building | G.ConveyorMk3, 1338645, C.progression),
         "Building: Conveyor Mk.4": ItemData(G.Building | G.ConveyorMk4, 1338646, C.progression),
@@ -556,11 +557,11 @@ class Items:
         "Building: Label Sign Bundle": ItemData(G.Building | G.Signs, 1338678, C.filler, 0),
         "Building: Display Sign Bundle": ItemData(G.Building | G.Signs, 1338679, C.filler, 0),
         "Building: Billboard Set": ItemData(G.Building | G.Signs, 1338680, C.filler, 0),
-        #1338681 Moved to cosmetics - 1.1
+        # 1338681 Moved to cosmetics - 1.1
         "Building: Metal Pillar": ItemData(G.Pilars, 1338682, C.filler, 0),
         "Building: Concrete Pillar": ItemData(G.Pilars, 1338683, C.filler, 0),
         "Building: Frame Pillar": ItemData(G.Pilars, 1338684, C.filler, 0),
-        #1338685 - 1338691 Moved to cosmetics - 1.1
+        # 1338685 - 1338691 Moved to cosmetics - 1.1
         "Building: Foundation": ItemData(G.Building | G.Foundations | G.NeverExclude, 1338692, C.progression),
         "Building: Half Foundation": ItemData(G.Foundations, 1338693, C.filler, 0),
         "Building: Corner Ramp Pack": ItemData(G.Foundations, 1338694, C.filler, 0),
@@ -606,7 +607,7 @@ class Items:
         "Building: Beam Expansion Pack": ItemData(G.Beams, 1338733, C.filler, 0),
         "Building: Ventilation Bundle": ItemData(G.Building, 1338734, C.filler, 0),
 ###
-        #1338729 - 1338749 Reserved for buildings
+        # 1338729 - 1338749 Reserved for buildings
         "Customizer: Asphalt Foundation Material": ItemData(G.Customizer | G.Foundations, 1338750, C.filler, 0),
         "Customizer: Concrete Foundation Material": ItemData(G.Customizer | G.Foundations, 1338751, C.filler, 0),
         "Customizer: Concrete Wall Material": ItemData(G.Customizer | G.Walls, 1338752, C.filler, 0),
@@ -632,12 +633,12 @@ class Items:
         "Customizer: Carbon Steel Finish": ItemData(G.Customizer, 1338772, C.filler, 0), 
         "Customizer: Caterium Paint Finish": ItemData(G.Customizer, 1338773, C.filler, 0), 
 
-        #1338776 - 1338799 Reserved for Cosmetics
+        # 1338776 - 1338799 Reserved for Cosmetics
 
         # Transports 1338800 - 1338899
         # Drones (including Drone)
         "Transport: Drones": ItemData(G.Transport, 1338800, C.useful),
-        # Trains (including Empty Platform, rails, station, locomotive, train stop) # 1.1
+        # Trains (including Empty Platform, rails, station, locomotive, train stop)  # 1.1
         "Transport: Trains": ItemData(G.Transport | G.Trains, 1338801, C.useful),
         "Transport: Fluid Trains": ItemData(G.Transport | G.Trains, 1338802, C.useful),
         # Tracker / Truck (including truck station)
@@ -653,9 +654,9 @@ class Items:
         "Transport: Hypertube Wall Support": ItemData(G.Transport | G.HyperTubes, 1338811, C.filler),
         "Transport: Hypertube Wall Hole": ItemData(G.Transport | G.HyperTubes, 1338812, C.filler),
         # Personal Elevator (including additional floors)
-        "Transport: Personal Elevator": ItemData(G.Transport, 1338813, C.useful), # 1.1
+        "Transport: Personal Elevator": ItemData(G.Transport, 1338813, C.useful),  # 1.1
 
-        #1338900 - 1338998 Handled by trap system (includes a few non-trap things)
+        # 1338900 - 1338998 Handled by trap system (includes a few non-trap things)
         # Regenerate via /Script/Blutility.EditorUtilityWidgetBlueprint'/Archipelago/Debug/EU_GenerateTrapIds.EU_GenerateTrapIds'
         "Trap: Hog": ItemData(G.Trap, 1338900, C.trap),
         "Trap: Alpha Hog": ItemData(G.Trap, 1338901, C.trap),
@@ -817,15 +818,15 @@ class Items:
         "Single: Packaged Rocket Fuel": ItemData(G.Parts, 1339131, count=0),
         "Single: Packaged Ionized Fuel": ItemData(G.Parts, 1339132, count=0),
         "Single: Dark Matter Crystal": ItemData(G.Parts, 1339133, count=0),
-        #1339134 - 1339149 Reserved for future parts
-        #1339150 - 1339199 Equipment / Ammo
+        # 1339134 - 1339149 Reserved for future parts
+        # 1339150 - 1339199 Equipment / Ammo
         "Single: Bacon Agaric": ItemData(G.Ammo, 1339150, count=0),
         "Single: Beryl Nut": ItemData(G.Ammo, 1339151, count=0),
         "Single: Blade Runners": ItemData(G.Equipment, 1339152),
         "Single: Boom Box": ItemData(G.Equipment, 1339153),
         "Single: Chainsaw": ItemData(G.Equipment, 1339154, C.useful),
         "Single: Cluster Nobelisk": ItemData(G.Ammo, 1339155, count=0),
-        "Single: Iodine-Infused Filter": ItemData(G.Equipment, 1339156, count=0), #1.1
+        "Single: Iodine-Infused Filter": ItemData(G.Equipment, 1339156, count=0),  # 1.1
         "Single: Cup": ItemData(G.Equipment, 1339157),
         "Single: Cup (gold)": ItemData(G.Equipment, 1339158, count=0),
         "Single: Explosive Rebar": ItemData(G.Ammo, 1339159, count=0),
@@ -863,7 +864,6 @@ class Items:
     filler_items: ClassVar[tuple[str, ...]] = tuple(item for item, details in item_data.items() 
                                                     if details.count > 0 and details.category & (G.Parts | G.Ammo))
 
-
     @classmethod
     def get_item_names_per_category(cls, game_logic: GameLogic) -> dict[str, set[str]]:
         groups: dict[str, set[str]] = {}
@@ -896,7 +896,7 @@ class Items:
     enabled_traps: tuple[str, ...]
 
     def __init__(self, player: Optional[int], logic: GameLogic, random: Random,
-                  options: SatisfactoryOptions, critical_path: CriticalPathCalculator):
+                 options: SatisfactoryOptions, critical_path: CriticalPathCalculator):
         self.player = player
         self.logic = logic
         self.random = random
@@ -906,7 +906,6 @@ class Items:
         self.trap_chance = self.options.trap_chance.value
         self.enabled_traps = tuple(self.options.trap_selection_override.value)
 
-
     @classmethod
     def create_item_uninitialized(cls, name: str, player: int) -> Item:
         data: ItemData = cls.item_data[name]
@@ -914,15 +913,14 @@ class Items:
 
     def create_item(self, name: str, player: int) -> Item:
         data: ItemData = self.item_data[name]
-        type = data.type
+        item_type = data.type
 
-        if type == C.progression \
+        if item_type == C.progression \
             and (data.category & (G.Recipe | G.Building)) and not (data.category & G.NeverExclude) \
-            and self.critical_path.required_item_names and name not in self.critical_path.required_item_names:
-                type = C.useful
+                and self.critical_path.required_item_names and name not in self.critical_path.required_item_names:
+            item_type = C.useful
 
-        return Item(name, type, data.code, player)
-
+        return Item(name, item_type, data.code, player)
 
     @classmethod
     def get_filler_item_name_uninitialized(cls, random: Random) -> str:
@@ -937,24 +935,22 @@ class Items:
             else:
                 return Items.get_filler_item_name_uninitialized(random)
 
-
     def get_excluded_items(self, precollected_items: list[Item]) -> set[str]:
         excluded_items: set[str] = { 
             item.name 
             for item in precollected_items
-            if item.name in self.item_data
-                and item.name not in self.options.start_inventory_from_pool.value
+            if item.name in self.item_data and item.name not in self.options.start_inventory_from_pool.value
         }
 
-        excluded_items.update({"Building: "+ building for building in self.critical_path.buildings_to_exclude})
-        excluded_items.update({"Bundle: "+ part for part in self.critical_path.parts_to_exclude})
-        excluded_items.update({"Single: "+ part for part in self.critical_path.parts_to_exclude})
+        excluded_items.update({"Building: " + building for building in self.critical_path.buildings_to_exclude})
+        excluded_items.update({"Bundle: " + part for part in self.critical_path.parts_to_exclude})
+        excluded_items.update({"Single: " + part for part in self.critical_path.parts_to_exclude})
 
         excluded_items.update({recipe for recipe in self.critical_path.recipes_to_exclude})
         excluded_items.update(self.critical_path.implicitly_unlocked)
 
         # since we dont have part logic setup for Transports
-        if (self.options.final_elevator_package == 1):
+        if self.options.final_elevator_package == 1:
             excluded_items.add("Transport: Drones")
 
         # Remove excluded items that arent unique
@@ -965,7 +961,6 @@ class Items:
         }
 
         return excluded_items
-
 
     def build_item_pool(self, random: Random, precollected_items: list[Item], number_of_locations: int) -> list[Item]:
         excluded_from_pool: set[str] = self.get_excluded_items(precollected_items)
@@ -984,7 +979,7 @@ class Items:
         ]
 
         free_space: int = number_of_locations - len(pool)
-        if (free_space < 0):
+        if free_space < 0:
             raise Exception(f"Location pool starved, trying to add {len(pool)} items to {number_of_locations} locations")
 
         non_excluded_filler_items: list[str] = [item for item in self.filler_items if item not in excluded_from_pool]

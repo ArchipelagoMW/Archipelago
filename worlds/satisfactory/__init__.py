@@ -70,7 +70,6 @@ class SatisfactoryWorld(World):
         for item_name in starting_inventory:
             self.push_precollected_by_name(item_name)
 
-
     def create_regions(self) -> None:
         locations: list[LocationData] = \
             Locations(self.game_logic, self.options, self.state_logic, self.items, self.critical_path).get_locations()
@@ -78,20 +77,18 @@ class SatisfactoryWorld(World):
             self.multiworld, self.options, self.player, self.game_logic, self.state_logic, self.critical_path,
             locations)
 
-
     def create_items(self) -> None:
         self.setup_events()
 
         number_of_locations: int = len(self.multiworld.get_unfilled_locations(self.player))
         precollected_items: list[Item] = self.multiworld.precollected_items[self.player]
-        
+
         self.multiworld.itempool += \
             self.items.build_item_pool(self.random, precollected_items, number_of_locations)
 
-
     def set_rules(self) -> None:
         resource_sink_goal: bool = "AWESOME Sink Points (total)" in self.options.goal_selection \
-                                or "AWESOME Sink Points (per minute)" in self.options.goal_selection
+                                   or "AWESOME Sink Points (per minute)" in self.options.goal_selection
 
         required_parts = set(self.game_logic.space_elevator_tiers[self.options.final_elevator_package.value - 1])
 
@@ -101,20 +98,17 @@ class SatisfactoryWorld(World):
         self.multiworld.completion_condition[self.player] = \
             lambda state: self.state_logic.can_produce_all(state, required_parts)
 
-
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
         if change and item.name in self.game_logic.indirect_recipes:
             state.prog_items[self.player][self.game_logic.indirect_recipes[item.name]] = 1
         return change
 
-
     def remove(self, state: CollectionState, item: Item) -> bool:
         change = super().remove(state, item)
         if change and item.name in self.game_logic.indirect_recipes:
             del state.prog_items[self.player][self.game_logic.indirect_recipes[item.name]]
         return change
-
 
     def fill_slot_data(self) -> dict[str, object]:
         slot_hub_layout: list[list[dict[str, int]]] = []
@@ -125,10 +119,10 @@ class SatisfactoryWorld(World):
                 slot_hub_layout[tier - 1].append({})
                 for part, amount in parts.items():
                     multiplied_amount = int(max(amount * (self.options.milestone_cost_multiplier / 100), 1))
-                    slot_hub_layout[tier-1][milestone-1][self.item_id_str(part)] = multiplied_amount
+                    slot_hub_layout[tier - 1][milestone - 1][self.item_id_str(part)] = multiplied_amount
 
         starting_recipes: tuple[int, ...] = tuple(
-            self.item_name_to_id[recipe_name] 
+            self.item_name_to_id[recipe_name]
             for recipe_name in self.critical_path.tier_0_recipes
         )
 
@@ -165,27 +159,26 @@ class SatisfactoryWorld(World):
             "DeathLink": bool(self.options.death_link)
         }
 
-
     @staticmethod
     def interpret_slot_data(slot_data: dict[str, Any] | None) -> dict[str, Any] | None:
         """Used by Universal Tracker, return value is passed to self.multiworld.re_gen_passthrough["Satisfactory"]"""
         return slot_data
 
-
     def process_universal_tracker_slot_data_if_available(self) -> None:
         """Used by Universal Tracker to correctly rebuild state"""
 
         slot_data: dict[str, Any] | None = None
-        if (hasattr(self.multiworld, "re_gen_passthrough") 
-                and isinstance(self.multiworld.re_gen_passthrough, dict) 
+        if (hasattr(self.multiworld, "re_gen_passthrough")
+                and isinstance(self.multiworld.re_gen_passthrough, dict)
                 and "Satisfactory" in self.multiworld.re_gen_passthrough):
             slot_data = self.multiworld.re_gen_passthrough["Satisfactory"]
 
         if not slot_data:
             return
 
-        if (slot_data["Data"]["SlotDataVersion"] != 1):
-            raise Exception("The slot_data version mismatch, the UT's Satisfactory .apworld is different from the one used during generation")
+        if slot_data["Data"]["SlotDataVersion"] != 1:
+            raise Exception("The slot_data version mismatch, the UT's Satisfactory .apworld is different from the one "
+                            "used during generation")
 
         self.options.goal_selection.value = slot_data["Data"]["Options"]["GoalSelection"]
         self.options.goal_requirement.value = slot_data["Data"]["Options"]["GoalRequirement"]
@@ -200,19 +193,17 @@ class SatisfactoryWorld(World):
         self.options.energy_link.value = int(slot_data["Data"]["Options"]["EnergyLink"])
 
         self.options.milestone_cost_multiplier.value = 100 * \
-            (slot_data["Data"]["HubLayout"][0][0][self.item_id_str("Concrete")] 
+            (slot_data["Data"]["HubLayout"][0][0][self.item_id_str("Concrete")]
                 / self.game_logic.hub_layout[0][0]["Concrete"])
         self.options.goal_exploration_collectables_amount.value = \
             slot_data["Data"]["ExplorationCosts"][self.item_id_str("Somersloop")]
-        
+
         self.critical_path_seed = slot_data["Data"]["UT"]["Seed"]
         self.options.randomize_starter_recipes.value = slot_data["Data"]["UT"]["RandomizeTier0"]
-
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.randomize_starter_recipes:
             spoiler_handle.write(f'Starter Recipes:                 {sorted(self.critical_path.tier_0_recipes)}\n')
-
 
     def setup_events(self) -> None:
         location: SatisfactoryLocation
@@ -225,13 +216,11 @@ class SatisfactoryWorld(World):
                 location.place_locked_item(item)
                 location.show_in_spoiler = False
 
-
     def get_filler_item_name(self) -> str:
         if self.items:
             return self.items.get_filler_item_name(self.random, None)
         else:
             return Items.get_filler_item_name_uninitialized(self.random)
-
 
     def create_item(self, name: str) -> Item:
         if self.items:
@@ -239,28 +228,26 @@ class SatisfactoryWorld(World):
         else:
             return Items.create_item_uninitialized(name, self.player)
 
-
-    def modify_multidata(self, multidata: dict[str, Any]) -> None: 
-        locations_visible_from_start: list[int] = list(range(1338000, 1338099)) # ids of Hub 1-1,1 to 2-5,10
+    def modify_multidata(self, multidata: dict[str, Any]) -> None:
+        locations_visible_from_start: list[int] = list(range(1338000, 1338099))  # ids of Hub 1-1,1 to 2-5,10
 
         if "Building: AWESOME Shop" in self.options.start_inventory \
                 or "Building: AWESOME Shop" in self.options.start_inventory_from_pool \
-                or 1338622 in multidata["precollected_items"][self.player]: # id of Building: AWESOME Shop
-            locations_visible_from_start.extend(range(1338700, 1338709)) # ids of shop locations 1 to 10
+                or 1338622 in multidata["precollected_items"][self.player]:  # id of Building: AWESOME Shop
+            locations_visible_from_start.extend(range(1338700, 1338709))  # ids of shop locations 1 to 10
 
         for location_id in locations_visible_from_start:
             if location_id in multidata["locations"][self.player]:
                 item_id, player_id, flags = multidata["locations"][self.player][location_id]
 
-                if player_id != self.player and flags & (ItemClassification.progression|ItemClassification.useful) > 0:
+                if player_id != self.player and flags & (
+                        ItemClassification.progression | ItemClassification.useful) > 0:
                     hint = Hint(player_id, self.player, location_id, item_id, False, item_flags=flags)
                     multidata["precollected_hints"][self.player].add(hint)
-
 
     def push_precollected_by_name(self, item_name: str) -> None:
         item = self.create_item(item_name)
         self.push_precollected(item)
-
 
     def item_id_str(self, item_name: str) -> str:
         # ItemIDs of bundles are shared with their component item

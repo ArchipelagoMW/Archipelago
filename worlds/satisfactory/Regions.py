@@ -7,6 +7,7 @@ from .StateLogic import StateLogic
 from .Options import SatisfactoryOptions, Placement
 from .CriticalPathCalculator import CriticalPathCalculator
 
+
 class SatisfactoryLocation(Location):
     game: str = "Satisfactory"
     event_name: Optional[str]
@@ -20,10 +21,10 @@ class SatisfactoryLocation(Location):
             self.event = True
             self.locked = True
 
-        if (data.rule):
+        if data.rule:
             self.access_rule = data.rule
 
-        if (data.non_progression):
+        if data.non_progression:
             self.item_rule = self.non_progression_only
 
     @staticmethod
@@ -32,8 +33,8 @@ class SatisfactoryLocation(Location):
 
 
 def create_regions_and_return_locations(multiworld: MultiWorld, options: SatisfactoryOptions, player: int,
-        game_logic: GameLogic, state_logic: StateLogic, critical_path: CriticalPathCalculator,
-        locations: list[LocationData]) -> None:
+                                        game_logic: GameLogic, state_logic: StateLogic,
+                                        critical_path: CriticalPathCalculator, locations: list[LocationData]) -> None:
     
     region_names: list[str] = [
         "Overworld",
@@ -42,7 +43,7 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
     ]
 
     for hub_tier, milestones_per_hub_tier in enumerate(game_logic.hub_layout, 1):
-        if (hub_tier > (options.final_elevator_package * 2)):
+        if hub_tier > (options.final_elevator_package * 2):
             break
 
         region_names.append(f"Hub Tier {hub_tier}")
@@ -67,7 +68,7 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
     regions: dict[str, Region] = create_regions(multiworld, player, locations_per_region, region_names)
 
     if __debug__:
-        throwIfAnyLocationIsNotAssignedToARegion(regions, locations_per_region)
+        throw_if_any_location_is_not_assigned_to_a__region(regions, locations_per_region)
         
     multiworld.regions += regions.values()
 
@@ -102,8 +103,8 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
             lambda state: is_universal_tracker or state_logic.can_build_all(state, super_early_game_buildings))
     
     if options.final_elevator_package >= 2:
-        connect(regions, "Hub Tier 2", "Hub Tier 3", lambda state: state.has("Elevator Tier 1", player) 
-                                              and (is_universal_tracker or state_logic.can_build_all(state, early_game_buildings)))
+        connect(regions, "Hub Tier 2", "Hub Tier 3", lambda state: state.has("Elevator Tier 1", player)
+            and (is_universal_tracker or state_logic.can_build_all(state, early_game_buildings)))
         connect(regions, "Hub Tier 3", "Hub Tier 4")
     if options.final_elevator_package >= 3:
         connect(regions, "Hub Tier 4", "Hub Tier 5", lambda state: state.has("Elevator Tier 2", player))
@@ -115,8 +116,8 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
         connect(regions, "Hub Tier 8", "Hub Tier 9", lambda state: state.has("Elevator Tier 4", player))
 
     connect(regions, "Overworld", "Mam", lambda state: state_logic.can_build(state, "MAM"))
-    connect(regions, "Overworld", "AWESOME Shop", lambda state:
-                                state_logic.can_build_all(state, ("AWESOME Shop", "AWESOME Sink")))
+    connect(regions, "Overworld", "AWESOME Shop",
+            lambda state: state_logic.can_build_all(state, ("AWESOME Shop", "AWESOME Sink")))
 
     def can_produce_all_allowing_handcrafting(parts: Iterable[str]) -> Callable[[CollectionState], bool]:
         def logic_rule(state: CollectionState):
@@ -125,12 +126,12 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
         return logic_rule
 
     for hub_tier, milestones_per_hub_tier in enumerate(game_logic.hub_layout, 1):
-        if (hub_tier > (options.final_elevator_package * 2)):
+        if hub_tier > (options.final_elevator_package * 2):
             break
 
         for milestone, parts_per_milestone in enumerate(milestones_per_hub_tier, 1):
             connect(regions, f"Hub Tier {hub_tier}", f"Hub {hub_tier}-{milestone}",
-                can_produce_all_allowing_handcrafting(parts_per_milestone))
+                    can_produce_all_allowing_handcrafting(parts_per_milestone))
             
     for building_name, building in game_logic.buildings.items():
         if building.can_produce and building_name in critical_path.required_buildings:
@@ -146,24 +147,26 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
 
             if not node.depends_on:
                 connect(regions, tree_name, f"{tree_name}: {node.name}",
-                    lambda state, parts=node.unlock_cost: state_logic.can_produce_all(state, parts))
+                        lambda state, parts=node.unlock_cost: state_logic.can_produce_all(state, parts))
             else:
                 for parent in node.depends_on:
                     if f"{tree_name}: {parent}" in region_names:
-                        connect(regions, f"{tree_name}: {parent}", f"{tree_name}: {node.name}", 
-                            lambda state, parts=node.unlock_cost: state_logic.can_produce_all(state, parts))
+                        connect(regions, f"{tree_name}: {parent}", f"{tree_name}: {node.name}",
+                                lambda state, parts=node.unlock_cost: state_logic.can_produce_all(state, parts))
 
 
-def throwIfAnyLocationIsNotAssignedToARegion(regions: dict[str, Region], regionNames: dict[str, list[LocationData]]) -> None:
-    existingRegions = set(regions)
-    existingRegionNames = set(regionNames)
+def throw_if_any_location_is_not_assigned_to_a__region(regions: dict[str, Region],
+                                                       region_names: dict[str, list[LocationData]]) -> None:
+    existing_regions = set(regions)
+    existing_region_names = set(region_names)
 
-    if (existingRegionNames - existingRegions):
-        raise Exception(f"Satisfactory: the following regions are used in locations: {existingRegionNames - existingRegions}, but no such region exists")
+    if existing_region_names - existing_regions:
+        raise Exception(f"Satisfactory: the following regions are used in locations: "
+                        f"{existing_region_names - existing_regions}, but no such region exists")
 
 
-def create_region(multiworld: MultiWorld, player: int, 
-        locations_per_region: dict[str, list[LocationData]], name: str) -> Region:
+def create_region(multiworld: MultiWorld, player: int,
+                  locations_per_region: dict[str, list[LocationData]], name: str) -> Region:
 
     region = Region(name, player, multiworld)
 
@@ -177,24 +180,24 @@ def create_region(multiworld: MultiWorld, player: int,
 
 
 def create_regions(multiworld: MultiWorld, player: int, locations_per_region: dict[str, list[LocationData]],
-                    region_names: list[str]) -> dict[str, Region]:
+                   region_names: list[str]) -> dict[str, Region]:
     return {
-        name : create_region(multiworld, player, locations_per_region, name)
+        name: create_region(multiworld, player, locations_per_region, name)
         for name in region_names
     }
 
 
-def connect(regions: dict[str, Region], source: str, target: str, 
-        rule: Optional[Callable[[CollectionState], bool]] = None) -> None:
+def connect(regions: dict[str, Region], source: str, target: str,
+            rule: Optional[Callable[[CollectionState], bool]] = None) -> None:
 
-    sourceRegion = regions[source]
-    targetRegion = regions[target]
+    source_region = regions[source]
+    target_region = regions[target]
 
-    sourceRegion.connect(targetRegion, rule=rule)
+    source_region.connect(target_region, rule=rule)
 
 
 def get_locations_per_region(locations: list[LocationData]) -> dict[str, list[LocationData]]:
-    per_region: dict[str, list[LocationData]]  = {}
+    per_region: dict[str, list[LocationData]] = {}
 
     for location in locations:
         per_region.setdefault(location.region, []).append(location)

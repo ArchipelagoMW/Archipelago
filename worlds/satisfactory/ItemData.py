@@ -2,6 +2,7 @@ from enum import IntFlag
 from dataclasses import dataclass
 from BaseClasses import ItemClassification
 
+
 class ItemGroups(IntFlag):
     Parts = 1 << 1
     Equipment = 1 << 2
@@ -41,5 +42,5 @@ class ItemData:
     code: int
     type: ItemClassification = ItemClassification.filler
     count: int = 1
-    """How many of this item exists in the pool. 0 means none, but still defines the item so it can be added in the starting inventory for example"""
-
+    """How many of this item exists in the pool. 0 means none, but still defines the item so it can be added in the 
+    starting inventory for example"""

@@ -2,6 +2,7 @@ from BaseClasses import Tutorial
 from .Options import option_groups, option_presets
 from ..AutoWorld import WebWorld
 
+
 class SatisfactoryWebWorld(WebWorld):
     theme = "dirt"
     setup = Tutorial(

@@ -8,7 +8,8 @@ from .Items import Items
 from .Options import SatisfactoryOptions
 from .CriticalPathCalculator import CriticalPathCalculator
 
-class LocationData():
+
+class LocationData:
     __slots__ = ("region", "name", "event_name", "code", "non_progression", "rule")
     region: str
     name: str
@@ -29,8 +30,8 @@ class LocationData():
 
 class Part(LocationData):
     @staticmethod
-    def get_parts(state_logic: StateLogic, recipes: tuple[Recipe, ...], name: str, 
-                                                                    final_elevator_tier: int) -> list[LocationData]:
+    def get_parts(state_logic: StateLogic, recipes: tuple[Recipe, ...], name: str,
+                  final_elevator_tier: int) -> list[LocationData]:
         recipes_per_region: dict[str, list[Recipe]] = {}
 
         for recipe in recipes:
@@ -44,10 +45,11 @@ class Part(LocationData):
 
     def __init__(self, state_logic: StateLogic, region: str, recipes: Iterable[Recipe], name: str):
         super().__init__(region, part_event_prefix + name + " in " + region, EventId, part_event_prefix + name,
-            rule = self.can_produce_any_recipe_for_part(state_logic, recipes))
+                         rule=Part.can_produce_any_recipe_for_part(state_logic, recipes))
 
-    def can_produce_any_recipe_for_part(self, state_logic: StateLogic, recipes: Iterable[Recipe]) \
-                                                                            -> Callable[[CollectionState], bool]:
+    @staticmethod
+    def can_produce_any_recipe_for_part(state_logic: StateLogic, recipes: Iterable[Recipe]) \
+            -> Callable[[CollectionState], bool]:
         def can_build_by_any_recipe(state: CollectionState) -> bool:
             return any(state_logic.can_produce_specific_recipe_for_part(state, recipe) for recipe in recipes)
 
@@ -56,11 +58,12 @@ class Part(LocationData):
 
 class EventBuilding(LocationData):
     def __init__(self, game_logic: GameLogic, state_logic: StateLogic, building_name: str, building: Building):
-        super().__init__("Overworld", building_event_prefix + building_name, EventId, 
-            rule = self.can_create_building(game_logic, state_logic, building))
+        super().__init__("Overworld", building_event_prefix + building_name, EventId,
+                         rule=EventBuilding.can_create_building(game_logic, state_logic, building))
 
-    def can_create_building(self, game_logic: GameLogic, state_logic: StateLogic, building: Building
-            ) -> Callable[[CollectionState], bool]:
+    @staticmethod
+    def can_create_building(game_logic: GameLogic, state_logic: StateLogic, building: Building) \
+            -> Callable[[CollectionState], bool]:
 
         def can_build(state: CollectionState) -> bool:
             return state_logic.has_recipe(state, building) \
@@ -72,19 +75,20 @@ class EventBuilding(LocationData):
 
 class PowerInfrastructure(LocationData):
     def __init__(self, game_logic: GameLogic, state_logic: StateLogic, 
-                 powerLevel: PowerInfrastructureLevel, recipes: Iterable[Recipe]):
-        super().__init__("Overworld", building_event_prefix + powerLevel.to_name(), EventId, 
-            rule = self.can_create_power_infrastructure(game_logic, state_logic, powerLevel, recipes))
+                 power_level: PowerInfrastructureLevel, recipes: Iterable[Recipe]):
+        super().__init__("Overworld", building_event_prefix + power_level.to_name(), EventId,
+                         rule=PowerInfrastructure.can_create_power_infrastructure(game_logic, state_logic, power_level, recipes))
 
-    def can_create_power_infrastructure(self, game_logic: GameLogic, state_logic: StateLogic, 
-                                        powerLevel: PowerInfrastructureLevel, recipes: Iterable[Recipe]
-            ) -> Callable[[CollectionState], bool]:
+    @staticmethod
+    def can_create_power_infrastructure(game_logic: GameLogic, state_logic: StateLogic,
+                                        power_level: PowerInfrastructureLevel, recipes: Iterable[Recipe])\
+            -> Callable[[CollectionState], bool]:
 
         def can_power(state: CollectionState) -> bool:
-            return any(state_logic.can_power(state, level) for level in PowerInfrastructureLevel if level > powerLevel)\
+            return any(state_logic.can_power(state, level) for level in PowerInfrastructureLevel if level > power_level)\
                 or any(state_logic.can_build(state, recipe.building) and 
-                       state_logic.can_produce_all_allowing_handcrafting(state, game_logic, recipe.inputs) 
-                        for recipe in recipes)
+                       state_logic.can_produce_all_allowing_handcrafting(state, game_logic, recipe.inputs)
+                       for recipe in recipes)
 
         return can_power
 
@@ -92,32 +96,33 @@ class PowerInfrastructure(LocationData):
 class ElevatorTier(LocationData):
     def __init__(self, tier: int, state_logic: StateLogic, game_logic: GameLogic):
         super().__init__("Overworld", f"Elevator Tier {tier + 1}", EventId,
-            rule = lambda state: state_logic.can_build(state, "Space Elevator") and \
-                                 state_logic.can_produce_all(state, game_logic.space_elevator_tiers[tier]))
+                         rule=lambda state: state_logic.can_build(state, "Space Elevator") and
+                         state_logic.can_produce_all(state, game_logic.space_elevator_tiers[tier]))
 
 
 class HubSlot(LocationData):
-    def __init__(self, tier: int, milestone: int, slot: int, locationId: int):
-        super().__init__(f"Hub {tier}-{milestone}", f"Hub {tier}-{milestone}, item {slot}", locationId)
+    def __init__(self, tier: int, milestone: int, slot: int, location_id: int):
+        super().__init__(f"Hub {tier}-{milestone}", f"Hub {tier}-{milestone}, item {slot}", location_id)
 
 
 class MamSlot(LocationData):
-    def __init__(self, tree: str, nodeName: str, locationId: int):
-        super().__init__(f"{tree}: {nodeName}", f"{tree}: {nodeName}", locationId)
+    def __init__(self, tree: str, node_name: str, location_id: int):
+        super().__init__(f"{tree}: {node_name}", f"{tree}: {node_name}", location_id)
 
 
 class ShopSlot(LocationData):
-    def __init__(self, state_logic: Optional[StateLogic], slot: int, cost: int, locationId: int):
-        super().__init__("AWESOME Shop", f"AWESOME Shop purchase {slot}", locationId,
-            rule = self.can_purchase_from_shop(state_logic, cost))
-        
-    def can_purchase_from_shop(self, state_logic: Optional[StateLogic], cost: int) -> Callable[[CollectionState], bool]:
+    def __init__(self, state_logic: Optional[StateLogic], slot: int, cost: int, location_id: int):
+        super().__init__("AWESOME Shop", f"AWESOME Shop purchase {slot}", location_id,
+                         rule=ShopSlot.can_purchase_from_shop(state_logic, cost))
+
+    @staticmethod
+    def can_purchase_from_shop(state_logic: Optional[StateLogic], cost: int) -> Callable[[CollectionState], bool]:
         def can_purchase(state: CollectionState) -> bool:
             if not state_logic or cost < 20:
                 return True
-            elif (cost >= 20 and cost < 50):
+            elif 20 <= cost < 50:
                 return state_logic.is_elevator_tier(state, 1)
-            elif (cost >= 50 and cost < 100):
+            elif 50 <= cost < 100:
                 return state_logic.is_elevator_tier(state, 2)
             else:
                 return state_logic.is_elevator_tier(state, 3)
@@ -127,7 +132,7 @@ class ShopSlot(LocationData):
 
 class HardDrive(LocationData):
     def __init__(self, data: DropPodData, state_logic: Optional[StateLogic],
-            locationId: int, tier: int, can_hold_progression: bool):
+                 location_id: int, tier: int, can_hold_progression: bool):
 
         # drop pod locations are unlocked by hard drives, there is currently no direct mapping between location and hard drive
         # we currently do not know how many hdd require gas or radioactive protection
@@ -146,11 +151,12 @@ class HardDrive(LocationData):
             return logic_rule
 
         super().__init__(
-            get_region(data.gassed, data.radioactive), f"Hard drive random check {(locationId - 1338600) + 1}", locationId,
-                non_progression = not can_hold_progression, rule = get_rule(data.item, data.power))
+            get_region(data.gassed, data.radioactive),
+            f"Hard drive random check {(location_id - 1338600) + 1}", location_id,
+            non_progression=not can_hold_progression, rule=get_rule(data.item, data.power))
 
 
-class Locations():
+class Locations:
     game_logic: Optional[GameLogic]
     options: Optional[SatisfactoryOptions]
     state_logic: Optional[StateLogic]
@@ -172,7 +178,6 @@ class Locations():
         self.state_logic = state_logic
         self.items = items
         self.critical_path = critical_path
-
 
     def get_base_location_table(self, max_tier: int) -> list[LocationData]:
         all_locations = [
@@ -198,7 +203,7 @@ class Locations():
             MamSlot("Caterium", "AI Limiter", 1338519),
             MamSlot("Caterium", "Smart Splitter", 1338520),
             MamSlot("Caterium", "Programmable Splitter", 1338521),
-            MamSlot("Mycelia", "Gas Mask", 1338522), # 1.0
+            MamSlot("Mycelia", "Gas Mask", 1338522),  # 1.0
             MamSlot("Caterium", "Zipline", 1338523),
             MamSlot("Caterium", "Geothermal Generator", 1338524),
             MamSlot("Caterium", "Priority Power Switch", 1338525),
@@ -270,7 +275,7 @@ class Locations():
             MamSlot("Alien Technology", "Production Amplifier", 1338591),
             MamSlot("Alien Technology", "Power Augmenter", 1338592),
             # 1338593 Alien Power Matrix
-            MamSlot("Quartz", "Material Resonance Screening", 1338594), # 1.1
+            MamSlot("Quartz", "Material Resonance Screening", 1338594),  # 1.1
             # 1338600 - 1338699 - Harddrives - Harddrives
             ShopSlot(self.state_logic, 1, 3, 1338700),
             ShopSlot(self.state_logic, 2, 3, 1338701),
@@ -300,7 +305,7 @@ class Locations():
         return all_locations
 
     def get_locations_for_data_package(self) -> dict[str, int]:
-        "Must include all possible location names and their id's"
+        """Must include all possible location names and their id's"""
 
         # 1338000 - 1338499 - Milestones
         # 1338500 - 1338599 - Mam
@@ -316,7 +321,7 @@ class Locations():
         return {location.name: location.code for location in location_table}
 
     def get_locations(self) -> list[LocationData]:
-        "Only return location used in this game based on settings"
+        """Only return location used in this game based on settings"""
 
         if not self.game_logic or not self.options or not self.state_logic or not self.items:
             raise Exception("Locations need to be initialized with logic, options and items before using this method")
@@ -386,7 +391,7 @@ class Locations():
         return location_table
     
     def get_hard_drive_locations(self, for_data_package: bool, max_tier: int, available_parts: set[str]) \
-                                                                                                -> list[LocationData]:
+            -> list[LocationData]:
         hard_drive_locations: list[LocationData] = []
 
         bucket_size: int
@@ -398,7 +403,7 @@ class Locations():
             bucket_size = floor((self.drop_pod_location_id_end - self.drop_pod_location_id_start) / max_tier)
             drop_pod_data = self.game_logic.drop_pods
             # sort, easily obtainable first, should be deterministic
-            drop_pod_data.sort(key=lambda data: ("!" if data.item is None else data.item) + str(data.x - data.z))
+            drop_pod_data.sort(key=lambda i: ("!" if i.item is None else i.item) + str(i.x - i.z))
 
         for location_id in range(self.drop_pod_location_id_start, self.drop_pod_location_id_end + 1):
             if for_data_package:
