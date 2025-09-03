@@ -1264,7 +1264,7 @@ if "Starcraft 2" in network_data_package["games"]:
         UPGRADE_RESEARCH_SPEED_ITEM_ID = 1807
         UPGRADE_RESEARCH_COST_ITEM_ID = 1808
         REDUCED_MAX_SUPPLY_ITEM_ID = 1850
-        slot_data = tracker_data.get_slot_data(team, player)
+        slot_data = tracker_data.get_slot_data(player)
         inventory: collections.Counter[int] = tracker_data.get_player_inventory_counts(team, player)
         item_id_to_name = tracker_data.item_id_to_name["Starcraft 2"]
         location_id_to_name = tracker_data.location_id_to_name["Starcraft 2"]
@@ -1283,7 +1283,7 @@ if "Starcraft 2" in network_data_package["games"]:
 
         # Locations
         have_nco_locations = False
-        locations = tracker_data.get_player_locations(team, player)
+        locations = tracker_data.get_player_locations(player)
         checked_locations = tracker_data.get_player_checked_locations(team, player)
         missions: dict[str, list[tuple[str, bool]]] = {}
         for location_id in locations:
