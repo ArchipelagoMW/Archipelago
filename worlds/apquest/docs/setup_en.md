@@ -23,7 +23,7 @@ If your room is hosted on a WebHost (e.g. [archipelago.gg](archipelago.gg)),
 you should be able to simply click on your name in the player list.  
 This will open the Archipelago Launcher
 and ask you whether you want to connect with the Text Client or the APQuest Client.  
-Choose "Game Client". The rest should happen completely automatically and you should be able to play APQuest.
+Choose "APQuest Client". The rest should happen completely automatically and you should be able to play APQuest.
 
 ### Locally hosted room
 
