@@ -613,7 +613,8 @@ class SA2BWorld(World):
            self.options.chao_stats.value > 0 or \
            self.options.chao_animal_parts or \
            self.options.chao_kindergarten or \
-           self.options.black_market_slots.value > 0:
+           self.options.black_market_slots.value > 0 or \
+           self.option.goal.value == 7:
             return True;
 
         return False

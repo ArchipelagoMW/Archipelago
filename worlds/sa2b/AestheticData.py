@@ -170,6 +170,11 @@ sample_chao_names = [
 	"Portia",
 	"Graves",
 	"Kaycee",
+	"Ghandi",
+	"Medli",
+	"Jak",
+	"Wario",
+	"Theo",
 ]
 
 totally_real_item_names = [
@@ -289,6 +294,25 @@ totally_real_item_names = [
 	"Passive Camoflage",
 
 	"Earth Card",
+
+	"Advanced Trebuchets",
+	"The Wheel 2",
+	"NFTs",
+
+	"Ballad of Storms",
+	"Wind God's Song",
+	"Earth God's Song",
+	"Ordon's Pearl",
+
+	"69 Precursor Orbs",
+
+	"AI Enhance",
+
+	"Green Boosters",
+	"Triple Dash Refills",
+	"Rising Platforms",
+	"Red Bubbles",
+	"Granny's Car Keys",
 ]
 
 all_exits = [
