@@ -33,7 +33,7 @@ class SatisfactoryLocation(Location):
 
 def create_regions_and_return_locations(multiworld: MultiWorld, options: SatisfactoryOptions, player: int,
         game_logic: GameLogic, state_logic: StateLogic, critical_path: CriticalPathCalculator,
-        locations: list[LocationData]):
+        locations: list[LocationData]) -> None:
     
     region_names: list[str] = [
         "Overworld",
@@ -154,7 +154,7 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
                             lambda state, parts=node.unlock_cost: state_logic.can_produce_all(state, parts))
 
 
-def throwIfAnyLocationIsNotAssignedToARegion(regions: dict[str, Region], regionNames: dict[str, LocationData]):
+def throwIfAnyLocationIsNotAssignedToARegion(regions: dict[str, Region], regionNames: dict[str, list[LocationData]]) -> None:
     existingRegions = set(regions)
     existingRegionNames = set(regionNames)
 
@@ -185,7 +185,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations_per_region: di
 
 
 def connect(regions: dict[str, Region], source: str, target: str, 
-        rule: Optional[Callable[[CollectionState], bool]] = None):
+        rule: Optional[Callable[[CollectionState], bool]] = None) -> None:
 
     sourceRegion = regions[source]
     targetRegion = regions[target]

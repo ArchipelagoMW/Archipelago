@@ -111,7 +111,7 @@ class ShopSlot(LocationData):
         super().__init__("AWESOME Shop", f"AWESOME Shop purchase {slot}", locationId,
             rule = self.can_purchase_from_shop(state_logic, cost))
         
-    def can_purchase_from_shop(self, state_logic: Optional[StateLogic], cost) -> Callable[[CollectionState], bool]:
+    def can_purchase_from_shop(self, state_logic: Optional[StateLogic], cost: int) -> Callable[[CollectionState], bool]:
         def can_purchase(state: CollectionState) -> bool:
             if not state_logic or cost < 20:
                 return True
@@ -139,7 +139,7 @@ class HardDrive(LocationData):
             # Power is kept out of logic. with energy link its simple, 
             # without you just going to have to figure it your yourself
 
-            def logic_rule(state: CollectionState):
+            def logic_rule(state: CollectionState) -> bool:
                 return state_logic.can_build(state, "MAM") and (
                     (not unlocked_by) or (state_logic and state_logic.can_produce(state, unlocked_by)))
 
@@ -396,7 +396,7 @@ class Locations():
             drop_pod_data = []
         else:
             bucket_size = floor((self.drop_pod_location_id_end - self.drop_pod_location_id_start) / max_tier)
-            drop_pod_data: list[DropPodData] = self.game_logic.drop_pods
+            drop_pod_data = self.game_logic.drop_pods
             # sort, easily obtainable first, should be deterministic
             drop_pod_data.sort(key=lambda data: ("!" if data.item is None else data.item) + str(data.x - data.z))
 

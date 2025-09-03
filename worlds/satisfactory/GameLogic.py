@@ -2,13 +2,15 @@ from typing import Optional
 from dataclasses import dataclass
 from enum import IntEnum
 
+
 class PowerInfrastructureLevel(IntEnum):
     Basic = 1
     Automated = 2
     Advanced = 3
     Complex = 4
 
-    def to_name(self):
+    def to_name(self) -> str:
+
         return "Power level: " + self.name
 
 liquids: set[str] = {

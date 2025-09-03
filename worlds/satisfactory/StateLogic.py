@@ -21,7 +21,7 @@ class StateLogic:
         self.options = options
         self.critical_path = critical_path
 
-    def has_recipe(self, state: CollectionState, recipe: Recipe):
+    def has_recipe(self, state: CollectionState, recipe: Recipe) -> bool:
         return state.has(recipe.name, self.player) or recipe.name in self.critical_path.implicitly_unlocked 
     
     def can_build(self, state: CollectionState, building_name: Optional[str]) -> bool:
