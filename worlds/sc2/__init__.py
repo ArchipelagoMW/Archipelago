@@ -658,7 +658,7 @@ def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> N
         for item in item_list:
             if item.name in (
                     item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_PROGRESSIVE_STIMPACK, item_names.MARINE_MAGRAIL_MUNITIONS,
-                    item_names.MEDIC_STABILIZER_MEDPACKS, item_names.MEDIC_NANO_PROJECTOR, item_names.MARINE_LASER_TARGETING_SYSTEM,
+                    item_names.MEDIC_STABILIZER_MEDPACKS, item_names.MARINE_LASER_TARGETING_SYSTEM,
             ):
                 item.flags |= ItemFilterFlags.AllowedOrphan
     # These rules only trigger on Standard tactics
@@ -666,8 +666,8 @@ def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> N
         for item in item_list:
             if item.name in (
                     item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_PROGRESSIVE_STIMPACK, item_names.MARINE_MAGRAIL_MUNITIONS,
-                    item_names.MEDIC_STABILIZER_MEDPACKS, item_names.MEDIC_NANO_PROJECTOR, item_names.MARINE_LASER_TARGETING_SYSTEM,
-                    item_names.FIREBAT_NANO_PROJECTORS, item_names.FIREBAT_NANO_PROJECTORS, item_names.FIREBAT_PROGRESSIVE_STIMPACK
+                    item_names.MEDIC_STABILIZER_MEDPACKS, item_names.MARINE_LASER_TARGETING_SYSTEM,
+                    item_names.FIREBAT_NANO_PROJECTORS, item_names.FIREBAT_JUGGERNAUT_PLATING, item_names.FIREBAT_PROGRESSIVE_STIMPACK
             ):
                 item.flags |= ItemFilterFlags.AllowedOrphan
     if SC2Mission.EVIL_AWOKEN in missions and world.options.required_tactics == RequiredTactics.option_standard:
