@@ -515,7 +515,8 @@ def _populate_sprite_table():
                     logging.debug(f"Spritefile {file} could not be loaded as a valid sprite.")
 
             with concurrent.futures.ThreadPoolExecutor() as pool:
-                sprite_paths = [user_path('data', 'sprites', 'alttpr'), user_path('data', 'sprites', 'custom')]
+                sprite_paths = [user_path("data", "sprites", "alttp", "remote"),
+                                user_path("data", "sprites", "alttp", "custom")]
                 for dir in [dir for dir in sprite_paths if os.path.isdir(dir)]:
                     for file in os.listdir(dir):
                         pool.submit(load_sprite_from_file, os.path.join(dir, file))
