@@ -1,5 +1,5 @@
 import random
-import typing
+from typing import cast, Any
 
 from Options import FreeText, NumericOption
 
@@ -47,7 +47,7 @@ class FloatRangeText(FreeText, NumericOption):
                 raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__}")
 
     @classmethod
-    def from_text(cls, text: str) -> typing.Any:
+    def from_text(cls, text: str) -> Any:
         return cls(text)
 
     @classmethod
@@ -99,31 +99,31 @@ class FloatRangeText(FreeText, NumericOption):
     def get_option_name(cls, value: float) -> str:
         return str(value)
 
-    def __eq__(self, other: typing.Any):
+    def __eq__(self, other: Any):
         if isinstance(other, NumericOption):
             return self.value == other.value
         else:
-            return typing.cast(bool, self.value == other)
+            return cast(bool, self.value == other)
 
-    def __lt__(self, other: typing.Union[int, float, NumericOption]) -> bool:
+    def __lt__(self, other: int | float | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value < other.value
         else:
             return self.value < other
 
-    def __le__(self, other: typing.Union[int, float, NumericOption]) -> bool:
+    def __le__(self, other: int | float | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value <= other.value
         else:
             return self.value <= other
 
-    def __gt__(self, other: typing.Union[int, float, NumericOption]) -> bool:
+    def __gt__(self, other: int | float | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value > other.value
         else:
             return self.value > other
 
-    def __ge__(self, other: typing.Union[int, float, NumericOption]) -> bool:
+    def __ge__(self, other: int | float | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value >= other.value
         else:
@@ -132,59 +132,59 @@ class FloatRangeText(FreeText, NumericOption):
     def __int__(self) -> int:
         return int(self.value)
 
-    def __and__(self, other: typing.Any) -> int:
+    def __and__(self, other: Any) -> int:
         raise TypeError("& operator not supported for float values")
 
-    def __floordiv__(self, other: typing.Any) -> int:
+    def __floordiv__(self, other: Any) -> int:
         return int(self.value // float(other))
 
     def __invert__(self) -> int:
         raise TypeError("~ operator not supported for float values")
 
-    def __lshift__(self, other: typing.Any) -> int:
+    def __lshift__(self, other: Any) -> int:
         raise TypeError("<< operator not supported for float values")
 
-    def __mod__(self, other: typing.Any) -> float:
+    def __mod__(self, other: Any) -> float:
         return self.value % float(other)
 
     def __neg__(self) -> float:
         return -self.value
 
-    def __or__(self, other: typing.Any) -> int:
+    def __or__(self, other: Any) -> int:
         raise TypeError("| operator not supported for float values")
 
     def __pos__(self) -> float:
         return +self.value
 
-    def __rand__(self, other: typing.Any) -> int:
+    def __rand__(self, other: Any) -> int:
         raise TypeError("& operator not supported for float values")
 
-    def __rfloordiv__(self, other: typing.Any) -> int:
+    def __rfloordiv__(self, other: Any) -> int:
         return int(float(other) // self.value)
 
-    def __rlshift__(self, other: typing.Any) -> int:
+    def __rlshift__(self, other: Any) -> int:
         raise TypeError("<< operator not supported for float values")
 
-    def __rmod__(self, other: typing.Any) -> float:
+    def __rmod__(self, other: Any) -> float:
         return float(other) % self.value
 
-    def __ror__(self, other: typing.Any) -> int:
+    def __ror__(self, other: Any) -> int:
         raise TypeError("| operator not supported for float values")
 
-    def __round__(self, ndigits: typing.Optional[int] = None) -> float:
+    def __round__(self, ndigits: int | None = None) -> float:
         return round(self.value, ndigits)
 
-    def __rpow__(self, base: typing.Any) -> typing.Any:
+    def __rpow__(self, base: Any) -> Any:
         return base ** self.value
 
-    def __rrshift__(self, other: typing.Any) -> int:
+    def __rrshift__(self, other: Any) -> int:
         raise TypeError(">> operator not supported for float values")
 
-    def __rshift__(self, other: typing.Any) -> int:
+    def __rshift__(self, other: Any) -> int:
         raise TypeError(">> operator not supported for float values")
 
-    def __rxor__(self, other: typing.Any) -> int:
+    def __rxor__(self, other: Any) -> int:
         raise TypeError("^ operator not supported for float values")
 
-    def __xor__(self, other: typing.Any) -> int:
+    def __xor__(self, other: Any) -> int:
         raise TypeError("^ operator not supported for float values")

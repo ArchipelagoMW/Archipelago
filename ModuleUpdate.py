@@ -5,18 +5,22 @@ import multiprocessing
 import warnings
 
 
-if sys.platform in ("win32", "darwin") and sys.version_info < (3, 10, 11):
+if sys.platform in ("win32", "darwin") and sys.version_info < (3, 11, 9):
     # Official micro version updates. This should match the number in docs/running from source.md.
-    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. Official 3.10.15+ is supported.")
-elif sys.platform in ("win32", "darwin") and sys.version_info < (3, 10, 15):
+    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. Official 3.11.9+ is supported.")
+elif sys.platform in ("win32", "darwin") and sys.version_info < (3, 11, 13):
     # There are known security issues, but no easy way to install fixed versions on Windows for testing.
     warnings.warn(f"Python Version {sys.version_info} has security issues. Don't use in production.")
-elif sys.version_info < (3, 10, 1):
+elif sys.version_info < (3, 11, 0):
     # Other platforms may get security backports instead of micro updates, so the number is unreliable.
-    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. 3.10.1+ is supported.")
+    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. 3.11.0+ is supported.")
 
 # don't run update if environment is frozen/compiled or if not the parent process (skip in subprocess)
-_skip_update = bool(getattr(sys, "frozen", False) or multiprocessing.parent_process())
+_skip_update = bool(
+    getattr(sys, "frozen", False) or 
+    multiprocessing.parent_process() or 
+    os.environ.get("SKIP_REQUIREMENTS_UPDATE", "").lower() in ("1", "true", "yes")
+)
 update_ran = _skip_update
 
 
@@ -70,11 +74,11 @@ def update_command():
 def install_pkg_resources(yes=False):
     try:
         import pkg_resources  # noqa: F401
-    except ImportError:
+    except (AttributeError, ImportError):
         check_pip()
         if not yes:
             confirm("pkg_resources not found, press enter to install it")
-        subprocess.call([sys.executable, "-m", "pip", "install", "--upgrade", "setuptools"])
+        subprocess.call([sys.executable, "-m", "pip", "install", "--upgrade", "setuptools>=75,<81"])
 
 
 def update(yes: bool = False, force: bool = False) -> None:
