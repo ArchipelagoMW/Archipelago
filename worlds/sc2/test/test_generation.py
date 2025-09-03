@@ -1254,6 +1254,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(SC2Mission.ENGINE_OF_DESTRUCTION, missions)
         # This is not rolled
         self.assertNotIn(SC2Mission.PIERCING_OF_THE_SHROUD, missions)
+        self.assertNotIn(SC2Mission.BELLY_OF_THE_BEAST, missions)
         # These items are excluded and shouldn't appear
         self.assertNotIn(item_names.MARINE, itempool)
         self.assertNotIn(item_names.MEDIC, itempool)
