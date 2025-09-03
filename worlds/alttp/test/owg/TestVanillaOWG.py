@@ -4,7 +4,7 @@ from ...ItemPool import difficulties
 from ...Items import item_factory
 from ...Options import GlitchesRequired
 
-from .. import LTTPTestBase, TestBase
+from ..bases import LTTPTestBase, TestBase
 
 
 class TestVanillaOWG(TestBase, LTTPTestBase):

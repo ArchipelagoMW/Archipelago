@@ -7,7 +7,7 @@ from ...Options import GlitchesRequired
 from ...Regions import mark_light_world_regions
 from ...Shops import create_shops
 
-from .. import LTTPTestBase, TestBase
+from ..bases import LTTPTestBase, TestBase
 
 
 class TestInvertedOWG(TestBase, LTTPTestBase):

@@ -1,5 +1,5 @@
 from ...Shops import shop_table
-from .. import TestBase
+from ..bases import TestBase
 
 
 class TestSram(TestBase):
