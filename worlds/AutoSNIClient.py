@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import enum
 import logging
 from typing import (TYPE_CHECKING, Any, ClassVar, Dict, Generic, Iterable,
-                    NamedTuple, Optional, Sequence, Tuple, TypeGuard, TypeVar, Union)
+                    Optional, Sequence, Tuple, TypeGuard, TypeVar, Union)
 
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components
@@ -100,13 +100,14 @@ class SNIClient(abc.ABC, metaclass=AutoSNIClientRegister):
         pass
 
 
-class Read(NamedTuple):
+@dataclass(frozen=True, slots=True, order=True)
+class Read:
     """ snes memory read - address and size in bytes """
     address: int
     size: int
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class _MemRead:
     location: Read
     data: bytes
@@ -120,9 +121,7 @@ class SnesData(Generic[_T_Enum]):
     """ sorted by address """
 
     def __init__(self, ranges: Sequence[tuple[Read, bytes]]) -> None:
-        self._ranges = []
-        for r, d in ranges:
-            self._ranges.append(_MemRead(r, d))
+        self._ranges = [_MemRead(r, d) for r, d in ranges]
 
     def get(self, read: _T_Enum) -> bytes:
         assert isinstance(read.value, Read), read.value
