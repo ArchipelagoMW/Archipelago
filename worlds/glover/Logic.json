@@ -4374,6 +4374,26 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"mv1": 27,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 32,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Dennis": [
