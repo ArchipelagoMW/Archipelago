@@ -30,7 +30,7 @@ I'm not actually sure if it's the first, but I'm not aware of any others.
 
 ## Once I'm inside the APQuest client, how do I actually play APQuest?
 
-WASD for movement.  
+WASD or Arrow Keys for movement.  
 Space to swing your sword (if you have it) or interact with objects.  
 C to fire the Confetti Cannon.
 

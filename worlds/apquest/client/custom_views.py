@@ -43,13 +43,13 @@ class APQuestGameView(MDRecycleView):
         self._keyboard = None
 
     def _on_keyboard_down(self, _, keycode, _1, _2) -> bool:
-        if keycode[1] == "up":
+        if keycode[1] == "up" or keycode[1] == "w":
             self.input_function(Input.UP)
-        elif keycode[1] == "down":
+        elif keycode[1] == "down" or keycode[1] == "s":
             self.input_function(Input.DOWN)
-        elif keycode[1] == "left":
+        elif keycode[1] == "left" or keycode[1] == "a":
             self.input_function(Input.LEFT)
-        elif keycode[1] == "right":
+        elif keycode[1] == "right" or keycode[1] == "d":
             self.input_function(Input.RIGHT)
         elif keycode[1] == "spacebar":
             self.input_function(Input.ACTION)

@@ -83,13 +83,13 @@ if __name__ == "__main__":
         print(render_to_text(game))
 
     def on_press(key: Key | KeyCode | None) -> None:
-        if key == keyboard.KeyCode.from_char("w"):
+        if key == keyboard.KeyCode.from_char("w") or key == Key.up:
             input_and_rerender(Input.UP)
-        if key == keyboard.KeyCode.from_char("s"):
+        if key == keyboard.KeyCode.from_char("s") or key == Key.down:
             input_and_rerender(Input.DOWN)
-        if key == keyboard.KeyCode.from_char("a"):
+        if key == keyboard.KeyCode.from_char("a") or key == Key.left:
             input_and_rerender(Input.LEFT)
-        if key == keyboard.KeyCode.from_char("d"):
+        if key == keyboard.KeyCode.from_char("d") or key == Key.right:
             input_and_rerender(Input.RIGHT)
         if key == Key.space:
             input_and_rerender(Input.ACTION)
