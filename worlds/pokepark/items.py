@@ -31,7 +31,7 @@ class PokeparkFriendshipItemClientData(PokeparkBaseItemClientData):
 @dataclass
 class PokeparkPasswordItemClientData(PokeparkBaseItemClientData):
     def __post_init__(self):
-        self.opcode = 0xb7  # friendship opcode
+        self.opcode = 0xb7  # opcode
 
 
 @dataclass

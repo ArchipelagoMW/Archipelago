@@ -1068,7 +1068,7 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: can_destroy_objects_overworld(state, player)
     )
     set_rule_if_exists(
-        "Cavern Zone Main Area - Diglett Crate -- Magnemite Unlocked",
+        "Cavern Zone Main Area - Diglett Crate -- Diglett Unlocked",
         lambda state: can_destroy_objects_overworld(state, player)
     )
     set_rule_if_exists(
@@ -1114,6 +1114,10 @@ def set_rules(world: "PokeparkWorld") -> None:
     set_rule_if_exists(
         "Cavern Zone Main Area - Marowak Power Competition -- Friendship",
         lambda state: can_battle_thunderbolt_immune(state, player)
+    )
+    set_rule_if_exists(
+        "Cavern Zone Main Area - Mawile Power Competition -- Friendship",
+        lambda state: can_play_catch(state, player)
     )
     # Bastiodon's Panel Crush
 

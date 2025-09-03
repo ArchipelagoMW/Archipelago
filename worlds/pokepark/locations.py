@@ -167,12 +167,18 @@ class PokeparkCaterpieTreeClientData(PokeparkBaseClientLocationData):
 
 
 @dataclass
-class PokeparkShroomishCrateClientData(PokeparkBaseClientLocationData):
+class PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(PokeparkBaseClientLocationData):
+    _expected_value: Optional[int] = 0xFFFFFFFF
+    _bit_mask: Optional[int] = 0xFFFFFFFF
     def __post_init__(self):
+        assert self._expected_value is not None
+        assert self._bit_mask is not None
         self.global_manager_data_struc_offset = 0x41
         self.in_structure_offset = 0x0
         self.expected_value = 0b10000000
         self.bit_mask = 0b10000000
+        self.expected_value = self._expected_value
+        self.bit_mask = self._bit_mask
         self.in_structure_address_interval = 0x0
 
 
@@ -232,7 +238,7 @@ class PokeparkChristmasTreeQuestClientData(PokeparkBaseClientLocationData):
 
 
 @dataclass
-class PokeparkRhyperiorQuestClientData(PokeparkBaseClientLocationData):
+class PokeparkRhyperiorQuestMagnemite2CrateFlagClientData(PokeparkBaseClientLocationData):
     _expected_value: Optional[int] = 0xFFFFFFFF
     _bit_mask: Optional[int] = 0xFFFFFFFF
 
@@ -276,6 +282,20 @@ class PokeparkF0301BippaFlagClientData(PokeparkBaseClientLocationData):
         self.expected_value = self._expected_value
         self.bit_mask = self._bit_mask
 
+
+@dataclass
+class PokeparkMagnemite1CrateFlagClientData(PokeparkBaseClientLocationData):
+    _expected_value: Optional[int] = 0xFFFFFFFF
+    _bit_mask: Optional[int] = 0xFFFFFFFF
+
+    def __post_init__(self):
+        assert self._expected_value is not None
+        assert self._bit_mask is not None
+        self.global_manager_data_struc_offset = 0x3b
+        self.in_structure_offset = 0x0
+        self.in_structure_address_interval = 0x0
+        self.expected_value = self._expected_value
+        self.bit_mask = self._bit_mask
 
 @dataclass
 class PokeparkBulbasaurAttractionClientData(PokeparkBaseClientLocationData):
@@ -727,8 +747,11 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Meadow Zone Main Area - Shroomish Crate -- Shroomish Unlocked": PokeparkLocationData(
-        42, PokeparkFlag.POKEMON_UNLOCK, "Meadow Zone Main Area", 0x0101, PokeparkShroomishCrateClientData(
+        42, PokeparkFlag.POKEMON_UNLOCK, "Meadow Zone Main Area", 0x0101,
+        PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(
             structure_position=0,
+            _expected_value=0b10000000,
+            _bit_mask=0b10000000,
             memory_range=MemoryRange.BYTE
         ),
     ),
@@ -2150,23 +2173,38 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Cavern Zone Main Area - Magnemite Crate Entrance -- Magnemite Unlocked": PokeparkLocationData(
-        245, PokeparkFlag.POKEMON_UNLOCK, "Cavern Zone Main Area", 0x0401, PokeparkBaseClientLocationData(
-            # TODO: add client Data
+        245, PokeparkFlag.POKEMON_UNLOCK, "Cavern Zone Main Area", 0x0401, PokeparkMagnemite1CrateFlagClientData(
+            structure_position=0,
+            _expected_value=0b00001000,
+            _bit_mask=0b00001000,
+            memory_range=MemoryRange.BYTE
         )
     ),
     "Cavern Zone Main Area - Magnemite Crate Magma Zone Entrance -- Magnemite Unlocked": PokeparkLocationData(
-        246, PokeparkFlag.POKEMON_UNLOCK, "Cavern Zone Main Area", 0x0401, PokeparkBaseClientLocationData(
-            # TODO: add client Data
+        246, PokeparkFlag.POKEMON_UNLOCK, "Cavern Zone Main Area", 0x0401,
+        PokeparkRhyperiorQuestMagnemite2CrateFlagClientData(
+            structure_position=0,
+            _expected_value=0b00000010,
+            _bit_mask=0b00000010,
+            memory_range=MemoryRange.BYTE
         )
     ),
     "Cavern Zone Main Area - Magnemite Crate Deep Inside -- Magnemite Unlocked": PokeparkLocationData(
-        247, PokeparkFlag.POKEMON_UNLOCK, "Cavern Zone Main Area", 0x0401, PokeparkBaseClientLocationData(
-            # TODO: add client Data
+        247, PokeparkFlag.POKEMON_UNLOCK, "Cavern Zone Main Area", 0x0401,
+        PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(
+            structure_position=0,
+            _expected_value=0b00100000,
+            _bit_mask=0b00100000,
+            memory_range=MemoryRange.BYTE
         )
     ),
-    "Cavern Zone Main Area - Diglett Crate -- Magnemite Unlocked": PokeparkLocationData(
-        248, PokeparkFlag.POKEMON_UNLOCK, "Cavern Zone Main Area", 0x0401, PokeparkBaseClientLocationData(
-            # TODO: add client Data
+    "Cavern Zone Main Area - Diglett Crate -- Diglett Unlocked": PokeparkLocationData(
+        248, PokeparkFlag.POKEMON_UNLOCK, "Cavern Zone Main Area", 0x0401,
+        PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(
+            structure_position=0,
+            _expected_value=0b00000010,
+            _bit_mask=0b00000010,
+            memory_range=MemoryRange.BYTE
         )
     ),
     "Cavern Zone Main Area - Bonsly Power Competition -- Friendship": PokeparkLocationData(
@@ -2488,7 +2526,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Magma Zone Circle Area - Rhyperior Iron Disc -- Quest": PokeparkLocationData(
         295, PokeparkFlag.QUEST, "Magma Zone Circle Area", 0x0402,
-        PokeparkRhyperiorQuestClientData(
+        PokeparkRhyperiorQuestMagnemite2CrateFlagClientData(
             structure_position=0,
             _expected_value=0b10000000,
             _bit_mask=0b10000000,
@@ -4381,6 +4419,12 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     "Ice Zone Empoleon Area - Empoleon -- Friendship": PokeparkLocationData(
         560, PokeparkFlag.FRIENDSHIP, "Ice Zone Empoleon Area", 0x0301, PokeparkFriendshipClientLocationData(
             structure_position=80,
+            memory_range=MemoryRange.BYTE
+        )
+    ),
+    "Cavern Zone Main Area - Mawile Power Competition -- Friendship": PokeparkLocationData(
+        561, PokeparkFlag.CHASE, "Cavern Zone Main Area", 0x0301, PokeparkFriendshipClientLocationData(
+            structure_position=83,
             memory_range=MemoryRange.BYTE
         )
     ),
