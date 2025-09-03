@@ -1304,11 +1304,11 @@ def parse_uri(uri: str) -> str:
     return uri.split('?', 1)[0]
 
 
-async def main():
+async def main(args: typing.Sequence[str] | None):
     multiprocessing.freeze_support()
     parser = get_base_parser()
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
-    args, uri = parser.parse_known_args()
+    args, uri = parser.parse_known_args(args)
 
     if uri and uri[0].startswith('archipelago://'):
         args.connect = parse_uri(' '.join(uri))
@@ -2346,7 +2346,7 @@ def force_settings_save_on_close() -> None:
     _has_forced_save = True
 
 
-def launch():
+def launch(*args: str):
     colorama.just_fix_windows_console()
-    asyncio.run(main())
+    asyncio.run(main(args))
     colorama.deinit()
