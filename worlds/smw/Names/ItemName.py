@@ -36,6 +36,7 @@ literature_trap       = "Literature Trap"
 timer_trap            = "Timer Trap"
 reverse_controls_trap = "Reverse Trap"
 thwimp_trap           = "Thwimp Trap"
+dry_trap              = "Dry Trap"
 
 ice_untrap              = "Ice Untrap"
 timer_untrap            = "Timer Untrap"

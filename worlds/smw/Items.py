@@ -57,6 +57,7 @@ trap_table = {
     ItemName.timer_trap:            ItemData(0xBC0016, False, True),
     ItemName.reverse_controls_trap: ItemData(0xBC001C, False, True),
     ItemName.thwimp_trap:           ItemData(0xBC001D, False, True),
+    ItemName.dry_trap:              ItemData(0xBC0021, False, True),
 
     ItemName.ice_untrap:              ItemData(0xBC001E, False),
     ItemName.timer_untrap:            ItemData(0xBC001F, False),
@@ -98,6 +99,7 @@ trap_name_to_value: typing.Dict[str, int] = {
     ItemName.timer_trap:            0xBC0016,
     ItemName.reverse_controls_trap: 0xBC001C,
     ItemName.thwimp_trap:           0xBC001D,
+    ItemName.dry_trap:              0xBC0021,
 
     # Common other trap names
     "Chaos Control Trap": 0xBC0014,  # Stun Trap
@@ -124,4 +126,15 @@ trap_name_to_value: typing.Dict[str, int] = {
     "Fast Trap":          0xBC0016,  # Timer Trap
     "Nut Trap":           0xBC001D,  # Thwimp Trap
     "Army Trap":          0xBC001D,  # Thwimp Trap
+
+    "Bubble Trap":        0xBC0014,  # Stun Trap
+    "Depletion Trap":     0xBC0021,  # Dry Trap
+    "Flip Trap":          0xBC001C,  # Reverse Trap
+    "Get Out Trap":       0xBC001D,  # Thwimp Trap
+    "Iron Boots Trap":    0xBC0014,  # Stun Trap
+    "Meteor Trap":        0xBC001D,  # Thwimp Trap
+    "No Vac Trap":        0xBC0021,  # Dry Trap
+    "Phone Trap":         0xBC0015,  # Literature Trap
+    "Squash Trap":        0xBC001D,  # Thwimp Trap
+    "Tutorial Trap":      0xBC0015,  # Literature Trap
 }

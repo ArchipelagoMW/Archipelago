@@ -349,6 +349,13 @@ class ThwimpTrapWeight(BaseTrapWeight):
     display_name = "Thwimp Trap Weight"
 
 
+class DryTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which removes your stored item
+    """
+    display_name = "Dry Trap Weight"
+
+
 class IceUntrapWeight(BaseTrapWeight):
     """
     Likelihood of a receiving an untrap which causes the level to stop being slippery
@@ -548,6 +555,7 @@ smw_option_groups = [
         TimerTrapWeight,
         ReverseTrapWeight,
         ThwimpTrapWeight,
+        DryTrapWeight,
         IceUntrapWeight,
         TimerUntrapWeight,
         ReverseUntrapWeight,
@@ -600,6 +608,7 @@ class SMWOptions(PerGameCommonOptions):
     timer_trap_weight: TimerTrapWeight
     reverse_trap_weight: ReverseTrapWeight
     thwimp_trap_weight: ThwimpTrapWeight
+    dry_trap_weight: DryTrapWeight
     ice_untrap_weight: IceUntrapWeight
     timer_untrap_weight: TimerUntrapWeight
     reverse_untrap_weight: ReverseUntrapWeight

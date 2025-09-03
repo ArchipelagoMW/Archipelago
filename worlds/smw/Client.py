@@ -390,7 +390,7 @@ class SMWSNIClient(SNIClient):
                     new_item_count = trap_rom_data[next_trap.item][1]
                     snes_buffered_write(ctx, WRAM_START + trap_rom_data[next_trap.item][0], bytes([new_item_count]))
             else:
-                if trap_active[0] > 0:
+                if (trap_rom_data[next_trap.item][1] != 0 and trap_active[0] > 0) or (trap_rom_data[next_trap.item][1] == 0 and trap_active[0] == 0):
                     # Trap already active
                     if from_queue:
                         self.add_trap_to_queue(next_trap, message)
