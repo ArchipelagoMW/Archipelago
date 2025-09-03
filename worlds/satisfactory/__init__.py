@@ -58,7 +58,7 @@ class SatisfactoryWorld(World):
             self.push_precollected_by_name("Building: Conveyor Merger")
 
         if not self.options.trap_selection_override.value:
-            self.options.trap_selection_override.value = self.options.trap_selection_preset.get_selected_list()
+            self.options.trap_selection_override.value = set(self.options.trap_selection_preset.get_selected_list())
 
         self.critical_path = CriticalPathCalculator(self.game_logic, self.critical_path_seed, self.options)
         self.critical_path.calculate()

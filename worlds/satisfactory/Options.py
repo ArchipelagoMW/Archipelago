@@ -38,11 +38,15 @@ class ChoiceMapMeta(AssembleOptions):
 
 class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
     choices: ClassVar[dict[str, list[str]]]
+    default: str
 
     def get_selected_list(self) -> list[str]:
         for index, choice in enumerate(self.choices):
             if index == self.value:
                 return self.choices[choice]
+            
+        raise Exception(f"ChoiceMap: selected choice {self.value} is not valid, valid choices are: {self.choices.keys()}")
+
 class ElevatorTier(NamedRange):
     """
     Put these Shipments to Space Elevator packages in logic.
@@ -283,7 +287,6 @@ class TrapSelectionOverride(OptionSet):
     """
     display_name = "Trap Override"
     valid_keys = _trap_types
-    default = {}
 
 class EnergyLink(DefaultOnToggle):
     """

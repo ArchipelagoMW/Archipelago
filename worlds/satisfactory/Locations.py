@@ -387,7 +387,7 @@ class Locations():
     
     def get_hard_drive_locations(self, for_data_package: bool, max_tier: int, available_parts: set[str]) \
                                                                                                 -> list[LocationData]:
-        hard_drive_locations: list[HardDrive] = []
+        hard_drive_locations: list[LocationData] = []
 
         bucket_size: int
         drop_pod_data: list[DropPodData]

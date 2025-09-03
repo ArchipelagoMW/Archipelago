@@ -1,6 +1,6 @@
 from random import Random
 from typing import ClassVar, Optional
-from collections.abc import Collection
+from collections.abc import Sequence
 from BaseClasses import Item, ItemClassification as C
 from .GameLogic import GameLogic
 from .Options import SatisfactoryOptions
@@ -928,7 +928,7 @@ class Items:
     def get_filler_item_name_uninitialized(cls, random: Random) -> str:
         return random.choice(cls.filler_items)
 
-    def get_filler_item_name(self, random: Random, filler_items: Collection[str] | None) -> str:
+    def get_filler_item_name(self, random: Random, filler_items: Sequence[str] | None) -> str:
         if self.enabled_traps and random.random() < (self.trap_chance / 100):
             return random.choice(self.enabled_traps)
         else:

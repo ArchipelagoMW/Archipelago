@@ -1,5 +1,5 @@
 from enum import IntFlag
-from typing import NamedTuple
+from dataclasses import dataclass
 from BaseClasses import ItemClassification
 
 class ItemGroups(IntFlag):
@@ -34,7 +34,8 @@ class ItemGroups(IntFlag):
     NeverExclude = 1 << 29
 
 
-class ItemData(NamedTuple):
+@dataclass
+class ItemData:
     """Represents an item in the pool, it could be a resource bundle, production recipe, trap, etc."""
     category: ItemGroups
     code: int

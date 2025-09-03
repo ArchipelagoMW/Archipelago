@@ -45,19 +45,19 @@ radio_actives: set[str] = {
     "Ficsonium Fuel Rod"
 }
 
-class Recipe():
+class Recipe:
     """
     Relationship between components and what is required to produce them (input ingredients, production building, etc.)
     Not all recipes are Satisfactory FGRecipes - for example, Water has a Recipe, but it's not an FGRecipe
     """
     name: str
-    building: str
-    inputs: tuple[str, ...]
+    building: Optional[str]
+    inputs: Optional[tuple[str, ...]]
     minimal_belt_speed: int
     handcraftable: bool
     implicitly_unlocked: bool
     """No explicit location/item is needed to unlock this recipe, you have access as soon as dependencies are met (ex. Water, Leaves, tutorial starting items)"""
-    additional_outputs: tuple[str, ...]
+    additional_outputs: Optional[tuple[str, ...]]
     minimal_tier: int
 
     needs_pipes: bool
@@ -114,7 +114,7 @@ class MamNode:
         self.minimal_tier = minimal_tier
 
 
-class MamTree():
+class MamTree:
     access_items: tuple[str, ...]
     """At least one of these game items must enter the player inventory for this MamTree to be available"""
     nodes: tuple[MamNode, ...]
