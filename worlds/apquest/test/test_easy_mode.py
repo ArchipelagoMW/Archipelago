@@ -7,7 +7,7 @@ class TestEasyModeLogic(APQuestTestBase):
     # Our test base is a subclass of WorldTestBase.
     # WorldTestBase takes a dict of options and sets up a multiworld for you with a single world of your game.
     # The world will have the options you specified.
-    options = {
+    options = {  # noqa: RUF012
         "hard_mode": False,
         # Options you don't specify will use their default values.
         # It is good practice to specify every option that has an impact on your test, even when it's the default value.
