@@ -140,9 +140,25 @@ class ClairObscurWorld(World):
         self.multiworld.itempool += self.item_pool
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return self.options.as_dict(
+        slot_data: Dict[str, Any] = {}
+        slot_data["options"] = self.options.as_dict(
             "goal", "char_shuffle", "starting_char", "gestral_shuffle"
         )
+
+        #Pictos and weapons, organized roughly by sphere placement so the client can somewhat balance their level.
+        slot_data["pictos"]: List[int] = []
+        slot_data["weapons"]: List[int] = []
+        spheres = self.multiworld.get_spheres()
+        for sphere in spheres:
+            for loc in sphere:
+                if loc.item.name in self.item_name_groups["Picto"]:
+                    slot_data["pictos"].append(loc.item.code)
+                elif loc.item.name in self.item_name_groups["Weapon"]:
+                    slot_data["weapons"].append(loc.item.code)
+
+        return slot_data
+
+
 
     def create_item(self, name: str) -> ClairObscurItem:
         return self.create_item_by_id(self.item_name_to_id[name])

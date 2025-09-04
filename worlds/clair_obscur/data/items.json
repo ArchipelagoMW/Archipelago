@@ -1905,48 +1905,6 @@
   },
   {
     "type": "Weapon",
-    "name": "Noahram",
-    "internal_name": "Noahram",
-    "quantity": 1,
-    "progressive": 2
-  },
-  {
-    "type": "Weapon",
-    "name": "Maellum",
-    "internal_name": "Maellum",
-    "quantity": 1,
-    "progressive": 2
-  },
-  {
-    "type": "Weapon",
-    "name": "Lunerim",
-    "internal_name": "Lunerim",
-    "quantity": 1,
-    "progressive": 2
-  },
-  {
-    "type": "Weapon",
-    "name": "Scieleson",
-    "internal_name": "Scieleson",
-    "quantity": 1,
-    "progressive": 2
-  },
-  {
-    "type": "Weapon",
-    "name": "Verleso",
-    "internal_name": "Verleso",
-    "quantity": 1,
-    "progressive": 2
-  },
-  {
-    "type": "Weapon",
-    "name": "Monocaro",
-    "internal_name": "Monocaro",
-    "quantity": 1,
-    "progressive": 2
-  },
-  {
-    "type": "Weapon",
     "name": "Lanceram",
     "internal_name": "Lanceram",
     "quantity": 1,
