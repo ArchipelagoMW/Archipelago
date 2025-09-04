@@ -257,6 +257,14 @@ another flag like "progression", it means "an especially useful progression item
   combined with `progression`; see below)
 * `progression_skip_balancing`: the combination of `progression` and `skip_balancing`, i.e., a progression item that
   will not be moved around by progression balancing; used, e.g., for currency or tokens, to not flood early spheres
+* `deprioritized`: denotes that an item should not be placed on priority locations
+  (to be combined with `progression`; see below)
+* `progression_deprioritized`: the combination of `progression` and `deprioritized`, i.e. a progression item that
+  should not be placed on priority locations, despite being progression;
+  like skip_balancing, this is commonly used for currency or tokens.
+* `progression_deprioritized_skip_balancing`: the combination of `progression`, `deprioritized` and `skip_balancing`.
+  Since there is overlap between the kind of items that want `skip_balancing` and `deprioritized`,
+  this combined classification exists for convenience
 
 ### Regions
 
@@ -612,17 +620,10 @@ def create_items(self) -> None:
     # If there are two of the same item, the item has to be twice in the pool.
     # Which items are added to the pool may depend on player options, e.g. custom win condition like triforce hunt.
     # Having an item in the start inventory won't remove it from the pool.
-    # If an item can't have duplicates it has to be excluded manually.
-
-    # List of items to exclude, as a copy since it will be destroyed below
-    exclude = [item for item in self.multiworld.precollected_items[self.player]]
+    # If you want to do that, use start_inventory_from_pool
 
     for item in map(self.create_item, mygame_items):
-        if item in exclude:
-            exclude.remove(item)  # this is destructive. create unique list above
-            self.multiworld.itempool.append(self.create_item("nothing"))
-        else:
-            self.multiworld.itempool.append(item)
+        self.multiworld.itempool.append(item)
 
     # itempool and number of locations should match up.
     # If this is not the case we want to fill the itempool with junk.
