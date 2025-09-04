@@ -137,7 +137,7 @@ class TestStartWithoutBackpackSize1(TestBackpackBase):
     options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
                options.BackpackSize.internal_name: options.BackpackSize.option_1,
                options.StartWithout.internal_name: frozenset({StartWithoutOptionName.backpack})}
-    expected_starting_backpacks = 4
+    expected_starting_backpacks = 6
     expected_total_backpacks = 36
 
     def test_has_correct_backpack_locations(self):
@@ -177,7 +177,7 @@ class TestStartWithoutBackpackSize4(TestBackpackBase):
     options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
                options.BackpackSize.internal_name: options.BackpackSize.option_4,
                options.StartWithout.internal_name: frozenset({StartWithoutOptionName.backpack})}
-    expected_starting_backpacks = 1
+    expected_starting_backpacks = 2
     expected_total_backpacks = 9
 
     def test_has_correct_backpack_locations(self):

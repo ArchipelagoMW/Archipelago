@@ -218,7 +218,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Consumable.fireworks_red: self.region.can_reach(Region.casino),
             Consumable.fireworks_purple: self.region.can_reach(Region.casino),
             Consumable.fireworks_green: self.region.can_reach(Region.casino),
-            Consumable.golden_animal_cracker: self.skill.has_mastery(Skill.farming),
+            Consumable.golden_animal_cracker: self.skill.has_mastery(Skill.farming) & (self.fishing.can_fish_chests | self.region.can_reach(Region.skull_cavern_25)),
             Consumable.mystery_box: self.received(CommunityUpgrade.mr_qi_plane_ride),
             Consumable.gold_mystery_box: self.received(CommunityUpgrade.mr_qi_plane_ride) & self.skill.has_mastery(Skill.foraging),
             Currency.calico_egg: self.region.can_reach(LogicRegion.desert_festival),
