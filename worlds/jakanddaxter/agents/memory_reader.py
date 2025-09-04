@@ -308,7 +308,8 @@ class JakAndDaxterMemoryReader:
                 self.connected = False
 
         elif Utils.is_linux:
-            marker_addresses = list(self.gk_process.search_by_value(bytes, len(self.marker), self.marker))
+            marker_addresses = list(self.gk_process.search_by_value(bytes, len(self.marker), self.marker,
+                                                                    writeable_only=True))
             if len(marker_addresses) > 0:
                 goal_pointer = marker_addresses[0] + len(self.marker) + 4
                 self.goal_address = int.from_bytes(
