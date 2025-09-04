@@ -48,7 +48,7 @@ class TestHammer(APQuestTestBase):
                 # We'll create an instance of the Hammer item, then collect it into the state.
                 # For this, we can use our world's create_item method.
                 # You could also use the same strategy as above and grab the item from the itempool instead.
-                hammer = self.multiworld.worlds[2].create_item("Hammer")
+                hammer = self.world.create_item("Hammer")
                 self.multiworld.state.collect(hammer)
 
                 self.assertTrue(top_middle_chest_player_two.can_reach(self.multiworld.state))
