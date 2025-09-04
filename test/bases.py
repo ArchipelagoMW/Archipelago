@@ -367,8 +367,7 @@ class MultiworldTestBase(unittest.TestCase):
         self.multiworld.player_name = {}
 
         args = Namespace()
-        for i, game in enumerate(self.games):
-            player_number = i + 1
+        for player_number, game in enumerate(self.games, 1):
             self.multiworld.game[player_number] = game
             self.multiworld.player_name[player_number] = f"Tester {player_number}"
 
