@@ -2977,10 +2977,10 @@
     },
     {
         "internal_name": "Chest_SeaCliff_38",
-        "name": "Sea Cliff: Quest_HexgaRock",
+        "name": "Stone Wave Cliffs: White Hexga reward",
         "location": "Sea Cliff",
-        "original_item": "Quest_HexgaRock",
-        "condition": {},
+        "original_item": "AutoShell",
+        "condition": {"Rock Crystal":  3},
         "type": "Chest"
     },
     {

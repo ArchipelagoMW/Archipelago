@@ -37,7 +37,7 @@ def create_item_name_to_ap_id() -> Dict[str, int]:
 def get_classification(item_id: int) -> ItemClassification:
     return data.items[reverse_offset_item_value(item_id)].classification
 
-def create_item_groups(items: Dict[int, ClairObscurItemData]):
+def create_item_groups(items: Dict[int, ClairObscurItemData]) -> Dict[str, Set[str]]:
     item_groups: Dict[str, Set[str]] = {
         "Upgrade material": set(),
         "Exploration capacities": set(),
