@@ -68,6 +68,17 @@ class StartingCharacter(Choice):
     option_monoco = 4
     default = 0
 
+class GearScaling(Choice):
+    """How the levels of pictos and weapons you receive are determined.
+    Sphere placement: Roughly scales pictos/weapons by the logical sphere they're placed in.
+    Order received: As you receive more pictos/weapons, the levels of the next ones you receive will go up.
+    Random levels: Pictos/weapons have random levels."""
+    internal_name = "gear_scaling"
+    display_name = "Gear Scaling"
+    option_sphere_placement = 0
+    option_order_received = 1
+    default = 1
+
 class ClairObscurStartInventory(StartInventory):
     """
     Start with these items
@@ -79,6 +90,7 @@ class ClairObscurOptions(PerGameCommonOptions):
     char_shuffle: ShuffleCharacters
     gestral_shuffle: ShuffleLostGestrals
     starting_char: StartingCharacter
+    gear_scaling: GearScaling
 
     start_inventory: ClairObscurStartInventory
 

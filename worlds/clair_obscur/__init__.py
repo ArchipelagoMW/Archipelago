@@ -142,19 +142,37 @@ class ClairObscurWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
         slot_data["options"] = self.options.as_dict(
-            "goal", "char_shuffle", "starting_char", "gestral_shuffle"
+            "goal", "char_shuffle", "starting_char", "gestral_shuffle", "gear_scaling"
         )
 
-        #Pictos and weapons, organized roughly by sphere placement so the client can somewhat balance their level.
-        slot_data["pictos"]: List[int] = []
-        slot_data["weapons"]: List[int] = []
-        spheres = self.multiworld.get_spheres()
-        for sphere in spheres:
-            for loc in sphere:
-                if loc.item.name in self.item_name_groups["Picto"]:
-                    slot_data["pictos"].append(loc.item.code)
-                elif loc.item.name in self.item_name_groups["Weapon"]:
-                    slot_data["weapons"].append(loc.item.code)
+
+
+        if self.options.gear_scaling == 1:
+            return slot_data
+
+        #Lists of pictos and weapons to determine
+
+
+        match self.options.gear_scaling:
+            case 1:
+                #Scale by order received (handled entirely by client)
+                return slot_data
+            case 0:
+                #Scale by sphere placement
+                slot_data["pictos"]: List[int] = []
+                slot_data["weapons"]: List[int] = []
+                spheres = self.multiworld.get_spheres()
+                for sphere in spheres:
+                    for loc in sphere:
+                        if loc.item.name in self.item_name_groups["Picto"]:
+                            slot_data["pictos"].append(loc.item.code)
+                        elif loc.item.name in self.item_name_groups["Weapon"]:
+                            slot_data["weapons"].append(loc.item.code)
+            # case 2:
+            #     #Random scaling
+            #     slot_data["pictos"]: List[int] = []
+            #     slot_data["weapons"]: List[int] = []
+            #     for weapon in self.item_name_groups["Weapon"]:
 
         return slot_data
 
