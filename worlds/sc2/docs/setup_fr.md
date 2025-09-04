@@ -87,7 +87,7 @@ Pour les listes, chaque *item* doit être sur sa propre ligne et doit être pré
 ```yaml
 excluded_items:
   - Battlecruiser
-  - Drop-Pods (Kerrigan Tier 7)
+  - Drop-Pods (Kerrigan Ability)
 ```
 
 Une liste vide est représentée par une paire de crochets: `[]`. 
