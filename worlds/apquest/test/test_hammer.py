@@ -42,18 +42,16 @@ class TestHammer(APQuestTestBase):
     def test_hammer_is_required_for_top_middle_chest(self) -> None:
         if self.world.options.hammer:
             with self.subTest("Test that hammer is required for Top Middle Chest if hammer option is enabled"):
-                top_middle_chest_player_two = self.world.get_location("Top Middle Chest")
-                self.assertFalse(top_middle_chest_player_two.can_reach(self.multiworld.state))
-
-                # We'll create an instance of the Hammer item, then collect it into the state.
-                # For this, we can use our world's create_item method.
-                # You could also use the same strategy as above and grab the item from the itempool instead.
-                hammer = self.world.create_item("Hammer")
-                self.multiworld.state.collect(hammer)
-
-                self.assertTrue(top_middle_chest_player_two.can_reach(self.multiworld.state))
+                self.assertAccessDependency(["Top Middle Chest"], [["Hammer"]])
         else:
             with self.subTest("Test that hammer isn't required for Top Middle Chest if hammer option is disabled"):
+                # In this case, we want to check that the Hammer *isn't* required for the Top Middle Chest location.
+                # The robust way to do this is to collect every item into the state except for the Hammer,
+                # then assert that the location is reachable.
+                # Luckily, there is a helper for this: "collect_all_but".
+                self.collect_all_but("Hammer")
+
+                # Now, we manually check that the location is accessible using location.can_reach(state):
                 top_middle_chest_player_one = self.world.get_location("Top Middle Chest")
                 self.assertTrue(top_middle_chest_player_one.can_reach(self.multiworld.state))
 

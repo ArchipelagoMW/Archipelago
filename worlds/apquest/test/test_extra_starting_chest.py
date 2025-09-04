@@ -1,4 +1,3 @@
-
 from test.param import classvar_matrix
 
 from .bases import APQuestTestBase
