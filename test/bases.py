@@ -104,7 +104,7 @@ class TestBase(unittest.TestCase):
 
 
 class WorldTestBase(unittest.TestCase):
-    options: typing.Dict[str, typing.Any] = {}
+    options: typing.ClassVar[typing.Dict[str, typing.Any]] = {}
     """Define options that should be used when setting up this TestBase."""
     multiworld: MultiWorld
     """The constructed MultiWorld instance after setup."""
