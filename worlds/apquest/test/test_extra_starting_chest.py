@@ -29,11 +29,11 @@ class TestExtraStartingChest(APQuestTestBase):
                 # then catch the KeyError that is raised if the location doesn't exist.
                 # This makes this test a bit awkward, because TestCase has an assertRaises, but not an assertNotRaises.
                 try:
-                    self.multiworld.get_location("Bottom Left Extra Chest", 2)
+                    self.world.get_location("Bottom Left Extra Chest")
                 except KeyError:
                     self.fail("Bottom Left Extra Chest should exist, but it doesn't.")
         else:
             with self.subTest(
                 "Test that Bottom Left Extra Chest does not exist when extra_starting_chest option is disabled"
             ):
-                self.assertRaises(KeyError, self.multiworld.get_location, "Bottom Left Extra Chest", 1)
+                self.assertRaises(KeyError, self.world.get_location, "Bottom Left Extra Chest")

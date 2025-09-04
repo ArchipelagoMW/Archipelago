@@ -27,18 +27,14 @@ class TestHammer(APQuestTestBase):
             # Note: The Item class overrides __eq__, so you could do this using TestCase.assertIn with an Item instance
             # However, the author dislikes this pattern and prefers checking the necessary conditions inside a next().
             with self.subTest("Test that Hammer item exists and is progression if hammer option is enabled"):
-                hammer = next(
-                    (item for item in self.multiworld.itempool if item.player == 2 and item.name == "Hammer"), None
-                )
+                hammer = next((item for item in self.multiworld.itempool if item.name == "Hammer"), None)
                 self.assertIsNotNone(hammer)
                 self.assertTrue(cast(APQuestItem, hammer).advancement)
         else:
             with self.subTest("Test that Hammer doesn't exist if hammer option is not enabled"):
                 # Finding a specific item for a specific player can be done by iterating the multiworld itempool,
                 # comparing item.player and item.name to the desired values.
-                hammer = next(
-                    (item for item in self.multiworld.itempool if item.player == 1 and item.name == "Hammer"), None
-                )
+                hammer = next((item for item in self.multiworld.itempool if item.name == "Hammer"), None)
                 self.assertIsNone(hammer)
 
     # If the hammer option is enabled, a breakable wall is placed in front of the top middle chest.
@@ -46,7 +42,7 @@ class TestHammer(APQuestTestBase):
     def test_hammer_is_required_for_top_middle_chest(self) -> None:
         if self.world.options.hammer:
             with self.subTest("Test that hammer is required for Top Middle Chest if hammer option is enabled"):
-                top_middle_chest_player_two = self.multiworld.get_location("Top Middle Chest", 2)
+                top_middle_chest_player_two = self.world.get_location("Top Middle Chest")
                 self.assertFalse(top_middle_chest_player_two.can_reach(self.multiworld.state))
 
                 # We'll create an instance of the Hammer item, then collect it into the state.
@@ -58,9 +54,7 @@ class TestHammer(APQuestTestBase):
                 self.assertTrue(top_middle_chest_player_two.can_reach(self.multiworld.state))
         else:
             with self.subTest("Test that hammer isn't required for Top Middle Chest if hammer option is disabled"):
-                # The multiworld class has functions for get_location, get_entrance etc. as well.
-                # When using these versions of the functions, you need to provide the name and the player number.
-                top_middle_chest_player_one = self.multiworld.get_location("Top Middle Chest", 1)
+                top_middle_chest_player_one = self.world.get_location("Top Middle Chest")
                 self.assertTrue(top_middle_chest_player_one.can_reach(self.multiworld.state))
 
         # This unit test genuinely found an error in the world code when it was first written!
