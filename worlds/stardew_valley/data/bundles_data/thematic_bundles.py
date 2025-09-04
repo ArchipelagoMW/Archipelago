@@ -88,7 +88,7 @@ crab_pot_items_thematic = [*crab_pot_items_vanilla, *crab_pot_trash_items]
 crab_pot_bundle_thematic = BundleTemplate.extend_from(crab_pot_bundle_vanilla, crab_pot_items_thematic)
 
 specialty_fish_items_thematic = [*specialty_fish_items_vanilla, scorpion_carp, eel, octopus, lava_eel, ice_pip,
-                                 stonefish, void_salmon, stingray, spookfish, midnight_squid]
+                                 stonefish, void_salmon, stingray, spookfish, midnight_squid, slimejack, goby]
 specialty_fish_bundle_thematic = BundleTemplate.extend_from(specialty_fish_bundle_vanilla, specialty_fish_items_thematic)
 
 fish_tank_bundles_thematic = [river_fish_bundle_thematic, lake_fish_bundle_thematic, ocean_fish_bundle_thematic,

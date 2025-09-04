@@ -4,6 +4,7 @@ from ...data.building import Building
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource, AllRegionsSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
 from ...data.hats_data import Hats
+from ...data.monster_data import MonsterSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, YearRequirement, \
     GrangeDisplayRequirement, EggHuntRequirement, MuseumCompletionRequirement, BuildingRequirement, \
     NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, \
@@ -12,6 +13,7 @@ from ...data.requirement import ToolRequirement, BookRequirement, SkillRequireme
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource, HatMouseSource
 from ...logic.tailoring_logic import TailoringSource
+from ...logic.time_logic import MAX_MONTHS
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
 from ...strings.building_names import Building as BuildingNames
@@ -26,6 +28,7 @@ from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
 from ...strings.material_names import Material
 from ...strings.metal_names import MetalBar
+from ...strings.monster_names import Monster
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
@@ -337,6 +340,8 @@ pelican_town = ContentPack(
 
         # Furniture
         Furniture.single_bed: (ShopSource(price=500, shop_region=Region.carpenter),),
+        Furniture.crane_game_house_plant: (ShopSource(price=500, shop_region=Region.movie_theater),),
+        Furniture.cursed_mannequin: (MonsterSource(monsters=(Monster.haunted_skull,), amount_tier=MAX_MONTHS),),
     },
     fishes=(
         fish_data.albacore,

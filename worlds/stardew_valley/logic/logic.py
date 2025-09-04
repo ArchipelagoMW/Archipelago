@@ -58,7 +58,7 @@ from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
-from ..options import StardewValleyOptions, BundleRandomization
+from ..options import StardewValleyOptions, BundleRandomization, IncludeEndgameLocations
 from ..stardew_rule import False_, StardewRule, Or, Reach
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
@@ -240,6 +240,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Fish.snail: self.fishing.can_crab_pot_at(Region.town),
             Fishing.curiosity_lure: self.monster.can_kill(self.monster.all_monsters_by_name[Monster.mummy]),
             Fishing.lead_bobber: self.skill.has_level(Skill.fishing, 6) & self.money.can_spend_at(Region.fish_shop, 200),
+            Fishing.golden_bobber: self.region.can_reach(LogicRegion.desert_festival) & self.fishing.can_fish_chests,
             Forageable.hay: self.building.has_building(Building.silo) & self.tool.has_scythe(), #
             Forageable.journal_scrap: self.region.can_reach_all(Region.island_west, Region.island_north, Region.island_south, Region.volcano_floor_10) & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),#
             Forageable.secret_note: self.region.can_reach(LogicRegion.secret_notes), #
@@ -283,6 +284,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Machine.enricher: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20),
             Machine.pressure_nozzle: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20),
             Machine.sewing_machine: (self.region.can_reach(Region.haley_house) & self.has(ArtisanGood.cloth)) | (self.received(Machine.sewing_machine) & self.region.can_reach(Region.secret_woods)),
+            Machine.statue_endless_fortune: self.has_statue_of_endless_fortune(),
             Material.cinder_shard: self.region.can_reach(Region.volcano_floor_5),
             Material.clay: self.region.can_reach_any(Region.farm, Region.beach, Region.quarry) & self.tool.has_tool(Tool.hoe),
             Material.coal: self.mine.can_mine_in_the_mines_floor_41_80() | self.tool.has_pan(),
@@ -434,3 +436,12 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         if items:
             rule = rule & self.has_all(*items)
         return rule
+
+    def can_purchase_statue_of_endless_fortune(self) -> StardewRule:
+        return self.money.can_spend_at(Region.casino, 1_000_000)
+
+    def has_statue_of_endless_fortune(self) -> StardewRule:
+        can_purchase_rule = self.can_purchase_statue_of_endless_fortune()
+        if self.options.include_endgame_locations == IncludeEndgameLocations.option_true:
+            return can_purchase_rule & self.received(Machine.statue_endless_fortune)
+        return can_purchase_rule

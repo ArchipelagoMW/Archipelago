@@ -131,6 +131,8 @@ royal_serpent = create_monster(Monster.royal_serpent, MonsterCategory.serpents, 
 magma_sprite = create_monster(Monster.magma_sprite, MonsterCategory.magma_sprites, volcano, Performance.galaxy)
 magma_sparker = create_monster(Monster.magma_sparker, MonsterCategory.magma_sprites, volcano_high, Performance.galaxy)
 
+haunted_skull = create_monster(Monster.haunted_skull, MonsterCategory.none, quarry_mine, Performance.great)
+
 register_monster_modification(ModNames.sve, shadow_brute_dangerous, update_monster_locations)
 register_monster_modification(ModNames.sve, shadow_sniper, update_monster_locations)
 register_monster_modification(ModNames.sve, shadow_shaman_dangerous, update_monster_locations)

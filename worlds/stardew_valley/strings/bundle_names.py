@@ -128,6 +128,15 @@ class BundleName:
 
 
 class MemeBundleName:
+    reconnection = meme_bundle("Reconnection")
+    hint = meme_bundle("Hint")
+    colored_crystals = meme_bundle("Colored Crystals")
+    catch_and_release = meme_bundle("Catch And Release")
+    pollution = meme_bundle("Pollution")
+    sacrifice = meme_bundle("Sacrifice")
+    dr_seuss = meme_bundle("Dr Seuss")
+    algorerhythm = meme_bundle("TheAlGoreRhythm")
+    distracted = meme_bundle("Distracted")
     square_hole = meme_bundle("Square Hole")
     hairy = meme_bundle("Hairy")
     stanley = meme_bundle("Stanley")

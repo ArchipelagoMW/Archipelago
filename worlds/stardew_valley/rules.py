@@ -1127,7 +1127,7 @@ def set_endgame_locations_rules(logic: StardewLogic, rule_collector: StardewRule
     rule_collector.set_location_rule("Mountain Shortcuts Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
     rule_collector.set_location_rule("Town To Tide Pools Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
     rule_collector.set_location_rule("Tunnel To Backwoods Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
-    rule_collector.set_location_rule("Purchase Statue Of Endless Fortune", logic.money.can_spend_at(Region.casino, 1_000_000))
+    rule_collector.set_location_rule("Purchase Statue Of Endless Fortune", logic.can_purchase_statue_of_endless_fortune())
     rule_collector.set_location_rule("Purchase Catalogue", logic.money.can_spend_at(Region.pierre_store, 30_000))
     rule_collector.set_location_rule("Purchase Furniture Catalogue", logic.money.can_spend_at(Region.carpenter, 200_000))
     rule_collector.set_location_rule("Purchase Joja Furniture Catalogue",

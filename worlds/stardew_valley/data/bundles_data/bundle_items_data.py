@@ -3,9 +3,10 @@ from ..shirt_data import Shirts
 from ...bundles.bundle_item import BundleItem
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
+from ...strings.book_names import Book
 from ...strings.boot_names import Boots
 from ...strings.catalogue_names import CatalogueItem
-from ...strings.craftable_names import Consumable, Lighting, Fishing, Craftable, Bomb, Furniture, Floor, Edible
+from ...strings.craftable_names import Consumable, Lighting, Fishing, Craftable, Bomb, Furniture, Floor, Edible, Statue
 from ...strings.crop_names import Vegetable, Fruit
 from ...strings.currency_names import Currency
 from ...strings.decoration_names import Decoration
@@ -18,6 +19,7 @@ from ...strings.fruit_tree_names import Sapling
 from ...strings.geode_names import Geode
 from ...strings.gift_names import Gift
 from ...strings.ingredient_names import Ingredient
+from ...strings.machine_names import Machine
 from ...strings.material_names import Material
 from ...strings.meme_item_names import MemeItem
 from ...strings.metal_names import Fossil, Ore, MetalBar, Mineral, Artifact
@@ -416,6 +418,8 @@ blue_discus = BundleItem(Fish.blue_discus, source=BundleItem.Sources.island)
 stingray = BundleItem(Fish.stingray, source=BundleItem.Sources.island)
 spookfish = BundleItem(Fish.spookfish)
 midnight_squid = BundleItem(Fish.midnight_squid)
+slimejack = BundleItem(Fish.slimejack)
+goby = BundleItem(Fish.goby)
 
 angler = BundleItem(Fish.angler)
 crimsonfish = BundleItem(Fish.crimsonfish)
@@ -441,6 +445,7 @@ magic_bait = BundleItem(Fishing.magic_bait, 10, source=BundleItem.Sources.island
 pearl = BundleItem(Gift.pearl)
 challenge_bait = BundleItem(Fishing.challenge_bait, 25, source=BundleItem.Sources.masteries)
 targeted_bait = BundleItem(ArtisanGood.targeted_bait, 25, source=BundleItem.Sources.content)
+golden_bobber = BundleItem(Fishing.golden_bobber)
 
 ginger = BundleItem(Forageable.ginger, source=BundleItem.Sources.content)
 magma_cap = BundleItem(Mushroom.magma_cap, source=BundleItem.Sources.content)
@@ -482,6 +487,7 @@ green_jacket_shirt = BundleItem(Shirts.green_jacket.name)
 mermaid_boots = BundleItem(Boots.mermaid_boots)
 
 lucky_purple_shorts = BundleItem(SpecialItem.lucky_purple_shorts)
+trimmed_purple_shorts = BundleItem(SpecialItem.trimmed_purple_shorts)
 
 ancient_fruit_wine = BundleItem(ArtisanGood.specific_wine(Fruit.ancient_fruit))
 dried_ancient_fruit = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.ancient_fruit))
@@ -500,6 +506,7 @@ strawberry_wine = BundleItem(ArtisanGood.specific_wine(Fruit.strawberry))
 dried_strawberry = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.strawberry))
 pumpkin_juice = BundleItem(ArtisanGood.specific_juice(Vegetable.pumpkin))
 raisins = BundleItem(ArtisanGood.raisins)
+dried_qi_fruit = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.qi_fruit), source=BundleItem.Sources.content)
 
 aged_lava_eel_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.lava_eel))
 aged_crimsonfish_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.crimsonfish))
@@ -508,6 +515,7 @@ legend_roe = BundleItem(AnimalProduct.specific_roe(Fish.legend))
 aged_legend_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.legend))
 aged_glacierfish_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.glacierfish))
 aged_mutant_carp_roe = BundleItem(ArtisanGood.specific_aged_roe(Fish.mutant_carp))
+midnight_squid_roe = BundleItem(AnimalProduct.specific_roe(Fish.midnight_squid))
 
 legend_bait = BundleItem(ArtisanGood.specific_bait(Fish.legend))
 
@@ -530,6 +538,7 @@ bug_steak = BundleItem(Edible.bug_steak)
 tea_set = BundleItem(Gift.tea_set)
 golden_pumpkin = BundleItem(Gift.golden_pumpkin)
 mermaid_pendant = BundleItem(Gift.mermaid_pendant)
+void_ghost_pendant = BundleItem(Gift.void_ghost_pendant)
 advanced_tv_remote = BundleItem(SpecialItem.advanced_tv_remote)
 
 crystal_ball = BundleItem(CatalogueItem.crystal_ball)
@@ -542,6 +551,10 @@ flute_block = BundleItem(Furniture.flute_block)
 candle_lamp = BundleItem(Furniture.candle_lamp)
 modern_lamp = BundleItem(Furniture.modern_lamp)
 single_bed = BundleItem(Furniture.single_bed)
+statue_of_endless_fortune = BundleItem(Machine.statue_endless_fortune)
+cursed_mannequin = BundleItem(Furniture.cursed_mannequin)
+statue_of_blessings = BundleItem(Statue.blessings)
+crane_house_plant = BundleItem(Furniture.crane_game_house_plant)
 
 wood_floor = BundleItem(Floor.wood)
 rustic_plank_floor = BundleItem(Floor.rustic)
@@ -564,6 +577,10 @@ warp_totem_desert = BundleItem(Consumable.warp_totem_desert, source=BundleItem.S
 warp_totem_island = BundleItem(Consumable.warp_totem_island, source=BundleItem.Sources.island)
 rain_totem = BundleItem(Consumable.rain_totem)
 treasure_totem = BundleItem(Consumable.treasure_totem, source=BundleItem.Sources.masteries)
+
+book_of_mysteries = BundleItem(Book.book_of_mysteries)
+
+far_away_stone = BundleItem(SpecialItem.far_away_stone)
 
 death = BundleItem(NotReallyAnItem.death)
 

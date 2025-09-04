@@ -50,6 +50,7 @@ class Monster:
     magma_sprite = "Magma Sprite"
     magma_sparker = "Magma Sparker"
     metal_head = "Metal Head"
+    haunted_skull = "Haunted Skull"
 
 
 class MonsterCategory:
@@ -66,5 +67,6 @@ class MonsterCategory:
     serpents = "Serpents"
     magma_sprites = "Magma Sprites"
     metal_heads = "Metal Heads"
+    none = "None"
 
 

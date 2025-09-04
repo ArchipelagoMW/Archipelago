@@ -63,6 +63,7 @@ class Fishing:
     curiosity_lure = "Curiosity Lure"
     deluxe_bait = "Deluxe Bait"
     challenge_bait = "Challenge Bait"
+    golden_bobber = "Golden Bobber"
 
 
 class Ring:
@@ -128,6 +129,8 @@ class Furniture:
     flute_block = "Flute Block"
     drum_block = "Drum Block"
     single_bed = "Single Bed"
+    cursed_mannequin = "Cursed Mannequin"
+    crane_game_house_plant = "House Plant 13 (Crane Game)"
 
 
 class Storage:

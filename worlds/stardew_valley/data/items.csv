@@ -569,7 +569,7 @@ id,name,classification,groups,content_packs
 643,Mountain Shortcuts,progression,"ENDGAME_LOCATION_ITEMS",
 645,Town To Tide Pools Shortcut,progression,"ENDGAME_LOCATION_ITEMS",
 646,Tunnel To Backwoods Shortcut,progression,"ENDGAME_LOCATION_ITEMS",
-648,Statue Of Endless Fortune,useful,"ENDGAME_LOCATION_ITEMS",
+648,Statue Of Endless Fortune,progression,"ENDGAME_LOCATION_ITEMS",
 649,Catalogue,progression,"FILLER_DECORATION",
 650,Furniture Catalogue,progression,"FILLER_DECORATION",
 651,Joja Furniture Catalogue,progression,"ENDGAME_LOCATION_ITEMS,MAXIMUM_ONE,ENDGAME_LOCATION_ITEMS",
