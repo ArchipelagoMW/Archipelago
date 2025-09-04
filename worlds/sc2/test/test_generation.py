@@ -1228,7 +1228,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         # A unit nerf happens due to excluding OP items
         self.assertNotIn(item_names.MOTHERSHIP_INTEGRATED_POWER, starting_inventory)
 
-    def test_orphan_behavior_for_build_missions(self) -> None:
+    def test_terran_nobuild_sections_get_marine_medic_upgrades_with_units_excluded(self) -> None:
         world_options = {
             'mission_order': MissionOrder.option_grid,
             'maximum_campaign_size': MaximumCampaignSize.range_end,
