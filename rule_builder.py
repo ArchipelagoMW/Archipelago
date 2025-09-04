@@ -924,7 +924,8 @@ class Has(Rule[TWorld], game="Archipelago"):
 
         @override
         def _evaluate(self, state: CollectionState) -> bool:
-            return state.has(self.item_name, self.player, count=self.count)
+            # implementation based on state.has
+            return state.prog_items[self.player][self.item_name] >= self.count
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
@@ -1001,7 +1002,12 @@ class HasAll(Rule[TWorld], game="Archipelago"):
 
         @override
         def _evaluate(self, state: CollectionState) -> bool:
-            return state.has_all(self.item_names, self.player)
+            # implementation based on state.has_all
+            player_prog_items = state.prog_items[self.player]
+            for item in self.item_names:
+                if not player_prog_items[item]:
+                    return False
+            return True
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
@@ -1109,7 +1115,12 @@ class HasAny(Rule[TWorld], game="Archipelago"):
 
         @override
         def _evaluate(self, state: CollectionState) -> bool:
-            return state.has_any(self.item_names, self.player)
+            # implementation based on state.has_any
+            player_prog_items = state.prog_items[self.player]
+            for item in self.item_names:
+                if player_prog_items[item]:
+                    return True
+            return False
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
@@ -1206,9 +1217,12 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
 
         @override
         def _evaluate(self, state: CollectionState) -> bool:
-            # it will certainly be faster to reimplement has_all_counts here
-            # I'm leaving it for now so I can benchmark it later
-            return state.has_all_counts(dict(self.item_counts), self.player)
+            # implementation based on state.has_all_counts
+            player_prog_items = state.prog_items[self.player]
+            for item, count in self.item_counts:
+                if player_prog_items[item] < count:
+                    return False
+            return True
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
@@ -1297,9 +1311,12 @@ class HasAnyCount(HasAllCounts[TWorld], game="Archipelago"):
     class Resolved(HasAllCounts.Resolved):
         @override
         def _evaluate(self, state: CollectionState) -> bool:
-            # it will certainly be faster to reimplement has_all_counts here
-            # I'm leaving it for now so I can benchmark it later
-            return state.has_any_count(dict(self.item_counts), self.player)
+            # implementation based on state.has_any_count
+            player_prog_items = state.prog_items[self.player]
+            for item, count in self.item_counts:
+                if player_prog_items[item] >= count:
+                    return True
+            return False
 
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
@@ -1411,7 +1428,14 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
 
         @override
         def _evaluate(self, state: CollectionState) -> bool:
-            return state.has_from_list(self.item_names, self.player, self.count)
+            # implementation based on state.has_from_list
+            found = 0
+            player_prog_items = state.prog_items[self.player]
+            for item_name in self.item_names:
+                found += player_prog_items[item_name]
+                if found >= self.count:
+                    return True
+            return False
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
@@ -1507,7 +1531,14 @@ class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
     class Resolved(HasFromList.Resolved):
         @override
         def _evaluate(self, state: CollectionState) -> bool:
-            return state.has_from_list_unique(self.item_names, self.player, self.count)
+            # implementation based on state.has_from_list_unique
+            found = 0
+            player_prog_items = state.prog_items[self.player]
+            for item_name in self.item_names:
+                found += player_prog_items[item_name] > 0
+                if found >= self.count:
+                    return True
+            return False
 
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
@@ -1606,7 +1637,14 @@ class HasGroup(Rule[TWorld], game="Archipelago"):
 
         @override
         def _evaluate(self, state: CollectionState) -> bool:
-            return state.has_group(self.item_name_group, self.player, self.count)
+            # implementation based on state.has_group
+            found = 0
+            player_prog_items = state.prog_items[self.player]
+            for item_name in self.item_names:
+                found += player_prog_items[item_name]
+                if found >= self.count:
+                    return True
+            return False
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
@@ -1646,7 +1684,14 @@ class HasGroupUnique(HasGroup[TWorld], game="Archipelago"):
     class Resolved(HasGroup.Resolved):
         @override
         def _evaluate(self, state: CollectionState) -> bool:
-            return state.has_group_unique(self.item_name_group, self.player, self.count)
+            # implementation based on state.has_group_unique
+            found = 0
+            player_prog_items = state.prog_items[self.player]
+            for item_name in self.item_names:
+                found += player_prog_items[item_name] > 0
+                if found >= self.count:
+                    return True
+            return False
 
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
