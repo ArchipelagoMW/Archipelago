@@ -21,10 +21,11 @@ import random
 import concurrent.futures
 import time
 import uuid
+import argparse
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
-from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
+from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser, handle_url_arg
 from Utils import init_logging, is_windows, async_start
 from .item import item_names, item_parents, race_to_item_type
 from .item.item_annotations import ITEM_NAME_ANNOTATIONS
@@ -1298,12 +1299,6 @@ class CompatItemHolder(typing.NamedTuple):
     quantity: int = 1
 
 
-def parse_uri(uri: str) -> str:
-    if "://" in uri:
-        uri = uri.split("://", 1)[1]
-    return uri.split('?', 1)[0]
-
-
 async def main(args: typing.Sequence[str] | None):
     multiprocessing.freeze_support()
     parser = get_base_parser()
@@ -1311,7 +1306,8 @@ async def main(args: typing.Sequence[str] | None):
     args, uri = parser.parse_known_args(args)
 
     if uri and uri[0].startswith('archipelago://'):
-        args.connect = parse_uri(' '.join(uri))
+        args.url = uri[0]
+        handle_url_arg(args, parser)
 
     ctx = SC2Context(args.connect, args.password)
     ctx.auth = args.name
