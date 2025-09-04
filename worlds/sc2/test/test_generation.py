@@ -2,13 +2,21 @@
 Unit tests for world generation
 """
 from typing import *
+
+from Options import Accessibility
 from .test_base import Sc2SetupTestBase
 
-from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race, unreleased_items
+from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race, unreleased_items, \
+    StarterUnit, GrantStoryTech
 from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_random_first_mission
 from ..options import EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder, ExcludeOverpoweredItems, \
-    VanillaItemsOnly, MaximumCampaignSize
+    VanillaItemsOnly, MaximumCampaignSize, AllInMap, KeyMode, EnableRaceSwapVariants, EnableMissionRaceBalancing, \
+    ShuffleCampaigns, ShuffleNoBuild, RequiredTactics, EnsureGenericItems, GenericUpgradeResearch, \
+    GenericUpgradeResearchSpeedup, GenericUpgradeItems, KerriganPresence, KerriganLevelItemDistribution, \
+    KerriganPrimalStatus, EnableMorphling, WarCouncilNerfs, SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, \
+    SpearOfAdunPassiveAbilityPresence, SpearOfAdunPassivesPresentInNoBuild, GrantStoryLevels, TakeOverAIAllies, \
+    DifficultyCurve, ExcludeVeryHardMissions
 
 
 class TestItemFiltering(Sc2SetupTestBase):
@@ -1226,3 +1234,39 @@ class TestItemFiltering(Sc2SetupTestBase):
 
         # A unit nerf happens due to excluding OP items
         self.assertNotIn(item_names.MOTHERSHIP_INTEGRATED_POWER, starting_inventory)
+
+    def test_all_kerrigan_missions_are_nobuild_and_grant_story_tech_is_on(self) -> None:
+        # The actual situation the bug got caught
+        world_options = {
+            'mission_order': MissionOrder.option_vanilla_shuffled,
+            'selected_races': [
+                SC2Race.TERRAN.get_title(),
+                SC2Race.ZERG.get_title(),
+                SC2Race.PROTOSS.get_title(),
+            ],
+            'enabled_campaigns': [
+                SC2Campaign.WOL.campaign_name,
+                SC2Campaign.PROPHECY.campaign_name,
+                SC2Campaign.HOTS.campaign_name,
+                SC2Campaign.PROLOGUE.campaign_name,
+                SC2Campaign.LOTV.campaign_name,
+                SC2Campaign.EPILOGUE.campaign_name,
+                SC2Campaign.NCO.campaign_name,
+            ],
+            'enable_race_swap': EnableRaceSwapVariants.option_shuffle_all_non_vanilla, # Causes no build Kerrigan missions to be present, only nobuilds remain
+            'shuffle_campaigns': ShuffleCampaigns.option_true,
+            'shuffle_no_build': ShuffleNoBuild.option_true,
+            'starter_unit': StarterUnit.option_balanced,
+            'required_tactics': RequiredTactics.option_standard,
+            'kerrigan_presence': KerriganPresence.option_vanilla,
+            'kerrigan_levels_per_mission_completed': 0,
+            'kerrigan_levels_per_mission_completed_cap': -1,
+            'kerrigan_level_item_sum': 87,
+            'kerrigan_level_item_distribution': KerriganLevelItemDistribution.option_size_7,
+            'kerrigan_total_level_cap': -1,
+            'start_primary_abilities': 0,
+            'grant_story_tech': GrantStoryTech.option_grant,
+            'grant_story_levels': GrantStoryLevels.option_additive,
+        }
+        self.generate_world(world_options)
+        # Just check that the world itself generates under those rules and no exception is thrown
