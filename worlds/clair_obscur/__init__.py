@@ -145,14 +145,6 @@ class ClairObscurWorld(World):
             "goal", "char_shuffle", "starting_char", "gestral_shuffle", "gear_scaling"
         )
 
-
-
-        if self.options.gear_scaling == 1:
-            return slot_data
-
-        #Lists of pictos and weapons to determine
-
-
         match self.options.gear_scaling:
             case 1:
                 #Scale by order received (handled entirely by client)
