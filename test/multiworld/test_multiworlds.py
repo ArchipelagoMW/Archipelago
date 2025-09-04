@@ -34,7 +34,7 @@ class TestAllGamesMultiworld(ImportedMultiworldTestBase):
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
 
 
-@classvar_matrix(world_classes=[[world_type] * 2 for world_type in AutoWorldRegister.world_types])
+@classvar_matrix(games=[[world_type] * 2 for world_type in AutoWorldRegister.world_types])
 class TestTwoPlayerMulti(ImportedMultiworldTestBase):
     shared_options = {"accessibility": "full"}
 

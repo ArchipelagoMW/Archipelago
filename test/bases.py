@@ -356,6 +356,8 @@ class MultiworldTestBase(unittest.TestCase):
         self.world_setup()
 
     def world_setup(self, seed: int | None = None) -> None:
+        assert self.games, "Trying to create a MultiworldTestBase with no games."
+
         self.multiworld = MultiWorld(len(self.games))
 
         self.multiworld.set_seed(seed)
