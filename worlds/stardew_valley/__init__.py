@@ -289,7 +289,8 @@ class StardewValleyWorld(World):
 
     def precollect_starting_backpacks(self):
         if self.options.backpack_progression != BackpackProgression.option_vanilla and StartWithoutOptionName.backpack in self.options.start_without:
-            num_starting_slots = max(4, self.options.backpack_size.value)
+            minimum_start_slots = 4 if StartWithoutOptionName.tools in self.options.start_without else 6
+            num_starting_slots = max(minimum_start_slots, self.options.backpack_size.value)
             num_starting_backpacks = math.ceil(num_starting_slots / self.options.backpack_size.value)
             num_already_starting_backpacks = 0
             for precollected_item in self.multiworld.precollected_items[self.player]:
