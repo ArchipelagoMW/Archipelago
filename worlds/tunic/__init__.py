@@ -208,6 +208,10 @@ class TunicWorld(World):
             else:
                 self.options.local_fill.value = 0
 
+        if self.options.local_fill > 0 and self.settings.limit_grass_rando:
+            # discard grass from non_local if it's meant to be limited
+            self.options.non_local_items.value.discard("Grass")
+
         if self.options.grass_randomizer:
             if self.settings.limit_grass_rando and self.options.local_fill < 95 and self.multiworld.players > 1:
                 raise OptionError(f"TUNIC: Player {self.player_name} has their Local Fill option set too low. "
@@ -477,9 +481,6 @@ class TunicWorld(World):
         self.fill_items = []
         if self.options.local_fill > 0 and self.multiworld.players > 1:
             # skip items marked local or non-local, let fill deal with them in its own way
-            # discard grass from non_local if it's meant to be limited
-            if self.settings.limit_grass_rando:
-                self.options.non_local_items.value.discard("Grass")
             all_filler: list[TunicItem] = []
             non_filler: list[TunicItem] = []
             for tunic_item in tunic_items:
