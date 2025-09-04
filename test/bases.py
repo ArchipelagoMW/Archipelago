@@ -6,8 +6,8 @@ from argparse import Namespace
 
 from Generate import get_seed_name
 from test.general import gen_steps
-from worlds import AutoWorld
-from worlds.AutoWorld import World, call_all
+from worlds import AutoWorld, AutoWorldRegister
+from worlds.AutoWorld import World, call_all, call_single
 
 from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
 from worlds.alttp.Items import item_factory
@@ -343,3 +343,78 @@ class WorldTestBase(unittest.TestCase):
             placed_items = [loc.item for loc in self.multiworld.get_locations() if loc.item and loc.item.code]
             self.assertLessEqual(len(self.multiworld.itempool), len(placed_items),
                                  "Unplaced Items remaining in itempool")
+
+
+class MultiworldTestBase(unittest.TestCase):
+    multiworld: MultiWorld
+
+    games: typing.ClassVar[list[str]] = []
+    shared_options: typing.ClassVar[dict[str, typing.Any]] = {}
+    options_per_world: typing.ClassVar[dict[int, dict[str, typing.Any]]] = {}
+
+    def setUp(self):
+        self.world_setup()
+
+    def world_setup(self, seed: int | None = None) -> None:
+        self.multiworld = MultiWorld(len(self.games))
+
+        self.multiworld.set_seed(seed)
+        random.seed(self.multiworld.seed)
+        self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
+
+        self.multiworld.player_name = {}
+
+        args = Namespace()
+        for i, game in enumerate(self.games):
+            player_number = i + 1
+            self.multiworld.game[player_number] = game
+            self.multiworld.player_name[player_number] = f"Tester {player_number}"
+
+            options = self.shared_options | self.options_per_world.get(player_number, {})
+
+            world_type = AutoWorldRegister.world_types[game]
+            for name, option in world_type.options_dataclass.type_hints.items():
+                if not hasattr(args, name):
+                    setattr(args, name, {})
+
+                getattr(args, name)[player_number] = option.from_any(options.get(name, option.default))
+
+        self.multiworld.set_options(args)
+        self.multiworld.state = CollectionState(self.multiworld)
+
+        self.assertSteps(gen_steps)
+
+    # similar to the implementation in WorldTestBase.test_fill
+    # but for multiple players and doesn't allow minimal accessibility
+    def fulfills_accessibility(self) -> bool:
+        """
+        Checks that the multiworld satisfies locations accessibility requirements, failing if all locations are cleared
+        but not beatable, or some locations are unreachable.
+        """
+        locations = [loc for loc in self.multiworld.get_locations()]
+        state = CollectionState(self.multiworld)
+        while locations:
+            sphere: list[Location] = []
+            for n in range(len(locations) - 1, -1, -1):
+                if locations[n].can_reach(state):
+                    sphere.append(locations.pop(n))
+            self.assertTrue(sphere, f"Unreachable locations: {locations}")
+            if not sphere:
+                return False
+            for location in sphere:
+                if location.item:
+                    state.collect(location.item, True, location)
+        return self.multiworld.has_beaten_game(state, 1)
+
+    def assertSteps(self, steps: tuple[str, ...]) -> None:
+        """Calls each step individually, continuing if a step for a specific world step fails."""
+        world_types = {world.__class__ for world in self.multiworld.worlds.values()}
+        for step in steps:
+            for player, world in self.multiworld.worlds.items():
+                with self.subTest(game=world.game, step=step):
+                    call_single(self.multiworld, step, player)
+            for world_type in sorted(world_types, key=lambda world: world.__name__):
+                with self.subTest(game=world_type.game, step=f"stage_{step}"):
+                    stage_callable = getattr(world_type, f"stage_{step}", None)
+                    if stage_callable:
+                        stage_callable(self.multiworld)
