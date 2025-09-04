@@ -168,11 +168,16 @@ class ClairObscurWorld(World):
                             slot_data["pictos"].append(loc.item.code)
                         elif loc.item.name in self.item_name_groups["Weapon"]:
                             slot_data["weapons"].append(loc.item.code)
-            # case 2:
-            #     #Random scaling
-            #     slot_data["pictos"]: List[int] = []
-            #     slot_data["weapons"]: List[int] = []
-            #     for weapon in self.item_name_groups["Weapon"]:
+            case 2:
+                #Random scaling
+                slot_data["pictos"]: List[int] = []
+                slot_data["weapons"]: List[int] = []
+                for picto in self.item_name_groups["Picto"]:
+                    slot_data["pictos"].append(self.item_name_to_id[picto])
+                for weapon in self.item_name_groups["Weapon"]:
+                    slot_data["weapons"].append(self.item_name_to_id[weapon])
+                self.random.shuffle(slot_data["pictos"])
+                self.random.shuffle(slot_data["weapons"])
 
         return slot_data
 

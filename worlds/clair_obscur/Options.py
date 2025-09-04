@@ -77,7 +77,8 @@ class GearScaling(Choice):
     display_name = "Gear Scaling"
     option_sphere_placement = 0
     option_order_received = 1
-    default = 1
+    option_random_levels = 2
+    default = 0
 
 class ClairObscurStartInventory(StartInventory):
     """
