@@ -61,6 +61,10 @@ class PlayerSprite(Choice):
     option_horse = 2
     option_cat = 3
 
+    # For choices, you can also define aliases.
+    # For example, we could make it so "player_sprite: kitty" resolves to "player_sprite: cat" like this:
+    alias_kitty = option_cat
+
     default = option_human
 
 
