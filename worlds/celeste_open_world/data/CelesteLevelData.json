@@ -37087,10 +37087,6 @@
                                     "rule": []
                                 },
                                 {
-                                    "dest": "south-east-door",
-                                    "rule": []
-                                },
-                                {
                                     "dest": "south-west-door",
                                     "rule": []
                                 },

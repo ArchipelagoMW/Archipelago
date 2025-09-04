@@ -4776,7 +4776,6 @@ all_region_connections: dict[str, RegionConnection] = {
     "10a_d-00_north-west---10a_d-00_breaker": RegionConnection("10a_d-00_north-west", "10a_d-00_breaker", [[ItemName.jellyfish, ItemName.springs, ItemName.dash_switches, ItemName.breaker_boxes, ], ]),
     "10a_d-00_breaker---10a_d-00_south": RegionConnection("10a_d-00_breaker", "10a_d-00_south", []),
     "10a_d-00_breaker---10a_d-00_north-east-door": RegionConnection("10a_d-00_breaker", "10a_d-00_north-east-door", []),
-    "10a_d-00_breaker---10a_d-00_south-east-door": RegionConnection("10a_d-00_breaker", "10a_d-00_south-east-door", []),
     "10a_d-00_breaker---10a_d-00_south-west-door": RegionConnection("10a_d-00_breaker", "10a_d-00_south-west-door", []),
     "10a_d-00_breaker---10a_d-00_west-door": RegionConnection("10a_d-00_breaker", "10a_d-00_west-door", []),
     "10a_d-00_breaker---10a_d-00_north-west-door": RegionConnection("10a_d-00_breaker", "10a_d-00_north-west-door", []),
