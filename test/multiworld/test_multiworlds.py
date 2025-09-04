@@ -1,3 +1,4 @@
+import typing
 import unittest
 import warnings
 
@@ -7,7 +8,7 @@ from ..param import classvar_matrix
 
 
 class MultiworldTestBase(ImportedMultiworldTestBase):
-    def __init_subclass__(cls, **kwargs):
+    def __init_subclass__(cls, **kwargs: typing.Any) -> None:
         super().__init_subclass__(**kwargs)
         warnings.warn(
             "MultiworldTestBase has been moved to test/bases.py. Please import it from there instead.",
