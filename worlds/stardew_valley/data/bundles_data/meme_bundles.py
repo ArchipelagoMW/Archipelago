@@ -250,7 +250,7 @@ distracted_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.distrac
 algorerhythm_items =[item.as_amount(2) for item in
                      [midnight_squid_roe, tea_set, statue_of_endless_fortune, golden_bobber, dried_qi_fruit, cursed_mannequin,
                       statue_of_blessings, crane_house_plant, book_of_mysteries, far_away_stone, void_ghost_pendant, trimmed_purple_shorts]]
-algorerhythm_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.algorerhythm, algorerhythm_items, 4, 4)
+algorerhythm_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.algorerhythm, algorerhythm_items, 12, 4)
 
 
 red_fish_items = [red_mullet, red_snapper, lava_eel, crimsonfish]
