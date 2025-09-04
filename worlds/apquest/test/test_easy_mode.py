@@ -16,10 +16,20 @@ class TestEasyModeLogic(APQuestTestBase):
     }
 
     # At this point, we could stop, and a few default tests would be run on our world.
-    # At the time of writing (2025-08-23), this includes:
+    # At the time of writing (2025-09-04), this includes the following tests:
     # - If you have every item, every location can be reached
     # - If you have no items, you can still reach something ("Sphere 1" is not empty)
     # - The world successfully generates (Fill does not crash)
+
+    # These "default tests" only get run if run_default_tests is set to True.
+    # This is enabled by default.
+    # If you run a lot of tests, and especially if a lot of them have overlapping options,
+    # you might want to disable these default options of them, as the fill test can actually take quite a while.
+
+    # For our TestEasyModeLogic case, there is actually a good reason to disable the default tests:
+    # This test runs on default options, since easy mode is the default.
+    # Default tests already get run on default options for all worlds, so we don't need to waste time doing it again.
+    run_default_tests = False
 
     # This is already useful, but we also want to do our own tests.
     # A test is a function whose name starts with "test".
