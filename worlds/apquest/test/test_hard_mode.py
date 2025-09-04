@@ -35,7 +35,8 @@ class TestHardMode(APQuestTestBase):
         # 3. No Shield & All Health Upgrades  ->   Right Room Enemy Drop is reachable.
 
         # Note: Every other item that isn't the Shield nor a Health Upgrade is collected into state.
-        # In our case, this means we don't have to mention the Sword. By omitting it, it's assumed that we have it.
+        # This even includes pre-placed items, which notably includes any event location/item pairs you created.
+        # In our case, it means we don't have to mention the Sword. By omitting it, it's assumed that we have it.
 
         # This explains why the possible_items parameter is a list, but not why it's a list of lists.
         # Let's look at the Final Boss Location. This location requires Sword, Shield, and both Health Upgrades.
