@@ -14,7 +14,7 @@ class MultiworldTestBase(ImportedMultiworldTestBase):
             DeprecationWarning
         )
 
-@unittest.skip("Too slow for main")
+@unittest.skip("too slow for main")
 class TestAllGamesMultiworld(ImportedMultiworldTestBase):
     games = list(AutoWorldRegister.world_types)
     shared_options = {"accessibility": "full"}
