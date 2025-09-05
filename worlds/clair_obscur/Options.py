@@ -68,6 +68,20 @@ class StartingCharacter(Choice):
     option_monoco = 4
     default = 0
 
+class GearScaling(Choice):
+    """How the levels of pictos and weapons you receive are determined.
+    Sphere placement: Roughly scales pictos/weapons by the logical sphere they're placed in.
+    Order received: As you receive more pictos/weapons, the levels of the next ones you receive will go up.
+    Random balanced: Pictos/weapons have random levels assigned in an even spread.
+    Full random: Exaclty what it says. There's no guarantee that you'll get high-level pictos... but you probably will."""
+    internal_name = "gear_scaling"
+    display_name = "Gear Scaling"
+    option_sphere_placement = 0
+    option_order_received = 1
+    option_random_balanced = 2
+    option_full_random = 3
+    default = 0
+
 class ClairObscurStartInventory(StartInventory):
     """
     Start with these items
@@ -79,6 +93,7 @@ class ClairObscurOptions(PerGameCommonOptions):
     char_shuffle: ShuffleCharacters
     gestral_shuffle: ShuffleLostGestrals
     starting_char: StartingCharacter
+    gear_scaling: GearScaling
 
     start_inventory: ClairObscurStartInventory
 
