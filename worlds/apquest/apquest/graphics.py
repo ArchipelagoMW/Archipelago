@@ -1,0 +1,44 @@
+from enum import Enum
+
+
+class Graphic(Enum):
+    EMPTY = 0
+    WALL = 1
+    BUTTON_NOT_ACTIVATED = 2
+    BUTTON_ACTIVATED = 3
+    KEY_DOOR = 4
+    BUTTON_DOOR = 5
+    CHEST = 6
+    BUSH = 7
+    BREAKABLE_BLOCK = 8
+
+    NORMAL_ENEMY_1_HEALTH = 10
+    NORMAL_ENEMY_2_HEATLH = 11
+
+    BOSS_1_HEALTH = 20
+    BOSS_2_HEALTH = 21
+    BOSS_3_HEALTH = 22
+    BOSS_4_HEALTH = 23
+    BOSS_5_HEALTH = 24
+
+    PLAYER_DOWN = 30
+    PLAYER_UP = 31
+    PLAYER_LEFT = 32
+    PLAYER_RIGHT = 33
+
+    KEY = 41
+    SWORD = 42
+    SHIELD = 43
+    HAMMER = 44
+
+    HEART = 50
+    HALF_HEART = 51
+    EMPTY_HEART = 52
+
+    CONFETTI_CANNON = 60
+
+    REMOTE_ITEM = 70
+
+    ITEMS_TEXT = 80
+
+    UNKNOWN = -1
