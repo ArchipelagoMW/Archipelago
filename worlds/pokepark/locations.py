@@ -193,6 +193,20 @@ class PokeparkMagikarpRescueClientData(PokeparkBaseClientLocationData):
 
 
 @dataclass
+class PokeparkBaltoyCrateClientData(PokeparkBaseClientLocationData):
+    _expected_value: Optional[int] = 0xFFFFFFFF
+    _bit_mask: Optional[int] = 0xFFFFFFFF
+
+    def __post_init__(self):
+        assert self._expected_value is not None
+        assert self._bit_mask is not None
+        self.global_manager_data_struc_offset = 0x4f
+        self.in_structure_offset = 0x0
+        self.expected_value = self._expected_value
+        self.bit_mask = self._bit_mask
+        self.in_structure_address_interval = 0x0
+
+@dataclass
 class PokeparkMewChallengeClientData(PokeparkBaseClientLocationData):
     _expected_value: Optional[int] = 0xFFFFFFFF
     _bit_mask: Optional[int] = 0xFFFFFFFF
@@ -201,6 +215,21 @@ class PokeparkMewChallengeClientData(PokeparkBaseClientLocationData):
         assert self._expected_value is not None
         assert self._bit_mask is not None
         self.global_manager_data_struc_offset = 0x51
+        self.in_structure_offset = 0x0
+        self.expected_value = self._expected_value
+        self.bit_mask = self._bit_mask
+        self.in_structure_address_interval = 0x0
+
+
+@dataclass
+class PokeparkGolemUnlockFlagClientData(PokeparkBaseClientLocationData):
+    _expected_value: Optional[int] = 0xFFFFFFFF
+    _bit_mask: Optional[int] = 0xFFFFFFFF
+
+    def __post_init__(self):
+        assert self._expected_value is not None
+        assert self._bit_mask is not None
+        self.global_manager_data_struc_offset = 0x48
         self.in_structure_offset = 0x0
         self.expected_value = self._expected_value
         self.bit_mask = self._bit_mask
@@ -2535,8 +2564,11 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Magma Zone Main Area - Baltoy Crate -- Baltoy Unlocked": PokeparkLocationData(
         296, PokeparkFlag.POKEMON_UNLOCK, "Magma Zone Main Area", 0x0402,
-        PokeparkBaseClientLocationData(
-            # TODO: add client Data
+        PokeparkBaltoyCrateClientData(
+            structure_position=0,
+            _expected_value=0b10000000,
+            _bit_mask=0b10000000,
+            memory_range=MemoryRange.BYTE
         )
     ),
     "Magma Zone Main Area - Bonsly Power Competition -- Friendship": PokeparkLocationData(
@@ -4427,5 +4459,29 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             structure_position=83,
             memory_range=MemoryRange.BYTE
         )
+    ),
+    "Magma Zone Main Area - Drill -- Torkoal Unlocked": PokeparkLocationData(
+        562, PokeparkFlag.POKEMON_UNLOCK, "Magma Zone Main Area", 0x0301,
+        PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(
+            structure_position=0,
+            memory_range=MemoryRange.BYTE,
+            _expected_value=0b00010000,
+            _bit_mask=0b00010000
+        )
+    ),
+    "Magma Zone Main Area - Furnace -- Golem Unlocked": PokeparkLocationData(
+        563, PokeparkFlag.POKEMON_UNLOCK, "Magma Zone Main Area", 0x0301,
+        PokeparkGolemUnlockFlagClientData(
+            structure_position=0,
+            memory_range=MemoryRange.BYTE,
+            _expected_value=0b00010000,
+            _bit_mask=0b00010000
+        )
+    ),
+    "Magma Zone Circle Area - Charmander Power Competition -- Friendship": PokeparkLocationData(
+        564, PokeparkFlag.BATTLE, "Magma Zone Circle Area", 0x0402, PokeparkFriendshipClientLocationData(
+            structure_position=145,
+            memory_range=MemoryRange.BYTE
+        ),
     ),
 }

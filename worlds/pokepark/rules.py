@@ -1212,6 +1212,18 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: can_play_catch(state, player)
     )
     set_rule_if_exists(
+        "Magma Zone Main Area - Drill -- Torkoal Unlocked",
+        lambda state: can_dash_overworld(state, player)
+    )
+    set_rule_if_exists(
+        "Magma Zone Main Area - Furnace -- Golem Unlocked",
+        lambda state: can_dash_overworld(state, player)
+    )
+    set_rule_if_exists(
+        "Magma Zone Circle Area - Charmander Power Competition -- Friendship",
+        lambda state: can_battle(state, player)
+    )
+    set_rule_if_exists(
         "Magma Zone Circle Area - Ninetales Power Competition -- Friendship",
         lambda state: can_play_catch_intermediate(state, player)
     )
