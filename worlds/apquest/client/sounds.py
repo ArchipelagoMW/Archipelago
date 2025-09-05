@@ -44,10 +44,13 @@ class SoundManager:
     background_music_intro: Sound
     background_music: Sound
 
-    background_music_target_volume: float = 0
+    current_background_music_volume: float = 1.
+    background_music_target_volume: float = 0.
 
     background_music_task: Task | None = None
     background_music_last_position: int = 0
+
+    volume_modifier: float = 1.
 
     game_started: bool
     allow_intro_to_play: bool
@@ -150,10 +153,15 @@ class SoundManager:
     def play_background_music(self, play: bool = True) -> None:
         if play:
             self.background_music_target_volume = 1
-            self.background_music.volume = 1
+            self.set_background_music_volume(1)
         else:
             self.background_music_target_volume = 0
-            self.background_music.volume = 0
+            self.set_background_music_volume(0)
+
+    def set_background_music_volume(self, volume: float):
+        self.current_background_music_volume = volume
+        self.background_music.volume = volume * self.volume_modifier
+        self.background_music_intro.volume = volume * self.volume_modifier
 
     def fade_background_music(self, fade_in: bool = True) -> None:
         if fade_in:
@@ -162,12 +170,12 @@ class SoundManager:
             self.background_music_target_volume = 0
 
     def do_fade(self) -> None:
-        if self.background_music.volume > self.background_music_target_volume:
-            self.background_music.volume = max(0.0, self.background_music.volume - 0.02)
-        if self.background_music.volume < self.background_music_target_volume:
-            self.background_music.volume = min(1.0, self.background_music.volume + 0.02)
+        if current_background_music_volume > self.background_music_target_volume:
+            self.set_background_music_volume(max(0.0, self.current_background_music_volume - 0.02))
+        if current_background_music_volume < self.background_music_target_volume:
+            self.set_background_music_volume(min(1.0, self.current_background_music_volume + 0.02))
 
-        if self.background_music.volume == 0:
+        if current_background_music_volume == 0:
             if self.background_music.state == "play":
                 self.background_music_last_position = self.background_music.get_pos()
                 if self.background_music_last_position != 0:  # SDL2 get_pos doesn't work, just continue playing muted

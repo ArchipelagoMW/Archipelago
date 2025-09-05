@@ -232,3 +232,6 @@ class ConfettiView(MDRecycleView):
                     3 + i * 0.05,
                 )
             )
+
+class VolumeSliderView(MDRecycleView):
+    pass

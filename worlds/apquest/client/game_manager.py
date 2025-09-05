@@ -15,7 +15,7 @@ from kivymd.uix.recycleview import MDRecycleView
 
 from ..apquest.game import Game
 from ..apquest.graphics import Graphic
-from .custom_views import APQuestGameView, APQuestGrid, ConfettiView
+from .custom_views import APQuestGameView, APQuestGrid, ConfettiView, VolumeSliderView
 from .graphics import IMAGE_GRAPHICS, PLAYER_GRAPHICS, TEXTURES, PlayerSprite
 from .sounds import SoundManager
 
@@ -164,6 +164,9 @@ class APQuestManager(GameManager):
         game_container.bind(size=self.lower_game_grid.check_resize)
         game_container.bind(size=self.upper_game_grid.check_resize)
         game_container.bind(size=self.confetti_view.check_resize)
+
+        self.grid.add_widget(MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40),
+                                          spacing=5, padding=(5, 10)))
 
         Clock.schedule_interval(lambda dt: self.confetti_view.redraw_confetti(dt), 1 / 60)
 
