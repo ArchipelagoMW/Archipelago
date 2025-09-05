@@ -156,7 +156,7 @@ def set_rules(world):
 
 def set_isolated_locations_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, trash_bear_requests: Dict[str, List[str]]):
     rule_collector.set_location_rule("Beach Bridge Repair", logic.grind.can_grind_item(300, "Wood"))
-    rule_collector.set_location_rule("Grim Reaper Statue", logic.combat.can_fight_at_level(Performance.good) & logic.tool.has_tool(Tool.pickaxe))
+    rule_collector.set_location_rule("Grim Reaper Statue", logic.combat.can_fight_at_level(Performance.decent) & logic.tool.has_tool(Tool.pickaxe))
     rule_collector.set_location_rule("Galaxy Sword Shrine", logic.has("Prismatic Shard"))
     rule_collector.set_location_rule("Krobus Stardrop", logic.money.can_spend(20000))
     rule_collector.set_location_rule("Demetrius's Breakthrough", logic.money.can_have_earned_total(25000))
