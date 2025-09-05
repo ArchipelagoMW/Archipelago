@@ -97,6 +97,9 @@ class EarthBoundClient(SNIClient):
         snes_buffered_write(ctx, GOT_DEATH_FROM_SERVER, bytes([0x01]))
         text_open = await snes_read(ctx, OPEN_WINDOW, 1)
 
+        if text_open is None: #Catch None reads from client jank????????
+            return
+
         if is_currently_dead[0] != 0x00 or can_receive_deathlinks[0] == 0x00:
             return
 
@@ -186,6 +189,9 @@ class EarthBoundClient(SNIClient):
         if ctx.slot is None:
             return
 
+        if outgoing_energy is None: #None Catcher
+            return
+
         await ctx.send_msgs([{
             "cmd": "Get",
             "keys": [f"GiftBoxes;{ctx.team}"]
@@ -230,6 +236,9 @@ class EarthBoundClient(SNIClient):
                 item = item_id_table[gift_item_name]
             else:
                 item = trait_interpreter(gift)
+
+        if outgoing_energy is None: # None Catcher
+            return
 
             inbox_queue = await snes_read(ctx, WRAM_START + 0x3200, 1)
             # Pause if the receiver queue is full

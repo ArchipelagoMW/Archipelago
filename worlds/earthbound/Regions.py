@@ -23,11 +23,13 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
     regions = [
         create_region(world, player, locations_per_region, "Menu"),
         create_region(world, player, locations_per_region, "Ness's Mind"),
+        create_region(world, player, locations_per_region, "Global ATM Access"),
         create_region(world, player, locations_per_region, "Northern Onett"),
         create_region(world, player, locations_per_region, "Onett"),
         create_region(world, player, locations_per_region, "Arcade"),
         create_region(world, player, locations_per_region, "Giant Step"),
         create_region(world, player, locations_per_region, "Twoson"),
+        create_region(world, player, locations_per_region, "Common Condiment Shop"),
         create_region(world, player, locations_per_region, "Everdred's House"),
         create_region(world, player, locations_per_region, "Peaceful Rest Valley"),
         create_region(world, player, locations_per_region, "Happy-Happy Village"),
@@ -72,9 +74,7 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
         create_region(world, player, locations_per_region, "Fire Spring"),
         create_region(world, player, locations_per_region, "Magicant"),
         create_region(world, player, locations_per_region, "Sea of Eden"),
-        create_region(world, player, locations_per_region, "Cave of the Present"),
-        create_region(world, player, locations_per_region, "Global ATM Access"),
-        create_region(world, player, locations_per_region, "Common Condiment Shop")
+        create_region(world, player, locations_per_region, "Cave of the Present")
 
     ]
     if world.options.giygas_required:
