@@ -101,7 +101,7 @@ def has_x_belt_multiplier(state: CollectionState, player: int, needed: float) ->
 
 
 def has_logic_list_building(state: CollectionState, player: int, buildings: list[str], index: int,
-                            includeuseful: bool) -> bool:
+                            includeuseful: bool, floating: bool) -> bool:
 
     # Includes balancer, tunnel, and trash in logic in order to make them appear in earlier spheres
     if includeuseful and not (state.has(ITEMS.trash, player) and has_balancer(state, player) and
@@ -109,7 +109,7 @@ def has_logic_list_building(state: CollectionState, player: int, buildings: list
         return False
 
     if buildings[index] == ITEMS.cutter:
-        if buildings.index(ITEMS.stacker) < index:
+        if buildings.index(ITEMS.stacker) < index and not floating:
             return state.has_any((ITEMS.cutter, ITEMS.cutter_quad), player)
         else:
             return can_cut_half(state, player)
@@ -195,38 +195,38 @@ def create_shapez_regions(player: int, multiworld: MultiWorld, floating: bool,
     # Progressively connect level and upgrade regions
     regions[REGIONS.main].connect(
         regions[REGIONS.levels_1], "Using first level building",
-        lambda state: has_logic_list_building(state, player, level_logic_buildings, 0, False))
+        lambda state: has_logic_list_building(state, player, level_logic_buildings, 0, False, floating))
     regions[REGIONS.levels_1].connect(
         regions[REGIONS.levels_2], "Using second level building",
-        lambda state: has_logic_list_building(state, player, level_logic_buildings, 1, False))
+        lambda state: has_logic_list_building(state, player, level_logic_buildings, 1, False, floating))
     regions[REGIONS.levels_2].connect(
         regions[REGIONS.levels_3], "Using third level building",
         lambda state: has_logic_list_building(state, player, level_logic_buildings, 2,
-                                              early_useful == OPTIONS.buildings_3))
+                                              early_useful == OPTIONS.buildings_3, floating))
     regions[REGIONS.levels_3].connect(
         regions[REGIONS.levels_4], "Using fourth level building",
-        lambda state: has_logic_list_building(state, player, level_logic_buildings, 3, False))
+        lambda state: has_logic_list_building(state, player, level_logic_buildings, 3, False, floating))
     regions[REGIONS.levels_4].connect(
         regions[REGIONS.levels_5], "Using fifth level building",
         lambda state: has_logic_list_building(state, player, level_logic_buildings, 4,
-                                              early_useful == OPTIONS.buildings_5))
+                                              early_useful == OPTIONS.buildings_5, floating))
     regions[REGIONS.main].connect(
         regions[REGIONS.upgrades_1], "Using first upgrade building",
-        lambda state: has_logic_list_building(state, player, upgrade_logic_buildings, 0, False))
+        lambda state: has_logic_list_building(state, player, upgrade_logic_buildings, 0, False, floating))
     regions[REGIONS.upgrades_1].connect(
         regions[REGIONS.upgrades_2], "Using second upgrade building",
-        lambda state: has_logic_list_building(state, player, upgrade_logic_buildings, 1, False))
+        lambda state: has_logic_list_building(state, player, upgrade_logic_buildings, 1, False, floating))
     regions[REGIONS.upgrades_2].connect(
         regions[REGIONS.upgrades_3], "Using third upgrade building",
         lambda state: has_logic_list_building(state, player, upgrade_logic_buildings, 2,
-                                              early_useful == OPTIONS.buildings_3))
+                                              early_useful == OPTIONS.buildings_3, floating))
     regions[REGIONS.upgrades_3].connect(
         regions[REGIONS.upgrades_4], "Using fourth upgrade building",
-        lambda state: has_logic_list_building(state, player, upgrade_logic_buildings, 3, False))
+        lambda state: has_logic_list_building(state, player, upgrade_logic_buildings, 3, False, floating))
     regions[REGIONS.upgrades_4].connect(
         regions[REGIONS.upgrades_5], "Using fifth upgrade building",
         lambda state: has_logic_list_building(state, player, upgrade_logic_buildings, 4,
-                                              early_useful == OPTIONS.buildings_5))
+                                              early_useful == OPTIONS.buildings_5, floating))
 
     # Connect Uncolored shapesanity regions to Main
     regions[REGIONS.main].connect(
