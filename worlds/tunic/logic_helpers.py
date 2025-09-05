@@ -91,8 +91,7 @@ def can_get_past_bushes(state: CollectionState, world: "TunicWorld") -> bool:
 
 def has_fuses(fuse_event: str, state: CollectionState, world: "TunicWorld") -> bool:
     player = world.player
-    fuses_option = False  # replace fuses_option with world.options.shuffle_fuses when fuse shuffle is in
-    if fuses_option:
+    if world.options.shuffle_fuses:
         return state.has_all(fuse_activation_reqs[fuse_event], player)
 
     return state.has(fuse_event, player)

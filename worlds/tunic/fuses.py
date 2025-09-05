@@ -80,14 +80,6 @@ for location_name, location_data in fuse_location_table.items():
     fuse_location_groups.setdefault("Fuses", set()).add(location_name)
 
 
-def has_fuses(fuse_event: str, state: CollectionState, world: "TunicWorld") -> bool:
-    player = world.player
-    if world.options.shuffle_fuses:
-        return state.has_all(fuse_activation_reqs[fuse_event], player)
-
-    return state.has(fuse_event, player)
-
-
 # to be deduplicated in the big refactor
 def has_ladder(ladder: str, state: CollectionState, world: "TunicWorld") -> bool:
     return not world.options.shuffle_ladders or state.has(ladder, world.player)
