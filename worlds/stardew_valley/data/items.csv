@@ -6,8 +6,8 @@ id,name,classification,groups,mod_name
 18,Greenhouse,progression,COMMUNITY_REWARD,
 19,Glittering Boulder Removed,progression,COMMUNITY_REWARD,
 20,Minecarts Repair,useful,COMMUNITY_REWARD,
-21,Bus Repair,progression,COMMUNITY_REWARD,
-22,Progressive Movie Theater,progression,COMMUNITY_REWARD,
+21,Bus Repair,progression,"COMMUNITY_REWARD,DESERT_TRANSPORTATION",
+22,Progressive Movie Theater,"progression,trap",COMMUNITY_REWARD,
 23,Stardrop,progression,,
 24,Progressive Backpack,progression,,
 25,Rusty Sword,filler,"WEAPON,DEPRECATED",
@@ -63,8 +63,8 @@ id,name,classification,groups,mod_name
 77,Combat Level,progression,SKILL_LEVEL_UP,
 78,Earth Obelisk,progression,WIZARD_BUILDING,
 79,Water Obelisk,progression,WIZARD_BUILDING,
-80,Desert Obelisk,progression,WIZARD_BUILDING,
-81,Island Obelisk,progression,"WIZARD_BUILDING,GINGER_ISLAND",
+80,Desert Obelisk,progression,"WIZARD_BUILDING,DESERT_TRANSPORTATION",
+81,Island Obelisk,progression,"WIZARD_BUILDING,GINGER_ISLAND,ISLAND_TRANSPORTATION",
 82,Junimo Hut,useful,WIZARD_BUILDING,
 83,Gold Clock,progression,WIZARD_BUILDING,
 84,Progressive Coop,progression,BUILDING,
@@ -242,7 +242,7 @@ id,name,classification,groups,mod_name
 257,Peach Sapling,progression,"RESOURCE_PACK,RESOURCE_PACK_USEFUL,CROPSANITY",
 258,Banana Sapling,progression,"GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL,CROPSANITY",
 259,Mango Sapling,progression,"GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL,CROPSANITY",
-260,Boat Repair,progression,GINGER_ISLAND,
+260,Boat Repair,progression,"GINGER_ISLAND,ISLAND_TRANSPORTATION",
 261,Open Professor Snail Cave,progression,GINGER_ISLAND,
 262,Island North Turtle,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
 263,Island West Turtle,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
@@ -307,7 +307,7 @@ id,name,classification,groups,mod_name
 322,Phoenix Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
 323,Immunity Band,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
 324,Glowstone Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
-325,Fairy Dust Recipe,progression,,
+325,Fairy Dust Recipe,progression,"GINGER_ISLAND",
 326,Heavy Tapper Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
 327,Hyper Speed-Gro Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
 328,Deluxe Fertilizer Recipe,progression,QI_CRAFTING_RECIPE,
@@ -474,7 +474,7 @@ id,name,classification,groups,mod_name
 507,Resource Pack: 40 Calico Egg,useful,"FESTIVAL",
 508,Resource Pack: 35 Calico Egg,useful,"FESTIVAL",
 509,Resource Pack: 30 Calico Egg,useful,"FESTIVAL",
-510,Book: The Art O' Crabbing,useful,"FESTIVAL",
+510,Book: The Art O' Crabbing,progression,"FESTIVAL",
 511,Mr Qi's Plane Ride,progression,,
 521,Power: Price Catalogue,useful,"BOOK_POWER",
 522,Power: Mapping Cave Systems,useful,"BOOK_POWER",
@@ -509,6 +509,7 @@ id,name,classification,groups,mod_name
 561,Fishing Bar Size Bonus,filler,PLAYER_BUFF,
 562,Quality Bonus,filler,PLAYER_BUFF,
 563,Glow Bonus,filler,PLAYER_BUFF,
+564,Pet Bowl,progression,BUILDING,
 4001,Burnt Trap,trap,TRAP,
 4002,Darkness Trap,trap,TRAP,
 4003,Frozen Trap,trap,TRAP,
@@ -747,7 +748,7 @@ id,name,classification,groups,mod_name
 5208,Chest,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5209,Stone Chest,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5210,Quality Bobber,filler,RESOURCE_PACK,
-5211,Mini-Obelisk,filler,"EXACTLY_TWO,RESOURCE_PACK",
+5211,Mini-Obelisk,filler,"AT_LEAST_TWO,RESOURCE_PACK",
 5212,Monster Musk,filler,RESOURCE_PACK,
 5213,Sprinkler,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5214,Quality Sprinkler,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
@@ -759,7 +760,7 @@ id,name,classification,groups,mod_name
 5220,Lightning Rod,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5221,Resource Pack: 5000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5222,Resource Pack: 10000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
-5223,Junimo Chest,filler,"EXACTLY_TWO,RESOURCE_PACK",
+5223,Junimo Chest,filler,"AT_LEAST_TWO,RESOURCE_PACK",
 5224,Horse Flute,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5225,Pierre's Missing Stocklist,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5226,Hopper,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
@@ -819,6 +820,7 @@ id,name,classification,groups,mod_name
 5289,Prismatic Shard,filler,"RESOURCE_PACK",
 5290,Stardrop Tea,filler,"RESOURCE_PACK",
 5291,Resource Pack: 2 Artifact Trove,filler,"RESOURCE_PACK",
+5292,Resource Pack: 20 Cinder Shard,filler,"GINGER_ISLAND,RESOURCE_PACK",
 10001,Luck Level,progression,SKILL_LEVEL_UP,Luck Skill
 10002,Magic Level,progression,SKILL_LEVEL_UP,Magic
 10003,Socializing Level,progression,SKILL_LEVEL_UP,Socializing Skill
@@ -927,6 +929,7 @@ id,name,classification,groups,mod_name
 10518,Aurora Vineyard Tablet,progression,,Stardew Valley Expanded
 10519,Scarlett's Job Offer,progression,,Stardew Valley Expanded
 10520,Morgan's Schooling,progression,,Stardew Valley Expanded
+10521,Aurora Vineyard Reclamation,progression,,Stardew Valley Expanded
 10601,Magic Elixir Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Magic
 10602,Travel Core Recipe,progression,CRAFTSANITY,Magic
 10603,Haste Elixir Recipe,progression,CRAFTSANITY,Stardew Valley Expanded

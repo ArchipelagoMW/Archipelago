@@ -1,7 +1,6 @@
 import tkinter as tk
 import argparse
 import logging
-import random
 import os
 import zipfile
 from itertools import chain
@@ -197,7 +196,6 @@ def set_icon(window):
 def adjust(args):
     # Create a fake multiworld and OOTWorld to use as a base
     multiworld = MultiWorld(1)
-    multiworld.per_slot_randoms = {1: random}
     ootworld = OOTWorld(multiworld, 1)
     # Set options in the fake OOTWorld
     for name, option in chain(cosmetic_options.items(), sfx_options.items()):

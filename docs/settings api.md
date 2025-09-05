@@ -102,17 +102,16 @@ In worlds, this should only be used for the top level to avoid issues when upgra
 
 ### Bool
 
-Since `bool` can not be subclassed, use the `settings.Bool` helper in a `typing.Union` to get a comment in host.yaml.
+Since `bool` can not be subclassed, use the `settings.Bool` helper in a union to get a comment in host.yaml.
 
 ```python
 import settings
-import typing
 
 class MySettings(settings.Group):
     class MyBool(settings.Bool):
         """Doc string"""
 
-    my_value: typing.Union[MyBool, bool] = True
+    my_value: MyBool | bool = True
 ```
 
 ### UserFilePath
@@ -134,15 +133,15 @@ Checks the file against [md5s](#md5s) by default.
 
 Resolves to an executable (varying file extension based on platform)
 
-#### description: Optional\[str\]
+#### description: str | None
 
 Human-readable name to use in file browser
 
-#### copy_to: Optional\[str\]
+#### copy_to: str | None
 
 Instead of storing the path, copy the file.
 
-#### md5s: List[Union[str, bytes]]
+#### md5s: list[str | bytes]
 
 Provide md5 hashes as hex digests or raw bytes for automatic validation.
 
@@ -182,10 +181,3 @@ circular / partial imports. Instead, the code should fetch from settings on dema
 
 "Global" settings are populated immediately, while worlds settings are lazy loaded, so if really necessary,
 "global" settings could be used in global scope of worlds.
-
-
-### APWorld Backwards Compatibility
-
-APWorlds that want to be compatible with both stable and dev versions, have two options:
-1. use the old Utils.get_options() API until Archipelago 0.4.2 is out
-2. add some sort of compatibility code to your world that mimics the new API

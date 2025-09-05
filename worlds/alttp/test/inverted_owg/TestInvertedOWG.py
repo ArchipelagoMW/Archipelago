@@ -6,7 +6,7 @@ from worlds.alttp.Items import item_factory
 from worlds.alttp.Options import GlitchesRequired
 from worlds.alttp.Regions import mark_light_world_regions
 from worlds.alttp.Shops import create_shops
-from test.TestBase import TestBase
+from test.bases import TestBase
 
 from worlds.alttp.test import LTTPTestBase
 
@@ -14,10 +14,10 @@ from worlds.alttp.test import LTTPTestBase
 class TestInvertedOWG(TestBase, LTTPTestBase):
     def setUp(self):
         self.world_setup()
-        self.multiworld.glitches_required[1] = GlitchesRequired.from_any("overworld_glitches")
-        self.multiworld.mode[1].value = 2
-        self.multiworld.bombless_start[1].value = True
-        self.multiworld.shuffle_capacity_upgrades[1].value = 2
+        self.multiworld.worlds[1].options.glitches_required = GlitchesRequired.from_any("overworld_glitches")
+        self.multiworld.worlds[1].options.mode.value = 2
+        self.multiworld.worlds[1].options.bombless_start.value = True
+        self.multiworld.worlds[1].options.shuffle_capacity_upgrades.value = 2
         self.multiworld.worlds[1].difficulty_requirements = difficulties['normal']
         create_inverted_regions(self.multiworld, 1)
         self.world.create_dungeons()

@@ -14,8 +14,8 @@ class TestDungeon(LTTPTestBase):
         self.starting_regions = []  # Where to start exploring
         self.remove_exits = []      # Block dungeon exits
         self.multiworld.worlds[1].difficulty_requirements = difficulties['normal']
-        self.multiworld.bombless_start[1].value = True
-        self.multiworld.shuffle_capacity_upgrades[1].value = 2
+        self.multiworld.worlds[1].options.bombless_start.value = True
+        self.multiworld.worlds[1].options.shuffle_capacity_upgrades.value = 2
         create_regions(self.multiworld, 1)
         self.multiworld.worlds[1].create_dungeons()
         create_shops(self.multiworld, 1)
@@ -54,7 +54,7 @@ class TestDungeon(LTTPTestBase):
 
                 for item in items:
                     item.classification = ItemClassification.progression
-                    state.collect(item, event=True)  # event=True prevents running sweep_for_events() and picking up
-                state.sweep_for_events()             # key drop keys repeatedly
+                    state.collect(item, prevent_sweep=True)  # prevent_sweep=True prevents running sweep_for_advancements() and picking up
+                state.sweep_for_advancements()             # key drop keys repeatedly
 
                 self.assertEqual(self.multiworld.get_location(location, 1).can_reach(state), access, f"failed {self.multiworld.get_location(location, 1)} with: {item_pool}")

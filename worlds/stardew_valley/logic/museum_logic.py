@@ -1,13 +1,5 @@
-from typing import Union
-
 from Utils import cache_self1
-from .action_logic import ActionLogicMixin
 from .base_logic import BaseLogic, BaseLogicMixin
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .time_logic import TimeLogicMixin
-from .tool_logic import ToolLogicMixin
 from .. import options
 from ..data.museum_data import MuseumItem, all_museum_items, all_museum_artifacts, all_museum_minerals
 from ..stardew_rule import StardewRule, False_
@@ -22,7 +14,7 @@ class MuseumLogicMixin(BaseLogicMixin):
         self.museum = MuseumLogic(*args, **kwargs)
 
 
-class MuseumLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, TimeLogicMixin, RegionLogicMixin, ActionLogicMixin, ToolLogicMixin, MuseumLogicMixin]]):
+class MuseumLogic(BaseLogic):
 
     def can_donate_museum_items(self, number: int) -> StardewRule:
         return self.logic.region.can_reach(Region.museum) & self.logic.museum.can_find_museum_items(number)
@@ -41,7 +33,7 @@ class MuseumLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, TimeLogicMi
         else:
             geodes_rule = False_()
         # monster_rule = self.can_farm_monster(item.monsters)
-        time_needed_to_grind = (20 - item.difficulty) / 2
+        time_needed_to_grind = int((20 - item.difficulty) // 2)
         time_rule = self.logic.time.has_lived_months(time_needed_to_grind)
         pan_rule = False_()
         if item.item_name == Mineral.earth_crystal or item.item_name == Mineral.fire_quartz or item.item_name == Mineral.frozen_tear:

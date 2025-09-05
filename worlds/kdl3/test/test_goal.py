@@ -5,12 +5,12 @@ class TestFastGoal(KDL3TestBase):
     options = {
         "open_world": False,
         "goal_speed": "fast",
-        "total_heart_stars": 30,
+        "max_heart_stars": 30,
         "heart_stars_required": 50,
         "filler_percentage": 0,
     }
 
-    def test_goal(self):
+    def test_goal(self) -> None:
         self.assertBeatable(False)
         heart_stars = self.get_items_by_name("Heart Star")
         self.collect(heart_stars[0:14])
@@ -30,12 +30,12 @@ class TestNormalGoal(KDL3TestBase):
     options = {
         "open_world": False,
         "goal_speed": "normal",
-        "total_heart_stars": 30,
+        "max_heart_stars": 30,
         "heart_stars_required": 50,
         "filler_percentage": 0,
     }
 
-    def test_goal(self):
+    def test_goal(self) -> None:
         self.assertBeatable(False)
         heart_stars = self.get_items_by_name("Heart Star")
         self.collect(heart_stars[0:14])
@@ -51,14 +51,14 @@ class TestNormalGoal(KDL3TestBase):
         self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
         self.assertBeatable(True)
 
-    def test_kine(self):
+    def test_kine(self) -> None:
         self.collect_by_name(["Cutter", "Burning", "Heart Star"])
         self.assertBeatable(False)
 
-    def test_cutter(self):
+    def test_cutter(self) -> None:
         self.collect_by_name(["Kine", "Burning", "Heart Star"])
         self.assertBeatable(False)
 
-    def test_burning(self):
+    def test_burning(self) -> None:
         self.collect_by_name(["Cutter", "Kine", "Heart Star"])
         self.assertBeatable(False)

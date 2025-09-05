@@ -137,7 +137,6 @@ class SVEFish:
     void_eel = "Void Eel"
     water_grub = "Water Grub"
     sea_sponge = "Sea Sponge"
-    dulse_seaweed = "Dulse Seaweed"
 
 
 class DistantLandsFish:
@@ -145,6 +144,10 @@ class DistantLandsFish:
     swamp_leech = "Swamp Leech"
     purple_algae = "Purple Algae"
     giant_horsehoe_crab = "Giant Horsehoe Crab"
+
+
+class SVEWaterItem:
+    dulse_seaweed = "Dulse Seaweed"
 
 
 class ModTrash:

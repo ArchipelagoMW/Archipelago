@@ -328,7 +328,7 @@ location_table: List[LocationInfo] = [
     {"name": "Boat Rental",
         "id": base_id + 55,
         "inGameId": "DadDeer[0]",
-        "needsShovel": False, "purchase": True,
+        "needsShovel": False, "purchase": 100,
 		"minGoldenFeathers": 0, "minGoldenFeathersEasy": 0, "minGoldenFeathersBucket": 0},
     {"name": "Boat Challenge Reward",
         "id": base_id + 56,

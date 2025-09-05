@@ -94,6 +94,7 @@ class Entrance:
     play_junimo_kart = "Play Junimo Kart"
     reach_junimo_kart_2 = "Reach Junimo Kart 2"
     reach_junimo_kart_3 = "Reach Junimo Kart 3"
+    reach_junimo_kart_4 = "Reach Junimo Kart 4"
     enter_locker_room = "Bathhouse Entrance to Locker Room"
     enter_public_bath = "Locker Room to Public Bath"
     enter_witch_swamp = "Witch Warp Cave to Witch's Swamp"
@@ -193,10 +194,15 @@ class LogicEntrance:
     island_cooking = "Island Cooking"
     shipping = "Use Shipping Bin"
     watch_queen_of_sauce = "Watch Queen of Sauce"
-    blacksmith_copper = "Upgrade Copper Tools"
-    blacksmith_iron = "Upgrade Iron Tools"
-    blacksmith_gold = "Upgrade Gold Tools"
-    blacksmith_iridium = "Upgrade Iridium Tools"
+
+    @staticmethod
+    def blacksmith_upgrade(material: str) -> str:
+        return f"Upgrade {material} Tools"
+
+    blacksmith_copper = blacksmith_upgrade("Copper")
+    blacksmith_iron = blacksmith_upgrade("Iron")
+    blacksmith_gold = blacksmith_upgrade("Gold")
+    blacksmith_iridium = blacksmith_upgrade("Iridium")
 
     grow_spring_crops = "Grow Spring Crops"
     grow_summer_crops = "Grow Summer Crops"
@@ -358,6 +364,7 @@ class SVEEntrance:
     sprite_spring_to_cave = "Sprite Spring to Sprite Spring Cave"
     fish_shop_to_willy_bedroom = "Willy's Fish Shop to Willy's Bedroom"
     museum_to_gunther_bedroom = "Museum to Gunther's Bedroom"
+    highlands_to_pond = "Highlands to Highlands Pond"
 
 
 class AlectoEntrance:
