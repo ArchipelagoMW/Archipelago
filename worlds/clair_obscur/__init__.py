@@ -145,10 +145,11 @@ class ClairObscurWorld(World):
             "goal", "char_shuffle", "starting_char", "gestral_shuffle", "gear_scaling"
         )
 
+        slot_data["totals"]: Dict[str, int] = {}
+        slot_data["totals"]["pictos"] = len(self.item_name_groups["Picto"])
+        slot_data["totals"]["weapons"] = len(self.item_name_groups["Weapon"])
+
         match self.options.gear_scaling:
-            case 1:
-                #Scale by order received (handled entirely by client)
-                return slot_data
             case 0:
                 #Scale by sphere placement
                 slot_data["pictos"]: List[int] = []
@@ -160,6 +161,9 @@ class ClairObscurWorld(World):
                             slot_data["pictos"].append(loc.item.code)
                         elif loc.item.name in self.item_name_groups["Weapon"]:
                             slot_data["weapons"].append(loc.item.code)
+            case 1:
+                # Scale by order received (handled entirely by client)
+                return slot_data
             case 2:
                 #Random scaling
                 slot_data["pictos"]: List[int] = []
@@ -170,6 +174,9 @@ class ClairObscurWorld(World):
                     slot_data["weapons"].append(self.item_name_to_id[weapon])
                 self.random.shuffle(slot_data["pictos"])
                 self.random.shuffle(slot_data["weapons"])
+            case 3:
+                #Full random scaling (handled entirely by client)
+                return slot_data
 
         return slot_data
 
