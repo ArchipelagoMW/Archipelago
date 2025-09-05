@@ -1,4 +1,5 @@
 from dataclasses import fields
+from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
 from logging import warning
 from typing import Any, TypedDict, ClassVar, TextIO
 
@@ -207,6 +208,10 @@ class TunicWorld(World):
                 self.options.local_fill.value = 40
             else:
                 self.options.local_fill.value = 0
+
+        if self.options.local_fill > 0 and self.settings.limit_grass_rando:
+            # discard grass from non_local if it's meant to be limited
+            self.options.non_local_items.value.discard("Grass")
 
         if self.options.grass_randomizer:
             if self.settings.limit_grass_rando and self.options.local_fill < 95 and self.multiworld.players > 1:

@@ -1,6 +1,5 @@
-from test.bases import WorldTestBase
-
 from .. import options
+from .bases import TunicTestBase
 
 
 class TunicTestBase(WorldTestBase):

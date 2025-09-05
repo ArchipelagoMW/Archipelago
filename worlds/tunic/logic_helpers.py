@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 
 from .constants import *
+from .fuses import fuse_activation_reqs
 from .options import HexagonQuestAbilityUnlockType, IceGrappling
 
 if TYPE_CHECKING:
@@ -38,7 +39,7 @@ def has_ability(ability: str, state: CollectionState, world: "TunicWorld") -> bo
 
 # a check to see if you can whack things in melee at all
 def has_melee(state: CollectionState, player: int) -> bool:
-    return state.has_any({"Stick", "Sword", "Sword Upgrade"}, player)
+    return state.has_any(("Stick", "Sword", "Sword Upgrade"), player)
 
 
 def has_sword(state: CollectionState, player: int) -> bool:
@@ -53,9 +54,9 @@ def has_ice_grapple_logic(long_range: bool, difficulty: IceGrappling, state: Col
     if world.options.ice_grappling < difficulty:
         return False
     if not long_range:
-        return state.has_all({ice_dagger, grapple}, world.player)
+        return state.has_all((ice_dagger, grapple), world.player)
     else:
-        return state.has_all({ice_dagger, fire_wand, grapple}, world.player) and has_ability(icebolt, state, world)
+        return state.has_all((ice_dagger, fire_wand, grapple), world.player) and has_ability(icebolt, state, world)
 
 
 def can_ladder_storage(state: CollectionState, world: "TunicWorld") -> bool:
@@ -86,3 +87,12 @@ def can_shop(state: CollectionState, world: "TunicWorld") -> bool:
 def can_get_past_bushes(state: CollectionState, world: "TunicWorld") -> bool:
     # add in glass cannon + stick for grass rando
     return has_sword(state, world.player) or state.has_any((fire_wand, laurels, gun), world.player)
+
+
+def has_fuses(fuse_event: str, state: CollectionState, world: "TunicWorld") -> bool:
+    player = world.player
+    fuses_option = False  # replace fuses_option with world.options.shuffle_fuses when fuse shuffle is in
+    if fuses_option:
+        return state.has_all(fuse_activation_reqs[fuse_event], player)
+
+    return state.has(fuse_event, player)

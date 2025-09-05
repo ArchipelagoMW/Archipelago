@@ -321,7 +321,7 @@ def get_def_level(state: CollectionState, player: int) -> tuple[int, int]:
     def_offerings = state.count("DEF Offering", player)
     # defense falls off, can just cap it at 8 for simplicity
     return (min(8, 1 + def_offerings
-                + state.count_from_list({"Hero Relic - DEF", "Secret Legend", "Phonomath"}, player))
+                + state.count_from_list(("Hero Relic - DEF", "Secret Legend", "Phonomath"), player))
             + (2 if state.has("Shield", player) else 0)
             + (2 if state.has("Hero's Laurels", player) else 0),
             def_offerings)
@@ -332,7 +332,7 @@ def get_potion_level(state: CollectionState, player: int) -> tuple[int, int]:
     potion_offerings = min(2, state.count("Potion Offering", player))
     # your third potion upgrade (from offerings) costs 1,000 money, reasonable to assume you won't do that
     return (1 + potion_offerings
-            + state.count_from_list({"Hero Relic - POTION", "Just Some Pals", "Spring Falls", "Back To Work"}, player),
+            + state.count_from_list(("Hero Relic - POTION", "Just Some Pals", "Spring Falls", "Back To Work"), player),
             potion_offerings)
 
 
@@ -346,15 +346,15 @@ def get_hp_level(state: CollectionState, player: int) -> tuple[int, int]:
 def get_sp_level(state: CollectionState, player: int) -> tuple[int, int]:
     sp_offerings = state.count("SP Offering", player)
     return (1 + sp_offerings
-            + state.count_from_list({"Hero Relic - SP", "Mr Mayor", "Power Up",
-                                     "Regal Weasel", "Forever Friend"}, player),
+            + state.count_from_list(("Hero Relic - SP", "Mr Mayor", "Power Up",
+                                     "Regal Weasel", "Forever Friend"), player),
             sp_offerings)
 
 
 def get_mp_level(state: CollectionState, player: int) -> tuple[int, int]:
     mp_offerings = state.count("MP Offering", player)
     return (1 + mp_offerings
-            + state.count_from_list({"Hero Relic - MP", "Sacred Geometry", "Vintage", "Dusty"}, player),
+            + state.count_from_list(("Hero Relic - MP", "Sacred Geometry", "Vintage", "Dusty"), player),
             mp_offerings)
 
 

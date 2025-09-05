@@ -1,13 +1,11 @@
 from BaseClasses import ItemClassification
 from collections import Counter
 
-from test.bases import WorldTestBase
-
-from .. import options
+from .. import options, TunicWorld
+from .bases import TunicTestBase
 from ..combat_logic import (check_combat_reqs, area_data, get_money_count, calc_effective_hp, get_potion_level,
                             get_hp_level, get_def_level, get_sp_level, has_combat_reqs)
 from ..items import item_table
-from .. import TunicWorld
 
 
 class TunicTestBase(WorldTestBase):
