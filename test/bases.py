@@ -9,15 +9,30 @@ from test.general import gen_steps
 from worlds import AutoWorld
 from worlds.AutoWorld import World, call_all
 
-from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
+from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, PathValue, Region
 from worlds.alttp.Items import item_factory
+
+
+class DefaultOptionsDict(typing.Dict[str, typing.Any]):
+    def __setitem__(self, key: str, value: typing.Any) -> None:
+        raise Exception("Can not modify global default options. Please copy in setUp.")
+
+    def __copy__(self) -> typing.Dict[str, typing.Any]:
+        return {**self}
+
+    def __deepcopy__(self, memodict):
+        from copy import deepcopy
+        res = {}
+        memodict[id(self)] = res
+        res.update({k: deepcopy(v, memodict) for k, v in self.items()})
+        return res
 
 
 class TestBase(unittest.TestCase):
     multiworld: MultiWorld
-    _state_cache = {}
+    _state_cache: typing.Dict[typing.Tuple[MultiWorld, typing.Tuple[Item, ...]], CollectionState] = {}
 
-    def get_state(self, items):
+    def get_state(self, items: typing.List[Item]) -> CollectionState:
         if (self.multiworld, tuple(items)) in self._state_cache:
             return self._state_cache[self.multiworld, tuple(items)]
         state = CollectionState(self.multiworld)
@@ -29,26 +44,28 @@ class TestBase(unittest.TestCase):
         self._state_cache[self.multiworld, tuple(items)] = state
         return state
 
-    def get_path(self, state, region):
-        def flist_to_iter(node):
+    def get_path(self, state: CollectionState, region: Region) -> typing.List[typing.Tuple[str, str]]:
+        def flist_to_iter(node: typing.Optional[PathValue]) -> typing.Iterator[str]:
             while node:
                 value, node = node
                 yield value
 
         from itertools import zip_longest
-        reversed_path_as_flist = state.path.get(region, (region, None))
-        string_path_flat = reversed(list(map(str, flist_to_iter(reversed_path_as_flist))))
+        reversed_path_as_flist = state.path.get(region, (str(region), None))
+        string_path_flat = reversed(list(flist_to_iter(reversed_path_as_flist)))
         # Now we combine the flat string list into (region, exit) pairs
         pathsiter = iter(string_path_flat)
         pathpairs = zip_longest(pathsiter, pathsiter)
         return list(pathpairs)
 
-    def run_location_tests(self, access_pool):
+    def run_location_tests(self, access_pool) -> None:
         for i, (location, access, *item_pool) in enumerate(access_pool):
             items = item_pool[0]
             all_except = item_pool[1] if len(item_pool) > 1 else None
             state = self._get_items(item_pool, all_except)
-            path = self.get_path(state, self.multiworld.get_location(location, 1).parent_region)
+            parent_region = self.multiworld.get_location(location, 1).parent_region
+            assert parent_region
+            path = self.get_path(state, parent_region)
             with self.subTest(msg="Reach Location", location=location, access=access, items=items,
                               all_except=all_except, path=path, entry=i):
 
@@ -71,7 +88,9 @@ class TestBase(unittest.TestCase):
             items = item_pool[0]
             all_except = item_pool[1] if len(item_pool) > 1 else None
             state = self._get_items(item_pool, all_except)
-            path = self.get_path(state, self.multiworld.get_entrance(entrance, 1).parent_region)
+            parent_region = self.multiworld.get_entrance(entrance, 1).parent_region
+            assert parent_region
+            path = self.get_path(state, parent_region)
             with self.subTest(msg="Reach Entrance", entrance=entrance, access=access, items=items,
                               all_except=all_except, path=path, entry=i):
 
@@ -104,7 +123,7 @@ class TestBase(unittest.TestCase):
 
 
 class WorldTestBase(unittest.TestCase):
-    options: typing.Dict[str, typing.Any] = {}
+    options: typing.Dict[str, typing.Any] = DefaultOptionsDict()
     """Define options that should be used when setting up this TestBase."""
     multiworld: MultiWorld
     """The constructed MultiWorld instance after setup."""
@@ -151,7 +170,7 @@ class WorldTestBase(unittest.TestCase):
                 (hasattr(WorldTestBase, self._testMethodName)
                  and not self.run_default_tests and
                  getattr(self, self._testMethodName).__code__ is
-                 getattr(WorldTestBase, self._testMethodName, None).__code__):
+                 getattr(getattr(WorldTestBase, self._testMethodName, None), "__code__", None)):
             return  # setUp gets called for tests defined in the base class. We skip world_setup here.
         if not hasattr(self, "game"):
             raise NotImplementedError("didn't define game name")
@@ -252,9 +271,9 @@ class WorldTestBase(unittest.TestCase):
         state = CollectionState(self.multiworld)
         self.collect_all_but(all_items, state)
         if only_check_listed:
-            for location in locations:
-                self.assertFalse(state.can_reach(location, "Location", self.player),
-                                 f"{location} is reachable without {all_items}")
+            for location_name in locations:
+                self.assertFalse(state.can_reach(location_name, "Location", self.player),
+                                 f"{location_name} is reachable without {all_items}")
         else:
             for location in self.multiworld.get_locations():
                 loc_reachable = state.can_reach(location, "Location", self.player)
@@ -265,13 +284,13 @@ class WorldTestBase(unittest.TestCase):
             items = self.get_items_by_name(item_names)
             for item in items:
                 state.collect(item)
-            for location in locations:
-                self.assertTrue(state.can_reach(location, "Location", self.player),
-                                f"{location} not reachable with {item_names}")
+            for location_name in locations:
+                self.assertTrue(state.can_reach(location_name, "Location", self.player),
+                                f"{location_name} not reachable with {item_names}")
             for item in items:
                 state.remove(item)
 
-    def assertBeatable(self, beatable: bool):
+    def assertBeatable(self, beatable: bool) -> None:
         """Asserts that the game can be beaten with the current state"""
         self.assertEqual(self.multiworld.can_beat_game(self.multiworld.state), beatable)
 
@@ -279,16 +298,16 @@ class WorldTestBase(unittest.TestCase):
     @property
     def run_default_tests(self) -> bool:
         """Not possible or identical to the base test that's always being run already"""
-        return (self.options
-                or self.setUp.__code__ is not WorldTestBase.setUp.__code__
-                or self.world_setup.__code__ is not WorldTestBase.world_setup.__code__)
+        return bool(self.options
+                    or self.setUp.__code__ is not WorldTestBase.setUp.__code__
+                    or self.world_setup.__code__ is not WorldTestBase.world_setup.__code__)
 
     @property
     def constructed(self) -> bool:
         """A multiworld has been constructed by this point"""
         return hasattr(self, "game") and hasattr(self, "multiworld")
 
-    def test_all_state_can_reach_everything(self):
+    def test_all_state_can_reach_everything(self) -> None:
         """Ensure all state can reach everything and complete the game with the defined options"""
         if not (self.run_default_tests and self.constructed):
             return
@@ -302,7 +321,7 @@ class WorldTestBase(unittest.TestCase):
                 self.multiworld.state = state
                 self.assertBeatable(True)
 
-    def test_empty_state_can_reach_something(self):
+    def test_empty_state_can_reach_something(self) -> None:
         """Ensure empty state can reach at least one location with the defined options"""
         if not (self.run_default_tests and self.constructed):
             return
@@ -312,7 +331,7 @@ class WorldTestBase(unittest.TestCase):
             self.assertGreater(len(locations), 0,
                                "Need to be able to reach at least one location to get started.")
 
-    def test_fill(self):
+    def test_fill(self) -> None:
         """Generates a multiworld and validates placements with the defined options"""
         if not (self.run_default_tests and self.constructed):
             return
