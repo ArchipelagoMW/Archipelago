@@ -230,10 +230,11 @@ ALL_ITEMS_TABLE: dict[str, GrinchItemData] = {
 # ICE_TRAP_EQUIV = ["Chaos Control Trap", "Freeze Trap", "Frozen Trap", "Honey Trap", "Paralyze Trap", "Stun Trap", "Bubble Trap"]
 # DAMAGE_TRAP_EQUIV = ["Banana Trap", "Bomb", "Bonk Trap", "Fire Trap", "Laughter Trap", "Nut Trap", "Push Trap", "Squash Trap", "Thwimp Trap", "TNT Barrel Trap", "Meteor Trap"]
 # SPRING_TRAP_EQUIV = ["Eject Ability", "Hiccup Trap", "Jump Trap", "Jumping Jacks Trap", "Whoops! Trap"]
-# HOME_TRAP_EQUIV = ["Blue Balls Curse", "Instant Death Trap"]
+# HOME_TRAP_EQUIV = ["Blue Balls Curse", "Instant Death Trap", "Get Out Trap"]
 # SLOWNESS_TRAP_EQUIV = ["Iron Boots Trap", "Slow Trap", "Sticky Floor Trap"]
 # CUTSCENE_TRAP_EQUIV = ["Phone Trap"]
 # ELEC_TRAP_EQUIV = []
+# DEPL_TRAP_EQUIV = ["Dry Trap"]
 
 def grinch_items_to_id() -> dict[str, int]:
     item_mappings: dict[str, int] = {}
