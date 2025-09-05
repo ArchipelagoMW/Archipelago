@@ -323,5 +323,6 @@ class GrinchClient(BizHawkClient):
     #     amount = data["amount"]
     #     source = data["source"]
     #     if source == self.slot:
-    #         self.ring_link_eggs += amount
     #         return
+    #     else:
+    #         self.ring_link_eggs += amount
