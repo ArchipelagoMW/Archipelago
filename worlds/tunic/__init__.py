@@ -493,10 +493,6 @@ class TunicWorld(World):
         # pull out the filler so that we can place it manually during pre_fill
         self.fill_items = []
         if self.options.local_fill > 0 and self.multiworld.players > 1:
-            # skip items marked local or non-local, let fill deal with them in its own way
-            # discard grass from non_local if it's meant to be limited
-            if self.settings.limit_grass_rando:
-                self.options.non_local_items.value.discard("Grass")
             all_filler: list[TunicItem] = []
             non_filler: list[TunicItem] = []
             for tunic_item in tunic_items:
