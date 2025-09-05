@@ -7,6 +7,7 @@ from enum import IntEnum
 import os
 import threading
 from io import BytesIO
+from pathlib import Path
 
 from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload, Sequence
 
@@ -94,6 +95,7 @@ class APContainer:
     compression_method: ClassVar[int] = zipfile.ZIP_DEFLATED
 
     path: Optional[str]
+    manifest_write_subdirectory: Optional[str] = None
 
     def __init__(self, path: Optional[str] = None):
         self.path = path
@@ -115,8 +117,15 @@ class APContainer:
             manifest_str = json.dumps(manifest)
         except Exception as e:
             raise Exception(f"Manifest {manifest} did not convert to json.") from e
-        else:
-            opened_zipfile.writestr("archipelago.json", manifest_str)
+
+        manifest_location = "archipelago.json"
+        if self.manifest_write_subdirectory:
+            stripped_write_directory = self.manifest_write_subdirectory.strip("/\\")
+            if "/" in stripped_write_directory or "\\" in stripped_write_directory:
+                raise ValueError("APContainer manifest_write_subdirectory must be single-depth.")
+            manifest_location = f"{stripped_write_directory}/{manifest_location}"
+
+        opened_zipfile.writestr(manifest_location, manifest_str)
 
     def read(self, file: Optional[Union[str, BinaryIO]] = None) -> None:
         """Read data into patch object. file can be file-like, such as an outer zip file's stream."""
@@ -137,7 +146,24 @@ class APContainer:
                 raise InvalidDataError(f"{message}This might be the incorrect world version for this file") from e
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
-        with opened_zipfile.open("archipelago.json", "r") as f:
+        try:
+            manifest_info = opened_zipfile.getinfo("archipelago.json")
+        except KeyError as e:
+            # Make sure root only contains one folder
+            root_dir_elements = [info for info in opened_zipfile.infolist() if len(Path(info.filename).parts) == 1]
+            if len(root_dir_elements) != 1:
+                raise e
+            only_folder = root_dir_elements[0]
+            if not only_folder.is_dir():
+                raise e
+
+            # Look for archipelago.json in this single directory
+            try:
+                manifest_info = opened_zipfile.getinfo(f"{only_folder.filename}/archipelago.json")
+            except KeyError:
+                raise e
+
+        with opened_zipfile.open(manifest_info, "r") as f:
             manifest = json.load(f)
         if manifest["compatible_version"] > self.version:
             raise Exception(f"File (version: {manifest['compatible_version']}) too new "
