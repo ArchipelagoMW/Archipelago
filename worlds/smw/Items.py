@@ -137,4 +137,9 @@ trap_name_to_value: typing.Dict[str, int] = {
     "Phone Trap":         0xBC0015,  # Literature Trap
     "Squash Trap":        0xBC001D,  # Thwimp Trap
     "Tutorial Trap":      0xBC0015,  # Literature Trap
+
+    "Mirror Trap":        0xBC001C,  # Reverse Trap
+    "No Stocks":          0xBC0021,  # Dry Trap
+    "Time Limit":         0xBC0016,  # Timer Trap
+    "Time Warp Trap":     0xBC0016,  # Timer Trap
 }
