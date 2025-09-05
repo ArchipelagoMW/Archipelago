@@ -101,6 +101,7 @@ class GrinchClient(BizHawkClient):
             await self.goal_checker(ctx)
             await self.option_handler(ctx)
             await self.constant_address_update(ctx)
+            # await self.ring_link_input(args["args"])
 
         except bizhawk.RequestFailedError as ex:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
@@ -318,9 +319,9 @@ class GrinchClient(BizHawkClient):
     #     bizhawk.write(int(current_eggs + ctx.ring_link_eggs).to_bytes(byte_size=2, byteorder="little"))
     #     ctx.ring_link_eggs = 0
     #
-    # async def ring_link_input(self, ctx: "BizHawkClientContext", data):
-    #     amount = data["amount"]  # yeah his personal client that he made
-    #     source = data["source"]  # can you tell im tired trying to write this
-    #     if source == ctx.slot:
-    #         ctx.ring_link_eggs += amount
+    # async def ring_link_input(self, data):
+    #     amount = data["amount"]
+    #     source = data["source"]
+    #     if source == self.slot:
+    #         self.ring_link_eggs += amount
     #         return
