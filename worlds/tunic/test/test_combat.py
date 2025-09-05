@@ -8,10 +8,6 @@ from ..combat_logic import (check_combat_reqs, area_data, get_money_count, calc_
 from ..items import item_table
 
 
-class TunicTestBase(WorldTestBase):
-    game = "TUNIC"
-
-
 class TestCombat(TunicTestBase):
     options = {options.CombatLogic.internal_name: options.CombatLogic.option_on}
     world: TunicWorld

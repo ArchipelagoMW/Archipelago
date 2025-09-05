@@ -2,10 +2,6 @@ from .. import options
 from .bases import TunicTestBase
 
 
-class TunicTestBase(WorldTestBase):
-    game = "TUNIC"
-
-
 class TestWells(TunicTestBase):
     options = {options.CombatLogic.internal_name: options.CombatLogic.option_off}
 
