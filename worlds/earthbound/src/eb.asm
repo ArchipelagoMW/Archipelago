@@ -8132,10 +8132,10 @@ dd LavapantsDesc
 
 ORG $C6FED6
 db $0A
-dl LavaPantsUseTxt
+dl LavaPantsHandleItem
 
 ORG $D56B61
-db $8F
+db $0F
 
 ORG $C7BF60
 db $08
@@ -9849,7 +9849,7 @@ db $02
 .UnlockDoor:
 db $08
 dd LeaderPantsText
-db $1D, $01, $FF, $B3
+db $1D, $01, $FF, $B3 ;Todo. Add check for presence of item....? Find a way to stop this if we already used tenda pants
 db $18, $04
 .FireSpringUnlocked
 db $0A, $0B, $B1, $C9
@@ -18352,6 +18352,13 @@ dd $C8A997
 db $0A
 dl $C8A8E7
 
+LavaPantsHandleItem:
+db $1B, $00
+db $08
+dd LavaPantsUseTxt
+db $1B, $01
+db $1B, $0F, $00, $00
+db $02
 
 ;ORG $C7617D
 ;dd DisplayAndGetMoney
