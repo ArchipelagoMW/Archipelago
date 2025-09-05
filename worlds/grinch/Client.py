@@ -1,3 +1,4 @@
+import time
 from typing import TYPE_CHECKING
 import asyncio
 import NetUtils
@@ -78,6 +79,9 @@ class GrinchClient(BizHawkClient):
                 self.loc_unlimited_eggs = bool(ctx.slot_data["give_unlimited_eggs"])
                 logger.info("You are now connected to the client. "+
                     "There may be a slight delay to check you are not in demo mode before locations start to send.")
+                # tags = args.get("tags", [])
+                # if "RingLink" in tags:
+                #     ring_link_input(self, args["data"])
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         await ctx.get_username()
@@ -285,3 +289,38 @@ class GrinchClient(BizHawkClient):
             if address_to_validate == 0x010000 or address_to_validate == 0x08FB94: # TODO Temporairly skips teleportation addresses; to be changed later on.
                 return
             raise Exception("Unable to update address as expected. Address: "+ str(address_to_validate)+"; Expected Value: "+str(expected_value))
+
+    # async def ring_link_output(self, ctx: "BizHawkClientContext", byte_size: int):
+    #     bizhawk.seek(0x010058)
+    #     byte_size = 2
+    #     current_eggs = int.from_bytes(byte_size=2, byteorder="little")
+    #     difference = current_eggs - ctx.previous_eggs
+    #     ctx.previous_eggs = current_eggs + ctx.ring_link_eggs
+    #
+    #     if difference != 0:
+    #         # logger.info("got here with a difference of " + str(difference))
+    #         msg = {
+    #             "cmd": "Bounce",
+    #             "slots": [ctx.slot],
+    #             "data": {
+    #                 "time": time.time(),
+    #                 "source": ctx.slot,
+    #                 "amount": difference
+    #             },
+    #             "tags": ["RingLink"]
+    #         }
+    #         await ctx.send_msgs([msg])
+    #
+    #     # here write new ring value back into file
+    #     bizhawk.seek(0x010058)
+    #     if current_eggs + ctx.ring_link_eggs < 0:
+    #         ctx.ring_link_eggs = -current_eggs
+    #     bizhawk.write(int(current_eggs + ctx.ring_link_eggs).to_bytes(byte_size=2, byteorder="little"))
+    #     ctx.ring_link_eggs = 0
+    #
+    # async def ring_link_input(self, ctx: "BizHawkClientContext", data):
+    #     amount = data["amount"]  # yeah his personal client that he made
+    #     source = data["source"]  # can you tell im tired trying to write this
+    #     if source == ctx.slot:
+    #         ctx.ring_link_eggs += amount
+    #         return
