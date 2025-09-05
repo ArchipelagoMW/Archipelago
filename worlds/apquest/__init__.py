@@ -18,7 +18,7 @@ def run_client(*args: str) -> None:
     # Also, if your component has its own lifecycle, like if it is its own window that can be interacted with,
     # you should use LauncherComponents.launch_subprosses to launch it.
     # Specifically for components that support a gui mode using kivy, but can also be run without gui,
-    # you should use the LauncherComponents.launch helper (which itself calls launch_subprocesS).
+    # you should use the LauncherComponents.launch helper (which itself calls launch_subprocess).
     # This mainly applies to CommonClient-derived clients.
     launch(launch_ap_quest_client, name="APQuest Client", args=args)
 
