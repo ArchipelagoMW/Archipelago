@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 
 from .constants import *
-from .fuses import fuse_activation_reqs
 from .options import HexagonQuestAbilityUnlockType, IceGrappling
 
 if TYPE_CHECKING:
@@ -89,10 +88,38 @@ def can_get_past_bushes(state: CollectionState, world: "TunicWorld") -> bool:
     return has_sword(state, world.player) or state.has_any((fire_wand, laurels, gun), world.player)
 
 
-def has_fuses(fuse_event: str, state: CollectionState, world: "TunicWorld") -> bool:
-    player = world.player
-    fuses_option = False  # replace fuses_option with world.options.shuffle_fuses when fuse shuffle is in
-    if fuses_option:
-        return state.has_all(fuse_activation_reqs[fuse_event], player)
+# for fuse locations and reusing event names to simplify er_rules
+fuse_activation_reqs: dict[str, list[str]] = {
+    swamp_fuse_2: [swamp_fuse_1],
+    swamp_fuse_3: [swamp_fuse_1, swamp_fuse_2],
+    fortress_exterior_fuse_2: [fortress_exterior_fuse_1],
+    beneath_the_vault_fuse: [fortress_exterior_fuse_1, fortress_exterior_fuse_2],
+    fortress_candles_fuse: [fortress_exterior_fuse_1, fortress_exterior_fuse_2, beneath_the_vault_fuse],
+    fortress_door_left_fuse: [fortress_exterior_fuse_1, fortress_exterior_fuse_2, beneath_the_vault_fuse,
+                              fortress_candles_fuse],
+    fortress_courtyard_upper_fuse: [fortress_exterior_fuse_1],
+    fortress_courtyard_lower_fuse: [fortress_exterior_fuse_1, fortress_courtyard_upper_fuse],
+    fortress_door_right_fuse: [fortress_exterior_fuse_1, fortress_courtyard_upper_fuse, fortress_courtyard_lower_fuse],
+    quarry_fuse_2: [quarry_fuse_1],
+    "Activate Furnace Fuse": [west_furnace_fuse],
+    "Activate South and West Fortress Exterior Fuses": [fortress_exterior_fuse_1, fortress_exterior_fuse_2],
+    "Activate Upper and Central Fortress Exterior Fuses": [fortress_exterior_fuse_1, fortress_courtyard_upper_fuse,
+                                                           fortress_courtyard_lower_fuse],
+    "Activate Beneath the Vault Fuse": [fortress_exterior_fuse_1, fortress_exterior_fuse_2, beneath_the_vault_fuse],
+    "Activate Eastern Vault West Fuses": [fortress_exterior_fuse_1, fortress_exterior_fuse_2, beneath_the_vault_fuse,
+                                          fortress_candles_fuse, fortress_door_left_fuse],
+    "Activate Eastern Vault East Fuse": [fortress_exterior_fuse_1, fortress_courtyard_upper_fuse,
+                                         fortress_courtyard_lower_fuse, fortress_door_right_fuse],
+    "Activate Quarry Connector Fuse": [quarry_fuse_1],
+    "Activate Quarry Fuse": [quarry_fuse_1, quarry_fuse_2],
+    "Activate Ziggurat Fuse": [ziggurat_teleporter_fuse],
+    "Activate West Garden Fuse": [west_garden_fuse],
+    "Activate Library Fuse": [library_lab_fuse],
+}
 
-    return state.has(fuse_event, player)
+
+def has_fuses(fuse_event: str, state: CollectionState, world: "TunicWorld") -> bool:
+    if world.options.shuffle_fuses:
+        return state.has_all(fuse_activation_reqs[fuse_event], world.player)
+
+    return state.has(fuse_event, world.player)

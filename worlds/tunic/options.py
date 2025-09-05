@@ -198,6 +198,24 @@ class ShuffleLadders(Toggle):
     display_name = "Shuffle Ladders"
 
 
+class ShuffleFuses(Toggle):
+    """
+    Praying at a fuse will reward a check instead of turning on the power. The power from each fuse gets turned into an
+    item that must be found in order to restore power for that part of the path.
+    """
+    internal_name = "shuffle_fuses"
+    display_name = "Shuffle Fuses"
+
+
+class ShuffleBells(Toggle):
+    """
+    The East and West bells are shuffled into the item pool and must be found in order to unlock the Sealed Temple.
+    Ringing the bells will instead now reward a check.
+    """
+    internal_name = "shuffle_bells"
+    display_name = "Shuffle Bells"
+
+
 class GrassRandomizer(Toggle):
     """
     Turns over 6,000 blades of grass and bushes in the game into checks.
@@ -357,8 +375,8 @@ class TunicOptions(PerGameCommonOptions):
     hexagon_quest_ability_type: HexagonQuestAbilityUnlockType
 
     shuffle_ladders: ShuffleLadders
-    # shuffle_fuses: ShuffleFuses
-    # shuffle_bells: ShuffleBells
+    shuffle_fuses: ShuffleFuses
+    shuffle_bells: ShuffleBells
     grass_randomizer: GrassRandomizer
     breakable_shuffle: BreakableShuffle
     local_fill: LocalFill
