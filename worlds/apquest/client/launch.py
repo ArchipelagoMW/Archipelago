@@ -11,7 +11,7 @@ from CommonClient import get_base_parser, handle_url_arg
 # Copy things from here at your own risk.
 
 
-def launch_client(*args: Sequence[str]) -> None:
+def launch_ap_quest_client(*args: Sequence[str]) -> None:
     from .ap_quest_client import main
 
     parser = get_base_parser()

@@ -13,14 +13,14 @@ from .world import APQuestWorld as APQuestWorld
 # First, you'll need a function that takes a list of args (e.g. from the command line) that launches your component.
 def run_client(*args: str) -> None:
     # Ideally, you should lazily import your component code so that it doesn't have to be loaded until necessary.
-    from .client.launch import launch_client
+    from .client.launch import launch_ap_quest_client
 
     # Also, if your component has its own lifecycle, like if it is its own window that can be interacted with,
     # you should use LauncherComponents.launch_subprosses to launch it.
     # Specifically for components that support a gui mode using kivy, but can also be run without gui,
     # you should use the LauncherComponents.launch helper (which itself calls launch_subprocesS).
     # This mainly applies to CommonClient-derived clients.
-    launch(launch_client, name="APQuest Client", args=args)
+    launch(launch_ap_quest_client, name="APQuest Client", args=args)
 
 
 # You then add this function as a component by appending a Component instance to LauncherComponents.components.
