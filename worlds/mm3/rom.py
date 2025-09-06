@@ -186,7 +186,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
                                        names.get_shadow_blade,
                                        names.get_rush_marine,
                                    ]):
-        item = world.multiworld.get_location(location, world.player).item
+        item = world.get_location(location).item
         if item:
             if len(item.name) <= 13:
                 # we want to just place it in the center

@@ -273,7 +273,7 @@ def write_palette_shuffle(world: "MM3World", rom: "MM3ProcedurePatch") -> None:
             if "-" in color_set:
                 character, color = color_set.split("-")
                 if character.title() not in palette_pointers:
-                    logging.warning(f"Player {world.multiworld.get_player_name(world.player)} "
+                    logging.warning(f"Player {world.player_name} "
                                     f"attempted to set color for unrecognized option {character}")
                 colors = color.split("|")
                 real_colors = validate_colors(*parse_color(colors), allow_match=True)

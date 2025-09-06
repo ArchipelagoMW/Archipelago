@@ -297,14 +297,14 @@ def set_rules(world: "MM3World") -> None:
             if i in (20, 21):
                 # multi-phase fights, get all potential weaknesses
                 # we should probably do this smarter, but this works for now
-                add_rule(world.multiworld.get_location(location, world.player),
+                add_rule(world.get_location(location),
                          lambda state, weps=tuple(weapons): state.has_all(weps, world.player))
             else:
-                add_rule(world.multiworld.get_location(location, world.player),
+                add_rule(world.get_location(location),
                          lambda state, weps=tuple(weapons): state.has_any(weps, world.player))
 
     # Need to defeat x amount of robot masters for Wily 4
-    add_rule(world.multiworld.get_location(names.wily_stage_4, world.player),
+    add_rule(world.get_location(names.wily_stage_4),
              lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_4_requirement.value,
                                                   world.wily_4_weapons))
 

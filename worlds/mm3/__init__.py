@@ -115,7 +115,7 @@ class MM3World(World):
                 menu.connect(stage, f"To {region}",
                              lambda state, req=required_items: state.has_all(req, self.player))
             else:
-                old_stage = self.multiworld.get_region(prev_stage, self.player)
+                old_stage = self.get_region(prev_stage)
                 old_stage.connect(stage, f"To {region}",
                                   lambda state, req=required_items: state.has_all(req, self.player))
             stage.add_locations(stage_locations)
@@ -132,6 +132,9 @@ class MM3World(World):
                 if region in energy_pickups:
                     stage.add_locations(energy_pickups[region], MM3Location)
             self.multiworld.regions.append(stage)
+        goal_location = self.get_location(gamma)
+        goal_location.place_locked_item(MM3Item("Victory", ItemClassification.progression, None, self.player))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_item(self, name: str, force_non_progression: bool = False) -> MM3Item:
         item = item_table[name]
@@ -144,7 +147,7 @@ class MM3World(World):
         return MM3Item(name, classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choices(list(filler_item_weights.keys()),
+        return self.random.choices(list(filler_item_weights.keys()),
                                               weights=list(filler_item_weights.values()))[0]
 
     def create_items(self) -> None:
@@ -165,7 +168,7 @@ class MM3World(World):
             total_checks += 106
         remaining = total_checks - len(itempool)
         itempool.extend([self.create_item(name)
-                         for name in self.multiworld.random.choices(list(filler_item_weights.keys()),
+                         for name in self.random.choices(list(filler_item_weights.keys()),
                                                                     weights=list(filler_item_weights.values()),
                                                                     k=remaining)])
         self.multiworld.itempool += itempool
@@ -184,11 +187,6 @@ class MM3World(World):
             logger.warning(
                 f"Incompatible starting Robot Master, changing to "
                 f"{self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
-
-    def generate_basic(self) -> None:
-        goal_location = self.multiworld.get_location(gamma, self.player)
-        goal_location.place_locked_item(MM3Item("Victory", ItemClassification.progression, None, self.player))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def fill_hook(self,
                   prog_item_pool: list["Item"],
@@ -251,7 +249,7 @@ class MM3World(World):
 
     def generate_output(self, output_directory: str) -> None:
         try:
-            patch = MM3ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+            patch = MM3ProcedurePatch(player=self.player, player_name=self.player_name)
             patch_rom(self, patch)
 
             self.rom_name = patch.name
@@ -281,4 +279,4 @@ class MM3World(World):
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.player_name]
