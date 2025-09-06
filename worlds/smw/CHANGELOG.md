@@ -1,6 +1,34 @@
 # Super Mario World - Changelog
 
 
+## v2.2
+
+### Features:
+- New Items
+	- Dry Trap
+		- Removes your item box item
+	- Ice Untrap
+		- Removes Ice Physics from the current level, if applicable
+	- Timer Untrap
+		- Returns the timer to 300 seconds if it drops below 100 seconds
+	- Reverse Untrap
+		- Returns reversed controls to normal, if applicable
+- Switch Palace levels are now always shuffled into the single-exit level pool
+- Castles and Fortresses can now optionally be shuffled into the single-exit level pool
+- Level Name Shuffle
+	- In-game names of levels can be shuffled. Location Names (Client and Server) are unchanged
+- Level Tile Shuffle
+- Boss Health option
+	- Koopaling and Bowser health values can be set
+- The names of the mod/APWorld developers and contributors have been added to the in-game credits
+
+### Quality of Life:
+
+- The list of visted levels per slot is stored on the server, and the PopTracker pack now reads this list and by default only displays levels that you have visited
+- More Trap names are handled for TrapLink
+
+
+
 ## v2.1
 
 ### Features:
