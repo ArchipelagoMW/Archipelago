@@ -119,7 +119,7 @@ def after_add_item(inventory: Counter[str], item: "Item") -> None:
 
 def after_remove_item(inventory: Counter[str], item: "Item") -> None:
     for effect in LOGIC_EFFECTS.get(item.code, ()):
-        inventory[effect.name] += 1
+        inventory[effect.name] -= 1
     min_counter = LOGIC_MINIMUM_COUNTERS.get(item.code)
     if min_counter:
         if inventory[min_counter.name] > inventory[item.name]:
