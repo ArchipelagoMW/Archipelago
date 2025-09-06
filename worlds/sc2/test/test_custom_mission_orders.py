@@ -10,6 +10,7 @@ from BaseClasses import ItemClassification
 class TestCustomMissionOrders(Sc2SetupTestBase):
     def test_mini_wol_generates(self):
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': 'custom',
             'custom_mission_order': {
                 'Mini Wings of Liberty': {
@@ -192,6 +193,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
         test_item = item_names.ZERGLING
         test_amount = 3
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': 'custom',
             'locked_items': { test_item: 1 }, # Make sure it is generated as normal
             'custom_mission_order': {

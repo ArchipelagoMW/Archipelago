@@ -270,7 +270,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
     def test_race_swap_pick_one_has_correct_length_and_includes_swaps(self) -> None:
         world_options = {
-            'selected_races': options.SelectRaces.valid_keys,
+            'selected_races': options.SelectedRaces.valid_keys,
             'enable_race_swap': options.EnableRaceSwapVariants.option_pick_one,
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name,

@@ -68,6 +68,7 @@ class ItemFilterTests(Sc2SetupTestBase):
 
     def test_excluding_all_items_in_multiparent_excludes_child_items(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'excluded_items': {
                 item_names.ZEALOT: 1,
                 item_names.SENTINEL: 1,
