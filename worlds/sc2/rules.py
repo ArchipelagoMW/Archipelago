@@ -2159,8 +2159,8 @@ class SC2Logic:
         if not self.terran_very_hard_mission_weapon_armor_level(state):
             return False
         beats_kerrigan = (
-            state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.BANSHEE}, self.player)
-            or state.has_all({item_names.REAPER, item_names.REAPER_RESOURCE_EFFICIENCY}, self.player)
+            state.has_any((item_names.MARINE, item_names.DOMINION_TROOPER, item_names.BANSHEE), self.player)
+            or state.has_all((item_names.REAPER, item_names.REAPER_RESOURCE_EFFICIENCY), self.player)
             or (self.all_in_map == AllInMap.option_air and state.has_all((item_names.VALKYRIE, item_names.VALKYRIE_FLECHETTE_MISSILES), self.player))
             or (self.advanced_tactics and state.has_all((item_names.GHOST, item_names.GHOST_EMP_ROUNDS), self.player))
         )
@@ -2171,7 +2171,7 @@ class SC2Logic:
         if self.all_in_map == AllInMap.option_ground:
             # Ground
             defense_rating = self.terran_defense_rating(state, True, False)
-            if state.has_any((item_names.BATTLECRUISER, item_names.BANSHEE, item_names.VALKYRIE), self.player):
+            if state.has_any((item_names.BATTLECRUISER, item_names.BANSHEE), self.player):
                 defense_rating += 2
             return defense_rating >= 13
         else:
@@ -2180,8 +2180,8 @@ class SC2Logic:
             return (
                 defense_rating >= 9
                 and self.terran_competent_anti_air(state)
-                and state.has_any({item_names.VIKING, item_names.BATTLECRUISER, item_names.VALKYRIE}, self.player)
-                and state.has_any({item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER, item_names.MISSILE_TURRET}, self.player)
+                and state.has_any((item_names.VIKING, item_names.BATTLECRUISER, item_names.VALKYRIE), self.player)
+                and state.has_any((item_names.HIVE_MIND_EMULATOR, item_names.PSI_DISRUPTER, item_names.MISSILE_TURRET), self.player)
             )
 
     def zerg_all_in_requirement(self, state: CollectionState):
