@@ -215,7 +215,8 @@ lumine_hall_text = [
     "My statistics show about 70% of kids these days don't stop to read bulletin boards anymore. Well, I had to shell out a lot of money for this, but let's see you ignore THIS one, suckers!          ...Brick Road",
     "I'm Ness... I could go for a burger right about now... That girl from Twoson sure is cute... I wonder if I should ask her out on a date... W...wha...? What's...? H-HEY! These thoughts are PRIVATE!",
     "Chris, when is Parasite Eve in AP?",
-    "Praise the Fool!"
+    "Praise the Fool!",
+    "Am I the only one who likes Sonic Unleashed?"
 ]
 
 spoiler_psi = {

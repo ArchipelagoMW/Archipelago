@@ -237,9 +237,6 @@ class EarthBoundClient(SNIClient):
             else:
                 item = trait_interpreter(gift)
 
-        if outgoing_energy is None: # None Catcher
-            return
-
             inbox_queue = await snes_read(ctx, WRAM_START + 0x3200, 1)
             # Pause if the receiver queue is full
             if not inbox_queue[0]:
