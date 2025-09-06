@@ -2154,30 +2154,7 @@ not_balanced_starting_units = {
 
 # Defense rating table
 # Commented defense ratings are handled in LogicMixin
-tvx_defense_ratings = {
-    item_names.SIEGE_TANK: 5,
-    # "Graduating Range": 1,
-    item_names.PLANETARY_FORTRESS: 3,
-    # Bunker w/ Marine/Marauder: 3,
-    item_names.PERDITION_TURRET: 2,
-    item_names.DEVASTATOR_TURRET: 2,
-    item_names.VULTURE: 1,
-    item_names.BANSHEE: 1,
-    item_names.BATTLECRUISER: 1,
-    item_names.LIBERATOR: 4,
-    item_names.WIDOW_MINE: 1,
-    # "Concealment (Widow Mine)": 1
-}
-tvz_defense_ratings = {
-    item_names.PERDITION_TURRET: 2,
-    # Bunker w/ Firebat: 2,
-    item_names.LIBERATOR: -2,
-    item_names.HIVE_MIND_EMULATOR: 3,
-    item_names.PSI_DISRUPTER: 3,
-}
-tvx_air_defense_ratings = {
-    item_names.MISSILE_TURRET: 2,
-}
+# Note(phaneros): Terran defense rating data moved to virtual_items.py
 zvx_defense_ratings = {
     # Note that this doesn't include Kerrigan because this is just for race swaps, which doesn't involve her (for now)
     item_names.SPINE_CRAWLER: 3,
