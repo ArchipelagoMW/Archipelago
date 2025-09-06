@@ -7,15 +7,7 @@ from Generate import get_seed_name
 from worlds import AutoWorld
 from test.general import gen_steps, call_all
 
-from test.bases import WorldTestBase
 from .. import SC2World
-from .. import client
-
-class Sc2TestBase(WorldTestBase):
-    game = client.SC2Context.game
-    world: SC2World
-    player: ClassVar[int] = 1
-    skip_long_tests: bool = True
 
 
 class Sc2SetupTestBase(unittest.TestCase):
