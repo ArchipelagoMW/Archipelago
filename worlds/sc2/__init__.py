@@ -30,7 +30,7 @@ from .options import (
 )
 from .rules import get_basic_units, SC2Logic
 from . import settings
-from .pool_filter import filter_items
+from .pool_filter import filter_items, after_add_item, after_remove_item
 from .mission_tables import SC2Campaign, SC2Mission, SC2Race, MissionFlag
 from .regions import create_mission_order
 from .mission_order import SC2MissionOrder
@@ -253,6 +253,18 @@ class SC2World(World):
             slot_data["enable_void_trade"] = EnableVoidTrade.option_false
 
         return slot_data
+    
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        change = super().collect(state, item)
+        if change:
+            after_add_item(state.prog_items[item.player], item)
+        return change
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        change = super().remove(state, item)
+        if change:
+            after_remove_item(state.prog_items[item.player], item)
+        return change
 
     def pre_fill(self) -> None:
         assert self.logic is not None

@@ -1,14 +1,17 @@
 import logging
 from typing import Callable, Dict, List, Set, Tuple, TYPE_CHECKING, Iterable
 
+from collections import Counter
 from BaseClasses import Location, ItemClassification
 from .item import StarcraftItem, ItemFilterFlags, item_names, item_parents, item_groups
 from .item.item_tables import item_table, TerranItemType, ZergItemType, spear_of_adun_calldowns, \
     spear_of_adun_castable_passives
 from .options import RequiredTactics
+from .rules import LOGIC_EFFECTS, LOGIC_MINIMUM_COUNTERS
 
 if TYPE_CHECKING:
     from . import SC2World
+    from BaseClasses import Item
 
 
 # Items that can be placed before resources if not already in
@@ -105,18 +108,36 @@ def copy_item(item: StarcraftItem) -> StarcraftItem:
     return StarcraftItem(item.name, item.classification, item.code, item.player, item.filter_flags)
 
 
+def after_add_item(inventory: Counter[str], item: "Item") -> None:
+    for effect in LOGIC_EFFECTS.get(item.code, ()):
+        inventory[effect.name] += 1
+    min_counter = LOGIC_MINIMUM_COUNTERS.get(item.code)
+    if min_counter:
+        inventory[min_counter.name] = min(
+            inventory[effect.name] for effect in min_counter
+        )
+
+def after_remove_item(inventory: Counter[str], item: "Item") -> None:
+    for effect in LOGIC_EFFECTS.get(item.code, ()):
+        inventory[effect.name] += 1
+    min_counter = LOGIC_MINIMUM_COUNTERS.get(item.code)
+    if min_counter:
+        if inventory[min_counter.name] > inventory[item.name]:
+            inventory[min_counter.name] = inventory[item.name]
+
+
 class ValidInventory:
     def __init__(self, world: 'SC2World', item_pool: List[StarcraftItem]) -> None:
         self.multiworld = world.multiworld
         self.player = world.player
         self.world: 'SC2World' = world
         # Track all Progression items and those with complex rules for filtering
-        self.logical_inventory: Dict[str, int] = {}
+        self.logical_inventory: Counter[str] = Counter()
         for item in item_pool:
             if not item_table[item.name].is_important_for_filtering():
                 continue
-            self.logical_inventory.setdefault(item.name, 0)
             self.logical_inventory[item.name] += 1
+            after_add_item(self.logical_inventory, item)
         self.item_pool = item_pool
         self.item_name_to_item: Dict[str, List[StarcraftItem]] = {}
         self.item_name_to_child_items: Dict[str, List[StarcraftItem]] = {}
@@ -162,6 +183,12 @@ class ValidInventory:
             )
             max_upgrades_per_unit = min_upgrades_per_unit
 
+        # Determining if the full-size inventory can complete campaign
+        # Note(mm): Now that user excludes are checked against logic, this can probably never fail unless there's a bug.
+        failed_locations: List[str] = [location for (location, requirement) in requirements if not requirement(self)]
+        if len(failed_locations) > 0:
+            raise Exception(f"Too many items excluded - couldn't satisfy access rules for the following locations:\n{failed_locations}")
+
         def attempt_removal(
             item: StarcraftItem,
             remove_flag: ItemFilterFlags = ItemFilterFlags.FilterExcluded,
@@ -173,10 +200,12 @@ class ValidInventory:
             # Only run logic checks when removing logic items
             if self.logical_inventory.get(item.name, 0) > 0:
                 self.logical_inventory[item.name] -= 1
+                after_remove_item(self.logical_inventory, item)
                 failed_rules = [name for name, requirement in mission_requirements if not requirement(self)]
                 if failed_rules:
                     # If item cannot be removed, lock and revert
                     self.logical_inventory[item.name] += 1
+                    after_add_item(self.logical_inventory, item)
                     item.filter_flags |= ItemFilterFlags.LogicLocked
                     return f"{len(failed_rules)} rules starting with \"{failed_rules[0]}\""
                 if not self.logical_inventory[item.name]:
