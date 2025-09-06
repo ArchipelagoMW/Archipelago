@@ -4536,4 +4536,10 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             memory_range=MemoryRange.BYTE
         ),
     ),
+    "Flower Zone Main Area - Rayquaza -- Friendship": PokeparkLocationData(
+        569, PokeparkFlag.FRIENDSHIP, "Flower Zone Main Area", 0x0402, PokeparkFriendshipClientLocationData(
+            structure_position=192,
+            memory_range=MemoryRange.BYTE
+        ),
+    ),
 }

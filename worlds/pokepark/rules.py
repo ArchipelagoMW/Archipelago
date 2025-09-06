@@ -2140,6 +2140,11 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: True
     )
 
+    set_rule_if_exists(
+        "Flower Zone Main Area - Rayquaza -- Friendship",
+        lambda state: state.has("Rayquaza Prisma", player)
+    )
+
     # Rayquaza's Balloon Panic
     set_rule_if_exists(
         "Rayquaza's Balloon Panic Attraction -- Prisma",
