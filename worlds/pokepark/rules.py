@@ -520,7 +520,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Beach Zone Main Area - Totodile Power Competition -- Friendship",
-        lambda state: can_battle(state, player)
+        lambda state: can_battle(state, player) and state.has("Totodile Unlock", player)
     )
     set_rule_if_exists(
         "Beach Zone Main Area - Pidgeotto Power Competition -- Friendship",
@@ -799,7 +799,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Prinplup Power Competition -- Friendship",
-        lambda state: can_battle(state, player)  # TODO: dependency on Igloo Quest?
+        lambda state: can_battle(state, player)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Sneasel Power Competition -- Friendship",
@@ -1089,7 +1089,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Cavern Zone Main Area - Sudowoodo Power Competition -- Friendship",
-        lambda state: True
+        lambda state: state.has("Sudowoodo Unlock", player)
     )
     set_rule_if_exists(
         "Cavern Zone Main Area - Aron Power Competition -- Friendship",
@@ -1225,7 +1225,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Magma Zone Circle Area - Ninetales Power Competition -- Friendship",
-        lambda state: can_play_catch_intermediate(state, player)
+        lambda state: can_play_catch_intermediate(state, player) and state.has("Ninetales Unlock", player)
     )
     set_rule_if_exists(
         "Magma Zone Circle Area - Quilava Power Competition -- Friendship",
@@ -1245,7 +1245,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Magma Zone Circle Area - Ponyta Power Competition -- Friendship",
-        lambda state: can_play_catch_intermediate(state, player)
+        lambda state: can_play_catch_intermediate(state, player) and state.has("Ponyta Unlock", player)
     )
     set_rule_if_exists(
         "Magma Zone Main Area - Torkoal Power Competition -- Friendship",
@@ -1895,7 +1895,12 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Jolteon Power Competition -- Friendship",
-        lambda state: can_play_catch_intermediate(state, player) and state.count_group("Friendship Items", player) >= 90
+        lambda state: can_play_catch_intermediate(state, player) and state.count_group(
+            "Friendship Items",
+            player
+        ) >= 90 and state.has(
+            "Jolteon Unlock", player
+        )
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Skorupi Power Competition -- Friendship",
