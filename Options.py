@@ -1761,6 +1761,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
                     __version__=__version__, game=game_name, yaml_dump=yaml_dump_scalar,
                     dictify_range=dictify_range,
                     cleandoc=cleandoc,
+                    preset_name=name,
                     preset=preset,
                 )
                 preset_name = f" - {name}" if name else ""
