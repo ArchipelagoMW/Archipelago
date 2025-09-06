@@ -19,9 +19,6 @@ from .options import (
     get_enabled_races,
 )
 from .item.item_tables import (
-    tvx_defense_ratings,
-    tvz_defense_ratings,
-    tvx_air_defense_ratings,
     kerrigan_levels,
     item_table,
     zvx_air_defense_ratings,
@@ -31,7 +28,6 @@ from .item.item_tables import (
     no_logic_basic_units,
     advanced_basic_units,
     basic_units,
-    upgrade_bundle_inverted_lookup,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
     soa_ultimate_ratings,
     soa_energy_ratings,
