@@ -102,7 +102,7 @@ class PokeparkThunderboltUpgradeClientLocationData(PokeparkBaseClientLocationDat
 
 
 @dataclass
-class PokeparkIronTailUpgradeClientLocationData(PokeparkBaseClientLocationData):
+class PokeparkIronTailUpgradeMetapodTreeClientLocationData(PokeparkBaseClientLocationData):
     _expected_value: Optional[int] = 0xFFFFFFFF
     _bit_mask: Optional[int] = 0xFFFFFFFF
 
@@ -181,6 +181,22 @@ class PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(PokeparkBaseCl
         self.bit_mask = self._bit_mask
         self.in_structure_address_interval = 0x0
 
+
+@dataclass
+class PokeparkKakunaTreeClientData(PokeparkBaseClientLocationData):
+    _expected_value: Optional[int] = 0xFFFFFFFF
+    _bit_mask: Optional[int] = 0xFFFFFFFF
+
+    def __post_init__(self):
+        assert self._expected_value is not None
+        assert self._bit_mask is not None
+        self.global_manager_data_struc_offset = 0x41
+        self.in_structure_offset = 0x0
+        self.expected_value = 0b10000000
+        self.bit_mask = 0b10000000
+        self.expected_value = self._expected_value
+        self.bit_mask = self._bit_mask
+        self.in_structure_address_interval = 0x0
 
 @dataclass
 class PokeparkMagikarpRescueClientData(PokeparkBaseClientLocationData):
@@ -607,7 +623,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Treehouse - Power Up - Iron Tail Upgrade 1": PokeparkLocationData(
-        15, PokeparkFlag.POWER_UP, "Treehouse", 0x0201, PokeparkIronTailUpgradeClientLocationData(
+        15, PokeparkFlag.POWER_UP, "Treehouse", 0x0201, PokeparkIronTailUpgradeMetapodTreeClientLocationData(
             structure_position=0,
             memory_range=MemoryRange.BYTE,
             _expected_value=0b00010000,
@@ -615,7 +631,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Treehouse - Power Up - Iron Tail Upgrade 2": PokeparkLocationData(
-        16, PokeparkFlag.POWER_UP, "Treehouse", 0x0201, PokeparkIronTailUpgradeClientLocationData(
+        16, PokeparkFlag.POWER_UP, "Treehouse", 0x0201, PokeparkIronTailUpgradeMetapodTreeClientLocationData(
             structure_position=0,
             memory_range=MemoryRange.BYTE,
             _expected_value=0b00100000,
@@ -623,7 +639,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Treehouse - Power Up - Iron Tail Upgrade 3": PokeparkLocationData(
-        17, PokeparkFlag.POWER_UP, "Treehouse", 0x0201, PokeparkIronTailUpgradeClientLocationData(
+        17, PokeparkFlag.POWER_UP, "Treehouse", 0x0201, PokeparkIronTailUpgradeMetapodTreeClientLocationData(
             structure_position=0,
             memory_range=MemoryRange.BYTE,
             _expected_value=0b00110000,
@@ -2941,13 +2957,20 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Haunted Zone Main Area - Metapod Left Tree -- Metapod Unlocked": PokeparkLocationData(
-        348, PokeparkFlag.POKEMON_UNLOCK, "Haunted Zone Main Area", 0x0501, PokeparkBaseClientLocationData(
-            # TODO: add client Data
+        348, PokeparkFlag.POKEMON_UNLOCK, "Haunted Zone Main Area", 0x0501,
+        PokeparkIronTailUpgradeMetapodTreeClientLocationData(
+            structure_position=0,
+            _expected_value=0b00000001,
+            _bit_mask=0b00000001,
+            memory_range=MemoryRange.BYTE
         )
     ),
     "Haunted Zone Main Area - Kakuna Right Tree -- Metapod Unlocked": PokeparkLocationData(
-        349, PokeparkFlag.POKEMON_UNLOCK, "Haunted Zone Main Area", 0x0501, PokeparkBaseClientLocationData(
-            # TODO: add client Data
+        349, PokeparkFlag.POKEMON_UNLOCK, "Haunted Zone Main Area", 0x0501, PokeparkKakunaTreeClientData(
+            structure_position=0,
+            _expected_value=0b01000000,
+            _bit_mask=0b01000000,
+            memory_range=MemoryRange.BYTE
         )
     ),
 
