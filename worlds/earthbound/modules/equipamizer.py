@@ -287,7 +287,7 @@ royal_names = [
 ]
 
 
-def randomize_armor(world, rom) -> None:
+def randomize_armor(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     if world.options.equipamizer_cap_stats:
         armor_caps = {
             "body": 30,
@@ -690,7 +690,7 @@ def randomize_armor(world, rom) -> None:
         world.description_pointer += len(description)
 
 
-def randomize_weapons(world, rom) -> None:
+def randomize_weapons(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     if world.options.equipamizer_cap_stats:
         weapon_cap = 120
     else:

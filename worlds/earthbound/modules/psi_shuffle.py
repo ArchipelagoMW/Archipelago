@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from .Rom import LocalRom
     
 
-def shuffle_psi(world) -> None:
+def shuffle_psi(world: "EarthBoundWorld") -> None:
     world.offensive_psi_slots = [
         "Special",
         "Flash",

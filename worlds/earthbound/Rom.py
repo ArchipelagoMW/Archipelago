@@ -26,7 +26,7 @@ from .modules.enemizer.randomize_enemy_stats import randomize_enemy_stats
 from .modules.enemizer.randomize_enemy_attacks import randomize_enemy_attacks
 from .game_data.static_location_data import location_groups
 from BaseClasses import ItemClassification
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Sequence
 from logging import warning
 # from .local_data import local_locations
 
@@ -61,7 +61,7 @@ valid_hashes = ["a864b2e5c141d2dec1c4cbed75a42a85",  # Cartridge
 
 class LocalRom(object):
 
-    def __init__(self, file: bytes, name: Optional[str] = None) -> None:
+    def __init__(self, file: bytes, name: str | None = None) -> None:
         self.file = bytearray(file)
         self.name = name
 
@@ -74,14 +74,14 @@ class LocalRom(object):
     def write_byte(self, offset: int, value: int) -> None:
         self.file[offset] = value
 
-    def write_bytes(self, offset: int, values) -> None:
+    def write_bytes(self, offset: int, values: Sequence[int]) -> None:
         self.file[offset:offset + len(values)] = values
 
     def get_bytes(self) -> bytes:
         return bytes(self.file)
 
 
-def patch_rom(world, rom, player: int) -> None:
+def patch_rom(world: "EarthBoundWorld", rom: LocalRom, player: int) -> None:
     rom.copy_bytes(0x1578DD, 0x3E, 0x34A060)  # Threed/Saturn teleport move
     rom.copy_bytes(0x15791B, 0xF8, 0x157959)
 
@@ -702,7 +702,7 @@ def patch_rom(world, rom, player: int) -> None:
                 # THIS WILL CRASH IF ADDRESS IS WRONG.
     rom.write_bytes(0x2EC909, struct.pack("I", protection_text[world.franklin_protection][0]))  # help text
     rom.write_bytes(0x2EC957, struct.pack("I", protection_text[world.franklin_protection][1]))  # battle text
-    from Main import __version__
+    from Utils import __version__
     rom.name = bytearray(f'MOM2AP{__version__.replace(".", "")[0:3]}_{player}_{world.multiworld.seed:11}\0', "utf8")[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x00FFC0, rom.name)
@@ -725,9 +725,6 @@ class EBProcPatch(APProcedurePatch, APTokenMixin):
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
-
-    def write_byte(self, offset, value) -> None:
-        self.write_token(APTokenTypes.WRITE, offset, value.to_bytes(1, "little"))
 
     def write_bytes(self, offset, value: typing.Iterable[int]) -> None:
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
