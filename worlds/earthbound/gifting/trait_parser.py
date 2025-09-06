@@ -1,5 +1,6 @@
 from ..game_data.local_data import item_id_table
 import random
+from typing import Any
 
 gift_exclusions = [
     "Franklin Badge",
@@ -398,7 +399,7 @@ gift_by_quality = {
 }
 
 
-def trait_interpreter(gift) -> int:
+def trait_interpreter(gift: dict[str, Any]) -> int:
     """Converts received gifts into in-game items.
        If the item name perfectly matches an in-game item, that item will be received.
        If any of the traits can be scaled i.e. a healing item, the gift will be converted into an item of roughly that value.

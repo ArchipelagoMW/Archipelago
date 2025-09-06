@@ -2,8 +2,12 @@ from ..game_data.local_data import psi_item_table, character_item_table, special
 from ..game_data.text_data import calc_pixel_width, text_encoder
 from ..game_data.static_location_data import location_ids
 from ..Options import ShopRandomizer, MagicantMode, MonkeyCavesMode
-from BaseClasses import ItemClassification
+from BaseClasses import ItemClassification, Location
 import struct
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import EarthBoundWorld
+    from .Rom import LocalRom
 
 shop_locations = {
     "Onett Drugstore - Right Counter Slot 1",
@@ -285,7 +289,7 @@ shop_locations = {
 }
 
 
-def write_shop_checks(world, rom, shop_checks) -> None:
+def write_shop_checks(world: "EarthBoundWorld", rom: "LocalRom", shop_checks: list[Location]) -> None:
     unsellable_filler_prices = {
         "Broken Machine": 150,
         "Broken Air Gun": 110,

@@ -5,71 +5,6 @@ from ..Options import Armorizer, Weaponizer
 from operator import attrgetter
 import struct
 
-
-def roll_resistances(world, element, armor) -> None:
-    chance = world.random.randint(0, 100)
-    if chance < world.options.armorizer_resistance_chance.value:
-        setattr(armor, element, world.random.randint(1, 3))
-    else:
-        setattr(armor, element, 0)
-
-
-def price_weapons(world, weapons, rom) -> None:
-    for index, weapon in enumerate(weapons):
-        if weapon.can_equip == "Poo":
-            price = 10 * weapon.poo_off
-        else:
-            price = 10 * weapon.offense
-
-        if price > 300:
-            price = price * 2
-        
-        price += (20 * weapon.aux_stat)
-        price -= (50 * weapon.miss_rate)
-        price += world.random.randint(-20, 20)
-        price = max(5, price)
-        rom.write_bytes((weapon.address + 26), struct.pack("H", price))
-        if weapon.double_price_item in summers_addresses:
-            price = min(0xFFFF, price * 2)
-            rom.write_bytes((summers_addresses[weapon.double_price_item] + 26), struct.pack("H", price))
-
-
-def price_armors(world, armor_pricing_list, rom) -> None:
-    for index, armor in enumerate(armor_pricing_list):
-        if armor.can_equip == "Poo":
-            price = 10 * armor.poo_def
-        else:
-            price = 10 * armor.defense
-        
-        if price > 300:
-            price = price * 2
-        price += (20 * armor.aux_stat)
-        price += (50 * armor.fire_res)
-        price += (50 * armor.freeze_res)
-        price += (50 * armor.flash_res)
-        price += (50 * armor.par_res)
-        price += world.random.randint(-20, 20)
-        price = max(5, price)
-        rom.write_bytes((armor.address + 26), struct.pack("H", price))
-        if armor.double_price_item in summers_addresses:
-            price = min(0xFFFF, price * 2)
-            rom.write_bytes((summers_addresses[armor.double_price_item] + 26), struct.pack("H", price))
-
-
-def apply_progressive_weapons(world, weapons, progressives, rom) -> None:
-    for index, item in enumerate(weapons):
-        weapon = world.weapon_list[item]
-        weapon.offense = progressives[index].offense
-        rom.write_bytes(weapon.address + 31, bytearray([weapon.offense]))
-
-
-def apply_progressive_armor(world, armors, progressives, rom) -> None:
-    for index, item in enumerate(armors):
-        armor = world.armor_list[item]
-        armor.defense = progressives[index].defense
-        rom.write_bytes(armor.address + 31, bytearray([armor.defense]))
-
-
 @dataclass
 class EBArmor:
     address: int
@@ -99,6 +34,70 @@ class EBWeapon:
     poo_off: int = 0
     miss_rate: int = 0
     double_price_item: str = "None"
+
+
+def roll_resistances(world: "EarthBoundWorld", element: str, armor: EBArmor) -> None:
+    chance = world.random.randint(0, 100)
+    if chance < world.options.armorizer_resistance_chance.value:
+        setattr(armor, element, world.random.randint(1, 3))
+    else:
+        setattr(armor, element, 0)
+
+
+def price_weapons(world: "EarthBoundWorld", weapons: list[EBWeapon], rom: "LocalRom") -> None:
+    for index, weapon in enumerate(weapons):
+        if weapon.can_equip == "Poo":
+            price = 10 * weapon.poo_off
+        else:
+            price = 10 * weapon.offense
+
+        if price > 300:
+            price = price * 2
+        
+        price += (20 * weapon.aux_stat)
+        price -= (50 * weapon.miss_rate)
+        price += world.random.randint(-20, 20)
+        price = max(5, price)
+        rom.write_bytes((weapon.address + 26), struct.pack("H", price))
+        if weapon.double_price_item in summers_addresses:
+            price = min(0xFFFF, price * 2)
+            rom.write_bytes((summers_addresses[weapon.double_price_item] + 26), struct.pack("H", price))
+
+
+def price_armors(world: "EarthBoundWorld", armor_pricing_list: list[EBArmor], rom: "LocalRom") -> None:
+    for index, armor in enumerate(armor_pricing_list):
+        if armor.can_equip == "Poo":
+            price = 10 * armor.poo_def
+        else:
+            price = 10 * armor.defense
+        
+        if price > 300:
+            price = price * 2
+        price += (20 * armor.aux_stat)
+        price += (50 * armor.fire_res)
+        price += (50 * armor.freeze_res)
+        price += (50 * armor.flash_res)
+        price += (50 * armor.par_res)
+        price += world.random.randint(-20, 20)
+        price = max(5, price)
+        rom.write_bytes((armor.address + 26), struct.pack("H", price))
+        if armor.double_price_item in summers_addresses:
+            price = min(0xFFFF, price * 2)
+            rom.write_bytes((summers_addresses[armor.double_price_item] + 26), struct.pack("H", price))
+
+
+def apply_progressive_weapons(world: "EarthBoundWorld", weapons: list[str], progressives: list[str], rom: "LocalRom") -> None:
+    for index, item in enumerate(weapons):
+        weapon = world.weapon_list[item]
+        weapon.offense = progressives[index].offense
+        rom.write_bytes(weapon.address + 31, bytearray([weapon.offense]))
+
+
+def apply_progressive_armor(world: "EarthBoundWorld", armors: list[str], progressives: list[str], rom: "LocalRom") -> None:
+    for index, item in enumerate(armors):
+        armor = world.armor_list[item]
+        armor.defense = progressives[index].defense
+        rom.write_bytes(armor.address + 31, bytearray([armor.defense]))
 
 
 adjectives = [

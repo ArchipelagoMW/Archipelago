@@ -3,6 +3,11 @@ from .enemy_attributes import excluded_enemies
 from ..enemy_data import spell_breaks
 from ..enemy_shuffler import enemy_ids
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ... import EarthBoundWorld
+    from ...Rom import LocalRom
+
 battle_actions = {  # Actions in camel case are scaled
     "Attack": 0x04,
     "Shoot": 0x05,
@@ -197,7 +202,7 @@ psi_actions = {
 }
 
 
-def randomize_enemy_attacks(world, rom) -> None:
+def randomize_enemy_attacks(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     """Generates random attacks for enemies.
        Certain attacks need to have an argument variable attached.
        PSI moves have a 19% chance of being rolled only if the enemy has a non-zero max PP stat."""

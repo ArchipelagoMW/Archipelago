@@ -1,5 +1,7 @@
 from ..game_data.text_data import eb_text_table
 from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .. import EarthBoundWorld
 
 random_flavors = [
     "Mint flavor",

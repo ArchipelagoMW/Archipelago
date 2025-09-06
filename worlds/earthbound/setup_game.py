@@ -5,9 +5,11 @@ from .modules.psi_shuffle import shuffle_psi
 from .modules.boss_shuffle import initialize_bosses
 from .modules.enemy_shuffler import shuffle_enemies
 from .modules.dungeon_er import shuffle_dungeons
-
-
-def setup_gamevars(world) -> None:
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import EarthBoundWorld
+    
+def setup_gamevars(world: "EarthBoundWorld") -> None:
     """Initialize or roll most world variables"""
 
     world.slime_pile_wanted_item = world.random.choice([
@@ -432,7 +434,7 @@ def setup_gamevars(world) -> None:
     shuffle_dungeons(world)
 
 
-def place_static_items(world) -> None:
+def place_static_items(world: "EarthBoundWorld") -> None:
     """Places all locked items. Some are events. Some are filler items that
        need to be placed depending on certain settings."""
 

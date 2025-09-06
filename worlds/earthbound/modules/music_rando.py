@@ -1,4 +1,8 @@
 from ..Options import RandomizeOverworldMusic, RandomizeFanfares
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import EarthBoundWorld
+    from .Rom import LocalRom
 
 town_songs = [
     0x2E,
@@ -184,7 +188,7 @@ battle_songs = [
 ]
 
 
-def music_randomizer(world, rom) -> None:
+def music_randomizer(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     fanfares = [
         0x05,
         0x08,

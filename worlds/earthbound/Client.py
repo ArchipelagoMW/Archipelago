@@ -61,9 +61,9 @@ class EarthBoundClient(SNIClient):
     game = "EarthBound"
     patch_suffix = ".apeb"
     most_recent_connect: str = ""
-    client_version = world_version
-    hint_list = []
-    hinted_shop_locations = []
+    client_version: str = world_version
+    hint_list: list[int] = []
+    hinted_shop_locations: list[int] = []
 
     async def deathlink_kill_player(self, ctx: "SNIContext") -> None:
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
@@ -123,13 +123,13 @@ class EarthBoundClient(SNIClient):
         ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
 
-    def on_package(self, ctx, cmd: str, args: dict):
+    def on_package(self, ctx, cmd: str, args: dict[str, typing.Any]) -> None:
         super().on_package(ctx, cmd, args)
 
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", None)
 
-    async def validate_rom(self, ctx) -> bool:
+    async def validate_rom(self, ctx: "SNIContext") -> bool:
         from SNIClient import snes_read
 
         rom_name = await snes_read(ctx, EB_ROMHASH_START, ROMHASH_SIZE)
@@ -157,7 +157,7 @@ class EarthBoundClient(SNIClient):
             await ctx.update_death_link(bool(death_link[0] & 0b1))
         return True
 
-    async def game_watcher(self, ctx) -> None:
+    async def game_watcher(self, ctx: "SNIContext") -> None:
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read, snes_write
         giygas_clear = await snes_read(ctx, GIYGAS_CLEAR, 0x1)
         game_clear = await snes_read(ctx, GAME_CLEAR, 0x1)

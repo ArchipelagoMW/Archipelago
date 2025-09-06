@@ -1,6 +1,10 @@
 import struct
 from ..Options import PSIShuffle
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import EarthBoundWorld
+    from .Rom import LocalRom
+    
 
 def shuffle_psi(world) -> None:
     world.offensive_psi_slots = [
@@ -407,7 +411,7 @@ def shuffle_psi(world) -> None:
     ]
 
 
-def write_psi(world, rom) -> None:
+def write_psi(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     from ..game_data.text_data import text_encoder
     psi_num = 0
     for spell, (address, levels) in world.psi_address.items():
@@ -506,6 +510,6 @@ def write_psi(world, rom) -> None:
     rom.write_bytes(0x15C06D, bytearray(struct.pack("H", world.gadget_actions[world.jeff_assist_items[1]][1])))
 
 
-def adjust_psi_list(psi_input, spell, index) -> None:
+def adjust_psi_list(psi_input: list[str], spell: str, index: int) -> None:
     """Move a spell in the PSI table to a different entry/slot"""
     psi_input.insert(index, (psi_input.pop(psi_input.index(spell))))

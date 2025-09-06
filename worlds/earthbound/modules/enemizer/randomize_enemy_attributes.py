@@ -2,7 +2,10 @@ import struct
 from .enemy_attributes import (enemy_species, enemy_adjectives, battle_sprites, field_sprites, excluded_enemies,
                                insects, robots, movement_patterns, start_texts, death_texts, weakness_table)
 from ...game_data.text_data import calc_pixel_width, text_encoder
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ... import EarthBoundWorld
+    from ...Rom import LocalRom
 shield_statuses = [
     "phys_1",
     "phys_2",
@@ -26,7 +29,7 @@ battle_songs = [
 ]
 
 
-def randomize_enemy_attributes(world, rom) -> None:
+def randomize_enemy_attributes(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     """Randomizes various attributes of enemies. This includes the name,
        gender, sprite, color, etc. Data can be found in enemy_attributes."""
     taken_names = []
@@ -131,7 +134,7 @@ def randomize_enemy_attributes(world, rom) -> None:
                     enemy = f"{enemy} ({i + 2})"
 
 
-def get_weakness(element, species) -> int:
+def get_weakness(element: str, species: str) -> int:
     """Returns a weakness to given element, given the enemy's base species."""
     if species in weakness_table[element]:
         weakness = weakness_table[element][species]
