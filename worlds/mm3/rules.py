@@ -241,7 +241,8 @@ def set_rules(world: "MM3World") -> None:
                 # we are out of weapons that can actually damage the boss
                 # so find the weapon that has the most uses, and apply that as an additional weakness
                 # it should be impossible to be out of energy
-                wp, max_uses = max((weapon, weapon_energy[weapon] // weapon_costs[weapon]) for weapon in weapon_weight
+                max_uses, wp = max((weapon_energy[weapon] // weapon_costs[weapon], weapon)
+                                   for weapon in weapon_weight
                                    if weapon != 0)
                 world.weapon_damage[wp][boss] = minimum_weakness_requirement[wp]
                 used = min(int(weapon_energy[wp] // weapon_costs[wp]),
