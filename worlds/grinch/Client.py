@@ -108,6 +108,7 @@ class GrinchClient(BizHawkClient):
             logger.error("Failure to connect / authenticate the grinch. Error details: " + str(ex))
             pass
         except Exception as genericEx:
+            # For all other errors, catch this and let the client gracefully disconnect
             logger.error("Unknown error occurred while playing the grinch. Error details: " + str(genericEx))
             await ctx.disconnect(False)
             pass
