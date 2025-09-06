@@ -60,3 +60,7 @@
 * Indent `case` inside `switch ` with 2 spaces.
 * Use single quotes.
 * Semicolons are required after every statement.
+
+## KV
+
+* Style should be fully in the kivy files, not in python.
