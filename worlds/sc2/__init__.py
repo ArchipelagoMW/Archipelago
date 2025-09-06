@@ -12,8 +12,11 @@ from .item.item_tables import (
     get_full_item_list,
     not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
-from .item import FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents, \
+from .item import (
+    FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents,
     ZergItemType, ProtossItemType, ItemData
+)
+from .item.virtual_items import after_add_item, after_remove_item
 from .locations import (
 	get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags,
     get_plando_locations, LocationType, lookup_location_id_to_type
@@ -253,6 +256,18 @@ class SC2World(World):
             slot_data["enable_void_trade"] = EnableVoidTrade.option_false
 
         return slot_data
+    
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        change = super().collect(state, item)
+        if change:
+            after_add_item(state.prog_items[item.player], item)
+        return change
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        change = super().remove(state, item)
+        if change:
+            after_remove_item(state.prog_items[item.player], item)
+        return change
 
     def pre_fill(self) -> None:
         assert self.logic is not None
