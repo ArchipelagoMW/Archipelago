@@ -107,6 +107,10 @@ class GrinchClient(BizHawkClient):
             # The connector didn't respond. Exit handler and return to main loop to reconnect
             logger.error("Failure to connect / authenticate the grinch. Error details: " + str(ex))
             pass
+        except Exception as genericEx:
+            logger.error("Unknown error occurred while playing the grinch. Error details: " + str(genericEx))
+            await ctx.disconnect(False)
+            pass
 
     async def location_checker(self, ctx: "BizHawkClientContext"):
         from CommonClient import logger
