@@ -1,5 +1,6 @@
 from math import floor
 from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple, Iterable
+import enum
 
 from BaseClasses import CollectionState, Location
 from .item.item_groups import kerrigan_non_ulimates, kerrigan_logic_active_abilities
@@ -23,7 +24,7 @@ from .item.item_tables import (
     tvz_defense_ratings,
     tvx_air_defense_ratings,
     kerrigan_levels,
-    get_full_item_list,
+    item_table,
     zvx_air_defense_ratings,
     zvx_defense_ratings,
     pvx_defense_ratings,
@@ -45,6 +46,109 @@ from .item import item_groups, item_names
 
 if TYPE_CHECKING:
     from . import SC2World
+
+
+class LogicEffect(enum.IntFlag):
+    TERRAN_INFANTRY_ARMOR = enum.auto()
+    TERRAN_INFANTRY_WEAPON = enum.auto()
+    TERRAN_VEHICLE_ARMOR = enum.auto()
+    TERRAN_VEHICLE_WEAPON = enum.auto()
+    TERRAN_SHIP_ARMOR = enum.auto()
+    TERRAN_SHIP_WEAPON = enum.auto()
+    ZERG_MELEE_ATTACK = enum.auto()
+    ZERG_RANGED_ATTACK = enum.auto()
+    ZERG_GROUND_ARMOR = enum.auto()
+    ZERG_AIR_ATTACK = enum.auto()
+    ZERG_AIR_ARMOR = enum.auto()
+    PROTOSS_GROUND_ARMOR = enum.auto()
+    PROTOSS_GROUND_WEAPON = enum.auto()
+    PROTOSS_AIR_ARMOR = enum.auto()
+    PROTOSS_AIR_WEAPON = enum.auto()
+    # Note(phaneros): shield tracking is incomplete when bundling by air/ground; not used by logic
+    PROTOSS_SHIELDS = enum.auto()
+    TERRAN_UPGRADE = (
+         TERRAN_INFANTRY_WEAPON|TERRAN_INFANTRY_ARMOR
+        |TERRAN_VEHICLE_WEAPON|TERRAN_VEHICLE_ARMOR
+        |TERRAN_SHIP_WEAPON|TERRAN_SHIP_ARMOR
+    ),
+    ZERG_UPGRADE = (
+         ZERG_MELEE_ATTACK|ZERG_RANGED_ATTACK|ZERG_GROUND_ARMOR
+        |ZERG_AIR_ATTACK|ZERG_AIR_ARMOR
+    )
+    PROTOSS_UPGRADE = (
+         PROTOSS_GROUND_WEAPON|PROTOSS_GROUND_ARMOR
+        |PROTOSS_AIR_WEAPON|PROTOSS_AIR_ARMOR
+        # |PROTOSS_SHIELDS
+    )
+
+
+LOGIC_EFFECTS = {
+    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON].code: LogicEffect.TERRAN_INFANTRY_WEAPON,
+    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR].code: LogicEffect.TERRAN_INFANTRY_ARMOR,
+    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON].code: LogicEffect.TERRAN_VEHICLE_WEAPON,
+    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR].code: LogicEffect.TERRAN_VEHICLE_ARMOR,
+    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON].code: LogicEffect.TERRAN_SHIP_WEAPON,
+    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR].code: LogicEffect.TERRAN_SHIP_ARMOR,
+    item_table[item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE].code: LogicEffect.TERRAN_INFANTRY_WEAPON|LogicEffect.TERRAN_VEHICLE_WEAPON|LogicEffect.TERRAN_SHIP_WEAPON,
+    item_table[item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE].code: LogicEffect.TERRAN_INFANTRY_ARMOR|LogicEffect.TERRAN_VEHICLE_ARMOR|LogicEffect.TERRAN_SHIP_ARMOR,
+    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE].code: LogicEffect.TERRAN_INFANTRY_WEAPON|LogicEffect.TERRAN_INFANTRY_ARMOR,
+    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE].code: LogicEffect.TERRAN_VEHICLE_WEAPON|LogicEffect.TERRAN_VEHICLE_ARMOR,
+    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE].code: LogicEffect.TERRAN_SHIP_WEAPON|LogicEffect.TERRAN_SHIP_ARMOR,
+    item_table[item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_ZERG_MELEE_ATTACK].code: LogicEffect.ZERG_MELEE_ATTACK,
+    item_table[item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK].code: LogicEffect.ZERG_RANGED_ATTACK,
+    item_table[item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE].code: LogicEffect.ZERG_GROUND_ARMOR,
+    item_table[item_names.PROGRESSIVE_ZERG_FLYER_ATTACK].code: LogicEffect.ZERG_AIR_ATTACK,
+    item_table[item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE].code: LogicEffect.ZERG_AIR_ARMOR,
+    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE].code: LogicEffect.ZERG_MELEE_ATTACK|LogicEffect.ZERG_RANGED_ATTACK|LogicEffect.ZERG_AIR_ATTACK,
+    item_table[item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE].code: LogicEffect.ZERG_GROUND_ARMOR|LogicEffect.ZERG_AIR_ARMOR,
+    item_table[item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE].code: LogicEffect.ZERG_MELEE_ATTACK|LogicEffect.ZERG_RANGED_ATTACK|LogicEffect.ZERG_GROUND_ARMOR,
+    item_table[item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE].code: LogicEffect.ZERG_AIR_ATTACK|LogicEffect.ZERG_AIR_ARMOR,
+    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
+    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON].code: LogicEffect.PROTOSS_GROUND_WEAPON,
+    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR].code: LogicEffect.PROTOSS_GROUND_ARMOR,
+    item_table[item_names.PROGRESSIVE_PROTOSS_SHIELDS].code: LogicEffect.PROTOSS_SHIELDS,
+    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON].code: LogicEffect.PROTOSS_AIR_WEAPON,
+    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR].code: LogicEffect.PROTOSS_AIR_ARMOR,
+    item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE].code: LogicEffect.PROTOSS_GROUND_WEAPON|LogicEffect.PROTOSS_AIR_WEAPON,
+    item_table[item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE].code: LogicEffect.PROTOSS_GROUND_ARMOR|LogicEffect.PROTOSS_AIR_ARMOR,
+    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE].code: LogicEffect.PROTOSS_GROUND_WEAPON|LogicEffect.PROTOSS_GROUND_ARMOR,
+    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE].code: LogicEffect.PROTOSS_AIR_WEAPON|LogicEffect.PROTOSS_AIR_ARMOR,
+    item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
+}
+LOGIC_MINIMUM_COUNTERS = {
+    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
+    item_table[item_names.PROGRESSIVE_ZERG_MELEE_ATTACK].code: LogicEffect.ZERG_UPGRADE,
+    item_table[item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK].code: LogicEffect.ZERG_UPGRADE,
+    item_table[item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE].code: LogicEffect.ZERG_UPGRADE,
+    item_table[item_names.PROGRESSIVE_ZERG_FLYER_ATTACK].code: LogicEffect.ZERG_UPGRADE,
+    item_table[item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE].code: LogicEffect.ZERG_UPGRADE,
+    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
+    item_table[item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
+    item_table[item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
+    item_table[item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
+    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
+    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON].code: LogicEffect.PROTOSS_UPGRADE,
+    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR].code: LogicEffect.PROTOSS_UPGRADE,
+    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON].code: LogicEffect.PROTOSS_UPGRADE,
+    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR].code: LogicEffect.PROTOSS_UPGRADE,
+    item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
+    item_table[item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
+    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
+    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
+    item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
+}
 
 
 class SC2Logic:
@@ -81,7 +185,7 @@ class SC2Logic:
         self.base_power_rating = 2 if self.advanced_tactics else 0
 
         # Must be set externally for accurate logic checking of upgrade level when generic_upgrade_missions is checked
-        self.total_mission_count = 1
+        self.total_mission_count = 0
 
         # Must be set externally
         self.nova_used = True
@@ -112,26 +216,18 @@ class SC2Logic:
     def get_very_hard_required_upgrade_level(self):
         return 2 if self.advanced_tactics else 3
 
-    def weapon_armor_upgrade_count(self, upgrade_item: str, state: CollectionState) -> int:
-        assert upgrade_item in upgrade_bundle_inverted_lookup.keys()
-        count: int = 0
+    def weapon_armor_upgrade_count(self, logic_effect: str, state: CollectionState) -> int:
+        result = state.count(logic_effect, self.player)
         if self.generic_upgrade_missions > 0:
-            if (not self.is_item_placement(state)) or self.logic_level == RequiredTactics.option_no_logic:
-                # Item pool filtering, W/A upgrades aren't items
-                # No Logic: Don't care about W/A in this case
-                return WEAPON_ARMOR_UPGRADE_MAX_LEVEL
-            else:
-                count += floor((100 / self.generic_upgrade_missions) * (state.count_group("Missions", self.player) / self.total_mission_count))
-        count += state.count(upgrade_item, self.player)
-        count += state.count_from_list(upgrade_bundle_inverted_lookup[upgrade_item], self.player)
-        if upgrade_item == item_names.PROGRESSIVE_PROTOSS_SHIELDS:
-            count += max(
-                state.count(item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE, self.player),
-                state.count(item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE, self.player),
-            )
-        if upgrade_item in item_groups.protoss_generic_upgrades and state.has(item_names.QUATRO, self.player):
-            count += 1
-        return count
+            result += self.generic_upgrades_from_missions(state)
+        return result
+
+    def generic_upgrades_from_missions(self, state: CollectionState) -> int:
+        if not self.total_mission_count:
+            return WEAPON_ARMOR_UPGRADE_MAX_LEVEL
+        return (
+            floor((100 / self.generic_upgrade_missions) * (state.count_group("Missions", self.player) / self.total_mission_count))
+        )
 
     def soa_power_rating(self, state: CollectionState):
         power_rating = 0
@@ -175,26 +271,7 @@ class SC2Logic:
         """
         Minimum W/A upgrade level for unit classes present in the world
         """
-        count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL
-        if self.has_barracks_unit:
-            count = min(
-                count,
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, state),
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR, state),
-            )
-        if self.has_factory_unit:
-            count = min(
-                count,
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON, state),
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR, state),
-            )
-        if self.has_starport_unit:
-            count = min(
-                count,
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state),
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR, state),
-            )
-        return count
+        return self.weapon_armor_upgrade_count(LogicEffect.TERRAN_UPGRADE.name, state)
 
     def terran_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
         return self.terran_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
@@ -244,7 +321,7 @@ class SC2Logic:
             or (
                 self.advanced_tactics
                 and state.has_any({item_names.WRAITH, item_names.VALKYRIE, item_names.BATTLECRUISER}, self.player)
-                and self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state) >= 2
+                and self.weapon_armor_upgrade_count(LogicEffect.TERRAN_SHIP_WEAPON.name, state) >= 2
             )
         )
 
@@ -279,7 +356,7 @@ class SC2Logic:
             or (
                 state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER}, self.player)
                 and self.terran_bio_heal(state)
-                and self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, state) >= 2
+                and self.weapon_armor_upgrade_count(LogicEffect.TERRAN_INFANTRY_WEAPON.name, state) >= 2
             )
             or self.advanced_tactics
             and (
@@ -452,14 +529,14 @@ class SC2Logic:
         if not self.terran_competent_anti_air(state):
             return False
         # Infantry with Healing
-        infantry_weapons = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, state)
-        infantry_armor = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR, state)
+        infantry_weapons = self.weapon_armor_upgrade_count(LogicEffect.TERRAN_INFANTRY_WEAPON.name, state)
+        infantry_armor = self.weapon_armor_upgrade_count(LogicEffect.TERRAN_INFANTRY_ARMOR.name, state)
         infantry = state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player)
         if infantry_weapons >= 2 and infantry_armor >= 1 and infantry and self.terran_bio_heal(state):
             return True
         # Mass Air-To-Ground
-        ship_weapons = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state)
-        ship_armor = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR, state)
+        ship_weapons = self.weapon_armor_upgrade_count(LogicEffect.TERRAN_SHIP_WEAPON.name, state)
+        ship_armor = self.weapon_armor_upgrade_count(LogicEffect.TERRAN_SHIP_ARMOR.name, state)
         if ship_weapons >= 1 and ship_armor >= 1:
             air = (
                 state.has_any({item_names.BANSHEE, item_names.BATTLECRUISER}, self.player)
@@ -471,8 +548,8 @@ class SC2Logic:
             if air and self.terran_mineral_dump(state):
                 return True
         # Strong Mech
-        vehicle_weapons = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON, state)
-        vehicle_armor = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR, state)
+        vehicle_weapons = self.weapon_armor_upgrade_count(LogicEffect.TERRAN_VEHICLE_WEAPON.name, state)
+        vehicle_armor = self.weapon_armor_upgrade_count(LogicEffect.TERRAN_VEHICLE_ARMOR.name, state)
         if vehicle_weapons >= 1 and vehicle_armor >= 1:
             strong_vehicle = state.has_any({item_names.THOR, item_names.SIEGE_TANK}, self.player)
             light_frontline = state.has_any(
@@ -760,32 +837,34 @@ class SC2Logic:
         return defense_score
 
     def zerg_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL
-        if self.has_zerg_melee_unit:
-            count = min(count, self.zerg_melee_weapon_armor_upgrade_min_level(state))
-        if self.has_zerg_ranged_unit:
-            count = min(count, self.zerg_ranged_weapon_armor_upgrade_min_level(state))
-        if self.has_zerg_air_unit:
-            count = min(count, self.zerg_flyer_weapon_armor_upgrade_min_level(state))
-        return count
+        return self.weapon_armor_upgrade_count(LogicEffect.ZERG_UPGRADE.name, state)
 
     def zerg_melee_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        return min(
-            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_MELEE_ATTACK, state),
-            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE, state),
+        result = min(
+            state.count(LogicEffect.ZERG_MELEE_ATTACK.name, self.player),
+            state.count(LogicEffect.ZERG_GROUND_ARMOR.name, self.player),
         )
+        if self.generic_upgrade_missions > 0:
+            result += self.generic_upgrades_from_missions(state)
+        return result
 
     def zerg_ranged_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        return min(
-            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK, state),
-            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE, state),
+        result = min(
+            state.count(LogicEffect.ZERG_RANGED_ATTACK.name, self.player),
+            state.count(LogicEffect.ZERG_GROUND_ARMOR.name, self.player),
         )
+        if self.generic_upgrade_missions > 0:
+            result += self.generic_upgrades_from_missions(state)
+        return result
 
     def zerg_flyer_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        return min(
-            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_ATTACK, state),
-            self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE, state),
+        result = min(
+            state.count(LogicEffect.ZERG_AIR_ATTACK.name, self.player),
+            state.count(LogicEffect.ZERG_AIR_ARMOR.name, self.player),
         )
+        if self.generic_upgrade_missions > 0:
+            result += self.generic_upgrades_from_missions(state)
+        return result
 
     def zerg_can_collect_pickup_across_gap(self, state: CollectionState) -> bool:
         """Any way for zerg to get any ground unit across gaps longer than viper yoink range to collect a pickup."""
@@ -1114,7 +1193,7 @@ class SC2Logic:
             levels = min(levels, self.kerrigan_levels_per_mission_completed_cap)
         # Levels from items
         for kerrigan_level_item in kerrigan_levels:
-            level_amount = get_full_item_list()[kerrigan_level_item].number
+            level_amount = item_table[kerrigan_level_item].number
             item_count = state.count(kerrigan_level_item, self.player)
             levels += item_count * level_amount
         # Total level cap
@@ -1168,25 +1247,7 @@ class SC2Logic:
         return power_score
 
     def protoss_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL + 1  # +1 for Quatro
-        if self.has_protoss_ground_unit:
-            count = min(
-                count,
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON, state),
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR, state),
-            )
-        if self.has_protoss_air_unit:
-            count = min(
-                count,
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, state),
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR, state),
-            )
-        if self.has_protoss_ground_unit or self.has_protoss_air_unit:
-            count = min(
-                count,
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_SHIELDS, state),
-            )
-        return count
+        return self.weapon_armor_upgrade_count(LogicEffect.PROTOSS_UPGRADE.name, state)
 
     def protoss_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
         return self.protoss_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
@@ -1470,9 +1531,8 @@ class SC2Logic:
                     or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
                 )
             )
-            and self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_AIR_WEAPON, state) >= 2
-            and self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_AIR_ARMOR, state) >= 2
-            and self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_SHIELDS, state) >= 2
+            and self.weapon_armor_upgrade_count(LogicEffect.PROTOSS_AIR_WEAPON.name, state) >= 2
+            and self.weapon_armor_upgrade_count(LogicEffect.PROTOSS_AIR_ARMOR.name, state) >= 2
         )
 
     def protoss_hybrid_counter(self, state: CollectionState) -> bool:
@@ -1747,7 +1807,7 @@ class SC2Logic:
             self.terran_air_anti_air(state)
             or (
                 state.has_any({item_names.BATTLECRUISER, item_names.VALKYRIE}, self.player)
-                and self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state) >= 2
+                and self.weapon_armor_upgrade_count(LogicEffect.TERRAN_SHIP_WEAPON.name, state) >= 2
             )
         )
 
@@ -1778,7 +1838,7 @@ class SC2Logic:
                 or (
                     state.has_any((item_names.TEMPEST, item_names.SKYLORD, item_names.DESTROYER), self.player)
                     or (
-                        self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, state) >= 2
+                        self.weapon_armor_upgrade_count(LogicEffect.PROTOSS_AIR_WEAPON.name, state) >= 2
                         and state.has(item_names.CARRIER, self.player)
                         or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
                     )
@@ -2029,7 +2089,7 @@ class SC2Logic:
         return (
             state.has(item_names.BATTLECRUISER, self.player)
             and (
-                self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state) >= 2
+                self.weapon_armor_upgrade_count(LogicEffect.TERRAN_SHIP_WEAPON.name, state) >= 2
                 or state.has(item_names.BATTLECRUISER_ATX_LASER_BATTERY, self.player)
             )
         ) or (
@@ -2057,7 +2117,7 @@ class SC2Logic:
                 state.has_any((item_names.GOLIATH, item_names.CYCLONE, item_names.VIKING), self.player)
                 or (
                     state.has_any((item_names.WRAITH, item_names.VALKYRIE, item_names.BATTLECRUISER), self.player)
-                    and self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state) >= 2
+                    and self.weapon_armor_upgrade_count(LogicEffect.TERRAN_SHIP_WEAPON.name, state) >= 2
                 )
                 or state.has_all((item_names.THOR, item_names.THOR_PROGRESSIVE_HIGH_IMPACT_PAYLOAD), self.player)
             )
@@ -2910,7 +2970,9 @@ class SC2Logic:
 
     def protoss_the_host_requirement(self, state: CollectionState) -> bool:
         return (
-            self.protoss_fleet(state) and self.protoss_static_defense(state) and self.protoss_army_weapon_armor_upgrade_min_level(state) >= 2
+            self.protoss_fleet(state)
+            and self.protoss_static_defense(state)
+            and self.protoss_army_weapon_armor_upgrade_min_level(state) >= 2
         ) or (
             self.protoss_deathball(state)
             and state.has(item_names.SOA_TIME_STOP, self.player)

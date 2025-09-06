@@ -8,8 +8,16 @@ from BaseClasses import ItemClassification, MultiWorld
 import Options as CoreOptions
 from .. import options, locations
 from ..item import item_tables
-from ..rules import SC2Logic
+from ..rules import SC2Logic, LogicEffect
 from ..mission_tables import SC2Race, MissionFlag, lookup_name_to_mission
+
+
+VIRTUAL_ITEM_NAMES = {
+    LogicEffect.TERRAN_UPGRADE.name,
+    LogicEffect.ZERG_UPGRADE.name,
+    LogicEffect.PROTOSS_UPGRADE.name,
+    *LogicEffect._member_names_,
+}
 
 
 class TestInventory:
@@ -18,10 +26,12 @@ class TestInventory:
     """
     def __init__(self) -> None:
         self.random: Random = Random()
-        self.progression_types: Set[ItemClassification] = {ItemClassification.progression, ItemClassification.progression_skip_balancing}
 
     def is_item_progression(self, item: str) -> bool:
-        return item_tables.item_table[item].classification in self.progression_types
+        return (
+            item in VIRTUAL_ITEM_NAMES
+            or (item_tables.item_table[item].classification & ItemClassification.progression)
+        )
 
     def random_boolean(self):
         return self.random.choice([True, False])
