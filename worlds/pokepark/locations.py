@@ -175,25 +175,21 @@ class PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(PokeparkBaseCl
         assert self._bit_mask is not None
         self.global_manager_data_struc_offset = 0x41
         self.in_structure_offset = 0x0
-        self.expected_value = 0b10000000
-        self.bit_mask = 0b10000000
         self.expected_value = self._expected_value
         self.bit_mask = self._bit_mask
         self.in_structure_address_interval = 0x0
 
 
 @dataclass
-class PokeparkKakunaTreeClientData(PokeparkBaseClientLocationData):
+class PokeparkKakunaTreeVoltorbVaseClientData(PokeparkBaseClientLocationData):
     _expected_value: Optional[int] = 0xFFFFFFFF
     _bit_mask: Optional[int] = 0xFFFFFFFF
 
     def __post_init__(self):
         assert self._expected_value is not None
         assert self._bit_mask is not None
-        self.global_manager_data_struc_offset = 0x41
+        self.global_manager_data_struc_offset = 0x38
         self.in_structure_offset = 0x0
-        self.expected_value = 0b10000000
-        self.bit_mask = 0b10000000
         self.expected_value = self._expected_value
         self.bit_mask = self._bit_mask
         self.in_structure_address_interval = 0x0
@@ -223,7 +219,7 @@ class PokeparkBaltoyCrateClientData(PokeparkBaseClientLocationData):
         self.in_structure_address_interval = 0x0
 
 @dataclass
-class PokeparkMewChallengeClientData(PokeparkBaseClientLocationData):
+class PokeparkMewChallengeGengarPaintingClientData(PokeparkBaseClientLocationData):
     _expected_value: Optional[int] = 0xFFFFFFFF
     _bit_mask: Optional[int] = 0xFFFFFFFF
 
@@ -2966,7 +2962,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Haunted Zone Main Area - Kakuna Right Tree -- Metapod Unlocked": PokeparkLocationData(
-        349, PokeparkFlag.POKEMON_UNLOCK, "Haunted Zone Main Area", 0x0501, PokeparkKakunaTreeClientData(
+        349, PokeparkFlag.POKEMON_UNLOCK, "Haunted Zone Main Area", 0x0501, PokeparkKakunaTreeVoltorbVaseClientData(
             structure_position=0,
             _expected_value=0b01000000,
             _bit_mask=0b01000000,
@@ -3294,13 +3290,21 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Haunted Zone Mansion Area - Gengar Painting -- Gengar Unlocked": PokeparkLocationData(
-        396, PokeparkFlag.POKEMON_UNLOCK, "Haunted Zone Mansion Gengar Area", 0x0502, PokeparkBaseClientLocationData(
-            # TODO: add client Data
+        396, PokeparkFlag.POKEMON_UNLOCK, "Haunted Zone Mansion Gengar Area", 0x0502,
+        PokeparkMewChallengeGengarPaintingClientData(
+            structure_position=0,
+            _expected_value=0b00000001,
+            _bit_mask=0b00000001,
+            memory_range=MemoryRange.BYTE
         )
     ),
     "Haunted Zone Mansion Area - Voltorb Vase -- Voltorb Unlocked": PokeparkLocationData(
-        397, PokeparkFlag.POKEMON_UNLOCK, "Haunted Zone Mansion Gengar Area", 0x0502, PokeparkBaseClientLocationData(
-            # TODO: add client Data
+        397, PokeparkFlag.POKEMON_UNLOCK, "Haunted Zone Mansion Gengar Area", 0x0502,
+        PokeparkKakunaTreeVoltorbVaseClientData(
+            structure_position=0,
+            _expected_value=0b00001000,
+            _bit_mask=0b00001000,
+            memory_range=MemoryRange.BYTE
         )
     ),
     "Haunted Zone Mansion Area - Abra Power Competition -- Friendship": PokeparkLocationData(
@@ -4179,7 +4183,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
     "Skygarden - Mew Power Competition -- Stage 1": PokeparkLocationData(
         519, PokeparkFlag.ALWAYS, "Skygarden", 0x0701,
-        PokeparkMewChallengeClientData(
+        PokeparkMewChallengeGengarPaintingClientData(
             structure_position=0,
             _expected_value=0b00010000,
             _bit_mask=0b00010000,
@@ -4188,7 +4192,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Skygarden - Mew Power Competition -- Stage 2": PokeparkLocationData(
         520, PokeparkFlag.ALWAYS, "Skygarden", 0x0701,
-        PokeparkMewChallengeClientData(
+        PokeparkMewChallengeGengarPaintingClientData(
             structure_position=0,
             _expected_value=0b00001000,
             _bit_mask=0b00001000,
@@ -4197,7 +4201,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Skygarden - Mew Power Competition -- Stage 3": PokeparkLocationData(
         521, PokeparkFlag.ALWAYS, "Skygarden", 0x0701,
-        PokeparkMewChallengeClientData(
+        PokeparkMewChallengeGengarPaintingClientData(
             structure_position=0,
             _expected_value=0b00000100,
             _bit_mask=0b00000100,
@@ -4206,7 +4210,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Skygarden - Mew Power Competition -- Stage 4": PokeparkLocationData(
         522, PokeparkFlag.ALWAYS, "Skygarden", 0x0701,
-        PokeparkMewChallengeClientData(
+        PokeparkMewChallengeGengarPaintingClientData(
             structure_position=0,
             _expected_value=0b00000010,
             _bit_mask=0b00000010,
@@ -4458,7 +4462,8 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
 
     "Ice Zone Frozen Lake Area - Frozen Mamoswine -- Ice Rescue": PokeparkLocationData(
-        558, PokeparkFlag.POKEMON_UNLOCK, "Ice Zone Frozen Lake Area", 0x0301, PokeparkMewChallengeClientData(
+        558, PokeparkFlag.POKEMON_UNLOCK, "Ice Zone Frozen Lake Area", 0x0301,
+        PokeparkMewChallengeGengarPaintingClientData(
             structure_position=0,
             memory_range=MemoryRange.BYTE,
             _expected_value=0b00100000,
@@ -4504,6 +4509,18 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     "Magma Zone Circle Area - Charmander Power Competition -- Friendship": PokeparkLocationData(
         564, PokeparkFlag.BATTLE, "Magma Zone Circle Area", 0x0402, PokeparkFriendshipClientLocationData(
             structure_position=145,
+            memory_range=MemoryRange.BYTE
+        ),
+    ),
+    "Haunted Zone Main Area - Tangrowth -- Friendship": PokeparkLocationData(
+        565, PokeparkFlag.FRIENDSHIP, "Haunted Zone Main Area", 0x0402, PokeparkFriendshipClientLocationData(
+            structure_position=123,
+            memory_range=MemoryRange.BYTE
+        ),
+    ),
+    "Haunted Zone Mansion Area - Dusknoir -- Friendship": PokeparkLocationData(
+        566, PokeparkFlag.FRIENDSHIP, "Haunted Zone Mansion Area", 0x0402, PokeparkFriendshipClientLocationData(
+            structure_position=135,
             memory_range=MemoryRange.BYTE
         ),
     ),

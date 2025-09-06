@@ -1525,6 +1525,10 @@ def set_rules(world: "PokeparkWorld") -> None:
         "Haunted Zone Main Area - Drifloon Power Competition -- Friendship",
         lambda state: True
     )
+    set_rule_if_exists(
+        "Haunted Zone Main Area - Tangrowth -- Friendship",
+        lambda state: state.has("Tangrowth Prisma", player)
+    )
     # Tangrowth's Swing-Along
     set_rule_if_exists(
         "Tangrowth's Swing-Along Attraction -- Prisma",
@@ -1700,6 +1704,10 @@ def set_rules(world: "PokeparkWorld") -> None:
     set_rule_if_exists(
         "Haunted Zone Mansion Area - Abra Power Competition -- Friendship",
         lambda state: state.has("Rotom Prisma", player)
+    )
+    set_rule_if_exists(
+        "Haunted Zone Mansion Area - Dusknoir -- Friendship",
+        lambda state: state.has("Dusknoir Prisma", player)
     )
     # Dusknoir's Speed Slam
     set_rule_if_exists(
