@@ -1938,6 +1938,15 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: True
     )
 
+    set_rule_if_exists(
+        "Granite Zone Salamence Area - Salamence -- Friendship",
+        lambda state: state.has("Salamence Prisma", player)
+    )
+    set_rule_if_exists(
+        "Granite Zone Main Area - Absol -- Friendship",
+        lambda state: state.has("Absol Prisma", player)
+    )
+
     # Absol Hurdle Dash
     set_rule_if_exists(
         "Absol's Hurdle Bounce Attraction -- Prisma",

@@ -4524,4 +4524,16 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             memory_range=MemoryRange.BYTE
         ),
     ),
+    "Granite Zone Main Area - Absol -- Friendship": PokeparkLocationData(
+        567, PokeparkFlag.FRIENDSHIP, "Granite Zone Main Area", 0x0402, PokeparkFriendshipClientLocationData(
+            structure_position=154,
+            memory_range=MemoryRange.BYTE
+        ),
+    ),
+    "Granite Zone Salamence Area - Salamence -- Friendship": PokeparkLocationData(
+        567, PokeparkFlag.FRIENDSHIP, "Granite Zone Salamence Area", 0x0402, PokeparkFriendshipClientLocationData(
+            structure_position=155,
+            memory_range=MemoryRange.BYTE
+        ),
+    ),
 }
