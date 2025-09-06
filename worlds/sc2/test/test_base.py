@@ -10,6 +10,7 @@ from test.general import gen_steps, call_all
 from test.bases import WorldTestBase
 from .. import SC2World
 from .. import client
+from .. import options
 
 class Sc2TestBase(WorldTestBase):
     game = client.SC2Context.game
@@ -24,6 +25,9 @@ class Sc2SetupTestBase(unittest.TestCase):
     This allows potentially generating multiple worlds in one test case, useful for tracking down a rare / sporadic
     crash.
     """
+    ALL_CAMPAIGNS = {
+        'enabled_campaigns': options.EnabledCampaigns.valid_keys,
+    }
     seed: Optional[int] = None
     game = SC2World.game
     player = 1
