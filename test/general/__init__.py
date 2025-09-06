@@ -73,6 +73,9 @@ class TestWorld(World):
     hidden = True
     web = TestWebWorld()
 
+    def get_filler_item_name(self) -> str:
+        return "Nothing"
+
 
 # add our test world to the data package, so we can test it later
 network_data_package["games"][TestWorld.game] = TestWorld.get_data_package_data()
