@@ -226,19 +226,25 @@ class GrinchClient(BizHawkClient):
 
         for (item_name, item_data) in items_to_check.items():
             # If item is an event or already been received, ignore.
-            if item_data.id is None or GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
+            if item_data.id is None: # or GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
                 continue
 
-            # This assumes we don't have the item so we must set all the data to 0
+            # This will either constantly update the item to ensure you still have it or take it away if you don't deserve it
             for addr_to_update in item_data.update_ram_addr:
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
                 if is_binary:
                     current_bin_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
                         addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
-                    current_bin_value &= ~(1 << addr_to_update.binary_bit_pos)
+                    if GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
+                        current_bin_value |= (1 << addr_to_update.binary_bit_pos)
+                    else:
+                        current_bin_value &= ~(1 << addr_to_update.binary_bit_pos)
                     await self.update_and_validate_address(ctx, addr_to_update.ram_address, current_bin_value, 1)
                 else:
-                    await self.update_and_validate_address(ctx, addr_to_update.ram_address, 0, 1)
+                    if GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
+                        await self.update_and_validate_address(ctx, addr_to_update.ram_address, addr_to_update.value, 1)
+                    else:
+                        await self.update_and_validate_address(ctx, addr_to_update.ram_address, 0, 1)
 
     async def ingame_checker(self, ctx: "BizHawkClientContext"):
         from CommonClient import logger
