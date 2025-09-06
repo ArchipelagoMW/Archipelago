@@ -560,19 +560,23 @@ access_rules_dict: dict[str,list[list[str]]] = {
         ["Sleigh Room Key"]
     ],
     "Spin N' Win Supadow": [
-        ["Spin N' Win Door Unlock"],
+        []
+        # ["Spin N' Win Door Unlock"],
         # ["Progressive Supadow Door Unlock"]
     ],
     "Dankamania Supadow": [
-        ["Dankamania Door Unlock"],
+        []
+        # ["Dankamania Door Unlock"],
         # ["Progressive Supadow Door Unlock: 2"]
     ],
     "The Copter Race Contest Supadow": [
-        ["The Copter Race Contest Door Unlock"],
+        []
+        # ["The Copter Race Contest Door Unlock"],
         # ["Progressive Supadow Door Unlock: 3"]
     ],
     "Bike Race": [
-        ["Bike Race Access"],
+        []
+        # ["Bike Race Access"],
         # ["Progressive Supadow Door Unlock: 4"]
     ]
 }
