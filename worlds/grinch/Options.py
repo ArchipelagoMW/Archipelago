@@ -80,7 +80,6 @@ class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     progressive_vacuum: ProgressiveVacuum
     missionsanity: Missionsanity
     annoying_locations: AnnoyingLocations
-    minigamesanity: Supadow
     progressive_gadget: ProgressiveGadget
     supadow_minigames: Supadow
     giftsanity: Gifts
