@@ -759,6 +759,7 @@ class TestItemFiltering(Sc2SetupTestBase):
     def test_kerrigan_levels_per_mission_triggering_pre_fill(self):
         world_options = {
             # Vanilla WoL with all missions
+            **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_custom,
             'custom_mission_order': {
                 'campaign': {
