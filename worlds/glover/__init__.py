@@ -124,6 +124,10 @@ class GloverWorld(World):
             split_name : list[str] = name.split(" ")
             garibs_number : int = int(split_name[len(split_name) - 2])
             state.add_item("Total Garibs", self.player, garibs_number)
+        #Level events
+        if name == "Crn1 Rocket":
+            rockets_count = state.count("Crn1 Rocket", self.player)
+            state.add_item("Crn1 Rocket " + str(rockets_count), self.player)
         return output
 
     def remove(self, state, item):
@@ -145,6 +149,10 @@ class GloverWorld(World):
             split_name : list[str] = name.split(" ")
             garibs_number : int = int(split_name[len(split_name) - 2])
             state.remove_item("Total Garibs", self.player, garibs_number)
+        #Level events
+        if name == "Crn1 Rocket":
+            rockets_count = state.count("Crn1 Rocket", self.player)
+            state.remove_item("Crn1 Rocket " + str(rockets_count), self.player)
         return output
 
     def __init__(self, world, player):
