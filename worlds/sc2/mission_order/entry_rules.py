@@ -10,6 +10,10 @@ from BaseClasses import CollectionState
 if TYPE_CHECKING:
     from .nodes import SC2MOGenMission
 
+def always_true(state: CollectionState) -> bool:
+    """Helper method to avoid creating trivial lambdas"""
+    return True
+
 
 class EntryRule(ABC):
     buffer_fulfilled: bool
@@ -150,7 +154,7 @@ class CountMissionsEntryRule(EntryRule):
     def __init__(self, missions_to_count: List[SC2MOGenMission], target_amount: int, visual_reqs: List[Union[str, SC2MOGenMission]]):
         super().__init__()
         self.missions_to_count = missions_to_count
-        if target_amount == -1 or target_amount > len(missions_to_count):
+        if target_amount <= -1 or target_amount > len(missions_to_count):
             self.target_amount = len(missions_to_count)
         else:
             self.target_amount = target_amount
@@ -166,7 +170,7 @@ class CountMissionsEntryRule(EntryRule):
 
     def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
         if self.target_amount == 0:
-            return lambda _: True
+            return always_true
         
         beat_items = [mission.beat_item() for mission in self.missions_to_count]
         def count_missions(state: CollectionState) -> bool:
@@ -244,7 +248,7 @@ class SubRuleEntryRule(EntryRule):
         self.rule_id = rule_id
         self.rules_to_check = rules_to_check
         self.min_depth = -1
-        if target_amount == -1 or target_amount > len(rules_to_check):
+        if target_amount <= -1 or target_amount > len(rules_to_check):
             self.target_amount = len(rules_to_check)
         else:
             self.target_amount = target_amount
@@ -271,8 +275,8 @@ class SubRuleEntryRule(EntryRule):
 
     def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
         sub_lambdas = [rule.to_lambda(player) for rule in self.rules_to_check]
-        if len(sub_lambdas) == 0 or self.target_amount == 0:
-            return lambda _: True
+        if self.target_amount == 0:
+            return always_true
         if len(sub_lambdas) == 1:
             return sub_lambdas[0]
         
