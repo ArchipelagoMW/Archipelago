@@ -247,7 +247,7 @@ PATH_TO_ARCHIPELAGO=
 ARCHIPELAGO="$(ls ${PATH_TO_ARCHIPELAGO:-$(dirname $0)}/Archipelago_*.AppImage | sort -r | head -1)"
 
 # Start the Archipelago client
-$ARCHIPELAGO Starcraft2Client
+$ARCHIPELAGO "Starcraft 2 Client"
 ```
 
 For Lutris installs, you can run `lutris -l` to get the numerical ID of your StarCraft II install, then run the command

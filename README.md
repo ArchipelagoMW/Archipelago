@@ -20,7 +20,6 @@ Currently, the following games are supported:
 * Meritous
 * Super Metroid/Link to the Past combo randomizer (SMZ3)
 * ChecksFinder
-* ArchipIDLE
 * Hollow Knight
 * The Witness
 * Sonic Adventure 2: Battle
