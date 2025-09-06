@@ -7,12 +7,13 @@ import sys
 import time
 from random import Random
 from dataclasses import make_dataclass
+from copy import deepcopy
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Iterable, List, Mapping, Optional, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
-from Utils import deprecate
+from Utils import Version, version_tuple
 
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
@@ -279,6 +280,25 @@ class World(metaclass=AutoWorldRegister):
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
 
+    world_version: ClassVar[Version] = Version(0, 0, 0)
+    """
+    Increment this every time you make a new release. Used for confirming yaml validity (for now).
+    
+    Of the form:
+    Major.Minor.Patch-Tag
+    """
+
+    min_generator_version: ClassVar[Version] = deepcopy(version_tuple)
+    """
+    The minimum generator version of Archipelago required for this world to function.
+    """
+
+    max_generator_version: ClassVar[Optional[Version]] = None
+    """
+    The maximum generator version of Archipelago allowed to import this world. Intended for known breakages across
+    generator versions.
+    """
+
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
     """
     override this if changes to a world break forward-compatibility of the client
@@ -328,6 +348,11 @@ class World(metaclass=AutoWorldRegister):
     """name of the section in host.yaml for world-specific settings, will default to {folder}_options"""
     settings: ClassVar[Optional["Group"]]
     """loaded settings from host.yaml"""
+
+    file_types: Optional[Tuple[str]] = None
+    """List of file types this apworld is expected to support (for clients)"""
+    contains: Optional[Tuple[Literal["world", "client", "adjuster"]]] = None
+    """List of content this apworld provides (world, client, adjuster)"""
 
     zip_path: ClassVar[Optional[pathlib.Path]] = None
     """If loaded from a .apworld, this is the Path to it."""
