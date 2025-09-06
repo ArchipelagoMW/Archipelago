@@ -12,8 +12,11 @@ from .item.item_tables import (
     get_full_item_list,
     not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
-from .item import FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents, \
+from .item import (
+    FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents,
     ZergItemType, ProtossItemType, ItemData
+)
+from .item.virtual_items import after_add_item, after_remove_item
 from .locations import (
 	get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags,
     get_plando_locations, LocationType, lookup_location_id_to_type
@@ -30,7 +33,7 @@ from .options import (
 )
 from .rules import get_basic_units, SC2Logic
 from . import settings
-from .pool_filter import filter_items, after_add_item, after_remove_item
+from .pool_filter import filter_items
 from .mission_tables import SC2Campaign, SC2Mission, SC2Race, MissionFlag
 from .regions import create_mission_order
 from .mission_order import SC2MissionOrder

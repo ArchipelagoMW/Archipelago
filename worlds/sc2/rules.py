@@ -1,6 +1,5 @@
 from math import floor
-from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple, Iterable
-import enum
+from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple, NamedTuple
 
 from BaseClasses import CollectionState, Location
 from .item.item_groups import kerrigan_non_ulimates, kerrigan_logic_active_abilities
@@ -43,112 +42,10 @@ from .item.item_tables import (
 )
 from .mission_tables import SC2Race, SC2Campaign
 from .item import item_groups, item_names
+from .item.virtual_items import LogicEffect
 
 if TYPE_CHECKING:
     from . import SC2World
-
-
-class LogicEffect(enum.IntFlag):
-    TERRAN_INFANTRY_ARMOR = enum.auto()
-    TERRAN_INFANTRY_WEAPON = enum.auto()
-    TERRAN_VEHICLE_ARMOR = enum.auto()
-    TERRAN_VEHICLE_WEAPON = enum.auto()
-    TERRAN_SHIP_ARMOR = enum.auto()
-    TERRAN_SHIP_WEAPON = enum.auto()
-    ZERG_MELEE_ATTACK = enum.auto()
-    ZERG_RANGED_ATTACK = enum.auto()
-    ZERG_GROUND_ARMOR = enum.auto()
-    ZERG_AIR_ATTACK = enum.auto()
-    ZERG_AIR_ARMOR = enum.auto()
-    PROTOSS_GROUND_ARMOR = enum.auto()
-    PROTOSS_GROUND_WEAPON = enum.auto()
-    PROTOSS_AIR_ARMOR = enum.auto()
-    PROTOSS_AIR_WEAPON = enum.auto()
-    # Note(phaneros): shield tracking is incomplete when bundling by air/ground; not used by logic
-    PROTOSS_SHIELDS = enum.auto()
-    TERRAN_UPGRADE = (
-         TERRAN_INFANTRY_WEAPON|TERRAN_INFANTRY_ARMOR
-        |TERRAN_VEHICLE_WEAPON|TERRAN_VEHICLE_ARMOR
-        |TERRAN_SHIP_WEAPON|TERRAN_SHIP_ARMOR
-    ),
-    ZERG_UPGRADE = (
-         ZERG_MELEE_ATTACK|ZERG_RANGED_ATTACK|ZERG_GROUND_ARMOR
-        |ZERG_AIR_ATTACK|ZERG_AIR_ARMOR
-    )
-    PROTOSS_UPGRADE = (
-         PROTOSS_GROUND_WEAPON|PROTOSS_GROUND_ARMOR
-        |PROTOSS_AIR_WEAPON|PROTOSS_AIR_ARMOR
-        # |PROTOSS_SHIELDS
-    )
-
-
-LOGIC_EFFECTS = {
-    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON].code: LogicEffect.TERRAN_INFANTRY_WEAPON,
-    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR].code: LogicEffect.TERRAN_INFANTRY_ARMOR,
-    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON].code: LogicEffect.TERRAN_VEHICLE_WEAPON,
-    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR].code: LogicEffect.TERRAN_VEHICLE_ARMOR,
-    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON].code: LogicEffect.TERRAN_SHIP_WEAPON,
-    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR].code: LogicEffect.TERRAN_SHIP_ARMOR,
-    item_table[item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE].code: LogicEffect.TERRAN_INFANTRY_WEAPON|LogicEffect.TERRAN_VEHICLE_WEAPON|LogicEffect.TERRAN_SHIP_WEAPON,
-    item_table[item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE].code: LogicEffect.TERRAN_INFANTRY_ARMOR|LogicEffect.TERRAN_VEHICLE_ARMOR|LogicEffect.TERRAN_SHIP_ARMOR,
-    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE].code: LogicEffect.TERRAN_INFANTRY_WEAPON|LogicEffect.TERRAN_INFANTRY_ARMOR,
-    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE].code: LogicEffect.TERRAN_VEHICLE_WEAPON|LogicEffect.TERRAN_VEHICLE_ARMOR,
-    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE].code: LogicEffect.TERRAN_SHIP_WEAPON|LogicEffect.TERRAN_SHIP_ARMOR,
-    item_table[item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_MELEE_ATTACK].code: LogicEffect.ZERG_MELEE_ATTACK,
-    item_table[item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK].code: LogicEffect.ZERG_RANGED_ATTACK,
-    item_table[item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE].code: LogicEffect.ZERG_GROUND_ARMOR,
-    item_table[item_names.PROGRESSIVE_ZERG_FLYER_ATTACK].code: LogicEffect.ZERG_AIR_ATTACK,
-    item_table[item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE].code: LogicEffect.ZERG_AIR_ARMOR,
-    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE].code: LogicEffect.ZERG_MELEE_ATTACK|LogicEffect.ZERG_RANGED_ATTACK|LogicEffect.ZERG_AIR_ATTACK,
-    item_table[item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE].code: LogicEffect.ZERG_GROUND_ARMOR|LogicEffect.ZERG_AIR_ARMOR,
-    item_table[item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE].code: LogicEffect.ZERG_MELEE_ATTACK|LogicEffect.ZERG_RANGED_ATTACK|LogicEffect.ZERG_GROUND_ARMOR,
-    item_table[item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE].code: LogicEffect.ZERG_AIR_ATTACK|LogicEffect.ZERG_AIR_ARMOR,
-    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON].code: LogicEffect.PROTOSS_GROUND_WEAPON,
-    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR].code: LogicEffect.PROTOSS_GROUND_ARMOR,
-    item_table[item_names.PROGRESSIVE_PROTOSS_SHIELDS].code: LogicEffect.PROTOSS_SHIELDS,
-    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON].code: LogicEffect.PROTOSS_AIR_WEAPON,
-    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR].code: LogicEffect.PROTOSS_AIR_ARMOR,
-    item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE].code: LogicEffect.PROTOSS_GROUND_WEAPON|LogicEffect.PROTOSS_AIR_WEAPON,
-    item_table[item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE].code: LogicEffect.PROTOSS_GROUND_ARMOR|LogicEffect.PROTOSS_AIR_ARMOR,
-    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE].code: LogicEffect.PROTOSS_GROUND_WEAPON|LogicEffect.PROTOSS_GROUND_ARMOR,
-    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE].code: LogicEffect.PROTOSS_AIR_WEAPON|LogicEffect.PROTOSS_AIR_ARMOR,
-    item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
-}
-LOGIC_MINIMUM_COUNTERS = {
-    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_MELEE_ATTACK].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_FLYER_ATTACK].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON].code: LogicEffect.PROTOSS_UPGRADE,
-    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR].code: LogicEffect.PROTOSS_UPGRADE,
-    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON].code: LogicEffect.PROTOSS_UPGRADE,
-    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR].code: LogicEffect.PROTOSS_UPGRADE,
-    item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
-    item_table[item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
-    item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
-    item_table[item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
-    item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
-}
 
 
 class SC2Logic:
@@ -484,40 +381,33 @@ class SC2Logic:
 
     def terran_defense_rating(self, state: CollectionState, zerg_enemy: bool, air_enemy: bool = True) -> int:
         """
-        Ability to handle defensive missions
-        :param state:
+        F2-safe defensive score. Comes from siegeable units and buildings.
+        :param state: The Archipelago CollectionState
         :param zerg_enemy: Whether the enemy is zerg
         :param air_enemy: Whether the enemy attacks with air
         :return:
         """
-        defense_score = sum((tvx_defense_ratings[item] for item in tvx_defense_ratings if state.has(item, self.player)))
-        # Manned Bunker
-        if state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player) and state.has(
-            item_names.BUNKER, self.player
-        ):
-            defense_score += 3
-        elif zerg_enemy and state.has(item_names.FIREBAT, self.player) and state.has(item_names.BUNKER, self.player):
-            defense_score += 2
+        defense_score = state.count(LogicEffect.TERRAN_DEFENSE_RATING.name, self.player)
+        if state.has(item_names.BUNKER, self.player):
+            bunker_score = state.count(LogicEffect.BUNKER_DEFENSE_RATING.name, self.player)
+            if bunker_score > 3:
+                defense_score += 3
+            else:
+                defense_score += bunker_score
         # Siege Tank upgrades
-        if state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_MAELSTROM_ROUNDS}, self.player):
-            defense_score += 2
-        if state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_GRADUATING_RANGE}, self.player):
-            defense_score += 1
+        if state.has(item_names.SIEGE_TANK, self.player):
+            if state.has(item_names.SIEGE_TANK_MAELSTROM_ROUNDS, self.player):
+                defense_score += 2
+            if state.has(item_names.SIEGE_TANK_GRADUATING_RANGE, self.player):
+                defense_score += 1
         # Widow Mine upgrade
-        if state.has_all({item_names.WIDOW_MINE, item_names.WIDOW_MINE_CONCEALMENT}, self.player):
+        if state.has_all((item_names.WIDOW_MINE, item_names.WIDOW_MINE_CONCEALMENT), self.player):
             defense_score += 1
-        # Viking with splash
-        if state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS}, self.player):
-            defense_score += 2
 
         # General enemy-based rules
         if zerg_enemy:
-            defense_score += sum((tvz_defense_ratings[item] for item in tvz_defense_ratings if state.has(item, self.player)))
-        if air_enemy:
-            # Capped at 2
-            defense_score += min(sum((tvx_air_defense_ratings[item] for item in tvx_air_defense_ratings if state.has(item, self.player))), 2)
-        if air_enemy and zerg_enemy and state.has(item_names.VALKYRIE, self.player):
-            # Valkyries shred mass Mutas, the most common air enemy that's massed in these cases
+            defense_score += state.count(LogicEffect.TVZ_DEFENSE_RATING.name, self.player)
+        if air_enemy and state.has(item_names.MISSILE_TURRET, self.player):
             defense_score += 2
         # Advanced Tactics bumps defense rating requirements down by 2
         if self.advanced_tactics:
@@ -1879,7 +1769,7 @@ class SC2Logic:
 
     def terran_gates_of_hell_requirement(self, state: CollectionState) -> bool:
         """Gates of Hell mission requirement"""
-        return self.terran_competent_comp(state) and (self.terran_defense_rating(state, True) > 6)
+        return self.terran_competent_comp(state) and (self.terran_defense_rating(state, True, True) > 6)
 
     def zerg_gates_of_hell_requirement(self, state: CollectionState) -> bool:
         """Gates of Hell mission requirement"""
@@ -1925,6 +1815,16 @@ class SC2Logic:
         if self.protoss_power_rating(state) < 5:
             return False
         return self.protoss_common_unit(state) and self.protoss_anti_armor_anti_air(state)
+    
+    def terran_the_dig_nobuild_requirement(self, state: CollectionState) -> bool:
+        return self.advanced_tactics or self.marine_medic_upgrade(state)
+    
+    def terran_the_dig_anti_ground_requirement(self, state: CollectionState) -> bool:
+        return (
+            (self.advanced_tactics or self.marine_medic_upgrade(state))
+            and self.terran_defense_rating(state, False, False) >= 6
+            and self.terran_common_unit(state)
+        )
 
     def terran_can_grab_ghosts_in_the_fog_east_rock_formation(self, state: CollectionState) -> bool:
         """
@@ -2275,7 +2175,7 @@ class SC2Logic:
         if self.all_in_map == AllInMap.option_ground:
             # Ground
             defense_rating = self.terran_defense_rating(state, True, False)
-            if state.has_any({item_names.BATTLECRUISER, item_names.BANSHEE}, self.player):
+            if state.has_any((item_names.BATTLECRUISER, item_names.BANSHEE, item_names.VALKYRIE), self.player):
                 defense_rating += 2
             return defense_rating >= 13
         else:
@@ -3193,9 +3093,8 @@ class SC2Logic:
             self.terran_able_to_snipe_defiler(state)
             and (self.terran_cliffjumper(state) or state.has(item_names.BANSHEE, self.player))
             and self.nova_splash(state)
-            and self.terran_defense_rating(state, True, False) >= 3
-            and self.advanced_tactics
-            or state.has(item_names.NOVA_JUMP_SUIT_MODULE, self.player)
+            and self.terran_defense_rating(state, True, False) >= 2
+            and (self.advanced_tactics or state.has(item_names.NOVA_JUMP_SUIT_MODULE, self.player))
         )
 
     def enemy_intelligence_garrisonable_unit(self, state: CollectionState) -> bool:
@@ -3282,7 +3181,7 @@ class SC2Logic:
             self.nova_any_weapon(state)
             and self.nova_splash(state)
             and self.terran_beats_protoss_deathball(state)
-            and self.terran_defense_rating(state, True, True) >= 7
+            and self.terran_defense_rating(state, True, True) >= 6
             and self.terran_power_rating(state) >= 5
         )
 

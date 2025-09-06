@@ -734,51 +734,35 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Left Relic",
             SC2WOL_LOC_ID_OFFSET + 901,
             LocationType.VANILLA,
-            lambda state: (
-                logic.terran_defense_rating(state, False, False) >= 6
-                and logic.terran_common_unit(state)
-                and (logic.marine_medic_upgrade(state) or adv_tactics)
-            ),
+            logic.terran_the_dig_anti_ground_requirement,
         ),
         make_location_data(
             SC2Mission.THE_DIG.mission_name,
             "Right Ground Relic",
             SC2WOL_LOC_ID_OFFSET + 902,
             LocationType.VANILLA,
-            lambda state: (
-                logic.terran_defense_rating(state, False, False) >= 6
-                and logic.terran_common_unit(state)
-                and (logic.marine_medic_upgrade(state) or adv_tactics)
-            ),
+            logic.terran_the_dig_anti_ground_requirement,
         ),
         make_location_data(
             SC2Mission.THE_DIG.mission_name,
             "Right Cliff Relic",
             SC2WOL_LOC_ID_OFFSET + 903,
             LocationType.VANILLA,
-            lambda state: (
-                logic.terran_defense_rating(state, False, False) >= 6
-                and logic.terran_common_unit(state)
-                and (logic.marine_medic_upgrade(state) or adv_tactics)
-            ),
+            logic.terran_the_dig_anti_ground_requirement,
         ),
         make_location_data(
             SC2Mission.THE_DIG.mission_name,
             "Moebius Base",
             SC2WOL_LOC_ID_OFFSET + 904,
             LocationType.EXTRA,
-            lambda state: logic.marine_medic_upgrade(state) or adv_tactics,
+            logic.terran_the_dig_nobuild_requirement,
         ),
         make_location_data(
             SC2Mission.THE_DIG.mission_name,
             "Door Outer Layer",
             SC2WOL_LOC_ID_OFFSET + 905,
             LocationType.EXTRA,
-            lambda state: (
-                logic.terran_defense_rating(state, False, False) >= 6
-                and logic.terran_common_unit(state)
-                and (logic.marine_medic_upgrade(state) or adv_tactics)
-            ),
+            logic.terran_the_dig_anti_ground_requirement,
         ),
         make_location_data(
             SC2Mission.THE_DIG.mission_name,

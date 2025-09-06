@@ -4,14 +4,14 @@ from typing import Callable, Dict, List, Set, Tuple, TYPE_CHECKING, Iterable
 from collections import Counter
 from BaseClasses import Location, ItemClassification
 from .item import StarcraftItem, ItemFilterFlags, item_names, item_parents, item_groups
-from .item.item_tables import item_table, TerranItemType, ZergItemType, spear_of_adun_calldowns, \
-    spear_of_adun_castable_passives
+from .item.item_tables import (
+    item_table, TerranItemType, ZergItemType, spear_of_adun_calldowns, spear_of_adun_castable_passives
+)
+from .item.virtual_items import after_add_item, after_remove_item
 from .options import RequiredTactics
-from .rules import LOGIC_EFFECTS, LOGIC_MINIMUM_COUNTERS
 
 if TYPE_CHECKING:
     from . import SC2World
-    from BaseClasses import Item
 
 
 # Items that can be placed before resources if not already in
@@ -106,24 +106,6 @@ second_pass_placeable_items: Tuple[str, ...] = (
 
 def copy_item(item: StarcraftItem) -> StarcraftItem:
     return StarcraftItem(item.name, item.classification, item.code, item.player, item.filter_flags)
-
-
-def after_add_item(inventory: Counter[str], item: "Item") -> None:
-    for effect in LOGIC_EFFECTS.get(item.code, ()):
-        inventory[effect.name] += 1
-    min_counter = LOGIC_MINIMUM_COUNTERS.get(item.code)
-    if min_counter:
-        inventory[min_counter.name] = min(
-            inventory[effect.name] for effect in min_counter
-        )
-
-def after_remove_item(inventory: Counter[str], item: "Item") -> None:
-    for effect in LOGIC_EFFECTS.get(item.code, ()):
-        inventory[effect.name] -= 1
-    min_counter = LOGIC_MINIMUM_COUNTERS.get(item.code)
-    if min_counter:
-        if inventory[min_counter.name] > inventory[item.name]:
-            inventory[min_counter.name] = inventory[item.name]
 
 
 class ValidInventory:
@@ -508,9 +490,14 @@ def filter_items(world: 'SC2World', location_cache: List[Location], item_pool: L
     target_nonfiller_item_count = inventory_size - reserved_filler_count
     filler_amount = (inventory_size * world.options.filler_percentage) // 100
     if world.options.required_tactics.value == RequiredTactics.option_no_logic:
-        mission_requirements = []
+        mission_requirements: list[tuple[str, Callable]] = []
     else:
-        mission_requirements = [(location.name, location.access_rule) for location in location_cache]
+        mission_requirements = []
+        requirement_ids: set[int] = set()
+        for location in location_cache:
+            if id(location.access_rule) not in requirement_ids:
+                mission_requirements.append((location.name, location.access_rule))
+                requirement_ids.add(id(location.access_rule))
     valid_inventory = ValidInventory(world, item_pool)
 
     valid_items = valid_inventory.generate_reduced_inventory(target_nonfiller_item_count, filler_amount, mission_requirements)
