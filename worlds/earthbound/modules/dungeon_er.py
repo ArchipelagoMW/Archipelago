@@ -1,4 +1,10 @@
 import struct
+from typing import Optional, TYPE_CHECKING
+from dataclasses import dataclass
+from ..game_data.local_data import item_id_table
+if TYPE_CHECKING:
+    from .. import EarthBoundWorld
+    from ..Rom import LocalRom
 from typing import Optional
 from dataclasses import dataclass
 from ..game_data.local_data import item_id_table
@@ -12,7 +18,7 @@ class EBDungeonDoor:
     is_script: bool = False # Script warps invert the x and y coordinate
 
 
-def shuffle_dungeons(world) -> None:
+def shuffle_dungeons(world: "EarthBoundWorld") -> None:
     # Is the dept. store a dungeon
     single_exit_dungeons = [
         "Giant Step",
@@ -78,7 +84,7 @@ def shuffle_dungeons(world) -> None:
         world.dungeon_connections[entrance] = shuffled_double_dungeons[index]
 
 
-def write_dungeon_entrances(world, rom) -> None:
+def write_dungeon_entrances(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     dungeon_entrances = {
         "Arcade": ["Arcade Entrance", "Arcade Exit", "Arcade Back Exit", "Arcade Back Entrance"],
         "Giant Step": ["Giant Step Entrance", "Giant Step Exit"],

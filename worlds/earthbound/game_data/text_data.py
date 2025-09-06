@@ -271,7 +271,7 @@ spoiler_badges = {
 }
 
 
-def text_encoder(text, textcap) -> bytearray:
+def text_encoder(text: str, textcap: int) -> bytearray:
     """Return an encoded bytearray of in-game text from a string. Unknown characters will be replaced with a ?.
        textcap is the maximum allowed length of the text."""
     encoded_text = bytearray()
@@ -283,7 +283,7 @@ def text_encoder(text, textcap) -> bytearray:
     return encoded_text
 
 
-def calc_pixel_width(text) -> int:
+def calc_pixel_width(text: str) -> int:
     """Return the in-game width of a string. EarthBound uses a VWF, and some text strings
        need to be shortened to fit within in-game menus."""
     width = 0

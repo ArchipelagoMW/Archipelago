@@ -160,10 +160,10 @@ gift_qualities = {
 class EarthBoundGift:
     name: str
     value: int
-    traits: list
+    traits: list[str]
 
 
-def make_trait(trait: str, name):
+def make_trait(trait: str, name: str) -> dict[str, str | int]:
     if name in gift_qualities and trait in gift_qualities[name]:
         quality = gift_qualities[name][trait]
     else:
@@ -175,11 +175,11 @@ def make_trait(trait: str, name):
         return {"trait": trait}
 
 
-def make_default_traits(traits: List[str], name: str) -> list:
+def make_default_traits(traits: list[str], name: str) -> list[dict[str, str | int]]:
     return [make_trait(trait, name) for trait in traits]
 
 
-def create_gift(name, value, traits) -> EarthBoundGift:
+def create_gift(name: str, value: int, traits: list[str]) -> EarthBoundGift:
     """Create a Gift with the specified tag and values."""
     return EarthBoundGift(name, value, make_default_traits(traits, name))
 

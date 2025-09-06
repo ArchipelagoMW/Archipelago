@@ -2,7 +2,8 @@ from .enemy_attributes import excluded_enemies
 
 
 class EnemyStatCopy:
-    def __init__(self, hp, exp, money, speed, offense, defense, level, guts, luck):
+    def __init__(self, hp: int, exp: int, money: int, speed: int, offense: int,
+                      defense: int, level: int, guts: int, luck: int):
         self.hp = hp
         self.exp = exp
         self.money = money

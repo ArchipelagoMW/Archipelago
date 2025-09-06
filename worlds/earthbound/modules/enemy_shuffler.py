@@ -1,5 +1,9 @@
 import struct
 from ..game_data.text_data import text_encoder
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .. import EarthBoundWorld
+    from ..Rom import LocalRom
 
 enemy_ids = {
     "Insane Cultist": 0x01,
@@ -483,7 +487,7 @@ can_walkthrough = [
 ]
 
 
-def shuffle_enemies(world) -> None:
+def shuffle_enemies(world: "EarthBoundWorld") -> None:
     """Shuffles the global enemy table."""
     world.acting_enemy_list = {}
     shuffled_enemies = base_enemy_table.copy()
@@ -493,7 +497,7 @@ def shuffle_enemies(world) -> None:
         world.acting_enemy_list[base_enemy_table[index]] = enemy
 
 
-def apply_enemy_shuffle(world, rom) -> None:
+def apply_enemy_shuffle(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     """Writes the shuffled enemy table into ROM."""
     rom.write_bytes(0x10d54d, bytearray([enemy_ids[world.acting_enemy_list["Spiteful Crow"]]]))
     rom.write_bytes(0x10d551, bytearray([enemy_ids[world.acting_enemy_list["Runaway Dog"]]]))

@@ -1,4 +1,8 @@
-from typing import NamedTuple, List, Dict
+from typing import NamedTuple, TYPE_CHECKING
+import struct
+if TYPE_CHECKING:
+    from .. import EarthBoundWorld
+    from ..Rom import LocalRom
 import struct
 
 boss_sprite_pointers = {
@@ -40,10 +44,10 @@ hard_final_bosses = ["Carbon Dog", "Kraken", "Clumsy Robot", "Starman Junior", "
 
 
 class SlotInfo(NamedTuple):
-    sprite_addrs: List[int]
-    short_names: List[int]
-    long_names: List[int]
-    battle_data: List[int]
+    sprite_addrs: list[int]
+    short_names: list[int]
+    long_names: list[int]
+    battle_data: list[int]
 
 
 class BossData(NamedTuple):
@@ -55,7 +59,7 @@ class BossData(NamedTuple):
     music: int
 
 
-def initialize_bosses(world) -> None:
+def initialize_bosses(world: "EarthBoundWorld") -> None:
     world.boss_list = [
         "Frank",
         "Frankystein Mark II",
@@ -191,7 +195,7 @@ def initialize_bosses(world) -> None:
             world.boss_list.insert(29, "Giygas (4)")
 
 
-def write_bosses(world, rom) -> None:
+def write_bosses(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     if world.boss_list[25] == "Carbon Dog" and world.boss_list[27] in banned_transformations:
         original_boss = world.boss_list[27]
         transformation_replacement = world.random.randint(0, 24)

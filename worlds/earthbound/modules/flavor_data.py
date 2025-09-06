@@ -1,5 +1,5 @@
 from ..game_data.text_data import eb_text_table
-
+from typing import TYPE_CHECKING
 
 random_flavors = [
     "Mint flavor",
@@ -312,7 +312,7 @@ vanilla_flavor_pointers = {
 }
 
 
-def create_flavors(world) -> None:
+def create_flavors(world: "EarthBoundWorld") -> None:
     """Shuffle flavors (textbox palettes). Vanilla flavors are copied from the ROM itself and not stored here."""
     world.flavor_text = []
     world.flavor_pointer = [0x01F72B, 0x01F746, 0x01F761, 0x01F77C]

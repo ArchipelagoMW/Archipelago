@@ -2,10 +2,18 @@ from typing import Dict
 from collections import Counter
 import struct
 import math
+from typing import TYPE_CHECKING
+from logging import warning
+if TYPE_CHECKING:
+    from .. import EarthBoundWorld
+    from ..Rom import LocalRom
+
 
 
 class EarthBoundEnemy:
-    def __init__(self, name, address, hp, pp, exp, money, speed, offense, defense, level, guts, luck, is_scaled, shield=None, attack_extensions=0):
+    def __init__(self, name: str, address: int, hp: int, pp: int, exp: int, money: int, speed: int, offense: int,
+                 defense: int, level: int, guts: int, luck: int, is_scaled: bool, shield: str | None = None,
+                 attack_extensions: int = 0):
         self.name = name
         self.address = address
         self.hp = hp
@@ -23,7 +31,7 @@ class EarthBoundEnemy:
         self.attack_extensions = attack_extensions
 
 
-def initialize_enemies(world) -> None:
+def initialize_enemies(world: "EarthBoundWorld") -> None:
     world.enemy_psi = {
         "Dept. Store Spook": ["freeze", "fire", "lifeup", "null"],
         "Dept. Store Spook (2)": ["null", "null", "freeze", "null"],
@@ -678,7 +686,7 @@ levels = [
     74,
     75]  # gigyas
 
-spell_breaks: Dict[str, Dict[int, str]] = {
+spell_breaks: dict[str, dict[int, str]] = {
     "freeze": {8: "zeta", 12: "epsilon", 20: "delta", 25: "lambda", 40: "alpha", 65: "beta", 70: "gamma", 100: "omega"},
     "fire": {5: "zeta", 10: "epsilon", 20: "alpha", 50: "beta", 70: "gamma", 100: "omega"},  # zeta needs to do less damage
     "lifeup": {20: "alpha", 100: "beta"},
@@ -764,10 +772,11 @@ spell_breaks: Dict[str, Dict[int, str]] = {
 }
 
 
-def get_psi_levels(level: int, breaks: Dict[int, str]) -> str:
-    for top_val, psi_level in breaks.items():
-        if level <= top_val:
-            return psi_level
+def get_psi_levels(level: int, breaks: dict[str, dict[int, str]]):
+  for top_level, psi_val in breaks.items():
+    if level <= top_level:
+      return psi_val
+  return breaks[max(breaks)]
 
 
 spell_elements = {
@@ -1154,18 +1163,18 @@ shield_table = {
 }
 
 
-def assumed_player_speed_for_level(level) -> int:
+def assumed_player_speed_for_level(level: int) -> int:
     return 2 + 58 * (level - 1) / 80
 
 
-def scale_enemy_speed(enemy, new_level) -> int:
+def scale_enemy_speed(enemy: EarthBoundEnemy, new_level: int) -> int:
     normal_dodge_chance = (2 * enemy.speed - assumed_player_speed_for_level(enemy.level)) / 500
 
     enemy_scaled_speed = (normal_dodge_chance * 500 + assumed_player_speed_for_level(new_level)) / 2
     return enemy_scaled_speed
 
 
-def scale_exp_2(base_exp, base_level, new_level, world) -> int:
+def scale_exp_2(base_exp: int, base_level: int, new_level: int, world: "EarthBoundWorld") -> int:
     base_scaled_exp = calculate_exp(base_level)
     scaled_exp = calculate_exp(new_level)
     new_exp = base_exp * scaled_exp / base_scaled_exp
@@ -1174,7 +1183,7 @@ def scale_exp_2(base_exp, base_level, new_level, world) -> int:
     return new_exp
 
 
-def calculate_exp(level):
+def calculate_exp(level: int) -> float:
     if level > 30:
         return 1000 * math.exp(0.05 * level)
     else:
@@ -1182,7 +1191,7 @@ def calculate_exp(level):
         # return 10 * math.exp(0.2 * level) if not boosted
 
 
-def scale_shield(level, shield) -> str:
+def scale_shield(level: int, shield: str | None) -> str:
     if shield is not None:
         if level < 10:
             enemy_shield = "disabled"
@@ -1196,6 +1205,9 @@ def scale_shield(level, shield) -> str:
                 enemy_shield = "psi_1"
             else:
                 enemy_shield = "psi_2"
+        else:
+            warning(f"Could not scale shield, found initial value of {shield}, this is probably a typo")
+            enemy_shield = "disabled"
         return enemy_shield
 
 
@@ -1222,7 +1234,7 @@ guardian_intro = {
 }
 
 
-def scale_enemies(world, rom) -> None:
+def scale_enemies(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     additional_party_members = 0
     if world.options.auto_scale_party_members:
         if world.starting_character != "Ness":
@@ -1268,22 +1280,16 @@ def scale_enemies(world, rom) -> None:
                 enemy_defense = int(enemy.defense * level / enemy.level)
                 enemy_level = int(enemy.level * level / enemy.level)
                 enemy_shield = scale_shield(level, enemy.shield)
-                enemy_hp = struct.pack('<H', enemy_hp)
-                enemy_pp = struct.pack('<H', enemy_pp)
-                enemy_exp = struct.pack('<I', enemy_exp)
-                enemy_money = struct.pack('<H', enemy_money)
-                enemy_offense = struct.pack('<H', enemy_offense)
-                enemy_defense = struct.pack('<H', enemy_defense)
-                rom.write_bytes(enemy.address + 33, bytearray(enemy_hp))
-                rom.write_bytes(enemy.address + 35, bytearray(enemy_pp))
-                rom.write_bytes(enemy.address + 37, bytearray(enemy_exp))
-                rom.write_bytes(enemy.address + 41, bytearray(enemy_money))
-                rom.write_bytes(enemy.address + 60, bytearray([enemy_speed]))
-                rom.write_bytes(enemy.address + 56, bytearray(enemy_offense))
-                rom.write_bytes(enemy.address + 58, bytearray(enemy_defense))
-                rom.write_bytes(enemy.address + 54, bytearray([enemy_level]))
+                rom.write_bytes(enemy.address + 33, enemy_hp.to_bytes(2, "little"))
+                rom.write_bytes(enemy.address + 35, enemy_pp.to_bytes(2, "little"))
+                rom.write_bytes(enemy.address + 37, enemy_exp.to_bytes(4, "little"))
+                rom.write_bytes(enemy.address + 41, enemy_money.to_bytes(2, "little"))
+                rom.write_bytes(enemy.address + 60, enemy_speed.to_bytes(1, "little"))
+                rom.write_bytes(enemy.address + 56, enemy_offense.to_bytes(2, "little"))
+                rom.write_bytes(enemy.address + 58, enemy_defense.to_bytes(2, "little"))
+                rom.write_bytes(enemy.address + 54, enemy_level.to_bytes(2, "little"))
                 if enemy.shield is not None:
-                    rom.write_bytes(enemy.address + 89, bytearray([shield_table[enemy_shield]]))
+                    rom.write_bytes(enemy.address + 89, shield_table[enemy_shield].to_bytes(1, "little"))
                 
                 if enemy.name in world.enemy_psi:
                     for index, spell in [(i, s) for i, s in enumerate(world.enemy_psi[enemy.name]) if s != "null"]:
