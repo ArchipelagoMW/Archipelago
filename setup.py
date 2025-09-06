@@ -30,7 +30,7 @@ try:
         install_cx_freeze = False
     except pkg_resources.ResolutionError:
         install_cx_freeze = True
-except ImportError:
+except (AttributeError, ImportError):
     install_cx_freeze = True
     pkg_resources = None  # type: ignore[assignment]
 
@@ -65,7 +65,6 @@ from Cython.Build import cythonize
 non_apworlds: set[str] = {
     "A Link to the Past",
     "Adventure",
-    "ArchipIDLE",
     "Archipelago",
     "Lufia II Ancient Cave",
     "Meritous",
@@ -199,9 +198,10 @@ extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
 def remove_sprites_from_folder(folder: Path) -> None:
-    for file in os.listdir(folder):
-        if file != ".gitignore":
-            os.remove(folder / file)
+    if os.path.isdir(folder):
+        for file in os.listdir(folder):
+            if file != ".gitignore":
+                os.remove(folder / file)
 
 
 def _threaded_hash(filepath: str | Path) -> str:
@@ -410,6 +410,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 os.system(signtool + os.path.join(self.buildfolder, "lib", "worlds", "oot", "data", *exe_path))
 
         remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttpr")
+        remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttp" / "remote")
 
         self.create_manifest()
 

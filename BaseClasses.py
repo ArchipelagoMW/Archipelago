@@ -154,17 +154,11 @@ class MultiWorld():
         self.algorithm = 'balanced'
         self.groups = {}
         self.regions = self.RegionManager(players)
-        self.shops = []
         self.itempool = []
         self.seed = None
         self.seed_name: str = "Unavailable"
         self.precollected_items = {player: [] for player in self.player_ids}
         self.required_locations = []
-        self.light_world_light_cone = False
-        self.dark_world_light_cone = False
-        self.rupoor_cost = 10
-        self.aga_randomness = True
-        self.save_and_quit_from_boss = True
         self.custom = False
         self.customitemarray = []
         self.shuffle_ganon = True
@@ -228,16 +222,7 @@ class MultiWorld():
         self.seed_name = name if name else str(self.seed)
 
     def set_options(self, args: Namespace) -> None:
-        # TODO - remove this section once all worlds use options dataclasses
         from worlds import AutoWorld
-
-        all_keys: Set[str] = {key for player in self.player_ids for key in
-                              AutoWorld.AutoWorldRegister.world_types[self.game[player]].options_dataclass.type_hints}
-        for option_key in all_keys:
-            option = Utils.DeprecateDict(f"Getting options from multiworld is now deprecated. "
-                                         f"Please use `self.options.{option_key}` instead.", True)
-            option.update(getattr(args, option_key, {}))
-            setattr(self, option_key, option)
 
         for player in self.player_ids:
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
@@ -1586,7 +1571,7 @@ class ItemClassification(IntFlag):
 
     def as_flag(self) -> int:
         """As Network API flag int."""
-        return int(self & 0b0111)
+        return int(self & 0b00111)
 
 
 class Item:
@@ -1914,7 +1899,8 @@ class Spoiler:
             if self.unreachables:
                 outfile.write('\n\nUnreachable Progression Items:\n\n')
                 outfile.write(
-                    '\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.unreachables]))
+                    '\n'.join(['%s: %s' % (unreachable.item, unreachable)
+                               for unreachable in sorted(self.unreachables)]))
 
             if self.paths:
                 outfile.write('\n\nPaths:\n\n')
@@ -1941,7 +1927,7 @@ class Tutorial(NamedTuple):
     description: str
     language: str
     file_name: str
-    link: str
+    link: str  # unused
     authors: List[str]
 
 
