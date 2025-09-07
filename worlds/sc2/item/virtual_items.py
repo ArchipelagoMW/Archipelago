@@ -90,7 +90,6 @@ LOGIC_EFFECTS = {
     item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE].code: (LogicEffect.PROTOSS_GROUND_WEAPON|LogicEffect.PROTOSS_GROUND_ARMOR, 1),
     item_table[item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE].code: (LogicEffect.PROTOSS_AIR_WEAPON|LogicEffect.PROTOSS_AIR_ARMOR, 1),
     item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE].code: (LogicEffect.PROTOSS_UPGRADE, 1),
-    item_table[item_names.QUATRO].code: (LogicEffect.PROTOSS_UPGRADE, 1),
 
     # General defense rating
     item_table[item_names.SIEGE_TANK].code: (LogicEffect.TERRAN_DEFENSE_RATING, 5),
@@ -145,7 +144,6 @@ LOGIC_MINIMUM_COUNTERS = {
     item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
     item_table[item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
     item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
-    item_table[item_names.QUATRO].code: LogicEffect.PROTOSS_UPGRADE,
 }
 
 
@@ -156,8 +154,9 @@ def after_add_item(inventory: "Counter[str]", item: "Item") -> None:
             inventory[effect.name] += count
     min_counter = LOGIC_MINIMUM_COUNTERS.get(item.code)
     if min_counter:
-        if inventory[min_counter.name] < inventory[item.name]:
-            inventory[min_counter.name] = inventory[item.name]
+        inventory[min_counter.name] = min(
+            inventory[effect.name] for effect in min_counter
+        )
 
 def after_remove_item(inventory: "Counter[str]", item: "Item") -> None:
     effects, count = LOGIC_EFFECTS.get(item.code, (LogicEffect.NONE, 0))
@@ -166,6 +165,5 @@ def after_remove_item(inventory: "Counter[str]", item: "Item") -> None:
             inventory[effect.name] -= count
     min_counter = LOGIC_MINIMUM_COUNTERS.get(item.code)
     if min_counter:
-        inventory[min_counter.name] = min(
-            inventory[effect.name] for effect in min_counter
-        )
+        if inventory[min_counter.name] > inventory[item.name]:
+            inventory[min_counter.name] = inventory[item.name]
