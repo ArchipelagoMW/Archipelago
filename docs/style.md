@@ -63,4 +63,4 @@
 
 ## KV
 
-* Style should be fully in the kivy files, not in python.
+* Style should be defined in `.kv` as much as possible, only Python when unavailable.
