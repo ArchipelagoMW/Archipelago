@@ -89,7 +89,7 @@ class GrinchClient(BizHawkClient):
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         from CommonClient import  logger
         #If the player is not connected to an AP Server, or their connection was disconnected.
-        if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
+        if not ctx.slot:
             return
 
         try:
