@@ -825,11 +825,14 @@ def flag_start_abilities(world: SC2World, item_list: List[FilterItem]) -> None:
 def flag_unused_upgrade_types(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes +armour/attack upgrades based on generic upgrade strategy.
     Caps upgrade items based on `max_upgrade_level`."""
+    generic_upgrade_missions = world.options.generic_upgrade_missions.value > 0
     upgrade_items = world.options.generic_upgrade_items.value
     upgrade_included_counts: Dict[str, int] = {}
     for item in item_list:
         if item.data.type in item_tables.upgrade_item_types:
-            if item.name not in upgrade_included_names[upgrade_items]:
+            if (item.name not in upgrade_included_names[upgrade_items]
+                or (generic_upgrade_missions and ItemFilterFlags.StartInventory not in item.flags)
+            ):
                 item.flags |= ItemFilterFlags.Removed
             else:
                 included = upgrade_included_counts.get(item.name, 0)
