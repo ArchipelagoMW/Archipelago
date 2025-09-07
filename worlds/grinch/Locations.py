@@ -182,6 +182,12 @@ grinch_locations = {
         "Tires in Who Dump": GrinchLocationData("Sleigh Room", "Sleigh Ride", 1602, [GrinchRamData(0x0101FB, binary_bit_pos=4)]),
         "Twin-End Tuba in Submarine World": GrinchLocationData("Sleigh Room", "Sleigh Ride", 1603, [GrinchRamData(0x0101FB, binary_bit_pos=6)]),
         "GPS in Who Lake": GrinchLocationData("Sleigh Room", "Sleigh Ride", 1604, [GrinchRamData(0x0101FB, binary_bit_pos=5)]),
+# Mount Crumpit Locations
+        "1st Crate Squashed": GrinchLocationData("Mount Crumpit", "Mount Crumpit", 1700, [GrinchRamData(0x095343, value=1)]),
+        "2nd Crate Squashed": GrinchLocationData("Mount Crumpit", "Mount Crumpit", 1701, [GrinchRamData(0x095343, value=2)]),
+        "3rd Crate Squashed": GrinchLocationData("Mount Crumpit", "Mount Crumpit", 1702, [GrinchRamData(0x095343, value=3)]),
+        "4th Crate Squashed": GrinchLocationData("Mount Crumpit", "Mount Crumpit", 1703, [GrinchRamData(0x095343, value=4)]),
+        "5th Crate Squashed": GrinchLocationData("Mount Crumpit", "Mount Crumpit", 1704, [GrinchRamData(0x095343, value=5)]),
 }
 
 def grinch_locations_to_id() -> dict[str,int]:
