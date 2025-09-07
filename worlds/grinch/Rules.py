@@ -26,7 +26,7 @@ def interpret_rule(rule_set: list[list[str]], player: int):
 
     access_list: list[Callable[[CollectionState], bool]] = []
     for item_set in rule_set:
-        access_list.append(lambda state: state.has_all(item_set, player))
+        access_list.append(lambda state, items=tuple(item_set): state.has_all(items, player))
     return access_list
 
     #Each item in the list is a separate list of rules. Each separate list is just an "OR" condition.
