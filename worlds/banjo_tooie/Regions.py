@@ -1145,10 +1145,10 @@ NEST_REGIONS: Dict[str, List[str]] = {
       locationName.NESTHP39,
       locationName.NESTHP40,
     ],
-    regionName.HPFBOSS:[
+    regionName.HPFBOSS: [
         locationName.NESTHP23,
     ],
-    regionName.HPIBOSS:[
+    regionName.HPIBOSS: [
       locationName.NESTHP24,
     ],
     regionName.CC:      [
