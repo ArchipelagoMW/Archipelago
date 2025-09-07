@@ -84,7 +84,7 @@ class BanjoTooieWorld(World):
     increased focus on puzzle-solving over the worlds of Banjo-Kazooie.
     """
 
-    game: str = "Banjo-Tooie"
+    game = "Banjo-Tooie"
     version = "V4.8"
     options: BanjoTooieOptions
     settings: BanjoTooieSettings
