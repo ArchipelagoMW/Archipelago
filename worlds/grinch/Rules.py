@@ -295,7 +295,7 @@ rules_dict: dict[str,list[list[str]]] = {
         # ["Max"]
     ],
     "OCD Blueprint - Guardian's House - Right Side": [
-        ["Rotten Egg Launcher", "Grinch Copter"],
+        ["Grinch Copter"],
         ["Slime Shooter", "Rocket Spring"]
     ],
     "OCD Blueprint - Inside Guardian's House": [
