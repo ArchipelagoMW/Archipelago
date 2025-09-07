@@ -797,7 +797,6 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_kerrigan_levels_per_mission_and_generic_upgrades_both_triggering_pre_fill(self):
         world_options = {
-            # Vanilla WoL with all missions
             'mission_order': options.MissionOrder.option_custom,
             'custom_mission_order': {
                 'campaign': {
@@ -842,7 +841,52 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(item_names.KERRIGAN_LEVELS_70, itempool)
         self.assertNotIn(item_names.KERRIGAN_LEVELS_70, starting_inventory)
 
-
+    def test_wa_prefill_doesnt_trigger_if_upgrades_in_start_inventory(self) -> None:
+        world_options = {
+            'mission_order': options.MissionOrder.option_custom,
+            'custom_mission_order': {
+                'campaign': {
+                    'goal': True,
+                    'layout': {
+                        'type': 'column',
+                        'size': 3,
+                        'missions': [
+                            {
+                                'index': 0,
+                                'mission_pool': [SC2Mission.THE_DIG.mission_name]
+                            },
+                            {
+                                'index': 1,
+                                'mission_pool': [SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name]
+                            },
+                            {
+                                'index': 2,
+                                'mission_pool': [SC2Mission.ALL_IN.mission_name]
+                            },
+                        ]
+                    }
+                }
+            },
+            'start_inventory': {
+                item_names.GOLIATH: 1,
+                item_groups.ItemGroupNames.TERRAN_GENERIC_UPGRADES: 3,
+            },
+            'selected_races': [SC2Race.TERRAN.get_title()],
+            'required_tactics': options.RequiredTactics.option_standard,
+            'generic_upgrade_items': options.GenericUpgradeItems.option_bundle_all,
+            'generic_upgrade_missions': 100, # Weapon / Armor upgrades
+        }
+        self.generate_world(world_options)
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        starting_terran_upgrades = [
+            item_name
+            for item_name in starting_inventory
+            if item_tables.item_table[item_name].type == item_tables.TerranItemType.Upgrade
+        ]
+        self.assertEqual(
+            len(starting_terran_upgrades), 3,
+            msg=f"Unexpected Upgrades in start inventory (expected 3 terran upgrades): {starting_terran_upgrades}"
+        )
 
     def test_locking_required_items(self):
         world_options = {
