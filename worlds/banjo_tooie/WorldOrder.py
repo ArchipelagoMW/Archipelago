@@ -102,14 +102,18 @@ def generate_world_order(world: BanjoTooieWorld, worlds: List[str]) -> List[str]
 
     return worlds
 
-def set_level_costs(world: BanjoTooieWorld) -> None:
-    normal_costs = [1,4,8,14,20,28,36,45,55]
-    quick_costs = [1,3,6,10,15,21,28,35,44]
-    long_costs = [1,8,16,25,34,43,52,60,70]
-    level_cost_max = [1,10,20,30,50,60,70,80,90]
-    custom_costs = world.options.custom_worlds.value.split(",")
 
-    random_costs = [1,1,1,1,1,1,1,1,1]
+def set_level_costs(world: BanjoTooieWorld) -> None:
+    normal_costs = [1, 4, 8, 14, 20, 28, 36, 45, 55]
+    quick_costs = [1, 3, 6, 10, 15, 21, 28, 35, 44]
+    long_costs = [1, 8, 16, 25, 34, 43, 52, 60, 70]
+    level_cost_max = [1, 10, 20, 30, 50, 60, 70, 80, 90]
+    try:
+        custom_costs = [int(cost) for cost in world.options.custom_worlds.value.split(",")]
+    except ValueError:
+        raise OptionError(f"Custom Costs for {world.player_name} must be numeric")
+
+    random_costs = [1, 1, 1, 1, 1, 1, 1, 1, 1]
     for i in range(len(random_costs)):
         random_costs[i] = world.random.randint(1, level_cost_max[i])
 
@@ -120,17 +124,12 @@ def set_level_costs(world: BanjoTooieWorld) -> None:
         raise ValueError("Custom Costs has too many levels.")
 
     for i in range(len(custom_costs)):
-        try:
-            int(custom_costs[i])
-        except Exception:
-            raise ValueError("Custom Cost for world "+str(i+1)+" must be a number.")
-        custom_costs[i] = int(custom_costs[i])
         if custom_costs[i] == 0:
-            raise ValueError("Custom Cost for world "+str(i+1)+" can't be 0.")
+            raise ValueError(f"Custom Cost for world {i + 1} can't be 0.")
         if custom_costs[i] < 0:
-            raise ValueError("Custom Cost for world "+str(i+1)+" can't be negative.")
+            raise ValueError(f"Custom Cost for world {i + 1} can't be negative.")
         if custom_costs[i] > level_cost_max[i]:
-            raise ValueError("Custom Cost for world "+str(i+1)+" is too high.")
+            raise ValueError(f"Custom Cost for world {i + 1} is too high.")
 
     chosen_costs = []
     if world.options.world_requirements == WorldRequirements.option_quick:
