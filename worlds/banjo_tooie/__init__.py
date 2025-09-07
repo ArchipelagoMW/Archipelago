@@ -57,7 +57,6 @@ class BanjoTooieSettings(settings.Group):
     program_path: ProgramPath | str = ""
     program_args: ProgramArgs | str = "--lua="
 
-#NOTE! For Backward Compatability, don't use type str|None. multi types not allowed on older Pythons
 class BanjoTooieWeb(WebWorld):
     setup_en = Tutorial("Setup Banjo-Tooie",
         """A guide to setting up Archipelago Banjo-Tooie on your computer.""",
