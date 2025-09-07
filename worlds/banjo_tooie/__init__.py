@@ -30,31 +30,32 @@ def run_client():
 
 components.append(Component("Banjo-Tooie Client", func=run_client, component_type=Type.CLIENT))
 
+
 class BanjoTooieSettings(settings.Group):
 
-  class RomPath(settings.OptionalUserFilePath):
-    """File path of the Banjo-Tooie (USA) ROM."""
-
-  class PatchPath(settings.OptionalUserFolderPath):
-    """Folder path of where to save the patched ROM."""
-
-  class ProgramPath(settings.OptionalUserFilePath):
-    """
-      File path of the program to automatically run.
-      Leave blank to disable.
-    """
-
-  class ProgramArgs(str):
-    """
-      Arguments to pass to the automatically run program.
-      Leave blank to disable.
-      Set to "--lua=" to automatically use the correct path for the lua connector.
-    """
-
-  rom_path: RomPath | str = ""
-  patch_path: PatchPath | str = ""
-  program_path: ProgramPath | str = ""
-  program_args: ProgramArgs | str = "--lua="
+    class RomPath(settings.OptionalUserFilePath):
+        """File path of the Banjo-Tooie (USA) ROM."""
+    
+    class PatchPath(settings.OptionalUserFolderPath):
+        """Folder path of where to save the patched ROM."""
+    
+    class ProgramPath(settings.OptionalUserFilePath):
+        """
+        File path of the program to automatically run.
+        Leave blank to disable.
+        """
+    
+    class ProgramArgs(str):
+        """
+        Arguments to pass to the automatically run program.
+        Leave blank to disable.
+        Set to "--lua=" to automatically use the correct path for the lua connector.
+        """
+    
+    rom_path: RomPath | str = ""
+    patch_path: PatchPath | str = ""
+    program_path: ProgramPath | str = ""
+    program_args: ProgramArgs | str = "--lua="
 
 #NOTE! For Backward Compatability, don't use type str|None. multi types not allowed on older Pythons
 class BanjoTooieWeb(WebWorld):
