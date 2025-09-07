@@ -1,7 +1,7 @@
 import unittest
 
 from BaseClasses import PlandoOptions
-from Options import ItemLinks, Choice
+from Options import ItemLinks, Choice, TextChoice, Range, NamedRange
 from Utils import restricted_dumps
 from worlds.AutoWorld import AutoWorldRegister
 
@@ -14,6 +14,31 @@ class TestOptions(unittest.TestCase):
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):
                         self.assertTrue(option.__doc__)
+
+    def test_option_defaults(self):
+        """Test that defaults for submitted options are valid."""
+        for gamename, world_type in AutoWorldRegister.world_types.items():
+            if not world_type.hidden:
+                for option_key, option in world_type.options_dataclass.type_hints.items():
+                    with self.subTest(game=gamename, option=option_key):
+                        if issubclass(option, TextChoice):
+                            self.assertTrue(option.default in option.name_lookup,
+                                f"Default value {option.default} for TextChoice option"
+                                f"{option.__name__} in {gamename} is not valid!"
+                            )
+                        if issubclass(option, Range):
+                            range_raised = False
+                            try:
+                                if type(option.default) == str:
+                                    option.__init__(option, option.from_text(option.default))
+                                else:
+                                    option.__init__(option, option.default)
+                            except:
+                                range_raised = True
+                            self.assertFalse(range_raised,
+                                f"Default value {option.default} for Range option"
+                                f"{option.__name__} in {gamename} is not valid!"
+                            )
 
     def test_options_are_not_set_by_world(self):
         """Test that options attribute is not already set"""
