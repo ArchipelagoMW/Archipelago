@@ -57,6 +57,7 @@ class LogicSet(NamedTuple):
 
 
 LOGIC_EFFECTS = {
+    # Weapon/armour ups
     item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON].code: (LogicEffect.TERRAN_INFANTRY_WEAPON, 1),
     item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR].code: (LogicEffect.TERRAN_INFANTRY_ARMOR, 1),
     item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON].code: (LogicEffect.TERRAN_VEHICLE_WEAPON, 1),
@@ -89,7 +90,9 @@ LOGIC_EFFECTS = {
     item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE].code: (LogicEffect.PROTOSS_GROUND_WEAPON|LogicEffect.PROTOSS_GROUND_ARMOR, 1),
     item_table[item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE].code: (LogicEffect.PROTOSS_AIR_WEAPON|LogicEffect.PROTOSS_AIR_ARMOR, 1),
     item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE].code: (LogicEffect.PROTOSS_UPGRADE, 1),
+    item_table[item_names.QUATRO].code: (LogicEffect.PROTOSS_UPGRADE, 1),
 
+    # General defense rating
     item_table[item_names.SIEGE_TANK].code: (LogicEffect.TERRAN_DEFENSE_RATING, 5),
     item_table[item_names.PLANETARY_FORTRESS].code: (LogicEffect.TERRAN_DEFENSE_RATING, 3),
     item_table[item_names.PERDITION_TURRET].code: (LogicEffect.TERRAN_DEFENSE_RATING|LogicEffect.TVZ_DEFENSE_RATING, 2),
@@ -97,17 +100,20 @@ LOGIC_EFFECTS = {
     item_table[item_names.LIBERATOR].code: (LogicEffect.TERRAN_DEFENSE_RATING, 3),
     item_table[item_names.WIDOW_MINE].code: (LogicEffect.TERRAN_DEFENSE_RATING, 1),
 
+    item_table[item_names.HIVE_MIND_EMULATOR].code: (LogicEffect.TVZ_DEFENSE_RATING, 3),
+    item_table[item_names.PSI_DISRUPTER].code: (LogicEffect.TVZ_DEFENSE_RATING, 3),
+
+    # Bunker component of defense rating (this contribution gets capped to 3)
     item_table[item_names.MARINE].code: (LogicEffect.BUNKER_DEFENSE_RATING, 3),
     item_table[item_names.DOMINION_TROOPER].code: (LogicEffect.BUNKER_DEFENSE_RATING, 3),
     item_table[item_names.MARAUDER].code: (LogicEffect.BUNKER_DEFENSE_RATING, 3),
     item_table[item_names.FIREBAT].code: (LogicEffect.BUNKER_DEFENSE_RATING, 1),
-    item_table[item_names.GHOST].code: (LogicEffect.BUNKER_DEFENSE_RATING, 2),
-    item_table[item_names.SPECTRE].code: (LogicEffect.BUNKER_DEFENSE_RATING, 2),
-
-    item_table[item_names.HIVE_MIND_EMULATOR].code: (LogicEffect.TVZ_DEFENSE_RATING, 3),
-    item_table[item_names.PSI_DISRUPTER].code: (LogicEffect.TVZ_DEFENSE_RATING, 3),
+    item_table[item_names.GHOST].code: (LogicEffect.BUNKER_DEFENSE_RATING, 1),
+    item_table[item_names.SPECTRE].code: (LogicEffect.BUNKER_DEFENSE_RATING, 1),
 }
 LOGIC_MINIMUM_COUNTERS = {
+    # When the key is added or removed,
+    # the counter for value's name is recalculated as the minimum value of all of its component bits.
     item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON].code: LogicEffect.TERRAN_UPGRADE,
     item_table[item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR].code: LogicEffect.TERRAN_UPGRADE,
     item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON].code: LogicEffect.TERRAN_UPGRADE,
@@ -139,6 +145,7 @@ LOGIC_MINIMUM_COUNTERS = {
     item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
     item_table[item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
     item_table[item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE].code: LogicEffect.PROTOSS_UPGRADE,
+    item_table[item_names.QUATRO].code: LogicEffect.PROTOSS_UPGRADE,
 }
 
 
@@ -149,9 +156,8 @@ def after_add_item(inventory: "Counter[str]", item: "Item") -> None:
             inventory[effect.name] += count
     min_counter = LOGIC_MINIMUM_COUNTERS.get(item.code)
     if min_counter:
-        inventory[min_counter.name] = min(
-            inventory[effect.name] for effect in min_counter
-        )
+        if inventory[min_counter.name] < inventory[item.name]:
+            inventory[min_counter.name] = inventory[item.name]
 
 def after_remove_item(inventory: "Counter[str]", item: "Item") -> None:
     effects, count = LOGIC_EFFECTS.get(item.code, (LogicEffect.NONE, 0))
@@ -160,5 +166,6 @@ def after_remove_item(inventory: "Counter[str]", item: "Item") -> None:
             inventory[effect.name] -= count
     min_counter = LOGIC_MINIMUM_COUNTERS.get(item.code)
     if min_counter:
-        if inventory[min_counter.name] > inventory[item.name]:
-            inventory[min_counter.name] = inventory[item.name]
+        inventory[min_counter.name] = min(
+            inventory[effect.name] for effect in min_counter
+        )

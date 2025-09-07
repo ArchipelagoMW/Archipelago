@@ -869,8 +869,6 @@ def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -
                     item.flags |= ItemFilterFlags.UserExcluded
                 vanilla_nonprogressive_count[item.name] += 1
 
-    excluded_count: Dict[str, int] = dict()
-
 
 def flag_war_council_items(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes / start-inventories items based on `nerf_unit_baselines` option.

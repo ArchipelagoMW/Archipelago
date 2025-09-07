@@ -117,6 +117,8 @@ class SC2Logic:
 
     def generic_upgrades_from_missions(self, state: CollectionState) -> int:
         if not self.total_mission_count:
+            # This flag should be 0 during item pool culling, so w/a checks will always pass.
+            # pre_fill sets total_mission_count to check if upgrade items need to be added to the starting inventory.
             return WEAPON_ARMOR_UPGRADE_MAX_LEVEL
         return (
             floor((100 / self.generic_upgrade_missions) * (state.count_group("Missions", self.player) / self.total_mission_count))
