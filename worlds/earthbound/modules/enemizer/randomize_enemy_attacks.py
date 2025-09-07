@@ -2,7 +2,6 @@ import struct
 from .enemy_attributes import excluded_enemies
 from ..enemy_data import spell_breaks
 from ..enemy_shuffler import enemy_ids
-
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ... import EarthBoundWorld

@@ -66,4 +66,3 @@ def randomize_enemy_stats(world: "EarthBoundWorld", rom: "LocalRom") -> None:
                 world.enemies[f"{enemy} (2)"].money = world.enemies[enemy].money
                 rom.write_bytes(world.enemies[f"{enemy} (2)"].address + 0x3D, bytearray([world.enemies[enemy].guts]))
                 rom.write_bytes(world.enemies[f"{enemy} (2)"].address + 0x3E, bytearray([world.enemies[enemy].luck]))
-                

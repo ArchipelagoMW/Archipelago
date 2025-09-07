@@ -67,7 +67,7 @@ class EarthBoundWorld(World):
     data_version = 1
     required_client_version = (0, 5, 0) 
 
-    item_name_to_id = {item: item_table[item].code for item in item_table if item_table[item].code}
+    item_name_to_id = {item: data.code for item, data in item_table.items() if data.code}
     location_name_to_id = location_ids
     item_name_groups = get_item_names_per_category()
     location_name_groups = location_groups
@@ -89,18 +89,17 @@ class EarthBoundWorld(World):
         self.locked_locations = []
         self.location_cache = []
         self.event_count = 8
-        self.progressive_filler_bats = 0
-        self.progressive_filler_pans = 0
-        self.progressive_filler_guns = 0
-        self.progressive_filler_bracelets = 0
-        self.progressive_filler_other = 0
-        self.world_version = world_version
-        self.removed_teleports = []
+        self.progressive_filler_bats: int = 0
+        self.progressive_filler_pans: int = 0
+        self.progressive_filler_guns: int = 0
+        self.progressive_filler_bracelets: int = 0
+        self.progressive_filler_other: int = 0
+        self.world_version: str = world_version
         self.armor_list: Dict[str, EBArmor]
         self.weapon_list: Dict[str, EBWeapon]
         self.boss_slots: Dict[str, SlotInfo]
         self.boss_info: Dict[str, BossData]
-        self.starting_character = None
+        self.starting_character: str | None = None
         self.locals = []
         self.rom_name = None
         self.starting_area_teleport = None
@@ -109,10 +108,11 @@ class EarthBoundWorld(World):
         self.rare_gear = []
         self.get_all_spheres = threading.Event()
         self.boss_list: List[str] = []
-        self.starting_region = int
-        self.dungeon_connections = {}
+        self.starting_region = str
+        self.start_location = int
+        self.dungeon_connections: dict[str, str] = {}
         self.has_generated_output: bool = False
-        self.hint_man_hints: List[Tuple] = []
+        self.hint_man_hints: list[tuple[int | str, player]] = []
 
         self.common_items = [
             "Cookie",
@@ -335,7 +335,7 @@ class EarthBoundWorld(World):
         fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), prefill_locations, prefill_items, True, True)
         setup_hints(self)
 
-    def get_pre_fill_items(self) -> list:
+    def get_pre_fill_items(self) -> list[Item]:
         characters = ["Ness", "Paula", "Jeff", "Poo"]
         prefill_items = []
         for character in characters:
@@ -344,7 +344,7 @@ class EarthBoundWorld(World):
         return prefill_items
 
     @classmethod
-    def stage_generate_output(cls, multiworld, output_directory) -> None:
+    def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str) -> None:
         multiworld.eb_spheres = list(multiworld.get_spheres())
         for world in multiworld.get_game_worlds("EarthBound"):
             world.get_all_spheres.set()

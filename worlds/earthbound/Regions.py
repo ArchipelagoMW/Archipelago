@@ -10,11 +10,11 @@ class EBLocation(Location):
     game: str = "EarthBound"
     region: str
 
-    def __init__(self, player: int, name: str = " ", address: Optional[int] = None, parent=None):
+    def __init__(self, player: int, name: str = " ", address: int | None = None, parent: Region | None = None) -> None:
         super().__init__(player, name, address, parent)
 
 
-def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
+def init_areas(world: "EarthBoundWorld", locations: list[LocationData]) -> None:
     multiworld = world.multiworld
     player = world.player
 
@@ -84,7 +84,7 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
         ])
     multiworld.regions += regions
 
-def connect_area_exits(world):
+def connect_area_exits(world: "EarthBoundWorld"):
     multiworld = world.multiworld
     player = world.player
 
