@@ -494,21 +494,21 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "GPS in Who Lake": [
         ["Who Lake Vacuum Access", "Rotten Egg Launcher"]
-    ],
-    "1st Crate Squashed": [
-        []
-    ],
-    "2nd Crate Squashed": [
-        []
-    ],
-    "3rd Crate Squashed": [
-        []
-    ],
-    "4th Crate Squashed": [
-        []
-    ],
-    "5th Crate Squashed": [
-        []
+    # ],
+    # "1st Crate Squashed": [
+    #     []
+    # ],
+    # "2nd Crate Squashed": [
+    #     []
+    # ],
+    # "3rd Crate Squashed": [
+    #     []
+    # ],
+    # "4th Crate Squashed": [
+    #     []
+    # ],
+    # "5th Crate Squashed": [
+    #     []
     ]
 }
 
