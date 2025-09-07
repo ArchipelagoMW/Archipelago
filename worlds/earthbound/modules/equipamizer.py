@@ -4,6 +4,10 @@ from ..game_data.text_data import text_encoder, calc_pixel_width
 from ..Options import Armorizer, Weaponizer
 from operator import attrgetter
 import struct
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .. import EarthBoundWorld
+    from ..Rom import LocalRom
 
 @dataclass
 class EBArmor:
