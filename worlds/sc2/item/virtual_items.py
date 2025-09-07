@@ -96,7 +96,7 @@ LOGIC_EFFECTS = {
     item_table[item_names.PLANETARY_FORTRESS].code: (LogicEffect.TERRAN_DEFENSE_RATING, 3),
     item_table[item_names.PERDITION_TURRET].code: (LogicEffect.TERRAN_DEFENSE_RATING|LogicEffect.TVZ_DEFENSE_RATING, 2),
     item_table[item_names.DEVASTATOR_TURRET].code: (LogicEffect.TERRAN_DEFENSE_RATING, 2),
-    item_table[item_names.LIBERATOR].code: (LogicEffect.TERRAN_DEFENSE_RATING, 3),
+    item_table[item_names.LIBERATOR].code: (LogicEffect.TERRAN_DEFENSE_RATING, 4),  # adjusted to 2 vs zerg
     item_table[item_names.WIDOW_MINE].code: (LogicEffect.TERRAN_DEFENSE_RATING, 1),
 
     item_table[item_names.HIVE_MIND_EMULATOR].code: (LogicEffect.TVZ_DEFENSE_RATING, 3),

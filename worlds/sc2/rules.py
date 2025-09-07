@@ -117,6 +117,7 @@ class SC2Logic:
         return 2 if self.advanced_tactics else 3
 
     def weapon_armor_upgrade_count(self, logic_effect: str, state: CollectionState) -> int:
+        """Note This does not account for quatro; use `protoss_weapon_armor_upgrade_count` for protoss"""
         result = state.count(logic_effect, self.player)
         if self.generic_upgrade_missions > 0:
             result += self.generic_upgrades_from_missions(state)
@@ -412,6 +413,7 @@ class SC2Logic:
         # General enemy-based rules
         if zerg_enemy:
             defense_score += state.count(LogicEffect.TVZ_DEFENSE_RATING.name, self.player)
+            defense_score -= 2 * state.has(item_names.LIBERATOR, self.player)  # Liberator defense rating 4 -> 2
         if air_enemy and state.has(item_names.MISSILE_TURRET, self.player):
             defense_score += 2
         # Advanced Tactics bumps defense rating requirements down by 2
@@ -1141,8 +1143,18 @@ class SC2Logic:
             power_score += sum((rating for item, rating in soa_passive_ratings.items() if state.has(item, self.player)))
         return power_score
 
+    def protoss_weapon_armor_upgrade_count(self, logic_effect: str, state: CollectionState) -> int:
+        """Separated out from generic weapon_armor_upgrade_count to account for Quatro"""
+        return (
+            self.weapon_armor_upgrade_count(logic_effect, state)
+            + state.has(item_names.QUATRO, self.player)
+        )
+
     def protoss_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        return self.weapon_armor_upgrade_count(LogicEffect.PROTOSS_UPGRADE.name, state)
+        return (
+            self.weapon_armor_upgrade_count(LogicEffect.PROTOSS_UPGRADE.name, state)
+            + state.has(item_names.QUATRO, self.player)
+        )
 
     def protoss_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
         return self.protoss_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
@@ -1426,8 +1438,8 @@ class SC2Logic:
                     or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
                 )
             )
-            and self.weapon_armor_upgrade_count(LogicEffect.PROTOSS_AIR_WEAPON.name, state) >= 2
-            and self.weapon_armor_upgrade_count(LogicEffect.PROTOSS_AIR_ARMOR.name, state) >= 2
+            and self.protoss_weapon_armor_upgrade_count(LogicEffect.PROTOSS_AIR_WEAPON.name, state) >= 2
+            and self.protoss_weapon_armor_upgrade_count(LogicEffect.PROTOSS_AIR_ARMOR.name, state) >= 2
         )
 
     def protoss_hybrid_counter(self, state: CollectionState) -> bool:
@@ -1730,7 +1742,7 @@ class SC2Logic:
                 or (
                     state.has_any((item_names.TEMPEST, item_names.SKYLORD, item_names.DESTROYER), self.player)
                     or (
-                        self.weapon_armor_upgrade_count(LogicEffect.PROTOSS_AIR_WEAPON.name, state) >= 2
+                        self.protoss_weapon_armor_upgrade_count(LogicEffect.PROTOSS_AIR_WEAPON.name, state) >= 2
                         and state.has(item_names.CARRIER, self.player)
                         or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
                     )
