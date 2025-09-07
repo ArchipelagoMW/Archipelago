@@ -2,7 +2,7 @@ from BaseClasses import MultiWorld
 from ..generic.Rules import set_rule
 from .Options import CCCharlesOptions
 
-# Go mode: Green Egg + Blue Egg + Ref Egg + Temple Key + Bug Spray (+ Remote Explosive x8 but the base game ignores it)
+# Go mode: Green Egg + Blue Egg + Red Egg + Temple Key + Bug Spray (+ Remote Explosive x8 but the base game ignores it)
 
 def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None:
     # Tony Tiddle
@@ -33,9 +33,9 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
     set_rule(world.get_location("South House Chest Scraps 4", player),
         lambda state: state.has("Lockpicks", player))
     set_rule(world.get_location("South House Chest Scraps 5", player),
-         lambda state: state.has("Lockpicks", player))
+        lambda state: state.has("Lockpicks", player))
     set_rule(world.get_location("South House Chest Scraps 6", player),
-         lambda state: state.has("Lockpicks", player))
+        lambda state: state.has("Lockpicks", player))
 
     # South Mine
     set_rule(world.get_entrance("South Mine Gate", player),
@@ -54,7 +54,7 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
 
     # Sasha
     set_rule(world.get_location("Haunted House Sasha Mission End", player),
-            lambda state: state.has("Page Drawing", player, 8))
+        lambda state: state.has("Page Drawing", player, 8))
 
     # Santiago
     set_rule(world.get_location("Port Santiago Mission End", player),
@@ -92,7 +92,7 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
 
     # John Smith
     set_rule(world.get_location("Workshop John Smith Mission End", player),
-         lambda state: state.has("Box of Rockets", player))
+        lambda state: state.has("Box of Rockets", player))
 
     # Claire
     set_rule(world.get_location("Lighthouse Claire Mission End", player),
@@ -175,7 +175,7 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
 
     # Mountain Ruin
     set_rule(world.get_entrance("Mountain Ruin Gate", player),
-             lambda state: state.has("Mountain Ruin Key", player))
+        lambda state: state.has("Mountain Ruin Key", player))
 
     set_rule(world.get_location("Mountain Ruin Inside Red Paint Can", player),
         lambda state: state.has("Lockpicks", player))
@@ -192,7 +192,7 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
     set_rule(world.get_location("Pickle Val Jar of Pickles", player),
         lambda state: state.has("Lockpicks", player))
     set_rule(world.get_location("Pickle Val Pickle Lady Mission End", player),
-         lambda state: state.has("Jar of Pickles", player))
+        lambda state: state.has("Jar of Pickles", player))
 
     # Morse Bunker
     set_rule(world.get_location("Morse Bunker Chest Scraps 1", player),
@@ -206,5 +206,10 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
     set_rule(world.get_location("Morse Bunker Chest Scraps 5", player),
         lambda state: state.has("Lockpicks", player))
 
-    # Place "Victory" at "Final Boss" and set collection as win condition
+    # Add rules to reach the "Go mode"
+    set_rule(world.get_location("Final Boss", player),
+        lambda state: state.has("Temple Key", player)
+            and state.has("Green Egg", player)
+            and state.has("Blue Egg", player)
+            and state.has("Red Egg", player))
     world.completion_condition[player] = lambda state: state.has("Victory", player)

@@ -224,11 +224,10 @@ def create_regions(world: MultiWorld, options: CCCharlesOptions, player: int) ->
     morse_bunker_region.add_locations(loc_morse_bunker, CCCharlesLocation)
     world.regions.append(morse_bunker_region)
 
-    # Include Victory event
-    loc_final_boss = CCCharlesLocation(player, "Final Boss", None, menu_region)
+    # Place "Victory" event at "Final Boss" location
+    loc_final_boss = CCCharlesLocation(player, "Final Boss", None, prism_temple_region)
     loc_final_boss.place_locked_item(CCCharlesItem("Victory", ItemClassification.progression, None, player))
-
-    menu_region.locations.append(loc_final_boss)
+    prism_temple_region.locations.append(loc_final_boss)
 
     # Connect the Regions by named Entrances that must have access Rules
     menu_region.connect(start_camp_region)
@@ -280,7 +279,7 @@ def create_regions(world: MultiWorld, options: CCCharlesOptions, player: int) ->
     menu_region.connect(mine_shaft_region)
     menu_region.connect(mob_camp_region)
     menu_region.connect(mob_camp_locked_room_region)
-    mob_camp_region.connect(mob_camp_locked_room_region, 'Mob Camp Locked Door')
+    mob_camp_region.connect(mob_camp_locked_room_region, "Mob Camp Locked Door")
     menu_region.connect(mine_elevator_exit_region)
     menu_region.connect(mountain_ruin_outside_region)
     menu_region.connect(mountain_ruin_inside_region)
