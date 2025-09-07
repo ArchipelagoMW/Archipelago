@@ -1609,7 +1609,7 @@ def connect_regions(self):
     region_menu.add_exits({regionName.SM})
 
     region_SM = self.get_region(regionName.SM)
-    region_SM.add_exits({regionName.IOHJV, regionName.SMGL},{
+    region_SM.add_exits({regionName.IOHJV, regionName.SMGL}, {
                           regionName.IOHJV: lambda state: rules.canGetPassedKlungo(state),
                           regionName.SMGL: lambda state: rules.SM_to_GL(state)
                         })
