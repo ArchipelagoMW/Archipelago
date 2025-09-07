@@ -1602,7 +1602,6 @@ def create_region(multiworld, player: int, active_locations, name: str, location
     return ret
 
 def connect_regions(self):
-    multiworld = self.multiworld
     player = self.player
     rules = BanjoTooieRules(self)
 
