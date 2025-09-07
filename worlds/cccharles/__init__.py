@@ -61,7 +61,7 @@ class CCCharlesWorld(World):
     # Typing hints for all the options we defined
     options: CCCharlesOptions
 
-    topology_present = True  # Show path to required location checks in spoiler
+    topology_present = False # Hide path to required location checks in spoiler
 
     def create_regions(self) -> None:
         create_regions(self.multiworld, self.options, self.player)
@@ -154,10 +154,10 @@ class CCCharlesWorld(World):
                 classification = ItemClassification.progression
             case "Temple Key":
                 classification = ItemClassification.progression
-            case "Bug spray":
+            case "Bug Spray":
                 classification = ItemClassification.progression
             case _: # Should not occur
-                classification = ItemClassification.filler
+                raise Exception("Unexpected case met: classification cannot be set for unknown item \"" + name + "\"")
 
         return CCCharlesItem(name, classification, item_id, self.player)
 
