@@ -203,6 +203,7 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
     # "No Vac Trap": GrinchItemData("Traps", 610, IC.trap, [GrinchRamData(0x0102DA, value=0]),
     # "Invisible Trap": GrinchItemData("Traps", 611, IC.trap, [GrinchRamData(0x0102DA, value=0, bit_size=4)])
     # "Child Trap": GrinchItemData("Traps", 612, IC.trap,[GrinchRamData()])
+    # "Disable Jump Trap": GrinchItemData("Traps", 613, IC.trap,[GrinchRamData(0x010026, binary_bit_pos=6)])
 }
 
 #Movesets
