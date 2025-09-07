@@ -44,6 +44,13 @@ if TYPE_CHECKING:
     from . import SC2World
 
 
+def min2(left: int, right: int) -> int:
+    """A faster min() function that only takes two values. About twice as fast under timeit"""
+    if left < right:
+        return left
+    return right
+
+
 class SC2Logic:
     def __init__(self, world: Optional["SC2World"]) -> None:
         # Note: Don't store a reference to the world so we can cache this object on the world object
@@ -721,7 +728,7 @@ class SC2Logic:
         # General enemy-based rules
         if air_enemy:
             # Capped at 2
-            defense_score += min(sum((zvx_air_defense_ratings[item] for item in zvx_air_defense_ratings if state.has(item, self.player))), 2)
+            defense_score += min2(sum((zvx_air_defense_ratings[item] for item in zvx_air_defense_ratings if state.has(item, self.player))), 2)
         # Advanced Tactics bumps defense rating requirements down by 2
         if self.advanced_tactics:
             defense_score += 2
@@ -731,7 +738,7 @@ class SC2Logic:
         return self.weapon_armor_upgrade_count(LogicEffect.ZERG_UPGRADE.name, state)
 
     def zerg_melee_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        result = min(
+        result = min2(
             state.count(LogicEffect.ZERG_MELEE_ATTACK.name, self.player),
             state.count(LogicEffect.ZERG_GROUND_ARMOR.name, self.player),
         )
@@ -740,7 +747,7 @@ class SC2Logic:
         return result
 
     def zerg_ranged_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        result = min(
+        result = min2(
             state.count(LogicEffect.ZERG_RANGED_ATTACK.name, self.player),
             state.count(LogicEffect.ZERG_GROUND_ARMOR.name, self.player),
         )
@@ -749,7 +756,7 @@ class SC2Logic:
         return result
 
     def zerg_flyer_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        result = min(
+        result = min2(
             state.count(LogicEffect.ZERG_AIR_ATTACK.name, self.player),
             state.count(LogicEffect.ZERG_AIR_ARMOR.name, self.player),
         )
@@ -1078,7 +1085,7 @@ class SC2Logic:
         # Levels from missions beaten
         levels = self.kerrigan_levels_per_mission_completed * state.count_group("Missions", self.player)
         if self.kerrigan_levels_per_mission_completed_cap != -1:
-            levels = min(levels, self.kerrigan_levels_per_mission_completed_cap)
+            levels = min2(levels, self.kerrigan_levels_per_mission_completed_cap)
         # Levels from items
         for kerrigan_level_item in kerrigan_levels:
             level_amount = item_table[kerrigan_level_item].number
@@ -1086,7 +1093,7 @@ class SC2Logic:
             levels += item_count * level_amount
         # Total level cap
         if self.kerrigan_total_level_cap != -1:
-            levels = min(levels, self.kerrigan_total_level_cap)
+            levels = min2(levels, self.kerrigan_total_level_cap)
 
         return levels >= target
 
