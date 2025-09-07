@@ -58,13 +58,15 @@ class BanjoTooieSettings(settings.Group):
     program_args: ProgramArgs | str = "--lua="
 
 class BanjoTooieWeb(WebWorld):
-    setup_en = Tutorial("Setup Banjo-Tooie",
+    setup_en = Tutorial(
+        "Setup Banjo-Tooie",
         """A guide to setting up Archipelago Banjo-Tooie on your computer.""",
         "English",
         "setup_en.md",
         "setup/en",
         ["Beebaleen"])
-    setup_fr = Tutorial("Setup Banjo-Tooie",
+    setup_fr = Tutorial(
+        "Setup Banjo-Tooie",
         """A guide to setting up Archipelago Banjo-Tooie on your computer.""",
         "French",
         "setup_fr.md",
