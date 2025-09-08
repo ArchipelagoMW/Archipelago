@@ -71,7 +71,7 @@ switches_to_event_items = {
     #"Prt2: " : "Prt2 Lower Water",
     #"Prt2: " : "Prt2 Ramp",
     #"Prt2: " : "Prt2 Gate",
-    #"Prt3: " : "Prt3 Platform Spin",
+    ##"Prt3: " : "Prt3 Platform Spin",
     #"Prt3: " : "Prt3 Trampoline",
     #"Prt3: " : "Prt3 Stairs",
     #"Prt3: " : "Prt3 Elevator",
