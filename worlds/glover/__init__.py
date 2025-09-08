@@ -93,7 +93,7 @@ class GloverWorld(World):
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
     #DELETE THIS ONCE IT'S FINISHED
-    existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn1", "Crn2", "Crn3", "Crn!", "Prt!", "Pht!", "FoF!", "Otw!", "Training"]
+    existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn1", "Crn2", "Crn!", "Prt!", "Pht!", "FoF!", "Otw!", "Training"]
     group_lists : list[str] = ["Not Crystal",
 	"Not Bowling",
 	"Not Bowling or Crystal",
@@ -116,11 +116,9 @@ class GloverWorld(World):
         if name.endswith("H Ball") and name.startswith(tuple(self.world_prefixes)) and item.code == None:
             state.add_item("Returned Balls", self.player)
         #Garib counting
-        if name.endswith("Garib"):
+        if name == "Garib":
             state.add_item("Total Garibs", self.player)
-        elif name == "Locate Garibs" or name == "Extra Garibs":
-            return output
-        elif name.endswith("Garibs"):
+        elif name.endswith("Garibs") and name[:1].isdigit():
             split_name : list[str] = name.split(" ")
             garibs_number : int = int(split_name[len(split_name) - 2])
             state.add_item("Total Garibs", self.player, garibs_number)
@@ -141,11 +139,9 @@ class GloverWorld(World):
         if name.endswith("H Ball") and name.startswith(tuple(self.world_prefixes)) and item.code == None:
             state.remove_item("Returned Balls", self.player)
         #Garib counting
-        if name.endswith("Garib"):
+        if name == "Garib":
             state.remove_item("Total Garibs", self.player)
-        elif name == "Locate Garibs" or name == "Extra Garibs":
-            return output
-        elif name.endswith("Garibs"):
+        elif name.endswith("Garibs") and name[:1].isdigit():
             split_name : list[str] = name.split(" ")
             garibs_number : int = int(split_name[len(split_name) - 2])
             state.remove_item("Total Garibs", self.player, garibs_number)
@@ -184,24 +180,24 @@ class GloverWorld(World):
             ["Atl3", 80],
             ["Atl?", 25],
             ["Crn1", 65],
-            ["Crn2", 80],
-            ["Crn3", 80]#,
-            #["Crn?", 20],
-            #["Prt1", 70],
-            #["Prt2", 60],
-            #["Prt3", 80],
-            #["Prt?", 50],
-            #["Pht1", 80],
-            #["Pht2", 80],
-            #["Pht3", 80],
-            #["Pht?", 60],
-            #["FoF1", 60],
-            #["FoF2", 60],
-            #["FoF3", 70],
-            #["FoF?", 56],
-            #["Otw1", 50],
-            #["Otw2", 50],
-            #["Otw3", 80],
+            ["Crn2", 80]#,
+            #["Crn3", 80]#,
+            #["Crn?", 20]#,
+            #["Prt1", 70]#,
+            #["Prt2", 60]#,
+            #["Prt3", 80]#,
+            #["Prt?", 50]#,
+            #["Pht1", 80]#,
+            #["Pht2", 80]#,
+            #["Pht3", 80]#,
+            #["Pht?", 60]#,
+            #["FoF1", 60]#,
+            #["FoF2", 60]#,
+            #["FoF3", 70]#,
+            #["FoF?", 56]#,
+            #["Otw1", 50]#,
+            #["Otw2", 50]#,
+            #["Otw3", 80]#,
             #["Otw?", 50]
         ]
         #Extra garib placements
@@ -211,24 +207,24 @@ class GloverWorld(World):
             ["Atl3", 0],
             ["Atl?", 0],
             ["Crn1", 0],
-            ["Crn2", 0],
-            ["Crn3", 0]#,
-            #["Crn?", 0],
-            #["Prt1", 0],
-            #["Prt2", 0],
-            #["Prt3", 0],
-            #["Prt?", 0],
-            #["Pht1", 0],
-            #["Pht2", 0],
-            #["Pht3", 0],
-            #["Pht?", 0],
-            #["FoF1", 0],
-            #["FoF2", 0],
-            #["FoF3", 0],
-            #["FoF?", 0],
-            #["Otw1", 0],
-            #["Otw2", 0],
-            #["Otw3", 0],
+            ["Crn2", 0]#,
+            #["Crn3", 0]#,
+            #["Crn?", 0]#,
+            #["Prt1", 0]#,
+            #["Prt2", 0]#,
+            #["Prt3", 0]#,
+            #["Prt?", 0]#,
+            #["Pht1", 0]#,
+            #["Pht2", 0]#,
+            #["Pht3", 0]#,
+            #["Pht?", 0]#,
+            #["FoF1", 0]#,
+            #["FoF2", 0]#,
+            #["FoF3", 0]#,
+            #["FoF?", 0]#,
+            #["Otw1", 0]#,
+            #["Otw2", 0]#,
+            #["Otw3", 0]#,
             #["Otw?", 0]
         ]
         self.starting_ball : str = "Rubber Ball"

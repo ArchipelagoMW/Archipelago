@@ -161,6 +161,7 @@ local ROM_ITEM_TABLE = {
     "AP_SPACE_L3_GARIBS",
     "AP_SPACE_BONUS_GARIBS",
     "AP_LIFE_UP",
+	"AP_HELICOPTER_POTION",
     "AP_HERCULES_POTION",
     "AP_SPEED_POTION",
     "AP_STICKY_POTION",
@@ -12207,12 +12208,12 @@ function received_moves(itemId)
     --    GVR:setItem(ITEM_TABLE["AP_BEACHBALL_POTION"], 1)
     --elseif itemId == 6500344 then
     --    GVR:setItem(ITEM_TABLE["AP_DEATH_POTION"], 1)
-    --elseif itemId == 6500345 then
-    --    GVR:setItem(ITEM_TABLE["AP_HELICOPTER_POTION"], 1)
+    elseif itemId == 6500345 then
+        GVR:setItem(ITEM_TABLE["AP_HELICOPTER_POTION"], 1)
     --elseif itemId == 6500346 then
     --    GVR:setItem(ITEM_TABLE["AP_FROG_POTION"], 1)
-    --elseif itemId == 6500347 then
-    --    GVR:setItem(ITEM_TABLE["AP_BOOMERANG_POTION"], 1)
+    elseif itemId == 6500347 then
+        GVR:setItem(ITEM_TABLE["AP_BOOMERANG_POTION"], 1)
     elseif itemId == 6500348 then
         GVR:setItem(ITEM_TABLE["AP_SPEED_POTION"], 1)
     elseif itemId == 6500349 then
