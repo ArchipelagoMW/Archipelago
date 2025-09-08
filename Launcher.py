@@ -256,7 +256,10 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
         button_layout: ScrollBox = ObjectProperty(None)
         search_box: MDTextField = ObjectProperty(None)
         cards: list[LauncherCard]
-        current_filter: Sequence[str | Type] | None
+        current_filter: Sequence[str | Type]
+        original_filter: Sequence[str | Type]
+        favorites: list[str]
+        original_favorites: list[str]
 
         def __init__(self, ctx=None, components=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
@@ -280,6 +283,8 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
                             else:
                                 filters.append(Type[filter])
                         self.current_filter = filters
+            self.original_favorites = self.favorites.copy()
+            self.original_filter = self.current_filter.copy()
             super().__init__()
 
         def set_favorite(self, caller):
@@ -423,9 +428,14 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
             super()._stop(*largs)
 
         def on_stop(self):
-            Utils.persistent_store("launcher", "favorites", self.favorites)
-            Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
-                                                                   for filter in self.current_filter))
+            if self.favorites != self.original_favorites:
+                Utils.persistent_store("launcher", "favorites", self.favorites)
+            if self.current_filter !=  self.original_filter:
+                Utils.persistent_store(
+                    "launcher",
+                    "filter",
+                    ", ".join(filter.name if isinstance(filter, Type) else filter for filter in self.current_filter)
+                )
             super().on_stop()
 
     Launcher(components=launch_components, args=args).run()
