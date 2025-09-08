@@ -66,6 +66,7 @@ class StartingCharacter(Choice):
     option_maelle = 2
     option_sciel = 3
     option_monoco = 4
+    option_verso = 5
     default = 0
 
 class GearScaling(Choice):
