@@ -1,7 +1,9 @@
-from typing import Callable, List
+from typing import Callable, List, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from worlds.pokepark import PokeparkOptions
+
+if TYPE_CHECKING:
+    from worlds.pokepark import PokeparkOptions, PokeparkWorld
 from worlds.pokepark.rules import can_farm_berries
 
 # for now like this to simplify documentation of entrances and logic, should be later replaced with extensive logic
@@ -153,14 +155,10 @@ ADDITIONAL_REGION_TO_ENTRANCES: dict[str, List[str]] = {
 VANILLA_ENTRANCES_TO_EXITS: dict[str, str] = {
     "Treehouse Meadow Zone Gate": "Meadow Zone Main Area",
     "Treehouse Drifblim Fast Travel Meadow Zone": "Meadow Zone Main Area",
-    "Meadow Zone Main Area - Bulbasaur's Daring Dash Attraction": "Bulbasaur's Daring Dash Attraction",
     "Meadow Zone Main Area - Venusaur's Gate": "Meadow Zone Venusaur Area",
-    "Meadow Zone Venusaur Area - Venusaur's Vine Swing Attraction": "Venusaur's Vine Swing Attraction",
 
     "Treehouse Beach Zone Gate": "Beach Zone Main Area",
     "Treehouse Drifblim Fast Travel Beach Zone": "Beach Zone Main Area",
-    "Beach Zone Main Area - Pelipper's Circle Circuit Attraction": "Pelipper's Circle Circuit Attraction",
-    "Beach Zone Recycle Area - Gyarado's Aqua Dash Attraction": "Gyarado's Aqua Dash Attraction",
     "Beach Zone Bridge 2": "Beach Zone Recycle Area",
     "Beach Zone Bridge 1": "Beach Zone Middle Isle",
 
@@ -169,43 +167,50 @@ VANILLA_ENTRANCES_TO_EXITS: dict[str, str] = {
     "Ice Zone Main Area Lift": "Ice Zone Lower Lift Area",
     "Ice Zone Frozen Lake": "Ice Zone Frozen Lake Area",
     "Ice Zone Main Area Empoleon Gate": "Ice Zone Empoleon Area",
-    "Ice Zone Empoleon Area - Empoleon's Snow Slide Attraction": "Empoleon's Snow Slide Attraction",
 
     "Treehouse Cavern Zone Gate": "Cavern Zone Main Area",
     "Treehouse Drifblim Fast Travel Cavern Zone": "Cavern Zone Main Area",
-    "Cavern Zone Main Area - Bastiodon's Panel Crush Attraction": "Bastiodon's Panel Crush Attraction",
 
     "Cavern Zone Magma Zone Gate": "Magma Zone Main Area",
     "Treehouse Drifblim Fast Travel Magma Zone": "Magma Zone Main Area",
-    "Magma Zone Circle Area - Rhyperior's Bumper Burn Attraction": "Rhyperior's Bumper Burn Attraction",
     "Magma Zone Blaziken Gate": "Magma Zone Blaziken Area",
-    "Magma Zone Blaziken Area - Blaziken's Boulder Bash Attraction": "Blaziken's Boulder Bash Attraction",
     "Magma Zone Fire Wall": "Magma Zone Circle Area",
 
     "Treehouse Haunted Zone Gate": "Haunted Zone Main Area",
     "Treehouse Drifblim Fast Travel Haunted Zone": "Haunted Zone Main Area",
-    "Haunted Zone Main Area - Tangrowth's Swing-Along Attraction": "Tangrowth's Swing-Along Attraction",
     "Haunted Zone Mansion Entrance": "Haunted Zone Mansion Area",
-    "Haunted Zone Mansion Area - Dusknoir's Speed Slam Attraction": "Dusknoir's Speed Slam Attraction",
     "Haunted Zone Mansion White Gem Door": "Haunted Zone Mansion Ballroom Area",
     "Haunted Zone Mansion Red Gem Door": "Haunted Zone Mansion Study Area",
     "Haunted Zone Mansion Blue Gem Door": "Haunted Zone Mansion Gengar Area",
     "Haunted Zone Mansion Green Gem Door": "Haunted Zone Mansion Antic Area",
     "Haunted Zone Mansion Rotom's Hidden Entrance": "Haunted Zone Rotom Area",
-    "Haunted Zone Rotom Area - Rotom's Spooky Shoot-'em-Up Attraction": "Rotom's Spooky Shoot-'em-Up Attraction",
 
     "Treehouse Granite Zone Gate": "Granite Zone Main Area",
     "Treehouse Drifblim Fast Travel Granite Zone": "Granite Zone Main Area",
     "Granite Zone Flygon Door": "Granite Zone Salamence Area",
-    "Granite Zone Main Area - Absol's Hurdle Bounce Attraction": "Absol's Hurdle Bounce Attraction",
-    "Granite Zone Salamence Area - Salamence's Sky Race Attraction": "Salamence's Sky Race Attraction",
 
     "Granite Zone Flower Zone Entrance": "Flower Zone Main Area",
     "Treehouse Drifblim Fast Travel Flower Zone": "Flower Zone Main Area",
-    "Flower Zone Main Area - Rayquaza's Balloon Panic Attraction": "Rayquaza's Balloon Panic Attraction",
 
     "Treehouse Piplup Air Balloon": "Skygarden",
 
+
+}
+ATTRACTION_ENTRANCES_TO_EXITS: dict[str, str] = {
+    "Meadow Zone Main Area - Bulbasaur's Daring Dash Attraction": "Bulbasaur's Daring Dash Attraction",
+    "Meadow Zone Venusaur Area - Venusaur's Vine Swing Attraction": "Venusaur's Vine Swing Attraction",
+    "Beach Zone Main Area - Pelipper's Circle Circuit Attraction": "Pelipper's Circle Circuit Attraction",
+    "Beach Zone Recycle Area - Gyarado's Aqua Dash Attraction": "Gyarado's Aqua Dash Attraction",
+    "Ice Zone Empoleon Area - Empoleon's Snow Slide Attraction": "Empoleon's Snow Slide Attraction",
+    "Cavern Zone Main Area - Bastiodon's Panel Crush Attraction": "Bastiodon's Panel Crush Attraction",
+    "Magma Zone Circle Area - Rhyperior's Bumper Burn Attraction": "Rhyperior's Bumper Burn Attraction",
+    "Magma Zone Blaziken Area - Blaziken's Boulder Bash Attraction": "Blaziken's Boulder Bash Attraction",
+    "Haunted Zone Main Area - Tangrowth's Swing-Along Attraction": "Tangrowth's Swing-Along Attraction",
+    "Haunted Zone Mansion Area - Dusknoir's Speed Slam Attraction": "Dusknoir's Speed Slam Attraction",
+    "Haunted Zone Rotom Area - Rotom's Spooky Shoot-'em-Up Attraction": "Rotom's Spooky Shoot-'em-Up Attraction",
+    "Granite Zone Main Area - Absol's Hurdle Bounce Attraction": "Absol's Hurdle Bounce Attraction",
+    "Granite Zone Salamence Area - Salamence's Sky Race Attraction": "Salamence's Sky Race Attraction",
+    "Flower Zone Main Area - Rayquaza's Balloon Panic Attraction": "Rayquaza's Balloon Panic Attraction",
 
 }
 
@@ -299,8 +304,19 @@ ADDITIONAL_ENTRANCES_TO_EXITS: dict[str, str] = {
 }
 
 
-def get_entrance_rules(player: int, options: PokeparkOptions):
-    ENTRANCE_RULES: dict[str, Callable[[CollectionState], bool]] = {
+class EntranceRandomizer:
+    def __init__(self, world: "PokeparkWorld"):
+        self.world = world
+        self.multiworld = world.multiworld
+        self.player = world.player
+        self.entrances_to_exits: dict[str, str] = {}
+        self.region_to_entrances: dict[str, str] = {}
+        self.entrances_rules: dict[str, Callable[[CollectionState], bool]] = {}
+
+    def get_entrance_rules(self):
+        player = self.player
+        options = self.world.options
+        ENTRANCE_RULES: dict[str, Callable[[CollectionState], bool]] = {
         "Treehouse Meadow Zone Gate": lambda state: True,
         "Treehouse Drifblim Fast Travel Meadow Zone": lambda state: state.has(
             "Meadow Zone Fast Travel",
@@ -503,23 +519,44 @@ def get_entrance_rules(player: int, options: PokeparkOptions):
 
         "Granite Zone Furret": lambda state: True,
         "Flower Zone Furret": lambda state: True,
-    }
-    return ENTRANCE_RULES
+        }
+        self.entrances_rules = ENTRANCE_RULES
+        return ENTRANCE_RULES
 
+    def randomize_attraction_entrances(self):
+        entrances = list(ATTRACTION_ENTRANCES_TO_EXITS.keys())
+        exits = list(ATTRACTION_ENTRANCES_TO_EXITS.values())
+        self.world.random.shuffle(exits)
 
-def get_entrances_to_exits(options: PokeparkOptions):
-    if options.each_zone == options.each_zone.option_false:
-        return VANILLA_ENTRANCES_TO_EXITS | ADDITIONAL_ENTRANCES_TO_EXITS
-    else:
-        return VANILLA_ENTRANCES_TO_EXITS
+        return dict(zip(entrances, exits))
 
+    def get_entrances_to_exits(self):
+        options = self.world.options
+        ENTRANCES_TO_EXITS: dict[str, str] = VANILLA_ENTRANCES_TO_EXITS
+        if options.randomize_attraction_entrances == options.randomize_attraction_entrances.option_true:
+            ENTRANCES_TO_EXITS = ENTRANCES_TO_EXITS | self.randomize_attraction_entrances()
+        else:
+            ENTRANCES_TO_EXITS = ENTRANCES_TO_EXITS | ATTRACTION_ENTRANCES_TO_EXITS
+        if options.each_zone == options.each_zone.option_false:
+            ENTRANCES_TO_EXITS = ENTRANCES_TO_EXITS | ADDITIONAL_ENTRANCES_TO_EXITS
 
-def get_region_to_entrances(options: PokeparkOptions):
-    if options.each_zone == options.each_zone.option_false:
-        MERGED_REGION_TO_ENTRANCES = {}
-        for d in [REGION_TO_ENTRANCES, ADDITIONAL_REGION_TO_ENTRANCES]:
-            for region, entrances in d.items():
-                MERGED_REGION_TO_ENTRANCES.setdefault(region, []).extend(entrances)
-        return MERGED_REGION_TO_ENTRANCES
-    else:
-        return REGION_TO_ENTRANCES
+        self.entrances_to_exits = ENTRANCES_TO_EXITS
+        return ENTRANCES_TO_EXITS
+
+    def get_region_to_entrances(self):
+        options = self.world.options
+        if options.each_zone == options.each_zone.option_false:
+            MERGED_REGION_TO_ENTRANCES = {}
+            for d in [REGION_TO_ENTRANCES, ADDITIONAL_REGION_TO_ENTRANCES]:
+                for region, entrances in d.items():
+                    MERGED_REGION_TO_ENTRANCES.setdefault(region, []).extend(entrances)
+            self.region_to_entrances = MERGED_REGION_TO_ENTRANCES
+            return MERGED_REGION_TO_ENTRANCES
+        else:
+            self.region_to_entrances = REGION_TO_ENTRANCES
+            return REGION_TO_ENTRANCES
+
+    def generate_entrance_data(self):
+        self.get_entrances_to_exits()
+        self.get_region_to_entrances()
+        self.get_entrance_rules()

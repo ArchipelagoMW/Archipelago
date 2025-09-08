@@ -137,6 +137,12 @@ class RemoveAttractionLocations(Toggle):
     default = False
 
 
+class RandomizeAttractionEntrances(Toggle):
+    """
+    Randomizes Attraction Entrances
+    """
+    default = False
+
 class EachZone(Toggle):
     """
     Pokemon that are in multiple Zones become additional Locations. e.g. Bonsly (Meadow, Cavern, Magma Zone)
@@ -168,6 +174,7 @@ class PokeparkOptions(PerGameCommonOptions):
     remove_attraction_locations: RemoveAttractionLocations
     num_required_prisma_count_skygarden: NumRequiredPrismaCountSkygarden
     in_zone_road_blocks: InZoneRoadBlocks
+    randomize_attraction_entrances: RandomizeAttractionEntrances
 
     def get_output_dict(self) -> dict[str, Any]:
         """

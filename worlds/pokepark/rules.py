@@ -17,7 +17,11 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Treehouse
     set_rule_if_exists("Treehouse - Burmy - Friendship", lambda state: True)
     set_rule_if_exists("Treehouse - Mime Jr. - Friendship", lambda state: True)
-    set_rule_if_exists("Treehouse - Drifblim - Friendship", lambda state: can_farm_berries(state, player))
+    set_rule_if_exists(
+        "Treehouse - Drifblim - Friendship", lambda state: can_farm_berries(state, player) and state.count_group(
+            "Fast Travel Items", player
+        ) >= 1
+    )
     set_rule_if_exists("Treehouse - Power Up - Thunderbolt Upgrade 1", lambda state: can_farm_berries(state, player))
     set_rule_if_exists(
         "Treehouse - Power Up - Thunderbolt Upgrade 2",
@@ -45,7 +49,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Double Dash Upgrade",
-        lambda state: True
+        lambda state: state.can_reach_location("Treehouse - Power Up - Dash Upgrade 2", player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Health Upgrade 1",
@@ -1479,7 +1483,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Haunted Zone Main Area - Hunchkrow Power Competition -- Friendship",
-        lambda state: can_battle(state, player) and state.has("Hunchkrow Unlock")
+        lambda state: can_battle(state, player) and state.has("Hunchkrow Unlock", player)
     )
     set_rule_if_exists(
         "Haunted Zone Main Area - Gliscor Power Competition -- Friendship",

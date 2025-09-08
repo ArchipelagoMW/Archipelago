@@ -16,7 +16,7 @@ from worlds.LauncherComponents import Component, components, Type, launch as lau
 from .items import item_name_groups, PokeparkItem, ITEM_TABLE
 from .locations import LOCATION_TABLE, MultiZoneFlag, PokeparkLocation, PokeparkFlag
 from .options import PokeparkOptions, pokepark_option_groups
-from .regions import REGION_TO_ENTRANCES, get_entrance_rules, get_entrances_to_exits, get_region_to_entrances
+from .regions import EntranceRandomizer
 from .rules import set_rules
 from ..Files import APPlayerContainer
 
@@ -95,6 +95,7 @@ class PokeparkWorld(World):
         self.locations: set[str] = set()
         self.nonprogress_locations: set[str] = set()
         self.item_classification_overrides: dict[str, IC] = {}
+        self.entrances: EntranceRandomizer = EntranceRandomizer(self)
 
     def _determine_locations(self) -> set[str]:
         """
@@ -167,6 +168,10 @@ class PokeparkWorld(World):
             "Entrances": {},
         }
 
+        output_entrances = output_data["Entrances"]
+        for zone_entrance, zone_exit in self.entrances.entrances_to_exits.items():
+            output_entrances[zone_entrance] = zone_exit
+
         # Output the plando details to file.
         aptww = PokeparkContainer(
             path=os.path.join(
@@ -183,9 +188,10 @@ class PokeparkWorld(World):
         player = self.player
         options = self.options
 
-        ENTRANCES_TO_EXITS = get_entrances_to_exits(options)
-        REGION_TO_ENTRANCES = get_region_to_entrances(options)
-        ENTRANCE_RULES = get_entrance_rules(player, options)
+        self.entrances.generate_entrance_data()
+        ENTRANCES_TO_EXITS = self.entrances.entrances_to_exits
+        REGION_TO_ENTRANCES = self.entrances.region_to_entrances
+        ENTRANCE_RULES = self.entrances.entrances_rules
 
         treehouse = Region("Treehouse", player, multiworld)
         multiworld.regions.append(treehouse)

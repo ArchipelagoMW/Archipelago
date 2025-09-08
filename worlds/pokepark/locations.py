@@ -2155,7 +2155,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Cavern Zone Main Area - Cranidos Power Competition -- Friendship": PokeparkLocationData(
         235, PokeparkFlag.BATTLE, "Cavern Zone Main Area", 0x0401, PokeparkFriendshipClientLocationData(
-            structure_position=89,
+            structure_position=87,
             memory_range=MemoryRange.BYTE
         ),
     ),
