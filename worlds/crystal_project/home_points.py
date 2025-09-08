@@ -72,8 +72,8 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(SARA_SARA_BEACH_WEST, "Beach Bird's Nest", 2709, lambda state: logic.has_vertical_movement(state)),
 
         LocationData(BEAURIOR_VOLCANO, "Beaurior Rock", 1792),
-        LocationData(BEAURIOR_VOLCANO, "Beaurior Volcano Peak", 3037, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
 
+        LocationData(BEAURIOR_ROCK, "Beaurior Volcano Peak", 3037, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
         LocationData(BEAURIOR_ROCK, "Boss Room", 822, lambda state: logic.has_key(state, SMALL_KEY, 4)),
 
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Entrance", 1124),
