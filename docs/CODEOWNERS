@@ -25,9 +25,6 @@
 # Aquaria
 /worlds/aquaria/ @tioui
 
-# ArchipIDLE
-/worlds/archipidle/ @LegendaryLinux
-
 # Blasphemous
 /worlds/blasphemous/ @TRPG0
 
@@ -51,6 +48,9 @@
 
 # ChecksFinder
 /worlds/checksfinder/ @SunCatMC
+
+# Choo-Choo Charles
+/worlds/cccharles/ @Yaranorgoth
 
 # Civilization VI
 /worlds/civ6/ @hesto2
