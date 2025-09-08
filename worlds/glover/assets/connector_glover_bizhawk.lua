@@ -11499,10 +11499,10 @@ GLOVERHACK = {
     RDRAMBase = 0x80000000,
     RDRAMSize = 0x800000,
 
-        base_pointer = 0x400000,
+    base_pointer = 0x400000,
     pc = 0x0,
     ap_items = 0x9B,
-    ap_world = 0x734,
+    ap_world = 0x738,
       hub_entrance = 0x0,
       door_number = 0x1,
       garib_locations = 0x4,
@@ -11547,13 +11547,13 @@ GLOVERHACK = {
       taglink = 0x4,
     hub_map = 0x8,
     world_map = 0x9,
-    pc_deathlink = 0x6EC,
-    n64_deathlink = 0x6EF,
-    pc_taglink = 0x6ED,
-    n64_taglink = 0x6F0,
-    ROM_MAJOR_VERSION = 0x730,
-    ROM_MINOR_VERSION = 0x731,
-    ROM_PATCH_VERSION = 0x732
+    pc_deathlink = 0x6ED,
+    n64_deathlink = 0x6F0,
+    pc_taglink = 0x6EE,
+    n64_taglink = 0x6F1,
+    ROM_MAJOR_VERSION = 0x732,
+    ROM_MINOR_VERSION = 0x733,
+    ROM_PATCH_VERSION = 0x734
 }
 
 function GLOVERHACK:new(t)
