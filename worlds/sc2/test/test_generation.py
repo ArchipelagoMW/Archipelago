@@ -1234,7 +1234,6 @@ class TestItemFiltering(Sc2SetupTestBase):
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
             'unexcluded_items': [item_names.SOA_TIME_STOP],
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
-            'selected_races': [SC2Race.PROTOSS.get_title()],
         }
 
         self.generate_world(world_options)
