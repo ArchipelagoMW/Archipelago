@@ -1720,8 +1720,9 @@ class Spoiler:
                     location.item.name, location.item.player, location.name, location.player) for location in
                                                                                sphere_candidates])
                 if not multiworld.has_beaten_game(state):
-                    raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}), and as a result, '
-                                       f'the multiworld was not beatable. Something went terribly wrong here.')
+                    raise RuntimeError("During playthrough generation, the game was determined not to be beatable. "
+                                       "Something went terribly wrong here. "
+                                       f"Unreachable progression items: {sphere_candidates}")
                 else:
                     self.unreachables = sphere_candidates
                     break
