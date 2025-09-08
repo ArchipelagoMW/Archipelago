@@ -2653,6 +2653,13 @@
     "progressive": 1
   },
   {
+    "type": "Character",
+    "name": "Verso",
+    "internal_name": "Verso",
+    "quantity": 1,
+    "progressive": 1
+  },
+  {
     "type": "Area",
     "name": "Area - Flying Waters",
     "internal_name": "GoblusLair",
