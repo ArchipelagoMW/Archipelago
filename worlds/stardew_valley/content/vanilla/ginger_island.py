@@ -9,7 +9,7 @@ from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
 from ...data.requirement import WalnutRequirement, ForgeInfinityWeaponRequirement, CookedRecipesRequirement, \
     CraftedItemsRequirement, CaughtFishRequirement, FullShipmentRequirement, RegionRequirement, \
-    AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, HasItemRequirement
+    AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, HasItemRequirement, ToolRequirement
 from ...data.shop import ShopSource, HatMouseSource
 from ...logic.tailoring_logic import TailoringSource
 from ...logic.time_logic import MAX_MONTHS
@@ -29,6 +29,7 @@ from ...strings.monster_names import Monster
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
+from ...strings.tool_names import Tool
 
 
 class GingerIslandContentPack(ContentPack):
@@ -54,7 +55,8 @@ ginger_island_content_pack = GingerIslandContentPack(
         ),
         Forageable.ginger: (
             Tag(ItemTag.FORAGE),
-            ForagingSource(regions=(Region.island_west,)),
+            ForagingSource(regions=(Region.island_west,),
+                           other_requirements=(ToolRequirement(Tool.hoe),)),
         ),
         Mushroom.magma_cap: (
             Tag(ItemTag.FORAGE),
