@@ -668,6 +668,7 @@ class SohOptions(PerGameCommonOptions):
     full_wallets: FullWallets
     bombchu_bag: BombchuBag
     bombchu_drops: BombchuDrops
+    start_inventory_from_pool: StartInventoryPool
     blue_fire_arrows: BlueFireArrows
     sunlight_arrows: SunlightArrows
     infinite_upgrades: InfiniteUpgrades
