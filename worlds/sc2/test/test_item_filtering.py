@@ -15,6 +15,7 @@ class ItemFilterTests(Sc2SetupTestBase):
             },
             'required_tactics': 'standard',
             'min_number_of_upgrades': 1,
+            **self.TERRAN_CAMPAIGNS,
             'selected_races': {
                 SC2Race.TERRAN.get_title()
             },
@@ -54,6 +55,7 @@ class ItemFilterTests(Sc2SetupTestBase):
             },
             'min_number_of_upgrades': 2,
             'required_tactics': 'standard',
+            **self.ALL_CAMPAIGNS,
             'selected_races': {
                 SC2Race.PROTOSS.get_title()
             },
@@ -68,7 +70,6 @@ class ItemFilterTests(Sc2SetupTestBase):
 
     def test_excluding_all_items_in_multiparent_excludes_child_items(self) -> None:
         world_options = {
-            **self.ALL_CAMPAIGNS,
             'excluded_items': {
                 item_names.ZEALOT: 1,
                 item_names.SENTINEL: 1,
@@ -76,6 +77,7 @@ class ItemFilterTests(Sc2SetupTestBase):
             },
             'min_number_of_upgrades': 2,
             'required_tactics': 'standard',
+            **self.PROTOSS_CAMPAIGNS,
             'selected_races': {
                 SC2Race.PROTOSS.get_title()
             },

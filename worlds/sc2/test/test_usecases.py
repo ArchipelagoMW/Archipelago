@@ -341,6 +341,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     def test_kerrigan_max_active_abilities(self):
         target_number: int = 8
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'selected_races': {
@@ -359,6 +360,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     def test_kerrigan_max_passive_abilities(self):
         target_number: int = 3
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'selected_races': {
@@ -377,6 +379,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     def test_spear_of_adun_max_active_abilities(self):
         target_number: int = 8
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'selected_races': {
@@ -396,6 +399,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     def test_spear_of_adun_max_autocasts(self):
         target_number: int = 2
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'selected_races': {
@@ -415,6 +419,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     def test_nova_max_weapons(self):
         target_number: int = 3
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'selected_races': {
@@ -434,6 +439,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     def test_nova_max_gadgets(self):
         target_number: int = 3
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'selected_races': {
@@ -451,6 +457,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
     
     def test_mercs_only(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'selected_races': [
                 SC2Race.TERRAN.get_title(),
                 SC2Race.ZERG.get_title(),
