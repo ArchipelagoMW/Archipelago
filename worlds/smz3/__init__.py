@@ -260,12 +260,18 @@ class SMZ3World(World):
                     l.always_allow = lambda state, item, loc=loc: \
                         item.game == "SMZ3" and \
                         loc.alwaysAllow(item.item, state.smz3state[self.player])
-                old_rule = l.item_rule
-                l.item_rule = lambda item, loc=loc, region=region: (\
+                l.item_rule = lambda item, loc=loc, region=region, old_rule=l.item_rule: (\
                     item.game != "SMZ3" or \
                     loc.allow(item.item, None) and \
                         region.CanFill(item.item)) and old_rule(item)
                 set_rule(l, lambda state, loc=loc: loc.Available(state.smz3state[self.player]))
+
+        # In multiworlds, GT is disallowed from having progression items.
+        # This item rule replicates this behavior for non-SMZ3 games
+        for loc in self.smz3World.GetRegion("Ganon's Tower").Locations:
+            l = self.locations[loc.Name]
+            l.item_rule = lambda item, old_rule=l.item_rule: \
+                (item.game == "SMZ3" or not item.advancement) and old_rule(item)
 
     def create_regions(self):
         self.create_locations(self.player)
@@ -589,29 +595,18 @@ class SMZ3World(World):
         ]))
 
     def JunkFillGT(self, factor):
-        poolLength = len(self.multiworld.itempool)
-        junkPoolIdx = [i for i in range(0, poolLength)
-                    if self.multiworld.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap)]
+        junkPoolIdx = [idx for idx, i in enumerate(self.multiworld.itempool) if i.excludable]
+        self.random.shuffle(junkPoolIdx)
+        junkLocations = [loc for loc in self.locations.values() if loc.name in self.locationNamesGT and loc.item is None]
+        self.random.shuffle(junkLocations)
         toRemove = []
-        for loc in self.locations.values():
-            # commenting this for now since doing a partial GT pre fill would allow for non SMZ3 progression in GT
-            # which isnt desirable (SMZ3 logic only filters for SMZ3 items). Having progression in GT can only happen in Single Player.
-            # if len(toRemove) >= int(len(self.locationNamesGT) * factor * self.smz3World.TowerCrystals / 7):
-            #     break
-            if loc.name in self.locationNamesGT and loc.item is None:
-                poolLength = len(junkPoolIdx)
-                # start looking at a random starting index and loop at start if no match found
-                start = self.multiworld.random.randint(0, poolLength)
-                itemFromPool = None
-                for off in range(0, poolLength):
-                    i = (start + off) % poolLength
-                    candidate = self.multiworld.itempool[junkPoolIdx[i]]
-                    if junkPoolIdx[i] not in toRemove and loc.can_fill(self.multiworld.state, candidate, False):
-                        itemFromPool = candidate
-                        toRemove.append(junkPoolIdx[i])
-                        break
-                assert itemFromPool is not None, "Can't find anymore item(s) to pre fill GT"
-                self.multiworld.push_item(loc, itemFromPool, False)
+        for loc in junkLocations:
+            # Note: Upstream GT junk fill uses FastFill, which ignores item rules
+            if len(junkPoolIdx) == 0 or len(toRemove) >= int(len(junkLocations) * factor * self.smz3World.TowerCrystals / 7):
+                break
+            itemFromPool = self.multiworld.itempool[junkPoolIdx[0]]
+            toRemove.append(junkPoolIdx.pop(0))
+            loc.place_locked_item(itemFromPool)
         toRemove.sort(reverse = True)
         for i in toRemove: 
             self.multiworld.itempool.pop(i)
@@ -622,15 +617,15 @@ class SMZ3World(World):
             raise Exception(f"Tried to place item {itemType} at {location.Name}, but there is no such item in the item pool")
         else:
             location.Item = itemToPlace
-            itemFromPool = next((i for i in self.multiworld.itempool if i.player == self.player and i.name == itemToPlace.Type.name), None)
-            if itemFromPool is not None:
+            itemPoolIdx = next((idx for idx, i in enumerate(self.multiworld.itempool) if i.player == self.player and i.name == itemToPlace.Type.name), None)
+            if itemPoolIdx is not None:
+                itemFromPool = self.multiworld.itempool.pop(itemPoolIdx)
                 self.multiworld.get_location(location.Name, self.player).place_locked_item(itemFromPool)
-                self.multiworld.itempool.remove(itemFromPool)
             else:
-                itemFromPool = next((i for i in self.smz3DungeonItems if i.player == self.player and i.name == itemToPlace.Type.name), None)
-                if itemFromPool is not None:
+                itemPoolIdx = next((idx for idx, i in enumerate(self.smz3DungeonItems) if i.player == self.player and i.name == itemToPlace.Type.name), None)
+                if itemPoolIdx is not None:
+                    itemFromPool = self.smz3DungeonItems.pop(itemPoolIdx)
                     self.multiworld.get_location(location.Name, self.player).place_locked_item(itemFromPool)
-                    self.smz3DungeonItems.remove(itemFromPool)
         itemPool.remove(itemToPlace)
 
     def FrontFillItemInOwnWorld(self, itemPool, itemType):
@@ -640,10 +635,10 @@ class SMZ3World(World):
             raise Exception(f"Tried to front fill {item.Name} in, but no location was available")
         
         location.Item = item
-        itemFromPool = next((i for i in self.multiworld.itempool if i.player == self.player and i.name == item.Type.name and i.advancement == item.Progression), None)
-        if itemFromPool is not None:
+        itemPoolIdx = next((idx for idx, i in enumerate(self.multiworld.itempool) if i.player == self.player and i.name == item.Type.name and i.advancement == item.Progression), None)
+        if itemPoolIdx is not None:
+            itemFromPool = self.multiworld.itempool.pop(itemPoolIdx)
             self.multiworld.get_location(location.Name, self.player).place_locked_item(itemFromPool)
-            self.multiworld.itempool.remove(itemFromPool)
         itemPool.remove(item)
 
     def InitialFillInOwnWorld(self):
