@@ -1719,9 +1719,9 @@ class Spoiler:
                 logging.debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
                     location.item.name, location.item.player, location.name, location.player) for location in
                                                                                sphere_candidates])
-                if any([multiworld.worlds[location.item.player].options.accessibility != 'minimal' for location in sphere_candidates]):
-                    raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}). '
-                                       f'Something went terribly wrong here.')
+                if not multiworld.has_beaten_game(state):
+                    raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}), and as a result, '
+                                       f'the multiworld was not beatable. Something went terribly wrong here.')
                 else:
                     self.unreachables = sphere_candidates
                     break
