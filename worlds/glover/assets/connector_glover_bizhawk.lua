@@ -97,7 +97,9 @@ local MAX_WORLD_GARIBS = {
 	['AP_SPACE_L3_GARIBS'] = 80,
 	['AP_SPACE_BONUS_GARIBS'] = 50
 };
-
+local TOTAL_PROGRESSIVE_LEVEL_EVENTS = {
+	['AP_CARNIVAL_L1_ROCKET_RAMP'] = 0
+}
 
 --------------- DEATH LINK ----------------------
 local DEATH_LINK_TRIGGERED = false;
@@ -181,6 +183,60 @@ local ROM_ITEM_TABLE = {
     "AP_CARNIVAL_L1_ROCKET_RAMP",
     "AP_CARNIVAL_L2_TEETH",
     "AP_CARNIVAL_L2_FAN",
+	--"AP_CARNIVAL_L3_SPIN_DOOR",
+	--"AP_CARNIVAL_L3_HANDS",
+	--"AP_PIRATES_L1_RAISE_BEACH",
+	--"AP_PIRATES_L1_ELEVATOR",
+	--"AP_PIRATES_L1_CHEST",
+	--"AP_PIRATES_L1_SANDPILE",
+	--"AP_PIRATES_L1_WATERSPOUT",
+	--"AP_PIRATES_L1_LIGHTHOUSE",
+	--"AP_PIRATES_L1_RAISE_SHIP",
+	--"AP_PIRATES_L1_BRIDGE",
+	--"AP_PIRATES_L2_LOWER_WATER",
+	--"AP_PIRATES_L2_RAMP",
+	--"AP_PIRATES_L2_GATE",
+	--"AP_PIRATES_L3_PLATFORM_SPIN",
+	--"AP_PIRATES_L3_TRAMPOLINE",
+	--"AP_PIRATES_L3_STAIRS",
+	--"AP_PIRATES_L3_ELEVATOR",
+	--"AP_PREHISTORIC_L1_LIFE_DROP",
+	--"AP_PREHISTORIC_L2_PLATFORM_1",
+	--"AP_PREHISTORIC_L2_PLATFORM_2",
+	--"AP_PREHISTORIC_L2_LOWER_BALL_SWITCH",
+	--"AP_PREHISTORIC_L3_DROP_GARIBS",
+	--"AP_PREHISTORIC_L3_SPIN_STONES",
+	--"AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_1",
+	--"AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_2",
+	--"AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_3",
+	--"AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH_4",
+	--"AP_PREHISTORIC_L3_FLOATING_PLATFORMS",
+	--"AP_PREHISTORIC_L3_LAVA_SPINNING",
+	--"AP_PREHISTORIC_L3_DIRT_ELEVATOR",
+	--"AP_FORTRESS_L1_COFFIN",
+	--"AP_FORTRESS_L1_DOORWAY",
+	--"AP_FORTRESS_L1_DRAWBRIDGE",
+	--"AP_FORTRESS_L2_GARIBS_FALL",
+	--"AP_FORTRESS_L2_CHECKPOINT_GATES",
+	--"AP_FORTRESS_L2_MUMMY_GATE",
+	--"AP_FORTRESS_L3_GATE",
+	--"AP_FORTRESS_L3_SPIKES",
+	--"AP_SPACE_L1_ALIENS",
+	--"AP_SPACE_L1_FANS",
+	--"AP_SPACE_L1_FLYING_PLATFORMS",
+	--"AP_SPACE_L1_GOO_PLATFORMS",
+	--"AP_SPACE_L1_UFO",
+	--"AP_SPACE_L1_MISSILE",
+	--"AP_SPACE_L2_MASHERS",
+	--"AP_SPACE_L2_RAMP",
+	--"AP_SPACE_L3_HAZARD_GATE",
+	--"AP_SPACE_L3_SIGN",
+	--"AP_SPACE_L3_FAN",
+	--"AP_SPACE_L3_BRIDGE",
+	--"AP_SPACE_L3_GLASS_GATE",
+	--"AP_TRAINING_WORLD_SANDPIT",
+	--"AP_TRAINING_WORLD_LOWER_TARGET",
+	--"AP_TRAINING_WORLD_STAIRS",
     "AP_MAX_ITEM",
 };
 
@@ -10953,18 +11009,28 @@ local GARIB_GROUPS_MAP = {
 		},
 	},
 	["AP_FORTRESS_BONUS"] = {
-		["Garibs A"] = {
+		["Goal Garibs"] = {
 			["id"] = "11585",
 			["garibs"] = {
 				"1585",
 				"1586",
 				"1587",
-				"1588",
+				"1588"
+			}
+		},
+		["Inner A Garibs"] = {
+			["id"] = "11589",
+			["garibs"] = {
 				"1589",
 				"1590",
 				"1591",
 				"1592",
-				"1593",
+				"1593"
+			}
+		},
+		["Inner B Garibs"] = {
+			["id"] = "11594",
+			["garibs"] = {
 				"1594",
 				"1595",
 				"1596",
@@ -10972,26 +11038,36 @@ local GARIB_GROUPS_MAP = {
 				"1598"
 			}
 		},
-		["Garibs B"] = {
+		["Inner C Garibs"] = {
 			["id"] = "11599",
 			["garibs"] = {
 				"1599",
 				"1600",
 				"1601",
 				"1602",
-				"1603",
+				"1603"
+			}
+		},
+		["Inner D Garibs"] = {
+			["id"] = "11604",
+			["garibs"] = {
 				"1604",
 				"1605",
 				"1606",
 				"1607",
-				"1608",
+				"1608"
+			}
+		},
+		["Life Garibs"] = {
+			["id"] = "11609",
+			["garibs"] = {
 				"1609",
 				"1610",
 				"1611",
 				"1612"
 			}
 		},
-		["Garibs C"] = {
+		["Outer A Garibs"] = {
 			["id"] = "11613",
 			["garibs"] = {
 				"1613",
@@ -11000,7 +11076,12 @@ local GARIB_GROUPS_MAP = {
 				"1616",
 				"1617",
 				"1618",
-				"1619",
+				"1619"
+			}
+		},
+		["Outer B Garibs"] = {
+			["id"] = "11620",
+			["garibs"] = {
 				"1620",
 				"1621",
 				"1622",
@@ -11010,7 +11091,7 @@ local GARIB_GROUPS_MAP = {
 				"1626"
 			}
 		},
-		["Garibs D"] = {
+		["Outer C Garibs"] = {
 			["id"] = "11627",
 			["garibs"] = {
 				"1627",
@@ -11019,7 +11100,12 @@ local GARIB_GROUPS_MAP = {
 				"1630",
 				"1631",
 				"1632",
-				"1633",
+				"1633"
+			}
+		},
+		["Outer D Garibs"] = {
+			["id"] = "11634",
+			["garibs"] = {
 				"1634",
 				"1635",
 				"1636",
@@ -12288,23 +12374,20 @@ function received_events(itemId)
     elseif itemId == 6500014 then
         GVR:setItem(ITEM_TABLE["AP_ATLANTIS_L3_CAVE"], 1)
 	elseif itemId == 6500024 then
-	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_ELEVATOR"], 1)
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_CONVEYOR"], 1)
 	elseif itemId == 6500025 then
 	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_GATE"], 1)
 	elseif itemId == 6500026 then
-	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_DOOR_A"], 1)
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_DOORA"], 1)
 	elseif itemId == 6500027 then
-	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_DOOR_B"], 1)
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_DOORB"], 1)
 	elseif itemId == 6500028 then
-	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_DOOR_C"], 1)
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_DOORC"], 1)
 	elseif itemId == 6500029 then
-	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_ROCKET_1"], 1)
-	elseif itemId == 6500030 then
-	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_ROCKET_2"], 1)
-	elseif itemId == 6500031 then
-	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_ROCKET_3"], 1)
+		TOTAL_PROGRESSIVE_LEVEL_EVENTS["AP_CARNIVAL_L1_ROCKET_RAMP"] = TOTAL_PROGRESSIVE_LEVEL_EVENTS["AP_CARNIVAL_L1_ROCKET_RAMP"] + 1
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L1_ROCKET_RAMP"], TOTAL_PROGRESSIVE_LEVEL_EVENTS["AP_CARNIVAL_L1_ROCKET_RAMP"])
 	elseif itemId == 6500032 then
-	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L2_DROP_GARIBS"], 1)
+	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L2_TEETH"], 1)
 	elseif itemId == 6500033 then
 	    GVR:setItem(ITEM_TABLE["AP_CARNIVAL_L2_FAN"], 1)
 	elseif itemId == 6500034 then

@@ -5289,8 +5289,21 @@
 				},
 				{
 					"ballRequirement": false,
-					"mv0": 24,
-					"mv1": 3,
+					"mv0": 30,
+					"regionIndex": 11,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 13,
+					"mv1": 25,
+					"regionIndex": 11,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 32,
 					"regionIndex": 11,
 					"trickDifficulty": 0
 				}
@@ -7027,10 +7040,10 @@
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 13,
-						"mv1": 8,
-						"mv2": 11,
-						"mv3": 2,
+						"mv0": 11,
+						"mv1": 2,
+						"mv2": 27,
+						"mv3": 26,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					}
@@ -18180,102 +18193,6 @@
 			}
 		},
 		"l5": {
-			"Garibs A": [
-				{
-					"AP_IDS": [
-						"0x631",
-						"0x632",
-						"0x633",
-						"0x634",
-						"0x635",
-						"0x636",
-						"0x637",
-						"0x638",
-						"0x639",
-						"0x63A",
-						"0x63B",
-						"0x63C",
-						"0x63D",
-						"0x63E"
-					],
-					"IDS": [],
-					"NEEDS_BALL": false,
-					"REGION": 0,
-					"TYPE": 1
-				}
-			],
-			"Garibs B": [
-				{
-					"AP_IDS": [
-						"0x63F",
-						"0x640",
-						"0x641",
-						"0x642",
-						"0x643",
-						"0x644",
-						"0x645",
-						"0x646",
-						"0x647",
-						"0x648",
-						"0x649",
-						"0x64A",
-						"0x64B",
-						"0x64C"
-					],
-					"IDS": [],
-					"NEEDS_BALL": false,
-					"REGION": 0,
-					"TYPE": 1
-				}
-			],
-			"Garibs C": [
-				{
-					"AP_IDS": [
-						"0x64D",
-						"0x64E",
-						"0x64F",
-						"0x650",
-						"0x651",
-						"0x652",
-						"0x653",
-						"0x654",
-						"0x655",
-						"0x656",
-						"0x657",
-						"0x658",
-						"0x659",
-						"0x65A"
-					],
-					"IDS": [],
-					"NEEDS_BALL": false,
-					"REGION": 0,
-					"TYPE": 1
-				}
-			],
-			"Garibs D": [
-				{
-					"AP_IDS": [
-						"0x65B",
-						"0x65C",
-						"0x65D",
-						"0x65E",
-						"0x65F",
-						"0x660",
-						"0x661",
-						"0x662",
-						"0x663",
-						"0x664",
-						"0x665",
-						"0x666",
-						"0x667",
-						"0x668"
-					],
-					"IDS": [],
-					"NEEDS_BALL": false,
-					"REGION": 0,
-					"TYPE": 1
-				}
-			],
 			"Goal": [
 				{
 					"AP_IDS": [
@@ -18285,6 +18202,109 @@
 					"NEEDS_BALL": true,
 					"REGION": 0,
 					"TYPE": 5
+				}
+			],
+			"Goal Garibs": [
+				{
+					"AP_IDS": [
+						"0x631",
+						"0x632",
+						"0x633",
+						"0x634"
+					],
+					"IDS": [
+						"0x37",
+						"0x38",
+						"0x30",
+						"0x2F"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 1
+				}
+			],
+			"Inner A Garibs": [
+				{
+					"AP_IDS": [
+						"0x635",
+						"0x636",
+						"0x637",
+						"0x638",
+						"0x639"
+					],
+					"IDS": [
+						"0x54",
+						"0x53",
+						"0x3A",
+						"0x42",
+						"0x43"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 1
+				}
+			],
+			"Inner B Garibs": [
+				{
+					"AP_IDS": [
+						"0x63A",
+						"0x63B",
+						"0x63C",
+						"0x63D",
+						"0x63E"
+					],
+					"IDS": [
+						"0x50",
+						"0x51",
+						"0x3B",
+						"0x3D",
+						"0x3F"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 1
+				}
+			],
+			"Inner C Garibs": [
+				{
+					"AP_IDS": [
+						"0x63F",
+						"0x640",
+						"0x641",
+						"0x642",
+						"0x643"
+					],
+					"IDS": [
+						"0x5A",
+						"0x59",
+						"0x4D",
+						"0x4A",
+						"0x4B"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 1
+				}
+			],
+			"Inner D Garibs": [
+				{
+					"AP_IDS": [
+						"0x644",
+						"0x645",
+						"0x646",
+						"0x647",
+						"0x648"
+					],
+					"IDS": [
+						"0x56",
+						"0x57",
+						"0x4E",
+						"0x45",
+						"0x47"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 1
 				}
 			],
 			"Life": [
@@ -18298,6 +18318,25 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 2
+				}
+			],
+			"Life Garibs": [
+				{
+					"AP_IDS": [
+						"0x649",
+						"0x64A",
+						"0x64B",
+						"0x64C"
+					],
+					"IDS": [
+						"0x27",
+						"0x29",
+						"0x34",
+						"0x32"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 1
 				}
 			],
 			"Main": {
@@ -18325,7 +18364,107 @@
 					}
 				],
 				"I": 0
-			}
+			},
+			"Outer A Garibs": [
+				{
+					"AP_IDS": [
+						"0x64D",
+						"0x64E",
+						"0x64F",
+						"0x650",
+						"0x651",
+						"0x652",
+						"0x653"
+					],
+					"IDS": [
+						"0x6D",
+						"0x6E",
+						"0x6C",
+						"0x41",
+						"0x63",
+						"0x62",
+						"0x2E"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 1
+				}
+			],
+			"Outer B Garibs": [
+				{
+					"AP_IDS": [
+						"0x654",
+						"0x655",
+						"0x656",
+						"0x657",
+						"0x658",
+						"0x659",
+						"0x65A"
+					],
+					"IDS": [
+						"0x68",
+						"0x6A",
+						"0x69",
+						"0x3E",
+						"0x60",
+						"0x5F",
+						"0x28"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 1
+				}
+			],
+			"Outer C Garibs": [
+				{
+					"AP_IDS": [
+						"0x65B",
+						"0x65C",
+						"0x65D",
+						"0x65E",
+						"0x65F",
+						"0x660",
+						"0x661"
+					],
+					"IDS": [
+						"0x75",
+						"0x76",
+						"0x74",
+						"0x49",
+						"0x65",
+						"0x66",
+						"0x36"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 1
+				}
+			],
+			"Outer D Garibs": [
+				{
+					"AP_IDS": [
+						"0x662",
+						"0x663",
+						"0x664",
+						"0x665",
+						"0x666",
+						"0x667",
+						"0x668"
+					],
+					"IDS": [
+						"0x70",
+						"0x72",
+						"0x71",
+						"0x46",
+						"0x5C",
+						"0x5D",
+						"0x33"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 0,
+					"TYPE": 1
+				}
+			]
 		}
 	},
 	{
@@ -21540,7 +21679,9 @@
 					"AP_IDS": [
 						"0x7AA"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x8D"
+					],
 					"NEEDS_BALL": true,
 					"REGION": 3,
 					"TYPE": 0
@@ -21551,7 +21692,9 @@
 					"AP_IDS": [
 						"0x79B"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x108"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 3,
 					"TYPE": 6
@@ -21562,7 +21705,9 @@
 					"AP_IDS": [
 						"0x79C"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x10D"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 5,
 					"TYPE": 6
@@ -21604,7 +21749,9 @@
 					"AP_IDS": [
 						"0x79D"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x103"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 6
@@ -21615,7 +21762,9 @@
 					"AP_IDS": [
 						"0x79E"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x110"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 5,
 					"TYPE": 6
@@ -21626,7 +21775,9 @@
 					"AP_IDS": [
 						"0x79F"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x10A"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 4,
 					"TYPE": 6
@@ -21637,7 +21788,9 @@
 					"AP_IDS": [
 						"0x7A0"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x104"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 6
@@ -21648,7 +21801,9 @@
 					"AP_IDS": [
 						"0x7A1"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x10F"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 6
@@ -21690,7 +21845,9 @@
 					"AP_IDS": [
 						"0x7A2"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x10B"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 5,
 					"TYPE": 6
@@ -21701,7 +21858,9 @@
 					"AP_IDS": [
 						"0x7AB"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x93"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 5,
 					"TYPE": 0
@@ -21712,7 +21871,9 @@
 					"AP_IDS": [
 						"0x7A3"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x10C"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 5,
 					"TYPE": 6
@@ -21786,7 +21947,9 @@
 					"AP_IDS": [
 						"0x7A4"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x111"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 6
@@ -21797,7 +21960,9 @@
 					"AP_IDS": [
 						"0x7A5"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x10E"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 6
@@ -21925,7 +22090,9 @@
 					"AP_IDS": [
 						"0x7A6"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x109"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 4,
 					"TYPE": 6
@@ -21936,7 +22103,9 @@
 					"AP_IDS": [
 						"0x7A7"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x107"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 2,
 					"TYPE": 6
@@ -22010,7 +22179,9 @@
 					"AP_IDS": [
 						"0x7AC"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x9A"
+					],
 					"NEEDS_BALL": true,
 					"REGION": 6,
 					"TYPE": 0
@@ -22021,7 +22192,9 @@
 					"AP_IDS": [
 						"0x7A8"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x105"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 1,
 					"TYPE": 6
@@ -22032,7 +22205,9 @@
 					"AP_IDS": [
 						"0x7A9"
 					],
-					"IDS": [],
+					"IDS": [
+						"0x106"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 1,
 					"TYPE": 6
