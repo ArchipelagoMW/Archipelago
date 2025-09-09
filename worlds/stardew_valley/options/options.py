@@ -1022,11 +1022,12 @@ all_mods = {ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
 # These mods have been disabled because either they are not updated for the current supported version of Stardew Valley,
 # or we didn't find the time to validate that they work or fix compatibility issues if they do.
 # Once a mod is validated to be functional, it can simply be removed from this list
+# SVE specifically is disabled because their main version is significantly ahead of ours, with breaking changes, and nobody is maintaining our integration.
 disabled_mods = {ModNames.deepwoods, ModNames.magic,
                  ModNames.cooking_skill,
                  ModNames.yoba, ModNames.eugene,
                  ModNames.wellwick, ModNames.shiko, ModNames.delores, ModNames.riley,
-                 ModNames.boarding_house}
+                 ModNames.boarding_house, ModNames.sve}
 
 enabled_mods = all_mods.difference(disabled_mods)
 all_mods_except_invalid_combinations = set(all_mods)
