@@ -17,6 +17,10 @@ semaphore = threading.Semaphore(os.cpu_count() or 4)
 del threading
 
 
+class ImproperlyConfiguredAutoPatchError(Exception):
+    pass
+
+
 class AutoPatchRegister(abc.ABCMeta):
     patch_types: ClassVar[Dict[str, AutoPatchRegister]] = {}
     file_endings: ClassVar[Dict[str, AutoPatchRegister]] = {}
@@ -26,15 +30,26 @@ class AutoPatchRegister(abc.ABCMeta):
         new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
             AutoPatchRegister.patch_types[dct["game"]] = new_class
-            if not dct["patch_file_ending"]:
-                raise Exception(f"Need an expected file ending for {name}")
+
+            patch_file_ending = dct.get("patch_file_ending")
+            if not patch_file_ending:
+                raise ImproperlyConfiguredAutoPatchError(
+                    f"Need an expected file ending for auto patch container {new_class}"
+                )
+
+            existing_handler = AutoPatchRegister.file_endings.get(patch_file_ending)
+            if existing_handler:
+                raise ImproperlyConfiguredAutoPatchError(
+                    f"Two auto patch containers are using the same file extension: {new_class}, {existing_handler}"
+                )
+
+            if not callable(getattr(new_class, "patch", None)):
+                raise ImproperlyConfiguredAutoPatchError(
+                    f"Container {new_class} uses metaclass AutoPatchRegister, but does not have a patch method defined."
+                )
+
             AutoPatchRegister.file_endings[dct["patch_file_ending"]] = new_class
         return new_class
-
-    @staticmethod
-    def get_handler(file: str) -> Optional[AutoPatchRegister]:
-        _, suffix = os.path.splitext(file)
-        return AutoPatchRegister.file_endings.get(suffix, None)
 
 
 class AutoPatchExtensionRegister(abc.ABCMeta):
