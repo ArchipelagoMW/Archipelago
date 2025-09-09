@@ -78,7 +78,7 @@ class GrinchClient(BizHawkClient):
 
         return True
 
-    async def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
+    def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         from CommonClient import logger
         super().on_package(ctx, cmd, args)
         match cmd:
@@ -97,14 +97,14 @@ class GrinchClient(BizHawkClient):
                     ctx.tags -= { "RingLink" }
 
                 if tags != ctx.tags:
-                    await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
+                    Utils.async_start(ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}]), "Update RingLink Tags")
 
             case "Bounced":
                 if "tags" not in args:
                     return
 
                 if "RingLink" in ctx.tags and "RingLink" in args["tags"] and args["data"]["source"] != ctx.player_names[ctx.slot]:
-                    await self.ring_link_input(args["data"]["amount"], ctx)
+                    Utils.async_start(self.ring_link_input(args["data"]["amount"], ctx), "SyncEggs")
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         await ctx.get_username()
@@ -124,7 +124,6 @@ class GrinchClient(BizHawkClient):
             await self.goal_checker(ctx)
             await self.option_handler(ctx)
             await self.constant_address_update(ctx)
-            # await self.ring_link_input(args["args"])
 
         except bizhawk.RequestFailedError as ex:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
@@ -324,8 +323,10 @@ class GrinchClient(BizHawkClient):
             raise Exception("Unable to update address as expected. Address: "+ str(address_to_validate)+"; Expected Value: "+str(expected_value))
 
     async def ring_link_output(self, ctx: "BizHawkClientContext"):
+        from CommonClient import logger
         if not ctx.slot:
             return
+
         try:
             current_egg_count = int.from_bytes(
                 (await bizhawk.read(ctx.bizhawk_ctx, [(EGG_COUNT_ADDR, EGG_ADDR_BYTESIZE, "MainRAM")]))[0], "little")
