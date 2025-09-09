@@ -5014,7 +5014,7 @@
         "internal_name": "RD_CreationAlpha",
         "location": "Renoir’s Drafts",
         "original_item": "",
-        "condition": {},
+        "condition": {"Paint Break":  1},
         "type": "Boss",
         "boss_type": "Chromatic"
     },
