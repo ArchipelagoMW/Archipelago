@@ -3,6 +3,7 @@ from typing import Dict
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..content.vanilla.qi_board import qi_board_content_pack
+from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, Has, false_
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.transport_names import Transportation
@@ -105,3 +106,10 @@ class SpecialOrderLogic(BaseLogic):
 
     def has_island_transport(self) -> StardewRule:
         return self.logic.received(Transportation.island_obelisk) | self.logic.received(Transportation.boat_repair)
+
+    def can_get_radioactive_ore(self) -> StardewRule:
+        if self.options.special_order_locations & SpecialOrderLocations.option_board:
+            return self.logic.false_
+
+        return self.logic.ability.can_mine_perfectly() & self.logic.region.can_reach(Region.qi_walnut_room) &\
+               self.logic.region.can_reach_all(*(Region.mines_floor_100, Region.skull_cavern_100))

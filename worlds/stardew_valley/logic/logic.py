@@ -307,7 +307,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Ore.gold: self.mine.can_mine_in_the_mines_floor_81_120() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_pan(ToolMaterial.gold),
             Ore.iridium: self.count(2, *(self.mine.can_mine_in_the_skull_cavern(), self.can_fish_pond(Fish.super_cucumber), self.tool.has_pan(ToolMaterial.iridium))),
             Ore.iron: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_pan(ToolMaterial.iron),
-            Ore.radioactive: self.ability.can_mine_perfectly() & self.region.can_reach(Region.qi_walnut_room),
+            Ore.radioactive: self.special_order.can_get_radioactive_ore(),
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
             RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             SpecialItem.lucky_purple_shorts: self.special_items.has_purple_shorts(),
