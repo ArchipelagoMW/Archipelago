@@ -57,33 +57,35 @@ def set_rules(world):
     else:
         #2 gestrals in First Continent North
         add_rule(mw.get_location("Lost Gestral reward 1", player),
-                 lambda state: state.can_reach_region("WM: First Continent North", player))
+                 lambda state: state.has_any_count({"Progressive Rock": 2, "Area - Flying Waters": 1}, player))
         add_rule(mw.get_location("Lost Gestral reward 1", player),
-                 lambda state: state.can_reach_region("WM: First Continent North", player))
+                 lambda state: state.has_any_count({"Progressive Rock": 2, "Area - Flying Waters": 1}, player))
         add_rule(mw.get_location("Lost Gestral reward 2", player),
-                 lambda state: state.can_reach_region("WM: First Continent North", player))
+                 lambda state: state.has_any_count({"Progressive Rock": 2, "Area - Flying Waters": 1}, player))
 
         #1 gestral in South Sea
         add_rule(mw.get_location("Lost Gestral reward 3", player),
-                 lambda state: state.can_reach_region("WM: South Sea", player))
+                 lambda state: state.has("Progressive Rock", player, 2))
 
         #1 in Second Continent South
         add_rule(mw.get_location("Lost Gestral reward 4", player),
-                 lambda state: state.can_reach_region("WM: Second Continent South", player))
+                 lambda state: (state.has("Progressive Rock", player, 3) or
+                                state.has_all_counts({"Progressive Rock": 2, "Area - Forgotten Battlefield": 1},
+                                                     player)))
 
         #2 in North Sea
         add_rule(mw.get_location("Lost Gestral reward 5", player),
-                 lambda state: state.can_reach_region("WM: First Continent North", player))
+                 lambda state: state.has("Progressive Rock", player, 3))
         add_rule(mw.get_location("Lost Gestral reward 6", player),
-                 lambda state: state.can_reach_region("WM: First Continent North", player))
+                 lambda state: state.has("Progressive Rock", player, 3))
 
         #3 in Sky
         add_rule(mw.get_location("Lost Gestral reward 7", player),
-                 lambda state: state.can_reach_region("WM: Sky", player))
+                 lambda state: state.has("Progressive Rock", player, 4))
         add_rule(mw.get_location("Lost Gestral reward 8", player),
-                 lambda state: state.can_reach_region("WM: Sky", player))
+                 lambda state: state.has("Progressive Rock", player, 4))
         add_rule(mw.get_location("Lost Gestral reward 9", player),
-                 lambda state: state.can_reach_region("WM: Sky", player))
+                 lambda state: state.has("Progressive Rock", player, 4))
 
     #Character specific access rules- can't be added to conditions due to shuffle char option
     if world.options.char_shuffle:
