@@ -69,7 +69,7 @@ class UnlimitedEggs(Toggle):
     display_name = "Unlimited Rotten Eggs"
 
 class RingLinkOption(Toggle):
-    """Whenever this is toggled, your ammo is linked with other ringlink-compatible games that also have this enabled. [NOT IMPLEMENTED]"""
+    """Whenever this is toggled, your ammo is linked with other ringlink-compatible games that also have this enabled."""
 
 class TrapLinkOption(Toggle):
     """If a trap is sent from Grinch, traps that are compatible with other games are triggered aswell. [NOT IMPLEMENTED]"""

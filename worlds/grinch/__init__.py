@@ -8,6 +8,7 @@ from .Client import *
 from typing import ClassVar
 
 from worlds.AutoWorld import World
+import Options
 
 from . import Options
 from .Rules import access_rules_dict
@@ -28,7 +29,10 @@ class GrinchWorld(World):
         super(GrinchWorld, self).__init__(*args, **kwargs)
 
     def generate_early(self) -> None: #Special conditions changed before generation occurs
-        pass
+        if self.options.ring_link == 1 and self.options.unlimited_eggs == 1:
+            raise Options.OptionError("Cannot enable both unlimited rotten eggs and ring links. You can only enable one of these at a time."+
+                                      f"The following player's YAML needs to be fixed: {self.player_name}")
+
 
     def create_regions(self): #Generates all regions for the multiworld
         for region_name in access_rules_dict.keys():
