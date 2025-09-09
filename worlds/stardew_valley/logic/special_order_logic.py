@@ -108,7 +108,7 @@ class SpecialOrderLogic(BaseLogic):
         return self.logic.received(Transportation.island_obelisk) | self.logic.received(Transportation.boat_repair)
 
     def can_get_radioactive_ore(self) -> StardewRule:
-        if self.options.special_order_locations & SpecialOrderLocations.option_board:
+        if not self.options.special_order_locations & SpecialOrderLocations.value_qi:
             return self.logic.false_
 
         return self.logic.ability.can_mine_perfectly() & self.logic.region.can_reach(Region.qi_walnut_room) &\
