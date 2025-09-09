@@ -260,7 +260,7 @@ iridium_ore = BundleItem(Ore.iridium)
 gold_ore = BundleItem(Ore.gold)
 iron_ore = BundleItem(Ore.iron)
 copper_ore = BundleItem(Ore.copper)
-radioactive_ore = BundleItem(Ore.radioactive, source=BundleItem.Sources.island)
+radioactive_ore = BundleItem(Ore.radioactive, source=BundleItem.Sources.qi_board)
 battery_pack = BundleItem(ArtisanGood.battery_pack)
 
 quartz = BundleItem(Mineral.quartz)
