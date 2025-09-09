@@ -1759,8 +1759,8 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         set_rule(world.get_location("Eastern Vault West Fuses"),
                  lambda state: state.has("Activate Beneath the Vault Fuse", player))
         set_rule(world.get_location("Eastern Vault East Fuse"),
-                 lambda state: state.has_all({"Activate Upper and Central Fortress Exterior Fuses",
-                                              "Activate South and West Fortress Exterior Fuses"}, player))
+                 lambda state: state.has_all(("Activate Upper and Central Fortress Exterior Fuses",
+                                              "Activate South and West Fortress Exterior Fuses"), player))
         set_rule(world.get_location("Quarry Connector Fuse"),
                  lambda state: has_ability(prayer, state, world) and state.has(grapple, player))
         set_rule(world.get_location("Quarry Fuse"),
