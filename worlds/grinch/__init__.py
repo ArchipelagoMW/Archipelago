@@ -72,7 +72,7 @@ class GrinchWorld(World):
     def fill_slot_data(self):
         return {
             "give_unlimited_eggs": self.options.unlimited_eggs.value,
-
+            "ring_link": self.options.ring_link.value,
         }
 
     def generate_output(self, output_directory: str) -> None:
