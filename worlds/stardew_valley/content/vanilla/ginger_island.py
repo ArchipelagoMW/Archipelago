@@ -8,7 +8,7 @@ from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropS
 from ...data.hats_data import Hats
 from ...data.monster_data import MonsterSource
 from ...data.requirement import WalnutRequirement, ForgeInfinityWeaponRequirement, CookedRecipesRequirement, \
-    CraftedItemsRequirement, CaughtFishRequirement, FullShipmentRequirement, RegionRequirement, \
+    CaughtFishRequirement, FullShipmentRequirement, RegionRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, HasItemRequirement, ToolRequirement
 from ...data.shop import ShopSource, HatMouseSource
 from ...logic.tailoring_logic import TailoringSource
@@ -119,7 +119,6 @@ ginger_island_content_pack = GingerIslandContentPack(
         Hats.infinity_crown: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(ForgeInfinityWeaponRequirement(),)),),
         Hats.archers_cap: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(9999),)),),
         Hats.chef_hat: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(9999),)),),
-        Hats.gnomes_cap: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(9999),)),),
         Hats.eye_patch: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(9999, unique=True),)),),
         Hats.cowpoke_hat: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(FullShipmentRequirement(),)),),
         Hats.goblin_mask: (Tag(ItemTag.HAT), HatMouseSource(price=10000, unlock_requirements=(FullShipmentRequirement(),)),),

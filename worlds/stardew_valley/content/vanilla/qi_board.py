@@ -5,7 +5,7 @@ from ...data import fish_data
 from ...data.game_item import GenericSource, ItemTag, Tag
 from ...data.harvest import HarvestCropSource
 from ...data.hats_data import Hats
-from ...data.requirement import DangerousMinesRequirement
+from ...data.requirement import DangerousMinesRequirement, CraftedItemsRequirement
 from ...data.shop import HatMouseSource
 from ...logic.tailoring_logic import TailoringSource
 from ...strings.crop_names import Fruit
@@ -41,5 +41,6 @@ qi_board_content_pack = QiBoardContentPack(
         Hats.space_helmet: (HatMouseSource(price=20000, unlock_requirements=(DangerousMinesRequirement(120),)),),
         Hats.qi_mask: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fruit.qi_fruit,)),),
         Hats.radioactive_goggles: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(MetalBar.radioactive,)),),
+        Hats.gnomes_cap: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(9999),)),),
     },
 )
