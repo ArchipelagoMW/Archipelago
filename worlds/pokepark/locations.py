@@ -205,6 +205,20 @@ class PokeparkMagikarpRescueClientData(PokeparkBaseClientLocationData):
 
 
 @dataclass
+class PokeparkPrismaCompletionClientData(PokeparkBaseClientLocationData):
+    _expected_value: Optional[int] = 0xFFFFFFFF
+    _bit_mask: Optional[int] = 0xFFFFFFFF
+
+    def __post_init__(self):
+        assert self._expected_value is not None
+        assert self._bit_mask is not None
+        self.global_manager_data_struc_offset = 0x52
+        self.in_structure_offset = 0x0
+        self.expected_value = self._expected_value
+        self.bit_mask = self._bit_mask
+        self.in_structure_address_interval = 0x0
+
+@dataclass
 class PokeparkBaltoyCrateClientData(PokeparkBaseClientLocationData):
     _expected_value: Optional[int] = 0xFFFFFFFF
     _bit_mask: Optional[int] = 0xFFFFFFFF
@@ -4227,20 +4241,29 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
 
     "Skygarden - Prisma Completion -- Stage 1": PokeparkLocationData(
         524, PokeparkFlag.POSTGAME, "Skygarden", 0x0701,
-        PokeparkBaseClientLocationData(
-            # TODO: add client Data
+        PokeparkPrismaCompletionClientData(
+            structure_position=0,
+            _expected_value=0b00000100,
+            _bit_mask=0b00000100,
+            memory_range=MemoryRange.BYTE
         )
     ),
     "Skygarden - Prisma Completion -- Stage 2": PokeparkLocationData(
         525, PokeparkFlag.POSTGAME, "Skygarden", 0x0701,
-        PokeparkBaseClientLocationData(
-            # TODO: add client Data
+        PokeparkPrismaCompletionClientData(
+            structure_position=0,
+            _expected_value=0b00000110,
+            _bit_mask=0b00000110,
+            memory_range=MemoryRange.BYTE
         )
     ),
     "Skygarden - Prisma Completion -- Completed": PokeparkLocationData(
         526, PokeparkFlag.POSTGAME, "Skygarden", 0x0701,
-        PokeparkBaseClientLocationData(
-            # TODO: add client Data
+        PokeparkPrismaCompletionClientData(
+            structure_position=0,
+            _expected_value=0b00001000,
+            _bit_mask=0b00001000,
+            memory_range=MemoryRange.BYTE
         )
     ),
 

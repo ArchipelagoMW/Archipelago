@@ -4,7 +4,7 @@ Archipelago init file for Pokepark
 import os
 import zipfile
 from base64 import b64encode
-from typing import Any, ClassVar, Callable
+from typing import Any, ClassVar, Callable, Dict
 
 import yaml
 
@@ -20,6 +20,7 @@ from .regions import EntranceRandomizer
 from .rules import set_rules
 from ..Files import APPlayerContainer
 
+VERSION: tuple[int, int, int] = (0, 0, 0)
 
 class PokeparkWebWorld(WebWorld):
     theme = "jungle"
@@ -160,6 +161,7 @@ class PokeparkWorld(World):
 
         # Output seed name and slot number to seed RNG in randomizer client.
         output_data = {
+            "Version": list(VERSION),
             "Seed": multiworld.seed_name,
             "Slot": player,
             "Name": self.player_name,
@@ -237,18 +239,18 @@ class PokeparkWorld(World):
             if data.type == "Item":
                 progressive_pool.extend([item_name] * data.quantity)
 
-        if options.power_randomizer == options.power_randomizer.option_dash:
+        if options.power_randomizer.value == options.power_randomizer.option_dash:
             precollected_pool.append("Progressive Dash")
             progressive_pool.remove("Progressive Dash")
-        if options.power_randomizer == options.power_randomizer.option_thunderbolt:
+        if options.power_randomizer.value == options.power_randomizer.option_thunderbolt:
             precollected_pool.append("Progressive Thunderbolt")
             progressive_pool.remove("Progressive Thunderbolt")
-        if options.power_randomizer == options.power_randomizer.option_thunderbolt_dash:
+        if options.power_randomizer.value == options.power_randomizer.option_thunderbolt_dash:
             precollected_pool.append("Progressive Thunderbolt")
             progressive_pool.remove("Progressive Thunderbolt")
             precollected_pool.append("Progressive Dash")
             progressive_pool.remove("Progressive Dash")
-        if options.power_randomizer == options.power_randomizer.option_full:
+        if options.power_randomizer.value == options.power_randomizer.option_full:
             for i in range(4):
                 precollected_pool.append("Progressive Thunderbolt")
                 progressive_pool.remove("Progressive Thunderbolt")
@@ -262,7 +264,7 @@ class PokeparkWorld(World):
             precollected_pool.append("Double Dash")
             progressive_pool.remove("Double Dash")
 
-        if options.starting_zone == options.starting_zone.option_one:
+        if options.starting_zone.value == options.starting_zone.option_one:
             fast_travel_items = [
                 "Meadow Zone Fast Travel",
                 "Beach Zone Fast Travel",
@@ -278,7 +280,7 @@ class PokeparkWorld(World):
             precollected_pool.append(precollected_fast_travel)
             progressive_pool.remove(precollected_fast_travel)
 
-        if options.starting_zone == options.starting_zone.option_all:
+        if options.starting_zone.value == options.starting_zone.option_all:
             fast_travel_items = [
                 "Meadow Zone Fast Travel",
                 "Beach Zone Fast Travel",
@@ -293,7 +295,7 @@ class PokeparkWorld(World):
                 precollected_pool.append(item)
                 progressive_pool.remove(item)
 
-        if options.in_zone_road_blocks:
+        if not options.in_zone_road_blocks.value:
             road_block_items = [
                 "Beach Bridge 1 Unlock",
                 "Beach Bridge 2 Unlock",
@@ -710,7 +712,11 @@ class PokeparkWorld(World):
         for item in progressive_pool:
             self.multiworld.itempool.append(self.create_item(item))
 
-
+    def fill_slot_data(self) -> Dict[str, Any]:
+        slot_data = self.options.as_dict(
+            "goal",
+        )
+        return slot_data
 
 def launch_client():
     from .PokeparkClient import main

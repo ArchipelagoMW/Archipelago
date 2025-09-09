@@ -9,6 +9,7 @@ from worlds.pokepark import PokeparkItem, LOCATION_TABLE
 from worlds.pokepark.adresses import POWER_MAP, MemoryAddress
 from worlds.pokepark.dme_helper import read_memory
 from worlds.pokepark.items import LOOKUP_ID_TO_NAME, ITEM_TABLE, PokeparkPowerItemClientData
+from worlds.pokepark.options import Goal
 
 ModuleUpdate.update()
 
@@ -17,6 +18,9 @@ import Utils
 from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
     CommonContext, server_loop
+
+MEW_GOAL_CODE = 523
+POSTGAME_PRISMA_GOAL_CODE = 526
 
 SLOT_NAME_ADDR = 0x80001820
 GLOBAL_MANGAER_PARAMETER1_ADDR = 0x80001800
@@ -66,6 +70,8 @@ class PokeparkContext(CommonContext):
     game = "PokePark"
     items_handling = 0b111  # full remote
     victory = False
+    goal_code = None
+    slot_data: dict[str, Any] | None = None
 
     def __init__(self, server_address, password):
         super(PokeparkContext, self).__init__(server_address, password)
@@ -116,8 +122,11 @@ class PokeparkContext(CommonContext):
         :param args: The command arguments.
         """
         if cmd == "Connected":
+            self.slot_data = args.get("slot_data", None)
             self.items_received_2 = []
             self.last_rcvd_index = -1
+            if self.slot_data["goal"] == Goal.option_mew:
+                self.goal_code = MEW_GOAL_CODE
             # Request the connected slot's dictionary (used as a set) of visited stages.
             visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
             Utils.async_start(self.send_msgs([{"cmd": "Get", "keys": [visited_stages_key]}]))
@@ -301,7 +310,7 @@ async def check_locations(ctx: PokeparkContext) -> None:
                                )
         current_value = read_memory(dme, memory)
         if (current_value & client_data.bit_mask) == expected_value:
-            if data.code is None:
+            if data.code == ctx.goal_code:
                 if not ctx.victory:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.victory = True
@@ -346,8 +355,9 @@ async def dolphin_sync_task(ctx: PokeparkContext) -> None:
 
     While connected, read the emulator's memory to look for any relevant changes made by the player in the game.
 
-    :param ctx: The Wind Waker client context.
+    :param ctx: The Pokepark client context.
     """
+
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
     while not ctx.exit_event.is_set():
         try:

@@ -146,6 +146,7 @@ class RandomizeAttractionEntrances(Toggle):
 class EachZone(Toggle):
     """
     Pokemon that are in multiple Zones become additional Locations. e.g. Bonsly (Meadow, Cavern, Magma Zone)
+    (not implemented, still generating)
     """
     default = False
 
