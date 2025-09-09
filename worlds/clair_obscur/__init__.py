@@ -100,7 +100,7 @@ class ClairObscurWorld(World):
 
         if self.options.char_shuffle:
             #Create items for characters if character shuffle is on.
-            chars = ["Gustave", "Maelle", "Lune", "Sciel", "Monoco"]
+            chars = ["Gustave", "Maelle", "Lune", "Sciel", "Monoco", "Verso"]
             starting_char = self.options.starting_char.current_option_name
             for char in chars:
                 char_item = self.create_item(char)
