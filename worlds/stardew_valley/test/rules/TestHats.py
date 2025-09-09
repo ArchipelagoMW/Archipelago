@@ -54,7 +54,7 @@ class TestHatsLogic(SVTestBase):
 
 class TestNoHatsLogic(SVTestBase):
     options = {
-        AllowedFillerItems.internal_name: frozenset({AllowedFillerOptionName.hats})
+        AllowedFillerItems.internal_name: frozenset({AllowedFillerOptionName.hats}),
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
         FestivalLocations.internal_name: FestivalLocations.option_hard,
         Fishsanity.internal_name: Fishsanity.option_all,
