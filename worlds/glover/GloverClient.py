@@ -682,6 +682,9 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         if ctx.tip_table != tipslist:
             ctx.tip_table = tipslist
             tip_hints = ctx.slot_data["mr_hints_locations"]
+            #For when tip hints are off
+            if isinstance(tip_hints, list):
+                tip_hints = {}
             tip_hints_type = ctx.slot_data["mr_hints"]
             for locationId, value in tipslist.items():
                 if value == True:
