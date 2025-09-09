@@ -10,7 +10,7 @@ from typing import ClassVar
 from worlds.AutoWorld import World
 import Options
 
-from . import Options
+from .Options import GrinchOptions
 from .Rules import access_rules_dict
 
 
