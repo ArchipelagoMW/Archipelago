@@ -9,6 +9,7 @@ from ...data.requirement import DangerousMinesRequirement
 from ...data.shop import HatMouseSource
 from ...logic.tailoring_logic import TailoringSource
 from ...strings.crop_names import Fruit
+from ...strings.metal_names import MetalBar
 from ...strings.region_names import Region
 from ...strings.seed_names import Seed
 
@@ -39,5 +40,6 @@ qi_board_content_pack = QiBoardContentPack(
     hat_sources={
         Hats.space_helmet: (HatMouseSource(price=20000, unlock_requirements=(DangerousMinesRequirement(120),)),),
         Hats.qi_mask: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fruit.qi_fruit,)),),
+        Hats.radioactive_goggles: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(MetalBar.radioactive,)),),
     },
 )

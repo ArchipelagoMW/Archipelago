@@ -24,7 +24,7 @@ from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
 from ...strings.geode_names import Geode
 from ...strings.material_names import Material
-from ...strings.metal_names import Fossil, Mineral, MetalBar
+from ...strings.metal_names import Fossil, Mineral
 from ...strings.monster_names import Monster
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
@@ -144,7 +144,6 @@ ginger_island_content_pack = GingerIslandContentPack(
                                                                        require_all_regions=True),),
 
         Hats.foragers_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Forageable.ginger,)),),
-        Hats.radioactive_goggles: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(MetalBar.radioactive,)),),
         Hats.sunglasses: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Material.cinder_shard,)),),
         Hats.swashbuckler_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Forageable.dragon_tooth,)),),
         Hats.warrior_helmet: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(AnimalProduct.ostrich_egg,)),),

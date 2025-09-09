@@ -2795,7 +2795,7 @@ id,region,name,tags,content_packs
 4688,Farm,Wear Pumpkin Mask,"HATSANITY,HAT_TAILORING",
 4689,Farm,Wear Qi Mask,"HATSANITY,HAT_TAILORING,GINGER_ISLAND",
 4690,Farm,Wear Raccoon Hat,"HATSANITY,HAT_MEDIUM",
-4691,Farm,Wear Radioactive Goggles,"HATSANITY,HAT_TAILORING,GINGER_ISLAND",
+4691,Farm,Wear Radioactive Goggles,"HATSANITY,HAT_TAILORING,GINGER_ISLAND,REQUIRES_QI_ORDERS",
 4692,Farm,Wear Red Cowboy Hat,"HATSANITY,HAT_RNG",
 4693,Farm,Wear Red Fez,"HATSANITY,HAT_MEDIUM",
 4694,Farm,Wear Sailor's Cap,"HATSANITY,HAT_EASY",
@@ -3681,7 +3681,7 @@ id,region,name,tags,content_packs
 57440,Farm,Craft Copper Slot Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT",Luck Skill
 57441,Farm,Craft Gold Slot Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT",Luck Skill
 57442,Farm,Craft Iridium Slot Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT",Luck Skill
-57443,Farm,Craft Radioactive Slot Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",Luck Skill
+57443,Farm,Craft Radioactive Slot Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND,REQUIRES_QI_ORDERS",Luck Skill
 57451,Adventurer's Guild,Magic Elixir Recipe,"CHEFSANITY,CRAFTSANITY_RECIPE,CHEFSANITY_PURCHASE",Magic
 57452,Adventurer's Guild,Travel Core Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Magic
 57453,Alesia Shop,Haste Elixir Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Stardew Valley Expanded
