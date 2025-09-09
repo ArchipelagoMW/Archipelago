@@ -64,3 +64,5 @@
 ## KV
 
 * Style should be defined in `.kv` as much as possible, only Python when unavailable.
+* Should follow [our Python style](#python-code) where appropriate (quotation marks, indentation).
+* When escaping a line break, add a space between code and backslash.
