@@ -156,23 +156,17 @@ def home_path(*path: str) -> str:
     """Returns path to a file in the user home's Archipelago directory."""
     if hasattr(home_path, 'cached_path'):
         pass
-    elif sys.platform.startswith('linux'):
-        xdg_data_home = os.getenv('XDG_DATA_HOME', os.path.expanduser('~/.local/share'))
-        home_path.cached_path = xdg_data_home + '/Archipelago'
-        if not os.path.isdir(home_path.cached_path):
+    else:
+        import platformdirs
+        home_path.cached_path = platformdirs.user_data_dir('Archipelago', False)
+        # migrate legacy home dir if needed
+        if is_linux and not os.path.isdir(home_path.cached_path):
             legacy_home_path = os.path.expanduser('~/Archipelago')
             if os.path.isdir(legacy_home_path):
                 os.renames(legacy_home_path, home_path.cached_path)
                 os.symlink(home_path.cached_path, legacy_home_path)
-            else:
-                os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
-    elif sys.platform == 'darwin':
-        import platformdirs
-        home_path.cached_path = platformdirs.user_data_dir("Archipelago", False)
+        # create home dir if it doesn't exists
         os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
-    else:
-        # not implemented
-        home_path.cached_path = local_path()  # this will generate the same exceptions we got previously
 
     return os.path.join(home_path.cached_path, *path)
 
