@@ -350,4 +350,4 @@ class GrinchClient(BizHawkClient):
         current_egg_count = int.from_bytes(
             (await bizhawk.read(ctx.bizhawk_ctx, [(EGG_COUNT_ADDR, EGG_ADDR_BYTESIZE, "MainRAM")]))[0], "little")
         current_egg_count = min(current_egg_count + egg_amount, MAX_EGGS)
-        await self.update_and_validate_address(ctx, EGG_COUNT_ADDR, current_egg_count, EGG_ADDR_BYTESIZE)
+        await self.update_and_validate_address(ctx, EGG_COUNT_ADDR, int(current_egg_count), EGG_ADDR_BYTESIZE)
