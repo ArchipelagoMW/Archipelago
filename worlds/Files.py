@@ -31,10 +31,19 @@ class AutoPatchRegister(abc.ABCMeta):
         if "game" in dct:
             AutoPatchRegister.patch_types[dct["game"]] = new_class
 
+            if not callable(getattr(new_class, "patch", None)):
+                raise ImproperlyConfiguredAutoPatchError(
+                    f"Container {new_class} uses metaclass AutoPatchRegister, but does not have a patch method defined."
+                )
+
             patch_file_ending = dct.get("patch_file_ending")
             if not patch_file_ending:
                 raise ImproperlyConfiguredAutoPatchError(
                     f"Need an expected file ending for auto patch container {new_class}"
+                )
+            if patch_file_ending == ".zip":
+                raise ImproperlyConfiguredAutoPatchError(
+                    f'Auto patch container {new_class} uses file ending ".zip", which is not allowed.'
                 )
 
             existing_handler = AutoPatchRegister.file_endings.get(patch_file_ending)
@@ -43,10 +52,7 @@ class AutoPatchRegister(abc.ABCMeta):
                     f"Two auto patch containers are using the same file extension: {new_class}, {existing_handler}"
                 )
 
-            if not callable(getattr(new_class, "patch", None)):
-                raise ImproperlyConfiguredAutoPatchError(
-                    f"Container {new_class} uses metaclass AutoPatchRegister, but does not have a patch method defined."
-                )
+
 
             AutoPatchRegister.file_endings[dct["patch_file_ending"]] = new_class
         return new_class
