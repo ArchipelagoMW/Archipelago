@@ -82,4 +82,4 @@ class TestShipsanityEverything(SVTestBase):
 
                 self.collect(bin_item)
                 self.assert_can_reach_location(location.name)
-                self.remove(bin_item)
+            self.remove(bin_item)

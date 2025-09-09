@@ -5,7 +5,8 @@ from ...content.feature.hatsanity import to_location_name
 from ...data.hats_data import Hats
 from ...locations import LocationTags
 from ...options import Hatsanity, SeasonRandomization, FestivalLocations, Shipsanity, Eatsanity, Cooksanity, Fishsanity, Craftsanity
-from ...strings.ap_names.ap_option_names import HatsanityOptionName
+from ...options.options import AllowedFillerItems
+from ...strings.ap_names.ap_option_names import HatsanityOptionName, AllowedFillerOptionName
 
 
 class TestHatsLogic(SVTestBase):
@@ -53,6 +54,7 @@ class TestHatsLogic(SVTestBase):
 
 class TestNoHatsLogic(SVTestBase):
     options = {
+        AllowedFillerItems.internal_name: frozenset({AllowedFillerOptionName.hats})
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
         FestivalLocations.internal_name: FestivalLocations.option_hard,
         Fishsanity.internal_name: Fishsanity.option_all,
