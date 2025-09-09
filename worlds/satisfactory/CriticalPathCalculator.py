@@ -7,7 +7,7 @@ from .Options import SatisfactoryOptions
 class CriticalPathCalculator:
     logic: GameLogic
     random: Random
-    final_elevator_package: int
+    final_elevator_phase: int
     randomize_starter_recipes: bool
 
     required_parts: set[str]
@@ -28,7 +28,7 @@ class CriticalPathCalculator:
     def __init__(self, logic: GameLogic, seed: float, options: SatisfactoryOptions):
         self.logic = logic
         self.random = Random(seed)
-        self.final_elevator_package = options.final_elevator_package.value
+        self.final_elevator_phase = options.final_elevator_phase.value
         self.randomize_starter_recipes = bool(options.randomize_starter_recipes.value)
 
     def calculate(self) -> None:
@@ -41,13 +41,13 @@ class CriticalPathCalculator:
         self.configure_implicitly_unlocked_and_handcraftable_parts()
 
         self.select_minimal_required_parts_for(
-            self.logic.space_elevator_tiers[self.final_elevator_package-1].keys())
+            self.logic.space_elevator_phases[self.final_elevator_phase-1].keys())
 
         for tree in self.logic.man_trees.values():
             self.select_minimal_required_parts_for(tree.access_items)
 
             for node in tree.nodes:
-                if node.minimal_tier > self.final_elevator_package:
+                if node.minimal_phase > self.final_elevator_phase:
                     continue
 
                 self.select_minimal_required_parts_for(node.unlock_cost.keys())
@@ -68,7 +68,7 @@ class CriticalPathCalculator:
         self.select_minimal_required_parts_for_building("Pipeline Pump Mk.1")
         self.select_minimal_required_parts_for_building("Pipeline Pump Mk.2")
 
-        if self.logic.recipes["Uranium"][0].minimal_tier <= self.final_elevator_package:
+        if self.logic.recipes["Uranium"][0].minimal_phase <= self.final_elevator_phase:
             self.select_minimal_required_parts_for(("Hazmat Suit", "Iodine-Infused Filter"))
 
         for i in range(1, self.__potential_required_belt_speed + 1):
@@ -83,7 +83,7 @@ class CriticalPathCalculator:
             recipe.name 
             for part in self.required_parts
             for recipe in self.logic.recipes[part]
-            if recipe.minimal_tier <= self.final_elevator_package
+            if recipe.minimal_phase <= self.final_elevator_phase
         }
         self.required_item_names.update({"Building: "+ building for building in self.required_buildings})
 
@@ -107,7 +107,7 @@ class CriticalPathCalculator:
             self.required_parts.add(part)
 
             for recipe in self.logic.recipes[part]:
-                if recipe.minimal_tier > self.final_elevator_package:
+                if recipe.minimal_phase > self.final_elevator_phase:
                     continue
 
                 self.__potential_required_belt_speed = \
@@ -132,7 +132,7 @@ class CriticalPathCalculator:
             recipe.name
             for part in self.logic.recipes
             for recipe in self.logic.recipes[part]
-            if recipe.minimal_tier > self.final_elevator_package
+            if recipe.minimal_phase > self.final_elevator_phase
         }
 
         excluded_count = len(self.recipes_to_exclude)

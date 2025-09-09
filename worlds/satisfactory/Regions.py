@@ -42,7 +42,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
     ]
 
     for hub_tier, milestones_per_hub_tier in enumerate(game_logic.hub_layout, 1):
-        if (hub_tier > (options.final_elevator_package * 2)):
+        if (hub_tier > (options.final_elevator_phase * 2)):
             break
 
         region_names.append(f"Hub Tier {hub_tier}")
@@ -60,7 +60,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
         region_names.append(tree_name)
 
         for node in tree.nodes:
-            if node.minimal_tier <= options.final_elevator_package:
+            if node.minimal_phase <= options.final_elevator_phase:
                 region_names.append(f"{tree_name}: {node.name}")
 
     locations_per_region: dict[str, LocationData] = get_locations_per_region(locations)
@@ -91,7 +91,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
         super_early_game_buildings.append("Conveyor Splitter")
         super_early_game_buildings.append("Conveyor Merger")
 
-    if options.final_elevator_package == 1:
+    if options.final_elevator_phase == 1:
         super_early_game_buildings.extend(early_game_buildings)
 
     is_ut = getattr(world, "generation_is_fake", False)
@@ -100,17 +100,17 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
     connect(regions, "Hub Tier 1", "Hub Tier 2",
             lambda state: is_ut or state_logic.can_build_all(state, super_early_game_buildings))
     
-    if options.final_elevator_package >= 2:
+    if options.final_elevator_phase >= 2:
         connect(regions, "Hub Tier 2", "Hub Tier 3", lambda state: state.has("Elevator Tier 1", player) 
                                               and (is_ut or state_logic.can_build_all(state, early_game_buildings)))
         connect(regions, "Hub Tier 3", "Hub Tier 4")
-    if options.final_elevator_package >= 3:
+    if options.final_elevator_phase >= 3:
         connect(regions, "Hub Tier 4", "Hub Tier 5", lambda state: state.has("Elevator Tier 2", player))
         connect(regions, "Hub Tier 5", "Hub Tier 6")
-    if options.final_elevator_package >= 4:
+    if options.final_elevator_phase >= 4:
         connect(regions, "Hub Tier 6", "Hub Tier 7", lambda state: state.has("Elevator Tier 3", player))
         connect(regions, "Hub Tier 7", "Hub Tier 8")
-    if options.final_elevator_package >= 5:    
+    if options.final_elevator_phase >= 5:    
         connect(regions, "Hub Tier 8", "Hub Tier 9", lambda state: state.has("Elevator Tier 4", player))
 
     connect(regions, "Overworld", "Mam", lambda state: state_logic.can_build(state, "MAM"))
@@ -124,7 +124,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
         return logic_rule
 
     for hub_tier, milestones_per_hub_tier in enumerate(game_logic.hub_layout, 1):
-        if (hub_tier > (options.final_elevator_package * 2)):
+        if (hub_tier > (options.final_elevator_phase * 2)):
             break
 
         for minestone, parts_per_milestone in enumerate(milestones_per_hub_tier, 1):
@@ -140,7 +140,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
         connect(regions, "Mam", tree_name)
 
         for node in tree.nodes:
-            if node.minimal_tier > options.final_elevator_package:
+            if node.minimal_phase > options.final_elevator_phase:
                 continue
 
             if not node.depends_on:
