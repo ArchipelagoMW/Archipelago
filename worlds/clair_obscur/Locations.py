@@ -24,7 +24,6 @@ class ClairObscurLocation(Location):
 
 
 def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> None:
-    code = 0
 
     excluded_types = []
     if not world.options.gestral_shuffle:
@@ -41,10 +40,11 @@ def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> N
             if location_data.type in excluded_types:
                 continue
 
+            loc_id = world.location_name_to_id[location_data.name]
             location = ClairObscurLocation(
                 world.player,
                 location_data.name,
-                offset_location_value(code),
+                loc_id,
                 region,
                 location_data.default_item
             )
@@ -60,7 +60,6 @@ def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> N
                 add_rule(location, lambda state, pl=world.player, pic=pictos: state.has_group("Picto", pl, pic))
 
             region.locations.append(location)
-            code += 1
 
 
 def offset_location_value(location_id: int) -> int:
@@ -81,7 +80,7 @@ def create_location_name_to_ap_id() -> Dict[str, int]:
     Creates a map from item name to their AP item id
     """
     name_to_ap_id = {}
-    index = 1
+    index = 0
     for location in data.locations.values():
         name_to_ap_id[location.name] = offset_location_value(index)
         index += 1

@@ -58,6 +58,8 @@ def set_rules(world):
         #2 gestrals in First Continent North
         add_rule(mw.get_location("Lost Gestral reward 1", player),
                  lambda state: state.can_reach_region("WM: First Continent North", player))
+        add_rule(mw.get_location("Lost Gestral reward 1", player),
+                 lambda state: state.can_reach_region("WM: First Continent North", player))
         add_rule(mw.get_location("Lost Gestral reward 2", player),
                  lambda state: state.can_reach_region("WM: First Continent North", player))
 
@@ -82,3 +84,8 @@ def set_rules(world):
                  lambda state: state.can_reach_region("WM: Sky", player))
         add_rule(mw.get_location("Lost Gestral reward 9", player),
                  lambda state: state.can_reach_region("WM: Sky", player))
+
+    #Character specific access rules- can't be added to conditions due to shuffle char option
+    if world.options.char_shuffle:
+        add_rule(mw.get_location("Sacred River: Golgra", player),
+                 lambda state: state.has("Monoco", player))

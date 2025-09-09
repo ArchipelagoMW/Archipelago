@@ -5825,8 +5825,7 @@
         "location": "Sacred River",
         "original_item": "",
         "condition": {
-            "Painted Power": 1,
-            "Monoco": 1
+            "Painted Power": 1
         },
         "type": "Boss",
         "boss_type": "Normal"
