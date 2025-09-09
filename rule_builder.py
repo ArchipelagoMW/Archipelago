@@ -292,7 +292,7 @@ class RuleWorldMixin(World):
     @override
     def collect(self, state: CollectionState, item: Item) -> bool:
         changed = super().collect(state, item)
-        if changed and self.rule_caching_enabled and getattr(self, "rule_item_dependencies", None):
+        if changed and self.rule_caching_enabled and self.rule_item_dependencies:
             player_results = state.rule_cache[self.player]
             mapped_name = self.item_mapping.get(item.name, "")
             rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
@@ -308,26 +308,26 @@ class RuleWorldMixin(World):
             return changed
 
         player_results = state.rule_cache[self.player]
-        if getattr(self, "rule_item_dependencies", None):
+        if self.rule_item_dependencies:
             mapped_name = self.item_mapping.get(item.name, "")
             rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
             for rule_id in rule_ids:
                 player_results.pop(rule_id, None)
 
         # clear all region dependent caches as none can be trusted
-        if getattr(self, "rule_region_dependencies", None):
+        if self.rule_region_dependencies:
             for rule_ids in self.rule_region_dependencies.values():
                 for rule_id in rule_ids:
                     player_results.pop(rule_id, None)
 
         # clear all location dependent caches as they may have lost region access
-        if getattr(self, "rule_location_dependencies", None):
+        if self.rule_location_dependencies:
             for rule_ids in self.rule_location_dependencies.values():
                 for rule_id in rule_ids:
                     player_results.pop(rule_id, None)
 
         # clear all entrance dependent caches as they may have lost region access
-        if getattr(self, "rule_entrance_dependencies", None):
+        if self.rule_entrance_dependencies:
             for rule_ids in self.rule_entrance_dependencies.values():
                 for rule_id in rule_ids:
                     player_results.pop(rule_id, None)
@@ -337,7 +337,7 @@ class RuleWorldMixin(World):
     @override
     def reached_region(self, state: CollectionState, region: Region) -> None:
         super().reached_region(state, region)
-        if self.rule_caching_enabled and getattr(self, "rule_region_dependencies", None):
+        if self.rule_caching_enabled and self.rule_region_dependencies:
             player_results = state.rule_cache[self.player]
             for rule_id in self.rule_region_dependencies[region.name]:
                 player_results.pop(rule_id, None)
