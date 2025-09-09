@@ -285,7 +285,9 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
 
     set_bedroom_entrance_rules(logic, rule_collector, content)
     set_festival_entrance_rules(logic, rule_collector)
-    rule_collector.set_island_entrance_rule(LogicEntrance.island_cooking, logic.cooking.can_cook_in_kitchen)
+    
+    # I can't remember why this was here, but clearly we do not need kitchen rules for island cooking....
+    # rule_collector.set_island_entrance_rule(LogicEntrance.island_cooking, logic.cooking.can_cook_in_kitchen)
     rule_collector.set_entrance_rule(LogicEntrance.farmhouse_cooking, logic.cooking.can_cook_in_kitchen)
     rule_collector.set_entrance_rule(LogicEntrance.shipping, logic.shipping.can_use_shipping_bin)
     rule_collector.set_entrance_rule(LogicEntrance.find_secret_notes,
