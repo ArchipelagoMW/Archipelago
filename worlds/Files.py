@@ -37,13 +37,13 @@ class AutoPatchRegister(abc.ABCMeta):
                 )
 
             patch_file_ending = dct.get("patch_file_ending")
-            if not patch_file_ending:
-                raise ImproperlyConfiguredAutoPatchError(
-                    f"Need an expected file ending for auto patch container {new_class}"
-                )
             if patch_file_ending == ".zip":
                 raise ImproperlyConfiguredAutoPatchError(
                     f'Auto patch container {new_class} uses file ending ".zip", which is not allowed.'
+                )
+            if patch_file_ending is None:
+                raise ImproperlyConfiguredAutoPatchError(
+                    f"Need an expected file ending for auto patch container {new_class}"
                 )
 
             existing_handler = AutoPatchRegister.file_endings.get(patch_file_ending)
@@ -52,10 +52,13 @@ class AutoPatchRegister(abc.ABCMeta):
                     f"Two auto patch containers are using the same file extension: {new_class}, {existing_handler}"
                 )
 
-
-
             AutoPatchRegister.file_endings[dct["patch_file_ending"]] = new_class
         return new_class
+
+    @staticmethod
+    def get_handler(file: str) -> Optional[AutoPatchRegister]:
+        _, suffix = os.path.splitext(file)
+        return AutoPatchRegister.file_endings.get(suffix, None)
 
 
 class AutoPatchExtensionRegister(abc.ABCMeta):
