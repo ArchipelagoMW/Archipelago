@@ -596,6 +596,8 @@ id,name,classification,groups,content_packs
 673,Bookseller Stock: Progressive Experience Books,progression,"BOOKSELLER",
 674,Bookseller Stock: Progressive Rare Books,progression,"BOOKSELLER",
 675,Bookseller Stock: Permanent Books,progression,"BOOKSELLER",
+676,Men's Locker Key,progression,,
+677,Women's Locker Key,progression,,
 4001,Burnt Trap,trap,TRAP,
 4002,Darkness Trap,trap,TRAP,
 4003,Frozen Trap,trap,TRAP,
