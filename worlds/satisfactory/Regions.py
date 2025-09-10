@@ -1,5 +1,5 @@
 from typing import Optional
-from collections.abc import Callable, Iterable
+from collections.abc import Callable
 from BaseClasses import MultiWorld, Region, Location, Item, CollectionState
 from .Locations import LocationData
 from .GameLogic import GameLogic, PowerInfrastructureLevel

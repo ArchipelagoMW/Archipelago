@@ -950,7 +950,7 @@ class Items:
         excluded_items.update(self.critical_path.implicitly_unlocked)
 
         # since we dont have part logic setup for Transports
-        if (self.options.final_elevator_phase == 1):
+        if self.options.final_elevator_phase == 1:
             excluded_items.add("Transport: Drones")
 
         # Remove excluded items that arent unique
@@ -970,7 +970,7 @@ class Items:
             for name, data in self.item_data.items()
             for _ in range(data.count)
             if data.category & (G.Recipe | G.Building | G.Equipment | G.Ammo | G.Transport | G.Upgrades)
-                and name not in excluded_from_pool
+            and name not in excluded_from_pool
         ]
         pool: list[Item] = [
             item 

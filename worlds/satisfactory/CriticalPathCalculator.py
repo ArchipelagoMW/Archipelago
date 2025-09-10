@@ -124,8 +124,8 @@ class CriticalPathCalculator:
                                 self.logic.buildings[recipe.building].power_requirement)
 
     def calculate_excluded_things(self) -> None:
-        self.parts_to_exclude = set()
-        self.buildings_to_exclude = set()
+        self.parts_to_exclude = set[str]()
+        self.buildings_to_exclude = set[str]()
         self.recipes_to_exclude = {
             recipe.name
             for part in self.logic.recipes
@@ -153,7 +153,7 @@ class CriticalPathCalculator:
                     building_name
                     for building_name, building in self.logic.buildings.items()
                     if building_name not in self.buildings_to_exclude
-                       and building.inputs and any(input in self.parts_to_exclude for input in building.inputs)
+                    and building.inputs and any(input in self.parts_to_exclude for input in building.inputs)
                 }
 
                 self.recipes_to_exclude.update({

@@ -85,7 +85,7 @@ class PowerInfrastructure(LocationData):
 
     @staticmethod
     def get_can_create_power_infrastructure_rule(state_logic: StateLogic,
-                                        power_level: PowerInfrastructureLevel, recipes: Iterable[Recipe])\
+                                                 power_level: PowerInfrastructureLevel, recipes: Iterable[Recipe])\
             -> Callable[[CollectionState], bool]:
 
         higher_levels = tuple(level for level in PowerInfrastructureLevel if level > power_level)
@@ -98,10 +98,10 @@ class PowerInfrastructure(LocationData):
 
 
 class ElevatorPhase(LocationData):
-    def __init__(self, phaseIndex: int, state_logic: StateLogic, game_logic: GameLogic):
-        super().__init__("Overworld", f"Elevator Phase {phaseIndex + 1}", EventId,
-            rule = lambda state: state_logic.can_build(state, "Space Elevator") and \
-                                 state_logic.can_produce_all(state, game_logic.space_elevator_phases[phaseIndex].keys()))
+    def __init__(self, phase_index: int, state_logic: StateLogic, game_logic: GameLogic):
+        super().__init__("Overworld", f"Elevator Phase {phase_index + 1}", EventId,
+                         rule=lambda state: state_logic.can_build(state, "Space Elevator") and
+                              state_logic.can_produce_all(state, game_logic.space_elevator_phases[phase_index].keys()))
 
 
 class HubSlot(LocationData):
@@ -335,7 +335,7 @@ class Locations:
         location_table = self.get_base_location_table(max_tier_for_game)
         location_table.extend(self.get_hub_locations(False, max_tier_for_game))
         location_table.extend(self.get_hard_drive_locations(False, max_tier_for_game, self.critical_path.required_parts))
-        location_table.extend(self.get_logical_event_locations(self.options.final_elevator_phase))
+        location_table.extend(self.get_logical_event_locations(self.options.final_elevator_phase.value))
 
         return location_table
 
@@ -407,7 +407,7 @@ class Locations:
             bucket_size = floor((self.drop_pod_location_id_end - self.drop_pod_location_id_start) / max_tier)
             drop_pod_data = self.game_logic.drop_pods
             # sort, easily obtainable first, should be deterministic
-            drop_pod_data.sort(key = lambda data: ("!" if data.item is None else data.item) + str(data.x - data.z))
+            drop_pod_data.sort(key=lambda dp: ("!" if dp.item is None else dp.item) + str(dp.x - dp.z))
 
         for location_id in range(self.drop_pod_location_id_start, self.drop_pod_location_id_end + 1):
             if for_data_package:

@@ -52,6 +52,7 @@ class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
             
         raise Exception(f"ChoiceMap: selected choice {self.value} is not valid, valid choices are: {self.choices.keys()}")
 
+
 class ElevatorPhase(NamedRange):
     """
     Put the milestones accessible BEFORE this Space Elevator Phase in logic.
@@ -378,7 +379,7 @@ _default_starting_items = _skip_tutorial_starting_items + [
     "Bundle: Iron Ingot",
     "Bundle: Copper Ingot",
     "Bundle: Concrete",
-    "Bundle: Solid Biofuel", # user's choice if they want to hold onto it for chainsaw or burn it right away
+    "Bundle: Solid Biofuel",  # user's choice if they want to hold onto it for chainsaw or burn it right away
     "Building: Blueprint Designer",
     "Expanded Toolbelt",
     "Inflated Pocket Dimension",
