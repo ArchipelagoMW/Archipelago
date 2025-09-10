@@ -18,7 +18,7 @@ from typing import Dict
 from Utils import visualize_regions
 
 from .Locations import get_location_names, get_total_locations
-from .Items import create_item, create_itempool, item_table
+from .Items import create_item, create_itempool, item_table, create_item_list, get_level_start
 from .Options import HexcellsInfiniteOptions
 from .Regions import create_regions
 from .Rules import set_rules
@@ -56,7 +56,7 @@ class HexcellsInfiniteWorld(World):
     location_name_to_id = get_location_names()
     # And these 2 are the name of your Options.py class. 
     options_dataclass = HexcellsInfiniteOptions
-    options = HexcellsInfiniteOptions
+    options: HexcellsInfiniteOptions
     # The name of the class above
     web = HexcellsInfiniteWebWorld()
     # print("🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀🐀")
@@ -79,12 +79,21 @@ class HexcellsInfiniteWorld(World):
         # Push precollected is how you give your player items they need to start with
         # This is for options though. Dont worry about the starting inventory option thats in all yamls
         # AP handles that one
-        # self.multiworld.push_precollected(self.create_item(starting_chapter))
-        print()
+        
+        if(self.options.LevelUnlockType == Options.LevelUnlockType.option_individual):
+            for name,data in item_table.items():
+                if(name == get_level_start):
+                    self.multiworld.push_precollected()
+                    print("Gave player starting item:" + name)
+                else:
+                    print("Failed to give starting location")
+        else:
+            print("Vanilla Unlock Level Type")
+        
 
     # Regions are the different locations in your world. So like Undead Burgh in dark souls or Pacifilog Town in pokemon
     # They dont have to match your game, they can be whatever you need them to be for organization
-    def create_regions(self):
+    def create_regions(self, ):
         # This function comes from your Regions.py and dont worry that it matches the function that its in
         create_regions(self)
         
@@ -101,6 +110,7 @@ class HexcellsInfiniteWorld(World):
     # The important part is that the items get into the self.multiworld.itempool as a list of Items
     # Ill try to explain better in the Items.py file 
     def create_items(self):
+        create_item_list(self)
         self.multiworld.itempool += create_itempool(self)
 
     # This is just a helper function for turning names into Items. You could do some other stuff here as well

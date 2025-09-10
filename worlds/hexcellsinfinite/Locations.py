@@ -1,6 +1,7 @@
 # Look at init or Items.py for more information on imports
 from typing import Dict, TYPE_CHECKING
 import logging
+from . import Options
 
 from .Types import LocData
 
@@ -40,57 +41,105 @@ def is_valid_location(world: "HexcellsInfiniteWorld", name) -> bool:
 # Heres where you do the next fun part of listing out all those locations
 # Its a lot
 # My advice, zone out for half an hour listening to music and hope you wake up to a completed list
+# if(HexcellsInfiniteWorld.options.LevelUnlockType == Options.LevelUnlockType.option_vanilla):
+
 hexcells_infinite_locations = {
-    # You can take a peak at Types.py for more information but,
-    # LocData is code, region in this instance
-    # Regions will be explained more in Regions.py
-    # But just know that it's mostly about organization
-    # Place locations together based on where they are in the game and what is needed to get there
+        # You can take a peak at Types.py for more information but,
+        # LocData is code, region in this instance
+        # Regions will be explained more in Regions.py
+        # But just know that it's mostly about organization
+        # Place locations together based on where they are in the game and what is needed to get there
+        "1-1": LocData(1, "Level Group 1"),
+        "1-2": LocData(2, "Level Group 1"),
+        "1-3": LocData(3, "Level Group 1"),
+        "1-4": LocData(4, "Level Group 1"),
+        "1-5": LocData(5, "Level Group 1"),
+        "1-6": LocData(6, "Level Group 1"),
 
-    "1-1": LocData(1, "Level Group 1"),
-    "1-2": LocData(2, "Level Group 1"),
-    "1-3": LocData(3, "Level Group 1"),
-    "1-4": LocData(4, "Level Group 1"),
-    "1-5": LocData(5, "Level Group 1"),
-    "1-6": LocData(6, "Level Group 1"),
+        "2-1": LocData(7, "Level Group 2"),
+        "2-2": LocData(8, "Level Group 2"),
+        "2-3": LocData(9, "Level Group 2"),
+        "2-4": LocData(10, "Level Group 2"),
+        "2-5": LocData(11, "Level Group 2"),
+        "2-6": LocData(12, "Level Group 2"),
 
-    "2-1": LocData(7, "Level Group 2"),
-    "2-2": LocData(8, "Level Group 2"),
-    "2-3": LocData(9, "Level Group 2"),
-    "2-4": LocData(10, "Level Group 2"),
-    "2-5": LocData(11, "Level Group 2"),
-    "2-6": LocData(12, "Level Group 2"),
+        "3-1": LocData(13, "Level Group 3"),
+        "3-2": LocData(14, "Level Group 3"),
+        "3-3": LocData(15, "Level Group 3"), 
+        "3-4": LocData(16, "Level Group 3"),
+        "3-5": LocData(17, "Level Group 3"),
+        "3-6": LocData(18, "Level Group 3"),
 
-    "3-1": LocData(13, "Level Group 3"),
-    "3-2": LocData(14, "Level Group 3"),
-    "3-3": LocData(15, "Level Group 3"), 
-    "3-4": LocData(16, "Level Group 3"),
-    "3-5": LocData(17, "Level Group 3"),
-    "3-6": LocData(18, "Level Group 3"),
+        "4-1": LocData(19, "Level Group 4"),
+        "4-2": LocData(20, "Level Group 4"),
+        "4-3": LocData(21, "Level Group 4"),
+        "4-4": LocData(22, "Level Group 4"),
+        "4-5": LocData(23, "Level Group 4"),
+        "4-6": LocData(24, "Level Group 4"),
 
-    "4-1": LocData(19, "Level Group 4"),
-    "4-2": LocData(20, "Level Group 4"),
-    "4-3": LocData(21, "Level Group 4"),
-    "4-4": LocData(22, "Level Group 4"),
-    "4-5": LocData(23, "Level Group 4"),
-    "4-6": LocData(24, "Level Group 4"),
+        "5-1": LocData(25, "Level Group 5"),
+        "5-2": LocData(26, "Level Group 5"),
+        "5-3": LocData(27, "Level Group 5"),
+        "5-4": LocData(28, "Level Group 5"),
+        "5-5": LocData(29, "Level Group 5"),
+        "5-6": LocData(30, "Level Group 5"),
 
-    "5-1": LocData(25, "Level Group 5"),
-    "5-2": LocData(26, "Level Group 5"),
-    "5-3": LocData(27, "Level Group 5"),
-    "5-4": LocData(28, "Level Group 5"),
-    "5-5": LocData(29, "Level Group 5"),
-    "5-6": LocData(30, "Level Group 5"),
+        "6-1": LocData(31, "Level Group 6"),
+        "6-2": LocData(32, "Level Group 6"),
+        "6-3": LocData(33, "Level Group 6"),
+        "6-4": LocData(34, "Level Group 6"),
+        "6-5": LocData(35, "Level Group 6"),
+        "6-6": LocData(36, "Level Group 6")
+    }
+# elif(HexcellsInfiniteWorld.options.LevelUnlockType == Options.LevelUnlockType.option_individual):
+#     hexcells_infinite_locations = {
+#         # You can take a peak at Types.py for more information but,
+#         # LocData is code, region in this instance
+#         # Regions will be explained more in Regions.py
+#         # But just know that it's mostly about organization
+#         # Place locations together based on where they are in the game and what is needed to get there
+#         "1-1": LocData(1, "1-1"),
+#         "1-2": LocData(2, "1-2"),
+#         "1-3": LocData(3, "1-3"),
+#         "1-4": LocData(4, "1-4"),
+#         "1-5": LocData(5, "1-5"),
+#         "1-6": LocData(6, "1-6"),
 
-    "6-1": LocData(31, "Level Group 6"),
-    "6-2": LocData(32, "Level Group 6"),
-    "6-3": LocData(33, "Level Group 6"),
-    "6-4": LocData(34, "Level Group 6"),
-    "6-5": LocData(35, "Level Group 6"),
-    "6-6": LocData(36, "Level Group 6")
+#         "2-1": LocData(7, "2-1"),
+#         "2-2": LocData(8, "2-2"),
+#         "2-3": LocData(9, "2-3"),
+#         "2-4": LocData(10, "2-4"),
+#         "2-5": LocData(11, "2-5"),
+#         "2-6": LocData(12, "2-6"),
 
-}
+#         "3-1": LocData(13, "3-1"),
+#         "3-2": LocData(14, "3-2"),
+#         "3-3": LocData(15, "3-3"), 
+#         "3-4": LocData(16, "3-4"),
+#         "3-5": LocData(17, "3-5"),
+#         "3-6": LocData(18, "3-6"),
 
+#         "4-1": LocData(19, "4-1"),
+#         "4-2": LocData(20, "4-2"),
+#         "4-3": LocData(21, "4-3"),
+#         "4-4": LocData(22, "4-4"),
+#         "4-5": LocData(23, "4-5"),
+#         "4-6": LocData(24, "4-6"),
+
+#         "5-1": LocData(25, "5-1"),
+#         "5-2": LocData(26, "5-2"),
+#         "5-3": LocData(27, "5-3"),
+#         "5-4": LocData(28, "5-4"),
+#         "5-5": LocData(29, "5-5"),
+#         "5-6": LocData(30, "5-6"),
+
+#         "6-1": LocData(31, "6-1"),
+#         "6-2": LocData(32, "6-2"),
+#         "6-3": LocData(33, "6-3"),
+#         "6-4": LocData(34, "6-4"),
+#         "6-5": LocData(35, "6-5"),
+#         "6-6": LocData(36, "6-6")
+#     }
 
 # Also like in Items.py, this collects all the dictionaries together
 # Its important to note that locations MUST be bigger than progressive item count and should be bigger than total item count

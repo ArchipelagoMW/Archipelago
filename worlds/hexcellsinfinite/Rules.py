@@ -14,11 +14,22 @@ if TYPE_CHECKING:
 def set_rules(world: "HexcellsInfiniteWorld"):
     player = world.player
     options = world.options
-
-    add_rule(world.multiworld.get_entrance("Level Group 1 -> Level Group 2", player), lambda state: state.has("Gem", player, 6))
-    add_rule(world.multiworld.get_entrance("Level Group 2 -> Level Group 3", player), lambda state: state.has("Gem", player, 12))
-    add_rule(world.multiworld.get_entrance("Level Group 3 -> Level Group 4", player), lambda state: state.has("Gem", player, 18))
-    add_rule(world.multiworld.get_entrance("Level Group 4 -> Level Group 5", player), lambda state: state.has("Gem", player, 24))
-    add_rule(world.multiworld.get_entrance("Level Group 5 -> Level Group 6", player), lambda state: state.has("Gem", player, 30))
+    if(HexcellsInfiniteWorld.options.LevelUnlockType == Options.LevelUnlockType.option_vanilla):
+        add_rule(world.multiworld.get_entrance("Level Group 1 -> Level Group 2", player), lambda state: state.has("Gem", player, 6))
+        add_rule(world.multiworld.get_entrance("Level Group 2 -> Level Group 3", player), lambda state: state.has("Gem", player, 12))
+        add_rule(world.multiworld.get_entrance("Level Group 3 -> Level Group 4", player), lambda state: state.has("Gem", player, 18))
+        add_rule(world.multiworld.get_entrance("Level Group 4 -> Level Group 5", player), lambda state: state.has("Gem", player, 24))
+        add_rule(world.multiworld.get_entrance("Level Group 5 -> Level Group 6", player), lambda state: state.has("Gem", player, 30))
     
-    world.multiworld.completion_condition[player] = lambda state: state.has("Gem", player, 36)
+        world.multiworld.completion_condition[player] = lambda state: state.has("Gem", player, 36)
+    else:
+        world.multiworld.completion_condition[player] = lambda state: state.has_all({
+            "1-1","1-2","1-3","1-4","1-5","1-6",
+            "2-1","2-2","2-3","2-4","2-5","2-6",
+            "3-1","3-2","3-3","3-4","3-5","3-6",
+            "4-1","4-2","4-3","4-4","4-5","4-6",
+            "5-1","5-2","5-3","5-4","5-5","5-6",
+            "6-1","6-2","6-3","6-4","6-5","6-6"},player)
+        
+
+

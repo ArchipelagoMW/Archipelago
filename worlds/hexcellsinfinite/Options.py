@@ -13,6 +13,9 @@ def create_option_groups() -> List[OptionGroup]:
     return option_group_list
 
 
+
+
+
 class RequirePerfectClears(Toggle):
     """
     This determines if levels need to be cleared with no mistakes to send out an item. 
@@ -44,8 +47,7 @@ class LevelUnlockType(Choice):
     """
     This determines how levels will be unlocked.
     Vanilla: Levels are unlocked in groups of 6, with 6 groups total.
-    Individual: Levels are unlocked individually, with individual gem amount requirements.
-    NOT CURRENTLY IMPLEMENTED 
+    Individual: Levels are unlocked individually, with individual gem amount requirements. 
     """
     display_name = "Level Unlock Type"
     option_vanilla = 1
