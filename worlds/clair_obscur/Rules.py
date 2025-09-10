@@ -91,3 +91,7 @@ def set_rules(world):
     if world.options.char_shuffle:
         add_rule(mw.get_location("Sacred River: Golgra", player),
                  lambda state: state.has("Monoco", player))
+        add_rule(mw.get_entrance("WM: Sky -> The Reacher", player),
+                 lambda state: state.has("Maelle", player))
+        add_rule(mw.get_entrance("WM: Sky -> Sirene's Dress", player),
+                 lambda state: state.has("Sciel", player))
