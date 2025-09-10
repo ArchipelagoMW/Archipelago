@@ -50,11 +50,11 @@ def create_itempool(world: "HexcellsInfiniteWorld") -> List[Item]:
     print(level_start)
     if (world.options.LevelUnlockType == Options.LevelUnlockType.option_vanilla):
         print("Creating Gem Items")
-        itempool.extend(create_multiple_items(world,hexcells_infinite_items,36))
+        itempool.extend(create_multiple_items(world,hexcells_infinite_items["Gem"],36))
     elif (world.options.LevelUnlockType == Options.LevelUnlockType.option_individual):
         for item in hexcells_infinite_items.keys():
-            if(item != level_start):
-                itempool.append(create_item(world, hexcells_infinite_items))
+            if(item != level_start and item != "Gem"):
+                itempool.append(create_item(world, hexcells_infinite_items[item]))
 
     return itempool
 
