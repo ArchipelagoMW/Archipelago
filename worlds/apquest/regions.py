@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 # This makes regions especially useful for traversal logic ("Can the player reach this part of the map?")
 
 # Every location must be inside a region, and you must have at least one region.
-# This is why we create regions first, and then later we create the locations (in locations.py)
+# This is why we create regions first, and then later we create the locations (in locations.py).
 
 
 def create_and_connect_regions(world: APQuestWorld) -> None:
