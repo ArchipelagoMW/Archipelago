@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 # A region is a container for locations ("checks"), which connects to other regions via "Entrance" objects.
 # Many games will model their Regions after physical in-game places, but you can also have more abstract regions.
 # For a location to be in logic, its containing region must be reachable.
-# The connecting Entrances between regions can have rules (more on that in rules.py),
+# The connecting Entrances between regions can have rules - more on that in rules.py,
 # which makes regions useful for traversal logic ("Can the player reach this part of the map?")
 
 # Every location must be inside a region, and you must have at least one region.
