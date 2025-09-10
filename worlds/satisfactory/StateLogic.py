@@ -79,11 +79,11 @@ class StateLogic:
             and self.can_build(state, recipe.building) \
             and self.can_produce_all(state, recipe.inputs)
     
-    def is_elevator_tier(self, state: CollectionState, phase: int) -> bool:
-        limited_phase = min(self.options.final_elevator_package - 1, phase)
+    def is_elevator_phase(self, state: CollectionState, phase: int) -> bool:
+        limited_phase = min(self.options.final_elevator_phase - 1, phase)
 
         if limited_phase != 0:
-            return state.has(f"Elevator Tier {limited_phase}", self.player)
+            return state.has(f"Elevator Phase {limited_phase}", self.player)
         else:
             return True
     

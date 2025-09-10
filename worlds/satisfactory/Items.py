@@ -1,11 +1,10 @@
 from random import Random
 from typing import ClassVar, Optional
 from collections.abc import Collection
-from BaseClasses import Item, ItemClassification as C, MultiWorld
+from BaseClasses import Item, ItemClassification as C
 from .GameLogic import GameLogic
 from .Options import SatisfactoryOptions
 from .ItemData import ItemData, ItemGroups as G
-from .Options import SatisfactoryOptions
 from .CriticalPathCalculator import CriticalPathCalculator
 
 class Items:
@@ -955,7 +954,7 @@ class Items:
         excluded_items.update(self.critical_path.implicitly_unlocked)
 
         # since we dont have part logic setup for Transports
-        if (self.options.final_elevator_package == 1):
+        if (self.options.final_elevator_phase == 1):
             excluded_items.add("Transport: Drones")
 
         # Remove excluded items that arent unique

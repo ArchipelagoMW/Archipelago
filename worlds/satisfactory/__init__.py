@@ -1,17 +1,15 @@
 from typing import TextIO, ClassVar, Any
 from BaseClasses import Item, ItemClassification, CollectionState
-from collections.abc import Sequence
+from NetUtils import Hint
+from ..AutoWorld import World
+from .CriticalPathCalculator import CriticalPathCalculator
 from .GameLogic import GameLogic
 from .Items import Items
 from .Locations import Locations, LocationData
 from .StateLogic import EventId, StateLogic
 from .Options import SatisfactoryOptions, Placement
 from .Regions import SatisfactoryLocation, create_regions_and_return_locations
-from .CriticalPathCalculator import CriticalPathCalculator
 from .Web import SatisfactoryWebWorld
-from ..AutoWorld import World
-from NetUtils import Hint
-from BaseClasses import ItemClassification
 
 
 class SatisfactoryWorld(World):
@@ -45,7 +43,7 @@ class SatisfactoryWorld(World):
     def generate_early(self) -> None:
         self.process_universal_tracker_slot_data_if_available()
 
-        if self.critical_path_seed == None:
+        if self.critical_path_seed is None:
             self.critical_path_seed = self.random.random()
 
         if self.options.mam_logic_placement.value == Placement.starting_inventory:
@@ -95,7 +93,7 @@ class SatisfactoryWorld(World):
         resource_sink_goal: bool = "AWESOME Sink Points (total)" in self.options.goal_selection \
                                 or "AWESOME Sink Points (per minute)" in self.options.goal_selection
 
-        required_parts = set(self.game_logic.space_elevator_tiers[self.options.final_elevator_package.value - 1].keys())
+        required_parts = set(self.game_logic.space_elevator_phases[self.options.final_elevator_phase.value - 1].keys())
 
         if resource_sink_goal:
             required_parts.union(self.game_logic.buildings["AWESOME Sink"].inputs)
@@ -129,7 +127,7 @@ class SatisfactoryWorld(World):
                     multiplied_amount = int(max(amount * (self.options.milestone_cost_multiplier / 100), 1))
                     slot_hub_layout[tier-1][milestone-1][self.item_id_str(part)] = multiplied_amount
 
-        starting_recipes: tuple[int] = tuple(
+        starting_recipes: tuple[int, ...] = tuple(
             self.item_name_to_id[recipe_name] 
             for recipe_name in self.critical_path.tier_0_recipes
         )
@@ -148,7 +146,8 @@ class SatisfactoryWorld(World):
                 "Options": {
                     "GoalSelection": self.options.goal_selection.value,
                     "GoalRequirement": self.options.goal_requirement.value,
-                    "FinalElevatorTier": self.options.final_elevator_package.value,
+                    # TODO rename slot data FinalElevatorTier to FinalElevatorPhase in the mod, then here
+                    "FinalElevatorTier": self.options.final_elevator_phase.value,
                     "FinalResourceSinkPointsTotal": self.options.goal_awesome_sink_points_total.value,
                     "FinalResourceSinkPointsPerMinute": self.options.goal_awesome_sink_points_per_minute.value,
                     "FreeSampleEquipment": self.options.free_sample_equipment.value,
@@ -191,7 +190,8 @@ class SatisfactoryWorld(World):
 
         self.options.goal_selection.value = slot_data["Data"]["Options"]["GoalSelection"]
         self.options.goal_requirement.value = slot_data["Data"]["Options"]["GoalRequirement"]
-        self.options.final_elevator_package.value = slot_data["Data"]["Options"]["FinalElevatorTier"]
+        # TODO rename slot data FinalElevatorTier to FinalElevatorPhase in the mod, then here
+        self.options.final_elevator_phase.value = slot_data["Data"]["Options"]["FinalElevatorTier"]
         self.options.goal_awesome_sink_points_total.value = slot_data["Data"]["Options"]["FinalResourceSinkPointsTotal"]
         self.options.goal_awesome_sink_points_per_minute.value = \
             slot_data["Data"]["Options"]["FinalResourceSinkPointsPerMinute"]

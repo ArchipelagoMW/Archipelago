@@ -29,12 +29,12 @@ class LocationData():
 
 class Part(LocationData):
     @staticmethod
-    def get_parts(state_logic: StateLogic, recipes: tuple[Recipe, ...], name: str, 
-                                                                    final_elevator_tier: int) -> list[LocationData]:
+    def get_parts(state_logic: StateLogic, recipes: tuple[Recipe, ...], name: str,
+                                                                    final_elevator_phase: int) -> list[LocationData]:
         recipes_per_region: dict[str, list[Recipe]] = {}
 
         for recipe in recipes:
-            if recipe.minimal_tier > final_elevator_tier:
+            if recipe.minimal_phase > final_elevator_phase:
                 continue
 
             recipes_per_region.setdefault(recipe.building or "Overworld", []).append(recipe)
@@ -89,11 +89,11 @@ class PowerInfrastructure(LocationData):
         return can_power
 
 
-class ElevatorTier(LocationData):
-    def __init__(self, tier: int, state_logic: StateLogic, game_logic: GameLogic):
-        super().__init__("Overworld", f"Elevator Tier {tier + 1}", EventId,
+class ElevatorPhase(LocationData):
+    def __init__(self, phaseIndex: int, state_logic: StateLogic, game_logic: GameLogic):
+        super().__init__("Overworld", f"Elevator Phase {phaseIndex + 1}", EventId,
             rule = lambda state: state_logic.can_build(state, "Space Elevator") and \
-                                 state_logic.can_produce_all(state, game_logic.space_elevator_tiers[tier].keys()))
+                                 state_logic.can_produce_all(state, game_logic.space_elevator_phases[phaseIndex].keys()))
 
 
 class HubSlot(LocationData):
@@ -116,11 +116,11 @@ class ShopSlot(LocationData):
             if not state_logic or cost < 20:
                 return True
             elif (cost >= 20 and cost < 50):
-                return state_logic.is_elevator_tier(state, 1)
+                return state_logic.is_elevator_phase(state, 1)
             elif (cost >= 50 and cost < 100):
-                return state_logic.is_elevator_tier(state, 2)
+                return state_logic.is_elevator_phase(state, 2)
             else:
-                return state_logic.is_elevator_tier(state, 3)
+                return state_logic.is_elevator_phase(state, 3)
             
         return can_purchase
 
@@ -321,12 +321,12 @@ class Locations():
         if not self.game_logic or not self.options or not self.state_logic or not self.items:
             raise Exception("Locations need to be initialized with logic, options and items before using this method")
 
-        max_tier_for_game = min(self.options.final_elevator_package * 2, len(self.game_logic.hub_layout))
+        max_tier_for_game = min(self.options.final_elevator_phase * 2, len(self.game_logic.hub_layout))
 
         location_table = self.get_base_location_table(max_tier_for_game)
         location_table.extend(self.get_hub_locations(False, max_tier_for_game))
-        location_table.extend(self.get_hard_drive_locations(False, max_tier_for_game,self.critical_path.required_parts))
-        location_table.extend(self.get_logical_event_locations(self.options.final_elevator_package))
+        location_table.extend(self.get_hard_drive_locations(False, max_tier_for_game, self.critical_path.required_parts))
+        location_table.extend(self.get_logical_event_locations(self.options.final_elevator_phase))
 
         return location_table
 
@@ -337,7 +337,7 @@ class Locations():
         if (for_data_package):
            number_of_slots_per_milestone_for_game = self.max_slots
         else:
-            if self.options.final_elevator_package <= 2:
+            if self.options.final_elevator_phase <= 2:
                 number_of_slots_per_milestone_for_game = self.max_slots
             else:
                 number_of_slots_per_milestone_for_game = self.game_logic.slots_per_milestone
@@ -359,21 +359,21 @@ class Locations():
                 
         return location_table
 
-    def get_logical_event_locations(self, final_elevator_tier: int) -> list[LocationData]:
+    def get_logical_event_locations(self, final_elevator_phase: int) -> list[LocationData]:
         location_table: list[LocationData] = []
 
         # for performance plan is to upfront calculated everything we need
-        # and than create one massive state.has_all for each logical gate (hub tiers, elevator tiers)
+        # and than create one massive state.has_all for each logical gate (hub tiers, elevator phases)
 
         location_table.extend(
-            ElevatorTier(index, self.state_logic, self.game_logic) 
-            for index, parts in enumerate(self.game_logic.space_elevator_tiers)
-            if index < self.options.final_elevator_package)
+            ElevatorPhase(phaseIndex, self.state_logic, self.game_logic) 
+            for phaseIndex, _ in enumerate(self.game_logic.space_elevator_phases)
+            if phaseIndex < final_elevator_phase)
         location_table.extend(
             part
             for part_name, recipes in self.game_logic.recipes.items() 
             if part_name in self.critical_path.required_parts
-            for part in Part.get_parts(self.state_logic, recipes, part_name, final_elevator_tier))
+            for part in Part.get_parts(self.state_logic, recipes, part_name, final_elevator_phase))
         location_table.extend(
             EventBuilding(self.game_logic, self.state_logic, name, building) 
             for name, building in self.game_logic.buildings.items()
@@ -398,7 +398,7 @@ class Locations():
             bucket_size = floor((self.drop_pod_location_id_end - self.drop_pod_location_id_start) / max_tier)
             drop_pod_data: list[DropPodData] = self.game_logic.drop_pods
             # sort, easily obtainable first, should be deterministic
-            drop_pod_data.sort(key = lambda data: ("!" if data.item == None else data.item) + str(data.x - data.z))
+            drop_pod_data.sort(key = lambda data: ("!" if data.item is None else data.item) + str(data.x - data.z))
 
         for location_id in range(self.drop_pod_location_id_start, self.drop_pod_location_id_end + 1):
             if for_data_package:
