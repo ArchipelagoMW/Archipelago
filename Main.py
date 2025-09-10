@@ -37,7 +37,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
     logger = logging.getLogger()
     multiworld.set_seed(seed, args.race, str(args.outputname) if args.outputname else None)
-    multiworld.plando_options = args.plando_options
+    multiworld.plando_options = args.plando
     multiworld.game = args.game.copy()
     multiworld.player_name = args.name.copy()
     multiworld.sprite = args.sprite.copy()
