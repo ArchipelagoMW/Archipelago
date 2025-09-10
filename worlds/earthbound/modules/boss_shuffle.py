@@ -194,8 +194,6 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
             world.boss_list.remove("Giygas (4)")
             world.boss_list.insert(29, "Giygas (4)")
 
-
-def write_bosses(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     if world.boss_list[25] == "Carbon Dog" and world.boss_list[27] in banned_transformations:
         original_boss = world.boss_list[27]
         transformation_replacement = world.random.randint(0, 24)
@@ -211,7 +209,7 @@ def write_bosses(world: "EarthBoundWorld", rom: "LocalRom") -> None:
                 continue
             world.boss_list[25], world.boss_list[i] = world.boss_list[i], world.boss_list[25]
 
-
+def write_bosses(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     rom.write_bytes(0x15E527, bytearray([0x00, 0x00]))  # Blank out Pokey's end battle action
     rom.write_bytes(0x15B8B9, bytearray([0x00, 0x00]))
     rom.write_bytes(0x15DD13, bytearray([0x00, 0x00]))  # Blank out barf's end battle script
