@@ -267,7 +267,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.enter_skull_cavern, logic.received(Wallet.skull_key))
     rule_collector.set_entrance_rule(LogicEntrance.talk_to_mines_dwarf,
                                      logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
-    rule_collector.set_entrance_rule(LogicEntrance.buy_from_traveling_merchant, logic.traveling_merchant.has_days() & logic.money.can_spend(1000))
+    rule_collector.set_entrance_rule(LogicEntrance.buy_from_traveling_merchant, logic.traveling_merchant.has_days() & logic.money.can_spend(1200))
     set_raccoon_rules(logic, rule_collector, bundle_rooms, world_options)
 
     rule_collector.set_entrance_rule(LogicEntrance.fish_in_waterfall,
