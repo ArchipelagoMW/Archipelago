@@ -335,7 +335,7 @@ class GrinchClient(BizHawkClient):
 
     async def ring_link_output(self, ctx: "BizHawkClientContext"):
         from CommonClient import logger
-        while not ctx.exit_event or ctx.slot:
+        while not ctx.exit_event and ctx.slot:
 
             try:
                 current_egg_count = int.from_bytes(
