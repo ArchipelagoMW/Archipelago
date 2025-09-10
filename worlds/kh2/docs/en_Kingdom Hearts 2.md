@@ -109,6 +109,9 @@ I.E potions, ethers, boosts etc.
 - There are many little things this mod does so if you have any questions feel free to ping me (@JaredWeakStrike) in the archipelago discord and I can hopefully answer your question.
 2. TopazTK/ArchipelagoEnablers
 - This is in sense another companion mod and is required for many things to work correctly.
-- This mod allows deathlink to work and without it sora's hp would stay at 0 since the game doesnt check if sora should die unless he gets hit.
-- This mod allows for magic to be updated without room transitioning. This mod also allows for proper magic handling through room transitions
-- This mod also replaces equations/auto-save and equations/soft-reset and with create issues if both are used in tandem. It creates an autosave at slot 99 and is treated like a normal save.
+- Notification System: Allows the client to flip a byte in game for it to trigger a puzzle piece popup/information popup
+- Deathlink: Allows the client to flip a byte to kill sora when the client sets sora's hp to 0 (normally it doesnt kill sora)
+- Instant Movement: No need to pause when you obtain movement for it to update.
+- Instant Magic: No need to room transition to update magic (still have to pause for the client to give you the magic)
+- Autosave: Creates a save file in slot 99 that is treated like a normal save file. It is made on room transition
+- Soft Reset: All shoulder buttons+start. For ds4 its L1+l2+R1+R2+Options
