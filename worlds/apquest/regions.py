@@ -16,10 +16,7 @@ if TYPE_CHECKING:
 
 
 def create_and_connect_regions(world: APQuestWorld) -> None:
-    # First, we'll create our regions...
     create_all_regions(world)
-
-    # ...and then we'll connect them to each other.
     connect_regions(world)
 
 
