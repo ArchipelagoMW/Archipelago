@@ -109,6 +109,10 @@ if __name__ == "__main__":
         logging.exception(e)
         logging.warning("Could not update LttP sprites.")
     app = get_app()
+    from worlds import AutoWorldRegister
+    # Update to only valid WebHost worlds
+    AutoWorldRegister.world_types = dict(filter(lambda item: hasattr(item[1].web, "tutorials"),
+                                                AutoWorldRegister.world_types.items()))
     create_options_files()
     copy_tutorials_files_to_static()
     if app.config["SELFLAUNCH"]:
