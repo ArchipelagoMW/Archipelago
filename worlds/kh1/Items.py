@@ -17,21 +17,7 @@ class KH1ItemData(NamedTuple):
 
 
 def get_items_by_category(category: str) -> Dict[str, KH1ItemData]:
-    item_dict: Dict[str, KH1ItemData] = {}
-    for name, data in item_table.items():
-        if data.category == category:
-            item_dict.setdefault(name, data)
-
-    return item_dict
-
-def get_items_by_type(type: str) -> Dict[str, KH1ItemData]:
-    item_dict: Dict[str, KH1ItemData] = {}
-    for name, data in item_table.items():
-        if data.type == type:
-            item_dict.setdefault(name, data)
-
-    return item_dict
-
+    return {name: data for name, data in item_table.items() if data.category == category}
 
 item_table: Dict[str, KH1ItemData] = {
     "Potion":                            KH1ItemData("Item",             code = 264_1001, classification = ItemClassification.filler,      type = "Item",                            ),

@@ -5,7 +5,7 @@ from BaseClasses import ItemClassification
 from .Data import WORLD_KEY_ITEMS, LOGIC_BEGINNER, LOGIC_NORMAL, LOGIC_PROUD, LOGIC_MINIMAL
 
 from .Locations import KH1Location, location_table
-from .Items import KH1Item, item_table, get_items_by_type, get_items_by_category
+from .Items import KH1Item, item_table
 
 WORLDS =    ["Destiny Islands", "Traverse Town", "Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah",      "Monstro",      "Atlantica", "Halloween Town", "Neverland",  "Hollow Bastion", "End of the World", "100 Acre Wood"]
 KEYBLADES = ["Oathkeeper",      "Lionheart",     "Lady Luck",  "Olympia",          "Jungle King", "Three Wishes", "Wishing Star", "Crabclaw",  "Pumpkinhead",    "Fairy Harp", "Divine Rose",    "Oblivion",         "Spellbinder"]
@@ -1734,48 +1734,21 @@ def set_rules(kh1world):
             add_rule(kh1world.get_location(location),
                 lambda state: has_basic_tools(state, player))
         if options.remote_items.current_key == "off":
-            if location_table[location].type == "Chest":
-                add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or i.name not in get_items_by_type("Stats").keys()))
-            if location_table[location].type == "Reward":
-                add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or i.name not in get_items_by_type("Stats").keys()))
             if location_table[location].type == "Static":
                 add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or i.name in get_items_by_type("Item").keys()))
+                    lambda i: (i.player != player or item_table[i.name].type == "Item"))
             if location_table[location].type == "Level Slot 1":
                 add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or i.name in get_items_by_category("Level Up").keys() or i.name in get_items_by_category("Limited Level Up").keys()))
+                    lambda i: (i.player != player or item_table[i.name].category in ["Level Up", "Limited Level Up"]))
             if location_table[location].type == "Level Slot 2":
                 add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or (i.name in get_items_by_category("Level Up").keys() or i.name in get_items_by_category("Limited Level Up").keys() or i.name in get_items_by_type("Ability").keys())))
+                    lambda i: (i.player != player or (item_table[i.name].category in ["Level Up", "Limited Level Up"] or item_table[i.name].type == "Ability")))
             if location_table[location].type == "Synth":
                 add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or (i.name in get_items_by_type("Item").keys())))
+                    lambda i: (i.player != player or (item_table[i.name].type == "Item")))
             if location_table[location].type == "Prize":
                 add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or (i.name in get_items_by_type("Item").keys())))
-        # if options.remote_items.current_key in ("off", "allow"):
-        #     if location_table[location].type == "Prize":
-        #         add_item_rule(kh1world.get_location(location),
-        #             lambda i: (
-        #                 i.player != player
-        #                 or
-        #                 (
-        #                     i.name in get_items_by_type("Item").keys()
-        #                     and i.name not in ("Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon")
-        #                     and 
-        #                     (
-        #                         i.name not in ("Protect Chain", "Fire Ring", "Thunder Ring", "Blizzard Ring")
-        #                         or options.randomize_party_member_starting_accessories
-        #                     )
-        #                     and
-        #                     (
-        #                         item_table[i.name].max_quantity == 1
-        #                         or item_table[i.name].classification == ItemClassification.filler
-        #                     )
-        #                 )
-        #             ))
+                    lambda i: (i.player != player or (item_table[i.name].type == "Item")))
         if options.keyblades_unlock_chests:
             if location_table[location].type == "Chest" or location in BROKEN_KEYBLADE_LOCKING_LOCATIONS:
                 location_world = location_table[location].category
