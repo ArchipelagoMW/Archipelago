@@ -18,8 +18,6 @@ tabbed out of EmuHawk.
 - Under `Config > Preferred Cores > PSX`, select NymaShock.
 - Open any PlayStation game in EmuHawk and go to `Config > Controllers…` to configure your inputs. If you can't click
 `Controllers…`, it's because you need to load a game first.
-- Ape Escape is very particular about its analog setup: go to `PSX > Settings` and select `Sync Settings`. Change Virtual
-Port 1 to Dual Analog to help prevent deadzone issues.
 You may need to invert Sensitivity for the up/down axis to -100%.
 This can be found under Analog Controls through `Config > Controllers…`.
 Depending on your controller, you may also want to tweak the Deadzone. Something like 6% is recommended for a DualShock 4.
