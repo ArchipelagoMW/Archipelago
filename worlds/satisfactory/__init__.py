@@ -202,8 +202,6 @@ class SatisfactoryWorld(World):
         self.options.randomize_starter_recipes.value = slot_data["Data"]["UT"]["RandomizeTier0"]
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
-        spoiler_handle.write(f'Method calls: {self.state_logic.call_count}\n')
-
         if self.options.randomize_starter_recipes:
             spoiler_handle.write(f'Starter Recipes:                 {sorted(self.critical_path.tier_0_recipes)}\n')
 

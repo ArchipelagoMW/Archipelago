@@ -50,8 +50,11 @@ class Part(LocationData):
     @staticmethod
     def can_produce_any_recipe_for_part(state_logic: StateLogic, recipes: Iterable[Recipe]) \
             -> Callable[[CollectionState], bool]:
+        
+        recipe_rules = tuple(state_logic.get_can_produce_specific_recipe_for_part_rule(recipe) for recipe in recipes)
+
         def can_build_by_any_recipe(state: CollectionState) -> bool:
-            return any(state_logic.can_produce_specific_recipe_for_part(state, recipe) for recipe in recipes)
+            return any(rule(state) for rule in recipe_rules)
 
         return can_build_by_any_recipe
 
