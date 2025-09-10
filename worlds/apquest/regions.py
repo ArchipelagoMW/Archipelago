@@ -7,14 +7,24 @@ from BaseClasses import Entrance, Region
 if TYPE_CHECKING:
     from .world import APQuestWorld
 
+# A region is a container for locations ("checks"), which connects to other regions via "Entrance" objects.
+# Many games will model their Regions after physical in-game places, but you can also have more abstract regions.
+# For a location to be in logic, its containing region must be reachable.
+# The connecting Entrances between regions can have rules (more on that in rules.py),
+# which makes regions useful for traversal logic ("Can the player reach this part of the map?")
+# Every location must be inside a region, so you must have at least one region. But really, you should have more :)
+
 
 def create_and_connect_regions(world: APQuestWorld) -> None:
+    # First, we'll create our regions...
     create_all_regions(world)
+
+    # ...and then we'll connect them to each other.
     connect_regions(world)
 
 
 def create_all_regions(world: APQuestWorld) -> None:
-    # Creating a region is as simple as calling its constructor.
+    # Creating a region is as simple as calling the constructor of the Region class.
     overworld = Region("Overworld", world.player, world.multiworld)
     top_left_room = Region("Top Left Room", world.player, world.multiworld)
     bottom_right_room = Region("Bottom Right Room", world.player, world.multiworld)
