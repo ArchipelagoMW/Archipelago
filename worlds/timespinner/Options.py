@@ -367,8 +367,8 @@ class TrapChance(Range):
 class Traps(OptionList):
     """List of traps that may be in the item pool to find"""
     display_name = "Traps Types"
-    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap", "Spider Trap" }
-    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap", "Spider Trap" ]
+    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap", "Spider Trap", "Lights Out Trap", "Palm Punch Trap" }
+    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap", "Spider Trap", "Lights Out Trap", "Palm Punch Trap" ]
 
 class PresentAccessWithWheelAndSpindle(Toggle):
     """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
@@ -398,6 +398,14 @@ class GateKeep(Toggle):
 class RoyalRoadblock(Toggle):
     """The Royal Towers entrance door requires a royal orb (Plasma Orb, Plasma Geyser, or Royal Ring) to enter."""
     display_name = "Royal Roadblock"
+
+class PureTorcher(Toggle):
+    """All lanterns contain checks. (Except tutorial)"""
+    display_name = "Pure Torcher"
+
+class FindTheFlame(Toggle):
+    """Lanterns in 'Pure Torcher' will not break without new item 'Cube of Bodie'."""
+    display_name = "Find the Flame"
 
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -441,6 +449,8 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     pyramid_start: PyramidStart
     gate_keep: GateKeep
     royal_roadblock: RoyalRoadblock
+    pure_torcher: PureTorcher
+    find_the_flame: FindTheFlame
     trap_chance: TrapChance
     traps: Traps
 

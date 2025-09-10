@@ -132,6 +132,8 @@ class TimespinnerWorld(World):
             "PyramidStart": self.options.pyramid_start.value,
             "GateKeep": self.options.gate_keep.value,
             "RoyalRoadblock": self.options.royal_roadblock.value,
+            "PureTorcher": self.options.pure_torcher.value,
+            "FindTheFlame": self.options.find_the_flame.value,
             "Traps": self.options.traps.value,
             "DeathLink": self.options.death_link.value,
             "StinkyMaw": True,
@@ -298,7 +300,9 @@ class TimespinnerWorld(World):
         if not item.advancement:
             return item
 
-        if (name == 'Tablet' or name == 'Library Keycard V') and not self.options.downloadable_items:
+        if name == 'Tablet' and not self.options.downloadable_items:
+            item.classification = ItemClassification.filler
+        elif name == 'Library Keycard V' and not (self.options.downloadable_items or self.options.pure_torcher):
             item.classification = ItemClassification.filler
         elif name == 'Oculus Ring' and not self.options.eye_spy:
             item.classification = ItemClassification.filler
@@ -314,6 +318,8 @@ class TimespinnerWorld(World):
                 and not self.options.lock_key_amadeus:
             item.classification = ItemClassification.filler
         elif name == "Drawbridge Key" and not self.options.gate_keep: 
+            item.classification = ItemClassification.filler
+        elif name == "Cube of Bodie" and not self.options.find_the_flame: 
             item.classification = ItemClassification.filler
 
         return item
@@ -360,6 +366,9 @@ class TimespinnerWorld(World):
 
         if not self.options.gate_keep:
             excluded_items.add('Drawbridge Key')
+
+        if not self.options.find_the_flame:
+            excluded_items.add('Cube of Bodie')
 
         for item in self.multiworld.precollected_items[self.player]:
             if item.name not in self.item_name_groups['UseItem']:
