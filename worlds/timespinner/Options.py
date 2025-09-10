@@ -67,66 +67,41 @@ class BossRandoType(Choice):
     option_singularity = 2
     option_manual = 3
 
-def boss_option(boss: str) -> Dict[Optional, Or]:
-    return {
-        Optional(boss): Or(
-            And({
-                Optional("FelineSentry"): And(int, lambda n: n >= 0),
-                Optional("Varndagroth"): And(int, lambda n: n >= 0),
-                Optional("AzureQueen"): And(int, lambda n: n >= 0),
-                Optional("GoldenIdol"): And(int, lambda n: n >= 0),
-                Optional("Aelana"): And(int, lambda n: n >= 0),
-                Optional("Maw"): And(int, lambda n: n >= 0),
-                Optional("Cantoran"): And(int, lambda n: n >= 0),
-                Optional("Genza"): And(int, lambda n: n >= 0),
-                Optional("Nuvius"): And(int, lambda n: n >= 0),
-                Optional("Vol"): And(int, lambda n: n >= 0),
-                Optional("Prince"): And(int, lambda n: n >= 0),
-                Optional("Xarion"): And(int, lambda n: n >= 0),
-                Optional("Ravenlord"): And(int, lambda n: n >= 0),
-                Optional("Ifrit"): And(int, lambda n: n >= 0),
-                Optional("Sandman"): And(int, lambda n: n >= 0),
-                Optional("Nightmare"): And(int, lambda n: n >= 0)
-            }, lambda d: any(v > 0 for v in d.values())),
-            "FelineSentry",
-            "Varndagroth",
-            "AzureQueen",
-            "GoldenIdol",
-            "Aelana",
-            "Maw",
-            "Cantoran",
-            "Genza",
-            "Nuvius",
-            "Vol",
-            "Prince",
-            "Xarion",
-            "Ravenlord",
-            "Ifrit",
-            "Sandman",
-            "Nightmare")
-    }
-
 class BossRandoOverrides(OptionDict):
-    """Manual mapping of bosses to the boss they will be replaced with. Bosses that you don't specify will be the
-    vanilla boss."""
-    schema = Schema({
-        **boss_option("FelineSentry"),
-        **boss_option("Varndagroth"),
-        **boss_option("AzureQueen"),
-        **boss_option("GoldenIdol"),
-        **boss_option("Aelana"),
-        **boss_option("Maw"),
-        **boss_option("Cantoran"),
-        **boss_option("Genza"),
-        **boss_option("Nuvius"),
-        **boss_option("Vol"),
-        **boss_option("Prince"),
-        **boss_option("Xarion"),
-        **boss_option("Ravenlord"),
-        **boss_option("Ifrit"),
-        **boss_option("Sandman"),
-        **boss_option("Nightmare")
-    })
+    """
+    Manual mapping of bosses to the boss they will be replaced with.
+    Bosses that you don't specify will be the vanilla boss.
+    """
+    bosses = [
+        "FelineSentry",
+        "Varndagroth",
+        "AzureQueen",
+        "GoldenIdol",
+        "Aelana",
+        "Maw",
+        "Cantoran",
+        "Genza",
+        "Nuvius",
+        "Vol",
+        "Prince",
+        "Xarion",
+        "Ravenlord",
+        "Ifrit",
+        "Sandman",
+        "Nightmare",
+    ]
+
+    schema = Schema(
+        {
+            Optional(Or(*bosses)): Or(
+                And(
+                    {Optional(boss): And(int, lambda n: n >= 0) for boss in bosses},
+                    lambda d: any(v > 0 for v in d.values()),
+                ),
+                *bosses
+            )
+        }
+    )
     display_name = "Boss Rando Overrides"
     default = {
         "FelineSentry": "FelineSentry",
