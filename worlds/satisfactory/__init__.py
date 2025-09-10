@@ -7,7 +7,9 @@ from .Locations import Locations, LocationData
 from .StateLogic import EventId, StateLogic
 from .Options import SatisfactoryOptions, Placement
 from .Regions import SatisfactoryLocation, create_regions_and_return_locations
+from .CriticalPathCalculator import CriticalPathCalculator
 from .Web import SatisfactoryWebWorld
+from ..AutoWorld import World
 
 
 class SatisfactoryWorld(World):

@@ -874,7 +874,7 @@ class GameLogic:
             MamNode("Turbo Rifle Ammo", {"Rifle Ammo": 1000, "Packaged Turbofuel": 50, "Aluminum Casing": 100, }, depends_on=("The Rifle", ), minimal_phase=2),  # (Research_Sulfur_5_2_C) # 1.0
             MamNode("Turbo Fuel", {"Hard Drive": 1, "Compacted Coal": 15, "Packaged Fuel": 50, }, depends_on=("Experimental Power Generation", )),  # (Research_Sulfur_TurboFuel_C)
             MamNode("Expanded Toolbelt", {"Black Powder": 100, "Encased Industrial Beam": 50, }, depends_on=("Black Powder", )),  # (Research_Sulfur_5_C)
-            MamNode("Nuclear Deterrent Development", {"Nobelisk": 500, "Encased Uranium Cell": 10, "AI Limiter": 100, }, depends_on=("Cluster Nobelisk", ), minimal_tier=2),  # (Research_Sulfur_5_1_C) # 1.0
+            MamNode("Nuclear Deterrent Development", {"Nobelisk": 500, "Encased Uranium Cell": 10, "AI Limiter": 100, }, depends_on=("Cluster Nobelisk", ), minimal_phase=2),  # (Research_Sulfur_5_1_C) # 1.0
             MamNode("Rocket Fuel", {"Hard Drive": 1, "Empty Fluid Tank": 10, "Packaged Turbofuel": 100, }, depends_on=("Turbo Fuel", ), minimal_phase=3),  # 1.0
             MamNode("Ionized Fuel", {"Hard Drive": 1, "Power Shard": 100, "Packaged Rocket Fuel": 200, }, depends_on=("Turbo Fuel", ), minimal_phase=4),  # 1.0
         ))

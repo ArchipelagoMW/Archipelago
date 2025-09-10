@@ -104,7 +104,7 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
 
     if options.final_elevator_phase >= 2:
         connect(regions, "Hub Tier 2", "Hub Tier 3", lambda state: state.has("Elevator Phase 1", player)
-                                              and (is_ut or state_logic.can_build_all(state, early_game_buildings)))
+                and (is_universal_tracker or state_logic.can_build_all(state, early_game_buildings)))
         connect(regions, "Hub Tier 3", "Hub Tier 4")
     if options.final_elevator_phase >= 3:
         connect(regions, "Hub Tier 4", "Hub Tier 5", lambda state: state.has("Elevator Phase 2", player))
