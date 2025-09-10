@@ -4,15 +4,15 @@
 
 - Stardew Valley 1.6 on PC (Recommended: [Steam version](https://store.steampowered.com/app/413150/Stardew_Valley/))
 - SMAPI ([Mod loader for Stardew Valley](https://www.nexusmods.com/stardewvalley/mods/2400?tab=files))
-- [StardewArchipelago Mod Release 6.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
-    - It is important to use a mod release of version 6.x.x to play seeds that have been generated here. Later releases 
+- [StardewArchipelago Mod Release 7.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
+    - It is important to use a mod release of version 7.x.x to play seeds that have been generated here. Later releases 
   can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
 
 ## Optional Software
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
     * (Only for the TextClient)
 - Other Stardew Valley Mods [Nexus Mods](https://www.nexusmods.com/stardewvalley)
-    * There are [supported mods](https://github.com/agilbert1412/StardewArchipelago/blob/6.x.x/Documentation/Supported%20Mods.md) 
+    * There are [supported mods](https://github.com/agilbert1412/StardewArchipelago/blob/7.x.x/Documentation/Supported%20Mods.md) 
   that you can add to your yaml to include them with the Archipelago randomization
 
     * It is **not** recommended to further mod Stardew Valley with unsupported mods, although it is possible to do so. 
@@ -89,7 +89,7 @@ Stardew-exclusive commands.
 
 ### Playing with supported mods
 
-See the [Supported mods documentation](https://github.com/agilbert1412/StardewArchipelago/blob/6.x.x/Documentation/Supported%20Mods.md)
+See the [Supported mods documentation](https://github.com/agilbert1412/StardewArchipelago/blob/7.x.x/Documentation/Supported%20Mods.md)
 
 ### Multiplayer
 
