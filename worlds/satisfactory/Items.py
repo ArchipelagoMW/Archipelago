@@ -1,11 +1,10 @@
 from random import Random
 from typing import ClassVar, Optional
 from collections.abc import Collection
-from BaseClasses import Item, ItemClassification as C, MultiWorld
+from BaseClasses import Item, ItemClassification as C
 from .GameLogic import GameLogic
 from .Options import SatisfactoryOptions
 from .ItemData import ItemData, ItemGroups as G
-from .Options import SatisfactoryOptions
 from .CriticalPathCalculator import CriticalPathCalculator
 
 class Items:

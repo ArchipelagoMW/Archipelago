@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from typing import ClassVar, Any, cast
 from enum import IntEnum
+from schema import Schema, And
 from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, OptionGroup
 from Options import Range, NamedRange, Toggle, DefaultOnToggle, OptionSet, StartInventoryPool, Choice
-from schema import Schema, And
 
 class Placement(IntEnum):
     starting_inventory = 0

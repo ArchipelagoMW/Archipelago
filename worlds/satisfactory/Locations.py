@@ -398,7 +398,7 @@ class Locations():
             bucket_size = floor((self.drop_pod_location_id_end - self.drop_pod_location_id_start) / max_tier)
             drop_pod_data: list[DropPodData] = self.game_logic.drop_pods
             # sort, easily obtainable first, should be deterministic
-            drop_pod_data.sort(key = lambda data: ("!" if data.item == None else data.item) + str(data.x - data.z))
+            drop_pod_data.sort(key = lambda data: ("!" if data.item is None else data.item) + str(data.x - data.z))
 
         for location_id in range(self.drop_pod_location_id_start, self.drop_pod_location_id_end + 1):
             if for_data_package:

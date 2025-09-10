@@ -1,17 +1,15 @@
 from typing import TextIO, ClassVar, Any
 from BaseClasses import Item, ItemClassification, CollectionState
-from collections.abc import Sequence
+from NetUtils import Hint
+from ..AutoWorld import World
+from .CriticalPathCalculator import CriticalPathCalculator
 from .GameLogic import GameLogic
 from .Items import Items
 from .Locations import Locations, LocationData
 from .StateLogic import EventId, StateLogic
 from .Options import SatisfactoryOptions, Placement
 from .Regions import SatisfactoryLocation, create_regions_and_return_locations
-from .CriticalPathCalculator import CriticalPathCalculator
 from .Web import SatisfactoryWebWorld
-from ..AutoWorld import World
-from NetUtils import Hint
-from BaseClasses import ItemClassification
 
 
 class SatisfactoryWorld(World):
@@ -45,7 +43,7 @@ class SatisfactoryWorld(World):
     def generate_early(self) -> None:
         self.process_universal_tracker_slot_data_if_available()
 
-        if self.critical_path_seed == None:
+        if self.critical_path_seed is None:
             self.critical_path_seed = self.random.random()
 
         if self.options.mam_logic_placement.value == Placement.starting_inventory:
