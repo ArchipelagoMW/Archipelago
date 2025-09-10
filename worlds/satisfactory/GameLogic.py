@@ -10,7 +10,6 @@ class PowerInfrastructureLevel(IntEnum):
     Complex = 4
 
     def to_name(self) -> str:
-
         return "Power level: " + self.name
 
 

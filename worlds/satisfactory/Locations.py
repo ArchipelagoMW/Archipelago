@@ -57,38 +57,39 @@ class Part(LocationData):
 
 
 class EventBuilding(LocationData):
-    def __init__(self, game_logic: GameLogic, state_logic: StateLogic, building_name: str, building: Building):
+    def __init__(self, state_logic: StateLogic, building_name: str, building: Building):
         super().__init__("Overworld", building_event_prefix + building_name, EventId,
-                         rule=EventBuilding.can_create_building(game_logic, state_logic, building))
+                         rule=EventBuilding.get_can_create_building_rule(state_logic, building))
 
     @staticmethod
-    def can_create_building(game_logic: GameLogic, state_logic: StateLogic, building: Building) \
+    def get_can_create_building_rule(state_logic: StateLogic, building: Building) \
             -> Callable[[CollectionState], bool]:
+        handcrafting_rule = state_logic.get_can_produce_all_allowing_handcrafting_rule(building.inputs)
 
         def can_build(state: CollectionState) -> bool:
             return state_logic.has_recipe(state, building) \
                 and state_logic.can_power(state, building.power_requirement) \
-                and state_logic.can_produce_all_allowing_handcrafting(state, game_logic, building.inputs)
+                and handcrafting_rule(state)
 
         return can_build
 
 
 class PowerInfrastructure(LocationData):
-    def __init__(self, game_logic: GameLogic, state_logic: StateLogic, 
+    def __init__(self, state_logic: StateLogic, 
                  power_level: PowerInfrastructureLevel, recipes: Iterable[Recipe]):
         super().__init__("Overworld", building_event_prefix + power_level.to_name(), EventId,
-                         rule=PowerInfrastructure.can_create_power_infrastructure(game_logic, state_logic, power_level, recipes))
+                         rule=PowerInfrastructure.get_can_create_power_infrastructure_rule(state_logic, power_level, recipes))
 
     @staticmethod
-    def can_create_power_infrastructure(game_logic: GameLogic, state_logic: StateLogic,
+    def get_can_create_power_infrastructure_rule(state_logic: StateLogic,
                                         power_level: PowerInfrastructureLevel, recipes: Iterable[Recipe])\
             -> Callable[[CollectionState], bool]:
 
+        higher_levels = tuple(level for level in PowerInfrastructureLevel if level > power_level)
+
         def can_power(state: CollectionState) -> bool:
-            return any(state_logic.can_power(state, level) for level in PowerInfrastructureLevel if level > power_level)\
-                or any(state_logic.can_build(state, recipe.building) and 
-                       state_logic.can_produce_all_allowing_handcrafting(state, game_logic, recipe.inputs)
-                       for recipe in recipes)
+            return any(state_logic.can_power(state, higher_level) for higher_level in higher_levels) \
+                or any(state_logic.can_build(state, recipe.building) for recipe in recipes)
 
         return can_power
 
@@ -380,11 +381,11 @@ class Locations:
             if part_name in self.critical_path.required_parts
             for part in Part.get_parts(self.state_logic, recipes, part_name, final_elevator_tier))
         location_table.extend(
-            EventBuilding(self.game_logic, self.state_logic, name, building) 
+            EventBuilding(self.state_logic, name, building) 
             for name, building in self.game_logic.buildings.items()
             if name in self.critical_path.required_buildings)
         location_table.extend(
-            PowerInfrastructure(self.game_logic, self.state_logic, power_level, recipes) 
+            PowerInfrastructure(self.state_logic, power_level, recipes) 
             for power_level, recipes in self.game_logic.requirement_per_powerlevel.items()
             if power_level <= self.critical_path.required_power_level)
 

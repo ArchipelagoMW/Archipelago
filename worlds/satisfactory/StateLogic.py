@@ -10,6 +10,8 @@ EventId: Optional[int] = None
 part_event_prefix = "Can Produce: "
 building_event_prefix = "Can Build: "
 
+true_lambda = lambda _: True
+false_lambda = lambda _: False
 
 class StateLogic:
     player: int
@@ -46,24 +48,31 @@ class StateLogic:
         return parts is None or \
             state.has_all(map(self.to_part_event, parts), self.player)
 
-    def can_produce_all_allowing_handcrafting(self, state: CollectionState, logic: GameLogic,
-                                              parts: Optional[Iterable[str]]) -> bool:
+    def can_handcraft_single_part(self, state: CollectionState, part: str) -> bool:
+        if self.can_produce(state, part):
+            return True
         
-        def can_handcraft_part(part: str) -> bool:
-            if self.can_produce(state, part):
-                return True
-            elif part not in self.critical_path.handcraftable_parts:
-                return False
+        if part not in self.critical_path.handcraftable_parts:
+            return False
 
-            recipes: list[Recipe] = self.critical_path.handcraftable_parts[part]
-            return any(
-                self.has_recipe(state, recipe)
-                and (not recipe.inputs or self.can_produce_all_allowing_handcrafting(state, logic, recipe.inputs))
-                for recipe in recipes)
+        recipes: list[Recipe] = self.critical_path.handcraftable_parts[part]
+        return any(
+            self.has_recipe(state, recipe)
+            and (not recipe.inputs or all(
+                self.can_handcraft_single_part(state, recipe_part) 
+                for recipe_part in recipe.inputs))
+            for recipe in recipes)
 
-        return not parts or all(can_handcraft_part(part) for part in parts)
+    def get_can_produce_all_allowing_handcrafting_rule(self, parts: Optional[Iterable[str]]) -> bool:
+        if not parts:
+            return true_lambda
 
+        return lambda state: all(self.can_handcraft_single_part(state, part) for part in parts)
+
+    call_count = 0
     def can_produce_specific_recipe_for_part(self, state: CollectionState, recipe: Recipe) -> bool:
+        self.call_count = self.call_count + 1
+
         if recipe.needs_pipes and (
                 not self.can_build_any(state, ("Pipes Mk.1", "Pipes Mk.2")) or
                 not self.can_build_any(state, ("Pipeline Pump Mk.1", "Pipeline Pump Mk.2"))):
@@ -79,6 +88,8 @@ class StateLogic:
         return self.has_recipe(state, recipe) \
             and self.can_build(state, recipe.building) \
             and self.can_produce_all(state, recipe.inputs)
+    
+
     
     def is_elevator_tier(self, state: CollectionState, phase: int) -> bool:
         limited_phase = min(self.options.final_elevator_package - 1, phase)

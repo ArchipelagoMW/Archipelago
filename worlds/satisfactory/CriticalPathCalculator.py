@@ -158,10 +158,9 @@ class CriticalPathCalculator:
 
                 self.recipes_to_exclude.update({
                     recipe_per_part.name
-                    for building_to_exclude in new_buildings_to_exclude
                     for recipes_per_part in self.logic.recipes.values()
                     for recipe_per_part in recipes_per_part
-                    if recipe_per_part.building == building_to_exclude
+                    if recipe_per_part.building in new_buildings_to_exclude
                 })
 
                 self.buildings_to_exclude.update(new_buildings_to_exclude)

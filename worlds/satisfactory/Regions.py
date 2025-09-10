@@ -119,19 +119,13 @@ def create_regions_and_return_locations(multiworld: MultiWorld, options: Satisfa
     connect(regions, "Overworld", "AWESOME Shop",
             lambda state: state_logic.can_build_all(state, ("AWESOME Shop", "AWESOME Sink")))
 
-    def can_produce_all_allowing_handcrafting(parts: Iterable[str]) -> Callable[[CollectionState], bool]:
-        def logic_rule(state: CollectionState):
-            return state_logic.can_produce_all_allowing_handcrafting(state, game_logic, parts)
-
-        return logic_rule
-
     for hub_tier, milestones_per_hub_tier in enumerate(game_logic.hub_layout, 1):
         if hub_tier > (options.final_elevator_package * 2):
             break
 
         for milestone, parts_per_milestone in enumerate(milestones_per_hub_tier, 1):
             connect(regions, f"Hub Tier {hub_tier}", f"Hub {hub_tier}-{milestone}",
-                    can_produce_all_allowing_handcrafting(parts_per_milestone))
+                    state_logic.get_can_produce_all_allowing_handcrafting_rule(parts_per_milestone))
             
     for building_name, building in game_logic.buildings.items():
         if building.can_produce and building_name in critical_path.required_buildings:
