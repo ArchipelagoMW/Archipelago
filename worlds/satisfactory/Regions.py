@@ -101,17 +101,17 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
             lambda state: is_ut or state_logic.can_build_all(state, super_early_game_buildings))
 
     if options.final_elevator_phase >= 2:
-        connect(regions, "Hub Tier 2", "Hub Tier 3", lambda state: state.has("Elevator Tier 1", player) 
+        connect(regions, "Hub Tier 2", "Hub Tier 3", lambda state: state.has("Elevator Phase 1", player)
                                               and (is_ut or state_logic.can_build_all(state, early_game_buildings)))
         connect(regions, "Hub Tier 3", "Hub Tier 4")
     if options.final_elevator_phase >= 3:
-        connect(regions, "Hub Tier 4", "Hub Tier 5", lambda state: state.has("Elevator Tier 2", player))
+        connect(regions, "Hub Tier 4", "Hub Tier 5", lambda state: state.has("Elevator Phase 2", player))
         connect(regions, "Hub Tier 5", "Hub Tier 6")
     if options.final_elevator_phase >= 4:
-        connect(regions, "Hub Tier 6", "Hub Tier 7", lambda state: state.has("Elevator Tier 3", player))
+        connect(regions, "Hub Tier 6", "Hub Tier 7", lambda state: state.has("Elevator Phase 3", player))
         connect(regions, "Hub Tier 7", "Hub Tier 8")
-    if options.final_elevator_phase >= 5:    
-        connect(regions, "Hub Tier 8", "Hub Tier 9", lambda state: state.has("Elevator Tier 4", player))
+    if options.final_elevator_phase >= 5:
+        connect(regions, "Hub Tier 8", "Hub Tier 9", lambda state: state.has("Elevator Phase 4", player))
 
     connect(regions, "Overworld", "Mam", lambda state: state_logic.can_build(state, "MAM"))
     connect(regions, "Overworld", "AWESOME Shop", lambda state:

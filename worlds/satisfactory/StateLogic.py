@@ -83,7 +83,7 @@ class StateLogic:
         limited_phase = min(self.options.final_elevator_phase - 1, phase)
 
         if limited_phase != 0:
-            return state.has(f"Elevator Tier {limited_phase}", self.player)
+            return state.has(f"Elevator Phase {limited_phase}", self.player)
         else:
             return True
     
