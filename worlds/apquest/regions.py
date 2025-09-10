@@ -12,7 +12,9 @@ if TYPE_CHECKING:
 # For a location to be in logic, its containing region must be reachable.
 # The connecting Entrances between regions can have rules (more on that in rules.py),
 # which makes regions useful for traversal logic ("Can the player reach this part of the map?")
-# Every location must be inside a region, so you must have at least one region. But really, you should have more :)
+
+# Every location must be inside a region, and you must have at least one region.
+# This is why we create regions first, and then later we create the locations (in locations.py)
 
 
 def create_and_connect_regions(world: APQuestWorld) -> None:
