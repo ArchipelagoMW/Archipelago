@@ -1,5 +1,5 @@
 import time
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Sequence
 import asyncio
 import NetUtils
 import copy
@@ -73,7 +73,7 @@ class GrinchClient(BizHawkClient):
         ctx.game = self.game
         ctx.items_handling = self.items_handling
         ctx.want_slot_data = True
-        ctx.watcher_timeout = 0.25
+        ctx.watcher_timeout = 0.125
         self.loading_bios_msg = False
 
         return True
@@ -180,6 +180,7 @@ class GrinchClient(BizHawkClient):
 
         # Ensures we only get the new items that we want to give the player
         new_items_only = ctx.items_received[self.last_received_index:]
+        addr_list_to_update: list[tuple[int, Sequence[int], str]] = []
 
         for item_received in new_items_only:
             local_item = ctx.item_names.lookup_in_game(item_received.item)
@@ -199,11 +200,15 @@ class GrinchClient(BizHawkClient):
                     current_ram_address_value = addr_to_update.value
 
                 # Write the updated value back into RAM
-                await self.update_and_validate_address(ctx, addr_to_update.ram_address, current_ram_address_value, addr_to_update.bit_size)
+                addr_list_to_update.append((addr_to_update.ram_address,
+                    current_ram_address_value.to_bytes(addr_to_update.bit_size, "little"),"MainRAM"))
 
 
             self.last_received_index += 1
-            await self.update_and_validate_address(ctx, RECV_ITEM_ADDR, self.last_received_index, RECV_ITEM_BITSIZE)
+
+        addr_list_to_update.append((RECV_ITEM_ADDR,
+                self.last_received_index.to_bytes(RECV_ITEM_BITSIZE,"little"), "MainRAM"))
+        await bizhawk.write(ctx.bizhawk_ctx, addr_list_to_update)
 
     async def goal_checker(self, ctx: "BizHawkClientContext"):
         if not ctx.finished_game:
@@ -220,14 +225,17 @@ class GrinchClient(BizHawkClient):
 
     # This function's entire purpose is to take away items we physically received ingame, but have not received from AP
     async def remove_physical_items(self, ctx: "BizHawkClientContext"):
+        addr_list_to_update: list[tuple[int, Sequence[int], str]] = []
+
         list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
         items_to_check: dict[str, GrinchItemData] = {**GADGETS_TABLE} #, **SLEIGH_PARTS_TABLE
         heart_count = len(list(item_id for item_id in list_recv_itemids if item_id == 42570))
         heart_item_data = ALL_ITEMS_TABLE["Heart of Stone"]
-        await self.update_and_validate_address(ctx, heart_item_data.update_ram_addr[0].ram_address, min(heart_count, 4), 1)
+        addr_list_to_update.append((heart_item_data.update_ram_addr[0].ram_address,
+            min(heart_count, 4).to_bytes(1, "little"), "MainRAM"))
 
-        # Setting Who Lake Mission Count back to 0 to prevent warping after completing 3 missions
-        await self.update_and_validate_address(ctx,0x0100F0, 0, 4)
+        # Setting mission count for all accesses back to 0 to prevent warping/unlocking after completing 3 missions
+        addr_list_to_update.append((0x0100F0, int(0).to_bytes(4, "little"), "MainRAM"))
 
         for (item_name, item_data) in items_to_check.items():
             # If item is an event or already been received, ignore.
@@ -241,12 +249,18 @@ class GrinchClient(BizHawkClient):
                     current_bin_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
                         addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
                     current_bin_value &= ~(1 << addr_to_update.binary_bit_pos)
-                    await self.update_and_validate_address(ctx, addr_to_update.ram_address, current_bin_value, 1)
+                    addr_list_to_update.append((addr_to_update.ram_address,
+                        current_bin_value.to_bytes(1, "little"), "MainRAM"))
                 else:
-                    await self.update_and_validate_address(ctx, addr_to_update.ram_address, 0, 1)
+                    addr_list_to_update.append((addr_to_update.ram_address,
+                        int(0).to_bytes(1, "little"), "MainRAM"))
+
+        await bizhawk.write(ctx.bizhawk_ctx, addr_list_to_update)
 
     # Removes the regional access until you actually received it from AP.
     async def constant_address_update(self, ctx: "BizHawkClientContext"):
+        addr_list_to_update: list[tuple[int, Sequence[int], str]] = []
+
         list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
         items_to_check: dict[str, GrinchItemData] = {**KEYS_TABLE, **MISSION_ITEMS_TABLE}
 
@@ -265,12 +279,17 @@ class GrinchClient(BizHawkClient):
                         current_bin_value |= (1 << addr_to_update.binary_bit_pos)
                     else:
                         current_bin_value &= ~(1 << addr_to_update.binary_bit_pos)
-                    await self.update_and_validate_address(ctx, addr_to_update.ram_address, current_bin_value, 1)
+                    addr_list_to_update.append((addr_to_update.ram_address,
+                        current_bin_value.to_bytes(1, "little"), "MainRAM"))
                 else:
                     if GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
-                        await self.update_and_validate_address(ctx, addr_to_update.ram_address, addr_to_update.value, 1)
+                        addr_list_to_update.append((addr_to_update.ram_address,
+                            addr_to_update.value.to_bytes(1, "little"), "MainRAM"))
                     else:
-                        await self.update_and_validate_address(ctx, addr_to_update.ram_address, 0, 1)
+                        addr_list_to_update.append((addr_to_update.ram_address,
+                            int(0).to_bytes(1, "little"), "MainRAM"))
+
+        await bizhawk.write(ctx.bizhawk_ctx, addr_list_to_update)
 
     async def ingame_checker(self, ctx: "BizHawkClientContext"):
         from CommonClient import logger
@@ -313,14 +332,6 @@ class GrinchClient(BizHawkClient):
     async def option_handler(self, ctx: "BizHawkClientContext"):
         if self.loc_unlimited_eggs:
             await bizhawk.write(ctx.bizhawk_ctx, [(EGG_COUNT_ADDR, MAX_EGGS.to_bytes(2,"little"), "MainRAM")])
-
-    async def update_and_validate_address(self, ctx: "BizHawkClientContext", address_to_validate: int, expected_value: int, byte_size: int):
-        await bizhawk.write(ctx.bizhawk_ctx, [(address_to_validate, expected_value.to_bytes(byte_size, "little"), "MainRAM")])
-        current_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(address_to_validate, byte_size, "MainRAM")]))[0], "little")
-        if not current_value == expected_value:
-            if address_to_validate == 0x010000 or address_to_validate == 0x08FB94 or address_to_validate == 0x010058: # TODO Temporairly skips teleportation addresses; to be changed later on.
-                return
-            raise Exception("Unable to update address as expected. Address: "+ str(address_to_validate)+"; Expected Value: "+str(expected_value))
 
     async def ring_link_output(self, ctx: "BizHawkClientContext"):
         from CommonClient import logger
