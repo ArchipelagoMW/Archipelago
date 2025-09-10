@@ -1287,7 +1287,7 @@ def scale_enemies(world: "EarthBoundWorld", rom: "LocalRom") -> None:
                 rom.write_bytes(enemy.address + 60, enemy_speed.to_bytes(1, "little"))
                 rom.write_bytes(enemy.address + 56, enemy_offense.to_bytes(2, "little"))
                 rom.write_bytes(enemy.address + 58, enemy_defense.to_bytes(2, "little"))
-                rom.write_bytes(enemy.address + 54, enemy_level.to_bytes(2, "little"))
+                rom.write_bytes(enemy.address + 54, enemy_level.to_bytes(1, "little"))
                 if enemy.shield is not None:
                     rom.write_bytes(enemy.address + 89, shield_table[enemy_shield].to_bytes(1, "little"))
                 

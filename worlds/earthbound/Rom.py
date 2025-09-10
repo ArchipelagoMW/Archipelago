@@ -71,9 +71,6 @@ class LocalRom(object):
     def read_bytes(self, offset: int, length: int) -> bytes:
         return self.file[offset:offset + length]
 
-    def write_byte(self, offset: int, value: int) -> None:
-        self.file[offset] = value
-
     def write_bytes(self, offset: int, values: Sequence[int]) -> None:
         self.file[offset:offset + len(values)] = values
 
@@ -599,12 +596,13 @@ def patch_rom(world: "EarthBoundWorld", rom: LocalRom, player: int) -> None:
             if i == 480:
                 drawn_background = struct.pack("H", 0x00E3)
             else:
-                drawn_background = struct.pack("H", world.random.randint(0x01, 0x0146))  # clearly this isn't giygas
+                drawn_background = struct.pack("H", world.random.randint(0x01, 0x0146))
 
             if battle_bg_bpp[struct.unpack("H", drawn_background)[0]] == 4:
                 drawn_background_2 = struct.pack("H",  0x0000)
             else:
                 drawn_background_2 = struct.pack("H", world.random.choice(bpp2_bgs))
+            #print(f"ello mate we are doing background {i} at {hex(0xCBD89A + (i * 4))}, the background is {drawn_background[0]}.")
             if world.flipped_bg > 33 or drawn_background not in bpp2_bgs:
                 rom.write_bytes(0x0BD89A + (i * 4), drawn_background)
                 rom.write_bytes(0x0BD89C + (i * 4), drawn_background_2)
@@ -726,10 +724,10 @@ class EBProcPatch(APProcedurePatch, APTokenMixin):
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
 
-    def write_bytes(self, offset, value: typing.Iterable[int]) -> None:
+    def write_bytes(self, offset: int, value: typing.Iterable[int]) -> None:
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
     
-    def copy_bytes(self, source, amount, destination) -> None:
+    def copy_bytes(self, source: int, amount: int, destination: int) -> None:
         self.write_token(APTokenTypes.COPY, destination, (amount, source))
 
 
