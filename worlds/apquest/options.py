@@ -35,6 +35,15 @@ class ExtraStartingChest(Toggle):
     display_name = "Extra Starting Chest"
 
 
+class StartWithOneConfettiCannon(Toggle):
+    """
+    Start with a confetti cannon already in your inventory.
+    Why? Because you deserve it. You get to celebrate yourself without doing any work first.
+    """
+
+    display_name = "Start With One Confetti Cannon"
+
+
 # A range is a numeric option with a min and max value. This will be represented by a slider on the website.
 class ConfettiExplosiveness(Range):
     """
@@ -75,6 +84,7 @@ class APQuestOptions(PerGameCommonOptions):
     hard_mode: HardMode
     hammer: Hammer
     extra_starting_chest: ExtraStartingChest
+    start_with_one_confetti_cannon: StartWithOneConfettiCannon
     confetti_explosiveness: ConfettiExplosiveness
     player_sprite: PlayerSprite
 
@@ -83,7 +93,7 @@ class APQuestOptions(PerGameCommonOptions):
 option_groups = [
     OptionGroup(
         "Gameplay Options",
-        [HardMode, Hammer, ExtraStartingChest],
+        [HardMode, Hammer, ExtraStartingChest, StartWithOneConfettiCannon],
     ),
     OptionGroup(
         "Aesthetic Options",
@@ -97,6 +107,7 @@ option_presets = {
         "hard_mode": False,
         "hammer": False,
         "extra_starting_chest": False,
+        "start_with_one_confetti_cannon": False,
         "confetti_explosiveness": ConfettiExplosiveness.range_start,
         "player_sprite": PlayerSprite.option_human,
     },
@@ -104,6 +115,7 @@ option_presets = {
         "hard_mode": True,
         "hammer": True,
         "extra_starting_chest": True,
+        "start_with_one_confetti_cannon": True,
         "confetti_explosiveness": ConfettiExplosiveness.range_end,
         "player_sprite": PlayerSprite.option_duck,
     },
