@@ -42,7 +42,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
     ]
 
     for hub_tier, milestones_per_hub_tier in enumerate(game_logic.hub_layout, 1):
-        if (hub_tier > (options.final_elevator_phase * 2)):
+        if hub_tier > (options.final_elevator_phase * 2):
             break
 
         region_names.append(f"Hub Tier {hub_tier}")
@@ -99,7 +99,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
     connect(regions, "Overworld", "Hub Tier 1")
     connect(regions, "Hub Tier 1", "Hub Tier 2",
             lambda state: is_ut or state_logic.can_build_all(state, super_early_game_buildings))
-    
+
     if options.final_elevator_phase >= 2:
         connect(regions, "Hub Tier 2", "Hub Tier 3", lambda state: state.has("Elevator Tier 1", player) 
                                               and (is_ut or state_logic.can_build_all(state, early_game_buildings)))
@@ -124,7 +124,7 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
         return logic_rule
 
     for hub_tier, milestones_per_hub_tier in enumerate(game_logic.hub_layout, 1):
-        if (hub_tier > (options.final_elevator_phase * 2)):
+        if hub_tier > (options.final_elevator_phase * 2):
             break
 
         for minestone, parts_per_milestone in enumerate(milestones_per_hub_tier, 1):

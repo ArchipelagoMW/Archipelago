@@ -29,7 +29,7 @@ class LocationData():
 
 class Part(LocationData):
     @staticmethod
-    def get_parts(state_logic: StateLogic, recipes: tuple[Recipe, ...], name: str, 
+    def get_parts(state_logic: StateLogic, recipes: tuple[Recipe, ...], name: str,
                                                                     final_elevator_phase: int) -> list[LocationData]:
         recipes_per_region: dict[str, list[Recipe]] = {}
 
@@ -90,10 +90,10 @@ class PowerInfrastructure(LocationData):
 
 
 class ElevatorPhase(LocationData):
-    def __init__(self, phase: int, state_logic: StateLogic, game_logic: GameLogic):
-        super().__init__("Overworld", f"Elevator Phase {phase + 1}", EventId,
+    def __init__(self, phaseIndex: int, state_logic: StateLogic, game_logic: GameLogic):
+        super().__init__("Overworld", f"Elevator Phase {phaseIndex + 1}", EventId,
             rule = lambda state: state_logic.can_build(state, "Space Elevator") and \
-                                 state_logic.can_produce_all(state, game_logic.space_elevator_phases[phase].keys()))
+                                 state_logic.can_produce_all(state, game_logic.space_elevator_phases[phaseIndex].keys()))
 
 
 class HubSlot(LocationData):
@@ -366,9 +366,9 @@ class Locations():
         # and than create one massive state.has_all for each logical gate (hub tiers, elevator phases)
 
         location_table.extend(
-            ElevatorPhase(index, self.state_logic, self.game_logic) 
-            for index, parts in enumerate(self.game_logic.space_elevator_phases)
-            if index < self.options.final_elevator_phase)
+            ElevatorPhase(phaseIndex, self.state_logic, self.game_logic) 
+            for phaseIndex, _ in enumerate(self.game_logic.space_elevator_phases)
+            if phaseIndex < final_elevator_phase)
         location_table.extend(
             part
             for part_name, recipes in self.game_logic.recipes.items() 

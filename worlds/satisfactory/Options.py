@@ -50,7 +50,7 @@ class ElevatorPhase(NamedRange):
     Milestones after the selected Phase are empty and contain nothing.
     If your goal selection contains *Space Elevator Phase* then submitting this Phase's elevator package completes that goal.
     If the goal is not enabled, this setting simply limits the HUB's content.
-
+    
     Estimated in-game completion times:
     
     - **Phase 1 (Tiers 0-2)**: ~3 Hours
@@ -450,7 +450,7 @@ class GoalSelection(OptionSet):
         # "Erect a FICSMAS Tree",
     }
     default = {"Space Elevator Phase"}
-    schema = Schema(And(set, len), 
+    schema = Schema(And(set, len),
                     error = "yaml does not specify a goal, the Satisfactory option `goal_selection` is empty")
 
 class GoalRequirement(Choice):

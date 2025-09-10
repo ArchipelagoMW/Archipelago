@@ -129,7 +129,7 @@ class SatisfactoryWorld(World):
                     multiplied_amount = int(max(amount * (self.options.milestone_cost_multiplier / 100), 1))
                     slot_hub_layout[tier-1][milestone-1][self.item_id_str(part)] = multiplied_amount
 
-        starting_recipes: tuple[int] = tuple(
+        starting_recipes: tuple[int, ...] = tuple(
             self.item_name_to_id[recipe_name] 
             for recipe_name in self.critical_path.tier_0_recipes
         )
@@ -148,7 +148,7 @@ class SatisfactoryWorld(World):
                 "Options": {
                     "GoalSelection": self.options.goal_selection.value,
                     "GoalRequirement": self.options.goal_requirement.value,
-                    # TODO rename slot data FinalElevatorTier to FinalElevatorPhase in the mod
+                    # TODO rename slot data FinalElevatorTier to FinalElevatorPhase in the mod, then here
                     "FinalElevatorTier": self.options.final_elevator_phase.value,
                     "FinalResourceSinkPointsTotal": self.options.goal_awesome_sink_points_total.value,
                     "FinalResourceSinkPointsPerMinute": self.options.goal_awesome_sink_points_per_minute.value,
@@ -192,6 +192,7 @@ class SatisfactoryWorld(World):
 
         self.options.goal_selection.value = slot_data["Data"]["Options"]["GoalSelection"]
         self.options.goal_requirement.value = slot_data["Data"]["Options"]["GoalRequirement"]
+        # TODO rename slot data FinalElevatorTier to FinalElevatorPhase in the mod, then here
         self.options.final_elevator_phase.value = slot_data["Data"]["Options"]["FinalElevatorTier"]
         self.options.goal_awesome_sink_points_total.value = slot_data["Data"]["Options"]["FinalResourceSinkPointsTotal"]
         self.options.goal_awesome_sink_points_per_minute.value = \
