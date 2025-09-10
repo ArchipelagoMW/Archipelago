@@ -53,6 +53,75 @@ class BossRando(Choice):
     option_unscaled = 2
     alias_true = 1
 
+class BossRandoType(Choice):
+    """
+    Sets what type of boss shuffling occurs.
+    Shuffle: Bosses will be shuffled amongst each other
+    Chaos: Bosses will be randomized with the chance of duplicate bosses
+    Singularity: All bosses will be replaced with a single boss
+    Manual: Bosses will be placed according to the Boss Rando Overrides setting
+    """
+    display_name = "Boss Randomization Type"
+    option_shuffle = 0
+    option_chaos = 1
+    option_singularity = 2
+    option_manual = 3
+
+class BossRandoOverrides(OptionDict):
+    """
+    Manual mapping of bosses to the boss they will be replaced with.
+    Bosses that you don't specify will be the vanilla boss.
+    """
+    bosses = [
+        "FelineSentry",
+        "Varndagroth",
+        "AzureQueen",
+        "GoldenIdol",
+        "Aelana",
+        "Maw",
+        "Cantoran",
+        "Genza",
+        "Nuvius",
+        "Vol",
+        "Prince",
+        "Xarion",
+        "Ravenlord",
+        "Ifrit",
+        "Sandman",
+        "Nightmare",
+    ]
+
+    schema = Schema(
+        {
+            Optional(Or(*bosses)): Or(
+                And(
+                    {Optional(boss): And(int, lambda n: n >= 0) for boss in bosses},
+                    lambda d: any(v > 0 for v in d.values()),
+                ),
+                *bosses
+            )
+        }
+    )
+    display_name = "Boss Rando Overrides"
+    default = {
+        "FelineSentry": "FelineSentry",
+        "Varndagroth": "Varndagroth",
+        "AzureQueen": "AzureQueen",
+        "GoldenIdol": "GoldenIdol",
+        "Aelana": "Aelana",
+        "Maw": "Maw",
+        "Cantoran": "Cantoran",
+        "Genza": "Genza",
+        "Nuvius": "Nuvius",
+        "Vol": "Vol",
+        "Prince": "Prince",
+        "Xarion": "Xarion",
+        "Ravenlord": "Ravenlord",
+        "Ifrit": "Ifrit",
+        "Sandman": "Sandman",
+        "Nightmare": "Nightmare"
+    }
+
 class EnemyRando(Choice):
     "Wheter enemies will be randomized, and if their damage/hp should be scaled."
     display_name = "Enemy Randomization"
@@ -420,6 +489,8 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     cantoran: Cantoran
     lore_checks: LoreChecks
     boss_rando: BossRando
+    boss_rando_type: BossRandoType
+    boss_rando_overrides: BossRandoOverrides
     enemy_rando: EnemyRando
     damage_rando: DamageRando
     damage_rando_overrides: DamageRandoOverrides
