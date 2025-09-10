@@ -183,8 +183,8 @@ local ROM_ITEM_TABLE = {
     "AP_CARNIVAL_L1_ROCKET_RAMP",
     "AP_CARNIVAL_L2_TEETH",
     "AP_CARNIVAL_L2_FAN",
-	--"AP_CARNIVAL_L3_SPIN_DOOR",
-	--"AP_CARNIVAL_L3_HANDS",
+	"AP_CARNIVAL_L3_SPIN_DOOR",
+	"AP_CARNIVAL_L3_HANDS",
 	--"AP_PIRATES_L1_RAISE_BEACH",
 	--"AP_PIRATES_L1_ELEVATOR",
 	--"AP_PIRATES_L1_CHEST",
@@ -11588,7 +11588,7 @@ GLOVERHACK = {
     base_pointer = 0x400000,
     pc = 0x0,
     ap_items = 0x9B,
-    ap_world = 0x738,
+    ap_world = 0x73C,
       hub_entrance = 0x0,
       door_number = 0x1,
       garib_locations = 0x4,
@@ -11633,13 +11633,13 @@ GLOVERHACK = {
       taglink = 0x4,
     hub_map = 0x8,
     world_map = 0x9,
-    pc_deathlink = 0x6ED,
-    n64_deathlink = 0x6F0,
-    pc_taglink = 0x6EE,
-    n64_taglink = 0x6F1,
-    ROM_MAJOR_VERSION = 0x732,
-    ROM_MINOR_VERSION = 0x733,
-    ROM_PATCH_VERSION = 0x734
+    pc_deathlink = 0x6EF,
+    n64_deathlink = 0x6F2,
+    pc_taglink = 0x6F0,
+    n64_taglink = 0x6F3,
+    ROM_MAJOR_VERSION = 0x736,
+    ROM_MINOR_VERSION = 0x737,
+    ROM_PATCH_VERSION = 0x738
 }
 
 function GLOVERHACK:new(t)
