@@ -14,5 +14,6 @@ class Goal:
     legend = "Legend"
     mystery_of_the_stardrops = "Mystery of the Stardrops"
     mad_hatter = "Mad Hatter"
+    ultimate_foodie = "Ultimate Foodie"
     allsanity = "Allsanity"
     perfection = "Perfection"

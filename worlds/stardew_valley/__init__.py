@@ -369,6 +369,10 @@ class StardewValleyWorld(World):
             self.create_event_location(location_table[GoalName.mad_hatter],
                                        self.logic.goal.can_complete_mad_hatter(self.get_all_location_names()),
                                        Event.victory)
+        elif self.options.goal == Goal.option_ultimate_foodie:
+            self.create_event_location(location_table[GoalName.ultimate_foodie],
+                                       self.logic.goal.can_complete_ultimate_foodie(self.get_all_location_names()),
+                                       Event.victory)
         elif self.options.goal == Goal.option_allsanity:
             self.create_event_location(location_table[GoalName.allsanity],
                                        self.logic.goal.can_complete_allsanity(),

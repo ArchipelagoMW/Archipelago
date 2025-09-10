@@ -34,6 +34,7 @@ class Goal(Choice):
     Legend: Earn 10 000 000g
     Mystery of the Stardrops: Find every stardrop
     Mad Hatter: Complete all your hatsanity locations. If hatsanity is disabled, will enable it on "Easy+Tailoring"
+    Ultimate Foodie: Eat all items in the game. Adapts to Eatsanity
     Allsanity: Complete every check in your slot
     Perfection: Attain Perfection
     """
@@ -55,6 +56,7 @@ class Goal(Choice):
     option_legend = 12
     option_mystery_of_the_stardrops = 13
     option_mad_hatter = 20
+    option_ultimate_foodie = 21
     # option_junimo_kart =
     # option_prairie_king =
     # option_fector_challenge =

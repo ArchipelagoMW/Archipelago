@@ -173,6 +173,18 @@ class GoalLogic(BaseLogic):
             rules.append(self.logic.region.can_reach_location(hatsanity_location.name))
         return self.logic.and_(*rules)
 
+    def can_complete_ultimate_foodie(self, all_location_names_in_slot: list[str]) -> StardewRule:
+        if not self.options.eatsanity.value:
+            raise Exception("Cannot play Ultimate Foodie Goal without Eatsanity")
+
+        rules = []
+
+        for eatsanity_location in locations_by_tag[LocationTags.EATSANITY]:
+            if eatsanity_location.name not in all_location_names_in_slot:
+                continue
+            rules.append(self.logic.region.can_reach_location(eatsanity_location.name))
+        return self.logic.and_(*rules)
+
     def can_complete_allsanity(self) -> StardewRule:
         return self.logic.has_progress_percent(100)
 
