@@ -100,6 +100,7 @@ def create_all_items(world: APQuestWorld) -> None:
     # Players can add precollected items themselves via the generic "start_inventory" option.
     # If you want to add your own precollected items, you can do so via multiworld.push_precollected().
     if world.options.start_with_one_confetti_cannon:
+        # We're adding a filler item, but you can also add progression item to the player's precollected inventory.
         starting_confetti_cannon = world.create_item("Confetti Cannon")
         world.multiworld.push_precollected(starting_confetti_cannon)
 
