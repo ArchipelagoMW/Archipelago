@@ -318,36 +318,38 @@ class GrinchClient(BizHawkClient):
         await bizhawk.write(ctx.bizhawk_ctx, [(address_to_validate, expected_value.to_bytes(byte_size, "little"), "MainRAM")])
         current_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(address_to_validate, byte_size, "MainRAM")]))[0], "little")
         if not current_value == expected_value:
-            if address_to_validate == 0x010000 or address_to_validate == 0x08FB94: # TODO Temporairly skips teleportation addresses; to be changed later on.
+            if address_to_validate == 0x010000 or address_to_validate == 0x08FB94 or address_to_validate == 0x010058: # TODO Temporairly skips teleportation addresses; to be changed later on.
                 return
             raise Exception("Unable to update address as expected. Address: "+ str(address_to_validate)+"; Expected Value: "+str(expected_value))
 
     async def ring_link_output(self, ctx: "BizHawkClientContext"):
         from CommonClient import logger
-        if not ctx.slot:
-            return
+        while not ctx.exit_event or ctx.slot:
 
-        try:
-            current_egg_count = int.from_bytes(
-                (await bizhawk.read(ctx.bizhawk_ctx, [(EGG_COUNT_ADDR, EGG_ADDR_BYTESIZE, "MainRAM")]))[0], "little")
+            try:
+                current_egg_count = int.from_bytes(
+                    (await bizhawk.read(ctx.bizhawk_ctx, [(EGG_COUNT_ADDR, EGG_ADDR_BYTESIZE, "MainRAM")]))[0], "little")
 
-            if (current_egg_count - self.previous_egg_count) != 0:
-                msg = {
-                    "cmd": "Bounce",
-                    "data": {
-                        "time": time.time(),
-                        "source": ctx.player_names[ctx.slot],
-                        "amount": current_egg_count - self.previous_egg_count
-                    },
-                    "tags": ["RingLink"]
-                }
-                await ctx.send_msgs([msg])
-                self.previous_egg_count = current_egg_count
-        except Exception as ex:
-            logger.error("While monitoring grinch's egg count ingame, an error occured. Details:"+ str(ex))
+                if (current_egg_count - self.previous_egg_count) != 0:
+                    msg = {
+                        "cmd": "Bounce",
+                        "data": {
+                            "time": time.time(),
+                            "source": ctx.player_names[ctx.slot],
+                            "amount": current_egg_count - self.previous_egg_count
+                        },
+                        "tags": ["RingLink"]
+                    }
+                    await ctx.send_msgs([msg])
+                    self.previous_egg_count = current_egg_count
+            except Exception as ex:
+                logger.error("While monitoring grinch's egg count ingame, an error occured. Details:"+ str(ex))
 
     async def ring_link_input(self, egg_amount: int, ctx: "BizHawkClientContext"):
+        from CommonClient import logger
         current_egg_count = int.from_bytes(
             (await bizhawk.read(ctx.bizhawk_ctx, [(EGG_COUNT_ADDR, EGG_ADDR_BYTESIZE, "MainRAM")]))[0], "little")
         current_egg_count = min(current_egg_count + egg_amount, MAX_EGGS)
-        await self.update_and_validate_address(ctx, EGG_COUNT_ADDR, int(current_egg_count), EGG_ADDR_BYTESIZE)
+        await bizhawk.write(ctx.bizhawk_ctx, [(EGG_COUNT_ADDR,
+            int(current_egg_count).to_bytes(EGG_ADDR_BYTESIZE, "little"), "MainRAM")])
+        self.previous_egg_count = current_egg_count
