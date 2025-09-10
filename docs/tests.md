@@ -82,10 +82,10 @@ overridden. For more information on what methods are available to your class, ch
 
 #### Alternatives to WorldTestBase
 
-Unit tests can also be created using [TestBase](/test/bases.py#L16) or
-[unittest.TestCase](https://docs.python.org/3/library/unittest.html#unittest.TestCase) depending on your use case. These
-may be useful for generating a multiworld under very specific constraints without using the generic world setup, or for
-testing portions of your code that can be tested without relying on a multiworld to be created first.
+Unit tests can also be created using
+[unittest.TestCase](https://docs.python.org/3/library/unittest.html#unittest.TestCase) directly. These may be useful
+for generating a multiworld under very specific constraints without using the generic world setup, or for testing
+portions of your code that can be tested without relying on a multiworld to be created first.
 
 #### Parametrization
 
@@ -102,8 +102,7 @@ for multiple inputs) the base test. Some important things to consider when attem
 
 * Classes inheriting from `WorldTestBase`, including those created by the helpers in `test.param`, will run all
   base tests by default, make sure the produced tests actually do what you aim for and do not waste a lot of
-  extra CPU time. Consider using `TestBase` or `unittest.TestCase` directly
-  or setting `WorldTestBase.run_default_tests` to False.
+  extra CPU time. Consider using `unittest.TestCase` directly or setting `WorldTestBase.run_default_tests` to False.
 
 #### Performance Considerations
 
