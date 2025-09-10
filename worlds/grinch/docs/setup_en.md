@@ -8,24 +8,31 @@ BizHawk support.
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) Version 2.9.1 is supported, but I can't promise if any version is stable or not.
 - The latest `grinch.apworld` file. You can find this on the [Releases page](https://github.com/MarioSpore/Grinch-AP/releases/latest). Put this in your `Archipelago/custom_worlds` folder.
 
-## Configuring your Config (.yaml) file
+## Configuring BizHawk
+Once you have installed BizHawk, open `EmuHawk.exe` and change the following settings:
 
-### What is a config file and why do I need one?
+- If you're using BizHawk 2.7 or 2.8, go to `Config > Customize`. On the Advanced tab, switch the Lua Core from
+`NLua+KopiLua` to `Lua+LuaInterface`, then restart EmuHawk. (If you're using BizHawk 2.9, you can skip this step.)
+- Under `Config > Customize`, check the "Run in background" option to prevent disconnecting from the client while you're
+tabbed out of EmuHawk.
+- Under `Config > Preferred Cores > PSX`, select NymaShock.
+- Open any PlayStation game in EmuHawk and go to `Config > Controllers…` to configure your inputs. If you can't click
+`Controllers…`, it's because you need to load a game first.
+- Ape Escape is very particular about its analog setup: go to `PSX > Settings` and select `Sync Settings`. Change Virtual
+Port 1 to Dual Analog to help prevent deadzone issues.
+You may need to invert Sensitivity for the up/down axis to -100%.
+This can be found under Analog Controls through `Config > Controllers…`.
+Depending on your controller, you may also want to tweak the Deadzone. Something like 6% is recommended for a DualShock 4.
+- Consider clearing keybinds in `Config > Hotkeys…` if you don't intend to use them. Select the keybind and press Esc to
+clear it.
 
-See the guide on setting up a basic YAML at the Archipelago setup
-guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
+## Generating a Game
 
-### Where do I get a config file?
-
-The Player options page on the website allows you to configure your personal
-options and export a config file from them: [The Grinch Player Options Page](../player-options)
-
-### Verifying your config file
-
-If you would like to validate your config file to make sure it works, you may do
-so on the YAML Validator page: [YAML Validation page](/check)
-
-## Joining a MultiWorld Game
+1. Create your options file (YAML). After installing the `grinch.apworld` file, you can generate a template within the Archipelago Launcher by clicking `Generate Template Settings`.
+2. Follow the general Archipelago instructions for [generating a game](https://archipelago.gg/tutorial/Archipelago/setup/en#generating-a-game).
+3. Open `ArchipelagoLauncher.exe`
+4. Select "BizHawk Client" in the right-side column. On your first time opening BizHawk Client, you will also be asked to
+locate `EmuHawk.exe` in your BizHawk install.
 
 ### Connect to the Multiserver
 
@@ -37,18 +44,3 @@ script. Navigate to your Archipelago install folder and open `data/lua/connector
 To connect the client to the multiserver simply put `<address>:<port>` on the text field on top and
 press enter (if the server uses a password, type in the bottom text field
 `/connect <address>:<port> [password]`)
-
-## Hosting a MultiWorld game
-
-The recommended way to host a game is to use our hosting service. The process is relatively simple:
-
-1. Collect config files from your players.
-2. Upload the config files to the Generate page above.
-    - Generate page: [WebHost Seed Generation Page](/generate)
-3. Wait a moment while the seed is generated.
-4. When the seed is generated, you will be redirected to a "Seed Info" page.
-5. Click "Create New Room". This will take you to the server page. Provide the link to this page to
-  your players, so they may download their patch files from there.
-6. Note that a link to a MultiWorld Tracker is at the top of the room page. The tracker shows the
-  progress of all players in the game. Any observers may also be given the link to this page.
-7. Once all players have joined, you may begin playing.
