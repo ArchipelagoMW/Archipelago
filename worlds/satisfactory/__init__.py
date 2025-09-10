@@ -140,7 +140,6 @@ class SatisfactoryWorld(World):
                 "Options": {
                     "GoalSelection": self.options.goal_selection.value,
                     "GoalRequirement": self.options.goal_requirement.value,
-                    # TODO rename slot data FinalElevatorTier to FinalElevatorPhase in the mod, then here
                     "FinalElevatorTier": self.options.final_elevator_phase.value,
                     "FinalResourceSinkPointsTotal": self.options.goal_awesome_sink_points_total.value,
                     "FinalResourceSinkPointsPerMinute": self.options.goal_awesome_sink_points_per_minute.value,

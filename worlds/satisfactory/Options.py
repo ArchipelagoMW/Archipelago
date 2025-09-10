@@ -61,22 +61,22 @@ class ElevatorPhase(NamedRange):
     
     Estimated in-game completion times:
     
-    - **Phase 1 (Tiers 0-2)**: ~3 Hours
-    - **Phase 2 (Tiers 0-4)**: ~8 Hours
-    - **Phase 3 (Tiers 0-6)**: ~2 Days
-    - **Phase 4 (Tiers 0-8)**: ~1 Week
-    - **Phase 5 (Tiers 0-9)**: ~1.5 Weeks
+    - **Phase 1 (Tiers 1-2)**: ~3 Hours
+    - **Phase 2 (Tiers 1-4)**: ~8 Hours
+    - **Phase 3 (Tiers 1-6)**: ~2 Days
+    - **Phase 4 (Tiers 1-8)**: ~1 Week
+    - **Phase 5 (Tiers 1-9)**: ~1.5 Weeks
     """
     display_name = "Final Space Elevator Phase in logic"
     default = 2
     range_start = 1
     range_end = 5
     special_range_names = {
-        "phase 1 (tiers 0-2)": 1,
-        "phase 2 (tiers 0-4)": 2,
-        "phase 3 (tiers 0-6)": 3,
-        "phase 4 (tiers 0-8)": 4,
-        "phase 5 (tiers 0-9)": 5,
+        "phase 1 (tiers 1-2)": 1,
+        "phase 2 (tiers 1-4)": 2,
+        "phase 3 (tiers 1-6)": 3,
+        "phase 4 (tiers 1-8)": 4,
+        "phase 5 (tiers 1-9)": 5,
     }
 
 
