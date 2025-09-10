@@ -7,9 +7,7 @@ from .Locations import Locations, LocationData
 from .StateLogic import EventId, StateLogic
 from .Options import SatisfactoryOptions, Placement
 from .Regions import SatisfactoryLocation, create_regions_and_return_locations
-from .CriticalPathCalculator import CriticalPathCalculator
 from .Web import SatisfactoryWebWorld
-from ..AutoWorld import World
 
 
 class SatisfactoryWorld(World):
@@ -90,7 +88,7 @@ class SatisfactoryWorld(World):
         resource_sink_goal: bool = "AWESOME Sink Points (total)" in self.options.goal_selection \
                                    or "AWESOME Sink Points (per minute)" in self.options.goal_selection
 
-        required_parts = set(self.game_logic.space_elevator_tiers[self.options.final_elevator_package.value - 1])
+        required_parts = set(self.game_logic.space_elevator_phases[self.options.final_elevator_phase.value - 1].keys())
 
         if resource_sink_goal:
             required_parts.union(self.game_logic.buildings["AWESOME Sink"].inputs)
@@ -140,7 +138,8 @@ class SatisfactoryWorld(World):
                 "Options": {
                     "GoalSelection": self.options.goal_selection.value,
                     "GoalRequirement": self.options.goal_requirement.value,
-                    "FinalElevatorTier": self.options.final_elevator_package.value,
+                    # TODO rename slot data FinalElevatorTier to FinalElevatorPhase in the mod, then here
+                    "FinalElevatorTier": self.options.final_elevator_phase.value,
                     "FinalResourceSinkPointsTotal": self.options.goal_awesome_sink_points_total.value,
                     "FinalResourceSinkPointsPerMinute": self.options.goal_awesome_sink_points_per_minute.value,
                     "FreeSampleEquipment": self.options.free_sample_equipment.value,
@@ -182,7 +181,8 @@ class SatisfactoryWorld(World):
 
         self.options.goal_selection.value = slot_data["Data"]["Options"]["GoalSelection"]
         self.options.goal_requirement.value = slot_data["Data"]["Options"]["GoalRequirement"]
-        self.options.final_elevator_package.value = slot_data["Data"]["Options"]["FinalElevatorTier"]
+        # TODO rename slot data FinalElevatorTier to FinalElevatorPhase in the mod, then here
+        self.options.final_elevator_phase.value = slot_data["Data"]["Options"]["FinalElevatorTier"]
         self.options.goal_awesome_sink_points_total.value = slot_data["Data"]["Options"]["FinalResourceSinkPointsTotal"]
         self.options.goal_awesome_sink_points_per_minute.value = \
             slot_data["Data"]["Options"]["FinalResourceSinkPointsPerMinute"]

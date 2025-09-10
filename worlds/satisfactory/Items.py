@@ -950,7 +950,7 @@ class Items:
         excluded_items.update(self.critical_path.implicitly_unlocked)
 
         # since we dont have part logic setup for Transports
-        if self.options.final_elevator_package == 1:
+        if (self.options.final_elevator_phase == 1):
             excluded_items.add("Transport: Drones")
 
         # Remove excluded items that arent unique

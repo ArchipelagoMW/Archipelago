@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from typing import ClassVar, Any, cast
 from enum import IntEnum
+from schema import Schema, And
 from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, OptionGroup
 from Options import Range, NamedRange, Toggle, DefaultOnToggle, OptionSet, StartInventoryPool, Choice
-from schema import Schema, And
 
 
 class Placement(IntEnum):
@@ -52,31 +52,31 @@ class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
             
         raise Exception(f"ChoiceMap: selected choice {self.value} is not valid, valid choices are: {self.choices.keys()}")
 
-
-class ElevatorTier(NamedRange):
+class ElevatorPhase(NamedRange):
     """
-    Put these Shipments to Space Elevator packages in logic.
-    Milestones past these packages will be empty.
-    If your goal selection contains *Space Elevator Tier* then the goal will be to complete these shipments.
-
+    Put the milestones accessible BEFORE this Space Elevator Phase in logic.
+    Milestones after the selected Phase are empty and contain nothing.
+    If your goal selection contains *Space Elevator Phase* then submitting this Phase's elevator package completes that goal.
+    If the goal is not enabled, this setting simply limits the HUB's content.
+    
     Estimated in-game completion times:
     
-    - **one package (tiers 1-2)**: ~3 Hours
-    - **two packages (tiers 1-4)**: ~8 Hours
-    - **three packages (tiers 1-6)**: ~2 Days
-    - **four packages (tiers 1-8)**: ~1 Week
-    - **five packages (tiers 1-9)**: ~1.5 Weeks
+    - **Phase 1 (Tiers 0-2)**: ~3 Hours
+    - **Phase 2 (Tiers 0-4)**: ~8 Hours
+    - **Phase 3 (Tiers 0-6)**: ~2 Days
+    - **Phase 4 (Tiers 0-8)**: ~1 Week
+    - **Phase 5 (Tiers 0-9)**: ~1.5 Weeks
     """
-    display_name = "Space Elevator shipments in logic"
+    display_name = "Final Space Elevator Phase in logic"
     default = 2
     range_start = 1
     range_end = 5
     special_range_names = {
-        "one package (tiers 1-2)": 1,
-        "two packages (tiers 1-4)": 2,
-        "three packages (tiers 1-6)": 3,
-        "four packages (tiers 1-8)": 4,
-        "five packages (tiers 1-9)": 5,
+        "phase 1 (tiers 0-2)": 1,
+        "phase 2 (tiers 0-4)": 2,
+        "phase 3 (tiers 0-6)": 3,
+        "phase 4 (tiers 0-8)": 4,
+        "phase 5 (tiers 0-9)": 5,
     }
 
 
@@ -477,14 +477,14 @@ class GoalSelection(OptionSet):
     """
     display_name = "Select your Goals"
     valid_keys = {
-        "Space Elevator Tier",
+        "Space Elevator Phase",
         "AWESOME Sink Points (total)",
         "AWESOME Sink Points (per minute)",
         "Exploration Collectables",
         # "Erect a FICSMAS Tree",
     }
-    default = {"Space Elevator Tier"}
-    schema = Schema(And(set, len), 
+    default = {"Space Elevator Phase"}
+    schema = Schema(And(set, len),
                     error="yaml does not specify a goal, the Satisfactory option `goal_selection` is empty")
 
 
@@ -513,7 +513,7 @@ class RandomizeTier0(DefaultOnToggle):
 class SatisfactoryOptions(PerGameCommonOptions, DeathLinkMixin):
     goal_selection: GoalSelection
     goal_requirement: GoalRequirement
-    final_elevator_package: ElevatorTier
+    final_elevator_phase: ElevatorPhase
     goal_awesome_sink_points_total: ResourceSinkPointsTotal
     goal_awesome_sink_points_per_minute: ResourceSinkPointsPerMinute
     goal_exploration_collectables_amount: ExplorationCollectableCount
@@ -538,7 +538,7 @@ class SatisfactoryOptions(PerGameCommonOptions, DeathLinkMixin):
 
 option_groups = [
     OptionGroup("Game Scope", [
-        ElevatorTier,
+        ElevatorPhase,
         HardDriveProgressionLimit
     ]),
     OptionGroup("Goal Selection", [
@@ -571,8 +571,8 @@ option_groups = [
 
 option_presets: dict[str, dict[str, Any]] = {
     "Short": {
-        "final_elevator_package": 1,
-        "goal_selection": {"Space Elevator Tier", "AWESOME Sink Points (total)"},
+        "final_elevator_phase": 1,
+        "goal_selection": {"Space Elevator Phase", "AWESOME Sink Points (total)"},
         "goal_requirement": GoalRequirement.option_require_any_one_goal,
         "goal_awesome_sink_points_total": 17804500,  # 100 coupons
         "hard_drive_progression_limit": 20,
@@ -586,8 +586,8 @@ option_presets: dict[str, dict[str, Any]] = {
         "trap_selection_preset": 1  # Gentle
     },
     "Long": {
-        "final_elevator_package": 3,
-        "goal_selection": {"Space Elevator Tier", "AWESOME Sink Points (per minute)"},
+        "final_elevator_phase": 3,
+        "goal_selection": {"Space Elevator Phase", "AWESOME Sink Points (per minute)"},
         "goal_requirement": GoalRequirement.option_require_all_goals,
         "goal_awesome_sink_points_per_minute": 100000,  # ~10 heavy modular frame/min
         "hard_drive_progression_limit": 60,
@@ -598,8 +598,8 @@ option_presets: dict[str, dict[str, Any]] = {
         "trap_selection_preset": 3  # Harder
     },
     "Extra Long": {
-        "final_elevator_package": 5,
-        "goal_selection": {"Space Elevator Tier", "AWESOME Sink Points (per minute)"},
+        "final_elevator_phase": 5,
+        "goal_selection": {"Space Elevator Phase", "AWESOME Sink Points (per minute)"},
         "goal_requirement": GoalRequirement.option_require_all_goals,
         "goal_awesome_sink_points_per_minute": 625000,  # ~10 fused modular frame/min
         "hard_drive_progression_limit": 100,
