@@ -24,7 +24,6 @@ if TYPE_CHECKING:
     from . import HexcellsInfiniteWorld
 
 
-hexcells_infinite_items = {}
 level_start = ""
 
 def get_level_start():
@@ -79,11 +78,10 @@ def create_multiple_items(world: "HexcellsInfiniteWorld", name: str, count: int,
 # Watch out for overlap with your item codes
 # These are just random numbers dont trust them PLEASE
 # I've seen some games that dynamically add item codes such as DOOM as well
-def create_item_list(world: "HexcellsInfiniteWorld"):
-    global hexcells_infinite_items
-    if (world.options.LevelUnlockType == Options.LevelUnlockType.option_individual):
-        hexcells_infinite_items = {
-            # Progression items
+
+hexcells_infinite_items = {
+    # Progression items
+    "Gem": ItemData(0, ItemClassification.progression),
             "1-1": ItemData(1, ItemClassification.progression),
             "1-2": ItemData(2, ItemClassification.progression),
             "1-3": ItemData(3, ItemClassification.progression),
@@ -125,11 +123,8 @@ def create_item_list(world: "HexcellsInfiniteWorld"):
             "6-4": ItemData(34, ItemClassification.progression),
             "6-5": ItemData(35, ItemClassification.progression),
             "6-6": ItemData(36, ItemClassification.progression)
-        }
-    elif (world.options.LevelUnlockType == Options.LevelUnlockType.option_vanilla):
-        hexcells_infinite_items = {
-            "Gem": ItemData(0, ItemClassification.progression)
-        }
+    }
+    
 
 
 # This makes a really convenient list of all the other dictionaries

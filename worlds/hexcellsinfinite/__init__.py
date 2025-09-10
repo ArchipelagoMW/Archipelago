@@ -18,7 +18,7 @@ from typing import Dict
 from Utils import visualize_regions
 
 from .Locations import get_location_names, get_total_locations
-from .Items import create_item, create_itempool, item_table, create_item_list, get_level_start
+from .Items import create_item, create_itempool, item_table, get_level_start
 from .Options import HexcellsInfiniteOptions
 from .Regions import create_regions
 from .Rules import set_rules
@@ -93,7 +93,7 @@ class HexcellsInfiniteWorld(World):
 
     # Regions are the different locations in your world. So like Undead Burgh in dark souls or Pacifilog Town in pokemon
     # They dont have to match your game, they can be whatever you need them to be for organization
-    def create_regions(self, ):
+    def create_regions(self):
         # This function comes from your Regions.py and dont worry that it matches the function that its in
         create_regions(self)
         
@@ -110,7 +110,6 @@ class HexcellsInfiniteWorld(World):
     # The important part is that the items get into the self.multiworld.itempool as a list of Items
     # Ill try to explain better in the Items.py file 
     def create_items(self):
-        create_item_list(self)
         self.multiworld.itempool += create_itempool(self)
 
     # This is just a helper function for turning names into Items. You could do some other stuff here as well
