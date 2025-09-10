@@ -40,10 +40,18 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
         world_options.shipsanity.value = options.Shipsanity.option_full_shipment_with_fish
         message = f"Shipsanity Everything {message_template} Replaced with 'Full Shipment With Fish'"
         logger.warning(message)
-    if not settings.allow_hatsanity_perfection and world_options.hatsanity >= options.Hatsanity.option_near_perfection:
-        world_options.hatsanity.value = options.Hatsanity.option_difficult
-        message = f"Hatsanity Near or Post Perfection {message_template} Replaced with 'Difficult'"
-        logger.warning(message)
+    if not settings.allow_hatsanity_perfection:
+        removed_one = False
+        if HatsanityOptionName.near_perfection in world_options.hatsanity.value:
+            world_options.hatsanity.value.remove(HatsanityOptionName.near_perfection)
+            removed_one = True
+        if HatsanityOptionName.post_perfection in world_options.hatsanity.value:
+            world_options.hatsanity.value.remove(HatsanityOptionName.post_perfection)
+            removed_one = True
+        if removed_one and HatsanityOptionName.difficult not in world_options.hatsanity.value:
+            world_options.hatsanity.value.add(HatsanityOptionName.difficult)
+            message = f"Hatsanity Near or Post Perfection {message_template} Hatsanity setting reduced."
+            logger.warning(message)
     if not settings.allow_jojapocalypse and world_options.jojapocalypse >= options.Jojapocalypse.option_allowed:
         world_options.jojapocalypse.value = options.Jojapocalypse.option_disabled
         message = f"Jojapocalypse {message_template} Disabled."
@@ -59,6 +67,7 @@ def force_change_options_if_incompatible(world_options: options.StardewValleyOpt
     force_no_jojapocalypse_without_being_sure(world_options, player, player_name)
     force_eatsanity_no_enzymes_if_no_other_eatsanity(world_options, player, player_name)
     force_hatsanity_when_goal_is_mad_hatter(world_options, player, player_name)
+    force_eatsanity_when_goal_is_ultimate_foodie(world_options, player, player_name)
     force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_options, player, player_name)
     force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
@@ -108,6 +117,17 @@ def force_hatsanity_when_goal_is_mad_hatter(world_options: options.StardewValley
         goal_name = world_options.goal.current_option_name
         logger.warning(f"Goal '{goal_name}' requires Hatsanity. "
                        f"Hatsanity option forced to 'Easy+Tailoring' for player {player} ({player_name})")
+
+
+def force_eatsanity_when_goal_is_ultimate_foodie(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
+    goal_is_foodie = world_options.goal == options.Goal.option_ultimate_foodie
+    eatsanity_is_disabled = world_options.eatsanity == options.Eatsanity.preset_none
+
+    if goal_is_foodie and eatsanity_is_disabled:
+        world_options.eatsanity.value = options.Eatsanity.preset_all
+        goal_name = world_options.goal.current_option_name
+        logger.warning(f"Goal '{goal_name}' requires Eatsanity. "
+                       f"Eatsanity option forced to 'All' for player {player} ({player_name})")
 
 
 def force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:

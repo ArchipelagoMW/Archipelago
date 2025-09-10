@@ -37,6 +37,7 @@ The player can choose from a number of goals, using their YAML options.
 - Earn the title of [Legend](https://stardewvalleywiki.com/Gold) by earning 10 000 000g
 - Solve the [Mystery of the Stardrops](https://stardewvalleywiki.com/Stardrop) by finding every stardrop
 - Find and wear every [Hat](https://stardewvalleywiki.com/Hats) in the game.
+- Find and eat every item in the game.
 - Finish 100% of your randomizer slot with Allsanity: Complete every check in your slot
 - Achieve [Perfection](https://stardewvalleywiki.com/Perfection) in your save file
 
