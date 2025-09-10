@@ -4,7 +4,8 @@ Unit tests for world generation
 from typing import *
 from .test_base import Sc2SetupTestBase
 
-from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race, unreleased_items
+from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race, unreleased_items, \
+    RequiredTactics
 from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_random_first_mission
 from ..options import EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder, ExcludeOverpoweredItems, \
@@ -1226,3 +1227,36 @@ class TestItemFiltering(Sc2SetupTestBase):
 
         # A unit nerf happens due to excluding OP items
         self.assertNotIn(item_names.MOTHERSHIP_INTEGRATED_POWER, starting_inventory)
+
+    def test_terran_nobuild_sections_get_marine_medic_upgrades_with_units_excluded(self) -> None:
+        world_options = {
+            'mission_order': MissionOrder.option_grid,
+            'maximum_campaign_size': MaximumCampaignSize.range_end,
+            'enabled_campaigns': {
+                SC2Campaign.WOL.campaign_name
+            },
+            'excluded_items': [item_names.MARINE, item_names.MEDIC],
+            'shuffle_no_build': False,
+            'required_tactics': RequiredTactics.option_standard
+        }
+        mm_logic_upgrades = {
+            item_names.MARINE_COMBAT_SHIELD, item_names.MARINE_MAGRAIL_MUNITIONS,
+            item_names.MARINE_LASER_TARGETING_SYSTEM,
+            item_names.MARINE_PROGRESSIVE_STIMPACK, item_names.MEDIC_STABILIZER_MEDPACKS
+        }
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+        missions = self.multiworld.worlds[self.player].custom_mission_order.get_used_missions()
+
+        # These missions are rolled
+        self.assertIn(SC2Mission.THE_DIG, missions)
+        self.assertIn(SC2Mission.ENGINE_OF_DESTRUCTION, missions)
+        # This is not rolled
+        self.assertNotIn(SC2Mission.PIERCING_OF_THE_SHROUD, missions)
+        self.assertNotIn(SC2Mission.BELLY_OF_THE_BEAST, missions)
+        # These items are excluded and shouldn't appear
+        self.assertNotIn(item_names.MARINE, itempool)
+        self.assertNotIn(item_names.MEDIC, itempool)
+        # An upgrade is requested by logic for The Dig and Engine of Destruction
+        self.assertGreaterEqual(len(set(itempool).intersection(mm_logic_upgrades)), 1)
