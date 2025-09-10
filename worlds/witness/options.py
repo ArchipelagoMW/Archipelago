@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Tuple
 
 from schema import And, Schema
 
@@ -6,7 +7,7 @@ from Options import (
     Choice,
     DefaultOnToggle,
     LocationSet,
-    OptionDict,
+    OptionCounter,
     OptionError,
     OptionGroup,
     OptionSet,
@@ -18,6 +19,7 @@ from Options import (
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
+from .data.utils import is_easter_time
 from .entity_hunt import ALL_HUNTABLE_PANELS
 
 
@@ -142,6 +144,53 @@ class ShuffleEnvironmentalPuzzles(Choice):
     option_obelisk_sides = 2
 
 
+class EasterEggHunt(Choice):
+    """
+    Adds up to 120 Easter Eggs to the game, placed by NewSoupVi, Exempt-Medic, hatkirby, Scipio, and Rever.
+    These can be collected by simply clicking on them.
+
+    The difficulty options differ by how many Eggs you need to collect for each check and how many are logically required for each check.
+
+    - "Easy": 3 / 8
+    - "Normal": 3 / 6
+    - "Hard": 4 / 6
+    - "Very Hard": 4 / 5
+    - "Extreme": 4 / 4 (You are expected to collect every Easter Egg)
+
+    Checks that require more Eggs than logically available still exist, but are excluded.
+    For example, on "Easy", the "63 Eggs Collected" check can physically be obtained, but would logically require 125 Easter Eggs, which is impossible. Thus, it is excluded.
+
+    On "Easy", "Normal", and "Hard", you will start with an "Egg Radar" that you can activate using the Puzzle Skip key.
+    On every difficulty except "Extreme", there will be a message when you've collected all Easter Eggs in an area.
+    On "Easy", there will be an additional message after every Easter Egg telling you how many Easter Eggs are remaining in the area.
+
+    It is recommended that you play this mode together with Door Shuffle. Without it, more than half of the Easter Eggs will be in sphere 1.
+    """
+
+    visibility = Visibility.all if is_easter_time() else Visibility.none
+
+    display_name = "Easter Egg Hunt"
+    option_off = 0
+    # Number represents the amount of eggs needed per check
+    option_easy = 1
+    option_normal = 2
+    option_hard = 3
+    option_very_hard = 4
+    option_extreme = 5
+    default = 2 if is_easter_time() else 0
+
+    def get_step_and_logical_step(self) -> Tuple[int, int]:
+        if self == "easy":
+            return 3, 8
+        if self == "normal":
+            return 3, 6
+        if self == "hard":
+            return 4, 6
+        if self == "very_hard":
+            return 4, 5
+        return 4, 4
+
+
 class ShuffleDog(Choice):
     """
     Adds petting the dog statue in Town into the location pool.
@@ -159,7 +208,7 @@ class EnvironmentalPuzzlesDifficulty(Choice):
     """
     When "Shuffle Environmental Puzzles" is on, this setting governs which EPs are eligible for the location pool.
     - Eclipse: Every EP in the game is eligible, including the 1-hour-long "Theater Eclipse EP".
-    - Tedious Theater Eclipse EP is excluded from the location pool.
+    - Tedious: Theater Eclipse EP is excluded from the location pool.
     - Normal: several other difficult or long EPs are excluded as well.
     """
     display_name = "Environmental Puzzles Difficulty"
@@ -217,6 +266,8 @@ class VictoryCondition(Choice):
 
 class PanelHuntTotal(Range):
     """
+    Only relevant if the Victory Condition is "Panel Hunt".
+
     Sets the number of random panels that will get marked as "Panel Hunt" panels in the "Panel Hunt" game mode.
     """
     display_name = "Total Panel Hunt panels"
@@ -227,6 +278,8 @@ class PanelHuntTotal(Range):
 
 class PanelHuntRequiredPercentage(Range):
     """
+    Only relevant if the Victory Condition is "Panel Hunt".
+
     Determines the percentage of "Panel Hunt" panels that need to be solved to win.
     """
     display_name = "Percentage of required Panel Hunt panels"
@@ -237,12 +290,13 @@ class PanelHuntRequiredPercentage(Range):
 
 class PanelHuntPostgame(Choice):
     """
+    Only relevant if the Victory Condition is "Panel Hunt".
+
     In panel hunt, there are technically no postgame locations.
     Depending on your options, this can leave Mountain and Caves as two huge areas with Hunt Panels in them that cannot be reached until you get enough lasers to go through the very linear Mountain descent.
     Panel Hunt tends to be more fun when the world is open.
     This option lets you force anything locked by lasers to be disabled, and thus ineligible for Hunt Panels.
     To compensate, the respective mountain box solution (short box / long box) will be forced to be a Hunt Panel.
-    Does nothing if Panel Hunt is not your victory condition.
 
     Note: The "Mountain Lasers" option may also affect locations locked by challenge lasers if the only path to those locations leads through the Mountain Entry.
     """
@@ -258,6 +312,8 @@ class PanelHuntPostgame(Choice):
 
 class PanelHuntDiscourageSameAreaFactor(Range):
     """
+    Only relevant if the Victory Condition is "Panel Hunt".
+
     The greater this value, the less likely it is that many Hunt Panels show up in the same area.
 
     At 0, Hunt Panels will be selected randomly.
@@ -272,6 +328,8 @@ class PanelHuntDiscourageSameAreaFactor(Range):
 
 class PanelHuntPlando(LocationSet):
     """
+    Only relevant if the Victory Condition is "Panel Hunt".
+
     Specify specific hunt panels you want for your panel hunt game.
     """
 
@@ -356,23 +414,25 @@ class TrapPercentage(Range):
     default = 20
 
 
-class TrapWeights(OptionDict):
+_default_trap_weights = {
+    trap_name: item_definition.weight
+    for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
+    if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
+}
+
+
+class TrapWeights(OptionCounter):
     """
     Specify the weights determining how many copies of each trap item will be in your itempool.
-    If you don't want a specific type of trap, you can set the weight for it to 0 (Do not delete the entry outright!).
+    If you don't want a specific type of trap, you can set the weight for it to 0.
     If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option.
     """
     display_name = "Trap Weights"
-    schema = Schema({
-        trap_name: And(int, lambda n: n >= 0)
-        for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
-        if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
-    })
-    default = {
-        trap_name: item_definition.weight
-        for trap_name, item_definition in static_witness_logic.ALL_ITEMS.items()
-        if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
-    }
+    valid_keys = _default_trap_weights.keys()
+
+    min = 0
+
+    default = _default_trap_weights
 
 
 class PuzzleSkipAmount(Range):
@@ -402,7 +462,6 @@ class VagueHints(Choice):
 
     If set to "stable", only location groups will be used. If location groups aren't implemented for the game your item ended up in, your hint will instead only tell you that the item is "somewhere in" that game.
     If set to "experimental", region names will be eligible as well, and you will never receive a "somewhere in" hint. Keep in mind that region names are not always intended to be comprehensible to players — only turn this on if you are okay with a bit of chaos.
-
 
     The distinction does not matter in single player, as Witness implements location groups for every location.
 
@@ -504,6 +563,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     death_link_amnesty: DeathLinkAmnesty
     puzzle_randomization_seed: PuzzleRandomizationSeed
     shuffle_dog: ShuffleDog
+    easter_egg_hunt: EasterEggHunt
 
 
 witness_option_groups = [
@@ -561,3 +621,13 @@ witness_option_groups = [
         ShuffleDog,
     ])
 ]
+
+# Make sure that Easter Egg Hunt is VERY visible during easter time (when it's enabled by default)
+if is_easter_time():
+    easter_special_option_group = OptionGroup("EASTER SPECIAL", [
+        EasterEggHunt,
+    ])
+    witness_option_groups.insert(2, easter_special_option_group)
+else:
+    silly_options_group = next(group for group in witness_option_groups if group.name == "Silly Options")
+    silly_options_group.options.append(EasterEggHunt)

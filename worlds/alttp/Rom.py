@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import Utils
+import settings
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
@@ -92,7 +93,7 @@ class LocalRom:
             # cause crash to provide traceback
             import xxtea
 
-        local_random = world.per_slot_randoms[player]
+        local_random = world.worlds[player].random
         key = bytes(local_random.getrandbits(8 * 16).to_bytes(16, 'big'))
         self.write_bytes(0x1800B0, bytearray(key))
         self.write_int16(0x180087, 1)
@@ -281,7 +282,6 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
 
 def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
     player = world.player
-    multiworld = world.multiworld
     check_enemizer(enemizercli)
     randopatch_path = os.path.abspath(os.path.join(output_directory, f'enemizer_randopatch_{player}.sfc'))
     options_path = os.path.abspath(os.path.join(output_directory, f'enemizer_options_{player}.json'))
@@ -289,18 +289,18 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
 
     # write options file for enemizer
     options = {
-        'RandomizeEnemies': multiworld.enemy_shuffle[player].value,
+        'RandomizeEnemies': world.options.enemy_shuffle.value,
         'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': multiworld.bush_shuffle[player].value,
-        'RandomizeEnemyHealthRange': multiworld.enemy_health[player] != 'default',
+        'RandomizeBushEnemyChance': world.options.bush_shuffle.value,
+        'RandomizeEnemyHealthRange': world.options.enemy_health != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
-            multiworld.enemy_health[player].current_key],
+            world.options.enemy_health.current_key],
         'OHKO': False,
-        'RandomizeEnemyDamage': multiworld.enemy_damage[player] != 'default',
+        'RandomizeEnemyDamage': world.options.enemy_damage != 'default',
         'AllowEnemyZeroDamage': True,
-        'ShuffleEnemyDamageGroups': multiworld.enemy_damage[player] != 'default',
-        'EnemyDamageChaosMode': multiworld.enemy_damage[player] == 'chaos',
-        'EasyModeEscape': multiworld.mode[player] == "standard",
+        'ShuffleEnemyDamageGroups': world.options.enemy_damage != 'default',
+        'EnemyDamageChaosMode': world.options.enemy_damage == 'chaos',
+        'EasyModeEscape': world.options.mode == "standard",
         'EnemiesAbsorbable': False,
         'AbsorbableSpawnRate': 10,
         'AbsorbableTypes': {
@@ -329,7 +329,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
         'GrayscaleMode': False,
         'GenerateSpoilers': False,
         'RandomizeLinkSpritePalette': False,
-        'RandomizePots': multiworld.pot_shuffle[player].value,
+        'RandomizePots': world.options.pot_shuffle.value,
         'ShuffleMusic': False,
         'BootlegMagic': True,
         'CustomBosses': False,
@@ -342,7 +342,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
         'BeesLevel': 0,
         'RandomizeTileTrapPattern': False,
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': multiworld.killable_thieves[player].value,
+        'AllowKillableThief': world.options.killable_thieves.value,
         'RandomizeSpriteOnHit': False,
         'DebugMode': False,
         'DebugForceEnemy': False,
@@ -366,13 +366,13 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
             'MiseryMire': world.dungeons["Misery Mire"].boss.enemizer_name,
             'TurtleRock': world.dungeons["Turtle Rock"].boss.enemizer_name,
             'GanonsTower1':
-                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
                                "Inverted Ganons Tower"].bosses['bottom'].enemizer_name,
             'GanonsTower2':
-                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
                                "Inverted Ganons Tower"].bosses['middle'].enemizer_name,
             'GanonsTower3':
-                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                world.dungeons["Ganons Tower" if world.options.mode != 'inverted' else
                                "Inverted Ganons Tower"].bosses['top'].enemizer_name,
             'GanonsTower4': 'Agahnim2',
             'Ganon': 'Ganon',
@@ -386,7 +386,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
 
     max_enemizer_tries = 5
     for i in range(max_enemizer_tries):
-        enemizer_seed = str(multiworld.per_slot_randoms[player].randint(0, 999999999))
+        enemizer_seed = str(world.random.randint(0, 999999999))
         enemizer_command = [os.path.abspath(enemizercli),
                             '--rom', randopatch_path,
                             '--seed', enemizer_seed,
@@ -416,7 +416,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
             continue
 
         for j in range(i + 1, max_enemizer_tries):
-            multiworld.per_slot_randoms[player].randint(0, 999999999)
+            world.random.randint(0, 999999999)
             # Sacrifice all remaining random numbers that would have been used for unused enemizer tries.
             # This allows for future enemizer bug fixes to NOT affect the rest of the seed's randomness
         break
@@ -430,7 +430,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
 
     # Moblins attached to "key drop" locations crash the game when dropping their item when Key Drop Shuffle is on.
     # Replace them with a Slime enemy if they are placed.
-    if multiworld.key_drop_shuffle[player]:
+    if world.options.key_drop_shuffle:
         key_drop_enemies = {
             0x4DA20, 0x4DA5C, 0x4DB7F, 0x4DD73, 0x4DDC3, 0x4DE07, 0x4E201,
             0x4E20A, 0x4E326, 0x4E4F7, 0x4E687, 0x4E70C, 0x4E7C8, 0x4E7FA
@@ -515,9 +515,15 @@ def _populate_sprite_table():
                     logging.debug(f"Spritefile {file} could not be loaded as a valid sprite.")
 
             with concurrent.futures.ThreadPoolExecutor() as pool:
-                for dir in [user_path('data', 'sprites', 'alttpr'), user_path('data', 'sprites', 'custom')]:
+                sprite_paths = [user_path("data", "sprites", "alttp", "remote"),
+                                user_path("data", "sprites", "alttp", "custom")]
+                for dir in [dir for dir in sprite_paths if os.path.isdir(dir)]:
                     for file in os.listdir(dir):
                         pool.submit(load_sprite_from_file, os.path.join(dir, file))
+
+            if "link" not in _sprite_table:
+                logging.info("Link sprite was not loaded. Loading link from base rom")
+                load_sprite_from_file(get_base_rom_path())
 
 
 class Sprite():
@@ -554,6 +560,11 @@ class Sprite():
             self.sprite = filedata[0x80000:0x87000]
             self.palette = filedata[0xDD308:0xDD380]
             self.glove_palette = filedata[0xDEDF5:0xDEDF9]
+            h = hashlib.md5()
+            h.update(filedata)
+            if h.hexdigest() == LTTPJPN10HASH:
+                self.name = "Link"
+                self.author_name = "Nintendo"
         elif filedata.startswith(b'ZSPR'):
             self.from_zspr(filedata, filename)
         else:
@@ -782,8 +793,8 @@ def get_nonnative_item_sprite(code: int) -> int:
 
 
 def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
+    local_random = world.worlds[player].random
     local_world = world.worlds[player]
-    local_random = local_world.random
 
     # patch items
 
@@ -830,20 +841,20 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
 
             # patch music
             music_addresses = dungeon_music_addresses[location.name]
-            if world.map_shuffle[player]:
+            if local_world.options.map_shuffle:
                 music = local_random.choice([0x11, 0x16])
             else:
                 music = 0x11 if 'Pendant' in location.item.name else 0x16
             for music_address in music_addresses:
                 rom.write_byte(music_address, music)
 
-    if world.map_shuffle[player]:
+    if local_world.options.map_shuffle:
         rom.write_byte(0x155C9, local_random.choice([0x11, 0x16]))  # Randomize GT music too with map shuffle
 
     # patch entrance/exits/holes
-    for region in world.regions:
+    for region in world.get_regions(player):
         for exit in region.exits:
-            if exit.target is not None and exit.player == player:
+            if exit.target is not None:
                 if isinstance(exit.addresses, tuple):
                     offset = exit.target
                     room_id, ow_area, vram_loc, scroll_y, scroll_x, link_y, link_x, camera_y, camera_x, unknown_1, unknown_2, door_1, door_2 = exit.addresses
@@ -858,15 +869,15 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                     # Thanks to Zarby89 for originally finding these values
                     # todo fix screen scrolling
 
-                    if world.entrance_shuffle[player] != 'insanity' and \
+                    if local_world.options.entrance_shuffle != 'insanity' and \
                             exit.name in {'Eastern Palace Exit', 'Tower of Hera Exit', 'Thieves Town Exit',
                                           'Skull Woods Final Section Exit', 'Ice Palace Exit', 'Misery Mire Exit',
                                           'Palace of Darkness Exit', 'Swamp Palace Exit', 'Ganons Tower Exit',
                                           'Desert Palace Exit (North)', 'Agahnims Tower Exit', 'Spiral Cave Exit (Top)',
                                           'Superbunny Cave Exit (Bottom)', 'Turtle Rock Ledge Exit (East)'} and \
-                            (world.glitches_required[player] not in ['hybrid_major_glitches', 'no_logic'] or
-                                exit.name not in {'Palace of Darkness Exit', 'Tower of Hera Exit', 'Swamp Palace Exit'}):
-                        # For exits that connot be reached from another, no need to apply offset fixes.
+                            (local_world.options.glitches_required not in ['hybrid_major_glitches', 'no_logic'] or
+                             exit.name not in {'Palace of Darkness Exit', 'Tower of Hera Exit', 'Swamp Palace Exit'}):
+                        # For exits that cannot be reached from another, no need to apply offset fixes.
                         rom.write_int16(0x15DB5 + 2 * offset, link_y)  # same as final else
                     elif room_id == 0x0059 and local_world.fix_skullwoods_exit:
                         rom.write_int16(0x15DB5 + 2 * offset, 0x00F8)
@@ -893,7 +904,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                 else:
                     # patch door table
                     rom.write_byte(0xDBB73 + exit.addresses, exit.target)
-    if world.mode[player] == 'inverted':
+    if local_world.options.mode == 'inverted':
         patch_shuffled_dark_sanc(world, rom, player)
 
     write_custom_shops(rom, world, player)
@@ -904,16 +915,16 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         return 0x53 + int(num), 0x79 + int(num)
 
     credits_total = 216
-    if world.retro_caves[player]:  # Old man cave and Take any caves will count towards collection rate.
+    if local_world.options.retro_caves:  # Old man cave and Take any caves will count towards collection rate.
         credits_total += 5
-    if world.shop_item_slots[player]:  # Potion shop only counts towards collection rate if included in the shuffle.
-        credits_total += 30 if world.include_witch_hut[player] else 27
-    if world.shuffle_capacity_upgrades[player]:
+    if local_world.options.shop_item_slots:  # Potion shop only counts towards collection rate if included in the shuffle.
+        credits_total += 30 if local_world.options.include_witch_hut else 27
+    if local_world.options.shuffle_capacity_upgrades:
         credits_total += 2
 
     rom.write_byte(0x187010, credits_total)  # dynamic credits
 
-    if world.key_drop_shuffle[player]:
+    if local_world.options.key_drop_shuffle:
         rom.write_byte(0x140000, 1)  # enable key drop shuffle
         credits_total += len(key_drop_data)
         # update dungeon counters
@@ -967,11 +978,11 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         rom.write_byte(0x51DE, 0x00)
 
     # set open mode:
-    if world.mode[player] in ['open', 'inverted']:
+    if local_world.options.mode in ['open', 'inverted']:
         rom.write_byte(0x180032, 0x01)  # open mode
-    if world.mode[player] == 'inverted':
+    if local_world.options.mode == 'inverted':
         set_inverted_mode(world, player, rom)
-    elif world.mode[player] == 'standard':
+    elif local_world.options.mode == 'standard':
         rom.write_byte(0x180032, 0x00)  # standard mode
 
     uncle_location = world.get_location('Link\'s Uncle', player)
@@ -991,17 +1002,22 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         rom.write_bytes(0x6D323, [0x00, 0x00, 0xe4, 0xff, 0x08, 0x0E])
 
     # set light cones
-    rom.write_byte(0x180038, 0x01 if world.mode[player] == "standard" else 0x00)
-    rom.write_byte(0x180039, 0x01 if world.light_world_light_cone else 0x00)
-    rom.write_byte(0x18003A, 0x01 if world.dark_world_light_cone else 0x00)
+    rom.write_byte(0x180038, 0x01 if local_world.options.mode == "standard" else 0x00)
+    # light world light cone
+    rom.write_byte(0x180039, local_world.light_world_light_cone)
+    # dark world light cone
+    rom.write_byte(0x18003A, local_world.dark_world_light_cone)
 
     GREEN_TWENTY_RUPEES = 0x47
     GREEN_CLOCK = item_table["Green Clock"].item_code
 
     rom.write_byte(0x18004F, 0x01)  # Byrna Invulnerability: on
 
+    # Rupoor negative value
+    rom.write_int16(0x180036, local_world.rupoor_cost)
+
     # handle item_functionality
-    if world.item_functionality[player] == 'hard':
+    if local_world.options.item_functionality == 'hard':
         rom.write_byte(0x180181, 0x01)  # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00)  # Don't auto equip silvers on pickup
         # Powdered Fairies Prize
@@ -1017,11 +1033,9 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         # Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
-        # Rupoor negative value
-        rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x02)  # Hookshot only
-    elif world.item_functionality[player] == 'expert':
+    elif local_world.options.item_functionality == 'expert':
         rom.write_byte(0x180181, 0x01)  # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00)  # Don't auto equip silvers on pickup
         # Powdered Fairies Prize
@@ -1037,8 +1051,6 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         # Disable catching fairies
         rom.write_byte(0x34FD6, 0x80)
         overflow_replacement = GREEN_TWENTY_RUPEES
-        # Rupoor negative value
-        rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x00)  # Nothing
     else:
@@ -1056,12 +1068,10 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         rom.write_byte(0x18004F, 0x01)
         # Enable catching fairies
         rom.write_byte(0x34FD6, 0xF0)
-        # Rupoor negative value
-        rom.write_int16(0x180036, world.rupoor_cost)
         # Set stun items
         rom.write_byte(0x180180, 0x03)  # All standard items
         # Set overflow items for progressive equipment
-        if world.timer[player] in ['timed', 'timed_countdown', 'timed_ohko']:
+        if local_world.options.timer in ['timed', 'timed_countdown', 'timed_ohko']:
             overflow_replacement = GREEN_CLOCK
         else:
             overflow_replacement = GREEN_TWENTY_RUPEES
@@ -1073,7 +1083,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
 
     # Set overflow items for progressive equipment
     rom.write_bytes(0x180090,
-                    [difficulty.progressive_sword_limit if not world.swordless[player] else 0,
+                    [difficulty.progressive_sword_limit if not local_world.options.swordless else 0,
                      item_table[difficulty.basicsword[-1]].item_code,
                      difficulty.progressive_shield_limit, item_table[difficulty.basicshield[-1]].item_code,
                      difficulty.progressive_armor_limit, item_table[difficulty.basicarmor[-1]].item_code,
@@ -1081,7 +1091,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                      difficulty.progressive_bow_limit, item_table[difficulty.basicbow[-1]].item_code])
 
     if difficulty.progressive_bow_limit < 2 and (
-            world.swordless[player] or world.glitches_required[player] == 'no_glitches'):
+            local_world.options.swordless or local_world.options.glitches_required == 'no_glitches'):
         rom.write_bytes(0x180098, [2, item_table["Silver Bow"].item_code])
         rom.write_byte(0x180181, 0x01)  # Make silver arrows work only on ganon
         rom.write_byte(0x180182, 0x00)  # Don't auto equip silvers on pickup
@@ -1089,15 +1099,15 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     # set up game internal RNG seed
     rom.write_bytes(0x178000, local_random.getrandbits(8 * 1024).to_bytes(1024, 'big'))
     prize_replacements = {}
-    if world.item_functionality[player] in ['hard', 'expert']:
+    if local_world.options.item_functionality in ['hard', 'expert']:
         prize_replacements[0xE0] = 0xDF  # Fairy -> heart
         prize_replacements[0xE3] = 0xD8  # Big magic -> small magic
 
-    if world.retro_bow[player]:
+    if local_world.options.retro_bow:
         prize_replacements[0xE1] = 0xDA  # 5 Arrows -> Blue Rupee
         prize_replacements[0xE2] = 0xDB  # 10 Arrows -> Red Rupee
 
-    if world.shuffle_prizes[player] in ("general", "both"):
+    if local_world.options.shuffle_prizes in ("general", "both"):
         # shuffle prize packs
         prizes = [0xD8, 0xD8, 0xD8, 0xD8, 0xD9, 0xD8, 0xD8, 0xD9, 0xDA, 0xD9, 0xDA, 0xDB, 0xDA, 0xD9, 0xDA, 0xDA, 0xE0,
                   0xDF, 0xDF, 0xDA, 0xE0, 0xDF, 0xD8, 0xDF,
@@ -1159,7 +1169,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
             byte = int(rom.read_byte(address))
             rom.write_byte(address, prize_replacements.get(byte, byte))
 
-    if world.shuffle_prizes[player] in ("bonk", "both"):
+    if local_world.options.shuffle_prizes in ("bonk", "both"):
         # set bonk prizes
         bonk_prizes = [0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xAC, 0xE3, 0xE3, 0xDA, 0xE3, 0xDA, 0xD8, 0xAC,
                        0xAC, 0xE3, 0xD8, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xDC, 0xDB, 0xE3, 0xDA, 0x79, 0x79,
@@ -1186,7 +1196,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         0x12, 0x01, 0x35, 0xFF,  # lamp -> 5 rupees
         0x51, 0x06, 0x52, 0xFF,  # 6 +5 bomb upgrades -> +10 bomb upgrade
         0x53, 0x06, 0x54, 0xFF,  # 6 +5 arrow upgrades -> +10 arrow upgrade
-        0x58, 0x01, 0x36 if world.retro_bow[player] else 0x43, 0xFF,  # silver arrows -> single arrow (red 20 in retro mode)
+        0x58, 0x01, 0x36 if local_world.options.retro_bow else 0x43, 0xFF,  # silver arrows -> single arrow (red 20 in retro mode)
         0x3E, difficulty.boss_heart_container_limit, 0x47, 0xff,  # boss heart -> green 20
         0x17, difficulty.heart_piece_limit, 0x47, 0xff,  # piece of heart -> green 20
         0xFF, 0xFF, 0xFF, 0xFF,  # end of table sentinel
@@ -1228,13 +1238,13 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x180029, 0x01)  # Smithy quick item give
 
     # set swordless mode settings
-    rom.write_byte(0x18003F, 0x01 if world.swordless[player] else 0x00)  # hammer can harm ganon
-    rom.write_byte(0x180040, 0x01 if world.swordless[player] else 0x00)  # open curtains
-    rom.write_byte(0x180041, 0x01 if world.swordless[player] else 0x00)  # swordless medallions
-    rom.write_byte(0x180043, 0xFF if world.swordless[player] else 0x00)  # starting sword for link
-    rom.write_byte(0x180044, 0x01 if world.swordless[player] else 0x00)  # hammer activates tablets
+    rom.write_byte(0x18003F, 0x01 if local_world.options.swordless else 0x00)  # hammer can harm ganon
+    rom.write_byte(0x180040, 0x01 if local_world.options.swordless else 0x00)  # open curtains
+    rom.write_byte(0x180041, 0x01 if local_world.options.swordless else 0x00)  # swordless medallions
+    rom.write_byte(0x180043, 0xFF if local_world.options.swordless else 0x00)  # starting sword for link
+    rom.write_byte(0x180044, 0x01 if local_world.options.swordless else 0x00)  # hammer activates tablets
 
-    if world.item_functionality[player] == 'easy':
+    if local_world.options.item_functionality == 'easy':
         rom.write_byte(0x18003F, 0x01)  # hammer can harm ganon
         rom.write_byte(0x180041, 0x02)  # Allow swordless medallion use EVERYWHERE.
         rom.write_byte(0x180044, 0x01)  # hammer activates tablets
@@ -1252,11 +1262,11 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     # Set up requested clock settings
     if local_world.clock_mode in ['countdown-ohko', 'stopwatch', 'countdown']:
         rom.write_int32(0x180200,
-                        world.red_clock_time[player] * 60 * 60)  # red clock adjustment time (in frames, sint32)
+                        local_world.options.red_clock_time * 60 * 60)  # red clock adjustment time (in frames, sint32)
         rom.write_int32(0x180204,
-                        world.blue_clock_time[player] * 60 * 60)  # blue clock adjustment time (in frames, sint32)
+                        local_world.options.blue_clock_time * 60 * 60)  # blue clock adjustment time (in frames, sint32)
         rom.write_int32(0x180208,
-                        world.green_clock_time[player] * 60 * 60)  # green clock adjustment time (in frames, sint32)
+                        local_world.options.green_clock_time * 60 * 60)  # green clock adjustment time (in frames, sint32)
     else:
         rom.write_int32(0x180200, 0)  # red clock adjustment time (in frames, sint32)
         rom.write_int32(0x180204, 0)  # blue clock adjustment time (in frames, sint32)
@@ -1264,20 +1274,20 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
 
     # Set up requested start time for countdown modes
     if local_world.clock_mode in ['countdown-ohko', 'countdown']:
-        rom.write_int32(0x18020C, world.countdown_start_time[player] * 60 * 60)  # starting time (in frames, sint32)
+        rom.write_int32(0x18020C, local_world.options.countdown_start_time * 60 * 60)  # starting time (in frames, sint32)
     else:
         rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
 
     # set up goals for treasure hunt
     rom.write_int16(0x180163, max(0, local_world.treasure_hunt_required -
-                    sum(1 for item in world.precollected_items[player] if item.name == "Triforce Piece")))
+                                  sum(1 for item in world.precollected_items[player] if item.name == "Triforce Piece")))
     rom.write_bytes(0x180165, [0x0E, 0x28])  #  Triforce Piece Sprite
     rom.write_byte(0x180194, 1)  # Must turn in triforced pieces (instant win not enabled)
 
     rom.write_bytes(0x180213, [0x00, 0x01])  # Not a Tournament Seed
 
     gametype = 0x04  # item
-    if world.entrance_shuffle[player] != 'vanilla':
+    if local_world.options.entrance_shuffle != 'vanilla':
         gametype |= 0x02  # entrance
     if enemized:
         gametype |= 0x01  # enemizer
@@ -1288,7 +1298,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x1800A2, 0x01 if local_world.fix_fake_world else 0x00)
     # Lock or unlock aga tower door during escape sequence.
     rom.write_byte(0x180169, 0x00)
-    if world.mode[player] == 'inverted':
+    if local_world.options.mode == 'inverted':
         rom.write_byte(0x180169, 0x02)  # lock aga/ganon tower door with crystals in inverted
     rom.write_byte(0x180171,
                    0x01 if local_world.ganon_at_pyramid else 0x00)  # Enable respawning on pyramid after ganon death
@@ -1299,12 +1309,11 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_bytes(0x50563, [0x3F, 0x14])  # disable below ganon chest
     rom.write_byte(0x50599, 0x00)  # disable below ganon chest
     rom.write_bytes(0xE9A5, [0x7E, 0x00, 0x24])  # disable below ganon chest
-    rom.write_byte(0x18008B, 0x01 if world.open_pyramid[player].to_bool(world, player) else 0x00)  # pre-open Pyramid Hole
-    rom.write_byte(0x18008C, 0x01 if world.crystals_needed_for_gt[
-                                         player] == 0 else 0x00)  # GT pre-opened if crystal requirement is 0
+    rom.write_byte(0x18008B, 0x01 if local_world.options.open_pyramid.to_bool(world, player) else 0x00)  # pre-open Pyramid Hole
+    rom.write_byte(0x18008C, 0x01 if local_world.options.crystals_needed_for_gt == 0 else 0x00)  # GT pre-opened if crystal requirement is 0
     rom.write_byte(0xF5D73, 0xF0)  # bees are catchable
     rom.write_byte(0xF5F10, 0xF0)  # bees are catchable
-    rom.write_byte(0x180086, 0x00 if world.aga_randomness else 0x01)  # set blue ball and ganon warp randomness
+    rom.write_byte(0x180086, 0x00)  # set blue ball and ganon warp randomness
     rom.write_byte(0x1800A0, 0x01)  # return to light world on s+q without mirror
     rom.write_byte(0x1800A1, 0x01)  # enable overworld screen transition draining for water level inside swamp
     rom.write_byte(0x180174, 0x01 if local_world.fix_fake_world else 0x00)
@@ -1315,7 +1324,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     equip[0x36C] = 0x18
     equip[0x36D] = 0x18
     equip[0x379] = 0x68
-    starting_max_bombs = 0 if world.bombless_start[player] else 10
+    starting_max_bombs = 0 if local_world.options.bombless_start else 10
     starting_max_arrows = 30
 
     startingstate = CollectionState(world)
@@ -1323,12 +1332,12 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     if startingstate.has('Silver Bow', player):
         equip[0x340] = 1
         equip[0x38E] |= 0x60
-        if not world.retro_bow[player]:
+        if not local_world.options.retro_bow:
             equip[0x38E] |= 0x80
     elif startingstate.has('Bow', player):
         equip[0x340] = 1
         equip[0x38E] |= 0x20  # progressive flag to get the correct hint in all cases
-        if not world.retro_bow[player]:
+        if not local_world.options.retro_bow:
             equip[0x38E] |= 0x80
     if startingstate.has('Silver Arrows', player):
         equip[0x38E] |= 0x40
@@ -1466,7 +1475,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         elif item.name in bombs:
             equip[0x343] += bombs[item.name]
         elif item.name in arrows:
-            if world.retro_bow[player]:
+            if local_world.options.retro_bow:
                 equip[0x38E] |= 0x80
                 equip[0x377] = 1
             else:
@@ -1492,16 +1501,13 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_bytes(0x183000, equip[0x340:])
     rom.write_bytes(0x271A6, equip[0x340:0x340 + 60])
 
-    rom.write_byte(0x18004A, 0x00 if world.mode[player] != 'inverted' else 0x01)  # Inverted mode
+    rom.write_byte(0x18004A, 0x00 if local_world.options.mode != 'inverted' else 0x01)  # Inverted mode
     rom.write_byte(0x18005D, 0x00)  # Hammer always breaks barrier
-    rom.write_byte(0x2AF79, 0xD0 if world.mode[
-                                        player] != 'inverted' else 0xF0)  # vortexes: Normal  (D0=light to dark, F0=dark to light, 42 = both)
-    rom.write_byte(0x3A943, 0xD0 if world.mode[
-                                        player] != 'inverted' else 0xF0)  # Mirror: Normal  (D0=Dark to Light, F0=light to dark, 42 = both)
-    rom.write_byte(0x3A96D, 0xF0 if world.mode[
-                                        player] != 'inverted' else 0xD0)  # Residual Portal: Normal  (F0= Light Side, D0=Dark Side, 42 = both (Darth Vader))
+    rom.write_byte(0x2AF79, 0xD0 if local_world.options.mode != 'inverted' else 0xF0)  # vortexes: Normal  (D0=light to dark, F0=dark to light, 42 = both)
+    rom.write_byte(0x3A943, 0xD0 if local_world.options.mode != 'inverted' else 0xF0)  # Mirror: Normal  (D0=Dark to Light, F0=light to dark, 42 = both)
+    rom.write_byte(0x3A96D, 0xF0 if local_world.options.mode != 'inverted' else 0xD0)  # Residual Portal: Normal  (F0= Light Side, D0=Dark Side, 42 = both (Darth Vader))
     rom.write_byte(0x3A9A7, 0xD0)  # Residual Portal: Normal  (D0= Light Side, F0=Dark Side, 42 = both (Darth Vader))
-    if world.shuffle_capacity_upgrades[player]:
+    if local_world.options.shuffle_capacity_upgrades:
         rom.write_bytes(0x180080,
                         [5, 10, 5, 10])  # values to fill for Capacity Upgrades (Bomb5, Bomb10, Arrow5, Arrow10)
     else:
@@ -1512,21 +1518,21 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                               (0x02 if 'bombs' in local_world.escape_assist else 0x00) |
                               (0x04 if 'magic' in local_world.escape_assist else 0x00)))  # Escape assist
 
-    if world.goal[player] in ['pedestal', 'triforce_hunt', 'local_triforce_hunt']:
+    if local_world.options.goal in ['pedestal', 'triforce_hunt', 'local_triforce_hunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
-    elif world.goal[player] in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
+    elif local_world.options.goal in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
         rom.write_byte(0x18003E, 0x05)  # make ganon invincible until enough triforce pieces are collected
-    elif world.goal[player] in ['ganon_pedestal']:
+    elif local_world.options.goal in ['ganon_pedestal']:
         rom.write_byte(0x18003E, 0x06)
-    elif world.goal[player] in ['bosses']:
+    elif local_world.options.goal in ['bosses']:
         rom.write_byte(0x18003E, 0x02)  # make ganon invincible until all bosses are beat
-    elif world.goal[player] in ['crystals']:
+    elif local_world.options.goal in ['crystals']:
         rom.write_byte(0x18003E, 0x04)  # make ganon invincible until all crystals
     else:
         rom.write_byte(0x18003E, 0x03)  # make ganon invincible until all crystals and aga 2 are collected
 
-    rom.write_byte(0x18005E, world.crystals_needed_for_gt[player])
-    rom.write_byte(0x18005F, world.crystals_needed_for_ganon[player])
+    rom.write_byte(0x18005E, local_world.options.crystals_needed_for_gt)
+    rom.write_byte(0x18005F, local_world.options.crystals_needed_for_ganon)
 
     # Bitfield - enable text box to show with free roaming items
     #
@@ -1537,21 +1543,20 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     # c - enabled for inside compasses
     # s - enabled for inside small keys
     # block HC upstairs doors in rain state in standard mode
-    rom.write_byte(0x18008A, 0x01 if world.mode[player] == "standard" and world.entrance_shuffle[player] != 'vanilla' else 0x00)
+    rom.write_byte(0x18008A, 0x01 if local_world.options.mode == "standard" and local_world.options.entrance_shuffle != 'vanilla' else 0x00)
 
-    rom.write_byte(0x18016A, 0x10 | ((0x01 if world.small_key_shuffle[player] else 0x00)
-                                     | (0x02 if world.compass_shuffle[player] else 0x00)
-                                     | (0x04 if world.map_shuffle[player] else 0x00)
-                                     | (0x08 if world.big_key_shuffle[
-                player] else 0x00)))  # free roaming item text boxes
-    rom.write_byte(0x18003B, 0x01 if world.map_shuffle[player] else 0x00)  # maps showing crystals on overworld
+    rom.write_byte(0x18016A, 0x10 | ((0x01 if local_world.options.small_key_shuffle else 0x00)
+                                     | (0x02 if local_world.options.compass_shuffle else 0x00)
+                                     | (0x04 if local_world.options.map_shuffle else 0x00)
+                                     | (0x08 if local_world.options.big_key_shuffle else 0x00)))  # free roaming item text boxes
+    rom.write_byte(0x18003B, 0x01 if local_world.options.map_shuffle else 0x00)  # maps showing crystals on overworld
 
     # compasses showing dungeon count
-    if local_world.clock_mode or not world.dungeon_counters[player]:
+    if local_world.clock_mode or local_world.options.dungeon_counters == 'off':
         rom.write_byte(0x18003C, 0x00)  # Currently must be off if timer is on, because they use same HUD location
-    elif world.dungeon_counters[player] is True:
+    elif local_world.options.dungeon_counters == 'on':
         rom.write_byte(0x18003C, 0x02)  # always on
-    elif world.compass_shuffle[player] or world.dungeon_counters[player] == 'pickup':
+    elif local_world.options.compass_shuffle or local_world.options.dungeon_counters == 'pickup':
         rom.write_byte(0x18003C, 0x01)  # show on pickup
     else:
         rom.write_byte(0x18003C, 0x00)
@@ -1564,11 +1569,11 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     # b - Big Key
     # a - Small Key
     #
-    rom.write_byte(0x180045, ((0x00 if (world.small_key_shuffle[player] == small_key_shuffle.option_original_dungeon or
-                                        world.small_key_shuffle[player] == small_key_shuffle.option_universal) else 0x01)
-                              | (0x02 if world.big_key_shuffle[player] else 0x00)
-                              | (0x04 if world.map_shuffle[player] else 0x00)
-                              | (0x08 if world.compass_shuffle[player] else 0x00)))  # free roaming items in menu
+    rom.write_byte(0x180045, ((0x00 if (local_world.options.small_key_shuffle == small_key_shuffle.option_original_dungeon or
+                                        local_world.options.small_key_shuffle == small_key_shuffle.option_universal) else 0x01)
+                              | (0x02 if local_world.options.big_key_shuffle else 0x00)
+                              | (0x04 if local_world.options.map_shuffle else 0x00)
+                              | (0x08 if local_world.options.compass_shuffle else 0x00)))  # free roaming items in menu
 
     # Map reveals
     reveal_bytes = {
@@ -1594,32 +1599,26 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         return 0x0000
 
     rom.write_int16(0x18017A,
-                    get_reveal_bytes('Green Pendant') if world.map_shuffle[player] else 0x0000)  # Sahasrahla reveal
-    rom.write_int16(0x18017C, get_reveal_bytes('Crystal 5') | get_reveal_bytes('Crystal 6') if world.map_shuffle[
-        player] else 0x0000)  # Bomb Shop Reveal
+                    get_reveal_bytes('Green Pendant') if local_world.options.map_shuffle else 0x0000)  # Sahasrahla reveal
+    rom.write_int16(0x18017C, get_reveal_bytes('Crystal 5') | get_reveal_bytes('Crystal 6') if local_world.options.map_shuffle else 0x0000)  # Bomb Shop Reveal
 
-    rom.write_byte(0x180172, 0x01 if world.small_key_shuffle[
-                                         player] == small_key_shuffle.option_universal else 0x00)  # universal keys
-    rom.write_byte(0x18637E, 0x01 if world.retro_bow[player] else 0x00)  # Skip quiver in item shops once bought
-    rom.write_byte(0x180175, 0x01 if world.retro_bow[player] else 0x00)  # rupee bow
-    rom.write_byte(0x180176, 0x0A if world.retro_bow[player] else 0x00)  # wood arrow cost
-    rom.write_byte(0x180178, 0x32 if world.retro_bow[player] else 0x00)  # silver arrow cost
-    rom.write_byte(0x301FC, 0xDA if world.retro_bow[player] else 0xE1)  # rupees replace arrows under pots
-    rom.write_byte(0x30052, 0xDB if world.retro_bow[player] else 0xE2)  # replace arrows in fish prize from bottle merchant
-    rom.write_bytes(0xECB4E, [0xA9, 0x00, 0xEA, 0xEA] if world.retro_bow[player] else [0xAF, 0x77, 0xF3,
-                                                                                   0x7E])  # Thief steals rupees instead of arrows
-    rom.write_bytes(0xF0D96, [0xA9, 0x00, 0xEA, 0xEA] if world.retro_bow[player] else [0xAF, 0x77, 0xF3,
-                                                                                   0x7E])  # Pikit steals rupees instead of arrows
-    rom.write_bytes(0xEDA5,
-                    [0x35, 0x41] if world.retro_bow[player] else [0x43, 0x44])  # Chest game gives rupees instead of arrows
+    rom.write_byte(0x180172, 0x01 if local_world.options.small_key_shuffle == small_key_shuffle.option_universal else 0x00)  # universal keys
+    rom.write_byte(0x18637E, 0x01 if local_world.options.retro_bow else 0x00)  # Skip quiver in item shops once bought
+    rom.write_byte(0x180175, 0x01 if local_world.options.retro_bow else 0x00)  # rupee bow
+    rom.write_byte(0x180176, 0x0A if local_world.options.retro_bow else 0x00)  # wood arrow cost
+    rom.write_byte(0x180178, 0x32 if local_world.options.retro_bow else 0x00)  # silver arrow cost
+    rom.write_byte(0x301FC, 0xDA if local_world.options.retro_bow else 0xE1)  # rupees replace arrows under pots
+    rom.write_byte(0x30052, 0xDB if local_world.options.retro_bow else 0xE2)  # replace arrows in fish prize from bottle merchant
+    rom.write_bytes(0xECB4E, [0xA9, 0x00, 0xEA, 0xEA] if local_world.options.retro_bow else [0xAF, 0x77, 0xF3, 0x7E])  # Thief steals rupees instead of arrows
+    rom.write_bytes(0xF0D96, [0xA9, 0x00, 0xEA, 0xEA] if local_world.options.retro_bow else [0xAF, 0x77, 0xF3, 0x7E])  # Pikit steals rupees instead of arrows
+    rom.write_bytes(0xEDA5, [0x35, 0x41] if local_world.options.retro_bow else [0x43, 0x44])  # Chest game gives rupees instead of arrows
     digging_game_rng = local_random.randint(1, 30)  # set rng for digging game
     rom.write_byte(0x180020, digging_game_rng)
     rom.write_byte(0xEFD95, digging_game_rng)
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
-    rom.write_byte(0x1800A4, 0x01 if world.glitches_required[player] != 'no_logic' else 0x00)  # enable POD EG fix
-    rom.write_byte(0x186383, 0x01 if world.glitches_required[
-        player] == 'no_logic' else 0x00)  # disable glitching to Triforce from Ganons Room
-    rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
+    rom.write_byte(0x1800A4, 0x01 if local_world.options.glitches_required != 'no_logic' else 0x00)  # enable POD EG fix
+    rom.write_byte(0x186383, 0x01 if local_world.options.glitches_required == 'no_logic' else 0x00)  # disable glitching to Triforce from Ganons Room
+    rom.write_byte(0x180042, 0x01 if local_world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
 
     # remove shield from uncle
     rom.write_bytes(0x6D253, [0x00, 0x00, 0xf6, 0xff, 0x00, 0x0E])
@@ -1635,7 +1634,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_bytes(0x180185, [0, 0, 0])  # Uncle respawn refills (magic, bombs, arrows)
     rom.write_bytes(0x180188, [0, 0, 0])  # Zelda respawn refills (magic, bombs, arrows)
     rom.write_bytes(0x18018B, [0, 0, 0])  # Mantle respawn refills (magic, bombs, arrows)
-    if world.mode[player] == 'standard' and uncle_location.item and uncle_location.item.player == player:
+    if local_world.options.mode == 'standard' and uncle_location.item and uncle_location.item.player == player:
         if uncle_location.item.name in {'Bow', 'Progressive Bow'}:
             rom.write_byte(0x18004E, 1)  # Escape Fill (arrows)
             rom.write_int16(0x180183, 300)  # Escape fill rupee bow
@@ -1663,8 +1662,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                         0xAD, 0xBF, 0x0A, 0xF0, 0x4F])
 
     # allow smith into multi-entrance caves in appropriate shuffles
-    if world.entrance_shuffle[player] in ['restricted', 'full', 'crossed', 'insanity'] or (
-            world.entrance_shuffle[player] == 'simple' and world.mode[player] == 'inverted'):
+    if local_world.options.entrance_shuffle in ['restricted', 'full', 'crossed', 'insanity'] or (
+            local_world.options.entrance_shuffle == 'simple' and local_world.options.mode == 'inverted'):
         rom.write_byte(0x18004C, 0x01)
 
     # set correct flag for hera basement item
@@ -1684,8 +1683,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         rom.write_byte(0xFED31, 0x2A)  # bombable exit
         rom.write_byte(0xFEE41, 0x2A)  # bombable exit
 
-    if world.tile_shuffle[player]:
-        tile_set = TileSet.get_random_tile_set(world.per_slot_randoms[player])
+    if local_world.options.tile_shuffle:
+        tile_set = TileSet.get_random_tile_set(world.worlds[player].random)
         rom.write_byte(0x4BA21, tile_set.get_speed())
         rom.write_byte(0x4BA1D, tile_set.get_len())
         rom.write_bytes(0x4BA2A, tile_set.get_bytes())
@@ -1740,8 +1739,7 @@ def get_price_data(price: int, price_type: int) -> List[int]:
 
 
 def write_custom_shops(rom, world, player):
-    shops = sorted([shop for shop in world.shops if shop.custom and shop.region.player == player],
-                   key=lambda shop: shop.sram_offset)
+    shops = sorted([shop for shop in world.worlds[player].shops if shop.custom], key=lambda shop: shop.sram_offset)
 
     shop_data = bytearray()
     items_data = bytearray()
@@ -1760,9 +1758,9 @@ def write_custom_shops(rom, world, player):
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item is None:
                 break
-            if world.shop_item_slots[player] or shop.type == ShopType.TakeAny:
-                count_shop = (shop.region.name != 'Potion Shop' or world.include_witch_hut[player]) and \
-                             (shop.region.name != 'Capacity Upgrade' or world.shuffle_capacity_upgrades[player])
+            if world.worlds[player].options.shop_item_slots or shop.type == ShopType.TakeAny:
+                count_shop = (shop.region.name != 'Potion Shop' or world.worlds[player].options.include_witch_hut) and \
+                             (shop.region.name != 'Capacity Upgrade' or world.worlds[player].options.shuffle_capacity_upgrades)
                 rom.write_byte(0x186560 + shop.sram_offset + slot, 1 if count_shop else 0)
             if item['item'] == 'Single Arrow' and item['player'] == 0:
                 arrow_mask |= 1 << index
@@ -1779,7 +1777,7 @@ def write_custom_shops(rom, world, player):
                 item_code = get_nonnative_item_sprite(world.worlds[item['player']].item_name_to_id[item['item']])
             else:
                 item_code = item_table[item["item"]].item_code
-                if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro_bow[player]:
+                if item['item'] == 'Single Arrow' and item['player'] == 0 and world.worlds[player].options.retro_bow:
                     rom.write_byte(0x186500 + shop.sram_offset + slot, arrow_mask)
 
             item_data = [shop_id, item_code] + price_data + \
@@ -1792,7 +1790,7 @@ def write_custom_shops(rom, world, player):
     items_data.extend([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
     rom.write_bytes(0x184900, items_data)
 
-    if world.retro_bow[player]:
+    if world.worlds[player].options.retro_bow:
         retro_shop_slots.append(0xFF)
         rom.write_bytes(0x186540, retro_shop_slots)
 
@@ -2197,19 +2195,18 @@ def write_string_to_rom(rom, target, string):
 
 def write_strings(rom, world, player):
     from . import ALTTPWorld
-
+    local_random = world.worlds[player].random
     w: ALTTPWorld = world.worlds[player]
-    local_random = w.random
 
     tt = TextTable()
     tt.removeUnwantedText()
 
     # Let's keep this guy's text accurate to the shuffle setting.
-    if world.entrance_shuffle[player] in ['vanilla', 'dungeons_full', 'dungeons_simple', 'dungeons_crossed']:
+    if world.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_full', 'dungeons_simple', 'dungeons_crossed']:
         tt['kakariko_flophouse_man_no_flippers'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
         tt['kakariko_flophouse_man'] = 'I really hate mowing my yard.\n{PAGEBREAK}\nI should move.'
 
-    if world.mode[player] == 'inverted':
+    if world.worlds[player].options.mode == 'inverted':
         tt['sign_village_of_outcasts'] = 'attention\nferal ducks sighted\nhiding in statues\n\nflute players beware\n'
 
     def hint_text(dest, ped_hint=False):
@@ -2228,21 +2225,21 @@ def write_strings(rom, world, player):
                 hint += f" for {world.player_name[dest.player]}"
         return hint
 
-    if world.scams[player].gives_king_zora_hint:
+    if world.worlds[player].options.scams.gives_king_zora_hint:
         # Zora hint
         zora_location = world.get_location("King Zora", player)
         tt['zora_tells_cost'] = f"You got 500 rupees to buy {hint_text(zora_location.item)}" \
                                 f"\n  ≥ Duh\n    Oh carp\n{{CHOICE}}"
-    if world.scams[player].gives_bottle_merchant_hint:
+    if world.worlds[player].options.scams.gives_bottle_merchant_hint:
         # Bottle Vendor hint
         vendor_location = world.get_location("Bottle Merchant", player)
         tt['bottle_vendor_choice'] = f"I gots {hint_text(vendor_location.item)}\nYous gots 100 rupees?" \
                                      f"\n  ≥ I want\n    no way!\n{{CHOICE}}"
 
     # First we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
-    if world.hints[player]:
-        if world.hints[player].value >= 2:
-            if world.hints[player] == "full":
+    if world.worlds[player].options.hints:
+        if world.worlds[player].options.hints.value >= 2:
+            if world.worlds[player].options.hints == "full":
                 tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles have hints!'
             else:
                 tt['sign_north_of_links_house'] = '> Randomizer The telepathic tiles can have hints!'
@@ -2255,11 +2252,11 @@ def write_strings(rom, world, player):
             entrances_to_hint = {}
             entrances_to_hint.update(InconvenientDungeonEntrances)
             if world.shuffle_ganon:
-                if world.mode[player] == 'inverted':
+                if world.worlds[player].options.mode == 'inverted':
                     entrances_to_hint.update({'Inverted Ganons Tower': 'The sealed castle door'})
                 else:
                     entrances_to_hint.update({'Ganons Tower': 'Ganon\'s Tower'})
-            if world.entrance_shuffle[player] in ['simple', 'restricted']:
+            if world.worlds[player].options.entrance_shuffle in ['simple', 'restricted']:
                 for entrance in all_entrances:
                     if entrance.name in entrances_to_hint:
                         this_hint = entrances_to_hint[entrance.name] + ' leads to ' + hint_text(
@@ -2269,9 +2266,9 @@ def write_strings(rom, world, player):
                         break
             # Now we write inconvenient locations for most shuffles and finish taking care of the less chaotic ones.
             entrances_to_hint.update(InconvenientOtherEntrances)
-            if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+            if world.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
                 hint_count = 0
-            elif world.entrance_shuffle[player] in ['simple', 'restricted']:
+            elif world.worlds[player].options.entrance_shuffle in ['simple', 'restricted']:
                 hint_count = 2
             else:
                 hint_count = 4
@@ -2288,31 +2285,31 @@ def write_strings(rom, world, player):
 
             # Next we handle hints for randomly selected other entrances,
             # curating the selection intelligently based on shuffle.
-            if world.entrance_shuffle[player] not in ['simple', 'restricted']:
+            if world.worlds[player].options.entrance_shuffle not in ['simple', 'restricted']:
                 entrances_to_hint.update(ConnectorEntrances)
                 entrances_to_hint.update(DungeonEntrances)
-                if world.mode[player] == 'inverted':
+                if world.worlds[player].options.mode == 'inverted':
                     entrances_to_hint.update({'Inverted Agahnims Tower': 'The dark mountain tower'})
                 else:
                     entrances_to_hint.update({'Agahnims Tower': 'The sealed castle door'})
-            elif world.entrance_shuffle[player] == 'restricted':
+            elif world.worlds[player].options.entrance_shuffle == 'restricted':
                 entrances_to_hint.update(ConnectorEntrances)
             entrances_to_hint.update(OtherEntrances)
-            if world.mode[player] == 'inverted':
+            if world.worlds[player].options.mode == 'inverted':
                 entrances_to_hint.update({'Inverted Dark Sanctuary': 'The dark sanctuary cave'})
                 entrances_to_hint.update({'Inverted Big Bomb Shop': 'The old hero\'s dark home'})
                 entrances_to_hint.update({'Inverted Links House': 'The old hero\'s light home'})
             else:
                 entrances_to_hint.update({'Dark Sanctuary Hint': 'The dark sanctuary cave'})
                 entrances_to_hint.update({'Big Bomb Shop': 'The old bomb shop'})
-            if world.entrance_shuffle[player] != 'insanity':
+            if world.worlds[player].options.entrance_shuffle != 'insanity':
                 entrances_to_hint.update(InsanityEntrances)
                 if world.shuffle_ganon:
-                    if world.mode[player] == 'inverted':
+                    if world.worlds[player].options.mode == 'inverted':
                         entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
                     else:
                         entrances_to_hint.update({'Pyramid Ledge': 'The pyramid ledge'})
-            hint_count = 4 if world.entrance_shuffle[player] not in ['vanilla', 'dungeons_simple', 'dungeons_full',
+            hint_count = 4 if world.worlds[player].options.entrance_shuffle not in ['vanilla', 'dungeons_simple', 'dungeons_full',
                                                             'dungeons_crossed'] else 0
             for entrance in all_entrances:
                 if entrance.name in entrances_to_hint:
@@ -2327,10 +2324,10 @@ def write_strings(rom, world, player):
 
             # Next we write a few hints for specific inconvenient locations. We don't make many because in entrance this is highly unpredictable.
             locations_to_hint = InconvenientLocations.copy()
-            if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+            if world.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
                 locations_to_hint.extend(InconvenientVanillaLocations)
             local_random.shuffle(locations_to_hint)
-            hint_count = 3 if world.entrance_shuffle[player] not in ['vanilla', 'dungeons_simple', 'dungeons_full',
+            hint_count = 3 if world.worlds[player].options.entrance_shuffle not in ['vanilla', 'dungeons_simple', 'dungeons_full',
                                                             'dungeons_crossed'] else 5
             for location in locations_to_hint[:hint_count]:
                 if location == 'Swamp Left':
@@ -2385,15 +2382,15 @@ def write_strings(rom, world, player):
 
             # Lastly we write hints to show where certain interesting items are.
             items_to_hint = RelevantItems.copy()
-            if world.small_key_shuffle[player].hints_useful:
+            if world.worlds[player].options.small_key_shuffle.hints_useful:
                 items_to_hint |= item_name_groups["Small Keys"]
-            if world.big_key_shuffle[player].hints_useful:
+            if world.worlds[player].options.big_key_shuffle.hints_useful:
                 items_to_hint |= item_name_groups["Big Keys"]
 
-            if world.hints[player] == "full":
+            if world.worlds[player].options.hints == "full":
                 hint_count = len(hint_locations)  # fill all remaining hint locations with Item hints.
             else:
-                hint_count = 5 if world.entrance_shuffle[player] not in ['vanilla', 'dungeons_simple', 'dungeons_full',
+                hint_count = 5 if world.worlds[player].options.entrance_shuffle not in ['vanilla', 'dungeons_simple', 'dungeons_full',
                                                                 'dungeons_crossed'] else 8
             hint_count = min(hint_count, len(items_to_hint), len(hint_locations))
             if hint_count:
@@ -2424,7 +2421,7 @@ def write_strings(rom, world, player):
     tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
     tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
     if world.worlds[player].has_progressive_bows and (w.difficulty_requirements.progressive_bow_limit >= 2 or (
-            world.swordless[player] or world.glitches_required[player] == 'no_glitches')):
+            world.worlds[player].options.swordless or world.worlds[player].options.glitches_required == 'no_glitches')):
         prog_bow_locs = world.find_item_locations('Progressive Bow', player, True)
         local_random.shuffle(prog_bow_locs)
         found_bow = False
@@ -2448,26 +2445,26 @@ def write_strings(rom, world, player):
     greenpendant = world.find_item('Green Pendant', player)
     tt['sahasrahla_bring_courage'] = 'I lost my family heirloom in %s' % greenpendant.hint_text
 
-    if world.crystals_needed_for_gt[player] == 1:
+    if world.worlds[player].options.crystals_needed_for_gt == 1:
         tt['sign_ganons_tower'] = 'You need a crystal to enter.'
     else:
-        tt['sign_ganons_tower'] = f'You need {world.crystals_needed_for_gt[player]} crystals to enter.'
+        tt['sign_ganons_tower'] = f'You need {world.worlds[player].options.crystals_needed_for_gt} crystals to enter.'
 
-    if world.goal[player] == 'bosses':
+    if world.worlds[player].options.goal == 'bosses':
         tt['sign_ganon'] = 'You need to kill all bosses, Ganon last.'
-    elif world.goal[player] == 'ganon_pedestal':
+    elif world.worlds[player].options.goal == 'ganon_pedestal':
         tt['sign_ganon'] = 'You need to pull the pedestal to defeat Ganon.'
-    elif world.goal[player] == "ganon":
-        if world.crystals_needed_for_ganon[player] == 1:
+    elif world.worlds[player].options.goal == "ganon":
+        if world.worlds[player].options.crystals_needed_for_ganon == 1:
             tt['sign_ganon'] = 'You need a crystal to beat Ganon and have beaten Agahnim atop Ganons Tower.'
         else:
-            tt['sign_ganon'] = f'You need {world.crystals_needed_for_ganon[player]} crystals to beat Ganon and ' \
+            tt['sign_ganon'] = f'You need {world.worlds[player].options.crystals_needed_for_ganon} crystals to beat Ganon and ' \
                                f'have beaten Agahnim atop Ganons Tower'
     else:
-        if world.crystals_needed_for_ganon[player] == 1:
+        if world.worlds[player].options.crystals_needed_for_ganon == 1:
             tt['sign_ganon'] = 'You need a crystal to beat Ganon.'
         else:
-            tt['sign_ganon'] = f'You need {world.crystals_needed_for_ganon[player]} crystals to beat Ganon.'
+            tt['sign_ganon'] = f'You need {world.worlds[player].options.crystals_needed_for_ganon} crystals to beat Ganon.'
 
     tt['uncle_leaving_text'] = Uncle_texts[local_random.randint(0, len(Uncle_texts) - 1)]
     tt['end_triforce'] = "{NOBORDER}\n" + Triforce_texts[local_random.randint(0, len(Triforce_texts) - 1)]
@@ -2480,10 +2477,10 @@ def write_strings(rom, world, player):
     triforce_pieces_required = max(0, w.treasure_hunt_required -
                                    sum(1 for item in world.precollected_items[player] if item.name == "Triforce Piece"))
 
-    if world.goal[player] in ['triforce_hunt', 'local_triforce_hunt']:
+    if world.worlds[player].options.goal in ['triforce_hunt', 'local_triforce_hunt']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
-        if world.goal[player] == 'triforce_hunt' and world.players > 1:
+        if world.worlds[player].options.goal == 'triforce_hunt' and world.players > 1:
             tt['sign_ganon'] = 'Go find the Triforce pieces with your friends... Ganon is invincible!'
         else:
             tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
@@ -2497,7 +2494,7 @@ def write_strings(rom, world, player):
                                "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
                                "hidden in  a hollow tree. If you bring\n%d Triforce piece out of %d, I can reassemble it." % \
                                (triforce_pieces_required, w.treasure_hunt_total)
-    elif world.goal[player] in ['pedestal']:
+    elif world.worlds[player].options.goal in ['pedestal']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
         tt['sign_ganon'] = 'You need to get to the pedestal... Ganon is invincible!'
@@ -2506,17 +2503,17 @@ def write_strings(rom, world, player):
         tt['ganon_fall_in_alt'] = 'You cannot defeat me until you finish your goal!'
         tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
         if triforce_pieces_required > 1:
-            if world.goal[player] == 'ganon_triforce_hunt' and world.players > 1:
+            if world.worlds[player].options.goal == 'ganon_triforce_hunt' and world.players > 1:
                 tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d with your friends to defeat Ganon.' % \
                                    (triforce_pieces_required, w.treasure_hunt_total)
-            elif world.goal[player] in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
+            elif world.worlds[player].options.goal in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
                 tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d to defeat Ganon.' % \
                                    (triforce_pieces_required, w.treasure_hunt_total)
         else:
-            if world.goal[player] == 'ganon_triforce_hunt' and world.players > 1:
+            if world.worlds[player].options.goal == 'ganon_triforce_hunt' and world.players > 1:
                 tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d with your friends to defeat Ganon.' % \
                                    (triforce_pieces_required, w.treasure_hunt_total)
-            elif world.goal[player] in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
+            elif world.worlds[player].options.goal in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
                 tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d to defeat Ganon.' % \
                                    (triforce_pieces_required, w.treasure_hunt_total)
 
@@ -2539,11 +2536,11 @@ def write_strings(rom, world, player):
     tt['tablet_bombos_book'] = bombos_text
 
     # inverted spawn menu changes
-    if world.mode[player] == 'inverted':
+    if world.worlds[player].options.mode == 'inverted':
         tt['menu_start_2'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n{CHOICE3}"
         tt['menu_start_3'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n Mountain Cave\n{CHOICE2}"
 
-    for at, text, _ in world.plando_texts[player]:
+    for at, text, _ in world.worlds[player].options.plando_texts:
 
         if at not in tt:
             raise Exception(f"No text target \"{at}\" found.")
@@ -2616,12 +2613,12 @@ def set_inverted_mode(world, player, rom):
     rom.write_byte(snes_to_pc(0x08D40C), 0xD0)  # morph proof
     # the following bytes should only be written in vanilla
     # or they'll overwrite the randomizer's shuffles
-    if world.entrance_shuffle[player] == 'vanilla':
+    if world.worlds[player].options.entrance_shuffle == 'vanilla':
         rom.write_byte(0xDBB73 + 0x23, 0x37)  # switch AT and GT
         rom.write_byte(0xDBB73 + 0x36, 0x24)
         rom.write_int16(0x15AEE + 2 * 0x38, 0x00E0)
         rom.write_int16(0x15AEE + 2 * 0x25, 0x000C)
-    if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+    if world.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
         rom.write_byte(0x15B8C, 0x6C)
         rom.write_byte(0xDBB73 + 0x00, 0x53)  # switch bomb shop and links house
         rom.write_byte(0xDBB73 + 0x52, 0x01)
@@ -2679,7 +2676,7 @@ def set_inverted_mode(world, player, rom):
     rom.write_int16(snes_to_pc(0x02D9A6), 0x005A)
     rom.write_byte(snes_to_pc(0x02D9B3), 0x12)
     # keep the old man spawn point at old man house unless shuffle is vanilla
-    if world.entrance_shuffle[player] in ['vanilla', 'dungeons_full', 'dungeons_simple', 'dungeons_crossed']:
+    if world.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_full', 'dungeons_simple', 'dungeons_crossed']:
         rom.write_bytes(snes_to_pc(0x308350), [0x00, 0x00, 0x01])
         rom.write_int16(snes_to_pc(0x02D8DE), 0x00F1)
         rom.write_bytes(snes_to_pc(0x02D910), [0x1F, 0x1E, 0x1F, 0x1F, 0x03, 0x02, 0x03, 0x03])
@@ -2742,7 +2739,7 @@ def set_inverted_mode(world, player, rom):
     rom.write_int16s(snes_to_pc(0x1bb836), [0x001B, 0x001B, 0x001B])
     rom.write_int16(snes_to_pc(0x308300), 0x0140)  # new pyramid hole entrance
     rom.write_int16(snes_to_pc(0x308320), 0x001B)
-    if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+    if world.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
         rom.write_byte(snes_to_pc(0x308340), 0x7B)
     rom.write_int16(snes_to_pc(0x1af504), 0x148B)
     rom.write_int16(snes_to_pc(0x1af50c), 0x149B)
@@ -2779,10 +2776,10 @@ def set_inverted_mode(world, player, rom):
     rom.write_bytes(snes_to_pc(0x1BC85A), [0x50, 0x0F, 0x82])
     rom.write_int16(0xDB96F + 2 * 0x35, 0x001B)  # move pyramid exit door
     rom.write_int16(0xDBA71 + 2 * 0x35, 0x06A4)
-    if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+    if world.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
         rom.write_byte(0xDBB73 + 0x35, 0x36)
     rom.write_byte(snes_to_pc(0x09D436), 0xF3)  # remove castle gate warp
-    if world.entrance_shuffle[player] in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+    if world.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
         rom.write_int16(0x15AEE + 2 * 0x37, 0x0010)  # pyramid exit to new hc area
         rom.write_byte(0x15B8C + 0x37, 0x1B)
         rom.write_int16(0x15BDB + 2 * 0x37, 0x0418)
@@ -3026,7 +3023,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_settings()
+    options = settings.get_settings()
     if not file_name:
         file_name = options["lttp_options"]["rom_file"]
     if not os.path.exists(file_name):

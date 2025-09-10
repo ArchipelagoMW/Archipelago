@@ -29,6 +29,10 @@
 * New classes, attributes, and methods in core code should have docstrings that follow
   [reST style](https://peps.python.org/pep-0287/).
 * Worlds that do not follow PEP8 should still have a consistent style across its files to make reading easier.
+* [Match statements](https://docs.python.org/3/tutorial/controlflow.html#tut-match)
+  may be used instead of `if`-`elif` if they result in nicer code, or they actually use pattern matching.
+  Beware of the performance: they are not `goto`s, but `if`-`elif` under the hood, and you may have less control. When
+  in doubt, just don't use it.
 
 ## Markdown
 
@@ -56,3 +60,9 @@
 * Indent `case` inside `switch ` with 2 spaces.
 * Use single quotes.
 * Semicolons are required after every statement.
+
+## KV
+
+* Style should be defined in `.kv` as much as possible, only Python when unavailable.
+* Should follow [our Python style](#python-code) where appropriate (quotation marks, indentation).
+* When escaping a line break, add a space between code and backslash.

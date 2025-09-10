@@ -1,7 +1,7 @@
 from typing import Dict, List, Set, Tuple, TextIO, Any, Optional
 from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import get_item_names_per_category
-from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items
+from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items, pyramid_start_starter_progression_items
 from .Locations import get_location_datas, EventId
 from .Options import BackwardsCompatiableTimespinnerOptions, Toggle
 from .PreCalculatedWeights import PreCalculatedWeights
@@ -42,6 +42,7 @@ class TimespinnerWorld(World):
     topology_present = True
     web = TimespinnerWebWorld()
     required_client_version = (0, 4, 2)
+    ut_can_gen_without_yaml = True
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_location_datas(-1, None, None)}
@@ -126,6 +127,13 @@ class TimespinnerWorld(World):
             "UnchainedKeys": self.options.unchained_keys.value,
             "PresentAccessWithWheelAndSpindle": self.options.back_to_the_future.value,
             "PrismBreak": self.options.prism_break.value,
+            "LockKeyAmadeus": self.options.lock_key_amadeus.value,
+            "RiskyWarps": self.options.risky_warps.value,
+            "PyramidStart": self.options.pyramid_start.value,
+            "GateKeep": self.options.gate_keep.value,
+            "RoyalRoadblock": self.options.royal_roadblock.value,
+            "PureTorcher": self.options.pure_torcher.value,
+            "FindTheFlame": self.options.find_the_flame.value,
             "Traps": self.options.traps.value,
             "DeathLink": self.options.death_link.value,
             "StinkyMaw": True,
@@ -203,7 +211,7 @@ class TimespinnerWorld(World):
         self.precalculated_weights.past_key_unlock = slot_data["PastGate"]
         self.precalculated_weights.time_key_unlock = slot_data["TimeGate"]
         # rising tides
-        if (slot_data["Basement"] > 1):
+        if (slot_data["Basement"] > 0):
             self.precalculated_weights.flood_basement = True
         if (slot_data["Basement"] == 2):
             self.precalculated_weights.flood_basement_high = True
@@ -292,7 +300,9 @@ class TimespinnerWorld(World):
         if not item.advancement:
             return item
 
-        if (name == 'Tablet' or name == 'Library Keycard V') and not self.options.downloadable_items:
+        if name == 'Tablet' and not self.options.downloadable_items:
+            item.classification = ItemClassification.filler
+        elif name == 'Library Keycard V' and not (self.options.downloadable_items or self.options.pure_torcher):
             item.classification = ItemClassification.filler
         elif name == 'Oculus Ring' and not self.options.eye_spy:
             item.classification = ItemClassification.filler
@@ -303,6 +313,13 @@ class TimespinnerWorld(World):
             item.classification = ItemClassification.filler
         elif name in {"Laser Access A", "Laser Access I", "Laser Access M"} \
                 and not self.options.prism_break:
+            item.classification = ItemClassification.filler
+        elif name in {"Lab Access Genza", "Lab Access Experiment", "Lab Access Research", "Lab Access Dynamo"} \
+                and not self.options.lock_key_amadeus:
+            item.classification = ItemClassification.filler
+        elif name == "Drawbridge Key" and not self.options.gate_keep: 
+            item.classification = ItemClassification.filler
+        elif name == "Cube of Bodie" and not self.options.find_the_flame: 
             item.classification = ItemClassification.filler
 
         return item
@@ -341,6 +358,18 @@ class TimespinnerWorld(World):
             excluded_items.add('Laser Access I')
             excluded_items.add('Laser Access M')
 
+        if not self.options.lock_key_amadeus:
+            excluded_items.add('Lab Access Genza')
+            excluded_items.add('Lab Access Experiment')
+            excluded_items.add('Lab Access Research')
+            excluded_items.add('Lab Access Dynamo')
+
+        if not self.options.gate_keep:
+            excluded_items.add('Drawbridge Key')
+
+        if not self.options.find_the_flame:
+            excluded_items.add('Cube of Bodie')
+
         for item in self.multiworld.precollected_items[self.player]:
             if item.name not in self.item_name_groups['UseItem']:
                 excluded_items.add(item.name)
@@ -376,15 +405,18 @@ class TimespinnerWorld(World):
         self.place_locked_item(excluded_items, location, item_name)
 
     def place_first_progression_item(self, excluded_items: Set[str]) -> None:
-        if self.options.quick_seed or self.options.inverted or self.precalculated_weights.flood_lake_desolation:
+        if (self.options.quick_seed or self.options.inverted or self.precalculated_weights.flood_lake_desolation) \
+        and not self.options.pyramid_start:
             return
 
+        enabled_starter_progression_items = pyramid_start_starter_progression_items if self.options.pyramid_start else starter_progression_items
+
         for item_name in self.options.start_inventory.value.keys():
-            if item_name in starter_progression_items:
+            if item_name in enabled_starter_progression_items:
                 return
 
         local_starter_progression_items = tuple(
-            item for item in starter_progression_items 
+            item for item in enabled_starter_progression_items 
                 if item not in excluded_items and item not in self.options.non_local_items.value)
 
         if not local_starter_progression_items:
