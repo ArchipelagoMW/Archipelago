@@ -3164,6 +3164,7 @@ def handle_boss_health(rom, world: World):
     rom.write_byte(0xCFCD, world.options.koopaling_health.value)
     rom.write_byte(0xD3FF, world.options.koopaling_health.value * 4)
     rom.write_byte(0x1CE1A, world.options.koopaling_health.value)
+    rom.write_byte(0x1CED4, world.options.koopaling_health.value)
 
 
 def patch_rom(world: World, rom, player, active_level_dict):
