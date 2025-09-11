@@ -35,10 +35,11 @@ class GrinchClient(BizHawkClient):
     system = "PSX"
     patch_suffix = ".apgrinch"
     items_handling = 0b111
-    demo_mode_buffer = 0
-    last_map_location = -1
-    ingame_log = False
+    demo_mode_buffer: int = 0
+    last_map_location: int = -1
+    ingame_log: bool = False
     previous_egg_count: int = 0
+    send_ring_link: bool = False
 
     def __init__(self):
         super().__init__()
@@ -91,6 +92,7 @@ class GrinchClient(BizHawkClient):
 
                 tags = copy.deepcopy(ctx.tags)
                 if ring_link_enabled:
+                    self.send_ring_link = True
                     Utils.async_start(self.ring_link_output(ctx), name="EggLink")
                     ctx.tags.add("RingLink")
                 else:
@@ -348,7 +350,7 @@ class GrinchClient(BizHawkClient):
 
     async def ring_link_output(self, ctx: "BizHawkClientContext"):
         from CommonClient import logger
-        while not ctx.exit_event and ctx.slot:
+        while self.send_ring_link and ctx.slot:
 
             try:
                 current_egg_count = int.from_bytes(
@@ -366,8 +368,14 @@ class GrinchClient(BizHawkClient):
                     }
                     await ctx.send_msgs([msg])
                     self.previous_egg_count = current_egg_count
+                    # logger.info(f"RingLink: You sent {str(current_egg_count - self.previous_egg_count)} rotten eggs.")
+                await asyncio.sleep(0.1)
             except Exception as ex:
-                logger.error("While monitoring grinch's egg count ingame, an error occured. Details:"+ str(ex))
+                logger.error("While monitoring grinch's egg count ingame, an error occurred. Details:"+ str(ex))
+                self.send_ring_link = False
+
+        if not ctx.slot:
+            logger.info("You must be connected to the multi-world in order for RingLink to work properly.")
 
     async def ring_link_input(self, egg_amount: int, ctx: "BizHawkClientContext"):
         from CommonClient import logger
@@ -377,3 +385,4 @@ class GrinchClient(BizHawkClient):
         await bizhawk.write(ctx.bizhawk_ctx, [(EGG_COUNT_ADDR,
             int(current_egg_count).to_bytes(EGG_ADDR_BYTESIZE, "little"), "MainRAM")])
         self.previous_egg_count = current_egg_count
+        # logger.info(f"RingLink: You received {str(egg_amount)} rotten eggs.")
