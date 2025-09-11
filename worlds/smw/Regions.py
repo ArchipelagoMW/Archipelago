@@ -895,10 +895,7 @@ def create_regions(world: World, active_locations):
         add_location_to_region(multiworld, player, active_locations, LocationName.vanilla_fortress_region, LocationName.vanilla_fortress_hidden_1up,
                                lambda state: state.has(ItemName.mario_swim, player))
         add_location_to_region(multiworld, player, active_locations, LocationName.cookie_mountain_region, LocationName.cookie_mountain_hidden_1up,
-                               lambda state: (state.has(ItemName.mario_swim, player) or
-                                              state.has(ItemName.yoshi_activate, player) or
-                                             (state.has(ItemName.mario_run, player, player) and
-                                              state.has(ItemName.progressive_powerup, player, 3))))
+                               lambda state: (state.has(ItemName.mario_swim, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.forest_of_illusion_3_region, LocationName.forest_of_illusion_3_hidden_1up,
                                lambda state: (state.has(ItemName.mario_carry, player) or
                                               state.has(ItemName.yoshi_activate, player)))
@@ -1039,7 +1036,8 @@ def create_regions(world: World, active_locations):
         add_location_to_region(multiworld, player, active_locations, LocationName.cookie_mountain_region, LocationName.cookie_mountain_coin_block_9)
         add_location_to_region(multiworld, player, active_locations, LocationName.cookie_mountain_region, LocationName.cookie_mountain_powerup_block_1)
         add_location_to_region(multiworld, player, active_locations, LocationName.cookie_mountain_region, LocationName.cookie_mountain_life_block_1,
-                        lambda state:( (state.has(ItemName.mario_climb, player)) or  (state.has(ItemName.mario_swim, player))))
+                        lambda state: (state.has(ItemName.yoshi_activate, player) or
+                                        state.has(ItemName.mario_climb, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.cookie_mountain_region, LocationName.cookie_mountain_vine_block_1)
         add_location_to_region(multiworld, player, active_locations, LocationName.cookie_mountain_region, LocationName.cookie_mountain_yoshi_block_1,
                         lambda state: state.has(ItemName.red_switch_palace, player))
