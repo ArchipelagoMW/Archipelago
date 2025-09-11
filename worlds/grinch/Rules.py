@@ -542,7 +542,7 @@ access_rules_dict: dict[str,list[list[str]]] = {
         # ["Progressive Vacuum Access": 2]
     ],
     "Minefield": [
-        ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"],
+        ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
     "Power Plant": [
