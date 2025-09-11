@@ -33,12 +33,17 @@ class StateLogic:
     critical_path: CriticalPathCalculator
     initial_unlocked_items: set[str]
 
-    pipe_events: ClassVar[tuple[str, str]]
-    pump_events: ClassVar[tuple[str, str]]
-    hazmat_events: ClassVar[tuple[str, str]]
-    belt_events: ClassVar[tuple[tuple[str, ...], ...]]
+    pipe_events: ClassVar[tuple[str, str]] = \
+        tuple(to_building_event(building) for building in ("Pipes Mk.1", "Pipes Mk.2"))
+    pump_events: ClassVar[tuple[str, str]] = \
+        tuple(to_building_event(building) for building in ("Pipeline Pump Mk.1", "Pipeline Pump Mk.2"))
+    hazmat_events: ClassVar[tuple[str, str]] = \
+        tuple(to_part_event(part) for part in ("Hazmat Suit", "Iodine-Infused Filter"))
+    belt_events: ClassVar[tuple[tuple[str, ...], ...]] = tuple(
+        tuple(map(to_building_event, map(to_belt_name, range(speed, 6))))
+        for speed in range(1, 6)
+    )
 
-    basic_recipe_rule: Callable[[CollectionState], bool]
     pipes_rule: Callable[[CollectionState], bool]
     radio_active_rule: Callable[[CollectionState], bool]
     belt_rules: Tuple[Callable[[CollectionState], bool], ...]
@@ -108,65 +113,54 @@ class StateLogic:
     def get_belt_speed_rule(self, belt_speed: int) -> Callable[[CollectionState], bool]:
         return lambda state: state.has_any(self.belt_events[belt_speed], self.player)
 
+    def is_recipe_producible(self, state: CollectionState, recipe: Recipe) -> bool:
+        return self.has_recipe(state, recipe) \
+               and self.can_build(state, recipe.building) \
+               and self.can_produce_all(state, recipe.inputs)
+
     def get_can_produce_specific_recipe_for_part_rule(self, recipe: Recipe) -> Callable[[CollectionState], bool]:
         if recipe.needs_pipes:
             if recipe.is_radio_active:
                 if recipe.minimal_belt_speed:
                     return lambda state: \
-                        self.has_recipe(state, recipe) \
-                        and self.can_build(state, recipe.building) \
-                        and self.can_produce_all(state, recipe.inputs) \
+                        self.is_recipe_producible(state, recipe) \
                         and self.pipes_rule(state) \
                         and self.radio_active_rule(state) \
                         and self.belt_rule[recipe.minimal_belt_speed - 1]
                 else:
                     return lambda state: \
-                        self.has_recipe(state, recipe) \
-                        and self.can_build(state, recipe.building) \
-                        and self.can_produce_all(state, recipe.inputs) \
+                        self.is_recipe_producible(state, recipe) \
                         and self.pipes_rule(state) \
                         and self.radio_active_rule(state)
             else:
                 if recipe.minimal_belt_speed:
                     return lambda state: \
-                        self.has_recipe(state, recipe) \
-                        and self.can_build(state, recipe.building) \
-                        and self.can_produce_all(state, recipe.inputs) \
+                        self.is_recipe_producible(state, recipe) \
                         and self.pipes_rule(state) \
                         and self.belt_rule[recipe.minimal_belt_speed - 1]
                 else:
                     return lambda state: \
-                        self.has_recipe(state, recipe) \
-                        and self.can_build(state, recipe.building) \
-                        and self.can_produce_all(state, recipe.inputs) \
+                        self.is_recipe_producible(state, recipe) \
                         and self.pipes_rule(state)
         else:
             if recipe.is_radio_active:
                 if recipe.minimal_belt_speed:
                     return lambda state: \
-                        self.has_recipe(state, recipe) \
-                        and self.can_build(state, recipe.building) \
-                        and self.can_produce_all(state, recipe.inputs) \
+                        self.is_recipe_producible(state, recipe) \
                         and self.radio_active_rule(state) \
                         and self.belt_rule[recipe.minimal_belt_speed - 1]
                 else:
                     return lambda state: \
-                        self.has_recipe(state, recipe) \
-                        and self.can_build(state, recipe.building) \
-                        and self.can_produce_all(state, recipe.inputs) \
+                        self.is_recipe_producible(state, recipe) \
                         and self.radio_active_rule(state)
             else:
                 if recipe.minimal_belt_speed:
                     return lambda state: \
-                        self.has_recipe(state, recipe) \
-                        and self.can_build(state, recipe.building) \
-                        and self.can_produce_all(state, recipe.inputs) \
+                        self.is_recipe_producible(state, recipe) \
                         and self.belt_rule[recipe.minimal_belt_speed - 1]
                 else:
                     return lambda state: \
-                        self.has_recipe(state, recipe) \
-                        and self.can_build(state, recipe.building) \
-                        and self.can_produce_all(state, recipe.inputs)
+                        self.is_recipe_producible(state, recipe)
 
     def is_elevator_phase(self, state: CollectionState, phase: int) -> bool:
         limited_phase = min(self.options.final_elevator_phase - 1, phase)
@@ -175,12 +169,3 @@ class StateLogic:
             return state.has(f"Elevator Phase {limited_phase}", self.player)
         else:
             return True
-
-    pipe_events = tuple(to_building_event(building) for building in ("Pipes Mk.1", "Pipes Mk.2"))
-    pump_events = \
-        tuple(to_building_event(building) for building in ("Pipeline Pump Mk.1", "Pipeline Pump Mk.2"))
-    hazmat_events = tuple(to_part_event(part) for part in ("Hazmat Suit", "Iodine-Infused Filter"))
-    belt_events = tuple(
-        tuple(map(to_building_event, map(to_belt_name, range(speed, 6))))
-        for speed in range(1, 6)
-    )
