@@ -114,6 +114,8 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+fuzz.py
+fuzz_output/
 
 
 # Flask stuff:

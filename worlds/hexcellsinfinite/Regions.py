@@ -18,6 +18,12 @@ def create_regions(world: "HexcellsInfiniteWorld"):
 
     # You can technically name your connections whatever you want as well
     # You'll use those connection names in Rules.py
+
+
+
+
+
+
     menu = create_region(world, "Menu")
     
     if(world.options.LevelUnlockType == Options.LevelUnlockType.option_vanilla):
@@ -30,47 +36,47 @@ def create_regions(world: "HexcellsInfiniteWorld"):
         create_region_and_connect(world, "Level Group 6", "Level Group 5 -> Level Group 6", lvlgroup5)
 
     elif(world.options.LevelUnlockType == Options.LevelUnlockType.option_individual):
-        create_region_and_connect(world, "Hexcells 1-1", "Menu -> 1-1", menu)
-        create_region_and_connect(world, "Hexcells 1-2", "Menu -> 1-2", menu)
-        create_region_and_connect(world, "Hexcells 1-3", "Menu -> 1-3", menu)
-        create_region_and_connect(world, "Hexcells 1-4", "Menu -> 1-4", menu)
-        create_region_and_connect(world, "Hexcells 1-5", "Menu -> 1-5", menu)
-        create_region_and_connect(world, "Hexcells 1-6", "Menu -> 1-6", menu)
+        create_region_and_connect(world, "Hexcells Level 1-1", "Menu -> 1-1", menu)
+        create_region_and_connect(world, "Hexcells Level 1-2", "Menu -> 1-2", menu)
+        create_region_and_connect(world, "Hexcells Level 1-3", "Menu -> 1-3", menu)
+        create_region_and_connect(world, "Hexcells Level 1-4", "Menu -> 1-4", menu)
+        create_region_and_connect(world, "Hexcells Level 1-5", "Menu -> 1-5", menu)
+        create_region_and_connect(world, "Hexcells Level 1-6", "Menu -> 1-6", menu)
 
-        create_region_and_connect(world, "Hexcells 2-1", "Menu -> 2-1", menu)
-        create_region_and_connect(world, "Hexcells 2-2", "Menu -> 2-2", menu)
-        create_region_and_connect(world, "Hexcells 2-3", "Menu -> 2-3", menu)
-        create_region_and_connect(world, "Hexcells 2-4", "Menu -> 2-4", menu)
-        create_region_and_connect(world, "Hexcells 2-5", "Menu -> 2-5", menu)
-        create_region_and_connect(world, "Hexcells 2-6", "Menu -> 2-6", menu)
+        create_region_and_connect(world, "Hexcells Level 2-1", "Menu -> 2-1", menu)
+        create_region_and_connect(world, "Hexcells Level 2-2", "Menu -> 2-2", menu)
+        create_region_and_connect(world, "Hexcells Level 2-3", "Menu -> 2-3", menu)
+        create_region_and_connect(world, "Hexcells Level 2-4", "Menu -> 2-4", menu)
+        create_region_and_connect(world, "Hexcells Level 2-5", "Menu -> 2-5", menu)
+        create_region_and_connect(world, "Hexcells Level 2-6", "Menu -> 2-6", menu)
         
-        create_region_and_connect(world, "Hexcells 3-1", "Menu -> 3-1", menu)
-        create_region_and_connect(world, "Hexcells 3-2", "Menu -> 3-2", menu)
-        create_region_and_connect(world, "Hexcells 3-3", "Menu -> 3-3", menu)
-        create_region_and_connect(world, "Hexcells 3-4", "Menu -> 3-4", menu)
-        create_region_and_connect(world, "Hexcells 3-5", "Menu -> 3-5", menu)
-        create_region_and_connect(world, "Hexcells 3-6", "Menu -> 3-6", menu)
+        create_region_and_connect(world, "Hexcells Level 3-1", "Menu -> 3-1", menu)
+        create_region_and_connect(world, "Hexcells Level 3-2", "Menu -> 3-2", menu)
+        create_region_and_connect(world, "Hexcells Level 3-3", "Menu -> 3-3", menu)
+        create_region_and_connect(world, "Hexcells Level 3-4", "Menu -> 3-4", menu)
+        create_region_and_connect(world, "Hexcells Level 3-5", "Menu -> 3-5", menu)
+        create_region_and_connect(world, "Hexcells Level 3-6", "Menu -> 3-6", menu)
 
-        create_region_and_connect(world, "Hexcells 4-1", "Menu -> 4-1", menu)
-        create_region_and_connect(world, "Hexcells 4-2", "Menu -> 4-2", menu)
-        create_region_and_connect(world, "Hexcells 4-3", "Menu -> 4-3", menu)
-        create_region_and_connect(world, "Hexcells 4-4", "Menu -> 4-4", menu)
-        create_region_and_connect(world, "Hexcells 4-5", "Menu -> 4-5", menu)
-        create_region_and_connect(world, "Hexcells 4-6", "Menu -> 4-6", menu)
+        create_region_and_connect(world, "Hexcells Level 4-1", "Menu -> 4-1", menu)
+        create_region_and_connect(world, "Hexcells Level 4-2", "Menu -> 4-2", menu)
+        create_region_and_connect(world, "Hexcells Level 4-3", "Menu -> 4-3", menu)
+        create_region_and_connect(world, "Hexcells Level 4-4", "Menu -> 4-4", menu)
+        create_region_and_connect(world, "Hexcells Level 4-5", "Menu -> 4-5", menu)
+        create_region_and_connect(world, "Hexcells Level 4-6", "Menu -> 4-6", menu)
 
-        create_region_and_connect(world, "Hexcells 5-1", "Menu -> 5-1", menu)
-        create_region_and_connect(world, "Hexcells 5-2", "Menu -> 5-2", menu)
-        create_region_and_connect(world, "Hexcells 5-3", "Menu -> 5-3", menu)
-        create_region_and_connect(world, "Hexcells 5-4", "Menu -> 5-4", menu)
-        create_region_and_connect(world, "Hexcells 5-5", "Menu -> 5-5", menu)
-        create_region_and_connect(world, "Hexcells 5-6", "Menu -> 5-6", menu)
+        create_region_and_connect(world, "Hexcells Level 5-1", "Menu -> 5-1", menu)
+        create_region_and_connect(world, "Hexcells Level 5-2", "Menu -> 5-2", menu)
+        create_region_and_connect(world, "Hexcells Level 5-3", "Menu -> 5-3", menu)
+        create_region_and_connect(world, "Hexcells Level 5-4", "Menu -> 5-4", menu)
+        create_region_and_connect(world, "Hexcells Level 5-5", "Menu -> 5-5", menu)
+        create_region_and_connect(world, "Hexcells Level 5-6", "Menu -> 5-6", menu)
 
-        create_region_and_connect(world, "Hexcells 6-1", "Menu -> 6-1", menu)
-        create_region_and_connect(world, "Hexcells 6-2", "Menu -> 6-2", menu)
-        create_region_and_connect(world, "Hexcells 6-3", "Menu -> 6-3", menu)
-        create_region_and_connect(world, "Hexcells 6-4", "Menu -> 6-4", menu)
-        create_region_and_connect(world, "Hexcells 6-5", "Menu -> 6-5", menu)
-        create_region_and_connect(world, "Hexcells 6-6", "Menu -> 6-6", menu)
+        create_region_and_connect(world, "Hexcells Level 6-1", "Menu -> 6-1", menu)
+        create_region_and_connect(world, "Hexcells Level 6-2", "Menu -> 6-2", menu)
+        create_region_and_connect(world, "Hexcells Level 6-3", "Menu -> 6-3", menu)
+        create_region_and_connect(world, "Hexcells Level 6-4", "Menu -> 6-4", menu)
+        create_region_and_connect(world, "Hexcells Level 6-5", "Menu -> 6-5", menu)
+        create_region_and_connect(world, "Hexcells Level 6-6", "Menu -> 6-6", menu)
 
 
 def create_region(world: "HexcellsInfiniteWorld", name: str) -> Region:

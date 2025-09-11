@@ -41,14 +41,19 @@ def is_valid_location(world: "HexcellsInfiniteWorld", name) -> bool:
 # Heres where you do the next fun part of listing out all those locations
 # Its a lot
 # My advice, zone out for half an hour listening to music and hope you wake up to a completed list
-# if(HexcellsInfiniteWorld.options.LevelUnlockType == Options.LevelUnlockType.option_vanilla):
 
 hexcells_infinite_locations = {}
 
 
-for world in range(1, 7):
-    for level in range(1, 7):
-        name = f"Hexcells {world}-{level}"
+for worldNum in range(1, 7):
+    for levelNum in range(1, 7):
+        name = f"Hexcells {worldNum}-{levelNum}"
+        hexcells_infinite_locations[name] = LocData(len(hexcells_infinite_locations)+1, f"Level Group {worldNum}")
+
+
+for worldNum in range(1, 7):
+    for levelNum in range(1, 7):
+        name = f"Hexcells Level {worldNum}-{levelNum}"
         hexcells_infinite_locations[name] = LocData(len(hexcells_infinite_locations)+1, f"{name}")
 
 
