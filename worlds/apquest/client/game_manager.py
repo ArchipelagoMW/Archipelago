@@ -77,8 +77,12 @@ class APQuestManager(GameManager):
 
     def render(self, game: Game, player_sprite: PlayerSprite) -> None:
         self.setup_game_grid_if_not_setup(game.gameboard.size)
-        self.render_background_game_grid(game.gameboard.size, game.active_math_problem is None)
+
+        # This calls game.render(), which needs to happen to update the state of math traps
         self.render_gameboard(game, player_sprite)
+        # Only now can we check whether a math problem is active
+        self.render_background_game_grid(game.gameboard.size, game.active_math_problem is None)
+
         self.render_item_column(game)
 
     def render_gameboard(self, game: Game, player_sprite: PlayerSprite) -> None:
