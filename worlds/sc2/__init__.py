@@ -35,6 +35,7 @@ from .mission_tables import SC2Campaign, SC2Mission, SC2Race, MissionFlag
 from .regions import create_mission_order
 from .mission_order import SC2MissionOrder
 from worlds.LauncherComponents import components, Component, launch as launch_component
+from .mission_order.presets import sc2_options_presets
 
 logger = logging.getLogger("Starcraft 2")
 VICTORY_MODULO = 100
@@ -75,6 +76,7 @@ class Starcraft2WebWorld(WebWorld):
 
     tutorials = [setup_en, setup_fr, custom_mission_orders_en]
     game_info_languages = ["en", "fr"]
+    options_presets = sc2_options_presets
     option_groups = option_groups
 
 
