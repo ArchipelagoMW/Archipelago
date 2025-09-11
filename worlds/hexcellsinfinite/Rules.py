@@ -15,7 +15,6 @@ if TYPE_CHECKING:
 # Even better if its a game you know a lot about and can tell what you need to get to certain locations
 def set_rules(world: "HexcellsInfiniteWorld"):
     player = world.player
-    options = world.options
     if(world.options.LevelUnlockType == Options.LevelUnlockType.option_vanilla):
         add_rule(world.multiworld.get_entrance("Level Group 1 -> Level Group 2", player), lambda state: state.has("Gem", player, 6))
         add_rule(world.multiworld.get_entrance("Level Group 2 -> Level Group 3", player), lambda state: state.has("Gem", player, 12))
@@ -25,6 +24,16 @@ def set_rules(world: "HexcellsInfiniteWorld"):
     
         world.multiworld.completion_condition[player] = lambda state: state.has("Gem", player, 36)
     else:
+        
+        for worldNum in range(1, 7):
+            for levelNum in range(1, 7):
+                levelName = f"Hexcells {worldNum}-{levelNum}"
+                regionName = f"Menu -> {worldNum}-{levelNum}"
+                rule = lambda state, lamLevelName=levelName: state.has(lamLevelName, player, 1)
+                add_rule(world.multiworld.get_entrance(regionName, player), rule)
+
+
+        
         world.multiworld.completion_condition[player] = lambda state: state.has_all(HEXCELLS_LEVEL_ITEMS,player)
         
 

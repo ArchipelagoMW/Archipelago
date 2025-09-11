@@ -49,7 +49,7 @@ hexcells_infinite_locations = {}
 for world in range(1, 7):
     for level in range(1, 7):
         name = f"Hexcells {world}-{level}"
-        hexcells_infinite_locations[name] = LocData(len(hexcells_infinite_locations), f"Level Group {world}")
+        hexcells_infinite_locations[name] = LocData(len(hexcells_infinite_locations)+1, f"{name}")
 
 
 

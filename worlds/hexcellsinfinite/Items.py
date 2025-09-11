@@ -80,9 +80,9 @@ HEXCELLS_LEVEL_ITEMS = []
 for world in range(1, 7):
     for level in range(1, 7):
         name = f"Hexcells {world}-{level}"
-        hexcells_infinite_items[name] = ItemData(len(hexcells_infinite_items), ItemClassification.progression)
+        hexcells_infinite_items[name] = ItemData(len(hexcells_infinite_items)+1, ItemClassification.progression)
         HEXCELLS_LEVEL_ITEMS.append(name)
-hexcells_infinite_items["Gem"] = ItemData(len(hexcells_infinite_items), ItemClassification.progression)
+hexcells_infinite_items["Gem"] = ItemData(len(hexcells_infinite_items)+1, ItemClassification.progression)
 
 
 

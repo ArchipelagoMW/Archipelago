@@ -85,7 +85,7 @@ class HexcellsInfiniteWorld(World):
         
 
         if(self.options.LevelUnlockType == Options.LevelUnlockType.option_individual):
-            level_start = random.choice(HEXCELLS_LEVEL_ITEMS)
+            level_start = self.random.choice(HEXCELLS_LEVEL_ITEMS)
             
             self.multiworld.push_precollected(create_item(self, level_start))
             print("Gave player starting item:" + level_start)
