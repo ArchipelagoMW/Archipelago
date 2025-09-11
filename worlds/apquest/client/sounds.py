@@ -185,6 +185,9 @@ class SoundManager:
             Config.write()
             self.set_background_music_volume(self.current_background_music_volume)
 
+            for jingle in self.jingles.values():
+                jingle.volume = self.volume_percentage / 100
+
     def do_fade(self) -> None:
         if self.current_background_music_volume > self.background_music_target_volume:
             self.set_background_music_volume(max(0.0, self.current_background_music_volume - 0.02))
