@@ -11,6 +11,7 @@
 # Here you are only grabbing the randrange function from random. This is less bulky but you need to put exactly what you want from that file/library
 # If you want more things from the import add a comma like the worlds.AutoWorld import below
 import logging
+import random
 
 from BaseClasses import MultiWorld, Item, Tutorial
 from worlds.AutoWorld import World, CollectionState, WebWorld
@@ -18,7 +19,7 @@ from typing import Dict
 from Utils import visualize_regions
 
 from .Locations import get_location_names, get_total_locations
-from .Items import create_item, create_itempool, item_table, get_level_start
+from .Items import create_item, create_itempool, item_table, HEXCELLS_LEVEL_ITEMS 
 from .Options import HexcellsInfiniteOptions
 from .Regions import create_regions
 from .Rules import set_rules
@@ -79,14 +80,25 @@ class HexcellsInfiniteWorld(World):
         # Push precollected is how you give your player items they need to start with
         # This is for options though. Dont worry about the starting inventory option thats in all yamls
         # AP handles that one
+    
+
         
+
         if(self.options.LevelUnlockType == Options.LevelUnlockType.option_individual):
-            for name,data in item_table.items():
-                if(name == get_level_start):
-                    self.multiworld.push_precollected()
-                    print("Gave player starting item:" + name)
-                else:
-                    print("Failed to give starting location")
+            level_start = random.choice(HEXCELLS_LEVEL_ITEMS)
+            
+            self.multiworld.push_precollected(create_item(self, level_start))
+            print("Gave player starting item:" + level_start)
+
+
+
+            # for name,data in item_table.items():
+            #     print("Name: " + name)
+            #     if(name == level_start):
+            #         self.multiworld.push_precollected(create_item(self,name))
+            #         print("Gave player starting item:" + name)
+            #     else:
+            #         print("Failed to give starting location")
         else:
             print("Vanilla Unlock Level Type")
         
