@@ -688,7 +688,6 @@ def handle_level_shuffle(rom, world: World, active_level_dict):
     world.random.shuffle(tiles_s)
     consistent_tile_mapping: dict[int, int] = dict(zip(tiles_o, tiles_s))
     singularity_tile = world.random.choice(tiles_o)
-    singularity_tile = world.random.choice(tiles_o)
 
     for level_id, tile_id in active_level_dict.items():
         rom.write_byte(0x37F70 + level_id, tile_id)
@@ -721,11 +720,8 @@ def handle_level_shuffle(rom, world: World, active_level_dict):
         elif world.options.level_tile_shuffle == "singularity":
             new_tile_type = singularity_tile
 
-        # TODO: REMOVE
-        #print(f"Tile 0x{tile_id:02x} (Level 0x{level_id:02x}) at coords 0x{tile_x:02x}:0x{tile_y:02x} (address 0x{address:05x}) set to tile type 0x{new_tile_type:02x}")
-
         # Remove and add Castle Top pieces
-        if new_tile_type == 0x5D:
+        if new_tile_type == 0x5D and not tile_tile_data.forbid_castle_top:
             rom.write_byte(address - 0x10, 0x4C)
         elif tile_tile_data.original_tile == 0x5D:
             rom.write_byte(address - 0x10, 0x10)
