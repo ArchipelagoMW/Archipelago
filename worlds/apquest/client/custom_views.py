@@ -19,6 +19,31 @@ if TYPE_CHECKING:
     pass
 
 
+INPUT_MAP = {
+    "up": Input.UP,
+    "w": Input.UP,
+    "down": Input.DOWN,
+    "s": Input.DOWN,
+    "right": Input.RIGHT,
+    "d": Input.RIGHT,
+    "left": Input.LEFT,
+    "a": Input.LEFT,
+    "spacebar": Input.ACTION,
+    "c": Input.CONFETTI,
+    "0": Input.ZERO,
+    "1": Input.ONE,
+    "2": Input.TWO,
+    "3": Input.THREE,
+    "4": Input.FOUR,
+    "5": Input.FIVE,
+    "6": Input.SIX,
+    "7": Input.SEVEN,
+    "8": Input.EIGHT,
+    "9": Input.NINE,
+    "backspace": Input.BACKSPACE,
+}
+
+
 class APQuestGameView(MDRecycleView):
     _keyboard: Keyboard | None = None
     input_function: Callable[[Input], None]
@@ -44,18 +69,8 @@ class APQuestGameView(MDRecycleView):
         self._keyboard = None
 
     def _on_keyboard_down(self, _, keycode, _1, _2) -> bool:
-        if keycode[1] == "up" or keycode[1] == "w":
-            self.input_function(Input.UP)
-        elif keycode[1] == "down" or keycode[1] == "s":
-            self.input_function(Input.DOWN)
-        elif keycode[1] == "left" or keycode[1] == "a":
-            self.input_function(Input.LEFT)
-        elif keycode[1] == "right" or keycode[1] == "d":
-            self.input_function(Input.RIGHT)
-        elif keycode[1] == "spacebar":
-            self.input_function(Input.ACTION)
-        elif keycode[1] == "c":
-            self.input_function(Input.CONFETTI)
+        if keycode[1] in INPUT_MAP:
+            self.input_function(INPUT_MAP[keycode[1]])
         return True
 
 

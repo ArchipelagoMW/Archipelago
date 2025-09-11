@@ -39,12 +39,15 @@ class APQuestManager(GameManager):
     top_image_grid: list[list[Image]]
     confetti_view: ConfettiView
 
+    bottom_grid_is_grass: bool
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.sound_manager = SoundManager()
         self.sound_manager.allow_intro_to_play = not self.ctx.delay_intro_song
         self.top_image_grid = []
         self.bottom_image_grid = []
+        self.bottom_grid_is_grass = False
 
     def allow_intro_song(self):
         self.sound_manager.allow_intro_to_play = True
@@ -74,6 +77,7 @@ class APQuestManager(GameManager):
 
     def render(self, game: Game, player_sprite: PlayerSprite) -> None:
         self.setup_game_grid_if_not_setup(game.gameboard.size)
+        self.render_background_game_grid(game.gameboard.size, game.active_math_problem is None)
         self.render_gameboard(game, player_sprite)
         self.render_item_column(game)
 
@@ -112,30 +116,49 @@ class APQuestManager(GameManager):
             image.texture.mag_filter = "nearest"
             image.opacity = 1
 
+    def render_background_game_grid(self, size: tuple[int, int], grass: bool) -> None:
+        if grass == self.bottom_grid_is_grass:
+            return
+
+        for row in range(size[1]):
+            for column in range(size[0]):
+                image = self.bottom_image_grid[row][column]
+
+                if not grass:
+                    image.color = (0.3, 0.3, 0.3)
+                    image.texture = None
+                    continue
+
+                boss_room = (row in (0, 1, 2) and (size[1] - column) in (1, 2, 3)) or (row, column) == (3, size[1] - 2)
+                if boss_room:
+                    image.color = (0.45, 0.35, 0.1)
+                    image.texture = None
+                    continue
+                image.texture = TEXTURES["grass.png"]
+                image.texture.mag_filter = "nearest"
+                image.color = (1.0, 1.0, 1.0)
+
+        self.bottom_grid_is_grass = grass
+
     def setup_game_grid_if_not_setup(self, size: tuple[int, int]) -> None:
         if self.upper_game_grid.children:
             return
 
         self.top_image_grid = []
+        self.bottom_image_grid = []
 
-        for row in range(size[1]):
+        for _row in range(size[1]):
             self.top_image_grid.append([])
-            for column in range(size[0]):
-                boss_room = (row in (0, 1, 2) and (size[1] - column) in (1, 2, 3)) or (row, column) == (3, size[1] - 2)
+            self.bottom_image_grid.append([])
 
-                if boss_room:
-                    # "boss room"
-                    image = Image(fit_mode="fill", color=(0.45, 0.35, 0.1))
-                else:
-                    image = Image(fit_mode="fill", texture=TEXTURES["grass.png"])
-                    image.texture.mag_filter = "nearest"
-                self.lower_game_grid.add_widget(image)
+            for _column in range(size[0]):
+                bottom_image = Image(fit_mode="fill", color=(0.3, 0.3, 0.3))
+                self.lower_game_grid.add_widget(bottom_image)
+                self.bottom_image_grid[-1].append(bottom_image)
 
-                image2 = Image(fit_mode="fill")
-
-                self.upper_game_grid.add_widget(image2)
-
-                self.top_image_grid[-1].append(image2)
+                top_image = Image(fit_mode="fill")
+                self.upper_game_grid.add_widget(top_image)
+                self.top_image_grid[-1].append(top_image)
 
             # Right side: Inventory
             image = Image(fit_mode="fill", color=(0.3, 0.3, 0.3))

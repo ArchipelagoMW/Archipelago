@@ -38,6 +38,38 @@ class APQuestItem(Item):
     game = "APQuest"
 
 
+# Ontop of our regular itempool, our world must be able to create arbitrary amounts of filler as requested by core.
+# To do this, it must define a function called world.get_filler_item_name(), which we will define in world.py later.
+# For now, let's make a function that returns the name of a random filler item here in items.py.
+def get_random_filler_item_name(world: APQuestWorld):
+    # APQuest has an option called "trap_chance".
+    # This is the percentage chance that each filler item is a Math Trap instead of a Confetti Cannon.
+    # For this purpose, we need to use a random generator.
+
+    # IMPORTANT: Whenever you need to use a random generator, you must use world.random.
+    # This ensures that generating with the same generator seed twice yields the same output.
+    # DO NOT use a bare random object from Python's built-in random module.
+    if world.random.randint(0, 99) < world.options.trap_chance:
+        return "Math Trap"
+    return "Confetti Cannon"
+
+
+def create_item_with_correct_classification(world: APQuestWorld, name: str) -> APQuestItem:
+    # Our world class must have a create_item() function that can create any of our items by name at any time.
+    # So, we make this helper function that creates the item by name with the correct classification.
+    # Note: This function's content could just be the contents of world.create_item in world.py directly,
+    # but it seemed nicer to have it in its own function over here in items.py.
+    classification = ITEM_CLASSIFICATIONS[name]
+
+    # It is perfectly normal and valid for an item's classification to differ based on the player's options.
+    # In our case, Health Upgrades are only logically considered in hard mode.
+    if name == "Health Upgrade" and world.options.hard_mode:
+        classification = ItemClassification.progression
+
+    return APQuestItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
+
+
+# With those two helper functions defined, let's now get to actually creating and submitting our itempool.
 def create_all_items(world: APQuestWorld) -> None:
     # This is the function in which we will create all the items that this world submits to the multiworld item pool.
     # There must be exactly as many items as there are locations.
@@ -66,9 +98,9 @@ def create_all_items(world: APQuestWorld) -> None:
         itempool.append(world.create_item("Hammer"))
 
     # Archipelago requires that each world submits as many locations as it submits items.
-    # This is what filler is for. In our case, that's the Confetti Cannon.
+    # This is what filler is for. APQuest has two filler items: The Confetti Cannon and the Math Trap.
     # Creating filler items works the same as any other item. But there is a question:
-    # How many Confetti Cannons do we actually need to create?
+    # How many filler items do we actually need to create?
     # In regions.py, we created either six or seven locations depending on the "extra_starting_chest" option.
     # In this function, we have created five or six items depending on whether the "hammer" option is enabled.
     # We *could* have a really complicated if-else tree checking the options again, but there is a better way.
@@ -86,11 +118,31 @@ def create_all_items(world: APQuestWorld) -> None:
     needed_amount_of_filler = amount_of_unfilled_locations - amount_of_items
 
     # Finally, we create that many filler items and add them to the itempool.
-    # Important: Make sure you're actually submitting different instances of the item!
-    # In Python, it can be easy to accidentally submit two references to the same object rather than two objects.
-    itempool += [world.create_item("Confetti Cannon") for _ in range(needed_amount_of_filler)]
+    # To create our filler, we could just use world.create_item("Confetti Cannon").
+    # But there is an alternative that works even better for most worlds, including APQuest.
+    # As discussed above, our world must have a get_filler_item_name() function defined,
+    # which must return the name of an infinitely repeatable filler item.
+    # Defining this function enables the use of a helper function called world.create_filler().
+    # You can just use this function directly to create as many filler items as you need to complete your itempool.
+    itempool += [world.create_filler() for _ in range(needed_amount_of_filler)]
 
-    # Finally, we just have append our itempool to the multiworld itempool.
+    # But... is that the right option for your game? Let's explore that.
+    # For some games, the concepts of "regular itempool filler" and "additionally created filler" are different.
+    # These games might want / require specific amounts of specific filler items in their regular pool.
+    # To achieve this, they will have to intentionally create the correct quantities using world.create_item().
+    # They may still use world.create_filler() to fill up the rest of their itempool with "repeatable filler",
+    # after creating their "specific quantity" filler and still having room left over.
+
+    # But there are many other games which *only* have infinitely repeatable filler items.
+    # They don't care about specific amounts of specific filler items, instead only caring about the proportions.
+    # In this case, world.create_filler() can just be used for the entire filler itempool.
+    # APQuest is one of these games:
+    # Regardless of whether it's filler for the regular itempool or additional filler for item links / etc.,
+    # we always just want a Confetti Cannon or a Math Trap depending on the "trap_chance" option.
+    # We defined this behavior in our get_random_filler_item_name() function, which in world.py,
+    # we'll bind to world.get_filler_item_name(). So, we can just use world.create_filler() for all of our filler.
+
+    # Anyway. With our world's itempool finalized, the only step remaining is to append it to the multiworld's itempool.
     world.multiworld.itempool += itempool
 
     # Sometimes, you might want the player to start with certain items already in their inventory.
@@ -102,18 +154,3 @@ def create_all_items(world: APQuestWorld) -> None:
         # We're adding a filler item, but you can also add progression items to the player's precollected inventory.
         starting_confetti_cannon = world.create_item("Confetti Cannon")
         world.push_precollected(starting_confetti_cannon)
-
-
-def create_item_with_correct_classification(world: APQuestWorld, name: str) -> APQuestItem:
-    # Our world class must have a create_item() function that can create any of our items by name at any time.
-    # So, we make this helper function that creates the item by name with the correct classification.
-    # Note: This function's content could just be the contents of world.create_item in world.py directly,
-    # but it seemed nicer to have it in its own function over here in items.py.
-    classification = ITEM_CLASSIFICATIONS[name]
-
-    # It is perfectly normal and valid for an item's classification to differ based on the player's options.
-    # In our case, Health Upgrades are only logically considered in hard mode.
-    if name == "Health Upgrade" and world.options.hard_mode:
-        classification = ItemClassification.progression
-
-    return APQuestItem(name, classification, ITEM_NAME_TO_ID[name], world.player)

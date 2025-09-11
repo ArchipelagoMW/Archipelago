@@ -35,6 +35,18 @@ class ExtraStartingChest(Toggle):
     display_name = "Extra Starting Chest"
 
 
+class TrapChance(Range):
+    """
+    Percentage chance that any given Confetti Cannon will be replaced by a Math Trap.
+    """
+
+    display_name = "Trap Chance"
+
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
 class StartWithOneConfettiCannon(Toggle):
     """
     Start with a confetti cannon already in your inventory.
@@ -85,6 +97,7 @@ class APQuestOptions(PerGameCommonOptions):
     hammer: Hammer
     extra_starting_chest: ExtraStartingChest
     start_with_one_confetti_cannon: StartWithOneConfettiCannon
+    trap_chance: TrapChance
     confetti_explosiveness: ConfettiExplosiveness
     player_sprite: PlayerSprite
 
@@ -93,7 +106,7 @@ class APQuestOptions(PerGameCommonOptions):
 option_groups = [
     OptionGroup(
         "Gameplay Options",
-        [HardMode, Hammer, ExtraStartingChest, StartWithOneConfettiCannon],
+        [HardMode, Hammer, ExtraStartingChest, StartWithOneConfettiCannon, TrapChance],
     ),
     OptionGroup(
         "Aesthetic Options",
@@ -108,6 +121,7 @@ option_presets = {
         "hammer": False,
         "extra_starting_chest": False,
         "start_with_one_confetti_cannon": False,
+        "trap_chance": 0,
         "confetti_explosiveness": ConfettiExplosiveness.range_start,
         "player_sprite": PlayerSprite.option_human,
     },
@@ -116,6 +130,7 @@ option_presets = {
         "hammer": True,
         "extra_starting_chest": True,
         "start_with_one_confetti_cannon": True,
+        "trap_chance": 50,
         "confetti_explosiveness": ConfettiExplosiveness.range_end,
         "player_sprite": PlayerSprite.option_duck,
     },
