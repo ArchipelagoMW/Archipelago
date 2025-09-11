@@ -1,4 +1,4 @@
-from .events import ConfettiFired
+from .events import ConfettiFired, MathProblemSolved
 
 try:
     from pynput import keyboard
@@ -39,6 +39,53 @@ graphic_to_char = {
     Graphic.HEART: "♡",
     Graphic.CONFETTI_CANNON: "?",
     Graphic.REMOTE_ITEM: "I",
+    Graphic.UNKNOWN: "ß",
+    Graphic.ZERO: "0",
+    Graphic.ONE: "1",
+    Graphic.TWO: "2",
+    Graphic.THREE: "3",
+    Graphic.FOUR: "4",
+    Graphic.FIVE: "5",
+    Graphic.SIX: "6",
+    Graphic.SEVEN: "7",
+    Graphic.EIGHT: "8",
+    Graphic.NINE: "9",
+    Graphic.PLUS: "+",
+    Graphic.MINUS: "-",
+    Graphic.TIMES: "x",
+    Graphic.DIVIDE: "/",
+    Graphic.LETTER_A: "A",
+    Graphic.LETTER_E: "E",
+    Graphic.LETTER_H: "H",
+    Graphic.LETTER_I: "I",
+    Graphic.LETTER_M: "M",
+    Graphic.LETTER_T: "T",
+    Graphic.EQUALS: "=",
+    Graphic.NO: "X",
+}
+
+KEY_CONVERSION = {
+    keyboard.KeyCode.from_char("w"): Input.UP,
+    Key.up: Input.UP,
+    keyboard.KeyCode.from_char("s"): Input.DOWN,
+    Key.down: Input.DOWN,
+    keyboard.KeyCode.from_char("a"): Input.LEFT,
+    Key.left: Input.LEFT,
+    keyboard.KeyCode.from_char("d"): Input.RIGHT,
+    Key.right: Input.RIGHT,
+    Key.space: Input.ACTION,
+    keyboard.KeyCode.from_char("c"): Input.CONFETTI,
+    keyboard.KeyCode.from_char("0"): Input.ZERO,
+    keyboard.KeyCode.from_char("1"): Input.ONE,
+    keyboard.KeyCode.from_char("2"): Input.TWO,
+    keyboard.KeyCode.from_char("3"): Input.THREE,
+    keyboard.KeyCode.from_char("4"): Input.FOUR,
+    keyboard.KeyCode.from_char("5"): Input.FIVE,
+    keyboard.KeyCode.from_char("6"): Input.SIX,
+    keyboard.KeyCode.from_char("7"): Input.SEVEN,
+    keyboard.KeyCode.from_char("8"): Input.EIGHT,
+    keyboard.KeyCode.from_char("9"): Input.NINE,
+    Key.backspace: Input.BACKSPACE,
 }
 
 
@@ -62,6 +109,8 @@ def render_to_text(game: Game) -> str:
         next_event = game.queued_events.pop(0)
         if isinstance(next_event, ConfettiFired):
             output_string += "Confetti fired! You feel motivated :)\n"
+        if isinstance(next_event, MathProblemSolved):
+            output_string += "Math problem solved!\n"
 
     for row in rendered_graphics:
         output_string += " ".join(graphic_to_char[graphic] for graphic in row)
@@ -74,27 +123,18 @@ if __name__ == "__main__":
     hard_mode = input("Do you want to play hard mode? (Y/N)").lower().strip() in ("y", "yes")
     hammer_exists = input("Do you want the hammer to exist in the game? (Y/N)").lower().strip() in ("y", "yes")
     extra_chest = input("Do you want the extra starting chest to exist in the game?").lower().strip() in ("y", "yes")
+    math_trap_percentage = int(input("What should the percentage of math traps be?"))
 
     game = Game(hard_mode, hammer_exists, extra_chest)
-    game.gameboard.fill_default_location_content()
+    game.gameboard.fill_default_location_content(math_trap_percentage)
 
     def input_and_rerender(input_key: Input) -> None:
         game.input(input_key)
         print(render_to_text(game))
 
     def on_press(key: Key | KeyCode | None) -> None:
-        if key == keyboard.KeyCode.from_char("w") or key == Key.up:
-            input_and_rerender(Input.UP)
-        if key == keyboard.KeyCode.from_char("s") or key == Key.down:
-            input_and_rerender(Input.DOWN)
-        if key == keyboard.KeyCode.from_char("a") or key == Key.left:
-            input_and_rerender(Input.LEFT)
-        if key == keyboard.KeyCode.from_char("d") or key == Key.right:
-            input_and_rerender(Input.RIGHT)
-        if key == Key.space:
-            input_and_rerender(Input.ACTION)
-        if key == keyboard.KeyCode.from_char("c"):
-            input_and_rerender(Input.CONFETTI)
+        if key in KEY_CONVERSION:
+            input_and_rerender(KEY_CONVERSION[key])
 
     print(render_to_text(game))
 

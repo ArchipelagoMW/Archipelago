@@ -13,6 +13,7 @@ class Item(Enum):
     HAMMER = ITEM_NAME_TO_ID["Hammer"]
     HEALTH_UPGRADE = ITEM_NAME_TO_ID["Health Upgrade"]
     CONFETTI_CANNON = ITEM_NAME_TO_ID["Confetti Cannon"]
+    MATH_TRAP = ITEM_NAME_TO_ID["Math Trap"]
     REMOTE_ITEM = -1
 
 
@@ -32,5 +33,6 @@ ITEM_TO_GRAPHIC = defaultdict(
         Item.HEALTH_UPGRADE: Graphic.HEART,
         Item.CONFETTI_CANNON: Graphic.CONFETTI_CANNON,
         Item.REMOTE_ITEM: Graphic.REMOTE_ITEM,
+        Item.MATH_TRAP: Graphic.MATH_TRAP,
     },
 )

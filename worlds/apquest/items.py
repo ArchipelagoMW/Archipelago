@@ -17,6 +17,7 @@ ITEM_NAME_TO_ID = {
     "Hammer": 4,
     "Health Upgrade": 5,
     "Confetti Cannon": 6,
+    "Math Trap": 7,
 }
 
 # Items should have a defined default classification.
@@ -28,9 +29,7 @@ ITEM_CLASSIFICATIONS = {
     "Hammer": ItemClassification.progression,
     "Health Upgrade": ItemClassification.useful,
     "Confetti Cannon": ItemClassification.filler,
-    # There is a fourth classification: ItemClassification.trap, for items that have a negative effect.
-    # APQuest doesn't have any of these items, but an example would be:
-    # "Slowness Trap": ItemClassification.trap
+    "Math Trap": ItemClassification.trap,
 }
 
 

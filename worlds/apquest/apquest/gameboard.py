@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 from collections.abc import Iterable
 from typing import TYPE_CHECKING
 
@@ -18,7 +19,8 @@ from .entities import (
     LocationMixin,
     Wall,
 )
-from .graphics import Graphic
+from .generate_math_problem import MathProblem
+from .graphics import DIGIT_TO_GRAPHIC, DIGIT_TO_GRAPHIC_ZERO_EMPTY, MATH_PROBLEM_TYPE_TO_GRAPHIC, Graphic
 from .items import Item
 from .locations import DEFAULT_CONTENT, Location
 
@@ -43,13 +45,18 @@ class Gameboard:
         self.content_filled = False
         self.remote_entity_by_location_id = {}
 
-    def fill_default_location_content(self) -> None:
+    def fill_default_location_content(self, trap_percentage: int = 0) -> None:
         for entity in self.iterate_entities():
             if isinstance(entity, LocationMixin):
                 if entity.location in DEFAULT_CONTENT:
                     content = DEFAULT_CONTENT[entity.location]
                     if content == Item.HAMMER and not self.hammer_exists:
                         content = Item.CONFETTI_CANNON
+
+                    if content == Item.CONFETTI_CANNON:
+                        if random.randrange(100) < trap_percentage:
+                            content = Item.MATH_TRAP
+
                     entity.content = content
 
         self.content_filled = True
@@ -99,6 +106,85 @@ class Gameboard:
             graphics.append(tuple(graphics_row))
 
         return tuple(graphics)
+
+    def render_math_problem(
+        self, problem: MathProblem, current_result: int | None = None
+    ) -> tuple[tuple[Graphic, ...], ...]:
+        rows = len(self.gameboard)
+        columns = len(self.gameboard[0])
+
+        def pad_row(row: list[Graphic]) -> tuple[Graphic, ...]:
+            row = row.copy()
+            while len(row) < columns:
+                row = [Graphic.EMPTY, *row, Graphic.EMPTY]
+            while len(row) > columns:
+                row.pop()
+
+            return tuple(row)
+
+        empty_row = tuple([Graphic.EMPTY] * columns)
+
+        math_time_row = pad_row(
+            [
+                Graphic.LETTER_M,
+                Graphic.LETTER_A,
+                Graphic.LETTER_T,
+                Graphic.LETTER_H,
+                Graphic.EMPTY,
+                Graphic.LETTER_T,
+                Graphic.LETTER_I,
+                Graphic.LETTER_M,
+                Graphic.LETTER_E,
+            ]
+        )
+
+        num_1_first_digit = problem.num_1 // 10
+        num_1_second_digit = problem.num_1 % 10
+        num_2_first_digit = problem.num_2 // 10
+        num_2_second_digit = problem.num_2 % 10
+
+        math_problem_row = pad_row(
+            [
+                DIGIT_TO_GRAPHIC_ZERO_EMPTY[num_1_first_digit],
+                DIGIT_TO_GRAPHIC[num_1_second_digit],
+                Graphic.EMPTY,
+                MATH_PROBLEM_TYPE_TO_GRAPHIC[problem.problem_type],
+                Graphic.EMPTY,
+                DIGIT_TO_GRAPHIC_ZERO_EMPTY[num_2_first_digit],
+                DIGIT_TO_GRAPHIC[num_2_second_digit],
+            ]
+        )
+
+        result_digit_1 = None
+        result_digit_2 = None
+        if current_result is not None:
+            result_digit_1 = current_result // 10
+            result_digit_2 = current_result % 10
+            if result_digit_1 == 0:
+                result_digit_1 = result_digit_2
+                result_digit_2 = None
+
+        result_row = pad_row(
+            [
+                Graphic.EQUALS,
+                Graphic.EMPTY,
+                DIGIT_TO_GRAPHIC[result_digit_1],
+                DIGIT_TO_GRAPHIC[result_digit_2],
+                Graphic.EMPTY,
+                Graphic.NO
+                if result_digit_1 is not None and result_digit_2 is not None and current_result != problem.result
+                else Graphic.EMPTY,
+            ]
+        )
+
+        output = [math_time_row, empty_row, math_problem_row, result_row]
+
+        while len(output) < rows:
+            output = [empty_row, *output, empty_row]
+        while len(output) > columns:
+            output.pop(0)
+
+        return tuple(output)
 
     def force_clear_location(self, location: Location) -> None:
         entity = self.remote_entity_by_location_id[location]
