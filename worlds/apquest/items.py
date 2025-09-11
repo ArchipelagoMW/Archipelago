@@ -98,7 +98,7 @@ def create_all_items(world: APQuestWorld) -> None:
     # These items are called "precollected items".
     # They will be sent as soon as they connect for the first time (depending on your client's item handling flag).
     # Players can add precollected items themselves via the generic "start_inventory" option.
-    # If you want to add your own precollected items, you can do so via multiworld.push_precollected().
+    # If you want to add your own precollected items, you can do so via world.push_precollected().
     if world.options.start_with_one_confetti_cannon:
         # We're adding a filler item, but you can also add progression items to the player's precollected inventory.
         starting_confetti_cannon = world.create_item("Confetti Cannon")
