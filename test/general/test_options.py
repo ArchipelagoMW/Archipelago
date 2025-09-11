@@ -24,20 +24,17 @@ class TestOptions(unittest.TestCase):
                         if issubclass(option, TextChoice):
                             self.assertTrue(option.default in option.name_lookup,
                                 f"Default value {option.default} for TextChoice option"
-                                f"{option.__name__} in {gamename} is not valid!"
+                                f" {option.__name__} in {gamename} is not valid!"
                             )
                         if issubclass(option, Range):
                             range_raised = False
                             try:
-                                if type(option.default) == str:
-                                    option.__init__(option, option.from_text(option.default))
-                                else:
-                                    option.__init__(option, option.default)
-                            except:
+                                option.from_any(option.default)
+                            except Exception:
                                 range_raised = True
                             self.assertFalse(range_raised,
                                 f"Default value {option.default} for Range option"
-                                f"{option.__name__} in {gamename} is not valid!"
+                                f" {option.__name__} in {gamename} is not valid!"
                             )
 
     def test_options_are_not_set_by_world(self):
