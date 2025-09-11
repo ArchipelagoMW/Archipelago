@@ -4,6 +4,7 @@ from asyncio import Task
 from pathlib import Path
 
 from CommonClient import logger
+from kivy import Config
 from kivy.core.audio import Sound, SoundLoader
 
 from .. import apquest
@@ -44,13 +45,13 @@ class SoundManager:
     background_music_intro: Sound
     background_music: Sound
 
-    current_background_music_volume: float = 1.
-    background_music_target_volume: float = 0.
+    current_background_music_volume: float = 1.0
+    background_music_target_volume: float = 0.0
 
     background_music_task: Task | None = None
     background_music_last_position: int = 0
 
-    volume_modifier: float = 1.
+    volume_percentage: int = 0
 
     game_started: bool
     allow_intro_to_play: bool
@@ -62,7 +63,14 @@ class SoundManager:
         self.game_started = False
         self.allow_intro_to_play = False
 
+        self.ensure_config()
+
         self.background_music_task = asyncio.create_task(self.sound_manager_loop())
+
+    def ensure_config(self) -> None:
+        Config.adddefaultsection("APQuest")
+        Config.setdefault("APQuest", "volume", 50)
+        self.set_volume_percentage(Config.getint("APQuest", "volume"))
 
     async def sound_manager_loop(self) -> None:
         while True:
@@ -160,8 +168,8 @@ class SoundManager:
 
     def set_background_music_volume(self, volume: float):
         self.current_background_music_volume = volume
-        self.background_music.volume = volume * self.volume_modifier
-        self.background_music_intro.volume = volume * self.volume_modifier
+        self.background_music.volume = volume * self.volume_percentage / 100
+        self.background_music_intro.volume = volume * self.volume_percentage / 100
 
     def fade_background_music(self, fade_in: bool = True) -> None:
         if fade_in:
@@ -169,13 +177,21 @@ class SoundManager:
         else:
             self.background_music_target_volume = 0
 
+    def set_volume_percentage(self, volume_percentage: float):
+        volume_percentage_int = int(volume_percentage)
+        if self.volume_percentage != volume_percentage:
+            self.volume_percentage = volume_percentage_int
+            Config.set("APQuest", "volume", volume_percentage_int)
+            Config.write()
+            self.set_background_music_volume(self.current_background_music_volume)
+
     def do_fade(self) -> None:
-        if current_background_music_volume > self.background_music_target_volume:
+        if self.current_background_music_volume > self.background_music_target_volume:
             self.set_background_music_volume(max(0.0, self.current_background_music_volume - 0.02))
-        if current_background_music_volume < self.background_music_target_volume:
+        if self.current_background_music_volume < self.background_music_target_volume:
             self.set_background_music_volume(min(1.0, self.current_background_music_volume + 0.02))
 
-        if current_background_music_volume == 0:
+        if self.current_background_music_volume == 0:
             if self.background_music.state == "play":
                 self.background_music_last_position = self.background_music.get_pos()
                 if self.background_music_last_position != 0:  # SDL2 get_pos doesn't work, just continue playing muted

@@ -253,9 +253,9 @@ async def main(args: Namespace) -> None:
 
 
 def launch(*args) -> None:
-    from .launch import launch_client
+    from .launch import launch_ap_quest_client
 
-    launch_client(*args)
+    launch_ap_quest_client(*args)
 
 
 if __name__ == "__main__":

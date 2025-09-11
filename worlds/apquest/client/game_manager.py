@@ -165,8 +165,12 @@ class APQuestManager(GameManager):
         game_container.bind(size=self.upper_game_grid.check_resize)
         game_container.bind(size=self.confetti_view.check_resize)
 
-        self.grid.add_widget(MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(40),
-                                          spacing=5, padding=(5, 10)))
+        volume_slider_container = VolumeSliderView()
+        volume_slider = volume_slider_container.ids["volume_slider"]
+        volume_slider.value = self.sound_manager.volume_percentage
+        volume_slider.bind(value=lambda _, new_volume: self.sound_manager.set_volume_percentage(new_volume))
+
+        self.grid.add_widget(volume_slider_container, index=3)
 
         Clock.schedule_interval(lambda dt: self.confetti_view.redraw_confetti(dt), 1 / 60)
 

@@ -9,6 +9,7 @@ from kivy.core.window import Keyboard, Window
 from kivy.graphics import Color, Triangle
 from kivy.graphics.instructions import Canvas
 from kivy.input import MotionEvent
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivymd.uix.recycleview import MDRecycleView
 
@@ -233,5 +234,6 @@ class ConfettiView(MDRecycleView):
                 )
             )
 
-class VolumeSliderView(MDRecycleView):
+
+class VolumeSliderView(BoxLayout):
     pass
