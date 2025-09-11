@@ -139,9 +139,22 @@ class GrinchClient(BizHawkClient):
         from CommonClient import logger
         # Update the AP Server to know what locations are not checked yet.
         local_locations_checked: list[int] = []
+        addr_list_to_read: list[tuple[int, int, str]] = []
         local_ap_locations: set[int] = copy.deepcopy(ctx.missing_locations)
+
+        # Loop through the first time of everything left to create the list of RAM addresses to read / monitor.
         for missing_location in local_ap_locations:
-            # local_location = ctx.location_names.lookup_in_game(missing_location)
+            grinch_loc_name = ctx.location_names.lookup_in_game(missing_location)
+            grinch_loc_ram_data = grinch_locations[grinch_loc_name]
+            missing_addr_list: list[tuple[int, int, str]] = [(read_addr.ram_address, read_addr.bit_size, "MainRAM") for
+                                                             read_addr in grinch_loc_ram_data.update_ram_addr]
+            addr_list_to_read = [*addr_list_to_read, *missing_addr_list]
+
+        returned_bytes: list[bytes] = await bizhawk.read(ctx.bizhawk_ctx, addr_list_to_read)
+
+        # Now loop through everything again and this time get the byte value from the above read, convert to int,
+        # and check to see if that ram address has our expected value.
+        for missing_location in local_ap_locations:
             # Missing location is the AP ID & we need to convert it back to a location name within our game.
             # Using the location name, we can then get the Grinch ram data from there.
             grinch_loc_name = ctx.location_names.lookup_in_game(missing_location)
@@ -152,13 +165,13 @@ class GrinchClient(BizHawkClient):
             ram_checked_list: list[bool] = []
             for addr_to_update in grinch_loc_ram_data.update_ram_addr:
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
-                current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
-                    addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
+                orig_index: int = addr_list_to_read.index((addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM"))
+                value_read_from_bizhawk: int = int.from_bytes(returned_bytes[orig_index], "little")
                 if is_binary:
-                    ram_checked_list.append((current_ram_address_value & (1 << addr_to_update.binary_bit_pos)) > 0)
+                    ram_checked_list.append((value_read_from_bizhawk & (1 << addr_to_update.binary_bit_pos)) > 0)
                 else:
                     expected_int_value = addr_to_update.value
-                    ram_checked_list.append(expected_int_value == current_ram_address_value)
+                    ram_checked_list.append(expected_int_value == value_read_from_bizhawk)
             if all(ram_checked_list):
                 local_locations_checked.append(GrinchLocation.get_apid(grinch_loc_ram_data.id))
 
