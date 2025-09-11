@@ -1,6 +1,6 @@
 # This file is technically not required whatsoever
-# I like to do this for organization and a few other worlds do similar
-# Its helpful for grouping variables, making them easy to access, and consistent
+# This file is for organization and a few other worlds do similar
+# It's helpful for grouping variables, making them easy to access, and consistent
 
 from enum import IntEnum
 from typing import NamedTuple, Optional

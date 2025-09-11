@@ -1,8 +1,8 @@
 # So the goal here is to have a catalog of all the items in your game
-# To correctly generate a games items they need to be bundled in a list
+# To correctly generate a games items, they need to be bundled in a list
 # A list in programming terms is anything in square brackets [] to put it simply
 
-# When a list is described its described as a list of x where x is the type of variable within it
+# A list is described as a separated order of x where x is the type of variable within it
 # IE: ["apple", "pear", "grape"] is a list of strings (anything inside "" OR '' are considered strings)
 
 # Logging = output. How you'll figure out whats going wrong
@@ -19,7 +19,7 @@ from .Locations import get_total_locations
 from . import Options
 from typing import List, Dict, TYPE_CHECKING
 
-# This is just making sure nothing gets confused dw about what its doing exactly
+# This is just making sure nothing gets confused about what its doing exactly
 if TYPE_CHECKING:
     from . import HexcellsInfiniteWorld
 
@@ -33,19 +33,13 @@ def create_itempool(world: "HexcellsInfiniteWorld") -> List[Item]:
 
     # In this function is where you would remove any starting items that you add in options such as starting chapter
     # This is also the place you would add dynamic amounts of items from options
-    # I can point to Sly Cooper and the Thievious Raccoonus since I did that
+    # This is also a good place to grab anything you need from options
 
-    # This is a good place to grab anything you need from options
-    # starting_chapter = chapter_type_to_name[ChapterType(world.options.StartingChapter)]
-
-
-    if (world.options.LevelUnlockType == Options.LevelUnlockType.option_vanilla):
-        print("Creating Gem Items")
-        itempool.extend(create_multiple_items(world,"Gem",36))
-    elif (world.options.LevelUnlockType == Options.LevelUnlockType.option_individual):
-        print("Filling locations!")
+    if world.options.LevelUnlockType == Options.LevelUnlockType.option_vanilla:
+        itempool.extend(create_multiple_items(world, "Gem", 36))
+    elif world.options.LevelUnlockType == Options.LevelUnlockType.option_individual:
         for item in hexcells_infinite_items.keys():
-            if(item != "Gem"):
+            if item != "Gem":
                 itempool.append(create_item(world, item))
 
     return itempool
@@ -71,21 +65,17 @@ def create_multiple_items(world: "HexcellsInfiniteWorld", name: str, count: int,
 # These are just random numbers dont trust them PLEASE
 # I've seen some games that dynamically add item codes such as DOOM as well
 
-hexcells_infinite_items = {
-    # Progression items
-}
+hexcells_infinite_items = {}
 
 HEXCELLS_LEVEL_ITEMS = []
 
+# Progression items
 for world in range(1, 7):
     for level in range(1, 7):
         name = f"Hexcells {world}-{level}"
         hexcells_infinite_items[name] = ItemData(len(hexcells_infinite_items)+1, ItemClassification.progression)
         HEXCELLS_LEVEL_ITEMS.append(name)
 hexcells_infinite_items["Gem"] = ItemData(len(hexcells_infinite_items)+1, ItemClassification.progression)
-
-
-
 
 # This makes a really convenient list of all the other dictionaries
 # (fun fact: {} is a dictionary)
