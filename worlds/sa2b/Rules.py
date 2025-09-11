@@ -1406,7 +1406,8 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
                  lambda state: (state.has(ItemName.rouge_mystic_melody, player) and
                                 state.has(ItemName.rouge_treasure_scope, player)))
         add_rule(multiworld.get_location(LocationName.white_jungle_lifebox_2, player),
-                 lambda state: state.has(ItemName.shadow_flame_ring, player))
+                 lambda state: (state.has(ItemName.shadow_flame_ring, player) and
+                                state.has(ItemName.shadow_air_shoes, player)))
 
         add_rule(multiworld.get_location(LocationName.metal_harbor_lifebox_3, player),
                  lambda state: state.has(ItemName.sonic_light_shoes, player))
@@ -2062,6 +2063,8 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
         add_rule(multiworld.get_location(LocationName.mad_space_big, player),
                  lambda state: state.has(ItemName.rouge_iron_boots, player))
 
+        add_rule(multiworld.get_location(LocationName.cannon_core_big_1, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.cannon_core_big_2, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
                                state.has(ItemName.eggman_jet_engine, player))
