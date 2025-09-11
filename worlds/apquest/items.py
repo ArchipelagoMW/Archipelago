@@ -102,7 +102,7 @@ def create_all_items(world: APQuestWorld) -> None:
     if world.options.start_with_one_confetti_cannon:
         # We're adding a filler item, but you can also add progression items to the player's precollected inventory.
         starting_confetti_cannon = world.create_item("Confetti Cannon")
-        world.multiworld.push_precollected(starting_confetti_cannon)
+        world.push_precollected(starting_confetti_cannon)
 
 
 def create_item_with_correct_classification(world: APQuestWorld, name: str) -> APQuestItem:
