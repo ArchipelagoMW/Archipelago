@@ -8,8 +8,7 @@ class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool
     trap: bool = False
-    quantity: int = 1
-    event: bool = False
+    useful: bool = False
 
 
 class SMWItem(Item):
@@ -59,9 +58,9 @@ trap_table = {
     ItemName.thwimp_trap:           ItemData(0xBC001D, False, True),
     ItemName.dry_trap:              ItemData(0xBC0021, False, True),
 
-    ItemName.ice_untrap:              ItemData(0xBC001E, False),
-    ItemName.timer_untrap:            ItemData(0xBC001F, False),
-    ItemName.reverse_controls_untrap: ItemData(0xBC0020, False),
+    ItemName.ice_untrap:              ItemData(0xBC001E, False, True, True),
+    ItemName.timer_untrap:            ItemData(0xBC001F, False, True, True),
+    ItemName.reverse_controls_untrap: ItemData(0xBC0020, False, True, True),
 }
 
 event_table = {
@@ -89,6 +88,7 @@ trap_value_to_name: typing.Dict[int, str] = {
     0xBC0016: ItemName.timer_trap,
     0xBC001C: ItemName.reverse_controls_trap,
     0xBC001D: ItemName.thwimp_trap,
+    0xBC0021: ItemName.dry_trap,
 }
 
 trap_name_to_value: typing.Dict[str, int] = {

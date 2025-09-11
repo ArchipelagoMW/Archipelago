@@ -322,16 +322,18 @@ class SMWWorld(World):
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
 
+        classification = ItemClassification.filler
         if force_non_progression:
             classification = ItemClassification.filler
         elif name == ItemName.yoshi_egg:
-            classification = ItemClassification.progression_skip_balancing
+            classification |= ItemClassification.progression_skip_balancing
         elif data.progression:
-            classification = ItemClassification.progression
-        elif data.trap:
-            classification = ItemClassification.trap
-        else:
-            classification = ItemClassification.filler
+            classification |= ItemClassification.progression
+
+        if data.trap:
+            classification |= ItemClassification.trap
+        if data.useful:
+            classification |= ItemClassification.useful
 
         created_item = SMWItem(name, classification, data.code, self.player)
 
