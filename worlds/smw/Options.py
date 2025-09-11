@@ -175,7 +175,7 @@ class BowserHealth(Range):
     How many hits Bowser takes to kill, per phase
     """
     display_name = "Bowser Health"
-    range_start = 1
+    range_start = 2
     range_end = 5
     default = 2
 
