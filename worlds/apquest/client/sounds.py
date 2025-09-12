@@ -158,7 +158,7 @@ class SoundManager:
             self.play_background_music(False)
         else:
             if self.math_trap_active:
-                # Don't fade math trap song, just play it (math trap should never be interrupted by a jingle anyway)
+                # Don't fade math trap song, it ends up feeling better
                 self.play_background_music(True)
             else:
                 self.fade_background_music(True)
@@ -175,10 +175,10 @@ class SoundManager:
         self.current_background_music_volume = volume
 
         for song_filename, song in self.bgm_songs.items():
-            if song_filename == self.active_bgm_song:
-                song.volume = volume * self.volume_percentage / 100
-            else:
+            if song_filename != self.active_bgm_song:
                 song.volume = 0
+                continue
+            song.volume = volume * self.volume_percentage / 100
 
     def fade_background_music(self, fade_in: bool = True) -> None:
         if fade_in:
@@ -228,12 +228,18 @@ class SoundManager:
                     song.seek(0)
 
     def update_active_song(self):
-        if not self.game_started:
-            self.active_bgm_song = BACKGROUND_MUSIC_INTRO
+        new_active_song = self.determine_correct_song()
+        if new_active_song == self.active_bgm_song:
             return
+        self.active_bgm_song = new_active_song
+        # reevaluate song volumes
+        self.set_background_music_volume(self.current_background_music_volume)
+
+    def determine_correct_song(self) -> str:
+        if not self.game_started:
+            return BACKGROUND_MUSIC_INTRO
 
         if self.math_trap_active:
-            self.active_bgm_song = MATH_TIME_BACKGROUND_MUSIC
-            return
+            return MATH_TIME_BACKGROUND_MUSIC
 
-        self.active_bgm_song = BACKGROUND_MUSIC
+        return BACKGROUND_MUSIC
