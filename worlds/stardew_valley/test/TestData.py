@@ -1,8 +1,26 @@
 import unittest
+from typing import List
 
+from .. import Group
+from ..content.content_packs import all_content_pack_names
 from ..items import load_item_csv
-from ..locations import load_location_csv
-from ..options import Mods
+from ..locations import load_location_csv, LocationTags
+from ..strings.trap_names import all_traps
+
+
+def print_lists_difference(list1: List[str], list2: List[str], list1_name: str = "List 1", list2_name: str = "List 2"):
+    for item in list1:
+        if item not in list2:
+            print(f"{item} is in {list1_name} but not in {list2_name}")
+    for item in list2:
+        if item not in list1:
+            print(f"{item} is in {list2_name} but not in {list1_name}")
+
+
+def print_duplicates(items: List[str]):
+    for item in items:
+        if items.count(item) > 1:
+            print(f"{item} is in the list {items.count(item)} times")
 
 
 class TestCsvIntegrity(unittest.TestCase):
@@ -23,11 +41,15 @@ class TestCsvIntegrity(unittest.TestCase):
             unique_names = set(all_names)
             self.assertEqual(len(all_names), len(unique_names))
 
-        with self.subTest("Test all mod names are valid"):
-            mod_names = {item.mod_name for item in items}
-            for mod_name in mod_names:
-                if mod_name:
-                    self.assertIn(mod_name, Mods.valid_keys)
+        with self.subTest("Test all content packs are valid"):
+            content_packs = {content_pack for item in items for content_pack in item.content_packs}
+            for content_pack in content_packs:
+                self.assertIn(content_pack, all_content_pack_names)
+
+        with self.subTest("Test all traps are in string"):
+            traps = [item.name for item in items if Group.TRAP in item.groups and Group.DEPRECATED not in item.groups]
+            for trap in traps:
+                self.assertIn(trap, all_traps)
 
     def test_locations_integrity(self):
         locations = load_location_csv()
@@ -47,7 +69,12 @@ class TestCsvIntegrity(unittest.TestCase):
             self.assertEqual(len(all_names), len(unique_names))
 
         with self.subTest("Test all mod names are valid"):
-            mod_names = {location.mod_name for location in locations}
-            for mod_name in mod_names:
-                if mod_name:
-                    self.assertIn(mod_name, Mods.valid_keys)
+            content_packs = {content_pack for location in locations for content_pack in location.content_packs}
+            for content_pack in content_packs:
+                self.assertIn(content_pack, all_content_pack_names)
+
+        with self.subTest("Test all craftsanity locations are either craft or recipe"):
+            for location in locations:
+                if LocationTags.CRAFTSANITY not in location.tags:
+                    continue
+                self.assertTrue(LocationTags.CRAFTSANITY_CRAFT in location.tags or LocationTags.CRAFTSANITY_RECIPE in location.tags)
