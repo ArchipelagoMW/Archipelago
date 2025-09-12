@@ -361,7 +361,7 @@ class GrinchClient(BizHawkClient):
                         "cmd": "Bounce",
                         "data": {
                             "time": time.time(),
-                            "source": ctx.player_names[ctx.slot],
+                            "source": ctx.slot,
                             "amount": current_egg_count - self.previous_egg_count
                         },
                         "tags": ["RingLink"]
