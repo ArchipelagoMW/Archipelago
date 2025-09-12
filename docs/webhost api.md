@@ -260,6 +260,8 @@ Will provide a dict of tracker data with the following keys:
   - Will return the name if there is none
 - A list of items each player has received as a NetworkItem (`player_items_received`)
 - A list of checks done by each player as a list of the location id's (`player_checks_done`)
+- The number of checks found vs. total checks available per player (player_checks_counts)
+  - Same logic as the multitracker template: found = checks completed, total = all available checks
 - The total number of checks done by all players (`total_checks_done`)
 - Hints that players have used or received (`hints`)
 - The time of last activity of each player in RFC 1123 format (`activity_timers`)
@@ -327,6 +329,23 @@ Example:
         {
           "player": 2,
           "alias": "Slot_Name_2"
+        }
+      ]
+    }
+  ],
+  "player_checks_counts": [
+    {
+      "team": 0,
+      "players": [
+        {
+          "player": 1,
+          "found": 0,
+          "total": 10
+        },
+        {
+          "player": 2,
+          "found": 10,
+          "total": 10
         }
       ]
     }
