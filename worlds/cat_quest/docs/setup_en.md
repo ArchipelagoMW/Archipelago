@@ -26,4 +26,4 @@ Type in your room info and click confirm to start the game
 
 If you do not see this menu, you should have the same results by clicking 'New Game'.
 
-You can continue your saved game by clicking Continue like in vanilla Cat Quest. (Do not click continue on an old savefile, it will send checks to the server for everything done in that old file)
+You can continue your saved game by clicking Continue like in vanilla Cat Quest.
