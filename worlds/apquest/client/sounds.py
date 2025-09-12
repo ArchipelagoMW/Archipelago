@@ -20,9 +20,13 @@ ITEM_JINGLES = {
 }
 
 CONFETTI_CANNON = "APQuest Confetti Cannon.ogg"
+MATH_PROBLEM_STARTED_JINGLE = "APQuest Math Problem Starter Jingle.ogg"
+MATH_PROBLEM_SOLVED_JINGLE = "APQuest Math Problem Solved Jingle.ogg"
 VICTORY_JINGLE = "8bit Victory.ogg"
 
 ALL_JINGLES = [
+    MATH_PROBLEM_SOLVED_JINGLE,
+    MATH_PROBLEM_STARTED_JINGLE,
     CONFETTI_CANNON,
     VICTORY_JINGLE,
     *ITEM_JINGLES.values(),
@@ -30,20 +34,27 @@ ALL_JINGLES = [
 
 BACKGROUND_MUSIC_INTRO = "APQuest Intro.ogg"
 BACKGROUND_MUSIC = "APQuest BGM.ogg"
+MATH_TIME_BACKGROUND_MUSIC = "APQuest Math BGM.ogg"
+
+ALL_BGM = [
+    BACKGROUND_MUSIC_INTRO,
+    BACKGROUND_MUSIC,
+    MATH_TIME_BACKGROUND_MUSIC,
+]
 
 ALL_SOUNDS = [
     *ALL_JINGLES,
-    BACKGROUND_MUSIC_INTRO,
-    BACKGROUND_MUSIC,
+    *ALL_BGM,
 ]
 
 
 class SoundManager:
     sound_paths: dict[str, Path]
-    jingles: dict[str, Sound]
 
-    background_music_intro: Sound
-    background_music: Sound
+    jingles: dict[str, Sound]
+    bgm_songs: dict[str, Sound]
+
+    active_bgm_song: str = BACKGROUND_MUSIC_INTRO
 
     current_background_music_volume: float = 1.0
     background_music_target_volume: float = 0.0
@@ -54,6 +65,7 @@ class SoundManager:
     volume_percentage: int = 0
 
     game_started: bool
+    math_trap_active: bool
     allow_intro_to_play: bool
 
     def __init__(self) -> None:
@@ -62,6 +74,7 @@ class SoundManager:
 
         self.game_started = False
         self.allow_intro_to_play = False
+        self.math_trap_active = False
 
         self.ensure_config()
 
@@ -74,15 +87,8 @@ class SoundManager:
 
     async def sound_manager_loop(self) -> None:
         while True:
-            if not self.game_started:
-                if self.allow_intro_to_play and self.background_music_intro.state == "stop":
-                    self.background_music_intro.play()
-                await asyncio.sleep(0.02)
-                continue
-
             self.update_background_music()
             self.do_fade()
-            self.background_music_intro.stop()
             await asyncio.sleep(0.02)
 
     def extract_sounds(self) -> None:
@@ -123,20 +129,14 @@ class SoundManager:
             logger.exception(e)
 
         try:
-            self.background_music = self.load_audio(BACKGROUND_MUSIC)
-            self.background_music.loop = True
-            self.background_music.seek(0)
+            self.bgm_songs = {sound_filename: self.load_audio(sound_filename) for sound_filename in ALL_BGM}
+            for bgm_song in self.bgm_songs.values():
+                bgm_song.loop = True
+                bgm_song.seek(0)
         except Exception as e:
             logger.exception(e)
 
-        try:
-            self.background_music_intro = self.load_audio(BACKGROUND_MUSIC_INTRO)
-            self.background_music_intro.loop = True
-            self.background_music_intro.seek(0)
-        except Exception as e:
-            logger.exception(e)
-
-    def play_jingle(self, audio_filename) -> None:
+    def play_jingle(self, audio_filename: str) -> None:
         higher_priority_sound_is_playing = False
 
         for sound_name, sound in self.jingles.items():
@@ -153,10 +153,15 @@ class SoundManager:
                 higher_priority_sound_is_playing = True
 
     def update_background_music(self) -> None:
+        self.update_active_song()
         if any(sound.state == "play" for sound in self.jingles.values()):
             self.play_background_music(False)
         else:
-            self.fade_background_music(True)
+            if self.math_trap_active:
+                # Don't fade math trap song, just play it (math trap should never be interrupted by a jingle anyway)
+                self.play_background_music(True)
+            else:
+                self.fade_background_music(True)
 
     def play_background_music(self, play: bool = True) -> None:
         if play:
@@ -168,8 +173,12 @@ class SoundManager:
 
     def set_background_music_volume(self, volume: float):
         self.current_background_music_volume = volume
-        self.background_music.volume = volume * self.volume_percentage / 100
-        self.background_music_intro.volume = volume * self.volume_percentage / 100
+
+        for song_filename, song in self.bgm_songs.items():
+            if song_filename == self.active_bgm_song:
+                song.volume = volume * self.volume_percentage / 100
+            else:
+                song.volume = 0
 
     def fade_background_music(self, fade_in: bool = True) -> None:
         if fade_in:
@@ -194,13 +203,37 @@ class SoundManager:
         if self.current_background_music_volume < self.background_music_target_volume:
             self.set_background_music_volume(min(1.0, self.current_background_music_volume + 0.02))
 
-        if self.current_background_music_volume == 0:
-            if self.background_music.state == "play":
-                self.background_music_last_position = self.background_music.get_pos()
-                if self.background_music_last_position != 0:  # SDL2 get_pos doesn't work, just continue playing muted
-                    self.background_music.stop()
-        else:
-            if self.background_music.state == "stop":
-                if self.background_music_last_position != 0:  # SDL2 get_pos doesn't work
-                    self.background_music.seek(self.background_music_last_position)
-                self.background_music.play()
+        for song_filename, song in self.bgm_songs.items():
+            if song_filename != self.active_bgm_song:
+                if song_filename == BACKGROUND_MUSIC:
+                    # It ends up feeling better if this just always continues playing quietly after being started.
+                    # Even "fading in at a random spot" is better than restarting the song after a jingle / math trap.
+                    if self.game_started and song.state == "stop":
+                        song.play()
+                        song.seek(0)
+                    continue
+
+                song.stop()
+                song.seek(0)
+                continue
+
+            if self.active_bgm_song == BACKGROUND_MUSIC_INTRO and not self.allow_intro_to_play:
+                song.stop()
+                song.seek(0)
+                continue
+
+            if self.current_background_music_volume != 0:
+                if song.state == "stop":
+                    song.play()
+                    song.seek(0)
+
+    def update_active_song(self):
+        if not self.game_started:
+            self.active_bgm_song = BACKGROUND_MUSIC_INTRO
+            return
+
+        if self.math_trap_active:
+            self.active_bgm_song = MATH_TIME_BACKGROUND_MUSIC
+            return
+
+        self.active_bgm_song = BACKGROUND_MUSIC

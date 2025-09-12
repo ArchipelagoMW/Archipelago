@@ -23,9 +23,9 @@ class MathProblemType(Enum):
 
 MATH_PROBLEM_CONSTRAINTS = {
     MathProblemType.PLUS: NumberChoiceConstraints(1, 99, 1, 99, True, add),
-    MathProblemType.MINUS: NumberChoiceConstraints(2, 100, 1, 99, False, sub),
+    MathProblemType.MINUS: NumberChoiceConstraints(2, 99, 1, 99, False, sub),
     MathProblemType.TIMES: NumberChoiceConstraints(2, 10, 2, 50, True, mul),
-    MathProblemType.DIVIDE: NumberChoiceConstraints(4, 100, 2, 50, False, truediv),
+    MathProblemType.DIVIDE: NumberChoiceConstraints(4, 99, 2, 50, False, truediv),
 }
 
 

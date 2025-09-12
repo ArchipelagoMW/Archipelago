@@ -7,14 +7,20 @@ from typing import TYPE_CHECKING, Any
 from CommonClient import CommonContext, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 
-from ..apquest.events import ConfettiFired, LocationClearedEvent, VictoryEvent
+from ..apquest.events import ConfettiFired, LocationClearedEvent, MathProblemSolved, MathProblemStarted, VictoryEvent
 from ..apquest.game import Game, Input
 from ..apquest.items import Item
 from ..apquest.locations import Location
 from .game_manager import APQuestManager
 from .graphics import PlayerSprite
 from .item_quality import get_quality_for_network_item
-from .sounds import CONFETTI_CANNON, ITEM_JINGLES, VICTORY_JINGLE
+from .sounds import (
+    CONFETTI_CANNON,
+    ITEM_JINGLES,
+    MATH_PROBLEM_SOLVED_JINGLE,
+    MATH_PROBLEM_STARTED_JINGLE,
+    VICTORY_JINGLE,
+)
 
 if TYPE_CHECKING:
     import kvui
@@ -178,9 +184,14 @@ class APQuestContext(CommonContext):
 
     def render(self) -> None:
         self.ui.render(self.ap_quest_game, self.player_sprite)
+        self.handle_game_events()
 
     def location_checked_side_effects(self, location: int) -> None:
         network_item = self.locations_info[location]
+
+        if network_item.player == self.slot and network_item.item == Item.MATH_TRAP:
+            # In case of a local math trap, we only play the math trap trigger jingle
+            return
 
         item_quality = get_quality_for_network_item(network_item)
         self.play_jingle(ITEM_JINGLES[item_quality])
@@ -197,9 +208,11 @@ class APQuestContext(CommonContext):
 
             if isinstance(event, LocationClearedEvent):
                 self.queued_locations.append(event.location_id)
+                continue
 
             if isinstance(event, VictoryEvent):
                 self.play_jingle(VICTORY_JINGLE)
+                continue
 
             if isinstance(event, ConfettiFired):
                 gameboard_x, gameboard_y = self.ap_quest_game.gameboard.size
@@ -209,6 +222,15 @@ class APQuestContext(CommonContext):
 
                 self.ui.play_jingle(CONFETTI_CANNON)
                 self.ui.add_confetti((x, y), (self.slot_data["confetti_explosiveness"] + 1) * 5)
+                continue
+
+            if isinstance(event, MathProblemStarted):
+                self.play_jingle(MATH_PROBLEM_STARTED_JINGLE)
+                continue
+
+            if isinstance(event, MathProblemSolved):
+                self.play_jingle(MATH_PROBLEM_SOLVED_JINGLE)
+                continue
 
     def input_and_rerender(self, input_key: Input) -> None:
         if self.ap_quest_game is None:
@@ -216,7 +238,6 @@ class APQuestContext(CommonContext):
         if not self.ap_quest_game.gameboard.ready:
             return
         self.ap_quest_game.input(input_key)
-        self.handle_game_events()
         self.render()
 
     def make_gui(self) -> "type[kvui.GameManager]":

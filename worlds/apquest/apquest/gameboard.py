@@ -108,7 +108,7 @@ class Gameboard:
         return tuple(graphics)
 
     def render_math_problem(
-        self, problem: MathProblem, current_result: int | None = None
+        self, problem: MathProblem, current_input_digits: list[int], current_input_int: int | None
     ) -> tuple[tuple[Graphic, ...], ...]:
         rows = len(self.gameboard)
         columns = len(self.gameboard[0])
@@ -155,25 +155,21 @@ class Gameboard:
             ]
         )
 
-        result_digit_1 = None
-        result_digit_2 = None
-        if current_result is not None:
-            result_digit_1 = current_result // 10
-            result_digit_2 = current_result % 10
-            if result_digit_1 == 0:
-                result_digit_1 = result_digit_2
-                result_digit_2 = None
+        display_digit_1 = None
+        display_digit_2 = None
+        if current_input_digits:
+            display_digit_1 = current_input_digits[0]
+        if len(current_input_digits) == 2:
+            display_digit_2 = current_input_digits[1]
 
         result_row = pad_row(
             [
                 Graphic.EQUALS,
                 Graphic.EMPTY,
-                DIGIT_TO_GRAPHIC[result_digit_1],
-                DIGIT_TO_GRAPHIC[result_digit_2],
+                DIGIT_TO_GRAPHIC[display_digit_1],
+                DIGIT_TO_GRAPHIC[display_digit_2],
                 Graphic.EMPTY,
-                Graphic.NO
-                if result_digit_1 is not None and result_digit_2 is not None and current_result != problem.result
-                else Graphic.EMPTY,
+                Graphic.NO if len(current_input_digits) == 2 and current_input_int != problem.result else Graphic.EMPTY,
             ]
         )
 

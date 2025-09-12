@@ -2,7 +2,7 @@ from math import ceil
 from random import Random
 
 from .entities import InteractableMixin
-from .events import ConfettiFired, Event, MathProblemSolved
+from .events import ConfettiFired, Event, MathProblemSolved, MathProblemStarted
 from .gameboard import Gameboard, create_gameboard
 from .generate_math_problem import MathProblem, generate_math_problem
 from .graphics import Graphic
@@ -44,10 +44,17 @@ class Game:
             self.active_math_problem = generate_math_problem(self.random)
             self.active_math_problem_input = []
             self.player.remove_item(Item.MATH_TRAP)
-            return self.gameboard.render_math_problem(self.active_math_problem, self.currently_typed_in_math_result)
+            self.queued_events.append(MathProblemStarted())
+            return self.gameboard.render_math_problem(
+                self.active_math_problem,
+                self.active_math_problem_input,
+                self.currently_typed_in_math_result,
+            )
 
         if self.active_math_problem is not None:
-            return self.gameboard.render_math_problem(self.active_math_problem, self.currently_typed_in_math_result)
+            return self.gameboard.render_math_problem(
+                self.active_math_problem, self.active_math_problem_input, self.currently_typed_in_math_result
+            )
 
         return self.gameboard.render(self.player)
 
@@ -134,6 +141,7 @@ class Game:
     def math_problem_input(self, input: int) -> None:
         if len(self.active_math_problem_input) >= 2:
             return
+
         self.active_math_problem_input.append(input)
         self.check_math_problem_result()
 

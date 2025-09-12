@@ -12,6 +12,11 @@ class LocationClearedEvent(Event):
 
 
 @dataclass
+class MathProblemStarted(Event):
+    pass
+
+
+@dataclass
 class MathProblemSolved(Event):
     pass
 

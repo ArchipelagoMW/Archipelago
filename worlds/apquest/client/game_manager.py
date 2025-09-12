@@ -82,6 +82,7 @@ class APQuestManager(GameManager):
         self.render_gameboard(game, player_sprite)
         # Only now can we check whether a math problem is active
         self.render_background_game_grid(game.gameboard.size, game.active_math_problem is None)
+        self.sound_manager.math_trap_active = game.active_math_problem is not None
 
         self.render_item_column(game)
 
