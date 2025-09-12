@@ -393,7 +393,7 @@ full_campaign_settings = {
     OPTION_NAME[RequiredTactics]:                       RequiredTactics.option_standard,
     OPTION_NAME[EnabledCampaigns]:                      EnabledCampaigns.valid_keys,
     OPTION_NAME[EnableRaceSwapVariants]:                EnableRaceSwapVariants.option_shuffle_all,
-    OPTION_NAME[KeyMode]:                               KeyMode.option_disabled,
+    OPTION_NAME[KeyMode]:                               KeyMode.option_progressive_missions,
     OPTION_NAME[MaximumCampaignSize]:                   MaximumCampaignSize.range_end,
     OPTION_NAME[TwoStartPositions]:                     TwoStartPositions.option_true,
     OPTION_NAME[StarterUnit]:                           StarterUnit.option_off,
