@@ -4,7 +4,7 @@ import Options as ap_options
 from .. import options
 from Options import Accessibility, ProgressionBalancing
 from .. import item_names
-from mission_tables import SC2Race, SC2Campaign
+from ..mission_tables import SC2Race, SC2Campaign
 
 from ..options import ( 
     # avoid import *
