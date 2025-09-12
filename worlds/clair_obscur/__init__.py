@@ -1,4 +1,4 @@
-import typing
+import typing, settings
 from math import ceil
 from typing import List, Any, Dict
 
@@ -31,11 +31,10 @@ class WebClairObscur(WebWorld):
     tutorials = [setup]
     option_groups = OPTIONS_GROUP
 
-class ClairObscurSettings(Group):
+class ClairObscurSettings(settings.Group):
     """
     No idea
     """
-    #me either but i'll get there
 
 class ClairObscurWorld(World):
     game = "Clair Obscur Expedition 33"

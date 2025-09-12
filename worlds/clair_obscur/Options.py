@@ -48,10 +48,10 @@ class AreaLogic(Choice):
     """
     internal_name = "area_logic"
     display_name = "Area logic"
-    option_normal = 0
-    option_hard = 1
-    option_no_logic = 2
-    default = 0
+    option_normal = 1
+    option_hard = 2
+    option_no_logic = 0
+    default = 1
 
 class ShuffleCharacters(Toggle):
     """Shuffles characters into the item pool."""
@@ -95,6 +95,7 @@ class ClairObscurOptions(PerGameCommonOptions):
     gestral_shuffle: ShuffleLostGestrals
     starting_char: StartingCharacter
     gear_scaling: GearScaling
+    area_logic: AreaLogic
 
     start_inventory: ClairObscurStartInventory
 

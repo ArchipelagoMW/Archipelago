@@ -25,19 +25,33 @@ def set_rules(world):
     #Major map connections- the playthrough will always go through these.
     major_connection_1 = mw.get_entrance("WM: First Continent South -> WM: South Sea", player)
     major_connection_2 = mw.get_entrance("WM: South Sea -> WM: North Sea", player)
-
-    #paint break reqs
+    major_connections_3 = [mw.get_entrance("WM: North Sea -> The Monolith", player),
+                           mw.get_entrance("WM: North Sea -> WM: Sky", player)]
 
     #broad transition reqs: FCS -> SS, SS -> NS
     #   % of area tickets based on settings, character reqs
     #   area tickets need to be in distinct groups for major areas in each section of the game; giving the player
     #   Flying Manor won't ensure they have the level range to do Visages for instance
-    add_rule(major_connection_1, lambda state, pl=player: state.has_group("Area", pl, 2))
-    add_rule(major_connection_2, lambda state, pl=player: state.has_group("Area", pl, 4))
+    if world.options.area_logic < 2:
+        add_rule(major_connection_1, lambda state: state.has_from_list([
+            "Area - Flying Waters",
+            "Area - Ancient Sanctuary",
+            "Area - Yellow Harvest",
+            "Area - Stone Wave Cliffs"
+        ], player, 4 / world.options.area_logic))
+        add_rule(major_connection_2, lambda state: state.has_from_list([
+            "Area - Forgotten Battlefield",
+            "Area - Old Lumiere"
+        ], player, 2 / world.options.area_logic))
+        for conn in major_connections_3:
+            add_rule(conn, lambda state: state.has_from_list([
+                "Area - Visages",
+                "Area - Sirene"
+            ], player, 2 / world.options.area_logic))
 
     if world.options.char_shuffle:
-        add_rule(major_connection_1, lambda state, pl=player: state.has_group("Character", pl, 1))
-        add_rule(major_connection_2, lambda state, pl=player: state.has_group("Character", pl, 2))
+        add_rule(major_connection_1, lambda state: state.has_group("Character", player, 1))
+        add_rule(major_connection_2, lambda state: state.has_group("Character", player, 2))
 
     #Lost Gestral access
     if world.options.gestral_shuffle:
@@ -95,3 +109,5 @@ def set_rules(world):
                  lambda state: state.has("Maelle", player))
         add_rule(mw.get_entrance("WM: Sky -> Sirene's Dress", player),
                  lambda state: state.has("Sciel", player))
+        add_rule(mw.get_entrance("WM: Sky -> The Chosen Path", player),
+                 lambda state: state.has_group("Character", player, 4))
