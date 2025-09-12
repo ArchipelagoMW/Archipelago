@@ -1,22 +1,10 @@
 # This is where your imports go. That means any functions or variables that you want to use here but exist in another file
 # What I have here is just some of the basic Archipelago classes that are widely used
-
-# A more indepth explanation of the types of imports
-
-# import random
-# With that import you are importing every single function, class, variable, whatever else that is allowed to be imported from random. Super useful and simple but somewhat bulky
-
-# from random import randrange
-# Here you are only grabbing the randrange function from random. This is less bulky but you need to put exactly what you want from that file/library
 # If you want more things from the import, add a comma like the worlds.AutoWorld import below
 import logging
-from random import choice
 
 from BaseClasses import MultiWorld, Item, Tutorial
-from worlds.AutoWorld import World, CollectionState, WebWorld
-from typing import Dict
-from Utils import visualize_regions
-
+from worlds.AutoWorld import World, WebWorld
 from .Locations import get_location_names, get_total_locations
 from .Items import create_item, create_itempool, item_table, HEXCELLS_LEVEL_ITEMS 
 from .Options import HexcellsInfiniteOptions
@@ -60,12 +48,6 @@ class HexcellsInfiniteWorld(World):
     # The name of the class above
     web = HexcellsInfiniteWebWorld()
 
-    # There are other built in variables for AP. You can look at other worlds to see your options
-
-    # If you need to do something immediately, put it in generate_early()
-    def __init__(self, multiworld: "MultiWorld", player: int):
-        super().__init__(multiworld, player)
-
     # This is where you'd do things just before the generation
     # Super important for doing things like adjusting the item pool based on options and the like
     # Can technically be skipped if you don't need to do anything, or if you handle it elsewhere like A Short Hike
@@ -105,8 +87,8 @@ class HexcellsInfiniteWorld(World):
     
     # The slot data is what you're sending to the AP server. You dont have to add all your options, but if it's needed to be used for your game implementation, then it should be added.
     # Seed, Slot, and TotalLocations are all super important for AP though, you need those
-    def fill_slot_data(self) -> Dict[str, object]:
-        slot_data: Dict[str, object] = {
+    def fill_slot_data(self) -> dict[str, object]:
+        slot_data: dict[str, object] = {
             "options": {
                   "RequirePerfectClears":     self.options.RequirePerfectClears.value,
                   "PuzzleOptions":            self.options.PuzzleOptions.value,
@@ -115,9 +97,8 @@ class HexcellsInfiniteWorld(World):
                   "HardGeneration":           self.options.HardGeneration.value
             },
             "Seed": self.multiworld.seed_name,  # to verify the server's multiworld
-            "Slot": self.multiworld.player_name[self.player],  # to connect to server
+            "Slot": self.player_name,  # to connect to server
             "TotalLocations": get_total_locations(self) # get_total_locations(self) comes from Locations.py
         }
 
         return slot_data
-    

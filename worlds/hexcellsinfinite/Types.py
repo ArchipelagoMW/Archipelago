@@ -2,7 +2,6 @@
 # This file is for organization and a few other worlds do similar
 # It's helpful for grouping variables, making them easy to access, and consistent
 
-from enum import IntEnum
 from typing import NamedTuple, Optional
 from BaseClasses import Location, Item, ItemClassification
 
