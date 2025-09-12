@@ -12296,8 +12296,8 @@ function received_moves(itemId)
     --    GVR:setItem(ITEM_TABLE["AP_DEATH_POTION"], 1)
     elseif itemId == 6500345 then
         GVR:setItem(ITEM_TABLE["AP_HELICOPTER_POTION"], 1)
-    --elseif itemId == 6500346 then
-    --    GVR:setItem(ITEM_TABLE["AP_FROG_POTION"], 1)
+    elseif itemId == 6500346 then
+        GVR:setItem(ITEM_TABLE["AP_FROG_POTION"], 1)
     elseif itemId == 6500347 then
         GVR:setItem(ITEM_TABLE["AP_BOOMERANG_POTION"], 1)
     elseif itemId == 6500348 then

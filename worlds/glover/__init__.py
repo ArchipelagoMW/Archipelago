@@ -10,7 +10,7 @@ from worlds.generic.Rules import add_rule, set_rule
 
 from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall
 from .JsonReader import build_data, generate_location_name_to_id
-from .ItemPool import construct_blank_world_garibs, create_trap_name_table, generate_item_name_to_id, generate_item_name_groups, find_item_data, select_trap_item_name, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, filler_table, trap_table
+from .ItemPool import construct_blank_world_garibs, create_trap_name_table, generate_item_name_to_id, generate_item_name_groups, find_item_data, select_trap_item_name, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table
 from Utils import visualize_regions
 from .Hints import create_hints
 
@@ -93,7 +93,7 @@ class GloverWorld(World):
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
     #DELETE THIS ONCE IT'S FINISHED
-    existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn1", "Crn2", "Crn3", "Crn!", "Crn?", "Prt1", "Prt!", "Pht!", "FoF!", "Otw!", "Training"]
+    existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn1", "Crn2", "Crn3", "Crn!", "Crn?", "Prt1", "Prt2", "Prt3", "Prt!", "Prt?", "Pht!", "FoF!", "Otw!", "Training"]
     group_lists : list[str] = ["Not Crystal",
 	"Not Bowling",
 	"Not Bowling or Crystal",
@@ -116,12 +116,10 @@ class GloverWorld(World):
         if name.endswith("H Ball") and name.startswith(tuple(self.world_prefixes)) and item.code == None:
             state.add_item("Returned Balls", self.player)
         #Garib counting
-        if name == "Garib":
-            state.add_item("Total Garibs", self.player)
-        elif name.endswith("Garibs") and name[:1].isdigit():
-            split_name : list[str] = name.split(" ")
-            garibs_number : int = int(split_name[len(split_name) - 2])
-            state.add_item("Total Garibs", self.player, garibs_number)
+        if name.endswith("Garib") or name.endswith("Garibs"):
+            garibs_number : int = self.get_garib_group_size(name)
+            if garibs_number >= 0:
+                state.add_item("Total Garibs", self.player, garibs_number)
         #Level events
         if name == "Crn1 Rocket":
             rockets_count = state.count("Crn1 Rocket", self.player)
@@ -139,17 +137,23 @@ class GloverWorld(World):
         if name.endswith("H Ball") and name.startswith(tuple(self.world_prefixes)) and item.code == None:
             state.remove_item("Returned Balls", self.player)
         #Garib counting
-        if name == "Garib":
-            state.remove_item("Total Garibs", self.player)
-        elif name.endswith("Garibs") and name[:1].isdigit():
-            split_name : list[str] = name.split(" ")
-            garibs_number : int = int(split_name[len(split_name) - 2])
-            state.remove_item("Total Garibs", self.player, garibs_number)
+        if name.endswith("Garib") or name.endswith("Garibs"):
+            garibs_number : int = self.get_garib_group_size(name)
+            if garibs_number >= 0:
+                state.remove_item("Total Garibs", self.player, garibs_number)
         #Level events
         if name == "Crn1 Rocket":
             rockets_count = state.count("Crn1 Rocket", self.player)
             state.remove_item("Crn1 Rocket " + str(rockets_count), self.player)
         return output
+
+    def get_garib_group_size(self, garibName : str):
+        if garibName == "Garib":
+            return 1
+        nameDigit : str = garibName.removesuffix(" Garib").removesuffix(" Garibs")[-2:].removeprefix(" ")
+        if nameDigit.isdigit():
+            return int(nameDigit)
+        return -1
 
     def __init__(self, world, player):
         self.version = "V0.1"
@@ -183,10 +187,10 @@ class GloverWorld(World):
             ["Crn2", 80],
             ["Crn3", 80],
             ["Crn?", 20],
-            ["Prt1", 70]#,
-            #["Prt2", 60]#,
-            #["Prt3", 80]#,
-            #["Prt?", 50]#,
+            ["Prt1", 70],
+            ["Prt2", 60],
+            ["Prt3", 80],
+            ["Prt?", 50]#,
             #["Pht1", 80]#,
             #["Pht2", 80]#,
             #["Pht3", 80]#,
@@ -210,10 +214,10 @@ class GloverWorld(World):
             ["Crn2", 0],
             ["Crn3", 0],
             ["Crn?", 0],
-            ["Prt1", 0]#,
-            #["Prt2", 0]#,
-            #["Prt3", 0]#,
-            #["Prt?", 0]#,
+            ["Prt1", 0],
+            ["Prt2", 0],
+            ["Prt3", 0],
+            ["Prt?", 0]#,
             #["Pht1", 0]#,
             #["Pht2", 0]#,
             #["Pht3", 0]#,
@@ -260,17 +264,6 @@ class GloverWorld(World):
         return -1
 
     def generate_early(self):
-        #Garib Sorting Order
-        if self.options.garib_sorting == GaribSorting.option_random_order:
-            self.random.shuffle(self.garib_level_order)
-            #Bonus levels all go at the end if they're disabled
-            if not self.options.bonus_levels:
-                self.garib_level_order.append(self.garib_level_order.pop(["Atl?", 25])),
-                self.garib_level_order.append(self.garib_level_order.pop(["Crn?", 20]))
-                #self.garib_level_order.append(self.garib_level_order.pop(["Prt?", 50]))
-                #self.garib_level_order.append(self.garib_level_order.pop(["Pht?", 60]))
-                #self.garib_level_order.append(self.garib_level_order.pop(["FoF?", 56]))
-                #self.garib_level_order.append(self.garib_level_order.pop(["Otw?", 50]))
         #Setup the spawning checkpoints
         if self.options.spawning_checkpoint_randomizer:
             #If randomized, pick a number from it's assigned value to the current value
@@ -287,15 +280,15 @@ class GloverWorld(World):
 
             #TEMP: While only certain levels exist, randomize only those.
             randomizable_existing_levels = self.existing_levels.copy()
-            randomizable_existing_levels.remove("Crn!")
-            randomizable_existing_levels.remove("Prt!")
             randomizable_existing_levels.remove("Pht!")
             randomizable_existing_levels.remove("FoF!")
             randomizable_existing_levels.remove("Otw!")
+            randomizable_existing_levels.remove("Training")
             shuffled_existing_levels = randomizable_existing_levels.copy()
             self.random.shuffle(shuffled_existing_levels)
+            originalEntries = self.wayroom_entrances.copy()
             for level_index, level_name in enumerate(randomizable_existing_levels):
-                replaced_index = self.wayroom_entrances.index(level_name)
+                replaced_index = originalEntries.index(level_name)
                 self.wayroom_entrances[replaced_index] = shuffled_existing_levels[level_index]
 
             #self.random.shuffle(self.overworld_entrances)
@@ -312,6 +305,29 @@ class GloverWorld(World):
                 self.wayroom_entrances.insert(19, "Pht?")
                 self.wayroom_entrances.insert(24, "FoF?")
                 self.wayroom_entrances.insert(29, "Otw?")
+        
+        #Random Garib Sorting Order
+        if self.options.garib_sorting == GaribSorting.option_random_order:
+            self.random.shuffle(self.garib_level_order)
+        #Randomized Entrances, Garibs in Order
+        elif self.options.garib_sorting == GaribSorting.option_in_order and self.options.entrance_randomizer:
+            new_garib_order : list[list] = []
+            for level_name in self.wayroom_entrances:
+                #Find the level with the same name
+                for each_entry in self.garib_level_order:
+                    if each_entry[0] == level_name:
+                        new_garib_order.append(each_entry)
+            self.garib_level_order = new_garib_order
+        
+        #Bonus level garibs all go at the end if they're disabled
+        if not self.options.bonus_levels:
+            self.garib_level_order.append(self.garib_level_order.pop(["Atl?", 25])),
+            self.garib_level_order.append(self.garib_level_order.pop(["Crn?", 20]))
+            self.garib_level_order.append(self.garib_level_order.pop(["Prt?", 50]))
+            #self.garib_level_order.append(self.garib_level_order.pop(["Pht?", 60]))
+            #self.garib_level_order.append(self.garib_level_order.pop(["FoF?", 56]))
+            #self.garib_level_order.append(self.garib_level_order.pop(["Otw?", 50]))
+
         #Set the starting ball
         match self.options.starting_ball:
             case StartingBall.option_rubber_ball:
@@ -390,7 +406,7 @@ class GloverWorld(World):
         if item_data.type == "Trap":
             fake_item_name = select_trap_item_name(self, name_for_use)
             item_output.fake_name = fake_item_name
-            print(item_output.hint_text)
+            #print(item_output.hint_text)
         return item_output
 
     def percent_of(self, percent : int) -> float:
