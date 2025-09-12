@@ -23,11 +23,8 @@ When you open your game, you should see the archipawlago menu screen and the ran
 
 Depending on how much you've played the game beforehand, the menu may look different.
 
-If you have the 'New Game +' button, click it, and you should have a button called Start New Archipelago Game. 
-Type in your room info and click confirm to start the game
-
-If you have save data already (the continue button is lit up), then simply click 'New Game' and do as above.
-
-if you do not have save data, click 'New Game', play the game until it saves for the first time, return to the menu and click 'New Game' again. Do as above.
+- If you have the 'New Game +' button, click it, and you should have a button called Start New Archipelago Game. Type in your room info and click confirm to start the game
+- If you have save data already (the continue button is lit up), then simply click 'New Game' and do as above.
+- if you do not have save data, click 'New Game', play the game until it saves for the first time, return to the menu and click 'New Game' again. Do as above.
 
 You can continue your saved game by clicking Continue like in vanilla Cat Quest. This will automatically connect you to the slot you last played on.
