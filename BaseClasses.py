@@ -1862,7 +1862,9 @@ class Spoiler:
                 if self.multiworld.players > 1:
                     outfile.write('\nPlayer %d: %s\n' % (player, self.multiworld.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.multiworld.game[player])
-                outfile.write('Location Count:                  %d\n' % len(self.multiworld.get_locations(player)))
+
+                loc_count = len([loc for loc in self.multiworld.get_locations(player) if not loc.is_event])
+                outfile.write('Location Count:                  %d\n' % loc_count)
 
                 for f_option, option in self.multiworld.worlds[player].options_dataclass.type_hints.items():
                     write_option(f_option, option)
