@@ -1,0 +1,40 @@
+<ConfettiView>:
+    size_hint: None, None
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+    spacing: 0
+    padding: 0
+
+<APQuestGrid>:
+    cols: 12
+    rows: 11
+    spacing: 0
+    padding: 0
+    size_hint: None, None
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+<APQuestGameView>:
+    RelativeLayout:
+        id: game_container
+
+<VolumeSliderView>:
+    orientation: "horizontal"
+    size_hint: 1, None
+    padding: 0
+    height: 50
+
+    Label:
+        size_hint: None, 1
+        text: "Volume:"
+
+    Slider:
+        id: volume_slider
+        size_hint: 1, 1
+        min: 0
+        max: 100
+        step: 1
+        value: 50
+        orientation: "horizontal"
+
+    Label:
+        size_hint: None, 1
+        text: str(int(volume_slider.value))
