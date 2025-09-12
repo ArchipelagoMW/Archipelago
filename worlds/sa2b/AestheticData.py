@@ -170,126 +170,309 @@ sample_chao_names = [
 	"Portia",
 	"Graves",
 	"Kaycee",
+	"Ghandi",
+	"Medli",
+	"Jak",
+	"Wario",
+	"Theo",
 ]
 
-totally_real_item_names = [
-	"Mallet",
-	"Lava Rod",
-	"Master Knife",
-	"Slippers",
-	"Spade",
+totally_real_item_names: dict[str, list[str]] = {
+	"Bumper Stickers": [
+		"Bonus Score",
+		"Boosting Bumper",
+	],
 
-	"Progressive Car Upgrade",
-	"Bonus Token",
+	"Castlevania 64": [
+		"Earth card",
+		"Venus card",
+		"Ax",
+		"Storehouse Key",
+	],
 
-	"Shortnail",
-	"Runmaster",
+	"Celeste 64": [
+		"Blueberry",
+		"Side Flip",
+		"Triple Dash Refills",
+		"Swap Blocks",
+		"Dream Blocks",
+	],
 
-	"Courage Form",
-	"Auto Courage",
-	"Donald Defender",
-	"Goofy Blizzard",
-	"Ultimate Weapon",
+	"Celeste (Open World)": [
+		"Green Boosters",
+		"Triple Dash Refills",
+		"Rising Platforms",
+		"Red Bubbles",
+		"Granny's Car Keys",
+		"Blueberry",
+	],
 
-	"Song of the Sky Whale",
-	"Gryphon Shoes",
-	"Wing Key",
-	"Strength Anklet",
+	"Civilization VI": [
+		"Advanced Trebuchets",
+		"The Wheel 2",
+		"NFTs",
+	],
 
-	"Hairclip",
+	"Donkey Kong Country 3": [
+		"Progressive Car Upgrade",
+		"Bonus Token",
+	],
 
-	"Key of Wisdom",
+	"Factorio": [
+		"logistic-ai",
+		"progressive-militia",
+		"progressive-stronger-explosives",
+		"uranium-food",
+	],
 
-	"Baking",
-	"Progressive Block Mining",
+	"A Hat in Time": [
+		"Fire Hat",
+		"69 Pons",
+		"Relic (Green Canyon)",
+		"Relic (Cooler Cow)",
+		"Time Fragment",
+	],
 
-	"Jar",
-	"Whistle of Space",
-	"Rito Tunic",
+	"Hollow Knight": [
+		"Shortnail",
+		"Runmaster",
+	],
 
-	"Kitchen Sink",
+	"Jak and Daxter The Precursor Legacy": [
+		"69 Precursor Orbs",
+		"Jump Roll",
+		"Roll Kick",
+	],
 
-	"Rock Badge",
-	"Key Card",
-	"Pikachu",
-	"Eevee",
-	"HM02 Strength",
+	"Kirby's Dream Land 3": [
+		"CooCoo",
+	],
 
-	"Progressive Astromancers",
-	"Progressive Chefs",
-	"The Living Safe",
-	"Lady Quinn",
+	"Kingdom Hearts 2": [
+		"Courage Form",
+		"Auto Courage",
+		"Donald Defender",
+		"Goofy Blizzard",
+		"Ultimate Weapon",
+	],
 
-	"Dio's Worst Enemy",
+	"Lingo": [
+		"Art Gallery (First Floor)",
+		"Color Hunt - Pink Barrier",
+	],
 
-	"Pink Chaos Emerald",
-	"Black Chaos Emerald",
-	"Tails - Large Cannon",
-	"Eggman - Bazooka",
-	"Eggman - Booster",
-	"Knuckles - Shades",
-	"Sonic - Magic Shoes",
-	"Shadow - Bounce Bracelet",
-	"Rouge - Air Necklace",
-	"Big Key (Eggman's Pyramid)",
+	"A Link to the Past": [
+		"Mallet",
+		"Lava Rod",
+		"Master Knife",
+		"Slippers",
+		"Spade",
+		"Big Key (Dark Palace)",
+		"Big Key (Hera Tower)",
+	],
 
-	"Sensor Bunker",
-	"Phantom",
-	"Soldier",
+	"Links Awakening DX": [
+		"Song of the Sky Whale",
+		"Gryphon Shoes",
+		"Wing Key",
+		"Strength Anklet",
+	],
 
-	"Plasma Suit",
-	"Gravity Beam",
-	"Hi-Jump Ball",
+	"Mario & Luigi Superstar Saga": [
+		"Mega Nut",
+	],
 
-	"Cannon Unlock LLL",
-	"Feather Cap",
+	"The Messenger": [
+		"Key of Anger",
+		"Time Shard (69)",
+		"Hydro",
+	],
 
-	"Progressive Yoshi",
-	"Purple Switch Palace",
-	"Cape Feather",
+	"Muse Dash": [
+		"U.N. Owen Was Her",
+		"Renai Circulation",
+		"Flyers",
+	],
 
-	"Cane of Bryan",
+	"Noita": [
+		"Gold (69)",
+		"Sphere",
+		"Melee Die",
+	],
 
-	"Van Repair",
-	"Autumn",
-	"Galaxy Knife",
-	"Green Cabbage Seeds",
+	"Ocarina of Time": [
+		"Jar",
+		"Whistle of Space",
+		"Rito Tunic",
+		"Boss Key (Forest Haven)",
+		"Boss Key (Swamp Palace)",
+		"Boss Key (Great Bay Temple)",
+	],
 
-	"Timespinner Cog 1",
+	"Old School Runescape": [
+		"Area: Taverly",
+		"Area: Meiyerditch",
+		"Fire Cape",
+	],
 
-	"Ladder",
+	"Overcooked! 2": [
+		"Kitchen Sink",
+	],
 
-	"Visible Dots",
+	"Paint": [
+		"AI Enhance",
+		"Paint Bucket",
+		"Pen",
+	],
 
-	"CooCoo",
+	"Pokemon Red and Blue": [
+		"Rock Badge",
+		"Key Card",
+		"Pikachu",
+		"Eevee",
+		"HM02 Strength",
+		"HM05 Fly",
+		"HM01 Surf",
+		"Card Key 12F",
+	],
 
-	"Blueberry",
+	"Risk of Rain 2": [
+		"Dio's Worst Enemy",
+		"Stage 5",
+		"Mythical Item",
+	],
 
-	"Ear of Luigi",
+	"Rogue Legacy": [
+		"Progressive Astromancers",
+		"Progressive Chefs",
+		"The Living Safe",
+		"Lady Quinn",
+	],
 
-	"Mega Nut",
+	"Saving Princess": [
+		"Fire Spreadshot",
+		"Volcano Key",
+		"Frozen Key",
+	],
 
-	"DUELIST ALLIANCE",
-	"DUEL OVERLOAD",
-	"POWER OF THE ELEMENTS",
-	"S:P Little Knight",
-	"Red-Eyes Dark Dragoon",
+	"Secret of Evermore": [
+		"Mantis Claw",
+		"Progressive pants",
+		"Deflect",
+	],
 
-	"Fire Hat",
+	"shapez": [
+		"Spinner",
+		"Toggle",
+		"Slicer",
+		"Splitter",
+	],
 
-	"Area: Taverly",
-	"Area: Meiyerditch",
-	"Fire Cape",
+	"SMZ3": [
+		"Cane of Bryan",
+	],
 
-	"Donald Zeta Flare",
+	"Sonic Adventure 2 Battle": [
+		"Pink Chaos Emerald",
+		"Black Chaos Emerald",
+		"Tails - Large Cannon",
+		"Eggman - Bazooka",
+		"Eggman - Booster",
+		"Knuckles - Shades",
+		"Sonic - Magic Shoes",
+		"Shadow - Bounce Bracelet",
+		"Rouge - Air Necklace",
+		"Big Key (Eggman's Pyramid)",
+	],
 
-	"Category One of a Kind",
-	"Category Fuller House",
+	"Starcraft 2": [
+		"Sensor Bunker",
+		"Phantom",
+		"Soldier",
+	],
 
-	"Passive Camoflage",
+	"Stardew Valley": [
+		"Van Repair",
+		"Ship Repair",
+		"Autumn",
+		"Galaxy Knife",
+		"Green Cabbage Seeds",
+		"Casket",
+		"Pet Moonlight Jelly",
+		"Adventurer's Guild Key",
+	],
 
-	"Earth Card",
-]
+	"Super Mario Land 2": [
+		"Luigi Coin",
+		"Luigi Zone Progression",
+		"Hard Mode",
+	],
+
+	"Super Metroid": [
+		"Plasma Suit",
+		"Gravity Beam",
+		"Hi-Jump Ball",
+	],
+
+	"Super Mario 64": [
+		"Cannon Unlock LLL",
+		"Feather Cap",
+	],
+
+	"Super Mario World": [
+		"Progressive Yoshi",
+		"Purple Switch Palace",
+		"Cape Feather",
+		"Fire Flower",
+		"Cling",
+		"Twirl Jump",
+	],
+
+	"Timespinner": [
+		"Timespinner Cog 1",
+		"Leg Cannon",
+	],
+
+	"TUNIC": [
+		"Ladder To West Forest",
+		"Money x69",
+		"Page 69",
+		"Master Sword",
+	],
+
+	"The Wind Waker": [
+		"Ballad of Storms",
+		"Wind God's Song",
+		"Earth God's Song",
+		"Ordon's Pearl",
+	],
+
+	"The Witness": [
+		"Visible Dots",
+	],
+
+	"Yacht Dice": [
+		"Category One of a Kind",
+		"Category Fuller House",
+	],
+
+	"Yoshi's Island": [
+		"Ear of Luigi",
+		"+69 Stars",
+		"Water Melon",
+		"World 7 Gate",
+		"Small Spring Ball",
+	],
+
+	"Yu-Gi-Oh! 2006": [
+		"DUELIST ALLIANCE",
+		"DUEL OVERLOAD",
+		"POWER OF THE ELEMENTS",
+		"S:P Little Knight",
+		"Red-Eyes Dark Dragoon",
+		"Maxx C"
+	],
+}
 
 all_exits = [
 	0x00,  # Lobby to Neutral

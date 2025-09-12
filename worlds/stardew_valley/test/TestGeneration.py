@@ -131,15 +131,13 @@ class TestProgressiveElevator(SVTestBase):
         items_for_115 = self.generate_items_for_mine_115()
         last_elevator = self.get_item_by_name("Progressive Mine Elevator")
         self.collect(items_for_115)
-        floor_115 = self.multiworld.get_region("The Mines - Floor 115", self.player)
-        floor_120 = self.multiworld.get_region("The Mines - Floor 120", self.player)
 
-        self.assertTrue(floor_115.can_reach(self.multiworld.state))
-        self.assertFalse(floor_120.can_reach(self.multiworld.state))
+        self.assert_can_reach_region(Region.mines_floor_115)
+        self.assert_cannot_reach_region(Region.mines_floor_120)
 
         self.collect(last_elevator)
 
-        self.assertTrue(floor_120.can_reach(self.multiworld.state))
+        self.assert_can_reach_region(Region.mines_floor_120)
 
     def generate_items_for_mine_115(self) -> List[Item]:
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2
@@ -171,27 +169,24 @@ class TestSkullCavernLogic(SVTestBase):
         items_for_skull_50 = self.generate_items_for_skull_50()
         items_for_skull_100 = self.generate_items_for_skull_100()
         self.collect(items_for_115)
-        floor_115 = self.multiworld.get_region(Region.mines_floor_115, self.player)
-        skull_25 = self.multiworld.get_region(Region.skull_cavern_25, self.player)
-        skull_75 = self.multiworld.get_region(Region.skull_cavern_75, self.player)
 
-        self.assertTrue(floor_115.can_reach(self.multiworld.state))
-        self.assertFalse(skull_25.can_reach(self.multiworld.state))
-        self.assertFalse(skull_75.can_reach(self.multiworld.state))
+        self.assert_can_reach_region(Region.mines_floor_115)
+        self.assert_cannot_reach_region(Region.skull_cavern_25)
+        self.assert_cannot_reach_region(Region.skull_cavern_75)
 
         self.remove(items_for_115)
         self.collect(items_for_skull_50)
 
-        self.assertTrue(floor_115.can_reach(self.multiworld.state))
-        self.assertTrue(skull_25.can_reach(self.multiworld.state))
-        self.assertFalse(skull_75.can_reach(self.multiworld.state))
+        self.assert_can_reach_region(Region.mines_floor_115)
+        self.assert_can_reach_region(Region.skull_cavern_25)
+        self.assert_cannot_reach_region(Region.skull_cavern_75)
 
         self.remove(items_for_skull_50)
         self.collect(items_for_skull_100)
 
-        self.assertTrue(floor_115.can_reach(self.multiworld.state))
-        self.assertTrue(skull_25.can_reach(self.multiworld.state))
-        self.assertTrue(skull_75.can_reach(self.multiworld.state))
+        self.assert_can_reach_region(Region.mines_floor_115)
+        self.assert_can_reach_region(Region.skull_cavern_25)
+        self.assert_can_reach_region(Region.skull_cavern_75)
 
     def generate_items_for_mine_115(self) -> List[Item]:
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2
