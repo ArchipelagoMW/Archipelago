@@ -19,11 +19,11 @@
 
 ## Connecting
 
-You connect by opening `...\ArchipelagoRandomizer\SaveData\RoomInfo.json` from your Cat Quest root folder, and adding your player and room information.
-It should follow the format that the file already has. Then the connection should be established once you start your save. 
+When you open your game, you should see the archipawlago menu screen and the randomizer version. 
 
-You start a new game by picking New Game in your menu. 
+Within the 'New Game +' menu, you should see a button called Start New Archipelago Game. 
+Type in your room info and click confirm to start the game
 
-If you already beat the game and only have New Game +. choose this, and then pick New Archipelago Game within that menu (Do not play using Mew Game or New Game +). 
+If you do not see this menu, you should have the same results by clicking 'New Game'.
 
 You can continue your saved game by clicking Continue like in vanilla Cat Quest. (Do not click continue on an old savefile, it will send checks to the server for everything done in that old file)
