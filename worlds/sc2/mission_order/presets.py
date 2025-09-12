@@ -4,6 +4,7 @@ import Options as ap_options
 from .. import options
 from Options import Accessibility, ProgressionBalancing
 from .. import item_names
+from mission_tables import SC2Race, SC2Campaign
 
 from ..options import ( 
     # avoid import *
@@ -21,7 +22,7 @@ from ..options import (
     ExcludeOverpoweredItems, VictoryCache, VanillaLocations, ExtraLocations, ChallengeLocations, MasteryLocations, BasebustLocations, 
     SpeedrunLocations, PreventativeLocations, FillerPercentage, MineralsPerItem, VespenePerItem, StartingSupplyPerItem, MaximumSupplyPerItem, 
     MaximumSupplyReductionPerItem, LowestMaximumSupply, ResearchCostReductionPerItem, FillerItemsDistribution, MissionOrderScouting, 
-    CustomMissionOrder, SC2Race, SC2Campaign, OPTION_NAME
+    CustomMissionOrder, OPTION_NAME
 )
 
 template_settings = {
@@ -126,7 +127,7 @@ zerg_rush_settings = {
 }
 
 classic_grid_settings = {
-    # Short-ish 5x5 Grid (8 required, 24 total), all races. Synch-friendly
+    # Short-ish 5x5 Grid (8 required, 24 total), all races. Sync-friendly
     OPTION_NAME[Accessibility]:                         Accessibility.option_full,
     OPTION_NAME[ProgressionBalancing]:                  ProgressionBalancing.default,
     OPTION_NAME[GameDifficulty]:                        GameDifficulty.option_hard,
@@ -441,5 +442,5 @@ sc2_options_presets: Dict[str, Dict[str, Any]] = {
     "Bread and Butter [~12 hours]": bread_and_butter_settings,
     "Pure Protoss [~15 hours]":     all_protoss_settings,
     "Evil Logic [~6 hours]":        evil_logic_settings,
-    "Full Campaign [30+ hours]":    full_campaign_settings,
+    "Giant Grid Game [30+ hours]":  full_campaign_settings,
 }
