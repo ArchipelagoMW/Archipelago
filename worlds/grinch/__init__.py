@@ -1,6 +1,6 @@
 from BaseClasses import Region, Item, ItemClassification
 from .Locations import grinch_locations_to_id, grinch_locations, GrinchLocation
-from .Items import grinch_items_to_id, GrinchItem, ALL_ITEMS_TABLE, MISC_ITEMS_TABLE
+from .Items import grinch_items_to_id, GrinchItem, ALL_ITEMS_TABLE, MISC_ITEMS_TABLE, get_item_names_per_category
 from .Regions import connect_regions
 from .Rules import set_location_rules
 
@@ -22,7 +22,7 @@ class GrinchWorld(World):
     item_name_to_id: ClassVar[dict[str,int]] = grinch_items_to_id()
     location_name_to_id: ClassVar[dict[str,int]] = grinch_locations_to_id()
     required_client_version = (0, 6, 3)
-
+    item_name_groups = get_item_names_per_category()
 
     def __init__(self, *args, **kwargs): #Pulls __init__ function and takes control from there in BaseClasses.py
         self.origin_region_name: str = "Mount Crumpit"
