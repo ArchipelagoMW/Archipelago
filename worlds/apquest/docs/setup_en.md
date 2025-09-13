@@ -40,8 +40,3 @@ You should now be connected and able to play APQuest.
 The APQuest Client can seamlessly switch rooms without restarting.
 
 Simply click the "Disconnect" button, then connect to a different slot/room.
-
-## Music / Volume
-
-The APQuest Client currently has no in-built volume slider,
-but you can use your operating system's sound mixer to adjust the volume.

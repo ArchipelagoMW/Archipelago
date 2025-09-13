@@ -41,8 +41,3 @@ Du solltest jetzt verbunden sein und kannst APQuest spielen.
 Der APQuest Client kann zwischen verschiedenen Slots wechseln, ohne neugestartet werden zu müssen, 
 
 Klicke einfach den "Disconnect"-Knopf. Dann verbinde dich mit dem anderen Raum / Slot.
-
-## Musik / Lautstärke
-
-Der APQuest Client hat im Moment keinen eigenen Lautstärkeregler.  
-Du kannst den Lautstärker-Mixer deines Betriebssystems benutzen, um die Lautstärke einzustellen.
