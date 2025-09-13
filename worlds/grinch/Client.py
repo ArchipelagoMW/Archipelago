@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Sequence
 import asyncio
 import NetUtils
 import copy
-
+import uuid
 import Utils
 from .Locations import grinch_locations, GrinchLocation
 from .Items import ALL_ITEMS_TABLE, MISSION_ITEMS_TABLE, GADGETS_TABLE, KEYS_TABLE, GrinchItemData #, SLEIGH_PARTS_TABLE
@@ -40,12 +40,14 @@ class GrinchClient(BizHawkClient):
     ingame_log: bool = False
     previous_egg_count: int = 0
     send_ring_link: bool = False
+    unique_client_id: int = 0
 
     def __init__(self):
         super().__init__()
         self.last_received_index = 0
         self.loading_bios_msg = False
         self.loc_unlimited_eggs = False
+        self.unique_client_id = 0
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -85,6 +87,7 @@ class GrinchClient(BizHawkClient):
         match cmd:
             case "Connected":  # On Connect
                 self.loc_unlimited_eggs = bool(ctx.slot_data["give_unlimited_eggs"])
+                self.unique_client_id = self._get_uuid()
                 logger.info("You are now connected to the client. "+
                     "There may be a slight delay to check you are not in demo mode before locations start to send.")
 
@@ -105,7 +108,7 @@ class GrinchClient(BizHawkClient):
                 if "tags" not in args:
                     return
 
-                if "RingLink" in ctx.tags and "RingLink" in args["tags"] and args["data"]["source"] != ctx.slot:
+                if "RingLink" in ctx.tags and "RingLink" in args["tags"] and args["data"]["source"] != self.unique_client_id:
                     Utils.async_start(self.ring_link_input(args["data"]["amount"], ctx), "SyncEggs")
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
@@ -372,7 +375,7 @@ class GrinchClient(BizHawkClient):
                         "cmd": "Bounce",
                         "data": {
                             "time": time.time(),
-                            "source": ctx.slot,
+                            "source": self.unique_client_id,
                             "amount": current_egg_count - self.previous_egg_count
                         },
                         "tags": ["RingLink"]
@@ -398,3 +401,10 @@ class GrinchClient(BizHawkClient):
             int(current_egg_count).to_bytes(EGG_ADDR_BYTESIZE, "little"), "MainRAM")])
         self.previous_egg_count = current_egg_count
         # logger.info(f"RingLink: You received {str(egg_amount)} rotten eggs.")
+
+    def _get_uuid(self) -> int:
+        string_id = str(uuid.uuid4())
+        uid: int = 0
+        for char in string_id:
+            uid += ord(char)
+        return uid
