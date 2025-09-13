@@ -76,7 +76,7 @@ def set_all_location_rules(world: APQuestWorld) -> None:
     set_rule(
         right_room_enemy,
         lambda state: (
-            state.has("Sword")
+            state.has("Sword", world.player)
             and (not world.options.hard_mode or state.has_any(("Shield", "Health Upgrade"), world.player))
         ),
     )
