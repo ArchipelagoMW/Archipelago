@@ -1,10 +1,9 @@
-import unittest
-from .test_base import Sc2TestBase
+from .test_base import Sc2SetupTestBase
 from .. import mission_tables, SC2Campaign
 from .. import options
 from ..mission_order.layout_types import Grid
 
-class TestGridsizes(unittest.TestCase):
+class TestGridsizes(Sc2SetupTestBase):
     def test_grid_sizes_meet_specs(self):
         self.assertTupleEqual((1, 2, 0), Grid.get_grid_dimensions(2))
         self.assertTupleEqual((1, 3, 0), Grid.get_grid_dimensions(3))
@@ -23,18 +22,16 @@ class TestGridsizes(unittest.TestCase):
         self.assertTupleEqual((5, 6, 1), Grid.get_grid_dimensions(29))
         self.assertTupleEqual((5, 7, 2), Grid.get_grid_dimensions(33))
 
-
-class TestGridGeneration(Sc2TestBase):
-    options = {
-        "mission_order": options.MissionOrder.option_grid,
-        "excluded_missions": [mission_tables.SC2Mission.ZERO_HOUR.mission_name,],
-        "enabled_campaigns": {
-            SC2Campaign.WOL.campaign_name,
-            SC2Campaign.PROPHECY.campaign_name,
-        }
-    }
-
     def test_size_matches_exclusions(self):
+        world_options = {
+            "mission_order": options.MissionOrder.option_grid,
+            "excluded_missions": [mission_tables.SC2Mission.ZERO_HOUR.mission_name,],
+            "enabled_campaigns": {
+                SC2Campaign.WOL.campaign_name,
+                SC2Campaign.PROPHECY.campaign_name,
+            }
+        }
+        self.generate_world(world_options)
         self.assertNotIn(mission_tables.SC2Mission.ZERO_HOUR.mission_name, self.multiworld.regions)
         # WoL has 29 missions. -1 for Zero Hour being excluded, +1 for the automatically-added menu location
         self.assertEqual(len(self.multiworld.regions), 29)

@@ -1,10 +1,13 @@
 import logging
 from typing import Callable, Dict, List, Set, Tuple, TYPE_CHECKING, Iterable
 
+from collections import Counter
 from BaseClasses import Location, ItemClassification
 from .item import StarcraftItem, ItemFilterFlags, item_names, item_parents, item_groups
-from .item.item_tables import item_table, TerranItemType, ZergItemType, spear_of_adun_calldowns, \
-    spear_of_adun_castable_passives
+from .item.item_tables import (
+    item_table, TerranItemType, ZergItemType, spear_of_adun_calldowns, spear_of_adun_castable_passives
+)
+from .item.virtual_items import after_add_item, after_remove_item
 from .options import RequiredTactics
 
 if TYPE_CHECKING:
@@ -111,12 +114,12 @@ class ValidInventory:
         self.player = world.player
         self.world: 'SC2World' = world
         # Track all Progression items and those with complex rules for filtering
-        self.logical_inventory: Dict[str, int] = {}
+        self.logical_inventory: Counter[str] = Counter()
         for item in item_pool:
             if not item_table[item.name].is_important_for_filtering():
                 continue
-            self.logical_inventory.setdefault(item.name, 0)
             self.logical_inventory[item.name] += 1
+            after_add_item(self.logical_inventory, item)
         self.item_pool = item_pool
         self.item_name_to_item: Dict[str, List[StarcraftItem]] = {}
         self.item_name_to_child_items: Dict[str, List[StarcraftItem]] = {}
@@ -162,6 +165,12 @@ class ValidInventory:
             )
             max_upgrades_per_unit = min_upgrades_per_unit
 
+        # Determining if the full-size inventory can complete campaign
+        # Note(mm): Now that user excludes are checked against logic, this can probably never fail unless there's a bug.
+        failed_locations: List[str] = [location for (location, requirement) in requirements if not requirement(self)]
+        if len(failed_locations) > 0:
+            raise Exception(f"Too many items excluded - couldn't satisfy access rules for the following locations:\n{failed_locations}")
+
         def attempt_removal(
             item: StarcraftItem,
             remove_flag: ItemFilterFlags = ItemFilterFlags.FilterExcluded,
@@ -173,10 +182,12 @@ class ValidInventory:
             # Only run logic checks when removing logic items
             if self.logical_inventory.get(item.name, 0) > 0:
                 self.logical_inventory[item.name] -= 1
+                after_remove_item(self.logical_inventory, item)
                 failed_rules = [name for name, requirement in mission_requirements if not requirement(self)]
                 if failed_rules:
                     # If item cannot be removed, lock and revert
                     self.logical_inventory[item.name] += 1
+                    after_add_item(self.logical_inventory, item)
                     item.filter_flags |= ItemFilterFlags.LogicLocked
                     return f"{len(failed_rules)} rules starting with \"{failed_rules[0]}\""
                 if not self.logical_inventory[item.name]:
@@ -479,9 +490,14 @@ def filter_items(world: 'SC2World', location_cache: List[Location], item_pool: L
     target_nonfiller_item_count = inventory_size - reserved_filler_count
     filler_amount = (inventory_size * world.options.filler_percentage) // 100
     if world.options.required_tactics.value == RequiredTactics.option_no_logic:
-        mission_requirements = []
+        mission_requirements: list[tuple[str, Callable]] = []
     else:
-        mission_requirements = [(location.name, location.access_rule) for location in location_cache]
+        mission_requirements = []
+        requirement_ids: set[int] = set()
+        for location in location_cache:
+            if id(location.access_rule) not in requirement_ids:
+                mission_requirements.append((location.name, location.access_rule))
+                requirement_ids.add(id(location.access_rule))
     valid_inventory = ValidInventory(world, item_pool)
 
     valid_items = valid_inventory.generate_reduced_inventory(target_nonfiller_item_count, filler_amount, mission_requirements)
