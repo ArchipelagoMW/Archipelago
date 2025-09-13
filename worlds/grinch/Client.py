@@ -105,7 +105,7 @@ class GrinchClient(BizHawkClient):
                 if "tags" not in args:
                     return
 
-                if "RingLink" in ctx.tags and "RingLink" in args["tags"] and args["data"]["source"] != ctx.player_names[ctx.slot]:
+                if "RingLink" in ctx.tags and "RingLink" in args["tags"] and args["data"]["source"] != ctx.slot:
                     Utils.async_start(self.ring_link_input(args["data"]["amount"], ctx), "SyncEggs")
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
