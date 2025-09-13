@@ -34,7 +34,7 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
 
 
 # Each Item instance must correctly report the "game" it belongs to.
-# To make this simple, it is common practice to override the base Item class and override the "game" field.
+# To make this simple, it is common practice to subclass the basic Item class and override the "game" field.
 class APQuestItem(Item):
     game = "APQuest"
 
