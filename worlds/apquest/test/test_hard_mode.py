@@ -2,7 +2,7 @@ from .bases import APQuestTestBase
 
 
 class TestHardMode(APQuestTestBase):
-    options = {  # noqa: RUF012
+    options = {
         "hard_mode": True,
     }
 
