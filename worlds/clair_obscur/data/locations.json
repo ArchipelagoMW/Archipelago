@@ -4754,7 +4754,7 @@
     },
     {
         "name": "The Abyss: Simon",
-        "internal_name": "Boss_SimonALPHA*1",
+        "internal_name": "Boss_SimonPhase2*1",
         "location": "The Abyss",
         "original_item": "",
         "condition": {},
