@@ -59,7 +59,7 @@ jobs:
 
           if [[ "${{ github.ref_type }}" == "tag" ]]; then
             tag="${{ github.ref_name }}"
-            if [[ "$tag" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            if [[ "$tag" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
               full_latest="${{ env.REGISTRY }}/${{ steps.image.outputs.name }}:latest"
               # Check if latest is already in tags to avoid duplicates
               if ! printf '%s\n' "${tags[@]}" | grep -q "^$full_latest$"; then
