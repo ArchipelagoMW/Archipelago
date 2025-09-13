@@ -23,7 +23,8 @@ LOCATION_NAME_TO_ID = {
 }
 
 
-# It is common practice to override the base Location class to override the "game" field.
+# Each Location instance must correctly report the "game" it belongs to.
+# To make this simple, it is common practice to override the base Location class and override the "game" field.
 class APQuestLocation(Location):
     game = "APQuest"
 
