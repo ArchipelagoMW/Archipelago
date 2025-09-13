@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 
 def set_all_rules(world: APQuestWorld) -> None:
-    # In order for AP to be able to randomize into an item layout that is actually possible to complete,
-    # We need to define rules for our Entrances and Locations.
+    # In order for AP to generate an item layout that is actually possible for the player to complete,
+    # we need to define rules for our Entrances and Locations.
     # Note: Regions do not have rules, the Entrances connecting them do!
     # We'll do entrances first, then locations, and then finally we set our victory condition.
 
