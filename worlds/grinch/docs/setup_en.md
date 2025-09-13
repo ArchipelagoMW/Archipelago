@@ -27,8 +27,10 @@ Depending on your controller, you may also want to tweak the Deadzone. Something
 clear it.
 - You are required to legally obtain a PSX Bios BIN firmware file for the game to be opened. To import this, you go to
 `Config > Firmware... > Tools` and scrolling until you see the PlayStation tab. You might right click on the bios region
-and click `Set Customization` or `Import` on the top of the window. The bios should be recognized if Bizhawk displays a
-checkmark beside it, saying the bios version you have is stable and should run without issues.
+and click `Set Customization` or `Import` on the top of the window. Then a window should open, telling you what file to 
+import, which is the BIN file required. The bios should be recognized if Bizhawk displays a checkmark beside it, saying 
+the bios version you have is stable and should run without issues. If a bios is already been imported and the game
+runs fine by itself, you may skip this step.
 
 ## Generating a Game
 
