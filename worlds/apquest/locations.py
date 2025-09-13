@@ -29,6 +29,16 @@ class APQuestLocation(Location):
     game = "APQuest"
 
 
+# Let's make one more helper method before we begin:
+# Later on in the code, we'll want specific subsections of LOCATION_NAME_TO_ID.
+# To reduce the chance of copy-paste errors writing something like {"Chest": LOCATION_NAME_TO_ID["Chest"]},
+# let's make a helper method that takes a list of location names and returns them as a dict with their IDs.
+# Note: There is a minor typing quirk here. Some functions want location addresses to be an "int | None",
+# so while our function here only ever returns dict[str, int], we annotate it as dict[str, int | None].
+def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | None]:
+    return {location_name: LOCATION_NAME_TO_ID[location_name] for location_name in location_names}
+
+
 def create_all_locations(world: APQuestWorld) -> None:
     create_regular_locations(world)
     create_events(world)
@@ -52,28 +62,22 @@ def create_regular_locations(world: APQuestWorld) -> None:
 
     # A simpler way to do this is by using the region.add_locations helper.
     # For this, you need to have a dict of location names to their IDs (i.e. a subset of location_name_to_id)
+    # Aha! So that's why we made that "get_location_names_with_ids" helper method earlier.
     # You also need to pass your overridden Location class.
-    bottom_right_room_locations: dict[str, int | None] = {
-        "Bottom Right Room Left Chest": world.location_name_to_id["Bottom Right Room Left Chest"],
-        "Bottom Right Room Right Chest": world.location_name_to_id["Bottom Right Room Right Chest"],
-    }
+    bottom_right_room_locations = get_location_names_with_ids(
+        ["Bottom Right Room Left Chest", "Bottom Right Room Right Chest"]
+    )
     bottom_right_room.add_locations(bottom_right_room_locations, APQuestLocation)
 
-    top_left_room_locations: dict[str, int | None] = {
-        "Top Left Room Chest": world.location_name_to_id["Top Left Room Chest"],
-    }
+    top_left_room_locations: dict[str, int | None] = get_location_names_with_ids(["Top Left Room Chest"])
     top_left_room.add_locations(top_left_room_locations, APQuestLocation)
 
-    right_room_locations: dict[str, int | None] = {
-        "Right Room Enemy Drop": world.location_name_to_id["Right Room Enemy Drop"],
-    }
+    right_room_locations: dict[str, int | None] = get_location_names_with_ids(["Right Room Enemy Drop"])
     right_room.add_locations(right_room_locations, APQuestLocation)
 
     # Locations may be in different regions depending on the player's options.
     # In our case, the hammer option puts the Top Middle Chest into its own room called Top Middle Room.
-    top_middle_room_locations: dict[str, int | None] = {
-        "Top Middle Chest": world.location_name_to_id["Top Middle Chest"],
-    }
+    top_middle_room_locations: dict[str, int | None] = get_location_names_with_ids(["Top Middle Chest"])
     if world.options.hammer:
         top_middle_room = world.get_region("Top Middle Room")
         top_middle_room.add_locations(top_middle_room_locations, APQuestLocation)
@@ -86,10 +90,8 @@ def create_regular_locations(world: APQuestWorld) -> None:
         # Once again, it is important to stress that even though the Bottom Left Extra Chest location doesn't always
         # exist, it must still always be present in the world's location_name_to_id.
         # Whether the location actually exists in the seed is purely determined by whether we create and add it here.
-        bottom_left_extra_chest = APQuestLocation(
-            world.player, "Bottom Left Extra Chest", world.location_name_to_id["Bottom Left Extra Chest"], overworld
-        )
-        overworld.locations.append(bottom_left_extra_chest)
+        bottom_left_extra_chest = get_location_names_with_ids(["Bottom Left Extra Chest"])
+        overworld.add_locations(bottom_left_extra_chest, APQuestLocation)
 
 
 def create_events(world: APQuestWorld) -> None:
