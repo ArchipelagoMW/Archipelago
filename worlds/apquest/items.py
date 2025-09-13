@@ -151,7 +151,8 @@ def create_all_items(world: APQuestWorld) -> None:
     # We defined this behavior in our get_random_filler_item_name() function, which in world.py,
     # we'll bind to world.get_filler_item_name(). So, we can just use world.create_filler() for all of our filler.
 
-    # Anyway. With our world's itempool finalized, the only step remaining is to append it to the multiworld's itempool.
+    # Anyway. With our world's itempool finalized, we now need to submit it to the multiworld itempool.
+    # This is how the generator actually knows about the existence of our items.
     world.multiworld.itempool += itempool
 
     # Sometimes, you might want the player to start with certain items already in their inventory.
