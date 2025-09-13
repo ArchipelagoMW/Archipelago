@@ -18,7 +18,7 @@ def set_all_rules(world: APQuestWorld) -> None:
 
     set_all_entrance_rules(world)
     set_all_location_rules(world)
-    set_victory_condition(world)
+    set_completion_condition(world)
 
 
 def set_all_entrance_rules(world: APQuestWorld) -> None:
@@ -95,11 +95,11 @@ def set_all_location_rules(world: APQuestWorld) -> None:
         add_rule(final_boss, lambda state: state.has("Health Upgrade", world.player, 2))
 
 
-def set_victory_condition(world: APQuestWorld) -> None:
-    # Finally, we need to set a victory condition.
-    # You can just set a victory condition directly like any other condition, referencing items the player receives:
+def set_completion_condition(world: APQuestWorld) -> None:
+    # Finally, we need to set a completion condition for our world, defining what the player needs to win the game.
+    # You can just set a completion condition directly like any other condition, referencing items the player receives:
     world.multiworld.completion_condition[world.player] = lambda state: state.has_all(("Sword", "Shield"), world.player)
 
     # In our case, we went for the Victory event design pattern (see regions.py).
-    # So lets undo what we just did, and instead set the victory condition to:
+    # So lets undo what we just did, and instead set the completion condition to:
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
