@@ -69,7 +69,30 @@ def set_all_location_rules(world: APQuestWorld) -> None:
     # Since combat is a bit more complicated, we'll use this chance to cover some advanced access rule concepts.
 
     # Sometimes, you may want to have different rules depending on the player's chosen options.
+    # There is a wrong way to do this, and a right way to do this. Let's do the wrong way first.
     right_room_enemy = world.get_location("Right Room Enemy Drop")
+
+    # DON'T DO THIS!!!!
+    set_rule(right_room_enemy, lambda state: (
+        state.has("Sword")
+        and (not world.options.hard_mode or state.has_any(("Shield", "Health Upgrade"), world.player))
+    ))
+    # DON'T DO THIS!!!!
+
+    # Now, what's actually wrong with this? It works perfectly fine, right?
+    # If hard mode disabled, Sword is enough. If hard mode is enabled, we also need a Shield or a Health Upgrade.
+    # The access rule we just wrote does this correctly, so what's the problem?
+    # The problem is performance.
+    # Most of your world code doesn't need to be perfectly performant, since it just runs once per slot.
+    # However, access rules in particular are by far the hottest code path in Archipelago.
+    # An access rule will potentially be called thousands or even millions of times over the course of one generation.
+    # As a result, access rules are the one place where it's really worth putting in some effort to optimize.
+    # What's the performance problem here?
+    # Every time our access rule is called, it has to evaluate whether world.options.hard_mode is True or False.
+    # Wouldn't it be better if in easy mode, the access rule only checked for Sword to begin with?
+    # Wouldn't it also be better if in hard mode, it already knew it had to check Shield and Health Upgrade as well?
+    # Well, we can achieve this by doing the "if world.options.hard_mode" check outside the set_rule call,
+    # and instead having two *different* set_rule calls depending on which case we're in.
 
     if world.options.hard_mode:
         # If you have multiple conditions, you can obviously chain them via "or" or "and".
@@ -84,11 +107,12 @@ def set_all_location_rules(world: APQuestWorld) -> None:
         set_rule(right_room_enemy, lambda state: state.has("Sword", world.player))
 
     # Another way to chain multiple conditions is via the add_rule function.
-    # This is generally somewhat slow though, so it should only be used if your structure justifies it.
+    # This makes the access rules a bit slower though, so it should only be used if your structure justifies it.
     # In our case, it's pretty useful because hard mode and easy mode have different requirements.
     final_boss = world.get_location("Final Boss Defeated")
-    add_rule(final_boss, lambda state: state.has("Sword", world.player))
-    add_rule(final_boss, lambda state: state.has("Shield", world.player))
+
+    # For the "known" requirements, it's still better to chain them using a normal "and" condition.
+    add_rule(final_boss, lambda state: state.has_all(("Sword", "Shield"), world.player))
 
     if world.options.hard_mode:
         # You can check for multiple copies of an item by using the optional count parameter of state.has().
