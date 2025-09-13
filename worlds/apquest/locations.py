@@ -109,11 +109,18 @@ def create_events(world: APQuestWorld) -> None:
     button_in_top_left_room = Location(world.player, "Top Left Room Button", None, top_left_room)
     top_left_room.locations.append(button_in_top_left_room)
 
-    # We then need to put an event item onto the location. Item creation is discussed more in create_items().
+    # We then need to put an event item onto the location.
+    # An event item is an item whose code is "None" (same as the event location's address),
+    # and whose classification is "progression". Item creation will be discussed more in items.py.
+    # Note: Usually, items are created in world.create_items(), which for us happens in items.py.
+    # However, when the location of an item is known ahead of time (as is the case with an event location/item pair),
+    # it is common practice to create the item when creating the location.
+    # Since locations also have to be finalized after world.create_regions(), which runs before world.create_items(),
+    # we'll create both the event location and the event item in our locations.py code.
     button_item = items.APQuestItem("Top Left Room Button Pressed", ItemClassification.progression, None, world.player)
     button_in_top_left_room.place_locked_item(button_item)
 
-    # A way simpler way to do this is by using the region.create_event helper.
+    # A way simpler way to do create an event location/item pair is by using the region.create_event helper.
     # Luckily, we have another event we want to create: The Victory event.
     # We will use this event to track whether the player can win the game.
     # The Victory event is a completely optional abstraction - This will be discussed more in set_rules().
