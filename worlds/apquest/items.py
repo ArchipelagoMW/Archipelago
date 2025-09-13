@@ -22,7 +22,7 @@ ITEM_NAME_TO_ID = {
 
 # Items should have a defined default classification.
 # In our case, we will make a dictionary from item name to classification.
-ITEM_CLASSIFICATIONS = {
+DEFAULT_ITEM_CLASSIFICATIONS = {
     "Key": ItemClassification.progression,
     "Sword": ItemClassification.progression | ItemClassification.useful,  # Items can have multiple classifications.
     "Shield": ItemClassification.progression,
@@ -60,7 +60,7 @@ def create_item_with_correct_classification(world: APQuestWorld, name: str) -> A
     # So, we make this helper function that creates the item by name with the correct classification.
     # Note: This function's content could just be the contents of world.create_item in world.py directly,
     # but it seemed nicer to have it in its own function over here in items.py.
-    classification = ITEM_CLASSIFICATIONS[name]
+    classification = DEFAULT_ITEM_CLASSIFICATIONS[name]
 
     # It is perfectly normal and valid for an item's classification to differ based on the player's options.
     # In our case, Health Upgrades are only logically considered in hard mode.
