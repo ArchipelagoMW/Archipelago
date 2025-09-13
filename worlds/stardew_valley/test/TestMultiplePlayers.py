@@ -1,4 +1,4 @@
-from . import SVTestCase, setup_multiworld
+from .bases import SVTestCase, setup_multiworld
 from .. import True_
 from ..options import FestivalLocations, StartingMoney
 from ..strings.festival_check_names import FestivalCheck
@@ -51,8 +51,6 @@ class TestDifferentSettings(SVTestCase):
         self.check_location_rule(multiworld, 6, FestivalCheck.rarecrow_4, True, False)
 
     def test_money_rule_caching(self):
-        options_festivals_limited_money = {FestivalLocations.internal_name: FestivalLocations.option_easy,
-                                           StartingMoney.internal_name: 5000}
         options_festivals_limited_money = {FestivalLocations.internal_name: FestivalLocations.option_easy,
                                            StartingMoney.internal_name: 5000}
 

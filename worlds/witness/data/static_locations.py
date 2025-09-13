@@ -18,6 +18,7 @@ GENERAL_LOCATIONS = {
     "Outside Tutorial Outpost Entry Panel",
     "Outside Tutorial Outpost Exit Panel",
 
+    "Glass Factory Entry Panel",
     "Glass Factory Discard",
     "Glass Factory Back Wall 5",
     "Glass Factory Front 3",
@@ -103,6 +104,8 @@ GENERAL_LOCATIONS = {
     "Town RGB House Upstairs Left",
     "Town RGB House Upstairs Right",
     "Town RGB House Sound Room Right",
+
+    "Town Pet the Dog",
 
     "Windmill Theater Entry Panel",
     "Theater Exit Left Panel",
@@ -484,5 +487,5 @@ for key, item in ALL_LOCATIONS_TO_IDS.items():
     ALL_LOCATIONS_TO_ID[key] = item
 
 for loc in ALL_LOCATIONS_TO_IDS:
-    area = static_witness_logic.ENTITIES_BY_NAME[loc]["area"]["name"]
+    area = static_witness_logic.ENTITIES_BY_NAME[loc]["area"].name
     AREA_LOCATION_GROUPS.setdefault(area, set()).add(loc)

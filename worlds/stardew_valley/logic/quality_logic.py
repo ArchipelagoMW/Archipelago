@@ -14,7 +14,7 @@ class QualityLogicMixin(BaseLogicMixin):
         self.quality = QualityLogic(*args, **kwargs)
 
 
-class QualityLogic(BaseLogic[Union[SkillLogicMixin, FarmingLogicMixin]]):
+class QualityLogic(BaseLogic):
 
     @cache_self1
     def can_grow_crop_quality(self, quality: str) -> StardewRule:

@@ -20,6 +20,8 @@ class PathOption(Choice):
 class HiddenChests(Range):
     """
     Number of hidden chest checks added to the applicable biomes.
+    Note: The number of hidden chests that spawn per run in each biome varies.
+    You are expected do multiple runs to get all of your checks.
     """
     display_name = "Hidden Chests per Biome"
     range_start = 0
@@ -30,6 +32,8 @@ class HiddenChests(Range):
 class PedestalChecks(Range):
     """
     Number of checks that will spawn on pedestals in the applicable biomes.
+    Note: The number of pedestals that spawn per run in each biome varies.
+    You are expected do multiple runs to get all of your checks.
     """
     display_name = "Pedestal Checks per Biome"
     range_start = 0
@@ -117,10 +121,8 @@ class ShopPrice(Choice):
 
 
 class NoitaDeathLink(DeathLink):
-    """
-    When you die, everyone dies. Of course, the reverse is true too.
-    You can disable this in the in-game mod options.
-    """
+    __doc__ = (DeathLink.__doc__ + "\n\n    You can disable this or set it to give yourself a trap effect when " +
+               "another player dies in the in-game mod options.")
 
 
 @dataclass

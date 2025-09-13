@@ -97,12 +97,12 @@ class ConfigurableOptionInfo(typing.NamedTuple):
 
 
 class ColouredMessage:
-    def __init__(self, text: str = '') -> None:
+    def __init__(self, text: str = '', *, keep_markup: bool = False) -> None:
         self.parts: typing.List[dict] = []
         if text:
-            self(text)
-    def __call__(self, text: str) -> 'ColouredMessage':
-        add_json_text(self.parts, text)
+            self(text, keep_markup=keep_markup)
+    def __call__(self, text: str, *, keep_markup: bool = False) -> 'ColouredMessage':
+        add_json_text(self.parts, text, keep_markup=keep_markup)
         return self
     def coloured(self, text: str, colour: str) -> 'ColouredMessage':
         add_json_text(self.parts, text, type="color", color=colour)
@@ -128,7 +128,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         # Note(mm): Bold/underline can help readability, but unfortunately the CommonClient does not filter bold tags from command-line output.
         # Regardless, using `on_print_json` to get formatted text in the GUI and output in the command-line and in the logs,
         # without having to branch code from CommonClient
-        self.ctx.on_print_json({"data": [{"text": text}]})
+        self.ctx.on_print_json({"data": [{"text": text, "keep_markup": True}]})
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
         """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""
@@ -257,7 +257,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         print_faction_title()
                         has_printed_faction_title = True
                         (ColouredMessage('* ').item(item.item, self.ctx.slot, flags=item.flags)
-                            (" from ").location(item.location, self.ctx.slot)
+                            (" from ").location(item.location, item.player)
                             (" by ").player(item.player)
                         ).send(self.ctx)
                 
@@ -278,7 +278,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         for item in received_items_of_this_type:
                             filter_match_count += len(received_items_of_this_type)
                             (ColouredMessage('  * ').item(item.item, self.ctx.slot, flags=item.flags)
-                                (" from ").location(item.location, self.ctx.slot)
+                                (" from ").location(item.location, item.player)
                                 (" by ").player(item.player)
                             ).send(self.ctx)
                     
@@ -1625,6 +1625,6 @@ def get_location_offset(mission_id):
 
 
 def launch():
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()

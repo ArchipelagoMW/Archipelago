@@ -24,7 +24,7 @@ class TestBase(unittest.TestCase):
         for item in items:
             item.classification = ItemClassification.progression
             state.collect(item, prevent_sweep=True)
-        state.sweep_for_events()
+        state.sweep_for_advancements()
         state.update_reachable_regions(1)
         self._state_cache[self.multiworld, tuple(items)] = state
         return state
@@ -159,7 +159,6 @@ class WorldTestBase(unittest.TestCase):
         self.multiworld.game[self.player] = self.game
         self.multiworld.player_name = {self.player: "Tester"}
         self.multiworld.set_seed(seed)
-        self.multiworld.state = CollectionState(self.multiworld)
         random.seed(self.multiworld.seed)
         self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
         args = Namespace()
@@ -168,6 +167,7 @@ class WorldTestBase(unittest.TestCase):
                 1: option.from_any(self.options.get(name, option.default))
             })
         self.multiworld.set_options(args)
+        self.multiworld.state = CollectionState(self.multiworld)
         self.world = self.multiworld.worlds[self.player]
         for step in gen_steps:
             call_all(self.multiworld, step)
@@ -221,8 +221,8 @@ class WorldTestBase(unittest.TestCase):
         if isinstance(items, Item):
             items = (items,)
         for item in items:
-            if item.location and item.advancement and item.location in self.multiworld.state.events:
-                self.multiworld.state.events.remove(item.location)
+            if item.location and item.advancement and item.location in self.multiworld.state.advancements:
+                self.multiworld.state.advancements.remove(item.location)
             self.multiworld.state.remove(item)
 
     def can_reach_location(self, location: str) -> bool:
