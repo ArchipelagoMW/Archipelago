@@ -1,12 +1,14 @@
-# The Grinch - Setup Guide
+# The Grinch (PS1) - Setup Guide
 
 ## Required Software
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Please use version 0.6.2 or later for integrated
 BizHawk support.
-- Legally obtained NTSC Bin ROM file, probably named something like `Grinch, The (USA) (En,Fr,Es).bin`.
-- CUE files may work, but I have not tested this.
+- Legally obtained NTSC Bin ROM file, probably named something like `Grinch, The (USA) (En,Fr,Es).bin`. 
+CUE files may work, but I have not tested this.
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) Version 2.9.1 is supported, but I can't promise if any version is stable or not.
 - The latest `grinch.apworld` file. You can find this on the [Releases page](https://github.com/MarioSpore/Grinch-AP/releases/latest). Put this in your `Archipelago/custom_worlds` folder.
+- PSX BIOS Firmware bin file, which is required to run the game through Bizhawk. The file you need should be
+named something like `SCPH-5501.BIN`.
 
 ## Configuring BizHawk
 Once you have installed BizHawk, open `EmuHawk.exe` and change the following settings:
@@ -23,6 +25,10 @@ This can be found under Analog Controls through `Config > Controllers…`.
 Depending on your controller, you may also want to tweak the Deadzone. Something like 6% is recommended for a DualShock 4.
 - Consider clearing keybinds in `Config > Hotkeys…` if you don't intend to use them. Select the keybind and press Esc to
 clear it.
+- You are required to legally obtain a PSX Bios BIN firmware file for the game to be opened. To import this, you go to
+`Config > Firmware... > Tools` and scrolling until you see the PlayStation tab. You might right click on the bios region
+and click `Set Customization` or `Import` on the top of the window. The bios should be recognized if Bizhawk displays a
+checkmark beside it, saying the bios version you have is stable and should run without issues.
 
 ## Generating a Game
 
