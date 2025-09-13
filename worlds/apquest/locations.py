@@ -19,7 +19,8 @@ LOCATION_NAME_TO_ID = {
     "Bottom Left Extra Chest": 4,
     "Bottom Right Room Left Chest": 5,
     "Bottom Right Room Right Chest": 6,
-    "Right Room Enemy Drop": 10,  # Location IDs don't need to be sequential, as long as they're unique and greater than 0
+    # Location IDs don't need to be sequential, as long as they're unique and greater than 0.
+    "Right Room Enemy Drop": 10,
 }
 
 
