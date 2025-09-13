@@ -20,10 +20,8 @@ def run_client(*args: str) -> None:
     from .client.launch import launch_ap_quest_client
 
     # Also, if your component has its own lifecycle, like if it is its own window that can be interacted with,
-    # you should use LauncherComponents.launch_subprosses to launch it.
-    # Specifically for components that support a gui mode using kivy, but can also be run without gui,
     # you should use the LauncherComponents.launch helper (which itself calls launch_subprocess).
-    # This mainly applies to clients derived from APs generic "CommonClient" class.
+    # This will create a subprocess for your component, launching it in a separate window from the Archipelago Launcher.
     launch(launch_ap_quest_client, name="APQuest Client", args=args)
 
 
