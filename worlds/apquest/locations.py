@@ -29,7 +29,7 @@ class APQuestLocation(Location):
     game = "APQuest"
 
 
-# Let's make one more helper method before we begin:
+# Let's make one more helper method before we begin actually creating locations.
 # Later on in the code, we'll want specific subsections of LOCATION_NAME_TO_ID.
 # To reduce the chance of copy-paste errors writing something like {"Chest": LOCATION_NAME_TO_ID["Chest"]},
 # let's make a helper method that takes a list of location names and returns them as a dict with their IDs.
