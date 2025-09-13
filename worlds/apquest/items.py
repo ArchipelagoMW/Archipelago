@@ -94,12 +94,19 @@ def create_all_items(world: APQuestWorld) -> None:
     # Otherwise, we add a filler Confetti Cannon.
     if world.options.hammer:
         # Once again, it is important to stress that even though the Hammer doesn't always exist,
-        # it must be present in the worlds location_name_to_id.
+        # it must be present in the worlds item_name.
         # Whether it is actually in the itempool is determined purely by whether we create and add the item here.
         itempool.append(world.create_item("Hammer"))
 
     # Archipelago requires that each world submits as many locations as it submits items.
-    # This is what filler is for. APQuest has two filler items: The Confetti Cannon and the Math Trap.
+    # This is where we can use our filler and trap items.
+    # APQuest has two of these: The Confetti Cannon and the Math Trap.
+    # (Unfortunately, Archipelago is a bit ambiguous about its terminology here:
+    #  "filler" is an ItemClassification separate from "trap", but in a lot of its functions,
+    #  Archipelago will use "filler" to just mean "an additional item created to fill out the itempool".
+    #  "Filler" in this sense can technically have any ItemClassification,
+    #  but most commonly ItemClassification.filler or ItemClassification.trap.
+    #  Starting here, the word "filler" will be used for both filler-classified and trap-classified items.)
     # Creating filler items works the same as any other item. But there is a question:
     # How many filler items do we actually need to create?
     # In regions.py, we created either six or seven locations depending on the "extra_starting_chest" option.
