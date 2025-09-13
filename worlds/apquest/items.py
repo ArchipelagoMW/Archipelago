@@ -106,7 +106,8 @@ def create_all_items(world: APQuestWorld) -> None:
     #  Archipelago will use "filler" to just mean "an additional item created to fill out the itempool".
     #  "Filler" in this sense can technically have any ItemClassification,
     #  but most commonly ItemClassification.filler or ItemClassification.trap.
-    #  Starting here, the word "filler" will be used for both filler-classified and trap-classified items.)
+    #  Starting here, the word "filler" will be used to collectively refer to APQuest's Confetti Cannon and Math Trap,
+    #  which are ItemClassification.filler and ItemClassification.trap respectively.)
     # Creating filler items works the same as any other item. But there is a question:
     # How many filler items do we actually need to create?
     # In regions.py, we created either six or seven locations depending on the "extra_starting_chest" option.
