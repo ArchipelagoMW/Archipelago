@@ -3,7 +3,9 @@ from test.param import classvar_matrix
 from .bases import APQuestTestBase
 
 # Sometimes, you might want to test something with a specific option disabled, and then with it enabled.
-# To do this efficiently, we can use param.classvar_matrix.
+# We could write two separate TestCase classes, but for structural reasons and/or to reduce repeated code,
+# we might prefer both cases to be in one class.
+# To do this efficiently, we can use test.param.classvar_matrix.
 # First, we prepare a list of every option(s combination) we want to test:
 extra_starting_chest_options = [
     {"extra_starting_chest": False},
