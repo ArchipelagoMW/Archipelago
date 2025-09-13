@@ -491,23 +491,60 @@ def make_connections(mission_order: SC2MOGenMissionOrder, world: 'SC2World'):
         for layout in campaign.layouts:
             for mission in layout.missions:
                 if not mission.option_empty:
+                    mission_uses_rule = mission.entry_rule.target_amount > 0
                     mission_rule = mission.entry_rule.to_lambda(player)
+                    mandatory_prereq = mission.entry_rule.find_mandatory_mission()
                     # Only layout entrances need to consider campaign & layout prerequisites
                     if mission.option_entrance:
-                        campaign_rule = mission.parent().parent().entry_rule.to_lambda(player)
-                        layout_rule = mission.parent().entry_rule.to_lambda(player)
-                        unlock_rule = lambda state, campaign_rule=campaign_rule, layout_rule=layout_rule, mission_rule=mission_rule: \
-                                             campaign_rule(state) and layout_rule(state) and mission_rule(state)
-                    else:
+                        campaign_uses_rule = campaign.entry_rule.target_amount > 0
+                        campaign_rule = campaign.entry_rule.to_lambda(player)
+                        layout_uses_rule = layout.entry_rule.target_amount > 0
+                        layout_rule = layout.entry_rule.to_lambda(player)
+
+                        # Any mandatory prerequisite mission is good enough
+                        mandatory_prereq = campaign.entry_rule.find_mandatory_mission() if mandatory_prereq is None else mandatory_prereq
+                        mandatory_prereq = layout.entry_rule.find_mandatory_mission() if mandatory_prereq is None else mandatory_prereq
+
+                        # Avoid calling obviously unused lambdas
+                        if campaign_uses_rule:
+                            if layout_uses_rule:
+                                if mission_uses_rule:
+                                    unlock_rule = lambda state, campaign_rule=campaign_rule, layout_rule=layout_rule, mission_rule=mission_rule: \
+                                                         campaign_rule(state) and layout_rule(state) and mission_rule(state)
+                                else:
+                                    unlock_rule = lambda state, campaign_rule=campaign_rule, layout_rule=layout_rule: \
+                                                         campaign_rule(state) and layout_rule(state)
+                            else:
+                                if mission_uses_rule:
+                                    unlock_rule = lambda state, campaign_rule=campaign_rule, mission_rule=mission_rule: \
+                                                         campaign_rule(state) and mission_rule(state)
+                                else:
+                                    unlock_rule = campaign_rule
+                        elif layout_uses_rule:
+                            if mission_uses_rule:
+                                unlock_rule = lambda state, layout_rule=layout_rule, mission_rule=mission_rule: \
+                                                     layout_rule(state) and mission_rule(state)
+                            else:
+                                unlock_rule = layout_rule
+                        elif mission_uses_rule:
+                            unlock_rule = mission_rule
+                        else:
+                            unlock_rule = None
+                    elif mission_uses_rule:
                         unlock_rule = mission_rule
-                    # Individually connect to previous missions
-                    for prev_mission in mission.prev:
-                        connect(world, names, prev_mission.mission.mission_name, mission.mission.mission_name,
-                                lambda state, unlock_rule=unlock_rule: unlock_rule(state))
-                    # If there are no previous missions, connect to Menu instead
-                    if len(mission.prev) == 0:
-                        connect(world, names, "Menu", mission.mission.mission_name,
-                                lambda state, unlock_rule=unlock_rule: unlock_rule(state))
+                    else:
+                        unlock_rule = None
+                    
+                    # Connect to a discovered mandatory mission if possible
+                    if mandatory_prereq is not None:
+                        connect(world, names, mandatory_prereq.mission.mission_name, mission.mission.mission_name, unlock_rule)
+                    else:
+                        # If no mission is known to be mandatory, connect to all previous missions instead
+                        for prev_mission in mission.prev:
+                            connect(world, names, prev_mission.mission.mission_name, mission.mission.mission_name, unlock_rule)
+                        # As a last resort connect to Menu
+                        if len(mission.prev) == 0:
+                            connect(world, names, "Menu", mission.mission.mission_name, unlock_rule)
 
 
 def connect(world: 'SC2World', used_names: Dict[str, int], source: str, target: str,

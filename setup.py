@@ -65,7 +65,6 @@ from Cython.Build import cythonize
 non_apworlds: set[str] = {
     "A Link to the Past",
     "Adventure",
-    "ArchipIDLE",
     "Archipelago",
     "Lufia II Ancient Cave",
     "Meritous",
