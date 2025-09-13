@@ -76,6 +76,4 @@ def connect_regions(world: APQuestWorld) -> None:
     # In this case, we previously created an extra "Top Middle Room" region that we now need to connect to Overworld.
     if world.options.hammer:
         top_middle_room = world.get_region("Top Middle Room")
-        overworld.connect(
-            top_middle_room, "Overworld to Top Middle Room", lambda state: state.has("Hammer", world.player)
-        )
+        overworld.connect(top_middle_room, "Overworld to Top Middle Room")
