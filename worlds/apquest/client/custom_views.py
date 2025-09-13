@@ -13,7 +13,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivymd.uix.recycleview import MDRecycleView
 
-from ..apquest.inputs import Input
+from ..game.inputs import Input
 
 if TYPE_CHECKING:
     pass

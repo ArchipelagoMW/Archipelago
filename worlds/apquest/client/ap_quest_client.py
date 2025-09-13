@@ -7,10 +7,10 @@ from typing import TYPE_CHECKING, Any
 from CommonClient import CommonContext, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 
-from ..apquest.events import ConfettiFired, LocationClearedEvent, MathProblemSolved, MathProblemStarted, VictoryEvent
-from ..apquest.game import Game, Input
-from ..apquest.items import Item
-from ..apquest.locations import Location
+from ..game.events import ConfettiFired, LocationClearedEvent, MathProblemSolved, MathProblemStarted, VictoryEvent
+from ..game.game import Game, Input
+from ..game.items import Item
+from ..game.locations import Location
 from .game_manager import APQuestManager
 from .graphics import PlayerSprite
 from .item_quality import get_quality_for_network_item

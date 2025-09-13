@@ -4,8 +4,8 @@ from io import BytesIO
 
 from kivy.uix.image import CoreImage
 
-from .. import apquest
-from ..apquest.graphics import Graphic
+from .. import game
+from ..game.graphics import Graphic
 
 IMAGE_GRAPHICS = {
     Graphic.EMPTY: None,
@@ -104,7 +104,7 @@ ALL_GRAPHICS = [
 ]
 
 TEXTURES = {
-    file_name: CoreImage(BytesIO(pkgutil.get_data(apquest.__name__, f"graphics/{file_name}")), ext="png").texture
+    file_name: CoreImage(BytesIO(pkgutil.get_data(game.__name__, f"graphics/{file_name}")), ext="png").texture
     for file_name in ALL_GRAPHICS
     if file_name is not None
 }

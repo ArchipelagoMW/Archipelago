@@ -1,6 +1,6 @@
 from enum import Enum
 
-from worlds.apquest.apquest.generate_math_problem import MathProblemType
+from worlds.apquest.game.generate_math_problem import MathProblemType
 
 
 class Graphic(Enum):

@@ -13,8 +13,8 @@ from kivy.uix.image import Image
 from kivy.uix.layout import Layout
 from kivymd.uix.recycleview import MDRecycleView
 
-from ..apquest.game import Game
-from ..apquest.graphics import Graphic
+from ..game.game import Game
+from ..game.graphics import Graphic
 from .custom_views import APQuestGameView, APQuestGrid, ConfettiView, VolumeSliderView
 from .graphics import IMAGE_GRAPHICS, PLAYER_GRAPHICS, TEXTURES, PlayerSprite
 from .sounds import SoundManager
