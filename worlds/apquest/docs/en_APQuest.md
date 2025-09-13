@@ -9,7 +9,8 @@ config file.
 
 APQuest is an original game made entirely by NewSoupVi.  
 It is a minimal 8bit-era inspired adventure game with grid-like movement.  
-It is about 20 seconds long. However, the client can seamlessly switch between different slots, so if you want to have 10 of them, that should work pretty well.
+It is about 20 seconds long. However, the client can seamlessly switch between different slots,
+so if you want to have 10 of them, that should work pretty well.
 
 Crucially, this game is entirely integrated into the client sitting inside its .apworld.  
 If you have the .apworld installed into your [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
