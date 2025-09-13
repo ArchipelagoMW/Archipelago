@@ -5,9 +5,7 @@ from typing import Any
 from worlds.AutoWorld import World
 
 # Imports of your world's files must be relative.
-from . import items, locations, regions, rules
-from .options import APQuestOptions
-from .web_world import APQuestWebWorld
+from . import items, locations, options, regions, rules, web_world
 
 
 # The world class is the heart and soul of an apworld implementation.
@@ -29,11 +27,11 @@ class APQuestWorld(World):
     game = "APQuest"
 
     # The WebWorld is a definition class that governs how this world will be displayed on the website.
-    web = APQuestWebWorld()
+    web = web_world.APQuestWebWorld()
 
     # This is how we associate the options defined in our options.py with our world.
-    options: APQuestOptions
-    options_dataclass = APQuestOptions
+    options_dataclass = options.APQuestOptions
+    options: options.APQuestOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
 
     # Our world class must have a static location_name_to_id and item_name_to_id defined.
     # We define these in regions.py and items.py respectively, so we just set them here.
