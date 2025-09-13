@@ -63,7 +63,7 @@ def create_item_with_correct_classification(world: APQuestWorld, name: str) -> A
     classification = DEFAULT_ITEM_CLASSIFICATIONS[name]
 
     # It is perfectly normal and valid for an item's classification to differ based on the player's options.
-    # In our case, Health Upgrades are only logically considered in hard mode.
+    # In our case, Health Upgrades are only relevant to logic (and thus labeled as "progression") in hard mode.
     if name == "Health Upgrade" and world.options.hard_mode:
         classification = ItemClassification.progression
 
