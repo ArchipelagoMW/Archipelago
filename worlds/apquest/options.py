@@ -7,6 +7,8 @@ from Options import Choice, OptionGroup, PerGameCommonOptions, Range, Toggle
 
 
 # A toggle is an option that can either be on or off. This will be represented by a checkbox on the website.
+# The default for a toggle is "off".
+# If you want a toggle to be on by default, you can use the "DefaultOnToggle" class instead of the "Toggle" class.
 class HardMode(Toggle):
     """
     In hard mode, the basic enemy and the final boss will have more health.
@@ -56,7 +58,7 @@ class StartWithOneConfettiCannon(Toggle):
     display_name = "Start With One Confetti Cannon"
 
 
-# A range is a numeric option with a min and max value. This will be represented by a slider on the website.
+# A Range is a numeric option with a min and max value. This will be represented by a slider on the website.
 class ConfettiExplosiveness(Range):
     """
     How much confetti each use of a confetti cannon will fire.
@@ -66,6 +68,8 @@ class ConfettiExplosiveness(Range):
 
     range_start = 0
     range_end = 10
+
+    # Range options must define an explicit default value.
     default = 3
 
 
@@ -86,6 +90,7 @@ class PlayerSprite(Choice):
     # For example, we could make it so "player_sprite: kitty" resolves to "player_sprite: cat" like this:
     alias_kitty = option_cat
 
+    # Choice options must define an explicit default value.
     default = option_human
 
 
