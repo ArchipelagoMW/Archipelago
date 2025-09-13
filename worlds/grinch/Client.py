@@ -195,7 +195,7 @@ class GrinchClient(BizHawkClient):
 
         # Ensures we only get the new items that we want to give the player
         new_items_only = ctx.items_received[self.last_received_index:]
-        addr_list_to_update: list[tuple[int, Sequence[int], str]] = []
+        ram_addr_dict: dict[int, list[int]] = {}
 
         for item_received in new_items_only:
             local_item = ctx.item_names.lookup_in_game(item_received.item)
@@ -203,8 +203,11 @@ class GrinchClient(BizHawkClient):
 
             for addr_to_update in grinch_item_ram_data.update_ram_addr:
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
-                current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
-                    addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
+                if addr_to_update.ram_address in ram_addr_dict.keys():
+                    current_ram_address_value = ram_addr_dict[addr_to_update.ram_address][0]
+                else:
+                    current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
+                        addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
                 if is_binary:
                     current_ram_address_value = (current_ram_address_value | (1 << addr_to_update.binary_bit_pos))
                 elif addr_to_update.update_existing_value:
@@ -215,15 +218,13 @@ class GrinchClient(BizHawkClient):
                     current_ram_address_value = addr_to_update.value
 
                 # Write the updated value back into RAM
-                addr_list_to_update.append((addr_to_update.ram_address,
-                    current_ram_address_value.to_bytes(addr_to_update.bit_size, "little"),"MainRAM"))
-
+                ram_addr_dict[addr_to_update.ram_address] = [current_ram_address_value, addr_to_update.bit_size]
 
             self.last_received_index += 1
 
-        addr_list_to_update.append((RECV_ITEM_ADDR,
-                self.last_received_index.to_bytes(RECV_ITEM_BITSIZE,"little"), "MainRAM"))
-        await bizhawk.write(ctx.bizhawk_ctx, addr_list_to_update)
+        # Update the latest received item index to ram as well.
+        ram_addr_dict[RECV_ITEM_ADDR] = [self.last_received_index, RECV_ITEM_BITSIZE]
+        await bizhawk.write(ctx.bizhawk_ctx, self.convert_dict_to_ram_list(ram_addr_dict))
 
     async def goal_checker(self, ctx: "BizHawkClientContext"):
         if not ctx.finished_game:
@@ -240,17 +241,16 @@ class GrinchClient(BizHawkClient):
 
     # This function's entire purpose is to take away items we physically received ingame, but have not received from AP
     async def remove_physical_items(self, ctx: "BizHawkClientContext"):
-        addr_list_to_update: list[tuple[int, Sequence[int], str]] = []
+        ram_addr_dict: dict[int, list[int]] = {}
 
         list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
         items_to_check: dict[str, GrinchItemData] = {**GADGETS_TABLE} #, **SLEIGH_PARTS_TABLE
         heart_count = len(list(item_id for item_id in list_recv_itemids if item_id == 42570))
         heart_item_data = ALL_ITEMS_TABLE["Heart of Stone"]
-        addr_list_to_update.append((heart_item_data.update_ram_addr[0].ram_address,
-            min(heart_count, 4).to_bytes(1, "little"), "MainRAM"))
+        ram_addr_dict[heart_item_data.update_ram_addr[0].ram_address] = [min(heart_count, 4), 1]
 
         # Setting mission count for all accesses back to 0 to prevent warping/unlocking after completing 3 missions
-        addr_list_to_update.append((0x0100F0, int(0).to_bytes(4, "little"), "MainRAM"))
+        ram_addr_dict[0x0100F0] = [0, 4]
 
         for (item_name, item_data) in items_to_check.items():
             # If item is an event or already been received, ignore.
@@ -261,20 +261,30 @@ class GrinchClient(BizHawkClient):
             for addr_to_update in item_data.update_ram_addr:
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
                 if is_binary:
-                    current_bin_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
-                        addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
+                    if addr_to_update.ram_address in ram_addr_dict.keys():
+                        current_bin_value = ram_addr_dict[addr_to_update.ram_address][0]
+                    else:
+                        current_bin_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
+                            addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
                     current_bin_value &= ~(1 << addr_to_update.binary_bit_pos)
-                    addr_list_to_update.append((addr_to_update.ram_address,
-                        current_bin_value.to_bytes(1, "little"), "MainRAM"))
+                    ram_addr_dict[addr_to_update.ram_address] = [current_bin_value, 1]
                 else:
-                    addr_list_to_update.append((addr_to_update.ram_address,
-                        int(0).to_bytes(1, "little"), "MainRAM"))
+                    ram_addr_dict[addr_to_update.ram_address] = [0, addr_to_update.bit_size]
 
-        await bizhawk.write(ctx.bizhawk_ctx, addr_list_to_update)
+        await bizhawk.write(ctx.bizhawk_ctx, self.convert_dict_to_ram_list(ram_addr_dict))
+
+
+    def convert_dict_to_ram_list(self, addr_dict: dict[int, list[int]]) -> list[tuple[int, Sequence[int], str]]:
+        addr_list_to_update: list[tuple[int, Sequence[int], str]] = []
+
+        for (key, val) in addr_dict.items():
+            addr_list_to_update.append((key, val[0].to_bytes(val[1], "little"), "MainRAM"))
+
+        return addr_list_to_update
 
     # Removes the regional access until you actually received it from AP.
     async def constant_address_update(self, ctx: "BizHawkClientContext"):
-        addr_list_to_update: list[tuple[int, Sequence[int], str]] = []
+        ram_addr_dict: dict[int, list[int]] = {}
 
         list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
         items_to_check: dict[str, GrinchItemData] = {**KEYS_TABLE, **MISSION_ITEMS_TABLE}
@@ -288,23 +298,24 @@ class GrinchClient(BizHawkClient):
             for addr_to_update in item_data.update_ram_addr:
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
                 if is_binary:
-                    current_bin_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
-                        addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
+                    if addr_to_update.ram_address in ram_addr_dict.keys():
+                        current_bin_value = ram_addr_dict[addr_to_update.ram_address][0]
+                    else:
+                        current_bin_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
+                            addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
                     if GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
                         current_bin_value |= (1 << addr_to_update.binary_bit_pos)
                     else:
                         current_bin_value &= ~(1 << addr_to_update.binary_bit_pos)
-                    addr_list_to_update.append((addr_to_update.ram_address,
-                        current_bin_value.to_bytes(1, "little"), "MainRAM"))
+
+                    ram_addr_dict[addr_to_update.ram_address] = [current_bin_value, 1]
                 else:
                     if GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
-                        addr_list_to_update.append((addr_to_update.ram_address,
-                            addr_to_update.value.to_bytes(1, "little"), "MainRAM"))
+                        ram_addr_dict[addr_to_update.ram_address] = [addr_to_update.value, addr_to_update.bit_size]
                     else:
-                        addr_list_to_update.append((addr_to_update.ram_address,
-                            int(0).to_bytes(1, "little"), "MainRAM"))
+                        ram_addr_dict[addr_to_update.ram_address] = [0, addr_to_update.bit_size]
 
-        await bizhawk.write(ctx.bizhawk_ctx, addr_list_to_update)
+        await bizhawk.write(ctx.bizhawk_ctx, self.convert_dict_to_ram_list(ram_addr_dict))
 
     async def ingame_checker(self, ctx: "BizHawkClientContext"):
         from CommonClient import logger
