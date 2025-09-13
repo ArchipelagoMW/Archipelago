@@ -113,18 +113,18 @@ def create_all_items(world: APQuestWorld) -> None:
     # In regions.py, we created either six or seven locations depending on the "extra_starting_chest" option.
     # In this function, we have created five or six items depending on whether the "hammer" option is enabled.
     # We *could* have a really complicated if-else tree checking the options again, but there is a better way.
-    # We can compare the size of our itempool so far to the amount of locations in our world.
+    # We can compare the size of our itempool so far to the number of locations in our world.
 
     # The length of our itempool is easy to determine, since we have it as a list.
-    amount_of_items = len(itempool)
+    number_of_items = len(itempool)
 
-    # The amount of locations is also easy to determine, but we have to be careful.
+    # The number of locations is also easy to determine, but we have to be careful.
     # Just calling len(world.get_locations()) would report an incorrect number, because of our *event locations*.
-    # What we actually want is the amount of *unfilled* locations. Luckily, there is a helper method for this:
-    amount_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
+    # What we actually want is the number of *unfilled* locations. Luckily, there is a helper method for this:
+    number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
 
-    # Now, we just subtract the amount of items from the amount of locations to get the number of empty item slots.
-    needed_amount_of_filler = amount_of_unfilled_locations - amount_of_items
+    # Now, we just subtract the number of items from the number of locations to get the number of empty item slots.
+    needed_number_of_filler_items = number_of_unfilled_locations - number_of_items
 
     # Finally, we create that many filler items and add them to the itempool.
     # To create our filler, we could just use world.create_item("Confetti Cannon").
@@ -133,7 +133,7 @@ def create_all_items(world: APQuestWorld) -> None:
     # which must return the name of an infinitely repeatable filler item.
     # Defining this function enables the use of a helper function called world.create_filler().
     # You can just use this function directly to create as many filler items as you need to complete your itempool.
-    itempool += [world.create_filler() for _ in range(needed_amount_of_filler)]
+    itempool += [world.create_filler() for _ in range(needed_number_of_filler_items)]
 
     # But... is that the right option for your game? Let's explore that.
     # For some games, the concepts of "regular itempool filler" and "additionally created filler" are different.
