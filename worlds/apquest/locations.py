@@ -70,15 +70,15 @@ def create_regular_locations(world: APQuestWorld) -> None:
     )
     bottom_right_room.add_locations(bottom_right_room_locations, APQuestLocation)
 
-    top_left_room_locations: dict[str, int | None] = get_location_names_with_ids(["Top Left Room Chest"])
+    top_left_room_locations = get_location_names_with_ids(["Top Left Room Chest"])
     top_left_room.add_locations(top_left_room_locations, APQuestLocation)
 
-    right_room_locations: dict[str, int | None] = get_location_names_with_ids(["Right Room Enemy Drop"])
+    right_room_locations = get_location_names_with_ids(["Right Room Enemy Drop"])
     right_room.add_locations(right_room_locations, APQuestLocation)
 
     # Locations may be in different regions depending on the player's options.
     # In our case, the hammer option puts the Top Middle Chest into its own room called Top Middle Room.
-    top_middle_room_locations: dict[str, int | None] = get_location_names_with_ids(["Top Middle Chest"])
+    top_middle_room_locations = get_location_names_with_ids(["Top Middle Chest"])
     if world.options.hammer:
         top_middle_room = world.get_region("Top Middle Room")
         top_middle_room.add_locations(top_middle_room_locations, APQuestLocation)
