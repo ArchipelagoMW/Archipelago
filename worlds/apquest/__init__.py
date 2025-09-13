@@ -5,9 +5,13 @@ from worlds.LauncherComponents import Component, Type, components, launch
 from .world import APQuestWorld as APQuestWorld
 
 
-# Your apworld might have other components than just the generation.
+# Apart from the regular apworld code that allows generating multiworld seeds with your game,
+# your apworld might have other "components" that should be launchable from the Archipelago Launcher.
 # The most common type of component is a client, but there are other components, such as sprite/palette adjusters.
-# APQuest has a CommonClient-derived client that the entire game sits inside.
+# (Note: Some worlds distribute their clients as separate, standalone programs,
+#  while others include them in the apworld itself. Standalone clients are not an apworld component,
+#  although you could make a component that e.g. auto-installs and launches the standalone client for the user.)
+# APQuest has a CommonClient-derived client inside that apworld that contains the entire game. This is a component.
 # APQuest will not teach you how to make a client or any other type of component.
 # However, let's quickly talk about how you register a component to be launchable from the Archipelago Launcher.
 # First, you'll need a function that takes a list of args (e.g. from the command line) that launches your component.
