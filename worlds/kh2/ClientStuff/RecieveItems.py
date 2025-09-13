@@ -413,3 +413,14 @@ async def displayPuzzlePieceTextinGame(self, string_to_display):
         self.kh2_write_byte(0x800000, 2)  # displaying puzzle piece popup
         self.queued_puzzle_popup.remove(string_to_display)
         await asyncio.sleep(0.5)
+
+
+async def displayChestTextInGame(self, string_to_display):
+    if self.kh2_read_byte(0x800000) == 0:
+
+        displayed_string = self.to_khscii(string_to_display)
+        self.kh2_write_bytes(0x800150, 0)                # item picture
+        self.kh2_write_bytes(0x800154, displayed_string) # text
+        self.kh2_write_byte(0x800000, 3)                 # displaying chest popup
+        self.queued_puzzle_popup.remove(string_to_display)
+        await asyncio.sleep(0.5)

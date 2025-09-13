@@ -17,7 +17,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         Info: Displays the Information notification when you receive an item.
         None: Toggle off any of the receiving notifications.
         """
-        if notification_type in {"Puzzle", "Info", "None"}:
+        if notification_type in {"Puzzle", "Info", "None","Chest"}:
             temp_client_settings = self.ctx.client_settings["receive_popup_type"]
             self.ctx.client_settings["receive_popup_type"] = notification_type
             self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['receive_popup_type']}")
@@ -30,7 +30,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         Info: Displays the Information notification when you receive an item.
         None: Toggle off any of the receiving notifications.
         """
-        if notification_type in {"Puzzle", "Info", "None"}:
+        if notification_type in {"Puzzle", "Info", "None","Chest"}:
             temp_client_settings = self.ctx.client_settings["send_popup_type"]
             self.ctx.client_settings["send_popup_type"] = notification_type
             # doing it in this order to make sure it actually changes
@@ -78,3 +78,12 @@ class KH2CommandProcessor(ClientCommandProcessor):
 
     #def _cmd_kill(self):
     #    self.ctx.kh2_write_byte(0x810000, 1)
+
+    def _cmd_chest(self,itemid:int):
+        from .RecieveItems import to_khscii
+        from .ReadAndWrite import kh2_write_bytes,kh2_write_byte
+        displayed_string = to_khscii(self.ctx,"Yessir")
+        kh2_write_byte(self.ctx,0x800000,3)
+        kh2_write_byte(self.ctx,0x800150, int(itemid))
+        kh2_write_bytes(self.ctx,address = 0x800154,value = displayed_string)
+
