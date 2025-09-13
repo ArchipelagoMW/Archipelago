@@ -20,7 +20,6 @@ class APQuestWorld(World):
     APQuest is a minimal 8bit-era inspired adventure game with grid-like movement.
     Good games don't need more than six checks.
     """
-
     # The docstring should contain a description of the game, to be displayed on the WebHost.
 
     # You must override the "game" field to say the name of the game.

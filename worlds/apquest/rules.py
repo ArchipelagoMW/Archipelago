@@ -73,10 +73,13 @@ def set_all_location_rules(world: APQuestWorld) -> None:
     right_room_enemy = world.get_location("Right Room Enemy Drop")
 
     # DON'T DO THIS!!!!
-    set_rule(right_room_enemy, lambda state: (
-        state.has("Sword")
-        and (not world.options.hard_mode or state.has_any(("Shield", "Health Upgrade"), world.player))
-    ))
+    set_rule(
+        right_room_enemy,
+        lambda state: (
+            state.has("Sword")
+            and (not world.options.hard_mode or state.has_any(("Shield", "Health Upgrade"), world.player))
+        ),
+    )
     # DON'T DO THIS!!!!
 
     # Now, what's actually wrong with this? It works perfectly fine, right?
