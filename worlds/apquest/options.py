@@ -20,8 +20,8 @@ class HardMode(Toggle):
     In hard mode, the basic enemy and the final boss will have more health.
     The Health Upgrades become progression, as they are now required to beat the final boss.
     """
-
     # The docstring of an option is used as the description on the website and in the template yaml.
+
     # You'll also want to set a display name, which will determine what the option is called on the website.
     display_name = "Hard Mode"
 
