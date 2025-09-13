@@ -41,3 +41,7 @@ def kh2_read_string(self, address, length):
 
 def kh2_write_bytes(self, address, value):
     return self.kh2.write_bytes(self.kh2.base_address + address, bytes(value), len(value))
+
+
+def kh2_return_base_address(self):
+    return self.kh2.base_address

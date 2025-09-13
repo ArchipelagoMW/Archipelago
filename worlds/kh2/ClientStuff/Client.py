@@ -263,7 +263,7 @@ class KH2Context(CommonContext):
         self.deathlink_toggle = False
         self.deathlink_blacklist = []
 
-    from .ReadAndWrite import kh2_read_longlong, kh2_read_int, kh2_read_string, kh2_read_byte, kh2_write_bytes, kh2_write_int, kh2_write_short, kh2_write_byte, kh2_read_short
+    from .ReadAndWrite import kh2_read_longlong, kh2_read_int, kh2_read_string, kh2_read_byte, kh2_write_bytes, kh2_write_int, kh2_write_short, kh2_write_byte, kh2_read_short, kh2_return_base_address
     from .SendChecks import checkWorldLocations, checkSlots, checkLevels, verifyChests, verifyLevel
     from .RecieveItems import displayPuzzlePieceTextinGame, displayInfoTextinGame, verifyItems, give_item, IsInShop, to_khscii
 

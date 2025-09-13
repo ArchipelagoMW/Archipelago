@@ -322,8 +322,10 @@ async def verifyItems(self):
             item_data = self.item_name_to_data[item_name]
             amount_of_items = 0
             amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["Magic"][item_name]
-            if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(
-                    self.Shop) in {10, 8}:
+            # - base address because it reads a pointer then in stead of reading what it points to its pointer+baseaddress which offsets
+            if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(0xABAF38) == 0 \
+                    and self.kh2_read_longlong(0x0ABCCC8) != 0 \
+                    and self.kh2_read_int(self.kh2_read_longlong(0x0ABCCC8) + 0x88-self.kh2_return_base_address()) != 0:
                 self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
         for item_name in master_stat:
