@@ -109,5 +109,8 @@ class TestEasyModeLogic(APQuestTestBase):
 
         # Then, let's verify that they have the useful classification and NOT the progression classification.
         with self.subTest("Test that the Health Upgrades in the pool are useful, but not progression."):
+            # To check whether an item has a certain classification, you can use the following helper properties:
+            # item.filler, item.trap, item.useful and... item.advancement. No, not item.progression...
+            # (Just go with it, AP is old and has had many name changes over the years :D)
             self.assertTrue(all(health_upgrade.useful for health_upgrade in health_upgrades))
             self.assertFalse(any(health_upgrade.advancement for health_upgrade in health_upgrades))
