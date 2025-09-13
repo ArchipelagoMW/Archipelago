@@ -379,9 +379,10 @@ class GrinchClient(BizHawkClient):
 
     async def ring_link_input(self, egg_amount: int, ctx: "BizHawkClientContext"):
         from CommonClient import logger
-        current_egg_count = int.from_bytes(
+        game_egg_count = int.from_bytes(
             (await bizhawk.read(ctx.bizhawk_ctx, [(EGG_COUNT_ADDR, EGG_ADDR_BYTESIZE, "MainRAM")]))[0], "little")
-        current_egg_count = min(current_egg_count + egg_amount, MAX_EGGS)
+        non_neg_eggs = game_egg_count + egg_amount if game_egg_count + egg_amount > 0 else 0
+        current_egg_count = min(non_neg_eggs, MAX_EGGS)
         await bizhawk.write(ctx.bizhawk_ctx, [(EGG_COUNT_ADDR,
             int(current_egg_count).to_bytes(EGG_ADDR_BYTESIZE, "little"), "MainRAM")])
         self.previous_egg_count = current_egg_count
