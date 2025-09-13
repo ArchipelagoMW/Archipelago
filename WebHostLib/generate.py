@@ -96,7 +96,11 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
         except PicklingError as e:
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
-            return render_template("seedError.html", seed_error=("PicklingError: " + str(e)))
+            meta["error"] = format_exception(e)
+            if e.__cause__:
+                meta["source"] = format_exception(e.__cause__)
+            details = json.dumps(meta, indent=4).strip()
+            return render_template("seedError.html", seed_error=meta["error"], details=details)
 
         commit()
 
