@@ -81,7 +81,7 @@ def create_all_items(world: APQuestWorld) -> None:
     # Creating items should generally be done via the world's create_item method.
     # First, we create a list containing all the items that always exist.
 
-    itempool = [
+    itempool: list[Item] = [
         world.create_item("Key"),
         world.create_item("Sword"),
         world.create_item("Shield"),
