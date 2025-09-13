@@ -27,8 +27,9 @@ class TestExtraStartingChest(APQuestTestBase):
         if self.world.options.extra_starting_chest:
             with self.subTest("Test that Bottom Left Extra Chest exists when extra_starting_chest option is enabled"):
                 # Currently, the best way to check for the existence of a location is to try using get_location,
-                # then catch the KeyError that is raised if the location doesn't exist.
-                # This makes this test a bit awkward, because TestCase has an assertRaises, but not an assertNotRaises.
+                # then watch for the KeyError that is raised if the location doesn't exist.
+                # In a testing context, if we expect the code to raise, we can do this with TestCase.assertRaises.
+                # However, the opposite case is awkward, because TestCase doesn't have an "assertNotRaises".
                 try:
                     self.world.get_location("Bottom Left Extra Chest")
                 except KeyError:
