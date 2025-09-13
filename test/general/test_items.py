@@ -150,8 +150,7 @@ class TestBase(unittest.TestCase):
         """Test that worlds don't modify the locality of items after duplicates are resolved"""
         gen_steps = ("generate_early",)
         additional_steps = ("create_regions", "create_items", "set_rules", "connect_entrances", "generate_basic", "pre_fill")
-        worlds_to_test = {game: world for game, world in AutoWorldRegister.world_types.items()}
-        for game_name, world_type in worlds_to_test.items():
+        for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
                 local_items = multiworld.worlds[1].options.local_items.value.copy()
