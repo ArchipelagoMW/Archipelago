@@ -51,7 +51,7 @@ In terms of these non-binding, non-legal Archipelago ownership structures, I wil
 I, NewSoupVi, hereby relinquish any and all rights to remove APQuest from Archipelago.  
 This applies to all parts of APQuest with the sole exception of the music and sounds.
 If I want the sounds to be removed, I must do so via a PR to the Archipelago repository myself.
-Said PR must keep APQuest in-tact and playable, just with the music removed.
+Said PR must keep APQuest intact and playable, just with the music removed.
 
 As long as I am the maintainer of APQuest, I wish to act as such.  
 This means that any updates to APQuest must go through me.
