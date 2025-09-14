@@ -1855,6 +1855,9 @@ class Spoiler:
                     Utils.__version__, self.multiworld.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.multiworld.algorithm)
             outfile.write('Players:                         %d\n' % self.multiworld.players)
+            if self.multiworld.players > 1:
+                loc_count = len([loc for loc in self.multiworld.get_locations() if not loc.is_event])
+                outfile.write('Total Location Count:            %d\n' % loc_count)
             outfile.write(f'Plando Options:                  {self.multiworld.plando_options}\n')
             AutoWorld.call_stage(self.multiworld, "write_spoiler_header", outfile)
 
