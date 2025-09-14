@@ -510,7 +510,21 @@ rules_dict: dict[str,list[list[str]]] = {
     "5th Crate Squashed": [
         []
     ]
+    # "Green Present": [
+    #     []
+    # ],
+    # "Red Present": [
+    #     []
+    # ],
+    # "Pink Present": [
+    #     ["Rotten Egg Launcher"],
+    #     ["Pancake"]
+    # ],
+    # "Yellow Present": [
+    #     ["Pancake"]
+    # ]
 }
+
 
 
 access_rules_dict: dict[str,list[list[str]]] = {
