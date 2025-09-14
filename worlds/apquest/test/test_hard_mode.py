@@ -75,6 +75,9 @@ class TestHardMode(APQuestTestBase):
         # But crucially, we are ensuring that all three items are actually required.
 
         # This explains why the list can have multiple elements, but not why each element is also a list itself.
+        # This is probably where you should stop reading and skip to test_hard_mode_health_upgrades.
+        # But if you really want to know why:
+
         # Having multiple elements in the inner lists is something that only comes up in more complex scenarios.
         # APQuest doesn't have any of these scenarios, but let's imagine one for completeness' sake.
         # Currently, the Enemy can be beaten with these item combinations:
