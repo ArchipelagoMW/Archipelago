@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from Options import FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, TextChoice, Range, NamedRange, OptionList, \
-    PerGameCommonOptions
+    PerGameCommonOptions, OptionSet
 
 class StartingArea(Choice):
     """
@@ -39,24 +39,38 @@ class Missionsanity(Choice):
     option_both = 3
     default = 1
 
-class AnnoyingLocations(DefaultOnToggle):
-    """Makes certain long, annoying, and tedious checks to be excluded [NOT IMPLEMENTED]"""
-    display_name = "Annoying Locations"
+class ExcludeRegions(OptionSet):
+    """Allows entire regions to be an excluded location to ensure you are not logically required to enter the region along
+     with any and all checks that are in that region too. WARNING: Excluding too many regions may cause generation to fail.
+
+     Valid keys: "Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Countdown to X-Mas Clock Tower", "City Hall",
+                  "Ski Resort", "Civic Center", "Minefield", "Power Plant", "Generator Building", "Scout's Hut",
+                  "North Shore", "Mayor's Villa", "Sleigh Ride"
+
+     [NOT IMPLEMENTED]"""
+    display_name = "Exclude Regions"
+    valid_keys = {"Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Countdown to X-Mas Clock Tower", "City Hall",
+                  "Ski Resort", "Civic Center", "Minefield", "Power Plant", "Generator Building", "Scout's Hut",
+                  "North Shore", "Mayor's Villa", "Sleigh Ride"}
 
 class ProgressiveGadget(Toggle):#DefaultOnToggle
     """
-    Determines whether you get access to a gadget as individual blueprint count [NOT IMPLEMENTED]
+    Determines whether you get access to a gadget as individual blueprint count. [NOT IMPLEMENTED]
     """
     display_name = "Progressive Gadgets"
 
 class Supadow(Toggle):
-    """Enables completing minigames through the Supadows in Mount Crumpit as checks. (9 locations) [NOT IMPLEMENTED]"""
-    display_name = "Supadow Minigame Locations"
+    """Enables completing minigames through the Supadows in Mount Crumpit as checks. NOT IMPLEMENTED]"""
+    display_name = "Supadow Minigames"
 
 
-class Gifts(Toggle):
-    """Missions that require you to squash every present in a level. (4 locations) [NOT IMPLEMENTED]"""
-    display_name = "Gift Collection Locations"
+class Gifts(Range):
+    """Considers how many gifts must be squashed per check.
+    Enabling this will also enable squashing all gifts in a region mission along side this. [NOT IMPLEMENTED]"""
+    display_name = "Gifts Squashed per check"
+    range_start = 0
+    range_end = 300
+    default = 0
 
 
 class Movesanity(Toggle):
@@ -70,16 +84,18 @@ class UnlimitedEggs(Toggle):
 
 class RingLinkOption(Toggle):
     """Whenever this is toggled, your ammo is linked with other ringlink-compatible games that also have this enabled."""
+    display_name = "Ring Link"
 
 class TrapLinkOption(Toggle):
-    """If a trap is sent from Grinch, traps that are compatible with other games are triggered aswell. [NOT IMPLEMENTED]"""
+    """If a trap is sent from Grinch, traps that are compatible with other games are triggered as well. [NOT IMPLEMENTED]"""
+    display_name = "Trap Link"
 
 @dataclass
 class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     starting_area: StartingArea
     progressive_vacuum: ProgressiveVacuum
     missionsanity: Missionsanity
-    annoying_locations: AnnoyingLocations
+    exclude_regions: ExcludeRegions
     progressive_gadget: ProgressiveGadget
     supadow_minigames: Supadow
     giftsanity: Gifts
