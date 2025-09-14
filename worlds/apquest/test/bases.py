@@ -22,5 +22,5 @@ class APQuestTestBase(WorldTestBase):
 # The best order to read these tests in is:
 # 1. test_easy_mode.py
 # 2. test_hard_mode.py
-# 3. test_hammer.py
-# 4. test_extra_starting_chest.py
+# 3. test_extra_starting_chest.py
+# 4. test_hammer.py

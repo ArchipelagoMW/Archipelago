@@ -1,59 +1,66 @@
-from typing import cast
 
-from test.param import classvar_matrix
 
-from ..items import APQuestItem
 from .bases import APQuestTestBase
 
-# This file assumes that you've read test_extra_starting_chest.py first.
-# classvar_matrix will not be explained again here, so make sure you've read that first.
 
-# We'll once again use classvar_matrix to test that the world behaves correctly both if "hammer" option is disabled,
-# and also that it behaves correctly when the "hammer" option is enabled.
-hammer_options = [
-    {"hammer": False},
-    {"hammer": True},
-]
+class TestHammerOff(APQuestTestBase):
+    options = {
+        "hammer": False,
+    }
+
+    # Once again, this is just default settings, so running the default tests would be wasteful.
+    run_default_tests = False
+
+    # The hammer option adds the Hammer item to the itempool.
+    # Since the hammer option is off in this TestCase, we have to verify that the Hammer is *not* in the itempool.
+    def test_hammer_doesnt_exist(self) -> None:
+        # An easy way to verify that an item is or is not in the itempool is by using WorldTestBase.get_items_by_name().
+        # This will return a list of all matching items, which we can check for its length.
+        hammers_in_itempool = self.get_items_by_name("Hammer")
+        self.assertEqual(len(hammers_in_itempool), 0)
+
+    # If the hammer option is not enabled, the Top Middle Chest should just be accessible with nothing.
+    def test_hammer_is_not_required_for_top_middle_chest(self) -> None:
+        # To check whether an item is required for a location, we would use self.assertAccessDependency.
+        # However, in this case, we want to check that the Hammer *isn't* required for the Top Middle Chest location.
+        # The robust way to do this is to collect every item into the state except for the Hammer,
+        # then assert that the location is reachable.
+        # Luckily, there is a helper for this: "collect_all_but".
+        self.collect_all_but("Hammer")
+
+        # Now, we manually check that the location is accessible using location.can_reach(state):
+        top_middle_chest_player_one = self.world.get_location("Top Middle Chest")
+        self.assertTrue(top_middle_chest_player_one.can_reach(self.multiworld.state))
 
 
-@classvar_matrix(options=hammer_options)
-class TestHammer(APQuestTestBase):
-    # The hammer option adds the Hammer item to the itempool, so let's verify that it's there (only when it should be).
-    # Remember: Each test here will get run twice, once with the "hammer" option disabled, and once with it enabled.
-    # We need to check which case we're in, and react appropriately.
+class TestHammerOn(APQuestTestBase):
+    options = {
+        "hammer": True,
+    }
+
+    # When the hammer option is on, the Hammer should exist in the itempool. Let's verify that.
     def test_hammer_exists(self) -> None:
-        if self.world.options.hammer:
-            # To test whether an item exists, we need to find it in the itempool
-            # Note: The Item class overrides __eq__, so you could do this using TestCase.assertIn with an Item instance
-            # However, the author dislikes this pattern and prefers checking the necessary conditions inside a next().
-            with self.subTest("Test that Hammer item exists and is progression if hammer option is enabled"):
-                hammer = next((item for item in self.multiworld.itempool if item.name == "Hammer"), None)
-                self.assertIsNotNone(hammer)
-                self.assertTrue(cast(APQuestItem, hammer).advancement)
-        else:
-            with self.subTest("Test that Hammer doesn't exist if hammer option is not enabled"):
-                # Finding a specific item for a specific player can be done by iterating the multiworld itempool,
-                # comparing item.player and item.name to the desired values.
-                hammer = next((item for item in self.multiworld.itempool if item.name == "Hammer"), None)
-                self.assertIsNone(hammer)
+        # Nothing new to say here, but I do want to take this opportunity to teach you some Python magic. :D
+        # In Python, when you check for the truth value of something that isn't a bool,
+        # it will be implicitly converted to a bool automatically.
+        # Which instances of a class convert to "False" and which convert to "True" is class-specific.
+        # In the case of lists (or containers in general), empty means False, and not-empty means True.
+        # bool([]) -> False
+        # bool([1, 2, 3]) -> True
+        # So, after grabbing all instances of the Hammer item from the itempool as a list ...
+        hammers_in_itempool = self.get_items_by_name("Hammer")
 
-    # If the hammer option is enabled, a breakable wall is placed in front of the top middle chest.
-    # Let's test that this requirement is correctly added in the logic.
+        # ... instead of checking that the len() is 1, we can run this absolutely beautiful statement instead:
+        self.assertTrue(hammers_in_itempool)
+
+        # I love Python <3
+
+    # When the hammer option is on, the Hammer is required for the Top Middle Chest.
     def test_hammer_is_required_for_top_middle_chest(self) -> None:
-        if self.world.options.hammer:
-            with self.subTest("Test that hammer is required for Top Middle Chest if hammer option is enabled"):
-                self.assertAccessDependency(["Top Middle Chest"], [["Hammer"]])
-        else:
-            with self.subTest("Test that hammer isn't required for Top Middle Chest if hammer option is disabled"):
-                # In this case, we want to check that the Hammer *isn't* required for the Top Middle Chest location.
-                # The robust way to do this is to collect every item into the state except for the Hammer,
-                # then assert that the location is reachable.
-                # Luckily, there is a helper for this: "collect_all_but".
-                self.collect_all_but("Hammer")
-
-                # Now, we manually check that the location is accessible using location.can_reach(state):
-                top_middle_chest_player_one = self.world.get_location("Top Middle Chest")
-                self.assertTrue(top_middle_chest_player_one.can_reach(self.multiworld.state))
+        # This case is simple again: Just run self.assertAccessDependency()
+        self.assertAccessDependency(["Top Middle Chest"], [["Hammer"]])
 
         # This unit test genuinely found an error in the world code when it was first written!
+        # The Hammer logic was not actually being correctly applied even if the hammer option was enabled,
+        # and the generator thought Top Middle Chest was considered accessible without the Hammer.
         # This is why testing can be extremely valuable.

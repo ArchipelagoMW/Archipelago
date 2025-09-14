@@ -1,41 +1,40 @@
-from test.param import classvar_matrix
 
 from .bases import APQuestTestBase
 
-# Sometimes, you might want to test something with a specific option disabled, and then with it enabled.
-# We could write two separate TestCase classes, but for structural reasons and/or to reduce repeated code,
-# we might prefer both cases to be in one class.
-# To do this efficiently, we can use test.param.classvar_matrix.
-# First, we prepare a list of every option(s combination) we want to test:
-extra_starting_chest_options = [
-    {"extra_starting_chest": False},
-    {"extra_starting_chest": True},
-]
+
+# Sometimes, you might want to test something with a specific option disabled, then with it enabled.
+# For this purpose, we'll just have two different TestCase classes.
+class TestExtraStartingChestOff(APQuestTestBase):
+    options = {
+        "extra_starting_chest": False,
+    }
+
+    # Hmm... This is just default options again.
+    # This would run all the default WorldTestBase tests a second time on default options. That's a bit wasteful.
+    # Luckily, there is a way to turn off the default tests for a WorldTestBase subclass:
+    run_default_tests = False
+
+    # Since the extra_starting_chest option is False, we'll verify that the Extra Starting Chest location doesn't exist.
+    def test_extra_starting_chest_doesnt_exit(self) -> None:
+        # Currently, the best way to check for the existence of a location is to try using get_location,
+        # then watch for the KeyError that is raised if the location doesn't exist.
+        # In a testing context, we can do this with TestCase.assertRaises.
+        self.assertRaises(KeyError, self.world.get_location, "Bottom Left Extra Chest")
 
 
-# Then, we decorate our TestCase with @classvar_matrix, passing our options into it.
-# Our TestCase will then be run once with the extra_starting_chest option disabled, and once with it enabled.
-# Remember: The WorldTestBase class has a ClassVar called "options", which is what we're setting here.
-# CAREFUL: Passing multiple ClassVars to classvar_matrix will run *all combinations*, not perform a "zip" operation.
-@classvar_matrix(options=extra_starting_chest_options)
-class TestExtraStartingChest(APQuestTestBase):
-    # Our extra starting chest only exists if the extra_starting_chest option is enabled, so let's verify that.
+class TestExtraStartingChestOn(APQuestTestBase):
+    options = {
+        "extra_starting_chest": True,
+    }
+
+    # In this case, running the default tests is acceptable, since this is a unique options combination.
+
+    # Since the extra_starting_chest option is True, we'll verify that the Extra Starting Chest location exists.
     def test_extra_starting_chest_exists(self) -> None:
-        # Remember: Each test here will get run twice:
-        # Once with the "extra_starting_chest" option disabled, and once with it enabled.
-        # We need to check which case we're in, and run the appropriate test.
-        if self.world.options.extra_starting_chest:
-            with self.subTest("Test that Bottom Left Extra Chest exists when extra_starting_chest option is enabled"):
-                # Currently, the best way to check for the existence of a location is to try using get_location,
-                # then watch for the KeyError that is raised if the location doesn't exist.
-                # In a testing context, if we expect the code to raise, we can do this with TestCase.assertRaises.
-                # However, the opposite case is awkward, because TestCase doesn't have an "assertNotRaises".
-                try:
-                    self.world.get_location("Bottom Left Extra Chest")
-                except KeyError:
-                    self.fail("Bottom Left Extra Chest should exist, but it doesn't.")
-        else:
-            with self.subTest(
-                "Test that Bottom Left Extra Chest does not exist when extra_starting_chest option is disabled"
-            ):
-                self.assertRaises(KeyError, self.world.get_location, "Bottom Left Extra Chest")
+        # In this case, the location *should* exist, so world.get_location() should *not* KeyError.
+        # This is a bit awkward, because unittest.TestCase doesn't have an "assertNotRaises".
+        # So, we'll catch the KeyError ourselves, and then fail in the catch block with a custom message.
+        try:
+            self.world.get_location("Bottom Left Extra Chest")
+        except KeyError:
+            self.fail("Bottom Left Extra Chest should exist, but it doesn't.")
