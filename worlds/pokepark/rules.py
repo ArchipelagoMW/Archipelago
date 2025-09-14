@@ -788,7 +788,13 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Delibird -- Friendship",
-        lambda state: True  # Todo: Delibird Logic needs to be checked and rewritten
+        lambda state: state.has("Delibird Unlock", player) and
+                      state.has("Spheal Friendship", player) and
+                      state.has("Teddiursa Friendship", player) and
+                      state.has("Squirtle Unlock", player) and
+                      state.has("Squirtle Friendship", player) and
+                      state.has("Smoochum Friendship", player) and
+                      state.has("Smoochum Unlock", player)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Smoochum Power Competition -- Friendship",
