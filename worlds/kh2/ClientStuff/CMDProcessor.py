@@ -17,12 +17,12 @@ class KH2CommandProcessor(ClientCommandProcessor):
         Info: Displays the Information notification when you receive an item.
         None: Toggle off any of the receiving notifications.
         """
-        if notification_type in {"Puzzle", "Info", "None","Chest"}:
+        if notification_type in {"Puzzle", "Info", "Chest", "None"}:
             temp_client_settings = self.ctx.client_settings["receive_popup_type"]
             self.ctx.client_settings["receive_popup_type"] = notification_type
             self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['receive_popup_type']}")
         else:
-            self.output(f"Unknown receive notification type:{notification_type}. Valid Inputs: Puzzle, Info, None")
+            self.output(f"Unknown receive notification type:{notification_type}. Valid Inputs: Puzzle, Info, Chest ,None")
 
     def _cmd_send_notif(self, notification_type=""):
         """Change receive notification type.Valid Inputs:Puzzle, Info and None
@@ -30,13 +30,13 @@ class KH2CommandProcessor(ClientCommandProcessor):
         Info: Displays the Information notification when you receive an item.
         None: Toggle off any of the receiving notifications.
         """
-        if notification_type in {"Puzzle", "Info", "None","Chest"}:
+        if notification_type in {"Puzzle", "Info", "Chest", "None"}:
             temp_client_settings = self.ctx.client_settings["send_popup_type"]
             self.ctx.client_settings["send_popup_type"] = notification_type
             # doing it in this order to make sure it actually changes
             self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['send_popup_type']}")
         else:
-            self.output(f"Unknown send notification type:{notification_type}. Valid Inputs: Puzzle, Info, None")
+            self.output(f"Unknown send notification type:{notification_type}. Valid Inputs: Puzzle, Info, Chest ,None")
 
     def _cmd_change_send_truncation_priority(self, priority=""):
         """Change what gets truncated first when using puzzle piece notifications. Playername min is 5 and ItemName is 15"""
@@ -83,7 +83,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         from .RecieveItems import to_khscii
         from .ReadAndWrite import kh2_write_bytes,kh2_write_byte
         displayed_string = to_khscii(self.ctx,"Yessir")
-        kh2_write_byte(self.ctx,0x800000,3)
+
         kh2_write_byte(self.ctx,0x800150, int(itemid))
         kh2_write_bytes(self.ctx,address = 0x800154,value = displayed_string)
-
+        kh2_write_byte(self.ctx, 0x800000, 3)

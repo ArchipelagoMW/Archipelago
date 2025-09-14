@@ -323,9 +323,9 @@ async def verifyItems(self):
             amount_of_items = 0
             amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["Magic"][item_name]
             # - base address because it reads a pointer then in stead of reading what it points to its pointer+baseaddress which offsets
-            if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(0xABAF38) == 0 \
-                    and self.kh2_read_longlong(0x0ABCCC8) != 0 \
-                    and self.kh2_read_int(self.kh2_read_longlong(0x0ABCCC8) + 0x88-self.kh2_return_base_address()) != 0:
+            if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(self.FadeStatus) == 0 \
+                    and self.kh2_read_longlong(self.PlayerGaugePointer) != 0 \
+                    and self.kh2_read_int(self.kh2_read_longlong(self.PlayerGaugePointer) + 0x88-self.kh2_return_base_address()) != 0:
                 self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
         for item_name in master_stat:
@@ -419,8 +419,13 @@ async def displayChestTextInGame(self, string_to_display):
     if self.kh2_read_byte(0x800000) == 0:
 
         displayed_string = self.to_khscii(string_to_display)
-        self.kh2_write_bytes(0x800150, 0)                # item picture
+        print("made display string")
+        self.kh2_write_byte(0x800150, 1)                # item picture
+        print("wrote item picture")
         self.kh2_write_bytes(0x800154, displayed_string) # text
+        print("wrote text")
         self.kh2_write_byte(0x800000, 3)                 # displaying chest popup
-        self.queued_puzzle_popup.remove(string_to_display)
+        await asyncio.sleep(1)
+        print("called")
+        self.queued_chest_popup.remove(string_to_display)
         await asyncio.sleep(0.5)

@@ -55,6 +55,7 @@ class KH2Context(CommonContext):
         # queue for the strings to display on the screen
         self.queued_puzzle_popup = []
         self.queued_info_popup = []
+        self.queued_chest_popup = []
 
         # special characters for printing in game
         # A dictionary of all the special characters, which
@@ -119,7 +120,7 @@ class KH2Context(CommonContext):
             "send_truncate_first":    "PlayerName",  # there is no need to truncate item names for info popup
             "receive_truncate_first": "PlayerName",  # truncation order. Can be PlayerName or ItemName
             "send_popup_type":        "Puzzle",  # type of popup when you receive an item
-            "receive_popup_type":     "Puzzle",  # can be Puzzle, Info or None
+            "receive_popup_type":     "Puzzle",  # can be Puzzle, Info, Chest or None
         }
 
         if "localappdata" in os.environ:
@@ -186,6 +187,9 @@ class KH2Context(CommonContext):
         self.Slot1 = 0x2A23018
         self.InfoBarPointer = 0xABE2A8
         self.isDead = 0x0BEEF28
+
+        self.FadeStatus = 0xABAF38
+        self.PlayerGaugePointer = 0x0ABCCC8
 
         self.kh2_game_version = None  # can be egs or steam
 
@@ -265,7 +269,7 @@ class KH2Context(CommonContext):
 
     from .ReadAndWrite import kh2_read_longlong, kh2_read_int, kh2_read_string, kh2_read_byte, kh2_write_bytes, kh2_write_int, kh2_write_short, kh2_write_byte, kh2_read_short, kh2_return_base_address
     from .SendChecks import checkWorldLocations, checkSlots, checkLevels, verifyChests, verifyLevel
-    from .RecieveItems import displayPuzzlePieceTextinGame, displayInfoTextinGame, verifyItems, give_item, IsInShop, to_khscii
+    from .RecieveItems import displayPuzzlePieceTextinGame, displayInfoTextinGame, displayChestTextInGame, verifyItems, give_item, IsInShop, to_khscii
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -487,6 +491,22 @@ class KH2Context(CommonContext):
                             totalLength = len(itemName) + len(playerName)
                         # from  =6. totalLength of the string cant be over 31 or game crash
                         self.queued_puzzle_popup += [f"{itemName} from {playerName}"]
+                    elif self.client_settings["receive_popup_type"] == "Chest":
+                        totalLength = len(itemName) + len(playerName)
+                        while totalLength > 25:
+                            if self.client_settings["receive_truncate_first"] == "PlayerName":
+                                if len(playerName) > 5:
+                                    playerName = playerName[:-1]
+                                else:
+                                    itemName = itemName[:-1]
+                            else:
+                                if len(ItemName) > 15:
+                                    itemName = itemName[:-1]
+                                else:
+                                    playerName = playerName[:-1]
+                            totalLength = len(itemName) + len(playerName)
+                        # from  =6. totalLength of the string cant be over 31 or game crash
+                        self.queued_chest_popup += [f"{itemName} from {playerName}"]
 
                 if receiverID != self.slot and senderID == self.slot:  #item is sent to other players
                     itemName = self.item_names.lookup_in_slot(itemId, receiverID)
@@ -513,6 +533,21 @@ class KH2Context(CommonContext):
                             totalLength = len(itemName) + len(playerName)
                         # Sent  =5. to = 4 totalLength of the string cant be over 31 or game crash
                         self.queued_puzzle_popup += [f"Sent {itemName} to {playerName}"]
+                    elif self.client_settings["send_popup_type"] == "Chest":  #sanitize ItemName and reciever name
+                        while totalLength > 22:
+                            if self.client_settings["send_truncate_first"] == "PlayerName":
+                                if len(playerName) > 5:
+                                    playerName = playerName[:-1]
+                                else:
+                                    itemName = itemName[:-1]
+                            else:
+                                if len(ItemName) > 15:
+                                    itemName = itemName[:-1]
+                                else:
+                                    playerName = playerName[:-1]
+                            totalLength = len(itemName) + len(playerName)
+                        # Sent  =5. to = 4 totalLength of the string cant be over 31 or game crash
+                        self.queued_chest_popup += [f"Sent {itemName} to {playerName}"]
 
     def connect_to_game(self):
         if "KeybladeAbilities" in self.kh2slotdata.keys():
@@ -601,6 +636,8 @@ class KH2Context(CommonContext):
                     self.Shop = 0x7435D0
                     self.InfoBarPointer = 0xABE828
                     self.isDead = 0x0BEF4A8
+                    self.FadeStatus = 0xABB4B8
+                    self.PlayerGaugePointer = 0x0ABD248
                 elif self.kh2_read_string(0x9A9330, 4) == "KH2J":
                     self.kh2_game_version = "EGS"
                 else:
@@ -668,6 +705,8 @@ async def kh2_watcher(ctx: KH2Context):
                     await asyncio.create_task(ctx.displayPuzzlePieceTextinGame(ctx.queued_puzzle_popup[0]))  # send the num 1 index of whats in the queue
                 if ctx.queued_info_popup:
                     await asyncio.create_task(ctx.displayInfoTextinGame(ctx.queued_info_popup[0]))
+                if ctx.queued_chest_popup:
+                    await asyncio.create_task(ctx.displayChestTextInGame(ctx.queued_chest_popup[0]))
 
             elif not ctx.kh2connected and ctx.serverconnected:
                 logger.info("Game Connection lost. trying to reconnect.")
