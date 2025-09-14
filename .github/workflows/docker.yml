@@ -128,7 +128,7 @@ jobs:
           provenance: false
 
   manifest:
-    needs: [prepare, build-amd64, build-arm64]
+    needs: [prepare, build]
     runs-on: ubuntu-latest
     permissions:
       contents: read
