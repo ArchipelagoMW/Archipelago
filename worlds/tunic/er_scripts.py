@@ -214,6 +214,8 @@ def pair_portals(world: "TunicWorld", regions: dict[str, Region]) -> dict[Portal
         ladder_storage = seed_group["ladder_storage"]
         entrance_layout = seed_group["entrance_layout"]
         laurels_location = "10_fairies" if seed_group["laurels_at_10_fairies"] is True else False
+        shuffle_bells = seed_group["bell_shuffle"]
+        shuffle_fuses = seed_group["fuse_shuffle"]
 
     logic_tricks: tuple[bool, int, int] = (laurels_zips, ice_grappling, ladder_storage)
 

@@ -75,6 +75,8 @@ class SeedGroup(TypedDict):
     entrance_layout: int  # entrance layout value
     has_decoupled_enabled: bool  # for checking that players don't have conflicting options
     plando: list[PlandoConnection]  # consolidated plando connections for the seed group
+    bell_shuffle: bool  # off controls
+    fuse_shuffle: bool  # off controls
 
 
 class TunicWorld(World):
@@ -259,7 +261,9 @@ class TunicWorld(World):
                               laurels_at_10_fairies=tunic.options.laurels_location == LaurelsLocation.option_10_fairies,
                               entrance_layout=tunic.options.entrance_layout.value,
                               has_decoupled_enabled=bool(tunic.options.decoupled),
-                              plando=tunic.options.plando_connections.value.copy())
+                              plando=tunic.options.plando_connections.value.copy(),
+                              bell_shuffle=bool(tunic.options.shuffle_bells),
+                              fuse_shuffle=bool(tunic.options.shuffle_fuses))
                 continue
             # I feel that syncing this one is worse than erroring out
             if bool(tunic.options.decoupled) != cls.seed_groups[group]["has_decoupled_enabled"]:
@@ -277,6 +281,12 @@ class TunicWorld(World):
             # laurels at 10 fairies changes logic for secret gathering place placement
             if tunic.options.laurels_location == 3:
                 cls.seed_groups[group]["laurels_at_10_fairies"] = True
+            # off is more restrictive
+            if not tunic.options.shuffle_bells:
+                cls.seed_groups[group]["bell_shuffle"] = False
+            # off is more restrictive
+            if not tunic.options.shuffle_fuses:
+                cls.seed_groups[group]["fuse_shuffle"] = False
             # fixed shop and direction pairs override standard, but conflict with each other
             if tunic.options.entrance_layout:
                 if cls.seed_groups[group]["entrance_layout"] == EntranceLayout.option_standard:
