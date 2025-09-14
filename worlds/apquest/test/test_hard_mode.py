@@ -98,9 +98,9 @@ class TestHardMode(APQuestTestBase):
 
         # You can kinda think of assertAccessDependency as an OR(AND(item_list_1), AND(item_list_2), ...).
         # Except this "AND" is a special "AND" which allows reducing each list to a single representative item.
-        # And also, the "OR" is *also* special in that has to be exhaustive,
+        # And also, the "OR" is special as well in that has to be exhaustive,
         # where the set of completely unmentioned items must *not* be able to reach the location collectively.
-        # And *also*, each AND must be enough to access the location *out of the mentioned items*.
+        # And *also*, each "AND" must be enough to access the location *out of the mentioned items*.
         # ... I'm not sure this explanation helps anyone, but most of the time, you really don't have to think about it.
 
     def test_hard_mode_health_upgrades(self) -> None:
