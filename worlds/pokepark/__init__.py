@@ -756,7 +756,8 @@ class PokeparkWorld(World):
         if not strict and len(self.useful_pool) > 0:
             return self.useful_pool.pop()
 
-        if len(self.filler_pool) > 0:
+        use_vanilla_item_as_filler = self.multiworld.random.choice([True, False])
+        if len(self.filler_pool) > 0 and use_vanilla_item_as_filler:
             return self.filler_pool.pop()
 
         filler_consumables = ["10 Berries", "20 Berries", "50 Berries", "100 Berries"]
