@@ -102,7 +102,7 @@ def CanUse(state: CollectionState, world: "SohWorld", name: str, can_be_child: b
         case Items.LIGHT_ARROW.value:
             return can_use(Items.MAGIC_SINGLE.value) and can_use(Items.FAIRY_BOW.value)
         case Items.FAIRY_BOW.value:
-            return can_be_adult and (Events.AMMO_CAN_DROP or has(Events.CAN_BUY_ARROWS))
+            return can_be_adult and (has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_ARROWS))
         case Items.MEGATON_HAMMER.value:
             return can_be_adult
         case Items.IRON_BOOTS.value:
