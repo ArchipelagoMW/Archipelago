@@ -263,7 +263,9 @@ def host_room(room: UUID):
         (not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))
         or room.last_activity < now - datetime.timedelta(seconds=room.timeout)
     )
-    with db_session:
+    if now - room.last_activity > datetime.timedelta(minutes=1):
+        # we only set last_activity if needed, otherwise parallel access on /room will cause an internal server error
+        # due to "pony.orm.core.OptimisticCheckError: Object Room was updated outside of current transaction"
         room.last_activity = now  # will trigger a spinup, if it's not already running
 
     browser_tokens = "Mozilla", "Chrome", "Safari"
