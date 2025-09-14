@@ -96,10 +96,10 @@ class TestHardMode(APQuestTestBase):
         # meaning it is not collected into state.
         # Thus, this term cannot be simplified any further without testing something different to what we want to test.
 
-        # You can think of assertAccessDependency as an OR(AND(item_list_1), AND(item_list_2), ...).
+        # You can kinda think of assertAccessDependency as an OR(AND(item_list_1), AND(item_list_2), ...).
         # Except this "AND" is a special "AND" which allows reducing each list to a single representative item,
         # And the "OR" is *also* special in that has to be exhaustive,
-        # where the set of completely unmentioned items must *not* be able to reach the location collectively,
+        # where the set of completely unmentioned items must *not* be able to reach the location collectively.
         # And *also*, each AND must be enough to access the location *out of the mentioned items*.
         # ... I'm not sure this explanation helps anyone, but most of the time, you really don't have to think about it.
 
