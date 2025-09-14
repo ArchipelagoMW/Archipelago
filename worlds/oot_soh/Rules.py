@@ -86,6 +86,9 @@ def can_get_deku_baba_nuts(state: CollectionState, world: "SohWorld") -> bool:
     return can_use_sword(state, world) or can_use(Items.BOOMERANG.value, state, world)
 
 def is_adult(state: CollectionState, world: "SohWorld") -> bool:
+    # For now, return True as a placeholder since age logic is complex and context-dependent
+    # The real age checking should be done through the CanUse function's can_be_adult parameter
+    # TODO: Implement proper age checking based on world settings and progression
     return True
 
 
@@ -159,13 +162,13 @@ def can_hit_eye_targets(state: CollectionState, world: "SohWorld") -> bool:
 
 def can_stun_deku(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can stun Deku Scrubs."""
-    return can_attack(state, world) or can_use(Items.DEKU_NUT_BAG.value, state, world) or can_reflect_nuts(state, world) # Is this right for nuts?
+    return can_attack(state, world) or can_use(Items.DEKU_NUT_BAG.value, state, world) or can_shield(state, world) # Is this right for nuts?
 
 
 def can_reflect_nuts(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can reflect Deku Nuts back at enemies."""
-    return (can_use(Items.DEKU_SHIELD.value, state, world) or
-            (can_use(Items.HYLIAN_SHIELD.value, state, world) and is_adult(state, world)))
+    return can_stun_deku(state, world)
+
 
 def has_fire_source(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link has any fire source."""
@@ -174,12 +177,13 @@ def has_fire_source(state: CollectionState, world: "SohWorld") -> bool:
            # TODO: Add other fire sources like lit torches
            False)
 
-def can_jump_slash_except_hammer(state: CollectionState, world: "SohWorld") -> bool:
-    # Hammer can be weird with jump slashes in logic, so separate the two
-    return can_use(Items.STICKS.value, state, world) or can_use_sword(state, world)
 
 def can_jump_slash(state: CollectionState, world: "SohWorld") -> bool:
-    return can_jump_slash_except_hammer(state, world) or can_use(Items.MEGATON_HAMMER.value, state, world)
+    """Check if Link can perform a jump slash with any sword."""
+    return (can_use(Items.KOKIRI_SWORD.value, state, world) or 
+            can_use(Items.MASTER_SWORD.value, state, world) or 
+            can_use(Items.BIGGORONS_SWORD.value, state, world) or
+            can_use(Items.MEGATON_HAMMER.value, state, world))  # Hammer can substitute for sword in some cases
 
 
 # BELOW IS AI SLOP
