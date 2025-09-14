@@ -75,7 +75,7 @@ class TestHardMode(APQuestTestBase):
         # But crucially, we are ensuring that all three items are actually required.
 
         # So that's not really why the inner elements are lists.
-        # So we ask again: Why are they? When is it ever useful?
+        # So we ask again: Why are they lists? When is it ever useful?
         # Fair warning: This is probably where you should stop reading this and skip to test_hard_mode_health_upgrades.
         # But if you really want to know why:
 
