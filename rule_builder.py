@@ -59,8 +59,8 @@ class RuleWorldMixin(World):
         self.rule_region_dependencies = defaultdict(set)
         self.rule_location_dependencies = defaultdict(set)
         self.rule_entrance_dependencies = defaultdict(set)
-        self.true_rule = self.get_cached_rule(True_.Resolved(player=self.player))
-        self.false_rule = self.get_cached_rule(False_.Resolved(player=self.player))
+        self.true_rule = self.resolve_rule(True_())
+        self.false_rule = self.resolve_rule(False_())
 
     @classmethod
     def get_rule_cls(cls, name: str) -> type["Rule[Self]"]:
@@ -77,15 +77,11 @@ class RuleWorldMixin(World):
     def resolve_rule(self, rule: "Rule[Self]") -> "Rule.Resolved":
         """Returns a resolved rule registered with the caching system for this world"""
         resolved_rule = rule.resolve(self)
-        resolved_rule = self.get_cached_rule(resolved_rule)
-        return self.simplify_rule(resolved_rule)
+        resolved_rule = self.simplify_rule(resolved_rule)
+        return self.get_cached_rule(resolved_rule)
 
     def get_cached_rule(self, resolved_rule: "Rule.Resolved") -> "Rule.Resolved":
         """Returns a cached instance of a resolved rule based on the hash"""
-        if not self.rule_caching_enabled:
-            # skip the caching logic entirely
-            object.__setattr__(resolved_rule, "cacheable", False)
-            object.__setattr__(resolved_rule, "__call__", resolved_rule._evaluate)  # pyright: ignore[reportPrivateUsage]
         rule_hash = hash(resolved_rule)
         if rule_hash in self.rule_ids:
             return self.rule_ids[rule_hash]
@@ -223,20 +219,32 @@ class RuleWorldMixin(World):
             if count == 1:
                 has_all_items.append(item)
             else:
-                clauses.append(self.get_cached_rule(has_cls.Resolved(item, count, player=rule.player)))
+                clauses.append(
+                    self.get_cached_rule(
+                        has_cls.Resolved(item, count, player=rule.player, caching_enabled=self.rule_caching_enabled)
+                    )
+                )
 
         if len(has_all_items) == 1:
-            clauses.append(self.get_cached_rule(has_cls.Resolved(has_all_items[0], player=rule.player)))
+            clauses.append(
+                self.get_cached_rule(
+                    has_cls.Resolved(has_all_items[0], player=rule.player, caching_enabled=self.rule_caching_enabled)
+                )
+            )
         elif len(has_all_items) > 1:
-            clauses.append(self.get_cached_rule(has_all_cls.Resolved(tuple(has_all_items), player=rule.player)))
+            clauses.append(
+                self.get_cached_rule(
+                    has_all_cls.Resolved(
+                        tuple(has_all_items),
+                        player=rule.player,
+                        caching_enabled=self.rule_caching_enabled,
+                    )
+                )
+            )
 
         if len(clauses) == 1:
             return clauses[0]
-        return And.Resolved(
-            tuple(clauses),
-            player=rule.player,
-            cacheable=rule.cacheable and all(c.cacheable for c in clauses),
-        )
+        return And.Resolved(tuple(clauses), player=rule.player, caching_enabled=self.rule_caching_enabled)
 
     def _simplify_or(self, rule: "Or.Resolved") -> "Rule.Resolved":
         children_to_process = list(rule.children)
@@ -274,20 +282,32 @@ class RuleWorldMixin(World):
             if count == 1:
                 has_any_items.append(item)
             else:
-                clauses.append(self.get_cached_rule(has_cls.Resolved(item, count, player=rule.player)))
+                clauses.append(
+                    self.get_cached_rule(
+                        has_cls.Resolved(item, count, player=rule.player, caching_enabled=self.rule_caching_enabled)
+                    )
+                )
 
         if len(has_any_items) == 1:
-            clauses.append(self.get_cached_rule(has_cls.Resolved(has_any_items[0], player=rule.player)))
+            clauses.append(
+                self.get_cached_rule(
+                    has_cls.Resolved(has_any_items[0], player=rule.player, caching_enabled=self.rule_caching_enabled)
+                )
+            )
         elif len(has_any_items) > 1:
-            clauses.append(self.get_cached_rule(has_any_cls.Resolved(tuple(has_any_items), player=rule.player)))
+            clauses.append(
+                self.get_cached_rule(
+                    has_any_cls.Resolved(
+                        tuple(has_any_items),
+                        player=rule.player,
+                        caching_enabled=self.rule_caching_enabled,
+                    )
+                )
+            )
 
         if len(clauses) == 1:
             return clauses[0]
-        return Or.Resolved(
-            tuple(clauses),
-            player=rule.player,
-            cacheable=rule.cacheable and all(c.cacheable for c in clauses),
-        )
+        return Or.Resolved(tuple(clauses), player=rule.player, caching_enabled=self.rule_caching_enabled)
 
     @override
     def collect(self, state: CollectionState, item: Item) -> bool:
@@ -492,7 +512,7 @@ class Rule(Generic[TWorld]):
 
     def _instantiate(self, world: TWorld) -> "Resolved":
         """Create a new resolved rule for this world"""
-        return self.Resolved(player=world.player)
+        return self.Resolved(player=world.player, caching_enabled=world.rule_caching_enabled)
 
     def resolve(self, world: TWorld) -> "Resolved":
         """Resolve a rule with the given world"""
@@ -571,8 +591,17 @@ class Rule(Generic[TWorld]):
         player: int
         """The player this rule is for"""
 
-        cacheable: bool = dataclasses.field(repr=False, default=True, kw_only=True)
-        """If this rule should be cached in the state"""
+        caching_enabled: bool = dataclasses.field(repr=False, default=True, kw_only=True)
+        """If the world this rule is for has caching enabled"""
+
+        force_recalculate: ClassVar[bool] = False
+        """Forces this rule to be recalculated every time it is evaluated.
+        Forces any parent composite rules containing this rule to also be recalculated. Implies skip_cache."""
+
+        skip_cache: ClassVar[bool] = False
+        """Skips the caching layer when evaluating this rule.
+        Composite rules will still respect the caching layer so dependencies functions should be implemented as normal.
+        Set to True when rule calculation is trivial."""
 
         always_true: ClassVar[bool] = False
         """Whether this rule always evaluates to True, used to short-circuit logic"""
@@ -580,16 +609,24 @@ class Rule(Generic[TWorld]):
         always_false: ClassVar[bool] = False
         """Whether this rule always evaluates to True, used to short-circuit logic"""
 
+        def __post_init__(self) -> None:
+            object.__setattr__(
+                self,
+                "caching_enabled",
+                self.caching_enabled and not self.force_recalculate and not self.skip_cache,
+            )
+
         def __call__(self, state: CollectionState) -> bool:
             """Evaluate this rule's result with the given state, using the cached value if possible"""
-            cached_result = None
-            if self.cacheable:
-                cached_result = state.rule_cache[self.player].get(id(self))
+            if not self.caching_enabled:
+                return self._evaluate(state)
+
+            cached_result = state.rule_cache[self.player].get(id(self))
             if cached_result is not None:
                 return cached_result
+
             result = self._evaluate(state)
-            if self.cacheable:
-                state.rule_cache[self.player][id(self)] = result
+            state.rule_cache[self.player][id(self)] = result
             return result
 
         def _evaluate(self, state: CollectionState) -> bool:
@@ -632,6 +669,7 @@ class True_(Rule[TWorld], game="Archipelago"):  # noqa: N801
 
     class Resolved(Rule.Resolved):
         always_true: ClassVar[bool] = True
+        skip_cache: ClassVar[bool] = True
 
         @override
         def _evaluate(self, state: CollectionState) -> bool:
@@ -652,6 +690,7 @@ class False_(Rule[TWorld], game="Archipelago"):  # noqa: N801
 
     class Resolved(Rule.Resolved):
         always_false: ClassVar[bool] = True
+        skip_cache: ClassVar[bool] = True
 
         @override
         def _evaluate(self, state: CollectionState) -> bool:
@@ -680,7 +719,7 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         children = [world.resolve_rule(c) for c in self.children]
-        return self.Resolved(tuple(children), player=world.player)
+        return self.Resolved(tuple(children), player=world.player, caching_enabled=world.rule_caching_enabled)
 
     @override
     def to_dict(self) -> dict[str, Any]:
@@ -704,6 +743,14 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
 
     class Resolved(Rule.Resolved):
         children: tuple[Rule.Resolved, ...]
+
+        def __post_init__(self) -> None:
+            object.__setattr__(
+                self,
+                "force_recalculate",
+                self.force_recalculate or any(c.force_recalculate for c in self.children),
+            )
+            super().__post_init__()
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
@@ -825,7 +872,11 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        return self.Resolved(world.resolve_rule(self.child), player=world.player)
+        return self.Resolved(
+            world.resolve_rule(self.child),
+            player=world.player,
+            caching_enabled=world.rule_caching_enabled,
+        )
 
     @override
     def to_dict(self) -> dict[str, Any]:
@@ -849,6 +900,10 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
 
     class Resolved(Rule.Resolved):
         child: Rule.Resolved
+
+        def __post_init__(self) -> None:
+            object.__setattr__(self, "force_recalculate", self.force_recalculate or self.child.force_recalculate)
+            super().__post_init__()
 
         @override
         def _evaluate(self, state: CollectionState) -> bool:
@@ -910,7 +965,12 @@ class Has(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        return self.Resolved(self.item_name, self.count, player=world.player)
+        return self.Resolved(
+            self.item_name,
+            self.count,
+            player=world.player,
+            caching_enabled=world.rule_caching_enabled,
+        )
 
     @override
     def __str__(self) -> str:
@@ -921,6 +981,7 @@ class Has(Rule[TWorld], game="Archipelago"):
     class Resolved(Rule.Resolved):
         item_name: str
         count: int = 1
+        skip_cache: ClassVar[bool] = True
 
         @override
         def _evaluate(self, state: CollectionState) -> bool:
@@ -929,7 +990,7 @@ class Has(Rule[TWorld], game="Archipelago"):
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
-            return {self.item_name: {id(self)}}
+            return {self.item_name: set()}
 
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
@@ -981,7 +1042,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
             return world.true_rule
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
-        return self.Resolved(self.item_names, player=world.player)
+        return self.Resolved(self.item_names, player=world.player, caching_enabled=world.rule_caching_enabled)
 
     @override
     @classmethod
@@ -1094,7 +1155,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
             return world.false_rule
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
-        return self.Resolved(self.item_names, player=world.player)
+        return self.Resolved(self.item_names, player=world.player, caching_enabled=world.rule_caching_enabled)
 
     @override
     @classmethod
@@ -1204,7 +1265,11 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
-        return self.Resolved(tuple(self.item_counts.items()), player=world.player)
+        return self.Resolved(
+            tuple(self.item_counts.items()),
+            player=world.player,
+            caching_enabled=world.rule_caching_enabled,
+        )
 
     @override
     def __str__(self) -> str:
@@ -1306,7 +1371,11 @@ class HasAnyCount(HasAllCounts[TWorld], game="Archipelago"):
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
-        return self.Resolved(tuple(self.item_counts.items()), player=world.player)
+        return self.Resolved(
+            tuple(self.item_counts.items()),
+            player=world.player,
+            caching_enabled=world.rule_caching_enabled,
+        )
 
     class Resolved(HasAllCounts.Resolved):
         @override
@@ -1406,7 +1475,12 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
             return world.false_rule
         if len(self.item_names) == 1:
             return Has(self.item_names[0], self.count).resolve(world)
-        return self.Resolved(self.item_names, self.count, player=world.player)
+        return self.Resolved(
+            self.item_names,
+            self.count,
+            player=world.player,
+            caching_enabled=world.rule_caching_enabled,
+        )
 
     @override
     @classmethod
@@ -1526,7 +1600,12 @@ class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
             return world.false_rule
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
-        return self.Resolved(self.item_names, self.count, player=world.player)
+        return self.Resolved(
+            self.item_names,
+            self.count,
+            player=world.player,
+            caching_enabled=world.rule_caching_enabled,
+        )
 
     class Resolved(HasFromList.Resolved):
         @override
@@ -1622,7 +1701,13 @@ class HasGroup(Rule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         item_names = tuple(sorted(world.item_name_groups[self.item_name_group]))
-        return self.Resolved(self.item_name_group, item_names, self.count, player=world.player)
+        return self.Resolved(
+            self.item_name_group,
+            item_names,
+            self.count,
+            player=world.player,
+            caching_enabled=world.rule_caching_enabled,
+        )
 
     @override
     def __str__(self) -> str:
@@ -1742,7 +1827,12 @@ class CanReachLocation(Rule[TWorld], game="Archipelago"):
             if not location.parent_region:
                 raise ValueError(f"Location {location.name} has no parent region")
             parent_region_name = location.parent_region.name
-        return self.Resolved(self.location_name, parent_region_name, player=world.player)
+        return self.Resolved(
+            self.location_name,
+            parent_region_name,
+            player=world.player,
+            caching_enabled=world.rule_caching_enabled,
+        )
 
     @override
     def __str__(self) -> str:
@@ -1801,7 +1891,7 @@ class CanReachRegion(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        return self.Resolved(self.region_name, player=world.player)
+        return self.Resolved(self.region_name, player=world.player, caching_enabled=world.rule_caching_enabled)
 
     @override
     def __str__(self) -> str:
@@ -1862,7 +1952,12 @@ class CanReachEntrance(Rule[TWorld], game="Archipelago"):
             if not entrance.parent_region:
                 raise ValueError(f"Entrance {entrance.name} has no parent region")
             parent_region_name = entrance.parent_region.name
-        return self.Resolved(self.entrance_name, parent_region_name, player=world.player)
+        return self.Resolved(
+            self.entrance_name,
+            parent_region_name,
+            player=world.player,
+            caching_enabled=world.rule_caching_enabled,
+        )
 
     @override
     def __str__(self) -> str:

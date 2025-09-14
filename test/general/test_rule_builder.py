@@ -320,13 +320,15 @@ class TestCaching(unittest.TestCase):
         return super().setUp()
 
     def test_item_cache_busting(self) -> None:
-        entrance = self.world.get_entrance("Region 1 -> Region 2")
-        self.assertFalse(entrance.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_cache[1][id(entrance.access_rule)])
+        location = self.world.get_location("Location 4")
+        self.state.collect(self.world.create_item("Item 1"))  # access to region 2
+        self.state.collect(self.world.create_item("Item 2"))  # item directly needed
+        self.assertFalse(location.can_reach(self.state))  # populates cache
+        self.assertFalse(self.state.rule_cache[1][id(location.access_rule)])
 
-        self.state.collect(self.world.create_item("Item 1"))  # clears cache, item directly needed
-        self.assertNotIn(id(entrance.access_rule), self.state.rule_cache[1])
-        self.assertTrue(entrance.can_reach(self.state))
+        self.state.collect(self.world.create_item("Item 3"))  # clears cache, item directly needed
+        self.assertNotIn(id(location.access_rule), self.state.rule_cache[1])
+        self.assertTrue(location.can_reach(self.state))
 
     def test_region_cache_busting(self) -> None:
         location = self.world.get_location("Location 2")
@@ -359,6 +361,15 @@ class TestCaching(unittest.TestCase):
         self.state.collect(self.world.create_item("Item 1"))  # clears cache, item only needed for entrance access
         self.assertNotIn(id(location.access_rule), self.state.rule_cache[1])
         self.assertTrue(location.can_reach(self.state))
+
+    def test_has_skips_cache(self) -> None:
+        entrance = self.world.get_entrance("Region 1 -> Region 2")
+        self.assertFalse(entrance.can_reach(self.state))  # does not populates cache
+        self.assertNotIn(id(entrance.access_rule), self.state.rule_cache[1])
+
+        self.state.collect(self.world.create_item("Item 1"))  # no need to clear cache, item directly needed
+        self.assertNotIn(id(entrance.access_rule), self.state.rule_cache[1])
+        self.assertTrue(entrance.can_reach(self.state))
 
 
 class TestCacheDisabled(unittest.TestCase):
