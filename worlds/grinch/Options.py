@@ -43,13 +43,13 @@ class ExcludeRegions(OptionSet):
     """Allows entire regions to be an excluded location to ensure you are not logically required to enter the region along
      with any and all checks that are in that region too. WARNING: Excluding too many regions may cause generation to fail.
 
-     Valid keys: "Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Countdown to X-Mas Clock Tower", "City Hall",
+     Valid keys: "Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Clock Tower", "City Hall",
                   "Ski Resort", "Civic Center", "Minefield", "Power Plant", "Generator Building", "Scout's Hut",
                   "North Shore", "Mayor's Villa", "Sleigh Ride"
 
      [NOT IMPLEMENTED]"""
     display_name = "Exclude Regions"
-    valid_keys = {"Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Countdown to X-Mas Clock Tower", "City Hall",
+    valid_keys = {"Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Clock Tower", "City Hall",
                   "Ski Resort", "Civic Center", "Minefield", "Power Plant", "Generator Building", "Scout's Hut",
                   "North Shore", "Mayor's Villa", "Sleigh Ride"}
 
@@ -63,7 +63,6 @@ class Supadow(Toggle):
     """Enables completing minigames through the Supadows in Mount Crumpit as checks. NOT IMPLEMENTED]"""
     display_name = "Supadow Minigames"
 
-
 class Gifts(Range):
     """Considers how many gifts must be squashed per check.
     Enabling this will also enable squashing all gifts in a region mission along side this. [NOT IMPLEMENTED]"""
@@ -72,11 +71,9 @@ class Gifts(Range):
     range_end = 300
     default = 0
 
-
 class Movesanity(Toggle):
     """Randomizes Grinch's moveset along with randomizing max into the pool. [NOT IMPLEMENTED]"""
     display_name = "Movesanity"
-
 
 class UnlimitedEggs(Toggle):
     """Determine whether or not you run out of rotten eggs when you utilize your gadgets."""
