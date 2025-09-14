@@ -74,11 +74,11 @@ def update_command():
 def install_pkg_resources(yes=False):
     try:
         import pkg_resources  # noqa: F401
-    except ImportError:
+    except (AttributeError, ImportError):
         check_pip()
         if not yes:
             confirm("pkg_resources not found, press enter to install it")
-        subprocess.call([sys.executable, "-m", "pip", "install", "--upgrade", "setuptools<81"])
+        subprocess.call([sys.executable, "-m", "pip", "install", "--upgrade", "setuptools>=75,<81"])
 
 
 def update(yes: bool = False, force: bool = False) -> None:

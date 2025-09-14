@@ -10,7 +10,7 @@ What you'll need:
  * [Python 3.11.9 or newer](https://www.python.org/downloads/), not the Windows Store version
    * On Windows, please consider only using the latest supported version in production environments since security
      updates for older versions are not easily available.
-   * Python 3.12.x is currently the newest supported version
+   * Python 3.13.x is currently the newest supported version
  * pip: included in downloads from python.org, separate in many Linux distributions
  * Matching C compiler
    * possibly optional, read operating system specific sections
