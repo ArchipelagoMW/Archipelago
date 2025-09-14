@@ -88,7 +88,7 @@ class RemoveQuizPowerCompLocations(Toggle):
     Removing Quiz Power Competition Locations. These are not sending items anymore, but can still be used for
     gaining berries.
     """
-    default = False
+    default = True
 
 
 class RemoveHideAndSeekPowerCompLocations(Toggle):
@@ -126,15 +126,14 @@ class RemoveQuestLocations(Toggle):
     """
     Removing Quest Locations e.g. Bidoof Housing.
     """
-    default = True
+    default = False
 
 
 class RemoveAttractionLocations(Toggle):
     """
-    Removes Attraction Locations. Removing them adds all Power Competition Locations (except the Quizs) and the Quests
-    Attraction Locations are added automatically for the postgame goal
+    Removes non prisma clear Attraction Locations.
     """
-    default = False
+    default = True
 
 
 class RemoveAttractionPrismaLocations(Toggle):
