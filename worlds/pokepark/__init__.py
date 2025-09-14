@@ -11,7 +11,7 @@ import yaml
 from BaseClasses import ItemClassification as IC, Region, Tutorial
 from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, Type, components, launch as launch_component
+from worlds.LauncherComponents import Component, Type, components, icon_paths, launch as launch_component
 from .items import ITEM_TABLE, PokeparkItem, PokeparkItemData, item_name_groups
 from .locations import LOCATION_TABLE, MultiZoneFlag, PokeparkFlag, PokeparkLocation
 from .options import PokeparkOptions, RemoveBattlePowerCompLocations, pokepark_option_groups
@@ -812,4 +812,7 @@ def launch_client():
 
 
 components.append(Component("Pokepark Client", "PokeparkClient",
-                            func=launch_client, component_type=Type.CLIENT))
+                            func=launch_client, component_type=Type.CLIENT, icon="Pokepark"
+                            )
+                  )
+icon_paths["Pokepark"] = "ap:worlds.pokepark/assets/icon.png"
