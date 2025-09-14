@@ -4,7 +4,7 @@ from BaseClasses import CollectionState
 from ..generic.Rules import set_rule
 
 if TYPE_CHECKING:
-    from . import PokeparkWorld
+    from . import PokeparkOptions, PokeparkWorld
 
 
 def set_rules(world: "PokeparkWorld") -> None:
@@ -13,6 +13,7 @@ def set_rules(world: "PokeparkWorld") -> None:
             set_rule(world.get_location(location_name), rule)
 
     player = world.player
+    options = world.options
 
     # Treehouse
     set_rule_if_exists("Treehouse - Burmy - Friendship", lambda state: True)
@@ -54,7 +55,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     set_rule_if_exists(
         "Treehouse - Power Up - Health Upgrade 1",
         lambda state: can_farm_berries(state, player) and state.has("Venusaur Prisma", player)
-    )  # TODO: placeholder until defined
+    )
     set_rule_if_exists(
         "Treehouse - Power Up - Health Upgrade 2",
         lambda state: state.can_reach_location(
@@ -302,7 +303,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Bulbasaur Daring Dash Minigame
     set_rule_if_exists(
         "Bulbasaur's Daring Dash Attraction -- Prisma",
-        lambda state: can_beat_any_bulbasaur_daring_dash_record(state, player)
+        lambda state: can_beat_any_bulbasaur_daring_dash_record(state, player, options)
     )
     set_rule_if_exists(
         "Bulbasaur's Daring Dash Attraction -- Pikachu",
@@ -419,7 +420,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Venusaur's Vine Swing
     set_rule_if_exists(
         "Venusaur's Vine Swing Attraction -- Prisma",
-        lambda state: can_beat_any_venusaur_vine_swing_record(state, player)
+        lambda state: can_beat_any_venusaur_vine_swing_record(state, player, options)
     )
     set_rule_if_exists(
         "Venusaur's Vine Swing Attraction -- Pikachu",
@@ -548,7 +549,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Beach Zone Main Area - Wailord Power Competition -- Friendship",
-        lambda state: True
+        lambda state: state.can_reach_region("Beach Zone Recycle Area", player)
     )
     set_rule_if_exists(
         "Beach Zone Main Area - Feraligatr Power Competition -- Friendship",
@@ -559,35 +560,35 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: can_battle(state, player) and state.has("Blastoise Unlock", player)
     )
     set_rule_if_exists(
-        "Beach Zone Main Area - Bottle Recycling -- Stage 1",
+        "Beach Zone Recycle Area - Bottle Recycling -- Stage 1",
         lambda state: True
     )
     set_rule_if_exists(
-        "Beach Zone Main Area - Bottle Recycling -- Stage 2",
+        "Beach Zone Recycle Area - Bottle Recycling -- Stage 2",
         lambda state: True
     )
     set_rule_if_exists(
-        "Beach Zone Main Area - Bottle Recycling -- Stage 2 --- Krabby Unlocked",
+        "Beach Zone Recycle Area - Bottle Recycling -- Stage 2 --- Krabby Unlocked",
         lambda state: True
     )
     set_rule_if_exists(
-        "Beach Zone Main Area - Bottle Recycling -- Stage 3",
+        "Beach Zone Recycle Area - Bottle Recycling -- Stage 3",
         lambda state: True
     )
     set_rule_if_exists(
-        "Beach Zone Main Area - Bottle Recycling -- Stage 4",
+        "Beach Zone Recycle Area - Bottle Recycling -- Stage 4",
         lambda state: True
     )
     set_rule_if_exists(
-        "Beach Zone Main Area - Bottle Recycling -- Stage 4 --- Corphish Unlocked",
+        "Beach Zone Recycle Area - Bottle Recycling -- Stage 4 --- Corphish Unlocked",
         lambda state: True
     )
     set_rule_if_exists(
-        "Beach Zone Main Area - Bottle Recycling -- Stage 5",
+        "Beach Zone Recycle Area - Bottle Recycling -- Stage 5",
         lambda state: True
     )
     set_rule_if_exists(
-        "Beach Zone Main Area - Bottle Recycling -- Stage 6",
+        "Beach Zone Recycle Area - Bottle Recycling -- Stage 6",
         lambda state: True
     )
     set_rule_if_exists(
@@ -628,7 +629,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Pelipper's Circle Circuit Attraction
     set_rule_if_exists(
         "Pelipper's Circle Circuit Attraction -- Prisma",
-        lambda state: can_beat_any_pelipper_circle_circuit_record(state, player)
+        lambda state: can_beat_any_pelipper_circle_circuit_record(state, player, options)
     )
     set_rule_if_exists(
         "Pelipper's Circle Circuit Attraction -- Pikachu",
@@ -702,7 +703,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Gyarado's Aqua Dash
     set_rule_if_exists(
         "Gyarado's Aqua Dash Attraction -- Prisma",
-        lambda state: can_beat_any_gyarados_aqua_dash_record(state, player)
+        lambda state: can_beat_any_gyarados_aqua_dash_record(state, player, options)
     )
     set_rule_if_exists(
         "Gyarado's Aqua Dash Attraction -- Pikachu",
@@ -934,7 +935,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Empoleon's Snow Slide
     set_rule_if_exists(
         "Empoleon's Snow Slide Attraction -- Prisma",
-        lambda state: can_beat_any_empoleon_snow_slide_record(state, player)
+        lambda state: can_beat_any_empoleon_snow_slide_record(state, player, options)
     )
     set_rule_if_exists(
         "Empoleon's Snow Slide Attraction -- Pikachu",
@@ -1041,7 +1042,11 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Cavern Zone Main Area - Dugtrio Power Competition -- Friendship",
-        lambda state: True
+        lambda state: state.has("Bastiodon Prisma", player)
+    )
+    set_rule_if_exists(
+        "Cavern Zone Main Area - Diglett Power Competition -- Friendship",
+        lambda state: state.has("Bastiodon Prisma", player) and state.has("Diglett Unlock", player)
     )
     set_rule_if_exists(
         "Cavern Zone Main Area - Gible Power Competition -- Friendship",
@@ -1127,7 +1132,7 @@ def set_rules(world: "PokeparkWorld") -> None:
 
     set_rule_if_exists(
         "Bastiodon's Panel Crush Attraction -- Prisma",
-        lambda state: can_beat_any_bastiodon_panel_crush_record(state, player)
+        lambda state: can_beat_any_bastiodon_panel_crush_record(state, player, options)
     )
     set_rule_if_exists(
         "Bastiodon's Panel Crush Attraction -- Pikachu",
@@ -1327,7 +1332,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Rhyperior's Bumper Burn
     set_rule_if_exists(
         "Rhyperior's Bumper Burn Attraction -- Prisma",
-        lambda state: can_beat_any_rhyperior_bumper_burn_record(state, player)
+        lambda state: can_beat_any_rhyperior_bumper_burn_record(state, player, options)
     )
     set_rule_if_exists(
         "Rhyperior's Bumper Burn Attraction -- Pikachu",
@@ -1401,7 +1406,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Blaziken's Boulder Bash
     set_rule_if_exists(
         "Blaziken's Boulder Bash Attraction -- Prisma",
-        lambda state: can_beat_any_blaziken_boulder_bash_record(state, player)
+        lambda state: can_beat_any_blaziken_boulder_bash_record(state, player, options)
     )
     set_rule_if_exists(
         "Blaziken's Boulder Bash Attraction -- Pikachu",
@@ -1536,7 +1541,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Tangrowth's Swing-Along
     set_rule_if_exists(
         "Tangrowth's Swing-Along Attraction -- Prisma",
-        lambda state: can_beat_any_tangrowth_swing_along_record(state, player)
+        lambda state: can_beat_any_tangrowth_swing_along_record(state, player, options)
     )
     set_rule_if_exists(
         "Tangrowth's Swing-Along Attraction -- Pikachu",
@@ -1711,12 +1716,12 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Haunted Zone Mansion Area - Dusknoir -- Friendship",
-        lambda state: state.has("Dusknoir Prisma", player)
+        lambda state: state.has("Dusknoir Prisma", player) and state.has("Dusknoir Unlock", player)
     )
     # Dusknoir's Speed Slam
     set_rule_if_exists(
         "Dusknoir's Speed Slam Attraction -- Prisma",
-        lambda state: can_beat_any_dusknoir_speed_slam_record(state, player)
+        lambda state: can_beat_any_dusknoir_speed_slam_record(state, player, options)
     )
     set_rule_if_exists(
         "Dusknoir's Speed Slam Attraction -- Pikachu",
@@ -1789,7 +1794,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Rotom's Spooky Shoot-'em-Up
     set_rule_if_exists(
         "Rotom's Spooky Shoot-'em-Up Attraction -- Prisma",
-        lambda state: can_beat_any_rotom_spooky_shoot_record(state, player)
+        lambda state: can_beat_any_rotom_spooky_shoot_record(state, player, options)
     )
     set_rule_if_exists(
         "Rotom's Spooky Shoot-'em-Up Attraction -- Pikachu",
@@ -1959,7 +1964,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Absol Hurdle Dash
     set_rule_if_exists(
         "Absol's Hurdle Bounce Attraction -- Prisma",
-        lambda state: can_beat_any_absol_hurdle_bounde_record(state, player)
+        lambda state: can_beat_any_absol_hurdle_bounde_record(state, player, options)
     )
     set_rule_if_exists(
         "Absol's Hurdle Bounce Attraction -- Pikachu",
@@ -2033,7 +2038,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Salamence's Sky Race
     set_rule_if_exists(
         "Salamence's Sky Race Attraction -- Prisma",
-        lambda state: can_beat_any_salamence_sky_race_record(state, player)
+        lambda state: can_beat_any_salamence_sky_race_record(state, player, options)
     )
     set_rule_if_exists(
         "Salamence's Sky Race Attraction -- Pikachu",
@@ -2157,7 +2162,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Rayquaza's Balloon Panic
     set_rule_if_exists(
         "Rayquaza's Balloon Panic Attraction -- Prisma",
-        lambda state: can_beat_any_rayquaza_balloon_panic_record(state, player)
+        lambda state: can_beat_any_rayquaza_balloon_panic_record(state, player, options)
     )
     set_rule_if_exists(
         "Rayquaza's Balloon Panic Attraction -- Pikachu",
@@ -2284,8 +2289,11 @@ def can_beat_all_rayquaza_balloon_panic_records(state: CollectionState, player: 
     )
 
 
-def can_beat_any_rayquaza_balloon_panic_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_rayquaza_balloon_panic_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return True
+    else:
+        return (
             state.has("Lucario Friendship", player) or
             state.has("Glaceon Friendship", player) or
             state.has("Luxray Friendship", player) or
@@ -2306,6 +2314,7 @@ def can_beat_any_rayquaza_balloon_panic_record(state: CollectionState, player: i
 
 
 def can_beat_all_salamence_sky_race_records(state: CollectionState, player: int):
+
     return (
             state.has("Pikachu Balloon", player) and
             state.has("Salamence Friendship", player) and
@@ -2325,8 +2334,11 @@ def can_beat_all_salamence_sky_race_records(state: CollectionState, player: int)
     )
 
 
-def can_beat_any_salamence_sky_race_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_salamence_sky_race_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return state.has("Pikachu Balloon", player)
+    else:
+        return (
             state.has("Pikachu Balloon", player) or
             state.has("Salamence Friendship", player) or
             state.has("Charizard Friendship", player) or
@@ -2367,8 +2379,11 @@ def can_beat_all_absol_hurdle_bounde_records(state: CollectionState, player: int
     )
 
 
-def can_beat_any_absol_hurdle_bounde_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_absol_hurdle_bounde_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return True
+    else:
+        return (
             state.has("Chikorita Friendship", player) or
             state.has("Absol Friendship", player) or
             state.has("Lucario Friendship", player) or
@@ -2407,8 +2422,11 @@ def can_beat_all_rotom_spooky_shoot_records(state: CollectionState, player: int)
     )
 
 
-def can_beat_any_rotom_spooky_shoot_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_rotom_spooky_shoot_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return True
+    else:
+        return (
             state.has("Magnemite Friendship", player) or
             state.has("Porygon-Z Friendship", player) or
             state.has("Magnezone Friendship", player) or
@@ -2446,8 +2464,11 @@ def can_beat_all_dusknoir_speed_slam_records(state: CollectionState, player: int
     )
 
 
-def can_beat_any_dusknoir_speed_slam_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_dusknoir_speed_slam_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return True
+    else:
+        return (
             state.has("Stunky Friendship", player) or
             state.has("Gengar Friendship", player) or
             state.has("Mismagius Friendship", player) or
@@ -2486,8 +2507,11 @@ def can_beat_all_tangrowth_swing_along_records(state: CollectionState, player: i
     )
 
 
-def can_beat_any_tangrowth_swing_along_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_tangrowth_swing_along_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return True
+    else:
+        return (
             state.has("Meowth Friendship", player) or
             state.has("Pichu Friendship", player) or
             state.has("Lucario Friendship", player) or
@@ -2525,8 +2549,11 @@ def can_beat_all_blaziken_boulder_bash_records(state: CollectionState, player: i
     )
 
 
-def can_beat_any_blaziken_boulder_bash_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_blaziken_boulder_bash_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return True
+    else:
+        return (
             state.has("Geodude Friendship", player) or
             state.has("Phanpy Friendship", player) or
             state.has("Blaziken Friendship", player) or
@@ -2564,8 +2591,11 @@ def can_beat_all_rhyperior_bumper_burn_records(state: CollectionState, player: i
     )
 
 
-def can_beat_any_rhyperior_bumper_burn_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_rhyperior_bumper_burn_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return True
+    else:
+        return (
             state.has("Magnemite Friendship", player) or
             state.has("Rhyperior Friendship", player) or
             state.has("Tyranitar Friendship", player) or
@@ -2603,8 +2633,11 @@ def can_beat_all_bastiodon_panel_crush_records(state: CollectionState, player: i
     )
 
 
-def can_beat_any_bastiodon_panel_crush_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_bastiodon_panel_crush_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return True
+    else:
+        return (
             state.has("Sableye Friendship", player) or
             state.has("Meowth Friendship", player) or
             state.has("Torchic Friendship", player) or
@@ -2642,9 +2675,12 @@ def can_beat_all_empoleon_snow_slide_records(state: CollectionState, player: int
     )
 
 
-def can_beat_any_empoleon_snow_slide_record(state: CollectionState, player: int):
-    return (
-            state.has("Pikachu Snowboard Friendship", player) or
+def can_beat_any_empoleon_snow_slide_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return state.has("Pikachu Snowboard", player)
+    else:
+        return (
+                state.has("Pikachu Snowboard", player) or
             state.has("Teddiursa Friendship", player) or
             state.has("Magikarp Friendship", player) or
             state.has("Empoleon Friendship", player) or
@@ -2682,8 +2718,11 @@ def can_beat_all_gyarados_aqua_dash_records(state: CollectionState, player: int)
     )
 
 
-def can_beat_any_gyarados_aqua_dash_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_gyarados_aqua_dash_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return state.has("Pikachu Surfboard", player)
+    else:
+        return (
             state.has("Pikachu Surfboard", player) or
             state.has("Psyduck Friendship", player) or
             state.has("Azurill Friendship", player) or
@@ -2722,8 +2761,11 @@ def can_beat_all_pelipper_circle_circuit_records(state: CollectionState, player:
             state.has("Wingull Friendship", player))
 
 
-def can_beat_any_pelipper_circle_circuit_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_pelipper_circle_circuit_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return state.has("Pikachu Balloon", player)
+    else:
+        return (
             state.has("Pikachu Balloon", player) or
             state.has("Staraptor Friendship", player) or
             state.has("Togekiss Friendship", player) or
@@ -2762,8 +2804,11 @@ def can_beat_all_venusaur_vine_swing_records(state: CollectionState, player: int
     )
 
 
-def can_beat_any_venusaur_vine_swing_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_venusaur_vine_swing_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return True
+    else:
+        return (
             state.has("Munchlax Friendship", player) or
             state.has("Magikarp Friendship", player) or
             state.has("Blaziken Friendship", player) or
@@ -2782,8 +2827,11 @@ def can_beat_any_venusaur_vine_swing_record(state: CollectionState, player: int)
     )
 
 
-def can_beat_any_bulbasaur_daring_dash_record(state: CollectionState, player: int):
-    return (
+def can_beat_any_bulbasaur_daring_dash_record(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
+        return True
+    else:
+        return (
             state.has("Turtwig Friendship", player) or
             state.has("Munchlax Friendship", player) or
             state.has("Chimchar Friendship", player) or

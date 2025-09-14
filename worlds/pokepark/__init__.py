@@ -4,23 +4,372 @@ Archipelago init file for Pokepark
 import os
 import zipfile
 from base64 import b64encode
-from typing import Any, ClassVar, Callable, Dict
+from typing import Any, ClassVar, Dict
 
 import yaml
 
-from BaseClasses import Tutorial, Region
-from BaseClasses import ItemClassification as IC
-
+from BaseClasses import ItemClassification as IC, Region, Tutorial
+from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, components, Type, launch as launch_component
-from .items import item_name_groups, PokeparkItem, ITEM_TABLE
-from .locations import LOCATION_TABLE, MultiZoneFlag, PokeparkLocation, PokeparkFlag
-from .options import PokeparkOptions, pokepark_option_groups
+from worlds.LauncherComponents import Component, Type, components, launch as launch_component
+from .items import ITEM_TABLE, PokeparkItem, PokeparkItemData, item_name_groups
+from .locations import LOCATION_TABLE, MultiZoneFlag, PokeparkFlag, PokeparkLocation
+from .options import PokeparkOptions, RemoveBattlePowerCompLocations, pokepark_option_groups
 from .regions import EntranceRandomizer
 from .rules import set_rules
 from ..Files import APPlayerContainer
 
 VERSION: tuple[int, int, int] = (0, 0, 0)
+
+option_to_progression: dict[tuple[str, int], (int, list[str])] = {
+    ("remove_battle_power_comp_locations", 0): (60, [
+        "Lotad Unlock",
+        "Weedle Unlock",
+        "Bibarel Unlock",
+        "Torterra Unlock",
+        "Scyther Unlock",
+        "Chimchar Unlock",
+        "Ambipom Unlock",
+        "Totodile Unlock",
+        "Golduck Unlock",
+        "Blastoise Unlock",
+        "Floatzel Unlock",
+        "Krabby Unlock",
+        "Corphish Unlock",
+        "Smoochum Unlock",
+        "Squirtle Unlock",
+        "Primeape Unlock",
+        "Ursaring Unlock",
+        "Mamoswine Unlock",
+        "Magnezone Unlock",
+        "Phanpy Unlock",
+        "Hitmonlee Unlock",
+        "Electivire Unlock",
+        "Infernape Unlock",
+        "Torkoal Unlock",
+        "Hitmonchan Unlock",
+        "Magmortar Unlock",
+        "Baltoy Unlock",
+        "Honchkrow Unlock",
+        "Elekid Unlock",
+        "Electabuzz Unlock",
+        "Skuntank Unlock",
+        "Breloom Unlock",
+        "Mismagius Unlock",
+        "Gengar Unlock",
+        "Aerodactyl Unlock",
+        "Tyranitar Unlock",
+        "Garchomp Unlock",
+
+        "Progressive Thunderbolt",
+        "Progressive Iron Tail",
+    ]),
+    ("remove_chase_power_comp_locations", 0): (100, [
+        "Pachirisu Unlock",
+        "Shinx Unlock",
+        "Caterpie Unlock",
+        "Shroomish Unlock",
+        "Starly Unlock",
+        "Starly 2 Unlock",
+        "Sneasel Unlock",
+        "Raichu Unlock",
+        "Ninetales Unlock",
+        "Ponyta Unlock",
+        "Espeon Unlock",
+        "Voltorb Unlock",
+        "Luxray Unlock",
+        "Stunky Unlock",
+        "Electrode Unlock",
+        "Haunter Unlock",
+        "Gastly Unlock",
+        "Gastly 2 Unlock",
+        "Jolteon Unlock",
+    ]),
+    ("remove_hide_and_seek_power_comp_locations", 0): (0, [
+        "Bonsly Unlock",
+        "Sudowoodo Unlock",
+        "Mudkip Unlock",
+    ]),
+    ("remove_errand_power_comp_locations", 0): (0, [
+        "Tropius Unlock",
+        "Progressive Thunderbolt",
+    ]),
+    ("remove_misc_power_comp_locations", 0): (0, [
+        "Magnemite Unlock",
+        "Magnemite 2 Unlock",
+        "Magnemite 3 Unlock",
+        "Golem Unlock",
+        "Metapod Unlock",
+        "Kakuna Unlock",
+        "Diglett Unlock",
+        "Dusknoir Unlock",
+        "Rayquaza Unlock",
+
+    ]),
+    ("remove_quest_locations", 0): (0, [
+        "Mankey Friendship",
+        "Delibird Unlock",
+        "Spheal Friendship",
+        "Teddiursa Friendship",
+        "Squirtle Unlock",
+        "Squirtle Friendship",
+        "Smoochum Friendship",
+        "Smoochum Unlock",
+        "Glalie Unlock"]),
+    ("goal", 1): (193, []),
+    ("remove_attraction_locations", 0): (80, [
+        "Turtwig Friendship",
+        "Munchlax Friendship",
+        "Chimchar Friendship",
+        "Treecko Friendship",
+        "Bibarel Friendship",
+        "Bulbasaur Friendship",
+        "Bidoof Friendship",
+        "Oddish Friendship",
+        "Shroomish Friendship",
+        "Bonsly Friendship",
+        "Lotad Friendship",
+        "Weedle Friendship",
+        "Caterpie Friendship",
+        "Magikarp Friendship",
+        "Jolteon Friendship",
+        "Arcanine Friendship",
+        "Leafeon Friendship",
+        "Scyther Friendship",
+        "Ponyta Friendship",
+        "Shinx Friendship",
+        "Eevee Friendship",
+        "Pachirisu Friendship",
+        "Buneary Friendship",
+        "Croagunk Friendship",
+        "Mew Friendship",
+
+        "Magikarp Friendship",
+        "Munchlax Friendship",
+        "Blaziken Friendship",
+        "Infernape Friendship",
+        "Lucario Friendship",
+        "Primeape Friendship",
+        "Tangrowth Friendship",
+        "Ambipom Friendship",
+        "Croagunk Friendship",
+        "Mankey Friendship",
+        "Aipom Friendship",
+        "Chimchar Friendship",
+        "Treecko Friendship",
+        "Pachirisu Friendship",
+        "Jirachi Friendship",
+
+        "Staraptor Friendship",
+        "Togekiss Friendship",
+        "Honchkrow Friendship",
+        "Gliscor Friendship",
+        "Pelipper Friendship",
+        "Staravia Friendship",
+        "Pidgeotto Friendship",
+        "Butterfree Friendship",
+        "Tropius Friendship",
+        "Murkrow Friendship",
+        "Taillow Friendship",
+        "Spearow Friendship",
+        "Starly Friendship",
+        "Wingull Friendship",
+        "Latias Friendship",
+
+        "Psyduck Friendship",
+        "Azurill Friendship",
+        "Slowpoke Friendship",
+        "Empoleon Friendship",
+        "Floatzel Friendship",
+        "Feraligatr Friendship",
+        "Golduck Friendship",
+        "Vaporeon Friendship",
+        "Prinplup Friendship",
+        "Bibarel Friendship",
+        "Buizel Friendship",
+        "Corsola Friendship",
+        "Piplup Friendship",
+        "Lotad Friendship",
+        "Manaphy Friendship",
+
+        "Teddiursa Friendship",
+        "Magikarp Friendship",
+        "Empoleon Friendship",
+        "Glaceon Friendship",
+        "Blastoise Friendship",
+        "Glalie Friendship",
+        "Lapras Friendship",
+        "Delibird Friendship",
+        "Piloswine Friendship",
+        "Prinplup Friendship",
+        "Squirtle Friendship",
+        "Piplup Friendship",
+        "Quagsire Friendship",
+        "Spheal Friendship",
+        "Suicune Friendship",
+
+        "Sableye Friendship",
+        "Meowth Friendship",
+        "Torchic Friendship",
+        "Electivire Friendship",
+        "Magmortar Friendship",
+        "Hitmonlee Friendship",
+        "Ursaring Friendship",
+        "Mr. Mime Friendship",
+        "Raichu Friendship",
+        "Sudowoodo Friendship",
+        "Charmander Friendship",
+        "Gible Friendship",
+        "Chimchar Friendship",
+        "Magby Friendship",
+        "Metagross Friendship",
+
+        "Magnemite Friendship",
+        "Rhyperior Friendship",
+        "Tyranitar Friendship",
+        "Hitmontop Friendship",
+        "Flareon Friendship",
+        "Venusaur Friendship",
+        "Snorlax Friendship",
+        "Torterra Friendship",
+        "Magnezone Friendship",
+        "Claydol Friendship",
+        "Quilava Friendship",
+        "Torkoal Friendship",
+        "Baltoy Friendship",
+        "Bonsly Friendship",
+        "Heatran Friendship",
+
+        "Geodude Friendship",
+        "Phanpy Friendship",
+        "Blaziken Friendship",
+        "Garchomp Friendship",
+        "Scizor Friendship",
+        "Magmortar Friendship",
+        "Hitmonchan Friendship",
+        "Machamp Friendship",
+        "Marowak Friendship",
+        "Farfetch'd Friendship",
+        "Cranidos Friendship",
+        "Camerupt Friendship",
+        "Bastiodon Friendship",
+        "Mawile Friendship",
+        "Groudon Friendship",
+
+        "Meowth Friendship",
+        "Pichu Friendship",
+        "Lucario Friendship",
+        "Infernape Friendship",
+        "Blaziken Friendship",
+        "Riolu Friendship",
+        "Sneasel Friendship",
+        "Raichu Friendship",
+        "Ambipom Friendship",
+        "Primeape Friendship",
+        "Aipom Friendship",
+        "Electabuzz Friendship",
+        "Chimchar Friendship",
+        "Croagunk Friendship",
+        "Celebi Friendship",
+
+        "Stunky Friendship",
+        "Gengar Friendship",
+        "Mismagius Friendship",
+        "Scizor Friendship",
+        "Espeon Friendship",
+        "Dusknoir Friendship",
+        "Umbreon Friendship",
+        "Cranidos Friendship",
+        "Skuntank Friendship",
+        "Electrode Friendship",
+        "Gastly Friendship",
+        "Duskull Friendship",
+        "Misdreavus Friendship",
+        "Krabby Friendship",
+        "Darkrai Friendship",
+
+        "Magnemite Friendship",
+        "Porygon-Z Friendship",
+        "Magnezone Friendship",
+        "Gengar Friendship",
+        "Magmortar Friendship",
+        "Electivire Friendship",
+        "Mismagius Friendship",
+        "Claydol Friendship",
+        "Electabuzz Friendship",
+        "Haunter Friendship",
+        "Abra Friendship",
+        "Elekid Friendship",
+        "Mr. Mime Friendship",
+        "Baltoy Friendship",
+        "Rotom Friendship",
+
+        "Chikorita Friendship",
+        "Absol Friendship",
+        "Lucario Friendship",
+        "Ponyta Friendship",
+        "Ninetales Friendship",
+        "Lopunny Friendship",
+        "Espeon Friendship",
+        "Infernape Friendship",
+        "Breloom Friendship",
+        "Riolu Friendship",
+        "Furret Friendship",
+        "Mareep Friendship",
+        "Eevee Friendship",
+        "Vulpix Friendship",
+        "Shaymin Friendship",
+
+        "Salamence Friendship",
+        "Charizard Friendship",
+        "Dragonite Friendship",
+        "Flygon Friendship",
+        "Aerodactyl Friendship",
+        "Staraptor Friendship",
+        "Honchkrow Friendship",
+        "Gliscor Friendship",
+        "Pidgeotto Friendship",
+        "Togekiss Friendship",
+        "Golbat Friendship",
+        "Taillow Friendship",
+        "Murkrow Friendship",
+        "Zubat Friendship",
+        "Latios Friendship",
+
+        "Lucario Friendship",
+        "Glaceon Friendship",
+        "Luxray Friendship",
+        "Mamoswine Friendship",
+        "Infernape Friendship",
+        "Floatzel Friendship",
+        "Rhyperior Friendship",
+        "Absol Friendship",
+        "Breloom Friendship",
+        "Mareep Friendship",
+        "Cyndaquil Friendship",
+        "Totodile Friendship",
+        "Chikorita Friendship",
+        "Mime Jr. Friendship",
+        "Deoxys Friendship",
+
+        "Dusknoir Unlock",
+        "Rayquaza Unlock",
+        "Pikachu Surfboard",
+        "Pikachu Snowboard",
+        "Pikachu Balloon",
+    ]),
+    ("remove_attraction_prisma_locations", 0): (80, [
+        "Pikachu Surfboard",
+        "Pikachu Snowboard",
+        "Pikachu Balloon",
+        "Dusknoir Unlock",
+        "Rayquaza Unlock"
+    ]),
+    ("remove_pokemon_unlock_locations", 0): (85, [
+        "Progressive Dash",
+        "Progressive Thunderbolt"
+    ])
+}
 
 class PokeparkWebWorld(WebWorld):
     theme = "jungle"
@@ -77,8 +426,10 @@ class PokeparkWorld(World):
 
     options_dataclass = PokeparkOptions
     options: PokeparkOptions
+    topology_present: bool = True
 
     web = PokeparkWebWorld()
+    required_client_version: tuple[int, int, int] = (0, 5, 1)
 
     item_name_to_id: ClassVar[dict[str, int]] = {
         name: PokeparkItem.get_apid(data.code) for name, data in ITEM_TABLE.items() if data.code is not None
@@ -94,7 +445,10 @@ class PokeparkWorld(World):
         super().__init__(*args, **kwargs)
 
         self.locations: set[str] = set()
-        self.nonprogress_locations: set[str] = set()
+        self.progressive_pool: list[str] = list()
+        self.useful_pool: list[str] = list()
+        self.filler_pool: list[str] = list()
+        self.precollected_pool: list[str] = list()
         self.item_classification_overrides: dict[str, IC] = {}
         self.entrances: EntranceRandomizer = EntranceRandomizer(self)
 
@@ -117,6 +471,8 @@ class PokeparkWorld(World):
             (PokeparkFlag.POWER_UP, self.options.remove_power_training_locations),
             (PokeparkFlag.QUEST, self.options.remove_quest_locations),
             (PokeparkFlag.ATTRACTION, self.options.remove_attraction_locations),
+            (PokeparkFlag.ATTRACTION_PRISMA, self.options.remove_attraction_prisma_locations),
+            (PokeparkFlag.POKEMON_UNLOCK, self.options.remove_pokemon_unlock_locations)
         ]
 
         for flag, option in flag_options:
@@ -137,18 +493,111 @@ class PokeparkWorld(World):
         return locations
 
     def generate_early(self) -> None:
-        options = self.options
-        if options.goal == options.goal.option_postgame:
-            self.options.remove_attraction_locations.value = self.options.remove_attraction_locations.option_false
-        if options.remove_attraction_locations.value:
-            self.options.remove_chase_power_comp_locations.value = self.options.remove_chase_power_comp_locations.option_false
-            self.options.remove_battle_power_comp_locations.value = self.options.remove_battle_power_comp_locations.option_false
-            self.options.remove_hide_and_seek_power_comp_locations.value = self.options.remove_hide_and_seek_power_comp_locations.option_false
-            self.options.remove_errand_power_comp_locations.value = self.options.remove_errand_power_comp_locations.option_false
-            self.options.remove_misc_power_comp_locations.value = self.options.remove_misc_power_comp_locations.option_false
-            self.options.remove_quest_locations.value = self.options.remove_quest_locations.option_false
+        # generate regions and entrances
+        self.entrances.generate_entrance_data()
 
+        # setup locations
         self.locations = self._determine_locations()
+        self.update_pool_with_precollected_items()
+
+        self.determine_classification_dynamic()
+        self.distribute_item_pools()
+
+        if len(self.locations) <= len(self.progressive_pool):
+            raise OptionError("Invalid Option combination. removed too much locations. Try adding locations")
+
+    def distribute_item_pools(self):
+        for name in self.progressive_pool:
+            if (self.item_classification_overrides[name] == IC.filler or self.item_classification_overrides[name] ==
+                    IC.useful):
+                self.progressive_pool.remove(name)
+
+    def determine_classification_dynamic(self):
+        progressive_items = [
+            "Bulbasaur Prisma",
+            "Venusaur Prisma",
+            "Pelipper Prisma",
+            "Gyarados Prisma",
+            "Empoleon Prisma",
+            "Bastiodon Prisma",
+            "Rhyperior Prisma",
+            "Blaziken Prisma",
+            "Tangrowth Prisma",
+            "Dusknoir Prisma",
+            "Rotom Prisma",
+            "Absol Prisma",
+            "Salamence Prisma",
+            "Rayquaza Prisma",
+
+            "Beach Zone Fast Travel",
+            "Ice Zone Fast Travel",
+            "Cavern Zone Fast Travel",
+            "Magma Zone Fast Travel",
+            "Haunted Zone Fast Travel",
+            "Granite Zone Fast Travel",
+            "Flower Zone Fast Travel",
+
+            "Beach Bridge 1 Unlock",
+            "Beach Bridge 2 Unlock",
+            "Magma Zone Fire Wall Unlock",
+            "Haunted Zone Mansion Doors Unlock",
+            "Ice Zone Lift Unlock",
+            "Ice Zone Frozen Lake Unlock",
+
+            "Progressive Dash",
+        ]
+
+        options = self.options
+        option_names = [option_name for option_name, _ in option_to_progression.keys()]
+
+        option_dict = options.as_dict(*option_names)
+        min_required_friendship_count = 0
+
+        for option, (min_friendship, progression_items) in option_to_progression.items():
+            option_name, expected_value = option
+
+            if option_dict.get(option_name) == expected_value:
+                min_required_friendship_count = max(min_required_friendship_count, min_friendship)
+                progressive_items.extend(progression_items)
+
+        progressive_set = set(progressive_items)
+        friendship_removable = []
+        other_removable = []
+
+        for name in self.progressive_pool:
+            if name not in progressive_set:
+                if "Friendship" in name:
+                    friendship_removable.append(name)
+                else:
+                    other_removable.append(name)
+
+        max_removable_friendship = 193 - min_required_friendship_count
+        friendship_to_remove = friendship_removable[:max_removable_friendship]
+
+        items_to_remove = set(friendship_to_remove + other_removable)
+
+        overlap = progressive_set & items_to_remove
+        assert not overlap, f"Items marked as both needed and removable: {overlap}"
+        for name in self.progressive_pool:
+            if name in progressive_set or name not in items_to_remove:
+                self.item_classification_overrides[name] = IC.progression
+
+        useful_items = ["Progressive Dash",
+                        "Progressive Thunderbolt",
+                        "Progressive Thunderbolt",
+                        "Progressive Health",
+                        "Double Dash",
+                        "Meadow Zone Fast Travel"
+                        ]
+        for name in items_to_remove:
+            if name in useful_items:
+                self.item_classification_overrides[name] = IC.useful
+                self.progressive_pool.remove(name)
+                self.useful_pool.append(name)
+            else:
+                self.item_classification_overrides[name] = IC.filler
+                self.progressive_pool.remove(name)
+                self.filler_pool.append(name)
 
     def generate_output(self, output_directory: str) -> None:
         """
@@ -188,13 +637,9 @@ class PokeparkWorld(World):
     def create_regions(self):
         multiworld = self.multiworld
         player = self.player
-        options = self.options
-
-        self.entrances.generate_entrance_data()
         ENTRANCES_TO_EXITS = self.entrances.entrances_to_exits
         REGION_TO_ENTRANCES = self.entrances.region_to_entrances
         ENTRANCE_RULES = self.entrances.entrances_rules
-
         treehouse = Region("Treehouse", player, multiworld)
         multiworld.regions.append(treehouse)
         unique_region_names = set(ENTRANCES_TO_EXITS.values())
@@ -204,12 +649,12 @@ class PokeparkWorld(World):
             for entrance in entrances:
                 target_region_name = ENTRANCES_TO_EXITS.get(entrance)
                 target_region = multiworld.get_region(target_region_name, player)
-                print(f"{region_map} -> {target_region}")
                 multiworld.get_region(region_map, player).connect(
                     target_region
                     , f"{entrance} ->"
                       f" {target_region_name}", ENTRANCE_RULES[entrance]
                 )
+
         for location_name in sorted(self.locations):
             data = LOCATION_TABLE[location_name]
 
@@ -230,39 +675,38 @@ class PokeparkWorld(World):
             return PokeparkItem(name, self.player, ITEM_TABLE[name], classification)
         raise KeyError(f"Invalid item name: {name}")
 
-    def update_pool_with_precollected_items(self) -> tuple[list[str], list[str]]:
+    def update_pool_with_precollected_items(self):
         options = self.options
-        progressive_pool = []
-        precollected_pool = []
-
         for item_name, data in ITEM_TABLE.items():
             if data.type == "Item":
-                progressive_pool.extend([item_name] * data.quantity)
+                self.progressive_pool.extend([item_name] * data.quantity)
 
         if options.power_randomizer.value == options.power_randomizer.option_dash:
-            precollected_pool.append("Progressive Dash")
-            progressive_pool.remove("Progressive Dash")
+            self.precollected_pool.append("Progressive Dash")
+            self.progressive_pool.remove("Progressive Dash")
         if options.power_randomizer.value == options.power_randomizer.option_thunderbolt:
-            precollected_pool.append("Progressive Thunderbolt")
-            progressive_pool.remove("Progressive Thunderbolt")
+            self.precollected_pool.append("Progressive Thunderbolt")
+            self.progressive_pool.remove("Progressive Thunderbolt")
+
         if options.power_randomizer.value == options.power_randomizer.option_thunderbolt_dash:
-            precollected_pool.append("Progressive Thunderbolt")
-            progressive_pool.remove("Progressive Thunderbolt")
-            precollected_pool.append("Progressive Dash")
-            progressive_pool.remove("Progressive Dash")
+            self.precollected_pool.append("Progressive Thunderbolt")
+            self.progressive_pool.remove("Progressive Thunderbolt")
+            self.precollected_pool.append("Progressive Dash")
+            self.progressive_pool.remove("Progressive Dash")
         if options.power_randomizer.value == options.power_randomizer.option_full:
             for i in range(4):
-                precollected_pool.append("Progressive Thunderbolt")
-                progressive_pool.remove("Progressive Thunderbolt")
-                precollected_pool.append("Progressive Dash")
-                progressive_pool.remove("Progressive Dash")
+                self.precollected_pool.append("Progressive Thunderbolt")
+                self.progressive_pool.remove("Progressive Thunderbolt")
+                self.precollected_pool.append("Progressive Dash")
+                self.progressive_pool.remove("Progressive Dash")
             for i in range(3):
-                precollected_pool.append("Progressive Iron Tail")
-                progressive_pool.remove("Progressive Iron Tail")
-                precollected_pool.append("Progressive Health")
-                progressive_pool.remove("Progressive Health")
-            precollected_pool.append("Double Dash")
-            progressive_pool.remove("Double Dash")
+                self.precollected_pool.append("Progressive Iron Tail")
+                self.progressive_pool.remove("Progressive Iron Tail")
+
+                self.precollected_pool.append("Progressive Health")
+                self.progressive_pool.remove("Progressive Health")
+            self.precollected_pool.append("Double Dash")
+            self.progressive_pool.remove("Double Dash")
 
         if options.starting_zone.value == options.starting_zone.option_one:
             fast_travel_items = [
@@ -277,8 +721,8 @@ class PokeparkWorld(World):
             ]
             self.random.shuffle(fast_travel_items)
             precollected_fast_travel = self.random.choice(fast_travel_items)
-            precollected_pool.append(precollected_fast_travel)
-            progressive_pool.remove(precollected_fast_travel)
+            self.precollected_pool.append(precollected_fast_travel)
+            self.progressive_pool.remove(precollected_fast_travel)
 
         if options.starting_zone.value == options.starting_zone.option_all:
             fast_travel_items = [
@@ -292,8 +736,8 @@ class PokeparkWorld(World):
                 "Flower Zone Fast Travel",
             ]
             for item in fast_travel_items:
-                precollected_pool.append(item)
-                progressive_pool.remove(item)
+                self.precollected_pool.append(item)
+                self.progressive_pool.remove(item)
 
         if not options.in_zone_road_blocks.value:
             road_block_items = [
@@ -305,375 +749,24 @@ class PokeparkWorld(World):
                 "Ice Zone Frozen Lake Unlock",
             ]
             for item in road_block_items:
-                precollected_pool.append(item)
-                progressive_pool.remove(item)
+                self.precollected_pool.append(item)
+                self.progressive_pool.remove(item)
 
-        return progressive_pool, precollected_pool
+    def get_filler_item_name(self, strict: bool = True) -> str:
+        if not strict and len(self.useful_pool) > 0:
+            return self.useful_pool.pop()
 
-    def update_classification(self):
-        # mostly documentation items -> options for now
-        options = self.options
-        min_required_friendship_count = 0
-        progressive_items = [
-            "Bulbasaur Prisma",
-            "Venusaur Prisma",
-            "Pelipper Prisma",
-            "Gyarados Prisma",
-            "Empoleon Prisma",
-            "Bastiodon Prisma",
-            "Rhyperior Prisma",
-            "Blaziken Prisma",
-            "Tangrowth Prisma",
-            "Dusknoir Prisma",
-            "Rotom Prisma",
-            "Absol Prisma",
-            "Salamence Prisma",
-            "Rayquaza Prisma",
+        if len(self.filler_pool) > 0:
+            return self.filler_pool.pop()
 
-            "Beach Zone Fast Travel",
-            "Ice Zone Fast Travel",
-            "Cavern Zone Fast Travel",
-            "Magma Zone Fast Travel",
-            "Haunted Zone Fast Travel",
-            "Granite Zone Fast Travel",
-            "Flower Zone Fast Travel",
+        filler_consumables = ["10 Berries", "20 Berries", "50 Berries", "100 Berries"]
+        filler_weights = [2, 4, 8, 20]
 
-            "Beach Bridge 1 Unlock",
-            "Beach Bridge 2 Unlock",
-            "Magma Zone Fire Wall Unlock",
-            "Haunted Zone Mansion Doors Unlock",
-            "Ice Zone Lift Unlock",
-            "Ice Zone Frozen Lake Unlock",
-
-            "Progressive Dash",
-            "Progressive Thunderbolt",
-
-            "Victory"
-        ]
-
-        if not options.remove_attraction_locations.value:
-            min_required_friendship_count = max(min_required_friendship_count, 80)
-
-            progressive = [
-                # Attraction stuff
-                "Shaymin Friendship",
-                "Lopunny Friendship",
-                "Lucario Friendship",
-                "Infernape Friendship",
-                "Espeon Friendship",
-                "Absol Friendship",
-                "Ponyta Friendship",
-                "Ninetales Friendship",
-                "Breloom Friendship",
-                "Riolu Friendship",
-                "Furret Friendship",
-                "Mareep Friendship",
-                "Eevee Friendship",
-                "Vulpix Friendship",
-                "Chikorita Friendship",
-                "Deoxys Friendship",
-                "Floatzel Friendship",
-                "Glaceon Friendship",
-                "Luxray Friendship",
-                "Rhyperior Friendship",
-                "Mamoswine Friendship",
-                "Totodile Friendship",
-                "Cyndaquil Friendship",
-                "Mime Jr. Friendship",
-                "Jirachi Friendship",
-                "Blaziken Friendship",
-                "Tangrowth Friendship",
-                "Primeape Friendship",
-                "Ambipom Friendship",
-                "Mankey Friendship",
-                "Aipom Friendship",
-                "Chimchar Friendship",
-                "Treecko Friendship",
-                "Croagunk Friendship",
-                "Pachirisu Friendship",
-                "Munchlax Friendship",
-                "Magikarp Friendship",
-                "Celebi Friendship",
-                "Sneasel Friendship",
-                "Electabuzz Friendship",
-                "Raichu Friendship",
-                "Meowth Friendship",
-                "Pichu Friendship",
-                "Darkrai Friendship",
-                "Gengar Friendship",
-                "Mismagius Friendship",
-                "Scizor Friendship",
-                "Dusknoir Friendship",
-                "Umbreon Friendship",
-                "Krabby Friendship",
-                "Electrode Friendship",
-                "Cranidos Friendship",
-                "Skuntank Friendship",
-                "Misdreavus Friendship",
-                "Gastly Friendship",
-                "Stunky Friendship",
-                "Duskull Friendship",
-                "Manaphy Friendship",
-                "Empoleon Friendship",
-                "Feraligatr Friendship",
-                "Golduck Friendship",
-                "Vaporeon Friendship",
-                "Prinplup Friendship",
-                "Bibarel Friendship",
-                "Corsola Friendship",
-                "Buizel Friendship",
-                "Piplup Friendship",
-                "Lotad Friendship",
-                "Psyduck Friendship",
-                "Azurill Friendship",
-                "Slowpoke Friendship",
-                "Latias Friendship",
-                "Staraptor Friendship",
-                "Togekiss Friendship",
-                "Honchkrow Friendship",
-                "Staravia Friendship",
-                "Pidgeotto Friendship",
-                "Gliscor Friendship",
-                "Taillow Friendship",
-                "Spearow Friendship",
-                "Pelipper Friendship",
-                "Starly Friendship",
-                "Murkrow Friendship",
-                "Wingull Friendship",
-                "Tropius Friendship",
-                "Butterfree Friendship",
-                "Suicune Friendship",
-                "Blastoise Friendship",
-                "Glalie Friendship",
-                "Lapras Friendship",
-                "Delibird Friendship",
-                "Quagsire Friendship",
-                "Squirtle Friendship",
-                "Spheal Friendship",
-                "Piloswine Friendship",
-                "Teddiursa Friendship",
-                "Metagross Friendship",
-                "Hitmonlee Friendship",
-                "Electivire Friendship",
-                "Magmortar Friendship",
-                "Ursaring Friendship",
-                "Sableye Friendship",
-                "Mr. Mime Friendship",
-                "Sudowoodo Friendship",
-                "Charmander Friendship",
-                "Gible Friendship",
-                "Torchic Friendship",
-                "Magby Friendship",
-                "Heatran Friendship",
-                "Tyranitar Friendship",
-                "Hitmontop Friendship",
-                "Flareon Friendship",
-                "Venusaur Friendship",
-                "Snorlax Friendship",
-                "Torterra Friendship",
-                "Magnezone Friendship",
-                "Claydol Friendship",
-                "Quilava Friendship",
-                "Torkoal Friendship",
-                "Baltoy Friendship",
-                "Bonsly Friendship",
-                "Magnemite Friendship",
-                "Groudon Friendship",
-                "Garchomp Friendship",
-                "Hitmonchan Friendship",
-                "Machamp Friendship",
-                "Bastiodon Friendship",
-                "Marowak Friendship",
-                "Camerupt Friendship",
-                "Mawile Friendship",
-                "Farfetch'd Friendship",
-                "Geodude Friendship",
-                "Phanpy Friendship",
-                "Rotom Friendship",
-                "Porygon-Z Friendship",
-                "Haunter Friendship",
-                "Abra Friendship",
-                "Elekid Friendship",
-                "Latios Friendship",
-                "Salamence Friendship",
-                "Charizard Friendship",
-                "Dragonite Friendship",
-                "Flygon Friendship",
-                "Aerodactyl Friendship",
-                "Golbat Friendship",
-                "Zubat Friendship",
-                "Mew Friendship",
-                "Arcanine Friendship",
-                "Jolteon Friendship",
-                "Leafeon Friendship",
-                "Scyther Friendship",
-                "Shinx Friendship",
-                "Buneary Friendship",
-                "Turtwig Friendship",
-                "Bulbasaur Friendship",
-                "Bidoof Friendship",
-                "Oddish Friendship",
-                "Shroomish Friendship",
-                "Weedle Friendship",
-                "Caterpie Friendship",
-                "Dusknoir Unlock",
-                "Rayquaza Unlock",
-                "Pikachu Surfboard",
-                "Pikachu Snowboard",
-                "Pikachu Balloon",
-            ]
-            progressive_items.extend(progressive)
-
-        if not options.remove_battle_power_comp_locations.value:
-            min_required_friendship_count = max(min_required_friendship_count, 60)
-            progressive = [
-                "Lotad Unlock",
-                "Weedle Unlock",
-                "Bibarel Unlock",
-                "Torterra Unlock",
-                "Scyther Unlock",
-                "Chimchar Unlock",
-                "Ambipom Unlock",
-                "Totodile Unlock",
-                "Golduck Unlock",
-                "Blastoise Unlock",
-                "Floatzel Unlock",
-                "Krabby Unlock",
-                "Corphish Unlock",
-                "Smoochum Unlock",
-                "Squirtle Unlock",
-                "Primeape Unlock",
-                "Ursaring Unlock",
-                "Mamoswine Unlock",
-                "Magnezone Unlock",
-                "Scizor Unlock",
-                "Phanpy Unlock",
-                "Hitmonlee Unlock",
-                "Electivire Unlock",
-                "Infernape Unlock",
-                "Torkoal Unlock",
-                "Hitmonchan Unlock",
-                "Magmortar Unlock",
-                "Baltoy Unlock",
-                "Honchkrow Unlock",
-                "Elekid Unlock",
-                "Electabuzz Unlock",
-                "Skuntank Unlock",
-                "Breloom Unlock",
-                "Mismagius Unlock",
-                "Gengar Unlock",
-                "Aerodactyl Unlock",
-                "Tyranitar Unlock",
-                "Garchomp Unlock",
-
-                "Progressive Iron Tail",
-                "Progressive Health"
-            ]
-            progressive_items.extend(progressive)
-
-        if not options.remove_chase_power_comp_locations.value:
-            min_required_friendship_count = max(min_required_friendship_count, 100)
-
-            progressive = [
-                "Pachirisu Unlock",
-                "Shinx Unlock",
-                "Caterpie Unlock",
-                "Shroomish Unlock",
-                "Leafeon Unlock",
-                "Starly Unlock",
-                "Starly 2 Unlock",
-                "Sneasel Unlock",
-                "Raichu Unlock",
-                "Ninetales Unlock",
-                "Ponyta Unlock",
-                "Espeon Unlock",
-                "Voltorb Unlock",
-                "Luxray Unlock",
-                "Stunky Unlock",
-                "Electrode Unlock",
-                "Haunter Unlock",
-                "Gastly Unlock",
-                "Gastly 2 Unlock",
-                "Jolteon Unlock",
-            ]
-            progressive_items.extend(progressive)
-
-        if not options.remove_quiz_power_comp_locations.value:
-            min_required_friendship_count = max(min_required_friendship_count, 0)
-
-        if not options.remove_hide_and_seek_power_comp_locations.value:
-            min_required_friendship_count = max(min_required_friendship_count, 0)
-            progressive = [
-                "Bonsly Unlock",
-                "Sudowoodo Unlock",
-                "Mudkip Unlock",
-            ]
-            progressive_items.extend(progressive)
-
-        if not options.remove_errand_power_comp_locations.value:
-            min_required_friendship_count = max(min_required_friendship_count, 0)
-            progressive = [
-                "Tropius Unlock",
-            ]
-            progressive_items.extend(progressive)
-
-        if not options.remove_misc_power_comp_locations.value:
-            min_required_friendship_count = max(min_required_friendship_count, 0)
-
-            progressive = [
-                "Magnemite Unlock",
-                "Magnemite 2 Unlock",
-                "Magnemite 3 Unlock",
-                "Golem Unlock",
-                "Metapod Unlock",
-                "Kakuna Unlock",
-            ]
-            progressive_items.extend(progressive)
-
-        if not options.remove_quest_locations.value:
-            min_required_friendship_count = max(min_required_friendship_count, 0)
-
-            progressive = [
-                "Mankey Friendship",
-                "Delibird Unlock",
-                "Spheal Friendship",
-                "Teddiursa Friendship",
-                "Squirtle Unlock",
-                "Squirtle Friendship",
-                "Smoochum Friendship",
-                "Smoochum Unlock",
-                "Glalie Unlock"
-            ]
-            progressive_items.extend(progressive)
-
-        if options.goal == options.goal.option_postgame:
-            min_required_friendship_count = max(min_required_friendship_count, 193)
-
-        progressive_set = set(progressive_items)
-
-        friendship_items = {
-            name: data for name, data in ITEM_TABLE.items()
-            if "Friendship" in name
-        }
-        max_removable_friendship_items = 193 - min_required_friendship_count
-        removable_friendship_items = [name for name in friendship_items.keys()
-                                      if name not in progressive_set
-                                      ][:max_removable_friendship_items]
-        for name in removable_friendship_items:
-            self.item_classification_overrides[name] = IC.filler
-
-        removable_items = {
-            name: data for name, data in ITEM_TABLE.items()
-            if "Friendship" not in name and name not in progressive_set
-        }
-        for name in removable_items:
-            self.item_classification_overrides[name] = IC.filler
+        return self.multiworld.random.choices(filler_consumables, weights=filler_weights, k=1)[0]
 
     def create_items(self):
 
-        progressive_pool, precollected_pool = self.update_pool_with_precollected_items()
-
-        for item in precollected_pool:
+        for item in self.precollected_pool:
             self.multiworld.push_precollected(self.create_item(item))
 
         if self.options.goal == self.options.goal.option_mew:
@@ -693,23 +786,17 @@ class PokeparkWorld(World):
             )
             location.address = None
 
-        print(f"progressive pool len: {len(progressive_pool)}")
-        remaining_slots = len(self.multiworld.get_unfilled_locations(self.player)) - len(progressive_pool)
-        for i in range(remaining_slots):
-            if i % 20 == 0:
-                progressive_pool.append("100 Berries")
-            elif i % 8 == 0:
-                progressive_pool.append("50 Berries")
-            elif i % 4 == 0:
-                progressive_pool.append("20 Berries")
-            else:
-                progressive_pool.append("10 Berries")
+        remaining_slots = len(self.multiworld.get_unfilled_locations(self.player)) - len(self.progressive_pool)
 
-        self.random.shuffle(progressive_pool)
+        self.progressive_pool.extend(
+            [self.get_filler_item_name(strict=False) for _ in range(
+                remaining_slots
+            )]
+        )
 
-        self.update_classification()
+        self.random.shuffle(self.progressive_pool)
 
-        for item in progressive_pool:
+        for item in self.progressive_pool:
             self.multiworld.itempool.append(self.create_item(item))
 
     def fill_slot_data(self) -> Dict[str, Any]:

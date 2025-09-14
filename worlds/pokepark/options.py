@@ -137,6 +137,20 @@ class RemoveAttractionLocations(Toggle):
     default = False
 
 
+class RemoveAttractionPrismaLocations(Toggle):
+    """
+    Removes Attraction Prisma clear location
+    """
+    default = False
+
+
+class RemovePokemonUnlockLocations(Toggle):
+    """
+    Removes Pokemon Unlock Locations
+    """
+    default = False
+
+
 class RandomizeAttractionEntrances(Toggle):
     """
     Randomizes Attraction Entrances
@@ -173,6 +187,8 @@ class PokeparkOptions(PerGameCommonOptions):
     remove_power_training_locations: RemovePowerUpLocations
     remove_quest_locations: RemoveQuestLocations
     remove_attraction_locations: RemoveAttractionLocations
+    remove_attraction_prisma_locations: RemoveAttractionPrismaLocations
+    remove_pokemon_unlock_locations: RemovePokemonUnlockLocations
     num_required_prisma_count_skygarden: NumRequiredPrismaCountSkygarden
     in_zone_road_blocks: InZoneRoadBlocks
     randomize_attraction_entrances: RandomizeAttractionEntrances

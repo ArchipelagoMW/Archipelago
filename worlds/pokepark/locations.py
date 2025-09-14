@@ -17,6 +17,7 @@ class PokeparkFlag(Flag):
     POKEMON_UNLOCK = auto()  # Unlocks like Caterpie Tree
     QUEST = auto()
     ATTRACTION = auto()
+    ATTRACTION_PRISMA = auto()
     LEGENDARY = auto()  # unsure
     POWER_UP = auto()
     POSTGAME = auto()  # for postgame goals
@@ -742,7 +743,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Meadow Zone Main Area - Spearow Power Competition -- Friendship": PokeparkLocationData(
-        32, PokeparkFlag.FRIENDSHIP, "Meadow Zone Main Area", 0x0101, PokeparkFriendshipClientLocationData(
+        32, PokeparkFlag.BATTLE, "Meadow Zone Main Area", 0x0101, PokeparkFriendshipClientLocationData(
             structure_position=25,
             memory_range=MemoryRange.BYTE
         ), each_zone=MultiZoneFlag.MULTI
@@ -995,7 +996,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
     # Bulbasaur's Daring Dash Minigame
     "Bulbasaur's Daring Dash Attraction -- Prisma": PokeparkLocationData(
-        68, PokeparkFlag.ATTRACTION, "Bulbasaur's Daring Dash Attraction", 0x0101, PokeparkPrismaClientData(
+        68, PokeparkFlag.ATTRACTION_PRISMA, "Bulbasaur's Daring Dash Attraction", 0x0101, PokeparkPrismaClientData(
             structure_position=15,
             memory_range=MemoryRange.WORD
         )
@@ -1184,14 +1185,14 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
 
     "Meadow Zone Venusaur Area - Venusaur -- Friendship": PokeparkLocationData(
-        95, PokeparkFlag.ATTRACTION, "Meadow Zone Venusaur Area", 0x0102, PokeparkFriendshipClientLocationData(
+        95, PokeparkFlag.FRIENDSHIP, "Meadow Zone Venusaur Area", 0x0102, PokeparkFriendshipClientLocationData(
             structure_position=36,
             memory_range=MemoryRange.BYTE
         )
     ),
 
     "Venusaur's Vine Swing Attraction -- Prisma": PokeparkLocationData(
-        96, PokeparkFlag.ATTRACTION, "Venusaur's Vine Swing Attraction", 0x0102, PokeparkPrismaClientData(
+        96, PokeparkFlag.ATTRACTION_PRISMA, "Venusaur's Vine Swing Attraction", 0x0102, PokeparkPrismaClientData(
             structure_position=2,
             memory_range=MemoryRange.WORD
         )
@@ -1528,7 +1529,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
     #
     "Pelipper's Circle Circuit Attraction -- Prisma": PokeparkLocationData(
-        145, PokeparkFlag.ATTRACTION, "Pelipper's Circle Circuit Attraction", 0x0301, PokeparkPrismaClientData(
+        145, PokeparkFlag.ATTRACTION_PRISMA, "Pelipper's Circle Circuit Attraction", 0x0301, PokeparkPrismaClientData(
             structure_position=6,
             memory_range=MemoryRange.WORD
         )
@@ -1659,7 +1660,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     # Gyarado's Aqua Dash
 
     "Gyarado's Aqua Dash Attraction -- Prisma": PokeparkLocationData(
-        163, PokeparkFlag.ATTRACTION, "Gyarado's Aqua Dash Attraction", 0x0301, PokeparkPrismaClientData(
+        163, PokeparkFlag.ATTRACTION_PRISMA, "Gyarado's Aqua Dash Attraction", 0x0301, PokeparkPrismaClientData(
             structure_position=5,
             memory_range=MemoryRange.WORD
         )
@@ -2019,7 +2020,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
     #
     "Empoleon's Snow Slide Attraction -- Prisma": PokeparkLocationData(
-        214, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303, PokeparkPrismaClientData(
+        214, PokeparkFlag.ATTRACTION_PRISMA, "Empoleon's Snow Slide Attraction", 0x0303, PokeparkPrismaClientData(
             structure_position=8,
             memory_range=MemoryRange.WORD
         )
@@ -2346,7 +2347,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
     #
     "Bastiodon's Panel Crush Attraction -- Prisma": PokeparkLocationData(
-        260, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401, PokeparkPrismaClientData(
+        260, PokeparkFlag.ATTRACTION_PRISMA, "Bastiodon's Panel Crush Attraction", 0x0401, PokeparkPrismaClientData(
             structure_position=9,
             memory_range=MemoryRange.WORD
         )
@@ -2660,13 +2661,13 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     # Rhyperior's Bumper Burn
-    #
+    # TODO Pikachu
     #
     #
     #
 
     "Rhyperior's Bumper Burn Attraction -- Prisma": PokeparkLocationData(
-        306, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402, PokeparkPrismaClientData(
+        306, PokeparkFlag.ATTRACTION_PRISMA, "Rhyperior's Bumper Burn Attraction", 0x0402, PokeparkPrismaClientData(
             structure_position=10,
             memory_range=MemoryRange.WORD
         )
@@ -2799,7 +2800,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
 
     "Magma Zone Blaziken Area - Blaziken's Boulder Bash Attraction -- Prisma": PokeparkLocationData(
-        324, PokeparkFlag.ATTRACTION, "Blaziken's Boulder Bash Attraction", 0x0403, PokeparkPrismaClientData(
+        324, PokeparkFlag.ATTRACTION_PRISMA, "Blaziken's Boulder Bash Attraction", 0x0403, PokeparkPrismaClientData(
             structure_position=11,
             memory_range=MemoryRange.WORD
         )
@@ -3034,7 +3035,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
     #
     "Tangrowth's Swing-Along Attraction -- Prisma": PokeparkLocationData(
-        356, PokeparkFlag.ATTRACTION, "Tangrowth's Swing-Along Attraction", 0x0501, PokeparkPrismaClientData(
+        356, PokeparkFlag.ATTRACTION_PRISMA, "Tangrowth's Swing-Along Attraction", 0x0501, PokeparkPrismaClientData(
             structure_position=3,
             memory_range=MemoryRange.WORD
         )
@@ -3335,7 +3336,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
     #
     "Dusknoir's Speed Slam Attraction -- Prisma": PokeparkLocationData(
-        399, PokeparkFlag.ATTRACTION, "Dusknoir's Speed Slam Attraction", 0x0502, PokeparkPrismaClientData(
+        399, PokeparkFlag.ATTRACTION_PRISMA, "Dusknoir's Speed Slam Attraction", 0x0502, PokeparkPrismaClientData(
             structure_position=4,
             memory_range=MemoryRange.WORD
         )
@@ -3467,7 +3468,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
     #
     "Rotom's Spooky Shoot-'em-Up Attraction -- Prisma": PokeparkLocationData(
-        417, PokeparkFlag.ATTRACTION, "Rotom's Spooky Shoot-'em-Up Attraction", 0x0503, PokeparkPrismaClientData(
+        417, PokeparkFlag.ATTRACTION_PRISMA, "Rotom's Spooky Shoot-'em-Up Attraction", 0x0503, PokeparkPrismaClientData(
             structure_position=12,
             memory_range=MemoryRange.WORD
         )
@@ -3730,7 +3731,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
     #
     "Absol's Hurdle Bounce Attraction -- Prisma": PokeparkLocationData(
-        455, PokeparkFlag.ATTRACTION, "Absol's Hurdle Bounce Attraction", 0x0601, PokeparkPrismaClientData(
+        455, PokeparkFlag.ATTRACTION_PRISMA, "Absol's Hurdle Bounce Attraction", 0x0601, PokeparkPrismaClientData(
             structure_position=0x0,
             memory_range=MemoryRange.WORD
         )
@@ -3862,7 +3863,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
     #
     "Salamence's Sky Race Attraction -- Prisma": PokeparkLocationData(
-        473, PokeparkFlag.ATTRACTION, "Salamence's Sky Race Attraction", 0x0601, PokeparkPrismaClientData(
+        473, PokeparkFlag.ATTRACTION_PRISMA, "Salamence's Sky Race Attraction", 0x0601, PokeparkPrismaClientData(
             structure_position=14,
             memory_range=MemoryRange.WORD
         )
@@ -4065,7 +4066,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     #
     #
     "Rayquaza's Balloon Panic Attraction -- Prisma": PokeparkLocationData(
-        501, PokeparkFlag.ATTRACTION, "Rayquaza's Balloon Panic Attraction", 0x0602, PokeparkPrismaClientData(
+        501, PokeparkFlag.ATTRACTION_PRISMA, "Rayquaza's Balloon Panic Attraction", 0x0602, PokeparkPrismaClientData(
             structure_position=1,
             memory_range=MemoryRange.WORD
         )
@@ -4494,7 +4495,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Ice Zone Lower Lift Area - Froslass Power Competition -- Friendship": PokeparkLocationData(
-        559, PokeparkFlag.FRIENDSHIP, "Ice Zone Lower Lift Area", 0x0301, PokeparkFriendshipClientLocationData(
+        559, PokeparkFlag.BATTLE, "Ice Zone Lower Lift Area", 0x0301, PokeparkFriendshipClientLocationData(
             structure_position=75,
             memory_range=MemoryRange.BYTE
         )
@@ -4562,6 +4563,12 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     "Flower Zone Main Area - Rayquaza -- Friendship": PokeparkLocationData(
         569, PokeparkFlag.FRIENDSHIP, "Flower Zone Main Area", 0x0402, PokeparkFriendshipClientLocationData(
             structure_position=192,
+            memory_range=MemoryRange.BYTE
+        ),
+    ),
+    "Cavern Zone Main Area - Diglett Power Competition -- Friendship": PokeparkLocationData(
+        570, PokeparkFlag.FRIENDSHIP, "Cavern Zone Main Area", 0x0402, PokeparkFriendshipClientLocationData(
+            structure_position=172,
             memory_range=MemoryRange.BYTE
         ),
     ),
