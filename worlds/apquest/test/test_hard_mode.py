@@ -74,8 +74,9 @@ class TestHardMode(APQuestTestBase):
         # 2., 4., and 6. are the exact same check, so it is a bit redundant.
         # But crucially, we are ensuring that all three items are actually required.
 
-        # This explains why the list can have multiple elements, but not why each element is also a list itself.
-        # This is probably where you should stop reading and skip to test_hard_mode_health_upgrades.
+        # So that's not really why the inner elements are lists.
+        # So we ask again: Why are they? When is it ever useful?
+        # Fair warning: This is probably where you should stop reading this and skip to test_hard_mode_health_upgrades.
         # But if you really want to know why:
 
         # Having multiple elements in the inner lists is something that only comes up in more complex scenarios.
