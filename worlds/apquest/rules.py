@@ -127,6 +127,6 @@ def set_completion_condition(world: APQuestWorld) -> None:
     # You can just set a completion condition directly like any other condition, referencing items the player receives:
     world.multiworld.completion_condition[world.player] = lambda state: state.has_all(("Sword", "Shield"), world.player)
 
-    # In our case, we went for the Victory event design pattern (see regions.py).
+    # In our case, we went for the Victory event design pattern (see create_events() in locations.py).
     # So lets undo what we just did, and instead set the completion condition to:
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
