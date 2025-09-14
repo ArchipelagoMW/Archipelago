@@ -34,9 +34,14 @@ def is_adult(state: CollectionState, world: "SohWorld") -> bool:
     return True
 
 
+def can_damage(state: CollectionState, world: "SohWorld") -> bool:
+    return (can_use("Fairy Slingshot", state, world) or can_jump_slash(state, world)
+            or has_explosives(state, world) or can_use("Din's Fire", state, world)
+            or can_use("Fairy Bow", state, world))
+
 def can_attack(state: CollectionState, world: "SohWorld") -> bool:
-    # todo: logic goes here
-    return True
+    return (can_damage(state, world) or can_use("Boomerang", state, world)
+            or can_use("Hookshot", state, world))
 
 
 def can_shield(state: CollectionState, world: "SohWorld") -> bool:
