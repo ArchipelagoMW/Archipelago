@@ -5361,8 +5361,6 @@ all_locations: dict[str, LevelLocation] = {
 
 }
 
-region_names: set[str] = {cxn.source_name for _, cxn in all_region_connections.items()}
-region_names.update([loc.region_name for _, loc in all_locations.items()])
 connections_by_region: defaultdict[str, list[RegionConnection]] = defaultdict(lambda: [])
 locations_by_region: defaultdict[str, list[LevelLocation]] = defaultdict(lambda: [])
 
@@ -8935,8 +8933,6 @@ all_room_connections: dict[str, RoomConnection] = {
 
 }
 
-room_names: set[str] = {region.room_name for _, region in all_regions.items()}
-room_names.update([door.room_name for _, door in all_doors.items()])
 regions_by_room: defaultdict[str, list[PreRegion]] = defaultdict(lambda: [])
 doors_by_room: defaultdict[str, list[Door]] = defaultdict(lambda: [])
 
@@ -9780,16 +9776,14 @@ all_rooms: dict[str, Room] = {
 
 }
 
-levels: set[str] = {room.level_name for _, room in all_rooms.items()}
-levels.update([connection.level_name for _, connection in all_room_connections.items()])
 rooms_by_level: defaultdict[str, list[Room]] = defaultdict(lambda: [])
 room_cons_by_level: defaultdict[str, list[RoomConnection]] = defaultdict(lambda: [])
 
 for _, room in all_rooms.items():
     rooms_by_level[room.level_name].append(room)
 
-for _, connection in all_room_connections.items():
-    room_cons_by_level[connection.level_name].append(connection)
+for _, room_con in all_room_connections.items():
+    room_cons_by_level[room_con.level_name].append(room_con)
 
 all_levels: dict[str, Level] = {
     "0a": Level("0a", "Prologue", rooms_by_level["0a"], room_cons_by_level["0a"]),
