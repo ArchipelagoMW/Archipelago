@@ -837,7 +837,7 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: can_battle_thunderbolt_immune(state, player) and state.has("Mamoswine Unlock", player)
     )
     set_rule_if_exists(
-        "Ice Zone Main Area - Kirlia Power Competition -- Friendship",
+        "Ice Zone Main Area - Kirlia -- Friendship",
         lambda state: state.has("Delibird Friendship", player)
     )
     set_rule_if_exists(
