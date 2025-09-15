@@ -483,10 +483,30 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             continue
 
         # Faction units
-        if (not terran_build_missions
-            and item.data.type in (item_tables.TerranItemType.Unit, item_tables.TerranItemType.Building, item_tables.TerranItemType.Mercenary)
-        ):
-            item.flags |= ItemFilterFlags.FilterExcluded
+        if not terran_build_missions:
+            if item.data.type in (
+                    item_tables.TerranItemType.Unit,
+                    item_tables.TerranItemType.Unit_2,
+                    item_tables.TerranItemType.Building,
+                    item_tables.TerranItemType.Mercenary,
+                    item_tables.TerranItemType.Laboratory
+            ):
+                # Units, buildings and global upgrades
+                item.flags |= ItemFilterFlags.FilterExcluded
+            if (
+                    item.data.type in (
+                    item_tables.TerranItemType.Armory_1,
+                    item_tables.TerranItemType.Armory_2,
+                    item_tables.TerranItemType.Armory_3,
+                    item_tables.TerranItemType.Armory_4,
+                    item_tables.TerranItemType.Armory_5,
+                    item_tables.TerranItemType.Armory_6,
+                    item_tables.TerranItemType.Armory_7
+                ) and item.data.parent is None
+            ):
+                # CC and SCV upgrades
+                item.flags |= ItemFilterFlags.FilterExcluded
+
         if (not zerg_build_missions
             and item.data.type in (item_tables.ZergItemType.Unit, item_tables.ZergItemType.Mercenary, item_tables.ZergItemType.Evolution_Pit)
         ):
