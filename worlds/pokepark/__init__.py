@@ -508,10 +508,16 @@ class PokeparkWorld(World):
             raise OptionError("Invalid Option combination. removed too much locations. Try adding locations")
 
     def distribute_item_pools(self):
-        for name in self.progressive_pool:
-            if (self.item_classification_overrides[name] == IC.filler or self.item_classification_overrides[name] ==
-                    IC.useful):
-                self.progressive_pool.remove(name)
+        filler_items = [name for name in self.progressive_pool
+                        if self.item_classification_overrides.get(name) == IC.filler]
+        useful_items = [name for name in self.progressive_pool
+                        if self.item_classification_overrides.get(name) == IC.useful]
+        progression_items = [name for name in self.progressive_pool
+                             if self.item_classification_overrides.get(name) == IC.progression]
+
+        self.filler_pool.extend(filler_items)
+        self.useful_pool.extend(useful_items)
+        self.progressive_pool = progression_items
 
     def determine_classification_dynamic(self):
         progressive_items = [
@@ -556,7 +562,6 @@ class PokeparkWorld(World):
 
         for option, (min_friendship, progression_items) in option_to_progression.items():
             option_name, expected_value = option
-
             if option_dict.get(option_name) == expected_value:
                 min_required_friendship_count = max(min_required_friendship_count, min_friendship)
                 progressive_items.extend(progression_items)
@@ -579,6 +584,7 @@ class PokeparkWorld(World):
 
         overlap = progressive_set & items_to_remove
         assert not overlap, f"Items marked as both needed and removable: {overlap}"
+
         for name in self.progressive_pool:
             if name in progressive_set or name not in items_to_remove:
                 self.item_classification_overrides[name] = IC.progression
@@ -593,12 +599,8 @@ class PokeparkWorld(World):
         for name in items_to_remove:
             if name in useful_items:
                 self.item_classification_overrides[name] = IC.useful
-                self.progressive_pool.remove(name)
-                self.useful_pool.append(name)
             else:
                 self.item_classification_overrides[name] = IC.filler
-                self.progressive_pool.remove(name)
-                self.filler_pool.append(name)
 
     def generate_output(self, output_directory: str) -> None:
         """
@@ -703,9 +705,9 @@ class PokeparkWorld(World):
             for i in range(3):
                 self.precollected_pool.append("Progressive Iron Tail")
                 self.progressive_pool.remove("Progressive Iron Tail")
-
                 self.precollected_pool.append("Progressive Health")
                 self.progressive_pool.remove("Progressive Health")
+
             self.precollected_pool.append("Double Dash")
             self.progressive_pool.remove("Double Dash")
 

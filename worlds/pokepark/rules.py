@@ -2258,7 +2258,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     set_rule_if_exists(
         "Skygarden - Mew Power Competition -- Friendship",
         lambda state: can_battle(state, player) and can_battle_thunderbolt_immune(state, player) and
-                      can_play_catch_intermediate(state, player)
+                      maximized_dash(state, player)
     )
     set_rule_if_exists(
         "Skygarden - Prisma Completion -- Stage 1",
@@ -2883,6 +2883,10 @@ def can_play_catch(state: CollectionState, player: int):
 
 def can_play_catch_intermediate(state: CollectionState, player: int):
     return state.has("Progressive Dash", player, 2)
+
+
+def maximized_dash(state: CollectionState, player: int):
+    return state.has("Progressive Dash", player, 4)
 
 
 def can_dash_overworld(state: CollectionState, player: int):
