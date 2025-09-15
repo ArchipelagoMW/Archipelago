@@ -589,6 +589,7 @@ def create_eatsanity_enzyme_items(item_factory: StardewItemFactory, options: Sta
     items.extend(item_factory(item) for item in ["Mining Enzyme"]*5)
     items.extend(item_factory(item) for item in ["Magnetism Enzyme"]*2)
     items.extend(item_factory(item) for item in ["Defense Enzyme"]*5)
+    items.extend(item_factory(item) for item in ["Attack Enzyme"]*5)
     items.extend(item_factory(item) for item in ["Max Stamina Enzyme"]*3)
     items.extend(item_factory(item) for item in ["Squid Ink Enzyme"])
     items.extend(item_factory(item) for item in ["Monster Musk Enzyme"])

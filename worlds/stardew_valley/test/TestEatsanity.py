@@ -54,6 +54,7 @@ class TestEatsanityNone(SVEatsanityTestBase):
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
+        "Attack Enzyme",
     }
 
 
@@ -83,6 +84,7 @@ class TestEatsanityCrops(SVEatsanityTestBase):
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
+        "Attack Enzyme",
     }
 
     def test_need_crop_to_eat_it(self):
@@ -130,6 +132,7 @@ class TestEatsanityCooking(SVEatsanityTestBase):
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
+        "Attack Enzyme",
     }
 
     def test_need_recipe_and_ingredients_to_cook(self):
@@ -176,6 +179,7 @@ class TestEatsanityFish(SVEatsanityTestBase):
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
+        "Attack Enzyme",
     }
 
 
@@ -208,6 +212,7 @@ class TestEatsanityArtisan(SVEatsanityTestBase):
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
+        "Attack Enzyme",
     }
 
 
@@ -241,6 +246,7 @@ class TestEatsanityShop(SVEatsanityTestBase):
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
+        "Attack Enzyme",
     }
 
     def test_need_stardrop_to_eat_it(self):
@@ -281,6 +287,7 @@ class TestEatsanityPoisonousFish(SVEatsanityTestBase):
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
+        "Attack Enzyme",
     }
 
 
@@ -318,6 +325,7 @@ class TestEatsanityPoisonousArtisan(SVEatsanityTestBase):
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
+        "Attack Enzyme",
     }
 
     def test_need_lots_of_things_for_iridium_snake_milk(self):
@@ -383,4 +391,5 @@ class TestEatsanityEnzymeEffects(SVEatsanityTestBase):
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
+        "Attack Enzyme",
     }
