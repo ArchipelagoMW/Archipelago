@@ -185,15 +185,21 @@ def load_location_csv() -> List[LocationData]:
         location_reader = csv.DictReader(file)
         for location in location_reader:
             location_id = int(location["id"]) if location["id"] else None
-            groups = frozenset(LocationTags[group] for group in location["tags"].split(",") if group)
+            location_name = location["name"]
+            csv_tags = [LocationTags[tag] for tag in location["tags"].split(",") if tag]
+            tags = frozenset(csv_tags)
+            csv_content_packs = [cp for cp in location["content_packs"].split(",") if cp]
+            content_packs = frozenset(csv_content_packs)
 
-            content_packs = frozenset(cp for cp in location["content_packs"].split(",") if cp)
-            if LocationTags.GINGER_ISLAND in groups:
+            assert len(csv_tags) == len(tags), f"Location '{location_name}' has duplicate tags: {csv_tags}"
+            assert len(csv_content_packs) == len(content_packs)
+
+            if LocationTags.GINGER_ISLAND in tags:
                 content_packs |= {ginger_island_content_pack.name}
-            if LocationTags.SPECIAL_ORDER_QI in groups or LocationTags.REQUIRES_QI_ORDERS in groups:
+            if LocationTags.SPECIAL_ORDER_QI in tags or LocationTags.REQUIRES_QI_ORDERS in tags:
                 content_packs |= {qi_board_content_pack.name}
 
-            locations.append(LocationData(location_id, location["region"], location["name"], content_packs, groups))
+            locations.append(LocationData(location_id, location["region"], location_name, content_packs, tags))
 
     return locations
 

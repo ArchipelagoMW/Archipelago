@@ -154,14 +154,20 @@ def load_item_csv():
         item_reader = csv.DictReader(file)
         for item in item_reader:
             item_id = int(item["id"]) if item["id"] else None
+            item_name = item["name"]
             classification = reduce((lambda a, b: a | b), {ItemClassification[str_classification] for str_classification in item["classification"].split(",")})
-            groups = {Group[group] for group in item["groups"].split(",") if group}
+            csv_groups = [Group[group] for group in item["groups"].split(",") if group]
+            groups = set(csv_groups)
+            csv_content_packs = [cp for cp in item["content_packs"].split(",") if cp]
+            content_packs = frozenset(csv_content_packs)
 
-            content_packs = frozenset(cp for cp in item["content_packs"].split(",") if cp)
+            assert len(csv_groups) == len(groups), f"Item '{item_name}' has duplicate groups: {csv_groups}"
+            assert len(csv_content_packs) == len(content_packs)
+
             if Group.GINGER_ISLAND in groups:
                 content_packs |= {ginger_island_content_pack.name}
 
-            items.append(ItemData(item_id, item["name"], classification, content_packs, groups))
+            items.append(ItemData(item_id, item_name, classification, content_packs, groups))
     return items
 
 
