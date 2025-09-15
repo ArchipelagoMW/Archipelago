@@ -2,7 +2,7 @@ from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import World, WebWorld
 from .locations import get_location_names, get_total_locations
 from .items import create_item, create_itempool, item_table, HEXCELLS_LEVEL_ITEMS 
-from .options import HexcellsInfiniteOptions
+from .options import HexcellsInfiniteOptions, LevelUnlockType
 from .regions import create_regions
 from .rules import set_rules
 
@@ -30,7 +30,7 @@ class HexcellsInfiniteWorld(World):
     web = HexcellsInfiniteWebWorld()
 
     def generate_early(self):
-        if self.options.LevelUnlockType == Options.LevelUnlockType.option_individual :
+        if self.options.LevelUnlockType == LevelUnlockType.option_individual:
             level_start = self.random.choice(HEXCELLS_LEVEL_ITEMS)
             self.multiworld.push_precollected(create_item(self, level_start))
     
