@@ -1,9 +1,10 @@
+from typing import Any
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
 from options import Choice, OptionGroup, Toggle
 
-def create_option_groups() -> List[OptionGroup]:
-    option_group_list: List[OptionGroup] = []
+def create_option_groups() -> list[OptionGroup]:
+    option_group_list: list[OptionGroup] = []
     for name, options in hexcells_infinite_option_groups.items():
         option_group_list.append(OptionGroup(name=name, options=options))
 
