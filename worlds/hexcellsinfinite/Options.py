@@ -1,10 +1,7 @@
-from typing import List, Dict, Any
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
-from Options import Choice, OptionGroup, Toggle, Range
+from options import Choice, OptionGroup, Toggle
 
-# If you've ever gone to an options page and seen how sometimes options are grouped
-# This is that
 def create_option_groups() -> List[OptionGroup]:
     option_group_list: List[OptionGroup] = []
     for name, options in hexcells_infinite_option_groups.items():
@@ -65,9 +62,6 @@ class HexcellsInfiniteOptions(PerGameCommonOptions):
     LevelUnlockType:              LevelUnlockType
     HardGeneration:               HardGeneration
 
-
-# This is where you organize your options into groups
-# It's entirely up to you how you want to organize it
-hexcells_infinite_option_groups: Dict[str, List[Any]] = {
+hexcells_infinite_option_groups: dict[str, list[Any]] = {
     "General Options": [RequirePerfectClears, PuzzleOptions, EnableShields, LevelUnlockType, HardGeneration],
 }
