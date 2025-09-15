@@ -252,7 +252,10 @@ class PlayerColorNova(ColorChoice):
 
 
 class EnabledCampaigns(OptionSet):
-    """Determines which campaign's missions will be used"""
+    """
+    Determines which campaign's missions will be used.
+    Wings of Liberty, Prophecy, and Prologue are the only free-to-play campaigns.
+    """
     display_name = "Enabled Campaigns"
     valid_keys = {campaign.campaign_name for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL}
     default = set((SC2Campaign.WOL.campaign_name,))
