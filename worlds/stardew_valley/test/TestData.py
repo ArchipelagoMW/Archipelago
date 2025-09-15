@@ -1,4 +1,5 @@
 import unittest
+from collections import Counter
 from typing import List
 
 from .. import Group
@@ -34,7 +35,7 @@ class TestCsvIntegrity(unittest.TestCase):
         with self.subTest("Test all ids are unique"):
             all_ids = [item.code_without_offset for item in items]
             unique_ids = set(all_ids)
-            self.assertEqual(len(all_ids), len(unique_ids))
+            self.assertEqual(len(all_ids), len(unique_ids), f"Some ids are duplicated: {[item for item, count in Counter(all_ids).items() if count > 1]}")
 
         with self.subTest("Test all names are unique"):
             all_names = [item.name for item in items]
