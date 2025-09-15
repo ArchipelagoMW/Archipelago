@@ -25,8 +25,9 @@ clear it.
 [Mega Man 2 options page](../../../games/Mega%20Man%202/player-options).
 2. Follow the general Archipelago instructions for [generating a game](../../Archipelago/setup/en#generating-a-game).
 This will generate an output file for you. Your patch file will have the `.apmm2` file extension.
+This patch file can also be downloaded off the multiworld room page if you [host your multiworld on the website](../../Archipelago/setup#hosting-on-the-website).
 3. Open `ArchipelagoLauncher.exe`
-4. Select "Open Patch" on the left side and select your patch file.
+4. Select "Open Patch" from the initial list or under `Misc -> Open Patch` and select your patch file.
 5. If this is your first time patching, you will be prompted to locate your vanilla ROM. If you are using the Legacy 
 Collection, provide `Proteus.exe` in place of your rom.
 6. A patched `.nes` file will be created in the same place as the patch file.

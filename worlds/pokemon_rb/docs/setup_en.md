@@ -75,8 +75,9 @@ And the following special characters (these each count as one character):
 1. Create your options file (YAML).
 2. Follow the general Archipelago instructions for [generating a game](../../Archipelago/setup/en#generating-a-game).
 This will generate an output file for you. Your patch file will have a `.apred` or `.apblue` file extension.
+This patch file can also be downloaded off the multiworld room page if you [host your multiworld on the website](../../Archipelago/setup#hosting-on-the-website).
 3. Open `ArchipelagoLauncher.exe`
-4. Select "Open Patch" on the left side and select your patch file.
+4. Select "Open Patch" from the initial list or under `Misc -> Open Patch` and select your patch file.
 5. If this is your first time patching, you will be prompted to locate your vanilla ROM.
 6. A patched `.gb` file will be created in the same place as the patch file.
 7. On your first time opening a patch with BizHawk Client, you will also be asked to locate `EmuHawk.exe` in your
