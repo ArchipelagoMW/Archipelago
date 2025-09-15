@@ -32,7 +32,7 @@ from .Options import SohOptions
 from .Regions import region_data_table, reset_age_access, update_age_access
 from .Rules import get_soh_rule
 from .Enums import *
-from .dodongos_cavern import create_dc_regions_and_rules, set_location_rules_dc
+from worlds.oot_soh.location_access.dungeons.dodongos_cavern import create_dc_regions_and_rules, set_location_rules_dc
 
 class SohWebWorld(WebWorld):
     theme = "ice"

@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING
 from BaseClasses import Region
 from worlds.generic.Rules import set_rule
 
-from .Items import SohItem
-from .Locations import SohLocation, SohLocationData, base_location_table
-from .Rules import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
-                    has_fire_source_with_torch, can_use, can_do_trick, can_jump_slash)
+from worlds.oot_soh.Items import SohItem
+from worlds.oot_soh.Locations import SohLocation, SohLocationData, base_location_table
+from worlds.oot_soh.Rules import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
+                                  has_fire_source_with_torch, can_use, can_do_trick, can_jump_slash)
 
 if TYPE_CHECKING:
-    from . import SohWorld
+    from worlds.oot_soh import SohWorld
 
 
 # when python 3.10 and 3.11 are dropped, this should just become a StrEnum to make it easier

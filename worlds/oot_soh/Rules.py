@@ -124,14 +124,6 @@ def take_damage(state: CollectionState, world: "SohWorld") -> bool:
     return (can_use(Items.BOTTLE_WITH_FAIRY.value, state, world) or can_use(Items.NAYRUS_LOVE.value, state, world)
             or True)  #TODO: Implement "|| EffectiveHealth()"
 
-def has_fire_source (state: CollectionState, world: "SohWorld") -> bool:
-    """Check if Link has any fire source."""
-    return can_use(Items.DINS_FIRE.value, state, world) or can_use(Items.FIRE_ARROW.value, state, world)
-
-def has_fire_source_with_torch(state: CollectionState, world: "SohWorld") -> bool:
-    """Check if Link has a fire source that can be used with a torch."""
-    return has_fire_source(state, world) or can_use(Items.STICKS)
-
 def can_do_trick(trick: str, state: CollectionState, world: "SohWorld") -> bool:
     # TODO: Implement specific trick logic based on world settings
     # For now, return False for safety (no tricks assumed)
@@ -169,13 +161,14 @@ def can_reflect_nuts(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can reflect Deku Nuts back at enemies."""
     return can_stun_deku(state, world)
 
+def has_fire_source_with_torch(state: CollectionState, world: "SohWorld") -> bool:
+    """Check if Link has a fire source that can be used with a torch."""
+    return has_fire_source(state, world) or can_use(Items.STICKS, state, world)
 
 def has_fire_source(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link has any fire source."""
     return (can_use(Items.DINS_FIRE.value, state, world) or 
-           can_use(Items.FIRE_ARROW.value, state, world) or
-           # TODO: Add other fire sources like lit torches
-           False)
+           can_use(Items.FIRE_ARROW.value, state, world))
 
 
 def can_jump_slash(state: CollectionState, world: "SohWorld") -> bool:
