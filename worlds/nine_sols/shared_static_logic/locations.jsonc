@@ -813,7 +813,7 @@
     // Abandoned Mines
     {
         "address": 2301, "name": "AM: Above Left Exit",
-        "region": "AM - Above Left Exit", "requires": [ { "item": "Cloud Leap" } ] // AND grapple
+        "region": "AM - Above Left Exit", "requires": [] // grapple OR { "item": "Cloud Leap" }
     },
     {
         "address": 2302, "name": "AM: Defeat Celestial Warden: Yinyue",
