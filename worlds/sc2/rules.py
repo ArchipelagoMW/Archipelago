@@ -576,30 +576,34 @@ class SC2Logic:
         )
 
     def nova_any_nobuild_damage(self, state: CollectionState) -> bool:
-        return state.has_any(
-            (
-                item_names.NOVA_C20A_CANISTER_RIFLE,
-                item_names.NOVA_HELLFIRE_SHOTGUN,
-                item_names.NOVA_PLASMA_RIFLE,
-                item_names.NOVA_MONOMOLECULAR_BLADE,
-                item_names.NOVA_BLAZEFIRE_GUNBLADE,
-                item_names.NOVA_PULSE_GRENADES,
-                item_names.NOVA_DOMINATION,
-            ),
-            self.player,
-        )
+        return state.has_any((
+            item_names.NOVA_C20A_CANISTER_RIFLE,
+            item_names.NOVA_HELLFIRE_SHOTGUN,
+            item_names.NOVA_PLASMA_RIFLE,
+            item_names.NOVA_MONOMOLECULAR_BLADE,
+            item_names.NOVA_BLAZEFIRE_GUNBLADE,
+            item_names.NOVA_PULSE_GRENADES,
+            item_names.NOVA_DOMINATION,
+        ), self.player)
 
     def nova_any_weapon(self, state: CollectionState) -> bool:
-        return state.has_any(
-            {
-                item_names.NOVA_C20A_CANISTER_RIFLE,
-                item_names.NOVA_HELLFIRE_SHOTGUN,
-                item_names.NOVA_PLASMA_RIFLE,
-                item_names.NOVA_MONOMOLECULAR_BLADE,
-                item_names.NOVA_BLAZEFIRE_GUNBLADE,
-            },
-            self.player,
-        )
+        return state.has_any((
+            item_names.NOVA_C20A_CANISTER_RIFLE,
+            item_names.NOVA_HELLFIRE_SHOTGUN,
+            item_names.NOVA_PLASMA_RIFLE,
+            item_names.NOVA_MONOMOLECULAR_BLADE,
+            item_names.NOVA_BLAZEFIRE_GUNBLADE,
+        ), self.player)
+    
+    def nova_any_weapon_or_grenade(self, state: CollectionState) -> bool:
+        return state.has_any((
+            item_names.NOVA_C20A_CANISTER_RIFLE,
+            item_names.NOVA_HELLFIRE_SHOTGUN,
+            item_names.NOVA_PLASMA_RIFLE,
+            item_names.NOVA_MONOMOLECULAR_BLADE,
+            item_names.NOVA_BLAZEFIRE_GUNBLADE,
+            item_names.NOVA_PULSE_GRENADES,
+        ), self.player)
 
     def nova_ranged_weapon(self, state: CollectionState) -> bool:
         return state.has_any({item_names.NOVA_C20A_CANISTER_RIFLE, item_names.NOVA_HELLFIRE_SHOTGUN, item_names.NOVA_PLASMA_RIFLE}, self.player)

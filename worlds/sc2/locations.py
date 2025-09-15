@@ -5125,7 +5125,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2NCO_LOC_ID_OFFSET + 100,
             LocationType.VICTORY,
             logic.the_escape_requirement,
-            hard_rule=logic.nova_any_weapon,
+            hard_rule=logic.nova_any_weapon_or_grenade,
         ),
         make_location_data(
             SC2Mission.THE_ESCAPE.mission_name,
@@ -5149,7 +5149,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2NCO_LOC_ID_OFFSET + 103,
             LocationType.VANILLA,
             logic.the_escape_requirement,
-            hard_rule=logic.nova_any_weapon,
+            hard_rule=logic.nova_any_weapon_or_grenade,
         ),
         make_location_data(
             SC2Mission.THE_ESCAPE.mission_name,
@@ -5157,7 +5157,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2NCO_LOC_ID_OFFSET + 104,
             LocationType.VANILLA,
             logic.the_escape_requirement,
-            hard_rule=logic.nova_any_weapon,
+            hard_rule=logic.nova_any_weapon_or_grenade,
         ),
         make_location_data(
             SC2Mission.THE_ESCAPE.mission_name,
@@ -5165,7 +5165,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2NCO_LOC_ID_OFFSET + 105,
             LocationType.VANILLA,
             logic.the_escape_requirement,
-            hard_rule=logic.nova_any_weapon,
+            hard_rule=logic.nova_any_weapon_or_grenade,
         ),
         make_location_data(
             SC2Mission.SUDDEN_STRIKE.mission_name,
