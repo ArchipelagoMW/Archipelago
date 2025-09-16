@@ -52,10 +52,10 @@ class NineSolsWorld(World):
             if hasattr(self.multiworld, "re_gen_passthrough"):
                 if "Nine Sols" in self.multiworld.re_gen_passthrough:
                     slot_data = self.multiworld.re_gen_passthrough["Nine Sols"]
-                    self.options.seals_for_eigong = slot_data['seals_for_eigong']
-                    self.options.seals_for_prison = slot_data['seals_for_prison']
-                    self.options.seals_for_ethereal = slot_data['seals_for_ethereal']
-                    self.options.skip_soulscape_platforming = slot_data['skip_soulscape_platforming']
+                    self.options.seals_for_eigong.value = slot_data['seals_for_eigong']
+                    self.options.seals_for_prison.value = slot_data['seals_for_prison']
+                    self.options.seals_for_ethereal.value = slot_data['seals_for_ethereal']
+                    self.options.skip_soulscape_platforming.value = slot_data['skip_soulscape_platforming']
                     # TODO: alternate spawns, etc
             return
 

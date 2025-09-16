@@ -229,16 +229,16 @@ def eval_criterion(state: CollectionState, p: int, options: NineSolsGameOptions,
 
         # { "item": "..." } and { "anyOf": [ ... ] } and { "location": "foo" } and { "region": "bar" }
         # mean exactly what they sound like, and those are the only kinds of criteria.
-        if key == "item" and isinstance(value, str):
+        if (key == "item" or key == "item_group") and isinstance(value, str):
+            count = 1
             if "count" in criterion:  # technically no longer in use, but I still want it to be part of the format
-                return state.has(value, p, criterion["count"])
+                count = criterion["count"]
             if "count_option" in criterion:
-                return state.has(value, p, getattr(options, criterion["count_option"]).value)
-            return state.has(value, p)
-        elif key == "item_group" and isinstance(value, str):
-            if "count" in criterion:
-                return state.has_group(value, p, criterion["count"])
-            return state.has_group(value, p)
+                count = getattr(options, criterion["count_option"]).value
+
+            if key == "item_group":
+                return state.has_group(value, p, count)
+            return state.has(value, p, count)
         elif key == "count":
             raise ValueError("Apparently dict iteration can hit 'count' first?: " + json.dumps(criterion))
         elif key == "anyOf" and isinstance(value, list):
