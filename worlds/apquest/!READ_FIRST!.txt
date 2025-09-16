@@ -24,7 +24,7 @@ https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/running%20from%20sou
 You'll want to start with __init__.py, then move to world.py.
 If you also want to learn how to write unit tests, go to test/__init__.py.
 
-You can ignore the apquest/ folder, it contains the actual game code, graphics and music.
+You can ignore the game/ folder, it contains the actual game code, graphics and music.
 
 The client/ folder is NOT meant for teaching.
 While the client was written to the best of its author's ability, it does not meet the same standard as the world code.
