@@ -7,6 +7,11 @@ from worlds.AutoWorld import World
 # Imports of your world's files must be relative.
 from . import items, locations, options, regions, rules, web_world
 
+# APQuest will go through all the parts of the world api one step at a time,
+# with many examples and comments across multiple files.
+# If you'd rather read one continuous document, or just like reading multiple sources,
+# we also have this document specifying the entire world api:
+# https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md
 
 # The world class is the heart and soul of an apworld implementation.
 # It holds all the data and functions required to build the world and submit it to the multiworld generator.
