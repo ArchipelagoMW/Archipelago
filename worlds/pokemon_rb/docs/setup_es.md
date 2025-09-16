@@ -79,8 +79,9 @@ Y los siguientes caracteres especiales (cada uno ocupa un carácter):
 1. Crea tu archivo de opciones (YAML).
 2. Sigue las instrucciones generales de Archipelago para [generar un juego](../../Archipelago/setup/en#generating-a-game).
 Haciendo esto se generará un archivo de salida. Tu parche tendrá la extensión de archivo `.apred` o `.apblue`.
-3. Abre `ArchipelagoLauncher.exe`
-4. Selecciona "Open Patch" en el lado izquierdo y selecciona tu parche.
+Este parche también puede ser descargado desde la pagina de la sala del multiworld si tu [hosteas tu multiworld en el sitio web](../../Archipelago/setup#hosting-on-the-website).
+3. Abre `ArchipelagoLauncher.exe`.
+4. Selecciona "Open Patch" en la lista inicial o en Misc -> Open Patch y selecciona tu parche.
 5. Si es tu primera vez parchando, se te pedirá que selecciones tu ROM original.
 6. Un archivo `.gb` parchado será creado en el mismo lugar donde está el parche.
 7. La primera vez que abras un parche con BizHawk Client, también se te pedira ubicar `EmuHawk.exe` en tu

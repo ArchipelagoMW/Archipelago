@@ -31,8 +31,9 @@ con [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 2. Sigue las instrucciones generales de Archipelago para
 [Generar un juego](../../Archipelago/setup/en#generating-a-game). Esto generará un archivo de salida (output file) para
 ti. Tu archivo de parche tendrá la extensión de archivo `.apemerald`.
-3. Abre `ArchipelagoLauncher.exe`
-4. Selecciona "Open Patch" en el lado derecho y elige tu archivo de parcheo.
+Este parche también puede ser descargado desde la pagina de la sala del multiworld si tu [hosteas tu multiworld en el sitio web](../../Archipelago/setup#hosting-on-the-website).
+3. Abre `ArchipelagoLauncher.exe`.
+4. Selecciona "Open Patch" en la lista inicial o en Misc -> Open Patch y selecciona tu parche.
 5. Si esta es la primera vez que vas a parchear, se te pedirá que selecciones la ROM sin parchear.
 6. Un archivo parcheado con extensión `.gba` será creado en el mismo lugar que el archivo de parcheo.
 7. La primera vez que abras un archivo parcheado con el BizHawk Client, se te preguntará donde está localizado
@@ -51,7 +52,7 @@ siguiente en caso de que debas cerrar y volver a abrir la ventana en mitad de la
 parcheada, puedes volver a abrirlo desde el Archipelago Launcher.
 2. Asegúrate que EmuHawk está corriendo la ROM parcheada.
 3. En EmuHawk, ve a `Tools > Lua Console`. Debes tener esta ventana abierta mientras juegas.
-4. En la ventana de Lua Console, ve a `Script > Open Script…`.
+4. En la ventana de Lua Console, ve a `Script > Open Script...`.
 5. Ve a la carpeta donde está instalado Archipelago y abre `data/lua/connector_bizhawk_generic.lua`.
 6. El emulador y el cliente eventualmente se conectarán uno con el otro. La ventana de BizHawk Client indicará que te
 has conectado y reconocerá Pokémon Emerald.
