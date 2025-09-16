@@ -32,7 +32,7 @@ används tillsammans med
 2. Följ de allmänna Archipelago instruktionerna för att
 [Generera ett spel](../../Archipelago/setup/en#generating-a-game).
 Detta kommer generera en fil för dig. Din patchfil kommer ha `.apemerald` som sitt filnamnstillägg.
-Den här patch filen kan också laddas ner från multvärlds lobbyn om du [hostar din multivärld på hemsidan](../../Archipelago/setup#hosting-on-the-website).
+Den här patch filen kan också laddas ner från multvärldslobbyn om du [hostar din multivärld på hemsidan](../../Archipelago/setup#hosting-on-the-website).
 3. Öppna `ArchipelagoLauncher.exe`.
 4. Välj "Open Patch" från listan eller under `Misc -> Open Patch` och välj din patchfil.
 5. Om detta är första gången du patchar, så kommer du behöva välja var ditt ursprungliga ROM är.
