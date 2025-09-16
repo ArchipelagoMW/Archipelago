@@ -34,7 +34,7 @@ används tillsammans med
 Detta kommer generera en fil för dig. Din patchfil kommer ha `.apemerald` som sitt filnamnstillägg.
 Den här patch filen kan också laddas ner från multvärlds lobbyn om du [hostar din multivärld på hemsidan](../../Archipelago/setup#hosting-on-the-website).
 3. Öppna `ArchipelagoLauncher.exe`.
-Välj "Open Patch" från listan eller under `Misc -> Open Patch` och välj din patchfil.
+4. Välj "Open Patch" från listan eller under `Misc -> Open Patch` och välj din patchfil.
 5. Om detta är första gången du patchar, så kommer du behöva välja var ditt ursprungliga ROM är.
 6. En patchad `.gba` fil kommer skapas på samma plats som patchfilen.
 7. Första gången du öppnar en patch med BizHawk-klienten, kommer du också behöva bekräfta var `EmuHawk.exe` filen är
