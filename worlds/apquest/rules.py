@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 
-from ..generic.Rules import add_rule, set_rule
+from worlds.generic.Rules import add_rule, set_rule
 
 if TYPE_CHECKING:
     from .world import APQuestWorld
