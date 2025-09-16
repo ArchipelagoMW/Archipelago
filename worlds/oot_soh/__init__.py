@@ -32,7 +32,7 @@ from .Options import SohOptions
 from .Regions import region_data_table, reset_age_access, update_age_access
 from .Rules import get_soh_rule
 from .Enums import *
-from worlds.oot_soh.location_access.dungeons.dodongos_cavern import create_dc_regions_and_rules, set_location_rules_dc
+from worlds.oot_soh.location_access.dungeons import dodongos_cavern
 
 class SohWebWorld(WebWorld):
     theme = "ice"
@@ -61,7 +61,7 @@ class SohWorld(World):
     item_name_to_id = item_table
 
     def generate_early(self) -> None:
-        input("\033[33m WARNING: Ship of Harkinian currently only supports NO LOGIC! If you're OK with this, press Enter to continue. \033[0m")
+        input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
 
     def create_item(self, name: str) -> SohItem:
         return SohItem(name, item_data_table[name].classification, item_data_table[name].item_id, self.player)
@@ -306,7 +306,7 @@ class SohWorld(World):
             self.multiworld.regions.append(region)
 
         # todo: maybe easier to have region and rule making functions instead
-        create_dc_regions_and_rules(self)
+        dodongos_cavern.create_regions_and_rules(self)
 
         # Create locations.
         for region_name, region_data in region_data_table.items():

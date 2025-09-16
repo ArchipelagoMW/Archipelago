@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 
 # when python 3.10 and 3.11 are dropped, this should just become a StrEnum to make it easier
-dc_region_names: list[str] = [
+region_names: list[str] = [
     "Dodongos Cavern Beginning",
     "Dodongos Cavern Lobby",
     "Dodongos Cavern Lobby Switch",
@@ -40,7 +40,7 @@ dc_region_names: list[str] = [
 ]
 
 
-dc_events: dict[str, SohLocationData] = {
+events: dict[str, SohLocationData] = {
     "Dodongos Cavern Lobby Switch": SohLocationData("Dodongos Cavern Lobby Switch",
                                                     event_item="Dodongos Cavern Lobby Switch Activated"),
     "Dodongos Cavern Far Bridge Switch": SohLocationData("Dodongos Cavern Far Bridge",
@@ -50,24 +50,24 @@ dc_events: dict[str, SohLocationData] = {
 }
 
 
-def create_dc_regions_and_rules(world: "SohWorld") -> None:
-    for region_name in dc_region_names:
+def create_regions_and_rules(world: "SohWorld") -> None:
+    for region_name in region_names:
         region = Region(region_name, world.player, world.multiworld)
         world.multiworld.regions.append(region)
         region.add_locations({loc_name: loc_data.address for loc_name, loc_data in base_location_table.items()
                               if loc_data.region == region_name}, SohLocation)
 
-    for event_name, data in dc_events.items():
+    for event_name, data in events.items():
         region = world.get_region(data.region)
         region.add_event(event_name, data.event_item, location_type=SohLocation, item_type=SohItem)
 
-    set_region_rules_dc(world)
-    set_location_rules_dc(world)
+    set_region_rules(world)
+    set_location_rules(world)
 
 
 # I'm writing this with events in mind, even though the original for this dungeon doesn't use them
 # Probably will be easier that way
-def set_region_rules_dc(world: "SohWorld") -> None:
+def set_region_rules(world: "SohWorld") -> None:
     player = world.player
 
     world.get_region("Dodongos Cavern Entryway").connect(
@@ -269,7 +269,7 @@ def set_region_rules_dc(world: "SohWorld") -> None:
         world.get_region("Dodongos Cavern Boss Region"))
 
 
-def set_location_rules_dc(world: "SohWorld") -> None:
+def set_location_rules(world: "SohWorld") -> None:
     player = world.player
 
     set_rule(world.get_location("Dodongos Cavern Map Chest"),
