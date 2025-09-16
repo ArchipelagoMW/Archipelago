@@ -40,7 +40,7 @@
 
 <h2 style="text-transform:none";>Connecting to your multiworld via the KH1 Client</h2>
 
-- Once your game is being hosted, open `ArchipelagoLauncher.exe`..
+- Once your game is being hosted, open `ArchipelagoLauncher.exe`.
 - Find `KH1 Client` and open it.
 - At the top, in the `Server:` bar, type in the host address and port.
 - Click the `Connect` button in the top right.

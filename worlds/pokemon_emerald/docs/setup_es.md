@@ -32,7 +32,7 @@ con [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 [Generar un juego](../../Archipelago/setup/en#generating-a-game). Esto generará un archivo de salida (output file) para
 ti. Tu archivo de parche tendrá la extensión de archivo `.apemerald`.
 Este parche también puede ser descargado desde la pagina de la sala del multiworld si tu [hosteas tu multiworld en el sitio web](../../Archipelago/setup#hosting-on-the-website).
-3. Abre `ArchipelagoLauncher.exe`..
+3. Abre `ArchipelagoLauncher.exe`.
 4. Selecciona "Open Patch" en la lista inicial o en Misc -> Open Patch y selecciona tu parche.
 5. Si esta es la primera vez que vas a parchear, se te pedirá que selecciones la ROM sin parchear.
 6. Un archivo parcheado con extensión `.gba` será creado en el mismo lugar que el archivo de parcheo.
