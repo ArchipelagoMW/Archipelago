@@ -1,7 +1,7 @@
 from typing import Any
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
-from options import Choice, OptionGroup, Toggle
+from Options import Choice, OptionGroup, Toggle
 
 def create_option_groups() -> list[OptionGroup]:
     option_group_list: list[OptionGroup] = []
@@ -28,7 +28,6 @@ class PuzzleOptions(Choice):
     option_randomized = 2
     option_true_randomized = 3
     default = 1
-
 
 class EnableShields(Toggle):
     """
