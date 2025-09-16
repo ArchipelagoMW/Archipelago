@@ -14,9 +14,9 @@ När du har installerat BizHawk, öppna `EmuHawk.exe` och ändra följande inst�
 `NLua+KopiLua` till `Lua+LuaInterface`, starta om EmuHawk efteråt. (Använder du BizHawk 2.9, kan du skippa detta steg.)
 - Gå till `Config > Customize`. Markera "Run in background" inställningen för att förhindra bortkoppling från
 klienten om du alt-tabbar bort från EmuHawk.
-- Öppna en `.gba` fil i EmuHawk och gå till `Config > Controllers…` för att konfigurera dina inputs.
+- Öppna en `.gba` fil i EmuHawk och gå till `Config > Controllers...` för att konfigurera dina inputs.
 Om du inte hittar `Controllers…`, starta ett valfritt `.gba` ROM först.
-- Överväg att rensa keybinds i `Config > Hotkeys…` som du inte tänkt använda. Välj en keybind och tryck på ESC
+- Överväg att rensa keybinds i `Config > Hotkeys...` som du inte tänkt använda. Välj en keybind och tryck på ESC
 för att rensa bort den.
 
 ## Extra programvara
@@ -32,7 +32,7 @@ används tillsammans med
 2. Följ de allmänna Archipelago instruktionerna för att
 [Generera ett spel](../../Archipelago/setup/en#generating-a-game).
 Detta kommer generera en fil för dig. Din patchfil kommer ha `.apemerald` som sitt filnamnstillägg.
-3. Öppna `ArchipelagoLauncher.exe`
+3. Öppna `ArchipelagoLauncher.exe`.
 4. Välj "Open Patch" på vänstra sidan, och välj din patchfil.
 5. Om detta är första gången du patchar, så kommer du behöva välja var ditt ursprungliga ROM är.
 6. En patchad `.gba` fil kommer skapas på samma plats som patchfilen.
@@ -52,7 +52,7 @@ ifall du till exempel behöver stänga ner och starta om något medans du spelar
 så kan du bara öppna den igen från launchern.
 2. Dubbelkolla att EmuHawk faktiskt startat med den patchade ROM-filen.
 3. I EmuHawk, gå till `Tools > Lua Console`. Luakonsolen måste vara igång medans du spelar.
-4. I Luakonsolen, Tryck på `Script > Open Script…`.
+4. I Luakonsolen, Tryck på `Script > Open Script...`.
 5. Leta reda på din Archipelago-mapp och i den öppna `data/lua/connector_bizhawk_generic.lua`.
 6. Emulatorn och klienten kommer så småningom ansluta till varandra. I BizHawk-klienten kommer du kunna see om allt är
 anslutet och att Pokemon Emerald är igenkänt.

@@ -19,7 +19,7 @@
 - When prompted, install Panacea, then click `Next`.
 - When prompted, check KH1 plus any other AP game you want to play, and click `Install and configure Lua backend`, then click `Next`.
 - Extract the data for KH1.
-- Click `Finish`
+- Click `Finish`.
 
 <h3 style="text-transform:none";>Kingdom Hearts 1FM Randomizer Software</h3>
 
@@ -40,7 +40,7 @@
 
 <h2 style="text-transform:none";>Connecting to your multiworld via the KH1 Client</h2>
 
-- Once your game is being hosted, open `ArchipelagoLauncher.exe`.
+- Once your game is being hosted, open `ArchipelagoLauncher.exe`..
 - Find `KH1 Client` and open it.
 - At the top, in the `Server:` bar, type in the host address and port.
 - Click the `Connect` button in the top right.

@@ -80,7 +80,7 @@ Y los siguientes caracteres especiales (cada uno ocupa un carácter):
 2. Sigue las instrucciones generales de Archipelago para [generar un juego](../../Archipelago/setup/en#generating-a-game).
 Haciendo esto se generará un archivo de salida. Tu parche tendrá la extensión de archivo `.apred` o `.apblue`.
 Este parche también puede ser descargado desde la pagina de la sala del multiworld si tu [hosteas tu multiworld en el sitio web](../../Archipelago/setup#hosting-on-the-website).
-3. Abre `ArchipelagoLauncher.exe`.
+3. Abre `ArchipelagoLauncher.exe`..
 4. Selecciona "Open Patch" en la lista inicial o en Misc -> Open Patch y selecciona tu parche.
 5. Si es tu primera vez parchando, se te pedirá que selecciones tu ROM original.
 6. Un archivo `.gb` parchado será creado en el mismo lugar donde está el parche.
@@ -100,7 +100,7 @@ que tengas que cerrar y volver a abrir el juego por alguna razón.
 puedes volverlo a abrir desde el Launcher.
 2. Asegúrate que EmuHawk esta cargando el ROM parchado.
 3. En EmuHawk, ir a `Tools > Lua Console`. Esta ventana debe quedarse abierta mientras se juega.
-4. En la ventana de Lua Console, ir a `Script > Open Script…`.
+4. En la ventana de Lua Console, ir a `Script > Open Script...`.
 5. Navegar a tu carpeta de instalación de Archipelago y abrir `data/lua/connector_bizhawk_generic.lua`.
 6. El emulador se puede congelar por unos segundos hasta que logre conectarse al cliente. Esto es normal. La ventana del
 BizHawk Client debería indicar que se logro conectar y reconocer Pokémon Red/Blue.

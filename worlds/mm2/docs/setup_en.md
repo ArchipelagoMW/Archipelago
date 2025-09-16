@@ -14,9 +14,9 @@ Once you have installed BizHawk, open `EmuHawk.exe` and change the following set
 `NLua+KopiLua` to `Lua+LuaInterface`, then restart EmuHawk. (If you're using BizHawk 2.9, you can skip this step.)
 - Under `Config > Customize`, check the "Run in background" option to prevent disconnecting from the client while you're
 tabbed out of EmuHawk.
-- Open a `.nes` file in EmuHawk and go to `Config > Controllers…` to configure your inputs. If you can't click
+- Open a `.nes` file in EmuHawk and go to `Config > Controllers...` to configure your inputs. If you can't click
 `Controllers…`, load any `.nes` ROM first.
-- Consider clearing keybinds in `Config > Hotkeys…` if you don't intend to use them. Select the keybind and press Esc to
+- Consider clearing keybinds in `Config > Hotkeys...` if you don't intend to use them. Select the keybind and press Esc to
 clear it.
 
 ## Generating and Patching a Game
@@ -26,7 +26,7 @@ clear it.
 2. Follow the general Archipelago instructions for [generating a game](../../Archipelago/setup/en#generating-a-game).
 This will generate an output file for you. Your patch file will have the `.apmm2` file extension.
 This patch file can also be downloaded off the multiworld room page if you [host your multiworld on the website](../../Archipelago/setup#hosting-on-the-website).
-3. Open `ArchipelagoLauncher.exe`
+3. Open `ArchipelagoLauncher.exe`.
 4. Select "Open Patch" from the initial list or under `Misc -> Open Patch` and select your patch file.
 5. If this is your first time patching, you will be prompted to locate your vanilla ROM. If you are using the Legacy 
 Collection, provide `Proteus.exe` in place of your rom.
@@ -43,7 +43,7 @@ in case you have to close and reopen a window mid-game for some reason.
 you can re-open it from the launcher.
 2. Ensure EmuHawk is running the patched ROM.
 3. In EmuHawk, go to `Tools > Lua Console`. This window must stay open while playing.
-4. In the Lua Console window, go to `Script > Open Script…`.
+4. In the Lua Console window, go to `Script > Open Script...`.
 5. Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
 6. The emulator and client will eventually connect to each other. The BizHawk Client window should indicate that it
 connected and recognized Mega Man 2.

@@ -14,9 +14,9 @@ Una vez que hayas instalado BizHawk, abre `EmuHawk.exe` y cambia las siguientes 
 `NLua+KopiLua` a `Lua+LuaInterface`, luego reinicia EmuHawk. (Si estás usando BizHawk 2.9, puedes saltar este paso.)
 - En `Config > Customize`, activa la opción "Run in background" para prevenir desconexiones del cliente mientras
 la aplicación activa no sea EmuHawk.
-- Abre el archivo `.gba` en EmuHawk y luego ve a `Config > Controllers…` para configurar los controles. Si no puedes
+- Abre el archivo `.gba` en EmuHawk y luego ve a `Config > Controllers...` para configurar los controles. Si no puedes
 hacer clic en `Controllers…`, debes abrir cualquier ROM `.gba` primeramente.
-- Considera limpiar tus macros y atajos en `Config > Hotkeys…` si no quieres usarlas de manera intencional. Para
+- Considera limpiar tus macros y atajos en `Config > Hotkeys...` si no quieres usarlas de manera intencional. Para
 limpiarlas, selecciona el atajo y presiona la tecla Esc.
 
 ## Software Opcional
@@ -32,7 +32,7 @@ con [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 [Generar un juego](../../Archipelago/setup/en#generating-a-game). Esto generará un archivo de salida (output file) para
 ti. Tu archivo de parche tendrá la extensión de archivo `.apemerald`.
 Este parche también puede ser descargado desde la pagina de la sala del multiworld si tu [hosteas tu multiworld en el sitio web](../../Archipelago/setup#hosting-on-the-website).
-3. Abre `ArchipelagoLauncher.exe`.
+3. Abre `ArchipelagoLauncher.exe`..
 4. Selecciona "Open Patch" en la lista inicial o en Misc -> Open Patch y selecciona tu parche.
 5. Si esta es la primera vez que vas a parchear, se te pedirá que selecciones la ROM sin parchear.
 6. Un archivo parcheado con extensión `.gba` será creado en el mismo lugar que el archivo de parcheo.
