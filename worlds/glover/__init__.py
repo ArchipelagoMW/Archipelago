@@ -92,8 +92,7 @@ class GloverWorld(World):
     #Check/Item Prefixes
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
-    #DELETE THIS ONCE IT'S FINISHED
-    existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn1", "Crn2", "Crn3", "Crn!", "Crn?", "Prt1", "Prt2", "Prt3", "Prt!", "Prt?", "Pht!", "FoF!", "Otw!", "Training"]
+    existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn1", "Crn2", "Crn3", "Crn!", "Crn?", "Prt1", "Prt2", "Prt3", "Prt!", "Prt?", "Pht1", "Pht2", "Pht3", "Pht!", "Pht?", "FoF!", "Otw!", "Training"]
     group_lists : list[str] = ["Not Crystal",
 	"Not Bowling",
 	"Not Bowling or Crystal",
@@ -124,6 +123,9 @@ class GloverWorld(World):
         if name == "Crn1 Rocket":
             rockets_count = state.count("Crn1 Rocket", self.player)
             state.add_item("Crn1 Rocket " + str(rockets_count), self.player)
+        if name == "Pht3 Lower Monolith":
+            rockets_count = state.count("Pht3 Lower Monolith", self.player)
+            state.add_item("Pht3 Lower Monolith " + str(rockets_count), self.player)
         return output
 
     def remove(self, state, item):
@@ -145,6 +147,9 @@ class GloverWorld(World):
         if name == "Crn1 Rocket":
             rockets_count = state.count("Crn1 Rocket", self.player)
             state.remove_item("Crn1 Rocket " + str(rockets_count), self.player)
+        if name == "Pht3 Lower Monolith":
+            rockets_count = state.count("Pht3 Lower Monolith", self.player)
+            state.remove_item("Pht3 Lower Monolith " + str(rockets_count), self.player)
         return output
 
     def get_garib_group_size(self, garibName : str):
@@ -190,11 +195,11 @@ class GloverWorld(World):
             ["Prt1", 70],
             ["Prt2", 60],
             ["Prt3", 80],
-            ["Prt?", 50]#,
-            #["Pht1", 80]#,
-            #["Pht2", 80]#,
-            #["Pht3", 80]#,
-            #["Pht?", 60]#,
+            ["Prt?", 50],
+            ["Pht1", 80],
+            ["Pht2", 80],
+            ["Pht3", 80],
+            ["Pht?", 60]#,
             #["FoF1", 60]#,
             #["FoF2", 60]#,
             #["FoF3", 70]#,
@@ -217,11 +222,11 @@ class GloverWorld(World):
             ["Prt1", 0],
             ["Prt2", 0],
             ["Prt3", 0],
-            ["Prt?", 0]#,
-            #["Pht1", 0]#,
-            #["Pht2", 0]#,
-            #["Pht3", 0]#,
-            #["Pht?", 0]#,
+            ["Prt?", 0],
+            ["Pht1", 0],
+            ["Pht2", 0],
+            ["Pht3", 0],
+            ["Pht?", 0]#,
             #["FoF1", 0]#,
             #["FoF2", 0]#,
             #["FoF3", 0]#,
@@ -280,7 +285,6 @@ class GloverWorld(World):
 
             #TEMP: While only certain levels exist, randomize only those.
             randomizable_existing_levels = self.existing_levels.copy()
-            randomizable_existing_levels.remove("Pht!")
             randomizable_existing_levels.remove("FoF!")
             randomizable_existing_levels.remove("Otw!")
             randomizable_existing_levels.remove("Training")
@@ -324,7 +328,7 @@ class GloverWorld(World):
             self.garib_level_order.append(self.garib_level_order.pop(["Atl?", 25])),
             self.garib_level_order.append(self.garib_level_order.pop(["Crn?", 20]))
             self.garib_level_order.append(self.garib_level_order.pop(["Prt?", 50]))
-            #self.garib_level_order.append(self.garib_level_order.pop(["Pht?", 60]))
+            self.garib_level_order.append(self.garib_level_order.pop(["Pht?", 60]))
             #self.garib_level_order.append(self.garib_level_order.pop(["FoF?", 56]))
             #self.garib_level_order.append(self.garib_level_order.pop(["Otw?", 50]))
 
