@@ -79,10 +79,11 @@ class TestSkipSoulscapePlatforming(NineSolsTestBase):
 class TestSolSealCounts(NineSolsTestBase):
     options = {
         "seals_for_ethereal": 1,
+        "seals_for_prison": 2,
         "skip_soulscape_platforming": True,  # to make the relevant logic slightly simpler
     }
 
-    def test_seals_for_ethereal_one(self):
+    def test_one_seal_for_ethereal(self):
         self.assertNotReachableWith("Cortex Center: Defeat Lady Ethereal", [])
         self.assertNotReachableWith("Cortex Center: Defeat Lady Ethereal", [
             "Mystic Nymph: Scout Mode", "Charged Strike",  # to reach CC
@@ -92,4 +93,18 @@ class TestSolSealCounts(NineSolsTestBase):
             "Mystic Nymph: Scout Mode", "Charged Strike",  # to reach CC
             "Event - Lady Ethereal Soulscape Unlocked", "Air Dash",  # to reach and defeat Lady E
             "Seal of Kuafu",  # only 1 seal to trigger Lady E
+        ])
+
+    def test_two_seals_for_prison(self):
+        self.assertNotReachableWith("Prison: Near Root Node", [])
+        self.assertNotReachableWith("Prison: Near Root Node", [
+            "Mystic Nymph: Scout Mode", "Charged Strike", "Air Dash", "Tai-Chi Kick",  # to reach CC and FGH
+        ])
+        self.assertNotReachableWith("Prison: Near Root Node", [
+            "Mystic Nymph: Scout Mode", "Charged Strike", "Air Dash", "Tai-Chi Kick",  # to reach CC and FGH
+            "Seal of Kuafu",  # 1 seal is not enough
+        ])
+        self.assertReachableWith("Prison: Near Root Node", [
+            "Mystic Nymph: Scout Mode", "Charged Strike", "Air Dash", "Tai-Chi Kick",  # to reach CC and FGH
+            "Seal of Kuafu", "Seal of Goumang",  # 2 seals (and nymph) to trigger prison
         ])
