@@ -2030,112 +2030,112 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         215, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=13,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Teddiursa": PokeparkLocationData(
         216, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=14,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Magikarp": PokeparkLocationData(
         217, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=15,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Empoleon": PokeparkLocationData(
         218, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=1,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Glaceon": PokeparkLocationData(
         219, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=2,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Blastoise": PokeparkLocationData(
         220, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=3,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Glalie": PokeparkLocationData(
         221, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=4,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Lapras": PokeparkLocationData(
         222, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=5,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Delibird": PokeparkLocationData(
         223, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=7,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Piloswine": PokeparkLocationData(
         224, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=12,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Prinplup": PokeparkLocationData(
         225, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=6,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Squirtle": PokeparkLocationData(
         226, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=9,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Piplup": PokeparkLocationData(
         227, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=10,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Quagsire": PokeparkLocationData(
         228, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=8,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Spheal": PokeparkLocationData(
         229, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=11,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Suicune": PokeparkLocationData(
         230, PokeparkFlag.ATTRACTION, "Empoleon's Snow Slide Attraction", 0x0303,
         PokeparkEmpoleonAttractionClientData(
             structure_position=0,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Empoleon's Snow Slide Attraction -- Suicune Friendship": PokeparkLocationData(
@@ -2357,112 +2357,112 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         261, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=12,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Sableye": PokeparkLocationData(
         262, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=6,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Meowth": PokeparkLocationData(
         263, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=14,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Torchic": PokeparkLocationData(
         264, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=13,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Electivire": PokeparkLocationData(
         265, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=2,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Magmortar": PokeparkLocationData(
         266, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=3,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Hitmonlee": PokeparkLocationData(
         267, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=1,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Ursaring": PokeparkLocationData(
         268, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=5,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Mr. Mime": PokeparkLocationData(
         269, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=7,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Raichu": PokeparkLocationData(
         270, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=4,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Sudowoodo": PokeparkLocationData(
         271, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=8,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Charmander": PokeparkLocationData(
         272, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=9,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Gible": PokeparkLocationData(
         273, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=10,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Chimchar": PokeparkLocationData(
         274, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=11,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Magby": PokeparkLocationData(
         275, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=15,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Metagross": PokeparkLocationData(
         276, PokeparkFlag.ATTRACTION, "Bastiodon's Panel Crush Attraction", 0x0401,
         PokeparkBastiodonAttractionClientData(
             structure_position=0,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Bastiodon's Panel Crush Attraction -- Metagross Friendship": PokeparkLocationData(
@@ -2677,112 +2677,112 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         307, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=14,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Magnemite": PokeparkLocationData(
         308, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=15,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Rhyperior": PokeparkLocationData(
         309, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=1,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Tyranitar": PokeparkLocationData(
         310, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=2,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Hitmontop": PokeparkLocationData(
         311, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=3,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Flareon": PokeparkLocationData(
         312, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=4,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Venusaur": PokeparkLocationData(
         313, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=5,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Snorlax": PokeparkLocationData(
         314, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=6,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Torterra": PokeparkLocationData(
         315, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=7,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Magnezone": PokeparkLocationData(
         316, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=8,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Claydol": PokeparkLocationData(
         317, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=9,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Quilava": PokeparkLocationData(
         318, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=10,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Torkoal": PokeparkLocationData(
         319, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=11,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Baltoy": PokeparkLocationData(
         320, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=12,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Bonsly": PokeparkLocationData(
         321, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=13,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Heatran": PokeparkLocationData(
         322, PokeparkFlag.ATTRACTION, "Rhyperior's Bumper Burn Attraction", 0x0402,
         PokeparkRhyperiorAttractionClientData(
             structure_position=0,
-            memory_range=MemoryRange.WORD
+            memory_range=MemoryRange.HALFWORD
         )
     ),
     "Rhyperior's Bumper Burn Attraction -- Heatran Friendship": PokeparkLocationData(

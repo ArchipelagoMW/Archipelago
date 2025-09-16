@@ -499,15 +499,15 @@ class PokeparkWorld(World):
 
         # setup locations
         self.locations = self._determine_locations()
-        self.update_pool_with_precollected_items()
+        self._update_pool_with_precollected_items()
 
-        self.determine_classification_dynamic()
-        self.distribute_item_pools()
+        self._determine_classification_dynamic()
+        self._distribute_item_pools()
 
         if len(self.locations) <= len(self.progressive_pool):
             raise OptionError("Invalid Option combination. removed too much locations. Try adding locations")
 
-    def distribute_item_pools(self):
+    def _distribute_item_pools(self):
         filler_items = [name for name in self.progressive_pool
                         if self.item_classification_overrides.get(name) == IC.filler]
         useful_items = [name for name in self.progressive_pool
@@ -519,7 +519,7 @@ class PokeparkWorld(World):
         self.useful_pool.extend(useful_items)
         self.progressive_pool = progression_items
 
-    def determine_classification_dynamic(self):
+    def _determine_classification_dynamic(self):
         progressive_items = [
             "Bulbasaur Prisma",
             "Venusaur Prisma",
@@ -678,7 +678,7 @@ class PokeparkWorld(World):
             return PokeparkItem(name, self.player, ITEM_TABLE[name], classification)
         raise KeyError(f"Invalid item name: {name}")
 
-    def update_pool_with_precollected_items(self):
+    def _update_pool_with_precollected_items(self):
         options = self.options
         for item_name, data in ITEM_TABLE.items():
             if data.type == "Item":
