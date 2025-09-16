@@ -336,7 +336,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             WaterItem.river_jelly: self.fishing.can_fish_at(Region.town) & self.tool.has_fishing_rod(FishingRod.bamboo),
             WaterItem.sea_jelly: self.fishing.can_fish_at(Region.beach) & self.tool.has_fishing_rod(FishingRod.bamboo),
             WaterItem.seaweed: self.fishing.can_fish_at(Region.tide_pools),
-            WaterItem.white_algae: self.fishing.can_fish_at(Region.mines_floor_20),
+            WaterItem.white_algae: self.fishing.can_fish_at(Region.mines_floor_20) & self.tool.has_fishing_rod(FishingRod.bamboo),
             WildSeeds.grass_starter: self.money.can_spend_at(Region.pierre_store, 100),
         })
         # @formatter:on
