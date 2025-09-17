@@ -1890,7 +1890,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Flygon Power Competition -- Friendship",
-        lambda state: can_play_catch(state, player)
+        lambda state: can_play_catch(state, player) and state.has("Absol Prisma", player)
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Staraptor Power Competition -- Friendship",
