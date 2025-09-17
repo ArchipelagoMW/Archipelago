@@ -4572,4 +4572,10 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             memory_range=MemoryRange.BYTE
         ),
     ),
+    "Meadow Zone Main Area - Magikarp Power Competition -- Friendship": PokeparkLocationData(
+        571, PokeparkFlag.CHASE, "Meadow Zone Main Area", 0x0101, PokeparkFriendshipClientLocationData(
+            structure_position=64,
+            memory_range=MemoryRange.BYTE
+        )
+    ),
 }

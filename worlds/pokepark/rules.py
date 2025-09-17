@@ -212,6 +212,10 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: True
     )
     set_rule_if_exists(
+        "Meadow Zone Main Area - Magikarp Power Competition -- Friendship",
+        lambda state: state.has("Magikarp Unlock", player)
+    )
+    set_rule_if_exists(
         "Meadow Zone Main Area - Bidoof Housing -- Stage 1",
         lambda state: state.has("Mankey Friendship", player)
     )
