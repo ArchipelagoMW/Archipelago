@@ -90,13 +90,12 @@ class SC2Logic:
         # Must be set externally
         self.nova_used = True
 
+        self.very_hard_upgrade_level = 2 if self.advanced_tactics else 3
+
         # Conditionally set to False by the world after culling items
         self.has_barracks_unit: bool = True
         self.has_factory_unit: bool = True
         self.has_starport_unit: bool = True
-        self.has_zerg_melee_unit: bool = True
-        self.has_zerg_ranged_unit: bool = True
-        self.has_zerg_air_unit: bool = True
         self.has_protoss_ground_unit: bool = True
         self.has_protoss_air_unit: bool = True
 
@@ -177,7 +176,7 @@ class SC2Logic:
         return self.weapon_armor_upgrade_count(LogicEffect.TERRAN_UPGRADE.name, state)
 
     def terran_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
-        return self.terran_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
+        return self.terran_army_weapon_armor_upgrade_min_level(state) >= self.very_hard_upgrade_level
 
     # WoL
     def terran_common_unit(self, state: CollectionState) -> bool:
@@ -740,9 +739,6 @@ class SC2Logic:
             defense_score += 2
         return defense_score
 
-    def zerg_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        return self.weapon_armor_upgrade_count(LogicEffect.ZERG_UPGRADE.name, state)
-
     def zerg_melee_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
         result = min2(
             state.count(LogicEffect.ZERG_MELEE_ATTACK.name, self.player),
@@ -808,9 +804,6 @@ class SC2Logic:
                 item_names.INFESTED_MISSILE_TURRET,
             ), self.player)
         )
-
-    def zerg_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
-        return self.zerg_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
 
     def zerg_common_unit(self, state: CollectionState) -> bool:
         return state.has_any(self.basic_zerg_units, self.player)
@@ -949,34 +942,54 @@ class SC2Logic:
             state.has(item_names.ULTRALISK, self.player) or self.morphling_enabled
         )
 
-    def zerg_competent_comp(self, state: CollectionState) -> bool:
-        if self.zerg_army_weapon_armor_upgrade_min_level(state) < 2:
+    def zerg_upgraded_competent_comp(self, state: CollectionState, upgrade_threshold: int = 2) -> bool:
+        """Includes a check for w/a level"""
+        if self.weapon_armor_upgrade_count(LogicEffect.ZERG_GROUND_ARMOR.name, state) < upgrade_threshold:
+            # All comps require at least one upgraded ground unit
             return False
-        advanced = self.advanced_tactics
-        core_unit = state.has_any(
-            {item_names.ROACH, item_names.ABERRATION, item_names.ZERGLING, item_names.INFESTED_DIAMONDBACK}, self.player
-        ) or self.morph_igniter(state)
-        support_unit = (
-            state.has_any({item_names.SWARM_QUEEN, item_names.HYDRALISK, item_names.INFESTED_BANSHEE}, self.player)
-            or self.morph_brood_lord(state)
-            or state.has_all((item_names.MUTALISK, item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE), self.player)
-            or advanced
-            and (state.has_any({item_names.INFESTOR, item_names.DEFILER}, self.player) or self.morph_viper(state))
+        core_melee = (
+            self.weapon_armor_upgrade_count(LogicEffect.ZERG_MELEE_ATTACK.name, state) >= upgrade_threshold
+            and state.has_any((item_names.ZERGLING, item_names.ABERRATION, item_names.PYGALISK), self.player)
         )
-        if core_unit and support_unit:
-            return True
-        vespene_unit = (
-            state.has_any({item_names.ULTRALISK, item_names.ABERRATION}, self.player)
-            or (
-                self.morph_guardian(state)
-                and state.has_any(
-                    (item_names.GUARDIAN_SORONAN_ACID, item_names.GUARDIAN_EXPLOSIVE_SPORES, item_names.GUARDIAN_PRIMORDIAL_FURY), self.player
+        core_ranged = (
+            self.weapon_armor_upgrade_count(LogicEffect.ZERG_RANGED_ATTACK.name, state) >= upgrade_threshold
+            and (state.has_any((
+                    item_names.ROACH, item_names.ABERRATION, item_names.INFESTED_DIAMONDBACK
+                ), self.player)
+                or self.morph_igniter(state)
+            )
+        )
+        support_unit = (
+            state.count(LogicEffect.ZERG_MUTALISK_RATING.name, self.player) >= 14
+            or state.has_any((item_names.SWARM_QUEEN, item_names.HYDRALISK, item_names.INFESTED_BANSHEE), self.player)
+            or self.morph_brood_lord(state)
+            or (self.advanced_tactics
+                and (state.has_any((item_names.INFESTOR, item_names.DEFILER), self.player)
+                    or self.morph_viper(state)
                 )
             )
-            or advanced
-            and self.morph_viper(state)
         )
-        return vespene_unit and state.has_any({item_names.ZERGLING, item_names.SWARM_QUEEN}, self.player)
+        # Upgraded core unit + support unit that may not need w/a upgrades
+        if support_unit and (core_melee or core_ranged):
+            return True
+        vespene_unit = (
+            (
+                state.has_any((item_names.ULTRALISK, item_names.ABERRATION), self.player)
+                and self.weapon_armor_upgrade_count(LogicEffect.ZERG_MELEE_ATTACK.name, state) >= upgrade_threshold
+            )
+            or (self.advanced_tactics
+                and self.morph_viper(state)
+            )
+            or (
+                # No need for armour, the mineral dump will handle that
+                self.weapon_armor_upgrade_count(LogicEffect.ZERG_AIR_ATTACK.name, state) >= upgrade_threshold
+                and self.morph_guardian(state)
+                and state.has_any((
+                    item_names.GUARDIAN_SORONAN_ACID, item_names.GUARDIAN_EXPLOSIVE_SPORES, item_names.GUARDIAN_PRIMORDIAL_FURY
+                ), self.player)
+            )
+        )
+        return vespene_unit and state.has_any((item_names.ZERGLING, item_names.SWARM_QUEEN, item_names.PYGALISK), self.player)
 
     def zerg_common_unit_basic_aa(self, state: CollectionState) -> bool:
         return self.zerg_common_unit(state) and self.zerg_basic_anti_air(state)
@@ -985,10 +998,10 @@ class SC2Logic:
         return self.zerg_common_unit(state) and self.zerg_competent_anti_air(state)
 
     def zerg_competent_comp_basic_aa(self, state: CollectionState) -> bool:
-        return self.zerg_competent_comp(state) and self.zerg_basic_anti_air(state)
+        return self.zerg_upgraded_competent_comp(state) and self.zerg_basic_anti_air(state)
 
     def zerg_competent_comp_competent_aa(self, state: CollectionState) -> bool:
-        return self.zerg_competent_comp(state) and self.zerg_competent_anti_air(state)
+        return self.zerg_upgraded_competent_comp(state) and self.zerg_competent_anti_air(state)
 
     def spread_creep(self, state: CollectionState, free_creep_tumor=True) -> bool:
         return (self.advanced_tactics and free_creep_tumor) or state.has_any(
@@ -1014,11 +1027,11 @@ class SC2Logic:
 
     def zerg_base_buster(self, state: CollectionState) -> bool:
         """Powerful and sustainable zerg anti-ground for busting big bases; anti-air not included"""
-        if not self.zerg_competent_comp(state):
+        if not self.zerg_upgraded_competent_comp(state, self.very_hard_upgrade_level):
             return False
         return (
             (
-                self.zerg_melee_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
+                self.zerg_melee_weapon_armor_upgrade_min_level(state) >= self.very_hard_upgrade_level
                 and (
                     self.morph_tyrannozor(state)
                     or (
@@ -1030,7 +1043,7 @@ class SC2Logic:
                 and state.has(item_names.SWARM_QUEEN, self.player)  # Healing to sustain the frontline
             )
             or (
-                self.zerg_ranged_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
+                self.zerg_ranged_weapon_armor_upgrade_min_level(state) >= self.very_hard_upgrade_level
                 and (
                     self.morph_impaler(state)
                     or self.morph_lurker(state)
@@ -1054,11 +1067,12 @@ class SC2Logic:
                 )
             )
             or (
-                self.zerg_flyer_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
+                self.zerg_flyer_weapon_armor_upgrade_min_level(state) >= self.very_hard_upgrade_level
                 and (
                     self.morph_brood_lord(state)
-                    or self.morph_guardian(state)
-                    and state.has_all((item_names.GUARDIAN_PROPELLANT_SACS, item_names.GUARDIAN_SORONAN_ACID), self.player)
+                    or (self.morph_guardian(state)
+                        and state.has_all((item_names.GUARDIAN_PROPELLANT_SACS, item_names.GUARDIAN_SORONAN_ACID), self.player)
+                    )
                     or state.has_all((item_names.INFESTED_BANSHEE, item_names.INFESTED_BANSHEE_FLESHFUSED_TARGETING_OPTICS), self.player)
                     # Highly-upgraded anti-ground devourers would also be good
                 )
@@ -1161,7 +1175,7 @@ class SC2Logic:
         )
 
     def protoss_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
-        return self.protoss_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
+        return self.protoss_army_weapon_armor_upgrade_min_level(state) >= self.very_hard_upgrade_level
 
     def protoss_defense_rating(self, state: CollectionState, zerg_enemy: bool) -> int:
         """
@@ -1635,16 +1649,13 @@ class SC2Logic:
             self.zerg_defense_rating(state, True, False) >= 4
             and self.zerg_common_unit(state)
             and (
-                state.has_any(
-                    (
-                        item_names.SWARM_QUEEN,
-                        item_names.HYDRALISK,
-                        item_names.ROACH,
-                        item_names.MUTALISK,
-                        item_names.INFESTED_BANSHEE,
-                    ),
-                    self.player,
-                )
+                state.has_any((
+                    item_names.SWARM_QUEEN,
+                    item_names.HYDRALISK,
+                    item_names.ROACH,
+                    item_names.MUTALISK,
+                    item_names.INFESTED_BANSHEE,
+                ), self.player)
                 or self.morph_lurker(state)
                 or self.morph_brood_lord(state)
                 or (
@@ -1723,7 +1734,7 @@ class SC2Logic:
         return (
             self.zerg_common_unit(state)
             and self.zerg_competent_anti_air(state)
-            and (state.has(item_names.MUTALISK, self.player) or self.zerg_competent_comp(state))
+            and (state.has(item_names.MUTALISK, self.player) or self.zerg_upgraded_competent_comp(state))
         )
 
     def zerg_respond_to_colony_infestations(self, state: CollectionState) -> bool:
@@ -1815,15 +1826,24 @@ class SC2Logic:
         """
         if self.zerg_power_rating(state) < 5:
             return False
-        return (self.zerg_competent_comp(state) and state.has_any({item_names.HYDRALISK, item_names.MUTALISK}, self.player)) or (
-            self.advanced_tactics
-            and self.zerg_common_unit(state)
-            and (
-                state.has_any({item_names.MUTALISK, item_names.INFESTOR}, self.player)
-                or (self.morph_devourer(state) and state.has_any({item_names.HYDRALISK, item_names.SWARM_QUEEN}, self.player))
-                or (self.morph_viper(state) and state.has(item_names.VIPER_PARASITIC_BOMB, self.player))
+        return (
+            (
+                self.zerg_upgraded_competent_comp(state, self.very_hard_upgrade_level)
+                and state.has_any((item_names.HYDRALISK, item_names.MUTALISK), self.player)
             )
-            and self.zerg_army_weapon_armor_upgrade_min_level(state) >= 1
+            or (
+                self.advanced_tactics
+                and self.zerg_common_unit(state)
+                and (
+                    state.has_any((item_names.MUTALISK, item_names.INFESTOR), self.player)
+                    or (self.morph_devourer(state) and state.has_any((item_names.HYDRALISK, item_names.SWARM_QUEEN), self.player))
+                    or (self.morph_viper(state) and state.has(item_names.VIPER_PARASITIC_BOMB, self.player))
+                )
+                # Upgrades useful in all branches
+                and state.has_any((
+                    LogicEffect.ZERG_GROUND_ARMOR.name, LogicEffect.ZERG_AIR_ATTACK.name, LogicEffect.ZERG_AIR_ARMOR.name,
+                ), self.player)
+            )
         )
 
     def protoss_welcome_to_the_jungle_requirement(self, state: CollectionState) -> bool:
@@ -2051,12 +2071,8 @@ class SC2Logic:
         if self.advanced_tactics and state.has(item_names.INFESTOR, self.player):
             return True
         usable_muta = (
-            state.has_all((item_names.MUTALISK, item_names.MUTALISK_RAPID_REGENERATION), self.player)
-            and state.has_any((item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE), self.player)
-            and (
-                state.has(item_names.MUTALISK_SUNDERING_GLAIVE, self.player)
-                or state.has_all((item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE), self.player)
-            )
+            state.count(LogicEffect.ZERG_MUTALISK_RATING.name, self.player) >= 14
+            and state.has(item_names.MUTALISK_RAPID_REGENERATION, self.player)
         )
         return (
             # Heal
@@ -2092,7 +2108,7 @@ class SC2Logic:
             and (state.has_any({item_names.MUTALISK, item_names.CORRUPTOR, item_names.INFESTED_LIBERATOR, item_names.BROOD_QUEEN}, self.player))
             # Upgrades / general
             and self.zerg_competent_anti_air(state)
-            and self.zerg_competent_comp(state)
+            and self.zerg_upgraded_competent_comp(state)
         )
 
     def protoss_maw_requirement(self, state: CollectionState) -> bool:
@@ -2134,7 +2150,7 @@ class SC2Logic:
             or not self.zerg_repair_odin(state)
         ):
             return False
-        if power_rating >= 7 and self.zerg_competent_comp(state):
+        if power_rating >= 7 and self.zerg_upgraded_competent_comp(state):
             return True
         else:
             return self.zerg_base_buster(state)
@@ -2169,7 +2185,11 @@ class SC2Logic:
         return self.terran_competent_comp(state) and self.terran_defense_rating(state, True, True) >= 8
 
     def zerg_in_utter_darkness_requirement(self, state: CollectionState) -> bool:
-        return self.zerg_competent_comp(state) and self.zerg_competent_anti_air(state) and self.zerg_defense_rating(state, True, True) >= 8
+        return (
+            self.zerg_upgraded_competent_comp(state, self.very_hard_upgrade_level)
+            and self.zerg_competent_anti_air(state)
+            and self.zerg_defense_rating(state, True, True) >= 8
+        )
 
     def protoss_in_utter_darkness_requirement(self, state: CollectionState) -> bool:
         return self.protoss_competent_comp(state) and self.protoss_defense_rating(state, True) >= 4
@@ -2210,16 +2230,18 @@ class SC2Logic:
         """
         All-in (Zerg)
         """
-        if not self.zerg_very_hard_mission_weapon_armor_level(state):
-            return False
         beats_kerrigan = (
-            state.has_any({item_names.INFESTED_MARINE, item_names.INFESTED_BANSHEE, item_names.INFESTED_BUNKER}, self.player)
-            or state.has_all({item_names.SWARM_HOST, item_names.SWARM_HOST_RESOURCE_EFFICIENCY}, self.player)
+            state.has_any((
+                item_names.INFESTED_MARINE, item_names.INFESTED_BANSHEE, item_names.INFESTED_BUNKER,
+            ), self.player)
+            or state.has_all((
+                item_names.SWARM_HOST, item_names.SWARM_HOST_RESOURCE_EFFICIENCY,
+            ), self.player)
             or self.morph_brood_lord(state)
         )
         if not beats_kerrigan:
             return False
-        if not self.zerg_competent_comp(state):
+        if not self.zerg_upgraded_competent_comp(state, self.very_hard_upgrade_level):
             return False
         if self.all_in_map == AllInMap.option_ground:
             # Ground
@@ -2379,7 +2401,7 @@ class SC2Logic:
 
     def zerg_hand_of_darkness_requirement(self, state: CollectionState) -> bool:
         return (
-            self.zerg_competent_comp(state)
+            self.zerg_upgraded_competent_comp(state)
             and (self.zerg_competent_anti_air(state) or self.advanced_tactics and self.zerg_moderate_anti_air(state))
             and (self.basic_kerrigan(state) or self.zerg_power_rating(state) >= 4)
         )
@@ -2391,7 +2413,11 @@ class SC2Logic:
         return self.terran_beats_protoss_deathball(state) and self.terran_power_rating(state) >= 8
 
     def zerg_planetfall_requirement(self, state: CollectionState) -> bool:
-        return self.zerg_competent_comp(state) and self.zerg_competent_anti_air(state) and self.zerg_power_rating(state) >= 8
+        return (
+            self.zerg_upgraded_competent_comp(state, self.very_hard_upgrade_level)
+            and self.zerg_competent_anti_air(state)
+            and self.zerg_power_rating(state) >= 8
+        )
 
     def protoss_planetfall_requirement(self, state: CollectionState) -> bool:
         return self.protoss_deathball(state) and self.protoss_power_rating(state) >= 8
@@ -2402,13 +2428,12 @@ class SC2Logic:
         if self.take_over_ai_allies:
             return (
                 self.terran_competent_comp(state)
-                and self.zerg_competent_comp(state)
+                and self.zerg_upgraded_competent_comp(state, self.very_hard_upgrade_level)
                 and (self.zerg_competent_anti_air(state) or self.terran_competent_anti_air(state))
                 and self.terran_very_hard_mission_weapon_armor_level(state)
-                and self.zerg_very_hard_mission_weapon_armor_level(state)
             )
         else:
-            return self.zerg_competent_comp(state) and self.zerg_competent_anti_air(state) and self.zerg_very_hard_mission_weapon_armor_level(state)
+            return self.zerg_upgraded_competent_comp(state, self.very_hard_upgrade_level) and self.zerg_competent_anti_air(state)
 
     def terran_the_reckoning_requirement(self, state: CollectionState) -> bool:
         return self.terran_very_hard_mission_weapon_armor_level(state) and self.terran_base_trasher(state)
@@ -2560,7 +2585,7 @@ class SC2Logic:
 
     def zerg_brothers_in_arms_requirement(self, state: CollectionState) -> bool:
         return (
-            self.zerg_common_unit(state) and self.zerg_competent_comp(state) and self.zerg_competent_anti_air(state) and self.zerg_big_monsters(state)
+            self.zerg_common_unit(state) and self.zerg_upgraded_competent_comp(state) and self.zerg_competent_anti_air(state) and self.zerg_big_monsters(state)
         ) or (
             self.take_over_ai_allies
             and (self.zerg_common_unit(state) or self.terran_common_unit(state))
@@ -2604,27 +2629,46 @@ class SC2Logic:
             self.zerg_common_unit(state)
             and self.zerg_competent_anti_air(state)
             and state.has(item_names.SPINE_CRAWLER, self.player)
+            and self.zerg_flyer_weapon_armor_upgrade_min_level(state) >= self.very_hard_upgrade_level
             and (
-                self.morph_lurker(state)
-                or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE}, self.player)
-                or self.zerg_infested_tank_with_ammo(state)
-                or self.advanced_tactics
-                and state.has_all({item_names.ULTRALISK, item_names.ULTRALISK_CHITINOUS_PLATING, item_names.ULTRALISK_MONARCH_BLADES}, self.player)
+                # splash
+                state.has_all((
+                    item_names.MUTALISK,
+                    item_names.MUTALISK_SEVERING_GLAIVE,
+                    item_names.MUTALISK_VICIOUS_GLAIVE
+                ), self.player)
+                or (
+                    self.weapon_armor_upgrade_count(LogicEffect.ZERG_RANGED_ATTACK.name, state) >= self.very_hard_upgrade_level
+                    and (
+                        self.morph_lurker(state)
+                        and self.zerg_infested_tank_with_ammo(state)
+                    )
+                ) or (
+                    self.zerg_melee_weapon_armor_upgrade_min_level(state) >= self.very_hard_upgrade_level
+                    and self.advanced_tactics
+                    and state.has_all((
+                        item_names.ULTRALISK,
+                        item_names.ULTRALISK_CHITINOUS_PLATING,
+                        item_names.ULTRALISK_MONARCH_BLADES
+                    ), self.player)
+                )
             )
             and (
+                # static defenses, don't care about w/a
                 self.morph_impaler(state)
                 or state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_DEFENDER_MODE}, self.player)
                 or self.zerg_infested_tank_with_ammo(state)
                 or state.has(item_names.BILE_LAUNCHER, self.player)
             )
             and (
+                # Mobile anti-air
                 self.morph_devourer(state)
-                or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SUNDERING_GLAIVE}, self.player)
-                or self.advanced_tactics
-                and state.has(item_names.BROOD_QUEEN, self.player)
+                or state.has_all((item_names.MUTALISK, item_names.MUTALISK_SUNDERING_GLAIVE), self.player)
+                or (self.advanced_tactics
+                    and state.has(item_names.BROOD_QUEEN, self.player)
+                )
             )
             and self.zerg_mineral_dump(state)
-            and self.zerg_army_weapon_armor_upgrade_min_level(state) >= 2
         )
 
     def terran_temple_of_unification_requirement(self, state: CollectionState) -> bool:
@@ -2633,7 +2677,7 @@ class SC2Logic:
     def zerg_temple_of_unification_requirement(self, state: CollectionState) -> bool:
         # Don't be locked to roach/hydra
         return (
-            self.zerg_competent_comp(state)
+            self.zerg_upgraded_competent_comp(state)
             and self.zerg_competent_anti_air(state)
             and (
                 state.has(item_names.INFESTED_BANSHEE, self.player)
@@ -2680,7 +2724,7 @@ class SC2Logic:
         return (
             self.zerg_competent_anti_air(state)
             and self.zerg_common_unit(state)
-            and (self.take_over_ai_allies or (self.zerg_competent_comp(state) and self.zerg_big_monsters(state)))
+            and (self.take_over_ai_allies or (self.zerg_upgraded_competent_comp(state) and self.zerg_big_monsters(state)))
             and self.zerg_power_rating(state) >= 6
         )
 
@@ -2717,7 +2761,7 @@ class SC2Logic:
 
     def zerg_unsealing_the_past_requirement(self, state: CollectionState) -> bool:
         return (
-            self.zerg_competent_comp(state)
+            self.zerg_upgraded_competent_comp(state)
             and self.zerg_competent_anti_air(state)
             and self.zerg_power_rating(state) >= 6
             and (
@@ -2757,7 +2801,7 @@ class SC2Logic:
 
     def zerg_purification_requirement(self, state: CollectionState) -> bool:
         return (
-            self.zerg_competent_comp(state)
+            self.zerg_upgraded_competent_comp(state)
             and self.zerg_competent_anti_air(state)
             and self.zerg_defense_rating(state, True, True) >= 5
             and self.zerg_big_monsters(state)
@@ -2785,7 +2829,7 @@ class SC2Logic:
 
     def zerg_steps_of_the_rite_requirement(self, state: CollectionState) -> bool:
         return (
-            self.zerg_competent_comp(state)
+            self.zerg_upgraded_competent_comp(state)
             and self.zerg_competent_anti_air(state)
             and self.zerg_base_buster(state)
             and (
@@ -2806,7 +2850,7 @@ class SC2Logic:
 
     def zerg_rak_shir_requirement(self, state: CollectionState) -> bool:
         return (
-            self.zerg_competent_comp(state)
+            self.zerg_upgraded_competent_comp(state)
             and self.zerg_competent_anti_air(state)
             and (
                 self.zerg_big_monsters(state)
@@ -2864,7 +2908,7 @@ class SC2Logic:
 
     def zerg_templars_charge_requirement(self, state: CollectionState) -> bool:
         return (
-            self.zerg_competent_comp(state)
+            self.zerg_upgraded_competent_comp(state)
             and self.zerg_competent_anti_air(state)
             and state.has(item_names.SWARM_QUEEN, self.player)
             and (
@@ -2934,9 +2978,8 @@ class SC2Logic:
 
     def zerg_the_host_requirement(self, state: CollectionState) -> bool:
         return (
-            self.zerg_competent_comp(state)
+            self.zerg_upgraded_competent_comp(state, self.very_hard_upgrade_level)
             and self.zerg_competent_anti_air(state)
-            and self.zerg_very_hard_mission_weapon_armor_level(state)
             and self.zerg_base_buster(state)
             and self.zerg_big_monsters(state)
             and (
@@ -2985,10 +3028,9 @@ class SC2Logic:
 
     def zerg_salvation_requirement(self, state: CollectionState) -> bool:
         return (
-            self.zerg_competent_comp(state)
+            self.zerg_upgraded_competent_comp(state, self.very_hard_upgrade_level)
             and self.zerg_competent_anti_air(state)
             and state.has(item_names.SPINE_CRAWLER, self.player)
-            and self.zerg_very_hard_mission_weapon_armor_level(state)
             and (
                 self.morph_impaler_or_lurker(state)
                 or state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_DEFENDER_MODE}, self.player)
@@ -3006,14 +3048,24 @@ class SC2Logic:
         if not self.protoss_very_hard_mission_weapon_armor_level(state):
             return False
         if self.take_over_ai_allies and not (
-            self.terran_very_hard_mission_weapon_armor_level(state) and self.zerg_very_hard_mission_weapon_armor_level(state)
+            self.terran_very_hard_mission_weapon_armor_level(state)
+            and state.count_from_list((
+                LogicEffect.ZERG_AIR_ATTACK.name, LogicEffect.ZERG_MELEE_ATTACK.name, LogicEffect.ZERG_RANGED_ATTACK.name,
+            ), self.player) >= (4 + 2 * self.advanced_tactics)
+            and state.count_from_list((
+                LogicEffect.ZERG_AIR_ARMOR.name, LogicEffect.ZERG_GROUND_ARMOR.name,
+            ), self.player) >= (3 + 2 * self.advanced_tactics)
         ):
             return False
         return self.protoss_competent_comp(state) or (
             self.take_over_ai_allies
             and (
                 state.has(item_names.BATTLECRUISER, self.player)
-                or (state.has(item_names.ULTRALISK, self.player) and self.protoss_competent_anti_air(state))
+                or (state.has_all((
+                        item_names.ULTRALISK, LogicEffect.ZERG_MELEE_ATTACK.name, LogicEffect.ZERG_GROUND_ARMOR.name,
+                    ), self.player)
+                    and self.protoss_competent_anti_air(state)
+                )
             )
         )
 
@@ -3021,7 +3073,13 @@ class SC2Logic:
         if not self.terran_very_hard_mission_weapon_armor_level(state):
             return False
         if self.take_over_ai_allies and not (
-            self.protoss_very_hard_mission_weapon_armor_level(state) and self.zerg_very_hard_mission_weapon_armor_level(state)
+            self.protoss_very_hard_mission_weapon_armor_level(state)
+            and state.count_from_list((
+                LogicEffect.ZERG_AIR_ATTACK.name, LogicEffect.ZERG_MELEE_ATTACK.name, LogicEffect.ZERG_RANGED_ATTACK.name,
+            ), self.player) >= (4 + 2 * self.advanced_tactics)
+            and state.count_from_list((
+                LogicEffect.ZERG_AIR_ARMOR.name, LogicEffect.ZERG_GROUND_ARMOR.name,
+            ), self.player) >= (3 + 2 * self.advanced_tactics)
         ):
             return False
         defense_score = self.terran_defense_rating(state, False, True)
@@ -3043,8 +3101,6 @@ class SC2Logic:
         )
 
     def amons_fall_requirement(self, state: CollectionState) -> bool:
-        if not self.zerg_very_hard_mission_weapon_armor_level(state):
-            return False
         if not self.zerg_competent_anti_air(state):
             return False
         if self.zerg_power_rating(state) < 6:
@@ -3076,7 +3132,7 @@ class SC2Logic:
                 )
                 and self.terran_competent_anti_air(state)
                 and self.protoss_deathball(state)
-                and self.zerg_competent_comp(state)
+                and self.zerg_upgraded_competent_comp(state, self.very_hard_upgrade_level)
             )
         else:
             return (
@@ -3089,7 +3145,7 @@ class SC2Logic:
                     or self.morph_devourer(state)
                 )
                 or (self.advanced_tactics and self.spread_creep(state, False) and self.zerg_big_monsters(state))
-            ) and self.zerg_competent_comp(state)
+            ) and self.zerg_upgraded_competent_comp(state, self.very_hard_upgrade_level)
 
     def the_escape_stuff_granted(self) -> bool:
         """

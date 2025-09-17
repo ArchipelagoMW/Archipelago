@@ -2413,7 +2413,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 305,
             LocationType.MASTERY,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_competent_anti_air(state)
                 and (logic.basic_kerrigan(state) or kerriganless)
                 and logic.zerg_defense_rating(state, False, False) >= 3
@@ -2751,7 +2751,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 800,
             LocationType.VICTORY,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_moderate_anti_air(state)
                 and logic.spread_creep(state)
             ),
@@ -2768,7 +2768,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 802,
             LocationType.VANILLA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_moderate_anti_air(state)
                 and logic.spread_creep(state)
             ),
@@ -2779,7 +2779,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 803,
             LocationType.VANILLA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_moderate_anti_air(state)
                 and logic.spread_creep(state)
             ),
@@ -2790,7 +2790,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 804,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_moderate_anti_air(state)
                 and logic.spread_creep(state)
             ),
@@ -2814,7 +2814,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 807,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_moderate_anti_air(state)
                 and logic.spread_creep(state)
             ),
@@ -2825,7 +2825,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 808,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_moderate_anti_air(state)
                 and logic.spread_creep(state)
             ),
@@ -2836,7 +2836,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 809,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_moderate_anti_air(state)
                 and logic.spread_creep(state)
             ),
@@ -2847,7 +2847,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 810,
             LocationType.CHALLENGE,
             lambda state: (
-                logic.zerg_competent_comp(state) and logic.zerg_moderate_anti_air(state)
+                logic.zerg_upgraded_competent_comp(state) and logic.zerg_moderate_anti_air(state)
             ),
             flags=LocationFlag.BASEBUST,
         ),
@@ -2857,7 +2857,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 811,
             LocationType.CHALLENGE,
             lambda state: (
-                logic.zerg_competent_comp(state) and logic.zerg_moderate_anti_air(state)
+                logic.zerg_upgraded_competent_comp(state) and logic.zerg_moderate_anti_air(state)
             ),
             flags=LocationFlag.BASEBUST,
         ),
@@ -2867,7 +2867,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 812,
             LocationType.CHALLENGE,
             lambda state: (
-                logic.zerg_competent_comp(state) and logic.zerg_moderate_anti_air(state)
+                logic.zerg_upgraded_competent_comp(state) and logic.zerg_moderate_anti_air(state)
             ),
             flags=LocationFlag.BASEBUST,
         ),
@@ -3350,7 +3350,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 1500,
             LocationType.VICTORY,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and (
                     logic.zerg_competent_anti_air(state)
                     or (adv_tactics and logic.zerg_moderate_anti_air(state))
@@ -3363,7 +3363,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 1501,
             LocationType.VANILLA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and (
                     logic.zerg_competent_anti_air(state)
                     or (adv_tactics and logic.zerg_moderate_anti_air(state))
@@ -3376,7 +3376,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 1502,
             LocationType.VANILLA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and (
                     logic.zerg_competent_anti_air(state)
                     or (adv_tactics and logic.zerg_moderate_anti_air(state))
@@ -3401,7 +3401,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 1505,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and (
                     logic.zerg_competent_anti_air(state)
                     or (adv_tactics and logic.zerg_moderate_anti_air(state))
@@ -3414,7 +3414,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 1506,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and (
                     logic.zerg_competent_anti_air(state)
                     or (adv_tactics and logic.zerg_moderate_anti_air(state))
@@ -3427,7 +3427,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 1507,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and (
                     logic.zerg_competent_anti_air(state)
                     or (adv_tactics and logic.zerg_moderate_anti_air(state))
@@ -3440,7 +3440,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 1508,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and (
                     logic.zerg_competent_anti_air(state)
                     or (adv_tactics and logic.zerg_moderate_anti_air(state))
@@ -3453,7 +3453,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 1509,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and (
                     logic.zerg_competent_anti_air(state)
                     or (adv_tactics and logic.zerg_moderate_anti_air(state))
@@ -8905,7 +8905,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Victory",
             SC2_RACESWAP_LOC_ID_OFFSET + 4600,
             LocationType.VICTORY,
-            lambda state: logic.zerg_competent_comp(state)
+            lambda state: logic.zerg_upgraded_competent_comp(state)
             and logic.zerg_competent_anti_air(state),
         ),
         make_location_data(
@@ -8962,7 +8962,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Northwest Preserver",
             SC2_RACESWAP_LOC_ID_OFFSET + 4607,
             LocationType.EXTRA,
-            lambda state: logic.zerg_competent_comp(state)
+            lambda state: logic.zerg_upgraded_competent_comp(state)
             and logic.zerg_competent_anti_air(state),
         ),
         make_location_data(
@@ -8970,7 +8970,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Southwest Preserver",
             SC2_RACESWAP_LOC_ID_OFFSET + 4608,
             LocationType.EXTRA,
-            lambda state: logic.zerg_competent_comp(state)
+            lambda state: logic.zerg_upgraded_competent_comp(state)
             and logic.zerg_competent_anti_air(state),
         ),
         make_location_data(
@@ -8978,7 +8978,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "East Preserver",
             SC2_RACESWAP_LOC_ID_OFFSET + 4609,
             LocationType.EXTRA,
-            lambda state: logic.zerg_competent_comp(state)
+            lambda state: logic.zerg_upgraded_competent_comp(state)
             and logic.zerg_competent_anti_air(state),
         ),
         make_location_data(
@@ -11991,7 +11991,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Victory",
             SC2_RACESWAP_LOC_ID_OFFSET + 10000,
             LocationType.VICTORY,
-            lambda state: logic.zerg_competent_comp(state)
+            lambda state: logic.zerg_upgraded_competent_comp(state)
             and logic.zerg_moderate_anti_air(state),
         ),
         make_location_data(
@@ -11999,7 +11999,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "First Prisoner Group",
             SC2_RACESWAP_LOC_ID_OFFSET + 10001,
             LocationType.VANILLA,
-            lambda state: logic.zerg_competent_comp(state)
+            lambda state: logic.zerg_upgraded_competent_comp(state)
             and logic.zerg_moderate_anti_air(state),
         ),
         make_location_data(
@@ -12007,7 +12007,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Second Prisoner Group",
             SC2_RACESWAP_LOC_ID_OFFSET + 10002,
             LocationType.VANILLA,
-            lambda state: logic.zerg_competent_comp(state)
+            lambda state: logic.zerg_upgraded_competent_comp(state)
             and logic.zerg_moderate_anti_air(state),
         ),
         make_location_data(
@@ -12015,7 +12015,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "First Pylon",
             SC2_RACESWAP_LOC_ID_OFFSET + 10003,
             LocationType.VANILLA,
-            lambda state: logic.zerg_competent_comp(state)
+            lambda state: logic.zerg_upgraded_competent_comp(state)
             and logic.zerg_moderate_anti_air(state),
         ),
         make_location_data(
@@ -12023,7 +12023,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Second Pylon",
             SC2_RACESWAP_LOC_ID_OFFSET + 10004,
             LocationType.VANILLA,
-            lambda state: logic.zerg_competent_comp(state)
+            lambda state: logic.zerg_upgraded_competent_comp(state)
             and logic.zerg_moderate_anti_air(state),
         ),
         make_location_data(
@@ -12032,7 +12032,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 10005,
             LocationType.MASTERY,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_moderate_anti_air(state)
                 and logic.zerg_base_buster(state)
                 and logic.zerg_power_rating(state) >= 6
@@ -12086,7 +12086,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 10200,
             LocationType.VICTORY,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_competent_anti_air(state)
                 and logic.zerg_mineral_dump(state)
             ),
@@ -12097,7 +12097,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 10201,
             LocationType.VANILLA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_competent_anti_air(state)
                 and logic.zerg_mineral_dump(state)
             ),
@@ -12108,7 +12108,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 10202,
             LocationType.VANILLA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_competent_anti_air(state)
                 and logic.zerg_mineral_dump(state)
             ),
@@ -12119,7 +12119,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 10203,
             LocationType.VANILLA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_competent_anti_air(state)
                 and logic.zerg_mineral_dump(state)
                 and logic.zerg_can_grab_ghosts_in_the_fog_east_rock_formation(state)
@@ -12693,7 +12693,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 11600,
             LocationType.VICTORY,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_basic_kerriganless_anti_air(state)
             ),
         ),
@@ -12709,7 +12709,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 11602,
             LocationType.VANILLA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_basic_kerriganless_anti_air(state)
             ),
         ),
@@ -12719,7 +12719,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 11603,
             LocationType.VANILLA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_basic_kerriganless_anti_air(state)
             ),
         ),
@@ -12729,7 +12729,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 11604,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_basic_kerriganless_anti_air(state)
             ),
         ),
@@ -12739,7 +12739,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 11605,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_basic_kerriganless_anti_air(state)
             ),
         ),
@@ -12749,7 +12749,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 11606,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_basic_kerriganless_anti_air(state)
             ),
         ),
@@ -12759,7 +12759,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2_RACESWAP_LOC_ID_OFFSET + 11607,
             LocationType.EXTRA,
             lambda state: (
-                logic.zerg_competent_comp(state)
+                logic.zerg_upgraded_competent_comp(state)
                 and logic.zerg_basic_kerriganless_anti_air(state)
             ),
         ),

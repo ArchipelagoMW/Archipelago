@@ -34,6 +34,12 @@ class LogicEffect(enum.IntFlag):
     BUNKER_DEFENSE_RATING = enum.auto()
     TVZ_DEFENSE_RATING = enum.auto()
 
+    ZERG_MUTALISK_RATING = enum.auto()
+    """
+    Checking against 10+N guarantees mutas + N powerful upgrades (+attack, glaives).
+    >=14 is competent mutas
+    """
+
     TERRAN_UPGRADE = (
          TERRAN_INFANTRY_WEAPON|TERRAN_INFANTRY_ARMOR
         |TERRAN_VEHICLE_WEAPON|TERRAN_VEHICLE_ARMOR
@@ -73,13 +79,13 @@ LOGIC_EFFECTS = {
     item_table[item_names.PROGRESSIVE_ZERG_MELEE_ATTACK].code: (LogicEffect.ZERG_MELEE_ATTACK, 1),
     item_table[item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK].code: (LogicEffect.ZERG_RANGED_ATTACK, 1),
     item_table[item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE].code: (LogicEffect.ZERG_GROUND_ARMOR, 1),
-    item_table[item_names.PROGRESSIVE_ZERG_FLYER_ATTACK].code: (LogicEffect.ZERG_AIR_ATTACK, 1),
+    item_table[item_names.PROGRESSIVE_ZERG_FLYER_ATTACK].code: (LogicEffect.ZERG_AIR_ATTACK|LogicEffect.ZERG_MUTALISK_RATING, 1),
     item_table[item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE].code: (LogicEffect.ZERG_AIR_ARMOR, 1),
     item_table[item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE].code: (LogicEffect.ZERG_MELEE_ATTACK|LogicEffect.ZERG_RANGED_ATTACK|LogicEffect.ZERG_AIR_ATTACK, 1),
     item_table[item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE].code: (LogicEffect.ZERG_GROUND_ARMOR|LogicEffect.ZERG_AIR_ARMOR, 1),
     item_table[item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE].code: (LogicEffect.ZERG_MELEE_ATTACK|LogicEffect.ZERG_RANGED_ATTACK|LogicEffect.ZERG_GROUND_ARMOR, 1),
-    item_table[item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE].code: (LogicEffect.ZERG_AIR_ATTACK|LogicEffect.ZERG_AIR_ARMOR, 1),
-    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE].code: (LogicEffect.ZERG_UPGRADE, 1),
+    item_table[item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE].code: (LogicEffect.ZERG_AIR_ATTACK|LogicEffect.ZERG_AIR_ARMOR|LogicEffect.ZERG_MUTALISK_RATING, 1),
+    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE].code: (LogicEffect.ZERG_UPGRADE|LogicEffect.ZERG_MUTALISK_RATING, 1),
     item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON].code: (LogicEffect.PROTOSS_GROUND_WEAPON, 1),
     item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR].code: (LogicEffect.PROTOSS_GROUND_ARMOR, 1),
     item_table[item_names.PROGRESSIVE_PROTOSS_SHIELDS].code: (LogicEffect.PROTOSS_SHIELDS, 1),
@@ -109,6 +115,12 @@ LOGIC_EFFECTS = {
     item_table[item_names.FIREBAT].code: (LogicEffect.BUNKER_DEFENSE_RATING, 1),
     item_table[item_names.GHOST].code: (LogicEffect.BUNKER_DEFENSE_RATING, 1),
     item_table[item_names.SPECTRE].code: (LogicEffect.BUNKER_DEFENSE_RATING, 1),
+
+    # Mutalisk rating
+    item_table[item_names.MUTALISK].code: (LogicEffect.ZERG_MUTALISK_RATING, 10),
+    item_table[item_names.MUTALISK_SEVERING_GLAIVE].code: (LogicEffect.ZERG_MUTALISK_RATING, 1),
+    item_table[item_names.MUTALISK_SUNDERING_GLAIVE].code: (LogicEffect.ZERG_MUTALISK_RATING, 1),
+    item_table[item_names.MUTALISK_VICIOUS_GLAIVE].code: (LogicEffect.ZERG_MUTALISK_RATING, 1),
 }
 LOGIC_MINIMUM_COUNTERS = {
     # When the key is added or removed,
@@ -125,16 +137,6 @@ LOGIC_MINIMUM_COUNTERS = {
     item_table[item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
     item_table[item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
     item_table[item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE].code: LogicEffect.TERRAN_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_MELEE_ATTACK].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_FLYER_ATTACK].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_GROUND_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_FLYER_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
-    item_table[item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE].code: LogicEffect.ZERG_UPGRADE,
     item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON].code: LogicEffect.PROTOSS_UPGRADE,
     item_table[item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR].code: LogicEffect.PROTOSS_UPGRADE,
     item_table[item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON].code: LogicEffect.PROTOSS_UPGRADE,
