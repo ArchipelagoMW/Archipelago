@@ -2345,8 +2345,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 200,
             LocationType.VICTORY,
             lambda state: logic.basic_kerrigan(state)
-                or kerriganless
-                or logic.grant_story_tech == GrantStoryTech.option_grant,
+                or kerriganless,
             hard_rule=logic.zerg_any_units_back_in_the_saddle_requirement,
         ),
         make_location_data(
@@ -2355,8 +2354,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 201,
             LocationType.EXTRA,
             lambda state: logic.basic_kerrigan(state)
-                or kerriganless
-                or logic.grant_story_tech == GrantStoryTech.option_grant,
+                or kerriganless,
             hard_rule=logic.zerg_any_units_back_in_the_saddle_requirement,
         ),
         make_location_data(
@@ -2383,8 +2381,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             SC2HOTS_LOC_ID_OFFSET + 205,
             LocationType.EXTRA,
             lambda state: logic.basic_kerrigan(state)
-                or kerriganless
-                or logic.grant_story_tech == GrantStoryTech.option_grant,
+                or kerriganless,
             hard_rule=logic.zerg_any_units_back_in_the_saddle_requirement,
         ),
         make_location_data(
@@ -2450,7 +2447,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             lambda state: (
                 logic.zerg_competent_comp(state)
                 and logic.zerg_competent_anti_air(state)
-                and (logic.basic_kerrigan(state) or kerriganless)
+                and (logic.basic_kerrigan(state, False) or kerriganless)
                 and logic.zerg_defense_rating(state, False, False) >= 3
                 and logic.zerg_power_rating(state) >= 5
             ),
@@ -3534,7 +3531,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
                 kerriganless
                 or (
                     logic.two_kerrigan_actives(state)
-                    and (logic.basic_kerrigan(state) or logic.grant_story_tech == GrantStoryTech.option_grant)
+                    and logic.basic_kerrigan(state)
                     and logic.kerrigan_levels(state, 25)
                 )
             ),
@@ -3558,7 +3555,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
                 kerriganless
                 or (
                     logic.two_kerrigan_actives(state)
-                    and (logic.basic_kerrigan(state) or logic.grant_story_tech == GrantStoryTech.option_grant)
+                    and logic.basic_kerrigan(state)
                     and logic.kerrigan_levels(state, 25)
                 )
             ),
