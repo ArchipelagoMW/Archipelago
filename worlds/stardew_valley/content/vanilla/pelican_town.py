@@ -9,7 +9,7 @@ from ...data.requirement import ToolRequirement, BookRequirement, SkillRequireme
     GrangeDisplayRequirement, EggHuntRequirement, MuseumCompletionRequirement, BuildingRequirement, \
     NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, \
     ReceivedRaccoonsRequirement, \
-    PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement
+    PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement, CatalogueRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource, HatMouseSource
 from ...logic.tailoring_logic import TailoringSource
@@ -335,8 +335,8 @@ pelican_town = ContentPack(
             ShopSource(price=5000, shop_region=LogicRegion.bookseller_experience),),
 
         # Catalogues
-        Catalogue.wizard: (ShopSource(price=150000, shop_region=Region.sewer),),
-        Catalogue.furniture: (ShopSource(price=200000, shop_region=Region.carpenter, other_requirements=(BuildingRequirement(BuildingNames.kitchen),)),),
+        Catalogue.wizard: (ShopSource(price=150000, shop_region=Region.sewer, other_requirements=(CatalogueRequirement(Catalogue.wizard),)),),
+        Catalogue.furniture: (ShopSource(price=200000, shop_region=Region.carpenter, other_requirements=(CatalogueRequirement(Catalogue.furniture),BuildingRequirement(BuildingNames.kitchen),)),),
 
         # Furniture
         Furniture.single_bed: (ShopSource(price=500, shop_region=Region.carpenter),),

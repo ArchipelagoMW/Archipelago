@@ -194,3 +194,8 @@ class DangerousMinesRequirement(Requirement):
 class MonsterKillRequirement(Requirement):
     monsters: Tuple[str, ...]
     amount: int = 1
+
+
+@dataclass(frozen=True)
+class CatalogueRequirement(Requirement):
+    catalogue: str
