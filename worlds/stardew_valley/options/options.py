@@ -544,7 +544,7 @@ class Shipsanity(Choice):
     """Locations for shipping items?
     None: There are no checks for shipping items
     Crops: Every crop and forageable being shipped is a check
-    Fish: Every fish being shipped is a check except legendaries
+    Fish: Every fish being shipped is a check
     Full Shipment: Every item in the Collections page is a check
     Full Shipment With Fish: Every item in the Collections page and every fish is a check
     Everything: Every item in the game that can be shipped is a check
