@@ -69,90 +69,101 @@ class NumRequiredPrismaCountSkygarden(Range):
 
 class RemoveBattlePowerCompLocations(Toggle):
     """
-    Removing Battle Power Competition Locations. These are not sending items anymore, but can still be used for
+    Remove Battle Power Competition Locations. They will no longer send items but can still be used for
     gaining berries.
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
     """
     default = False
 
 
 class RemoveChasePowerCompLocations(Toggle):
     """
-    Removing Chase Power Competition Locations. These are not sending items anymore, but can still be used for
+    Remove Chase Power Competition Locations. They will no longer send items but can still be used for
     gaining berries.
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
     """
     default = False
 
 
 class RemoveQuizPowerCompLocations(Toggle):
     """
-    Removing Quiz Power Competition Locations. These are not sending items anymore, but can still be used for
+    Remove Quiz Power Competition Locations. They will no longer send items but can still be used for
     gaining berries.
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
     """
     default = True
 
 
 class RemoveHideAndSeekPowerCompLocations(Toggle):
     """
-    Removing Hide and Seek Power Competition Locations. These are not sending items anymore, but can still be used for
-    gaining berries.
+    Remove Hide and Seek Power Competition Locations. They will no longer send items but can still be
+    used for gaining berries.
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
     """
     default = False
 
 
 class RemoveErrandPowerCompLocations(Toggle):
     """
-    Removing Errand Power Competition Locations. These are not sending items anymore, but can still be used for
+    Remove Errand Power Competition Locations. They will no longer send items but can still be used for
     gaining berries.
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
     """
     default = False
 
 
 class RemoveMiscPowerCompLocations(Toggle):
     """
-    Removing Miscellaneous Power Competition Locations. These are not sending items anymore, but can still be used for
-    gaining berries.
+    Remove Miscellaneous Power Competition Locations. They will no longer send items but can still be
+    used for gaining berries.
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
     """
     default = False
 
 
 class RemovePowerUpLocations(Toggle):
     """
-    Removing Power Training Locations. e.g. Thunderbolt Upgrade Training at Electabuzz
+    Remove Power Training Locations (e.g., Thunderbolt Upgrade Training at Electabuzz).
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
     """
     default = False
 
 
 class RemoveQuestLocations(Toggle):
     """
-    Removing Quest Locations e.g. Bidoof Housing.
+    Remove Quest Locations (e.g., Bidoof Housing).
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
     """
     default = False
 
 
 class RemoveAttractionLocations(Toggle):
     """
-    Removes non prisma clear Attraction Locations.
+    Remove non-Prisma clear Attraction Locations.
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
     """
     default = True
 
 
 class RemoveAttractionPrismaLocations(Toggle):
     """
-    Removes Attraction Prisma clear location
+    Remove Attraction Prisma clear locations.
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
     """
     default = False
 
 
 class RemovePokemonUnlockLocations(Toggle):
     """
-    Removes Pokemon Unlock Locations
+    Remove Pokemon Unlock Locations.
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
     """
     default = False
 
 
 class RandomizeAttractionEntrances(Toggle):
     """
-    Randomizes Attraction Entrances
+    Randomize Attraction Entrances
     """
     default = False
 

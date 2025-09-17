@@ -506,7 +506,10 @@ class PokeparkWorld(World):
         self._distribute_item_pools()
 
         if len(self.locations) <= len(self.progressive_pool):
-            raise OptionError("Invalid Option combination. removed too much locations. Try adding locations")
+            raise OptionError(
+                "Invalid option combination: More progressive items than available locations. "
+                "Consider adding more locations."
+            )
 
     def _distribute_item_pools(self):
         filler_items = [name for name in self.progressive_pool
