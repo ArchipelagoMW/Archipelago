@@ -5,9 +5,10 @@ from random import Random
 import unittest
 from typing import List, Set, Iterable
 
-from BaseClasses import ItemClassification, MultiWorld
+from BaseClasses import ItemClassification, MultiWorld, CollectionState, Item
 import Options as CoreOptions
-from .. import options, locations
+from .test_base import Sc2SetupTestBase
+from .. import options, locations, SC2Mission
 from ..item import item_tables, item_groups
 from ..rules import SC2Logic, LogicConsequent
 from ..mission_tables import SC2Race, MissionFlag, lookup_name_to_mission
@@ -222,3 +223,20 @@ class TestRules(unittest.TestCase):
                 for item in rule.get_all_affecting_items():
 
                     self.assertTrue(test_inventory.is_item_valid(item) or item in item_groups.BEAT_EVENTS, f"The item {item} is not a progression item or a beat event for consequent {consequent}.")
+
+class TestRuleCachingBehavior(Sc2SetupTestBase):
+
+    def test_beat_mission_clears_w_a_cached_rules_if_needed(self):
+        world_options = {
+            'mission_order': options.MissionOrder.option_vanilla,
+            'generic_upgrade_missions': 1
+        }
+        self.generate_world(world_options)
+        beat_event = "Beat " + SC2Mission.LIBERATION_DAY.mission_name
+        consequent = LogicConsequent.TERRAN_INFANTRY_WEAPONS
+        state: CollectionState = CollectionState(self.multiworld)
+
+        state.prog_items[self.player][consequent] = 1  # Not fulfilled
+        self.world.collect(state, Item(beat_event, classification=ItemClassification.progression, code=None, player=self.player))
+
+        self.assertEqual(0, state.count(consequent, self.player))  # The cached state is invalidated

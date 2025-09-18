@@ -356,8 +356,10 @@ class SC2World(World):
 
     def clear_logic_cache(self, state: "CollectionState", item: "Item", is_removal: bool) -> None:
         if item.player == self.player:
-            for consequent, rule in self.logic.cached_rules.items():
-                if item.name in rule.get_all_affecting_items():
+            if item.name in self.logic.cached_rules_affected_by_items.keys():
+                cached_rules = self.logic.cached_rules_affected_by_items[item.name]
+                for rule in cached_rules:
+                    consequent = rule.consequent
                     consequent_count = state.count(consequent, self.player)
                     if consequent_count > 0:
                         if isinstance(rule, BooleanCachedRule):

@@ -1,6 +1,6 @@
 from enum import StrEnum, auto
 from math import floor
-from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple, Iterable, Any
+from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple, Iterable, Any, List
 
 from BaseClasses import CollectionState, Location
 from .item.item_groups import kerrigan_non_ulimates, kerrigan_logic_active_abilities
@@ -125,7 +125,7 @@ class IntegerCachedRule(AbstractCachedRule):
             result = self.rule(state, *args, **kwargs)
             self.set_state_count(state, result + 1)
             return result
-        return consequent_count -1
+        return consequent_count - 1
 
 class BooleanCachedRule(AbstractCachedRule):
     def __init__(self, logic: "SC2Logic", consequent: LogicConsequent, antecedents: Iterable[str], rule: Callable[[CollectionState], bool]):
@@ -322,6 +322,13 @@ class SC2Logic:
             item_names.ZEALOT, item_names.ZEALOT_WHIRLWIND, item_names.DESTROYER,
             item_names.DESTROYER_REFORGED_BLOODSHARD_CORE, item_names.DESTROYER_RESOURCE_EFFICIENCY,
         ), self.protoss_basic_splash_impl)
+
+        self.cached_rules_affected_by_items: Dict[str, List[AbstractCachedRule]] = dict()
+        for rule in self.cached_rules.values():
+            for item in rule.get_all_affecting_items():
+                if item not in self.cached_rules_affected_by_items.keys():
+                    self.cached_rules_affected_by_items[item] = []
+                self.cached_rules_affected_by_items[item].append(rule)
 
 
 
