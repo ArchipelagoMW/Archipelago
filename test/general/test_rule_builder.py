@@ -329,6 +329,9 @@ class TestCaching(unittest.TestCase):
         self.state.collect(self.world.create_item("Item 3"))  # clears cache, item directly needed
         self.assertNotIn(id(location.access_rule), self.state.rule_cache[1])
         self.assertTrue(location.can_reach(self.state))
+        self.assertTrue(self.state.rule_cache[1][id(location.access_rule)])
+        self.state.collect(self.world.create_item("Item 3"))  # does not clear cache as rule is already true
+        self.assertTrue(self.state.rule_cache[1][id(location.access_rule)])
 
     def test_region_cache_busting(self) -> None:
         location = self.world.get_location("Location 2")
