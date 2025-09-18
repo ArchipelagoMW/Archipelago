@@ -452,7 +452,7 @@ ability_table = {
 	"Throw" : 									ItemData(BASE_ID + 341, 1, "Progression", None),
 	"Ball Toss" : 								ItemData(BASE_ID + 342, 1, "Progression", None),
 #	"Beachball Potion" : 						ItemData(BASE_ID + 343, 1, "Progression", None),
-#	"Death Potion" : 							ItemData(BASE_ID + 344, 1, "Progression", None),
+	"Death Potion" : 							ItemData(BASE_ID + 344, 1, "Progression", None),
 	"Helicopter Potion" : 						ItemData(BASE_ID + 345, 1, "Progression", None),
 	"Frog Potion" : 							ItemData(BASE_ID + 346, 1, "Progression", None),
 	"Boomerang Ball Potion" : 					ItemData(BASE_ID + 347, 1, "Progression", None),
