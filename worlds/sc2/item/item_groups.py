@@ -23,7 +23,7 @@ For non-developers the following will be useful:
 item_name_groups: typing.Dict[str, typing.List[str]] = {}
 
 # Groups for use in world logic
-item_name_groups["Missions"] = ["Beat " + mission.mission_name for mission in SC2Mission]
+item_name_groups["Missions"] = BEAT_EVENTS = ["Beat " + mission.mission_name for mission in SC2Mission]
 item_name_groups["WoL Missions"] = ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.WOL]] + \
                                    ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.PROPHECY]]
 

@@ -1,5 +1,6 @@
+from enum import StrEnum, auto
 from math import floor
-from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple, Iterable
+from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple, Iterable, Any
 
 from BaseClasses import CollectionState, Location
 from .item.item_groups import kerrigan_non_ulimates, kerrigan_logic_active_abilities
@@ -41,11 +42,115 @@ from .item.item_tables import (
     protoss_passive_ratings,
 )
 from .mission_tables import SC2Race, SC2Campaign
-from .item import item_groups, item_names
+from .item import item_groups, item_names, item_tables
 
 if TYPE_CHECKING:
     from . import SC2World
 
+class LogicConsequent(StrEnum):
+    # W/A upgrades
+    TERRAN_INFANTRY_WEAPONS = auto()
+    TERRAN_INFANTRY_ARMOR = auto()
+    TERRAN_VEHICLE_WEAPONS = auto()
+    TERRAN_VEHICLE_ARMOR = auto()
+    TERRAN_SHIP_WEAPONS = auto()
+    TERRAN_SHIP_ARMOR = auto()
+    ZERG_MELEE_ATTACKS = auto()
+    ZERG_MISSILE_ATTACKS = auto()
+    ZERG_GROUND_CARAPACE = auto()
+    ZERG_FLYER_ATTACKS = auto()
+    ZERG_FLYER_CARAPACE = auto()
+    PROTOSS_GROUND_WEAPONS = auto()
+    PROTOSS_GROUND_ARMOR = auto()
+    PROTOSS_SHIELDS = auto()
+    PROTOSS_AIR_WEAPONS = auto()
+    PROTOSS_AIR_ARMOR = auto()
+    # Faction army-wide W/A
+    TERRAN_ARMY_WEAPON_ARMOR_UPGRADE = auto()
+    ZERG_ARMY_WEAPON_ARMOR_UPGRADE = auto()
+    PROTOSS_ARMY_WEAPON_ARMOR_UPGRADE = auto()
+    # Faction important rules
+    TERRAN_BIO_HEAL = auto()
+    TERRAN_SUSTAINABLE_MECH_HEAL = auto()
+    TERRAN_COMPETENT_GROUND_TO_AIR = auto()
+    TERRAN_COMPETENT_AIR_TO_AIR = auto()
+    TERRAN_COMPETENT_COMP = auto()
+    ZERG_COMPETENT_ANTI_AIR = auto()
+    ZERG_COMPETENT_COMP = auto()
+    PROTOSS_COMPETENT_ANTI_AIR = auto()
+    PROTOSS_COMPETENT_COMP = auto()
+    PROTOSS_DEATHBALL = auto()
+    PROTOSS_HYBRID_COUNTER = auto()
+    PROTOSS_FLEET = auto()
+    PROTOSS_BASIC_SPLASH = auto()
+
+class AbstractCachedRule:
+    def __init__(self, logic: "SC2Logic", consequent: LogicConsequent, antecedents: Iterable[str], rule: Callable[[CollectionState], Any]):
+        """
+
+        :param logic: The SC2 Logic
+        :param consequent: The event that's used for caching the rule
+        :param antecedents: The items that mutate this rule's result
+        :param rule: The rule implementation
+        """
+        self.logic = logic
+        self.consequent = consequent
+        self.antecedents = antecedents
+        self.rule = rule
+        self.all_affecting_items = None
+        assert consequent not in self.logic.cached_rules.keys()
+        self.logic.cached_rules[consequent] = self
+
+    def get_all_affecting_items(self) -> Iterable[str]:
+        if self.all_affecting_items is None:
+            self.all_affecting_items = set(self.antecedents)
+            for item in self.antecedents:
+                if item in self.logic.cached_rules.keys():
+                    self.all_affecting_items = self.all_affecting_items.union(self.logic.cached_rules[item].get_all_affecting_items())
+        return self.all_affecting_items
+
+    def set_state_count(self, state: CollectionState, count: int) -> None:
+        if hasattr(state, "prog_items"):
+            state.prog_items[self.logic.player][self.consequent] = count
+
+
+class IntegerCachedRule(AbstractCachedRule):
+    def __init__(self, logic: "SC2Logic", consequent: LogicConsequent, antecedents: Iterable[str], rule: Callable[[CollectionState], int], max_level = 0):
+        super().__init__(logic, consequent, antecedents, rule)
+        self.max_level: int = max_level
+
+    def __call__(self, state: CollectionState, *args, **kwargs) -> int:
+        consequent_count = state.count(self.consequent, self.logic.player)
+        if consequent_count == 0:
+            result = self.rule(state, *args, **kwargs)
+            self.set_state_count(state, result + 1)
+            return result
+        return consequent_count -1
+
+class BooleanCachedRule(AbstractCachedRule):
+    def __init__(self, logic: "SC2Logic", consequent: LogicConsequent, antecedents: Iterable[str], rule: Callable[[CollectionState], bool]):
+        super().__init__(logic, consequent, antecedents, rule)
+
+    def __call__(self, state: CollectionState, *args, **kwargs) -> bool:
+        consequent_count = state.count(self.consequent, self.logic.player)
+        if consequent_count == 0:
+            result = self.rule(state, *args, **kwargs)
+            self.set_state_count(state, 2 if result else 1)
+            return result
+        return consequent_count == 2
+
+class WeaponArmorCachedRule(IntegerCachedRule):
+    def __init__(self, logic: "SC2Logic", consequent: LogicConsequent, upgrade: str):
+        antecedents = upgrade_bundle_inverted_lookup[upgrade]
+        antecedents.append(upgrade)
+        if upgrade == item_names.PROGRESSIVE_PROTOSS_SHIELDS:
+            antecedents.extend((item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE, item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE))
+        if item_tables.item_table[upgrade].race == SC2Race.PROTOSS:
+            antecedents.append(item_names.QUATRO)
+        if logic.generic_upgrade_missions > 0:
+            antecedents.extend(item_groups.BEAT_EVENTS)
+        super().__init__(logic, consequent, antecedents, lambda state: self.logic.weapon_armor_upgrade_count_impl(upgrade, state))
+        self.logic.weapon_armor_rules[upgrade] = self
 
 class SC2Logic:
     def __init__(self, world: Optional["SC2World"]):
@@ -99,6 +204,127 @@ class SC2Logic:
         self.unit_count_functions: Dict[Tuple[SC2Race, int], Callable[[CollectionState], bool]] = {}
         """Cache of logic functions used by any_units logic level"""
 
+        # Performance optimization
+        self.cached_rules: Dict[LogicConsequent, AbstractCachedRule] = dict()
+        self.weapon_armor_rules: Dict[str, WeaponArmorCachedRule] = dict()
+        # W/A Cached rules
+        # Individual
+        WeaponArmorCachedRule(self, LogicConsequent.TERRAN_INFANTRY_WEAPONS, item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON)
+        WeaponArmorCachedRule(self, LogicConsequent.TERRAN_INFANTRY_ARMOR, item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR)
+        WeaponArmorCachedRule(self, LogicConsequent.TERRAN_VEHICLE_WEAPONS, item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON)
+        WeaponArmorCachedRule(self, LogicConsequent.TERRAN_VEHICLE_ARMOR, item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR)
+        WeaponArmorCachedRule(self, LogicConsequent.TERRAN_SHIP_WEAPONS, item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON)
+        WeaponArmorCachedRule(self, LogicConsequent.TERRAN_SHIP_ARMOR, item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR)
+        WeaponArmorCachedRule(self, LogicConsequent.ZERG_MELEE_ATTACKS, item_names.PROGRESSIVE_ZERG_MELEE_ATTACK)
+        WeaponArmorCachedRule(self, LogicConsequent.ZERG_MISSILE_ATTACKS, item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK)
+        WeaponArmorCachedRule(self, LogicConsequent.ZERG_GROUND_CARAPACE, item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE)
+        WeaponArmorCachedRule(self, LogicConsequent.ZERG_FLYER_ATTACKS, item_names.PROGRESSIVE_ZERG_FLYER_ATTACK)
+        WeaponArmorCachedRule(self, LogicConsequent.ZERG_FLYER_CARAPACE, item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE)
+        WeaponArmorCachedRule(self, LogicConsequent.PROTOSS_GROUND_WEAPONS, item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON)
+        WeaponArmorCachedRule(self, LogicConsequent.PROTOSS_GROUND_ARMOR, item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR)
+        WeaponArmorCachedRule(self, LogicConsequent.PROTOSS_SHIELDS, item_names.PROGRESSIVE_PROTOSS_SHIELDS)
+        WeaponArmorCachedRule(self, LogicConsequent.PROTOSS_AIR_WEAPONS, item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON)
+        WeaponArmorCachedRule(self, LogicConsequent.PROTOSS_AIR_ARMOR, item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR)
+        # Army-wide
+        self.terran_army_weapon_armor_upgrade_min_level = IntegerCachedRule(self, LogicConsequent.TERRAN_ARMY_WEAPON_ARMOR_UPGRADE, (
+            LogicConsequent.TERRAN_INFANTRY_WEAPONS, LogicConsequent.TERRAN_INFANTRY_ARMOR,
+            LogicConsequent.TERRAN_VEHICLE_WEAPONS, LogicConsequent.TERRAN_VEHICLE_ARMOR,
+            LogicConsequent.TERRAN_SHIP_WEAPONS, LogicConsequent.TERRAN_SHIP_ARMOR
+        ), self.terran_army_weapon_armor_upgrade_min_level_impl)
+        self.zerg_army_weapon_armor_upgrade_min_level = IntegerCachedRule(self, LogicConsequent.ZERG_ARMY_WEAPON_ARMOR_UPGRADE, (
+            LogicConsequent.ZERG_MELEE_ATTACKS, LogicConsequent.ZERG_MISSILE_ATTACKS, LogicConsequent.ZERG_GROUND_CARAPACE,
+            LogicConsequent.ZERG_FLYER_ATTACKS, LogicConsequent.ZERG_FLYER_CARAPACE,
+        ), self.zerg_army_weapon_armor_upgrade_min_level_impl)
+        self.protoss_army_weapon_armor_upgrade_min_level = IntegerCachedRule(self, LogicConsequent.PROTOSS_ARMY_WEAPON_ARMOR_UPGRADE, (
+            LogicConsequent.PROTOSS_GROUND_WEAPONS, LogicConsequent.PROTOSS_GROUND_ARMOR, LogicConsequent.PROTOSS_SHIELDS,
+            LogicConsequent.PROTOSS_AIR_WEAPONS, LogicConsequent.PROTOSS_AIR_ARMOR,
+        ), self.protoss_army_weapon_armor_upgrade_min_level_impl)
+
+        # Cached rules
+        # Terran
+        self.terran_bio_heal = BooleanCachedRule(self, LogicConsequent.TERRAN_BIO_HEAL, (
+            item_names.MEDIC, item_names.FIELD_RESPONSE_THETA, item_names.MEDIVAC, item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE,
+        ), self.terran_bio_heal_impl)
+        self.terran_sustainable_mech_heal = BooleanCachedRule(self, LogicConsequent.TERRAN_SUSTAINABLE_MECH_HEAL, (
+            item_names.SCIENCE_VESSEL, item_names.MEDIC, item_names.FIELD_RESPONSE_THETA,
+            item_names.MEDIC_ADAPTIVE_MEDPACKS, item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL,
+            item_names.RAVEN, item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE,
+        ), self.terran_sustainable_mech_heal_impl)
+        self.terran_competent_ground_to_air = BooleanCachedRule(self, LogicConsequent.TERRAN_COMPETENT_GROUND_TO_AIR, (
+            item_names.GOLIATH, item_names.MARINE, item_names.DOMINION_TROOPER, LogicConsequent.TERRAN_INFANTRY_WEAPONS,
+            LogicConsequent.TERRAN_BIO_HEAL, item_names.CYCLONE, item_names.THOR, item_names.THOR_PROGRESSIVE_HIGH_IMPACT_PAYLOAD
+        ), self.terran_competent_ground_to_air_impl)
+        self.terran_air_anti_air = BooleanCachedRule(self, LogicConsequent.TERRAN_COMPETENT_AIR_TO_AIR, (
+            item_names.VIKING, item_names.BATTLECRUISER, item_names.WRAITH, item_names.VALKYRIE,
+            LogicConsequent.TERRAN_SHIP_WEAPONS, item_names.BATTLECRUISER_ATX_LASER_BATTERY, item_names.WRAITH_ADVANCED_LASER_TECHNOLOGY,
+        ), self.terran_air_anti_air_impl)
+        self.terran_competent_comp = BooleanCachedRule(self, LogicConsequent.TERRAN_COMPETENT_COMP, (
+            LogicConsequent.TERRAN_COMPETENT_GROUND_TO_AIR, LogicConsequent.TERRAN_COMPETENT_AIR_TO_AIR,
+            LogicConsequent.TERRAN_INFANTRY_WEAPONS, LogicConsequent.TERRAN_INFANTRY_ARMOR,
+            LogicConsequent.TERRAN_VEHICLE_WEAPONS, LogicConsequent.TERRAN_VEHICLE_ARMOR,
+            LogicConsequent.TERRAN_SHIP_WEAPONS, LogicConsequent.TERRAN_SHIP_ARMOR,
+            item_names.MARAUDER, item_names.BANSHEE, item_names.VULTURE, item_names.HELLION, item_names.SON_OF_KORHAL,
+            item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY, item_names.SIEGE_TANK, item_names.WARHOUND,
+            item_names.REAPER, item_names.REAPER_RESOURCE_EFFICIENCY, LogicConsequent.TERRAN_SUSTAINABLE_MECH_HEAL,
+            item_names.VALKYRIE_FLECHETTE_MISSILES, item_names.DIAMONDBACK, item_names.PERDITION_TURRET,
+            item_names.DEVASTATOR_TURRET
+        ), self.terran_competent_comp_impl)
+        # Zerg
+        self.zerg_competent_anti_air = BooleanCachedRule(self, LogicConsequent.ZERG_COMPETENT_ANTI_AIR, (
+            item_names.CORRUPTOR, item_names.BROOD_QUEEN, item_names.HYDRALISK, item_names.MUTALISK,
+            item_names.INFESTOR
+        ), self.zerg_competent_anti_air_impl)
+        self.zerg_competent_comp = BooleanCachedRule(self, LogicConsequent.ZERG_COMPETENT_COMP, (
+            LogicConsequent.ZERG_ARMY_WEAPON_ARMOR_UPGRADE, item_names.ZERGLING, item_names.ROACH,
+            item_names.INFESTED_DIAMONDBACK, item_names.ABERRATION, item_names.INFESTED_BANSHEE,
+            item_names.SWARM_QUEEN, item_names.HYDRALISK, item_names.CORRUPTOR, item_names.MUTALISK,
+            item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, item_names.MUTALISK_SEVERING_GLAIVE,
+            item_names.MUTALISK_VICIOUS_GLAIVE, item_names.ULTRALISK, item_names.ROACH_PRIMAL_IGNITER_ASPECT,
+            item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, item_names.GUARDIAN_SORONAN_ACID,
+            item_names.GUARDIAN_EXPLOSIVE_SPORES, item_names.GUARDIAN_PRIMORDIAL_FURY,
+            item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT, item_names.DEFILER, item_names.INFESTOR,
+        ), self.zerg_competent_comp_impl)
+        # Protoss
+        self.protoss_competent_anti_air = BooleanCachedRule(self, LogicConsequent.PROTOSS_COMPETENT_ANTI_AIR, (
+            item_names.VOID_RAY, item_names.TEMPEST, item_names.DESTROYER, item_names.CALADRIUS, item_names.STALKER,
+            item_names.INSTIGATOR, item_names.SLAYER, item_names.ADEPT, item_names.CARRIER, item_names.CORSAIR,
+            item_names.MIRAGE, item_names.PHOENIX, item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT,
+            item_names.SCOUT, item_names.MISTWING, item_names.DRAGOON, item_names.WRATHWALKER,
+            item_names.WRATHWALKER_AERIAL_TRACKING, item_names.IMMORTAL, item_names.ANNIHILATOR,
+            item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING
+        ), self.protoss_competent_anti_air_impl)
+        self.protoss_competent_comp = BooleanCachedRule(self, LogicConsequent.PROTOSS_COMPETENT_COMP, (
+            LogicConsequent.PROTOSS_DEATHBALL, LogicConsequent.PROTOSS_FLEET, item_names.PHOTON_CANNON,
+            item_names.CENTURION_RESOURCE_EFFICIENCY, item_names.SENTRY, item_names.ARBITER,
+            item_names.ENERGIZER, item_names.MIRAGE_GRAVITON_BEAM, item_names.SUPPLICANT, item_names.SHIELD_BATTERY,
+        ), self.protoss_competent_comp_impl)
+        self.protoss_deathball = BooleanCachedRule(self, LogicConsequent.PROTOSS_DEATHBALL, (
+            LogicConsequent.PROTOSS_BASIC_SPLASH, LogicConsequent.PROTOSS_HYBRID_COUNTER,
+            LogicConsequent.PROTOSS_COMPETENT_ANTI_AIR, item_names.ZEALOT, item_names.CENTURION,
+            item_names.SENTINEL, LogicConsequent.PROTOSS_ARMY_WEAPON_ARMOR_UPGRADE, item_names.AVENGER,
+        ), self.protoss_deathball_impl)
+        self.protoss_hybrid_counter = BooleanCachedRule(self, LogicConsequent.PROTOSS_HYBRID_COUNTER, (
+            item_names.TRIREME, item_names.VANGUARD, item_names.VANGUARD_FUSION_MORTARS, item_names.ASCENDANT,
+            item_names.TEMPEST, item_names.WRATHWALKER, item_names.ANNIHILATOR, item_names.VOID_RAY, item_names.CARRIER,
+            item_names.IMMORTAL, item_names.SLAYER, item_names.DRAGOON, item_names.STALKER, item_names.ADEPT,
+            item_names.INSTIGATOR, item_names.OPPRESSOR, item_names.OPPRESSOR_VULCAN_BLASTER,
+        ), self.protoss_hybrid_counter_impl)
+        self.protoss_fleet = BooleanCachedRule(self, LogicConsequent.PROTOSS_FLEET, (
+            item_names.SKYLORD, item_names.TRIREME, item_names.TRIREME_SOLAR_BEAM,
+            LogicConsequent.PROTOSS_AIR_WEAPONS, LogicConsequent.PROTOSS_AIR_ARMOR, LogicConsequent.PROTOSS_SHIELDS,
+            item_names.TEMPEST, item_names.VOID_RAY, item_names.DESTROYER, item_names.CARRIER, item_names.PHOENIX,
+            item_names.MIRAGE, item_names.CORSAIR, item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT,
+        ), self.protoss_fleet_impl)
+        self.protoss_basic_splash = BooleanCachedRule(self, LogicConsequent.PROTOSS_BASIC_SPLASH, (
+            item_names.VANGUARD, item_names.REAVER, item_names.COLOSSUS, item_names.DARK_TEMPLAR,
+            item_names.DARK_TEMPLAR_LESSER_SHADOW_FURY, item_names.DARK_TEMPLAR_GREATER_SHADOW_FURY,
+            item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT, item_names.DAWNBRINGER,
+            item_names.ZEALOT, item_names.ZEALOT_WHIRLWIND, item_names.DESTROYER,
+            item_names.DESTROYER_REFORGED_BLOODSHARD_CORE, item_names.DESTROYER_RESOURCE_EFFICIENCY,
+        ), self.protoss_basic_splash_impl)
+
+
+
     # Super Globals
 
     def is_item_placement(self, state: CollectionState) -> bool:
@@ -112,7 +338,10 @@ class SC2Logic:
     def get_very_hard_required_upgrade_level(self):
         return 2 if self.advanced_tactics else 3
 
-    def weapon_armor_upgrade_count(self, upgrade_item: str, state: CollectionState) -> int:
+    def weapon_armor_upgrade_count(self, upgrade_item: str, state: CollectionState):
+        return self.weapon_armor_rules[upgrade_item](state)
+
+    def weapon_armor_upgrade_count_impl(self, upgrade_item: str, state: CollectionState) -> int:
         assert upgrade_item in upgrade_bundle_inverted_lookup.keys()
         count: int = 0
         if self.generic_upgrade_missions > 0:
@@ -171,7 +400,7 @@ class SC2Logic:
             power_score += sum((rating for item, rating in soa_passive_ratings.items() if state.has(item, self.player)))
         return power_score
 
-    def terran_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
+    def terran_army_weapon_armor_upgrade_min_level_impl(self, state: CollectionState) -> int:
         """
         Minimum W/A upgrade level for unit classes present in the world
         """
@@ -233,7 +462,7 @@ class SC2Logic:
             )
         )
 
-    def terran_air_anti_air(self, state: CollectionState) -> bool:
+    def terran_air_anti_air_impl(self, state: CollectionState) -> bool:
         """
         Air-to-air
         """
@@ -270,7 +499,7 @@ class SC2Logic:
             self.player,
         )
 
-    def terran_competent_ground_to_air(self, state: CollectionState) -> bool:
+    def terran_competent_ground_to_air_impl(self, state: CollectionState) -> bool:
         """
         Ground-to-air
         """
@@ -447,7 +676,7 @@ class SC2Logic:
             defense_score += 2
         return defense_score
 
-    def terran_competent_comp(self, state: CollectionState) -> bool:
+    def terran_competent_comp_impl(self, state: CollectionState) -> bool:
         # All competent comps require anti-air
         if not self.terran_competent_anti_air(state):
             return False
@@ -529,7 +758,7 @@ class SC2Logic:
             or state.has_any((item_names.FIREBAT_NANO_PROJECTORS, item_names.FIREBAT_JUGGERNAUT_PLATING), self.player)
         )
 
-    def terran_bio_heal(self, state: CollectionState) -> bool:
+    def terran_bio_heal_impl(self, state: CollectionState) -> bool:
         """
         Ability to heal bio units
         """
@@ -571,7 +800,7 @@ class SC2Logic:
             or state.has_all({item_names.THOR, item_names.THOR_BUTTON_WITH_A_SKULL_ON_IT}, self.player)
         )
 
-    def terran_sustainable_mech_heal(self, state: CollectionState) -> bool:
+    def terran_sustainable_mech_heal_impl(self, state: CollectionState) -> bool:
         """
         Can heal mech units without spending resources
         """
@@ -759,7 +988,7 @@ class SC2Logic:
             defense_score += 2
         return defense_score
 
-    def zerg_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
+    def zerg_army_weapon_armor_upgrade_min_level_impl(self, state: CollectionState) -> int:
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL
         if self.has_zerg_melee_unit:
             count = min(count, self.zerg_melee_weapon_armor_upgrade_min_level(state))
@@ -832,7 +1061,7 @@ class SC2Logic:
     def zerg_common_unit(self, state: CollectionState) -> bool:
         return state.has_any(self.basic_zerg_units, self.player)
 
-    def zerg_competent_anti_air(self, state: CollectionState) -> bool:
+    def zerg_competent_anti_air_impl(self, state: CollectionState) -> bool:
         return state.has_any({item_names.HYDRALISK, item_names.MUTALISK, item_names.CORRUPTOR, item_names.BROOD_QUEEN}, self.player) or (
             self.advanced_tactics and state.has(item_names.INFESTOR, self.player)
         )
@@ -966,7 +1195,7 @@ class SC2Logic:
             state.has(item_names.ULTRALISK, self.player) or self.morphling_enabled
         )
 
-    def zerg_competent_comp(self, state: CollectionState) -> bool:
+    def zerg_competent_comp_impl(self, state: CollectionState) -> bool:
         if self.zerg_army_weapon_armor_upgrade_min_level(state) < 2:
             return False
         advanced = self.advanced_tactics
@@ -1167,7 +1396,7 @@ class SC2Logic:
             power_score += sum((rating for item, rating in soa_passive_ratings.items() if state.has(item, self.player)))
         return power_score
 
-    def protoss_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
+    def protoss_army_weapon_armor_upgrade_min_level_impl(self, state: CollectionState) -> int:
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL + 1  # +1 for Quatro
         if self.has_protoss_ground_unit:
             count = min(
@@ -1395,7 +1624,7 @@ class SC2Logic:
     def protoss_common_unit_anti_armor_air(self, state: CollectionState) -> bool:
         return self.protoss_common_unit(state) and self.protoss_anti_armor_anti_air(state)
 
-    def protoss_competent_anti_air(self, state: CollectionState) -> bool:
+    def protoss_competent_anti_air_impl(self, state: CollectionState) -> bool:
         return (
             state.has_any(
                 {
@@ -1449,7 +1678,7 @@ class SC2Logic:
             )
         )
 
-    def protoss_fleet(self, state: CollectionState) -> bool:
+    def protoss_fleet_impl(self, state: CollectionState) -> bool:
         return (
             (
                 state.has_any(
@@ -1475,7 +1704,7 @@ class SC2Logic:
             and self.weapon_armor_upgrade_count(PROGRESSIVE_PROTOSS_SHIELDS, state) >= 2
         )
 
-    def protoss_hybrid_counter(self, state: CollectionState) -> bool:
+    def protoss_hybrid_counter_impl(self, state: CollectionState) -> bool:
         """
         Ground Hybrids
         """
@@ -1500,7 +1729,7 @@ class SC2Logic:
             or (self.advanced_tactics and state.has_all((item_names.OPPRESSOR, item_names.OPPRESSOR_VULCAN_BLASTER), self.player))
         )
 
-    def protoss_basic_splash(self, state: CollectionState) -> bool:
+    def protoss_basic_splash_impl(self, state: CollectionState) -> bool:
         return (
             state.has_any((
                 item_names.COLOSSUS,
@@ -1543,7 +1772,7 @@ class SC2Logic:
             {item_names.DARK_TEMPLAR, item_names.DARK_TEMPLAR_DARK_ARCHON_MELD}, self.player
         )
 
-    def protoss_competent_comp(self, state: CollectionState) -> bool:
+    def protoss_competent_comp_impl(self, state: CollectionState) -> bool:
         if not self.protoss_competent_anti_air(state):
             return False
         if self.protoss_fleet(state) and self.protoss_mineral_dump(state):
@@ -1603,7 +1832,7 @@ class SC2Logic:
             return True
         return False
 
-    def protoss_deathball(self, state: CollectionState) -> bool:
+    def protoss_deathball_impl(self, state: CollectionState) -> bool:
         return (
             self.protoss_common_unit(state)
             and self.protoss_competent_anti_air(state)

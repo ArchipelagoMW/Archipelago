@@ -1,4 +1,5 @@
 import itertools
+from abc import abstractmethod, ABC
 from dataclasses import fields
 from random import Random
 import unittest
@@ -7,34 +8,32 @@ from typing import List, Set, Iterable
 from BaseClasses import ItemClassification, MultiWorld
 import Options as CoreOptions
 from .. import options, locations
-from ..item import item_tables
-from ..rules import SC2Logic
+from ..item import item_tables, item_groups
+from ..rules import SC2Logic, LogicConsequent
 from ..mission_tables import SC2Race, MissionFlag, lookup_name_to_mission
 
+class TestInventory(ABC):
 
-class TestInventory:
-    """
-    Runs checks against inventory with validation if all target items are progression and returns a random result
-    """
-    def __init__(self) -> None:
+    def __init__(self, item_type: str) -> None:
         self.random: Random = Random()
-        self.progression_types: Set[ItemClassification] = {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+        self.item_type: str = item_type
 
-    def is_item_progression(self, item: str) -> bool:
-        return item_tables.item_table[item].classification in self.progression_types
+    @abstractmethod
+    def is_item_valid(self, item: str):
+        pass
 
     def random_boolean(self):
         return self.random.choice([True, False])
 
     def has(self, item: str, player: int, count: int = 1):
-        if not self.is_item_progression(item):
-            raise AssertionError("Logic item {} is not a progression item".format(item))
+        if not self.is_item_valid(item):
+            raise AssertionError("Logic item {} is not a {} item".format(item, self.item_type))
         return self.random_boolean()
 
     def has_any(self, items: Set[str], player: int):
-        non_progression_items = [item for item in items if not self.is_item_progression(item)]
+        non_progression_items = [item for item in items if not self.is_item_valid(item)]
         if len(non_progression_items) > 0:
-            raise AssertionError("Logic items {} are not progression items".format(non_progression_items))
+            raise AssertionError("Logic items {} are not {} items".format(non_progression_items, self.item_type))
         return self.random_boolean()
 
     def has_all(self, items: Set[str], player: int):
@@ -47,8 +46,8 @@ class TestInventory:
         return self.random.randrange(0, 20)
 
     def count(self, item: str, player: int) -> int:
-        if not self.is_item_progression(item):
-            raise AssertionError("Item {} is not a progression item".format(item))
+        if not self.is_item_valid(item):
+            raise AssertionError("Item {} is not a {} item".format(item, self.item_type))
         random_value: int = self.random.randrange(0, 5)
         if random_value == 4:  # 0-3 has a higher chance due to logic rules
             return self.random.randrange(4, 100)
@@ -61,6 +60,26 @@ class TestInventory:
     def count_from_list_unique(self, items: Iterable[str], player: int) -> int:
         return sum(self.count(item_name, player) for item_name in items)
 
+class TestValidInventory(TestInventory):
+    """
+    Runs checks against inventory with validation if all target items are progression and returns a random result
+    """
+    def __init__(self) -> None:
+        super().__init__("progression")
+        self.progression_types: Set[ItemClassification] = {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+
+    def is_item_valid(self, item: str) -> bool:
+        return item_tables.item_table[item].classification in self.progression_types or item in LogicConsequent
+
+
+class TestLogicConsequentInventory(TestInventory):
+    def __init__(self, consequent: LogicConsequent, antecedents: Iterable[str]) -> None:
+        super().__init__(f"antecedent for {consequent} consequent")
+        self.consequent: LogicConsequent = consequent
+        self.antecedents = antecedents
+
+    def is_item_valid(self, item: str) -> bool:
+        return item in self.antecedents
 
 class TestWorld:
     """
@@ -79,7 +98,8 @@ class TestWorld:
             defaults[option_name] = field_class(options.get_option_value(None, option_name))
         self.options: options.Starcraft2Options = options.Starcraft2Options(**defaults)
 
-        self.options.mission_order.value = options.MissionOrder.option_vanilla_shuffled
+        self.options.mission_order.value = options.MissionOrder.option_grid
+        self.options.enable_race_swap.value = options.EnableRaceSwapVariants.option_shuffle_all
 
         self.player = 1
         self.multiworld = MultiWorld(1)
@@ -120,7 +140,7 @@ class TestRules(unittest.TestCase):
         return test_world
 
     def test_items_in_rules_are_progression(self):
-        test_inventory = TestInventory()
+        test_inventory = TestValidInventory()
         for option in self.required_tactics_values:
             test_world = self._get_world(required_tactics=option)
             location_data = locations.get_locations(test_world)
@@ -129,7 +149,7 @@ class TestRules(unittest.TestCase):
                     location.rule(test_inventory)
     
     def test_items_in_all_in_are_progression(self):
-        test_inventory = TestInventory()
+        test_inventory = TestValidInventory()
         for test_options in itertools.product(self.required_tactics_values, self.all_in_map_values):
             test_world = self._get_world(required_tactics=test_options[0], all_in_map=test_options[1])
             for location in locations.get_locations(test_world):
@@ -139,7 +159,7 @@ class TestRules(unittest.TestCase):
                     location.rule(test_inventory)
 
     def test_items_in_kerriganless_missions_are_progression(self):
-        test_inventory = TestInventory()
+        test_inventory = TestValidInventory()
         for test_options in itertools.product(self.required_tactics_values, self.kerrigan_presence_values):
             test_world = self._get_world(required_tactics=test_options[0], kerrigan_presence=test_options[1])
             for location in locations.get_locations(test_world):
@@ -150,7 +170,7 @@ class TestRules(unittest.TestCase):
                     location.rule(test_inventory)
 
     def test_items_in_ai_takeover_missions_are_progression(self):
-        test_inventory = TestInventory()
+        test_inventory = TestValidInventory()
         for test_options in itertools.product(self.required_tactics_values, self.take_over_ai_allies_values):
             test_world = self._get_world(required_tactics=test_options[0], take_over_ai_allies=test_options[1])
             for location in locations.get_locations(test_world):
@@ -161,7 +181,7 @@ class TestRules(unittest.TestCase):
                     location.rule(test_inventory)
     
     def test_items_in_hard_rules_are_progression(self):
-        test_inventory = TestInventory()
+        test_inventory = TestValidInventory()
         test_world = TestWorld()
         test_world.options.required_tactics.value = options.RequiredTactics.option_any_units
         test_world.logic = SC2Logic(test_world)
@@ -172,7 +192,7 @@ class TestRules(unittest.TestCase):
                     location.hard_rule(test_inventory)
 
     def test_items_in_any_units_rules_are_progression(self):
-        test_inventory = TestInventory()
+        test_inventory = TestValidInventory()
         test_world = TestWorld()
         test_world.options.required_tactics.value = options.RequiredTactics.option_any_units
         logic = SC2Logic(test_world)
@@ -183,4 +203,22 @@ class TestRules(unittest.TestCase):
                 for _ in range(10):
                     rule(test_inventory)
 
+    def test_cached_rules_all_antecedents_are_declared(self):
+        for option in self.required_tactics_values:
+            test_world = self._get_world(required_tactics=option)
+            test_world.logic = SC2Logic(test_world)
+            for consequent, rule in test_world.logic.cached_rules.items():
+                test_inventory = TestLogicConsequentInventory(consequent, rule.get_all_affecting_items())
+                for _ in range(self.NUM_TEST_RUNS):
+                    rule.rule(test_inventory)
 
+    def test_cached_rules_antecedents_are_valid(self):
+        for option in self.required_tactics_values:
+            test_world = self._get_world(required_tactics=option)
+            test_world.logic = SC2Logic(test_world)
+            test_inventory = TestValidInventory()
+
+            for consequent, rule in test_world.logic.cached_rules.items():
+                for item in rule.get_all_affecting_items():
+
+                    self.assertTrue(test_inventory.is_item_valid(item) or item in item_groups.BEAT_EVENTS, f"The item {item} is not a progression item or a beat event for consequent {consequent}.")

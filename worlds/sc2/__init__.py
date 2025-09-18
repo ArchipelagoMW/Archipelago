@@ -28,7 +28,7 @@ from .options import (
     NovaGhostOfAChanceVariant, MissionOrder, VanillaItemsOnly, ExcludeOverpoweredItems,
     is_mission_in_soa_presence,
 )
-from .rules import get_basic_units, SC2Logic
+from .rules import get_basic_units, SC2Logic, BooleanCachedRule
 from . import settings
 from .pool_filter import filter_items
 from .mission_tables import SC2Campaign, SC2Mission, SC2Race, MissionFlag
@@ -341,6 +341,33 @@ class SC2World(World):
                                 for location in self.get_region(mission.mission_name).get_locations():
                                     if location.address is not None:
                                         hint_data[self.player][location.address] = mission_position_name
+
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        result = super().collect(state, item)
+        if result:
+            self.clear_logic_cache(state, item, False)
+        return result
+
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        result = super().remove(state, item)
+        if result:
+            self.clear_logic_cache(state, item, True)
+        return result
+
+    def clear_logic_cache(self, state: "CollectionState", item: "Item", is_removal: bool) -> None:
+        if item.player == self.player:
+            for consequent, rule in self.logic.cached_rules.items():
+                if item.name in rule.get_all_affecting_items():
+                    consequent_count = state.count(consequent, self.player)
+                    if consequent_count > 0:
+                        if isinstance(rule, BooleanCachedRule):
+                            if (consequent_count == 2 and is_removal) or (consequent_count == 1 and not is_removal):
+                                # Either the rule was fulfilled and a critical item was removed or
+                                # the rule was not fulfilled and a critical item was added
+                                state.prog_items[self.player][consequent] = 0
+                        else:
+                            # The value gets changed by adding a critical item
+                            state.prog_items[self.player][consequent] = 0
 
 
 def _get_column_display(index: int, single_row_layout: bool) -> str:
