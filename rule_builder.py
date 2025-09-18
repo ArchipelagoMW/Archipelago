@@ -317,7 +317,8 @@ class RuleWorldMixin(World):
             mapped_name = self.item_mapping.get(item.name, "")
             rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
             for rule_id in rule_ids:
-                player_results.pop(rule_id, None)
+                if player_results.get(rule_id, None) is False:
+                    del player_results[rule_id]
 
         return changed
 
