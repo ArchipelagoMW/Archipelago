@@ -70,7 +70,7 @@ class TestValidInventory(TestInventory):
         self.progression_types: Set[ItemClassification] = {ItemClassification.progression, ItemClassification.progression_skip_balancing}
 
     def is_item_valid(self, item: str) -> bool:
-        return item_tables.item_table[item].classification in self.progression_types or item in LogicConsequent
+        return item in LogicConsequent or item_tables.item_table[item].classification in self.progression_types
 
 
 class TestLogicConsequentInventory(TestInventory):
