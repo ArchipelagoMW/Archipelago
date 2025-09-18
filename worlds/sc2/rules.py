@@ -141,7 +141,7 @@ class BooleanCachedRule(AbstractCachedRule):
 
 class WeaponArmorCachedRule(IntegerCachedRule):
     def __init__(self, logic: "SC2Logic", consequent: LogicConsequent, upgrade: str):
-        antecedents = upgrade_bundle_inverted_lookup[upgrade]
+        antecedents = list(upgrade_bundle_inverted_lookup[upgrade])
         antecedents.append(upgrade)
         if upgrade == item_names.PROGRESSIVE_PROTOSS_SHIELDS:
             antecedents.extend((item_names.PROGRESSIVE_PROTOSS_GROUND_UPGRADE, item_names.PROGRESSIVE_PROTOSS_AIR_UPGRADE))
