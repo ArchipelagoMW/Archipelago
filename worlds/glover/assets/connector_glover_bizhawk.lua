@@ -134,6 +134,7 @@ local ROM_ITEM_TABLE = {
     "AP_SLAP",
     "AP_THROW",
     "AP_TOSS",
+	--"AP_GRAB",
     "AP_RUBBER_BALL",
     "AP_BOWLING_BALL",
     "AP_POWER_BALL",
@@ -170,6 +171,8 @@ local ROM_ITEM_TABLE = {
     "AP_FROG_POTION",
     "AP_BOOMERANG_POTION",
     "AP_HELICOPTER_POTION",
+	--"AP_BEACHBALL_POTION"
+    "AP_DEATH_POTION",
     "AP_ATLANTIS_L1_GATE",
     "AP_ATLANTIS_L2_RAISE_WATER",
     "AP_ATLANTIS_L2_WATER_DRAIN",
@@ -12326,8 +12329,8 @@ function received_moves(itemId)
         GVR:setItem(ITEM_TABLE["AP_TOSS"], 1)
     --elseif itemId == 6500343 then
     --    GVR:setItem(ITEM_TABLE["AP_BEACHBALL_POTION"], 1)
-    --elseif itemId == 6500344 then
-    --    GVR:setItem(ITEM_TABLE["AP_DEATH_POTION"], 1)
+    elseif itemId == 6500344 then
+        GVR:setItem(ITEM_TABLE["AP_DEATH_POTION"], 1)
     elseif itemId == 6500345 then
         GVR:setItem(ITEM_TABLE["AP_HELICOPTER_POTION"], 1)
     elseif itemId == 6500346 then
