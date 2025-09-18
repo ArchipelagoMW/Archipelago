@@ -538,31 +538,33 @@ garibsanity_world_table = {
 #garbinsanity = ItemData(BASE_ID + 10001, 1496, "Garib", None)
 
 decoupled_garib_table = {
-	"1 Garib" : 								ItemData(BASE_ID + 10001, 22, "Garib", None),
-	"2 Garibs" : 								ItemData(BASE_ID + 10002, 14, "Garib", None),
-	"3 Garibs" : 								ItemData(BASE_ID + 10003, 32, "Garib", None),
-	"4 Garibs" : 								ItemData(BASE_ID + 10004, 42, "Garib", None),
-	"5 Garibs" : 								ItemData(BASE_ID + 10005, 16, "Garib", None),
-	"6 Garibs" : 								ItemData(BASE_ID + 10006, 10, "Garib", None),
-	"7 Garibs" : 								ItemData(BASE_ID + 10007, 3, "Garib", None),
-	"8 Garibs" : 								ItemData(BASE_ID + 10008, 13, "Garib", None),
+	"1 Garib" : 								ItemData(BASE_ID + 10001, 30, "Garib", None),
+	"2 Garibs" : 								ItemData(BASE_ID + 10002, 22, "Garib", None),
+	"3 Garibs" : 								ItemData(BASE_ID + 10003, 43, "Garib", None),
+	"4 Garibs" : 								ItemData(BASE_ID + 10004, 49, "Garib", None),
+	"5 Garibs" : 								ItemData(BASE_ID + 10005, 22, "Garib", None),
+	"6 Garibs" : 								ItemData(BASE_ID + 10006, 11, "Garib", None),
+	"7 Garibs" : 								ItemData(BASE_ID + 10007, 4, "Garib", None),
+	"8 Garibs" : 								ItemData(BASE_ID + 10008, 19, "Garib", None),
 	"9 Garibs" : 								ItemData(BASE_ID + 10009, 4, "Garib", None),
-	"10 Garibs" : 								ItemData(BASE_ID + 10010, 3, "Garib", None),
-	"11 Garibs" : 								ItemData(BASE_ID + 10011, 1, "Garib", None),
-	"12 Garibs" : 								ItemData(BASE_ID + 10012, 4, "Garib", None),
-	"16 Garibs" : 								ItemData(BASE_ID + 10012, 1, "Garib", None)
+	"10 Garibs" : 								ItemData(BASE_ID + 10010, 10, "Garib", None),
+	"11 Garibs" : 								ItemData(BASE_ID + 10011, 2, "Garib", None),
+	"12 Garibs" : 								ItemData(BASE_ID + 10012, 5, "Garib", None),
+	"15 Garibs" : 								ItemData(BASE_ID + 10015, 1, "Garib", None),
+	"16 Garibs" : 								ItemData(BASE_ID + 10012, 2, "Garib", None)
 } 
 
-garbinsanity = ItemData(BASE_ID + 10001, 720, "Garib", None)
+garbinsanity = ItemData(BASE_ID + 10001, 1020, "Garib", None)
 
 decoupled_garib_bonus_count = {
 	"3 Garibs" : 		15,
 	"5 Garibs" : 		6,
 	"8 Garibs" :		1,
+	"10 Garibs" :		6,
 	"12 Garibs" :		1#,
 }
 
-garbinsanity_bonus_count = 95
+garbinsanity_bonus_count = 155
 
 
 all_items = {

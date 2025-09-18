@@ -122,7 +122,10 @@ def create_location_data(self : GloverWorld, check_name : str, check_info : list
     for each_id in non_blank_ap_ids(check_info[0]["IDS"]):
         if each_id == "" or each_id == "N/A" or each_id == "?":
             continue
-        rom_ids.append(int(each_id, 0))
+        if each_id.isdigit():
+            rom_ids.append(int(each_id, 0))
+        else:
+            rom_ids.append(-1)
     
     #Is it an enemy?
     enemy_with_garibs : bool = check_info[0]["TYPE"] == 10

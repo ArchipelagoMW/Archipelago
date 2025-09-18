@@ -14762,7 +14762,7 @@
 					"TYPE": 2
 				},
 				{
-					"ballRequirement": true,
+					"ballRequirement": false,
 					"mv0": 2,
 					"mv1": 29,
 					"regionIndex": 2,
@@ -14946,6 +14946,7 @@
 				},
 				{
 					"ballRequirement": false,
+					"ck0": "2 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -14960,6 +14961,7 @@
 				},
 				{
 					"ballRequirement": false,
+					"ck0": "3 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -14974,6 +14976,7 @@
 				},
 				{
 					"ballRequirement": false,
+					"ck0": "Bonus Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -14988,6 +14991,7 @@
 				},
 				{
 					"ballRequirement": false,
+					"ck0": "Boss Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
@@ -15078,6 +15082,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 13,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 13,
+					"trickDifficulty": 0
 				}
 			],
 			"Alcove Life 1": [
@@ -15091,6 +15100,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 13,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 13,
+					"trickDifficulty": 0
 				}
 			],
 			"Alcove Life 2": [
@@ -15104,6 +15119,27 @@
 					"NEEDS_BALL": false,
 					"REGION": 13,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 2,
+					"mv1": 14,
+					"regionIndex": 13,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 13,
+					"regionIndex": 13,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 32,
+					"regionIndex": 13,
+					"trickDifficulty": 0
 				}
 			],
 			"Avalanche": {
@@ -15114,6 +15150,12 @@
 						"NEEDS_BALL": true,
 						"REGION": 8,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 8,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15123,6 +15165,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 8,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 8,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 11
@@ -15135,6 +15182,12 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 3,
+						"regionIndex": 1,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15144,6 +15197,13 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 2,
+						"mv1": 4,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 1
@@ -15173,6 +15233,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 4,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 4,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 1": [
@@ -15186,6 +15251,19 @@
 					"NEEDS_BALL": true,
 					"REGION": 0,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"mv1": 26,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 2": [
@@ -15199,6 +15277,19 @@
 					"NEEDS_BALL": true,
 					"REGION": 9,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 9,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"mv1": 26,
+					"regionIndex": 9,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 3": [
@@ -15212,6 +15303,19 @@
 					"NEEDS_BALL": true,
 					"REGION": 12,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 12,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"mv1": 26,
+					"regionIndex": 12,
+					"trickDifficulty": 0
 				}
 			],
 			"Cliff Bottom Garibs": [
@@ -15229,6 +15333,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 6,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 6,
+					"trickDifficulty": 0
 				}
 			],
 			"Cliff Platforms": {
@@ -15239,6 +15348,31 @@
 						"NEEDS_BALL": true,
 						"REGION": 6,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 2,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 13,
+						"mv3": 2,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 32,
+						"mv3": 2,
+						"regionIndex": 6,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15248,6 +15382,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 6,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 2,
+						"regionIndex": 6,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 7
@@ -15273,6 +15413,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 12,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 12,
+					"trickDifficulty": 0
 				}
 			],
 			"Double Ice Wall Garibs": [
@@ -15288,6 +15433,17 @@
 					"NEEDS_BALL": false,
 					"REGION": 14,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 14,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 14,
+					"trickDifficulty": 0
 				}
 			],
 			"Dragonfly": {
@@ -15298,6 +15454,53 @@
 						"NEEDS_BALL": true,
 						"REGION": 7,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 2,
+						"regionIndex": 7,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 13,
+						"regionIndex": 7,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 32,
+						"regionIndex": 7,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 15,
+						"regionIndex": 7,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 10,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15307,6 +15510,27 @@
 						"NEEDS_BALL": false,
 						"REGION": 7,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 2,
+						"regionIndex": 7,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 11,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 10,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 8
@@ -15319,6 +15543,13 @@
 						"NEEDS_BALL": true,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 14,
+						"regionIndex": 12,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15328,6 +15559,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 14,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 14
@@ -15347,6 +15583,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 1,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 1,
+					"trickDifficulty": 0
 				}
 			],
 			"Goal": [
@@ -15358,6 +15599,11 @@
 					"NEEDS_BALL": true,
 					"REGION": 14,
 					"TYPE": 5
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 14,
+					"trickDifficulty": 0
 				}
 			],
 			"Goal Garibs": [
@@ -15373,6 +15619,17 @@
 					"NEEDS_BALL": false,
 					"REGION": 14,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 14,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 14,
+					"trickDifficulty": 0
 				}
 			],
 			"Hanging Garibs": [
@@ -15390,6 +15647,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 9,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 9,
+					"trickDifficulty": 0
 				}
 			],
 			"Ice Bridge Garibs": [
@@ -15417,6 +15679,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 12,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 12,
+					"trickDifficulty": 0
 				}
 			],
 			"Ice Cave": {
@@ -15427,6 +15694,13 @@
 						"NEEDS_BALL": true,
 						"REGION": 8,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 14,
+						"regionIndex": 8,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15436,6 +15710,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 8,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 10,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 10
@@ -15465,6 +15744,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 10,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 10,
+					"trickDifficulty": 0
 				}
 			],
 			"Ice Cave Life": [
@@ -15478,6 +15762,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 10,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 10,
+					"trickDifficulty": 0
 				}
 			],
 			"Ice Face Garibs": [
@@ -15495,6 +15784,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 3,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 3,
+					"trickDifficulty": 0
 				}
 			],
 			"Ice Face Life": [
@@ -15508,6 +15802,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"ck0": "Life Drop",
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Ice Lake": {
@@ -15518,6 +15818,21 @@
 						"NEEDS_BALL": true,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 4,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15527,6 +15842,27 @@
 						"NEEDS_BALL": false,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 4,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 2,
+						"regionIndex": 5,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 3
@@ -15539,6 +15875,28 @@
 						"NEEDS_BALL": true,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"mv1": 31,
+						"mv2": 25,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15548,6 +15906,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 6
@@ -15560,6 +15924,30 @@
 						"NEEDS_BALL": true,
 						"REGION": 11,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 13,
+						"regionIndex": 11,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 32,
+						"regionIndex": 11,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 15,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15569,6 +15957,17 @@
 						"NEEDS_BALL": false,
 						"REGION": 11,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 2,
+						"regionIndex": 11,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 13,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 12
@@ -15584,6 +15983,22 @@
 					"NEEDS_BALL": true,
 					"REGION": 0,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 10,
+					"mv1": 14,
+					"mv2": 12,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 10,
+					"mv1": 11,
+					"mv2": 14,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Island": {
@@ -15594,6 +16009,28 @@
 						"NEEDS_BALL": true,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"mv1": 31,
+						"mv2": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15603,6 +16040,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 4
@@ -15620,6 +16063,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 2,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 2,
+					"trickDifficulty": 0
 				}
 			],
 			"Left Below Ice Garibs": [
@@ -15637,6 +16085,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 5,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 5,
+					"trickDifficulty": 0
 				}
 			],
 			"Lower Cliffside Garibs": [
@@ -15652,6 +16105,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 7,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 7,
+					"trickDifficulty": 0
 				}
 			],
 			"Post Icicles": {
@@ -15662,6 +16120,35 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 14,
+						"mv1": 10,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 25,
+						"mv1": 31,
+						"mv2": 26,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15671,6 +16158,18 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 2
@@ -15704,6 +16203,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 5,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 5,
+					"trickDifficulty": 0
 				}
 			],
 			"Secret": {
@@ -15714,6 +16218,13 @@
 						"NEEDS_BALL": true,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 14,
+						"regionIndex": 12,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15723,6 +16234,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 13,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 13
@@ -15746,6 +16262,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 2,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 3,
+					"trickDifficulty": 0
 				}
 			],
 			"Snow Edge": {
@@ -15756,6 +16277,11 @@
 						"NEEDS_BALL": true,
 						"REGION": 8,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 8,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15765,6 +16291,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 8,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 8,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 9
@@ -15786,6 +16317,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 12,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 12,
+					"trickDifficulty": 0
 				}
 			],
 			"Spawn": {
@@ -15796,6 +16332,19 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 14,
+						"mv1": 10,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15805,6 +16354,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 1,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 0
@@ -15817,6 +16371,12 @@
 						"NEEDS_BALL": true,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 3,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15826,6 +16386,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 3,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 5
@@ -15843,6 +16409,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 7,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 7,
+					"trickDifficulty": 0
 				}
 			],
 			"Wind-Up": [
@@ -15859,6 +16430,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			]
 		},
@@ -15880,6 +16457,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 4,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 4,
+					"trickDifficulty": 0
 				}
 			],
 			"Bottom Avalanche Garibs": [
@@ -15897,6 +16479,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 18,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 18,
+					"trickDifficulty": 0
 				}
 			],
 			"Bottom Valley Life": [
@@ -15910,6 +16497,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 20,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 20,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 1": [
@@ -15923,6 +16515,33 @@
 					"NEEDS_BALL": true,
 					"REGION": 0,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"mv1": 26,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 13,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 32,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 2": [
@@ -15936,6 +16555,33 @@
 					"NEEDS_BALL": true,
 					"REGION": 13,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 13,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"mv1": 26,
+					"regionIndex": 13,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 13,
+					"regionIndex": 13,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 32,
+					"regionIndex": 13,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 3": [
@@ -15949,6 +16595,33 @@
 					"NEEDS_BALL": true,
 					"REGION": 18,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 13,
+					"regionIndex": 18,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 32,
+					"regionIndex": 18,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 18,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"mv1": 26,
+					"regionIndex": 18,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 4": [
@@ -15962,6 +16635,31 @@
 					"NEEDS_BALL": true,
 					"REGION": 19,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"regionIndex": 19,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 32,
+					"regionIndex": 19,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 19,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"mv1": 26,
+					"regionIndex": 19,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint Pillar": {
@@ -15972,6 +16670,28 @@
 						"NEEDS_BALL": true,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 26,
+						"mv2": 27,
+						"regionIndex": 12,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -15981,6 +16701,18 @@
 						"NEEDS_BALL": false,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 12,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 13
@@ -15993,6 +16725,46 @@
 						"NEEDS_BALL": true,
 						"REGION": 20,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 25,
+						"regionIndex": 20,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 20,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 20,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 25,
+						"mv2": 27,
+						"regionIndex": 20,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 26,
+						"mv3": 27,
+						"mv4": 25,
+						"regionIndex": 20,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16002,6 +16774,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 20,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 20,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 21
@@ -16014,6 +16792,65 @@
 						"NEEDS_BALL": true,
 						"REGION": 5,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 25,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 0,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 25,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 0,
+						"mv1": 12,
+						"mv2": 26,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"mv1": 25,
+						"mv2": 26,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 0,
+						"mv1": 11,
+						"mv2": 26,
+						"regionIndex": 5,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16023,6 +16860,23 @@
 						"NEEDS_BALL": false,
 						"REGION": 5,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 8,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 6
@@ -16038,6 +16892,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 16,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 16,
+					"trickDifficulty": 0
 				}
 			],
 			"Goal": [
@@ -16049,6 +16909,11 @@
 					"NEEDS_BALL": true,
 					"REGION": 21,
 					"TYPE": 5
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 21,
+					"trickDifficulty": 0
 				}
 			],
 			"Goal Life": [
@@ -16062,6 +16927,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 21,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 21,
+					"trickDifficulty": 0
 				}
 			],
 			"Hilltop": {
@@ -16072,6 +16942,18 @@
 						"NEEDS_BALL": true,
 						"REGION": 8,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 8,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16081,6 +16963,16 @@
 						"NEEDS_BALL": false,
 						"REGION": 8,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 8,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 9
@@ -16102,6 +16994,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 17,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 17,
+					"trickDifficulty": 0
 				}
 			],
 			"Lava Shore": {
@@ -16112,6 +17009,95 @@
 						"NEEDS_BALL": true,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 1",
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 1",
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 1",
+						"mv0": 12,
+						"mv1": 26,
+						"mv2": 27,
+						"mv3": 25,
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 1",
+						"mv0": 13,
+						"mv1": 11,
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 1",
+						"mv0": 11,
+						"mv1": 32,
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 17,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 17,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"regionIndex": 17,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 11,
+						"mv1": 25,
+						"mv2": 26,
+						"mv3": 27,
+						"regionIndex": 17,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 12,
+						"mv1": 25,
+						"mv2": 27,
+						"regionIndex": 17,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16121,6 +17107,23 @@
 						"NEEDS_BALL": false,
 						"REGION": 12,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Platform 1",
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Platform 2",
+						"regionIndex": 17,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 14
@@ -16136,6 +17139,11 @@
 					"NEEDS_BALL": true,
 					"REGION": 14,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 14,
+					"trickDifficulty": 0
 				}
 			],
 			"Lavafall Garib": [
@@ -16149,6 +17157,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 14,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 14,
+					"trickDifficulty": 0
 				}
 			],
 			"Lavafall Platform": {
@@ -16159,6 +17172,111 @@
 						"NEEDS_BALL": true,
 						"REGION": 1,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 25,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 0,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 25,
+						"mv2": 26,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 25,
+						"mv1": 11,
+						"mv2": 26,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 0,
+						"mv1": 11,
+						"mv2": 26,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 0,
+						"mv1": 12,
+						"mv2": 26,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 0,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"mv1": 25,
+						"mv2": 26,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 0,
+						"mv2": 26,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 0,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16168,6 +17286,30 @@
 						"NEEDS_BALL": false,
 						"REGION": 1,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 2
@@ -16184,6 +17326,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 14,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 14,
+					"trickDifficulty": 0
 				}
 			],
 			"Lower Spawn": {
@@ -16194,6 +17342,70 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 25,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 0,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 25,
+						"mv1": 12,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 0,
+						"mv1": 12,
+						"mv2": 26,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 0,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 25,
+						"mv1": 11,
+						"mv2": 26,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16203,6 +17415,23 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 1
@@ -16215,6 +17444,56 @@
 						"NEEDS_BALL": true,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 4,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 25,
+						"mv1": 11,
+						"mv2": 26,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 0,
+						"mv1": 11,
+						"mv2": 26,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 0,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 25,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 25,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 0,
+						"mv2": 26,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16224,6 +17503,35 @@
 						"NEEDS_BALL": false,
 						"REGION": 2,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 4,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 2,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 3
@@ -16236,6 +17544,40 @@
 						"NEEDS_BALL": true,
 						"REGION": 14,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 1",
+						"mv0": 25,
+						"mv1": 10,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 1",
+						"mv0": 25,
+						"mv1": 11,
+						"mv2": 26,
+						"mv3": 27,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 1",
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 1",
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 14,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16245,6 +17587,18 @@
 						"NEEDS_BALL": false,
 						"REGION": 14,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Platform 1",
+						"mv0": 25,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 16,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 15
@@ -16257,6 +17611,33 @@
 						"NEEDS_BALL": true,
 						"REGION": 15,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lower Ball Switch",
+						"mv0": 12,
+						"mv1": 27,
+						"mv2": 26,
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lower Ball Switch",
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 26,
+						"mv3": 27,
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lower Ball Switch",
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 15,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16266,6 +17647,43 @@
 						"NEEDS_BALL": false,
 						"REGION": 15,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Lower Ball Switch",
+						"mv0": 25,
+						"mv1": 4,
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Lower Ball Switch",
+						"mv0": 2,
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 13,
+						"mv1": 25,
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 32,
+						"mv1": 25,
+						"regionIndex": 15,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 14,
+						"mv1": 2,
+						"mv2": 4,
+						"regionIndex": 15,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 16
@@ -16285,6 +17703,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 18,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 18,
+					"trickDifficulty": 0
 				}
 			],
 			"Midpoint": {
@@ -16295,6 +17718,82 @@
 						"NEEDS_BALL": true,
 						"REGION": 14,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 10,
+						"mv1": 25,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 27,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 12,
+						"mv1": 25,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 18,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 18,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 27,
+						"mv3": 25,
+						"regionIndex": 18,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 25,
+						"mv1": 12,
+						"mv2": 27,
+						"regionIndex": 18,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16304,6 +17803,20 @@
 						"NEEDS_BALL": false,
 						"REGION": 14,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Platform 2",
+						"mv0": 25,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Platform 2",
+						"mv0": 25,
+						"regionIndex": 18,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 17
@@ -16316,6 +17829,124 @@
 						"NEEDS_BALL": true,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 0,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 0,
+						"mv1": 12,
+						"mv2": 26,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 0,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 25,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 0,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 25,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 0,
+						"mv1": 11,
+						"mv2": 26,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 25,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"mv1": 12,
+						"mv2": 0,
+						"regionIndex": 6,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16325,6 +17956,30 @@
 						"NEEDS_BALL": false,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 6,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 5
@@ -16342,6 +17997,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 6,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 6,
+					"trickDifficulty": 0
 				}
 			],
 			"Platform Before Slope": {
@@ -16352,6 +18012,46 @@
 						"NEEDS_BALL": true,
 						"REGION": 6,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 26,
+						"mv2": 27,
+						"mv3": 25,
+						"mv4": 4,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 25,
+						"mv1": 4,
+						"mv2": 11,
+						"mv3": 26,
+						"mv4": 27,
+						"mv5": 8,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 2,
+						"mv1": 8,
+						"mv2": 11,
+						"mv3": 26,
+						"mv4": 27,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 2,
+						"mv1": 12,
+						"mv2": 26,
+						"mv3": 27,
+						"regionIndex": 6,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16361,6 +18061,19 @@
 						"NEEDS_BALL": false,
 						"REGION": 6,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"mv1": 4,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 2,
+						"regionIndex": 6,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 7
@@ -16384,6 +18097,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 10,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 10,
+					"trickDifficulty": 0
 				}
 			],
 			"Push Wall Life": [
@@ -16397,6 +18115,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 10,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 10,
+					"trickDifficulty": 0
 				}
 			],
 			"Raptor Garibs": [
@@ -16424,6 +18147,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 4,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 4,
+					"trickDifficulty": 0
 				}
 			],
 			"Raptor Tree Garibs": [
@@ -16443,6 +18171,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 4,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 4,
+					"trickDifficulty": 0
 				}
 			],
 			"Rockslide Bottom": {
@@ -16453,6 +18186,54 @@
 						"NEEDS_BALL": true,
 						"REGION": 17,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 17,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 17,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 10,
+						"mv1": 25,
+						"regionIndex": 17,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 12,
+						"mv1": 27,
+						"mv2": 25,
+						"regionIndex": 17,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Platform 2",
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 27,
+						"mv3": 25,
+						"regionIndex": 17,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 19,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16462,6 +18243,18 @@
 						"NEEDS_BALL": false,
 						"REGION": 17,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Platform 2",
+						"mv0": 25,
+						"regionIndex": 17,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 19,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 18
@@ -16474,6 +18267,12 @@
 						"NEEDS_BALL": true,
 						"REGION": 18,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 18,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16483,6 +18282,17 @@
 						"NEEDS_BALL": false,
 						"REGION": 18,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 18,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 20,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 19
@@ -16495,6 +18305,12 @@
 						"NEEDS_BALL": true,
 						"REGION": 9,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 2,
+						"regionIndex": 9,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16504,6 +18320,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 9,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 2,
+						"regionIndex": 9,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 10
@@ -16525,6 +18347,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 14,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 14,
+					"trickDifficulty": 0
 				}
 			],
 			"Sign Hill": {
@@ -16535,6 +18362,37 @@
 						"NEEDS_BALL": true,
 						"REGION": 7,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 26,
+						"mv3": 27,
+						"mv4": 2,
+						"regionIndex": 7,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 10,
+						"mv2": 13,
+						"mv3": 2,
+						"regionIndex": 7,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 7,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16544,6 +18402,24 @@
 						"NEEDS_BALL": false,
 						"REGION": 7,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 2,
+						"regionIndex": 7,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"mv1": 4,
+						"regionIndex": 7,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 8
@@ -16559,6 +18435,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 18,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 18,
+					"trickDifficulty": 0
 				}
 			],
 			"Slope": {
@@ -16569,6 +18450,11 @@
 						"NEEDS_BALL": true,
 						"REGION": 9,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 9,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16578,6 +18464,17 @@
 						"NEEDS_BALL": false,
 						"REGION": 9,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 12,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 11
@@ -16599,6 +18496,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 11,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 11,
+					"trickDifficulty": 0
 				}
 			],
 			"Slope Wind-Up": [
@@ -16615,6 +18517,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 11,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 11,
+					"trickDifficulty": 0
 				}
 			],
 			"Spawn": {
@@ -16625,6 +18533,12 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 1,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16634,6 +18548,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 1,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 0
@@ -16657,6 +18576,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Switches Ball Switch": [
@@ -16670,6 +18594,11 @@
 					"NEEDS_BALL": true,
 					"REGION": 16,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 16,
+					"trickDifficulty": 0
 				}
 			],
 			"Switches Garibs": [
@@ -16691,6 +18620,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 15,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 15,
+					"trickDifficulty": 0
 				}
 			],
 			"Switches Life": [
@@ -16704,6 +18638,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 16,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 2,
+					"regionIndex": 16,
+					"trickDifficulty": 0
 				}
 			],
 			"Teeter": {
@@ -16714,6 +18654,37 @@
 						"NEEDS_BALL": true,
 						"REGION": 11,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 11,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 13,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 32,
+						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 25,
+						"mv1": 8,
+						"mv2": 11,
+						"mv3": 15,
+						"regionIndex": 14,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16723,6 +18694,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 11,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 12
@@ -16746,6 +18722,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 12,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 12,
+					"trickDifficulty": 0
 				}
 			],
 			"Top Avalanche Garibs": [
@@ -16763,6 +18744,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 19,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 19,
+					"trickDifficulty": 0
 				}
 			],
 			"Top Valley Life": [
@@ -16776,6 +18762,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 20,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 20,
+					"trickDifficulty": 0
 				}
 			],
 			"Tracey Garibs": [
@@ -16795,6 +18787,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 18,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 18,
+					"trickDifficulty": 0
 				}
 			],
 			"Traceys": [
@@ -16811,6 +18808,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 18,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 18,
+					"trickDifficulty": 0
 				}
 			],
 			"Traceys Wind-Up": [
@@ -16827,6 +18829,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 18,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 18,
+					"trickDifficulty": 0
 				}
 			],
 			"Tree Raptor": [
@@ -16841,6 +18849,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 4,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 4,
+					"trickDifficulty": 0
 				}
 			],
 			"Trees Garib": [
@@ -16854,6 +18868,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 18,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 18,
+					"trickDifficulty": 0
 				}
 			],
 			"Upper Tree Rex": {
@@ -16864,6 +18883,44 @@
 						"NEEDS_BALL": true,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 26,
+						"mv2": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 26,
+						"mv2": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16873,6 +18930,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 3,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 4
@@ -16885,6 +18948,60 @@
 						"NEEDS_BALL": true,
 						"REGION": 19,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 25,
+						"regionIndex": 19,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 19,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 19,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"mv1": 0,
+						"regionIndex": 19,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 25,
+						"mv2": 27,
+						"regionIndex": 19,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"mv1": 26,
+						"mv2": 27,
+						"mv3": 25,
+						"regionIndex": 19,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"mv1": 27,
+						"mv2": 2,
+						"mv3": 11,
+						"regionIndex": 19,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16894,6 +19011,17 @@
 						"NEEDS_BALL": false,
 						"REGION": 19,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 19,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 21,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 20
@@ -16929,6 +19057,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 20,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 20,
+					"trickDifficulty": 0
 				}
 			],
 			"Valley Wind-Up": [
@@ -16945,6 +19078,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 20,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 20,
+					"trickDifficulty": 0
 				}
 			]
 		},
@@ -16957,6 +19096,12 @@
 						"NEEDS_BALL": true,
 						"REGION": 1,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 28,
+						"regionIndex": 1,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -16966,6 +19111,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 1,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 1,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 2
@@ -16993,6 +19143,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 2,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 2,
+					"trickDifficulty": 0
 				}
 			],
 			"Cave Life": [
@@ -17006,6 +19162,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 2,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 2,
+					"trickDifficulty": 0
 				}
 			],
 			"Cave Speed Potion": [
@@ -17019,6 +19181,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 2,
 					"TYPE": 4
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 2,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 1": [
@@ -17032,6 +19200,19 @@
 					"NEEDS_BALL": true,
 					"REGION": 0,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 31,
+					"mv1": 26,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 2": [
@@ -17045,6 +19226,33 @@
 					"NEEDS_BALL": true,
 					"REGION": 5,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 5,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"mv1": 26,
+					"regionIndex": 5,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 13,
+					"regionIndex": 5,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 32,
+					"regionIndex": 5,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 3": [
@@ -17058,6 +19266,19 @@
 					"NEEDS_BALL": true,
 					"REGION": 8,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 31,
+					"mv1": 26,
+					"regionIndex": 8,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 8,
+					"trickDifficulty": 0
 				}
 			],
 			"Checkpoint 4": [
@@ -17071,6 +19292,19 @@
 					"NEEDS_BALL": true,
 					"REGION": 11,
 					"TYPE": 3
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 31,
+					"mv1": 26,
+					"regionIndex": 11,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 11,
+					"trickDifficulty": 0
 				}
 			],
 			"Circle Lava Garibs": [
@@ -17098,6 +19332,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 9,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 9,
+					"trickDifficulty": 0
 				}
 			],
 			"Death Potion": [
@@ -17109,6 +19348,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 4
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"End": {
@@ -17119,6 +19363,38 @@
 						"NEEDS_BALL": true,
 						"REGION": 11,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Dirt Elevator",
+						"mv0": 11,
+						"mv1": 26,
+						"regionIndex": 11,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Dirt Elevator",
+						"mv0": 25,
+						"mv1": 12,
+						"regionIndex": 11,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Dirt Elevator",
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 11,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Dirt Elevator",
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17128,6 +19404,13 @@
 						"NEEDS_BALL": false,
 						"REGION": 11,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Dirt Elevator",
+						"mv0": 25,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 12
@@ -17143,6 +19426,11 @@
 					"NEEDS_BALL": true,
 					"REGION": 8,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 8,
+					"trickDifficulty": 0
 				}
 			],
 			"Flying Lava Garibs": [
@@ -17160,6 +19448,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 7,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 7,
+					"trickDifficulty": 0
 				}
 			],
 			"Flying Platforms": {
@@ -17170,6 +19463,30 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Floating Platforms",
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Floating Platforms",
+						"mv0": 8,
+						"mv1": 13,
+						"mv2": 11,
+						"mv3": 2,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 8,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17179,6 +19496,25 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 8,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Floating Platforms",
+						"mv0": 2,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Floating Platforms",
+						"mv0": 2,
+						"regionIndex": 6,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 7
@@ -17192,6 +19528,11 @@
 					"NEEDS_BALL": true,
 					"REGION": 12,
 					"TYPE": 5
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 12,
+					"trickDifficulty": 0
 				}
 			],
 			"Grass Ring Garibs": [
@@ -17233,6 +19574,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 11,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 11,
+					"trickDifficulty": 0
 				}
 			],
 			"Grass Ring Wind-Up": [
@@ -17249,6 +19595,18 @@
 					"NEEDS_BALL": false,
 					"REGION": 11,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 18,
+					"regionIndex": 11,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 11,
+					"trickDifficulty": 0
 				}
 			],
 			"High Speed Potion": [
@@ -17262,6 +19620,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 11,
 					"TYPE": 4
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"regionIndex": 11,
+					"trickDifficulty": 0
 				}
 			],
 			"Lake": {
@@ -17272,6 +19636,27 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 28,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 4,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17281,6 +19666,26 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 4,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 5,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 1
@@ -17314,6 +19719,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 6,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 6,
+					"trickDifficulty": 0
 				}
 			],
 			"Lava Pit Ball Switch": [
@@ -17327,6 +19737,11 @@
 					"NEEDS_BALL": true,
 					"REGION": 11,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 11,
+					"trickDifficulty": 0
 				}
 			],
 			"Lava Shore": {
@@ -17337,6 +19752,11 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17346,6 +19766,17 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Floating Platforms",
+						"regionIndex": 7,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 6
@@ -17375,6 +19806,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"ck0": "Drop Garibs",
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Love Tree Life": [
@@ -17388,6 +19825,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"ck0": "Drop Garibs",
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Lower Grass Ledge Garibs": [
@@ -17403,6 +19846,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 12,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 12,
+					"trickDifficulty": 0
 				}
 			],
 			"Lower Grass Ledge Life": [
@@ -17416,6 +19864,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 12,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 12,
+					"trickDifficulty": 0
 				}
 			],
 			"Monolith A": [
@@ -17429,6 +19882,18 @@
 					"NEEDS_BALL": true,
 					"REGION": 5,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 5,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"regionIndex": 5,
+					"trickDifficulty": 0
 				}
 			],
 			"Monolith B": [
@@ -17442,6 +19907,18 @@
 					"NEEDS_BALL": true,
 					"REGION": 5,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 5,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"regionIndex": 5,
+					"trickDifficulty": 0
 				}
 			],
 			"Monolith Ball Switch": [
@@ -17455,6 +19932,31 @@
 					"NEEDS_BALL": true,
 					"REGION": 5,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"ck0": "Lower Monolith 4",
+					"mv0": 11,
+					"mv1": 26,
+					"regionIndex": 5,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"ck0": "Lower Monolith 4",
+					"mv0": 12,
+					"mv1": 26,
+					"mv2": 27,
+					"regionIndex": 5,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"ck0": "Lower Monolith 4",
+					"mv0": 8,
+					"mv1": 32,
+					"regionIndex": 5,
+					"trickDifficulty": 0
 				}
 			],
 			"Monolith C": [
@@ -17468,6 +19970,18 @@
 					"NEEDS_BALL": true,
 					"REGION": 5,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 5,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"regionIndex": 5,
+					"trickDifficulty": 0
 				}
 			],
 			"Monolith D": [
@@ -17481,6 +19995,18 @@
 					"NEEDS_BALL": true,
 					"REGION": 5,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 12,
+					"regionIndex": 5,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 11,
+					"regionIndex": 5,
+					"trickDifficulty": 0
 				}
 			],
 			"Monolith Wind-Ups": [
@@ -17501,6 +20027,18 @@
 					"NEEDS_BALL": false,
 					"REGION": 5,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 5,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 18,
+					"regionIndex": 5,
+					"trickDifficulty": 0
 				}
 			],
 			"Platforms Glover Switch": [
@@ -17524,6 +20062,44 @@
 						"NEEDS_BALL": true,
 						"REGION": 10,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 3,
+						"mv1": 8,
+						"mv2": 13,
+						"regionIndex": 10,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 3,
+						"mv1": 8,
+						"mv2": 32,
+						"regionIndex": 10,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 3,
+						"mv1": 11,
+						"mv2": 26,
+						"mv3": 27,
+						"regionIndex": 10,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 3,
+						"mv1": 12,
+						"mv2": 27,
+						"regionIndex": 10,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 12,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17533,6 +20109,18 @@
 						"NEEDS_BALL": false,
 						"REGION": 10,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Lava Spinning",
+						"mv0": 3,
+						"regionIndex": 10,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 12,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 11
@@ -17545,6 +20133,26 @@
 						"NEEDS_BALL": true,
 						"REGION": 9,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17554,6 +20162,25 @@
 						"NEEDS_BALL": false,
 						"REGION": 9,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Lava Spinning",
+						"mv0": 25,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Lava Spinning",
+						"mv0": 0,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 10
@@ -17566,6 +20193,18 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Spin Stones",
+						"regionIndex": 4,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17575,6 +20214,17 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Spin Stones",
+						"regionIndex": 4,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 3
@@ -17587,6 +20237,18 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 6,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17596,6 +20258,40 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 1,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Lava Spinning",
+						"mv0": 25,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Lava Spinning",
+						"mv0": 0,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 7,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 0
@@ -17608,6 +20304,86 @@
 						"NEEDS_BALL": true,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 8,
+						"mv1": 13,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 11,
+						"mv1": 25,
+						"mv2": 26,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 12,
+						"mv1": 25,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 0,
+						"mv1": 26,
+						"mv2": 12,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 0,
+						"mv1": 11,
+						"mv2": 26,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 8,
+						"mv1": 26,
+						"mv2": 27,
+						"regionIndex": 10,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 11,
+						"mv1": 25,
+						"mv2": 26,
+						"mv3": 27,
+						"regionIndex": 10,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 12,
+						"mv1": 25,
+						"mv2": 26,
+						"mv3": 27,
+						"regionIndex": 10,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17617,6 +20393,34 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Lava Spinning",
+						"mv0": 25,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Lava Spinning",
+						"mv0": 0,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Lava Spinning",
+						"mv0": 25,
+						"regionIndex": 10,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Lava Spinning",
+						"mv0": 0,
+						"regionIndex": 10,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 9
@@ -17629,6 +20433,12 @@
 						"NEEDS_BALL": true,
 						"REGION": 4,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Spin Stones",
+						"regionIndex": 4,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17638,6 +20448,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 4,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Spin Stones",
+						"regionIndex": 4,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 5
@@ -17650,6 +20466,22 @@
 						"NEEDS_BALL": true,
 						"REGION": 7,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 11,
+						"mv2": 13,
+						"mv3": 2,
+						"regionIndex": 7,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"regionIndex": 7,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17659,6 +20491,12 @@
 						"NEEDS_BALL": false,
 						"REGION": 7,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 2,
+						"regionIndex": 7,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 8
@@ -17675,6 +20513,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 10
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Tracey Garibs": [
@@ -17718,6 +20561,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Tracey Tree": [
@@ -17731,6 +20579,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Trees Glover Switch": [
@@ -17744,6 +20597,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Turning Stones": {
@@ -17754,6 +20613,18 @@
 						"NEEDS_BALL": true,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Spin Stones",
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Spin Stones",
+						"regionIndex": 5,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17763,6 +20634,18 @@
 						"NEEDS_BALL": false,
 						"REGION": 3,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Spin Stones",
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Spin Stones",
+						"regionIndex": 5,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 4
@@ -17786,6 +20669,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 4,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 4,
+					"trickDifficulty": 0
 				}
 			],
 			"Upper Grass Ledge Garibs": [
@@ -17803,6 +20691,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 12,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": false,
+					"regionIndex": 12,
+					"trickDifficulty": 0
 				}
 			]
 		},
@@ -17919,6 +20812,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Archway Life": [
@@ -17932,6 +20830,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Fossil Garibs": [
@@ -17963,6 +20866,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Fossils Life": [
@@ -17976,6 +20885,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Goal": [
@@ -17987,6 +20901,11 @@
 					"NEEDS_BALL": true,
 					"REGION": 0,
 					"TYPE": 5
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Goal Garibs": [
@@ -18018,6 +20937,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Homestretch Life": [
@@ -18031,6 +20955,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Lava Garibs": [
@@ -18062,6 +20991,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Main": {
@@ -18101,6 +21035,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Sharp Turn Garibs": [
@@ -18132,6 +21071,11 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			],
 			"Spawn Garibs": [
@@ -18163,6 +21107,12 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 1
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"regionIndex": 0,
+					"trickDifficulty": 0
 				}
 			]
 		}
