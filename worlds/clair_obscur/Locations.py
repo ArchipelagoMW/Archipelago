@@ -26,6 +26,11 @@ class ClairObscurLocation(Location):
 def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> None:
 
     excluded_types = []
+    exclusion_level = 99
+    if world.options.exclude_endgame_locations < 2 and world.options.goal < 2:
+        exclusion_level = 17 + world.options.goal
+        #Conveniently, the Monolith and Lumiere are 1 pictos_level apart.
+
     if not world.options.gestral_shuffle:
         excluded_types.append("Lost Gestral")
 
@@ -33,11 +38,14 @@ def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> N
         if region_name == "Menu": continue
 
         region_data = data.regions[region_name]
+        if region_data.pictos_level >= exclusion_level: continue
 
         for location_name in region_data.locations:
 
             location_data = data.locations[location_name]
-            if location_data.type in excluded_types:
+
+            if (location_data.type in excluded_types or
+                    (world.options.exclude_endgame_locations == 0 and location_data.pictos_level > exclusion_level)):
                 continue
 
             loc_id = world.location_name_to_id[location_data.name]

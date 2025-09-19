@@ -7,19 +7,19 @@ def set_rules(world):
     mw = world.multiworld
 
     goal = world.options.goal
-    goal_loc = ""
+    goal_reg = ""
     match goal:
         case 0:
-            goal_loc = "The Monolith: The Paintress"
+            goal_reg = "The Monolith"
         case 1:
-            goal_loc = "Lumiere: The Curator"
+            goal_reg = "Lumiere"
         case 2:
-            goal_loc = "Endless Tower: Stage 11-3"
+            goal_reg = "Endless Tower Stage 11"
         case 3:
-            goal_loc = "The Abyss: Simon"
+            goal_reg = "Renoir's Drafts"
 
     mw.completion_condition[player] = (
-        lambda state: state.can_reach_location(goal_loc, player)
+        lambda state: state.can_reach_region(goal_reg, player)
     )
 
     #Major map connections- the playthrough will always go through these.
