@@ -18,7 +18,7 @@
     "name": "Chroma Catalyst (5)",
     "internal_name": "UpgradeMaterial_Level1",
     "quantity": 5,
-    "progressive": 2
+    "progressive": 0
   },
   {
     "type": "Upgrade material",
@@ -39,7 +39,7 @@
     "name": "Polished Chroma Catalyst (5)",
     "internal_name": "UpgradeMaterial_Level2",
     "quantity": 5,
-    "progressive": 2
+    "progressive": 0
   },
   {
     "type": "Upgrade material",
@@ -60,7 +60,7 @@
     "name": "Resplendent Chroma Catalyst (5)",
     "internal_name": "UpgradeMaterial_Level3",
     "quantity": 5,
-    "progressive": 2
+    "progressive": 0
   },
   {
     "type": "Upgrade material",
@@ -81,14 +81,14 @@
     "name": "Grandiose Chroma Catalyst (5)",
     "internal_name": "UpgradeMaterial_Level4",
     "quantity": 5,
-    "progressive": 2
+    "progressive": 0
   },
   {
     "type": "Upgrade material",
     "name": "Perfect Chroma Catalyst",
     "internal_name": "UpgradeMaterial_Level5",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 0
   },
   {
     "type": "Upgrade material",
@@ -151,14 +151,14 @@
     "name": "Colour of Lumina (1)",
     "internal_name": "Consumable_LuminaPoint",
     "quantity": 1,
-    "progressive": 2
+    "progressive": 0
   },
   {
     "type": "Upgrade material",
     "name": "Colour of Lumina (5)",
     "internal_name": "Consumable_LuminaPoint",
     "quantity": 5,
-    "progressive": 2
+    "progressive": 0
   },
   {
     "type": "Exploration capacities",

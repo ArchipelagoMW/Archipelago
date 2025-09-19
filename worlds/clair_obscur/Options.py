@@ -18,7 +18,7 @@ class Goal(Choice):
 
 class ExcludeEndgameLocations(Choice):
     """
-    Determines what to do with locations higher level than the set goal, if the goal is Paintress or Curator.
+    Determines how to handle locations higher level than the set goal, if the goal is Paintress or Curator.
     Excluded: Locations won't be added to the pool.
     Filler: Locations will only contain filler items.
     Included: All locations are included.
@@ -28,10 +28,11 @@ class ExcludeEndgameLocations(Choice):
     option_excluded = 0
     option_filler = 1
     option_included = 2
+    default = 0
 
 class ExcludeEndlessTower(Choice):
     """
-    Determines what to do with Endless Tower locations.
+    Determines how to handle Endless Tower locations.
     Excluded: Locations won't be added to the pool.
     Filler: Locations will only contain filler items.
     Included: All locations are included.
@@ -41,6 +42,7 @@ class ExcludeEndlessTower(Choice):
     option_excluded = 0
     option_filler = 1
     option_included = 2
+    default = 2
 
 class ShuffleLostGestrals(Toggle):
     """
@@ -84,13 +86,13 @@ class GearScaling(Choice):
     """How the levels of pictos and weapons you receive are determined.
     Sphere placement: Roughly scales pictos/weapons by the logical sphere they're placed in.
     Order received: As you receive more pictos/weapons, the levels of the next ones you receive will go up.
-    Random balanced: Pictos/weapons have random levels assigned in an even spread.
+    Balanced random: Pictos/weapons have random levels assigned in an even spread.
     Full random: Exaclty what it says. There's no guarantee that you'll get high-level pictos... but you probably will."""
     internal_name = "gear_scaling"
     display_name = "Gear Scaling"
     option_sphere_placement = 0
     option_order_received = 1
-    option_random_balanced = 2
+    option_balanced_random = 2
     option_full_random = 3
     default = 0
 
