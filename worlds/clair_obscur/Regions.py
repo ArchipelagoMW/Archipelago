@@ -37,7 +37,8 @@ def connect_regions(world: ClairObscurWorld):
                 add_rule(entrance, lambda state, con = cond, pl = player, am=amount: state.has(con, pl, am))
 
         #Pictos amount condition
-        if connection.pictos_level > 1:
-            pictos_amount = world.convert_pictos(connection.pictos_level)
+        lvl = data.regions[destination.name].pictos_level
+        if lvl > 1:
+            pictos_amount = world.convert_pictos(lvl)
             add_rule(entrance, lambda state, pl = player, pic = pictos_amount: state.has_group(
                 "Picto", pl, pic))

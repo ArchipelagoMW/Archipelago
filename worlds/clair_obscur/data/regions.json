@@ -1,6 +1,7 @@
 [
     {
         "region_name": "Ancient Sanctuary",
+        "level": 4,
         "locations": [
             "Ancient Sanctuary: Entrance - Past climbing handholds",
             "Ancient Sanctuary: Sanctuary Maze - In dark cave before shortcut to flag 1",
@@ -27,6 +28,7 @@
     },
     {
         "region_name": "Crimson Forest",
+        "level": 24,
         "locations": [
             "Crimson Forest: Crimson Perch - Bottom floor near cave",
             "Crimson Forest: Crimson Perch - Under Expedition Flag",
@@ -42,6 +44,7 @@
     },
     {
         "region_name": "Dark Shores",
+        "level": 23,
         "locations": [
             "Dark Shores: In barrel behind two Nevrons",
             "Dark Shores: Right side item 1",
@@ -56,6 +59,7 @@
     },
     {
         "region_name": "Esquie's Nest",
+        "level": 5,
         "locations": [
             "Esquies Nest: Take shortcut out from Esquie's room. Wheeeeee",
             "Esquies Nest: Francois - I hid this item - find it before Fran Fran",
@@ -72,6 +76,7 @@
     },
     {
         "region_name": "Falling Leaves",
+        "level": 14,
         "locations": [
             "Manor: From Falling Leaves - On the desk",
             "Falling Leaves: Left path past Persik near fossilized expeditioners",
@@ -83,6 +88,7 @@
     },
     {
         "region_name": "Flying Manor",
+        "level": 28,
         "locations": [
             "Flying Manor: Central Platform - Near easels",
             "Flying Manor: Dualliste Wing - Near Stalact",
@@ -131,6 +137,7 @@
     },
     {
         "region_name": "Forgotten Battlefield",
+        "level": 8,
         "locations": [
             "Forgotten Battlefield: Main Gate - Left side wooden deck",
             "Forgotten Battlefield: Main Gate - Right side near outer wall",
@@ -165,6 +172,7 @@
     },
     {
         "region_name": "Frozen Hearts",
+        "level": 21,
         "locations": [
             "Manor: From Frozen Hearts - At the harp",
             "Frozen Hearts: Glacial Falls - Chromatic Veilleur Ice Cave item 1",
@@ -205,6 +213,7 @@
     },
     {
         "region_name": "Gestral Village",
+        "level": 4,
         "locations": [
             "Manor: From First Continent Sea - After library platforms",
             "Manor: From Gestral Village - In crawlspace",
@@ -221,6 +230,7 @@
     },
     {
         "region_name": "Flying Waters",
+        "level": 3,
         "locations": [
             "Manor: Dining Hall Puzzle",
             "Manor: Through fake painting",
@@ -260,6 +270,7 @@
     },
     {
         "region_name": "Monoco's Station",
+        "level": 1,
         "locations": [
             "Grandis Station: Monoco's Station - Back of station",
             "Grandis Station: Monoco's Station - Near Grandis Merchant"
@@ -267,6 +278,7 @@
     },
     {
         "region_name": "Lumiere",
+        "level": 16,
         "locations": [
             "Lumiere (Act 3): Opera House - On building railing in Paint Spike",
             "Lumiere (Act 3): Entrance - Left of stairs after docks",
@@ -319,6 +331,7 @@
     },
     {
         "region_name": "The Monolith",
+        "level": 15,
         "locations": [
             "Manor: From Inside the Monolith - Near the vase on a table",
             "Monolith: Tainted Meadows - Detour near Eveque",
@@ -377,6 +390,7 @@
     },
     {
         "region_name": "Old Lumiere",
+        "level": 10,
         "locations": [
             "Manor: From Old Lumiere - In the sink",
             "Old Lumiere: Left Street - In barrels after grapple",
@@ -402,13 +416,11 @@
             "Old Lumiere: Chromatic Danseuse",
             "Old Lumiere: Mime",
             "Old Lumiere: Renoir"
-        ],
-        "parent_map": "World Map: Swim",
-        "condition": {},
-        "exits": []
+        ]
     },
     {
         "region_name": "The Reacher",
+        "level": 20,
         "locations": [
             "The Reacher: Entrance - early handholds",
             "The Reacher: Mountain - boxes by cliffside",
@@ -444,6 +456,7 @@
     },
     {
         "region_name": "Renoir's Drafts",
+        "level": 31,
         "locations": [
             "Renoir' Draft: Entrance - triple Contortionniste",
             "Renoir' Draft: Entrance - Moissonneuse",
@@ -463,6 +476,7 @@
     },
     {
         "region_name": "Stone Wave Cliffs",
+        "level": 7,
         "locations": [
             "Manor: From Stone Wave Cliffs - In the wardrobe",
             "Sea Cliff: Chroma 1",
@@ -511,6 +525,7 @@
     },
     {
         "region_name": "Sirene",
+        "level": 13,
         "locations": [
             "Manor: From Sirene - Break the bathroom mirror",
             "Sirene: Dancing Classes - Down verical zipline in first room",
@@ -553,18 +568,21 @@
     },
     {
         "region_name": "Red Woods",
+        "level": 1,
         "locations": [
             "Red Woods: Lumina 1"
         ]
     },
     {
         "region_name": "The Small Bourgeon",
+        "level": 1,
         "locations": [
             "Small Bourgeon: Feed the White Nevron and loot his vomit"
         ]
     },
     {
         "region_name": "Stone Wave Cliffs Cave",
+        "level": 8,
         "locations": [
             "Stone Wave Cliffs Cave: Behind Chromatic Hexga",
             "Stone Wave Cliffs Cave: Through ruined archway",
@@ -575,6 +593,7 @@
     },
     {
         "region_name": "The Chosen Path",
+        "level": 20,
         "locations": [
             "Chosen Path: Complete all Canvases",
             "The Chosen Path: Benisseur",
@@ -586,6 +605,7 @@
     },
     {
         "region_name": "Sky Island",
+        "level": 20,
         "locations": [
             "Floating Island: At end of area",
             "Sky Island: Chromatic Glaise"
@@ -598,6 +618,7 @@
     },
     {
         "region_name": "Isle of the Eyes",
+        "level": 22,
         "locations": [
             "Visages: Item 1",
             "Visages: Item 2",
@@ -607,6 +628,7 @@
     },
     {
         "region_name": "The Crows",
+        "level": 1,
         "locations": [
             "The Crows: Item",
             "The Crows: Chromatic Chapelier"
@@ -614,6 +636,7 @@
     },
     {
         "region_name": "Floating Cemetery",
+        "level": 1,
         "locations": [
             "Cemetery: Upper level overlooking entrance",
             "Cemetery: Near barrels",
@@ -623,12 +646,14 @@
     },
     {
         "region_name": "Coastal Cave",
+        "level": 1,
         "locations": [
             "Coastal Cave: Left side"
         ]
     },
     {
         "region_name": "Crushing Cavern",
+        "level": 9,
         "locations": [
             "Cavern Crusher: After boss",
             "Crushing Cavern: Giant Sapling"
@@ -636,6 +661,7 @@
     },
     {
         "region_name": "Esoteric Ruins",
+        "level": 1,
         "locations": [
             "Esoteric Ruins: Side path near statue",
             "Esoteric Ruins: Paint Cage",
@@ -646,6 +672,7 @@
     },
     {
         "region_name": "Sinister Cave",
+        "level": 13,
         "locations": [
             "Sinister Cave: Near glowing nevron",
             "Sinister Cave: After long fall",
@@ -655,24 +682,28 @@
     },
     {
         "region_name": "The Fountain",
+        "level": 1,
         "locations": [
             "The Fountain: In front of Blanche"
         ]
     },
     {
         "region_name": "Abbest Cave",
+        "level": 1,
         "locations": [
             "Abbest Cave: Chromatic Abbest"
         ]
     },
     {
         "region_name": "Flying Casino",
+        "level": 1,
         "locations": [
             "Flying Casino: Item"
         ]
     },
     {
         "region_name": "The Carousel",
+        "level": 1,
         "locations": [
             "Carousel: In boxes",
             "Carousel: Left of Expedition Flag"
@@ -680,6 +711,7 @@
     },
     {
         "region_name": "White Sands",
+        "level": 1,
         "locations": [
             "White Sands: Next to Expedition Flag",
             "White Sands: In front of boat overlooking Manor"
@@ -687,6 +719,7 @@
     },
     {
         "region_name": "Sacred River",
+        "level": 1,
         "locations": [
             "Sacred River: Item",
             "Sacred River: Golgra"
@@ -694,6 +727,7 @@
     },
     {
         "region_name": "Spring Meadows",
+        "level": 1,
         "locations": [
             "Spring Meadows: Meadows Corridor - On the path",
             "Spring Meadows: Meadows Corridor - Small cave",
@@ -729,6 +763,7 @@
     },
     {
         "region_name": "Endless Night Sanctuary",
+        "level": 21,
         "locations": [
             "Endless Night Sanctuary: Warrior' Route - Near expeditioner corpse",
             "Endless Night Sanctuary: Entrance - Near Contortionniste corpses",
@@ -752,6 +787,7 @@
     },
     {
         "region_name": "Visages",
+        "level": 11,
         "locations": [
             "Manor: From Visages - Next to piano",
             "Visages: Plazza - On cliffside overlooking ocean",
@@ -780,6 +816,7 @@
     },
     {
         "region_name": "Yellow Harvest",
+        "level": 7,
         "locations": [
             "Yellow Harvest: Entrance - Near broken fountain",
             "Yellow Harvest: Entrance - Path to sunken building",
@@ -794,6 +831,7 @@
     },
     {
         "region_name": "WM: First Continent South",
+        "level": 1,
         "locations": [
             "World Map: First Continent - Outside Abbest Cave",
             "World Map: First Continent - Just outside Spring Meadows",
@@ -815,6 +853,7 @@
     },
     {
         "region_name": "WM: First Continent North",
+        "level": 1,
         "locations": [
             "World Map: First Continent - Paint spike west of Flying Waters exit",
             "World Map: First Continent - Ruins between Gestral Village and Stone Wave Cliffs",
@@ -834,6 +873,7 @@
     },
     {
         "region_name": "WM: South Sea",
+        "level": 1,
         "locations": [
             "World Map: First Continent - Beach outside The Meadows",
             "World Map: On the island with White Tree",
@@ -858,6 +898,7 @@
     },
     {
         "region_name": "WM: Second Continent South",
+        "level": 1,
         "locations": [
             "World Map: Second Continent - Ruined wall near Coastal Cave",
             "World Map: Second Continent - On the hill north of Stone Quarry",
@@ -872,6 +913,7 @@
     },
     {
         "region_name": "WM: Second Continent NE",
+        "level": 1,
         "locations": [
             "World Map: Second Continent - Outside The Carousel",
             "World Map: Second Continent - Southwest of The Carousel"
@@ -879,6 +921,7 @@
     },
     {
         "region_name": "WM: Second Continent NW",
+        "level": 1,
         "locations": [
             "World Map: Second Continent - Ruins far south of Old Lumiere entrance",
             "World Map: Second Continent - Outside Old Lumiere",
@@ -889,6 +932,7 @@
     },
     {
         "region_name": "WM: North Sea",
+        "level": 1,
         "locations": [
             "World Map: Second Continent - Beach east of Old Lumiere north exit",
             "Boat Graveyard item",
@@ -909,12 +953,14 @@
     },
     {
         "region_name": "WM: Outside Gestral Village",
+        "level": 1,
         "locations": [
             "World Map: First Continent - Outside Gestral Village"
         ]
     },
     {
         "region_name": "WM: Sky",
+        "level": 1,
         "locations": [
             "Manor: From World Map Sky Near Giant Petank - In closet",
             "World Map: First Continent - Northeast of Dark Shores beach",
@@ -951,6 +997,7 @@
     },
     {
         "region_name": "WM: Underwater",
+        "level": 1,
         "locations": [
             "World Map: Dive - East of Lumiere",
             "World Map: Dive - Near The Meadows",
@@ -968,18 +1015,21 @@
     },
     {
         "region_name": "Lost Woods",
+        "level": 1,
         "locations": [
             "Lost Woods item"
         ]
     },
     {
         "region_name": "Painting Workshop",
+        "level": 1,
         "locations": [
             "Painting Workshop: Lampmaster"
         ]
     },
     {
         "region_name": "Endless Tower",
+        "level": 21,
         "locations": [
             "Endless Tower: Stage 1-1",
             "Endless Tower: Stage 1-2",
@@ -988,6 +1038,7 @@
     },
     {
         "region_name": "Endless Tower Stage 2",
+        "level": 22,
         "locations": [
             "Endless Tower: Stage 2-1",
             "Endless Tower: Stage 2-2",
@@ -996,6 +1047,7 @@
     },
     {
         "region_name": "Endless Tower Stage 3",
+        "level": 23,
         "locations": [
             "Endless Tower: Stage 3-1",
             "Endless Tower: Stage 3-2",
@@ -1004,6 +1056,7 @@
     },
     {
         "region_name": "Endless Tower Stage 4",
+        "level": 24,
         "locations": [
             "Endless Tower: Stage 4-1",
             "Endless Tower: Stage 4-2",
@@ -1012,6 +1065,7 @@
     },
     {
         "region_name": "Endless Tower Stage 5",
+        "level": 25,
         "locations": [
             "Endless Tower: Stage 5-1",
             "Endless Tower: Stage 5-2",
@@ -1020,6 +1074,7 @@
     },
     {
         "region_name": "Endless Tower Stage 6",
+        "level": 26,
         "locations": [
             "Endless Tower: Stage 6-1",
             "Endless Tower: Stage 6-2",
@@ -1028,6 +1083,7 @@
     },
     {
         "region_name": "Endless Tower Stage 7",
+        "level": 27,
         "locations": [
             "Endless Tower: Stage 7-1",
             "Endless Tower: Stage 7-2",
@@ -1036,6 +1092,7 @@
     },
     {
         "region_name": "Endless Tower Stage 8",
+        "level": 28,
         "locations": [
             "Endless Tower: Stage 8-1",
             "Endless Tower: Stage 8-2",
@@ -1044,6 +1101,7 @@
     },
     {
         "region_name": "Endless Tower Stage 9",
+        "level": 29,
         "locations": [
             "Endless Tower: Stage 9-1",
             "Endless Tower: Stage 9-2",
@@ -1052,6 +1110,7 @@
     },
     {
         "region_name": "Endless Tower Stage 10",
+        "level": 30,
         "locations": [
             "Endless Tower: Stage 10-1",
             "Endless Tower: Stage 10-2",
@@ -1060,6 +1119,7 @@
     },
     {
         "region_name": "Endless Tower Stage 11",
+        "level": 31,
         "locations": [
 
             "Endless Tower: Stage 11-1",
@@ -1069,6 +1129,7 @@
     },
     {
         "region_name": "Dark Gestral Arena",
+        "level": 25,
         "locations": [
             "Dark Gestral Arena: Round 1",
             "Dark Gestral Arena: Round 2",
@@ -1078,6 +1139,7 @@
     },
     {
         "region_name": "Hidden Gestral Arena",
+        "level": 6,
         "locations": [
             "Hidden Gestral Arena: Bertrand Big Hands",
             "Hidden Gestral Arena: Dominique Giant Feet",
@@ -1087,12 +1149,14 @@
     },
     {
         "region_name": "Sirene's Dress",
+        "level": 20,
         "locations": [
             "Sirene’s Dress: Chromatic Glissando"
         ]
     },
     {
         "region_name": "Sunless Cliffs",
+        "level": 31,
         "locations": [
             "Sunless Cliffs: Bald Mime"
         ]
