@@ -4990,7 +4990,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level": 10
     },
     {
         "name": "Spring Meadows: Chromatic Lancelier",
