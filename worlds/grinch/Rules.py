@@ -424,11 +424,11 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "Stealing All Gifts": [
         # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
-        ["Rotten Egg Launcher", "Who Forest Vacuum Access", "Who Dump Vacuum Access", "Who Lake Vacuum Access", "Rocket Spring", "Marine Mobile"]
+        ["Rotten Egg Launcher", "Who Forest Vacuum Tube", "Who Dump Vacuum Tube", "Who Lake Vacuum Tube", "Rocket Spring", "Marine Mobile"]
     ],
     "Neutralizing Santa": [
         # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
-        ["Rotten Egg Launcher", "Who Forest Vacuum Access", "Who Dump Vacuum Access", "Who Lake Vacuum Access", "Rocket Spring", "Marine Mobile"]
+        ["Rotten Egg Launcher", "Who Forest Vacuum Tube", "Who Dump Vacuum Tube", "Who Lake Vacuum Tube", "Rocket Spring", "Marine Mobile"]
     ],
     "Heart of Stone - Whoville's Post Office": [
         []
@@ -484,16 +484,16 @@ rules_dict: dict[str,list[list[str]]] = {
         ["Rotten Egg Launcher"]
     ],
     "Skis in Who Forest": [
-        ["Who Forest Vacuum Access"]
+        ["Who Forest Vacuum Tube"]
     ],
     "Tires in Who Dump": [
-        ["Who Dump Vacuum Access", "Rocket Spring", "Rotten Egg Launcher"]
+        ["Who Dump Vacuum Tube", "Rocket Spring", "Rotten Egg Launcher"]
     ],
     "Twin-End Tuba in Submarine World": [
-        ["Who Lake Vacuum Access", "Marine Mobile"]
+        ["Who Lake Vacuum Tube", "Marine Mobile"]
     ],
     "GPS in Who Lake": [
-        ["Who Lake Vacuum Access", "Rotten Egg Launcher"]
+        ["Who Lake Vacuum Tube", "Rotten Egg Launcher"]
     ],
     "1st Crate Squashed": [
         []
@@ -541,8 +541,8 @@ access_rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "Who Forest": [
-        ["Who Forest Vacuum Access"],
-        # ["Progressive Vacuum Access": 1]
+        ["Who Forest Vacuum Tube"],
+        # ["Progressive Vacuum Tube": 1]
     ],
     "Ski Resort": [
         ["Cable Car Access Card"]
@@ -552,8 +552,8 @@ access_rules_dict: dict[str,list[list[str]]] = {
         ["Octopus Climbing Device"]
     ],
     "Who Dump": [
-        ["Who Dump Vacuum Access"],
-        # ["Progressive Vacuum Access": 2]
+        ["Who Dump Vacuum Tube"],
+        # ["Progressive Vacuum Tube": 2]
     ],
     "Minefield": [
         ["Rotten Egg Launcher", "Rocket Spring"],
@@ -569,8 +569,8 @@ access_rules_dict: dict[str,list[list[str]]] = {
         ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
     ],
     "Who Lake": [
-        ["Who Lake Vacuum Access"],
-        # ["Progressive Vacuum Access": 3]
+        ["Who Lake Vacuum Tube"],
+        # ["Progressive Vacuum Tube": 3]
     ],
     "Scout's Hut": [
         ["Grinch Copter"],

@@ -140,15 +140,15 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
 
 #Access Keys
 KEYS_TABLE: dict[str, GrinchItemData] = {
-    # "Whoville Vacuum Access": GrinchItemData("Vacuum Access", 400, IC.progression,
+    # "Whoville Vacuum Tube": GrinchItemData("Vacuum Tubes", 400, IC.progression,
     #     [GrinchRamData()]),
-    "Who Forest Vacuum Access": GrinchItemData("Vacuum Access", 401, IC.progression,
+    "Who Forest Vacuum Tube": GrinchItemData("Vacuum Tubes", 401, IC.progression,
         [GrinchRamData(0x0100AA, binary_bit_pos=2)]),
-    "Who Dump Vacuum Access": GrinchItemData("Vacuum Access", 402, IC.progression,
+    "Who Dump Vacuum Tube": GrinchItemData("Vacuum Tubes", 402, IC.progression,
         [GrinchRamData(0x0100AA, binary_bit_pos=3)]),
-    "Who Lake Vacuum Access": GrinchItemData("Vacuum Access", 403, IC.progression,
+    "Who Lake Vacuum Tube": GrinchItemData("Vacuum Tubes", 403, IC.progression,
         [GrinchRamData(0x0100AA, binary_bit_pos=4)]),
-    # "Progressive Vacuum Access": GrinchItemData("Vacuum Access", 404, IC.progression,
+    # "Progressive Vacuum Access": GrinchItemData("Vacuum Tubes", 404, IC.progression,
     #     [GrinchRamData()]),
     # "Spin N' Win Door Unlock": GrinchItemData("Supadow Door Unlocks", 405, IC.progression,
     #     [GrinchRamData()]),
