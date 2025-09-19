@@ -70,6 +70,28 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
             per_player_checks.append(
                 {"player": player, "locations": sorted(tracker_data.get_player_checked_locations(team, player))})
 
+    class PlayerChecksCount(TypedDict):
+        player: int
+        found: int
+        total: int
+
+    player_checks_counts: list[dict[str, int | list[PlayerChecksCount]]] = []
+    """Checks Item Found/Total per player."""
+    for team, players in all_players.items():
+        per_player_counts: list[PlayerChecksCount] = []
+        team_counts = {"team": team, "players": per_player_counts}
+        player_checks_counts.append(team_counts)
+        for player in players:
+            found = len(tracker_data.get_player_checked_locations(team, player))
+            total = len(tracker_data.get_player_locations(team, player))
+            per_player_counts.append(
+                {
+                    "player": player,
+                    "found": found,
+                    "total": total,
+                }
+            )
+
     total_checks_done: list[dict[str, int]] = [
         {"team": team, "checks_done": checks_done}
         for team, checks_done in tracker_data.get_team_locations_checked_count().items()
@@ -115,7 +137,6 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
         # FIX: key is "players" (not "player_timers")
         activity_timers[team]["players"][player - 1]["time"] = datetime.fromtimestamp(timestamp, timezone.utc)
 
-
     connection_timers: list[dict[str, int | list[PlayerTimer]]] = []
     """Time of last connection per player. Returned as RFC 1123 format and null if no connection has been made."""
     for team, players in all_players.items():
@@ -148,6 +169,7 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
         "aliases": player_aliases,
         "player_items_received": player_items_received,
         "player_checks_done": player_checks_done,
+        "player_checks_counts": player_checks_counts,
         "total_checks_done": total_checks_done,
         "hints": hints,
         "activity_timers": activity_timers,
