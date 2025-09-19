@@ -57,7 +57,7 @@ class ClairObscurWorld(World):
 
     settings: typing.ClassVar[ClairObscurSettings]
 
-    def convert_pictos(self, pictos_level: int):
+    def convert_pictos(self, pictos_level: int) -> int:
         #Converts the connection destination's pictos level into an amount of pictos required to reach that level with
         #scale-by-order-received.
         return ceil((pictos_level - 1) * 5.8)
