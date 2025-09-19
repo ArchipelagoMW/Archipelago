@@ -47,6 +47,13 @@ if TYPE_CHECKING:
     from . import SC2World
 
 
+def min2(a: int, b: int) -> int:
+    """`min()` that only takes two values; faster than baseline int by about 2x"""
+    if a <= b:
+        return a
+    return b
+
+
 class SC2Logic:
     def __init__(self, world: Optional["SC2World"]) -> None:
         # Note: Don't store a reference to the world so we can cache this object on the world object
@@ -762,27 +769,27 @@ class SC2Logic:
     def zerg_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL
         if self.has_zerg_melee_unit:
-            count = min(count, self.zerg_melee_weapon_armor_upgrade_min_level(state))
+            count = min2(count, self.zerg_melee_weapon_armor_upgrade_min_level(state))
         if self.has_zerg_ranged_unit:
-            count = min(count, self.zerg_ranged_weapon_armor_upgrade_min_level(state))
+            count = min2(count, self.zerg_ranged_weapon_armor_upgrade_min_level(state))
         if self.has_zerg_air_unit:
-            count = min(count, self.zerg_flyer_weapon_armor_upgrade_min_level(state))
+            count = min2(count, self.zerg_flyer_weapon_armor_upgrade_min_level(state))
         return count
 
     def zerg_melee_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        return min(
+        return min2(
             self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_MELEE_ATTACK, state),
             self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE, state),
         )
 
     def zerg_ranged_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        return min(
+        return min2(
             self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK, state),
             self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_GROUND_CARAPACE, state),
         )
 
     def zerg_flyer_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
-        return min(
+        return min2(
             self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_ATTACK, state),
             self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_ZERG_FLYER_CARAPACE, state),
         )
@@ -1108,7 +1115,7 @@ class SC2Logic:
         # Levels from missions beaten
         levels = self.kerrigan_levels_per_mission_completed * state.count_group("Missions", self.player)
         if self.kerrigan_levels_per_mission_completed_cap != -1:
-            levels = min(levels, self.kerrigan_levels_per_mission_completed_cap)
+            levels = min2(levels, self.kerrigan_levels_per_mission_completed_cap)
         # Levels from items
         for kerrigan_level_item in kerrigan_levels:
             level_amount = get_full_item_list()[kerrigan_level_item].number
@@ -1116,7 +1123,7 @@ class SC2Logic:
             levels += item_count * level_amount
         # Total level cap
         if self.kerrigan_total_level_cap != -1:
-            levels = min(levels, self.kerrigan_total_level_cap)
+            levels = min2(levels, self.kerrigan_total_level_cap)
 
         return levels >= target
 
