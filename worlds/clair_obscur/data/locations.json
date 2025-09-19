@@ -4782,7 +4782,8 @@
             "Painted Power": 1
         },
         "type": "Boss",
-        "boss_type": "Area"
+        "boss_type": "Area",
+        "pictos_level": 30
     },
     {
         "name": "Esquie’s Nest: Francois",

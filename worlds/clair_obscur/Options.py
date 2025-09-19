@@ -16,19 +16,31 @@ class Goal(Choice):
 
     default = 1
 
-class ExcludeLocations(Choice):
+class ExcludeEndgameLocations(Choice):
     """
-    This will remove all Endless Tower locations from the pool.
-    None: No locations excluded.
-    Endless Tower:
+    Determines what to do with locations higher level than the set goal, if the goal is Paintress or Curator.
+    Excluded: Locations won't be added to the pool.
+    Filler: Locations will only contain filler items.
+    Included: All locations are included.
     """
     internal_name = "exclude_endgame_locations"
     display_name = "Exclude Endgame Locations"
-    option_none = 0
-    option_endless = 1
-    option_drafts = 2
-    option_both = 3
-    default = 3
+    option_excluded = 0
+    option_filler = 1
+    option_included = 2
+
+class ExcludeEndlessTower(Choice):
+    """
+    Determines what to do with Endless Tower locations.
+    Excluded: Locations won't be added to the pool.
+    Filler: Locations will only contain filler items.
+    Included: All locations are included.
+    """
+    internal_name = "exclude_endless_tower"
+    display_name = "Exclude Endless Tower"
+    option_excluded = 0
+    option_filler = 1
+    option_included = 2
 
 class ShuffleLostGestrals(Toggle):
     """
@@ -39,7 +51,6 @@ class ShuffleLostGestrals(Toggle):
 
 class AreaLogic(Choice):
     """
-    Unimplemented
     Determines how many major area unlock items will be placed how early.
     Normal: Act 1 major areas won't be placed past Act 1; Forgotten Battlefield and Old Lumiere won't be placed behind
     Visages/Sirene; Visages and Sirene won't be placed behind The Monolith.
@@ -92,6 +103,8 @@ class ClairObscurStartInventory(StartInventory):
 class ClairObscurOptions(PerGameCommonOptions):
     goal: Goal
     char_shuffle: ShuffleCharacters
+    exclude_endgame_locations: ExcludeEndgameLocations
+    exclude_endless_tower: ExcludeEndlessTower
     gestral_shuffle: ShuffleLostGestrals
     starting_char: StartingCharacter
     gear_scaling: GearScaling
