@@ -1380,7 +1380,7 @@ class NonLocalItems(ItemSet):
 
 
 class StartInventory(ItemDict):
-    """Start with these items."""
+    """Start with the specified amount of these items. Example: "Bomb: 1" """
     verify_item_name = True
     display_name = "Start Inventory"
     rich_text_doc = True
@@ -1388,7 +1388,7 @@ class StartInventory(ItemDict):
 
 
 class StartInventoryPool(StartInventory):
-    """Start with these items and don't place them in the world.
+    """Start with the specified amount of these items and don't place them in the world. Example: "Bomb: 1"
 
     The game decides what the replacement items will be.
     """
