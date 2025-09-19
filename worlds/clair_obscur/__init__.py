@@ -108,12 +108,8 @@ class ClairObscurWorld(World):
                     self.item_pool.append(char_item)
 
         #Add filler to match the amount of locations
-        location_count = len(data.locations)
-        remaining_items_to_generate = location_count - len(self.item_pool)
-        if not self.options.gestral_shuffle:
-            remaining_items_to_generate -= 9
+        remaining_items_to_generate = len(self.multiworld.get_unfilled_locations(self.player)) - len(self.item_pool)
 
-        #Based on the amount of materials normally needed to upgrade a weapon from level 1 to 32; 4 : 12 : 27 : 35
         filler_amounts = {
             "Chroma Catalyst (5)": 1,
             "Polished Chroma Catalyst (5)": 2,
@@ -130,11 +126,7 @@ class ClairObscurWorld(World):
         for i in range(0, remaining_items_to_generate):
             item_name = filler_item_sequence[i % sequence_length]
             self.item_pool.append(self.create_item(item_name))
-            # i modulo filler_item_sequence length
 
-        # for i in range(0, remaining_items_to_generate):
-        #     item = self.create_item("Resplendent Chroma Catalyst (3)")
-        #     self.item_pool.append(item)
         self.multiworld.itempool += self.item_pool
 
     def fill_slot_data(self) -> Dict[str, Any]:
