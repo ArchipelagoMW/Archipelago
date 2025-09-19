@@ -4,16 +4,20 @@
 
 {% block head %}
     <title>Generation failed, please retry.</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/waitSeed.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/waitSeed.css') }}"/>
 {% endblock %}
 
 {% block body %}
     {% include 'header/oceanIslandHeader.html' %}
     <div id="wait-seed-wrapper" class="grass-island">
         <div id="wait-seed">
-            <h1>Generation failed</h1>
-			<h2>please retry</h2>
-            {{ seed_error }}
+            <h1>Generation Failed</h1>
+            <h2>Please try again!</h2>
+            <p>{{ seed_error }}</p>
+            <h4>More details:</h4>
+            <p>
+                <code class="grassy">{{ details }}</code>
+            </p>
         </div>
     </div>
 {% endblock %}
