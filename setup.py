@@ -30,7 +30,7 @@ try:
         install_cx_freeze = False
     except pkg_resources.ResolutionError:
         install_cx_freeze = True
-except ImportError:
+except (AttributeError, ImportError):
     install_cx_freeze = True
     pkg_resources = None  # type: ignore[assignment]
 
@@ -65,7 +65,6 @@ from Cython.Build import cythonize
 non_apworlds: set[str] = {
     "A Link to the Past",
     "Adventure",
-    "ArchipIDLE",
     "Archipelago",
     "Lufia II Ancient Cave",
     "Meritous",
