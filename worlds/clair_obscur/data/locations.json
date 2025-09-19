@@ -4754,7 +4754,7 @@
     },
     {
         "name": "The Abyss: Simon",
-        "internal_name": "Boss_SimonALPHA*1",
+        "internal_name": "Boss_SimonPhase2*1",
         "location": "The Abyss",
         "original_item": "",
         "condition": {},
@@ -5114,7 +5114,7 @@
     },
     {
         "name": "Stone Wave Cliffs: Chromatic Gault",
-        "internal_name": "WM_Gault_Alpha",
+        "internal_name": "YF_GaultB_Alpha",
         "location": "Stone Wave Cliffs",
         "original_item": "",
         "condition": {
@@ -5429,7 +5429,7 @@
     },
     {
         "name": "Lumiere: Creation",
-        "internal_name": "L_Creation*1_Aberration*2",
+        "internal_name": "L_Aberration*2_Creation*1",
         "location": "Lumiere",
         "original_item": "",
         "condition": {},
@@ -5528,7 +5528,7 @@
     },
     {
         "name": "Spring Meadows: Eveque",
-        "internal_name": "SM_Eveque*1",
+        "internal_name": "SM_Eveque_ShieldTutorial*1",
         "location": "Spring Meadows",
         "original_item": "",
         "condition": {},
