@@ -142,6 +142,7 @@ class APContainer:
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
         try:
+            assert self.manifest_path.endswith("archipelago.json"), "Filename should be archipelago.json"
             manifest_info = opened_zipfile.getinfo(self.manifest_path)
         except KeyError as e:
             for info in opened_zipfile.infolist():
