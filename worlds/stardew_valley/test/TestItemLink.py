@@ -4,6 +4,7 @@ from .. import options, item_table, Group
 max_iterations = 4000
 
 
+# Success Rate: (1 - ((1 - (1 / 199)) ^ 4000)) ^ 199 -> 0.99999964737880935363435882766624 -> 99.999965%
 class TestItemLinksEverythingIncluded(SVTestBase):
     options = {options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
                options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
