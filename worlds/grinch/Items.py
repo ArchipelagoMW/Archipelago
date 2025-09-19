@@ -191,6 +191,7 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
 # alias to Slowness Trap for traplink
     # "Tip Toe Trap": GrinchItemData("Traps", 603, IC.trap, [GrinchRamData()]),
 # This item may not function properly if you receive it during a loading screen or in Mount Crumpit
+# alias to Exhaustion Trap
 #     "Damage Trap": GrinchItemData("Traps", 604, IC.trap, [GrinchRamData(0x0E8FDC, value=-20, update_existing_value=True)]),
     "Depletion Trap": GrinchItemData("Traps", 605, IC.trap, [GrinchRamData(0x010058, value=0, bit_size=2)]),
     "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
