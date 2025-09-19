@@ -1,8 +1,15 @@
 from ..bases import SVTestBase
+from ... import StartWithoutOptionName, SeasonRandomization, EntranceRandomization
 from ...locations import location_table, LocationTags
+from ...options import StartWithout
 
 
 class TestTravelingMerchant(SVTestBase):
+    options = {
+        StartWithout: frozenset({StartWithoutOptionName.buildings}),
+        SeasonRandomization: SeasonRandomization.option_randomized_not_winter,
+        EntranceRandomization: EntranceRandomization.option_disabled,
+    }
 
     def test_purchase_from_traveling_merchant_requires_money(self):
         traveling_merchant_location_names = [l for l in self.get_real_location_names() if LocationTags.TRAVELING_MERCHANT in location_table[l].tags]
