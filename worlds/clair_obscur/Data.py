@@ -25,22 +25,22 @@ class ClairObscurLocationData(NamedTuple):
 class ClairObscurRegionData:
     name: str
     locations: List[str]
+    pictos_level: int
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, pictos: int):
         self.name = name
         self.locations = []
+        self.pictos_level = pictos if pictos is not None else 1
 
 class ClairObscurRegionConnection:
     origin_region: str
     destination_region: str
     condition: {}
-    pictos_level: int
 
-    def __init__(self, cond: {}, origin: str, destination: str, pictos: int):
+    def __init__(self, cond: {}, origin: str, destination: str):
         self.origin_region = origin
         self.destination_region = destination
         self.condition = cond if cond is not None else {}
-        self.pictos_level = pictos if pictos is not None else 1
 
 class ClairObscurData:
     items: Dict[int, ClairObscurItemData]
@@ -118,8 +118,10 @@ def populate_data_regions() -> Dict[str, ClairObscurRegionData]:
     regions_json = load_json_data("regions.json")
     for region in regions_json:
         region_name = region["region_name"]
+        region_level = region["level"]
         current_region_data = ClairObscurRegionData(
-            region_name
+            region_name,
+            region_level
         )
 
         for location_name in region["locations"]:
@@ -142,13 +144,11 @@ def populate_data_connections() -> List[ClairObscurRegionConnection]:
         conn_from = conn["from"]
         conn_to = conn["to"]
         conn_condition = conn["condition"]
-        conn_pictos = int(conn["pictos_level"])
 
         new_connection = ClairObscurRegionConnection(
             conn_condition,
             conn_from,
-            conn_to,
-            conn_pictos
+            conn_to
         )
 
         region_connections.append(new_connection)

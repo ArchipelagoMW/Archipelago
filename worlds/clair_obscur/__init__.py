@@ -88,7 +88,6 @@ class ClairObscurWorld(World):
         for item_id, item_data in data.items.items():
             amount = 1
 
-
             if item_data.type in excluded_types or item_data.name in excluded_names:
                 continue
             if item_data.name in amounts:
@@ -109,10 +108,10 @@ class ClairObscurWorld(World):
                     self.item_pool.append(char_item)
 
         #Add filler to match the amount of locations
-
         location_count = len(data.locations)
-
         remaining_items_to_generate = location_count - len(self.item_pool)
+        if not self.options.gestral_shuffle:
+            remaining_items_to_generate -= 9
 
         #Based on the amount of materials normally needed to upgrade a weapon from level 1 to 32; 4 : 12 : 27 : 35
         filler_amounts = {
