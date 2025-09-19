@@ -3353,7 +3353,7 @@
     },
     {
         "internal_name": "Chest_SmallLevel_CavernCrusher_1",
-        "name": "Cavern Crusher: After boss",
+        "name": "Crushing Cavern: After boss",
         "location": "Small Level Cavern Crusher",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
