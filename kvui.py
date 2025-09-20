@@ -915,6 +915,9 @@ class GameManager(ThemedApp):
             if len(self.logging_pairs) > 1:
                 self.add_client_tab(display_name, self.log_panels[display_name])
 
+        self.my_log = UILog()
+        self.add_client_tab("My Checks", self.my_log)
+
         self.hint_log = HintLog(self.json_to_kivy_parser)
         hint_panel = self.add_client_tab("Hints", HintLayout(self.hint_log))
         self.log_panels["Hints"] = hint_panel.content
@@ -1071,9 +1074,15 @@ class GameManager(ThemedApp):
             logging.getLogger("Client").exception(e)
 
     def print_json(self, data: typing.List[JSONMessagePart]):
+        def concerns_me(p: JSONMessagePart) -> bool:
+            return "player" in p and self.ctx.slot_concerns_self(p["player"])
+        message_concerns_me = any(concerns_me(d) for d in data)
+        # Parser mutates data.
         text = self.json_to_kivy_parser(data)
         self.log_panels["Archipelago"].on_message_markup(text)
         self.log_panels["All"].on_message_markup(text)
+        if message_concerns_me:
+            self.my_log.on_message_markup(text)
 
     def focus_textinput(self):
         if hasattr(self, "textinput"):
