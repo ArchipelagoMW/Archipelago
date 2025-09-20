@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Heretic (e.g. Steam version)](https://store.steampowered.com/app/2390/Heretic_Shadow_of_the_Serpent_Riders/)
+- [Heretic (e.g. Steam version)](https://store.steampowered.com/app/3286930/Heretic__Hexen/)
 - [Archipelago Crispy DOOM](https://github.com/Daivuk/apdoom/releases) (Same download for DOOM 1993, DOOM II and Heretic)
 
 ## Optional Software
