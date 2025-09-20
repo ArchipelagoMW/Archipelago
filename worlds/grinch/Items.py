@@ -148,7 +148,7 @@ KEYS_TABLE: dict[str, GrinchItemData] = {
         [GrinchRamData(0x0100AA, binary_bit_pos=3)]),
     "Who Lake Vacuum Tube": GrinchItemData("Vacuum Tubes", 403, IC.progression,
         [GrinchRamData(0x0100AA, binary_bit_pos=4)]),
-    # "Progressive Vacuum Access": GrinchItemData("Vacuum Tubes", 404, IC.progression,
+    # "Progressive Vacuum Tube": GrinchItemData("Vacuum Tubes", 404, IC.progression,
     #     [GrinchRamData()]),
     # "Spin N' Win Door Unlock": GrinchItemData("Supadow Door Unlocks", 405, IC.progression,
     #     [GrinchRamData()]),
