@@ -2,48 +2,41 @@
   {
     "from": "Menu",
     "to": "Spring Meadows",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "Spring Meadows",
     "to": "WM: First Continent South",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "WM: First Continent South",
     "to": "Abbest Cave",
-    "condition": {},
-    "pictos_level": 10
+    "condition": {}
   },
   {
     "from": "WM: First Continent South",
     "to": "Flying Waters",
     "condition": {
       "Area - Flying Waters": 1
-    },
-    "pictos_level": 3
+    }
   },
   {
     "from": "WM: First Continent South",
     "to": "WM: South Sea",
     "condition": {
       "Progressive Rock": 2
-    },
-    "pictos_level": 3
+    }
   },
   {
     "from": "Flying Waters",
     "to": "WM: First Continent North",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "WM: South Sea",
     "to": "WM: First Continent North",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "WM: First Continent North",
@@ -51,8 +44,7 @@
     "condition": {
       "Progressive Rock": 1,
       "Area - Stone Wave Cliffs": 1
-    },
-    "pictos_level": 1
+    }
   },
   {
     "from": "WM: First Continent North",
@@ -60,78 +52,67 @@
     "condition": {
       "Progressive Rock": 1,
       "Area - Yellow Harvest": 1
-    },
-    "pictos_level": 7
+    }
   },
   {
     "from": "Yellow Harvest",
     "to": "Lost Woods",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "WM: South Sea",
     "to": "Forgotten Battlefield",
     "condition": {
       "Area - Forgotten Battlefield": 1
-    },
-    "pictos_level": 8
+    }
   },
   {
     "from": "WM: South Sea",
     "to": "WM: Second Continent South",
     "condition": {
       "Progressive Rock": 3
-    },
-    "pictos_level": 8
+    }
   },
   {
     "from": "WM: South Sea",
     "to": "WM: North Sea",
     "condition": {
       "Progressive Rock": 3
-    },
-    "pictos_level": 11
+    }
   },
   {
     "from": "WM: South Sea",
     "to": "WM: Second Continent NW",
     "condition": {
       "Progressive Rock": 3
-    },
-    "pictos_level": 8
+    }
   },
   {
     "from": "Forgotten Battlefield",
     "to": "WM: Second Continent South",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "WM: Second Continent South",
     "to": "Monoco's Station",
     "condition": {
       "Area - Monoco's Station": 1
-    },
-    "pictos_level": 1
+    }
   },
   {
     "to": "WM: Second Continent NW",
     "condition": {},
-    "pictos_level": 1,
     "from": "Monoco's Station"
   },
   {
     "to": "WM: Second Continent NE",
     "condition": {},
-    "pictos_level": 1,
     "from": "Monoco's Station"
   },
   {
     "from": "WM: Sky",
     "to": "Lost Woods",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "WM: North Sea",
@@ -139,8 +120,7 @@
     "condition": {
       "Barrier Breaker": 1,
       "Area - The Monolith": 1
-    },
-    "pictos_level": 15
+    }
   },
   {
     "from": "The Monolith",
@@ -149,43 +129,37 @@
       "Progressive Rock": 4,
       "Painted Power": 1,
       "Area - Lumiere" : 1
-    },
-    "pictos_level": 16
+    }
   },
   {
     "from": "WM: Sky",
     "to": "WM: Underwater",
     "condition": {
       "Progressive Rock": 5
-    },
-    "pictos_level": 1
+    }
   },
   {
     "from": "WM: North Sea",
     "to": "WM: Sky",
     "condition": {
       "Progressive Rock": 4
-    },
-    "pictos_level": 16
+    }
   },
   {
     "from": "WM: Sky",
     "to": "WM: Second Continent NE",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "to": "Ancient Sanctuary",
     "condition": {
       "Area - Ancient Sanctuary": 1
     },
-    "pictos_level": 4,
     "from": "WM: First Continent North"
   },
   {
     "to": "WM: Outside Gestral Village",
     "condition": {},
-    "pictos_level": 1,
     "from": "Ancient Sanctuary"
   },
   {
@@ -193,7 +167,6 @@
     "condition": {
       "Area - Gestral Village": 1
     },
-    "pictos_level": 4,
     "from": "WM: Outside Gestral Village"
   },
   {
@@ -201,13 +174,11 @@
     "condition": {
       "Area - Esquie's Nest": 1
     },
-    "pictos_level": 5,
     "from": "WM: First Continent North"
   },
   {
     "to": "WM: Outside Gestral Village",
     "condition": {},
-    "pictos_level": 1,
     "from": "WM: Sky"
   },
   {
@@ -215,24 +186,21 @@
     "to": "Crimson Forest",
     "condition": {
       "Area - Crimson Forest": 1
-    },
-    "pictos_level": 24
+    }
   },
   {
     "from": "WM: Sky",
     "to": "Dark Shores",
     "condition": {
       "Painted Power": 1
-    },
-    "pictos_level": 23
+    }
   },
   {
     "from": "WM: North Sea",
     "to": "Falling Leaves",
     "condition": {
       "Area - Falling Leaves": 1
-    },
-    "pictos_level": 14
+    }
   },
   {
     "from": "WM: Sky",
@@ -240,8 +208,7 @@
     "condition": {
       "Painted Power": 1,
       "Area - Flying Manor": 1
-    },
-    "pictos_level": 28
+    }
   },
   {
     "from": "WM: Sky",
@@ -249,16 +216,14 @@
     "condition": {
       "Painted Power": 1,
       "Area - Frozen Hearts": 1
-    },
-    "pictos_level": 21
+    }
   },
   {
     "from": "WM: Second Continent NW",
     "to": "Old Lumiere",
     "condition": {
       "Area - Old Lumiere": 1
-    },
-    "pictos_level": 10
+    }
   },
   {
     "from": "WM: Sky",
@@ -266,8 +231,7 @@
     "condition": {
       "Painted Power": 1,
       "Area - The Reacher": 1
-    },
-    "pictos_level": 20
+    }
   },
   {
     "from": "WM: Underwater",
@@ -275,24 +239,21 @@
     "condition": {
       "Painted Power": 1,
       "Area - Renoir's Drafts": 1
-    },
-    "pictos_level": 31
+    }
   },
   {
     "from": "WM: North Sea",
     "to": "Sirene",
     "condition": {
       "Area - Sirene": 1
-    },
-    "pictos_level": 13
+    }
   },
   {
     "from": "WM: North Sea",
     "to": "Visages",
     "condition": {
       "Area - Visages": 1
-    },
-    "pictos_level": 11
+    }
   },
   {
     "from": "WM: First Continent North",
@@ -304,104 +265,89 @@
     "from": "WM: South Sea",
     "to": "Stone Wave Cliffs Cave",
     "condition": {
-    },
-    "pictos_level": 8
+    }
   },
   {
     "from": "WM: Sky",
     "to": "The Chosen Path",
     "condition": {
       "Painted Power": 1
-    },
-    "pictos_level": 20
+    }
   },
   {
     "from": "WM: Sky",
     "to": "Sky Island",
     "condition": {
       "Painted Power": 1
-    },
-    "pictos_level": 20
+    }
   },
   {
     "from": "WM: Sky",
     "to": "Isle of the Eyes",
     "condition": {
       "Painted Power": 1
-    },
-    "pictos_level": 22
+    }
   },
   {
     "from": "WM: North Sea",
     "to": "The Crows",
     "condition": {
-    },
-    "pictos_level": 1
+    }
   },
   {
     "from": "WM: Sky",
     "to": "The Fountain",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "WM: Sky",
     "to": "Floating Cemetery",
     "condition": {
-    },
-    "pictos_level": 1
+    }
   },
   {
     "from": "WM: Second Continent South",
     "to": "Coastal Cave",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "WM: South Sea",
     "to": "Crushing Cavern",
     "condition": {
-    },
-    "pictos_level": 9
+    }
   },
   {
     "from": "WM: Second Continent NW",
     "to": "Esoteric Ruins",
     "condition": {
-    },
-    "pictos_level": 1
+    }
   },
   {
     "from": "WM: North Sea",
     "to": "Sinister Cave",
     "condition": {
-    },
-    "pictos_level": 13
+    }
   },
   {
     "from": "WM: Sky",
     "to": "Flying Casino",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "WM: Second Continent NE",
     "to": "The Carousel",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "WM: Sky",
     "to": "White Sands",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   },
   {
     "from": "WM: Sky",
     "to": "Sacred River",
     "condition": {
-    },
-    "pictos_level": 1
+    }
   },
   {
     "from": "WM: Sky",
@@ -409,15 +355,13 @@
     "condition": {
       "Painted Power": 1,
       "Area - Endless Night Sanctuary": 1
-    },
-    "pictos_level": 25
+    }
   },
   {
     "from": "WM: Sky",
     "to": "Painting Workshop",
     "condition": {
-    },
-    "pictos_level": 30
+    }
   },
   {
     "from": "WM: Sky",
@@ -425,104 +369,88 @@
     "condition": {
       "Painted Power": 1,
       "Area - Endless Tower": 1
-    },
-    "pictos_level": 21
+    }
   },
   {
     "from": "Endless Tower",
     "to": "Endless Tower Stage 2",
-    "condition": {},
-    "pictos_level": 22
+    "condition": {}
   },
   {
     "from": "Endless Tower Stage 2",
     "to": "Endless Tower Stage 3",
-    "condition": {},
-    "pictos_level": 23
+    "condition": {}
   },
   {
     "from": "Endless Tower Stage 3",
     "to": "Endless Tower Stage 4",
-    "condition": {},
-    "pictos_level": 24
+    "condition": {}
   },
   {
     "from": "Endless Tower Stage 4",
     "to": "Endless Tower Stage 5",
-    "condition": {},
-    "pictos_level": 25
+    "condition": {}
   },
   {
     "from": "Endless Tower Stage 5",
     "to": "Endless Tower Stage 6",
-    "condition": {},
-    "pictos_level": 26
+    "condition": {}
   },
   {
     "from": "Endless Tower Stage 6",
     "to": "Endless Tower Stage 7",
-    "condition": {},
-    "pictos_level": 27
+    "condition": {}
   },
   {
     "from": "Endless Tower Stage 7",
     "to": "Endless Tower Stage 8",
-    "condition": {},
-    "pictos_level": 28
+    "condition": {}
   },
   {
     "from": "Endless Tower Stage 8",
     "to": "Endless Tower Stage 9",
-    "condition": {},
-    "pictos_level": 29
+    "condition": {}
   },
   {
     "from": "Endless Tower Stage 9",
     "to": "Endless Tower Stage 10",
-    "condition": {},
-    "pictos_level": 30
+    "condition": {}
   },
   {
     "from": "Endless Tower Stage 10",
     "to": "Endless Tower Stage 11",
-    "condition": {},
-    "pictos_level": 31
+    "condition": {}
   },
   {
     "from": "WM: Sky",
     "to": "Dark Gestral Arena",
     "condition": {
       "Painted Power": 1
-    },
-    "pictos_level": 25
+    }
   },
   {
     "from": "WM: First Continent North",
     "to": "Hidden Gestral Arena",
     "condition": {
-    },
-    "pictos_level": 1
+    }
   },
   {
     "from": "WM: Sky",
     "to": "Sirene's Dress",
     "condition": {
       "Painted Power": 1
-    },
-    "pictos_level": 1
+    }
   },
   {
     "from": "WM: Sky",
     "to": "Sunless Cliffs",
     "condition": {
       "Painted Power": 1
-    },
-    "pictos_level": 31
+    }
   },
   {
     "from": "WM: First Continent North",
     "to": "Red Woods",
-    "condition": {},
-    "pictos_level": 1
+    "condition": {}
   }
 ]

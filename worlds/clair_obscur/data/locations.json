@@ -897,7 +897,7 @@
     },
     {
         "internal_name": "Chest_FrozenHearts_4",
-        "name": "Frozen Hearts: Icebount Train Station - Chromatic Veilleur Ice Cave item 2",
+        "name": "Frozen Hearts: Icebound Train Station - Chromatic Veilleur Ice Cave item 2",
         "location": "Frozen Hearts",
         "original_item": "UpgradeMaterial",
         "condition": {},
@@ -3353,7 +3353,7 @@
     },
     {
         "internal_name": "Chest_SmallLevel_CavernCrusher_1",
-        "name": "Cavern Crusher: After boss",
+        "name": "Crushing Cavern: After boss",
         "location": "Small Level Cavern Crusher",
         "original_item": "Consumable_LuminaPoint",
         "condition": {},
@@ -4782,7 +4782,8 @@
             "Painted Power": 1
         },
         "type": "Boss",
-        "boss_type": "Area"
+        "boss_type": "Area",
+        "pictos_level": 30
     },
     {
         "name": "Esquie’s Nest: Francois",
@@ -4794,7 +4795,7 @@
         "boss_type": "Area"
     },
     {
-        "name": "Lumiere: The Curator",
+        "name": "Lumiere (Act 3): The Curator",
         "internal_name": "L_Boss_Curator_P1",
         "location": "Lumiere",
         "original_item": "",
@@ -4947,7 +4948,7 @@
         "boss_type": "Chromatic"
     },
     {
-        "name": "Lumiere: Chromatic Echassier",
+        "name": "Lumiere (Act 3): Chromatic Echassier",
         "internal_name": "LU_EchassierAlpha*1",
         "location": "Lumiere",
         "original_item": "",
@@ -5070,7 +5071,8 @@
         "original_item": "",
         "condition": {},
         "type": "Boss",
-        "boss_type": "Chromatic"
+        "boss_type": "Chromatic",
+        "pictos_level": 10
     },
     {
         "name": "Spring Meadows: Chromatic Lancelier",
@@ -5121,7 +5123,7 @@
         },
         "type": "Boss",
         "boss_type": "Chromatic",
-        "pictos_level":  28
+        "pictos_level":  20
     },
     {
         "name": "World Map: Chromatic Goblu",
@@ -5427,7 +5429,7 @@
         "boss_type": "Normal"
     },
     {
-        "name": "Lumiere: Creation",
+        "name": "Lumiere (Act 3): Creation",
         "internal_name": "L_Aberration*2_Creation*1",
         "location": "Lumiere",
         "original_item": "",
