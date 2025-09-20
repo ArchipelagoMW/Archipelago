@@ -21,7 +21,7 @@ class ProgressiveVacuum(Toggle):#DefaultOnToggle
 
     Enabled: Whoville > Who Forest > Who Dump > Who Lake
     """
-    display_name = "Progressive Vacuum Access"
+    display_name = "Progressive Vacuum Tubes"
 
 class Missionsanity(Choice):
     """
