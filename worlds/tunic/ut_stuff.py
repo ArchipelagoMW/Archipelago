@@ -96,6 +96,7 @@ poptracker_data: dict[str, int] = {
     "[Southwest] Chest Guarded By Turret/Behind the Trees": 509342519,
     "[Northwest] Shadowy Corner Chest/Dark Ramps Chest": 509342520,
     "[Southwest] Obscured In Tunnel To Beach/Deep in the Wall": 509342521,
+    "[Southwest] Obscured In Tunnel To Beach/Deep between the Trees": 509342521,
     "[Southwest] Grapple Chest Over Walkway/Jeffry": 509342522,
     "[Northwest] Chest Beneath Quarry Gate/Across the Bridge": 509342523,
     "[Southeast] Chest Near Swamp/Under the Bridge": 509342524,
