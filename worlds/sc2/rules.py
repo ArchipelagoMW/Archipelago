@@ -454,7 +454,7 @@ class SC2Logic:
             defense_score += 2
         return defense_score
 
-    def terran_competent_comp(self, state: CollectionState) -> bool:
+    def terran_competent_comp(self, state: CollectionState, upgrade_level: int = 1) -> bool:
         # All competent comps require anti-air
         if not self.terran_competent_anti_air(state):
             return False
@@ -462,12 +462,12 @@ class SC2Logic:
         infantry_weapons = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, state)
         infantry_armor = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR, state)
         infantry = state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player)
-        if infantry_weapons >= 2 and infantry_armor >= 1 and infantry and self.terran_bio_heal(state):
+        if infantry_weapons >= upgrade_level + 1 and infantry_armor >= upgrade_level and infantry and self.terran_bio_heal(state):
             return True
         # Mass Air-To-Ground
         ship_weapons = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state)
         ship_armor = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR, state)
-        if ship_weapons >= 1 and ship_armor >= 1:
+        if ship_weapons >= upgrade_level and ship_armor >= upgrade_level:
             air = (
                 state.has_any({item_names.BANSHEE, item_names.BATTLECRUISER}, self.player)
                 or state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY}, self.player)
@@ -480,7 +480,7 @@ class SC2Logic:
         # Strong Mech
         vehicle_weapons = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON, state)
         vehicle_armor = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR, state)
-        if vehicle_weapons >= 1 and vehicle_armor >= 1:
+        if vehicle_weapons >= upgrade_level and vehicle_armor >= upgrade_level:
             strong_vehicle = state.has_any({item_names.THOR, item_names.SIEGE_TANK}, self.player)
             light_frontline = state.has_any(
                 {item_names.MARINE, item_names.DOMINION_TROOPER, item_names.HELLION, item_names.VULTURE}, self.player

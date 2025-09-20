@@ -2150,8 +2150,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Victory",
             SC2WOL_LOC_ID_OFFSET + 2800,
             LocationType.VICTORY,
-            lambda state: logic.terran_competent_comp(state)
-            and logic.terran_army_weapon_armor_upgrade_min_level(state) >= 2,
+            lambda state: logic.terran_competent_comp(state, 2),
         ),
         make_location_data(
             SC2Mission.SHATTER_THE_SKY.mission_name,
@@ -2172,24 +2171,21 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             "Southeast Coolant Tower",
             SC2WOL_LOC_ID_OFFSET + 2803,
             LocationType.VANILLA,
-            lambda state: logic.terran_competent_comp(state)
-            and logic.terran_army_weapon_armor_upgrade_min_level(state) >= 2,
+            lambda state: logic.terran_competent_comp(state, 2),
         ),
         make_location_data(
             SC2Mission.SHATTER_THE_SKY.mission_name,
             "Southwest Coolant Tower",
             SC2WOL_LOC_ID_OFFSET + 2804,
             LocationType.VANILLA,
-            lambda state: logic.terran_competent_comp(state)
-            and logic.terran_army_weapon_armor_upgrade_min_level(state) >= 2,
+            lambda state: logic.terran_competent_comp(state, 2),
         ),
         make_location_data(
             SC2Mission.SHATTER_THE_SKY.mission_name,
             "Leviathan",
             SC2WOL_LOC_ID_OFFSET + 2805,
             LocationType.VANILLA,
-            lambda state: logic.terran_competent_comp(state)
-            and logic.terran_army_weapon_armor_upgrade_min_level(state) >= 2,
+            lambda state: logic.terran_competent_comp(state, 2),
             hard_rule=logic.terran_any_anti_air,
         ),
         make_location_data(
