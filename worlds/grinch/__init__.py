@@ -41,8 +41,8 @@ class GrinchWorld(World):
         for location, data in grinch_locations.items():
             region = self.get_region(data.region)
             entry = GrinchLocation(self.player, location, region, data)
-            if location == "Neutralizing Santa":
-                entry.place_locked_item(Item("Goal", ItemClassification.progression, None, self.player))
+            if location == "Mount Crumpit's Sleigh Ride - Neutralizing Santa":
+                entry.place_locked_item(Item("Neutralized", ItemClassification.progression, None, self.player))
             region.locations.append(entry)
         connect_regions(self)
 
@@ -67,7 +67,7 @@ class GrinchWorld(World):
         self.multiworld.itempool += self_itempool
 
     def set_rules(self):
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Goal", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Neutralized", self.player)
         set_location_rules(self)
 
     def get_other_filler_item(self, other_filler: list[str]) -> str:

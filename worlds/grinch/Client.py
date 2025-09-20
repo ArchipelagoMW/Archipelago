@@ -231,7 +231,7 @@ class GrinchClient(BizHawkClient):
 
     async def goal_checker(self, ctx: "BizHawkClientContext"):
         if not ctx.finished_game:
-            goal_loc = grinch_locations["Neutralizing Santa"]
+            goal_loc = grinch_locations["Mount Crumpit's Sleigh Ride - Neutralizing Santa"]
             goal_ram_address = goal_loc.update_ram_addr[0]
             current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
                 goal_ram_address.ram_address, goal_ram_address.bit_size, "MainRAM")]))[0], "little")

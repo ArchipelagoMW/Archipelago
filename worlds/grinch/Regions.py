@@ -19,7 +19,7 @@ mainareas_list = [
 subareas_list = [
     "Post Office",
     "City Hall",
-    "Countdown to X-Mas Tower",
+    "Clock Tower",
     "Ski Resort",
     "Civic Center",
     "Minefield",
@@ -83,12 +83,12 @@ def connect_regions(world: "GrinchWorld"):
     grinchconnect(world, "Mount Crumpit", "Who Dump")
     grinchconnect(world, "Mount Crumpit", "Who Lake")
     grinchconnect(world, "Mount Crumpit", "Sleigh Room")
-    grinchconnect(world, "Mount Crumpit", "Spin N' Win Supadow")
-    grinchconnect(world, "Mount Crumpit", "Dankamania Supadow")
-    grinchconnect(world, "Mount Crumpit", "The Copter Race Contest Supadow")
+    grinchconnect(world, "Mount Crumpit", "Spin N' Win")
+    grinchconnect(world, "Mount Crumpit", "Dankamania")
+    grinchconnect(world, "Mount Crumpit", "The Copter Race Contest")
     grinchconnect(world, "Whoville", "Post Office")
     grinchconnect(world, "Whoville", "City Hall")
-    grinchconnect(world, "Whoville", "Countdown to X-Mas Clock Tower")
+    grinchconnect(world, "Whoville", "Clock Tower")
     grinchconnect(world, "Who Forest", "Ski Resort")
     grinchconnect(world, "Who Forest", "Civic Center")
     grinchconnect(world, "Who Dump", "Minefield")
