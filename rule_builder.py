@@ -1361,8 +1361,11 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
 
 
 @dataclasses.dataclass()
-class HasAnyCount(HasAllCounts[TWorld], game="Archipelago"):
+class HasAnyCount(Rule[TWorld], game="Archipelago"):
     """A rule that checks if the player has any of the specified counts of the given items"""
+
+    item_counts: dict[str, int]
+    """A mapping of item name to count to check for"""
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
@@ -1378,7 +1381,15 @@ class HasAnyCount(HasAllCounts[TWorld], game="Archipelago"):
             caching_enabled=world.rule_caching_enabled,
         )
 
-    class Resolved(HasAllCounts.Resolved):
+    @override
+    def __str__(self) -> str:
+        items = ", ".join([f"{item} x{count}" for item, count in self.item_counts.items()])
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({items}{options})"
+
+    class Resolved(Rule.Resolved):
+        item_counts: tuple[tuple[str, int], ...]
+
         @override
         def _evaluate(self, state: CollectionState) -> bool:
             # implementation based on state.has_any_count
@@ -1387,6 +1398,10 @@ class HasAnyCount(HasAllCounts[TWorld], game="Archipelago"):
                 if player_prog_items[item] >= count:
                     return True
             return False
+
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {item: {id(self)} for item, _ in self.item_counts}
 
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
@@ -1586,13 +1601,19 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
 
 
 @dataclasses.dataclass(init=False)
-class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
+class HasFromListUnique(Rule[TWorld], game="Archipelago"):
     """A rule that checks if the player has at least `count` of the given items, ignoring duplicates of the same item"""
+
+    item_names: tuple[str, ...]
+    """A tuple of item names to check for"""
+
+    count: int = 1
+    """The number of items the player needs to have"""
 
     def __init__(self, *item_names: str, count: int = 1, options: Iterable[OptionFilter[Any]] = ()) -> None:
         super().__init__(options=options)
-        self.item_names: tuple[str, ...] = tuple(sorted(set(item_names)))
-        self.count: int = count
+        self.item_names = tuple(sorted(set(item_names)))
+        self.count = count
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
@@ -1608,7 +1629,24 @@ class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
             caching_enabled=world.rule_caching_enabled,
         )
 
-    class Resolved(HasFromList.Resolved):
+    @override
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any], world_cls: type[RuleWorldMixin]) -> Self:
+        args = {**data.get("args", {})}
+        item_names = args.pop("item_names", ())
+        options = OptionFilter.multiple_from_dict(data.get("options", ()))
+        return cls(*item_names, **args, options=options)
+
+    @override
+    def __str__(self) -> str:
+        items = ", ".join(self.item_names)
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({items}, count={self.count}{options})"
+
+    class Resolved(Rule.Resolved):
+        item_names: tuple[str, ...]
+        count: int = 1
+
         @override
         def _evaluate(self, state: CollectionState) -> bool:
             # implementation based on state.has_from_list_unique
@@ -1619,6 +1657,10 @@ class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
                 if found >= self.count:
                     return True
             return False
+
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {item: {id(self)} for item in self.item_names}
 
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
@@ -1763,11 +1805,38 @@ class HasGroup(Rule[TWorld], game="Archipelago"):
 
 
 @dataclasses.dataclass()
-class HasGroupUnique(HasGroup[TWorld], game="Archipelago"):
+class HasGroupUnique(Rule[TWorld], game="Archipelago"):
     """A rule that checks if the player has at least `count` of the items present
     in the specified item group, ignoring duplicates of the same item"""
 
-    class Resolved(HasGroup.Resolved):
+    item_name_group: str
+    """The name of the item group containing the items"""
+
+    count: int = 1
+    """The number of items the player needs to have"""
+
+    @override
+    def _instantiate(self, world: TWorld) -> Rule.Resolved:
+        item_names = tuple(sorted(world.item_name_groups[self.item_name_group]))
+        return self.Resolved(
+            self.item_name_group,
+            item_names,
+            self.count,
+            player=world.player,
+            caching_enabled=world.rule_caching_enabled,
+        )
+
+    @override
+    def __str__(self) -> str:
+        count = f", count={self.count}" if self.count > 1 else ""
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({self.item_name_group}{count}{options})"
+
+    class Resolved(Rule.Resolved):
+        item_name_group: str
+        item_names: tuple[str, ...]
+        count: int = 1
+
         @override
         def _evaluate(self, state: CollectionState) -> bool:
             # implementation based on state.has_group_unique
@@ -1778,6 +1847,10 @@ class HasGroupUnique(HasGroup[TWorld], game="Archipelago"):
                 if found >= self.count:
                     return True
             return False
+
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {item: {id(self)} for item in self.item_names}
 
         @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
