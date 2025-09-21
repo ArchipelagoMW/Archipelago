@@ -17,7 +17,6 @@ from .models import GameDataPackage, Room
 # Multisave is currently updated, at most, every minute.
 TRACKER_CACHE_TIMEOUT_IN_SECONDS = 60
 
-_multidata_cache = {}
 _multiworld_trackers: Dict[str, Callable] = {}
 _player_trackers: Dict[str, Callable] = {}
 
@@ -85,27 +84,27 @@ class TrackerData:
         """Retrieves the seed name."""
         return self._multidata["seed_name"]
 
-    def get_slot_data(self, team: int, player: int) -> Dict[str, Any]:
+    def get_slot_data(self, player: int) -> Dict[str, Any]:
         """Retrieves the slot data for a given player."""
         return self._multidata["slot_data"][player]
 
-    def get_slot_info(self, team: int, player: int) -> NetworkSlot:
+    def get_slot_info(self, player: int) -> NetworkSlot:
         """Retrieves the NetworkSlot data for a given player."""
         return self._multidata["slot_info"][player]
 
-    def get_player_name(self, team: int, player: int) -> str:
+    def get_player_name(self, player: int) -> str:
         """Retrieves the slot name for a given player."""
-        return self.get_slot_info(team, player).name
+        return self.get_slot_info(player).name
 
-    def get_player_game(self, team: int, player: int) -> str:
+    def get_player_game(self, player: int) -> str:
         """Retrieves the game for a given player."""
-        return self.get_slot_info(team, player).game
+        return self.get_slot_info(player).game
 
-    def get_player_locations(self, team: int, player: int) -> Dict[int, ItemMetadata]:
+    def get_player_locations(self, player: int) -> Dict[int, ItemMetadata]:
         """Retrieves all locations with their containing item's metadata for a given player."""
         return self._multidata["locations"][player]
 
-    def get_player_starting_inventory(self, team: int, player: int) -> List[int]:
+    def get_player_starting_inventory(self, player: int) -> List[int]:
         """Retrieves a list of all item codes a given slot starts with."""
         return self._multidata["precollected_items"][player]
 
@@ -116,7 +115,7 @@ class TrackerData:
     @_cache_results
     def get_player_missing_locations(self, team: int, player: int) -> Set[int]:
         """Retrieves the set of all locations not marked complete by this player."""
-        return set(self.get_player_locations(team, player)) - self.get_player_checked_locations(team, player)
+        return set(self.get_player_locations(player)) - self.get_player_checked_locations(team, player)
 
     def get_player_received_items(self, team: int, player: int) -> List[NetworkItem]:
         """Returns all items received to this player in order of received."""
@@ -126,7 +125,7 @@ class TrackerData:
     def get_player_inventory_counts(self, team: int, player: int) -> collections.Counter:
         """Retrieves a dictionary of all items received by their id and their received count."""
         received_items = self.get_player_received_items(team, player)
-        starting_items = self.get_player_starting_inventory(team, player)
+        starting_items = self.get_player_starting_inventory(player)
         inventory = collections.Counter()
         for item in received_items:
             inventory[item.item] += 1
@@ -179,7 +178,7 @@ class TrackerData:
     def get_team_locations_total_count(self) -> Dict[int, int]:
         """Retrieves a dictionary of total player locations each team has."""
         return {
-            team: sum(len(self.get_player_locations(team, player)) for player in players)
+            team: sum(len(self.get_player_locations(player)) for player in players)
             for team, players in self.get_all_players().items()
         }
 
@@ -210,7 +209,7 @@ class TrackerData:
         return {
             0: [
                 player for player, slot_info in self._multidata["slot_info"].items()
-                if self.get_slot_info(0, player).type == SlotType.player
+                if self.get_slot_info(player).type == SlotType.player
             ]
         }
 
@@ -226,7 +225,7 @@ class TrackerData:
     def get_room_locations(self) -> Dict[TeamPlayer, Dict[int, ItemMetadata]]:
         """Retrieves a dictionary of all locations and their associated item metadata per player."""
         return {
-            (team, player): self.get_player_locations(team, player)
+            (team, player): self.get_player_locations(player)
             for team, players in self.get_all_players().items() for player in players
         }
 
@@ -234,7 +233,7 @@ class TrackerData:
     def get_room_games(self) -> Dict[TeamPlayer, str]:
         """Retrieves a dictionary of games for each player."""
         return {
-            (team, player): self.get_player_game(team, player)
+            (team, player): self.get_player_game(player)
             for team, players in self.get_all_slots().items() for player in players
         }
 
@@ -262,9 +261,9 @@ class TrackerData:
             for player in players:
                 alias = self.get_player_alias(team, player)
                 if alias:
-                    long_player_names[team, player] = f"{alias} ({self.get_player_name(team, player)})"
+                    long_player_names[team, player] = f"{alias} ({self.get_player_name(player)})"
                 else:
-                    long_player_names[team, player] = self.get_player_name(team, player)
+                    long_player_names[team, player] = self.get_player_name(player)
 
         return long_player_names
 
@@ -344,7 +343,7 @@ def get_timeout_and_player_tracker(room: Room, tracked_team: int, tracked_player
     tracker_data = TrackerData(room)
 
     # Load and render the game-specific player tracker, or fallback to generic tracker if none exists.
-    game_specific_tracker = _player_trackers.get(tracker_data.get_player_game(tracked_team, tracked_player), None)
+    game_specific_tracker = _player_trackers.get(tracker_data.get_player_game(tracked_player), None)
     if game_specific_tracker and not generic:
         tracker = game_specific_tracker(tracker_data, tracked_team, tracked_player)
     else:
@@ -409,10 +408,10 @@ def get_enabled_multiworld_trackers(room: Room) -> Dict[str, Callable]:
 
 
 def render_generic_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
-    game = tracker_data.get_player_game(team, player)
+    game = tracker_data.get_player_game(player)
 
     received_items_in_order = {}
-    starting_inventory = tracker_data.get_player_starting_inventory(team, player)
+    starting_inventory = tracker_data.get_player_starting_inventory(player)
     for index, item in enumerate(starting_inventory):
         received_items_in_order[item] = index
     for index, network_item in enumerate(tracker_data.get_player_received_items(team, player),
@@ -428,7 +427,7 @@ def render_generic_tracker(tracker_data: TrackerData, team: int, player: int) ->
         player=player,
         player_name=tracker_data.get_room_long_player_names()[team, player],
         inventory=tracker_data.get_player_inventory_counts(team, player),
-        locations=tracker_data.get_player_locations(team, player),
+        locations=tracker_data.get_player_locations(player),
         checked_locations=tracker_data.get_player_checked_locations(team, player),
         received_items=received_items_in_order,
         saving_second=tracker_data.get_room_saving_second(),
@@ -500,7 +499,7 @@ if "Factorio" in network_data_package["games"]:
                 tracker_data.item_id_to_name["Factorio"][item_id]: count
                 for item_id, count in tracker_data.get_player_inventory_counts(team, player).items()
             }) for team, players in tracker_data.get_all_players().items() for player in players
-            if tracker_data.get_player_game(team, player) == "Factorio"
+            if tracker_data.get_player_game(player) == "Factorio"
         }
 
         return render_template(
@@ -589,7 +588,7 @@ if "A Link to the Past" in network_data_package["games"]:
 
         # Highlight 'bombs' if we received any bomb upgrades in bombless start.
         # In race mode, we'll just assume bombless start for simplicity.
-        if tracker_data.get_slot_data(team, player).get("bombless_start", True):
+        if tracker_data.get_slot_data(player).get("bombless_start", True):
             inventory["Bombs"] = sum(count for item, count in inventory.items() if item.startswith("Bomb Upgrade"))
         else:
             inventory["Bombs"] = 1
@@ -605,7 +604,7 @@ if "A Link to the Past" in network_data_package["games"]:
                 for code, count in tracker_data.get_player_inventory_counts(team, player).items()
             })
             for team, players in tracker_data.get_all_players().items()
-            for player in players if tracker_data.get_slot_info(team, player).game == "A Link to the Past"
+            for player in players if tracker_data.get_slot_info(player).game == "A Link to the Past"
         }
 
         # Translate non-progression items to progression items for tracker simplicity.
@@ -624,7 +623,7 @@ if "A Link to the Past" in network_data_package["games"]:
                 for region_name in known_regions
             }
             for team, players in tracker_data.get_all_players().items()
-            for player in players if tracker_data.get_slot_info(team, player).game == "A Link to the Past"
+            for player in players if tracker_data.get_slot_info(player).game == "A Link to the Past"
         }
 
         # Get a totals count.
@@ -698,7 +697,7 @@ if "A Link to the Past" in network_data_package["games"]:
             team=team,
             player=player,
             inventory=inventory,
-            player_name=tracker_data.get_player_name(team, player),
+            player_name=tracker_data.get_player_name(player),
             regions=regions,
             known_regions=known_regions,
         )
@@ -845,7 +844,7 @@ if "Ocarina of Time" in network_data_package["games"]:
                 return full_name[len(area):]
             return full_name
 
-        locations = tracker_data.get_player_locations(team, player)
+        locations = tracker_data.get_player_locations(player)
         checked_locations = tracker_data.get_player_checked_locations(team, player).intersection(set(locations))
         location_info = {}
         checks_done = {}
@@ -907,7 +906,7 @@ if "Ocarina of Time" in network_data_package["games"]:
             player=player,
             team=team,
             room=tracker_data.room,
-            player_name=tracker_data.get_player_name(team, player),
+            player_name=tracker_data.get_player_name(player),
             icons=icons,
             acquired_items={lookup_any_item_id_to_name[id] for id, count in inventory.items() if count > 0},
             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
@@ -954,57 +953,37 @@ if "Timespinner" in network_data_package["games"]:
             "Lab Glasses":         "https://timespinnerwiki.com/mediawiki/images/4/4a/Lab_Glasses.png",
             "Eye Orb":             "https://timespinnerwiki.com/mediawiki/images/a/a4/Eye_Orb.png",
             "Lab Coat":            "https://timespinnerwiki.com/mediawiki/images/5/51/Lab_Coat.png", 
-            "Demon":               "https://timespinnerwiki.com/mediawiki/images/f/f8/Familiar_Demon.png", 
+            "Demon":               "https://timespinnerwiki.com/mediawiki/images/f/f8/Familiar_Demon.png",
+            "Cube of Bodie":       "https://timespinnerwiki.com/mediawiki/images/1/14/Menu_Icon_Stats.png"
         }
 
         timespinner_location_ids = {
-            "Present":         [
-                1337000, 1337001, 1337002, 1337003, 1337004, 1337005, 1337006, 1337007, 1337008, 1337009,
-                1337010, 1337011, 1337012, 1337013, 1337014, 1337015, 1337016, 1337017, 1337018, 1337019,
-                1337020, 1337021, 1337022, 1337023, 1337024, 1337025, 1337026, 1337027, 1337028, 1337029,
-                1337030, 1337031, 1337032, 1337033, 1337034, 1337035, 1337036, 1337037, 1337038, 1337039,
-                1337040, 1337041, 1337042, 1337043, 1337044, 1337045, 1337046, 1337047, 1337048, 1337049,
-                1337050, 1337051, 1337052, 1337053, 1337054, 1337055, 1337056, 1337057, 1337058, 1337059,
-                1337060, 1337061, 1337062, 1337063, 1337064, 1337065, 1337066, 1337067, 1337068, 1337069,
-                1337070, 1337071, 1337072, 1337073, 1337074, 1337075, 1337076, 1337077, 1337078, 1337079,
-                1337080, 1337081, 1337082, 1337083, 1337084, 1337085],
-            "Past":            [
-                1337086, 1337087, 1337088, 1337089,
-                1337090, 1337091, 1337092, 1337093, 1337094, 1337095, 1337096, 1337097, 1337098, 1337099,
-                1337100, 1337101, 1337102, 1337103, 1337104, 1337105, 1337106, 1337107, 1337108, 1337109,
-                1337110, 1337111, 1337112, 1337113, 1337114, 1337115, 1337116, 1337117, 1337118, 1337119,
-                1337120, 1337121, 1337122, 1337123, 1337124, 1337125, 1337126, 1337127, 1337128, 1337129,
-                1337130, 1337131, 1337132, 1337133, 1337134, 1337135, 1337136, 1337137, 1337138, 1337139,
-                1337140, 1337141, 1337142, 1337143, 1337144, 1337145, 1337146, 1337147, 1337148, 1337149,
-                1337150, 1337151, 1337152, 1337153, 1337154, 1337155,
-                1337171, 1337172, 1337173, 1337174, 1337175],
+            "Present": list(range(1337000, 1337085)),
+            "Past": list(range(1337086, 1337175)),
             "Ancient Pyramid": [
                 1337236,
                 1337246, 1337247, 1337248, 1337249]
         }
 
-        slot_data = tracker_data.get_slot_data(team, player)
+        slot_data = tracker_data.get_slot_data(player)
         if (slot_data["DownloadableItems"]):
-            timespinner_location_ids["Present"] += [
-                1337156, 1337157, 1337159,
-                1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169,
-                1337170]
+            timespinner_location_ids["Present"] += [1337156, 1337157] + list(range(1337159, 1337170))
         if (slot_data["Cantoran"]):
             timespinner_location_ids["Past"].append(1337176)
         if (slot_data["LoreChecks"]):
-            timespinner_location_ids["Present"] += [
-                1337177, 1337178, 1337179,
-                1337180, 1337181, 1337182, 1337183, 1337184, 1337185, 1337186, 1337187]
-            timespinner_location_ids["Past"] += [
-                1337188, 1337189,
-                1337190, 1337191, 1337192, 1337193, 1337194, 1337195, 1337196, 1337197, 1337198]
+            timespinner_location_ids["Present"] += list(range(1337177, 1337187))
+            timespinner_location_ids["Past"] += list(range(1337188, 1337198))
         if (slot_data["GyreArchives"]):
-            timespinner_location_ids["Ancient Pyramid"] += [
-                1337237, 1337238, 1337239,
-                1337240, 1337241, 1337242, 1337243, 1337244, 1337245]
+            timespinner_location_ids["Ancient Pyramid"] += list(range(1337237, 1337245))
         if (slot_data["PyramidStart"]):
             timespinner_location_ids["Ancient Pyramid"] += [
                 1337233, 1337234, 1337235]
+        if (slot_data["PureTorcher"]):
+            timespinner_location_ids["Present"] += list(range(1337250, 1337352)) + list(range(1337422, 1337496)) + [1337506] + list(range(1337712, 1337779)) + [1337781, 1337782]
+            timespinner_location_ids["Past"] += list(range(1337497, 1337505)) + list(range(1337507, 1337711)) + [1337780]
+            timespinner_location_ids["Ancient Pyramid"] += list(range(1337369, 1337421))
+            if (slot_data["GyreArchives"]):
+                timespinner_location_ids["Ancient Pyramid"] += list(range(1337353, 1337368))
 
         display_data = {}
 
@@ -1035,7 +1014,7 @@ if "Timespinner" in network_data_package["games"]:
             player=player,
             team=team,
             room=tracker_data.room,
-            player_name=tracker_data.get_player_name(team, player),
+            player_name=tracker_data.get_player_name(player),
             checks_done=checks_done,
             checks_in_area=checks_in_area,
             location_info=location_info,
@@ -1144,7 +1123,7 @@ if "Super Metroid" in network_data_package["games"]:
             player=player,
             team=team,
             room=tracker_data.room,
-            player_name=tracker_data.get_player_name(team, player),
+            player_name=tracker_data.get_player_name(player),
             checks_done=checks_done,
             checks_in_area=checks_in_area,
             location_info=location_info,
@@ -1194,7 +1173,7 @@ if "ChecksFinder" in network_data_package["games"]:
 
         display_data = {}
         inventory = tracker_data.get_player_inventory_counts(team, player)
-        locations = tracker_data.get_player_locations(team, player)
+        locations = tracker_data.get_player_locations(player)
 
         # Multi-items
         multi_items = {
@@ -1236,7 +1215,7 @@ if "ChecksFinder" in network_data_package["games"]:
             player=player,
             team=team,
             room=tracker_data.room,
-            player_name=tracker_data.get_player_name(team, player),
+            player_name=tracker_data.get_player_name(player),
             checks_done=checks_done,
             checks_in_area=checks_in_area,
             location_info=location_info,
@@ -1247,1114 +1226,225 @@ if "ChecksFinder" in network_data_package["games"]:
 
 if "Starcraft 2" in network_data_package["games"]:
     def render_Starcraft2_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
-        SC2WOL_LOC_ID_OFFSET = 1000
-        SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
-        SC2LOTV_LOC_ID_OFFSET = SC2HOTS_LOC_ID_OFFSET + 2000
-        SC2NCO_LOC_ID_OFFSET = SC2LOTV_LOC_ID_OFFSET + 2500
-
         SC2WOL_ITEM_ID_OFFSET = 1000
-        SC2HOTS_ITEM_ID_OFFSET = SC2WOL_ITEM_ID_OFFSET + 1000
-        SC2LOTV_ITEM_ID_OFFSET = SC2HOTS_ITEM_ID_OFFSET + 1000
+        SC2HOTS_ITEM_ID_OFFSET = 2000
+        SC2LOTV_ITEM_ID_OFFSET = 2000
+        SC2_KEY_ITEM_ID_OFFSET = 4000
+        NCO_LOCATION_ID_LOW = 20004500
+        NCO_LOCATION_ID_HIGH = NCO_LOCATION_ID_LOW + 1000
 
-        slot_data = tracker_data.get_slot_data(team, player)
-        minerals_per_item = slot_data.get("minerals_per_item", 15)
-        vespene_per_item = slot_data.get("vespene_per_item", 15)
-        starting_supply_per_item = slot_data.get("starting_supply_per_item", 2)
+        STARTING_MINERALS_ITEM_ID = 1800
+        STARTING_VESPENE_ITEM_ID = 1801
+        STARTING_SUPPLY_ITEM_ID = 1802
+        # NOTHING_ITEM_ID = 1803
+        MAX_SUPPLY_ITEM_ID = 1804
+        SHIELD_REGENERATION_ITEM_ID = 1805
+        BUILDING_CONSTRUCTION_SPEED_ITEM_ID = 1806
+        UPGRADE_RESEARCH_SPEED_ITEM_ID = 1807
+        UPGRADE_RESEARCH_COST_ITEM_ID = 1808
+        REDUCED_MAX_SUPPLY_ITEM_ID = 1850
+        slot_data = tracker_data.get_slot_data(player)
+        inventory: collections.Counter[int] = tracker_data.get_player_inventory_counts(team, player)
+        item_id_to_name = tracker_data.item_id_to_name["Starcraft 2"]
+        location_id_to_name = tracker_data.location_id_to_name["Starcraft 2"]
 
-        github_icon_base_url = "https://matthewmarinets.github.io/ap_sc2_icons/icons/"
-        organics_icon_base_url = "https://0rganics.org/archipelago/sc2wol/"
-
-        icons = {
-            "Starting Minerals":                           github_icon_base_url + "blizzard/icon-mineral-nobg.png",
-            "Starting Vespene":                            github_icon_base_url + "blizzard/icon-gas-terran-nobg.png",
-            "Starting Supply":                             github_icon_base_url + "blizzard/icon-supply-terran_nobg.png",
-
-            "Terran Infantry Weapons Level 1":             github_icon_base_url + "blizzard/btn-upgrade-terran-infantryweaponslevel1.png",
-            "Terran Infantry Weapons Level 2":             github_icon_base_url + "blizzard/btn-upgrade-terran-infantryweaponslevel2.png",
-            "Terran Infantry Weapons Level 3":             github_icon_base_url + "blizzard/btn-upgrade-terran-infantryweaponslevel3.png",
-            "Terran Infantry Armor Level 1":               github_icon_base_url + "blizzard/btn-upgrade-terran-infantryarmorlevel1.png",
-            "Terran Infantry Armor Level 2":               github_icon_base_url + "blizzard/btn-upgrade-terran-infantryarmorlevel2.png",
-            "Terran Infantry Armor Level 3":               github_icon_base_url + "blizzard/btn-upgrade-terran-infantryarmorlevel3.png",
-            "Terran Vehicle Weapons Level 1":              github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleweaponslevel1.png",
-            "Terran Vehicle Weapons Level 2":              github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleweaponslevel2.png",
-            "Terran Vehicle Weapons Level 3":              github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleweaponslevel3.png",
-            "Terran Vehicle Armor Level 1":                github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleplatinglevel1.png",
-            "Terran Vehicle Armor Level 2":                github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleplatinglevel2.png",
-            "Terran Vehicle Armor Level 3":                github_icon_base_url + "blizzard/btn-upgrade-terran-vehicleplatinglevel3.png",
-            "Terran Ship Weapons Level 1":                 github_icon_base_url + "blizzard/btn-upgrade-terran-shipweaponslevel1.png",
-            "Terran Ship Weapons Level 2":                 github_icon_base_url + "blizzard/btn-upgrade-terran-shipweaponslevel2.png",
-            "Terran Ship Weapons Level 3":                 github_icon_base_url + "blizzard/btn-upgrade-terran-shipweaponslevel3.png",
-            "Terran Ship Armor Level 1":                   github_icon_base_url + "blizzard/btn-upgrade-terran-shipplatinglevel1.png",
-            "Terran Ship Armor Level 2":                   github_icon_base_url + "blizzard/btn-upgrade-terran-shipplatinglevel2.png",
-            "Terran Ship Armor Level 3":                   github_icon_base_url + "blizzard/btn-upgrade-terran-shipplatinglevel3.png",
-
-            "Bunker":                                      "https://static.wikia.nocookie.net/starcraft/images/c/c5/Bunker_SC2_Icon1.jpg",
-            "Missile Turret":                              "https://static.wikia.nocookie.net/starcraft/images/5/5f/MissileTurret_SC2_Icon1.jpg",
-            "Sensor Tower":                                "https://static.wikia.nocookie.net/starcraft/images/d/d2/SensorTower_SC2_Icon1.jpg",
-
-            "Projectile Accelerator (Bunker)":             github_icon_base_url + "blizzard/btn-upgrade-zerg-stukov-bunkerresearchbundle_05.png",
-            "Neosteel Bunker (Bunker)":                    organics_icon_base_url + "NeosteelBunker.png",
-            "Titanium Housing (Missile Turret)":           organics_icon_base_url + "TitaniumHousing.png",
-            "Hellstorm Batteries (Missile Turret)":        github_icon_base_url + "blizzard/btn-ability-stetmann-corruptormissilebarrage.png",
-            "Advanced Construction (SCV)":                 github_icon_base_url + "blizzard/btn-ability-mengsk-trooper-advancedconstruction.png",
-            "Dual-Fusion Welders (SCV)":                   github_icon_base_url + "blizzard/btn-upgrade-swann-scvdoublerepair.png",
-            "Hostile Environment Adaptation (SCV)":        github_icon_base_url + "blizzard/btn-upgrade-swann-hellarmor.png",
-            "Fire-Suppression System Level 1":             organics_icon_base_url + "Fire-SuppressionSystem.png",
-            "Fire-Suppression System Level 2":             github_icon_base_url + "blizzard/btn-upgrade-swann-firesuppressionsystem.png",
-
-            "Orbital Command":                             organics_icon_base_url + "OrbitalCommandCampaign.png",
-            "Planetary Command Module":                    github_icon_base_url + "original/btn-orbital-fortress.png",
-            "Lift Off (Planetary Fortress)":               github_icon_base_url + "blizzard/btn-ability-terran-liftoff.png",
-            "Armament Stabilizers (Planetary Fortress)":   github_icon_base_url + "blizzard/btn-ability-mengsk-siegetank-flyingtankarmament.png",
-            "Advanced Targeting (Planetary Fortress)":     github_icon_base_url + "blizzard/btn-ability-terran-detectionconedebuff.png",
-
-            "Marine":                                      "https://static.wikia.nocookie.net/starcraft/images/4/47/Marine_SC2_Icon1.jpg",
-            "Medic":                                       github_icon_base_url + "blizzard/btn-unit-terran-medic.png",
-            "Firebat":                                     github_icon_base_url + "blizzard/btn-unit-terran-firebat.png",
-            "Marauder":                                    "https://static.wikia.nocookie.net/starcraft/images/b/ba/Marauder_SC2_Icon1.jpg",
-            "Reaper":                                      "https://static.wikia.nocookie.net/starcraft/images/7/7d/Reaper_SC2_Icon1.jpg",
-            "Ghost":                                       "https://static.wikia.nocookie.net/starcraft/images/6/6e/Ghost_SC2_Icon1.jpg",
-            "Spectre":                                     github_icon_base_url + "original/btn-unit-terran-spectre.png",
-            "HERC":                                        github_icon_base_url + "blizzard/btn-unit-terran-herc.png",
-
-            "Stimpack (Marine)":                           github_icon_base_url + "blizzard/btn-ability-terran-stimpack-color.png",
-            "Super Stimpack (Marine)":                     github_icon_base_url + "blizzard/btn-upgrade-terran-superstimppack.png",
-            "Combat Shield (Marine)":                      github_icon_base_url + "blizzard/btn-techupgrade-terran-combatshield-color.png",
-            "Laser Targeting System (Marine)":             github_icon_base_url + "blizzard/btn-upgrade-terran-lazertargetingsystem.png",
-            "Magrail Munitions (Marine)":                  github_icon_base_url + "blizzard/btn-upgrade-terran-magrailmunitions.png",
-            "Optimized Logistics (Marine)":                github_icon_base_url + "blizzard/btn-upgrade-terran-optimizedlogistics.png",
-            "Advanced Medic Facilities (Medic)":           organics_icon_base_url + "AdvancedMedicFacilities.png",
-            "Stabilizer Medpacks (Medic)":                 github_icon_base_url + "blizzard/btn-upgrade-raynor-stabilizermedpacks.png",
-            "Restoration (Medic)":                         github_icon_base_url + "original/btn-ability-terran-restoration@scbw.png",
-            "Optical Flare (Medic)":                       github_icon_base_url + "blizzard/btn-upgrade-protoss-fenix-dragoonsolariteflare.png",
-            "Resource Efficiency (Medic)":                 github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Adaptive Medpacks (Medic)":                   github_icon_base_url + "blizzard/btn-ability-terran-heal-color.png",
-            "Nano Projector (Medic)":                      github_icon_base_url + "blizzard/talent-raynor-level03-firebatmedicrange.png",
-            "Incinerator Gauntlets (Firebat)":             github_icon_base_url + "blizzard/btn-upgrade-raynor-incineratorgauntlets.png",
-            "Juggernaut Plating (Firebat)":                github_icon_base_url + "blizzard/btn-upgrade-raynor-juggernautplating.png",
-            "Stimpack (Firebat)":                          github_icon_base_url + "blizzard/btn-ability-terran-stimpack-color.png",
-            "Super Stimpack (Firebat)":                    github_icon_base_url + "blizzard/btn-upgrade-terran-superstimppack.png",
-            "Resource Efficiency (Firebat)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Infernal Pre-Igniter (Firebat)":              github_icon_base_url + "blizzard/btn-upgrade-terran-infernalpreigniter.png",
-            "Kinetic Foam (Firebat)":                      organics_icon_base_url + "KineticFoam.png",
-            "Nano Projectors (Firebat)":                   github_icon_base_url + "blizzard/talent-raynor-level03-firebatmedicrange.png",
-            "Concussive Shells (Marauder)":                github_icon_base_url + "blizzard/btn-ability-terran-punishergrenade-color.png",
-            "Kinetic Foam (Marauder)":                     organics_icon_base_url + "KineticFoam.png",
-            "Stimpack (Marauder)":                         github_icon_base_url + "blizzard/btn-ability-terran-stimpack-color.png",
-            "Super Stimpack (Marauder)":                   github_icon_base_url + "blizzard/btn-upgrade-terran-superstimppack.png",
-            "Laser Targeting System (Marauder)":           github_icon_base_url + "blizzard/btn-upgrade-terran-lazertargetingsystem.png",
-            "Magrail Munitions (Marauder)":                github_icon_base_url + "blizzard/btn-upgrade-terran-magrailmunitions.png",
-            "Internal Tech Module (Marauder)":             github_icon_base_url + "blizzard/btn-upgrade-terran-internalizedtechmodule.png",
-            "Juggernaut Plating (Marauder)":               organics_icon_base_url + "JuggernautPlating.png",
-            "U-238 Rounds (Reaper)":                       organics_icon_base_url + "U-238Rounds.png",
-            "G-4 Clusterbomb (Reaper)":                    github_icon_base_url + "blizzard/btn-upgrade-terran-kd8chargeex3.png",
-            "Stimpack (Reaper)":                           github_icon_base_url + "blizzard/btn-ability-terran-stimpack-color.png",
-            "Super Stimpack (Reaper)":                     github_icon_base_url + "blizzard/btn-upgrade-terran-superstimppack.png",
-            "Laser Targeting System (Reaper)":             github_icon_base_url + "blizzard/btn-upgrade-terran-lazertargetingsystem.png",
-            "Advanced Cloaking Field (Reaper)":            github_icon_base_url + "original/btn-permacloak-reaper.png",
-            "Spider Mines (Reaper)":                       github_icon_base_url + "original/btn-ability-terran-spidermine.png",
-            "Combat Drugs (Reaper)":                       github_icon_base_url + "blizzard/btn-upgrade-terran-reapercombatdrugs.png",
-            "Jet Pack Overdrive (Reaper)":                 github_icon_base_url + "blizzard/btn-ability-hornerhan-reaper-flightmode.png",
-            "Ocular Implants (Ghost)":                     organics_icon_base_url + "OcularImplants.png",
-            "Crius Suit (Ghost)":                          github_icon_base_url + "original/btn-permacloak-ghost.png",
-            "EMP Rounds (Ghost)":                          github_icon_base_url + "blizzard/btn-ability-terran-emp-color.png",
-            "Lockdown (Ghost)":                            github_icon_base_url + "original/btn-abilty-terran-lockdown@scbw.png",
-            "Resource Efficiency (Ghost)":                 github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Psionic Lash (Spectre)":                      organics_icon_base_url + "PsionicLash.png",
-            "Nyx-Class Cloaking Module (Spectre)":         github_icon_base_url + "original/btn-permacloak-spectre.png",
-            "Impaler Rounds (Spectre)":                    github_icon_base_url + "blizzard/btn-techupgrade-terran-impalerrounds.png",
-            "Resource Efficiency (Spectre)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Juggernaut Plating (HERC)":                   organics_icon_base_url + "JuggernautPlating.png",
-            "Kinetic Foam (HERC)":                         organics_icon_base_url + "KineticFoam.png",
-            "Resource Efficiency (HERC)":                  github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-
-            "Hellion":                                     "https://static.wikia.nocookie.net/starcraft/images/5/56/Hellion_SC2_Icon1.jpg",
-            "Vulture":                                     github_icon_base_url + "blizzard/btn-unit-terran-vulture.png",
-            "Goliath":                                     github_icon_base_url + "blizzard/btn-unit-terran-goliath.png",
-            "Diamondback":                                 github_icon_base_url + "blizzard/btn-unit-terran-cobra.png",
-            "Siege Tank":                                  "https://static.wikia.nocookie.net/starcraft/images/5/57/SiegeTank_SC2_Icon1.jpg",
-            "Thor":                                        "https://static.wikia.nocookie.net/starcraft/images/e/ef/Thor_SC2_Icon1.jpg",
-            "Predator":                                    github_icon_base_url + "original/btn-unit-terran-predator.png",
-            "Widow Mine":                                  github_icon_base_url + "blizzard/btn-unit-terran-widowmine.png",
-            "Cyclone":                                     github_icon_base_url + "blizzard/btn-unit-terran-cyclone.png",
-            "Warhound":                                    github_icon_base_url + "blizzard/btn-unit-terran-warhound.png",
-
-            "Twin-Linked Flamethrower (Hellion)":          github_icon_base_url + "blizzard/btn-upgrade-mengsk-trooper-flamethrower.png",
-            "Thermite Filaments (Hellion)":                github_icon_base_url + "blizzard/btn-upgrade-terran-infernalpreigniter.png",
-            "Hellbat Aspect (Hellion)":                    github_icon_base_url + "blizzard/btn-unit-terran-hellionbattlemode.png",
-            "Smart Servos (Hellion)":                      github_icon_base_url + "blizzard/btn-upgrade-terran-transformationservos.png",
-            "Optimized Logistics (Hellion)":               github_icon_base_url + "blizzard/btn-upgrade-terran-optimizedlogistics.png",
-            "Jump Jets (Hellion)":                         github_icon_base_url + "blizzard/btn-upgrade-terran-jumpjets.png",
-            "Stimpack (Hellion)":                          github_icon_base_url + "blizzard/btn-ability-terran-stimpack-color.png",
-            "Super Stimpack (Hellion)":                    github_icon_base_url + "blizzard/btn-upgrade-terran-superstimppack.png",
-            "Infernal Plating (Hellion)":                  github_icon_base_url + "blizzard/btn-upgrade-swann-hellarmor.png",
-            "Cerberus Mine (Spider Mine)":                 github_icon_base_url + "blizzard/btn-upgrade-raynor-cerberusmines.png",
-            "High Explosive Munition (Spider Mine)":       github_icon_base_url + "original/btn-ability-terran-spidermine.png",
-            "Replenishable Magazine (Vulture)":            github_icon_base_url + "blizzard/btn-upgrade-raynor-replenishablemagazine.png",
-            "Replenishable Magazine (Free) (Vulture)":     github_icon_base_url + "blizzard/btn-upgrade-raynor-replenishablemagazine.png",
-            "Ion Thrusters (Vulture)":                     github_icon_base_url + "blizzard/btn-ability-terran-emergencythrusters.png",
-            "Auto Launchers (Vulture)":                    github_icon_base_url + "blizzard/btn-upgrade-terran-jotunboosters.png",
-            "Auto-Repair (Vulture)":                       github_icon_base_url + "blizzard/ui_tipicon_campaign_space01-repair.png",
-            "Multi-Lock Weapons System (Goliath)":         github_icon_base_url + "blizzard/btn-upgrade-swann-multilockweaponsystem.png",
-            "Ares-Class Targeting System (Goliath)":       github_icon_base_url + "blizzard/btn-upgrade-swann-aresclasstargetingsystem.png",
-            "Jump Jets (Goliath)":                         github_icon_base_url + "blizzard/btn-upgrade-terran-jumpjets.png",
-            "Optimized Logistics (Goliath)":               github_icon_base_url + "blizzard/btn-upgrade-terran-optimizedlogistics.png",
-            "Shaped Hull (Goliath)":                       organics_icon_base_url + "ShapedHull.png",
-            "Resource Efficiency (Goliath)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Internal Tech Module (Goliath)":              github_icon_base_url + "blizzard/btn-upgrade-terran-internalizedtechmodule.png",
-            "Tri-Lithium Power Cell (Diamondback)":        github_icon_base_url + "original/btn-upgrade-terran-trilithium-power-cell.png",
-            "Tungsten Spikes (Diamondback)":               github_icon_base_url + "original/btn-upgrade-terran-tungsten-spikes.png",
-            "Shaped Hull (Diamondback)":                   organics_icon_base_url + "ShapedHull.png",
-            "Hyperfluxor (Diamondback)":                   github_icon_base_url + "blizzard/btn-upgrade-mengsk-engineeringbay-orbitaldrop.png",
-            "Burst Capacitors (Diamondback)":              github_icon_base_url + "blizzard/btn-ability-terran-electricfield.png",
-            "Ion Thrusters (Diamondback)":                 github_icon_base_url + "blizzard/btn-ability-terran-emergencythrusters.png",
-            "Resource Efficiency (Diamondback)":           github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Maelstrom Rounds (Siege Tank)":               github_icon_base_url + "blizzard/btn-upgrade-raynor-maelstromrounds.png",
-            "Shaped Blast (Siege Tank)":                   organics_icon_base_url + "ShapedBlast.png",
-            "Jump Jets (Siege Tank)":                      github_icon_base_url + "blizzard/btn-upgrade-terran-jumpjets.png",
-            "Spider Mines (Siege Tank)":                   github_icon_base_url + "blizzard/btn-upgrade-siegetank-spidermines.png",
-            "Smart Servos (Siege Tank)":                   github_icon_base_url + "blizzard/btn-upgrade-terran-transformationservos.png",
-            "Graduating Range (Siege Tank)":               github_icon_base_url + "blizzard/btn-upgrade-terran-nova-siegetankrange.png",
-            "Laser Targeting System (Siege Tank)":         github_icon_base_url + "blizzard/btn-upgrade-terran-lazertargetingsystem.png",
-            "Advanced Siege Tech (Siege Tank)":            github_icon_base_url + "blizzard/btn-upgrade-raynor-improvedsiegemode.png",
-            "Internal Tech Module (Siege Tank)":           github_icon_base_url + "blizzard/btn-upgrade-terran-internalizedtechmodule.png",
-            "Shaped Hull (Siege Tank)":                    organics_icon_base_url + "ShapedHull.png",
-            "Resource Efficiency (Siege Tank)":            github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "330mm Barrage Cannon (Thor)":                 github_icon_base_url + "original/btn-ability-thor-330mm.png",
-            "Immortality Protocol (Thor)":                 github_icon_base_url + "blizzard/btn-techupgrade-terran-immortalityprotocol.png",
-            "Immortality Protocol (Free) (Thor)":          github_icon_base_url + "blizzard/btn-techupgrade-terran-immortalityprotocol.png",
-            "High Impact Payload (Thor)":                  github_icon_base_url + "blizzard/btn-unit-terran-thorsiegemode.png",
-            "Smart Servos (Thor)":                         github_icon_base_url + "blizzard/btn-upgrade-terran-transformationservos.png",
-            "Button With a Skull on It (Thor)":            github_icon_base_url + "blizzard/btn-ability-terran-nuclearstrike-color.png",
-            "Laser Targeting System (Thor)":               github_icon_base_url + "blizzard/btn-upgrade-terran-lazertargetingsystem.png",
-            "Large Scale Field Construction (Thor)":       github_icon_base_url + "blizzard/talent-swann-level12-immortalityprotocol.png",
-            "Resource Efficiency (Predator)":              github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Cloak (Predator)":                            github_icon_base_url + "blizzard/btn-ability-terran-cloak-color.png",
-            "Charge (Predator)":                           github_icon_base_url + "blizzard/btn-ability-protoss-charge-color.png",
-            "Predator's Fury (Predator)":                  github_icon_base_url + "blizzard/btn-ability-protoss-shadowfury.png",
-            "Drilling Claws (Widow Mine)":                 github_icon_base_url + "blizzard/btn-upgrade-terran-researchdrillingclaws.png",
-            "Concealment (Widow Mine)":                    github_icon_base_url + "blizzard/btn-ability-terran-widowminehidden.png",
-            "Black Market Launchers (Widow Mine)":         github_icon_base_url + "blizzard/btn-ability-hornerhan-widowmine-attackrange.png",
-            "Executioner Missiles (Widow Mine)":           github_icon_base_url + "blizzard/btn-ability-hornerhan-widowmine-deathblossom.png",
-            "Mag-Field Accelerators (Cyclone)":            github_icon_base_url + "blizzard/btn-upgrade-terran-magfieldaccelerator.png",
-            "Mag-Field Launchers (Cyclone)":               github_icon_base_url + "blizzard/btn-upgrade-terran-cyclonerangeupgrade.png",
-            "Targeting Optics (Cyclone)":                  github_icon_base_url + "blizzard/btn-upgrade-swann-targetingoptics.png",
-            "Rapid Fire Launchers (Cyclone)":              github_icon_base_url + "blizzard/btn-upgrade-raynor-ripwavemissiles.png",
-            "Resource Efficiency (Cyclone)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Internal Tech Module (Cyclone)":              github_icon_base_url + "blizzard/btn-upgrade-terran-internalizedtechmodule.png",
-            "Resource Efficiency (Warhound)":              github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Reinforced Plating (Warhound)":               github_icon_base_url + "original/btn-research-zerg-fortifiedbunker.png",
-
-            "Medivac":                                     "https://static.wikia.nocookie.net/starcraft/images/d/db/Medivac_SC2_Icon1.jpg",
-            "Wraith":                                      github_icon_base_url + "blizzard/btn-unit-terran-wraith.png",
-            "Viking":                                      "https://static.wikia.nocookie.net/starcraft/images/2/2a/Viking_SC2_Icon1.jpg",
-            "Banshee":                                     "https://static.wikia.nocookie.net/starcraft/images/3/32/Banshee_SC2_Icon1.jpg",
-            "Battlecruiser":                               "https://static.wikia.nocookie.net/starcraft/images/f/f5/Battlecruiser_SC2_Icon1.jpg",
-            "Raven":                                       "https://static.wikia.nocookie.net/starcraft/images/1/19/SC2_Lab_Raven_Icon.png",
-            "Science Vessel":                              "https://static.wikia.nocookie.net/starcraft/images/c/c3/SC2_Lab_SciVes_Icon.png",
-            "Hercules":                                    "https://static.wikia.nocookie.net/starcraft/images/4/40/SC2_Lab_Hercules_Icon.png",
-            "Liberator":                                   github_icon_base_url + "blizzard/btn-unit-terran-liberator.png",
-            "Valkyrie":                                    github_icon_base_url + "original/btn-unit-terran-valkyrie@scbw.png",
-
-            "Rapid Deployment Tube (Medivac)":             organics_icon_base_url + "RapidDeploymentTube.png",
-            "Advanced Healing AI (Medivac)":               github_icon_base_url + "blizzard/btn-ability-mengsk-medivac-doublehealbeam.png",
-            "Expanded Hull (Medivac)":                     github_icon_base_url + "blizzard/btn-upgrade-mengsk-engineeringbay-neosteelfortifiedarmor.png",
-            "Afterburners (Medivac)":                      github_icon_base_url + "blizzard/btn-upgrade-terran-medivacemergencythrusters.png",
-            "Scatter Veil (Medivac)":                      github_icon_base_url + "blizzard/btn-upgrade-swann-defensivematrix.png",
-            "Advanced Cloaking Field (Medivac)":           github_icon_base_url + "original/btn-permacloak-medivac.png",
-            "Tomahawk Power Cells (Wraith)":               organics_icon_base_url + "TomahawkPowerCells.png",
-            "Unregistered Cloaking Module (Wraith)":       github_icon_base_url + "original/btn-permacloak-wraith.png",
-            "Trigger Override (Wraith)":                   github_icon_base_url + "blizzard/btn-ability-hornerhan-wraith-attackspeed.png",
-            "Internal Tech Module (Wraith)":               github_icon_base_url + "blizzard/btn-upgrade-terran-internalizedtechmodule.png",
-            "Resource Efficiency (Wraith)":                github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Displacement Field (Wraith)":                 github_icon_base_url + "blizzard/btn-upgrade-swann-displacementfield.png",
-            "Advanced Laser Technology (Wraith)":          github_icon_base_url + "blizzard/btn-upgrade-swann-improvedburstlaser.png",
-            "Ripwave Missiles (Viking)":                   github_icon_base_url + "blizzard/btn-upgrade-raynor-ripwavemissiles.png",
-            "Phobos-Class Weapons System (Viking)":        github_icon_base_url + "blizzard/btn-upgrade-raynor-phobosclassweaponssystem.png",
-            "Smart Servos (Viking)":                       github_icon_base_url + "blizzard/btn-upgrade-terran-transformationservos.png",
-            "Anti-Mechanical Munition (Viking)":           github_icon_base_url + "blizzard/btn-ability-terran-ignorearmor.png",
-            "Shredder Rounds (Viking)":                    github_icon_base_url + "blizzard/btn-ability-hornerhan-viking-piercingattacks.png",
-            "W.I.L.D. Missiles (Viking)":                  github_icon_base_url + "blizzard/btn-ability-hornerhan-viking-missileupgrade.png",
-            "Cross-Spectrum Dampeners (Banshee)":          github_icon_base_url + "original/btn-banshee-cross-spectrum-dampeners.png",
-            "Advanced Cross-Spectrum Dampeners (Banshee)": github_icon_base_url + "original/btn-permacloak-banshee.png",
-            "Shockwave Missile Battery (Banshee)":         github_icon_base_url + "blizzard/btn-upgrade-raynor-shockwavemissilebattery.png",
-            "Hyperflight Rotors (Banshee)":                github_icon_base_url + "blizzard/btn-upgrade-terran-hyperflightrotors.png",
-            "Laser Targeting System (Banshee)":            github_icon_base_url + "blizzard/btn-upgrade-terran-lazertargetingsystem.png",
-            "Internal Tech Module (Banshee)":              github_icon_base_url + "blizzard/btn-upgrade-terran-internalizedtechmodule.png",
-            "Shaped Hull (Banshee)":                       organics_icon_base_url + "ShapedHull.png",
-            "Advanced Targeting Optics (Banshee)":         github_icon_base_url + "blizzard/btn-ability-terran-detectionconedebuff.png",
-            "Distortion Blasters (Banshee)":               github_icon_base_url + "blizzard/btn-techupgrade-terran-cloakdistortionfield.png",
-            "Rocket Barrage (Banshee)":                    github_icon_base_url + "blizzard/btn-upgrade-terran-nova-bansheemissilestrik.png",
-            "Missile Pods (Battlecruiser) Level 1":        organics_icon_base_url + "MissilePods.png",
-            "Missile Pods (Battlecruiser) Level 2":        github_icon_base_url + "blizzard/btn-upgrade-terran-nova-bansheemissilestrik.png",
-            "Defensive Matrix (Battlecruiser)":            github_icon_base_url + "blizzard/btn-upgrade-swann-defensivematrix.png",
-            "Advanced Defensive Matrix (Battlecruiser)":   github_icon_base_url + "blizzard/btn-upgrade-swann-defensivematrix.png",
-            "Tactical Jump (Battlecruiser)":               github_icon_base_url + "blizzard/btn-ability-terran-warpjump.png",
-            "Cloak (Battlecruiser)":                       github_icon_base_url + "blizzard/btn-ability-terran-cloak-color.png",
-            "ATX Laser Battery (Battlecruiser)":           github_icon_base_url + "blizzard/btn-upgrade-terran-nova-specialordance.png",
-            "Optimized Logistics (Battlecruiser)":         github_icon_base_url + "blizzard/btn-upgrade-terran-optimizedlogistics.png",
-            "Internal Tech Module (Battlecruiser)":        github_icon_base_url + "blizzard/btn-upgrade-terran-internalizedtechmodule.png",
-            "Behemoth Plating (Battlecruiser)":            github_icon_base_url + "original/btn-research-zerg-fortifiedbunker.png",
-            "Covert Ops Engines (Battlecruiser)":          github_icon_base_url + "blizzard/btn-ability-terran-emergencythrusters.png",
-            "Bio Mechanical Repair Drone (Raven)":         github_icon_base_url + "blizzard/btn-unit-biomechanicaldrone.png",
-            "Spider Mines (Raven)":                        github_icon_base_url + "blizzard/btn-upgrade-siegetank-spidermines.png",
-            "Railgun Turret (Raven)":                      github_icon_base_url + "blizzard/btn-unit-terran-autoturretblackops.png",
-            "Hunter-Seeker Weapon (Raven)":                github_icon_base_url + "blizzard/btn-upgrade-terran-nova-specialordance.png",
-            "Interference Matrix (Raven)":                 github_icon_base_url + "blizzard/btn-upgrade-terran-interferencematrix.png",
-            "Anti-Armor Missile (Raven)":                  github_icon_base_url + "blizzard/btn-ability-terran-shreddermissile-color.png",
-            "Internal Tech Module (Raven)":                github_icon_base_url + "blizzard/btn-upgrade-terran-internalizedtechmodule.png",
-            "Resource Efficiency (Raven)":                 github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Durable Materials (Raven)":                   github_icon_base_url + "blizzard/btn-upgrade-terran-durablematerials.png",
-            "EMP Shockwave (Science Vessel)":              github_icon_base_url + "blizzard/btn-ability-mengsk-ghost-staticempblast.png",
-            "Defensive Matrix (Science Vessel)":           github_icon_base_url + "blizzard/btn-upgrade-swann-defensivematrix.png",
-            "Improved Nano-Repair (Science Vessel)":       github_icon_base_url + "blizzard/btn-upgrade-swann-improvednanorepair.png",
-            "Advanced AI Systems (Science Vessel)":        github_icon_base_url + "blizzard/btn-ability-mengsk-medivac-doublehealbeam.png",
-            "Internal Fusion Module (Hercules)":           github_icon_base_url + "blizzard/btn-upgrade-terran-internalizedtechmodule.png",
-            "Tactical Jump (Hercules)":                    github_icon_base_url + "blizzard/btn-ability-terran-hercules-tacticaljump.png",
-            "Advanced Ballistics (Liberator)":             github_icon_base_url + "blizzard/btn-upgrade-terran-advanceballistics.png",
-            "Raid Artillery (Liberator)":                  github_icon_base_url + "blizzard/btn-upgrade-terran-nova-terrandefendermodestructureattack.png",
-            "Cloak (Liberator)":                           github_icon_base_url + "blizzard/btn-ability-terran-cloak-color.png",
-            "Laser Targeting System (Liberator)":          github_icon_base_url + "blizzard/btn-upgrade-terran-lazertargetingsystem.png",
-            "Optimized Logistics (Liberator)":             github_icon_base_url + "blizzard/btn-upgrade-terran-optimizedlogistics.png",
-            "Smart Servos (Liberator)":                    github_icon_base_url + "blizzard/btn-upgrade-terran-transformationservos.png",
-            "Resource Efficiency (Liberator)":             github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Enhanced Cluster Launchers (Valkyrie)":       github_icon_base_url + "blizzard/btn-ability-stetmann-corruptormissilebarrage.png",
-            "Shaped Hull (Valkyrie)":                      organics_icon_base_url + "ShapedHull.png",
-            "Flechette Missiles (Valkyrie)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-viking-missileupgrade.png",
-            "Afterburners (Valkyrie)":                     github_icon_base_url + "blizzard/btn-upgrade-terran-medivacemergencythrusters.png",
-            "Launching Vector Compensator (Valkyrie)":     github_icon_base_url + "blizzard/btn-ability-terran-emergencythrusters.png",
-            "Resource Efficiency (Valkyrie)":              github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-
-            "War Pigs":                                    "https://static.wikia.nocookie.net/starcraft/images/e/ed/WarPigs_SC2_Icon1.jpg",
-            "Devil Dogs":                                  "https://static.wikia.nocookie.net/starcraft/images/3/33/DevilDogs_SC2_Icon1.jpg",
-            "Hammer Securities":                           "https://static.wikia.nocookie.net/starcraft/images/3/3b/HammerSecurity_SC2_Icon1.jpg",
-            "Spartan Company":                             "https://static.wikia.nocookie.net/starcraft/images/b/be/SpartanCompany_SC2_Icon1.jpg",
-            "Siege Breakers":                              "https://static.wikia.nocookie.net/starcraft/images/3/31/SiegeBreakers_SC2_Icon1.jpg",
-            "Hel's Angels":                                "https://static.wikia.nocookie.net/starcraft/images/6/63/HelsAngels_SC2_Icon1.jpg",
-            "Dusk Wings":                                  "https://static.wikia.nocookie.net/starcraft/images/5/52/DuskWings_SC2_Icon1.jpg",
-            "Jackson's Revenge":                           "https://static.wikia.nocookie.net/starcraft/images/9/95/JacksonsRevenge_SC2_Icon1.jpg",
-            "Skibi's Angels":                              github_icon_base_url + "blizzard/btn-unit-terran-medicelite.png",
-            "Death Heads":                                 github_icon_base_url + "blizzard/btn-unit-terran-deathhead.png",
-            "Winged Nightmares":                           github_icon_base_url + "blizzard/btn-unit-collection-wraith-junker.png",
-            "Midnight Riders":                             github_icon_base_url + "blizzard/btn-unit-terran-liberatorblackops.png",
-            "Brynhilds":                                   github_icon_base_url + "blizzard/btn-unit-collection-vikingfighter-covertops.png",
-            "Jotun":                                       github_icon_base_url + "blizzard/btn-unit-terran-thormengsk.png",
-
-            "Ultra-Capacitors":                            "https://static.wikia.nocookie.net/starcraft/images/2/23/SC2_Lab_Ultra_Capacitors_Icon.png",
-            "Vanadium Plating":                            "https://static.wikia.nocookie.net/starcraft/images/6/67/SC2_Lab_VanPlating_Icon.png",
-            "Orbital Depots":                              "https://static.wikia.nocookie.net/starcraft/images/0/01/SC2_Lab_Orbital_Depot_Icon.png",
-            "Micro-Filtering":                             "https://static.wikia.nocookie.net/starcraft/images/2/20/SC2_Lab_MicroFilter_Icon.png",
-            "Automated Refinery":                          "https://static.wikia.nocookie.net/starcraft/images/7/71/SC2_Lab_Auto_Refinery_Icon.png",
-            "Command Center Reactor":                      "https://static.wikia.nocookie.net/starcraft/images/e/ef/SC2_Lab_CC_Reactor_Icon.png",
-            "Tech Reactor":                                "https://static.wikia.nocookie.net/starcraft/images/c/c5/SC2_Lab_Tech_Reactor_Icon.png",
-            "Orbital Strike":                              "https://static.wikia.nocookie.net/starcraft/images/d/df/SC2_Lab_Orb_Strike_Icon.png",
-
-            "Shrike Turret (Bunker)":                      "https://static.wikia.nocookie.net/starcraft/images/4/44/SC2_Lab_Shrike_Turret_Icon.png",
-            "Fortified Bunker (Bunker)":                   "https://static.wikia.nocookie.net/starcraft/images/4/4f/SC2_Lab_FortBunker_Icon.png",
-            "Planetary Fortress":                          "https://static.wikia.nocookie.net/starcraft/images/0/0b/SC2_Lab_PlanetFortress_Icon.png",
-            "Perdition Turret":                            "https://static.wikia.nocookie.net/starcraft/images/a/af/SC2_Lab_PerdTurret_Icon.png",
-            "Cellular Reactor":                            "https://static.wikia.nocookie.net/starcraft/images/d/d8/SC2_Lab_CellReactor_Icon.png",
-            "Regenerative Bio-Steel Level 1":              github_icon_base_url + "original/btn-regenerativebiosteel-green.png",
-            "Regenerative Bio-Steel Level 2":              github_icon_base_url + "original/btn-regenerativebiosteel-blue.png",
-            "Regenerative Bio-Steel Level 3":              github_icon_base_url + "blizzard/btn-research-zerg-regenerativebio-steel.png",
-            "Hive Mind Emulator":                          "https://static.wikia.nocookie.net/starcraft/images/b/bc/SC2_Lab_Hive_Emulator_Icon.png",
-            "Psi Disrupter":                               "https://static.wikia.nocookie.net/starcraft/images/c/cf/SC2_Lab_Psi_Disruptor_Icon.png",
-
-            "Structure Armor":                             github_icon_base_url + "blizzard/btn-upgrade-terran-buildingarmor.png",
-            "Hi-Sec Auto Tracking":                        github_icon_base_url + "blizzard/btn-upgrade-terran-hisecautotracking.png",
-            "Advanced Optics":                             github_icon_base_url + "blizzard/btn-upgrade-swann-vehiclerangeincrease.png",
-            "Rogue Forces":                                github_icon_base_url + "blizzard/btn-unit-terran-tosh.png",
-
-            "Ghost Visor (Nova Equipment)":                github_icon_base_url + "blizzard/btn-upgrade-nova-equipment-ghostvisor.png",
-            "Rangefinder Oculus (Nova Equipment)":         github_icon_base_url + "blizzard/btn-upgrade-nova-equipment-rangefinderoculus.png",
-            "Domination (Nova Ability)":                   github_icon_base_url + "blizzard/btn-ability-nova-domination.png",
-            "Blink (Nova Ability)":                        github_icon_base_url + "blizzard/btn-upgrade-nova-blink.png",
-            "Stealth Suit Module (Nova Suit Module)":      github_icon_base_url + "blizzard/btn-upgrade-nova-equipment-stealthsuit.png",
-            "Cloak (Nova Suit Module)":                    github_icon_base_url + "blizzard/btn-ability-terran-cloak-color.png",
-            "Permanently Cloaked (Nova Suit Module)":      github_icon_base_url + "blizzard/btn-upgrade-nova-tacticalstealthsuit.png",
-            "Energy Suit Module (Nova Suit Module)":       github_icon_base_url + "blizzard/btn-upgrade-nova-equipment-apolloinfantrysuit.png",
-            "Armored Suit Module (Nova Suit Module)":      github_icon_base_url + "blizzard/btn-upgrade-nova-equipment-blinksuit.png",
-            "Jump Suit Module (Nova Suit Module)":         github_icon_base_url + "blizzard/btn-upgrade-nova-jetpack.png",
-            "C20A Canister Rifle (Nova Weapon)":           github_icon_base_url + "blizzard/btn-upgrade-nova-equipment-canisterrifle.png",
-            "Hellfire Shotgun (Nova Weapon)":              github_icon_base_url + "blizzard/btn-upgrade-nova-equipment-shotgun.png",
-            "Plasma Rifle (Nova Weapon)":                  github_icon_base_url + "blizzard/btn-upgrade-nova-equipment-plasmagun.png",
-            "Monomolecular Blade (Nova Weapon)":           github_icon_base_url + "blizzard/btn-upgrade-nova-equipment-monomolecularblade.png",
-            "Blazefire Gunblade (Nova Weapon)":            github_icon_base_url + "blizzard/btn-upgrade-nova-equipment-gunblade_sword.png",
-            "Stim Infusion (Nova Gadget)":                 github_icon_base_url + "blizzard/btn-upgrade-terran-superstimppack.png",
-            "Pulse Grenades (Nova Gadget)":                github_icon_base_url + "blizzard/btn-upgrade-nova-btn-upgrade-nova-pulsegrenade.png",
-            "Flashbang Grenades (Nova Gadget)":            github_icon_base_url + "blizzard/btn-upgrade-nova-btn-upgrade-nova-flashgrenade.png",
-            "Ionic Force Field (Nova Gadget)":             github_icon_base_url + "blizzard/btn-upgrade-terran-nova-personaldefensivematrix.png",
-            "Holo Decoy (Nova Gadget)":                    github_icon_base_url + "blizzard/btn-upgrade-nova-holographicdecoy.png",
-            "Tac Nuke Strike (Nova Ability)":              github_icon_base_url + "blizzard/btn-ability-terran-nuclearstrike-color.png",
-
-            "Zerg Melee Attack Level 1":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-meleeattacks-level1.png",
-            "Zerg Melee Attack Level 2":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-meleeattacks-level2.png",
-            "Zerg Melee Attack Level 3":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-meleeattacks-level3.png",
-            "Zerg Missile Attack Level 1":                 github_icon_base_url + "blizzard/btn-upgrade-zerg-missileattacks-level1.png",
-            "Zerg Missile Attack Level 2":                 github_icon_base_url + "blizzard/btn-upgrade-zerg-missileattacks-level2.png",
-            "Zerg Missile Attack Level 3":                 github_icon_base_url + "blizzard/btn-upgrade-zerg-missileattacks-level3.png",
-            "Zerg Ground Carapace Level 1":                github_icon_base_url + "blizzard/btn-upgrade-zerg-groundcarapace-level1.png",
-            "Zerg Ground Carapace Level 2":                github_icon_base_url + "blizzard/btn-upgrade-zerg-groundcarapace-level2.png",
-            "Zerg Ground Carapace Level 3":                github_icon_base_url + "blizzard/btn-upgrade-zerg-groundcarapace-level3.png",
-            "Zerg Flyer Attack Level 1":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-airattacks-level1.png",
-            "Zerg Flyer Attack Level 2":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-airattacks-level2.png",
-            "Zerg Flyer Attack Level 3":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-airattacks-level3.png",
-            "Zerg Flyer Carapace Level 1":                 github_icon_base_url + "blizzard/btn-upgrade-zerg-flyercarapace-level1.png",
-            "Zerg Flyer Carapace Level 2":                 github_icon_base_url + "blizzard/btn-upgrade-zerg-flyercarapace-level2.png",
-            "Zerg Flyer Carapace Level 3":                 github_icon_base_url + "blizzard/btn-upgrade-zerg-flyercarapace-level3.png",
-
-            "Automated Extractors (Kerrigan Tier 3)":      github_icon_base_url + "blizzard/btn-ability-kerrigan-automatedextractors.png",
-            "Vespene Efficiency (Kerrigan Tier 5)":        github_icon_base_url + "blizzard/btn-ability-kerrigan-vespeneefficiency.png",
-            "Twin Drones (Kerrigan Tier 5)":               github_icon_base_url + "blizzard/btn-ability-kerrigan-twindrones.png",
-            "Improved Overlords (Kerrigan Tier 3)":        github_icon_base_url + "blizzard/btn-ability-kerrigan-improvedoverlords.png",
-            "Ventral Sacs (Overlord)":                     github_icon_base_url + "blizzard/btn-upgrade-zerg-ventralsacs.png",
-            "Malignant Creep (Kerrigan Tier 5)":           github_icon_base_url + "blizzard/btn-ability-kerrigan-malignantcreep.png",
-
-            "Spine Crawler":                               github_icon_base_url + "blizzard/btn-building-zerg-spinecrawler.png",
-            "Spore Crawler":                               github_icon_base_url + "blizzard/btn-building-zerg-sporecrawler.png",
-
-            "Zergling":                                    github_icon_base_url + "blizzard/btn-unit-zerg-zergling.png",
-            "Swarm Queen":                                 github_icon_base_url + "blizzard/btn-unit-zerg-broodqueen.png",
-            "Roach":                                       github_icon_base_url + "blizzard/btn-unit-zerg-roach.png",
-            "Hydralisk":                                   github_icon_base_url + "blizzard/btn-unit-zerg-hydralisk.png",
-            "Aberration":                                  github_icon_base_url + "blizzard/btn-unit-zerg-aberration.png",
-            "Mutalisk":                                    github_icon_base_url + "blizzard/btn-unit-zerg-mutalisk.png",
-            "Corruptor":                                   github_icon_base_url + "blizzard/btn-unit-zerg-corruptor.png",
-            "Swarm Host":                                  github_icon_base_url + "blizzard/btn-unit-zerg-swarmhost.png",
-            "Infestor":                                    github_icon_base_url + "blizzard/btn-unit-zerg-infestor.png",
-            "Defiler":                                     github_icon_base_url + "original/btn-unit-zerg-defiler@scbw.png",
-            "Ultralisk":                                   github_icon_base_url + "blizzard/btn-unit-zerg-ultralisk.png",
-            "Brood Queen":                                 github_icon_base_url + "blizzard/btn-unit-zerg-classicqueen.png",
-            "Scourge":                                     github_icon_base_url + "blizzard/btn-unit-zerg-scourge.png",
-
-            "Baneling Aspect (Zergling)":                  github_icon_base_url + "blizzard/btn-unit-zerg-baneling.png",
-            "Ravager Aspect (Roach)":                      github_icon_base_url + "blizzard/btn-unit-zerg-ravager.png",
-            "Impaler Aspect (Hydralisk)":                  github_icon_base_url + "blizzard/btn-unit-zerg-impaler.png",
-            "Lurker Aspect (Hydralisk)":                   github_icon_base_url + "blizzard/btn-unit-zerg-lurker.png",
-            "Brood Lord Aspect (Mutalisk/Corruptor)":      github_icon_base_url + "blizzard/btn-unit-zerg-broodlord.png",
-            "Viper Aspect (Mutalisk/Corruptor)":           github_icon_base_url + "blizzard/btn-unit-zerg-viper.png",
-            "Guardian Aspect (Mutalisk/Corruptor)":        github_icon_base_url + "blizzard/btn-unit-zerg-primalguardian.png",
-            "Devourer Aspect (Mutalisk/Corruptor)":        github_icon_base_url + "blizzard/btn-unit-zerg-devourerex3.png",
-
-            "Raptor Strain (Zergling)":                    github_icon_base_url + "blizzard/btn-unit-zerg-zergling-raptor.png",
-            "Swarmling Strain (Zergling)":                 github_icon_base_url + "blizzard/btn-unit-zerg-zergling-swarmling.png",
-            "Hardened Carapace (Zergling)":                github_icon_base_url + "blizzard/btn-upgrade-zerg-hardenedcarapace.png",
-            "Adrenal Overload (Zergling)":                 github_icon_base_url + "blizzard/btn-upgrade-zerg-adrenaloverload.png",
-            "Metabolic Boost (Zergling)":                  github_icon_base_url + "blizzard/btn-upgrade-zerg-hotsmetabolicboost.png",
-            "Shredding Claws (Zergling)":                  github_icon_base_url + "blizzard/btn-upgrade-zergling-armorshredding.png",
-            "Zergling Reconstitution (Kerrigan Tier 3)":   github_icon_base_url + "blizzard/btn-ability-kerrigan-zerglingreconstitution.png",
-            "Splitter Strain (Baneling)":                  github_icon_base_url + "blizzard/talent-zagara-level14-unlocksplitterling.png",
-            "Hunter Strain (Baneling)":                    github_icon_base_url + "blizzard/btn-ability-zerg-cliffjump-baneling.png",
-            "Corrosive Acid (Baneling)":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-corrosiveacid.png",
-            "Rupture (Baneling)":                          github_icon_base_url + "blizzard/btn-upgrade-zerg-rupture.png",
-            "Regenerative Acid (Baneling)":                github_icon_base_url + "blizzard/btn-upgrade-zerg-regenerativebile.png",
-            "Centrifugal Hooks (Baneling)":                github_icon_base_url + "blizzard/btn-upgrade-zerg-centrifugalhooks.png",
-            "Tunneling Jaws (Baneling)":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-tunnelingjaws.png",
-            "Rapid Metamorph (Baneling)":                  github_icon_base_url + "blizzard/btn-upgrade-terran-optimizedlogistics.png",
-            "Spawn Larvae (Swarm Queen)":                  github_icon_base_url + "blizzard/btn-unit-zerg-larva.png",
-            "Deep Tunnel (Swarm Queen)":                   github_icon_base_url + "blizzard/btn-ability-zerg-deeptunnel.png",
-            "Organic Carapace (Swarm Queen)":              github_icon_base_url + "blizzard/btn-upgrade-zerg-organiccarapace.png",
-            "Bio-Mechanical Transfusion (Swarm Queen)":    github_icon_base_url + "blizzard/btn-upgrade-zerg-abathur-biomechanicaltransfusion.png",
-            "Resource Efficiency (Swarm Queen)":           github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Incubator Chamber (Swarm Queen)":             github_icon_base_url + "blizzard/btn-upgrade-zerg-abathur-incubationchamber.png",
-            "Vile Strain (Roach)":                         github_icon_base_url + "blizzard/btn-unit-zerg-roach-vile.png",
-            "Corpser Strain (Roach)":                      github_icon_base_url + "blizzard/btn-unit-zerg-roach-corpser.png",
-            "Hydriodic Bile (Roach)":                      github_icon_base_url + "blizzard/btn-upgrade-zerg-hydriaticacid.png",
-            "Adaptive Plating (Roach)":                    github_icon_base_url + "blizzard/btn-upgrade-zerg-adaptivecarapace.png",
-            "Tunneling Claws (Roach)":                     github_icon_base_url + "blizzard/btn-upgrade-zerg-hotstunnelingclaws.png",
-            "Glial Reconstitution (Roach)":                github_icon_base_url + "blizzard/btn-upgrade-zerg-glialreconstitution.png",
-            "Organic Carapace (Roach)":                    github_icon_base_url + "blizzard/btn-upgrade-zerg-organiccarapace.png",
-            "Potent Bile (Ravager)":                       github_icon_base_url + "blizzard/potentbile_coop.png",
-            "Bloated Bile Ducts (Ravager)":                github_icon_base_url + "blizzard/btn-ability-zerg-abathur-corrosivebilelarge.png",
-            "Deep Tunnel (Ravager)":                       github_icon_base_url + "blizzard/btn-ability-zerg-deeptunnel.png",
-            "Frenzy (Hydralisk)":                          github_icon_base_url + "blizzard/btn-upgrade-zerg-frenzy.png",
-            "Ancillary Carapace (Hydralisk)":              github_icon_base_url + "blizzard/btn-upgrade-zerg-ancillaryarmor.png",
-            "Grooved Spines (Hydralisk)":                  github_icon_base_url + "blizzard/btn-upgrade-zerg-hotsgroovedspines.png",
-            "Muscular Augments (Hydralisk)":               github_icon_base_url + "blizzard/btn-upgrade-zerg-evolvemuscularaugments.png",
-            "Resource Efficiency (Hydralisk)":             github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Adaptive Talons (Impaler)":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-adaptivetalons.png",
-            "Secretion Glands (Impaler)":                  github_icon_base_url + "blizzard/btn-ability-zerg-creepspread.png",
-            "Hardened Tentacle Spines (Impaler)":          github_icon_base_url + "blizzard/btn-ability-zerg-dehaka-impaler-tenderize.png",
-            "Seismic Spines (Lurker)":                     github_icon_base_url + "blizzard/btn-upgrade-kerrigan-seismicspines.png",
-            "Adapted Spines (Lurker)":                     github_icon_base_url + "blizzard/btn-upgrade-zerg-groovedspines.png",
-            "Vicious Glaive (Mutalisk)":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-viciousglaive.png",
-            "Rapid Regeneration (Mutalisk)":               github_icon_base_url + "blizzard/btn-upgrade-zerg-rapidregeneration.png",
-            "Sundering Glaive (Mutalisk)":                 github_icon_base_url + "blizzard/btn-upgrade-zerg-explosiveglaive.png",
-            "Severing Glaive (Mutalisk)":                  github_icon_base_url + "blizzard/btn-upgrade-zerg-explosiveglaive.png",
-            "Aerodynamic Glaive Shape (Mutalisk)":         github_icon_base_url + "blizzard/btn-ability-dehaka-airbonusdamage.png",
-            "Corruption (Corruptor)":                      github_icon_base_url + "blizzard/btn-ability-zerg-causticspray.png",
-            "Caustic Spray (Corruptor)":                   github_icon_base_url + "blizzard/btn-ability-zerg-corruption-color.png",
-            "Porous Cartilage (Brood Lord)":               github_icon_base_url + "blizzard/btn-upgrade-kerrigan-broodlordspeed.png",
-            "Evolved Carapace (Brood Lord)":               github_icon_base_url + "blizzard/btn-upgrade-zerg-chitinousplating.png",
-            "Splitter Mitosis (Brood Lord)":               github_icon_base_url + "blizzard/abilityicon_spawnbroodlings_square.png",
-            "Resource Efficiency (Brood Lord)":            github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Parasitic Bomb (Viper)":                      github_icon_base_url + "blizzard/btn-ability-zerg-parasiticbomb.png",
-            "Paralytic Barbs (Viper)":                     github_icon_base_url + "blizzard/btn-upgrade-zerg-abathur-abduct.png",
-            "Virulent Microbes (Viper)":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-abathur-castrange.png",
-            "Prolonged Dispersion (Guardian)":             github_icon_base_url + "blizzard/btn-upgrade-zerg-abathur-prolongeddispersion.png",
-            "Primal Adaptation (Guardian)":                github_icon_base_url + "blizzard/biomassrecovery_coop.png",
-            "Soronan Acid (Guardian)":                     github_icon_base_url + "blizzard/btn-upgrade-zerg-abathur-biomass.png",
-            "Corrosive Spray (Devourer)":                  github_icon_base_url + "blizzard/btn-upgrade-zerg-abathur-devourer-corrosivespray.png",
-            "Gaping Maw (Devourer)":                       github_icon_base_url + "blizzard/btn-ability-zerg-explode-color.png",
-            "Improved Osmosis (Devourer)":                 github_icon_base_url + "blizzard/btn-upgrade-zerg-pneumatizedcarapace.png",
-            "Prescient Spores (Devourer)":                 github_icon_base_url + "blizzard/btn-upgrade-zerg-airattacks-level2.png",
-            "Carrion Strain (Swarm Host)":                 github_icon_base_url + "blizzard/btn-unit-zerg-swarmhost-carrion.png",
-            "Creeper Strain (Swarm Host)":                 github_icon_base_url + "blizzard/btn-unit-zerg-swarmhost-creeper.png",
-            "Burrow (Swarm Host)":                         github_icon_base_url + "blizzard/btn-ability-zerg-burrow-color.png",
-            "Rapid Incubation (Swarm Host)":               github_icon_base_url + "blizzard/btn-upgrade-zerg-rapidincubation.png",
-            "Pressurized Glands (Swarm Host)":             github_icon_base_url + "blizzard/btn-upgrade-zerg-pressurizedglands.png",
-            "Locust Metabolic Boost (Swarm Host)":         github_icon_base_url + "blizzard/btn-upgrade-zerg-glialreconstitution.png",
-            "Enduring Locusts (Swarm Host)":               github_icon_base_url + "blizzard/btn-upgrade-zerg-evolveincreasedlocustlifetime.png",
-            "Organic Carapace (Swarm Host)":               github_icon_base_url + "blizzard/btn-upgrade-zerg-organiccarapace.png",
-            "Resource Efficiency (Swarm Host)":            github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Infested Terran (Infestor)":                  github_icon_base_url + "blizzard/btn-unit-zerg-infestedmarine.png",
-            "Microbial Shroud (Infestor)":                 github_icon_base_url + "blizzard/btn-ability-zerg-darkswarm.png",
-            "Noxious Strain (Ultralisk)":                  github_icon_base_url + "blizzard/btn-unit-zerg-ultralisk-noxious.png",
-            "Torrasque Strain (Ultralisk)":                github_icon_base_url + "blizzard/btn-unit-zerg-ultralisk-torrasque.png",
-            "Burrow Charge (Ultralisk)":                   github_icon_base_url + "blizzard/btn-upgrade-zerg-burrowcharge.png",
-            "Tissue Assimilation (Ultralisk)":             github_icon_base_url + "blizzard/btn-upgrade-zerg-tissueassimilation.png",
-            "Monarch Blades (Ultralisk)":                  github_icon_base_url + "blizzard/btn-upgrade-zerg-monarchblades.png",
-            "Anabolic Synthesis (Ultralisk)":              github_icon_base_url + "blizzard/btn-upgrade-zerg-anabolicsynthesis.png",
-            "Chitinous Plating (Ultralisk)":               github_icon_base_url + "blizzard/btn-upgrade-zerg-chitinousplating.png",
-            "Organic Carapace (Ultralisk)":                github_icon_base_url + "blizzard/btn-upgrade-zerg-organiccarapace.png",
-            "Resource Efficiency (Ultralisk)":             github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Fungal Growth (Brood Queen)":                 github_icon_base_url + "blizzard/btn-upgrade-zerg-stukov-researchqueenfungalgrowth.png",
-            "Ensnare (Brood Queen)":                       github_icon_base_url + "blizzard/btn-ability-zerg-fungalgrowth-color.png",
-            "Enhanced Mitochondria (Brood Queen)":         github_icon_base_url + "blizzard/btn-upgrade-zerg-stukov-queenenergyregen.png",
-            "Virulent Spores (Scourge)":                   github_icon_base_url + "blizzard/btn-upgrade-zagara-scourgesplashdamage.png",
-            "Resource Efficiency (Scourge)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Swarm Scourge (Scourge)":                     github_icon_base_url + "original/btn-upgrade-custom-triple-scourge.png",
-
-            "Infested Medics":                             github_icon_base_url + "blizzard/btn-unit-terran-medicelite.png",
-            "Infested Siege Tanks":                        github_icon_base_url + "original/btn-unit-terran-siegetankmercenary-tank.png",
-            "Infested Banshees":                           github_icon_base_url + "original/btn-unit-terran-bansheemercenary.png",
-
-            "Primal Form (Kerrigan)":                      github_icon_base_url + "blizzard/btn-unit-zerg-kerriganinfested.png",
-            "Kinetic Blast (Kerrigan Tier 1)":             github_icon_base_url + "blizzard/btn-ability-kerrigan-kineticblast.png",
-            "Heroic Fortitude (Kerrigan Tier 1)":          github_icon_base_url + "blizzard/btn-ability-kerrigan-heroicfortitude.png",
-            "Leaping Strike (Kerrigan Tier 1)":            github_icon_base_url + "blizzard/btn-ability-kerrigan-leapingstrike.png",
-            "Crushing Grip (Kerrigan Tier 2)":             github_icon_base_url + "blizzard/btn-ability-swarm-kerrigan-crushinggrip.png",
-            "Chain Reaction (Kerrigan Tier 2)":            github_icon_base_url + "blizzard/btn-ability-swarm-kerrigan-chainreaction.png",
-            "Psionic Shift (Kerrigan Tier 2)":             github_icon_base_url + "blizzard/btn-ability-kerrigan-psychicshift.png",
-            "Wild Mutation (Kerrigan Tier 4)":             github_icon_base_url + "blizzard/btn-ability-kerrigan-wildmutation.png",
-            "Spawn Banelings (Kerrigan Tier 4)":           github_icon_base_url + "blizzard/abilityicon_spawnbanelings_square.png",
-            "Mend (Kerrigan Tier 4)":                      github_icon_base_url + "blizzard/btn-ability-zerg-transfusion-color.png",
-            "Infest Broodlings (Kerrigan Tier 6)":         github_icon_base_url + "blizzard/abilityicon_spawnbroodlings_square.png",
-            "Fury (Kerrigan Tier 6)":                      github_icon_base_url + "blizzard/btn-ability-kerrigan-fury.png",
-            "Ability Efficiency (Kerrigan Tier 6)":        github_icon_base_url + "blizzard/btn-ability-kerrigan-abilityefficiency.png",
-            "Apocalypse (Kerrigan Tier 7)":                github_icon_base_url + "blizzard/btn-ability-kerrigan-apocalypse.png",
-            "Spawn Leviathan (Kerrigan Tier 7)":           github_icon_base_url + "blizzard/btn-unit-zerg-leviathan.png",
-            "Drop-Pods (Kerrigan Tier 7)":                 github_icon_base_url + "blizzard/btn-ability-kerrigan-droppods.png",
-
-            "Protoss Ground Weapon Level 1":               github_icon_base_url + "blizzard/btn-upgrade-protoss-groundweaponslevel1.png",
-            "Protoss Ground Weapon Level 2":               github_icon_base_url + "blizzard/btn-upgrade-protoss-groundweaponslevel2.png",
-            "Protoss Ground Weapon Level 3":               github_icon_base_url + "blizzard/btn-upgrade-protoss-groundweaponslevel3.png",
-            "Protoss Ground Armor Level 1":                github_icon_base_url + "blizzard/btn-upgrade-protoss-groundarmorlevel1.png",
-            "Protoss Ground Armor Level 2":                github_icon_base_url + "blizzard/btn-upgrade-protoss-groundarmorlevel2.png",
-            "Protoss Ground Armor Level 3":                github_icon_base_url + "blizzard/btn-upgrade-protoss-groundarmorlevel3.png",
-            "Protoss Shields Level 1":                     github_icon_base_url + "blizzard/btn-upgrade-protoss-shieldslevel1.png",
-            "Protoss Shields Level 2":                     github_icon_base_url + "blizzard/btn-upgrade-protoss-shieldslevel2.png",
-            "Protoss Shields Level 3":                     github_icon_base_url + "blizzard/btn-upgrade-protoss-shieldslevel3.png",
-            "Protoss Air Weapon Level 1":                  github_icon_base_url + "blizzard/btn-upgrade-protoss-airweaponslevel1.png",
-            "Protoss Air Weapon Level 2":                  github_icon_base_url + "blizzard/btn-upgrade-protoss-airweaponslevel2.png",
-            "Protoss Air Weapon Level 3":                  github_icon_base_url + "blizzard/btn-upgrade-protoss-airweaponslevel3.png",
-            "Protoss Air Armor Level 1":                   github_icon_base_url + "blizzard/btn-upgrade-protoss-airarmorlevel1.png",
-            "Protoss Air Armor Level 2":                   github_icon_base_url + "blizzard/btn-upgrade-protoss-airarmorlevel2.png",
-            "Protoss Air Armor Level 3":                   github_icon_base_url + "blizzard/btn-upgrade-protoss-airarmorlevel3.png",
-
-            "Quatro":                                      github_icon_base_url + "blizzard/btn-progression-protoss-fenix-6-forgeresearch.png",
-
-            "Photon Cannon":                               github_icon_base_url + "blizzard/btn-building-protoss-photoncannon.png",
-            "Khaydarin Monolith":                          github_icon_base_url + "blizzard/btn-unit-protoss-khaydarinmonolith.png",
-            "Shield Battery":                              github_icon_base_url + "blizzard/btn-building-protoss-shieldbattery.png",
-
-            "Enhanced Targeting":                          github_icon_base_url + "blizzard/btn-upgrade-karax-turretrange.png",
-            "Optimized Ordnance":                          github_icon_base_url + "blizzard/btn-upgrade-karax-turretattackspeed.png",
-            "Khalai Ingenuity":                            github_icon_base_url + "blizzard/btn-upgrade-karax-pylonwarpininstantly.png",
-            "Orbital Assimilators":                        github_icon_base_url + "blizzard/btn-ability-spearofadun-orbitalassimilator.png",
-            "Amplified Assimilators":                      github_icon_base_url + "original/btn-research-terran-microfiltering.png",
-            "Warp Harmonization":                          github_icon_base_url + "blizzard/btn-ability-spearofadun-warpharmonization.png",
-            "Superior Warp Gates":                         github_icon_base_url + "blizzard/talent-artanis-level03-warpgatecharges.png",
-            "Nexus Overcharge":                            github_icon_base_url + "blizzard/btn-ability-spearofadun-nexusovercharge.png",
-
-            "Zealot":                                      github_icon_base_url + "blizzard/btn-unit-protoss-zealot-aiur.png",
-            "Centurion":                                   github_icon_base_url + "blizzard/btn-unit-protoss-zealot-nerazim.png",
-            "Sentinel":                                    github_icon_base_url + "blizzard/btn-unit-protoss-zealot-purifier.png",
-            "Supplicant":                                  github_icon_base_url + "blizzard/btn-unit-protoss-alarak-taldarim-supplicant.png",
-            "Sentry":                                      github_icon_base_url + "blizzard/btn-unit-protoss-sentry.png",
-            "Energizer":                                   github_icon_base_url + "blizzard/btn-unit-protoss-sentry-purifier.png",
-            "Havoc":                                       github_icon_base_url + "blizzard/btn-unit-protoss-sentry-taldarim.png",
-            "Stalker":                                     "https://static.wikia.nocookie.net/starcraft/images/0/0d/Icon_Protoss_Stalker.jpg",
-            "Instigator":                                  github_icon_base_url + "blizzard/btn-unit-protoss-stalker-purifier.png",
-            "Slayer":                                      github_icon_base_url + "blizzard/btn-unit-protoss-alarak-taldarim-stalker.png",
-            "Dragoon":                                     github_icon_base_url + "blizzard/btn-unit-protoss-dragoon-void.png",
-            "Adept":                                       github_icon_base_url + "blizzard/btn-unit-protoss-adept-purifier.png",
-            "High Templar":                                "https://static.wikia.nocookie.net/starcraft/images/a/a0/Icon_Protoss_High_Templar.jpg",
-            "Signifier":                                   github_icon_base_url + "original/btn-unit-protoss-hightemplar-nerazim.png",
-            "Ascendant":                                   github_icon_base_url + "blizzard/btn-unit-protoss-hightemplar-taldarim.png",
-            "Dark Archon":                                 github_icon_base_url + "blizzard/talent-vorazun-level05-unlockdarkarchon.png",
-            "Dark Templar":                                "https://static.wikia.nocookie.net/starcraft/images/9/90/Icon_Protoss_Dark_Templar.jpg",
-            "Avenger":                                     github_icon_base_url + "blizzard/btn-unit-protoss-darktemplar-aiur.png",
-            "Blood Hunter":                                github_icon_base_url + "blizzard/btn-unit-protoss-darktemplar-taldarim.png",
-
-            "Leg Enhancements (Zealot/Sentinel/Centurion)": github_icon_base_url + "blizzard/btn-ability-protoss-charge-color.png",
-            "Shield Capacity (Zealot/Sentinel/Centurion)": github_icon_base_url + "blizzard/btn-upgrade-protoss-shieldslevel1.png",
-            "Blood Shield (Supplicant)":                   github_icon_base_url + "blizzard/btn-upgrade-protoss-alarak-supplicantarmor.png",
-            "Soul Augmentation (Supplicant)":              github_icon_base_url + "blizzard/btn-upgrade-protoss-alarak-supplicantextrashields.png",
-            "Shield Regeneration (Supplicant)":            github_icon_base_url + "blizzard/btn-ability-protoss-voidarmor.png",
-            "Force Field (Sentry)":                        github_icon_base_url + "blizzard/btn-ability-protoss-forcefield-color.png",
-            "Hallucination (Sentry)":                      github_icon_base_url + "blizzard/btn-ability-protoss-hallucination-color.png",
-            "Reclamation (Energizer)":                     github_icon_base_url + "blizzard/btn-ability-protoss-reclamation.png",
-            "Forged Chassis (Energizer)":                  github_icon_base_url + "blizzard/btn-upgrade-protoss-groundarmorlevel0.png",
-            "Detect Weakness (Havoc)":                     github_icon_base_url + "blizzard/btn-upgrade-protoss-alarak-havoctargetlockbuffed.png",
-            "Bloodshard Resonance (Havoc)":                github_icon_base_url + "blizzard/btn-upgrade-protoss-alarak-rangeincrease.png",
-            "Cloaking Module (Sentry/Energizer/Havoc)":    github_icon_base_url + "blizzard/btn-upgrade-protoss-alarak-permanentcloak.png",
-            "Rapid Recharging (Sentry/Energizer/Havoc/Shield Battery)": github_icon_base_url + "blizzard/btn-upgrade-karax-energyregen200.png",
-            "Disintegrating Particles (Stalker/Instigator/Slayer)": github_icon_base_url + "blizzard/btn-ability-protoss-phasedisruptor.png",
-            "Particle Reflection (Stalker/Instigator/Slayer)": github_icon_base_url + "blizzard/btn-upgrade-protoss-fenix-adeptchampionbounceattack.png",
-            "High Impact Phase Disruptor (Dragoon)":       github_icon_base_url + "blizzard/btn-ability-protoss-phasedisruptor.png",
-            "Trillic Compression System (Dragoon)":        github_icon_base_url + "blizzard/btn-ability-protoss-dragoonchassis.png",
-            "Singularity Charge (Dragoon)":                github_icon_base_url + "blizzard/btn-upgrade-artanis-singularitycharge.png",
-            "Enhanced Strider Servos (Dragoon)":           github_icon_base_url + "blizzard/btn-upgrade-terran-transformationservos.png",
-            "Shockwave (Adept)":                           github_icon_base_url + "blizzard/btn-upgrade-protoss-fenix-adept-recochetglaiveupgraded.png",
-            "Resonating Glaives (Adept)":                  github_icon_base_url + "blizzard/btn-upgrade-protoss-resonatingglaives.png",
-            "Phase Bulwark (Adept)":                       github_icon_base_url + "blizzard/btn-upgrade-protoss-adeptshieldupgrade.png",
-            "Unshackled Psionic Storm (High Templar/Signifier)": github_icon_base_url + "blizzard/btn-ability-protoss-psistorm.png",
-            "Hallucination (High Templar/Signifier)":      github_icon_base_url + "blizzard/btn-ability-protoss-hallucination-color.png",
-            "Khaydarin Amulet (High Templar/Signifier)":   github_icon_base_url + "blizzard/btn-upgrade-protoss-khaydarinamulet.png",
-            "High Archon (Archon)":                        github_icon_base_url + "blizzard/btn-upgrade-artanis-healingpsionicstorm.png",
-            "Power Overwhelming (Ascendant)":              github_icon_base_url + "blizzard/btn-upgrade-protoss-alarak-ascendantspermanentlybetter.png",
-            "Chaotic Attunement (Ascendant)":              github_icon_base_url + "blizzard/btn-upgrade-protoss-alarak-ascendant'spsiorbtravelsfurther.png",
-            "Blood Amulet (Ascendant)":                    github_icon_base_url + "blizzard/btn-upgrade-protoss-wrathwalker-chargetimeimproved.png",
-            "Feedback (Dark Archon)":                      github_icon_base_url + "blizzard/btn-ability-protoss-feedback-color.png",
-            "Maelstrom (Dark Archon)":                     github_icon_base_url + "blizzard/btn-ability-protoss-voidstasis.png",
-            "Argus Talisman (Dark Archon)":                github_icon_base_url + "original/btn-upgrade-protoss-argustalisman@scbw.png",
-            "Dark Archon Meld (Dark Templar)":             github_icon_base_url + "blizzard/talent-vorazun-level05-unlockdarkarchon.png",
-            "Shroud of Adun (Dark Templar/Avenger/Blood Hunter)": github_icon_base_url + "blizzard/talent-vorazun-level01-shadowstalk.png",
-            "Shadow Guard Training (Dark Templar/Avenger/Blood Hunter)": github_icon_base_url + "blizzard/btn-ability-terran-heal-color.png",
-            "Blink (Dark Templar/Avenger/Blood Hunter)":   github_icon_base_url + "blizzard/btn-ability-protoss-shadowdash.png",
-            "Resource Efficiency (Dark Templar/Avenger/Blood Hunter)": github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-
-            "Warp Prism":                                  github_icon_base_url + "blizzard/btn-unit-protoss-warpprism.png",
-            "Immortal":                                    "https://static.wikia.nocookie.net/starcraft/images/c/c1/Icon_Protoss_Immortal.jpg",
-            "Annihilator":                                 github_icon_base_url + "blizzard/btn-unit-protoss-immortal-nerazim.png",
-            "Vanguard":                                    github_icon_base_url + "blizzard/btn-unit-protoss-immortal-taldarim.png",
-            "Colossus":                                    github_icon_base_url + "blizzard/btn-unit-protoss-colossus-purifier.png",
-            "Wrathwalker":                                 github_icon_base_url + "blizzard/btn-unit-protoss-colossus-taldarim.png",
-            "Observer":                                    github_icon_base_url + "blizzard/btn-unit-protoss-observer.png",
-            "Reaver":                                      github_icon_base_url + "blizzard/btn-unit-protoss-reaver.png",
-            "Disruptor":                                   github_icon_base_url + "blizzard/btn-unit-protoss-disruptor.png",
-
-            "Gravitic Drive (Warp Prism)":                 github_icon_base_url + "blizzard/btn-upgrade-protoss-graviticdrive.png",
-            "Phase Blaster (Warp Prism)":                  github_icon_base_url + "blizzard/btn-upgrade-protoss-airweaponslevel0.png",
-            "War Configuration (Warp Prism)":              github_icon_base_url + "blizzard/btn-upgrade-protoss-alarak-graviticdrive.png",
-            "Singularity Charge (Immortal/Annihilator)":   github_icon_base_url + "blizzard/btn-upgrade-artanis-singularitycharge.png",
-            "Advanced Targeting Mechanics (Immortal/Annihilator)": github_icon_base_url + "blizzard/btn-ability-terran-detectionconedebuff.png",
-            "Agony Launchers (Vanguard)":                  github_icon_base_url + "blizzard/btn-upgrade-protoss-vanguard-aoeradiusincreased.png",
-            "Matter Dispersion (Vanguard)":                github_icon_base_url + "blizzard/btn-ability-terran-detectionconedebuff.png",
-            "Pacification Protocol (Colossus)":            github_icon_base_url + "blizzard/btn-ability-protoss-chargedblast.png",
-            "Rapid Power Cycling (Wrathwalker)":           github_icon_base_url + "blizzard/btn-upgrade-protoss-wrathwalker-chargetimeimproved.png",
-            "Eye of Wrath (Wrathwalker)":                  github_icon_base_url + "blizzard/btn-upgrade-protoss-extendedthermallance.png",
-            "Gravitic Boosters (Observer)":                github_icon_base_url + "blizzard/btn-upgrade-protoss-graviticbooster.png",
-            "Sensor Array (Observer)":                     github_icon_base_url + "blizzard/btn-ability-zeratul-observer-sensorarray.png",
-            "Scarab Damage (Reaver)":                      github_icon_base_url + "blizzard/btn-ability-protoss-scarabshot.png",
-            "Solarite Payload (Reaver)":                   github_icon_base_url + "blizzard/btn-upgrade-artanis-scarabsplashradius.png",
-            "Reaver Capacity (Reaver)":                    github_icon_base_url + "original/btn-upgrade-protoss-increasedscarabcapacity@scbw.png",
-            "Resource Efficiency (Reaver)":                github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-
-            "Phoenix":                                     "https://static.wikia.nocookie.net/starcraft/images/b/b1/Icon_Protoss_Phoenix.jpg",
-            "Mirage":                                      github_icon_base_url + "blizzard/btn-unit-protoss-phoenix-purifier.png",
-            "Corsair":                                     github_icon_base_url + "blizzard/btn-unit-protoss-corsair.png",
-            "Destroyer":                                   github_icon_base_url + "blizzard/btn-unit-protoss-voidray-taldarim.png",
-            "Void Ray":                                    github_icon_base_url + "blizzard/btn-unit-protoss-voidray-nerazim.png",
-            "Carrier":                                     "https://static.wikia.nocookie.net/starcraft/images/2/2c/Icon_Protoss_Carrier.jpg",
-            "Scout":                                       github_icon_base_url + "original/btn-unit-protoss-scout.png",
-            "Tempest":                                     github_icon_base_url + "blizzard/btn-unit-protoss-tempest-purifier.png",
-            "Mothership":                                  github_icon_base_url + "blizzard/btn-unit-protoss-mothership-taldarim.png",
-            "Arbiter":                                     github_icon_base_url + "blizzard/btn-unit-protoss-arbiter.png",
-            "Oracle":                                      github_icon_base_url + "blizzard/btn-unit-protoss-oracle.png",
-
-            "Ionic Wavelength Flux (Phoenix/Mirage)":      github_icon_base_url + "blizzard/btn-upgrade-protoss-airweaponslevel0.png",
-            "Anion Pulse-Crystals (Phoenix/Mirage)":       github_icon_base_url + "blizzard/btn-upgrade-protoss-phoenixrange.png",
-            "Stealth Drive (Corsair)":                     github_icon_base_url + "blizzard/btn-upgrade-vorazun-corsairpermanentlycloaked.png",
-            "Argus Jewel (Corsair)":                       github_icon_base_url + "blizzard/btn-ability-protoss-stasistrap.png",
-            "Sustaining Disruption (Corsair)":             github_icon_base_url + "blizzard/btn-ability-protoss-disruptionweb.png",
-            "Neutron Shields (Corsair)":                   github_icon_base_url + "blizzard/btn-upgrade-protoss-shieldslevel1.png",
-            "Reforged Bloodshard Core (Destroyer)":        github_icon_base_url + "blizzard/btn-amonshardsarmor.png",
-            "Flux Vanes (Void Ray/Destroyer)":             github_icon_base_url + "blizzard/btn-upgrade-protoss-fluxvanes.png",
-            "Graviton Catapult (Carrier)":                 github_icon_base_url + "blizzard/btn-upgrade-protoss-gravitoncatapult.png",
-            "Hull of Past Glories (Carrier)":              github_icon_base_url + "blizzard/btn-progression-protoss-fenix-14-colossusandcarrierchampionsresearch.png",
-            "Combat Sensor Array (Scout)":                 github_icon_base_url + "blizzard/btn-upgrade-protoss-fenix-scoutchampionrange.png",
-            "Apial Sensors (Scout)":                       github_icon_base_url + "blizzard/btn-upgrade-tychus-detection.png",
-            "Gravitic Thrusters (Scout)":                  github_icon_base_url + "blizzard/btn-upgrade-protoss-graviticbooster.png",
-            "Advanced Photon Blasters (Scout)":            github_icon_base_url + "blizzard/btn-upgrade-protoss-airweaponslevel3.png",
-            "Tectonic Destabilizers (Tempest)":            github_icon_base_url + "blizzard/btn-ability-protoss-disruptionblast.png",
-            "Quantic Reactor (Tempest)":                   github_icon_base_url + "blizzard/btn-upgrade-protoss-researchgravitysling.png",
-            "Gravity Sling (Tempest)":                     github_icon_base_url + "blizzard/btn-upgrade-protoss-tectonicdisruptors.png",
-            "Chronostatic Reinforcement (Arbiter)":        github_icon_base_url + "blizzard/btn-upgrade-protoss-airarmorlevel2.png",
-            "Khaydarin Core (Arbiter)":                    github_icon_base_url + "blizzard/btn-upgrade-protoss-adeptshieldupgrade.png",
-            "Spacetime Anchor (Arbiter)":                  github_icon_base_url + "blizzard/btn-ability-protoss-stasisfield.png",
-            "Resource Efficiency (Arbiter)":               github_icon_base_url + "blizzard/btn-ability-hornerhan-salvagebonus.png",
-            "Enhanced Cloak Field (Arbiter)":              github_icon_base_url + "blizzard/btn-ability-stetmann-stetzonegenerator-speed.png",
-            "Stealth Drive (Oracle)":                      github_icon_base_url + "blizzard/btn-upgrade-vorazun-oraclepermanentlycloaked.png",
-            "Stasis Calibration (Oracle)":                 github_icon_base_url + "blizzard/btn-ability-protoss-oracle-stasiscalibration.png",
-            "Temporal Acceleration Beam (Oracle)":         github_icon_base_url + "blizzard/btn-ability-protoss-oraclepulsarcannonon.png",
-
-            "Matrix Overload":                             github_icon_base_url + "blizzard/btn-ability-spearofadun-matrixoverload.png",
-            "Guardian Shell":                              github_icon_base_url + "blizzard/btn-ability-spearofadun-guardianshell.png",
-
-            "Chrono Surge (Spear of Adun Calldown)":       github_icon_base_url + "blizzard/btn-ability-spearofadun-chronosurge.png",
-            "Proxy Pylon (Spear of Adun Calldown)":        github_icon_base_url + "blizzard/btn-ability-spearofadun-deploypylon.png",
-            "Warp In Reinforcements (Spear of Adun Calldown)": github_icon_base_url + "blizzard/btn-ability-spearofadun-warpinreinforcements.png",
-            "Pylon Overcharge (Spear of Adun Calldown)":   github_icon_base_url + "blizzard/btn-ability-protoss-purify.png",
-            "Orbital Strike (Spear of Adun Calldown)":     github_icon_base_url + "blizzard/btn-ability-spearofadun-orbitalstrike.png",
-            "Temporal Field (Spear of Adun Calldown)":     github_icon_base_url + "blizzard/btn-ability-spearofadun-temporalfield.png",
-            "Solar Lance (Spear of Adun Calldown)":        github_icon_base_url + "blizzard/btn-ability-spearofadun-solarlance.png",
-            "Mass Recall (Spear of Adun Calldown)":        github_icon_base_url + "blizzard/btn-ability-spearofadun-massrecall.png",
-            "Shield Overcharge (Spear of Adun Calldown)":  github_icon_base_url + "blizzard/btn-ability-spearofadun-shieldovercharge.png",
-            "Deploy Fenix (Spear of Adun Calldown)":       github_icon_base_url + "blizzard/btn-unit-protoss-fenix.png",
-            "Purifier Beam (Spear of Adun Calldown)":      github_icon_base_url + "blizzard/btn-ability-spearofadun-purifierbeam.png",
-            "Time Stop (Spear of Adun Calldown)":          github_icon_base_url + "blizzard/btn-ability-spearofadun-timestop.png",
-            "Solar Bombardment (Spear of Adun Calldown)":  github_icon_base_url + "blizzard/btn-ability-spearofadun-solarbombardment.png",
-
-            "Reconstruction Beam (Spear of Adun Auto-Cast)": github_icon_base_url + "blizzard/btn-ability-spearofadun-reconstructionbeam.png",
-            "Overwatch (Spear of Adun Auto-Cast)":         github_icon_base_url + "blizzard/btn-ability-zeratul-chargedcrystal-psionicwinds.png",
-
-            "Nothing":                                     "",
-        }
-        sc2wol_location_ids = {
-            "Liberation Day":          range(SC2WOL_LOC_ID_OFFSET + 100, SC2WOL_LOC_ID_OFFSET + 200),
-            "The Outlaws":             range(SC2WOL_LOC_ID_OFFSET + 200, SC2WOL_LOC_ID_OFFSET + 300),
-            "Zero Hour":               range(SC2WOL_LOC_ID_OFFSET + 300, SC2WOL_LOC_ID_OFFSET + 400),
-            "Evacuation":              range(SC2WOL_LOC_ID_OFFSET + 400, SC2WOL_LOC_ID_OFFSET + 500),
-            "Outbreak":                range(SC2WOL_LOC_ID_OFFSET + 500, SC2WOL_LOC_ID_OFFSET + 600),
-            "Safe Haven":              range(SC2WOL_LOC_ID_OFFSET + 600, SC2WOL_LOC_ID_OFFSET + 700),
-            "Haven's Fall":            range(SC2WOL_LOC_ID_OFFSET + 700, SC2WOL_LOC_ID_OFFSET + 800),
-            "Smash and Grab":          range(SC2WOL_LOC_ID_OFFSET + 800, SC2WOL_LOC_ID_OFFSET + 900),
-            "The Dig":                 range(SC2WOL_LOC_ID_OFFSET + 900, SC2WOL_LOC_ID_OFFSET + 1000),
-            "The Moebius Factor":      range(SC2WOL_LOC_ID_OFFSET + 1000, SC2WOL_LOC_ID_OFFSET + 1100),
-            "Supernova":               range(SC2WOL_LOC_ID_OFFSET + 1100, SC2WOL_LOC_ID_OFFSET + 1200),
-            "Maw of the Void":         range(SC2WOL_LOC_ID_OFFSET + 1200, SC2WOL_LOC_ID_OFFSET + 1300),
-            "Devil's Playground":      range(SC2WOL_LOC_ID_OFFSET + 1300, SC2WOL_LOC_ID_OFFSET + 1400),
-            "Welcome to the Jungle":   range(SC2WOL_LOC_ID_OFFSET + 1400, SC2WOL_LOC_ID_OFFSET + 1500),
-            "Breakout":                range(SC2WOL_LOC_ID_OFFSET + 1500, SC2WOL_LOC_ID_OFFSET + 1600),
-            "Ghost of a Chance":       range(SC2WOL_LOC_ID_OFFSET + 1600, SC2WOL_LOC_ID_OFFSET + 1700),
-            "The Great Train Robbery": range(SC2WOL_LOC_ID_OFFSET + 1700, SC2WOL_LOC_ID_OFFSET + 1800),
-            "Cutthroat":               range(SC2WOL_LOC_ID_OFFSET + 1800, SC2WOL_LOC_ID_OFFSET + 1900),
-            "Engine of Destruction":   range(SC2WOL_LOC_ID_OFFSET + 1900, SC2WOL_LOC_ID_OFFSET + 2000),
-            "Media Blitz":             range(SC2WOL_LOC_ID_OFFSET + 2000, SC2WOL_LOC_ID_OFFSET + 2100),
-            "Piercing the Shroud":     range(SC2WOL_LOC_ID_OFFSET + 2100, SC2WOL_LOC_ID_OFFSET + 2200),
-            "Whispers of Doom":        range(SC2WOL_LOC_ID_OFFSET + 2200, SC2WOL_LOC_ID_OFFSET + 2300),
-            "A Sinister Turn":         range(SC2WOL_LOC_ID_OFFSET + 2300, SC2WOL_LOC_ID_OFFSET + 2400),
-            "Echoes of the Future":    range(SC2WOL_LOC_ID_OFFSET + 2400, SC2WOL_LOC_ID_OFFSET + 2500),
-            "In Utter Darkness":       range(SC2WOL_LOC_ID_OFFSET + 2500, SC2WOL_LOC_ID_OFFSET + 2600),
-            "Gates of Hell":           range(SC2WOL_LOC_ID_OFFSET + 2600, SC2WOL_LOC_ID_OFFSET + 2700),
-            "Belly of the Beast":      range(SC2WOL_LOC_ID_OFFSET + 2700, SC2WOL_LOC_ID_OFFSET + 2800),
-            "Shatter the Sky":         range(SC2WOL_LOC_ID_OFFSET + 2800, SC2WOL_LOC_ID_OFFSET + 2900),
-            "All-In":                  range(SC2WOL_LOC_ID_OFFSET + 2900, SC2WOL_LOC_ID_OFFSET + 3000),
-
-            "Lab Rat":                 range(SC2HOTS_LOC_ID_OFFSET + 100, SC2HOTS_LOC_ID_OFFSET + 200),
-            "Back in the Saddle":      range(SC2HOTS_LOC_ID_OFFSET + 200, SC2HOTS_LOC_ID_OFFSET + 300),
-            "Rendezvous":              range(SC2HOTS_LOC_ID_OFFSET + 300, SC2HOTS_LOC_ID_OFFSET + 400),
-            "Harvest of Screams":      range(SC2HOTS_LOC_ID_OFFSET + 400, SC2HOTS_LOC_ID_OFFSET + 500),
-            "Shoot the Messenger":     range(SC2HOTS_LOC_ID_OFFSET + 500, SC2HOTS_LOC_ID_OFFSET + 600),
-            "Enemy Within":            range(SC2HOTS_LOC_ID_OFFSET + 600, SC2HOTS_LOC_ID_OFFSET + 700),
-            "Domination":              range(SC2HOTS_LOC_ID_OFFSET + 700, SC2HOTS_LOC_ID_OFFSET + 800),
-            "Fire in the Sky":         range(SC2HOTS_LOC_ID_OFFSET + 800, SC2HOTS_LOC_ID_OFFSET + 900),
-            "Old Soldiers":            range(SC2HOTS_LOC_ID_OFFSET + 900, SC2HOTS_LOC_ID_OFFSET + 1000),
-            "Waking the Ancient":      range(SC2HOTS_LOC_ID_OFFSET + 1000, SC2HOTS_LOC_ID_OFFSET + 1100),
-            "The Crucible":            range(SC2HOTS_LOC_ID_OFFSET + 1100, SC2HOTS_LOC_ID_OFFSET + 1200),
-            "Supreme":                 range(SC2HOTS_LOC_ID_OFFSET + 1200, SC2HOTS_LOC_ID_OFFSET + 1300),
-            "Infested":                range(SC2HOTS_LOC_ID_OFFSET + 1300, SC2HOTS_LOC_ID_OFFSET + 1400),
-            "Hand of Darkness":        range(SC2HOTS_LOC_ID_OFFSET + 1400, SC2HOTS_LOC_ID_OFFSET + 1500),
-            "Phantoms of the Void":    range(SC2HOTS_LOC_ID_OFFSET + 1500, SC2HOTS_LOC_ID_OFFSET + 1600),
-            "With Friends Like These": range(SC2HOTS_LOC_ID_OFFSET + 1600, SC2HOTS_LOC_ID_OFFSET + 1700),
-            "Conviction":              range(SC2HOTS_LOC_ID_OFFSET + 1700, SC2HOTS_LOC_ID_OFFSET + 1800),
-            "Planetfall":              range(SC2HOTS_LOC_ID_OFFSET + 1800, SC2HOTS_LOC_ID_OFFSET + 1900),
-            "Death From Above":        range(SC2HOTS_LOC_ID_OFFSET + 1900, SC2HOTS_LOC_ID_OFFSET + 2000),
-            "The Reckoning":           range(SC2HOTS_LOC_ID_OFFSET + 2000, SC2HOTS_LOC_ID_OFFSET + 2100),
-
-            "Dark Whispers":           range(SC2LOTV_LOC_ID_OFFSET + 100, SC2LOTV_LOC_ID_OFFSET + 200),
-            "Ghosts in the Fog":       range(SC2LOTV_LOC_ID_OFFSET + 200, SC2LOTV_LOC_ID_OFFSET + 300),
-            "Evil Awoken":             range(SC2LOTV_LOC_ID_OFFSET + 300, SC2LOTV_LOC_ID_OFFSET + 400),
-
-            "For Aiur!":               range(SC2LOTV_LOC_ID_OFFSET + 400, SC2LOTV_LOC_ID_OFFSET + 500),
-            "The Growing Shadow":      range(SC2LOTV_LOC_ID_OFFSET + 500, SC2LOTV_LOC_ID_OFFSET + 600),
-            "The Spear of Adun":       range(SC2LOTV_LOC_ID_OFFSET + 600, SC2LOTV_LOC_ID_OFFSET + 700),
-            "Sky Shield":              range(SC2LOTV_LOC_ID_OFFSET + 700, SC2LOTV_LOC_ID_OFFSET + 800),
-            "Brothers in Arms":        range(SC2LOTV_LOC_ID_OFFSET + 800, SC2LOTV_LOC_ID_OFFSET + 900),
-            "Amon's Reach":            range(SC2LOTV_LOC_ID_OFFSET + 900, SC2LOTV_LOC_ID_OFFSET + 1000),
-            "Last Stand":              range(SC2LOTV_LOC_ID_OFFSET + 1000, SC2LOTV_LOC_ID_OFFSET + 1100),
-            "Forbidden Weapon":        range(SC2LOTV_LOC_ID_OFFSET + 1100, SC2LOTV_LOC_ID_OFFSET + 1200),
-            "Temple of Unification":   range(SC2LOTV_LOC_ID_OFFSET + 1200, SC2LOTV_LOC_ID_OFFSET + 1300),
-            "The Infinite Cycle":      range(SC2LOTV_LOC_ID_OFFSET + 1300, SC2LOTV_LOC_ID_OFFSET + 1400),
-            "Harbinger of Oblivion":   range(SC2LOTV_LOC_ID_OFFSET + 1400, SC2LOTV_LOC_ID_OFFSET + 1500),
-            "Unsealing the Past":      range(SC2LOTV_LOC_ID_OFFSET + 1500, SC2LOTV_LOC_ID_OFFSET + 1600),
-            "Purification":            range(SC2LOTV_LOC_ID_OFFSET + 1600, SC2LOTV_LOC_ID_OFFSET + 1700),
-            "Steps of the Rite":       range(SC2LOTV_LOC_ID_OFFSET + 1700, SC2LOTV_LOC_ID_OFFSET + 1800),
-            "Rak'Shir":                range(SC2LOTV_LOC_ID_OFFSET + 1800, SC2LOTV_LOC_ID_OFFSET + 1900),
-            "Templar's Charge":        range(SC2LOTV_LOC_ID_OFFSET + 1900, SC2LOTV_LOC_ID_OFFSET + 2000),
-            "Templar's Return":        range(SC2LOTV_LOC_ID_OFFSET + 2000, SC2LOTV_LOC_ID_OFFSET + 2100),
-            "The Host":                range(SC2LOTV_LOC_ID_OFFSET + 2100, SC2LOTV_LOC_ID_OFFSET + 2200),
-            "Salvation":               range(SC2LOTV_LOC_ID_OFFSET + 2200, SC2LOTV_LOC_ID_OFFSET + 2300),
-
-            "Into the Void":           range(SC2LOTV_LOC_ID_OFFSET + 2300, SC2LOTV_LOC_ID_OFFSET + 2400),
-            "The Essence of Eternity": range(SC2LOTV_LOC_ID_OFFSET + 2400, SC2LOTV_LOC_ID_OFFSET + 2500),
-            "Amon's Fall":             range(SC2LOTV_LOC_ID_OFFSET + 2500, SC2LOTV_LOC_ID_OFFSET + 2600),
-
-            "The Escape":              range(SC2NCO_LOC_ID_OFFSET + 100, SC2NCO_LOC_ID_OFFSET + 200),
-            "Sudden Strike":           range(SC2NCO_LOC_ID_OFFSET + 200, SC2NCO_LOC_ID_OFFSET + 300),
-            "Enemy Intelligence":      range(SC2NCO_LOC_ID_OFFSET + 300, SC2NCO_LOC_ID_OFFSET + 400),
-            "Trouble In Paradise":     range(SC2NCO_LOC_ID_OFFSET + 400, SC2NCO_LOC_ID_OFFSET + 500),
-            "Night Terrors":           range(SC2NCO_LOC_ID_OFFSET + 500, SC2NCO_LOC_ID_OFFSET + 600),
-            "Flashpoint":              range(SC2NCO_LOC_ID_OFFSET + 600, SC2NCO_LOC_ID_OFFSET + 700),
-            "In the Enemy's Shadow":   range(SC2NCO_LOC_ID_OFFSET + 700, SC2NCO_LOC_ID_OFFSET + 800),
-            "Dark Skies":              range(SC2NCO_LOC_ID_OFFSET + 800, SC2NCO_LOC_ID_OFFSET + 900),
-            "End Game":                range(SC2NCO_LOC_ID_OFFSET + 900, SC2NCO_LOC_ID_OFFSET + 1000),
-        }
-
+        # Filler item counters
         display_data = {}
+        display_data["minerals_count"] = slot_data.get("minerals_per_item", 15) * inventory.get(STARTING_MINERALS_ITEM_ID, 0)
+        display_data["vespene_count"] = slot_data.get("vespene_per_item", 15) * inventory.get(STARTING_VESPENE_ITEM_ID, 0)
+        display_data["supply_count"] = slot_data.get("starting_supply_per_item", 2) * inventory.get(STARTING_SUPPLY_ITEM_ID, 0)
+        display_data["max_supply_count"] = slot_data.get("maximum_supply_per_item", 1) * inventory.get(MAX_SUPPLY_ITEM_ID, 0)
+        display_data["reduced_supply_count"] = slot_data.get("maximum_supply_reduction_per_item", 1) * inventory.get(REDUCED_MAX_SUPPLY_ITEM_ID, 0)
+        display_data["construction_speed_count"] = inventory.get(BUILDING_CONSTRUCTION_SPEED_ITEM_ID, 0)
+        display_data["shield_regen_count"] = inventory.get(SHIELD_REGENERATION_ITEM_ID, 0)
+        display_data["upgrade_speed_count"] = inventory.get(UPGRADE_RESEARCH_SPEED_ITEM_ID, 0)
+        display_data["research_cost_count"] = inventory.get(UPGRADE_RESEARCH_COST_ITEM_ID, 0)
 
-        # Grouped Items
-        grouped_item_ids = {
-            "Progressive Terran Weapon Upgrade":        107 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Armor Upgrade":         108 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Infantry Upgrade":      109 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Vehicle Upgrade":       110 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Ship Upgrade":          111 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Weapon/Armor Upgrade":  112 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Zerg Weapon Upgrade":          105 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Armor Upgrade":           106 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Ground Upgrade":          107 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Flyer Upgrade":           108 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Weapon/Armor Upgrade":    109 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Weapon Upgrade":       105 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Armor Upgrade":        106 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Ground Upgrade":       107 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Air Upgrade":          108 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Weapon/Armor Upgrade": 109 + SC2LOTV_ITEM_ID_OFFSET,
-        }
-        grouped_item_replacements = {
-            "Progressive Terran Weapon Upgrade":   ["Progressive Terran Infantry Weapon",
-                                                    "Progressive Terran Vehicle Weapon",
-                                                    "Progressive Terran Ship Weapon"],
-            "Progressive Terran Armor Upgrade":    ["Progressive Terran Infantry Armor",
-                                                    "Progressive Terran Vehicle Armor",
-                                                    "Progressive Terran Ship Armor"],
-            "Progressive Terran Infantry Upgrade": ["Progressive Terran Infantry Weapon",
-                                                    "Progressive Terran Infantry Armor"],
-            "Progressive Terran Vehicle Upgrade":  ["Progressive Terran Vehicle Weapon",
-                                                    "Progressive Terran Vehicle Armor"],
-            "Progressive Terran Ship Upgrade":     ["Progressive Terran Ship Weapon", "Progressive Terran Ship Armor"],
-            "Progressive Zerg Weapon Upgrade":     ["Progressive Zerg Melee Attack", "Progressive Zerg Missile Attack",
-                                                    "Progressive Zerg Flyer Attack"],
-            "Progressive Zerg Armor Upgrade":      ["Progressive Zerg Ground Carapace",
-                                                    "Progressive Zerg Flyer Carapace"],
-            "Progressive Zerg Ground Upgrade":     ["Progressive Zerg Melee Attack", "Progressive Zerg Missile Attack",
-                                                    "Progressive Zerg Ground Carapace"],
-            "Progressive Zerg Flyer Upgrade":      ["Progressive Zerg Flyer Attack", "Progressive Zerg Flyer Carapace"],
-            "Progressive Protoss Weapon Upgrade":  ["Progressive Protoss Ground Weapon",
-                                                    "Progressive Protoss Air Weapon"],
-            "Progressive Protoss Armor Upgrade":   ["Progressive Protoss Ground Armor", "Progressive Protoss Shields",
-                                                    "Progressive Protoss Air Armor"],
-            "Progressive Protoss Ground Upgrade":  ["Progressive Protoss Ground Weapon",
-                                                    "Progressive Protoss Ground Armor",
-                                                    "Progressive Protoss Shields"],
-            "Progressive Protoss Air Upgrade":     ["Progressive Protoss Air Weapon", "Progressive Protoss Air Armor",
-                                                    "Progressive Protoss Shields"]
-        }
-        grouped_item_replacements["Progressive Terran Weapon/Armor Upgrade"] = \
-            grouped_item_replacements["Progressive Terran Weapon Upgrade"] \
-            + grouped_item_replacements["Progressive Terran Armor Upgrade"]
-        grouped_item_replacements["Progressive Zerg Weapon/Armor Upgrade"] = \
-            grouped_item_replacements["Progressive Zerg Weapon Upgrade"] \
-            + grouped_item_replacements["Progressive Zerg Armor Upgrade"]
-        grouped_item_replacements["Progressive Protoss Weapon/Armor Upgrade"] = \
-            grouped_item_replacements["Progressive Protoss Weapon Upgrade"] \
-            + grouped_item_replacements["Progressive Protoss Armor Upgrade"]
-        replacement_item_ids = {
-            "Progressive Terran Infantry Weapon": 100 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Infantry Armor":  102 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Vehicle Weapon":  103 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Vehicle Armor":   104 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Ship Weapon":     105 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Ship Armor":      106 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Zerg Melee Attack":      100 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Missile Attack":    101 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Ground Carapace":   102 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Flyer Attack":      103 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Flyer Carapace":    104 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Ground Weapon":  100 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Ground Armor":   101 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Shields":        102 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Air Weapon":     103 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Air Armor":      104 + SC2LOTV_ITEM_ID_OFFSET,
-        }
+        # Locations
+        have_nco_locations = False
+        locations = tracker_data.get_player_locations(player)
+        checked_locations = tracker_data.get_player_checked_locations(team, player)
+        missions: dict[str, list[tuple[str, bool]]] = {}
+        for location_id in locations:
+            location_name = location_id_to_name.get(location_id, "")
+            if ":" not in location_name:
+                continue
+            mission_name = location_name.split(":", 1)[0]
+            missions.setdefault(mission_name, []).append((location_name, location_id in checked_locations))
+            if location_id >= NCO_LOCATION_ID_LOW and location_id < NCO_LOCATION_ID_HIGH:
+                have_nco_locations = True
+        missions = {mission: missions[mission] for mission in sorted(missions)}
 
-        inventory: collections.Counter = tracker_data.get_player_inventory_counts(team, player)
-        for grouped_item_name, grouped_item_id in grouped_item_ids.items():
-            count: int = inventory[grouped_item_id]
-            if count > 0:
-                for replacement_item in grouped_item_replacements[grouped_item_name]:
-                    replacement_id: int = replacement_item_ids[replacement_item]
-                    if replacement_id not in inventory or count > inventory[replacement_id]:
-                        # If two groups provide the same individual item, maximum is used
-                        # (this behavior is used for Protoss Shields)
-                        inventory[replacement_id] = count
-
-        # Determine display for progressive items
-        progressive_items = {
-            "Progressive Terran Infantry Weapon":                   100 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Infantry Armor":                    102 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Vehicle Weapon":                    103 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Vehicle Armor":                     104 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Ship Weapon":                       105 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Terran Ship Armor":                        106 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Fire-Suppression System":                  206 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Orbital Command":                          207 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Stimpack (Marine)":                        208 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Stimpack (Firebat)":                       226 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Stimpack (Marauder)":                      228 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Stimpack (Reaper)":                        250 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Stimpack (Hellion)":                       259 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Replenishable Magazine (Vulture)":         303 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Tri-Lithium Power Cell (Diamondback)":     306 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Tomahawk Power Cells (Wraith)":            312 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Cross-Spectrum Dampeners (Banshee)":       316 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Missile Pods (Battlecruiser)":             318 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Defensive Matrix (Battlecruiser)":         319 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Immortality Protocol (Thor)":              325 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive High Impact Payload (Thor)":               361 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Augmented Thrusters (Planetary Fortress)": 388 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Regenerative Bio-Steel":                   617 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Stealth Suit Module (Nova Suit Module)":   904 + SC2WOL_ITEM_ID_OFFSET,
-            "Progressive Zerg Melee Attack":                        100 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Missile Attack":                      101 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Ground Carapace":                     102 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Flyer Attack":                        103 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Zerg Flyer Carapace":                      104 + SC2HOTS_ITEM_ID_OFFSET,
-            "Progressive Protoss Ground Weapon":                    100 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Ground Armor":                     101 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Shields":                          102 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Air Weapon":                       103 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Protoss Air Armor":                        104 + SC2LOTV_ITEM_ID_OFFSET,
-            "Progressive Proxy Pylon (Spear of Adun Calldown)":     701 + SC2LOTV_ITEM_ID_OFFSET,
-        }
-        # Format: L0, L1, L2, L3
-        progressive_names = {
-            "Progressive Terran Infantry Weapon":               ["Terran Infantry Weapons Level 1", 
-                                                                 "Terran Infantry Weapons Level 1",
-                                                                 "Terran Infantry Weapons Level 2", 
-                                                                 "Terran Infantry Weapons Level 3"],
-            "Progressive Terran Infantry Armor":                ["Terran Infantry Armor Level 1", 
-                                                                 "Terran Infantry Armor Level 1",
-                                                                 "Terran Infantry Armor Level 2", 
-                                                                 "Terran Infantry Armor Level 3"],
-            "Progressive Terran Vehicle Weapon":                ["Terran Vehicle Weapons Level 1", 
-                                                                 "Terran Vehicle Weapons Level 1",
-                                                                 "Terran Vehicle Weapons Level 2", 
-                                                                 "Terran Vehicle Weapons Level 3"],
-            "Progressive Terran Vehicle Armor":                 ["Terran Vehicle Armor Level 1", 
-                                                                 "Terran Vehicle Armor Level 1",
-                                                                 "Terran Vehicle Armor Level 2", 
-                                                                 "Terran Vehicle Armor Level 3"],
-            "Progressive Terran Ship Weapon":                   ["Terran Ship Weapons Level 1",
-                                                                 "Terran Ship Weapons Level 1",
-                                                                 "Terran Ship Weapons Level 2",
-                                                                 "Terran Ship Weapons Level 3"],
-            "Progressive Terran Ship Armor":                    ["Terran Ship Armor Level 1", 
-                                                                 "Terran Ship Armor Level 1",
-                                                                 "Terran Ship Armor Level 2", 
-                                                                 "Terran Ship Armor Level 3"],
-            "Progressive Fire-Suppression System":              ["Fire-Suppression System Level 1",
-                                                                 "Fire-Suppression System Level 1",
-                                                                 "Fire-Suppression System Level 2"],
-            "Progressive Orbital Command":                      ["Orbital Command", "Orbital Command",
-                                                                 "Planetary Command Module"],
-            "Progressive Stimpack (Marine)":                    ["Stimpack (Marine)", "Stimpack (Marine)",
-                                                                 "Super Stimpack (Marine)"],
-            "Progressive Stimpack (Firebat)":                   ["Stimpack (Firebat)", "Stimpack (Firebat)",
-                                                                 "Super Stimpack (Firebat)"],
-            "Progressive Stimpack (Marauder)":                  ["Stimpack (Marauder)", "Stimpack (Marauder)",
-                                                                 "Super Stimpack (Marauder)"],
-            "Progressive Stimpack (Reaper)":                    ["Stimpack (Reaper)", "Stimpack (Reaper)",
-                                                                 "Super Stimpack (Reaper)"],
-            "Progressive Stimpack (Hellion)":                   ["Stimpack (Hellion)", "Stimpack (Hellion)",
-                                                                 "Super Stimpack (Hellion)"],
-            "Progressive Replenishable Magazine (Vulture)":     ["Replenishable Magazine (Vulture)",
-                                                                 "Replenishable Magazine (Vulture)",
-                                                                 "Replenishable Magazine (Free) (Vulture)"],
-            "Progressive Tri-Lithium Power Cell (Diamondback)": ["Tri-Lithium Power Cell (Diamondback)",
-                                                                 "Tri-Lithium Power Cell (Diamondback)",
-                                                                 "Tungsten Spikes (Diamondback)"],
-            "Progressive Tomahawk Power Cells (Wraith)":        ["Tomahawk Power Cells (Wraith)",
-                                                                 "Tomahawk Power Cells (Wraith)",
-                                                                 "Unregistered Cloaking Module (Wraith)"],
-            "Progressive Cross-Spectrum Dampeners (Banshee)":   ["Cross-Spectrum Dampeners (Banshee)",
-                                                                 "Cross-Spectrum Dampeners (Banshee)",
-                                                                 "Advanced Cross-Spectrum Dampeners (Banshee)"],
-            "Progressive Missile Pods (Battlecruiser)":         ["Missile Pods (Battlecruiser) Level 1",
-                                                                 "Missile Pods (Battlecruiser) Level 1",
-                                                                 "Missile Pods (Battlecruiser) Level 2"],
-            "Progressive Defensive Matrix (Battlecruiser)":     ["Defensive Matrix (Battlecruiser)",
-                                                                 "Defensive Matrix (Battlecruiser)",
-                                                                 "Advanced Defensive Matrix (Battlecruiser)"],
-            "Progressive Immortality Protocol (Thor)":          ["Immortality Protocol (Thor)",
-                                                                 "Immortality Protocol (Thor)",
-                                                                 "Immortality Protocol (Free) (Thor)"],
-            "Progressive High Impact Payload (Thor)":           ["High Impact Payload (Thor)",
-                                                                 "High Impact Payload (Thor)", "Smart Servos (Thor)"],
-            "Progressive Augmented Thrusters (Planetary Fortress)": ["Lift Off (Planetary Fortress)",
-                                                                     "Lift Off (Planetary Fortress)",
-                                                                     "Armament Stabilizers (Planetary Fortress)"],
-            "Progressive Regenerative Bio-Steel":               ["Regenerative Bio-Steel Level 1",
-                                                                 "Regenerative Bio-Steel Level 1",
-                                                                 "Regenerative Bio-Steel Level 2",
-                                                                 "Regenerative Bio-Steel Level 3"],
-            "Progressive Stealth Suit Module (Nova Suit Module)": ["Stealth Suit Module (Nova Suit Module)",
-                                                                   "Cloak (Nova Suit Module)",
-                                                                   "Permanently Cloaked (Nova Suit Module)"],
-            "Progressive Zerg Melee Attack":                    ["Zerg Melee Attack Level 1",
-                                                                 "Zerg Melee Attack Level 1",
-                                                                 "Zerg Melee Attack Level 2",
-                                                                 "Zerg Melee Attack Level 3"],
-            "Progressive Zerg Missile Attack":                  ["Zerg Missile Attack Level 1",
-                                                                 "Zerg Missile Attack Level 1",
-                                                                 "Zerg Missile Attack Level 2",
-                                                                 "Zerg Missile Attack Level 3"],
-            "Progressive Zerg Ground Carapace":                 ["Zerg Ground Carapace Level 1",
-                                                                 "Zerg Ground Carapace Level 1",
-                                                                 "Zerg Ground Carapace Level 2",
-                                                                 "Zerg Ground Carapace Level 3"],
-            "Progressive Zerg Flyer Attack":                    ["Zerg Flyer Attack Level 1",
-                                                                 "Zerg Flyer Attack Level 1",
-                                                                 "Zerg Flyer Attack Level 2",
-                                                                 "Zerg Flyer Attack Level 3"],
-            "Progressive Zerg Flyer Carapace":                  ["Zerg Flyer Carapace Level 1",
-                                                                 "Zerg Flyer Carapace Level 1",
-                                                                 "Zerg Flyer Carapace Level 2",
-                                                                 "Zerg Flyer Carapace Level 3"],
-            "Progressive Protoss Ground Weapon":                ["Protoss Ground Weapon Level 1",
-                                                                 "Protoss Ground Weapon Level 1",
-                                                                 "Protoss Ground Weapon Level 2",
-                                                                 "Protoss Ground Weapon Level 3"],
-            "Progressive Protoss Ground Armor":                 ["Protoss Ground Armor Level 1",
-                                                                 "Protoss Ground Armor Level 1",
-                                                                 "Protoss Ground Armor Level 2",
-                                                                 "Protoss Ground Armor Level 3"],
-            "Progressive Protoss Shields":                      ["Protoss Shields Level 1", "Protoss Shields Level 1",
-                                                                 "Protoss Shields Level 2", "Protoss Shields Level 3"],
-            "Progressive Protoss Air Weapon":                   ["Protoss Air Weapon Level 1",
-                                                                 "Protoss Air Weapon Level 1",
-                                                                 "Protoss Air Weapon Level 2",
-                                                                 "Protoss Air Weapon Level 3"],
-            "Progressive Protoss Air Armor":                    ["Protoss Air Armor Level 1",
-                                                                 "Protoss Air Armor Level 1",
-                                                                 "Protoss Air Armor Level 2",
-                                                                 "Protoss Air Armor Level 3"],
-            "Progressive Proxy Pylon (Spear of Adun Calldown)": ["Proxy Pylon (Spear of Adun Calldown)",
-                                                                 "Proxy Pylon (Spear of Adun Calldown)",
-                                                                 "Warp In Reinforcements (Spear of Adun Calldown)"]
-        }
-        for item_name, item_id in progressive_items.items():
-            level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
-            display_name = progressive_names[item_name][level]
-            base_name = (item_name.split(maxsplit=1)[1].lower()
-                         .replace(' ', '_')
-                         .replace("-", "")
-                         .replace("(", "")
-                         .replace(")", ""))
-            display_data[base_name + "_level"] = level
-            display_data[base_name + "_url"] = icons[display_name] if display_name in icons else "FIXME"
-            display_data[base_name + "_name"] = display_name
-
-        # Multi-items
-        multi_items = {
-            "Additional Starting Minerals": 800 + SC2WOL_ITEM_ID_OFFSET,
-            "Additional Starting Vespene":  801 + SC2WOL_ITEM_ID_OFFSET,
-            "Additional Starting Supply":   802 + SC2WOL_ITEM_ID_OFFSET
-        }
-        for item_name, item_id in multi_items.items():
-            base_name = item_name.split()[-1].lower()
-            count = inventory[item_id]
-            if base_name == "supply":
-                count = count * starting_supply_per_item
-            elif base_name == "minerals":
-                count = count * minerals_per_item
-            elif base_name == "vespene":
-                count = count * vespene_per_item
-            display_data[base_name + "_count"] = count
         # Kerrigan level
-        level_items = {
-            "1 Kerrigan Level":     509 + SC2HOTS_ITEM_ID_OFFSET,
-            "2 Kerrigan Levels":    508 + SC2HOTS_ITEM_ID_OFFSET,
-            "3 Kerrigan Levels":    507 + SC2HOTS_ITEM_ID_OFFSET,
-            "4 Kerrigan Levels":    506 + SC2HOTS_ITEM_ID_OFFSET,
-            "5 Kerrigan Levels":    505 + SC2HOTS_ITEM_ID_OFFSET,
-            "6 Kerrigan Levels":    504 + SC2HOTS_ITEM_ID_OFFSET,
-            "7 Kerrigan Levels":    503 + SC2HOTS_ITEM_ID_OFFSET,
-            "8 Kerrigan Levels":    502 + SC2HOTS_ITEM_ID_OFFSET,
-            "9 Kerrigan Levels":    501 + SC2HOTS_ITEM_ID_OFFSET,
-            "10 Kerrigan Levels":   500 + SC2HOTS_ITEM_ID_OFFSET,
-            "14 Kerrigan Levels":   510 + SC2HOTS_ITEM_ID_OFFSET,
-            "35 Kerrigan Levels":   511 + SC2HOTS_ITEM_ID_OFFSET,
-            "70 Kerrigan Levels":   512 + SC2HOTS_ITEM_ID_OFFSET,
-        }
-        level_amounts = {
-            "1 Kerrigan Level":     1,
-            "2 Kerrigan Levels":    2,
-            "3 Kerrigan Levels":    3,
-            "4 Kerrigan Levels":    4,
-            "5 Kerrigan Levels":    5,
-            "6 Kerrigan Levels":    6,
-            "7 Kerrigan Levels":    7,
-            "8 Kerrigan Levels":    8,
-            "9 Kerrigan Levels":    9,
-            "10 Kerrigan Levels":   10,
-            "14 Kerrigan Levels":   14,
-            "35 Kerrigan Levels":   35,
-            "70 Kerrigan Levels":   70,
-        }
+        level_item_id_to_amount = (
+            (509 + SC2HOTS_ITEM_ID_OFFSET, 1,),
+            (508 + SC2HOTS_ITEM_ID_OFFSET, 2,),
+            (507 + SC2HOTS_ITEM_ID_OFFSET, 3,),
+            (506 + SC2HOTS_ITEM_ID_OFFSET, 4,),
+            (505 + SC2HOTS_ITEM_ID_OFFSET, 5,),
+            (504 + SC2HOTS_ITEM_ID_OFFSET, 6,),
+            (503 + SC2HOTS_ITEM_ID_OFFSET, 7,),
+            (502 + SC2HOTS_ITEM_ID_OFFSET, 8,),
+            (501 + SC2HOTS_ITEM_ID_OFFSET, 9,),
+            (500 + SC2HOTS_ITEM_ID_OFFSET, 10,),
+            (510 + SC2HOTS_ITEM_ID_OFFSET, 14,),
+            (511 + SC2HOTS_ITEM_ID_OFFSET, 35,),
+            (512 + SC2HOTS_ITEM_ID_OFFSET, 70,),
+        )
         kerrigan_level = 0
-        for item_name, item_id in level_items.items():
-            count = inventory[item_id]
-            amount = level_amounts[item_name]
-            kerrigan_level += count * amount
+        for item_id, levels_per_item in level_item_id_to_amount:
+            kerrigan_level += levels_per_item * inventory[item_id]
         display_data["kerrigan_level"] = kerrigan_level
+
+        # Hero presence
+        display_data["kerrigan_present"] = slot_data.get("kerrigan_presence", 0) == 0
+        display_data["nova_present"] = have_nco_locations
+
+        # Upgrades
+        TERRAN_INFANTRY_WEAPON_ID = 100 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_INFANTRY_ARMOR_ID =  102 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_VEHICLE_WEAPON_ID =  103 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_VEHICLE_ARMOR_ID =   104 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_SHIP_WEAPON_ID =     105 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_SHIP_ARMOR_ID =      106 + SC2WOL_ITEM_ID_OFFSET
+        ZERG_MELEE_ATTACK_ID =      100 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_MISSILE_ATTACK_ID =    101 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_GROUND_CARAPACE_ID =   102 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_FLYER_ATTACK_ID =      103 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_FLYER_CARAPACE_ID =    104 + SC2HOTS_ITEM_ID_OFFSET
+        PROTOSS_GROUND_WEAPON_ID =  100 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_GROUND_ARMOR_ID =   101 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_SHIELDS_ID =        102 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_AIR_WEAPON_ID =     103 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_AIR_ARMOR_ID =      104 + SC2LOTV_ITEM_ID_OFFSET
+
+        # Bundles
+        TERRAN_WEAPON_UPGRADE_ID =        107 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_ARMOR_UPGRADE_ID =         108 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_INFANTRY_UPGRADE_ID =      109 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_VEHICLE_UPGRADE_ID =       110 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_SHIP_UPGRADE_ID =          111 + SC2WOL_ITEM_ID_OFFSET
+        TERRAN_WEAPON_ARMOR_UPGRADE_ID =  112 + SC2WOL_ITEM_ID_OFFSET
+        ZERG_WEAPON_UPGRADE_ID =          105 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_ARMOR_UPGRADE_ID =           106 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_GROUND_UPGRADE_ID =          107 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_FLYER_UPGRADE_ID =           108 + SC2HOTS_ITEM_ID_OFFSET
+        ZERG_WEAPON_ARMOR_UPGRADE_ID =    109 + SC2HOTS_ITEM_ID_OFFSET
+        PROTOSS_WEAPON_UPGRADE_ID =       105 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_ARMOR_UPGRADE_ID =        106 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_GROUND_UPGRADE_ID =       107 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_AIR_UPGRADE_ID =          108 + SC2LOTV_ITEM_ID_OFFSET
+        PROTOSS_WEAPON_ARMOR_UPGRADE_ID = 109 + SC2LOTV_ITEM_ID_OFFSET
+        grouped_item_replacements = {
+            TERRAN_WEAPON_UPGRADE_ID: [
+                TERRAN_INFANTRY_WEAPON_ID,
+                TERRAN_VEHICLE_WEAPON_ID,
+                TERRAN_SHIP_WEAPON_ID,
+            ],
+            TERRAN_ARMOR_UPGRADE_ID: [
+                TERRAN_INFANTRY_ARMOR_ID,
+                TERRAN_VEHICLE_ARMOR_ID,
+                TERRAN_SHIP_ARMOR_ID,
+            ],
+            TERRAN_INFANTRY_UPGRADE_ID: [
+                TERRAN_INFANTRY_WEAPON_ID,
+                TERRAN_INFANTRY_ARMOR_ID,
+            ],
+            TERRAN_VEHICLE_UPGRADE_ID: [
+                TERRAN_VEHICLE_WEAPON_ID,
+                TERRAN_VEHICLE_ARMOR_ID,
+            ],
+            TERRAN_SHIP_UPGRADE_ID: [
+                TERRAN_SHIP_WEAPON_ID,
+                TERRAN_SHIP_ARMOR_ID
+            ],
+            ZERG_WEAPON_UPGRADE_ID: [
+                ZERG_MELEE_ATTACK_ID,
+                ZERG_MISSILE_ATTACK_ID,
+                ZERG_FLYER_ATTACK_ID,
+            ],
+            ZERG_ARMOR_UPGRADE_ID: [
+                ZERG_GROUND_CARAPACE_ID,
+                ZERG_FLYER_CARAPACE_ID,
+            ],
+            ZERG_GROUND_UPGRADE_ID: [
+                ZERG_MELEE_ATTACK_ID,
+                ZERG_MISSILE_ATTACK_ID,
+                ZERG_GROUND_CARAPACE_ID,
+            ],
+            ZERG_FLYER_UPGRADE_ID: [
+                ZERG_FLYER_ATTACK_ID,
+                ZERG_FLYER_CARAPACE_ID,
+            ],
+            PROTOSS_WEAPON_UPGRADE_ID: [
+                PROTOSS_GROUND_WEAPON_ID,
+                PROTOSS_AIR_WEAPON_ID,
+            ],
+            PROTOSS_ARMOR_UPGRADE_ID: [
+                PROTOSS_GROUND_ARMOR_ID,
+                PROTOSS_SHIELDS_ID,
+                PROTOSS_AIR_ARMOR_ID,
+            ],
+            PROTOSS_GROUND_UPGRADE_ID: [
+                PROTOSS_GROUND_WEAPON_ID,
+                PROTOSS_GROUND_ARMOR_ID,
+                PROTOSS_SHIELDS_ID,
+            ],
+            PROTOSS_AIR_UPGRADE_ID: [
+                PROTOSS_AIR_WEAPON_ID,
+                PROTOSS_AIR_ARMOR_ID,
+                PROTOSS_SHIELDS_ID,
+            ]
+        }
+        grouped_item_replacements[TERRAN_WEAPON_ARMOR_UPGRADE_ID] = (
+            grouped_item_replacements[TERRAN_WEAPON_UPGRADE_ID]
+            + grouped_item_replacements[TERRAN_ARMOR_UPGRADE_ID]
+        )
+        grouped_item_replacements[ZERG_WEAPON_ARMOR_UPGRADE_ID] = (
+            grouped_item_replacements[ZERG_WEAPON_UPGRADE_ID]
+            + grouped_item_replacements[ZERG_ARMOR_UPGRADE_ID]
+        )
+        grouped_item_replacements[PROTOSS_WEAPON_ARMOR_UPGRADE_ID] = (
+            grouped_item_replacements[PROTOSS_WEAPON_UPGRADE_ID]
+            + grouped_item_replacements[PROTOSS_ARMOR_UPGRADE_ID]
+        )
+        for bundle_id, upgrade_ids in grouped_item_replacements.items():
+            bundle_amount = inventory[bundle_id]
+            for upgrade_id in upgrade_ids:
+                if bundle_amount > inventory[upgrade_id]:
+                    # Only assign, don't add.
+                    # This behaviour mimics protoss shields, where the output is
+                    # the maximum bundle contribution, not the sum
+                    inventory[upgrade_id] = bundle_amount
+
 
         # Victory condition
         game_state = tracker_data.get_player_client_status(team, player)
-        display_data["game_finished"] = game_state == 30
+        display_data["game_finished"] = game_state == ClientStatus.CLIENT_GOAL
 
-        # Turn location IDs into mission objective counts
-        locations = tracker_data.get_player_locations(team, player)
-        checked_locations = tracker_data.get_player_checked_locations(team, player)
-        lookup_name = lambda id: tracker_data.location_id_to_name["Starcraft 2"][id]
-        location_info = {mission_name: {lookup_name(id): (id in checked_locations) for id in mission_locations if
-                                        id in set(locations)} for mission_name, mission_locations in
-                         sc2wol_location_ids.items()}
-        checks_done = {mission_name: len(
-            [id for id in mission_locations if id in checked_locations and id in set(locations)]) for
-                       mission_name, mission_locations in sc2wol_location_ids.items()}
-        checks_done['Total'] = len(checked_locations)
-        checks_in_area = {mission_name: len([id for id in mission_locations if id in set(locations)]) for
-                          mission_name, mission_locations in sc2wol_location_ids.items()}
-        checks_in_area['Total'] = sum(checks_in_area.values())
+        # Keys
+        keys: dict[str, int] = {}
+        for item_id, item_count in inventory.items():
+            if item_id < SC2_KEY_ITEM_ID_OFFSET:
+                continue
+            keys[item_id_to_name[item_id]] = item_count
 
-        lookup_any_item_id_to_name = tracker_data.item_id_to_name["Starcraft 2"]
         return render_template(
             "tracker__Starcraft2.html",
             inventory=inventory,
-            icons=icons,
-            acquired_items={lookup_any_item_id_to_name[id] for id, count in inventory.items() if count > 0},
             player=player,
             team=team,
             room=tracker_data.room,
-            player_name=tracker_data.get_player_name(team, player),
-            checks_done=checks_done,
-            checks_in_area=checks_in_area,
-            location_info=location_info,
+            player_name=tracker_data.get_player_name(player),
+            missions=missions,
+            locations=locations,
+            checked_locations=checked_locations,
+            location_id_to_name=location_id_to_name,
+            item_id_to_name=item_id_to_name,
+            keys=keys,
+            saving_second=tracker_data.get_room_saving_second(),
             **display_data,
         )
+
 
     _player_trackers["Starcraft 2"] = render_Starcraft2_tracker
