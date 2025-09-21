@@ -102,7 +102,7 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
         for player in players:
             player_hints = sorted(tracker_data.get_player_hints(team, player))
             hints.append({"team": team, "player": player, "hints": player_hints})
-            slot_info = tracker_data.get_slot_info(team, player)
+            slot_info = tracker_data.get_slot_info(player)
             # this assumes groups are always after players
             if slot_info.type != SlotType.group:
                 continue
@@ -153,7 +153,6 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
 
 
 class PlayerGroups(TypedDict):
-    team: int
     slot: int
     name: str
     members: list[int]
@@ -185,16 +184,16 @@ def static_tracker_data(tracker: UUID) -> dict[str, Any]:
     """The Slot ID of groups and the IDs of the group's members."""
     for team, players in tracker_data.get_all_slots().items():
         for player in players:
-            slot_info = tracker_data.get_slot_info(team, player)
+            slot_info = tracker_data.get_slot_info(player)
             if slot_info.type != SlotType.group or not slot_info.group_members:
                 continue
             groups.append(
                 {
-                    "team": team,
                     "slot": player,
                     "name": slot_info.name,
                     "members": list(slot_info.group_members),
                 })
+        break
 
     return {
         "groups": groups,
@@ -223,7 +222,7 @@ def tracker_slot_data(tracker: UUID) -> list[PlayerSlotData]:
     """Slot data for each player."""
     for team, players in all_players.items():
         for player in players:
-            slot_data.append({"player": player, "slot_data": tracker_data.get_slot_data(team, player)})
+            slot_data.append({"player": player, "slot_data": tracker_data.get_slot_data(player)})
         break
 
     return slot_data

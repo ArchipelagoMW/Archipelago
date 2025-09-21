@@ -381,7 +381,7 @@ Example:
 Will provide a dict of static tracker data with the following keys:
 
 - item_link groups and their players (`groups`)
-- The datapackage hash for each player (`datapackage`)
+- The datapackage hash for each game (`datapackage`)
   - This hash can then be sent to the datapackage API to receive the appropriate datapackage as necessary
 
 Example:
@@ -389,7 +389,6 @@ Example:
 {
   "groups": [
     {
-      "team": 0,
       "slot": 5,
       "name": "testGroup",
       "members": [
@@ -398,7 +397,6 @@ Example:
       ]
     },
     {
-      "team": 0,
       "slot": 6,
       "name": "myCoolLink",
       "members": [
@@ -410,11 +408,9 @@ Example:
   "datapackage": {
     "Archipelago": {
       "checksum": "ac9141e9ad0318df2fa27da5f20c50a842afeecb",
-      "version": 0
     },
     "The Messenger": {
       "checksum": "6991cbcda7316b65bcb072667f3ee4c4cae71c0b",
-      "version": 0
     }
   }
 }
