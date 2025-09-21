@@ -31,413 +31,413 @@ def interpret_rule(rule_set: list[list[str]], player: int):
 
     #Each item in the list is a separate list of rules. Each separate list is just an "OR" condition.
 rules_dict: dict[str,list[list[str]]] = {
-    "Whoville - First Visit": [
+    "WV - First Visit": [
         []
     ],
-    "Whoville's Post Office - First Visit": [
+    "WV - Post Office - First Visit": [
         []
     ],
-    "Whoville's City Hall - First Visit": [
+    "WV - City Hall - First Visit": [
         []
     ],
-    "Whoville's Clock Tower - First Visit": [
+    "WV - Clock Tower - First Visit": [
         []
     ],
-    "Who Forest - First Visit": [
+    "WF - First Visit": [
         []
     ],
-    "Who Forest's Ski Resort - First Visit": [
+    "WF - Ski Resort - First Visit": [
         []
     ],
-    "Who Forest's Civic Center - First Visit": [
+    "WF - Civic Center - First Visit": [
         []
     ],
-    "Who Dump - First Visit": [
+    "WD - First Visit": [
         []
     ],
-    "Who Dump's Minefield - First Visit": [
+    "WD - Minefield - First Visit": [
         []
     ],
-    "Who Dump's Power Plant - First Visit": [
+    "WD - Power Plant - First Visit": [
         []
     ],
-    "Who Dump's Generator Building - First Visit": [
+    "WD - Generator Building - First Visit": [
         []
     ],
-    "Who Lake's South Shore- First Visit": [
+    "WL - South Shore- First Visit": [
         []
     ],
-    "Who Lake's Submarine World - First Visit": [
+    "WL - Submarine World - First Visit": [
         []
     ],
-    "Who Lake's Scout's Hut - First Visit": [
+    "WL - Scout's Hut - First Visit": [
         []
     ],
-    "Who Lake's North Shore - First Visit": [
+    "WL - North Shore - First Visit": [
         []
     ],
-    "Who Lake's Mayor's Villa - First Visit": [
+    "WL - Mayor's Villa - First Visit": [
         []
     ],
-    "Whoville's Post Office - Shuffling The Mail": [
+    "WV - Post Office - Shuffling The Mail": [
         []
     ],
-    "Whoville - Smashing Snowmen": [
+    "WV - Smashing Snowmen": [
         []
     ],
-    "Whoville - Painting The Mayor's Posters": [
+    "WV - Painting The Mayor's Posters": [
         ["Painting Bucket"]
     ],
-    "Whoville - Launching Eggs Into Houses": [
+    "WV - Launching Eggs Into Houses": [
         ["Rotten Egg Launcher"]
     ],
-    "Whoville's City Hall - Modifying The Mayor's Statue": [
+    "WV - City Hall - Modifying The Mayor's Statue": [
         ["Sculpting Tools"]
     ],
-    "Whoville's Clock Tower - Advancing The Countdown-To-Xmas Clock": [
+    "WV - Clock Tower - Advancing The Countdown-To-Xmas Clock": [
         ["Hammer", "Rocket Spring"]
     ],
-    "Whoville - Squashing All Gifts": [
+    "WV - Squashing All Gifts": [
         ["Grinch Copter", "Slime Shooter", "Rotten Egg Launcher", "Who Cloak", "Rocket Spring"]
     ],
-    "Who Forest - Making Xmas Trees Droop": [
+    "WF - Making Xmas Trees Droop": [
         ["Rotten Egg Launcher"]
     ],
-    "Who Forest - Sabotaging Snow Cannon With Glue": [
+    "WF - Sabotaging Snow Cannon With Glue": [
         ["Glue Bucket", "Rocket Spring"],
         ["Glue Bucket", "Grinch Copter"]
     ],
-    "Who Forest - Putting Beehives In Cabins": [
+    "WF - Putting Beehives In Cabins": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Forest's Ski Resort - Sliming The Mayor's Skis": [
+    "WF - Ski Resort - Sliming The Mayor's Skis": [
         ["Slime Shooter", "Rotten Egg Launcher"]
     ],
-    "Who Forest's Civic Center - Replacing The Candles On The Cake With Fireworks": [
+    "WF - Civic Center - Replacing The Candles On The Cake With Fireworks": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Octopus Climbing Device", "Rocket Spring"]
     ],
-    "Who Forest - Squashing All Gifts": [
+    "WF - Squashing All Gifts": [
         ["Grinch Copter", "Cable Car Access Card", "Slime Shooter", "Rotten Egg Launcher"],
         ["Octopus Climbing Device", "Rocket Spring", "Cable Car Access Card", "Slime Shooter", "Rotten Egg Launcher"]
     ],
-    "Who Dump - Stealing Food From Birds": [
+    "WD - Stealing Food From Birds": [
         ["Rocket Spring", "Rotten Egg Launcher"]
     ],
-    "Who Dump - Feeding The Computer With Robot Parts": [
+    "WD - Feeding The Computer With Robot Parts": [
         ["Rocket Spring", "Rotten Egg Launcher"]
     ],
-    "Who Dump - Infesting The Mayor's House With Rats": [
+    "WD - Infesting The Mayor's House With Rats": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Dump - Conducting The Stinky Gas To Who-Bris' Shack": [
+    "WD - Conducting The Stinky Gas To Who-Bris' Shack": [
         ["Rocket Spring", "Rotten Egg Launcher"]
     ],
-    "Who Dump's Minefield - Shaving Who Dump Guardian": [
+    "WD - Minefield - Shaving Who Dump Guardian": [
         ["Scissors", "Grinch Copter"],
         ["Scissors", "Slime Shooter", "Rocket Spring"]
     ],
-    "Who Dump's Generator Building - Short-Circuiting Power-Plant": [
+    "WD - Generator Building - Short-Circuiting Power-Plant": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
     ],
-    "Who Dump - Squashing All Gifts": [
+    "WD - Squashing All Gifts": [
         ["Grinch Copter", "Rocket Spring", "Slime Shooter", "Rotten Egg Launcher"],
         ["Octopus Climbing Device", "Rocket Spring", "Slime Shooter", "Rotten Egg Launcher"]
     ],
-    "Who Lake's South Shore - Putting Thistles In Shorts": [
+    "WL - South Shore - Putting Thistles In Shorts": [
         ["Rotten Egg Launcher", "Octopus Climbing Device"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Lake's South Shore - Sabotaging The Tents": [
+    "WL - South Shore - Sabotaging The Tents": [
         ["Octopus Climbing Device", "Rocket Spring"],
         ["Grinch Copter"]
     ],
-    "Who Lake's North Shore - Drilling Holes In Canoes": [
+    "WL - North Shore - Drilling Holes In Canoes": [
         ["Drill"]
         # ["Drill", "Max"]
     ],
-    "Who Lake's Submarine World - Modifying The Marine Mobile": [
+    "WL - Submarine World - Modifying The Marine Mobile": [
         []
     ],
-    "Who Lake's Mayor's Villa - Hooking The Mayor's Bed To The Motorboat": [
+    "WL - Mayor's Villa - Hooking The Mayor's Bed To The Motorboat": [
         ["Rope", "Hook", "Rotten Egg Launcher", "Scout Clothes"]
     ],
-    "Who Lake - Squashing All Gifts": [
+    "WL - Squashing All Gifts": [
         ["Grinch Copter", "Marine Mobile", "Scout Clothes", "Rotten Egg Launcher", "Hook", "Rope"],
         ["Octopus Climbing Device", "Rocket Spring", "Marine Mobile", "Scout Clothes", "Rotten Egg Launcher", "Hook", "Rope"]
     ],
-    "Whoville - Binoculars Blueprint on Post Office Roof": [
+    "WV - Binoculars BP on Post Office Roof": [
         []
     ],
-    "Whoville's City Hall - Binoculars Blueprint left side of Library": [
+    "WV - City Hall - Binoculars BP left side of Library": [
         []
     ],
-    "Whoville's City Hall - Binoculars Blueprint front side of Library": [
+    "WV - City Hall - Binoculars BP front side of Library": [
         []
     ],
-    "Whoville's City Hall - Binoculars Blueprint right side of Library": [
+    "WV - City Hall - Binoculars BP right side of Library": [
         []
     ],
-    "Whoville - REL Blueprint left of City Hall": [
+    "WV - REL BP left of City Hall": [
         []
     ],
-    "Whoville - REL Blueprint left of Clock Tower": [
+    "WV - REL BP left of Clock Tower": [
         []
     ],
-    "Whoville's Post Office - REL Blueprint inside Silver Room": [
+    "WV - Post Office - REL BP inside Silver Room": [
         ["Who Cloak"]
         # ["Who Cloak", "Max"]
     ],
-    "Whoville's Post Office - REL Blueprint at Entrance Door after Mission Completion": [
+    "WV - Post Office - REL BP at Entrance Door after Mission Completion": [
         ["Who Cloak"]
         # ["Who Cloak", "Max"]
     ],
-    "Who Forest - RS Blueprint behind Vacuum Tube": [
+    "WF - RS BP behind Vacuum Tube": [
         []
     ],
-    "Who Forest - RS Blueprint in front of 2nd House near Vacuum Tube": [
+    "WF - RS BP in front of 2nd House near Vacuum Tube": [
         []
     ],
-    "Who Forest - RS Blueprint near Tree House on Ground": [
+    "WF - RS BP near Tree House on Ground": [
         []
     ],
-    "Who Forest - RS Blueprint behind Cable Car House": [
+    "WF - RS BP behind Cable Car House": [
         []
     ],
-    "Who Forest - RS Blueprint near Who Snowball in Cave": [
+    "WF - RS BP near Who Snowball in Cave": [
         []
     ],
-    "Who Forest - RS Blueprint on Branch Platform closest to Glue Cannon": [
+    "WF - RS BP on Branch Platform closest to Glue Cannon": [
         []
     ],
-    "Who Forest - RS Blueprint on Branch Platform Near Beast": [
+    "WF - RS BP on Branch Platform Near Beast": [
         []
     ],
-    "Who Forest - RS Blueprint on Branch Platform Elevated next to House": [
+    "WF - RS BP on Branch Platform Elevated next to House": [
         []
     ],
-    "Who Forest - RS Blueprint on Tree House": [
+    "WF - RS BP on Tree House": [
         ["Rotten Egg Launcher"],
         ["Grinch Copter"]
     ],
-    "Who Forest - SS Blueprint in Branch Platform Elevated House": [
+    "WF - SS BP in Branch Platform Elevated House": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Forest - SS Blueprint in Branch Platform House next to Beast": [
+    "WF - SS BP in Branch Platform House next to Beast": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Forest - SS Blueprint in House in front of Civic Center Cave": [
+    "WF - SS BP in House in front of Civic Center Cave": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Forest - SS Blueprint in House next to Tree House": [
+    "WF - SS BP in House next to Tree House": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Forest - SS Blueprint in House across from Tree House": [
+    "WF - SS BP in House across from Tree House": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Forest - SS Blueprint in 2nd House near Vacuum Tube Right Side": [
+    "WF - SS BP in 2nd House near Vacuum Tube Right Side": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Forest - SS Blueprint in 2nd House near Vacuum Tube Left Side": [
+    "WF - SS BP in 2nd House near Vacuum Tube Left Side": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Forest - SS Blueprint in 2nd House near Vacuum Tube inbetween Blueprints": [
+    "WF - SS BP in 2nd House near Vacuum Tube inbetween Blueprints": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Forest - SS Blueprint in House near Vacuum Tube": [
+    "WF - SS BP in House near Vacuum Tube": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Dump - OCD Blueprint inside Middle Pipe": [
+    "WD - OCD BP inside Middle Pipe": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Slime Shooter", "Rocket Spring"],
         ["Slime Shooter", "Grinch Copter"]
     ],
-    "Who Dump - OCD Blueprint inside Right Pipe": [
+    "WD - OCD BP inside Right Pipe": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Dump - OCD Blueprint in Vent to Mayor's House": [
+    "WD - OCD BP in Vent to Mayor's House": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"]
     ],
-    "Who Dump - OCD Blueprint inside Left Pipe": [
+    "WD - OCD BP inside Left Pipe": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Slime Shooter", "Rocket Spring"],
         ["Slime Shooter", "Grinch Copter"]
     ],
-    "Who Dump - OCD Blueprint near Right Side of Power Plant Wall": [
+    "WD - OCD BP near Right Side of Power Plant Wall": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Slime Shooter", "Rocket Spring"],
         ["Slime Shooter", "Grinch Copter"]
     ],
-    "Who Dump - OCD Blueprint near Who-Bris' Shack": [
+    "WD - OCD BP near Who-Bris' Shack": [
         ["Rotten Egg Launcher", "Rocket Spring"]
     ],
-    "Who Dump's Minefield - OCD Blueprint on Left Side of House": [
+    "WD - Minefield - OCD BP on Left Side of House": [
         []
         # ["Rotten Egg Launcher", "Grinch Copter"],
         # ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
         # ["Max"]
     ],
-    "Who Dump's Minefield - OCD Blueprint on Right Side of Shack": [
+    "WD - Minefield - OCD BP on Right Side of Shack": [
         ["Grinch Copter"],
         ["Slime Shooter", "Rocket Spring"]
     ],
-    "Who Dump's Minefield - OCD Blueprint inside Guardian's House": [
+    "WD - Minefield - OCD BP inside Guardian's House": [
         []
         # ["Rotten Egg Launcher", "Grinch Copter"],
         # ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
         # ["Max"]
     ],
-    "Who Lake's South Shore - MM Blueprint on Bridge to Scout's Hut": [
+    "WL - South Shore - MM BP on Bridge to Scout's Hut": [
         []
     ],
-    "Who Lake's South Shore - MM Blueprint across from Tent near Porcupine": [
+    "WL - South Shore - MM BP across from Tent near Porcupine": [
         []
     ],
-    "Who Lake's South Shore - MM Blueprint near Outhouse": [
+    "WL - South Shore - MM BP near Outhouse": [
         []
     ],
-    "Who Lake's South Shore - MM Blueprint near Hill Bridge": [
+    "WL - South Shore - MM BP near Hill Bridge": [
         []
     ],
-    "Who Lake's South Shore - MM Blueprint on Scout's Hut Roof": [
+    "WL - South Shore - MM BP on Scout's Hut Roof": [
         ["Rocket Spring"],
         ["Grinch Copter"]
     ],
-    "Who Lake's South Shore - MM Blueprint on Grass Platform": [
+    "WL - South Shore - MM BP on Grass Platform": [
         ["Rocket Spring"],
         ["Grinch Copter"]
     ],
-    "Who Lake's South Shore - MM Blueprint across Zipline Platform": [
+    "WL - South Shore - MM BP across Zipline Platform": [
         ["Rocket Spring", "Octopus Climbing Device"],
         ["Grinch Copter"]
     ],
-    "Who Lake's South Shore - MM Blueprint behind Summer Beast": [
+    "WL - South Shore - MM BP behind Summer Beast": [
         ["Rotten Egg Launcher", "Octopus Climbing Device"],
         ["Grinch Copter"]
     ],
-    "Who Lake's North Shore - MM Blueprint below Bridge": [
+    "WL - North Shore - MM BP below Bridge": [
         []
     ],
-    "Who Lake's North Shore - MM Blueprint behind Skunk Hut": [
+    "WL - North Shore - MM BP behind Skunk Hut": [
         []
     ],
-    "Who Lake's North Shore - MM Blueprint inside Skunk Hut": [
-        []
-        # ["Max"]
-    ],
-    "Who Lake's North Shore - MM Blueprint inside House's Fence": [
+    "WL - North Shore - MM BP inside Skunk Hut": [
         []
         # ["Max"]
     ],
-    "Who Lake's North Shore - MM Blueprint inside Boulder Box near Bridge": [
+    "WL - North Shore - MM BP inside House's Fence": [
+        []
+        # ["Max"]
+    ],
+    "WL - North Shore - MM BP inside Boulder Box near Bridge": [
         []
     ],
-    "Who Lake's North Shore - MM Blueprint inside Boulder Box behind Skunk Hut": [
+    "WL - North Shore - MM BP inside Boulder Box behind Skunk Hut": [
         []
     ],
-    "Who Lake's North Shore - MM Blueprint inside Drill House": [
+    "WL - North Shore - MM BP inside Drill House": [
         []
     ],
-    "Who Lake's North Shore - MM Blueprint on Crow Platform near Drill House": [
+    "WL - North Shore - MM BP on Crow Platform near Drill House": [
         []
     ],
-    "Whoville's City Hall - GC Blueprint in Safe Room": [
+    "WV - City Hall - GC BP in Safe Room": [
         []
     ],
-    "Whoville's City Hall - GC Blueprint in Statue Room": [
+    "WV - City Hall - GC BP in Statue Room": [
         []
     ],
-    "Whoville's Clock Tower - GC Blueprint in Bedroom": [
+    "WV - Clock Tower - GC BP in Bedroom": [
         ["Rocket Spring"]
     #   ["Max", "Rocket Spring"]
     ],
-    "Whoville's Clock Tower - GC Blueprint in Bell Room": [
+    "WV - Clock Tower - GC BP in Bell Room": [
         ["Rocket Spring"]
     ],
-    "Who Forest's Ski Resort - GC Blueprint inside Dog's Fence": [
+    "WF - Ski Resort - GC BP inside Dog's Fence": [
         []
     ],
-    "Who Forest's Ski Resort - GC Blueprint in Max Cave": [
+    "WF - Ski Resort - GC BP in Max Cave": [
         []
         # ["Max"]
     ],
-    "Who Forest's Civic Center - GC Blueprint on Left Side in Bat Cave Wall": [
+    "WF - Civic Center - GC BP on Left Side in Bat Cave Wall": [
         ["Grinch Copter"],
         ["Octopus Climbing Device", "Rocket Spring"]
     ],
-    "Who Forest's Civic Center - GC Blueprint in Frozen Ice": [
+    "WF - Civic Center - GC BP in Frozen Ice": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Octopus Climbing Device", "Rocket Spring"],
         ["Slime Shooter", "Grinch Copter"],
         ["Slime Shooter", "Octopus Climbing Device", "Rocket Spring"]
     ],
-    "Who Dump's Power Plant - GC Blueprint in Max Cave": [
+    "WD - Power Plant - GC BP in Max Cave": [
         []
         # ["Max"]
     ],
-    "Who Dump's Power Plant - GC Blueprint After First Gate": [
+    "WD - Power Plant - GC BP After First Gate": [
         ["Rotten Egg Launcher", "Rocket Spring"],
         ["Grinch Copter"]
     #   ["Max", "Rotten Egg Launcher", "Rocket Spring"]
     ],
-    "Who Dump's Generator Building - GC Blueprint on the Highest Platform": [
+    "WD - Generator Building - GC BP on the Highest Platform": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
     ],
-    "Who Dump's Generator Building - GC Blueprint at the Entrance after Mission Completion": [
+    "WD - Generator Building - GC BP at the Entrance after Mission Completion": [
         ["Rotten Egg Launcher", "Grinch Copter"],
         ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
     ],
-    "Who Lake's Submarine World - GC Blueprint Just Below Water Surface": [
+    "WL - Submarine World - GC BP Just Below Water Surface": [
         ["Marine Mobile"]
     ],
-    "Who Lake's Submarine World - GC Blueprint Underwater": [
+    "WL - Submarine World - GC BP Underwater": [
         ["Marine Mobile"]
     ],
-    "Who Lake's Mayor's Villa - GC Blueprint on Tree Branch": [
+    "WL - Mayor's Villa - GC BP on Tree Branch": [
         ["Grinch Copter"],
         ["Rotten Egg Launcher", "Rocket Spring"]
     ],
-    "Who Lake's Mayor's Villa - GC Blueprint in Pirate's Cave": [
+    "WL - Mayor's Villa - GC BP in Pirate's Cave": [
         ["Grinch Copter"],
         ["Rotten Egg Launcher", "Rocket Spring"]
     ],
-    "Mount Crumpit's Sleigh Ride - Stealing All Gifts": [
+    "MC - Sleigh Ride - Stealing All Gifts": [
         # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
         ["Rotten Egg Launcher", "Who Forest Vacuum Tube", "Who Dump Vacuum Tube", "Who Lake Vacuum Tube", "Rocket Spring", "Marine Mobile"]
     ],
-    "Mount Crumpit's Sleigh Ride - Neutralizing Santa": [
+    "MC - Sleigh Ride - Neutralizing Santa": [
         # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
         ["Rotten Egg Launcher", "Who Forest Vacuum Tube", "Who Dump Vacuum Tube", "Who Lake Vacuum Tube", "Rocket Spring", "Marine Mobile"]
     ],
-    "Whoville's Post Office - Heart of Stone": [
+    "WV - Post Office - Heart of Stone": [
         []
     ],
-    "Who Forest's Ski Resort - Heart of Stone": [
+    "WF - Ski Resort - Heart of Stone": [
         []
     ],
-    "Who Dump's Minefield - Heart of Stone": [
+    "WD - Minefield - Heart of Stone": [
         ["Grinch Copter"],
         ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
     ],
-    "Who Lake's North Shore - Heart of Stone": [
+    "WL - North Shore - Heart of Stone": [
         []
         # ["Max"]
     ],
@@ -477,34 +477,34 @@ rules_dict: dict[str,list[list[str]]] = {
     "Bike Race - Top 3": [
         []
     ],
-    "Whoville - Exhaust Pipes": [
+    "WV - Exhaust Pipes": [
         ["Rotten Egg Launcher"]
     ],
-    "Who Forest - Skis": [
+    "WF - Skis": [
         ["Who Forest Vacuum Tube"]
     ],
-    "Who Dump - Tires": [
+    "WD - Tires": [
         ["Who Dump Vacuum Tube", "Rocket Spring", "Rotten Egg Launcher"]
     ],
-    "Who Lake's Submarine World - Twin-End Tuba": [
+    "WL - Submarine World - Twin-End Tuba": [
         ["Who Lake Vacuum Tube", "Marine Mobile"]
     ],
-    "Who Lake's South Shore - GPS": [
+    "WL - South Shore - GPS": [
         ["Who Lake Vacuum Tube", "Rotten Egg Launcher"]
     ],
-    "Mount Crumpit - 1st Crate Squashed": [
+    "MC - 1st Crate Squashed": [
         []
     ],
-    "Mount Crumpit - 2nd Crate Squashed": [
+    "MC - 2nd Crate Squashed": [
         []
     ],
-    "Mount Crumpit - 3rd Crate Squashed": [
+    "MC - 3rd Crate Squashed": [
         []
     ],
-    "Mount Crumpit - 4th Crate Squashed": [
+    "MC - 4th Crate Squashed": [
         []
     ],
-    "Mount Crumpit - 5th Crate Squashed": [
+    "MC - 5th Crate Squashed": [
         []
     ]
     # "Green Present": [

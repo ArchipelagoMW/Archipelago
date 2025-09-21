@@ -41,7 +41,7 @@ class GrinchWorld(World):
         for location, data in grinch_locations.items():
             region = self.get_region(data.region)
             entry = GrinchLocation(self.player, location, region, data)
-            if location == "Mount Crumpit's Sleigh Ride - Neutralizing Santa":
+            if location == "MC - Sleigh Ride - Neutralizing Santa":
                 entry.place_locked_item(Item("Neutralized", ItemClassification.progression, None, self.player))
             region.locations.append(entry)
         connect_regions(self)
