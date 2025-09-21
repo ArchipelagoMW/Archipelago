@@ -160,7 +160,6 @@ class PlayerGroups(TypedDict):
 
 
 class PlayerSlotData(TypedDict):
-    team: int
     player: int
     slot_data: dict[str, Any]
 
@@ -224,6 +223,7 @@ def tracker_slot_data(tracker: UUID) -> list[PlayerSlotData]:
     """Slot data for each player."""
     for team, players in all_players.items():
         for player in players:
-            slot_data.append({"team": team, "player": player, "slot_data": tracker_data.get_slot_data(team, player)})
+            slot_data.append({"player": player, "slot_data": tracker_data.get_slot_data(team, player)})
+        break
 
     return slot_data

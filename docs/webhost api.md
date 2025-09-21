@@ -428,7 +428,6 @@ Example:
 ```json
 [
   {
-    "team": 0,
     "player": 1,
     "slot_data": {
       "example_option": 1,
@@ -436,7 +435,6 @@ Example:
     }
   },
   {
-    "team": 0,
     "player": 2,
     "slot_data": {
       "example_option": 1,
