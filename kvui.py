@@ -916,7 +916,7 @@ class GameManager(ThemedApp):
                 self.add_client_tab(display_name, self.log_panels[display_name])
 
         self.my_log = UILog()
-        self.add_client_tab("My Checks", self.my_log)
+        self.add_client_tab("My Activity", self.my_log)
 
         self.hint_log = HintLog(self.json_to_kivy_parser)
         hint_panel = self.add_client_tab("Hints", HintLayout(self.hint_log))
