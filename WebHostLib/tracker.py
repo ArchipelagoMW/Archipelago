@@ -17,7 +17,6 @@ from .models import GameDataPackage, Room
 # Multisave is currently updated, at most, every minute.
 TRACKER_CACHE_TIMEOUT_IN_SECONDS = 60
 
-_multidata_cache = {}
 _multiworld_trackers: Dict[str, Callable] = {}
 _player_trackers: Dict[str, Callable] = {}
 
