@@ -32,7 +32,7 @@ def set_rules(world):
     #   % of area tickets based on settings, character reqs
     #   area tickets need to be in distinct groups for major areas in each section of the game; giving the player
     #   Flying Manor won't ensure they have the level range to do Visages for instance
-    if world.options.area_logic < 0:
+    if world.options.area_logic > 0:
         add_rule(major_connection_1, lambda state: state.has_from_list([
             "Area - Flying Waters",
             "Area - Ancient Sanctuary",
