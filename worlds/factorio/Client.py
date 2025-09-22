@@ -65,7 +65,7 @@ class FactorioCommandProcessor(ClientCommandProcessor):
         try:
             result = self.ctx.rcon_client.send_command("/help")
             if result:
-                self.output("RCON Client already connected")
+                self.output("RCON Client already connected.")
             return True
         except factorio_rcon.RCONNetworkError:
             self.ctx.rcon_client = factorio_rcon.RCONClient("localhost", self.ctx.rcon_port, self.ctx.rcon_password, timeout=5)
