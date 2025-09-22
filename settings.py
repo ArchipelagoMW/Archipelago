@@ -583,8 +583,10 @@ class ServerOptions(Group):
         """
         Countdown modes
         Determines whether or not a player can initiate a countdown with !countdown
+        Note that /countdown is always available to the host.
+
         "enabled" -> Client can always initiate a countdown with !countdown.
-        "disabled" -> Client can never initiate a countdown with !countdown. /countdown is still available to the host.
+        "disabled" -> Client can never initiate a countdown with !countdown.
         "auto" -> !countdown will be available for any room with less than 30 slots.
         """
 
