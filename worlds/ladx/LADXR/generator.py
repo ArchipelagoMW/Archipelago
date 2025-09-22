@@ -242,9 +242,9 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     #    patches.health.setStartHealth(rom, 1)
 
     patches.inventory.songSelectAfterOcarinaSelect(rom)
-    if options["quickswap"] == 'a':
+    if options["quickswap"] == Options.Quickswap.option_a:
         patches.core.quickswap(rom, 1)
-    elif options["quickswap"] == 'b':
+    elif options["quickswap"] == Options.Quickswap.option_b:
         patches.core.quickswap(rom, 0)
 
     patches.core.addBootsControls(rom, options["boots_controls"])
