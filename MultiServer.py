@@ -664,7 +664,7 @@ class Context:
             self.release_mode = savedata["game_options"]["release_mode"]
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
             self.collect_mode = savedata["game_options"]["collect_mode"]
-            self.countdown_mode = savedata["game_options"]["countdown_mode"]
+            self.countdown_mode = savedata["game_options"].get("countdown_mode", self.countdown_mode)
             self.item_cheat = savedata["game_options"]["item_cheat"]
             self.compatibility = savedata["game_options"]["compatibility"]
 
