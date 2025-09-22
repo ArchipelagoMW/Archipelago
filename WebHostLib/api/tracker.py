@@ -100,7 +100,7 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
     for team, players in all_players.items():
         for player in players:
             player_locations_total.append(
-                {"team": team, "player": player, "total_locations": len(tracker_data.get_player_locations(team, player))})
+                {"team": team, "player": player, "total_locations": len(tracker_data.get_player_locations(player))})
 
     total_checks_done: list[TeamTotalChecks] = [
         {"team": team, "checks_done": checks_done}
