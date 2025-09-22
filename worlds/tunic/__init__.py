@@ -620,7 +620,8 @@ class TunicWorld(World):
         set_er_location_rules(self)
 
     def connect_entrances(self) -> None:
-        if self.using_ut and self.multiworld.enforce_deferred_connections in ("on", "default"):
+        if (self.options.entrance_rando and self.using_ut
+                and self.multiworld.enforce_deferred_connections in ("on", "default")):
             ut_stuff.disconnect_entrances(self)
             ut_stuff.setup_found_entrances_datastorage(self)
 
