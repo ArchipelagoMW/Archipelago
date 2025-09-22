@@ -140,7 +140,7 @@ class SatisfactoryWorld(World):
                 "Options": {
                     "GoalSelection": self.options.goal_selection.value,
                     "GoalRequirement": self.options.goal_requirement.value,
-                    "FinalElevatorTier": self.options.final_elevator_phase.value,
+                    "FinalElevatorPhase": self.options.final_elevator_phase.value,
                     "FinalResourceSinkPointsTotal": self.options.goal_awesome_sink_points_total.value,
                     "FinalResourceSinkPointsPerMinute": self.options.goal_awesome_sink_points_per_minute.value,
                     "FreeSampleEquipment": self.options.free_sample_equipment.value,
