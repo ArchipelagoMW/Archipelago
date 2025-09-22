@@ -352,6 +352,8 @@ async def verifyItems(self):
                 elif item_name == ItemName.DriveGaugeUp:
                     current_max_drive = self.kh2_read_byte(self.Slot1 + 0x1B2)
                     # change when max drive is changed from 6 to 4
+                    # drive is maxed at 9 and base_drive is always 5 so if amount is higher set to 4 which is the max it should be
+                    amount_of_items = min(amount_of_items, 4)
                     if current_max_drive < 9 and current_max_drive != self.base_drive + amount_of_items:
                         self.kh2_write_byte(self.Slot1 + 0x1B2, self.base_drive + amount_of_items)
                 # need to do these differently when the amount is dynamic
