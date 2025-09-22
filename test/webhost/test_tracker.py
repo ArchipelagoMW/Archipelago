@@ -93,3 +93,13 @@ class TestTracker(TestBase):
                 headers={"If-Modified-Since": "Wed, 21 Oct 2015 07:28:00"},  # missing timezone
             )
             self.assertEqual(response.status_code, 400)
+
+    def test_tracker_api(self) -> None:
+        """Verify that tracker api gives a reply for the room."""
+        with self.app.test_request_context():
+            with self.client.open(url_for("api.tracker_data", tracker=self.tracker_uuid)) as response:
+                self.assertEqual(response.status_code, 200)
+            with self.client.open(url_for("api.static_tracker_data", tracker=self.tracker_uuid)) as response:
+                self.assertEqual(response.status_code, 200)
+            with self.client.open(url_for("api.tracker_slot_data", tracker=self.tracker_uuid)) as response:
+                self.assertEqual(response.status_code, 200)
