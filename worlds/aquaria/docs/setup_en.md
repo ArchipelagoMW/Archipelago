@@ -58,7 +58,7 @@ can do that from the command line by using:
 chmod +x Aquaria_Randomizer-*.AppImage
 ```
 
-or by using the Graphical file Explorer of your system (the permission est generally in the file properties).
+or by using the Graphical file Explorer of your system (the permission can generally be set in the file properties).
 
 To launch the randomizer using the integrated launcher, just execute the AppImage file.
 
