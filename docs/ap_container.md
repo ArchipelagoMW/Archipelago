@@ -51,7 +51,7 @@ def get_manifest(self) -> dict[str, Any]:
     }
 ```
 
-Apart from potentially `get_manifest`, it should usually not be necessary to overwrite any of these functions.
+Apart from potentially `get_manifest`, it should usually not be necessary to override any of these functions.
 Instead, you can use one of the stock subclasses of APContainer defined in [Files.py](../worlds/Files.py), each of
 which is meant for a specific APContainer use case and will usually abstract away these functions for you.
 
@@ -79,6 +79,9 @@ player: int | None  # Can be None, but must be present
 player_name: str
 server: str  # Can be an empty string, but must be present
 ```
+
+For an APPlayerContainer, you usually call its `.write` in [World.generate-output](world%20api.md#generate-output).  
+Then, you call `.read` or `.patch` (for [APAutoPatchInterface](#APAutoPatchInterface)) from e.g. the client component.
 
 ### APPatch
 
