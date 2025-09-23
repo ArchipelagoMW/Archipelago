@@ -115,7 +115,7 @@ def get_source_data(cls) -> bytes:
     ...
 ```
 
-APProcedurePatch also has a `hash` field that automatically gets written and read to the manifest of the
+Finally, APProcedurePatch has a `hash` field that automatically gets written and read to the manifest of the
 APProcedurePatch zip file.
 
 #### Patching procedure
