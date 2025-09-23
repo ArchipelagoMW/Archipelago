@@ -545,8 +545,8 @@ def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_location_rule(CandyBox2LocationName.EGG_ROOM_QUEST_CLEARED, can_fly() | has_weapon(CandyBox2ItemName.NOTHING_WEAPON), CandyBox2Room.QUEST_THE_CASTLE_EGG_ROOM)
 
     # The Desert Fortress
-    rules_package.add_location_rule(CandyBox2LocationName.XINOPHERYDON_DEFEATED, (can_fly() | can_brew(False)) & (has_weapon(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) | rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS)), CandyBox2Room.QUEST_THE_XINOPHERYDON)
-    rules_package.add_location_rule(CandyBox2LocationName.XINOPHERYDON_QUEST_UNICORN_HORN_ACQUIRED, can_fly() | can_brew(False), CandyBox2Room.QUEST_THE_XINOPHERYDON)
+    rules_package.add_location_rule(CandyBox2LocationName.XINOPHERYDON_DEFEATED, (can_fly() | (can_brew(False) & can_jump())) & (has_weapon(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) | rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS)), CandyBox2Room.QUEST_THE_XINOPHERYDON)
+    rules_package.add_location_rule(CandyBox2LocationName.XINOPHERYDON_QUEST_UNICORN_HORN_ACQUIRED, can_fly() | (can_brew(False) & can_jump()), CandyBox2Room.QUEST_THE_XINOPHERYDON)
     rules_package.add_location_rule(CandyBox2LocationName.TEAPOT_DEFEATED, weapon_is_at_least(CandyBox2ItemName.SCYTHE) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN) & rule_item(CandyBox2ItemName.SORCERESS_CAULDRON) & rule_item(CandyBox2ItemName.XINOPHERYDON_CLAW), CandyBox2Room.QUEST_THE_TEAPOT)
     rules_package.add_location_rule(CandyBox2LocationName.ROCKET_BOOTS_ACQUIRED, can_fly() | (rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & can_jump() & can_cast(CandyBox2Castable.TELEPORT) & (rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN) | has_weapon(CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR))), CandyBox2Room.QUEST_THE_LEDGE_ROOM)
 
