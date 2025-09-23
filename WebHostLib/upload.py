@@ -1,4 +1,3 @@
-import base64
 import json
 import pickle
 import typing
@@ -14,9 +13,8 @@ from pony.orm.core import TransactionIntegrityError
 import schema
 
 import MultiServer
-from NetUtils import SlotType
+from NetUtils import GamesPackage, SlotType
 from Utils import VersionException, __version__
-from worlds import GamesPackage
 from worlds.Files import AutoPatchRegister
 from worlds.AutoWorld import data_package_checksum
 from . import app
@@ -135,11 +133,6 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                 flash("Could not load multidata. File may be corrupted or incompatible.")
                 multidata = None
 
-        # Minecraft
-        elif file.filename.endswith(".apmc"):
-            data = zfile.open(file, "r").read()
-            metadata = json.loads(base64.b64decode(data).decode("utf-8"))
-            files[metadata["player_id"]] = data
 
         # Factorio
         elif file.filename.endswith(".zip"):

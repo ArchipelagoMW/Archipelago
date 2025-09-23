@@ -21,7 +21,7 @@ import Utils
 if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
-from MultiServer import CommandProcessor
+from MultiServer import CommandProcessor, mark_raw
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
                       RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
 from Utils import Version, stream_input, async_start
@@ -107,7 +107,9 @@ class ClientCommandProcessor(CommandProcessor):
             return False
         count = 0
         checked_count = 0
-        for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
+
+        lookup = self.ctx.location_names[self.ctx.game]
+        for location_id, location in lookup.items():
             if filter_text and filter_text not in location:
                 continue
             if location_id < 0:
@@ -128,43 +130,87 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No missing location checks found.")
         return True
 
-    def _cmd_items(self):
+    def output_datapackage_part(self, name: typing.Literal["Item Names", "Location Names"]) -> bool:
+        """
+        Helper to digest a specific section of this game's datapackage.
+
+        :param name: Printed to the user as context for the part.
+
+        :return: Whether the process was successful.
+        """
+        if not self.ctx.game:
+            self.output(f"No game set, cannot determine {name}.")
+            return False
+
+        lookup = self.ctx.item_names if name == "Item Names" else self.ctx.location_names
+        lookup = lookup[self.ctx.game]
+        self.output(f"{name} for {self.ctx.game}")
+        for name in lookup.values():
+            self.output(name)
+        return True
+
+    def _cmd_items(self) -> bool:
         """List all item names for the currently running game."""
-        if not self.ctx.game:
-            self.output("No game set, cannot determine existing items.")
-            return False
-        self.output(f"Item Names for {self.ctx.game}")
-        for item_name in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id:
-            self.output(item_name)
+        return self.output_datapackage_part("Item Names")
 
-    def _cmd_item_groups(self):
-        """List all item group names for the currently running game."""
-        if not self.ctx.game:
-            self.output("No game set, cannot determine existing item groups.")
-            return False
-        self.output(f"Item Group Names for {self.ctx.game}")
-        for group_name in AutoWorldRegister.world_types[self.ctx.game].item_name_groups:
-            self.output(group_name)
-
-    def _cmd_locations(self):
+    def _cmd_locations(self) -> bool:
         """List all location names for the currently running game."""
-        if not self.ctx.game:
-            self.output("No game set, cannot determine existing locations.")
-            return False
-        self.output(f"Location Names for {self.ctx.game}")
-        for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
-            self.output(location_name)
+        return self.output_datapackage_part("Location Names")
 
-    def _cmd_location_groups(self):
-        """List all location group names for the currently running game."""
-        if not self.ctx.game:
-            self.output("No game set, cannot determine existing location groups.")
-            return False
-        self.output(f"Location Group Names for {self.ctx.game}")
-        for group_name in AutoWorldRegister.world_types[self.ctx.game].location_name_groups:
-            self.output(group_name)
+    def output_group_part(self, group_key: typing.Literal["item_name_groups", "location_name_groups"],
+                          filter_key: str,
+                          name: str) -> bool:
+        """
+        Logs an item or location group from the player's game's datapackage.
 
-    def _cmd_ready(self):
+        :param group_key: Either Item or Location group to be processed.
+        :param filter_key: Which group key to filter to. If an empty string is passed will log all item/location groups.
+        :param name: Printed to the user as context for the part.
+
+        :return: Whether the process was successful.
+        """
+        if not self.ctx.game:
+            self.output(f"No game set, cannot determine existing {name} Groups.")
+            return False
+        lookup = Utils.persistent_load().get("groups_by_checksum", {}).get(self.ctx.checksums[self.ctx.game], {})\
+            .get(self.ctx.game, {}).get(group_key, {})
+        if lookup is None:
+            self.output("datapackage not yet loaded, try again")
+            return False
+
+        if filter_key:
+            if filter_key not in lookup:
+                self.output(f"Unknown {name} Group {filter_key}")
+                return False
+
+            self.output(f"{name}s for {name} Group \"{filter_key}\"")
+            for entry in lookup[filter_key]:
+                self.output(entry)
+        else:
+            self.output(f"{name} Groups for {self.ctx.game}")
+            for group in lookup:
+                self.output(group)
+        return True
+
+    @mark_raw
+    def _cmd_item_groups(self, key: str = "") -> bool:
+        """
+        List all item group names for the currently running game.
+
+        :param key: Which item group to filter to. Will log all groups if empty.
+        """
+        return self.output_group_part("item_name_groups", key, "Item")
+
+    @mark_raw
+    def _cmd_location_groups(self, key: str = "") -> bool:
+        """
+        List all location group names for the currently running game.
+
+        :param key: Which item group to filter to. Will log all groups if empty.
+        """
+        return self.output_group_part("location_name_groups", key, "Location")
+
+    def _cmd_ready(self) -> bool:
         """Send ready status to server."""
         self.ctx.ready = not self.ctx.ready
         if self.ctx.ready:
@@ -174,6 +220,7 @@ class ClientCommandProcessor(CommandProcessor):
             state = ClientStatus.CLIENT_CONNECTED
             self.output("Unreadied.")
         async_start(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
+        return True
 
     def default(self, raw: str):
         """The default message parser to be used when parsing any messages that do not match a command"""
@@ -201,6 +248,7 @@ class CommonContext:
 
         # noinspection PyTypeChecker
         def __getitem__(self, key: str) -> typing.Mapping[int, str]:
+            assert isinstance(key, str), f"ctx.{self.lookup_type}_names used with an id, use the lookup_in_ helpers instead"
             return self._game_store[key]
 
         def __len__(self) -> int:
@@ -210,7 +258,7 @@ class CommonContext:
             return iter(self._game_store)
 
         def __repr__(self) -> str:
-            return self._game_store.__repr__()
+            return repr(self._game_store)
 
         def lookup_in_game(self, code: int, game_name: typing.Optional[str] = None) -> str:
             """Returns the name for an item/location id in the context of a specific game or own game if `game` is
@@ -378,6 +426,8 @@ class CommonContext:
 
         self.jsontotextparser = JSONtoTextParser(self)
         self.rawjsontotextparser = RawJSONtoTextParser(self)
+        if self.game:
+            self.checksums[self.game] = network_data_package["games"][self.game]["checksum"]
         self.update_data_package(network_data_package)
 
         # execution
@@ -636,6 +686,24 @@ class CommonContext:
         logger.info(f"Got new ID/Name DataPackage for {', '.join(data_package['games'])}")
         for game, game_data in data_package["games"].items():
             Utils.store_data_package_for_checksum(game, game_data)
+
+    def consume_network_item_groups(self):
+        data = {"item_name_groups": self.stored_data[f"_read_item_name_groups_{self.game}"]}
+        current_cache = Utils.persistent_load().get("groups_by_checksum", {}).get(self.checksums[self.game], {})
+        if self.game in current_cache:
+            current_cache[self.game].update(data)
+        else:
+            current_cache[self.game] = data
+        Utils.persistent_store("groups_by_checksum", self.checksums[self.game], current_cache)
+
+    def consume_network_location_groups(self):
+        data = {"location_name_groups": self.stored_data[f"_read_location_name_groups_{self.game}"]}
+        current_cache = Utils.persistent_load().get("groups_by_checksum", {}).get(self.checksums[self.game], {})
+        if self.game in current_cache:
+            current_cache[self.game].update(data)
+        else:
+            current_cache[self.game] = data
+        Utils.persistent_store("groups_by_checksum", self.checksums[self.game], current_cache)
 
     # data storage
 
@@ -937,6 +1005,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.hint_points = args.get("hint_points", 0)
         ctx.consume_players_package(args["players"])
         ctx.stored_data_notification_keys.add(f"_read_hints_{ctx.team}_{ctx.slot}")
+        if ctx.game:
+            game = ctx.game
+        else:
+            game = ctx.slot_info[ctx.slot][1]
+        ctx.stored_data_notification_keys.add(f"_read_item_name_groups_{game}")
+        ctx.stored_data_notification_keys.add(f"_read_location_name_groups_{game}")
         msgs = []
         if ctx.locations_checked:
             msgs.append({"cmd": "LocationChecks",
@@ -1017,11 +1091,19 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.stored_data.update(args["keys"])
         if ctx.ui and f"_read_hints_{ctx.team}_{ctx.slot}" in args["keys"]:
             ctx.ui.update_hints()
+        if f"_read_item_name_groups_{ctx.game}" in args["keys"]:
+            ctx.consume_network_item_groups()
+        if f"_read_location_name_groups_{ctx.game}" in args["keys"]:
+            ctx.consume_network_location_groups()
 
     elif cmd == "SetReply":
         ctx.stored_data[args["key"]] = args["value"]
         if ctx.ui and f"_read_hints_{ctx.team}_{ctx.slot}" == args["key"]:
             ctx.ui.update_hints()
+        elif f"_read_item_name_groups_{ctx.game}" == args["key"]:
+            ctx.consume_network_item_groups()
+        elif f"_read_location_name_groups_{ctx.game}" == args["key"]:
+            ctx.consume_network_location_groups()
         elif args["key"].startswith("EnergyLink"):
             ctx.current_energy_link_value = args["value"]
             if ctx.ui:
