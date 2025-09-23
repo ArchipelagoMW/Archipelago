@@ -93,7 +93,12 @@ It has the following additional field which defines the "procedure" that will be
     procedure: Literal["custom"] | list[tuple[str, list[Any]]] = "custom"
 ```
 
-You should subclass APPatch directly if your APContainer is a patch file, but it does not get patched automatically.
+You should subclass APPatch directly if your APContainer is a patch file,
+but applying the patch does not go through the APContainer subclass itself.
+Examples:
+- Application of the patch happens in a standalone external program
+- The patch data doesn't patch a file, instead being read by your client component
+and then directly forwarded to or injected in to the game somehow
 
 ### APAutoPatchInterface
 
