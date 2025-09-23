@@ -4,11 +4,11 @@ from typing import Dict, Iterable, List, Optional, Set, Tuple, Union
 
 from worlds._sc2common.bot import logger
 
-from s2clientprotocol import debug_pb2 as debug_pb
-from s2clientprotocol import query_pb2 as query_pb
-from s2clientprotocol import raw_pb2 as raw_pb
-from s2clientprotocol import sc2api_pb2 as sc_pb
-from s2clientprotocol import spatial_pb2 as spatial_pb
+from . import debug_pb2 as debug_pb
+from . import query_pb2 as query_pb
+from . import raw_pb2 as raw_pb
+from . import sc2api_pb2 as sc_pb
+from . import spatial_pb2 as spatial_pb
 
 from .data import ActionResult, ChatChannel, Race, Result, Status
 from .game_data import AbilityData, GameData
