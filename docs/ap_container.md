@@ -92,6 +92,7 @@ and it will execute the patch, returning the location of the resulting patched f
 ### APProcedurePatch
 
 APProcedurePatch is a subclass of APAutoPatchInterface that implements the patching procedure protocol for roms.  
+(Note: You can patch things that aren't roms, it's just become convention to call the patch infile a "rom")  
 It must define at least one `procedure`, where `procedure` is a list of patching procedures to be applied to the rom.
 
 Example:
