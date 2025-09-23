@@ -598,7 +598,7 @@ class PokemonDataEditorFrame(MDBoxLayout):
         else:
             field_value = _field_object.text
         errors, has_error = validate_pokemon_data_string(app.sprite_preview.folder_input.text, {_field: field_value})
-        temp_pokemon_data_string = f"{_field}: {field_value.replace("\n", ", ")}"
+        temp_pokemon_data_string = f"{_field}: {field_value.replace('\n', ', ')}"
         is_different_from_rom = True
         is_different_from_data = False
         internal_field = "dex" if _field == "forbid_flip" else _field
