@@ -68,7 +68,7 @@ An APPlayerContainer is an APContainer that is linked to one specific player in 
 
 The APPlayerContainer class itself has the following fields, both of which can optionally be overridden:
 ```py
-game: ClassVar[Optional[str]] = None
+game: ClassVar[str | None] = None
 patch_file_ending: str = ""
 ```
 
@@ -90,7 +90,7 @@ APPatch is a subclass of APPlayerContainer which represents a patch file for a s
 It has the following additional field which defines the "procedure" that will be used to execute the patch:
 
 ```py
-    procedure: Union[Literal["custom"], List[Tuple[str, List[Any]]]] = "custom"
+    procedure: Literal["custom"] | list[tuple[str, list[Any]]] = "custom"
 ```
 
 You should subclass APPatch directly if your APContainer is a patch file, but it does not get patched automatically.
