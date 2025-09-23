@@ -51,9 +51,9 @@ def get_manifest(self) -> dict[str, Any]:
     }
 ```
 
-Apart from potentially `get_manifest`, it should usually not be necessary to overwrite any of these functions,
-because you can use one of the stock subclasses of APContainer defined in [Files.py](../worlds/Files.py)
-which are meant for a specific APContainer use case and abstract away these functions for you.
+Apart from potentially `get_manifest`, it should usually not be necessary to overwrite any of these functions.
+Instead, you can use one of the stock subclasses of APContainer defined in [Files.py](../worlds/Files.py), each of
+which is meant for a specific APContainer use case and will usually abstract away these functions for you.
 
 ## Subclasses of APContainer (types of containers)
 
