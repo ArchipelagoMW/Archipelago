@@ -6,7 +6,7 @@ from BaseClasses import Location, Region
 
 class GrinchLocationData(NamedTuple):
     region: str
-    location_group: str
+    location_group: str #list[str]
     id: Optional[int]
     update_ram_addr: list[GrinchRamData]
     reset_addr: Optional[list[GrinchRamData]] = None # Addresses to update once we find the item
