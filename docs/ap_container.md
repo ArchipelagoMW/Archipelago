@@ -120,7 +120,7 @@ APProcedurePatch zip file.
 
 #### Patching procedure
 
-A patching procedure in essence, is a function on a subclass of `APPatchExtension` which performs a patch.
+A patching procedure is a function on a subclass of `APPatchExtension` which performs a patch.
 Aside from being passed the instance of APProcedurePatch that this procedure was called from,
 a procedure function takes bytes as an input, and outputs bytes. Usually: Unpatched rom -> Patched rom.  
 Many procedures also take a third arg, which points to a file in the APContainer zip file,
