@@ -195,7 +195,7 @@ TRAPS_TABLE: dict[str, GrinchItemData] = {
 #     "Damage Trap": GrinchItemData("Traps", 604, IC.trap, [GrinchRamData(0x0E8FDC, value=-20, update_existing_value=True)]),
     "Depletion Trap": GrinchItemData("Traps", 605, IC.trap, [GrinchRamData(0x010058, value=0, bit_size=2)]),
     "Dump it to Crumpit": GrinchItemData("Traps", 606, IC.trap, #Alias to Home Trap for traplink
-        [GrinchRamData(0x010000, value=0x05), GrinchRamData(0x08FB94, value=1)]),
+        [GrinchRamData(0x010000, value=0x05), GrinchRamData(0x08FB94, value=1), GrinchRamData(0x0100B4, value=0)]),
 #alias to Spring Trap for traplink
     # "Rocket Spring Trap": GrinchItemData("Traps", 607, IC.trap, [GrinchRamData()]),
 #alias to Home Trap for traplink
