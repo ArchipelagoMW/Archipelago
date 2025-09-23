@@ -94,11 +94,11 @@ It has the following additional field which defines the "procedure" that will be
 ```
 
 You should subclass APPatch directly if your APContainer is a patch file,
-but applying the patch does not go through the APContainer subclass itself.
+but applying the patch does not involve your APContainer subclass writing a resulting file.
 Examples:
-- Application of the patch happens in a standalone external program
-- The patch data doesn't patch a file, instead being read by your client component
-and then directly forwarded to or injected in to the game somehow
+- Application of the patch produces a new file, but this happens in a standalone external program
+- The patch data doesn't get applied to a file, instead being read by your client component
+and then directly forwarded to or injected into the game somehow
 
 ### APAutoPatchInterface
 
