@@ -96,12 +96,6 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
             player_checks_done.append(
                 {"team": team, "player": player, "locations": sorted(tracker_data.get_player_checked_locations(team, player))})
 
-    player_locations_total: list[PlayerLocationsTotal] = []
-    for team, players in all_players.items():
-        for player in players:
-            player_locations_total.append(
-                {"team": team, "player": player, "total_locations": len(tracker_data.get_player_locations(player))})
-
     total_checks_done: list[TeamTotalChecks] = [
         {"team": team, "checks_done": checks_done}
         for team, checks_done in tracker_data.get_team_locations_checked_count().items()
@@ -157,7 +151,6 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
         "aliases": player_aliases,
         "player_items_received": player_items_received,
         "player_checks_done": player_checks_done,
-        "player_locations_total": player_locations_total,
         "total_checks_done": total_checks_done,
         "hints": hints,
         "activity_timers": activity_timers,
@@ -209,9 +202,16 @@ def static_tracker_data(tracker: UUID) -> dict[str, Any]:
                 })
         break
 
+    player_locations_total: list[PlayerLocationsTotal] = []
+    for team, players in all_players.items():
+        for player in players:
+            player_locations_total.append(
+                {"team": team, "player": player, "total_locations": len(tracker_data.get_player_locations(player))})
+
     return {
         "groups": groups,
         "datapackage": tracker_data._multidata["datapackage"],
+        "player_locations_total": player_locations_total,
     }
 
 # It should be exceedingly rare that slot data is needed, so it's separated out.
