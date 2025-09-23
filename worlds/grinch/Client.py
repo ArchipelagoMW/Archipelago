@@ -70,6 +70,8 @@ class GrinchClient(BizHawkClient):
 
                 logger.error("Invalid rom detected. You are not playing Grinch USA Version.")
                 raise Exception("Invalid rom detected. You are not playing Grinch USA Version.")
+
+            ctx.command_processor.commands["ringlink"] = _cmd_ringlink
         except Exception:
             return False
 
@@ -408,3 +410,19 @@ class GrinchClient(BizHawkClient):
         for char in string_id:
             uid += ord(char)
         return uid
+
+def _cmd_ringlink(self):
+    """Toggle ringling from client. Overrides default setting."""
+    if not self.ctx.slot:
+        return
+    Utils.async_start(_update_ring_link(self.ctx, not "RingLink" in self.ctx.tags), name="Update RingLink")
+
+async def _update_ring_link(ctx: "BizHawkClientContext", ring_link: bool):
+    """Helper function to set Ring Link connection tag on/off and update the connection if already connected."""
+    old_tags = copy.deepcopy(ctx.tags)
+    if ring_link:
+        ctx.tags.add("RingLink")
+    else:
+        ctx.tags -= {"RingLink"}
+    if old_tags != ctx.tags and ctx.server and not ctx.server.socket.closed:
+        await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
