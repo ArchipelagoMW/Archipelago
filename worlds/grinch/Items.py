@@ -5,11 +5,10 @@ from BaseClasses import Item
 from BaseClasses import ItemClassification as IC #IC can be any name, saves having to type the whole word in code
 
 class GrinchItemData(NamedTuple):
-    item_group: str #arbituary that can be whatever it can be, basically the field/property for item groups
+    item_group: str #list[str] #arbituary that can be whatever it can be, basically the field/property for item groups
     id: Optional[int]
     classification: IC
     update_ram_addr: list[GrinchRamData]
-    second_item_group: Optional[str] = None
 
 class GrinchItem(Item):
     game: str = "The Grinch"
@@ -100,28 +99,27 @@ GADGETS_TABLE: dict[str, GrinchItemData] = {
 #Mission Specific Items
 MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
     "Who Cloak": GrinchItemData("Mission Specific Items", 200, IC.progression,
-        [GrinchRamData(0x0101F9, binary_bit_pos=0)], second_item_group="Useful Items"),
+        [GrinchRamData(0x0101F9, binary_bit_pos=0)]),
     "Painting Bucket": GrinchItemData("Mission Specific Items", 201, IC.progression_deprioritized,
-        [GrinchRamData(0x0101F9, binary_bit_pos=1)], second_item_group="Useful Items"),
+        [GrinchRamData(0x0101F9, binary_bit_pos=1)]),
     "Scissors": GrinchItemData("Mission Specific Items", 202, IC.progression_deprioritized,
-        [GrinchRamData(0x0101F9, binary_bit_pos=6), GrinchRamData(0x0100C2, binary_bit_pos=1)],
-        second_item_group="Useful Items"),
+        [GrinchRamData(0x0101F9, binary_bit_pos=6), GrinchRamData(0x0100C2, binary_bit_pos=1)]),
     "Glue Bucket": GrinchItemData("Mission Specific Items", 203, IC.progression_deprioritized,
-        [GrinchRamData(0x0101F9, binary_bit_pos=4)], second_item_group="Useful Items"),
+        [GrinchRamData(0x0101F9, binary_bit_pos=4)]),
     "Cable Car Access Card": GrinchItemData("Mission Specific Items", 204, IC.progression,
-        [GrinchRamData(0x0101F9, binary_bit_pos=5)], second_item_group="Useful Items"),
+        [GrinchRamData(0x0101F9, binary_bit_pos=5)]),
     "Drill": GrinchItemData("Mission Specific Items", 205, IC.progression_deprioritized,
-        [GrinchRamData(0x0101FA, binary_bit_pos=2)], second_item_group="Useful Items"),
+        [GrinchRamData(0x0101FA, binary_bit_pos=2)]),
     "Rope": GrinchItemData("Mission Specific Items", 206, IC.progression_deprioritized,
-        [GrinchRamData(0x0101FA, binary_bit_pos=1)], second_item_group="Useful Items"),
+        [GrinchRamData(0x0101FA, binary_bit_pos=1)]),
     "Hook": GrinchItemData("Mission Specific Items", 207, IC.progression_deprioritized,
-        [GrinchRamData(0x0101FA, binary_bit_pos=0)], second_item_group="Useful Items"),
+        [GrinchRamData(0x0101FA, binary_bit_pos=0)]),
     "Sculpting Tools": GrinchItemData("Mission Specific Items", 208, IC.progression_deprioritized,
-        [GrinchRamData(0x0101F9, binary_bit_pos=2)], second_item_group="Useful Items"),
+        [GrinchRamData(0x0101F9, binary_bit_pos=2)]),
     "Hammer": GrinchItemData("Mission Specific Items", 209, IC.progression_deprioritized,
-        [GrinchRamData(0x0101F9, binary_bit_pos=3)], second_item_group="Useful Items"),
+        [GrinchRamData(0x0101F9, binary_bit_pos=3)]),
     "Scout Clothes": GrinchItemData("Mission Specific Items", 210, IC.progression,
-        [GrinchRamData(0x0101F9, binary_bit_pos=7)], second_item_group="Useful Items")
+        [GrinchRamData(0x0101F9, binary_bit_pos=7)])
 }
 
 #Sleigh Parts
