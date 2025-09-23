@@ -1,5 +1,3 @@
-from worlds.Files import APProcedurePatch
-
 # APContainer
 
 An APContainer is a zip file holding data or code that somehow extends Archipelago.
