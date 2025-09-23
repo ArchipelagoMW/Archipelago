@@ -22,8 +22,8 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-from s2clientprotocol import common_pb2 as s2clientprotocol_dot_common__pb2
-from s2clientprotocol import error_pb2 as s2clientprotocol_dot_error__pb2
+from . import common_pb2 as s2clientprotocol_dot_common__pb2
+from . import error_pb2 as s2clientprotocol_dot_error__pb2
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cs2clientprotocol/query.proto\x12\x0eSC2APIProtocol\x1a\x1ds2clientprotocol/common.proto\x1a\x1cs2clientprotocol/error.proto\"\xf0\x01\n\x0cRequestQuery\x12\x34\n\x07pathing\x18\x01 \x03(\x0b\x32#.SC2APIProtocol.RequestQueryPathing\x12\x41\n\tabilities\x18\x02 \x03(\x0b\x32..SC2APIProtocol.RequestQueryAvailableAbilities\x12\x41\n\nplacements\x18\x03 \x03(\x0b\x32-.SC2APIProtocol.RequestQueryBuildingPlacement\x12$\n\x1cignore_resource_requirements\x18\x04 \x01(\x08\"\xce\x01\n\rResponseQuery\x12\x35\n\x07pathing\x18\x01 \x03(\x0b\x32$.SC2APIProtocol.ResponseQueryPathing\x12\x42\n\tabilities\x18\x02 \x03(\x0b\x32/.SC2APIProtocol.ResponseQueryAvailableAbilities\x12\x42\n\nplacements\x18\x03 \x03(\x0b\x32..SC2APIProtocol.ResponseQueryBuildingPlacement\"\x8a\x01\n\x13RequestQueryPathing\x12,\n\tstart_pos\x18\x01 \x01(\x0b\x32\x17.SC2APIProtocol.Point2DH\x00\x12\x12\n\x08unit_tag\x18\x02 \x01(\x04H\x00\x12(\n\x07\x65nd_pos\x18\x03 \x01(\x0b\x32\x17.SC2APIProtocol.Point2DB\x07\n\x05start\"(\n\x14ResponseQueryPathing\x12\x10\n\x08\x64istance\x18\x01 \x01(\x02\"2\n\x1eRequestQueryAvailableAbilities\x12\x10\n\x08unit_tag\x18\x01 \x01(\x04\"~\n\x1fResponseQueryAvailableAbilities\x12\x33\n\tabilities\x18\x01 \x03(\x0b\x32 .SC2APIProtocol.AvailableAbility\x12\x10\n\x08unit_tag\x18\x02 \x01(\x04\x12\x14\n\x0cunit_type_id\x18\x03 \x01(\r\"z\n\x1dRequestQueryBuildingPlacement\x12\x12\n\nability_id\x18\x01 \x01(\x05\x12+\n\ntarget_pos\x18\x02 \x01(\x0b\x32\x17.SC2APIProtocol.Point2D\x12\x18\n\x10placing_unit_tag\x18\x03 \x01(\x04\"N\n\x1eResponseQueryBuildingPlacement\x12,\n\x06result\x18\x01 \x01(\x0e\x32\x1c.SC2APIProtocol.ActionResult')
