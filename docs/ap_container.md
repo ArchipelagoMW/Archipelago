@@ -7,6 +7,36 @@ In the future, [apworlds](apworld%20specification.md) may become a type of APCon
 An APContainer is read by a subclass of the APContainer class in [Files.py](../worlds/Files.py).  
 This class also has a function to write the APContainer zip file, and this is usually how APContainers are created.
 
+Here's a quick overview of the functions of the APContainer class:
+
+```py
+def write(self, file: str | BinaryIO | None = None) -> None:
+    """Top level function to write the APContainer to its zip file.
+    Should usually not be overwritten, instead overwrite write_contents."""
+    ...
+
+def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
+    """Can be overwritten, but you must call super().write_contents if you do.
+    Subclasses of APContainer such as APProcedurePatch may write other data by default as well,
+    such as patch data files created during generation."""
+    ...
+
+def read(self, file: str | BinaryIO | None = None) -> None:
+    """Top level function to read the APContainer zip file into the APContainer Python class instance.
+    Should usually not be overwritten, instead overwrite read_contents."""
+    ...
+
+def read_contents(self, opened_zipfile: zipfile.ZipFile) -> dict[str, Any]:
+    """Can be overwritten, but you must call super().read_contents() if you do.
+    By default, returns the data from the archipelago.json manifest.
+    Subclasses of APContainer such as APProcedurePatch may read and return other data by default as well,
+    such as byte data of any other files that aren't archipelago.json."""
+    ...
+
+def get_manifest(self) -> dict[str, Any]:
+    """Return the manifest data for writing archipelago.json when .write is called."""
+```
+
 ## Specification
 
 An APContainer must be a zip archive.  
