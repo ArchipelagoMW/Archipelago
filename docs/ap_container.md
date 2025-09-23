@@ -4,7 +4,16 @@ An APContainer is a zip file holding data or code that somehow extends Archipela
 The main use currently is for patch files to be read by game clients.  
 In the future, [apworlds](apworld%20specification.md) may become a type of APContainer as well.
 
-An APContainer is read by a subclass of the APContainer class in [Files.py](../worlds/Files.py).  
+## Specification
+
+An APContainer must be a zip archive.  
+This zip file can (and usually will) have a custom extension linking it to one specific purpose.
+
+An APContainer must contain a manifest file called `archipelago.json`.
+
+## APContainer Python class
+
+An APContainer zipfile is read by a subclass of the APContainer class in [Files.py](../worlds/Files.py).  
 This class also has a function to write the APContainer zip file, and this is usually how APContainers are created.
 
 Here's a quick overview of the functions of the APContainer class:
@@ -42,14 +51,11 @@ def get_manifest(self) -> dict[str, Any]:
     }
 ```
 
-## Specification
+Apart from potentially `get_manifest`, it should usually not be necessary to overwrite any of these functions,
+because you can use one of the stock subclasses of APContainer defined in [Files.py](../worlds/Files.py)
+which are meant for a specific APContainer use case and abstract away these functions for you.
 
-An APContainer must be a zip archive.  
-This zip file can (and usually will) have a custom extension linking it to one specific purpose.
-
-An APContainer must contain a manifest file called `archipelago.json`.
-
-## Types of containers
+## Subclasses of APContainer (types of containers)
 
 In [Files.py](../worlds/Files.py), there are a lot of predefined subclasses of APContainer for specific purposes.  
 Here, you will find a quick description of each one.
