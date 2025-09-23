@@ -94,7 +94,7 @@ It has the following additional field which defines the "procedure" that will be
 ```
 
 You should subclass APPatch directly if your APContainer is a patch file,
-but applying the patch does not involve your APContainer subclass writing a resulting file.
+but applying the patch does not involve your APContainer subclass writing a resulting patch**ed** file.
 Examples:
 - Application of the patch produces a new file, but this happens in a standalone external program
 - The patch data doesn't get applied to a file, instead being read by your client component
