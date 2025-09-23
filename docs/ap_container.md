@@ -12,8 +12,7 @@ This class also has a function to write the APContainer zip file, and this is us
 An APContainer must be a zip archive.  
 This zip file can (and usually will) have a custom extension linking it to one specific purpose.
 
-An APContainer must contain a manifest file called `archipelago.json`.  
-This file must either be in the root, or in the only subfolder of the root.
+An APContainer must contain a manifest file called `archipelago.json`.
 
 ## Types of containers
 
