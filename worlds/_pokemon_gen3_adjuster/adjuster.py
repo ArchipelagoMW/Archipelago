@@ -18,7 +18,6 @@ from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 from kivymd.uix.behaviors import StencilBehavior
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDButton, MDButtonText
 from kivymd.uix.card import MDCard
 from kivymd.uix.fitimage import FitImage
@@ -65,6 +64,7 @@ adjuster_name = "Gen 3" if frlg_support and emerald_support \
     else "No-Goal"
 
 GAME_GEN3_ADJUSTER = "Pokemon Gen 3 Adjuster"
+
 
 # Miscellaneaous objects
 class Spinbox(ResizableTextField):
@@ -279,7 +279,7 @@ class PatchFrame(MDBoxLayout):
             # If the patch is valid, show the isAP checkbox, the Sprite Extractor
             # and the data edition window if it's displayed
             show_widget(self.is_ap_checkbox)
-            show_widget(app.sprite_extractor, 2 if app.sprite_preview.parent != None else 1)
+            show_widget(app.sprite_extractor, 2 if app.sprite_preview.parent is not None else 1)
             app.sprite_extractor.input.items = self.object_folders
             self.entry.text_color_normal = colors.white
             self.entry.text_color_focus = colors.white
@@ -342,7 +342,7 @@ class SpritePackFrame(MDBoxLayout):
     def update_sprite_pack(self, _, _sprite_pack: str):
         opts.sprite_pack = _sprite_pack
 
-        self.is_sprite_pack_valid = _sprite_pack != None and os.path.isdir(_sprite_pack)
+        self.is_sprite_pack_valid = _sprite_pack is not None and os.path.isdir(_sprite_pack)
         app.top_frame.try_validate_sprite_pack(opts.sprite_pack)
         colors = KivyJSONtoTextParser.TextColors()
         if not self.is_sprite_pack_valid:
@@ -368,7 +368,7 @@ class TopFrame(MDCard):
         self.patch_frame.late_init()
         self.sprite_pack_frame.late_init()
 
-    def try_validate_sprite_pack(self, _sprite_pack: str, _patch_changed = False):
+    def try_validate_sprite_pack(self, _sprite_pack: str, _patch_changed=False):
         # Validates the sprite pack if both the ROM/patch file and the sprite packs are valid
         has_error = False
         if self.patch_frame.is_patch_valid:
@@ -377,7 +377,8 @@ class TopFrame(MDCard):
                 app.sprite_preview.error_label.text = "Could not build the AP ROM."
                 return
             is_rom_ap_state = handle_address_collection(app.ap_rom, app.top_frame.patch_frame.rom_version,
-                None if _patch_changed else self.patch_frame.is_ap_checkbox.checkbox.active)
+                                                        None if _patch_changed else
+                                                        self.patch_frame.is_ap_checkbox.checkbox.active)
             if _patch_changed:
                 # Change the state of the isAP button automatically when a new patch is loaded
                 self.patch_frame.is_ap_checkbox.checkbox.active = is_rom_ap_state
@@ -404,7 +405,7 @@ class SpriteExtractorFrame(MDCard):
     def update_sprite_extraction(self, _, _value: str = "Shouldnotbewritten"):
         # Enables or disables the sprite extraction button if the sprite's name is valid or not
         text = _value if _value != "Shouldnotbewritten" else self.input.text
-        self.extract_button.disabled = not text in app.top_frame.patch_frame.object_folders
+        self.extract_button.disabled = text not in app.top_frame.patch_frame.object_folders
         colors = KivyJSONtoTextParser.TextColors()
         self.input.fill_color_normal = colors.red if self.extract_button.disabled else colors.white
         self.input.fill_color_focus = colors.red if self.extract_button.disabled else colors.white
@@ -412,7 +413,7 @@ class SpriteExtractorFrame(MDCard):
     def extract_sprites(self):
         # Run when the Extract button is pressed
         # Extract all the sprites from the given Pokemon or Trainer into the given folder
-        if not self.input.text in app.top_frame.patch_frame.object_folders:
+        if self.input.text not in app.top_frame.patch_frame.object_folders:
             return
 
         base_folder_path: str = ""
@@ -497,13 +498,13 @@ class PokemonDataEditorFrame(MDBoxLayout):
     spdef_tooltip = "This value changes the Pokemon's base Special Defense.\nAwaits a value between 1 and 255."
     type_1_tooltip = "This value changes the Pokemon's first type."
     type_2_tooltip = "This value changes the Pokemon's second type.\n"\
-                    + "Make it match the first type if you want the Pokemon to only have one type."
+                     + "Make it match the first type if you want the Pokemon to only have one type."
     ability_1_tooltip = "This value changes the Pokemon's first ability."
     ability_2_tooltip = "This value changes the Pokemon's second ability.\n"\
                         + "Make it match the first ability if you want the Pokemon to only have one ability."
     gender_ratio_tooltip = "This value changes the Pokemon's gender ratio."
     forbid_flip_tooltip = "This value dictates whether the Pokemon's sprite can be flipped or not.\n"\
-                        + "The sprite is flipped when looking at a Pokemon's status screen in your team."
+                          + "The sprite is flipped when looking at a Pokemon's status screen in your team."
     move_pool_tooltip = "This value contains the Pokemon's levelup learnset.\nEach line must contain a move.\n"\
                         + "Each move must be written in the format \"<move>: <level>\".\n"\
                         + "With <move> being a known Pokemon move from this generation.\n"\
@@ -649,7 +650,6 @@ class PokemonDataEditorFrame(MDBoxLayout):
                     else:
                         pokemon_data[field] = self.pokemon_saved_data[field]
 
-
         self.hp_input.text = str(pokemon_data["hp"])
         self.spd_input.text = str(pokemon_data["spd"])
         self.atk_input.text = str(pokemon_data["atk"])
@@ -660,7 +660,7 @@ class PokemonDataEditorFrame(MDBoxLayout):
         self.type_2_input.text = POKEMON_TYPES[pokemon_data["type2"]]
         self.ability_1_input.text = POKEMON_ABILITIES[pokemon_data["ability1"]].title()
         self.ability_2_input.text = POKEMON_ABILITIES[pokemon_data["ability2"]].title() if pokemon_data["ability2"] \
-                                    else POKEMON_ABILITIES[pokemon_data["ability1"]].title()
+            else POKEMON_ABILITIES[pokemon_data["ability1"]].title()
         self.gender_ratio_input.text = POKEMON_GENDER_RATIOS[pokemon_data["gender_ratio"]]
         self.forbid_flip_input.active = (pokemon_data["dex"] >> 7) > 0
         self.move_pool_input.text = stringify_move_pool(pokemon_data["move_pool"])
@@ -777,7 +777,7 @@ class SpritePreviewFrame(MDCard):
 
     def seek_main_sprite(self, _new_folder: str):
         folder_path = os.path.join(opts.sprite_pack, _new_folder.title())
-        main_sprites = [ "front_anim", "front", "battle_front", "battle_front_1" ]
+        main_sprites = ["front_anim", "front", "battle_front", "battle_front_1"]
         for sprite in main_sprites:
             if os.path.exists(os.path.join(folder_path, sprite + ".png")):
                 return sprite
@@ -870,7 +870,7 @@ class SpritePreviewFrame(MDCard):
 
     def update_folder_list(self, _, _folders: list[str]):
         self.folder_input.items = _folders
-        if not self.folder_input.text in _folders:
+        if self.folder_input.text not in _folders:
             self.folder_input.text = ""
 
     def on_text_sprite_input(self, _, _new_sprite: str):
@@ -923,7 +923,7 @@ class SpritePreviewFrame(MDCard):
 
     def update_sprite_list(self, _, _sprites: list[str]):
         self.sprite_input.items = _sprites
-        if not self.sprite_input.text in _sprites:
+        if self.sprite_input.text not in _sprites:
             self.sprite_input.text = ""
 
 
@@ -1021,8 +1021,8 @@ class AdjusterRootLayout(MDFloatLayout):
                 rom_data = self.frlg_build_ap_rom(_patch)
         if not rom_data:
             messagebox.showerror(title="Failure",
-                                message="Cannot build the AP ROM: invalid file extension: "
-                                        + f"requires {'/'.join(self.adjuster_extensions[1:])}")
+                                 message="Cannot build the AP ROM: invalid file extension: "
+                                         + f"requires {'/'.join(self.adjuster_extensions[1:])}")
             return bytearray()
 
         return rom_data

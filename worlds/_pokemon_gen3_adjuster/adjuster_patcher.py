@@ -1354,7 +1354,7 @@ def destringify_pokemon_data(_pokemon_name: str, _data_string: str, _safe_mode=F
             new_field_value = field_value if _safe_mode else (1 if field_value in [1, "1", "True"] else 0)
             field_name = "dex"
         elif field_name == "move_pool":
-            if field_value.startswith('[ '):
+            if field_value.startswith("[ "):
                 field_value = field_value[2:-2]
             if not _safe_mode:
                 move_pool_errors, has_move_pool_error = validate_move_pool_string(_pokemon_name,
