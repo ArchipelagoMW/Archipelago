@@ -477,8 +477,8 @@ def patch_kh2(self, output_directory):
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
     self.mod_yml["title"] = f"Archipelago Seed - {self.multiworld.get_file_safe_player_name(self.player)}"
-    self.mod_yml["originalAuthor"] = "JaredWeakStrike and Shananas"
-    self.mod_yml["description"] = f"Seed {self.multiworld.seed_name} was generated for {self.multiworld.get_file_safe_player_name(self.player)} - Player {self.player} at {curr_timestamp} UTC. Have fun!"
+    self.mod_yml["originalAuthor"] = "JaredWeakStrike"
+    self.mod_yml["description"] = f"Seed {self.multiworld.seed_name} was generated for {self.multiworld.get_file_safe_player_name(self.player)} - Player {self.player} at {curr_timestamp} UTC. Have fun! \nCredit to delilahisdidi for the icons!"
 
     openkhmod = {
         "TrsrList.yml": yaml.dump(self.formattedTrsr, line_break="\n"),

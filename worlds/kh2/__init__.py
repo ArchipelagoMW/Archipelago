@@ -20,8 +20,9 @@ def launch_client():
     from .ClientStuff.Client import launch
     launch_component(launch, name="KH2Client")
 
-icon_paths['khapicon'] = local_path('data', 'khapicon.png')
-components.append(Component("KH2 Client", func=launch_client, component_type=Type.CLIENT,icon='kh2apicon'))
+
+icon_paths['kh2apicon'] = f"ap:{__name__}/data/khapicon.png"
+components.append(Component("KH2 Client", func=launch_client, component_type=Type.CLIENT, icon='kh2apicon'))
 
 
 class KingdomHearts2Web(WebWorld):
