@@ -35,6 +35,7 @@ def read_contents(self, opened_zipfile: zipfile.ZipFile) -> dict[str, Any]:
 
 def get_manifest(self) -> dict[str, Any]:
     """Return the manifest data for writing archipelago.json when .write is called."""
+    ...
 ```
 
 ## Specification
