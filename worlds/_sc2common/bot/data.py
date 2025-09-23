@@ -7,11 +7,11 @@ https://github.com/Blizzard/s2client-api/blob/d9ba0a33d6ce9d233c2a4ee988360c188f
 """
 import enum
 
-from . import common_pb2 as common_pb
-from . import data_pb2 as data_pb
-from . import error_pb2 as error_pb
-from . import raw_pb2 as raw_pb
-from . import sc2api_pb2 as sc_pb
+from .proto import common_pb2 as common_pb
+from .proto import data_pb2 as data_pb
+from .proto import error_pb2 as error_pb
+from .proto import raw_pb2 as raw_pb
+from .proto import sc2api_pb2 as sc_pb
 
 CreateGameError = enum.Enum("CreateGameError", sc_pb.ResponseCreateGame.Error.items())
 
