@@ -481,7 +481,7 @@ def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_UNDER_THE_RUG, no_conditions(), CandyBox2Room.VILLAGE_FURNISHED_HOUSE)
 
     # Cellar rules
-    rules_package.add_location_rule(CandyBox2LocationName.CELLAR_QUEST_CLEARED, weapon_is_at_least(CandyBox2ItemName.WOODEN_SWORD), CandyBox2Room.QUEST_THE_CELLAR)
+    rules_package.add_location_rule(CandyBox2LocationName.CELLAR_QUEST_CLEARED, no_conditions(), CandyBox2Room.QUEST_THE_CELLAR)
 
     rules_package.add_location_rule(CandyBox2LocationName.THE_SQUIRRELS_FIRST_QUESTION, no_conditions(), CandyBox2Room.SQUIRREL_TREE)
     rules_package.add_location_rule(CandyBox2LocationName.THE_SQUIRRELS_SECOND_QUESTION, no_conditions(), CandyBox2Room.SQUIRREL_TREE)
