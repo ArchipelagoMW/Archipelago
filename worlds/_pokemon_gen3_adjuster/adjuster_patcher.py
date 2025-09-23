@@ -921,36 +921,36 @@ def validate_pokemon_data_string(_pokemon_name: str, _data: str | dict[str, int 
             try:
                 field_number_value = int(field_value)
                 if field_number_value < 1 or field_number_value > 255:
-                    add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
+                    add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_value}'.", True)
             except Exception:
-                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
+                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_value}'.", True)
         elif field_name in ["type1", "type2"]:
             # Data must be a number corresponding to a valid type
             try:
                 if field_value.capitalize() not in POKEMON_TYPES:
                     field_number_value = int(field_value)
                     if field_number_value < 0 or field_number_value >= len(POKEMON_TYPES):
-                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
+                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_value}'.", True)
             except Exception:
-                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
+                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_value}'.", True)
         elif field_name in ["ability1", "ability2"]:
             # Data must be a number corresponding to a valid ability
             try:
                 if field_value.upper() not in POKEMON_ABILITIES:
                     field_number_value = int(field_value)
                     if field_number_value < 1 or field_number_value >= len(POKEMON_ABILITIES):
-                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
+                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_value}'.", True)
             except Exception:
-                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
+                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_value}'.", True)
         elif field_name == "gender_ratio":
             # Data must be a number corresponding to a valid gender ratio
             try:
                 if field_value not in list(POKEMON_GENDER_RATIOS.values()):
                     field_number_value = int(field_value)
                     if field_number_value not in list(POKEMON_GENDER_RATIOS.keys()):
-                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
+                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_value}'.", True)
             except Exception:
-                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
+                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_value}'.", True)
         elif field_name == "dex":
             # Data must either be a 0 (allowed) or a 1 (forbidden)
             if field_value not in [0, 1, "0", "1", "True", "False"]:
@@ -960,7 +960,7 @@ def validate_pokemon_data_string(_pokemon_name: str, _data: str | dict[str, int 
             if len(field_value) < 4:
                 add_error(f"{_pokemon_name}'s move pool is empty.", True)
             else:
-                add_error(*validate_move_pool_string(_pokemon_name, field_value.replace(", ", "\n")[2:-2]), True)
+                add_error(*validate_move_pool_string(_pokemon_name, field_value.replace(", ", "\n")), True)
     return errors, has_error
 
 
@@ -1354,12 +1354,14 @@ def destringify_pokemon_data(_pokemon_name: str, _data_string: str, _safe_mode=F
             new_field_value = field_value if _safe_mode else (1 if field_value in [1, "1", "True"] else 0)
             field_name = "dex"
         elif field_name == "move_pool":
+            if field_value.startswith('[ '):
+                field_value = field_value[2:-2]
             if not _safe_mode:
                 move_pool_errors, has_move_pool_error = validate_move_pool_string(_pokemon_name,
-                                                                                  field_value[2:-2].replace(", ", "\n"))
+                                                                                  field_value.replace(", ", "\n"))
                 if has_move_pool_error:
                     raise Exception(f"Bad move pool: {move_pool_errors}")
-                new_field_value = destringify_move_pool(field_value[2:-2].replace(", ", "\n"))
+                new_field_value = destringify_move_pool(field_value.replace(", ", "\n"))
             else:
                 new_field_value = field_value
         result[field_name] = new_field_value
