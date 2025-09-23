@@ -1,30 +1,29 @@
 import concurrent.futures
 import json
 import os
-import pickle
 import random
 import tempfile
 import zipfile
 from collections import Counter
-from typing import Any, Dict, List, Optional, Union, Set
+from pickle import PicklingError
+from typing import Any
 
 from flask import flash, redirect, render_template, request, session, url_for
 from pony.orm import commit, db_session
 
 from BaseClasses import get_seed, seeddigits
-from Generate import PlandoOptions, handle_name
+from Generate import PlandoOptions, handle_name, mystery_argparse
 from Main import main as ERmain
-from Utils import __version__
+from Utils import __version__, restricted_dumps
 from WebHostLib import app
 from settings import ServerOptions, GeneratorOptions
-from worlds.alttp.EntranceRandomizer import parse_arguments
 from .check import get_yaml_data, roll_options
 from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
 from .upload import upload_zip_to_db
 
 
-def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[str], Dict[str, Any]]]:
-    plando_options: Set[str] = set()
+def get_meta(options_source: dict, race: bool = False) -> dict[str, list[str] | dict[str, Any]]:
+    plando_options: set[str] = set()
     for substr in ("bosses", "items", "connections", "texts"):
         if options_source.get(f"plando_{substr}", substr in GeneratorOptions.plando_options):
             plando_options.add(substr)
@@ -73,7 +72,7 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
-def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any]):
+def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
     results, gen_options = roll_options(options, set(meta["plando_options"]))
 
     if any(type(result) == str for result in results.values()):
@@ -83,12 +82,18 @@ def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any])
               f"If you have a larger group, please generate it yourself and upload it.")
         return redirect(url_for(request.endpoint, **(request.view_args or {})))
     elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
-        gen = Generation(
-            options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
-            # convert to json compatible
-            meta=json.dumps(meta),
-            state=STATE_QUEUED,
-            owner=session["_id"])
+        try:
+            gen = Generation(
+                options=restricted_dumps({name: vars(options) for name, options in gen_options.items()}),
+                # convert to json compatible
+                meta=json.dumps(meta),
+                state=STATE_QUEUED,
+                owner=session["_id"])
+        except PicklingError as e:
+            from .autolauncher import handle_generation_failure
+            handle_generation_failure(e)
+            return render_template("seedError.html", seed_error=("PicklingError: " + str(e)))
+
         commit()
 
         return redirect(url_for("wait_seed", seed=gen.id))
@@ -104,9 +109,9 @@ def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any])
         return redirect(url_for("view_seed", seed=seed_id))
 
 
-def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
-    if not meta:
-        meta: Dict[str, Any] = {}
+def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, sid=None):
+    if meta is None:
+        meta = {}
 
     meta.setdefault("server_options", {}).setdefault("hint_cost", 10)
     race = meta.setdefault("generator_options", {}).setdefault("race", False)
@@ -123,36 +128,39 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
 
         seedname = "W" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
 
-        erargs = parse_arguments(['--multi', str(playercount)])
-        erargs.seed = seed
-        erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
-        erargs.spoiler = meta["generator_options"].get("spoiler", 0)
-        erargs.race = race
-        erargs.outputname = seedname
-        erargs.outputpath = target.name
-        erargs.teams = 1
-        erargs.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
-                                                                       {"bosses", "items", "connections", "texts"}))
-        erargs.skip_prog_balancing = False
-        erargs.skip_output = False
-        erargs.spoiler_only = False
-        erargs.csv_output = False
+        args = mystery_argparse()
+        args.multi = playercount
+        args.seed = seed
+        args.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
+        args.spoiler = meta["generator_options"].get("spoiler", 0)
+        args.race = race
+        args.outputname = seedname
+        args.outputpath = target.name
+        args.teams = 1
+        args.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
+                                                                     {"bosses", "items", "connections", "texts"}))
+        args.skip_prog_balancing = False
+        args.skip_output = False
+        args.spoiler_only = False
+        args.csv_output = False
+        args.sprite = dict.fromkeys(range(1, args.multi+1), None)
+        args.sprite_pool = dict.fromkeys(range(1, args.multi+1), None)
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
             for k, v in settings.items():
                 if v is not None:
-                    if hasattr(erargs, k):
-                        getattr(erargs, k)[player] = v
+                    if hasattr(args, k):
+                        getattr(args, k)[player] = v
                     else:
-                        setattr(erargs, k, {player: v})
+                        setattr(args, k, {player: v})
 
-            if not erargs.name[player]:
-                erargs.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
-            erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
-        if len(set(erargs.name.values())) != len(erargs.name):
-            raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
-        ERmain(erargs, seed, baked_server_options=meta["server_options"])
+            if not args.name[player]:
+                args.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
+            args.name[player] = handle_name(args.name[player], player, name_counter)
+        if len(set(args.name.values())) != len(args.name):
+            raise Exception(f"Names have to be unique. Names: {Counter(args.name.values())}")
+        ERmain(args, seed, baked_server_options=meta["server_options"])
 
         return upload_to_db(target.name, sid, owner, race)
     thread_pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)

@@ -17,11 +17,11 @@ from .Subclasses import KH2Item
 
 
 def launch_client():
-    from .Client import launch
+    from .ClientStuff.Client import launch
     launch_component(launch, name="KH2Client")
 
-components.append(Component("KH2 Client", "KH2Client", func=launch_client, component_type=Type.CLIENT, icon='kh2apicon'))
 icon_paths['khapicon'] = local_path('data', 'khapicon.png')
+components.append(Component("KH2 Client", func=launch_client, component_type=Type.CLIENT,icon='kh2apicon'))
 
 
 class KingdomHearts2Web(WebWorld):
@@ -103,16 +103,16 @@ class KH2World(World):
                 self.goofy_ability_dict[ability] -= 1
 
         slot_data = self.options.as_dict(
-            "Goal", 
-            "FinalXemnas", 
-            "LuckyEmblemsRequired", 
-            "BountyRequired",
-            "FightLogic",
-            "FinalFormLogic",
-            "AutoFormLogic",
-            "LevelDepth",
-            "DonaldGoofyStatsanity",
-            "CorSkipToggle"
+                "Goal",
+                "FinalXemnas",
+                "LuckyEmblemsRequired",
+                "BountyRequired",
+                "FightLogic",
+                "FinalFormLogic",
+                "AutoFormLogic",
+                "LevelDepth",
+                "DonaldGoofyStatsanity",
+                "CorSkipToggle"
         )
         slot_data.update({
             "hitlist":                [],  # remove this after next update
@@ -202,6 +202,7 @@ class KH2World(World):
         """
         Determines the quantity of items and maps plando locations to items.
         """
+
         # Item: Quantity Map
         # Example. Quick Run: 4
         self.total_locations = len(all_locations.keys())
