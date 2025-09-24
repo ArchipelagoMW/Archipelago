@@ -4,6 +4,13 @@ from worlds.LauncherComponents import Component, Type, components, launch
 # Obviously, this world class needs to exist first. For this, read world.py.
 from .world import APQuestWorld as APQuestWorld
 
+# The first thing you should make for your world is an archipelago.json manifest file.
+# You can reference APQuest's, but you should change the "game" field (obviously),
+# and you should also change the "minimum_ap_version" - probably to the current value of Utils.__version__.
+# Afterward, you can start reading world.py.
+
+# (This file contains a bit more info about clients and Launcher components,
+#  which you can come back to later if you're interested in those topics)
 
 # Apart from the regular apworld code that allows generating multiworld seeds with your game,
 # your apworld might have other "components" that should be launchable from the Archipelago Launcher.
