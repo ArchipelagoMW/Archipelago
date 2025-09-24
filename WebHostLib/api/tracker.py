@@ -146,7 +146,6 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
         for player in players:
             player_status.append({"team": team, "player": player, "status": tracker_data.get_player_client_status(team, player)})
 
-
     return {
         "aliases": player_aliases,
         "player_items_received": player_items_received,
