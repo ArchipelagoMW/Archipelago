@@ -422,6 +422,8 @@ Will provide a dict of static tracker data with the following keys:
   - Each item is a named dict of the game's name.
     - Each game contains two keys, the datapackage's checksum hash `checksum`, and the version `version`
   - This hash can then be sent to the datapackage API to receive the appropriate datapackage as necessary
+- The number of checks found vs. total checks available per player (`player_locations_total`)
+  - Same logic as the multitracker template: found = len(player_checks_done.locations) / total = player_locations_total.total_locations (all available checks).
 
 Example:
 ```json
@@ -453,7 +455,19 @@ Example:
       "checksum": "6991cbcda7316b65bcb072667f3ee4c4cae71c0b",
       "version": 0
     }
-  }
+  },
+  "player_locations_total": [
+    {
+      "player": 1,
+      "team" : 0,
+      "total_locations": 10
+    },
+    {
+      "player": 2,
+      "team" : 0,
+      "total_locations": 20
+    }
+  ],
 }
 ```
 
