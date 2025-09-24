@@ -1,8 +1,122 @@
 from enum import Enum
-#TODO complete this enum
-class Regions(str, Enum):
+class RegionNames:
+    """Region names for the Ship of Harkinian randomizer"""
+    
+    # Core regions
     ROOT = "Menu"
     TEMPLE_OF_TIME = "Temple of Time"
+    
+    # Deku Tree regions
+    DEKU_TREE_ENTRYWAY = "Deku Tree Entryway"
+    DEKU_TREE_LOBBY = "Deku Tree Lobby"
+    DEKU_TREE_2F_MIDDLE_ROOM = "Deku Tree 2F Middle Room"
+    DEKU_TREE_SLINGSHOT_ROOM = "Deku Tree Slingshot Room"
+    DEKU_TREE_COMPASS_ROOM = "Deku Tree Compass Room"
+    DEKU_TREE_BASEMENT_LOWER = "Deku Tree Basement Lower"
+    DEKU_TREE_BASEMENT_SCRUB_ROOM = "Deku Tree Basement Scrub Room"
+    DEKU_TREE_BASEMENT_WATER_ROOM_FRONT = "Deku Tree Basement Water Room Front"
+    DEKU_TREE_BASEMENT_WATER_ROOM_BACK = "Deku Tree Basement Water Room Back"
+    DEKU_TREE_BASEMENT_TORCH_ROOM = "Deku Tree Basement Torch Room"
+    DEKU_TREE_BASEMENT_BACK_LOBBY = "Deku Tree Basement Back Lobby"
+    DEKU_TREE_BASEMENT_BACK_ROOM = "Deku Tree Basement Back Room"
+    DEKU_TREE_BASEMENT_UPPER = "Deku Tree Basement Upper"
+    DEKU_TREE_OUTSIDE_BOSS_ROOM = "Deku Tree Outside Boss Room"
+    DEKU_TREE_BOSS_ENTRYWAY = "Deku Tree Boss Entryway"
+    DEKU_TREE_BOSS_EXIT = "Deku Tree Boss Exit"
+    DEKU_TREE_BOSS_ROOM = "Deku Tree Boss Room"
+    
+    # Deku Tree Master Quest regions
+    DEKU_TREE_MQ_1F = "Deku Tree MQ 1F"
+    DEKU_TREE_MQ_2F = "Deku Tree MQ 2F"
+    DEKU_TREE_MQ_3F = "Deku Tree MQ 3F"
+    DEKU_TREE_MQ_EYE_TARGET_ROOM = "Deku Tree MQ Eye Target Room"
+    DEKU_TREE_MQ_COMPASS_ROOM = "Deku Tree MQ Compass Room"
+    DEKU_TREE_MQ_PAST_BOULDER_VINES = "Deku Tree MQ Past Boulder Vines"
+    DEKU_TREE_MQ_BASEMENT = "Deku Tree MQ Basement"
+    DEKU_TREE_MQ_BASEMENT_SOUTHEAST_ROOM = "Deku Tree MQ Basement Southeast Room"
+    DEKU_TREE_MQ_BASEMENT_WATER_ROOM_FRONT = "Deku Tree MQ Basement Water Room Front"
+    DEKU_TREE_MQ_BASEMENT_WATER_ROOM_BACK = "Deku Tree MQ Basement Water Room Back"
+    DEKU_TREE_MQ_BASEMENT_SOUTHWEST_ROOM = "Deku Tree MQ Basement Southwest Room"
+    DEKU_TREE_MQ_BASEMENT_GRAVE_ROOM = "Deku Tree MQ Basement Grave Room"
+    DEKU_TREE_MQ_BASEMENT_BACK_ROOM = "Deku Tree MQ Basement Back Room"
+    DEKU_TREE_MQ_BASEMENT_LEDGE = "Deku Tree MQ Basement Ledge"
+    DEKU_TREE_MQ_OUTSIDE_BOSS_ROOM = "Deku Tree MQ Outside Boss Room"
+    
+    # Dodongo's Cavern regions
+    DODONGOS_CAVERN_ENTRYWAY = "Dodongos Cavern Entryway"
+    DODONGOS_CAVERN_BEGINNING = "Dodongos Cavern Beginning"
+    DODONGOS_CAVERN_LOBBY = "Dodongos Cavern Lobby"
+    DODONGOS_CAVERN_LOBBY_SWITCH = "Dodongos Cavern Lobby Switch"
+    DODONGOS_CAVERN_SE_CORRIDOR = "Dodongos Cavern SE Corridor"
+    DODONGOS_CAVERN_SE_ROOM = "Dodongos Cavern SE Room"
+    DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS = "Dodongos Cavern Near Lower Lizalfos"
+    DODONGOS_CAVERN_LOWER_LIZALFOS = "Dodongos Cavern Lower Lizalfos"
+    DODONGOS_CAVERN_DODONGO_ROOM = "Dodongos Cavern Dodongo Room"
+    DODONGOS_CAVERN_NEAR_DODONGO_ROOM = "Dodongos Cavern Near Dodongo Room"
+    DODONGOS_CAVERN_STAIRS_LOWER = "Dodongos Cavern Stairs Lower"
+    DODONGOS_CAVERN_STAIRS_UPPER = "Dodongos Cavern Stairs Upper"
+    DODONGOS_CAVERN_COMPASS_ROOM = "Dodongos Cavern Compass Room"
+    DODONGOS_CAVERN_ARMOS_ROOM = "Dodongos Cavern Armos Room"
+    DODONGOS_CAVERN_BOMB_ROOM_LOWER = "Dodongos Cavern Bomb Room Lower"
+    DODONGOS_CAVERN_2F_SIDE_ROOM = "Dodongos Cavern 2F Side Room"
+    DODONGOS_CAVERN_FIRST_SLINGSHOT_ROOM = "Dodongos Cavern First Slingshot Room"
+    DODONGOS_CAVERN_UPPER_LIZALFOS = "Dodongos Cavern Upper Lizalfos"
+    DODONGOS_CAVERN_SECOND_SLINGSHOT_ROOM = "Dodongos Cavern Second Slingshot Room"
+    DODONGOS_CAVERN_BOMB_ROOM_UPPER = "Dodongos Cavern Bomb Room Upper"
+    DODONGOS_CAVERN_FAR_BRIDGE = "Dodongos Cavern Far Bridge"
+    DODONGOS_CAVERN_BOSS_AREA = "Dodongos Cavern Boss Area"
+    DODONGOS_CAVERN_BACK_ROOM = "Dodongos Cavern Back Room"
+    DODONGOS_CAVERN_BOSS_ENTRYWAY = "Dodongos Cavern Boss Entryway"
+    DODONGOS_CAVERN_BOSS_EXIT = "Dodongos Cavern Boss Exit"
+    DODONGOS_CAVERN_BOSS_ROOM = "Dodongos Cavern Boss Room"
+    
+    # Dodongo's Cavern Master Quest regions
+    DODONGOS_CAVERN_MQ_BEGINNING = "Dodongos Cavern MQ Beginning"
+    DODONGOS_CAVERN_MQ_LOBBY = "Dodongos Cavern MQ Lobby"
+    DODONGOS_CAVERN_MQ_GOSSIP_STONE = "Dodongos Cavern MQ Gossip Stone"
+    DODONGOS_CAVERN_MQ_MOUTH_SIDE_BRIDGE = "Dodongos Cavern MQ Mouth Side Bridge"
+    DODONGOS_CAVERN_MQ_STAIRS_PAST_MUD_WALL = "Dodongos Cavern MQ Stairs Past Mud Wall"
+    DODONGOS_CAVERN_MQ_STAIRS_LOWER = "Dodongos Cavern MQ Stairs Lower"
+    DODONGOS_CAVERN_MQ_STAIRS_UPPER = "Dodongos Cavern MQ Stairs Upper"
+    DODONGOS_CAVERN_MQ_STAIRS_PAST_BIG_SKULLTULAS = "Dodongos Cavern MQ Stairs Past Big Skulltulas"
+    DODONGOS_CAVERN_MQ_DODONGO_ROOM = "Dodongos Cavern MQ Dodongo Room"
+    DODONGOS_CAVERN_MQ_TORCH_PUZZLE_LOWER = "Dodongos Cavern MQ Torch Puzzle Lower"
+    DODONGOS_CAVERN_MQ_BIG_BLOCK_ROOM = "Dodongos Cavern MQ Big Block Room"
+    DODONGOS_CAVERN_MQ_LARVAE_ROOM = "Dodongos Cavern MQ Larvae Room"
+    DODONGOS_CAVERN_MQ_UPPER_LIZALFOS = "Dodongos Cavern MQ Upper Lizalfos"
+    DODONGOS_CAVERN_MQ_TWO_FIRES_ROOM = "Dodongos Cavern MQ Two Fires Room"
+    DODONGOS_CAVERN_MQ_TORCH_PUZZLE_UPPER = "Dodongos Cavern MQ Torch Puzzle Upper"
+    DODONGOS_CAVERN_MQ_LOWER_RIGHT_SIDE = "Dodongos Cavern MQ Lower Right Side"
+    DODONGOS_CAVERN_MQ_LOWER_LIZALFOS = "Dodongos Cavern MQ Lower Lizalfos"
+    DODONGOS_CAVERN_MQ_POES_ROOM = "Dodongos Cavern MQ Poes Room"
+    DODONGOS_CAVERN_MQ_MAD_SCRUB_ROOM = "Dodongos Cavern MQ Mad Scrub Room"
+    DODONGOS_CAVERN_MQ_BEHIND_MOUTH = "Dodongos Cavern MQ Behind Mouth"
+    DODONGOS_CAVERN_MQ_BACK_BEHIND_FIRE = "Dodongos Cavern MQ Back Behind Fire"
+    DODONGOS_CAVERN_MQ_BACK_SWITCH_GRAVE = "Dodongos Cavern MQ Back Switch Grave"
+
+# Keep the enum for backward compatibility, but delegate to the class
+class Regions(str, Enum):
+    ROOT = RegionNames.ROOT
+    TEMPLE_OF_TIME = RegionNames.TEMPLE_OF_TIME
+    
+    # Deku Tree regions
+    DEKU_TREE_ENTRYWAY = RegionNames.DEKU_TREE_ENTRYWAY
+    DEKU_TREE_LOBBY = RegionNames.DEKU_TREE_LOBBY
+    DEKU_TREE_2F_MIDDLE_ROOM = RegionNames.DEKU_TREE_2F_MIDDLE_ROOM
+    DEKU_TREE_SLINGSHOT_ROOM = RegionNames.DEKU_TREE_SLINGSHOT_ROOM
+    DEKU_TREE_COMPASS_ROOM = RegionNames.DEKU_TREE_COMPASS_ROOM
+    DEKU_TREE_BASEMENT_LOWER = RegionNames.DEKU_TREE_BASEMENT_LOWER
+    DEKU_TREE_BASEMENT_SCRUB_ROOM = RegionNames.DEKU_TREE_BASEMENT_SCRUB_ROOM
+    DEKU_TREE_BASEMENT_WATER_ROOM_FRONT = RegionNames.DEKU_TREE_BASEMENT_WATER_ROOM_FRONT
+    DEKU_TREE_BASEMENT_WATER_ROOM_BACK = RegionNames.DEKU_TREE_BASEMENT_WATER_ROOM_BACK
+    DEKU_TREE_BASEMENT_TORCH_ROOM = RegionNames.DEKU_TREE_BASEMENT_TORCH_ROOM
+    DEKU_TREE_BASEMENT_BACK_LOBBY = RegionNames.DEKU_TREE_BASEMENT_BACK_LOBBY
+    DEKU_TREE_BASEMENT_BACK_ROOM = RegionNames.DEKU_TREE_BASEMENT_BACK_ROOM
+    DEKU_TREE_BASEMENT_UPPER = RegionNames.DEKU_TREE_BASEMENT_UPPER
+    DEKU_TREE_OUTSIDE_BOSS_ROOM = RegionNames.DEKU_TREE_OUTSIDE_BOSS_ROOM
+    DEKU_TREE_BOSS_ENTRYWAY = RegionNames.DEKU_TREE_BOSS_ENTRYWAY
+    DEKU_TREE_BOSS_EXIT = RegionNames.DEKU_TREE_BOSS_EXIT
+    DEKU_TREE_BOSS_ROOM = RegionNames.DEKU_TREE_BOSS_ROOM
 
 #TODO go through this and Locations for any that aren't needed or should be events
 #For any such entries, remove them from Items and Locations and add to Events. Also, set up event registration.

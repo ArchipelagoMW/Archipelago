@@ -33,7 +33,10 @@ from .Options import SohOptions
 from .Regions import region_data_table, reset_age_access, update_age_access
 from .Rules import get_soh_rule
 from .Enums import *
-from worlds.oot_soh.location_access.dungeons import dodongos_cavern
+from worlds.oot_soh.location_access.dungeons import \
+    dodongos_cavern, \
+    deku_tree
+
 
 import logging
 logger = logging.getLogger("SOH_OOT")
@@ -311,6 +314,7 @@ class SohWorld(World):
             self.multiworld.regions.append(region)
 
         dodongos_cavern.create_regions_and_rules(self)
+        deku_tree.create_regions_and_rules(self)
 
         # Create locations.
         for region_name, region_data in region_data_table.items():

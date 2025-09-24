@@ -383,3 +383,23 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
 
     # Default case - assume basic combat is sufficient
     return can_damage(state, world)
+
+
+def can_pass_enemy(state: CollectionState, world: "SohWorld", enemy: str) -> bool:
+    """Check if Link can pass by an enemy (usually by killing or stunning it)."""
+    return can_kill_enemy(state, world, enemy) # I think that we can be more permissive here, but for now this is fine
+
+
+def can_cut_shrubs(state: CollectionState, world: "SohWorld") -> bool:
+    """Check if Link can cut shrubs (grass, bushes)."""
+    return (can_use_sword(state, world) or
+            can_use(Items.BOOMERANG.value, state, world) or 
+            has_explosives(state, world) or
+            can_use(Items.GORONS_BRACELET.value, state, world) or
+            can_use(Items.MEGATON_HAMMER.value, state, world))
+
+
+def hookshot_or_boomerang(state: CollectionState, world: "SohWorld") -> bool:
+    """Check if Link has hookshot or boomerang."""
+    return (can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
+            can_use(Items.BOOMERANG.value, state, world))
