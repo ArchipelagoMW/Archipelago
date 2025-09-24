@@ -4,12 +4,17 @@ from .Enums import *
 from .Regions import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
 from worlds.oot_soh import SohWorld
 #Contains a set of helpers for access rules
+import logging
+logger = logging.getLogger("SOH_OOT.Logic")
 
 #TODO Some of this uses Item names that will likely move to the Events enum
 def HasItem(state: CollectionState, world: "SohWorld", itemName: str, count:int = 1, can_be_child: bool = True, can_be_adult: bool = True) -> bool:
     def has(name, count=1): 
-        if name in state.prog_items:
-            return state.has(name, world.player, count) #To shorten the many calls in this function
+        if name in state.prog_items[world.player]:
+            result = state.has(name, world.player, count) #To shorten the many calls in this function
+            if result:
+                logger.debug(f"We HasItem({name})")
+            return result
         return False
     def can_use(name, count=1):
         return CanUse(state, world, name, can_be_child, can_be_adult)

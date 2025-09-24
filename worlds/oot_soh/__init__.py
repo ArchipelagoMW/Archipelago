@@ -2,6 +2,7 @@ from typing import List, Dict, Any
 import math
 
 from BaseClasses import CollectionState, Item, Region, Tutorial
+from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table, filler_items, filler_bottles
 from .Locations import SohLocation, base_location_table, \
@@ -34,6 +35,9 @@ from .Rules import get_soh_rule
 from .Enums import *
 from worlds.oot_soh.location_access.dungeons import dodongos_cavern
 
+import logging
+logger = logging.getLogger("SOH_OOT")
+
 class SohWebWorld(WebWorld):
     theme = "ice"
     
@@ -61,7 +65,8 @@ class SohWorld(World):
     item_name_to_id = item_table
 
     def generate_early(self) -> None:
-        input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
+        #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
+        pass
 
     def create_item(self, name: str) -> SohItem:
         return SohItem(name, item_data_table[name].classification, item_data_table[name].item_id, self.player)
@@ -305,7 +310,6 @@ class SohWorld(World):
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
-        # todo: maybe easier to have region and rule making functions instead
         dodongos_cavern.create_regions_and_rules(self)
 
         # Create locations.
@@ -632,3 +636,10 @@ class SohWorld(World):
         #reset_age_access() #TODO pass the starting age option 
         #update_age_access(self, state)
         return super().remove(state, item)
+
+    def generate_output(self, output_directory: str):
+    
+        visualize_regions(self.multiworld.get_region(self.origin_region_name, self.player), f"SOH-Player{self.player}.puml",
+                        show_entrance_names=True,
+                        regions_to_highlight=self.multiworld.get_all_state(self.player).reachable_regions[
+                            self.player])
