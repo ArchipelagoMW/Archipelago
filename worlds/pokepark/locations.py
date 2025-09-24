@@ -1979,7 +1979,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ), each_zone=MultiZoneFlag.MULTI
     ),
     "Ice Zone Main Area - Corphish Power Competition -- Friendship": PokeparkLocationData(
-        208, PokeparkFlag.BATTLE, "Ice Zone Main Area", 0x0302, PokeparkFriendshipClientLocationData(
+        208, PokeparkFlag.BATTLE, "Ice Zone Lower Lift Area", 0x0302, PokeparkFriendshipClientLocationData(
             structure_position=48,
             memory_range=MemoryRange.BYTE
         ), each_zone=MultiZoneFlag.MULTI
@@ -2514,7 +2514,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Magma Zone Main Area - Flareon Power Competition -- Friendship": PokeparkLocationData(
-        284, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0402, PokeparkFriendshipClientLocationData(
+        284, PokeparkFlag.BATTLE, "Magma Zone Circle Area", 0x0402, PokeparkFriendshipClientLocationData(
             structure_position=41,
             memory_range=MemoryRange.BYTE
         ),
@@ -2661,7 +2661,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     # Rhyperior's Bumper Burn
-    # TODO Pikachu
+    #
     #
     #
     #
@@ -4380,7 +4380,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
         each_zone=MultiZoneFlag.SINGLE
     ),
-    "Corphish Power Competition -- Friendship": PokeparkLocationData(
+    "Corphish Power Competition -- Friendship": PokeparkLocationData(  # TODO beach zone corphish missing
         543, PokeparkFlag.BATTLE, "Corphish", 0x0000, PokeparkFriendshipClientLocationData(
             structure_position=48,
             memory_range=MemoryRange.BYTE

@@ -810,6 +810,19 @@ class PokeparkWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = self.options.as_dict(
             "goal",
+            "num_required_prisma_count_skygarden",
+            "remove_battle_power_comp_locations",
+            "remove_chase_power_comp_locations",
+            "remove_quiz_power_comp_locations",
+            "remove_hide_and_seek_power_comp_locations",
+            "remove_errand_power_comp_locations",
+            "remove_misc_power_comp_locations",
+            "remove_power_training_locations",
+            "remove_quest_locations",
+            "remove_attraction_locations",
+            "remove_attraction_prisma_locations",
+            "remove_pokemon_unlock_locations"
+
         )
         return slot_data
 

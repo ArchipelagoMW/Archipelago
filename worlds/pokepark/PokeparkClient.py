@@ -41,8 +41,21 @@ CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
 AP_VISITED_STAGE_NAMES_KEY_FORMAT = "pokepark_visited_stages_%i"
 
 STAGE_NAME_MAP = {
-    0x0101.to_bytes(2): "Meadow Zone Overworld",
+    0x0101.to_bytes(2): "Meadow Zone Main Area",
+    0x0102.to_bytes(2): "Meadow Zone Venusaur Area",
     0x0201.to_bytes(2): "Treehouse",
+    0x0301.to_bytes(2): "Beach Zone Main Area",
+    0x0302.to_bytes(2): "Ice Zone Main Area",
+    0x0303.to_bytes(2): "Ice Zone Empoleon Area",
+    0x0401.to_bytes(2): "Cavern Zone Main Area",
+    0x0402.to_bytes(2): "Magma Zone Main Area",
+    0x0403.to_bytes(2): "Magma Zone Blaziken Area",
+    0x0501.to_bytes(2): "Haunted Zone Main Area",
+    0x0502.to_bytes(2): "Haunted Zone Mansion Area",
+    0x0503.to_bytes(2): "Haunted Zone Rotom Area",
+    0x0601.to_bytes(2): "Granite Zone Main Area",
+    0x0602.to_bytes(2): "Flower Zone Main Area",
+    0x0701.to_bytes(2): "Skygarden",
 
 }
 
