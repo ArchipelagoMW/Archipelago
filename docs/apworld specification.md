@@ -44,8 +44,7 @@ There are also the following optional version fields (using the format `"1.0.0"`
 
 In the Archipelago Launcher, there is a "Build apworlds" component that will package all world folders to `.apworld`,
 and add `archipelago.json` manifest files to them.  
-This `archipelago.json` will contain the appropriate `version`, `compatible_version`, and `game` fields automatically
-(`game` is taken from your world class).
+This `archipelago.json` will automatically include the appropriate `version` and `compatible_version`.
 
 If a world folder has an `archipelago.json` in its root, any fields it contains will be carried over.  
 So, a world folder with an `archipelago.json` that looks like this:
