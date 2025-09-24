@@ -39,6 +39,7 @@ region_data_table: Dict[str, SohRegionData] = {
     Regions.DODONGOS_CAVERN_BOSS_AREA.value: SohRegionData([]),
     Regions.DODONGOS_CAVERN_BACK_ROOM.value: SohRegionData([]),
     Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BOSS_ROOM.value: SohRegionData([]),
     
     # Deku Tree regions
     Regions.DEKU_TREE_ENTRYWAY.value: SohRegionData(["Hyrule"]),

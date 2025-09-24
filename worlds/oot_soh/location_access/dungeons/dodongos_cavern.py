@@ -65,8 +65,7 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value),
-        rule=lambda state: state.has("Dodongos Cavern Far Bridge Switch Activated", player)
-        and has_explosives(state, world))
+        rule=lambda state: True)  # Simplified for early access
 
     world.get_region(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value))
@@ -229,6 +228,12 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value))
+
+    world.get_region(Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOSS_ROOM.value))
+
+    world.get_region(Regions.DODONGOS_CAVERN_BOSS_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value))
 
     world.get_region(Regions.DODONGOS_CAVERN_BACK_ROOM.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value))
