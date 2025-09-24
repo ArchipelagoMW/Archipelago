@@ -59,10 +59,10 @@ def set_region_rules(world: "SohWorld") -> None:
     world.get_region(Regions.DEKU_TREE_BASEMENT_LOWER.value).connect(
         world.get_region(Regions.DEKU_TREE_LOBBY.value))
 
-    # Basement Back Room access - simplified for early access
+
     world.get_region(Regions.DEKU_TREE_BASEMENT_LOWER.value).connect(
         world.get_region(Regions.DEKU_TREE_BASEMENT_BACK_ROOM.value),
-        rule=lambda state: has_fire_source_with_torch(state, world) or can_use(Items.FAIRY_BOW.value, state, world))  # Allow basic access
+        rule=lambda state: has_fire_source_with_torch(state, world) or can_use(Items.FAIRY_BOW.value, state, world))
 
     world.get_region(Regions.DEKU_TREE_BASEMENT_BACK_ROOM.value).connect(
         world.get_region(Regions.DEKU_TREE_BASEMENT_LOWER.value))
@@ -82,11 +82,9 @@ def set_region_rules(world: "SohWorld") -> None:
     world.get_region(Regions.DEKU_TREE_BOSS_ENTRYWAY.value).connect(
         world.get_region(Regions.DEKU_TREE_BASEMENT_UPPER.value))
 
-    # Boss entryway to boss room - simplified for early access
     world.get_region(Regions.DEKU_TREE_BOSS_ENTRYWAY.value).connect(
         world.get_region(Regions.DEKU_TREE_BOSS_ROOM.value),
-        # cpp logic: {return (logic->HasItem(RG_BRONZE_SCALE) || Here(RR_DEKU_TREE_OUTSIDE_BOSS_ROOM, []{return logic->CanUse(RG_IRON_BOOTS);})) && Here(RR_DEKU_TREE_OUTSIDE_BOSS_ROOM, []{return logic->CanReflectNuts();});}),
-        rule=lambda state: can_use(Items.IRON_BOOTS.value, state, world) or can_reflect_nuts(state, world) or can_use(Items.BRONZE_SCALE.value, state, world))
+        rule=lambda state: can_reflect_nuts(state, world))
 
     world.get_region(Regions.DEKU_TREE_BOSS_ROOM.value).connect(
         world.get_region(Regions.DEKU_TREE_BOSS_ENTRYWAY.value))
