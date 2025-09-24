@@ -29,12 +29,45 @@ The current format version has at minimum:
 }
 ```
 
-with the following optional version fields using the format `"1.0.0"` to represent major.minor.build:
+These three fields get automatically added to the `archipelago.json` of an .apworld if it is packaged using the
+["Build apworlds" launcher component](#build-apworlds-launcher-component),
+which is strongly recommended instead of trying to write these yourself.
+
+There are also the following optional version fields (using the format `"1.0.0"` to represent major.minor.build):
 * `minimum_ap_version` and `maximum_ap_version` - which if present will each be compared against the current
   Archipelago version respectively to filter those files from being loaded
 * `world_version` - an arbitrary version for that world in order to only load the newest valid world.
   An apworld without a world_version is always treated as older than one with a version
 
+These are for you to specify in the `archipelago.json` yourself. Read the next section for the recommended workflow.
+
+### "Build apworlds" Launcher Component
+
+In the Archipelago Launcher, there is a "Build apworlds" component that will package all world folders to `.apworld`,
+and add `archipelago.json` manifest files to them.  
+This `archipelago.json` will contain the appropriate `version`, `compatible_version`, and `game` fields automatically.
+
+If a world folder has an `archipelago.json` in its root, any fields it contains will be carried over.  
+So, a world folder with an `archipelago.json` that looks like this:
+
+```json
+{
+    "minimum_ap_version": "0.6.4"
+}
+```
+
+will be packaged into an `.apworld` with a manifest file inside of it that looks like this:
+
+```json
+{
+    "minimum_ap_version": "0.6.4"
+    "version": 6,
+    "compatible_version": 5,
+    "game": "Game Name"
+}
+```
+
+This is the recommended workflow for packaging your world to an `.apworld`.
 
 ## Extra Data
 
