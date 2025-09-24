@@ -14,7 +14,6 @@ from BaseClasses import CollectionState, Item, Location, LocationProgressType, M
 from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, flood_items, \
     parse_planned_blocks, distribute_planned_blocks, resolve_early_locations_for_planned
 from NetUtils import convert_to_base_types
-from Options import StartInventoryPool
 from Utils import __version__, output_path, restricted_dumps, version_tuple
 from settings import get_settings
 from worlds import AutoWorld
@@ -72,28 +71,9 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
     logger.info('')
 
+    multiworld.collect_starting_inventory()
+
     for player in multiworld.player_ids:
-        for item_name, count in multiworld.worlds[player].options.start_inventory.value.items():
-            for _ in range(count):
-                multiworld.push_precollected(multiworld.create_item(item_name, player))
-
-        for item_name, count in getattr(multiworld.worlds[player].options,
-                                        "start_inventory_from_pool",
-                                        StartInventoryPool({})).value.items():
-            for _ in range(count):
-                multiworld.push_precollected(multiworld.create_item(item_name, player))
-            # remove from_pool items also from early items handling, as starting is plenty early.
-            early = multiworld.early_items[player].get(item_name, 0)
-            if early:
-                multiworld.early_items[player][item_name] = max(0, early-count)
-                remaining_count = count-early
-                if remaining_count > 0:
-                    local_early = multiworld.local_early_items[player].get(item_name, 0)
-                    if local_early:
-                        multiworld.early_items[player][item_name] = max(0, local_early - remaining_count)
-                    del local_early
-            del early
-
         # items can't be both local and non-local, prefer local
         multiworld.worlds[player].options.non_local_items.value -= multiworld.worlds[player].options.local_items.value
         multiworld.worlds[player].options.non_local_items.value -= set(multiworld.local_early_items[player])
@@ -139,41 +119,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     AutoWorld.call_all(multiworld, "connect_entrances")
     AutoWorld.call_all(multiworld, "generate_basic")
 
-    # remove starting inventory from pool items.
-    # Because some worlds don't actually create items during create_items this has to be as late as possible.
-    fallback_inventory = StartInventoryPool({})
-    depletion_pool: dict[int, dict[str, int]] = {
-        player: getattr(multiworld.worlds[player].options, "start_inventory_from_pool", fallback_inventory).value.copy()
-        for player in multiworld.player_ids
-    }
-    target_per_player = {
-        player: sum(target_items.values()) for player, target_items in depletion_pool.items() if target_items
-    }
-
-    if target_per_player:
-        new_itempool: list[Item] = []
-
-        # Make new itempool with start_inventory_from_pool items removed
-        for item in multiworld.itempool:
-            if depletion_pool[item.player].get(item.name, 0):
-                depletion_pool[item.player][item.name] -= 1
-            else:
-                new_itempool.append(item)
-
-        # Create filler in place of the removed items, warn if any items couldn't be found in the multiworld itempool
-        for player, target in target_per_player.items():
-            unfound_items = {item: count for item, count in depletion_pool[player].items() if count}
-
-            if unfound_items:
-                player_name = multiworld.get_player_name(player)
-                logger.warning(f"{player_name} tried to remove items from their pool that don't exist: {unfound_items}")
-
-            needed_items = target_per_player[player] - sum(unfound_items.values())
-            new_itempool += [multiworld.worlds[player].create_filler() for _ in range(needed_items)]
-
-        assert len(multiworld.itempool) == len(new_itempool), "Item Pool amounts should not change."
-        multiworld.itempool[:] = new_itempool
-
+    multiworld.remove_starting_inventory_from_pool()
     multiworld.link_items()
 
     if any(world.options.item_links for world in multiworld.worlds.values()):
