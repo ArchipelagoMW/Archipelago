@@ -40,32 +40,37 @@ def set_region_rules(world: "SohWorld") -> None:
 
     double_link_regions(world, Regions.DEKU_TREE_ENTRYWAY.value, Regions.DEKU_TREE_LOBBY.value)
 
+    # Slingshot Room access requires shield
     world.get_region(Regions.DEKU_TREE_LOBBY.value).connect(
-        world.get_region(Regions.DEKU_TREE_SLINGSHOT_ROOM.value))
+        world.get_region(Regions.DEKU_TREE_SLINGSHOT_ROOM.value),
+        rule=lambda state: can_shield(state, world))
 
     world.get_region(Regions.DEKU_TREE_SLINGSHOT_ROOM.value).connect(
         world.get_region(Regions.DEKU_TREE_LOBBY.value))
 
-    world.get_region(Regions.DEKU_TREE_LOBBY.value).connect(
-        world.get_region(Regions.DEKU_TREE_COMPASS_ROOM.value))
+    # Compass Room - simple access from lobby
+    double_link_regions(world, Regions.DEKU_TREE_LOBBY.value, Regions.DEKU_TREE_COMPASS_ROOM.value)
 
-    world.get_region(Regions.DEKU_TREE_COMPASS_ROOM.value).connect(
-        world.get_region(Regions.DEKU_TREE_LOBBY.value))
-
+    # Basement access requires ability to deal with enemies or adult
     world.get_region(Regions.DEKU_TREE_LOBBY.value).connect(
-        world.get_region(Regions.DEKU_TREE_BASEMENT_LOWER.value))
+        world.get_region(Regions.DEKU_TREE_BASEMENT_LOWER.value),
+        rule=lambda state: is_adult(state, world) or can_attack(state, world) or can_use(Items.NUTS.value, state, world))
 
     world.get_region(Regions.DEKU_TREE_BASEMENT_LOWER.value).connect(
         world.get_region(Regions.DEKU_TREE_LOBBY.value))
 
+    # Basement Upper access requires adult or specific logic
     world.get_region(Regions.DEKU_TREE_BASEMENT_LOWER.value).connect(
-        world.get_region(Regions.DEKU_TREE_BASEMENT_UPPER.value))
+        world.get_region(Regions.DEKU_TREE_BASEMENT_UPPER.value),
+        rule=lambda state: is_adult(state, world))
 
     world.get_region(Regions.DEKU_TREE_BASEMENT_UPPER.value).connect(
         world.get_region(Regions.DEKU_TREE_BASEMENT_LOWER.value))
 
+    # Boss room access requires fire source or bow
     world.get_region(Regions.DEKU_TREE_BASEMENT_UPPER.value).connect(
-        world.get_region(Regions.DEKU_TREE_BOSS_ROOM.value))
+        world.get_region(Regions.DEKU_TREE_BOSS_ROOM.value),
+        rule=lambda state: has_fire_source_with_torch(state, world) or can_use(Items.PROGRESSIVE_BOW.value, state, world))
 
 
 

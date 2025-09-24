@@ -2,12 +2,12 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Region
 from worlds.generic.Rules import set_rule
-
+from worlds.oot_soh.Regions import double_link_regions
 from worlds.oot_soh.Items import SohItem
 from worlds.oot_soh.Locations import SohLocation, SohLocationData, base_location_table
 from worlds.oot_soh.Enums import Regions, Items, Locations
 from worlds.oot_soh.Rules import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
-                                  has_fire_source_with_torch, can_use, can_do_trick, can_jump_slash)
+                                  has_fire_source_with_torch, can_use, can_do_trick, can_jump_slash, blast_or_smash)
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
@@ -40,16 +40,12 @@ def create_regions_and_rules(world: "SohWorld") -> None:
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
 
-    world.get_region(Regions.DODONGOS_CAVERN_ENTRYWAY.value).connect(
-        world.get_region(Regions.DODONGOS_CAVERN_BEGINNING.value))
+    double_link_regions(world, Regions.DODONGOS_CAVERN_ENTRYWAY.value, Regions.DODONGOS_CAVERN_BEGINNING.value)
 
-    world.get_region(Regions.DODONGOS_CAVERN_BEGINNING.value).connect(
-        world.get_region(Regions.DODONGOS_CAVERN_ENTRYWAY.value))
-
+    # Entry to main lobby requires breaking mud walls or strength upgrade
     world.get_region(Regions.DODONGOS_CAVERN_BEGINNING.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value),
-        rule=lambda state: can_break_mud_walls(state, world)
-        or state.has(Items.STRENGTH_UPGRADE.value, player))
+        rule=lambda state: blast_or_smash(state, world) or state.has(Items.STRENGTH_UPGRADE.value, player))
 
     world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BEGINNING.value))
@@ -87,13 +83,9 @@ def set_region_rules(world: "SohWorld") -> None:
         or can_attack(state, world)
         or (take_damage(state, world) and can_shield(state, world)))
 
-    world.get_region(Regions.DODONGOS_CAVERN_SE_CORRIDOR.value).connect(
-        world.get_region(Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value))
+    double_link_regions(world, Regions.DODONGOS_CAVERN_SE_CORRIDOR.value, Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value)
 
     world.get_region(Regions.DODONGOS_CAVERN_SE_ROOM.value).connect(
-        world.get_region(Regions.DODONGOS_CAVERN_SE_CORRIDOR.value))
-
-    world.get_region(Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_SE_CORRIDOR.value))
 
     world.get_region(Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value).connect(
@@ -220,10 +212,10 @@ def set_region_rules(world: "SohWorld") -> None:
         world.get_region(Regions.DODONGOS_CAVERN_FAR_BRIDGE.value))
 
     world.get_region(Regions.DODONGOS_CAVERN_FAR_BRIDGE.value).connect(
-        world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value))
+        world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value))
 
     world.get_region(Regions.DODONGOS_CAVERN_FAR_BRIDGE.value).connect(
-        world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value))
+        world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value))
 
     world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value))
@@ -234,6 +226,9 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value))
+
+    world.get_region(Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value))
 
     world.get_region(Regions.DODONGOS_CAVERN_BACK_ROOM.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value))
