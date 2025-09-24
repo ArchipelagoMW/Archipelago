@@ -6,6 +6,7 @@ from .test_base import Sc2SetupTestBase
 from .. import MissionFlag
 from ..item import item_tables, item_names
 from BaseClasses import ItemClassification
+from .. import options
 
 class TestCustomMissionOrders(Sc2SetupTestBase):
     def test_mini_wol_generates(self):
@@ -138,6 +139,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
         test_item = item_names.ZERGLING_METABOLIC_BOOST
         world_options = {
             'mission_order': 'custom',
+            'enabled_campaigns': set(options.EnabledCampaigns.valid_keys),
             'start_inventory': { test_item: 1 },
             'custom_mission_order': {
                 'test': {
@@ -165,6 +167,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
         test_item = item_names.ZERGLING_METABOLIC_BOOST
         world_options = {
             'mission_order': 'custom',
+            'enabled_campaigns': set(options.EnabledCampaigns.valid_keys),
             'start_inventory': { test_item: 1 },
             'locked_items': { test_item: 1 },
             'custom_mission_order': {
