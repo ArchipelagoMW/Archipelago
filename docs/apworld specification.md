@@ -39,7 +39,8 @@ There are also the following optional version fields (using the format `"1.0.0"`
 * `world_version` - an arbitrary version for that world in order to only load the newest valid world.
   An apworld without a world_version is always treated as older than one with a version
 
-These are for you to specify in the `archipelago.json` yourself. Read the next section for the recommended workflow.
+These are for you to specify in the `archipelago.json` yourself.
+Read the ["Build apworlds" launcher component](#build-apworlds-launcher-component) section for the recommended workflow.
 
 ### "Build apworlds" Launcher Component
 
