@@ -12,12 +12,11 @@ from flask import flash, redirect, render_template, request, session, url_for
 from pony.orm import commit, db_session
 
 from BaseClasses import get_seed, seeddigits
-from Generate import PlandoOptions, handle_name
+from Generate import PlandoOptions, handle_name, mystery_argparse
 from Main import main as ERmain
 from Utils import __version__, restricted_dumps
 from WebHostLib import app
 from settings import ServerOptions, GeneratorOptions
-from worlds.alttp.EntranceRandomizer import parse_arguments
 from .check import get_yaml_data, roll_options
 from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
 from .upload import upload_zip_to_db
@@ -129,36 +128,39 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
 
         seedname = "W" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
 
-        erargs = parse_arguments(['--multi', str(playercount)])
-        erargs.seed = seed
-        erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
-        erargs.spoiler = meta["generator_options"].get("spoiler", 0)
-        erargs.race = race
-        erargs.outputname = seedname
-        erargs.outputpath = target.name
-        erargs.teams = 1
-        erargs.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
-                                                                       {"bosses", "items", "connections", "texts"}))
-        erargs.skip_prog_balancing = False
-        erargs.skip_output = False
-        erargs.spoiler_only = False
-        erargs.csv_output = False
+        args = mystery_argparse()
+        args.multi = playercount
+        args.seed = seed
+        args.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
+        args.spoiler = meta["generator_options"].get("spoiler", 0)
+        args.race = race
+        args.outputname = seedname
+        args.outputpath = target.name
+        args.teams = 1
+        args.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
+                                                                     {"bosses", "items", "connections", "texts"}))
+        args.skip_prog_balancing = False
+        args.skip_output = False
+        args.spoiler_only = False
+        args.csv_output = False
+        args.sprite = dict.fromkeys(range(1, args.multi+1), None)
+        args.sprite_pool = dict.fromkeys(range(1, args.multi+1), None)
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):
             for k, v in settings.items():
                 if v is not None:
-                    if hasattr(erargs, k):
-                        getattr(erargs, k)[player] = v
+                    if hasattr(args, k):
+                        getattr(args, k)[player] = v
                     else:
-                        setattr(erargs, k, {player: v})
+                        setattr(args, k, {player: v})
 
-            if not erargs.name[player]:
-                erargs.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
-            erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
-        if len(set(erargs.name.values())) != len(erargs.name):
-            raise Exception(f"Names have to be unique. Names: {Counter(erargs.name.values())}")
-        ERmain(erargs, seed, baked_server_options=meta["server_options"])
+            if not args.name[player]:
+                args.name[player] = os.path.splitext(os.path.split(playerfile)[-1])[0]
+            args.name[player] = handle_name(args.name[player], player, name_counter)
+        if len(set(args.name.values())) != len(args.name):
+            raise Exception(f"Names have to be unique. Names: {Counter(args.name.values())}")
+        ERmain(args, seed, baked_server_options=meta["server_options"])
 
         return upload_to_db(target.name, sid, owner, race)
     thread_pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
