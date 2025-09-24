@@ -29,8 +29,9 @@ The current format version has at minimum:
 }
 ```
 
-The `version` and `compatible_version` fields get automatically added to the `archipelago.json`
-of an .apworld if it is packaged using the ["Build apworlds" launcher component](#build-apworlds-launcher-component),
+The `version` and `compatible_version` fields refer to Archipelago's internal file packaging scheme
+and get automatically added to the `archipelago.json` of an .apworld if it is packaged using the 
+["Build apworlds" launcher component](#build-apworlds-launcher-component),
 which is strongly recommended instead of trying to write these yourself.  
 The `game` field should be present in any handwritten apworld manifest files.
 
