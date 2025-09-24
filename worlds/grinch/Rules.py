@@ -4,6 +4,7 @@ import Utils
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule
+from .Items import *
 
 #Adds all rules from access_rules_dict to locations
 def set_location_rules(world: World):
@@ -89,71 +90,71 @@ rules_dict: dict[str,list[list[str]]] = {
         ["Painting Bucket"]
     ],
     "WV - Launching Eggs Into Houses": [
-        ["Rotten Egg Launcher"]
+        [REL]
     ],
     "WV - City Hall - Modifying The Mayor's Statue": [
         ["Sculpting Tools"]
     ],
     "WV - Clock Tower - Advancing The Countdown-To-Xmas Clock": [
-        ["Hammer", "Rocket Spring"]
+        ["Hammer", RS]
     ],
     "WV - Squashing All Gifts": [
-        ["Grinch Copter", "Slime Shooter", "Rotten Egg Launcher", "Who Cloak", "Rocket Spring"]
+        [GC, SS, REL, "Who Cloak", RS]
     ],
     "WF - Making Xmas Trees Droop": [
-        ["Rotten Egg Launcher"]
+        [REL]
     ],
     "WF - Sabotaging Snow Cannon With Glue": [
-        ["Glue Bucket", "Rocket Spring"],
-        ["Glue Bucket", "Grinch Copter"]
+        ["Glue Bucket", RS],
+        ["Glue Bucket", GC]
     ],
     "WF - Putting Beehives In Cabins": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WF - Ski Resort - Sliming The Mayor's Skis": [
-        ["Slime Shooter", "Rotten Egg Launcher"]
+        [SS, REL]
     ],
     "WF - Civic Center - Replacing The Candles On The Cake With Fireworks": [
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Rotten Egg Launcher", "Octopus Climbing Device", "Rocket Spring"]
+        [REL, GC],
+        [REL, OCD, RS]
     ],
     "WF - Squashing All Gifts": [
-        ["Grinch Copter", "Cable Car Access Card", "Slime Shooter", "Rotten Egg Launcher"],
-        ["Octopus Climbing Device", "Rocket Spring", "Cable Car Access Card", "Slime Shooter", "Rotten Egg Launcher"]
+        [GC, "Cable Car Access Card", SS, REL],
+        [OCD, RS, "Cable Car Access Card", SS, REL]
     ],
     "WD - Stealing Food From Birds": [
-        ["Rocket Spring", "Rotten Egg Launcher"]
+        [RS, REL]
     ],
     "WD - Feeding The Computer With Robot Parts": [
-        ["Rocket Spring", "Rotten Egg Launcher"]
+        [RS, REL]
     ],
     "WD - Infesting The Mayor's House With Rats": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WD - Conducting The Stinky Gas To Who-Bris' Shack": [
-        ["Rocket Spring", "Rotten Egg Launcher"]
+        [RS, REL]
     ],
     "WD - Minefield - Shaving Who Dump Guardian": [
-        ["Scissors", "Grinch Copter"],
-        ["Scissors", "Slime Shooter", "Rocket Spring"]
+        ["Scissors", GC],
+        ["Scissors", SS, RS]
     ],
     "WD - Generator Building - Short-Circuiting Power-Plant": [
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
+        [REL, GC],
+        [REL, OCD, SS, RS]
     ],
     "WD - Squashing All Gifts": [
-        ["Grinch Copter", "Rocket Spring", "Slime Shooter", "Rotten Egg Launcher"],
-        ["Octopus Climbing Device", "Rocket Spring", "Slime Shooter", "Rotten Egg Launcher"]
+        [GC, RS, SS, REL],
+        [OCD, RS, SS, REL]
     ],
     "WL - South Shore - Putting Thistles In Shorts": [
-        ["Rotten Egg Launcher", "Octopus Climbing Device"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, OCD],
+        [REL, GC]
     ],
     "WL - South Shore - Sabotaging The Tents": [
-        ["Octopus Climbing Device", "Rocket Spring"],
-        ["Grinch Copter"]
+        [OCD, RS],
+        [GC]
     ],
     "WL - North Shore - Drilling Holes In Canoes": [
         ["Drill"]
@@ -163,11 +164,11 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "WL - Mayor's Villa - Hooking The Mayor's Bed To The Motorboat": [
-        ["Rope", "Hook", "Rotten Egg Launcher", "Scout Clothes"]
+        ["Rope", "Hook", REL, "Scout Clothes"]
     ],
     "WL - Squashing All Gifts": [
-        ["Grinch Copter", "Marine Mobile", "Scout Clothes", "Rotten Egg Launcher", "Hook", "Rope"],
-        ["Octopus Climbing Device", "Rocket Spring", "Marine Mobile", "Scout Clothes", "Rotten Egg Launcher", "Hook", "Rope"]
+        [GC, MM, "Scout Clothes", REL, "Hook", "Rope"],
+        [OCD, RS, MM, "Scout Clothes", REL, "Hook", "Rope"]
     ],
     "WV - Binoculars BP on Post Office Roof": [
         []
@@ -220,88 +221,88 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "WF - RS BP on Tree House": [
-        ["Rotten Egg Launcher"],
-        ["Grinch Copter"]
+        [REL],
+        [GC]
     ],
     "WF - SS BP in Branch Platform Elevated House": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WF - SS BP in Branch Platform House next to Beast": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WF - SS BP in House in front of Civic Center Cave": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WF - SS BP in House next to Tree House": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WF - SS BP in House across from Tree House": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WF - SS BP in 2nd House near Vacuum Tube Right Side": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WF - SS BP in 2nd House near Vacuum Tube Left Side": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WF - SS BP in 2nd House near Vacuum Tube inbetween Blueprints": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WF - SS BP in House near Vacuum Tube": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WD - OCD BP inside Middle Pipe": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Slime Shooter", "Rocket Spring"],
-        ["Slime Shooter", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC],
+        [SS, RS],
+        [SS, GC]
     ],
     "WD - OCD BP inside Right Pipe": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WD - OCD BP in Vent to Mayor's House": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "WD - OCD BP inside Left Pipe": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Slime Shooter", "Rocket Spring"],
-        ["Slime Shooter", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC],
+        [SS, RS],
+        [SS, GC]
     ],
     "WD - OCD BP near Right Side of Power Plant Wall": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Slime Shooter", "Rocket Spring"],
-        ["Slime Shooter", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC],
+        [SS, RS],
+        [SS, GC]
     ],
     "WD - OCD BP near Who-Bris' Shack": [
-        ["Rotten Egg Launcher", "Rocket Spring"]
+        [REL, RS]
     ],
     "WD - Minefield - OCD BP on Left Side of House": [
         []
-        # ["Rotten Egg Launcher", "Grinch Copter"],
-        # ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
+        # [REL, GC],
+        # [REL, SS, RS]
         # ["Max"]
     ],
     "WD - Minefield - OCD BP on Right Side of Shack": [
-        ["Grinch Copter"],
-        ["Slime Shooter", "Rocket Spring"]
+        [GC],
+        [SS, RS]
     ],
     "WD - Minefield - OCD BP inside Guardian's House": [
         []
-        # ["Rotten Egg Launcher", "Grinch Copter"],
-        # ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
+        # [REL, GC],
+        # [REL, SS, RS]
         # ["Max"]
     ],
     "WL - South Shore - MM BP on Bridge to Scout's Hut": [
@@ -317,20 +318,20 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "WL - South Shore - MM BP on Scout's Hut Roof": [
-        ["Rocket Spring"],
-        ["Grinch Copter"]
+        [RS],
+        [GC]
     ],
     "WL - South Shore - MM BP on Grass Platform": [
-        ["Rocket Spring"],
-        ["Grinch Copter"]
+        [RS],
+        [GC]
     ],
     "WL - South Shore - MM BP across Zipline Platform": [
-        ["Rocket Spring", "Octopus Climbing Device"],
-        ["Grinch Copter"]
+        [RS, OCD],
+        [GC]
     ],
     "WL - South Shore - MM BP behind Summer Beast": [
-        ["Rotten Egg Launcher", "Octopus Climbing Device"],
-        ["Grinch Copter"]
+        [REL, OCD],
+        [GC]
     ],
     "WL - North Shore - MM BP below Bridge": [
         []
@@ -365,11 +366,11 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "WV - Clock Tower - GC BP in Bedroom": [
-        ["Rocket Spring"]
-    #   ["Max", "Rocket Spring"]
+        [RS]
+    #   ["Max", RS]
     ],
     "WV - Clock Tower - GC BP in Bell Room": [
-        ["Rocket Spring"]
+        [RS]
     ],
     "WF - Ski Resort - GC BP inside Dog's Fence": [
         []
@@ -379,53 +380,53 @@ rules_dict: dict[str,list[list[str]]] = {
         # ["Max"]
     ],
     "WF - Civic Center - GC BP on Left Side in Bat Cave Wall": [
-        ["Grinch Copter"],
-        ["Octopus Climbing Device", "Rocket Spring"]
+        [GC],
+        [OCD, RS]
     ],
     "WF - Civic Center - GC BP in Frozen Ice": [
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Rotten Egg Launcher", "Octopus Climbing Device", "Rocket Spring"],
-        ["Slime Shooter", "Grinch Copter"],
-        ["Slime Shooter", "Octopus Climbing Device", "Rocket Spring"]
+        [REL, GC],
+        [REL, OCD, RS],
+        [SS, GC],
+        [SS, OCD, RS]
     ],
     "WD - Power Plant - GC BP in Max Cave": [
         []
         # ["Max"]
     ],
     "WD - Power Plant - GC BP After First Gate": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Grinch Copter"]
-    #   ["Max", "Rotten Egg Launcher", "Rocket Spring"]
+        [REL, RS],
+        [GC]
+    #   ["Max", REL, RS]
     ],
     "WD - Generator Building - GC BP on the Highest Platform": [
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
+        [REL, GC],
+        [REL, OCD, SS, RS]
     ],
     "WD - Generator Building - GC BP at the Entrance after Mission Completion": [
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
+        [REL, GC],
+        [REL, OCD, SS, RS]
     ],
     "WL - Submarine World - GC BP Just Below Water Surface": [
-        ["Marine Mobile"]
+        [MM]
     ],
     "WL - Submarine World - GC BP Underwater": [
-        ["Marine Mobile"]
+        [MM]
     ],
     "WL - Mayor's Villa - GC BP on Tree Branch": [
-        ["Grinch Copter"],
-        ["Rotten Egg Launcher", "Rocket Spring"]
+        [GC],
+        [REL, RS]
     ],
     "WL - Mayor's Villa - GC BP in Pirate's Cave": [
-        ["Grinch Copter"],
-        ["Rotten Egg Launcher", "Rocket Spring"]
+        [GC],
+        [REL, RS]
     ],
     "MC - Sleigh Ride - Stealing All Gifts": [
         # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
-        ["Rotten Egg Launcher", "Who Forest Vacuum Tube", "Who Dump Vacuum Tube", "Who Lake Vacuum Tube", "Rocket Spring", "Marine Mobile"]
+        [REL, "Who Forest Vacuum Tube", "Who Dump Vacuum Tube", "Who Lake Vacuum Tube", RS, MM]
     ],
     "MC - Sleigh Ride - Neutralizing Santa": [
         # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
-        ["Rotten Egg Launcher", "Who Forest Vacuum Tube", "Who Dump Vacuum Tube", "Who Lake Vacuum Tube", "Rocket Spring", "Marine Mobile"]
+        [REL, "Who Forest Vacuum Tube", "Who Dump Vacuum Tube", "Who Lake Vacuum Tube", RS, MM]
     ],
     "WV - Post Office - Heart of Stone": [
         []
@@ -434,8 +435,8 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "WD - Minefield - Heart of Stone": [
-        ["Grinch Copter"],
-        ["Rotten Egg Launcher", "Slime Shooter", "Rocket Spring"]
+        [GC],
+        [REL, SS, RS]
     ],
     "WL - North Shore - Heart of Stone": [
         []
@@ -478,19 +479,19 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "WV - Exhaust Pipes": [
-        ["Rotten Egg Launcher"]
+        [REL]
     ],
     "WF - Skis": [
         ["Who Forest Vacuum Tube"]
     ],
     "WD - Tires": [
-        ["Who Dump Vacuum Tube", "Rocket Spring", "Rotten Egg Launcher"]
+        ["Who Dump Vacuum Tube", RS, REL]
     ],
     "WL - Submarine World - Twin-End Tuba": [
-        ["Who Lake Vacuum Tube", "Marine Mobile"]
+        ["Who Lake Vacuum Tube", MM]
     ],
     "WL - South Shore - GPS": [
-        ["Who Lake Vacuum Tube", "Rotten Egg Launcher"]
+        ["Who Lake Vacuum Tube", REL]
     ],
     "MC - 1st Crate Squashed": [
         []
@@ -514,7 +515,7 @@ rules_dict: dict[str,list[list[str]]] = {
     #     []
     # ],
     # "Pink Present": [
-    #     ["Rotten Egg Launcher"],
+    #     [REL],
     #     ["Pancake"]
     # ],
     # "Yellow Present": [
@@ -532,7 +533,7 @@ access_rules_dict: dict[str,list[list[str]]] = {
         ["Who Cloak"]
     ],
     "City Hall": [
-        ["Rotten Egg Launcher"]
+        [REL]
     ],
     "Clock Tower": [
         []
@@ -545,33 +546,33 @@ access_rules_dict: dict[str,list[list[str]]] = {
         ["Cable Car Access Card"]
     ],
     "Civic Center": [
-        ["Grinch Copter"],
-        ["Octopus Climbing Device"]
+        [GC],
+        [OCD]
     ],
     "Who Dump": [
         ["Who Dump Vacuum Tube"],
         # ["Progressive Vacuum Tube": 2]
     ],
     "Minefield": [
-        ["Rotten Egg Launcher", "Rocket Spring"],
-        ["Rotten Egg Launcher", "Grinch Copter"]
+        [REL, RS],
+        [REL, GC]
     ],
     "Power Plant": [
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Slime Shooter", "Grinch Copter"],
-        ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
+        [REL, GC],
+        [SS, GC],
+        [REL, OCD, SS, RS]
     ],
     "Generator Building": [
-        ["Rotten Egg Launcher", "Grinch Copter"],
-        ["Rotten Egg Launcher", "Octopus Climbing Device", "Slime Shooter", "Rocket Spring"]
+        [REL, GC],
+        [REL, OCD, SS, RS]
     ],
     "Who Lake": [
         ["Who Lake Vacuum Tube"],
         # ["Progressive Vacuum Tube": 3]
     ],
     "Scout's Hut": [
-        ["Grinch Copter"],
-        ["Rocket Spring"]
+        [GC],
+        [RS]
     ],
     "North Shore": [
         ["Scout Clothes"]
@@ -580,7 +581,7 @@ access_rules_dict: dict[str,list[list[str]]] = {
         ["Scout Clothes"]
     ],
     "Submarine World": [
-        ["Marine Mobile"]
+        [MM]
     ],
     "Sleigh Room": [
         ["Sleigh Room Key"]

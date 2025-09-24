@@ -35,6 +35,24 @@ def get_item_names_per_category() -> dict[str, set[str]]:
 
     return categories
 
+REL: str = "Rotten Egg Launcher"
+RS: str = "Rocket Spring"
+SS: str = "Slime Shooter"
+OCD: str = "Octopus Climbing Device"
+MM: str = "Marine Mobile"
+GC: str = "Grinch Copter"
+WV: str = "Whoville Vacuum Tube"
+WF: str = "Who Forest Vacuum Tube"
+WD: str = "Who Dump Vacuum Tube"
+WL: str = "Who Lake Vacuum Tube"
+PVT: str = "Progressive Vacuum Tube"
+PC: str = "Pancake"
+SR: str = "Sleigh Room Key"
+BB: str = "Bad Breath"
+PNP: str = "Push & Pull"
+M: str = "Max"
+TT: str = "Tip Toe"
+
 #Gadgets
 #All gadgets require at least 4 different blueprints to be unlocked in the computer in Mount Crumpit.
 GADGETS_TABLE: dict[str, GrinchItemData] = {
