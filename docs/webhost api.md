@@ -24,13 +24,21 @@ Current endpoints:
     - [`/get_rooms`](#getrooms)
     - [`/get_seeds`](#getseeds)
 
+## API Data Caching
+To reduce the strain on an Archipelago WebHost, many API endpoints will cache their data and only poll new data in timed intervals. Each endpoint has their own caching time related to the type of data being served. More dynamic data is refreshed more frequently, while static data is cached for longer.  
+Each API endpoint will have their "Cache timer" listed under their definition (if any).
+API calls to these endpoints should not be faster than the listed timer. This will result in wasted processing for your client and (more importantly) the Archipelago WebHost, as the data will not be refreshed by the WebHost until the internal timer has elapsed.
+
 
 ## Datapackage Endpoints
 These endpoints are used by applications to acquire a room's datapackage, and validate that they have the correct datapackage for use. Datapackages normally include, item IDs, location IDs, and name groupings, for a given room, and are essential for mapping IDs received from Archipelago to their correct items or locations.
 
 ### `/datapackage`
 <a name="datapackage"></a>
+
 Fetches the current datapackage from the WebHost.  
+**Cache timer: None**
+
 You'll receive a dict named `games` that contains a named dict of every game and its data currently supported by Archipelago.  
 Each game will have:
 - A checksum `checksum`
@@ -76,7 +84,10 @@ Example:
 
 ### `/datapackage/<string:checksum>`
 <a name="datapackagestringchecksum"></a>
-Fetches a single datapackage by checksum.
+
+Fetches a single datapackage by checksum.  
+**Cache timer: 3600 seconds**
+
 Returns a dict of the game's data with:
 - A checksum `checksum`
 - A dict of item groups `item_name_groups`
@@ -88,7 +99,10 @@ Its format will be identical to the whole-datapackage endpoint (`/datapackage`),
 
 ### `/datapackage_checksum`
 <a name="datapackagechecksum"></a>
-Fetches the checksums of the current static datapackages on the WebHost.
+
+Fetches the checksums of the current static datapackages on the WebHost.  
+**Cache timer: None**
+
 You'll receive a dict with `game:checksum` key-value pairs for all the current officially supported games.  
 Example:
 ```json
@@ -108,6 +122,7 @@ These endpoints are used internally for the WebHost to generate games and valida
 <a name="generate"></a>
 Submits a game to the WebHost for generation.  
 **This endpoint only accepts a POST HTTP request.**  
+**Cache timer: None**
 
 There are two ways to submit data for generation: With a file and with JSON.
 
@@ -172,6 +187,8 @@ In the event of an unhandled server exception, you'll be provided a dict with a 
 ### `/status/<suuid:seed>`
 <a name="status"></a>
 Retrieves the status of the seed's generation.  
+**Cache timer: None**
+
 This endpoint will return a dict with a single key-value pair. The key will always be `text`  
 The value will tell you the status of the generation:
 - Generation was completed: `Generation done` with a 201 status code
@@ -184,6 +201,8 @@ Endpoints to fetch information of the active WebHost room with the supplied room
 
 ### `/room_status/<suuid:room_id>`  
 <a name="roomstatus"></a>
+**Cache timer: None**
+
 Will provide a dict of room data with the following keys:
 - Tracker SUUID (`tracker`)
 - A list of players (`players`)
@@ -254,6 +273,8 @@ can either be viewed while on a room tracker page, or from the [room's endpoint]
 
 ### `/tracker/<suuid:tracker>`
 <a name=tracker></a>
+**Cache timer: 60 seconds**
+
 Will provide a dict of tracker data with the following keys:
 
 - A list of players current alias data (`aliases`)
@@ -391,6 +412,8 @@ Example:
 
 ### `/static_tracker/<suuid:tracker>`
 <a name=statictracker></a>
+**Cache timer: 300 seconds**
+
 Will provide a dict of static tracker data with the following keys:
 
 - A list of item_link groups and their member players (`groups`)
@@ -436,7 +459,9 @@ Example:
 
 ### `/slot_data_tracker/<suuid:tracker>`
 <a name=slotdatatracker></a>
-Will provide a list of each player's slot_data.
+Will provide a list of each player's slot_data.  
+**Cache timer: 300 seconds**
+
 Each list item will contain a dict with the player's data:
 - player slot number `player`
 - A named dict `slot_data` containing any set slot data for that player
@@ -467,6 +492,8 @@ User endpoints can get room and seed details from the current session tokens (co
 ### `/get_rooms`  
 <a name="getrooms"></a>
 Retreives a list of all rooms currently owned by the session token.  
+**Cache timer: None**
+
 Each list item will contain a dict with the room's details:
 - Room SUUID (`room_id`)
 - Seed SUUID (`seed_id`)
@@ -503,6 +530,8 @@ Example:
 ### `/get_seeds`  
 <a name="getseeds"></a>
 Retreives a list of all seeds currently owned by the session token.  
+**Cache timer: None**
+
 Each item in the list will contain a dict with the seed's details:
 - Seed SUUID (`seed_id`)
 - Creation timestamp (`creation_time`)
