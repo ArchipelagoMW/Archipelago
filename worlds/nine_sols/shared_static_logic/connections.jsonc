@@ -694,6 +694,11 @@
     { "from": "GoSW - Cixing Arena", "to": "GoSW - Lower Left Transporter", "requires": [ { "anyOf": [
         { "item": "Air Dash" }, { "item": "Cloud Leap" }
     ] } ] }, // grapple AND (AD OR DJ)
+    { "from": "GoSW - Lower Left Transporter", "to": "GoSW - Cixing Arena", "requires": [
+        { "item": "Cloud Leap" } // the first rope after transporter hard requires CL,
+        // middle -> right rope over the spikes doesn't work for me with AD alone (even though the reverse does),
+        // and finally no grapple in this direction
+    ] },
     // And since these are also simple and isolated, we'll do the Lear's grave stuff next
     { "from": "GoSW - Cixing Arena", "to": "GoSW - Lear's Grave", "requires": [
         // to activate the door and force Cixing to spawn in defense
