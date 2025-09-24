@@ -1,5 +1,6 @@
 from enum import Enum
-class RegionNames:
+
+class Regions(str, Enum):
     """Region names for the Ship of Harkinian randomizer"""
     
     # Core regions
@@ -93,30 +94,6 @@ class RegionNames:
     DODONGOS_CAVERN_MQ_BEHIND_MOUTH = "Dodongos Cavern MQ Behind Mouth"
     DODONGOS_CAVERN_MQ_BACK_BEHIND_FIRE = "Dodongos Cavern MQ Back Behind Fire"
     DODONGOS_CAVERN_MQ_BACK_SWITCH_GRAVE = "Dodongos Cavern MQ Back Switch Grave"
-
-# Keep the enum for backward compatibility, but delegate to the class
-class Regions(str, Enum):
-    ROOT = RegionNames.ROOT
-    TEMPLE_OF_TIME = RegionNames.TEMPLE_OF_TIME
-    
-    # Deku Tree regions
-    DEKU_TREE_ENTRYWAY = RegionNames.DEKU_TREE_ENTRYWAY
-    DEKU_TREE_LOBBY = RegionNames.DEKU_TREE_LOBBY
-    DEKU_TREE_2F_MIDDLE_ROOM = RegionNames.DEKU_TREE_2F_MIDDLE_ROOM
-    DEKU_TREE_SLINGSHOT_ROOM = RegionNames.DEKU_TREE_SLINGSHOT_ROOM
-    DEKU_TREE_COMPASS_ROOM = RegionNames.DEKU_TREE_COMPASS_ROOM
-    DEKU_TREE_BASEMENT_LOWER = RegionNames.DEKU_TREE_BASEMENT_LOWER
-    DEKU_TREE_BASEMENT_SCRUB_ROOM = RegionNames.DEKU_TREE_BASEMENT_SCRUB_ROOM
-    DEKU_TREE_BASEMENT_WATER_ROOM_FRONT = RegionNames.DEKU_TREE_BASEMENT_WATER_ROOM_FRONT
-    DEKU_TREE_BASEMENT_WATER_ROOM_BACK = RegionNames.DEKU_TREE_BASEMENT_WATER_ROOM_BACK
-    DEKU_TREE_BASEMENT_TORCH_ROOM = RegionNames.DEKU_TREE_BASEMENT_TORCH_ROOM
-    DEKU_TREE_BASEMENT_BACK_LOBBY = RegionNames.DEKU_TREE_BASEMENT_BACK_LOBBY
-    DEKU_TREE_BASEMENT_BACK_ROOM = RegionNames.DEKU_TREE_BASEMENT_BACK_ROOM
-    DEKU_TREE_BASEMENT_UPPER = RegionNames.DEKU_TREE_BASEMENT_UPPER
-    DEKU_TREE_OUTSIDE_BOSS_ROOM = RegionNames.DEKU_TREE_OUTSIDE_BOSS_ROOM
-    DEKU_TREE_BOSS_ENTRYWAY = RegionNames.DEKU_TREE_BOSS_ENTRYWAY
-    DEKU_TREE_BOSS_EXIT = RegionNames.DEKU_TREE_BOSS_EXIT
-    DEKU_TREE_BOSS_ROOM = RegionNames.DEKU_TREE_BOSS_ROOM
 
 #TODO go through this and Locations for any that aren't needed or should be events
 #For any such entries, remove them from Items and Locations and add to Events. Also, set up event registration.

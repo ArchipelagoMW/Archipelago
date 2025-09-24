@@ -11,8 +11,31 @@ class SohRegionData(NamedTuple):
 
 region_data_table: Dict[str, SohRegionData] = {
     Regions.ROOT.value: SohRegionData(["Hyrule"]),
-    "Hyrule": SohRegionData(["Dodongos Cavern Entryway"]),
-    "Dodongos Cavern Entryway": SohRegionData(["Hyrule"]),
+    "Hyrule": SohRegionData([Regions.DODONGOS_CAVERN_ENTRYWAY.value]),
+    Regions.DODONGOS_CAVERN_ENTRYWAY.value: SohRegionData(["Hyrule"]),
+    Regions.DODONGOS_CAVERN_BEGINNING.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_LOBBY.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_SE_CORRIDOR.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_SE_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_DODONGO_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_NEAR_DODONGO_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_STAIRS_LOWER.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_STAIRS_UPPER.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_COMPASS_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_ARMOS_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_2F_SIDE_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_FIRST_SLINGSHOT_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_SECOND_SLINGSHOT_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_FAR_BRIDGE.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BOSS_AREA.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BACK_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value: SohRegionData([]),
 }
 
 class SohEntranceData(NamedTuple):

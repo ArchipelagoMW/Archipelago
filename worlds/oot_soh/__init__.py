@@ -313,9 +313,6 @@ class SohWorld(World):
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
-        dodongos_cavern.create_regions_and_rules(self)
-        deku_tree.create_regions_and_rules(self)
-
         # Create locations.
         for region_name, region_data in region_data_table.items():
             region = self.multiworld.get_region(region_name, self.player)
@@ -553,6 +550,10 @@ class SohWorld(World):
             token_item = self.create_item(Items.GOLD_SKULLTULA_TOKEN.value)
             for location_name, location_data in gold_skulltula_dungeon_location_table.items():
                 self.get_location(location_name).place_locked_item(token_item)
+
+        # Set dungeon-specific region rules and location rules after all locations are created
+        dodongos_cavern.create_regions_and_rules(self)
+        deku_tree.create_regions_and_rules(self)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)

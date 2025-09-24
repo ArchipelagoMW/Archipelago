@@ -5,6 +5,7 @@ from worlds.generic.Rules import set_rule
 
 from worlds.oot_soh.Items import SohItem
 from worlds.oot_soh.Locations import SohLocation, SohLocationData, base_location_table
+from worlds.oot_soh.Enums import Regions, Items, Locations
 from worlds.oot_soh.Rules import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
                                   has_fire_source_with_torch, can_use, can_do_trick, can_jump_slash)
 
@@ -12,51 +13,20 @@ if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
 
 
-# when python 3.10 and 3.11 are dropped, this should just become a StrEnum to make it easier
-region_names: list[str] = [
-    "Dodongos Cavern Beginning",
-    "Dodongos Cavern Lobby",
-    "Dodongos Cavern Lobby Switch",
-    "Dodongos Cavern SE Corridor",
-    "Dodongos Cavern SE Room",
-    "Dodongos Cavern Near Lower Lizalfos",
-    "Dodongos Cavern Lower Lizalfos",
-    "Dodongos Cavern Dodongo Room",
-    "Dodongos Cavern Near Dodongo Room",
-    "Dodongos Cavern Stairs Lower",
-    "Dodongos Cavern Stairs Upper",
-    "Dodongos Cavern Compass Room",
-    "Dodongos Cavern Armos Room",
-    "Dodongos Cavern Bomb Room Lower",
-    "Dodongos Cavern 2F Side Room",
-    "Dodongos Cavern First Slingshot Room",
-    "Dodongos Cavern Upper Lizalfos",
-    "Dodongos Cavern Second Slingshot Room",
-    "Dodongos Cavern Bomb Room Upper",
-    "Dodongos Cavern Far Bridge",
-    "Dodongos Cavern Boss Region",
-    "Dodongos Cavern Back Room",
-    "Dodongos Cavern Boss Entryway",
-]
-
-
 events: dict[str, SohLocationData] = {
-    "Dodongos Cavern Lobby Switch": SohLocationData("Dodongos Cavern Lobby Switch",
+    "Dodongos Cavern Lobby Switch": SohLocationData(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value,
                                                     event_item="Dodongos Cavern Lobby Switch Activated"),
-    "Dodongos Cavern Far Bridge Switch": SohLocationData("Dodongos Cavern Far Bridge",
+    "Dodongos Cavern Far Bridge Switch": SohLocationData(Regions.DODONGOS_CAVERN_FAR_BRIDGE.value,
                                                          event_item="Dodongos Cavern Far Bridge Switch Activated"),
-    "Dodongos Cavern Lower Lizalfos": SohLocationData("Dodongos Cavern Lower Lizalfos",
+    "Dodongos Cavern Lower Lizalfos": SohLocationData(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value,
                                                       event_item="Defeated Dodongos Cavern Lower Lizalfos")
 }
 
 
 def create_regions_and_rules(world: "SohWorld") -> None:
-    for region_name in region_names:
-        region = Region(region_name, world.player, world.multiworld)
-        world.multiworld.regions.append(region)
-        region.add_locations({loc_name: loc_data.address for loc_name, loc_data in base_location_table.items()
-                              if loc_data.region == region_name}, SohLocation)
-
+    # Regions are now created in the main region_data_table system
+    # Just add events and set up rules
+    
     for event_name, data in events.items():
         region = world.get_region(data.region)
         region.add_event(event_name, data.event_item, location_type=SohLocation, item_type=SohItem)
@@ -70,213 +40,213 @@ def create_regions_and_rules(world: "SohWorld") -> None:
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
 
-    world.get_region("Dodongos Cavern Entryway").connect(
-        world.get_region("Dodongos Cavern Beginning"))
+    world.get_region(Regions.DODONGOS_CAVERN_ENTRYWAY.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BEGINNING.value))
 
-    world.get_region("Dodongos Cavern Beginning").connect(
-        world.get_region("Dodongos Cavern Entryway"))
+    world.get_region(Regions.DODONGOS_CAVERN_BEGINNING.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_ENTRYWAY.value))
 
-    world.get_region("Dodongos Cavern Beginning").connect(
-        world.get_region("Dodongos Cavern Lobby"),
+    world.get_region(Regions.DODONGOS_CAVERN_BEGINNING.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value),
         rule=lambda state: can_break_mud_walls(state, world)
-        or state.has("Strength Upgrade", player))
+        or state.has(Items.STRENGTH_UPGRADE.value, player))
 
-    world.get_region("Dodongos Cavern Lobby").connect(
-        world.get_region("Dodongos Cavern Beginning"))
+    world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BEGINNING.value))
 
-    world.get_region("Dodongos Cavern Lobby").connect(
-        world.get_region("Dodongos Cavern Lobby Switch"),
+    world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value),
         rule=lambda state: is_adult(state, world))
 
-    world.get_region("Dodongos Cavern Lobby").connect(
-        world.get_region("Dodongos Cavern SE Corridor"),
+    world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_SE_CORRIDOR.value),
         rule=lambda state: can_break_mud_walls(state, world)
-        or state.has("Strength Upgrade", player))
+        or state.has(Items.STRENGTH_UPGRADE.value, player))
 
-    world.get_region("Dodongos Cavern Lobby").connect(
-        world.get_region("Dodongos Cavern Stairs Lower"),
+    world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_STAIRS_LOWER.value),
         rule=lambda state: state.has("Dodongos Cavern Lobby Switch Activated", player))
 
-    world.get_region("Dodongos Cavern Lobby").connect(
-        world.get_region("Dodongos Cavern Boss Region"),
+    world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value),
         rule=lambda state: state.has("Dodongos Cavern Far Bridge Switch Activated", player)
         and has_explosives(state, world))
 
-    world.get_region("Dodongos Cavern Lobby Switch").connect(
-        world.get_region("Dodongos Cavern Lobby"))
+    world.get_region(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value))
 
-    world.get_region("Dodongos Cavern Lobby Switch").connect(
-        world.get_region("Dodongos Cavern Dodongo Room"))
+    world.get_region(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value))
 
-    world.get_region("Dodongos Cavern SE Corridor").connect(
-        world.get_region("Dodongos Cavern Lobby"))
+    world.get_region(Regions.DODONGOS_CAVERN_SE_CORRIDOR.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value))
 
-    world.get_region("Dodongos Cavern SE Corridor").connect(
-        world.get_region("Dodongos Cavern SE Room"),
+    world.get_region(Regions.DODONGOS_CAVERN_SE_CORRIDOR.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_SE_ROOM.value),
         rule=lambda state: can_break_mud_walls(state, world)
         or can_attack(state, world)
         or (take_damage(state, world) and can_shield(state, world)))
 
-    world.get_region("Dodongos Cavern SE Corridor").connect(
-        world.get_region("Dodongos Cavern Near Lower Lizalfos"))
+    world.get_region(Regions.DODONGOS_CAVERN_SE_CORRIDOR.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value))
 
-    world.get_region("Dodongos Cavern SE Room").connect(
-        world.get_region("Dodongos Cavern SE Corridor"))
+    world.get_region(Regions.DODONGOS_CAVERN_SE_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_SE_CORRIDOR.value))
 
-    world.get_region("Dodongos Cavern Near Lower Lizalfos").connect(
-        world.get_region("Dodongos Cavern SE Corridor"))
+    world.get_region(Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_SE_CORRIDOR.value))
 
-    world.get_region("Dodongos Cavern Near Lower Lizalfos").connect(
-        world.get_region("Dodongos Cavern Lower Lizalfos"))
+    world.get_region(Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value))
 
-    world.get_region("Dodongos Cavern Lower Lizalfos").connect(
-        world.get_region("Dodongos Cavern Near Lower Lizalfos"),
+    world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value),
         rule=lambda state: can_kill_enemy(state, world, "Lizalfos", 0, quantity=2))
 
-    world.get_region("Dodongos Cavern Lower Lizalfos").connect(
-        world.get_region("Dodongos Cavern Dodongo Room"),
+    world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value),
         rule=lambda state: can_kill_enemy(state, world, "Lizalfos", 0, quantity=2))
 
-    world.get_region("Dodongos Cavern Dodongo Room").connect(
-        world.get_region("Dodongos Cavern Lobby Switch"),
+    world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value),
         rule=lambda state: has_fire_source_with_torch(state, world))
 
-    world.get_region("Dodongos Cavern Dodongo Room").connect(
-        world.get_region("Dodongos Cavern Lower Lizalfos"))
+    world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value))
 
-    world.get_region("Dodongos Cavern Dodongo Room").connect(
-        world.get_region("Dodongos Cavern Near Dodongo Room"),
+    world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_NEAR_DODONGO_ROOM.value),
         rule=lambda state: can_break_mud_walls(state, world)
-        or state.has("Strength Upgrade", player))
+        or state.has(Items.STRENGTH_UPGRADE.value, player))
 
-    world.get_region("Dodongos Cavern Near Dodongo Room").connect(
-        world.get_region("Dodongos Cavern Dodongo Room"))
+    world.get_region(Regions.DODONGOS_CAVERN_NEAR_DODONGO_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value))
 
-    world.get_region("Dodongos Cavern Stairs Lower").connect(
-        world.get_region("Dodongos Cavern Lobby"))
+    world.get_region(Regions.DODONGOS_CAVERN_STAIRS_LOWER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value))
 
-    world.get_region("Dodongos Cavern Stairs Lower").connect(
-        world.get_region("Dodongos Cavern Stairs Upper"),
+    world.get_region(Regions.DODONGOS_CAVERN_STAIRS_LOWER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_STAIRS_UPPER.value),
         rule=lambda state: has_explosives(state, world)
-        or state.has("Strength Upgrade", player)
-        or can_use("Din's Fire", state, world)
-        or (can_do_trick("DC Stairs With Bow", state, world) and can_use("Fairy Bow", state, world)))
+        or state.has(Items.STRENGTH_UPGRADE.value, player)
+        or can_use(Items.DINS_FIRE.value, state, world)
+        or (can_do_trick("DC Stairs With Bow", state, world) and can_use(Items.PROGRESSIVE_BOW.value, state, world)))
 
-    world.get_region("Dodongos Cavern Stairs Lower").connect(
-        world.get_region("Dodongos Cavern Compass Room"),
+    world.get_region(Regions.DODONGOS_CAVERN_STAIRS_LOWER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_COMPASS_ROOM.value),
         rule=lambda state: can_break_mud_walls(state, world)
-        or state.has("Strength Upgrade", player))
+        or state.has(Items.STRENGTH_UPGRADE.value, player))
 
-    world.get_region("Dodongos Cavern Stairs Upper").connect(
-        world.get_region("Dodongos Cavern Stairs Lower"))
+    world.get_region(Regions.DODONGOS_CAVERN_STAIRS_UPPER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_STAIRS_LOWER.value))
 
-    world.get_region("Dodongos Cavern Stairs Upper").connect(
-        world.get_region("Dodongos Cavern Armos Room"))
+    world.get_region(Regions.DODONGOS_CAVERN_STAIRS_UPPER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_ARMOS_ROOM.value))
 
-    world.get_region("Dodongos Cavern Compass Room").connect(
-        world.get_region("Dodongos Cavern Stairs Lower"),
-        rule=lambda state: can_use("Master Sword", state, world)
-        or can_use("Biggoron Sword", state, world)
-        or can_use("Megaton Hammer", state, world)
+    world.get_region(Regions.DODONGOS_CAVERN_COMPASS_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_STAIRS_LOWER.value),
+        rule=lambda state: can_use(Items.MASTER_SWORD.value, state, world)
+        or can_use(Items.BIGGORONS_SWORD.value, state, world)
+        or can_use(Items.MEGATON_HAMMER.value, state, world)
         or has_explosives(state, world)
-        or state.has("Strength Upgrade", player))
+        or state.has(Items.STRENGTH_UPGRADE.value, player))
 
-    world.get_region("Dodongos Cavern Armos Room").connect(
-        world.get_region("Dodongos Cavern Stairs Upper"))
+    world.get_region(Regions.DODONGOS_CAVERN_ARMOS_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_STAIRS_UPPER.value))
 
-    world.get_region("Dodongos Cavern Armos Room").connect(
-        world.get_region("Dodongos Cavern Bomb Room Lower"))
+    world.get_region(Regions.DODONGOS_CAVERN_ARMOS_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value))
 
-    world.get_region("Dodongos Cavern Bomb Room Lower").connect(
-        world.get_region("Dodongos Cavern Armos Room"))
+    world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_ARMOS_ROOM.value))
 
-    world.get_region("Dodongos Cavern Bomb Room Lower").connect(
-        world.get_region("Dodongos Cavern 2F Side Room"),
+    world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_2F_SIDE_ROOM.value),
         rule=lambda state: can_break_mud_walls(state, world)
-        or (can_do_trick("DC Scrub Room", state, world) and state.has("Strength Upgrade", player)))
+        or (can_do_trick("DC Scrub Room", state, world) and state.has(Items.STRENGTH_UPGRADE.value, player)))
 
-    world.get_region("Dodongos Cavern Bomb Room Lower").connect(
-        world.get_region("Dodongos Cavern First Slingshot Room"),
+    world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_FIRST_SLINGSHOT_ROOM.value),
         rule=lambda state: can_break_mud_walls(state, world)
-        or state.has("Strength Upgrade", player))
+        or state.has(Items.STRENGTH_UPGRADE.value, player))
 
-    world.get_region("Dodongos Cavern Bomb Room Lower").connect(
-        world.get_region("Dodongos Cavern Bomb Room Upper"),
+    world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value),
         rule=lambda state: (is_adult(state, world) and can_do_trick("DC Jump", state, world))
-        or can_use("Hover Boots", state, world)
-        or (is_adult(state, world) and can_use("Longshot", state, world))
+        or can_use(Items.HOVER_BOOTS.value, state, world)
+        or (is_adult(state, world) and can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world))
         or (can_do_trick("Damage Boost Simple", state, world) and has_explosives(state, world)
             and can_jump_slash(state, world)))
 
-    world.get_region("Dodongos Cavern 2F Side Room").connect(
-        world.get_region("Dodongos Cavern Bomb Room Lower"))
+    world.get_region(Regions.DODONGOS_CAVERN_2F_SIDE_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value))
 
-    world.get_region("Dodongos Cavern First Slingshot Room").connect(
-        world.get_region("Dodongos Cavern Bomb Room Lower"))
+    world.get_region(Regions.DODONGOS_CAVERN_FIRST_SLINGSHOT_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value))
 
-    world.get_region("Dodongos Cavern Upper Lizalfos").connect(
-        world.get_region("Dodongos Cavern Bomb Room Lower"),
-        rule=lambda state: can_use("Fairy Slingshot", state, world)
-        or can_use("Fairy Bow", state, world)
+    world.get_region(Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value),
+        rule=lambda state: can_use(Items.PROGRESSIVE_SLINGSHOT.value, state, world)
+        or can_use(Items.PROGRESSIVE_BOW.value, state, world)
         or can_do_trick("DC Slingshot Skip", state, world))
 
-    world.get_region("Dodongos Cavern Upper Lizalfos").connect(
-        world.get_region("Dodongos Cavern Lower Lizalfos"))
+    world.get_region(Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value))
 
-    world.get_region("Dodongos Cavern Upper Lizalfos").connect(
-        world.get_region("Dodongos Cavern First Slingshot Room"),
+    world.get_region(Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_FIRST_SLINGSHOT_ROOM.value),
         rule=lambda state: state.has("Defeated Dodongos Cavern Lower Lizalfos", player))
 
-    world.get_region("Dodongos Cavern Upper Lizalfos").connect(
-        world.get_region("Dodongos Cavern Second Slingshot Room"),
+    world.get_region(Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_SECOND_SLINGSHOT_ROOM.value),
         rule=lambda state: state.has("Defeated Dodongos Cavern Lower Lizalfos", player))
 
-    world.get_region("Dodongos Cavern Second Slingshot Room").connect(
-        world.get_region("Dodongos Cavern Upper Lizalfos"))
+    world.get_region(Regions.DODONGOS_CAVERN_SECOND_SLINGSHOT_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value))
 
-    world.get_region("Dodongos Cavern Second Slingshot Room").connect(
-        world.get_region("Dodongos Cavern Bomb Room Upper"),
-        rule=lambda state: can_use("Fairy Slingshot", state, world)
-        or can_use("Fairy Bow", state, world)
+    world.get_region(Regions.DODONGOS_CAVERN_SECOND_SLINGSHOT_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value),
+        rule=lambda state: can_use(Items.PROGRESSIVE_SLINGSHOT.value, state, world)
+        or can_use(Items.PROGRESSIVE_BOW.value, state, world)
         or can_do_trick("DC Slingshot Skip", state, world))
 
-    world.get_region("Dodongos Cavern Bomb Room Upper").connect(
-        world.get_region("Dodongos Cavern Bomb Room Lower"))
+    world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value))
 
-    world.get_region("Dodongos Cavern Bomb Room Upper").connect(
-        world.get_region("Dodongos Cavern Second Slingshot Room"))
+    world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_SECOND_SLINGSHOT_ROOM.value))
 
-    world.get_region("Dodongos Cavern Bomb Room Upper").connect(
-        world.get_region("Dodongos Cavern Far Bridge"))
+    world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_FAR_BRIDGE.value))
 
-    world.get_region("Dodongos Cavern Far Bridge").connect(
-        world.get_region("Dodongos Cavern Lobby"))
+    world.get_region(Regions.DODONGOS_CAVERN_FAR_BRIDGE.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value))
 
-    world.get_region("Dodongos Cavern Far Bridge").connect(
-        world.get_region("Dodongos Cavern Bomb Room Upper"))
+    world.get_region(Regions.DODONGOS_CAVERN_FAR_BRIDGE.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value))
 
-    world.get_region("Dodongos Cavern Boss Region").connect(
-        world.get_region("Dodongos Cavern Lobby"))
+    world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value))
 
-    world.get_region("Dodongos Cavern Boss Region").connect(
-        world.get_region("Dodongos Cavern Back Room"),
+    world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BACK_ROOM.value),
         rule=lambda state: can_break_mud_walls(state, world))
 
-    world.get_region("Dodongos Cavern Boss Region").connect(
-        world.get_region("Dodongos Cavern Boss Entryway"))
+    world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value))
 
-    world.get_region("Dodongos Cavern Back Room").connect(
-        world.get_region("Dodongos Cavern Boss Region"))
+    world.get_region(Regions.DODONGOS_CAVERN_BACK_ROOM.value).connect(
+        world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value))
 
 
 def set_location_rules(world: "SohWorld") -> None:
     player = world.player
 
-    set_rule(world.get_location("Dodongos Cavern Map Chest"),
+    set_rule(world.get_location(Locations.DODONGOS_CAVERN_MAP_CHEST.value),
              rule=lambda state: can_break_mud_walls(state, world)
-             or state.has("Strength Upgrade", player))
+             or state.has(Items.STRENGTH_UPGRADE.value, player))
 
-    set_rule(world.get_location("Dodongos Cavern End Of Bridge Chest"),
+    set_rule(world.get_location(Locations.DODONGOS_CAVERN_END_OF_BRIDGE_CHEST.value),
              rule=lambda state: can_break_mud_walls(state, world))
 
     set_rule(world.get_location("Dodongos Cavern Lower Lizalfos"),
