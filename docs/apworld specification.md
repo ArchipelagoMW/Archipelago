@@ -53,7 +53,8 @@ So, a world folder with an `archipelago.json` that looks like this:
 
 ```json
 {
-    "minimum_ap_version": "0.6.4"
+    "minimum_ap_version": "0.6.4",
+    "world_version": "2.1.4"
 }
 ```
 
@@ -61,7 +62,8 @@ will be packaged into an `.apworld` with a manifest file inside of it that looks
 
 ```json
 {
-    "minimum_ap_version": "0.6.4"
+    "minimum_ap_version": "0.6.4", 
+    "world_version": "2.1.4",
     "version": 6,
     "compatible_version": 5,
     "game": "Game Name"
