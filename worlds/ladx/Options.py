@@ -3,7 +3,8 @@ from dataclasses import dataclass
 import os.path
 import typing
 import logging
-from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Removed
+from Options import (Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Removed,
+                     DeathLink)
 from collections import defaultdict
 import Utils
 
@@ -621,6 +622,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     tarins_gift: TarinsGift
     overworld: Overworld
     stabilize_item_pool: StabilizeItemPool
+    death_link: DeathLink
 
     warp_improvements: Removed
     additional_warp_points: Removed
