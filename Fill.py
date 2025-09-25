@@ -232,20 +232,15 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                 if not location.item:
                     location.progress_type = location.progress_type.EXCLUDED
 
-    if not allow_partial and len(unplaced_items) > 0 and len(locations) > 0:
-        # There are leftover unplaceable items and locations that won't accept them
-        if multiworld.can_beat_game():
-            logging.warning(
-                f"Not all items placed. Game beatable anyway.\nCould not place:\n"
-                f"{', '.join(str(item) for item in unplaced_items)}")
-        else:
-            raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
-                            f"Unplaced items:\n"
-                            f"{', '.join(str(item) for item in unplaced_items)}\n"
-                            f"Unfilled locations:\n"
-                            f"{', '.join(str(location) for location in locations)}\n"
-                            f"Already placed {len(placements)}:\n"
-                            f"{', '.join(str(place) for place in placements)}", multiworld=multiworld)
+    if not allow_partial and unplaced_items:
+        # There are leftover unplaceable items
+        raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
+                        f"Unplaced items:\n"
+                        f"{', '.join(str(item) for item in unplaced_items)}\n"
+                        f"Unfilled locations:\n"
+                        f"{', '.join(str(location) for location in locations)}\n"
+                        f"Already placed {len(placements)}:\n"
+                        f"{', '.join(str(place) for place in placements)}", multiworld=multiworld)
 
     item_pool.extend(unplaced_items)
 
