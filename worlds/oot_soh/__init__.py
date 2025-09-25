@@ -490,10 +490,10 @@ class SohWorld(World):
 
         # Add Weird Egg and Zelda's Letter to their vanilla locations when not shuffled
         if not self.options.skip_child_zelda and not self.options.shuffle_weird_egg:
-            self.get_location(Locations.HCMALON_EGG.value).place_locked_item(self.create_item(Items.WEIRD_EGG.value))
+            self.get_location(Locations.HC_MALON_EGG.value).place_locked_item(self.create_item(Items.WEIRD_EGG.value))
 
         if not self.options.skip_child_zelda:
-            self.get_location(Locations.HCZELDAS_LETTER.value).place_locked_item(self.create_item(Items.ZELDAS_LETTER.value))
+            self.get_location(Locations.HC_ZELDAS_LETTER.value).place_locked_item(self.create_item(Items.ZELDAS_LETTER.value))
 
         # Place Master Sword on vanilla location if not shuffled
         if not self.options.shuffle_master_sword:
@@ -502,7 +502,7 @@ class SohWorld(World):
         # Handle vanilla goron tunic in shop
         # TODO: Proper implementation of vanilla shop items and shuffle them amongst all shops
         if self.options.shuffle_shops:
-            self.get_location(Locations.GCSHOP_ITEM1.value).place_locked_item(self.create_item(Items.BUY_GORON_TUNIC.value))
+            self.get_location(Locations.GC_SHOP_ITEM1.value).place_locked_item(self.create_item(Items.BUY_GORON_TUNIC.value))
 
         # Create a dictionary mapping blue warp rewards to their vanilla items
         dungeon_reward_item_mapping = {

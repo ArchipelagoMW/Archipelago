@@ -22,9 +22,6 @@ events: dict[str, SohLocationData] = {
 
 
 def create_regions_and_rules(world: "SohWorld") -> None:
-    # Regions are now created in the main region_data_table system
-    # Just add events and set up rules
-    
     for event_name, data in events.items():
         region = world.get_region(data.region)
         region.add_event(event_name, data.event_item, location_type=SohLocation, item_type=SohItem)
