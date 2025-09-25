@@ -1,9 +1,9 @@
 from enum import Enum
 
 class Regions(str, Enum):
-	"""Region names for the Ship of Harkinian randomizer"""
+	"""List of all region enums"""
 
-	ROOT = "Root"
+	ROOT = "Menu"
 	ROOT_EXITS = "Root Exits"
 	CHILD_SPAWN = "Child Spawn"
 	ADULT_SPAWN = "Adult Spawn"
@@ -551,7 +551,6 @@ class Regions(str, Enum):
 	SHADOW_TEMPLE_HUGE_PIT = "Shadow Temple Huge Pit"
 	SHADOW_TEMPLE_WIND_TUNNEL = "Shadow Temple Wind Tunnel"
 	SHADOW_TEMPLE_BEYOND_BOAT = "Shadow Temple Beyond Boat"
-	INVALID_REGION = "Invalid Region"
 	SHADOW_TEMPLE_MQ_BEGINNING = "Shadow Temple MQ Beginning"
 	SHADOW_TEMPLE_MQ_SPINNER_ROOM = "Shadow Temple MQ Spinner Room"
 	SHADOW_TEMPLE_MQ_DEAD_HAND_REGION = "Shadow Temple MQ Dead Hand Region"
