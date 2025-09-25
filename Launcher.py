@@ -215,6 +215,11 @@ def launch(exe, in_terminal=False):
 
 
 def launch_component_from_gui(component, in_terminal=False):
+    """
+    Launch a component from within a GUI, deciding whether the component needs its own new process or not.
+    Should not be used as an "entry point" launch, because that will create an infinite loop. Use run_component instead.
+    """
+
     if component.func and not in_terminal:
         component.func()
         return
