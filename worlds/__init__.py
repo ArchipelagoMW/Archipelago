@@ -126,8 +126,8 @@ for world_source in world_sources:
                     break
             if manifest:
                 break
-        game = manifest.get("game", None)
-        if game:
+        game = manifest.get("game")
+        if game in AutoWorldRegister.world_types:
             AutoWorldRegister.world_types[game].world_version = Version(*tuplize_version(manifest.get("world_version",
                                                                                                       "0.0.0")))
 
