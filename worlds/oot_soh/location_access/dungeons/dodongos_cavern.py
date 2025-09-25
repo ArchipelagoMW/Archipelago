@@ -36,6 +36,8 @@ def create_regions_and_rules(world: "SohWorld") -> None:
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
 
+    double_link_regions(world, Regions.DODONGOS_CAVERN_ENTRYWAY.value, Regions.ROOT.value)
+
     double_link_regions(world, Regions.DODONGOS_CAVERN_ENTRYWAY.value, Regions.DODONGOS_CAVERN_BEGINNING.value)
 
     # Entry to main lobby requires breaking mud walls or strength upgrade
@@ -60,7 +62,7 @@ def set_region_rules(world: "SohWorld") -> None:
         rule=lambda state: state.has("Dodongos Cavern Lobby Switch Activated", player))
 
     world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
-        world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value),
+        world.get_region(Regions.DODONGOS_CAVERN_BOSS_REGION.value),
         rule=lambda state: True)  # Simplified for early access
 
     world.get_region(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value).connect(
@@ -212,18 +214,18 @@ def set_region_rules(world: "SohWorld") -> None:
     world.get_region(Regions.DODONGOS_CAVERN_FAR_BRIDGE.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value))
 
-    world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value).connect(
+    world.get_region(Regions.DODONGOS_CAVERN_BOSS_REGION.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value))
 
-    world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value).connect(
+    world.get_region(Regions.DODONGOS_CAVERN_BOSS_REGION.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BACK_ROOM.value),
         rule=lambda state: can_break_mud_walls(state, world))
 
-    world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value).connect(
+    world.get_region(Regions.DODONGOS_CAVERN_BOSS_REGION.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value))
 
     world.get_region(Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value).connect(
-        world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value))
+        world.get_region(Regions.DODONGOS_CAVERN_BOSS_REGION.value))
 
     world.get_region(Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOSS_ROOM.value))
@@ -232,7 +234,7 @@ def set_region_rules(world: "SohWorld") -> None:
         world.get_region(Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value))
 
     world.get_region(Regions.DODONGOS_CAVERN_BACK_ROOM.value).connect(
-        world.get_region(Regions.DODONGOS_CAVERN_BOSS_AREA.value))
+        world.get_region(Regions.DODONGOS_CAVERN_BOSS_REGION.value))
 
 
 def set_location_rules(world: "SohWorld") -> None:

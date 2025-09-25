@@ -30,7 +30,8 @@ from .Locations import SohLocation, base_location_table, \
     carpenters_location_table, \
     location_table
 from .Options import SohOptions
-from .Regions import region_data_table, reset_age_access, update_age_access
+from .RegionAgeAccess import reset_age_access, update_age_access
+from .Regions import region_data_table
 from .Enums import *
 from worlds.oot_soh.location_access.dungeons import \
     deku_tree, \
