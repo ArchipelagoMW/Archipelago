@@ -1,0 +1,599 @@
+<TextColors>:
+    # Hex-format RGB colors used in clients. Resets after an update/install.
+    # To avoid, you can copy the TextColors section into a new "user.kv" next to this file
+    # and it will read from there instead.
+    black: "000000"
+    red: "EE0000"
+    green: "00FF7F"  # typically a location
+    yellow: "FAFAD2"  # typically other slots/players
+    blue: "6495ED"  # typically extra info (such as entrance)
+    magenta: "EE00EE"  # typically your slot/player
+    cyan: "00EEEE"  # typically regular item
+    slateblue: "6D8BE8"  # typically useful item
+    plum: "AF99EF"  # typically progression item
+    salmon: "FA8072"  # typically trap item
+    white: "FFFFFF"  # not used, if you want to change the generic text color change color in Label
+    orange: "FF7700"  # Used for command echo
+    # KivyMD theming parameters
+    theme_style: "Dark" # Light/Dark
+    primary_palette: "Lightsteelblue" # Many options
+    dynamic_scheme_name: "VIBRANT"
+    dynamic_scheme_contrast: 0.0
+
+<AdjusterRootLayout>:
+    size_hint: [1, 1]
+    pos: (0, 0)
+
+    top_frame: top_frame.__self__
+    sprite_extractor: sprite_extractor.__self__
+    sprite_preview: sprite_preview.__self__
+    bottom_frame: bottom_frame.__self__
+
+    MDScrollView:
+        layout: layout
+        bar_width: "12dp"
+        scroll_wheel_distance: 40
+        do_scroll_x: False
+        scroll_type: ['bars', 'content']
+        MDBoxLayout:
+            id: layout
+            orientation: "vertical"
+            padding: [8]
+            spacing: 8
+            size_hint_y: None
+            height: self.minimum_height
+            TopFrame:
+                id: top_frame
+            SpriteExtractorFrame:
+                id: sprite_extractor
+            SpritePreviewFrame:
+                id: sprite_preview
+            BottomFrame:
+                id: bottom_frame
+
+<TopFrame>:
+    orientation: "vertical"
+    style: "filled"
+    adaptive_height: True
+    size_hint_x: 1
+    padding: [12]
+    spacing: 8
+
+    patch_frame: patch_frame.__self__
+    sprite_pack_frame: sprite_pack_frame.__self__
+
+    PatchFrame:
+        id: patch_frame
+    SpritePackFrame:
+        id: sprite_pack_frame
+
+<PatchFrame>:
+    orientation: "horizontal"
+    spacing: 8
+    size_hint_x: 1
+    adaptive_height: True
+
+    label: label.__self__
+    entry: entry.__self__
+    select_button: select_button.__self__
+    is_ap_checkbox: is_ap_checkbox.__self__
+
+    MDLabel:
+        id: label
+        text: "Patch / Modified Rom"
+        adaptive_width: True
+    ResizableTextField:
+        id: entry
+        theme_text_color: "Custom"
+        size_hint_x: 1
+    MDButton:
+        id: select_button
+        on_press: root.select_patch()
+        style: "tonal"
+        MDButtonText:
+            text: "Select Patch/Rom"
+    CheckItem:
+        id: is_ap_checkbox
+        text: "Is AP?"
+        pos_hint: {"center_y": 0.5}
+
+<SpritePackFrame>:
+    orientation: "horizontal"
+    spacing: 8
+    size_hint_x: 1
+    adaptive_height: True
+
+    label: label.__self__
+    entry: entry.__self__
+    select_button: select_button.__self__
+
+    MDLabel:
+        id: label
+        text: "Sprite Pack to Load"
+        adaptive_width: True
+    ResizableTextField:
+        id: entry
+        theme_text_color: "Custom"
+        size_hint_x: 1
+    MDButton:
+        id: select_button
+        on_press: root.select_sprite_pack()
+        style: "tonal"
+        MDButtonText:
+            text: "Select Pack"
+
+<SpriteExtractorFrame>:
+    style: "filled"
+    orientation: "vertical"
+    adaptive_height: True
+    padding: [12]
+    spacing: 8
+
+    input: input.__self__
+    extract_button: extract_button.__self__
+    extract_all_button: extract_all_button.__self__
+
+    MDLabel:
+        text: "Sprite Extractor"
+        font_style: "Headline"
+        role: "small"
+        adaptive_size: True
+        pos_hint: {"center_x": 0.5}
+    MDDivider:
+        size_hint_x: 0.4
+        pos_hint: {"center_x": 0.5}
+    MDLabel:
+        text: "Type the name of the Trainer/Pokemon you want to\nextract then press the button below."
+        adaptive_size: True
+        pos_hint: {"center_x": 0.5}
+        halign: "center"
+    AutocompleteInput:
+        id: input
+        theme_text_color: "Custom"
+        size_hint_x: 0.3
+        pos_hint: {"center_x": 0.5}
+    MDBoxLayout:
+        orientation: "horizontal"
+        adaptive_size: True
+        spacing: 8
+        pos_hint: {"center_x": 0.5}
+        MDButton:
+            id: extract_button
+            style: "tonal"
+            on_press: root.extract_sprites()
+            MDButtonText:
+                text: "Extract"
+        MDButton:
+            id: extract_all_button
+            style: "tonal"
+            on_press: root.extract_all_sprites()
+            MDButtonText:
+                text: "Extract All (takes a while)"
+
+<SpritePreviewFrame>:
+    style: "filled"
+    orientation: "vertical"
+    spacing: 8
+    size_hint_x: 1
+    adaptive_height: True
+    padding: [12]
+
+    grid: grid.__self__
+    sprite_box: sprite_box.__self__
+    folder_input: folder_input.__self__
+    sprite_input: sprite_input.__self__
+    data_editor_frame: data_editor_frame.__self__
+    data_editor_error: data_editor_error.__self__
+    sprite_image: sprite_image.__self__
+    palette_grid: palette_grid.__self__
+    error_label: error_label.__self__
+
+    MDLabel:
+        text: "Sprite Preview"
+        font_style: "Headline"
+        role: "small"
+        adaptive_size: True
+        pos_hint: {"center_x": 0.5}
+    MDDivider:
+        size_hint_x: 0.4
+        pos_hint: {"center_x": 0.5}
+    MDBoxLayout:
+        adaptive_height: True
+        orientation: "vertical"
+        spacing: 8
+        MDGridLayout:
+            id: grid
+            cols: 2
+            adaptive_height: True
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            spacing: 16
+            padding: [8]
+            MDBoxLayout:
+                id: sprite_box
+                padding: [0, 10, 0, 0]
+                adaptive_width: True
+                size_hint_y: None
+                height: 174
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                MDGridLayout:
+                    size_hint: [None, None]
+                    size: [272, 174]
+                    cols: 2
+                    spacing: 16
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        adaptive_size: True
+                        spacing: 16
+                        AutocompleteInput:
+                            id: folder_input
+                            mode: "outlined"
+                            text: "a"
+                            theme_text_color: "Custom"
+                            size_hint_x: None
+                            width: 128
+                            MDTextFieldHintText:
+                                text: "Current Folder"
+                        FitImageTop:
+                            id: sprite_image
+                            fit_mode: "contain"
+                            size_hint: [None, None]
+                            size: [128, 128]
+                            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                            source: root.default_image
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        adaptive_size: True
+                        spacing: 16
+                        AutocompleteInput:
+                            id: sprite_input
+                            mode: "outlined"
+                            text: "a"
+                            theme_text_color: "Custom"
+                            size_hint_x: None
+                            width: 128
+                            MDTextFieldHintText:
+                                text: "Current Sprite"
+                        MDGridLayout:
+                            id: palette_grid
+                            cols: 4
+                            size_hint: [None, None]
+                            size: [128, 128]
+            PokemonDataEditorFrame:
+                id: data_editor_frame
+            MDLabel:
+                id: data_editor_error
+                text: "A ROM needs to be loaded\nto edit a Pokemon's data!"
+                size_hint: [None, 1]
+                adaptive_width: True
+                padding: [48, 0, 0, 0]
+                halign: "center"
+                valign: "center"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        MDLabel:
+            id: error_label
+            adaptive_size: True
+            pos_hint: {"center_x": 0.5}
+            halign: "center"
+            text: "No error detected! The sprite pack is valid."
+
+<PokemonDataEditorFrame>:
+    hp_input: hp_input.__self__
+    hp_label: hp_label.__self__
+    spd_input: spd_input.__self__
+    spd_label: spd_label.__self__
+    atk_input: atk_input.__self__
+    atk_label: atk_label.__self__
+    def_input: def_input.__self__
+    def_label: def_label.__self__
+    spatk_input: spatk_input.__self__
+    spatk_label: spatk_label.__self__
+    spdef_input: spdef_input.__self__
+    spdef_label: spdef_label.__self__
+    move_pool_input: move_pool_input.__self__
+    move_pool_label: move_pool_label.__self__
+    type_1_input: type_1_input.__self__
+    type_1_button: type_1_button.__self__
+    type_1_label: type_1_label.__self__
+    type_2_input: type_2_input.__self__
+    type_2_button: type_2_button.__self__
+    type_2_label: type_2_label.__self__
+    ability_1_input: ability_1_input.__self__
+    ability_1_label: ability_1_label.__self__
+    ability_2_input: ability_2_input.__self__
+    ability_2_label: ability_2_label.__self__
+    gender_ratio_input: gender_ratio_input.__self__
+    gender_ratio_button: gender_ratio_button.__self__
+    gender_ratio_label: gender_ratio_label.__self__
+    forbid_flip_input: forbid_flip_input.__self__
+    forbid_flip_label: forbid_flip_label.__self__
+    save_data: save_data.__self__
+    save_data_text: save_data_text.__self__
+
+    orientation: "vertical"
+    padding: [0, 0, 0, 8]
+    adaptive_height: True
+    MDTabsPrimary:
+        id: tabs
+        label_only: True
+        MDTabsItem:
+            MDTabsItemText:
+                text: "Stats"
+        MDTabsItem:
+            MDTabsItemText:
+                text: "Move Pool"
+        MDTabsItem:
+            MDTabsItemText:
+                text: "Extra Data"
+        MDTabsCarousel:
+            id: related_content_container
+            size_hint: [1, None]
+            height: 250
+            MDGridLayout:
+                cols: 2
+                spacing: 16
+                padding: [8, 0, 8, 8]
+                adaptive_height: True
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: 8
+                    adaptive_height: True
+                    TooltipMDLabel:
+                        id: hp_label
+                        text: "HP"
+                        pos_hint: {"center_x": 0.5}
+                        adaptive_size: True
+                    Spinbox:
+                        id: hp_input
+                        on_text: root.check_value(root.hp_input, root.hp_label, "hp", root.hp_tooltip)
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: 8
+                    adaptive_height: True
+                    TooltipMDLabel:
+                        id: spd_label
+                        text: "Speed"
+                        pos_hint: {"center_x": 0.5}
+                        adaptive_size: True
+                    Spinbox:
+                        id: spd_input
+                        on_text: root.check_value(root.spd_input, root.spd_label, "spd", root.spd_tooltip)
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: 8
+                    adaptive_height: True
+                    TooltipMDLabel:
+                        id: atk_label
+                        text: "Attack"
+                        pos_hint: {"center_x": 0.5}
+                        adaptive_size: True
+                    Spinbox:
+                        id: atk_input
+                        on_text: root.check_value(root.atk_input, root.atk_label, "atk", root.atk_tooltip)
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: 8
+                    adaptive_height: True
+                    TooltipMDLabel:
+                        id: def_label
+                        text: "Defense"
+                        pos_hint: {"center_x": 0.5}
+                        adaptive_size: True
+                    Spinbox:
+                        id: def_input
+                        on_text: root.check_value(root.def_input, root.def_label, "def", root.def_tooltip)
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: 8
+                    adaptive_height: True
+                    TooltipMDLabel:
+                        id: spatk_label
+                        text: "Special Attack"
+                        pos_hint: {"center_x": 0.5}
+                        adaptive_size: True
+                    Spinbox:
+                        id: spatk_input
+                        on_text: root.check_value(root.spatk_input, root.spatk_label, "spatk", root.spatk_tooltip)
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: 8
+                    adaptive_height: True
+                    TooltipMDLabel:
+                        id: spdef_label
+                        text: "Special Defense"
+                        pos_hint: {"center_x": 0.5}
+                        adaptive_size: True
+                    Spinbox:
+                        id: spdef_input
+                        on_text: root.check_value(root.spdef_input, root.spdef_label, "spdef", root.spdef_tooltip)
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: 8
+                padding: [8, 0, 8, 8]
+                TooltipMDLabel:
+                    id: move_pool_label
+                    text: "Move Pool"
+                    pos_hint: {"center_x": 0.5}
+                    adaptive_size: True
+                TextInput:
+                    id: move_pool_input
+                    multiline: True
+                    on_text: root.check_value(root.move_pool_input, root.move_pool_label, "move_pool", root.move_pool_tooltip)
+            MDGridLayout:
+                cols: 2
+                spacing: 16
+                padding: [8, 0, 8, 8]
+                adaptive_height: True
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: 8
+                    adaptive_height: True
+                    TooltipMDLabel:
+                        id: type_1_label
+                        text: "Type 1"
+                        pos_hint: {"center_x": 0.5}
+                        adaptive_size: True
+                    MDButton:
+                        id: type_1_button
+                        style: "tonal"
+                        pos_hint: {"center_x": 0.5}
+                        MDButtonText:
+                            id: type_1_input
+                            text: "Type 1"
+                            on_text: root.check_value(root.type_1_input, root.type_1_label, "type1", root.type_1_tooltip)
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: 8
+                    adaptive_height: True
+                    TooltipMDLabel:
+                        id: type_2_label
+                        text: "Type 2"
+                        pos_hint: {"center_x": 0.5}
+                        adaptive_size: True
+                    MDButton:
+                        id: type_2_button
+                        style: "tonal"
+                        pos_hint: {"center_x": 0.5}
+                        MDButtonText:
+                            id: type_2_input
+                            text: "Type 2"
+                            on_text: root.check_value(root.type_2_input, root.type_2_label, "type2", root.type_2_tooltip)
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: 8
+                    adaptive_height: True
+                    TooltipMDLabel:
+                        id: ability_1_label
+                        text: "Ability 1"
+                        pos_hint: {"center_x": 0.5}
+                        adaptive_size: True
+                    AutocompleteInput:
+                        id: ability_1_input
+                        on_text: root.check_value(root.ability_1_input, root.ability_1_label, "ability1", root.ability_1_tooltip)
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: 8
+                    adaptive_height: True
+                    TooltipMDLabel:
+                        id: ability_2_label
+                        text: "Ability 2"
+                        pos_hint: {"center_x": 0.5}
+                        adaptive_size: True
+                    AutocompleteInput:
+                        id: ability_2_input
+                        on_text: root.check_value(root.ability_2_input, root.ability_2_label, "ability2", root.ability_2_tooltip)
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: 8
+                    adaptive_height: True
+                    TooltipMDLabel:
+                        id: gender_ratio_label
+                        text: "Gender Ratio"
+                        pos_hint: {"center_x": 0.5}
+                        adaptive_size: True
+                    MDButton:
+                        id: gender_ratio_button
+                        style: "tonal"
+                        pos_hint: {"center_x": 0.5}
+                        MDButtonText:
+                            id: gender_ratio_input
+                            text: "Gender Ratio"
+                            on_text: root.check_value(root.gender_ratio_input, root.gender_ratio_label, "gender_ratio", root.gender_ratio_tooltip)
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: 67
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        spacing: 8
+                        adaptive_height: True
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        TooltipMDLabel:
+                            text: "Forbid Flip"
+                            pos_hint: {"center_x": 0.5}
+                            adaptive_size: True
+                            id: forbid_flip_label
+                        MDCheckbox:
+                            id: forbid_flip_input
+                            pos_hint: {"center_x": 0.5}
+                            on_active: root.check_value(root.forbid_flip_input, root.forbid_flip_label, "dex", root.forbid_flip_tooltip)
+    MDButton:
+        id: save_data
+        pos_hint: {"center_x": 0.5}
+        style: "tonal"
+        on_press: root.save_pokemon_data()
+        MDButtonText:
+            id: save_data_text
+            text: "Save Data"
+
+<BottomFrame>:
+    orientation: "horizontal"
+    adaptive_size: True
+    spacing: 8
+    pos_hint: {"center_x": 0.5, "center_y": 1}
+
+    adjust_rom: adjust_rom.__self__
+    save_data: save_data.__self__
+
+    MDButton:
+        id: adjust_rom
+        style: "tonal"
+        pos_hint: {"center_x": 0.5}
+        on_press: root.press_adjust_rom()
+        MDButtonText:
+            text: "Adjust ROM"
+    MDButton:
+        id: save_data
+        style: "tonal"
+        pos_hint: {"center_x": 0.5}
+        on_press: root.save_gui_settings()
+        MDButtonText:
+            text: "Save Data"
+
+
+# Util
+<ResizableTextField>:
+    size_hint_y: None
+    height: 30
+    multiline: False
+    write_tab: False
+    pos_hint: {"center_y": 0.5}
+
+<CheckItem>:
+    adaptive_size: True
+
+    checkbox: checkbox.__self__
+
+    MDCheckbox:
+        id: checkbox
+        adaptive_size: True
+    MDLabel:
+        text: root.text
+        adaptive_size: True
+        padding: [4, 0]
+        pos_hint: {"center_y": .5}
+
+<Spinbox>:
+    input_filter: 'int'
+
+    MDIconButton:
+        id: up_button
+        icon: "menu_up"
+        size_hint: [None, None]
+        size: [30, 15]
+        pos_hint: {"center_x": 1, "center_y": 1}
+        on_press: root.increment()
+    MDIconButton:
+        id: down_button
+        icon: "menu_down"
+        size_hint: [None, None]
+        size: [30, 15]
+        pos_hint: {"center_x": 1, "center_y": 0}
+        on_press: root.decrement()
+
+<TooltipMDLabel>:
+    MDTooltipPlain:
+        text: root.tooltip_text
+        text_color: "black"
+        halign: "center"
