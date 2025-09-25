@@ -309,6 +309,11 @@ def is_adult(state: CollectionState, world: "SohWorld") -> bool:
     # TODO: Implement proper age checking based on world settings and progression
     return True
 
+def is_child(state: CollectionState, world: "SohWorld") -> bool:
+    # For now, return True as a placeholder since age logic is complex and context-dependent
+    # The real age checking should be done through the CanUse function's can_be_adult parameter
+    # TODO: Implement proper age checking based on world settings and progression
+    return True
 
 def can_damage(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can deal damage to enemies."""
