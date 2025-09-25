@@ -490,8 +490,14 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         for game, version in games.items():
             if game not in AutoWorldRegister.world_types:
                 raise Exception(f"Settings reports required world \"{game}\", which is not present")
-            if tuplize_version(version) > AutoWorldRegister.world_types[game].world_version:
+            if isinstance(version, str):
+                version = {"min": version}
+            if "min" in version and tuplize_version(version["min"]) > AutoWorldRegister.world_types[game].world_version:
                 raise Exception(f"Settings reports required version of world \"{game}\" is at least {version}, "
+                                f"however world is of version "
+                                f"{AutoWorldRegister.world_types[game].world_version.as_simple_string()}")
+            if "max" in version and tuplize_version(version["max"]) > AutoWorldRegister.world_types[game].world_version:
+                raise Exception(f"Settings reports required version of world \"{game}\" is no later than {version}, "
                                 f"however world is of version "
                                 f"{AutoWorldRegister.world_types[game].world_version.as_simple_string()}")
     ret = argparse.Namespace()
