@@ -8,11 +8,68 @@ if TYPE_CHECKING:
 class SohRegionData(NamedTuple):
     connecting_regions: List[str] = []
 
+def double_link_regions(world: "SohWorld", region1: str, region2: str):
+    world.get_region(region1).connect(world.get_region(region2))
+    world.get_region(region2).connect(world.get_region(region1))
 
 region_data_table: Dict[str, SohRegionData] = {
     Regions.ROOT.value: SohRegionData(["Hyrule"]),
-    "Hyrule": SohRegionData(["Dodongos Cavern Entryway"]),
-    "Dodongos Cavern Entryway": SohRegionData(["Hyrule"]),
+    "Hyrule": SohRegionData([Regions.DODONGOS_CAVERN_ENTRYWAY.value, Regions.DEKU_TREE_ENTRYWAY.value]),
+    Regions.DODONGOS_CAVERN_ENTRYWAY.value: SohRegionData(["Hyrule"]),
+    Regions.DODONGOS_CAVERN_BEGINNING.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_LOBBY.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_SE_CORRIDOR.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_SE_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_DODONGO_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_NEAR_DODONGO_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_STAIRS_LOWER.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_STAIRS_UPPER.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_COMPASS_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_ARMOS_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_2F_SIDE_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_FIRST_SLINGSHOT_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_SECOND_SLINGSHOT_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_FAR_BRIDGE.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BOSS_AREA.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BACK_ROOM.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value: SohRegionData([]),
+    Regions.DODONGOS_CAVERN_BOSS_ROOM.value: SohRegionData([]),
+    
+    # Deku Tree regions
+    Regions.DEKU_TREE_ENTRYWAY.value: SohRegionData(["Hyrule"]),
+    Regions.DEKU_TREE_LOBBY.value: SohRegionData([]),
+    Regions.DEKU_TREE_2F_MIDDLE_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_SLINGSHOT_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_COMPASS_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_LOWER.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_WATER_ROOM_FRONT.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_TORCH_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_BACK_LOBBY.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_BACK_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_UPPER.value: SohRegionData([]),
+    Regions.DEKU_TREE_OUTSIDE_BOSS_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_BOSS_ENTRYWAY.value: SohRegionData([]),
+    Regions.DEKU_TREE_BOSS_EXIT.value: SohRegionData([]),
+    Regions.DEKU_TREE_BOSS_ROOM.value: SohRegionData([]),
+    
+    # Deku Tree Master Quest regions
+    Regions.DEKU_TREE_MQ_1F.value: SohRegionData([]),
+    Regions.DEKU_TREE_MQ_2F.value: SohRegionData([]),
+    Regions.DEKU_TREE_MQ_3F.value: SohRegionData([]),
+    Regions.DEKU_TREE_MQ_EYE_TARGET_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_MQ_COMPASS_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_MQ_BASEMENT_GRAVE_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_MQ_BASEMENT_BACK_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_MQ_BASEMENT_LEDGE.value: SohRegionData([]),
+    Regions.DEKU_TREE_MQ_OUTSIDE_BOSS_ROOM.value: SohRegionData([]),
 }
 
 class SohEntranceData(NamedTuple):

@@ -2,6 +2,7 @@ from typing import List, Dict, Any
 import math
 
 from BaseClasses import CollectionState, Item, Region, Tutorial
+from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table, filler_items, filler_bottles
 from .Locations import SohLocation, base_location_table, \
@@ -32,7 +33,13 @@ from .Options import SohOptions
 from .Regions import region_data_table, reset_age_access, update_age_access
 from .Rules import get_soh_rule
 from .Enums import *
-from .dodongos_cavern import create_dc_regions_and_rules, set_location_rules_dc
+from worlds.oot_soh.location_access.dungeons import \
+    dodongos_cavern, \
+    deku_tree
+
+
+import logging
+logger = logging.getLogger("SOH_OOT")
 
 class SohWebWorld(WebWorld):
     theme = "ice"
@@ -61,7 +68,8 @@ class SohWorld(World):
     item_name_to_id = item_table
 
     def generate_early(self) -> None:
-        input("\033[33m WARNING: Ship of Harkinian currently only supports NO LOGIC! If you're OK with this, press Enter to continue. \033[0m")
+        #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
+        pass
 
     def create_item(self, name: str) -> SohItem:
         return SohItem(name, item_data_table[name].classification, item_data_table[name].item_id, self.player)
@@ -305,9 +313,6 @@ class SohWorld(World):
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
-        # todo: maybe easier to have region and rule making functions instead
-        create_dc_regions_and_rules(self)
-
         # Create locations.
         for region_name, region_data in region_data_table.items():
             region = self.multiworld.get_region(region_name, self.player)
@@ -546,6 +551,10 @@ class SohWorld(World):
             for location_name, location_data in gold_skulltula_dungeon_location_table.items():
                 self.get_location(location_name).place_locked_item(token_item)
 
+        # Set dungeon-specific region rules and location rules after all locations are created
+        dodongos_cavern.create_regions_and_rules(self)
+        deku_tree.create_regions_and_rules(self)
+
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
     
@@ -632,3 +641,10 @@ class SohWorld(World):
         #reset_age_access() #TODO pass the starting age option 
         #update_age_access(self, state)
         return super().remove(state, item)
+
+    def generate_output(self, output_directory: str):
+    
+        visualize_regions(self.multiworld.get_region(self.origin_region_name, self.player), f"SOH-Player{self.player}.puml",
+                        show_entrance_names=True,
+                        regions_to_highlight=self.multiworld.get_all_state(self.player).reachable_regions[
+                            self.player])
