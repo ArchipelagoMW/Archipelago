@@ -167,7 +167,7 @@ def set_region_rules(world: "SohWorld") -> None:
         world.get_region(Regions.DEKU_TREE_BASEMENT_UPPER.value))
 
     world.get_region(Regions.DEKU_TREE_OUTSIDE_BOSS_ROOM.value).connect(
-        world.get_region(Regions.DEKU_TREE_BOSS_ENTRYWAY.value.value),
+        world.get_region(Regions.DEKU_TREE_BOSS_ENTRYWAY.value),
         rule=lambda state: (has_item(Items.BRONZE_SCALE.value, state, world) or can_use(Items.IRON_BOOTS.value))
             and can_reflect_nuts(state, world))
     
