@@ -23,8 +23,8 @@ Metadata about the apworld is defined in an `archipelago.json` file inside the z
 The current format version has at minimum:
 ```json
 {
-    "version": 6,
-    "compatible_version": 5,
+    "version": 7,
+    "compatible_version": 7,
     "game": "Game Name"
 }
 ```
@@ -40,6 +40,8 @@ There are also the following optional version fields (using the format `"1.0.0"`
   Archipelago version respectively to filter those files from being loaded
 * `world_version` - an arbitrary version for that world in order to only load the newest valid world.
   An apworld without a world_version is always treated as older than one with a version
+* `authors` - a list of authors, to eventually be displayed in various user-facing places such as WebHost and
+  package managers. Should always be a list of strings.
 
 ### "Build apworlds" Launcher Component
 
@@ -56,7 +58,8 @@ So, a world folder with an `archipelago.json` that looks like this:
 {
     "game": "Game Name",
     "minimum_ap_version": "0.6.4",
-    "world_version": "2.1.4"
+    "world_version": "2.1.4",
+    "authors": ["NewSoupVi"]
 }
 ```
 
@@ -66,8 +69,9 @@ will be packaged into an `.apworld` with a manifest file inside of it that looks
 {
     "minimum_ap_version": "0.6.4", 
     "world_version": "2.1.4",
-    "version": 6,
-    "compatible_version": 5,
+    "authors": ["NewSoupVi"],
+    "version": 7,
+    "compatible_version": 7,
     "game": "Game Name"
 }
 ```
