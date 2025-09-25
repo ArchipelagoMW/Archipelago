@@ -249,25 +249,25 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
         else:
             return typing.cast(bool, self.value == other)
 
-    def __lt__(self, other: typing.Union[int, NumericOption]) -> bool:
+    def __lt__(self, other: int | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value < other.value
         else:
             return self.value < other
 
-    def __le__(self, other: typing.Union[int, NumericOption]) -> bool:
+    def __le__(self, other: int | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value <= other.value
         else:
             return self.value <= other
 
-    def __gt__(self, other: typing.Union[int, NumericOption]) -> bool:
+    def __gt__(self, other: int | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value > other.value
         else:
             return self.value > other
 
-    def __ge__(self, other: typing.Union[int, NumericOption]) -> bool:
+    def __ge__(self, other: int | NumericOption) -> bool:
         if isinstance(other, NumericOption):
             return self.value >= other.value
         else:
@@ -285,6 +285,13 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
         else:
             return self.value * other
 
+    def __imul__(self, other: typing.Any) -> Self:
+        if isinstance(other, NumericOption):
+            self.value *= other.value
+        else:
+            self.value *= other
+        return self
+
     def __rmul__(self, other: typing.Any) -> typing.Any:
         if isinstance(other, NumericOption):
             return other.value * self.value
@@ -297,6 +304,13 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
         else:
             return self.value - other
 
+    def __isub__(self, other: typing.Any) -> Self:
+        if isinstance(other, NumericOption):
+            self.value -= other.value
+        else:
+            self.value -= other
+        return self
+
     def __rsub__(self, left: typing.Any) -> typing.Any:
         if isinstance(left, NumericOption):
             return left.value - self.value
@@ -308,6 +322,13 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
             return self.value + other.value
         else:
             return self.value + other
+
+    def __iadd__(self, other: typing.Any) -> Self:
+        if isinstance(other, NumericOption):
+            self.value += other.value
+        else:
+            self.value += other
+        return self
 
     def __radd__(self, left: typing.Any) -> typing.Any:
         if isinstance(left, NumericOption):
@@ -342,6 +363,41 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
     def __floordiv__(self, other: typing.Any) -> int:
         return self.value // int(other)
 
+    def __iand__(self, other: typing.Any) -> Self:
+        self.value &= int(other)
+        return self
+
+    def __ifloordiv__(self, other: typing.Any) -> Self:
+        self.value //= int(other)
+        return self
+
+    def __ilshift__(self, other: typing.Any) -> Self:
+        self.value <<= int(other)
+        return self
+
+    def __imod__(self, other: typing.Any) -> Self:
+        self.value %= int(other)
+        return self
+
+    def __ior__(self, other: typing.Any) -> Self:
+        self.value |= int(other)
+        return self
+
+    def __ipow__(self, exponent: numbers.Complex, modulus: numbers.Integral | None = None) -> Self:
+        if modulus is not None:
+            assert isinstance(exponent, numbers.Integral)
+            self.value = pow(self.value, exponent, modulus)  # type: ignore
+        self.value **= exponent  # type: ignore
+        return self
+
+    def __irshift__(self, other: typing.Any) -> Self:
+        self.value >>= int(other)
+        return self
+
+    def __ixor__(self, other: typing.Any) -> Self:
+        self.value ^= int(other)
+        return self
+
     def __invert__(self) -> int:
         return ~(self.value)
 
@@ -360,8 +416,8 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
     def __pos__(self) -> int:
         return +(self.value)
 
-    def __pow__(self, exponent: numbers.Complex, modulus: typing.Optional[numbers.Integral] = None) -> int:
-        if not (modulus is None):
+    def __pow__(self, exponent: numbers.Complex, modulus: numbers.Integral | None = None) -> int:
+        if modulus is not None:
             assert isinstance(exponent, numbers.Integral)
             return pow(self.value, exponent, modulus)  # type: ignore
         return self.value ** exponent  # type: ignore
@@ -381,7 +437,7 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
     def __ror__(self, other: typing.Any) -> int:
         return int(other) | self.value
 
-    def __round__(self, ndigits: typing.Optional[int] = None) -> int:
+    def __round__(self, ndigits: int | None = None) -> int:
         return round(self.value, ndigits)
 
     def __rpow__(self, base: typing.Any) -> typing.Any:
