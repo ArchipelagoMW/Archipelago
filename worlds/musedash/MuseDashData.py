@@ -661,4 +661,8 @@ SONG_DATA: Dict[str, SongData] = {
     "Ineffabilis": SongData(2900785, "87-4", "Aim to Be a Rhythm Master!", False, 3, 7, 10),
     "DaJiaHao": SongData(2900786, "87-5", "Aim to Be a Rhythm Master!", False, 5, 7, 10),
     "Echoes of SeraphiM": SongData(2900787, "87-6", "Aim to Be a Rhythm Master!", False, 5, 8, 10),
+    "Othello feat.Uiro": SongData(2900788, "88-0", "MUSE RADIO FM106", True, 3, 5, 7),
+    "Midnight Blue": SongData(2900789, "88-1", "MUSE RADIO FM106", True, 2, 5, 7),
+    "overwork feat.Woonoo": SongData(2900790, "88-2", "MUSE RADIO FM106", True, 2, 6, 8),
+    "SUPER CITYLIGHTS": SongData(2900791, "88-3", "MUSE RADIO FM106", True, 5, 7, 10),
 }
