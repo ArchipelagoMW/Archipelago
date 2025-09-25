@@ -35,6 +35,8 @@ def create_regions_and_rules(world: "SohWorld") -> None:
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
 
+    double_link_regions(world, Regions.DEKU_TREE_ENTRYWAY.value, Regions.ROOT.value)
+
     double_link_regions(world, Regions.DEKU_TREE_ENTRYWAY.value, Regions.DEKU_TREE_LOBBY.value)
 
     # Lobby connections

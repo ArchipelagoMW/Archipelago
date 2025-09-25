@@ -2,7 +2,7 @@ from typing import Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from .Enums import *
-from .Regions import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
+from .RegionAgeAccess import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
 
 if TYPE_CHECKING:
     from . import SohWorld
