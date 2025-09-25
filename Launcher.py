@@ -214,7 +214,7 @@ def launch(exe, in_terminal=False):
     subprocess.Popen(exe)
 
 
-def launch_component(component, in_terminal=False):
+def launch_component_from_gui(component, in_terminal=False):
     if component.func and not in_terminal:
         component.func()
         return
@@ -405,7 +405,7 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
         def component_action(button):
             MDSnackbar(MDSnackbarText(text="Opening in a new window..."), y=dp(24), pos_hint={"center_x": 0.5},
                        size_hint_x=0.5).open()
-            launch_component(button.component, button.component.cli)
+            launch_component_from_gui(button.component, button.component.cli)
 
         def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
             """ When a patch file is dropped into the window, run the associated component. """
