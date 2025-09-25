@@ -5,7 +5,59 @@ class Regions(str, Enum):
     
     # Core regions
     ROOT = "Menu"
+    
+    # Kokiri Forest regions
+    KOKIRI_FOREST = "Kokiri Forest"
+    KF_OUTSIDE_DEKU_TREE = "KF Outside Deku Tree"
+    KF_LINKS_HOUSE = "KF Link's House"
+    KF_MIDOS_HOUSE = "KF Mido's House"
+    KF_SARIAS_HOUSE = "KF Saria's House"
+    KF_HOUSE_OF_TWINS = "KF House of Twins"
+    KF_KNOW_IT_ALL_HOUSE = "KF Know It All House"
+    KF_KOKIRI_SHOP = "KF Kokiri Shop"
+    KF_STORMS_GROTTO = "KF Storms Grotto"
+    
+    # Lost Woods regions
+    LW_FOREST_EXIT = "LW Forest Exit"
+    THE_LOST_WOODS = "Lost Woods"
+    LW_BEYOND_MIDO = "LW Beyond Mido"
+    LW_NEAR_SHORTCUTS_GROTTO = "LW Near Shortcuts Grotto"
+    DEKU_THEATER = "Deku Theater"
+    LW_SCRUBS_GROTTO = "LW Scrubs Grotto"
+    LW_BRIDGE_FROM_FOREST = "LW Bridge From Forest"
+    LW_BRIDGE = "LW Bridge"
+    
+    # Hyrule Field regions
+    HYRULE_FIELD = "Hyrule Field"
+    HF_SOUTHEAST_GROTTO = "HF Southeast Grotto"
+    HF_OPEN_GROTTO = "HF Open Grotto"
+    HF_INSIDE_FENCE_GROTTO = "HF Inside Fence Grotto"
+    HF_COW_GROTTO = "HF Cow Grotto"
+    HF_COW_GROTTO_BEHIND_WEBS = "HF Cow Grotto Behind Webs"
+    HF_NEAR_MARKET_GROTTO = "HF Near Market Grotto"
+    HF_FAIRY_GROTTO = "HF Fairy Grotto"
+    HF_NEAR_KAK_GROTTO = "HF Near Kak Grotto"
+    HF_TEKTITE_GROTTO = "HF Tektite Grotto"
+    
+    # Market regions
+    MARKET_ENTRANCE = "Market Entrance"
+    THE_MARKET = "Market"
+    MARKET_BACK_ALLEY = "Market Back Alley"
+    MARKET_GUARD_HOUSE = "Market Guard House"
+    MARKET_BAZAAR = "Market Bazaar"
+    MARKET_MASK_SHOP = "Market Mask Shop"
+    MARKET_SHOOTING_GALLERY = "Market Shooting Gallery"
+    MARKET_BOMBCHU_BOWLING = "Market Bombchu Bowling"
+    MARKET_POTION_SHOP = "Market Potion Shop"
+    MARKET_TREASURE_CHEST_GAME = "Market Treasure Chest Game"
+    MARKET_BOMBCHU_SHOP = "Market Bombchu Shop"
+    MARKET_DOG_LADY_HOUSE = "Market Dog Lady House"
+    MARKET_MAN_IN_GREEN_HOUSE = "Market Man in Green House"
+    
+    # Temple of Time regions
+    TOT_ENTRANCE = "ToT Entrance"
     TEMPLE_OF_TIME = "Temple of Time"
+    TOT_BEYOND_DOOR_OF_TIME = "Beyond Door of Time"
     
     # Deku Tree regions
     DEKU_TREE_ENTRYWAY = "Deku Tree Entryway"
@@ -94,6 +146,25 @@ class Regions(str, Enum):
     DODONGOS_CAVERN_MQ_BEHIND_MOUTH = "Dodongos Cavern MQ Behind Mouth"
     DODONGOS_CAVERN_MQ_BACK_BEHIND_FIRE = "Dodongos Cavern MQ Back Behind Fire"
     DODONGOS_CAVERN_MQ_BACK_SWITCH_GRAVE = "Dodongos Cavern MQ Back Switch Grave"
+    
+    # Ganon's Castle regions
+    GANONS_CASTLE_ENTRYWAY = "Ganon's Castle Entryway"
+    GANONS_CASTLE_LOBBY = "Ganon's Castle Lobby"
+    GANONS_CASTLE_DEKU_SCRUBS = "Ganon's Castle Deku Scrubs"
+    GANONS_CASTLE_FOREST_TRIAL = "Ganon's Castle Forest Trial"
+    GANONS_CASTLE_FIRE_TRIAL = "Ganon's Castle Fire Trial"
+    GANONS_CASTLE_WATER_TRIAL = "Ganon's Castle Water Trial"
+    GANONS_CASTLE_SHADOW_TRIAL = "Ganon's Castle Shadow Trial"
+    GANONS_CASTLE_SPIRIT_TRIAL = "Ganon's Castle Spirit Trial"
+    GANONS_CASTLE_LIGHT_TRIAL = "Ganon's Castle Light Trial"
+    GANONS_TOWER_ENTRYWAY = "Ganon's Tower Entryway"
+    GANONS_TOWER_FLOOR_1 = "Ganon's Tower Floor 1"
+    GANONS_TOWER_FLOOR_2 = "Ganon's Tower Floor 2"
+    GANONS_TOWER_FLOOR_3 = "Ganon's Tower Floor 3"
+    GANONS_TOWER_BEFORE_GANONDORF_LAIR = "Ganon's Tower Before Ganondorf's Lair"
+    GANONS_TOWER_GANONDORF_LAIR = "Ganondorf's Lair"
+    GANONS_CASTLE_ESCAPE = "Ganon's Castle Escape"
+    GANONS_CASTLE_GANON_ARENA = "Ganon's Arena"
 
 #TODO go through this and Locations for any that aren't needed or should be events
 #For any such entries, remove them from Items and Locations and add to Events. Also, set up event registration.

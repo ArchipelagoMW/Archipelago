@@ -13,9 +13,82 @@ def double_link_regions(world: "SohWorld", region1: str, region2: str):
     world.get_region(region2).connect(world.get_region(region1))
 
 region_data_table: Dict[str, SohRegionData] = {
-    Regions.ROOT.value: SohRegionData(["Hyrule"]),
-    "Hyrule": SohRegionData([Regions.DODONGOS_CAVERN_ENTRYWAY.value, Regions.DEKU_TREE_ENTRYWAY.value]),
-    Regions.DODONGOS_CAVERN_ENTRYWAY.value: SohRegionData(["Hyrule"]),
+    Regions.ROOT.value: SohRegionData([Regions.KF_LINKS_HOUSE.value]),
+
+    # Kokiri Forest
+    Regions.KOKIRI_FOREST.value: SohRegionData([]),
+    Regions.KF_OUTSIDE_DEKU_TREE.value: SohRegionData([]),
+    Regions.KF_LINKS_HOUSE.value: SohRegionData([Regions.ROOT.value, Regions.DEKU_TREE_ENTRYWAY.value, Regions.DODONGOS_CAVERN_ENTRYWAY.value]),
+    Regions.KF_MIDOS_HOUSE.value: SohRegionData([]),
+    Regions.KF_SARIAS_HOUSE.value: SohRegionData([]),
+    Regions.KF_HOUSE_OF_TWINS.value: SohRegionData([]),
+    Regions.KF_KNOW_IT_ALL_HOUSE.value: SohRegionData([]),
+    Regions.KF_KOKIRI_SHOP.value: SohRegionData([]),
+    Regions.KF_STORMS_GROTTO.value: SohRegionData([]),
+
+    # Lost Woods
+    Regions.LW_FOREST_EXIT.value: SohRegionData([]),
+    Regions.THE_LOST_WOODS.value: SohRegionData([]),
+    Regions.LW_BEYOND_MIDO.value: SohRegionData([]),
+    Regions.LW_NEAR_SHORTCUTS_GROTTO.value: SohRegionData([]),
+    Regions.DEKU_THEATER.value: SohRegionData([]),
+    Regions.LW_SCRUBS_GROTTO.value: SohRegionData([]),
+    Regions.LW_BRIDGE_FROM_FOREST.value: SohRegionData([]),
+    Regions.LW_BRIDGE.value: SohRegionData([]),
+
+    # Hyrule Field
+    Regions.HYRULE_FIELD.value: SohRegionData([]),
+    Regions.HF_SOUTHEAST_GROTTO.value: SohRegionData([]),
+    Regions.HF_OPEN_GROTTO.value: SohRegionData([]),
+    Regions.HF_INSIDE_FENCE_GROTTO.value: SohRegionData([]),
+    Regions.HF_COW_GROTTO.value: SohRegionData([]),
+    Regions.HF_COW_GROTTO_BEHIND_WEBS.value: SohRegionData([]),
+    Regions.HF_NEAR_MARKET_GROTTO.value: SohRegionData([]),
+    Regions.HF_FAIRY_GROTTO.value: SohRegionData([]),
+    Regions.HF_NEAR_KAK_GROTTO.value: SohRegionData([]),
+    Regions.HF_TEKTITE_GROTTO.value: SohRegionData([]),
+
+    # Market
+    Regions.MARKET_ENTRANCE.value: SohRegionData([]),
+    Regions.THE_MARKET.value: SohRegionData([]),
+    Regions.MARKET_BACK_ALLEY.value: SohRegionData([]),
+    Regions.MARKET_GUARD_HOUSE.value: SohRegionData([]),
+    Regions.MARKET_BAZAAR.value: SohRegionData([]),
+    Regions.MARKET_MASK_SHOP.value: SohRegionData([]),
+    Regions.MARKET_SHOOTING_GALLERY.value: SohRegionData([]),
+    Regions.MARKET_BOMBCHU_BOWLING.value: SohRegionData([]),
+    Regions.MARKET_POTION_SHOP.value: SohRegionData([]),
+    Regions.MARKET_TREASURE_CHEST_GAME.value: SohRegionData([]),
+    Regions.MARKET_BOMBCHU_SHOP.value: SohRegionData([]),
+    Regions.MARKET_DOG_LADY_HOUSE.value: SohRegionData([]),
+    Regions.MARKET_MAN_IN_GREEN_HOUSE.value: SohRegionData([]),
+
+    # Temple of Time
+    Regions.TOT_ENTRANCE.value: SohRegionData([]),
+    Regions.TEMPLE_OF_TIME.value: SohRegionData([]),
+    Regions.TOT_BEYOND_DOOR_OF_TIME.value: SohRegionData([]),
+
+    # Deku Tree
+    Regions.DEKU_TREE_ENTRYWAY.value: SohRegionData([Regions.KF_LINKS_HOUSE.value]),
+    Regions.DEKU_TREE_LOBBY.value: SohRegionData([]),
+    Regions.DEKU_TREE_2F_MIDDLE_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_SLINGSHOT_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_COMPASS_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_LOWER.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_WATER_ROOM_FRONT.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_TORCH_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_BACK_LOBBY.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_BACK_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_BASEMENT_UPPER.value: SohRegionData([]),
+    Regions.DEKU_TREE_OUTSIDE_BOSS_ROOM.value: SohRegionData([]),
+    Regions.DEKU_TREE_BOSS_ENTRYWAY.value: SohRegionData([]),
+    Regions.DEKU_TREE_BOSS_EXIT.value: SohRegionData([]),
+    Regions.DEKU_TREE_BOSS_ROOM.value: SohRegionData([]),
+
+    # Dodongo's Cavern
+    Regions.DODONGOS_CAVERN_ENTRYWAY.value: SohRegionData([Regions.KF_LINKS_HOUSE.value]),
     Regions.DODONGOS_CAVERN_BEGINNING.value: SohRegionData([]),
     Regions.DODONGOS_CAVERN_LOBBY.value: SohRegionData([]),
     Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value: SohRegionData([]),
@@ -40,36 +113,25 @@ region_data_table: Dict[str, SohRegionData] = {
     Regions.DODONGOS_CAVERN_BACK_ROOM.value: SohRegionData([]),
     Regions.DODONGOS_CAVERN_BOSS_ENTRYWAY.value: SohRegionData([]),
     Regions.DODONGOS_CAVERN_BOSS_ROOM.value: SohRegionData([]),
-    
-    # Deku Tree regions
-    Regions.DEKU_TREE_ENTRYWAY.value: SohRegionData(["Hyrule"]),
-    Regions.DEKU_TREE_LOBBY.value: SohRegionData([]),
-    Regions.DEKU_TREE_2F_MIDDLE_ROOM.value: SohRegionData([]),
-    Regions.DEKU_TREE_SLINGSHOT_ROOM.value: SohRegionData([]),
-    Regions.DEKU_TREE_COMPASS_ROOM.value: SohRegionData([]),
-    Regions.DEKU_TREE_BASEMENT_LOWER.value: SohRegionData([]),
-    Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM.value: SohRegionData([]),
-    Regions.DEKU_TREE_BASEMENT_WATER_ROOM_FRONT.value: SohRegionData([]),
-    Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK.value: SohRegionData([]),
-    Regions.DEKU_TREE_BASEMENT_TORCH_ROOM.value: SohRegionData([]),
-    Regions.DEKU_TREE_BASEMENT_BACK_LOBBY.value: SohRegionData([]),
-    Regions.DEKU_TREE_BASEMENT_BACK_ROOM.value: SohRegionData([]),
-    Regions.DEKU_TREE_BASEMENT_UPPER.value: SohRegionData([]),
-    Regions.DEKU_TREE_OUTSIDE_BOSS_ROOM.value: SohRegionData([]),
-    Regions.DEKU_TREE_BOSS_ENTRYWAY.value: SohRegionData([]),
-    Regions.DEKU_TREE_BOSS_EXIT.value: SohRegionData([]),
-    Regions.DEKU_TREE_BOSS_ROOM.value: SohRegionData([]),
-    
-    # Deku Tree Master Quest regions
-    Regions.DEKU_TREE_MQ_1F.value: SohRegionData([]),
-    Regions.DEKU_TREE_MQ_2F.value: SohRegionData([]),
-    Regions.DEKU_TREE_MQ_3F.value: SohRegionData([]),
-    Regions.DEKU_TREE_MQ_EYE_TARGET_ROOM.value: SohRegionData([]),
-    Regions.DEKU_TREE_MQ_COMPASS_ROOM.value: SohRegionData([]),
-    Regions.DEKU_TREE_MQ_BASEMENT_GRAVE_ROOM.value: SohRegionData([]),
-    Regions.DEKU_TREE_MQ_BASEMENT_BACK_ROOM.value: SohRegionData([]),
-    Regions.DEKU_TREE_MQ_BASEMENT_LEDGE.value: SohRegionData([]),
-    Regions.DEKU_TREE_MQ_OUTSIDE_BOSS_ROOM.value: SohRegionData([]),
+
+    # Ganon's Castle
+    Regions.GANONS_CASTLE_ENTRYWAY.value: SohRegionData([]),
+    Regions.GANONS_CASTLE_LOBBY.value: SohRegionData([]),
+    Regions.GANONS_CASTLE_DEKU_SCRUBS.value: SohRegionData([]),
+    Regions.GANONS_CASTLE_FOREST_TRIAL.value: SohRegionData([]),
+    Regions.GANONS_CASTLE_FIRE_TRIAL.value: SohRegionData([]),
+    Regions.GANONS_CASTLE_WATER_TRIAL.value: SohRegionData([]),
+    Regions.GANONS_CASTLE_SHADOW_TRIAL.value: SohRegionData([]),
+    Regions.GANONS_CASTLE_SPIRIT_TRIAL.value: SohRegionData([]),
+    Regions.GANONS_CASTLE_LIGHT_TRIAL.value: SohRegionData([]),
+    Regions.GANONS_TOWER_ENTRYWAY.value: SohRegionData([]),
+    Regions.GANONS_TOWER_FLOOR_1.value: SohRegionData([]),
+    Regions.GANONS_TOWER_FLOOR_2.value: SohRegionData([]),
+    Regions.GANONS_TOWER_FLOOR_3.value: SohRegionData([]),
+    Regions.GANONS_TOWER_BEFORE_GANONDORF_LAIR.value: SohRegionData([]),
+    Regions.GANONS_TOWER_GANONDORF_LAIR.value: SohRegionData([]),
+    Regions.GANONS_CASTLE_ESCAPE.value: SohRegionData([]),
+    Regions.GANONS_CASTLE_GANON_ARENA.value: SohRegionData([]),
 }
 
 class SohEntranceData(NamedTuple):
