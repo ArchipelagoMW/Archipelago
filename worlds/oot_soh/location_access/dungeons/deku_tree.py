@@ -105,12 +105,12 @@ def set_region_rules(world: "SohWorld") -> None:
     
     world.get_region(Regions.DEKU_TREE_BASEMENT_WATER_ROOM_FRONT.value).connect(
         world.get_region(Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK.value),
-        rule=lambda state: has_item(Items.BRONZE_SCALE.value) or can_do_trick("Deku B1 backflip over spiked log"))
+        rule=lambda state: has_item(Items.BRONZE_SCALE.value, state, world) or can_do_trick("Deku B1 backflip over spiked log"))
 
     # Deku basement water room back
     world.get_region(Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK.value).connect(
         world.get_region(Regions.DEKU_TREE_BASEMENT_WATER_ROOM_FRONT.value),
-        rule=lambda state: has_item(Items.BRONZE_SCALE.value) or can_do_trick("Deku B1 backflip over spiked log"))
+        rule=lambda state: has_item(Items.BRONZE_SCALE.value, state, world) or can_do_trick("Deku B1 backflip over spiked log"))
 
     world.get_region(Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK.value).connect(
         world.get_region(Regions.DEKU_TREE_BASEMENT_TORCH_ROOM.value))
