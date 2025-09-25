@@ -395,11 +395,14 @@
     { "from": "OW - Lower Right Exit", "to": "FU - Left Exit", "requires": [] },
 
     // Outer Warehouse
-    { "from": "OW - Lower Right Exit", "to": "OW - Activate Crates", "requires": [ { "anyOf": [
-        { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
-    ] } ] }, // and wall climb and hacking
+    { "from": "OW - Lower Right Exit", "to": "OW - Activate Crates And Return", "requires": [
+        // getting to the hack point requires TCK or AD or CL
+        { "item": "Air Dash" }, // but the lasers on the return trip hard require AD
+        // (unless we expect players to figure out you can ground dash from tiny ledges)
+        { "item": "Mystic Nymph: Scout Mode" } // and the crushers on the return trip need Nymph to disable
+    ] }, // and wall climb and hacking
     { "from": "OW - Lower Right Exit", "to": "OW - Root Node & Middle Exits", "requires": [
-        { "region": "OW - Activate Crates" } // and wall climb
+        { "region": "OW - Activate Crates And Return" } // and wall climb
     ] },
     { "from": "OW - Root Node & Middle Exits", "to": "OW - Crate Riding", "requires": [] }, // wall climb
     // ^these crates are active without hacking the panel in the bottom left, so visiting that is not required
