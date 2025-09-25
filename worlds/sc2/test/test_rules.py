@@ -116,6 +116,7 @@ class TestRules(unittest.TestCase):
         test_world.options.take_over_ai_allies.value = take_over_ai_allies
         test_world.options.kerrigan_presence.value = kerrigan_presence
         test_world.options.spear_of_adun_passive_ability_presence.value = spear_of_adun_passive_presence
+        test_world.options.enabled_campaigns.value = set(options.EnabledCampaigns.valid_keys)
         test_world.logic = SC2Logic(test_world)  # type: ignore
         return test_world
 
