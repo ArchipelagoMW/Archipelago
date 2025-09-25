@@ -19,7 +19,7 @@ from .regions import EntranceRandomizer
 from .rules import set_rules
 from ..Files import APPlayerContainer
 
-VERSION: tuple[int, int, int] = (0, 0, 0)
+VERSION: tuple[int, int, int] = (0, 0, 1)
 
 option_to_progression: dict[tuple[str, int], (int, list[str])] = {
     ("remove_battle_power_comp_locations", 0): (60, [
