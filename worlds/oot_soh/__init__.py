@@ -31,11 +31,10 @@ from .Locations import SohLocation, base_location_table, \
     location_table
 from .Options import SohOptions
 from .Regions import region_data_table, reset_age_access, update_age_access
-from .Rules import get_soh_rule
 from .Enums import *
 from worlds.oot_soh.location_access.dungeons import \
-    dodongos_cavern, \
-    deku_tree
+    deku_tree, \
+    dodongos_cavern
 
 
 import logging
@@ -646,5 +645,5 @@ class SohWorld(World):
     
         visualize_regions(self.multiworld.get_region(self.origin_region_name, self.player), f"SOH-Player{self.player}.puml",
                         show_entrance_names=True,
-                        regions_to_highlight=self.multiworld.get_all_state(self.player).reachable_regions[
+                        regions_to_highlight=self.multiworld.get_all_state().reachable_regions[
                             self.player])

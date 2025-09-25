@@ -1,15 +1,13 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import Region
 from worlds.generic.Rules import set_rule
 from worlds.oot_soh.Regions import double_link_regions
 from worlds.oot_soh.Items import SohItem
-from worlds.oot_soh.Locations import SohLocation, SohLocationData, base_location_table
-from worlds.oot_soh.Enums import Regions, Items, Locations
-from worlds.oot_soh.Rules import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
-                                  has_fire_source_with_torch, can_use, can_do_trick, can_jump_slash, can_cut_shrubs, 
-                                  can_pass_enemy, has_item, can_reflect_nuts, hookshot_or_boomerang,
-                                  can_hit_eye_targets, blast_or_smash)
+from worlds.oot_soh.Locations import SohLocation, SohLocationData
+from worlds.oot_soh.Enums import *
+from worlds.oot_soh.LogicHelpers import (is_adult, can_attack, can_kill_enemy,
+                                  has_fire_source_with_torch, can_use, can_cut_shrubs, 
+                                  can_pass_enemy, can_reflect_nuts)
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
@@ -59,10 +57,11 @@ def set_region_rules(world: "SohWorld") -> None:
     world.get_region(Regions.DEKU_TREE_BASEMENT_LOWER.value).connect(
         world.get_region(Regions.DEKU_TREE_LOBBY.value))
 
-
     world.get_region(Regions.DEKU_TREE_BASEMENT_LOWER.value).connect(
         world.get_region(Regions.DEKU_TREE_BASEMENT_BACK_ROOM.value),
-        rule=lambda state: has_fire_source_with_torch(state, world) or can_use(Items.FAIRY_BOW.value, state, world))
+        # rule=lambda state: has_fire_source_with_torch(state, world) or can_use(Items.FAIRY_BOW.value, state, world))
+        # Above commented out because it can't succeed without stick pot event implemented
+        rule=lambda state: True)
 
     world.get_region(Regions.DEKU_TREE_BASEMENT_BACK_ROOM.value).connect(
         world.get_region(Regions.DEKU_TREE_BASEMENT_LOWER.value))
@@ -77,7 +76,9 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DEKU_TREE_BASEMENT_UPPER.value).connect(
         world.get_region(Regions.DEKU_TREE_BOSS_ENTRYWAY.value),
-        rule=lambda state: has_fire_source_with_torch(state, world))
+        # rule=lambda state: has_fire_source_with_torch(state, world))
+        # Above commented out because it can't succeed without stick pot event implemented
+        rule=lambda state: True)
 
     world.get_region(Regions.DEKU_TREE_BOSS_ENTRYWAY.value).connect(
         world.get_region(Regions.DEKU_TREE_BASEMENT_UPPER.value))
@@ -88,7 +89,6 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DEKU_TREE_BOSS_ROOM.value).connect(
         world.get_region(Regions.DEKU_TREE_BOSS_ENTRYWAY.value))
-
 
 
 def set_location_rules(world: "SohWorld") -> None:
@@ -159,34 +159,25 @@ def set_location_rules(world: "SohWorld") -> None:
     # Only set rule on Gold Skulltula tokens if they are shuffled
     if world.options.shuffle_skull_tokens in ["dungeon", "all"]:
         try:
-            set_rule(world.get_location(Locations.DEKU_TREE_GSCOMPASS_ROOM.value),
+            set_rule(world.get_location(Locations.DEKU_TREE_GS_COMPASS_ROOM.value),
                      rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
         except KeyError:
             pass
 
         try:
-            set_rule(world.get_location(Locations.DEKU_TREE_GSBASEMENT_GATE.value),
+            set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_GATE.value),
                      rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
         except KeyError:
             pass
 
         try:
-            set_rule(world.get_location(Locations.DEKU_TREE_GSBASEMENT_VINES.value),
+            set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_VINES.value),
                      rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
         except KeyError:
             pass
 
         try:
-            set_rule(world.get_location(Locations.DEKU_TREE_GSBASEMENT_BACK_ROOM.value),
+            set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_BACK_ROOM.value),
                      rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
-        except KeyError:
-            pass
-
-    # Only set rule on scrubs if they are shuffled - no regular scrubs in vanilla Deku Tree
-    if world.options.shuffle_scrubs:
-        try:
-            # Only MQ has scrubs in Deku Tree
-            set_rule(world.get_location(Locations.DEKU_TREE_MQDEKU_SCRUB.value),
-                     rule=lambda state: can_reflect_nuts(state, world) or can_use(Items.MEGATON_HAMMER.value, state, world))
         except KeyError:
             pass

@@ -1,12 +1,11 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import Region
 from worlds.generic.Rules import set_rule
 from worlds.oot_soh.Regions import double_link_regions
 from worlds.oot_soh.Items import SohItem
-from worlds.oot_soh.Locations import SohLocation, SohLocationData, base_location_table
+from worlds.oot_soh.Locations import SohLocation, SohLocationData
 from worlds.oot_soh.Enums import Regions, Items, Locations
-from worlds.oot_soh.Rules import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
+from worlds.oot_soh.LogicHelpers import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
                                   has_fire_source_with_torch, can_use, can_do_trick, can_jump_slash, blast_or_smash)
 
 if TYPE_CHECKING:
@@ -92,11 +91,11 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value),
-        rule=lambda state: can_kill_enemy(state, world, "Lizalfos", 0, quantity=2))
+        rule=lambda state: can_kill_enemy(state, world, "Lizalfos", "close", quantity=2))
 
     world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value),
-        rule=lambda state: can_kill_enemy(state, world, "Lizalfos", 0, quantity=2))
+        rule=lambda state: can_kill_enemy(state, world, "Lizalfos", "close", quantity=2))
 
     world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value),
@@ -250,4 +249,4 @@ def set_location_rules(world: "SohWorld") -> None:
              rule=lambda state: can_break_mud_walls(state, world))
 
     set_rule(world.get_location("Dodongos Cavern Lower Lizalfos"),
-             rule=lambda state: can_kill_enemy(state, world, "Lizalfos", 0, quantity=2))
+             rule=lambda state: can_kill_enemy(state, world, "Lizalfos", "close", quantity=2))
