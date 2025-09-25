@@ -194,44 +194,41 @@ def set_region_rules(world: "SohWorld") -> None:
 def set_location_rules(world: "SohWorld") -> None:
     player = world.player
 
-    # Deku Tree Map Chest
+    # Deku Lobby
     set_rule(world.get_location(Locations.DEKU_TREE_MAP_CHEST.value),
              rule=lambda state: True)  # Always accessible
 
-    # Deku Tree Slingshot Chest
+    # Deku Slingshot Room
     set_rule(world.get_location(Locations.DEKU_TREE_SLINGSHOT_CHEST.value),
              rule=lambda state: True)
-
-    # Deku Tree Slingshot Room Side Chest
     set_rule(world.get_location(Locations.DEKU_TREE_SLINGSHOT_ROOM_SIDE_CHEST.value),
              rule=lambda state: True)
 
-    # Deku Tree Compass Chest
+    # Deku Compass Room
     set_rule(world.get_location(Locations.DEKU_TREE_COMPASS_CHEST.value),
              rule=lambda state: True)
-
-    # Deku Tree Compass Room Side Chest
     set_rule(world.get_location(Locations.DEKU_TREE_COMPASS_ROOM_SIDE_CHEST.value),
              rule=lambda state: True)
 
-    # Deku Tree Basement Chest
+    # Deku Basement Lower
     set_rule(world.get_location(Locations.DEKU_TREE_BASEMENT_CHEST.value),
              rule=lambda state: True)
 
-    # Queen Gohma Dungeon Reward
+    # Deku Boss room
     set_rule(world.get_location(Locations.QUEEN_GOHMA.value),
              rule=lambda state: can_kill_enemy(state, world, "gohma"))
-
-    # Queen Gohma Heart Container
     set_rule(world.get_location(Locations.DEKU_TREE_QUEEN_GOHMA_HEART_CONTAINER.value),
              rule=lambda state: can_kill_enemy(state, world, "gohma"))
 
     # Only set rule on freestanding items if they are shuffled
     if world.options.shuffle_freestanding_items in ["dungeon", "all"]:
+        # Deku Lobby
         set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_LOWER_HEART.value),
-                    rule=lambda state: True)  # Always accessible
+                    rule=lambda state: True)
         set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_UPPER_HEART.value),
                     rule=lambda state: can_pass_enemy(state, world, "big_skulltula"))
+        
+        # Deku Outside boss room
         for underwater_heart in (Locations.DEKU_TREE_FINAL_ROOM_LEFT_FRONT_HEART, 
                                  Locations.DEKU_TREE_FINAL_ROOM_LEFT_BACK_HEART, 
                                  Locations.DEKU_TREE_FINAL_ROOM_RIGHT_HEART):
@@ -272,12 +269,12 @@ def set_location_rules(world: "SohWorld") -> None:
                 Locations.DEKU_TREE_QUEEN_GOHMA_GRASS8):
             set_rule(grass_spot.value, rule=lambda state: can_cut_shrubs(state, world))
 
-        # Scrub reflectable grass
+        # Scrub reflect grass,   # can reflect is probably a mistake in SoH
         for grass_spot in (Locations.DEKU_TREE_SLINGSHOT_GRASS1,
                 Locations.DEKU_TREE_SLINGSHOT_GRASS2,
                 Locations.DEKU_TREE_SLINGSHOT_GRASS3,
                 Locations.DEKU_TREE_SLINGSHOT_GRASS4):
-            set_rule(grass_spot.value, rule=lambda state: can_cut_shrubs(state, world) and can_reflect_nuts(state, world))  # can reflect is probably a mistake in SoH
+            set_rule(grass_spot.value, rule=lambda state: can_cut_shrubs(state, world) and can_reflect_nuts(state, world))
 
         # Requires fire grass
         for grass_spot in (Locations.DEKU_TREE_BEFORE_BOSS_GRASS1,
@@ -289,11 +286,16 @@ def set_location_rules(world: "SohWorld") -> None:
 
     # Only set rule on Gold Skulltula tokens if they are shuffled
     if world.options.shuffle_skull_tokens in ["dungeon", "all"]:
+        # Deku Compass room
         set_rule(world.get_location(Locations.DEKU_TREE_GS_COMPASS_ROOM.value),
                     rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
+        
+        # Deku Basment Lower
         set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_GATE.value),
                     rule=lambda state: can_kill_enemy(state, world, "gold_skulltula", "short_jumpslash"))
         set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_VINES.value),
                     rule=lambda state: can_kill_enemy(state, world, "gold_skulltula", "short_jumpslash" if can_do_trick("Deku MQ Compass GS") else "bomb_throw"))
+        
+        # Deku Basement back room
         set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_BACK_ROOM.value),
                     rule=lambda state: hookshot_or_boomerang(state, world))
