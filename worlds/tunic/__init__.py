@@ -7,13 +7,13 @@ from Options import PlandoConnection, OptionError, PerGameCommonOptions, Range, 
 from settings import Group, Bool, FilePath
 from worlds.AutoWorld import WebWorld, World
 
-# from .bells import bell_location_groups, bell_location_name_to_id
+from .bells import bell_location_groups, bell_location_name_to_id
 from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
 from .combat_logic import area_data, CombatState
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .er_rules import set_er_location_rules
 from .er_scripts import create_er_regions, verify_plando_directions
-# from .fuses import fuse_location_name_to_id, fuse_location_groups
+from .fuses import fuse_location_name_to_id, fuse_location_groups
 from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups, excluded_grass_locations
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
                     combat_items)
@@ -75,6 +75,8 @@ class SeedGroup(TypedDict):
     entrance_layout: int  # entrance layout value
     has_decoupled_enabled: bool  # for checking that players don't have conflicting options
     plando: list[PlandoConnection]  # consolidated plando connections for the seed group
+    bell_shuffle: bool  # off controls
+    fuse_shuffle: bool  # off controls
 
 
 class TunicWorld(World):
@@ -98,17 +100,17 @@ class TunicWorld(World):
         location_name_groups.setdefault(group_name, set()).update(members)
     for group_name, members in breakable_location_groups.items():
         location_name_groups.setdefault(group_name, set()).update(members)
-    # for group_name, members in fuse_location_groups.items():
-    #     location_name_groups.setdefault(group_name, set()).update(members)
-    # for group_name, members in bell_location_groups.items():
-    #     location_name_groups.setdefault(group_name, set()).update(members)
+    for group_name, members in fuse_location_groups.items():
+        location_name_groups.setdefault(group_name, set()).update(members)
+    for group_name, members in bell_location_groups.items():
+        location_name_groups.setdefault(group_name, set()).update(members)
 
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
     location_name_to_id.update(grass_location_name_to_id)
     location_name_to_id.update(breakable_location_name_to_id)
-    # location_name_to_id.update(fuse_location_name_to_id)
-    # location_name_to_id.update(bell_location_name_to_id)
+    location_name_to_id.update(fuse_location_name_to_id)
+    location_name_to_id.update(bell_location_name_to_id)
 
     player_location_table: dict[str, int]
     ability_unlocks: dict[str, int]
@@ -227,11 +229,11 @@ class TunicWorld(World):
                 self.player_location_table.update({name: num for name, num in breakable_location_name_to_id.items()
                                                    if not name.startswith("Purgatory")})
 
-        # if self.options.shuffle_fuses:
-        #     self.player_location_table.update(fuse_location_name_to_id)
-        #
-        # if self.options.shuffle_bells:
-        #     self.player_location_table.update(bell_location_name_to_id)
+        if self.options.shuffle_fuses:
+            self.player_location_table.update(fuse_location_name_to_id)
+
+        if self.options.shuffle_bells:
+            self.player_location_table.update(bell_location_name_to_id)
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -259,7 +261,9 @@ class TunicWorld(World):
                               laurels_at_10_fairies=tunic.options.laurels_location == LaurelsLocation.option_10_fairies,
                               entrance_layout=tunic.options.entrance_layout.value,
                               has_decoupled_enabled=bool(tunic.options.decoupled),
-                              plando=tunic.options.plando_connections.value.copy())
+                              plando=tunic.options.plando_connections.value.copy(),
+                              bell_shuffle=bool(tunic.options.shuffle_bells),
+                              fuse_shuffle=bool(tunic.options.shuffle_fuses))
                 continue
             # I feel that syncing this one is worse than erroring out
             if bool(tunic.options.decoupled) != cls.seed_groups[group]["has_decoupled_enabled"]:
@@ -277,6 +281,12 @@ class TunicWorld(World):
             # laurels at 10 fairies changes logic for secret gathering place placement
             if tunic.options.laurels_location == 3:
                 cls.seed_groups[group]["laurels_at_10_fairies"] = True
+            # off is more restrictive
+            if not tunic.options.shuffle_bells:
+                cls.seed_groups[group]["bell_shuffle"] = False
+            # off is more restrictive
+            if not tunic.options.shuffle_fuses:
+                cls.seed_groups[group]["fuse_shuffle"] = False
             # fixed shop and direction pairs override standard, but conflict with each other
             if tunic.options.entrance_layout:
                 if cls.seed_groups[group]["entrance_layout"] == EntranceLayout.option_standard:
@@ -428,6 +438,19 @@ class TunicWorld(World):
                     ladder_count += 1
             remove_filler(ladder_count)
 
+        if self.options.shuffle_fuses:
+            for item_name, item_data in item_table.items():
+                if item_data.item_group == "Fuses":
+                    if item_name == "Cathedral Elevator Fuse" and self.options.entrance_rando:
+                        tunic_items.append(self.create_item(item_name, ItemClassification.useful))
+                        continue
+                    items_to_create[item_name] = 1
+
+        if self.options.shuffle_bells:
+            for item_name, item_data in item_table.items():
+                if item_data.item_group == "Bells":
+                    items_to_create[item_name] = 1
+
         if self.options.hexagon_quest:
             # Replace pages and normal hexagons with filler
             for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
@@ -480,7 +503,6 @@ class TunicWorld(World):
         # pull out the filler so that we can place it manually during pre_fill
         self.fill_items = []
         if self.options.local_fill > 0 and self.multiworld.players > 1:
-            # skip items marked local or non-local, let fill deal with them in its own way
             all_filler: list[TunicItem] = []
             non_filler: list[TunicItem] = []
             for tunic_item in tunic_items:
@@ -709,8 +731,8 @@ class TunicWorld(World):
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
             "decoupled": self.options.decoupled.value if self.options.entrance_rando else 0,
             "shuffle_ladders": self.options.shuffle_ladders.value,
-            # "shuffle_fuses": self.options.shuffle_fuses.value,
-            # "shuffle_bells": self.options.shuffle_bells.value,
+            "shuffle_fuses": self.options.shuffle_fuses.value,
+            "shuffle_bells": self.options.shuffle_bells.value,
             "grass_randomizer": self.options.grass_randomizer.value,
             "combat_logic": self.options.combat_logic.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
