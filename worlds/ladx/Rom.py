@@ -10,6 +10,7 @@ import binascii
 import pickle
 import logging
 from typing import TYPE_CHECKING
+from Options import OptionError
 from .Common import *
 from .LADXR import generator
 from .LADXR.main import get_parser
@@ -146,7 +147,7 @@ def apply_overrides(patch_data: dict) -> None:
     from Generate import roll_settings
     try:
         rolled_settings = roll_settings(wrapped_overrides)
-    except:
+    except OptionError:
         logger = logging.getLogger("Link's Awakening Logger")
         logger.warning("Failed to apply option overrides, check that they are formatted correctly.")
         return
