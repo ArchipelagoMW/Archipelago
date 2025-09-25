@@ -337,7 +337,7 @@ class World(metaclass=AutoWorldRegister):
     """If loaded from a .apworld, this is the Path to it."""
     __file__: ClassVar[str]
     """path it was loaded from"""
-    world_version: ClassVar[Version | None] = None
+    world_version: ClassVar[Version] = Version(0, 0, 0)
     """Optional world version loaded from archipelago.json"""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
