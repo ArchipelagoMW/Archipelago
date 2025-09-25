@@ -33,10 +33,35 @@ from .Options import SohOptions
 from .RegionAgeAccess import reset_age_access, update_age_access
 from .Regions import region_data_table
 from .Enums import *
+from worlds.oot_soh.location_access import root
+from worlds.oot_soh.location_access.overworld import \
+    castle_grounds, \
+    death_mountain_crater, \
+    death_mountain_trail, \
+    desert_colossus, \
+    gerudo_fortress, \
+    gerudo_valley, \
+    goron_city, \
+    graveyard, \
+    haunted_wasteland, \
+    hyrule_field, \
+    kakariko, \
+    kokiri_forest, \
+    lake_hylia, \
+    lon_lon_ranch
 from worlds.oot_soh.location_access.dungeons import \
+    bottom_of_the_well, \
     deku_tree, \
-    dodongos_cavern
-
+    dodongos_cavern, \
+    fire_temple, \
+    forest_temple, \
+    ganons_castle, \
+    gerudo_training_ground, \
+    ice_cavern, \
+    jabujabus_belly, \
+    shadow_temple, \
+    spirit_temple, \
+    water_temple
 
 import logging
 logger = logging.getLogger("SOH_OOT")
@@ -551,9 +576,39 @@ class SohWorld(World):
             for location_name, location_data in gold_skulltula_dungeon_location_table.items():
                 self.get_location(location_name).place_locked_item(token_item)
 
-        # Set dungeon-specific region rules and location rules after all locations are created
-        dodongos_cavern.create_regions_and_rules(self)
+        # Set region rules and location rules after all locations are created
+        # Root
+        root.create_regions_and_rules(self)
+
+        # Overworld
+        castle_grounds.create_regions_and_rules(self)
+        death_mountain_crater.create_regions_and_rules(self)
+        death_mountain_trail.create_regions_and_rules(self)
+        desert_colossus.create_regions_and_rules(self)
+        gerudo_fortress.create_regions_and_rules(self)
+        gerudo_valley.create_regions_and_rules(self)
+        goron_city.create_regions_and_rules(self)
+        graveyard.create_regions_and_rules(self)
+        haunted_wasteland.create_regions_and_rules(self)
+        hyrule_field.create_regions_and_rules(self)
+        kakariko.create_regions_and_rules(self)
+        kokiri_forest.create_regions_and_rules(self)
+        lake_hylia.create_regions_and_rules(self)
+        lon_lon_ranch.create_regions_and_rules(self)
+        
+        # Dungeons
+        bottom_of_the_well.create_regions_and_rules(self)
         deku_tree.create_regions_and_rules(self)
+        dodongos_cavern.create_regions_and_rules(self)
+        fire_temple.create_regions_and_rules(self)
+        forest_temple.create_regions_and_rules(self)
+        ganons_castle.create_regions_and_rules(self)
+        gerudo_training_ground.create_regions_and_rules(self)
+        ice_cavern.create_regions_and_rules(self)
+        jabujabus_belly.create_regions_and_rules(self)
+        shadow_temple.create_regions_and_rules(self)
+        spirit_temple.create_regions_and_rules(self)
+        water_temple.create_regions_and_rules(self)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
