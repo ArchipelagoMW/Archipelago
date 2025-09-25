@@ -124,60 +124,27 @@ def set_location_rules(world: "SohWorld") -> None:
 
     # Only set rule on freestanding items if they are shuffled
     if world.options.shuffle_freestanding_items in ["dungeon", "all"]:
-        try:
-            set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_LOWER_HEART.value),
-                     rule=lambda state: True)  # Always accessible
-        except KeyError:
-            pass
-
-        try:
-            set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_UPPER_HEART.value),
-                     rule=lambda state: can_pass_enemy(state, world, "big_skulltula"))
-        except KeyError:
-            pass
+        set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_LOWER_HEART.value),
+                    rule=lambda state: True)  # Always accessible
+        set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_UPPER_HEART.value),
+                    rule=lambda state: can_pass_enemy(state, world, "big_skulltula"))
 
     # Only set rule on grass items if they are shuffled
     if world.options.shuffle_grass in ["dungeon", "all"]:
-        try:
-            set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_GRASS1.value),
-                     rule=lambda state: can_cut_shrubs(state, world))
-        except KeyError:
-            pass
-
-        try:
-            set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_GRASS2.value),
-                     rule=lambda state: can_cut_shrubs(state, world))
-        except KeyError:
-            pass
-
-        try:
-            set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_GRASS3.value),
-                     rule=lambda state: can_cut_shrubs(state, world))
-        except KeyError:
-            pass
+        set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_GRASS1.value),
+                    rule=lambda state: can_cut_shrubs(state, world))
+        set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_GRASS2.value),
+                    rule=lambda state: can_cut_shrubs(state, world))
+        set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_GRASS3.value),
+                    rule=lambda state: can_cut_shrubs(state, world))
 
     # Only set rule on Gold Skulltula tokens if they are shuffled
     if world.options.shuffle_skull_tokens in ["dungeon", "all"]:
-        try:
-            set_rule(world.get_location(Locations.DEKU_TREE_GS_COMPASS_ROOM.value),
-                     rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
-        except KeyError:
-            pass
-
-        try:
-            set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_GATE.value),
-                     rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
-        except KeyError:
-            pass
-
-        try:
-            set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_VINES.value),
-                     rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
-        except KeyError:
-            pass
-
-        try:
-            set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_BACK_ROOM.value),
-                     rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
-        except KeyError:
-            pass
+        set_rule(world.get_location(Locations.DEKU_TREE_GS_COMPASS_ROOM.value),
+                    rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
+        set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_GATE.value),
+                    rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
+        set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_VINES.value),
+                    rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
+        set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_BACK_ROOM.value),
+                    rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
