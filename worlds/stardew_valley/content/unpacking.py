@@ -65,6 +65,10 @@ def register_pack(content: StardewContent, pack: ContentPack):
         content.farm_buildings[building.name] = building
     pack.farm_building_hook(content)
 
+    for animal in pack.animals:
+        content.animals[animal.name] = animal
+    pack.animal_hook(content)
+
     for skill in pack.skills:
         content.skills[skill.name] = skill
     pack.skill_hook(content)

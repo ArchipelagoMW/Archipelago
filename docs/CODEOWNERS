@@ -21,9 +21,6 @@
 # Aquaria
 /worlds/aquaria/ @tioui
 
-# ArchipIDLE
-/worlds/archipidle/ @LegendaryLinux
-
 # Blasphemous
 /worlds/blasphemous/ @TRPG0
 
@@ -42,14 +39,17 @@
 # Celeste 64
 /worlds/celeste64/ @PoryGone
 
+# Celeste (Open World)
+/worlds/celeste_open_world/ @PoryGone
+
 # ChecksFinder
 /worlds/checksfinder/ @SunCatMC
 
+# Choo-Choo Charles
+/worlds/cccharles/ @Yaranorgoth
+
 # Civilization VI
 /worlds/civ6/ @hesto2
-
-# Clique
-/worlds/clique/ @ThePhar
 
 # Dark Souls III
 /worlds/dark_souls_3/ @Marechal-L @nex3
@@ -72,6 +72,9 @@
 # Faxanadu
 /worlds/faxanadu/ @Daivuk
 
+# Final Fantasy (1)
+/worlds/ff1/ @Rosalie-A
+
 # Final Fantasy Mystic Quest
 /worlds/ffmq/ @Alchav @wildham0
 
@@ -86,6 +89,9 @@
 
 # Inscryption
 /worlds/inscryption/ @DrBibop @Glowbuzz
+
+# Jak and Daxter: The Precursor Legacy
+/worlds/jakanddaxter/ @massimilianodelliubaldini
 
 # Kirby's Dream Land 3
 /worlds/kdl3/ @Silvris
@@ -118,9 +124,6 @@
 # The Messenger
 /worlds/messenger/ @alwaysintreble
 
-# Minecraft
-/worlds/minecraft/ @KonoTyran @espeon65536
-
 # Mega Man 2
 /worlds/mm2/ @Silvris
 
@@ -139,6 +142,9 @@
 # Overcooked! 2
 /worlds/overcooked2/ @toasterparty
 
+# Paint
+/worlds/paint/ @MarioManTAW
+
 # Pokemon Emerald
 /worlds/pokemon_emerald/ @Zunawe
 
@@ -148,14 +154,14 @@
 # Raft
 /worlds/raft/ @SunnyBat
 
-# Rogue Legacy
-/worlds/rogue_legacy/ @ThePhar
-
 # Risk of Rain 2
 /worlds/ror2/ @kindasneaki
 
 # Saving Princess
 /worlds/saving_princess/ @LeonarthCG
+
+# shapez
+/worlds/shapez/ @BlastSlimey
 
 # Shivers
 /worlds/shivers/ @GodlFire @korydondzila
@@ -175,6 +181,9 @@
 # Super Mario 64
 /worlds/sm64ex/ @N00byKing
 
+# Super Mario Land 2: 6 Golden Coins
+/worlds/marioland2/ @Alchav
+
 # Super Mario World
 /worlds/smw/ @PoryGone
 
@@ -183,9 +192,6 @@
 
 # Secret of Evermore
 /worlds/soe/ @black-sliver
-
-# Slay the Spire
-/worlds/spire/ @KonoTyran
 
 # Stardew Valley
 /worlds/stardew_valley/ @agilbert1412
@@ -200,7 +206,7 @@
 /worlds/timespinner/ @Jarno458
 
 # The Legend of Zelda (1)
-/worlds/tloz/ @Rosalie-A @t3hf1gm3nt
+/worlds/tloz/ @Rosalie-A
 
 # TUNIC
 /worlds/tunic/ @silent-destroyer @ScipioWright
@@ -232,30 +238,14 @@
 # Zillion
 /worlds/zillion/ @beauxq
 
-# Zork Grand Inquisitor
-/worlds/zork_grand_inquisitor/ @nbrochu
-
-
 ## Active Unmaintained Worlds
 
 # The following worlds in this repo are currently unmaintained, but currently still work in core. If any update breaks
-# compatibility, these worlds may be moved to `worlds_disabled`. If you are interested in stepping up as maintainer for
+# compatibility, these worlds may be deleted. If you are interested in stepping up as maintainer for
 # any of these worlds, please review `/docs/world maintainer.md` documentation.
-
-# Final Fantasy (1)
-# /worlds/ff1/
 
 # Ocarina of Time
 # /worlds/oot/
-
-## Disabled Unmaintained Worlds
-
-# The following worlds in this repo are currently unmaintained and disabled as they do not work in core. If you are
-# interested in stepping up as maintainer for any of these worlds, please review `/docs/world maintainer.md`
-# documentation.
-
-# Ori and the Blind Forest
-# /worlds_disabled/oribf/
 
 ###################
 ## Documentation ##

@@ -2640,9 +2640,13 @@ class PokemonRBWarp(Entrance):
         self.warp_id = warp_id
         self.address = address
         self.flags = flags
+        self.addresses = None
+        self.target = None
 
     def connect(self, entrance):
-        super().connect(entrance.parent_region, None, target=entrance.warp_id)
+        super().connect(entrance.parent_region)
+        self.addresses = None
+        self.target = entrance.warp_id
 
     def access_rule(self, state):
         if self.connected_region is None:

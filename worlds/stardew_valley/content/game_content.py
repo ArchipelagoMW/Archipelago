@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, Iterable, Set, Any, Mapping, Type, Tuple, Union
+from typing import Iterable, Set, Any, Mapping, Type, Tuple, Union
 
 from .feature import booksanity, cropsanity, fishsanity, friendsanity, skill_progression, building_progression, tool_progression
+from ..data.animal import Animal
 from ..data.building import Building
 from ..data.fish_data import FishItem
 from ..data.game_item import GameItem, Source, ItemTag
@@ -18,12 +19,13 @@ class StardewContent:
 
     # regions -> To be used with can reach rule
 
-    game_items: Dict[str, GameItem] = field(default_factory=dict)
-    fishes: Dict[str, FishItem] = field(default_factory=dict)
-    villagers: Dict[str, Villager] = field(default_factory=dict)
-    farm_buildings: Dict[str, Building] = field(default_factory=dict)
-    skills: Dict[str, Skill] = field(default_factory=dict)
-    quests: Dict[str, Any] = field(default_factory=dict)
+    game_items: dict[str, GameItem] = field(default_factory=dict)
+    fishes: dict[str, FishItem] = field(default_factory=dict)
+    villagers: dict[str, Villager] = field(default_factory=dict)
+    farm_buildings: dict[str, Building] = field(default_factory=dict)
+    animals: dict[str, Animal] = field(default_factory=dict)
+    skills: dict[str, Skill] = field(default_factory=dict)
+    quests: dict[str, Any] = field(default_factory=dict)
 
     def find_sources_of_type(self, types: Union[Type[Source], Tuple[Type[Source]]]) -> Iterable[Source]:
         for item in self.game_items.values():
@@ -107,6 +109,11 @@ class ContentPack:
     farm_buildings: Iterable[Building] = ()
 
     def farm_building_hook(self, content: StardewContent):
+        ...
+
+    animals: Iterable[Animal] = ()
+
+    def animal_hook(self, content: StardewContent):
         ...
 
     skills: Iterable[Skill] = ()
