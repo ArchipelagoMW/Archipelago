@@ -1127,8 +1127,10 @@ class SC2Logic:
 
         return levels >= target
 
-    def basic_kerrigan(self, state: CollectionState) -> bool:
-        # One active ability that can be used to defeat enemies directly on Standard
+    def basic_kerrigan(self, state: CollectionState, story_tech_available=True) -> bool:
+        if story_tech_available and self.grant_story_tech == GrantStoryTech.option_grant:
+            return True
+        # One active ability that can be used to defeat enemies directly
         if not state.has_any(
             (
                 item_names.KERRIGAN_LEAPING_STRIKE,
@@ -1149,7 +1151,9 @@ class SC2Logic:
                 return True
         return False
 
-    def two_kerrigan_actives(self, state: CollectionState) -> bool:
+    def two_kerrigan_actives(self, state: CollectionState, story_tech_available=True) -> bool:
+        if story_tech_available and self.grant_story_tech == GrantStoryTech.option_grant:
+            return True
         count = 0
         for i in range(7):
             if state.has_any(kerrigan_logic_active_abilities, self.player):
@@ -2396,7 +2400,7 @@ class SC2Logic:
         return (
             self.zerg_competent_comp(state)
             and (self.zerg_competent_anti_air(state) or self.advanced_tactics and self.zerg_moderate_anti_air(state))
-            and (self.basic_kerrigan(state) or self.zerg_power_rating(state) >= 4)
+            and (self.basic_kerrigan(state, False) or self.zerg_power_rating(state) >= 4)
         )
 
     def protoss_hand_of_darkness_requirement(self, state: CollectionState) -> bool:
@@ -2412,7 +2416,7 @@ class SC2Logic:
         return self.protoss_deathball(state) and self.protoss_power_rating(state) >= 8
 
     def zerg_the_reckoning_requirement(self, state: CollectionState) -> bool:
-        if not (self.zerg_power_rating(state) >= 6 or self.basic_kerrigan(state)):
+        if not (self.zerg_power_rating(state) >= 6 or self.basic_kerrigan(state, False)):
             return False
         if self.take_over_ai_allies:
             return (
@@ -2460,20 +2464,22 @@ class SC2Logic:
 
     def the_infinite_cycle_requirement(self, state: CollectionState) -> bool:
         return (
-            self.grant_story_tech == GrantStoryTech.option_grant
-            or not self.kerrigan_unit_available
-            or (
-                state.has_any(
-                    (
-                        item_names.KERRIGAN_KINETIC_BLAST,
-                        item_names.KERRIGAN_SPAWN_BANELINGS,
-                        item_names.KERRIGAN_LEAPING_STRIKE,
-                        item_names.KERRIGAN_SPAWN_LEVIATHAN,
-                    ),
-                    self.player,
+            self.kerrigan_levels(state, 70)
+            and (
+                self.grant_story_tech == GrantStoryTech.option_grant
+                or not self.kerrigan_unit_available
+                or (
+                    state.has_any(
+                        (
+                            item_names.KERRIGAN_KINETIC_BLAST,
+                            item_names.KERRIGAN_SPAWN_BANELINGS,
+                            item_names.KERRIGAN_LEAPING_STRIKE,
+                            item_names.KERRIGAN_SPAWN_LEVIATHAN,
+                        ),
+                        self.player,
+                    )
+                    and self.basic_kerrigan(state)
                 )
-                and self.basic_kerrigan(state)
-                and self.kerrigan_levels(state, 70)
             )
         )
 
