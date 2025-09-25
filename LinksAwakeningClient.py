@@ -412,10 +412,10 @@ class LinksAwakeningClient():
             status = (await self.gameboy.async_read_memory_safe(LAClientConstants.wLinkStatusBits))[0]
 
         item_id -= LABaseID
-        # The player name table only goes up to 100, so don't go past that
+        # The player name table only goes up to 101, so don't go past that
         # Even if it didn't, the remote player _index_ byte is just a byte, so 255 max
-        if from_player > 100:
-            from_player = 100
+        if from_player > 101:
+            from_player = 101
 
         next_index += 1
         self.gameboy.write_memory(LAClientConstants.wLinkGiveItem, [
