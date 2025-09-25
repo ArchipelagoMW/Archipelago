@@ -184,7 +184,7 @@ if apworlds:
                 apworld_source.load()
                 if apworld.game in AutoWorldRegister.world_types:
                     # world could fail to load at this point
-                    if apworld.version:
+                    if apworld.world_version:
                         AutoWorldRegister.world_types[apworld.game].world_version = apworld.world_version
                     else:
                         AutoWorldRegister.world_types[apworld.game].world_version = Version(0, 0, 0)
