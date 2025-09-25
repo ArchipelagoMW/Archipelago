@@ -584,6 +584,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     multiworld.random.shuffle(itempool)
 
     fill_locations = sorted(multiworld.get_unfilled_locations())
+    # All fill steps for i"mportant" items (early, priority, progression) should be balanced by the balancing factor.
     fill_locations = balanced_shuffle(multiworld, fill_locations, itempool)
 
     fill_locations, itempool = distribute_early_items(multiworld, fill_locations, itempool)
@@ -707,6 +708,10 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     del mark_for_locking, lock_later
 
     inaccessible_location_rules(multiworld, multiworld.state, defaultlocations)
+
+    # We now need to "undo" the balanced shuffle, because remaining fill should treat all games equally for this.
+    multiworld.random.shuffle(defaultlocations)
+    multiworld.random.shuffle(excludedlocations)
 
     remaining_fill(multiworld, excludedlocations, filleritempool, "Remaining Excluded",
                    move_unplaceable_to_start_inventory=panic_method=="start_inventory")
