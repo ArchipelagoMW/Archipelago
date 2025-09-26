@@ -22,7 +22,7 @@ class GrinchWorld(World):
     item_name_to_id: ClassVar[dict[str,int]] = grinch_items_to_id()
     location_name_to_id: ClassVar[dict[str,int]] = grinch_locations_to_id()
     required_client_version = (0, 6, 3)
-    item_name_groups: ClassVar[dict[str, set[str]]] = get_item_names_per_category()
+    item_name_groups = get_item_names_per_category()
 
     def __init__(self, *args, **kwargs): #Pulls __init__ function and takes control from there in BaseClasses.py
         self.origin_region_name: str = "Mount Crumpit"
