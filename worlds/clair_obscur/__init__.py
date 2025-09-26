@@ -85,8 +85,8 @@ class ClairObscurWorld(World):
 
         excluded_types = ["Journal", "Character"]
         excluded_names = []
-        if not self.options.gestral_shuffle:
-            excluded_names.append("Lost Gestral")
+        if not self.options.gestral_shuffle: excluded_names.append("Lost Gestral")
+        if not self.options.shuffle_free_aim: excluded_names.append("Free Aim")
 
         for item_id, item_data in data.items.items():
             amount = 1
@@ -135,7 +135,8 @@ class ClairObscurWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
         slot_data["options"] = self.options.as_dict(
-            "goal", "char_shuffle", "starting_char", "gestral_shuffle", "gear_scaling", "shuffle_free_aim"
+            "goal", "char_shuffle", "starting_char", "gestral_shuffle", "gear_scaling", "shuffle_free_aim",
+            "exclude_endgame_locations", "exclude_endless_tower"
         )
 
         slot_data["totals"]: Dict[str, int] = {}
