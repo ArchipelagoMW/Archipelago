@@ -496,7 +496,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
         return has_explosives(state, world)
 
     # Lizalfos (requires good weapons)
-    if enemy == Enemies.LIZALFOS:
+    if enemy == Enemies.LIZALFOS.value:
         return (can_jump_slash(state, world) or
                 can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 has_explosives(state, world))
