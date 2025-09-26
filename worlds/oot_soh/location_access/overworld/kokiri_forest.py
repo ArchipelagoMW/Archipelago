@@ -7,7 +7,8 @@ from worlds.oot_soh.Locations import SohLocation, SohLocationData
 from worlds.oot_soh.Enums import *
 from worlds.oot_soh.LogicHelpers import (set_location_rules, connect_regions, is_adult, can_attack, can_get_nighttimeGS,
                                          is_child, can_kill_enemy, can_use, can_do_trick, call_gossip_fairy_except_suns,
-                                         can_cut_shrubs, can_break_pots, has_bottle, call_gossip_fairy)
+                                         can_cut_shrubs, can_break_pots, has_bottle, call_gossip_fairy,
+                                         can_break_lower_hives, can_open_storms_grotto)
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
@@ -39,7 +40,7 @@ def set_rules(world: "SohWorld") -> None:
                                                                         is_child(state, world) and
                                                                         can_get_nighttimeGS(state,world))],
         [Locations.KF_GS_BEAN_PATCH.value, lambda state: can_use(Items.BOTTLE_WITH_BUGS, state, world) and
-                                                         can_attack(state, world)],
+                                                         can_attack(state, world) and is_child(state, world)],
         [Locations.KF_GS_HOUSE_OF_TWINS.value, lambda state: is_adult(state, world) and
                                                              ((can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or can_use(Items.BOOMERANG.value, state, world))
                                                               or (can_do_trick("Kokiri Forest Gold Skulltula with Hover Boots", state, world)
@@ -63,27 +64,27 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.KF_NORTH_GRASS_EAST_RUPEE.value, lambda state: is_child(state, world)],
         [Locations.KF_BOULDER_MAZE_FIRST_RUPEE.value, lambda state: is_child(state, world)],
         [Locations.KF_BOULDER_MAZE_SECOND_RUPEE.value, lambda state: is_child(state, world)],
-        [Locations.KF_BEAN_PLATFORM_RUPEE1.value, lambda state: can_use(Items.HOVER_BOOTS.value, state, world) or
+        [Locations.KF_BEAN_PLATFORM_RUPEE1.value, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS.value, state, world or
                                                                    can_use(Items.BOOMERANG.value, state, world) or
-                                                                   state.has("Kokiri Forest Bean Planted")],
-        [Locations.KF_BEAN_PLATFORM_RUPEE2.value, lambda state: can_use(Items.HOVER_BOOTS.value, state, world) or
+                                                                   state.has("Kokiri Forest Bean Planted"))],
+        [Locations.KF_BEAN_PLATFORM_RUPEE2.value, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS.value, state, world or
                                                                    can_use(Items.BOOMERANG.value, state, world) or
-                                                                   state.has("Kokiri Forest Bean Planted")],
-        [Locations.KF_BEAN_PLATFORM_RUPEE3.value, lambda state: can_use(Items.HOVER_BOOTS.value, state, world) or
+                                                                   state.has("Kokiri Forest Bean Planted"))],
+        [Locations.KF_BEAN_PLATFORM_RUPEE3.value, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS.value, state, world or
                                                                    can_use(Items.BOOMERANG.value, state, world) or
-                                                                   state.has("Kokiri Forest Bean Planted")],
-        [Locations.KF_BEAN_PLATFORM_RUPEE4.value, lambda state: can_use(Items.HOVER_BOOTS.value, state, world) or
+                                                                   state.has("Kokiri Forest Bean Planted"))],
+        [Locations.KF_BEAN_PLATFORM_RUPEE4.value, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS.value, state, world or
                                                                    can_use(Items.BOOMERANG.value, state, world) or
-                                                                   state.has("Kokiri Forest Bean Planted")],
-        [Locations.KF_BEAN_PLATFORM_RUPEE5.value, lambda state: can_use(Items.HOVER_BOOTS.value, state, world) or
+                                                                   state.has("Kokiri Forest Bean Planted"))],
+        [Locations.KF_BEAN_PLATFORM_RUPEE5.value, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS.value, state, world or
                                                                    can_use(Items.BOOMERANG.value, state, world) or
-                                                                   state.has("Kokiri Forest Bean Planted")],
-        [Locations.KF_BEAN_PLATFORM_RUPEE6.value, lambda state:  can_use(Items.HOVER_BOOTS.value, state, world) or
-                                                                 can_use(Items.BOOMERANG.value, state, world) or
-                                                                 state.has("Kokiri Forest Bean Planted")],
-        [Locations.KF_BEAN_PLATFORM_RED_RUPEE.value, lambda state: can_use(Items.HOVER_BOOTS.value, state, world) or
+                                                                   state.has("Kokiri Forest Bean Planted"))],
+        [Locations.KF_BEAN_PLATFORM_RUPEE6.value, lambda state:  is_adult(state, world) and (Items.HOVER_BOOTS.value, state, world or
                                                                    can_use(Items.BOOMERANG.value, state, world) or
-                                                                   state.has("Kokiri Forest Bean Planted")],
+                                                                   state.has("Kokiri Forest Bean Planted"))],
+        [Locations.KF_BEAN_PLATFORM_RED_RUPEE.value, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS.value, state, world or
+                                                                   can_use(Items.BOOMERANG.value, state, world) or
+                                                                   state.has("Kokiri Forest Bean Planted"))],
         [Locations.KF_SARIAS_ROOF_EAST_HEART.value, lambda state: is_child(state, world)],
         [Locations.KF_SARIAS_ROOF_NORTH_HEART.value, lambda state: is_child(state, world)],
         [Locations.KF_SARIAS_ROOF_WEST_HEART.value, lambda state: is_child(state, world)],
@@ -154,7 +155,7 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.KF_ADULT_GRASS19.value, lambda state: (is_adult(state, world)
                                                         and can_cut_shrubs(state, world))],
         [Locations.KF_ADULT_GRASS20.value, lambda state: (is_adult(state, world)
-                                                        and can_cut_shrubs(state, world))]
+                                                        and can_cut_shrubs(state, world))],
 
     ])
     # Connections
@@ -169,11 +170,11 @@ def set_rules(world: "SohWorld") -> None:
                                                              (can_kill_enemy(state, world, Enemies.BIG_SKULLTULA) or
                                                              state.has("Cleared Forest Temple")))
                                                             or state.has("Showed Mido the Sword and Shield", player)
-                                                           or world.options.closed_forest>1],
+                                                           or world.options.closed_forest==2],
         [Regions.LOST_WOODS.value, lambda state: True],
-        [Regions.LW_BRIDGE_FROM_FOREST.value, lambda state: world.options.closed_forest>1 or is_adult(state, world) or
+        [Regions.LW_BRIDGE_FROM_FOREST.value, lambda state: world.options.closed_forest>=1 or is_adult(state, world) or
                                                             state.has("Cleared Deku Tree")],
-        [Regions.KF_STORMS_GROTTO.value, lambda state: can_use(Items.SONG_OF_STORMS.value, state, world)]
+        [Regions.KF_STORMS_GROTTO.value, lambda state: can_open_storms_grotto(state, world)]
     ])
 
     ## KF Link's House
@@ -263,13 +264,13 @@ def set_rules(world: "SohWorld") -> None:
     # Connections #Adding dungeon entrance shuffle here would be simple just requires adding the option to be checked here.
     connect_regions(Regions.KF_OUTSIDE_DEKU_TREE.value, world, [
         [Regions.DEKU_TREE_ENTRYWAY.value, lambda state: (is_child(state, world))
-                                                         and (world.options.closed_forest>1
+                                                         and (world.options.closed_forest==2
                                                             or state.has("Showed Mido the Sword and Shield", player))],
         [Regions.KOKIRI_FOREST.value, lambda state:  (is_adult(state, world) and
                                                              (can_kill_enemy(state, world, Enemies.BIG_SKULLTULA) or
                                                              state.has("Cleared Forest Temple")))
                                                             or state.has("Showed Mido the Sword and Shield", player)
-                                                           or world.options.closed_forest>1]
+                                                           or world.options.closed_forest==2]
     ])
 
     ## KF Storms Grotto

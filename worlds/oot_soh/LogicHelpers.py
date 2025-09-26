@@ -425,10 +425,6 @@ def call_gossip_fairy_except_suns(state: CollectionState, world: "SohWorld") -> 
 def call_gossip_fairy(state: CollectionState, world: "SohWorld") -> bool:
     return (call_gossip_fairy_except_suns(state, world) or
             can_use(Items.SUNS_SONG.value, state, world))
-
-def can_open_storms_grotto(state: CollectionState, world: "SohWorld") -> bool:
-    return can_use(Items.SONG_OF_STORMS.value, state, world)
-
 def can_break_lower_hives(state: CollectionState, world: "SohWorld") -> bool:
     return can_break_upper_hives(state, world) or can_use(Items.PROGRESSIVE_BOMB_BAG.value, state, world)
 
@@ -438,7 +434,10 @@ def can_break_upper_hives(state: CollectionState, world: "SohWorld") -> bool:
             (can_do_trick("Beehives With Bombchus", state, world)
              and can_use(Items.PROGRESSIVE_BOMBCHU. value, state, world)))
 
-
+def can_open_storms_grotto(state: CollectionState, world: "SohWorld") -> bool:
+    return (can_use(Items.SONG_OF_STORMS.value, state, world) and
+            (has_item(Items.STONE_OF_AGONY.value, state, world)
+             or can_do_trick("Hidden Grottos without Stone of Agony", state, world)))
 
 
 
