@@ -720,13 +720,11 @@ class MessageBoxLabel(MDLabel):
 
 
 class MessageBox(Popup):
-
     def __init__(self, title, text, error=False, **kwargs):
-        label = MessageBoxLabel(text=text)
+        label = MessageBoxLabel(text=text, padding=("6dp", "0dp"))
         separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
         super().__init__(title=title, content=label, size_hint=(0.5, None), width=max(100, int(label.width) + 40),
                          separator_color=separator_color, **kwargs)
-        self.height += max(0, label.height - 18)
 
 
 class MDNavigationItemBase(MDNavigationItem):
@@ -921,9 +919,11 @@ class GameManager(ThemedApp):
         hint_panel = self.add_client_tab("Hints", HintLayout(self.hint_log))
         self.log_panels["Hints"] = hint_panel.content
 
-        self.main_area_container = MDGridLayout(size_hint_y=1, cols=1)
-        self.main_area_container.add_widget(self.tabs)
-        self.main_area_container.add_widget(self.screens)
+        self.main_area_container = MDGridLayout(size_hint_y=1, rows=1)
+        tab_container = MDGridLayout(size_hint_y=1, cols=1)
+        tab_container.add_widget(self.tabs)
+        tab_container.add_widget(self.screens)
+        self.main_area_container.add_widget(tab_container)
 
         self.grid.add_widget(self.main_area_container)
 

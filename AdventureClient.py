@@ -407,6 +407,7 @@ async def atari_sync_task(ctx: AdventureContext):
                 except ConnectionRefusedError:
                     logger.debug("Connection Refused, Trying Again")
                     ctx.atari_status = CONNECTION_REFUSED_STATUS
+                    await asyncio.sleep(1)
                     continue
                 except CancelledError:
                     pass
