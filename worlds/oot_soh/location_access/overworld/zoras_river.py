@@ -32,6 +32,7 @@ def set_rules(world: "SohWorld") -> None:
     ## ZR Front
     # Locations
     set_location_rules(world, [
+
         [Locations.ZR_GS_TREE.value, lambda state: is_child(state, world) and
                                                       can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA)],
         [Locations.ZR_NEAR_TREE_GRASS1.value, lambda state: can_cut_shrubs(state, world)],
@@ -139,6 +140,7 @@ def set_rules(world: "SohWorld") -> None:
                                                           (is_adult(state, world) and
                                                            can_use(Items.HOVER_BOOTS.value, state, world) and
                                                            can_do_trick("ZD with Hover Boots", state, world))]
+
     ])
 
     ## ZR From Shortcut
@@ -149,6 +151,7 @@ def set_rules(world: "SohWorld") -> None:
                                                  state.has(Items.BRONZE_SCALE.value)],
         [Regions.LOST_WOODS.value, lambda state: state.has(Items.SILVER_SCALE.value) or
                                                  can_use(Items.IRON_BOOTS.value, state, world)]
+
     ])
 
     ## ZR Behind Waterfall
@@ -174,6 +177,7 @@ def set_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.ZR_OPEN_GROTTO.value, world, [
+
         [Regions.ZORA_RIVER.value, lambda state: True]
     ])
 
@@ -190,7 +194,9 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.ZR_FAIRY_GROTTO_FAIRY8.value, lambda state: True]
     ])
     # Connections
+
     connect_regions(Regions.ZR_FAIRY_GROTTO.value, world, [
+
         [Regions.ZORA_RIVER.value, lambda state: True]
     ])
 
