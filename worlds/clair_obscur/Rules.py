@@ -54,21 +54,22 @@ def set_rules(world):
         add_rule(major_connection_2, lambda state: state.has_group("Character", player, 2))
 
     #Lost Gestral access
-    if world.options.gestral_shuffle:
-        gestral_rewards_locations = ["Lost Gestral reward 1",
-                                     "Lost Gestral reward 2",
-                                     "Lost Gestral reward 3",
-                                     "Lost Gestral reward 4",
-                                     "Lost Gestral reward 5",
-                                     "Lost Gestral reward 6",
-                                     "Lost Gestral reward 7",
-                                     "Lost Gestral reward 8",
-                                     "Lost Gestral reward 9"]
-        for i in range(0, 9):
-            loc = mw.get_location(gestral_rewards_locations[i], player)
-            add_rule(loc, lambda state, pl=player, x=i: state.has("Lost Gestral", pl, x + 1))
-
-    else:
+    # if world.options.gestral_shuffle:
+    #     gestral_rewards_locations = ["Lost Gestral reward 1",
+    #                                  "Lost Gestral reward 2",
+    #                                  "Lost Gestral reward 3",
+    #                                  "Lost Gestral reward 4",
+    #                                  "Lost Gestral reward 5",
+    #                                  "Lost Gestral reward 6",
+    #                                  "Lost Gestral reward 7",
+    #                                  "Lost Gestral reward 8",
+    #                                  "Lost Gestral reward 9"]
+    #     for i in range(0, 9):
+    #         loc = mw.get_location(gestral_rewards_locations[i], player)
+    #         add_rule(loc, lambda state, pl=player, x=i: state.has("Lost Gestral", pl, x + 1))
+    #
+    # else:
+    if not world.options.char_shuffle:
         #2 gestrals in First Continent North
         add_rule(mw.get_location("Lost Gestral reward 1", player),
                  lambda state: state.has_any_count({"Progressive Rock": 2, "Area - Flying Waters": 1}, player))
@@ -110,4 +111,4 @@ def set_rules(world):
         add_rule(mw.get_entrance("WM: Sky -> Sirene's Dress", player),
                  lambda state: state.has("Sciel", player))
         add_rule(mw.get_entrance("WM: Sky -> The Chosen Path", player),
-                 lambda state: state.has_group("Character", player, 4))
+                 lambda state: state.has_group("Character", player, 5))
