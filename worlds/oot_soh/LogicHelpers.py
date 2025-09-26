@@ -11,13 +11,14 @@ if TYPE_CHECKING:
 import logging
 logger = logging.getLogger("SOH_OOT.Logic")
 
-def add_logic(location, logic, world: "SohWorld") -> None:
-    if location in world.multiworld.regions.location_cache[world.player]:
-        set_rule(world.get_location(location), rule=logic)
-
-def connect_regions(parent_region, child_region, logic, world: "SohWorld") -> None:
-    world.get_region(parent_region).connect(
-        world.get_region(child_region), rule=logic)
+def set_location_rules(world: "SohWorld", locations = [[]]) -> None:
+    for location in locations:
+        if location[0] in world.multiworld.regions.location_cache[world.player]:
+            set_rule(world.get_location(location[0]), rule=location[1])
+    
+def connect_regions(parent_region, world: "SohWorld", child_regions = [[]]) -> None:
+    for region in child_regions:
+        world.get_region(parent_region).connect(world.get_region(region[0]), rule=region[1])
 
 def has_item(itemName: str, state: CollectionState, world: "SohWorld", count:int = 1, can_be_child: bool = True, can_be_adult: bool = True) -> bool:
     def has(itemName, count=1): 
