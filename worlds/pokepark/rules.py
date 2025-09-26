@@ -2166,7 +2166,7 @@ def set_rules(world: "PokeparkWorld") -> None:
 
     set_rule_if_exists(
         "Flower Zone Main Area - Rayquaza -- Friendship",
-        lambda state: state.has("Rayquaza Prisma", player)
+        lambda state: state.has("Rayquaza Prisma", player) and state.has("Rayquaza Unlock", player)
     )
 
     # Rayquaza's Balloon Panic
