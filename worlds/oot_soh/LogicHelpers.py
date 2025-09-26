@@ -4,7 +4,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule
 from .Enums import *
 from .RegionAgeAccess import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
-
+from ..stardew_valley.stardew_rule import true_
 
 if TYPE_CHECKING:
     from . import SohWorld
@@ -439,7 +439,11 @@ def can_open_storms_grotto(state: CollectionState, world: "SohWorld") -> bool:
             (has_item(Items.STONE_OF_AGONY.value, state, world)
              or can_do_trick("Hidden Grottos without Stone of Agony", state, world)))
 
-
+def can_live(state: CollectionState, world: "SohWorld") -> bool:
+    if state.has_any_count({"Heart Container": 1, "Heart Piece": 4}, world.player):
+        return True
+    else:
+        return False
 
 # BELOW IS AI SLOP
 # Based on C++ Logic
