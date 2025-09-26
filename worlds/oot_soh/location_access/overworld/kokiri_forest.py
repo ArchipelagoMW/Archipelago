@@ -53,10 +53,9 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.KF_BEAN_PLATFORM_RUPEE5.value, lambda state: True],
         [Locations.KF_BEAN_PLATFORM_RUPEE6.value, lambda state: True],
         [Locations.KF_BEAN_PLATFORM_RED_RUPEE.value, lambda state: True],
-        [Locations.KF_SARIAS_HOUSE_BOTTOM_LEFT_HEART.value, lambda state: True],
-        [Locations.KF_SARIAS_HOUSE_TOP_RIGHT_HEART.value, lambda state: True],
-        [Locations.KF_SARIAS_HOUSE_BOTTOM_RIGHT_HEART.value, lambda state: True],
-        [Locations.KF_SARIAS_HOUSE_TOP_LEFT_HEART.value, lambda state: True],
+        [Locations.KF_SARIAS_ROOF_EAST_HEART.value, lambda state: True],
+        [Locations.KF_SARIAS_ROOF_NORTH_HEART.value, lambda state: True],
+        [Locations.KF_SARIAS_ROOF_WEST_HEART.value, lambda state: True],
         [Locations.KF_CHILD_GRASS1.value, lambda state: True],
         [Locations.KF_CHILD_GRASS2.value, lambda state: True],
         [Locations.KF_CHILD_GRASS3.value, lambda state: True],
@@ -114,5 +113,103 @@ def set_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.KF_LINKS_HOUSE.value, world, [
+        [Regions.KOKIRI_FOREST.value, lambda state: True]
+    ])
+
+    ## KF Mido's House
+    # Locations
+    set_location_rules(world, [
+        [Locations.KF_MIDO_TOP_LEFT_CHEST.value, lambda state: True],
+        [Locations.KF_MIDO_TOP_RIGHT_CHEST.value, lambda state: True],
+        [Locations.KF_MIDO_BOTTOM_LEFT_CHEST.value, lambda state: True],
+        [Locations.KF_MIDO_BOTTOM_RIGHT_CHEST.value, lambda state: True]
+    ])
+    # Connections
+    connect_regions(Regions.KF_MIDOS_HOUSE.value, world, [
+        [Regions.KOKIRI_FOREST.value, lambda state: True]
+    ])
+
+    ## KF Saria's House
+    # Locations
+    set_location_rules(world, [
+        [Locations.KF_SARIAS_HOUSE_TOP_LEFT_HEART.value, lambda state: True],
+        [Locations.KF_SARIAS_HOUSE_TOP_RIGHT_HEART.value, lambda state: True],
+        [Locations.KF_SARIAS_HOUSE_BOTTOM_LEFT_HEART.value, lambda state: True],
+        [Locations.KF_SARIAS_HOUSE_BOTTOM_RIGHT_HEART.value, lambda state: True]
+    ])
+    # Connections
+    connect_regions(Regions.KF_SARIAS_HOUSE.value, world, [
+        [Regions.KOKIRI_FOREST.value, lambda state: True]
+    ])
+
+    ## KF House of Twins
+    # Locations
+    set_location_rules(world, [
+        [Locations.KF_TWINS_HOUSE_POT1.value, lambda state: True],
+        [Locations.KF_TWINS_HOUSE_POT2.value, lambda state: True]
+    ])
+    # Connections
+    connect_regions(Regions.KF_HOUSE_OF_TWINS.value, world, [
+        [Regions.KOKIRI_FOREST.value, lambda state: True]
+    ])
+
+    ## KF Know it All House
+    # Locations
+    set_location_rules(world, [
+        [Locations.KF_BROTHERS_HOUSE_POT1.value, lambda state: True],
+        [Locations.KF_BROTHERS_HOUSE_POT2.value, lambda state: True]
+    ])
+    # Connections
+    connect_regions(Regions.KF_KNOW_IT_ALL_HOUSE.value, world, [
+        [Regions.KOKIRI_FOREST.value, lambda state: True]
+    ])
+
+    ## KF Kokiri Shop
+    # Locations
+    set_location_rules(world, [
+        [Locations.KF_SHOP_ITEM1.value, lambda state: True],
+        [Locations.KF_SHOP_ITEM2.value, lambda state: True],
+        [Locations.KF_SHOP_ITEM3.value, lambda state: True],
+        [Locations.KF_SHOP_ITEM4.value, lambda state: True],
+        [Locations.KF_SHOP_ITEM5.value, lambda state: True],
+        [Locations.KF_SHOP_ITEM6.value, lambda state: True],
+        [Locations.KF_SHOP_ITEM7.value, lambda state: True],
+        [Locations.KF_SHOP_ITEM8.value, lambda state: True]
+    ])
+    # Connections
+    connect_regions(Regions.KF_KOKIRI_SHOP.value, world, [
+        [Regions.KOKIRI_FOREST.value, lambda state: True]
+    ])
+
+    ## KF Outside Deku Tree
+    # Locations
+    set_location_rules(world, [
+        [Locations.KF_DEKU_TREE_LEFT_GOSSIP_STONE_FAIRY.value, lambda state: True],
+        [Locations.KF_DEKU_TREE_LEFT_GOSSIP_STONE_BIG_FAIRY.value, lambda state: True],
+        [Locations.KF_DEKU_TREE_RIGHT_GOSSIP_STONE_FAIRY.value, lambda state: True],
+        [Locations.KF_DEKU_TREE_RIGHT_GOSSIP_STONE_BIG_FAIRY.value, lambda state: True]
+    ])
+    # Connections
+    connect_regions(Regions.KF_OUTSIDE_DEKU_TREE.value, world, [
+        [Regions.DEKU_TREE_ENTRYWAY.value, lambda state: True],
+        [Regions.KOKIRI_FOREST.value, lambda state: True]
+    ])
+
+    ## KF Storms Grotto
+    # Locations
+    set_location_rules(world, [
+        [Locations.KF_STORMS_GROTTO_CHEST.value, lambda state: True],
+        [Locations.KF_STORMS_GROTTO_FISH.value, lambda state: True],
+        [Locations.KF_STORMS_GOSSIP_STONE_FAIRY.value, lambda state: True],
+        [Locations.KF_STORMS_GOSSIP_STONE_BIG_FAIRY.value, lambda state: True],
+        [Locations.KF_STORMS_GROTTO_BEEHIVE_LEFT.value, lambda state: True],
+        [Locations.KF_STORMS_GROTTO_BEEHIVE_RIGHT.value, lambda state: True],
+        [Locations.KF_STORMS_GROTTO_GRASS1.value, lambda state: True],
+        [Locations.KF_STORMS_GROTTO_GRASS2.value, lambda state: True],
+        [Locations.KF_STORMS_GROTTO_GRASS3.value, lambda state: True],
+        [Locations.KF_STORMS_GROTTO_GRASS4.value, lambda state: True],
+    ])
+    # Connections
+    connect_regions(Regions.KF_STORMS_GROTTO.value, world, [
         [Regions.KOKIRI_FOREST.value, lambda state: True]
     ])
