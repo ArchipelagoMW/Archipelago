@@ -12,7 +12,7 @@ from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Iterable, List, Ma
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
-from Utils import deprecate
+from Utils import Version
 
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
@@ -337,6 +337,7 @@ class World(metaclass=AutoWorldRegister):
     """If loaded from a .apworld, this is the Path to it."""
     __file__: ClassVar[str]
     """path it was loaded from"""
+    _world_version: ClassVar[Version] = Version(0, 0, 0)
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None
@@ -561,6 +562,11 @@ class World(metaclass=AutoWorldRegister):
     @property
     def player_name(self) -> str:
         return self.multiworld.get_player_name(self.player)
+
+    @property
+    def world_version(self) -> Version:
+        """Optional world version loaded from archipelago.json"""
+        return self._world_version
 
     @classmethod
     def get_data_package_data(cls) -> "GamesPackage":
