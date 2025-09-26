@@ -1,4 +1,4 @@
-from typing import Callable, Dict, NamedTuple, Optional, TYPE_CHECKING
+from typing import Dict, NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import Location
 from .Enums import *

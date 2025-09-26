@@ -226,7 +226,7 @@ def set_location_rules(world: "SohWorld") -> None:
         set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_LOWER_HEART.value),
                     rule=lambda state: True)
         set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_UPPER_HEART.value),
-                    rule=lambda state: can_pass_enemy(state, world, "big_skulltula"))
+                    rule=lambda state: can_pass_enemy(state, world, Enemies.BIG_SKULLTULA.value))
         
         # Deku Outside boss room
         for underwater_heart in (Locations.DEKU_TREE_FINAL_ROOM_LEFT_FRONT_HEART, 
@@ -288,13 +288,13 @@ def set_location_rules(world: "SohWorld") -> None:
     if world.options.shuffle_skull_tokens in ["dungeon", "all"]:
         # Deku Compass room
         set_rule(world.get_location(Locations.DEKU_TREE_GS_COMPASS_ROOM.value),
-                    rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
+                    rule=lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value))
         
         # Deku Basment Lower
         set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_GATE.value),
-                    rule=lambda state: can_kill_enemy(state, world, "gold_skulltula", "short_jumpslash"))
+                    rule=lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value, "short_jumpslash"))
         set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_VINES.value),
-                    rule=lambda state: can_kill_enemy(state, world, "gold_skulltula", "short_jumpslash" if can_do_trick("Deku MQ Compass GS") else "bomb_throw"))
+                    rule=lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value, "short_jumpslash" if can_do_trick("Deku MQ Compass GS") else "bomb_throw"))
         
         # Deku Basement back room
         set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_BACK_ROOM.value),
