@@ -566,7 +566,7 @@ class World(metaclass=AutoWorldRegister):
     @property
     def world_version(self) -> Version:
         """Optional world version loaded from archipelago.json"""
-        return Version(*self._world_version)
+        return self._world_version
 
     @classmethod
     def get_data_package_data(cls) -> "GamesPackage":
