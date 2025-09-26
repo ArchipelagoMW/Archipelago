@@ -5,7 +5,7 @@ from worlds.oot_soh.Regions import double_link_regions
 from worlds.oot_soh.Items import SohItem
 from worlds.oot_soh.Locations import SohLocation, SohLocationData
 from worlds.oot_soh.Enums import *
-from worlds.oot_soh.LogicHelpers import (set_location_rules, connect_regions)
+from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions)
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
@@ -28,7 +28,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## Kokiri Forest
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KOKIRI_FOREST, world, [
         [Locations.KF_KOKIRI_SWORD_CHEST.value, lambda state: True],
         [Locations.KF_GS_KNOW_IT_ALL_HOUSE.value, lambda state: True],
         [Locations.KF_GS_BEAN_PATCH.value, lambda state: True],
@@ -107,7 +107,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF Link's House
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_LINKS_HOUSE, world, [
         [Locations.KF_LINKS_HOUSE_COW.value, lambda state: True],
         [Locations.KF_LINKS_HOUSE_POT.value, lambda state: True]
     ])
@@ -118,7 +118,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF Mido's House
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_MIDOS_HOUSE, world, [
         [Locations.KF_MIDO_TOP_LEFT_CHEST.value, lambda state: True],
         [Locations.KF_MIDO_TOP_RIGHT_CHEST.value, lambda state: True],
         [Locations.KF_MIDO_BOTTOM_LEFT_CHEST.value, lambda state: True],
@@ -131,7 +131,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF Saria's House
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_SARIAS_HOUSE, world, [
         [Locations.KF_SARIAS_HOUSE_TOP_LEFT_HEART.value, lambda state: True],
         [Locations.KF_SARIAS_HOUSE_TOP_RIGHT_HEART.value, lambda state: True],
         [Locations.KF_SARIAS_HOUSE_BOTTOM_LEFT_HEART.value, lambda state: True],
@@ -144,7 +144,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF House of Twins
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_HOUSE_OF_TWINS, world, [
         [Locations.KF_TWINS_HOUSE_POT1.value, lambda state: True],
         [Locations.KF_TWINS_HOUSE_POT2.value, lambda state: True]
     ])
@@ -155,7 +155,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF Know it All House
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_KNOW_IT_ALL_HOUSE, world, [
         [Locations.KF_BROTHERS_HOUSE_POT1.value, lambda state: True],
         [Locations.KF_BROTHERS_HOUSE_POT2.value, lambda state: True]
     ])
@@ -166,7 +166,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF Kokiri Shop
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_KOKIRI_SHOP.value, world, [
         [Locations.KF_SHOP_ITEM1.value, lambda state: True],
         [Locations.KF_SHOP_ITEM2.value, lambda state: True],
         [Locations.KF_SHOP_ITEM3.value, lambda state: True],
@@ -183,7 +183,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF Outside Deku Tree
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_OUTSIDE_DEKU_TREE, world, [
         [Locations.KF_DEKU_TREE_LEFT_GOSSIP_STONE_FAIRY.value, lambda state: True],
         [Locations.KF_DEKU_TREE_LEFT_GOSSIP_STONE_BIG_FAIRY.value, lambda state: True],
         [Locations.KF_DEKU_TREE_RIGHT_GOSSIP_STONE_FAIRY.value, lambda state: True],
@@ -197,7 +197,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF Storms Grotto
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_STORMS_GROTTO, world, [
         [Locations.KF_STORMS_GROTTO_CHEST.value, lambda state: True],
         [Locations.KF_STORMS_GROTTO_FISH.value, lambda state: True],
         [Locations.KF_STORMS_GOSSIP_STONE_FAIRY.value, lambda state: True],
