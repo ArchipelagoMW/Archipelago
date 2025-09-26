@@ -4,6 +4,8 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule
 from .Enums import *
 from .RegionAgeAccess import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
+from ..ladx.LADXR.locations.items import HOOKSHOT
+from ..stardew_valley.stardew_rule import true_
 
 if TYPE_CHECKING:
     from . import SohWorld
@@ -192,6 +194,8 @@ def can_use(name: str, state: CollectionState, world: "SohWorld", can_be_child: 
             return can_be_child
         case Items.BOTTLE_WITH_RUTOS_LETTER.value:
             return can_be_child
+        case Items.BOTTLE_WITH_BUGS.value:
+            return can_be_child
         case Items.MAGIC_BEAN.value:
             return can_be_child
         case Items.ZELDAS_LULLABY.value:
@@ -319,6 +323,10 @@ def is_adult(state: CollectionState, world: "SohWorld") -> bool:
     # TODO: Implement proper age checking based on world settings and progression
     return True
 
+def is_child(state: CollectionState, world: "SohWorld") -> bool:
+    # So basically for the same reason as up here, feels like it would make sense to have this check
+    # Because it could be useful for starting adult/various entrance randomizer settings
+    return True
 
 def can_damage(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can deal damage to enemies."""
@@ -356,6 +364,10 @@ def can_do_trick(trick: str, state: CollectionState, world: "SohWorld") -> bool:
     # TODO: Implement specific trick logic based on world settings
     # For now, return False for safety (no tricks assumed)
     return False
+
+def can_get_nighttimeGS(state: CollectionState, world: "SohWorld") -> bool:
+    return (can_use(Items.SUNS_SONG.value, state, world ) or
+            can_do_trick("Nighttime Gold Skulltulas", state, world))
 
 
 def can_break_pots(state: CollectionState, world: "SohWorld") -> bool:
@@ -405,6 +417,30 @@ def can_jump_slash(state: CollectionState, world: "SohWorld") -> bool:
             can_use(Items.MASTER_SWORD.value, state, world) or 
             can_use(Items.BIGGORONS_SWORD.value, state, world) or
             can_use(Items.MEGATON_HAMMER.value, state, world))  # Hammer can substitute for sword in some cases
+
+def call_gossip_fairy_except_suns(state: CollectionState, world: "SohWorld") -> bool:
+    return (can_use(Items.ZELDAS_LULLABY.value, state, world) or
+            can_use(Items.EPONAS_SONG.value, state, world) or
+            can_use(Items.SONG_OF_TIME.value, state, world))
+
+def call_gossip_fairy(state: CollectionState, world: "SohWorld") -> bool:
+    return (call_gossip_fairy_except_suns(state, world) or
+            can_use(Items.SUNS_SONG.value, state, world))
+
+def can_open_storms_grotto(state: CollectionState, world: "SohWorld") -> bool:
+    return can_use(Items.SONG_OF_STORMS.value, state, world)
+
+def can_break_lower_hives(state: CollectionState, world: "SohWorld") -> bool:
+    return can_break_upper_hives(state, world) or can_use(Items.PROGRESSIVE_BOMB_BAG.value, state, world)
+
+def can_break_upper_hives(state: CollectionState, world: "SohWorld") -> bool:
+    return (can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
+            can_use(Items.BOOMERANG.value, state, world) or
+            (can_do_trick("Beehives With Bombchus", state, world)
+             and can_use(Items.PROGRESSIVE_BOMBCHU. value, state, world)))
+
+
+
 
 
 # BELOW IS AI SLOP
