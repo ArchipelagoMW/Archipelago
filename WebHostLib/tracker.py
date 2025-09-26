@@ -17,7 +17,6 @@ from .models import GameDataPackage, Room
 # Multisave is currently updated, at most, every minute.
 TRACKER_CACHE_TIMEOUT_IN_SECONDS = 60
 
-_multidata_cache = {}
 _multiworld_trackers: Dict[str, Callable] = {}
 _player_trackers: Dict[str, Callable] = {}
 
@@ -85,27 +84,27 @@ class TrackerData:
         """Retrieves the seed name."""
         return self._multidata["seed_name"]
 
-    def get_slot_data(self, team: int, player: int) -> Dict[str, Any]:
+    def get_slot_data(self, player: int) -> Dict[str, Any]:
         """Retrieves the slot data for a given player."""
         return self._multidata["slot_data"][player]
 
-    def get_slot_info(self, team: int, player: int) -> NetworkSlot:
+    def get_slot_info(self, player: int) -> NetworkSlot:
         """Retrieves the NetworkSlot data for a given player."""
         return self._multidata["slot_info"][player]
 
-    def get_player_name(self, team: int, player: int) -> str:
+    def get_player_name(self, player: int) -> str:
         """Retrieves the slot name for a given player."""
-        return self.get_slot_info(team, player).name
+        return self.get_slot_info(player).name
 
-    def get_player_game(self, team: int, player: int) -> str:
+    def get_player_game(self, player: int) -> str:
         """Retrieves the game for a given player."""
-        return self.get_slot_info(team, player).game
+        return self.get_slot_info(player).game
 
-    def get_player_locations(self, team: int, player: int) -> Dict[int, ItemMetadata]:
+    def get_player_locations(self, player: int) -> Dict[int, ItemMetadata]:
         """Retrieves all locations with their containing item's metadata for a given player."""
         return self._multidata["locations"][player]
 
-    def get_player_starting_inventory(self, team: int, player: int) -> List[int]:
+    def get_player_starting_inventory(self, player: int) -> List[int]:
         """Retrieves a list of all item codes a given slot starts with."""
         return self._multidata["precollected_items"][player]
 
@@ -116,7 +115,7 @@ class TrackerData:
     @_cache_results
     def get_player_missing_locations(self, team: int, player: int) -> Set[int]:
         """Retrieves the set of all locations not marked complete by this player."""
-        return set(self.get_player_locations(team, player)) - self.get_player_checked_locations(team, player)
+        return set(self.get_player_locations(player)) - self.get_player_checked_locations(team, player)
 
     def get_player_received_items(self, team: int, player: int) -> List[NetworkItem]:
         """Returns all items received to this player in order of received."""
@@ -126,7 +125,7 @@ class TrackerData:
     def get_player_inventory_counts(self, team: int, player: int) -> collections.Counter:
         """Retrieves a dictionary of all items received by their id and their received count."""
         received_items = self.get_player_received_items(team, player)
-        starting_items = self.get_player_starting_inventory(team, player)
+        starting_items = self.get_player_starting_inventory(player)
         inventory = collections.Counter()
         for item in received_items:
             inventory[item.item] += 1
@@ -179,7 +178,7 @@ class TrackerData:
     def get_team_locations_total_count(self) -> Dict[int, int]:
         """Retrieves a dictionary of total player locations each team has."""
         return {
-            team: sum(len(self.get_player_locations(team, player)) for player in players)
+            team: sum(len(self.get_player_locations(player)) for player in players)
             for team, players in self.get_all_players().items()
         }
 
@@ -210,7 +209,7 @@ class TrackerData:
         return {
             0: [
                 player for player, slot_info in self._multidata["slot_info"].items()
-                if self.get_slot_info(0, player).type == SlotType.player
+                if self.get_slot_info(player).type == SlotType.player
             ]
         }
 
@@ -226,7 +225,7 @@ class TrackerData:
     def get_room_locations(self) -> Dict[TeamPlayer, Dict[int, ItemMetadata]]:
         """Retrieves a dictionary of all locations and their associated item metadata per player."""
         return {
-            (team, player): self.get_player_locations(team, player)
+            (team, player): self.get_player_locations(player)
             for team, players in self.get_all_players().items() for player in players
         }
 
@@ -234,7 +233,7 @@ class TrackerData:
     def get_room_games(self) -> Dict[TeamPlayer, str]:
         """Retrieves a dictionary of games for each player."""
         return {
-            (team, player): self.get_player_game(team, player)
+            (team, player): self.get_player_game(player)
             for team, players in self.get_all_slots().items() for player in players
         }
 
@@ -262,9 +261,9 @@ class TrackerData:
             for player in players:
                 alias = self.get_player_alias(team, player)
                 if alias:
-                    long_player_names[team, player] = f"{alias} ({self.get_player_name(team, player)})"
+                    long_player_names[team, player] = f"{alias} ({self.get_player_name(player)})"
                 else:
-                    long_player_names[team, player] = self.get_player_name(team, player)
+                    long_player_names[team, player] = self.get_player_name(player)
 
         return long_player_names
 
@@ -344,7 +343,7 @@ def get_timeout_and_player_tracker(room: Room, tracked_team: int, tracked_player
     tracker_data = TrackerData(room)
 
     # Load and render the game-specific player tracker, or fallback to generic tracker if none exists.
-    game_specific_tracker = _player_trackers.get(tracker_data.get_player_game(tracked_team, tracked_player), None)
+    game_specific_tracker = _player_trackers.get(tracker_data.get_player_game(tracked_player), None)
     if game_specific_tracker and not generic:
         tracker = game_specific_tracker(tracker_data, tracked_team, tracked_player)
     else:
@@ -409,10 +408,10 @@ def get_enabled_multiworld_trackers(room: Room) -> Dict[str, Callable]:
 
 
 def render_generic_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
-    game = tracker_data.get_player_game(team, player)
+    game = tracker_data.get_player_game(player)
 
     received_items_in_order = {}
-    starting_inventory = tracker_data.get_player_starting_inventory(team, player)
+    starting_inventory = tracker_data.get_player_starting_inventory(player)
     for index, item in enumerate(starting_inventory):
         received_items_in_order[item] = index
     for index, network_item in enumerate(tracker_data.get_player_received_items(team, player),
@@ -428,7 +427,7 @@ def render_generic_tracker(tracker_data: TrackerData, team: int, player: int) ->
         player=player,
         player_name=tracker_data.get_room_long_player_names()[team, player],
         inventory=tracker_data.get_player_inventory_counts(team, player),
-        locations=tracker_data.get_player_locations(team, player),
+        locations=tracker_data.get_player_locations(player),
         checked_locations=tracker_data.get_player_checked_locations(team, player),
         received_items=received_items_in_order,
         saving_second=tracker_data.get_room_saving_second(),
@@ -500,7 +499,7 @@ if "Factorio" in network_data_package["games"]:
                 tracker_data.item_id_to_name["Factorio"][item_id]: count
                 for item_id, count in tracker_data.get_player_inventory_counts(team, player).items()
             }) for team, players in tracker_data.get_all_players().items() for player in players
-            if tracker_data.get_player_game(team, player) == "Factorio"
+            if tracker_data.get_player_game(player) == "Factorio"
         }
 
         return render_template(
@@ -589,7 +588,7 @@ if "A Link to the Past" in network_data_package["games"]:
 
         # Highlight 'bombs' if we received any bomb upgrades in bombless start.
         # In race mode, we'll just assume bombless start for simplicity.
-        if tracker_data.get_slot_data(team, player).get("bombless_start", True):
+        if tracker_data.get_slot_data(player).get("bombless_start", True):
             inventory["Bombs"] = sum(count for item, count in inventory.items() if item.startswith("Bomb Upgrade"))
         else:
             inventory["Bombs"] = 1
@@ -605,7 +604,7 @@ if "A Link to the Past" in network_data_package["games"]:
                 for code, count in tracker_data.get_player_inventory_counts(team, player).items()
             })
             for team, players in tracker_data.get_all_players().items()
-            for player in players if tracker_data.get_slot_info(team, player).game == "A Link to the Past"
+            for player in players if tracker_data.get_slot_info(player).game == "A Link to the Past"
         }
 
         # Translate non-progression items to progression items for tracker simplicity.
@@ -624,7 +623,7 @@ if "A Link to the Past" in network_data_package["games"]:
                 for region_name in known_regions
             }
             for team, players in tracker_data.get_all_players().items()
-            for player in players if tracker_data.get_slot_info(team, player).game == "A Link to the Past"
+            for player in players if tracker_data.get_slot_info(player).game == "A Link to the Past"
         }
 
         # Get a totals count.
@@ -698,7 +697,7 @@ if "A Link to the Past" in network_data_package["games"]:
             team=team,
             player=player,
             inventory=inventory,
-            player_name=tracker_data.get_player_name(team, player),
+            player_name=tracker_data.get_player_name(player),
             regions=regions,
             known_regions=known_regions,
         )
@@ -845,7 +844,7 @@ if "Ocarina of Time" in network_data_package["games"]:
                 return full_name[len(area):]
             return full_name
 
-        locations = tracker_data.get_player_locations(team, player)
+        locations = tracker_data.get_player_locations(player)
         checked_locations = tracker_data.get_player_checked_locations(team, player).intersection(set(locations))
         location_info = {}
         checks_done = {}
@@ -907,7 +906,7 @@ if "Ocarina of Time" in network_data_package["games"]:
             player=player,
             team=team,
             room=tracker_data.room,
-            player_name=tracker_data.get_player_name(team, player),
+            player_name=tracker_data.get_player_name(player),
             icons=icons,
             acquired_items={lookup_any_item_id_to_name[id] for id, count in inventory.items() if count > 0},
             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
@@ -954,57 +953,37 @@ if "Timespinner" in network_data_package["games"]:
             "Lab Glasses":         "https://timespinnerwiki.com/mediawiki/images/4/4a/Lab_Glasses.png",
             "Eye Orb":             "https://timespinnerwiki.com/mediawiki/images/a/a4/Eye_Orb.png",
             "Lab Coat":            "https://timespinnerwiki.com/mediawiki/images/5/51/Lab_Coat.png", 
-            "Demon":               "https://timespinnerwiki.com/mediawiki/images/f/f8/Familiar_Demon.png", 
+            "Demon":               "https://timespinnerwiki.com/mediawiki/images/f/f8/Familiar_Demon.png",
+            "Cube of Bodie":       "https://timespinnerwiki.com/mediawiki/images/1/14/Menu_Icon_Stats.png"
         }
 
         timespinner_location_ids = {
-            "Present":         [
-                1337000, 1337001, 1337002, 1337003, 1337004, 1337005, 1337006, 1337007, 1337008, 1337009,
-                1337010, 1337011, 1337012, 1337013, 1337014, 1337015, 1337016, 1337017, 1337018, 1337019,
-                1337020, 1337021, 1337022, 1337023, 1337024, 1337025, 1337026, 1337027, 1337028, 1337029,
-                1337030, 1337031, 1337032, 1337033, 1337034, 1337035, 1337036, 1337037, 1337038, 1337039,
-                1337040, 1337041, 1337042, 1337043, 1337044, 1337045, 1337046, 1337047, 1337048, 1337049,
-                1337050, 1337051, 1337052, 1337053, 1337054, 1337055, 1337056, 1337057, 1337058, 1337059,
-                1337060, 1337061, 1337062, 1337063, 1337064, 1337065, 1337066, 1337067, 1337068, 1337069,
-                1337070, 1337071, 1337072, 1337073, 1337074, 1337075, 1337076, 1337077, 1337078, 1337079,
-                1337080, 1337081, 1337082, 1337083, 1337084, 1337085],
-            "Past":            [
-                1337086, 1337087, 1337088, 1337089,
-                1337090, 1337091, 1337092, 1337093, 1337094, 1337095, 1337096, 1337097, 1337098, 1337099,
-                1337100, 1337101, 1337102, 1337103, 1337104, 1337105, 1337106, 1337107, 1337108, 1337109,
-                1337110, 1337111, 1337112, 1337113, 1337114, 1337115, 1337116, 1337117, 1337118, 1337119,
-                1337120, 1337121, 1337122, 1337123, 1337124, 1337125, 1337126, 1337127, 1337128, 1337129,
-                1337130, 1337131, 1337132, 1337133, 1337134, 1337135, 1337136, 1337137, 1337138, 1337139,
-                1337140, 1337141, 1337142, 1337143, 1337144, 1337145, 1337146, 1337147, 1337148, 1337149,
-                1337150, 1337151, 1337152, 1337153, 1337154, 1337155,
-                1337171, 1337172, 1337173, 1337174, 1337175],
+            "Present": list(range(1337000, 1337085)),
+            "Past": list(range(1337086, 1337175)),
             "Ancient Pyramid": [
                 1337236,
                 1337246, 1337247, 1337248, 1337249]
         }
 
-        slot_data = tracker_data.get_slot_data(team, player)
+        slot_data = tracker_data.get_slot_data(player)
         if (slot_data["DownloadableItems"]):
-            timespinner_location_ids["Present"] += [
-                1337156, 1337157, 1337159,
-                1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169,
-                1337170]
+            timespinner_location_ids["Present"] += [1337156, 1337157] + list(range(1337159, 1337170))
         if (slot_data["Cantoran"]):
             timespinner_location_ids["Past"].append(1337176)
         if (slot_data["LoreChecks"]):
-            timespinner_location_ids["Present"] += [
-                1337177, 1337178, 1337179,
-                1337180, 1337181, 1337182, 1337183, 1337184, 1337185, 1337186, 1337187]
-            timespinner_location_ids["Past"] += [
-                1337188, 1337189,
-                1337190, 1337191, 1337192, 1337193, 1337194, 1337195, 1337196, 1337197, 1337198]
+            timespinner_location_ids["Present"] += list(range(1337177, 1337187))
+            timespinner_location_ids["Past"] += list(range(1337188, 1337198))
         if (slot_data["GyreArchives"]):
-            timespinner_location_ids["Ancient Pyramid"] += [
-                1337237, 1337238, 1337239,
-                1337240, 1337241, 1337242, 1337243, 1337244, 1337245]
+            timespinner_location_ids["Ancient Pyramid"] += list(range(1337237, 1337245))
         if (slot_data["PyramidStart"]):
             timespinner_location_ids["Ancient Pyramid"] += [
                 1337233, 1337234, 1337235]
+        if (slot_data["PureTorcher"]):
+            timespinner_location_ids["Present"] += list(range(1337250, 1337352)) + list(range(1337422, 1337496)) + [1337506] + list(range(1337712, 1337779)) + [1337781, 1337782]
+            timespinner_location_ids["Past"] += list(range(1337497, 1337505)) + list(range(1337507, 1337711)) + [1337780]
+            timespinner_location_ids["Ancient Pyramid"] += list(range(1337369, 1337421))
+            if (slot_data["GyreArchives"]):
+                timespinner_location_ids["Ancient Pyramid"] += list(range(1337353, 1337368))
 
         display_data = {}
 
@@ -1035,7 +1014,7 @@ if "Timespinner" in network_data_package["games"]:
             player=player,
             team=team,
             room=tracker_data.room,
-            player_name=tracker_data.get_player_name(team, player),
+            player_name=tracker_data.get_player_name(player),
             checks_done=checks_done,
             checks_in_area=checks_in_area,
             location_info=location_info,
@@ -1144,7 +1123,7 @@ if "Super Metroid" in network_data_package["games"]:
             player=player,
             team=team,
             room=tracker_data.room,
-            player_name=tracker_data.get_player_name(team, player),
+            player_name=tracker_data.get_player_name(player),
             checks_done=checks_done,
             checks_in_area=checks_in_area,
             location_info=location_info,
@@ -1194,7 +1173,7 @@ if "ChecksFinder" in network_data_package["games"]:
 
         display_data = {}
         inventory = tracker_data.get_player_inventory_counts(team, player)
-        locations = tracker_data.get_player_locations(team, player)
+        locations = tracker_data.get_player_locations(player)
 
         # Multi-items
         multi_items = {
@@ -1236,7 +1215,7 @@ if "ChecksFinder" in network_data_package["games"]:
             player=player,
             team=team,
             room=tracker_data.room,
-            player_name=tracker_data.get_player_name(team, player),
+            player_name=tracker_data.get_player_name(player),
             checks_done=checks_done,
             checks_in_area=checks_in_area,
             location_info=location_info,
@@ -1264,7 +1243,7 @@ if "Starcraft 2" in network_data_package["games"]:
         UPGRADE_RESEARCH_SPEED_ITEM_ID = 1807
         UPGRADE_RESEARCH_COST_ITEM_ID = 1808
         REDUCED_MAX_SUPPLY_ITEM_ID = 1850
-        slot_data = tracker_data.get_slot_data(team, player)
+        slot_data = tracker_data.get_slot_data(player)
         inventory: collections.Counter[int] = tracker_data.get_player_inventory_counts(team, player)
         item_id_to_name = tracker_data.item_id_to_name["Starcraft 2"]
         location_id_to_name = tracker_data.location_id_to_name["Starcraft 2"]
@@ -1280,10 +1259,10 @@ if "Starcraft 2" in network_data_package["games"]:
         display_data["shield_regen_count"] = inventory.get(SHIELD_REGENERATION_ITEM_ID, 0)
         display_data["upgrade_speed_count"] = inventory.get(UPGRADE_RESEARCH_SPEED_ITEM_ID, 0)
         display_data["research_cost_count"] = inventory.get(UPGRADE_RESEARCH_COST_ITEM_ID, 0)
-        
+
         # Locations
         have_nco_locations = False
-        locations = tracker_data.get_player_locations(team, player)
+        locations = tracker_data.get_player_locations(player)
         checked_locations = tracker_data.get_player_checked_locations(team, player)
         missions: dict[str, list[tuple[str, bool]]] = {}
         for location_id in locations:
@@ -1438,7 +1417,7 @@ if "Starcraft 2" in network_data_package["games"]:
                     # the maximum bundle contribution, not the sum
                     inventory[upgrade_id] = bundle_amount
 
-        
+
         # Victory condition
         game_state = tracker_data.get_player_client_status(team, player)
         display_data["game_finished"] = game_state == ClientStatus.CLIENT_GOAL
@@ -1456,7 +1435,7 @@ if "Starcraft 2" in network_data_package["games"]:
             player=player,
             team=team,
             room=tracker_data.room,
-            player_name=tracker_data.get_player_name(team, player),
+            player_name=tracker_data.get_player_name(player),
             missions=missions,
             locations=locations,
             checked_locations=checked_locations,
