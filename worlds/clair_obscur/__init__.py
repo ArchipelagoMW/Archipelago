@@ -73,6 +73,9 @@ class ClairObscurWorld(World):
             "Shape of Health": 2,
             "Shape of Life": 2,
             "Shape of Energy": 2,
+            "Healing Tint Shard": 10,
+            "Energy Tint Shard": 10,
+            "Revive Tint Shard": 10,
 
             #Only 10 are possible to get in a normal playthrough
             "Perfect Chroma Catalyst": 10
@@ -132,7 +135,7 @@ class ClairObscurWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
         slot_data["options"] = self.options.as_dict(
-            "goal", "char_shuffle", "starting_char", "gestral_shuffle", "gear_scaling"
+            "goal", "char_shuffle", "starting_char", "gestral_shuffle", "gear_scaling", "shuffle_free_aim"
         )
 
         slot_data["totals"]: Dict[str, int] = {}

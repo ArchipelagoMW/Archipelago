@@ -51,6 +51,14 @@ class ShuffleLostGestrals(Toggle):
     internal_name = "shuffle_lost_gestrals"
     display_name = "Shuffle Lost Gestrals"
 
+class ShuffleFreeAim(Toggle):
+    """
+    Shuffles the ability to shoot outside of battle into the pool.
+    """
+    internal_name = "shuffle_free_aim"
+    display_name = "Shuffle Free Aim"
+    default = 0
+
 class AreaLogic(Choice):
     """
     Determines how many major area unlock items will be placed how early.
@@ -105,6 +113,7 @@ class ClairObscurStartInventory(StartInventory):
 class ClairObscurOptions(PerGameCommonOptions):
     goal: Goal
     char_shuffle: ShuffleCharacters
+    shuffle_free_aim: ShuffleFreeAim
     exclude_endgame_locations: ExcludeEndgameLocations
     exclude_endless_tower: ExcludeEndlessTower
     gestral_shuffle: ShuffleLostGestrals

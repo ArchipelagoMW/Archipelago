@@ -43,6 +43,10 @@ def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> N
         "Sea Cliff: Chroma 1"]
 
     excluded_types = []
+    excluded_conditions = []
+    if not world.options.shuffle_free_aim: excluded_conditions.append("Free Aim")
+    if not world.options.gestral_shuffle: excluded_conditions.append("Lost Gestral")
+
     exclusion_level = 99
     if world.options.exclude_endgame_locations < 2 and world.options.goal < 2:
         exclusion_level = 16 + world.options.goal
@@ -77,6 +81,7 @@ def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> N
             conditions = location_data.condition
             if conditions:
                 for cond in conditions:
+                    if cond in excluded_conditions: continue
                     amount = conditions[cond]
                     add_rule(location, lambda state, con=cond, pl=world.player, am=amount: state.has(con, pl, am))
 
