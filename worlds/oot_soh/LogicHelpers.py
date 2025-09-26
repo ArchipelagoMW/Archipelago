@@ -19,7 +19,9 @@ def connect_regions(parent_region: str, world: "SohWorld", child_regions = [[]])
 def add_locations(parent_region: str, world: "SohWorld", locations = [[]]) -> None:
     for location in locations:
         locationName = location[0]
-        locationRule = location[1]
+        locationRule = lambda state: True
+        if(len(location) < 2):
+            locationRule = location[1]
         if locationName in world.included_locations:
             locationAddress = world.included_locations.pop(location[0])
             world.get_region(parent_region).add_locations({locationName: locationAddress}, SohLocation)
