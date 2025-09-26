@@ -15,10 +15,10 @@ class TotalReceived(BaseStardewRule):
     def __init__(self, count: int, items: Union[str, Iterable[str]], player: int):
         items_list: List[str]
 
-        if isinstance(items, Iterable):
-            items_list = [*items]
-        else:
+        if isinstance(items, str):
             items_list = [items]
+        else:
+            items_list = [*items]
 
         self.player = player
         self.items = items_list
