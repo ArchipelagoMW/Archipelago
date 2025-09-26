@@ -27,7 +27,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## Root
     # Locations
-    add_locations(Regions.Root.value, world, [
+    add_locations(Regions.ROOT.value, world, [
         [Locations.LINKS_POCKET.value, lambda state: True]
     ])
     # Connections
