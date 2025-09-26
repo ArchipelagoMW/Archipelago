@@ -4,8 +4,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule
 from .Enums import *
 from .RegionAgeAccess import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
-from ..ladx.LADXR.locations.items import HOOKSHOT
-from ..stardew_valley.stardew_rule import true_
+
 
 if TYPE_CHECKING:
     from . import SohWorld
