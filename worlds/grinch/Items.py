@@ -161,7 +161,7 @@ KEYS_TABLE: dict[str, GrinchItemData] = {
     #     [GrinchRamData()]),
     "Who Forest Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 401, IC.progression,
         [GrinchRamData(0x0100AA, binary_bit_pos=2)]),
-    "Who Dump Vacuum Tube": GrinchItemData("Vacuum Tubes", 402, IC.progression,
+    "Who Dump Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 402, IC.progression,
         [GrinchRamData(0x0100AA, binary_bit_pos=3)]),
     "Who Lake Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 403, IC.progression,
         [GrinchRamData(0x0100AA, binary_bit_pos=4)]),
