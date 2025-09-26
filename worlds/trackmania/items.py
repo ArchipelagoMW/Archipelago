@@ -63,13 +63,23 @@ def create_itempool(world: "TrackmaniaWorld") -> list[Item]:
     for series in world.series_data:
         total_map_count += series["MapCount"]
 
-    #create medals for each map
-    itempool += create_medals(world, "Author Medal", 300, total_map_count)
-    itempool += create_medals(world, "Gold Medal", 200, total_map_count)
-    itempool += create_medals(world, "Silver Medal", 100, total_map_count)
-    itempool += create_medals(world, "Bronze Medal", 0, total_map_count)
+    total_item_slots: int = (total_map_count * get_locations_per_map(world))
+    spots_remaining: int = total_item_slots
 
-    spots_remaining: int = (total_map_count * get_locations_per_map(world)) - len(itempool)
+    #create medals for each map
+    if spots_remaining >= total_map_count:
+        itempool += create_medals(world, "Author Medal", 300, total_map_count)
+    spots_remaining = total_item_slots - len(itempool)
+    if spots_remaining >= total_map_count:
+        itempool += create_medals(world, "Gold Medal", 200, total_map_count)
+    spots_remaining = total_item_slots - len(itempool)
+    if spots_remaining >= total_map_count:
+        itempool += create_medals(world, "Silver Medal", 100, total_map_count)
+    spots_remaining = total_item_slots - len(itempool)
+    if spots_remaining >= total_map_count:
+        itempool += create_medals(world, "Bronze Medal", 0, total_map_count)
+    spots_remaining = total_item_slots - len(itempool)
+
     if spots_remaining < 0:
         spots_remaining = 0 # just in case
 

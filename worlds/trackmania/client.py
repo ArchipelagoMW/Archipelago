@@ -130,6 +130,11 @@ class TrackmaniaContext(CommonContext):
                 self.server_msgs.append(self.room_info)
                 self.update_items()
                 self.awaiting_info = False
+            else:# send all checks we have whenever we reconnect to the server
+                if self.is_proxy_connected():
+                    msg: dict = {"cmd":"Resync"}
+                    self.server_msgs.append(encode(msg))
+
 
         elif cmd == "RoomUpdate":
             # Same story as above
@@ -233,7 +238,7 @@ def launch():
         ctx = TrackmaniaContext(args.connect, args.password)
         logger.info("Starting Trackmania proxy server")
         ctx.proxy = websockets.serve(functools.partial(proxy, ctx=ctx),
-                                     host="", port=22422, ping_timeout=999999, ping_interval=999999)
+                                     host="", port=22422, logger=logger,ping_timeout=999999, ping_interval=999999)
         ctx.proxy_task = asyncio.create_task(proxy_loop(ctx), name="ProxyLoop")
 
         if gui_enabled:
