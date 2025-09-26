@@ -140,7 +140,7 @@
         "name": "Ancient Sanctuary: Giant Bell Alley - Paint Cage before Expedition Flag",
         "location": "Ancient Sanctuary",
         "original_item": "PartyHealShard",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -420,7 +420,7 @@
         "name": "Flying Manor: Dualliste Wing - Paint Cage",
         "location": "Flying Manor",
         "original_item": "ReviveWithPower",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -660,7 +660,9 @@
         "name": "Flying Manor: Eveque Wing - Paint Cage",
         "location": "Flying Manor",
         "original_item": "StunEnergy",
-        "condition": {"Paint Break": 1},
+        "condition": {
+            "Paint Break": 1,
+            "Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -860,7 +862,7 @@
         "name": "Forgotten Battlefield: Battlefield - Paint Cage",
         "location": "Forgotten Battlefield",
         "original_item": "PartyHealShard",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -908,7 +910,7 @@
         "name": "Frozen Hearts: Icebound Train Station - Past Paint Cage",
         "location": "Frozen Hearts",
         "original_item": "ChromaPack_Large",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -924,7 +926,7 @@
         "name": "Frozen Hearts: Glacial Falls - Paint Cage 1",
         "location": "Frozen Hearts",
         "original_item": "AntiFrozen",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -940,7 +942,7 @@
         "name": "Frozen Hearts: Glacial Falls - Paint Cage 2",
         "location": "Frozen Hearts",
         "original_item": "ReviveTint_Shard",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -1116,7 +1118,7 @@
         "name": "Gestral Village: Steal from Victorifo",
         "location": "Gestral Village",
         "original_item": "ChromaPack_Large",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -1388,7 +1390,7 @@
         "name": "Flying Waters: Coral Cave - Paint Cage",
         "location": "Goblus Lair",
         "original_item": "ReviveTint_Shard",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -1868,7 +1870,7 @@
         "name": "Manor: From Sirene - Break the bathroom mirror",
         "location": "Manor",
         "original_item": "ConsumableUpgradeMaterial_Health",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -1908,7 +1910,7 @@
         "name": "Monolith: Tainted Meadows - Paint Cage",
         "location": "Monolith",
         "original_item": "ReviveTint_Shard",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -1988,7 +1990,9 @@
         "name": "Monolith: Tainted Sanctuary - Paint Cage",
         "location": "Monolith",
         "original_item": "RandomDefense",
-        "condition": {"Paint Break": 1},
+        "condition": {
+            "Paint Break": 1,
+            "Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -2132,7 +2136,7 @@
         "name": "Monolith: Tainted Hearts - Paint Cage",
         "location": "Monolith",
         "original_item": "ReinforcementParade",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -2268,7 +2272,7 @@
         "name": "Old Lumiere: Manor Gardens - Near Paint Cage",
         "location": "Old Lumiere",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -2372,7 +2376,9 @@
         "name": "Old Lumiere: Manor Gardens - Paint Cage",
         "location": "Old Lumiere",
         "original_item": "Redalim",
-        "condition": {"Paint Break": 1},
+        "condition": {
+            "Paint Break": 1,
+            "Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -2716,7 +2722,7 @@
         "name": "Stone Wave Cliffs: Entrance - Paint cage",
         "location": "Sea Cliff",
         "original_item": "Delaram",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -2772,7 +2778,9 @@
         "name": "Stone Wave Cliffs: Old Farm - Paint cage",
         "location": "Sea Cliff",
         "original_item": "Duenum",
-        "condition": {"Paint Break": 1},
+        "condition": {
+            "Paint Break": 1,
+            "Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -3012,7 +3020,7 @@
         "name": "Sirene: Dancing Classes - Paint Cage",
         "location": "Sirene",
         "original_item": "ShieldAffinity",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -3132,7 +3140,7 @@
         "name": "Sirene: Sewing Atelier - Paint Cage",
         "location": "Sirene",
         "original_item": "ReviveTint_Shard",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -3268,7 +3276,7 @@
         "name": "Stone Wave Cliffs Cave: Paint Cage",
         "location": "Small Level Stonewave Cliffs Cave",
         "original_item": "PartyHealShard",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -3372,7 +3380,7 @@
         "name": "Esoteric Ruins: Paint Cage",
         "location": "Small Level Door Maze",
         "original_item": "ChromaPack_ExtraLarge",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -3860,7 +3868,7 @@
         "name": "Endless Night Sanctuary: Night Totem - Paint Cage above flag",
         "location": "Twilight Sanctuary",
         "original_item": "UpgradeMaterial",
-        "condition": {},
+        "condition": {"Free Aim":  1},
         "type": "Chest"
     },
     {
@@ -6143,7 +6151,7 @@
         "name": "Lost Gestral reward 1",
         "internal_name": "",
         "location": "Camp",
-        "condition": {},
+        "condition": {"Lost Gestral": 1},
         "original_item": "",
         "type": "Lost Gestral reward"
     },
@@ -6151,7 +6159,7 @@
         "name": "Lost Gestral reward 2",
         "internal_name": "",
         "location": "Camp",
-        "condition": {},
+        "condition": {"Lost Gestral": 2},
         "original_item": "",
         "type": "Lost Gestral reward"
     },
@@ -6159,7 +6167,7 @@
         "name": "Lost Gestral reward 3",
         "internal_name": "",
         "location": "Camp",
-        "condition": {},
+        "condition": {"Lost Gestral": 3},
         "original_item": "",
         "type": "Lost Gestral reward"
     },
@@ -6167,7 +6175,7 @@
         "name": "Lost Gestral reward 4",
         "internal_name": "",
         "location": "Camp",
-        "condition": {},
+        "condition": {"Lost Gestral": 4},
         "original_item": "",
         "type": "Lost Gestral reward"
     },
@@ -6175,7 +6183,7 @@
         "name": "Lost Gestral reward 5",
         "internal_name": "",
         "location": "Camp",
-        "condition": {},
+        "condition": {"Lost Gestral": 5},
         "original_item": "",
         "type": "Lost Gestral reward"
     },
@@ -6183,7 +6191,7 @@
         "name": "Lost Gestral reward 6",
         "internal_name": "",
         "location": "Camp",
-        "condition": {},
+        "condition": {"Lost Gestral": 6},
         "original_item": "",
         "type": "Lost Gestral reward"
     },
@@ -6191,7 +6199,7 @@
         "name": "Lost Gestral reward 7",
         "internal_name": "",
         "location": "Camp",
-        "condition": {},
+        "condition": {"Lost Gestral": 7},
         "original_item": "",
         "type": "Lost Gestral reward"
     },
@@ -6199,7 +6207,7 @@
         "name": "Lost Gestral reward 8",
         "internal_name": "",
         "location": "Camp",
-        "condition": {},
+        "condition": {"Lost Gestral": 8},
         "original_item": "",
         "type": "Lost Gestral reward"
     },
@@ -6207,7 +6215,7 @@
         "name": "Lost Gestral reward 9",
         "internal_name": "",
         "location": "Camp",
-        "condition": {},
+        "condition": {"Lost Gestral": 9},
         "original_item": "",
         "type": "Lost Gestral reward"
     }

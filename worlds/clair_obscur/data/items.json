@@ -2805,5 +2805,12 @@
     "internal_name": "SideLevel_CleasTower_Entrance",
     "quantity": 1,
     "progressive": 1
+  },
+  {
+    "type": "Exploration capacities",
+    "name": "Free Aim",
+    "internal_name": "FreeAim",
+    "quantity": 1,
+    "progressive": 1
   }
 ]
