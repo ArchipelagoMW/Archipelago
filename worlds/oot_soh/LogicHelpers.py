@@ -454,33 +454,23 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
     """
 
     # Define what weapons work at each range
-    def can_hit_at_range(range_type: str) -> bool:
-        if range_type == Combat_Ranges.CLOSE.value:
-            return (can_jump_slash(state, world) or
-                    has_explosives(state, world) or
-                    can_use(Items.DINS_FIRE.value, state, world))
-
-        elif range_type in [Combat_Ranges.SHORT_JUMPSLASH.value, Combat_Ranges.MASTER_SWORD_JUMPSLASH.value, Combat_Ranges.LONG_JUMPSLASH.value]:
-            return can_jump_slash(state, world)
-
-        elif range_type == Combat_Ranges.BOMB_THROW.value:
-            return has_explosives(state, world)
-
-        elif range_type == Combat_Ranges.BOOMERANG.value:
-            return can_use(Items.BOOMERANG.value, state, world)
-
-        elif range_type == Combat_Ranges.HOOKSHOT.value:
-            return can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world)
-
-        elif range_type == Combat_Ranges.LONGSHOT.value:
-            return can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world)  # Longshot is progressive hookshot level 2
-
-        elif range_type == Combat_Ranges.FAR.value:
-            return (can_use(Items.PROGRESSIVE_BOW.value, state, world) or
-                    can_use(Items.PROGRESSIVE_SLINGSHOT.value, state, world) or
-                    can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
-                    has_explosives(state, world))
-
+    def can_hit_at_range(range_type: Combat_Ranges) -> bool:
+        if range_type == Combat_Ranges.CLOSE and can_use(Items.MEGATON_HAMMER):
+            return True
+        if range_type <= Combat_Ranges.SHORT_JUMPSLASH and can_use(Items.KOKIRI_SWORD):
+            return True
+        if range_type <= Combat_Ranges.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD):
+            return True
+        if range_type <= Combat_Ranges.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD) or can_use(Items.STICKS)):
+            return True
+        if range_type <= Combat_Ranges.BOMB_THROW and can_use(Items.BOMB_BAG):
+            return True
+        if range_type <= Combat_Ranges.HOOKSHOT and can_use(Items.HOOKSHOT):
+            return True
+        if range_type <= Combat_Ranges.LONGSHOT and (can_use(Items.LONGSHOT) or (wall_or_floor and can_use(Items.BOMBCHUS_5))):
+            return True
+        if range_type <= Combat_Ranges.FAR and (can_use(Items.FAIRY_SLINGSHOT) or can_use(Items.FAIRY_BOW)):
+            return True
         return False
 
     # Enemy-specific logic based on C++ implementation
