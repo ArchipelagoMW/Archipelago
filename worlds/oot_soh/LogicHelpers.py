@@ -427,7 +427,7 @@ def can_hit_switch(state: CollectionState, world: "SohWorld", distance: str = "c
 
     return False
 
-def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = "close",
+def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = Combat_Ranges.CLOSE.value,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
     Check if Link can kill a specific enemy at a given combat range.
@@ -445,27 +445,27 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
 
     # Define what weapons work at each range
     def can_hit_at_range(range_type: str) -> bool:
-        if range_type == "close":
+        if range_type == Combat_Ranges.CLOSE.value:
             return (can_jump_slash(state, world) or
                     has_explosives(state, world) or
                     can_use(Items.DINS_FIRE.value, state, world))
 
-        elif range_type in ["short_jumpslash", "master_sword_jumpslash", "long_jumpslash"]:
+        elif range_type in [Combat_Ranges.SHORT_JUMPSLASH.value, Combat_Ranges.MASTER_SWORD_JUMPSLASH.value, Combat_Ranges.LONG_JUMPSLASH.value]:
             return can_jump_slash(state, world)
 
-        elif range_type == "bomb_throw":
+        elif range_type == Combat_Ranges.BOMB_THROW.value:
             return has_explosives(state, world)
 
-        elif range_type == "boomerang":
+        elif range_type == Combat_Ranges.BOOMERANG.value:
             return can_use(Items.BOOMERANG.value, state, world)
 
-        elif range_type == "hookshot":
+        elif range_type == Combat_Ranges.HOOKSHOT.value:
             return can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world)
 
-        elif range_type == "longshot":
+        elif range_type == Combat_Ranges.LONGSHOT.value:
             return can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world)  # Longshot is progressive hookshot level 2
 
-        elif range_type == "far":
+        elif range_type == Combat_Ranges.FAR.value:
             return (can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                     can_use(Items.PROGRESSIVE_SLINGSHOT.value, state, world) or
                     can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
@@ -474,95 +474,94 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
         return False
 
     # Enemy-specific logic based on C++ implementation
-    enemy_lower = enemy.lower().replace(" ", "_")
 
     # Guards (need specific items or tricks)
-    if enemy_lower in ["gerudo_guard", "break_room_guard"]:
+    if enemy in [Enemies.GERUDO_GUARD.value, Enemies.BREAK_ROOM_GUARD.value]:
         return (can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
                 has_explosives(state, world))
 
     # Gold Skulltulas and similar enemies that can be hit at various ranges
-    if enemy_lower in ["gold_skulltula", "big_skulltula"]:
+    if enemy in [Enemies.GOLD_SKULLTULA.value, Enemies.BIG_SKULLTULA.value]:
         return can_hit_at_range(combat_range)
 
     # Small enemies that are easy to kill
-    if enemy_lower in ["gohma_larva", "mad_scrub", "deku_baba", "withered_deku_baba"]:
+    if enemy in [Enemies.GOHMA_LARVA.value, Enemies.MAD_SCRUB.value, Enemies.DEKU_BABA.value, Enemies.WITHERED_DEKU_BABA.value]:
         return can_hit_at_range(combat_range)
 
     # Dodongo (requires explosives or specific attacks)
-    if enemy_lower == "dodongo":
-        if combat_range in ["close", "short_jumpslash", "master_sword_jumpslash", "long_jumpslash"]:
+    if enemy == Enemies.DODONGO.value:
+        if combat_range in [Combat_Ranges.CLOSE.value, Combat_Ranges.SHORT_JUMPSLASH.value, Combat_Ranges.MASTER_SWORD_JUMPSLASH.value, Combat_Ranges.LONG_JUMPSLASH.value]:
             return (can_jump_slash(state, world) or has_explosives(state, world))
         return has_explosives(state, world)
 
     # Lizalfos (requires good weapons)
-    if enemy_lower == "lizalfos":
+    if enemy == Enemies.LIZALFOS:
         return (can_jump_slash(state, world) or
                 can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 has_explosives(state, world))
 
     # Flying enemies
-    if enemy_lower in ["keese", "fire_keese"]:
+    if enemy in [Enemies.KEESE.value, Enemies.FIRE_KEESE.value]:
         return can_hit_at_range(combat_range)
 
     # Bubbles (need specific attacks)
-    if enemy_lower in ["blue_bubble", "green_bubble"]:
+    if enemy in [Enemies.BLUE_BUBBLE.value, Enemies.GREEN_BUBBLE.value]:
         return (can_jump_slash(state, world) or
                 can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
                 can_use(Items.BOOMERANG.value, state, world))
 
     # Tough enemies
-    if enemy_lower in ["dead_hand", "like_like", "floormaster", "wallmaster"]:
+    if enemy in [Enemies.DEAD_HAND.value, Enemies.LIKE_LIKE.value, Enemies.FLOORMASTER.value, Enemies.WALLMASTER.value]:
         return (can_jump_slash(state, world) or
                 can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 has_explosives(state, world))
 
     # Stalfos (needs good weapons)
-    if enemy_lower == "stalfos":
+    if enemy == Enemies.STALFOS.value:
         return can_hit_at_range(combat_range) and (
                 can_jump_slash(state, world) or
                 can_use(Items.MEGATON_HAMMER.value, state, world))
 
     # Iron Knuckle (very tough)
-    if enemy_lower == "iron_knuckle":
+    if enemy == Enemies.IRON_KNUCKLE.value:
         return (can_jump_slash(state, world) or
                 can_use(Items.MEGATON_HAMMER.value, state, world) or
                 has_explosives(state, world))
 
     # Fire enemies
-    if enemy_lower in ["flare_dancer", "torch_slug"]:
+    if enemy in [Enemies.FLARE_DANCER.value, Enemies.TORCH_SLUG.value]:
         return (can_jump_slash(state, world) or
                 can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
                 has_explosives(state, world))
 
     # Wolfos
-    if enemy_lower in ["wolfos", "white_wolfos"]:
+    if enemy in [Enemies.WOLFOS.value, Enemies.WHITE_WOLFOS.value]:
         return (can_jump_slash(state, world) or
                 can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 has_explosives(state, world))
 
     # Gerudo Warrior
-    if enemy_lower == "gerudo_warrior":
+    if enemy == Enemies.GERUDO_WARRIOR.value:
         return (can_jump_slash(state, world) or
                 can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 has_explosives(state, world))
 
     # ReDeads and Gibdos
-    if enemy_lower in ["gibdo", "redead"]:
+    if enemy in [Enemies.GIBDO.value, Enemies.REDEAD.value]:
         return (can_jump_slash(state, world) or
                 can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 can_use(Items.SUNS_SONG.value, state, world) or
                 has_explosives(state, world))
 
     # Other enemies
-    if enemy_lower in ["meg", "armos", "dinolfos", "freezard", "shell_blade", "spike", "stinger"]:
+    if enemy in [Enemies.MEG.value, Enemies.ARMOS.value, Enemies.DINOLFOS.value, Enemies.FREEZARD.value, Enemies.SHELL_BLADE.value, Enemies.SPIKE.value, Enemies.STINGER.value]:
         return can_hit_at_range(combat_range)
 
     # Water enemies
-    if enemy_lower in ["big_octo", "bari", "shabom", "octorok", "tentacle"]:
+    if enemy in [Enemies.BIG_OCTO.value, Enemies.BARI.value, Enemies.SHABOM.value, Enemies.OCTOROK.value, Enemies.TENTACLE.value]:
         if in_water:
             return (can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
                     can_use(Items.PROGRESSIVE_BOW.value, state, world) or
@@ -570,31 +569,31 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
         return can_hit_at_range(combat_range)
 
     # Bosses
-    if enemy_lower in ["gohma", "king_dodongo", "barinade", "phantom_ganon", "volvagia",
-                       "morpha", "bongo_bongo", "twinrova", "ganondorf", "ganon"]:
+    if enemy in [Enemies.GOHMA.value, Enemies.KING_DODONGO.value, Enemies.BARINADE.value, Enemies.PHANTOM_GANON.value, Enemies.VOLVAGIA.value,
+                       Enemies.MORPHA.value, Enemies.BONGO_BONGO.value, Enemies.TWINROVA.value, Enemies.GANONDORF.value, Enemies.GANON.value]:
         # Bosses generally require good weapons and specific strategies
         return (can_jump_slash(state, world) or
                 can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 has_explosives(state, world))
 
     # Dark Link (special case)
-    if enemy_lower == "dark_link":
+    if enemy == Enemies.DARK_LINK.value:
         return (can_use(Items.MEGATON_HAMMER.value, state, world) or
                 can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 has_explosives(state, world))
 
     # Beamos (needs ranged attacks)
-    if enemy_lower == "beamos":
+    if enemy == Enemies.BEAMOS.value:
         return (can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
                 has_explosives(state, world))
 
     # Purple Leever
-    if enemy_lower == "purple_leever":
+    if enemy == Enemies.PURPLE_LEEVER.value:
         return can_hit_at_range(combat_range)
 
     # Anubis (tough enemy)
-    if enemy_lower == "anubis":
+    if enemy == Enemies.ANUBIS.value:
         return (can_jump_slash(state, world) or
                 can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                 has_explosives(state, world))

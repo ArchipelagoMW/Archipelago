@@ -126,7 +126,7 @@ def set_location_rules(world: "SohWorld") -> None:
         set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_LOWER_HEART.value),
                     rule=lambda state: True)  # Always accessible
         set_rule(world.get_location(Locations.DEKU_TREE_LOBBY_UPPER_HEART.value),
-                    rule=lambda state: can_pass_enemy(state, world, "big_skulltula"))
+                    rule=lambda state: can_pass_enemy(state, world, Enemies.BIG_SKULLTULA.value))
 
     # Only set rule on grass items if they are shuffled
     if world.options.shuffle_grass in ["dungeon", "all"]:
@@ -140,10 +140,10 @@ def set_location_rules(world: "SohWorld") -> None:
     # Only set rule on Gold Skulltula tokens if they are shuffled
     if world.options.shuffle_skull_tokens in ["dungeon", "all"]:
         set_rule(world.get_location(Locations.DEKU_TREE_GS_COMPASS_ROOM.value),
-                    rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
+                    rule=lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value))
         set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_GATE.value),
-                    rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
+                    rule=lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value))
         set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_VINES.value),
-                    rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
+                    rule=lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value))
         set_rule(world.get_location(Locations.DEKU_TREE_GS_BASEMENT_BACK_ROOM.value),
-                    rule=lambda state: can_kill_enemy(state, world, "gold_skulltula"))
+                    rule=lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value))
