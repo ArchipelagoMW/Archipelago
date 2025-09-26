@@ -3431,7 +3431,7 @@ class Enemies(str, Enum):
 	OCTOROK = "octorok"
 	
 @total_ordering
-class Combat_Ranges(str, Enum):
+class CombatRanges(str, Enum):
 	CLOSE = "close"
 	SHORT_JUMPSLASH = "short_jumpslash"
 	MASTER_SWORD_JUMPSLASH = "master_sword_jumpslash"
@@ -3443,5 +3443,5 @@ class Combat_Ranges(str, Enum):
 	FAR = "far"
 	
 	def __lt__(self, other):
-		vals = [e for e in Combat_Ranges]
+		vals = [e for e in CombatRanges]
 		return vals.index(self) < vals.index(other)

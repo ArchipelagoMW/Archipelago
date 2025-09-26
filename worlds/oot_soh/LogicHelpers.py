@@ -437,7 +437,7 @@ def can_hit_switch(state: CollectionState, world: "SohWorld", distance: str = "c
 
     return False
 
-def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = Combat_Ranges.CLOSE.value,
+def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = CombatRanges.CLOSE.value,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
     Check if Link can kill a specific enemy at a given combat range.
@@ -454,22 +454,22 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
     """
 
     # Define what weapons work at each range
-    def can_hit_at_range(range_type: Combat_Ranges) -> bool:
-        if range_type == Combat_Ranges.CLOSE and can_use(Items.MEGATON_HAMMER):
+    def can_hit_at_range(range_type: CombatRanges) -> bool:
+        if range_type == CombatRanges.CLOSE and can_use(Items.MEGATON_HAMMER):
             return True
-        if range_type <= Combat_Ranges.SHORT_JUMPSLASH and can_use(Items.KOKIRI_SWORD):
+        if range_type <= CombatRanges.SHORT_JUMPSLASH and can_use(Items.KOKIRI_SWORD):
             return True
-        if range_type <= Combat_Ranges.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD):
+        if range_type <= CombatRanges.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD):
             return True
-        if range_type <= Combat_Ranges.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD) or can_use(Items.STICKS)):
+        if range_type <= CombatRanges.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD) or can_use(Items.STICKS)):
             return True
-        if range_type <= Combat_Ranges.BOMB_THROW and can_use(Items.BOMB_BAG):
+        if range_type <= CombatRanges.BOMB_THROW and can_use(Items.BOMB_BAG):
             return True
-        if range_type <= Combat_Ranges.HOOKSHOT and can_use(Items.HOOKSHOT):
+        if range_type <= CombatRanges.HOOKSHOT and can_use(Items.HOOKSHOT):
             return True
-        if range_type <= Combat_Ranges.LONGSHOT and (can_use(Items.LONGSHOT) or (wall_or_floor and can_use(Items.BOMBCHUS_5))):
+        if range_type <= CombatRanges.LONGSHOT and (can_use(Items.LONGSHOT) or (wall_or_floor and can_use(Items.BOMBCHUS_5))):
             return True
-        if range_type <= Combat_Ranges.FAR and (can_use(Items.FAIRY_SLINGSHOT) or can_use(Items.FAIRY_BOW)):
+        if range_type <= CombatRanges.FAR and (can_use(Items.FAIRY_SLINGSHOT) or can_use(Items.FAIRY_BOW)):
             return True
         return False
 
@@ -491,7 +491,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
 
     # Dodongo (requires explosives or specific attacks)
     if enemy == Enemies.DODONGO.value:
-        if combat_range in [Combat_Ranges.CLOSE.value, Combat_Ranges.SHORT_JUMPSLASH.value, Combat_Ranges.MASTER_SWORD_JUMPSLASH.value, Combat_Ranges.LONG_JUMPSLASH.value]:
+        if combat_range in [CombatRanges.CLOSE.value, CombatRanges.SHORT_JUMPSLASH.value, CombatRanges.MASTER_SWORD_JUMPSLASH.value, CombatRanges.LONG_JUMPSLASH.value]:
             return (can_jump_slash(state, world) or has_explosives(state, world))
         return has_explosives(state, world)
 
@@ -503,7 +503,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
 
     # Flying enemies
     if enemy in [Enemies.KEESE.value, Enemies.FIRE_KEESE.value]:
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(combat_range) and combat_range > CombatRanges.CLOSE
 
     # Bubbles (need specific attacks)
     if enemy in [Enemies.BLUE_BUBBLE.value, Enemies.GREEN_BUBBLE.value]:
