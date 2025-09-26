@@ -168,7 +168,7 @@ class PokeparkCaterpieTreeClientData(PokeparkBaseClientLocationData):
 
 
 @dataclass
-class PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(PokeparkBaseClientLocationData):
+class PokeparkShroomishCrateMagnemite3CrateDiglettCrateBaltoyCrateClientData(PokeparkBaseClientLocationData):
     _expected_value: Optional[int] = 0xFFFFFFFF
     _bit_mask: Optional[int] = 0xFFFFFFFF
     def __post_init__(self):
@@ -219,19 +219,6 @@ class PokeparkPrismaCompletionClientData(PokeparkBaseClientLocationData):
         self.bit_mask = self._bit_mask
         self.in_structure_address_interval = 0x0
 
-@dataclass
-class PokeparkBaltoyCrateClientData(PokeparkBaseClientLocationData):
-    _expected_value: Optional[int] = 0xFFFFFFFF
-    _bit_mask: Optional[int] = 0xFFFFFFFF
-
-    def __post_init__(self):
-        assert self._expected_value is not None
-        assert self._bit_mask is not None
-        self.global_manager_data_struc_offset = 0x4f
-        self.in_structure_offset = 0x0
-        self.expected_value = self._expected_value
-        self.bit_mask = self._bit_mask
-        self.in_structure_address_interval = 0x0
 
 @dataclass
 class PokeparkMewChallengeGengarPaintingClientData(PokeparkBaseClientLocationData):
@@ -804,7 +791,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Meadow Zone Main Area - Shroomish Crate -- Shroomish Unlocked": PokeparkLocationData(
         42, PokeparkFlag.POKEMON_UNLOCK, "Meadow Zone Main Area", 0x0101,
-        PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(
+        PokeparkShroomishCrateMagnemite3CrateDiglettCrateBaltoyCrateClientData(
             structure_position=0,
             _expected_value=0b10000000,
             _bit_mask=0b10000000,
@@ -2247,7 +2234,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Cavern Zone Main Area - Magnemite Crate Deep Inside -- Magnemite Unlocked": PokeparkLocationData(
         247, PokeparkFlag.POKEMON_UNLOCK, "Cavern Zone Main Area", 0x0401,
-        PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(
+        PokeparkShroomishCrateMagnemite3CrateDiglettCrateBaltoyCrateClientData(
             structure_position=0,
             _expected_value=0b00100000,
             _bit_mask=0b00100000,
@@ -2256,7 +2243,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Cavern Zone Main Area - Diglett Crate -- Diglett Unlocked": PokeparkLocationData(
         248, PokeparkFlag.POKEMON_UNLOCK, "Cavern Zone Main Area", 0x0401,
-        PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(
+        PokeparkShroomishCrateMagnemite3CrateDiglettCrateBaltoyCrateClientData(
             structure_position=0,
             _expected_value=0b00000010,
             _bit_mask=0b00000010,
@@ -2591,10 +2578,10 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Magma Zone Main Area - Baltoy Crate -- Baltoy Unlocked": PokeparkLocationData(
         296, PokeparkFlag.POKEMON_UNLOCK, "Magma Zone Main Area", 0x0402,
-        PokeparkBaltoyCrateClientData(
+        PokeparkShroomishCrateMagnemite3CrateDiglettCrateBaltoyCrateClientData(
             structure_position=0,
-            _expected_value=0b10000000,
-            _bit_mask=0b10000000,
+            _expected_value=0b00000001,
+            _bit_mask=0b00000001,
             memory_range=MemoryRange.BYTE
         )
     ),
@@ -3219,7 +3206,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Haunted Zone Mansion Area - Voltorb Power Competition -- Friendship": PokeparkLocationData(
         382, PokeparkFlag.CHASE, "Haunted Zone Mansion Gengar Area", 0x0502, PokeparkFriendshipClientLocationData(
-            structure_position=151,
+            structure_position=127,
             memory_range=MemoryRange.BYTE
         ),
     ),
@@ -4514,7 +4501,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
     "Magma Zone Main Area - Drill -- Torkoal Unlocked": PokeparkLocationData(
         562, PokeparkFlag.POKEMON_UNLOCK, "Magma Zone Main Area", 0x0301,
-        PokeparkShroomishCrateMagnemite3CrateDiglettCrateClientData(
+        PokeparkShroomishCrateMagnemite3CrateDiglettCrateBaltoyCrateClientData(
             structure_position=0,
             memory_range=MemoryRange.BYTE,
             _expected_value=0b00010000,
