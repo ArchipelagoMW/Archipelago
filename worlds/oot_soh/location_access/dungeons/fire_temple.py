@@ -5,7 +5,7 @@ from worlds.oot_soh.Regions import double_link_regions
 from worlds.oot_soh.Items import SohItem
 from worlds.oot_soh.Locations import SohLocation, SohLocationData
 from worlds.oot_soh.Enums import *
-from worlds.oot_soh.LogicHelpers import (set_location_rules, connect_regions)
+from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions)
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld

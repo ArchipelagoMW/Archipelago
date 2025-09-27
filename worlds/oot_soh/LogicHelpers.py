@@ -1,6 +1,7 @@
 from typing import Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
+from .Locations import SohLocation
 from worlds.generic.Rules import set_rule
 from .Enums import *
 from .RegionAgeAccess import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
@@ -11,14 +12,20 @@ if TYPE_CHECKING:
 import logging
 logger = logging.getLogger("SOH_OOT.Logic")
 
-def set_location_rules(world: "SohWorld", locations = [[]]) -> None:
-    for location in locations:
-        if location[0] in world.multiworld.regions.location_cache[world.player]:
-            set_rule(world.get_location(location[0]), rule=location[1])
-    
-def connect_regions(parent_region, world: "SohWorld", child_regions = [[]]) -> None:
+def connect_regions(parent_region: str, world: "SohWorld", child_regions = [[]]) -> None:
     for region in child_regions:
         world.get_region(parent_region).connect(world.get_region(region[0]), rule=region[1])
+
+def add_locations(parent_region: str, world: "SohWorld", locations = [[]]) -> None:
+    for location in locations:
+        locationName = location[0]
+        locationRule = lambda state: True
+        if(len(location) < 2):
+            locationRule = location[1]
+        if locationName in world.included_locations:
+            locationAddress = world.included_locations.pop(location[0])
+            world.get_region(parent_region).add_locations({locationName: locationAddress}, SohLocation)
+            set_rule(world.get_location(locationName), locationRule)
 
 def has_item(itemName: str, state: CollectionState, world: "SohWorld", count:int = 1, can_be_child: bool = True, can_be_adult: bool = True) -> bool:
     def has(itemName, count=1): 
@@ -319,6 +326,11 @@ def is_adult(state: CollectionState, world: "SohWorld") -> bool:
     # TODO: Implement proper age checking based on world settings and progression
     return True
 
+def is_child(state: CollectionState, world: "SohWorld") -> bool:
+    # For now, return True as a placeholder since age logic is complex and context-dependent
+    # The real age checking should be done through the CanUse function's can_be_adult parameter
+    # TODO: Implement proper age checking based on world settings and progression
+    return True
 
 def can_damage(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can deal damage to enemies."""
