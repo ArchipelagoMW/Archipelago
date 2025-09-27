@@ -22,8 +22,9 @@ class Goal(Choice):
 class Victory(Choice):
     """
     Mithrix: Defeat Mithrix in Commencement
-    Voidling: Defeat the Voidling in The Planetarium (DLC required! Will select any if not enabled.)
+    Voidling: Defeat the Voidling in The Planetarium (SOTV DLC required! Will select any if not enabled.)
     Limbo: Defeat the Scavenger in Hidden Realm: A Moment, Whole
+    Falseson: Defeat False son and gift an item to the altar in Prime Meridian (SOTS DLC required! Will select any if not enabled.)
     Any: Any victory in the game will count. See Final Stage Death for additional ways.
     """
     display_name = "Victory Condition"
@@ -31,6 +32,7 @@ class Victory(Choice):
     option_mithrix = 1
     option_voidling = 2
     option_limbo = 3
+    option_falseson = 4
     default = 0
 
 
@@ -138,17 +140,25 @@ class FinalStageDeath(Toggle):
     If not use the following to tell if final stage death will count:
     Victory: mithrix - only dying in Commencement will count.
     Victory: voidling - only dying in The Planetarium will count.
-    Victory: limbo - Obliterating yourself will count."""
+    Victory: limbo - Obliterating yourself will count.
+    Victory: falseson - only dying in Prime Meridian will count."""
     display_name = "Final Stage Death is Win"
 
 
 class DLC_SOTV(Toggle):
     """
-     Enable if you are using SOTV DLC.
+     Enable if you are using Survivors of the Void DLC.
      Affects environment availability for Explore Mode.
      Adds Void Items into the item pool
      """
     display_name = "Enable DLC - SOTV"
+
+class DLC_SOTS(Toggle):
+    """
+     Enable if you are using Seekers of the Storm DLC.
+     Affects environment availability for Explore Mode.
+     """
+    display_name = "Enable DLC - SOTS"
 
 
 class RequireStages(DefaultOnToggle):
@@ -160,6 +170,20 @@ class ProgressiveStages(DefaultOnToggle):
     """This will convert Stage items to be a progressive item. For example instead of "Stage 2" it would be
      "Progressive Stage" """
     display_name = "Progressive Stages"
+class StageVariants(Toggle):
+    """Enable if you want to include stage variants in the environment pool.
+    Stages included are:
+    - Distant Roost - Distant Roost (2)
+    - Titanic Plains - Titanic Plains (2)
+    SOTS DLC Enabled:
+    - Verdant Falls - Vicious Falls
+    - Disturbed Impact - Shattered Abodes
+    - Treeborn Colony - Golden Dieback"""
+    display_name = "Include Stage Variants"
+
+class ShowSeerPortals(DefaultOnToggle):
+    """Shows Seer Portals at the teleporter to allow choosing the next environment."""
+    display_name = "Show Seer Portals"
 
 
 class GreenScrap(Range):
@@ -384,6 +408,7 @@ ror2_option_groups = [
         AltarsPerEnvironment,
         RequireStages,
         ProgressiveStages,
+        ShowSeerPortals,
     ]),
     OptionGroup("Classic Mode Options", [
         TotalLocations,
@@ -427,8 +452,11 @@ class ROR2Options(PerGameCommonOptions):
     start_with_revive: StartWithRevive
     final_stage_death: FinalStageDeath
     dlc_sotv: DLC_SOTV
+    dlc_sots: DLC_SOTS
     require_stages: RequireStages
     progressive_stages: ProgressiveStages
+    stage_variants: StageVariants
+    show_seer_portals: ShowSeerPortals
     death_link: DeathLink
     item_pickup_step: ItemPickupStep
     shrine_use_step: ShrineUseStep

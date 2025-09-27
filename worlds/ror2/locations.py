@@ -3,7 +3,7 @@ from BaseClasses import Location
 from .options import TotalLocations, ChestsPerEnvironment, ShrinesPerEnvironment, ScavengersPerEnvironment, \
     ScannersPerEnvironment, AltarsPerEnvironment
 from .ror2environments import compress_dict_list_horizontal, environment_vanilla_orderedstages_table, \
-    environment_sotv_orderedstages_table
+    environment_sotv_orderedstages_table, environment_sost_orderedstages_table
 
 
 class RiskOfRainLocation(Location):
@@ -57,13 +57,15 @@ def get_environment_locations(chests: int, shrines: int, scavengers: int, scanne
     return locations
 
 
-def get_locations(chests: int, shrines: int, scavengers: int, scanners: int, altars: int, dlc_sotv: bool) \
+def get_locations(chests: int, shrines: int, scavengers: int, scanners: int, altars: int, dlc_sotv: bool, dlc_sots: bool) \
         -> Dict[str, int]:
     """Get a dictionary of locations for the orderedstage environments with the locations from the parameters."""
     locations = {}
     orderedstages = compress_dict_list_horizontal(environment_vanilla_orderedstages_table)
     if dlc_sotv:
         orderedstages.update(compress_dict_list_horizontal(environment_sotv_orderedstages_table))
+    if dlc_sots:
+        orderedstages.update(compress_dict_list_horizontal(environment_sost_orderedstages_table))
     # for every environment, generate the respective locations
     for environment_name, environment_index in orderedstages.items():
         locations.update(get_environment_locations(
@@ -86,4 +88,5 @@ location_table.update(get_locations(
     scanners=ScannersPerEnvironment.range_end,
     altars=AltarsPerEnvironment.range_end,
     dlc_sotv=True,
+    dlc_sots=True
 ))

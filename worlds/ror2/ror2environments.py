@@ -4,11 +4,14 @@ from typing import Dict, List, TypeVar
 
 environment_vanilla_orderedstage_1_table: Dict[str, int] = {
     "Distant Roost":                            7,  # blackbeach
-    "Distant Roost (2)":                        8,  # blackbeach2
     "Titanic Plains":                          15,  # golemplains
-    "Titanic Plains (2)":                      16,  # golemplains2
     "Verdant Falls":                           28,  # lakes
 }
+environment_vanilla_variant_orderedstage_1_table: Dict[str, int] = {
+    "Distant Roost (2)": 8,  # blackbeach2
+    "Titanic Plains (2)": 16,  # golemplains2
+}
+
 environment_vanilla_orderedstage_2_table: Dict[str, int] = {
     "Abandoned Aqueduct":                      17,  # goolake
     "Wetland Aspect":                          12,  # foggyswamp
@@ -54,6 +57,33 @@ environment_sotv_special_table: Dict[str, int] = {
     "The Planetarium":                         45,  # voidraid
 }
 
+environment_sost_orderstage_1_table: Dict[str, int] = {
+
+    "Shattered Abodes":                        54,  # village
+
+}
+environment_sost_variant_orderstage_1_table: Dict[str, int] = {
+    "Viscous Falls": 34,  # lakesnight
+    "Disturbed Impact": 55,  # villagenight
+}
+
+environment_sost_orderstage_2_table: Dict[str, int] = {
+    "Reformed Altar":                         36,  # lemuriantemple
+}
+
+environment_sost_orderstage_3_table: Dict[str, int] = {
+    "Treeborn Colony":                         21,  # habitat
+    "Golden Dieback":                          22,  # habitatfall
+}
+
+environment_sost_orderstage_5_table: Dict[str, int] = {
+    "Helminth Hatchery":                    23,  # helminthroost
+}
+
+environment_sost_special_table: Dict[str, int] = {
+    "Prime Meridian":                          40,  # meridian
+}
+
 X = TypeVar("X")
 Y = TypeVar("Y")
 
@@ -94,24 +124,36 @@ def collapse_dict_list_vertical(list_of_dict_1: List[Dict[X, Y]], *args: List[Di
 #  (unsure of the space/time cost of creating these initially)
 
 environment_vanilla_orderedstages_table = \
-    [environment_vanilla_orderedstage_1_table, environment_vanilla_orderedstage_2_table,
-     environment_vanilla_orderedstage_3_table, environment_vanilla_orderedstage_4_table,
-     environment_vanilla_orderedstage_5_table]
+    [environment_vanilla_orderedstage_1_table,
+     environment_vanilla_orderedstage_2_table, environment_vanilla_orderedstage_3_table,
+     environment_vanilla_orderedstage_4_table, environment_vanilla_orderedstage_5_table]
 environment_vanilla_table = \
     {**compress_dict_list_horizontal(environment_vanilla_orderedstages_table),
      **environment_vanilla_hidden_realm_table, **environment_vanilla_special_table}
+environment_vanilla_orderedstages_table_with_variants = \
+    {**compress_dict_list_horizontal((environment_vanilla_orderedstages_table), environment_vanilla_variant_orderedstage_1_table)}
+environment_vanilla_table_with_variants = \
+    {**compress_dict_list_horizontal(environment_vanilla_orderedstages_table_with_variants),
+     **environment_vanilla_hidden_realm_table, **environment_vanilla_special_table}
 
+# SoTV
 environment_sotv_orderedstages_table = \
     [environment_sotv_orderedstage_1_table, environment_sotv_orderedstage_2_table,
      environment_sotv_orderedstage_3_table]
 environment_sotv_table = \
     {**compress_dict_list_horizontal(environment_sotv_orderedstages_table), **environment_sotv_special_table}
+# SoST
+environment_sost_orderedstages_table = \
+    [environment_sost_orderstage_1_table, environment_sost_orderstage_2_table,
+     environment_sost_orderstage_3_table, {}, environment_sost_orderstage_5_table] # There is no new stage 4 in SoST
+environment_sost_table = \
+    {**compress_dict_list_horizontal(environment_sost_orderedstages_table), **environment_sost_special_table}
+environment_sost_orderedstages_table_with_variants = \
+    [environment_sost_orderedstages_table, environment_sost_variant_orderstage_1_table]
+environment_sost_table_with_variants = \
+    {**compress_dict_list_horizontal(environment_sost_orderedstages_table_with_variants), **environment_sost_special_table}
 
-environment_non_orderedstages_table = \
-    {**environment_vanilla_hidden_realm_table, **environment_vanilla_special_table, **environment_sotv_special_table}
-environment_orderedstages_table = \
-    collapse_dict_list_vertical(environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table)
-environment_all_table = {**environment_vanilla_table, **environment_sotv_table}
+environment_all_table = {**environment_vanilla_table_with_variants, **environment_sotv_table, **environment_sost_table_with_variants}
 
 
 def shift_by_offset(dictionary: Dict[str, int], offset: int) -> Dict[str, int]:
