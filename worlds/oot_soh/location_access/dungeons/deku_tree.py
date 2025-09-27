@@ -29,7 +29,7 @@ class EventLocations(str, Enum):
 class LocalEventItems(str, Enum):
     DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED = "Deku Tree Basement Upper Block Pushed"
 
-def create_regions_and_rules(world: "SohWorld") -> None:
+def set_region_rules(world: "SohWorld") -> None:
     player = world.player
 
     ## Deku Tree Entryway
