@@ -5,7 +5,7 @@ from BaseClasses import CollectionState, Item, Region, Tutorial
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table, filler_items, filler_bottles
-from .Locations import SohLocation, base_location_table, \
+from .Locations import SohLocation, SohLocationData, base_location_table, \
     gold_skulltula_overworld_location_table, \
     gold_skulltula_dungeon_location_table, \
     shops_location_table, \
@@ -91,6 +91,10 @@ class SohWorld(World):
     options_dataclass = SohOptions
     location_name_to_id = location_table
     item_name_to_id = item_table
+
+    def __init__(self, multiworld, player):
+        super().__init__(multiworld, player)
+        self.included_locations = dict[str: int]()
 
     def generate_early(self) -> None:
         #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
@@ -337,182 +341,196 @@ class SohWorld(World):
         for region_name in region_data_table.keys():
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
+            region.add_exits(region_data_table[region_name].connecting_regions)
 
         # Create locations.
-        for region_name, region_data in region_data_table.items():
-            region = self.multiworld.get_region(region_name, self.player)
 
             # Base locations
-            region.add_locations({
+            self.included_locations.update({
                 location_name: location_data.address for location_name, location_data in base_location_table.items()
-                if location_data.region == region_name
-            }, SohLocation)
+            })
 
             # Gold Skulltulas (Overworld)
-            region.add_locations({
+            self.included_locations.update({
                 location_name: location_data.address for location_name, location_data in gold_skulltula_overworld_location_table.items()
-                if location_data.region == region_name
-            }, SohLocation)
+            })
 
             # Gold Skulltulas (Dungeon)
-            region.add_locations({
+            self.included_locations.update({
                 location_name: location_data.address for location_name, location_data in gold_skulltula_dungeon_location_table.items()
-                if location_data.region == region_name
-            }, SohLocation)
+            })
 
             # Shops
             if self.options.shuffle_shops:
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in shops_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Scrubs
             if self.options.shuffle_scrubs:
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in scrubs_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Adult Trade Items
             if self.options.shuffle_adult_trade_items:
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in trade_items_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Merchants
             if self.options.shuffle_merchants == "bean_merchant_only" or self.options.shuffle_merchants == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in merchants_items_location_table.items()
-                    if location_data.region == region_name and location_name == "ZR Magic Bean Salesman"
-                }, SohLocation)
+                    #if location_data.region == region_name and location_name == "ZR Magic Bean Salesman"
+                })
 
             if self.options.shuffle_merchants == "all_but_beans" or self.options.shuffle_merchants == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in merchants_items_location_table.items()
-                    if location_data.region == region_name and (location_name == "Kak Granny's Shop" or location_name == "GC Medigoron" or location_name == "Wasteland Carpet Salesman")
-                }, SohLocation)
+                    #if location_data.region == region_name and (location_name == "Kak Granny's Shop" or location_name == "GC Medigoron" or location_name == "Wasteland Carpet Salesman")
+                })
 
             # Cows
             if self.options.shuffle_cows:
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in cows_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Frogs
             if self.options.shuffle_frog_song_rupees:
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in frogs_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Beehives
             if self.options.shuffle_beehives:
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in beehives_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Pots (Overworld)
             if self.options.shuffle_pots == "overworld" or self.options.shuffle_pots == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in pots_overworld_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Pots (Dungeon)
             if self.options.shuffle_pots == "dungeon" or self.options.shuffle_pots == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in pots_dungeon_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Crates (Overworld)
             if self.options.shuffle_crates == "overworld" or self.options.shuffle_crates == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in crates_overworld_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Crates (Dungeon)
             if self.options.shuffle_crates == "dungeon" or self.options.shuffle_crates == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in crates_dungeon_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Freestanding (Overworld)
             if self.options.shuffle_freestanding_items == "overworld" or self.options.shuffle_freestanding_items == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in freestanding_overworld_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Freestanding (Dungeon)
             if self.options.shuffle_freestanding_items == "dungeon" or self.options.shuffle_freestanding_items == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in freestanding_dungeon_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Fairies
             if self.options.shuffle_fairies:
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in fairies_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Grass (Overworld)
             if self.options.shuffle_grass == "overworld" or self.options.shuffle_grass == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in grass_overworld_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Grass (Dungeon)
             if self.options.shuffle_grass == "dungeon" or self.options.shuffle_grass == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in grass_dungeon_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Fish (Pond)
             if self.options.shuffle_fish == "pond" or self.options.shuffle_fish == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in fish_pond_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Fish (Overworld)
             if self.options.shuffle_fish == "overworld" or self.options.shuffle_fish == "all":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in fish_overworld_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Child Zelda
             if not self.options.skip_child_zelda:
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in child_zelda_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             # Carpenters
             if self.options.fortress_carpenters == "normal":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in carpenters_location_table.items()
-                    if location_data.region == region_name
-                }, SohLocation)
+                })
 
             if self.options.fortress_carpenters == "fast":
-                region.add_locations({
+                self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in carpenters_location_table.items()
-                    if location_data.region == region_name and (location_name == "GF Freed All Carpenters" or location_name == "GF 1 Torch Carpenter")
-                }, SohLocation)
-                
-            region.add_exits(region_data_table[region_name].connecting_regions)
+                    #if location_data.region == region_name and (location_name == "GF Freed All Carpenters" or location_name == "GF 1 Torch Carpenter")
+                })
+            
+        # Set region rules and location rules after all locations are created
+        # Root
+        root.create_regions_and_rules(self)
+
+        # Overworld
+        #castle_grounds.create_regions_and_rules(self)
+        #death_mountain_crater.create_regions_and_rules(self)
+        #death_mountain_trail.create_regions_and_rules(self)
+        #desert_colossus.create_regions_and_rules(self)
+        #gerudo_fortress.create_regions_and_rules(self)
+        #gerudo_valley.create_regions_and_rules(self)
+        #goron_city.create_regions_and_rules(self)
+        #graveyard.create_regions_and_rules(self)
+        #haunted_wasteland.create_regions_and_rules(self)
+        #hyrule_field.create_regions_and_rules(self)
+        #kakariko.create_regions_and_rules(self)
+        kokiri_forest.create_regions_and_rules(self)
+        #lake_hylia.create_regions_and_rules(self)
+        #lon_lon_ranch.create_regions_and_rules(self)
+        
+        # Dungeons
+        #bottom_of_the_well.create_regions_and_rules(self)
+        deku_tree.create_regions_and_rules(self)
+        #dodongos_cavern.create_regions_and_rules(self)
+        #fire_temple.create_regions_and_rules(self)
+        #forest_temple.create_regions_and_rules(self)
+        #ganons_castle.create_regions_and_rules(self)
+        #gerudo_training_ground.create_regions_and_rules(self)
+        #ice_cavern.create_regions_and_rules(self)
+        #jabujabus_belly.create_regions_and_rules(self)
+        #shadow_temple.create_regions_and_rules(self)
+        #spirit_temple.create_regions_and_rules(self)
+        #water_temple.create_regions_and_rules(self)
+
+        # Place any locations that were missed
+        # TODO should be removed when logic is done
+        for location_name, location_address in self.included_locations.items():
+            self.get_region(Regions.ROOT.value).add_locations({location_name: location_address}, SohLocation)
 
         # Add Weird Egg and Zelda's Letter to their vanilla locations when not shuffled
         if not self.options.skip_child_zelda and not self.options.shuffle_weird_egg:
@@ -575,40 +593,7 @@ class SohWorld(World):
             token_item = self.create_item(Items.GOLD_SKULLTULA_TOKEN.value)
             for location_name, location_data in gold_skulltula_dungeon_location_table.items():
                 self.get_location(location_name).place_locked_item(token_item)
-
-        # Set region rules and location rules after all locations are created
-        # Root
-        root.create_regions_and_rules(self)
-
-        # Overworld
-        castle_grounds.create_regions_and_rules(self)
-        death_mountain_crater.create_regions_and_rules(self)
-        death_mountain_trail.create_regions_and_rules(self)
-        desert_colossus.create_regions_and_rules(self)
-        gerudo_fortress.create_regions_and_rules(self)
-        gerudo_valley.create_regions_and_rules(self)
-        goron_city.create_regions_and_rules(self)
-        graveyard.create_regions_and_rules(self)
-        haunted_wasteland.create_regions_and_rules(self)
-        hyrule_field.create_regions_and_rules(self)
-        kakariko.create_regions_and_rules(self)
-        kokiri_forest.create_regions_and_rules(self)
-        lake_hylia.create_regions_and_rules(self)
-        lon_lon_ranch.create_regions_and_rules(self)
         
-        # Dungeons
-        bottom_of_the_well.create_regions_and_rules(self)
-        deku_tree.create_regions_and_rules(self)
-        dodongos_cavern.create_regions_and_rules(self)
-        fire_temple.create_regions_and_rules(self)
-        forest_temple.create_regions_and_rules(self)
-        ganons_castle.create_regions_and_rules(self)
-        gerudo_training_ground.create_regions_and_rules(self)
-        ice_cavern.create_regions_and_rules(self)
-        jabujabus_belly.create_regions_and_rules(self)
-        shadow_temple.create_regions_and_rules(self)
-        spirit_temple.create_regions_and_rules(self)
-        water_temple.create_regions_and_rules(self)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)

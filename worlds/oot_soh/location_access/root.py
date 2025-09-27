@@ -4,7 +4,7 @@ from worlds.generic.Rules import set_rule
 from worlds.oot_soh.Items import SohItem
 from worlds.oot_soh.Locations import SohLocation, SohLocationData
 from worlds.oot_soh.Enums import *
-from worlds.oot_soh.LogicHelpers import (set_location_rules, connect_regions, can_use)
+from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions, can_use)
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
@@ -27,7 +27,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## Root
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.ROOT.value, world, [
         [Locations.LINKS_POCKET.value, lambda state: True]
     ])
     # Connections
