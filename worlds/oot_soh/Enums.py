@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Regions(str, Enum):
     """List of all region enums"""
 
@@ -676,9 +677,10 @@ class Regions(str, Enum):
     GANONS_CASTLE_ESCAPE = "Ganon's Castle Escape"
     GANONS_ARENA = "Ganon's Arena"
 
-#TODO go through this and Locations for any that aren't needed or should be events
-#For any such entries, remove them from Items and Locations and add to Events. Also, set up event registration.
-#Later, we'll go through the events and replace some with other methods
+
+# TODO go through this and Locations for any that aren't needed or should be events
+# For any such entries, remove them from Items and Locations and add to Events. Also, set up event registration.
+# Later, we'll go through the events and replace some with other methods
 class Items(str, Enum):
     KOKIRI_SWORD = "Kokiri Sword"
     MASTER_SWORD = "Master Sword"
@@ -959,6 +961,7 @@ class Items(str, Enum):
     NUTS = "Nuts"
     EPONA = "Epona"
     MAX = "Max"
+
 
 class Locations(str, Enum):
     LINKS_POCKET = "Link's Pocket"
@@ -1430,7 +1433,7 @@ class Locations(str, Enum):
     DODONGOS_CAVERN_GOSSIP_STONE = "Dodongos Cavern Gossip Stone"
     GANONS_CASTLE_GANONDORF_HINT = "Ganon's Castle Ganondorf Hint"
     GANONS_CASTLE_SHEIK_HINT = "Ganon's Castle Sheik Hint"
-    #GANONS_CASTLE_SHEIK_HINT = "Ganon's Castle Sheik Hint"
+    # GANONS_CASTLE_SHEIK_HINT = "Ganon's Castle Sheik Hint"
     COMPLETED_TRIFORCE = "Completed Triforce"
     GRAVEYARD_DIARY_HINT = "Graveyard Diary Hint"
     MARKET_GREG_HINT = "Market Greg Hint"
@@ -3353,6 +3356,8 @@ class Locations(str, Enum):
     ZD_FISH3 = "ZD Fish 3"
     ZD_FISH4 = "ZD Fish 4"
     ZD_FISH5 = "ZD Fish 5"
+
+
 class Enemies(str, Enum):
     GOLD_SKULLTULA = "gold_skulltula"
     BIG_SKULLTULA = "big_skulltula"
@@ -3407,7 +3412,8 @@ class Enemies(str, Enum):
     BARI = "bari"
     SHABOM = "shabom"
     OCTOROK = "octorok"
-    
+
+
 class CombatRanges(str, Enum):
     CLOSE = "close"
     SHORT_JUMPSLASH = "short_jumpslash"
@@ -3419,9 +3425,11 @@ class CombatRanges(str, Enum):
     LONGSHOT = "longshot"
     FAR = "far"
 
+
 class EventLocations(str, Enum):
     DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
     KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
+
 
 class Events(str, Enum):
     DEKU_TREE_BASEMENT_BLOCK_PUSHED = "Deku Tree Basement Block Pushed"
@@ -3443,4 +3451,3 @@ class Events(str, Enum):
     CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
     COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
     CARPET_MERCHANT = "Can Buy From Carpet Merchant"
-
