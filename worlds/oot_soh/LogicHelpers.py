@@ -28,10 +28,14 @@ def connect_regions(parent_region: str, world: "SohWorld", child_regions = [[]])
     for region in child_regions:
         world.get_region(parent_region).connect(world.get_region(region[0]), rule=region[1])
 
-def add_event(parent_region, event_location, event_item, rule, world):
-    event = SohLocation(world.player, event_location, None, parent_region)
-    event.place_locked_item(SohItem(event_item, IC.progression, None, world.player))
-    set_rule(event, rule)
+def add_events(parent_region, world: "SohWorld", events = [[]]):
+    for event in events:
+        event_location = event[0]
+        event_item = event[1]
+        event_rule = event[2]
+        new_event = SohLocation(world.player, event_location, None, parent_region)
+        new_event.place_locked_item(SohItem(event_item, IC.progression, None, world.player))
+        set_rule(new_event, event_rule)
 
 def has_item(itemName: str, state: CollectionState, world: "SohWorld", count:int = 1, can_be_child: bool = True, can_be_adult: bool = True) -> bool:
     def has(itemName, count=1): 
@@ -455,7 +459,7 @@ def can_hit_switch(state: CollectionState, world: "SohWorld", distance: str = "c
 
     return False
 
-def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = Combat_Ranges.CLOSE.value,
+def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = CombatRanges.CLOSE.value,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
     Check if Link can kill a specific enemy at a given combat range.
@@ -473,27 +477,27 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
 
     # Define what weapons work at each range
     def can_hit_at_range(range_type: str) -> bool:
-        if range_type == Combat_Ranges.CLOSE.value:
+        if range_type == CombatRanges.CLOSE.value:
             return (can_jump_slash(state, world) or
                     has_explosives(state, world) or
                     can_use(Items.DINS_FIRE.value, state, world))
 
-        elif range_type in [Combat_Ranges.SHORT_JUMPSLASH.value, Combat_Ranges.MASTER_SWORD_JUMPSLASH.value, Combat_Ranges.LONG_JUMPSLASH.value]:
+        elif range_type in [CombatRanges.SHORT_JUMPSLASH.value, CombatRanges.MASTER_SWORD_JUMPSLASH.value, CombatRanges.LONG_JUMPSLASH.value]:
             return can_jump_slash(state, world)
 
-        elif range_type == Combat_Ranges.BOMB_THROW.value:
+        elif range_type == CombatRanges.BOMB_THROW.value:
             return has_explosives(state, world)
 
-        elif range_type == Combat_Ranges.BOOMERANG.value:
+        elif range_type == CombatRanges.BOOMERANG.value:
             return can_use(Items.BOOMERANG.value, state, world)
 
-        elif range_type == Combat_Ranges.HOOKSHOT.value:
+        elif range_type == CombatRanges.HOOKSHOT.value:
             return can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world)
 
-        elif range_type == Combat_Ranges.LONGSHOT.value:
+        elif range_type == CombatRanges.LONGSHOT.value:
             return can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world)  # Longshot is progressive hookshot level 2
 
-        elif range_type == Combat_Ranges.FAR.value:
+        elif range_type == CombatRanges.FAR.value:
             return (can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                     can_use(Items.PROGRESSIVE_SLINGSHOT.value, state, world) or
                     can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
@@ -519,7 +523,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
 
     # Dodongo (requires explosives or specific attacks)
     if enemy == Enemies.DODONGO.value:
-        if combat_range in [Combat_Ranges.CLOSE.value, Combat_Ranges.SHORT_JUMPSLASH.value, Combat_Ranges.MASTER_SWORD_JUMPSLASH.value, Combat_Ranges.LONG_JUMPSLASH.value]:
+        if combat_range in [CombatRanges.CLOSE.value, CombatRanges.SHORT_JUMPSLASH.value, CombatRanges.MASTER_SWORD_JUMPSLASH.value, CombatRanges.LONG_JUMPSLASH.value]:
             return (can_jump_slash(state, world) or has_explosives(state, world))
         return has_explosives(state, world)
 
