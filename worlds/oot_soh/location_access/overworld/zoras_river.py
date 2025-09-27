@@ -81,7 +81,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Events
     add_events(Regions.ZORA_RIVER.value, world,[
-        [EventLocations.BUG_SHRUBS_KF.value, Events.BUG_SHRUBS.value, lambda state: can_cut_shrubs(state, world)],
+        [EventLocations.BUG_SHRUBS_ZR.value, Events.BUG_SHRUBS.value, lambda state: can_cut_shrubs(state, world)],
     ])
 
     ## ZR From Shortcut
