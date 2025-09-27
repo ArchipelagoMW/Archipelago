@@ -271,7 +271,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                            or world.options.closed_forest==2]
     ])
     add_events(Regions.KF_OUTSIDE_DEKU_TREE.value, world, [
-        [EventLocations.MIDO_OUTSIDE.value, lambda state: Items.KOKIRI_SWORD.value and
+        [EventLocations.MIDO_OUTSIDE.value, Events.MIDO_SWORD_AND_SHIELD, lambda state: Items.KOKIRI_SWORD.value and
                                                   Items.DEKU_SHIELD.value],
     ])
 
