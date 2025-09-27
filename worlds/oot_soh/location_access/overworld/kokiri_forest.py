@@ -5,11 +5,12 @@ from worlds.oot_soh.Regions import double_link_regions
 from worlds.oot_soh.Items import SohItem
 from worlds.oot_soh.Locations import SohLocation, SohLocationData
 from worlds.oot_soh.Enums import *
-from worlds.oot_soh.LogicHelpers import (set_location_rules, connect_regions, is_adult, can_attack, can_get_nighttimeGS,
+from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions, is_adult, can_attack, can_get_nighttimeGS,
                                          is_child, can_kill_enemy, can_use, can_do_trick, call_gossip_fairy_except_suns,
                                          can_cut_shrubs, can_break_pots, has_bottle, call_gossip_fairy,
                                          can_break_lower_hives, can_open_storms_grotto, can_pass_enemy,
                                          hookshot_or_boomerang)
+
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
@@ -22,15 +23,8 @@ events: dict[str, SohLocationData] = {
                                     event_item= "Showed Mido the Sword and Shield")
 }
 
+def set_region_rules(world: "SohWorld") -> None:
 
-def create_regions_and_rules(world: "SohWorld") -> None:
-    for event_name, data in events.items():
-        region = world.get_region(data.region)
-        region.add_event(event_name, data.event_item, location_type=SohLocation, item_type=SohItem)
-
-    set_rules(world)
-
-def set_rules(world: "SohWorld") -> None:
     player = world.player
 
     ## Kokiri Forest
@@ -161,8 +155,6 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.KF_ADULT_GRASS19.value, lambda state: (is_adult(state, world)
                                                         and can_cut_shrubs(state, world))],
         [Locations.KF_ADULT_GRASS20.value, lambda state: (is_adult(state, world)
-                                                        and can_cut_shrubs(state, world))],
-
     ])
     # Connections
     connect_regions(Regions.KOKIRI_FOREST.value, world, [
@@ -190,6 +182,7 @@ def set_rules(world: "SohWorld") -> None:
                                                            can_use(Items.EPONAS_SONG.value, state, world) and
                                                            state.has("Gotten Link's Cow")],
         [Locations.KF_LINKS_HOUSE_POT.value, lambda state: can_break_pots(state, world)]
+
     ])
     # Connections
     connect_regions(Regions.KF_LINKS_HOUSE.value, world, [
@@ -198,7 +191,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF Mido's House
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_MIDOS_HOUSE, world, [
         [Locations.KF_MIDO_TOP_LEFT_CHEST.value, lambda state: True],
         [Locations.KF_MIDO_TOP_RIGHT_CHEST.value, lambda state: True],
         [Locations.KF_MIDO_BOTTOM_LEFT_CHEST.value, lambda state: True],
@@ -211,7 +204,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF Saria's House
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_SARIAS_HOUSE, world, [
         [Locations.KF_SARIAS_HOUSE_TOP_LEFT_HEART.value, lambda state: True],
         [Locations.KF_SARIAS_HOUSE_TOP_RIGHT_HEART.value, lambda state: True],
         [Locations.KF_SARIAS_HOUSE_BOTTOM_LEFT_HEART.value, lambda state: True],
@@ -227,6 +220,7 @@ def set_rules(world: "SohWorld") -> None:
     set_location_rules(world, [
         [Locations.KF_TWINS_HOUSE_POT1.value, lambda state: can_break_pots(state, world)],
         [Locations.KF_TWINS_HOUSE_POT2.value, lambda state: can_break_pots(state, world)]
+
     ])
     # Connections
     connect_regions(Regions.KF_HOUSE_OF_TWINS.value, world, [
@@ -238,6 +232,7 @@ def set_rules(world: "SohWorld") -> None:
     set_location_rules(world, [
         [Locations.KF_BROTHERS_HOUSE_POT1.value, lambda state: can_break_pots(state, world)],
         [Locations.KF_BROTHERS_HOUSE_POT2.value, lambda state: can_break_pots(state, world)]
+
     ])
     # Connections
     connect_regions(Regions.KF_KNOW_IT_ALL_HOUSE.value, world, [
@@ -246,7 +241,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF Kokiri Shop
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_KOKIRI_SHOP.value, world, [
         [Locations.KF_SHOP_ITEM1.value, lambda state: True],
         [Locations.KF_SHOP_ITEM2.value, lambda state: True],
         [Locations.KF_SHOP_ITEM3.value, lambda state: True],
@@ -285,7 +280,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## KF Storms Grotto
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.KF_STORMS_GROTTO, world, [
         [Locations.KF_STORMS_GROTTO_CHEST.value, lambda state: True],
         [Locations.KF_STORMS_GROTTO_FISH.value, lambda state: has_bottle(state, world)],
         [Locations.KF_STORMS_GOSSIP_STONE_FAIRY.value, lambda state: call_gossip_fairy(state, world)],
