@@ -404,7 +404,7 @@ def can_hit_switch(state: CollectionState, world: "SohWorld", distance: str = "c
 
 
 # todo: this should probably have a LogicMixin cache for speed, definitely a much later thing
-def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = Combat_Ranges.CLOSE.value,
+def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = CombatRanges.CLOSE.value,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
     Check if Link can kill a specific enemy at a given combat range.
@@ -422,27 +422,27 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
 
     # Define what weapons work at each range
     def can_hit_at_range(range_type: str) -> bool:
-        if range_type == Combat_Ranges.CLOSE.value:
+        if range_type == CombatRanges.CLOSE.value:
             return (can_jump_slash(state, world) or
                     has_explosives(state, world) or
                     can_use(Items.DINS_FIRE.value, state, world))
 
-        elif range_type in [Combat_Ranges.SHORT_JUMPSLASH.value, Combat_Ranges.MASTER_SWORD_JUMPSLASH.value, Combat_Ranges.LONG_JUMPSLASH.value]:
+        elif range_type in [CombatRanges.SHORT_JUMPSLASH.value, CombatRanges.MASTER_SWORD_JUMPSLASH.value, CombatRanges.LONG_JUMPSLASH.value]:
             return can_jump_slash(state, world)
 
-        elif range_type == Combat_Ranges.BOMB_THROW.value:
+        elif range_type == CombatRanges.BOMB_THROW.value:
             return has_explosives(state, world)
 
-        elif range_type == Combat_Ranges.BOOMERANG.value:
+        elif range_type == CombatRanges.BOOMERANG.value:
             return can_use(Items.BOOMERANG.value, state, world)
 
-        elif range_type == Combat_Ranges.HOOKSHOT.value:
+        elif range_type == CombatRanges.HOOKSHOT.value:
             return can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world)
 
-        elif range_type == Combat_Ranges.LONGSHOT.value:
+        elif range_type == CombatRanges.LONGSHOT.value:
             return can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world)  # Longshot is progressive hookshot level 2
 
-        elif range_type == Combat_Ranges.FAR.value:
+        elif range_type == CombatRanges.FAR.value:
             return (can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                     can_use(Items.PROGRESSIVE_SLINGSHOT.value, state, world) or
                     can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
@@ -468,7 +468,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
 
     # Dodongo (requires explosives or specific attacks)
     if enemy == Enemies.DODONGO.value:
-        if combat_range in [Combat_Ranges.CLOSE.value, Combat_Ranges.SHORT_JUMPSLASH.value, Combat_Ranges.MASTER_SWORD_JUMPSLASH.value, Combat_Ranges.LONG_JUMPSLASH.value]:
+        if combat_range in [CombatRanges.CLOSE.value, CombatRanges.SHORT_JUMPSLASH.value, CombatRanges.MASTER_SWORD_JUMPSLASH.value, CombatRanges.LONG_JUMPSLASH.value]:
             return can_jump_slash(state, world) or has_explosives(state, world)
         return has_explosives(state, world)
 
