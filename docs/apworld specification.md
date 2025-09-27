@@ -35,11 +35,12 @@ and get automatically added to the `archipelago.json` of an .apworld if it is pa
 which is strongly recommended instead of trying to write these yourself.  
 The `game` field should be present in any handwritten apworld manifest files.
 
-There are also the following optional version fields (using the format `"1.0.0"` to represent major.minor.build):
+There are also the following optional fields:
 * `minimum_ap_version` and `maximum_ap_version` - which if present will each be compared against the current
-  Archipelago version respectively to filter those files from being loaded
+  Archipelago version respectively to filter those files from being loaded.
 * `world_version` - an arbitrary version for that world in order to only load the newest valid world.
   An apworld without a world_version is always treated as older than one with a version
+  (**Must** use exactly the format `"major.minor.build"`, e.g. `1.0.0`)
 * `authors` - a list of authors, to eventually be displayed in various user-facing places such as WebHost and
   package managers. Should always be a list of strings.
 
