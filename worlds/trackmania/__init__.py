@@ -9,6 +9,10 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
 from Utils import local_path
 from BaseClasses import Item, Tutorial
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from BaseClasses import MultiWorld
 
 def launch_client():
     from .client import launch
