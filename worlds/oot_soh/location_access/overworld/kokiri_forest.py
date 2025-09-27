@@ -259,7 +259,7 @@ def set_region_rules(world: "SohWorld") -> None:
         [Locations.KF_DEKU_TREE_RIGHT_GOSSIP_STONE_FAIRY.value, lambda state: call_gossip_fairy_except_suns(state, world)],
         [Locations.KF_DEKU_TREE_RIGHT_GOSSIP_STONE_BIG_FAIRY.value, lambda state: can_use(Items.SONG_OF_STORMS.value, state, world)]
     ])
-    # Connections #Adding dungeon entrance shuffle here would be simple just requires adding the option to be checked here.
+    # Connections
     connect_regions(Regions.KF_OUTSIDE_DEKU_TREE.value, world, [
         [Regions.DEKU_TREE_ENTRYWAY.value, lambda state: (is_child(state, world))
                                                          and (world.options.closed_forest==2
