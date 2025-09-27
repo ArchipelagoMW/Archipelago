@@ -397,6 +397,10 @@ def randomize_abilities(world: "PokemonEmeraldWorld") -> None:
     ability_blacklist = {ability_label_to_value[label] for label in ability_blacklist_labels}
     ability_whitelist = [a.ability_id for a in data.abilities if a.ability_id not in ability_blacklist]
 
+    # If every ability is blacklisted, set all abilities to Cacophony, effectively disabling abilities
+    if len(ability_whitelist) == 0:
+        ability_whitelist = [data.constants["ABILITY_CACOPHONY"]]
+
     if world.options.abilities == RandomizeAbilities.option_follow_evolutions:
         already_modified: Set[int] = set()
 
