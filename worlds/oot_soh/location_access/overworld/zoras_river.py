@@ -134,7 +134,7 @@ def set_rules(world: "SohWorld") -> None:
         [Regions.ZR_FAIRY_GROTTO.value, lambda state: blast_or_smash(state, world)], #I am not sure that there's any scenario where blast or smash wouldn't apply to here, not sure why this needs here (which checks if the other age opened it, basically)?
         [Regions.LOST_WOODS.value, lambda state: state.has(Items.SILVER_SCALE.value) or  can_use(Items.IRON_BOOTS, state, world)],
         [Regions.ZR_STORMS_GROTTO.value, lambda state: can_open_storms_grotto(state, world)],
-        [Regions.ZR_BEHIND_WATERFALL.value, lambda state: world.options.sleeping_waterfall.value==1 or  #Same thing here? Not sure there's a situation with a need for this check
+        [Regions.ZR_BEHIND_WATERFALL.value, lambda state: world.options.sleeping_waterfall.value==1 or
                                                           can_use(Items.ZELDAS_LULLABY.value, state, world) or
                                                           (is_child(state, world) and
                                                            can_do_trick("ZD with Cuckoo", state, world)) or
