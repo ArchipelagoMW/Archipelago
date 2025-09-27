@@ -1,9 +1,10 @@
 from typing import Callable, TYPE_CHECKING
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, ItemClassification as IC
 from .Locations import SohLocation
 from worlds.generic.Rules import set_rule
 from .Enums import *
+from .Items import SohItem
 from .RegionAgeAccess import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
 
 if TYPE_CHECKING:
@@ -11,10 +12,6 @@ if TYPE_CHECKING:
 
 import logging
 logger = logging.getLogger("SOH_OOT.Logic")
-
-def connect_regions(parent_region: str, world: "SohWorld", child_regions = [[]]) -> None:
-    for region in child_regions:
-        world.get_region(parent_region).connect(world.get_region(region[0]), rule=region[1])
 
 def add_locations(parent_region: str, world: "SohWorld", locations = [[]]) -> None:
     for location in locations:
@@ -26,6 +23,15 @@ def add_locations(parent_region: str, world: "SohWorld", locations = [[]]) -> No
             locationAddress = world.included_locations.pop(location[0])
             world.get_region(parent_region).add_locations({locationName: locationAddress}, SohLocation)
             set_rule(world.get_location(locationName), locationRule)
+
+def connect_regions(parent_region: str, world: "SohWorld", child_regions = [[]]) -> None:
+    for region in child_regions:
+        world.get_region(parent_region).connect(world.get_region(region[0]), rule=region[1])
+
+def add_event(parent_region, event_location, event_item, rule, world):
+    event = SohLocation(world.player, event_location, None, parent_region)
+    event.place_locked_item(SohItem(event_item, IC.progression, None, world.player))
+    set_rule(event, rule)
 
 def has_item(itemName: str, state: CollectionState, world: "SohWorld", count:int = 1, can_be_child: bool = True, can_be_adult: bool = True) -> bool:
     def has(itemName, count=1): 
