@@ -3449,3 +3449,4 @@ class Events(str, Enum):
     CLEARED_FOREST_TEMPLE = "Forest Temple Completed"
     CLEARED_DEKU_TREE = "Deku Tree Completed"
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
+    BUG_SHRUBS = "Has Access to Shrub Bugs"
