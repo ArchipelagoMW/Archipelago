@@ -4,7 +4,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule
 from .Enums import *
 from .RegionAgeAccess import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
-from ..stardew_valley.stardew_rule import true_
+
 
 if TYPE_CHECKING:
     from . import SohWorld
@@ -194,7 +194,10 @@ def can_use(name: str, state: CollectionState, world: "SohWorld", can_be_child: 
         case Items.BOTTLE_WITH_RUTOS_LETTER.value:
             return can_be_child
         case Items.BOTTLE_WITH_BUGS.value:
-            return can_be_child
+            return (has_bottle(state, world) and
+                    (state.has("Shrub Bugs", world.player) or
+                    state.has("WanderingBugs", world.player) or
+                    state.has("BugRock", world.player)))
         case Items.MAGIC_BEAN.value:
             return can_be_child
         case Items.ZELDAS_LULLABY.value:

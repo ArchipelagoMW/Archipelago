@@ -15,7 +15,8 @@ if TYPE_CHECKING:
 
 
 events: dict[str, SohLocationData] = {
-    
+    "BugShrub": SohLocationData(Regions.ZORA_RIVER.value,
+                                   event_item="Shrub Bugs"),
 }
 
 
@@ -32,7 +33,6 @@ def set_rules(world: "SohWorld") -> None:
     ## ZR Front
     # Locations
     set_location_rules(world, [
-
         [Locations.ZR_GS_TREE.value, lambda state: is_child(state, world) and
                                                       can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA)],
         [Locations.ZR_NEAR_TREE_GRASS1.value, lambda state: can_cut_shrubs(state, world)],
@@ -57,6 +57,7 @@ def set_rules(world: "SohWorld") -> None:
     ## Zora River
     # Locations
     set_location_rules(world, [
+        ["BugShrub", lambda state: can_cut_shrubs(state, world)],
         [Locations.ZR_MAGIC_BEAN_SALESMAN.value, lambda state: is_child(state, world)],
         [Locations.ZR_FROGS_OCARINA_GAME.value, lambda state: (is_child(state, world) and
                                                                can_use(Items.SONG_OF_STORMS.value, state, world) and
