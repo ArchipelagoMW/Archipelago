@@ -3373,6 +3373,7 @@ class Events(str, Enum):
     CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
     COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
     CARPET_MERCHANT = "Can Buy From Carpet Merchant"
+    DEKU_TREE_CLEAR = "Defeat Queen Gohma"
 
 class Enemies(str, Enum):
     GOLD_SKULLTULA = "gold_skulltula"
@@ -3439,11 +3440,3 @@ class CombatRanges(str, Enum):
 	HOOKSHOT = "hookshot"
 	LONGSHOT = "longshot"
 	FAR = "far"
-
-class EventLocations(str, Enum):
-	DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
-	KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
-
-class EventItems(str, Enum):
-	DEKU_TREE_BASEMENT_BLOCK_PUSHED = "Deku Tree Basement Block Pushed"
-	STICK_ACCESS = "Stick Access"
