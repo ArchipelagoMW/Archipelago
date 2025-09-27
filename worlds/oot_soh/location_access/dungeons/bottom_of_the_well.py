@@ -40,11 +40,11 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_FRONT_CENTER_BOMBABLE_CHEST.value, lambda state: has_explosives(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_UNDERWATER_FRONT_CHEST.value, lambda state: state.has(events.get("LoweredWaterInsideBotw").event_item) or can_open_underwater_chest(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_UNDERWATER_LEFT_CHEST.value, lambda state: state.has(events.get("LoweredWaterInsideBotw").event_item) or can_open_underwater_chest(state, world)],
+        [Locations.BOTTOM_OF_THE_WELL_UNDERWATER_FRONT_CHEST.value, lambda state: state.has(Events.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL) or can_open_underwater_chest(state, world)],
+        [Locations.BOTTOM_OF_THE_WELL_UNDERWATER_LEFT_CHEST.value, lambda state: state.has(Events.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL) or can_open_underwater_chest(state, world)],
         [Locations.BOTTOM_OF_THE_WELL_NEAR_ENTRANCE_POT1.value, lambda state: can_break_pots(state, world)],
         [Locations.BOTTOM_OF_THE_WELL_NEAR_ENTRANCE_POT2.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_UNDERWATER_POT.value, lambda state: (can_break_pots(state, world) and state.has(events.get("LoweredWaterInsideBotw").event_item)) or can_use(Items.BOOMERANG.value, state, world)]
+        [Locations.BOTTOM_OF_THE_WELL_UNDERWATER_POT.value, lambda state: (can_break_pots(state, world) and state.has(Events.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL)) or can_use(Items.BOOMERANG.value, state, world)]
     ])
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, world, [
@@ -52,8 +52,8 @@ def set_region_rules(world: "SohWorld") -> None:
         [Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS.value, lambda state: lens_or_skip(state, world)],
         [Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM.value, lambda state: lens_or_skip(state, world)],
         [Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM.value, lambda state: is_child(state, world) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM.value, lambda state: state.has(events.get("LoweredWaterInsideBotw").event_item) or has_item(Items.BRONZE_SCALE.value, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM.value, lambda state: state.has(events.get("LoweredWaterInsideBotw").event_item) and is_child(state, world)],
+        [Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM.value, lambda state: state.has(Events.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL) or has_item(Items.BRONZE_SCALE.value, state, world)],
+        [Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM.value, lambda state: state.has(Events.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL) and is_child(state, world)],
         [Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, lambda state: True]
     ])
 
@@ -136,7 +136,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: state.has(events.get("LoweredWaterInsideBotw").event_item) or has_item(Items.BRONZE_SCALE.value, state, world)]
+        [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: state.has(Events.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL) or has_item(Items.BRONZE_SCALE.value, state, world)]
     ])
 
     ## Bottom of the Well Dead Hand Room 
