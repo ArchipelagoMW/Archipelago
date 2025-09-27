@@ -88,6 +88,10 @@ def has_item(itemName: str, state: CollectionState, world: "SohWorld", count:int
             return has(Items.GOLDEN_SCALE.value) or has(Items.PROGRESSIVE_SCALE.value, 2)
         case Items.BOTTLE_WITH_BIG_POE.value:
             return has_bottle(state, world)
+        case Items.MAGIC_BEAN.value:
+            return has_bottle(state, world)
+        case Items.BOTTLE_WITH_BUGS.value:
+            return has_bottle(state, world)
         case _:
             return has(itemName, count)
         
@@ -194,10 +198,7 @@ def can_use(name: str, state: CollectionState, world: "SohWorld", can_be_child: 
         case Items.BOTTLE_WITH_RUTOS_LETTER.value:
             return can_be_child
         case Items.BOTTLE_WITH_BUGS.value:
-            return (has_bottle(state, world) and
-                    (state.has("Shrub Bugs", world.player) or
-                    state.has("WanderingBugs", world.player) or
-                    state.has("BugRock", world.player)))
+            return has(Events.CAN_SPAWN_SOIL_GS) #Returns false for some reason but I don't know why? ToDO: Fix this
         case Items.MAGIC_BEAN.value:
             return can_be_child
         case Items.ZELDAS_LULLABY.value:
@@ -229,7 +230,7 @@ def can_use(name: str, state: CollectionState, world: "SohWorld", can_be_child: 
 
 def scarecrows_song(state: CollectionState, world: "SohWorld") -> bool:
     #TODO handle scarecrow song option in place of the False
-    return (False and has_item(Items.FAIRY_OCARINA.value, state, world) and OcarinaButtons(state, world) > 2) or \
+    return (False and has_item(Items.FAIRY_OCARINA.value, state, world) and ocarina_buttons(state, world) > 2) or \
         (has_item(Events.CHILD_SCARECROW, state, world) and has_item(Events.ADULT_SCARECROW, state, world))
 
 def has_bottle(state: CollectionState, world: "SohWorld") -> bool: # soup
@@ -328,6 +329,7 @@ def is_adult(state: CollectionState, world: "SohWorld") -> bool:
 def is_child(state: CollectionState, world: "SohWorld") -> bool:
     # So basically for the same reason as up here, feels like it would make sense to have this check
     # Because it could be useful for starting adult/various entrance randomizer settings
+    # Todo: Fix this
     return True
 
 def can_damage(state: CollectionState, world: "SohWorld") -> bool:
