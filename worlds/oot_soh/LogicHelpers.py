@@ -646,21 +646,21 @@ def small_keys(key: Items, requiredAmount: int, state: CollectionState, world: "
 def has_key_ring(key : Items, state: CollectionState, world: "SohWorld") -> bool:
     match key:
         case Items.FOREST_TEMPLE_SMALL_KEY:
-            return has_item(Items.FOREST_TEMPLE_KEY_RING, state, world)
+            return has_item(Items.FOREST_TEMPLE_KEY_RING.value, state, world)
         case Items.FIRE_TEMPLE_SMALL_KEY:
-            return has_item(Items.FIRE_TEMPLE_KEY_RING, state, world)
+            return has_item(Items.FIRE_TEMPLE_KEY_RING.value, state, world)
         case Items.WATER_TEMPLE_SMALL_KEY:
-            return has_item(Items.WATER_TEMPLE_KEY_RING, state, world)
+            return has_item(Items.WATER_TEMPLE_KEY_RING.value, state, world)
         case Items.BOTTOM_OF_THE_WELL_SMALL_KEY:
-            return has_item(Items.BOTTOM_OF_THE_WELL_KEY_RING, state, world)
+            return has_item(Items.BOTTOM_OF_THE_WELL_KEY_RING.value, state, world)
         case Items.SHADOW_TEMPLE_SMALL_KEY:
-            return has_item(Items.SHADOW_TEMPLE_KEY_RING, state, world)
+            return has_item(Items.SHADOW_TEMPLE_KEY_RING.value, state, world)
         case Items.GERUDO_FORTRESS_SMALL_KEY:
-            return has_item(Items.GERUDO_FORTRESS_KEY_RING, state, world)
+            return has_item(Items.GERUDO_FORTRESS_KEY_RING.value, state, world)
         case Items.SPIRIT_TEMPLE_SMALL_KEY:
-            return has_item(Items.SPIRIT_TEMPLE_KEY_RING, state, world)
+            return has_item(Items.SPIRIT_TEMPLE_KEY_RING.value, state, world)
         case Items.GANONS_CASTLE_SMALL_KEY:
-            return has_item(Items.GANONS_CASTLE_KEY_RING, state, world)
+            return has_item(Items.GANONS_CASTLE_KEY_RING.value, state, world)
         case _:
             return False
 
@@ -668,17 +668,17 @@ def lens_or_skip(state: CollectionState, world: "SohWorld") -> bool:
     return (False or can_use(Items.LENS_OF_TRUTH, state, world)) # replace false with ctx->GetTrickOption(RT_LENS_BOTW)
 
 def can_get_enemy_drop(state: CollectionState, world: "SohWorld", enemy : Enemies, range : EnemyDistance = EnemyDistance.CLOSE, aboveLink : bool = False) -> bool:
-    if not can_kill_enemy(state, world, enemy, range):
+    if not can_kill_enemy(state, world, enemy.value, range.value):
         return False
     
-    if range <= EnemyDistance.MASTER_SWORD_JUMPSLASH:
+    if range.value <= EnemyDistance.MASTER_SWORD_JUMPSLASH.value:
         return True
     
     drop = False
     match enemy:
         case Enemies.GOLD_SKULLTULA:
             if range in [EnemyDistance.BOOMERANG, EnemyDistance.HOOKSHOT, EnemyDistance.LONGSHOT]:
-                drop = (can_use(Items.BOOMERANG, state, world) or can_use(Items.HOOKSHOT, state, world) or Items.LONGSHOT, state, world)
+                drop = (can_use(Items.BOOMERANG.value, state, world) or can_use(Items.HOOKSHOT.value, state, world) or can_use(Items.LONGSHOT.value, state, world))
 
             return drop
         case Enemies.KEESE:
@@ -686,16 +686,16 @@ def can_get_enemy_drop(state: CollectionState, world: "SohWorld", enemy : Enemie
         case Enemies.FIRE_KEESE:
             return True
         case _:
-            return aboveLink or (range <= EnemyDistance.BOOMERANG and can_use(Items.BOOMERANG, state, world))
+            return aboveLink or (range.value <= EnemyDistance.BOOMERANG.value and can_use(Items.BOOMERANG.value, state, world))
         
 def can_detonate_bomb_flowers(state: CollectionState, world: "SohWorld") -> bool:
-    return (can_use(Items.FAIRY_BOW.value, state, world) or has_explosives(state, world) or can_use(Items.DINS_FIRE.value, state, world))
+    return (can_use(Items.PROGRESSIVE_BOW.value, state, world) or has_explosives(state, world) or can_use(Items.DINS_FIRE.value, state, world))
 
 def can_detonate_upright_bomb_flower(state: CollectionState, world: "SohWorld") -> bool:
     return (can_detonate_bomb_flowers(state, world) 
             or has_item(Items.GORONS_BRACELET.value, state, world)
             or (False # Trick ctx->GetTrickOption(RT_BLUE_FIRE_MUD_WALLS)
-                and can_use(Items.BOTTLE_WITH_BLUE_FIRE)
+                and can_use(Items.BOTTLE_WITH_BLUE_FIRE.value, state, world)
                 and (False # EffectiveHealth Function. Not sure how to implement some of the stuff that is client setting specific
                     or can_use(Items.NAYRUS_LOVE.value, state, world)
                 ))

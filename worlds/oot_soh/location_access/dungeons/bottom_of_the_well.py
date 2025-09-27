@@ -137,9 +137,9 @@ def set_rules(world: "SohWorld") -> None:
     ## Bottom of the Well Coffin Room 
     # Locations
     set_location_rules(world, [
-        [Locations.BOTTOM_OF_THE_WELL_FREESTANDING_KEY.value, lambda state: has_fire_source_with_torch(state, world) or can_use(Items.FAIRY_BOW.value, state, world)],
+        [Locations.BOTTOM_OF_THE_WELL_FREESTANDING_KEY.value, lambda state: has_fire_source_with_torch(state, world) or can_use(Items.PROGRESSIVE_BOW.value, state, world)],
         [Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_FRONT_LEFT_HEART.value, lambda state: True],
-        [Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_MIDDLE_RIGHT_HEART.value, lambda state: has_fire_source_with_torch(state, world) or can_use(Items.FAIRY_BOW.value, state, world)]
+        [Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_MIDDLE_RIGHT_HEART.value, lambda state: has_fire_source_with_torch(state, world) or can_use(Items.PROGRESSIVE_BOW.value, state, world)]
 
     ])
     # Connections
