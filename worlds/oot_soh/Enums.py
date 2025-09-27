@@ -883,7 +883,7 @@ class Items(str, Enum):
     BONGO_BONGOS_SOUL = "Bongo Bongo's Soul"
     TWINROVAS_SOUL = "Twinrova's Soul"
     GANONS_SOUL = "Ganon's Soul"
-    OCARINA_ABUTTON = "Ocarina A Button"
+    OCARINA_A_BUTTON = "Ocarina A Button"
     OCARINA_CUP_BUTTON = "Ocarina C Up Button"
     OCARINA_CDOWN_BUTTON = "Ocarina C Down Button"
     OCARINA_CLEFT_BUTTON = "Ocarina C Left Button"
