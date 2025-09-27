@@ -4,7 +4,7 @@ import math
 from BaseClasses import CollectionState, Item, Region, Tutorial
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
-from .Items import SohItem, item_data_table, item_table, filler_items, filler_bottles
+from .Items import SohItem, item_data_table, item_table, filler_items, filler_bottles, item_name_groups
 from .Locations import SohLocation, SohLocationData, base_location_table, \
     gold_skulltula_overworld_location_table, \
     gold_skulltula_dungeon_location_table, \
@@ -33,8 +33,8 @@ from .Options import SohOptions
 from .RegionAgeAccess import reset_age_access, update_age_access
 from .Regions import region_data_table
 from .Enums import *
-from worlds.oot_soh.location_access import root
-from worlds.oot_soh.location_access.overworld import \
+from ...location_access import root
+from ...location_access.overworld import \
     castle_grounds, \
     death_mountain_crater, \
     death_mountain_trail, \
@@ -49,7 +49,7 @@ from worlds.oot_soh.location_access.overworld import \
     kokiri_forest, \
     lake_hylia, \
     lon_lon_ranch
-from worlds.oot_soh.location_access.dungeons import \
+from ...location_access.dungeons import \
     bottom_of_the_well, \
     deku_tree, \
     dodongos_cavern, \
@@ -91,6 +91,7 @@ class SohWorld(World):
     options_dataclass = SohOptions
     location_name_to_id = location_table
     item_name_to_id = item_table
+    item_name_groups = item_name_groups
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
@@ -174,7 +175,7 @@ class SohWorld(World):
 
         # Ocarina Buttons
         if self.options.shuffle_ocarina_buttons:
-            items_to_create[Items.OCARINA_ABUTTON.value] = 1
+            items_to_create[Items.OCARINA_A_BUTTON.value] = 1
             items_to_create[Items.OCARINA_CDOWN_BUTTON.value] = 1
             items_to_create[Items.OCARINA_CLEFT_BUTTON.value] = 1
             items_to_create[Items.OCARINA_CRIGHT_BUTTON.value] = 1
