@@ -11,22 +11,6 @@ if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
 
 
-events: dict[str, SohLocationData] = {
-    "Deku Tree Lobby Switch": SohLocationData(Regions.DEKU_TREE_LOBBY.value,
-                                             event_item="Deku Tree Lobby Switch Activated"),
-    "Deku Tree Basement Push Block": SohLocationData(Regions.DEKU_TREE_BASEMENT_LOWER.value,
-                                                    event_item="Deku Tree Basement Push Block Moved"),
-}
-
-
-def create_regions_and_rules(world: "SohWorld") -> None:
-    for event_name, data in events.items():
-        region = world.get_region(data.region)
-        region.add_event(event_name, data.event_item, location_type=SohLocation, item_type=SohItem)
-
-    set_region_rules(world)
-
-
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
 
@@ -111,7 +95,7 @@ def set_region_rules(world: "SohWorld") -> None:
         [Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM.value, lambda state: True], # has_fire_source_with_torch(state, world) or can_use(Items.FAIRY_BOW.value, state, world)],
         # Above commented out because it can't succeed without stick pot event implemented
         [Regions.DEKU_TREE_BASEMENT_UPPER.value, lambda state: is_adult(state, world) or can_do_trick("Deku B1 Skip", state, world)
-            or state.has(EventItems.DEKU_TREE_BASEMENT_BLOCK_PUSHED, world.player)]
+            or state.has(Events.DEKU_TREE_BASEMENT_BLOCK_PUSHED, world.player)]
     ])
 
     ## Deku basement shrub room
@@ -196,7 +180,9 @@ def set_region_rules(world: "SohWorld") -> None:
         # Above commented out because it can't succeed without stick pot event implemented
     ])
     # Events
-    add_event(Regions.DEKU_TREE_BASEMENT_UPPER.value, EventLocations.DEKU_TREE_BASEMENT_BLOCK.value, EventItems.DEKU_TREE_BASEMENT_BLOCK_PUSHED.value, lambda state: True, world)
+    add_events(Regions.DEKU_TREE_BASEMENT_UPPER.value, world, [
+        [EventLocations.DEKU_TREE_BASEMENT_BLOCK.value, Events.DEKU_TREE_BASEMENT_BLOCK_PUSHED.value, lambda state: True]
+    ])
 
     ## Deku outside boss room
     # Locations

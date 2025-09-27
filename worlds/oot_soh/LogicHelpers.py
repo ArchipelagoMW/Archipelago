@@ -32,11 +32,14 @@ def connect_regions(parent_region: str, world: "SohWorld", child_regions) -> Non
     for region in child_regions:
         world.get_region(parent_region).connect(world.get_region(region[0]), rule=region[1])
 
-
-def add_event(parent_region, event_location, event_item, rule, world):
-    event = SohLocation(world.player, event_location, None, parent_region)
-    event.place_locked_item(SohItem(event_item, IC.progression, None, world.player))
-    set_rule(event, rule)
+def add_events(parent_region, world: "SohWorld", events = [[]]):
+    for event in events:
+        event_location = event[0]
+        event_item = event[1]
+        event_rule = event[2]
+        new_event = SohLocation(world.player, event_location, None, parent_region)
+        new_event.place_locked_item(SohItem(event_item, IC.progression, None, world.player))
+        set_rule(new_event, event_rule)
 
 
 # TODO account for starting nuts being disabled
@@ -403,9 +406,7 @@ def can_hit_switch(state: CollectionState, world: "SohWorld", distance: str = "c
 
     return False
 
-
-# todo: this should probably have a LogicMixin cache for speed, definitely a much later thing
-def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = CombatRanges.CLOSE.value,
+def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = Combat_Ranges.CLOSE.value,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
     Check if Link can kill a specific enemy at a given combat range.
@@ -469,8 +470,8 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
 
     # Dodongo (requires explosives or specific attacks)
     if enemy == Enemies.DODONGO.value:
-        if combat_range in [CombatRanges.CLOSE.value, CombatRanges.SHORT_JUMPSLASH.value, CombatRanges.MASTER_SWORD_JUMPSLASH.value, CombatRanges.LONG_JUMPSLASH.value]:
-            return can_jump_slash(state, world) or has_explosives(state, world)
+        if combat_range in [Combat_Ranges.CLOSE.value, Combat_Ranges.SHORT_JUMPSLASH.value, Combat_Ranges.MASTER_SWORD_JUMPSLASH.value, Combat_Ranges.LONG_JUMPSLASH.value]:
+            return (can_jump_slash(state, world) or has_explosives(state, world))
         return has_explosives(state, world)
 
     # Lizalfos (requires good weapons)
