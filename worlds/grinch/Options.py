@@ -96,7 +96,7 @@ class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     progressive_gadget: ProgressiveGadget
     supadow_minigames: Supadow
     giftsanity: Gifts
-    movesanity: Movesanity
+    move_rando: Movesanity
     unlimited_eggs: UnlimitedEggs
     ring_link: RingLinkOption
     trap_link: TrapLinkOption
