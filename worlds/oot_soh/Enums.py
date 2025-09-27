@@ -3302,10 +3302,10 @@ class Locations(str, Enum):
 	DEKU_TREE_QUEEN_GOHMA_GRASS2 = "Deku Tree Queen Gohma Grass 2"
 	DEKU_TREE_QUEEN_GOHMA_GRASS3 = "Deku Tree Queen Gohma Grass 3"
 	DEKU_TREE_QUEEN_GOHMA_GRASS4 = "Deku Tree Queen Gohma Grass 4"
-	DE_KU_TREE_QUEEN_GOHMA_GRASS5 = "Deku Tree Queen Gohma Grass 5"
-	DE_KU_TREE_QUEEN_GOHMA_GRASS6 = "Deku Tree Queen Gohma Grass 6"
-	DE_KU_TREE_QUEEN_GOHMA_GRASS7 = "Deku Tree Queen Gohma Grass 7"
-	DE_KU_TREE_QUEEN_GOHMA_GRASS8 = "Deku Tree Queen Gohma Grass 8"
+	DEKU_TREE_QUEEN_GOHMA_GRASS5 = "Deku Tree Queen Gohma Grass 5"
+	DEKU_TREE_QUEEN_GOHMA_GRASS6 = "Deku Tree Queen Gohma Grass 6"
+	DEKU_TREE_QUEEN_GOHMA_GRASS7 = "Deku Tree Queen Gohma Grass 7"
+	DEKU_TREE_QUEEN_GOHMA_GRASS8 = "Deku Tree Queen Gohma Grass 8"
 	LH_CHILD_POND_FISH1 = "LH Child Pond Fish 1"
 	LH_CHILD_POND_FISH2 = "LH Child Pond Fish 2"
 	LH_CHILD_POND_FISH3 = "LH Child Pond Fish 3"
@@ -3354,26 +3354,6 @@ class Locations(str, Enum):
 	ZD_FISH3 = "ZD Fish 3"
 	ZD_FISH4 = "ZD Fish 4"
 	ZD_FISH5 = "ZD Fish 5"
-
-class Events(str, Enum):
-	AMMO_CAN_DROP = "Ammo Can Drop" #Equal to SoH AmmoCanDrop event
-	CAN_BUY_ARROWS = "Can Buy Arrows" #Equal to SoH LOGIC_BUY_ARROW logicval
-	CAN_BUY_DEKU_SHIELD = "Can Buy Deku Shield"
-	CAN_BUY_GREEN_POTION = "Can Buy Green Potion"
-	CAN_BUY_SEEDS = "Can Buy Seeds"
-	CAN_BUY_BOMBS = "Can Buy Bombs"
-	NUT_POT = "Nut Pot"
-	NUT_CRATE = "Nut Crate"
-	DEKU_BABA_NUTS = "Deku Baba Nuts"
-	STICK_POT = "Stick Pot"
-	DEKU_BABA_STICKS = "Deku Baba Sticks"
-	CHILD_SCARECROW = "Child Scarecrow"
-	ADULT_SCARECROW = "Adult Scarecrow"
-	DELIVER_LETTER = "Deliver Leter"
-	CAN_EMPTY_BIG_POES = "Can Empty Big Poes"
-	CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
-	COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
-	CARPET_MERCHANT = "Can Buy From Carpet Merchant"
 
 class Enemies(str, Enum):
 	GOLD_SKULLTULA = "gold_skulltula"
@@ -3445,3 +3425,28 @@ class CombatRanges(str, Enum):
 	def __lt__(self, other):
 		vals = [e for e in CombatRanges]
 		return vals.index(self) < vals.index(other)
+
+class EventLocations(str, Enum):
+	DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
+	KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
+
+class Events(str, Enum):
+    DEKU_TREE_BASEMENT_BLOCK_PUSHED = "Deku Tree Basement Block Pushed"
+    AMMO_CAN_DROP = "Ammo Can Drop"
+    CAN_BUY_ARROWS = "Can Buy Arrows"
+    CAN_BUY_DEKU_SHIELD = "Can Buy Deku Shield"
+    CAN_BUY_GREEN_POTION = "Can Buy Green Potion"
+    CAN_BUY_SEEDS = "Can Buy Seeds"
+    CAN_BUY_BOMBS = "Can Buy Bombs"
+    NUT_POT = "Nut Pot"
+    NUT_CRATE = "Nut Crate"
+    DEKU_BABA_NUTS = "Deku Baba Nuts"
+    STICK_POT = "Stick Pot"
+    DEKU_BABA_STICKS = "Deku Baba Sticks"
+    CHILD_SCARECROW = "Child Scarecrow"
+    ADULT_SCARECROW = "Adult Scarecrow"
+    DELIVER_LETTER = "Deliver Leter"
+    CAN_EMPTY_BIG_POES = "Can Empty Big Poes"
+    CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
+    COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
+    CARPET_MERCHANT = "Can Buy From Carpet Merchant"
