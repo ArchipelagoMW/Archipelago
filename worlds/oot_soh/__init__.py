@@ -33,8 +33,8 @@ from .Options import SohOptions
 from .RegionAgeAccess import reset_age_access, update_age_access
 from .Regions import region_data_table
 from .Enums import *
-from worlds.oot_soh.location_access import root
-from worlds.oot_soh.location_access.overworld import \
+from ...location_access import root
+from ...location_access.overworld import \
     castle_grounds, \
     death_mountain_crater, \
     death_mountain_trail, \
@@ -49,7 +49,7 @@ from worlds.oot_soh.location_access.overworld import \
     kokiri_forest, \
     lake_hylia, \
     lon_lon_ranch
-from worlds.oot_soh.location_access.dungeons import \
+from ...location_access.dungeons import \
     bottom_of_the_well, \
     deku_tree, \
     dodongos_cavern, \
