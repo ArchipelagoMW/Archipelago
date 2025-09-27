@@ -3429,7 +3429,7 @@ class Enemies(str, Enum):
     SHABOM = "shabom"
     OCTOROK = "octorok"
     
-class Combat_Ranges(str, Enum):
+class CombatRanges(str, Enum):
 	CLOSE = "close"
 	SHORT_JUMPSLASH = "short_jumpslash"
 	MASTER_SWORD_JUMPSLASH = "master_sword_jumpslash"
@@ -3439,3 +3439,11 @@ class Combat_Ranges(str, Enum):
 	HOOKSHOT = "hookshot"
 	LONGSHOT = "longshot"
 	FAR = "far"
+
+class EventLocations(str, Enum):
+	DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
+	KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
+
+class EventItems(str, Enum):
+	DEKU_TREE_BASEMENT_BLOCK_PUSHED = "Deku Tree Basement Block Pushed"
+	STICK_ACCESS = "Stick Access"

@@ -1,10 +1,10 @@
 from typing import Callable, TYPE_CHECKING
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, ItemClassification as IC
 from .Locations import SohLocation
 from worlds.generic.Rules import set_rule
 from .Enums import *
-from .Items import item_data_table, ItemType, no_rules_bottles
+from .Items import SohItem, item_data_table, ItemType, no_rules_bottles
 from .RegionAgeAccess import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
 
 if TYPE_CHECKING:
@@ -12,11 +12,6 @@ if TYPE_CHECKING:
 
 import logging
 logger = logging.getLogger("SOH_OOT.Logic")
-
-
-def connect_regions(parent_region: str, world: "SohWorld", child_regions = [[]]) -> None:
-    for region in child_regions:
-        world.get_region(parent_region).connect(world.get_region(region[0]), rule=region[1])
 
 
 def add_locations(parent_region: str, world: "SohWorld", locations: list[str]) -> None:
@@ -29,6 +24,17 @@ def add_locations(parent_region: str, world: "SohWorld", locations: list[str]) -
             locationAddress = world.included_locations.pop(location[0])
             world.get_region(parent_region).add_locations({locationName: locationAddress}, SohLocation)
             set_rule(world.get_location(locationName), locationRule)
+
+
+def connect_regions(parent_region: str, world: "SohWorld", child_regions: list[str]) -> None:
+    for region in child_regions:
+        world.get_region(parent_region).connect(world.get_region(region[0]), rule=region[1])
+
+
+def add_event(parent_region, event_location, event_item, rule, world):
+    event = SohLocation(world.player, event_location, None, parent_region)
+    event.place_locked_item(SohItem(event_item, IC.progression, None, world.player))
+    set_rule(event, rule)
 
 
 # TODO account for starting nuts being disabled
@@ -111,10 +117,10 @@ def can_use(name: str, state: CollectionState, world: "SohWorld", can_be_child: 
 
     if data[name].item_type == ItemType.song:
         return can_play_song(state, world, name)
-    
+
     if name in (Items.FIRE_ARROW.value, Items.ICE_ARROW.value, Items.LIGHT_ARROW.value):
         return can_use_item(Items.FAIRY_BOW.value)
-    
+
     if "Bombchu" in name:
         return bombchu_refill(state, world) and bombchus_enabled(state, world)
 
@@ -292,7 +298,7 @@ def can_attack(state: CollectionState, world: "SohWorld") -> bool:
 def can_standing_shield(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can use a shield for standing blocks."""
     return (can_use(Items.MIRROR_SHIELD.value, state, world) or  # Only adult can use mirror shield
-            (is_adult(state, world) and can_use(Items.HYLIAN_SHIELD.value, state, world)) or 
+            (is_adult(state, world) and can_use(Items.HYLIAN_SHIELD.value, state, world)) or
             can_use(Items.DEKU_SHIELD.value, state, world))  # Only child can use deku shield
 
 

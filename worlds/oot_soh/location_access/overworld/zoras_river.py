@@ -28,8 +28,8 @@ def set_rules(world: "SohWorld") -> None:
     
     ## ZR Front
     # Locations
-    set_location_rules(world, [
-        [Locations.RC_ZR_GS_TREE.value, lambda state: True],
+    add_locations(Regions.ZR_FRONT.value, world, [
+        [Locations.ZR_GS_TREE.value, lambda state: True],
         [Locations.ZR_NEAR_TREE_GRASS1.value, lambda state: True],
         [Locations.ZR_NEAR_TREE_GRASS2.value, lambda state: True],
         [Locations.ZR_NEAR_TREE_GRASS3.value, lambda state: True],
@@ -51,7 +51,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## Zora River
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.ZORA_RIVER.value, world, [
         [Locations.ZR_MAGIC_BEAN_SALESMAN.value, lambda state: True],
         [Locations.ZR_FROGS_OCARINA_GAME.value, lambda state: True],
         [Locations.ZR_FROGS_IN_THE_RAIN.value, lambda state: True],
@@ -104,7 +104,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## ZR Open Grotto
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.ZR_OPEN_GROTTO.value, world, [
         [Locations.ZR_OPEN_GROTTO_CHEST.value, lambda state: True],
         [Locations.ZR_OPEN_GROTTO_FISH.value, lambda state: True],
         [Locations.ZR_OPEN_GROTTO_GOSSIP_STONE_FAIRY.value, lambda state: True],
@@ -117,13 +117,13 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.ZR_OPEN_GROTTO_GRASS4.value, lambda state: True]
     ])
     # Connections
-        connect_regions(Regions.ZR_OPEN_GROTTO.value, world, [
+    connect_regions(Regions.ZR_OPEN_GROTTO.value, world, [
         [Regions.ZORA_RIVER.value, lambda state: True]
     ])
 
     ## ZR Fairy Grotto
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.ZR_FAIRY_GROTTO.value, world, [
         [Locations.ZR_FAIRY_GROTTO_FAIRY1.value, lambda state: True],
         [Locations.ZR_FAIRY_GROTTO_FAIRY2.value, lambda state: True],
         [Locations.ZR_FAIRY_GROTTO_FAIRY3.value, lambda state: True],
@@ -134,18 +134,18 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.ZR_FAIRY_GROTTO_FAIRY8.value, lambda state: True]
     ])
     # Connections
-        connect_regions(Regions.ZR_FAIRY_GROTTO.value, world, [
+    connect_regions(Regions.ZR_FAIRY_GROTTO.value, world, [
         [Regions.ZORA_RIVER.value, lambda state: True]
     ])
 
     ## ZR Storms Grotto
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.ZR_STORMS_GROTTO.value, world, [
         [Locations.ZR_DEKU_SCRUB_GROTTO_FRONT.value, lambda state: True],
         [Locations.ZR_DEKU_SCRUB_GROTTO_REAR.value, lambda state: True],
         [Locations.ZR_STORMS_GROTTO_BEEHIVE.value, lambda state: True]
     ])
     # Connections
-        connect_regions(Regions.ZR_STORMS_GROTTO.value, world, [
+    connect_regions(Regions.ZR_STORMS_GROTTO.value, world, [
         [Regions.ZORA_RIVER.value, lambda state: True]
     ])
