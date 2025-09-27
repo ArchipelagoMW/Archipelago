@@ -39,16 +39,18 @@ class Missionsanity(Choice):
     option_both = 3
     default = 1
 
-class ExcludeRegions(OptionSet):
-    """Allows entire regions to be an excluded location to ensure you are not logically required to enter the region along
-     with any and all checks that are in that region too. WARNING: Excluding too many regions may cause generation to fail.
+class ExcludeEnvironments(OptionSet):
+    """
+    Allows entire environments to be an excluded location to ensure you are not logically required to enter the environment along
+    with any and all checks that are in that environment too. WARNING: Excluding too many environments may cause generation to fail.
+    [NOT IMPLEMENTED]
 
-     Valid keys: "Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Clock Tower", "City Hall",
+    Valid keys: "Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Clock Tower", "City Hall",
                   "Ski Resort", "Civic Center", "Minefield", "Power Plant", "Generator Building", "Scout's Hut",
                   "North Shore", "Mayor's Villa", "Sleigh Ride"
 
-     [NOT IMPLEMENTED]"""
-    display_name = "Exclude Regions"
+    """
+    display_name = "Exclude Environments"
     valid_keys = {"Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Clock Tower", "City Hall",
                   "Ski Resort", "Civic Center", "Minefield", "Power Plant", "Generator Building", "Scout's Hut",
                   "North Shore", "Mayor's Villa", "Sleigh Ride"}
@@ -64,16 +66,32 @@ class Supadow(Toggle):
     display_name = "Supadow Minigames"
 
 class Gifts(Range):
-    """Considers how many gifts must be squashed per check.
+    """
+    Considers how many gifts must be squashed per check.
     Enabling this will also enable squashing all gifts in a region mission along side this. [NOT IMPLEMENTED]"""
-    display_name = "Gifts Squashed per check"
+    display_name = "Gifts Squashed per Check"
     range_start = 0
     range_end = 300
     default = 0
 
-class Movesanity(Toggle):
-    """Randomizes Grinch's moveset along with randomizing max into the pool. [NOT IMPLEMENTED]"""
-    display_name = "Movesanity"
+class GadgetRando(OptionSet):
+    """
+    Randomizes Grinch's gadgets along with randomizing Binoculars into the pool. [NOT IMPLEMENTED]
+
+    Valid keys: "Binoculars", "Rotten Egg Launcher", "Rocket Spring", "Slime Shooter", "Octopus Climbing Device",
+                "Marine Mobile", "Grinch Copter"
+    """
+    display_name = "Gadgets Randomized"
+    valid_keys = {"Binoculars", "Rotten Egg Launcher", "Rocket Spring", "Slime Shooter", "Octopus Climbing Device",
+                "Marine Mobile", "Grinch Copter"}
+
+class Moverando(OptionSet):
+    """Randomizes Grinch's moveset along with randomizing max into the pool. [NOT IMPLEMENTED]
+
+    Valid keys: "Pancake", "Push & Pull", "Max", "Bad Breath", "Tip Toe"
+    """
+    display_name = "Moves Randomized"
+    valid_keys = {"Pancake", "Push & Pull", "Max", "Bad Breath", "Tip Toe"}
 
 class UnlimitedEggs(Toggle):
     """Determine whether or not you run out of rotten eggs when you utilize your gadgets."""
@@ -92,11 +110,11 @@ class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     starting_area: StartingArea
     progressive_vacuum: ProgressiveVacuum
     missionsanity: Missionsanity
-    exclude_regions: ExcludeRegions
+    exclude_environments: ExcludeEnvironments
     progressive_gadget: ProgressiveGadget
     supadow_minigames: Supadow
     giftsanity: Gifts
-    move_rando: Movesanity
+    move_rando: Moverando
     unlimited_eggs: UnlimitedEggs
     ring_link: RingLinkOption
     trap_link: TrapLinkOption
