@@ -32,7 +32,9 @@ def connect_regions(parent_region: str, world: "SohWorld", child_regions) -> Non
     for region in child_regions:
         world.get_region(parent_region).connect(world.get_region(region[0]), rule=region[1])
 
-def add_events(parent_region, world: "SohWorld", events = [[]]):
+
+# todo: add typing for events, change it from list[list] to list[tuple]
+def add_events(parent_region, world: "SohWorld", events):
     for event in events:
         event_location = event[0]
         event_item = event[1]
