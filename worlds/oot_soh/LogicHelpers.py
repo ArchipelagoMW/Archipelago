@@ -437,7 +437,7 @@ def can_hit_switch(state: CollectionState, world: "SohWorld", distance: str = "c
 
     return False
 
-def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = Combat_Ranges.CLOSE.value,
+def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = EnemyDistance.CLOSE.value,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
     Check if Link can kill a specific enemy at a given combat range.
@@ -455,27 +455,27 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
 
     # Define what weapons work at each range
     def can_hit_at_range(range_type: str) -> bool:
-        if range_type == Combat_Ranges.CLOSE.value:
+        if range_type == EnemyDistance.CLOSE.value:
             return (can_jump_slash(state, world) or
                     has_explosives(state, world) or
                     can_use(Items.DINS_FIRE.value, state, world))
 
-        elif range_type in [Combat_Ranges.SHORT_JUMPSLASH.value, Combat_Ranges.MASTER_SWORD_JUMPSLASH.value, Combat_Ranges.LONG_JUMPSLASH.value]:
+        elif range_type in [EnemyDistance.SHORT_JUMPSLASH.value, EnemyDistance.MASTER_SWORD_JUMPSLASH.value, EnemyDistance.LONG_JUMPSLASH.value]:
             return can_jump_slash(state, world)
 
-        elif range_type == Combat_Ranges.BOMB_THROW.value:
+        elif range_type == EnemyDistance.BOMB_THROW.value:
             return has_explosives(state, world)
 
-        elif range_type == Combat_Ranges.BOOMERANG.value:
+        elif range_type == EnemyDistance.BOOMERANG.value:
             return can_use(Items.BOOMERANG.value, state, world)
 
-        elif range_type == Combat_Ranges.HOOKSHOT.value:
+        elif range_type == EnemyDistance.HOOKSHOT.value:
             return can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world)
 
-        elif range_type == Combat_Ranges.LONGSHOT.value:
+        elif range_type == EnemyDistance.LONGSHOT.value:
             return can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world)  # Longshot is progressive hookshot level 2
 
-        elif range_type == Combat_Ranges.FAR.value:
+        elif range_type == EnemyDistance.FAR.value:
             return (can_use(Items.PROGRESSIVE_BOW.value, state, world) or
                     can_use(Items.PROGRESSIVE_SLINGSHOT.value, state, world) or
                     can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
@@ -501,7 +501,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
 
     # Dodongo (requires explosives or specific attacks)
     if enemy == Enemies.DODONGO.value:
-        if combat_range in [Combat_Ranges.CLOSE.value, Combat_Ranges.SHORT_JUMPSLASH.value, Combat_Ranges.MASTER_SWORD_JUMPSLASH.value, Combat_Ranges.LONG_JUMPSLASH.value]:
+        if combat_range in [EnemyDistance.CLOSE.value, EnemyDistance.SHORT_JUMPSLASH.value, EnemyDistance.MASTER_SWORD_JUMPSLASH.value, EnemyDistance.LONG_JUMPSLASH.value]:
             return (can_jump_slash(state, world) or has_explosives(state, world))
         return has_explosives(state, world)
 
@@ -630,3 +630,74 @@ def hookshot_or_boomerang(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link has hookshot or boomerang."""
     return (can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) or
             can_use(Items.BOOMERANG.value, state, world))
+
+def can_open_underwater_chest(state: CollectionState, world: "SohWorld") -> bool:
+    # FIGURE OUT TRICKS AND REPLACE THIS FALSE WITH EQUIVILENT ctx->GetTrickOption(RT_OPEN_UNDERWATER_CHEST)
+    return (False and 
+            can_use(Items.IRON_BOOTS.value, state, value) and 
+            can_use(Items.HOOKSHOT.value, state, world))
+
+def small_keys(key: Items, requiredAmount: int, state: CollectionState, world: "SohWorld") -> bool:
+    if has_item(Items.SKELETON_KEY.value, state, world) or has_key_ring(key, state, world):
+        return True
+
+    return (state.has(key, world.player, requiredAmount))
+
+def has_key_ring(key : Items, state: CollectionState, world: "SohWorld") -> bool:
+    match key:
+        case Items.FOREST_TEMPLE_SMALL_KEY:
+            return has_item(Items.FOREST_TEMPLE_KEY_RING, state, world)
+        case Items.FIRE_TEMPLE_SMALL_KEY:
+            return has_item(Items.FIRE_TEMPLE_KEY_RING, state, world)
+        case Items.WATER_TEMPLE_SMALL_KEY:
+            return has_item(Items.WATER_TEMPLE_KEY_RING, state, world)
+        case Items.BOTTOM_OF_THE_WELL_SMALL_KEY:
+            return has_item(Items.BOTTOM_OF_THE_WELL_KEY_RING, state, world)
+        case Items.SHADOW_TEMPLE_SMALL_KEY:
+            return has_item(Items.SHADOW_TEMPLE_KEY_RING, state, world)
+        case Items.GERUDO_FORTRESS_SMALL_KEY:
+            return has_item(Items.GERUDO_FORTRESS_KEY_RING, state, world)
+        case Items.SPIRIT_TEMPLE_SMALL_KEY:
+            return has_item(Items.SPIRIT_TEMPLE_KEY_RING, state, world)
+        case Items.GANONS_CASTLE_SMALL_KEY:
+            return has_item(Items.GANONS_CASTLE_KEY_RING, state, world)
+        case _:
+            return False
+
+def lens_or_skip(state: CollectionState, world: "SohWorld") -> bool:
+    return (False or can_use(Items.LENS_OF_TRUTH, state, world)) # replace false with ctx->GetTrickOption(RT_LENS_BOTW)
+
+def can_get_enemy_drop(state: CollectionState, world: "SohWorld", enemy : Enemies, range : EnemyDistance = EnemyDistance.CLOSE, aboveLink : bool = False) -> bool:
+    if not can_kill_enemy(state, world, enemy, range):
+        return False
+    
+    if range <= EnemyDistance.MASTER_SWORD_JUMPSLASH:
+        return True
+    
+    drop = False
+    match enemy:
+        case Enemies.GOLD_SKULLTULA:
+            if range in [EnemyDistance.BOOMERANG, EnemyDistance.HOOKSHOT, EnemyDistance.LONGSHOT]:
+                drop = (can_use(Items.BOOMERANG, state, world) or can_use(Items.HOOKSHOT, state, world) or Items.LONGSHOT, state, world)
+
+            return drop
+        case Enemies.KEESE:
+            return True
+        case Enemies.FIRE_KEESE:
+            return True
+        case _:
+            return aboveLink or (range <= EnemyDistance.BOOMERANG and can_use(Items.BOOMERANG, state, world))
+        
+def can_detonate_bomb_flowers(state: CollectionState, world: "SohWorld") -> bool:
+    return (can_use(Items.FAIRY_BOW.value, state, world) or has_explosives(state, world) or can_use(Items.DINS_FIRE.value, state, world))
+
+def can_detonate_upright_bomb_flower(state: CollectionState, world: "SohWorld") -> bool:
+    return (can_detonate_bomb_flowers(state, world) 
+            or has_item(Items.GORONS_BRACELET.value, state, world)
+            or (False # Trick ctx->GetTrickOption(RT_BLUE_FIRE_MUD_WALLS)
+                and can_use(Items.BOTTLE_WITH_BLUE_FIRE)
+                and (False # EffectiveHealth Function. Not sure how to implement some of the stuff that is client setting specific
+                    or can_use(Items.NAYRUS_LOVE.value, state, world)
+                ))
+
+            ) 
