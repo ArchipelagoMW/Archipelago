@@ -4,7 +4,7 @@ from worlds.generic.Rules import set_rule
 from worlds.oot_soh.Regions import double_link_regions
 from worlds.oot_soh.Items import SohItem
 from worlds.oot_soh.Locations import SohLocation, SohLocationData
-from worlds.oot_soh.Enums import Regions, Items, Locations, Enemies, Combat_Ranges
+from worlds.oot_soh.Enums import Regions, Items, Locations, Enemies, CombatRanges
 from worlds.oot_soh.LogicHelpers import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
                                   has_fire_source_with_torch, can_use, can_do_trick, can_jump_slash, blast_or_smash)
 
@@ -12,33 +12,8 @@ if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
 
 
-events: dict[str, SohLocationData] = {
-    "Dodongos Cavern Lobby Switch": SohLocationData(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value,
-                                                    event_item="Dodongos Cavern Lobby Switch Activated"),
-    "Dodongos Cavern Far Bridge Switch": SohLocationData(Regions.DODONGOS_CAVERN_FAR_BRIDGE.value,
-                                                         event_item="Dodongos Cavern Far Bridge Switch Activated"),
-    "Dodongos Cavern Lower Lizalfos": SohLocationData(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value,
-                                                      event_item="Defeated Dodongos Cavern Lower Lizalfos")
-}
-
-
-def create_regions_and_rules(world: "SohWorld") -> None:
-    for event_name, data in events.items():
-        region = world.get_region(data.region)
-        region.add_event(event_name, data.event_item, location_type=SohLocation, item_type=SohItem)
-
-    set_region_rules(world)
-    set_location_rules(world)
-
-
-# I'm writing this with events in mind, even though the original for this dungeon doesn't use them
-# Probably will be easier that way
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
-
-    double_link_regions(world, Regions.DODONGOS_CAVERN_ENTRYWAY.value, Regions.ROOT.value)
-
-    double_link_regions(world, Regions.DODONGOS_CAVERN_ENTRYWAY.value, Regions.DODONGOS_CAVERN_BEGINNING.value)
 
     # Entry to main lobby requires breaking mud walls or strength upgrade
     world.get_region(Regions.DODONGOS_CAVERN_BEGINNING.value).connect(
@@ -59,7 +34,9 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_STAIRS_LOWER.value),
-        rule=lambda state: state.has("Dodongos Cavern Lobby Switch Activated", player))
+        rule=lambda state: True)
+        # rule=lambda state: state.has("Dodongos Cavern Lobby Switch Activated", player))
+        # add above as event
 
     world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOSS_REGION.value),
@@ -90,11 +67,11 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value),
-        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, Combat_Ranges.CLOSE.value, quantity=2))
+        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, CombatRanges.CLOSE.value, quantity=2))
 
     world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value),
-        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, Combat_Ranges.CLOSE.value, quantity=2))
+        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, CombatRanges.CLOSE.value, quantity=2))
 
     world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value),
@@ -184,11 +161,15 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_FIRST_SLINGSHOT_ROOM.value),
-        rule=lambda state: state.has("Defeated Dodongos Cavern Lower Lizalfos", player))
+        rule = lambda state: True)
+        # rule=lambda state: state.has("Defeated Dodongos Cavern Lower Lizalfos", player))
+        # add above as event
 
     world.get_region(Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_SECOND_SLINGSHOT_ROOM.value),
-        rule=lambda state: state.has("Defeated Dodongos Cavern Lower Lizalfos", player))
+        rule = lambda state: True)
+        # rule=lambda state: state.has("Defeated Dodongos Cavern Lower Lizalfos", player))
+        # add above as event
 
     world.get_region(Regions.DODONGOS_CAVERN_SECOND_SLINGSHOT_ROOM.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value))
@@ -248,4 +229,4 @@ def set_location_rules(world: "SohWorld") -> None:
              rule=lambda state: can_break_mud_walls(state, world))
 
     set_rule(world.get_location("Dodongos Cavern Lower Lizalfos"),
-             rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, Combat_Ranges.CLOSE.value, quantity=2))
+             rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, CombatRanges.CLOSE.value, quantity=2))

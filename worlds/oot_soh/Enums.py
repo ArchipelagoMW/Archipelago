@@ -3354,27 +3354,6 @@ class Locations(str, Enum):
 	ZD_FISH4 = "ZD Fish 4"
 	ZD_FISH5 = "ZD Fish 5"
 
-class Events(str, Enum):
-    AMMO_CAN_DROP = "Ammo Can Drop" #Equal to SoH AmmoCanDrop event
-    CAN_BUY_ARROWS = "Can Buy Arrows" #Equal to SoH LOGIC_BUY_ARROW logicval
-    CAN_BUY_DEKU_SHIELD = "Can Buy Deku Shield"
-    CAN_BUY_GREEN_POTION = "Can Buy Green Potion"
-    CAN_BUY_SEEDS = "Can Buy Seeds"
-    CAN_BUY_BOMBS = "Can Buy Bombs"
-    NUT_POT = "Nut Pot"
-    NUT_CRATE = "Nut Crate"
-    DEKU_BABA_NUTS = "Deku Baba Nuts"
-    STICK_POT = "Stick Pot"
-    DEKU_BABA_STICKS = "Deku Baba Sticks"
-    CHILD_SCARECROW = "Child Scarecrow"
-    ADULT_SCARECROW = "Adult Scarecrow"
-    DELIVER_LETTER = "Deliver Leter"
-    CAN_EMPTY_BIG_POES = "Can Empty Big Poes"
-    CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
-    COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
-    CARPET_MERCHANT = "Can Buy From Carpet Merchant"
-    DEKU_TREE_CLEAR = "Defeat Queen Gohma"
-
 class Enemies(str, Enum):
     GOLD_SKULLTULA = "gold_skulltula"
     BIG_SKULLTULA = "big_skulltula"
@@ -3440,3 +3419,25 @@ class CombatRanges(str, Enum):
 	HOOKSHOT = "hookshot"
 	LONGSHOT = "longshot"
 	FAR = "far"
+
+class Events(str, Enum):
+    DEKU_TREE_BASEMENT_BLOCK_PUSHED = "Deku Tree Basement Block Pushed"
+    AMMO_CAN_DROP = "Ammo Can Drop"
+    CAN_BUY_ARROWS = "Can Buy Arrows"
+    CAN_BUY_DEKU_SHIELD = "Can Buy Deku Shield"
+    CAN_BUY_GREEN_POTION = "Can Buy Green Potion"
+    CAN_BUY_SEEDS = "Can Buy Seeds"
+    CAN_BUY_BOMBS = "Can Buy Bombs"
+    NUT_POT = "Nut Pot"
+    NUT_CRATE = "Nut Crate"
+    DEKU_BABA_NUTS = "Deku Baba Nuts"
+    STICK_POT = "Stick Pot"
+    DEKU_BABA_STICKS = "Deku Baba Sticks"
+    CHILD_SCARECROW = "Child Scarecrow"
+    ADULT_SCARECROW = "Adult Scarecrow"
+    DELIVER_LETTER = "Deliver Leter"
+    CAN_EMPTY_BIG_POES = "Can Empty Big Poes"
+    CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
+    COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
+    CARPET_MERCHANT = "Can Buy From Carpet Merchant"
+    DEKU_TREE_CLEAR = "Defeat Queen Gohma"
