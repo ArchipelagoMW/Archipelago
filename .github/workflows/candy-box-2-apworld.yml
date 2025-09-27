@@ -21,22 +21,22 @@ jobs:
         with:
           path: "worlds/candybox2.apworld"
           name: 'candybox2.apworld'
-  release:
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' }}
-    needs:
-      - archive
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: 'candybox2.apworld'
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: true
-          title: "Latest Development Build"
-          files: candybox2.apworld
+#  release:
+#    runs-on: ubuntu-latest
+#    if: ${{ github.event_name == 'push' }}
+#    needs:
+#      - archive
+#    steps:
+#      - uses: actions/download-artifact@v4
+#        with:
+#          name: 'candybox2.apworld'
+#      - uses: "marvinpinto/action-automatic-releases@latest"
+#        with:
+#          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#          automatic_release_tag: "latest"
+#          prerelease: true
+#          title: "Latest Development Build"
+#          files: candybox2.apworld
   release-to-created-release:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'release' }}
