@@ -117,7 +117,7 @@ class GrinchClient(BizHawkClient):
         await ctx.get_username()
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
-        from CommonClient import  logger
+        from CommonClient import logger
         #If the player is not connected to an AP Server, or their connection was disconnected.
         if not ctx.slot:
             return
@@ -197,7 +197,6 @@ class GrinchClient(BizHawkClient):
             RECV_ITEM_ADDR, RECV_ITEM_BITSIZE, "MainRAM")]))[0], "little")
         if len(ctx.items_received) == self.last_received_index:
             return
-
         # Ensures we only get the new items that we want to give the player
         new_items_only = ctx.items_received[self.last_received_index:]
         ram_addr_dict: dict[int, list[int]] = {}
@@ -214,7 +213,9 @@ class GrinchClient(BizHawkClient):
                     current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
                         addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
                 if is_binary:
+                    logger.info(str(item_received)+"before")
                     current_ram_address_value = (current_ram_address_value | (1 << addr_to_update.binary_bit_pos))
+                    logger.info(str(item_received) + "after")
                 elif addr_to_update.update_existing_value:
                     # Grabs minimum value of a list of numbers and makes sure it does not go above max count possible
                     current_ram_address_value += addr_to_update.value
@@ -237,7 +238,8 @@ class GrinchClient(BizHawkClient):
             goal_ram_address = goal_loc.update_ram_addr[0]
             current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
                 goal_ram_address.ram_address, goal_ram_address.bit_size, "MainRAM")]))[0], "little")
-            if (current_ram_address_value & (1 << goal_ram_address.binary_bit_pos)) > 0:
+            # if (current_ram_address_value & (1 << goal_ram_address.binary_bit_pos)) > 0:
+            if current_ram_address_value == goal_ram_address.value:
                 ctx.finished_game = True
                 await ctx.send_msgs([{
                     "cmd": "StatusUpdate",

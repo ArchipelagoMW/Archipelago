@@ -6,7 +6,7 @@ from BaseClasses import Location, Region
 
 class GrinchLocationData(NamedTuple):
     region: str
-    location_group: list[str]
+    location_group: Optional[list[str]]
     id: Optional[int]
     update_ram_addr: list[GrinchRamData]
     reset_addr: Optional[list[GrinchRamData]] = None # Addresses to update once we find the item
@@ -32,6 +32,9 @@ def get_location_names_per_category() -> dict[str, set[str]]:
     categories: dict[str, set[str]] = {}
 
     for name, data in grinch_locations.items():
+        if data.location_group is None:
+                continue
+
         for group in data.location_group:  # iterate over each category
             categories.setdefault(group, set()).add(name)
 
@@ -166,7 +169,7 @@ grinch_locations = {
         "WL - Mayor's Villa - GC BP in Pirate's Cave": GrinchLocationData("Mayor's Villa", ["Grinch Copter Blueprints"], 1215, [GrinchRamData(0x010275, binary_bit_pos=6)]),
 #Sleigh Room Locations
         "MC - Sleigh Ride - Stealing All Gifts": GrinchLocationData("Sleigh Room", ["Sleigh Ride"], 1300, [GrinchRamData(0x0100BF, binary_bit_pos=6)]),
-        "MC - Sleigh Ride - Neutralizing Santa": GrinchLocationData("Sleigh Room", ["Sleigh Ride"], None, [GrinchRamData(0x010000, value=0x3E)]),#[GrinchRamData(0x0100BF, binary_bit_pos=7)]),
+        "MC - Sleigh Ride - Neutralizing Santa": GrinchLocationData("Sleigh Room", None, None, [GrinchRamData(0x010000, value=0x3E)]),#[GrinchRamData(0x0100BF, binary_bit_pos=7)]),
 #Heart of Stones
         "WV - Post Office - Heart of Stone": GrinchLocationData("Post Office", ["Heart of Stones"], 1400, [GrinchRamData(0x0101FA, binary_bit_pos=6)]),
         "WF - Ski Resort - Heart of Stone": GrinchLocationData("Ski Resort", ["Heart of Stones"], 1401, [GrinchRamData(0x0101FA, binary_bit_pos=7)]),
