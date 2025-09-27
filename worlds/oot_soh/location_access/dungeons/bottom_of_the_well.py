@@ -67,7 +67,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## Bottom of the Well Behind Fake Walls
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS, world, [
+    add_locations(Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_FRONT_LEFT_FAKE_WALL_CHEST.value, lambda state: True],
         [Locations.BOTTOM_OF_THE_WELL_RIGHT_BOTTOM_FAKE_WALL_CHEST.value, lambda state: True],
         [Locations.BOTTOM_OF_THE_WELL_COMPASS_CHEST.value, lambda state: True],
@@ -75,7 +75,7 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.BOTTOM_OF_THE_WELL_BACK_LEFT_BOMBABLE_CHEST.value, lambda state: has_explosives(state, world)]
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS, world, [
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS.value, world, [
         [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: lens_or_skip(state, world)],
         [Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS.value, lambda state: small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world)],
         [Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, lambda state: True],
@@ -84,24 +84,24 @@ def set_rules(world: "SohWorld") -> None:
 
     ## Bottom of the Well Southwest Room
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, world, [
+    add_locations(Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_LEFT_SIDE_POT1.value, lambda state: can_break_pots(state, world)],
         [Locations.BOTTOM_OF_THE_WELL_LEFT_SIDE_POT2.value, lambda state: can_break_pots(state, world)],
         [Locations.BOTTOM_OF_THE_WELL_LEFT_SIDE_POT3.value, lambda state: can_break_pots(state, world)]
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, world, [
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM.value, world, [
         [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: lens_or_skip(state, world)]
     ])
 
     ## Bottom of the Well Keese-Beamos Room
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, world, [
+    add_locations(Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_FIRE_KEESE_CHEST.value, lambda state: lens_or_skip(state, world)],
         [Locations.BOTTOM_OF_THE_WELL_FIRE_KEESE_POT1.value, lambda state: can_break_pots(state, world) and lens_or_skip(state, world)]
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, world, [
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM.value, world, [
         [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: is_child(state, world) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world) and lens_or_skip(state, world)],
         [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: lens_or_skip(state, world)],
         [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: lens_or_skip(state, world)]
@@ -109,12 +109,12 @@ def set_rules(world: "SohWorld") -> None:
 
     ## Bottom of the Well Like-Like Cage
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE, world, [
+    add_locations(Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_LIKE_LIKE_CHEST.value, lambda state: True],
         [Locations.BOTTOM_OF_THE_WELL_GS_LIKE_LIKE_CAGE.value, lambda state: can_get_enemy_drop(state, world, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG)]
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE, world, [
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE.value, world, [
         [Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM.value, lambda state: True]
     ])
 
@@ -125,42 +125,42 @@ def set_rules(world: "SohWorld") -> None:
     #     EventAccess(&logic->DekuBabaNuts,   []{return logic->CanGetDekuBabaNuts();}),
     # }, 
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS, world, [
+    add_locations(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_GS_WEST_INNER_ROOM.value, lambda state: can_get_enemy_drop(state, world, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG)],
         [Locations.BOTTOM_OF_THE_WELL_GS_EAST_INNER_ROOM.value, lambda state: can_get_enemy_drop(state, world, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG)]
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS, world, [
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS.value, world, [
         [Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS.value, lambda state: small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world)]
     ])
 
     ## Bottom of the Well Coffin Room 
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM, world, [
+    add_locations(Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_FREESTANDING_KEY.value, lambda state: has_fire_source_with_torch(state, world) or can_use(Items.PROGRESSIVE_BOW.value, state, world)],
         [Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_FRONT_LEFT_HEART.value, lambda state: True],
         [Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_MIDDLE_RIGHT_HEART.value, lambda state: has_fire_source_with_torch(state, world) or can_use(Items.PROGRESSIVE_BOW.value, state, world)]
 
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM, world, [
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM.value, world, [
         [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: state.has(events.get("LoweredWaterInsideBotw").event_item) or has_item(Items.BRONZE_SCALE.value, state, world)]
     ])
 
     ## Bottom of the Well Dead Hand Room 
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM, world, [
+    add_locations(Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_LENS_OF_TRUTH_CHEST.value, lambda state: can_kill_enemy(Enemies.DEAD_HAND.value, state, world)],
         [Locations.BOTTOM_OF_THE_WELL_INVISIBLE_CHEST.value, lambda state: lens_or_skip(state, world)]
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM, world, [
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM.value, world, [
         [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: is_child(state, world) and can_kill_enemy(Enemies.DEAD_HAND.value, state, world)]
     ])
 
     ## Bottom of the Well Basement 
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT, world, [
+    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_MAP_CHEST.value, lambda state: blast_or_smash(state, world)],
         [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT1.value, lambda state: can_break_pots(state, world)],
         [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT2.value, lambda state: can_break_pots(state, world)],
@@ -189,7 +189,7 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS9.value, lambda state: can_cut_shrubs(state, world) and blast_or_smash(state, world)]
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT, world, [
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, world, [
         [Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM.value, lambda state: is_child(state, world) and can_pass_enemy(Enemies.BIG_SKULLTULA.value, state, world)],
         # False here is for trick ctx->GetTrickOption(RT_BOTW_BASEMENT)
         [Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS.value, lambda state: blast_or_smash(state, world) or can_use(Items.DINS_FIRE.value, state, world) or (can_use(Items.STICKS.value) and False)] # NOT 100% SURE HOW TO TRANSLATE HERE. Has to do with Age: Entrance(RR_BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, []{return Here(RR_BOTTOM_OF_THE_WELL_BASEMENT, []{return logic->BlastOrSmash() || logic->CanUse(RG_DINS_FIRE) || (logic->CanUse(RG_STICKS) && ctx->GetTrickOption(RT_BOTW_BASEMENT));});}),
@@ -197,17 +197,17 @@ def set_rules(world: "SohWorld") -> None:
 
     ## Bottom of the Well Useful Bomb Flowers
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, world, [
+    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_MAP_CHEST.value, lambda state: has_item(Items.GORONS_BRACELET.value, state, world)]
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, world, [
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS.value, world, [
         [Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, lambda state: can_detonate_upright_bomb_flower(state, world)]
     ])
 
     ## Bottom of the Well Basement Platform
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM, world, [
+    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_LEFT_RUPEE.value, lambda state: True],
         [Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_BACK_LEFT_RUPEE.value, lambda state: True],
         [Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_MIDDLE_RUPEE.value, lambda state: True],
@@ -216,6 +216,6 @@ def set_rules(world: "SohWorld") -> None:
         
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM, world, [
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM.value, world, [
         [Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, lambda state: True]
     ])
