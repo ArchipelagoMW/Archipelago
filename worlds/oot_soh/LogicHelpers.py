@@ -141,9 +141,7 @@ def can_use(name: str, state: CollectionState, world: "SohWorld", can_be_child: 
         return has(Events.AMMO_CAN_DROP) and (has(Events.NUT_POT) or has(Events.NUT_CRATE) or has(Events.DEKU_BABA_NUTS))
     elif name == Items.STICKS.value:
         return has(Events.STICK_POT) or has(Events.DEKU_BABA_STICKS)
-    elif name == Items.PROGRESSIVE_BOMB_BAG.value:
-        return has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_BOMBS)
-    elif name == Items.BOMB_BAG.value:
+    elif name in (Items.PROGRESSIVE_BOMB_BAG.value, Items.BOMB_BAG.value):
         return has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_BOMBS)
     elif name == Items.FISHING_POLE.value:
         return has(Items.CHILD_WALLET.value)  # as long as you have enough rubies
