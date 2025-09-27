@@ -5,7 +5,7 @@ from worlds.oot_soh.Regions import double_link_regions
 from worlds.oot_soh.Items import SohItem
 from worlds.oot_soh.Locations import SohLocation, SohLocationData
 from worlds.oot_soh.Enums import *
-from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions, can_pass_enemy, has_explosives, lens_or_skip, can_open_underwater_chest, 
+from worlds.oot_soh.LogicHelpers import (add_events, add_locations, connect_regions, can_pass_enemy, has_explosives, lens_or_skip, can_open_underwater_chest, 
                                          can_cut_shrubs, blast_or_smash, can_break_pots, has_item, take_damage,can_use, small_keys, can_get_enemy_drop, 
                                          can_detonate_upright_bomb_flower, has_fire_source_with_torch, can_kill_enemy)
 
@@ -33,6 +33,10 @@ def set_region_rules(world: "SohWorld") -> None:
     #     EventAccess(&logic->NutPot,                 []{return true;}),
     #     EventAccess(&logic->LoweredWaterInsideBotw, []{return logic->CanUse(RG_ZELDAS_LULLABY);}),
     # },
+    # Events
+    add_events(Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, world, [
+        [EventLocations.BOTTOM_OF_THE_WELL_LOWERED_WATER.value, Events.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL.value, lambda state: can_use(Items.ZELDAS_LULLABY.value, state, world)]
+    ])
     # Locations
     add_locations(Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, world, [
         [Locations.BOTTOM_OF_THE_WELL_FRONT_CENTER_BOMBABLE_CHEST.value, lambda state: has_explosives(state, world)],
