@@ -14,7 +14,8 @@ import logging
 logger = logging.getLogger("SOH_OOT.Logic")
 
 
-def add_locations(parent_region: str, world: "SohWorld", locations: list[str]) -> None:
+# todo: add typing for child_regions, change it from a list[list] to list[tuple]
+def add_locations(parent_region: str, world: "SohWorld", locations) -> None:
     for location in locations:
         locationName = location[0]
         locationRule = lambda state: True
@@ -26,7 +27,8 @@ def add_locations(parent_region: str, world: "SohWorld", locations: list[str]) -
             set_rule(world.get_location(locationName), locationRule)
 
 
-def connect_regions(parent_region: str, world: "SohWorld", child_regions: list[str]) -> None:
+# todo: add typing for child_regions, change it from a list[list] to list[tuple]
+def connect_regions(parent_region: str, world: "SohWorld", child_regions) -> None:
     for region in child_regions:
         world.get_region(parent_region).connect(world.get_region(region[0]), rule=region[1])
 
