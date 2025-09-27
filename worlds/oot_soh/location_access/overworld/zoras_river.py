@@ -7,6 +7,7 @@ from worlds.oot_soh.Locations import SohLocation, SohLocationData
 from worlds.oot_soh.Enums import *
 from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions, can_cut_shrubs)
 
+
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
 
