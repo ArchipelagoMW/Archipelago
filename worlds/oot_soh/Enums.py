@@ -3421,8 +3421,12 @@ class CombatRanges(str, Enum):
 	FAR = "far"
 
 class EventLocations(str, Enum):
-	DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
-	KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
+    DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
+    KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
+    MIDO = "Mido's Location"
+    MIDO_OUTSIDE = "Mido's Location From Outside Deku Tree"
+    BUG_SHRUBS_KF = "Has Access to Shrub Bugs in Kokiri Forest"
+    BEAN_SOIL_KF = "Soft Soil in Kokiri Forest"
 
 class Events(str, Enum):
     DEKU_TREE_BASEMENT_BLOCK_PUSHED = "Deku Tree Basement Block Pushed"

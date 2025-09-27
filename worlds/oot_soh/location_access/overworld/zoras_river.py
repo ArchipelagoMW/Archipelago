@@ -5,7 +5,7 @@ from worlds.oot_soh.Regions import double_link_regions
 from worlds.oot_soh.Items import SohItem
 from worlds.oot_soh.Locations import SohLocation, SohLocationData
 from worlds.oot_soh.Enums import *
-from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions, can_cut_shrubs)
+from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions, can_cut_shrubs, add_events)
 
 
 if TYPE_CHECKING:
@@ -44,7 +44,6 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
 
     add_locations(Regions.ZORA_RIVER, world, [
-        [Events.BUG_SHRUBS.value, lambda state: can_cut_shrubs(state, world)],
         [Locations.ZR_MAGIC_BEAN_SALESMAN.value, lambda state: True],
         [Locations.ZR_FROGS_OCARINA_GAME.value, lambda state: True],
         [Locations.ZR_FROGS_IN_THE_RAIN.value, lambda state: True],
@@ -79,6 +78,10 @@ def set_region_rules(world: "SohWorld") -> None:
         [Regions.LOST_WOODS.value, lambda state: True],
         [Regions.ZR_STORMS_GROTTO.value, lambda state: True],
         [Regions.ZR_BEHIND_WATERFALL.value, lambda state: True]
+    ])
+    # Events
+    add_events(Regions.ZORA_RIVER.value, world,[
+        [EventLocations.BUG_SHRUBS_KF.value, Events.BUG_SHRUBS.value, lambda state: can_cut_shrubs(state, world)],
     ])
 
     ## ZR From Shortcut
