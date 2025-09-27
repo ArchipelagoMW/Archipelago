@@ -3421,8 +3421,9 @@ class CombatRanges(str, Enum):
 	FAR = "far"
 
 class EventLocations(str, Enum):
-	DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
-	KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
+    DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
+    KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
+    BUG_SHRUBS_ZR = "Zora River Bug Shrubs"
 
 class Events(str, Enum):
     DEKU_TREE_BASEMENT_BLOCK_PUSHED = "Deku Tree Basement Block Pushed"
@@ -3444,3 +3445,4 @@ class Events(str, Enum):
     CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
     COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
     CARPET_MERCHANT = "Can Buy From Carpet Merchant"
+    BUG_SHRUBS = "Has Access to Shrub Bugs"

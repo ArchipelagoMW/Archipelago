@@ -9,17 +9,13 @@ from worlds.oot_soh.Enums import *
 from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions, is_child, can_kill_enemy, can_cut_shrubs,
                                          is_adult, blast_or_smash, can_use, can_do_trick, can_attack,
                                          can_get_nighttimeGS, call_gossip_fairy, can_open_storms_grotto, can_live,
-                                         has_bottle, can_break_lower_hives, can_stun_deku, can_break_upper_hives)
+                                         has_bottle, can_break_lower_hives, can_stun_deku, can_break_upper_hives,
+                                         add_events)
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
 
 
-
-events: dict[str, SohLocationData] = {
-    "BugShrub": SohLocationData(Regions.ZORA_RIVER.value,
-                                   event_item="Shrub Bugs"),
-}
 
 
 
@@ -30,7 +26,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## ZR Front
     # Locations
 
-    set_location_rules(world, [
+    add_locations(Regions.ZR_FRONT.value, world, [
         [Locations.ZR_GS_TREE.value, lambda state: is_child(state, world) and
                                                       can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA)],
         [Locations.ZR_NEAR_TREE_GRASS1.value, lambda state: can_cut_shrubs(state, world)],
@@ -55,8 +51,7 @@ def set_region_rules(world: "SohWorld") -> None:
 
     ## Zora River
     # Locations
-    set_location_rules(world, [
-        ["BugShrub", lambda state: can_cut_shrubs(state, world)],
+    add_locations(Regions.ZORA_RIVER.value, world, [
         [Locations.ZR_MAGIC_BEAN_SALESMAN.value, lambda state: is_child(state, world)],
         [Locations.ZR_FROGS_OCARINA_GAME.value, lambda state: (is_child(state, world) and
                                                                can_use(Items.SONG_OF_STORMS.value, state, world) and
@@ -142,6 +137,10 @@ def set_region_rules(world: "SohWorld") -> None:
                                                            can_do_trick("ZD with Hover Boots", state, world))]
 
     ])
+    # Events
+    add_events(Regions.ZORA_RIVER.value, world, [
+        [EventLocations.BUG_SHRUBS_ZR.value, Events.BUG_SHRUBS, lambda state: can_cut_shrubs(state, world)],
+    ])
 
     ## ZR From Shortcut
     # Connections
@@ -199,7 +198,7 @@ def set_region_rules(world: "SohWorld") -> None:
 
     ## ZR Storms Grotto
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.ZR_STORMS_GROTTO.value, world, [
         [Locations.ZR_DEKU_SCRUB_GROTTO_FRONT.value, lambda state: can_stun_deku(state, world)],
         [Locations.ZR_DEKU_SCRUB_GROTTO_REAR.value, lambda state: can_stun_deku(state, world)],
         [Locations.ZR_STORMS_GROTTO_BEEHIVE.value, lambda state: can_break_upper_hives(state, world)]
