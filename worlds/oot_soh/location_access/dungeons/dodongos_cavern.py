@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
 from worlds.generic.Rules import set_rule
-from worlds.oot_soh.Regions import double_link_regions
-from worlds.oot_soh.Items import SohItem
-from worlds.oot_soh.Locations import SohLocation, SohLocationData
-from worlds.oot_soh.Enums import Regions, Items, Locations, Enemies, Combat_Ranges
-from worlds.oot_soh.LogicHelpers import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
+from ...Regions import double_link_regions
+from ...Items import SohItem
+from ...Locations import SohLocation, SohLocationData
+from ...Enums import Regions, Items, Locations, Enemies, Combat_Ranges
+from ...LogicHelpers import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
                                   has_fire_source_with_torch, can_use, can_do_trick, can_jump_slash, blast_or_smash)
 
 if TYPE_CHECKING:
