@@ -3425,7 +3425,7 @@ class EventLocations(str, Enum):
     KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
     MIDO = "Mido's Location"
     MIDO_OUTSIDE = "Mido's Location From Outside Deku Tree"
-    BUG_SHRUBS_KF = "Has Access to Shrub Bugs in Kokiri Forest"
+    BUG_SHRUBS_ZR = "Has Access to Shrub Bugs in Kokiri Forest"
     BEAN_SOIL_KF = "Soft Soil in Kokiri Forest"
 
 class Events(str, Enum):
