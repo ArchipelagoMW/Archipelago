@@ -4,7 +4,7 @@ import math
 from BaseClasses import CollectionState, Item, Region, Tutorial
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
-from .Items import SohItem, item_data_table, item_table, filler_items, filler_bottles
+from .Items import SohItem, item_data_table, item_table, filler_items, filler_bottles, item_name_groups
 from .Locations import SohLocation, SohLocationData, base_location_table, \
     gold_skulltula_overworld_location_table, \
     gold_skulltula_dungeon_location_table, \
@@ -91,6 +91,7 @@ class SohWorld(World):
     options_dataclass = SohOptions
     location_name_to_id = location_table
     item_name_to_id = item_table
+    item_name_groups = item_name_groups
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
@@ -174,7 +175,7 @@ class SohWorld(World):
 
         # Ocarina Buttons
         if self.options.shuffle_ocarina_buttons:
-            items_to_create[Items.OCARINA_ABUTTON.value] = 1
+            items_to_create[Items.OCARINA_A_BUTTON.value] = 1
             items_to_create[Items.OCARINA_CDOWN_BUTTON.value] = 1
             items_to_create[Items.OCARINA_CLEFT_BUTTON.value] = 1
             items_to_create[Items.OCARINA_CRIGHT_BUTTON.value] = 1
