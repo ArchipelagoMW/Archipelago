@@ -271,7 +271,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Deku Tree boss room
     # Events
     add_events(Regions.DEKU_TREE_BOSS_ROOM.value, world, [
-        [EventLocations.DEKU_TREE_BOSS.value, Events.DEKU_TREE_CLEAR.value, lambda state: True]
+        [EventLocations.DEKU_TREE_BOSS.value, Events.DEKU_TREE_CLEAR.value, lambda state: can_kill_enemy(state, world, Enemies.GOHMA)]
     ])
 
     # Locations
