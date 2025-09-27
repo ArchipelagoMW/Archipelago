@@ -3444,3 +3444,8 @@ class Events(str, Enum):
     CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
     COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
     CARPET_MERCHANT = "Can Buy From Carpet Merchant"
+    BEAN_PLANTED_KF = "Kokiri Forest Bean Planted"
+    MIDO_SWORD_AND_SHIELD = "Showed Mido the Sword and Shield"
+    CLEARED_FOREST_TEMPLE = "Forest Temple Completed"
+    CLEARED_DEKU_TREE = "Deku Tree Completed"
+    GOTTEN_LINKS_COW = "Link's Cow Was Gifted"

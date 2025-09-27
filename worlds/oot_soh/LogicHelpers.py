@@ -386,7 +386,7 @@ def can_do_trick(trick: str, state: CollectionState, world: "SohWorld") -> bool:
     # For now, return False for safety (no tricks assumed)
     return False
 
-def can_get_nighttimeGS(state: CollectionState, world: "SohWorld") -> bool:
+def can_get_nighttime_gs(state: CollectionState, world: "SohWorld") -> bool:
     return (can_use(Items.SUNS_SONG.value, state, world ) or
             can_do_trick("Nighttime Gold Skulltulas", state, world))
 
@@ -447,6 +447,7 @@ def call_gossip_fairy_except_suns(state: CollectionState, world: "SohWorld") -> 
 def call_gossip_fairy(state: CollectionState, world: "SohWorld") -> bool:
     return (call_gossip_fairy_except_suns(state, world) or
             can_use(Items.SUNS_SONG.value, state, world))
+
 def can_break_lower_hives(state: CollectionState, world: "SohWorld") -> bool:
     return can_break_upper_hives(state, world) or can_use(Items.PROGRESSIVE_BOMB_BAG.value, state, world)
 
