@@ -204,7 +204,6 @@ def can_play_song(state: CollectionState, world: "SohWorld", song: str) -> bool:
     if not world.options.shuffle_ocarina_buttons:
         return True
     else:
-        # alternatively, we can precollect the ocarina buttons if ocarina shuffle is off
         return state.has_all(ocarina_buttons_required[song], world.player)
 
 
