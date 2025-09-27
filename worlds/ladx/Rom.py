@@ -8,7 +8,9 @@ import pkgutil
 import bsdiff4
 import binascii
 import pickle
+import logging
 from typing import TYPE_CHECKING
+from Options import OptionError
 from .Common import *
 from .LADXR import generator
 from .LADXR.main import get_parser
@@ -19,14 +21,13 @@ LADX_HASH = "07c211479386825042efb4ad31bb525f"
 if TYPE_CHECKING:
     from . import LinksAwakeningWorld
 
-
 class LADXPatchExtensions(worlds.Files.APPatchExtension):
     game = LINKS_AWAKENING
 
     @staticmethod
     def generate_rom(caller: worlds.Files.APProcedurePatch, rom: bytes, data_file: str) -> bytes:
         patch_data = json.loads(caller.get_file(data_file).decode("utf-8"))
-        # TODO local option overrides
+        apply_overrides(patch_data)
         rom_name = get_base_rom_path()
         out_name = f"{patch_data['out_base']}{caller.result_file_ending}"
         parser = get_parser()
@@ -36,6 +37,7 @@ class LADXPatchExtensions(worlds.Files.APPatchExtension):
     @staticmethod
     def patch_title_screen(caller: worlds.Files.APProcedurePatch, rom: bytes, data_file: str) -> bytes:
         patch_data = json.loads(caller.get_file(data_file).decode("utf-8"))
+        apply_overrides(patch_data)
         if patch_data["options"]["ap_title_screen"]:
             return bsdiff4.patch(rom, pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
         return rom
@@ -131,3 +133,47 @@ def get_base_rom_path(file_name: str = "") -> str:
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
+
+
+def apply_overrides(patch_data: dict) -> None:
+    host_settings = settings.get_settings()
+    option_overrides = host_settings["ladx_options"].get("option_overrides")
+    if not option_overrides:
+        return
+    wrapped_overrides = {
+        "game": LINKS_AWAKENING,
+        LINKS_AWAKENING: option_overrides,
+    }
+    from Generate import roll_settings
+    try:
+        rolled_settings = roll_settings(wrapped_overrides)
+    except OptionError:
+        logger = logging.getLogger("Link's Awakening Logger")
+        logger.warning("Failed to apply option overrides, check that they are formatted correctly.")
+        return
+
+    overridable_options = {
+        "gfxmod",
+        "link_palette",
+        "music",
+        "music_change_condition",
+        "palette",
+        "ap_title_screen",
+        "boots_controls",
+        "nag_messages",
+        "text_shuffle",
+        "low_hp_beep",
+        "text_mode",
+        "no_flash",
+        "quickswap",
+    }
+    if not patch_data["is_race"]:
+        overridable_options.update([
+            "trendy_game",
+            "warps",
+        ])
+    for option_name in option_overrides.keys():
+        if (option_name not in patch_data["options"]) or (option_name not in overridable_options):
+            continue
+        patch_data["options"][option_name] = getattr(rolled_settings, option_name).value
+
