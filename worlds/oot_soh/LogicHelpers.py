@@ -194,7 +194,10 @@ def can_use(name: str, state: CollectionState, world: "SohWorld", can_be_child: 
         case Items.BOTTLE_WITH_RUTOS_LETTER.value:
             return can_be_child
         case Items.BOTTLE_WITH_BUGS.value:
-            return can_be_child
+            return (has_bottle(state, world) and
+                    (state.has("Shrub Bugs", world.player) or
+                    state.has("WanderingBugs", world.player) or
+                    state.has("BugRock", world.player)))
         case Items.MAGIC_BEAN.value:
             return can_be_child
         case Items.ZELDAS_LULLABY.value:
@@ -439,7 +442,11 @@ def can_open_storms_grotto(state: CollectionState, world: "SohWorld") -> bool:
             (has_item(Items.STONE_OF_AGONY.value, state, world)
              or can_do_trick("Hidden Grottos without Stone of Agony", state, world)))
 
-
+def can_live(state: CollectionState, world: "SohWorld") -> bool:
+    if state.has_any_count({"Heart Container": 1, "Heart Piece": 4}, world.player):
+        return True
+    else:
+        return False
 
 # BELOW IS AI SLOP
 # Based on C++ Logic
