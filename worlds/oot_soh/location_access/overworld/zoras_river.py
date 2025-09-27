@@ -5,7 +5,8 @@ from worlds.oot_soh.Regions import double_link_regions
 from worlds.oot_soh.Items import SohItem
 from worlds.oot_soh.Locations import SohLocation, SohLocationData
 from worlds.oot_soh.Enums import *
-from worlds.oot_soh.LogicHelpers import (set_location_rules, connect_regions, is_child, can_kill_enemy, can_cut_shrubs,
+
+from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions, is_child, can_kill_enemy, can_cut_shrubs,
                                          is_adult, blast_or_smash, can_use, can_do_trick, can_attack,
                                          can_get_nighttimeGS, call_gossip_fairy, can_open_storms_grotto, can_live,
                                          has_bottle, can_break_lower_hives, can_stun_deku, can_break_upper_hives)
@@ -14,24 +15,21 @@ if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
 
 
+
 events: dict[str, SohLocationData] = {
     "BugShrub": SohLocationData(Regions.ZORA_RIVER.value,
                                    event_item="Shrub Bugs"),
 }
 
 
-def create_regions_and_rules(world: "SohWorld") -> None:
-    for event_name, data in events.items():
-        region = world.get_region(data.region)
-        region.add_event(event_name, data.event_item, location_type=SohLocation, item_type=SohItem)
 
-    set_rules(world)
+def set_region_rules(world: "SohWorld") -> None:
 
-def set_rules(world: "SohWorld") -> None:
     player = world.player
     
     ## ZR Front
     # Locations
+
     set_location_rules(world, [
         [Locations.ZR_GS_TREE.value, lambda state: is_child(state, world) and
                                                       can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA)],
@@ -47,6 +45,7 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.ZR_NEAR_TREE_GRASS10.value, lambda state: can_cut_shrubs(state, world)],
         [Locations.ZR_NEAR_TREE_GRASS11.value, lambda state: can_cut_shrubs(state, world)],
         [Locations.ZR_NEAR_TREE_GRASS12.value, lambda state: can_cut_shrubs(state, world)]
+
     ])
     # Connections
     connect_regions(Regions.ZR_FRONT.value, world, [
@@ -164,7 +163,7 @@ def set_rules(world: "SohWorld") -> None:
 
     ## ZR Open Grotto
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.ZR_OPEN_GROTTO.value, world, [
         [Locations.ZR_OPEN_GROTTO_CHEST.value, lambda state: True],
         [Locations.ZR_OPEN_GROTTO_FISH.value, lambda state: has_bottle(state, world)],
         [Locations.ZR_OPEN_GROTTO_GOSSIP_STONE_FAIRY.value, lambda state: call_gossip_fairy(state, world)],
@@ -178,13 +177,12 @@ def set_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.ZR_OPEN_GROTTO.value, world, [
-
         [Regions.ZORA_RIVER.value, lambda state: True]
     ])
 
     ## ZR Fairy Grotto
     # Locations
-    set_location_rules(world, [
+    add_locations(Regions.ZR_FAIRY_GROTTO.value, world, [
         [Locations.ZR_FAIRY_GROTTO_FAIRY1.value, lambda state: True],
         [Locations.ZR_FAIRY_GROTTO_FAIRY2.value, lambda state: True],
         [Locations.ZR_FAIRY_GROTTO_FAIRY3.value, lambda state: True],
@@ -195,9 +193,7 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.ZR_FAIRY_GROTTO_FAIRY8.value, lambda state: True]
     ])
     # Connections
-
     connect_regions(Regions.ZR_FAIRY_GROTTO.value, world, [
-
         [Regions.ZORA_RIVER.value, lambda state: True]
     ])
 
@@ -207,6 +203,7 @@ def set_rules(world: "SohWorld") -> None:
         [Locations.ZR_DEKU_SCRUB_GROTTO_FRONT.value, lambda state: can_stun_deku(state, world)],
         [Locations.ZR_DEKU_SCRUB_GROTTO_REAR.value, lambda state: can_stun_deku(state, world)],
         [Locations.ZR_STORMS_GROTTO_BEEHIVE.value, lambda state: can_break_upper_hives(state, world)]
+
     ])
     # Connections
     connect_regions(Regions.ZR_STORMS_GROTTO.value, world, [
