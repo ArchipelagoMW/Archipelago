@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Dict
 
 from worlds.generic.Rules import set_rule
-from worlds.oot_soh.Regions import double_link_regions
-from worlds.oot_soh.Items import SohItem
-from worlds.oot_soh.Locations import SohLocation, SohLocationData
-from worlds.oot_soh.Enums import *
-from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions, is_adult, can_attack,
+from ...Regions import double_link_regions
+from ...Items import SohItem
+from ...Locations import SohLocation, SohLocationData
+from ...Enums import *
+from ...LogicHelpers import (add_locations, connect_regions, is_adult, can_attack,
                                          is_child, can_kill_enemy, can_use, can_do_trick, call_gossip_fairy_except_suns,
                                          can_cut_shrubs, can_break_pots, has_bottle, call_gossip_fairy,
                                          can_break_lower_hives, can_open_storms_grotto, can_pass_enemy,

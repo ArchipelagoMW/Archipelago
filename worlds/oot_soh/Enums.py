@@ -3428,6 +3428,7 @@ class EventLocations(str, Enum):
     MIDO_OUTSIDE = "Mido's Location From Outside Deku Tree"
     BUG_SHRUBS_ZR = "Has Access to Shrub Bugs in Kokiri Forest"
     BEAN_SOIL_KF = "Soft Soil in Kokiri Forest"
+
 class Events(str, Enum):
     DEKU_TREE_BASEMENT_BLOCK_PUSHED = "Deku Tree Basement Block Pushed"
     AMMO_CAN_DROP = "Ammo Can Drop"
