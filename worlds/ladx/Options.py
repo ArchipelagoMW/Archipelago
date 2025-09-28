@@ -224,12 +224,14 @@ class Goal(Choice, LADXROption):
     [Instruments] The Wind Fish's Egg will only open if you have the required number of Instruments of the Sirens, and play the Ballad of the Wind Fish.
     [Seashells] The Egg will open when you bring 20 seashells. The Ballad and Ocarina are not needed.
     [Open] The Egg will start pre-opened.
+    [Specific] The Wind Fish's Egg will open with specific instruments, check the sign at the egg to see which.
     """
     display_name = "Goal"
     ladxr_name = "goal"
     option_instruments = 1
     option_seashells = 2
     option_open = 3
+    option_specific = 4
 
     default = option_instruments
 
