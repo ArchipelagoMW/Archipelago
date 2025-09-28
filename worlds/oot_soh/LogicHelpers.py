@@ -391,6 +391,7 @@ def call_gossip_fairy_except_suns(state: CollectionState, world: "SohWorld") -> 
 def call_gossip_fairy(state: CollectionState, world: "SohWorld") -> bool:
     return (call_gossip_fairy_except_suns(state, world) or
             can_use(Items.SUNS_SONG.value, state, world))
+
 def can_break_lower_hives(state: CollectionState, world: "SohWorld") -> bool:
     return can_break_upper_hives(state, world) or can_use(Items.PROGRESSIVE_BOMB_BAG.value, state, world)
 
