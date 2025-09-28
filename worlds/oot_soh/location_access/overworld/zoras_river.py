@@ -5,17 +5,15 @@ from ...Regions import double_link_regions
 from ...Items import SohItem
 from ...Locations import SohLocation, SohLocationData
 from ...Enums import *
-
 from ...LogicHelpers import (add_locations, connect_regions, is_child, can_kill_enemy, can_cut_shrubs,
                                          is_adult, blast_or_smash, can_use, can_do_trick, can_attack,
                                          can_get_nighttime_gs, call_gossip_fairy, can_open_storms_grotto, can_live,
                                          has_bottle, can_break_lower_hives, can_stun_deku, can_break_upper_hives,
                                          add_events)
 
+
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
-
-
 
 
 
@@ -51,6 +49,7 @@ def set_region_rules(world: "SohWorld") -> None:
 
     ## Zora River
     # Locations
+    
     add_locations(Regions.ZORA_RIVER.value, world, [
         [Locations.ZR_MAGIC_BEAN_SALESMAN.value, lambda state: is_child(state, world)],
         [Locations.ZR_FROGS_OCARINA_GAME.value, lambda state: (is_child(state, world) and
@@ -140,6 +139,10 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.ZORA_RIVER.value, world, [
         [EventLocations.BUG_SHRUBS_ZR.value, Events.BUG_SHRUBS, lambda state: can_cut_shrubs(state, world)],
+    ])
+    # Events
+    add_events(Regions.ZORA_RIVER.value, world,[
+        [EventLocations.BUG_SHRUBS_ZR.value, Events.BUG_SHRUBS.value, lambda state: can_cut_shrubs(state, world)],
     ])
 
     ## ZR From Shortcut

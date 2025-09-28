@@ -3409,16 +3409,25 @@ class Enemies(str, Enum):
     SHABOM = "shabom"
     OCTOROK = "octorok"
     
-class CombatRanges(str, Enum):
-	CLOSE = "close"
-	SHORT_JUMPSLASH = "short_jumpslash"
-	MASTER_SWORD_JUMPSLASH = "master_sword_jumpslash"
-	LONG_JUMPSLASH = "long_jumpslash"
-	BOMB_THROW = "bomb_throw"
-	BOOMERANG = "boomerang"
-	HOOKSHOT = "hookshot"
-	LONGSHOT = "longshot"
-	FAR = "far"
+class EnemyDistance(Enum):
+	CLOSE = 1
+	SHORT_JUMPSLASH = 2
+	MASTER_SWORD_JUMPSLASH = 3
+	LONG_JUMPSLASH = 4
+	BOMB_THROW = 5
+	BOOMERANG = 6
+	HOOKSHOT = 7
+	LONGSHOT = 8
+	FAR = 9
+
+
+class EventLocations(str, Enum):
+    DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
+    KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
+    MIDO = "Mido's Location"
+    MIDO_OUTSIDE = "Mido's Location From Outside Deku Tree"
+    BUG_SHRUBS_ZR = "Has Access to Shrub Bugs in Kokiri Forest"
+    BEAN_SOIL_KF = "Soft Soil in Kokiri Forest"
 
 class EventLocations(str, Enum):
     DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
@@ -3446,6 +3455,11 @@ class Events(str, Enum):
     CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
     COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
     CARPET_MERCHANT = "Can Buy From Carpet Merchant"
+    BEAN_PLANTED_KF = "Kokiri Forest Bean Planted"
+    MIDO_SWORD_AND_SHIELD = "Showed Mido the Sword and Shield"
+    CLEARED_FOREST_TEMPLE = "Forest Temple Completed"
+    CLEARED_DEKU_TREE = "Deku Tree Completed"
+    GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     BUG_SHRUBS = "Has Access to Shrub Bugs"
     DEKU_TREE_CLEAR = "Defeat Queen Gohma"
 
