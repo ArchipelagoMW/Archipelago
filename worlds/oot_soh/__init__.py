@@ -5,7 +5,7 @@ from BaseClasses import CollectionState, Item, Region, Tutorial
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table, filler_items, filler_bottles, item_name_groups
-from .Locations import SohLocation, SohLocationData, base_location_table, \
+from .Locations import SohLocation, base_location_table, \
     gold_skulltula_overworld_location_table, \
     gold_skulltula_dungeon_location_table, \
     shops_location_table, \
@@ -356,149 +356,149 @@ class SohWorld(World):
 
             # Base locations
             self.included_locations.update({
-                location_name: location_data.address for location_name, location_data in base_location_table.items()
+                location_name: address for location_name, address in base_location_table.items()
             })
 
             # Gold Skulltulas (Overworld)
             self.included_locations.update({
-                location_name: location_data.address for location_name, location_data in gold_skulltula_overworld_location_table.items()
+                location_name: address for location_name, address in gold_skulltula_overworld_location_table.items()
             })
 
             # Gold Skulltulas (Dungeon)
             self.included_locations.update({
-                location_name: location_data.address for location_name, location_data in gold_skulltula_dungeon_location_table.items()
+                location_name: address for location_name, address in gold_skulltula_dungeon_location_table.items()
             })
 
             # Shops
             if self.options.shuffle_shops:
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in shops_location_table.items()
+                    location_name: address for location_name, address in shops_location_table.items()
                 })
 
             # Scrubs
             if self.options.shuffle_scrubs:
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in scrubs_location_table.items()
+                    location_name: address for location_name, address in scrubs_location_table.items()
                 })
 
             # Adult Trade Items
             if self.options.shuffle_adult_trade_items:
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in trade_items_location_table.items()
+                    location_name: address for location_name, address in trade_items_location_table.items()
                 })
 
             # Merchants
             if self.options.shuffle_merchants == "bean_merchant_only" or self.options.shuffle_merchants == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in merchants_items_location_table.items()
+                    location_name: address for location_name, address in merchants_items_location_table.items()
                     if location_name == "ZR Magic Bean Salesman"
                 })
 
             if self.options.shuffle_merchants == "all_but_beans" or self.options.shuffle_merchants == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in merchants_items_location_table.items()
+                    location_name: address for location_name, address in merchants_items_location_table.items()
                     if location_name in {"Kak Granny's Shop", "GC Medigoron", "Wasteland Carpet Salesman"}
                 })
 
             # Cows
             if self.options.shuffle_cows:
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in cows_location_table.items()
+                    location_name: address for location_name, address in cows_location_table.items()
                 })
 
             # Frogs
             if self.options.shuffle_frog_song_rupees:
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in frogs_location_table.items()
+                    location_name: address for location_name, address in frogs_location_table.items()
                 })
 
             # Beehives
             if self.options.shuffle_beehives:
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in beehives_location_table.items()
+                    location_name: address for location_name, address in beehives_location_table.items()
                 })
 
             # Pots (Overworld)
             if self.options.shuffle_pots == "overworld" or self.options.shuffle_pots == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in pots_overworld_location_table.items()
+                    location_name: address for location_name, address in pots_overworld_location_table.items()
                 })
 
             # Pots (Dungeon)
             if self.options.shuffle_pots == "dungeon" or self.options.shuffle_pots == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in pots_dungeon_location_table.items()
+                    location_name: address for location_name, address in pots_dungeon_location_table.items()
                 })
 
             # Crates (Overworld)
             if self.options.shuffle_crates == "overworld" or self.options.shuffle_crates == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in crates_overworld_location_table.items()
+                    location_name: address for location_name, address in crates_overworld_location_table.items()
                 })
 
             # Crates (Dungeon)
             if self.options.shuffle_crates == "dungeon" or self.options.shuffle_crates == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in crates_dungeon_location_table.items()
+                    location_name: address for location_name, address in crates_dungeon_location_table.items()
                 })
 
             # Freestanding (Overworld)
             if self.options.shuffle_freestanding_items == "overworld" or self.options.shuffle_freestanding_items == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in freestanding_overworld_location_table.items()
+                    location_name: address for location_name, address in freestanding_overworld_location_table.items()
                 })
 
             # Freestanding (Dungeon)
             if self.options.shuffle_freestanding_items == "dungeon" or self.options.shuffle_freestanding_items == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in freestanding_dungeon_location_table.items()
+                    location_name: address for location_name, address in freestanding_dungeon_location_table.items()
                 })
 
             # Fairies
             if self.options.shuffle_fairies:
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in fairies_location_table.items()
+                    location_name: address for location_name, address in fairies_location_table.items()
                 })
 
             # Grass (Overworld)
             if self.options.shuffle_grass == "overworld" or self.options.shuffle_grass == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in grass_overworld_location_table.items()
+                    location_name: address for location_name, address in grass_overworld_location_table.items()
                 })
 
             # Grass (Dungeon)
             if self.options.shuffle_grass == "dungeon" or self.options.shuffle_grass == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in grass_dungeon_location_table.items()
+                    location_name: address for location_name, address in grass_dungeon_location_table.items()
                 })
 
             # Fish (Pond)
             if self.options.shuffle_fish == "pond" or self.options.shuffle_fish == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in fish_pond_location_table.items()
+                    location_name: address for location_name, address in fish_pond_location_table.items()
                 })
 
             # Fish (Overworld)
             if self.options.shuffle_fish == "overworld" or self.options.shuffle_fish == "all":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in fish_overworld_location_table.items()
+                    location_name: address for location_name, address in fish_overworld_location_table.items()
                 })
 
             # Child Zelda
             if not self.options.skip_child_zelda:
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in child_zelda_location_table.items()
+                    location_name: address for location_name, address in child_zelda_location_table.items()
                 })
 
             # Carpenters
             if self.options.fortress_carpenters == "normal":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in carpenters_location_table.items()
+                    location_name: address for location_name, address in carpenters_location_table.items()
                 })
 
             if self.options.fortress_carpenters == "fast":
                 self.included_locations.update({
-                    location_name: location_data.address for location_name, location_data in carpenters_location_table.items()
+                    location_name: address for location_name, address in carpenters_location_table.items()
                     if location_name in {"GF Freed All Carpenters", "GF 1 Torch Carpenter"}
                 })
             
@@ -603,12 +603,12 @@ class SohWorld(World):
         # Preplace tokens based on settings.
         if self.options.shuffle_skull_tokens == "off" or self.options.shuffle_skull_tokens == "dungeon":
             token_item = self.create_item(Items.GOLD_SKULLTULA_TOKEN.value)
-            for location_name, location_data in gold_skulltula_overworld_location_table.items():
+            for location_name, address in gold_skulltula_overworld_location_table.items():
                 self.get_location(location_name).place_locked_item(token_item)
 
         if self.options.shuffle_skull_tokens == "off" or self.options.shuffle_skull_tokens == "overworld":
             token_item = self.create_item(Items.GOLD_SKULLTULA_TOKEN.value)
-            for location_name, location_data in gold_skulltula_dungeon_location_table.items():
+            for location_name, address in gold_skulltula_dungeon_location_table.items():
                 self.get_location(location_name).place_locked_item(token_item)
         
 
