@@ -32,6 +32,7 @@
 *.apsave
 *.BIN
 *.puml
+*.zspr
 
 setups
 build
