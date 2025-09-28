@@ -1,10 +1,11 @@
 from . import RoR2TestBase
 
 
-class VoidlingGoalTest(RoR2TestBase):
+class FalseSonGoalTest(RoR2TestBase):
     options = {
         "dlc_sots": "true",
-        "victory": "falseson"
+        "victory": "falseson",
+        "stage_variants": "true"
     }
 
     def test_false_son(self) -> None:
