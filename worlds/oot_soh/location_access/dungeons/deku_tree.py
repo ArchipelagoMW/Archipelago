@@ -118,10 +118,10 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.DEKU_TREE_BASEMENT_LOWER.value, world, [
         [Locations.DEKU_TREE_BASEMENT_CHEST.value, lambda state: True],
-        [Locations.DEKU_TREE_GS_BASEMENT_GATE.value, lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value, CombatRanges.SHORT_JUMPSLASH.value)],
-        #[Locations.DEKU_TREE_GS_BASEMENT_VINES.value, lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value, CombatRanges.SHORT_JUMPSLASH.value if can_do_trick("Deku MQ Compass GS", state, world) else CombatRanges.BOMB_THROW.value)],
+        [Locations.DEKU_TREE_GS_BASEMENT_GATE.value, lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value, EnemyDistance.SHORT_JUMPSLASH.value)],
+        #[Locations.DEKU_TREE_GS_BASEMENT_VINES.value, lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value, EnemyDistance.SHORT_JUMPSLASH.value if can_do_trick("Deku MQ Compass GS", state, world) else EnemyDistance.BOMB_THROW.value)],
         # Above commented out because Bomb Throw distance causes fill error
-        [Locations.DEKU_TREE_GS_BASEMENT_VINES.value, lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value, CombatRanges.SHORT_JUMPSLASH.value)],
+        [Locations.DEKU_TREE_GS_BASEMENT_VINES.value, lambda state: can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA.value, EnemyDistance.SHORT_JUMPSLASH.value)],
         [Locations.DEKU_TREE_BASEMENT_GRASS1, lambda state: can_cut_shrubs(state, world)],
         [Locations.DEKU_TREE_BASEMENT_GRASS2, lambda state: can_cut_shrubs(state, world)]
     ])

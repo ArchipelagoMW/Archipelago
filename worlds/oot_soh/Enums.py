@@ -3409,16 +3409,16 @@ class Enemies(str, Enum):
     SHABOM = "shabom"
     OCTOROK = "octorok"
     
-class CombatRanges(str, Enum):
-	CLOSE = "close"
-	SHORT_JUMPSLASH = "short_jumpslash"
-	MASTER_SWORD_JUMPSLASH = "master_sword_jumpslash"
-	LONG_JUMPSLASH = "long_jumpslash"
-	BOMB_THROW = "bomb_throw"
-	BOOMERANG = "boomerang"
-	HOOKSHOT = "hookshot"
-	LONGSHOT = "longshot"
-	FAR = "far"
+class EnemyDistance(Enum):
+	CLOSE = 1
+	SHORT_JUMPSLASH = 2
+	MASTER_SWORD_JUMPSLASH = 3
+	LONG_JUMPSLASH = 4
+	BOMB_THROW = 5
+	BOOMERANG = 6
+	HOOKSHOT = 7
+	LONGSHOT = 8
+	FAR = 9
 
 
 class EventLocations(str, Enum):
