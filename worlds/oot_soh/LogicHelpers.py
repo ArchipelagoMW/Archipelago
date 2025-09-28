@@ -407,10 +407,7 @@ def can_open_storms_grotto(state: CollectionState, world: "SohWorld") -> bool:
              or can_do_trick("Hidden Grottos without Stone of Agony", state, world)))
 
 def can_live(state: CollectionState, world: "SohWorld") -> bool:
-    if state.has_any_count({"Heart Container": 1, "Heart Piece": 4}, world.player):
-        return True
-    else:
-        return False
+    return state.has_any_count({"Heart Container": 1, "Heart Piece": 4}, world.player)
 
 # BELOW IS AI SLOP
 # Based on C++ Logic
