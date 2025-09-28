@@ -328,7 +328,7 @@ def can_do_trick(trick: str, state: CollectionState, world: "SohWorld") -> bool:
     # For now, return False for safety (no tricks assumed)
     return False
 
-def can_get_nighttimeGS(state: CollectionState, world: "SohWorld") -> bool:
+def can_get_nighttime_gs(state: CollectionState, world: "SohWorld") -> bool:
     return (can_use(Items.SUNS_SONG.value, state, world ) or
             can_do_trick("Nighttime Gold Skulltulas", state, world))
 
@@ -406,10 +406,8 @@ def can_open_storms_grotto(state: CollectionState, world: "SohWorld") -> bool:
              or can_do_trick("Hidden Grottos without Stone of Agony", state, world)))
 
 def can_live(state: CollectionState, world: "SohWorld") -> bool:
-    if state.has_any_count({"Heart Container": 1, "Heart Piece": 4}, world.player):
-        return True
-    else:
-        return False
+    return state.has_any_count({"Heart Container": 1, "Heart Piece": 4}, world.player)
+
 
 # BELOW IS AI SLOP
 # Based on C++ Logic

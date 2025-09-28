@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING
 
-from worlds.generic.Rules import set_rule
-from worlds.oot_soh.Regions import double_link_regions
-from worlds.oot_soh.Items import SohItem
-from worlds.oot_soh.Locations import SohLocation, SohLocationData
-from worlds.oot_soh.Enums import *
+from ...Rules import set_rule
+from ...Regions import double_link_regions
+from ...Items import SohItem
+from ...Locations import SohLocation, SohLocationData
+from ...Enums import *
 
-from worlds.oot_soh.LogicHelpers import (add_locations, connect_regions, is_child, can_kill_enemy, can_cut_shrubs,
+from ...LogicHelpers import (add_locations, connect_regions, is_child, can_kill_enemy, can_cut_shrubs,
                                          is_adult, blast_or_smash, can_use, can_do_trick, can_attack,
-                                         can_get_nighttimeGS, call_gossip_fairy, can_open_storms_grotto, can_live,
+                                         can_get_nighttime_gs, call_gossip_fairy, can_open_storms_grotto, can_live,
                                          has_bottle, can_break_lower_hives, can_stun_deku, can_break_upper_hives,
                                          add_events)
 
@@ -82,14 +82,14 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                                   and can_do_trick("ZR Upper Piece of Heart without Hover Boots", state, world))],
         [Locations.ZR_GS_LADDER.value, lambda state: is_child(state, world)
                                                      and  can_attack(state, world)
-                                                     and can_get_nighttimeGS(state, world)],
+                                                     and can_get_nighttime_gs(state, world)],
         [Locations.ZR_GS_NEAR_RAISED_GROTTOS.value, lambda state: is_adult(state, world) and
                                                                   (can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world)
                                                                    or can_use(Items.BOOMERANG.value, state, world)) and
-                                                                  can_get_nighttimeGS(state, world)],
+                                                                  can_get_nighttime_gs(state, world)],
         [Locations.ZR_GS_ABOVE_BRIDGE.value, lambda state: is_adult(state, world) and
                                                            can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world) and
-                                                           can_get_nighttimeGS(state, world)],
+                                                           can_get_nighttime_gs(state, world)],
         [Locations.ZR_BEAN_SPROUT_FAIRY1.value, lambda state: is_child(state, world)
                                                               and can_use(Items.MAGIC_BEAN.value, state, world)
                                                               and can_use(Items.SONG_OF_STORMS.value, state, world)],
