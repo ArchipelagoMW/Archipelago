@@ -134,7 +134,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                     else:
                         quantity = yaml.get("quantity", 1) if allow_quantity else 1
 
-                        for i in range(quantity):
+                        for _ in range(quantity):
                             weights_for_file.append(yaml)
                 weights_cache[fname] = tuple(weights_for_file)
                         
