@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
 from worlds.generic.Rules import set_rule
-from worlds.oot_soh.Regions import double_link_regions
-from worlds.oot_soh.Items import SohItem
-from worlds.oot_soh.Locations import SohLocation, SohLocationData
-from worlds.oot_soh.Enums import *
-from worlds.oot_soh.LogicHelpers import (add_events, add_locations, connect_regions, can_pass_enemy, has_explosives, lens_or_skip, can_open_underwater_chest, 
+from ...Regions import double_link_regions
+from ...Items import SohItem
+from ...Locations import SohLocation, SohLocationData
+from ...Enums import *
+from ...LogicHelpers import (add_events, add_locations, connect_regions, can_pass_enemy, has_explosives, lens_or_skip, can_open_underwater_chest, 
                                          can_cut_shrubs, blast_or_smash, can_break_pots, has_item, take_damage,can_use, small_keys, can_get_enemy_drop, 
                                          can_detonate_upright_bomb_flower, has_fire_source_with_torch, can_kill_enemy, can_do_trick, can_get_deku_baba_nuts, can_get_deku_baba_sticks, is_child)
 
@@ -188,7 +188,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, world, [
         [Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM.value, lambda state: is_child(state, world) and can_pass_enemy(Enemies.BIG_SKULLTULA.value, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS.value, lambda state: blast_or_smash(state, world) or can_use(Items.DINS_FIRE.value, state, world) or (can_use(Items.STICKS.value) and can_do_trick("RT BOTW Basement", state, world))] # NOT 100% SURE HOW TO TRANSLATE HERE. Has to do with Age: Entrance(RR_BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, []{return Here(RR_BOTTOM_OF_THE_WELL_BASEMENT, []{return logic->BlastOrSmash() || logic->CanUse(RG_DINS_FIRE) || (logic->CanUse(RG_STICKS) && ctx->GetTrickOption(RT_BOTW_BASEMENT));});}),
+        [Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS.value, lambda state: blast_or_smash(state, world) or can_use(Items.DINS_FIRE.value, state, world) or (can_use(Items.STICKS.value) and can_do_trick("RT BOTW Basement", state, world))]
     ])
 
     ## Bottom of the Well Useful Bomb Flowers
