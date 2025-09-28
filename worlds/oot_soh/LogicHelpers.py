@@ -131,14 +131,14 @@ def can_use(name: str, state: CollectionState, world: "SohWorld", can_be_child: 
         return can_play_song(state, world, name)
 
     if name in (Items.FIRE_ARROW.value, Items.ICE_ARROW.value, Items.LIGHT_ARROW.value):
-        return can_use_item(Items.FAIRY_BOW.value)
+        return can_use_item(Items.PROGRESSIVE_BOW.value)
 
     if "Bombchu" in name:
         return bombchu_refill(state, world) and bombchus_enabled(state, world)
 
     if name == Items.PROGRESSIVE_MAGIC_METER.value:
         return has(Events.AMMO_CAN_DROP) or (has_bottle(state, world) and has(Events.CAN_BUY_GREEN_POTION))
-    elif name == Items.FAIRY_BOW.value:
+    elif name == Items.PROGRESSIVE_BOW.value:
         return has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_ARROWS)
     elif name == Items.FAIRY_SLINGSHOT.value:
         return has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_SEEDS)
@@ -666,9 +666,6 @@ def has_key_ring(key : Items, state: CollectionState, world: "SohWorld") -> bool
             return has_item(Items.GANONS_CASTLE_KEY_RING.value, state, world)
         case _:
             return False
-
-def lens_or_skip(trickName: str, state: CollectionState, world: "SohWorld") -> bool:
-    return (can_do_trick(trickName, state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world))
 
 def can_get_enemy_drop(state: CollectionState, world: "SohWorld", enemy : Enemies, range : EnemyDistance = EnemyDistance.CLOSE, aboveLink : bool = False) -> bool:
     if not can_kill_enemy(state, world, enemy.value, range.value):

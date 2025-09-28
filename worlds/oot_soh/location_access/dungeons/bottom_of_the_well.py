@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from ...Enums import *
-from ...LogicHelpers import (add_events, add_locations, connect_regions, can_pass_enemy, has_explosives, lens_or_skip, can_open_underwater_chest, 
+from ...LogicHelpers import (add_events, add_locations, connect_regions, can_pass_enemy, has_explosives, can_open_underwater_chest, 
                                          can_cut_shrubs, blast_or_smash, can_break_pots, has_item, take_damage,can_use, small_keys, can_get_enemy_drop, 
                                          can_detonate_upright_bomb_flower, has_fire_source_with_torch, can_kill_enemy, can_do_trick, can_get_deku_baba_nuts, can_get_deku_baba_sticks, is_child)
 

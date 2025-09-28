@@ -3445,3 +3445,4 @@ class Events(str, Enum):
     CLEARED_FOREST_TEMPLE = "Forest Temple Completed"
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     BUG_ACCESS = "Bug Access"
+    GAME_COMPLETED = "Game Completed"

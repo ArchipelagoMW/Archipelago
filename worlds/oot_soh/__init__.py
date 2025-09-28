@@ -620,7 +620,7 @@ class SohWorld(World):
 
     def set_rules(self) -> None:
         # Completion condition.
-        self.multiworld.completion_condition[self.player] = lambda state: True
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(Events.GAME_COMPLETED.value, self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
