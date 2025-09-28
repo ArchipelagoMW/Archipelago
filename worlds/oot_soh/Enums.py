@@ -3414,11 +3414,11 @@ class EnemyDistance(Enum):
 	SHORT_JUMPSLASH = 2
 	MASTER_SWORD_JUMPSLASH = 3
 	LONG_JUMPSLASH = 4
-	BOMB_THROW = 4
-	BOOMERANG = 5
-	HOOKSHOT = 6
-	LONGSHOT = 7
-	FAR = 8
+	BOMB_THROW = 5
+	BOOMERANG = 6
+	HOOKSHOT = 7
+	LONGSHOT = 8
+	FAR = 9
 
 
 class EventLocations(str, Enum):
