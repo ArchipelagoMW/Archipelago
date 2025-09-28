@@ -20,7 +20,7 @@ def add_locations(parent_region: str, world: "SohWorld", locations) -> None:
     for location in locations:
         locationName = location[0]
         locationRule = lambda state: True
-        if(len(location) < 2):
+        if(len(location) > 1):
             locationRule = location[1]
         if locationName in world.included_locations:
             locationAddress = world.included_locations.pop(location[0])
@@ -34,15 +34,17 @@ def connect_regions(parent_region: str, world: "SohWorld", child_regions) -> Non
         world.get_region(parent_region).connect(world.get_region(region[0]), rule=region[1])
 
 
-# todo: add typing for events, change it from list[list] to list[tuple]
 def add_events(parent_region, world: "SohWorld", events):
     for event in events:
         event_location = event[0]
         event_item = event[1]
-        event_rule = event[2]
-        new_event = SohLocation(world.player, event_location, None, parent_region)
-        new_event.place_locked_item(SohItem(event_item, IC.progression, None, world.player))
-        set_rule(new_event, event_rule)
+        event_rule = lambda state: True
+        if(len(event) > 2):
+            event_rule = event[2]
+        
+        world.get_region(parent_region).add_locations({event_location: None}, SohLocation)
+        world.get_location(event_location).place_locked_item(SohItem(event_item, IC.progression, None, world.player))
+        set_rule(world.get_location(event_location), event_rule)
 
 
 # TODO account for starting nuts being disabled

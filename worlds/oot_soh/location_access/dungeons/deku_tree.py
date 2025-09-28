@@ -10,6 +10,24 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
 
+class EventLocations(str, Enum):
+    DEKU_TREE_LOBBY_BABA_STICKS = "Deku Tree Lobby Baba Sticks",
+    DEKU_TREE_LOBBY_BABA_NUTS = "Deku Tree Lobby Baba Nuts",
+    DEKU_TREE_COMPASS_BABA_STICKS = "Deku Tree Compass Room Baba Sticks",
+    DEKU_TREE_COMPASS_BABA_NUTS = "Deku Tree Compass Room Baba Nuts",
+    DEKU_TREE_BASEMENT_LOWER_BABA_STICKS = "Deku Tree Basement Lower Baba Sticks",
+    DEKU_TREE_BASEMENT_LOWER_BABA_NUTS = "Deku Tree Basement Lower Baba Nuts",
+    DEKU_TREE_BASEMENT_TORCH_ROOM_BABA_STICKS = "Deku Tree Basement Torch Room Baba Sticks",
+    DEKU_TREE_BASEMENT_TORCH_ROOM_BABA_NUTS = "Deku Tree Torch Room Baba Nuts",
+    DEKU_TREE_BASEMENT_BACK_LOBBY_BABA_STICKS = "Deku Tree Basement Back Lobby Baba Sticks",
+    DEKU_TREE_BASEMENT_BACK_LOBBY_BABA_NUTS = "Deku Tree Basement Back Lobby Baba Nuts",
+    DEKU_TREE_BASEMENT_UPPER_BABA_STICKS = "Deku Tree Basement Upper Baba Sticks",
+    DEKU_TREE_BASEMENT_UPPER_BABA_NUTS = "Deku Tree Basement Upper Baba Nuts",
+    DEKU_TREE_BASEMENT_UPPER_BLOCK = "Deku Tree Basement Upper Push Block",
+    DEKU_TREE_BOSS = "Deku Tree Queen Gohma"
+
+class LocalEventItems(str, Enum):
+    DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED = "Deku Tree Basement Upper Block Pushed"
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
@@ -18,10 +36,16 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DEKU_TREE_ENTRYWAY.value, world, [
         [Regions.DEKU_TREE_LOBBY.value, lambda state: True],
-        [Regions.KF_OUTSIDE_DEKU_TREE, lambda state: True]
+        [Regions.KF_OUTSIDE_DEKU_TREE.value, lambda state: True]
     ])
 
     ## Deku Lobby
+    # Events
+    add_events(Regions.DEKU_TREE_LOBBY.value, world, [
+        [EventLocations.DEKU_TREE_LOBBY_BABA_STICKS.value, Events.DEKU_BABA_STICKS.value, lambda state: can_get_deku_baba_sticks(state, world)],
+        [EventLocations.DEKU_TREE_LOBBY_BABA_NUTS.value, Events.DEKU_BABA_NUTS.value, lambda state: can_get_deku_baba_nuts(state, world)]
+    ])
+
     # Locations
     add_locations(Regions.DEKU_TREE_LOBBY, world, [
         [Locations.DEKU_TREE_MAP_CHEST.value, lambda state: True],
@@ -33,6 +57,7 @@ def set_region_rules(world: "SohWorld") -> None:
         [Locations.DEKU_TREE_LOBBY_GRASS4, lambda state: can_cut_shrubs(state, world)],
         [Locations.DEKU_TREE_LOBBY_GRASS5, lambda state: can_cut_shrubs(state, world)]
     ])
+    
     # Connections
     connect_regions(Regions.DEKU_TREE_LOBBY.value, world, [
         [Regions.DEKU_TREE_2F_MIDDLE_ROOM.value, lambda state: True],
@@ -64,6 +89,12 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## Deku compass room
+    # Events
+    add_events(Regions.DEKU_TREE_COMPASS_ROOM.value, world, [
+        [EventLocations.DEKU_TREE_COMPASS_BABA_STICKS.value, Events.DEKU_BABA_STICKS.value, lambda state: can_get_deku_baba_sticks(state, world)],
+        [EventLocations.DEKU_TREE_COMPASS_BABA_NUTS.value, Events.DEKU_BABA_NUTS.value, lambda state: can_get_deku_baba_nuts(state, world)]
+    ])
+
     # Locations
     add_locations(Regions.DEKU_TREE_COMPASS_ROOM.value, world, [
         [Locations.DEKU_TREE_COMPASS_CHEST.value, lambda state: True],
@@ -79,6 +110,11 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## Deku Basement Lower
+    # Events
+    add_events(Regions.DEKU_TREE_BASEMENT_LOWER.value, world, [
+        [EventLocations.DEKU_TREE_BASEMENT_LOWER_BABA_STICKS.value, Events.DEKU_BABA_STICKS.value, lambda state: can_get_deku_baba_sticks(state, world)],
+        [EventLocations.DEKU_TREE_BASEMENT_LOWER_BABA_NUTS.value, Events.DEKU_BABA_NUTS.value, lambda state: can_get_deku_baba_nuts(state, world)]
+    ])
     # Locations
     add_locations(Regions.DEKU_TREE_BASEMENT_LOWER.value, world, [
         [Locations.DEKU_TREE_BASEMENT_CHEST.value, lambda state: True],
@@ -95,7 +131,7 @@ def set_region_rules(world: "SohWorld") -> None:
         [Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM.value, lambda state: True], # has_fire_source_with_torch(state, world) or can_use(Items.FAIRY_BOW.value, state, world)],
         # Above commented out because it can't succeed without stick pot event implemented
         [Regions.DEKU_TREE_BASEMENT_UPPER.value, lambda state: is_adult(state, world) or can_do_trick("Deku B1 Skip", state, world)
-            or state.has(Events.DEKU_TREE_BASEMENT_BLOCK_PUSHED, world.player)]
+            or has_item(LocalEventItems.DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED.value, state, world)]
     ])
 
     ## Deku basement shrub room
@@ -132,6 +168,11 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## Deku tree basement torch room
+    # Events
+    add_events(Regions.DEKU_TREE_BASEMENT_TORCH_ROOM.value, world, [
+        [EventLocations.DEKU_TREE_BASEMENT_TORCH_ROOM_BABA_STICKS.value, Events.DEKU_BABA_STICKS.value, lambda state: can_get_deku_baba_sticks(state, world)],
+        [EventLocations.DEKU_TREE_BASEMENT_TORCH_ROOM_BABA_NUTS.value, Events.DEKU_BABA_NUTS.value, lambda state: can_get_deku_baba_nuts(state, world)]
+    ])
     # Locations
     add_locations(Regions.DEKU_TREE_BASEMENT_TORCH_ROOM.value, world, [
         [Locations.DEKU_TREE_TORCHES_GRASS1, lambda state: can_cut_shrubs(state, world)],
@@ -145,6 +186,11 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## Deku basement back lobby
+    # Events
+    add_events(Regions.DEKU_TREE_BASEMENT_BACK_LOBBY.value, world, [
+        [EventLocations.DEKU_TREE_BASEMENT_BACK_LOBBY_BABA_STICKS.value, Events.DEKU_BABA_STICKS.value, lambda state: can_get_deku_baba_sticks(state, world)],
+        [EventLocations.DEKU_TREE_BASEMENT_BACK_LOBBY_BABA_NUTS.value, Events.DEKU_BABA_NUTS.value, lambda state: can_get_deku_baba_nuts(state, world)]
+    ])
     # Locations
     add_locations(Regions.DEKU_TREE_BASEMENT_BACK_LOBBY.value, world, [
         [Locations.DEKU_TREE_LARVAE_GRASS1, lambda state: can_cut_shrubs(state, world)],
@@ -171,6 +217,12 @@ def set_region_rules(world: "SohWorld") -> None:
         ])
 
     ## Deku basement upper
+    # Events
+    add_events(Regions.DEKU_TREE_BASEMENT_UPPER.value, world, [
+        [EventLocations.DEKU_TREE_BASEMENT_UPPER_BABA_STICKS.value, Events.DEKU_BABA_STICKS.value, lambda state: can_get_deku_baba_sticks(state, world)],
+        [EventLocations.DEKU_TREE_BASEMENT_UPPER_BABA_NUTS.value, Events.DEKU_BABA_NUTS.value, lambda state: can_get_deku_baba_nuts(state, world)],
+        [EventLocations.DEKU_TREE_BASEMENT_UPPER_BLOCK.value, LocalEventItems.DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED.value, lambda state: True]
+    ])
     # Connections
     connect_regions(Regions.DEKU_TREE_BASEMENT_UPPER.value, world, [
         [Regions.DEKU_TREE_BASEMENT_LOWER.value, lambda state: True],
@@ -179,21 +231,13 @@ def set_region_rules(world: "SohWorld") -> None:
         #    (can_do_trick("Deku B1 bow webs") and is_adult(state, world) and can_use(Items.FAIRY_BOW.value))]
         # Above commented out because it can't succeed without stick pot event implemented
     ])
-    # Events
-    add_events(Regions.DEKU_TREE_BASEMENT_UPPER.value, world, [
-        [EventLocations.DEKU_TREE_BASEMENT_BLOCK.value, Events.DEKU_TREE_BASEMENT_BLOCK_PUSHED.value, lambda state: True]
-    ])
 
     ## Deku outside boss room
     # Locations
-    outside_boss_freestanding_rule = lambda state: has_item(Items.BRONZE_SCALE, state, world) \
-                                            or can_use(Items.IRON_BOOTS, state, world) \
-                                            or can_use(Items.IRON_BOOTS, state, world)
-    
     add_locations(Regions.DEKU_TREE_OUTSIDE_BOSS_ROOM.value, world, [
-        [Locations.DEKU_TREE_FINAL_ROOM_LEFT_FRONT_HEART, outside_boss_freestanding_rule],
-        [Locations.DEKU_TREE_FINAL_ROOM_LEFT_BACK_HEART, outside_boss_freestanding_rule],
-        [Locations.DEKU_TREE_FINAL_ROOM_RIGHT_HEART, outside_boss_freestanding_rule],
+        [Locations.DEKU_TREE_FINAL_ROOM_LEFT_FRONT_HEART, lambda state: has_item(Items.BRONZE_SCALE, state, world) or can_use(Items.IRON_BOOTS, state, world) or can_use(Items.IRON_BOOTS, state, world)],
+        [Locations.DEKU_TREE_FINAL_ROOM_LEFT_BACK_HEART, lambda state: has_item(Items.BRONZE_SCALE, state, world) or can_use(Items.IRON_BOOTS, state, world) or can_use(Items.IRON_BOOTS, state, world)],
+        [Locations.DEKU_TREE_FINAL_ROOM_RIGHT_HEART, lambda state: has_item(Items.BRONZE_SCALE, state, world) or can_use(Items.IRON_BOOTS, state, world) or can_use(Items.IRON_BOOTS, state, world)],
         [Locations.DEKU_TREE_BEFORE_BOSS_GRASS1, lambda state: can_cut_shrubs(state, world)], # lambda state: can_cut_shrubs(state, world) and has_fire_source_with_torch(state, world)
             # Above commented out because it can't succeed without stick pot event implemented],
         [Locations.DEKU_TREE_BEFORE_BOSS_GRASS2, lambda state: can_cut_shrubs(state, world)], # lambda state: can_cut_shrubs(state, world) and has_fire_source_with_torch(state, world)
@@ -225,10 +269,15 @@ def set_region_rules(world: "SohWorld") -> None:
     
 
     ## Deku Tree boss room
-    # Deku Boss room
+    # Events
+    add_events(Regions.DEKU_TREE_BOSS_ROOM.value, world, [
+        [EventLocations.DEKU_TREE_BOSS.value, Events.DEKU_TREE_CLEAR.value, lambda state: can_kill_enemy(state, world, Enemies.GOHMA)]
+    ])
+
+    # Locations
     add_locations(Regions.DEKU_TREE_BOSS_ROOM.value, world, [
-        [Locations.QUEEN_GOHMA.value, lambda state: can_kill_enemy(state, world, "gohma")],
-        [Locations.DEKU_TREE_QUEEN_GOHMA_HEART_CONTAINER.value, lambda state: can_kill_enemy(state, world, "gohma")],
+        [Locations.QUEEN_GOHMA.value, lambda state: has_item(Events.DEKU_TREE_CLEAR.value, state, world)],
+        [Locations.DEKU_TREE_QUEEN_GOHMA_HEART_CONTAINER.value, lambda state: has_item(Events.DEKU_TREE_CLEAR.value, state, world)],
         [Locations.DEKU_TREE_QUEEN_GOHMA_GRASS1, lambda state: can_cut_shrubs(state, world)],
         [Locations.DEKU_TREE_QUEEN_GOHMA_GRASS2, lambda state: can_cut_shrubs(state, world)],
         [Locations.DEKU_TREE_QUEEN_GOHMA_GRASS3, lambda state: can_cut_shrubs(state, world)],
@@ -241,5 +290,5 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DEKU_TREE_BOSS_ROOM.value, world, [
         [Regions.DEKU_TREE_BOSS_EXIT.value, lambda state: True],
-        [Regions.KF_OUTSIDE_DEKU_TREE.value, lambda state: can_kill_enemy(state, world, "gohma")]   
+        [Regions.KF_OUTSIDE_DEKU_TREE.value, lambda state: has_item(Events.DEKU_TREE_CLEAR.value, state, world)]   
     ])

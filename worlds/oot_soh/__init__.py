@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import math
 
 from BaseClasses import CollectionState, Item, Region, Tutorial
@@ -95,7 +95,7 @@ class SohWorld(World):
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
-        self.included_locations = dict[str: int]()
+        self.included_locations = dict[str, int]()
 
     def generate_early(self) -> None:
         #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
@@ -383,13 +383,13 @@ class SohWorld(World):
             if self.options.shuffle_merchants == "bean_merchant_only" or self.options.shuffle_merchants == "all":
                 self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in merchants_items_location_table.items()
-                    #if location_data.region == region_name and location_name == "ZR Magic Bean Salesman"
+                    if location_name == "ZR Magic Bean Salesman"
                 })
 
             if self.options.shuffle_merchants == "all_but_beans" or self.options.shuffle_merchants == "all":
                 self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in merchants_items_location_table.items()
-                    #if location_data.region == region_name and (location_name == "Kak Granny's Shop" or location_name == "GC Medigoron" or location_name == "Wasteland Carpet Salesman")
+                    if location_name in {"Kak Granny's Shop", "GC Medigoron", "Wasteland Carpet Salesman"}
                 })
 
             # Cows
@@ -491,7 +491,7 @@ class SohWorld(World):
             if self.options.fortress_carpenters == "fast":
                 self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in carpenters_location_table.items()
-                    #if location_data.region == region_name and (location_name == "GF Freed All Carpenters" or location_name == "GF 1 Torch Carpenter")
+                    if location_name in {"GF Freed All Carpenters", "GF 1 Torch Carpenter"}
                 })
             
         # Set region rules and location rules after all locations are created
