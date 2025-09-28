@@ -3420,6 +3420,15 @@ class CombatRanges(str, Enum):
 	LONGSHOT = "longshot"
 	FAR = "far"
 
+
+class EventLocations(str, Enum):
+    DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
+    KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
+    MIDO = "Mido's Location"
+    MIDO_OUTSIDE = "Mido's Location From Outside Deku Tree"
+    BUG_SHRUBS_ZR = "Has Access to Shrub Bugs in Kokiri Forest"
+    BEAN_SOIL_KF = "Soft Soil in Kokiri Forest"
+
 class Events(str, Enum):
     DEKU_TREE_BASEMENT_BLOCK_PUSHED = "Deku Tree Basement Block Pushed"
     AMMO_CAN_DROP = "Ammo Can Drop"
@@ -3440,4 +3449,11 @@ class Events(str, Enum):
     CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
     COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
     CARPET_MERCHANT = "Can Buy From Carpet Merchant"
+    BEAN_PLANTED_KF = "Kokiri Forest Bean Planted"
+    MIDO_SWORD_AND_SHIELD = "Showed Mido the Sword and Shield"
+    CLEARED_FOREST_TEMPLE = "Forest Temple Completed"
+    CLEARED_DEKU_TREE = "Deku Tree Completed"
+    GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
+    BUG_SHRUBS = "Has Access to Shrub Bugs"
     DEKU_TREE_CLEAR = "Defeat Queen Gohma"
+
