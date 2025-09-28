@@ -175,12 +175,12 @@ class ProgressiveStages(DefaultOnToggle):
 class StageVariants(Toggle):
     """Enable if you want to include stage variants in the environment pool.
     Stages included are:
-    - Distant Roost - Distant Roost (2)
-    - Titanic Plains - Titanic Plains (2)
+    - Distant Roost (2)
+    - Titanic Plains (2)
     SOTS DLC Enabled:
-    - Verdant Falls - Vicious Falls
-    - Disturbed Impact - Shattered Abodes
-    - Treeborn Colony - Golden Dieback"""
+    - Vicious Falls
+    - Shattered Abodes
+    - Golden Dieback"""
     display_name = "Include Stage Variants"
 
 
@@ -411,6 +411,7 @@ ror2_option_groups = [
         AltarsPerEnvironment,
         RequireStages,
         ProgressiveStages,
+        StageVariants,
         ShowSeerPortals,
     ]),
     OptionGroup("Classic Mode Options", [
