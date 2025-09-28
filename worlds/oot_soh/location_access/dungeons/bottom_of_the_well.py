@@ -7,10 +7,19 @@ from worlds.oot_soh.Locations import SohLocation, SohLocationData
 from worlds.oot_soh.Enums import *
 from worlds.oot_soh.LogicHelpers import (add_events, add_locations, connect_regions, can_pass_enemy, has_explosives, lens_or_skip, can_open_underwater_chest, 
                                          can_cut_shrubs, blast_or_smash, can_break_pots, has_item, take_damage,can_use, small_keys, can_get_enemy_drop, 
-                                         can_detonate_upright_bomb_flower, has_fire_source_with_torch, can_kill_enemy, can_do_trick)
+                                         can_detonate_upright_bomb_flower, has_fire_source_with_torch, can_kill_enemy, can_do_trick, can_get_deku_baba_nuts, can_get_deku_baba_sticks, is_child)
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
+
+class EventLocations(str, Enum):
+	BOTTOM_OF_THE_WELL_LOWERED_WATER = "Bottom of the Well Lowered Water"
+	BOTTOM_OF_THE_WELL_NUT_POT = "Bottom of the Well Nut Pot"
+	BOTTOM_OF_THE_WELL_STICK_POT = "Bottom of the Well Stick Pot"
+	BOTTOM_OF_THE_WELL_BABAS = "Bottom of the Well Nut Pot"
+
+class LocalEventItems(str, Enum):
+	LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL = "Water was lowered in the Bottom of the Well"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -31,7 +40,7 @@ def set_region_rules(world: "SohWorld") -> None:
     add_events(Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, world, [
         [EventLocations.BOTTOM_OF_THE_WELL_STICK_POT.value, Events.STICK_POT.value, lambda state: True],
         [EventLocations.BOTTOM_OF_THE_WELL_NUT_POT.value, Events.NUT_POT.value, lambda state: True],
-        [EventLocations.BOTTOM_OF_THE_WELL_LOWERED_WATER.value, Events.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL.value, lambda state: can_use(Items.ZELDAS_LULLABY.value, state, world)]
+        [EventLocations.BOTTOM_OF_THE_WELL_LOWERED_WATER.value, LocalEventItems.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL.value, lambda state: can_use(Items.ZELDAS_LULLABY.value, state, world)]
     ])
     # Locations
     add_locations(Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, world, [
