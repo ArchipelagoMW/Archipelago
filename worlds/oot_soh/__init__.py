@@ -383,13 +383,13 @@ class SohWorld(World):
             if self.options.shuffle_merchants == "bean_merchant_only" or self.options.shuffle_merchants == "all":
                 self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in merchants_items_location_table.items()
-                    #if location_data.region == region_name and location_name == "ZR Magic Bean Salesman"
+                    if location_name == "ZR Magic Bean Salesman"
                 })
 
             if self.options.shuffle_merchants == "all_but_beans" or self.options.shuffle_merchants == "all":
                 self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in merchants_items_location_table.items()
-                    #if location_data.region == region_name and (location_name == "Kak Granny's Shop" or location_name == "GC Medigoron" or location_name == "Wasteland Carpet Salesman")
+                    if location_name in {"Kak Granny's Shop", "GC Medigoron", "Wasteland Carpet Salesman"}
                 })
 
             # Cows
@@ -491,7 +491,7 @@ class SohWorld(World):
             if self.options.fortress_carpenters == "fast":
                 self.included_locations.update({
                     location_name: location_data.address for location_name, location_data in carpenters_location_table.items()
-                    #if location_data.region == region_name and (location_name == "GF Freed All Carpenters" or location_name == "GF 1 Torch Carpenter")
+                    if location_name in {"GF Freed All Carpenters", "GF 1 Torch Carpenter"}
                 })
             
         # Set region rules and location rules after all locations are created
