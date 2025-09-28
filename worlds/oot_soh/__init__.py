@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import math
 
 from BaseClasses import CollectionState, Item, Region, Tutorial
@@ -95,7 +95,7 @@ class SohWorld(World):
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
-        self.included_locations = dict[str: int]()
+        self.included_locations = dict[str, int]()
 
     def generate_early(self) -> None:
         #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")

@@ -12,7 +12,7 @@ class SohLocation(Location):
 
 class SohLocationData(NamedTuple):
     region: str
-    address: Optional[int] = None
+    address: int
     event_item: str | None = None
 
 base_location_table: Dict[str, SohLocationData] = {
