@@ -654,9 +654,8 @@ def hookshot_or_boomerang(state: CollectionState, world: "SohWorld") -> bool:
             can_use(Items.BOOMERANG.value, state, world))
 
 def can_open_underwater_chest(state: CollectionState, world: "SohWorld") -> bool:
-    # FIGURE OUT TRICKS AND REPLACE THIS FALSE WITH EQUIVILENT ctx->GetTrickOption(RT_OPEN_UNDERWATER_CHEST)
-    return (False and 
-            can_use(Items.IRON_BOOTS.value, state, value) and 
+    return (can_do_trick("RT Open Underwater Chest", state, world) and 
+            can_use(Items.IRON_BOOTS.value, state, world) and 
             can_use(Items.HOOKSHOT.value, state, world))
 
 def small_keys(key: Items, requiredAmount: int, state: CollectionState, world: "SohWorld") -> bool:
@@ -686,8 +685,8 @@ def has_key_ring(key : Items, state: CollectionState, world: "SohWorld") -> bool
         case _:
             return False
 
-def lens_or_skip(state: CollectionState, world: "SohWorld") -> bool:
-    return (False or can_use(Items.LENS_OF_TRUTH, state, world)) # replace false with ctx->GetTrickOption(RT_LENS_BOTW)
+def lens_or_skip(trickName: str, state: CollectionState, world: "SohWorld") -> bool:
+    return (can_do_trick(trickName, state, world) or can_use(Items.LENS_OF_TRUTH, state, world))
 
 def can_get_enemy_drop(state: CollectionState, world: "SohWorld", enemy : Enemies, range : EnemyDistance = EnemyDistance.CLOSE, aboveLink : bool = False) -> bool:
     if not can_kill_enemy(state, world, enemy.value, range.value):
@@ -716,8 +715,8 @@ def can_detonate_bomb_flowers(state: CollectionState, world: "SohWorld") -> bool
 def can_detonate_upright_bomb_flower(state: CollectionState, world: "SohWorld") -> bool:
     return (can_detonate_bomb_flowers(state, world) 
             or has_item(Items.GORONS_BRACELET.value, state, world)
-            or (False # Trick ctx->GetTrickOption(RT_BLUE_FIRE_MUD_WALLS)
-                and can_use(Items.BOTTLE_WITH_BLUE_FIRE.value, state, world)
+            or (can_do_trick("RT BLUE FIRE MUD WALLS", state, world)
+                and blue_fire(state, world)
                 and (False # EffectiveHealth Function. Not sure how to implement some of the stuff that is client setting specific
                     or can_use(Items.NAYRUS_LOVE.value, state, world)
                 ))

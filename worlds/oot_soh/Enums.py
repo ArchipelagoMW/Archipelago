@@ -3424,6 +3424,9 @@ class EventLocations(str, Enum):
 	DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
 	KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
 	BOTTOM_OF_THE_WELL_LOWERED_WATER = "Bottom of the Well Lowered Water"
+	BOTTOM_OF_THE_WELL_NUT_POT = "Bottom of the Well Nut Pot"
+	BOTTOM_OF_THE_WELL_STICK_POT = "Bottom of the Well Stick Pot"
+	BOTTOM_OF_THE_WELL_BABAS = "Bottom of the Well Nut Pot"
 
 class Events(str, Enum):
 	DEKU_TREE_BASEMENT_BLOCK_PUSHED = "Deku Tree Basement Block Pushed"
