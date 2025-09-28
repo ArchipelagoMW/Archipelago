@@ -48,7 +48,15 @@ from .location_access.overworld import \
     kakariko, \
     kokiri_forest, \
     lake_hylia, \
-    lon_lon_ranch
+    lon_lon_ranch, \
+    lost_woods, \
+    market, \
+    sacred_forest_meadow, \
+    temple_of_time, \
+    thieves_hideout, \
+    zoras_domain, \
+    zoras_fountain, \
+    zoras_river
 from .location_access.dungeons import \
     bottom_of_the_well, \
     deku_tree, \
@@ -513,6 +521,14 @@ class SohWorld(World):
         kokiri_forest.set_region_rules(self)
         lake_hylia.set_region_rules(self)
         lon_lon_ranch.set_region_rules(self)
+        lost_woods.set_region_rules(self)
+        market.set_region_rules(self)
+        sacred_forest_meadow.set_region_rules(self)
+        temple_of_time.set_region_rules(self)
+        thieves_hideout.set_region_rules(self)
+        zoras_domain.set_region_rules(self)
+        zoras_fountain.set_region_rules(self)
+        zoras_river.set_region_rules(self)
         
         # Dungeons
         bottom_of_the_well.set_region_rules(self)

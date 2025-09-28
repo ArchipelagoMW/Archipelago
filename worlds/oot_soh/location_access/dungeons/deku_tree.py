@@ -1,14 +1,11 @@
 from typing import TYPE_CHECKING
 
-from worlds.generic.Rules import set_rule
-from ...Regions import double_link_regions
-from ...Items import SohItem
-from ...Locations import SohLocation, SohLocationData
 from ...Enums import *
 from ...LogicHelpers import *
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
+
 
 class EventLocations(str, Enum):
     DEKU_TREE_LOBBY_BABA_STICKS = "Deku Tree Lobby Baba Sticks",
@@ -26,8 +23,10 @@ class EventLocations(str, Enum):
     DEKU_TREE_BASEMENT_UPPER_BLOCK = "Deku Tree Basement Upper Push Block",
     DEKU_TREE_BOSS = "Deku Tree Queen Gohma"
 
-class LocalEventItems(str, Enum):
+
+class LocalEvents(str, Enum):
     DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED = "Deku Tree Basement Upper Block Pushed"
+
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
@@ -131,7 +130,7 @@ def set_region_rules(world: "SohWorld") -> None:
         [Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM.value, lambda state: True], # has_fire_source_with_torch(state, world) or can_use(Items.FAIRY_BOW.value, state, world)],
         # Above commented out because it can't succeed without stick pot event implemented
         [Regions.DEKU_TREE_BASEMENT_UPPER.value, lambda state: is_adult(state, world) or can_do_trick("Deku B1 Skip", state, world)
-            or has_item(LocalEventItems.DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED.value, state, world)]
+            or has_item(LocalEvents.DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED.value, state, world)]
     ])
 
     ## Deku basement shrub room
@@ -221,7 +220,7 @@ def set_region_rules(world: "SohWorld") -> None:
     add_events(Regions.DEKU_TREE_BASEMENT_UPPER.value, world, [
         [EventLocations.DEKU_TREE_BASEMENT_UPPER_BABA_STICKS.value, Events.DEKU_BABA_STICKS.value, lambda state: can_get_deku_baba_sticks(state, world)],
         [EventLocations.DEKU_TREE_BASEMENT_UPPER_BABA_NUTS.value, Events.DEKU_BABA_NUTS.value, lambda state: can_get_deku_baba_nuts(state, world)],
-        [EventLocations.DEKU_TREE_BASEMENT_UPPER_BLOCK.value, LocalEventItems.DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED.value, lambda state: True]
+        [EventLocations.DEKU_TREE_BASEMENT_UPPER_BLOCK.value, LocalEvents.DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED.value, lambda state: True]
     ])
     # Connections
     connect_regions(Regions.DEKU_TREE_BASEMENT_UPPER.value, world, [
@@ -271,13 +270,13 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Deku Tree boss room
     # Events
     add_events(Regions.DEKU_TREE_BOSS_ROOM.value, world, [
-        [EventLocations.DEKU_TREE_BOSS.value, Events.DEKU_TREE_CLEAR.value, lambda state: can_kill_enemy(state, world, Enemies.GOHMA)]
+        [EventLocations.DEKU_TREE_BOSS.value, Events.CLEARED_DEKU_TREE.value, lambda state: can_kill_enemy(state, world, Enemies.GOHMA)]
     ])
 
     # Locations
     add_locations(Regions.DEKU_TREE_BOSS_ROOM.value, world, [
-        [Locations.QUEEN_GOHMA.value, lambda state: has_item(Events.DEKU_TREE_CLEAR.value, state, world)],
-        [Locations.DEKU_TREE_QUEEN_GOHMA_HEART_CONTAINER.value, lambda state: has_item(Events.DEKU_TREE_CLEAR.value, state, world)],
+        [Locations.QUEEN_GOHMA.value, lambda state: has_item(Events.CLEARED_DEKU_TREE.value, state, world)],
+        [Locations.DEKU_TREE_QUEEN_GOHMA_HEART_CONTAINER.value, lambda state: has_item(Events.CLEARED_DEKU_TREE.value, state, world)],
         [Locations.DEKU_TREE_QUEEN_GOHMA_GRASS1, lambda state: can_cut_shrubs(state, world)],
         [Locations.DEKU_TREE_QUEEN_GOHMA_GRASS2, lambda state: can_cut_shrubs(state, world)],
         [Locations.DEKU_TREE_QUEEN_GOHMA_GRASS3, lambda state: can_cut_shrubs(state, world)],
@@ -290,5 +289,5 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DEKU_TREE_BOSS_ROOM.value, world, [
         [Regions.DEKU_TREE_BOSS_EXIT.value, lambda state: True],
-        [Regions.KF_OUTSIDE_DEKU_TREE.value, lambda state: has_item(Events.DEKU_TREE_CLEAR.value, state, world)]   
+        [Regions.KF_OUTSIDE_DEKU_TREE.value, lambda state: has_item(Events.CLEARED_DEKU_TREE.value, state, world)]   
     ])

@@ -83,10 +83,6 @@ def has_item(itemName: str, state: CollectionState, world: "SohWorld", count: in
         return state.has_any_count({Items.SILVER_GAUNTLETS.value: 1, Items.STRENGTH_UPGRADE.value: 2}, player)
     elif itemName == Items.GOLDEN_GAUNTLETS.value:
         return state.has_any_count({Items.GOLDEN_GAUNTLETS.value: 1, Items.STRENGTH_UPGRADE.value: 3}, player)
-    elif itemName == Items.MAGIC_SINGLE.value:
-        return state.has_any((Items.MAGIC_SINGLE.value, Items.PROGRESSIVE_MAGIC_METER.value), player)
-    elif itemName == Items.MAGIC_DOUBLE.value:
-        return state.has_any_count({Items.MAGIC_DOUBLE.value: 1, Items.PROGRESSIVE_MAGIC_METER.value: 2}, player)
     elif itemName == Items.ADULT_WALLET.value:
         return state.has_any((Items.ADULT_WALLET.value, Items.PROGRESSIVE_WALLET.value), player)
     elif itemName == Items.GIANT_WALLET.value:
@@ -97,9 +93,15 @@ def has_item(itemName: str, state: CollectionState, world: "SohWorld", count: in
         return state.has_any((Items.SILVER_SCALE.value, Items.PROGRESSIVE_SCALE.value), player)
     elif itemName == Items.GOLDEN_SCALE.value:
         return state.has_any_count({Items.GOLDEN_SCALE.value: 1, Items.PROGRESSIVE_SCALE.value: 2}, player)
+    elif itemName == Items.MAGIC_BEAN.value:
+        return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
+    elif itemName == Items.CHILD_WALLET.value:
+        return state.has(Items.PROGRESSIVE_WALLET.value, player) or world.options.shuffle_childs_wallet == 0
     # todo: is this for being able to catch a big poe??
     elif itemName == Items.BOTTLE_WITH_BIG_POE.value:
         return has_bottle(state, world)
+    elif itemName == Items.BOTTLE_WITH_BUGS.value:
+        return has_bottle(state, world) and state.has(Events.BUG_ACCESS.value, player)
     else:
         return state.has(itemName, player, count)
 
@@ -122,7 +124,7 @@ def can_use(name: str, state: CollectionState, world: "SohWorld", can_be_child: 
     if data[name].child_only and not can_be_child:
         return False
 
-    if data[name].item_type == ItemType.magic and not can_use_item(Items.MAGIC_SINGLE.value):
+    if data[name].item_type == ItemType.magic and not can_use_item(Items.PROGRESSIVE_MAGIC_METER.value):
         return False
 
     if data[name].item_type == ItemType.song:
@@ -134,7 +136,7 @@ def can_use(name: str, state: CollectionState, world: "SohWorld", can_be_child: 
     if "Bombchu" in name:
         return bombchu_refill(state, world) and bombchus_enabled(state, world)
 
-    if name == Items.MAGIC_SINGLE.value:
+    if name == Items.PROGRESSIVE_MAGIC_METER.value:
         return has(Events.AMMO_CAN_DROP) or (has_bottle(state, world) and has(Events.CAN_BUY_GREEN_POTION))
     elif name == Items.FAIRY_BOW.value:
         return has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_ARROWS)
@@ -439,7 +441,7 @@ def can_hit_switch(state: CollectionState, world: "SohWorld", distance: str = "c
 
     return False
 
-def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: str = EnemyDistance.CLOSE.value,
+def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat_range: int = EnemyDistance.CLOSE.value,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
     Check if Link can kill a specific enemy at a given combat range.
@@ -456,7 +458,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: str, combat
     """
 
     # Define what weapons work at each range
-    def can_hit_at_range(range_type: str) -> bool:
+    def can_hit_at_range(range_type: int) -> bool:
         if range_type == EnemyDistance.CLOSE.value:
             return (can_jump_slash(state, world) or
                     has_explosives(state, world) or
@@ -666,7 +668,7 @@ def has_key_ring(key : Items, state: CollectionState, world: "SohWorld") -> bool
             return False
 
 def lens_or_skip(trickName: str, state: CollectionState, world: "SohWorld") -> bool:
-    return (can_do_trick(trickName, state, world) or can_use(Items.LENS_OF_TRUTH, state, world))
+    return (can_do_trick(trickName, state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world))
 
 def can_get_enemy_drop(state: CollectionState, world: "SohWorld", enemy : Enemies, range : EnemyDistance = EnemyDistance.CLOSE, aboveLink : bool = False) -> bool:
     if not can_kill_enemy(state, world, enemy.value, range.value):
