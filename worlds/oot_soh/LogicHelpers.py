@@ -167,7 +167,6 @@ def has_bottle(state: CollectionState, world: "SohWorld") -> bool:  # soup
     return False
 
 
-
 def bottle_count(state: CollectionState, world: "SohWorld") -> int:
     count = state.count_from_list(no_rules_bottles, world.player)
     if state.has(Events.DELIVER_LETTER, world.player):
