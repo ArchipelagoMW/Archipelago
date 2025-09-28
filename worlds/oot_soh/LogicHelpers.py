@@ -7,7 +7,6 @@ from .Enums import *
 from .Items import SohItem, item_data_table, ItemType, no_rules_bottles
 from .RegionAgeAccess import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
 
-
 if TYPE_CHECKING:
     from . import SohWorld
 
@@ -157,7 +156,6 @@ def scarecrows_song(state: CollectionState, world: "SohWorld") -> bool:
     return ((False and has_item(Items.FAIRY_OCARINA.value, state, world)
             and state.has_group_unique("Ocarina Buttons", world.player, 2))
             or (has_item(Events.CHILD_SCARECROW, state, world) and has_item(Events.ADULT_SCARECROW, state, world)))
-
 
 def has_bottle(state: CollectionState, world: "SohWorld") -> bool:  # soup
     if state.has_any(no_rules_bottles, world.player):
