@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
 from worlds.generic.Rules import set_rule
-from worlds.oot_soh.Regions import double_link_regions
-from worlds.oot_soh.Items import SohItem
-from worlds.oot_soh.Locations import SohLocation, SohLocationData
-from worlds.oot_soh.Enums import *
-from worlds.oot_soh.LogicHelpers import *
+from ...Regions import double_link_regions
+from ...Items import SohItem
+from ...Locations import SohLocation, SohLocationData
+from ...Enums import *
+from ...LogicHelpers import *
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
