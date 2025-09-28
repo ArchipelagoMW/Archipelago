@@ -5,8 +5,9 @@ from .locations import RiskOfRainLocation, item_pickups, get_locations
 from .rules import set_rules
 from .ror2environments import environment_vanilla_table, environment_vanilla_orderedstages_table, \
     environment_sotv_orderedstages_table, environment_sotv_table, environment_sost_orderedstages_table, \
-    environment_sost_table, collapse_dict_list_vertical, shift_by_offset, environment_sost_variant_orderstage_1_table, \
-    environment_vanilla_variant_orderedstage_1_table, environment_sost_orderedstages_table_with_variants, environment_vanilla_table_with_variants
+    environment_sost_table, collapse_dict_list_vertical, shift_by_offset, environment_vanilla_variants_table, \
+    environment_vanilla_variant_orderedstages_table, environment_sots_variants_table, \
+    environment_sots_variants_orderedstages_table
 
 from BaseClasses import Item, ItemClassification, Tutorial
 from .options import ItemWeights, ROR2Options, ror2_option_groups
@@ -65,7 +66,8 @@ class RiskOfRainWorld(World):
                     scanners=self.options.scanner_per_stage.value,
                     altars=self.options.altars_per_stage.value,
                     dlc_sotv=bool(self.options.dlc_sotv.value),
-                    dlc_sots=bool(self.options.dlc_sots.value)
+                    dlc_sots=bool(self.options.dlc_sots.value),
+                    stage_variants=bool(self.options.stage_variants)
                 )
             )
         self.total_revivals = int(self.options.total_revivals.value / 100 *
@@ -110,33 +112,39 @@ class RiskOfRainWorld(World):
 
             # figure out all available ordered stages for each tier
             environment_available_orderedstages_table = environment_vanilla_orderedstages_table
-
+            environments_pool = shift_by_offset(environment_vanilla_table, environment_offset)
+            # Vanilla Variants
             if self.options.stage_variants:
-                environment_available_orderedstages_table = environment_vanilla_orderedstages_table
-            else:
-                environment_available_orderedstages_table = environment_available_orderedstages_table
+                environment_available_orderedstages_table = \
+                    collapse_dict_list_vertical(environment_available_orderedstages_table,
+                                                environment_vanilla_variant_orderedstages_table)
             if self.options.dlc_sotv:
                 environment_available_orderedstages_table = \
                     collapse_dict_list_vertical(environment_available_orderedstages_table,
                                                 environment_sotv_orderedstages_table)
-            if self.options.dlc_sots and not self.options.stage_variants:
+            if self.options.dlc_sots:
                 environment_available_orderedstages_table = \
                     collapse_dict_list_vertical(environment_available_orderedstages_table,
                                                 environment_sost_orderedstages_table)
             if self.options.dlc_sots and self.options.stage_variants:
                 environment_available_orderedstages_table = \
                     collapse_dict_list_vertical(environment_available_orderedstages_table,
-                                                environment_sost_orderedstages_table,
-                                                [environment_sost_variant_orderstage_1_table])
+                                                environment_sots_variants_orderedstages_table)
 
-            environments_pool = shift_by_offset(environment_vanilla_table, environment_offset)
-
+            if self.options.stage_variants:
+                environment_offset_table = shift_by_offset(environment_vanilla_variants_table, environment_offset)
+                environments_pool = {**environments_pool, **environment_offset_table}
             if self.options.dlc_sotv:
                 environment_offset_table = shift_by_offset(environment_sotv_table, environment_offset)
                 environments_pool = {**environments_pool, **environment_offset_table}
             if self.options.dlc_sots:
                 environment_offset_table = shift_by_offset(environment_sost_table, environment_offset)
                 environments_pool = {**environments_pool, **environment_offset_table}
+            # SOTS Variant Environments
+            if self.options.dlc_sots and self.options.stage_variants:
+                environment_offset_table = shift_by_offset(environment_sots_variants_table, environment_offset)
+                environments_pool = {**environments_pool, **environment_offset_table}
+
             # percollect starting environment for stage 1
             unlock = self.random.choices(list(environment_available_orderedstages_table[0].keys()), k=1)
             self.multiworld.push_precollected(self.create_item(unlock[0]))
@@ -169,7 +177,8 @@ class RiskOfRainWorld(World):
                     scanners=self.options.scanner_per_stage.value,
                     altars=self.options.altars_per_stage.value,
                     dlc_sotv=bool(self.options.dlc_sotv.value),
-                    dlc_sots=bool(self.options.dlc_sots.value)
+                    dlc_sots=bool(self.options.dlc_sots.value),
+                    stage_variants=bool(self.options.stage_variants)
                 )
             )
         # Create junk items

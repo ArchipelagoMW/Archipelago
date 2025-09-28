@@ -1,7 +1,9 @@
 from worlds.generic.Rules import set_rule, add_rule
 from BaseClasses import MultiWorld
 from .locations import get_locations
-from .ror2environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table, environment_sost_orderedstages_table
+from .ror2environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table, \
+    environment_sost_orderedstages_table, environment_vanilla_variant_orderedstages_table, \
+    environment_sots_variants_orderedstages_table
 from typing import Set, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -43,6 +45,24 @@ def has_location_access_rule(multiworld: MultiWorld, environment: str, player: i
         multiworld.get_location(location_name, player).access_rule = \
             lambda state: state.has(environment, player)
 
+def explore_environment_rule(table, multiworld, player, chests, shrines, newts, scavengers, scanners):
+    for i in range(len(table)):
+        for environment_name, _ in table[i].items():
+            # Make sure to go through each location
+            if scavengers == 1:
+                has_location_access_rule(multiworld, environment_name, player, scavengers, "Scavenger")
+            if scanners == 1:
+                has_location_access_rule(multiworld, environment_name, player, scanners, "Radio Scanner")
+            for chest in range(1, chests + 1):
+                has_location_access_rule(multiworld, environment_name, player, chest, "Chest")
+            for shrine in range(1, shrines + 1):
+                has_location_access_rule(multiworld, environment_name, player, shrine, "Shrine")
+            if newts > 0:
+                for newt in range(1, newts + 1):
+                    has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
+            if i > 0:
+                has_stage_access_rule(multiworld, f"Stage {i}", i, environment_name, player)
+
 
 def set_rules(ror2_world: "RiskOfRainWorld") -> None:
     player = ror2_world.player
@@ -61,7 +81,8 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                 scanners=ror2_options.scanner_per_stage.value,
                 altars=ror2_options.altars_per_stage.value,
                 dlc_sotv=bool(ror2_options.dlc_sotv.value),
-                dlc_sots=bool(ror2_options.dlc_sots.value)
+                dlc_sots=bool(ror2_options.dlc_sots.value),
+                stage_variants=bool(ror2_options.stage_variants)
             )
         )
 
@@ -103,59 +124,23 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
         scavengers = ror2_options.scavengers_per_stage.value
         scanners = ror2_options.scanner_per_stage.value
         # Vanilla stages
-        for i in range(len(environment_vanilla_orderedstages_table)):
-            for environment_name, _ in environment_vanilla_orderedstages_table[i].items():
-                # Make sure to go through each location
-                if scavengers == 1:
-                    has_location_access_rule(multiworld, environment_name, player, scavengers, "Scavenger")
-                if scanners == 1:
-                    has_location_access_rule(multiworld, environment_name, player, scanners, "Radio Scanner")
-                for chest in range(1, chests + 1):
-                    has_location_access_rule(multiworld, environment_name, player, chest, "Chest")
-                for shrine in range(1, shrines + 1):
-                    has_location_access_rule(multiworld, environment_name, player, shrine, "Shrine")
-                if newts > 0:
-                    for newt in range(1, newts + 1):
-                        has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
-                if i > 0:
-                    has_stage_access_rule(multiworld, f"Stage {i}", i, environment_name, player)
+        explore_environment_rule(environment_vanilla_orderedstages_table, multiworld, player, chests, shrines, newts,
+                                 scavengers, scanners)
+        # Vanilla Variant stages
+        if ror2_options.stage_variants:
+            explore_environment_rule(environment_vanilla_variant_orderedstages_table, multiworld, player, chests, shrines, newts,
+                                 scavengers, scanners)
         # SoTv stages
         if ror2_options.dlc_sotv:
-            for i in range(len(environment_sotv_orderedstages_table)):
-                for environment_name, _ in environment_sotv_orderedstages_table[i].items():
-                    # Make sure to go through each location
-                    if scavengers == 1:
-                        has_location_access_rule(multiworld, environment_name, player, scavengers, "Scavenger")
-                    if scanners == 1:
-                        has_location_access_rule(multiworld, environment_name, player, scanners, "Radio Scanner")
-                    for chest in range(1, chests + 1):
-                        has_location_access_rule(multiworld, environment_name, player, chest, "Chest")
-                    for shrine in range(1, shrines + 1):
-                        has_location_access_rule(multiworld, environment_name, player, shrine, "Shrine")
-                    if newts > 0:
-                        for newt in range(1, newts + 1):
-                            has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
-                    if i > 0:
-                        has_stage_access_rule(multiworld, f"Stage {i}", i, environment_name, player)
+            explore_environment_rule(environment_sotv_orderedstages_table, multiworld, player, chests, shrines,
+                                     newts, scavengers, scanners)
         # SoTS stages
         if ror2_options.dlc_sots:
-            for i in range(len(environment_sost_orderedstages_table)):
-                for environment_name, _ in environment_sost_orderedstages_table[i].items():
-                    # Make sure to go through each location
-                    if scavengers == 1:
-                        has_location_access_rule(multiworld, environment_name, player, scavengers, "Scavenger")
-                    if scanners == 1:
-                        has_location_access_rule(multiworld, environment_name, player, scanners, "Radio Scanner")
-                    for chest in range(1, chests + 1):
-                        has_location_access_rule(multiworld, environment_name, player, chest, "Chest")
-                    for shrine in range(1, shrines + 1):
-                        has_location_access_rule(multiworld, environment_name, player, shrine, "Shrine")
-                    if newts > 0:
-                        for newt in range(1, newts + 1):
-                            has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
-                    if i > 0:
-                        has_stage_access_rule(multiworld, f"Stage {i}", i, environment_name, player)
-
+            explore_environment_rule(environment_sost_orderedstages_table, multiworld, player, chests, shrines,
+                                     newts, scavengers, scanners)
+        if ror2_options.dlc_sots and ror2_options.stage_variants:
+            explore_environment_rule(environment_sots_variants_orderedstages_table, multiworld, player, chests, shrines,
+                                     newts, scavengers, scanners)
 
         has_entrance_access_rule(multiworld, "Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole",
                                  player)

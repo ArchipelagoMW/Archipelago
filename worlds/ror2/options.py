@@ -170,6 +170,8 @@ class ProgressiveStages(DefaultOnToggle):
     """This will convert Stage items to be a progressive item. For example instead of "Stage 2" it would be
      "Progressive Stage" """
     display_name = "Progressive Stages"
+
+
 class StageVariants(Toggle):
     """Enable if you want to include stage variants in the environment pool.
     Stages included are:
@@ -180,6 +182,7 @@ class StageVariants(Toggle):
     - Disturbed Impact - Shattered Abodes
     - Treeborn Colony - Golden Dieback"""
     display_name = "Include Stage Variants"
+
 
 class ShowSeerPortals(DefaultOnToggle):
     """Shows Seer Portals at the teleporter to allow choosing the next environment."""

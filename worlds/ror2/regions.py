@@ -18,13 +18,10 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
     multiworld = ror2_world.multiworld
     # Default Locations
     non_dlc_regions: Dict[str, RoRRegionData] = {
-        "Menu":                                 RoRRegionData(None, ["Distant Roost", "Distant Roost (2)",
-                                                                     "Titanic Plains", "Titanic Plains (2)",
+        "Menu":                                 RoRRegionData(None, ["Distant Roost", "Titanic Plains",
                                                                      "Verdant Falls"]),
         "Distant Roost":                        RoRRegionData([], ["OrderedStage_1"]),
-        "Distant Roost (2)":                    RoRRegionData([], ["OrderedStage_1"]),
         "Titanic Plains":                       RoRRegionData([], ["OrderedStage_1"]),
-        "Titanic Plains (2)":                   RoRRegionData([], ["OrderedStage_1"]),
         "Verdant Falls":                        RoRRegionData([], ["OrderedStage_1"]),
         "Abandoned Aqueduct":                   RoRRegionData([], ["OrderedStage_2"]),
         "Wetland Aspect":                       RoRRegionData([], ["OrderedStage_2"]),
@@ -35,6 +32,10 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
         "Sundered Grove":                       RoRRegionData([], ["OrderedStage_4"]),
         "Sky Meadow":                           RoRRegionData([], ["Hidden Realm: Bulwark's Ambry", "OrderedStage_5"]),
     }
+    non_dlc_variant_regions: Dict[str, RoRRegionData] = {
+        "Distant Roost (2)": RoRRegionData([], ["OrderedStage_1"]),
+        "Titanic Plains (2)": RoRRegionData([], ["OrderedStage_1"]),
+    }
     # SOTV Regions
     dlc_sotv_regions: Dict[str, RoRRegionData] = {
         "Siphoned Forest":                      RoRRegionData([], ["OrderedStage_1"]),
@@ -43,13 +44,16 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
     }
 
     dlc_sost_regions: Dict[str, RoRRegionData] = {
-        "Viscous Falls":                        RoRRegionData([], ["OrderedStage_1"]),
         "Shattered Abodes":                     RoRRegionData([], ["OrderedStage_1"]),
-        "Disturbed Impact":                     RoRRegionData([], ["OrderedStage_1"]),
-        "Reformed Altar":                      RoRRegionData([], ["OrderedStage_2", "Treeborn Colony", "Golden Dieback"]),
+        "Reformed Altar":                      RoRRegionData([], ["OrderedStage_2", "Treeborn Colony"]),
         "Treeborn Colony":                      RoRRegionData([], ["OrderedStage_3", "Prime Meridian"]),
-        "Golden Dieback":                       RoRRegionData([], ["OrderedStage_3", "Prime Meridian"]),
         "Helminth Hatchery":                    RoRRegionData([], ["Hidden Realm: Bulwark's Ambry", "OrderedStage_5"]),
+    }
+
+    dlc_sots_variant_regions: Dict[str, RoRRegionData] = {
+        "Viscous Falls": RoRRegionData([], ["OrderedStage_1"]),
+        "Disturbed Impact": RoRRegionData([], ["OrderedStage_1"]),
+        "Golden Dieback": RoRRegionData([], ["OrderedStage_3", "Prime Meridian"]),
     }
 
     other_regions: Dict[str, RoRRegionData] = {
@@ -88,10 +92,14 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
     scanners = int(ror2_options.scanner_per_stage)
     newt = int(ror2_options.altars_per_stage)
     all_location_regions = {**non_dlc_regions}
+    if ror2_options.stage_variants:
+        all_location_regions.update(non_dlc_variant_regions)
     if ror2_options.dlc_sotv:
         all_location_regions.update(dlc_sotv_regions)
     if ror2_options.dlc_sots:
         all_location_regions.update(dlc_sost_regions)
+    if ror2_options.dlc_sots and ror2_options.stage_variants:
+        all_location_regions.update(dlc_sots_variant_regions)
 
     # Locations
     for key in all_location_regions:
@@ -117,6 +125,10 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
                 all_location_regions[key].locations.append(f"{key}: Newt Altar {i + 1}")
     regions_pool: Dict = {**all_location_regions, **other_regions}
 
+    # Non DLC Variant Locations
+    if ror2_options.stage_variants:
+        non_dlc_regions["Menu"].region_exits.append("Distant Roost (2)")
+        non_dlc_regions["Menu"].region_exits.append("Titanic Plains (2)")
     # SOTV DLC Locations
     if ror2_options.dlc_sotv:
         non_dlc_regions["Menu"].region_exits.append("Siphoned Forest")
@@ -127,20 +139,25 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
 
     # SOTS DLC Locations
     if ror2_options.dlc_sots:
-        non_dlc_regions["Menu"].region_exits.append("Viscous Falls")
         non_dlc_regions["Menu"].region_exits.append("Shattered Abodes")
-        non_dlc_regions["Menu"].region_exits.append("Disturbed Impact")
         other_regions["OrderedStage_1"].region_exits.append("Reformed Altar")
         other_regions["OrderedStage_4"].region_exits.append("Helminth Hatchery")
-        regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_sost_other_regions}
+    if ror2_options.dlc_sots and ror2_options.stage_variants:
+        non_dlc_regions["Menu"].region_exits.append("Viscous Falls")
+        non_dlc_regions["Menu"].region_exits.append("Disturbed Impact")
+        dlc_sost_regions["Reformed Altar"].region_exits.append("Golden Dieback")
 
-    if ror2_options.dlc_sotv and not ror2_options.dlc_sots:
-        regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_sotv_other_regions}
-    elif ror2_options.dlc_sots and not ror2_options.dlc_sotv:
-        regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_sost_other_regions}
-    elif ror2_options.dlc_sots and ror2_options.dlc_sotv:
-        regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_sotv_other_regions,
-                              **dlc_sost_other_regions}
+    # if ror2_options.dlc_sotv and not ror2_options.dlc_sots:
+    #     regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_sotv_other_regions}
+    # elif ror2_options.dlc_sots and not ror2_options.dlc_sotv:
+    #     regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_sost_other_regions}
+    # elif ror2_options.dlc_sots and ror2_options.dlc_sotv:
+    #     regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_sotv_other_regions,
+    #                           **dlc_sost_other_regions}
+    if ror2_options.dlc_sotv:
+        regions_pool.update(dlc_sotv_other_regions)
+    if ror2_options.dlc_sots:
+        regions_pool.update(dlc_sost_other_regions)
 
     # Check to see if Victory needs to be removed from regions
     if ror2_options.victory == "mithrix":
