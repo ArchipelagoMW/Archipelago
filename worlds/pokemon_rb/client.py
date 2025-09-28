@@ -36,22 +36,22 @@ DATA_LOCATIONS = {
     "CrashCheck4": (0x16DD, 1),
 }
 
-TRACKER_EVENT_FLAGS = {
-    "EVENT_BEAT_BROCK": 0x77,
-    "EVENT_BEAT_MISTY": 0xbf,
-    "EVENT_BEAT_LT_SURGE": 0x167,
-    "EVENT_BEAT_ERIKA": 0x1a9,
-    "EVENT_BEAT_KOGA": 0x259,
-    "EVENT_BEAT_SABRINA": 0x361,
-    "EVENT_BEAT_BLAINE": 0x299,
-    "EVENT_BEAT_VIRIDIAN_GYM_GIOVANNI": 0x51,
+TRACKER_EVENT_FLAGS = [
+    0x77, # EVENT_BEAT_BROCK
+    0xbf, # EVENT_BEAT_MISTY
+    0x167, # EVENT_BEAT_LT_SURGE
+    0x1a9, # EVENT_BEAT_ERIKA
+    0x259, # EVENT_BEAT_KOGA
+    0x361, # EVENT_BEAT_SABRINA
+    0x299, # EVENT_BEAT_BLAINE
+    0x51, # EVENT_BEAT_VIRIDIAN_GYM_GIOVANNI
 
-    "EVENT_OAK_GOT_PARCEL": 0x38,
-    "EVENT_BEAT_ROUTE22_RIVAL_1ST_BATTLE": 0x525,
-    "EVENT_RESCUED_MR_FUJI":0x117,
-    "EVENT_GOT_SS_TICKET": 0x550, # EVENT_MET_BILL
-    "EVENT_BEAT_SILPH_CO_GIOVANNI": 0x78f
-}
+    0x38, # EVENT_OAK_GOT_PARCEL
+    0x525, # EVENT_BEAT_ROUTE22_RIVAL_1ST_BATTLE
+    0x117, # EVENT_RESCUED_MR_FUJI
+    0x550, # EVENT_MET_BILL
+    0x78f, # EVENT_BEAT_SILPH_CO_GIOVANNI
+]
 
 assert len(TRACKER_EVENT_FLAGS) <= 32
 
@@ -258,7 +258,7 @@ class PokemonRBClient(BizHawkClient):
 
         # TRACKER
         tracker_bitfield = 0
-        for i, flag in enumerate(TRACKER_EVENT_FLAGS.values()):
+        for i, flag in enumerate(TRACKER_EVENT_FLAGS):
             if data["EventFlag"][flag // 8] & (1 << (flag % 8)):
                 tracker_bitfield |= 1 << i
 
