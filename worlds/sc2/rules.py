@@ -3367,7 +3367,7 @@ class SC2Logic:
                 ) >= target
                 and (
                     target < 5
-                    or self.zerg_any_anti_air(state)
+                    or self.terran_any_anti_air(state)
                 )
                 and (
                     # Anything that can hit buildings
