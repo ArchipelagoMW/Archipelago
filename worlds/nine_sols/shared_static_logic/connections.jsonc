@@ -521,6 +521,7 @@
         { "item": "Air Dash" }, { "item": "Cloud Leap" }
     ] } ] }, // (CL OR (AD AND grapple)) AND hacking 3
     { "from": "P - Kanghui Level", "to": "P - After Kanghui", "requires": [] }, // TODO: combat logic?
+
     { "from": "P - After Kanghui", "to": "FMR - Left Elevator", "requires": [] }, // one-way elevator
 
     // Factory (Machine Room)
@@ -614,6 +615,7 @@
     { "from": "UC - Upper Cave", "to": "UC - Camp", "requires": [] }, // fall
     { "from": "UC - Camp", "to": "UC - Upper Cave", "requires": [] }, // WC OR DJ
     { "from": "UC - Camp", "to": "Lieguan Arena", "requires": [] },
+
     { "from": "Lieguan Arena", "to": "GD - Left Exit", "requires": [] }, // TODO: combat logic?
 
     // Galactic Dock
@@ -742,7 +744,6 @@
         { "item": "Mystic Nymph: Scout Mode" } // to open the one-way door
     ] },
     { "from": "GoSW - Above Western Cliffs", "to": "GoSW - Upper Left Exit", "requires": [] }, // one-way bridge hack
-
     { "from": "GoSW - Upper Right Exit", "to": "GoSW - Lower Right Exits", "requires": [] }, // rope to portal, fall, press button for vertical green platforms, fall, one-way door
     { "from": "GoSW - Root Node", "to": "GoSW - Lower Right Exits", "requires": [] }, // fall, press button for vertical green platforms, fall, one-way door
 
