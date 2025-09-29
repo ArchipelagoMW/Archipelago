@@ -20,8 +20,8 @@ else:
 class RuleWorldMixin(World):
     """A World mixin that provides helpers for interacting with the rule builder"""
 
-    rule_ids: dict[int, "Rule.Resolved"]
-    """A mapping of ids to resolved rules"""
+    rules_by_hash: dict[int, "Rule.Resolved"]
+    """A mapping of hash values to resolved rules"""
 
     rule_item_dependencies: dict[str, set[int]]
     """A mapping of item name to set of rule ids"""
@@ -54,7 +54,7 @@ class RuleWorldMixin(World):
 
     def __init__(self, multiworld: MultiWorld, player: int) -> None:
         super().__init__(multiworld, player)
-        self.rule_ids = {}
+        self.rules_by_hash = {}
         self.rule_item_dependencies = defaultdict(set)
         self.rule_region_dependencies = defaultdict(set)
         self.rule_location_dependencies = defaultdict(set)
@@ -83,9 +83,9 @@ class RuleWorldMixin(World):
     def get_cached_rule(self, resolved_rule: "Rule.Resolved") -> "Rule.Resolved":
         """Returns a cached instance of a resolved rule based on the hash"""
         rule_hash = hash(resolved_rule)
-        if rule_hash in self.rule_ids:
-            return self.rule_ids[rule_hash]
-        self.rule_ids[rule_hash] = resolved_rule
+        if rule_hash in self.rules_by_hash:
+            return self.rules_by_hash[rule_hash]
+        self.rules_by_hash[rule_hash] = resolved_rule
         return resolved_rule
 
     def register_rule_dependencies(self, resolved_rule: "Rule.Resolved") -> None:
