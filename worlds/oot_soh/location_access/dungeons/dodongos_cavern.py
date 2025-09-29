@@ -1,10 +1,7 @@
 from typing import TYPE_CHECKING
 
 from worlds.generic.Rules import set_rule
-from ...Regions import double_link_regions
-from ...Items import SohItem
-from ...Locations import SohLocation, SohLocationData
-from ...Enums import Regions, Items, Locations, Enemies, CombatRanges
+from ...Enums import *
 from ...LogicHelpers import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
                                   has_fire_source_with_torch, can_use, can_do_trick, can_jump_slash, blast_or_smash)
 
@@ -57,8 +54,6 @@ def set_region_rules(world: "SohWorld") -> None:
         or can_attack(state, world)
         or (take_damage(state, world) and can_shield(state, world)))
 
-    double_link_regions(world, Regions.DODONGOS_CAVERN_SE_CORRIDOR.value, Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value)
-
     world.get_region(Regions.DODONGOS_CAVERN_SE_ROOM.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_SE_CORRIDOR.value))
 
@@ -67,11 +62,11 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value),
-        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, CombatRanges.CLOSE.value, quantity=2))
+        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, EnemyDistance.CLOSE.value, quantity=2))
 
     world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value),
-        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, CombatRanges.CLOSE.value, quantity=2))
+        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, EnemyDistance.CLOSE.value, quantity=2))
 
     world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value),
@@ -229,4 +224,4 @@ def set_location_rules(world: "SohWorld") -> None:
              rule=lambda state: can_break_mud_walls(state, world))
 
     set_rule(world.get_location("Dodongos Cavern Lower Lizalfos"),
-             rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, CombatRanges.CLOSE.value, quantity=2))
+             rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, EnemyDistance.CLOSE.value, quantity=2))

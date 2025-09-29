@@ -1,19 +1,29 @@
 from typing import TYPE_CHECKING
 
-from worlds.generic.Rules import set_rule
-from ..Items import SohItem
-from ..Locations import SohLocation, SohLocationData
 from ..Enums import *
-from ..LogicHelpers import (add_locations, connect_regions, can_use)
+from ..LogicHelpers import *
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
+
+
+class EventLocations(str, Enum):
+    ROOT_AMMO_DROP = "Root Ammo Drop"
+    TRIFORCE_HUNT_COMPLETION = "Triforce Hunt Completion"
 
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
 
     ## Root
+    # Events
+    add_events(Regions.KOKIRI_FOREST.value, world, [
+        [EventLocations.ROOT_AMMO_DROP.value, Events.AMMO_CAN_DROP.value, lambda state: True], # Not sure why but ship has this set to true immediately, so this mirrors that.
+        [EventLocations.TRIFORCE_HUNT_COMPLETION.value, Events.GAME_COMPLETED.value,  lambda state:
+         (world.options.triforce_hunt == 1 and 
+         has_item(Items.TRIFORCE_PIECE.value, state, world, world.options.triforce_hunt_required_pieces.value)) or 
+         has_item(Events.GAME_COMPLETED.value, state, world)]
+    ])
     # Locations
     add_locations(Regions.ROOT.value, world, [
         [Locations.LINKS_POCKET.value, lambda state: True]
