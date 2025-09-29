@@ -48,6 +48,8 @@ def main(
     if not isinstance(input_path, pathlib.Path):
         input_path = pathlib.Path(input_path)
 
+    assert input_path.is_dir(), f"{input_path} is not a directory or does not exist"
+
     os.makedirs(output_path, exist_ok=True)
 
     if apworld_name is None:
