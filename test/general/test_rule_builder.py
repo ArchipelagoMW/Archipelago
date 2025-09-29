@@ -35,14 +35,14 @@ from worlds.AutoWorld import WebWorld, World
 
 
 class ToggleOption(Toggle):
-    auto_display_name: ClassVar[bool] = True
+    auto_display_name = True
 
 
 class ChoiceOption(Choice):
-    option_first: ClassVar[int] = 0
-    option_second: ClassVar[int] = 1
-    option_third: ClassVar[int] = 2
-    default: ClassVar[int] = 0
+    option_first = 0
+    option_second = 1
+    option_third = 2
+    default = 0
 
 
 @dataclass
@@ -56,30 +56,30 @@ LOC_COUNT = 20
 
 
 class RuleBuilderItem(Item):
-    game: str = GAME
+    game = GAME
 
 
 class RuleBuilderLocation(Location):
-    game: str = GAME
+    game = GAME
 
 
 class RuleBuilderWebWorld(WebWorld):
-    tutorials = []  # noqa: RUF012  # pyright: ignore[reportUnannotatedClassAttribute]
+    tutorials = []  # noqa: RUF012
 
 
 class RuleBuilderWorld(RuleWorldMixin, World):  # pyright: ignore[reportUnsafeMultipleInheritance]
-    game: ClassVar[str] = GAME
-    web: ClassVar[WebWorld] = RuleBuilderWebWorld()
+    game = GAME
+    web = RuleBuilderWebWorld()
     item_name_to_id: ClassVar[dict[str, int]] = {f"Item {i}": i for i in range(1, LOC_COUNT + 1)}
     location_name_to_id: ClassVar[dict[str, int]] = {f"Location {i}": i for i in range(1, LOC_COUNT + 1)}
     item_name_groups: ClassVar[dict[str, set[str]]] = {
         "Group 1": {"Item 1", "Item 2", "Item 3"},
         "Group 2": {"Item 4", "Item 5"},
     }
-    hidden: ClassVar[bool] = True
-    options_dataclass: "ClassVar[type[PerGameCommonOptions]]" = RuleBuilderOptions
+    hidden = True
+    options_dataclass = RuleBuilderOptions
     options: RuleBuilderOptions  # pyright: ignore[reportIncompatibleVariableOverride]
-    origin_region_name: str = "Region 1"
+    origin_region_name = "Region 1"
 
     @override
     def create_item(self, name: str) -> "RuleBuilderItem":
@@ -847,24 +847,24 @@ class TestExplain(unittest.TestCase):
             {"type": "text", "text": "Missing "},
             {"type": "color", "color": "cyan", "text": "4"},
             {"type": "text", "text": "x "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 1", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 1"},
             {"type": "text", "text": " | "},
             {"type": "text", "text": "Missing "},
             {"type": "color", "color": "cyan", "text": "some"},
             {"type": "text", "text": " of ("},
             {"type": "text", "text": "Missing: "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 2", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 2"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 3", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 3"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " | "},
             {"type": "text", "text": "Missing "},
             {"type": "color", "color": "cyan", "text": "all"},
             {"type": "text", "text": " of ("},
             {"type": "text", "text": "Missing: "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 4", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 4"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 5", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 5"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " & "},
@@ -872,10 +872,10 @@ class TestExplain(unittest.TestCase):
             {"type": "color", "color": "cyan", "text": "some"},
             {"type": "text", "text": " of ("},
             {"type": "text", "text": "Missing: "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 6", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 6"},
             {"type": "text", "text": " x1"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 7", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 7"},
             {"type": "text", "text": " x5"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " & "},
@@ -883,10 +883,10 @@ class TestExplain(unittest.TestCase):
             {"type": "color", "color": "cyan", "text": "all"},
             {"type": "text", "text": " of ("},
             {"type": "text", "text": "Missing: "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 8", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 8"},
             {"type": "text", "text": " x2"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 9", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 9"},
             {"type": "text", "text": " x3"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " & "},
@@ -894,20 +894,20 @@ class TestExplain(unittest.TestCase):
             {"type": "color", "color": "salmon", "text": "0/2"},
             {"type": "text", "text": " items from ("},
             {"type": "text", "text": "Missing: "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 10", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 10"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 11", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 11"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 12", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 12"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " & "},
             {"type": "text", "text": "Has "},
             {"type": "color", "color": "salmon", "text": "0/1"},
             {"type": "text", "text": " unique items from ("},
             {"type": "text", "text": "Missing: "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 13", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 13"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "salmon", "text": "Item 14", "player": 1},
+            {"type": "color", "color": "salmon", "text": "Item 14"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " & "},
             {"type": "text", "text": "Has "},
@@ -945,24 +945,24 @@ class TestExplain(unittest.TestCase):
             {"type": "text", "text": "Has "},
             {"type": "color", "color": "cyan", "text": "4"},
             {"type": "text", "text": "x "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 1", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 1"},
             {"type": "text", "text": " | "},
             {"type": "text", "text": "Has "},
             {"type": "color", "color": "cyan", "text": "all"},
             {"type": "text", "text": " of ("},
             {"type": "text", "text": "Found: "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 2", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 2"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 3", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 3"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " | "},
             {"type": "text", "text": "Has "},
             {"type": "color", "color": "cyan", "text": "some"},
             {"type": "text", "text": " of ("},
             {"type": "text", "text": "Found: "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 4", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 4"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 5", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 5"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " & "},
@@ -970,10 +970,10 @@ class TestExplain(unittest.TestCase):
             {"type": "color", "color": "cyan", "text": "all"},
             {"type": "text", "text": " of ("},
             {"type": "text", "text": "Found: "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 6", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 6"},
             {"type": "text", "text": " x1"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 7", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 7"},
             {"type": "text", "text": " x5"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " & "},
@@ -981,10 +981,10 @@ class TestExplain(unittest.TestCase):
             {"type": "color", "color": "cyan", "text": "some"},
             {"type": "text", "text": " of ("},
             {"type": "text", "text": "Found: "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 8", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 8"},
             {"type": "text", "text": " x2"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 9", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 9"},
             {"type": "text", "text": " x3"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " & "},
@@ -992,20 +992,20 @@ class TestExplain(unittest.TestCase):
             {"type": "color", "color": "green", "text": "30/2"},
             {"type": "text", "text": " items from ("},
             {"type": "text", "text": "Found: "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 10", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 10"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 11", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 11"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 12", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 12"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " & "},
             {"type": "text", "text": "Has "},
             {"type": "color", "color": "green", "text": "2/1"},
             {"type": "text", "text": " unique items from ("},
             {"type": "text", "text": "Found: "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 13", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 13"},
             {"type": "text", "text": ", "},
-            {"type": "item_name", "flags": 1, "color": "green", "text": "Item 14", "player": 1},
+            {"type": "color", "color": "green", "text": "Item 14"},
             {"type": "text", "text": ")"},
             {"type": "text", "text": " & "},
             {"type": "text", "text": "Has "},

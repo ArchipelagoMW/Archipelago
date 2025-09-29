@@ -1000,15 +1000,11 @@ class Has(Rule[TWorld], game="Archipelago"):
             if self.count > 1:
                 messages.append({"type": "color", "color": "cyan", "text": str(self.count)})
                 messages.append({"type": "text", "text": "x "})
-            item_message: JSONMessagePart = {
-                "type": "item_name",
-                "flags": 0b001,
-                "text": self.item_name,
-                "player": self.player,
-            }
             if state:
-                item_message["color"] = "green" if self(state) else "salmon"
-            messages.append(item_message)
+                color = "green" if self(state) else "salmon"
+                messages.append({"type": "color", "color": color, "text": self.item_name})
+            else:
+                messages.append({"type": "item_name", "flags": 0b001, "text": self.item_name, "player": self.player})
             return messages
 
         @override
@@ -1103,9 +1099,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
                 for i, item in enumerate(found):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "green", "text": item})
                 if missing:
                     messages.append({"type": "text", "text": "; "})
 
@@ -1114,9 +1108,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
                 for i, item in enumerate(missing):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "salmon", "text": item})
             messages.append({"type": "text", "text": ")"})
             return messages
 
@@ -1216,9 +1208,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
                 for i, item in enumerate(found):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "green", "text": item})
                 if missing:
                     messages.append({"type": "text", "text": "; "})
 
@@ -1227,9 +1217,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
                 for i, item in enumerate(missing):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "salmon", "text": item})
             messages.append({"type": "text", "text": ")"})
             return messages
 
@@ -1323,9 +1311,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
                 for i, (item, count) in enumerate(found):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "green", "text": item})
                     messages.append({"type": "text", "text": f" x{count}"})
                 if missing:
                     messages.append({"type": "text", "text": "; "})
@@ -1335,9 +1321,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
                 for i, (item, count) in enumerate(missing):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "salmon", "text": item})
                     messages.append({"type": "text", "text": f" x{count}"})
             messages.append({"type": "text", "text": ")"})
             return messages
@@ -1432,9 +1416,7 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
                 for i, (item, count) in enumerate(found):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "green", "text": item})
                     messages.append({"type": "text", "text": f" x{count}"})
                 if missing:
                     messages.append({"type": "text", "text": "; "})
@@ -1444,9 +1426,7 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
                 for i, (item, count) in enumerate(missing):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "salmon", "text": item})
                     messages.append({"type": "text", "text": f" x{count}"})
             messages.append({"type": "text", "text": ")"})
             return messages
@@ -1550,11 +1530,12 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
             found_count = state.count_from_list(self.item_names, self.player)
             found = [item for item in self.item_names if state.has(item, self.player)]
             missing = [item for item in self.item_names if item not in found]
+            color = "green" if found_count >= self.count else "salmon"
             messages = [
                 {"type": "text", "text": "Has "},
                 {
                     "type": "color",
-                    "color": "green" if found_count >= self.count else "salmon",
+                    "color": color,
                     "text": f"{found_count}/{self.count}",
                 },
                 {"type": "text", "text": " items from ("},
@@ -1564,9 +1545,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
                 for i, item in enumerate(found):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "green", "text": item})
                 if missing:
                     messages.append({"type": "text", "text": "; "})
 
@@ -1575,9 +1554,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
                 for i, item in enumerate(missing):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "salmon", "text": item})
             messages.append({"type": "text", "text": ")"})
             return messages
 
@@ -1681,13 +1658,10 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
             found_count = state.count_from_list_unique(self.item_names, self.player)
             found = [item for item in self.item_names if state.has(item, self.player)]
             missing = [item for item in self.item_names if item not in found]
+            color = "green" if found_count >= self.count else "salmon"
             messages = [
                 {"type": "text", "text": "Has "},
-                {
-                    "type": "color",
-                    "color": "green" if found_count >= self.count else "salmon",
-                    "text": f"{found_count}/{self.count}",
-                },
+                {"type": "color", "color": color, "text": f"{found_count}/{self.count}"},
                 {"type": "text", "text": " unique items from ("},
             ]
             if found:
@@ -1695,9 +1669,7 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
                 for i, item in enumerate(found):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "green", "text": item})
                 if missing:
                     messages.append({"type": "text", "text": "; "})
 
@@ -1706,9 +1678,7 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
                 for i, item in enumerate(missing):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
-                    messages.append(
-                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
-                    )
+                    messages.append({"type": "color", "color": "salmon", "text": item})
             messages.append({"type": "text", "text": ")"})
             return messages
 
