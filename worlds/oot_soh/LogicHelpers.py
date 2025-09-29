@@ -105,6 +105,11 @@ def has_item(itemName: Enum, state: CollectionState, world: "SohWorld", count: i
     else:
         return state.has(itemName.value, player, count)
 
+def can_use_any (names: list[Enum], state: CollectionState, world: "SohWorld", can_be_child: bool = True, can_be_adult: bool = True) -> bool:
+    for name in names:
+        if can_use(name, state, world, can_be_child, can_be_adult):
+            return True
+    return False
 
 def can_use(name: Enum, state: CollectionState, world: "SohWorld", can_be_child: bool = True, can_be_adult: bool = True) -> bool:
     if not has_item(name, state, world):
@@ -219,7 +224,7 @@ def can_play_song(state: CollectionState, world: "SohWorld", song: Enum) -> bool
 
 def has_explosives(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link has access to explosives (bombs or bombchus)."""
-    return can_use(Items.PROGRESSIVE_BOMB_BAG, state, world) or can_use(Items.PROGRESSIVE_BOMBCHU, state, world)
+    return can_use_any([Items.PROGRESSIVE_BOMB_BAG, Items.PROGRESSIVE_BOMBCHU], state, world)
 
 
 def blast_or_smash(state: CollectionState, world: "SohWorld") -> bool:
@@ -234,10 +239,7 @@ def blue_fire(state: CollectionState, world: "SohWorld") -> bool:
 
 def can_use_sword(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can use any sword."""
-    return (can_use(Items.KOKIRI_SWORD, state, world) or
-            can_use(Items.MASTER_SWORD, state, world) or
-            can_use(Items.BIGGORONS_SWORD, state, world))
-
+    return can_use_any([Items.KOKIRI_SWORD, Items.MASTER_SWORD, Items.PROGRESSIVE_BOMBCHU], state, world)
 
 def has_projectile(state: CollectionState, world: "SohWorld", age: str = "either") -> bool:
     """Check if Link has access to projectiles."""
@@ -259,9 +261,8 @@ def has_projectile(state: CollectionState, world: "SohWorld", age: str = "either
 
 
 def can_use_projectile(state: CollectionState, world: "SohWorld", age: str = "either") -> bool:
-    return (has_explosives(state, world) or can_use(Items.PROGRESSIVE_SLINGSHOT, state, world) or
-            can_use(Items.BOOMERANG, state, world) or can_use(Items.PROGRESSIVE_HOOKSHOT, state, world) or
-            can_use(Items.PROGRESSIVE_BOW, state, world))
+    return (can_use_any([Items.PROGRESSIVE_SLINGSHOT,Items.BOOMERANG,Items.PROGRESSIVE_HOOKSHOT,Items.PROGRESSIVE_BOW], state, world)
+        or has_explosives(state, world))
 
 
 def can_break_mud_walls(state: CollectionState, world: "SohWorld") -> bool:
@@ -292,11 +293,10 @@ def is_child(state: CollectionState, world: "SohWorld") -> bool:
 
 def can_damage(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can deal damage to enemies."""
-    return (can_use(Items.PROGRESSIVE_SLINGSHOT, state, world) or 
-            can_jump_slash(state, world) or 
-            has_explosives(state, world) or 
-            can_use(Items.DINS_FIRE, state, world) or
-            can_use(Items.PROGRESSIVE_BOW, state, world))
+    return (can_jump_slash(state, world) or
+            has_explosives(state, world) or
+            can_use_any([Items.PROGRESSIVE_SLINGSHOT, Items.PROGRESSIVE_BOW, Items.DINS_FIRE], state, world)
+            )
 
 
 def can_attack(state: CollectionState, world: "SohWorld") -> bool:
@@ -315,9 +315,7 @@ def can_standing_shield(state: CollectionState, world: "SohWorld") -> bool:
 
 def can_shield(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can use a shield for blocking or stunning."""
-    return (can_use(Items.MIRROR_SHIELD, state, world) or
-            can_use(Items.HYLIAN_SHIELD, state, world) or
-            can_use(Items.DEKU_SHIELD, state, world))
+    return can_use_any([Items.MIRROR_SHIELD,Items.HYLIAN_SHIELD,Items.DEKU_SHIELD], state, world)
 
 
 def take_damage(state: CollectionState, world: "SohWorld") -> bool:
@@ -352,10 +350,7 @@ def can_break_crates(state: CollectionState, world: "SohWorld") -> bool:
 
 def can_hit_eye_targets(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can hit eye switches/targets."""
-    return (can_use(Items.PROGRESSIVE_BOW, state, world) or 
-            can_use(Items.PROGRESSIVE_SLINGSHOT, state, world) or
-            can_use(Items.PROGRESSIVE_HOOKSHOT, state, world) or
-            can_use(Items.BOOMERANG, state, world))
+    return can_use_any([Items.PROGRESSIVE_BOW,Items.PROGRESSIVE_SLINGSHOT, Items.PROGRESSIVE_HOOKSHOT, Items.BOOMERANG], state, world)
 
 
 def can_stun_deku(state: CollectionState, world: "SohWorld") -> bool:
@@ -381,15 +376,11 @@ def has_fire_source(state: CollectionState, world: "SohWorld") -> bool:
 
 def can_jump_slash(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can perform a jump slash with any sword."""
-    return (can_use(Items.KOKIRI_SWORD, state, world) or 
-            can_use(Items.MASTER_SWORD, state, world) or 
-            can_use(Items.BIGGORONS_SWORD, state, world) or
-            can_use(Items.MEGATON_HAMMER, state, world))  # Hammer can substitute for sword in some cases
+    # Hammer can substitute for sword in some cases?
+    return can_use_any([Items.KOKIRI_SWORD,Items.MASTER_SWORD,Items.BIGGORONS_SWORD,Items.MEGATON_HAMMER], state, world)
 
 def call_gossip_fairy_except_suns(state: CollectionState, world: "SohWorld") -> bool:
-    return (can_use(Items.ZELDAS_LULLABY, state, world) or
-            can_use(Items.EPONAS_SONG, state, world) or
-            can_use(Items.SONG_OF_TIME, state, world))
+    return can_use_any([Items.ZELDAS_LULLABY,Items.EPONAS_SONG,Items.SONG_OF_TIME], state, world)
 
 def call_gossip_fairy(state: CollectionState, world: "SohWorld") -> bool:
     return (call_gossip_fairy_except_suns(state, world) or
@@ -523,9 +514,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enum, comba
     # Bubbles (need specific attacks)
     if enemy in [Enemies.BLUE_BUBBLE, Enemies.GREEN_BUBBLE]:
         return (can_jump_slash(state, world) or
-                can_use(Items.PROGRESSIVE_BOW, state, world) or
-                can_use(Items.PROGRESSIVE_HOOKSHOT, state, world) or
-                can_use(Items.BOOMERANG, state, world))
+                can_use_any([Items.PROGRESSIVE_BOW,Items.PROGRESSIVE_HOOKSHOT,Items.BOOMERANG], state, world))
 
     # Tough enemies
     if enemy in [Enemies.DEAD_HAND, Enemies.LIKE_LIKE, Enemies.FLOORMASTER, Enemies.WALLMASTER]:
@@ -679,7 +668,7 @@ def can_get_enemy_drop(state: CollectionState, world: "SohWorld", enemy : Enemie
     match enemy:
         case Enemies.GOLD_SKULLTULA:
             if range in [EnemyDistance.BOOMERANG, EnemyDistance.HOOKSHOT, EnemyDistance.LONGSHOT]:
-                drop = (can_use(Items.BOOMERANG, state, world) or can_use(Items.HOOKSHOT, state, world) or can_use(Items.LONGSHOT, state, world))
+                drop = (can_use_any([Items.BOOMERANG, Items.HOOKSHOT, Items.LONGSHOT], state, world))
 
             return drop
         case Enemies.KEESE:
@@ -690,7 +679,7 @@ def can_get_enemy_drop(state: CollectionState, world: "SohWorld", enemy : Enemie
             return aboveLink or (range.value <= EnemyDistance.BOOMERANG.value and can_use(Items.BOOMERANG, state, world))
         
 def can_detonate_bomb_flowers(state: CollectionState, world: "SohWorld") -> bool:
-    return (can_use(Items.PROGRESSIVE_BOW, state, world) or has_explosives(state, world) or can_use(Items.DINS_FIRE, state, world))
+    return can_use_any([Items.PROGRESSIVE_BOW, Items.DINS_FIRE], state, world) or has_explosives(state, world)
 
 def can_detonate_upright_bomb_flower(state: CollectionState, world: "SohWorld") -> bool:
     return (can_detonate_bomb_flowers(state, world) 
