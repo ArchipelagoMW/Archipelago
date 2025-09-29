@@ -3420,12 +3420,6 @@ class EnemyDistance(Enum):
     LONGSHOT = 8
     FAR = 9
 
-class EventLocations(str, Enum):
-    DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
-    KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
-    BUG_SHRUBS_ZR = "Zora River Bug Shrubs"
-
-
 class Events(str, Enum):
     AMMO_CAN_DROP = "Ammo Can Drop"
     CAN_BUY_ARROWS = "Can Buy Arrows"

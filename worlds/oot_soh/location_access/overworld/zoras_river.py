@@ -1,10 +1,4 @@
 from typing import TYPE_CHECKING
-
-
-from ...Rules import set_rule
-from ...Regions import double_link_regions
-from ...Items import SohItem
-from ...Locations import SohLocation, SohLocationData
 from ...Enums import *
 from ...LogicHelpers import *
 
@@ -83,11 +77,11 @@ def set_region_rules(world: "SohWorld") -> None:
                                                            can_use(Items.SUNS_SONG.value, state, world)],
         [Locations.ZR_FROGS_SONG_OF_TIME.value, lambda state: is_child(state, world) and
                                                               can_use(Items.SONG_OF_TIME.value, state, world)],
-        [Locations.ZR_NEAR_OPEN_GROTTO_FREESTANDING_PO_H.value, lambda state: is_child(state, world) or
+        [Locations.ZR_NEAR_OPEN_GROTTO_FREESTANDING_POH.value, lambda state: is_child(state, world) or
                                                                               can_use(Items.HOVER_BOOTS.value, state, world)
                                                                               or (is_adult(state, world)
                                                                                   and can_do_trick("ZR Lower Piece of Heart without Hover Boots", state, world))],
-        [Locations.ZR_NEAR_DOMAIN_FREESTANDING_PO_H.value, lambda state: is_child(state, world) or
+        [Locations.ZR_NEAR_DOMAIN_FREESTANDING_POH.value, lambda state: is_child(state, world) or
                                                                               can_use(Items.HOVER_BOOTS.value, state, world)
                                                                               or (is_adult(state, world)
                                                                                   and can_do_trick("ZR Upper Piece of Heart without Hover Boots", state, world))],
@@ -149,9 +143,6 @@ def set_region_rules(world: "SohWorld") -> None:
 
     ])
     # Events
-    add_events(Regions.ZORA_RIVER.value, world, [
-        [EventLocations.BUG_SHRUBS_ZR.value, Events.BUG_SHRUBS, lambda state: can_cut_shrubs(state, world)],
-    ])
 
     ## ZR From Shortcut
     # Connections
