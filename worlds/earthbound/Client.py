@@ -225,12 +225,15 @@ class EarthBoundClient(SNIClient):
                 }])
 
         inbox = ctx.stored_data.get(f"GiftBox;{ctx.team};{ctx.slot}")
+        snes_logger.info(f"im sleeping")
         motherbox = ctx.stored_data.get(f"GiftBoxes;{ctx.team}")
         if inbox:
+            snes_logger.info(f"I'm glorching out rn we just got a {inbox}")
             gift_item_name = "None"
             key, gift = next(iter(inbox.items()))
             if "item_name" in gift or "ItemName" in gift:
                 gift_item_name = gift.get("item_name", gift.get("ItemName"))
+                snes_logger.info(f"What the fuck!!!! It's glorching!!! You got a {gift_item_name}!")
             if gift_item_name in item_id_table and gift_item_name not in gift_exclusions:
                 # If the name matches an EB item, convert it to one (even if not coming from EB)
                 item = item_id_table[gift_item_name]
@@ -239,6 +242,7 @@ class EarthBoundClient(SNIClient):
 
             inbox_queue = await snes_read(ctx, WRAM_START + 0x3200, 1)
             # Pause if the receiver queue is full
+            snes_logger.info(f"i cant bleieve there are {inbox_queue[0]} items in my queue rn")
             if not inbox_queue[0]:
                 await snes_write(ctx, [(WRAM_START + 0x3200, bytes([item]))])
                 inbox.pop(key)
@@ -249,6 +253,8 @@ class EarthBoundClient(SNIClient):
                             "default": {},
                             "operations": [{"operation": "pop", "value": key}]
                         }])
+            else:
+                snes_logger.info("whuh why is this here :glorp:")
 
         # We're in the Gift selection menu. This should write the selected player's name into RAM
         # for parsing.

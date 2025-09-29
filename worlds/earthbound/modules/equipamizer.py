@@ -703,9 +703,9 @@ def randomize_weapons(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     weapon_names = {
         "Ness": ["bat", "stick", "club", "board", "racket", "cue", "pole", "paddle"],
         "Paula": ["fry pan", "frypan", "skillet", "whisk", "saucepan", "pin"],
-        "Jeff": ["gun", "beam", "air gun", "beam gun", "cannon", "blaster", "pistol", "revolver", "shotgun"],
-        "Poo": ["Sword", "Katana", "Knife", "Scissor", "Cutter", "Blade", "Chisel", "Saw", "Axe"],
-        "All": ["yo-yo", "slingshot", "boomerang"]
+        "Jeff": ["gun", "beam", "air gun", "beam gun", "cannon", "blaster", "pistol", "revolver", "shotgun", "rifle"],
+        "Poo": ["Sword", "Katana", "Knife", "Scissor", "Cutter", "Blade", "Chisel", "Saw", "Axe", "Scalpel", "Sabre"],
+        "All": ["yo-yo", "slingshot", "boomerang", "chakram", "bow"]
     }
 
     taken_names = []
