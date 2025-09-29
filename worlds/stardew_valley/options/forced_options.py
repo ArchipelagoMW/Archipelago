@@ -80,7 +80,7 @@ def force_no_jojapocalypse_without_being_sure(world_options: options.StardewVall
 
     if has_jojapocalypse and not is_sure:
         world_options.jojapocalypse.value = Jojapocalypse.option_disabled
-        logger.warning(f"Jojapocalypse requires affirmative consent to be enabled."
+        logger.warning(f"Jojapocalypse requires affirmative consent to be enabled. "
                        f"Jojapocalypse option forced to '{world_options.jojapocalypse}' for player {player} ({player_name})")
 
     start_price = world_options.joja_start_price.value
@@ -88,7 +88,7 @@ def force_no_jojapocalypse_without_being_sure(world_options: options.StardewVall
     if end_price <= start_price:
         end_price = start_price + 1
         world_options.joja_end_price.value = end_price
-        logger.warning(f"Jojapocalypse End price must be higher than the start price"
+        logger.warning(f"Jojapocalypse End price must be higher than the start price. "
                        f"Jojapocalypse End Price forced to '{world_options.joja_end_price}' for player {player} ({player_name})")
 
 
@@ -106,7 +106,7 @@ def force_eatsanity_no_enzymes_if_no_other_eatsanity(world_options: options.Star
 def force_hatsanity_when_goal_is_mad_hatter(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
     if world_options.exclude_ginger_island.value and HatsanityOptionName.post_perfection in world_options.hatsanity:
         world_options.hatsanity.value.remove(HatsanityOptionName.post_perfection)
-        logger.warning(f"Hatsanity '{HatsanityOptionName.post_perfection}' requires ginger island "
+        logger.warning(f"Hatsanity '{HatsanityOptionName.post_perfection}' requires ginger island. "
                        f"'{HatsanityOptionName.post_perfection}' force-removed from Hatsanity")
 
     goal_is_mad_hatter = world_options.goal == options.Goal.option_mad_hatter
