@@ -39,6 +39,8 @@ def mystery_argparse():
     parser.add_argument('--spoiler', type=int, default=defaults.spoiler)
     parser.add_argument('--outputpath', default=settings.general_options.output_path,
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
+    parser.add_argument('--allow_quantity', action="store_true", default=defaults.allow_quantity,
+                        help='Allows the use of the quantity option in yamls. Default is the set value in the host.yaml.')
     parser.add_argument('--race', action='store_true', default=defaults.race)
     parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
     parser.add_argument('--log_level', default=defaults.loglevel, help='Sets log level')
@@ -120,7 +122,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
 
     player_id = 1
     player_files = {}
-    allow_quantity = get_settings().generator.allow_quantity
+    allow_quantity = args.allow_quantity
     for file in os.scandir(args.player_files_path):
         fname = file.name
         if file.is_file() and not fname.startswith(".") and not fname.lower().endswith(".ini") and \
