@@ -81,6 +81,7 @@ Currently, the following games are supported:
 * shapez
 * Paint
 * Celeste (Open World)
+* Choo-Choo Charles
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
