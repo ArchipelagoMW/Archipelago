@@ -160,7 +160,6 @@ def scarecrows_song(state: CollectionState, world: "SohWorld") -> bool:
             and state.has_group_unique("Ocarina Buttons", world.player, 2))
             or (has_item(Events.CHILD_SCARECROW, state, world) and has_item(Events.ADULT_SCARECROW, state, world)))
 
-
 def has_bottle(state: CollectionState, world: "SohWorld") -> bool:  # soup
     if state.has_any(no_rules_bottles, world.player):
         return True
