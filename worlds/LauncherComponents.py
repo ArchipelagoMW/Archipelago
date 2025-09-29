@@ -1,11 +1,12 @@
 import bisect
 import logging
+import os.path
 import pathlib
 import weakref
 from enum import Enum, auto
-from typing import Optional, Callable, List, Iterable, Tuple
+from typing import Callable, Iterable, List, Optional, Tuple
 
-from Utils import local_path, open_filename, is_frozen
+from Utils import is_frozen, local_path, open_filename
 
 
 class Type(Enum):
@@ -233,10 +234,9 @@ components: List[Component] = [
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
 
-    #MegaMan Battle Network 3
+    # MegaMan Battle Network 3
     Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'))
 ]
-
 
 # if registering an icon from within an apworld, the format "ap:module.name/path/to/file.png" can be used
 icon_paths = {
@@ -246,36 +246,17 @@ icon_paths = {
 
 if not is_frozen():
     def _build_apworlds():
-        import json
-        import os
-        import zipfile
-
+        import build_apworld
         from worlds import AutoWorldRegister
-        from worlds.Files import APWorldContainer
 
         apworlds_folder = os.path.join("build", "apworlds")
-        os.makedirs(apworlds_folder, exist_ok=True)
-        for worldname, worldtype in AutoWorldRegister.world_types.items():
-            file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
-            world_directory = os.path.join("worlds", file_name)
-            if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
-                manifest = json.load(open(os.path.join(world_directory, "archipelago.json")))
-            else:
-                manifest = {}
 
-            zip_path = os.path.join(apworlds_folder, file_name + ".apworld")
-            apworld = APWorldContainer(str(zip_path))
-            apworld.game = worldtype.game
-            manifest.update(apworld.get_manifest())
-            apworld.manifest_path = f"{file_name}/archipelago.json"
-            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED,
-                                 compresslevel=9) as zf:
-                for path in pathlib.Path(world_directory).rglob("*.*"):
-                    relative_path = os.path.join(*path.parts[path.parts.index("worlds") + 1:])
-                    if "__MACOSX" in relative_path or ".DS_STORE" in relative_path or "__pycache__" in relative_path:
-                        continue
-                    if not relative_path.endswith("archipelago.json"):
-                        zf.write(path, relative_path)
-                zf.writestr(apworld.manifest_path, json.dumps(manifest))
+        for _, worldtype in AutoWorldRegister.world_types.items():
+            build_apworld.main(
+                input_path=os.path.dirname(worldtype.__file__),
+                output_path=apworlds_folder,
+                world_type=worldtype
+            )
 
-    components.append(Component('Build apworlds', func=_build_apworlds, cli=True,))
+
+    components.append(Component('Build apworlds', func=_build_apworlds, cli=True, ))
