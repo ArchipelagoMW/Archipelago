@@ -32,6 +32,19 @@ def main(
     apworld_name: Optional[str] = None,
     world_type: Optional[Type[World]] = None
 ):
+    """
+    Creates an apworld file at output_path containing the directory at input_path.
+    Note: some common dirs/files that should not be packaged are automatically excluded (see ZIP_EXCLUDE).
+
+    The apworld spec can be found here: https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/apworld%20specification.md
+
+    :param input_path: Path to the directory which will be used as the contents of the apworld
+    :param output_path: Path to the directory into which the created apworld file will be put
+    :param apworld_name: Name for the apworld file and its contained directory. Defaults to input_path directory name
+    :param world_type: The worlds.AutoWorld.World type for this apworld. If omitted, it will be found/loaded automatically.
+    (world_type's presence is an optimization in case the caller already has it)
+    """
+
     if not isinstance(input_path, pathlib.Path):
         input_path = pathlib.Path(input_path)
 
@@ -107,6 +120,7 @@ def _find_or_load_world_type(path: pathlib.Path) -> Type[World]:
 def _find_registered_world_type_for_path(path: pathlib.Path) -> Optional[Type[World]]:
     return next(
         (
+            # dicts keep insertion order, so if we just added a world, it'll be last, hence the reversed
             world_type for _, world_type in reversed(AutoWorldRegister.world_types.items())
             if _is_world_type_from_path(world_type, path)
         ),
