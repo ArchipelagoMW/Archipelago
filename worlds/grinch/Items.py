@@ -50,9 +50,9 @@ PVT: str = "Progressive Vacuum Tube"
 PC: str = "Pancake"
 SR: str = "Sleigh Room Key"
 BB: str = "Bad Breath"
-SO: str = "Seize Objects"
+Se: str = "Seize"
 M: str = "Max"
-TT: str = "Sneak"
+Sn: str = "Sneak"
 
 #Gadgets
 #All gadgets require at least 4 different blueprints to be unlocked in the computer in Mount Crumpit.

@@ -88,10 +88,10 @@ class GadgetRando(OptionSet):
 class Moverando(OptionSet):
     """Randomizes Grinch's moveset along with randomizing max into the pool. [NOT IMPLEMENTED]
 
-    Valid keys: "Pancake", "Seize Objects", "Max", "Bad Breath", "Sneak"
+    Valid keys: "Pancake", "Seize", "Max", "Bad Breath", "Sneak"
     """
     display_name = "Moves Randomized"
-    valid_keys = {"Pancake", "Seize Objects", "Max", "Bad Breath", "Sneak"}
+    valid_keys = {"Pancake", "Seize", "Max", "Bad Breath", "Sneak"}
 
 class UnlimitedEggs(Toggle):
     """Determine whether or not you run out of rotten eggs when you utilize your gadgets."""
