@@ -256,13 +256,13 @@ class EnabledCampaigns(OptionSet):
     Determines which campaign's missions will be used.
     Wings of Liberty, Prophecy, and Prologue are the only free-to-play campaigns.
     Valid campaign names:
-    - Wings of Liberty
-    - Prophecy
-    - Heart of the Swarm
-    - Whispers of Oblivion (Legacy of the Void: Prologue)
-    - Legacy of the Void
-    - Into the Void (Legacy of the Void: Epilogue)
-    - Nova Covert Ops
+    - 'Wings of Liberty'
+    - 'Prophecy'
+    - 'Heart of the Swarm'
+    - 'Whispers of Oblivion (Legacy of the Void: Prologue)'
+    - 'Legacy of the Void'
+    - 'Into the Void (Legacy of the Void: Epilogue)'
+    - 'Nova Covert Ops'
     """
     display_name = "Enabled Campaigns"
     valid_keys = {campaign.campaign_name for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL}
