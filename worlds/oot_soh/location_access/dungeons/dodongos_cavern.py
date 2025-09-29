@@ -62,11 +62,11 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS.value),
-        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, EnemyDistance.CLOSE.value, quantity=2))
+        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS, EnemyDistance.CLOSE, quantity=2))
 
     world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value),
-        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, EnemyDistance.CLOSE.value, quantity=2))
+        rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS, EnemyDistance.CLOSE, quantity=2))
 
     world.get_region(Regions.DODONGOS_CAVERN_DODONGO_ROOM.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value),
@@ -90,8 +90,8 @@ def set_region_rules(world: "SohWorld") -> None:
         world.get_region(Regions.DODONGOS_CAVERN_STAIRS_UPPER.value),
         rule=lambda state: has_explosives(state, world)
         or state.has(Items.STRENGTH_UPGRADE.value, player)
-        or can_use(Items.DINS_FIRE.value, state, world)
-        or (can_do_trick("DC Stairs With Bow", state, world) and can_use(Items.PROGRESSIVE_BOW.value, state, world)))
+        or can_use(Items.DINS_FIRE, state, world)
+        or (can_do_trick("DC Stairs With Bow", state, world) and can_use(Items.PROGRESSIVE_BOW, state, world)))
 
     world.get_region(Regions.DODONGOS_CAVERN_STAIRS_LOWER.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_COMPASS_ROOM.value),
@@ -106,11 +106,11 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_COMPASS_ROOM.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_STAIRS_LOWER.value),
-        rule=lambda state: can_use(Items.MASTER_SWORD.value, state, world)
-        or can_use(Items.BIGGORONS_SWORD.value, state, world)
-        or can_use(Items.MEGATON_HAMMER.value, state, world)
+        rule=lambda state: can_use(Items.MASTER_SWORD, state, world)
+        or can_use(Items.BIGGORONS_SWORD, state, world)
+        or can_use(Items.MEGATON_HAMMER, state, world)
         or has_explosives(state, world)
-        or state.has(Items.STRENGTH_UPGRADE.value, player))
+        or state.has(Items.STRENGTH_UPGRADE, player))
 
     world.get_region(Regions.DODONGOS_CAVERN_ARMOS_ROOM.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_STAIRS_UPPER.value))
@@ -134,8 +134,8 @@ def set_region_rules(world: "SohWorld") -> None:
     world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value),
         rule=lambda state: (is_adult(state, world) and can_do_trick("DC Jump", state, world))
-        or can_use(Items.HOVER_BOOTS.value, state, world)
-        or (is_adult(state, world) and can_use(Items.PROGRESSIVE_HOOKSHOT.value, state, world))
+        or can_use(Items.HOVER_BOOTS, state, world)
+        or (is_adult(state, world) and can_use(Items.PROGRESSIVE_HOOKSHOT, state, world))
         or (can_do_trick("Damage Boost Simple", state, world) and has_explosives(state, world)
             and can_jump_slash(state, world)))
 
@@ -147,8 +147,8 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value),
-        rule=lambda state: can_use(Items.PROGRESSIVE_SLINGSHOT.value, state, world)
-        or can_use(Items.PROGRESSIVE_BOW.value, state, world)
+        rule=lambda state: can_use(Items.PROGRESSIVE_SLINGSHOT, state, world)
+        or can_use(Items.PROGRESSIVE_BOW, state, world)
         or can_do_trick("DC Slingshot Skip", state, world))
 
     world.get_region(Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value).connect(
@@ -171,8 +171,8 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_SECOND_SLINGSHOT_ROOM.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value),
-        rule=lambda state: can_use(Items.PROGRESSIVE_SLINGSHOT.value, state, world)
-        or can_use(Items.PROGRESSIVE_BOW.value, state, world)
+        rule=lambda state: can_use(Items.PROGRESSIVE_SLINGSHOT, state, world)
+        or can_use(Items.PROGRESSIVE_BOW, state, world)
         or can_do_trick("DC Slingshot Skip", state, world))
 
     world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value).connect(
@@ -224,4 +224,4 @@ def set_location_rules(world: "SohWorld") -> None:
              rule=lambda state: can_break_mud_walls(state, world))
 
     set_rule(world.get_location("Dodongos Cavern Lower Lizalfos"),
-             rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS.value, EnemyDistance.CLOSE.value, quantity=2))
+             rule=lambda state: can_kill_enemy(state, world, Enemies.LIZALFOS, EnemyDistance.CLOSE, quantity=2))
