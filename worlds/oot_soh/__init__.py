@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 import math
 
 from BaseClasses import CollectionState, Item, Region, Tutorial

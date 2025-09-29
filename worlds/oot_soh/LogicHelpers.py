@@ -1,4 +1,4 @@
-from typing import Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState, ItemClassification as IC
 from .Locations import SohLocation

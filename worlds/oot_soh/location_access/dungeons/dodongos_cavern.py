@@ -2,8 +2,7 @@ from typing import TYPE_CHECKING
 
 from worlds.generic.Rules import set_rule
 from ...Enums import *
-from ...LogicHelpers import (can_break_mud_walls, is_adult, has_explosives, can_attack, take_damage, can_shield, can_kill_enemy,
-                                  has_fire_source_with_torch, can_use, can_do_trick, can_jump_slash, blast_or_smash)
+from ...LogicHelpers import *
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld

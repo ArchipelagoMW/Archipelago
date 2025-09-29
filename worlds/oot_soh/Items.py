@@ -1,10 +1,7 @@
-from typing import Callable, Dict, NamedTuple, Optional, TYPE_CHECKING
+from typing import Dict, NamedTuple, TYPE_CHECKING
 from enum import IntEnum
 from BaseClasses import Item, ItemClassification as IC
 from .Enums import *
-
-if TYPE_CHECKING:
-    from . import SohWorld
 
 
 class SohItem(Item):

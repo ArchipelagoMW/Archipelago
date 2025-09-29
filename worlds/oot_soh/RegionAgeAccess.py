@@ -1,4 +1,4 @@
-from typing import Dict, List, NamedTuple, cast, TYPE_CHECKING
+from typing import Dict, NamedTuple, cast, TYPE_CHECKING
 from BaseClasses import CollectionState, Entrance, Region
 from .Enums import Regions
 from .Regions import region_data_table

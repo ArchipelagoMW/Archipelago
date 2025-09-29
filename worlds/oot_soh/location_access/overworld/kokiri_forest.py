@@ -1,12 +1,7 @@
 from typing import TYPE_CHECKING
 
 from ...Enums import *
-from ...LogicHelpers import (add_locations, connect_regions, is_adult, can_attack,
-                                         is_child, can_use, can_do_trick, call_gossip_fairy_except_suns,
-                                         can_cut_shrubs, can_break_pots, has_bottle, call_gossip_fairy,
-                                         can_break_lower_hives, can_open_storms_grotto, can_pass_enemy,
-                                         hookshot_or_boomerang, can_get_nighttime_gs, add_events)
-
+from ...LogicHelpers import *
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
