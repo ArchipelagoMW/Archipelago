@@ -97,7 +97,6 @@ class SMZ3World(World):
             ItemType.TwentyRupees,
             ItemType.FiftyRupees,
             ItemType.ThreeHundredRupees,
-            ItemType.ETank,
             ItemType.Missile,
             ItemType.Super,
             ItemType.PowerBomb
@@ -231,7 +230,6 @@ class SMZ3World(World):
 
         niceItems = TotalSMZ3Item.Item.CreateNicePool(self.smz3World)
         junkItems = TotalSMZ3Item.Item.CreateJunkPool(self.smz3World)
-        self.junkItemsNames = [item.Type.name for item in junkItems]
 
         if (self.smz3World.Config.Keysanity):
             progressionItems = self.progression + self.dungeon + self.keyCardsItems + self.SmMapsItems
@@ -500,7 +498,14 @@ class SMZ3World(World):
             multidata["connect_names"][new_name] = payload
 
     def fill_slot_data(self): 
-        slot_data = {}
+        slot_data = {
+            "goal": self.options.goal.value,
+            "open_tower": self.options.open_tower.value,
+            "ganon_vulnerable": self.options.ganon_vulnerable.value,
+            "open_tourian": self.options.open_tourian.value,
+            "sm_logic": self.options.sm_logic.value,
+            "key_shuffle": self.options.key_shuffle.value,
+        }
         return slot_data
 
     def collect(self, state: CollectionState, item: Item) -> bool:
