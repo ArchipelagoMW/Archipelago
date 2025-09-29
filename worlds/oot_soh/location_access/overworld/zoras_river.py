@@ -1,29 +1,36 @@
 from typing import TYPE_CHECKING
 
+
 from ...Rules import set_rule
 from ...Regions import double_link_regions
 from ...Items import SohItem
 from ...Locations import SohLocation, SohLocationData
 from ...Enums import *
-from ...LogicHelpers import (add_locations, connect_regions, is_child, can_kill_enemy, can_cut_shrubs,
-                                         is_adult, blast_or_smash, can_use, can_do_trick, can_attack,
-                                         can_get_nighttime_gs, call_gossip_fairy, can_open_storms_grotto, can_live,
-                                         has_bottle, can_break_lower_hives, can_stun_deku, can_break_upper_hives,
-                                         add_events)
+from ...LogicHelpers import *
 
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
 
 
+class EventLocations(str, Enum):
+    ZORAS_RIVER_SHRUB = "Zora's River Shrub"
+    MAGIC_BEAN_SALESMAN_SHOP = "Magic Bean Salesman Shop"
+
 
 def set_region_rules(world: "SohWorld") -> None:
-
     player = world.player
     
+    # TODO: Temporary to test generation
+    connect_regions(Regions.KOKIRI_FOREST.value, world, [
+        [Regions.ZR_FRONT.value, lambda state: True]
+    ])
+    connect_regions(Regions.ZR_FRONT.value, world, [
+        [Regions.KOKIRI_FOREST.value, lambda state: True]
+    ])
+
     ## ZR Front
     # Locations
-
     add_locations(Regions.ZR_FRONT.value, world, [
         [Locations.ZR_GS_TREE.value, lambda state: is_child(state, world) and
                                                       can_kill_enemy(state, world, Enemies.GOLD_SKULLTULA)],
@@ -48,8 +55,13 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## Zora River
+    # Events
+    add_events(Regions.ZORA_RIVER.value, world, [
+        [EventLocations.MAGIC_BEAN_SALESMAN_SHOP.value, Events.CAN_BUY_BEANS.value, 
+            lambda state: has_item(Items.CHILD_WALLET.value, state, world) and (world.options.shuffle_merchants == 0 or world.options.shuffle_merchants == 2)], # Bean shop not randomized
+        [EventLocations.ZORAS_RIVER_SHRUB.value, Events.BUG_ACCESS.value, lambda state: can_cut_shrubs(state, world)]
+    ])
     # Locations
-    
     add_locations(Regions.ZORA_RIVER.value, world, [
         [Locations.ZR_MAGIC_BEAN_SALESMAN.value, lambda state: is_child(state, world)],
         [Locations.ZR_FROGS_OCARINA_GAME.value, lambda state: (is_child(state, world) and
@@ -139,10 +151,6 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.ZORA_RIVER.value, world, [
         [EventLocations.BUG_SHRUBS_ZR.value, Events.BUG_SHRUBS, lambda state: can_cut_shrubs(state, world)],
-    ])
-    # Events
-    add_events(Regions.ZORA_RIVER.value, world,[
-        [EventLocations.BUG_SHRUBS_ZR.value, Events.BUG_SHRUBS.value, lambda state: can_cut_shrubs(state, world)],
     ])
 
     ## ZR From Shortcut
