@@ -24,127 +24,127 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Kokiri Forest
     # Locations
     add_locations(Regions.KOKIRI_FOREST, world, [
-        [Locations.KF_KOKIRI_SWORD_CHEST, lambda state: is_child(state, world)],
+        [Locations.KF_KOKIRI_SWORD_CHEST, lambda state: is_child(state, world, Regions.KOKIRI_FOREST)],
         [Locations.KF_GS_KNOW_IT_ALL_HOUSE, lambda state: (can_attack(state, world) and
-                                                                        is_child(state, world) and
+                                                                        is_child(state, world, Regions.KOKIRI_FOREST) and
                                                                         can_get_nighttime_gs(state,world))],
         [Locations.KF_GS_BEAN_PATCH, lambda state: can_attack(state, world) and
-                                                         is_child(state, world) and
+                                                         is_child(state, world, Regions.KOKIRI_FOREST) and
                                                          can_use(Items.BOTTLE_WITH_BUGS, state, world)],
-        [Locations.KF_GS_HOUSE_OF_TWINS, lambda state: is_adult(state, world) and
+        [Locations.KF_GS_HOUSE_OF_TWINS, lambda state: is_adult(state, world, Regions.KOKIRI_FOREST) and
                                                              (hookshot_or_boomerang(state, world)
                                                               or (can_do_trick("Kokiri Forest Gold Skulltula with Hover Boots", state, world)
                                                                   and can_use(Items.HOVER_BOOTS, state, world))) and can_get_nighttime_gs(state, world)],
-        [Locations.KF_BEAN_SPROUT_FAIRY1, lambda state: is_child(state, world)
+        [Locations.KF_BEAN_SPROUT_FAIRY1, lambda state: is_child(state, world, Regions.KOKIRI_FOREST)
                                                               and state.has(Events.KOKIRI_FOREST_BEAN_PLANTED, player)
                                                               and can_use(Items.SONG_OF_STORMS, state, world)],
-        [Locations.KF_BEAN_SPROUT_FAIRY2, lambda state: is_child(state, world)
+        [Locations.KF_BEAN_SPROUT_FAIRY2, lambda state: is_child(state, world, Regions.KOKIRI_FOREST)
                                                               and state.has(Events.KOKIRI_FOREST_BEAN_PLANTED, player)
                                                               and can_use(Items.SONG_OF_STORMS, state, world)],
-        [Locations.KF_BEAN_SPROUT_FAIRY3, lambda state: is_child(state, world)
+        [Locations.KF_BEAN_SPROUT_FAIRY3, lambda state: is_child(state, world, Regions.KOKIRI_FOREST)
                                                               and state.has(Events.KOKIRI_FOREST_BEAN_PLANTED, player)
                                                               and can_use(Items.SONG_OF_STORMS, state, world)],
         [Locations.KF_GOSSIP_STONE_FAIRY, lambda state: call_gossip_fairy_except_suns(state, world)],
         [Locations.KF_GOSSIP_STONE_BIG_FAIRY, lambda state: can_use(Items.SONG_OF_STORMS, state, world)],
-        [Locations.KF_BRIDGE_RUPEE, lambda state: is_child(state,world)],
-        [Locations.KF_BEHIND_MIDOS_HOUSE_RUPEE, lambda state: is_child(state,world)],
-        [Locations.KF_SOUTH_GRASS_WEST_RUPEE, lambda state: is_child(state,world)],
-        [Locations.KF_SOUTH_GRASS_EAST_RUPEE, lambda state: is_child(state ,world)],
-        [Locations.KF_NORTH_GRASS_WEST_RUPEE, lambda state: is_child(state, world)],
-        [Locations.KF_NORTH_GRASS_EAST_RUPEE, lambda state: is_child(state, world)],
-        [Locations.KF_BOULDER_MAZE_FIRST_RUPEE, lambda state: is_child(state, world)],
-        [Locations.KF_BOULDER_MAZE_SECOND_RUPEE, lambda state: is_child(state, world)],
-        [Locations.KF_BEAN_PLATFORM_RUPEE1, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS, state, world or
+        [Locations.KF_BRIDGE_RUPEE, lambda state: is_child(state,world, Locations.KF_BRIDGE_RUPEE)],
+        [Locations.KF_BEHIND_MIDOS_HOUSE_RUPEE, lambda state: is_child(state,world, Locations.KF_BEHIND_MIDOS_HOUSE_RUPEE)],
+        [Locations.KF_SOUTH_GRASS_WEST_RUPEE, lambda state: is_child(state,world, Locations.KF_SOUTH_GRASS_WEST_RUPEE)],
+        [Locations.KF_SOUTH_GRASS_EAST_RUPEE, lambda state: is_child(state ,world, Locations.KF_SOUTH_GRASS_EAST_RUPEE)],
+        [Locations.KF_NORTH_GRASS_WEST_RUPEE, lambda state: is_child(state, world, Locations.KF_NORTH_GRASS_WEST_RUPEE)],
+        [Locations.KF_NORTH_GRASS_EAST_RUPEE, lambda state: is_child(state, world, Locations.KF_NORTH_GRASS_EAST_RUPEE)],
+        [Locations.KF_BOULDER_MAZE_FIRST_RUPEE, lambda state: is_child(state, world, Locations.KF_BOULDER_MAZE_FIRST_RUPEE)],
+        [Locations.KF_BOULDER_MAZE_SECOND_RUPEE, lambda state: is_child(state, world, Locations.KF_BOULDER_MAZE_SECOND_RUPEE)],
+        [Locations.KF_BEAN_PLATFORM_RUPEE1, lambda state: is_adult(state, world, Locations.KF_BEAN_PLATFORM_RUPEE1) and (Items.HOVER_BOOTS, state, world or
                                                                    can_use(Items.BOOMERANG, state, world) or
                                                                    state.has(Events.KOKIRI_FOREST_BEAN_PLANTED, player))],
-        [Locations.KF_BEAN_PLATFORM_RUPEE2, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS, state, world or
+        [Locations.KF_BEAN_PLATFORM_RUPEE2, lambda state: is_adult(state, world, Locations.KF_BEAN_PLATFORM_RUPEE2) and (Items.HOVER_BOOTS, state, world or
                                                                    can_use(Items.BOOMERANG, state, world) or
                                                                    state.has(Events.KOKIRI_FOREST_BEAN_PLANTED, player))],
-        [Locations.KF_BEAN_PLATFORM_RUPEE3, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS, state, world or
+        [Locations.KF_BEAN_PLATFORM_RUPEE3, lambda state: is_adult(state, world, Regions.KOKIRI_FOREST) and (Items.HOVER_BOOTS, state, world or
                                                                    can_use(Items.BOOMERANG, state, world) or
                                                                    state.has(Events.KOKIRI_FOREST_BEAN_PLANTED, player))],
-        [Locations.KF_BEAN_PLATFORM_RUPEE4, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS, state, world or
+        [Locations.KF_BEAN_PLATFORM_RUPEE4, lambda state: is_adult(state, world, Regions.KOKIRI_FOREST) and (Items.HOVER_BOOTS, state, world or
                                                                    can_use(Items.BOOMERANG, state, world) or
                                                                    state.has(Events.KOKIRI_FOREST_BEAN_PLANTED, player))],
-        [Locations.KF_BEAN_PLATFORM_RUPEE5, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS, state, world or
+        [Locations.KF_BEAN_PLATFORM_RUPEE5, lambda state: is_adult(state, world, Regions.KOKIRI_FOREST) and (Items.HOVER_BOOTS, state, world or
                                                                    can_use(Items.BOOMERANG, state, world) or
                                                                    state.has(Events.KOKIRI_FOREST_BEAN_PLANTED, player))],
-        [Locations.KF_BEAN_PLATFORM_RUPEE6, lambda state:  is_adult(state, world) and (Items.HOVER_BOOTS, state, world or
+        [Locations.KF_BEAN_PLATFORM_RUPEE6, lambda state:  is_adult(state, world, Regions.KOKIRI_FOREST) and (Items.HOVER_BOOTS, state, world or
                                                                    can_use(Items.BOOMERANG, state, world) or
                                                                    state.has(Events.KOKIRI_FOREST_BEAN_PLANTED, player))],
-        [Locations.KF_BEAN_PLATFORM_RED_RUPEE, lambda state: is_adult(state, world) and (Items.HOVER_BOOTS, state, world or
+        [Locations.KF_BEAN_PLATFORM_RED_RUPEE, lambda state: is_adult(state, world, Regions.KOKIRI_FOREST) and (Items.HOVER_BOOTS, state, world or
                                                                    can_use(Items.BOOMERANG, state, world) or
                                                                    state.has(Events.KOKIRI_FOREST_BEAN_PLANTED, player))],
-        [Locations.KF_SARIAS_ROOF_EAST_HEART, lambda state: is_child(state, world)],
-        [Locations.KF_SARIAS_ROOF_NORTH_HEART, lambda state: is_child(state, world)],
-        [Locations.KF_SARIAS_ROOF_WEST_HEART, lambda state: is_child(state, world)],
-        [Locations.KF_CHILD_GRASS1, lambda state: (is_child(state, world)
+        [Locations.KF_SARIAS_ROOF_EAST_HEART, lambda state: is_child(state, world, Regions.KOKIRI_FOREST)],
+        [Locations.KF_SARIAS_ROOF_NORTH_HEART, lambda state: is_child(state, world, Regions.KOKIRI_FOREST)],
+        [Locations.KF_SARIAS_ROOF_WEST_HEART, lambda state: is_child(state, world, Regions.KOKIRI_FOREST)],
+        [Locations.KF_CHILD_GRASS1, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS2, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS2, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS3, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS3, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS4, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS4, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS5, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS5, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS6, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS6, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS7, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS7, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS8, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS8, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS9, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS9, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS10, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS10, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS11, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS11, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS12, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS12, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS_MAZE1, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS_MAZE1, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS_MAZE2, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS_MAZE2, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_CHILD_GRASS_MAZE3, lambda state: (is_child(state, world)
+        [Locations.KF_CHILD_GRASS_MAZE3, lambda state: (is_child(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS1, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS1, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS2, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS2, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS3, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS3, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS4, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS4, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS5, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS5, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS6, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS6, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS7, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS7, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS8, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS8, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS9, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS9, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS10, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS10, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS11, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS11, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS12, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS12, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS13, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS13, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS14, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS14, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS15, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS15, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS16, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS16, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS17, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS17, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS19, lambda state: (is_adult(state, world)
+        [Locations.KF_ADULT_GRASS19, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST)
                                                         and can_cut_shrubs(state, world))],
-        [Locations.KF_ADULT_GRASS20, lambda state: (is_adult(state, world))]
+        [Locations.KF_ADULT_GRASS20, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST))]
     ])
     # Connections
     connect_regions(Regions.KOKIRI_FOREST, world, [
@@ -154,13 +154,13 @@ def set_region_rules(world: "SohWorld") -> None:
         [Regions.KF_HOUSE_OF_TWINS, lambda state: True],
         [Regions.KF_KNOW_IT_ALL_HOUSE, lambda state: True],
         [Regions.KF_KOKIRI_SHOP, lambda state: True],
-        [Regions.KF_OUTSIDE_DEKU_TREE, lambda state: (is_adult(state, world) and
+        [Regions.KF_OUTSIDE_DEKU_TREE, lambda state: (is_adult(state, world, Regions.KOKIRI_FOREST) and
                                                              (can_pass_enemy(state, world, Enemies.BIG_SKULLTULA) or
                                                              state.has(Events.CLEARED_FOREST_TEMPLE, player)))
                                                             or state.has(LocalEvents.MIDO_SWORD_AND_SHIELD, player)
                                                            or world.options.closed_forest==2],
         [Regions.LOST_WOODS, lambda state: True],
-        [Regions.LW_BRIDGE_FROM_FOREST, lambda state: world.options.closed_forest>=1 or is_adult(state, world) or
+        [Regions.LW_BRIDGE_FROM_FOREST, lambda state: world.options.closed_forest>=1 or is_adult(state, world, Regions.KOKIRI_FOREST) or
                                                             state.has(Events.CLEARED_DEKU_TREE, player)],
         [Regions.KF_STORMS_GROTTO, lambda state: can_open_storms_grotto(state, world)]
     ])
@@ -168,14 +168,14 @@ def set_region_rules(world: "SohWorld") -> None:
     add_events(Regions.KOKIRI_FOREST, world, [
         [EventLocations.MIDO, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda state: Items.KOKIRI_SWORD and
                                                           Items.DEKU_SHIELD],
-        [EventLocations.KOKIRI_FOREST_SOFT_SOIL, Events.KOKIRI_FOREST_BEAN_PLANTED, lambda state: is_child(state, world) and
+        [EventLocations.KOKIRI_FOREST_SOFT_SOIL, Events.KOKIRI_FOREST_BEAN_PLANTED, lambda state: is_child(state, world, Regions.KOKIRI_FOREST) and
                                                      can_use(Items.MAGIC_BEAN, state, world)],
     ])
 
     ## KF Link's House
     # Locations
     add_locations(Regions.KF_LINKS_HOUSE, world, [
-        [Locations.KF_LINKS_HOUSE_COW, lambda state: is_adult(state, world) and
+        [Locations.KF_LINKS_HOUSE_COW, lambda state: is_adult(state, world, Regions.KF_LINKS_HOUSE) and
                                                            can_use(Items.EPONAS_SONG, state, world) and
                                                            state.has(Events.GOTTEN_LINKS_COW, player)],
         [Locations.KF_LINKS_HOUSE_POT, lambda state: can_break_pots(state, world)]
@@ -263,10 +263,10 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.KF_OUTSIDE_DEKU_TREE, world, [
-        [Regions.DEKU_TREE_ENTRYWAY, lambda state: (is_child(state, world))
+        [Regions.DEKU_TREE_ENTRYWAY, lambda state: (is_child(state, world, Regions.DEKU_TREE_ENTRYWAY))
                                                          and (world.options.closed_forest==2
                                                             or state.has(LocalEvents.MIDO_SWORD_AND_SHIELD, player))],
-        [Regions.KOKIRI_FOREST, lambda state:  (is_adult(state, world) and
+        [Regions.KOKIRI_FOREST, lambda state:  (is_adult(state, world, Regions.KOKIRI_FOREST) and
                                                              (can_pass_enemy(state, world, Enemies.BIG_SKULLTULA) or
                                                              state.has(Events.CLEARED_FOREST_TEMPLE, player)))
                                                             or state.has(LocalEvents.MIDO_SWORD_AND_SHIELD, player)

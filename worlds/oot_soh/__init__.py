@@ -1,8 +1,9 @@
 from typing import Dict, Any
+from collections import deque
 
-from BaseClasses import CollectionState, Item, Tutorial
+from BaseClasses import CollectionState, Item, Tutorial, MultiWorld
 from Utils import visualize_regions
-from worlds.AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World, LogicMixin
 from .Items import SohItem, item_data_table, item_table, item_name_groups
 from .Locations import location_table
 from .Options import SohOptions
@@ -12,6 +13,7 @@ from .Enums import *
 from .ItemPool import create_item_pool
 
 import logging
+import copy
 logger = logging.getLogger("SOH_OOT")
 
 class SohWebWorld(WebWorld):
@@ -28,6 +30,79 @@ class SohWebWorld(WebWorld):
     
     tutorials = [setup_en]
     game_info_languages = ["en"]
+
+class SohState(LogicMixin):
+    def init_mixin(self, parent: MultiWorld):
+        self._soh_stale = {player: True for player in parent.worlds.keys()
+                            if parent.worlds[player].game == SohWorld.game}
+        players = parent.get_game_groups(SohWorld.game) + parent.get_game_players(SohWorld.game)
+        self._soh_child_reachable_regions = {player: set() for player in players}
+        self._soh_adult_reachable_regions = {player: set() for player in players}
+        self._soh_child_blocked_regions = {player: set() for player in players}
+        self._soh_adult_blocked_regions = {player: set() for player in players}
+        self._soh_age = {player: None for player in players}
+
+    def copy_mixin(self, ret) -> CollectionState:
+        ret._soh_stale = {player: stale for player, stale in self._soh_stale.items()}
+        ret._soh_child_reachable_regions = {player: copy.copy(regions) for player, regions in self._soh_child_reachable_regions.items()}
+        ret._soh_adult_reachable_regions = {player: copy.copy(regions) for player, regions in self._soh_adult_reachable_regions.items()}
+        ret._soh_child_blocked_regions = {player: copy.copy(regions) for player, regions in self._soh_child_blocked_regions.items()}
+        ret._soh_adult_blocked_regions = {player: copy.copy(regions) for player, regions in self._soh_adult_blocked_regions.items()}
+        ret._soh_age = {player: age for player, age in self._soh_age.items()}
+        return ret
+    
+    def _soh_invalidate(self, player):
+        self._soh_child_reachable_regions[player] = set()
+        self._soh_adult_reachable_regions[player] = set()
+        self._soh_child_blocked_regions[player] = set()
+        self._soh_adult_blocked_regions[player] = set()
+        self._soh_stale[player] = True
+
+    def _soh_update_age_reachable_regions(self, player):
+        self._soh_stale[player] = False
+        for age in ['child', 'adult']:
+            self._soh_age[player] = age
+            start = self.multiworld.get_region(Regions.ROOT, player)
+            
+            if age == 'child':
+                reachable = self._soh_child_reachable_regions[player]
+                blocked = self._soh_child_blocked_regions[player]
+                queue = deque(self._soh_child_blocked_regions[player])
+            else:
+                reachable = self._soh_adult_reachable_regions[player]
+                blocked = self._soh_adult_blocked_regions[player]
+                queue = deque(self._soh_adult_blocked_regions[player])
+
+            # init on first call
+            if start not in reachable:
+                reachable.add(start)
+                blocked.update(start.exits)
+                queue.extend(start.exits)
+
+            # run breadth first search
+            while queue:
+                connection = queue.popleft()
+                new_region = connection.connected_region
+                if new_region is None:
+                    continue
+                if new_region in reachable:
+                    blocked.remove(connection)
+                elif connection.can_reach(self):
+                    reachable.add(new_region)
+                    blocked.remove(connection)
+                    blocked.update(new_region.exits)
+                    queue.extend(new_region.exits)
+                    self.path[new_region] = (new_region.name, self.path.get(connection, None))
+    
+    def _soh_can_reach_as_age(self, region: str, age, player):
+        if self._soh_age[player] is None:
+            # first layer of recursion
+            self._soh_age[player] = age
+            can_reach = self.multiworld.get_region(region, player).can_reach(self)
+            self._soh_age[player] = None
+            return can_reach
+        return self._soh_age[player] == age
+
 
 
 class SohWorld(World):
@@ -49,8 +124,9 @@ class SohWorld(World):
         #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
         pass
 
-    def create_item(self, name: Enum) -> SohItem:
-        return SohItem(name.value, item_data_table[name].classification, item_data_table[name].item_id, self.player)
+    def create_item(self, name: str) -> SohItem:
+        item_entry = Items(name)
+        return SohItem(name, item_data_table[item_entry].classification, item_data_table[item_entry].item_id, self.player)
 
     def create_items(self) -> None:
         create_item_pool(self)
@@ -132,13 +208,15 @@ class SohWorld(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         # Temporarily disabled because logic is in progress
         #update_age_access(self, state)
+        state._soh_stale[self.player] = True
         return super().collect(state, item)
     
     def remove(self, state: CollectionState, item: Item) -> bool:
         # Temporarily disabled because logic is in progress
-        #reset_age_access() #TODO pass the starting age option 
-        #update_age_access(self, state)
-        return super().remove(state, item)
+        changed = super().remove(state, item)
+        if changed:
+            state._soh_invalidate(self.player)
+        return changed
 
     def generate_output(self, output_directory: str):
     

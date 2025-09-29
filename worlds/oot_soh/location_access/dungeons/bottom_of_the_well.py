@@ -35,7 +35,7 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, world, [])
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, world, [
-        [Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda state: is_child(state, world) and can_pass_enemy(state, world, Enemies.BIG_SKULLTULA)], # Technically involves an fake wall, but passing it lensless is intended in vanilla and it is well telegraphed
+        [Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda state: is_child(state, world, Regions.BOTTOM_OF_THE_WELL_PERIMETER) and can_pass_enemy(state, world, Enemies.BIG_SKULLTULA)], # Technically involves an fake wall, but passing it lensless is intended in vanilla and it is well telegraphed
         #[Regions.BOTTOM_OF_THE_WELL_MQ_PERIMETER, lambda state: is_child(state, world)],
         [Regions.KAK_WELL, lambda state: True]
     ])
@@ -58,12 +58,12 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_PERIMETER, world, [
-        [Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, lambda state: is_child(state, world) and can_pass_enemy(state, world, Enemies.BIG_SKULLTULA)],
+        [Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, lambda state: is_child(state, world, Regions.BOTTOM_OF_THE_WELL_ENTRYWAY) and can_pass_enemy(state, world, Enemies.BIG_SKULLTULA)],
         [Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH, state, world)],
         [Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, lambda state: is_child(state, world) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world)],
+        [Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, lambda state: is_child(state, world, Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world)],
         [Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM, lambda state: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, state, world) or has_item(Items.BRONZE_SCALE, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM, lambda state: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, state, world) and is_child(state, world)],
+        [Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM, lambda state: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, state, world) and is_child(state, world, Regions.BOTTOM_OF_THE_WELL_BASEMENT)],
         [Regions.BOTTOM_OF_THE_WELL_BASEMENT, lambda state: True]
     ])
 
@@ -104,7 +104,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, world, [
-        [Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda state: is_child(state, world) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world) and can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH, state, world)],
+        [Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda state: is_child(state, world, Regions.BOTTOM_OF_THE_WELL_PERIMETER) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world) and can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH, state, world)],
         [Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH, state, world)],
         [Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH, state, world)]
     ])
@@ -157,7 +157,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM, world, [
-        [Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda state: is_child(state, world) and can_kill_enemy(state, world, Enemies.DEAD_HAND)]
+        [Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda state: is_child(state, world, Regions.BOTTOM_OF_THE_WELL_PERIMETER) and can_kill_enemy(state, world, Enemies.DEAD_HAND)]
     ])
 
     ## Bottom of the Well Basement 
@@ -192,7 +192,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT, world, [
-        [Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, lambda state: is_child(state, world) and can_pass_enemy(state, world, Enemies.BIG_SKULLTULA)],
+        [Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, lambda state: is_child(state, world, Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM) and can_pass_enemy(state, world, Enemies.BIG_SKULLTULA)],
         [Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, lambda state: blast_or_smash(state, world) or can_use(Items.DINS_FIRE, state, world) or (can_use(Items.STICKS, state, world) and can_do_trick("RT BOTW Basement", state, world))]
     ])
 

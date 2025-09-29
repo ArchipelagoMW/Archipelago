@@ -104,8 +104,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])      
     # Connections
     connect_regions(Regions.DEKU_TREE_COMPASS_ROOM, world, [
-        [Regions.DEKU_TREE_LOBBY, lambda state: True] # has_fire_source_with_torch(state, world)]
-        # Above commented out because it can't succeed without stick pot event implemented
+        [Regions.DEKU_TREE_LOBBY, lambda state: has_fire_source_with_torch(state, world)]
     ])
 
     ## Deku Basement Lower
@@ -127,9 +126,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DEKU_TREE_BASEMENT_LOWER, world, [
         [Regions.DEKU_TREE_LOBBY, lambda state: True],
-        [Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM, lambda state: True], # has_fire_source_with_torch(state, world) or can_use(Items.FAIRY_BOW, state, world)],
-        # Above commented out because it can't succeed without stick pot event implemented
-        [Regions.DEKU_TREE_BASEMENT_UPPER, lambda state: is_adult(state, world) or can_do_trick("Deku B1 Skip", state, world)
+        [Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM, lambda state: has_fire_source_with_torch(state, world) or can_use(Items.PROGRESSIVE_BOW, state, world)],
+        [Regions.DEKU_TREE_BASEMENT_UPPER, lambda state: is_adult(state, world, Regions.DEKU_TREE_BASEMENT_LOWER) or can_do_trick("Deku B1 Skip", state, world)
             or has_item(LocalEvents.DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED, state, world)]
     ])
 
@@ -151,7 +149,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DEKU_TREE_BASEMENT_WATER_ROOM_FRONT, world, [
         [Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM, lambda state: True],
-        [Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK, lambda state: has_item(Items.BRONZE_SCALE, state, world) or can_do_trick("Deku B1 backflip over spiked log", state, world)]
+        [Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK, lambda state: True] #has_item(Items.BRONZE_SCALE, state, world) or can_do_trick("Deku B1 backflip over spiked log", state, world)]
     ])
 
     ## Deku basement water room back
@@ -225,10 +223,9 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DEKU_TREE_BASEMENT_UPPER, world, [
         [Regions.DEKU_TREE_BASEMENT_LOWER, lambda state: True],
-        [Regions.DEKU_TREE_BASEMENT_BACK_LOBBY, lambda state: is_child(state, world)],
-        [Regions.DEKU_TREE_OUTSIDE_BOSS_ROOM, lambda state: True] # lambda state: has_fire_source_with_torch(state, world) or 
-        #    (can_do_trick("Deku B1 bow webs") and is_adult(state, world) and can_use(Items.FAIRY_BOW))]
-        # Above commented out because it can't succeed without stick pot event implemented
+        [Regions.DEKU_TREE_BASEMENT_BACK_LOBBY, lambda state: is_child(state, world, Regions.DEKU_TREE_BASEMENT_UPPER)],
+        [Regions.DEKU_TREE_OUTSIDE_BOSS_ROOM, lambda state: has_fire_source_with_torch(state, world) or
+                (can_do_trick("Deku B1 bow webs", state, world) and is_adult(state, world, Regions.DEKU_TREE_BASEMENT_UPPER) and can_use(Items.PROGRESSIVE_BOW, state, world))]
     ])
 
     ## Deku outside boss room
@@ -237,12 +234,9 @@ def set_region_rules(world: "SohWorld") -> None:
         [Locations.DEKU_TREE_FINAL_ROOM_LEFT_FRONT_HEART, lambda state: has_item(Items.BRONZE_SCALE, state, world) or can_use(Items.IRON_BOOTS, state, world) or can_use(Items.IRON_BOOTS, state, world)],
         [Locations.DEKU_TREE_FINAL_ROOM_LEFT_BACK_HEART, lambda state: has_item(Items.BRONZE_SCALE, state, world) or can_use(Items.IRON_BOOTS, state, world) or can_use(Items.IRON_BOOTS, state, world)],
         [Locations.DEKU_TREE_FINAL_ROOM_RIGHT_HEART, lambda state: has_item(Items.BRONZE_SCALE, state, world) or can_use(Items.IRON_BOOTS, state, world) or can_use(Items.IRON_BOOTS, state, world)],
-        [Locations.DEKU_TREE_BEFORE_BOSS_GRASS1, lambda state: can_cut_shrubs(state, world)], # lambda state: can_cut_shrubs(state, world) and has_fire_source_with_torch(state, world)
-            # Above commented out because it can't succeed without stick pot event implemented],
-        [Locations.DEKU_TREE_BEFORE_BOSS_GRASS2, lambda state: can_cut_shrubs(state, world)], # lambda state: can_cut_shrubs(state, world) and has_fire_source_with_torch(state, world)
-            # Above commented out because it can't succeed without stick pot event implemented],
-        [Locations.DEKU_TREE_BEFORE_BOSS_GRASS3, lambda state: can_cut_shrubs(state, world)] # lambda state: can_cut_shrubs(state, world) and has_fire_source_with_torch(state, world)
-            # Above commented out because it can't succeed without stick pot event implemented]
+        [Locations.DEKU_TREE_BEFORE_BOSS_GRASS1, lambda state: can_cut_shrubs(state, world) and has_fire_source_with_torch(state, world)],
+        [Locations.DEKU_TREE_BEFORE_BOSS_GRASS2, lambda state: can_cut_shrubs(state, world) and has_fire_source_with_torch(state, world)],
+        [Locations.DEKU_TREE_BEFORE_BOSS_GRASS3, lambda state: can_cut_shrubs(state, world) and has_fire_source_with_torch(state, world)]
     ])
     # Connections
     connect_regions(Regions.DEKU_TREE_OUTSIDE_BOSS_ROOM, world, [

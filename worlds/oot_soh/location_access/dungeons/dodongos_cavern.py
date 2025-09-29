@@ -21,7 +21,7 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_LOBBY_SWITCH.value),
-        rule=lambda state: is_adult(state, world))
+        rule=lambda state: is_adult(state, world, Regions.DODONGOS_CAVERN_LOBBY_SWITCH))
 
     world.get_region(Regions.DODONGOS_CAVERN_LOBBY.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_SE_CORRIDOR.value),
@@ -132,9 +132,9 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value),
-        rule=lambda state: (is_adult(state, world) and can_do_trick("DC Jump", state, world))
+        rule=lambda state: (is_adult(state, world, Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER) and can_do_trick("DC Jump", state, world))
         or can_use(Items.HOVER_BOOTS, state, world)
-        or (is_adult(state, world) and can_use(Items.PROGRESSIVE_HOOKSHOT, state, world))
+        or (is_adult(state, world, Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER) and can_use(Items.PROGRESSIVE_HOOKSHOT, state, world))
         or (can_do_trick("Damage Boost Simple", state, world) and has_explosives(state, world)
             and can_jump_slash(state, world)))
 

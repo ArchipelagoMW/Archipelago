@@ -276,18 +276,14 @@ def can_get_deku_baba_nuts(state: CollectionState, world: "SohWorld") -> bool:
     return can_use_sword(state, world) or can_use(Items.BOOMERANG, state, world)
 
 
-def is_adult(state: CollectionState, world: "SohWorld") -> bool:
-    # For now, return True as a placeholder since age logic is complex and context-dependent
-    # The real age checking should be done through the CanUse function's can_be_adult parameter
-    # TODO: Implement proper age checking based on world settings and progression
-    return True
+def is_adult(state: CollectionState, world: "SohWorld", location: Regions | Locations | Enum) -> bool:
+    place = location.value if type(location) == Regions else world.get_location(location.value).parent_region.name
+    return state._soh_can_reach_as_age(place, 'adult', world.player)
 
 
-def is_child(state: CollectionState, world: "SohWorld") -> bool:
-    # For now, return True as a placeholder since age logic is complex and context-dependent
-    # The real age checking should be done through the CanUse function's can_be_adult parameter
-    # TODO: Implement proper age checking based on world settings and progression
-    return True
+def is_child(state: CollectionState, world: "SohWorld", location: Regions | Locations | Enum) -> bool:
+    place = location.value if type(location) == Regions else world.get_location(location.value).parent_region.name
+    return state._soh_can_reach_as_age(place, 'child', world.player)
 
 
 def can_damage(state: CollectionState, world: "SohWorld") -> bool:
@@ -306,10 +302,10 @@ def can_attack(state: CollectionState, world: "SohWorld") -> bool:
             can_use(Items.PROGRESSIVE_HOOKSHOT, state, world))
 
 
-def can_standing_shield(state: CollectionState, world: "SohWorld") -> bool:
+def can_standing_shield(state: CollectionState, world: "SohWorld", place: Enum) -> bool:
     """Check if Link can use a shield for standing blocks."""
     return (can_use(Items.MIRROR_SHIELD, state, world) or  # Only adult can use mirror shield
-            (is_adult(state, world) and can_use(Items.HYLIAN_SHIELD, state, world)) or
+            (is_adult(state, world, place) and can_use(Items.HYLIAN_SHIELD, state, world)) or
             can_use(Items.DEKU_SHIELD, state, world))  # Only child can use deku shield
 
 
