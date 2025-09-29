@@ -735,8 +735,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(THE_OPEN_SEA, "The Open Sea Chest - South of Jidamba Tangle 2", 3765 + treasure_index_offset, lambda state: logic.has_swimming(state)), #Z-Potion chest
 
         #NPCs
-        #Todo NPCs Player Options: (-139, 91, 123) do we want a filter option to add the guy who fishes things up for you
-        #LocationData(THE_OPEN_SEA, "The Open Sea NPC - Z27_FisherOnRaft", 2804 + npc_index_offset),
+        LocationData(THE_OPEN_SEA, "The Open Sea NPC - I'm on a raft!", 2804 + npc_index_offset, lambda state: state.has("Item - Super Rod", player) and state.has("Item - Jigging Lure", player)),
         #CheckOrNot: (930, 91, 253) do we put a check on the guy who gives you a Gaea Shard if you get there with no Salmon lol: no
         #LocationData(THE_OPEN_SEA, "The Open Sea NPC - Z34_SinisterSailor", 2520 + npc_index_offset),
 
@@ -994,8 +993,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #NPCs
         #Todo NPCs Job Masters: Tall Tall Heights (Outpost) map has Master Chemist ID 3707 (491, 221, -389); gives you Chemist Seal in exchange for job mastery
-        #Todo NPCs Player Options: (197, 192, -441) do we want a filter option to add the guys who fish things up for you
-        #LocationData(TALL_TALL_HEIGHTS, "Tall, Tall Heights NPC - Z8_FisherInHut", 1549 + npc_index_offset),
         LocationData(TALL_TALL_HEIGHTS, "Tall, Tall Heights NPC - Gold above the Boomer Society", 1600 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ingot
         LocationData(TALL_TALL_HEIGHTS, "Tall, Tall Heights NPC - Hop along spike mountain to Gold", 2853 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)), #Dust
         LocationData(TALL_TALL_HEIGHTS, "Tall, Tall Heights NPC - Melted snow Gold past the chest east of the Athenaeum", 2847 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)) and logic.has_horizontal_movement(state)), #Ingot
@@ -1006,6 +1003,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(TALL_TALL_HEIGHTS, "Tall, Tall Heights NPC - Gold tucked in melted snow past the Chips Challenge east of shrine", 2846 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ore
         LocationData(TALL_TALL_HEIGHTS, "Tall, Tall Heights NPC - Gold past the Athenaeum Chips Challenge", 1602 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
         LocationData(TALL_TALL_HEIGHTS, "Overpass NPC - Gold past Tall Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset), #1st Gold Dust Overpass (Cloudy Wind)
+        LocationData(TALL_TALL_HEIGHTS, "Tall, Tall Heights NPC - Fish in the hut", 1549 + npc_index_offset, lambda state: state.has("Item - Tough Rod", player) and state.has("Item - Fly Lure", player)),
 
         #Northern Cave
         #Treasure chests

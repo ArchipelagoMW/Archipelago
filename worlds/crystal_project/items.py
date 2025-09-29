@@ -108,11 +108,11 @@ item_table: Dict[str, ItemData] = {
 
     #Fishing
     "Item - Flimsy Rod": ItemData(ITEM, 55 + item_index_offset, ItemClassification.progression, 1),
-    "Item - Tough Rod": ItemData(ITEM, 150 + item_index_offset, ItemClassification.useful),
-    "Item - Super Rod": ItemData(ITEM, 151 + item_index_offset, ItemClassification.useful),
+    "Item - Tough Rod": ItemData(ITEM, 150 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Super Rod": ItemData(ITEM, 151 + item_index_offset, ItemClassification.progression, 0, 0, 1),
     "Item - Plug Lure": ItemData(ITEM, 91 + item_index_offset, ItemClassification.progression, 1),
-    "Item - Fly Lure": ItemData(ITEM, 149 + item_index_offset, ItemClassification.useful),
-    "Item - Jigging Lure": ItemData(ITEM, 97 + item_index_offset, ItemClassification.useful),
+    "Item - Fly Lure": ItemData(ITEM, 149 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Jigging Lure": ItemData(ITEM, 97 + item_index_offset, ItemClassification.progression, 0, 0, 1),
 
     #Ore
     "Item - Silver Ore": ItemData(ORE, 3 + item_index_offset, ItemClassification.useful, 0, 18), #Used by Capital Blacksmith, Capital Sequoia, Advanced Regions
