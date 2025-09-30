@@ -15,8 +15,10 @@
 * Prefer [format string literals](https://peps.python.org/pep-0498/) over string concatenation,
   use single quotes inside them: `f"Like {dct['key']}"`
 * Use type annotations where possible for function signatures and class members.
-* Use type annotations where appropriate for local variables (e.g. `var: List[int] = []`, or when the
-  type is hard or impossible to deduce.) Clear annotations help developers look up and validate API calls.
+* Use type annotations where appropriate for local variables (e.g. `var: list[int] = []`, or when the
+  type is hard or impossible to deduce). Clear annotations help developers look up and validate API calls.
+* Prefer new style type annotations for new code (e.g. `var: dict[str, str | int]` over
+  `var: Dict[str, Union[str, int]]`).
 * If a line ends with an open bracket/brace/parentheses, the matching closing bracket should be at the
   beginning of a line at the same indentation as the beginning of the line with the open bracket.
   ```python
@@ -60,3 +62,9 @@
 * Indent `case` inside `switch ` with 2 spaces.
 * Use single quotes.
 * Semicolons are required after every statement.
+
+## KV
+
+* Style should be defined in `.kv` as much as possible, only Python when unavailable.
+* Should follow [our Python style](#python-code) where appropriate (quotation marks, indentation).
+* When escaping a line break, add a space between code and backslash.

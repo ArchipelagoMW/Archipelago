@@ -1,8 +1,11 @@
-from typing import Dict, NamedTuple, Optional, TYPE_CHECKING, Set
+from typing import NamedTuple, TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule, add_rule
-from .rules import has_sword, has_melee
+
+from .constants import base_id
+from .logic_helpers import has_sword, has_melee
+
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -10,12 +13,12 @@ if TYPE_CHECKING:
 class TunicLocationData(NamedTuple):
     region: str
     er_region: str  # entrance rando region
-    location_group: Optional[str] = None
+    location_group: str | None = None
 
 
-location_base_id = 509342400
-
-grass_location_table: Dict[str, TunicLocationData] = {
+# todo: remove region, make all of these regions append grass to the name
+# and then set the rules on the region entrances instead of the locations directly
+grass_location_table: dict[str, TunicLocationData] = {
     "Overworld - Overworld Grass (576) (7.0, 4.0, -223.0)": TunicLocationData("Overworld", "Overworld"),
     "Overworld - Overworld Grass (572) (6.0, 4.0, -223.0)": TunicLocationData("Overworld", "Overworld"),
     "Overworld - Overworld Grass (574) (7.0, 4.0, -224.0)": TunicLocationData("Overworld", "Overworld"),
@@ -7763,9 +7766,10 @@ excluded_grass_locations = {
     "Overworld - East Overworld Bush (64) (56.0, 44.0, -107.0)",
 }
 
-grass_location_name_to_id: Dict[str, int] = {name: location_base_id + 302 + index for index, name in enumerate(grass_location_table)}
+grass_base_id = base_id + 302
+grass_location_name_to_id: dict[str, int] = {name: grass_base_id + index for index, name in enumerate(grass_location_table)}
 
-grass_location_name_groups: Dict[str, Set[str]] = {}
+grass_location_name_groups: dict[str, set[str]] = {}
 for loc_name, loc_data in grass_location_table.items():
     area_name = loc_name.split(" - ", 1)[0]
     # adding it to the normal location group and a grass-only one

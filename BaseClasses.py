@@ -261,6 +261,7 @@ class MultiWorld():
                         "local_items": set(item_link.get("local_items", [])),
                         "non_local_items": set(item_link.get("non_local_items", [])),
                         "link_replacement": replacement_prio.index(item_link["link_replacement"]),
+                        "skip_if_solo": item_link.get("skip_if_solo", False),
                     }
 
         for _name, item_link in item_links.items():
@@ -284,6 +285,8 @@ class MultiWorld():
 
         for group_name, item_link in item_links.items():
             game = item_link["game"]
+            if item_link["skip_if_solo"] and len(item_link["players"]) == 1:
+                continue
             group_id, group = self.add_group(group_name, game, set(item_link["players"]))
 
             group["item_pool"] = item_link["item_pool"]
@@ -1571,7 +1574,7 @@ class ItemClassification(IntFlag):
 
     def as_flag(self) -> int:
         """As Network API flag int."""
-        return int(self & 0b0111)
+        return int(self & 0b00111)
 
 
 class Item:
@@ -1899,7 +1902,8 @@ class Spoiler:
             if self.unreachables:
                 outfile.write('\n\nUnreachable Progression Items:\n\n')
                 outfile.write(
-                    '\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.unreachables]))
+                    '\n'.join(['%s: %s' % (unreachable.item, unreachable)
+                               for unreachable in sorted(self.unreachables)]))
 
             if self.paths:
                 outfile.write('\n\nPaths:\n\n')
