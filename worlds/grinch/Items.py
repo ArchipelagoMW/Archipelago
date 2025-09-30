@@ -169,7 +169,7 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
 #Access Keys
 KEYS_TABLE: dict[str, GrinchItemData] = {
     # "Whoville Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 400, IC.progression,
-    #     [GrinchRamData()]),
+    #     [GrinchRamData(010200, binary_bit_pos=1)]),
     "Who Forest Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 401, IC.progression,
         [GrinchRamData(0x0100AA, binary_bit_pos=2)]),
     "Who Dump Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 402, IC.progression,
