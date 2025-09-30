@@ -51,7 +51,7 @@ def add_events(parent_region: Regions, world: "SohWorld", events):
 # TODO account for starting sticks being disabled
 # TODO add child wallet options
 # TODO add bronze scale options
-def has_item(item: Items, state: CollectionState, world: "SohWorld", count: int = 1, can_be_child: bool = True,
+def has_item(item: Enum, state: CollectionState, world: "SohWorld", count: int = 1, can_be_child: bool = True,
              can_be_adult: bool = True) -> bool:
     player = world.player
 
