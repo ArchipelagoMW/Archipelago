@@ -32,8 +32,8 @@ The current format version has at minimum:
 The `version` and `compatible_version` fields refer to Archipelago's internal file packaging scheme
 and get automatically added to the `archipelago.json` of an .apworld if it is packaged using the 
 ["Build apworlds" launcher component](#build-apworlds-launcher-component),
-which is strongly recommended instead of trying to write these yourself.  
-The `game` field should be present in any handwritten apworld manifest files.
+which is the correct way to package your .apworld as a world developer. Do not write these fields yourself.  
+On the other hand, the `game` field should be present in any handwritten apworld manifest files.
 
 There are also the following optional fields:
 * `minimum_ap_version` and `maximum_ap_version` - which if present will each be compared against the current
