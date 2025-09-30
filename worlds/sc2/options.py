@@ -63,7 +63,7 @@ class Sc2MissionSet(OptionSet):
         return self.value.__len__()
 
 
-class SelectRaces(OptionSet):
+class SelectedRaces(OptionSet):
     """
     Pick which factions' missions and items can be shuffled into the world.
     """
@@ -152,6 +152,7 @@ class MissionOrder(Choice):
     option_golden_path = 10
     option_hopscotch = 11
     option_custom = 99
+    default = option_golden_path
 
 
 class MaximumCampaignSize(Range):
@@ -251,10 +252,21 @@ class PlayerColorNova(ColorChoice):
 
 
 class EnabledCampaigns(OptionSet):
-    """Determines which campaign's missions will be used"""
+    """
+    Determines which campaign's missions will be used.
+    Wings of Liberty, Prophecy, and Prologue are the only free-to-play campaigns.
+    Valid campaign names:
+    - 'Wings of Liberty'
+    - 'Prophecy'
+    - 'Heart of the Swarm'
+    - 'Whispers of Oblivion (Legacy of the Void: Prologue)'
+    - 'Legacy of the Void'
+    - 'Into the Void (Legacy of the Void: Epilogue)'
+    - 'Nova Covert Ops'
+    """
     display_name = "Enabled Campaigns"
     valid_keys = {campaign.campaign_name for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL}
-    default = valid_keys
+    default = set((SC2Campaign.WOL.campaign_name,))
 
 
 class EnableRaceSwapVariants(Choice):
@@ -1342,7 +1354,7 @@ class Starcraft2Options(PerGameCommonOptions):
     player_color_zerg: PlayerColorZerg
     player_color_zerg_primal: PlayerColorZergPrimal
     player_color_nova: PlayerColorNova
-    selected_races: SelectRaces
+    selected_races: SelectedRaces
     enabled_campaigns: EnabledCampaigns
     enable_race_swap: EnableRaceSwapVariants
     mission_race_balancing: EnableMissionRaceBalancing
@@ -1436,7 +1448,7 @@ option_groups = [
         ShuffleCampaigns,
         AllInMap,
         TwoStartPositions,
-        SelectRaces,
+        SelectedRaces,
         ExcludeVeryHardMissions,
         EnableMissionRaceBalancing,
     ]),
@@ -1548,7 +1560,7 @@ def get_option_value(world: Union['SC2World', None], name: str) -> int:
 
 
 def get_enabled_races(world: Optional['SC2World']) -> Set[SC2Race]:
-    race_names = world.options.selected_races.value if world and len(world.options.selected_races.value) > 0 else SelectRaces.valid_keys
+    race_names = world.options.selected_races.value if world and len(world.options.selected_races.value) > 0 else SelectedRaces.valid_keys
     return {race for race in SC2Race if race.get_title() in race_names}
 
 
