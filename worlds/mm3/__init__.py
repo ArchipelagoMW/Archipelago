@@ -93,14 +93,14 @@ class MM3World(World):
     location_name_groups = location_groups
     web = MM3WebWorld()
     rom_name: bytearray
-    world_version: tuple[int, int, int] = (0, 1, 3)
-
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name = bytearray()
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
         self.weapon_damage = weapon_damage.copy()
         self.wily_4_weapons: dict[int, list[int]] = {}
+        if not hasattr(self, "world_version"):
+            self.world_version: tuple[int, int, int] = (0, 1, 3)
 
     def create_regions(self) -> None:
         menu = MM3Region("Menu", self.player, self.multiworld)
