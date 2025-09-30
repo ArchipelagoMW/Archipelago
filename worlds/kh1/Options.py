@@ -257,7 +257,7 @@ class KeybladeStats(Choice):
     """
     Determines whether Keyblade stats should be randomized.
     
-    Randomize: Randomly generates STR and MP bonuses for each keyblade between the defined minimums and maximums.
+    Randomize: Randomly generates stats for each keyblade between the defined minimums and maximums.
     
     Shuffle: Shuffles the stats of the vanilla keyblades amongst each other.
     
