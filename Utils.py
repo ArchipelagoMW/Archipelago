@@ -323,11 +323,13 @@ def get_options() -> Settings:
     return get_settings()
 
 
-def persistent_store(category: str, key: str, value: typing.Any):
-    path = user_path("_persistent_storage.yaml")
+def persistent_store(category: str, key: str, value: typing.Any, force_store: bool = False):
     storage = persistent_load()
+    if not force_store and category in storage and key in storage[category] and storage[category][key] == value:
+        return  # no changes necessary
     category_dict = storage.setdefault(category, {})
     category_dict[key] = value
+    path = user_path("_persistent_storage.yaml")
     with open(path, "wt") as f:
         f.write(dump(storage, Dumper=Dumper))
 
