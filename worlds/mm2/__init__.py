@@ -133,6 +133,9 @@ class MM2World(World):
                                                                          Consumables.option_all):
                 stage.add_locations(energy_pickups[region], MM2Location)
             self.multiworld.regions.append(stage)
+        goal_location = self.get_location(dr_wily)
+        goal_location.place_locked_item(MM2Item("Victory", ItemClassification.progression, None, self.player))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_item(self, name: str) -> MM2Item:
         item = item_table[name]
@@ -188,11 +191,6 @@ class MM2World(World):
                 f"Mega Man 2 ({self.player_name}): "
                 f"Incompatible starting Robot Master, changing to "
                 f"{self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
-
-    def generate_basic(self) -> None:
-        goal_location = self.get_location(dr_wily)
-        goal_location.place_locked_item(MM2Item("Victory", ItemClassification.progression, None, self.player))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def fill_hook(self,
                   progitempool: List["Item"],
