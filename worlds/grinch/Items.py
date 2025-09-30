@@ -59,7 +59,7 @@ SC: str = "Scissors"
 GB: str = "Glue Bucket"
 CCAC: str = "Cable Car Access Card"
 DRL: str = "Drill"
-RPE: str = "Rope"
+RP: str = "Rope"
 HK: str = "Hook"
 ST: str = "Sculpting Tools"
 HMR: str = "Hammer"
@@ -168,8 +168,8 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
 
 #Access Keys
 KEYS_TABLE: dict[str, GrinchItemData] = {
-    # "Whoville Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 400, IC.progression,
-    #     [GrinchRamData(010200, binary_bit_pos=1)]),
+    "Whoville Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 400, IC.progression,
+        [GrinchRamData(0x010200, binary_bit_pos=1)]),
     "Who Forest Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 401, IC.progression,
         [GrinchRamData(0x0100AA, binary_bit_pos=2)]),
     "Who Dump Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 402, IC.progression,

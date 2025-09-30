@@ -87,26 +87,26 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "WV - Painting The Mayor's Posters": [
-        ["Painting Bucket"]
+        [PB]
     ],
     "WV - Launching Eggs Into Houses": [
         [REL]
     ],
     "WV - City Hall - Modifying The Mayor's Statue": [
-        ["Sculpting Tools"]
+        [ST]
     ],
     "WV - Clock Tower - Advancing The Countdown-To-Xmas Clock": [
-        ["Hammer", RS]
+        [HMR, RS]
     ],
     "WV - Squashing All Gifts": [
-        [GC, SS, REL, "Who Cloak", RS]
+        [GC, SS, REL, WC, RS]
     ],
     "WF - Making Xmas Trees Droop": [
         [REL]
     ],
     "WF - Sabotaging Snow Cannon With Glue": [
-        ["Glue Bucket", RS],
-        ["Glue Bucket", GC]
+        [GB, RS],
+        [GB, GC]
     ],
     "WF - Putting Beehives In Cabins": [
         [REL, RS],
@@ -120,8 +120,8 @@ rules_dict: dict[str,list[list[str]]] = {
         [REL, OCD, RS]
     ],
     "WF - Squashing All Gifts": [
-        [GC, "Cable Car Access Card", SS, REL],
-        [OCD, RS, "Cable Car Access Card", SS, REL]
+        [GC, CCAC, SS, REL],
+        [OCD, RS, CCAC, SS, REL]
     ],
     "WD - Stealing Food From Birds": [
         [RS, REL]
@@ -137,8 +137,8 @@ rules_dict: dict[str,list[list[str]]] = {
         [RS, REL]
     ],
     "WD - Minefield - Shaving Who Dump Guardian": [
-        ["Scissors", GC],
-        ["Scissors", SS, RS]
+        [SC, GC],
+        [SC, SS, RS]
     ],
     "WD - Generator Building - Short-Circuiting Power-Plant": [
         [REL, GC],
@@ -157,18 +157,18 @@ rules_dict: dict[str,list[list[str]]] = {
         [GC]
     ],
     "WL - North Shore - Drilling Holes In Canoes": [
-        ["Drill"]
-        # ["Drill", "Max"]
+        [DRL]
+        # [DRL, MX]
     ],
     "WL - Submarine World - Modifying The Marine Mobile": [
         []
     ],
     "WL - Mayor's Villa - Hooking The Mayor's Bed To The Motorboat": [
-        ["Rope", "Hook", REL, "Scout Clothes"]
+        [RP, HK, REL, SCL]
     ],
     "WL - Squashing All Gifts": [
-        [GC, MM, "Scout Clothes", REL, "Hook", "Rope"],
-        [OCD, RS, MM, "Scout Clothes", REL, "Hook", "Rope"]
+        [GC, MM, SCL, REL, HK, RP],
+        [OCD, RS, MM, SCL, REL, HK, RP]
     ],
     "WV - Binoculars BP on Post Office Roof": [
         []
@@ -189,12 +189,12 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "WV - Post Office - REL BP inside Silver Room": [
-        ["Who Cloak"]
-        # ["Who Cloak", "Max"]
+        [WC]
+        # [WC, MX]
     ],
     "WV - Post Office - REL BP at Entrance Door after Mission Completion": [
-        ["Who Cloak"]
-        # ["Who Cloak", "Max"]
+        [WC]
+        # [WC, MX]
     ],
     "WF - RS BP behind Vacuum Tube": [
         []
@@ -293,7 +293,7 @@ rules_dict: dict[str,list[list[str]]] = {
         []
         # [REL, GC],
         # [REL, SS, RS]
-        # ["Max"]
+        # [MX]
     ],
     "WD - Minefield - OCD BP on Right Side of Shack": [
         [GC],
@@ -303,7 +303,7 @@ rules_dict: dict[str,list[list[str]]] = {
         []
         # [REL, GC],
         # [REL, SS, RS]
-        # ["Max"]
+        # [MX]
     ],
     "WL - South Shore - MM BP on Bridge to Scout's Hut": [
         []
@@ -341,11 +341,11 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WL - North Shore - MM BP inside Skunk Hut": [
         []
-        # ["Max"]
+        # [MX]
     ],
     "WL - North Shore - MM BP inside House's Fence": [
         []
-        # ["Max"]
+        # [MX]
     ],
     "WL - North Shore - MM BP inside Boulder Box near Bridge": [
         []
@@ -367,7 +367,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WV - Clock Tower - GC BP in Bedroom": [
         [RS]
-    #   ["Max", RS]
+    #   [MX, RS]
     ],
     "WV - Clock Tower - GC BP in Bell Room": [
         [RS]
@@ -377,7 +377,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WF - Ski Resort - GC BP in Max Cave": [
         []
-        # ["Max"]
+        # [MX]
     ],
     "WF - Civic Center - GC BP on Left Side in Bat Cave Wall": [
         [GC],
@@ -391,12 +391,12 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WD - Power Plant - GC BP in Max Cave": [
         []
-        # ["Max"]
+        # [MX]
     ],
     "WD - Power Plant - GC BP After First Gate": [
         [REL, RS],
         [GC]
-    #   ["Max", REL, RS]
+    #   [MX, REL, RS]
     ],
     "WD - Generator Building - GC BP on the Highest Platform": [
         [REL, GC],
@@ -422,11 +422,11 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "MC - Sleigh Ride - Stealing All Gifts": [
         # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
-        [REL, "Who Forest Vacuum Tube", "Who Dump Vacuum Tube", "Who Lake Vacuum Tube", RS, MM]
+        [REL, WV, WF, WD, WL, RS, MM]
     ],
     "MC - Sleigh Ride - Neutralizing Santa": [
         # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
-        [REL, "Who Forest Vacuum Tube", "Who Dump Vacuum Tube", "Who Lake Vacuum Tube", RS, MM]
+        [REL, WV, WF, WD, WL, RS, MM]
     ],
     "WV - Post Office - Heart of Stone": [
         []
@@ -440,7 +440,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WL - North Shore - Heart of Stone": [
         []
-        # ["Max"]
+        # [MX]
     ],
     "Spin N' Win - Easy": [
         []
@@ -482,16 +482,16 @@ rules_dict: dict[str,list[list[str]]] = {
         [REL]
     ],
     "WF - Skis": [
-        ["Who Forest Vacuum Tube"]
+        [WF]
     ],
     "WD - Tires": [
-        ["Who Dump Vacuum Tube", RS, REL]
+        [WD, RS, REL]
     ],
     "WL - Submarine World - Twin-End Tuba": [
-        ["Who Lake Vacuum Tube", MM]
+        [WL, MM]
     ],
     "WL - South Shore - GPS": [
-        ["Who Lake Vacuum Tube", REL]
+        [WL, REL]
     ],
     "MC - 1st Crate Squashed": [
         []
@@ -527,10 +527,10 @@ rules_dict: dict[str,list[list[str]]] = {
 
 access_rules_dict: dict[str,list[list[str]]] = {
     "Whoville": [
-        []
+        [WV]
     ],
     "Post Office": [
-        ["Who Cloak"]
+        [WC]
     ],
     "City Hall": [
         [REL]
@@ -539,19 +539,19 @@ access_rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "Who Forest": [
-        ["Who Forest Vacuum Tube"],
-        # ["Progressive Vacuum Tube": 1]
+        [WF],
+        # [VT: 1]
     ],
     "Ski Resort": [
-        ["Cable Car Access Card"]
+        [CCAC]
     ],
     "Civic Center": [
         [GC],
         [OCD]
     ],
     "Who Dump": [
-        ["Who Dump Vacuum Tube"],
-        # ["Progressive Vacuum Tube": 2]
+        [WD],
+        # [VT: 2]
     ],
     "Minefield": [
         [REL, RS],
@@ -567,24 +567,24 @@ access_rules_dict: dict[str,list[list[str]]] = {
         [REL, OCD, SS, RS]
     ],
     "Who Lake": [
-        ["Who Lake Vacuum Tube"],
-        # ["Progressive Vacuum Tube": 3]
+        [WL],
+        # [VT: 3]
     ],
     "Scout's Hut": [
         [GC],
         [RS]
     ],
     "North Shore": [
-        ["Scout Clothes"]
+        [SCL]
     ],
     "Mayor's Villa": [
-        ["Scout Clothes"]
+        [SCL]
     ],
     "Submarine World": [
         [MM]
     ],
     "Sleigh Room": [
-        ["Sleigh Room Key"]
+        [SR]
     ],
     "Spin N' Win": [
         []
