@@ -75,6 +75,10 @@ class AutoWorldRegister(type):
                 if "required_client_version" in base.__dict__:
                     dct["required_client_version"] = max(dct["required_client_version"],
                                                          base.__dict__["required_client_version"])
+        if "world_version" in dct:
+            if dct["world_version"] != Version(0, 0, 0):
+                raise RuntimeError(f"{name} is attempting to set 'world_version' from within the class. world_version "
+                                   f"can only be set from manifest.")
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
@@ -337,7 +341,8 @@ class World(metaclass=AutoWorldRegister):
     """If loaded from a .apworld, this is the Path to it."""
     __file__: ClassVar[str]
     """path it was loaded from"""
-    _world_version: ClassVar[Version] = Version(0, 0, 0)
+    world_version: ClassVar[Version] = Version(0, 0, 0)
+    """Optional world version loaded from archipelago.json"""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None
@@ -562,11 +567,6 @@ class World(metaclass=AutoWorldRegister):
     @property
     def player_name(self) -> str:
         return self.multiworld.get_player_name(self.player)
-
-    @property
-    def world_version(self) -> Version:
-        """Optional world version loaded from archipelago.json"""
-        return self._world_version
 
     @classmethod
     def get_data_package_data(cls) -> "GamesPackage":

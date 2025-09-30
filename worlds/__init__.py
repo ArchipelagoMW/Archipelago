@@ -128,8 +128,8 @@ for world_source in world_sources:
                 break
         game = manifest.get("game")
         if game in AutoWorldRegister.world_types:
-            AutoWorldRegister.world_types[game]._world_version = Version(*tuplize_version(manifest.get("world_version",
-                                                                                                       "0.0.0")))
+            AutoWorldRegister.world_types[game].world_version = Version(*tuplize_version(manifest.get("world_version",
+                                                                                                      "0.0.0")))
 
 if apworlds:
     # encapsulation for namespace / gc purposes
@@ -185,7 +185,7 @@ if apworlds:
                 if apworld.game in AutoWorldRegister.world_types:
                     # world could fail to load at this point
                     if apworld.world_version:
-                        AutoWorldRegister.world_types[apworld.game]._world_version = apworld.world_version
+                        AutoWorldRegister.world_types[apworld.game].world_version = apworld.world_version
     load_apworlds()
     del load_apworlds
 
