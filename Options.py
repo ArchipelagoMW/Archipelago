@@ -1754,7 +1754,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
                 option_groups=option_groups,
                 __version__=__version__,
                 game=game_name,
-                world_version=world._world_version.as_simple_string(),
+                world_version=world.world_version.as_simple_string(),
                 yaml_dump=yaml_dump_scalar,
                 dictify_range=dictify_range,
                 cleandoc=cleandoc,
