@@ -1709,7 +1709,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
     from jinja2 import Template
 
     from worlds import AutoWorldRegister
-    from Utils import local_path, __version__
+    from Utils import local_path, __version__, tuplize_version
 
     full_path: str
 
@@ -1752,7 +1752,10 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
             res = template.render(
                 option_groups=option_groups,
-                __version__=__version__, game=game_name, yaml_dump=yaml_dump_scalar,
+                __version__=__version__,
+                game=game_name,
+                world_version=world._world_version.as_simple_string(),
+                yaml_dump=yaml_dump_scalar,
                 dictify_range=dictify_range,
                 cleandoc=cleandoc,
             )
