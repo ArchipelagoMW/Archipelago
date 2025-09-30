@@ -65,7 +65,7 @@ rules_dict: dict[str,list[list[str]]] = {
     "WD - Generator Building - First Visit": [
         []
     ],
-    "WL - South Shore- First Visit": [
+    "WL - South Shore - First Visit": [
         []
     ],
     "WL - Submarine World - First Visit": [
