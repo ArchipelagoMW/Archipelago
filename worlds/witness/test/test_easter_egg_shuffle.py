@@ -34,7 +34,7 @@ class TestEasterEggShuffle(WitnessMultiworldTestBase):
             self.assertFalse(egg_locations)
 
         for player, eggs_per_check, logical_eggs_per_check in zip(
-                [2, 3, 4, 5, 6], [3, 3, 4, 4, 4], [8, 6, 6, 5, 4], strict=True
+            [2, 3, 4, 5, 6], [3, 3, 4, 4, 4], [8, 6, 6, 5, 4], strict=True
         ):
             world = cast(WitnessWorld, self.multiworld.worlds[player])
             option_name = world.options.easter_egg_hunt
