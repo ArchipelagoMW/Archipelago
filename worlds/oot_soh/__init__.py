@@ -49,8 +49,8 @@ class SohWorld(World):
         #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
         pass
 
-    def create_item(self, name: Enum) -> SohItem:
-        return SohItem(name.value, item_data_table[name].classification, item_data_table[name].item_id, self.player)
+    def create_item(self, item: Items) -> SohItem:
+        return SohItem(item.value, item_data_table[item].classification, item_data_table[item].item_id, self.player)
 
     def create_items(self) -> None:
         create_item_pool(self)

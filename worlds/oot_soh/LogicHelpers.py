@@ -16,7 +16,7 @@ logger = logging.getLogger("SOH_OOT.Logic")
 
 
 # todo: add typing for child_regions, change it from a list[list] to list[tuple]
-def add_locations(parent_region: Enum, world: "SohWorld", locations) -> None:
+def add_locations(parent_region: Regions, world: "SohWorld", locations) -> None:
     for location in locations:
         locationName = location[0].value
         locationRule = lambda state: True
@@ -29,12 +29,12 @@ def add_locations(parent_region: Enum, world: "SohWorld", locations) -> None:
 
 
 # todo: add typing for child_regions, change it from a list[list] to list[tuple]
-def connect_regions(parent_region: Enum, world: "SohWorld", child_regions) -> None:
+def connect_regions(parent_region: Regions, world: "SohWorld", child_regions) -> None:
     for region in child_regions:
         world.get_region(parent_region.value).connect(world.get_region(region[0].value), rule=region[1])
 
 
-def add_events(parent_region, world: "SohWorld", events):
+def add_events(parent_region: Regions, world: "SohWorld", events):
     for event in events:
         event_location = event[0].value
         event_item = event[1].value
@@ -42,7 +42,7 @@ def add_events(parent_region, world: "SohWorld", events):
         if(len(event) > 2):
             event_rule = event[2]
         
-        world.get_region(parent_region).add_locations({event_location: None}, SohLocation)
+        world.get_region(parent_region.value).add_locations({event_location: None}, SohLocation)
         world.get_location(event_location).place_locked_item(SohItem(event_item, IC.progression, None, world.player))
         set_rule(world.get_location(event_location), event_rule)
 
@@ -51,104 +51,104 @@ def add_events(parent_region, world: "SohWorld", events):
 # TODO account for starting sticks being disabled
 # TODO add child wallet options
 # TODO add bronze scale options
-def has_item(itemName: Enum, state: CollectionState, world: "SohWorld", count: int = 1, can_be_child: bool = True,
+def has_item(item: Items, state: CollectionState, world: "SohWorld", count: int = 1, can_be_child: bool = True,
              can_be_adult: bool = True) -> bool:
     player = world.player
 
-    def can_use_item(name: Enum):
-        return can_use(name, state, world, can_be_child, can_be_adult)
+    def can_use_item(name: Items):
+        return can_use(name.value, state, world, can_be_child, can_be_adult)
       
-    if itemName in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
-        return (state.has_any((Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20,
+    if item in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
+        return (state.has_any((Items.BOMBCHUS_5.value, Items.BOMBCHUS_10.value, Items.BOMBCHUS_20.value,
                                Items.PROGRESSIVE_BOMBCHU.value), world.player)
                 or (bombchus_enabled(state, world)
-                    and state.has_any((Events.CAN_BUY_BOMBCHUS, Events.COULD_PLAY_BOWLING, Events.CARPET_MERCHANT), world.player)))
+                    and state.has_any((Events.CAN_BUY_BOMBCHUS.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value), world.player)))
 
-    if itemName == Items.FAIRY_OCARINA:
+    if item == Items.FAIRY_OCARINA:
         return state.has_any((Items.FAIRY_OCARINA.value, Items.OCARINA_OF_TIME.value, Items.PROGRESSIVE_OCARINA.value), player)
-    elif itemName == Items.OCARINA_OF_TIME:
+    elif item == Items.OCARINA_OF_TIME:
         return state.has_any_count({Items.OCARINA_OF_TIME.value: 1, Items.PROGRESSIVE_OCARINA.value: 2}, player)
-    elif itemName == Items.SCARECROW:
+    elif item == Items.SCARECROW:
         return scarecrows_song(state, world) and can_use_item(Items.HOOKSHOT)
-    elif itemName == Items.DISTANT_SCARECROW:
+    elif item == Items.DISTANT_SCARECROW:
         return scarecrows_song(state, world) and can_use_item(Items.LONGSHOT)
-    elif itemName == Items.DEKU_SHIELD:
+    elif item == Items.DEKU_SHIELD:
         return state.has(Events.CAN_BUY_DEKU_SHIELD.value, player)
     # todo: a lot of these progressive items can probably be evaluated way more simply with a collect/remove override
-    elif itemName == Items.PROGRESSIVE_GORON_SWORD:
+    elif item == Items.PROGRESSIVE_GORON_SWORD:
         return state.has_any((Items.GIANTS_KNIFE.value, Items.BIGGORONS_SWORD.value, Items.PROGRESSIVE_GORON_SWORD.value), player)
-    elif itemName == Items.GORONS_BRACELET:
+    elif item == Items.GORONS_BRACELET:
         return state.has_any((Items.GORONS_BRACELET.value, Items.STRENGTH_UPGRADE.value), player)
-    elif itemName == Items.SILVER_GAUNTLETS:
+    elif item == Items.SILVER_GAUNTLETS:
         return state.has_any_count({Items.SILVER_GAUNTLETS.value: 1, Items.STRENGTH_UPGRADE.value: 2}, player)
-    elif itemName == Items.GOLDEN_GAUNTLETS:
+    elif item == Items.GOLDEN_GAUNTLETS:
         return state.has_any_count({Items.GOLDEN_GAUNTLETS.value: 1, Items.STRENGTH_UPGRADE.value: 3}, player)
-    elif itemName == Items.ADULT_WALLET:
+    elif item == Items.ADULT_WALLET:
         return state.has_any((Items.ADULT_WALLET.value, Items.PROGRESSIVE_WALLET.value), player)
-    elif itemName == Items.GIANT_WALLET:
+    elif item == Items.GIANT_WALLET:
         return state.has_any_count({Items.GIANT_WALLET.value: 1, Items.PROGRESSIVE_WALLET.value: 2}, player)
-    elif itemName == Items.TYCOON_WALLET:
+    elif item == Items.TYCOON_WALLET:
         return state.has_any_count({Items.TYCOON_WALLET.value: 1, Items.PROGRESSIVE_WALLET.value: 3}, player)
-    elif itemName == Items.SILVER_SCALE:
+    elif item == Items.SILVER_SCALE:
         return state.has_any((Items.SILVER_SCALE.value, Items.PROGRESSIVE_SCALE.value), player)
-    elif itemName == Items.GOLDEN_SCALE:
+    elif item == Items.GOLDEN_SCALE:
         return state.has_any_count({Items.GOLDEN_SCALE.value: 1, Items.PROGRESSIVE_SCALE.value: 2}, player)
-    elif itemName == Items.MAGIC_BEAN:
+    elif item == Items.MAGIC_BEAN:
         return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
-    elif itemName == Items.CHILD_WALLET:
+    elif item == Items.CHILD_WALLET:
         return state.has(Items.PROGRESSIVE_WALLET.value, player) or world.options.shuffle_childs_wallet == 0
     # todo: is this for being able to catch a big poe??
-    elif itemName == Items.BOTTLE_WITH_BIG_POE:
+    elif item == Items.BOTTLE_WITH_BIG_POE:
         return has_bottle(state, world)
-    elif itemName == Items.BOTTLE_WITH_BUGS:
+    elif item == Items.BOTTLE_WITH_BUGS:
         return has_bottle(state, world) and state.has(Events.BUG_ACCESS.value, player)
     else:
-        return state.has(itemName.value, player, count)
+        return state.has(item.value, player, count)
 
 
-def can_use(name: Enum, state: CollectionState, world: "SohWorld", can_be_child: bool = True, can_be_adult: bool = True) -> bool:
-    if not has_item(name, state, world):
+def can_use(item: Items, state: CollectionState, world: "SohWorld", can_be_child: bool = True, can_be_adult: bool = True) -> bool:
+    if not has_item(item, state, world):
         return False
 
-    def has(item_name: Enum, count: int = 1):
-        return has_item(item_name, state, world, count, can_be_child, can_be_adult)
+    def has(item: Items, count: int = 1):
+        return has_item(item, state, world, count, can_be_child, can_be_adult)
 
-    def can_use_item(item_name):
-        return can_use(item_name, state, world, can_be_child, can_be_adult)
+    def can_use_item(item: Items):
+        return can_use(item, state, world, can_be_child, can_be_adult)
 
     data = item_data_table
 
-    if data[name].adult_only and not can_be_adult:
+    if data[item].adult_only and not can_be_adult:
         return False
 
-    if data[name].child_only and not can_be_child:
+    if data[item].child_only and not can_be_child:
         return False
 
-    if data[name].item_type == ItemType.magic and not can_use_item(Items.PROGRESSIVE_MAGIC_METER):
+    if data[item].item_type == ItemType.magic and not can_use_item(Items.PROGRESSIVE_MAGIC_METER):
         return False
 
-    if data[name].item_type == ItemType.song:
-        return can_play_song(state, world, name)
+    if data[item].item_type == ItemType.song:
+        return can_play_song(state, world, item)
 
-    if name in (Items.FIRE_ARROW, Items.ICE_ARROW, Items.LIGHT_ARROW):
+    if item in (Items.FIRE_ARROW, Items.ICE_ARROW, Items.LIGHT_ARROW):
         return can_use_item(Items.PROGRESSIVE_BOW)
 
-    if "Bombchu" in name.value:
+    if item in [Items.PROGRESSIVE_BOMBCHU,Items.BOMBCHUS_5,Items.BOMBCHUS_10,Items.BOMBCHUS_20]:
         return bombchu_refill(state, world) and bombchus_enabled(state, world)
 
-    if name == Items.PROGRESSIVE_MAGIC_METER:
+    if item == Items.PROGRESSIVE_MAGIC_METER:
         return has(Events.AMMO_CAN_DROP) or (has_bottle(state, world) and has(Events.CAN_BUY_GREEN_POTION))
-    elif name == Items.PROGRESSIVE_BOW:
+    elif item == Items.PROGRESSIVE_BOW:
         return has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_ARROWS)
-    elif name == Items.FAIRY_SLINGSHOT:
+    elif item == Items.FAIRY_SLINGSHOT:
         return has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_SEEDS)
-    elif name == Items.NUTS:
+    elif item == Items.NUTS:
         return has(Events.AMMO_CAN_DROP) and (has(Events.NUT_POT) or has(Events.NUT_CRATE) or has(Events.DEKU_BABA_NUTS))
-    elif name == Items.STICKS:
+    elif item == Items.STICKS:
         return has(Events.STICK_POT) or has(Events.DEKU_BABA_STICKS)
-    elif name in (Items.PROGRESSIVE_BOMB_BAG, Items.BOMB_BAG):
+    elif item in (Items.PROGRESSIVE_BOMB_BAG, Items.BOMB_BAG):
         return has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_BOMBS)
-    elif name == Items.FISHING_POLE:
+    elif item == Items.FISHING_POLE:
         return has(Items.CHILD_WALLET)  # as long as you have enough rubies
 
     return True
@@ -442,7 +442,7 @@ def can_hit_switch(state: CollectionState, world: "SohWorld", distance: str = "c
 
     return False
 
-def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enum, combat_range: Enum = EnemyDistance.CLOSE,
+def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies, distance: EnemyDistance = EnemyDistance.CLOSE,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
     Check if Link can kill a specific enemy at a given combat range.
@@ -459,28 +459,28 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enum, comba
     """
 
     # Define what weapons work at each range
-    def can_hit_at_range(range_type: Enum) -> bool:
-        if range_type == EnemyDistance.CLOSE:
+    def can_hit_at_range(distance: EnemyDistance) -> bool:
+        if distance == EnemyDistance.CLOSE:
             return (can_jump_slash(state, world) or
                     has_explosives(state, world) or
                     can_use(Items.DINS_FIRE, state, world))
 
-        elif range_type in [EnemyDistance.SHORT_JUMPSLASH, EnemyDistance.MASTER_SWORD_JUMPSLASH, EnemyDistance.LONG_JUMPSLASH]:
+        elif distance in [EnemyDistance.SHORT_JUMPSLASH, EnemyDistance.MASTER_SWORD_JUMPSLASH, EnemyDistance.LONG_JUMPSLASH]:
             return can_jump_slash(state, world)
 
-        elif range_type == EnemyDistance.BOMB_THROW:
+        elif distance == EnemyDistance.BOMB_THROW:
             return has_explosives(state, world)
 
-        elif range_type == EnemyDistance.BOOMERANG:
+        elif distance == EnemyDistance.BOOMERANG:
             return can_use(Items.BOOMERANG, state, world)
 
-        elif range_type == EnemyDistance.HOOKSHOT:
+        elif distance == EnemyDistance.HOOKSHOT:
             return can_use(Items.PROGRESSIVE_HOOKSHOT, state, world)
 
-        elif range_type == EnemyDistance.LONGSHOT:
+        elif distance == EnemyDistance.LONGSHOT:
             return can_use(Items.PROGRESSIVE_HOOKSHOT, state, world)  # Longshot is progressive hookshot level 2
 
-        elif range_type == EnemyDistance.FAR:
+        elif distance == EnemyDistance.FAR:
             return (can_use(Items.PROGRESSIVE_BOW, state, world) or
                     can_use(Items.PROGRESSIVE_SLINGSHOT, state, world) or
                     can_use(Items.PROGRESSIVE_HOOKSHOT, state, world) or
@@ -498,15 +498,15 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enum, comba
 
     # Gold Skulltulas and similar enemies that can be hit at various ranges
     if enemy in [Enemies.GOLD_SKULLTULA, Enemies.BIG_SKULLTULA]:
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Small enemies that are easy to kill
     if enemy in [Enemies.GOHMA_LARVA, Enemies.MAD_SCRUB, Enemies.DEKU_BABA, Enemies.WITHERED_DEKU_BABA]:
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Dodongo (requires explosives or specific attacks)
     if enemy == Enemies.DODONGO:
-        if combat_range in [EnemyDistance.CLOSE, EnemyDistance.SHORT_JUMPSLASH, EnemyDistance.MASTER_SWORD_JUMPSLASH, EnemyDistance.LONG_JUMPSLASH]:
+        if distance in [EnemyDistance.CLOSE, EnemyDistance.SHORT_JUMPSLASH, EnemyDistance.MASTER_SWORD_JUMPSLASH, EnemyDistance.LONG_JUMPSLASH]:
             return (can_jump_slash(state, world) or has_explosives(state, world))
         return has_explosives(state, world)
 
@@ -518,7 +518,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enum, comba
 
     # Flying enemies
     if enemy in [Enemies.KEESE, Enemies.FIRE_KEESE]:
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Bubbles (need specific attacks)
     if enemy in [Enemies.BLUE_BUBBLE, Enemies.GREEN_BUBBLE]:
@@ -535,7 +535,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enum, comba
 
     # Stalfos (needs good weapons)
     if enemy == Enemies.STALFOS:
-        return can_hit_at_range(combat_range) and (
+        return can_hit_at_range(distance) and (
                 can_jump_slash(state, world) or
                 can_use(Items.MEGATON_HAMMER, state, world))
 
@@ -573,7 +573,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enum, comba
 
     # Other enemies
     if enemy in [Enemies.MEG, Enemies.ARMOS, Enemies.DINOLFOS, Enemies.FREEZARD, Enemies.SHELL_BLADE, Enemies.SPIKE, Enemies.STINGER]:
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Water enemies
     if enemy in [Enemies.BIG_OCTO, Enemies.BARI, Enemies.SHABOM, Enemies.OCTOROK, Enemies.TENTACLE]:
@@ -581,7 +581,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enum, comba
             return (can_use(Items.PROGRESSIVE_HOOKSHOT, state, world) or
                     can_use(Items.PROGRESSIVE_BOW, state, world) or
                     has_explosives(state, world))
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Bosses
     if enemy in [Enemies.GOHMA, Enemies.KING_DODONGO, Enemies.BARINADE, Enemies.PHANTOM_GANON, Enemies.VOLVAGIA,
@@ -605,7 +605,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enum, comba
 
     # Purple Leever
     if enemy == Enemies.PURPLE_LEEVER:
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Anubis (tough enemy)
     if enemy == Enemies.ANUBIS:
@@ -617,7 +617,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enum, comba
     return can_damage(state, world)
 
 
-def can_pass_enemy(state: CollectionState, world: "SohWorld", enemy: Enum) -> bool:
+def can_pass_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies) -> bool:
     """Check if Link can pass by an enemy (usually by killing or stunning it)."""
     return can_kill_enemy(state, world, enemy) # I think that we can be more permissive here, but for now this is fine
 
@@ -668,26 +668,25 @@ def has_key_ring(key : Items, state: CollectionState, world: "SohWorld") -> bool
         case _:
             return False
 
-def can_get_enemy_drop(state: CollectionState, world: "SohWorld", enemy : Enemies, range : EnemyDistance = EnemyDistance.CLOSE, aboveLink : bool = False) -> bool:
-    if not can_kill_enemy(state, world, enemy, range):
+def can_get_enemy_drop(state: CollectionState, world: "SohWorld", enemy: Enemies, distance: EnemyDistance = EnemyDistance.CLOSE, aboveLink: bool = False) -> bool:
+    if not can_kill_enemy(state, world, enemy, distance):
         return False
     
-    if range.value <= EnemyDistance.MASTER_SWORD_JUMPSLASH.value:
+    if distance.value <= EnemyDistance.MASTER_SWORD_JUMPSLASH.value:
         return True
-    
-    drop = False
+
     match enemy:
         case Enemies.GOLD_SKULLTULA:
-            if range in [EnemyDistance.BOOMERANG, EnemyDistance.HOOKSHOT, EnemyDistance.LONGSHOT]:
-                drop = (can_use(Items.BOOMERANG, state, world) or can_use(Items.HOOKSHOT, state, world) or can_use(Items.LONGSHOT, state, world))
-
-            return drop
+            if distance in [EnemyDistance.BOOMERANG, EnemyDistance.HOOKSHOT, EnemyDistance.LONGSHOT]:
+                return (can_use(Items.BOOMERANG, state, world) or can_use(Items.HOOKSHOT, state, world) or can_use(Items.LONGSHOT, state, world))
+                
+            return False
         case Enemies.KEESE:
             return True
         case Enemies.FIRE_KEESE:
             return True
         case _:
-            return aboveLink or (range.value <= EnemyDistance.BOOMERANG.value and can_use(Items.BOOMERANG, state, world))
+            return aboveLink or (distance.value <= EnemyDistance.BOOMERANG.value and can_use(Items.BOOMERANG, state, world))
         
 def can_detonate_bomb_flowers(state: CollectionState, world: "SohWorld") -> bool:
     return (can_use(Items.PROGRESSIVE_BOW, state, world) or has_explosives(state, world) or can_use(Items.DINS_FIRE, state, world))
