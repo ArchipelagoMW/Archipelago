@@ -3,7 +3,7 @@ Archipelago init file for The Witness
 """
 import dataclasses
 from logging import error, warning
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional, cast, ClassVar
 
 from BaseClasses import CollectionState, Entrance, Location, LocationProgressType, Region, Tutorial
 
@@ -84,6 +84,8 @@ class WitnessWorld(World):
 
     required_client_version = (0, 6, 0)
 
+    ut_can_gen_without_yaml: ClassVar[bool] = True
+
     player_logic: WitnessPlayerLogic
     player_locations: WitnessPlayerLocations
     player_items: WitnessPlayerItems
@@ -158,6 +160,14 @@ class WitnessWorld(World):
                               f" Shuffle, Door Shuffle, or Obelisk Keys.")
 
     def generate_early(self) -> None:
+        # Do this first, as set_options_from_ut might re-set it to something different
+        if self.options.victory_condition == "panel_hunt":
+            total_panels = self.options.panel_hunt_total
+            required_percentage = self.options.panel_hunt_required_percentage
+            self.panel_hunt_required_count = round(total_panels * required_percentage / 100)
+        else:
+            self.panel_hunt_required_count = 0
+
         set_options_from_ut(self)
 
         disabled_locations = self.options.exclude_locations.value
@@ -180,13 +190,6 @@ class WitnessWorld(World):
         for item_name, item_data in self.player_items.item_data.items():
             if item_data.local_only:
                 self.options.local_items.value.add(item_name)
-
-        if self.options.victory_condition == "panel_hunt":
-            total_panels = self.options.panel_hunt_total
-            required_percentage = self.options.panel_hunt_required_percentage
-            self.panel_hunt_required_count = round(total_panels * required_percentage / 100)
-        else:
-            self.panel_hunt_required_count = 0
 
     def create_regions(self) -> None:
         self.player_regions.create_regions(self, self.player_logic)

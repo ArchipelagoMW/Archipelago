@@ -270,3 +270,7 @@ def is_easter_time() -> bool:
     last_easter_day = date(today.year, 4, 26)  # Latest possible is 4/25 + 1 day buffer for Easter Monday
 
     return earliest_easter_day <= today <= last_easter_day
+
+
+def entity_id_int_to_canonical_entity_id_string(entity_id_int: int) -> str:
+    return f"{entity_id_int:#0x{5}}"

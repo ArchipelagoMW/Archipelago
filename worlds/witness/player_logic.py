@@ -24,6 +24,7 @@ from .data.definition_classes import ConnectionDefinition, WitnessRule
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import (
+    entity_id_int_to_canonical_entity_id_string,
     get_boat,
     get_caves_except_path_to_challenge_exclusion_list,
     get_complex_additional_panels,
@@ -60,7 +61,12 @@ class WitnessPlayerLogic:
 
     VICTORY_LOCATION: str
 
-    def __init__(self, world: "WitnessWorld", disabled_locations: Set[str], start_inv: Dict[str, int]) -> None:
+    def __init__(
+        self,
+        world: "WitnessWorld",
+        disabled_locations: Set[str],
+        start_inv: Dict[str, int],
+    ) -> None:
         self.YAML_DISABLED_LOCATIONS: Set[str] = disabled_locations
         self.YAML_ADDED_ITEMS: Dict[str, int] = start_inv
 
@@ -150,6 +156,8 @@ class WitnessPlayerLogic:
         # After we have adjusted the raw requirements, we perform a dependency reduction for the entity requirements.
         # This will make the access conditions way faster, instead of recursively checking dependent entities each time.
         self.make_dependency_reduced_checklist()
+
+        self.make_universal_tracker_adjustments(world)
 
         if world.options.victory_condition == "panel_hunt":
             picker = EntityHuntPicker(self, world, self.PRE_PICKED_HUNT_ENTITIES)
@@ -1099,3 +1107,20 @@ class WitnessPlayerLogic:
             self.EVENT_ITEM_PAIRS[f"{region_name} Easter Egg{plural}"] = (event_name, region_name)
 
         return
+
+    def make_universal_tracker_adjustments(self, world: "WitnessWorld") -> None:
+        re_gen_passthrough = getattr(world.multiworld, "re_gen_passthrough", None)
+        if re_gen_passthrough is None:
+            return
+
+        witness_slot_data = re_gen_passthrough["The Witness"]
+
+        if "hunt_entities" not in witness_slot_data:
+            raise ValueError(
+                "The Witness apworld you have is not compatible with this multiworld, "
+                "as it is missing 'hunt_entities' in slot_data."
+            )
+
+        self.PRE_PICKED_HUNT_ENTITIES = {
+            entity_id_int_to_canonical_entity_id_string(entity_int) for entity_int in witness_slot_data["hunt_entities"]
+        }
