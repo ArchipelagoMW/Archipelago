@@ -665,4 +665,10 @@ SONG_DATA: Dict[str, SongData] = {
     "Midnight Blue": SongData(2900789, "88-1", "MUSE RADIO FM106", True, 2, 5, 7),
     "overwork feat.Woonoo": SongData(2900790, "88-2", "MUSE RADIO FM106", True, 2, 6, 8),
     "SUPER CITYLIGHTS": SongData(2900791, "88-3", "MUSE RADIO FM106", True, 5, 7, 10),
+    "Flametide": SongData(2900792, "89-0", "Legendary Voyage, Mystic Treasure", True, 5, 7, 9),
+    "Embrace feat. Kiyon": SongData(2900793, "89-1", "Legendary Voyage, Mystic Treasure", True, 2, 5, 8),
+    "Magazines feat. Nia Suzune": SongData(2900794, "89-2", "Legendary Voyage, Mystic Treasure", True, 3, 6, 8),
+    "Temptation": SongData(2900795, "89-3", "Legendary Voyage, Mystic Treasure", False, 5, 8, 10),
+    "PwP": SongData(2900796, "89-4", "Legendary Voyage, Mystic Treasure", True, 3, 6, 9),
+    "I Can Show You": SongData(2900797, "89-5", "Legendary Voyage, Mystic Treasure", False, 5, 7, 9),
 }

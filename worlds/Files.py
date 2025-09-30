@@ -8,13 +8,17 @@ import os
 import threading
 from io import BytesIO
 
-from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload, Sequence
+from typing import (ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload, Sequence,
+                    TYPE_CHECKING)
 
 import bsdiff4
 
 semaphore = threading.Semaphore(os.cpu_count() or 4)
 
 del threading
+
+if TYPE_CHECKING:
+    from Utils import Version
 
 
 class AutoPatchRegister(abc.ABCMeta):
@@ -65,7 +69,7 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
             return handler
 
 
-container_version: int = 6
+container_version: int = 7
 
 
 def is_ap_player_container(game: str, data: bytes, player: int):
@@ -161,6 +165,33 @@ class APContainer:
             "compatible_version": 5,
             "version": container_version,
         }
+
+
+class APWorldContainer(APContainer):
+    """A zipfile containing a world implementation."""
+    game: str | None = None
+    world_version: "Version | None" = None
+    minimum_ap_version: "Version | None" = None
+    maximum_ap_version: "Version | None" = None
+
+    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
+        from Utils import tuplize_version, Version
+        manifest = super().read_contents(opened_zipfile)
+        self.game = manifest["game"]
+        for version_key in ("world_version", "minimum_ap_version", "maximum_ap_version"):
+            if version_key in manifest:
+                setattr(self, version_key, Version(*tuplize_version(manifest[version_key])))
+        return manifest
+
+    def get_manifest(self) -> Dict[str, Any]:
+        manifest = super().get_manifest()
+        manifest["game"] = self.game
+        manifest["compatible_version"] = 7
+        for version_key in ("world_version", "minimum_ap_version", "maximum_ap_version"):
+            version = getattr(self, version_key)
+            if version:
+                manifest[version_key] = version.as_simple_string()
+        return manifest
 
 
 class APPlayerContainer(APContainer):
