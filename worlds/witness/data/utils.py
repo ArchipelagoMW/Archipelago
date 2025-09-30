@@ -273,4 +273,4 @@ def is_easter_time() -> bool:
 
 
 def entity_id_int_to_canonical_entity_id_string(entity_id_int: int) -> str:
-    return f"{entity_id_int:#0x{5}}"
+    return f"0x{entity_id_int:0{5}x}".upper()

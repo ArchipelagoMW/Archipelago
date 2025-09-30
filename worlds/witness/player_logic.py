@@ -1124,3 +1124,11 @@ class WitnessPlayerLogic:
         self.PRE_PICKED_HUNT_ENTITIES = {
             entity_id_int_to_canonical_entity_id_string(entity_int) for entity_int in witness_slot_data["hunt_entities"]
         }
+
+        not_real_entities = set(self.REFERENCE_LOGIC.ENTITIES_BY_HEX) - self.PRE_PICKED_HUNT_ENTITIES
+        if not_real_entities:
+            raise ValueError(
+                "UT slot_data had panel hunt entities in it that the apworld does not recognize. "
+                "Please report this to NewSoupVi.\n"
+                f"{not_real_entities}"
+            )
