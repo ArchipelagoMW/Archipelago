@@ -34,7 +34,7 @@ class OptionRelevance(IntFlag):
     all_trackers = 0b110
 
 
-class RelevanceMixin(Option):
+class RelevanceMixin:
     relevance: OptionRelevance = OptionRelevance.none
 
     @property
@@ -657,9 +657,8 @@ class TheWitnessOptions(PerGameCommonOptions):
     shuffle_dog: ShuffleDog
     easter_egg_hunt: EasterEggHunt
 
-
 assert all(
-    isinstance(option_type, RelevanceMixin) or option_name in PerGameCommonOptions.type_hints
+    issubclass(option_type, RelevanceMixin) or option_name in PerGameCommonOptions.type_hints
     for option_name, option_type in TheWitnessOptions.type_hints.items()
 )
 

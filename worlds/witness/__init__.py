@@ -389,9 +389,9 @@ class WitnessWorld(World):
 
         slot_data_options = [
             option_name for option_name, option_type in TheWitnessOptions.type_hints.items()
-            if isinstance(option_type, RelevanceMixin) and option_type.needs_to_be_in_slot_data
+            if issubclass(option_type, RelevanceMixin) and option_type.needs_to_be_in_slot_data
         ]
-        slot_data |= TheWitnessOptions.as_dict(*slot_data_options, toggles_as_bools=True)
+        slot_data |= self.options.as_dict(*slot_data_options, toggles_as_bools=True)
         return slot_data
 
     def create_item(self, item_name: str) -> WitnessItem:
