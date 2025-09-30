@@ -516,10 +516,10 @@ rules_dict: dict[str,list[list[str]]] = {
     # ],
     # "Pink Present": [
     #     [REL],
-    #     ["Pancake"]
+    #     [PC]
     # ],
     # "Yellow Present": [
-    #     ["Pancake"]
+    #     [PC]
     # ]
 }
 
