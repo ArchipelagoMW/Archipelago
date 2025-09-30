@@ -66,7 +66,7 @@ class WitnessPlayerItems:
         }
 
         # Downgrade door items and make lasers local if local lasers is on
-        for item_name, item_data in self.item_data.items():
+        for item_data in self.item_data.values():
             if not isinstance(item_data.definition, DoorItemDefinition):
                 continue
 
@@ -194,7 +194,7 @@ class WitnessPlayerItems:
 
         # Get the actual number of each item by scaling the float weight values to match the target quantity.
         int_weights: list[int] = build_weighted_int_list(filler_items.values(), remaining_quantity)
-        output.update(zip(filler_items.keys(), int_weights))
+        output.update(zip(filler_items.keys(), int_weights, strict=True))
 
         return output
 
@@ -251,7 +251,7 @@ class WitnessPlayerItems:
 
     def get_progressive_item_ids_in_pool(self) -> dict[int, list[int]]:
         output: dict[int, list[int]] = {}
-        for item_name, quantity in dict(self._mandatory_items.items()).items():
+        for item_name in self._mandatory_items:
             item = self.item_data[item_name]
             if isinstance(item.definition, ProgressiveItemDefinition):
                 # Note: we need to reference the static table here rather than the player-specific one because the child

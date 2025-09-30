@@ -680,11 +680,8 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
         extra_always_and_priority_hints: list[WitnessLocationHint] = []
 
-        for _ in range(more_always_hints):
-            extra_always_and_priority_hints.append(always_hints.pop())
-
-        for _ in range(more_priority_hints):
-            extra_always_and_priority_hints.append(priority_hints.pop())
+        extra_always_and_priority_hints += always_hints[-more_always_hints:]
+        extra_always_and_priority_hints += priority_hints[-more_priority_hints:]
 
         generated_hints += make_extra_location_hints(
             world, hint_amount - len(generated_hints), world.own_itempool, already_hinted_locations,

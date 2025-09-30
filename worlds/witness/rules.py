@@ -318,25 +318,25 @@ def set_rules(world: "WitnessWorld") -> None:
     Sets all rules for all locations
     """
 
-    for location in world.player_locations.CHECK_LOCATION_TABLE:
-        real_location = location
+    for location_name in world.player_locations.CHECK_LOCATION_TABLE:
+        real_location_name = location_name
 
-        if location in world.player_locations.EVENT_LOCATION_TABLE:
-            entity_hex_or_region_name = world.player_logic.EVENT_ITEM_PAIRS[location][1]
+        if location_name in world.player_locations.EVENT_LOCATION_TABLE:
+            entity_hex_or_region_name = world.player_logic.EVENT_ITEM_PAIRS[location_name][1]
             if entity_hex_or_region_name in static_witness_logic.ALL_REGIONS_BY_NAME:
-                set_rule(world.get_location(location), make_region_lambda(entity_hex_or_region_name, world))
+                set_rule(world.get_location(location_name), make_region_lambda(entity_hex_or_region_name, world))
                 continue
 
-            real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex_or_region_name]["checkName"]
+            real_location_name = static_witness_logic.ENTITIES_BY_HEX[entity_hex_or_region_name]["checkName"]
 
-        associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location]
+        associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location_name]
         entity_hex = associated_entity["entity_hex"]
 
         rule = make_lambda(entity_hex, world)
         if rule is None:
             continue
 
-        location = world.get_location(location)
+        location = world.get_location(location_name)
 
         set_rule(location, rule)
 

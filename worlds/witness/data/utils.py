@@ -43,7 +43,7 @@ def build_weighted_int_list(inputs: Collection[float], total: int) -> list[int]:
     rounded_sum = sum(rounded_output)
 
     # If the output's total is insufficient, increment the value that has the largest remainder until we meet our goal.
-    remainders: list[float] = [real - rounded for real, rounded in zip(scaled_input, rounded_output)]
+    remainders: list[float] = [real - rounded for real, rounded in zip(scaled_input, rounded_output, strict=True)]
     while rounded_sum < total:
         max_remainder = max(remainders)
         if max_remainder == 0:

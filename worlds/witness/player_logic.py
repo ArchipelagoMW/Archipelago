@@ -731,10 +731,13 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(get_obelisk_keys())
 
         if world.options.shuffle_EPs == "obelisk_sides":
-            ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
-                      if ep_obj["entityType"] == "EP")
+            ep_gen = (
+                ep_hex
+                for ep_hex, ep_obj in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
+                if ep_obj["entityType"] == "EP"
+            )
 
-            for ep_hex, ep_obj in ep_gen:
+            for ep_hex in ep_gen:
                 obelisk = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[self.REFERENCE_LOGIC.EP_TO_OBELISK_SIDE[ep_hex]]
                 obelisk_name = obelisk["checkName"]
                 ep_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[ep_hex]["checkName"]

@@ -74,7 +74,7 @@ def populate_items() -> None:
 
 def get_item_to_door_mappings() -> dict[int, list[int]]:
     output: dict[int, list[int]] = {}
-    for item_name, item_data in ITEM_DATA.items():
+    for item_data in ITEM_DATA.values():
         if not isinstance(item_data.definition, DoorItemDefinition) or item_data.ap_code is None:
             continue
         output[item_data.ap_code] = [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]

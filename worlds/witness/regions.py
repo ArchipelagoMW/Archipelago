@@ -110,10 +110,10 @@ class WitnessPlayerRegions:
         all_locations: set[str] = set()
         regions_by_name: dict[str, Region] = {}
 
-        regions_to_create = {
-            k: v for k, v in self.reference_logic.ALL_REGIONS_BY_NAME.items()
+        regions_to_create = [
+            k for k, v in self.reference_logic.ALL_REGIONS_BY_NAME.items()
             if k not in player_logic.UNREACHABLE_REGIONS
-        }
+        ]
 
         event_locations_per_region: dict[str, dict[str, int]] = defaultdict(dict)
 
@@ -131,7 +131,7 @@ class WitnessPlayerRegions:
                 order = self.reference_logic.ENTITIES_BY_HEX[entity_or_region]["order"]
             event_locations_per_region[region_name][event_location] = order
 
-        for region_name, region in regions_to_create.items():
+        for region_name in regions_to_create:
             location_entities_for_this_region = [
                 self.reference_logic.ENTITIES_BY_HEX[entity] for entity in region.logical_entities
             ]
@@ -162,6 +162,6 @@ class WitnessPlayerRegions:
 
         world.multiworld.regions += regions_by_name.values()
 
-        for region_name, region in regions_to_create.items():
+        for region_name in regions_to_create:
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 self.connect_if_possible(world, region_name, connection[0], connection[1], regions_by_name)

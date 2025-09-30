@@ -370,11 +370,6 @@ GENERAL_LOCATIONS = {
 
     "Tunnels Town Shortcut Panel",
 
-    "Caves Skylight EP",
-    "Challenge Water EP",
-    "Tunnels Theater Flowers EP",
-    "Tutorial Gate EP",
-
     "Mountaintop Mountain Entry Panel",
 
     "Mountain Floor 1 Light Bridge Controller",
@@ -389,10 +384,6 @@ GENERAL_LOCATIONS = {
     "Mountain Floor 2 Light Bridge Controller Near",
     "Mountain Floor 2 Light Bridge Controller Far",
 
-    "Mountain Bottom Floor Yellow Bridge EP",
-    "Mountain Bottom Floor Blue Bridge EP",
-    "Mountain Floor 2 Pink Bridge EP",
-
     "Mountain Floor 2 Elevator Discard",
     "Mountain Bottom Floor Giant Puzzle",
 
@@ -405,7 +396,6 @@ GENERAL_LOCATIONS = {
     "Mountain Bottom Floor Right Pillar 4",
 
     "Challenge Vault Box",
-    "Theater Challenge Video",
     "Mountain Bottom Floor Discard",
 }
 
@@ -473,19 +463,16 @@ def get_event_name(entity_hex: str) -> str:
     return cast(str, static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]) + action
 
 
-ALL_LOCATIONS_TO_IDS = {
+ALL_LOCATIONS_TO_ID = {
     panel_obj["checkName"]: get_id(chex)
     for chex, panel_obj in static_witness_logic.ENTITIES_BY_HEX.items()
     if panel_obj["id"]
 }
 
-ALL_LOCATIONS_TO_IDS = dict(
-    sorted(ALL_LOCATIONS_TO_IDS.items(), key=lambda loc: loc[1])
+ALL_LOCATIONS_TO_ID = dict(
+    sorted(ALL_LOCATIONS_TO_ID.items(), key=lambda loc: loc[1])
 )
 
-for key, item in ALL_LOCATIONS_TO_IDS.items():
-    ALL_LOCATIONS_TO_ID[key] = item
-
-for loc in ALL_LOCATIONS_TO_IDS:
+for loc in ALL_LOCATIONS_TO_ID:
     area = static_witness_logic.ENTITIES_BY_NAME[loc]["area"].name
     AREA_LOCATION_GROUPS.setdefault(area, set()).add(loc)

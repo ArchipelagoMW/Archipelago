@@ -2,10 +2,10 @@ from collections.abc import Iterable, Mapping
 from typing import Any, ClassVar
 
 from BaseClasses import CollectionState, Entrance, Item, Location, Region
-
-from test.bases import WorldTestBase
 from test.general import gen_steps, setup_multiworld
 from test.multiworld.test_multiworlds import MultiworldTestBase
+
+from test.bases import WorldTestBase
 
 from .. import WitnessWorld
 from ..data.utils import cast_not_none
@@ -135,7 +135,7 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
 
         self.multiworld = setup_multiworld([WitnessWorld] * len(self.options_per_world), ())
 
-        for world, options in zip(self.multiworld.worlds.values(), self.options_per_world):
+        for world, options in zip(self.multiworld.worlds.values(), self.options_per_world, strict=True):
             for option_name, option_value in {**self.common_options, **options}.items():
                 option = getattr(world.options, option_name)
                 self.assertIsNotNone(option)

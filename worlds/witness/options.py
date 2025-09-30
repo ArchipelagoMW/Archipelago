@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from frozenlist import FrozenList
+
 from Options import (
     Choice,
     DefaultOnToggle,
@@ -332,9 +334,9 @@ class PanelHuntPlando(LocationSet):
 
     display_name = "Panel Hunt Plando"
 
-    valid_keys = [  # noqa: RUF012
+    valid_keys = FrozenList([
         static_witness_logic.ENTITIES_BY_HEX[panel_hex]["checkName"] for panel_hex in ALL_HUNTABLE_PANELS
-    ]
+    ])
 
 
 class PuzzleRandomization(Choice):

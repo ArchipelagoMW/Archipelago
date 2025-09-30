@@ -138,7 +138,7 @@ class EntityHuntPicker:
         hunt_entities_picked_so_far_prevent_div_0 = max(len(self.HUNT_ENTITIES), 1)
 
         contributing_percentage_per_area = {}
-        for area, eligible_entities in self.ELIGIBLE_ENTITIES_PER_AREA.items():
+        for area in self.ELIGIBLE_ENTITIES_PER_AREA.keys():
             amount_of_already_chosen_entities = len(self.ELIGIBLE_ENTITIES_PER_AREA[area] & self.HUNT_ENTITIES)
             current_percentage = amount_of_already_chosen_entities / hunt_entities_picked_so_far_prevent_div_0
             contributing_percentage_per_area[area] = current_percentage

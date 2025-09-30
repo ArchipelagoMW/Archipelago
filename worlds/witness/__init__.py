@@ -52,7 +52,7 @@ class WitnessWebWorld(WebWorld):
         ["Rever"]
     )
 
-    tutorials = [setup_en, setup_de, setup_fr]  # noqa: RUF012
+    tutorials = [setup_en, setup_de, setup_fr]
 
     options_presets = witness_option_presets
     option_groups = witness_option_groups
@@ -268,7 +268,7 @@ class WitnessWorld(World):
             ("Desert Outside", "Desert Surface 2"),
         ]
 
-        for i in range(num_early_locs, needed_size):
+        for _i in range(num_early_locs, needed_size):
             if not extra_checks:
                 break
 
