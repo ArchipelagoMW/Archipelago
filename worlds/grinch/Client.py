@@ -213,9 +213,7 @@ class GrinchClient(BizHawkClient):
                     current_ram_address_value = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
                         addr_to_update.ram_address, addr_to_update.bit_size, "MainRAM")]))[0], "little")
                 if is_binary:
-                    logger.info(str(item_received)+"before")
                     current_ram_address_value = (current_ram_address_value | (1 << addr_to_update.binary_bit_pos))
-                    logger.info(str(item_received) + "after")
                 elif addr_to_update.update_existing_value:
                     # Grabs minimum value of a list of numbers and makes sure it does not go above max count possible
                     current_ram_address_value += addr_to_update.value
