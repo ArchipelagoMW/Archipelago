@@ -6,6 +6,7 @@ from Options import (
     Choice,
     DefaultOnToggle,
     LocationSet,
+    Option,
     OptionCounter,
     OptionError,
     OptionGroup,
@@ -32,7 +33,8 @@ class OptionRelevance(IntFlag):
 
     all_trackers: 0b110
 
-class RelevanceMixin:
+
+class RelevanceMixin(Option):
     relevance: OptionRelevance = OptionRelevance.none
 
     @property

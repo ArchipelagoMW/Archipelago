@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING
 
+from .options import OptionRelevance
+
 if TYPE_CHECKING:
-    from . import TheWitnessOptions, WitnessWorld
+    from . import TheWitnessOptions, WitnessWorld, RelevanceMixin
 
 
 def set_options_from_ut(world: "WitnessWorld"):
@@ -10,5 +12,13 @@ def set_options_from_ut(world: "WitnessWorld"):
         return
 
     for option_name, option_type in TheWitnessOptions.type_hints:
-        if option_name in re_gen_passthrough:
-            setattr(world.options, option_name, option_type(re_gen_passthrough[option_name]))
+        if not isinstance(option_type, RelevanceMixin):
+            continue
+
+        if not option_type.relevance & OptionRelevance.universal_tracker_regeneration:
+            continue
+
+        if option_name not in re_gen_passthrough:
+            raise ValueError("The Witness apworld you have is too new for this multiworld.")
+
+        setattr(world.options, option_name, option_type(re_gen_passthrough[option_name]))
