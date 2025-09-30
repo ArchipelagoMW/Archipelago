@@ -94,11 +94,11 @@ class SohState(LogicMixin):
                     queue.extend(new_region.exits)
                     self.path[new_region] = (new_region.name, self.path.get(connection, None))
     
-    def _soh_can_reach_as_age(self, region: str, age, player):
+    def _soh_can_reach_as_age(self, region: Regions, age, player: int): # Todo, type safety to age enum
         if self._soh_age[player] is None:
             # first layer of recursion
             self._soh_age[player] = age
-            can_reach = self.multiworld.get_region(region, player).can_reach(self)
+            can_reach = self.multiworld.get_region(region.value, player).can_reach(self)
             self._soh_age[player] = None
             return can_reach
         return self._soh_age[player] == age

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 from BaseClasses import CollectionState, ItemClassification as IC
 from .Locations import SohLocation
@@ -15,43 +15,65 @@ import logging
 logger = logging.getLogger("SOH_OOT.Logic")
 
 
-# todo: add typing for child_regions, change it from a list[list] to list[tuple]
-def add_locations(parent_region: Enum, world: "SohWorld", locations) -> None:
+class rule_wrapper:
+    def __init__(self, parent_region: Regions, rule: Callable[[CollectionState, Regions, "SohWorld"], bool], world: "SohWorld"):
+        self.parent_region = parent_region
+        self.world = world
+        self.rule = rule
+
+    @staticmethod
+    def wrap(parent_region: Regions, rule: Callable[[CollectionState, Regions, "SohWorld"], bool], world: "SohWorld") -> Callable[[CollectionState], bool]:
+        wrapper = rule_wrapper(parent_region, rule, world)
+        return wrapper.evaluate
+
+    def evaluate(self, state: CollectionState) -> bool:
+        return self.rule(state, self.parent_region, self.world)
+
+
+def add_locations(parent_region: Regions, world: "SohWorld", 
+                  locations: list[tuple[Locations, Callable[[CollectionState, Regions, "SohWorld"], bool]]]) -> None:
     for location in locations:
         locationName = location[0].value
-        locationRule = lambda state: True
-        if(len(location) > 1):
+        locationRule = lambda s, r, w: True
+        if len(location) > 1:
             locationRule = location[1]
         if locationName in world.included_locations:
             locationAddress = world.included_locations.pop(location[0])
             world.get_region(parent_region.value).add_locations({locationName: locationAddress}, SohLocation)
-            set_rule(world.get_location(locationName), locationRule)
+            set_rule(world.get_location(locationName), rule_wrapper.wrap(parent_region, locationRule, world))
 
 
-# todo: add typing for child_regions, change it from a list[list] to list[tuple]
-def connect_regions(parent_region: Enum, world: "SohWorld", child_regions) -> None:
+
+def connect_regions(parent_region: Regions, world: "SohWorld", 
+                    child_regions: list[tuple[Regions, Callable[[CollectionState, Regions, "SohWorld"], bool]]]) -> None:
     for region in child_regions:
-        world.get_region(parent_region.value).connect(world.get_region(region[0].value), rule=region[1])
+        regionName = region[0]
+        regionRule = lambda s, r, w: True
+        if len(region) > 1:
+            regionRule = region[1]
+        world.get_region(parent_region.value).connect(world.get_region(regionName.value), 
+                                                      rule=rule_wrapper.wrap(parent_region, regionRule, world))
 
 
-def add_events(parent_region, world: "SohWorld", events):
+def add_events(parent_region, world: "SohWorld", 
+               events: list[tuple[Enum, Events | Enum, Callable[[CollectionState, Regions, "SohWorld"], bool]]]) -> None:
     for event in events:
         event_location = event[0].value
         event_item = event[1].value
-        event_rule = lambda state: True
-        if(len(event) > 2):
+        event_rule = lambda s, r, w: True
+        if len(event) > 2:
             event_rule = event[2]
         
         world.get_region(parent_region).add_locations({event_location: None}, SohLocation)
         world.get_location(event_location).place_locked_item(SohItem(event_item, IC.progression, None, world.player))
-        set_rule(world.get_location(event_location), event_rule)
+        set_rule(world.get_location(event_location), rule_wrapper.wrap(parent_region, event_rule, world))
 
 
 # TODO account for starting nuts being disabled
 # TODO account for starting sticks being disabled
 # TODO add child wallet options
 # TODO add bronze scale options
-def has_item(itemName: Enum, state: CollectionState, world: "SohWorld", count: int = 1, can_be_child: bool = True,
+def has_item(itemName: Items | Events | Enum, state: CollectionState, world: "SohWorld", count: int = 1, can_be_child: bool = True,
              can_be_adult: bool = True) -> bool:
     player = world.player
 
@@ -276,14 +298,12 @@ def can_get_deku_baba_nuts(state: CollectionState, world: "SohWorld") -> bool:
     return can_use_sword(state, world) or can_use(Items.BOOMERANG, state, world)
 
 
-def is_adult(state: CollectionState, world: "SohWorld", location: Regions | Locations | Enum) -> bool:
-    place = location.value if type(location) == Regions else world.get_location(location.value).parent_region.name
-    return state._soh_can_reach_as_age(place, 'adult', world.player)
+def is_adult(state: CollectionState, region: Regions, world: "SohWorld") -> bool:
+    return state._soh_can_reach_as_age(region, 'adult', world.player)
 
 
-def is_child(state: CollectionState, world: "SohWorld", location: Regions | Locations | Enum) -> bool:
-    place = location.value if type(location) == Regions else world.get_location(location.value).parent_region.name
-    return state._soh_can_reach_as_age(place, 'child', world.player)
+def is_child(state: CollectionState, region: Regions, world: "SohWorld") -> bool:
+    return state._soh_can_reach_as_age(region, 'child', world.player)
 
 
 def can_damage(state: CollectionState, world: "SohWorld") -> bool:
@@ -302,10 +322,10 @@ def can_attack(state: CollectionState, world: "SohWorld") -> bool:
             can_use(Items.PROGRESSIVE_HOOKSHOT, state, world))
 
 
-def can_standing_shield(state: CollectionState, world: "SohWorld", place: Enum) -> bool:
+def can_standing_shield(state: CollectionState, parent_region: Regions, world: "SohWorld", ) -> bool:
     """Check if Link can use a shield for standing blocks."""
     return (can_use(Items.MIRROR_SHIELD, state, world) or  # Only adult can use mirror shield
-            (is_adult(state, world, place) and can_use(Items.HYLIAN_SHIELD, state, world)) or
+            (is_adult(state, world, parent_region) and can_use(Items.HYLIAN_SHIELD, state, world)) or
             can_use(Items.DEKU_SHIELD, state, world))  # Only child can use deku shield
 
 

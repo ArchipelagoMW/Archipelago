@@ -16,13 +16,13 @@ def set_region_rules(world: "SohWorld") -> None:
     
     # TODO: Temporary to test generation
     connect_regions(Regions.KOKIRI_FOREST, world, [
-        [Regions.GANONS_ARENA, lambda state: True]
+        (Regions.GANONS_ARENA, lambda s, r, w: True)
     ])
     connect_regions(Regions.GANONS_ARENA, world, [
-        [Regions.KOKIRI_FOREST, lambda state: True]
+        (Regions.KOKIRI_FOREST, lambda s, r, w: True)
     ])
     add_events(Regions.GANONS_ARENA, world, [
-        [EventLocations.GANON_DEFEATED, Events.GAME_COMPLETED, lambda state: 
-         (can_use(Items.LIGHT_ARROW, state, world) and can_use(Items.MASTER_SWORD, state, world) and world.options.triforce_hunt == 0) or 
-         has_item(Events.GAME_COMPLETED, state, world)]
+        (EventLocations.GANON_DEFEATED, Events.GAME_COMPLETED, lambda s, r, w: 
+         (can_use(Items.LIGHT_ARROW, s, w) and can_use(Items.MASTER_SWORD, s, w) and world.options.triforce_hunt == 0) or 
+         has_item(Events.GAME_COMPLETED, s, w))
     ])
