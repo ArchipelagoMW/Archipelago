@@ -2,6 +2,7 @@
 Unit tests for world generation
 """
 from typing import *
+
 from .test_base import Sc2SetupTestBase
 
 from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race, unreleased_items, \
