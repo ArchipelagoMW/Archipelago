@@ -1321,7 +1321,8 @@ class CommandProcessor(metaclass=CommandMeta):
                         argname += "=" + parameter.default
                 argtext += argname
                 argtext += " "
-            s += f"{self.marker}{command} {argtext}\n    {method.__doc__}\n"
+            doctext = '\n    '.join(inspect.getdoc(method).split('\n'))
+            s += f"{self.marker}{command} {argtext}\n    {doctext}\n"
         return s
 
     def _cmd_help(self):
@@ -1349,19 +1350,6 @@ class CommandProcessor(metaclass=CommandMeta):
 
 class CommonCommandProcessor(CommandProcessor):
     ctx: Context
-
-    def _cmd_countdown(self, seconds: str = "10") -> bool:
-        """Start a countdown in seconds"""
-        try:
-            timer = int(seconds, 10)
-        except ValueError:
-            timer = 10
-        else:
-            if timer > 60 * 60:
-                raise ValueError(f"{timer} is invalid. Maximum is 1 hour.")
-
-        async_start(countdown(self.ctx, timer))
-        return True
 
     def _cmd_options(self):
         """List all current options. Warning: lists password."""
@@ -2258,6 +2246,19 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
         self.output(f"Could not find player {player_name} to collect")
         return False
+
+    def _cmd_countdown(self, seconds: str = "10") -> bool:
+        """Start a countdown in seconds"""
+        try:
+            timer = int(seconds, 10)
+        except ValueError:
+            timer = 10
+        else:
+            if timer > 60 * 60:
+                raise ValueError(f"{timer} is invalid. Maximum is 1 hour.")
+
+        async_start(countdown(self.ctx, timer))
+        return True
 
     @mark_raw
     def _cmd_release(self, player_name: str) -> bool:
