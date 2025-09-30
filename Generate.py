@@ -491,7 +491,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             if game not in AutoWorldRegister.world_types:
                 continue
             if not version:
-                raise Exception(f"Invalid version for game {game}: {version}")
+                raise Exception(f"Invalid version for game {game}: {version}.")
             if isinstance(version, str):
                 version = {"min": version}
             if "min" in version and tuplize_version(version["min"]) > AutoWorldRegister.world_types[game]._world_version:
