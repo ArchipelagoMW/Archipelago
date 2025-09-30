@@ -151,7 +151,8 @@ filler_item_names = [
     "Royal Obituary",
     "Snowo Dance",
     "Gear Bug",
-    "Tower Map Spinoff",
+    "Tower Map Spinoff"
+    "Yep Tree",
 
 
 ]

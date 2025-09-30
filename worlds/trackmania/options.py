@@ -230,6 +230,19 @@ class CustomSeries(OptionDict):
         min_length: 40000
         max_length: 75000
     ```
+
+    All Current Valid Tags:
+    Race,FullSpeed,Tech,RPG,LOL,Press Forward,SpeedTech,MultiLap,
+    Offroad,Trial,ZrT,SpeedFun,Competitive,Ice,Dirt,Stunt,Reactor,
+    Platform,Slow Motion,Bumper,Fragile,Scenery,Kacky,Endurance,Mini,
+    Remake,Mixed,Nascar,SpeedDrift,Minigame,Obstacle,Transitional,Grass,
+    Backwards,EngineOff,Signature,Royal,Water,Plastic,Arena,Freestyle,
+    Educational,Sausage,Bobsleigh,Pathfinding,FlagRush,Puzzle,Freeblocking,
+    Altered Nadeo,SnowCar,Wood,Underwater,Turtle,RallyCar,MixedCar,
+    Bugslide,Mudslide,Moving Items,DesertCar,SpeedMapping,NoBrake,CruiseControl,
+    NoSteer,RPG-Immersive,Pipes,Magnet,NoGrip
+    TM2 Exclusive Tags:
+    Glass,Sand,Cobblestone,ForceAccel
     """
     display_name = "Custom Series"
     visibility = Visibility.template|Visibility.spoiler
