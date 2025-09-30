@@ -24,14 +24,14 @@ from .entity_hunt import ALL_HUNTABLE_PANELS
 
 
 class OptionRelevance(IntFlag):
-    client: 0b001
-    universal_tracker_regeneration: 0b010
-    external_tracker: 0b100
+    client = 0b001
+    universal_tracker_regeneration = 0b010
+    external_tracker = 0b100
 
-    none: 0b000
-    all: 0b111
+    none = 0b000
+    all = 0b111
 
-    all_trackers: 0b110
+    all_trackers = 0b110
 
 
 class RelevanceMixin(Option):
