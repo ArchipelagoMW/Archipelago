@@ -1,7 +1,6 @@
 from dataclasses import dataclass
+from enum import IntFlag
 from typing import Tuple
-
-from schema import And, Schema
 
 from Options import (
     Choice,
@@ -23,7 +22,25 @@ from .data.utils import is_easter_time
 from .entity_hunt import ALL_HUNTABLE_PANELS
 
 
-class DisableNonRandomizedPuzzles(Toggle):
+class OptionRelevance(IntFlag):
+    client: 0b001
+    universal_tracker_regeneration: 0b010
+    external_tracker: 0b100
+
+    none: 0b000
+    all: 0b111
+
+    all_trackers: 0b110
+
+class RelevanceMixin:
+    relevance: OptionRelevance = OptionRelevance.none
+
+    @property
+    def needs_to_be_in_slot_data(self):
+        return self.relevance != OptionRelevance.none
+
+
+class DisableNonRandomizedPuzzles(RelevanceMixin, Toggle):
     """
     Disables puzzles that cannot be randomized.
     This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
@@ -31,16 +48,20 @@ class DisableNonRandomizedPuzzles(Toggle):
     The lasers for those areas will activate as you solve optional puzzles, such as Discarded Panels.
     Additionally, the panel activating the Jungle Popup Wall will be on from the start.
     """
+    relevance = OptionRelevance.all
+
     display_name = "Disable non randomized puzzles"
 
 
-class EarlyCaves(Choice):
+class EarlyCaves(RelevanceMixin, Choice):
     """
     Adds an item that opens the Caves Shortcuts to Swamp and Mountain, allowing early access to the Caves even if you are not playing a remote Door Shuffle mode.
     You can either add this item to the pool to be found in the multiworld, or you can outright start with it and have immediate access to the Caves.
 
     If you choose "Add To Pool" and you are already playing a remote Door Shuffle mode, this option will do nothing.
     """
+    relevance = OptionRelevance.all_trackers
+
     display_name = "Early Caves"
     option_off = 0
     alias_false = 0
@@ -50,28 +71,33 @@ class EarlyCaves(Choice):
     alias_on = 2
 
 
-class EarlySymbolItem(DefaultOnToggle):
+class EarlySymbolItem(RelevanceMixin, DefaultOnToggle):
     """
     Put a random helpful symbol item on an early check, specifically Tutorial Gate Open if it is available early.
     """
+    relevance = OptionRelevance.none
 
     visibility = Visibility.none
 
 
-class ShuffleSymbols(DefaultOnToggle):
+class ShuffleSymbols(RelevanceMixin, DefaultOnToggle):
     """
     If on, you will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols.
 
     Please note that there is no minimum set of progression items in this randomizer.
     If you turn this option off and don't turn on door shuffle or obelisk keys, there will be no progression items, which will disallow you from adding your yaml to a multiworld generation.
     """
+    relevance = OptionRelevance.all
+
     display_name = "Shuffle Symbols"
 
 
-class ShuffleLasers(Choice):
+class ShuffleLasers(RelevanceMixin, Choice):
     """
     If on, the 11 lasers are turned into items and will activate on their own upon receiving them.
     """
+    relevance = OptionRelevance.all_trackers  # Client gets this info through door info in slot_data
+
     display_name = "Shuffle Lasers"
     option_off = 0
     alias_false = 0
@@ -81,13 +107,15 @@ class ShuffleLasers(Choice):
     alias_on = 2
 
 
-class ShuffleDoors(Choice):
+class ShuffleDoors(RelevanceMixin, Choice):
     """
     If on, opening doors, moving bridges etc. will require a "key".
     - Panels: The panel on the door will be locked until receiving its corresponding key.
     - Doors: The door will open immediately upon receiving its key. Door panels are added as location checks.
     - Mixed: Includes all doors from "doors", and all control panels (bridges, elevators etc.) from "panels".
     """
+    relevance = OptionRelevance.all_trackers  # Client gets this info through door info in slot_data
+
     display_name = "Shuffle Doors"
     option_off = 0
     option_panels = 1
@@ -95,42 +123,50 @@ class ShuffleDoors(Choice):
     option_mixed = 3
 
 
-class DoorGroupings(Choice):
+class DoorGroupings(RelevanceMixin, Choice):
     """
     Controls how door items are grouped.
 
     - Off: There will be one key for each door, potentially resulting in upwards of 120 keys being added to the item pool.
     - Regional: All doors in the same general region will open at once with a single key, reducing the amount of door items and complexity.
     """
+    relevance = OptionRelevance.all_trackers  # Client gets this info through door info in slot_data
+
     display_name = "Door Groupings"
     option_off = 0
     option_regional = 1
 
 
-class ShuffleBoat(DefaultOnToggle):
+class ShuffleBoat(RelevanceMixin, DefaultOnToggle):
     """
     If on, adds a "Boat" item to the item pool. Before receiving this item, you will not be able to use the boat.
     """
+    relevance = OptionRelevance.all_trackers  # Client gets this info through door info in slot_data
+
     display_name = "Shuffle Boat"
 
 
-class ShuffleDiscardedPanels(Toggle):
+class ShuffleDiscardedPanels(RelevanceMixin, Toggle):
     """
     Adds Discarded Panels into the location pool.
 
     Even if this is off, solving certain Discarded Panels may still be necessary to beat the game - The main example of this being the alternate activation triggers in "Disable non randomized puzzles".
     """
+    relevance = OptionRelevance.all_trackers  # Client gets this info through existing locations
+
     display_name = "Shuffle Discarded Panels"
 
 
-class ShuffleVaultBoxes(Toggle):
+class ShuffleVaultBoxes(RelevanceMixin, Toggle):
     """
     Adds Vault Boxes to the location pool.
     """
+    relevance = OptionRelevance.all_trackers  # Client gets this info through existing locations
+
     display_name = "Shuffle Vault Boxes"
 
 
-class ShuffleEnvironmentalPuzzles(Choice):
+class ShuffleEnvironmentalPuzzles(RelevanceMixin, Choice):
     """
     Adds Environmental/Obelisk Puzzles into the location pool.
     - Individual: Every Environmental Puzzle sends an item.
@@ -138,13 +174,15 @@ class ShuffleEnvironmentalPuzzles(Choice):
 
     Note: In Obelisk Sides, any EPs excluded through another option will be pre-completed on their Obelisk.
     """
+    relevance = OptionRelevance.all  # Client currently uses this info, but could probably infer from existing locations
+
     display_name = "Shuffle Environmental Puzzles"
     option_off = 0
     option_individual = 1
     option_obelisk_sides = 2
 
 
-class EasterEggHunt(Choice):
+class EasterEggHunt(RelevanceMixin, Choice):
     """
     Adds up to 120 Easter Eggs to the game, placed by NewSoupVi, Exempt-Medic, hatkirby, Scipio, and Rever.
     These can be collected by simply clicking on them.
@@ -166,6 +204,7 @@ class EasterEggHunt(Choice):
 
     It is recommended that you play this mode together with Door Shuffle. Without it, more than half of the Easter Eggs will be in sphere 1.
     """
+    relevance = OptionRelevance.all
 
     visibility = Visibility.all if is_easter_time() else Visibility.none
 
@@ -191,11 +230,13 @@ class EasterEggHunt(Choice):
         return 4, 4
 
 
-class ShuffleDog(Choice):
+class ShuffleDog(RelevanceMixin, Choice):
     """
     Adds petting the dog statue in Town into the location pool.
     Alternatively, you can force it to be a Puzzle Skip.
     """
+    relevance = OptionRelevance.all_trackers  # Client infers this from existing locations
+
     display_name = "Pet the Dog"
 
     option_off = 0
@@ -204,47 +245,55 @@ class ShuffleDog(Choice):
     default = 1
 
 
-class EnvironmentalPuzzlesDifficulty(Choice):
+class EnvironmentalPuzzlesDifficulty(RelevanceMixin, Choice):
     """
     When "Shuffle Environmental Puzzles" is on, this setting governs which EPs are eligible for the location pool.
     - Eclipse: Every EP in the game is eligible, including the 1-hour-long "Theater Eclipse EP".
     - Tedious: Theater Eclipse EP is excluded from the location pool.
     - Normal: several other difficult or long EPs are excluded as well.
     """
+    relevance = OptionRelevance.all_trackers  # Client just sees "disabled EPs"
+
     display_name = "Environmental Puzzles Difficulty"
     option_normal = 0
     option_tedious = 1
     option_eclipse = 2
 
 
-class ObeliskKeys(DefaultOnToggle):
+class ObeliskKeys(RelevanceMixin, DefaultOnToggle):
     """
     Add one Obelisk Key item per Obelisk, locking you out of solving any of the associated Environmental Puzzles.
 
     Does nothing if "Shuffle Environmental Puzzles" is set to "off".
     """
+    relevance = OptionRelevance.all_trackers  # Client gets this info through door info in slot_data
+
     display_name = "Obelisk Keys"
 
 
-class UnlockableWarps(Toggle):
+class UnlockableWarps(RelevanceMixin, Toggle):
     """
     Adds unlockable fast travel points to the game.
     These warp points are represented by spheres in game. You walk up to one, you unlock it for warping.
 
     The warp points are: Entry, Symmetry Island, Desert, Quarry, Keep, Shipwreck, Town, Jungle, Bunker, Treehouse, Mountaintop, Caves.
     """
+    relevance = OptionRelevance.client | OptionRelevance.external_tracker  # The PopTracker pack has a warp-based trick
+
     display_name = "Unlockable Fast Travel Points"
 
 
-class ShufflePostgame(Toggle):
+class ShufflePostgame(RelevanceMixin, Toggle):
     """
     Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
     Use this if you don't play with release on victory.
     """
+    relevance = OptionRelevance.all
+
     display_name = "Shuffle Postgame"
 
 
-class VictoryCondition(Choice):
+class VictoryCondition(RelevanceMixin, Choice):
     """
     Set the victory condition for this world.
     - Elevator: Start the elevator at the bottom of the mountain (requires Mountain Lasers).
@@ -256,6 +305,8 @@ class VictoryCondition(Choice):
     It is important to note that while the Mountain Box requires Desert Laser to be redirected in Town for that laser
     to count, the laser locks on the Elevator and Challenge Timer panels do not.
     """
+    relevance = OptionRelevance.all_trackers  # Client gets a "victory location" through slot_data instead
+
     display_name = "Victory Condition"
     option_elevator = 0
     option_challenge = 1
@@ -264,31 +315,35 @@ class VictoryCondition(Choice):
     option_panel_hunt = 4
 
 
-class PanelHuntTotal(Range):
+class PanelHuntTotal(RelevanceMixin, Range):
     """
     Only relevant if the Victory Condition is "Panel Hunt".
 
     Sets the number of random panels that will get marked as "Panel Hunt" panels in the "Panel Hunt" game mode.
     """
+    relevance = OptionRelevance.none  # slot_data contains a list of hunt panels, which client just checks the size of
+
     display_name = "Total Panel Hunt panels"
     range_start = 5
     range_end = 100
     default = 40
 
 
-class PanelHuntRequiredPercentage(Range):
+class PanelHuntRequiredPercentage(RelevanceMixin, Range):
     """
     Only relevant if the Victory Condition is "Panel Hunt".
 
     Determines the percentage of "Panel Hunt" panels that need to be solved to win.
     """
+    relevance = OptionRelevance.none  # Tracked by a different value called WitnessWorld.panel_hunt_required_count
+
     display_name = "Percentage of required Panel Hunt panels"
     range_start = 20
     range_end = 100
     default = 63
 
 
-class PanelHuntPostgame(Choice):
+class PanelHuntPostgame(RelevanceMixin, Choice):
     """
     Only relevant if the Victory Condition is "Panel Hunt".
 
@@ -300,6 +355,8 @@ class PanelHuntPostgame(Choice):
 
     Note: The "Mountain Lasers" option may also affect locations locked by challenge lasers if the only path to those locations leads through the Mountain Entry.
     """
+    # PopTracker pack doesn't track this
+    relevance = OptionRelevance.universal_tracker_regeneration | OptionRelevance.client
 
     display_name = "Force postgame in Panel Hunt"
 
@@ -310,7 +367,7 @@ class PanelHuntPostgame(Choice):
     default = 3
 
 
-class PanelHuntDiscourageSameAreaFactor(Range):
+class PanelHuntDiscourageSameAreaFactor(RelevanceMixin, Range):
     """
     Only relevant if the Victory Condition is "Panel Hunt".
 
@@ -319,6 +376,8 @@ class PanelHuntDiscourageSameAreaFactor(Range):
     At 0, Hunt Panels will be selected randomly.
     At 100, Hunt Panels will be almost completely evenly distributed between areas.
     """
+    relevance = OptionRelevance.none  # Universal tracker & client just consume the list of chosen hunt panels
+
     display_name = "Panel Hunt Discourage Same Area Factor"
 
     range_start = 0
@@ -326,19 +385,20 @@ class PanelHuntDiscourageSameAreaFactor(Range):
     default = 40
 
 
-class PanelHuntPlando(LocationSet):
+class PanelHuntPlando(RelevanceMixin, LocationSet):
     """
     Only relevant if the Victory Condition is "Panel Hunt".
 
     Specify specific hunt panels you want for your panel hunt game.
     """
+    relevance = OptionRelevance.none  # Universal tracker & client just consume the list of chosen hunt panels
 
     display_name = "Panel Hunt Plando"
 
     valid_keys = [static_witness_logic.ENTITIES_BY_HEX[panel_hex]["checkName"] for panel_hex in ALL_HUNTABLE_PANELS]
 
 
-class PuzzleRandomization(Choice):
+class PuzzleRandomization(RelevanceMixin, Choice):
     """
     Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
     "Sigma Normal" randomizes puzzles close to their original mechanics and difficulty.
@@ -346,6 +406,8 @@ class PuzzleRandomization(Choice):
     "Umbra Variety" focuses on unique symbol combinations not featured in the original game. It is harder than Sigma Normal, but easier than Sigma Expert.
     "None" means that the puzzles are unchanged from the original game.
     """
+    relevance = OptionRelevance.all
+
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
     option_sigma_expert = 1
@@ -353,29 +415,33 @@ class PuzzleRandomization(Choice):
     option_none = 2
 
 
-class MountainLasers(Range):
+class MountainLasers(RelevanceMixin, Range):
     """
     Sets the number of lasers required to enter the Mountain.
     If set to a higher number than 7, the mountaintop box will be slightly rotated to make it possible to solve without the hatch being opened.
     This change will also be applied logically to the long solution ("Challenge Lasers" option).
     """
+    relevance = OptionRelevance.all
+
     display_name = "Required Lasers for Mountain Entry"
     range_start = 1
     range_end = 11
     default = 7
 
 
-class ChallengeLasers(Range):
+class ChallengeLasers(RelevanceMixin, Range):
     """
     Sets the number of lasers required to enter the Caves through the Mountain Bottom Floor Discard and to unlock the Challenge Timer Panel.
     """
+    relevance = OptionRelevance.all
+
     display_name = "Required Lasers for Challenge"
     range_start = 1
     range_end = 11
     default = 11
 
 
-class ElevatorsComeToYou(OptionSet):
+class ElevatorsComeToYou(RelevanceMixin, OptionSet):
     """
     In vanilla, some bridges/elevators come to you if you walk up to them when they are not currently there.
     However, there are some that don't. Notably, this prevents Quarry Elevator from being a logical access method into Quarry, because you can send it away without riding ot and then permanently be locked out of using it.
@@ -386,6 +452,8 @@ class ElevatorsComeToYou(OptionSet):
     - Swamp Long Bridge: Rotates the side you approach it from towards you, but also rotates the other side away
     - Bunker Elevator: Makes the Bunker Elevator come to any floor that you approach it from, meaning it can be accessed from the roof immediately
     """
+
+    relevance = OptionRelevance.all
 
     # Used to be a toggle
     @classmethod
@@ -404,10 +472,12 @@ class ElevatorsComeToYou(OptionSet):
     default = frozenset({"Quarry Elevator"})
 
 
-class TrapPercentage(Range):
+class TrapPercentage(RelevanceMixin, Range):
     """
     Replaces junk items with traps, at the specified rate.
     """
+    relevance = OptionRelevance.none
+
     display_name = "Trap Percentage"
     range_start = 0
     range_end = 100
@@ -421,12 +491,14 @@ _default_trap_weights = {
 }
 
 
-class TrapWeights(OptionCounter):
+class TrapWeights(RelevanceMixin, OptionCounter):
     """
     Specify the weights determining how many copies of each trap item will be in your itempool.
     If you don't want a specific type of trap, you can set the weight for it to 0.
     If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option.
     """
+    relevance = OptionRelevance.none
+
     display_name = "Trap Weights"
     valid_keys = _default_trap_weights.keys()
 
@@ -435,28 +507,32 @@ class TrapWeights(OptionCounter):
     default = _default_trap_weights
 
 
-class PuzzleSkipAmount(Range):
+class PuzzleSkipAmount(RelevanceMixin, Range):
     """
     Adds this many Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel.
     """
+    relevance = OptionRelevance.none
+
     display_name = "Puzzle Skips"
     range_start = 0
     range_end = 30
     default = 10
 
 
-class HintAmount(Range):
+class HintAmount(RelevanceMixin, Range):
     """
     Adds hints to Audio Logs. If set to a low amount, up to 2 additional duplicates of each hint will be added.
     Remaining Audio Logs will have junk hints.
     """
+    relevance = OptionRelevance.none
+
     display_name = "Hints on Audio Logs"
     range_start = 0
     range_end = 49
     default = 12
 
 
-class VagueHints(Choice):
+class VagueHints(RelevanceMixin, Choice):
     """Make Location Hints a bit more vague, where they only tell you about the general area the item is in.
     Area Hints will be generated as normal.
 
@@ -467,6 +543,10 @@ class VagueHints(Choice):
 
     Also, please don't pester any devs about implementing location groups. Bring it up nicely, accept their response even if it is "No".
     """
+    # This is to provide backcompat for a bug.
+    # Remove this when backcompat is broken for another reason
+    relevance = OptionRelevance.client
+
     display_name = "Vague Hints"
 
     option_off = 0
@@ -474,51 +554,61 @@ class VagueHints(Choice):
     option_experimental = 2
 
 
-class AreaHintPercentage(Range):
+class AreaHintPercentage(RelevanceMixin, Range):
     """
     There are two types of hints for The Witness.
     "Location hints" hint one location in your world or one location containing an item for your world.
     "Area hints" tell you some general info about the items you can find in one of the main geographic areas on the island.
     Use this option to specify how many of your hints you want to be area hints. The rest will be location hints.
     """
+    relevance = OptionRelevance.none
+
     display_name = "Area Hint Percentage"
     range_start = 0
     range_end = 100
     default = 33
 
 
-class LaserHints(Toggle):
+class LaserHints(RelevanceMixin, Toggle):
     """
     If on, lasers will tell you where their items are if you walk close to them in-game.
     Only applies if Laser Shuffle is enabled.
     """
+    relevance = OptionRelevance.none
+
     display_name = "Laser Hints"
 
 
-class DeathLink(Toggle):
+class DeathLink(RelevanceMixin, Toggle):
     """
     If on, whenever you fail a puzzle (with some exceptions), you and everyone who is also on Death Link dies.
     The effect of a "death" in The Witness is a Bonk Trap.
     """
+    relevance = OptionRelevance.all  # Trackers use this for trick logic (some tricks are unreasonable on death link)
+
     display_name = "Death Link"
 
 
-class DeathLinkAmnesty(Range):
+class DeathLinkAmnesty(RelevanceMixin, Range):
     """
     The number of panel fails to allow before sending a death through Death Link.
     0 means every panel fail will send a death, 1 means every other panel fail will send a death, etc.
     """
+    relevance = OptionRelevance.client
+
     display_name = "Death Link Amnesty"
     range_start = 0
     range_end = 5
     default = 1
 
 
-class PuzzleRandomizationSeed(Range):
+class PuzzleRandomizationSeed(RelevanceMixin, Range):
     """
     Sigma Rando, which is the basis for all puzzle randomization in this randomizer, uses a seed from 1 to 9999999 for the puzzle randomization.
     This option lets you set this seed yourself.
     """
+    relevance = OptionRelevance.client
+
     display_name = "Puzzle Randomization Seed"
     range_start = 1
     range_end = 9999999
@@ -564,6 +654,12 @@ class TheWitnessOptions(PerGameCommonOptions):
     puzzle_randomization_seed: PuzzleRandomizationSeed
     shuffle_dog: ShuffleDog
     easter_egg_hunt: EasterEggHunt
+
+
+assert all(
+    isinstance(option_type, RelevanceMixin) or option_name in PerGameCommonOptions.type_hints
+    for option_name, option_type in TheWitnessOptions.type_hints.items()
+)
 
 
 witness_option_groups = [

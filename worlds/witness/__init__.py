@@ -17,12 +17,13 @@ from .data.item_definition_classes import DoorItemDefinition, ItemData
 from .data.utils import cast_not_none, get_audio_logs
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
-from .options import TheWitnessOptions, witness_option_groups
+from .options import RelevanceMixin, TheWitnessOptions, witness_option_groups
 from .player_items import WitnessItem, WitnessPlayerItems
 from .player_logic import WitnessPlayerLogic
 from .presets import witness_option_presets
 from .regions import WitnessPlayerRegions
 from .rules import set_rules
+from .universal_tracker import set_options_from_ut
 
 
 class WitnessWebWorld(WebWorld):
@@ -157,6 +158,8 @@ class WitnessWorld(World):
                               f" Shuffle, Door Shuffle, or Obelisk Keys.")
 
     def generate_early(self) -> None:
+        set_options_from_ut(self)
+
         disabled_locations = self.options.exclude_locations.value
 
         self.player_logic = WitnessPlayerLogic(
@@ -384,11 +387,11 @@ class WitnessWorld(World):
 
         slot_data = self._get_slot_data()
 
-        for option_name in (attr.name for attr in dataclasses.fields(TheWitnessOptions)
-                            if attr not in dataclasses.fields(PerGameCommonOptions)):
-            option = getattr(self.options, option_name)
-            slot_data[option_name] = bool(option.value) if isinstance(option, Toggle) else option.value
-
+        slot_data_options = [
+            option_name for option_name, option_type in TheWitnessOptions.type_hints.items()
+            if isinstance(option_type, RelevanceMixin) and option_type.needs_to_be_in_slot_data
+        ]
+        slot_data |= TheWitnessOptions.as_dict(*slot_data_options, toggles_as_bools=True)
         return slot_data
 
     def create_item(self, item_name: str) -> WitnessItem:
