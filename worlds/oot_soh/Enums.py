@@ -3410,6 +3410,7 @@ class Enemies(str, Enum):
     SHABOM = "shabom"
     OCTOROK = "octorok"
     
+@total_ordering
 class EnemyDistance(Enum):
     CLOSE = 1
     SHORT_JUMPSLASH = 2
@@ -3420,6 +3421,9 @@ class EnemyDistance(Enum):
     HOOKSHOT = 7
     LONGSHOT = 8
     FAR = 9
+
+    def __lt__(self, other):
+        return self.value < other.value
 
 class Events(str, Enum):
     AMMO_CAN_DROP = "Ammo Can Drop"
