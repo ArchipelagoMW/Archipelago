@@ -134,7 +134,9 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                     if yaml is None:
                         logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
                     else:
-                        quantity = yaml.get("quantity", 1) if allow_quantity else 1
+                        quantity = yaml.get("quantity", 1)
+                        if not allow_quantity and quantity > 1:
+                            raise ValueError("Quantity greater than 1 is deactivated by host settings.")
 
                         for _ in range(quantity):
                             weights_for_file.append(yaml)
