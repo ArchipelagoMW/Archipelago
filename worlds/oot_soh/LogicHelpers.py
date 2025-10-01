@@ -108,7 +108,7 @@ def has_item(itemName: str, state: CollectionState, world: "SohWorld", count:int
         case _:
             return has(itemName, count)
         
-def can_use(name: Items, state: CollectionState, world: SohWorld, can_be_child: bool = True, can_be_adult: bool = True) -> bool:
+def can_use(name: Items, state: CollectionState, world: "SohWorld", can_be_child: bool = True, can_be_adult: bool = True) -> bool:
     if not has_item(name, state, world):
         return False
     def has(name, count=1): 
@@ -239,15 +239,15 @@ def can_use(name: Items, state: CollectionState, world: SohWorld, can_be_child: 
         case _:
             return False
 
-def scarecrows_song(state: CollectionState, world: SohWorld) -> bool:
+def scarecrows_song(state: CollectionState, world: "SohWorld") -> bool:
     #TODO handle scarecrow song option in place of the False
     return (False and has_item(Items.FAIRY_OCARINA.value, state, world) and OcarinaButtons(state, world) > 2) or \
         (has_item(Events.CHILD_SCARECROW, state, world) and has_item(Events.ADULT_SCARECROW, state, world))
 
-def has_bottle(state: CollectionState, world: SohWorld) -> bool: # soup
+def has_bottle(state: CollectionState, world: "SohWorld") -> bool: # soup
     return bottle_count(state, world) >= 1
 
-def bottle_count(state: CollectionState, world: SohWorld) -> int:
+def bottle_count(state: CollectionState, world: "SohWorld") -> int:
     count = 0
     for name in [Items.EMPTY_BOTTLE.value, Items.BOTTLE_WITH_BLUE_POTION.value, Items.BOTTLE_WITH_BUGS.value, Items.BOTTLE_WITH_FAIRY.value, Items.BOTTLE_WITH_FISH.value, \
                   Items.BOTTLE_WITH_GREEN_POTION.value, Items.BOTTLE_WITH_GREEN_POTION.value, Items.BOTTLE_WITH_BLUE_FIRE.value, Items.BOTTLE_WITH_MILK.value, Items.BOTTLE_WITH_RED_POTION.value]:
@@ -258,15 +258,15 @@ def bottle_count(state: CollectionState, world: SohWorld) -> int:
         count += state.count(Items.BOTTLE_WITH_BIG_POE.value, world.player)
     return count
 
-def bombchu_refill(state: CollectionState, world: SohWorld) -> bool:
+def bombchu_refill(state: CollectionState, world: "SohWorld") -> bool:
     return state.has_any([Events.CAN_BUY_BOMBCHUS, Events.COULD_PLAY_BOWLING, Events.CARPET_MERCHANT], world.player) or False #TODO put enable bombchu drops option here
 
-def bombchus_enabled(state: CollectionState, world: SohWorld) -> bool:
+def bombchus_enabled(state: CollectionState, world: "SohWorld") -> bool:
     if False: #TODO bombchu bag enabled
         return HasItem(state, world, Items.BOMBCHU_BAG.value)
     return has_item(Items.BOMB_BAG, state, world)
 
-def can_play_song(state: CollectionState, world: SohWorld, *buttons: str) -> bool:
+def can_play_song(state: CollectionState, world: "SohWorld", *buttons: str) -> bool:
     if not has_item(Items.FAIRY_OCARINA, state, world):
         return False
     for button in buttons:
@@ -277,29 +277,29 @@ def can_play_song(state: CollectionState, world: SohWorld, *buttons: str) -> boo
             return True
     return True
 
-def ocarina_buttons(state: CollectionState, world: SohWorld) -> int:
+def ocarina_buttons(state: CollectionState, world: "SohWorld") -> int:
     return state.count_from_list([Items.OCARINA_ABUTTON.value, Items.OCARINA_CDOWN_BUTTON.value, Items.OCARINA_CLEFT_BUTTON.value, \
                                   Items.OCARINA_CUP_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value], world.player)
 
-def has_explosives(state: CollectionState, world: SohWorld) -> bool:
+def has_explosives(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link has access to explosives (bombs or bombchus)."""
     return can_use(Items.PROGRESSIVE_BOMB_BAG, state, world) or can_use(Items.PROGRESSIVE_BOMBCHU, state, world)
 
-def blast_or_smash(state: CollectionState, world: SohWorld) -> bool:
+def blast_or_smash(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can blast or smash obstacles."""
     return has_explosives(state, world) or can_use(Items.MEGATON_HAMMER, state, world)
 
-def blue_fire(state: CollectionState, world: SohWorld) -> bool:
+def blue_fire(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link has access to blue fire."""
     return can_use(Items.BOTTLE_WITH_BLUE_FIRE, state, world)  # or blue fire arrows
 
-def can_use_sword(state: CollectionState, world: SohWorld) -> bool:
+def can_use_sword(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can use any sword."""
     return (can_use(Items.KOKIRI_SWORD, state, world) or
             can_use(Items.MASTER_SWORD, state, world) or
             can_use(Items.BIGGORONS_SWORD, state, world))
 
-def has_projectile(state: CollectionState, world: SohWorld, age: str = "either") -> bool:
+def has_projectile(state: CollectionState, world: "SohWorld", age: str = "either") -> bool:
     """Check if Link has access to projectiles."""
     if has_explosives(state, world):
         return True
@@ -317,21 +317,21 @@ def has_projectile(state: CollectionState, world: SohWorld, age: str = "either")
     else:  # "either"
         return child_projectiles or adult_projectiles
 
-def can_use_projectile(state: CollectionState, world: SohWorld, age: str = "either") -> bool:
+def can_use_projectile(state: CollectionState, world: "SohWorld", age: str = "either") -> bool:
     return (has_explosives(state, world) or can_use(Items.PROGRESSIVE_SLINGSHOT, state, world) or
             can_use(Items.BOOMERANG, state, world) or can_use(Items.PROGRESSIVE_HOOKSHOT, state, world) or
             can_use(Items.PROGRESSIVE_BOW, state, world))
 
-def can_break_mud_walls(state: CollectionState, world: SohWorld) -> bool:
+def can_break_mud_walls(state: CollectionState, world: "SohWorld") -> bool:
     return blast_or_smash(state, world) or (can_do_trick("Blue Fire Mud Walls", state, world) and blue_fire(state, world))
 
-def can_get_deku_baba_sticks(state: CollectionState, world: SohWorld) -> bool:
+def can_get_deku_baba_sticks(state: CollectionState, world: "SohWorld") -> bool:
     return can_use(Items.DEKU_STICK_1, state, world) or can_use(Items.BOOMERANG, state, world)
 
-def can_get_deku_baba_nuts(state: CollectionState, world: SohWorld) -> bool:
+def can_get_deku_baba_nuts(state: CollectionState, world: "SohWorld") -> bool:
     return can_use_sword(state, world) or can_use(Items.BOOMERANG, state, world)
 
-def is_adult(state: CollectionState, world: SohWorld) -> bool:
+def is_adult(state: CollectionState, world: "SohWorld") -> bool:
     # For now, return True as a placeholder since age logic is complex and context-dependent
     # The real age checking should be done through the CanUse function's can_be_adult parameter
     # TODO: Implement proper age checking based on world settings and progression
@@ -343,7 +343,7 @@ def is_child(state: CollectionState, world: "SohWorld") -> bool:
     # TODO: Implement proper age checking based on world settings and progression
     return True
 
-def can_damage(state: CollectionState, world: SohWorld) -> bool:
+def can_damage(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can deal damage to enemies."""
     return (can_use(Items.PROGRESSIVE_SLINGSHOT, state, world) or 
             can_jump_slash(state, world) or 
@@ -352,36 +352,36 @@ def can_damage(state: CollectionState, world: SohWorld) -> bool:
             can_use(Items.PROGRESSIVE_BOW, state, world))
 
 
-def can_attack(state: CollectionState, world: SohWorld) -> bool:
+def can_attack(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can attack enemies (damage or stun)."""
     return (can_damage(state, world) or 
             can_use(Items.BOOMERANG, state, world) or
             can_use(Items.PROGRESSIVE_HOOKSHOT, state, world))
 
-def can_standing_shield(state: CollectionState, world: SohWorld) -> bool:
+def can_standing_shield(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can use a shield for standing blocks."""
     return (can_use(Items.MIRROR_SHIELD, state, world) or # Only adult can use mirror shield
             (is_adult(state, world) and can_use(Items.HYLIAN_SHIELD, state, world)) or
             can_use(Items.DEKU_SHIELD, state, world)) # Only child can use deku shield
 
-def can_shield(state: CollectionState, world: SohWorld) -> bool:
+def can_shield(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can use a shield for blocking or stunning."""
     return (can_use(Items.MIRROR_SHIELD, state, world) or
             can_use(Items.HYLIAN_SHIELD, state, world) or
             can_use(Items.DEKU_SHIELD, state, world))
 
-def take_damage(state: CollectionState, world: SohWorld) -> bool:
+def take_damage(state: CollectionState, world: "SohWorld") -> bool:
     # return CanUse(RG_BOTTLE_WITH_FAIRY) || EffectiveHealth() != 1 || CanUse(RG_NAYRUS_LOVE);
     return (can_use(Items.BOTTLE_WITH_FAIRY, state, world) or can_use(Items.NAYRUS_LOVE, state, world)
             or True)  #TODO: Implement "|| EffectiveHealth()"
 
-def can_do_trick(trick: str, state: CollectionState, world: SohWorld) -> bool:
+def can_do_trick(trick: str, state: CollectionState, world: "SohWorld") -> bool:
     # TODO: Implement specific trick logic based on world settings
     # For now, return False for safety (no tricks assumed)
     return False
 
 
-def can_break_pots(state: CollectionState, world: SohWorld) -> bool:
+def can_break_pots(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can break pots for items."""
     return (can_jump_slash(state, world) or 
            can_use(Items.BOOMERANG, state, world) or
@@ -389,13 +389,13 @@ def can_break_pots(state: CollectionState, world: SohWorld) -> bool:
            can_use(Items.PROGRESSIVE_HOOKSHOT, state, world))
 
 
-def can_break_crates(state: CollectionState, world: SohWorld) -> bool:
+def can_break_crates(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can break crates."""
     return (can_jump_slash(state, world) or 
            has_explosives(state, world))
 
 
-def can_hit_eye_targets(state: CollectionState, world: SohWorld) -> bool:
+def can_hit_eye_targets(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can hit eye switches/targets."""
     return (can_use(Items.PROGRESSIVE_BOW, state, world) or 
            can_use(Items.PROGRESSIVE_SLINGSHOT, state, world) or
@@ -403,34 +403,34 @@ def can_hit_eye_targets(state: CollectionState, world: SohWorld) -> bool:
            can_use(Items.BOOMERANG, state, world))
 
 
-def can_stun_deku(state: CollectionState, world: SohWorld) -> bool:
+def can_stun_deku(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can stun Deku Scrubs."""
     return can_attack(state, world) or can_use(Items.DEKU_NUT_BAG, state, world) or can_shield(state, world) # Is this right for nuts?
 
 
-def can_reflect_nuts(state: CollectionState, world: SohWorld) -> bool:
+def can_reflect_nuts(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can reflect Deku Nuts back at enemies."""
     return can_stun_deku(state, world)
 
-def has_fire_source_with_torch(state: CollectionState, world: SohWorld) -> bool:
+def has_fire_source_with_torch(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link has a fire source that can be used with a torch."""
     return has_fire_source(state, world) or can_use(Items.STICKS, state, world)
 
-def has_fire_source(state: CollectionState, world: SohWorld) -> bool:
+def has_fire_source(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link has any fire source."""
     return (can_use(Items.DINS_FIRE, state, world) or 
            can_use(Items.FIRE_ARROW, state, world))
 
 
-def can_jump_slash(state: CollectionState, world: SohWorld) -> bool:
+def can_jump_slash(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can perform a jump slash with any sword."""
     return (can_jump_slash_except_hammer(state, world) or can_use(Items.MEGATON_HAMMER, state, world))  # Hammer can substitute for sword in some cases
 
-def can_jump_slash_except_hammer(state: CollectionState, world: SohWorld):
+def can_jump_slash_except_hammer(state: CollectionState, world: "SohWorld"):
     return can_use(Items.KOKIRI_SWORD, state, world) or can_use(Items.MASTER_SWORD, state, world) or can_use(Items.BIGGORONS_SWORD, state, world)
 
 
-def can_hit_switch(state: CollectionState, world: SohWorld, distance: CombatRanges = CombatRanges.CLOSE,
+def can_hit_switch(state: CollectionState, world: "SohWorld", distance: CombatRanges = CombatRanges.CLOSE,
                    in_water: bool = False) -> bool:
     if distance <= CombatRanges.SHORT_JUMPSLASH and (can_use(Items.KOKIRI_SWORD, state, world) or can_use(Items.MEGATON_HAMMER, state, world)):
         return True
@@ -448,7 +448,7 @@ def can_hit_switch(state: CollectionState, world: SohWorld, distance: CombatRang
         return True
     return False
 
-def can_kill_enemy(state: CollectionState, world: SohWorld, enemy: Enemies, combat_range: CombatRanges = CombatRanges.CLOSE,
+def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies, combat_range: CombatRanges = CombatRanges.CLOSE,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
     Check if Link can kill a specific enemy at a given combat range.
@@ -657,7 +657,7 @@ def can_kill_enemy(state: CollectionState, world: SohWorld, enemy: Enemies, comb
 
     return False
 
-def has_boss_soul(soul: Items, state: CollectionState, world: SohWorld):
+def has_boss_soul(soul: Items, state: CollectionState, world: "SohWorld"):
     soulsanity = world.options.shuffle_boss_souls.value
     if soulsanity == ShuffleBossSouls.option_off:
         return True
@@ -665,12 +665,12 @@ def has_boss_soul(soul: Items, state: CollectionState, world: SohWorld):
         return True if soulsanity == ShuffleBossSouls.option_on else state.has(Items.GANONS_SOUL, world.player)
     return state.has(soul, world.player)
 
-def can_pass_enemy(state: CollectionState, world: SohWorld, enemy: Enemies) -> bool:
+def can_pass_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies) -> bool:
     """Check if Link can pass by an enemy (usually by killing or stunning it)."""
     return can_kill_enemy(state, world, enemy) # I think that we can be more permissive here, but for now this is fine
 
 
-def can_cut_shrubs(state: CollectionState, world: SohWorld) -> bool:
+def can_cut_shrubs(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can cut shrubs (grass, bushes)."""
     return (can_use_sword(state, world) or
             can_use(Items.BOOMERANG, state, world) or 
@@ -679,7 +679,7 @@ def can_cut_shrubs(state: CollectionState, world: SohWorld) -> bool:
             can_use(Items.MEGATON_HAMMER, state, world))
 
 
-def hookshot_or_boomerang(state: CollectionState, world: SohWorld) -> bool:
+def hookshot_or_boomerang(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link has hookshot or boomerang."""
     return (can_use(Items.PROGRESSIVE_HOOKSHOT, state, world) or
             can_use(Items.BOOMERANG, state, world))
