@@ -256,11 +256,11 @@ if not is_frozen():
 
         import argparse
         parser = argparse.ArgumentParser("Build script for APWorlds")
-        parser.add_argument("single", type=str, default=(), nargs="*", help="Name of a singular APWorld to build.")
+        parser.add_argument("worlds", type=str, default=(), nargs="*", help="Names of APWorlds to build.")
         args = parser.parse_args(launch_args)
 
-        if args.single:
-            games = [(game, AutoWorldRegister.world_types.get(game, None)) for game in args.single]
+        if args.worlds:
+            games = [(game, AutoWorldRegister.world_types.get(game, None)) for game in args.worlds]
         else:
             games = [(worldname, worldtype) for worldname, worldtype in AutoWorldRegister.world_types.items()
                      if not worldtype.zip_path]
