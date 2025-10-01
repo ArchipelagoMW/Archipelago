@@ -76,8 +76,8 @@ webhost:
 * `game_info_languages` (optional) list of strings for defining the existing game info pages your game supports. The
   documents must be prefixed with the same string as defined here. Default already has 'en'.
 
-* `options_presets` (optional) `Dict[str, Dict[str, Any]]` where the keys are the names of the presets and the values
-  are the options to be set for that preset. The options are defined as a `Dict[str, Any]` where the keys are the names
+* `options_presets` (optional) `dict[str, dict[str, Any]]` where the keys are the names of the presets and the values
+  are the options to be set for that preset. The options are defined as a `dict[str, Any]` where the keys are the names
   of the options and the values are the values to be set for that option. These presets will be available for users to
   select from on the game's options page.
 
@@ -753,7 +753,7 @@ from BaseClasses import CollectionState, MultiWorld
 from worlds.AutoWorld import LogicMixin
 
 class MyGameState(LogicMixin):
-    mygame_defeatable_enemies: Dict[int, Set[str]]  # per player
+    mygame_defeatable_enemies: dict[int, set[str]]  # per player
 
     def init_mixin(self, multiworld: MultiWorld) -> None:
         # Initialize per player with the corresponding "nothing" value, such as 0 or an empty set.
@@ -882,11 +882,11 @@ item/location pairs is unnecessary since the AP server already retains and freel
 that request it. The most common usage of slot data is sending option results that the client needs to be aware of.
 
 ```python
-def fill_slot_data(self) -> Dict[str, Any]:
+def fill_slot_data(self) -> dict[str, Any]:
     # In order for our game client to handle the generated seed correctly we need to know what the user selected
     # for their difficulty and final boss HP.
     # A dictionary returned from this method gets set as the slot_data and will be sent to the client after connecting.
-    # The options dataclass has a method to return a `Dict[str, Any]` of each option name provided and the relevant
+    # The options dataclass has a method to return a `dict[str, Any]` of each option name provided and the relevant
     # option's value.
     return self.options.as_dict("difficulty", "final_boss_hp")
 ```
