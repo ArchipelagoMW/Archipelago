@@ -49,7 +49,7 @@ class RiskOfRainWorld(World):
     }
     location_name_to_id = item_pickups
 
-    required_client_version = (0, 5, 0)
+    required_client_version = (0, 6, 4)
     web = RiskOfWeb()
     total_revivals: int
 
