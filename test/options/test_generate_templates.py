@@ -33,8 +33,7 @@ class TestGenerateYamlTemplates(unittest.TestCase):
 
     def test_name_with_colon(self) -> None:
         from Options import generate_yaml_templates
-        from worlds.AutoWorld import AutoWorldRegister
-        from worlds.AutoWorld import World
+        from worlds.AutoWorld import AutoWorldRegister, TestableWorld, World
 
         class WorldWithColon(World):
             game = "World: with colon"
