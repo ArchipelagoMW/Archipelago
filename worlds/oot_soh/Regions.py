@@ -1,5 +1,6 @@
 from typing import Dict, List, NamedTuple, TYPE_CHECKING
-from BaseClasses import Region
+from worlds.AutoWorld import LogicMixin
+from BaseClasses import MultiWorld, Region
 from .Enums import *
 from .Locations import SohLocation, base_location_table, \
     gold_skulltula_overworld_location_table, \
@@ -69,6 +70,24 @@ if TYPE_CHECKING:
 class SohRegionData(NamedTuple):
     connecting_regions: List[str] = []
 
+class SohRegion(Region):
+    game="Ship of Harkinian"
+
+    def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: str | None = None):
+        super().__init__(name, player, multiworld, hint)
+
+    def can_reach(self, state) -> bool:
+        if state._soh_stale[self.player]:
+            stored_age = state._soh_age[self.player]
+            state._soh_update_age_reachable_regions(self.player)
+            state._soh_age[self.player] = stored_age
+        
+        if state._soh_age[self.player] == "child":
+            return self in state._soh_child_reachable_regions[self.player]
+        elif state._soh_age[self.player] == "adult":
+            return self in state._soh_adult_reachable_regions[self.player]
+        else:
+            return self in state._soh_child_reachable_regions[self.player] or self in state._soh_adult_reachable_regions[self.player]
 
 def create_regions_and_locations(world: "SohWorld") -> None:
 
@@ -79,7 +98,7 @@ def create_regions_and_locations(world: "SohWorld") -> None:
 
     # Create regions.
     for region_name in region_data_table.keys():
-        region = Region(region_name, world.player, world.multiworld)
+        region = SohRegion(region_name, world.player, world.multiworld)
         world.multiworld.regions.append(region)
         region.add_exits(region_data_table[region_name].connecting_regions)
 

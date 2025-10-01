@@ -3443,6 +3443,12 @@ class Events(str, Enum):
     KOKIRI_FOREST_BEAN_PLANTED = "Kokiri Forest Bean Planted"
     CLEARED_DEKU_TREE = "Deku Tree Completed"
     CLEARED_FOREST_TEMPLE = "Forest Temple Completed"
+    TIME_TRAVEL = "Time Travel"
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     BUG_ACCESS = "Bug Access"
     GAME_COMPLETED = "Game Completed"
+
+class Ages(str, Enum):
+    CHILD = "child"
+    ADULT = "adult"
+    null = None
