@@ -5,8 +5,6 @@ from .Locations import SohLocation
 from worlds.generic.Rules import set_rule
 from .Enums import *
 from .Items import SohItem, item_data_table, ItemType, no_rules_bottles
-from .RegionAgeAccess import can_access_entrance_as_adult, can_access_entrance_as_child, can_access_region_as_adult, can_access_region_as_child
-
 
 if TYPE_CHECKING:
     from . import SohWorld
