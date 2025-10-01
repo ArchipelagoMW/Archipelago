@@ -1,7 +1,6 @@
-from typing import Dict, List, NamedTuple, cast, TYPE_CHECKING
+from typing import Dict, NamedTuple, cast, TYPE_CHECKING
 from BaseClasses import CollectionState, Entrance, Region
 from .Enums import Regions
-from .Regions import region_data_table
 
 if TYPE_CHECKING:
     from . import SohWorld
@@ -15,9 +14,9 @@ child_access_table: Dict[str, bool] = {}
 adult_access_table: Dict[str, bool] = {}
 
 def reset_age_access(start_as_adult: bool = False):
-    for k in region_data_table.keys():
-        child_access_table[k] = False
-        adult_access_table[k] = False
+    for region in Regions:
+        child_access_table[region.value] = False
+        adult_access_table[region.value] = False
 
     child_access_table[Regions.ROOT.value] = not start_as_adult
     adult_access_table[Regions.ROOT.value] = start_as_adult

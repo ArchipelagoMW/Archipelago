@@ -884,7 +884,7 @@ class Items(str, Enum):
     BONGO_BONGOS_SOUL = "Bongo Bongo's Soul"
     TWINROVAS_SOUL = "Twinrova's Soul"
     GANONS_SOUL = "Ganon's Soul"
-    OCARINA_ABUTTON = "Ocarina A Button"
+    OCARINA_A_BUTTON = "Ocarina A Button"
     OCARINA_CUP_BUTTON = "Ocarina C Up Button"
     OCARINA_CDOWN_BUTTON = "Ocarina C Down Button"
     OCARINA_CLEFT_BUTTON = "Ocarina C Left Button"
@@ -1067,8 +1067,8 @@ class Locations(str, Enum):
     ZR_OPEN_GROTTO_CHEST = "ZR Open Grotto Chest"
     ZR_FROGS_IN_THE_RAIN = "ZR Frogs in the Rain"
     ZR_FROGS_OCARINA_GAME = "ZR Frogs Ocarina Game"
-    ZR_NEAR_OPEN_GROTTO_FREESTANDING_PO_H = "ZR Near Open Grotto Freestanding PoH"
-    ZR_NEAR_DOMAIN_FREESTANDING_PO_H = "ZR Near Domain Freestanding PoH"
+    ZR_NEAR_OPEN_GROTTO_FREESTANDING_POH = "ZR Near Open Grotto Freestanding PoH"
+    ZR_NEAR_DOMAIN_FREESTANDING_POH = "ZR Near Domain Freestanding PoH"
     ZD_DIVING_MINIGAME = "ZD Diving Minigame"
     ZD_CHEST = "ZD Chest"
     ZD_KING_ZORA_THAWED = "ZD King Zora Thawed"
@@ -3410,34 +3410,25 @@ class Enemies(str, Enum):
     SHABOM = "shabom"
     OCTOROK = "octorok"
     
-@total_ordering
-class CombatRanges(str, Enum):
-    CLOSE = "close"
-    SHORT_JUMPSLASH = "short_jumpslash"
-    MASTER_SWORD_JUMPSLASH = "master_sword_jumpslash"
-    LONG_JUMPSLASH = "long_jumpslash"
-    BOMB_THROW = "bomb_throw"
-    BOOMERANG = "boomerang"
-    HOOKSHOT = "hookshot"
-    LONGSHOT = "longshot"
-    FAR = "far"
-    
-    def __lt__(self, other):
-        vals = [e for e in CombatRanges]
-        return vals.index(self) < vals.index(other)
-
-class EventLocations(str, Enum):
-    DEKU_TREE_BASEMENT_BLOCK = "Deku Tree Basement Block"
-    KOKIRI_FOREST_DEKU_BABAS = "Kokiri Forest Deku Babas"
+class EnemyDistance(Enum):
+    CLOSE = 1
+    SHORT_JUMPSLASH = 2
+    MASTER_SWORD_JUMPSLASH = 3
+    LONG_JUMPSLASH = 4
+    BOMB_THROW = 5
+    BOOMERANG = 6
+    HOOKSHOT = 7
+    LONGSHOT = 8
+    FAR = 9
 
 class Events(str, Enum):
-    DEKU_TREE_BASEMENT_BLOCK_PUSHED = "Deku Tree Basement Block Pushed"
     AMMO_CAN_DROP = "Ammo Can Drop"
     CAN_BUY_ARROWS = "Can Buy Arrows"
     CAN_BUY_DEKU_SHIELD = "Can Buy Deku Shield"
     CAN_BUY_GREEN_POTION = "Can Buy Green Potion"
     CAN_BUY_SEEDS = "Can Buy Seeds"
     CAN_BUY_BOMBS = "Can Buy Bombs"
+    CAN_BUY_BEANS = "Can Buy Beans"
     NUT_POT = "Nut Pot"
     NUT_CRATE = "Nut Crate"
     DEKU_BABA_NUTS = "Deku Baba Nuts"
@@ -3450,3 +3441,9 @@ class Events(str, Enum):
     CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
     COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
     CARPET_MERCHANT = "Can Buy From Carpet Merchant"
+    KOKIRI_FOREST_BEAN_PLANTED = "Kokiri Forest Bean Planted"
+    CLEARED_DEKU_TREE = "Deku Tree Completed"
+    CLEARED_FOREST_TEMPLE = "Forest Temple Completed"
+    GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
+    BUG_ACCESS = "Bug Access"
+    GAME_COMPLETED = "Game Completed"
