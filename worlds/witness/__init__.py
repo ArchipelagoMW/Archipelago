@@ -104,7 +104,6 @@ class WitnessWorld(World):
             "item_id_to_door_hexes": static_witness_items.get_item_to_door_mappings(),
             "door_items_in_the_pool": self.player_items.get_door_item_ids_in_pool(),
             "doors_that_shouldnt_be_locked": [int(h, 16) for h in self.player_logic.FORBIDDEN_DOORS],
-            "symbols_not_in_the_game": self.player_items.get_symbol_ids_not_in_pool(),
             "disabled_entities": [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
             "hunt_entities": [int(h, 16) for h in self.player_logic.HUNT_ENTITIES],
             "log_ids_to_hints": self.log_ids_to_hints,
@@ -112,7 +111,6 @@ class WitnessWorld(World):
             "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
             "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
             "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_ENTITIES],
-            "entity_to_name": static_witness_logic.ENTITY_ID_TO_NAME,
             "panel_hunt_required_absolute": self.panel_hunt_required_count
         }
 

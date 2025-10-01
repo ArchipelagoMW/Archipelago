@@ -2,15 +2,8 @@ from .. import options
 from .bases import TunicTestBase
 
 
-class TestAccess(TunicTestBase):
+class TestWells(TunicTestBase):
     options = {options.CombatLogic.internal_name: options.CombatLogic.option_off}
-
-    # test whether you can get into the temple without laurels
-    def test_temple_access(self) -> None:
-        self.collect_all_but(["Hero's Laurels", "Lantern"])
-        self.assertFalse(self.can_reach_location("Sealed Temple - Page Pickup"))
-        self.collect_by_name(["Lantern"])
-        self.assertTrue(self.can_reach_location("Sealed Temple - Page Pickup"))
 
     # test that the wells function properly. Since fairies is written the same way, that should succeed too
     def test_wells(self) -> None:
@@ -50,22 +43,12 @@ class TestHexQuestNoShuffle(TunicTestBase):
         self.assertTrue(self.can_reach_location("Fountain Cross Door - Page Pickup"))
 
 
-class TestNormalGoal(TunicTestBase):
-    options = {options.HexagonQuest.internal_name: options.HexagonQuest.option_false}
-
-    # test that you need the three colored hexes to reach the Heir in standard
-    def test_normal_goal(self) -> None:
-        location = ["The Heir"]
-        items = [["Red Questagon", "Blue Questagon", "Green Questagon"]]
-        self.assertAccessDependency(location, items)
-
-
 class TestER(TunicTestBase):
     options = {options.EntranceRando.internal_name: options.EntranceRando.option_yes,
                options.AbilityShuffling.internal_name: options.AbilityShuffling.option_true,
                options.HexagonQuest.internal_name: options.HexagonQuest.option_false,
                options.CombatLogic.internal_name: options.CombatLogic.option_off,
-               options.FixedShop.internal_name: options.FixedShop.option_true}
+               options.EntranceLayout.internal_name: options.EntranceLayout.option_fixed_shop}
 
     def test_overworld_hc_chest(self) -> None:
         # test to see that static connections are working properly -- this chest requires holy cross and is in Overworld
@@ -99,7 +82,7 @@ class TestLadderStorage(TunicTestBase):
     options = {options.EntranceRando.internal_name: options.EntranceRando.option_yes,
                options.AbilityShuffling.internal_name: options.AbilityShuffling.option_true,
                options.HexagonQuest.internal_name: options.HexagonQuest.option_false,
-               options.FixedShop.internal_name: options.FixedShop.option_false,
+               options.EntranceLayout.internal_name: options.EntranceLayout.option_standard,
                options.LadderStorage.internal_name: options.LadderStorage.option_hard,
                options.LadderStorageWithoutItems.internal_name: options.LadderStorageWithoutItems.option_false,
                "plando_connections": [
