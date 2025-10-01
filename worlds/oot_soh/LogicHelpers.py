@@ -124,6 +124,8 @@ def has_item(itemName: Items | Events | Enum, bundle: tuple[CollectionState, Reg
         return has_bottle(bundle)
     elif itemName == Items.BOTTLE_WITH_BUGS:
         return has_bottle(bundle) and state.has(Events.BUG_ACCESS.value, player)
+    elif itemName == Items.BRONZE_SCALE:
+        return world.options.shuffle_swim == 0 or state.has(Items.PROGRESSIVE_SCALE.value, player)
     else:
         return state.has(itemName.value, player, count)
 
