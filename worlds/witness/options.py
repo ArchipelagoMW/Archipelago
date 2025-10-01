@@ -357,8 +357,7 @@ class PanelHuntPostgame(RelevanceMixin, Choice):
 
     Note: The "Mountain Lasers" option may also affect locations locked by challenge lasers if the only path to those locations leads through the Mountain Entry.
     """
-    # PopTracker pack doesn't track this
-    relevance = OptionRelevance.universal_tracker_regeneration | OptionRelevance.client
+    relevance = OptionRelevance.all
 
     display_name = "Force postgame in Panel Hunt"
 
@@ -728,3 +727,4 @@ if is_easter_time():
 else:
     silly_options_group = next(group for group in witness_option_groups if group.name == "Silly Options")
     silly_options_group.options.append(EasterEggHunt)
+
