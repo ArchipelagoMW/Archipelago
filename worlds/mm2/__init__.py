@@ -96,7 +96,6 @@ class MM2World(World):
     location_name_groups = location_groups
     web = MM2WebWorld()
     rom_name: bytearray
-    world_version: Tuple[int, int, int] = (0, 3, 2)
     wily_5_weapons: Dict[int, List[int]]
 
     def __init__(self, multiworld: MultiWorld, player: int):
