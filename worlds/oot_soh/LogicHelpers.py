@@ -71,15 +71,14 @@ def add_events(parent_region, world: "SohWorld",
 # TODO account for starting sticks being disabled
 # TODO add child wallet options
 # TODO add bronze scale options
-def has_item(itemName: Items | Events | Enum, bundle: tuple[CollectionState, Regions, "SohWorld"], count: int = 1, can_be_child: bool = True,
-             can_be_adult: bool = True) -> bool:
+def has_item(itemName: Items | Events | Enum, bundle: tuple[CollectionState, Regions, "SohWorld"], count: int = 1) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
     player = world.player
 
-    def can_use_item(name: Enum):
-        return can_use(name, bundle, can_be_child, can_be_adult)
+    def can_use_item(name: Enum, bundle):
+        return can_use(name, bundle)
       
     if itemName in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
         return (state.has_any((Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20,
@@ -92,9 +91,9 @@ def has_item(itemName: Items | Events | Enum, bundle: tuple[CollectionState, Reg
     elif itemName == Items.OCARINA_OF_TIME:
         return state.has_any_count({Items.OCARINA_OF_TIME.value: 1, Items.PROGRESSIVE_OCARINA.value: 2}, player)
     elif itemName == Items.SCARECROW:
-        return scarecrows_song(bundle) and can_use_item(Items.HOOKSHOT)
+        return scarecrows_song(bundle) and can_use_item(Items.HOOKSHOT, bundle)
     elif itemName == Items.DISTANT_SCARECROW:
-        return scarecrows_song(bundle) and can_use_item(Items.LONGSHOT)
+        return scarecrows_song(bundle) and can_use_item(Items.LONGSHOT, bundle)
     elif itemName == Items.DEKU_SHIELD:
         return state.has(Events.CAN_BUY_DEKU_SHIELD.value, player)
     # todo: a lot of these progressive items can probably be evaluated way more simply with a collect/remove override
@@ -128,32 +127,28 @@ def has_item(itemName: Items | Events | Enum, bundle: tuple[CollectionState, Reg
     else:
         return state.has(itemName.value, player, count)
 
-def can_use_any (names: list[Enum], state: CollectionState, world: "SohWorld", can_be_child: bool = True, can_be_adult: bool = True) -> bool:
+def can_use_any(names: list[Enum], bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     for name in names:
-        if can_use(name, state, world, can_be_child, can_be_adult):
+        if can_use(name, bundle):
             return True
     return False
 
-def can_use(name: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"], can_be_child: bool = True, can_be_adult: bool = True) -> bool:
-    state = bundle[0]
-    parent_region = bundle[1]
-    world = bundle[2]
-
+def can_use(name: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     if not has_item(name, bundle):
         return False
 
     def has(item_name: Enum, count: int = 1):
-        return has_item(item_name, bundle, count, can_be_child, can_be_adult)
+        return has_item(item_name, bundle, count)
 
     def can_use_item(item_name):
-        return can_use(item_name, bundle, can_be_child, can_be_adult)
+        return can_use(item_name, bundle)
 
     data = item_data_table
 
-    if data[name].adult_only and not can_be_adult:
+    if data[name].adult_only and not is_adult(bundle):
         return False
 
-    if data[name].child_only and not can_be_child:
+    if data[name].child_only and not is_child(bundle):
         return False
 
     if data[name].item_type == ItemType.magic and not can_use_item(Items.PROGRESSIVE_MAGIC_METER):
@@ -269,7 +264,7 @@ def can_play_song(bundle: tuple[CollectionState, Regions, "SohWorld"], song: Enu
 
 def has_explosives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link has access to explosives (bombs or bombchus)."""
-    return can_use_any([Items.PROGRESSIVE_BOMB_BAG, Items.PROGRESSIVE_BOMBCHU], bundled)
+    return can_use_any([Items.PROGRESSIVE_BOMB_BAG, Items.PROGRESSIVE_BOMBCHU], bundle)
 
 
 def blast_or_smash(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -573,7 +568,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
     # Bubbles (need specific attacks)
     if enemy in [Enemies.BLUE_BUBBLE, Enemies.GREEN_BUBBLE]:
         return (can_jump_slash(bundle) or
-                can_use_any([Items.PROGRESSIVE_BOW,Items.PROGRESSIVE_HOOKSHOT,Items.BOOMERANG], bunle))
+                can_use_any([Items.PROGRESSIVE_BOW,Items.PROGRESSIVE_HOOKSHOT,Items.BOOMERANG], bundle))
 
     # Tough enemies
     if enemy in [Enemies.DEAD_HAND, Enemies.LIKE_LIKE, Enemies.FLOORMASTER, Enemies.WALLMASTER]:
