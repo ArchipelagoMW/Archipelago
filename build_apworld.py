@@ -28,7 +28,7 @@ def main(
     output_path: StrPath = os.curdir,
     apworld_name: Optional[str] = None,
     world_type: Optional[Type[World]] = None
-):
+) -> str:
     """
     Creates an apworld file at output_path containing the directory at input_path.
     Note: some common dirs/files that should not be packaged are automatically excluded (see ZIP_EXCLUDE).
@@ -96,6 +96,7 @@ def main(
 
         zf.writestr(os.path.join(apworld_name, MANIFEST_NAME), orjson.dumps(manifest))
 
+    return zip_path
 
 
 def _find_or_load_world_type(path: Path) -> Type[World]:
