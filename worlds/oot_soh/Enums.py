@@ -3447,3 +3447,8 @@ class Events(str, Enum):
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     BUG_ACCESS = "Bug Access"
     GAME_COMPLETED = "Game Completed"
+
+class Ages(str, Enum):
+    CHILD = "child"
+    ADULT = "adult"
+    null = None

@@ -40,7 +40,7 @@ class SohState(LogicMixin):
         self._soh_adult_reachable_regions = {player: set() for player in players}
         self._soh_child_blocked_regions = {player: set() for player in players}
         self._soh_adult_blocked_regions = {player: set() for player in players}
-        self._soh_age = {player: None for player in players}
+        self._soh_age = {player: Ages.null for player in players}
 
     def copy_mixin(self, ret) -> CollectionState:
         ret._soh_stale = {player: stale for player, stale in self._soh_stale.items()}
@@ -60,11 +60,11 @@ class SohState(LogicMixin):
 
     def _soh_update_age_reachable_regions(self, player):
         self._soh_stale[player] = False
-        for age in ['child', 'adult']:
+        for age in [Ages.CHILD, Ages.ADULT]:
             self._soh_age[player] = age
             start = self.multiworld.get_region(Regions.ROOT, player)
             
-            if age == 'child':
+            if age == Ages.CHILD:
                 reachable = self._soh_child_reachable_regions[player]
                 blocked = self._soh_child_blocked_regions[player]
                 queue = deque(self._soh_child_blocked_regions[player])
@@ -94,12 +94,12 @@ class SohState(LogicMixin):
                     queue.extend(new_region.exits)
                     self.path[new_region] = (new_region.name, self.path.get(connection, None))
     
-    def _soh_can_reach_as_age(self, region: Regions, age, player: int): # Todo, type safety to age enum
-        if self._soh_age[player] is None:
+    def _soh_can_reach_as_age(self, region: Regions, age: Ages, player: int): # Todo, type safety to age enum
+        if self._soh_age[player] is Ages.null:
             # first layer of recursion
             self._soh_age[player] = age
             can_reach = self.multiworld.get_region(region.value, player).can_reach(self)
-            self._soh_age[player] = None
+            self._soh_age[player] = Ages.null
             return can_reach
         return self._soh_age[player] == age
 

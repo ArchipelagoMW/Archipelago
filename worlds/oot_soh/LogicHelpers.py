@@ -327,14 +327,22 @@ def is_adult(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
-    return state._soh_can_reach_as_age(parent_region, 'adult', world.player)
+    return state._soh_can_reach_as_age(parent_region, Ages.ADULT, world.player)
 
 
 def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
-    return state._soh_can_reach_as_age(parent_region, 'child', world.player)
+    return state._soh_can_reach_as_age(parent_region, Ages.CHILD, world.player)
+
+
+def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    state = bundle[0]
+    parent_region = bundle[1]
+    world = bundle[2]
+    # Todo use is_child or is_adult based on starting age setting
+    return is_child(bundle)
 
 
 def can_damage(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:

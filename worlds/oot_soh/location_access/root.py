@@ -39,14 +39,14 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.ROOT, world, [
-        (Regions.ROOT_EXITS, lambda bundle: is_child(bundle) or has_item(Events.TIME_TRAVEL, bundle))
+        (Regions.ROOT_EXITS, lambda bundle: starting_age(bundle) or has_item(Events.TIME_TRAVEL, bundle))
     ])
     
     ## Root Exits
     # Connections
     connect_regions(Regions.ROOT_EXITS, world, [
-        (Regions.CHILD_SPAWN, lambda bundle: is_child(bundle)), # TODO: Implement starting age
-        (Regions.ADULT_SPAWN, lambda bundle: is_adult(bundle)), # TODO: Implement starting age
+        (Regions.CHILD_SPAWN, lambda bundle: is_child(bundle)),
+        (Regions.ADULT_SPAWN, lambda bundle: is_adult(bundle)),
         (Regions.MINUET_OF_FOREST_WARP, lambda bundle: True),
         (Regions.BOLERO_OF_FIRE_WARP, lambda bundle: True),
         (Regions.SERENADE_OF_WATER_WARP, lambda bundle: True),
