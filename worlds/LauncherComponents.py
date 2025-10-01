@@ -245,17 +245,32 @@ icon_paths = {
 }
 
 if not is_frozen():
-    def _build_apworlds():
+    def _build_apworlds(*launch_args: str):
         import json
         import os
         import zipfile
 
         from worlds import AutoWorldRegister
         from worlds.Files import APWorldContainer
+        from Launcher import open_folder
+
+        import argparse
+        parser = argparse.ArgumentParser("Build script for APWorlds")
+        parser.add_argument("single", type=str, default=(), nargs="*", help="Name of a singular APWorld to build.")
+        args = parser.parse_args(launch_args)
+
+        if args.single:
+            games = [(game, AutoWorldRegister.world_types.get(game, None)) for game in args.single]
+        else:
+            games = [(worldname, worldtype) for worldname, worldtype in AutoWorldRegister.world_types.items()
+                     if not worldtype.zip_path]
 
         apworlds_folder = os.path.join("build", "apworlds")
         os.makedirs(apworlds_folder, exist_ok=True)
-        for worldname, worldtype in AutoWorldRegister.world_types.items():
+        for worldname, worldtype in games:
+            if not worldtype:
+                logging.error(f"Requested APWorld \"{worldname}\" does not exist.")
+                continue
             file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
             world_directory = os.path.join("worlds", file_name)
             if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
@@ -270,12 +285,17 @@ if not is_frozen():
             apworld.manifest_path = f"{file_name}/archipelago.json"
             with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED,
                                  compresslevel=9) as zf:
-                for path in pathlib.Path(world_directory).rglob("*.*"):
+                for path in pathlib.Path(world_directory).rglob("*"):
                     relative_path = os.path.join(*path.parts[path.parts.index("worlds") + 1:])
                     if "__MACOSX" in relative_path or ".DS_STORE" in relative_path or "__pycache__" in relative_path:
                         continue
                     if not relative_path.endswith("archipelago.json"):
                         zf.write(path, relative_path)
                 zf.writestr(apworld.manifest_path, json.dumps(manifest))
+        open_folder(apworlds_folder)
 
-    components.append(Component('Build apworlds', func=_build_apworlds, cli=True,))
+
+    def _run_build_apworlds(*args: str):
+        launch_subprocess(_build_apworlds, name="BuildAPWorlds", args=args)
+
+    components.append(Component('Build APWorlds', func=_run_build_apworlds, cli=True,))
