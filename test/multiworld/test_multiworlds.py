@@ -1,11 +1,11 @@
 import unittest
-from typing import ClassVar, List, Tuple
+from typing import Any, ClassVar, List, Tuple
 from unittest import TestCase
 
 from BaseClasses import CollectionState, Location, MultiWorld
 from Fill import distribute_items_restrictive
 from Options import Accessibility
-from worlds.AutoWorld import AutoWorldRegister, call_all, call_single
+from worlds.AutoWorld import AutoWorldRegister, call_all, call_single, World
 from ..general import gen_steps, setup_multiworld
 from ..param import classvar_matrix
 
@@ -53,9 +53,9 @@ class MultiworldTestBase(TestCase):
 class TestAllGamesMultiworld(MultiworldTestBase):
     def test_fills(self) -> None:
         """Tests that a multiworld with one of every registered game world can generate."""
-        all_worlds = []
-        all_options = []
-        for game_name, testable_world in AutoWorldRegister.testable_worlds.items():
+        all_worlds: list[type[World]] = []
+        all_options: list[dict[str, Any]] = []
+        for testable_world in AutoWorldRegister.testable_worlds.values():
             world_type = testable_world.world_type
             for options in testable_world.testable_options_by_name.values():
                 all_worlds.append(world_type)
