@@ -3449,6 +3449,12 @@ class Events(str, Enum):
     CLEARED_WATER_TEMPLE = "Water Temple Completed"
     CLEARED_SPIRIT_TEMPLE = "Spirit Temple Completed"
     CLEARED_SHADOW_TEMPLE = "Shadow Temple Completed"
+    TIME_TRAVEL = "Time Travel"
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     BUG_ACCESS = "Bug Access"
     GAME_COMPLETED = "Game Completed"
+
+class Ages(str, Enum):
+    CHILD = "child"
+    ADULT = "adult"
+    null = None
