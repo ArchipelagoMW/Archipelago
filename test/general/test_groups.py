@@ -8,7 +8,8 @@ class TestNameGroups(TestCase):
         """
         Test that there are no empty item name groups, which is likely a bug.
         """
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, testable_world in AutoWorldRegister.testable_worlds.items():
+            world_type = testable_world.world_type
             if not world_type.item_id_to_name:
                 continue  # ignore worlds without items
             with self.subTest(game=game_name):
@@ -19,7 +20,8 @@ class TestNameGroups(TestCase):
         """
         Test that there are no empty location name groups, which is likely a bug.
         """
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, testable_world in AutoWorldRegister.testable_worlds.items():
+            world_type = testable_world.world_type
             if not world_type.location_id_to_name:
                 continue  # ignore worlds without locations
             with self.subTest(game=game_name):

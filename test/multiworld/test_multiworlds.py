@@ -53,8 +53,15 @@ class MultiworldTestBase(TestCase):
 class TestAllGamesMultiworld(MultiworldTestBase):
     def test_fills(self) -> None:
         """Tests that a multiworld with one of every registered game world can generate."""
-        all_worlds = list(AutoWorldRegister.world_types.values())
-        self.multiworld = setup_multiworld(all_worlds, ())
+        all_worlds = []
+        all_options = []
+        for game_name, testable_world in AutoWorldRegister.testable_worlds.items():
+            world_type = testable_world.world_type
+            for options in testable_world.testable_options_by_name.values():
+                all_worlds.append(world_type)
+                all_options.append(options)
+
+        self.multiworld = setup_multiworld(all_worlds, options=all_options)
         for world in self.multiworld.worlds.values():
             world.options.accessibility.value = Accessibility.option_full
         self.assertSteps(gen_steps)
@@ -64,18 +71,29 @@ class TestAllGamesMultiworld(MultiworldTestBase):
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
 
 
-@classvar_matrix(game=AutoWorldRegister.world_types.keys())
+games_and_options = [
+    (game_name, options_name)
+    for game_name, testable_world in AutoWorldRegister.testable_worlds.items()
+    for options_name in testable_world.testable_options_by_name
+]
+@classvar_matrix(game_and_options=games_and_options)
 class TestTwoPlayerMulti(MultiworldTestBase):
-    game: ClassVar[str]
+    game_and_options: ClassVar[tuple[str, str]]
 
     def test_two_player_single_game_fills(self) -> None:
         """Tests that a multiworld of two players for each registered game world can generate."""
-        world_type = AutoWorldRegister.world_types[self.game]
-        self.multiworld = setup_multiworld([world_type, world_type], ())
+        game, options_name = self.game_and_options
+
+        testable_world = AutoWorldRegister.testable_worlds[game]
+        world_type = testable_world.world_type
+        options = testable_world.testable_options_by_name[options_name]
+        self.multiworld = setup_multiworld([world_type, world_type], (), options=options)
         for world in self.multiworld.worlds.values():
             world.options.accessibility.value = Accessibility.option_full
         self.assertSteps(gen_steps)
-        with self.subTest("filling multiworld", games=world_type.game, seed=self.multiworld.seed):
+        with self.subTest(
+            "filling multiworld", games=world_type.game, options=options_name, seed=self.multiworld.seed
+        ):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")

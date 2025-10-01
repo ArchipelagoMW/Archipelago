@@ -16,9 +16,8 @@ gen_steps = (
 )
 
 
-def setup_solo_multiworld(
-        world_type: Type[World], steps: Tuple[str, ...] = gen_steps, seed: Optional[int] = None
-) -> MultiWorld:
+def setup_solo_multiworld(world_type: Type[World], steps: Tuple[str, ...] = gen_steps, seed: Optional[int] = None,
+                          options: dict[str, Any] | None = None) -> MultiWorld:
     """
     Creates a multiworld with a single player of `world_type`, sets default options, and calls provided gen steps.
     
@@ -26,9 +25,10 @@ def setup_solo_multiworld(
     :param steps: The gen steps that should be called on the generated multiworld before returning. Default calls
     steps through pre_fill
     :param seed: The seed to be used when creating this multiworld
+    :param options: Options to set on the world.
     :return: The generated multiworld
     """
-    return setup_multiworld(world_type, steps, seed)
+    return setup_multiworld(world_type, steps, seed, options)
 
 
 def setup_multiworld(worlds: list[type[World]] | type[World], steps: tuple[str, ...] = gen_steps,

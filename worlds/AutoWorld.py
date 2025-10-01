@@ -6,7 +6,7 @@ import pathlib
 import sys
 import time
 from random import Random
-from dataclasses import make_dataclass
+from dataclasses import field, dataclass
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Iterable, List, Mapping, Optional, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
 
@@ -26,8 +26,15 @@ class InvalidItemError(KeyError):
     pass
 
 
+@dataclass
+class TestableWorld:
+    world_type: type[World]
+    testable_options_by_name: dict[str, dict[str, Any]] = field(default_factory=lambda: {"default": {}})
+
+
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
+    testable_worlds: dict[str, TestableWorld] = {}
     __file__: str
     zip_path: Optional[str]
     settings_key: str
@@ -85,6 +92,13 @@ class AutoWorldRegister(type):
                 {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
                 {new_class.__file__}.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
+            AutoWorldRegister.testable_worlds[dct["game"]] = TestableWorld(new_class)
+            if "test_presets" in dct:
+                for preset_name, options in dct["test_presets"].items():
+                    if preset_name == "default":
+                        raise RuntimeError("Preset 'default' is reserved, must be run on all worlds.")
+                    AutoWorldRegister.testable_worlds[dct["game"]].testable_options_by_name[preset_name] = options
+
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         if "settings_key" not in dct:
@@ -332,6 +346,9 @@ class World(metaclass=AutoWorldRegister):
     """name of the section in host.yaml for world-specific settings, will default to {folder}_options"""
     settings: ClassVar[Optional["Group"]]
     """loaded settings from host.yaml"""
+
+    test_presets: ClassVar[str]
+    """extra test presets to run the generic unit tests on"""
 
     zip_path: ClassVar[Optional[pathlib.Path]] = None
     """If loaded from a .apworld, this is the Path to it."""
