@@ -1,10 +1,10 @@
 import argparse
 import importlib
 import os
-import pathlib
 import sys
 import zipfile
-from typing import Optional, TYPE_CHECKING, Type
+from pathlib import Path
+from typing import Optional, Type, TypeAlias
 
 import orjson
 
@@ -12,10 +12,7 @@ from worlds import AutoWorldRegister
 from worlds.AutoWorld import World
 from worlds.Files import APWorldContainer
 
-if TYPE_CHECKING:
-    from _typeshed import StrPath
-else:
-    StrPath = None
+StrPath: TypeAlias = str | os.PathLike[str]
 
 MANIFEST_NAME = "archipelago.json"
 ZIP_EXCLUDE = {
@@ -45,8 +42,8 @@ def main(
     (world_type's presence is an optimization in case the caller already has it)
     """
 
-    if not isinstance(input_path, pathlib.Path):
-        input_path = pathlib.Path(input_path)
+    if not isinstance(input_path, Path):
+        input_path = Path(input_path)
 
     assert input_path.is_dir(), f"{input_path} is not a directory or does not exist"
 
@@ -84,7 +81,7 @@ def main(
     ) as zf:
         for path in input_path.rglob("*.*"):
             excluded = False
-            relative_path = pathlib.Path(apworld_name, path.relative_to(input_path))
+            relative_path = Path(apworld_name, path.relative_to(input_path))
 
             for exclude in ZIP_EXCLUDE:
                 if exclude in str(relative_path):
@@ -100,14 +97,15 @@ def main(
         zf.writestr(os.path.join(apworld_name, MANIFEST_NAME), orjson.dumps(manifest))
 
 
-def _find_or_load_world_type(path: pathlib.Path) -> Type[World]:
+
+def _find_or_load_world_type(path: Path) -> Type[World]:
     world_type = _find_registered_world_type_for_path(path)
 
     if world_type is None:
-        path_parent = pathlib.Path(path.parent).resolve()
+        path_parent = str(Path(path.parent).resolve())
 
         if path_parent not in sys.path:
-            sys.path.insert(0, str(path_parent))
+            sys.path.insert(0, path_parent)
 
         importlib.import_module(path.name)
 
@@ -119,7 +117,7 @@ def _find_or_load_world_type(path: pathlib.Path) -> Type[World]:
     return world_type
 
 
-def _find_registered_world_type_for_path(path: pathlib.Path) -> Optional[Type[World]]:
+def _find_registered_world_type_for_path(path: Path) -> Optional[Type[World]]:
     return next(
         (
             # dicts keep insertion order, so if we just added a world, it'll be last, hence the reversed
@@ -130,8 +128,8 @@ def _find_registered_world_type_for_path(path: pathlib.Path) -> Optional[Type[Wo
     )
 
 
-def _is_world_type_from_path(world_type: Type[World], path: pathlib.Path) -> bool:
-    return pathlib.Path(world_type.__file__).is_relative_to(path.resolve())
+def _is_world_type_from_path(world_type: Type[World], path: Path) -> bool:
+    return Path(world_type.__file__).is_relative_to(path.resolve())
 
 
 if __name__ == "__main__":
