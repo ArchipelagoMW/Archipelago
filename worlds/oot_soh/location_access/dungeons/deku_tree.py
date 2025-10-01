@@ -44,7 +44,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.DEKU_TREE_LOBBY_BABA_STICKS, Events.DEKU_BABA_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
         (EventLocations.DEKU_TREE_LOBBY_BABA_NUTS, Events.DEKU_BABA_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
-
     # Locations
     add_locations(Regions.DEKU_TREE_LOBBY, world, [
         (Locations.DEKU_TREE_MAP_CHEST, lambda bundle: True),
@@ -56,7 +55,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.DEKU_TREE_LOBBY_GRASS4, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.DEKU_TREE_LOBBY_GRASS5, lambda bundle: can_cut_shrubs(bundle))
     ])
-    
     # Connections
     connect_regions(Regions.DEKU_TREE_LOBBY, world, [
         (Regions.DEKU_TREE_2F_MIDDLE_ROOM, lambda bundle: True),
@@ -71,7 +69,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DEKU_TREE_LOBBY, lambda bundle: can_reflect_nuts(bundle) or can_use(Items.MEGATON_HAMMER, bundle)),
         (Regions.DEKU_TREE_SLINGSHOT_ROOM, lambda bundle: can_reflect_nuts(bundle) or can_use(Items.MEGATON_HAMMER, bundle))
     ])
-    
     ## Deku slingshot room
     # Locations
     add_locations(Regions.DEKU_TREE_SLINGSHOT_ROOM, world, [
@@ -93,7 +90,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.DEKU_TREE_COMPASS_BABA_STICKS, Events.DEKU_BABA_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
         (EventLocations.DEKU_TREE_COMPASS_BABA_NUTS, Events.DEKU_BABA_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
-
     # Locations
     add_locations(Regions.DEKU_TREE_COMPASS_ROOM, world, [
         (Locations.DEKU_TREE_COMPASS_CHEST, lambda bundle: True),
@@ -199,7 +195,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DEKU_TREE_BASEMENT_BACK_ROOM, lambda bundle: True), # lambda bundle: (has_fire_source_with_torch(bundle) or can_use(Items.FAIRY_BOW, bundle)),
         (Regions.DEKU_TREE_BASEMENT_UPPER, lambda bundle: True) # lambda bundle: (has_fire_source_with_torch(bundle) or can_use(Items.FAIRY_BOW, bundle)),
         # Above commented out because it can't succeed without stick pot event implemented
-        
     ])
 
     ## Deku basement back room
@@ -211,7 +206,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DEKU_TREE_BASEMENT_BACK_ROOM, world, [
         (Regions.DEKU_TREE_BASEMENT_BACK_LOBBY, lambda bundle: True),
-        ])
+    ])
 
     ## Deku basement upper
     # Events
@@ -266,7 +261,6 @@ def set_region_rules(world: "SohWorld") -> None:
     add_events(Regions.DEKU_TREE_BOSS_ROOM, world, [
         (EventLocations.DEKU_TREE_BOSS, Events.CLEARED_DEKU_TREE, lambda bundle: can_kill_enemy(bundle, Enemies.GOHMA))
     ])
-
     # Locations
     add_locations(Regions.DEKU_TREE_BOSS_ROOM, world, [
         (Locations.QUEEN_GOHMA, lambda bundle: has_item(Events.CLEARED_DEKU_TREE, bundle)),

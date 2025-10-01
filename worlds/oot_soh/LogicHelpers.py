@@ -4,7 +4,7 @@ from BaseClasses import CollectionState, ItemClassification as IC
 from .Locations import SohLocation
 from worlds.generic.Rules import set_rule
 from .Enums import *
-from .Items import SohItem, item_data_table, ItemType, no_rules_bottles
+from .Items import SohItem, item_data_table, ItemType, no_rules_bottles, item_name_groups
 
 if TYPE_CHECKING:
     from . import SohWorld
@@ -435,9 +435,7 @@ def can_jump_slash(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return (can_jump_slash_except_hammer(bundle) or can_use(Items.MEGATON_HAMMER, bundle))
 
 def call_gossip_fairy_except_suns(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return (can_use(Items.ZELDAS_LULLABY, bundle) or
-            can_use(Items.EPONAS_SONG, bundle) or
-            can_use(Items.SONG_OF_TIME, bundle))
+    return can_use_any([Items.ZELDAS_LULLABY, Items.EPONAS_SONG, Items.SONG_OF_TIME], bundle)
 
 def call_gossip_fairy(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return (call_gossip_fairy_except_suns(bundle) or
@@ -447,7 +445,7 @@ def can_break_lower_hives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -
     return can_break_upper_beehives(bundle) or can_use(Items.PROGRESSIVE_BOMB_BAG, bundle)
 
 def can_break_upper_beehives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return (hookshot_or_boomerang(state, world) or
+    return (hookshot_or_boomerang(bundle) or
             (can_do_trick("Beehives With Bombchus", bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) and 
             (False and (can_use(Items.PROGRESSIVE_BOW, bundle) or can_use(Items.PROGRESSIVE_SLINGSHOT, bundle))))
 
@@ -464,13 +462,9 @@ def can_live(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 # BELOW IS AI SLOP
 # Based on C++ Logic
-def can_hit_switch(bundle: tuple[CollectionState, Regions, "SohWorld"], distance: str = "close",
+def can_hit_switch(bundle: tuple[CollectionState, Regions, "SohWorld"], distance: EnemyDistance = EnemyDistance.CLOSE,
                    in_water: bool = False) -> bool:
     hit = False
-    
-    # doesn't really need to be checked. Doesn't do anything
-    # if(distance.value == EnemyDistance.CLOSE.value):
-    #     pass
     
     if(distance.value <= EnemyDistance.SHORT_JUMPSLASH.value):
         hit = can_use(Items.KOKIRI_SWORD, bundle) or can_use(Items.MEGATON_HAMMER, bundle)
@@ -494,7 +488,7 @@ def can_hit_switch(bundle: tuple[CollectionState, Regions, "SohWorld"], distance
         hit = hit or has_item(Items.PROGRESSIVE_HOOKSHOT, bundle, 2)
 
     if(distance.value <= EnemyDistance.FAR.value):
-        hit = hit or can_use(Items.PROGRESSIVE_SLINGSHOT, state, world) or can_use(Items.PROGRESSIVE_BOW, state, world)
+        hit = hit or can_use(Items.PROGRESSIVE_SLINGSHOT, bundle) or can_use(Items.PROGRESSIVE_BOW, bundle)
 
     return hit
 
@@ -758,103 +752,112 @@ def can_detonate_upright_bomb_flower(bundle: tuple[CollectionState, Regions, "So
                     or can_use(Items.NAYRUS_LOVE, bundle)
                 ))
 
-            ) 
+            )
 
-def ocarina_buttons(state: CollectionState, world: "SohWorld") -> int:
-    return (has_item(Items.OCARINA_A_BUTTON, state, world) + has_item(Items.OCARINA_CLEFT_BUTTON, state, world) + has_item(Items.OCARINA_CRIGHT_BUTTON, state, world) +
-        has_item(Items.OCARINA_CUP_BUTTON, state, world) + has_item(Items.OCARINA_CDOWN_BUTTON, state, world))
+def item_group_count(bundle: tuple[CollectionState, Regions, "SohWorld"], item_group: str) -> int:
+    state = bundle[0]
+    world = bundle[2]
+    items = item_name_groups[item_group]
+    count = 0
+    for item in items:
+        if (state.has(item, world.player)):
+            count += 1
+    return count
 
-def can_spawn_soil_skull(state: CollectionState, world: "SohWorld") -> bool:
-    return (is_child(state, world) and can_use(Items.BOTTLE_WITH_BUGS, state, world))
+def ocarina_button_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
+    return item_group_count(bundle, "Ocarina Buttons")
 
-def dungeon_count(state: CollectionState, world: "SohWorld") -> int:
-    return (has_item(Events.CLEARED_DEKU_TREE, state, world) + has_item(Events.CLEARED_DODONGOS_CAVERN, state, world) + has_item(Events.CLEARED_JABU_JABUS_BELLY, state, world) +
-            has_item(Events.CLEARED_FOREST_TEMPLE, state, world) + has_item(Events.CLEARED_FIRE_TEMPLE, state, world) + has_item(Events.CLEARED_WATER_TEMPLE, state, world) +
-            has_item(Events.CLEARED_SPIRIT_TEMPLE, state, world) + has_item(Events.CLEARED_SHADOW_TEMPLE, state, world))
+def stone_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
+    return item_group_count(bundle, "Stones")
 
-def stone_count(state: CollectionState, world: "SohWorld") -> int:
-    return (has_item(Items.KOKIRIS_EMERALD, state, world) + has_item(Items.GORONS_RUBY, state, world) + has_item(Items.ZORAS_SAPPHIRE, state, world))
+def medallion_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
+    return item_group_count(bundle, "Medallions")
 
-def medallion_count(state: CollectionState, world: "SohWorld") -> int:
-    return (has_item(Items.FOREST_MEDALLION, state, world) + has_item(Items.FIRE_MEDALLION, state, world) + has_item(Items.WATER_MEDALLION, state, world) + 
-            has_item(Items.SPIRIT_MEDALLION, state, world) + has_item(Items.SHADOW_MEDALLION, state, world) + has_item(Items.LIGHT_MEDALLION, state, world))
+dungeon_events: list[Events] = [Events.CLEARED_DEKU_TREE, Events.CLEARED_DODONGOS_CAVERN, Events.CLEARED_JABU_JABUS_BELLY, 
+                      Events.CLEARED_FOREST_TEMPLE, Events.CLEARED_FIRE_TEMPLE, Events.CLEARED_WATER_TEMPLE, 
+                      Events.CLEARED_SPIRIT_TEMPLE, Events.CLEARED_SHADOW_TEMPLE]
+def dungeon_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
+    count = 0
+    for dungeon in dungeon_events:
+        if has_item(dungeon, bundle):
+            count += 1
+    return count
 
-def fire_timer(state: CollectionState, world: "SohWorld") -> int:
-    return 255 if can_use(Items.GORON_TUNIC, state, world) else ((hearts(state, world) * 8) if can_do_trick("Fewer Tunic Requirements", state, world) else 0)
+def can_spawn_soil_skull(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    return (is_child(bundle) and can_use(Items.BOTTLE_WITH_BUGS, bundle))
 
-def water_timer(state: CollectionState, world: "SohWorld") -> int:
-    return 255 if can_use(Items.ZORA_TUNIC, state, world) else ((hearts(state, world) * 8) if can_do_trick("Fewer Tunic Requirements", state, world) else 0)
+def fire_timer(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
+    return 255 if can_use(Items.GORON_TUNIC, bundle) else ((hearts(bundle) * 8) if can_do_trick("Fewer Tunic Requirements", bundle) else 0)
 
+def water_timer(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
+    return 255 if can_use(Items.ZORA_TUNIC, bundle) else ((hearts(bundle) * 8) if can_do_trick("Fewer Tunic Requirements", bundle) else 0)
 
-def hearts(state: CollectionState, world: "SohWorld") -> int:
-    # Hard to know exactly how many hearts they have but we can guess. Unless the client sends us the heart count.
-    # Guess they start with 3; add total heart containers; add total pieces of heart / 4
-    # They also divide their value by 16. Not 100% sure why.
-    return (3 + state.count(Items.HEART_CONTAINER.value, world.player) + (state.count(Items.PIECE_OF_HEART.value, world.player) / 4)) / 16
+def hearts(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
+    state = bundle[0]
+    world = bundle[2]
+    return (3 + state.count(Items.HEART_CONTAINER.value, world.player) + (state.count(Items.PIECE_OF_HEART.value, world.player) // 4))
 
-def can_open_bomb_grotto(state: CollectionState, world: "SohWorld") -> bool:
-    return blast_or_smash(state, world) and (has_item(Items.STONE_OF_AGONY, state, world) or can_do_trick("Grottos Without Agony", state, world))
+def can_open_bomb_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    return blast_or_smash(bundle) and (has_item(Items.STONE_OF_AGONY, bundle) or can_do_trick("Grottos Without Agony", bundle))
 
-def trade_quest_step(item: Items, state: CollectionState, world: "SohWorld") -> bool:
+def trade_quest_step(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    world = bundle[2]
     if (bool(world.options.shuffle_adult_trade_items.value)):
         return False
     
     hasState = False
 
     if (item == Items.POCKET_EGG):
-        hasState = hasState or has_item(Items.POCKET_EGG, state, world)
+        hasState = hasState or has_item(Items.POCKET_EGG, bundle)
 
     if (item == Items.COJIRO):
-        hasState = hasState or has_item(Items.COJIRO, state, world)
+        hasState = hasState or has_item(Items.COJIRO, bundle)
 
     if (item == Items.ODD_MUSHROOM):
-        hasState = hasState or has_item(Items.ODD_MUSHROOM, state, world)
+        hasState = hasState or has_item(Items.ODD_MUSHROOM, bundle)
 
     if (item == Items.ODD_POTION):
-        hasState = hasState or has_item(Items.ODD_POTION, state, world)
+        hasState = hasState or has_item(Items.ODD_POTION, bundle)
 
     if (item == Items.POACHERS_SAW):
-        hasState = hasState or has_item(Items.POACHERS_SAW, state, world)
+        hasState = hasState or has_item(Items.POACHERS_SAW, bundle)
 
     if (item == Items.BROKEN_GORONS_SWORD):
-        hasState = hasState or has_item(Items.BROKEN_GORONS_SWORD, state, world)
+        hasState = hasState or has_item(Items.BROKEN_GORONS_SWORD, bundle)
     
     if (item == Items.PRESCRIPTION):
-        hasState = hasState or has_item(Items.PRESCRIPTION, state, world)
+        hasState = hasState or has_item(Items.PRESCRIPTION, bundle)
 
     if (item == Items.WORLDS_FINEST_EYEDROPS):
-        hasState = hasState or has_item(Items.WORLDS_FINEST_EYEDROPS, state, world)
+        hasState = hasState or has_item(Items.WORLDS_FINEST_EYEDROPS, bundle)
 
     if (item == Items.CLAIM_CHECK):
-        hasState = hasState or has_item(Items.CLAIM_CHECK, state, world)
+        hasState = hasState or has_item(Items.CLAIM_CHECK, bundle)
 
     return hasState
 
-def can_build_rainbow_bridge(state: CollectionState, world: "SohWorld") -> bool:
+def can_build_rainbow_bridge(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    world = bundle[2]
+
+    greg_wildcard = 0
+    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.rainbow_bridge_greg_reward.value:
+        greg_wildcard = 1
+
     return (world.options.rainbow_bridge.value == 1 or
-            (world.options.rainbow_bridge.value == 0 and has_item(Items.SHADOW_MEDALLION, state, world) and has_item(Items.SPIRIT_MEDALLION, state, world) and can_use(Items.LIGHT_ARROW, state, world)) or
-            (world.options.rainbow_bridge.value == 2 and (stone_count(state, world) >= world.options.rainbow_bridge_stones_required.value)) or
-            (world.options.rainbow_bridge.value == 3 and (medallion_count(state, world) >= world.options.rainbow_bridge_medallions_required.value)) or
-            (world.options.rainbow_bridge.value == 4 and (stone_count(state, world) + medallion_count(state, world) >= world.options.rainbow_bridge_dungeon_rewards_required.value)) or
-            (world.options.rainbow_bridge.value == 5 and (dungeon_count() >= world.options.rainbow_bridge_dungeons_required.value)) or
-            (world.options.rainbow_bridge.value == 6 and (get_gs_count(state, world) >= world.options.rainbow_bridge_skull_tokens_required.value))
-            (world.options.rainbow_bridge.value == 7 and (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value))))
+            (world.options.rainbow_bridge.value == 0 and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle) and can_use(Items.LIGHT_ARROW, bundle)) or
+            (world.options.rainbow_bridge.value == 2 and ((stone_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_stones_required.value)) or
+            (world.options.rainbow_bridge.value == 3 and ((medallion_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_medallions_required.value)) or
+            (world.options.rainbow_bridge.value == 4 and ((stone_count(bundle) + medallion_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_dungeon_rewards_required.value)) or
+            (world.options.rainbow_bridge.value == 5 and ((dungeon_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_dungeons_required.value)) or
+            (world.options.rainbow_bridge.value == 6 and (get_gs_count(bundle) >= world.options.rainbow_bridge_skull_tokens_required.value)) or
+            (world.options.rainbow_bridge.value == 7 and has_item(Items.GREG_THE_GREEN_RUPEE, bundle)))
 
-# This version includes Greg Wildcard
-# def can_build_rainbow_bridge(state: CollectionState, world: "SohWorld") -> bool:
-#     return (world.options.rainbow_bridge.value == 1 or
-#             (world.options.rainbow_bridge.value == 0 and has_item(Items.SHADOW_MEDALLION, state, world) and has_item(Items.SPIRIT_MEDALLION, state, world) and can_use(Items.LIGHT_ARROW, state, world)) or
-#             (world.options.rainbow_bridge.value == 2 and (stone_count(state, world) + (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value)) >= world.options.rainbow_bridge_stones_required.value)) or
-#             (world.options.rainbow_bridge.value == 3 and (medallion_count(state, world) + (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value)) >= world.options.rainbow_bridge_medallions_required.value)) or
-#             (world.options.rainbow_bridge.value == 4 and (stone_count(state, world) + medallion_count(state, world) + (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value)) >= world.options.rainbow_bridge_dungeon_rewards_required.value)) or
-#             (world.options.rainbow_bridge.value == 5 and (dungeon_count() + (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value)) >= world.options.rainbow_bridge_dungeons_required.value)) or
-#             (world.options.rainbow_bridge.value == 6 and (get_gs_count(state, world) >= world.options.rainbow_bridge_skull_tokens_required.value))
-#             (world.options.rainbow_bridge.value == 7 and (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value))))
+def get_gs_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
+    state = bundle[0]
+    world = bundle[2]
+    return state.count(Items.GOLD_SKULLTULA_TOKEN.value, world.player)
 
-def get_gs_count(state: CollectionState, world: "SohWorld") -> int:
-    return state.count(Items.GOLD_SKULLTULA_TOKEN, world.player)
 
-# We don't have any options related to this yet
-# def can_trigger_lacs(state: CollectionState, world: "SohWorld") -> bool:
-#     return ()
-
+def can_trigger_lacs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    return True
+    # TODO: Implement this, needed for default LACS condition and if Ganons Boss Key is placed on LACS.

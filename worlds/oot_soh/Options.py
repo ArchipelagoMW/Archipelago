@@ -114,6 +114,13 @@ class RainbowBridge(Choice):
     option_greg = 7
     default = 7
 
+class RainbowBridgeGregWildcard(Toggle):
+    """
+    If Rainbow Bridge is enabled, Greg will count toward the bridge requirement goal.
+    """
+    display_name = "Rainbow Bridge Greg Wildcard"
+    visibility = Visibility.none
+
 class RainbowBridgeStonesRequired(Range):
     """
     If Rainbow Bridge is set to stones, this is how many Spiritual Stones are required to open it.
@@ -158,12 +165,6 @@ class RainbowBridgeSkullTokensRequired(Range):
     range_start = 1
     range_end = 100
     default = 50
-
-# class RainbowBridgeGregWildcard(Toggle):
-#     """
-#     If Rainbow Bridge is enabled, Greg will count toward the bridge requirement goal.
-#     """
-#     display_name = "Rainbow Bridge Greg Wildcard"
 
 class GanonsTrialsRequired(Range):
     """
@@ -646,7 +647,7 @@ class SohOptions(PerGameCommonOptions):
     rainbow_bridge_dungeon_rewards_required: RainbowBridgeDungeonRewardsRequired
     rainbow_bridge_dungeons_required: RainbowBridgeDungeonsRequired
     rainbow_bridge_skull_tokens_required: RainbowBridgeSkullTokensRequired
-    #rainbow_bridge_greg_reward: RainbowBridgeGregWWildcard
+    rainbow_bridge_greg_reward: RainbowBridgeGregWildcard
     ganons_trials_required: GanonsTrialsRequired
     triforce_hunt: TriforceHunt
     triforce_hunt_required_pieces: TriforceHuntRequiredPieces

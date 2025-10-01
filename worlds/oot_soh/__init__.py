@@ -74,6 +74,7 @@ class SohWorld(World):
             "lock_overworld_doors": self.options.lock_overworld_doors.value,
             "fortress_carpenters": self.options.fortress_carpenters.value,
             "rainbow_bridge": self.options.rainbow_bridge.value,
+            "rainbow_bridge_greg_reward": self.options.rainbow_bridge_greg_reward.value,
             "rainbow_bridge_stones_required": self.options.rainbow_bridge_stones_required.value,
             "rainbow_bridge_medallions_required": self.options.rainbow_bridge_medallions_required.value,
             "rainbow_bridge_dungeon_rewards_required": self.options.rainbow_bridge_dungeon_rewards_required.value,
