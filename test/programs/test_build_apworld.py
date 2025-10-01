@@ -216,6 +216,26 @@ class TestBuildApworld(unittest.TestCase):
 		with zipfile.ZipFile(apworld_path) as zf:
 			self.assertFalse(f"{input_path.name}/{excluded_file_name}" in zf.namelist())
 
+	def test_zipfile_extensionless(self: Self) -> None:
+		input_path = self.create_apworld_dir()
+		output_path = self.output_tempdir.name
+
+		excluded_file_name = "README"
+		excluded_file_path = Path(input_path, excluded_file_name)
+		excluded_file_path.touch()
+
+		self.assertTrue(excluded_file_path.exists())
+
+		apworld_path = build_apworld.main(
+			input_path=input_path,
+			output_path=output_path
+		)
+
+		self.assertTrue(os.path.exists(apworld_path))
+
+		with zipfile.ZipFile(apworld_path) as zf:
+			self.assertTrue(f"{input_path.name}/{excluded_file_name}" in zf.namelist())
+
 	def test_zipfile_manifest(self: Self) -> None:
 		input_path = self.create_apworld_dir()
 		output_path = self.output_tempdir.name
