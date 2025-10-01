@@ -4,7 +4,7 @@
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Please use version 0.6.3 or later for integrated
 BizHawk support.
 - Legally obtained NTSC Bin ROM file, probably named something like `Grinch, The (USA) (En,Fr,Es).bin`. 
-CUE files may work, but I have not tested this.
+The game's CUE file should also work aswell along side the BIN file if you have troubles opening the BIN file.
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) Versions 2.9.1 & 2.10 is supported, but I can't promise if any version is stable or not. As of September 2025, the Grinch may not be compatible with 2.11 yet.
 - The latest `grinch.apworld` file. You can find this on the [Releases page](https://github.com/MarioSpore/Grinch-AP/releases/latest). Put this in your `Archipelago/custom_worlds` folder.
 - PSX BIOS Firmware bin file, which is required to run the game through Bizhawk. The file you need should be
