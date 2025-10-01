@@ -56,7 +56,7 @@ class TestBuildApworld(unittest.TestCase):
 			self.test_world_cache[Path(test_world.__file__).parent] = test_world
 
 	@classmethod
-	def create_apworld_dir(cls: Type[Self], dir_name: AnyStr = "apworld") -> Path:
+	def create_apworld_dir(cls: Type[Self], dir_name: AnyStr = "test_world") -> Path:
 		apworld_dir = Path(cls.output_tempdir.name, dir_name)
 
 		if apworld_dir.exists():
