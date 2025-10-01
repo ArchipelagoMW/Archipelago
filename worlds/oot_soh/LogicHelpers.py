@@ -656,7 +656,7 @@ def has_boss_soul(soul: Items, state: CollectionState, world: "SohWorld"):
     return state.has(soul, world.player)
 
 
-def can_pass_enemy(state: CollectionState, world: "SohWorld", enemy: Enum) -> bool:
+def can_pass_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies) -> bool:
     """Check if Link can pass by an enemy (usually by killing or stunning it)."""
     return can_kill_enemy(state, world, enemy) # I think that we can be more permissive here, but for now this is fine
 
