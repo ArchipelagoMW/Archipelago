@@ -7,6 +7,7 @@ from flask import request, session, url_for
 from markupsafe import Markup
 from pony.orm import commit, select
 
+from Utils import restricted_dumps
 from WebHostLib import app, cache
 from WebHostLib.check import get_yaml_data, roll_options
 from WebHostLib.generate import get_meta
@@ -57,7 +58,7 @@ def generate_api():
                     "detail": results}, 400
         else:
             gen = Generation(
-                options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
+                options=restricted_dumps({name: vars(options) for name, options in gen_options.items()}),
                 # convert to json compatible
                 meta=json.dumps(meta), state=STATE_QUEUED,
                 owner=session["_id"])
