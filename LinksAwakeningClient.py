@@ -477,7 +477,7 @@ class LinksAwakeningClient():
             if item.player == ctx.slot:
                 args["command"] |= MWCommands.SEND_ITEM_SPECIAL
                 args["item_code"] = item.item - Common.BASE_ID
-                args["item_sender"] = clamp(0, ctx.slot, 100)
+                args["item_sender"] = clamp(0, ctx.slot, 101)
             if trade:
                 args["command"] |= trade["cmd"]
                 args["mp_f"] = trade["mask"]
@@ -541,7 +541,7 @@ class LinksAwakeningClient():
             item = ctx.recvd_checks[recv_index]
             self.gameboy.send_mw_command(command=MWCommands.SEND_ITEM,
                                          item_code=item.item - Common.BASE_ID,
-                                         item_sender=clamp(0, item.player, 100),
+                                         item_sender=clamp(0, item.player, 101),
                                          mp_cd=recv_index)
             return
 
