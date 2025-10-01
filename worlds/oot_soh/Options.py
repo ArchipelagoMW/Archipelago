@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, Range, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Toggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility
 
 class ClosedForest(Choice):
     """
@@ -608,6 +608,22 @@ class SkeletonKey(Toggle):
     """
     display_name = "Skeleton Key"
 
+
+class StartingAge(Choice):
+    """
+    Decide whether to start as child Link or adult Link.
+    Child Link starts in Link's House in Kokiri Forest.
+    Adult Link starts in the Temple of Time.
+
+    This is hidden for now until it's implemented mod-side.
+    """
+    display_name = "Starting Age"
+    option_child = 0
+    option_adult = 1
+    default = 0
+    visibility = Visibility.none
+
+
 @dataclass
 class SohOptions(PerGameCommonOptions):
     closed_forest: ClosedForest
@@ -673,3 +689,6 @@ class SohOptions(PerGameCommonOptions):
     sunlight_arrows: SunlightArrows
     infinite_upgrades: InfiniteUpgrades
     skeleton_key: SkeletonKey
+    starting_age: StartingAge
+
+# todo: option groups so this isn't a nightmare to navigate

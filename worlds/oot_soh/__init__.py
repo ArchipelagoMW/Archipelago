@@ -127,6 +127,7 @@ class SohWorld(World):
             "sunlight_arrows": self.options.sunlight_arrows.value,
             "infinite_upgrades": self.options.infinite_upgrades.value,
             "skeleton_key": self.options.skeleton_key.value,
+            "starting_age": self.options.starting_age.value,
         }
     
     def collect(self, state: CollectionState, item: Item) -> bool:
