@@ -11,11 +11,11 @@ class ItemName:
     swingwich = "Swingwich"
     repellent_dish = "Repellent Dish"
     fluffy_crepe = "Fluffy Crepe"
-    septium_drops = "Seeptium Drops"
+    septium_drops = "Septium Drops"
     queenly_cookie = "Queenly Cookie"
-    amar_spiritus = "Amar Spirits"
+    amar_spiritus = "Amar Spiritus"
     miso_fish = "Miso Fish"
-    castel_castella = "Castel Castella"
+    castel_castella = "Castle Castella"
     fresh_water = "Fresh Water"
     fishy_finale = "Fishy Finale"
     tear_balm = "Tear Balm"
@@ -25,7 +25,7 @@ class ItemName:
     celestial_balm = "Celestial Balm"
     ep_charge = "EP Charge"
     smelling_salts = "Smelling Salts"
-    insulating_tape = "Insulting Tape"
+    insulating_tape = "Insulating Tape"
     softening_balm = "Softening Balm"
     s_tablet = "S-Tablet"
     purging_balm = "Purging Balm"
@@ -174,8 +174,8 @@ class ItemName:
     renne_progressive_craft = "Renne's Progressive Craft"
 
     # Key Item
-    bennu_defeat = "Bennu Defeated (Chapter 1 Cleared)"
-    kloe_rescue = "Kloe Rescued (Chapter 2 Cleared)"
+    chapter_1_cleared = "Chapter 1 Cleared"
+    chapter_2_cleared = "Chapter 2 Cleared"
     entrance_exam_results = "Entrance Exam Results"
 
     # Metadata

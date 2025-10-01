@@ -31,11 +31,13 @@ class AnimationWriter:
         self.craft_id_to_as_function_name = None
         self.craft_id_to_character_name_mapping = None
         self.craft_id_to_craft_file_name_mapping = None
+        self.base_craft_ids = set()
         self._populate_craft_mappings()
 
     def write_animation(self, source_craft_id: int, destination_craft_id: int) -> None:
         """
         Write the craft animation instructions of the source craft id to the destination craft id.
+        Only writes base craft ids. Passing in an upgraded craft ID will result in an NOP.
 
         Args:
             source_craft_id (int): The craft animation you wish to write.
@@ -44,6 +46,10 @@ class AnimationWriter:
         Returns:
             None
         """
+        if (source_craft_id not in self.base_craft_ids) ^ (destination_craft_id not in self.base_craft_ids):
+            raise ValueError(f"Invalid craft ID state. Base craft is being replaced by upgraded craft or vice versa. Please report this to the discord thread.")
+        if source_craft_id not in self.base_craft_ids:
+            return  # NOP, only replace base craft ids, as they share an animation with their base craft.
         data = self._read_craft(source_craft_id)
         self._write_craft(destination_craft_id, data)
 
@@ -54,6 +60,7 @@ class AnimationWriter:
         Returns:
             None
         """
+        self.base_craft_ids = set()
         self.craft_id_to_as_function_name = {}
         self.craft_id_to_character_name_mapping = {}
         self.craft_id_to_craft_file_name_mapping = {}
@@ -68,6 +75,7 @@ class AnimationWriter:
                 if craft_file_character_name == "Ries":
                     craft_file_character_name = "ries_hood"
                 craft_file_name = f'{craft_file_character_name.lower()}_{base_craft_name.lower().replace(" ", "_").replace(chr(39),"").replace("-","_")}.as'
+                self.base_craft_ids.add(craft.base_craft_id)
                 self.craft_id_to_as_function_name[craft.base_craft_id] = craft.base_as_function_name
                 self.craft_id_to_character_name_mapping[craft.base_craft_id] = character_name
                 self.craft_id_to_craft_file_name_mapping[craft.base_craft_id] = craft_file_name

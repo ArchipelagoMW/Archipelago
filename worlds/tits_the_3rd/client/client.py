@@ -28,7 +28,7 @@ from worlds.tits_the_3rd.tables.location_list import (
     event_craft_location_id_to_character_id_and_craft_id,
 )
 from worlds.tits_the_3rd.tables.craft_list import craft_name_to_id
-from worlds.tits_the_3rd.items import get_item_id, area_flag_to_name, character_id_to_name
+from worlds.tits_the_3rd.items import get_item_id, area_flag_to_name, character_id_to_name, meta_data_table
 from worlds.tits_the_3rd.names.location_name import LocationName
 from worlds.tits_the_3rd.names.item_name import ItemName
 from worlds.tits_the_3rd.util import load_file
@@ -68,6 +68,7 @@ class TitsThe3rdContext(CommonContext):
         self.non_local_locations_initiated = False
         self.slot_data = None
         self.non_local_mapping = dict()
+        self.player_aliases_to_actual_name = dict()
 
         self.items_to_be_sent_notification = queue.Queue()
         self.player_name_to_game: Dict[str, str] = dict()
@@ -104,7 +105,7 @@ class TitsThe3rdContext(CommonContext):
         Returns a buffer (the patch output, in zip format)
         """
         if not "factoria.exe" in os.listdir(game_dir):
-            logger.error("factoria.exe not found. Please install factoria from https://github.com/Aureole-Suite/Factoria/releases/tag/v1.0")
+            logger.info("factoria.exe not found. Please install factoria from https://github.com/Aureole-Suite/Factoria/releases/tag/v1.0")
             raise FileNotFoundError("factoria.exe not found. Please install factoria from https://github.com/Aureole-Suite/Factoria/releases/tag/v1.0")
 
         # The patch is applied onto files derrived from the base game's files.
@@ -132,7 +133,7 @@ class TitsThe3rdContext(CommonContext):
         os.makedirs(scena_game_mod_folder, exist_ok=False)
         patch_scena_folder = os.path.join(patch_output_dir, "sn")
         if not os.path.exists(patch_scena_folder):
-            logger.error("SN folder not found in patch output! Please contact the maintainer of the mod in the discord.")
+            logger.info("SN folder not found in patch output! Please contact the maintainer of the mod in the discord.")
             raise FileNotFoundError("SN folder not found in patch output! Please contact the maintainer of the mod in the discord.")
         for file_name in os.listdir(patch_scena_folder):
             source_path = os.path.join(patch_scena_folder, file_name)
@@ -158,6 +159,9 @@ class TitsThe3rdContext(CommonContext):
             game_items.append(item)
             game_items_text.append(item_text)
 
+        with open(os.path.join(dt_game_mod_folder, "item_id_mapping.json"), "w") as mapping_file:
+            json.dump(self.non_local_mapping, mapping_file, indent=4)
+
         for area_flag, area_name in area_flag_to_name.items():
             item, item_text = dt_items.create_non_local_item(20000 + area_flag, area_name)
             game_items.append(item)
@@ -168,8 +172,14 @@ class TitsThe3rdContext(CommonContext):
             game_items.append(item)
             game_items_text.append(item_text)
 
-        craft_id_to_name = {craft_id: craft_name for craft_name, craft_id in craft_name_to_id.items()}
-        craft_mapping: dict = self.slot_data["old_craft_id_to_new_craft_id"]
+        craft_id_to_name = {int(craft_id): craft_name for craft_name, craft_id in craft_name_to_id.items()}
+        if "old_craft_id_to_new_craft_id" in self.slot_data and self.slot_data["old_craft_id_to_new_craft_id"] is not None:
+            craft_mapping: dict = {int(k): v for k, v in self.slot_data["old_craft_id_to_new_craft_id"].items()}
+        else:
+            craft_mapping = dict()
+        for craft_id in craft_id_to_name:
+            if craft_id not in craft_mapping:
+                craft_mapping[craft_id] = craft_id
         for old_craft_id, new_craft_id in craft_mapping.items():
             old_craft_id = int(old_craft_id)
             craft_name = craft_id_to_name[new_craft_id]
@@ -202,23 +212,28 @@ class TitsThe3rdContext(CommonContext):
         if not self.slot_data["old_craft_id_to_new_craft_id"]:
             return  # No craft changes, we can use the default table
         if not "T_MAGIC_Converter.exe" in os.listdir(game_dir):
-            logger.error("T_MAGIC_Converter.exe not found. Please install T_MAGIC_Converter from https://github.com/akatatsu27/FalcomToolsCollection/releases/tag/T_MAGIC")
-            raise FileNotFoundError("T_MAGIC_Converter.exe not found. Please install T_MAGIC_Converter from https://github.com/akatatsu27/FalcomToolsCollection/releases/tag/T_MAGIC")
+            logger.info("T_MAGIC_Converter.exe not found. Please install T_MAGIC_Converter from https://github.com/akatatsu27/FalcomToolsCollection/releases/tag/T_MAGIC")
+            raise FileNotFoundError(
+                "T_MAGIC_Converter.exe not found. Please install T_MAGIC_Converter from https://github.com/akatatsu27/FalcomToolsCollection/releases/tag/T_MAGIC"
+            )
 
         try:
             t_magic_path = os.path.join(dt_base_folder, "t_magic._dt")
             t_magic_converter_path = os.path.join(game_dir, "T_MAGIC_Converter.exe")
             try:
-                subprocess.run([
-                    t_magic_converter_path,
-                    t_magic_path,
-                ], check=True)
+                subprocess.run(
+                    [
+                        t_magic_converter_path,
+                        t_magic_path,
+                    ],
+                    check=True,
+                )
             except subprocess.CalledProcessError as err:
-                logger.error(f"Error running T_MAGIC_Converter: {err}")
+                logger.info(f"Error running T_MAGIC_Converter: {err}")
                 raise RuntimeError(f"Error running T_MAGIC_Converter: {err}") from err
             t_magic_json_output_path = os.path.join(game_dir, "output", "t_magic.json")
             if not os.path.exists(t_magic_json_output_path):
-                logger.error("t_magic.json not found in output directory after running T_MAGIC_Converter.exe. Please contact the maintainer of the mod in the discord.")
+                logger.info("t_magic.json not found in output directory after running T_MAGIC_Converter.exe. Please contact the maintainer of the mod in the discord.")
                 raise FileNotFoundError("t_magic.json not found in output directory after running T_MAGIC_Converter.exe. Please contact the maintainer of the mod in the discord.")
 
             # Build the new t_magic contents
@@ -240,22 +255,19 @@ class TitsThe3rdContext(CommonContext):
                     with open(t_magic_json_output_path, "w", encoding="utf-8") as t_magic_json_file:
                         json.dump(new_t_magic_json, t_magic_json_file)
             except Exception as err:
-                logger.error(f"Error building new t_magic: {err}")
+                logger.info(f"Error building new t_magic: {err}")
                 raise RuntimeError(f"Error building new t_magic: {err}") from err
 
             # Write the new t_magic file
             try:
-                subprocess.run([
-                    t_magic_converter_path,
-                    t_magic_json_output_path
-                ], check=True)
+                subprocess.run([t_magic_converter_path, t_magic_json_output_path], check=True)
             except subprocess.CalledProcessError as err:
-                logger.error(f"Error running t_magic_converter: {err}")
+                logger.info(f"Error running t_magic_converter: {err}")
                 raise RuntimeError(f"Error running t_magic_converter: {err}") from err
 
             t_magic_dt_output_path = os.path.join(game_dir, "output", "t_magic._dt")
             if not os.path.exists(t_magic_dt_output_path):
-                logger.error("t_magic._dt not found in output directory after running T_MAGIC_Converter.exe. Please contact the maintainer of the mod in the discord.")
+                logger.info("t_magic._dt not found in output directory after running T_MAGIC_Converter.exe. Please contact the maintainer of the mod in the discord.")
                 raise FileNotFoundError("t_magic._dt not found in output directory after running T_MAGIC_Converter.exe. Please contact the maintainer of the mod in the discord.")
             shutil.move(t_magic_dt_output_path, os.path.join(dt_game_mod_folder, "t_magic._dt"))
         finally:
@@ -273,7 +285,7 @@ class TitsThe3rdContext(CommonContext):
             return
         t_crtget_path = os.path.join(dt_base_folder, "t_crfget._dt")
         if not os.path.exists(t_crtget_path):
-            logger.error("t_crfget._dt not found in base directory. Please contact the maintainer of the mod in the discord.")
+            logger.info("t_crfget._dt not found in base directory. Please contact the maintainer of the mod in the discord.")
             raise FileNotFoundError("t_crfget._dt not found in base directory. Please contact the maintainer of the mod in the discord.")
         try:
             with open(t_crtget_path, "rb") as f:
@@ -287,7 +299,7 @@ class TitsThe3rdContext(CommonContext):
             with open(t_crtget_path, "wb") as f:
                 f.write(data)
         except Exception as err:
-            logger.error(f"Error modifying t_crfget: {err}")
+            logger.info(f"Error modifying t_crfget: {err}")
             raise RuntimeError(f"Error modifying t_crfget: {err}") from err
         shutil.move(t_crtget_path, os.path.join(dt_game_mod_folder, "t_crfget._dt"))
 
@@ -312,10 +324,10 @@ class TitsThe3rdContext(CommonContext):
         if not self.slot_data["old_craft_id_to_new_craft_id"]:
             return  # No craft changes, we can use the default animations.
         if not "AS_Converter.exe" in os.listdir(game_dir):
-            logger.error("AS_Converter.exe not found. Please install AS_Converter from https://github.com/tdkollins/FalcomToolsCollection/releases/tag/1.0.0")
+            logger.info("AS_Converter.exe not found. Please install AS_Converter from https://github.com/tdkollins/FalcomToolsCollection/releases/tag/1.0.0")
             raise FileNotFoundError("AS_Converter.exe not found. Please install AS_Converter from https://github.com/tdkollins/FalcomToolsCollection/releases/tag/1.0.0")
         if os.path.exists("outbin"):
-            logger.error("outbin folder already exists. Cannot patch without overwriting contents. Please delete the outbin folder and try again.")
+            logger.info("outbin folder already exists. Cannot patch without overwriting contents. Please delete the outbin folder and try again.")
             raise RuntimeError("outbin folder already exists. Cannot patch without overwriting contents. Please delete the outbin folder and try again.")
 
         as_game_mod_folder = os.path.join(game_dir, "data", "ED6_DT30")
@@ -323,7 +335,7 @@ class TitsThe3rdContext(CommonContext):
 
         as_patch_output_folder = os.path.join(patch_output_dir, "as")
         if not os.path.exists(as_patch_output_folder):
-            logger.error("AS folder not found in patch output! Please contact the maintainer of the mod in the discord.")
+            logger.info("AS folder not found in patch output! Please contact the maintainer of the mod in the discord.")
             raise FileNotFoundError("AS folder not found in patch output! Please contact the maintainer of the mod in the discord.")
 
         try:
@@ -332,7 +344,7 @@ class TitsThe3rdContext(CommonContext):
                 # Take the animation from source craft, and give it to the destination craft.
                 animation_writer.write_animation(int(source_craft_id), int(destination_craft_id))
         except Exception as err:
-            logger.error(f"Error writing craft animation: {err}")
+            logger.info(f"Error writing craft animation: {err}")
             raise RuntimeError(f"Error writing craft animation: {err}") from err
 
         as_converter_path = os.path.join(game_dir, "AS_Converter.exe")
@@ -346,7 +358,7 @@ class TitsThe3rdContext(CommonContext):
                     check=True,
                 )
             except subprocess.CalledProcessError as err:
-                logger.error(f"Error running AS_Converter: {err}")
+                logger.info(f"Error running AS_Converter: {err}")
                 raise RuntimeError(f"Error running AS_Converter: {err}") from err
 
             for file_name in os.listdir("outbin"):
@@ -364,7 +376,7 @@ class TitsThe3rdContext(CommonContext):
         game_dir = Path(get_settings().tits_the_3rd_options.game_installation_path)
         files_in_game_dir = os.listdir(game_dir)
         if not "ed6_win3_DX9.exe" in files_in_game_dir:
-            logger.error(f"ed6_win3_DX9.exe not found in game directory {game_dir}. Please configure the correct game directory in the settings.")
+            logger.info(f"ed6_win3_DX9.exe not found in game directory {game_dir}. Please configure the correct game directory in the settings.")
             raise FileNotFoundError(f"ed6_win3_DX9.exe not found in game directory {game_dir}. Please configure the correct game directory in the settings.")
 
         lb_ark_folder = os.path.join(game_dir, "data")
@@ -374,6 +386,19 @@ class TitsThe3rdContext(CommonContext):
             with open(os.path.join(lb_ark_folder, "player.txt"), "r", encoding="utf-8") as player_id_file:
                 if player_id_file.read() == f"{self.auth}-{self.seed_name}":
                     logger.info("Player has not changed. Skip installing patch")
+                    try:
+                        with open(os.path.join(game_dir, "data/ED6_DT22/item_id_mapping.json")) as mapping_file:
+                            tmp_mapping = json.load(mapping_file)
+                            self.non_local_mapping = {int(k): v for k, v in tmp_mapping.items()}
+                    except FileNotFoundError:
+                        current_id = 50000
+
+                        for location, _ in self.non_local_locations.items():
+                            self.non_local_mapping[location] = current_id
+                            current_id += 1
+
+                        with open(os.path.join(os.path.join(game_dir, "data/ED6_DT22/item_id_mapping.json"), "item_id_mapping.json"), "w") as mapping_file:
+                            json.dump(self.non_local_mapping, mapping_file, indent=4)
                     return True
 
         self._clean_previous_mod_install(lb_ark_folder)
@@ -410,6 +435,7 @@ class TitsThe3rdContext(CommonContext):
         self.player_name_to_game = dict()
         self.slot_data = None
         self.non_local_mapping = dict()
+        self.player_aliases_to_actual_name = dict()
 
     async def server_auth(self, password_requested: bool = False):
         """Wrapper for login."""
@@ -433,6 +459,7 @@ class TitsThe3rdContext(CommonContext):
             games = set()
             for player in [NetworkPlayer(*player) for player in args["players"]]:
                 self.player_name_to_game[player.name] = self.slot_info[player.slot].game
+                self.player_aliases_to_actual_name[player.alias] = player.name
                 games.add(self.slot_info[player.slot].game)
 
             asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": list(games)}]))
@@ -444,7 +471,8 @@ class TitsThe3rdContext(CommonContext):
                     receiving_player = self.player_names[item.player]
                     current_player = self.slot_info[self.slot].name
                     if receiving_player != current_player:
-                        original_game = self.player_name_to_game[receiving_player]
+                        player_name = self.player_aliases_to_actual_name[receiving_player]
+                        original_game = self.player_name_to_game[player_name]
                         self.non_local_locations[item.location] = (receiving_player, original_game, item.item)
                 self.non_local_locations_initiated = True
 
@@ -490,37 +518,37 @@ class TitsThe3rdContext(CommonContext):
             if item_id is None or item_id >= 500000:
                 result = True
             # Unlock location
-            elif get_item_id(ItemName.craft_min_id) <= item_id <= get_item_id(ItemName.craft_max_id):  # Craft get
+            elif meta_data_table[ItemName.craft_min_id] <= item_id <= meta_data_table[ItemName.craft_max_id]:  # Craft get
                 craft_idx = 0
                 for past_item in self.items_received[: self.last_received_item_index + 1]:
                     if past_item.item == item_id:
                         craft_idx += 1
-                character_id = item_id - get_item_id(ItemName.craft_min_id)
+                character_id = item_id - meta_data_table[ItemName.craft_min_id]
                 craft_id = self.slot_data["craft_get_order"][self.game_interface.CHARACTER_ID_TO_NAME[character_id]][craft_idx]
                 result = self.game_interface.give_craft(character_id, craft_id)
-            elif get_item_id(ItemName.area_min_id) <= item_id <= get_item_id(ItemName.area_max_id):
-                result = self.game_interface.unlock_area(item_id - get_item_id(ItemName.area_min_id))
+            elif meta_data_table[ItemName.area_min_id] <= item_id <= meta_data_table[ItemName.area_max_id]:
+                result = self.game_interface.unlock_area(item_id - meta_data_table[ItemName.area_min_id])
             # Unlock character
-            elif get_item_id(ItemName.character_min_id) <= item_id <= get_item_id(ItemName.character_max_id):
-                result = self.game_interface.unlock_character(item_id - get_item_id(ItemName.character_min_id))
+            elif meta_data_table[ItemName.character_min_id] <= item_id <= meta_data_table[ItemName.character_max_id]:
+                result = self.game_interface.unlock_character(item_id - meta_data_table[ItemName.character_min_id])
             # Give Mira
-            elif get_item_id(ItemName.mira_min_id) <= item_id <= get_item_id(ItemName.mira_max_id):
-                result = self.game_interface.give_mira(item_id - get_item_id(ItemName.mira_min_id))
+            elif meta_data_table[ItemName.mira_min_id] <= item_id <= meta_data_table[ItemName.mira_max_id]:
+                result = self.game_interface.give_mira(item_id - meta_data_table[ItemName.mira_min_id])
             # Give lower element sepith
-            elif get_item_id(ItemName.lower_elements_sepith_min_id) <= item_id <= get_item_id(ItemName.lower_elements_sepith_max_id):
-                result = self.game_interface.give_low_sepith(item_id - get_item_id(ItemName.lower_elements_sepith_min_id))
+            elif meta_data_table[ItemName.lower_elements_sepith_min_id] <= item_id <= meta_data_table[ItemName.lower_elements_sepith_max_id]:
+                result = self.game_interface.give_low_sepith(item_id - meta_data_table[ItemName.lower_elements_sepith_min_id])
             # Give all sepith
-            elif get_item_id(ItemName.all_sepith_min_id) <= item_id <= get_item_id(ItemName.all_sepith_max_id):
-                result = self.game_interface.give_all_sepith(item_id - get_item_id(ItemName.all_sepith_min_id), item_id - get_item_id(ItemName.all_sepith_min_id))
+            elif meta_data_table[ItemName.all_sepith_min_id] <= item_id <= meta_data_table[ItemName.all_sepith_max_id]:
+                result = self.game_interface.give_all_sepith(item_id - meta_data_table[ItemName.all_sepith_min_id], item_id - meta_data_table[ItemName.all_sepith_min_id])
             # Give all sepith (100 lower, 50 higher)
             elif get_item_id(ItemName.all_sepith_100_50) == item_id:
                 result = self.game_interface.give_all_sepith(100, 50)
             # Give higher element sepith
-            elif get_item_id(ItemName.higher_elements_sepith_min_id) <= item_id <= get_item_id(ItemName.higher_elements_sepith_max_id):
-                result = self.game_interface.give_high_sepith(item_id - get_item_id(ItemName.higher_elements_sepith_min_id))
+            elif meta_data_table[ItemName.higher_elements_sepith_min_id] <= item_id <= meta_data_table[ItemName.higher_elements_sepith_max_id]:
+                result = self.game_interface.give_high_sepith(item_id - meta_data_table[ItemName.higher_elements_sepith_min_id])
             # Give Recipe
-            elif get_item_id(ItemName.recipe_min_id) <= item_id <= get_item_id(ItemName.recipe_max_id):
-                result = self.game_interface.give_recipe(item_id - get_item_id(ItemName.recipe_min_id))
+            elif meta_data_table[ItemName.recipe_min_id] <= item_id <= meta_data_table[ItemName.recipe_max_id]:
+                result = self.game_interface.give_recipe(item_id - meta_data_table[ItemName.recipe_min_id])
             # Just a normal item
             else:
                 result = self.game_interface.give_item(item_id, 1)
@@ -559,7 +587,7 @@ class TitsThe3rdContext(CommonContext):
     async def check_location(self, location_id: int):
         if not self.game_interface.should_send_and_recieve_items(self.world_player_identifier):
             return
-        if location_id == get_location_id(LocationName.chapter2_boss_defeated):  # Goal location
+        if location_id == get_location_id(self.slot_data["victory_location"]):  # Goal location
             self.finished_game = True
             await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
         self.locations_checked.add(location_id)
@@ -571,20 +599,14 @@ class TitsThe3rdContext(CommonContext):
         for location_id in self.location_ids:
             if location_id in self.locations_checked:
                 continue
-            elif (
-                MIN_CRAFT_LOCATION_ID <= location_id <= MAX_CRAFT_LOCATION_ID
-                and location_id in craft_location_id_to_character_id_and_level_threshold
-            ):
+            elif MIN_CRAFT_LOCATION_ID <= location_id <= MAX_CRAFT_LOCATION_ID and location_id in craft_location_id_to_character_id_and_level_threshold:
                 character_id, level_threshold = craft_location_id_to_character_id_and_level_threshold[location_id]
                 if not self.game_interface.has_character(character_id):
                     continue
                 if self.game_interface.read_character_level(character_id) >= level_threshold:
                     await self.check_location(location_id)
                     continue
-            elif (
-                MIN_CRAFT_LOCATION_ID <= location_id <= MAX_CRAFT_LOCATION_ID
-                and location_id in event_craft_location_id_to_character_id_and_craft_id
-            ):
+            elif MIN_CRAFT_LOCATION_ID <= location_id <= MAX_CRAFT_LOCATION_ID and location_id in event_craft_location_id_to_character_id_and_craft_id:
                 # TODO: this condition can be removed once location_id = flag_event_craft_acquired_array + craft_id
                 character_id, craft_id = event_craft_location_id_to_character_id_and_craft_id[location_id]
                 if self.game_interface.read_flag(self.game_interface.FLAG_EVENT_CRAFT_ACQUIRED_ARRAY + craft_id):
@@ -603,7 +625,6 @@ class TitsThe3rdContext(CommonContext):
                     and self.game_interface.should_send_and_recieve_items(self.world_player_identifier)
                     and self.game_interface.is_valid_to_receive_item()
                 ):
-                    print("giving craft", character_id, craft_id)
                     self.game_interface.give_craft(character_id, craft_id)
                     while self.game_interface.is_in_event():
                         await asyncio.sleep(0.1)

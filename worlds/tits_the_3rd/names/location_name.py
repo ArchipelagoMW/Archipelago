@@ -150,8 +150,8 @@ class LocationName:
     day_grancel_east_department_store_se = "Day Grancel East Chest (Department Store SE)" # 10176
     day_grancel_east_department_store_ne = "Day Grancel East Chest (Department Store NE)" # 10177
     day_grancel_east_department_store_nw = "Day Grancel East Chest (Department Store NW)" # 10178
-    day_grancel_east_erebonian_ambassy_center_room = "Day Grancel East Chest (Erebonian Ambassy Center Room)" # 10174
-    day_grancel_east_erebonian_ambassy_right_room = "Day Grancel East Chest (Erebonian Ambassy Right Room)" # 10175
+    day_grancel_east_erebonian_embassy_center_room = "Day Grancel East Chest (Erebonian Embassy Center Room)"  # 10174
+    day_grancel_east_erebonian_embassy_right_room = "Day Grancel East Chest (Erebonian Embassy Right Room)"  # 10175
     day_grancel_port_first_warehouse = "Day Grancel Port Chest (First Warehouse)" # 10168
     day_grancel_port_east_of_boat = "Day Grancel Port Chest (East Of Boat)" # 10160
     day_grancel_port_west_of_boat = "Day Grancel Port Chest (West Of Boat)" # 10161
@@ -182,8 +182,8 @@ class LocationName:
     night_grancel_east_department_store_se = "Night Grancel East Chest (Department Store SE)" # 2176
     night_grancel_east_department_store_ne = "Night Grancel East Chest (Department Store NE)" # 2177
     night_grancel_east_department_store_nw = "Night Grancel East Chest (Department Store NW)" # 2178
-    night_grancel_east_erebonian_ambassy_center_room = "Night Grancel East Chest (Erebonian Ambassy Center Room)" # 2174
-    night_grancel_east_erebonian_ambassy_right_room = "Night Grancel East Chest (Erebonian Ambassy Right Room)" # 2175
+    night_grancel_east_erebonian_embassy_center_room = "Night Grancel East Chest (Erebonian Embassy Center Room)"  # 2174
+    night_grancel_east_erebonian_embassy_right_room = "Night Grancel East Chest (Erebonian Embassy Right Room)"  # 2175
     night_grancel_port_first_warehouse = "Night Grancel Port Chest (First Warehouse)" # 2168
     night_grancel_port_east_of_boat = "Night Grancel Port Chest (East Of Boat)" # 2160
     night_grancel_port_west_of_boat = "Night Grancel Port Chest (West Of Boat)" # 2161

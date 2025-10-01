@@ -25,8 +25,9 @@ def _get_character_to_craft_get_order() -> dict[str, List[Dict[int, int]]]:
     The order of the craft_id is the default order based on level acquired.
     This will return the character's default crafts.
     """
+    default_characters_copy = deepcopy(default_characters)
     character_to_craft_get_order = {}
-    for character in default_characters:
+    for character in default_characters_copy:
         craft_id_to_level_acquired = {}
         crafts = character.crafts
 
@@ -142,17 +143,20 @@ def _get_old_craft_id_to_new_craft_id(characters: List[Character]) -> Dict[int, 
     Returns:
         Dict[int, int]: A mapping of old craft IDs to new craft IDs.
     """
+    default_characters_copy = deepcopy(default_characters)
     old_craft_id_to_new_craft_id = {}
     for idx, character in enumerate(characters):
-        default_character = default_characters[idx]
+        default_character = default_characters_copy[idx]
         for idx, old_craft in enumerate(default_character.fixed_normal_crafts):
             old_craft_id_to_new_craft_id[old_craft.base_craft_id] = character.fixed_normal_crafts[idx].base_craft_id
         for idx, old_craft in enumerate(default_character.fixed_scrafts):
             old_craft_id_to_new_craft_id[old_craft.base_craft_id] = character.fixed_scrafts[idx].base_craft_id
         for idx, old_craft in enumerate(default_character.upgradable_normal_crafts):
             old_craft_id_to_new_craft_id[old_craft.base_craft_id] = character.upgradable_normal_crafts[idx].base_craft_id
+            old_craft_id_to_new_craft_id[old_craft.upgraded_craft_id] = character.upgradable_normal_crafts[idx].upgraded_craft_id
         for idx, old_craft in enumerate(default_character.upgradable_scrafts):
             old_craft_id_to_new_craft_id[old_craft.base_craft_id] = character.upgradable_scrafts[idx].base_craft_id
+            old_craft_id_to_new_craft_id[old_craft.upgraded_craft_id] = character.upgradable_scrafts[idx].upgraded_craft_id
     return old_craft_id_to_new_craft_id
 
 def shuffle_crafts_main(options: TitsThe3rdOptions, rng: Random) -> tuple[Optional[Dict[str, List[int]]], Optional[Dict[int, int]]]:

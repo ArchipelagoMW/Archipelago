@@ -25,7 +25,16 @@ from .items import (
 )
 from .tables.location_list import craft_locations, location_table, default_sealing_stone_quartz
 from .locations import create_locations, location_groups
-from .options import CharacterStartingQuartzOptions, ChestItemPoolOptions, SealingStoneCharactersOptions, StartingCharactersOptions, TitsThe3rdOptions, CraftShuffle, CraftPlacement
+from .options import (
+    CharacterStartingQuartzOptions,
+    ChestItemPoolOptions,
+    SealingStoneCharactersOptions,
+    StartingCharactersOptions,
+    TitsThe3rdOptions,
+    CraftShuffle,
+    CraftPlacement,
+    VictoryConditionOption,
+)
 from .regions import create_regions, connect_regions
 from .settings import TitsThe3rdSettings
 from .web import TitsThe3rdWeb
@@ -124,14 +133,20 @@ class TitsThe3rdWorld(World):
             for character in character_list:
                 if character in default_character_to_location:
                     location_name = default_character_to_location[character]
+                    if self.options.name_spoiler_option:
+                        real_location_name = scrub_spoiler_data(location_name)
+                    else:
+                        real_location_name = location_name
                     character_item = self.create_item(character)
-                    self.multiworld.get_location(location_name, self.player).place_locked_item(character_item)
+                    self.multiworld.get_location(real_location_name, self.player).place_locked_item(character_item)
                     sealing_stone_locations.remove(location_name)
                 else:
                     leftover_characters.append(character)
 
             for character in leftover_characters:
                 location_name = sealing_stone_locations.pop()
+                if self.options.name_spoiler_option:
+                    location_name = scrub_spoiler_data(location_name)
                 character_item = self.create_item(character)
                 self.multiworld.get_location(location_name, self.player).place_locked_item(character_item)
         # Shuffle
@@ -140,6 +155,8 @@ class TitsThe3rdWorld(World):
             self.multiworld.random.shuffle(sealing_stone_locations)
             for character in character_list:
                 location_name = sealing_stone_locations.pop()
+                if self.options.name_spoiler_option:
+                    location_name = scrub_spoiler_data(location_name)
                 character_item = self.create_item(character)
                 self.multiworld.get_location(location_name, self.player).place_locked_item(character_item)
 
@@ -157,6 +174,8 @@ class TitsThe3rdWorld(World):
             None
         """
         for location_name in location_names:
+            if self.options.name_spoiler_option:
+                location_name = scrub_spoiler_data(location_name)
             self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item(item_name))
 
     def _set_default_craft_locations(self) -> None:
@@ -184,12 +203,6 @@ class TitsThe3rdWorld(World):
         self._set_default_craft_locations_for_character(location_names=location_groups["Renne Crafts"], item_name=ItemName.renne_progressive_craft)
 
     def pre_fill(self) -> None:
-        # For now hard code beating Bennu as victory
-        chapter_1_item = self.create_item(ItemName.bennu_defeat)
-        chapter_2_item = self.create_item(ItemName.kloe_rescue)
-        # TODO: change victory condition
-        self.multiworld.get_location(LocationName.chapter1_boss_defeated, self.player).place_locked_item(chapter_1_item)
-        self.multiworld.get_location(LocationName.chapter2_boss_defeated, self.player).place_locked_item(chapter_2_item)
         # Crafts
         if self.options.craft_placement == CraftPlacement.option_default and self.options.craft_shuffle:
             # Crafts are at their default locations, but which craft is given is randomized.
@@ -204,11 +217,22 @@ class TitsThe3rdWorld(World):
             remaining_craft_locations = list(craft_locations.keys())
             for item in craft_items:
                 location_name = self.multiworld.random.choice(remaining_craft_locations)
-                self.multiworld.get_location(location_name, self.player).place_locked_item(item)
+                if self.options.name_spoiler_option:
+                    real_location_name = scrub_spoiler_data(location_name)
+                else:
+                    real_location_name = location_name
+                self.multiworld.get_location(real_location_name, self.player).place_locked_item(item)
                 remaining_craft_locations.remove(location_name)
 
     def create_items(self) -> None:
         """Define items for Trails in the Sky the 3rd AP"""
+        # For now hard code beating Bennu as victory
+        chapter_1_item = self.create_item(ItemName.chapter_1_cleared)
+        chapter_2_item = self.create_item(ItemName.chapter_2_cleared)
+        # TODO: change victory condition
+        self.multiworld.get_location(LocationName.chapter1_boss_defeated, self.player).place_locked_item(chapter_1_item)
+        self.multiworld.get_location(LocationName.chapter2_boss_defeated, self.player).place_locked_item(chapter_2_item)
+
         itempool = deepcopy(default_item_pool)
 
         # Setup all the playable characters stuffs
@@ -221,12 +245,16 @@ class TitsThe3rdWorld(World):
         # Vanilla
         elif self.options.character_starting_quartz_options == CharacterStartingQuartzOptions.option_vanilla:
             for location_name, quartz_name in default_sealing_stone_quartz.items():
+                if self.options.name_spoiler_option:
+                    location_name = scrub_spoiler_data(location_name)
                 quartz_item = self.create_item(quartz_name)
                 self.multiworld.get_location(location_name, self.player).place_locked_item(quartz_item)
         # Random Quartz
         elif self.options.character_starting_quartz_options == CharacterStartingQuartzOptions.option_random_quartz:
             quartz_list = list(quartz_table.keys())
             for location_name in default_sealing_stone_quartz:
+                if self.options.name_spoiler_option:
+                    location_name = scrub_spoiler_data(location_name)
                 quartz_item = self.create_item(self.multiworld.random.choice(quartz_list))
                 self.multiworld.get_location(location_name, self.player).place_locked_item(quartz_item)
         # Else all random (NOP): We just let the filler handler further down handle this
@@ -248,9 +276,19 @@ class TitsThe3rdWorld(World):
             for _ in range(quantity):
                 self.multiworld.itempool.append(self.create_item(item_name))
 
+    def get_victory_item_and_location(self):
+        if self.options.victory_condition_option == VictoryConditionOption.option_chapter_1:
+            victory_item = ItemName.chapter_1_cleared
+            victory_location = LocationName.chapter1_boss_defeated
+        else:
+            victory_item = ItemName.chapter_2_cleared
+            victory_location = LocationName.chapter2_boss_defeated
+
+        return victory_item, victory_location
+
     def set_rules(self) -> None:
         """Set remaining rules."""
-        self.multiworld.completion_condition[self.player] = lambda _: True
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(self.get_victory_item_and_location()[0], self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         # Note: if craft shuffle is on, event get crafts will be a random progressive craft.
@@ -263,6 +301,7 @@ class TitsThe3rdWorld(World):
             "old_craft_id_to_new_craft_id": old_craft_id_to_new_craft_id,
             "default_event_crafts": self.options.craft_placement == CraftPlacement.option_default and not self.options.craft_shuffle,
             "default_crfget": self.options.craft_placement == CraftPlacement.option_default and not self.options.craft_shuffle,
+            "victory_location": self.get_victory_item_and_location()[1],
         }
 
     def get_filler_item_name(self):

@@ -158,11 +158,11 @@ def write_item_text_table(output_path: Path, item_text_table: list):
         item_text_stream = io.BytesIO()
 
         item_data_stream.write(int.to_bytes(item_header_length + item_data_stream.tell() + 4, 2, "little"))
-        item_text_stream.write(item["item_name"].encode("shift-jis"))
+        item_text_stream.write(item["item_name"].encode("shift-jis", errors="replace"))
         item_text_stream.write(b"\0")
 
         item_data_stream.write(int.to_bytes(item_header_length + item_data_stream.tell() + 2 + item_text_stream.tell(), 2, "little"))
-        item_text_stream.write(item["item_desc"].encode("shift-jis"))
+        item_text_stream.write(item["item_desc"].encode("shift-jis", errors="replace"))
         item_text_stream.write(b"\0")
 
         item_text_stream.seek(0)

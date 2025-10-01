@@ -527,7 +527,6 @@ class TitsThe3rdMemoryIO():
         address: int = self.get_scena_offset(b"AP Item Send Notification")
         if not address:
             return False
-        logger.info(f"Sending Item {item_id}")
         self.tits_the_3rd_mem.write_bytes(address + 36, item_id.to_bytes(2, "little"), 2)
         self.call_scena(self.scena_functions["send_item"])
         return True

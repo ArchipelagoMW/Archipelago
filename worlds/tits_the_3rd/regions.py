@@ -153,7 +153,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
         player,
         RegionName.jade_corridor_expansion_area_2,
         RegionName.day_grancel_south,
-        lambda state: state.has(ItemName.day_grancel_south_unlock, player, 1)
+        lambda state: state.has_all([ItemName.day_grancel_south_unlock, ItemName.chapter_1_cleared], player)
     )
     connect_region(
         multiworld,
@@ -280,7 +280,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
         player,
         RegionName.jade_corridor_expansion_area_2,
         RegionName.night_grancel_south,
-        lambda state: state.has(ItemName.night_grancel_south_unlock, player, 1)
+        lambda state: state.has_all([ItemName.night_grancel_south_unlock, ItemName.chapter_1_cleared], player)
     )
     connect_region(
         multiworld,
