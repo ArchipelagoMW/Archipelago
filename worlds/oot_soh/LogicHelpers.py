@@ -516,7 +516,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies, co
              (can_use(Items.NUTS, state, world) or hookshot_or_boomerang(state, world) or can_standing_shield(state, world)))
 
     if enemy == Enemies.DEAD_HAND:
-        return can_use_sword(state, world) or (can_use(Items.STICKS, state, world) and False) # replace False with ctx->GetTrickOption(RT_BOTW_CHILD_DEADHAND));
+        return can_use_sword(state, world) or (can_use(Items.STICKS, state, world) and False) #TODO replace False with ctx->GetTrickOption(RT_BOTW_CHILD_DEADHAND));
 
     if enemy == Enemies.WITHERED_DEKU_BABA:
         return can_attack(state, world) or can_use(Items.BOOMERANG, state, world)
@@ -608,7 +608,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies, co
     if enemy == Enemies.MORPHA:
         return has_boss_soul(Items.MORPHAS_SOUL, state, world) and \
                (can_use(Items.HOOKSHOT, state, world) or \
-                (False and has_item("Bronze Scale", state, world))) and \
+                (False and has_item(Items.PROGRESSIVE_SCALE, state, world, count=1))) and \
                (can_use_sword(state, world) or can_use(Items.MEGATON_HAMMER, state, world)) #TODO replace False with ctx->get_trick_option(RT_WATER_MORPHA_WITHOUT_HOOKSHOT)
     if enemy == Enemies.BONGO_BONGO:
         return has_boss_soul(Items.BONGO_BONGOS_SOUL, state, world) and \
