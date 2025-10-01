@@ -338,17 +338,16 @@ def can_get_nighttime_gs(state: CollectionState, world: "SohWorld") -> bool:
 
 def can_break_pots(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can break pots for items."""
-    return (can_jump_slash(state, world) or 
-           can_use(Items.BOOMERANG, state, world) or
-           has_explosives(state, world) or
-           can_use(Items.PROGRESSIVE_HOOKSHOT, state, world))
+    return True
 
 
 def can_break_crates(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can break crates."""
-    return (can_jump_slash(state, world) or 
-            has_explosives(state, world))
+    return True
 
+def can_break_small_crates(state: CollectionState, world: "SohWorld") -> bool:
+    """Check if Link can break small crates."""
+    return True
 
 def can_hit_eye_targets(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can hit eye switches/targets."""
@@ -360,12 +359,12 @@ def can_hit_eye_targets(state: CollectionState, world: "SohWorld") -> bool:
 
 def can_stun_deku(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can stun Deku Scrubs."""
-    return can_attack(state, world) or can_use(Items.DEKU_NUT_BAG, state, world) or can_shield(state, world) # Is this right for nuts?
+    return (can_attack(state, world) or can_use(Items.DEKU_NUT_BAG, state, world) or can_reflect_nuts(state, world))
 
 
 def can_reflect_nuts(state: CollectionState, world: "SohWorld") -> bool:
     """Check if Link can reflect Deku Nuts back at enemies."""
-    return can_stun_deku(state, world)
+    return (can_use(Items.DEKU_SHIELD, state, world) or (is_adult(state, world) and has_item(Items.HYLIAN_SHIELD, state, world)))
 
 
 def has_fire_source_with_torch(state: CollectionState, world: "SohWorld") -> bool:
@@ -378,13 +377,13 @@ def has_fire_source(state: CollectionState, world: "SohWorld") -> bool:
     return (can_use(Items.DINS_FIRE, state, world) or 
             can_use(Items.FIRE_ARROW, state, world))
 
+def can_jump_slash_except_hammer(state: CollectionState, world: "SohWorld") -> bool:
+    """Check if Link can perform a jump slash with any sword."""
+    return (can_use(Items.STICKS, state, world) or can_use_sword(state, world))
 
 def can_jump_slash(state: CollectionState, world: "SohWorld") -> bool:
-    """Check if Link can perform a jump slash with any sword."""
-    return (can_use(Items.KOKIRI_SWORD, state, world) or 
-            can_use(Items.MASTER_SWORD, state, world) or 
-            can_use(Items.BIGGORONS_SWORD, state, world) or
-            can_use(Items.MEGATON_HAMMER, state, world))  # Hammer can substitute for sword in some cases
+    """Check if Link can perform a jump slash at all"""
+    return (can_jump_slash_except_hammer(state, world) or can_use(Items.MEGATON_HAMMER, state, world))
 
 def call_gossip_fairy_except_suns(state: CollectionState, world: "SohWorld") -> bool:
     return (can_use(Items.ZELDAS_LULLABY, state, world) or
@@ -396,13 +395,12 @@ def call_gossip_fairy(state: CollectionState, world: "SohWorld") -> bool:
             can_use(Items.SUNS_SONG, state, world))
 
 def can_break_lower_hives(state: CollectionState, world: "SohWorld") -> bool:
-    return can_break_upper_hives(state, world) or can_use(Items.PROGRESSIVE_BOMB_BAG, state, world)
+    return can_break_upper_beehives(state, world) or can_use(Items.PROGRESSIVE_BOMB_BAG, state, world)
 
-def can_break_upper_hives(state: CollectionState, world: "SohWorld") -> bool:
-    return (can_use(Items.PROGRESSIVE_HOOKSHOT, state, world) or
-            can_use(Items.BOOMERANG, state, world) or
-            (can_do_trick("Beehives With Bombchus", state, world)
-             and can_use(Items.PROGRESSIVE_BOMBCHU, state, world)))
+def can_break_upper_beehives(state: CollectionState, world: "SohWorld") -> bool:
+    return (hookshot_or_boomerang(state, world) or
+            (can_do_trick("Beehives With Bombchus", state, world) and can_use(Items.PROGRESSIVE_BOMBCHU, state, world)) and 
+            (False and (can_use(Items.PROGRESSIVE_BOW, state, world) or can_use(Items.PROGRESSIVE_SLINGSHOT, state, world))))
 
 def can_open_storms_grotto(state: CollectionState, world: "SohWorld") -> bool:
     return (can_use(Items.SONG_OF_STORMS, state, world) and
@@ -415,32 +413,38 @@ def can_live(state: CollectionState, world: "SohWorld") -> bool:
 # BELOW IS AI SLOP
 # Based on C++ Logic
 
-def can_hit_switch(state: CollectionState, world: "SohWorld", distance: str = "close",
-                   in_water: bool = False) -> bool:
-    if distance == "close":
-        return (can_jump_slash(state, world) or
-                has_explosives(state, world) or
-                can_use(Items.BOOMERANG, state, world) or
-                can_use(Items.PROGRESSIVE_HOOKSHOT, state, world))
+def can_hit_switch(distance: EnemyDistance, in_water: bool, state: CollectionState, world: "SohWorld") -> bool:
+    hit = False
+    
+    # doesn't really need to be checked. Doesn't do anything
+    # if(distance.value == EnemyDistance.CLOSE.value):
+    #     pass
+    
+    if(distance.value <= EnemyDistance.SHORT_JUMPSLASH.value):
+        hit = can_use(Items.KOKIRI_SWORD, state, world) or can_use(Items.MEGATON_HAMMER, state, world)
 
-    elif distance in ["short_jumpslash", "master_sword_jumpslash", "long_jumpslash"]:
-        return can_jump_slash(state, world)
+    if(distance.value <= EnemyDistance.MASTER_SWORD_JUMPSLASH.value):
+        hit = hit or can_use(Items.MASTER_SWORD, state, world)
 
-    elif distance == "bomb_throw":
-        return has_explosives(state, world)
+    if(distance.value <= EnemyDistance.LONG_JUMPSLASH.value):
+        hit = hit or can_use(Items.BIGGORONS_SWORD, state, world) or can_use(Items.STICKS, state, world)
 
-    elif distance == "boomerang":
-        return can_use(Items.BOOMERANG, state, world)
+    if(distance.value <= EnemyDistance.BOMB_THROW.value):
+        hit = hit or (not in_water and can_use(Items.BOMB_BAG, state, world))
+        
+    if(distance.value <= EnemyDistance.BOOMERANG.value):
+        hit = hit or can_use(Items.BOOMERANG, state, world)
 
-    elif distance in ["hookshot", "longshot"]:
-        return can_use(Items.PROGRESSIVE_HOOKSHOT, state, world)
+    if(distance.value <= EnemyDistance.HOOKSHOT.value):
+        hit = hit or has_item(Items.PROGRESSIVE_HOOKSHOT, state, world) or can_use(Items.BOMBCHUS_5, state, world)
 
-    elif distance == "far":
-        return (can_use(Items.PROGRESSIVE_BOW, state, world) or
-                can_use(Items.PROGRESSIVE_HOOKSHOT, state, world) or
-                has_explosives(state, world))
+    if(distance.value <= EnemyDistance.LONGSHOT.value):
+        hit = hit or has_item(Items.PROGRESSIVE_HOOKSHOT, state, world, 2)
 
-    return False
+    if(distance.value <= EnemyDistance.FAR.value):
+        hit = hit or can_use(Items.PROGRESSIVE_SLINGSHOT, state, world) or can_use(Items.PROGRESSIVE_BOW, state, world)
+
+    return hit
 
 def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enum, combat_range: Enum = EnemyDistance.CLOSE,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
@@ -702,3 +706,102 @@ def can_detonate_upright_bomb_flower(state: CollectionState, world: "SohWorld") 
                 ))
 
             ) 
+
+def ocarina_buttons(state: CollectionState, world: "SohWorld") -> int:
+    return (has_item(Items.OCARINA_A_BUTTON, state, world) + has_item(Items.OCARINA_CLEFT_BUTTON, state, world) + has_item(Items.OCARINA_CRIGHT_BUTTON, state, world) +
+        has_item(Items.OCARINA_CUP_BUTTON, state, world) + has_item(Items.OCARINA_CDOWN_BUTTON, state, world))
+
+def can_spawn_soil_skull(state: CollectionState, world: "SohWorld") -> bool:
+    return (is_child(state, world) and can_use(Items.BOTTLE_WITH_BUGS, state, world))
+
+def dungeon_count(state: CollectionState, world: "SohWorld") -> int:
+    return (has_item(Events.CLEARED_DEKU_TREE, state, world) + has_item(Events.CLEARED_DODONGOS_CAVERN, state, world) + has_item(Events.CLEARED_JABU_JABUS_BELLY, state, world) +
+            has_item(Events.CLEARED_FOREST_TEMPLE, state, world) + has_item(Events.CLEARED_FIRE_TEMPLE, state, world) + has_item(Events.CLEARED_WATER_TEMPLE, state, world) +
+            has_item(Events.CLEARED_SPIRIT_TEMPLE, state, world) + has_item(Events.CLEARED_SHADOW_TEMPLE, state, world))
+
+def stone_count(state: CollectionState, world: "SohWorld") -> int:
+    return (has_item(Items.KOKIRIS_EMERALD, state, world) + has_item(Items.GORONS_RUBY, state, world) + has_item(Items.ZORAS_SAPPHIRE, state, world))
+
+def medallion_count(state: CollectionState, world: "SohWorld") -> int:
+    return (has_item(Items.FOREST_MEDALLION, state, world) + has_item(Items.FIRE_MEDALLION, state, world) + has_item(Items.WATER_MEDALLION, state, world) + 
+            has_item(Items.SPIRIT_MEDALLION, state, world) + has_item(Items.SHADOW_MEDALLION, state, world) + has_item(Items.LIGHT_MEDALLION, state, world))
+
+def fire_timer(state: CollectionState, world: "SohWorld") -> int:
+    return 255 if can_use(Items.GORON_TUNIC, state, world) else ((hearts(state, world) * 8) if can_do_trick("Fewer Tunic Requirements", state, world) else 0)
+
+def water_timer(state: CollectionState, world: "SohWorld") -> int:
+    return 255 if can_use(Items.ZORA_TUNIC, state, world) else ((hearts(state, world) * 8) if can_do_trick("Fewer Tunic Requirements", state, world) else 0)
+
+
+def hearts(state: CollectionState, world: "SohWorld") -> int:
+    # Hard to know exactly how many hearts they have but we can guess. Unless the client sends us the heart count.
+    # Guess they start with 3; add total heart containers; add total pieces of heart / 4
+    # They also divide their value by 16. Not 100% sure why.
+    return (3 + state.count(Items.HEART_CONTAINER.value, world.player) + (state.count(Items.PIECE_OF_HEART.value, world.player) / 4)) / 16
+
+def can_open_bomb_grotto(state: CollectionState, world: "SohWorld") -> bool:
+    return blast_or_smash(state, world) and (has_item(Items.STONE_OF_AGONY, state, world) or can_do_trick("Grottos Without Agony", state, world))
+
+def trade_quest_step(item: Items, state: CollectionState, world: "SohWorld") -> bool:
+    if (bool(world.options.shuffle_adult_trade_items.value)):
+        return False
+    
+    hasState = False
+
+    if (item == Items.POCKET_EGG):
+        hasState = hasState or has_item(Items.POCKET_EGG, state, world)
+
+    if (item == Items.COJIRO):
+        hasState = hasState or has_item(Items.COJIRO, state, world)
+
+    if (item == Items.ODD_MUSHROOM):
+        hasState = hasState or has_item(Items.ODD_MUSHROOM, state, world)
+
+    if (item == Items.ODD_POTION):
+        hasState = hasState or has_item(Items.ODD_POTION, state, world)
+
+    if (item == Items.POACHERS_SAW):
+        hasState = hasState or has_item(Items.POACHERS_SAW, state, world)
+
+    if (item == Items.BROKEN_GORONS_SWORD):
+        hasState = hasState or has_item(Items.BROKEN_GORONS_SWORD, state, world)
+    
+    if (item == Items.PRESCRIPTION):
+        hasState = hasState or has_item(Items.PRESCRIPTION, state, world)
+
+    if (item == Items.WORLDS_FINEST_EYEDROPS):
+        hasState = hasState or has_item(Items.WORLDS_FINEST_EYEDROPS, state, world)
+
+    if (item == Items.CLAIM_CHECK):
+        hasState = hasState or has_item(Items.CLAIM_CHECK, state, world)
+
+    return hasState
+
+def can_build_rainbow_bridge(state: CollectionState, world: "SohWorld") -> bool:
+    return (world.options.rainbow_bridge.value == 1 or
+            (world.options.rainbow_bridge.value == 0 and has_item(Items.SHADOW_MEDALLION, state, world) and has_item(Items.SPIRIT_MEDALLION, state, world) and can_use(Items.LIGHT_ARROW, state, world)) or
+            (world.options.rainbow_bridge.value == 2 and (stone_count(state, world) >= world.options.rainbow_bridge_stones_required.value)) or
+            (world.options.rainbow_bridge.value == 3 and (medallion_count(state, world) >= world.options.rainbow_bridge_medallions_required.value)) or
+            (world.options.rainbow_bridge.value == 4 and (stone_count(state, world) + medallion_count(state, world) >= world.options.rainbow_bridge_dungeon_rewards_required.value)) or
+            (world.options.rainbow_bridge.value == 5 and (dungeon_count() >= world.options.rainbow_bridge_dungeons_required.value)) or
+            (world.options.rainbow_bridge.value == 6 and (get_gs_count(state, world) >= world.options.rainbow_bridge_skull_tokens_required.value))
+            (world.options.rainbow_bridge.value == 7 and (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value))))
+
+# This version includes Greg Wildcard
+# def can_build_rainbow_bridge(state: CollectionState, world: "SohWorld") -> bool:
+#     return (world.options.rainbow_bridge.value == 1 or
+#             (world.options.rainbow_bridge.value == 0 and has_item(Items.SHADOW_MEDALLION, state, world) and has_item(Items.SPIRIT_MEDALLION, state, world) and can_use(Items.LIGHT_ARROW, state, world)) or
+#             (world.options.rainbow_bridge.value == 2 and (stone_count(state, world) + (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value)) >= world.options.rainbow_bridge_stones_required.value)) or
+#             (world.options.rainbow_bridge.value == 3 and (medallion_count(state, world) + (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value)) >= world.options.rainbow_bridge_medallions_required.value)) or
+#             (world.options.rainbow_bridge.value == 4 and (stone_count(state, world) + medallion_count(state, world) + (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value)) >= world.options.rainbow_bridge_dungeon_rewards_required.value)) or
+#             (world.options.rainbow_bridge.value == 5 and (dungeon_count() + (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value)) >= world.options.rainbow_bridge_dungeons_required.value)) or
+#             (world.options.rainbow_bridge.value == 6 and (get_gs_count(state, world) >= world.options.rainbow_bridge_skull_tokens_required.value))
+#             (world.options.rainbow_bridge.value == 7 and (has_item(Items.GREG_THE_GREEN_RUPEE) and bool(world.options.rainbow_bridge_greg_reward.value))))
+
+def get_gs_count(state: CollectionState, world: "SohWorld") -> int:
+    return state.count(Items.GOLD_SKULLTULA_TOKEN, world.player)
+
+# We don't have any options related to this yet
+# def can_trigger_lacs(state: CollectionState, world: "SohWorld") -> bool:
+#     return ()
+
