@@ -615,7 +615,7 @@ class StartingAge(Choice):
     Child Link starts in Link's House in Kokiri Forest.
     Adult Link starts in the Temple of Time.
 
-    This is hidden for now until it's implemented mod-side.
+    TODO: This is hidden for now until it's implemented mod-side.
     """
     display_name = "Starting Age"
     option_child = 0

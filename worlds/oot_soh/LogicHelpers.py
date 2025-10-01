@@ -340,7 +340,7 @@ def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     parent_region = bundle[1]
     world = bundle[2]
     # Todo use is_child or is_adult based on starting age setting
-    return is_child(bundle)
+    return (world.options.starting_age == 'child' and is_child(bundle)) or (world.options.starting_age == 'adult' and is_adult(bundle))
 
 
 def can_damage(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
