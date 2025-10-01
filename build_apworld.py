@@ -77,7 +77,8 @@ def main(
         zip_path,
         "w",
         zipfile.ZIP_DEFLATED,
-        compresslevel=9
+        compresslevel=9,
+        strict_timestamps=False
     ) as zf:
         for path in input_path.rglob("*.*"):
             excluded = False
