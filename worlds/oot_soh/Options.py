@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, Range, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Toggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility
 
 class ClosedForest(Choice):
     """
@@ -614,11 +614,14 @@ class StartingAge(Choice):
     Decide whether to start as child Link or adult Link.
     Child Link starts in Link's House in Kokiri Forest.
     Adult Link starts in the Temple of Time.
+
+    This is hidden for now until it's implemented mod-side.
     """
     display_name = "Starting Age"
     option_child = 0
     option_adult = 1
     default = 0
+    visibility = Visibility.none
 
 
 @dataclass
