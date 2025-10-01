@@ -1,5 +1,4 @@
 import json
-import pickle
 import typing
 from uuid import UUID
 
