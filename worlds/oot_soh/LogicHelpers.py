@@ -430,25 +430,25 @@ def can_jump_slash_except_hammer(state: CollectionState, world: "SohWorld"):
     return can_use(Items.KOKIRI_SWORD, state, world) or can_use(Items.MASTER_SWORD, state, world) or can_use(Items.BIGGORONS_SWORD, state, world)
 
 
-def can_hit_switch(state: CollectionState, world: "SohWorld", distance: EnemyDistance = EnemyDistance.CLOSE,
+def can_hit_switch(state: CollectionState, world: "SohWorld", distance: CombatRanges = CombatRanges.CLOSE,
                    in_water: bool = False) -> bool:
-    if distance <= EnemyDistance.SHORT_JUMPSLASH and (can_use(Items.KOKIRI_SWORD, state, world) or can_use(Items.MEGATON_HAMMER, state, world)):
+    if distance <= CombatRanges.SHORT_JUMPSLASH and (can_use(Items.KOKIRI_SWORD, state, world) or can_use(Items.MEGATON_HAMMER, state, world)):
         return True
-    if distance <= EnemyDistance.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD, state, world):
+    if distance <= CombatRanges.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD, state, world):
         return True
-    if distance <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, state, world) or can_use(Items.STICKS, state, world)):
+    if distance <= CombatRanges.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, state, world) or can_use(Items.STICKS, state, world)):
         return True
-    if distance <= EnemyDistance.BOMB_THROW and not in_water and can_use(Items.BOMB_BAG, state, world):
+    if distance <= CombatRanges.BOMB_THROW and not in_water and can_use(Items.BOMB_BAG, state, world):
         return True
-    if distance <= EnemyDistance.HOOKSHOT and (can_use(Items.HOOKSHOT, state, world) or can_use(Items.BOMBCHUS_5, state, world)):
+    if distance <= CombatRanges.HOOKSHOT and (can_use(Items.HOOKSHOT, state, world) or can_use(Items.BOMBCHUS_5, state, world)):
         return True
-    if distance <= EnemyDistance.LONGSHOT and can_use(Items.LONGSHOT, state, world):
+    if distance <= CombatRanges.LONGSHOT and can_use(Items.LONGSHOT, state, world):
         return True
-    if distance <= EnemyDistance.FAR and (can_use(Items.FAIRY_SLINGSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world)):
+    if distance <= CombatRanges.FAR and (can_use(Items.FAIRY_SLINGSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world)):
         return True
     return False
 
-def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies, combat_range: EnemyDistance = EnemyDistance.CLOSE,
+def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies, combat_range: CombatRanges = CombatRanges.CLOSE,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
     Check if Link can kill a specific enemy at a given combat range.
@@ -464,22 +464,22 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies, co
         in_water: Whether the fight is underwater
     """
     # Define what weapons work at each range
-    def can_hit_at_range(range_type: EnemyDistance) -> bool:
-        if range_type == EnemyDistance.CLOSE and can_use(Items.MEGATON_HAMMER, state, world):
+    def can_hit_at_range(range_type: CombatRanges) -> bool:
+        if range_type == CombatRanges.CLOSE and can_use(Items.MEGATON_HAMMER, state, world):
             return True
-        if range_type <= EnemyDistance.SHORT_JUMPSLASH and can_use(Items.KOKIRI_SWORD, state, world):
+        if range_type <= CombatRanges.SHORT_JUMPSLASH and can_use(Items.KOKIRI_SWORD, state, world):
             return True
-        if range_type <= EnemyDistance.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD, state, world):
+        if range_type <= CombatRanges.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD, state, world):
             return True
-        if range_type <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, state, world) or can_use(Items.STICKS, state, world)):
+        if range_type <= CombatRanges.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, state, world) or can_use(Items.STICKS, state, world)):
             return True
-        if range_type <= EnemyDistance.BOMB_THROW and (not in_water and can_use(Items.BOMB_BAG, state, world)):
+        if range_type <= CombatRanges.BOMB_THROW and (not in_water and can_use(Items.BOMB_BAG, state, world)):
             return True
-        if range_type <= EnemyDistance.HOOKSHOT and (can_use(Items.HOOKSHOT, state, world) or (wall_or_floor and can_use(Items.BOMBCHUS_5, state, world))):
+        if range_type <= CombatRanges.HOOKSHOT and (can_use(Items.HOOKSHOT, state, world) or (wall_or_floor and can_use(Items.BOMBCHUS_5, state, world))):
             return True
-        if range_type <= EnemyDistance.LONGSHOT and can_use(Items.LONGSHOT, state, world):
+        if range_type <= CombatRanges.LONGSHOT and can_use(Items.LONGSHOT, state, world):
             return True
-        if range_type <= EnemyDistance.FAR and (can_use(Items.FAIRY_SLINGSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world)):
+        if range_type <= CombatRanges.FAR and (can_use(Items.FAIRY_SLINGSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world)):
             return True
         return False
 
@@ -489,11 +489,11 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies, co
         return False
 
     if enemy == Enemies.GOLD_SKULLTULA:
-        return can_hit_at_range(combat_range) or (combat_range <= EnemyDistance.LONGSHOT and (wall_or_floor and can_use(Items.BOMBCHUS_5, state, world))) or \
-            (combat_range <= EnemyDistance.BOOMERANG and can_use(Items.DINS_FIRE, state, world))
+        return can_hit_at_range(combat_range) or (combat_range <= CombatRanges.LONGSHOT and (wall_or_floor and can_use(Items.BOMBCHUS_5, state, world))) or \
+            (combat_range <= CombatRanges.BOOMERANG and can_use(Items.DINS_FIRE, state, world))
 
     if enemy == Enemies.BIG_SKULLTULA:
-        return can_hit_at_range(combat_range) or (combat_range <= EnemyDistance.BOOMERANG and can_use(Items.DINS_FIRE, state, world))
+        return can_hit_at_range(combat_range) or (combat_range <= CombatRanges.BOOMERANG and can_use(Items.DINS_FIRE, state, world))
 
     if enemy in [Enemies.GOHMA_LARVA, Enemies.MAD_SCRUB, Enemies.DEKU_BABA]:
         return can_attack(state, world)
@@ -507,8 +507,8 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies, co
             or can_use(Items.FAIRY_SLINGSHOT, state, world)
 
     if enemy in [Enemies.KEESE, Enemies.FIRE_KEESE]:
-        return can_hit_at_range(combat_range) or (combat_range == EnemyDistance.CLOSE and can_use(Items.KOKIRI_SWORD, state, world)) \
-            or (combat_range <= EnemyDistance.BOOMERANG and can_use(Items.BOOMERANG, state, world))
+        return can_hit_at_range(combat_range) or (combat_range == CombatRanges.CLOSE and can_use(Items.KOKIRI_SWORD, state, world)) \
+            or (combat_range <= CombatRanges.BOOMERANG and can_use(Items.BOOMERANG, state, world))
 
     if enemy in Enemies.BLUE_BUBBLE:
         return blast_or_smash(state, world) or can_use(Items.PROGRESSIVE_BOW, state, world) or \
@@ -525,7 +525,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies, co
         return can_use_sword(state, world) or (can_use(Items.STICKS, state, world) and False) #TODO replace False with dead hand child option
 
     if enemy == Enemies.STALFOS:
-        return can_hit_at_range(combat_range) or (combat_range == EnemyDistance.CLOSE and can_use(Items.KOKIRI_SWORD, state, world))
+        return can_hit_at_range(combat_range) or (combat_range == CombatRanges.CLOSE and can_use(Items.KOKIRI_SWORD, state, world))
 
     if enemy == Enemies.IRON_KNUCKLE:
         return (can_use_sword(state, world) or
@@ -585,7 +585,7 @@ def can_kill_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies, co
                 can_use(Items.DINS_FIRE, state, world)
 
     if enemy == Enemies.STINGER:
-        return can_hit_at_range(combat_range) or (combat_range == EnemyDistance.CLOSE and can_use(Items.KOKIRI_SWORD, state, world))
+        return can_hit_at_range(combat_range) or (combat_range == CombatRanges.CLOSE and can_use(Items.KOKIRI_SWORD, state, world))
 
     if enemy == Enemies.BIG_OCTO:
         # If chasing octo is annoying but with rolls you can catch him, and you need rang to get into this room
