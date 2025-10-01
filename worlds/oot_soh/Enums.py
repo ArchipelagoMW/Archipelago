@@ -1067,8 +1067,8 @@ class Locations(str, Enum):
     ZR_OPEN_GROTTO_CHEST = "ZR Open Grotto Chest"
     ZR_FROGS_IN_THE_RAIN = "ZR Frogs in the Rain"
     ZR_FROGS_OCARINA_GAME = "ZR Frogs Ocarina Game"
-    ZR_NEAR_OPEN_GROTTO_FREESTANDING_PO_H = "ZR Near Open Grotto Freestanding PoH"
-    ZR_NEAR_DOMAIN_FREESTANDING_PO_H = "ZR Near Domain Freestanding PoH"
+    ZR_NEAR_OPEN_GROTTO_FREESTANDING_POH = "ZR Near Open Grotto Freestanding PoH"
+    ZR_NEAR_DOMAIN_FREESTANDING_POH = "ZR Near Domain Freestanding PoH"
     ZD_DIVING_MINIGAME = "ZD Diving Minigame"
     ZD_CHEST = "ZD Chest"
     ZD_KING_ZORA_THAWED = "ZD King Zora Thawed"
@@ -3411,7 +3411,7 @@ class Enemies(str, Enum):
     OCTOROK = "octorok"
     
 @total_ordering
-class CombatRanges(str, Enum):
+class EnemyDistance(str, Enum):
     CLOSE = "close"
     SHORT_JUMPSLASH = "short_jumpslash"
     MASTER_SWORD_JUMPSLASH = "master_sword_jumpslash"
@@ -3423,7 +3423,7 @@ class CombatRanges(str, Enum):
     FAR = "far"
     
     def __lt__(self, other):
-        vals = [e for e in CombatRanges]
+        vals = [e for e in EnemyDistance]
         return vals.index(self) < vals.index(other)
 
 class EventLocations(str, Enum):
