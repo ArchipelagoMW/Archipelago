@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class TestGenerateYamlTemplates(unittest.TestCase):
     old_world_types: Dict[str, Type["World"]]
-    old_testable_worlds: Dict[str, TestableWorld]
+    old_testable_worlds: Dict[str, "TestableWorld"]
 
     def setUp(self) -> None:
         import worlds.AutoWorld
