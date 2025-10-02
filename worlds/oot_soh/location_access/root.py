@@ -20,9 +20,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Root
     # Events
     add_events(Regions.KOKIRI_FOREST, world, [
-        (EventLocations.ROOT_AMMO_DROP, Events.AMMO_CAN_DROP, lambda bundle: True), # Not sure why but ship has this set to true immediately, so this mirrors that.
-        (EventLocations.ROOT_TIME_TRAVEL, Events.TIME_TRAVEL, lambda bundle: has_item(Events.CLEARED_DEKU_TREE, bundle)), # temp
-        (EventLocations.ROOT_SHIELD, Events.CAN_BUY_DEKU_SHIELD, lambda bundle: True), # Temp
+        (EventLocations.ROOT_TIME_TRAVEL, Events.TIME_TRAVEL, lambda bundle: has_item(Events.CLEARED_DEKU_TREE, bundle)), # TODO: Remove this when it's on Temple of Time region
+        (EventLocations.ROOT_SHIELD, Events.CAN_BUY_DEKU_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
         (EventLocations.TRIFORCE_HUNT_COMPLETION, Events.GAME_COMPLETED,  lambda bundle:
          (world.options.triforce_hunt == 1 and 
          has_item(Items.TRIFORCE_PIECE, bundle, world.options.triforce_hunt_required_pieces.value)) or 

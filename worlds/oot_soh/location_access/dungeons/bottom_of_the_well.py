@@ -139,9 +139,9 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Bottom of the Well Coffin Room 
     # Locations
     add_locations(Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM, world, [
-        (Locations.BOTTOM_OF_THE_WELL_FREESTANDING_KEY, lambda bundle: has_fire_source_with_torch(bundle) or can_use(Items.PROGRESSIVE_BOW, bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_FREESTANDING_KEY, lambda bundle: has_fire_source_with_torch(bundle) or can_use(Items.FAIRY_BOW, bundle)),
         (Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_FRONT_LEFT_HEART, lambda bundle: True),
-        (Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_MIDDLE_RIGHT_HEART, lambda bundle: has_fire_source_with_torch(bundle) or can_use(Items.PROGRESSIVE_BOW, bundle))
+        (Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_MIDDLE_RIGHT_HEART, lambda bundle: has_fire_source_with_torch(bundle) or can_use(Items.FAIRY_BOW, bundle))
 
     ])
     # Connections

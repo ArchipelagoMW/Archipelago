@@ -53,8 +53,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.ZORA_RIVER, world, [
         (EventLocations.MAGIC_BEAN_SALESMAN_SHOP, Events.CAN_BUY_BEANS, 
-            lambda bundle: has_item(Items.CHILD_WALLET, bundle) and (world.options.shuffle_merchants == 0 or world.options.shuffle_merchants == 2)), # Bean shop not randomized
-        (EventLocations.ZORAS_RIVER_SHRUB, Events.BUG_ACCESS, lambda bundle: can_cut_shrubs(bundle))
+            lambda bundle: can_afford(10, bundle) and (world.options.shuffle_merchants == 0 or world.options.shuffle_merchants == 2)), # Bean shop not randomized
+        (EventLocations.ZORAS_RIVER_SHRUB, Events.CAN_BOTTLE_BUGS, lambda bundle: can_cut_shrubs(bundle))
     ])
     # Locations
     add_locations(Regions.ZORA_RIVER, world, [
@@ -90,11 +90,11 @@ def set_region_rules(world: "SohWorld") -> None:
                                                      and  can_attack(bundle)
                                                      and can_get_nighttime_gs(bundle)),
         (Locations.ZR_GS_NEAR_RAISED_GROTTOS, lambda bundle: is_adult(bundle) and
-                                                                  (can_use(Items.PROGRESSIVE_HOOKSHOT, bundle)
+                                                                  (can_use(Items.HOOKSHOT, bundle)
                                                                    or can_use(Items.BOOMERANG, bundle)) and
                                                                   can_get_nighttime_gs(bundle)),
         (Locations.ZR_GS_ABOVE_BRIDGE, lambda bundle: is_adult(bundle) and
-                                                           can_use(Items.PROGRESSIVE_HOOKSHOT, bundle) and
+                                                           can_use(Items.HOOKSHOT, bundle) and
                                                            can_get_nighttime_gs(bundle)),
         (Locations.ZR_BEAN_SPROUT_FAIRY1, lambda bundle: is_child(bundle)
                                                               and can_use(Items.MAGIC_BEAN, bundle)
@@ -204,7 +204,7 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.ZR_STORMS_GROTTO, world, [
         (Locations.ZR_DEKU_SCRUB_GROTTO_FRONT, lambda bundle: can_stun_deku(bundle)),
         (Locations.ZR_DEKU_SCRUB_GROTTO_REAR, lambda bundle: can_stun_deku(bundle)),
-        (Locations.ZR_STORMS_GROTTO_BEEHIVE, lambda bundle: can_break_upper_hives(bundle))
+        (Locations.ZR_STORMS_GROTTO_BEEHIVE, lambda bundle: can_break_upper_beehives(bundle))
 
     ])
     # Connections

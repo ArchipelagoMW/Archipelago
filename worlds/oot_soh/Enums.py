@@ -3426,12 +3426,13 @@ class EnemyDistance(Enum):
         return self.value < other.value
 
 class Events(str, Enum):
-    AMMO_CAN_DROP = "Ammo Can Drop"
-    CAN_BUY_ARROWS = "Can Buy Arrows"
+    CAN_BUY_STICKS = "Can Buy Sticks"
+    CAN_BUY_NUTS = "Can Buy Nuts"
     CAN_BUY_DEKU_SHIELD = "Can Buy Deku Shield"
+    CAN_BUY_HYLIAN_SHIELD = "Can Buy Hylian Shield"
     CAN_BUY_GREEN_POTION = "Can Buy Green Potion"
-    CAN_BUY_SEEDS = "Can Buy Seeds"
     CAN_BUY_BOMBS = "Can Buy Bombs"
+    CAN_BUY_BUGS = "Can Buy Bugs"
     CAN_BUY_BEANS = "Can Buy Beans"
     NUT_POT = "Nut Pot"
     NUT_CRATE = "Nut Crate"
@@ -3456,7 +3457,8 @@ class Events(str, Enum):
     CLEARED_SHADOW_TEMPLE = "Shadow Temple Completed"
     TIME_TRAVEL = "Time Travel"
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
-    BUG_ACCESS = "Bug Access"
+    CAN_BOTTLE_BUGS = "Can Bottle Bugs"
+    CAN_BOTTLE_BIG_POE = "Can Bottle Big Poe"
     GAME_COMPLETED = "Game Completed"
 
 class Ages(str, Enum):
