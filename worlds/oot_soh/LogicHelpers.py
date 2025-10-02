@@ -693,7 +693,7 @@ def small_keys(key: Items, requiredAmount: int, bundle: tuple[CollectionState, R
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
-    if has_item(Items.SKELETON_KEY, bundle) or (bool(world.options.key_rings.value) and has_key_ring(key, bundle)):
+    if has_item(Items.SKELETON_KEY, bundle) or (world.options.key_rings.value and has_key_ring(key, bundle)):
         return True
 
     return (state.has(key.value, world.player, requiredAmount))
@@ -801,7 +801,7 @@ def can_open_bomb_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) ->
 
 def trade_quest_step(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
-    if (bool(world.options.shuffle_adult_trade_items.value)):
+    if (world.options.shuffle_adult_trade_items.value):
         return False
     
     hasState = False
@@ -861,7 +861,12 @@ def can_trigger_lacs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> boo
     world = bundle[2]
 
     greg_wildcard = 0
-    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.rainbow_bridge_greg_reward.value:
+    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.ganons_castle_boss_key_greg_wildcard.value:
         greg_wildcard = 1
 
-    return (world.options.)
+    return ((world.options.ganons_castle_boss_key. value == 2 and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle)) or
+            (world.options.ganons_castle_boss_key. value == 3 and (stone_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_stones_required.value)) or
+            (world.options.ganons_castle_boss_key. value == 4 and (medallion_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_medallions_required.value)) or
+            (world.options.ganons_castle_boss_key. value == 5 and (stone_count(bundle) + medallion_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeon_rewards_required.value)) or 
+            (world.options.ganons_castle_boss_key. value == 6 and (dungeon_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeons_required.value)) or
+            (world.options.ganons_castle_boss_key. value == 7 and (get_gs_count(bundle) >= world.options.ganons_castle_boss_key_skull_tokens_required.value)))
