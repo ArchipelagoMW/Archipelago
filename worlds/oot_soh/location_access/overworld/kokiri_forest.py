@@ -130,9 +130,9 @@ def set_region_rules(world: "SohWorld") -> None:
                                                              (can_pass_enemy(bundle, Enemies.BIG_SKULLTULA) or
                                                              has_item(Events.CLEARED_FOREST_TEMPLE, bundle)))
                                                             or (is_child(bundle) and has_item(LocalEvents.MIDO_SWORD_AND_SHIELD, bundle))
-                                                           or world.options.closed_forest==2),  # Todo, maybe create a helper for handling settings
+                                                           or world.options.closed_forest.value == 2),  # Todo, maybe create a helper for handling settings
         (Regions.LOST_WOODS, lambda bundle: True),
-        (Regions.LW_BRIDGE_FROM_FOREST, lambda bundle: world.options.closed_forest>=1 or is_adult(bundle) or
+        (Regions.LW_BRIDGE_FROM_FOREST, lambda bundle: world.options.closed_forest.value >= 1 or is_adult(bundle) or
                                                             has_item(Events.CLEARED_DEKU_TREE, bundle)),
         (Regions.KF_STORMS_GROTTO, lambda bundle: can_open_storms_grotto(bundle))
     ])
@@ -232,13 +232,13 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.KF_OUTSIDE_DEKU_TREE, world, [
         (Regions.DEKU_TREE_ENTRYWAY, lambda bundle: (is_child(bundle))
-                                                         and (world.options.closed_forest==2
+                                                         and (world.options.closed_forest.value == 2
                                                             or has_item(LocalEvents.MIDO_SWORD_AND_SHIELD, bundle))),
         (Regions.KOKIRI_FOREST, lambda bundle:  (is_adult(bundle) and
                                                              (can_pass_enemy(bundle, Enemies.BIG_SKULLTULA) or
                                                              has_item(Events.CLEARED_FOREST_TEMPLE, bundle)))
                                                             or has_item(LocalEvents.MIDO_SWORD_AND_SHIELD, bundle)
-                                                           or world.options.closed_forest==2)
+                                                           or world.options.closed_forest.value == 2)
     ])
 
     ## KF Storms Grotto

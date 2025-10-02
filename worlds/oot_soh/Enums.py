@@ -3138,7 +3138,7 @@ class Locations(str, Enum):
     ZR_NEAR_TREE_GRASS10 = "ZR Near Tree Grass 10"
     ZR_NEAR_TREE_GRASS11 = "ZR Near Tree Grass 11"
     ZR_NEAR_TREE_GRASS12 = "ZR Near Tree Grass 12"
-    ZR_NEAR_FREESTANDING_PO_HGRASS = "ZR Near Freestanding PoH Grass"
+    ZR_NEAR_FREESTANDING_POH_GRASS = "ZR Near Freestanding PoH Grass"
     KF_STORMS_GROTTO_GRASS1 = "KF Storms Grotto Grass 1"
     KF_STORMS_GROTTO_GRASS2 = "KF Storms Grotto Grass 2"
     KF_STORMS_GROTTO_GRASS3 = "KF Storms Grotto Grass 3"

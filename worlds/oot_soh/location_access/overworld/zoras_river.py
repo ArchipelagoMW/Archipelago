@@ -53,7 +53,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.ZORA_RIVER, world, [
         (EventLocations.MAGIC_BEAN_SALESMAN_SHOP, Events.CAN_BUY_BEANS, 
-            lambda bundle: can_afford(10, bundle) and (world.options.shuffle_merchants == 0 or world.options.shuffle_merchants == 2)), # Bean shop not randomized
+            lambda bundle: can_afford(10, bundle) and (world.options.shuffle_merchants.value == 0 or world.options.shuffle_merchants.value == 2)), # Bean shop not randomized
         (EventLocations.ZORAS_RIVER_SHRUB, Events.CAN_BOTTLE_BUGS, lambda bundle: can_cut_shrubs(bundle))
     ])
     # Locations
@@ -125,7 +125,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                          (has_item(Items.BRONZE_SCALE, bundle) or
                                                                           can_use(Items.IRON_BOOTS, bundle) or
                                                                           can_use(Items.BOOMERANG, bundle))),
-        (Locations.ZR_NEAR_FREESTANDING_PO_HGRASS, lambda bundle: can_cut_shrubs(bundle))
+        (Locations.ZR_NEAR_FREESTANDING_POH_GRASS, lambda bundle: can_cut_shrubs(bundle))
     ])
     # Connections
     connect_regions(Regions.ZORA_RIVER, world, [
@@ -134,7 +134,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.ZR_FAIRY_GROTTO, lambda bundle: blast_or_smash(bundle)), #I am not sure that there's any scenario where blast or smash wouldn't apply to here, not sure why this needs here (which checks if the other age opened it, basically)?
         (Regions.LOST_WOODS, lambda bundle: has_item(Items.SILVER_SCALE, bundle) or  can_use(Items.IRON_BOOTS, bundle)),
         (Regions.ZR_STORMS_GROTTO, lambda bundle: can_open_storms_grotto(bundle)),
-        (Regions.ZR_BEHIND_WATERFALL, lambda bundle: world.options.sleeping_waterfall==1 or
+        (Regions.ZR_BEHIND_WATERFALL, lambda bundle: world.options.sleeping_waterfall.value == 1 or
                                                           can_use(Items.ZELDAS_LULLABY, bundle) or
                                                           (is_child(bundle) and
                                                            can_do_trick("ZD with Cuckoo", bundle)) or
