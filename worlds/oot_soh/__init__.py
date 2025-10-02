@@ -6,10 +6,10 @@ from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table, item_name_groups
 from .Locations import location_table
 from .Options import SohOptions
-from .RegionAgeAccess import reset_age_access, update_age_access
 from .Regions import create_regions_and_locations, place_locked_items
 from .Enums import *
 from .ItemPool import create_item_pool
+from . import RegionAgeAccess
 
 import logging
 logger = logging.getLogger("SOH_OOT")
@@ -28,7 +28,6 @@ class SohWebWorld(WebWorld):
     
     tutorials = [setup_en]
     game_info_languages = ["en"]
-
 
 class SohWorld(World):
     """A PC Port of Ocarina of Time"""
@@ -49,8 +48,9 @@ class SohWorld(World):
         #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
         pass
 
-    def create_item(self, name: Enum) -> SohItem:
-        return SohItem(name.value, item_data_table[name].classification, item_data_table[name].item_id, self.player)
+    def create_item(self, name: str) -> SohItem:
+        item_entry = Items(name)
+        return SohItem(name, item_data_table[item_entry].classification, item_data_table[item_entry].item_id, self.player)
 
     def create_items(self) -> None:
         create_item_pool(self)
@@ -74,6 +74,7 @@ class SohWorld(World):
             "lock_overworld_doors": self.options.lock_overworld_doors.value,
             "fortress_carpenters": self.options.fortress_carpenters.value,
             "rainbow_bridge": self.options.rainbow_bridge.value,
+            "rainbow_bridge_greg_wildcard": self.options.rainbow_bridge_greg_wildcard.value,
             "rainbow_bridge_stones_required": self.options.rainbow_bridge_stones_required.value,
             "rainbow_bridge_medallions_required": self.options.rainbow_bridge_medallions_required.value,
             "rainbow_bridge_dungeon_rewards_required": self.options.rainbow_bridge_dungeon_rewards_required.value,
@@ -109,6 +110,7 @@ class SohWorld(World):
             "shuffle_dungeon_rewards": self.options.shuffle_dungeon_rewards.value,
             "maps_and_compasses": self.options.maps_and_compasses.value,
             "ganons_castle_boss_key": self.options.ganons_castle_boss_key.value,
+            "ganons_castle_boss_key_greg_wildcard": self.options.ganons_castle_boss_key_greg_wildcard.value,
             "ganons_castle_boss_key_stones_required": self.options.ganons_castle_boss_key_stones_required.value,
             "ganons_castle_boss_key_medallions_required": self.options.ganons_castle_boss_key_medallions_required.value,
             "ganons_castle_boss_key_dungeon_rewards_required": self.options.ganons_castle_boss_key_dungeon_rewards_required.value,
@@ -127,18 +129,21 @@ class SohWorld(World):
             "sunlight_arrows": self.options.sunlight_arrows.value,
             "infinite_upgrades": self.options.infinite_upgrades.value,
             "skeleton_key": self.options.skeleton_key.value,
+            "starting_age": self.options.starting_age.value,
         }
     
     def collect(self, state: CollectionState, item: Item) -> bool:
         # Temporarily disabled because logic is in progress
         #update_age_access(self, state)
+        state._soh_stale[self.player] = True
         return super().collect(state, item)
     
     def remove(self, state: CollectionState, item: Item) -> bool:
         # Temporarily disabled because logic is in progress
-        #reset_age_access() #TODO pass the starting age option 
-        #update_age_access(self, state)
-        return super().remove(state, item)
+        changed = super().remove(state, item)
+        if changed:
+            state._soh_invalidate(self.player)
+        return changed
 
     def generate_output(self, output_directory: str):
     

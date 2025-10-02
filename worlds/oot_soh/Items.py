@@ -26,7 +26,7 @@ class SohItemData(NamedTuple):
     item_groups: list[str] = []  # for item_name_groups
 
 
-item_data_table: Dict[Enum, SohItemData] = {
+item_data_table: Dict[Items, SohItemData] = {
     # Items commented out that can never appear in the item pool and are only used on Ship internally
 
     Items.KOKIRI_SWORD: SohItemData(1, IC.progression, 1, child_only=True, item_groups=["Swords"]),
@@ -152,15 +152,15 @@ item_data_table: Dict[Enum, SohItemData] = {
     Items.GERUDO_FORTRESS_KEY_RING: SohItemData(121, IC.progression, 0, item_groups=["Keys"]),
     Items.GANONS_CASTLE_KEY_RING: SohItemData(122, IC.progression, 0, item_groups=["Keys"]),
     Items.TREASURE_GAME_KEY_RING: SohItemData(123, IC.progression, 0, item_groups=["Keys"]),
-    Items.KOKIRIS_EMERALD: SohItemData(124, IC.progression, 0),
-    Items.GORONS_RUBY: SohItemData(125, IC.progression, 0),
-    Items.ZORAS_SAPPHIRE: SohItemData(126, IC.progression, 0),
-    Items.FOREST_MEDALLION: SohItemData(127, IC.progression, 0),
-    Items.FIRE_MEDALLION: SohItemData(128, IC.progression, 0),
-    Items.WATER_MEDALLION: SohItemData(129, IC.progression, 0),
-    Items.SPIRIT_MEDALLION: SohItemData(130, IC.progression, 0),
-    Items.SHADOW_MEDALLION: SohItemData(131, IC.progression, 0),
-    Items.LIGHT_MEDALLION: SohItemData(132, IC.progression, 0),
+    Items.KOKIRIS_EMERALD: SohItemData(124, IC.progression, 0, item_groups=["Stones"]),
+    Items.GORONS_RUBY: SohItemData(125, IC.progression, 0, item_groups=["Stones"]),
+    Items.ZORAS_SAPPHIRE: SohItemData(126, IC.progression, 0, item_groups=["Stones"]),
+    Items.FOREST_MEDALLION: SohItemData(127, IC.progression, 0, item_groups=["Medallions"]),
+    Items.FIRE_MEDALLION: SohItemData(128, IC.progression, 0, item_groups=["Medallions"]),
+    Items.WATER_MEDALLION: SohItemData(129, IC.progression, 0, item_groups=["Medallions"]),
+    Items.SPIRIT_MEDALLION: SohItemData(130, IC.progression, 0, item_groups=["Medallions"]),
+    Items.SHADOW_MEDALLION: SohItemData(131, IC.progression, 0, item_groups=["Medallions"]),
+    Items.LIGHT_MEDALLION: SohItemData(132, IC.progression, 0, item_groups=["Medallions"]),
     Items.RECOVERY_HEART: SohItemData(133, IC.filler, 0),
     Items.GREEN_RUPEE: SohItemData(134, IC.filler, 0),
     Items.GREG_THE_GREEN_RUPEE: SohItemData(135, IC.progression, 1),
@@ -344,7 +344,7 @@ filler_bottles = [
     Items.BOTTLE_WITH_POE,
 ]
 
-all_bottles: list[Enum] = [
+all_bottles: list[Items] = [
     *filler_bottles,
     Items.BOTTLE_WITH_RUTOS_LETTER,
 ]
