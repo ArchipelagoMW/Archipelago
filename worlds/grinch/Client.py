@@ -327,6 +327,8 @@ class GrinchClient(BizHawkClient):
 
         ingame_map_id = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
             0x010000, 1, "MainRAM")]))[0], "little")
+         initial_cutscene_checker = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
+            0x010094, 1, "MainRAM")]))[0], "little")
 
         #If not in game or at a menu, or loading the publisher logos
         if ingame_map_id <= 0x04 or ingame_map_id >= 0x35:
@@ -339,6 +341,7 @@ class GrinchClient(BizHawkClient):
                 # Reset our demo mode checker just in case the game is in demo mode.
                 self.demo_mode_buffer = 0
                 self.ingame_log = False
+            if initial_cutscene_checker != 1:
                 return False
 
             # Update the previous map we were on to be the current map.
