@@ -53,7 +53,7 @@ def connect_regions(parent_region: Regions, world: "SohWorld",
                                                       rule=rule_wrapper.wrap(parent_region, regionRule, world))
 
 
-def add_events(parent_region, world: "SohWorld", 
+def add_events(parent_region: Regions, world: "SohWorld", 
                events: list[tuple[Enum, Events | Enum, Callable[[tuple[CollectionState, Regions, "SohWorld"]], bool]]]) -> None:
     for event in events:
         event_location = event[0].value
@@ -62,7 +62,7 @@ def add_events(parent_region, world: "SohWorld",
         if len(event) > 2:
             event_rule = event[2]
         
-        world.get_region(parent_region).add_locations({event_location: None}, SohLocation)
+        world.get_region(parent_region.value).add_locations({event_location: None}, SohLocation)
         world.get_location(event_location).place_locked_item(SohItem(event_item, IC.progression, None, world.player))
         set_rule(world.get_location(event_location), rule_wrapper.wrap(parent_region, event_rule, world))
 
@@ -71,7 +71,7 @@ def add_events(parent_region, world: "SohWorld",
 # TODO account for starting sticks being disabled
 # TODO add child wallet options
 # TODO add bronze scale options
-def has_item(itemName: Items | Events | Enum, bundle: tuple[CollectionState, Regions, "SohWorld"], count: int = 1) -> bool:
+def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions, "SohWorld"], count: int = 1) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
@@ -80,54 +80,54 @@ def has_item(itemName: Items | Events | Enum, bundle: tuple[CollectionState, Reg
     def can_use_item(name: Enum, bundle):
         return can_use(name, bundle)
       
-    if itemName in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
-        return (state.has_any((Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20,
+    if item in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
+        return (state.has_any((Items.BOMBCHUS_5.value, Items.BOMBCHUS_10.value, Items.BOMBCHUS_20.value,
                                Items.PROGRESSIVE_BOMBCHU.value), world.player)
                 or (bombchus_enabled(bundle)
-                    and state.has_any((Events.CAN_BUY_BOMBCHUS, Events.COULD_PLAY_BOWLING, Events.CARPET_MERCHANT), world.player)))
+                    and state.has_any((Events.CAN_BUY_BOMBCHUS.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value), world.player)))
 
-    if itemName == Items.FAIRY_OCARINA:
+    if item == Items.FAIRY_OCARINA:
         return state.has_any((Items.FAIRY_OCARINA.value, Items.OCARINA_OF_TIME.value, Items.PROGRESSIVE_OCARINA.value), player)
-    elif itemName == Items.OCARINA_OF_TIME:
+    elif item == Items.OCARINA_OF_TIME:
         return state.has_any_count({Items.OCARINA_OF_TIME.value: 1, Items.PROGRESSIVE_OCARINA.value: 2}, player)
-    elif itemName == Items.SCARECROW:
+    elif item == Items.SCARECROW:
         return scarecrows_song(bundle) and can_use_item(Items.HOOKSHOT, bundle)
-    elif itemName == Items.DISTANT_SCARECROW:
+    elif item == Items.DISTANT_SCARECROW:
         return scarecrows_song(bundle) and can_use_item(Items.LONGSHOT, bundle)
-    elif itemName == Items.DEKU_SHIELD:
+    elif item == Items.DEKU_SHIELD:
         return state.has(Events.CAN_BUY_DEKU_SHIELD.value, player)
     # todo: a lot of these progressive items can probably be evaluated way more simply with a collect/remove override
-    elif itemName == Items.PROGRESSIVE_GORON_SWORD:
+    elif item == Items.PROGRESSIVE_GORON_SWORD:
         return state.has_any((Items.GIANTS_KNIFE.value, Items.BIGGORONS_SWORD.value, Items.PROGRESSIVE_GORON_SWORD.value), player)
-    elif itemName == Items.GORONS_BRACELET:
+    elif item == Items.GORONS_BRACELET:
         return state.has_any((Items.GORONS_BRACELET.value, Items.STRENGTH_UPGRADE.value), player)
-    elif itemName == Items.SILVER_GAUNTLETS:
+    elif item == Items.SILVER_GAUNTLETS:
         return state.has_any_count({Items.SILVER_GAUNTLETS.value: 1, Items.STRENGTH_UPGRADE.value: 2}, player)
-    elif itemName == Items.GOLDEN_GAUNTLETS:
+    elif item == Items.GOLDEN_GAUNTLETS:
         return state.has_any_count({Items.GOLDEN_GAUNTLETS.value: 1, Items.STRENGTH_UPGRADE.value: 3}, player)
-    elif itemName == Items.ADULT_WALLET:
+    elif item == Items.ADULT_WALLET:
         return state.has_any((Items.ADULT_WALLET.value, Items.PROGRESSIVE_WALLET.value), player)
-    elif itemName == Items.GIANT_WALLET:
+    elif item == Items.GIANT_WALLET:
         return state.has_any_count({Items.GIANT_WALLET.value: 1, Items.PROGRESSIVE_WALLET.value: 2}, player)
-    elif itemName == Items.TYCOON_WALLET:
+    elif item == Items.TYCOON_WALLET:
         return state.has_any_count({Items.TYCOON_WALLET.value: 1, Items.PROGRESSIVE_WALLET.value: 3}, player)
-    elif itemName == Items.SILVER_SCALE:
+    elif item == Items.SILVER_SCALE:
         return state.has_any((Items.SILVER_SCALE.value, Items.PROGRESSIVE_SCALE.value), player)
-    elif itemName == Items.GOLDEN_SCALE:
+    elif item == Items.GOLDEN_SCALE:
         return state.has_any_count({Items.GOLDEN_SCALE.value: 1, Items.PROGRESSIVE_SCALE.value: 2}, player)
-    elif itemName == Items.MAGIC_BEAN:
+    elif item == Items.MAGIC_BEAN:
         return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
-    elif itemName == Items.CHILD_WALLET:
+    elif item == Items.CHILD_WALLET:
         return state.has(Items.PROGRESSIVE_WALLET.value, player) or world.options.shuffle_childs_wallet == 0
     # todo: is this for being able to catch a big poe??
-    elif itemName == Items.BOTTLE_WITH_BIG_POE:
+    elif item == Items.BOTTLE_WITH_BIG_POE:
         return has_bottle(bundle)
-    elif itemName == Items.BOTTLE_WITH_BUGS:
+    elif item == Items.BOTTLE_WITH_BUGS:
         return has_bottle(bundle) and state.has(Events.BUG_ACCESS.value, player)
-    elif itemName == Items.BRONZE_SCALE:
+    elif item == Items.BRONZE_SCALE:
         return world.options.shuffle_swim == 0 or state.has(Items.PROGRESSIVE_SCALE.value, player)
     else:
-        return state.has(itemName.value, player, count)
+        return state.has(item.value, player, count)
 
 def can_use_any(names: list[Enum], bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     for name in names:
@@ -135,8 +135,8 @@ def can_use_any(names: list[Enum], bundle: tuple[CollectionState, Regions, "SohW
             return True
     return False
 
-def can_use(name: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    if not has_item(name, bundle):
+def can_use(item: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    if not has_item(item, bundle):
         return False
 
     def has(item_name: Enum, count: int = 1):
@@ -147,37 +147,37 @@ def can_use(name: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
 
     data = item_data_table
 
-    if data[name].adult_only and not is_adult(bundle):
+    if data[item].adult_only and not is_adult(bundle):
         return False
 
-    if data[name].child_only and not is_child(bundle):
+    if data[item].child_only and not is_child(bundle):
         return False
 
-    if data[name].item_type == ItemType.magic and not can_use_item(Items.PROGRESSIVE_MAGIC_METER):
+    if data[item].item_type == ItemType.magic and not can_use_item(Items.PROGRESSIVE_MAGIC_METER):
         return False
 
-    if data[name].item_type == ItemType.song:
-        return can_play_song(bundle, name)
+    if data[item].item_type == ItemType.song:
+        return can_play_song(bundle, item)
 
-    if name in (Items.FIRE_ARROW, Items.ICE_ARROW, Items.LIGHT_ARROW):
+    if item in (Items.FIRE_ARROW, Items.ICE_ARROW, Items.LIGHT_ARROW):
         return can_use_item(Items.PROGRESSIVE_BOW)
 
-    if "Bombchu" in name.value:
+    if item in [Items.PROGRESSIVE_BOMBCHU,Items.BOMBCHUS_5,Items.BOMBCHUS_10,Items.BOMBCHUS_20]:
         return bombchu_refill(bundle) and bombchus_enabled(bundle)
 
-    if name == Items.PROGRESSIVE_MAGIC_METER:
+    if item == Items.PROGRESSIVE_MAGIC_METER:
         return has(Events.AMMO_CAN_DROP) or (has_bottle(bundle) and has(Events.CAN_BUY_GREEN_POTION))
-    elif name == Items.PROGRESSIVE_BOW:
+    elif item == Items.PROGRESSIVE_BOW:
         return has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_ARROWS)
-    elif name == Items.FAIRY_SLINGSHOT:
+    elif item == Items.FAIRY_SLINGSHOT:
         return has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_SEEDS)
-    elif name == Items.NUTS:
+    elif item == Items.NUTS:
         return has(Events.AMMO_CAN_DROP) and (has(Events.NUT_POT) or has(Events.NUT_CRATE) or has(Events.DEKU_BABA_NUTS))
-    elif name == Items.STICKS:
+    elif item == Items.STICKS:
         return has(Events.STICK_POT) or has(Events.DEKU_BABA_STICKS)
-    elif name in (Items.PROGRESSIVE_BOMB_BAG, Items.BOMB_BAG):
+    elif item in (Items.PROGRESSIVE_BOMB_BAG, Items.BOMB_BAG):
         return has(Events.AMMO_CAN_DROP) or has(Events.CAN_BUY_BOMBS)
-    elif name == Items.FISHING_POLE:
+    elif item == Items.FISHING_POLE:
         return has(Items.CHILD_WALLET)  # as long as you have enough rubies
 
     return True
@@ -492,7 +492,7 @@ def can_hit_switch(bundle: tuple[CollectionState, Regions, "SohWorld"], distance
 
     return hit
 
-def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enum, combat_range: Enum = EnemyDistance.CLOSE,
+def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies, distance: EnemyDistance = EnemyDistance.CLOSE,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
     Check if Link can kill a specific enemy at a given combat range.
@@ -509,28 +509,28 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
     """
 
     # Define what weapons work at each range
-    def can_hit_at_range(range_type: Enum) -> bool:
-        if range_type == EnemyDistance.CLOSE:
+    def can_hit_at_range(distance: EnemyDistance) -> bool:
+        if distance == EnemyDistance.CLOSE:
             return (can_jump_slash(bundle) or
                     has_explosives(bundle) or
                     can_use(Items.DINS_FIRE, bundle))
 
-        elif range_type in [EnemyDistance.SHORT_JUMPSLASH, EnemyDistance.MASTER_SWORD_JUMPSLASH, EnemyDistance.LONG_JUMPSLASH]:
+        elif distance in [EnemyDistance.SHORT_JUMPSLASH, EnemyDistance.MASTER_SWORD_JUMPSLASH, EnemyDistance.LONG_JUMPSLASH]:
             return can_jump_slash(bundle)
 
-        elif range_type == EnemyDistance.BOMB_THROW:
+        elif distance == EnemyDistance.BOMB_THROW:
             return has_explosives(bundle)
 
-        elif range_type == EnemyDistance.BOOMERANG:
+        elif distance == EnemyDistance.BOOMERANG:
             return can_use(Items.BOOMERANG, bundle)
 
-        elif range_type == EnemyDistance.HOOKSHOT:
+        elif distance == EnemyDistance.HOOKSHOT:
             return can_use(Items.PROGRESSIVE_HOOKSHOT, bundle)
 
-        elif range_type == EnemyDistance.LONGSHOT:
+        elif distance == EnemyDistance.LONGSHOT:
             return can_use(Items.PROGRESSIVE_HOOKSHOT, bundle)  # Longshot is progressive hookshot level 2
 
-        elif range_type == EnemyDistance.FAR:
+        elif distance == EnemyDistance.FAR:
             return (can_use(Items.PROGRESSIVE_BOW, bundle) or
                     can_use(Items.PROGRESSIVE_SLINGSHOT, bundle) or
                     can_use(Items.PROGRESSIVE_HOOKSHOT, bundle) or
@@ -548,15 +548,15 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
 
     # Gold Skulltulas and similar enemies that can be hit at various ranges
     if enemy in [Enemies.GOLD_SKULLTULA, Enemies.BIG_SKULLTULA]:
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Small enemies that are easy to kill
     if enemy in [Enemies.GOHMA_LARVA, Enemies.MAD_SCRUB, Enemies.DEKU_BABA, Enemies.WITHERED_DEKU_BABA]:
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Dodongo (requires explosives or specific attacks)
     if enemy == Enemies.DODONGO:
-        if combat_range in [EnemyDistance.CLOSE, EnemyDistance.SHORT_JUMPSLASH, EnemyDistance.MASTER_SWORD_JUMPSLASH, EnemyDistance.LONG_JUMPSLASH]:
+        if distance in [EnemyDistance.CLOSE, EnemyDistance.SHORT_JUMPSLASH, EnemyDistance.MASTER_SWORD_JUMPSLASH, EnemyDistance.LONG_JUMPSLASH]:
             return (can_jump_slash(bundle) or has_explosives(bundle))
         return has_explosives(bundle)
 
@@ -568,7 +568,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
 
     # Flying enemies
     if enemy in [Enemies.KEESE, Enemies.FIRE_KEESE]:
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Bubbles (need specific attacks)
     if enemy in [Enemies.BLUE_BUBBLE, Enemies.GREEN_BUBBLE]:
@@ -583,7 +583,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
 
     # Stalfos (needs good weapons)
     if enemy == Enemies.STALFOS:
-        return can_hit_at_range(combat_range) and (
+        return can_hit_at_range(distance) and (
                 can_jump_slash(bundle) or
                 can_use(Items.MEGATON_HAMMER, bundle))
 
@@ -621,7 +621,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
 
     # Other enemies
     if enemy in [Enemies.MEG, Enemies.ARMOS, Enemies.DINOLFOS, Enemies.FREEZARD, Enemies.SHELL_BLADE, Enemies.SPIKE, Enemies.STINGER]:
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Water enemies
     if enemy in [Enemies.BIG_OCTO, Enemies.BARI, Enemies.SHABOM, Enemies.OCTOROK, Enemies.TENTACLE]:
@@ -629,7 +629,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
             return (can_use(Items.PROGRESSIVE_HOOKSHOT, bundle) or
                     can_use(Items.PROGRESSIVE_BOW, bundle) or
                     has_explosives(bundle))
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Bosses
     if enemy in [Enemies.GOHMA, Enemies.KING_DODONGO, Enemies.BARINADE, Enemies.PHANTOM_GANON, Enemies.VOLVAGIA,
@@ -653,7 +653,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
 
     # Purple Leever
     if enemy == Enemies.PURPLE_LEEVER:
-        return can_hit_at_range(combat_range)
+        return can_hit_at_range(distance)
 
     # Anubis (tough enemy)
     if enemy == Enemies.ANUBIS:
@@ -665,7 +665,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
     return can_damage(bundle)
 
 
-def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enum) -> bool:
+def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies) -> bool:
     """Check if Link can pass by an enemy (usually by killing or stunning it)."""
     return can_kill_enemy(bundle, enemy) # I think that we can be more permissive here, but for now this is fine
 
@@ -693,7 +693,7 @@ def small_keys(key: Items, requiredAmount: int, bundle: tuple[CollectionState, R
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
-    if has_item(Items.SKELETON_KEY, bundle) or has_key_ring(key, bundle):
+    if has_item(Items.SKELETON_KEY, bundle) or (world.options.key_rings.value and has_key_ring(key, bundle)):
         return True
 
     return (state.has(key.value, world.player, requiredAmount))
@@ -719,26 +719,25 @@ def has_key_ring(key : Items, bundle: tuple[CollectionState, Regions, "SohWorld"
         case _:
             return False
 
-def can_get_enemy_drop(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy : Enemies, range : EnemyDistance = EnemyDistance.CLOSE, aboveLink : bool = False) -> bool:
-    if not can_kill_enemy(bundle, enemy, range):
+def can_get_enemy_drop(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy : Enemies, distance : EnemyDistance = EnemyDistance.CLOSE, aboveLink : bool = False) -> bool:
+    if not can_kill_enemy(bundle, enemy, distance):
         return False
     
-    if range.value <= EnemyDistance.MASTER_SWORD_JUMPSLASH.value:
+    if distance.value <= EnemyDistance.MASTER_SWORD_JUMPSLASH.value:
         return True
-    
-    drop = False
+
     match enemy:
         case Enemies.GOLD_SKULLTULA:
-            if range in [EnemyDistance.BOOMERANG, EnemyDistance.HOOKSHOT, EnemyDistance.LONGSHOT]:
-                drop = (can_use_any([Items.BOOMERANG, Items.HOOKSHOT, Items.LONGSHOT], bundle))
+            if distance in [EnemyDistance.BOOMERANG, EnemyDistance.HOOKSHOT, EnemyDistance.LONGSHOT]:
+                return (can_use_any([Items.BOOMERANG, Items.HOOKSHOT, Items.LONGSHOT], bundle))
 
-            return drop
+            return False
         case Enemies.KEESE:
             return True
         case Enemies.FIRE_KEESE:
             return True
         case _:
-            return aboveLink or (range.value <= EnemyDistance.BOOMERANG.value and can_use(Items.BOOMERANG, bundle))
+            return aboveLink or (distance.value <= EnemyDistance.BOOMERANG.value and can_use(Items.BOOMERANG, bundle))
         
 def can_detonate_bomb_flowers(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return can_use_any([Items.PROGRESSIVE_BOW, Items.DINS_FIRE], bundle) or has_explosives(bundle)
@@ -802,7 +801,7 @@ def can_open_bomb_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) ->
 
 def trade_quest_step(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
-    if (bool(world.options.shuffle_adult_trade_items.value)):
+    if (world.options.shuffle_adult_trade_items.value):
         return False
     
     hasState = False
@@ -859,5 +858,15 @@ def get_gs_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
 
 
 def can_trigger_lacs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return True
-    # TODO: Implement this, needed for default LACS condition and if Ganons Boss Key is placed on LACS.
+    world = bundle[2]
+
+    greg_wildcard = 0
+    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.ganons_castle_boss_key_greg_wildcard.value:
+        greg_wildcard = 1
+
+    return ((world.options.ganons_castle_boss_key. value == 2 and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle)) or
+            (world.options.ganons_castle_boss_key. value == 3 and (stone_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_stones_required.value)) or
+            (world.options.ganons_castle_boss_key. value == 4 and (medallion_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_medallions_required.value)) or
+            (world.options.ganons_castle_boss_key. value == 5 and (stone_count(bundle) + medallion_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeon_rewards_required.value)) or 
+            (world.options.ganons_castle_boss_key. value == 6 and (dungeon_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeons_required.value)) or
+            (world.options.ganons_castle_boss_key. value == 7 and (get_gs_count(bundle) >= world.options.ganons_castle_boss_key_skull_tokens_required.value)))

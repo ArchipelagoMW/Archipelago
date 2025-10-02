@@ -465,6 +465,13 @@ class GanonsCastleBossKey(Choice):
     option_lacs_skull_tokens = 7
     default = 5
 
+class GanonsCastleBossKeyGregWildcard(Toggle):
+    """
+    If Ganons Castle Boss Key is enabled, Greg will count toward the LACS goal.
+    """
+    display_name = "Ganons Castle Boss Key Greg Wildcard"
+    visibility = Visibility.none
+
 class GanonsCastleBossKeyStonesRequired(Range):
     """
     If Ganon's Boss Key is set to stones, this is how many Spiritual Stones are required to open it.
@@ -647,7 +654,7 @@ class SohOptions(PerGameCommonOptions):
     rainbow_bridge_dungeon_rewards_required: RainbowBridgeDungeonRewardsRequired
     rainbow_bridge_dungeons_required: RainbowBridgeDungeonsRequired
     rainbow_bridge_skull_tokens_required: RainbowBridgeSkullTokensRequired
-    rainbow_bridge_greg_reward: RainbowBridgeGregWildcard
+    rainbow_bridge_greg_wildcard: RainbowBridgeGregWildcard
     ganons_trials_required: GanonsTrialsRequired
     triforce_hunt: TriforceHunt
     triforce_hunt_required_pieces: TriforceHuntRequiredPieces
@@ -683,6 +690,7 @@ class SohOptions(PerGameCommonOptions):
     ganons_castle_boss_key_dungeon_rewards_required: GanonsCastleBossKeyDungeonRewardsRequired
     ganons_castle_boss_key_dungeons_required: GanonsCastleBossKeyDungeonsRequired
     ganons_castle_boss_key_skull_tokens_required: GanonsCastleBossKeySkullTokensRequired
+    ganons_castle_boss_key_greg_wildcard: GanonsCastleBossKeyGregWildcard
     key_rings: KeyRings
     big_poe_target_count: BigPoeTargetCount
     skip_child_zelda: SkipChildZelda

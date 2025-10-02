@@ -26,7 +26,7 @@ class SohItemData(NamedTuple):
     item_groups: list[str] = []  # for item_name_groups
 
 
-item_data_table: Dict[Enum, SohItemData] = {
+item_data_table: Dict[Items, SohItemData] = {
     # Items commented out that can never appear in the item pool and are only used on Ship internally
 
     Items.KOKIRI_SWORD: SohItemData(1, IC.progression, 1, child_only=True, item_groups=["Swords"]),
@@ -344,7 +344,7 @@ filler_bottles = [
     Items.BOTTLE_WITH_POE,
 ]
 
-all_bottles: list[Enum] = [
+all_bottles: list[Items] = [
     *filler_bottles,
     Items.BOTTLE_WITH_RUTOS_LETTER,
 ]
