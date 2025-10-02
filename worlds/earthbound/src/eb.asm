@@ -9116,6 +9116,13 @@ db $E1, $03
 ORG $C91EA8; TEST THIS!!!! SKY RUNNER FIX
 db $d2
 
+ORG $C99CCD
+db $0A
+dl DisableOSSOnLumine
+
+ORG $C0D668
+LDA $9889
+
 
 ;New data table go here
 
@@ -18359,6 +18366,13 @@ dd LavaPantsUseTxt
 db $1B, $01
 db $1B, $0F, $00, $00
 db $02
+
+DisableOSSOnLumine:
+db $1f, $eb, $ff, $06
+db $1F, $41, $06
+db $0A
+dl $C99CD1
+
 
 ;ORG $C7617D
 ;dd DisplayAndGetMoney
