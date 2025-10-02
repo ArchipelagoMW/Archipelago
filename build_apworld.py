@@ -35,10 +35,10 @@ def main(
 
     The apworld spec can be found here: https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/apworld%20specification.md
 
-    :param input_path: Path to the directory which will be used as the contents of the apworld
+    :param input_path: Path to the directory which will be used as the contents of the apworld file
     :param output_path: Path to the directory into which the created apworld file will be put
     :param apworld_name: Name for the apworld file and its contained directory. Defaults to input_path directory name
-    :param world_type: The worlds.AutoWorld.World type for this apworld. If omitted, it will be found/loaded automatically.
+    :param world_type: The worlds.AutoWorld.World type for this APWorld. If omitted, it will be found/loaded automatically.
     (world_type's presence is an optimization in case the caller already has it)
     """
 
@@ -136,9 +136,9 @@ def _is_world_type_from_path(world_type: Type[World], path: Path) -> bool:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_path", help="Path to the apworld dir")
-    parser.add_argument("-n", "--apworld-name", default=None, help="Name of the built apworld")
-    parser.add_argument("-o", "--output-path", default=os.curdir, help="Path to place the built apworld")
+    parser.add_argument("input_path", help="Path to the APWorld source dir")
+    parser.add_argument("-n", "--apworld-name", default=None, help="Name of the built apworld file")
+    parser.add_argument("-o", "--output-path", default=os.curdir, help="Path to place the built apworld file")
 
     args = parser.parse_args()
 
