@@ -1,12 +1,11 @@
 import bisect
 import logging
-import os.path
 import pathlib
 import weakref
 from enum import Enum, auto
 from typing import Callable, Iterable, List, Optional, Tuple
 
-from Utils import is_frozen, local_path, open_filename
+from Utils import is_frozen, is_kivy_running, local_path, open_filename
 
 
 class Type(Enum):
@@ -178,10 +177,9 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
         if module_name == loaded_name:
             found_already_loaded = True
             break
-    if found_already_loaded:
-        raise Exception(f"Installed APWorld successfully, but '{module_name}' is already loaded,\n"
-                        "so a Launcher restart is required to use the new installation.\n"
-                        "If the Launcher is not open, no action needs to be taken.")
+    if found_already_loaded and is_kivy_running():
+        raise Exception(f"Installed APWorld successfully, but '{module_name}' is already loaded, "
+                        "so a Launcher restart is required to use the new installation.")
     world_source = worlds.WorldSource(str(target), is_zip=True)
     bisect.insort(worlds.world_sources, world_source)
     world_source.load()
@@ -198,7 +196,7 @@ def install_apworld(apworld_path: str = "") -> None:
         source, target = res
     except Exception as e:
         import Utils
-        Utils.messagebox(e.__class__.__name__, str(e), error=True)
+        Utils.messagebox("Notice", str(e), error=True)
         logging.exception(e)
     else:
         import Utils
@@ -245,18 +243,40 @@ icon_paths = {
 }
 
 if not is_frozen():
-    def _build_apworlds():
+    def _build_apworlds(*launch_args: str):
+        import os
+        import zipfile
+
         import build_apworld
         from worlds import AutoWorldRegister
+        from Launcher import open_folder
+
+        import argparse
+        parser = argparse.ArgumentParser("Build script for APWorlds")
+        parser.add_argument("worlds", type=str, default=(), nargs="*", help="Names of APWorlds to build.")
+        args = parser.parse_args(launch_args)
+
+        if args.worlds:
+            games = [(game, AutoWorldRegister.world_types.get(game, None)) for game in args.worlds]
+        else:
+            games = [(worldname, worldtype) for worldname, worldtype in AutoWorldRegister.world_types.items()
+                     if not worldtype.zip_path]
 
         apworlds_folder = os.path.join("build", "apworlds")
 
-        for _, worldtype in AutoWorldRegister.world_types.items():
+        for worldname, worldtype in games:
+            if not worldtype:
+                logging.error(f"Requested APWorld \"{worldname}\" does not exist.")
+                continue
+
             build_apworld.main(
                 input_path=os.path.dirname(worldtype.__file__),
                 output_path=apworlds_folder,
                 world_type=worldtype
             )
 
+        open_folder(apworlds_folder)
 
-    components.append(Component('Build apworlds', func=_build_apworlds, cli=True, ))
+
+    components.append(Component('Build APWorlds', func=_build_apworlds, cli=True,
+                                description="Build APWorlds from loose-file world folders."))
