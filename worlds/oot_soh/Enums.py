@@ -3437,8 +3437,11 @@ class Events(str, Enum):
     CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
     CHILD_SCARECROW = "Child Scarecrow"
     ADULT_SCARECROW = "Adult Scarecrow"
-    DELIVER_LETTER = "Deliver Leter"
+    DELIVER_LETTER = "Deliver Letter"
     CAN_EMPTY_BIG_POES = "Can Empty Big Poes"
+    CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
+    CAN_BORROW_MASKS = "Can Borrow Masks"
+    BORROW_SKULL_MASK = "Borrow Skull Mask"
     COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
     CARPET_MERCHANT = "Can Buy From Carpet Merchant"
     CLEARED_DEKU_TREE = "Deku Tree Completed"
@@ -3453,6 +3456,8 @@ class Events(str, Enum):
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     CAN_ACCESS_BUGS = "Can Access Bugs"
     CAN_DEFEAT_BIG_POE = "Can Defeat Big Poe"
+    DAMPES_WINDMILL_ACCESS = "Dampe's Windmill Access"
+    DRAIN_WELL = "Drain Well"
     GAME_COMPLETED = "Game Completed"
 
 class Ages(str, Enum):
