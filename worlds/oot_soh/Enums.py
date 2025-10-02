@@ -3442,7 +3442,19 @@ class Events(str, Enum):
     CARPET_MERCHANT = "Can Buy From Carpet Merchant"
     KOKIRI_FOREST_BEAN_PLANTED = "Kokiri Forest Bean Planted"
     CLEARED_DEKU_TREE = "Deku Tree Completed"
+    CLEARED_DODONGOS_CAVERN = "Dodongos Cavern Completed"
+    CLEARED_JABU_JABUS_BELLY = "Jabu Jabus Belly Completed"
     CLEARED_FOREST_TEMPLE = "Forest Temple Completed"
+    CLEARED_FIRE_TEMPLE = "Fire Temple Completed"
+    CLEARED_WATER_TEMPLE = "Water Temple Completed"
+    CLEARED_SPIRIT_TEMPLE = "Spirit Temple Completed"
+    CLEARED_SHADOW_TEMPLE = "Shadow Temple Completed"
+    TIME_TRAVEL = "Time Travel"
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     BUG_ACCESS = "Bug Access"
     GAME_COMPLETED = "Game Completed"
+
+class Ages(str, Enum):
+    CHILD = "child"
+    ADULT = "adult"
+    null = None

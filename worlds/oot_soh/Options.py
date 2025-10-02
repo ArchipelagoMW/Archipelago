@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, Range, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Toggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility
 
 class ClosedForest(Choice):
     """
@@ -113,6 +113,13 @@ class RainbowBridge(Choice):
     option_tokens = 6
     option_greg = 7
     default = 7
+
+class RainbowBridgeGregWildcard(Toggle):
+    """
+    If Rainbow Bridge is enabled, Greg will count toward the bridge requirement goal.
+    """
+    display_name = "Rainbow Bridge Greg Wildcard"
+    visibility = Visibility.none
 
 class RainbowBridgeStonesRequired(Range):
     """
@@ -608,6 +615,22 @@ class SkeletonKey(Toggle):
     """
     display_name = "Skeleton Key"
 
+
+class StartingAge(Choice):
+    """
+    Decide whether to start as child Link or adult Link.
+    Child Link starts in Link's House in Kokiri Forest.
+    Adult Link starts in the Temple of Time.
+
+    TODO: This is hidden for now until it's implemented mod-side.
+    """
+    display_name = "Starting Age"
+    option_child = 0
+    option_adult = 1
+    default = 0
+    visibility = Visibility.none
+
+
 @dataclass
 class SohOptions(PerGameCommonOptions):
     closed_forest: ClosedForest
@@ -624,6 +647,7 @@ class SohOptions(PerGameCommonOptions):
     rainbow_bridge_dungeon_rewards_required: RainbowBridgeDungeonRewardsRequired
     rainbow_bridge_dungeons_required: RainbowBridgeDungeonsRequired
     rainbow_bridge_skull_tokens_required: RainbowBridgeSkullTokensRequired
+    rainbow_bridge_greg_reward: RainbowBridgeGregWildcard
     ganons_trials_required: GanonsTrialsRequired
     triforce_hunt: TriforceHunt
     triforce_hunt_required_pieces: TriforceHuntRequiredPieces
@@ -673,3 +697,6 @@ class SohOptions(PerGameCommonOptions):
     sunlight_arrows: SunlightArrows
     infinite_upgrades: InfiniteUpgrades
     skeleton_key: SkeletonKey
+    starting_age: StartingAge
+
+# todo: option groups so this isn't a nightmare to navigate
