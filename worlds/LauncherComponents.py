@@ -295,8 +295,5 @@ if not is_frozen():
         open_folder(apworlds_folder)
 
 
-    def _run_build_apworlds(*args: str):
-        launch_subprocess(_build_apworlds, name="BuildAPWorlds", args=args)
-
-    components.append(Component('Build APWorlds', func=_run_build_apworlds, cli=True,
+    components.append(Component('Build APWorlds', func=_build_apworlds, cli=True,
                                 description="Build APWorlds from loose-file world folders."))
