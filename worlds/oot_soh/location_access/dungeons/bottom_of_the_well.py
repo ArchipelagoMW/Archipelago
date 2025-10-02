@@ -43,8 +43,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Bottom of the Well Perimeter
     # Events
     add_events(Regions.BOTTOM_OF_THE_WELL_PERIMETER, world, [
-        (EventLocations.BOTTOM_OF_THE_WELL_STICK_POT, Events.STICK_POT, lambda bundle: True),
-        (EventLocations.BOTTOM_OF_THE_WELL_NUT_POT, Events.NUT_POT, lambda bundle: True),
+        (EventLocations.BOTTOM_OF_THE_WELL_STICK_POT, Events.CAN_FARM_STICKS, lambda bundle: True),
+        (EventLocations.BOTTOM_OF_THE_WELL_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True),
         (EventLocations.BOTTOM_OF_THE_WELL_LOWERED_WATER, LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
     ])
     # Locations
@@ -123,8 +123,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Bottom of the Well Inner Rooms 
     # Events
     add_events(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS, world, [
-        (EventLocations.BOTTOM_OF_THE_WELL_BABAS_STICKS, Events.DEKU_BABA_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
-        (EventLocations.BOTTOM_OF_THE_WELL_BABAS_NUTS, Events.DEKU_BABA_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
+        (EventLocations.BOTTOM_OF_THE_WELL_BABAS_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.BOTTOM_OF_THE_WELL_BABAS_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
     # Locations
     add_locations(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS, world, [

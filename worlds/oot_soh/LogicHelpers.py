@@ -153,11 +153,9 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
     elif item == Items.BOTTLE_WITH_BUGS:
         return has_bottle(bundle) and (state.has(Events.CAN_BOTTLE_BUGS.value, player) or state.has(Events.CAN_BUY_BUGS.value, player))
     elif item == Items.STICKS:
-        return ((state.has(Events.STICK_POT.value, player) or state.has(Events.DEKU_BABA_STICKS.value, player) or state.has(Events.CAN_BUY_STICKS.value, player)) and 
-                (world.options.shuffle_deku_stick_bag == 0 or state.has(Items.PROGRESSIVE_STICK_CAPACITY.value, player)))
+        return (state.has(Events.CAN_FARM_STICKS.value, player) and (world.options.shuffle_deku_stick_bag == 0 or state.has(Items.PROGRESSIVE_STICK_CAPACITY.value, player)))
     elif item == Items.NUTS:
-        return ((state.has(Events.NUT_POT.value, player) or state.has(Events.DEKU_BABA_NUTS.value, player) or state.has(Events.NUT_CRATE.value, player) or state.has(Events.CAN_BUY_NUTS.value, player)) and 
-                (world.options.shuffle_deku_nut_bag == 0 or state.has(Items.PROGRESSIVE_NUT_CAPACITY.value, player)))
+        return (state.has(Events.CAN_FARM_NUTS.value, player) and (world.options.shuffle_deku_nut_bag == 0 or state.has(Items.PROGRESSIVE_NUT_CAPACITY.value, player)))
     else:
         return state.has(item.value, player, count)
 
@@ -243,7 +241,7 @@ ocarina_buttons_required: dict[str, list[str]] = {
 }
 
 
-def can_play_song(song: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+def can_play_song(song: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
@@ -524,7 +522,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
 
     if enemy == Enemies.GOLD_SKULLTULA:
         return can_hit_at_range(distance) or (distance <= EnemyDistance.LONGSHOT and (wall_or_floor and can_use(Items.BOMBCHUS_5, bundle))) or \
-            (distance <= EnemyDistance.BOOMERANG and can_use(Items.DINS_FIRE, bundle))
+            (distance <= EnemyDistance.BOOMERANG and (can_use_any([Items.DINS_FIRE, Items.BOOMERANG], bundle)))
 
     if enemy == Enemies.BIG_SKULLTULA:
         return can_hit_at_range(distance) or (distance <= EnemyDistance.BOOMERANG and can_use(Items.DINS_FIRE, bundle))

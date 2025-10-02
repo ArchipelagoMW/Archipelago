@@ -31,4 +31,6 @@ Archipelago saves, including all the trackers, installed graphical mods and QoL 
 
 ### Configure Your YAML File
 
-Visit the [Ship of Harkinian options page](/games/ShipofHarkinian/player-options) to generate a YAML with your selected options.
+In the Archipelago launcher, choose "Install APWorld" and pick the "oot_soh.apworld" file that came with your download. Afterwards, in the Archipelago launcher,
+choose "Generate Template Options". This will generate .yamls inside your Archipelago installation folder under "Players/Templates". Find the "Ship of Harkinian.yaml"
+file and edit it with your text editor of choosing. Change anything in there to your liking!

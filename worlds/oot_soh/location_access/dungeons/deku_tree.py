@@ -41,8 +41,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Deku Lobby
     # Events
     add_events(Regions.DEKU_TREE_LOBBY, world, [
-        (EventLocations.DEKU_TREE_LOBBY_BABA_STICKS, Events.DEKU_BABA_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
-        (EventLocations.DEKU_TREE_LOBBY_BABA_NUTS, Events.DEKU_BABA_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
+        (EventLocations.DEKU_TREE_LOBBY_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.DEKU_TREE_LOBBY_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
     # Locations
     add_locations(Regions.DEKU_TREE_LOBBY, world, [
@@ -87,8 +87,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Deku compass room
     # Events
     add_events(Regions.DEKU_TREE_COMPASS_ROOM, world, [
-        (EventLocations.DEKU_TREE_COMPASS_BABA_STICKS, Events.DEKU_BABA_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
-        (EventLocations.DEKU_TREE_COMPASS_BABA_NUTS, Events.DEKU_BABA_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
+        (EventLocations.DEKU_TREE_COMPASS_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.DEKU_TREE_COMPASS_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
     # Locations
     add_locations(Regions.DEKU_TREE_COMPASS_ROOM, world, [
@@ -106,8 +106,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Deku Basement Lower
     # Events
     add_events(Regions.DEKU_TREE_BASEMENT_LOWER, world, [
-        (EventLocations.DEKU_TREE_BASEMENT_LOWER_BABA_STICKS, Events.DEKU_BABA_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
-        (EventLocations.DEKU_TREE_BASEMENT_LOWER_BABA_NUTS, Events.DEKU_BABA_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
+        (EventLocations.DEKU_TREE_BASEMENT_LOWER_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.DEKU_TREE_BASEMENT_LOWER_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
     # Locations
     add_locations(Regions.DEKU_TREE_BASEMENT_LOWER, world, [
@@ -161,8 +161,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Deku tree basement torch room
     # Events
     add_events(Regions.DEKU_TREE_BASEMENT_TORCH_ROOM, world, [
-        (EventLocations.DEKU_TREE_BASEMENT_TORCH_ROOM_BABA_STICKS, Events.DEKU_BABA_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
-        (EventLocations.DEKU_TREE_BASEMENT_TORCH_ROOM_BABA_NUTS, Events.DEKU_BABA_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
+        (EventLocations.DEKU_TREE_BASEMENT_TORCH_ROOM_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.DEKU_TREE_BASEMENT_TORCH_ROOM_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
     # Locations
     add_locations(Regions.DEKU_TREE_BASEMENT_TORCH_ROOM, world, [
@@ -178,8 +178,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Deku basement back lobby
     # Events
     add_events(Regions.DEKU_TREE_BASEMENT_BACK_LOBBY, world, [
-        (EventLocations.DEKU_TREE_BASEMENT_BACK_LOBBY_BABA_STICKS, Events.DEKU_BABA_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
-        (EventLocations.DEKU_TREE_BASEMENT_BACK_LOBBY_BABA_NUTS, Events.DEKU_BABA_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
+        (EventLocations.DEKU_TREE_BASEMENT_BACK_LOBBY_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.DEKU_TREE_BASEMENT_BACK_LOBBY_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
     # Locations
     add_locations(Regions.DEKU_TREE_BASEMENT_BACK_LOBBY, world, [
@@ -207,8 +207,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Deku basement upper
     # Events
     add_events(Regions.DEKU_TREE_BASEMENT_UPPER, world, [
-        (EventLocations.DEKU_TREE_BASEMENT_UPPER_BABA_STICKS, Events.DEKU_BABA_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
-        (EventLocations.DEKU_TREE_BASEMENT_UPPER_BABA_NUTS, Events.DEKU_BABA_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle)),
+        (EventLocations.DEKU_TREE_BASEMENT_UPPER_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.DEKU_TREE_BASEMENT_UPPER_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle)),
         (EventLocations.DEKU_TREE_BASEMENT_UPPER_BLOCK, LocalEvents.DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED, lambda bundle: True)
     ])
     # Connections
