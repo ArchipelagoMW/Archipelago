@@ -13,6 +13,7 @@ from typing import Any, AnyStr, ClassVar, Final, Self, Type
 
 import orjson
 
+import Launcher
 import build_apworld
 from general import TestWorld
 from worlds import AutoWorldRegister
@@ -266,3 +267,47 @@ class TestBuildApworld(unittest.TestCase):
 		)
 
 		self.assertTrue(os.path.exists(apworld_path))
+
+	def test_launcher_component_all(self: Self) -> None:
+		build_dir = "build"
+		# noinspection SpellCheckingInspection
+		apworlds_path = os.path.join(build_dir, "apworlds")
+
+		_, component = Launcher.identify("Build APWorlds")
+
+		Launcher.main({
+			"args": {
+				"--suppress-open"
+			},
+			"component": component,
+			"update_settings": False
+		})
+
+		try:
+			self.assertTrue(os.path.exists(apworlds_path))
+			self.assertEqual(len(AutoWorldRegister.world_types), len(os.listdir(apworlds_path)))
+		finally:
+			shutil.rmtree(build_dir)
+
+	def test_launcher_component_single(self: Self) -> None:
+		build_dir = "build"
+		# noinspection SpellCheckingInspection
+		apworlds_path = os.path.join(build_dir, "apworlds")
+
+		_, component = Launcher.identify("Build APWorlds")
+
+		Launcher.main({
+			"args": {
+				"--suppress-open",
+				"worlds",
+				"Archipelago"
+			},
+			"component": component,
+			"update_settings": False
+		})
+
+		try:
+			self.assertTrue(os.path.exists(os.path.join(apworlds_path, "generic.apworld")))
+			self.assertEqual(1, len(os.listdir(apworlds_path)))
+		finally:
+			shutil.rmtree(build_dir)
