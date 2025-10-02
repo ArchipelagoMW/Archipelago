@@ -50,6 +50,6 @@ Events have a couple different parts. First, at the top of the file, you’ll de
 Again it’s probably best to look at existing files and see how they’re utilized there. Deku tree has quite a few events, some local, some used in other places, so it’s a good place to look.
 
 
-# I made my PR, now what?
+## I made my PR, now what?
 
 We’ll review it whenever we have time. Keep in mind we’re just doing this in our free time too, so it may take a couple days before we get to it. There may be changes that are requested, and once all questions/requested changes are made, it’ll get merged. Once we have all the areas mapped out, we’ll start a testing phase and start bug fixing. Let’s do this!
