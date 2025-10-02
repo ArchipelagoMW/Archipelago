@@ -21,9 +21,9 @@ import Utils
 import Options
 from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
-from settings import get_settings
 
 def mystery_argparse():
+    from settings import get_settings
     settings = get_settings()
     defaults = settings.generator
 
@@ -135,6 +135,8 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                         logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
                     else:
                         quantity = yaml.get("quantity", 1)
+                        if quantity <= 0:
+                            raise ValueError("A quantity of 0 or less is invalid. Please change it to at least 1.")
                         if not allow_quantity and quantity > 1:
                             raise ValueError("Quantity greater than 1 is deactivated by host settings.")
 
