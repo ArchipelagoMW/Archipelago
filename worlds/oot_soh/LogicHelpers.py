@@ -316,6 +316,12 @@ def is_adult(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return state._soh_can_reach_as_age(parent_region, Ages.ADULT, world.player)
 
 
+def at_day(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    # For now, return True as a placeholder since time of day logic is complex and context-dependent
+    # TODO: Implement proper time checking based on world settings and progression
+    return True
+
+
 def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
@@ -725,6 +731,14 @@ def can_open_underwater_chest(bundle: tuple[CollectionState, Regions, "SohWorld"
     return (can_do_trick("RT Open Underwater Chest", bundle) and 
             can_use(Items.IRON_BOOTS, bundle) and 
             can_use(Items.HOOKSHOT, bundle))
+
+
+def can_open_overworld_door(key: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    world = bundle[2]
+    if not world.options.lock_overworld_doors:
+        return True
+
+    return has_item(Items.SKELETON_KEY, bundle) or has_item(key, bundle)
 
 
 def small_keys(key: Items, requiredAmount: int, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
