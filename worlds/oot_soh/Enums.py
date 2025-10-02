@@ -3451,8 +3451,8 @@ class Events(str, Enum):
     CLEARED_SHADOW_TEMPLE = "Shadow Temple Completed"
     TIME_TRAVEL = "Time Travel"
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
-    CAN_BOTTLE_BUGS = "Can Bottle Bugs"
-    CAN_BOTTLE_BIG_POE = "Can Bottle Big Poe"
+    CAN_ACCESS_BUGS = "Can Access Bugs"
+    CAN_DEFEAT_BIG_POE = "Can Defeat Big Poe"
     GAME_COMPLETED = "Game Completed"
 
 class Ages(str, Enum):
