@@ -462,35 +462,23 @@ def can_live(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 # BELOW IS AI SLOP
 # Based on C++ Logic
-def can_hit_switch(bundle: tuple[CollectionState, Regions, "SohWorld"], distance: EnemyDistance = EnemyDistance.CLOSE,
+def can_hit_switch(state: CollectionState, world: "SohWorld", distance: EnemyDistance = EnemyDistance.CLOSE,
                    in_water: bool = False) -> bool:
-    hit = False
-    
-    if(distance.value <= EnemyDistance.SHORT_JUMPSLASH.value):
-        hit = can_use(Items.KOKIRI_SWORD, bundle) or can_use(Items.MEGATON_HAMMER, bundle)
-
-    if(distance.value <= EnemyDistance.MASTER_SWORD_JUMPSLASH.value):
-        hit = hit or can_use(Items.MASTER_SWORD, bundle)
-
-    if(distance.value <= EnemyDistance.LONG_JUMPSLASH.value):
-        hit = hit or can_use(Items.BIGGORONS_SWORD, bundle) or can_use(Items.STICKS, bundle)
-
-    if(distance.value <= EnemyDistance.BOMB_THROW.value):
-        hit = hit or (not in_water and can_use(Items.BOMB_BAG, bundle))
-        
-    if(distance.value <= EnemyDistance.BOOMERANG.value):
-        hit = hit or can_use(Items.BOOMERANG, bundle)
-
-    if(distance.value <= EnemyDistance.HOOKSHOT.value):
-        hit = hit or has_item(Items.PROGRESSIVE_HOOKSHOT, bundle) or can_use(Items.BOMBCHUS_5, bundle)
-
-    if(distance.value <= EnemyDistance.LONGSHOT.value):
-        hit = hit or has_item(Items.PROGRESSIVE_HOOKSHOT, bundle, 2)
-
-    if(distance.value <= EnemyDistance.FAR.value):
-        hit = hit or can_use(Items.PROGRESSIVE_SLINGSHOT, bundle) or can_use(Items.PROGRESSIVE_BOW, bundle)
-
-    return hit
+    if distance <= EnemyDistance.SHORT_JUMPSLASH and (can_use(Items.KOKIRI_SWORD, state, world) or can_use(Items.MEGATON_HAMMER, state, world)):
+        return True
+    if distance <= EnemyDistance.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD, state, world):
+        return True
+    if distance <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, state, world) or can_use(Items.STICKS, state, world)):
+        return True
+    if distance <= EnemyDistance.BOMB_THROW and not in_water and can_use(Items.BOMB_BAG, state, world):
+        return True
+    if distance <= EnemyDistance.HOOKSHOT and (can_use(Items.HOOKSHOT, state, world) or can_use(Items.BOMBCHUS_5, state, world)):
+        return True
+    if distance <= EnemyDistance.LONGSHOT and can_use(Items.LONGSHOT, state, world):
+        return True
+    if distance <= EnemyDistance.FAR and (can_use(Items.FAIRY_SLINGSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world)):
+        return True
+    return False
 
 def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies, distance: EnemyDistance = EnemyDistance.CLOSE,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
@@ -507,165 +495,210 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         timer: Whether there's a timer constraint
         in_water: Whether the fight is underwater
     """
-
     # Define what weapons work at each range
-    def can_hit_at_range(distance: EnemyDistance) -> bool:
-        if distance == EnemyDistance.CLOSE:
-            return (can_jump_slash(bundle) or
-                    has_explosives(bundle) or
-                    can_use(Items.DINS_FIRE, bundle))
-
-        elif distance in [EnemyDistance.SHORT_JUMPSLASH, EnemyDistance.MASTER_SWORD_JUMPSLASH, EnemyDistance.LONG_JUMPSLASH]:
-            return can_jump_slash(bundle)
-
-        elif distance == EnemyDistance.BOMB_THROW:
-            return has_explosives(bundle)
-
-        elif distance == EnemyDistance.BOOMERANG:
-            return can_use(Items.BOOMERANG, bundle)
-
-        elif distance == EnemyDistance.HOOKSHOT:
-            return can_use(Items.PROGRESSIVE_HOOKSHOT, bundle)
-
-        elif distance == EnemyDistance.LONGSHOT:
-            return can_use(Items.PROGRESSIVE_HOOKSHOT, bundle)  # Longshot is progressive hookshot level 2
-
-        elif distance == EnemyDistance.FAR:
-            return (can_use(Items.PROGRESSIVE_BOW, bundle) or
-                    can_use(Items.PROGRESSIVE_SLINGSHOT, bundle) or
-                    can_use(Items.PROGRESSIVE_HOOKSHOT, bundle) or
-                    has_explosives(bundle))
-
+    def can_hit_at_range(range_type: EnemyDistance) -> bool:
+        if range_type == EnemyDistance.CLOSE and can_use(Items.MEGATON_HAMMER, state, world):
+            return True
+        if range_type <= EnemyDistance.SHORT_JUMPSLASH and can_use(Items.KOKIRI_SWORD, state, world):
+            return True
+        if range_type <= EnemyDistance.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD, state, world):
+            return True
+        if range_type <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, state, world) or can_use(Items.STICKS, state, world)):
+            return True
+        if range_type <= EnemyDistance.BOMB_THROW and (not in_water and can_use(Items.BOMB_BAG, state, world)):
+            return True
+        if range_type <= EnemyDistance.HOOKSHOT and (can_use(Items.HOOKSHOT, state, world) or (wall_or_floor and can_use(Items.BOMBCHUS_5, state, world))):
+            return True
+        if range_type <= EnemyDistance.LONGSHOT and can_use(Items.LONGSHOT, state, world):
+            return True
+        if range_type <= EnemyDistance.FAR and (can_use(Items.FAIRY_SLINGSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world)):
+            return True
         return False
 
     # Enemy-specific logic based on C++ implementation
 
-    # Guards (need specific items or tricks)
     if enemy in [Enemies.GERUDO_GUARD, Enemies.BREAK_ROOM_GUARD]:
-        return (can_use(Items.PROGRESSIVE_BOW, bundle) or
-                can_use(Items.PROGRESSIVE_HOOKSHOT, bundle) or
-                has_explosives(bundle))
+        return False
 
-    # Gold Skulltulas and similar enemies that can be hit at various ranges
-    if enemy in [Enemies.GOLD_SKULLTULA, Enemies.BIG_SKULLTULA]:
-        return can_hit_at_range(distance)
+    if enemy == Enemies.GOLD_SKULLTULA:
+        return can_hit_at_range(combat_range) or (combat_range <= EnemyDistance.LONGSHOT and (wall_or_floor and can_use(Items.BOMBCHUS_5, state, world))) or \
+            (combat_range <= EnemyDistance.BOOMERANG and can_use(Items.DINS_FIRE, state, world))
 
-    # Small enemies that are easy to kill
-    if enemy in [Enemies.GOHMA_LARVA, Enemies.MAD_SCRUB, Enemies.DEKU_BABA, Enemies.WITHERED_DEKU_BABA]:
-        return can_hit_at_range(distance)
+    if enemy == Enemies.BIG_SKULLTULA:
+        return can_hit_at_range(combat_range) or (combat_range <= EnemyDistance.BOOMERANG and can_use(Items.DINS_FIRE, state, world))
 
-    # Dodongo (requires explosives or specific attacks)
+    if enemy in [Enemies.GOHMA_LARVA, Enemies.MAD_SCRUB, Enemies.DEKU_BABA]:
+        return can_attack(state, world)
+    
     if enemy == Enemies.DODONGO:
-        if distance in [EnemyDistance.CLOSE, EnemyDistance.SHORT_JUMPSLASH, EnemyDistance.MASTER_SWORD_JUMPSLASH, EnemyDistance.LONG_JUMPSLASH]:
-            return (can_jump_slash(bundle) or has_explosives(bundle))
-        return has_explosives(bundle)
+        return can_use_sword(state, world) or can_use(Items.MEGATON_HAMMER, state, world) or (quantity <= 5 and can_use(Items.STICKS, state, world)) or \
+                has_explosives(state, world) or can_use(Items.FAIRY_SLINGSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world)
 
-    # Lizalfos (requires good weapons)
     if enemy == Enemies.LIZALFOS:
-        return (can_jump_slash(bundle) or
-                can_use(Items.PROGRESSIVE_BOW, bundle) or
-                has_explosives(bundle))
+        return (can_jump_slash(state, world) or can_use(Items.PROGRESSIVE_BOW, state, world) or has_explosives(state, world)) \
+            or can_use(Items.FAIRY_SLINGSHOT, state, world)
 
-    # Flying enemies
     if enemy in [Enemies.KEESE, Enemies.FIRE_KEESE]:
-        return can_hit_at_range(distance)
+        return can_hit_at_range(combat_range) or (combat_range == EnemyDistance.CLOSE and can_use(Items.KOKIRI_SWORD, state, world)) \
+            or (combat_range <= EnemyDistance.BOOMERANG and can_use(Items.BOOMERANG, state, world))
 
-    # Bubbles (need specific attacks)
-    if enemy in [Enemies.BLUE_BUBBLE, Enemies.GREEN_BUBBLE]:
-        return (can_jump_slash(bundle) or
-                can_use_any([Items.PROGRESSIVE_BOW,Items.PROGRESSIVE_HOOKSHOT,Items.BOOMERANG], bundle))
+    if enemy in Enemies.BLUE_BUBBLE:
+        return blast_or_smash(state, world) or can_use(Items.PROGRESSIVE_BOW, state, world) or \
+            ((can_jump_slash_except_hammer(state, world) or can_use(Items.PROGRESSIVE_SLINGSHOT, state, world)) and \
+             (can_use(Items.NUTS, state, world) or hookshot_or_boomerang(state, world) or can_standing_shield(state, world)))
 
-    # Tough enemies
-    if enemy in [Enemies.DEAD_HAND, Enemies.LIKE_LIKE, Enemies.FLOORMASTER, Enemies.WALLMASTER]:
-        return (can_jump_slash(bundle) or
-                can_use(Items.PROGRESSIVE_BOW, bundle) or
-                has_explosives(bundle))
+    if enemy == Enemies.DEAD_HAND:
+        return can_use_sword(state, world) or (can_use(Items.STICKS, state, world) and False) #TODO replace False with ctx->GetTrickOption(RT_BOTW_CHILD_DEADHAND));
 
-    # Stalfos (needs good weapons)
+    if enemy == Enemies.WITHERED_DEKU_BABA:
+        return can_attack(state, world) or can_use(Items.BOOMERANG, state, world)
+
+    if enemy in [Enemies.LIKE_LIKE, Enemies.FLOORMASTER]:
+        return can_use_sword(state, world) or (can_use(Items.STICKS, state, world) and False) #TODO replace False with dead hand child option
+
     if enemy == Enemies.STALFOS:
-        return can_hit_at_range(distance) and (
-                can_jump_slash(bundle) or
-                can_use(Items.MEGATON_HAMMER, bundle))
+        return can_hit_at_range(combat_range) or (combat_range == EnemyDistance.CLOSE and can_use(Items.KOKIRI_SWORD, state, world))
 
-    # Iron Knuckle (very tough)
     if enemy == Enemies.IRON_KNUCKLE:
-        return (can_jump_slash(bundle) or
-                can_use(Items.MEGATON_HAMMER, bundle) or
-                has_explosives(bundle))
+        return (can_use_sword(state, world) or
+                can_use(Items.MEGATON_HAMMER, state, world) or
+                has_explosives(state, world))
 
-    # Fire enemies
-    if enemy in [Enemies.FLARE_DANCER, Enemies.TORCH_SLUG]:
-        return (can_jump_slash(bundle) or
-                can_use(Items.PROGRESSIVE_BOW, bundle) or
-                can_use(Items.PROGRESSIVE_HOOKSHOT, bundle) or
-                has_explosives(bundle))
+    if enemy == Enemies.FLARE_DANCER:
+        return can_use(Items.MEGATON_HAMMER, state, world) or \
+               can_use(Items.PROGRESSIVE_HOOKSHOT, state, world) or \
+               (has_explosives(state, world) and (can_jump_slash_except_hammer(state, world) or can_use(Items.PROGRESSIVE_BOW, state, world) or \
+                    can_use(Items.PROGRESSIVE_SLINGSHOT, state, world) or can_use(Items.BOOMERANG, state, world)))
 
-    # Wolfos
-    if enemy in [Enemies.WOLFOS, Enemies.WHITE_WOLFOS]:
-        return (can_jump_slash(bundle) or
-                can_use(Items.PROGRESSIVE_BOW, bundle) or
-                has_explosives(bundle))
+    if enemy in [Enemies.WOLFOS, Enemies.WHITE_WOLFOS, Enemies.WALLMASTER]:
+        return can_jump_slash(state, world) or can_use(Items.FAIRY_BOW, state, world) or can_use(Items.FAIRY_SLINGSHOT, state, world) or \
+                   can_use(Items.BOMBCHUS_5, state, world) or can_use(Items.DINS_FIRE, state, world) or \
+                   (can_use(Items.BOMB_BAG, state, world) and (can_use(Items.NUTS, state, world) or can_use(Items.HOOKSHOT, state, world) or can_use(Items.BOOMERANG, state, world)))
 
-    # Gerudo Warrior
     if enemy == Enemies.GERUDO_WARRIOR:
-        return (can_jump_slash(bundle) or
-                can_use(Items.PROGRESSIVE_BOW, bundle) or
-                has_explosives(bundle))
+        return can_jump_slash(state, world) or can_use(Items.FAIRY_BOW, state, world) or \
+                    (False and #TODO replace False with Gerudo warrior with hard weapon trick option
+                    (can_use(Items.FAIRY_SLINGSHOT, state, world) or can_use(Items.BOMBCHUS_5, state, world)))
 
-    # ReDeads and Gibdos
     if enemy in [Enemies.GIBDO, Enemies.REDEAD]:
-        return (can_jump_slash(bundle) or
-                can_use(Items.PROGRESSIVE_BOW, bundle) or
-                can_use(Items.SUNS_SONG, bundle) or
-                has_explosives(bundle))
+        return can_jump_slash(state, world) or \
+               can_use(Items.DINS_FIRE, state, world)
 
-    # Other enemies
-    if enemy in [Enemies.MEG, Enemies.ARMOS, Enemies.DINOLFOS, Enemies.FREEZARD, Enemies.SHELL_BLADE, Enemies.SPIKE, Enemies.STINGER]:
-        return can_hit_at_range(distance)
+    if enemy == Enemies.MEG:
+        return can_use(Items.FAIRY_BOW, state, world) or can_use(Items.HOOKSHOT, state, world) or has_explosives(state, world)
+    
+    if enemy == Enemies.ARMOS:
+        return blast_or_smash(state, world) or can_use(Items.MASTER_SWORD, state, world) or can_use(Items.BIGGORONS_SWORD, state, world) or can_use(Items.STICKS, state, world) or \
+                   can_use(Items.FAIRY_BOW, state, world) or \
+                   ((can_use(Items.NUTS, state, world) or can_use(Items.HOOKSHOT, state, world) or can_use(Items.BOOMERANG, state, world)) and
+                    (can_use(Items.KOKIRI_SWORD, state, world) or can_use(Items.FAIRY_SLINGSHOT, state, world)))
 
-    # Water enemies
-    if enemy in [Enemies.BIG_OCTO, Enemies.BARI, Enemies.SHABOM, Enemies.OCTOROK, Enemies.TENTACLE]:
-        if in_water:
-            return (can_use(Items.PROGRESSIVE_HOOKSHOT, bundle) or
-                    can_use(Items.PROGRESSIVE_BOW, bundle) or
-                    has_explosives(bundle))
-        return can_hit_at_range(distance)
+    if enemy == Enemies.GREEN_BUBBLE:
+        return can_jump_slash(state, world) or can_use(Items.FAIRY_BOW, state, world) or can_use(Items.FAIRY_SLINGSHOT, state, world) or has_explosives(state, world)
 
-    # Bosses
-    if enemy in [Enemies.GOHMA, Enemies.KING_DODONGO, Enemies.BARINADE, Enemies.PHANTOM_GANON, Enemies.VOLVAGIA,
-                       Enemies.MORPHA, Enemies.BONGO_BONGO, Enemies.TWINROVA, Enemies.GANONDORF, Enemies.GANON]:
-        # Bosses generally require good weapons and specific strategies
-        return (can_jump_slash(bundle) or
-                can_use(Items.PROGRESSIVE_BOW, bundle) or
-                has_explosives(bundle))
+    if enemy == Enemies.DINOLFOS:
+        return can_jump_slash(state, world) or can_use(Items.FAIRY_BOW, state, world) or can_use(Items.FAIRY_SLINGSHOT, state, world) or \
+                   (not timer and can_use(Items.BOMBCHUS_5, state, world))
+    
+    if enemy == Enemies.TORCH_SLUG:
+        return can_jump_slash(state, world) or has_explosives(state, world) or can_use(Items.FAIRY_BOW, state, world)
+    
+    if enemy == Enemies.FREEZARD:
+        return can_use(Items.MASTER_SWORD, state, world) or can_use(Items.BIGGORONS_SWORD, state, world) or can_use(Items.MEGATON_HAMMER, state, world) or \
+                   can_use(Items.STICKS, state, world) or has_explosives(state, world) or can_use(Items.HOOKSHOT, state, world) or can_use(Items.DINS_FIRE, state, world) or \
+                   can_use(Items.FIRE_ARROW, state, world)
 
-    # Dark Link (special case)
+    if enemy == Enemies.SHELL_BLADE:
+        return can_jump_slash(state, world) or has_explosives(state, world) or can_use(Items.HOOKSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world) or can_use(Items.DINS_FIRE, state, world)
+
+    if enemy == Enemies.SPIKE:
+        return can_use(Items.MASTER_SWORD, state, world) or can_use(Items.BIGGORONS_SWORD, state, world) or can_use(Items.MEGATON_HAMMER, state, world) or \
+                can_use(Items.STICKS, state, world) or has_explosives(state, world) or can_use(Items.HOOKSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world) or \
+                can_use(Items.DINS_FIRE, state, world)
+
+    if enemy == Enemies.STINGER:
+        return can_hit_at_range(combat_range) or (combat_range == EnemyDistance.CLOSE and can_use(Items.KOKIRI_SWORD, state, world))
+
+    if enemy == Enemies.BIG_OCTO:
+        # If chasing octo is annoying but with rolls you can catch him, and you need rang to get into this room
+        # without shenanigans anyway. Bunny makes it free
+        return can_use(Items.KOKIRI_SWORD, state, world) or can_use(Items.STICKS, state, world) or can_use(Items.MASTER_SWORD, state, world)
+    if enemy == Enemies.GOHMA:
+        return has_boss_soul(Items.GOHMAS_SOUL, state, world) and can_jump_slash(state, world) and \
+               (can_use(Items.NUTS, state, world) or can_use(Items.FAIRY_SLINGSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world) or hookshot_or_boomerang(state, world))
+    if enemy == Enemies.KING_DODONGO:
+        return has_boss_soul(Items.KING_DODONGOS_SOUL, state, world) and can_jump_slash(state, world) and \
+               (can_use(Items.BOMB_BAG, state, world) or has_item(Items.GORONS_BRACELET, state, world) or \
+               (False and can_access_region_as_adult(state, world, Regions.DODONGOS_CAVERN_BOSS_ROOM) and can_use(Items.BOMBCHUS_5, state, world))) #TODO replace False with ctx->get_trick_option(RT_DC_DODONGO_CHU)
+    if enemy == Enemies.BARINADE:
+        return has_boss_soul(Items.BARINADES_SOUL, state, world) and can_use(Items.BOOMERANG, state, world) and can_jump_slash_except_hammer(state, world)
+    if enemy == Enemies.PHANTOM_GANON:
+        return has_boss_soul(Items.PHANTOM_GANONS_SOUL, state, world) and can_use_sword(state, world) and \
+               (can_use(Items.HOOKSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world) or can_use(Items.FAIRY_SLINGSHOT, state, world))
+    if enemy == Enemies.VOLVAGIA:
+        return has_boss_soul(Items.VOLVAGIAS_SOUL, state, world) and can_use(Items.MEGATON_HAMMER, state, world)
+    if enemy == Enemies.MORPHA:
+        return has_boss_soul(Items.MORPHAS_SOUL, state, world) and \
+               (can_use(Items.HOOKSHOT, state, world) or \
+                (False and has_item(Items.PROGRESSIVE_SCALE, state, world, count=1))) and \
+               (can_use_sword(state, world) or can_use(Items.MEGATON_HAMMER, state, world)) #TODO replace False with ctx->get_trick_option(RT_WATER_MORPHA_WITHOUT_HOOKSHOT)
+    if enemy == Enemies.BONGO_BONGO:
+        return has_boss_soul(Items.BONGO_BONGOS_SOUL, state, world) and \
+               (can_use(Items.LENS_OF_TRUTH, state, world) or False) and can_use_sword(state, world) and \
+               (can_use(Items.HOOKSHOT, state, world) or can_use(Items.FAIRY_BOW, state, world) or can_use(Items.FAIRY_SLINGSHOT, state, world) or \
+                False) #TODO replace the Falses with ctx->get_trick_option(RT_LENS_BONGO) and ctx->get_trick_option(RT_SHADOW_BONGO)
+    if enemy == Enemies.TWINROVA:
+        return has_boss_soul(Items.TWINROVAS_SOUL, state, world) and can_use(Items.MIRROR_SHIELD, state, world) and \
+               (can_use_sword(state, world) or can_use(Items.MEGATON_HAMMER, state, world))
+    if enemy == Enemies.GANONDORF:
+        # RANDOTODO: Trick to use hammer (no jumpslash) or stick (only jumpslash) instead of a sword to reflect the
+        # energy ball and either of them regardless of jumpslashing to damage and kill ganondorf
+
+        # Bottle is not taken into account since a sword, hammer or stick are required
+        # for killing ganondorf and all of those can reflect the energy ball
+        # This will not be the case once ammo logic in taken into account as
+        # sticks are limited and using a bottle might become a requirement in that case
+        return has_boss_soul(Items.GANONS_SOUL, state, world) and can_use(Items.LIGHT_ARROW, state, world) and can_use_sword(state, world)
+    if enemy == Enemies.GANON:
+        return has_boss_soul(Items.GANONS_SOUL, state, world) and can_use(Items.MASTER_SWORD, state, world)
     if enemy == Enemies.DARK_LINK:
-        return (can_use(Items.MEGATON_HAMMER, bundle) or
-                can_use(Items.PROGRESSIVE_BOW, bundle) or
-                has_explosives(bundle))
-
-    # Beamos (needs ranged attacks)
-    if enemy == Enemies.BEAMOS:
-        return (can_use(Items.PROGRESSIVE_BOW, bundle) or
-                can_use(Items.PROGRESSIVE_HOOKSHOT, bundle) or
-                has_explosives(bundle))
-
-    # Purple Leever
-    if enemy == Enemies.PURPLE_LEEVER:
-        return can_hit_at_range(distance)
-
-    # Anubis (tough enemy)
+        # RANDOTODO Dark link is buggy right now, retest when he is not
+        return can_jump_slash(state, world) or can_use(Items.FAIRY_BOW, state, world)
     if enemy == Enemies.ANUBIS:
-        return (can_jump_slash(bundle) or
-                can_use(Items.PROGRESSIVE_BOW, bundle) or
-                has_explosives(bundle))
+        # there's a restoration that allows beating them with mirror shield + some way to trigger their attack
+        return has_fire_source(state, world)
+    if enemy == Enemies.BEAMOS:
+        return has_explosives(state, world)
+    if enemy == Enemies.PURPLE_LEEVER:
+        # dies on it's own, so this is the conditions to spawn it (killing 10 normal leevers)
+        # Sticks and Ice arrows work but will need ammo capacity logic
+        # other methods can damage them but not kill them, and they run when hit, making them impractical
+        return can_use(Items.MASTER_SWORD, state, world) or can_use(Items.BIGGORONS_SWORD, state, world)
+    if enemy == Enemies.TENTACLE:
+        return can_use(Items.BOOMERANG, state, world)
+    if enemy == Enemies.BARI:
+        return hookshot_or_boomerang(state, world) or can_use(Items.FAIRY_BOW, state, world) or has_explosives(state, world) or can_use(Items.MEGATON_HAMMER, state, world) or \
+               can_use(Items.STICKS, state, world) or can_use(Items.DINS_FIRE, state, world) or (take_damage(state, world) and can_use_sword(state, world))
+    if enemy == Enemies.SHABOM:
+        # RANDOTODO when you add better damage logic, you can kill this by taking hits
+        return can_use(Items.BOOMERANG, state, world) or can_use(Items.NUTS, state, world) or can_jump_slash(state, world) or can_use(Items.DINS_FIRE, state, world) or \
+               can_use(Items.ICE_ARROW, state, world)
+    if enemy == Enemies.OCTOROK:
+        return can_reflect_nuts(state, world) or hookshot_or_boomerang(state, world) or can_use(Items.FAIRY_BOW, state, world) or can_use(Items.FAIRY_SLINGSHOT, state, world) or \
+               can_use(Items.BOMB_BAG, state, world) or (wall_or_floor and can_use(Items.BOMBCHUS_5, state, world))
 
-    # Default case - assume basic combat is sufficient
-    return can_damage(bundle)
+    return False
+
+def has_boss_soul(soul: Items, state: CollectionState, world: "SohWorld"):
+    soulsanity = world.options.shuffle_boss_souls.value
+    if soulsanity == 0:
+        return True
+    if soul == Items.GANONS_SOUL:
+        return True if soulsanity == 1 else state.has(Items.GANONS_SOUL, world.player)
+    return state.has(soul, world.player)
 
 
-def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies) -> bool:
+def can_pass_enemy(state: CollectionState, world: "SohWorld", enemy: Enemies) -> bool:
     """Check if Link can pass by an enemy (usually by killing or stunning it)."""
     return can_kill_enemy(bundle, enemy) # I think that we can be more permissive here, but for now this is fine
 
