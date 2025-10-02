@@ -69,7 +69,7 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
             return handler
 
 
-container_version: int = 6
+container_version: int = 7
 
 
 def is_ap_player_container(game: str, data: bytes, player: int):
@@ -186,6 +186,7 @@ class APWorldContainer(APContainer):
     def get_manifest(self) -> Dict[str, Any]:
         manifest = super().get_manifest()
         manifest["game"] = self.game
+        manifest["compatible_version"] = 7
         for version_key in ("world_version", "minimum_ap_version", "maximum_ap_version"):
             version = getattr(self, version_key)
             if version:
