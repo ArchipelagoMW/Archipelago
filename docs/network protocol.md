@@ -79,7 +79,7 @@ Sent to clients when they connect to an Archipelago server.
 | generator_version     | [NetworkVersion](#NetworkVersion)             | Object denoting the version of Archipelago which generated the multiworld.                                                                                                                                                            |
 | tags                  | list\[str\]                                   | Denotes special features or capabilities that the sender is capable of. Example: `WebHost`                                                                                                                                            |
 | password              | bool                                          | Denoted whether a password is required to join this room.                                                                                                                                                                             |
-| permissions           | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "release", "collect" and "remaining".                                                                                                                              |
+| permissions           | dict\[str, [Permission](#Permission)\]        | Mapping of permission name to [Permission](#Permission), keys are: "release", "collect" and "remaining".                                                                                                                              |
 | hint_cost             | int                                           | The percentage of total locations that need to be checked to receive a hint from the server.                                                                                                                                          |
 | location_check_points | int                                           | The amount of hint points you receive per item/location check completed.                                                                                                                                                              |
 | games                 | list\[str\]                                   | List of games present in this multiworld.                                                                                                                                                                                             |
@@ -662,13 +662,14 @@ class SlotType(enum.IntFlag):
 An object representing static information about a slot.
 
 ```python
-import typing
+from collections.abc import Sequence
+from typing import NamedTuple
 from NetUtils import SlotType
-class NetworkSlot(typing.NamedTuple):
+class NetworkSlot(NamedTuple):
    name: str
    game: str
    type: SlotType
-   group_members: typing.List[int] = []  # only populated if type == group
+   group_members: Sequence[int] = []  # only populated if type == group
 ```
 
 ### Permission
@@ -686,8 +687,8 @@ class Permission(enum.IntEnum):
 ### Hint
 An object representing a Hint.
 ```python
-import typing
-class Hint(typing.NamedTuple):
+from typing import NamedTuple
+class Hint(NamedTuple):
     receiving_player: int
     finding_player: int
     location: int
