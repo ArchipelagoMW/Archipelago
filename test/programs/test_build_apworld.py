@@ -201,7 +201,7 @@ class TestBuildApworld(unittest.TestCase):
 		output_path = self.output_tempdir.name
 
 		excluded_file_name = ".DS_STORE"
-		excluded_file_path = Path(input_path, excluded_file_name)
+		excluded_file_path = input_path / excluded_file_name
 		excluded_file_path.touch()
 
 		self.assertTrue(excluded_file_path.exists())
@@ -221,7 +221,7 @@ class TestBuildApworld(unittest.TestCase):
 		output_path = self.output_tempdir.name
 
 		excluded_file_name = "README"
-		excluded_file_path = Path(input_path, excluded_file_name)
+		excluded_file_path = input_path / excluded_file_name
 		excluded_file_path.touch()
 
 		self.assertTrue(excluded_file_path.exists())
