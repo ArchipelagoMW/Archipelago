@@ -265,14 +265,14 @@ def blast_or_smash(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 def blue_fire(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link has access to blue fire."""
-    return can_use(Items.BOTTLE_WITH_BLUE_FIRE, bundle)  # or blue fire arrows
+    return has_bottle(bundle) and (has_item(Events.CAN_ACCESS_BLUE_FIRE, bundle) or has_item(Items.BUY_BLUE_FIRE, bundle)) # TODO: Implement blue fire arrow option
 
 
 def can_use_sword(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can use any sword."""
     return can_use_any([Items.KOKIRI_SWORD, Items.MASTER_SWORD, Items.BIGGORONS_SWORD], bundle)
 
-
+# TODO change the age here to the enum
 def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: str = "either") -> bool:
     """Check if Link has access to projectiles."""
     if has_explosives(bundle):
@@ -322,11 +322,21 @@ def at_day(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return True
 
 
+def at_night(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    # For now, return True as a placeholder since time of day logic is complex and context-dependent
+    # TODO: Implement proper time checking based on world settings and progression
+    return True
+
+
 def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
     return state._soh_can_reach_as_age(parent_region, Ages.CHILD, world.player)
+
+
+def can_be_both_ages(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    return is_child(bundle) and is_adult(bundle)
 
 
 def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -368,9 +378,8 @@ def can_shield(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 
 def take_damage(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    # return CanUse(RG_BOTTLE_WITH_FAIRY) || EffectiveHealth() != 1 || CanUse(RG_NAYRUS_LOVE);
     return (can_use(Items.BOTTLE_WITH_FAIRY, bundle) or can_use(Items.NAYRUS_LOVE, bundle)
-            or True)  #TODO: Implement "|| EffectiveHealth()"
+            or effective_health(bundle) != 1)
 
 
 def can_do_trick(trick: str, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -394,8 +403,13 @@ def can_break_crates(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> boo
     return True
   
 
-def can_break_small_crates(state: CollectionState, world: "SohWorld") -> bool:
+def can_break_small_crates(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can break small crates."""
+    return True
+
+
+def can_bonk_trees(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    """Check if Link can bonk trees."""
     return True
 
 
@@ -803,7 +817,7 @@ def can_detonate_upright_bomb_flower(bundle: tuple[CollectionState, Regions, "So
             or has_item(Items.GORONS_BRACELET, bundle)
             or (can_do_trick("RT BLUE FIRE MUD WALLS", bundle)
                 and blue_fire(bundle)
-                and (False # EffectiveHealth Function. Not sure how to implement some of the stuff that is client setting specific
+                and (effective_health != 1
                     or can_use(Items.NAYRUS_LOVE, bundle)
                 ))
 
@@ -868,8 +882,9 @@ def can_open_bomb_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) ->
 
 def trade_quest_step(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
-    if (world.options.shuffle_adult_trade_items.value):
-        return False
+    # If adult trade shuffle is off, it'll automatically assume the whole trade quest is complete as soon as claim check is obtained.
+    if (world.options.shuffle_adult_trade_items.value == 0):
+        return has_item(Items.CLAIM_CHECK, bundle)
     
     hasState = False
 
@@ -943,3 +958,10 @@ def can_trigger_lacs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> boo
             (gbk_setting == 5 and (stone_count(bundle) + medallion_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeon_rewards_required.value)) or 
             (gbk_setting == 6 and (dungeon_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeons_required.value)) or
             (gbk_setting == 7 and (get_gs_count(bundle) >= world.options.ganons_castle_boss_key_skull_tokens_required.value)))
+
+# TODO implement EffectiveHealth(); Returns 2 for now
+def effective_health(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
+    return 2
+
+def can_plant_bean(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    return has_item(Items.MAGIC_BEAN, bundle) and can_be_both_ages(bundle)
