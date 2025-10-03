@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility
+from Options import Choice, Toggle, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility, OptionGroup
 
 
 class ClosedForest(Choice):
@@ -775,4 +775,117 @@ class SohOptions(PerGameCommonOptions):
     skeleton_key: SkeletonKey
     starting_age: StartingAge
 
-# todo: option groups so this isn't a nightmare to navigate
+
+soh_option_groups = [
+    OptionGroup("Area Access", [
+        ClosedForest,
+        KakarikoGate,
+        DoorOfTime,
+        ZorasFountain,
+        SleepingWaterfall,
+        JabuJabu,
+        LockOverworldDoors,
+    ]),
+    OptionGroup("World Settings", [
+        StartingAge,
+        FortressCarpenters,
+        RainbowBridge,
+        RainbowBridgeStonesRequired,
+        RainbowBridgeMedallionsRequired,
+        RainbowBridgeDungeonRewardsRequired,
+        RainbowBridgeDungeonsRequired,
+        RainbowBridgeSkullTokensRequired,
+        RainbowBridgeGregWildcard,
+        GanonsTrialsRequired,
+        TriforceHunt,
+        TriforceHuntRequiredPieces,
+        TriforceHuntExtraPiecesPercentage,
+    ]),
+    # OptionGroup("Shuffle Entrances", [
+    #     # Dungeon Entrances
+    #     # Boss Entrances
+    #     # Overworld Entrances
+    #     # Interior Entrances
+    #     # Grotto Entrances
+    #     # Owl Drops
+    #     # Warp Songs
+    #     # Overworld Spawns
+    #     # Decouple Entrances
+    # ]),
+    OptionGroup("Shuffle Items", [
+        # Shuffle Songs -- idk if this or the other ones here will be an actual option here, delete if not
+        ShuffleTokens,
+        # Night Skulltulas Expect Sun's Song
+        # Shuffle Kokiri Sword
+        ShuffleMasterSword,
+        ShuffleChildsWallet,
+        # Include Tycoon Wallet
+        # Shuffle Ocarinas
+        ShuffleOcarinaButtons,
+        ShuffleSwim,
+        ShuffleWeirdEgg,
+        # Shuffle Gerudu Membership Card
+        ShuffleFishingPole,
+        ShuffleDekuStickBag,
+        ShuffleDekuNutBag,
+        ShuffleFreestandingItems,
+    ]),
+    OptionGroup("Shuffle NPCs & Merchants", [
+        ShuffleShops,
+        ShuffleShopsItemAmount,
+        # Shop Prices
+        # Other shop weight stuff
+        ShuffleFish,
+        ShuffleScrubs,
+        # Scrub prices
+        ShuffleBeehives,
+        ShuffleCows,
+        ShufflePots,
+        ShuffleCrates,
+        ShuffleMerchants,
+        # Merchant prices
+        ShuffleFrogSongRupees,
+        ShuffleAdultTradeItems,
+        # 100 skulls reward shuffle
+        ShuffleBossSouls,
+        ShuffleFairies,
+        ShuffleGrass,
+    ]),
+    OptionGroup("Shuffle Dungeon Items", [
+        ShuffleDungeonRewards,
+        MapsAndCompasses,
+        # Small Key Shuffle
+        # Gerudo Fortress Keys
+        # Boss Key Shuffle
+        GanonsCastleBossKey,
+        GanonsCastleBossKeyStonesRequired,
+        GanonsCastleBossKeyMedallionsRequired,
+        GanonsCastleBossKeyDungeonRewardsRequired,
+        GanonsCastleBossKeyDungeonsRequired,
+        GanonsCastleBossKeySkullTokensRequired,
+        GanonsCastleBossKeyGregWildcard,
+        KeyRings,
+        # Key Ring Dungeon Count
+    ]),
+    # todo: decide whether these should be in the yaml or just let you change them locally on the fly
+    OptionGroup("Timesavers", [
+        # Cuccoos to Return
+        BigPoeTargetCount,
+        SkipChildZelda,
+        SkipEponaRace,
+        CompleteMaskQuest,
+        SkipScarecrowsSong,
+    ]),
+    # OptionGroup("Item Pool & Hints", [
+    # none of these are implemented, so just leaving this placeholder
+    # ]),
+    OptionGroup("Additional Features", [
+        FullWallets,  # another one that should maybe just be a locally changeable setting instead of in the yaml
+        BombchuBag,
+        BombchuDrops,
+        BlueFireArrows,
+        SunlightArrows,
+        InfiniteUpgrades,
+        SkeletonKey,
+    ])
+]
