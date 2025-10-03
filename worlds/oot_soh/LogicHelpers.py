@@ -322,6 +322,12 @@ def at_day(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return True
 
 
+def at_night(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    # For now, return True as a placeholder since time of day logic is complex and context-dependent
+    # TODO: Implement proper time checking based on world settings and progression
+    return True
+
+
 def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
