@@ -8,10 +8,10 @@ APWorlds can either be a folder, or they can be packaged as an .apworld file.
 
 ## .apworld File Format
 
-.apworld provides a way to package and ship an APWorld that is not part of the main distribution
+The `.apworld` file format provides a way to package and ship an APWorld that is not part of the main distribution
 by placing a `*.apworld` file into the worlds folder.
 
-.apworld files are zip archives, all lower case, with the file ending `.apworld`.
+`.apworld` files are zip archives, all lower case, with the file ending `.apworld`.
 The zip has to contain a folder with the same name as the zip, case-sensitive, that contains what would normally be in
 the world's folder in `worlds/`. I.e. `worlds/ror2.apworld` containing `ror2/__init__.py`.
 
