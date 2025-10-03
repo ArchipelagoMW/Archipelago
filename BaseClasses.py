@@ -451,14 +451,13 @@ class MultiWorld():
         ret = CollectionState(self, allow_partial_entrances)
 
         for item in self.itempool:
-            self.worlds[item.player].collect(ret, item)
+            ret.collect(item, prevent_sweep=True)
         if collect_pre_fill_items:
             for player in self.player_ids:
                 subworld = self.worlds[player]
                 for item in subworld.get_pre_fill_items():
-                    subworld.collect(ret, item)
-        if perform_sweep:
-            ret.sweep_for_advancements()
+                    ret.collect(item, prevent_sweep=True)
+        ret.sweep_for_advancements()
 
         return ret
 
@@ -1109,18 +1108,18 @@ class CollectionState():
         )
 
     # Item related
-    def collect(self, item: Item, prevent_sweep: bool = False, location: Optional[Location] = None) -> bool:
+    def collect(self, item: Item, prevent_sweep: bool = False, location: Optional[Location] = None) -> None:
         if location:
             self.locations_checked.add(location)
 
-        changed = self.multiworld.worlds[item.player].collect(self, item)
+        if not item.advancement:
+            return
 
+        self.multiworld.worlds[item.player].collect(self, item)
         self.stale[item.player] = True
 
-        if changed and not prevent_sweep:
+        if not prevent_sweep:
             self.sweep_for_advancements()
-
-        return changed
 
     def add_item(self, item: str, player: int, count: int = 1) -> None:
         """
@@ -1133,13 +1132,16 @@ class CollectionState():
         assert count > 0
         self.prog_items[player][item] += count
 
-    def remove(self, item: Item):
-        changed = self.multiworld.worlds[item.player].remove(self, item)
-        if changed:
-            # invalidate caches, nothing can be trusted anymore now
-            self.reachable_regions[item.player] = set()
-            self.blocked_connections[item.player] = set()
-            self.stale[item.player] = True
+    def remove(self, item: Item) -> None:
+        if not item.advancement:
+            return
+
+        self.multiworld.worlds[item.player].remove(self, item)
+
+        # invalidate caches, nothing can be trusted anymore now
+        self.reachable_regions[item.player] = set()
+        self.blocked_connections[item.player] = set()
+        self.stale[item.player] = True
 
     def remove_item(self, item: str, player: int, count: int = 1) -> None:
         """
