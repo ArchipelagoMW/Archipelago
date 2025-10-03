@@ -272,7 +272,7 @@ def can_use_sword(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can use any sword."""
     return can_use_any([Items.KOKIRI_SWORD, Items.MASTER_SWORD, Items.BIGGORONS_SWORD], bundle)
 
-# TODO change the age here to the enum
+
 def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: str = "either") -> bool:
     """Check if Link has access to projectiles."""
     if has_explosives(bundle):
@@ -368,8 +368,9 @@ def can_shield(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 
 def take_damage(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    # return CanUse(RG_BOTTLE_WITH_FAIRY) || EffectiveHealth() != 1 || CanUse(RG_NAYRUS_LOVE);
     return (can_use(Items.BOTTLE_WITH_FAIRY, bundle) or can_use(Items.NAYRUS_LOVE, bundle)
-            or effective_health(bundle) != 1)
+            or True)  #TODO: Implement "|| EffectiveHealth()"
 
 
 def can_do_trick(trick: str, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -802,7 +803,7 @@ def can_detonate_upright_bomb_flower(bundle: tuple[CollectionState, Regions, "So
             or has_item(Items.GORONS_BRACELET, bundle)
             or (can_do_trick("RT BLUE FIRE MUD WALLS", bundle)
                 and blue_fire(bundle)
-                and (effective_health != 1
+                and (False # EffectiveHealth Function. Not sure how to implement some of the stuff that is client setting specific
                     or can_use(Items.NAYRUS_LOVE, bundle)
                 ))
 
@@ -942,14 +943,3 @@ def can_trigger_lacs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> boo
             (gbk_setting == 5 and (stone_count(bundle) + medallion_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeon_rewards_required.value)) or 
             (gbk_setting == 6 and (dungeon_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeons_required.value)) or
             (gbk_setting == 7 and (get_gs_count(bundle) >= world.options.ganons_castle_boss_key_skull_tokens_required.value)))
-
-# TODO implement EffectiveHealth(); Returns 1 for now
-def effective_health(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
-    return 1
-
-def can_plant_bean(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return get_ammo(Items.MAGIC_BEAN, bundle) > 0 # && TODO Implement BothAgesCheck()
-
-# TODO Currently isn't accurate. Only shows how many of the item we have collected. Not how many the player actually has atm.
-def get_ammo(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
-    return bundle[0].count(item, bundle[2].player) 
