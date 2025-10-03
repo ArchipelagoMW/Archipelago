@@ -25,7 +25,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Death Mountain Crater Upper Local
     # Events
     add_events(Regions.DMC_UPPER_LOCAL, world, [
-        (EventLocations.DMC_GOSSIP_STONE_FAIRY, Events.GOSSIP_STONE_FAIRY, lambda bundle: has_explosives(bundle) and call_gossip_fairy_except_suns(bundle) and (fire_timer(bundle) >= 16 or hearts(bundle) >= 3))
+        (EventLocations.DMC_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_GOSSIP_STONE_FAIRY, lambda bundle: has_explosives(bundle) and call_gossip_fairy_except_suns(bundle) and (fire_timer(bundle) >= 16 or hearts(bundle) >= 3))
     ])
     # Locations
     add_locations(Regions.DMC_UPPER_LOCAL, world, [
@@ -95,7 +95,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Death Mountain Crater Central Local
     # Events
     add_events(Regions.DMC_CENTRAL_LOCAL, world, [
-        (EventLocations.DMC_BEAN_PLANT_FAIRY, Events.BEAN_PLANT_FAIRY, lambda bundle: can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS, bundle) and (fire_timer(bundle) >= 8 or hearts(bundle) >= 3))
+        (EventLocations.DMC_BEAN_PLANT_FAIRY, Events.CAN_ACCESS_BEAN_PLANT_FAIRY, lambda bundle: can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS, bundle) and (fire_timer(bundle) >= 8 or hearts(bundle) >= 3))
     ])
     # Locations
     add_locations(Regions.DMC_CENTRAL_LOCAL, world, [
