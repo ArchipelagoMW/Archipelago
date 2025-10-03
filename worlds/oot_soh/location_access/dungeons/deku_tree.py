@@ -121,7 +121,7 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.DEKU_TREE_BASEMENT_LOWER, world, [
         (Regions.DEKU_TREE_LOBBY, lambda bundle: True),
         (Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM, lambda bundle: has_fire_source_with_torch(bundle) or can_use(Items.FAIRY_BOW, bundle)),
-        (Regions.DEKU_TREE_BASEMENT_UPPER, lambda bundle: is_adult(bundle) or can_do_trick("Deku B1 Skip", bundle)
+        (Regions.DEKU_TREE_BASEMENT_UPPER, lambda bundle: is_adult(bundle) or can_do_trick(Tricks.DEKU_B1_SKIP, bundle)
             or has_item(LocalEvents.DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED, bundle))
     ])
 
@@ -143,7 +143,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DEKU_TREE_BASEMENT_WATER_ROOM_FRONT, world, [
         (Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM, lambda bundle: True),
-        (Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK, lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_do_trick("Deku B1 backflip over spiked log", bundle)),
+        (Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK, lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_do_trick(Tricks.DEKU_B1_BACKFLIP_OVER_SPIKED_LOG, bundle)),
     ])
 
     ## Deku basement water room back
@@ -154,7 +154,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK, world, [
-        (Regions.DEKU_TREE_BASEMENT_WATER_ROOM_FRONT, lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_do_trick("Deku B1 backflip over spiked log", bundle)),
+        (Regions.DEKU_TREE_BASEMENT_WATER_ROOM_FRONT, lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_do_trick(Tricks.DEKU_B1_BACKFLIP_OVER_SPIKED_LOG, bundle)),
         (Regions.DEKU_TREE_BASEMENT_TORCH_ROOM, lambda bundle: True)
     ])
 
@@ -216,7 +216,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DEKU_TREE_BASEMENT_LOWER, lambda bundle: True),
         (Regions.DEKU_TREE_BASEMENT_BACK_LOBBY, lambda bundle: is_child(bundle)),
         (Regions.DEKU_TREE_OUTSIDE_BOSS_ROOM, lambda bundle: has_fire_source_with_torch(bundle) or
-                (can_do_trick("Deku B1 bow webs", bundle) and is_adult(bundle) and can_use(Items.FAIRY_BOW, bundle)))
+                (can_do_trick(Tricks.DEKU_B1_BOW_WEBS, bundle) and is_adult(bundle) and can_use(Items.FAIRY_BOW, bundle)))
     ])
 
     ## Deku outside boss room

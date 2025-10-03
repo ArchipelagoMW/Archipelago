@@ -52,7 +52,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DMC_LADDER_REGION_NEARBY, world, [
         (Regions.DMC_UPPER_NEARBY, lambda bundle: hearts(bundle) >= 3),
-        (Regions.DMC_LOWER_NEARBY, lambda bundle: hearts(bundle) >= 3 and (can_use(Items.HOVER_BOOTS, bundle) or (can_do_trick("DMC Boulder JS", bundle) and is_adult(bundle) and can_use(Items.MEGATON_HAMMER, bundle)) or (can_do_trick("DMC Boulder Skip", bundle) and is_adult(bundle))))
+        (Regions.DMC_LOWER_NEARBY, lambda bundle: hearts(bundle) >= 3 and (can_use(Items.HOVER_BOOTS, bundle) or (can_do_trick(Tricks.DMC_BOULDER_JS, bundle) and is_adult(bundle) and can_use(Items.MEGATON_HAMMER, bundle)) or (can_do_trick("DMC Boulder Skip", bundle) and is_adult(bundle))))
     ])
 
     ## Death Mountain Crater Lower Nearby
@@ -77,7 +77,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DMC_LOWER_NEARBY, lambda bundle: True),
         (Regions.DMC_LADDER_REGION_NEARBY, lambda bundle: fire_timer(bundle) >= 8 or hearts(bundle) >= 3),
         (Regions.DMC_CENTRAL_NEARBY, lambda bundle: (can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle)) and (fire_timer(bundle) >= 8 or hearts(bundle) >= 3)),
-        (Regions.DMC_CENTRAL_LOCAL, lambda bundle: (can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle) or (is_adult(bundle) and can_shield(bundle) and can_do_trick("DMC Bolero Jump", bundle))) and fire_timer(bundle) >= 24)
+        (Regions.DMC_CENTRAL_LOCAL, lambda bundle: (can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle) or (is_adult(bundle) and can_shield(bundle) and can_do_trick(Tricks.DMC_BOLERO_JUMP, bundle))) and fire_timer(bundle) >= 24)
     ])
 
     ## Death Mountain Crater Volcano Vent
@@ -98,7 +98,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DMC_CENTRAL_NEARBY, world, [
         (Regions.DMC_CENTRAL_LOCAL, lambda bundle: fire_timer(bundle) >= 48),
-        (Regions.DMC_VOLCANO_VENT, lambda bundle: is_adult(bundle) and hearts(bundle) >= 3 and can_do_trick("DMC Hover Bean POH", bundle) and can_use(Items.HOVER_BOOTS, bundle)),
+        (Regions.DMC_VOLCANO_VENT, lambda bundle: is_adult(bundle) and hearts(bundle) >= 3 and can_do_trick(Tricks.DMC_HOVER_BEAN_POH, bundle) and can_use(Items.HOVER_BOOTS, bundle)),
 
     ])
 
