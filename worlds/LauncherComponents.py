@@ -217,8 +217,6 @@ components: List[Component] = [
               description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
               description="Connect to a multiworld using the text client."),
-    Component('Links Awakening DX Client', 'LinksAwakeningClient',
-              file_identifier=SuffixIdentifier('.apladx')),
     Component('LttP Adjuster', 'LttPAdjuster'),
     # Ocarina of Time
     Component('OoT Client', 'OoTClient',
