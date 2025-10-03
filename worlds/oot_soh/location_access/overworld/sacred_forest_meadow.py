@@ -37,9 +37,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.SFM_MAZE_UPPER_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_play_song(Items.SONG_OF_STORMS, bundle)),
         (Locations.SFM_SARIA_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (Locations.SFM_SARIA_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_play_song(Items.SONG_OF_STORMS, bundle)),
-        (Locations.SFM_MAZE_LOWER_GOSSIP_STONE, lambda bundle: True),
-        (Locations.SFM_MAZE_UPPER_GOSSIP_STONE, lambda bundle: True),
-        (Locations.SFM_SARIA_GOSSIP_STONE, lambda bundle: True),
     ])
     # Connections
     connect_regions(Regions.SACRED_FOREST_MEADOW, world, [
