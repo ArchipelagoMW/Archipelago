@@ -10,7 +10,7 @@ from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.building_names import Building
 from ..strings.generic_names import Generic
 from ..strings.gift_names import Gift
-from ..strings.region_names import Region
+from ..strings.region_names import Region, LogicRegion
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
 
@@ -49,7 +49,9 @@ class RelationshipLogic(BaseLogic):
         if not self.content.features.friendsanity.is_enabled:
             return self.logic.relationship.can_reproduce(number_children)
 
-        return self.logic.received_n(*possible_kids, count=number_children) & self.logic.building.has_building(Building.kids_room)
+        return self.logic.received_n(*possible_kids, count=number_children) & \
+            self.logic.building.has_building(Building.kids_room) & \
+            self.logic.relationship.can_reproduce(number_children)
 
     def can_reproduce(self, number_children: int = 1) -> StardewRule:
         assert number_children >= 0, "Can't have a negative amount of children."
@@ -121,13 +123,14 @@ class RelationshipLogic(BaseLogic):
         if villager is None:
             return false_
 
-        rules = [self.logic.region.can_reach_any(villager.locations)]
+        rules = [self.logic.region.can_reach_any(*villager.locations)]
 
         if npc == NPC.kent:
             rules.append(self.logic.time.has_year_two)
 
         elif npc == NPC.leo:
             rules.append(self.logic.received("Island North Turtle"))
+            rules.append(self.logic.region.can_reach(Region.leo_hut))
 
         elif npc == ModNPC.lance:
             rules.append(self.logic.region.can_reach(Region.volcano_floor_10))
@@ -146,20 +149,15 @@ class RelationshipLogic(BaseLogic):
             rules.append(self.logic.received(SVEQuestItem.morgan_schooling))
 
         elif npc == ModNPC.goblin:
-            rules.append(self.logic.region.can_reach_all((Region.witch_hut, Region.wizard_tower)))
+            rules.append(self.logic.region.can_reach_all(Region.witch_hut, Region.wizard_tower))
 
         return self.logic.and_(*rules)
 
-    def can_give_loved_gifts_to_everyone(self) -> StardewRule:
-        rules = []
+    def can_meet_all(self, *npcs: str) -> StardewRule:
+        return self.logic.and_(*[self.can_meet(npc) for npc in npcs])
 
-        for npc in self.content.villagers:
-            meet_rule = self.logic.relationship.can_meet(npc)
-            rules.append(meet_rule)
-
-        rules.append(self.logic.gifts.has_any_universal_love)
-
-        return self.logic.and_(*rules)
+    def can_meet_any(self, *npcs: str) -> StardewRule:
+        return self.logic.or_(*(self.can_meet(npc) for npc in npcs))
 
     # Should be cached
     def can_earn_relationship(self, npc: str, hearts: int = 0) -> StardewRule:
@@ -196,3 +194,9 @@ class RelationshipLogic(BaseLogic):
                 rules.append(self.logic.relationship.can_date(npc))
 
         return self.logic.and_(*rules)
+
+    def can_purchase_portrait(self, npc: str = "") -> StardewRule:
+        spend_rule = self.logic.money.can_spend_at(LogicRegion.traveling_cart, 30_000)
+        if npc == "":
+            return self.logic.relationship.can_get_married() & self.logic.relationship.has_hearts_with_any(14) & spend_rule
+        return self.logic.relationship.can_marry(npc) & self.logic.relationship.has_hearts(npc, 14) & spend_rule

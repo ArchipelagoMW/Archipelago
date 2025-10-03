@@ -1,13 +1,10 @@
 from dataclasses import dataclass
-from typing import Iterable, Union, List, Tuple, Hashable, TYPE_CHECKING
+from typing import Iterable, Union, List, Tuple, Hashable
 
 from BaseClasses import CollectionState
 from .base import BaseStardewRule, CombinableStardewRule
 from .protocol import StardewRule
 from ..strings.ap_names.event_names import Event
-
-if TYPE_CHECKING:
-    from .. import StardewValleyWorld
 
 
 class TotalReceived(BaseStardewRule):
@@ -18,10 +15,10 @@ class TotalReceived(BaseStardewRule):
     def __init__(self, count: int, items: Union[str, Iterable[str]], player: int):
         items_list: List[str]
 
-        if isinstance(items, Iterable):
-            items_list = [*items]
-        else:
+        if isinstance(items, str):
             items_list = [items]
+        else:
+            items_list = [*items]
 
         self.player = player
         self.items = items_list
