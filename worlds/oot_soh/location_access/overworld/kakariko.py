@@ -46,7 +46,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) and can_get_nighttime_gs(bundle) and can_bonk_trees(bundle)),
         (Locations.KAK_GS_WATCHTOWER, lambda bundle: is_child(bundle) and (
                 can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.LONGSHOT) or (
-                can_do_trick("RT Kak Tower GS", bundle) and can_jump_slash(bundle)) and can_get_nighttime_gs(bundle))),
+                can_do_trick(Tricks.KAK_TOWER_GS, bundle) and can_jump_slash(bundle)) and can_get_nighttime_gs(bundle))),
         (Locations.KAK_NEAR_POTION_SHOP_POT1, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
         (Locations.KAK_NEAR_POTION_SHOP_POT2, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
         (Locations.KAK_NEAR_POTION_SHOP_POT3, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
@@ -94,23 +94,23 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.KAK_WELL,
          lambda bundle: is_adult(bundle) or has_item(Events.DRAIN_WELL, bundle) or can_use(Items.IRON_BOOTS,
                                                                                            bundle) or (
-                                can_do_trick("RT Bottom of the Well Navi Dive", bundle) and is_child(
+                                can_do_trick(Tricks.BOTTOM_OF_THE_WELL_NAVI_DIVE, bundle) and is_child(
                             bundle) and has_item(Items.BRONZE_SCALE, bundle) and can_jump_slash(bundle))),
         (Regions.KAK_POTION_SHOP_FRONT,
          lambda bundle: (at_day(bundle) or is_child(bundle)) and can_open_overworld_door(
              Items.KAK_POTION_SHOP_KEY, bundle)),
         (Regions.KAK_REDEAD_GROTTO, lambda bundle: can_open_bomb_grotto(bundle)),
         (Regions.KAK_IMPAS_LEDGE, lambda bundle: (is_child(bundle) and at_day(bundle)) or (
-                is_adult(bundle) and can_do_trick("RT Visible Collision", bundle))),
+                is_adult(bundle) and can_do_trick(Tricks.VISIBLE_COLLISION, bundle))),
         (Regions.KAK_WATCHTOWER,
          lambda bundle: is_adult(bundle) or at_day(bundle) or can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA,
                                                                              EnemyDistance.LONGSHOT) or can_do_trick(
-             "RT Kak Tower GS", bundle) and can_jump_slash(bundle)),
+             Tricks.KAK_TOWER_GS, bundle) and can_jump_slash(bundle)),
         (Regions.KAK_ROOFTOP,
-         lambda bundle: can_use(Items.HOOKSHOT, bundle) or can_do_trick("RT Kak Man on Roof", bundle) and is_adult(
+         lambda bundle: can_use(Items.HOOKSHOT, bundle) or can_do_trick(Tricks.KAK_MAN_ON_ROOF, bundle) and is_adult(
              bundle)),
         (Regions.KAK_IMPAS_ROOFTOP,
-         lambda bundle: can_use(Items.HOOKSHOT, bundle) or can_do_trick("RT Kak Rooftop", bundle) and can_use(
+         lambda bundle: can_use(Items.HOOKSHOT, bundle) or can_do_trick(Tricks.KAK_ROOFTOP_GS, bundle) and can_use(
              Items.HOVER_BOOTS, bundle)),
         (Regions.THE_GRAVEYARD, lambda bundle: True),
         (Regions.KAK_BEHIND_GATE,
@@ -147,7 +147,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.KAK_WATCHTOWER, world, [
         (Regions.KAKARIKO_VILLAGE, lambda bundle: True),
-        (Regions.KAK_ROOFTOP, lambda bundle: can_do_trick("RT Kak Man On Roof", bundle) and is_child(bundle)),
+        (Regions.KAK_ROOFTOP, lambda bundle: can_do_trick(Tricks.KAK_MAN_ON_ROOF, bundle) and is_child(bundle)),
     ])
 
     # Kak Rooftop
@@ -234,9 +234,9 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.KAK_WINDMILL, world, [
         (Locations.KAK_WINDMILL_FREESTANDING_PO_H,
          lambda bundle: can_use(Items.BOOMERANG, bundle) or has_item(Events.DAMPES_WINDMILL_ACCESS, bundle) or (
-                 is_adult(bundle) and can_do_trick("RT Kak Adult Windmill POH", bundle)) or (
+                 is_adult(bundle) and can_do_trick(Tricks.KAK_ADULT_WINDMILL_POH, bundle)) or (
                                 is_child(bundle) and can_jump_slash_except_hammer(bundle) and can_do_trick(
-                            "RT Kak Child Windmill POH", bundle))),
+                            Tricks.KAK_CHILD_WINDMILL_POH, bundle))),
         (Locations.SONG_FROM_WINDMILL,
          lambda bundle: is_adult(bundle) and has_item(Items.FAIRY_OCARINA, bundle))
     ])
@@ -346,7 +346,7 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.KAK_BEHIND_GATE, world, [
         (Regions.KAKARIKO_VILLAGE,
          lambda bundle: is_adult(bundle) or has_item(LocalEvents.KAKARIKO_GATE_OPEN, bundle) or can_do_trick(
-             "RT Visible Collision", bundle)),
+             Tricks.VISIBLE_COLLISION, bundle)),
         (Regions.DEATH_MOUNTAIN, lambda bundle: True)
     ])
 
