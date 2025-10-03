@@ -8,8 +8,8 @@ if TYPE_CHECKING:
 
 
 class EventLocations(str, Enum):
-    SFM_GOSSIP_STONE = "Gossip Stone"
-    SFM_FAIRY_FOUNTAIN = "Fairy Fountain"
+    SFM_GOSSIP_STONE = "SFM Gossip Stone"
+    SFM_FAIRY_FOUNTAIN = "SFM Fairy Fountain"
 
 
 def set_region_rules(world: "SohWorld") -> None:
