@@ -471,7 +471,8 @@ class RestrictedUnpickler(pickle.Unpickler):
                 self.generic_properties_module = importlib.import_module("worlds.generic")
             return getattr(self.generic_properties_module, name)
         # pep 8 specifies that modules should have "all-lowercase names" (options, not Options)
-        if module.lower().endswith("options"):
+        # check if the end module contains the word "option" in it
+        if "option" in module.lower().rsplit('.', 1)[-1]:
             if module == "Options":
                 mod = self.options_module
             else:
