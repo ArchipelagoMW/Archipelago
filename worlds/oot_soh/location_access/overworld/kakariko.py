@@ -329,7 +329,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_OPEN_GROTTO_FISH, lambda bundle: has_bottle(bundle)),
         (Locations.KAK_OPEN_GROTTO_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy(bundle)),
         (Locations.KAK_OPEN_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_play_song(bundle, Items.SONG_OF_STORMS)),
-        (Locations.KAK_OPEN_GROTTO_GOSSIP_STONE, lambda bundle: True),
         (Locations.KAK_OPEN_GROTTO_BEEHIVE_LEFT, lambda bundle: can_break_lower_hives(bundle)),
         (Locations.KAK_OPEN_GROTTO_BEEHIVE_RIGHT, lambda bundle: can_break_lower_hives(bundle)),
         (Locations.KAK_OPEN_GROTTO_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
