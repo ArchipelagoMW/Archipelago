@@ -42,7 +42,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_GS_HOUSE_UNDER_CONSTRUCTION, lambda bundle: is_child(bundle) and can_get_nighttime_gs(bundle)),
         (Locations.KAK_GS_SKULLTULA_HOUSE, lambda bundle: is_child(bundle) and can_get_nighttime_gs(bundle)),
         (Locations.KAK_GS_GUARDS_HOUSE, lambda bundle: is_child(bundle) and can_get_nighttime_gs(bundle)),
-        (Locations.KAK_GS_TREE, lambda bundle: is_child(bundle) and can_get_nighttime_gs(bundle)),
+        (Locations.KAK_GS_TREE,
+         lambda bundle: is_child(bundle) and can_get_nighttime_gs(bundle) and can_bonk_trees(bundle)),
         (Locations.KAK_GS_WATCHTOWER, lambda bundle: is_child(bundle) and (
                 can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.LONGSHOT) or (
                 can_do_trick("RT Kak Tower GS", bundle) and can_jump_slash(bundle)) and can_get_nighttime_gs(bundle))),
@@ -93,8 +94,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.KAK_WELL,
          lambda bundle: is_adult(bundle) or has_item(Events.DRAIN_WELL, bundle) or can_use(Items.IRON_BOOTS,
                                                                                            bundle) or (
-                                    can_do_trick("RT Bottom of the Well Navi Dive", bundle) and is_child(
-                                bundle) and has_item(Items.BRONZE_SCALE, bundle) and can_jump_slash(bundle))),
+                                can_do_trick("RT Bottom of the Well Navi Dive", bundle) and is_child(
+                            bundle) and has_item(Items.BRONZE_SCALE, bundle) and can_jump_slash(bundle))),
         (Regions.KAK_POTION_SHOP_FRONT,
          lambda bundle: (at_day(bundle) or is_child(bundle)) and can_open_overworld_door(
              Items.KAK_POTION_SHOP_KEY, bundle)),
