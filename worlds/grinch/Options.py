@@ -48,7 +48,6 @@ class ExcludeEnvironments(OptionSet):
     Valid keys: "Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Clock Tower", "City Hall",
                   "Ski Resort", "Civic Center", "Minefield", "Power Plant", "Generator Building", "Scout's Hut",
                   "North Shore", "Mayor's Villa", "Sleigh Ride"
-
     """
     display_name = "Exclude Environments"
     valid_keys = {"Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Clock Tower", "City Hall",
@@ -68,7 +67,8 @@ class Supadow(Toggle):
 class Gifts(Range):
     """
     Considers how many gifts must be squashed per check.
-    Enabling this will also enable squashing all gifts in a region mission along side this. [NOT IMPLEMENTED]"""
+    Enabling this will also enable squashing all gifts in a region mission along side this. [NOT IMPLEMENTED]
+    """
     display_name = "Gifts Squashed per Check"
     range_start = 0
     range_end = 300
@@ -77,13 +77,17 @@ class Gifts(Range):
 class GadgetRando(OptionSet):
     """
     Randomizes Grinch's gadgets along with randomizing Binoculars into the pool. [NOT IMPLEMENTED]
-
-    Valid keys: "Binoculars", "Rotten Egg Launcher", "Rocket Spring", "Slime Shooter", "Octopus Climbing Device",
-                "Marine Mobile", "Grinch Copter"
     """
     display_name = "Gadgets Randomized"
-    valid_keys = {"Binoculars", "Rotten Egg Launcher", "Rocket Spring", "Slime Shooter", "Octopus Climbing Device",
-                "Marine Mobile", "Grinch Copter"}
+    default = [
+        "Binoculars",
+        "Rotten Egg Launcher",
+        "Rocket Spring",
+        "Slime Shooter",
+        "Octopus Climbing Device",
+        "Marine Mobile",
+        "Grinch Copter"
+    ]
 
 class Moverando(OptionSet):
     """Randomizes Grinch's moveset along with randomizing max into the pool. [NOT IMPLEMENTED]
@@ -91,7 +95,7 @@ class Moverando(OptionSet):
     Valid keys: "Pancake", "Seize", "Max", "Bad Breath", "Sneak"
     """
     display_name = "Moves Randomized"
-    valid_keys = {"Pancake", "Seize", "Max", "Bad Breath", "Sneak"}
+    default = ["Pancake", "Seize", "Max", "Bad Breath", "Sneak"]
 
 class UnlimitedEggs(Toggle):
     """Determine whether or not you run out of rotten eggs when you utilize your gadgets."""
