@@ -64,8 +64,7 @@ class ClairObscurWorld(World):
 
     def create_items(self) -> None:
 
-        #Amounts of each item to generate (anything else will be added once). Progressive Rock and quest items
-        #shouldn't change; other items can be adjusted based on options once options are implemented
+        #Amounts of each item to generate (anything else will be added once).
         amounts = {
             "Progressive Rock": 5,
             "Rock Crystal": 3,
@@ -83,7 +82,7 @@ class ClairObscurWorld(World):
 
         self.item_pool = []
 
-        excluded_types = ["Journal", "Character"]
+        excluded_types = ["Journal", "Character", "Trap"]
         excluded_names = []
         if not self.options.gestral_shuffle: excluded_names.append("Lost Gestral")
         if not self.options.shuffle_free_aim: excluded_names.append("Free Aim")
@@ -126,8 +125,13 @@ class ClairObscurWorld(World):
             filler_item_sequence += [item] * amount
 
         sequence_length = len(filler_item_sequence)
+        trap_chance = self.options.trap_chance
         for i in range(0, remaining_items_to_generate):
-            item_name = filler_item_sequence[i % sequence_length]
+            if self.random.randint(1, 100) <= trap_chance:
+                #Reference trap weights when more trap types are implemented
+                item_name = "Feet Trap"
+            else:
+                item_name = filler_item_sequence[i % sequence_length]
             self.item_pool.append(self.create_item(item_name))
 
         self.multiworld.itempool += self.item_pool
@@ -173,7 +177,6 @@ class ClairObscurWorld(World):
                 return slot_data
 
         return slot_data
-
 
 
     def create_item(self, name: str) -> ClairObscurItem:
