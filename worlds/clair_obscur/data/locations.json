@@ -4969,7 +4969,7 @@
         "internal_name": "MF_BoucheclierALPHA",
         "location": "Isle of the Eyes",
         "original_item": "",
-        "condition": {},
+        "condition": {"Free Aim": 1},
         "type": "Boss",
         "boss_type": "Chromatic"
     },
@@ -4978,7 +4978,7 @@
         "internal_name": "MF_ChapelieALPHA",
         "location": "The Crows",
         "original_item": "",
-        "condition": {},
+        "condition": {"Free Aim": 1},
         "type": "Boss",
         "boss_type": "Chromatic"
     },
