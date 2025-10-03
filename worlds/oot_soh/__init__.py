@@ -130,6 +130,7 @@ class SohWorld(World):
             "infinite_upgrades": self.options.infinite_upgrades.value,
             "skeleton_key": self.options.skeleton_key.value,
             "starting_age": self.options.starting_age.value,
+            "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
         }
     
     def collect(self, state: CollectionState, item: Item) -> bool:
