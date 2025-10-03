@@ -27,7 +27,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## ZR Front
     # Locations
     add_locations(Regions.ZR_FRONT, world, [
-        (Locations.ZR_GS_TREE, lambda bundle: is_child(bundle) and
+        (Locations.ZR_GS_TREE, lambda bundle: is_child(bundle) and can_bonk_trees(bundle) and
                                                       can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA)),
         (Locations.ZR_NEAR_TREE_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.ZR_NEAR_TREE_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
