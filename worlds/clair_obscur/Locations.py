@@ -85,8 +85,8 @@ def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> N
                     amount = conditions[cond]
                     add_rule(location, lambda state, con=cond, pl=world.player, am=amount: state.has(con, pl, am))
 
-            if location_data.type == "Boss":
-                location.progress_type = LocationProgressType.PRIORITY
+            # if location_data.type == "Boss":
+            #     location.progress_type = LocationProgressType.PRIORITY
 
             if location_data.pictos_level > 1:
                 #Checks location_data rather than location_level here as this doesn't need to run if there's already

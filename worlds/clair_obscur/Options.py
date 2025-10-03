@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, StartInventory, OptionGroup, Toggle
+from Options import Choice, PerGameCommonOptions, StartInventory, OptionGroup, Toggle, Range, DeathLinkMixin
 
 
 class Goal(Choice):
@@ -104,13 +104,24 @@ class GearScaling(Choice):
     option_full_random = 3
     default = 0
 
+class TrapChance(Range):
+    """
+    The chance for any filler item to be replaced with a trap.
+    Currently, the only implemented trap is the Feet Trap.
+    Feet Trap: plays the "My, what lovely feet" voice line and shows you some feet pics. Are you sure about this....?
+    """
+    display_name = "Trap Chance"
+    range_start = 0
+    range_end = 100
+    default = 0
+
 class ClairObscurStartInventory(StartInventory):
     """
     Start with these items
     """
 
 @dataclass
-class ClairObscurOptions(PerGameCommonOptions):
+class ClairObscurOptions(DeathLinkMixin, PerGameCommonOptions):
     goal: Goal
     char_shuffle: ShuffleCharacters
     shuffle_free_aim: ShuffleFreeAim
@@ -120,6 +131,7 @@ class ClairObscurOptions(PerGameCommonOptions):
     starting_char: StartingCharacter
     gear_scaling: GearScaling
     area_logic: AreaLogic
+    trap_chance: TrapChance
 
     start_inventory: ClairObscurStartInventory
 

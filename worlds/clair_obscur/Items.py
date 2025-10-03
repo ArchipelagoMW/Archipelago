@@ -46,7 +46,8 @@ def create_item_groups(items: Dict[int, ClairObscurItemData]) -> Dict[str, Set[s
         "Picto": set(),
         "Weapon": set(),
         "Character": set(),
-        "Area": set()
+        "Area": set(),
+        "Trap": set()
     }
 
     for item in items.keys():

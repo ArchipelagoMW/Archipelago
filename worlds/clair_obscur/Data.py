@@ -98,6 +98,13 @@ def populate_data_items() -> dict[int, ClairObscurItemData]:
             classification = ItemClassification.progression
         elif item["progressive"] == 2:
             classification = ItemClassification.useful
+        elif item["progressive"] == 3:
+            classification = ItemClassification.progression | ItemClassification.skip_balancing
+        elif item["progressive"] == 4:
+            classification = (ItemClassification.progression | ItemClassification.skip_balancing |
+                              ItemClassification.deprioritized)
+        elif item["progressive"] == 5:
+            classification = ItemClassification.trap
         else:
             raise ValueError(f"Unknown classification '{item["progressive"]}' for {item_name}")
 
