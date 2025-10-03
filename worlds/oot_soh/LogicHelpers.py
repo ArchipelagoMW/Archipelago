@@ -335,6 +335,10 @@ def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return state._soh_can_reach_as_age(parent_region, Ages.CHILD, world.player)
 
 
+def can_be_both_ages(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    return is_child(bundle) and is_adult(bundle)
+
+
 def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
@@ -949,13 +953,9 @@ def can_trigger_lacs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> boo
             (gbk_setting == 6 and (dungeon_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeons_required.value)) or
             (gbk_setting == 7 and (get_gs_count(bundle) >= world.options.ganons_castle_boss_key_skull_tokens_required.value)))
 
-# TODO implement EffectiveHealth(); Returns 1 for now
+# TODO implement EffectiveHealth(); Returns 2 for now
 def effective_health(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
-    return 1
+    return 2
 
 def can_plant_bean(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return get_ammo(Items.MAGIC_BEAN, bundle) > 0 # && TODO Implement BothAgesCheck()
-
-# TODO Currently isn't accurate. Only shows how many of the item we have collected. Not how many the player actually has atm.
-def get_ammo(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
-    return bundle[0].count(item, bundle[2].player) 
+    return has_item(Items.MAGIC_BEAN, bundle) and can_be_both_ages(bundle)
