@@ -3454,7 +3454,7 @@ class Events(str, Enum):
     CAN_ACCESS_BUGS = "Can Access Bugs"
     CAN_DEFEAT_BIG_POE = "Can Defeat Big Poe"
     GAME_COMPLETED = "Game Completed"
-    BLUE_FIRE_ACCESS = "Can Access Blue Fire"
+    CAN_ACCESS_BLUE_FIRE = "Can Access Blue Fire"
 
 class Ages(str, Enum):
     CHILD = "child"

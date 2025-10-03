@@ -67,4 +67,5 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ICE_CAVERN_SLIDING_BLOCK_ROOM_RUPEE3, lambda bundle: blue_fire(bundle) and (can_use(Items.SONG_OF_TIME, bundle) or can_use(Items.BOOMERANG, bundle)))
     ])
     # Connections
+    ## TODO The SOH logic also doesn't connect back to anything. May need to in Archi
     connect_regions(Regions.ICE_CAVERN, world, [])
