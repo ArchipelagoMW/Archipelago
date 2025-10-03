@@ -1,10 +1,7 @@
-from typing import Dict, NamedTuple, Optional, TYPE_CHECKING
+from typing import Dict, TYPE_CHECKING
 
 from BaseClasses import Location
 from .Enums import *
-
-if TYPE_CHECKING:
-    from . import SohWorld
 
 
 class SohLocation(Location):

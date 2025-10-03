@@ -1,4 +1,5 @@
 from enum import Enum
+from functools import total_ordering #allows defining orders with fewer functions; with this decorator only __eq__ and __lt__ is needed, and since enums implement __eq__ we can just implement __lt__
 
 class Regions(str, Enum):
     """List of all region enums"""
@@ -3137,7 +3138,7 @@ class Locations(str, Enum):
     ZR_NEAR_TREE_GRASS10 = "ZR Near Tree Grass 10"
     ZR_NEAR_TREE_GRASS11 = "ZR Near Tree Grass 11"
     ZR_NEAR_TREE_GRASS12 = "ZR Near Tree Grass 12"
-    ZR_NEAR_FREESTANDING_PO_HGRASS = "ZR Near Freestanding PoH Grass"
+    ZR_NEAR_FREESTANDING_POH_GRASS = "ZR Near Freestanding PoH Grass"
     KF_STORMS_GROTTO_GRASS1 = "KF Storms Grotto Grass 1"
     KF_STORMS_GROTTO_GRASS2 = "KF Storms Grotto Grass 2"
     KF_STORMS_GROTTO_GRASS3 = "KF Storms Grotto Grass 3"
@@ -3409,6 +3410,7 @@ class Enemies(str, Enum):
     SHABOM = "shabom"
     OCTOROK = "octorok"
     
+@total_ordering
 class EnemyDistance(Enum):
     CLOSE = 1
     SHORT_JUMPSLASH = 2
@@ -3420,29 +3422,40 @@ class EnemyDistance(Enum):
     LONGSHOT = 8
     FAR = 9
 
+    def __lt__(self, other):
+        return self.value < other.value
+
 class Events(str, Enum):
-    AMMO_CAN_DROP = "Ammo Can Drop"
-    CAN_BUY_ARROWS = "Can Buy Arrows"
+    CAN_FARM_STICKS = "Can Farm Sticks"
+    CAN_FARM_NUTS = "Can Farm Nuts"
     CAN_BUY_DEKU_SHIELD = "Can Buy Deku Shield"
+    CAN_BUY_HYLIAN_SHIELD = "Can Buy Hylian Shield"
     CAN_BUY_GREEN_POTION = "Can Buy Green Potion"
-    CAN_BUY_SEEDS = "Can Buy Seeds"
     CAN_BUY_BOMBS = "Can Buy Bombs"
+    CAN_BUY_BUGS = "Can Buy Bugs"
     CAN_BUY_BEANS = "Can Buy Beans"
-    NUT_POT = "Nut Pot"
-    NUT_CRATE = "Nut Crate"
-    DEKU_BABA_NUTS = "Deku Baba Nuts"
-    STICK_POT = "Stick Pot"
-    DEKU_BABA_STICKS = "Deku Baba Sticks"
+    CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
     CHILD_SCARECROW = "Child Scarecrow"
     ADULT_SCARECROW = "Adult Scarecrow"
     DELIVER_LETTER = "Deliver Leter"
     CAN_EMPTY_BIG_POES = "Can Empty Big Poes"
-    CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
     COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
     CARPET_MERCHANT = "Can Buy From Carpet Merchant"
-    KOKIRI_FOREST_BEAN_PLANTED = "Kokiri Forest Bean Planted"
     CLEARED_DEKU_TREE = "Deku Tree Completed"
+    CLEARED_DODONGOS_CAVERN = "Dodongos Cavern Completed"
+    CLEARED_JABU_JABUS_BELLY = "Jabu Jabus Belly Completed"
     CLEARED_FOREST_TEMPLE = "Forest Temple Completed"
+    CLEARED_FIRE_TEMPLE = "Fire Temple Completed"
+    CLEARED_WATER_TEMPLE = "Water Temple Completed"
+    CLEARED_SPIRIT_TEMPLE = "Spirit Temple Completed"
+    CLEARED_SHADOW_TEMPLE = "Shadow Temple Completed"
+    TIME_TRAVEL = "Time Travel"
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
-    BUG_ACCESS = "Bug Access"
+    CAN_ACCESS_BUGS = "Can Access Bugs"
+    CAN_DEFEAT_BIG_POE = "Can Defeat Big Poe"
     GAME_COMPLETED = "Game Completed"
+
+class Ages(str, Enum):
+    CHILD = "child"
+    ADULT = "adult"
+    null = None

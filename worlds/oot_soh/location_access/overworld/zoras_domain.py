@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from ...Enums import *
-from ...LogicHelpers import add_locations, connect_regions
+from ...LogicHelpers import *
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld

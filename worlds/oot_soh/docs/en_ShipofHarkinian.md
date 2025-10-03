@@ -40,6 +40,22 @@ warped to the end credits once finding the proper amount of pieces. If this is t
 after loading back into the savefile if players would like to fight him afterwards.
 
 
+## Can I play this in co-op with someone else on the same slot?
+
+Yes! It will automatically sync items obtained between everyone that is connected to the same slot. Keep in mind that in-game
+events like defeated dungeons, blown up boulders etc *aren't* synced between players. It doesn't matter if players are
+connected at the same time. This also means you can make a new savefile yourself on a different machine and pick up where
+you left off!
+
+
+## Can I play this offline?
+
+Yes, for the most part. When creating the savefile you will need to be connected to a slot. Afterwards, you can play offline. Once
+you connect again, it will automatically sync all the items you've obtained up to that point. Just remember to save properly when playing
+offline! If you're planning on playing a singleplayer Ship of Harkinian seed by yourself, look into generating a randomizer directly 
+in Ship of Harkinian instead for a much easier time.
+
+
 ## What items from Ship of Harkinian can appear in another player's world?
 
 Every item has a chance to appear in another player's world.

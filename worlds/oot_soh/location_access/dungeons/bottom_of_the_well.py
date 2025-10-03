@@ -1,9 +1,7 @@
 from typing import TYPE_CHECKING
 
 from ...Enums import *
-from ...LogicHelpers import (add_events, add_locations, connect_regions, can_pass_enemy, has_explosives, can_open_underwater_chest, 
-                                         can_cut_shrubs, blast_or_smash, can_break_pots, has_item, take_damage,can_use, small_keys, can_get_enemy_drop, 
-                                         can_detonate_upright_bomb_flower, has_fire_source_with_torch, can_kill_enemy, can_do_trick, can_get_deku_baba_nuts, can_get_deku_baba_sticks, is_child)
+from ...LogicHelpers import *
 
 if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
@@ -25,200 +23,200 @@ def set_region_rules(world: "SohWorld") -> None:
     player = world.player
     
     # TODO: Temporary to test generation
-    connect_regions(Regions.KOKIRI_FOREST.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_ENTRYWAY.value, lambda state: True]
+    connect_regions(Regions.KOKIRI_FOREST, world, [
+        (Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, lambda bundle: True)
     ])
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_ENTRYWAY.value, world, [
-        [Regions.KOKIRI_FOREST.value, lambda state: True]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, world, [
+        (Regions.KOKIRI_FOREST, lambda bundle: True)
     ])
 
     ## Bottom of The Well Entryway
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_ENTRYWAY.value, world, [])
+    add_locations(Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, world, [])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_ENTRYWAY.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: is_child(state, world) and can_pass_enemy(state, world, Enemies.BIG_SKULLTULA.value)], # Technically involves an fake wall, but passing it lensless is intended in vanilla and it is well telegraphed
-        #[Regions.BOTTOM_OF_THE_WELL_MQ_PERIMETER.value, lambda state: is_child(state, world)],
-        [Regions.KAK_WELL.value, lambda state: True]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, world, [
+        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: is_child(bundle) and can_pass_enemy(bundle, Enemies.BIG_SKULLTULA)), # Technically involves an fake wall, but passing it lensless is intended in vanilla and it is well telegraphed
+        #[Regions.BOTTOM_OF_THE_WELL_MQ_PERIMETER, lambda bundle: is_child(bundle),
+        (Regions.KAK_WELL, lambda bundle: True)
     ])
 
     ## Bottom of the Well Perimeter
     # Events
-    add_events(Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, world, [
-        [EventLocations.BOTTOM_OF_THE_WELL_STICK_POT.value, Events.STICK_POT.value, lambda state: True],
-        [EventLocations.BOTTOM_OF_THE_WELL_NUT_POT.value, Events.NUT_POT.value, lambda state: True],
-        [EventLocations.BOTTOM_OF_THE_WELL_LOWERED_WATER.value, LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL.value, lambda state: can_use(Items.ZELDAS_LULLABY.value, state, world)]
+    add_events(Regions.BOTTOM_OF_THE_WELL_PERIMETER, world, [
+        (EventLocations.BOTTOM_OF_THE_WELL_STICK_POT, Events.CAN_FARM_STICKS, lambda bundle: True),
+        (EventLocations.BOTTOM_OF_THE_WELL_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True),
+        (EventLocations.BOTTOM_OF_THE_WELL_LOWERED_WATER, LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
     ])
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, world, [
-        [Locations.BOTTOM_OF_THE_WELL_FRONT_CENTER_BOMBABLE_CHEST.value, lambda state: has_explosives(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_UNDERWATER_FRONT_CHEST.value, lambda state: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL.value, state, world) or can_open_underwater_chest(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_UNDERWATER_LEFT_CHEST.value, lambda state: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL.value, state, world) or can_open_underwater_chest(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_NEAR_ENTRANCE_POT1.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_NEAR_ENTRANCE_POT2.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_UNDERWATER_POT.value, lambda state: (can_break_pots(state, world) and has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL.value, state, world)) or can_use(Items.BOOMERANG.value, state, world)]
+    add_locations(Regions.BOTTOM_OF_THE_WELL_PERIMETER, world, [
+        (Locations.BOTTOM_OF_THE_WELL_FRONT_CENTER_BOMBABLE_CHEST, lambda bundle: has_explosives(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_UNDERWATER_FRONT_CHEST, lambda bundle: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, bundle) or can_open_underwater_chest(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_UNDERWATER_LEFT_CHEST, lambda bundle: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, bundle) or can_open_underwater_chest(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_NEAR_ENTRANCE_POT1, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_NEAR_ENTRANCE_POT2, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_UNDERWATER_POT, lambda bundle: (can_break_pots(bundle) and has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, bundle)) or can_use(Items.BOOMERANG, bundle))
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_ENTRYWAY.value, lambda state: is_child(state, world) and can_pass_enemy(state, world, Enemies.BIG_SKULLTULA.value)],
-        [Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS.value, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM.value, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM.value, lambda state: is_child(state, world) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM.value, lambda state: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL.value, state, world) or has_item(Items.BRONZE_SCALE.value, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM.value, lambda state: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL.value, state, world) and is_child(state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, lambda state: True]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_PERIMETER, world, [
+        (Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, lambda bundle: is_child(bundle) and can_pass_enemy(bundle, Enemies.BIG_SKULLTULA)),
+        (Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, lambda bundle: is_child(bundle) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM, lambda bundle: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, bundle) or has_item(Items.BRONZE_SCALE, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM, lambda bundle: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, bundle) and is_child(bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_BASEMENT, lambda bundle: True)
     ])
 
     ## Bottom of the Well Behind Fake Walls
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS.value, world, [
-        [Locations.BOTTOM_OF_THE_WELL_FRONT_LEFT_FAKE_WALL_CHEST.value, lambda state: True],
-        [Locations.BOTTOM_OF_THE_WELL_RIGHT_BOTTOM_FAKE_WALL_CHEST.value, lambda state: True],
-        [Locations.BOTTOM_OF_THE_WELL_COMPASS_CHEST.value, lambda state: True],
-        [Locations.BOTTOM_OF_THE_WELL_CENTER_SKULLTULA_CHEST.value, lambda state: can_pass_enemy(state, world, Enemies.BIG_SKULLTULA.value) or take_damage(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BACK_LEFT_BOMBABLE_CHEST.value, lambda state: has_explosives(state, world)]
+    add_locations(Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS, world, [
+        (Locations.BOTTOM_OF_THE_WELL_FRONT_LEFT_FAKE_WALL_CHEST, lambda bundle: True),
+        (Locations.BOTTOM_OF_THE_WELL_RIGHT_BOTTOM_FAKE_WALL_CHEST, lambda bundle: True),
+        (Locations.BOTTOM_OF_THE_WELL_COMPASS_CHEST, lambda bundle: True),
+        (Locations.BOTTOM_OF_THE_WELL_CENTER_SKULLTULA_CHEST, lambda bundle: can_pass_enemy(bundle, Enemies.BIG_SKULLTULA) or take_damage(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BACK_LEFT_BOMBABLE_CHEST, lambda bundle: has_explosives(bundle))
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS.value, lambda state: small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, lambda state: True],
-        [Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM.value, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world)]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS, world, [
+        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS, lambda bundle: small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_BASEMENT, lambda bundle: True),
+        (Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
     ])
 
     ## Bottom of the Well Southwest Room
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM.value, world, [
-        [Locations.BOTTOM_OF_THE_WELL_LEFT_SIDE_POT1.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_LEFT_SIDE_POT2.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_LEFT_SIDE_POT3.value, lambda state: can_break_pots(state, world)]
+    add_locations(Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, world, [
+        (Locations.BOTTOM_OF_THE_WELL_LEFT_SIDE_POT1, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_LEFT_SIDE_POT2, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_LEFT_SIDE_POT3, lambda bundle: can_break_pots(bundle))
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world)]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, world, [
+        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
     ])
 
     ## Bottom of the Well Keese-Beamos Room
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM.value, world, [
-        [Locations.BOTTOM_OF_THE_WELL_FIRE_KEESE_CHEST.value, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_FIRE_KEESE_POT1.value, lambda state: can_break_pots(state, world) and can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world)]
+    add_locations(Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, world, [
+        (Locations.BOTTOM_OF_THE_WELL_FIRE_KEESE_CHEST, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_FIRE_KEESE_POT1, lambda bundle: can_break_pots(bundle) and can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: is_child(state, world) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world) and can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE.value, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world)],
-        [Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS.value, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world)]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, world, [
+        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: is_child(bundle) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, bundle) and can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
     ])
 
     ## Bottom of the Well Like-Like Cage
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE.value, world, [
-        [Locations.BOTTOM_OF_THE_WELL_LIKE_LIKE_CHEST.value, lambda state: True],
-        [Locations.BOTTOM_OF_THE_WELL_GS_LIKE_LIKE_CAGE.value, lambda state: can_get_enemy_drop(state, world, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG)]
+    add_locations(Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE, world, [
+        (Locations.BOTTOM_OF_THE_WELL_LIKE_LIKE_CHEST, lambda bundle: True),
+        (Locations.BOTTOM_OF_THE_WELL_GS_LIKE_LIKE_CAGE, lambda bundle: can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG))
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM.value, lambda state: True]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE, world, [
+        (Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, lambda bundle: True)
     ])
 
     ## Bottom of the Well Inner Rooms 
     # Events
-    add_events(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS.value, world, [
-        [EventLocations.BOTTOM_OF_THE_WELL_BABAS_STICKS.value, Events.DEKU_BABA_STICKS.value, lambda state: can_get_deku_baba_sticks(state, world)],
-        [EventLocations.BOTTOM_OF_THE_WELL_BABAS_NUTS.value, Events.DEKU_BABA_NUTS.value, lambda state: can_get_deku_baba_nuts(state, world)]
+    add_events(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS, world, [
+        (EventLocations.BOTTOM_OF_THE_WELL_BABAS_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.BOTTOM_OF_THE_WELL_BABAS_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS.value, world, [
-        [Locations.BOTTOM_OF_THE_WELL_GS_WEST_INNER_ROOM.value, lambda state: can_get_enemy_drop(state, world, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG)],
-        [Locations.BOTTOM_OF_THE_WELL_GS_EAST_INNER_ROOM.value, lambda state: can_get_enemy_drop(state, world, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG)]
+    add_locations(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS, world, [
+        (Locations.BOTTOM_OF_THE_WELL_GS_WEST_INNER_ROOM, lambda bundle: can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG)),
+        (Locations.BOTTOM_OF_THE_WELL_GS_EAST_INNER_ROOM, lambda bundle: can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG))
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS.value, lambda state: small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, state, world)]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS, world, [
+        (Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS, lambda bundle: small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, bundle))
     ])
 
     ## Bottom of the Well Coffin Room 
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM.value, world, [
-        [Locations.BOTTOM_OF_THE_WELL_FREESTANDING_KEY.value, lambda state: has_fire_source_with_torch(state, world) or can_use(Items.PROGRESSIVE_BOW.value, state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_FRONT_LEFT_HEART.value, lambda state: True],
-        [Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_MIDDLE_RIGHT_HEART.value, lambda state: has_fire_source_with_torch(state, world) or can_use(Items.PROGRESSIVE_BOW.value, state, world)]
+    add_locations(Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM, world, [
+        (Locations.BOTTOM_OF_THE_WELL_FREESTANDING_KEY, lambda bundle: has_fire_source_with_torch(bundle) or can_use(Items.FAIRY_BOW, bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_FRONT_LEFT_HEART, lambda bundle: True),
+        (Locations.BOTTOM_OF_THE_WELL_COFFIN_ROOM_MIDDLE_RIGHT_HEART, lambda bundle: has_fire_source_with_torch(bundle) or can_use(Items.FAIRY_BOW, bundle))
 
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL.value, state, world) or has_item(Items.BRONZE_SCALE.value, state, world)]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM, world, [
+        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, bundle) or has_item(Items.BRONZE_SCALE, bundle))
     ])
 
     ## Bottom of the Well Dead Hand Room 
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM.value, world, [
-        [Locations.BOTTOM_OF_THE_WELL_LENS_OF_TRUTH_CHEST.value, lambda state: can_kill_enemy(state, world, Enemies.DEAD_HAND.value)],
-        [Locations.BOTTOM_OF_THE_WELL_INVISIBLE_CHEST.value, lambda state: can_do_trick("RT LENS BOTW", state, world) or can_use(Items.LENS_OF_TRUTH.value, state, world)]
+    add_locations(Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM, world, [
+        (Locations.BOTTOM_OF_THE_WELL_LENS_OF_TRUTH_CHEST, lambda bundle: can_kill_enemy(bundle, Enemies.DEAD_HAND)),
+        (Locations.BOTTOM_OF_THE_WELL_INVISIBLE_CHEST, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_PERIMETER.value, lambda state: is_child(state, world) and can_kill_enemy(state, world, Enemies.DEAD_HAND.value)]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM, world, [
+        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: is_child(bundle) and can_kill_enemy(bundle, Enemies.DEAD_HAND))
     ])
 
     ## Bottom of the Well Basement 
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, world, [
-        [Locations.BOTTOM_OF_THE_WELL_MAP_CHEST.value, lambda state: blast_or_smash(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT1.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT2.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT3.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT4.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT5.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT6.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT7.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT8.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT9.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT10.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT11.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT12.value, lambda state: can_break_pots(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_MQ_BASEMENT_SUNS_SONG_FAIRY.value, lambda state: can_use(Items.SUNS_SONG.value, state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS1.value, lambda state: can_cut_shrubs(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS2.value, lambda state: can_cut_shrubs(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS3.value, lambda state: can_cut_shrubs(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS1.value, lambda state: can_cut_shrubs(state, world) and blast_or_smash(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS2.value, lambda state: can_cut_shrubs(state, world) and blast_or_smash(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS3.value, lambda state: can_cut_shrubs(state, world) and blast_or_smash(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS4.value, lambda state: can_cut_shrubs(state, world) and blast_or_smash(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS5.value, lambda state: can_cut_shrubs(state, world) and blast_or_smash(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS6.value, lambda state: can_cut_shrubs(state, world) and blast_or_smash(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS7.value, lambda state: can_cut_shrubs(state, world) and blast_or_smash(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS8.value, lambda state: can_cut_shrubs(state, world) and blast_or_smash(state, world)],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS9.value, lambda state: can_cut_shrubs(state, world) and blast_or_smash(state, world)]
+    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT, world, [
+        (Locations.BOTTOM_OF_THE_WELL_MAP_CHEST, lambda bundle: blast_or_smash(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT1, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT2, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT3, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT4, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT5, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT6, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT7, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT8, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT9, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT10, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT11, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT12, lambda bundle: can_break_pots(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_MQ_BASEMENT_SUNS_SONG_FAIRY, lambda bundle: can_use(Items.SUNS_SONG, bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS3, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS1, lambda bundle: can_cut_shrubs(bundle) and blast_or_smash(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS2, lambda bundle: can_cut_shrubs(bundle) and blast_or_smash(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS3, lambda bundle: can_cut_shrubs(bundle) and blast_or_smash(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS4, lambda bundle: can_cut_shrubs(bundle) and blast_or_smash(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS5, lambda bundle: can_cut_shrubs(bundle) and blast_or_smash(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS6, lambda bundle: can_cut_shrubs(bundle) and blast_or_smash(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS7, lambda bundle: can_cut_shrubs(bundle) and blast_or_smash(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS8, lambda bundle: can_cut_shrubs(bundle) and blast_or_smash(bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_BEHIND_ROCKS_GRASS9, lambda bundle: can_cut_shrubs(bundle) and blast_or_smash(bundle))
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM.value, lambda state: is_child(state, world) and can_pass_enemy(state, world, Enemies.BIG_SKULLTULA.value)],
-        [Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS.value, lambda state: blast_or_smash(state, world) or can_use(Items.DINS_FIRE.value, state, world) or (can_use(Items.STICKS.value, state, world) and can_do_trick("RT BOTW Basement", state, world))]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT, world, [
+        (Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, lambda bundle: is_child(bundle) and can_pass_enemy(bundle, Enemies.BIG_SKULLTULA)),
+        (Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, lambda bundle: blast_or_smash(bundle) or can_use(Items.DINS_FIRE, bundle) or (can_use(Items.STICKS, bundle) and can_do_trick("RT BOTW Basement", bundle)))
     ])
 
     ## Bottom of the Well Useful Bomb Flowers
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS.value, world, [
-        [Locations.BOTTOM_OF_THE_WELL_MAP_CHEST.value, lambda state: has_item(Items.GORONS_BRACELET.value, state, world)]
+    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, world, [
+        (Locations.BOTTOM_OF_THE_WELL_MAP_CHEST, lambda bundle: has_item(Items.GORONS_BRACELET, bundle))
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, lambda state: can_detonate_upright_bomb_flower(state, world)]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, world, [
+        (Regions.BOTTOM_OF_THE_WELL_BASEMENT, lambda bundle: can_detonate_upright_bomb_flower(bundle))
     ])
 
     ## Bottom of the Well Basement Platform
     # Locations
-    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM.value, world, [
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_LEFT_RUPEE.value, lambda state: True],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_BACK_LEFT_RUPEE.value, lambda state: True],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_MIDDLE_RUPEE.value, lambda state: True],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_BACK_RIGHT_RUPEE.value, lambda state: True],
-        [Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_RIGHT_RUPEE.value, lambda state: True],
+    add_locations(Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM, world, [
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_LEFT_RUPEE, lambda bundle: True),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_BACK_LEFT_RUPEE, lambda bundle: True),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_MIDDLE_RUPEE, lambda bundle: True),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_BACK_RIGHT_RUPEE, lambda bundle: True),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM_RIGHT_RUPEE, lambda bundle: True),
         
     ])
     # Connections
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM.value, world, [
-        [Regions.BOTTOM_OF_THE_WELL_BASEMENT.value, lambda state: True]
+    connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM, world, [
+        (Regions.BOTTOM_OF_THE_WELL_BASEMENT, lambda bundle: True)
     ])
