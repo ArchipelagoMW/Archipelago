@@ -265,7 +265,7 @@ def blast_or_smash(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 def blue_fire(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link has access to blue fire."""
-    return can_use(Items.BOTTLE_WITH_BLUE_FIRE, bundle)  # or blue fire arrows
+    return has_bottle(bundle) and has_item(Events.BLUE_FIRE_ACCESS) # TODO: Implement blue fire arrow option
 
 
 def can_use_sword(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
