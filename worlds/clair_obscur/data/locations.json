@@ -4156,7 +4156,7 @@
         "name": "World Map: First Continent - Paint spike outside Gestral Village rock wall",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {},
+        "condition": {"Paint Break": 1},
         "type": "Chest"
     },
     {
