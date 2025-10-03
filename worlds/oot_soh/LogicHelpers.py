@@ -146,6 +146,14 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player)
     elif item == Items.LONGSHOT:
         return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player, 2)
+    elif item == Items.CHILD_WALLET:
+        return can_afford(99, bundle)
+    elif item == Items.ADULT_WALLET:
+        return can_afford(200, bundle)
+    elif item == Items.GIANT_WALLET:
+        return can_afford(500, bundle)
+    elif item == Items.TYCOON_WALLET:
+        return can_afford(999, bundle)
     elif item == Items.MAGIC_BEAN:
         return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
     elif item == Items.BOTTLE_WITH_BIG_POE:

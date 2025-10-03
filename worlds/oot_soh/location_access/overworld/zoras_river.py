@@ -53,7 +53,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.ZORA_RIVER, world, [
         (EventLocations.MAGIC_BEAN_SALESMAN_SHOP, Events.CAN_BUY_BEANS, 
-            lambda bundle: can_afford(10, bundle) and (world.options.shuffle_merchants.value == 0 or world.options.shuffle_merchants.value == 2)), # Bean shop not randomized
+            lambda bundle: has_item(Items.CHILD_WALLET, bundle) and (world.options.shuffle_merchants.value == 0 or world.options.shuffle_merchants.value == 2)), # Bean shop not randomized
         (EventLocations.ZORAS_RIVER_SHRUB, Events.CAN_ACCESS_BUGS, lambda bundle: can_cut_shrubs(bundle))
     ])
     # Locations
