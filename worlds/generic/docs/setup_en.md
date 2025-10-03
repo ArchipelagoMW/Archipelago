@@ -141,12 +141,11 @@ them, you may rename the file to `options.yaml`.
 If you are generating locally, you can play with worlds that are not included in the Archipelago installation. 
 The worlds are packaged as `.apworld` files. To add a world to your installation, click the "Install APWorld" button in
 the launcher and select the `.apworld` file you wish to install. Alternatively, you can drag the `.apworld` file onto the
-launcher, manually add the `.apworld` file to the `custom_worlds` folder of your Archipelago Installation, or double-click 
-the file itself. After adding a new world, it will function like the worlds that are already packaged with 
-Archipelago.
+launcher or double-click the file itself (if on Windows). After adding a new world, it will function like the worlds that
+are already packaged with Archipelago.
 
 We strongly recommend that you make sure that the source of the `.apworld` is safe and trustworthy before playing with a 
-custom world.
+custom world. Installed APWorlds are able to run custom code on your computer whenever you open Archipelago.
 
 #### Adding alternate versions of included worlds
 
