@@ -332,6 +332,7 @@ class GrinchClient(BizHawkClient):
 
         #If not in game or at a menu, or loading the publisher logos
         if ingame_map_id <= 0x04 or ingame_map_id >= 0x35:
+            self.ingame_log = False
             return False
 
         #If grinch has changed maps
