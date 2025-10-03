@@ -27,14 +27,14 @@ class ModItemLogic(BaseLogic):
 
     def get_modded_item_rules(self) -> Dict[str, StardewRule]:
         items = dict()
-        if ModNames.boarding_house in self.options.mods:
+        if self.content.is_enabled(ModNames.boarding_house):
             items.update(self.get_boarding_house_item_rules())
         return items
 
     def modify_vanilla_item_rules_with_mod_additions(self, item_rule: Dict[str, StardewRule]):
-        if ModNames.sve in self.options.mods:
+        if self.content.is_enabled(ModNames.sve):
             item_rule.update(self.get_modified_item_rules_for_sve(item_rule))
-        if ModNames.deepwoods in self.options.mods:
+        if self.content.is_enabled(ModNames.deepwoods):
             item_rule.update(self.get_modified_item_rules_for_deep_woods(item_rule))
         return item_rule
 

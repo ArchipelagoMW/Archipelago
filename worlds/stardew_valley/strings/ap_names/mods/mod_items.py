@@ -37,8 +37,8 @@ class SVEQuestItem:
 
     sve_always_quest_items: list[str] = [kittyfish_spell, scarlett_job_offer, morgan_schooling, aurora_vineyard_tablet, ]
     sve_always_quest_items_ginger_island: list[str] = [fable_reef_portal, ]
-    sve_quest_items: list[str] = [iridium_bomb, void_soul, grandpa_shed, aurora_vineyard_reclamation, ]
-    sve_quest_items_ginger_island: list[str] = [marlon_boat_paddle, ]
+    sve_quest_items: list[str] = [iridium_bomb, grandpa_shed, aurora_vineyard_reclamation, ]
+    sve_quest_items_ginger_island: list[str] = [void_soul, marlon_boat_paddle, ]
 
 
 class SVELocation:
