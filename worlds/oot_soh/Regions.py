@@ -1,5 +1,6 @@
 from typing import Dict, List, NamedTuple, TYPE_CHECKING
-from BaseClasses import Region
+from worlds.AutoWorld import LogicMixin
+from BaseClasses import MultiWorld, Region
 from .Enums import *
 from .Locations import SohLocation, base_location_table, \
     gold_skulltula_overworld_location_table, \
@@ -69,6 +70,24 @@ if TYPE_CHECKING:
 class SohRegionData(NamedTuple):
     connecting_regions: List[str] = []
 
+class SohRegion(Region):
+    game="Ship of Harkinian"
+
+    def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: str | None = None):
+        super().__init__(name, player, multiworld, hint)
+
+    def can_reach(self, state) -> bool:
+        if state._soh_stale[self.player]:
+            stored_age = state._soh_age[self.player]
+            state._soh_update_age_reachable_regions(self.player)
+            state._soh_age[self.player] = stored_age
+        
+        if state._soh_age[self.player] == "child":
+            return self in state._soh_child_reachable_regions[self.player]
+        elif state._soh_age[self.player] == "adult":
+            return self in state._soh_adult_reachable_regions[self.player]
+        else:
+            return self in state._soh_child_reachable_regions[self.player] or self in state._soh_adult_reachable_regions[self.player]
 
 def create_regions_and_locations(world: "SohWorld") -> None:
 
@@ -79,7 +98,7 @@ def create_regions_and_locations(world: "SohWorld") -> None:
 
     # Create regions.
     for region_name in region_data_table.keys():
-        region = Region(region_name, world.player, world.multiworld)
+        region = SohRegion(region_name, world.player, world.multiworld)
         world.multiworld.regions.append(region)
         region.add_exits(region_data_table[region_name].connecting_regions)
 
@@ -252,19 +271,19 @@ def place_locked_items(world: "SohWorld") -> None:
     
     # Add Weird Egg and Zelda's Letter to their vanilla locations when not shuffled
     if not world.options.skip_child_zelda and not world.options.shuffle_weird_egg:
-        world.get_location(Locations.HC_MALON_EGG.value).place_locked_item(world.create_item(Items.WEIRD_EGG))
+        world.get_location(Locations.HC_MALON_EGG.value).place_locked_item(world.create_item(Items.WEIRD_EGG.value))
 
     if not world.options.skip_child_zelda:
-        world.get_location(Locations.HC_ZELDAS_LETTER.value).place_locked_item(world.create_item(Items.ZELDAS_LETTER))
+        world.get_location(Locations.HC_ZELDAS_LETTER.value).place_locked_item(world.create_item(Items.ZELDAS_LETTER.value))
 
     # Place Master Sword on vanilla location if not shuffled
     if not world.options.shuffle_master_sword:
-        world.get_location(Locations.MARKET_TOT_MASTER_SWORD.value).place_locked_item(world.create_item(Items.MASTER_SWORD))
+        world.get_location(Locations.MARKET_TOT_MASTER_SWORD.value).place_locked_item(world.create_item(Items.MASTER_SWORD.value))
 
     # Handle vanilla goron tunic in shop
     # TODO: Proper implementation of vanilla shop items and shuffle them amongst all shops
     if world.options.shuffle_shops:
-        world.get_location(Locations.GC_SHOP_ITEM1.value).place_locked_item(world.create_item(Items.BUY_GORON_TUNIC))
+        world.get_location(Locations.GC_SHOP_ITEM1.value).place_locked_item(world.create_item(Items.BUY_GORON_TUNIC.value))
 
     # Create a dictionary mapping blue warp rewards to their vanilla items
     dungeon_reward_item_mapping = {
@@ -283,7 +302,7 @@ def place_locked_items(world: "SohWorld") -> None:
     if world.options.shuffle_dungeon_rewards == "off":      
         # Loop through dungeons rewards and set their items to the vanilla reward.      
         for location_name, reward_name in zip(dungeon_reward_item_mapping.keys(), dungeon_reward_item_mapping.values()):
-            world.get_location(location_name).place_locked_item(world.create_item(reward_name))
+            world.get_location(location_name.value).place_locked_item(world.create_item(reward_name.value))
 
     if world.options.shuffle_dungeon_rewards == "dungeons": 
         # Extract and shuffle just the item names from location_item_mapping
@@ -292,22 +311,22 @@ def place_locked_items(world: "SohWorld") -> None:
         
         # Pair each location with a unique shuffled dungeon reward
         for location_name, reward_name in zip(dungeon_reward_item_mapping.keys(), reward_names):
-            world.get_location(location_name).place_locked_item(world.create_item(reward_name))
+            world.get_location(location_name.value).place_locked_item(world.create_item(reward_name.value))
 
     # Place Ganons Boss Key
     if not world.options.ganons_castle_boss_key == "vanilla" and not world.options.ganons_castle_boss_key == "anywhere" and not world.options.triforce_hunt:
-        world.get_location(Locations.MARKET_TOT_LIGHT_ARROW_CUTSCENE.value).place_locked_item(world.create_item(Items.GANONS_CASTLE_BOSS_KEY))
+        world.get_location(Locations.MARKET_TOT_LIGHT_ARROW_CUTSCENE.value).place_locked_item(world.create_item(Items.GANONS_CASTLE_BOSS_KEY.value))
 
     if world.options.ganons_castle_boss_key == "vanilla" and not world.options.triforce_hunt:
-        world.get_location(Locations.GANONS_CASTLE_TOWER_BOSS_KEY_CHEST.value).place_locked_item(world.create_item(Items.GANONS_CASTLE_BOSS_KEY))
+        world.get_location(Locations.GANONS_CASTLE_TOWER_BOSS_KEY_CHEST.value).place_locked_item(world.create_item(Items.GANONS_CASTLE_BOSS_KEY.value))
 
     # Preplace tokens based on settings.
     if world.options.shuffle_skull_tokens == "off" or world.options.shuffle_skull_tokens == "dungeon":
-        token_item = world.create_item(Items.GOLD_SKULLTULA_TOKEN)
+        token_item = world.create_item(Items.GOLD_SKULLTULA_TOKEN.value)
         for location_name, address in gold_skulltula_overworld_location_table.items():
             world.get_location(location_name).place_locked_item(token_item)
 
     if world.options.shuffle_skull_tokens == "off" or world.options.shuffle_skull_tokens == "overworld":
-        token_item = world.create_item(Items.GOLD_SKULLTULA_TOKEN)
+        token_item = world.create_item(Items.GOLD_SKULLTULA_TOKEN.value)
         for location_name, address in gold_skulltula_dungeon_location_table.items():
             world.get_location(location_name).place_locked_item(token_item)
