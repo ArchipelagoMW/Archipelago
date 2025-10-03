@@ -49,7 +49,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ICE_CAVERN_FREESTANDING_PO_H, lambda bundle: blue_fire(bundle)),
         (Locations.ICE_CAVERN_GS_SPINNING_SCYTHE_ROOM, lambda bundle: hookshot_or_boomerang(bundle)),
         (Locations.ICE_CAVERN_GS_HEART_PIECE_ROOM, lambda bundle: blue_fire(bundle) and hookshot_or_boomerang(bundle)),
-        (Locations.ICE_CAVERN_GS_PUSH_BLOCK_ROOM, lambda bundle: blue_fire(bundle) and (hookshot_or_boomerang(bundle) or (can_do_trick("Ice Block GS") and can_use(Items.HOVER_BOOTS, bundle)))),
+        (Locations.ICE_CAVERN_GS_PUSH_BLOCK_ROOM, lambda bundle: blue_fire(bundle) and (hookshot_or_boomerang(bundle) or (can_do_trick("Ice Block GS", bundle) and can_use(Items.HOVER_BOOTS, bundle)))),
         (Locations.ICE_CAVERN_HALL_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.ICE_CAVERN_HALL_POT2, lambda bundle: can_break_pots(bundle)),
         (Locations.ICE_CAVERN_SPINNING_BLADE_POT1, lambda bundle: can_break_pots(bundle)),
