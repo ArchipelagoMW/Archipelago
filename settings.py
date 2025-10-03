@@ -174,6 +174,12 @@ class Group:
                 none_type = type(None)
                 for cls in candidates:
                     assert isinstance(cls, type), f"{self.__class__.__name__}.{k}: type {cls} not supported in settings"
+                    if hasattr(cls, "validate_input"):
+                        # Trust the class to validate and handle the input itself
+                        cls.validate_input(v)
+                        setattr(self, k, cls.__call__(v))
+                        break
+
                     if v is None and cls is none_type:
                         # assign None, i.e. from Optional
                         setattr(self, k, v)
@@ -293,6 +299,17 @@ class Group:
             self._changed = False
         finally:
             self._dumping = False
+
+
+class StringChoice(str):
+    valid_options: ClassVar[tuple[str]]
+
+    @classmethod
+    def validate_input(cls, value: str) -> None:
+        if value not in cls.valid_options:
+            raise ValueError(
+                f"Invalid input {value} for option of type {cls.__name__}. Valid options are {cls.valid_options}"
+            )
 
 
 class Bool:
@@ -548,7 +565,7 @@ class ServerOptions(Group):
         for a total of 5
         """
 
-    class ReleaseMode(str):
+    class ReleaseMode(StringChoice):
         """
         Release modes
         A Release sends out the remaining items *from* a world that releases
@@ -559,7 +576,9 @@ class ServerOptions(Group):
         "goal" -> release is allowed after goal completion
         """
 
-    class CollectMode(str):
+        valid_options = ("disabled", "enabled", "auto", "auto-enabled", "goal")
+
+    class CollectMode(StringChoice):
         """
         Collect modes
         A Collect sends the remaining items *to* a world that collects
@@ -570,7 +589,9 @@ class ServerOptions(Group):
         "goal" -> collect is allowed after goal completion
         """
 
-    class RemainingMode(str):
+        valid_options = ("disabled", "enabled", "auto", "auto-enabled", "goal")
+
+    class RemainingMode(StringChoice):
         """
         Remaining modes
         !remaining handling, that tells a client which items remain in their pool
@@ -578,6 +599,8 @@ class ServerOptions(Group):
         "disabled" -> Client can never ask for remaining items
         "goal" -> Client can ask for remaining items after goal completion
         """
+
+        valid_options = ("disabled", "enabled", "goal")
 
     class AutoShutdown(int):
         """Automatically shut down the server after this many seconds without new location checks, 0 to keep running"""
