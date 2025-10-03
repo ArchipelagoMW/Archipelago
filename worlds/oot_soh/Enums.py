@@ -3453,8 +3453,7 @@ class Events(str, Enum):
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     CAN_ACCESS_BUGS = "Can Access Bugs"
     CAN_DEFEAT_BIG_POE = "Can Defeat Big Poe"
-    GOSSIP_STONE_FAIRY = "Gossip Stone Fairy"
-    FREE_FAIRIES = "Free Fairies"
+    CAN_ACCESS_FAIRIES = "Can Access Fairies"
     GAME_COMPLETED = "Game Completed"
 
 class Ages(str, Enum):

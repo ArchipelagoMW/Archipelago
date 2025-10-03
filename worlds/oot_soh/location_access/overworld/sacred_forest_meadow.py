@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from worlds.shapez.data.strings import REGIONS
 from ...Enums import *
 from ...LogicHelpers import *
 
@@ -9,8 +8,8 @@ if TYPE_CHECKING:
 
 
 class EventLocations(str, Enum):
-    GOSSIP_STONE = "Gossip Stone"
-    FAIRY_FOUNTAIN = "Fairy Fountain"
+    SFM_GOSSIP_STONE = "Gossip Stone"
+    SFM_FAIRY_FOUNTAIN = "Fairy Fountain"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -18,11 +17,15 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.SFM_ENTRYWAY, world, [
         (Regions.LW_BEYOND_MIDO, lambda bundle: True),
-        (Regions.SFM_ENTRYWAY, lambda bundle: is_adult(bundle) or can_kill_enemy(bundle, Enemies.WOLFOS)),
+        (Regions.SACRED_FOREST_MEADOW, lambda bundle: is_adult(bundle) or can_kill_enemy(bundle, Enemies.WOLFOS)),
         (Regions.SFM_WOLFOS_GROTTO, lambda bundle: can_open_bomb_grotto(bundle)),
     ])
 
     # Sacred Forest Meadow
+    # Events
+    add_events(Regions.SACRED_FOREST_MEADOW, world, [
+        (EventLocations.SFM_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
+    ])
     # Location
     add_locations(Regions.SACRED_FOREST_MEADOW, world, [
         (Locations.SONG_FROM_SARIA, lambda bundle: is_child(bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
@@ -45,13 +48,13 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.SFM_FAIRY_GROTTO, lambda bundle: True),
         (Regions.SFM_STORMS_GROTTO, lambda bundle: can_open_storms_grotto(bundle)),
     ])
-    # Events
-    add_events(Regions.SACRED_FOREST_MEADOW, world, [
-        (EventLocations.GOSSIP_STONE, Events.GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy_except_suns(bundle)),
-    ])
 
 
     # SFM Fairy Grotto
+    # Events
+    add_events(Regions.SFM_FAIRY_GROTTO, world, [
+        (EventLocations.SFM_FAIRY_FOUNTAIN, Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
+    ])
     # Locations
     add_locations(Regions.SFM_FAIRY_GROTTO, world, [
         (Locations.SFM_FAIRY_GROTTO_FAIRY1, lambda bundle: True),
@@ -66,10 +69,6 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.SFM_FAIRY_GROTTO, world, [
         (Regions.SACRED_FOREST_MEADOW, lambda bundle: True),
-    ])
-    # Events
-    add_events(Regions.SFM_FAIRY_GROTTO, world, [
-        (EventLocations.FAIRY_FOUNTAIN, Events.FREE_FAIRIES, lambda bundle: True),
     ])
 
     # SFM Wolfos Grotto
