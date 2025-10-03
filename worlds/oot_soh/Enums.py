@@ -1026,7 +1026,7 @@ class Locations(str, Enum):
     HC_ZELDAS_LETTER = "HC Zeldas Letter"
     HC_GREAT_FAIRY_REWARD = "HC Great Fairy Reward"
     LLR_TALONS_CHICKENS = "LLR Talons Chickens"
-    LLR_FREESTANDING_PO_H = "LLR Freestanding PoH"
+    LLR_FREESTANDING_POH = "LLR Freestanding PoH"
     KAK_ANJU_AS_CHILD = "Kak Anju as Child"
     KAK_ANJU_AS_ADULT = "Kak Anju as Adult"
     KAK_IMPAS_HOUSE_FREESTANDING_PO_H = "Kak Impas House Freestanding PoH"
