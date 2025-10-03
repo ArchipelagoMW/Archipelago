@@ -3450,6 +3450,7 @@ class Events(str, Enum):
     CLEARED_SPIRIT_TEMPLE = "Spirit Temple Completed"
     CLEARED_SHADOW_TEMPLE = "Shadow Temple Completed"
     TIME_TRAVEL = "Time Travel"
+    FREED_EPONA = "Freed Epona"
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     CAN_ACCESS_BUGS = "Can Access Bugs"
     CAN_DEFEAT_BIG_POE = "Can Defeat Big Poe"
