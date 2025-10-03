@@ -265,7 +265,7 @@ def blast_or_smash(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 def blue_fire(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link has access to blue fire."""
-    return has_bottle(bundle) and has_item(Events.BLUE_FIRE_ACCESS) # TODO: Implement blue fire arrow option
+    return has_bottle(bundle) and (has_item(Events.CAN_ACCESS_BLUE_FIRE, bundle) or has_item(Items.BUY_BLUE_FIRE, bundle)) # TODO: Implement blue fire arrow option
 
 
 def can_use_sword(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -868,8 +868,9 @@ def can_open_bomb_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) ->
 
 def trade_quest_step(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
-    if (world.options.shuffle_adult_trade_items.value):
-        return False
+    # If adult trade shuffle is off, it'll automatically assume the whole trade quest is complete as soon as claim check is obtained.
+    if (world.options.shuffle_adult_trade_items.value == 0):
+        return has_item(Items.CLAIM_CHECK, bundle)
     
     hasState = False
 
