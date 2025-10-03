@@ -8,7 +8,7 @@ from .Client import *
 from typing import ClassVar
 
 from worlds.AutoWorld import World
-import Options
+from Options import OptionError
 
 from .Options import GrinchOptions
 from .Rules import access_rules_dict
@@ -31,7 +31,7 @@ class GrinchWorld(World):
 
     def generate_early(self) -> None: #Special conditions changed before generation occurs
         if self.options.ring_link == 1 and self.options.unlimited_eggs == 1:
-            raise Options.OptionError("Cannot enable both unlimited rotten eggs and ring links. You can only enable one of these at a time."+
+            raise OptionError("Cannot enable both unlimited rotten eggs and ring links. You can only enable one of these at a time." +
                                       f"The following player's YAML needs to be fixed: {self.player_name}")
 
 
