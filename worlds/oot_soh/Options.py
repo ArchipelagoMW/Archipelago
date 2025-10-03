@@ -301,6 +301,16 @@ class ShuffleShops(Toggle):
     """
     display_name = "Shuffle Shops"
 
+class ShuffleShopsItemAmount(Range):
+    """
+    If Shuffle Shops is on, set how many shop items in each shop will be randomized.
+    """
+    display_name = "Shuffle Shops Item Amount"
+    range_start = 1
+    range_end = 7
+    default = 4
+    visibility = Visibility.none
+
 class ShuffleFish(Choice):
     """
     Shuffle fish. Fishing pond fish will have 15 fish for each age. Overworld fish need a bottle to scoop up. Hylian Loach is not included.
@@ -670,6 +680,7 @@ class SohOptions(PerGameCommonOptions):
     shuffle_deku_nut_bag: ShuffleDekuNutBag
     shuffle_freestanding_items: ShuffleFreestandingItems
     shuffle_shops: ShuffleShops
+    shuffle_shops_item_amount: ShuffleShopsItemAmount
     shuffle_fish: ShuffleFish
     shuffle_scrubs: ShuffleScrubs
     shuffle_beehives: ShuffleBeehives
