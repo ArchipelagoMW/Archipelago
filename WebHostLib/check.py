@@ -1,7 +1,7 @@
 import os
 import zipfile
 import base64
-from typing import Union, Dict, Set, Tuple
+from collections.abc import Set
 
 from flask import request, flash, redirect, url_for, render_template
 from markupsafe import Markup
@@ -43,7 +43,7 @@ def mysterycheck():
     return redirect(url_for("check"), 301)
 
 
-def get_yaml_data(files) -> Union[Dict[str, str], str, Markup]:
+def get_yaml_data(files) -> dict[str, str] | str | Markup:
     options = {}
     for uploaded_file in files:
         if banned_file(uploaded_file.filename):
@@ -84,12 +84,12 @@ def get_yaml_data(files) -> Union[Dict[str, str], str, Markup]:
     return options
 
 
-def roll_options(options: Dict[str, Union[dict, str]],
+def roll_options(options: dict[str, dict | str],
                  plando_options: Set[str] = frozenset({"bosses", "items", "connections", "texts"})) -> \
-        Tuple[Dict[str, Union[str, bool]], Dict[str, dict]]:
+        tuple[dict[str, str | bool], dict[str, dict]]:
     plando_options = PlandoOptions.from_set(set(plando_options))
-    results = {}
-    rolled_results = {}
+    results: dict[str, str | bool] = {}
+    rolled_results: dict[str, dict] = {}
     for filename, text in options.items():
         try:
             if type(text) is dict:

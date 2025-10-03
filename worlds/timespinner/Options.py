@@ -53,6 +53,75 @@ class BossRando(Choice):
     option_unscaled = 2
     alias_true = 1
 
+class BossRandoType(Choice):
+    """
+    Sets what type of boss shuffling occurs.
+    Shuffle: Bosses will be shuffled amongst each other
+    Chaos: Bosses will be randomized with the chance of duplicate bosses
+    Singularity: All bosses will be replaced with a single boss
+    Manual: Bosses will be placed according to the Boss Rando Overrides setting
+    """
+    display_name = "Boss Randomization Type"
+    option_shuffle = 0
+    option_chaos = 1
+    option_singularity = 2
+    option_manual = 3
+
+class BossRandoOverrides(OptionDict):
+    """
+    Manual mapping of bosses to the boss they will be replaced with.
+    Bosses that you don't specify will be the vanilla boss.
+    """
+    bosses = [
+        "FelineSentry",
+        "Varndagroth",
+        "AzureQueen",
+        "GoldenIdol",
+        "Aelana",
+        "Maw",
+        "Cantoran",
+        "Genza",
+        "Nuvius",
+        "Vol",
+        "Prince",
+        "Xarion",
+        "Ravenlord",
+        "Ifrit",
+        "Sandman",
+        "Nightmare",
+    ]
+
+    schema = Schema(
+        {
+            Optional(Or(*bosses)): Or(
+                And(
+                    {Optional(boss): And(int, lambda n: n >= 0) for boss in bosses},
+                    lambda d: any(v > 0 for v in d.values()),
+                ),
+                *bosses
+            )
+        }
+    )
+    display_name = "Boss Rando Overrides"
+    default = {
+        "FelineSentry": "FelineSentry",
+        "Varndagroth": "Varndagroth",
+        "AzureQueen": "AzureQueen",
+        "GoldenIdol": "GoldenIdol",
+        "Aelana": "Aelana",
+        "Maw": "Maw",
+        "Cantoran": "Cantoran",
+        "Genza": "Genza",
+        "Nuvius": "Nuvius",
+        "Vol": "Vol",
+        "Prince": "Prince",
+        "Xarion": "Xarion",
+        "Ravenlord": "Ravenlord",
+        "Ifrit": "Ifrit",
+        "Sandman": "Sandman",
+        "Nightmare": "Nightmare"
+    }
+
 class EnemyRando(Choice):
     "Wheter enemies will be randomized, and if their damage/hp should be scaled."
     display_name = "Enemy Randomization"
@@ -60,6 +129,7 @@ class EnemyRando(Choice):
     option_scaled = 1
     option_unscaled = 2
     option_ryshia = 3
+    option_no_hell_spiders = 4
     alias_true = 1
 
 class DamageRando(Choice):
@@ -366,8 +436,8 @@ class TrapChance(Range):
 class Traps(OptionList):
     """List of traps that may be in the item pool to find"""
     display_name = "Traps Types"
-    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap" }
-    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap" ]
+    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap", "Spider Trap", "Lights Out Trap", "Palm Punch Trap" }
+    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap", "Spider Trap", "Lights Out Trap", "Palm Punch Trap" ]
 
 class PresentAccessWithWheelAndSpindle(Toggle):
     """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
@@ -377,6 +447,34 @@ class PrismBreak(Toggle):
     """Adds 3 Laser Access items to the item pool to remove the lasers blocking the military hangar area
     instead of needing to beat the Golden Idol, Aelana, and The Maw."""
     display_name = "Prism Break"
+    
+class LockKeyAmadeus(Toggle):
+    """Lasers in Amadeus' Laboratory are disabled via items, rather than by de-powering the lab. Experiments will spawn in the lab."""
+    display_name = "Lock Key Amadeus"
+    
+class RiskyWarps(Toggle):
+    """Expanded free-warp eligible locations, including Azure Queen, Xarion, Amadeus' Laboratory, and Emperor's Tower."""
+    display_name = "Risky Warps"
+
+class PyramidStart(Toggle):
+    """Start in ???. Takes priority over Inverted. Additional chests in Dark Forest and Pyramid. Sandman door behaves as it does in Enter Sandman."""
+    display_name = "Pyramid Start"
+
+class GateKeep(Toggle):
+    """The castle drawbridge starts raised, and can be lowered via item."""
+    display_name = "Gate Keep"
+
+class RoyalRoadblock(Toggle):
+    """The Royal Towers entrance door requires a royal orb (Plasma Orb, Plasma Geyser, or Royal Ring) to enter."""
+    display_name = "Royal Roadblock"
+
+class PureTorcher(Toggle):
+    """All lanterns contain checks. (Except tutorial)"""
+    display_name = "Pure Torcher"
+
+class FindTheFlame(Toggle):
+    """Lanterns in 'Pure Torcher' will not break without new item 'Cube of Bodie'."""
+    display_name = "Find the Flame"
 
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -391,6 +489,8 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     cantoran: Cantoran
     lore_checks: LoreChecks
     boss_rando: BossRando
+    boss_rando_type: BossRandoType
+    boss_rando_overrides: BossRandoOverrides
     enemy_rando: EnemyRando
     damage_rando: DamageRando
     damage_rando_overrides: DamageRandoOverrides
@@ -415,6 +515,13 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     unchained_keys: UnchainedKeys
     back_to_the_future: PresentAccessWithWheelAndSpindle
     prism_break: PrismBreak
+    lock_key_amadeus: LockKeyAmadeus
+    risky_warps: RiskyWarps
+    pyramid_start: PyramidStart
+    gate_keep: GateKeep
+    royal_roadblock: RoyalRoadblock
+    pure_torcher: PureTorcher
+    find_the_flame: FindTheFlame
     trap_chance: TrapChance
     traps: Traps
 

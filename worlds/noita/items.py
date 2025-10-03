@@ -1,6 +1,6 @@
 import itertools
 from collections import Counter
-from typing import Dict, List, NamedTuple, Set, TYPE_CHECKING
+from typing import NamedTuple, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
 from .options import BossesAsChecks, VictoryCondition, ExtraOrbs
@@ -27,12 +27,12 @@ def create_item(player: int, name: str) -> Item:
     return NoitaItem(name, item_data.classification, item_data.code, player)
 
 
-def create_fixed_item_pool() -> List[str]:
-    required_items: Dict[str, int] = {name: data.required_num for name, data in item_table.items()}
+def create_fixed_item_pool() -> list[str]:
+    required_items: dict[str, int] = {name: data.required_num for name, data in item_table.items()}
     return list(Counter(required_items).elements())
 
 
-def create_orb_items(victory_condition: VictoryCondition, extra_orbs: ExtraOrbs) -> List[str]:
+def create_orb_items(victory_condition: VictoryCondition, extra_orbs: ExtraOrbs) -> list[str]:
     orb_count = extra_orbs.value
     if victory_condition == VictoryCondition.option_pure_ending:
         orb_count = orb_count + 11
@@ -41,19 +41,19 @@ def create_orb_items(victory_condition: VictoryCondition, extra_orbs: ExtraOrbs)
     return ["Orb" for _ in range(orb_count)]
 
 
-def create_spatial_awareness_item(bosses_as_checks: BossesAsChecks) -> List[str]:
+def create_spatial_awareness_item(bosses_as_checks: BossesAsChecks) -> list[str]:
     return ["Spatial Awareness Perk"] if bosses_as_checks.value >= BossesAsChecks.option_all_bosses else []
 
 
-def create_kantele(victory_condition: VictoryCondition) -> List[str]:
+def create_kantele(victory_condition: VictoryCondition) -> list[str]:
     return ["Kantele"] if victory_condition.value >= VictoryCondition.option_pure_ending else []
 
 
-def create_random_items(world: NoitaWorld, weights: Dict[str, int], count: int) -> List[str]:
+def create_random_items(world: NoitaWorld, weights: dict[str, int], count: int) -> list[str]:
     filler_pool = weights.copy()
     if not world.options.bad_effects:
-        del filler_pool["Trap"]
-        del filler_pool["Greed Die"]
+        filler_pool["Trap"] = 0
+        filler_pool["Greed Die"] = 0
 
     return world.random.choices(population=list(filler_pool.keys()),
                                 weights=list(filler_pool.values()),
@@ -87,7 +87,7 @@ def create_all_items(world: NoitaWorld) -> None:
 
 
 # 110000 - 110032
-item_table: Dict[str, ItemData] = {
+item_table: dict[str, ItemData] = {
     "Trap":                                 ItemData(110000, "Traps", ItemClassification.trap),
     "Extra Max HP":                         ItemData(110001, "Pickups", ItemClassification.useful),
     "Spell Refresher":                      ItemData(110002, "Pickups", ItemClassification.filler),
@@ -122,7 +122,7 @@ item_table: Dict[str, ItemData] = {
     "Broken Wand":                          ItemData(110031, "Items", ItemClassification.filler),
 }
 
-shop_only_filler_weights: Dict[str, int] = {
+shop_only_filler_weights: dict[str, int] = {
     "Trap":             15,
     "Extra Max HP":     25,
     "Spell Refresher":  20,
@@ -135,7 +135,7 @@ shop_only_filler_weights: Dict[str, int] = {
     "Extra Life Perk":  10,
 }
 
-filler_weights: Dict[str, int] = {
+filler_weights: dict[str, int] = {
     **shop_only_filler_weights,
     "Gold (200)":       15,
     "Gold (1000)":      6,
@@ -152,22 +152,10 @@ filler_weights: Dict[str, int] = {
 }
 
 
-# These helper functions make the comprehensions below more readable
-def get_item_group(item_name: str) -> str:
-    return item_table[item_name].group
+filler_items: list[str] = list(filter(lambda item: item_table[item].classification == ItemClassification.filler,
+                                      item_table.keys()))
+item_name_to_id: dict[str, int] = {name: data.code for name, data in item_table.items()}
 
-
-def item_is_filler(item_name: str) -> bool:
-    return item_table[item_name].classification == ItemClassification.filler
-
-
-def item_is_perk(item_name: str) -> bool:
-    return item_table[item_name].group == "Perks"
-
-
-filler_items: List[str] = list(filter(item_is_filler, item_table.keys()))
-item_name_to_id: Dict[str, int] = {name: data.code for name, data in item_table.items()}
-
-item_name_groups: Dict[str, Set[str]] = {
-    group: set(item_names) for group, item_names in itertools.groupby(item_table, get_item_group)
+item_name_groups: dict[str, set[str]] = {
+    group: set(item_names) for group, item_names in itertools.groupby(item_table, lambda item: item_table[item].group)
 }

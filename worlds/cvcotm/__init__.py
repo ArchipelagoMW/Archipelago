@@ -19,8 +19,8 @@ from worlds.AutoWorld import WebWorld, World
 
 from .aesthetics import shuffle_sub_weapons, get_location_data, get_countdown_flags, populate_enemy_drops, \
     get_start_inventory_data
-from .rom import RomData, patch_rom, get_base_rom_path, CVCotMProcedurePatch, CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, \
-    CVCOTM_VC_US_HASH
+from .rom import RomData, patch_rom, get_base_rom_path, CVCotMProcedurePatch, CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH
+    # CVCOTM_VC_US_HASH
 from .client import CastlevaniaCotMClient
 
 
@@ -29,7 +29,8 @@ class CVCotMSettings(settings.Group):
         """File name of the Castlevania CotM US rom"""
         copy_to = "Castlevania - Circle of the Moon (USA).gba"
         description = "Castlevania CotM (US) ROM File"
-        md5s = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCOTM_VC_US_HASH]
+        # md5s = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCOTM_VC_US_HASH]
+        md5s = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
@@ -40,7 +41,7 @@ class CVCotMWeb(WebWorld):
 
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Archipleago Castlevania: Circle of the Moon randomizer on your computer and "
+        "A guide to setting up the Archipelago Castlevania: Circle of the Moon randomizer on your computer and "
         "connecting it to a multiworld.",
         "English",
         "setup_en.md",
@@ -210,7 +211,8 @@ class CVCotMWorld(World):
                 "ignore_cleansing": self.options.ignore_cleansing.value,
                 "skip_tutorials": self.options.skip_tutorials.value,
                 "required_last_keys": self.required_last_keys,
-                "completion_goal": self.options.completion_goal.value}
+                "completion_goal": self.options.completion_goal.value,
+                "nerf_roc_wing": self.options.nerf_roc_wing.value}
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(FILLER_ITEM_NAMES)

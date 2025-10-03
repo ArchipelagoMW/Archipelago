@@ -1,6 +1,6 @@
-from . import SVTestBase, allsanity_no_mods_6_x_x, \
-    allsanity_mods_6_x_x, minimal_locations_maximal_items, minimal_locations_maximal_items_with_island, get_minsanity_options, default_6_x_x, \
-    allsanity_mods_6_x_x_exclude_disabled
+from .bases import SVTestBase
+from .options.presets import default_6_x_x, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x_exclude_disabled, get_minsanity_options, \
+    minimal_locations_maximal_items, minimal_locations_maximal_items_with_island
 from .. import location_table
 from ..items import Group, item_table
 

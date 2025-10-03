@@ -1,6 +1,31 @@
 # Celeste 64 - Changelog
 
 
+## v1.3
+
+### Features:
+
+- New optional Location Checks
+	- Checkpointsanity
+- Hair Color
+	- Allows for setting of Maddy's hair color in each of No Dash, One Dash, Two Dash, and Feather states
+- Other Player Ghosts
+	- A game config option allows you to see ghosts of other Celeste 64 players in the multiworld
+
+### Quality of Life:
+
+- Checkpoint Warping
+	- Received Checkpoint items allow for warping to their respective checkpoint
+		- These items are on their respective checkpoint location if Checkpointsanity is disabled
+	- Logic accounts for being able to warp to otherwise inaccessible areas
+	- Checkpoints are a possible option for a starting item on Standard Logic + Move Shuffle + Checkpointsanity
+- New Options toggle to enable/disable background input
+
+### Bug Fixes:
+
+- Traffic Blocks now correctly appear disabled within Cassettes
+
+
 ## v1.2
 
 ### Features:

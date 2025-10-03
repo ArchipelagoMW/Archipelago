@@ -1,5 +1,5 @@
 
-import copy, time, random
+import copy, time
 from ..utils import log
 from ..logic.cache import RequestCache
 from ..rando.RandoServices import RandoServices
@@ -15,11 +15,11 @@ from ..graph.graph_utils import GraphUtils
 # item pool is not empty).
 # entry point is generateItems
 class Filler(object):
-    def __init__(self, startAP, graph, restrictions, emptyContainer, endDate=infinity):
+    def __init__(self, startAP, graph, restrictions, emptyContainer, endDate=infinity, *, random):
         self.startAP = startAP
         self.cache = RequestCache()
         self.graph = graph
-        self.services = RandoServices(graph, restrictions, self.cache)
+        self.services = RandoServices(graph, restrictions, self.cache, random=random)
         self.restrictions = restrictions
         self.settings = restrictions.settings
         self.endDate = endDate
@@ -108,9 +108,9 @@ class Filler(object):
 
 # very simple front fill algorithm with no rollback and no "softlock checks" (== dessy algorithm)
 class FrontFiller(Filler):
-    def __init__(self, startAP, graph, restrictions, emptyContainer, endDate=infinity):
-        super(FrontFiller, self).__init__(startAP, graph, restrictions, emptyContainer, endDate)
-        self.choice = ItemThenLocChoice(restrictions)
+    def __init__(self, startAP, graph, restrictions, emptyContainer, endDate=infinity, *, random):
+        super(FrontFiller, self).__init__(startAP, graph, restrictions, emptyContainer, endDate, random=random)
+        self.choice = ItemThenLocChoice(restrictions, random)
         self.stdStart = GraphUtils.isStandardStart(self.startAP)
 
     def isEarlyGame(self):
