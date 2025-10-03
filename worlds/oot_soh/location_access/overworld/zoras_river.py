@@ -81,11 +81,11 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ZR_NEAR_OPEN_GROTTO_FREESTANDING_POH, lambda bundle: is_child(bundle) or
                                                                               can_use(Items.HOVER_BOOTS, bundle)
                                                                               or (is_adult(bundle)
-                                                                                  and can_do_trick("ZR Lower Piece of Heart without Hover Boots", bundle))),
+                                                                                  and can_do_trick(Tricks.ZR_LOWER, bundle))),
         (Locations.ZR_NEAR_DOMAIN_FREESTANDING_POH, lambda bundle: is_child(bundle) or
                                                                               can_use(Items.HOVER_BOOTS, bundle)
                                                                               or (is_adult(bundle)
-                                                                                  and can_do_trick("ZR Upper Piece of Heart without Hover Boots", bundle))),
+                                                                                  and can_do_trick(Tricks.ZR_UPPER, bundle))),
         (Locations.ZR_GS_LADDER, lambda bundle: is_child(bundle)
                                                      and  can_attack(bundle)
                                                      and can_get_nighttime_gs(bundle)),
@@ -137,10 +137,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.ZR_BEHIND_WATERFALL, lambda bundle: world.options.sleeping_waterfall.value == 1 or
                                                           can_use(Items.ZELDAS_LULLABY, bundle) or
                                                           (is_child(bundle) and
-                                                           can_do_trick("ZD with Cuckoo", bundle)) or
+                                                           can_do_trick(Tricks.ZR_CUCCO, bundle)) or
                                                           (is_adult(bundle) and
                                                            can_use(Items.HOVER_BOOTS, bundle) and
-                                                           can_do_trick("ZD with Hover Boots", bundle)))
+                                                           can_do_trick(Tricks.ZR_HOVERS, bundle)))
 
     ])
     # Events

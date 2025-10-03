@@ -298,7 +298,7 @@ def can_use_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age:
 
 
 def can_break_mud_walls(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return blast_or_smash(bundle) or (can_do_trick("Blue Fire Mud Walls", bundle) and blue_fire(bundle))
+    return blast_or_smash(bundle) or (can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle) and blue_fire(bundle))
 
 
 def can_get_deku_baba_sticks(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -382,15 +382,15 @@ def take_damage(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
             or effective_health(bundle) != 1)
 
 
-def can_do_trick(trick: str, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+def can_do_trick(trick: Tricks, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     # TODO: Implement specific trick logic based on world settings
     # For now, return False for safety (no tricks assumed)
     return False
 
 
 def can_get_nighttime_gs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return (can_use(Items.SUNS_SONG, bundle ) or
-            can_do_trick("Nighttime Gold Skulltulas", bundle))
+    # TODO: Add check for "Skulls Expect Sun Song` option when implemented
+    return True
 
 
 def can_break_pots(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -464,14 +464,14 @@ def can_break_lower_hives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -
 
 def can_break_upper_beehives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return (hookshot_or_boomerang(bundle) or
-            (can_do_trick("Beehives With Bombchus", bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) and 
+            (can_do_trick(Tricks.BOMBCHU_BEEHIVES, bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) and
             (False and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle))))
 
 
 def can_open_storms_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return (can_use(Items.SONG_OF_STORMS, bundle) and
             (has_item(Items.STONE_OF_AGONY, bundle)
-             or can_do_trick("Hidden Grottos without Stone of Agony", bundle)))
+             or can_do_trick(Tricks.GROTTOS_WITHOUT_AGONY, bundle)))
 
 
 def can_live(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -742,7 +742,7 @@ def hookshot_or_boomerang(bundle: tuple[CollectionState, Regions, "SohWorld"]) -
 
 
 def can_open_underwater_chest(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return (can_do_trick("RT Open Underwater Chest", bundle) and 
+    return (can_do_trick(Tricks.OPEN_UNDERWATER_CHEST, bundle) and
             can_use(Items.IRON_BOOTS, bundle) and 
             can_use(Items.HOOKSHOT, bundle))
 
@@ -815,7 +815,7 @@ def can_detonate_bomb_flowers(bundle: tuple[CollectionState, Regions, "SohWorld"
 def can_detonate_upright_bomb_flower(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return (can_detonate_bomb_flowers(bundle) 
             or has_item(Items.GORONS_BRACELET, bundle)
-            or (can_do_trick("RT BLUE FIRE MUD WALLS", bundle)
+            or (can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle)
                 and blue_fire(bundle)
                 and (effective_health != 1
                     or can_use(Items.NAYRUS_LOVE, bundle)
@@ -863,11 +863,11 @@ def can_spawn_soil_skull(bundle: tuple[CollectionState, Regions, "SohWorld"]) ->
 
 
 def fire_timer(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
-    return 255 if can_use(Items.GORON_TUNIC, bundle) else ((hearts(bundle) * 8) if can_do_trick("Fewer Tunic Requirements", bundle) else 0)
+    return 255 if can_use(Items.GORON_TUNIC, bundle) else ((hearts(bundle) * 8) if can_do_trick(Tricks.FEWER_TUNIC_REQUIREMENTS, bundle) else 0)
 
 
 def water_timer(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
-    return 255 if can_use(Items.ZORA_TUNIC, bundle) else ((hearts(bundle) * 8) if can_do_trick("Fewer Tunic Requirements", bundle) else 0)
+    return 255 if can_use(Items.ZORA_TUNIC, bundle) else ((hearts(bundle) * 8) if can_do_trick(Tricks.FEWER_TUNIC_REQUIREMENTS, bundle) else 0)
 
 
 def hearts(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
@@ -877,7 +877,7 @@ def hearts(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
 
 
 def can_open_bomb_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return blast_or_smash(bundle) and (has_item(Items.STONE_OF_AGONY, bundle) or can_do_trick("Grottos Without Agony", bundle))
+    return blast_or_smash(bundle) and (has_item(Items.STONE_OF_AGONY, bundle) or can_do_trick(Tricks.GROTTOS_WITHOUT_AGONY, bundle))
 
 
 def trade_quest_step(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
