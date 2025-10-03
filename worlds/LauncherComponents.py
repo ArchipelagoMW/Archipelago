@@ -267,7 +267,7 @@ if not is_frozen():
                 )
                 assert manifest["game"] == worldtype.game, (
                     f"World directory {world_directory} has an archipelago.json manifest file, but value of the"
-                    f"\"game\" field ({manifest['game']} does not the World class's game ({worldtype.game})."
+                    f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
                 )
             else:
                 manifest = {}
