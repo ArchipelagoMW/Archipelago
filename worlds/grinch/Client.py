@@ -327,7 +327,7 @@ class GrinchClient(BizHawkClient):
 
         ingame_map_id = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
             0x010000, 1, "MainRAM")]))[0], "little")
-         initial_cutscene_checker = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
+        initial_cutscene_checker = int.from_bytes((await bizhawk.read(ctx.bizhawk_ctx, [(
             0x010094, 1, "MainRAM")]))[0], "little")
 
         #If not in game or at a menu, or loading the publisher logos
