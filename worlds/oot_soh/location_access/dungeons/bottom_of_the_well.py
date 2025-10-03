@@ -176,7 +176,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT10, lambda bundle: can_break_pots(bundle)),
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT11, lambda bundle: can_break_pots(bundle)),
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT12, lambda bundle: can_break_pots(bundle)),
-        (Locations.BOTTOM_OF_THE_WELL_MQ_BASEMENT_SUNS_SONG_FAIRY, lambda bundle: can_use(Items.SUNS_SONG, bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_SUNS_SONG_FAIRY, lambda bundle: can_use(Items.SUNS_SONG, bundle)),
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS3, lambda bundle: can_cut_shrubs(bundle)),
