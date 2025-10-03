@@ -42,7 +42,9 @@ class Missionsanity(Choice):
 class ExcludeEnvironments(OptionSet):
     """
     Allows entire environments to be an excluded location to ensure you are not logically required to enter the environment along
-    with any and all checks that are in that environment too. WARNING: Excluding too many environments may cause generation to fail.
+    with any and all checks that are in that environment too.
+
+    WARNING: Excluding too many environments may cause generation to fail.
     [NOT IMPLEMENTED]
 
     Valid keys: "Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Clock Tower", "City Hall",
@@ -95,7 +97,13 @@ class Moverando(OptionSet):
     Valid keys: "Pancake", "Seize", "Max", "Bad Breath", "Sneak"
     """
     display_name = "Moves Randomized"
-    default = ["Pancake", "Seize", "Max", "Bad Breath", "Sneak"]
+    default = [
+        "Pancake",
+        "Seize",
+        "Max",
+        "Bad Breath",
+        "Sneak"
+    ]
 
 class UnlimitedEggs(Toggle):
     """Determine whether or not you run out of rotten eggs when you utilize your gadgets."""
@@ -118,6 +126,7 @@ class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     progressive_gadget: ProgressiveGadget
     supadow_minigames: Supadow
     giftsanity: Gifts
+    gadget_rando: GadgetRando
     move_rando: Moverando
     unlimited_eggs: UnlimitedEggs
     ring_link: RingLinkOption
