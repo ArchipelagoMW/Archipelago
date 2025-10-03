@@ -1112,10 +1112,10 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Jidamba Tangle
         #Treasure chests
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Atop overgrown building E of Eaclaneya", 3028 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Inside overgrown building E of Eaclaneya", 1629 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Demon Plate chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Up a tree in north foliage", 3024 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Along a river through the foliage", 3026 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Atop overgrown building E of Eaclaneya", 3028 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Tucked against eastern side of Eaclaneya", 2801 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Flame Guard chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Tucked against western side of Eaclaneya", 2802 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Flamespike chest
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Chest - Smack in the center of the foliage", 1632 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Foliage Key chest
