@@ -3457,6 +3457,7 @@ class Events(str, Enum):
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     CAN_ACCESS_BUGS = "Can Access Bugs"
     CAN_DEFEAT_BIG_POE = "Can Defeat Big Poe"
+    CAN_ACCESS_FAIRIES = "Can Access Fairies"
     DAMPES_WINDMILL_ACCESS = "Dampe's Windmill Access"
     DRAIN_WELL = "Drain Well"
     GAME_COMPLETED = "Game Completed"
