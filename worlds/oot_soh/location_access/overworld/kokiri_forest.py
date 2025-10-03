@@ -11,11 +11,13 @@ class EventLocations(str, Enum):
     MIDO = "Mido's Location"
     MIDO_OUTSIDE = "Mido's Location From Outside Deku Tree"
     KOKIRI_FOREST_SOFT_SOIL = "Kokiri Forest Soft Soil"
+    KOKIRI_FOREST_GOSSIP_STONE = "Kokiri Forest Gossip Stone"
 
 
 class LocalEvents(str, Enum):
     MIDO_SWORD_AND_SHIELD = "Showed Mido the Sword and Shield"
     KOKIRI_FOREST_BEAN_PLANTED = "Kokiri Forest Bean Planted"
+    KOKIRI_FOREST_GOSSIP_STONE_FAIRY = "Kokiri Forest Gossip Stone Fairy"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -25,9 +27,9 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.MIDO, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: is_child(bundle)
                                                                     and has_item(Items.KOKIRI_SWORD, bundle) 
                                                                     and has_item(Items.DEKU_SHIELD, bundle)),
+        (EventLocations.KOKIRI_FOREST_GOSSIP_STONE, LocalEvents.KOKIRI_FOREST_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (EventLocations.KOKIRI_FOREST_SOFT_SOIL, LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, lambda bundle: is_child(bundle) and
                                                                                             can_use(Items.MAGIC_BEAN, bundle)),
-        # Missing Fairy events?
     ])
     # Locations
     add_locations(Regions.KOKIRI_FOREST, world, [
@@ -150,13 +152,12 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KF_DEKU_TREE_LEFT_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.KF_DEKU_TREE_RIGHT_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (Locations.KF_DEKU_TREE_RIGHT_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
-        (Locations.KF_DEKU_TREE_LEFT_GOSSIP_STONE, lambda bundle: True),
-        (Locations.KF_DEKU_TREE_RIGHT_GOSSIP_STONE, lambda bundle: True),
     ])
     # Connections
     connect_regions(Regions.KF_OUTSIDE_DEKU_TREE, world, [
         (Regions.DEKU_TREE_ENTRYWAY, lambda bundle: (is_child(bundle))
-                                                         and (world.options.closed_forest.value == 2
+                                                        # Todo: Add dungeons shuffle rule when entrance shuffle is implementedd
+                                                        and (world.options.closed_forest.value == 2
                                                             or has_item(LocalEvents.MIDO_SWORD_AND_SHIELD, bundle))),
         (Regions.KOKIRI_FOREST, lambda bundle:  (is_adult(bundle) and
                                                              (can_pass_enemy(bundle, Enemies.BIG_SKULLTULA) or
@@ -252,7 +253,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KF_STORMS_GROTTO_FISH, lambda bundle: has_bottle(bundle)),
         (Locations.KF_STORMS_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy(bundle)),
         (Locations.KF_STORMS_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
-        (Locations.KF_STORMS_GOSSIP_STONE, lambda bundle: True),
         (Locations.KF_STORMS_GROTTO_BEEHIVE_LEFT, lambda bundle: can_break_lower_hives(bundle)),
         (Locations.KF_STORMS_GROTTO_BEEHIVE_RIGHT, lambda bundle: can_break_lower_hives(bundle)),
         (Locations.KF_STORMS_GROTTO_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
