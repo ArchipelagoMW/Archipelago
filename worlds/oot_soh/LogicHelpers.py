@@ -394,8 +394,13 @@ def can_break_crates(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> boo
     return True
   
 
-def can_break_small_crates(state: CollectionState, world: "SohWorld") -> bool:
+def can_break_small_crates(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can break small crates."""
+    return True
+
+
+def can_bonk_trees(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    """Check if Link can bonk trees."""
     return True
 
 
