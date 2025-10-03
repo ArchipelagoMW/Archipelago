@@ -264,7 +264,8 @@ class ObscureRoutes(Toggle):
 
 class AutoSpendLP(Toggle):
     """
-    When enabled, every time a character earn LP it will automatically spend LP on abilities or passives.
+    When enabled, every time a character earns LP it will automatically spend LP on abilities or passives.
+    Extra LP earned on a job that is maxxed will then be sent to your subjob or if that is also maxxed a random unmaxxed job.
     """
     display_name = "Automatically Spend LP"
 

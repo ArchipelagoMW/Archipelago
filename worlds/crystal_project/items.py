@@ -107,12 +107,12 @@ item_table: Dict[str, ItemData] = {
     "Item - Decent Cod Bag": ItemData(ITEM, 185 + item_index_offset, ItemClassification.useful, 0, 0, 1), #Shoudu Province, Expert Zones
 
     #Fishing
-    "Item - Flimsy Rod": ItemData(ITEM, 55 + item_index_offset, ItemClassification.useful),
-    "Item - Tough Rod": ItemData(ITEM, 150 + item_index_offset, ItemClassification.useful),
-    "Item - Super Rod": ItemData(ITEM, 151 + item_index_offset, ItemClassification.useful),
-    "Item - Plug Lure": ItemData(ITEM, 91 + item_index_offset, ItemClassification.useful),
-    "Item - Fly Lure": ItemData(ITEM, 149 + item_index_offset, ItemClassification.useful),
-    "Item - Jigging Lure": ItemData(ITEM, 97 + item_index_offset, ItemClassification.useful),
+    "Item - Flimsy Rod": ItemData(ITEM, 55 + item_index_offset, ItemClassification.progression, 1),
+    "Item - Tough Rod": ItemData(ITEM, 150 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Super Rod": ItemData(ITEM, 151 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Plug Lure": ItemData(ITEM, 91 + item_index_offset, ItemClassification.progression, 1),
+    "Item - Fly Lure": ItemData(ITEM, 149 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Jigging Lure": ItemData(ITEM, 97 + item_index_offset, ItemClassification.progression, 0, 0, 1),
 
     #Ore
     "Item - Silver Ore": ItemData(ORE, 3 + item_index_offset, ItemClassification.useful, 0, 18), #Used by Capital Blacksmith, Capital Sequoia, Advanced Regions
@@ -1067,7 +1067,16 @@ item_table: Dict[str, ItemData] = {
     LIFEGIVER: ItemData(SCHOLAR_ABILITY, 376 + scholar_index_offset, ItemClassification.useful, 0, 1),
 
     #Traps
-    "Trap - Dialog Trap": ItemData(TRAP, 1 + trap_index_offset, ItemClassification.filler, 0),
+    "Trap - Dialog Trap": ItemData(TRAP, 1 + trap_index_offset, ItemClassification.trap, 0),
+    "Trap - Crag Demon Trap": ItemData(TRAP, 2 + trap_index_offset, ItemClassification.trap, 0),
+    "Trap - Clothes Fall Off Trap": ItemData(TRAP, 3 + trap_index_offset, ItemClassification.trap, 0),
+    "Trap - Oregon Trap": ItemData(TRAP, 4 + trap_index_offset, ItemClassification.trap, 0),
+    "Trap - Teleport Trap": ItemData(TRAP, 5 + trap_index_offset, ItemClassification.trap, 0),
+    "Trap - Moon Jump Trap": ItemData(TRAP, 6 + trap_index_offset, ItemClassification.trap, 0),
+    "Trap - Snail Jump Trap": ItemData(TRAP, 7 + trap_index_offset, ItemClassification.trap, 0),
+    "Trap - Dismount Trap": ItemData(TRAP, 8 + trap_index_offset, ItemClassification.trap, 0),
+    "Trap - Dunk Tank Trap": ItemData(TRAP, 9 + trap_index_offset, ItemClassification.trap, 0),
+    "Trap - Trap Pack Trap": ItemData(TRAP, 10 + trap_index_offset, ItemClassification.trap, 0),
 }
 
 progressive_equipment: Tuple[str, ...] = (
@@ -1854,10 +1863,6 @@ filler_items: Tuple[str, ...] = (
     "Item - Fresh Salmon",
     "Item - Scroll",
     # add currency?
-)
-
-trap_items: Tuple[str, ...] = (
-    "Trap - Dialog Trap",
 )
 
 def get_item_names_per_category() -> Dict[str, Set[str]]:

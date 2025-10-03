@@ -100,7 +100,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     rules_on_regions[MODDED_ZONE] = lambda state: True
 
     for region in region_levels_dictionary:
-        if world.options.regionsanity.value == world.options.regionsanity.option_true and region != MODDED_ZONE:
+        if world.options.regionsanity.value == world.options.regionsanity.option_true and region != MODDED_ZONE and region != MENU:
             rules_on_regions[region] = lambda state, lambda_region = region: (logic.is_area_in_level_range(state, region_levels_dictionary[lambda_region][0])
                                                                             and state.has(region_name_to_pass_dict[lambda_region], player))
 
@@ -377,7 +377,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, TALL_TALL_HEIGHTS, [SALMON_RIVER, GREENSHIRE_REPRISE, LANDS_END, SEQUOIA_ATHENAEUM, NORTHERN_STRETCH, CASTLE_RAMPARTS, THE_CHALICE_OF_TAR, THE_PALE_GROTTO, NORTHERN_CAVE],
                     {LANDS_END: lambda state: logic.has_vertical_movement(state),
                     SEQUOIA_ATHENAEUM: lambda state: state.has(VERMILLION_BOOK, player) and state.has(VIRIDIAN_BOOK, player) and state.has(CERULEAN_BOOK, player),
-                    NORTHERN_STRETCH: lambda state: logic.has_glide(state),
+                    NORTHERN_STRETCH: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state),
                     CASTLE_RAMPARTS: lambda state: logic.has_vertical_movement(state),
                     THE_PALE_GROTTO: lambda state: logic.has_swimming(state),
                     THE_CHALICE_OF_TAR: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state)})
@@ -479,7 +479,7 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
 def combine_callables(callable1: Callable[[CollectionState], bool], callable2: Callable[[CollectionState], bool]) -> Callable[[CollectionState], bool]:
     return lambda state, a=callable1, b=callable2: a(state) and b(state)
 
-def fancy_add_exits(self, region: str, exits: Union[Iterable[str], Dict[str, Optional[str]]],
+def fancy_add_exits(self, region: str, exits: List[str],
                     rules: Dict[str, Callable[[CollectionState], bool]] | None = None):
     if rules is not None:
         for region_rule in rules:
@@ -493,13 +493,20 @@ def fancy_add_exits(self, region: str, exits: Union[Iterable[str], Dict[str, Opt
             rules[region_exit] = combine_callables(rules[region_exit], rules_on_regions[region_exit])
         else:
             rules[region_exit] = rules_on_regions[region_exit]
+
+    # all regions except Menu have an exit to menu
+    if region != MENU:
+        exits.append(MENU)
+
     self.multiworld.get_region(region, self.player).add_exits(exits, rules)
 
 def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOptions) -> None:
     logic = CrystalProjectLogic(world.player, options)
 
     fancy_add_exits(world, MENU, [SPAWNING_MEADOWS, CAPITAL_SEQUOIA, MERCURY_SHRINE, SALMON_RIVER, POKO_POKO_DESERT, GANYMEDE_SHRINE, DIONE_SHRINE, TALL_TALL_HEIGHTS, LANDS_END, JIDAMBA_TANGLE, NEPTUNE_SHRINE, THE_OLD_WORLD, THE_NEW_WORLD, MODDED_ZONE],
-                    {CAPITAL_SEQUOIA: lambda state: state.has(GAEA_STONE, world.player),
+                    # If regionsanity is enabled it will set its own origin region, if it isn't we should connect menu to spawning meadows
+                    {SPAWNING_MEADOWS: lambda state: options.regionsanity.value == options.regionsanity.option_false,
+                    CAPITAL_SEQUOIA: lambda state: state.has(GAEA_STONE, world.player),
                     MERCURY_SHRINE: lambda state: state.has(MERCURY_STONE, world.player),
                     SALMON_RIVER: lambda state: state.has(POSEIDON_STONE, world.player),
                     POKO_POKO_DESERT: lambda state: state.has(MARS_STONE, world.player),

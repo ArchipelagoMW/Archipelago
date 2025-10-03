@@ -10,11 +10,13 @@ from .items import item_table, equipment_index_offset, item_index_offset, job_in
 from .locations import get_locations, get_shops, get_bosses, npc_index_offset, treasure_index_offset, crystal_index_offset, boss_index_offset, shop_index_offset
 from .unused_locations import get_unused_locations
 from .constants.biomes import get_region_by_id
+from .constants.keys import *
+from .constants.key_items import *
 from .rules import CrystalProjectLogic
 import json
 
 if TYPE_CHECKING:
-    from . import CrystalProjectWorld
+    from . import CrystalProjectWorld, CAPITAL_JAIL, BEAURIOR_ROCK, SARA_SARA_BAZAAR, CASTLE_RAMPARTS
 
 MAX_SUPPORTED_EDITOR_VERSION: int = 30
 
@@ -652,11 +654,13 @@ def build_spark_location(location, shifted_entity_ids: List[ModIncrementedIdData
 
     return None
 
-def build_condition_rule(condition, world: "CrystalProjectWorld") -> Optional[Callable[[CollectionState], bool]]:
+def build_condition_rule(region, condition, world: "CrystalProjectWorld") -> Optional[Callable[[CollectionState], bool]]:
     logic = CrystalProjectLogic(world.player, world.options)
     job_id = None
     loot_type = None
     loot_id = None
+
+    region_rule = build_region_specific_rules(region, world.player, logic)
 
     if condition is not None:
         if 'Number' in condition['Data']:
@@ -666,7 +670,7 @@ def build_condition_rule(condition, world: "CrystalProjectWorld") -> Optional[Ca
             loot_type = condition['Data']['LootType']
             loot_id = condition['Data']['LootValue']
     else:
-        return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
+        return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state) and region_rule
 
     if loot_type is None and job_id is not None:
         archipelago_loot_id = job_id + job_index_offset
@@ -675,13 +679,31 @@ def build_condition_rule(condition, world: "CrystalProjectWorld") -> Optional[Ca
     elif loot_type == 2:
         archipelago_loot_id = loot_id + equipment_index_offset
     else:
-        return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
+        return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state) and region_rule
 
     if archipelago_loot_id in world.item_id_to_name:
         item_name = world.item_id_to_name[archipelago_loot_id]
-        return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state) and state.has(item_name, world.player)
+        return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state) and state.has(item_name, world.player) and region_rule
     else:
-        return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
+        return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state) and region_rule
+
+def build_region_specific_rules(region, player:int, logic: CrystalProjectLogic) -> Optional[Callable[[CollectionState], bool]]:
+    if region == CAPITAL_SEQUOIA:
+        return lambda state: logic.has_key(state, LUXURY_KEY) and state.has(PROGRESSIVE_LUXURY_PASS, player) and logic.has_key(state, GARDENERS_KEY)
+    elif region == SARA_SARA_BAZAAR:
+        return lambda state: logic.has_key(state, ROOM_ONE_KEY)
+    elif region == CAPITAL_JAIL:
+        return lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, WEST_WING_KEY) and logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, DARK_WING_KEY) and logic.has_key(state, CELL_KEY, 6)
+    elif region == BEAURIOR_ROCK:
+        return lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)
+    elif region == SLIP_GLIDE_RIDE:
+        return lambda state: logic.has_key(state, RED_DOOR_KEY, 3)
+    elif region == SEQUOIA_ATHENAEUM:
+        return lambda state: logic.has_key(state, ICE_PUZZLE_KEY, 6)
+    elif region == CASTLE_RAMPARTS:
+        return lambda state: logic.has_key(state, RAMPART_KEY)
+    else:
+        return None
 
 def get_excluded_ids(mod: ModDataModel) -> IdsExcludedFromRandomization:
     if mod.System is not None and mod.System["Randomizer"] is not None:

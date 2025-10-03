@@ -8,7 +8,7 @@ from .constants.regions import *
 from .constants.teleport_stones import *
 from .constants.item_groups import *
 from .constants.region_passes import *
-from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, trap_items, \
+from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
     region_name_to_pass_dict
@@ -41,7 +41,7 @@ class CrystalProjectWeb(WebWorld):
 
 class CrystalProjectWorld(World):
     """Crystal Project is a mix of old school job based jRPG mixed with a ton of 3D platforming and exploration."""
-    apworld_version = "0.8.0"
+    apworld_version = "0.9.0"
     game = "Crystal Project"
     options_dataclass = CrystalProjectOptions
     options: CrystalProjectOptions
@@ -183,7 +183,7 @@ class CrystalProjectWorld(World):
                 location = LocationData(modded_location.region,
                                         modded_location.name,
                                         modded_location.code,
-                                        build_condition_rule(modded_location.rule_condition, self))
+                                        build_condition_rule(modded_location.region, modded_location.rule_condition, self))
                 locations.append(location)
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
@@ -191,7 +191,7 @@ class CrystalProjectWorld(World):
                 location = LocationData(shop.region,
                                         shop.name,
                                         shop.code,
-                                        build_condition_rule(shop.rule_condition, self))
+                                        build_condition_rule(modded_location.region, shop.rule_condition, self))
                 locations.append(location)
 
         if self.options.useMods and self.options.killBossesMode.value == self.options.killBossesMode.option_true:
@@ -199,7 +199,7 @@ class CrystalProjectWorld(World):
                 location = LocationData(modded_location.region,
                                         modded_location.name,
                                         modded_location.code,
-                                        build_condition_rule(modded_location.rule_condition, self))
+                                        build_condition_rule(modded_location.region, modded_location.rule_condition, self))
                 locations.append(location)
 
         if self.options.useMods:
@@ -242,6 +242,7 @@ class CrystalProjectWorld(World):
                 # Generate a collection state that is a copy of the current state but also has all the passes so we can
                 # check what regions we can access without just getting told none because we have no passes
                 all_passes_state: CollectionState = CollectionState(self.multiworld)
+                self.origin_region_name = SPAWNING_MEADOWS
                 for region_pass in self.item_name_groups[PASS]:
                     all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
                 for region in self.get_regions():
@@ -254,7 +255,6 @@ class CrystalProjectWorld(World):
             #only push if player doesn't already have the pass from their starting inventory
             if len(starting_passes_list) == 0:
                 self.multiworld.push_precollected(self.create_item(region_name_to_pass_dict[self.starter_region]))
-            self.multiworld.get_region(self.starter_region, self.player).add_exits([MENU])
 
     def create_item(self, name: str) -> Item:
         if name in item_table:
@@ -342,7 +342,7 @@ class CrystalProjectWorld(World):
         trap_chance: int = self.options.trapLikelihood.value
 
         if trap_chance > 0 and self.random.random() < (trap_chance / 100):
-             return self.random.choice(trap_items)
+             return self.random.choice(list(self.item_name_groups[TRAP]))
         else:
             return self.random.choice(filler_items)
 
