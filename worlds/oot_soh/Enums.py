@@ -2931,8 +2931,8 @@ class Locations(str, Enum):
     LW_TUNNEL_GROTTO_GOSSIP_STONE_BIG_FAIRY = "LW Tunnel Grotto Gossip Stone Big Fairy"
     DMT_STORMS_GROTTO_GOSSIP_STONE_FAIRY = "DMT Storms Grotto Gossip Stone Fairy"
     DMT_STORMS_GROTTO_GOSSIP_STONE_BIG_FAIRY = "DMT Storms Grotto Gossip Stone Big Fairy"
-    DM_CUPPER_GROTTO_GOSSIP_STONE_FAIRY = "DMC Upper Grotto Gossip Stone Fairy"
-    DM_CUPPER_GROTTO_GOSSIP_STONE_BIG_FAIRY = "DMC Upper Grotto Gossip Stone Big Fairy"
+    DMC_UPPER_GROTTO_GOSSIP_STONE_FAIRY = "DMC Upper Grotto Gossip Stone Fairy"
+    DMC_UPPER_GROTTO_GOSSIP_STONE_BIG_FAIRY = "DMC Upper Grotto Gossip Stone Big Fairy"
     LH_ISLAND_SUNS_SONG_FAIRY = "LH Island Sun's Song Fairy"
     HF_POND_SONG_OF_STORMS_FAIRY = "HF Pond Song of Storms Fairy"
     HF_DEKU_SCRUB_GROTTO_STORMS_FAIRY = "HF Deku Scrub Grotto Storms Fairy"
@@ -3454,6 +3454,8 @@ class Events(str, Enum):
     CAN_ACCESS_BUGS = "Can Access Bugs"
     CAN_DEFEAT_BIG_POE = "Can Defeat Big Poe"
     GAME_COMPLETED = "Game Completed"
+    GOSSIP_STONE_FAIRY = "Can get Gossip Stone Fairy"
+    BEAN_PLANT_FAIRY = "Can get Bean Plant Fairy"
 
 class Ages(str, Enum):
     CHILD = "child"
