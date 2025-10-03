@@ -21,6 +21,15 @@ class LocalEvents(str, Enum):
 
 def set_region_rules(world: "SohWorld") -> None:
     # Kakariko Village
+    # Events
+    add_events(Regions.KAKARIKO_VILLAGE, world, [
+        (EventLocations.KAKARIKO_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
+        (EventLocations.KAKARIKO_GATE_GUARD, LocalEvents.KAKARIKO_GATE_OPEN,
+         lambda bundle: is_child(bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
+        (EventLocations.KAKARIKO_GATE_GUARD, Events.BORROW_SKULL_MASK,
+         lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_MASKS, bundle) and has_item(Items.CHILD_WALLET,
+                                                                                                    bundle)),
+    ])
     # Locations
     add_locations(Regions.KAKARIKO_VILLAGE, world, [
         (Locations.SHEIK_IN_KAKARIKO,
@@ -54,34 +63,20 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_NEAR_GRAVEYARD_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.KAK_NEAR_GRAVEYARD_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.KAK_NEAR_GRAVEYARD_GRASS3, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.KAK_NEAR_OPEN_GROTTO_ADULT_CRATE1,
-         lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_OPEN_GROTTO_ADULT_CRATE2,
-         lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_OPEN_GROTTO_ADULT_CRATE3,
-         lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_OPEN_GROTTO_ADULT_CRATE4,
-         lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_POTION_SHOP_ADULT_CRATE,
-         lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_SHOOTING_GALLERY_ADULT_CRATE,
-         lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_BOARDING_HOUSE_ADULT_CRATE1,
-         lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_BOARDING_HOUSE_ADULT_CRATE2,
-         lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_BEHIND_GS_HOUSE_ADULT_CRATE,
-         lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_GRAVEYARD_CHILD_CRATE,
-         lambda bundle: is_child(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_WINDMILL_CHILD_CRATE,
-         lambda bundle: is_child(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_FENCE_CHILD_CRATE,
-         lambda bundle: is_child(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_BOARDING_HOUSE_CHILD_CRATE,
-         lambda bundle: is_child(bundle) and can_break_crates(bundle)),
-        (Locations.KAK_NEAR_BAZAAR_CHILD_CRATE,
-         lambda bundle: is_child(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_OPEN_GROTTO_ADULT_CRATE1, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_OPEN_GROTTO_ADULT_CRATE2, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_OPEN_GROTTO_ADULT_CRATE3, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_OPEN_GROTTO_ADULT_CRATE4, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_POTION_SHOP_ADULT_CRATE, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_SHOOTING_GALLERY_ADULT_CRATE, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_BOARDING_HOUSE_ADULT_CRATE1, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_BOARDING_HOUSE_ADULT_CRATE2, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_BEHIND_GS_HOUSE_ADULT_CRATE, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_GRAVEYARD_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_WINDMILL_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_FENCE_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_BOARDING_HOUSE_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_BAZAAR_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
     ])
     # Connections
     connect_regions(Regions.KAKARIKO_VILLAGE, world, [
@@ -101,7 +96,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                     can_do_trick("RT Bottom of the Well Navi Dive", bundle) and is_child(
                                 bundle) and has_item(Items.BRONZE_SCALE, bundle) and can_jump_slash(bundle))),
         (Regions.KAK_POTION_SHOP_FRONT,
-         lambda bundle: at_day(bundle) or is_child(bundle) and can_open_overworld_door(
+         lambda bundle: (at_day(bundle) or is_child(bundle)) and can_open_overworld_door(
              Items.KAK_POTION_SHOP_KEY, bundle)),
         (Regions.KAK_REDEAD_GROTTO, lambda bundle: can_open_bomb_grotto(bundle)),
         (Regions.KAK_IMPAS_LEDGE, lambda bundle: (is_child(bundle) and at_day(bundle)) or (
@@ -114,21 +109,12 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_use(Items.HOOKSHOT, bundle) or can_do_trick("RT Kak Man on Roof", bundle) and is_adult(
              bundle)),
         (Regions.KAK_IMPAS_ROOFTOP,
-         lambda bundle: can_use(Items.HOOKSHOT, bundle) or can_do_trick("Rt Kak Rooftop ", bundle) and can_use(
+         lambda bundle: can_use(Items.HOOKSHOT, bundle) or can_do_trick("RT Kak Rooftop", bundle) and can_use(
              Items.HOVER_BOOTS, bundle)),
         (Regions.THE_GRAVEYARD, lambda bundle: True),
         (Regions.KAK_BEHIND_GATE,
          lambda bundle: is_adult(bundle) or has_item(LocalEvents.KAKARIKO_GATE_OPEN, bundle)),
         (Regions.KAK_BACKYARD, lambda bundle: is_adult(bundle) or at_day(bundle)),
-    ])
-    # Events
-    add_events(Regions.KAKARIKO_VILLAGE, world, [
-        (EventLocations.KAKARIKO_ROCK, Events.BUG_ACCESS, lambda bundle: True),
-        (EventLocations.KAKARIKO_GATE_GUARD, LocalEvents.KAKARIKO_GATE_OPEN,
-         lambda bundle: is_child(bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
-        (EventLocations.KAKARIKO_GATE_GUARD, Events.BORROW_SKULL_MASK,
-         lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_MASKS, bundle) and has_item(Items.CHILD_WALLET,
-                                                                                                    bundle)),
     ])
 
     # Kak Impas Ledge
@@ -192,14 +178,14 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     # Kak Carpenter Boss House
-    # Connections
-    connect_regions(Regions.KAK_CARPENTER_BOSS_HOUSE, world, [
-        (Regions.KAKARIKO_VILLAGE, lambda bundle: True),
-    ])
     # Events
     add_events(Regions.KAK_CARPENTER_BOSS_HOUSE, world, [
         (EventLocations.KAKARIKO_ADULT_TALON, LocalEvents.WAKE_UP_ADULT_TALON,
          lambda bundle: is_adult(bundle) and can_use(Items.POCKET_EGG, bundle)),
+    ])
+    # Connections
+    connect_regions(Regions.KAK_CARPENTER_BOSS_HOUSE, world, [
+        (Regions.KAKARIKO_VILLAGE, lambda bundle: True),
     ])
 
     # Kak House of Skulltula
@@ -238,6 +224,11 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     # Kak Windmill
+    # Events
+    add_events(Regions.KAK_WINDMILL, world, [
+        (EventLocations.KAKARIKO_WINDMILL_PHONOGRAM_MAN, Events.DRAIN_WELL,
+         lambda bundle: is_child(bundle) and can_play_song(bundle, Items.SONG_OF_STORMS)),
+    ])
     # Locations
     add_locations(Regions.KAK_WINDMILL, world, [
         (Locations.KAK_WINDMILL_FREESTANDING_PO_H,
@@ -251,11 +242,6 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.KAK_WINDMILL, world, [
         (Regions.KAKARIKO_VILLAGE, lambda bundle: True),
-    ])
-    # Events
-    add_events(Regions.KAK_WINDMILL, world, [
-        (EventLocations.KAKARIKO_WINDMILL_PHONOGRAM_MAN, Events.DRAIN_WELL,
-         lambda bundle: is_child(bundle) and can_play_song(bundle, Items.SONG_OF_STORMS)),
     ])
 
     # Kak Bazaar
@@ -341,8 +327,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_OPEN_GROTTO_CHEST, lambda bundle: True),
         (Locations.KAK_OPEN_GROTTO_FISH, lambda bundle: has_bottle(bundle)),
         (Locations.KAK_OPEN_GROTTO_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy(bundle)),
-        (Locations.KAK_OPEN_GROTTO_GOSSIP_STONE_BIG_FAIRY,
-         lambda bundle: can_play_song(bundle, Items.SONG_OF_STORMS)),
+        (Locations.KAK_OPEN_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_play_song(bundle, Items.SONG_OF_STORMS)),
         (Locations.KAK_OPEN_GROTTO_GOSSIP_STONE, lambda bundle: True),
         (Locations.KAK_OPEN_GROTTO_BEEHIVE_LEFT, lambda bundle: can_break_lower_hives(bundle)),
         (Locations.KAK_OPEN_GROTTO_BEEHIVE_RIGHT, lambda bundle: can_break_lower_hives(bundle)),
@@ -372,6 +357,5 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_adult(bundle) or has_item(Items.BRONZE_SCALE, bundle) or has_item(Events.DRAIN_WELL,
                                                                                              bundle)),
         # TODO: Add check for dungeon entrance randomization
-        (Regions.BOTTOM_OF_THE_WELL_ENTRYWAY,
-         lambda bundle: is_child(bundle) or has_item(Events.DRAIN_WELL, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, lambda bundle: is_child(bundle) or has_item(Events.DRAIN_WELL, bundle)),
     ])

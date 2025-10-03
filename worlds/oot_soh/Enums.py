@@ -3439,7 +3439,6 @@ class Events(str, Enum):
     ADULT_SCARECROW = "Adult Scarecrow"
     DELIVER_LETTER = "Deliver Letter"
     CAN_EMPTY_BIG_POES = "Can Empty Big Poes"
-    CAN_BUY_BOMBCHUS = "Can Buy Bombchus"
     CAN_BORROW_MASKS = "Can Borrow Masks"
     BORROW_SKULL_MASK = "Borrow Skull Mask"
     COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
