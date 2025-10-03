@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility
+from Options import Choice, Toggle, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, Visibility
+
 
 class ClosedForest(Choice):
     """
@@ -13,6 +14,7 @@ class ClosedForest(Choice):
     option_off = 2
     default = 2
 
+
 class KakarikoGate(Choice):
     """
     Closed - The gate will remain closed until Zelda's Letter is shown to the guard.
@@ -22,6 +24,7 @@ class KakarikoGate(Choice):
     option_closed = 0
     option_open = 1
     default = 1
+
 
 class DoorOfTime(Choice):
     """
@@ -35,6 +38,7 @@ class DoorOfTime(Choice):
     option_open = 2
     default = 2
 
+
 class ZorasFountain(Choice):
     """
     Closed - King Zora obstructs the way to Zora's Fountain. Ruto's Letter must be shown as child Link in order to move him in both time periods.
@@ -46,6 +50,7 @@ class ZorasFountain(Choice):
     option_closed_as_child = 1
     option_open = 2
     default = 1
+
 
 class SleepingWaterfall(Choice):
     """
@@ -61,6 +66,7 @@ class SleepingWaterfall(Choice):
     option_open = 1
     default = 0
 
+
 class JabuJabu(Choice):
     """
     Closed - A fish is required to open Jabu-Jabu's mouth.
@@ -71,11 +77,13 @@ class JabuJabu(Choice):
     option_open = 1
     default = 0
 
+
 class LockOverworldDoors(Toggle):
     """
     Add locks to all wooden overworld doors, requiring specific small keys to open them.
     """
     display_name = "Lock Overworld Doors"
+
 
 class FortressCarpenters(Choice):
     """
@@ -90,6 +98,7 @@ class FortressCarpenters(Choice):
     option_fast = 1
     option_free = 2
     default = 1
+
 
 class RainbowBridge(Choice):
     """
@@ -114,12 +123,14 @@ class RainbowBridge(Choice):
     option_greg = 7
     default = 7
 
+
 class RainbowBridgeGregWildcard(Toggle):
     """
     If Rainbow Bridge is enabled, Greg will count toward the bridge requirement goal.
     """
     display_name = "Rainbow Bridge Greg Wildcard"
     visibility = Visibility.none
+
 
 class RainbowBridgeStonesRequired(Range):
     """
@@ -130,6 +141,7 @@ class RainbowBridgeStonesRequired(Range):
     range_end = 3
     default = 3
 
+
 class RainbowBridgeMedallionsRequired(Range):
     """
     If Rainbow Bridge is set to medallions, this is how many medallions are required to open it.
@@ -138,6 +150,7 @@ class RainbowBridgeMedallionsRequired(Range):
     range_start = 1
     range_end = 6
     default = 6
+
 
 class RainbowBridgeDungeonRewardsRequired(Range):
     """
@@ -148,6 +161,7 @@ class RainbowBridgeDungeonRewardsRequired(Range):
     range_end = 9
     default = 9
 
+
 class RainbowBridgeDungeonsRequired(Range):
     """
     If Rainbow Bridge is set to dungeons, this is how many completed dungeons are required to open it.
@@ -156,6 +170,7 @@ class RainbowBridgeDungeonsRequired(Range):
     range_start = 1
     range_end = 8
     default = 8
+
 
 class RainbowBridgeSkullTokensRequired(Range):
     """
@@ -166,6 +181,7 @@ class RainbowBridgeSkullTokensRequired(Range):
     range_end = 100
     default = 50
 
+
 class GanonsTrialsRequired(Range):
     """
     Sets the number of Ganon's Trials required to dispel the barrier.
@@ -174,6 +190,7 @@ class GanonsTrialsRequired(Range):
     range_start = 0
     range_end = 6
     default = 0
+
 
 class TriforceHunt(Toggle):
     """
@@ -184,6 +201,7 @@ class TriforceHunt(Toggle):
     """
     display_name = "Triforce Hunt"
 
+
 class TriforceHuntRequiredPieces(Range):
     """
     The amount of Triforce pieces required to win the game.
@@ -192,6 +210,7 @@ class TriforceHuntRequiredPieces(Range):
     range_start = 1
     range_end = 100
     default = 20
+
 
 class TriforceHuntExtraPiecesPercentage(Range):
     """
@@ -204,6 +223,7 @@ class TriforceHuntExtraPiecesPercentage(Range):
     range_start = 0
     range_end = 100
     default = 50
+
 
 class ShuffleTokens(Choice):
     """
@@ -220,12 +240,14 @@ class ShuffleTokens(Choice):
     option_all = 3
     default = 0
 
+
 class ShuffleMasterSword(Toggle):
     """
     Shuffles the Master Sword into the item pool.
     If you haven't found the Master Sword before facing Ganon, you won't receive it during the fight.
     """
     display_name = "Shuffle Master Sword"
+
 
 class ShuffleChildsWallet(Toggle):
     """
@@ -234,12 +256,14 @@ class ShuffleChildsWallet(Toggle):
     """
     display_name = "Shuffle Child's Wallet"
 
+
 class ShuffleOcarinaButtons(Toggle):
     """
     Enabling this shuffles the Ocarina buttons into the item pool.
     This will require finding the buttons before being able to use them in songs.
     """
     display_name = "Shuffle Ocarina Buttons"
+
 
 class ShuffleSwim(Toggle):
     """
@@ -249,6 +273,7 @@ class ShuffleSwim(Toggle):
     If you void out in Water Temple you will immediately be kicked out to prevent a softlock.
     """
     display_name = "Shuffle Swim"
+
 
 class ShuffleWeirdEgg(Toggle):
     """
@@ -262,11 +287,13 @@ class ShuffleWeirdEgg(Toggle):
     """
     display_name = "Shuffle Weird Egg"
 
+
 class ShuffleFishingPole(Toggle):
     """
     Shuffles the fishing pole into the item pool. The fishing pole is required to play the fishing pond minigame.
     """
     display_name = "Shuffle Fishing Pole"
+
 
 class ShuffleDekuStickBag(Toggle):
     """
@@ -274,11 +301,13 @@ class ShuffleDekuStickBag(Toggle):
     """
     display_name = "Shuffle Deku Stick Bag"
 
+
 class ShuffleDekuNutBag(Toggle):
     """
     Shuffles the Deku Nut bag into the item pool. The Deku Nut bag is required to hold Deku Nuts.
     """
     display_name = "Shuffle Deku Nut Bag"
+
 
 class ShuffleFreestandingItems(Choice):
     """
@@ -295,11 +324,13 @@ class ShuffleFreestandingItems(Choice):
     option_all = 3
     default = 0
 
+
 class ShuffleShops(Toggle):
     """
     Shuffle the 4 left items in every shop. Randomized items cost 10 rupees. The other 4 shop items stay vanilla.
     """
     display_name = "Shuffle Shops"
+
 
 class ShuffleShopsItemAmount(Range):
     """
@@ -310,6 +341,7 @@ class ShuffleShopsItemAmount(Range):
     range_end = 7
     default = 4
     visibility = Visibility.none
+
 
 class ShuffleFish(Choice):
     """
@@ -322,11 +354,13 @@ class ShuffleFish(Choice):
     option_all = 3
     default = 0
 
+
 class ShuffleScrubs(Toggle):
     """
     Shuffles all Deku Scrub merchants in the game. Randomized items cost 10 rupees.
     """
     display_name = "Shuffle Scrubs"
+
 
 class ShuffleBeehives(Toggle):
     """
@@ -334,11 +368,13 @@ class ShuffleBeehives(Toggle):
     """
     display_name = "Shuffle Beehives"
 
+
 class ShuffleCows(Toggle):
     """
     Randomize what cows will give when playing Epona's Song for them for the first time.
     """
     display_name = "Shuffle Cows"
+
 
 class ShufflePots(Choice):
     """
@@ -356,6 +392,7 @@ class ShufflePots(Choice):
     option_all = 3
     default = 0
 
+
 class ShuffleCrates(Choice):
     """
     Large and small crates will drop a randomized item the first time they're broken and collected.
@@ -371,6 +408,7 @@ class ShuffleCrates(Choice):
     option_all = 3
     default = 0
 
+
 class ShuffleMerchants(Choice):
     """
     This setting governs if the Bean Salesman, Medigoron, Granny and the Carpet Salesman sell a random item.
@@ -385,17 +423,20 @@ class ShuffleMerchants(Choice):
     option_all = 3
     default = 0
 
+
 class ShuffleFrogSongRupees(Toggle):
     """
     Shuffle the purple rupee rewards from the frogs in Zora's River. If this is turned off, only the Song of Storms and Frog Minigame rewards are shuffled.
     """
     display_name = "Shuffle Frog Song Rupees"
 
+
 class ShuffleAdultTradeItems(Toggle):
     """
     Adds all adult trade quest items to the pool. If this is turned off, only the Claim Check is in the pool.
     """
     display_name = "Shuffle Adult Trade Items"
+
 
 class ShuffleBossSouls(Choice):
     """
@@ -408,11 +449,13 @@ class ShuffleBossSouls(Choice):
     option_on_plus_ganons = 2
     default = 0
 
+
 class ShuffleFairies(Toggle):
     """
     Shuffle fairies from wonder spots, playing Song of Storms and other regular songs for Gossip Stones and in Fairy Fountains.
     """
     display_name = "Shuffle Fairies"
+
 
 class ShuffleGrass(Choice):
     """
@@ -429,6 +472,7 @@ class ShuffleGrass(Choice):
     option_all = 3
     default = 0
 
+
 class ShuffleDungeonRewards(Choice):
     """
     Shuffles the location of Spiritual Stones and medallions.
@@ -442,6 +486,7 @@ class ShuffleDungeonRewards(Choice):
     option_anywhere = 2
     default = 0
 
+
 class MapsAndCompasses(Choice):
     """
     Start with - You will start with Maps & Compasses from all dungeons.
@@ -451,6 +496,7 @@ class MapsAndCompasses(Choice):
     option_start_with = 0
     option_shuffle = 1
     default = 0
+
 
 class GanonsCastleBossKey(Choice):
     """
@@ -475,12 +521,14 @@ class GanonsCastleBossKey(Choice):
     option_lacs_skull_tokens = 7
     default = 5
 
+
 class GanonsCastleBossKeyGregWildcard(Toggle):
     """
     If Ganons Castle Boss Key is enabled, Greg will count toward the LACS goal.
     """
     display_name = "Ganons Castle Boss Key Greg Wildcard"
     visibility = Visibility.none
+
 
 class GanonsCastleBossKeyStonesRequired(Range):
     """
@@ -492,6 +540,7 @@ class GanonsCastleBossKeyStonesRequired(Range):
     range_end = 3
     default = 3
 
+
 class GanonsCastleBossKeyMedallionsRequired(Range):
     """
     If Ganon's Boss Key is set to medallions, this is how many medallions are required to open it.
@@ -501,6 +550,7 @@ class GanonsCastleBossKeyMedallionsRequired(Range):
     range_start = 1
     range_end = 6
     default = 6
+
 
 class GanonsCastleBossKeyDungeonRewardsRequired(Range):
     """
@@ -512,6 +562,7 @@ class GanonsCastleBossKeyDungeonRewardsRequired(Range):
     range_end = 9
     default = 6
 
+
 class GanonsCastleBossKeyDungeonsRequired(Range):
     """
     If Ganon's Boss Key is set to dungeons, this is how many dungeon completions are required to open it.
@@ -521,6 +572,7 @@ class GanonsCastleBossKeyDungeonsRequired(Range):
     range_start = 1
     range_end = 8
     default = 8
+
 
 class GanonsCastleBossKeySkullTokensRequired(Range):
     """
@@ -532,11 +584,13 @@ class GanonsCastleBossKeySkullTokensRequired(Range):
     range_end = 100
     default = 50
 
+
 class KeyRings(Toggle):
     """
     Keyrings will replace all small keys from a particular dungeon with a single keyring that awards all keys for its associated dungeon.
     """
     display_name = "Key Rings"
+
 
 class BigPoeTargetCount(Range):
     """
@@ -547,41 +601,42 @@ class BigPoeTargetCount(Range):
     range_end = 10
     default = 1
 
-class SkipChildZelda(Toggle):
+
+class SkipChildZelda(DefaultOnToggle):
     """
     Start with Zelda's Letter and the item Impa would normally give you and skip the sequence up until after meeting Zelda. Disables the ability to shuffle Weird Egg.
     """
     display_name = "Skip Child Zelda"
-    default = 1
 
-class SkipEponaRace(Toggle):
+
+class SkipEponaRace(DefaultOnToggle):
     """
     Epona can be summoned with Epona's Song without needing to race Ingo.
     """
     display_name = "Skip Epona Zelda"
-    default = 1
 
-class CompleteMaskQuest(Toggle):
+
+class CompleteMaskQuest(DefaultOnToggle):
     """
     Once the Happy Mask Shop is opened, all masks will be available to be borrowed.
     """
     display_name = "Complete Mask Quest"
-    default = 1
 
-class SkipScarecrowsSong(Toggle):
+
+class SkipScarecrowsSong(DefaultOnToggle):
     """
     Start with the ability to summon Pierre the Scarecrow. Pulling out an Ocarina in the usual locations will automatically summon him.
     With Shuffle Ocarina Buttons enabled, you'll need at least two Ocarina buttons to summon him.
     """
     display_name = "Skip Scarecrow's Song"
-    default = 1
 
-class FullWallets(Toggle):
+
+class FullWallets(DefaultOnToggle):
     """
     Start with a full wallet. All wallet upgrades come filled with rupees.
     """
     display_name = "Full Wallets"
-    default = 1
+
 
 class BombchuBag(Toggle):
     """
@@ -592,27 +647,28 @@ class BombchuBag(Toggle):
     """
     display_name = "Bombchu Bag"
 
-class BombchuDrops(Toggle):
+
+class BombchuDrops(DefaultOnToggle):
     """
     Once you obtain a Bombchu Bag, refills will sometimes replace Bomb drops that would spawn.
     If you have Bombchu Bag disabled, you will need a Bomb Bag and existing Bombchus for Bombchus to drop.
     """
     display_name = "Bombchu Drops"
-    default = 1
 
-class BlueFireArrows(Toggle):
+
+class BlueFireArrows(DefaultOnToggle):
     """
     Ice Arrows act like Blue Fire, making them able to melt red ice. 
     """
     display_name = "Blue Fire Arrows"
-    default = 1
 
-class SunlightArrows(Toggle):
+
+class SunlightArrows(DefaultOnToggle):
     """
     Light Arrows can be used to light up the sun switches instead of using the Mirror Shield.
     """
     display_name = "Sunlight Arrows"
-    default = 1
+
 
 class InfiniteUpgrades(Choice):
     """
@@ -625,6 +681,7 @@ class InfiniteUpgrades(Choice):
     option_progressive = 1
     option_condensed_progressive = 2
     default = 0
+
 
 class SkeletonKey(Toggle):
     """
