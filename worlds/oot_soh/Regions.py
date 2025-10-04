@@ -24,7 +24,8 @@ from .Locations import SohLocation, base_location_table, \
     fish_pond_location_table, \
     fish_overworld_location_table, \
     child_zelda_location_table, \
-    carpenters_location_table
+    carpenters_location_table, \
+    hundred_skulls_location_table
 from .location_access import root
 from .location_access.overworld import \
     castle_grounds, \
@@ -251,6 +252,9 @@ def create_regions_and_locations(world: "SohWorld") -> None:
                 location_name: address for location_name, address in carpenters_location_table.items()
                 if location_name in {"GF Freed All Carpenters", "GF 1 Torch Carpenter"}
             })
+
+        if world.options.shuffle_100_gs_reward:
+            world.included_locations.update(hundred_skulls_location_table)
             
     # Set region rules and location rules after all locations are created
     all_regions = [root, castle_grounds, death_mountain_crater, death_mountain_trail, desert_colossus, gerudo_fortress,

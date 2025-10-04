@@ -717,6 +717,15 @@ class StartingAge(Choice):
     visibility = Visibility.none
 
 
+class Shuffle100GSReward(Toggle):
+    """
+    Shuffle the item the cursed rich man in the House of Skulltula gives you when you have collected all 100 Gold Skulltula Tokens.
+    You can still talk to him multiple times to get Huge Rupees.
+    """
+    display_name = "Shuffle 100 GS Reward"
+    visibility = Visibility.none
+
+
 @dataclass
 class SohOptions(PerGameCommonOptions):
     closed_forest: ClosedForest
@@ -786,6 +795,7 @@ class SohOptions(PerGameCommonOptions):
     infinite_upgrades: InfiniteUpgrades
     skeleton_key: SkeletonKey
     starting_age: StartingAge
+    shuffle_100_gs_reward: Shuffle100GSReward
 
 
 soh_option_groups = [

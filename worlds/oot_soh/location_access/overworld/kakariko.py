@@ -197,6 +197,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_30_GOLD_SKULLTULA_REWARD, lambda bundle: has_item(Items.GOLD_SKULLTULA_TOKEN, bundle, 30)),
         (Locations.KAK_40_GOLD_SKULLTULA_REWARD, lambda bundle: has_item(Items.GOLD_SKULLTULA_TOKEN, bundle, 40)),
         (Locations.KAK_50_GOLD_SKULLTULA_REWARD, lambda bundle: has_item(Items.GOLD_SKULLTULA_TOKEN, bundle, 50)),
+        (Locations.KAK_100_GOLD_SKULLTULA_REWARD, lambda bundle: has_item(Items.GOLD_SKULLTULA_TOKEN, bundle, 100)),
     ])
     # Connections
     connect_regions(Regions.KAK_HOUSE_OF_SKULLTULA, world, [
