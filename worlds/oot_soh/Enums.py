@@ -156,6 +156,7 @@ class Regions(str, Enum):
     GRAVEYARD_WARP_PAD_REGION = "Graveyard Warp Pad Region"
     DEATH_MOUNTAIN = "Death Mountain"
     DEATH_MOUNTAIN_SUMMIT = "Death Mountain Summit"
+    DEATH_MOUNTAIN_TRAIL = "Death Mountain Trail"
     DMT_OWL_FLIGHT = "DMT Owl Flight"
     DMT_GREAT_FAIRY_FOUNTAIN = "DMT Great Fairy Fountain"
     DMT_COW_GROTTO = "DMT Cow Grotto"
