@@ -12,8 +12,7 @@ class EventLocations(str, Enum):
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-    
+
     ## Death Mountain Crater Upper Nearby
     # Connections
     connect_regions(Regions.DMC_UPPER_NEARBY, world, [
@@ -52,7 +51,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DMC_LADDER_REGION_NEARBY, world, [
         (Regions.DMC_UPPER_NEARBY, lambda bundle: hearts(bundle) >= 3),
-        (Regions.DMC_LOWER_NEARBY, lambda bundle: hearts(bundle) >= 3 and (can_use(Items.HOVER_BOOTS, bundle) or (can_do_trick(Tricks.DMC_BOULDER_JS, bundle) and is_adult(bundle) and can_use(Items.MEGATON_HAMMER, bundle)) or (can_do_trick("DMC Boulder Skip", bundle) and is_adult(bundle))))
+        (Regions.DMC_LOWER_NEARBY, lambda bundle: hearts(bundle) >= 3 and (can_use(Items.HOVER_BOOTS, bundle) or (can_do_trick(Tricks.DMC_BOULDER_JS, bundle) and is_adult(bundle) and can_use(Items.MEGATON_HAMMER, bundle)) or (can_do_trick(Tricks.DMC_BOULDER_SKIP, bundle) and is_adult(bundle))))
     ])
 
     ## Death Mountain Crater Lower Nearby
