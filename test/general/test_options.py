@@ -9,7 +9,8 @@ from worlds.AutoWorld import AutoWorldRegister
 class TestOptions(unittest.TestCase):
     def test_options_have_doc_string(self):
         """Test that submitted options have their own specified docstring"""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, testable_world in AutoWorldRegister.testable_worlds.items():
+            world_type = testable_world.world_type
             if not world_type.hidden:
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):
@@ -17,14 +18,16 @@ class TestOptions(unittest.TestCase):
 
     def test_options_are_not_set_by_world(self):
         """Test that options attribute is not already set"""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, testable_world in AutoWorldRegister.testable_worlds.items():
+            world_type = testable_world.world_type
             with self.subTest(game=gamename):
                 self.assertFalse(hasattr(world_type, "options"),
                                  f"Unexpected assignment to {world_type.__name__}.options!")
 
     def test_duplicate_options(self) -> None:
         """Tests that a world doesn't reuse the same option class."""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        for game_name, testable_world in AutoWorldRegister.testable_worlds.items():
+            world_type = testable_world.world_type
             with self.subTest(game=game_name):
                 seen_options = set()
                 for option in world_type.options_dataclass.type_hints.values():
@@ -74,7 +77,8 @@ class TestOptions(unittest.TestCase):
 
     def test_pickle_dumps(self):
         """Test options can be pickled into database for WebHost generation"""
-        for gamename, world_type in AutoWorldRegister.world_types.items():
+        for gamename, testable_world in AutoWorldRegister.testable_worlds.items():
+            world_type = testable_world.world_type
             if not world_type.hidden:
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):

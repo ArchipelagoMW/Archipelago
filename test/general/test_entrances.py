@@ -15,25 +15,27 @@ class TestBase(unittest.TestCase):
         gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances")
         additional_steps = ("generate_basic", "pre_fill")
 
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            with self.subTest("Game", game_name=game_name):
-                multiworld = setup_solo_multiworld(world_type, gen_steps)
+        for game_name, testable_world in AutoWorldRegister.testable_worlds.items():
+            world_type = testable_world.world_type
+            for options_name, options in testable_world.testable_options_by_name.items():
+                with self.subTest("Game", game_name=game_name, options=options_name):
+                    multiworld = setup_solo_multiworld(world_type, gen_steps, options=options)
 
-                original_entrances = get_entrance_name_to_source_and_target_dict(multiworld.worlds[1])
+                    original_entrances = get_entrance_name_to_source_and_target_dict(multiworld.worlds[1])
 
-                self.assertTrue(
-                    all(entrance[1] is not None and entrance[2] is not None for entrance in original_entrances),
-                    f"{game_name} had unconnected entrances after connect_entrances"
-                )
+                    self.assertTrue(
+                        all(entrance[1] is not None and entrance[2] is not None for entrance in original_entrances),
+                        f"{game_name} had unconnected entrances after connect_entrances"
+                    )
 
-                for step in additional_steps:
-                    with self.subTest("Step", step=step):
-                        call_all(multiworld, step)
-                        step_entrances = get_entrance_name_to_source_and_target_dict(multiworld.worlds[1])
+                    for step in additional_steps:
+                        with self.subTest("Step", step=step):
+                            call_all(multiworld, step)
+                            step_entrances = get_entrance_name_to_source_and_target_dict(multiworld.worlds[1])
 
-                        self.assertEqual(
-                            original_entrances, step_entrances, f"{game_name} modified entrances during {step}"
-                        )
+                            self.assertEqual(
+                                original_entrances, step_entrances, f"{game_name} modified entrances during {step}"
+                            )
 
     def test_all_state_before_connect_entrances(self):
         """Before connect_entrances, Entrance objects may be unconnected.
@@ -42,23 +44,25 @@ class TestBase(unittest.TestCase):
 
         gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances")
 
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            with self.subTest("Game", game_name=game_name):
-                multiworld = setup_solo_multiworld(world_type, ())
+        for game_name, testable_world in AutoWorldRegister.testable_worlds.items():
+            world_type = testable_world.world_type
+            for options_name, options in testable_world.testable_options_by_name.items():
+                with self.subTest("Game", game_name=game_name, options=options_name):
+                    multiworld = setup_solo_multiworld(world_type, (), options=options)
 
-                original_get_all_state = multiworld.get_all_state
+                    original_get_all_state = multiworld.get_all_state
 
-                def patched_get_all_state(use_cache: bool | None = None, allow_partial_entrances: bool = False,
-                                          **kwargs):
-                    self.assertTrue(allow_partial_entrances, (
-                        "Before the connect_entrances step finishes, other worlds might still have partial entrances. "
-                        "As such, any call to get_all_state must use allow_partial_entrances = True."
-                    ))
+                    def patched_get_all_state(use_cache: bool | None = None, allow_partial_entrances: bool = False,
+                                              **kwargs):
+                        self.assertTrue(allow_partial_entrances, (
+                            "Before the connect_entrances step finishes, other worlds might still have partial entrances. "
+                            "As such, any call to get_all_state must use allow_partial_entrances = True."
+                        ))
 
-                    return original_get_all_state(use_cache, allow_partial_entrances, **kwargs)
+                        return original_get_all_state(use_cache, allow_partial_entrances, **kwargs)
 
-                multiworld.get_all_state = patched_get_all_state
+                    multiworld.get_all_state = patched_get_all_state
 
-                for step in gen_steps:
-                    with self.subTest("Step", step=step):
-                        call_all(multiworld, step)
+                    for step in gen_steps:
+                        with self.subTest("Step", step=step):
+                            call_all(multiworld, step)
