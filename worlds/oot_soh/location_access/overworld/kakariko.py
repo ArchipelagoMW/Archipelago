@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 
 class EventLocations(str, Enum):
+    KAKARIKO_GATE = "Kakariko Gate"
     KAKARIKO_GATE_GUARD = "Kakariko Gate Guard"
     KAKARIKO_ROCK = "Kakariko Rock"
     KAKARIKO_ADULT_TALON = "Kakariko Adult Talon"
@@ -24,7 +25,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.KAKARIKO_VILLAGE, world, [
         (EventLocations.KAKARIKO_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
-        (EventLocations.KAKARIKO_GATE_GUARD, LocalEvents.KAKARIKO_GATE_OPEN,
+        (EventLocations.KAKARIKO_GATE, LocalEvents.KAKARIKO_GATE_OPEN,
          lambda bundle: is_child(bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
         (EventLocations.KAKARIKO_GATE_GUARD, Events.BORROW_SKULL_MASK,
          lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_MASKS, bundle) and has_item(Items.CHILD_WALLET,
@@ -197,6 +198,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_30_GOLD_SKULLTULA_REWARD, lambda bundle: has_item(Items.GOLD_SKULLTULA_TOKEN, bundle, 30)),
         (Locations.KAK_40_GOLD_SKULLTULA_REWARD, lambda bundle: has_item(Items.GOLD_SKULLTULA_TOKEN, bundle, 40)),
         (Locations.KAK_50_GOLD_SKULLTULA_REWARD, lambda bundle: has_item(Items.GOLD_SKULLTULA_TOKEN, bundle, 50)),
+        (Locations.KAK_100_GOLD_SKULLTULA_REWARD, lambda bundle: has_item(Items.GOLD_SKULLTULA_TOKEN, bundle, 100)),
     ])
     # Connections
     connect_regions(Regions.KAK_HOUSE_OF_SKULLTULA, world, [
@@ -206,7 +208,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Kak Impas House
     # Locations
     add_locations(Regions.KAK_IMPAS_HOUSE, world, [
-        (Locations.KAK_IMPAS_HOUSE_COW, lambda bundle: can_play_song(bundle, Items.EPONAS_SONG)),
+        (Locations.KAK_IMPAS_HOUSE_COW, lambda bundle: can_play_song(Items.EPONAS_SONG, bundle)),
     ])
     # Connections
     connect_regions(Regions.KAK_IMPAS_HOUSE, world, [
@@ -217,7 +219,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.KAK_IMPAS_HOUSE_BACK, world, [
         (Locations.KAK_IMPAS_HOUSE_FREESTANDING_PO_H, lambda bundle: True),
-        (Locations.KAK_IMPAS_HOUSE_COW, lambda bundle: can_play_song(bundle, Items.EPONAS_SONG)),
+        (Locations.KAK_IMPAS_HOUSE_COW, lambda bundle: can_play_song(Items.EPONAS_SONG, bundle)),
     ])
     # Connections
     connect_regions(Regions.KAK_IMPAS_HOUSE_BACK, world, [
@@ -228,7 +230,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.KAK_WINDMILL, world, [
         (EventLocations.KAKARIKO_WINDMILL_PHONOGRAM_MAN, Events.DRAIN_WELL,
-         lambda bundle: is_child(bundle) and can_play_song(bundle, Items.SONG_OF_STORMS)),
+         lambda bundle: is_child(bundle) and can_play_song(Items.SONG_OF_STORMS, bundle)),
     ])
     # Locations
     add_locations(Regions.KAK_WINDMILL, world, [
@@ -314,7 +316,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.KAK_REDEAD_GROTTO, world, [
         (Locations.KAK_REDEAD_GROTTO_CHEST,
-         lambda bundle: can_kill_enemy(bundle, enemy=Enemies.REDEAD, combat_range=EnemyDistance.CLOSE,
+         lambda bundle: can_kill_enemy(bundle, enemy=Enemies.REDEAD, distance=EnemyDistance.CLOSE,
                                        wall_or_floor=True, quantity=2))
     ])
     # Connections
@@ -328,7 +330,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_OPEN_GROTTO_CHEST, lambda bundle: True),
         (Locations.KAK_OPEN_GROTTO_FISH, lambda bundle: has_bottle(bundle)),
         (Locations.KAK_OPEN_GROTTO_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy(bundle)),
-        (Locations.KAK_OPEN_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_play_song(bundle, Items.SONG_OF_STORMS)),
+        (Locations.KAK_OPEN_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_play_song(Items.SONG_OF_STORMS, bundle)),
         (Locations.KAK_OPEN_GROTTO_BEEHIVE_LEFT, lambda bundle: can_break_lower_hives(bundle)),
         (Locations.KAK_OPEN_GROTTO_BEEHIVE_RIGHT, lambda bundle: can_break_lower_hives(bundle)),
         (Locations.KAK_OPEN_GROTTO_GRASS1, lambda bundle: can_cut_shrubs(bundle)),

@@ -126,7 +126,7 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.DMC_CENTRAL_LOCAL, world, [
         (Regions.DMC_CENTRAL_NEARBY, lambda bundle: True),
         (Regions.DMC_LOWER_NEARBY, lambda bundle: (is_adult(bundle) and can_plant_bean(bundle)) or can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle)),
-        (Regions.DMC_UPPER_NEARBY, lambda bundle: is_adult(bundle) and can_plant_bean(bundle)) 
+        (Regions.DMC_UPPER_NEARBY, lambda bundle: is_adult(bundle) and can_plant_bean(bundle)),
         (Regions.FIRE_TEMPLE_ENTRYWAY, lambda bundle: (is_child(bundle) and hearts(bundle) >= 3 and False) or (is_adult(bundle) and fire_timer(bundle) >= 24)), # TODO Implement Dungeon Shuffle Option to replace False
         (Regions.DMC_DISTANT_PLATFORM, lambda bundle: (fire_timer(bundle) >= 48 or hearts(bundle) >= 2) and can_use(Items.DISTANT_SCARECROW, bundle)),
         (Regions.DMC_VOLCANO_VENT, lambda bundle: is_adult(bundle) and hearts(bundle) >= 3 and can_plant_bean(bundle))
@@ -180,7 +180,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.DMC_DISTANT_PLATFORM_RUPEE1, lambda bundle: is_adult(bundle)),
         (Locations.DMC_DISTANT_PLATFORM_RUPEE2, lambda bundle: is_adult(bundle)),
         (Locations.DMC_DISTANT_PLATFORM_RUPEE3, lambda bundle: is_adult(bundle)),
-        (Locations.DMC_DISTANT_PLATFORM_RUPEE4, lambda bundle: is_adult(bundle))
+        (Locations.DMC_DISTANT_PLATFORM_RUPEE4, lambda bundle: is_adult(bundle)),
         (Locations.DMC_DISTANT_PLATFORM_RUPEE5, lambda bundle: is_adult(bundle)),
         (Locations.DMC_DISTANT_PLATFORM_RUPEE6, lambda bundle: is_adult(bundle)),
         (Locations.DMC_DISTANT_PLATFORM_RED_RUPEE, lambda bundle: is_adult(bundle))

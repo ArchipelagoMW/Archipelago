@@ -38,7 +38,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Ice Cavern Main
     # Events
     add_events(Regions.ICE_CAVERN, world, [
-        (EventLocations.ICE_CAVERN_BLUE_FIRE_ACCESS, Events.BLUE_FIRE_ACCESS, lambda bundle: is_adult(bundle))
+        (EventLocations.ICE_CAVERN_BLUE_FIRE_ACCESS, Events.CAN_ACCESS_BLUE_FIRE, lambda bundle: is_adult(bundle))
     ])
     # Locations
     add_locations(Regions.ICE_CAVERN, world, [
