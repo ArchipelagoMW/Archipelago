@@ -3463,6 +3463,7 @@ class Events(str, Enum):
     DRAIN_WELL = "Drain Well"
     GAME_COMPLETED = "Game Completed"
     CAN_ACCESS_BLUE_FIRE = "Can Access Blue Fire"
+    CAN_ACCESS_FISH = "Can Access Fish"
 
 class Ages(str, Enum):
     CHILD = "child"

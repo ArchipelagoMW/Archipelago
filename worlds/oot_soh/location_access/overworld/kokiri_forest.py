@@ -11,6 +11,7 @@ class EventLocations(str, Enum):
     MIDO = "Mido's Location"
     MIDO_OUTSIDE = "Mido's Location From Outside Deku Tree"
     KOKIRI_FOREST_SOFT_SOIL = "Kokiri Forest Soft Soil"
+    KOKIRI_FOREST_STORMS_GROTTO = "Kokiri Forest Storms Grotto"
 
 
 class LocalEvents(str, Enum):
@@ -142,8 +143,11 @@ def set_region_rules(world: "SohWorld") -> None:
     ## KF Outside Deku Tree
     # Locations
     add_events(Regions.KF_OUTSIDE_DEKU_TREE, world, [
-        (EventLocations.MIDO_OUTSIDE, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: has_item(Items.KOKIRI_SWORD, bundle) and
-                                                  has_item(Items.DEKU_SHIELD, bundle)),
+        (EventLocations.MIDO_OUTSIDE, Events.CAN_FARM_NUTS, lambda bundle: (can_get_deku_baba_nuts(bundle))),
+        (EventLocations.MIDO_OUTSIDE, Events.CAN_FARM_STICKS, lambda bundle: (can_get_deku_baba_sticks(bundle))),
+        (EventLocations.MIDO_OUTSIDE, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: (has_item(Items.KOKIRI_SWORD, bundle) and 
+                                                                                         has_item(Items.DEKU_SHIELD, bundle)))
+        (EventLocations.MIDO_OUTSIDE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy_except_suns(bundle))),
     ])
     add_locations(Regions.KF_OUTSIDE_DEKU_TREE, world, [
         (Locations.KF_DEKU_TREE_LEFT_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy_except_suns(bundle)),
@@ -245,6 +249,13 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## KF Storms Grotto
+    # Events
+    add_events(Regions.KF_STORMS_GROTTO, world, [
+        (EventLocations.KOKIRI_FOREST_STORMS_GROTTO, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.KOKIRI_FOREST_STORMS_GROTTO, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.KOKIRI_FOREST_STORMS_GROTTO, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.KOKIRI_FOREST_STORMS_GROTTO, Events.CAN_ACCESS_FISH, lambda bundle: True)
+    ])
     # Locations
     add_locations(Regions.KF_STORMS_GROTTO, world, [
         (Locations.KF_STORMS_GROTTO_CHEST, lambda bundle: True),
