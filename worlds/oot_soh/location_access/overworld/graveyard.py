@@ -28,7 +28,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.GRAVEYARD_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: can_use(Items.STICKS, bundle) and at_day(bundle)),
         (EventLocations.GRAVEYARD_BEAN_PLANT_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS, bundle)),
         (EventLocations.GRAVEYARD_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
-        (EventLocations.GRAVEYARD_BORROW_BUNNY_HOOD, LocalEvents.CAN_BORROW_BUNNY_HOOD, lambda bundle: is_child(bundle) and at_day(bundle) and True and has_item(Items.CHILD_WALLET, bundle)) #TODO replace true with Get()
+        (EventLocations.GRAVEYARD_BORROW_BUNNY_HOOD, LocalEvents.CAN_BORROW_BUNNY_HOOD, lambda bundle: is_child(bundle) and at_day(bundle) and has_item(Events.CAN_BORROW_SPOOKY_MASK, bundle) and has_item(Items.CHILD_WALLET, bundle))
     ])
     # Locations
     add_locations(Regions.THE_GRAVEYARD, world, [
@@ -56,9 +56,9 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.THE_GRAVEYARD, world, [
-        (Regions.GRAVEYARD_SHIELD_GRAVE, lambda bundle: is_adult(bundle) and at_night(bundle)),
+        (Regions.GRAVEYARD_SHIELD_GRAVE, lambda bundle: is_adult(bundle) or at_night(bundle)),
         (Regions.GRAVEYARD_COMPOSERS_GRAVE, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle)),
-        (Regions.GRAVEYARD_HEART_PIECE_GRAVE, lambda bundle: is_adult(bundle) and at_night(bundle)),
+        (Regions.GRAVEYARD_HEART_PIECE_GRAVE, lambda bundle: is_adult(bundle) or at_night(bundle)),
         (Regions.GRAVEYARD_DAMPES_GRAVE, lambda bundle: is_adult(bundle)),
         (Regions.GRAVEYARD_DAMPES_HOUSE, lambda bundle: is_adult(bundle) and can_open_overworld_door(Items.DAMPES_HUT_KEY, bundle)),
         (Regions.KAKARIKO_VILLAGE, lambda bundle: True),
@@ -143,12 +143,10 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GRAVEYARD_DAMPES_GRAVE, world, [
         (Regions.THE_GRAVEYARD, lambda bundle: True),
-        (Regions.KAK_WINDMILL, lambda bundle: is_adult(bundle) and can_use(Items.SONG_OF_TIME)) # For some reason the original line has a false at the end when making the entrance. Not sure what is up with that: Entrance(RR_KAK_WINDMILL,  []{return logic->IsAdult && logic->CanUse(RG_SONG_OF_TIME);}, false),
+        (Regions.KAK_WINDMILL, lambda bundle: is_adult(bundle) and can_use(Items.SONG_OF_TIME)) 
     ])
 
     ## The Graveyard Dampes House
-    # Locations
-    add_locations(Regions.GRAVEYARD_DAMPES_HOUSE, world, []) # For a Dampe hint:LOCATION(RC_DAMPE_HINT, logic->IsAdult),
     # Connections
     connect_regions(Regions.GRAVEYARD_DAMPES_HOUSE, world, [
         (Regions.THE_GRAVEYARD, lambda bundle: True)
