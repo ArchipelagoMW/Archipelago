@@ -30,10 +30,21 @@
                 }
 
                 const data = await response.json();
-                waitSeedDiv.innerHTML = `
-                    <h1>Generation in Progress</h1>
-                    <p>${data.text}</p>
-                `;
+                if (data.queue_len === 1){
+                    waitSeedDiv.innerHTML = `
+                        <h1>Generation in Progress</h1>
+                        <p>${data.text}</p>
+                        <p>This is the only generation in the queue.</p>
+                    `;
+                }
+                else {
+                    waitSeedDiv.innerHTML = `
+                        <h1>Generation in Progress</h1>
+                        <p>${data.text}</p>
+                        <p>There are ${data.queue_len} generations in the queue.</p>
+                    `;
+                }
+
 
                 setTimeout(checkStatus, 1000); // Continue polling.
             } catch (error) {
