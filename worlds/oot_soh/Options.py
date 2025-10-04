@@ -654,6 +654,7 @@ class Shuffle100GSReward(Toggle):
     You can still talk to him multiple times to get Huge Rupees.
     """
     display_name = "Shuffle 100 GS Reward"
+    visibility = Visibility.none
 
 
 @dataclass
