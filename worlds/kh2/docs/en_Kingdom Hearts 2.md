@@ -2,7 +2,7 @@
 
 ## Changes from the vanilla game
 
-This randomizer creates a more dynamic play experience by randomizing the locations of most items in Kingdom Hearts 2. Currently all items within Chests, Popups, Get Bonuses, Form Levels, and Sora's Levels are randomized. This allows abilities that Sora would normally have to be placed on Keyblades with random stats. Additionally, there are several options for ways to finish the game, allowing for different goals beyond beating the final boss.
+This randomizer creates a more dynamic play experience by randomizing the locations of most items in Kingdom Hearts 2. Currently all items within Chests, Popups, Get Bonuses, Form Levels, Summon Levels,and Sora's Levels are randomized. This allows abilities that Sora would normally have to be placed on Keyblades with random stats. Additionally, there are several options for ways to finish the game, allowing for different goals beyond beating the final boss.
 
 ## Where is the options page
 
@@ -39,7 +39,7 @@ In Kingdom Hearts 2, items which need to be sent to other worlds appear in any l
 ## When the player receives an item, what happens?
 
 
-It is added to your inventory. If you obtain magic, you will need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
+It is added to your inventory.
 
 ## What Happens if I die before Room Saving?
 
@@ -80,7 +80,7 @@ The list of possible locations that can contain a bounty:
 - Lingering Will
 - Starry Hill
 - Transport to Remembrance
-- Godess of Fate cup and Hades Paradox cup
+- Goddess of Fate cup and Hades Paradox cup
 
 ## Quality of life:
 
@@ -109,9 +109,15 @@ I.E potions, ethers, boosts etc.
 - There are many little things this mod does so if you have any questions feel free to ping me (@JaredWeakStrike) in the archipelago discord and I can hopefully answer your question.
 2. TopazTK/ArchipelagoEnablers
 - This is in sense another companion mod and is required for many things to work correctly.
-- Notification System: Allows the client to flip a byte in game for it to trigger a puzzle piece popup/information popup
-- Deathlink: Allows the client to flip a byte to kill sora when the client sets sora's hp to 0 (normally it doesnt kill sora)
+- Notification System: Allows the client to flip a byte in game for it to trigger a puzzle piece popup/information popup/chest popup
+- Deathlink: Allows the client to flip a byte to kill sora when the client sets sora's hp to 0 (normally it doesnt kill sora when his hp is set to 0)
 - Instant Movement: No need to pause when you obtain movement for it to update.
-- Instant Magic: No need to room transition to update magic (still have to pause for the client to give you the magic)
-- Autosave: Creates a save file in slot 99 that is treated like a normal save file. It is made on room transition
-- Soft Reset: All shoulder buttons+start. For ds4 its L1+l2+R1+R2+Options
+- Instant Magic: No need to room transition to update magic
+- Autosave: Creates a save file in slot 99 that is treated like a normal save file. It is made on room transition. Do note: it does overwrite any save in slot 99
+- Soft Reset: All shoulder buttons+start. For ds4 its L1+l2+R1+R2+Options for example
+3. TopazTK/ArchipelagoEnablersLITE
+- Everything in Archipelago Enablers EXCEPT auto save and soft reset
+- This mod is to be used with H2FM-Mods-equations19/auto-save or H2FM-Mods-equations19/soft-reset
+- Both equations' mods require KH2FM-Mods-equations19/KH2-Lua-Library
+- equations19/soft-reset: Use all shoulder buttons+start to reset 
+- equations19/auto-save: To load an auto-save, hold down the Select or your equivalent on your preferred controller while choosing a NO PROGRESS save file i.e. A save file that is at the start of the game and has no progress made. Make sure to hold the button down the whole time.

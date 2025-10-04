@@ -705,6 +705,8 @@ async def kh2_watcher(ctx: KH2Context):
             elif not ctx.kh2connected and ctx.serverconnected:
                 logger.info("Game Connection lost. trying to reconnect.")
                 ctx.kh2 = None
+                #todo: change this to be an option for the client to auto reconnect with the default being yes
+                # reason is because the await sleep causes the client to hang if you close the game then the client without disconnecting.
                 while not ctx.kh2connected and ctx.serverconnected:
                     try:
                         ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
