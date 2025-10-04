@@ -929,18 +929,18 @@ def trade_quest_step(item: Items, bundle: tuple[CollectionState, Regions, "SohWo
 def can_build_rainbow_bridge(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
 
-    greg_wildcard = 0
-    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.rainbow_bridge_greg_wildcard.value:
-        greg_wildcard = 1
+    greg_reward = 0
+    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.rainbow_bridge_greg_modifier.value == 1:
+        greg_reward = 1
 
     bridge_setting = world.options.rainbow_bridge.value # TODO: Remove magic number in comparisons, replace with enum
 
     return (bridge_setting == 1 or
             (bridge_setting == 0 and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle) and can_use(Items.LIGHT_ARROW, bundle)) or
-            (bridge_setting == 2 and ((stone_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_stones_required.value)) or
-            (bridge_setting == 3 and ((medallion_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_medallions_required.value)) or
-            (bridge_setting == 4 and ((stone_count(bundle) + medallion_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_dungeon_rewards_required.value)) or
-            (bridge_setting == 5 and ((dungeon_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_dungeons_required.value)) or
+            (bridge_setting == 2 and ((stone_count(bundle) + greg_reward) >= world.options.rainbow_bridge_stones_required.value)) or
+            (bridge_setting == 3 and ((medallion_count(bundle) + greg_reward) >= world.options.rainbow_bridge_medallions_required.value)) or
+            (bridge_setting == 4 and ((stone_count(bundle) + medallion_count(bundle) + greg_reward) >= world.options.rainbow_bridge_dungeon_rewards_required.value)) or
+            (bridge_setting == 5 and ((dungeon_count(bundle) + greg_reward) >= world.options.rainbow_bridge_dungeons_required.value)) or
             (bridge_setting == 6 and (get_gs_count(bundle) >= world.options.rainbow_bridge_skull_tokens_required.value)) or
             (bridge_setting == 7 and has_item(Items.GREG_THE_GREEN_RUPEE, bundle)))
 
@@ -954,17 +954,17 @@ def get_gs_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
 def can_trigger_lacs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
 
-    greg_wildcard = 0
-    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.ganons_castle_boss_key_greg_wildcard.value:
-        greg_wildcard = 1
+    greg_reward = 0
+    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.ganons_castle_boss_key_greg_modifier.value == 1:
+        greg_reward = 1
 
     gbk_setting = world.options.ganons_castle_boss_key.value # TODO: Remove magic number in comparisons, replace with enum
 
     return (((gbk_setting == 0 or gbk_setting == 1 or gbk_setting == 2) and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle)) or
-            (gbk_setting == 3 and (stone_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_stones_required.value)) or
-            (gbk_setting == 4 and (medallion_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_medallions_required.value)) or
-            (gbk_setting == 5 and (stone_count(bundle) + medallion_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeon_rewards_required.value)) or 
-            (gbk_setting == 6 and (dungeon_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeons_required.value)) or
+            (gbk_setting == 3 and (stone_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_stones_required.value)) or
+            (gbk_setting == 4 and (medallion_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_medallions_required.value)) or
+            (gbk_setting == 5 and (stone_count(bundle) + medallion_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_dungeon_rewards_required.value)) or 
+            (gbk_setting == 6 and (dungeon_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_dungeons_required.value)) or
             (gbk_setting == 7 and (get_gs_count(bundle) >= world.options.ganons_castle_boss_key_skull_tokens_required.value)))
 
 # TODO implement EffectiveHealth(); Returns 2 for now
