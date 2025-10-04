@@ -14,11 +14,6 @@ class EventLocations(str, Enum):
 
 class LocalEvents(str, Enum):
     CAN_EMPTY_BIG_POES = "Can Empty Big Poes"
-    CAN_BORROW_MASKS = "Retrieved Zelda's Letter and Opened Kakariko Gate"
-    BORROW_SKULL_MASK = "Borrow Skull Mask"
-    BORROW_SPOOKY_MASK = "Borrow Spooky Mask"
-    BORROW_BUNNY_HOOD = "Borrow Bunny Hood"
-    BORROW_RIGHT_MASKS = "Borrow Any Right Mask"
     CAN_PLAY_BOWLING = "Can Play Bombchu Bowling"
 
 
@@ -28,20 +23,20 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.MARKET_ENTRANCE, world, [
         (Regions.HYRULE_FIELD, lambda bundle: (is_adult(bundle) or at_day(bundle))),
         (Regions.MARKET, lambda bundle: True),
-        (Regions.MARKET_GUARD_HOUSE, lambda bundle: can_open_overworld_door(Items.GUARD_HOUSE_KEY))
+        (Regions.MARKET_GUARD_HOUSE, lambda bundle: can_open_overworld_door(Items.GUARD_HOUSE_KEY, bundle))
     ])
     
     ## Market
     # Locations
     add_locations(Regions.MARKET, world, [
-        (Locations.MARKET_MARKET_GRASS1, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET)))),
-        (Locations.MARKET_MARKET_GRASS2, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET)))),
-        (Locations.MARKET_MARKET_GRASS3, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET)))),
-        (Locations.MARKET_MARKET_GRASS4, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET)))),
-        (Locations.MARKET_MARKET_GRASS5, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET)))),
-        (Locations.MARKET_MARKET_GRASS6, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET)))),
-        (Locations.MARKET_MARKET_GRASS7, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET)))),
-        (Locations.MARKET_MARKET_GRASS8, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET)))),
+        (Locations.MARKET_MARKET_GRASS1, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
+        (Locations.MARKET_MARKET_GRASS2, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
+        (Locations.MARKET_MARKET_GRASS3, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
+        (Locations.MARKET_MARKET_GRASS4, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
+        (Locations.MARKET_MARKET_GRASS5, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
+        (Locations.MARKET_MARKET_GRASS6, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
+        (Locations.MARKET_MARKET_GRASS7, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
+        (Locations.MARKET_MARKET_GRASS8, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
         # Todo: The crates has 'logic->CanRoll()' outcommanted in SoH. Do we need those and when?
         (Locations.MARKET_NEAR_BAZAAR_CRATE1, lambda bundle: (is_child(bundle))),
         (Locations.MARKET_NEAR_BAZAAR_CRATE2, lambda bundle: (is_child(bundle))),
@@ -54,12 +49,12 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.MARKET_ENTRANCE, lambda bundle: True),
         (Regions.TOT_ENTRANCE, lambda bundle: True),
         (Regions.CASTLE_GROUNDS, lambda bundle: True),
-        (Regions.MARKET_BAZAAR, lambda bundle: (is_child(bundle) and at_day(bundle) and can_open_overworld_door(Items.MARKET_BAZAAR_KEY))),
-        (Regions.MARKET_MASK_SHOP, lambda bundle: (is_child(bundle) and at_day(bundle) and can_open_overworld_door(Items.MASK_SHOP_KEY))),
-        (Regions.MARKET_SHOOTING_GALLERY, lambda bundle: (is_child(bundle) and at_day(bundle) and can_open_overworld_door(Items.MARKET_SHOOTING_GALLERY_KEY))),
-        (Regions.MARKET_BOMBCHU_BOWLING, lambda bundle: (is_child(bundle) and can_open_overworld_door(Items.BOMBCHU_BOWLING_KEY))),
-        (Regions.MARKET_TREASURE_CHEST_GAME, lambda bundle: (is_child(bundle) and at_night(bundle) and can_open_overworld_door(Items.TREASURE_CHEST_GAME_BUILDING_KEY))),
-        (Regions.MARKET_POTION_SHOP, lambda bundle: (is_child(bundle) and at_day(bundle) and can_open_overworld_door(Items.MARKET_POTION_SHOP_KEY))),
+        (Regions.MARKET_BAZAAR, lambda bundle: (is_child(bundle) and at_day(bundle) and can_open_overworld_door(Items.MARKET_BAZAAR_KEY, bundle))),
+        (Regions.MARKET_MASK_SHOP, lambda bundle: (is_child(bundle) and at_day(bundle) and can_open_overworld_door(Items.MASK_SHOP_KEY, bundle))),
+        (Regions.MARKET_SHOOTING_GALLERY, lambda bundle: (is_child(bundle) and at_day(bundle) and can_open_overworld_door(Items.MARKET_SHOOTING_GALLERY_KEY, bundle))),
+        (Regions.MARKET_BOMBCHU_BOWLING, lambda bundle: (is_child(bundle) and can_open_overworld_door(Items.BOMBCHU_BOWLING_KEY, bundle))),
+        (Regions.MARKET_TREASURE_CHEST_GAME, lambda bundle: (is_child(bundle) and at_night(bundle) and can_open_overworld_door(Items.TREASURE_CHEST_GAME_BUILDING_KEY, bundle))),
+        (Regions.MARKET_POTION_SHOP, lambda bundle: (is_child(bundle) and at_day(bundle) and can_open_overworld_door(Items.MARKET_POTION_SHOP_KEY, bundle))),
         (Regions.MARKET_BACK_ALLEY, lambda bundle: is_child(bundle))
     ])
     
@@ -67,9 +62,9 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.MARKET_BACK_ALLEY, world, [
         (Regions.MARKET, lambda bundle: True),
-        (Regions.MARKET_BOMBCHU_SHOP, lambda bundle: (at_night(bundle) and can_open_overworld_door(Items.BOMBCHU_SHOP_KEY))),
-        (Regions.MARKET_DOG_LADY_HOUSE, lambda bundle: (can_open_overworld_door(Items.RICHARDS_HOUSE_KEY))),
-        (Regions.MARKET_MAN_IN_GREEN_HOUSE, lambda bundle: (at_night(bundle) and can_open_overworld_door(Items.ALLEY_HOUSE_KEY)))
+        (Regions.MARKET_BOMBCHU_SHOP, lambda bundle: (at_night(bundle) and can_open_overworld_door(Items.BOMBCHU_SHOP_KEY, bundle))),
+        (Regions.MARKET_DOG_LADY_HOUSE, lambda bundle: (can_open_overworld_door(Items.RICHARDS_HOUSE_KEY, bundle))),
+        (Regions.MARKET_MAN_IN_GREEN_HOUSE, lambda bundle: (at_night(bundle) and can_open_overworld_door(Items.ALLEY_HOUSE_KEY, bundle)))
     ])
     
     ## Market Guard House
@@ -169,11 +164,11 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.MARKET_MASK_SHOP, world, [
         # Todo: Is this accurate?
-        (EventLocations.MARKET_MASK_SHOP, LocalEvents.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER) and world.options.kakariko_gate.value))
-        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_SKULL_MASK, lambda bundle: (world.options.complete_mask_quest.value and LocalEvents.CAN_BORROW_MASKS)),
-        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_SPOOKY_MASK, lambda bundle: (world.options.complete_mask_quest.value and LocalEvents.CAN_BORROW_MASKS)),
-        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_BUNNY_HOOD, lambda bundle: (world.options.complete_mask_quest.value and LocalEvents.CAN_BORROW_MASKS)),
-        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_RIGHT_MASKS, lambda bundle: (world.options.complete_mask_quest.value and LocalEvents.CAN_BORROW_MASKS)),
+        (EventLocations.MARKET_MASK_SHOP, LocalEvents.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER, bundle) and world.options.kakariko_gate.value))
+        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_SKULL_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
+        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_SPOOKY_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
+        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_BUNNY_HOOD, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
+        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_RIGHT_MASKS, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
     ])
     # Locations
     add_locations(Regions.MARKET_MASK_SHOP, world, [
@@ -187,7 +182,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Market Shooting Gallery
     # Locations
     add_locations(Regions.MARKET_SHOOTING_GALLERY, world, [
-        (Locations.MARKET_SHOOTING_GALLERY, lambda bundle: (is_child(bundle) and has_item(Items.CHILD_WALLET)))
+        (Locations.MARKET_SHOOTING_GALLERY, lambda bundle: (is_child(bundle) and has_item(Items.CHILD_WALLET, bundle)))
     ])
     # Connections
     connect_regions(Regions.MARKET_SHOOTING_GALLERY, world, [
@@ -197,13 +192,12 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Market Bombchu Bowling
     # Events
     add_events(Regions.MARKET_BOMBCHU_BOWLING, world, [
-        (EventLocations.MARKET_BOMBCHU_BOWLING, LocalEvents.CAN_PLAY_BOWLING, lambda bundle: (has_item(Items.CHILD_WALLET)))
+        (EventLocations.MARKET_BOMBCHU_BOWLING, LocalEvents.CAN_PLAY_BOWLING, lambda bundle: (has_item(Items.CHILD_WALLET, bundle)))
     ])
     # Locations
     add_locations(Regions.MARKET_BOMBCHU_BOWLING, world, [
-        # Todo: Ship has logic->BombchusEnabled() here. Do we have an equivalent?
-        (Locations.MARKET_BOMBCHU_BOWLING_FIRST_PRIZE, lambda bundle: (LocalEvents.CAN_PLAY_BOWLING))
-        (Locations.MARKET_BOMBCHU_BOWLING_SECOND_PRIZE, lambda bundle: (LocalEvents.CAN_PLAY_BOWLING))
+        (Locations.MARKET_BOMBCHU_BOWLING_FIRST_PRIZE, lambda bundle: (LocalEvents.CAN_PLAY_BOWLING and bombchus_enabled(bundle)))
+        (Locations.MARKET_BOMBCHU_BOWLING_SECOND_PRIZE, lambda bundle: (LocalEvents.CAN_PLAY_BOWLING and bombchus_enabled(bundle)))
     ])
     # Connections
     connect_regions(Regions.MARKET_BOMBCHU_BOWLING, world, [
@@ -230,10 +224,10 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Market Treasure Chest Game
     # Locations
     add_locations(Regions.MARKET_TREASURE_CHEST_GAME, world, [
-        (Locations.MARKET_GREG_HINT, lambda bundle: (has_item(Items.CHILD_WALLET))),
+        (Locations.MARKET_GREG_HINT, lambda bundle: (has_item(Items.CHILD_WALLET, bundle))),
         # Todo: Missing 'shuffle_chest_minigame' option. Are we also missing 'logic->SmallKeys(SCENE_TREASURE_BOX_SHOP)
         # Example from Ship:
-        # LOCATION(RC_MARKET_TREASURE_CHEST_GAME_KEY_1,  logic->HasItem(RG_CHILD_WALLET) && ((ctx->GetOption(RSK_SHUFFLE_CHEST_MINIGAME).Is(RO_CHEST_GAME_SINGLE_KEYS) && logic->SmallKeys(SCENE_TREASURE_BOX_SHOP, 1)) || (ctx->GetOption(RSK_SHUFFLE_CHEST_MINIGAME).Is(RO_CHEST_GAME_PACK) && logic->SmallKeys(SCENE_TREASURE_BOX_SHOP, 1)) || (logic->CanUse(RG_LENS_OF_TRUTH) && !ctx->GetOption(RSK_SHUFFLE_CHEST_MINIGAME)))),
+        #LOCATION(RC_MARKET_TREASURE_CHEST_GAME_REWARD, logic->HasItem(RG_CHILD_WALLET) && ((logic->CanUse(RG_LENS_OF_TRUTH) && !ctx->GetOption(RSK_SHUFFLE_CHEST_MINIGAME)) || (ctx->GetOption(RSK_SHUFFLE_CHEST_MINIGAME).Is(RO_CHEST_GAME_SINGLE_KEYS) && logic->SmallKeys(SCENE_TREASURE_BOX_SHOP, 6)) || (ctx->GetOption(RSK_SHUFFLE_CHEST_MINIGAME).Is(RO_CHEST_GAME_PACK) && logic->SmallKeys(SCENE_TREASURE_BOX_SHOP, 1)))),
     ])
     # Connections
     connect_regions(Regions.MARKET_POTION_SHOP, world, [
