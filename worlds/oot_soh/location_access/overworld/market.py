@@ -163,12 +163,12 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Market Mask Shop
     # Events
     add_events(Regions.MARKET_MASK_SHOP, world, [
-        # Todo: Is this accurate?
-        (EventLocations.MARKET_MASK_SHOP, LocalEvents.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER, bundle) and world.options.kakariko_gate.value))
-        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_SKULL_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
-        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_SPOOKY_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
-        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_BUNNY_HOOD, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
-        (EventLocations.MARKET_MASK_SHOP, LocalEvents.BORROW_RIGHT_MASKS, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
+        # Todo: Is this accurate? CAN_BORROW_MASKS,BORROW_SKULL_MASK in Events, rest missing. Add to Enums?
+        (EventLocations.MARKET_MASK_SHOP, Events.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER, bundle) and world.options.kakariko_gate.value))
+        (EventLocations.MARKET_MASK_SHOP, Events.BORROW_SKULL_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
+        (EventLocations.MARKET_MASK_SHOP, Events.BORROW_SPOOKY_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
+        (EventLocations.MARKET_MASK_SHOP, Events.BORROW_BUNNY_HOOD, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
+        (EventLocations.MARKET_MASK_SHOP, Events.BORROW_RIGHT_MASKS, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
     ])
     # Locations
     add_locations(Regions.MARKET_MASK_SHOP, world, [
