@@ -1,8 +1,8 @@
 from BaseClasses import ItemClassification, LocationProgressType
 from Fill import distribute_items_restrictive
 
-from .bases import WitnessTestBase
 from ..data.utils import cast_not_none
+from ..test.bases import WitnessTestBase
 
 
 class TestEarlySymbolItemFalse(WitnessTestBase):
