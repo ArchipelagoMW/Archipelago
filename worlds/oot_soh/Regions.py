@@ -83,10 +83,12 @@ class SohRegion(Region):
             state._soh_update_age_reachable_regions(self.player)
             state._soh_age[self.player] = stored_age
         
-        if state._soh_age[self.player] == "child":
+        if state._soh_age[self.player] == Ages.CHILD:
             return self in state._soh_child_reachable_regions[self.player]
-        elif state._soh_age[self.player] == "adult":
+        elif state._soh_age[self.player] == Ages.ADULT:
             return self in state._soh_adult_reachable_regions[self.player]
+        elif state._soh_age[self.player] == Ages.BOTH:
+            return self in state._soh_child_reachable_regions[self.player] and self in state._soh_adult_reachable_regions[self.player]
         else:
             return self in state._soh_child_reachable_regions[self.player] or self in state._soh_adult_reachable_regions[self.player]
 

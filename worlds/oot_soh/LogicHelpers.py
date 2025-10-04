@@ -344,7 +344,10 @@ def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 
 def can_be_both_ages(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return is_child(bundle) and is_adult(bundle)
+    state = bundle[0]
+    parent_region = bundle[1]
+    world = bundle[2]
+    return state._soh_can_reach_as_age(parent_region, Ages.BOTH, world.player)
 
 
 def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
