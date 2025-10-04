@@ -3467,6 +3467,7 @@ class Events(str, Enum):
 class Ages(str, Enum):
     CHILD = "child"
     ADULT = "adult"
+    BOTH = "both"
     null = None
 
 

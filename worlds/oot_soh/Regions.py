@@ -24,7 +24,8 @@ from .Locations import SohLocation, base_location_table, \
     fish_pond_location_table, \
     fish_overworld_location_table, \
     child_zelda_location_table, \
-    carpenters_location_table
+    carpenters_location_table, \
+    hundred_skulls_location_table
 from .location_access import root
 from .location_access.overworld import \
     castle_grounds, \
@@ -82,10 +83,12 @@ class SohRegion(Region):
             state._soh_update_age_reachable_regions(self.player)
             state._soh_age[self.player] = stored_age
         
-        if state._soh_age[self.player] == "child":
+        if state._soh_age[self.player] == Ages.CHILD:
             return self in state._soh_child_reachable_regions[self.player]
-        elif state._soh_age[self.player] == "adult":
+        elif state._soh_age[self.player] == Ages.ADULT:
             return self in state._soh_adult_reachable_regions[self.player]
+        elif state._soh_age[self.player] == Ages.BOTH:
+            return self in state._soh_child_reachable_regions[self.player] and self in state._soh_adult_reachable_regions[self.player]
         else:
             return self in state._soh_child_reachable_regions[self.player] or self in state._soh_adult_reachable_regions[self.player]
 
@@ -251,6 +254,9 @@ def create_regions_and_locations(world: "SohWorld") -> None:
                 location_name: address for location_name, address in carpenters_location_table.items()
                 if location_name in {"GF Freed All Carpenters", "GF 1 Torch Carpenter"}
             })
+
+        if world.options.shuffle_100_gs_reward:
+            world.included_locations.update(hundred_skulls_location_table)
             
     # Set region rules and location rules after all locations are created
     all_regions = [root, castle_grounds, death_mountain_crater, death_mountain_trail, desert_colossus, gerudo_fortress,

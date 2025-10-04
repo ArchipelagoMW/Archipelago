@@ -344,7 +344,10 @@ def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 
 def can_be_both_ages(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return is_child(bundle) and is_adult(bundle)
+    state = bundle[0]
+    parent_region = bundle[1]
+    world = bundle[2]
+    return state._soh_can_reach_as_age(parent_region, Ages.BOTH, world.player)
 
 
 def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -423,7 +426,7 @@ def can_bonk_trees(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 def can_hit_eye_targets(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can hit eye switches/targets."""
-    return can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.HOOKSHOT, Items.BOOMERANG], bundle)
+    return can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle)
 
 
 def can_stun_deku(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -472,8 +475,8 @@ def can_break_lower_hives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -
 
 def can_break_upper_beehives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return (hookshot_or_boomerang(bundle) or
-            (can_do_trick(Tricks.BOMBCHU_BEEHIVES, bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) and
-            (False and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle))))
+            (can_do_trick("Beehives With Bombchus", bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) or 
+            (False and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle)))) #TODO implement sling/bow destroy hives option
 
 
 def can_open_storms_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -498,6 +501,8 @@ def can_hit_switch(bundle: tuple[CollectionState, Regions, "SohWorld"], distance
     if distance <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, bundle) or can_use(Items.STICKS, bundle)):
         return True
     if distance <= EnemyDistance.BOMB_THROW and not in_water and can_use(Items.BOMB_BAG, bundle):
+        return True
+    if distance <= EnemyDistance.BOOMERANG and can_use(Items.BOOMERANG, bundle):
         return True
     if distance <= EnemyDistance.HOOKSHOT and (can_use(Items.HOOKSHOT, bundle) or can_use(Items.BOMBCHUS_5, bundle)):
         return True
@@ -582,10 +587,23 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         return can_attack(bundle) or can_use(Items.BOOMERANG, bundle)
 
     if enemy in [Enemies.LIKE_LIKE, Enemies.FLOORMASTER]:
-        return can_use_sword(bundle) or (can_use(Items.STICKS, bundle) and False) #TODO replace False with dead hand child option
+        return can_damage(bundle)
 
     if enemy == Enemies.STALFOS:
-        return can_hit_at_range(distance) or (distance == EnemyDistance.CLOSE and can_use(Items.KOKIRI_SWORD, bundle))
+        if distance <= EnemyDistance.SHORT_JUMPSLASH and (can_use(Items.MEGATON_HAMMER, bundle) or can_use(Items.KOKIRI_SWORD, bundle)):
+            return True
+        if distance <= EnemyDistance.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD, bundle):
+            return True
+        if distance <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, bundle) or (quantity <= 1 and can_use(Items.STICKS, bundle))):
+            return True
+        if distance <= EnemyDistance.BOMB_THROW and quantity <= 2 and not timer and not in_water and \
+                                (can_use(Items.NUTS, bundle) or hookshot_or_boomerang(bundle)) and can_use(Items.PROGRESSIVE_BOMB_BAG, bundle):
+            return True
+        if distance <= EnemyDistance.HOOKSHOT and wall_or_floor and can_use(Items.BOMBCHUS_5, bundle):
+            return True
+        if distance <= EnemyDistance.FAR and can_use(Items.FAIRY_BOW, bundle):
+            return True
+        return False
 
     if enemy == Enemies.IRON_KNUCKLE:
         return (can_use_sword(bundle) or
@@ -726,7 +744,7 @@ def has_boss_soul(soul: Items, bundle: tuple[CollectionState, Regions, "SohWorld
         return True
     if soul == Items.GANONS_SOUL:
         return True if soulsanity == 1 else state.has(Items.GANONS_SOUL, world.player)
-    return state.has(soul, world.player)
+    return has_item(soul, bundle)
 
 
 def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies) -> bool:
@@ -804,9 +822,12 @@ def can_get_enemy_drop(bundle: tuple[CollectionState, Regions, "SohWorld"], enem
 
     match enemy:
         case Enemies.GOLD_SKULLTULA:
-            if distance in [EnemyDistance.BOOMERANG, EnemyDistance.HOOKSHOT, EnemyDistance.LONGSHOT]:
-                return (can_use_any([Items.BOOMERANG, Items.HOOKSHOT, Items.LONGSHOT], bundle))
-
+            if distance <= EnemyDistance.BOOMERANG and can_use(Items.BOOMERANG, bundle):
+                return True
+            if distance <= EnemyDistance.HOOKSHOT and can_use(Items.HOOKSHOT, bundle):
+                return True
+            if distance <= EnemyDistance.LONGSHOT and can_use(Items.LONGSHOT, bundle):
+                return True
             return False
         case Enemies.KEESE:
             return True
@@ -825,7 +846,7 @@ def can_detonate_upright_bomb_flower(bundle: tuple[CollectionState, Regions, "So
             or has_item(Items.GORONS_BRACELET, bundle)
             or (can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle)
                 and blue_fire(bundle)
-                and (effective_health != 1
+                and (effective_health(bundle) != 1
                     or can_use(Items.NAYRUS_LOVE, bundle)
                 ))
 
@@ -894,53 +915,52 @@ def trade_quest_step(item: Items, bundle: tuple[CollectionState, Regions, "SohWo
     if (world.options.shuffle_adult_trade_items.value == 0):
         return has_item(Items.CLAIM_CHECK, bundle)
     
-    hasState = False
-
+    #Items aren't comparable, so recursion is used to replace fallthrough here
     if (item == Items.POCKET_EGG):
-        hasState = hasState or has_item(Items.POCKET_EGG, bundle)
+        return has_item(Items.POCKET_EGG, bundle) or trade_quest_step(Items.COJIRO, bundle)
 
     if (item == Items.COJIRO):
-        hasState = hasState or has_item(Items.COJIRO, bundle)
+        return has_item(Items.COJIRO, bundle) or trade_quest_step(Items.ODD_MUSHROOM, bundle)
 
     if (item == Items.ODD_MUSHROOM):
-        hasState = hasState or has_item(Items.ODD_MUSHROOM, bundle)
+        return has_item(Items.ODD_MUSHROOM, bundle) or trade_quest_step(Items.ODD_POTION, bundle)
 
     if (item == Items.ODD_POTION):
-        hasState = hasState or has_item(Items.ODD_POTION, bundle)
+        return has_item(Items.ODD_POTION, bundle) or trade_quest_step(Items.POACHERS_SAW, bundle)
 
     if (item == Items.POACHERS_SAW):
-        hasState = hasState or has_item(Items.POACHERS_SAW, bundle)
+        return has_item(Items.POACHERS_SAW, bundle) or trade_quest_step(Items.BROKEN_GORONS_SWORD, bundle)
 
     if (item == Items.BROKEN_GORONS_SWORD):
-        hasState = hasState or has_item(Items.BROKEN_GORONS_SWORD, bundle)
+        return has_item(Items.BROKEN_GORONS_SWORD, bundle) or trade_quest_step(Items.PRESCRIPTION, bundle)
     
     if (item == Items.PRESCRIPTION):
-        hasState = hasState or has_item(Items.PRESCRIPTION, bundle)
+        return has_item(Items.PRESCRIPTION, bundle) or trade_quest_step(Items.WORLDS_FINEST_EYEDROPS, bundle)
 
     if (item == Items.WORLDS_FINEST_EYEDROPS):
-        hasState = hasState or has_item(Items.WORLDS_FINEST_EYEDROPS, bundle)
+        return has_item(Items.WORLDS_FINEST_EYEDROPS, bundle) or trade_quest_step(Items.CLAIM_CHECK, bundle)
 
     if (item == Items.CLAIM_CHECK):
-        hasState = hasState or has_item(Items.CLAIM_CHECK, bundle)
+        return has_item(Items.CLAIM_CHECK, bundle)
 
-    return hasState
+    return False
 
 
 def can_build_rainbow_bridge(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
 
-    greg_wildcard = 0
-    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.rainbow_bridge_greg_wildcard.value:
-        greg_wildcard = 1
+    greg_reward = 0
+    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.rainbow_bridge_greg_modifier.value == 1:
+        greg_reward = 1
 
     bridge_setting = world.options.rainbow_bridge.value # TODO: Remove magic number in comparisons, replace with enum
 
     return (bridge_setting == 1 or
             (bridge_setting == 0 and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle) and can_use(Items.LIGHT_ARROW, bundle)) or
-            (bridge_setting == 2 and ((stone_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_stones_required.value)) or
-            (bridge_setting == 3 and ((medallion_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_medallions_required.value)) or
-            (bridge_setting == 4 and ((stone_count(bundle) + medallion_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_dungeon_rewards_required.value)) or
-            (bridge_setting == 5 and ((dungeon_count(bundle) + greg_wildcard) >= world.options.rainbow_bridge_dungeons_required.value)) or
+            (bridge_setting == 2 and ((stone_count(bundle) + greg_reward) >= world.options.rainbow_bridge_stones_required.value)) or
+            (bridge_setting == 3 and ((medallion_count(bundle) + greg_reward) >= world.options.rainbow_bridge_medallions_required.value)) or
+            (bridge_setting == 4 and ((stone_count(bundle) + medallion_count(bundle) + greg_reward) >= world.options.rainbow_bridge_dungeon_rewards_required.value)) or
+            (bridge_setting == 5 and ((dungeon_count(bundle) + greg_reward) >= world.options.rainbow_bridge_dungeons_required.value)) or
             (bridge_setting == 6 and (get_gs_count(bundle) >= world.options.rainbow_bridge_skull_tokens_required.value)) or
             (bridge_setting == 7 and has_item(Items.GREG_THE_GREEN_RUPEE, bundle)))
 
@@ -954,17 +974,17 @@ def get_gs_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
 def can_trigger_lacs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
 
-    greg_wildcard = 0
-    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.ganons_castle_boss_key_greg_wildcard.value:
-        greg_wildcard = 1
+    greg_reward = 0
+    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.ganons_castle_boss_key_greg_modifier.value == 1:
+        greg_reward = 1
 
     gbk_setting = world.options.ganons_castle_boss_key.value # TODO: Remove magic number in comparisons, replace with enum
 
     return (((gbk_setting == 0 or gbk_setting == 1 or gbk_setting == 2) and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle)) or
-            (gbk_setting == 3 and (stone_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_stones_required.value)) or
-            (gbk_setting == 4 and (medallion_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_medallions_required.value)) or
-            (gbk_setting == 5 and (stone_count(bundle) + medallion_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeon_rewards_required.value)) or 
-            (gbk_setting == 6 and (dungeon_count(bundle) + greg_wildcard >= world.options.ganons_castle_boss_key_dungeons_required.value)) or
+            (gbk_setting == 3 and (stone_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_stones_required.value)) or
+            (gbk_setting == 4 and (medallion_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_medallions_required.value)) or
+            (gbk_setting == 5 and (stone_count(bundle) + medallion_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_dungeon_rewards_required.value)) or 
+            (gbk_setting == 6 and (dungeon_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_dungeons_required.value)) or
             (gbk_setting == 7 and (get_gs_count(bundle) >= world.options.ganons_castle_boss_key_skull_tokens_required.value)))
 
 # TODO implement EffectiveHealth(); Returns 2 for now

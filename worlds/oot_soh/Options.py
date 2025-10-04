@@ -124,11 +124,17 @@ class RainbowBridge(Choice):
     default = 7
 
 
-class RainbowBridgeGregWildcard(Toggle):
+class RainbowBridgeGregModifier(Choice):
     """
     If Rainbow Bridge is enabled, Greg will count toward the bridge requirement goal.
+    Off - Greg won't change the Rainbow Bridge Requirements.
+    Reward - Greg will count toward the bridge requirement and be considered in the logic.
+    Wildcard - Greg will count toward the bridge requirement but not be considered in logic.
     """
-    display_name = "Rainbow Bridge Greg Wildcard"
+    display_name = "Rainbow Bridge Greg Modifier"
+    option_off = 0
+    option_reward = 1
+    option_wildcard = 2
     visibility = Visibility.none
 
 
@@ -522,11 +528,17 @@ class GanonsCastleBossKey(Choice):
     default = 5
 
 
-class GanonsCastleBossKeyGregWildcard(Toggle):
+class GanonsCastleBossKeyGregModifier(Toggle):
     """
     If Ganons Castle Boss Key is enabled, Greg will count toward the LACS goal.
+    Off - Greg won't change the LACS goal requirement.
+    Reward - Greg will count toward the LACS goal and be considered in the logic.
+    Wildcard - Greg will count toward the LACS goal but not be considered in logic.
     """
     display_name = "Ganons Castle Boss Key Greg Wildcard"
+    option_off = 0
+    option_reward = 1
+    option_wildcard = 2
     visibility = Visibility.none
 
 
@@ -705,6 +717,15 @@ class StartingAge(Choice):
     visibility = Visibility.none
 
 
+class Shuffle100GSReward(Toggle):
+    """
+    Shuffle the item the cursed rich man in the House of Skulltula gives you when you have collected all 100 Gold Skulltula Tokens.
+    You can still talk to him multiple times to get Huge Rupees.
+    """
+    display_name = "Shuffle 100 GS Reward"
+    visibility = Visibility.none
+
+
 @dataclass
 class SohOptions(PerGameCommonOptions):
     closed_forest: ClosedForest
@@ -721,7 +742,7 @@ class SohOptions(PerGameCommonOptions):
     rainbow_bridge_dungeon_rewards_required: RainbowBridgeDungeonRewardsRequired
     rainbow_bridge_dungeons_required: RainbowBridgeDungeonsRequired
     rainbow_bridge_skull_tokens_required: RainbowBridgeSkullTokensRequired
-    rainbow_bridge_greg_wildcard: RainbowBridgeGregWildcard
+    rainbow_bridge_greg_modifier: RainbowBridgeGregModifier
     ganons_trials_required: GanonsTrialsRequired
     triforce_hunt: TriforceHunt
     triforce_hunt_required_pieces: TriforceHuntRequiredPieces
@@ -758,7 +779,7 @@ class SohOptions(PerGameCommonOptions):
     ganons_castle_boss_key_dungeon_rewards_required: GanonsCastleBossKeyDungeonRewardsRequired
     ganons_castle_boss_key_dungeons_required: GanonsCastleBossKeyDungeonsRequired
     ganons_castle_boss_key_skull_tokens_required: GanonsCastleBossKeySkullTokensRequired
-    ganons_castle_boss_key_greg_wildcard: GanonsCastleBossKeyGregWildcard
+    ganons_castle_boss_key_greg_modifier: GanonsCastleBossKeyGregModifier
     key_rings: KeyRings
     big_poe_target_count: BigPoeTargetCount
     skip_child_zelda: SkipChildZelda
@@ -774,6 +795,7 @@ class SohOptions(PerGameCommonOptions):
     infinite_upgrades: InfiniteUpgrades
     skeleton_key: SkeletonKey
     starting_age: StartingAge
+    shuffle_100_gs_reward: Shuffle100GSReward
 
 
 soh_option_groups = [
@@ -795,7 +817,7 @@ soh_option_groups = [
         RainbowBridgeDungeonRewardsRequired,
         RainbowBridgeDungeonsRequired,
         RainbowBridgeSkullTokensRequired,
-        RainbowBridgeGregWildcard,
+        RainbowBridgeGregModifier,
         GanonsTrialsRequired,
         TriforceHunt,
         TriforceHuntRequiredPieces,
@@ -863,7 +885,7 @@ soh_option_groups = [
         GanonsCastleBossKeyDungeonRewardsRequired,
         GanonsCastleBossKeyDungeonsRequired,
         GanonsCastleBossKeySkullTokensRequired,
-        GanonsCastleBossKeyGregWildcard,
+        GanonsCastleBossKeyGregModifier,
         KeyRings,
         # Key Ring Dungeon Count
     ]),
