@@ -17,7 +17,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Shadow Temple Entryway
     # Connections
     connect_regions(Regions.SHADOW_TEMPLE_ENTRYWAY, world, [
-        (Regions.SHADOW_TEMPLE_BEGINNING, lambda bundle: can_do_trick("Lens Shadow", bundle) and can_use(Items.LENS_OF_TRUTH, bundle) and (can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle))), 
+        (Regions.SHADOW_TEMPLE_BEGINNING, lambda bundle: can_do_trick(Tricks.LENS_SHADOW, bundle) and can_use(Items.LENS_OF_TRUTH, bundle) and (can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle))), 
         (Regions.GRAVEYARD_WARP_PAD_REGION, lambda bundle: True)
     ])
 
@@ -64,24 +64,24 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.SHADOW_TEMPLE_INVISIBLE_BLADES_VISIBLE_CHEST, lambda bundle: can_jump_slash_except_hammer(bundle)),
         (Locations.SHADOW_TEMPLE_INVISIBLE_BLADES_INVISIBLE_CHEST, lambda bundle: can_jump_slash_except_hammer(bundle)),
         (Locations.SHADOW_TEMPLE_FALLING_SPIKES_LOWER_CHEST, lambda bundle: True),
-        (Locations.SHADOW_TEMPLE_FALLING_SPIKES_UPPER_CHEST, lambda bundle: (can_do_trick("Shadow Umbrella Hover", bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_do_trick("Shadow Temple Umbrella Clip", bundle) or has_item(Items.GORONS_BRACELET, bundle)),
-        (Locations.SHADOW_TEMPLE_FALLING_SPIKES_SWITCH_CHEST, lambda bundle: (can_do_trick("Shadow Umbrella Hover", bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_do_trick("Shadow Temple Umbrella Clip", bundle) or has_item(Items.GORONS_BRACELET, bundle)),
-        (Locations.SHADOW_TEMPLE_INVISIBLE_SPIKES_CHEST, lambda bundle: small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 2, bundle) and ((can_do_trick("Lens Shadow Platform", bundle) and can_do_trick("Lens Shadow", bundle)) or can_use(Items.LENS_OF_TRUTH, bundle))),
-        (Locations.SHADOW_TEMPLE_FREESTANDING_KEY, lambda bundle: small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 2, bundle) and ((can_do_trick("Lens Shadow Platform", bundle) and can_do_trick("Lens Shadow", bundle)) or can_use(Items.LENS_OF_TRUTH, bundle)) and can_use(Items.HOOKSHOT, bundle) and (can_use(Items.BOMB_BAG, bundle) or has_item(Items.GORONS_BRACELET, bundle) or (can_do_trick("Shadow Freestanding Key", bundle) and can_use(Items.BOMBCHUS_5, bundle)))),
+        (Locations.SHADOW_TEMPLE_FALLING_SPIKES_UPPER_CHEST, lambda bundle: (can_do_trick(Tricks.SHADOW_UMBRELLA_HOVER, bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_do_trick(Tricks.SHADOW_UMBRELLA_CLIP, bundle) or has_item(Items.GORONS_BRACELET, bundle)),
+        (Locations.SHADOW_TEMPLE_FALLING_SPIKES_SWITCH_CHEST, lambda bundle: (can_do_trick(Tricks.SHADOW_UMBRELLA_HOVER, bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_do_trick(Tricks.SHADOW_UMBRELLA_CLIP, bundle) or has_item(Items.GORONS_BRACELET, bundle)),
+        (Locations.SHADOW_TEMPLE_INVISIBLE_SPIKES_CHEST, lambda bundle: small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 2, bundle) and ((can_do_trick(Tricks.LENS_SHADOW_PLATFORM, bundle) and can_do_trick(Tricks.LENS_SHADOW, bundle)) or can_use(Items.LENS_OF_TRUTH, bundle))),
+        (Locations.SHADOW_TEMPLE_FREESTANDING_KEY, lambda bundle: small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 2, bundle) and ((can_do_trick(Tricks.LENS_SHADOW_PLATFORM, bundle) and can_do_trick(Tricks.LENS_SHADOW, bundle)) or can_use(Items.LENS_OF_TRUTH, bundle)) and can_use(Items.HOOKSHOT, bundle) and (can_use(Items.BOMB_BAG, bundle) or has_item(Items.GORONS_BRACELET, bundle) or (can_do_trick(Tricks.SHADOW_FREESTANDING_KEY, bundle) and can_use(Items.BOMBCHUS_5, bundle)))),
         (Locations.SHADOW_TEMPLE_GS_LIKE_LIKE_ROOM, lambda bundle: can_jump_slash_except_hammer(bundle)),
-        (Locations.SHADOW_TEMPLE_GS_FALLING_SPIKES_ROOM, lambda bundle: can_use(Items.HOOKSHOT, bundle) or (can_do_trick("Shadow Temple Umbrella GS", bundle) and can_use(Items.HOVER_BOOTS, bundle) and can_standing_shield(bundle) and can_use(Items.MASTER_SWORD, bundle))),
-        (Locations.SHADOW_TEMPLE_GS_SINGLE_GIANT_POT, lambda bundle: small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 2, bundle) and ((can_do_trick("Lens Shadow Platform", bundle) and can_do_trick("Lens Shadow", bundle)) or can_use(Items.LENS_OF_TRUTH, bundle) and can_use(Items.HOOKSHOT, bundle))),
+        (Locations.SHADOW_TEMPLE_GS_FALLING_SPIKES_ROOM, lambda bundle: can_use(Items.HOOKSHOT, bundle) or (can_do_trick(Tricks.SHADOW_UMBRELLA_GS, bundle) and can_use(Items.HOVER_BOOTS, bundle) and can_standing_shield(bundle) and can_use(Items.MASTER_SWORD, bundle))),
+        (Locations.SHADOW_TEMPLE_GS_SINGLE_GIANT_POT, lambda bundle: small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 2, bundle) and ((can_do_trick(Tricks.LENS_SHADOW_PLATFORM, bundle) and can_do_trick(Tricks.LENS_SHADOW, bundle)) or can_use(Items.LENS_OF_TRUTH, bundle) and can_use(Items.HOOKSHOT, bundle))),
         (Locations.SHADOW_TEMPLE_FALLING_SPIKES_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.SHADOW_TEMPLE_FALLING_SPIKES_POT2, lambda bundle: can_break_pots(bundle)),
-        (Locations.SHADOW_TEMPLE_FALLING_SPIKES_POT3, lambda bundle: can_break_pots(bundle) and (can_do_trick("Shadow Umbrella Hover", bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_do_trick("Shadow Umbrella Clip", bundle) or has_item(Items.GORONS_BRACELET, bundle)),
-        (Locations.SHADOW_TEMPLE_FALLING_SPIKES_POT4, lambda bundle: can_break_pots(bundle) and (can_do_trick("Shadow Umbrella Hover", bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_do_trick("Shadow Umbrella Clip", bundle) or has_item(Items.GORONS_BRACELET, bundle)),
+        (Locations.SHADOW_TEMPLE_FALLING_SPIKES_POT3, lambda bundle: can_break_pots(bundle) and (can_do_trick(Tricks.SHADOW_UMBRELLA_HOVER, bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_do_trick(Tricks.SHADOW_UMBRELLA_CLIP, bundle) or has_item(Items.GORONS_BRACELET, bundle)),
+        (Locations.SHADOW_TEMPLE_FALLING_SPIKES_POT4, lambda bundle: can_break_pots(bundle) and (can_do_trick(Tricks.SHADOW_UMBRELLA_HOVER, bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_do_trick(Tricks.SHADOW_UMBRELLA_CLIP, bundle) or has_item(Items.GORONS_BRACELET, bundle)),
         (Locations.SHADOW_TEMPLE_INVISIBLE_BLADES_LEFT_HEART, lambda bundle: (can_use(Items.SONG_OF_TIME, bundle) and is_adult(bundle)) or can_use(Items.BOOMERANG, bundle)),
         (Locations.SHADOW_TEMPLE_INVISIBLE_BLADES_RIGHT_HEART, lambda bundle:(can_use(Items.SONG_OF_TIME, bundle) and is_adult(bundle)) or can_use(Items.BOOMERANG, bundle)),
         (Locations.SHADOW_TEMPLE_PIT_ROOM_SONG_OF_STORMS_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle))
     ])
     # Connections
     connect_regions(Regions.SHADOW_TEMPLE_HUGE_PIT, world, [
-        (Regions.SHADOW_TEMPLE_WIND_TUNNEL, lambda bundle: ((can_do_trick("Lens Shadow Platform", bundle) and can_do_trick("Lens Shadow", bundle)) or can_use(Items.LENS_OF_TRUTH, bundle)) and can_use(Items.HOOKSHOT, bundle) and small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 3, bundle)),
+        (Regions.SHADOW_TEMPLE_WIND_TUNNEL, lambda bundle: ((can_do_trick(Tricks.LENS_SHADOW_PLATFORM, bundle) and can_do_trick(Tricks.LENS_SHADOW, bundle)) or can_use(Items.LENS_OF_TRUTH, bundle)) and can_use(Items.HOOKSHOT, bundle) and small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 3, bundle)),
     ])
 
     ## Shadow Temple Wind Tunnel
@@ -112,18 +112,18 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.SHADOW_TEMPLE_GS_TRIPLE_GIANT_POT, lambda bundle: is_adult(bundle) and can_attack(bundle)),
         (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT2, lambda bundle: can_break_pots(bundle)),
-        (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT3, lambda bundle: can_break_pots(bundle) and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick("Shadow Statue", bundle) and can_use(Items.BOMBCHUS_5)))),
-        (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT4, lambda bundle: can_break_pots(bundle) and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick("Shadow Statue", bundle) and can_use(Items.BOMBCHUS_5)))),
+        (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT3, lambda bundle: can_break_pots(bundle) and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick(Tricks.SHADOW_STATUE, bundle) and can_use(Items.BOMBCHUS_5)))),
+        (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT4, lambda bundle: can_break_pots(bundle) and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick(Tricks.SHADOW_STATUE, bundle) and can_use(Items.BOMBCHUS_5)))),
         (Locations.SHADOW_TEMPLE_SPIKE_WALLS_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.SHADOW_TEMPLE_FLOORMASTER_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.SHADOW_TEMPLE_FLOORMASTER_POT2, lambda bundle: can_break_pots(bundle)),
         (Locations.SHADOW_TEMPLE_AFTER_SHIP_UPPER_LEFT_HEART, lambda bundle: can_use(Items.DISTANT_SCARECROW, bundle)),
         (Locations.SHADOW_TEMPLE_AFTER_SHIP_UPPER_RIGHT_HEART, lambda bundle: can_use(Items.DISTANT_SCARECROW, bundle)),
-        (Locations.SHADOW_TEMPLE_AFTER_SHIP_LOWER_HEART, lambda bundle: (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick("Shadow Statue", bundle) and can_use(Items.BOMBCHUS_5, bundle))) and can_use(Items.SONG_OF_TIME, bundle) or (can_use(Items.DISTANT_SCARECROW, bundle) and can_use(Items.HOVER_BOOTS, bundle)))
+        (Locations.SHADOW_TEMPLE_AFTER_SHIP_LOWER_HEART, lambda bundle: (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick(Tricks.SHADOW_STATUE, bundle) and can_use(Items.BOMBCHUS_5, bundle))) and can_use(Items.SONG_OF_TIME, bundle) or (can_use(Items.DISTANT_SCARECROW, bundle) and can_use(Items.HOVER_BOOTS, bundle)))
     ])
     # Connections
     connect_regions(Regions.SHADOW_TEMPLE_BEYOND_BOAT, world, [
-        (Regions.SHADOW_TEMPLE_BOSS_ENTRYWAY, lambda bundle: (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick("Shadow Statue", bundle) and can_use(Items.BOMBCHUS_5, bundle))) and small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 5, bundle) and can_use(Items.HOVER_BOOTS, bundle)),
+        (Regions.SHADOW_TEMPLE_BOSS_ENTRYWAY, lambda bundle: (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick(Tricks.SHADOW_STATUE, bundle) and can_use(Items.BOMBCHUS_5, bundle))) and small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 5, bundle) and can_use(Items.HOVER_BOOTS, bundle)),
     ])
 
     ## Shadow Temple Boss Entryway
