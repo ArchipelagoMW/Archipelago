@@ -11,13 +11,11 @@ class EventLocations(str, Enum):
     MIDO = "Mido's Location"
     MIDO_OUTSIDE = "Mido's Location From Outside Deku Tree"
     KOKIRI_FOREST_SOFT_SOIL = "Kokiri Forest Soft Soil"
-    KOKIRI_FOREST_GOSSIP_STONE = "Kokiri Forest Gossip Stone"
 
 
 class LocalEvents(str, Enum):
     MIDO_SWORD_AND_SHIELD = "Showed Mido the Sword and Shield"
     KOKIRI_FOREST_BEAN_PLANTED = "Kokiri Forest Bean Planted"
-    KOKIRI_FOREST_GOSSIP_STONE_FAIRY = "Kokiri Forest Gossip Stone Fairy"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -27,7 +25,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.MIDO, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: is_child(bundle)
                                                                     and has_item(Items.KOKIRI_SWORD, bundle) 
                                                                     and has_item(Items.DEKU_SHIELD, bundle)),
-        (EventLocations.KOKIRI_FOREST_GOSSIP_STONE, LocalEvents.KOKIRI_FOREST_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy_except_suns(bundle)),
+        (EventLocations.KOKIRI_FOREST_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (EventLocations.KOKIRI_FOREST_SOFT_SOIL, LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, lambda bundle: is_child(bundle) and
                                                                                             can_use(Items.MAGIC_BEAN, bundle)),
     ])
