@@ -42,7 +42,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                          can_use(Items.BOTTLE_WITH_BUGS, bundle)),
         (Locations.KF_GS_HOUSE_OF_TWINS, lambda bundle: is_adult(bundle) and
                                                              (hookshot_or_boomerang(bundle)
-                                                              or (can_do_trick("Kokiri Forest Gold Skulltula with Hover Boots", bundle)
+                                                              or (can_do_trick(Tricks.KF_ADULT_GS, bundle)
                                                                   and can_use(Items.HOVER_BOOTS, bundle))) and can_get_nighttime_gs(bundle)),
         (Locations.KF_BEAN_SPROUT_FAIRY1, lambda bundle: is_child(bundle)
                                                               and has_item(LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, bundle)

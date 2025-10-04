@@ -59,8 +59,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_PERIMETER, world, [
         (Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, lambda bundle: is_child(bundle) and can_pass_enemy(bundle, Enemies.BIG_SKULLTULA)),
-        (Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
-        (Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS, lambda bundle: can_do_trick(Tricks.LENS_BOTW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, lambda bundle: can_do_trick(Tricks.LENS_BOTW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
         (Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, lambda bundle: is_child(bundle) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, bundle)),
         (Regions.BOTTOM_OF_THE_WELL_COFFIN_ROOM, lambda bundle: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, bundle) or has_item(Items.BRONZE_SCALE, bundle)),
         (Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM, lambda bundle: has_item(LocalEvents.LOWERED_WATER_INSIDE_BOTTOM_OF_THE_WELL, bundle) and is_child(bundle)),
@@ -78,10 +78,10 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS, world, [
-        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: can_do_trick(Tricks.LENS_BOTW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
         (Regions.BOTTOM_OF_THE_WELL_INNER_ROOMS, lambda bundle: small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, bundle)),
         (Regions.BOTTOM_OF_THE_WELL_BASEMENT, lambda bundle: True),
-        (Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
+        (Regions.BOTTOM_OF_THE_WELL_BASEMENT_PLATFORM, lambda bundle: can_do_trick(Tricks.LENS_BOTW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
     ])
 
     ## Bottom of the Well Southwest Room
@@ -93,20 +93,20 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, world, [
-        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
+        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: can_do_trick(Tricks.LENS_BOTW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
     ])
 
     ## Bottom of the Well Keese-Beamos Room
     # Locations
     add_locations(Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, world, [
-        (Locations.BOTTOM_OF_THE_WELL_FIRE_KEESE_CHEST, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
-        (Locations.BOTTOM_OF_THE_WELL_FIRE_KEESE_POT1, lambda bundle: can_break_pots(bundle) and can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
+        (Locations.BOTTOM_OF_THE_WELL_FIRE_KEESE_CHEST, lambda bundle: can_do_trick(Tricks.LENS_BOTW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_FIRE_KEESE_POT1, lambda bundle: can_break_pots(bundle) and can_do_trick(Tricks.LENS_BOTW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
     ])
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, world, [
-        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: is_child(bundle) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, bundle) and can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
-        (Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
-        (Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
+        (Regions.BOTTOM_OF_THE_WELL_PERIMETER, lambda bundle: is_child(bundle) and small_keys(Items.BOTTOM_OF_THE_WELL_SMALL_KEY, 3, bundle) and can_do_trick(Tricks.LENS_BOTW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_LIKE_LIKE_CAGE, lambda bundle: can_do_trick(Tricks.LENS_BOTW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)),
+        (Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, lambda bundle: can_do_trick(Tricks.LENS_BOTW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
     ])
 
     ## Bottom of the Well Like-Like Cage
@@ -153,7 +153,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM, world, [
         (Locations.BOTTOM_OF_THE_WELL_LENS_OF_TRUTH_CHEST, lambda bundle: can_kill_enemy(bundle, Enemies.DEAD_HAND)),
-        (Locations.BOTTOM_OF_THE_WELL_INVISIBLE_CHEST, lambda bundle: can_do_trick("RT LENS BOTW", bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
+        (Locations.BOTTOM_OF_THE_WELL_INVISIBLE_CHEST, lambda bundle: can_do_trick(Tricks.LENS_BOTW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle))
     ])
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM, world, [
@@ -176,7 +176,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT10, lambda bundle: can_break_pots(bundle)),
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT11, lambda bundle: can_break_pots(bundle)),
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_POT12, lambda bundle: can_break_pots(bundle)),
-        (Locations.BOTTOM_OF_THE_WELL_MQ_BASEMENT_SUNS_SONG_FAIRY, lambda bundle: can_use(Items.SUNS_SONG, bundle)),
+        (Locations.BOTTOM_OF_THE_WELL_BASEMENT_SUNS_SONG_FAIRY, lambda bundle: can_use(Items.SUNS_SONG, bundle)),
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.BOTTOM_OF_THE_WELL_BASEMENT_GRASS3, lambda bundle: can_cut_shrubs(bundle)),
@@ -193,7 +193,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.BOTTOM_OF_THE_WELL_BASEMENT, world, [
         (Regions.BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM, lambda bundle: is_child(bundle) and can_pass_enemy(bundle, Enemies.BIG_SKULLTULA)),
-        (Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, lambda bundle: blast_or_smash(bundle) or can_use(Items.DINS_FIRE, bundle) or (can_use(Items.STICKS, bundle) and can_do_trick("RT BOTW Basement", bundle)))
+        (Regions.BOTTOM_OF_THE_WELL_BASEMENT_USEFUL_BOMB_FLOWERS, lambda bundle: blast_or_smash(bundle) or can_use(Items.DINS_FIRE, bundle) or (can_use(Items.STICKS, bundle) and can_do_trick(Tricks.BOTW_BASEMENT, bundle)))
     ])
 
     ## Bottom of the Well Useful Bomb Flowers

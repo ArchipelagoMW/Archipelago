@@ -27,7 +27,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## ZR Front
     # Locations
     add_locations(Regions.ZR_FRONT, world, [
-        (Locations.ZR_GS_TREE, lambda bundle: is_child(bundle) and
+        (Locations.ZR_GS_TREE, lambda bundle: is_child(bundle) and can_bonk_trees(bundle) and
                                                       can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA)),
         (Locations.ZR_NEAR_TREE_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.ZR_NEAR_TREE_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
@@ -53,8 +53,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.ZORA_RIVER, world, [
         (EventLocations.MAGIC_BEAN_SALESMAN_SHOP, Events.CAN_BUY_BEANS, 
-            lambda bundle: can_afford(10, bundle) and (world.options.shuffle_merchants.value == 0 or world.options.shuffle_merchants.value == 2)), # Bean shop not randomized
-        (EventLocations.ZORAS_RIVER_SHRUB, Events.CAN_BOTTLE_BUGS, lambda bundle: can_cut_shrubs(bundle))
+            lambda bundle: has_item(Items.CHILD_WALLET, bundle) and (world.options.shuffle_merchants.value == 0 or world.options.shuffle_merchants.value == 2)), # Bean shop not randomized
+        (EventLocations.ZORAS_RIVER_SHRUB, Events.CAN_ACCESS_BUGS, lambda bundle: can_cut_shrubs(bundle))
     ])
     # Locations
     add_locations(Regions.ZORA_RIVER, world, [
@@ -81,11 +81,11 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ZR_NEAR_OPEN_GROTTO_FREESTANDING_POH, lambda bundle: is_child(bundle) or
                                                                               can_use(Items.HOVER_BOOTS, bundle)
                                                                               or (is_adult(bundle)
-                                                                                  and can_do_trick("ZR Lower Piece of Heart without Hover Boots", bundle))),
+                                                                                  and can_do_trick(Tricks.ZR_LOWER, bundle))),
         (Locations.ZR_NEAR_DOMAIN_FREESTANDING_POH, lambda bundle: is_child(bundle) or
                                                                               can_use(Items.HOVER_BOOTS, bundle)
                                                                               or (is_adult(bundle)
-                                                                                  and can_do_trick("ZR Upper Piece of Heart without Hover Boots", bundle))),
+                                                                                  and can_do_trick(Tricks.ZR_UPPER, bundle))),
         (Locations.ZR_GS_LADDER, lambda bundle: is_child(bundle)
                                                      and  can_attack(bundle)
                                                      and can_get_nighttime_gs(bundle)),
@@ -137,10 +137,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.ZR_BEHIND_WATERFALL, lambda bundle: world.options.sleeping_waterfall.value == 1 or
                                                           can_use(Items.ZELDAS_LULLABY, bundle) or
                                                           (is_child(bundle) and
-                                                           can_do_trick("ZD with Cuckoo", bundle)) or
+                                                           can_do_trick(Tricks.ZR_CUCCO, bundle)) or
                                                           (is_adult(bundle) and
                                                            can_use(Items.HOVER_BOOTS, bundle) and
-                                                           can_do_trick("ZD with Hover Boots", bundle)))
+                                                           can_do_trick(Tricks.ZR_HOVERS, bundle)))
 
     ])
     # Events

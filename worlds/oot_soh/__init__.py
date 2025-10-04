@@ -5,7 +5,7 @@ from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table, item_name_groups
 from .Locations import location_table
-from .Options import SohOptions
+from .Options import SohOptions, soh_option_groups
 from .Regions import create_regions_and_locations, place_locked_items
 from .Enums import *
 from .ItemPool import create_item_pool
@@ -28,6 +28,8 @@ class SohWebWorld(WebWorld):
     
     tutorials = [setup_en]
     game_info_languages = ["en"]
+    option_groups = soh_option_groups
+
 
 class SohWorld(World):
     """A PC Port of Ocarina of Time"""
@@ -130,6 +132,7 @@ class SohWorld(World):
             "infinite_upgrades": self.options.infinite_upgrades.value,
             "skeleton_key": self.options.skeleton_key.value,
             "starting_age": self.options.starting_age.value,
+            "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
         }
     
     def collect(self, state: CollectionState, item: Item) -> bool:
