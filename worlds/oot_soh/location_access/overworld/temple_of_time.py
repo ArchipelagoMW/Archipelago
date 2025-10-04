@@ -47,7 +47,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Temple of Time
     # Locations
     add_locations(Regions.TEMPLE_OF_TIME, world, [
-        (Locations.MARKET_TOT_LIGHT_ARROW_CUTSCENE, lambda bundle: is_adult(bundle) and can_trigger_lacs(bundle)),
+        (Locations.MARKET_TOT_LIGHT_ARROW_CUTSCENE, lambda bundle: is_adult(bundle) and can_trigger_lacs(bundle))
     ])
 
     # Connections
@@ -65,7 +65,7 @@ def set_region_rules(world: "SohWorld") -> None:
 
         (Locations.MARKET_TOT_MASTER_SWORD, lambda bundle: is_adult(bundle)),
         (Locations.GIFT_FROM_RAURU, lambda bundle: is_adult(bundle)),
-        (Locations.SHEIK_AT_TEMPLE, lambda bundle: has_item(Items.FOREST_MEDALLION, bundle) and is_adult(bundle)),
+        (Locations.SHEIK_AT_TEMPLE, lambda bundle: has_item(Items.FOREST_MEDALLION, bundle) and is_adult(bundle))
     ])
     # Connections
     connect_regions(Regions.BEYOND_DOOR_OF_TIME, world, [
