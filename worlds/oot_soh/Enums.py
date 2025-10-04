@@ -1010,7 +1010,7 @@ class Locations(str, Enum):
     MARKET_BOMBCHU_BOWLING_SECOND_PRIZE = "Market Bombchu Bowling Second Prize"
     MARKET_LOST_DOG = "Market Lost Dog"
     MARKET_TREASURE_CHEST_GAME_REWARD = "Market Treasure Chest Game Reward"
-    MARKET10BIG_POES = "Market 10 Big Poes"
+    MARKET_10_BIG_POES = "Market 10 Big Poes"
     MARKET_CHEST_GAME_FIRST_ROOM_ITEM = "Market Chest Game First Room Item"
     MARKET_CHEST_GAME_SECOND_ROOM_ITEM = "Market Chest Game Second Room Item"
     MARKET_CHEST_GAME_THIRD_ROOM_ITEM = "Market Chest Game Third Room Item"
@@ -3356,6 +3356,7 @@ class Locations(str, Enum):
     ZD_FISH3 = "ZD Fish 3"
     ZD_FISH4 = "ZD Fish 4"
     ZD_FISH5 = "ZD Fish 5"
+    MARKET_TREE = "Market Tree"
 
 class Enemies(str, Enum):
     GOLD_SKULLTULA = "gold_skulltula"
