@@ -2,6 +2,7 @@ from copy import deepcopy
 from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType, ItemClassification
 from .items import item_table, item_groups
 from .locations import location_data, PokemonRBLocation
+from .rock_tunnel import randomize_rock_tunnel
 from . import logic
 from . import poke_data
 
@@ -1503,6 +1504,7 @@ def create_regions(world):
     multiworld = world.multiworld
     player = world.player
     locations_per_region = {}
+    rock_tunnel_parties = []
 
     start_inventory = world.options.start_inventory.value.copy()
     if world.options.randomize_pokedex == "start_with":
@@ -1521,16 +1523,25 @@ def create_regions(world):
 
     stones = ["Moon Stone", "Fire Stone", "Water Stone", "Thunder Stone", "Leaf Stone"]
 
+    if world.options.randomize_rock_tunnel:
+        (rock_tunnel_regions, world.rock_tunnel_seed, world.rock_tunnel_1f_data,
+         world.rock_tunnel_b1f_data) = randomize_rock_tunnel(world.random)
+
     for location in location_data:
-        locations_per_region.setdefault(location.region, [])
-        # The check for list is so that we don't try to check the item table with a list as a key
-        if location.inclusion(world, player) and (isinstance(location.original_item, list) or
-                                                  not (world.options.key_items_only and item_table[location.original_item].classification
-                                                       not in (ItemClassification.progression, ItemClassification.progression_skip_balancing) and not
-                location.event)):
+        if location.inclusion(world, player):
             location_object = PokemonRBLocation(player, location.name, location.address, location.rom_address,
                                                 location.type, location.level, location.level_address)
-            locations_per_region[location.region].append(location_object)
+            location_region = location.region
+            if (location.region.startswith("Rock Tunnel") and "Wild" not in location.region
+                    and "Trainer Parties" not in location.name and world.options.randomize_rock_tunnel):
+                for region_name, randomized_region in rock_tunnel_regions.items():
+                    if location.name in randomized_region["objects"]:
+                        location_region = region_name
+                        break
+                else:
+                    raise Exception(f"Failed to find location {location.name} in randomized Rock Tunnel layout.")
+            locations_per_region.setdefault(location_region, [])
+            locations_per_region[location_region].append(location_object)
 
             if location.type in ("Item", "Trainer Parties"):
                 event = location.event
@@ -1562,10 +1573,6 @@ def create_regions(world):
                             <= world.options.trap_percentage.value and combined_traps != 0):
                         item = world.create_item(world.select_trap())
 
-                if (world.options.key_items_only and (location.original_item != "Exp. All")
-                        and not (location.event or item.advancement)):
-                    continue
-
                 if item.name in start_inventory and start_inventory[item.name] > 0 and \
                         location.original_item in item_groups["Unique"]:
                     start_inventory[location.original_item] -= 1
@@ -1574,28 +1581,30 @@ def create_regions(world):
                 if event:
                     location_object.place_locked_item(item)
                     if location.type == "Trainer Parties":
-                        location_object.party_data = deepcopy(location.party_data)
+                        if "Rock Tunnel" in location.region and world.options.randomize_rock_tunnel:
+                            rock_tunnel_parties += deepcopy(location.party_data)
+                            location_object.party_data = []
+                        else:
+                            location_object.party_data = deepcopy(location.party_data)
                 else:
                     world.item_pool.append(item)
 
     world.random.shuffle(world.item_pool)
-    if not world.options.key_items_only:
-        def acceptable_item(item):
-            return ("Badge" not in item.name and "Trap" not in item.name and item.name != "Pokedex"
-                    and "Coins" not in item.name and "Progressive" not in item.name
-                    and ("Player's House 2F - Player's PC" not in world.options.exclude_locations or item.excludable)
-                    and ("Player's House 2F - Player's PC" in world.options.exclude_locations or
-                         "Player's House 2F - Player's PC" not in world.options.priority_locations or item.advancement))
+    def acceptable_item(item):
+        return ("Badge" not in item.name and "Trap" not in item.name and item.name != "Pokedex"
+                and "Coins" not in item.name and "Progressive" not in item.name
+                and ("Player's House 2F - Player's PC" not in world.options.exclude_locations or item.excludable)
+                and ("Player's House 2F - Player's PC" in world.options.exclude_locations or
+                     "Player's House 2F - Player's PC" not in world.options.priority_locations or item.advancement))
+    for i, item in enumerate(world.item_pool):
+        if acceptable_item(item) and (item.name not in world.options.non_local_items.value):
+            world.pc_item = world.item_pool.pop(i)
+            break
+    else:
         for i, item in enumerate(world.item_pool):
-            if acceptable_item(item) and (item.name not in world.options.non_local_items.value):
+            if acceptable_item(item):
                 world.pc_item = world.item_pool.pop(i)
                 break
-        else:
-            for i, item in enumerate(world.item_pool):
-                if acceptable_item(item):
-                    world.pc_item = world.item_pool.pop(i)
-                    break
-
 
     advancement_items = [item.name for item in world.item_pool if item.advancement] \
                         + [item.name for item in world.multiworld.precollected_items[world.player] if
@@ -1627,6 +1636,14 @@ def create_regions(world):
         for region in locations_per_region:
             assert not locations_per_region[region], f"locations not assigned to region {region}"
 
+    if world.options.randomize_rock_tunnel:
+        for party in rock_tunnel_parties:
+            for region_name, randomized_region in rock_tunnel_regions.items():
+                if party["location_name"] in randomized_region["objects"]:
+                    trainer_parties_object = world.multiworld.get_location(f"{region_name} - Trainer Parties",
+                                                                           world.player)
+                    trainer_parties_object.party_data.append(party)
+
     connect(multiworld, player, "Menu", "Pallet Town", one_way=True)
     connect(multiworld, player, "Menu", "Pokedex", one_way=True)
     connect(multiworld, player, "Menu", "Evolution", one_way=True)
@@ -1652,7 +1669,7 @@ def create_regions(world):
     connect(multiworld, player, "Pewter City", "Pewter City-E")
     connect(multiworld, player, "Pewter City-M", "Pewter City", one_way=True)
     connect(multiworld, player, "Pewter City", "Pewter City-M", lambda state: logic.can_cut(state, world, player), one_way=True)
-    connect(multiworld, player, "Pewter City-E", "Route 3", lambda state: logic.route(state, world, player), one_way=True)
+    connect(multiworld, player, "Pewter City-E", "Route 3", lambda state: logic.route3(state, world, player), one_way=True)
     connect(multiworld, player, "Route 3", "Pewter City-E", one_way=True)
     connect(multiworld, player, "Route 4-W", "Route 3")
     connect(multiworld, player, "Route 24", "Cerulean City-Water", lambda state: logic.can_surf(state, world, player))
@@ -1838,16 +1855,22 @@ def create_regions(world):
     connect(multiworld, player, "Pokemon Mansion 2F-E", "Pokemon Mansion 2F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 1F-SE", "Pokemon Mansion 1F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 1F", "Pokemon Mansion 1F-Wild", one_way=True)
-    connect(multiworld, player, "Rock Tunnel 1F-S 1", "Rock Tunnel 1F-S", lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel 1F-S 2", "Rock Tunnel 1F-S", lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel 1F-NW 1", "Rock Tunnel 1F-NW", lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel 1F-NW 2", "Rock Tunnel 1F-NW", lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel 1F-NE 1", "Rock Tunnel 1F-NE", lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel 1F-NE 2", "Rock Tunnel 1F-NE", lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel B1F-W 1", "Rock Tunnel B1F-W", lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel B1F-W 2", "Rock Tunnel B1F-W", lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel B1F-E 1", "Rock Tunnel B1F-E", lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel B1F-E 2", "Rock Tunnel B1F-E", lambda state: logic.rock_tunnel(state, world, player))
+
+    if world.options.randomize_rock_tunnel:
+        for region_name, randomized_region in rock_tunnel_regions.items():
+            for warp in randomized_region["warps"]:
+                connect(multiworld, player, warp, region_name, lambda state: logic.rock_tunnel(state, world, player))
+    else:
+        connect(multiworld, player, "Rock Tunnel 1F-S 1", "Rock Tunnel 1F-S", lambda state: logic.rock_tunnel(state, world, player))
+        connect(multiworld, player, "Rock Tunnel 1F-S 2", "Rock Tunnel 1F-S", lambda state: logic.rock_tunnel(state, world, player))
+        connect(multiworld, player, "Rock Tunnel 1F-NW 1", "Rock Tunnel 1F-NW", lambda state: logic.rock_tunnel(state, world, player))
+        connect(multiworld, player, "Rock Tunnel 1F-NW 2", "Rock Tunnel 1F-NW", lambda state: logic.rock_tunnel(state, world, player))
+        connect(multiworld, player, "Rock Tunnel 1F-NE 1", "Rock Tunnel 1F-NE", lambda state: logic.rock_tunnel(state, world, player))
+        connect(multiworld, player, "Rock Tunnel 1F-NE 2", "Rock Tunnel 1F-NE", lambda state: logic.rock_tunnel(state, world, player))
+        connect(multiworld, player, "Rock Tunnel B1F-W 1", "Rock Tunnel B1F-W", lambda state: logic.rock_tunnel(state, world, player))
+        connect(multiworld, player, "Rock Tunnel B1F-W 2", "Rock Tunnel B1F-W", lambda state: logic.rock_tunnel(state, world, player))
+        connect(multiworld, player, "Rock Tunnel B1F-E 1", "Rock Tunnel B1F-E", lambda state: logic.rock_tunnel(state, world, player))
+        connect(multiworld, player, "Rock Tunnel B1F-E 2", "Rock Tunnel B1F-E", lambda state: logic.rock_tunnel(state, world, player))
     connect(multiworld, player, "Rock Tunnel 1F-S", "Rock Tunnel 1F-Wild", lambda state: logic.rock_tunnel(state, world, player), one_way=True)
     connect(multiworld, player, "Rock Tunnel 1F-NW", "Rock Tunnel 1F-Wild", lambda state: logic.rock_tunnel(state, world, player), one_way=True)
     connect(multiworld, player, "Rock Tunnel 1F-NE", "Rock Tunnel 1F-Wild", lambda state: logic.rock_tunnel(state, world, player), one_way=True)
@@ -1999,10 +2022,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     shuffle = True
                 elif sorted([entrance_data['to']['map'], region.name]) == ["Celadon City", "Celadon Game Corner"]:
                     shuffle = False
-            if (world.options.randomize_rock_tunnel and "Rock Tunnel" in region.name and "Rock Tunnel" in
-                    entrance_data['to']['map']):
-                shuffle = False
-            elif (f"{region.name} to {entrance_data['to']['map']}" if "name" not in entrance_data else
+            if (f"{region.name} to {entrance_data['to']['map']}" if "name" not in entrance_data else
                     entrance_data["name"]) in silph_co_warps + saffron_gym_warps:
                 if world.options.warp_tile_shuffle:
                     shuffle = True
@@ -2058,8 +2078,6 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             forced_connections.update(simple_mandatory_connections)
         else:
             usable_safe_rooms += pokemarts
-            if world.options.key_items_only:
-                usable_safe_rooms.remove("Viridian Pokemart to Viridian City")
         if world.options.door_shuffle in ("full", "insanity", "decoupled"):
             forced_connections.update(full_mandatory_connections)
             r = world.random.randint(0, 3)
@@ -2120,8 +2138,6 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 forced_connections.add((a, b))
             forced_connections.add((pokemon_center_entrances[-1], pokemon_centers[-1]))
             forced_pokemarts = world.random.sample(pokemart_entrances, 8)
-            if world.options.key_items_only:
-                forced_pokemarts.sort(key=lambda i: i[0] != "Viridian Pokemart to Viridian City")
             for a, b in zip(forced_pokemarts, pokemarts):
                 forced_connections.add((a, b))
         else:
@@ -2132,11 +2148,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             for a, b in zip(world.random.sample(pokemon_center_entrances, 12), pokemon_centers):
                 one_way_forced_connections.add((a, b))
             # Ensure a Pokemart is available at the beginning of the game
-            if world.options.key_items_only:
-                one_way_forced_connections.add((world.random.choice(initial_doors),
-                                                "Viridian Pokemart to Viridian City"))
-
-            elif "Pokemart" not in pallet_safe_room:
+            if "Pokemart" not in pallet_safe_room:
                 one_way_forced_connections.add((world.random.choice(initial_doors), world.random.choice(
                         [mart for mart in pokemarts if mart not in safe_rooms_sample])))
 
@@ -2391,9 +2403,12 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             loop_out_interiors = []
             world.random.shuffle(entrances)
             for entrance in reversed(entrances):
+                if loop_out_interiors and entrance in loop_out_interiors[0]:
+                    continue
                 if not outdoor_map(entrance.parent_region.name):
                     found_exit = search_for_exit(entrance, entrance.parent_region, set())
-                    if found_exit is None:
+                    if found_exit is None or (loop_out_interiors and (found_exit in loop_out_interiors[0]
+                                                                      or entrance in loop_out_interiors[0])):
                         continue
                     loop_out_interiors.append([found_exit, entrance])
                     entrances.remove(entrance)
