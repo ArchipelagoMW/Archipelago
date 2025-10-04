@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
 
 class EventLocations(str, Enum):
-    SHADOW_TEMPLE_BEGINNING_NUT_POT = "Shadow Temple Entryway Nut Pot"
+    SHADOW_TEMPLE_BEGINNING_NUT_POT = "Shadow Temple Beginning Nut Pot"
     SHADOW_TEMPLE_FAIRY_POT = "Shadow Temple Fairy Pot"
     SHADOW_TEMPLE_BOSS_BONGO_BONGO = "Shadow Temple Boss Bongo Bongo"
 
