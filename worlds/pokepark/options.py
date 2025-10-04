@@ -161,6 +161,13 @@ class RemovePokemonUnlockLocations(Toggle):
     default = False
 
 
+class HarderEnemyAI(Toggle):
+    """
+Pokémon always have the harder AI in Power Competition.
+WARNING: Generation currently does not account for the harder enemy AI, which can lead to frustrating gameplay.
+    """
+    default = False
+
 class RandomizeAttractionEntrances(Toggle):
     """
     Randomize Attraction Entrances
@@ -202,6 +209,7 @@ class PokeparkOptions(PerGameCommonOptions):
     num_required_prisma_count_skygarden: NumRequiredPrismaCountSkygarden
     in_zone_road_blocks: InZoneRoadBlocks
     randomize_attraction_entrances: RandomizeAttractionEntrances
+    harder_enemy_ai: HarderEnemyAI
 
     def get_output_dict(self) -> dict[str, Any]:
         """
@@ -215,7 +223,8 @@ class PokeparkOptions(PerGameCommonOptions):
         # `yaml.safe_dump`.
         return self.as_dict(
             "num_required_battle_count",
-            "num_required_prisma_count_skygarden"
+            "num_required_prisma_count_skygarden",
+            "harder_enemy_ai"
         )
 
 
