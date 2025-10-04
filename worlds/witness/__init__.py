@@ -204,7 +204,7 @@ class WitnessWorld(World):
             self.own_itempool.append(dog_puzzle_skip)
             self.items_placed_early.append("Puzzle Skip")
 
-        # There are some really restrictive settings in The Witness.
+        # There are some really restrictive options in The Witness.
         # They are rarely played, but when they are, we add some extra sphere 1 locations.
         # This is done both to prevent generation failures, but also to make the early game less linear.
         # Only sweeps for events because having this behavior be random based on Tutorial Gate would be strange.
@@ -212,7 +212,7 @@ class WitnessWorld(World):
         state = CollectionState(self.multiworld)
         state.sweep_for_advancements(locations=event_locations)
 
-        # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
+        # Adjust the needed size for sphere 1 based on how restrictive the options are in terms of items
 
         early_locations = [
             location for location in self.multiworld.get_reachable_locations(state, self.player)
