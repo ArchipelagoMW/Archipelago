@@ -150,17 +150,18 @@ class CrystalProjectLogic:
         if shop_region == MERCURY_SHRINE_AP_REGION:
             return True
 
-        from .regions import region_levels_dictionary
+        from .regions import display_region_levels_dictionary
+        from .regions import ap_region_to_display_region_dictionary
 
         has_combat = False
         region_checked = 0
-        shop_region_index = list(region_levels_dictionary.keys()).index(shop_region)
+        shop_region_index = list(display_region_levels_dictionary.keys()).index(shop_region)
 
         for region in state.multiworld.worlds[self.player].get_regions():
             region_checked += 1
             #checking if the player has access to money-earning zones that are higher than 6 regions below the shop's region, to make sure they're not expected to grind Spawning Meadows enemies to buy something in Neptune Shrine
             if region_checked > (shop_region_index - 6) and region.can_reach(state) and region.name != MENU_AP_REGION and region.name != MODDED_ZONE_AP_REGION:
-                enemy_level = region_levels_dictionary[region.name][0]
+                enemy_level = display_region_levels_dictionary[ap_region_to_display_region_dictionary[region.name]][0]
                 if enemy_level > 0 or region.name == CAPITAL_SEQUOIA_AP_REGION or region.name == QUINTAR_RESERVE_AP_REGION:
                     has_combat = True
                     break

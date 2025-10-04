@@ -7,85 +7,159 @@ from .rules import CrystalProjectLogic
 from .constants.keys import *
 from .constants.key_items import *
 from .constants.ap_regions import *
+from .constants.display_regions import *
 from .constants.teleport_stones import *
 from .constants.region_passes import *
 
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
 
-region_levels_dictionary: Dict[str, Tuple[int, int]] = {
+ap_region_to_display_region_dictionary: Dict[str, str] = {}
+
+display_region_subregions_dictionary: Dict[str, List[str]] = {
     #Beginner
-    MENU_AP_REGION: (0, 0),
-    SPAWNING_MEADOWS_AP_REGION: (3, 3),
-    DELENDE_AP_REGION: (5, 10),
-    SOILED_DEN_AP_REGION: (7, 7),
-    THE_PALE_GROTTO_AP_REGION: (7, 10),
-    SEASIDE_CLIFFS_AP_REGION: (10, 15),
-    DRAFT_SHAFT_CONDUIT_AP_REGION: (12, 12),
-    MERCURY_SHRINE_AP_REGION: (0, 0),
-    YAMAGAWA_MA_AP_REGION: (15, 15),
-    PROVING_MEADOWS_AP_REGION: (0, 0),
-    SKUMPARADISE_AP_REGION: (15, 17),
-    # #Advanced
-    CAPITAL_SEQUOIA_AP_REGION: (0, 0),
-    JOJO_SEWERS_AP_REGION: (20, 22),
-    BOOMER_SOCIETY_AP_REGION: (0, 0),
-    ROLLING_QUINTAR_FIELDS_AP_REGION: (18, 21),
-    QUINTAR_NEST_AP_REGION: (18, 22),
-    QUINTAR_SANCTUM_AP_REGION: (21, 21),
-    CAPITAL_JAIL_AP_REGION: (24, 27),
-    CAPITAL_PIPELINE_AP_REGION: (50, 50),
-    COBBLESTONE_CRAG_AP_REGION: (0, 0),
-    OKIMOTO_NS_AP_REGION: (27, 31),
-    GREENSHIRE_REPRISE_AP_REGION: (33, 33),
-    SALMON_PASS_AP_REGION: (0, 0),
-    SALMON_RIVER_AP_REGION: (26, 29),
-    SHOUDU_WATERFRONT_AP_REGION: (0, 0),
-    POKO_POKO_DESERT_AP_REGION: (30, 32),
-    SARA_SARA_BAZAAR_AP_REGION: (0, 0),
-    SARA_SARA_BEACH_EAST_AP_REGION: (30, 30),
-    SARA_SARA_BEACH_WEST_AP_REGION: (38, 40),
-    ANCIENT_RESERVOIR_AP_REGION: (33, 35),
-    IBEK_CAVE_AP_REGION: (35, 35),
-    SALMON_BAY_AP_REGION: (0, 0),
-    # #Expert
-    THE_OPEN_SEA_AP_REGION: (54, 56),
-    SHOUDU_PROVINCE_AP_REGION: (36, 37),
-    THE_UNDERCITY_AP_REGION: (37, 39),
-    GANYMEDE_SHRINE_AP_REGION: (0, 0),
-    BEAURIOR_VOLCANO_AP_REGION: (37, 37),
-    BEAURIOR_ROCK_AP_REGION: (38, 40),
-    LAKE_DELENDE_AP_REGION: (40, 40),
-    QUINTAR_RESERVE_AP_REGION: (0, 0),
-    DIONE_SHRINE_AP_REGION: (0, 0),
-    QUINTAR_MAUSOLEUM_AP_REGION: (54, 56),
-    EASTERN_CHASM_AP_REGION: (0, 0),
-    TALL_TALL_HEIGHTS_AP_REGION: (41, 45),
-    NORTHERN_CAVE_AP_REGION: (43, 44),
-    LANDS_END_AP_REGION: (44, 47),
-    SLIP_GLIDE_RIDE_AP_REGION: (46, 48),
-    SEQUOIA_ATHENAEUM_AP_REGION: (0, 0),
-    NORTHERN_STRETCH_AP_REGION: (0, 0),
-    CASTLE_RAMPARTS_AP_REGION: (50, 50),
-    THE_CHALICE_OF_TAR_AP_REGION: (60, 60),
-    FLYERS_CRAG_AP_REGION: (0, 0),
-    JIDAMBA_TANGLE_AP_REGION: (50, 54),
-    JIDAMBA_EACLANEYA_AP_REGION: (54, 57),
-    THE_DEEP_SEA_AP_REGION: (58, 64),
-    NEPTUNE_SHRINE_AP_REGION: (0, 0),
-    JADE_CAVERN_AP_REGION: (57, 57),
-    CONTINENTAL_TRAM_AP_REGION: (0, 0),
-    # #End Game
-    ANCIENT_LABYRINTH_AP_REGION: (62, 66),
-    THE_SEQUOIA_AP_REGION: (60, 63),
-    THE_DEPTHS_AP_REGION: (63, 65),
-    CASTLE_SEQUOIA_AP_REGION: (56, 59),
-    THE_OLD_WORLD_AP_REGION: (0, 0),
-    THE_NEW_WORLD_AP_REGION: (60, 60),
-    MODDED_ZONE_AP_REGION: (30, 30),
+    MENU_DISPLAY_NAME: MENU_DISPLAY_SUBREGIONS,
+    SPAWNING_MEADOWS_DISPLAY_NAME: SPAWNING_MEADOWS_DISPLAY_SUBREGIONS,
+    DELENDE_DISPLAY_NAME: DELENDE_DISPLAY_SUBREGIONS,
+    SOILED_DEN_DISPLAY_NAME: SOILED_DEN_DISPLAY_SUBREGIONS,
+    THE_PALE_GROTTO_DISPLAY_NAME: THE_PALE_GROTTO_DISPLAY_SUBREGIONS,
+    SEASIDE_CLIFFS_DISPLAY_NAME: SEASIDE_CLIFFS_DISPLAY_SUBREGIONS,
+    DRAFT_SHAFT_CONDUIT_DISPLAY_NAME: DRAFT_SHAFT_CONDUIT_DISPLAY_SUBREGIONS,
+    MERCURY_SHRINE_DISPLAY_NAME: MERCURY_SHRINE_DISPLAY_SUBREGIONS,
+    YAMAGAWA_MA_DISPLAY_NAME: YAMAGAWA_MA_DISPLAY_SUBREGIONS,
+    PROVING_MEADOWS_DISPLAY_NAME: PROVING_MEADOWS_DISPLAY_SUBREGIONS,
+    SKUMPARADISE_DISPLAY_NAME: SKUMPARADISE_DISPLAY_SUBREGIONS,
+    #Advanced
+    CAPITAL_SEQUOIA_DISPLAY_NAME: CAPITAL_SEQUOIA_DISPLAY_SUBREGIONS,
+    JOJO_SEWERS_DISPLAY_NAME: JOJO_SEWERS_DISPLAY_SUBREGIONS,
+    BOOMER_SOCIETY_DISPLAY_NAME: BOOMER_SOCIETY_DISPLAY_SUBREGIONS,
+    ROLLING_QUINTAR_FIELDS_DISPLAY_NAME: ROLLING_QUINTAR_FIELDS_DISPLAY_SUBREGIONS,
+    QUINTAR_NEST_DISPLAY_NAME: QUINTAR_NEST_DISPLAY_SUBREGIONS,
+    QUINTAR_SANCTUM_DISPLAY_NAME: QUINTAR_SANCTUM_DISPLAY_SUBREGIONS,
+    CAPITAL_JAIL_DISPLAY_NAME: CAPITAL_JAIL_DISPLAY_SUBREGIONS,
+    CAPITAL_PIPELINE_DISPLAY_NAME: CAPITAL_PIPELINE_DISPLAY_SUBREGIONS,
+    COBBLESTONE_CRAG_DISPLAY_NAME: COBBLESTONE_CRAG_DISPLAY_SUBREGIONS,
+    OKIMOTO_NS_DISPLAY_NAME: OKIMOTO_NS_DISPLAY_SUBREGIONS,
+    GREENSHIRE_REPRISE_DISPLAY_NAME: GREENSHIRE_REPRISE_DISPLAY_SUBREGIONS,
+    SALMON_PASS_DISPLAY_NAME: SALMON_PASS_DISPLAY_SUBREGIONS,
+    SALMON_RIVER_DISPLAY_NAME: SALMON_RIVER_DISPLAY_SUBREGIONS,
+    SHOUDU_WATERFRONT_DISPLAY_NAME: SHOUDU_WATERFRONT_DISPLAY_SUBREGIONS,
+    POKO_POKO_DESERT_DISPLAY_NAME: POKO_POKO_DESERT_DISPLAY_SUBREGIONS,
+    SARA_SARA_BAZAAR_DISPLAY_NAME: SARA_SARA_BAZAAR_DISPLAY_SUBREGIONS,
+    SARA_SARA_BEACH_EAST_DISPLAY_NAME: SARA_SARA_BEACH_EAST_DISPLAY_SUBREGIONS,
+    SARA_SARA_BEACH_WEST_DISPLAY_NAME: SARA_SARA_BEACH_WEST_DISPLAY_SUBREGIONS,
+    ANCIENT_RESERVOIR_DISPLAY_NAME: ANCIENT_RESERVOIR_DISPLAY_SUBREGIONS,
+    SALMON_BAY_DISPLAY_NAME: SALMON_BAY_DISPLAY_SUBREGIONS,
+    #Expert
+    THE_OPEN_SEA_DISPLAY_NAME: THE_OPEN_SEA_DISPLAY_SUBREGIONS,
+    SHOUDU_PROVINCE_DISPLAY_NAME: SHOUDU_PROVINCE_DISPLAY_SUBREGIONS,
+    THE_UNDERCITY_DISPLAY_NAME: THE_UNDERCITY_DISPLAY_SUBREGIONS,
+    GANYMEDE_SHRINE_DISPLAY_NAME: GANYMEDE_SHRINE_DISPLAY_SUBREGIONS,
+    BEAURIOR_VOLCANO_DISPLAY_NAME: BEAURIOR_VOLCANO_DISPLAY_SUBREGIONS,
+    BEAURIOR_ROCK_DISPLAY_NAME: BEAURIOR_ROCK_DISPLAY_SUBREGIONS,
+    LAKE_DELENDE_DISPLAY_NAME: LAKE_DELENDE_DISPLAY_SUBREGIONS,
+    QUINTAR_RESERVE_DISPLAY_NAME: QUINTAR_RESERVE_DISPLAY_SUBREGIONS,
+    DIONE_SHRINE_DISPLAY_NAME: DIONE_SHRINE_DISPLAY_SUBREGIONS,
+    QUINTAR_MAUSOLEUM_DISPLAY_NAME: QUINTAR_MAUSOLEUM_DISPLAY_SUBREGIONS,
+    EASTERN_CHASM_DISPLAY_NAME: EASTERN_CHASM_DISPLAY_SUBREGIONS,
+    TALL_TALL_HEIGHTS_DISPLAY_NAME: TALL_TALL_HEIGHTS_DISPLAY_SUBREGIONS,
+    NORTHERN_CAVE_DISPLAY_NAME: NORTHERN_CAVE_DISPLAY_SUBREGIONS,
+    LANDS_END_DISPLAY_NAME: LANDS_END_DISPLAY_SUBREGIONS,
+    SLIP_GLIDE_RIDE_DISPLAY_NAME: SLIP_GLIDE_RIDE_DISPLAY_SUBREGIONS,
+    SEQUOIA_ATHENAEUM_DISPLAY_NAME: SEQUOIA_ATHENAEUM_DISPLAY_SUBREGIONS,
+    NORTHERN_STRETCH_DISPLAY_NAME: NORTHERN_STRETCH_DISPLAY_SUBREGIONS,
+    CASTLE_RAMPARTS_DISPLAY_NAME: CASTLE_RAMPARTS_DISPLAY_SUBREGIONS,
+    THE_CHALICE_OF_TAR_DISPLAY_NAME: THE_CHALICE_OF_TAR_DISPLAY_SUBREGIONS,
+    FLYERS_CRAG_DISPLAY_NAME: FLYERS_CRAG_DISPLAY_SUBREGIONS,
+    JIDAMBA_TANGLE_DISPLAY_NAME: JIDAMBA_TANGLE_DISPLAY_SUBREGIONS,
+    JIDAMBA_EACLANEYA_DISPLAY_NAME: JIDAMBA_EACLANEYA_DISPLAY_SUBREGIONS,
+    THE_DEEP_SEA_DISPLAY_NAME: THE_DEEP_SEA_DISPLAY_SUBREGIONS,
+    NEPTUNE_SHRINE_DISPLAY_NAME: NEPTUNE_SHRINE_DISPLAY_SUBREGIONS,
+    JADE_CAVERN_DISPLAY_NAME: JADE_CAVERN_DISPLAY_SUBREGIONS,
+    CONTINENTAL_TRAM_DISPLAY_NAME: CONTINENTAL_TRAM_DISPLAY_SUBREGIONS,
+    #End Game
+    ANCIENT_LABYRINTH_DISPLAY_NAME: ANCIENT_LABYRINTH_DISPLAY_SUBREGIONS,
+    THE_SEQUOIA_DISPLAY_NAME: THE_SEQUOIA_DISPLAY_SUBREGIONS,
+    THE_DEPTHS_DISPLAY_NAME: THE_DEPTHS_DISPLAY_SUBREGIONS,
+    CASTLE_SEQUOIA_DISPLAY_NAME: CASTLE_SEQUOIA_DISPLAY_SUBREGIONS,
+    THE_OLD_WORLD_DISPLAY_NAME: THE_OLD_WORLD_DISPLAY_SUBREGIONS,
+    THE_NEW_WORLD_DISPLAY_NAME: THE_NEW_WORLD_DISPLAY_SUBREGIONS,
+    MODDED_ZONE_DISPLAY_NAME: MODDED_ZONE_DISPLAY_SUBREGIONS,
 }
 
-rules_on_regions: Dict[str, Callable[[CollectionState], bool]] = {}
+display_region_levels_dictionary: Dict[str, Tuple[int, int]] = {
+    #Beginner
+    MENU_DISPLAY_NAME: (0, 0),
+    SPAWNING_MEADOWS_DISPLAY_NAME: (3, 3),
+    DELENDE_DISPLAY_NAME: (5, 10),
+    SOILED_DEN_DISPLAY_NAME: (7, 7),
+    THE_PALE_GROTTO_DISPLAY_NAME: (7, 10),
+    SEASIDE_CLIFFS_DISPLAY_NAME: (10, 15),
+    DRAFT_SHAFT_CONDUIT_DISPLAY_NAME: (12, 12),
+    MERCURY_SHRINE_DISPLAY_NAME: (0, 0),
+    YAMAGAWA_MA_DISPLAY_NAME: (15, 15),
+    PROVING_MEADOWS_DISPLAY_NAME: (0, 0),
+    SKUMPARADISE_DISPLAY_NAME: (15, 17),
+    #Advanced
+    CAPITAL_SEQUOIA_DISPLAY_NAME: (0, 0),
+    JOJO_SEWERS_DISPLAY_NAME: (20, 22),
+    BOOMER_SOCIETY_DISPLAY_NAME: (0, 0),
+    ROLLING_QUINTAR_FIELDS_DISPLAY_NAME: (18, 21),
+    QUINTAR_NEST_DISPLAY_NAME: (18, 22),
+    QUINTAR_SANCTUM_DISPLAY_NAME: (21, 21),
+    CAPITAL_JAIL_DISPLAY_NAME: (24, 27),
+    CAPITAL_PIPELINE_DISPLAY_NAME: (50, 50),
+    COBBLESTONE_CRAG_DISPLAY_NAME: (0, 0),
+    OKIMOTO_NS_DISPLAY_NAME: (27, 31),
+    GREENSHIRE_REPRISE_DISPLAY_NAME: (33, 33),
+    SALMON_PASS_DISPLAY_NAME: (0, 0),
+    SALMON_RIVER_DISPLAY_NAME: (26, 29),
+    SHOUDU_WATERFRONT_DISPLAY_NAME: (0, 0),
+    POKO_POKO_DESERT_DISPLAY_NAME: (30, 32),
+    SARA_SARA_BAZAAR_DISPLAY_NAME: (0, 0),
+    SARA_SARA_BEACH_EAST_DISPLAY_NAME: (30, 30),
+    SARA_SARA_BEACH_WEST_DISPLAY_NAME: (38, 40),
+    ANCIENT_RESERVOIR_DISPLAY_NAME: (33, 35),
+    #IBEK_CAVE_AP_REGION: (35, 35),
+    SALMON_BAY_DISPLAY_NAME: (0, 0),
+    #Expert
+    THE_OPEN_SEA_DISPLAY_NAME: (54, 56),
+    SHOUDU_PROVINCE_DISPLAY_NAME: (36, 37),
+    THE_UNDERCITY_DISPLAY_NAME: (37, 39),
+    GANYMEDE_SHRINE_DISPLAY_NAME: (0, 0),
+    BEAURIOR_VOLCANO_DISPLAY_NAME: (37, 37),
+    BEAURIOR_ROCK_DISPLAY_NAME: (38, 40),
+    LAKE_DELENDE_DISPLAY_NAME: (40, 40),
+    QUINTAR_RESERVE_DISPLAY_NAME: (0, 0),
+    DIONE_SHRINE_DISPLAY_NAME: (0, 0),
+    QUINTAR_MAUSOLEUM_DISPLAY_NAME: (54, 56),
+    EASTERN_CHASM_DISPLAY_NAME: (0, 0),
+    TALL_TALL_HEIGHTS_DISPLAY_NAME: (41, 45),
+    NORTHERN_CAVE_DISPLAY_NAME: (43, 44),
+    LANDS_END_DISPLAY_NAME: (44, 47),
+    SLIP_GLIDE_RIDE_DISPLAY_NAME: (46, 48),
+    SEQUOIA_ATHENAEUM_DISPLAY_NAME: (0, 0),
+    NORTHERN_STRETCH_DISPLAY_NAME: (0, 0),
+    CASTLE_RAMPARTS_DISPLAY_NAME: (50, 50),
+    THE_CHALICE_OF_TAR_DISPLAY_NAME: (60, 60),
+    FLYERS_CRAG_DISPLAY_NAME: (0, 0),
+    JIDAMBA_TANGLE_DISPLAY_NAME: (50, 54),
+    JIDAMBA_EACLANEYA_DISPLAY_NAME: (54, 57),
+    THE_DEEP_SEA_DISPLAY_NAME: (58, 64),
+    NEPTUNE_SHRINE_DISPLAY_NAME: (0, 0),
+    JADE_CAVERN_DISPLAY_NAME: (57, 57),
+    CONTINENTAL_TRAM_DISPLAY_NAME: (0, 0),
+    #End Game
+    ANCIENT_LABYRINTH_DISPLAY_NAME: (62, 66),
+    THE_SEQUOIA_DISPLAY_NAME: (60, 63),
+    THE_DEPTHS_DISPLAY_NAME: (63, 65),
+    CASTLE_SEQUOIA_DISPLAY_NAME: (56, 59),
+    THE_OLD_WORLD_DISPLAY_NAME: (0, 0),
+    THE_NEW_WORLD_DISPLAY_NAME: (60, 60),
+    MODDED_ZONE_DISPLAY_NAME: (30, 30),
+}
+
+rules_on_display_regions: Dict[str, Callable[[CollectionState], bool]] = {}
 
 class CrystalProjectLocation(Location):
     game: str = "CrystalProject"
@@ -97,34 +171,39 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld = world.multiworld
     player = world.player
     logic = CrystalProjectLogic(player, options)
-    rules_on_regions[MODDED_ZONE_AP_REGION] = lambda state: True
 
-    for region in region_levels_dictionary:
-        if world.options.regionsanity.value == world.options.regionsanity.option_true and region != MODDED_ZONE_AP_REGION:
-            rules_on_regions[region] = lambda state, lambda_region = region: (logic.is_area_in_level_range(state, region_levels_dictionary[lambda_region][0])
-                                                                              and state.has(display_region_name_to_pass_dict[lambda_region], player))
+    for display_region in display_region_subregions_dictionary:
+        for ap_region in display_region_subregions_dictionary[display_region]:
+            ap_region_to_display_region_dictionary[ap_region] = display_region
 
-            rules_on_regions[MODDED_ZONE_AP_REGION] = combine_callables(rules_on_regions[MODDED_ZONE_AP_REGION], rules_on_regions[region])
+    rules_on_display_regions[MODDED_ZONE_AP_REGION] = lambda state: True
+
+    for display_region in display_region_levels_dictionary:
+        if world.options.regionsanity.value == world.options.regionsanity.option_true and display_region != MODDED_ZONE_AP_REGION:
+            rules_on_display_regions[display_region] = lambda state, lambda_region = display_region: (logic.is_area_in_level_range(state, display_region_levels_dictionary[lambda_region][0])
+                                                                                                      and state.has(display_region_name_to_pass_dict[lambda_region], player))
+
+            rules_on_display_regions[MODDED_ZONE_AP_REGION] = combine_callables(rules_on_display_regions[MODDED_ZONE_AP_REGION], rules_on_display_regions[display_region])
         else:
-            rules_on_regions[region] = lambda state, lambda_region = region: (logic.is_area_in_level_range(state, region_levels_dictionary[lambda_region][0]))
+            rules_on_display_regions[display_region] = lambda state, lambda_region = display_region: (logic.is_area_in_level_range(state, display_region_levels_dictionary[lambda_region][0]))
 
     locations_per_region = get_locations_per_ap_region(locations)
 
     excluded = False
 
     beginner_regions = [
-        create_ap_region(world, player, locations_per_region, MENU_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SPAWNING_MEADOWS_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, DELENDE_AP_REGION, excluded),
+        create_display_region(world, player, locations_per_region, MENU_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SPAWNING_MEADOWS_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, DELENDE_DISPLAY_NAME, excluded),
         # bumped up mercury shrine because region order influences shop price NOTE TO DRAGONS, DO NOT MOVE WITHOUT REASON!!
-        create_ap_region(world, player, locations_per_region, MERCURY_SHRINE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SOILED_DEN_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, THE_PALE_GROTTO_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SEASIDE_CLIFFS_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, DRAFT_SHAFT_CONDUIT_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, YAMAGAWA_MA_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, PROVING_MEADOWS_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SKUMPARADISE_AP_REGION, excluded),
+        create_display_region(world, player, locations_per_region, MERCURY_SHRINE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SOILED_DEN_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, THE_PALE_GROTTO_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SEASIDE_CLIFFS_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, YAMAGAWA_MA_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, PROVING_MEADOWS_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SKUMPARADISE_DISPLAY_NAME, excluded),
     ]
 
     if (options.includedRegions == options.includedRegions.option_advanced or
@@ -135,27 +214,27 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         excluded = True
 
     advanced_regions = [
-        create_ap_region(world, player, locations_per_region, CAPITAL_SEQUOIA_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, JOJO_SEWERS_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, BOOMER_SOCIETY_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, ROLLING_QUINTAR_FIELDS_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, QUINTAR_NEST_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, QUINTAR_SANCTUM_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, CAPITAL_JAIL_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, CAPITAL_PIPELINE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, COBBLESTONE_CRAG_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, OKIMOTO_NS_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, GREENSHIRE_REPRISE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SALMON_PASS_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SALMON_RIVER_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SHOUDU_WATERFRONT_AP_REGION, excluded), #moved from Expert to Advanced
-        create_ap_region(world, player, locations_per_region, POKO_POKO_DESERT_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SARA_SARA_BAZAAR_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SARA_SARA_BEACH_EAST_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SARA_SARA_BEACH_WEST_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, ANCIENT_RESERVOIR_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, IBEK_CAVE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SALMON_BAY_AP_REGION, excluded),
+        create_display_region(world, player, locations_per_region, CAPITAL_SEQUOIA_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, JOJO_SEWERS_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, BOOMER_SOCIETY_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, QUINTAR_NEST_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, QUINTAR_SANCTUM_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, CAPITAL_JAIL_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, CAPITAL_PIPELINE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, COBBLESTONE_CRAG_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, OKIMOTO_NS_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, GREENSHIRE_REPRISE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SALMON_PASS_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SALMON_RIVER_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SHOUDU_WATERFRONT_DISPLAY_NAME, excluded), #moved from Expert to Advanced
+        create_display_region(world, player, locations_per_region, POKO_POKO_DESERT_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SARA_SARA_BAZAAR_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SARA_SARA_BEACH_EAST_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SARA_SARA_BEACH_WEST_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, ANCIENT_RESERVOIR_DISPLAY_NAME, excluded),
+        #create_display_region(world, player, locations_per_region, IBEK_CAVE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SALMON_BAY_DISPLAY_NAME, excluded),
     ]
 
     if (options.includedRegions == options.includedRegions.option_expert or
@@ -165,32 +244,32 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         excluded = True
 
     expert_regions = [
-        create_ap_region(world, player, locations_per_region, THE_OPEN_SEA_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SHOUDU_PROVINCE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, THE_UNDERCITY_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, GANYMEDE_SHRINE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, BEAURIOR_VOLCANO_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, BEAURIOR_ROCK_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, LAKE_DELENDE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, QUINTAR_RESERVE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, DIONE_SHRINE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, QUINTAR_MAUSOLEUM_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, EASTERN_CHASM_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, TALL_TALL_HEIGHTS_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, NORTHERN_CAVE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, LANDS_END_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SLIP_GLIDE_RIDE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, SEQUOIA_ATHENAEUM_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, NORTHERN_STRETCH_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, CASTLE_RAMPARTS_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, THE_CHALICE_OF_TAR_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, FLYERS_CRAG_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, JIDAMBA_TANGLE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, JIDAMBA_EACLANEYA_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, THE_DEEP_SEA_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, NEPTUNE_SHRINE_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, JADE_CAVERN_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, CONTINENTAL_TRAM_AP_REGION, excluded),
+        create_display_region(world, player, locations_per_region, THE_OPEN_SEA_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SHOUDU_PROVINCE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, THE_UNDERCITY_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, GANYMEDE_SHRINE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, BEAURIOR_VOLCANO_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, BEAURIOR_ROCK_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, LAKE_DELENDE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, QUINTAR_RESERVE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, DIONE_SHRINE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, QUINTAR_MAUSOLEUM_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, EASTERN_CHASM_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, TALL_TALL_HEIGHTS_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, NORTHERN_CAVE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, LANDS_END_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SLIP_GLIDE_RIDE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, SEQUOIA_ATHENAEUM_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, NORTHERN_STRETCH_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, CASTLE_RAMPARTS_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, THE_CHALICE_OF_TAR_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, FLYERS_CRAG_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, JIDAMBA_TANGLE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, JIDAMBA_EACLANEYA_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, THE_DEEP_SEA_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, NEPTUNE_SHRINE_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, JADE_CAVERN_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, CONTINENTAL_TRAM_DISPLAY_NAME, excluded),
     ]
 
     if options.includedRegions == options.includedRegions.option_all:
@@ -199,12 +278,12 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         excluded = True
      
     end_game_regions = [
-        create_ap_region(world, player, locations_per_region, ANCIENT_LABYRINTH_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, THE_SEQUOIA_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, THE_DEPTHS_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, CASTLE_SEQUOIA_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, THE_OLD_WORLD_AP_REGION, excluded),
-        create_ap_region(world, player, locations_per_region, THE_NEW_WORLD_AP_REGION, excluded),
+        create_display_region(world, player, locations_per_region, ANCIENT_LABYRINTH_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, THE_SEQUOIA_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, THE_DEPTHS_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, CASTLE_SEQUOIA_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, THE_OLD_WORLD_DISPLAY_NAME, excluded),
+        create_display_region(world, player, locations_per_region, THE_NEW_WORLD_DISPLAY_NAME, excluded),
     ]
 
     if options.useMods:
@@ -213,14 +292,19 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         excluded = True
 
     modded_regions = [
-        create_ap_region(world, player, locations_per_region, MODDED_ZONE_AP_REGION, excluded),
+        create_display_region(world, player, locations_per_region, MODDED_ZONE_DISPLAY_NAME, excluded),
     ]
 
-    multiworld.regions += beginner_regions
-    multiworld.regions += advanced_regions
-    multiworld.regions += expert_regions
-    multiworld.regions += end_game_regions
-    multiworld.regions += modded_regions
+    for beginner_display_region_subregions in beginner_regions:
+        multiworld.regions += beginner_display_region_subregions
+    for advanced_display_region_subregions in advanced_regions:
+        multiworld.regions += advanced_display_region_subregions
+    for expert_display_region_subregions in expert_regions:
+        multiworld.regions += expert_display_region_subregions
+    for end_game_display_region_subregions in end_game_regions:
+        multiworld.regions += end_game_display_region_subregions
+    for modded_display_region_subregions in modded_regions:
+        multiworld.regions += modded_display_region_subregions
 
     connect_menu_region(world, options)
 
@@ -265,7 +349,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     # why rental and horizontal both listed?
                     {COBBLESTONE_CRAG_AP_REGION: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) or logic.has_horizontal_movement(state),
                      GREENSHIRE_REPRISE_AP_REGION: lambda state: logic.has_jobs(state, 5),
-                    #note for eme: technically possible to get into the first dungeon with quintar instead of glide, but it's hard lol; come from Quintar Sanctum save point and go west up mountain and fall down through grate (that part's easy) then the quintar jump to the lamp is hard
+                     #note for eme: technically possible to get into the first dungeon with quintar instead of glide, but it's hard lol; come from Quintar Sanctum save point and go west up mountain and fall down through grate (that part's easy) then the quintar jump to the lamp is hard
                      CASTLE_SEQUOIA_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)})
     fancy_add_exits(world, JOJO_SEWERS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, BOOMER_SOCIETY_AP_REGION, THE_PALE_GROTTO_AP_REGION, CAPITAL_JAIL_AP_REGION, QUINTAR_NEST_AP_REGION],
                     {BOOMER_SOCIETY_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_false or logic.has_swimming(state),
@@ -436,7 +520,10 @@ def get_locations_per_ap_region(locations: List[LocationData]) -> Dict[str, List
 
     return per_region
 
-def create_ap_region(world: "CrystalProjectWorld", player: int, locations_per_region: Dict[str, List[LocationData]], name: str, excluded: bool) -> Region:
+def create_ap_region(world: "CrystalProjectWorld", player: int, locations_per_region: Dict[str, List[LocationData]], name: str, excluded: bool) -> Tuple[Region, Location | None]:
+    """
+    Creates an AP Region and returns it, as well as the Location used for region completion
+    """
     logic = CrystalProjectLogic(player, world.options)
     region = Region(name, player, world.multiworld)
 
@@ -453,19 +540,38 @@ def create_ap_region(world: "CrystalProjectWorld", player: int, locations_per_re
                 if location_data.regionsanity:
                     region_completion = location
 
-    # This is for the region completion location
-    if world.options.regionsanity.value == world.options.regionsanity.option_true and region_completion is not None:
-        for location in region.locations:
-            if location != region_completion:
-                region_completion.access_rule = combine_callables(region_completion.access_rule, location.access_rule)
-
     # This is for making sure players can earn money for required shop checks in shopsanity + regionsanity
     if world.options.regionsanity.value == world.options.regionsanity.option_true and world.options.shopsanity.value != world.options.shopsanity.option_disabled:
         for location in region.locations:
             if "Shop -" in location.name:
                 location.access_rule = combine_callables(location.access_rule, lambda state: logic.can_earn_money(state, region.name))
 
-    return region
+    return region, region_completion
+
+def create_display_region(world: "CrystalProjectWorld", player: int, locations_per_region: Dict[str, List[LocationData]], display_region_name: str, excluded: bool) -> List[Region]:
+    ap_regions: List[Region] = []
+    ap_region_names = display_region_subregions_dictionary[display_region_name]
+
+    region_completion_location = None
+    for ap_region_name in ap_region_names:
+        ap_region, region_completion_location_temp = create_ap_region(world, player, locations_per_region, ap_region_name, excluded)
+        ap_regions.append(ap_region)
+        if region_completion_location_temp is not None:
+            if region_completion_location is not None:
+                raise Exception(f"Two region completion locations exist inside {display_region_name}")
+            region_completion_location = region_completion_location_temp
+
+    #need to add the rule for every other location in the ap region, as well as every location in other ap regions, as well as a can_reach rule on other ap regions in this display region
+    # This is for the region completion location
+    if world.options.regionsanity.value == world.options.regionsanity.option_true and region_completion_location is not None:
+        for ap_region_name in display_region_subregions_dictionary[display_region_name]:
+            ap_region = Region(ap_region_name, player, world.multiworld)
+            region_completion_location.access_rule = combine_callables(region_completion_location.access_rule, lambda state, lambda_region_name = ap_region_name: state.can_reach(lambda_region_name, player=player))
+            for location in ap_region.locations:
+                if location != region_completion_location:
+                    region_completion_location.access_rule = combine_callables(region_completion_location.access_rule, location.access_rule)
+
+    return ap_regions
 
 def create_location(player: int, location_data: LocationData, region: Region) -> Location:
     location = CrystalProjectLocation(player, location_data.name, location_data.code, region)
@@ -485,13 +591,14 @@ def fancy_add_exits(self, region: str, exits: Union[Iterable[str], Dict[str, Opt
             if not region_rule in exits:
                 raise Exception(f"A rule was defined for the entrance {region} -> {region_rule} but {region_rule} isn't in the list of exits from {region}")
 
-    for region_exit in exits:
+    for destination_ap_region in exits:
+        destination_display_region = ap_region_to_display_region_dictionary[destination_ap_region]
         if rules is None:
             rules = {}
-        if region_exit in rules:
-            rules[region_exit] = combine_callables(rules[region_exit], rules_on_regions[region_exit])
+        if destination_ap_region in rules:
+            rules[destination_ap_region] = combine_callables(rules[destination_ap_region], rules_on_display_regions[destination_display_region])
         else:
-            rules[region_exit] = rules_on_regions[region_exit]
+            rules[destination_ap_region] = rules_on_display_regions[destination_display_region]
     self.multiworld.get_region(region, self.player).add_exits(exits, rules)
 
 def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOptions) -> None:
