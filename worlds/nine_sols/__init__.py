@@ -8,6 +8,7 @@ from .items import NineSolsItem, all_non_event_items_table, item_name_groups, cr
 from .locations_and_regions import all_non_event_locations_table, location_name_groups, create_regions
 from .options import NineSolsGameOptions
 from .ut_map_page.map_page_index import map_page_index
+from .jade_costs import generate_random_jade_costs
 
 
 class NineSolsWebWorld(WebWorld):
@@ -28,6 +29,7 @@ class NineSolsWorld(World):
     game = "Nine Sols"
     web = NineSolsWebWorld()
 
+    jade_costs = 'vanilla'
     # TODO: alternate spawns, etc
 
     # this is how we tell the Universal Tracker we want to use re_gen_passthrough
@@ -60,7 +62,8 @@ class NineSolsWorld(World):
             return
 
         # generate game-specific randomizations separate from AP items/locations
-        # TODO: random jade costs, etc
+        self.jade_costs = generate_random_jade_costs(self.random, self.options) \
+            if self.options.randomize_jade_costs else "vanilla"
 
     # members and methods implemented by locations_and_regions.py, locations.jsonc and connections.jsonc
 
@@ -108,6 +111,8 @@ class NineSolsWorld(World):
             'seals_for_prison',
             'seals_for_ethereal',
         )
+        # more client/mod features, these are only in the apworld because we want them fixed per-slot/at gen time
+        slot_data["jade_costs"] = self.jade_costs
         # apworld versions are not yet stored in the generated multiworld and exposed by AP servers,
         # so we have to transmit this to the client/mod using slot_data for the time being.
         apworld_manifest = orjson.loads(pkgutil.get_data(__name__, "archipelago.json").decode("utf-8"))

@@ -51,6 +51,35 @@ class SkipSoulscapePlatforming(Toggle):
     display_name = "Skip Soulscape Platforming"
 
 
+class RandomizeJadeCosts(Toggle):
+    """Edit the cost of every jade in this slot to a randomly chosen number between jade_cost_min and jade_cost_max.
+
+    This includes jades which are not Archipelago items.
+
+    Keep in mind that, for now, the maximum number of Computing Units cannot be changed."""
+    display_name = "Randomize Jade Costs"
+
+
+class JadeCostMin(Range):
+    """The minimum possible jade cost. Has no effect if randomize_jade_costs is false.
+
+    Keep in mind that the maximum number of Computing Units cannot be changed."""
+    display_name = "Jade Cost Minimum"
+    range_start = 0
+    range_end = 8
+    default = 1
+
+
+class JadeCostMax(Range):
+    """The maximum possible jade cost. Has no effect if randomize_jade_costs is false.
+
+    Keep in mind that the maximum number of Computing Units cannot be changed."""
+    display_name = "Jade Cost Maximum"
+    range_start = 0
+    range_end = 8
+    default = 3
+
+
 @dataclass
 class NineSolsGameOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -59,4 +88,7 @@ class NineSolsGameOptions(PerGameCommonOptions):
     seals_for_prison: SealsForPrison
     seals_for_ethereal: SealsForEthereal
     skip_soulscape_platforming: SkipSoulscapePlatforming
+    randomize_jade_costs: RandomizeJadeCosts
+    jade_cost_min: JadeCostMin
+    jade_cost_max: JadeCostMax
 
