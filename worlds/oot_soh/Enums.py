@@ -1494,7 +1494,7 @@ class Locations(str, Enum):
     GV_GS_PILLAR = "GV GS Pillar"
     GF_GS_TOP_FLOOR = "GF GS Top Floor"
     GF_GS_ARCHERY_RANGE = "GF GS Archery Range"
-    WASTELAND_GS_ = "Wasteland GS"
+    WASTELAND_GS = "Wasteland GS"
     COLOSSUS_GS_BEAN_PATCH = "Colossus GS Bean Patch"
     COLOSSUS_GS_TREE = "Colossus GS Tree"
     COLOSSUS_GS_HILL = "Colossus GS Hill"
