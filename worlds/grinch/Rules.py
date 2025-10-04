@@ -479,7 +479,7 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "WV - Exhaust Pipes": [
-        [REL]
+        [WV, REL]
     ],
     "WF - Skis": [
         [WF]
