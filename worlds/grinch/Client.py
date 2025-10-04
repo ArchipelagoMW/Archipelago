@@ -41,6 +41,7 @@ class GrinchClient(BizHawkClient):
     previous_egg_count: int = 0
     send_ring_link: bool = False
     unique_client_id: int = 0
+    ring_link_enabled = False
 
     def __init__(self):
         super().__init__()
@@ -93,12 +94,10 @@ class GrinchClient(BizHawkClient):
                 logger.info("You are now connected to the client. "+
                     "There may be a slight delay to check you are not in demo mode before locations start to send.")
 
-                ring_link_enabled = bool(ctx.slot_data["ring_link"])
+                self.ring_link_enabled = bool(ctx.slot_data["ring_link"])
 
                 tags = copy.deepcopy(ctx.tags)
-                if ring_link_enabled:
-                    self.send_ring_link = True
-                    Utils.async_start(self.ring_link_output(ctx), name="EggLink")
+                if self.ring_link_enabled:
                     ctx.tags.add("RingLink")
                 else:
                     ctx.tags -= { "RingLink" }
@@ -125,6 +124,11 @@ class GrinchClient(BizHawkClient):
         try:
             if not await self.ingame_checker(ctx):
                 return
+
+            if not any(task.get_name() == "Grinch EggLink" for task in asyncio.all_tasks()):
+                print("EggLink")
+                self.send_ring_link = True
+                Utils.async_start(self.ring_link_output(ctx), name="Grinch EggLink")
 
             await self.location_checker(ctx)
             await self.receiving_items_handler(ctx)
