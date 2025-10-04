@@ -274,6 +274,15 @@ if not is_frozen():
             world_directory = os.path.join("worlds", file_name)
             if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
                 manifest = json.load(open(os.path.join(world_directory, "archipelago.json")))
+
+                assert "game" in manifest, (
+                    f"World directory {world_directory} has an archipelago.json manifest file, but it"
+                    "does not define a \"game\"."
+                )
+                assert manifest["game"] == worldtype.game, (
+                    f"World directory {world_directory} has an archipelago.json manifest file, but value of the"
+                    f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
+                )
             else:
                 manifest = {}
 
