@@ -2,6 +2,7 @@
 Unit tests for world generation
 """
 from typing import *
+
 from .test_base import Sc2SetupTestBase
 
 from .. import mission_groups, mission_tables, options, locations, SC2Mission, SC2Campaign, SC2Race, unreleased_items, \
@@ -15,6 +16,7 @@ from ..options import EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder,
 class TestItemFiltering(Sc2SetupTestBase):
     def test_explicit_locks_excludes_interact_and_set_flags(self):
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'locked_items': {
                 item_names.MARINE: 0,
                 item_names.MARAUDER: 0,
@@ -115,6 +117,8 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_excluding_mission_groups_excludes_all_missions_in_group(self):
         world_options = {
+            **self.ZERG_CAMPAIGNS,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'excluded_missions': [
                 mission_groups.MissionGroupNames.HOTS_ZERUS_MISSIONS,
             ],
@@ -157,6 +161,8 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_excluding_all_terran_missions_excludes_all_terran_items(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'excluded_missions': [
@@ -172,6 +178,8 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_excluding_all_terran_build_missions_excludes_all_terran_units(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'excluded_missions': [
@@ -190,6 +198,8 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_excluding_all_zerg_and_kerrigan_missions_excludes_all_zerg_items(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'excluded_missions': [
@@ -205,6 +215,8 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_excluding_all_zerg_build_missions_excludes_zerg_units(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'excluded_missions': [
@@ -224,6 +236,8 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_excluding_all_protoss_missions_excludes_all_protoss_items(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'accessibility': 'locations',
@@ -241,6 +255,8 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_excluding_all_protoss_build_missions_excludes_protoss_units(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'accessibility': 'locations',
@@ -286,6 +302,7 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_vanilla_items_only_includes_only_nova_equipment_and_vanilla_and_filler_items(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             # Avoid options that lock non-vanilla items for logic
@@ -515,6 +532,7 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_nco_and_wol_picks_correct_starting_mission(self):
         world_options = {
+            'mission_order': MissionOrder.option_vanilla,
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name,
                 SC2Campaign.NCO.campaign_name
@@ -529,7 +547,7 @@ class TestItemFiltering(Sc2SetupTestBase):
                 mission_tables.SC2Mission.ZERO_HOUR.mission_name.split(" (")[0]
             ],
             'mission_order': options.MissionOrder.option_grid,
-            'selected_races': options.SelectRaces.valid_keys,
+            'selected_races': options.SelectedRaces.valid_keys,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name,
@@ -548,7 +566,7 @@ class TestItemFiltering(Sc2SetupTestBase):
                 mission_tables.SC2Mission.ZERO_HOUR.mission_name
             ],
             'mission_order': options.MissionOrder.option_grid,
-            'selected_races': options.SelectRaces.valid_keys,
+            'selected_races': options.SelectedRaces.valid_keys,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name,
@@ -756,7 +774,7 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_kerrigan_levels_per_mission_triggering_pre_fill(self):
         world_options = {
-            # Vanilla WoL with all missions
+            **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_custom,
             'custom_mission_order': {
                 'campaign': {
@@ -797,7 +815,7 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_kerrigan_levels_per_mission_and_generic_upgrades_both_triggering_pre_fill(self):
         world_options = {
-            # Vanilla WoL with all missions
+            **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_custom,
             'custom_mission_order': {
                 'campaign': {
@@ -842,10 +860,9 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(item_names.KERRIGAN_LEVELS_70, itempool)
         self.assertNotIn(item_names.KERRIGAN_LEVELS_70, starting_inventory)
 
-
-
     def test_locking_required_items(self):
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': options.MissionOrder.option_custom,
             'custom_mission_order': {
                 'campaign': {
@@ -891,7 +908,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': campaign_size,
             'enabled_campaigns': EnabledCampaigns.valid_keys,
-            'selected_races': options.SelectRaces.valid_keys,
+            'selected_races': options.SelectedRaces.valid_keys,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'mission_race_balancing': options.EnableMissionRaceBalancing.option_fully_balanced,
         }
@@ -923,6 +940,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             },
             'max_number_of_upgrades': 2,
             'mission_order': options.MissionOrder.option_grid,
+            **self.ALL_CAMPAIGNS,
             'selected_races': {
                 SC2Race.TERRAN.get_title(),
             },
@@ -959,6 +977,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             },
             'max_number_of_upgrades': 2,
             'mission_order': options.MissionOrder.option_grid,
+            **self.ALL_CAMPAIGNS,
             'selected_races': {
                 SC2Race.TERRAN.get_title(),
                 SC2Race.ZERG.get_title(),
@@ -989,6 +1008,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             },
             'max_upgrade_level': MAX_LEVEL,
             'mission_order': options.MissionOrder.option_grid,
+            **self.ALL_CAMPAIGNS,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'generic_upgrade_items': options.GenericUpgradeItems.option_bundle_weapon_and_armor
         }
@@ -1015,12 +1035,13 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_ghost_of_a_chance_generates_without_nco(self) -> None:
         world_options = {
+            **self.TERRAN_CAMPAIGNS,
             'mission_order': MissionOrder.option_custom,
             'nova_ghost_of_a_chance_variant': NovaGhostOfAChanceVariant.option_auto,
             'custom_mission_order': {
                 'test': {
                     'type': 'column',
-                    'size': 1, # Give the generator some space to place the key
+                    'size': 1,
                     'mission_pool': [
                         SC2Mission.GHOST_OF_A_CHANCE.mission_name
                     ]
@@ -1036,12 +1057,13 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_ghost_of_a_chance_generates_using_nco_nova(self) -> None:
         world_options = {
+            **self.TERRAN_CAMPAIGNS,
             'mission_order': MissionOrder.option_custom,
             'nova_ghost_of_a_chance_variant': NovaGhostOfAChanceVariant.option_nco,
             'custom_mission_order': {
                 'test': {
                     'type': 'column',
-                    'size': 2, # Give the generator some space to place the key
+                    'size': 2,
                     'mission_pool': [
                         SC2Mission.LIBERATION_DAY.mission_name, # Starter mission
                         SC2Mission.GHOST_OF_A_CHANCE.mission_name,
@@ -1057,12 +1079,13 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_ghost_of_a_chance_generates_with_nco(self) -> None:
         world_options = {
+            **self.TERRAN_CAMPAIGNS,
             'mission_order': MissionOrder.option_custom,
             'nova_ghost_of_a_chance_variant': NovaGhostOfAChanceVariant.option_auto,
             'custom_mission_order': {
                 'test': {
                     'type': 'column',
-                    'size': 3, # Give the generator some space to place the key
+                    'size': 3,
                     'mission_pool': [
                         SC2Mission.LIBERATION_DAY.mission_name, # Starter mission
                         SC2Mission.GHOST_OF_A_CHANCE.mission_name,
@@ -1079,7 +1102,9 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_exclude_overpowered_items(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': MissionOrder.option_grid,
+            'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'selected_races': [SC2Race.TERRAN.get_title()],
@@ -1095,7 +1120,9 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_exclude_overpowered_items_not_excluded(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': MissionOrder.option_grid,
+            'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'selected_races': [SC2Race.TERRAN.get_title()],
@@ -1111,7 +1138,9 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_exclude_overpowered_items_vanilla_only(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': MissionOrder.option_grid,
+            'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
             'vanilla_items_only': VanillaItemsOnly.option_true,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
@@ -1128,7 +1157,9 @@ class TestItemFiltering(Sc2SetupTestBase):
     def test_exclude_locked_overpowered_items(self) -> None:
         locked_item = item_names.BATTLECRUISER_ATX_LASER_BATTERY
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': MissionOrder.option_grid,
+            'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
             'locked_items': [locked_item],
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
@@ -1146,7 +1177,9 @@ class TestItemFiltering(Sc2SetupTestBase):
         Checks if all unreleased items are marked properly not to generate
         """
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': MissionOrder.option_grid,
+            'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
         }
@@ -1164,7 +1197,9 @@ class TestItemFiltering(Sc2SetupTestBase):
         Locking overrides this behavior - if they're locked, they must appear
         """
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': MissionOrder.option_grid,
+            'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'locked_items': {item_name: 0 for item_name in unreleased_items},
@@ -1179,10 +1214,12 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_merc_excluded_excludes_merc_upgrades(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': MissionOrder.option_grid,
             'maximum_campaign_size': MaximumCampaignSize.range_end,
             'excluded_items': [item_name for item_name in item_groups.terran_mercenaries],
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'selected_races': [SC2Race.TERRAN.get_title()],
         }
 
         self.generate_world(world_options)
@@ -1192,6 +1229,7 @@ class TestItemFiltering(Sc2SetupTestBase):
     
     def test_unexcluded_items_applies_over_op_items(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': MissionOrder.option_grid,
             'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
@@ -1215,11 +1253,13 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_exclude_overpowered_items_and_not_allow_unit_nerfs(self) -> None:
         world_options = {
+            **self.ALL_CAMPAIGNS,
             'mission_order': MissionOrder.option_grid,
             'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
             'war_council_nerfs': options.WarCouncilNerfs.option_false,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'selected_races': [SC2Race.PROTOSS.get_title()],
         }
 
         self.generate_world(world_options)
