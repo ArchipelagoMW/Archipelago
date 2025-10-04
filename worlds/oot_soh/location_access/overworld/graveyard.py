@@ -32,7 +32,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.THE_GRAVEYARD, world, [
-        (Locations.GRAVEYARD_FREESTANDING_PO_H, lambda bundle: (((is_adult(bundle) and can_plant_bean(bundle)) or can_use(Items.LONGSHOT, bundle)) and can_break_crates(bundle)) or (can_do_trick("GY POH") and can_use(Items.BOOMERANG, bundle))),
+        (Locations.GRAVEYARD_FREESTANDING_PO_H, lambda bundle: (((is_adult(bundle) and can_plant_bean(bundle)) or can_use(Items.LONGSHOT, bundle)) and can_break_crates(bundle)) or (can_do_trick(Tricks.GY_POH, bundle) and can_use(Items.BOOMERANG, bundle))),
         (Locations.GRAVEYARD_DAMPE_GRAVEDIGGING_TOUR, lambda bundle: has_item(Items.CHILD_WALLET, bundle) and is_child(bundle) and at_night(bundle)),
         (Locations.GRAVEYARD_GS_WALL, lambda bundle: is_child(bundle) and hookshot_or_boomerang(bundle) and at_night(bundle) and can_get_nighttime_gs(bundle)),
         (Locations.GRAVEYARD_GS_BEAN_PATCH, lambda bundle:can_spawn_soil_skull(bundle) and can_attack(bundle)),
@@ -124,7 +124,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.GRAVEYARD_DAMPES_GRAVE, world, [
         (Locations.GRAVEYARD_HOOKSHOT_CHEST, lambda bundle: True),
-        (Locations.GRAVEYARD_DAMPE_RACE_FREESTANDING_PO_H, lambda bundle: is_adult(bundle) or can_do_trick("GY Child Dampe Race POH")),
+        (Locations.GRAVEYARD_DAMPE_RACE_FREESTANDING_PO_H, lambda bundle: is_adult(bundle) or can_do_trick(Tricks.GY_CHILD_DAMPE_RACE_POH, bundle)),
         (Locations.GRAVEYARD_DAMPES_GRAVE_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.GRAVEYARD_DAMPES_GRAVE_POT2, lambda bundle: can_break_pots(bundle)),
         (Locations.GRAVEYARD_DAMPES_GRAVE_POT3, lambda bundle: can_break_pots(bundle)),
@@ -167,5 +167,5 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GRAVEYARD_WARP_PAD_REGION, world, [
         (Regions.THE_GRAVEYARD, lambda bundle: True),
-        (Regions.SHADOW_TEMPLE_ENTRYWAY, lambda bundle: can_use(Items.DINS_FIRE, bundle) or (can_do_trick("Graveyard Shadow Fire Arrows") and is_adult(bundle) and can_use(Items.FIRE_ARROW))) 
+        (Regions.SHADOW_TEMPLE_ENTRYWAY, lambda bundle: can_use(Items.DINS_FIRE, bundle) or (can_do_trick(Tricks.GY_SHADOW_FIRE_ARROWS, bundle) and is_adult(bundle) and can_use(Items.FIRE_ARROW))) 
     ])
