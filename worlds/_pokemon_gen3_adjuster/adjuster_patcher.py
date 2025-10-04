@@ -1324,7 +1324,7 @@ def stringify_pokemon_data(_data: dict[str, int | list[dict[str, str | int]]]):
             new_field_value = "True" if field_value & 0x80 else "False"
             field_name = "forbid_flip"
         elif field_name == "move_pool":
-            new_field_value = "[" + stringify_move_pool(field_value).replace("\n", ", ") + "]"
+            new_field_value = stringify_move_pool(field_value).replace("\n", ", ")
         else:
             new_field_value = str(field_value)
         result += "{}: {}\n".format(field_name, new_field_value)
@@ -1354,6 +1354,7 @@ def destringify_pokemon_data(_pokemon_name: str, _data_string: str, _safe_mode=F
             new_field_value = field_value if _safe_mode else (1 if field_value in [1, "1", "True"] else 0)
             field_name = "dex"
         elif field_name == "move_pool":
+            # Used to transform an old data format into the current format
             if field_value.startswith("[ "):
                 field_value = field_value[2:-2]
             if not _safe_mode:

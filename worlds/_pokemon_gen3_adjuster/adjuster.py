@@ -8,10 +8,10 @@ from bps.apply import apply_to_bytearrays as apply_bps_patch
 from kvui import KivyJSONtoTextParser, ResizableTextField, ThemedApp
 
 from kivy.clock import Clock
+from kivy.factory import Factory
 from kivy.graphics.context_instructions import Color
 from kivy.graphics.vertex_instructions import Rectangle
 from kivy.properties import ObjectProperty, BoundedNumericProperty, StringProperty, ListProperty
-from kivy.uix.dropdown import DropDown
 from kivy.uix.image import AsyncImage
 from kivy.uix.layout import Layout
 from kivy.uix.popup import Popup
@@ -40,7 +40,6 @@ from .adjuster_patcher import extract_sprites as extract_sprites_internal
 from .adjuster_constants import POKEMON_TYPES, POKEMON_FOLDERS, POKEMON_ABILITIES, POKEMON_GENDER_RATIOS, \
     REVERSE_POKEMON_GENDER_RATIOS
 from argparse import Namespace
-from tkinter import messagebox
 
 # Try to import the Pokemon Emerald and Pokemon Firered/Leafgreen data
 try:
@@ -213,6 +212,17 @@ class FitImageTopContainer(Widget):
             Color(1, 1, 1)
             Rectangle(texture=subtexture, pos=self.pos, size=(par_x, par_y))
 
+class InfoPopup(Popup):
+    popup_contents: MDBoxLayout = ObjectProperty()
+    popup_text: str = StringProperty("Popup text")
+    button_text: str = StringProperty("OK")
+
+    def open(self, _title="Title", _text="Popup text", _button_text="OK"):
+        self.title = _title
+        self.popup_text = _text
+        self.button_text = _button_text
+        super().open(self)
+
 
 # Actual useful objects
 class PatchFrame(MDBoxLayout):
@@ -249,8 +259,8 @@ class PatchFrame(MDBoxLayout):
             if frlg_support and self.rom_version == "Unknown":
                 _patch, self.rom_version = self.frlg_fetch_patch(_patch)
             if self.rom_version == "Unknown" and not self.entry.focus:
-                messagebox.showerror(title="Error while loading a ROM",
-                                     message=f"The ROM at path {_patch} isn't a valid Pokemon {adjuster_name} ROM!")
+                Factory.InfoPopup().open("Error while loading a ROM",
+                                         f"The ROM at path\n{_patch}\nisn't a valid Pokemon {adjuster_name} ROM!")
 
         opts.patch = _patch
 
@@ -428,8 +438,8 @@ class SpriteExtractorFrame(MDCard):
         handle_address_collection(app.ap_rom, app.top_frame.patch_frame.rom_version,
                                   app.top_frame.patch_frame.is_ap_checkbox.checkbox.active)
         extract_sprites_internal(self.input.text, output_folder)
-        messagebox.showinfo(title="Success",
-                            message=f"All sprites for {self.input.text} have successfully been extracted!")
+        Factory.InfoPopup().open("Successful Sprite Extraction",
+                                 f"All sprites for {self.input.text}\nhave successfully been extracted!")
 
     def extract_all_sprites(self):
         # Run when the Extract All button is pressed
@@ -451,7 +461,7 @@ class SpriteExtractorFrame(MDCard):
             if not os.path.isdir(current_output):
                 os.makedirs(current_output)
             extract_sprites_internal(object, current_output)
-        messagebox.showinfo(title="Success", message="All sprites have successfully been extracted!")
+        Factory.InfoPopup().open("Successful Sprite Extraction", "All sprites have successfully been extracted!")
 
 
 class PokemonDataEditorFrame(MDBoxLayout):
@@ -640,7 +650,8 @@ class PokemonDataEditorFrame(MDBoxLayout):
             pokemon_saved_data_errors, pokemon_saved_data_has_error =\
                 validate_pokemon_data_string(_folder, pokemon_saved_data_string)
             if pokemon_saved_data_has_error:
-                messagebox.showerror(title="Error while loading Pokemon data", message=pokemon_saved_data_errors)
+                Factory.InfoPopup().open("Error while loading Pokemon data",
+                                         pokemon_saved_data_errors)
             else:
                 self.pokemon_saved_data = destringify_pokemon_data(data_folder, pokemon_saved_data_string)
                 for field in self.pokemon_saved_data:
@@ -721,8 +732,8 @@ class PokemonDataEditorFrame(MDBoxLayout):
         elif os.path.exists(data_path):
             os.remove(data_path)
         app.top_frame.try_validate_sprite_pack(opts.sprite_pack)
-        messagebox.showinfo(title="Success",
-                            message=f"Data for the Pokemon {pokemon_name} has been successfully saved!")
+        Factory.InfoPopup().open("Successful Pokemon Data Save",
+                                 f"Data for the Pokemon {pokemon_name} has been successfully saved!")
 
 
 class SpritePreviewFrame(MDCard):
@@ -939,7 +950,8 @@ class BottomFrame(MDBoxLayout):
         gui_args.patch = opts.patch
         gui_args.sprite_pack = opts.sprite_pack
         persistent_store("adjuster", GAME_GEN3_ADJUSTER, gui_args)
-        messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
+        Factory.InfoPopup().open("Successful Adjuster Data Save",
+                                 "Adjuster settings saved to persistent storage!")
 
     def press_adjust_rom(self):
         try:
@@ -949,9 +961,11 @@ class BottomFrame(MDBoxLayout):
             path = app.adjust(gui_args)
         except Exception as e:
             logging.exception(e)
-            messagebox.showerror(title="Error while adjusting Rom", message=str(e))
+            Factory.InfoPopup().open("Error while adjusting the ROM",
+                                     str(e))
         else:
-            messagebox.showinfo(title="Success", message=f"Rom patched successfully to {path}")
+            Factory.InfoPopup().open("Successful ROM Adjustment",
+                                     f"ROM patched successfully to\n{path}")
 
 
 class AdjusterRootLayout(MDFloatLayout):
@@ -1004,8 +1018,8 @@ class AdjusterRootLayout(MDFloatLayout):
     def build_ap_rom(self, _patch: str):
         # Builds the AP ROM if a patch file was given or opens the AP ROM file that was given
         if not _patch:
-            messagebox.showerror(title="Failure",
-                                 message="Cannot build the AP ROM: a patch file or a patched ROM is required!")
+            Factory.InfoPopup().open("Failed ROM Build",
+                                     "Cannot build the AP ROM: a patch file or a patched ROM is required!")
             return
 
         rom_data: bytearray = None
@@ -1020,9 +1034,9 @@ class AdjusterRootLayout(MDFloatLayout):
             if frlg_support and not rom_data:
                 rom_data = self.frlg_build_ap_rom(_patch)
         if not rom_data:
-            messagebox.showerror(title="Failure",
-                                 message="Cannot build the AP ROM: invalid file extension: "
-                                         + f"requires {'/'.join(self.adjuster_extensions[1:])}")
+            Factory.InfoPopup().open("Failed ROM Build",
+                                     "Cannot build the AP ROM: invalid file extension: "
+                                     + f"requires {'/'.join(self.adjuster_extensions[1:])}")
             return bytearray()
 
         return rom_data
@@ -1133,8 +1147,9 @@ async def main():
             raise Exception("This Archipelago installation doesn't contain tools for neither Pokemon Emerald or "
                             + "Pokemon Firered/Leafgreen.")
         else:
-            messagebox.showerror("This Archipelago installation doesn't contain tools for neither Pokemon Emerald or "
-                                 + "Pokemon Firered/Leafgreen.")
+            Factory.InfoPopup().open("Failed: No Valid APWorld",
+                                     "This Archipelago installation doesn't contain tools for\n" +
+                                     "neither Pokemon Emerald or Pokemon Firered/Leafgreen.")
             return
 
     if not is_command_line:

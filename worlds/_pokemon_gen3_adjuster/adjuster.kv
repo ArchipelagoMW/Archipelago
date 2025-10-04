@@ -597,3 +597,44 @@
         text: root.tooltip_text
         text_color: "black"
         halign: "center"
+
+<InfoPopup>:
+    popup_text: "Popup text"
+    button_text: "Confirm"
+
+    size_hint: [None, None]
+    width: grid.width + dp(25)
+    height: grid.height + root.title_size + dp(48)
+
+    GridLayout:
+        id: grid
+        size_hint: None, None
+        size: self.minimum_size
+        padding: [10, 5]
+        cols: 1
+        AnchorLayout:
+            anchor_x: "center"
+            anchor_y: "bottom"
+            size_hint: None, None
+            height: message.height
+            width: max(message.width, butt.width)
+            Label:
+                id: message
+                text: root.popup_text
+                halign: "center"
+                size_hint: None, None
+                size: self.texture_size
+                padding: [10, 5]
+        AnchorLayout:
+            anchor_x: "center"
+            anchor_y: "bottom"
+            size_hint: None, None
+            height: butt.height
+            width: max(message.width, butt.width)
+            Button:
+                id: butt
+                text: root.button_text
+                size_hint: None, None
+                size: self.texture_size
+                padding: [10, 5]
+                on_release: root.dismiss()
