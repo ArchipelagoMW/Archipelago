@@ -586,7 +586,7 @@ class KH2Context(CommonContext):
         if self.deathlink_toggle and self.kh2_read_byte(0x810000) == 0 and self.kh2_read_byte(0x810001) != 0:
             # set deathlink flag so it doesn't send out bunch
             # basically making the game think it got its death from a deathlink instead of from the game
-            self.kh2_write_byte(0x810000, 1)
+            self.kh2_write_byte(0x810000, 0)
             # 0x810001 is set to 1 when you die via the goa script. This is done because the polling rate for the client can miss a death
             # but the lua script runs eveery frame so we cant miss them now
             self.kh2_write_byte(0x810001, 0)
