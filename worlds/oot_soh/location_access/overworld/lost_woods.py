@@ -112,8 +112,8 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                                                   bundle) or can_use(
                     Items.DINS_FIRE, bundle))) and can_get_nighttime_gs(bundle)),
         (Locations.LW_GS_BEAN_PATCH_NEAR_THEATER,
-         lambda bundle: can_spawn_soil_skull(bundle) and (can_attack(bundle) or (
-                     (not world.options.shuffle_scrubs.value == 0) and can_reflect_nuts(bundle)))),
+         lambda bundle: can_spawn_soil_skull(bundle) and (can_attack(bundle) or
+                     (world.options.shuffle_scrubs.value == 0 and can_reflect_nuts(bundle)))),
         (Locations.LW_BOULDER_RUPEE, lambda bundle: blast_or_smash(bundle)),
         (Locations.LW_BEAN_SPROUT_NEAR_THEATRE_FAIRY1,
          lambda bundle: is_child(bundle) and has_item(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS,
