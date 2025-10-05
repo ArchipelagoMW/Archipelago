@@ -1,7 +1,6 @@
 from typing import Dict, TYPE_CHECKING
 
 from BaseClasses import Location
-from .Enums import *
 
 
 class SohLocation(Location):
