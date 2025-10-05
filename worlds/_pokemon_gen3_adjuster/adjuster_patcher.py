@@ -3,7 +3,6 @@ import os
 from typing import Callable
 import zlib
 
-from PIL import Image
 from Utils import open_image_secure
 
 # Try to import the Pokemon Emerald and Pokemon Firered/Leafgreen data
@@ -486,6 +485,7 @@ def extract_complex_sprite(_overworld_struct_address: int, _sprite_key: str, _ob
             extra_sprite_name = current_extra_sprite_name
         start_sprite_pointer += 8
 
+    from PIL import Image
     final_image = Image.new("P", (sprite_width, sprite_height * sprite_requirements["internal_frames"]))
     final_image.putdata(sprites_pixel_data)
     final_image.putpalette(sprite_palette)
@@ -612,6 +612,7 @@ def extract_sprite(_data_address: int, _sprite_key: str, _object_name: str, _pal
         sprite_palette = extract_palette(_object_name, _palette_sprite_name, _sprite_key[:7])
 
     # Assemble the sprite
+    from PIL import Image
     extracted_image = Image.new("P", (sprite_width, sprite_height))
     extracted_image.putdata(sprite_pixel_data)
     extracted_image.putpalette(sprite_palette)
