@@ -304,7 +304,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_TRADE_ODD_MUSHROOM,
          lambda bundle: is_adult(bundle) and can_use(Items.ODD_MUSHROOM, bundle)),
         (Locations.KAK_GRANNYS_SHOP,
-         lambda bundle: is_adult(bundle) and (can_use(Items.ODD_MUSHROOM, bundle)) and trade_quest_step(
+         lambda bundle: is_adult(bundle) and can_use(Items.ADULT_WALLET, bundle) and (can_use(Items.ODD_MUSHROOM, bundle)) and trade_quest_step(
              Items.ODD_MUSHROOM, bundle))
     ])
     # Connections
