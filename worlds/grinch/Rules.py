@@ -127,7 +127,7 @@ rules_dict: dict[str,list[list[str]]] = {
         [REL, OCD, RS]
         # "move_rando"
         # [REL, GC],
-        # [REL, OCD, RS, SN]
+        # [REL, OCD, RS, SN],
         # [REL, OCD, RS, SS]
     ],
     "WF - Squashing All Gifts": [
@@ -181,7 +181,6 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WL - North Shore - Drilling Holes In Canoes": [
         [DRL]
-        # [DRL, MX]
     ],
     "WL - Submarine World - Modifying The Marine Mobile": [
         []
@@ -213,10 +212,12 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WV - Post Office - REL BP inside Silver Room": [
         [WC]
+        # "move_rando"
         # [WC, MX]
     ],
     "WV - Post Office - REL BP at Entrance Door after Mission Completion": [
         [WC]
+        # "move_rando"
         # [WC, MX]
     ],
     "WF - RS BP behind Vacuum Tube": [
@@ -314,6 +315,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WD - Minefield - OCD BP on Left Side of House": [
         []
+        # "move_rando"
         # [REL, GC],
         # [REL, SS, RS]
         # [MX]
@@ -324,6 +326,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WD - Minefield - OCD BP inside Guardian's House": [
         []
+        # "move_rando"
         # [REL, GC],
         # [REL, SS, RS]
         # [MX]
@@ -364,10 +367,12 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WL - North Shore - MM BP inside Skunk Hut": [
         []
+        # "move_rando"
         # [MX]
     ],
     "WL - North Shore - MM BP inside House's Fence": [
         []
+        # "move_rando"
         # [MX]
     ],
     "WL - North Shore - MM BP inside Boulder Box near Bridge": [
@@ -390,6 +395,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WV - Clock Tower - GC BP in Bedroom": [
         [RS]
+        # "move_rando"
     #   [MX, RS]
     ],
     "WV - Clock Tower - GC BP in Bell Room": [
@@ -400,6 +406,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WF - Ski Resort - GC BP in Max Cave": [
         []
+        # "move_rando"
         # [MX]
     ],
     "WF - Civic Center - GC BP on Left Side in Bat Cave Wall": [
@@ -414,11 +421,13 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WD - Power Plant - GC BP in Max Cave": [
         []
+        # "move_rando"
         # [MX]
     ],
     "WD - Power Plant - GC BP After First Gate": [
         [REL, RS],
         [GC]
+        # "move_rando"
     #   [MX, REL, RS]
     ],
     "WD - Generator Building - GC BP on the Highest Platform": [
@@ -463,6 +472,7 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WL - North Shore - Heart of Stone": [
         []
+        # "move_rando"
         # [MX]
     ],
     "Spin N' Win - Easy": [
@@ -518,18 +528,28 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "MC - 1st Crate Squashed": [
         []
+        # "move_rando"
+        # [PC]
     ],
     "MC - 2nd Crate Squashed": [
         []
+        # "move_rando"
+        # [PC]
     ],
     "MC - 3rd Crate Squashed": [
         []
+        # "move_rando"
+        # [PC]
     ],
     "MC - 4th Crate Squashed": [
         []
+        # "move_rando"
+        # [PC]
     ],
     "MC - 5th Crate Squashed": [
         []
+        # "move_rando"
+        # [PC]
     ]
     # "Green Present": [
     #     []
@@ -539,9 +559,12 @@ rules_dict: dict[str,list[list[str]]] = {
     # ],
     # "Pink Present": [
     #     [REL],
+    #     [move_rando]
     #     [PC]
     # ],
     # "Yellow Present": [
+    #     []
+    #     "move_rando"
     #     [PC]
     # ]
 }
@@ -560,6 +583,8 @@ access_rules_dict: dict[str,list[list[str]]] = {
     ],
     "Clock Tower": [
         []
+        # "move_rando"
+        # [SN]
     ],
     "Who Forest": [
         [WF],
