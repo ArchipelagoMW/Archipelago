@@ -516,7 +516,7 @@ def get_locations_per_ap_region(locations: List[LocationData]) -> Dict[str, List
     per_region: Dict[str, List[LocationData]] = {}
 
     for location in locations:
-        per_region.setdefault(location.region, []).append(location)
+        per_region.setdefault(location.ap_region, []).append(location)
 
     return per_region
 

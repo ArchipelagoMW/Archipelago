@@ -11,7 +11,7 @@ from .constants.scholar_abilities import *
 from .constants.teleport_stones import *
 
 class LocationData(NamedTuple):
-    region: str
+    ap_region: str
     name: str
     code: int
     rule: Optional[Callable[[CollectionState], bool]] = None
