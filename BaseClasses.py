@@ -1346,8 +1346,7 @@ class Region:
         for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
-    def add_locations(self, locations: Dict[str, Optional[int]],
-                      location_type: Optional[type[Location]] = None) -> None:
+    def add_locations(self, locations: Mapping[str, int | None], location_type: type[Location] | None = None) -> None:
         """
         Adds locations to the Region object, where location_type is your Location class and locations is a dict of
         location names to address.
@@ -1435,8 +1434,8 @@ class Region:
         entrance.connect(self)
         return entrance
 
-    def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
-                  rules: Dict[str, Callable[[CollectionState], bool]] = None) -> List[Entrance]:
+    def add_exits(self, exits: Iterable[str] | Mapping[str, str | None],
+                  rules: Mapping[str, Callable[[CollectionState], bool]] | None = None) -> List[Entrance]:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
@@ -1444,7 +1443,7 @@ class Region:
                       created entrances will be named "self.name -> connecting_region"
         :param rules: rules for the exits from this region. format is {"connecting_region": rule}
         """
-        if not isinstance(exits, Dict):
+        if not isinstance(exits, Mapping):
             exits = dict.fromkeys(exits)
         return [
             self.connect(
