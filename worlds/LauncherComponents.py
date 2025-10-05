@@ -180,7 +180,7 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     if found_already_loaded and is_kivy_running():
         raise Exception(f"Installed APWorld successfully, but '{module_name}' is already loaded, "
                         "so a Launcher restart is required to use the new installation.")
-    world_source = worlds.WorldSource(str(target), is_zip=True)
+    world_source = worlds.WorldSource(str(target), is_zip=True, relative=False)
     bisect.insort(worlds.world_sources, world_source)
     world_source.load()
 
@@ -274,6 +274,15 @@ if not is_frozen():
             world_directory = os.path.join("worlds", file_name)
             if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
                 manifest = json.load(open(os.path.join(world_directory, "archipelago.json")))
+
+                assert "game" in manifest, (
+                    f"World directory {world_directory} has an archipelago.json manifest file, but it"
+                    "does not define a \"game\"."
+                )
+                assert manifest["game"] == worldtype.game, (
+                    f"World directory {world_directory} has an archipelago.json manifest file, but value of the"
+                    f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
+                )
             else:
                 manifest = {}
 
