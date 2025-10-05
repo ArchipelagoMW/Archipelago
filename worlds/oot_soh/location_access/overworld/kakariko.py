@@ -13,6 +13,10 @@ class EventLocations(str, Enum):
     KAKARIKO_ROCK = "Kakariko Rock"
     KAKARIKO_ADULT_TALON = "Kakariko Adult Talon"
     KAKARIKO_WINDMILL_PHONOGRAM_MAN = "Kakariko Windmill Phonogram Man"
+    KAK_OPEN_GROTTO_GOSSIP_STONE = "Kak Open Grotto Gossip Stone"
+    KAK_OPEN_GROTTO_BUTTERFLY_FAIRY = "Kak Open Grotto Butterfly Fairy"
+    KAK_OPEN_GROTTO_BUG_GRASS = "Kak Open Grotto Bug Grass"
+    KAK_OPEN_GROTTO_FISH = "Kak Open Grotto Fish"
 
 
 class LocalEvents(str, Enum):
@@ -324,6 +328,13 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     # Kak Open Grotto
+    # Events
+    add_events(Regions.KAK_OPEN_GROTTO, world, [
+        (EventLocations.KAK_OPEN_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.KAK_OPEN_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.KAK_OPEN_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.KAK_OPEN_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+    ])
     # Locations
     add_locations(Regions.KAK_OPEN_GROTTO, world, [
         (Locations.KAK_OPEN_GROTTO_CHEST, lambda bundle: True),

@@ -15,7 +15,7 @@ class EventLocations(str, Enum):
     OUTSIDE_DEKU_TREE_DEKU_BABA_NUTS = "Outside Deku Tree Deku Baba Nuts"
     OUTSIDE_DEKU_TREE_DEKU_BABA_STICKS = "Outside Deku Tree Deku Baba Sticks"
     OUTSIDE_DEKU_TREE_GOSSIP_STONE_FAIRY = "Outside Deku Tree Gossip Stone Fairy"
-    KOKIRI_FOREST_STORMS_GROTTO_GOSSIP_STONE_FAIRY = "Kokiri Forest Storms Grotto Gossip Stone Fairy"
+    KOKIRI_FOREST_STORMS_GROTTO_GOSSIP_STONE = "Kokiri Forest Storms Grotto Gossip Stone"
     KOKIRI_FOREST_STORMS_GROTTO_BUTTERFLY_FAIRY = "Kokiri Forest Storms Grotto Butterfly Stone Fairy"
     KOKIRI_FOREST_STORMS_GROTTO_BUG_GRASS = "Kokiri Forest Storms Grotto Bugs"
     KOKIRI_FOREST_STORMS_GROTTO_FISH = "Kokiri Forest Storms Grotto Fish"
@@ -258,7 +258,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## KF Storms Grotto
     # Events
     add_events(Regions.KF_STORMS_GROTTO, world, [
-        (EventLocations.KOKIRI_FOREST_STORMS_GROTTO_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.KOKIRI_FOREST_STORMS_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
         (EventLocations.KOKIRI_FOREST_STORMS_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
         (EventLocations.KOKIRI_FOREST_STORMS_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
         (EventLocations.KOKIRI_FOREST_STORMS_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)

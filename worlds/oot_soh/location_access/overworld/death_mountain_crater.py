@@ -9,6 +9,10 @@ if TYPE_CHECKING:
 class EventLocations(str, Enum):
     DMC_GOSSIP_STONE_FAIRY = "Death Mountain Crater Gossip Stone Fairy"
     DMC_BEAN_PLANT_FAIRY = "Death Mountain Crater Bean Plant Fairy"
+    DMC_UPPER_GROTTO_GOSSIP_STONE = "Death Mountain Crater Upper Grotto Gossip Stone"
+    DMC_UPPER_GROTTO_BUTTERFLY_FAIRY = "Death Mountain Crater Upper Grotto Butterfly Fairy"
+    DMC_UPPER_GROTTO_BUG_GRASS = "Death Mountain Crater Upper Grotto Bug Grass"
+    DMC_UPPER_GROTTO_FISH = "Death Mountain Crater Upper Grotto Fish"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -142,6 +146,13 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## Death Mountain Crater Upper Grotto
+    # Events
+    add_events(Regions.DMC_UPPER_GROTTO, world, [
+        (EventLocations.DMC_UPPER_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.DMC_UPPER_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.DMC_UPPER_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.DMC_UPPER_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+    ])
     # Locations
     add_locations(Regions.DMC_UPPER_GROTTO, world, [
         (Locations.DMC_UPPER_GROTTO_CHEST, lambda bundle: True),
