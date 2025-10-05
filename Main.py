@@ -326,7 +326,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     if current_sphere:
                         spheres.append(dict(current_sphere))
 
-                multidata: NetUtils.MultiData | bytes = {
+                multidata: NetUtils.MultiData = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
                     "connect_names": {name: (0, player) for player, name in multiworld.player_name.items()},
@@ -350,11 +350,11 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 for key in ("slot_data", "er_hint_data"):
                     multidata[key] = convert_to_base_types(multidata[key])
 
-                multidata = zlib.compress(restricted_dumps(multidata), 9)
+                serialized_multidata = zlib.compress(restricted_dumps(multidata), 9)
 
                 with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
                     f.write(bytes([3]))  # version of format
-                    f.write(multidata)
+                    f.write(serialized_multidata)
 
             output_file_futures.append(pool.submit(write_multidata))
             if not check_accessibility_task.result():
