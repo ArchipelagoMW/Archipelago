@@ -1,10 +1,10 @@
-from locations import LocationData
 from typing import List, Optional
 
 from .options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
 from .locations import LocationData
 from .constants.ap_regions import *
+from .constants.display_regions import *
 from .constants.keys import *
 from .constants.key_items import *
 from .constants.teleport_stones import *
@@ -48,7 +48,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
 
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, "Quintar Enthusiast's House", 440),
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, "Rent-A-Quintar", 462),
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, "Quintar Sanctum", 917, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) or logic.has_vertical_movement(state)),
+        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, "Quintar Sanctum", 917, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_vertical_movement(state)),
 
         LocationData(QUINTAR_SANCTUM_AP_REGION, "Quintar Nameko", 968),
 

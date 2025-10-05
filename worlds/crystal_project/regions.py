@@ -347,18 +347,18 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {PROVING_MEADOWS_AP_REGION: lambda state: logic.has_jobs(state, 3)})
     fancy_add_exits(world, CAPITAL_SEQUOIA_AP_REGION, [JOJO_SEWERS_AP_REGION, ROLLING_QUINTAR_FIELDS_AP_REGION, COBBLESTONE_CRAG_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, CASTLE_SEQUOIA_AP_REGION, SKUMPARADISE_AP_REGION],
                     # why rental and horizontal both listed?
-                    {COBBLESTONE_CRAG_AP_REGION: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) or logic.has_horizontal_movement(state),
+                    {COBBLESTONE_CRAG_AP_REGION: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state),
                      GREENSHIRE_REPRISE_AP_REGION: lambda state: logic.has_jobs(state, 5),
                      #note for eme: technically possible to get into the first dungeon with quintar instead of glide, but it's hard lol; come from Quintar Sanctum save point and go west up mountain and fall down through grate (that part's easy) then the quintar jump to the lamp is hard
                      CASTLE_SEQUOIA_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)})
     fancy_add_exits(world, JOJO_SEWERS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, BOOMER_SOCIETY_AP_REGION, THE_PALE_GROTTO_AP_REGION, CAPITAL_JAIL_AP_REGION, QUINTAR_NEST_AP_REGION],
                     {BOOMER_SOCIETY_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_false or logic.has_swimming(state),
-                     CAPITAL_JAIL_AP_REGION: lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) or logic.has_swimming(state),
+                     CAPITAL_JAIL_AP_REGION: lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_swimming(state),
                      THE_PALE_GROTTO_AP_REGION: lambda state: logic.has_swimming(state),
-                     QUINTAR_NEST_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) or logic.has_swimming(state))})
+                     QUINTAR_NEST_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_swimming(state))})
     fancy_add_exits(world, BOOMER_SOCIETY_AP_REGION, [JOJO_SEWERS_AP_REGION, GREENSHIRE_REPRISE_AP_REGION])
     fancy_add_exits(world, ROLLING_QUINTAR_FIELDS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, QUINTAR_NEST_AP_REGION, QUINTAR_SANCTUM_AP_REGION, QUINTAR_RESERVE_AP_REGION],
-                    {QUINTAR_SANCTUM_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) or logic.has_vertical_movement(state)),
+                    {QUINTAR_SANCTUM_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_vertical_movement(state)),
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, QUINTAR_NEST_AP_REGION, [QUINTAR_SANCTUM_AP_REGION, COBBLESTONE_CRAG_AP_REGION, JOJO_SEWERS_AP_REGION],
                     {QUINTAR_SANCTUM_AP_REGION: lambda state: logic.has_swimming(state)})
@@ -379,7 +379,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      FLYERS_CRAG_AP_REGION: lambda state: (logic.has_glide(state) and logic.has_vertical_movement(state)) or logic.has_swimming(state)})
     fancy_add_exits(world, GREENSHIRE_REPRISE_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, SALMON_PASS_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION],
                     # if we add hard logic, it is possible to jump from the rolling quintar fields onto the cap seq walls from the southeast and manage to bypass the guard and thus the job requirement
-                    {SALMON_PASS_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) and logic.has_jobs(state, 5)) or logic.has_vertical_movement(state),
+                    {SALMON_PASS_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.has_jobs(state, 5)) or logic.has_vertical_movement(state),
                      TALL_TALL_HEIGHTS_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, SALMON_PASS_AP_REGION, [GREENSHIRE_REPRISE_AP_REGION, SALMON_RIVER_AP_REGION, DELENDE_AP_REGION],
                     {GREENSHIRE_REPRISE_AP_REGION: lambda state: (logic.has_horizontal_movement(state) or logic.has_swimming(state)),
@@ -394,7 +394,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      SALMON_BAY_AP_REGION: lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state),
                      ANCIENT_LABYRINTH_AP_REGION: lambda state: (state.has(ANCIENT_TABLET_A, player) or options.obscureRoutes.value == options.obscureRoutes.option_true) and logic.has_vertical_movement(state) and logic.has_glide(state)})
     fancy_add_exits(world, SARA_SARA_BAZAAR_AP_REGION, [POKO_POKO_DESERT_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_WEST_AP_REGION, SHOUDU_PROVINCE_AP_REGION, THE_OPEN_SEA_AP_REGION, CONTINENTAL_TRAM_AP_REGION],
-                    {SARA_SARA_BEACH_WEST_AP_REGION: lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_AP_REGION),
+                    {SARA_SARA_BEACH_WEST_AP_REGION: lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME),
                      SHOUDU_PROVINCE_AP_REGION: lambda state: state.has(FERRY_PASS, player),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
                      CONTINENTAL_TRAM_AP_REGION: lambda state: logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)})

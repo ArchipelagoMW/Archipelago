@@ -350,9 +350,9 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Deep in eastern Quintar cave", 745 + treasure_index_offset), #Hunting Bow chest
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - At the end of the road", 825 + treasure_index_offset), #Money chest
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Hidden beneath end of the road", 2674 + treasure_index_offset), #Tonic Pouch chest
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - West of and above sneaky chest", 338 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) or logic.has_horizontal_movement(state)), #Money chest
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Pinnacle by short and tall box friends", 471 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) or logic.has_horizontal_movement(state)), #Tincture Pouch chest
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Treetop west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) or logic.has_horizontal_movement(state)), #Spore Blocker chest
+        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - West of and above sneaky chest", 338 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Money chest
+        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Pinnacle by short and tall box friends", 471 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Tincture Pouch chest
+        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Treetop west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Spore Blocker chest
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, "Overpass Chest - Climb the mountain west of Quintar Sanctum entrance", 3532 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #1st Overpass Scrap chest on main Overpass map
 
         #NPCs
@@ -361,7 +361,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Silver beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset), #Dust
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset), #Fixed Missable
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Silver in Quintar cave beneath the end of the road", 454 + npc_index_offset), #Ingot
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Silver behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) or logic.has_horizontal_movement(state)), #Ore
+        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Silver behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Ore
 
         #Quintar Nest
         #Treasure chests
@@ -512,8 +512,8 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Salmon Pass
         #Treasure chests
         # 2 chests on the east side that either require the ability to get to Greenshire Reprise and cross it or hop the bridge (also you need the 5 jobs bc the rental quintar comes from Capital Sequoia)
-        LocationData(SALMON_PASS_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Chest - Riverbank among yellow flowers", 2700 + treasure_index_offset, lambda state: (state.can_reach(GREENSHIRE_REPRISE_AP_REGION, player=player) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) and logic.has_jobs(state, 5)) or logic.has_horizontal_movement(state) or logic.has_swimming(state)), #Paypirbak chest
-        LocationData(SALMON_PASS_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Chest - Admiring the hidden waterfall", 419 + treasure_index_offset, lambda state: (state.can_reach(GREENSHIRE_REPRISE_AP_REGION, player=player) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) and logic.has_jobs(state, 5)) or logic.has_horizontal_movement(state) or logic.has_swimming(state)), #Fenix Juice chest
+        LocationData(SALMON_PASS_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Chest - Riverbank among yellow flowers", 2700 + treasure_index_offset, lambda state: (state.can_reach(GREENSHIRE_REPRISE_AP_REGION, player=player) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.has_jobs(state, 5)) or logic.has_horizontal_movement(state) or logic.has_swimming(state)), #Paypirbak chest
+        LocationData(SALMON_PASS_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Chest - Admiring the hidden waterfall", 419 + treasure_index_offset, lambda state: (state.can_reach(GREENSHIRE_REPRISE_AP_REGION, player=player) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.has_jobs(state, 5)) or logic.has_horizontal_movement(state) or logic.has_swimming(state)), #Fenix Juice chest
         # 1 chest on the west side that either requires crossing the bridge or hoofing it from Salmon River
         LocationData(SALMON_PASS_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Chest - Across a bridge and around through a tunnel", 2420 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or state.can_reach(SALMON_RIVER_AP_REGION, player=player)),  # Fenix Juice chest
 
@@ -579,8 +579,8 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Sara Sara Bazaar
         #Treasure chests
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Someone took the St James and left a...", 408 + treasure_index_offset, lambda state: logic.has_key(state, ROOM_ONE_KEY)), #Knockout Stick chest
-        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Darkened upper storeroom 1", 414 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_AP_REGION) or logic.has_horizontal_movement(state)), #Potion chest
-        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Darkened upper storeroom 2", 513 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_AP_REGION) or logic.has_horizontal_movement(state)), #Storm Rod chest
+        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Darkened upper storeroom 1", 414 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Potion chest
+        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Darkened upper storeroom 2", 513 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Storm Rod chest
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Potion Mixer", 1194 + treasure_index_offset), #Beaurior Volcano map chest
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Spilled booty", 2936 + treasure_index_offset, lambda state: logic.has_swimming(state)), #Captains Hat chest
 
@@ -1345,7 +1345,7 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         LocationData(PROVING_MEADOWS_AP_REGION, PROVING_MEADOWS_DISPLAY_NAME + " Boss - Knight", 128 + boss_index_offset, lambda state: logic.has_jobs(state, 3) and logic.is_area_in_level_range(state, 10)), #Monster ID: 212 (using Z7_CrystalCheckerNPC)
         LocationData(SKUMPARADISE_AP_REGION, SKUMPARADISE_DISPLAY_NAME + " Boss - Parasite", 333 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 19)), #Monster ID: 38
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Defeat L60 dummy and it shall appear...!", 3530 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)), #Monster ID: 303
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Enami", 458 + boss_index_offset, lambda state: (logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_AP_REGION) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, 58)), #Monster ID: 49
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Enami", 458 + boss_index_offset, lambda state: (logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, 58)), #Monster ID: 49
         LocationData(JOJO_SEWERS_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Boss - Blood Slop", 758 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)), #Monster ID: 4
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " Boss - Fancy Quintar", 971 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)), #Monster ID: 68
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY) and logic.is_area_in_level_range(state, 27)), #Monster ID: 37

@@ -4,6 +4,7 @@ from .constants.key_items import *
 from .constants.mounts import *
 from .constants.teleport_stones import *
 from .constants.ap_regions import *
+from .constants.display_regions import *
 from .constants.region_passes import *
 from .constants.item_groups import *
 from .items import singleton_keys
@@ -41,7 +42,8 @@ class CrystalProjectLogic:
             clamshell_quantity = self.options.clamshellGoalQuantity.value
         return state.has(CLAMSHELL, self.player, clamshell_quantity)
 
-    def has_rental_quintar(self, state: CollectionState, rental_region_name: str) -> bool:
+    def has_rental_quintar(self, state: CollectionState, rental_display_region_name: str) -> bool:
+        #Using the display region for this check bc it's least likely to change and equivalent in function in this case
         has_rental_quintar: bool = False
         
         #If you have Owl Drum or Quintar Flute you're just good to go
@@ -51,9 +53,9 @@ class CrystalProjectLogic:
         else:
             has_rental_quintar = state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player) or state.has(PROGRESSIVE_MOUNT, self.player)
             if self.options.regionsanity:
-                if rental_region_name == ROLLING_QUINTAR_FIELDS_AP_REGION and not state.has(ROLLING_QUINTAR_FIELDS_PASS, self.player):
+                if rental_display_region_name == ROLLING_QUINTAR_FIELDS_DISPLAY_NAME and not state.has(ROLLING_QUINTAR_FIELDS_PASS, self.player):
                     has_rental_quintar = False
-                if rental_region_name == SARA_SARA_BAZAAR_AP_REGION and not state.has(SARA_SARA_BAZAAR_PASS, self.player):
+                if rental_display_region_name == SARA_SARA_BAZAAR_DISPLAY_NAME and not state.has(SARA_SARA_BAZAAR_PASS, self.player):
                     has_rental_quintar = False
 
         return has_rental_quintar
