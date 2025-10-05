@@ -74,8 +74,10 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.MARKET_GUARD_HOUSE, world, [
-        # Todo: Can't decide how big poe should be handled
-        #(Locations.MARKET_10_BIG_POES, lambda bundle: (is_adult(bundle) and (can_kill_enemy(Enemies.BIG_POE) || has_item(Items.BOTTLE_WITH_BIG_POE, bundle, world.options.big_poe_target_count.value)))),
+        (Locations.MARKET_10_BIG_POES, lambda bundle: (is_adult(bundle) and 
+                                                       (has_bottle(bundle) and
+                                                        has_item(Events.CAN_DEFEAT_BIG_POE, bundle)) or
+                                                       has_item(Items.BOTTLE_WITH_BIG_POE, bundle, world.options.big_poe_target_count.value))),
         (Locations.MARKET_MARKET_GS_GUARD_HOUSE, lambda bundle: (is_child(bundle))),
         (Locations.MARKET_GUARD_HOUSE_CHILD_POT1, lambda bundle: (is_child(bundle) and can_break_pots(bundle))),
         (Locations.MARKET_GUARD_HOUSE_CHILD_POT2, lambda bundle: (is_child(bundle) and can_break_pots(bundle))),
@@ -163,19 +165,15 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Market Mask Shop
     # Events
     add_events(Regions.MARKET_MASK_SHOP, world, [
-        # Todo: Is this accurate? CAN_BORROW_MASKS,BORROW_SKULL_MASK in Events, rest missing. Add to Enums?
-        (EventLocations.MARKET_MASK_SHOP, Events.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER, bundle) and world.options.kakariko_gate.value))
-        (EventLocations.MARKET_MASK_SHOP, Events.BORROW_SKULL_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
-        (EventLocations.MARKET_MASK_SHOP, Events.BORROW_SPOOKY_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
-        (EventLocations.MARKET_MASK_SHOP, Events.BORROW_BUNNY_HOOD, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
-        (EventLocations.MARKET_MASK_SHOP, Events.BORROW_RIGHT_MASKS, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
-    ])
-    # Locations
-    add_locations(Regions.MARKET_MASK_SHOP, world, [
-        (Locations.MARKET_MASK_SHOP_HINT, lambda bundle: True)
+        (EventLocations.MARKET_MASK_SHOP, Events.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER, bundle) and
+                                                                                   (has_item(Events.KAKARIKO_GATE_OPEN, bundle) or world.options.kakariko_gate.value == 1) or
+                                                                                   world.options.complete_mask_quest.value == 1)),
+        (EventLocations.MARKET_MASK_SHOP, Events.CAN_BORROW_SKULL_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
+        (EventLocations.MARKET_MASK_SHOP, Events.CAN_BORROW_SPOOKY_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
+        (EventLocations.MARKET_MASK_SHOP, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
     ])
     # Connections
-    connect_regions(Regions.MARKET_BAZAAR, world, [
+    connect_regions(Regions.MARKET_MASK_SHOP, world, [
         (Regions.MARKET, lambda bundle: True)
     ])
     
@@ -224,13 +222,11 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Market Treasure Chest Game
     # Locations
     add_locations(Regions.MARKET_TREASURE_CHEST_GAME, world, [
-        (Locations.MARKET_GREG_HINT, lambda bundle: (has_item(Items.CHILD_WALLET, bundle))),
-        # Todo: Missing 'shuffle_chest_minigame' option. Are we also missing 'logic->SmallKeys(SCENE_TREASURE_BOX_SHOP)
-        # Example from Ship:
-        #LOCATION(RC_MARKET_TREASURE_CHEST_GAME_REWARD, logic->HasItem(RG_CHILD_WALLET) && ((logic->CanUse(RG_LENS_OF_TRUTH) && !ctx->GetOption(RSK_SHUFFLE_CHEST_MINIGAME)) || (ctx->GetOption(RSK_SHUFFLE_CHEST_MINIGAME).Is(RO_CHEST_GAME_SINGLE_KEYS) && logic->SmallKeys(SCENE_TREASURE_BOX_SHOP, 6)) || (ctx->GetOption(RSK_SHUFFLE_CHEST_MINIGAME).Is(RO_CHEST_GAME_PACK) && logic->SmallKeys(SCENE_TREASURE_BOX_SHOP, 1)))),
+        (Locations.MARKET_TREASURE_CHEST_GAME_REWARD, lambda bundle: (has_item(Items.CHILD_WALLET, bundle) and
+                                                                      can_use(Items.LENS_OF_TRUTH, bundle)))
     ])
     # Connections
-    connect_regions(Regions.MARKET_POTION_SHOP, world, [
+    connect_regions(Regions.MARKET_TREASURE_CHEST_GAME, world, [
         (Regions.MARKET, lambda bundle: True)
     ])
     
