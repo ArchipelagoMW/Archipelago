@@ -10,6 +10,10 @@ class EventLocations(str, Enum):
     DMT_BEAN_PLANT_FAIRY = "Death Mountain Trail Bean Plant Fairy"
     DMT_GOSSIP_STONE_FAIRY = "Death Mountain Trail Gossip Stone Fairy"
     DMT_BUG_ROCK = "Death Mountain Trail Bug Rock"
+    DMT_STORMS_GROTTO_GOSSIP_STONE = "Death Mountain Trail Storms Grotto Gossip Stone"
+    DMT_STORMS_GROTTO_BUTTERFLY_FAIRY = "Death Mountain Trail Storms Grotto Butterfly Fairy"
+    DMT_STORMS_GROTTO_BUG_GRASS = "Death Mountain Trail Storms Grotto Bug Grass"
+    DMT_STORMS_GROTTO_FISH = "Death Mountain Trail Storms Grotto Fish"
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
@@ -98,6 +102,13 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## Death Mountain Trail Storms Grotto
+    # Events
+    add_events(Regions.KF_STORMS_GROTTO, world, [
+        (EventLocations.DMT_STORMS_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.DMT_STORMS_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.DMT_STORMS_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.DMT_STORMS_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+    ])
     # Locations
     add_locations(Regions.DMT_STORMS_GROTTO, world, [
         (Locations.DMT_STORMS_GROTTO_CHEST, lambda bundle: True),
