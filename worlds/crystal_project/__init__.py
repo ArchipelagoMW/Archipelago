@@ -14,7 +14,7 @@ from .items import item_table, optional_scholar_abilities, get_random_starting_j
     display_region_name_to_pass_dict
 from .locations import get_locations, get_bosses, get_shops, get_region_completions, LocationData
 from .presets import crystal_project_options_presets
-from .regions import init_areas
+from .regions import init_areas, ap_region_to_display_region_dictionary
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_modded_items, get_modded_locations, \
@@ -245,6 +245,7 @@ class CrystalProjectWorld(World):
                 for region_pass in self.item_name_groups[PASS]:
                     all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
                 for region in self.get_regions():
+                    #This checks what AP Regions are accessible to the player
                     if region.can_reach(all_passes_state) and region.name != MENU_AP_REGION and region.name != MODDED_ZONE_AP_REGION:
                         if len(region.locations) > 3:
                             initially_reachable_regions.append(region)
@@ -253,7 +254,8 @@ class CrystalProjectWorld(World):
             self.origin_region_name = self.starter_region
             #only push if player doesn't already have the pass from their starting inventory
             if len(starting_passes_list) == 0:
-                self.multiworld.push_precollected(self.create_item(display_region_name_to_pass_dict[self.starter_region]))
+                #Converts the AP Region that was picked as the starting region to the Display Region containing that AP Region
+                self.multiworld.push_precollected(self.create_item(display_region_name_to_pass_dict[ap_region_to_display_region_dictionary[self.starter_region]]))
             self.multiworld.get_region(self.starter_region, self.player).add_exits([MENU_AP_REGION])
 
     def create_item(self, name: str) -> Item:
