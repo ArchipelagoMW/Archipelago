@@ -13,11 +13,14 @@ class EventLocations(str, Enum):
     KAKARIKO_ROCK = "Kakariko Rock"
     KAKARIKO_ADULT_TALON = "Kakariko Adult Talon"
     KAKARIKO_WINDMILL_PHONOGRAM_MAN = "Kakariko Windmill Phonogram Man"
+    KAK_OPEN_GROTTO_GOSSIP_STONE = "Kak Open Grotto Gossip Stone"
+    KAK_OPEN_GROTTO_BUTTERFLY_FAIRY = "Kak Open Grotto Butterfly Fairy"
+    KAK_OPEN_GROTTO_BUG_GRASS = "Kak Open Grotto Bug Grass"
+    KAK_OPEN_GROTTO_FISH = "Kak Open Grotto Fish"
 
 
 class LocalEvents(str, Enum):
     WAKE_UP_ADULT_TALON = "Wake Up Talon As Adult"
-    KAKARIKO_GATE_OPEN = "Kakariko Gate Open"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -25,9 +28,9 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.KAKARIKO_VILLAGE, world, [
         (EventLocations.KAKARIKO_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
-        (EventLocations.KAKARIKO_GATE, LocalEvents.KAKARIKO_GATE_OPEN,
+        (EventLocations.KAKARIKO_GATE, Events.KAKARIKO_GATE_OPEN,
          lambda bundle: is_child(bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
-        (EventLocations.KAKARIKO_GATE_GUARD, Events.BORROW_SKULL_MASK,
+        (EventLocations.KAKARIKO_GATE_GUARD, Events.CAN_BORROW_SKULL_MASK,
          lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_MASKS, bundle) and has_item(Items.CHILD_WALLET,
                                                                                                     bundle)),
     ])
@@ -115,7 +118,7 @@ def set_region_rules(world: "SohWorld") -> None:
              Items.HOVER_BOOTS, bundle)),
         (Regions.THE_GRAVEYARD, lambda bundle: True),
         (Regions.KAK_BEHIND_GATE,
-         lambda bundle: is_adult(bundle) or has_item(LocalEvents.KAKARIKO_GATE_OPEN, bundle)),
+         lambda bundle: is_adult(bundle) or has_item(Events.KAKARIKO_GATE_OPEN, bundle)),
         (Regions.KAK_BACKYARD, lambda bundle: is_adult(bundle) or at_day(bundle)),
     ])
 
@@ -301,8 +304,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Kak Granny's Potion Shop
     # Locations
     add_locations(Regions.KAK_GRANNYS_POTION_SHOP, world, [
-        [Locations.KAK_TRADE_ODD_MUSHROOM,
-         lambda bundle: is_adult(bundle) and can_use(Items.ODD_MUSHROOM, bundle)],
+        (Locations.KAK_TRADE_ODD_MUSHROOM,
+         lambda bundle: is_adult(bundle) and can_use(Items.ODD_MUSHROOM, bundle)),
         (Locations.KAK_GRANNYS_SHOP,
          lambda bundle: is_adult(bundle) and (can_use(Items.ODD_MUSHROOM, bundle)) and trade_quest_step(
              Items.ODD_MUSHROOM, bundle))
@@ -325,6 +328,13 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     # Kak Open Grotto
+    # Events
+    add_events(Regions.KAK_OPEN_GROTTO, world, [
+        (EventLocations.KAK_OPEN_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.KAK_OPEN_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.KAK_OPEN_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.KAK_OPEN_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+    ])
     # Locations
     add_locations(Regions.KAK_OPEN_GROTTO, world, [
         (Locations.KAK_OPEN_GROTTO_CHEST, lambda bundle: True),
@@ -347,7 +357,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.KAK_BEHIND_GATE, world, [
         (Regions.KAKARIKO_VILLAGE,
-         lambda bundle: is_adult(bundle) or has_item(LocalEvents.KAKARIKO_GATE_OPEN, bundle) or can_do_trick(
+         lambda bundle: is_adult(bundle) or has_item(Events.KAKARIKO_GATE_OPEN, bundle) or can_do_trick(
              Tricks.VISIBLE_COLLISION, bundle)),
         (Regions.DEATH_MOUNTAIN, lambda bundle: True)
     ])

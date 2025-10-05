@@ -45,7 +45,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ICE_CAVERN_MAP_CHEST, lambda bundle: blue_fire(bundle) and is_adult(bundle)),
         (Locations.ICE_CAVERN_COMPASS_CHEST, lambda bundle: blue_fire(bundle)),
         (Locations.ICE_CAVERN_IRON_BOOTS_CHEST, lambda bundle: blue_fire(bundle) and can_kill_enemy(bundle, Enemies.WOLFOS)),
-        (Locations.SHEIK_IN_ICE_CAVERN, lambda bundle: blue_fire(bundle) and can_kill_enemy(bundle, Enemies.WOLFOS) and is_adult()),
+        (Locations.SHEIK_IN_ICE_CAVERN, lambda bundle: blue_fire(bundle) and can_kill_enemy(bundle, Enemies.WOLFOS) and is_adult(bundle)),
         (Locations.ICE_CAVERN_FREESTANDING_PO_H, lambda bundle: blue_fire(bundle)),
         (Locations.ICE_CAVERN_GS_SPINNING_SCYTHE_ROOM, lambda bundle: hookshot_or_boomerang(bundle)),
         (Locations.ICE_CAVERN_GS_HEART_PIECE_ROOM, lambda bundle: blue_fire(bundle) and hookshot_or_boomerang(bundle)),
