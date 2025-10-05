@@ -17,7 +17,6 @@ class EventLocations(str, Enum):
 
 class LocalEvents(str, Enum):
     WAKE_UP_ADULT_TALON = "Wake Up Talon As Adult"
-    KAKARIKO_GATE_OPEN = "Kakariko Gate Open"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -25,9 +24,9 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.KAKARIKO_VILLAGE, world, [
         (EventLocations.KAKARIKO_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
-        (EventLocations.KAKARIKO_GATE, LocalEvents.KAKARIKO_GATE_OPEN,
+        (EventLocations.KAKARIKO_GATE, Events.KAKARIKO_GATE_OPEN,
          lambda bundle: is_child(bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
-        (EventLocations.KAKARIKO_GATE_GUARD, Events.BORROW_SKULL_MASK,
+        (EventLocations.KAKARIKO_GATE_GUARD, Events.CAN_BORROW_SKULL_MASK,
          lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_MASKS, bundle) and has_item(Items.CHILD_WALLET,
                                                                                                     bundle)),
     ])
