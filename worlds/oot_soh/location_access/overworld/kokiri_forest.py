@@ -11,9 +11,8 @@ class EventLocations(str, Enum):
     MIDO = "Mido's Location"
     MIDO_OUTSIDE = "Mido's Location From Outside Deku Tree"
     KOKIRI_FOREST_SOFT_SOIL = "Kokiri Forest Soft Soil"
-    KOKIRI_FOREST_STORMS_GROTTO = "Kokiri Forest Storms Grotto"
-    OUTSIDE_DEKU_TREE_NUTS = "Outside Deku Tree Nuts"
-    OUTSIDE_DEKU_TREE_STICKS = "Outside Deku Tree Sticks"
+    OUTSIDE_DEKU_TREE_DEKU_BABA_NUTS = "Outside Deku Tree Deku Baba Nuts"
+    OUTSIDE_DEKU_TREE_DEKU_BABA_STICKS = "Outside Deku Tree Deku Baba Sticks"
     OUTSIDE_DEKU_TREE_GOSSIP_STONE_FAIRY = "Outside Deku Tree Gossip Stone Fairy"
     KOKIRI_FOREST_STORMS_GROTTO_GOSSIP_STONE_FAIRY = "Kokiri Forest Storms Grotto Gossip Stone Fairy"
     KOKIRI_FOREST_STORMS_GROTTO_BUTTERFLY_FAIRY = "Kokiri Forest Storms Grotto Butterfly Stone Fairy"
@@ -151,8 +150,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## KF Outside Deku Tree
     # Locations
     add_events(Regions.KF_OUTSIDE_DEKU_TREE, world, [
-        (EventLocations.OUTSIDE_DEKU_TREE_NUTS, Events.CAN_FARM_NUTS, lambda bundle: (can_get_deku_baba_nuts(bundle))),
-        (EventLocations.OUTSIDE_DEKU_TREE_STICKS, Events.CAN_FARM_STICKS, lambda bundle: (can_get_deku_baba_sticks(bundle))),
+        (EventLocations.OUTSIDE_DEKU_TREE_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: (can_get_deku_baba_nuts(bundle))),
+        (EventLocations.OUTSIDE_DEKU_TREE_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: (can_get_deku_baba_sticks(bundle))),
         (EventLocations.MIDO_OUTSIDE, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: (has_item(Items.KOKIRI_SWORD, bundle) and 
                                                                                          has_item(Items.DEKU_SHIELD, bundle)))
         (EventLocations.OUTSIDE_DEKU_TREE_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy_except_suns(bundle))),
