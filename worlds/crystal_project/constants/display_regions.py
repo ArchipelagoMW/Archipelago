@@ -1,5 +1,7 @@
 from .ap_regions import *
 
+#The first subregion (AP Region) in a display region will be the starter region if a player puts that display region's pass in their starting inventory
+#If making a new subregion, check all other project files for instances where the region you're replacing is mentioned, but especially regions, locations, and home_points
 MENU_DISPLAY_NAME = "Menu"
 MENU_DISPLAY_SUBREGIONS = [MENU_AP_REGION]
 #Beginner

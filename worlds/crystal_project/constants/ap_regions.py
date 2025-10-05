@@ -1,3 +1,4 @@
+#If making a new AP Region, remember to add it to display_regions
 #Beginner
 MENU_AP_REGION = "Menu"
 SPAWNING_MEADOWS_AP_REGION = "Spawning Meadows"
