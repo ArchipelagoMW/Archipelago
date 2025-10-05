@@ -4707,7 +4707,6 @@ SNACK_PICKUP_IDS = {
     (base_id + 400 + 2219): (b'G004', Snacks.SNACK__015.value),
     (base_id + 400 + 2220): (b'G004', Snacks.SNACK__020.value),
     (base_id + 400 + 2221): (b'G004', Snacks.SNACK__021.value),
-    (base_id + 400 + 2222): (b'G004', Snacks.SNACK__022.value),
     (base_id + 400 + 2223): (b'G004', Snacks.SNACK__023.value),
     (base_id + 400 + 2224): (b'G004', Snacks.SNACK__024.value),
     (base_id + 400 + 2225): (b'G004', Snacks.SNACK__025.value),
@@ -8162,6 +8161,8 @@ class NO100FContext(CommonContext):
                 self.use_speedster = True
             if 'completion_goal' in args['slot_data']:
                 self.completion_goal = args['slot_data']['completion_goal']
+                if self.completion_goal > 3 and not self.use_snacks:
+                    self.completion_goal -= 4  # Negate Snack selection if Snacksanity is disabled
             if 'boss_count' in args['slot_data']:
                 self.boss_count = args['slot_data']['boss_count']
             if 'token_count' in args['slot_data']:
@@ -9066,6 +9067,44 @@ async def _check_objects_by_id(ctx: NO100FContext, locations_checked: set, id_ta
                     boss_kills += 1
                     dolphin_memory_engine.write_byte(BOSS_KILLS_ADDR, boss_kills)
 
+            if scene == b'P002':
+                if v[1] == Keys.KEY1.value:
+
+                    fix_ptr = _find_obj_in_obj_table(Keys.KEY1.value)
+                    if fix_ptr is None: break
+
+                    key_gone = _check_platform_state(ctx, fix_ptr)
+                    if key_gone == 0:  # Key is Gone, but check has not been sent
+                        locations_checked.add(k)
+
+                if v[1] == Keys.KEY2.value:
+
+                    fix_ptr = _find_obj_in_obj_table(Keys.KEY2.value)
+                    if fix_ptr is None: break
+
+                    key_gone = _check_platform_state(ctx, fix_ptr)
+                    if key_gone == 0:  # Key is Gone, but check has not been sent
+                        locations_checked.add(k)
+
+                if v[1] == Keys.KEY3.value:
+
+                    fix_ptr = _find_obj_in_obj_table(Keys.KEY3.value)
+                    if fix_ptr is None: break
+
+                    key_gone = _check_platform_state(ctx, fix_ptr)
+                    if key_gone == 0:  # Key is Gone, but check has not been sent
+                        locations_checked.add(k)
+
+                if v[1] == Keys.KEY4.value:
+
+                    fix_ptr = _find_obj_in_obj_table(Keys.KEY4.value)
+                    if fix_ptr is None: break
+
+                    key_gone = _check_platform_state(ctx, fix_ptr)
+                    if key_gone == 0:  # Key is Gone, but check has not been sent
+                        locations_checked.add(k)
+
+
             if check_cb(ctx, obj_ptr):
                 locations_checked.add(k)
 
@@ -9294,7 +9333,7 @@ async def apply_level_fixes(ctx: NO100FContext):
                     if tokens & 2 ** i == 2 ** i:
                         sum_tokens += 1
 
-                if ctx.completion_goal == 1:    #Fixes for all bosses
+                if ctx.completion_goal == 1:    # Fixes for all bosses
                     if bossesKilled >= ctx.boss_count:
                         conditions_met = True
 

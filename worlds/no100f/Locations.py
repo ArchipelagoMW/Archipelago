@@ -2295,7 +2295,6 @@ snack_location_table = {
     LocationNames.g004_SNACK__015: base_id + 400 + 2219,
     LocationNames.g004_SNACK__020: base_id + 400 + 2220,
     LocationNames.g004_SNACK__021: base_id + 400 + 2221,
-    # LocationNames.g004_SNACK__022: base_id + 400 + 2222,
     LocationNames.g004_SNACK__023: base_id + 400 + 2223,
     LocationNames.g004_SNACK__024: base_id + 400 + 2224,
     LocationNames.g004_SNACK__025: base_id + 400 + 2225,
