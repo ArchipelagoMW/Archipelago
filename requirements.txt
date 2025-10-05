@@ -14,5 +14,6 @@ orjson>=3.10.15
 typing_extensions>=4.12.2
 pyshortcuts>=1.9.1
 python-bps-continued>=7
+pillow>=10.2.0
 kivymd @ git+https://github.com/kivymd/KivyMD@5ff9d0d
 kivymd>=2.0.1.dev0
