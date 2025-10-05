@@ -5,6 +5,7 @@ from .constants.keys import *
 from .constants.key_items import *
 from .constants.maps import *
 from .constants.ap_regions import *
+from .constants.display_regions import *
 from .constants.teleport_stones import *
 from .constants.item_groups import *
 from .constants.region_passes import *
@@ -180,7 +181,7 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods:
             for modded_location in self.modded_locations:
-                location = LocationData(modded_location.region,
+                location = LocationData(modded_location.display_region,
                                         modded_location.name,
                                         modded_location.code,
                                         build_condition_rule(modded_location.rule_condition, self))
