@@ -143,7 +143,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GRAVEYARD_DAMPES_GRAVE, world, [
         (Regions.THE_GRAVEYARD, lambda bundle: True),
-        (Regions.KAK_WINDMILL, lambda bundle: is_adult(bundle) and can_use(Items.SONG_OF_TIME)) 
+        (Regions.KAK_WINDMILL, lambda bundle: is_adult(bundle) and can_use(Items.SONG_OF_TIME, bundle)) 
     ])
 
     ## The Graveyard Dampes House
@@ -165,5 +165,6 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GRAVEYARD_WARP_PAD_REGION, world, [
         (Regions.THE_GRAVEYARD, lambda bundle: True),
-        (Regions.SHADOW_TEMPLE_ENTRYWAY, lambda bundle: can_use(Items.DINS_FIRE, bundle) or (can_do_trick(Tricks.GY_SHADOW_FIRE_ARROWS, bundle) and is_adult(bundle) and can_use(Items.FIRE_ARROW))) 
+        (Regions.SHADOW_TEMPLE_ENTRYWAY, lambda bundle: can_use(Items.DINS_FIRE, bundle) or (can_do_trick(Tricks.GY_SHADOW_FIRE_ARROWS, bundle) and is_adult(bundle) and can_use(Items.FIRE_ARROW, bundle))) 
     ])
+    

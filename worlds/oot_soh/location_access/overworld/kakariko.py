@@ -114,7 +114,7 @@ def set_region_rules(world: "SohWorld") -> None:
              Items.HOVER_BOOTS, bundle)),
         (Regions.THE_GRAVEYARD, lambda bundle: True),
         (Regions.KAK_BEHIND_GATE,
-         lambda bundle: is_adult(bundle) or has_item(LocalEvents.KAKARIKO_GATE_OPEN, bundle)),
+         lambda bundle: is_adult(bundle) or has_item(Events.KAKARIKO_GATE_OPEN, bundle)),
         (Regions.KAK_BACKYARD, lambda bundle: is_adult(bundle) or at_day(bundle)),
     ])
 
@@ -300,8 +300,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Kak Granny's Potion Shop
     # Locations
     add_locations(Regions.KAK_GRANNYS_POTION_SHOP, world, [
-        [Locations.KAK_TRADE_ODD_MUSHROOM,
-         lambda bundle: is_adult(bundle) and can_use(Items.ODD_MUSHROOM, bundle)],
+        (Locations.KAK_TRADE_ODD_MUSHROOM,
+         lambda bundle: is_adult(bundle) and can_use(Items.ODD_MUSHROOM, bundle)),
         (Locations.KAK_GRANNYS_SHOP,
          lambda bundle: is_adult(bundle) and (can_use(Items.ODD_MUSHROOM, bundle)) and trade_quest_step(
              Items.ODD_MUSHROOM, bundle))
@@ -346,7 +346,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.KAK_BEHIND_GATE, world, [
         (Regions.KAKARIKO_VILLAGE,
-         lambda bundle: is_adult(bundle) or has_item(LocalEvents.KAKARIKO_GATE_OPEN, bundle) or can_do_trick(
+         lambda bundle: is_adult(bundle) or has_item(Events.KAKARIKO_GATE_OPEN, bundle) or can_do_trick(
              Tricks.VISIBLE_COLLISION, bundle)),
         (Regions.DEATH_MOUNTAIN, lambda bundle: True)
     ])

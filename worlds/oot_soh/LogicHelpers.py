@@ -473,7 +473,7 @@ def can_break_lower_hives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -
 
 def can_break_upper_beehives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return (hookshot_or_boomerang(bundle) or
-            (can_do_trick("Beehives With Bombchus", bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) or 
+            (can_do_trick(Tricks.BOMBCHU_BEEHIVES, bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) or 
             (False and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle)))) #TODO implement sling/bow destroy hives option
 
 

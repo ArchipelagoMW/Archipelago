@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 class EventLocations(str, Enum):
     MIDO = "Mido's Location"
     MIDO_OUTSIDE = "Mido's Location From Outside Deku Tree"
+    KOKIRI_FOREST_GOSSIP_STONE_FAIRY = "Kokiri Forest Gossip Stone Fairy"
     KOKIRI_FOREST_SOFT_SOIL = "Kokiri Forest Soft Soil"
     OUTSIDE_DEKU_TREE_DEKU_BABA_NUTS = "Outside Deku Tree Deku Baba Nuts"
     OUTSIDE_DEKU_TREE_DEKU_BABA_STICKS = "Outside Deku Tree Deku Baba Sticks"
@@ -19,7 +20,6 @@ class EventLocations(str, Enum):
     KOKIRI_FOREST_STORMS_GROTTO_BUG_GRASS = "Kokiri Forest Storms Grotto Bugs"
     KOKIRI_FOREST_STORMS_GROTTO_FISH = "Kokiri Forest Storms Grotto Fish"
     
-
 
 class LocalEvents(str, Enum):
     MIDO_SWORD_AND_SHIELD = "Showed Mido the Sword and Shield"
@@ -33,7 +33,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.MIDO, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: is_child(bundle)
                                                                     and has_item(Items.KOKIRI_SWORD, bundle) 
                                                                     and has_item(Items.DEKU_SHIELD, bundle)),
-        (EventLocations.KOKIRI_FOREST_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
+        (EventLocations.KOKIRI_FOREST_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (EventLocations.KOKIRI_FOREST_SOFT_SOIL, LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, lambda bundle: is_child(bundle) and
                                                                                             can_use(Items.MAGIC_BEAN, bundle)),
     ])
@@ -153,7 +153,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.OUTSIDE_DEKU_TREE_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: (can_get_deku_baba_nuts(bundle))),
         (EventLocations.OUTSIDE_DEKU_TREE_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: (can_get_deku_baba_sticks(bundle))),
         (EventLocations.MIDO_OUTSIDE, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: (has_item(Items.KOKIRI_SWORD, bundle) and 
-                                                                                         has_item(Items.DEKU_SHIELD, bundle)))
+                                                                                         has_item(Items.DEKU_SHIELD, bundle))),
         (EventLocations.OUTSIDE_DEKU_TREE_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy_except_suns(bundle))),
     ])
     add_locations(Regions.KF_OUTSIDE_DEKU_TREE, world, [
