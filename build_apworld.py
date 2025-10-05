@@ -68,6 +68,15 @@ def main(
 
     if os.path.isfile(apworld.manifest_path):
         manifest = orjson.loads(open(apworld.manifest_path).read())
+
+        assert "game" in manifest, (
+            f"World directory {world_directory} has an archipelago.json manifest file, but it does not define a \"game\"."
+        )
+
+        assert manifest["game"] == worldtype.game, (
+            f"World directory {world_directory} has an archipelago.json manifest file, but value of the"
+            f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
+        )
     else:
         manifest = {}
 
