@@ -65,11 +65,11 @@ def set_region_rules(world: "SohWorld") -> None:
 
     ## Desert Colossus From Spirit Entryway
     # Locations
-    add_locations(Regions.DESERT_COLOSSUS_FROM_SPIRIT_ENTRYWAY, world, [
+    add_locations(Regions.DESERT_COLOSSUS_OUTSIDE_TEMPLE, world, [
         (Locations.SHEIK_AT_COLOSSUS, lambda bundle: True)
     ])
     # Connections
-    connect_regions(Regions.DESERT_COLOSSUS_FROM_SPIRIT_ENTRYWAY, world, [
+    connect_regions(Regions.DESERT_COLOSSUS_OUTSIDE_TEMPLE, world, [
         (Regions.DESERT_COLOSSUS, lambda bundle: True)
     ])
 
