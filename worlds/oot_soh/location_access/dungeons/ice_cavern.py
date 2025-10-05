@@ -38,14 +38,14 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Ice Cavern Main
     # Events
     add_events(Regions.ICE_CAVERN, world, [
-        (EventLocations.ICE_CAVERN_BLUE_FIRE_ACCESS, Events.BLUE_FIRE_ACCESS, lambda bundle: is_adult(bundle))
+        (EventLocations.ICE_CAVERN_BLUE_FIRE_ACCESS, Events.CAN_ACCESS_BLUE_FIRE, lambda bundle: is_adult(bundle))
     ])
     # Locations
     add_locations(Regions.ICE_CAVERN, world, [
         (Locations.ICE_CAVERN_MAP_CHEST, lambda bundle: blue_fire(bundle) and is_adult(bundle)),
         (Locations.ICE_CAVERN_COMPASS_CHEST, lambda bundle: blue_fire(bundle)),
         (Locations.ICE_CAVERN_IRON_BOOTS_CHEST, lambda bundle: blue_fire(bundle) and can_kill_enemy(bundle, Enemies.WOLFOS)),
-        (Locations.SHEIK_IN_ICE_CAVERN, lambda bundle: blue_fire(bundle) and can_kill_enemy(bundle, Enemies.WOLFOS) and is_adult()),
+        (Locations.SHEIK_IN_ICE_CAVERN, lambda bundle: blue_fire(bundle) and can_kill_enemy(bundle, Enemies.WOLFOS) and is_adult(bundle)),
         (Locations.ICE_CAVERN_FREESTANDING_PO_H, lambda bundle: blue_fire(bundle)),
         (Locations.ICE_CAVERN_GS_SPINNING_SCYTHE_ROOM, lambda bundle: hookshot_or_boomerang(bundle)),
         (Locations.ICE_CAVERN_GS_HEART_PIECE_ROOM, lambda bundle: blue_fire(bundle) and hookshot_or_boomerang(bundle)),

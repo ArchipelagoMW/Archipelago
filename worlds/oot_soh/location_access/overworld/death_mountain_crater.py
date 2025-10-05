@@ -9,11 +9,14 @@ if TYPE_CHECKING:
 class EventLocations(str, Enum):
     DMC_GOSSIP_STONE_FAIRY = "Death Mountain Crater Gossip Stone Fairy"
     DMC_BEAN_PLANT_FAIRY = "Death Mountain Crater Bean Plant Fairy"
+    DMC_UPPER_GROTTO_GOSSIP_STONE = "Death Mountain Crater Upper Grotto Gossip Stone"
+    DMC_UPPER_GROTTO_BUTTERFLY_FAIRY = "Death Mountain Crater Upper Grotto Butterfly Fairy"
+    DMC_UPPER_GROTTO_BUG_GRASS = "Death Mountain Crater Upper Grotto Bug Grass"
+    DMC_UPPER_GROTTO_FISH = "Death Mountain Crater Upper Grotto Fish"
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-    
+
     ## Death Mountain Crater Upper Nearby
     # Connections
     connect_regions(Regions.DMC_UPPER_NEARBY, world, [
@@ -52,7 +55,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DMC_LADDER_REGION_NEARBY, world, [
         (Regions.DMC_UPPER_NEARBY, lambda bundle: hearts(bundle) >= 3),
-        (Regions.DMC_LOWER_NEARBY, lambda bundle: hearts(bundle) >= 3 and (can_use(Items.HOVER_BOOTS, bundle) or (can_do_trick(Tricks.DMC_BOULDER_JS, bundle) and is_adult(bundle) and can_use(Items.MEGATON_HAMMER, bundle)) or (can_do_trick("DMC Boulder Skip", bundle) and is_adult(bundle))))
+        (Regions.DMC_LOWER_NEARBY, lambda bundle: hearts(bundle) >= 3 and (can_use(Items.HOVER_BOOTS, bundle) or (can_do_trick(Tricks.DMC_BOULDER_JS, bundle) and is_adult(bundle) and can_use(Items.MEGATON_HAMMER, bundle)) or (can_do_trick(Tricks.DMC_BOULDER_SKIP, bundle) and is_adult(bundle))))
     ])
 
     ## Death Mountain Crater Lower Nearby
@@ -126,7 +129,7 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.DMC_CENTRAL_LOCAL, world, [
         (Regions.DMC_CENTRAL_NEARBY, lambda bundle: True),
         (Regions.DMC_LOWER_NEARBY, lambda bundle: (is_adult(bundle) and can_plant_bean(bundle)) or can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle)),
-        (Regions.DMC_UPPER_NEARBY, lambda bundle: is_adult(bundle) and can_plant_bean(bundle)) 
+        (Regions.DMC_UPPER_NEARBY, lambda bundle: is_adult(bundle) and can_plant_bean(bundle)),
         (Regions.FIRE_TEMPLE_ENTRYWAY, lambda bundle: (is_child(bundle) and hearts(bundle) >= 3 and False) or (is_adult(bundle) and fire_timer(bundle) >= 24)), # TODO Implement Dungeon Shuffle Option to replace False
         (Regions.DMC_DISTANT_PLATFORM, lambda bundle: (fire_timer(bundle) >= 48 or hearts(bundle) >= 2) and can_use(Items.DISTANT_SCARECROW, bundle)),
         (Regions.DMC_VOLCANO_VENT, lambda bundle: is_adult(bundle) and hearts(bundle) >= 3 and can_plant_bean(bundle))
@@ -143,6 +146,13 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## Death Mountain Crater Upper Grotto
+    # Events
+    add_events(Regions.DMC_UPPER_GROTTO, world, [
+        (EventLocations.DMC_UPPER_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.DMC_UPPER_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.DMC_UPPER_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.DMC_UPPER_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+    ])
     # Locations
     add_locations(Regions.DMC_UPPER_GROTTO, world, [
         (Locations.DMC_UPPER_GROTTO_CHEST, lambda bundle: True),
@@ -180,7 +190,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.DMC_DISTANT_PLATFORM_RUPEE1, lambda bundle: is_adult(bundle)),
         (Locations.DMC_DISTANT_PLATFORM_RUPEE2, lambda bundle: is_adult(bundle)),
         (Locations.DMC_DISTANT_PLATFORM_RUPEE3, lambda bundle: is_adult(bundle)),
-        (Locations.DMC_DISTANT_PLATFORM_RUPEE4, lambda bundle: is_adult(bundle))
+        (Locations.DMC_DISTANT_PLATFORM_RUPEE4, lambda bundle: is_adult(bundle)),
         (Locations.DMC_DISTANT_PLATFORM_RUPEE5, lambda bundle: is_adult(bundle)),
         (Locations.DMC_DISTANT_PLATFORM_RUPEE6, lambda bundle: is_adult(bundle)),
         (Locations.DMC_DISTANT_PLATFORM_RED_RUPEE, lambda bundle: is_adult(bundle))

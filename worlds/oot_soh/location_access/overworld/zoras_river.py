@@ -11,6 +11,10 @@ if TYPE_CHECKING:
 class EventLocations(str, Enum):
     ZORAS_RIVER_SHRUB = "Zora's River Shrub"
     MAGIC_BEAN_SALESMAN_SHOP = "Magic Bean Salesman Shop"
+    ZR_OPEN_GROTTO_GOSSIP_STONE = "Death Mountain Crater Upper Grotto Gossip Stone"
+    ZR_OPEN_GROTTO_BUTTERFLY_FAIRY = "Death Mountain Crater Upper Grotto Butterfly Fairy"
+    ZR_OPEN_GROTTO_BUG_GRASS = "Death Mountain Crater Upper Grotto Bug Grass"
+    ZR_OPEN_GROTTO_FISH = "Death Mountain Crater Upper Grotto Fish"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -164,6 +168,13 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## ZR Open Grotto
+    # Events
+    add_events(Regions.ZR_OPEN_GROTTO, world, [
+        (EventLocations.ZR_OPEN_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.ZR_OPEN_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.ZR_OPEN_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.ZR_OPEN_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+    ])
     # Locations
     add_locations(Regions.ZR_OPEN_GROTTO, world, [
         (Locations.ZR_OPEN_GROTTO_CHEST, lambda bundle: True),
