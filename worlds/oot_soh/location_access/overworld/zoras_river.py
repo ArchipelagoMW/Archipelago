@@ -52,13 +52,15 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Zora River
     # Events
     add_events(Regions.ZORA_RIVER, world, [
-        (EventLocations.MAGIC_BEAN_SALESMAN_SHOP, Events.CAN_BUY_BEANS, 
-            lambda bundle: has_item(Items.CHILD_WALLET, bundle) and (world.options.shuffle_merchants.value == 0 or world.options.shuffle_merchants.value == 2)), # Bean shop not randomized
         (EventLocations.ZORAS_RIVER_SHRUB, Events.CAN_ACCESS_BUGS, lambda bundle: can_cut_shrubs(bundle))
     ])
+    if world.options.shuffle_merchants.value == 0 or world.options.shuffle_merchants.value == 2: # Only when selling vanilla item (beans)
+        add_events(Regions.ZORA_RIVER, world, [
+            (EventLocations.MAGIC_BEAN_SALESMAN_SHOP, Events.CAN_BUY_BEANS, lambda bundle: has_item(Items.CHILD_WALLET, bundle))
+        ])
     # Locations
     add_locations(Regions.ZORA_RIVER, world, [
-        (Locations.ZR_MAGIC_BEAN_SALESMAN, lambda bundle: is_child(bundle)),
+        (Locations.ZR_MAGIC_BEAN_SALESMAN, lambda bundle: is_child(bundle) and has_item(Items.CHILD_WALLET, bundle)),
         (Locations.ZR_FROGS_OCARINA_GAME, lambda bundle: (is_child(bundle) and
                                                                can_use(Items.SONG_OF_STORMS, bundle) and
                                                                can_use(Items.SONG_OF_TIME, bundle) and
