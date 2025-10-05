@@ -850,6 +850,13 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
+    if not gui_enabled:
+        if error:
+            logging.error(f"{title}: {text}")
+        else:
+            logging.info(f"{title}: {text}")
+        return
+
     if is_kivy_running():
         from kvui import MessageBox
         MessageBox(title, text, error).open()
