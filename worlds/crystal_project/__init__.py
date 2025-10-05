@@ -224,7 +224,7 @@ class CrystalProjectWorld(World):
         # pick one display region to give a starting pass to and then save that later
         if self.options.regionsanity.value == self.options.regionsanity.option_true:
             starting_passes_list: List[str] = []
-            #checking the start inventory for region passes and using the first one as the starter region, if any
+            #checking the start inventory for region passes and using the first one to set the starter region, if any
             for item_name in self.options.start_inventory.keys():
                 if item_name in self.item_name_groups[PASS]:
                     starting_passes_list.append(item_name)
@@ -460,7 +460,7 @@ class CrystalProjectWorld(World):
 
         for name, data in item_table.items():
             if name not in excluded_items:
-                #Check region and add the region amounts; then check Shopsanity and add the shop amounts
+                #Check region type and add the region-type amounts; then check Shopsanity and add the shop amounts
                 amount:int = int(data.beginnerAmount or 0)
                 if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
                     amount = amount + int(data.beginnerShops or 0)
