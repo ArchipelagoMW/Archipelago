@@ -70,12 +70,12 @@ def main(
         manifest = orjson.loads(open(apworld.manifest_path).read())
 
         assert "game" in manifest, (
-            f"World directory {world_directory} has an archipelago.json manifest file, but it does not define a \"game\"."
+            f"World directory {input_path} has an {MANIFEST_NAME} manifest file, but it does not define a \"game\"."
         )
 
-        assert manifest["game"] == worldtype.game, (
-            f"World directory {world_directory} has an archipelago.json manifest file, but value of the"
-            f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
+        assert manifest["game"] == game_name, (
+            f"World directory {input_path} has an {MANIFEST_NAME} manifest file, but value of the"
+            f"\"game\" field ({manifest['game']} does not equal the World class's game ({game_name})."
         )
     else:
         manifest = {}
