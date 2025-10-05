@@ -8,8 +8,9 @@ if TYPE_CHECKING:
     
 class EventLocations(str, Enum):
     HYRULE_FIELD = "Hyrule Field"
-    HF_COW_GROTTO_BEHIND_WEBS = "HF Cow Grotto Behind Webs"
-    HF_FAIRY_FOUNTAIN = "HF Fairy Fountain"
+    HF_COW_GROTTO_BEHIND_WEBS_GOSSIP_STONE = "HF Cow Grotto Behind Webs Gossip Stone"
+    HF_COW_GROTTO_BEHIND_WEBS_BUGS_SHRUB = "HF Cow Grotto Behind Webs Bugs Shrub"
+    HF_FAIRY_GROTTO_FAIRY = "HF Fairy Grotto Fairy"
     HF_SOUTHEAST_GROTTO_GOSSIP_STONE = "HF Southeast Grotto Gossip Stone"
     HF_SOUTHEAST_GROTTO_BUTTERFLY_FAIRY = "HF Southeast Grotto Butterfly Fairy"
     HF_SOUTHEAST_GROTTO_BUG_GRASS = "HF Southeast Grotto Bugs"
@@ -165,14 +166,11 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.KAKARIKO_VILLAGE, lambda bundle: True),
         (Regions.ZR_FRONT, lambda bundle: True),
         (Regions.LON_LON_RANCH, lambda bundle: True),
-        # Todo: Uses 'Here(RR_HYRULE_FIELD)'
         (Regions.HF_SOUTHEAST_GROTTO, lambda bundle: (blast_or_smash(bundle))),
         (Regions.HF_OPEN_GROTTO, lambda bundle: True),
         (Regions.HF_INSIDE_FENCE_GROTTO, lambda bundle: (can_open_bomb_grotto(bundle))),
         (Regions.HF_COW_GROTTO, lambda bundle: ((can_use(Items.MEGATON_HAMMER, bundle) or is_child(bundle)) and can_open_bomb_grotto(bundle))),
-        # Todo: Uses 'Here(RR_HYRULE_FIELD)'
         (Regions.HF_NEAR_MARKET_GROTTO, lambda bundle: (blast_or_smash(bundle))),
-        # Todo: Uses 'Here(RR_HYRULE_FIELD)'
         (Regions.HF_FAIRY_GROTTO, lambda bundle: (blast_or_smash(bundle))),
         (Regions.HF_NEAR_KAK_GROTTO, lambda bundle: (can_open_bomb_grotto(bundle))),
         (Regions.HF_TEKTITE_GROTTO, lambda bundle: (can_open_bomb_grotto(bundle))),
@@ -190,7 +188,6 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.HF_SOUTHEAST_GROTTO, world, [
         (Locations.HF_SOUTHEAST_GROTTO_CHEST, lambda bundle: True),
         (Locations.HF_SOUTHEAST_GROTTO_FISH, lambda bundle: (has_bottle(bundle))),
-        # Todo: Check below 2 accuracy
         (Locations.HF_SOUTHEAST_GOSSIP_STONE_FAIRY , lambda bundle: (call_gossip_fairy(bundle))),
         (Locations.HF_SOUTHEAST_GOSSIP_STONE_BIG_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
         (Locations.HF_SOUTHEAST_GROTTO_BEEHIVE_LEFT, lambda bundle: (can_break_lower_hives(bundle))),
@@ -253,13 +250,12 @@ def set_region_rules(world: "SohWorld") -> None:
     ## HF Cow Grotto Behind Webs
     # Events
     add_events(Regions.HF_COW_GROTTO_BEHIND_WEBS, world, [
-        # Todo: What is 'LOGIC_BUG_SHRUB'?
-        #(EventLocations.HF_COW_GROTTO_BEHIND_WEBS, Events.BUG_SHRUB, lambda bundle: (can_cut_shrubs(bundle))),
-        (EventLocations.HF_COW_GROTTO_BEHIND_WEBS, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle)))
+        (EventLocations.HF_COW_GROTTO_BEHIND_WEBS_BUGS_SHRUB, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.HF_COW_GROTTO_BEHIND_WEBS_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle)))
     ])
     # Locations
     add_locations(Regions.HF_COW_GROTTO_BEHIND_WEBS, world, [
-        (Locations.HF_GS_COW_GROTTO, lambda bundle: (can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, Items.BOOMERANG))),
+        (Locations.HF_GS_COW_GROTTO, lambda bundle: (can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG))),
         (Locations.HF_COW_GROTTO_COW, lambda bundle: (can_use(Items.EPONAS_SONG, bundle))),
         (Locations.HF_COW_GROTTO_GOSSIP_STONE_FAIRY, lambda bundle: (call_gossip_fairy(bundle))),
         (Locations.HF_COW_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
@@ -302,7 +298,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## HF Fairy Grotto
     # Events
     add_events(Regions.HF_FAIRY_GROTTO, world, [
-        (EventLocations.HF_FAIRY_GROTTO, Events.CAN_ACCESS_FAIRIES, lambda bundle: True)
+        (EventLocations.HF_FAIRY_GROTTO_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.HF_FAIRY_GROTTO, world, [
