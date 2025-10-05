@@ -12,8 +12,9 @@ class EventLocations(str, Enum):
     FOREST_TEMPLE_AMY = "Forest Temple Amy"
     FOREST_TEMPLE_BETH = "Forest Temple Beth"
     FOREST_TEMPLE_LOWER_STALFOS_FAIRY_POT = "Forest Temple Lower Stalfos Fairy Pot"
-    FOREST_TEMPLE_STICKS = "Forest Temple Stick"
-    FOREST_TEMPLE_NUTS = "Forest Temple Nuts"
+    FOREST_TEMPLE_DEKU_BABA_STICKS = "Forest Temple Deku Baba Sticks"
+    FOREST_TEMPLE_DEKu_BABA_NUTS = "Forest Temple Deku Baba Nuts"
+    FOREST_TEMPLE_CLEAR = "Forest Temple Clear"
 
 class LocalEvents(str, Enum):
     DEFEATED_MEG = "Defeated Meg"
@@ -140,7 +141,317 @@ def set_region_rules(world: "SohWorld") -> None:
     
     ## Forest Temple NW Outdoors Upper
     # Events
+    add_events(Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, world, [
+        (EventLocations.FOREST_TEMPLE_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.FOREST_TEMPLE_DEKu_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle)),
+    ])
     # Locations
+    add_locations(Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, world, [
+        (Locations.FOREST_TEMPLE_GS_LEVEL_ISLAND_COURTYARD, lambda bundle: hookshot_or_boomerang(bundle)),
+        (Locations.FOREST_TEMPLE_WEST_COURTYARD_RIGHT_HEART, lambda bundle: True),
+        (Locations.FOREST_TEMPLE_WEST_COURTYARD_LEFT_HEART, lambda bundle: True)
+    ])
     # Connections
+    connect_regions(Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, world, [
+        (Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_BELOW_BOSS_KEY_CHEST, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_FLOORMASTER_ROOM, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_BLOCK_PUSH_ROOM, lambda bundle: True)
+    ])
     
+    ## Forest Temple NE Outdoors Lower
+    # Events
+    add_events(Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, world, [
+        (EventLocations.FOREST_TEMPLE_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.FOREST_TEMPLE_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
+    ])
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, world, [
+        (Locations.FOREST_TEMPLE_RAISED_ISLAND_COURTYARD_CHEST, lambda bundle: can_use(Items.HOOKSHOT, bundle)),
+        (Locations.FOREST_TEMPLE_GS_RAISED_ISLAND_COURTYARD, lambda bundle: (can_use(Items.HOOKSHOT, bundle) or 
+                                                                             (can_do_trick(Tricks.FOREST_OUTDOORS_EAST_GS, bundle) and can_use(Items.BOOMERANG, bundle)))),
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, world, [
+        (Regions.FOREST_TEMPLE_LOBBY, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_NE_OUTDOORS_UPPER, lambda bundle: (can_use(Items.LONGSHOT, bundle) or 
+                                                                  (can_do_trick(Tricks.FOREST_VINES, bundle) and can_use(Items.HOOKSHOT, bundle)))),
+        (Regions.FOREST_TEMPLE_SEWER, lambda bundle: (has_item(Items.GOLDEN_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle))),
+        (Regions.FOREST_TEMPLE_FALLING_ROOM, lambda bundle: True)
+    ])
     
+    ## Forest Temple NE Outdoors Upper
+    # Events
+    add_events(Regions.FOREST_TEMPLE_NE_OUTDOORS_UPPER, world, [
+        (EventLocations.FOREST_TEMPLE_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.FOREST_TEMPLE_DEKu_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle)),
+    ])
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_NE_OUTDOORS_UPPER, world, [
+        (Locations.FOREST_TEMPLE_RAISED_ISLAND_COURTYARD_CHEST, lambda bundle: (is_adult(bundle) and
+                                                                                can_do_trick(Tricks.FOREST_OUTDOORS_LEDGE, bundle) and
+                                                                                can_use(Items.HOVER_BOOTS, bundle))),
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_NE_OUTDOORS_UPPER, world, [
+        (Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_MAP_ROOM, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_DRAINED_SEWER, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_FALLING_ROOM, lambda bundle: (can_do_trick(Tricks.FOREST_DOORFRAME, bundle) and
+                                                             can_jump_slash_except_hammer(bundle) and
+                                                             can_use(Items.HOVER_BOOTS, bundle) and
+                                                             can_use(Items.SCARECROW, bundle)))
+    ])
+    
+    ## Forest Temple Map Room
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_MAP_ROOM, world, [
+        (Locations.FOREST_TEMPLE_MAP_CHEST, lambda bundle: can_kill_enemy(bundle, Enemies.BLUE_BUBBLE))
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_MAP_ROOM, world, [
+        (Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, lambda bundle: can_kill_enemy(bundle, Enemies.BLUE_BUBBLE)),
+        (Regions.FOREST_TEMPLE_NE_OUTDOORS_UPPER, lambda bundle: can_kill_enemy(bundle, Enemies.BLUE_BUBBLE)),
+    ])
+    
+    ## Forest Temple Sewer
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_SEWER, world, [
+        (Locations.FOREST_TEMPLE_WELL_CHEST, lambda bundle: (can_open_underwater_chest(bundle) and
+                                                             water_timer(bundle) >= 8)),
+        (Locations.FOREST_TEMPLE_WELL_WEST_HEART, lambda bundle: (can_use(Items.IRON_BOOTS, bundle) and
+                                                                  water_timer(bundle) >= 8)),
+        (Locations.FOREST_TEMPLE_WELL_EAST_HEART, lambda bundle: (can_use(Items.IRON_BOOTS, bundle) and
+                                                                  water_timer(bundle) >= 8))
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_SEWER, world, [
+        (Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, lambda bundle: has_item(Items.BRONZE_SCALE, bundle)),
+        (Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, lambda bundle: has_item(Items.BRONZE_SCALE, bundle))
+    ])
+    
+    ## Forest Temple Drained Well
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_DRAINED_SEWER, world, [
+        (Locations.FOREST_TEMPLE_WELL_CHEST, lambda bundle: True),
+        (Locations.FOREST_TEMPLE_WELL_WEST_HEART, lambda bundle: True),
+        (Locations.FOREST_TEMPLE_WELL_EAST_HEART, lambda bundle: True)
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_DRAINED_SEWER, world, [
+        (Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, lambda bundle: True)
+    ])
+    
+    ## Forest Temple Below Boss Key Chest
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_BELOW_BOSS_KEY_CHEST, world, [
+        (Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, lambda bundle: can_kill_enemy(bundle, Enemies.BLUE_BUBBLE))
+    ])
+    
+    ## Forest Temple Floormaster Room
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_FLOORMASTER_ROOM, world, [
+        (Locations.FOREST_TEMPLE_FLOORMASTER_CHEST, lambda bundle: can_damage(bundle))
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_FLOORMASTER_ROOM, world, [
+        (Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, lambda bundle: True)
+    ])
+    
+    ## Forest Temple West Corridor
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_WEST_CORRIDOR, world, [
+        (Regions.FOREST_TEMPLE_LOBBY, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 1, bundle)),
+        (Regions.FOREST_TEMPLE_BLOCK_PUSH_ROOM, lambda bundle: (can_attack(bundle) or can_use(Items.NUTS, bundle)))
+    ])
+    
+    ## Forest Temple Block Push Room
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_BLOCK_PUSH_ROOM, world, [
+        (Locations.FOREST_TEMPLE_EYE_SWITCH_CHEST, lambda bundle: (has_item(Items.GORONS_BRACELET, bundle) and
+                                                                   (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle))))
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_BLOCK_PUSH_ROOM, world, [
+        (Regions.FOREST_TEMPLE_WEST_CORRIDOR, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, lambda bundle: (can_use(Items.HOVER_BOOTS, bundle) or
+                                                                  (can_do_trick(Tricks.FOREST_OUTSIDE_BACKDOOR, bundle) and 
+                                                                   can_jump_slash_except_hammer(bundle) and
+                                                                   has_item(Items.GORONS_BRACELET, bundle)))),
+        (Regions.FOREST_TEMPLE_NW_CORRIDOR_TWISTED, lambda bundle: (is_adult(bundle) and
+                                                                    has_item(Items.GORONS_BRACELET, bundle) and
+                                                                    small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 2, bundle))),
+        (Regions.FOREST_TEMPLE_NW_CORRIDOR_STRAIGHTENED, lambda bundle: (is_adult(bundle) and
+                                                                         (can_use(Items.FAIRY_BOW, bundle) or
+                                                                          can_use(Items.FAIRY_SLINGSHOT, bundle)) and
+                                                                         has_item(Items.GORONS_BRACELET, bundle) and
+                                                                         small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 2, bundle)))
+    ])
+    
+    ## Forest Temple NW Corridor Twisted
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_NW_CORRIDOR_TWISTED, world, [
+        (Regions.FOREST_TEMPLE_BLOCK_PUSH_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 2, bundle)),
+        (Regions.FOREST_TEMPLE_RED_POE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 3, bundle))
+    ])
+    
+    ## Forest Temple NW Corridor Straightened
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_NW_CORRIDOR_STRAIGHTENED, world, [
+        (Locations.FOREST_TEMPLE_BOSS_KEY_CHEST, lambda bundle: True)
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_NW_CORRIDOR_STRAIGHTENED, world, [
+        (Regions.FOREST_TEMPLE_BELOW_BOSS_KEY_CHEST, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_BLOCK_PUSH_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 2, bundle))
+    ])
+    
+    ## Forest Temple Red Poe Room
+    # Events
+    add_events(Regions.FOREST_TEMPLE_RED_POE_ROOM, world, [
+        (EventLocations.FOREST_TEMPLE_JOELLE, LocalEvents.DEFEATED_JOELLE, lambda bundle: can_use(Items.FAIRY_BOW, bundle))
+    ])
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_RED_POE_ROOM, world, [
+        (Locations.FOREST_TEMPLE_RED_POE_CHEST, lambda bundle: has_item(LocalEvents.DEFEATED_JOELLE, bundle))
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_RED_POE_ROOM, world, [
+        (Regions.FOREST_TEMPLE_NW_CORRIDOR_TWISTED, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 3, bundle)),
+        (Regions.FOREST_TEMPLE_UPPER_STALFOS, lambda bundle: True)
+    ])
+    
+    ## Forest Temple Upper Stalfos
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_UPPER_STALFOS, world, [
+        (Locations.FOREST_TEMPLE_BOW_CHEST, lambda bundle: can_kill_enemy(bundle, Enemies.STALFOS, EnemyDistance.CLOSE, True, 3)),
+        (Locations.FOREST_TEMPLE_UPPER_STALFOS_POT1, lambda bundle: can_break_pots(bundle)),
+        (Locations.FOREST_TEMPLE_UPPER_STALFOS_POT2, lambda bundle: can_break_pots(bundle)),
+        (Locations.FOREST_TEMPLE_UPPER_STALFOS_POT3, lambda bundle: can_break_pots(bundle)),
+        (Locations.FOREST_TEMPLE_UPPER_STALFOS_POT4, lambda bundle: can_break_pots(bundle)),
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_UPPER_STALFOS, world, [
+        (Regions.FOREST_TEMPLE_RED_POE_ROOM, lambda bundle: can_kill_enemy(bundle, Enemies.STALFOS, EnemyDistance.CLOSE, True, 3)),
+        (Regions.FOREST_TEMPLE_BLUE_POE_ROOM, lambda bundle: can_kill_enemy(bundle, Enemies.STALFOS, EnemyDistance.CLOSE, True, 3))
+    ])
+    
+    ## Forest Temple Blue Poe Room
+    # Events
+    add_events(Regions.FOREST_TEMPLE_BLUE_POE_ROOM, world, [
+        (EventLocations.FOREST_TEMPLE_BETH, LocalEvents.DEFEATED_BETH, lambda bundle: can_use(Items.FAIRY_BOW, bundle))
+    ])
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_BLUE_POE_ROOM, world, [
+        (Locations.FOREST_TEMPLE_BLUE_POE_CHEST, lambda bundle: has_item(LocalEvents.DEFEATED_BETH, bundle)),
+        (Locations.FOREST_TEMPLE_BLUE_POE_POT1, lambda bundle: can_break_pots(bundle)),
+        (Locations.FOREST_TEMPLE_BLUE_POE_POT2, lambda bundle: can_break_pots(bundle)),
+        (Locations.FOREST_TEMPLE_BLUE_POE_POT3, lambda bundle: can_break_pots(bundle)),
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_BLUE_POE_ROOM, world, [
+        (Regions.FOREST_TEMPLE_UPPER_STALFOS, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_NE_CORRIDOR_STRAIGHTENED, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 4))
+    ])
+    
+    ## Forest Temple NE Corridor Straightened
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_NE_CORRIDOR_STRAIGHTENED, world, [
+        (Regions.FOREST_TEMPLE_BLUE_POE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 4)),
+        (Regions.FOREST_TEMPLE_FROZEN_EYE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 5)),
+    ])
+    
+    ## Forest Temple NE Corridor Twisted
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_NE_CORRIDOR_TWISTED, world, [
+        (Regions.FOREST_TEMPLE_FROZEN_EYE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 5)),
+        (Regions.FOREST_TEMPLE_FALLING_ROOM, lambda bundle: True)
+    ])
+    
+    ## Forest Temple Frozen Eye Room
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_FROZEN_EYE_ROOM, world, [
+        (Locations.FOREST_TEMPLE_FROZEN_EYE_POT1, lambda bundle: can_break_pots(bundle)),
+        (Locations.FOREST_TEMPLE_FROZEN_EYE_POT2, lambda bundle: can_break_pots(bundle))
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_FROZEN_EYE_ROOM, world, [
+        (Regions.FOREST_TEMPLE_NE_CORRIDOR_STRAIGHTENED, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 5, bundle)),
+        (Regions.FOREST_TEMPLE_NE_CORRIDOR_TWISTED, lambda bundle: (small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 5, bundle) and
+                                                                    (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DINS_FIRE, bundle))))
+    ])
+    
+    ## Forest Temple Falling Room
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_FALLING_ROOM, world, [
+        (Locations.FOREST_TEMPLE_GS_RAISED_ISLAND_COURTYARD, lambda bundle: (can_use(Items.FAIRY_BOW, bundle) or
+                                                                             can_use(Items.FAIRY_SLINGSHOT, bundle) or
+                                                                             can_use(Items.DINS_FIRE, bundle) or
+                                                                             has_explosives(bundle))),
+        (Locations.FOREST_TEMPLE_FALLING_CEILING_ROOM_CHEST, lambda bundle: True),
+        (Locations.FOREST_TEMPLE_RAISED_ISLAND_COURTYARD_CHEST, lambda bundle: True)
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_FALLING_ROOM, world, [
+        (Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_GREEN_POE_ROOM, lambda bundle: True)
+    ])
+    
+    ## Forest Temple Green Poe Room
+    # Events
+    add_events(Regions.FOREST_TEMPLE_GREEN_POE_ROOM, world, [
+        (EventLocations.FOREST_TEMPLE_AMY, LocalEvents.DEFEATED_AMY, lambda bundle: can_use(Items.FAIRY_BOW, bundle))
+    ])
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_GREEN_POE_ROOM, world, [
+        (Locations.FOREST_TEMPLE_GREEN_POE_POT1, lambda bundle: can_break_pots(bundle)),
+        (Locations.FOREST_TEMPLE_GREEN_POE_POT2, lambda bundle: can_break_pots(bundle))
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_GREEN_POE_ROOM, world, [
+        (Regions.FOREST_TEMPLE_FALLING_ROOM, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_EAST_CORRIDOR, lambda bundle: has_item(LocalEvents.DEFEATED_AMY, bundle))
+    ])
+    
+    ## Foest Temple East Corridor
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_EAST_CORRIDOR, world, [
+        (Regions.FOREST_TEMPLE_LOBBY, lambda bundle: (can_attack(bundle) or can_use(Items.NUTS, bundle))),
+        (Regions.FOREST_TEMPLE_GREEN_POE_ROOM, lambda bundle: (can_attack(bundle) or can_use(Items.NUTS, bundle)))
+    ])
+    
+    ## Forest Temple Boss Region
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_BOSS_REGION, world, [
+        (Locations.FOREST_TEMPLE_BASEMENT_CHEST, lambda bundle: True),
+        (Locations.FOREST_TEMPLE_GS_BASEMENT, lambda bundle: hookshot_or_boomerang(bundle))
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_BOSS_REGION, world, [
+        (Regions.FOREST_TEMPLE_LOBBY, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_BOSS_ENTRYWAY, lambda bundle: True)
+    ])
+    
+    ## Forest Temple Boss Entryway
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_BOSS_ENTRYWAY, world, [
+        (Regions.FOREST_TEMPLE_BOSS_REGION, lambda bundle: False),
+        (Regions.FOREST_TEMPLE_BOSS_ROOM, lambda bundle: has_item(Items.FOREST_TEMPLE_BOSS_KEY, bundle))
+    ])
+    
+    ## Forest Temple Boss Room
+    # Events
+    add_events(Regions.FOREST_TEMPLE_BOSS_ROOM, world, [
+        (EventLocations.FOREST_TEMPLE_CLEAR, Events.CLEARED_FOREST_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.PHANTOM_GANON))
+    ])
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_BOSS_ROOM, world, [
+        (Locations.FOREST_TEMPLE_PHANTOM_GANON_HEART_CONTAINER, lambda bundle: has_item(Events.CLEARED_FOREST_TEMPLE, bundle)),
+        (Locations.PHANTOM_GANON, lambda bundle: has_item(Events.CLEARED_FOREST_TEMPLE, bundle))
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_BOSS_ROOM, world, [
+        (Regions.FOREST_TEMPLE_BOSS_ENTRYWAY, lambda bundle: False),
+        (Regions.SACRED_FOREST_MEADOW, lambda bundle: has_item(Events.CLEARED_FOREST_TEMPLE, bundle))
+    ])

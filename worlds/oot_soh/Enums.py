@@ -329,6 +329,7 @@ class Regions(str, Enum):
     FOREST_TEMPLE_NE_OUTDOORS_UPPER = "Forest Temple NE Outdoors Upper"
     FOREST_TEMPLE_MAP_ROOM = "Forest Temple Map Room"
     FOREST_TEMPLE_SEWER = "Forest Temple Sewer"
+    FOREST_TEMPLE_DRAINED_SEWER = "Forest Temple Drained Sewer"
     FOREST_TEMPLE_BELOW_BOSS_KEY_CHEST = "Forest Temple Below Boss Key Chest"
     FOREST_TEMPLE_FLOORMASTER_ROOM = "Forest Temple Floormaster Room"
     FOREST_TEMPLE_WEST_CORRIDOR = "Forest Temple West Corridor"
