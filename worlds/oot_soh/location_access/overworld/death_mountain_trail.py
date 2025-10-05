@@ -7,13 +7,13 @@ if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
 
 class EventLocations(str, Enum):
-    DMT_BEAN_PLANT_FAIRY = "Death Mountain Trail Bean Plant Fairy"
-    DMT_GOSSIP_STONE_FAIRY = "Death Mountain Trail Gossip Stone Fairy"
-    DMT_BUG_ROCK = "Death Mountain Trail Bug Rock"
-    DMT_STORMS_GROTTO_GOSSIP_STONE = "Death Mountain Trail Storms Grotto Gossip Stone"
-    DMT_STORMS_GROTTO_BUTTERFLY_FAIRY = "Death Mountain Trail Storms Grotto Butterfly Fairy"
-    DMT_STORMS_GROTTO_BUG_GRASS = "Death Mountain Trail Storms Grotto Bug Grass"
-    DMT_STORMS_GROTTO_FISH = "Death Mountain Trail Storms Grotto Fish"
+    DMT_BEAN_PLANT_FAIRY = "DMT Bean Plant Fairy"
+    DMT_GOSSIP_STONE_FAIRY = "DMT Gossip Stone Fairy"
+    DMT_BUG_ROCK = "DMT Bug Rock"
+    DMT_STORMS_GROTTO_GOSSIP_STONE = "DMT Storms Grotto Gossip Stone"
+    DMT_STORMS_GROTTO_BUTTERFLY_FAIRY = "DMT Storms Grotto Butterfly Fairy"
+    DMT_STORMS_GROTTO_BUG_GRASS = "DMT Storms Grotto Bug Grass"
+    DMT_STORMS_GROTTO_FISH = "DMT Storms Grotto Fish"
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
@@ -65,7 +65,7 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.DEATH_MOUNTAIN_SUMMIT, world, [
         (Regions.DEATH_MOUNTAIN_TRAIL, lambda bundle: True), 
         (Regions.DMC_UPPER_LOCAL, lambda bundle: True), 
-        (Regions.DMT_OWL_FLIGHT, lambda bundle: is_child(bundle)), # Original has a false at the end while making the entrance. Not sure what is means: Entrance(RR_DMT_OWL_FLIGHT,           []{return logic->IsChild;}, false),
+        (Regions.DMT_OWL_FLIGHT, lambda bundle: is_child(bundle)),
         (Regions.DMT_COW_GROTTO, lambda bundle: blast_or_smash(bundle)), 
         (Regions.DMT_GREAT_FAIRY_FOUNTAIN, lambda bundle: blast_or_smash(bundle))
     ])
