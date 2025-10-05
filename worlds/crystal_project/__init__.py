@@ -15,7 +15,7 @@ from .items import item_table, optional_scholar_abilities, get_random_starting_j
     display_region_name_to_pass_dict
 from .locations import get_locations, get_bosses, get_shops, get_region_completions, LocationData
 from .presets import crystal_project_options_presets
-from .regions import init_areas, ap_region_to_display_region_dictionary
+from .regions import init_areas, ap_region_to_display_region_dictionary, display_region_subregions_dictionary
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_modded_items, get_modded_locations, \
@@ -100,7 +100,7 @@ class CrystalProjectWorld(World):
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
-        self.starter_region: str = ""
+        self.starter_ap_region: str = ""
         self.starting_jobs: List[str] = []
         self.included_regions: List[str] = []
         self.statically_placed_jobs: int = 0
@@ -135,7 +135,7 @@ class CrystalProjectWorld(World):
                     self.options.useMods.value = slot_data["useMods"]
                     # self.modded_locations = slot_data["moddedLocationsForUT"]
                     # self.modded_shops = slot_data["moddedShopsForUT"]
-                    self.starter_region = slot_data["starter_region"]
+                    self.starter_ap_region = slot_data["starter_region"]
 
         self.multiworld.push_precollected(self.create_item(HOME_POINT_STONE))
 
@@ -221,7 +221,7 @@ class CrystalProjectWorld(World):
             logging.getLogger().info(message.format(self.options.newWorldStoneJobQuantity.value, jobs_earnable, self.player_name))
             self.options.newWorldStoneJobQuantity.value = jobs_earnable
 
-        # pick one region to give a starting pass to and then save that later
+        # pick one display region to give a starting pass to and then save that later
         if self.options.regionsanity.value == self.options.regionsanity.option_true:
             starting_passes_list: List[str] = []
             #checking the start inventory for region passes and using the first one as the starter region, if any
@@ -232,32 +232,33 @@ class CrystalProjectWorld(World):
                 if item_name in self.item_name_groups[PASS]:
                     starting_passes_list.append(item_name)
             if len(starting_passes_list) > 0:
-                for region_name in display_region_name_to_pass_dict:
-                    if display_region_name_to_pass_dict[region_name] == starting_passes_list[0]:
-                        self.starter_region = region_name
+                for display_region_name in display_region_name_to_pass_dict:
+                    if display_region_name_to_pass_dict[display_region_name] == starting_passes_list[0]:
+                        # The first subregion (AP Region) in a display region will be the starter region if a player puts that display region's pass in their starting inventory
+                        self.starter_ap_region = display_region_subregions_dictionary[display_region_name][0]
                         break
 
             # If this is UT re-gen the value isn't empty and we skip trying to pick a starter_region since we already have one
-            if self.starter_region == "":
+            if self.starter_ap_region == "":
                 initially_reachable_regions = []
                 # Generate a collection state that is a copy of the current state but also has all the passes so we can
                 # check what regions we can access without just getting told none because we have no passes
                 all_passes_state: CollectionState = CollectionState(self.multiworld)
                 for region_pass in self.item_name_groups[PASS]:
                     all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
-                for region in self.get_regions():
+                for ap_region in self.get_regions():
                     #This checks what AP Regions are accessible to the player
-                    if region.can_reach(all_passes_state) and region.name != MENU_AP_REGION and region.name != MODDED_ZONE_AP_REGION:
-                        if len(region.locations) > 3:
-                            initially_reachable_regions.append(region)
-                self.starter_region = self.random.choice(initially_reachable_regions).name
+                    if ap_region.can_reach(all_passes_state) and ap_region.name != MENU_AP_REGION and ap_region.name != MODDED_ZONE_AP_REGION:
+                        if len(ap_region.locations) > 3:
+                            initially_reachable_regions.append(ap_region)
+                self.starter_ap_region = self.random.choice(initially_reachable_regions).name
             # logging.getLogger().info("Starting region is " + self.starter_region)
-            self.origin_region_name = self.starter_region
+            self.origin_region_name = self.starter_ap_region
             #only push if player doesn't already have the pass from their starting inventory
             if len(starting_passes_list) == 0:
                 #Converts the AP Region that was picked as the starting region to the Display Region containing that AP Region
-                self.multiworld.push_precollected(self.create_item(display_region_name_to_pass_dict[ap_region_to_display_region_dictionary[self.starter_region]]))
-            self.multiworld.get_region(self.starter_region, self.player).add_exits([MENU_AP_REGION])
+                self.multiworld.push_precollected(self.create_item(display_region_name_to_pass_dict[ap_region_to_display_region_dictionary[self.starter_ap_region]]))
+            self.multiworld.get_region(self.starter_ap_region, self.player).add_exits([MENU_AP_REGION])
 
     def create_item(self, name: str) -> Item:
         if name in item_table:
@@ -450,7 +451,7 @@ class CrystalProjectWorld(World):
             for region_pass in self.item_name_groups[PASS]:
                 excluded_items.add(region_pass)
         else:
-            excluded_items.add(display_region_name_to_pass_dict[self.starter_region])
+            excluded_items.add(display_region_name_to_pass_dict[self.starter_ap_region])
 
         return excluded_items
 
@@ -638,5 +639,5 @@ class CrystalProjectWorld(World):
             "removedLocations": slot_data_removed_locations,
             # "moddedLocationsForUT": self.modded_locations,
             # "moddedShopsForUT": self.modded_shops,
-            "starter_region": self.starter_region, # stored for UT re-gen
+            "starter_region": self.starter_ap_region, # stored for UT re-gen
         }
