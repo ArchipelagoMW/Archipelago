@@ -3465,7 +3465,6 @@ class Events(str, Enum):
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     DAMPES_WINDMILL_ACCESS = "Dampe's Windmill Access"
     DRAIN_WELL = "Drain Well"
-    WAKE_UP_ADULT_TALON = "Wake Up Talon As Adult"
     KAKARIKO_GATE_OPEN = "Kakariko Gate Open"
     GAME_COMPLETED = "Game Completed"
 

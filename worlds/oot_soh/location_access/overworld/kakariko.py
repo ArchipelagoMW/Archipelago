@@ -19,6 +19,10 @@ class EventLocations(str, Enum):
     KAK_OPEN_GROTTO_FISH = "Kak Open Grotto Fish"
 
 
+class LocalEvents(str, Enum):
+    WAKE_UP_ADULT_TALON = "Wake Up Talon As Adult"
+
+
 def set_region_rules(world: "SohWorld") -> None:
     # Kakariko Village
     # Events
@@ -38,7 +42,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_ANJU_AS_CHILD, lambda bundle: is_child(bundle) and at_day(bundle)),
         (Locations.KAK_ANJU_AS_ADULT, lambda bundle: is_adult(bundle) and at_day(bundle)),
         (Locations.KAK_TRADE_POCKET_CUCCO, lambda bundle: is_adult(bundle) and at_day(bundle) and (
-                can_use(Items.POCKET_EGG, bundle) and has_item(Events.WAKE_UP_ADULT_TALON, bundle))),
+                can_use(Items.POCKET_EGG, bundle) and has_item(LocalEvents.WAKE_UP_ADULT_TALON, bundle))),
         (Locations.KAK_GS_HOUSE_UNDER_CONSTRUCTION, lambda bundle: is_child(bundle) and can_get_nighttime_gs(bundle)),
         (Locations.KAK_GS_SKULLTULA_HOUSE, lambda bundle: is_child(bundle) and can_get_nighttime_gs(bundle)),
         (Locations.KAK_GS_GUARDS_HOUSE, lambda bundle: is_child(bundle) and can_get_nighttime_gs(bundle)),
@@ -181,7 +185,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Kak Carpenter Boss House
     # Events
     add_events(Regions.KAK_CARPENTER_BOSS_HOUSE, world, [
-        (EventLocations.KAKARIKO_ADULT_TALON, Events.WAKE_UP_ADULT_TALON,
+        (EventLocations.KAKARIKO_ADULT_TALON, LocalEvents.WAKE_UP_ADULT_TALON,
          lambda bundle: is_adult(bundle) and can_use(Items.POCKET_EGG, bundle)),
     ])
     # Connections
