@@ -17,7 +17,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Shadow Temple Entryway
     # Connections
     connect_regions(Regions.SHADOW_TEMPLE_ENTRYWAY, world, [
-        (Regions.SHADOW_TEMPLE_BEGINNING, lambda bundle: can_do_trick(Tricks.LENS_SHADOW, bundle) and can_use(Items.LENS_OF_TRUTH, bundle) and (can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle))), 
+        (Regions.SHADOW_TEMPLE_BEGINNING, lambda bundle: can_do_trick(Tricks.LENS_SHADOW, bundle) or can_use(Items.LENS_OF_TRUTH, bundle) and (can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle))), 
         (Regions.GRAVEYARD_WARP_PAD_REGION, lambda bundle: True)
     ])
 
@@ -140,8 +140,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.SHADOW_TEMPLE_BOSS_ROOM, world, [
-        (Locations.SHADOW_TEMPLE_BONGO_BONGO_HEART_CONTAINER, lambda bundle:  has_item(Events.CLEARED_SHADOW_TEMPLE, bundle)),
-        (Locations.BONGO_BONGO, lambda bundle:  has_item(Events.CLEARED_SHADOW_TEMPLE, bundle))
+        (Locations.SHADOW_TEMPLE_BONGO_BONGO_HEART_CONTAINER, lambda bundle: has_item(Events.CLEARED_SHADOW_TEMPLE, bundle)),
+        (Locations.BONGO_BONGO, lambda bundle: has_item(Events.CLEARED_SHADOW_TEMPLE, bundle))
     ])
     # Connections
     connect_regions(Regions.SHADOW_TEMPLE_BOSS_ROOM, world, [
