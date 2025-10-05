@@ -8,8 +8,7 @@ if TYPE_CHECKING:
 
 class EventLocations(str, Enum):
     ZORAS_FOUNTAIN_GOSSIP_STONE_FAIRY = "Zora's Fountain Gossip Stone Fairy"
-    ZORAS_FOUNTAIN_BUTTERFLY_FAIRY = ("Zora's Fountain Butterfly Fairy"
-                                      "")
+    ZORAS_FOUNTAIN_BUTTERFLY_FAIRY = ("Zora's Fountain Butterfly Fairy")
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
