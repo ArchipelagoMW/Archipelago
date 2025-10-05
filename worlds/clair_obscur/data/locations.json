@@ -6061,7 +6061,7 @@
     },
     {
         "name": "Lost Gestral reward 1",
-        "internal_name": "",
+        "internal_name": "Lost Gestral reward 1",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 1
@@ -6071,7 +6071,7 @@
     },
     {
         "name": "Lost Gestral reward 2",
-        "internal_name": "",
+        "internal_name": "Lost Gestral reward 2",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 2
@@ -6081,7 +6081,7 @@
     },
     {
         "name": "Lost Gestral reward 3",
-        "internal_name": "",
+        "internal_name": "Lost Gestral reward 3",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 3
@@ -6091,7 +6091,7 @@
     },
     {
         "name": "Lost Gestral reward 4",
-        "internal_name": "",
+        "internal_name": "Lost Gestral reward 4",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 4
@@ -6101,7 +6101,7 @@
     },
     {
         "name": "Lost Gestral reward 5",
-        "internal_name": "",
+        "internal_name": "Lost Gestral reward 5",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 5
@@ -6111,7 +6111,7 @@
     },
     {
         "name": "Lost Gestral reward 6",
-        "internal_name": "",
+        "internal_name": "Lost Gestral reward 6",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 6
@@ -6121,7 +6121,7 @@
     },
     {
         "name": "Lost Gestral reward 7",
-        "internal_name": "",
+        "internal_name": "Lost Gestral reward 7",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 7
@@ -6131,7 +6131,7 @@
     },
     {
         "name": "Lost Gestral reward 8",
-        "internal_name": "",
+        "internal_name": "Lost Gestral reward 8",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 8
@@ -6141,7 +6141,7 @@
     },
     {
         "name": "Lost Gestral reward 9",
-        "internal_name": "",
+        "internal_name": "Lost Gestral reward 9",
         "location": "Camp",
         "condition": {
             "Lost Gestral": 9
