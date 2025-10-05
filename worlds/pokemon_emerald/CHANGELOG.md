@@ -1,3 +1,10 @@
+# 2.5.0
+
+### Features
+
+- Changed patch file format to pull base patch from apworld instead of including it in the patch, significantly reducing
+patch file size.
+
 # 2.4.1
 
 ### Fixes

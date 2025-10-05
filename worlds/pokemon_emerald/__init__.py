@@ -5,7 +5,6 @@ from collections import Counter
 import copy
 import logging
 import os
-import pkgutil
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, TextIO, Union
 
 from BaseClasses import CollectionState, ItemClassification, MultiWorld, Tutorial, LocationProgressType
@@ -15,7 +14,8 @@ import settings
 from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
-from .data import LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData, LocationCategory, data as emerald_data
+from .data import (LEGENDARY_POKEMON, MapData, SpeciesData, TrainerData, LocationCategory, MiscPokemonData,
+                   data as emerald_data)
 from .groups import ITEM_GROUPS, LOCATION_GROUPS
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
 from .locations import (PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_by_category,
@@ -129,7 +129,8 @@ class PokemonEmeraldWorld(World):
     modified_species: Dict[int, SpeciesData]
     modified_maps: Dict[str, MapData]
     modified_tmhm_moves: List[int]
-    modified_legendary_encounters: List[int]
+    modified_legendary_encounters: List[MiscPokemonData]
+    modified_misc_pokemon: List[MiscPokemonData]
     modified_starters: Tuple[int, int, int]
     modified_trainers: List[TrainerData]
 
@@ -148,6 +149,7 @@ class PokemonEmeraldWorld(World):
         self.modified_starters = emerald_data.starters
         self.modified_trainers = []
         self.modified_legendary_encounters = []
+        self.modified_misc_pokemon = []
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
@@ -365,7 +367,7 @@ class PokemonEmeraldWorld(World):
         # Filter progression items which shouldn't be shuffled into the itempool.
         # Their locations will still exist, but event items will be placed and
         # locked at their vanilla locations instead.
-        filter_categories = set()
+        filter_categories: set[LocationCategory] = set()
 
         if not self.options.key_items:
             filter_categories.add(LocationCategory.KEY)
@@ -615,6 +617,9 @@ class PokemonEmeraldWorld(World):
         randomize_types(self)
 
     def generate_output(self, output_directory: str) -> None:
+        import hashlib
+        import pkgutil
+
         self.modified_trainers = copy.deepcopy(emerald_data.trainers)
         self.modified_tmhm_moves = copy.deepcopy(emerald_data.tmhm_moves)
         self.modified_legendary_encounters = copy.deepcopy(emerald_data.legendary_encounters)
@@ -644,7 +649,7 @@ class PokemonEmeraldWorld(World):
         randomize_starters(self)
 
         patch = PokemonEmeraldProcedurePatch(player=self.player, player_name=self.player_name)
-        patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "data/base_patch.bsdiff4"))
+        patch.base_patch_hash = hashlib.sha256(pkgutil.get_data(__name__, "data/base_patch.bsdiff4")).hexdigest()
         write_tokens(self, patch)
 
         del self.modified_trainers
