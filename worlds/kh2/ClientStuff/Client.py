@@ -591,12 +591,13 @@ class KH2Context(CommonContext):
             # but the lua script runs eveery frame so we cant miss them now
             self.kh2_write_byte(0x810001, 0)
             #todo: read these from the goa lua instead since the deathlink is after they contiune which means that its just before they would've gotten into the fight
-            Room = self.kh2_read_byte(self.Now + 0x01)
-            Event = self.kh2_read_byte(self.Now + 0x08)
-            if (Room, Event) in DeathLinkPair.keys():
-                # remove the logger.info after testing phase/is in pr
-                logger.info(f"Deathlink: {self.player_names[self.slot]} died to {DeathLinkPair[(Room, Event)]}.")
-                await self.send_death(death_text=f"{self.player_names[self.slot]} died to {DeathLinkPair[(Room, Event)]}.")
+            Room = self.kh2_read_byte(0x810002)
+            Event = self.kh2_read_byte(0x810003)
+            World = self.kh2_read_byte(0x810004)
+            if (World, Room, Event) in DeathLinkPair.keys():
+
+                logger.info(f"Deathlink: {self.player_names[self.slot]} died to {DeathLinkPair[(World,Room, Event)]}.")
+                await self.send_death(death_text=f"{self.player_names[self.slot]} died to {DeathLinkPair[(World,Room, Event)]}.")
             else:
                 logger.info(f"Deathlink: {self.player_names[self.slot]} lost their heart to darkness.")
                 await self.send_death(death_text=f"{self.player_names[self.slot]} lost their heart to darkness.")
