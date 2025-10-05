@@ -10,8 +10,8 @@ import sys
 import urllib.parse
 import urllib.request
 from collections import Counter
-from typing import Any, Dict, Tuple, Union
 from itertools import chain
+from typing import Any
 
 import ModuleUpdate
 
@@ -77,7 +77,7 @@ def get_seed_name(random_source) -> str:
     return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
-def main(args=None) -> Tuple[argparse.Namespace, int]:
+def main(args=None) -> tuple[argparse.Namespace, int]:
     # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
     if __name__ == "__main__" and "worlds" in sys.modules:
         raise Exception("Worlds system should not be loaded before logging init.")
@@ -95,7 +95,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
         logging.info("Race mode enabled. Using non-deterministic random source.")
         random.seed()  # reset to time-based random source
 
-    weights_cache: Dict[str, Tuple[Any, ...]] = {}
+    weights_cache: dict[str, tuple[Any, ...]] = {}
     if args.weights_file_path and os.path.exists(args.weights_file_path):
         try:
             weights_cache[args.weights_file_path] = read_weights_yamls(args.weights_file_path)
@@ -166,21 +166,12 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                         f"A mix is also permitted.")
 
     from worlds.AutoWorld import AutoWorldRegister
-    from worlds.alttp.EntranceRandomizer import parse_arguments
-    erargs = parse_arguments(['--multi', str(args.multi)])
-    erargs.seed = seed
-    erargs.plando_options = args.plando
-    erargs.spoiler = args.spoiler
-    erargs.race = args.race
-    erargs.outputname = seed_name
-    erargs.outputpath = args.outputpath
-    erargs.skip_prog_balancing = args.skip_prog_balancing
-    erargs.skip_output = args.skip_output
-    erargs.spoiler_only = args.spoiler_only
-    erargs.name = {}
-    erargs.csv_output = args.csv_output
+    args.outputname = seed_name
+    args.sprite = dict.fromkeys(range(1, args.multi+1), None)
+    args.sprite_pool = dict.fromkeys(range(1, args.multi+1), None)
+    args.name = {}
 
-    settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
+    settings_cache: dict[str, tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
          for fname, yamls in weights_cache.items()}
 
@@ -205,30 +196,34 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     for player in range(1, args.multi + 1):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
     name_counter = Counter()
-    erargs.player_options = {}
+    args.player_options = {}
 
     player = 1
     while player <= args.multi:
         path = player_path_cache[player]
         if path:
             try:
-                settings: Tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
+                settings: tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
                     tuple(roll_settings(yaml, args.plando) for yaml in weights_cache[path])
                 for settingsObject in settings:
                     for k, v in vars(settingsObject).items():
                         if v is not None:
                             try:
-                                getattr(erargs, k)[player] = v
+                                getattr(args, k)[player] = v
                             except AttributeError:
-                                setattr(erargs, k, {player: v})
+                                setattr(args, k, {player: v})
                             except Exception as e:
                                 raise Exception(f"Error setting {k} to {v} for player {player}") from e
 
-                    if path == args.weights_file_path:  # if name came from the weights file, just use base player name
-                        erargs.name[player] = f"Player{player}"
-                    elif player not in erargs.name:  # if name was not specified, generate it from filename
-                        erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
-                    erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
+                    # name was not specified
+                    if player not in args.name:
+                        if path == args.weights_file_path:
+                            # weights file, so we need to make the name unique
+                            args.name[player] = f"Player{player}"
+                        else:
+                            # use the filename
+                            args.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
+                    args.name[player] = handle_name(args.name[player], player, name_counter)
 
                     player += 1
             except Exception as e:
@@ -236,13 +231,13 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 
-    if len(set(name.lower() for name in erargs.name.values())) != len(erargs.name):
-        raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in erargs.name.values())}")
+    if len(set(name.lower() for name in args.name.values())) != len(args.name):
+        raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in args.name.values())}")
 
-    return erargs, seed
+    return args, seed
 
 
-def read_weights_yamls(path) -> Tuple[Any, ...]:
+def read_weights_yamls(path) -> tuple[Any, ...]:
     try:
         if urllib.parse.urlparse(path).scheme in ('https', 'file'):
             yaml = str(urllib.request.urlopen(path).read(), "utf-8-sig")
@@ -378,7 +373,7 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
     return weights
 
 
-def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
+def roll_meta_option(option_key, game: str, category_dict: dict) -> Any:
     from worlds import AutoWorldRegister
 
     if not game:
@@ -491,7 +486,22 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             if required_plando_options:
                 raise Exception(f"Settings reports required plando module {str(required_plando_options)}, "
                                 f"which is not enabled.")
-
+        games = requirements.get("game", {})
+        for game, version in games.items():
+            if game not in AutoWorldRegister.world_types:
+                continue
+            if not version:
+                raise Exception(f"Invalid version for game {game}: {version}.")
+            if isinstance(version, str):
+                version = {"min": version}
+            if "min" in version and tuplize_version(version["min"]) > AutoWorldRegister.world_types[game].world_version:
+                raise Exception(f"Settings reports required version of world \"{game}\" is at least {version['min']}, "
+                                f"however world is of version "
+                                f"{AutoWorldRegister.world_types[game].world_version.as_simple_string()}.")
+            if "max" in version and tuplize_version(version["max"]) < AutoWorldRegister.world_types[game].world_version:
+                raise Exception(f"Settings reports required version of world \"{game}\" is no later than {version['max']}, "
+                                f"however world is of version "
+                                f"{AutoWorldRegister.world_types[game].world_version.as_simple_string()}.")
     ret = argparse.Namespace()
     for option_key in Options.PerGameCommonOptions.type_hints:
         if option_key in weights and option_key not in Options.CommonOptions.type_hints:

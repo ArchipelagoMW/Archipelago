@@ -1,5 +1,5 @@
 from BaseClasses import MultiWorld, get_seed, ItemClassification
-from . import setup_solo_multiworld, SVTestCase, solo_multiworld
+from .bases import SVTestCase, solo_multiworld, setup_solo_multiworld
 from .options.presets import allsanity_no_mods_6_x_x, get_minsanity_options
 from .. import StardewValleyWorld
 from ..items import Group, item_table

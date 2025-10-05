@@ -61,32 +61,43 @@ cache = Cache()
 Compress(app)
 
 
+def to_python(value):
+    return uuid.UUID(bytes=base64.urlsafe_b64decode(value + '=='))
+
+
+def to_url(value):
+    return base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
+
+
 class B64UUIDConverter(BaseConverter):
 
     def to_python(self, value):
-        return uuid.UUID(bytes=base64.urlsafe_b64decode(value + '=='))
+        return to_python(value)
 
     def to_url(self, value):
-        return base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
+        return to_url(value)
 
 
 # short UUID
 app.url_map.converters["suuid"] = B64UUIDConverter
-app.jinja_env.filters['suuid'] = lambda value: base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
+app.jinja_env.filters["suuid"] = to_url
 app.jinja_env.filters["title_sorted"] = title_sorted
 
 
 def register():
     """Import submodules, triggering their registering on flask routing.
     Note: initializes worlds subsystem."""
+    import importlib
+
+    from werkzeug.utils import find_modules
     # has automatic patch integration
-    import worlds.AutoWorld
     import worlds.Files
-    app.jinja_env.filters['supports_apdeltapatch'] = lambda game_name: \
-        game_name in worlds.Files.AutoPatchRegister.patch_types
+    app.jinja_env.filters['is_applayercontainer'] = worlds.Files.is_ap_player_container
 
     from WebHostLib.customserver import run_server_process
-    # to trigger app routing picking up on it
-    from . import tracker, upload, landing, check, generate, downloads, api, stats, misc, robots, options, session
 
+    for module in find_modules("WebHostLib", include_packages=True):
+        importlib.import_module(module)
+
+    from . import api
     app.register_blueprint(api.api_endpoints)
