@@ -3,6 +3,7 @@ from typing import List, Optional
 
 from .options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
+from .locations import LocationData
 from .constants.ap_regions import *
 from .constants.keys import *
 from .constants.key_items import *
