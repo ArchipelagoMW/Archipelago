@@ -281,8 +281,7 @@ def can_use_sword(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can use any sword."""
     return can_use_any([Items.KOKIRI_SWORD, Items.MASTER_SWORD, Items.BIGGORONS_SWORD], bundle)
 
-# TODO change the age here to the enum
-def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: str = "either") -> bool:
+def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: Ages = Ages.null) -> bool:
     """Check if Link has access to projectiles."""
     if has_explosives(bundle):
         return True
@@ -291,11 +290,11 @@ def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: str
     adult_projectiles = (can_use(Items.HOOKSHOT, bundle) or 
                          can_use(Items.FAIRY_BOW, bundle))
     
-    if age == "child":
+    if age == Ages.CHILD:
         return child_projectiles
-    elif age == "adult":
+    elif age == Ages.ADULT:
         return adult_projectiles
-    elif age == "both":
+    elif age == Ages.BOTH:
         return child_projectiles and adult_projectiles
     else:  # "either"
         return child_projectiles or adult_projectiles
