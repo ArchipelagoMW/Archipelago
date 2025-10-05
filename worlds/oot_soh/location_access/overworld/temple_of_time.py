@@ -55,8 +55,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.TOT_ENTRANCE, lambda bundle: True),
         (Regions.BEYOND_DOOR_OF_TIME,
          lambda bundle: world.options.door_of_time.value == 2 or
-                        (can_use(Items.SONG_OF_TIME, bundle) and world.options.door_of_time.value == 1) or
-                        (stone_count(bundle) == 3 and can_use(Items.SONG_OF_TIME, bundle) and has_item(Items.OCARINA_OF_TIME, bundle)))
+                        (can_use(Items.SONG_OF_TIME, bundle) and (world.options.door_of_time.value == 1 or
+                        (stone_count(bundle) == 3 and has_item(Items.OCARINA_OF_TIME, bundle)))
     ])
 
     ##Beyond Door of Time
