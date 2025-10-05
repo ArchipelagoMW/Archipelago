@@ -17,7 +17,7 @@ class EventLocations(str, Enum):
 
 
 class LocalEvents(str, Enum):
-    GANONS_CASTLE_GROUNDS_BUILD_RAINBOW_BRIDGE = "Ganon's Castle Grounds Build Rainbow Bridge"
+    GANONS_CASTLE_GROUNDS_BUILT_RAINBOW_BRIDGE = "Ganon's Castle Grounds Built Rainbow Bridge"
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
@@ -87,21 +87,17 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ##Hyrule Castle Storms Grotto
-    # Locations
-    add_locations(Regions.HC_STORMS_GROTTO, world, [
-        (Locations.HC_GS_STORMS_GROTTO, lambda bundle: can_use(Items.BOOMERANG, bundle) and can_do_trick(Tricks.HC_STORMS_GS, bundle))
-    ])
-
     # Connections
     connect_regions(Regions.HC_STORMS_GROTTO, world, [
         (Regions.CASTLE_GROUNDS, lambda bundle: True),
-        (Regions.HC_STORMS_GROTTO_BEHIND_WALLS, lambda bundle: can_break_mud_walls(bundle))
+        (Regions.HC_STORMS_GROTTO_BEHIND_WALLS, lambda bundle: can_break_mud_walls(bundle)),
+        (Regions.HC_STORMS_SKULLTULA, lambda bundle: can_use(Items.BOOMERANG, bundle) and can_do_trick(Tricks.HC_STORMS_GS, bundle))
     ])
 
     ##Hyrule Castle Storms Grotto Behind Walls
     # Events
     add_events(Regions.HC_STORMS_GROTTO_BEHIND_WALLS, world, [
-        (EventLocations.HYRULE_CASTLE_STORMS_GROTTO_BEHIND_WALLS_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True),
+        (EventLocations.HYRULE_CASTLE_STORMS_GROTTO_BEHIND_WALLS_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: can_break_pots(bundle)),
         (EventLocations.HYRULE_CASTLE_STORMS_GROTTO_BEHIND_WALLS_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: call_gossip_fairy(bundle)),
         (EventLocations.HYRULE_CASTLE_STORMS_GROTTO_BEHIND_WALLS_WANDERING_BUGS, Events.CAN_ACCESS_BUGS, lambda bundle: True)
@@ -110,7 +106,6 @@ def set_region_rules(world: "SohWorld") -> None:
 
     # Locations
     add_locations(Regions.HC_STORMS_GROTTO_BEHIND_WALLS, world, [
-        (Locations.HC_GS_STORMS_GROTTO, lambda bundle: hookshot_or_boomerang(bundle)),
         (Locations.HC_STORMS_GROTTO_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy(bundle)),
         (Locations.HC_STORMS_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.HC_STORMS_GROTTO_POT1, lambda bundle: can_break_pots(bundle)),
@@ -121,9 +116,22 @@ def set_region_rules(world: "SohWorld") -> None:
 
     # Connections
     connect_regions(Regions.HC_STORMS_GROTTO_BEHIND_WALLS, world, [
-        (Regions.HC_STORMS_GROTTO, lambda bundle: True)
+        (Regions.HC_STORMS_GROTTO, lambda bundle: True),
+        (Regions.HC_STORMS_SKULLTULA, lambda bundle: hookshot_or_boomerang(bundle)),
     ])
 
+    ##Hyrule Castle Storms Skulltule
+    ### This is a deviation from the original SOH logic because of the union of locations
+    # Locations
+    add_locations(Regions.HC_STORMS_SKULLTULA, world, [
+        (Locations.HC_GS_STORMS_GROTTO, lambda bundle: True)
+    ])
+
+    # Connections
+    connect_regions(Regions.HC_STORMS_SKULLTULA, world, [
+        (Regions.HC_STORMS_GROTTO, lambda bundle: True)
+    ])
+    
     ##Ganon's Castle Grounds
     # Events
     add_events(Regions.GANONS_CASTLE_GROUNDS, world, [
