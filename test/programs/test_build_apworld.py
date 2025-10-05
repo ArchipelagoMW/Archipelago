@@ -26,6 +26,8 @@ MANIFEST_CONTENTS: Final[str] = textwrap.dedent(f"""\
 	}}
 """)
 
+LAUNCHER_COMPONENT: Final[str] = "Build APWorlds"
+
 
 class TestBuildApworld(unittest.TestCase):
 	output_tempdir: ClassVar[TemporaryDirectory]
@@ -215,7 +217,7 @@ class TestBuildApworld(unittest.TestCase):
 		self.assertTrue(os.path.exists(apworld_path))
 
 		with zipfile.ZipFile(apworld_path) as zf:
-			self.assertFalse(f"{input_path.name}/{excluded_file_name}" in zf.namelist())
+			self.assertNotIn(f"{input_path.name}/{excluded_file_name}", zf.namelist())
 
 	def test_zipfile_extensionless(self: Self) -> None:
 		input_path = self.create_apworld_dir()
@@ -235,7 +237,7 @@ class TestBuildApworld(unittest.TestCase):
 		self.assertTrue(os.path.exists(apworld_path))
 
 		with zipfile.ZipFile(apworld_path) as zf:
-			self.assertTrue(f"{input_path.name}/{excluded_file_name}" in zf.namelist())
+			self.assertIn(f"{input_path.name}/{excluded_file_name}", zf.namelist())
 
 	def test_zipfile_manifest(self: Self) -> None:
 		input_path = self.create_apworld_dir()
@@ -251,8 +253,8 @@ class TestBuildApworld(unittest.TestCase):
 		with zipfile.ZipFile(apworld_path) as zf:
 			manifest: dict[str, Any] = orjson.loads(zf.read(f"{input_path.name}/{build_apworld.MANIFEST_NAME}"))
 
-			self.assertTrue("compatible_version" in manifest)
-			self.assertTrue("version" in manifest)
+			self.assertIn("compatible_version", manifest)
+			self.assertIn("version", manifest)
 
 	def test_zipfile_timestamp(self: Self) -> None:
 		input_path = self.create_apworld_dir("timestamp")
@@ -273,7 +275,7 @@ class TestBuildApworld(unittest.TestCase):
 		# noinspection SpellCheckingInspection
 		apworlds_path = os.path.join(build_dir, "apworlds")
 
-		_, component = Launcher.identify("Build APWorlds")
+		_, component = Launcher.identify(LAUNCHER_COMPONENT)
 
 		Launcher.main({
 			"args": {
@@ -287,19 +289,18 @@ class TestBuildApworld(unittest.TestCase):
 			self.assertTrue(os.path.exists(apworlds_path))
 			self.assertEqual(len(AutoWorldRegister.world_types), len(os.listdir(apworlds_path)))
 		finally:
-			shutil.rmtree(build_dir)
+			shutil.rmtree(build_dir, ignore_errors=True)
 
 	def test_launcher_component_single(self: Self) -> None:
 		build_dir = "build"
 		# noinspection SpellCheckingInspection
 		apworlds_path = os.path.join(build_dir, "apworlds")
 
-		_, component = Launcher.identify("Build APWorlds")
+		_, component = Launcher.identify(LAUNCHER_COMPONENT)
 
 		Launcher.main({
 			"args": {
 				"--suppress-open",
-				"worlds",
 				"Archipelago"
 			},
 			"component": component,
@@ -310,4 +311,4 @@ class TestBuildApworld(unittest.TestCase):
 			self.assertTrue(os.path.exists(os.path.join(apworlds_path, "generic.apworld")))
 			self.assertEqual(1, len(os.listdir(apworlds_path)))
 		finally:
-			shutil.rmtree(build_dir)
+			shutil.rmtree(build_dir, ignore_errors=True)
