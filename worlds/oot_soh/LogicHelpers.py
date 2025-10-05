@@ -96,6 +96,9 @@ def can_use(item: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
     
     if item == Items.DISTANT_SCARECROW:
         return scarecrows_song(bundle) and can_use(Items.LONGSHOT, bundle)
+    
+    if item == Items.EPONA:
+        return is_adult(bundle) and can_use(Items.EPONAS_SONG, bundle)
 
     return True
 
@@ -429,7 +432,7 @@ def can_hit_eye_targets(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
 
 def can_stun_deku(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can stun Deku Scrubs."""
-    return (can_attack(bundle) or can_use(Items.DEKU_NUT_BAG, bundle) or can_reflect_nuts(bundle))
+    return (can_attack(bundle) or can_use(Items.NUTS, bundle) or can_reflect_nuts(bundle))
 
 
 def can_reflect_nuts(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
