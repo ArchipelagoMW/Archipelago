@@ -108,152 +108,101 @@ def create_regions_and_locations(world: "SohWorld") -> None:
         # Create locations
 
         # Base locations
-        world.included_locations.update({
-            location_name: address for location_name, address in base_location_table.items()
-        })
+        world.included_locations.update(base_location_table)
 
         # Gold Skulltulas (Overworld)
-        world.included_locations.update({
-            location_name: address for location_name, address in gold_skulltula_overworld_location_table.items()
-        })
+        world.included_locations.update(gold_skulltula_overworld_location_table)
 
         # Gold Skulltulas (Dungeon)
-        world.included_locations.update({
-            location_name: address for location_name, address in gold_skulltula_dungeon_location_table.items()
-        })
+        world.included_locations.update(gold_skulltula_dungeon_location_table)
 
         # Shops
         if world.options.shuffle_shops:
-            world.included_locations.update({
-                location_name: address for location_name, address in shops_location_table.items()
-            })
+            world.included_locations.update(shops_location_table)
 
         # Scrubs
         if world.options.shuffle_scrubs:
-            world.included_locations.update({
-                location_name: address for location_name, address in scrubs_location_table.items()
-            })
+            world.included_locations.update(scrubs_location_table)
 
         # Adult Trade Items
         if world.options.shuffle_adult_trade_items:
-            world.included_locations.update({
-                location_name: address for location_name, address in trade_items_location_table.items()
-            })
+            world.included_locations.update(trade_items_location_table)
 
         # Merchants
         if world.options.shuffle_merchants == "bean_merchant_only" or world.options.shuffle_merchants == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in merchants_items_location_table.items()
-                if location_name == "ZR Magic Bean Salesman"
-            })
+            world.included_locations["ZR Magic Bean Salesman"] = merchants_items_location_table["ZR Magic Bean Salesman"]
 
         if world.options.shuffle_merchants == "all_but_beans" or world.options.shuffle_merchants == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in merchants_items_location_table.items()
-                if location_name in {"Kak Granny's Shop", "GC Medigoron", "Wasteland Carpet Salesman"}
-            })
+            for location_name in ("Kak Granny's Shop", "GC Medigoron", "Wasteland Carpet Salesman"):
+                world.included_locations[location_name] = merchants_items_location_table[location_name]
 
         # Cows
         if world.options.shuffle_cows:
-            world.included_locations.update({
-                location_name: address for location_name, address in cows_location_table.items()
-            })
+            world.included_locations.update(cows_location_table)
 
         # Frogs
         if world.options.shuffle_frog_song_rupees:
-            world.included_locations.update({
-                location_name: address for location_name, address in frogs_location_table.items()
-            })
+            world.included_locations.update(frogs_location_table)
 
         # Beehives
         if world.options.shuffle_beehives:
-            world.included_locations.update({
-                location_name: address for location_name, address in beehives_location_table.items()
-            })
+            world.included_locations.update(beehives_location_table)
 
         # Pots (Overworld)
         if world.options.shuffle_pots == "overworld" or world.options.shuffle_pots == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in pots_overworld_location_table.items()
-            })
+            world.included_locations.update(pots_overworld_location_table)
 
         # Pots (Dungeon)
         if world.options.shuffle_pots == "dungeon" or world.options.shuffle_pots == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in pots_dungeon_location_table.items()
-            })
+            world.included_locations.update(pots_dungeon_location_table)
 
         # Crates (Overworld)
         if world.options.shuffle_crates == "overworld" or world.options.shuffle_crates == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in crates_overworld_location_table.items()
-            })
+            world.included_locations.update(crates_overworld_location_table)
 
         # Crates (Dungeon)
         if world.options.shuffle_crates == "dungeon" or world.options.shuffle_crates == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in crates_dungeon_location_table.items()
-            })
+            world.included_locations.update(crates_dungeon_location_table)
 
         # Freestanding (Overworld)
         if world.options.shuffle_freestanding_items == "overworld" or world.options.shuffle_freestanding_items == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in freestanding_overworld_location_table.items()
-            })
+            world.included_locations.update(freestanding_overworld_location_table)
 
         # Freestanding (Dungeon)
         if world.options.shuffle_freestanding_items == "dungeon" or world.options.shuffle_freestanding_items == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in freestanding_dungeon_location_table.items()
-            })
+            world.included_locations.update(freestanding_dungeon_location_table)
 
         # Fairies
         if world.options.shuffle_fairies:
-            world.included_locations.update({
-                location_name: address for location_name, address in fairies_location_table.items()
-            })
+            world.included_locations.update(fairies_location_table)
 
         # Grass (Overworld)
         if world.options.shuffle_grass == "overworld" or world.options.shuffle_grass == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in grass_overworld_location_table.items()
-            })
+            world.included_locations.update(grass_overworld_location_table)
 
         # Grass (Dungeon)
         if world.options.shuffle_grass == "dungeon" or world.options.shuffle_grass == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in grass_dungeon_location_table.items()
-            })
+            world.included_locations.update(grass_dungeon_location_table)
 
         # Fish (Pond)
         if world.options.shuffle_fish == "pond" or world.options.shuffle_fish == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in fish_pond_location_table.items()
-            })
+            world.included_locations.update(fish_pond_location_table)
 
         # Fish (Overworld)
         if world.options.shuffle_fish == "overworld" or world.options.shuffle_fish == "all":
-            world.included_locations.update({
-                location_name: address for location_name, address in fish_overworld_location_table.items()
-            })
+            world.included_locations.update(fish_overworld_location_table)
 
         # Child Zelda
         if not world.options.skip_child_zelda:
-            world.included_locations.update({
-                location_name: address for location_name, address in child_zelda_location_table.items()
-            })
+            world.included_locations.update(child_zelda_location_table)
 
         # Carpenters
         if world.options.fortress_carpenters == "normal":
-            world.included_locations.update({
-                location_name: address for location_name, address in carpenters_location_table.items()
-            })
+            world.included_locations.update(carpenters_location_table)
 
         if world.options.fortress_carpenters == "fast":
-            world.included_locations.update({
-                location_name: address for location_name, address in carpenters_location_table.items()
-                if location_name in {"GF Freed All Carpenters", "GF 1 Torch Carpenter"}
-            })
+            for location_name in ("GF Freed All Carpenters", "GF 1 Torch Carpenter"):
+                world.included_locations[location_name] = carpenters_location_table[location_name]
 
         if world.options.shuffle_100_gs_reward:
             world.included_locations.update(hundred_skulls_location_table)
