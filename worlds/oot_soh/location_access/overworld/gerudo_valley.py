@@ -1,6 +1,3 @@
-from typing import TYPE_CHECKING
-
-from ...Enums import *
 from ...LogicHelpers import *
 
 if TYPE_CHECKING:
@@ -32,9 +29,9 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GV_CRATE_LEDGE, lambda bundle: is_child(bundle) or can_use(Items.LONGSHOT, bundle)),
         (Regions.GV_GROTTO_LEDGE, lambda bundle: True),
         (Regions.GV_FORTRESS_SIDE, lambda bundle: (is_adult(bundle) and (
-                    can_use(Items.EPONA, bundle) or can_use(Items.LONGSHOT,
-                                                            bundle) or world.options.fortress_carpenters.value == 2 or has_item(
-                Events.RESCUED_ALL_CARPENTERS, bundle))) or (is_child(bundle) and can_use(Items.HOOKSHOT, bundle))),
+                can_use(Items.EPONA, bundle) or can_use(Items.LONGSHOT,
+                                                        bundle) or world.options.fortress_carpenters.value == 2 or has_item(
+            Events.RESCUED_ALL_CARPENTERS, bundle))) or (is_child(bundle) and can_use(Items.HOOKSHOT, bundle))),
         (Regions.GV_LOWER_STREAM, lambda bundle: is_child(bundle))
     ])
 
