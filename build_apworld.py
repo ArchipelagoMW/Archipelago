@@ -67,15 +67,15 @@ def main(
     apworld.manifest_path = os.path.join(input_path, MANIFEST_NAME)
 
     if os.path.isfile(apworld.manifest_path):
+        game_key = "game"
         manifest = orjson.loads(open(apworld.manifest_path).read())
 
-        assert "game" in manifest, (
-            f"World directory {input_path} has an {MANIFEST_NAME} manifest file, but it does not define a \"game\"."
-        )
+        assert game_key in manifest, \
+            f"World directory {input_path} has an {MANIFEST_NAME} manifest file, but it does not define a \"{game_key}\"."
 
-        assert manifest["game"] == game_name, (
-            f"World directory {input_path} has an {MANIFEST_NAME} manifest file, but value of the"
-            f"\"game\" field ({manifest['game']} does not equal the World class's game ({game_name})."
+        assert manifest[game_key] == game_name, (
+            f"World directory {input_path} has an {MANIFEST_NAME} manifest file, but value of the "
+            f"\"{game_key}\" field ({manifest[game_key]}) does not equal the World class's game ({game_name})."
         )
     else:
         manifest = {}
