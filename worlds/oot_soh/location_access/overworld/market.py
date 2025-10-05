@@ -8,7 +8,10 @@ if TYPE_CHECKING:
     
 class EventLocations(str, Enum):
     MARKET_GUARD_HOUSE = "Market Guard House"
-    MARKET_MASK_SHOP = "Market Mask Shop"
+    MARKET_MASK_SHOP_ALL_MASKS = "Market Mask Shop All Masks"
+    MARKET_MASK_SHOP_SKULL_MASK = "Market Mask Shop Skull Mask"
+    MARKET_MASK_SHOP_SPOOKY_MASK = "Market Mask Shop Spooky Mask"
+    MARKET_MASK_SHOP_BUNNY_HOOD = "Market Mask Shop Bunny Hood"
     MARKET_BOMBCHU_BOWLING = "Market Bombchu Bowling"
 
 
@@ -37,7 +40,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.MARKET_MARKET_GRASS6, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
         (Locations.MARKET_MARKET_GRASS7, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
         (Locations.MARKET_MARKET_GRASS8, lambda bundle: (is_child(bundle) and (can_use_sword(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
-        # Todo: The crates has 'logic->CanRoll()' outcommanted in SoH. Do we need those and when?
         (Locations.MARKET_NEAR_BAZAAR_CRATE1, lambda bundle: (is_child(bundle))),
         (Locations.MARKET_NEAR_BAZAAR_CRATE2, lambda bundle: (is_child(bundle))),
         (Locations.MARKET_SHOOTING_GALLERY_CRATE1, lambda bundle: (is_child(bundle))),
@@ -165,12 +167,15 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Market Mask Shop
     # Events
     add_events(Regions.MARKET_MASK_SHOP, world, [
-        (EventLocations.MARKET_MASK_SHOP, Events.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER, bundle) and
+        (EventLocations.MARKET_MASK_SHOP_ALL_MASKS, Events.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER, bundle) and
                                                                                    (has_item(Events.KAKARIKO_GATE_OPEN, bundle) or world.options.kakariko_gate.value == 1) or
                                                                                    world.options.complete_mask_quest.value == 1)),
-        (EventLocations.MARKET_MASK_SHOP, Events.CAN_BORROW_SKULL_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
-        (EventLocations.MARKET_MASK_SHOP, Events.CAN_BORROW_SPOOKY_MASK, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
-        (EventLocations.MARKET_MASK_SHOP, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: (world.options.complete_mask_quest.value and Events.CAN_BORROW_MASKS)),
+        (EventLocations.MARKET_MASK_SHOP_SKULL_MASK, Events.CAN_BORROW_SKULL_MASK, lambda bundle: (world.options.complete_mask_quest.value or
+                                                                                        has_item(Events.CAN_BORROW_MASKS, bundle))),
+        (EventLocations.MARKET_MASK_SHOP_SPOOKY_MASK, Events.CAN_BORROW_SPOOKY_MASK, lambda bundle: (world.options.complete_mask_quest.value or
+                                                                                        has_item(Events.CAN_BORROW_MASKS, bundle))),
+        (EventLocations.MARKET_MASK_SHOP_BUNNY_HOOD, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: (world.options.complete_mask_quest.value or
+                                                                                        has_item(Events.CAN_BORROW_MASKS, bundle)))
     ])
     # Connections
     connect_regions(Regions.MARKET_MASK_SHOP, world, [
