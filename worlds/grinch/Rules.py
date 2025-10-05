@@ -85,6 +85,8 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WV - Smashing Snowmen": [
         []
+        # "move_rando"
+        # [PC]
     ],
     "WV - Painting The Mayor's Posters": [
         [PB]
@@ -94,6 +96,9 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WV - City Hall - Modifying The Mayor's Statue": [
         [ST]
+        # "move_rando"
+        # [ST, SN],
+        # [ST, SS]
     ],
     "WV - Clock Tower - Advancing The Countdown-To-Xmas Clock": [
         [HMR, RS]
@@ -103,6 +108,8 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WF - Making Xmas Trees Droop": [
         [REL]
+        # "move_rando"
+        # [REL, BB]
     ],
     "WF - Sabotaging Snow Cannon With Glue": [
         [GB, RS],
@@ -118,6 +125,10 @@ rules_dict: dict[str,list[list[str]]] = {
     "WF - Civic Center - Replacing The Candles On The Cake With Fireworks": [
         [REL, GC],
         [REL, OCD, RS]
+        # "move_rando"
+        # [REL, GC],
+        # [REL, OCD, RS, SN]
+        # [REL, OCD, RS, SS]
     ],
     "WF - Squashing All Gifts": [
         [GC, CCAC, SS, REL],
@@ -125,20 +136,32 @@ rules_dict: dict[str,list[list[str]]] = {
     ],
     "WD - Stealing Food From Birds": [
         [RS, REL]
+        # "move_rando"
+        # [RS, REL, PC]
     ],
     "WD - Feeding The Computer With Robot Parts": [
         [RS, REL]
+        # "move_rando"
+        # [RS, REL, PC]
     ],
     "WD - Infesting The Mayor's House With Rats": [
         [REL, RS],
         [REL, GC]
+        # "move_rando"
+        # [REL, RS, PC],
+        # [REL, GC, PC]
     ],
     "WD - Conducting The Stinky Gas To Who-Bris' Shack": [
         [RS, REL]
+        # "move_rando"
+        # [RS, REL, PC]
     ],
     "WD - Minefield - Shaving Who Dump Guardian": [
         [SC, GC],
         [SC, SS, RS]
+        # "move_rando"
+        # [SC, GC, SN],
+        # [SC, SS, RS, SN]
     ],
     "WD - Generator Building - Short-Circuiting Power-Plant": [
         [REL, GC],
@@ -556,11 +579,18 @@ access_rules_dict: dict[str,list[list[str]]] = {
     "Minefield": [
         [REL, RS],
         [REL, GC]
+        # "move_rando"
+        # [REL, RS, PC],
+        # [REL, GC, PC]
     ],
     "Power Plant": [
         [REL, GC],
         [SS, GC],
         [REL, OCD, SS, RS]
+        # "move_rando"
+        # [REL, GC, PC],
+        # [SS, GC, PC],
+        # [REL, OCD, SS, RS, PC]
     ],
     "Generator Building": [
         [REL, GC],
