@@ -544,11 +544,11 @@ class CrystalProjectWorld(World):
         if self.options.goal == self.options.goal.option_astley:
             win_condition_item = NEW_WORLD_STONE # todo should this still be here if we auto-hand you the stone?
             self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value)
-            self.included_regions.append(THE_NEW_WORLD_AP_REGION)
+            self.included_regions.append(THE_NEW_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_true_astley:
             win_condition_item = OLD_WORLD_STONE
             self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value) and logic.old_world_requirements(state)
-            self.included_regions.append(THE_OLD_WORLD_AP_REGION)
+            self.included_regions.append(THE_OLD_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_clamshells:
             win_condition_item = CLAMSHELL
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellGoalQuantity.value)
