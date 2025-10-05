@@ -188,7 +188,7 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
             for shop in self.modded_shops:
-                location = LocationData(shop.region,
+                location = LocationData(shop.display_region,
                                         shop.name,
                                         shop.code,
                                         build_condition_rule(shop.rule_condition, self))
@@ -196,7 +196,7 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods and self.options.killBossesMode.value == self.options.killBossesMode.option_true:
             for modded_location in self.modded_bosses:
-                location = LocationData(modded_location.region,
+                location = LocationData(modded_location.display_region,
                                         modded_location.name,
                                         modded_location.code,
                                         build_condition_rule(modded_location.rule_condition, self))
@@ -571,7 +571,7 @@ class CrystalProjectWorld(World):
 
             for modded_location in self.modded_locations:
                 slot_data_locations.append({"Id": modded_location.offsetless_code,
-                                            "Region": modded_location.region,
+                                            "DisplayRegion": modded_location.display_region,
                                             "Name": modded_location.name,
                                             "Coordinates": modded_location.coordinates,
                                             "biomeId": modded_location.biomeId,
@@ -579,7 +579,7 @@ class CrystalProjectWorld(World):
             if self.options.shopsanity != self.options.shopsanity.option_disabled:
                 for shop in self.modded_shops:
                     slot_data_locations.append({ "Id": shop.offsetless_code,
-                                                 "Region": shop.region,
+                                                 "DisplayRegion": shop.display_region,
                                                  "Name": shop.name,
                                                  "Coordinates": shop.coordinates,
                                                  "BiomeId": shop.biomeId,
@@ -588,7 +588,7 @@ class CrystalProjectWorld(World):
             if self.options.killBossesMode == self.options.killBossesMode.option_true:
                 for boss in self.modded_bosses:
                     slot_data_locations.append({ "Id": boss.offsetless_code,
-                                                 "Region": boss.region,
+                                                 "DisplayRegion": boss.display_region,
                                                  "Name": boss.name,
                                                  "Coordinates": boss.coordinates,
                                                  "BiomeId": boss.biomeId,
@@ -596,7 +596,7 @@ class CrystalProjectWorld(World):
 
             for location in self.removed_locations:
                 slot_data_removed_locations.append({"Id": location.offsetless_code,
-                                            "Region": location.region,
+                                            "DisplayRegion": location.display_region,
                                             "Name": location.name,
                                             "Coordinates": location.coordinates,
                                             "biomeId": location.biomeId,
