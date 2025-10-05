@@ -54,7 +54,7 @@ def connect_regions(parent_region: Regions, world: "SohWorld",
 
 
 def add_events(parent_region: Regions, world: "SohWorld", 
-               events: list[tuple[Enum, Events, Callable[[tuple[CollectionState, Regions, "SohWorld"]], bool]]]) -> None:
+               events: list[tuple[Enum, Events | Enum, Callable[[tuple[CollectionState, Regions, "SohWorld"]], bool]]]) -> None:
     for event in events:
         event_location = event[0].value
         event_item = event[1].value
