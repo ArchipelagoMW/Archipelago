@@ -21,12 +21,12 @@ def set_region_rules(world: "SohWorld") -> None:
     # Zoras Domain
     # Events
     add_events(Regions.ZORAS_DOMAIN, world, [
-        (EventLocations.ZR_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
-        (EventLocations.ZR_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True),
-        (EventLocations.ZR_STICK_POT, Events.CAN_FARM_STICKS, lambda bundle: is_child(bundle)),
-        (EventLocations.ZR_FISH_GROUP, Events.CAN_ACCESS_FISH, lambda bundle: is_child(bundle)),
-        (EventLocations.ZR_KING_ZORA_THAWED, LocalEvents.KING_ZORA_THAWED, lambda bundle: is_adult(bundle) and blue_fire(bundle)),
-        (EventLocations.ZR_DELIVER_RUTOS_LETTER, Events.DELIVER_LETTER, lambda bundle: can_use(Items.BOTTLE_WITH_RUTOS_LETTER, bundle) and is_child(bundle) and world.options.zoras_fountain.value != 2),
+        (EventLocations.ZD_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
+        (EventLocations.ZD_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True),
+        (EventLocations.ZD_STICK_POT, Events.CAN_FARM_STICKS, lambda bundle: is_child(bundle)),
+        (EventLocations.ZD_FISH_GROUP, Events.CAN_ACCESS_FISH, lambda bundle: is_child(bundle)),
+        (EventLocations.ZD_KING_ZORA_THAWED, LocalEvents.KING_ZORA_THAWED, lambda bundle: is_adult(bundle) and blue_fire(bundle)),
+        (EventLocations.ZD_DELIVER_RUTOS_LETTER, Events.DELIVER_LETTER, lambda bundle: can_use(Items.BOTTLE_WITH_RUTOS_LETTER, bundle) and is_child(bundle) and world.options.zoras_fountain.value != 2),
     ])
     # Locations
     add_locations(Regions.ZORAS_DOMAIN, world, [
@@ -63,13 +63,13 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.ZORAS_DOMAIN_ISLAND, world, [
         (Regions.ZORAS_DOMAIN, lambda bundle: is_adult(bundle) or has_item(Items.BRONZE_SCALE, bundle)),
-        (Regions.ZD_STORMS_GROTTO, lambda bundle: can_open_storms_grotto(bundle)),\
+        (Regions.ZD_STORMS_GROTTO, lambda bundle: can_open_storms_grotto(bundle)),
     ])
 
     # ZD Behind King Zora
     # Events
     add_events(Regions.ZD_BEHIND_KING_ZORA, world, [
-        (EventLocations.ZR_KING_ZORA_THAWED, LocalEvents.KING_ZORA_THAWED, lambda bundle: is_adult(bundle) and blue_fire(bundle)),
+        (EventLocations.ZD_KING_ZORA_THAWED, LocalEvents.KING_ZORA_THAWED, lambda bundle: is_adult(bundle) and blue_fire(bundle)),
     ])
     # Locations
     add_locations(Regions.ZD_BEHIND_KING_ZORA, world, [
