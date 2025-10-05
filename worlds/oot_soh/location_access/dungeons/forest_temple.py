@@ -13,7 +13,7 @@ class EventLocations(str, Enum):
     FOREST_TEMPLE_BETH = "Forest Temple Beth"
     FOREST_TEMPLE_LOWER_STALFOS_FAIRY_POT = "Forest Temple Lower Stalfos Fairy Pot"
     FOREST_TEMPLE_DEKU_BABA_STICKS = "Forest Temple Deku Baba Sticks"
-    FOREST_TEMPLE_DEKu_BABA_NUTS = "Forest Temple Deku Baba Nuts"
+    FOREST_TEMPLE_DEKU_BABA_NUTS = "Forest Temple Deku Baba Nuts"
     FOREST_TEMPLE_CLEAR = "Forest Temple Clear"
 
 class LocalEvents(str, Enum):
