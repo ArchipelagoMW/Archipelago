@@ -11,10 +11,10 @@ if TYPE_CHECKING:
 class EventLocations(str, Enum):
     ZORAS_RIVER_SHRUB = "Zora's River Shrub"
     MAGIC_BEAN_SALESMAN_SHOP = "Magic Bean Salesman Shop"
-    ZR_OPEN_GROTTO_GOSSIP_STONE = "Death Mountain Crater Upper Grotto Gossip Stone"
-    ZR_OPEN_GROTTO_BUTTERFLY_FAIRY = "Death Mountain Crater Upper Grotto Butterfly Fairy"
-    ZR_OPEN_GROTTO_BUG_GRASS = "Death Mountain Crater Upper Grotto Bug Grass"
-    ZR_OPEN_GROTTO_FISH = "Death Mountain Crater Upper Grotto Fish"
+    ZR_OPEN_GROTTO_GOSSIP_STONE = "Zora's River Upper Grotto Gossip Stone"
+    ZR_OPEN_GROTTO_BUTTERFLY_FAIRY = "Zora's River Upper Grotto Butterfly Fairy"
+    ZR_OPEN_GROTTO_BUG_GRASS = "Zora's River Upper Grotto Bug Grass"
+    ZR_OPEN_GROTTO_FISH = "Zora's River Upper Grotto Fish"
 
 
 def set_region_rules(world: "SohWorld") -> None:
