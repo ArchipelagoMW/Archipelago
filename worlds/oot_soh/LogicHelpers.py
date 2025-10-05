@@ -54,13 +54,11 @@ def connect_regions(parent_region: Regions, world: "SohWorld",
 
 
 def add_events(parent_region: Regions, world: "SohWorld", 
-               events: list[tuple[Enum, Events | Enum, Callable[[tuple[CollectionState, Regions, "SohWorld"]], bool]]]) -> None:
+               events: list[tuple[Enum, Events, Callable[[tuple[CollectionState, Regions, "SohWorld"]], bool]]]) -> None:
     for event in events:
         event_location = event[0].value
         event_item = event[1].value
-        event_rule = lambda bundle: True
-        if len(event) > 2:
-            event_rule = event[2]
+        event_rule = event[2]
         
         world.get_region(parent_region.value).add_locations({event_location: None}, SohLocation)
         world.get_location(event_location).place_locked_item(SohItem(event_item, IC.progression, None, world.player))
@@ -674,9 +672,9 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         return has_boss_soul(Items.GOHMAS_SOUL, bundle) and can_jump_slash(bundle) and \
                (can_use(Items.NUTS, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle) or hookshot_or_boomerang(bundle))
     if enemy == Enemies.KING_DODONGO:
-        return has_boss_soul(Items.KING_DODONGOS_SOUL, bundle) and can_jump_slash(bundle) and \
-               (can_use(Items.BOMB_BAG, bundle) or has_item(Items.GORONS_BRACELET, bundle) or \
-               (False and can_access_region_as_adult(state, world, Regions.DODONGOS_CAVERN_BOSS_ROOM) and can_use(Items.BOMBCHUS_5, bundle))) #TODO replace False with ctx->get_trick_option(RT_DC_DODONGO_CHU)
+        return (has_boss_soul(Items.KING_DODONGOS_SOUL, bundle) and can_jump_slash(bundle) and
+                (can_use(Items.BOMB_BAG, bundle) or has_item(Items.GORONS_BRACELET, bundle) or
+                 (False and is_adult(bundle) and can_use(Items.BOMBCHUS_5, bundle)))) #TODO replace False with ctx->get_trick_option(RT_DC_DODONGO_CHU)
     if enemy == Enemies.BARINADE:
         return has_boss_soul(Items.BARINADES_SOUL, bundle) and can_use(Items.BOOMERANG, bundle) and can_jump_slash_except_hammer(bundle)
     if enemy == Enemies.PHANTOM_GANON:
