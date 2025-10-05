@@ -156,8 +156,6 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return can_afford(999, bundle)
     elif item == Items.MAGIC_BEAN:
         return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
-    elif item == Items.BOTTLE_WITH_BIG_POE:
-        return state.has(Items.BOTTLE_WITH_BIG_POE.value, player) or (has_bottle(bundle) and state.has(Events.CAN_DEFEAT_BIG_POE.value, player))
     elif item == Items.BOTTLE_WITH_BUGS:
         return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BUGS.value, player) or state.has(Events.CAN_BUY_BUGS.value, player))
     elif item == Items.STICKS:
@@ -344,7 +342,10 @@ def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 
 def can_be_both_ages(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return is_child(bundle) and is_adult(bundle)
+    state = bundle[0]
+    parent_region = bundle[1]
+    world = bundle[2]
+    return state._soh_can_reach_as_age(parent_region, Ages.BOTH, world.player)
 
 
 def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -472,7 +473,7 @@ def can_break_lower_hives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -
 
 def can_break_upper_beehives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return (hookshot_or_boomerang(bundle) or
-            (can_do_trick("Beehives With Bombchus", bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) or 
+            (can_do_trick(Tricks.BOMBCHU_BEEHIVES, bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) or 
             (False and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle)))) #TODO implement sling/bow destroy hives option
 
 
