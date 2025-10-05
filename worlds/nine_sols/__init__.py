@@ -113,9 +113,7 @@ class NineSolsWorld(World):
         )
         # more client/mod features, these are only in the apworld because we want them fixed per-slot/at gen time
         slot_data["jade_costs"] = self.jade_costs
-        # apworld versions are not yet stored in the generated multiworld and exposed by AP servers,
-        # so we have to transmit this to the client/mod using slot_data for the time being.
-        apworld_manifest = orjson.loads(pkgutil.get_data(__name__, "archipelago.json").decode("utf-8"))
-        slot_data["apworld_version"] = apworld_manifest["world_version"]
+        # APWorld versions are not (yet?) exposed by AP servers, so the client/mod needs us to put it in slot_data
+        slot_data["apworld_version"] = self.world_version
         return slot_data
 
