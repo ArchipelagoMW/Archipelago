@@ -838,15 +838,15 @@ class GameManager(ThemedApp):
         self.log_panels: typing.Dict[str, Widget] = {}
 
         # keep track of last used command to autofill on click
-        self.last_autofillable_command = "hint"
-        autofillable_commands = ("hint_location", "hint", "getitem")
+        self.last_autofillable_command = "!hint"
+        autofillable_commands = ("!hint_location", "!hint", "!getitem")
         original_say = ctx.on_user_say
 
         def intercept_say(text):
             text = original_say(text)
             if text:
                 for command in autofillable_commands:
-                    if text.startswith("!" + command):
+                    if text.startswith(command):
                         self.last_autofillable_command = command
                         break
             return text

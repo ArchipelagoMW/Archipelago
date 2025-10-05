@@ -3,11 +3,11 @@ from typing import FrozenSet, TYPE_CHECKING
 from BaseClasses import Region
 from worlds.generic.Rules import set_rule, add_rule, forbid_item
 
-# from .bells import set_bell_location_rules
+from .bells import set_bell_location_rules
 from .combat_logic import has_combat_reqs
 from .constants import *
 from .er_data import Portal, get_portal_outlet_region
-# from .fuses import set_fuse_location_rules, has_fuses
+from .fuses import set_fuse_location_rules
 from .grass import set_grass_location_rules
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
 from .logic_helpers import (has_ability, has_ladder, has_melee, has_sword, has_lantern, has_mask, has_fuses,
@@ -16,9 +16,6 @@ from .options import IceGrappling, LadderStorage, CombatLogic
 
 if TYPE_CHECKING:
     from . import TunicWorld
-
-fuses_option = False  # replace with options.shuffle_fuses when fuse shuffle is in
-bells_option = False  # replace with options.shuffle_bells when bell shuffle is in
 
 
 def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_pairs: dict[Portal, Portal]) -> None:
@@ -334,8 +331,8 @@ def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_
     # nmg: ice grapple through temple door
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Temple Door"],
-        rule=lambda state: (state.has_all(("Ring Eastern Bell", "Ring Western Bell"), player) and not bells_option)
-        or (state.has_all(("East Bell", "West Bell"), player) and bells_option)
+        rule=lambda state: (state.has_all(("Ring Eastern Bell", "Ring Western Bell"), player) and not options.shuffle_bells)
+        or (state.has_all(("East Bell", "West Bell"), player) and options.shuffle_bells)
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     regions["Overworld Temple Door"].connect(
@@ -671,9 +668,9 @@ def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_
                  and (has_sword(state, player) or state.has_any((gun, fire_wand), player)))
                 # shoot fuse and have the shot hit you mid-LS
                 or (can_ladder_storage(state, world) and state.has(fire_wand, player)
-                    and options.ladder_storage >= LadderStorage.option_hard))) and not fuses_option)
+                    and options.ladder_storage >= LadderStorage.option_hard))) and not options.shuffle_fuses)
              or (state.has_all((atoll_northwest_fuse, atoll_northeast_fuse, atoll_southwest_fuse, atoll_southeast_fuse), player)
-                 and fuses_option))
+                 and options.shuffle_fuses))
     )
 
     regions["Ruined Atoll Statue"].connect(
@@ -804,12 +801,12 @@ def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_
         connecting_region=regions["Fortress Exterior from Overworld"],
         rule=lambda state: state.has(laurels, player)
         or (has_ability(prayer, state, world) and state.has(fortress_exterior_fuse_1, player)
-            and fuses_option))
+            and options.shuffle_fuses))
     regions["Fortress Exterior from Overworld"].connect(
         connecting_region=regions["Fortress Exterior near cave"],
         rule=lambda state: state.has(laurels, player)
         or (has_ability(prayer, state, world) and state.has(fortress_exterior_fuse_1, player)
-            if fuses_option else has_ability(prayer, state, world)))
+            if options.shuffle_fuses else has_ability(prayer, state, world)))
 
     # shoot far fire pot, enemy gets aggro'd
     regions["Fortress Exterior near cave"].connect(
@@ -880,7 +877,7 @@ def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_
         rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
         or (has_fuses("Activate Eastern Vault West Fuses", state, world)
             and has_fuses("Activate Eastern Vault East Fuse", state, world)
-            and fuses_option))
+            and options.shuffle_fuses))
 
     fort_grave_entry_to_combat = regions["Fortress Grave Path Entry"].connect(
         connecting_region=regions["Fortress Grave Path Combat"])
@@ -1027,18 +1024,18 @@ def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_
         connecting_region=regions["Rooted Ziggurat Lower Miniboss Platform"])
     zig_low_miniboss_to_mid = regions["Rooted Ziggurat Lower Miniboss Platform"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Mid Checkpoint"],
-        rule=lambda state: state.has(ziggurat_miniboss_fuse, player) if fuses_option
+        rule=lambda state: state.has(ziggurat_miniboss_fuse, player) if options.shuffle_fuses
         else (has_sword(state, player) and has_ability(prayer, state, world)))
     # can ice grapple to the voidlings to get to the double admin fight, still need to pray at the fuse
     zig_low_miniboss_to_back = regions["Rooted Ziggurat Lower Miniboss Platform"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"],
-        rule=lambda state: state.has(laurels, player) or (state.has(ziggurat_miniboss_fuse, player) and fuses_option)
-        or (has_sword(state, player) and has_ability(prayer, state, world) and not fuses_option))
+        rule=lambda state: state.has(laurels, player) or (state.has(ziggurat_miniboss_fuse, player) and options.shuffle_fuses)
+        or (has_sword(state, player) and has_ability(prayer, state, world) and not options.shuffle_fuses))
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Miniboss Platform"],
         rule=lambda state: state.has(laurels, player)
         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)
-        or (state.has(ziggurat_miniboss_fuse, player) and fuses_option))
+        or (state.has(ziggurat_miniboss_fuse, player) and options.shuffle_fuses))
 
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Entrance"],
@@ -1086,8 +1083,8 @@ def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_
                                               and state.can_reach_region("Overworld Beach", player)))))
                             and (not options.combat_logic
                                  or has_combat_reqs("Swamp", state, player))
-                            and not fuses_option)
-        or (state.has_all((swamp_fuse_1, swamp_fuse_2, swamp_fuse_3), player) and fuses_option)
+                            and not options.shuffle_fuses)
+        or (state.has_all((swamp_fuse_1, swamp_fuse_2, swamp_fuse_3), player) and options.shuffle_fuses)
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     if options.ladder_storage >= LadderStorage.option_hard and options.shuffle_ladders:
@@ -1096,7 +1093,7 @@ def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_
     regions["Swamp to Cathedral Main Entrance Region"].connect(
         connecting_region=regions["Swamp Mid"],
         rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
-        or (state.has_all((swamp_fuse_1, swamp_fuse_2, swamp_fuse_3), player) and fuses_option))
+        or (state.has_all((swamp_fuse_1, swamp_fuse_2, swamp_fuse_3), player) and options.shuffle_fuses))
 
     # grapple push the enemy by the door down, then grapple to it. Really jank
     regions["Swamp Mid"].connect(
@@ -1142,7 +1139,7 @@ def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_
 
     cath_entry_to_elev = regions["Cathedral Entry"].connect(
         connecting_region=regions["Cathedral to Gauntlet"],
-        rule=lambda state: ((state.has(cathedral_elevator_fuse, player) if fuses_option else has_ability(prayer, state, world))
+        rule=lambda state: ((state.has(cathedral_elevator_fuse, player) if options.shuffle_fuses else has_ability(prayer, state, world))
                             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
         or options.entrance_rando)  # elevator is always there in ER
     regions["Cathedral to Gauntlet"].connect(
@@ -1444,17 +1441,17 @@ def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_
                  lambda state: has_combat_reqs("Rooted Ziggurat", state, player))
         set_rule(zig_low_miniboss_to_back,
                  lambda state: state.has(laurels, player)
-                 or (state.has(ziggurat_miniboss_fuse, player) if fuses_option
+                 or (state.has(ziggurat_miniboss_fuse, player) if options.shuffle_fuses
                      else (has_ability(prayer, state, world) and has_combat_reqs("Rooted Ziggurat", state, player))))
         set_rule(zig_low_miniboss_to_mid,
-                 lambda state: state.has(ziggurat_miniboss_fuse, player) if fuses_option
+                 lambda state: state.has(ziggurat_miniboss_fuse, player) if options.shuffle_fuses
                  else (has_ability(prayer, state, world) and has_combat_reqs("Rooted Ziggurat", state, player)))
 
         # only activating the fuse requires combat logic
         set_rule(cath_entry_to_elev,
                  lambda state: options.entrance_rando
                  or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
-                 or (state.has(cathedral_elevator_fuse, player) if fuses_option
+                 or (state.has(cathedral_elevator_fuse, player) if options.shuffle_fuses
                      else (has_ability(prayer, state, world) and has_combat_reqs("Swamp", state, player))))
 
         set_rule(cath_entry_to_main,
@@ -1535,11 +1532,11 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     if options.grass_randomizer:
         set_grass_location_rules(world)
 
-    # if options.shuffle_fuses:
-    #     set_fuse_location_rules(world)
-    #
-    # if options.shuffle_bells:
-    #     set_bell_location_rules(world)
+    if options.shuffle_fuses:
+        set_fuse_location_rules(world)
+
+    if options.shuffle_bells:
+        set_bell_location_rules(world)
 
     forbid_item(world.get_location("Secret Gathering Place - 20 Fairy Reward"), fairies, player)
 
@@ -1702,7 +1699,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
                                                         and (state.has(laurels, player)
                                                              or options.entrance_rando)))
     set_rule(world.get_location("Rooted Ziggurat Lower - After Guarded Fuse"),
-             lambda state: state.has(ziggurat_miniboss_fuse, player) if fuses_option
+             lambda state: state.has(ziggurat_miniboss_fuse, player) if options.shuffle_fuses
              else has_sword(state, player) and has_ability(prayer, state, world))
 
     # Bosses
@@ -1745,12 +1742,12 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: state.has(laurels, player))
 
     # Events
-    if not bells_option:
+    if not options.shuffle_bells:
         set_rule(world.get_location("Eastern Bell"),
                  lambda state: (has_melee(state, player) or state.has(fire_wand, player)))
         set_rule(world.get_location("Western Bell"),
                  lambda state: (has_melee(state, player) or state.has(fire_wand, player)))
-    if not fuses_option:
+    if not options.shuffle_fuses:
         set_rule(world.get_location("Furnace Fuse"),
                  lambda state: has_ability(prayer, state, world))
         set_rule(world.get_location("South and West Fortress Exterior Fuses"),
@@ -1877,7 +1874,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
         # could just do the last two, but this outputs better in the spoiler log
         # dagger is maybe viable here, but it's sketchy -- activate ladder switch, save to reset enemies, climb up
-        if not fuses_option:
+        if not options.shuffle_fuses:
             combat_logic_to_loc("Upper and Central Fortress Exterior Fuses", "Eastern Vault Fortress")
             combat_logic_to_loc("Beneath the Vault Fuse", "Beneath the Vault")
             combat_logic_to_loc("Eastern Vault West Fuses", "Eastern Vault Fortress")
@@ -1896,10 +1893,10 @@ def set_er_location_rules(world: "TunicWorld") -> None:
                                 and (state.has(laurels, player) or world.options.entrance_rando))
                  or has_combat_reqs("Rooted Ziggurat", state, player))
         set_rule(world.get_location("Rooted Ziggurat Lower - After Guarded Fuse"),
-                 lambda state: state.has(ziggurat_miniboss_fuse, player) if fuses_option
+                 lambda state: state.has(ziggurat_miniboss_fuse, player) if options.shuffle_fuses
                  else (has_ability(prayer, state, world) and has_combat_reqs("Rooted Ziggurat", state, player)))
 
-        if fuses_option:
+        if options.shuffle_fuses:
             set_rule(world.get_location("Rooted Ziggurat Lower - [Miniboss] Activate Fuse"),
                      lambda state: has_ability(prayer, state, world) and has_combat_reqs("Rooted Ziggurat", state, player))
             combat_logic_to_loc("Beneath the Fortress - Activate Fuse", "Beneath the Vault")

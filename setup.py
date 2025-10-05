@@ -22,7 +22,7 @@ SNI_VERSION = "v0.0.100"  # change back to "latest" once tray icon issues are fi
 
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
-requirement = 'cx-Freeze==8.0.0'
+requirement = 'cx-Freeze==8.4.0'
 try:
     import pkg_resources
     try:
@@ -383,6 +383,15 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 world_directory = self.libfolder / "worlds" / file_name
                 if os.path.isfile(world_directory / "archipelago.json"):
                     manifest = json.load(open(world_directory / "archipelago.json"))
+
+                    assert "game" in manifest, (
+                        f"World directory {world_directory} has an archipelago.json manifest file, but it"
+                        "does not define a \"game\"."
+                    )
+                    assert manifest["game"] == worldtype.game, (
+                        f"World directory {world_directory} has an archipelago.json manifest file, but value of the"
+                        f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
+                    )
                 else:
                     manifest = {}
                 # this method creates an apworld that cannot be moved to a different OS or minor python version,
