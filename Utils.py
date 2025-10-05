@@ -48,7 +48,7 @@ class Version(typing.NamedTuple):
 
 
 __version__ = "0.6.4"
-version = version_tuple = tuplize_version(__version__)
+version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
 is_macos = sys.platform == "darwin"
