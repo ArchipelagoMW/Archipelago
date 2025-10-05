@@ -76,34 +76,10 @@ class Gifts(Range):
     range_end = 300
     default = 0
 
-class GadgetRando(OptionSet):
-    """
-    Randomizes Grinch's gadgets along with randomizing Binoculars into the pool. [NOT IMPLEMENTED]
-    """
-    display_name = "Gadgets Randomized"
-    default = [
-        "Binoculars",
-        "Rotten Egg Launcher",
-        "Rocket Spring",
-        "Slime Shooter",
-        "Octopus Climbing Device",
-        "Marine Mobile",
-        "Grinch Copter"
-    ]
-
-class Moverando(OptionSet):
+class Moverando(Toggle):
     """Randomizes Grinch's moveset along with randomizing max into the pool. [NOT IMPLEMENTED]
-
-    Valid keys: "Pancake", "Seize", "Max", "Bad Breath", "Sneak"
     """
     display_name = "Moves Randomized"
-    default = [
-        "Pancake",
-        "Seize",
-        "Max",
-        "Bad Breath",
-        "Sneak"
-    ]
 
 class UnlimitedEggs(Toggle):
     """Determine whether or not you run out of rotten eggs when you utilize your gadgets."""
@@ -126,7 +102,6 @@ class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     progressive_gadget: ProgressiveGadget
     supadow_minigames: Supadow
     giftsanity: Gifts
-    gadget_rando: GadgetRando
     move_rando: Moverando
     unlimited_eggs: UnlimitedEggs
     ring_link: RingLinkOption
