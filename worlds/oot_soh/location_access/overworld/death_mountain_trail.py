@@ -114,10 +114,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.DMT_STORMS_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.DMT_STORMS_GROTTO_BEEHIVE_LEFT, lambda bundle: can_break_lower_hives(bundle)),
         (Locations.DMT_STORMS_GROTTO_BEEHIVE_RIGHT, lambda bundle: can_break_lower_hives(bundle)),
-        (Locations.DMT_COW_GROTTO_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.DMT_COW_GROTTO_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.DMT_COW_GROTTO_GRASS3, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.DMT_COW_GROTTO_GRASS4, lambda bundle: can_cut_shrubs(bundle))
+        (Locations.DMT_STORMS_GROTTO_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.DMT_STORMS_GROTTO_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.DMT_STORMS_GROTTO_GRASS3, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.DMT_STORMS_GROTTO_GRASS4, lambda bundle: can_cut_shrubs(bundle))
     ])
     # Connections
     connect_regions(Regions.DMT_STORMS_GROTTO, world, [
