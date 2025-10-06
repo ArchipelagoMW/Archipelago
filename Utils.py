@@ -445,13 +445,10 @@ safe_builtins = frozenset((
 
 
 class RestrictedUnpickler(pickle.Unpickler):
-    generic_properties_module: Optional[object]
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(RestrictedUnpickler, self).__init__(*args, **kwargs)
         self.options_module = importlib.import_module("Options")
         self.net_utils_module = importlib.import_module("NetUtils")
-        self.generic_properties_module = None
 
     def find_class(self, module: str, name: str) -> type:
         if module == "builtins" and name in safe_builtins:
@@ -465,10 +462,6 @@ class RestrictedUnpickler(pickle.Unpickler):
                                              "SlotType", "NetworkSlot", "HintStatus"}:
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
-        if module == "worlds.generic" and name == "PlandoItem":
-            if not self.generic_properties_module:
-                self.generic_properties_module = importlib.import_module("worlds.generic")
-            return getattr(self.generic_properties_module, name)
         # pep 8 specifies that modules should have "all-lowercase names" (options, not Options)
         if module.lower().endswith("options"):
             if module == "Options":
