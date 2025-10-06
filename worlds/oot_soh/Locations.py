@@ -1,7 +1,6 @@
 from typing import Dict, TYPE_CHECKING
 
 from BaseClasses import Location
-from .Enums import *
 
 
 class SohLocation(Location):
@@ -87,7 +86,6 @@ base_location_table: Dict[str, int] = {
     "Kak 30 Gold Skulltula Reward": 146,
     "Kak 40 Gold Skulltula Reward": 147,
     "Kak 50 Gold Skulltula Reward": 148,
-    "Kak 100 Gold Skulltula Reward": 149,
     "Graveyard Shield Grave Chest": 173,
     "Graveyard Heart Piece Grave Chest": 174,
     "Graveyard Royal Family's Tomb Chest": 175,
@@ -2471,6 +2469,10 @@ carpenters_location_table: Dict[str, int] = {
     "GF Steep Slope Carpenter": 328,
 }
 
+hundred_skulls_location_table: dict[str, int] = {
+    "Kak 100 Gold Skulltula Reward": 149,
+}
+
 location_data_table: Dict[str, int] = {
     **base_location_table,
     **gold_skulltula_overworld_location_table,
@@ -2494,7 +2496,8 @@ location_data_table: Dict[str, int] = {
     **fish_pond_location_table,
     **fish_overworld_location_table,
     **child_zelda_location_table,
-    **carpenters_location_table
+    **carpenters_location_table,
+    **hundred_skulls_location_table,
 }
 
 location_table = {name: address for name, address in location_data_table.items()}

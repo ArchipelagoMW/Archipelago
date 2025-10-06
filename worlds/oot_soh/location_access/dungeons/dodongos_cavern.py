@@ -1,11 +1,7 @@
-from typing import TYPE_CHECKING
-
-from worlds.generic.Rules import set_rule
-from ...Enums import *
 from ...LogicHelpers import *
 
 if TYPE_CHECKING:
-    from worlds.oot_soh import SohWorld
+    from ... import SohWorld
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -90,7 +86,7 @@ def set_region_rules(world: "SohWorld") -> None:
         rule=lambda state: has_explosives(state, world)
         or state.has(Items.STRENGTH_UPGRADE.value, player)
         or can_use(Items.DINS_FIRE, state, world)
-        or (can_do_trick("DC Stairs With Bow", state, world) and can_use(Items.PROGRESSIVE_BOW, state, world)))
+        or (can_do_trick(Tricks.DC_STAIRS_WITH_BOW, state, world) and can_use(Items.PROGRESSIVE_BOW, state, world)))
 
     world.get_region(Regions.DODONGOS_CAVERN_STAIRS_LOWER.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_COMPASS_ROOM.value),
@@ -123,7 +119,7 @@ def set_region_rules(world: "SohWorld") -> None:
     world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_2F_SIDE_ROOM.value),
         rule=lambda state: can_break_mud_walls(state, world)
-        or (can_do_trick("DC Scrub Room", state, world) and state.has(Items.STRENGTH_UPGRADE.value, player)))
+        or (can_do_trick(Tricks.DC_SCRUB_ROOM, state, world) and state.has(Items.STRENGTH_UPGRADE.value, player)))
 
     world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_FIRST_SLINGSHOT_ROOM.value),
@@ -132,10 +128,10 @@ def set_region_rules(world: "SohWorld") -> None:
 
     world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value),
-        rule=lambda state: (is_adult(state, Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER, world) and can_do_trick("DC Jump", state, world))
+        rule=lambda state: (is_adult(state, Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER, world) and can_do_trick(Tricks.DC_JUMP, state, world))
         or can_use(Items.HOVER_BOOTS, state, world)
         or (is_adult(state, Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER, world) and can_use(Items.PROGRESSIVE_HOOKSHOT, state, world))
-        or (can_do_trick("Damage Boost Simple", state, world) and has_explosives(state, world)
+        or (can_do_trick(Tricks.DAMAGE_BOOST_SIMPLE, state, world) and has_explosives(state, world)
             and can_jump_slash(state, world)))
 
     world.get_region(Regions.DODONGOS_CAVERN_2F_SIDE_ROOM.value).connect(
@@ -148,7 +144,7 @@ def set_region_rules(world: "SohWorld") -> None:
         world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value),
         rule=lambda state: can_use(Items.PROGRESSIVE_SLINGSHOT, state, world)
         or can_use(Items.PROGRESSIVE_BOW, state, world)
-        or can_do_trick("DC Slingshot Skip", state, world))
+        or can_do_trick(Tricks.DC_SLINGSHOT_SKIP, state, world))
 
     world.get_region(Regions.DODONGOS_CAVERN_UPPER_LIZALFOS.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_LOWER_LIZALFOS.value))
@@ -172,7 +168,7 @@ def set_region_rules(world: "SohWorld") -> None:
         world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value),
         rule=lambda state: can_use(Items.PROGRESSIVE_SLINGSHOT, state, world)
         or can_use(Items.PROGRESSIVE_BOW, state, world)
-        or can_do_trick("DC Slingshot Skip", state, world))
+        or can_do_trick(Tricks.DC_SLINGSHOT_SKIP, state, world))
 
     world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER.value).connect(
         world.get_region(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER.value))

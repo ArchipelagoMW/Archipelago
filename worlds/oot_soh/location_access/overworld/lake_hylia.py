@@ -3,7 +3,7 @@ from ...Enums import *
 from ...LogicHelpers import *
 
 if TYPE_CHECKING:
-    from worlds.oot_soh import SohWorld
+    from ... import SohWorld
 
 class EventLocations(str, Enum):
     LAKE_HYLIA_SHRUB = "Lake Hylia Shrub"

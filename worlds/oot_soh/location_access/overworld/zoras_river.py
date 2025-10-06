@@ -1,16 +1,16 @@
-from typing import TYPE_CHECKING
-
-from ...Enums import *
 from ...LogicHelpers import *
 
-
 if TYPE_CHECKING:
-    from worlds.oot_soh import SohWorld
+    from ... import SohWorld
 
 
 class EventLocations(str, Enum):
     ZORAS_RIVER_SHRUB = "Zora's River Shrub"
     MAGIC_BEAN_SALESMAN_SHOP = "Magic Bean Salesman Shop"
+    ZR_OPEN_GROTTO_GOSSIP_STONE = "Zora's River Upper Grotto Gossip Stone"
+    ZR_OPEN_GROTTO_BUTTERFLY_FAIRY = "Zora's River Upper Grotto Butterfly Fairy"
+    ZR_OPEN_GROTTO_BUG_GRASS = "Zora's River Upper Grotto Bug Grass"
+    ZR_OPEN_GROTTO_FISH = "Zora's River Upper Grotto Fish"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -27,7 +27,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## ZR Front
     # Locations
     add_locations(Regions.ZR_FRONT, world, [
-        (Locations.ZR_GS_TREE, lambda bundle: is_child(bundle) and
+        (Locations.ZR_GS_TREE, lambda bundle: is_child(bundle) and can_bonk_trees(bundle) and
                                                       can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA)),
         (Locations.ZR_NEAR_TREE_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.ZR_NEAR_TREE_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
@@ -52,13 +52,15 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Zora River
     # Events
     add_events(Regions.ZORA_RIVER, world, [
-        (EventLocations.MAGIC_BEAN_SALESMAN_SHOP, Events.CAN_BUY_BEANS, 
-            lambda bundle: can_afford(10, bundle) and (world.options.shuffle_merchants.value == 0 or world.options.shuffle_merchants.value == 2)), # Bean shop not randomized
         (EventLocations.ZORAS_RIVER_SHRUB, Events.CAN_ACCESS_BUGS, lambda bundle: can_cut_shrubs(bundle))
     ])
+    if world.options.shuffle_merchants.value == 0 or world.options.shuffle_merchants.value == 2: # Only when selling vanilla item (beans)
+        add_events(Regions.ZORA_RIVER, world, [
+            (EventLocations.MAGIC_BEAN_SALESMAN_SHOP, Events.CAN_BUY_BEANS, lambda bundle: has_item(Items.CHILD_WALLET, bundle))
+        ])
     # Locations
     add_locations(Regions.ZORA_RIVER, world, [
-        (Locations.ZR_MAGIC_BEAN_SALESMAN, lambda bundle: is_child(bundle)),
+        (Locations.ZR_MAGIC_BEAN_SALESMAN, lambda bundle: is_child(bundle) and has_item(Items.CHILD_WALLET, bundle)),
         (Locations.ZR_FROGS_OCARINA_GAME, lambda bundle: (is_child(bundle) and
                                                                can_use(Items.SONG_OF_STORMS, bundle) and
                                                                can_use(Items.SONG_OF_TIME, bundle) and
@@ -81,11 +83,11 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ZR_NEAR_OPEN_GROTTO_FREESTANDING_POH, lambda bundle: is_child(bundle) or
                                                                               can_use(Items.HOVER_BOOTS, bundle)
                                                                               or (is_adult(bundle)
-                                                                                  and can_do_trick("ZR Lower Piece of Heart without Hover Boots", bundle))),
+                                                                                  and can_do_trick(Tricks.ZR_LOWER, bundle))),
         (Locations.ZR_NEAR_DOMAIN_FREESTANDING_POH, lambda bundle: is_child(bundle) or
                                                                               can_use(Items.HOVER_BOOTS, bundle)
                                                                               or (is_adult(bundle)
-                                                                                  and can_do_trick("ZR Upper Piece of Heart without Hover Boots", bundle))),
+                                                                                  and can_do_trick(Tricks.ZR_UPPER, bundle))),
         (Locations.ZR_GS_LADDER, lambda bundle: is_child(bundle)
                                                      and  can_attack(bundle)
                                                      and can_get_nighttime_gs(bundle)),
@@ -137,10 +139,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.ZR_BEHIND_WATERFALL, lambda bundle: world.options.sleeping_waterfall.value == 1 or
                                                           can_use(Items.ZELDAS_LULLABY, bundle) or
                                                           (is_child(bundle) and
-                                                           can_do_trick("ZD with Cuckoo", bundle)) or
+                                                           can_do_trick(Tricks.ZR_CUCCO, bundle)) or
                                                           (is_adult(bundle) and
                                                            can_use(Items.HOVER_BOOTS, bundle) and
-                                                           can_do_trick("ZD with Hover Boots", bundle)))
+                                                           can_do_trick(Tricks.ZR_HOVERS, bundle)))
 
     ])
     # Events
@@ -164,6 +166,13 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## ZR Open Grotto
+    # Events
+    add_events(Regions.ZR_OPEN_GROTTO, world, [
+        (EventLocations.ZR_OPEN_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.ZR_OPEN_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.ZR_OPEN_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.ZR_OPEN_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+    ])
     # Locations
     add_locations(Regions.ZR_OPEN_GROTTO, world, [
         (Locations.ZR_OPEN_GROTTO_CHEST, lambda bundle: True),
