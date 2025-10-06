@@ -123,13 +123,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.FOREST_TEMPLE_NW_OUTDOORS_LOWER_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
         (EventLocations.FOREST_TEMPLE_NW_OUTDOORS_LOWER_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
-    # Locations
-    add_locations(Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, world, [
-        (Locations.FOREST_TEMPLE_WEST_COURTYARD_RIGHT_HEART, lambda bundle: (can_use(Items.BOOMERANG, bundle) and 
-                                                                             can_do_trick(Tricks.FOREST_OUTDOORS_HEARTS_BOOMERANG, bundle))),
-        (Locations.FOREST_TEMPLE_WEST_COURTYARD_LEFT_HEART, lambda bundle: (can_use(Items.BOOMERANG, bundle) and 
-                                                                            can_do_trick(Tricks.FOREST_OUTDOORS_HEARTS_BOOMERANG, bundle)))
-    ])
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, world, [
         (Regions.FOREST_TEMPLE_LOBBY, lambda bundle: can_use(Items.SONG_OF_TIME, bundle)),
@@ -141,7 +134,9 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.FOREST_TEMPLE_MAP_ROOM, lambda bundle: True),
         (Regions.FOREST_TEMPLE_SEWER, lambda bundle: (has_item(Items.GOLDEN_SCALE, bundle) or
                                                       can_use(Items.IRON_BOOTS, bundle))),
-        (Regions.FOREST_TEMPLE_BOSS_ENTRYWAY, lambda bundle: False)
+        (Regions.FOREST_TEMPLE_BOSS_ENTRYWAY, lambda bundle: False),
+        (Regions.FOREST_TEMPLE_NW_COURTYARD_HEARTS, lambda bundle: (can_use(Items.BOOMERANG, bundle) and 
+                                                                    can_do_trick(Tricks.FOREST_OUTDOORS_HEARTS_BOOMERANG, bundle)))
     ])
     
     ## Forest Temple NW Outdoors Upper
@@ -150,18 +145,21 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.FOREST_TEMPLE_NW_OUTDOORS_UPPER_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
         (EventLocations.FOREST_TEMPLE_NW_OUTDOORS_UPPER_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle)),
     ])
-    # Locations
-    add_locations(Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, world, [
-        (Locations.FOREST_TEMPLE_WEST_COURTYARD_RIGHT_HEART, lambda bundle: True),
-        (Locations.FOREST_TEMPLE_WEST_COURTYARD_LEFT_HEART, lambda bundle: True)
-    ])
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, world, [
         (Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, lambda bundle: True),
         (Regions.FOREST_TEMPLE_COURTYARD_SKULLTULA_ISLAND, lambda bundle: hookshot_or_boomerang(bundle)),
         (Regions.FOREST_TEMPLE_BELOW_BOSS_KEY_CHEST, lambda bundle: True),
         (Regions.FOREST_TEMPLE_FLOORMASTER_ROOM, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_BLOCK_PUSH_ROOM, lambda bundle: True)
+        (Regions.FOREST_TEMPLE_BLOCK_PUSH_ROOM, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_NW_COURTYARD_HEARTS, lambda bundle: True)
+    ])
+    
+    ## Forest Temple NW Courtyard Hearts
+    # Locations
+    add_locations(Regions.FOREST_TEMPLE_NW_COURTYARD_HEARTS, world, [
+        (Locations.FOREST_TEMPLE_WEST_COURTYARD_RIGHT_HEART, lambda bundle: True),
+        (Locations.FOREST_TEMPLE_WEST_COURTYARD_LEFT_HEART, lambda bundle: True)
     ])
     
     ## Forest Temple Courtyard Skulltula Island
