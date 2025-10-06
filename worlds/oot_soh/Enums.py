@@ -93,6 +93,7 @@ class Regions(str, Enum):
     THIEVES_HIDEOUT_KITCHEN_TOP = "Thieves Hideout Kitchen Top"
     THIEVES_HIDEOUT_BREAK_ROOM = "Thieves Hideout Break Room"
     THIEVES_HIDEOUT_RESCUE_CARPENTERS = "Thieves Hideout Rescue Carpenters"
+    THIEVES_HIDEOUT_KITCHEN_POTS = "Thieves Hideout Kitchen Pots"
     WASTELAND_NEAR_FORTRESS = "Wasteland Near Fortress"
     HAUNTED_WASTELAND = "Haunted Wasteland"
     WASTELAND_NEAR_COLOSSUS = "Wasteland Near Colossus"
