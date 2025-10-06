@@ -14,6 +14,7 @@ class EventLocations(str, Enum):
     GANONS_CASTLE_LIGHT_TRIAL_AREA = "Ganon's Castle Light Trial Area"
     GANONS_CASTLE_BLUE_FIRE_ACCESS = "Ganon's Castle Blue Fire Access"
     GANONS_CASTLE_FAIRY_POT = "Ganon's Castle Fairy Pot"
+    GANONS_CASTLE_SPIRIT_TRIAL_NUT_POT = "Ganon's Castle Spirit Trial Nut Pot"
     GANON_DEFEATED = "Ganon Defeated"
     
 class LocalEvents(str, Enum):
@@ -150,28 +151,250 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                                                                               can_use(Items.LENS_OF_TRUTH, bundle))))))))
     ])
     # Locations
+    add_locations(Regions.GANONS_CASTLE_SHADOW_TRIAL, world, [
+        (Locations.GANONS_CASTLE_SHADOW_TRIAL_FRONT_CHEST, lambda bundle: (can_use(Items.FIRE_ARROW, bundle) or
+                                                                           can_use(Items.HOOKSHOT, bundle) or
+                                                                           can_use(Items.HOVER_BOOTS, bundle) or
+                                                                           can_use(Items.SONG_OF_TIME, bundle) or
+                                                                           is_child(bundle))),
+        (Locations.GANONS_CASTLE_SHADOW_TRIAL_GOLDEN_GAUNTLETS_CHEST, lambda bundle: (can_use(Items.FIRE_ARROW, bundle) or
+                                                                           (can_use(Items.LONGSHOT, bundle) or
+                                                                           (can_use(Items.HOVER_BOOTS, bundle) or
+                                                                           can_use(Items.DINS_FIRE, bundle))))),
+        (Locations.GANONS_CASTLE_SHADOW_TRIAL_POT1, lambda bundle: (can_use(Items.FIRE_ARROW, bundle) or
+                                                                    can_use(Items.LONGSHOT, bundle))),
+        (Locations.GANONS_CASTLE_SHADOW_TRIAL_POT2, lambda bundle: (can_use(Items.FIRE_ARROW, bundle) or
+                                                                    can_use(Items.LONGSHOT, bundle))),
+        (Locations.GANONS_CASTLE_SHADOW_TRIAL_POT3, lambda bundle: (can_break_pots(bundle) and
+                                                                    can_use(Items.MEGATON_HAMMER, bundle) and
+                                                                    ((can_use(Items.FIRE_ARROW, bundle) and
+                                                                      (can_do_trick(Tricks.LENS_GANON, bundle) or
+                                                                       can_use(Items.LENS_OF_TRUTH, bundle))) or
+                                                                     (can_use(Items.LONGSHOT, bundle) and
+                                                                      (can_use(Items.HOVER_BOOTS, bundle) or
+                                                                       (can_use(Items.DINS_FIRE, bundle) and
+                                                                        (can_do_trick(Tricks.LENS_GANON, bundle) or
+                                                                         can_use(Items.LENS_OF_TRUTH, bundle)))))))),
+        (Locations.GANONS_CASTLE_SHADOW_TRIAL_POT4, lambda bundle: (can_break_pots(bundle) and
+                                                                    can_use(Items.MEGATON_HAMMER, bundle) and
+                                                                    ((can_use(Items.FIRE_ARROW, bundle) and
+                                                                      (can_do_trick(Tricks.LENS_GANON, bundle) or
+                                                                       can_use(Items.LENS_OF_TRUTH, bundle))) or
+                                                                     (can_use(Items.LONGSHOT, bundle) and
+                                                                      (can_use(Items.HOVER_BOOTS, bundle) or
+                                                                       (can_use(Items.DINS_FIRE, bundle) and
+                                                                        (can_do_trick(Tricks.LENS_GANON, bundle) or
+                                                                         can_use(Items.LENS_OF_TRUTH, bundle)))))))),
+        (Locations.GANONS_CASTLE_SHADOW_TRIAL_HEART1, lambda bundle: ((can_use(Items.FIRE_ARROW, bundle) or
+                                                                       (can_use(Items.LONGSHOT, bundle) and
+                                                                        (can_use(Items.HOVER_BOOTS, bundle) or
+                                                                         can_use(Items.DINS_FIRE, bundle)))) and
+                                                                      (can_do_trick(Tricks.LENS_GANON, bundle) or
+                                                                       can_use(Items.LENS_OF_TRUTH, bundle) or
+                                                                       can_use(Items.BOOMERANG, bundle)))),
+        (Locations.GANONS_CASTLE_SHADOW_TRIAL_HEART2, lambda bundle: ((can_use(Items.FIRE_ARROW, bundle) or
+                                                                       (can_use(Items.LONGSHOT, bundle) and
+                                                                        (can_use(Items.HOVER_BOOTS, bundle) or
+                                                                         can_use(Items.DINS_FIRE, bundle)))) and
+                                                                      (can_do_trick(Tricks.LENS_GANON, bundle) or
+                                                                       can_use(Items.LENS_OF_TRUTH, bundle) or
+                                                                       can_use(Items.BOOMERANG, bundle)))),
+        (Locations.GANONS_CASTLE_SHADOW_TRIAL_HEART3, lambda bundle: ((can_use(Items.FIRE_ARROW, bundle) or
+                                                                       (can_use(Items.LONGSHOT, bundle) and
+                                                                        (can_use(Items.HOVER_BOOTS, bundle) or
+                                                                         can_use(Items.DINS_FIRE, bundle)))) and
+                                                                      (can_do_trick(Tricks.LENS_GANON, bundle) or
+                                                                       can_use(Items.LENS_OF_TRUTH, bundle) or
+                                                                       can_use(Items.BOOMERANG, bundle))))
+    ])
     
     ## Ganon's Castle Spirit Trial
-    ## Ganon's Castle Light Trial
-    ## Ganon's Tower Entryway
-    ## Ganon's Tower Floor 1
-    ## Ganon's Tower Floor 2
-    ## Ganon's Tower Floor 3
-    ## Ganon's Tower Before Ganondorf's Lair
-    ## Ganondorf's Lair
-    ## Ganon's Castle Escape
-    ## Ganon's Arena
+    # Events
+    add_events(Regions.GANONS_CASTLE_SPIRIT_TRIAL, world, [
+        (EventLocations.GANONS_CASTLE_SPIRIT_TRIAL_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: (((can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT, bundle) and
+                                                                                                    can_jump_slash_except_hammer(bundle)) or
+                                                                                                   can_use(Items.HOOKSHOT, bundle)) and
+                                                                                                  (can_use(Items.BOMBCHUS_5, bundle) or
+                                                                                                   (can_do_trick(Tricks.HOOKSHOT_EXTENSION) and
+                                                                                                    (can_use(Items.FAIRY_BOW, bundle) or
+                                                                                                     can_use(Items.FAIRY_SLINGSHOT, bundle)))) and
+                                                                                                  can_use(Items.FAIRY_BOW, bundle) and
+                                                                                                  (can_use(Items.MIRROR_SHIELD, bundle) or
+                                                                                                   (world.options.sunlight_arrows.value == 1 and can_use(Items.LIGHT_ARROW, bundle))))),
+        (EventLocations.GANONS_CASTLE_SPIRIT_TRIAL_AREA, LocalEvents.GANONS_CASTLE_SPIRIT_TRIAL_CLEARED, lambda bundle: (can_use(Items.LIGHT_ARROW, bundle) and
+                                                                                                                         (can_use(Items.MIRROR_SHIELD, bundle) or
+                                                                                                                          world.options.sunlight_arrows.value == 1) and
+                                                                                                                         (can_use(Items.BOMBCHUS_5, bundle) or
+                                                                                                                          (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and
+                                                                                                                           (can_use(Items.FAIRY_BOW, bundle) or
+                                                                                                                            can_use(Items.FAIRY_SLINGSHOT, bundle)))) and
+                                                                                                                         ((can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT, bundle) and
+                                                                                                                           can_jump_slash_except_hammer(bundle)) or
+                                                                                                                          can_use(Items.HOOKSHOT, bundle))))
+    ])
+    # Locations
+    add_locations(Regions.GANONS_CASTLE_SPIRIT_TRIAL, world, [
+        (Locations.GANONS_CASTLE_SPIRIT_TRIAL_CRYSTAL_SWITCH_CHEST, lambda bundle: ((can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT, bundle) or
+                                                                                     can_use(Items.HOOKSHOT, bundle)) and
+                                                                                    (can_jump_slash_except_hammer(bundle) or
+                                                                                     (can_use(Items.BOMBCHUS_5, bundle) or
+                                                                                      (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and
+                                                                                       (can_use(Items.FAIRY_BOW, bundle) or
+                                                                                        can_use(Items.FAIRY_SLINGSHOT, bundle))))))),
+        (Locations.GANONS_CASTLE_SPIRIT_TRIAL_INVISIBLE_CHEST, lambda bundle: ()),
+        (Locations.GANONS_CASTLE_SPIRIT_TRIAL_POT1, lambda bundle: (((can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT, bundle) and
+                                                                      can_jump_slash_except_hammer(bundle)) or
+                                                                     can_use(Items.HOOKSHOT, bundle)) and
+                                                                    (can_use(Items.BOMBCHUS_5, bundle) or
+                                                                     (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and
+                                                                      (can_use(Items.FAIRY_BOW, bundle) or
+                                                                       can_use(Items.FAIRY_SLINGSHOT, bundle)))) and
+                                                                    can_use(Items.FAIRY_BOW, bundle) and
+                                                                    (can_use(Items.MIRROR_SHIELD, bundle) or
+                                                                     (world.options.sunlight_arrows.value == 1 and can_use(Items.LIGHT_ARROW, bundle))))),
+        (Locations.GANONS_CASTLE_SPIRIT_TRIAL_POT2, lambda bundle: (((can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT, bundle) and
+                                                                      can_jump_slash_except_hammer(bundle)) or
+                                                                     can_use(Items.HOOKSHOT, bundle)) and
+                                                                    (can_use(Items.BOMBCHUS_5, bundle) or
+                                                                     (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and
+                                                                      (can_use(Items.FAIRY_BOW, bundle) or
+                                                                       can_use(Items.FAIRY_SLINGSHOT, bundle)))) and
+                                                                    can_use(Items.FAIRY_BOW, bundle) and
+                                                                    (can_use(Items.MIRROR_SHIELD, bundle) or
+                                                                     (world.options.sunlight_arrows.value == 1 and can_use(Items.LIGHT_ARROW, bundle))))),
+        (Locations.GANONS_CASTLE_SPIRIT_TRIAL_BEAMOS_SUNS_SONG_FAIRY, lambda bundle: can_use(Items.SUNS_SONG, bundle)),
+        (Locations.GANONS_CASTLE_SPIRIT_TRIAL_HEART, lambda bundle: True)
+    ])
     
-    # TODO: Temporary to test generation
-    connect_regions(Regions.KOKIRI_FOREST, world, [
+    ## Ganon's Castle Light Trial
+    # Events
+    add_events(Regions.GANONS_CASTLE_LIGHT_TRIAL, world, [
+        (EventLocations.GANONS_CASTLE_LIGHT_TRIAL_AREA, LocalEvents.GANONS_CASTLE_LIGHT_TRIAL_CLEARED, lambda bundle: (can_use(Items.LIGHT_ARROW, bundle) and
+                                                                                                                       can_use(Items.HOOKSHOT, bundle) and
+                                                                                                                       small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2, bundle) and
+                                                                                                                       (can_do_trick(Tricks.LENS_GANON, bundle) or
+                                                                                                                        can_use(Items.LENS_OF_TRUTH, bundle))))
+    ])
+    # Locations
+    add_locations(Regions.GANONS_CASTLE_LIGHT_TRIAL, world, [
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_FIRST_LEFT_CHEST, lambda bundle: True),
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_SECOND_LEFT_CHEST, lambda bundle: True),
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_THIRD_LEFT_CHEST, lambda bundle: True),
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_FIRST_RIGHT_CHEST, lambda bundle: True),
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_SECOND_RIGHT_CHEST, lambda bundle: True),
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_THIRD_RIGHT_CHEST, lambda bundle: True),
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_INVISIBLE_ENEMIES_CHEST, lambda bundle: (can_do_trick(Tricks.LENS_GANON, bundle) or
+                                                                                      can_use(Items.LENS_OF_TRUTH, bundle))),
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_LULLABY_CHEST, lambda bundle: (can_use(Items.ZELDAS_LULLABY, bundle) and
+                                                                            small_keys(Items.GANONS_CASTLE_SMALL_KEY, 1, bundle))),
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_BOULDER_POT1, lambda bundle: (can_break_pots(bundle) and
+                                                                           small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2, bundle))),
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_POT1, lambda bundle: (can_break_pots(bundle) and
+                                                                   can_use(Items.HOOKSHOT, bundle) and
+                                                                   small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2, bundle) and
+                                                                   (can_do_trick(Tricks.LENS_GANON, bundle) or
+                                                                    can_use(Items.LENS_OF_TRUTH, bundle)))),
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_POT2, lambda bundle: (can_break_pots(bundle) and
+                                                                   can_use(Items.HOOKSHOT, bundle) and
+                                                                   small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2, bundle) and
+                                                                   (can_do_trick(Tricks.LENS_GANON, bundle) or
+                                                                    can_use(Items.LENS_OF_TRUTH, bundle))))
+    ])
+    
+    ## Ganon's Tower Entryway
+    # Connections
+    connect_regions(Regions.GANONS_TOWER_ENTRYWAY, world, [
+        (Regions.GANONS_CASTLE_LOBBY, lambda bundle: True),
+        (Regions.GANONS_TOWER_FLOOR_1, lambda bundle: ((has_item(LocalEvents.GANONS_CASTLE_FOREST_TRIAL_CLEARED) or world.skipped_trials['Forest']) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_FIRE_TRIAL_CLEARED) or world.skipped_trials['Fire']) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_WATER_TRIAL_CLEARED) or world.skipped_trials['Water']) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_SHADOW_TRIAL_CLEARED) or world.skipped_trials['Shadow']) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_SPIRIT_TRIAL_CLEARED) or world.skipped_trials['Spirit']) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_LIGHT_TRIAL_CLEARED) or world.skipped_trials['Light'])))
+    ])
+    
+    ## Ganon's Tower Floor 1
+    # Connections
+    connect_regions(Regions.GANONS_TOWER_FLOOR_1, world, [
+        (Regions.GANONS_TOWER_ENTRYWAY, lambda bundle: can_kill_enemy(bundle, Enemies.DINOLFOS, EnemyDistance.CLOSE, True, 2)),
+        (Regions.GANONS_TOWER_FLOOR_2, lambda bundle: can_kill_enemy(bundle, Enemies.DINOLFOS, EnemyDistance.CLOSE, True, 2))
+    ])
+    
+    ## Ganon's Tower Floor 2
+    # Locations
+    add_locations(Regions.GANONS_TOWER_FLOOR_2, world, [
+        (Locations.GANONS_CASTLE_TOWER_BOSS_KEY_CHEST, lambda bundle: can_kill_enemy(bundle, Enemies.STALFOS, EnemyDistance.CLOSE, True, 2))
+    ])
+    # Connections
+    connect_regions(Regions.GANONS_TOWER_FLOOR_2, world, [
+        (Regions.GANONS_TOWER_FLOOR_1, lambda bundle: can_kill_enemy(bundle, Enemies.STALFOS, EnemyDistance.CLOSE, True, 2)),
+        (Regions.GANONS_TOWER_FLOOR_3, lambda bundle: can_kill_enemy(bundle, Enemies.STALFOS, EnemyDistance.CLOSE, True, 2))
+    ])
+    
+    ## Ganon's Tower Floor 3
+    # Connections
+    connect_regions(Regions.GANONS_TOWER_FLOOR_3, world, [
+        (Regions.GANONS_TOWER_FLOOR_2, lambda bundle: can_kill_enemy(bundle, Enemies.IRON_KNUCKLE, EnemyDistance.CLOSE, True, 2)),
+        (Regions.GANONS_TOWER_BEFORE_GANONDORFS_LAIR, lambda bundle: can_kill_enemy(bundle, Enemies.IRON_KNUCKLE, EnemyDistance.CLOSE, True, 2))
+    ])
+    
+    ## Ganon's Tower Before Ganondorf's Lair
+    # Locations
+    add_locations(Regions.GANONS_TOWER_BEFORE_GANONDORFS_LAIR, world, [
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT1, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT2, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT3, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT4, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT5, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT6, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT7, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT8, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT9, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT10, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT11, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT12, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT13, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT14, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT15, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT16, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT17, lambda bundle: can_break_pots(bundle)),
+        (Locations.GANONS_CASTLE_GANONS_TOWER_POT18, lambda bundle: can_break_pots(bundle)),
+    ])
+    # Connections
+    connect_regions(Regions.GANONS_TOWER_BEFORE_GANONDORFS_LAIR, world, [
+        (Regions.GANONS_TOWER_FLOOR_3, lambda bundle: True),
+        (Regions.GANONDORFS_LAIR, lambda bundle: has_item(Items.GANONS_CASTLE_BOSS_KEY, bundle))
+    ])
+    
+    ## Ganondorf's Lair
+    # Locations
+    add_locations(Regions.GANONDORFS_LAIR, world, [
+        (Locations.GANONS_CASTLE_GANONDORF_HINT, lambda bundle: has_boss_soul(Items.GANONS_SOUL, bundle))
+    ])
+    # Connections
+    connect_regions(Regions.GANONDORFS_LAIR, world, [
+        (Regions.GANONS_CASTLE_ESCAPE, lambda bundle: can_kill_enemy(bundle, Enemies.GANONDORF))
+    ])
+    
+    ## Ganon's Castle Escape
+    # Locations
+    #add_locations(Regions.GANONS_CASTLE_ESCAPE, world, [
+    #   # 10 pots
+    #])
+    # Connections
+    connect_regions(Regions.GANONS_CASTLE_ESCAPE, world, [
         (Regions.GANONS_ARENA, lambda bundle: True)
     ])
-    connect_regions(Regions.GANONS_ARENA, world, [
-        (Regions.KOKIRI_FOREST, lambda bundle: True)
-    ])
+    
+    ## Ganon's Arena
+    # Events
     add_events(Regions.GANONS_ARENA, world, [
         (EventLocations.GANON_DEFEATED, Events.GAME_COMPLETED, lambda bundle: 
          (can_use(Items.LIGHT_ARROW, bundle) and can_use(Items.MASTER_SWORD, bundle)
           and not world.options.triforce_hunt)
          or has_item(Events.GAME_COMPLETED, bundle))
+    ])
+    # Locations
+    add_locations(Regions.GANONS_ARENA, world, [
+        (Locations.GANON, lambda bundle: can_kill_enemy(bundle, Enemies.GANON))
     ])
