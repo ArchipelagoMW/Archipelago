@@ -135,16 +135,13 @@ def set_region_rules(world: "SohWorld") -> None:
     # GV Octorok Grotto
     # Locations
     add_locations(Regions.GV_OCTOROK_GROTTO, world, [
-        (Locations.GV_OCTOROK_GROTTO_RED_RUPEE,
+        (Locations.GV_OCTOROK_GROTTO_FRONT_LEFT_BLUE_RUPEE,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle) or can_use(
+             Items.BOOMERANG, bundle)),
+        (Locations.GV_OCTOROK_GROTTO_FRONT_RIGHT_BLUE_RUPEE,
          lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle) or can_use(
              Items.BOOMERANG, bundle)),
         (Locations.GV__OCTOROK_GROTTO_BACK_BLUE_RUPEE,
-         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle) or can_use(
-             Items.BOOMERANG, bundle)),
-        (Locations.GV_OCTOROK_GROTTO_BACK_LEFT_GREEN_RUPEE,
-         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle) or can_use(
-             Items.BOOMERANG, bundle)),
-        (Locations.GV_OCTOROK_GROTTO_BACK_RIGHT_GREEN_RUPEE,
          lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle) or can_use(
              Items.BOOMERANG, bundle)),
         (Locations.GV_OCTOROK_GROTTO_FRONT_LEFT_GREEN_RUPEE,
@@ -153,10 +150,13 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GV_OCTOROK_GROTTO_FRONT_RIGHT_GREEN_RUPEE,
          lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle) or can_use(
              Items.BOOMERANG, bundle)),
-        (Locations.GV_OCTOROK_GROTTO_FRONT_LEFT_BLUE_RUPEE,
+        (Locations.GV_OCTOROK_GROTTO_BACK_LEFT_GREEN_RUPEE,
          lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle) or can_use(
              Items.BOOMERANG, bundle)),
-        (Locations.GV_OCTOROK_GROTTO_FRONT_RIGHT_BLUE_RUPEE,
+        (Locations.GV_OCTOROK_GROTTO_BACK_RIGHT_GREEN_RUPEE,
+         lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle) or can_use(
+             Items.BOOMERANG, bundle)),
+        (Locations.GV_OCTOROK_GROTTO_RED_RUPEE,
          lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle) or can_use(
              Items.BOOMERANG, bundle)),
     ])
@@ -171,4 +171,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GV_DEKU_SCRUB_GROTTO_REAR, lambda bundle: can_stun_deku(bundle)),
         (Locations.GV_DEKU_SCRUB_GROTTO_FRONT, lambda bundle: can_stun_deku(bundle)),
         (Locations.GV_DEKU_SCRUB_GROTTO_BEEHIVE, lambda bundle: can_break_upper_beehives(bundle)),
+    ])
+    # Connections
+    connect_regions(Regions.GV_STORMS_GROTTO, world, [
+        (Regions.GV_FORTRESS_SIDE, lambda bundle: True),
     ])
