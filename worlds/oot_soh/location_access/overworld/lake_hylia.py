@@ -36,8 +36,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.ADULT_SCARECROW_UNLOCK, Events.ADULT_SCARECROW, lambda bundle: is_adult(bundle) and
                                                                                        has_item(Items.FAIRY_OCARINA, bundle) and
                                                                                        ocarina_button_count(bundle)>= 2),
-        (EventLocations.BEAN_PLANTED_LH, LocalEvents.BEAN_LH, lambda bundle: is_child(bundle) and
-                                                                        can_use(Items.MAGIC_BEAN, bundle)),
+        (EventLocations.BEAN_PLANTED_LH, LocalEvents.BEAN_LH, lambda bundle: can_plant_bean(bundle)),
     ])
     # Locations
     add_locations(Regions.LAKE_HYLIA, world, [
