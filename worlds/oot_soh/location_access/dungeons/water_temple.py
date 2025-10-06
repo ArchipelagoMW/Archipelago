@@ -4,12 +4,12 @@ if TYPE_CHECKING:
     from ... import SohWorld
     
 class EventLocations(str, Enum):
-    WATER_TEMPLE_EAST_LOWER = "Water Temple East Lower"
-    WATER_TEMPLE_CENTRAL_PILLAR_UPPER = "Water Temple Central Pillar Upper"
-    WATER_TEMPLE_HIGH_WATER = "Water Temple High Water"
+    WATER_TEMPLE_EAST_LOWER_WATER_LOW_FROM_HIGH = "Water Temple East Lower Water Low From High"
+    WATER_TEMPLE_CENTRAL_PILLAR_UPPER_WATER_MIDDLE = "Water Temple Central Pillar Upper Water Middle"
+    WATER_TEMPLE_HIGH_WATER_WATER_HIGH = "Water Temple High Water Water High"
     WATER_TEMPLE_BOSS_KEY_ROOM_FAIRY_POT = "Water Temple Boss Key Room Fairy Pot"
     WATER_TEMPLE_PRE_BOSS_ROOM_FAIRY_POT = "Water Temple Pre Boss Room Fairy Pot"
-    WATER_TEMPLE_BOSS_ROOM = "Water Temple Boss Room"
+    WATER_TEMPLE_BOSS_ROOM_CLEARED = "Water Temple Boss Room Cleared"
     
 class LocalEvents(str, Enum):
     WATER_TEMPLE_WATER_LOW_FROM_HIGH = "Water Temple Water Low From High"
@@ -104,7 +104,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Water Temple East Lower
     # Events
     add_events(Regions.WATER_TEMPLE_EAST_LOWER, world, [
-        (EventLocations.WATER_TEMPLE_EAST_LOWER, LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
+        (EventLocations.WATER_TEMPLE_EAST_LOWER_WATER_LOW_FROM_HIGH, LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
     ])
     # Locations
     add_locations(Regions.WATER_TEMPLE_EAST_LOWER, world, [
@@ -329,7 +329,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Water Temple Central Pillar Upper
     # Events
     add_events(Regions.WATER_TEMPLE_CENTRAL_PILLAR_UPPER, world, [
-        (EventLocations.WATER_TEMPLE_CENTRAL_PILLAR_UPPER, LocalEvents.WATER_TEMPLE_WATER_MIDDLE, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
+        (EventLocations.WATER_TEMPLE_CENTRAL_PILLAR_UPPER_WATER_MIDDLE, LocalEvents.WATER_TEMPLE_WATER_MIDDLE, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
     ])
     # Locations
     add_locations(Regions.WATER_TEMPLE_CENTRAL_PILLAR_UPPER, world, [
@@ -389,7 +389,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Water Temple High Water
     # Events
     add_events(Regions.WATER_TEMPLE_HIGH_WATER, world, [
-        (EventLocations.WATER_TEMPLE_HIGH_WATER, LocalEvents.WATER_TEMPLE_WATER_HIGH, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
+        (EventLocations.WATER_TEMPLE_HIGH_WATER_WATER_HIGH, LocalEvents.WATER_TEMPLE_WATER_HIGH, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
     ])
     # Connections
     connect_regions(Regions.WATER_TEMPLE_HIGH_WATER, world, [
@@ -534,7 +534,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Water Temple Boss Room
     # Events
     add_events(Regions.WATER_TEMPLE_BOSS_ROOM, world, [
-        (EventLocations.WATER_TEMPLE_BOSS_ROOM, Events.CLEARED_WATER_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.MORPHA))
+        (EventLocations.WATER_TEMPLE_BOSS_ROOM_CLEARED, Events.CLEARED_WATER_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.MORPHA))
     ])
     # Locations
     add_locations(Regions.WATER_TEMPLE_BOSS_ROOM, world, [
