@@ -960,7 +960,7 @@
   },
   {
     "type": "Picto",
-    "name": "Exhaust Affinity",
+    "name": "Exhausting Power",
     "internal_name": "ExhaustAffinity",
     "quantity": 1,
     "progressive": 2

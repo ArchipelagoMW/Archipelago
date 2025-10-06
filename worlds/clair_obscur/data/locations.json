@@ -3604,7 +3604,7 @@
         "name": "Spring Meadows: Abandoned Expeditioner Camp - On cliff behind paint spike 2",
         "location": "Spring Meadows",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {},
+        "condition": {"Paint Break": 1},
         "type": "Chest"
     },
     {
