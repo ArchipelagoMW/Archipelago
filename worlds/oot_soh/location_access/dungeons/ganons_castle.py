@@ -20,6 +20,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     add_events(Regions.GANONS_ARENA, world, [
         (EventLocations.GANON_DEFEATED, Events.GAME_COMPLETED, lambda bundle: 
-         (can_use(Items.LIGHT_ARROW, bundle) and can_use(Items.MASTER_SWORD, bundle) and world.options.triforce_hunt == 0) or 
-         has_item(Events.GAME_COMPLETED, bundle))
+         (can_use(Items.LIGHT_ARROW, bundle) and can_use(Items.MASTER_SWORD, bundle)
+          and not world.options.triforce_hunt)
+         or has_item(Events.GAME_COMPLETED, bundle))
     ])

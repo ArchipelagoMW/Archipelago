@@ -91,8 +91,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.SHADOW_TEMPLE_WIND_HINT_SUNS_SONG_FAIRY, lambda bundle: can_use(Items.SUNS_SONG, bundle)),
         (Locations.SHADOW_TEMPLE_AFTER_WIND_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.SHADOW_TEMPLE_AFTER_WIND_POT2, lambda bundle: can_break_pots(bundle)),
-        (Locations.SHADOW_TEMPLE_SCARECROW_NEAR_SHIP_NORTH_HEART, lambda bundle: can_use(Items.DISTANT_SCARECROW, bundle) and small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, bundle, 4)),
-        (Locations.SHADOW_TEMPLE_SCARECROW_NEAR_SHIP_SOUTH_HEART, lambda bundle: can_use(Items.DISTANT_SCARECROW, bundle) and small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, bundle, 4))
+        (Locations.SHADOW_TEMPLE_SCARECROW_NEAR_SHIP_NORTH_HEART, lambda bundle: can_use(Items.DISTANT_SCARECROW, bundle) and small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 4, bundle)),
+        (Locations.SHADOW_TEMPLE_SCARECROW_NEAR_SHIP_SOUTH_HEART, lambda bundle: can_use(Items.DISTANT_SCARECROW, bundle) and small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 4, bundle))
 
     ])
     # Connections
@@ -109,8 +109,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.SHADOW_TEMPLE_GS_TRIPLE_GIANT_POT, lambda bundle: is_adult(bundle) and can_attack(bundle)),
         (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT2, lambda bundle: can_break_pots(bundle)),
-        (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT3, lambda bundle: can_break_pots(bundle) and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick(Tricks.SHADOW_STATUE, bundle) and can_use(Items.BOMBCHUS_5)))),
-        (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT4, lambda bundle: can_break_pots(bundle) and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick(Tricks.SHADOW_STATUE, bundle) and can_use(Items.BOMBCHUS_5)))),
+        (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT3, lambda bundle: can_break_pots(bundle) and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick(Tricks.SHADOW_STATUE, bundle) and can_use(Items.BOMBCHUS_5, bundle)))),
+        (Locations.SHADOW_TEMPLE_AFTER_BOAT_POT4, lambda bundle: can_break_pots(bundle) and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DISTANT_SCARECROW, bundle) or (can_do_trick(Tricks.SHADOW_STATUE, bundle) and can_use(Items.BOMBCHUS_5, bundle)))),
         (Locations.SHADOW_TEMPLE_SPIKE_WALLS_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.SHADOW_TEMPLE_FLOORMASTER_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.SHADOW_TEMPLE_FLOORMASTER_POT2, lambda bundle: can_break_pots(bundle)),
