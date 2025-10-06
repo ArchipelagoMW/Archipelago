@@ -93,9 +93,6 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                (is_child(bundle) or
                                                                 bundle.has(Events.CLEARED_WATER_TEMPLE, bundle))) or
                                                               can_use(Items.DISTANT_SCARECROW, bundle))),
-        (Locations.LH_LAB_GOSSIP_STONE, lambda bundle: True), # Not necessary but seems nice to add?
-        (Locations.LH_SOUTHEAST_GOSSIP_STONE, lambda bundle: True),
-        (Locations.LH_SOUTHWEST_GOSSIP_STONE, lambda bundle: True),
         (Locations.LH_LHGRASS1, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.LH_LHGRASS2, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.LH_LHGRASS3, lambda bundle: can_cut_shrubs(bundle)),
