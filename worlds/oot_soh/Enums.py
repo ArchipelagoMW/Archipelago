@@ -3485,7 +3485,6 @@ class EnemyDistance(Enum):
 class Events(str, Enum):
     CAN_FARM_STICKS = "Can Farm Sticks"
     CAN_FARM_NUTS = "Can Farm Nuts"
-    CAN_ACCESS_FAIRIES = "Can Farm Fairies"
     CAN_BUY_DEKU_SHIELD = "Can Buy Deku Shield"
     CAN_BUY_HYLIAN_SHIELD = "Can Buy Hylian Shield"
     CAN_BUY_GREEN_POTION = "Can Buy Green Potion"
