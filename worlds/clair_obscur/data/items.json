@@ -2739,7 +2739,7 @@
   {
     "type": "Area",
     "name": "Area - The Monolith",
-    "internal_name": "Monolith_Interior_PaintressIntro",
+    "internal_name": "Level_PaintressIntro_Main",
     "quantity": 1,
     "progressive": 1
   },
