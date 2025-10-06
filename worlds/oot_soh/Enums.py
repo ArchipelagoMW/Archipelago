@@ -1083,7 +1083,7 @@ class Locations(str, Enum):
     LH_FREESTANDING_PO_H = "LH Freestanding PoH"
     LH_SUN = "LH Sun"
     GV_CRATE_FREESTANDING_POH = "GV Crate Freestanding PoH"
-    GV_WATERFALL_FREESTANDING_PO_H = "GV Waterfall Freestanding PoH"
+    GV_WATERFALL_FREESTANDING_POH = "GV Waterfall Freestanding PoH"
     GV_CHEST = "GV Chest"
     GF_CHEST = "GF Chest"
     GF_HBA_1000_POINTS = "GF HBA 1000 Points"

@@ -5,9 +5,9 @@ if TYPE_CHECKING:
 
 
 class EventLocations(str, Enum):
-    GV_BUG_ROCK = "GV BUG ROCK"
-    GV_GOSSIP_STONE = "GV GOSSIP STONE"
-    GV_BEAN_SOIL = "GV BEAN SOIL"
+    GV_BUG_ROCK = "GV Bug Rock"
+    GV_GOSSIP_STONE = "GV Gossip Stone"
+    GV_BEAN_SOIL = "GV Bean Soil"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -45,7 +45,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.GV_UPPER_STREAM, world, [
-        (Locations.GV_FREESTANDING_POH_CRATE, lambda bundle: is_child(bundle) or has_item(Items.BRONZE_SCALE, bundle)),
+        (Locations.GV_WATERFALL_FREESTANDING_POH, lambda bundle: is_child(bundle) or has_item(Items.BRONZE_SCALE, bundle)),
         (Locations.GV_GS_BEAN_PATCH, lambda bundle: can_spawn_soil_skull(bundle) and can_attack(bundle)),
         (Locations.GV_COW, lambda bundle: is_child(bundle) and can_use(Items.EPONAS_SONG, bundle)),
         (Locations.GV_BEAN_SPROUT_FAIRY1,
