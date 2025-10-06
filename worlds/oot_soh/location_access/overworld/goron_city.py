@@ -11,13 +11,14 @@ class EventLocations(str, Enum):
     GORON_CITY_STICK_POT = "Goron City Stick Pot"
     GORON_CITY_BUG_ROCK = "Goron City Bug Rock"
     GORON_CITY_DARUNIAS_CHAMBER_TORCH = "Goron City Darunias Chamber Torch"
+    GORON_CITY_FIRE_AROUND_POT = "Goron City Fire Around Pot"
     GORON_CITY_WOODS_WARP = "Goron City Woods Warp"
     GORON_CITY_DARUNIAS_DOOR_AS_CHILD = "Goron City Darunias Door as Child"
     GORON_CITY_STOP_ROLLING_GORON_AS_ADULT = "Goron City Stop Rolling Goron as Adult"
 
 
 class LocalEvents(str, Enum):
-    GORON_CITY_DARUNIAS_CHAMBER_TORCH_LIT = "Goron City Darunias Chamber Torch Lit"
+    GORON_CITY_CHILD_FIRE_LIT = "Goron City Child Fire Lit"
     GORON_CITY_WOODS_WARP_OPEN = "Goron City Woods Warp Open"
     GORON_CITY_DARUNIAS_DOOR_OPENED_AS_CHILD = "Goron City Darunias Door Opened as Child"
     GORON_CITY_STOP_ROLLING_GORON_AS_ADULT = "Goron City Stop Rolling Goron As Adult"
@@ -32,7 +33,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.GORON_CITY_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (EventLocations.GORON_CITY_STICK_POT, Events.CAN_FARM_STICKS, lambda bundle: is_child(bundle)),
         (EventLocations.GORON_CITY_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: blast_or_smash(bundle) or can_use(Items.SILVER_GAUNTLETS, bundle)),
-        (EventLocations.GORON_CITY_DARUNIAS_CHAMBER_TORCH, LocalEvents.GORON_CITY_DARUNIAS_CHAMBER_TORCH_LIT, lambda bundle: is_child(bundle) and can_use(Items.DINS_FIRE, bundle)),
+        (EventLocations.GORON_CITY_DARUNIAS_CHAMBER_TORCH, LocalEvents.GORON_CITY_CHILD_FIRE_LIT, lambda bundle: is_child(bundle) and can_use(Items.DINS_FIRE, bundle)),
         (EventLocations.GORON_CITY_WOODS_WARP, LocalEvents.GORON_CITY_WOODS_WARP_OPEN, lambda bundle: can_detonate_upright_bomb_flower(bundle) or can_use(Items.MEGATON_HAMMER, bundle) or has_item(LocalEvents.GORON_CITY_CHILD_FIRE_LIT, bundle)),
         (EventLocations.GORON_CITY_DARUNIAS_DOOR_AS_CHILD, LocalEvents.GORON_CITY_DARUNIAS_DOOR_OPENED_AS_CHILD, lambda bundle: is_child(bundle) and can_use(Items.ZELDAS_LULLABY, bundle)),
         (EventLocations.GORON_CITY_STOP_ROLLING_GORON_AS_ADULT, LocalEvents.GORON_CITY_STOP_ROLLING_GORON_AS_ADULT, lambda bundle: is_adult(bundle) and (has_item(Items.GORONS_BRACELET, bundle) or has_explosives(bundle) or can_use(Items.FAIRY_BOW, bundle) or (can_do_trick(Tricks.GC_LINK_GORON_DINS, bundle) and (can_use(Items.DINS_FIRE, bundle) or (can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle) and can_use(Items.BOTTLE_WITH_BLUE_FIRE, bundle))))))
@@ -93,7 +94,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Goron City Darunias Chamber
     # Events
     add_events(Regions.GC_DARUNIAS_CHAMBER, world, [
-        (EventLocations.GORON_CITY_DARUNIAS_CHAMBER_TORCH, LocalEvents.GORON_CITY_DARUNIAS_CHAMBER_TORCH_LIT, lambda bundle: is_child(bundle) or can_use(Items.STICKS, bundle))
+        (EventLocations.GORON_CITY_DARUNIAS_CHAMBER_TORCH, LocalEvents.GORON_CITY_CHILD_FIRE_LIT, lambda bundle: is_child(bundle) or can_use(Items.STICKS, bundle))
     ])
     # Locations
     add_locations(Regions.GC_DARUNIAS_CHAMBER, world, [
