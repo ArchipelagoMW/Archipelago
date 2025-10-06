@@ -96,6 +96,9 @@ def can_use(item: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
     
     if item == Items.DISTANT_SCARECROW:
         return scarecrows_song(bundle) and can_use(Items.LONGSHOT, bundle)
+    
+    if item == Items.EPONA:
+        return is_adult(bundle) and can_use(Items.EPONAS_SONG, bundle)
 
     return True
 
@@ -146,6 +149,8 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player)
     elif item == Items.LONGSHOT:
         return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player, 2)
+    elif item == Items.BOMB_BAG:
+        return state.has(Items.PROGRESSIVE_BOMB_BAG.value, player)
     elif item == Items.CHILD_WALLET:
         return can_afford(99, bundle)
     elif item == Items.ADULT_WALLET:
@@ -156,8 +161,6 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return can_afford(999, bundle)
     elif item == Items.MAGIC_BEAN:
         return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
-    elif item == Items.BOTTLE_WITH_BIG_POE:
-        return state.has(Items.BOTTLE_WITH_BIG_POE.value, player) or (has_bottle(bundle) and state.has(Events.CAN_DEFEAT_BIG_POE.value, player))
     elif item == Items.BOTTLE_WITH_BUGS:
         return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BUGS.value, player) or state.has(Events.CAN_BUY_BUGS.value, player))
     elif item == Items.STICKS:
@@ -263,7 +266,7 @@ def can_play_song(song: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"
 
 def has_explosives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link has access to explosives (bombs or bombchus)."""
-    return can_use_any([Items.PROGRESSIVE_BOMB_BAG, Items.PROGRESSIVE_BOMBCHU], bundle)
+    return can_use_any([Items.BOMB_BAG, Items.PROGRESSIVE_BOMBCHU], bundle)
 
 
 def blast_or_smash(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -280,8 +283,7 @@ def can_use_sword(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can use any sword."""
     return can_use_any([Items.KOKIRI_SWORD, Items.MASTER_SWORD, Items.BIGGORONS_SWORD], bundle)
 
-# TODO change the age here to the enum
-def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: str = "either") -> bool:
+def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: Ages = Ages.null) -> bool:
     """Check if Link has access to projectiles."""
     if has_explosives(bundle):
         return True
@@ -290,11 +292,11 @@ def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: str
     adult_projectiles = (can_use(Items.HOOKSHOT, bundle) or 
                          can_use(Items.FAIRY_BOW, bundle))
     
-    if age == "child":
+    if age == Ages.CHILD:
         return child_projectiles
-    elif age == "adult":
+    elif age == Ages.ADULT:
         return adult_projectiles
-    elif age == "both":
+    elif age == Ages.BOTH:
         return child_projectiles and adult_projectiles
     else:  # "either"
         return child_projectiles or adult_projectiles
@@ -431,7 +433,7 @@ def can_hit_eye_targets(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
 
 def can_stun_deku(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can stun Deku Scrubs."""
-    return (can_attack(bundle) or can_use(Items.DEKU_NUT_BAG, bundle) or can_reflect_nuts(bundle))
+    return (can_attack(bundle) or can_use(Items.NUTS, bundle) or can_reflect_nuts(bundle))
 
 
 def can_reflect_nuts(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -470,12 +472,12 @@ def call_gossip_fairy(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bo
 
 
 def can_break_lower_hives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return can_break_upper_beehives(bundle) or can_use(Items.PROGRESSIVE_BOMB_BAG, bundle)
+    return can_break_upper_beehives(bundle) or can_use(Items.BOMB_BAG, bundle)
 
 
 def can_break_upper_beehives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return (hookshot_or_boomerang(bundle) or
-            (can_do_trick("Beehives With Bombchus", bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) or 
+            (can_do_trick(Tricks.BOMBCHU_BEEHIVES, bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) or 
             (False and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle)))) #TODO implement sling/bow destroy hives option
 
 
@@ -597,7 +599,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         if distance <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, bundle) or (quantity <= 1 and can_use(Items.STICKS, bundle))):
             return True
         if distance <= EnemyDistance.BOMB_THROW and quantity <= 2 and not timer and not in_water and \
-                                (can_use(Items.NUTS, bundle) or hookshot_or_boomerang(bundle)) and can_use(Items.PROGRESSIVE_BOMB_BAG, bundle):
+                                (can_use(Items.NUTS, bundle) or hookshot_or_boomerang(bundle)) and can_use(Items.BOMB_BAG, bundle):
             return True
         if distance <= EnemyDistance.HOOKSHOT and wall_or_floor and can_use(Items.BOMBCHUS_5, bundle):
             return True

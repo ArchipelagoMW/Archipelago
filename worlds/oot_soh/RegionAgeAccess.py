@@ -1,4 +1,3 @@
-from typing import Dict, NamedTuple, cast, TYPE_CHECKING
 from collections import deque
 from BaseClasses import CollectionState, MultiWorld
 from worlds.AutoWorld import LogicMixin

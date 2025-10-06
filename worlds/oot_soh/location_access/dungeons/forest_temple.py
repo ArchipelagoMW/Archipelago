@@ -1,10 +1,7 @@
-from typing import TYPE_CHECKING
-
-from ...Enums import *
 from ...LogicHelpers import *
 
 if TYPE_CHECKING:
-    from worlds.oot_soh import SohWorld
+    from ... import SohWorld
     
 class EventLocations(str, Enum):
     FOREST_TEMPLE_MEG = "Forest Temple Meg"
@@ -15,7 +12,7 @@ class EventLocations(str, Enum):
     FOREST_TEMPLE_DEKU_BABA_STICKS = "Forest Temple Deku Baba Sticks"
     FOREST_TEMPLE_DEKU_BABA_NUTS = "Forest Temple Deku Baba Nuts"
     FOREST_TEMPLE_CLEAR = "Forest Temple Clear"
-
+   
 class LocalEvents(str, Enum):
     DEFEATED_MEG = "Defeated Meg"
     DEFEATED_JOELLE = "Defeated Joelle"

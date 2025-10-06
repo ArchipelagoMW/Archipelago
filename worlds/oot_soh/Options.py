@@ -343,7 +343,7 @@ class ShuffleShopsItemAmount(Range):
     If Shuffle Shops is on, set how many shop items in each shop will be randomized.
     """
     display_name = "Shuffle Shops Item Amount"
-    range_start = 1
+    range_start = 0
     range_end = 7
     default = 4
     visibility = Visibility.none
