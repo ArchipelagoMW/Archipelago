@@ -9,7 +9,8 @@ class EventLocations(str, Enum):
     ZD_NUT_POT = "ZD Nut Pot"
     ZD_STICK_POT = "ZD Stick Pot"
     ZD_FISH_GROUP = "ZD Fish Group"
-    ZD_KING_ZORA_THAWED = "ZD King Zora Thawed"
+    ZD_KING_ZORA_THAWING = "ZD King Zora Thawing"
+    ZD_BEHIND_KING_ZORA_THAWING = "ZD Behind King Zora Thawing"
     ZD_DELIVER_RUTOS_LETTER = "ZD Deliver Ruto's Letter"
     ZD_STORMS_GROTTO_FAIRY_ACCESS = "ZD STORMS GROTTO FAIRY ACCESS"
 
@@ -47,8 +48,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ZD_GS_FROZEN_WATERFALL, lambda bundle: is_adult(bundle) and (
                     hookshot_or_boomerang(bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.FAIRY_BOW,
                                                                                                        bundle) or (
-                                can_use(Items.MAGIC_SINGLE, bundle) and can_use(Items.MASTER_SWORD, bundle) or can_use(
-                            Items.KOKIRI_SWORD, bundle) or can_use(Items.BIGGORONS_SWORD, bundle))) or (
+                                can_use(Items.MAGIC_SINGLE, bundle) and (can_use(Items.MASTER_SWORD, bundle) or can_use(
+                            Items.KOKIRI_SWORD, bundle) or can_use(Items.BIGGORONS_SWORD, bundle)))) or (
                                                                       can_do_trick(Tricks.ZD_GS,
                                                                                    bundle) and can_jump_slash_except_hammer(
                                                                   bundle)) and can_get_nighttime_gs(bundle)),
