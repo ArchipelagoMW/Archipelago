@@ -123,7 +123,7 @@ class Regions(str, Enum):
     HC_GREAT_FAIRY_FOUNTAIN = "HC Great Fairy Fountain"
     HC_STORMS_GROTTO = "HC Storms Grotto"
     HC_STORMS_GROTTO_BEHIND_WALLS = "HC Storms Grotto Behind Walls"
-    HC_STORMS_SKULLTULA = "HC Storms Skulltula
+    HC_STORMS_SKULLTULA = "HC Storms Skulltula"
     GANONS_CASTLE_GROUNDS = "Ganon's Castle Grounds"
     OGC_GREAT_FAIRY_FOUNTAIN = "OGC Great Fairy Fountain"
     GANONS_CASTLE_LEDGE = "Ganon's Castle Ledge"
