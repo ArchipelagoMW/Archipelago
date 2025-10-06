@@ -1760,7 +1760,8 @@ void_trade_age_limits_ms: Dict[int, int] = {
 
 # Store the names of all options
 OPTION_NAME: dict[Option, str] = {}
-for _field_name, _field_info in Starcraft2Options.__dataclass_fields__.items():
-    assert _field_info.type not in OPTION_NAME
-    OPTION_NAME[_field_info.type] = _field_name
-OPTION_NAME.update({Accessibility: "accessibility", ProgressionBalancing: "progression_balancing"}),
+for _field in fields(Starcraft2Options):
+    assert _field.type not in OPTION_NAME
+    OPTION_NAME[_field.type] = _field.name
+OPTION_NAME[Accessibility] = 'accessibility'
+OPTION_NAME[ProgressionBalancing] = 'progression_balancing'
