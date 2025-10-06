@@ -126,7 +126,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, world, [
         (Regions.FOREST_TEMPLE_LOBBY, lambda bundle: can_use(Items.SONG_OF_TIME, bundle)),
-        (Regions.FOREST_TEMPLE_COURTYARD_SKULLTULA_ISLAND, lambda bundle: can_use(Items.LONGSHOT, bundle)),
+        (Regions.FOREST_TEMPLE_NW_COURTYARD_SKULLTULA_ISLAND, lambda bundle: can_use(Items.LONGSHOT, bundle)),
         (Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, lambda bundle: (can_do_trick(Tricks.HOVER_BOOST_SIMPLE, bundle) and
                                                                   can_do_trick(Tricks.DAMAGE_BOOST_SIMPLE, bundle) and
                                                                   has_explosives(bundle) and
@@ -148,7 +148,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, world, [
         (Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_COURTYARD_SKULLTULA_ISLAND, lambda bundle: hookshot_or_boomerang(bundle)),
+        (Regions.FOREST_TEMPLE_NW_COURTYARD_SKULLTULA_ISLAND, lambda bundle: hookshot_or_boomerang(bundle)),
         (Regions.FOREST_TEMPLE_BELOW_BOSS_KEY_CHEST, lambda bundle: True),
         (Regions.FOREST_TEMPLE_FLOORMASTER_ROOM, lambda bundle: True),
         (Regions.FOREST_TEMPLE_BLOCK_PUSH_ROOM, lambda bundle: True),
@@ -164,7 +164,7 @@ def set_region_rules(world: "SohWorld") -> None:
     
     ## Forest Temple Courtyard Skulltula Island
     # Locations
-    add_locations(Regions.FOREST_TEMPLE_COURTYARD_SKULLTULA_ISLAND, world, [
+    add_locations(Regions.FOREST_TEMPLE_NW_COURTYARD_SKULLTULA_ISLAND, world, [
         (Locations.FOREST_TEMPLE_GS_LEVEL_ISLAND_COURTYARD, lambda bundle: True)
     ])
     
@@ -181,8 +181,8 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                   (can_do_trick(Tricks.FOREST_VINES, bundle) and can_use(Items.HOOKSHOT, bundle)))),
         (Regions.FOREST_TEMPLE_SEWER, lambda bundle: (has_item(Items.GOLDEN_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle))),
         (Regions.FOREST_TEMPLE_FALLING_ROOM, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_COURTYARD_RAISED_ISLAND, lambda bundle: (can_use(Items.HOOKSHOT, bundle))),
-        (Regions.FOREST_TEMPLE_COURTYARD_RAISED_ISLAND_GS, lambda bundle: (can_use(Items.HOOKSHOT, bundle) or 
+        (Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND, lambda bundle: (can_use(Items.HOOKSHOT, bundle))),
+        (Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND_GS, lambda bundle: (can_use(Items.HOOKSHOT, bundle) or 
                                                                             (can_do_trick(Tricks.FOREST_OUTDOORS_EAST_GS, bundle) and can_use(Items.BOOMERANG, bundle))))
     ])
     
@@ -202,20 +202,20 @@ def set_region_rules(world: "SohWorld") -> None:
                                                              can_jump_slash_except_hammer(bundle) and
                                                              can_use(Items.HOVER_BOOTS, bundle) and
                                                              can_use(Items.SCARECROW, bundle))),
-        (Regions.FOREST_TEMPLE_COURTYARD_RAISED_ISLAND, lambda bundle: (is_adult(bundle) and
+        (Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND, lambda bundle: (is_adult(bundle) and
                                                                         can_do_trick(Tricks.FOREST_OUTDOORS_LEDGE, bundle) and
                                                                         can_use(Items.HOVER_BOOTS, bundle)))
     ])
     
-    ## Forest Temple Courtyard Raised Island
+    ## Forest Temple NE Courtyard Skulltula Island
     # Locations
-    add_locations(Regions.FOREST_TEMPLE_COURTYARD_RAISED_ISLAND, world, [
+    add_locations(Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND, world, [
         (Locations.FOREST_TEMPLE_RAISED_ISLAND_COURTYARD_CHEST, lambda bundle: True)
     ])
     
-    ## Forest Temple Courtyard Raised Island GS
+    ## Forest Temple NE Courtyard Skulltula Island GS
     # Locations
-    add_locations(Regions.FOREST_TEMPLE_COURTYARD_RAISED_ISLAND_GS, world, [
+    add_locations(Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND_GS, world, [
         (Locations.FOREST_TEMPLE_GS_RAISED_ISLAND_COURTYARD, lambda bundle: True)
     ])
     
