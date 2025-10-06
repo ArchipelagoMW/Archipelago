@@ -13,7 +13,7 @@ class EventLocations(str, Enum):
     GANONS_CASTLE_SPIRIT_TRIAL_AREA = "Ganon's Castle Spirit Trial Area"
     GANONS_CASTLE_LIGHT_TRIAL_AREA = "Ganon's Castle Light Trial Area"
     GANONS_CASTLE_BLUE_FIRE_ACCESS = "Ganon's Castle Blue Fire Access"
-    GANONS_CASTLE_FAIRY_POT = "Ganon's Castle Fairy Pot"
+    GANONS_CASTLE_WATER_TRIAL_FAIRY_POT = "Ganon's Castle Water Trial Fairy Pot"
     GANONS_CASTLE_SPIRIT_TRIAL_NUT_POT = "Ganon's Castle Spirit Trial Nut Pot"
     GANON_DEFEATED = "Ganon Defeated"
     
@@ -112,7 +112,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.GANONS_CASTLE_WATER_TRIAL, world, [
         (EventLocations.GANONS_CASTLE_BLUE_FIRE_ACCESS, Events.CAN_ACCESS_BLUE_FIRE, lambda bundle: True),
-        (EventLocations.GANONS_CASTLE_FAIRY_POT, Events.CAN_ACCESS_FAIRIES, lambda bundle: (blue_fire(bundle) and
+        (EventLocations.GANONS_CASTLE_WATER_TRIAL_FAIRY_POT, Events.CAN_ACCESS_FAIRIES, lambda bundle: (blue_fire(bundle) and
                                                                                             can_kill_enemy(bundle, Enemies.FREEZARD))),
         (EventLocations.GANONS_CASTLE_WATER_TRIAL_AREA, LocalEvents.GANONS_CASTLE_WATER_TRIAL_CLEARED, lambda bundle: (blue_fire(bundle) and
                                                                                                                        is_adult(bundle) and 
