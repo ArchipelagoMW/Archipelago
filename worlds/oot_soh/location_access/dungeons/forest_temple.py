@@ -9,10 +9,16 @@ class EventLocations(str, Enum):
     FOREST_TEMPLE_AMY = "Forest Temple Amy"
     FOREST_TEMPLE_BETH = "Forest Temple Beth"
     FOREST_TEMPLE_LOWER_STALFOS_FAIRY_POT = "Forest Temple Lower Stalfos Fairy Pot"
-    FOREST_TEMPLE_DEKU_BABA_STICKS = "Forest Temple Deku Baba Sticks"
-    FOREST_TEMPLE_DEKU_BABA_NUTS = "Forest Temple Deku Baba Nuts"
-    FOREST_TEMPLE_CLEAR = "Forest Temple Clear"
+    FOREST_TEMPLE_NW_OUTDOORS_LOWER_DEKU_BABA_STICKS = "Forest Temple NW Outdoors Lower Deku Baba Sticks"
+    FOREST_TEMPLE_NW_OUTDOORS_LOWER_DEKU_BABA_NUTS = "Forest Temple NW Outdoors Lower Deku Baba Nuts"
+    FOREST_TEMPLE_NW_OUTDOORS_UPPER_DEKU_BABA_STICKS = "Forest Temple NW Outdoors Upper Deku Baba Sticks"
+    FOREST_TEMPLE_NW_OUTDOORS_UPPER_DEKU_BABA_NUTS = "Forest Temple NW Outdoors Upper Deku Baba Nuts"
+    FOREST_TEMPLE_NE_OUTDOORS_UPPER_DEKU_BABA_STICKS = "Forest Temple NE Outdoors Upper Deku Baba Sticks"
+    FOREST_TEMPLE_NE_OUTDOORS_UPPER_DEKU_BABA_NUTS = "Forest Temple NE Outdoors Upper Deku Baba Nuts"
+    FOREST_TEMPLE_NE_OUTDOORS_LOWER_DEKU_BABA_STICKS = "Forest Temple NE Outdoors Lower Deku Baba Sticks"
+    FOREST_TEMPLE_NE_OUTDOORS_LOWER_DEKU_BABA_NUTS = "Forest Temple NE Outdoors Lower Deku Baba Nuts"
     FOREST_TEMPLE_NE_OUTDOORS_UPPER_DRAIN_SEWER = "Forest Temple NE Outdoors Upper Drain Sewer"
+    FOREST_TEMPLE_BOSS_PHANTOM_GANON = "Forest Temple Boss Phantom Ganon"
    
 class LocalEvents(str, Enum):
     DEFEATED_MEG = "Defeated Meg"
@@ -114,8 +120,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Forest Temple NW Outdoors Lower
     # Events
     add_events(Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, world, [
-        (EventLocations.FOREST_TEMPLE_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
-        (EventLocations.FOREST_TEMPLE_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
+        (EventLocations.FOREST_TEMPLE_NW_OUTDOORS_LOWER_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.FOREST_TEMPLE_NW_OUTDOORS_LOWER_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
     # Locations
     add_locations(Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, world, [
@@ -141,8 +147,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Forest Temple NW Outdoors Upper
     # Events
     add_events(Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, world, [
-        (EventLocations.FOREST_TEMPLE_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
-        (EventLocations.FOREST_TEMPLE_DEKu_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle)),
+        (EventLocations.FOREST_TEMPLE_NW_OUTDOORS_UPPER_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.FOREST_TEMPLE_NW_OUTDOORS_UPPER_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle)),
     ])
     # Locations
     add_locations(Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, world, [
@@ -167,8 +173,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Forest Temple NE Outdoors Lower
     # Events
     add_events(Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, world, [
-        (EventLocations.FOREST_TEMPLE_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
-        (EventLocations.FOREST_TEMPLE_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
+        (EventLocations.FOREST_TEMPLE_NE_OUTDOORS_LOWER_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.FOREST_TEMPLE_NE_OUTDOORS_LOWER_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle))
     ])
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, world, [
@@ -186,8 +192,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.FOREST_TEMPLE_NE_OUTDOORS_UPPER, world, [
         (EventLocations.FOREST_TEMPLE_NE_OUTDOORS_UPPER_DRAIN_SEWER, LocalEvents.DRAINED_SEWER, lambda bundle: True),
-        (EventLocations.FOREST_TEMPLE_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
-        (EventLocations.FOREST_TEMPLE_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle)),
+        (EventLocations.FOREST_TEMPLE_NE_OUTDOORS_UPPER_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
+        (EventLocations.FOREST_TEMPLE_NE_OUTDOORS_UPPER_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle)),
     ])
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_NE_OUTDOORS_UPPER, world, [
@@ -452,7 +458,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Forest Temple Boss Room
     # Events
     add_events(Regions.FOREST_TEMPLE_BOSS_ROOM, world, [
-        (EventLocations.FOREST_TEMPLE_CLEAR, Events.CLEARED_FOREST_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.PHANTOM_GANON))
+        (EventLocations.FOREST_TEMPLE_BOSS_PHANTOM_GANON, Events.CLEARED_FOREST_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.PHANTOM_GANON))
     ])
     # Locations
     add_locations(Regions.FOREST_TEMPLE_BOSS_ROOM, world, [
