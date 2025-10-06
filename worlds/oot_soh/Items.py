@@ -306,7 +306,7 @@ item_data_table: Dict[Items, SohItemData] = {
     #Items.DISTANT_SCARECROW: SohItemData( 275, IC.filler, 0, adult_only=True),
     Items.STICKS: SohItemData(276, IC.filler, 0, child_only=True),
     Items.NUTS: SohItemData(277, IC.filler, 0),
-    #Items.EPONA: SohItemData( 278, IC.filler, 0 ),
+    Items.EPONA: SohItemData( 278, IC.filler, 0, adult_only=True ),
     #Items.MAX: SohItemData( 279, IC.filler, 0 ),
 }
 
