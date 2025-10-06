@@ -55,7 +55,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                     can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA)),
         (Locations.LH_GS_LAB_WALL, lambda bundle: is_child(bundle) and
                                                   (can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG)
-                                                   or (can_do_trick("Lake Hylia Wall GS Jumpslash", bundle) and
+                                                   or (can_do_trick(Tricks.LH_LAB_WALL_GS, bundle) and
                                                        can_jump_slash_except_hammer(bundle))) and
                                                   can_get_nighttime_gs(bundle)),
         (Locations.LH_GS_SMALL_ISLAND, lambda bundle: is_child(bundle) and
@@ -179,7 +179,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                             can_use(Items.IRON_BOOTS, bundle)),
         (Regions.WATER_TEMPLE_ENTRYWAY, lambda bundle: can_use(Items.HOOKSHOT, bundle) and
                                                        ((can_use(Items.IRON_BOOTS, bundle) or
-                                                         (can_do_trick("Water Temple Hookshot", bundle) and
+                                                         (can_do_trick(Tricks.LH_WATER_HOOKSHOT, bundle) and
                                                           has_item(Items.GOLDEN_SCALE, bundle))) or
                                                         (is_adult(bundle) and
                                                          can_use(Items.LONGSHOT, bundle) and
@@ -203,7 +203,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.LH_LAB, world, [
         (Locations.LH_LAB_DIVE, lambda bundle: has_item(Items.GOLDEN_SCALE, bundle) or
-                                               (can_do_trick("Lake Hylia Diving", bundle) and
+                                               (can_do_trick(Tricks.LH_LAB_DIVING, bundle) and
                                                                                         can_use(Items.IRON_BOOTS, bundle) and
                                                                                         has_item(Items.BRONZE_SCALE, bundle))),
         (Locations.LH_LAB_TRADE_EYEBALL_FROG, lambda bundle: is_adult(bundle) and
