@@ -1,11 +1,7 @@
-from typing import TYPE_CHECKING
-
-from worlds.generic.Rules import set_rule
-from ...Enums import *
 from ...LogicHelpers import *
 
 if TYPE_CHECKING:
-    from worlds.oot_soh import SohWorld
+    from ... import SohWorld
 
 
 def set_region_rules(world: "SohWorld") -> None:
