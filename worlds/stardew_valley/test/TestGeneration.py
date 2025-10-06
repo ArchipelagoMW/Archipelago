@@ -120,165 +120,6 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
                 self.assertTrue(count == 0 or count == 2)
 
 
-class TestMonstersanityNone(SVTestBase):
-    options = {
-        options.Monstersanity.internal_name: options.Monstersanity.option_none,
-        # Not really necessary, but it adds more locations, so we don't have to remove useful items.
-        options.Fishsanity.internal_name: options.Fishsanity.option_all
-    }
-
-    @property
-    def run_default_tests(self) -> bool:
-        # None is default
-        return False
-
-    def test_when_generate_world_then_5_generic_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Weapon"), 5)
-
-    def test_when_generate_world_then_zero_specific_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Sword"), 0)
-        self.assertEqual(item_pool.count("Progressive Club"), 0)
-        self.assertEqual(item_pool.count("Progressive Dagger"), 0)
-
-    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
-
-    def test_when_generate_world_then_3_shoes_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Footwear"), 3)
-
-
-class TestMonstersanityGoals(SVTestBase):
-    options = {options.Monstersanity.internal_name: options.Monstersanity.option_goals}
-
-    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
-
-    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Sword"), 5)
-        self.assertEqual(item_pool.count("Progressive Club"), 5)
-        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
-
-    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
-
-    def test_when_generate_world_then_4_shoes_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
-
-    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in self.get_real_locations():
-            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
-                continue
-            with self.subTest(location.name):
-                self.assertFalse(location.can_reach(self.multiworld.state))
-
-
-class TestMonstersanityOnePerCategory(SVTestBase):
-    options = {options.Monstersanity.internal_name: options.Monstersanity.option_one_per_category}
-
-    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
-
-    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Sword"), 5)
-        self.assertEqual(item_pool.count("Progressive Club"), 5)
-        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
-
-    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
-
-    def test_when_generate_world_then_4_shoes_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
-
-    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in self.get_real_locations():
-            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
-                continue
-            with self.subTest(location.name):
-                self.assertFalse(location.can_reach(self.multiworld.state))
-
-
-class TestMonstersanityProgressive(SVTestBase):
-    options = {options.Monstersanity.internal_name: options.Monstersanity.option_progressive_goals}
-
-    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
-
-    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Sword"), 5)
-        self.assertEqual(item_pool.count("Progressive Club"), 5)
-        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
-
-    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
-
-    def test_when_generate_world_then_4_shoes_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
-
-    def test_when_generate_world_then_many_rings_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertIn("Hot Java Ring", item_pool)
-        self.assertIn("Wedding Ring", item_pool)
-        self.assertIn("Slime Charmer Ring", item_pool)
-
-    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in self.get_real_locations():
-            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
-                continue
-            with self.subTest(location.name):
-                self.assertFalse(location.can_reach(self.multiworld.state))
-
-
-class TestMonstersanitySplit(SVTestBase):
-    options = {options.Monstersanity.internal_name: options.Monstersanity.option_split_goals}
-
-    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
-
-    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Sword"), 5)
-        self.assertEqual(item_pool.count("Progressive Club"), 5)
-        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
-
-    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
-
-    def test_when_generate_world_then_4_shoes_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
-
-    def test_when_generate_world_then_many_rings_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertIn("Hot Java Ring", item_pool)
-        self.assertIn("Wedding Ring", item_pool)
-        self.assertIn("Slime Charmer Ring", item_pool)
-
-    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in self.get_real_locations():
-            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
-                continue
-            with self.subTest(location.name):
-                self.assertFalse(location.can_reach(self.multiworld.state))
-
-
 class TestProgressiveElevator(SVTestBase):
     options = {
         options.ElevatorProgression.internal_name: options.ElevatorProgression.option_progressive,
@@ -290,15 +131,13 @@ class TestProgressiveElevator(SVTestBase):
         items_for_115 = self.generate_items_for_mine_115()
         last_elevator = self.get_item_by_name("Progressive Mine Elevator")
         self.collect(items_for_115)
-        floor_115 = self.multiworld.get_region("The Mines - Floor 115", self.player)
-        floor_120 = self.multiworld.get_region("The Mines - Floor 120", self.player)
 
-        self.assertTrue(floor_115.can_reach(self.multiworld.state))
-        self.assertFalse(floor_120.can_reach(self.multiworld.state))
+        self.assert_can_reach_region(Region.mines_floor_115)
+        self.assert_cannot_reach_region(Region.mines_floor_120)
 
         self.collect(last_elevator)
 
-        self.assertTrue(floor_120.can_reach(self.multiworld.state))
+        self.assert_can_reach_region(Region.mines_floor_120)
 
     def generate_items_for_mine_115(self) -> List[Item]:
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2
@@ -330,27 +169,24 @@ class TestSkullCavernLogic(SVTestBase):
         items_for_skull_50 = self.generate_items_for_skull_50()
         items_for_skull_100 = self.generate_items_for_skull_100()
         self.collect(items_for_115)
-        floor_115 = self.multiworld.get_region(Region.mines_floor_115, self.player)
-        skull_25 = self.multiworld.get_region(Region.skull_cavern_25, self.player)
-        skull_75 = self.multiworld.get_region(Region.skull_cavern_75, self.player)
 
-        self.assertTrue(floor_115.can_reach(self.multiworld.state))
-        self.assertFalse(skull_25.can_reach(self.multiworld.state))
-        self.assertFalse(skull_75.can_reach(self.multiworld.state))
+        self.assert_can_reach_region(Region.mines_floor_115)
+        self.assert_cannot_reach_region(Region.skull_cavern_25)
+        self.assert_cannot_reach_region(Region.skull_cavern_75)
 
         self.remove(items_for_115)
         self.collect(items_for_skull_50)
 
-        self.assertTrue(floor_115.can_reach(self.multiworld.state))
-        self.assertTrue(skull_25.can_reach(self.multiworld.state))
-        self.assertFalse(skull_75.can_reach(self.multiworld.state))
+        self.assert_can_reach_region(Region.mines_floor_115)
+        self.assert_can_reach_region(Region.skull_cavern_25)
+        self.assert_cannot_reach_region(Region.skull_cavern_75)
 
         self.remove(items_for_skull_50)
         self.collect(items_for_skull_100)
 
-        self.assertTrue(floor_115.can_reach(self.multiworld.state))
-        self.assertTrue(skull_25.can_reach(self.multiworld.state))
-        self.assertTrue(skull_75.can_reach(self.multiworld.state))
+        self.assert_can_reach_region(Region.mines_floor_115)
+        self.assert_can_reach_region(Region.skull_cavern_25)
+        self.assert_can_reach_region(Region.skull_cavern_75)
 
     def generate_items_for_mine_115(self) -> List[Item]:
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2

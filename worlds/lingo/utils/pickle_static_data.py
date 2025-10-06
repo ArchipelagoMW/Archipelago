@@ -138,6 +138,8 @@ def process_single_entrance(source_room: str, room_name: str, door_obj) -> RoomE
         entrance_type = EntranceType.WARP
     elif source_room == "Crossroads" and room_name == "Roof":
         entrance_type = EntranceType.CROSSROADS_ROOF_ACCESS
+    elif "static_painting" in door_obj and door_obj["static_painting"]:
+        entrance_type = EntranceType.STATIC_PAINTING
 
     if "painting" in door_obj and door_obj["painting"]:
         PAINTING_EXIT_ROOMS.add(room_name)

@@ -7,6 +7,7 @@ from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST, 
 from .Locations import EventId, FF1Locations, generate_rule, CHAOS_TERMINATED_EVENT
 from .Options import FF1Options
 from ..AutoWorld import World, WebWorld
+from .Client import FF1Client
 
 
 class FF1Settings(settings.Group):
