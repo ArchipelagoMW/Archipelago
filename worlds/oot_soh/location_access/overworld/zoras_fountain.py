@@ -21,7 +21,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.ZORAS_FOUNTAIN_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: can_use(Items.STICKS, bundle) and at_day(bundle))
     ])
-
     # Locations
     add_locations(Regions.ZORAS_FOUNTAIN, world, [
         (Locations.ZF_GS_TREE, lambda bundle: is_child(bundle) and can_bonk_trees(bundle)),
@@ -31,12 +30,11 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ZF_FAIRY_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.ZF_JABU_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (Locations.ZF_JABU_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
-        (Locations.ZF_NEAR_JABU_POT1, lambda bundle: can_break_pots(bundle)),
-        (Locations.ZF_NEAR_JABU_POT2, lambda bundle: can_break_pots(bundle)),
-        (Locations.ZF_NEAR_JABU_POT3, lambda bundle: can_break_pots(bundle)),
-        (Locations.ZF_NEAR_JABU_POT4, lambda bundle: can_break_pots(bundle))
+        (Locations.ZF_NEAR_JABU_POT1, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
+        (Locations.ZF_NEAR_JABU_POT2, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
+        (Locations.ZF_NEAR_JABU_POT3, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
+        (Locations.ZF_NEAR_JABU_POT4, lambda bundle: is_child(bundle) and can_break_pots(bundle))
     ])
-
     # Connections
     connect_regions(Regions.ZORAS_FOUNTAIN, world, [
         (Regions.ZD_BEHIND_KING_ZORA, lambda bundle: True),
@@ -48,20 +46,19 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) and (can_use(Items.BOTTLE_WITH_FISH, bundle) or world.options.jabu_jabu.value == 1)),
         (Regions.ZF_GREAT_FAIRY_FOUNTAIN, lambda bundle: has_explosives(bundle) or (can_do_trick(Tricks.ZF_GREAT_FAIRY_WITHOUT_EXPLOSIVES, bundle) and can_use(Items.MEGATON_HAMMER, bundle) and  can_use(Items.SILVER_GAUNTLETS, bundle)))
     ])
-
+    
     ##Zora's Fountains Icebergs
     # Locations
     add_locations(Regions.ZF_ICEBERGS, world, [
         (Locations.ZF_ICEBERG_FREESTANDING_PO_H, lambda bundle: is_adult(bundle))
     ])
-
     # Connections
     connect_regions(Regions.ZF_ICEBERGS, world, [
         (Regions.ZORAS_FOUNTAIN, lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.HOVER_BOOTS, bundle)),
         (Regions.ZF_LAKEBED, lambda bundle: can_use(Items.IRON_BOOTS, bundle)),
         (Regions.ZF_LEDGE, lambda bundle: True)
     ])
-
+    
     ##Zora's Fountain Lakebed
     # Locations
     add_locations(Regions.ZF_LAKEBED, world, [
@@ -104,7 +101,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ZF_BOTTOM_NORTHWEST_OUTER_RUPEE,
          lambda bundle: is_adult(bundle) and can_use(Items.IRON_BOOTS, bundle) and water_timer(bundle) >= 16),
     ])
-
     # Connections
     connect_regions(Regions.ZF_LAKEBED, world, [
         (Regions.ZORAS_FOUNTAIN, lambda bundle: has_item(Items.BRONZE_SCALE, bundle))
@@ -122,11 +118,10 @@ def set_region_rules(world: "SohWorld") -> None:
     ##Zora's Fountain Hidden Cave
     # Locations
     add_locations(Regions.ZF_HIDDEN_CAVE, world, [
-        (Locations.ZF_HIDDEN_CAVE_POT1, lambda bundle: can_break_pots(bundle) and is_adult(bundle)),
-        (Locations.ZF_HIDDEN_CAVE_POT2, lambda bundle: can_break_pots(bundle) and is_adult(bundle)),
-        (Locations.ZF_HIDDEN_CAVE_POT3, lambda bundle: can_break_pots(bundle) and is_adult(bundle))
+        (Locations.ZF_HIDDEN_CAVE_POT1, lambda bundle: is_adult(bundle) and can_break_pots(bundle)),
+        (Locations.ZF_HIDDEN_CAVE_POT2, lambda bundle: is_adult(bundle) and can_break_pots(bundle)),
+        (Locations.ZF_HIDDEN_CAVE_POT3, lambda bundle: is_adult(bundle) and can_break_pots(bundle))
     ])
-
     # Connections
     connect_regions(Regions.ZF_HIDDEN_CAVE, world, [
         (Regions.ZF_HIDDEN_LEDGE, lambda bundle:True)
@@ -137,7 +132,6 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.ZF_HIDDEN_LEDGE, world, [
         (Locations.ZF_GS_HIDDEN_CAVE, lambda bundle: is_adult(bundle) and can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOMB_THROW) and can_get_nighttime_gs(bundle))
     ])
-
     # Connections
     connect_regions(Regions.ZF_HIDDEN_LEDGE, world, [
         (Regions.ZORAS_FOUNTAIN, lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or take_damage(bundle)),
@@ -155,7 +149,6 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.ZF_GREAT_FAIRY_FOUNTAIN, world, [
         (Locations.ZF_GREAT_FAIRY_REWARD, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
     ])
-
     # Connections
     connect_regions(Regions.ZF_GREAT_FAIRY_FOUNTAIN, world, [
         (Regions.ZORAS_FOUNTAIN, lambda bundle: True)
