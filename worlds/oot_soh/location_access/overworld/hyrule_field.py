@@ -188,8 +188,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.HF_SOUTHEAST_GROTTO, world, [
         (Locations.HF_SOUTHEAST_GROTTO_CHEST, lambda bundle: True),
         (Locations.HF_SOUTHEAST_GROTTO_FISH, lambda bundle: (has_bottle(bundle))),
-        (Locations.HF_SOUTHEAST_GOSSIP_STONE_FAIRY , lambda bundle: (call_gossip_fairy(bundle))),
-        (Locations.HF_SOUTHEAST_GOSSIP_STONE_BIG_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
+        (Locations.HF_SOUTHEAST_GROTTO_GOSSIP_STONE_FAIRY , lambda bundle: (call_gossip_fairy(bundle))),
+        (Locations.HF_SOUTHEAST_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
         (Locations.HF_SOUTHEAST_GROTTO_BEEHIVE_LEFT, lambda bundle: (can_break_lower_hives(bundle))),
         (Locations.HF_SOUTHEAST_GROTTO_BEEHIVE_RIGHT, lambda bundle: (can_break_lower_hives(bundle))),
         (Locations.HF_SOUTHEAST_GROTTO_GRASS1, lambda bundle: (can_cut_shrubs(bundle))),
