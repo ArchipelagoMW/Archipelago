@@ -97,8 +97,6 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
             meta["error"] = format_exception(e)
-            if e.__cause__:
-                meta["source"] = format_exception(e.__cause__)
             details = json.dumps(meta, indent=4).strip()
             return render_template("seedError.html", seed_error=meta["error"], details=details)
 
@@ -113,8 +111,6 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
             meta["error"] = format_exception(e)
-            if e.__cause__:
-                meta["source"] = format_exception(e.__cause__)
             details = json.dumps(meta, indent=4).strip()
             return render_template("seedError.html", seed_error=meta["error"], details=details)
 
@@ -190,8 +186,6 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
                     meta["error"] = ("Allowed time for Generation exceeded, " +
                                      "please consider generating locally instead. " +
                                      format_exception(e))
-                    if e.__cause__:
-                        meta["source"] = format_exception(e.__cause__)
                     gen.meta = json.dumps(meta)
                     commit()
     except BaseException as e:
@@ -202,8 +196,6 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
                     gen.state = STATE_ERROR
                     meta = json.loads(gen.meta)
                     meta["error"] = format_exception(e)
-                    if e.__cause__:
-                        meta["source"] = format_exception(e.__cause__)
                     gen.meta = json.dumps(meta)
                     commit()
         raise
