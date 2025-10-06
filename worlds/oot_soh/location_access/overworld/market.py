@@ -1,10 +1,7 @@
-from typing import TYPE_CHECKING
-
-from ...Enums import *
 from ...LogicHelpers import *
 
 if TYPE_CHECKING:
-    from worlds.oot_soh import SohWorld
+    from ... import SohWorld
     
 class EventLocations(str, Enum):
     MARKET_GUARD_HOUSE = "Market Guard House"
@@ -13,7 +10,6 @@ class EventLocations(str, Enum):
     MARKET_MASK_SHOP_SPOOKY_MASK = "Market Mask Shop Spooky Mask"
     MARKET_MASK_SHOP_BUNNY_HOOD = "Market Mask Shop Bunny Hood"
     MARKET_BOMBCHU_BOWLING = "Market Bombchu Bowling"
-
 
 class LocalEvents(str, Enum):
     CAN_EMPTY_BIG_POES = "Can Empty Big Poes"
