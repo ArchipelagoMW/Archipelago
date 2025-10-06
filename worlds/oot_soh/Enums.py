@@ -1079,7 +1079,7 @@ class Locations(str, Enum):
     LH_CHILD_FISHING = "LH Child Fishing"
     LH_ADULT_FISHING = "LH Adult Fishing"
     LH_LAB_DIVE = "LH Lab Dive"
-    LH_FREESTANDING_PO_H = "LH Freestanding PoH"
+    LH_FREESTANDING_POH = "LH Freestanding PoH"
     LH_SUN = "LH Sun"
     GV_CRATE_FREESTANDING_PO_H = "GV Crate Freestanding PoH"
     GV_WATERFALL_FREESTANDING_PO_H = "GV Waterfall Freestanding PoH"
@@ -3428,6 +3428,7 @@ class EnemyDistance(Enum):
 class Events(str, Enum):
     CAN_FARM_STICKS = "Can Farm Sticks"
     CAN_FARM_NUTS = "Can Farm Nuts"
+    CAN_ACCESS_FAIRIES = "Can Farm Fairies"
     CAN_BUY_DEKU_SHIELD = "Can Buy Deku Shield"
     CAN_BUY_HYLIAN_SHIELD = "Can Buy Hylian Shield"
     CAN_BUY_GREEN_POTION = "Can Buy Green Potion"
