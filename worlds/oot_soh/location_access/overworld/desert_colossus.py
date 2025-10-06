@@ -7,7 +7,8 @@ if TYPE_CHECKING:
     from worlds.oot_soh import SohWorld
 
 class EventLocations(str, Enum):
-    DESERT_COLOSSUS_FAIRY_POND = "Desert Colossus Fairy Pond"
+    DESERT_COLOSSUS_FAIRY_POND_COLOSSUS = "Desert Colossus Fairy Pond Colossus"
+    DESERT_COLOSSUS_FAIRY_POND_OASIS = "Desert Colossus Fairy Pond Oasis"
     DESERT_COLOSSUS_BUG_ROCK = "Desert Colossus Bug Rock"
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -16,7 +17,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Desert Colossus
     # Events
     add_events(Regions.DESERT_COLOSSUS, world, [
-        (EventLocations.DESERT_COLOSSUS_FAIRY_POND, Events.CAN_ACCESS_FAIRIES, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
+        (EventLocations.DESERT_COLOSSUS_FAIRY_POND_COLOSSUS, Events.CAN_ACCESS_FAIRIES, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
         (EventLocations.DESERT_COLOSSUS_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True)
     ])
     # Locations
@@ -44,7 +45,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Desert Colossus Oasis
     # Events
     add_events(Regions.DESERT_COLOSSUS_OASIS, world, [
-        (EventLocations.DESERT_COLOSSUS_FAIRY_POND, Events.CAN_ACCESS_FAIRIES, lambda bundle: True)
+        (EventLocations.DESERT_COLOSSUS_FAIRY_POND_OASIS, Events.CAN_ACCESS_FAIRIES, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.DESERT_COLOSSUS_OASIS, world, [
