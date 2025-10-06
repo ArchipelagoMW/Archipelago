@@ -28,7 +28,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.ZD_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True),
         (EventLocations.ZD_STICK_POT, Events.CAN_FARM_STICKS, lambda bundle: is_child(bundle)),
         (EventLocations.ZD_FISH_GROUP, Events.CAN_ACCESS_FISH, lambda bundle: is_child(bundle)),
-        (EventLocations.ZD_KING_ZORA_THAWED, LocalEvents.KING_ZORA_THAWED,
+        (EventLocations.ZD_KING_ZORA_THAWING, LocalEvents.KING_ZORA_THAWED,
          lambda bundle: is_adult(bundle) and blue_fire(bundle)),
         (EventLocations.ZD_DELIVER_RUTOS_LETTER, Events.DELIVER_LETTER,
          lambda bundle: can_use(Items.BOTTLE_WITH_RUTOS_LETTER, bundle) and is_child(
@@ -93,7 +93,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # ZD Behind King Zora
     # Events
     add_events(Regions.ZD_BEHIND_KING_ZORA, world, [
-        (EventLocations.ZD_KING_ZORA_THAWED, LocalEvents.KING_ZORA_THAWED,
+        (EventLocations.ZD_BEHIND_KING_ZORA_THAWING, LocalEvents.KING_ZORA_THAWED,
          lambda bundle: is_adult(bundle) and blue_fire(bundle)),
     ])
     # Locations
