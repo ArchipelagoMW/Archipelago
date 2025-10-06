@@ -73,7 +73,7 @@ class WorldSource:
                 if manifest:
                     break
             self.game = manifest.get("game")
-            self.version = Version(*tuplize_version(manifest.get("world_version", "0.0.0")))
+            self.version = tuplize_version(manifest.get("world_version", "0.0.0"))
 
     def __repr__(self) -> str:
         return (f"{self.__class__.__name__}({self.path}, is_zip={self.is_zip}, relative={self.relative}, "

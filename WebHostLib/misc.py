@@ -271,9 +271,9 @@ def host_room(room: UUID):
                  or "Discordbot" in request.user_agent.string
                  or not any(browser_token in request.user_agent.string for browser_token in browser_tokens))
 
-    def get_log(max_size: int = 0 if automated else 1024000) -> str:
+    def get_log(max_size: int = 0 if automated else 1024000) -> Tuple[str, int]:
         if max_size == 0:
-            return "…"
+            return "…", 0
         try:
             with open(os.path.join("logs", str(room.id) + ".txt"), "rb") as log:
                 raw_size = 0
@@ -284,9 +284,9 @@ def host_room(room: UUID):
                         break
                     raw_size += len(block)
                     fragments.append(block.decode("utf-8"))
-                return "".join(fragments)
+                return "".join(fragments), raw_size
         except FileNotFoundError:
-            return ""
+            return "", 0
 
     return render_template("hostRoom.html", room=room, should_refresh=should_refresh, get_log=get_log)
 

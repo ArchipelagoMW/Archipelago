@@ -35,7 +35,7 @@ if typing.TYPE_CHECKING:
 
 
 def tuplize_version(version: str) -> Version:
-    return Version(*(int(piece, 10) for piece in version.split(".")))
+    return Version(*(int(piece) for piece in version.split(".")))
 
 
 class Version(typing.NamedTuple):
@@ -49,7 +49,6 @@ class Version(typing.NamedTuple):
 
 __version__ = "0.6.4"
 version_tuple = tuplize_version(__version__)
-version = Version(*version_tuple)
 
 is_linux = sys.platform.startswith("linux")
 is_macos = sys.platform == "darwin"

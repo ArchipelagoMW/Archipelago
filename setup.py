@@ -372,7 +372,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
         from worlds.Files import APWorldContainer
-        from Utils import version
         assert not non_apworlds - set(AutoWorldRegister.world_types), \
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: list[str] = []
@@ -398,8 +397,8 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 # which should be ok
                 zip_path = self.libfolder / "worlds" / (file_name + ".apworld")
                 apworld = APWorldContainer(str(zip_path))
-                apworld.minimum_ap_version = version
-                apworld.maximum_ap_version = version
+                apworld.minimum_ap_version = version_tuple
+                apworld.maximum_ap_version = version_tuple
                 apworld.game = worldtype.game
                 manifest.update(apworld.get_manifest())
                 apworld.manifest_path = f"{file_name}/archipelago.json"
