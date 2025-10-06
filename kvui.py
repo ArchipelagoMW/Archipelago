@@ -720,13 +720,11 @@ class MessageBoxLabel(MDLabel):
 
 
 class MessageBox(Popup):
-
     def __init__(self, title, text, error=False, **kwargs):
-        label = MessageBoxLabel(text=text)
+        label = MessageBoxLabel(text=text, padding=("6dp", "0dp"))
         separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
         super().__init__(title=title, content=label, size_hint=(0.5, None), width=max(100, int(label.width) + 40),
                          separator_color=separator_color, **kwargs)
-        self.height += max(0, label.height - 18)
 
 
 class MDNavigationItemBase(MDNavigationItem):
@@ -840,15 +838,15 @@ class GameManager(ThemedApp):
         self.log_panels: typing.Dict[str, Widget] = {}
 
         # keep track of last used command to autofill on click
-        self.last_autofillable_command = "hint"
-        autofillable_commands = ("hint_location", "hint", "getitem")
+        self.last_autofillable_command = "!hint"
+        autofillable_commands = ("!hint_location", "!hint", "!getitem")
         original_say = ctx.on_user_say
 
         def intercept_say(text):
             text = original_say(text)
             if text:
                 for command in autofillable_commands:
-                    if text.startswith("!" + command):
+                    if text.startswith(command):
                         self.last_autofillable_command = command
                         break
             return text
