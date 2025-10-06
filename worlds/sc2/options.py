@@ -1763,5 +1763,5 @@ OPTION_NAME: dict[Option, str] = {}
 for _field in fields(Starcraft2Options):
     assert _field.type not in OPTION_NAME
     OPTION_NAME[_field.type] = _field.name
-OPTION_NAME[Accessibility] = 'accessibility'
-OPTION_NAME[ProgressionBalancing] = 'progression_balancing'
+OPTION_NAME[Accessibility] = "accessibility"
+OPTION_NAME[ProgressionBalancing] = "progression_balancing"
