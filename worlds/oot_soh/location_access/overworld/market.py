@@ -9,11 +9,7 @@ class EventLocations(str, Enum):
     MARKET_MASK_SHOP_SKULL_MASK = "Market Mask Shop Skull Mask"
     MARKET_MASK_SHOP_SPOOKY_MASK = "Market Mask Shop Spooky Mask"
     MARKET_MASK_SHOP_BUNNY_HOOD = "Market Mask Shop Bunny Hood"
-    MARKET_BOMBCHU_BOWLING = "Market Bombchu Bowling"
-
-class LocalEvents(str, Enum):
-    CAN_EMPTY_BIG_POES = "Can Empty Big Poes"
-    CAN_PLAY_BOWLING = "Can Play Bombchu Bowling"
+    MARKET_BOMBCHU_BOWLING_GAME = "Market Bombchu Bowling Game"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -68,14 +64,14 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Market Guard House
     # Events
     add_events(Regions.MARKET_GUARD_HOUSE, world, [
-        (EventLocations.MARKET_GUARD_HOUSE, LocalEvents.CAN_EMPTY_BIG_POES, lambda bundle: (is_adult(bundle)))
+        (EventLocations.MARKET_GUARD_HOUSE, Events.CAN_EMPTY_BIG_POES, lambda bundle: (is_adult(bundle)))
     ])
     # Locations
     add_locations(Regions.MARKET_GUARD_HOUSE, world, [
         (Locations.MARKET_10_BIG_POES, lambda bundle: (is_adult(bundle) and 
-                                                       (has_bottle(bundle) and
+                                                       ((has_bottle(bundle) and
                                                         has_item(Events.CAN_DEFEAT_BIG_POE, bundle)) or
-                                                       has_item(Items.BOTTLE_WITH_BIG_POE, bundle, world.options.big_poe_target_count.value))),
+                                                       has_item(Items.BOTTLE_WITH_BIG_POE, bundle, world.options.big_poe_target_count.value)))),
         (Locations.MARKET_MARKET_GS_GUARD_HOUSE, lambda bundle: (is_child(bundle))),
         (Locations.MARKET_GUARD_HOUSE_CHILD_POT1, lambda bundle: (is_child(bundle) and can_break_pots(bundle))),
         (Locations.MARKET_GUARD_HOUSE_CHILD_POT2, lambda bundle: (is_child(bundle) and can_break_pots(bundle))),
@@ -163,14 +159,12 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Market Mask Shop
     # Events
     add_events(Regions.MARKET_MASK_SHOP, world, [
-        (EventLocations.MARKET_MASK_SHOP_ALL_MASKS, Events.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER, bundle) and
-                                                                                   (has_item(Events.KAKARIKO_GATE_OPEN, bundle) or world.options.kakariko_gate.value == 1) or
-                                                                                   world.options.complete_mask_quest.value == 1)),
-        (EventLocations.MARKET_MASK_SHOP_SKULL_MASK, Events.CAN_BORROW_SKULL_MASK, lambda bundle: (world.options.complete_mask_quest.value or
+        (EventLocations.MARKET_MASK_SHOP_ALL_MASKS, Events.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER, bundle) and has_item(Events.KAKARIKO_GATE_OPEN, bundle))),
+        (EventLocations.MARKET_MASK_SHOP_SKULL_MASK, Events.CAN_BORROW_SKULL_MASK, lambda bundle: (world.options.complete_mask_quest.value == 1 or
                                                                                         has_item(Events.CAN_BORROW_MASKS, bundle))),
-        (EventLocations.MARKET_MASK_SHOP_SPOOKY_MASK, Events.CAN_BORROW_SPOOKY_MASK, lambda bundle: (world.options.complete_mask_quest.value or
+        (EventLocations.MARKET_MASK_SHOP_SPOOKY_MASK, Events.CAN_BORROW_SPOOKY_MASK, lambda bundle: (world.options.complete_mask_quest.value == 1 or
                                                                                         has_item(Events.CAN_BORROW_MASKS, bundle))),
-        (EventLocations.MARKET_MASK_SHOP_BUNNY_HOOD, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: (world.options.complete_mask_quest.value or
+        (EventLocations.MARKET_MASK_SHOP_BUNNY_HOOD, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: (world.options.complete_mask_quest.value == 1 or
                                                                                         has_item(Events.CAN_BORROW_MASKS, bundle)))
     ])
     # Connections
@@ -191,12 +185,12 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Market Bombchu Bowling
     # Events
     add_events(Regions.MARKET_BOMBCHU_BOWLING, world, [
-        (EventLocations.MARKET_BOMBCHU_BOWLING, LocalEvents.CAN_PLAY_BOWLING, lambda bundle: (has_item(Items.CHILD_WALLET, bundle)))
+        (EventLocations.MARKET_BOMBCHU_BOWLING, Events.CAN_BUY_BOMBS, lambda bundle: (has_item(Items.CHILD_WALLET, bundle)))
     ])
     # Locations
     add_locations(Regions.MARKET_BOMBCHU_BOWLING, world, [
-        (Locations.MARKET_BOMBCHU_BOWLING_FIRST_PRIZE, lambda bundle: (LocalEvents.CAN_PLAY_BOWLING and bombchus_enabled(bundle)))
-        (Locations.MARKET_BOMBCHU_BOWLING_SECOND_PRIZE, lambda bundle: (LocalEvents.CAN_PLAY_BOWLING and bombchus_enabled(bundle)))
+        (Locations.MARKET_BOMBCHU_BOWLING_FIRST_PRIZE, lambda bundle: (Events.CAN_BUY_BOMBS and bombchus_enabled(bundle)))
+        (Locations.MARKET_BOMBCHU_BOWLING_SECOND_PRIZE, lambda bundle: (Events.CAN_BUY_BOMBS and bombchus_enabled(bundle)))
     ])
     # Connections
     connect_regions(Regions.MARKET_BOMBCHU_BOWLING, world, [
