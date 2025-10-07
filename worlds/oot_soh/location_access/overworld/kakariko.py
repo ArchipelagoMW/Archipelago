@@ -206,24 +206,28 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     # Kak Impas House
-    # Locations
-    add_locations(Regions.KAK_IMPAS_HOUSE, world, [
-        (Locations.KAK_IMPAS_HOUSE_COW, lambda bundle: can_play_song(Items.EPONAS_SONG, bundle)),
-    ])
     # Connections
     connect_regions(Regions.KAK_IMPAS_HOUSE, world, [
         (Regions.KAKARIKO_VILLAGE, lambda bundle: True),
+        (Regions.KAK_COW_CAGE, lambda bundle: can_play_song(Items.EPONAS_SONG, bundle))
     ])
 
     # Kak Impas House Back
     # Locations
     add_locations(Regions.KAK_IMPAS_HOUSE_BACK, world, [
         (Locations.KAK_IMPAS_HOUSE_FREESTANDING_PO_H, lambda bundle: True),
-        (Locations.KAK_IMPAS_HOUSE_COW, lambda bundle: can_play_song(Items.EPONAS_SONG, bundle)),
     ])
     # Connections
     connect_regions(Regions.KAK_IMPAS_HOUSE_BACK, world, [
         (Regions.KAK_IMPAS_LEDGE, lambda bundle: True),
+        (Regions.KAK_COW_CAGE, lambda bundle: can_play_song(Items.EPONAS_SONG, bundle)),
+    ])
+
+    # Kak Impas House Cow
+    # This region exists because to get around AP's restriction on locations having one parent region
+    # Locations
+    add_locations(Regions.KAK_COW_CAGE, world, [
+        (Locations.KAK_IMPAS_HOUSE_COW, lambda bundle: True),
     ])
 
     # Kak Windmill
