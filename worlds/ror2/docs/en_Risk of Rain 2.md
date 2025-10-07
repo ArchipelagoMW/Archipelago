@@ -88,11 +88,20 @@ Explore Mode items are:
 * `Commencement`
 * `All the Hidden Realms`
 
-Dlc_Sotv items
+DLC Survivors of the void (SOTV) items
 * `Siphoned Forest`
 * `Aphelian Sanctuary`
 * `Sulfur Pools`
 * `Void Locus`
+
+DLC Seekers of the Storm (SOTS) items
+
+* `Shattered Abodes`, `Vicious Falls`, `Disturbed Impact`
+* `Reformed Altar`
+* `Treeborn Colony`, `Golden Dieback`
+* `Prime Meridian`
+* `Helminth Hatchery`
+
 
 When an explore item is granted, it will unlock that environment and will now be accessible! The 
 game will still pick randomly which environment is next, but it will first check to see if they are available. If you have
