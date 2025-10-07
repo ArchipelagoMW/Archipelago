@@ -356,8 +356,8 @@ class WitnessWorld(World):
         if hint_amount > len(enabled_audio_logs):
             # TODO: Make this an option in the advanced hints PR
             warning(
-                f"Player {self.player_name} requested {hint_amount} hints, but only {enabled_audio_logs} Audio Logs "
-                f"are available, so only {enabled_audio_logs} hints were created."
+                f"Player {self.player_name} requested {hint_amount} hints, but only {len(enabled_audio_logs)} "
+                f"Audio Logs are available, so only {len(enabled_audio_logs)} hints were created."
             )
             hint_amount = len(enabled_audio_logs)
             self.options.hint_amount.value = hint_amount
