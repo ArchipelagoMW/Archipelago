@@ -23,8 +23,8 @@ class TrackmaniaCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, TrackmaniaContext):
             if self.ctx.is_proxy_connected():
                 logger.info("Rerolling Loaded Map...")
-                series_number = int(series_number) # these can still be strings somehow!
-                map_number = int(map_number) # GODILOVEWEAKLYTYPEDLANGUAGES
+                series_number = int(series_number)
+                map_number = int(map_number)
                 msg : dict = {"cmd" : "Reroll", "series_index" : series_number, "map_index" : map_number}
                 msg_str = encode([msg])
                 self.ctx.server_msgs.append(msg_str)
@@ -238,7 +238,7 @@ def launch():
         ctx = TrackmaniaContext(args.connect, args.password)
         logger.info("Starting Trackmania proxy server")
         ctx.proxy = websockets.serve(functools.partial(proxy, ctx=ctx),
-                                     host="", port=22422, logger=logger,ping_timeout=999999, ping_interval=999999)
+                                     host="", port=22422, ping_timeout=999999, ping_interval=999999)
         ctx.proxy_task = asyncio.create_task(proxy_loop(ctx), name="ProxyLoop")
 
         if gui_enabled:
