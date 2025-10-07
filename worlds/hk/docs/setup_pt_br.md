@@ -36,7 +36,7 @@ Olhe o [guia de configuração básica de um multiworld](/tutorial/Archipelago/s
 Você pode usar a [página de configurações do jogador para Hollow Knight](/games/Hollow%20Knight/player-options) aqui no site do Archipelago 
 para gerar o YAML usando a interface gráfica.
 
-### Entrando numa partida de Archipelago no Hollow Knight
+## Entrando numa partida de Archipelago no Hollow Knight
 1. Começe o jogo depois de instalar todos os mods necessários.
 2. Crie um **novo jogo salvo.**
 3. Selecione o modo de jogo **Archipelago** do menu de seleção.

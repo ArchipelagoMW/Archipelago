@@ -3,8 +3,8 @@ from typing import ClassVar
 
 from BaseClasses import get_seed
 from test.param import classvar_matrix
-from .. import SVTestCase, solo_multiworld, skip_long_tests
 from ..assertion import WorldAssertMixin
+from ..bases import skip_long_tests, SVTestCase, solo_multiworld
 from ... import options
 
 if skip_long_tests():

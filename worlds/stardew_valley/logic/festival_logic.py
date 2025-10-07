@@ -154,7 +154,7 @@ class FestivalLogic(BaseLogic):
         # Salads at the bar are good enough
         cooking_rule = self.logic.money.can_spend_at(Region.saloon, 220)
 
-        fish_rule = self.logic.skill.can_fish(difficulty=50)
+        fish_rule = self.logic.fishing.can_fish_anywhere(50)
 
         # Hazelnut always available since the grange display is in fall
         forage_rule = self.logic.region.can_reach_any((Region.forest, Region.backwoods))
@@ -179,7 +179,7 @@ class FestivalLogic(BaseLogic):
         return animal_rule & artisan_rule & cooking_rule & fish_rule & forage_rule & fruit_rule & mineral_rule & vegetable_rule
 
     def can_win_fishing_competition(self) -> StardewRule:
-        return self.logic.skill.can_fish(difficulty=60)
+        return self.logic.fishing.can_fish(60)
 
     def has_all_rarecrows(self) -> StardewRule:
         rules = []

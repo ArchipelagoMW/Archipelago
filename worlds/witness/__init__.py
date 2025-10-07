@@ -27,14 +27,32 @@ from .rules import set_rules
 
 class WitnessWebWorld(WebWorld):
     theme = "jungle"
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing The Witness with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
         ["NewSoupVi", "Jarno"]
-    )]
+    )
+    setup_de = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "German",
+        "setup_de.md",
+        "setup/de",
+        ["NewSoupVi"]
+    )
+    setup_fr = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Rever"]
+    )
+
+    tutorials = [setup_en, setup_de, setup_fr]
 
     options_presets = witness_option_presets
     option_groups = witness_option_groups
@@ -86,7 +104,6 @@ class WitnessWorld(World):
             "item_id_to_door_hexes": static_witness_items.get_item_to_door_mappings(),
             "door_items_in_the_pool": self.player_items.get_door_item_ids_in_pool(),
             "doors_that_shouldnt_be_locked": [int(h, 16) for h in self.player_logic.FORBIDDEN_DOORS],
-            "symbols_not_in_the_game": self.player_items.get_symbol_ids_not_in_pool(),
             "disabled_entities": [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
             "hunt_entities": [int(h, 16) for h in self.player_logic.HUNT_ENTITIES],
             "log_ids_to_hints": self.log_ids_to_hints,
@@ -94,7 +111,6 @@ class WitnessWorld(World):
             "progressive_item_lists": self.player_items.get_progressive_item_ids_in_pool(),
             "obelisk_side_id_to_EPs": static_witness_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
             "precompleted_puzzles": [int(h, 16) for h in self.player_logic.EXCLUDED_ENTITIES],
-            "entity_to_name": static_witness_logic.ENTITY_ID_TO_NAME,
             "panel_hunt_required_absolute": self.panel_hunt_required_count
         }
 
@@ -239,7 +255,7 @@ class WitnessWorld(World):
         needed_size = 2
         needed_size += self.options.puzzle_randomization == "sigma_expert"
         needed_size += self.options.shuffle_symbols
-        needed_size += self.options.shuffle_doors > 0
+        needed_size += self.options.shuffle_doors != "off"
 
         # Then, add checks in order until the required amount of sphere 1 checks is met.
 
