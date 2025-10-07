@@ -271,9 +271,9 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         mw = None
         if spot.item_owner != spot.location_owner:
             mw = spot.item_owner
-            if mw > 100:
+            if mw > 101:
                 # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
-                mw = 100
+                mw = 101
         spot.patch(rom, spot.item, multiworld=mw)
     patches.enemies.changeBosses(rom, patch_data["world_setup"]["boss_mapping"])
     patches.enemies.changeMiniBosses(rom, patch_data["world_setup"]["miniboss_mapping"])
