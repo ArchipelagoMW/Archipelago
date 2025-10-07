@@ -509,7 +509,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.FIRE_TEMPLE_BOSS_ROOM, world, [
         (Locations.FIRE_TEMPLE_VOLVAGIA_HEART_CONTAINER, lambda bundle: has_item(Events.CLEARED_FIRE_TEMPLE, bundle)),
-        (Locations.VOLVAGIA, lambda bundle: has_item(Events.CLEARED_FIRE_TEMPLE))
+        (Locations.VOLVAGIA, lambda bundle: has_item(Events.CLEARED_FIRE_TEMPLE, bundle))
     ])
     # Connections
     connect_regions(Regions.FIRE_TEMPLE_BOSS_ROOM, world, [
