@@ -236,7 +236,6 @@ class WitnessWorld(World):
         ]
         self.reachable_early_locations = [location.name for location in early_locations]
 
-        num_reachable_locations = len(early_locations)
         num_reachable_tutorial_locations = sum(
             static_witness_logic.ALL_REGIONS_BY_NAME[
                 cast(Region, location.parent_region).name
@@ -269,7 +268,7 @@ class WitnessWorld(World):
             ("Desert Outside", "Desert Surface 2"),
         ]
 
-        for i in range(num_reachable_tutorial_locations, needed_size_to_hold_tutorial_items):
+        for _ in range(num_reachable_tutorial_locations, needed_size_to_hold_tutorial_items):
             if not extra_tutorial_checks:
                 break
 
@@ -285,7 +284,7 @@ class WitnessWorld(World):
                 f"""Location "{loc}" had to be added to {player}'s world to hold the requested early good items."""
             )
 
-        for i in range(num_reachable_locations, needed_size_overall):
+        for _ in range(len(self.reachable_early_locations), needed_size_overall):
             if not extra_checks:
                 break
 
