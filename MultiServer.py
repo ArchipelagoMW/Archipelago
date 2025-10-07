@@ -50,6 +50,9 @@ from BaseClasses import ItemClassification
 min_client_version = Version(0, 5, 0)
 colorama.just_fix_windows_console()
 
+no_version = Version(0, 0, 0)
+assert isinstance(no_version, tuple)  # assert immutable
+
 
 def remove_from_list(container, value):
     try:
@@ -125,8 +128,30 @@ def get_saving_second(seed_name: str, interval: int = 60) -> int:
 
 
 class Client(Endpoint):
-    version = Version(0, 0, 0)
-    tags: typing.List[str]
+    __slots__ = (
+        "version",
+        "auth",
+        "team",
+        "slot",
+        "send_index",
+        "tags",
+        "messageprocessor",
+        "ctx",
+        "remote_items",
+        "remote_start_inventory",
+        "no_items",
+        "no_locations",
+        "no_text",
+    )
+
+    version: Version
+    auth: bool
+    team: int | None
+    slot: int | None
+    send_index: int
+    tags: list[str]
+    messageprocessor: ClientMessageProcessor
+    ctx: weakref.ref[Context]
     remote_items: bool
     remote_start_inventory: bool
     no_items: bool
@@ -135,6 +160,7 @@ class Client(Endpoint):
 
     def __init__(self, socket: "ServerConnection", ctx: Context) -> None:
         super().__init__(socket)
+        self.version = no_version
         self.auth = False
         self.team = None
         self.slot = None
@@ -142,6 +168,11 @@ class Client(Endpoint):
         self.tags = []
         self.messageprocessor = client_message_processor(ctx, self)
         self.ctx = weakref.ref(ctx)
+        self.remote_items = False
+        self.remote_start_inventory = False
+        self.no_items = False
+        self.no_locations = False
+        self.no_text = False
 
     @property
     def items_handling(self):
