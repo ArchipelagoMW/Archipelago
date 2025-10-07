@@ -32,7 +32,7 @@ if typing.TYPE_CHECKING:
 
 import colorama
 import websockets
-from websockets.extensions.permessage_deflate import PerMessageDeflate
+from websockets.extensions.permessage_deflate import PerMessageDeflate, ServerPerMessageDeflateFactory
 try:
     # ponyorm is a requirement for webhost, not default server, so may not be importable
     from pony.orm.dbapiprovider import OperationalError
@@ -52,6 +52,12 @@ colorama.just_fix_windows_console()
 
 no_version = Version(0, 0, 0)
 assert isinstance(no_version, tuple)  # assert immutable
+
+server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
+    server_max_window_bits=11,
+    client_max_window_bits=11,
+    compress_settings={"memLevel": 4},
+)
 
 
 def remove_from_list(container, value):
@@ -2670,7 +2676,13 @@ async def main(args: argparse.Namespace):
 
     ssl_context = load_server_cert(args.cert, args.cert_key) if args.cert else None
 
-    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ssl=ssl_context)
+    ctx.server = websockets.serve(
+        functools.partial(server, ctx=ctx),
+        host=ctx.host,
+        port=ctx.port,
+        ssl=ssl_context,
+        extensions=[server_per_message_deflate_factory],
+    )
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))
