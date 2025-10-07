@@ -268,9 +268,9 @@ class WitnessPlayerLogic:
                         continue
                     # If the dependent entity is unsolvable and is NOT an EP, this requirement option is invalid.
                     new_items = frozenset()
-                elif option_entity in self.ALWAYS_EVENT_NAMES_BY_ENTITY_ID:
-                    new_items = frozenset({frozenset([self.ALWAYS_EVENT_NAMES_BY_ENTITY_ID[option_entity]])})
-                elif (entity_id, option_entity) in self.CONDITIONAL_EVENTS:
+                elif option_entity_id in self.ALWAYS_EVENT_NAMES_BY_ENTITY_ID:
+                    new_items = frozenset({frozenset([self.ALWAYS_EVENT_NAMES_BY_ENTITY_ID[option_entity_id]])})
+                elif (entity_id, option_entity_id) in self.CONDITIONAL_EVENTS:
                     new_items = frozenset({frozenset([self.CONDITIONAL_EVENTS[(entity_id, option_entity_id)]])})
                     self.USED_EVENT_NAMES_BY_ENTITY_ID[option_entity_id].append(
                         self.CONDITIONAL_EVENTS[(entity_id, option_entity_id)]
@@ -347,8 +347,8 @@ class WitnessPlayerLogic:
                         self.DOOR_ITEMS_BY_ID[entity_ids].remove(item_name)
 
         if adj_type == "Forbidden Doors":
-            entity_id = line[:7]
-            self.FORBIDDEN_DOORS.add(int(entity_id))
+            entity_id = int(line[:7], 16)
+            self.FORBIDDEN_DOORS.add(entity_id)
 
         if adj_type == "Starting Inventory":
             self.STARTING_INVENTORY.add(line)
@@ -356,8 +356,8 @@ class WitnessPlayerLogic:
         if adj_type == "Event Items":
             line_split = line.split(" - ")
             new_event_name = line_split[0]
-            entity_id = int(line_split[1])
-            dependent_entity_ids = [int(id_string) for id_string in line_split[2].split(",")]
+            entity_id = int(line_split[1], 16)
+            dependent_entity_ids = [int(id_string, 16) for id_string in line_split[2].split(",")]
 
             for dependent_entity_id in dependent_entity_ids:
                 self.CONDITIONAL_EVENTS[(entity_id, dependent_entity_id)] = new_event_name
@@ -367,7 +367,7 @@ class WitnessPlayerLogic:
         if adj_type == "Requirement Changes":
             line_split = line.split(" - ")
 
-            entity_id = int(line_split[0])
+            entity_id = int(line_split[0], 16)
 
             requirement = {
                 "entities": parse_witness_rule(line_split[1]),
@@ -569,19 +569,19 @@ class WitnessPlayerLogic:
     def finalize_easter_eggs(self, world: "WitnessWorld") -> None:
         self.AVAILABLE_EASTER_EGGS = {
             entity_id for entity_id, entity_obj in static_witness_logic.ENTITIES_BY_ID.items()
-            if entity_obj["entityType"] == "Easter Egg" and self.solvability_guaranteed(entity_id)
+            if entity_obj.entity_type == "Easter Egg" and self.solvability_guaranteed(entity_id)
         }
         max_eggs = len(self.AVAILABLE_EASTER_EGGS)
 
         self.AVAILABLE_EASTER_EGGS_PER_REGION = defaultdict(int)
         for entity_id in self.AVAILABLE_EASTER_EGGS:
-            region_name = static_witness_logic.ENTITIES_BY_ID[entity_id]["region"].name
+            region_name = static_witness_logic.ENTITIES_BY_ID[entity_id].region.name
             self.AVAILABLE_EASTER_EGGS_PER_REGION[region_name] += 1
 
         eggs_per_check, logically_required_eggs_per_check = world.options.easter_egg_hunt.get_step_and_logical_step()
 
         for entity_id, entity_obj in static_witness_logic.ENTITIES_BY_ID.items():
-            if entity_obj["entityType"] != "Easter Egg Total":
+            if entity_obj.entity_type != "Easter Egg Total":
                 continue
             if entity_id in self.COMPLETELY_DISABLED_ENTITIES:
                 continue

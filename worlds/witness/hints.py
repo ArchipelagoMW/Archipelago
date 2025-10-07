@@ -516,7 +516,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, area_items: List[Ite
     hunt_panels = None
     if world.options.victory_condition == "panel_hunt" and hinted_area != "Easter Eggs":
         hunt_panels = sum(
-            static_witness_logic.ENTITIES_BY_ID[hunt_entity]["area"].name == hinted_area
+            static_witness_logic.ENTITIES_BY_ID[hunt_entity].area.name == hinted_area
             for hunt_entity in world.player_logic.HUNT_ENTITIES
         )
 
