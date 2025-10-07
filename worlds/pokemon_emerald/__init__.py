@@ -125,6 +125,7 @@ class PokemonEmeraldWorld(World):
     blacklisted_opponent_pokemon: Set[int]
     hm_requirements: Dict[str, Union[int, List[str]]]
     auth: bytes
+    base_patch_hash: str | None = None
 
     modified_species: Dict[int, SpeciesData]
     modified_maps: Dict[str, MapData]
@@ -135,7 +136,13 @@ class PokemonEmeraldWorld(World):
     modified_trainers: List[TrainerData]
 
     def __init__(self, multiworld, player):
-        super(PokemonEmeraldWorld, self).__init__(multiworld, player)
+        super().__init__(multiworld, player)
+
+        if self.base_patch_hash is None:
+            import hashlib
+            import pkgutil
+            self.base_patch_hash = hashlib.sha256(pkgutil.get_data(__name__, "data/base_patch.bsdiff4")).hexdigest()
+
         self.badge_shuffle_info = None
         self.hm_shuffle_info = None
         self.free_fly_location_id = 0
@@ -617,9 +624,6 @@ class PokemonEmeraldWorld(World):
         randomize_types(self)
 
     def generate_output(self, output_directory: str) -> None:
-        import hashlib
-        import pkgutil
-
         self.modified_trainers = copy.deepcopy(emerald_data.trainers)
         self.modified_tmhm_moves = copy.deepcopy(emerald_data.tmhm_moves)
         self.modified_legendary_encounters = copy.deepcopy(emerald_data.legendary_encounters)
@@ -649,7 +653,7 @@ class PokemonEmeraldWorld(World):
         randomize_starters(self)
 
         patch = PokemonEmeraldProcedurePatch(player=self.player, player_name=self.player_name)
-        patch.base_patch_hash = hashlib.sha256(pkgutil.get_data(__name__, "data/base_patch.bsdiff4")).hexdigest()
+        patch.base_patch_hash = self.base_patch_hash
         write_tokens(self, patch)
 
         del self.modified_trainers
