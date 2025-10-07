@@ -107,12 +107,12 @@ item_table: Dict[str, ItemData] = {
     "Item - Decent Cod Bag": ItemData(ITEM, 185 + item_index_offset, ItemClassification.useful, 0, 0, 1), #Shoudu Province, Expert Zones
 
     #Fishing
-    "Item - Flimsy Rod": ItemData(ITEM, 55 + item_index_offset, ItemClassification.progression, 1),
-    "Item - Tough Rod": ItemData(ITEM, 150 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    "Item - Super Rod": ItemData(ITEM, 151 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    "Item - Plug Lure": ItemData(ITEM, 91 + item_index_offset, ItemClassification.progression, 1),
-    "Item - Fly Lure": ItemData(ITEM, 149 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    "Item - Jigging Lure": ItemData(ITEM, 97 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Flimsy Rod": ItemData(TACKLE, 55 + item_index_offset, ItemClassification.progression, 1),
+    "Item - Tough Rod": ItemData(TACKLE, 150 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Super Rod": ItemData(TACKLE, 151 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Plug Lure": ItemData(TACKLE, 91 + item_index_offset, ItemClassification.progression, 1),
+    "Item - Fly Lure": ItemData(TACKLE, 149 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Jigging Lure": ItemData(TACKLE, 97 + item_index_offset, ItemClassification.progression, 0, 0, 1),
 
     #Ore
     "Item - Silver Ore": ItemData(ORE, 3 + item_index_offset, ItemClassification.useful, 0, 18), #Used by Capital Blacksmith, Capital Sequoia, Advanced Regions
