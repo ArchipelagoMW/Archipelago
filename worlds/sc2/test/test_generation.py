@@ -356,6 +356,22 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(item_names.WARHOUND, world_items)
         self.assertIn(item_names.MARAUDER_PROGRESSIVE_STIMPACK, world_items)
         self.assertIn(item_names.REAPER_PROGRESSIVE_STIMPACK, world_items)
+    
+    def test_vanilla_items_only_and_exclude_op_items_together_allow_one_level_of_regen_biosteel(self) -> None:
+        world_options = {
+            # Ensuring an excess of locations so expected items don't get culled
+            **self.ALL_CAMPAIGNS,
+            'mission_order': options.MissionOrder.option_grid,
+            'maximum_campaign_size': options.MaximumCampaignSize.range_end,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'selected_races': {SC2Race.TERRAN.get_title()},
+            # Options under test
+            'vanilla_items_only': True,
+            'exclude_overpowered_items': True,
+        }
+        self.generate_world(world_options)
+        world_items = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(world_items.count(item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL), 1)
 
     def test_evil_awoken_with_vanilla_items_only_generates(self) -> None:
         world_options = {
