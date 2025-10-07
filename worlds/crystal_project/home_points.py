@@ -73,7 +73,8 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(SARA_SARA_BEACH_WEST_AP_REGION, "Beach Bird's Nest", 2709, lambda state: logic.has_vertical_movement(state)),
 
         LocationData(BEAURIOR_VOLCANO_AP_REGION, "Beaurior Rock", 1792),
-        LocationData(BEAURIOR_VOLCANO_AP_REGION, "Beaurior Volcano Peak", 3037, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
+        #TODO: put volcano peak in separate ap region instead of included in Beaurior Rock (also items nearby, not just homepoint stone)
+        LocationData(BEAURIOR_ROCK_AP_REGION, "Beaurior Volcano Peak", 3037, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
 
         LocationData(BEAURIOR_ROCK_AP_REGION, "Boss Room", 822, lambda state: logic.has_key(state, SMALL_KEY, 4)),
 

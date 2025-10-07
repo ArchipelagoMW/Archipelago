@@ -1,5 +1,6 @@
 from typing import List, Dict, Tuple, Callable, Optional, Union, Iterable, TYPE_CHECKING
 from BaseClasses import Region, Location, CollectionState
+from worlds.crystal_project.constants.ap_regions import CAPITAL_SEQUOIA_AP_REGION, SPAWNING_MEADOWS_AP_REGION
 from .options import CrystalProjectOptions
 from .locations import LocationData
 from .items import display_region_name_to_pass_dict
@@ -345,9 +346,10 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, SKUMPARADISE_AP_REGION, [PROVING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION],
                     {PROVING_MEADOWS_AP_REGION: lambda state: logic.has_jobs(state, 3)})
-    fancy_add_exits(world, CAPITAL_SEQUOIA_AP_REGION, [JOJO_SEWERS_AP_REGION, ROLLING_QUINTAR_FIELDS_AP_REGION, COBBLESTONE_CRAG_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, CASTLE_SEQUOIA_AP_REGION, SKUMPARADISE_AP_REGION],
+    fancy_add_exits(world, CAPITAL_SEQUOIA_AP_REGION, [JOJO_SEWERS_AP_REGION, BOOMER_SOCIETY_AP_REGION, ROLLING_QUINTAR_FIELDS_AP_REGION, COBBLESTONE_CRAG_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, CASTLE_SEQUOIA_AP_REGION, SKUMPARADISE_AP_REGION],
                     # why rental and horizontal both listed?
-                    {COBBLESTONE_CRAG_AP_REGION: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state),
+                    {BOOMER_SOCIETY_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
+                     COBBLESTONE_CRAG_AP_REGION: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state),
                      GREENSHIRE_REPRISE_AP_REGION: lambda state: logic.has_jobs(state, 5),
                      #note for eme: technically possible to get into the first dungeon with quintar instead of glide, but it's hard lol; come from Quintar Sanctum save point and go west up mountain and fall down through grate (that part's easy) then the quintar jump to the lamp is hard
                      CASTLE_SEQUOIA_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)})
@@ -356,7 +358,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      CAPITAL_JAIL_AP_REGION: lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_swimming(state),
                      THE_PALE_GROTTO_AP_REGION: lambda state: logic.has_swimming(state),
                      QUINTAR_NEST_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_swimming(state))})
-    fancy_add_exits(world, BOOMER_SOCIETY_AP_REGION, [JOJO_SEWERS_AP_REGION, GREENSHIRE_REPRISE_AP_REGION])
+    fancy_add_exits(world, BOOMER_SOCIETY_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, JOJO_SEWERS_AP_REGION, GREENSHIRE_REPRISE_AP_REGION])
     fancy_add_exits(world, ROLLING_QUINTAR_FIELDS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, QUINTAR_NEST_AP_REGION, QUINTAR_SANCTUM_AP_REGION, QUINTAR_RESERVE_AP_REGION],
                     {QUINTAR_SANCTUM_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_vertical_movement(state)),
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_vertical_movement(state)})
@@ -584,7 +586,7 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
 def combine_callables(callable1: Callable[[CollectionState], bool], callable2: Callable[[CollectionState], bool]) -> Callable[[CollectionState], bool]:
     return lambda state, a=callable1, b=callable2: a(state) and b(state)
 
-def fancy_add_exits(self, region: str, exits: Union[Iterable[str], Dict[str, Optional[str]]],
+def fancy_add_exits(self, region: str, exits: List[str],
                     rules: Dict[str, Callable[[CollectionState], bool]] | None = None):
     if rules is not None:
         for region_rule in rules:
@@ -599,13 +601,19 @@ def fancy_add_exits(self, region: str, exits: Union[Iterable[str], Dict[str, Opt
             rules[destination_ap_region] = combine_callables(rules[destination_ap_region], rules_on_display_regions[destination_display_region])
         else:
             rules[destination_ap_region] = rules_on_display_regions[destination_display_region]
+
+    # all regions except Menu have an exit to menu
+    if region != MENU:
+        exits.append(MENU)
+
     self.multiworld.get_region(region, self.player).add_exits(exits, rules)
 
 def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOptions) -> None:
     logic = CrystalProjectLogic(world.player, options)
 
     fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, MERCURY_SHRINE_AP_REGION, SALMON_RIVER_AP_REGION, POKO_POKO_DESERT_AP_REGION, GANYMEDE_SHRINE_AP_REGION, DIONE_SHRINE_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION, LANDS_END_AP_REGION, JIDAMBA_TANGLE_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, MODDED_ZONE_AP_REGION],
-                    {CAPITAL_SEQUOIA_AP_REGION: lambda state: state.has(GAEA_STONE, world.player),
+                    # If regionsanity is enabled it will set its own origin region, if it isn't we should connect menu to spawning meadows
+                    {SPAWNING_MEADOWS_AP_REGION: lambda state: options.regionsanity.value == options.regionsanity.option_false,CAPITAL_SEQUOIA_AP_REGION: lambda state: state.has(GAEA_STONE, world.player),
                      MERCURY_SHRINE_AP_REGION: lambda state: state.has(MERCURY_STONE, world.player),
                      SALMON_RIVER_AP_REGION: lambda state: state.has(POSEIDON_STONE, world.player),
                      POKO_POKO_DESERT_AP_REGION: lambda state: state.has(MARS_STONE, world.player),

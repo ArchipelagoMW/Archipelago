@@ -1,5 +1,6 @@
 from typing import List, Optional, Callable, NamedTuple
 from BaseClasses import CollectionState
+from worlds.crystal_project.constants.display_regions import SARA_SARA_BAZAAR_DISPLAY_NAME
 from .options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
 from .constants.jobs import *
@@ -92,8 +93,8 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dizzy noob chucks something at your face", 831 + npc_index_offset), #(276, 116, -204); Fervor Charm
         LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Not-at-all shady guy", 124 + npc_index_offset), #(181, 132, -200); Rotten Salmon
         #Todo NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
-        #Todo NPCs Player Options: do we want a filter option to add the guy who fishes things up for you (Z2_FisherOnDock ID 121 (166, 133, -208))
         LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Cartographer", 1153 + npc_index_offset), #guy who gives you a map of Delende if you don't have one (Z2_MapMan (198, 131, -74)) Fixed Missable
+        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Fish at the hatchery", 121 + npc_index_offset, lambda state: state.has("Item - Flimsy Rod", player) and state.has("Item - Plug Lure", player)),  # Fisher (Z2_FisherOnDock ID 121 (166, 133, -208))
         #Todo NPCs Shortcuts: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
 
         #Grans House (Delende)
@@ -481,7 +482,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Lurking behind bookcase", 434 + treasure_index_offset), #Potion Pouch chest
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Past hidden staircase", 694 + treasure_index_offset), #Tachi chest
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Dance above the koi pond", 1103 + treasure_index_offset), #Training Gi chest
-        LocationData(OKIMOTO_NS_AP_REGION, "Overpass Chest - Mountain lake north of the yashiki", 3534 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state)), #(605, 228, -270) 3rd Overpass Scrap in Overpass main map
+        LocationData(OKIMOTO_NS_AP_REGION, "Overpass Chest - Mountain lake north of the yashiki", 3534 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or logic.has_swimming(state)), #(605, 228, -270) 3rd Overpass Scrap in Overpass main map
 
         #NPCs
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " NPC - Silver on the way up", 359 + npc_index_offset), #Dust
@@ -547,10 +548,11 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Poko Poko Desert
         #Treasure chests
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Quintar leapfrog", 1080 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Butter Cutter chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - South of tricky Quintar Gold", 1082 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Hatchet chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - North Lookout Tower", 1190 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #North Lookout Token chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - This chests (on) a butte", 1169 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dueller
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Quintar leapfrog", 1080 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Butter Cutter chest
+        # if you're Good At Jumping you can get to this chest south of rocky outcropping gold with no mounts
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - South of tricky Quintar Gold", 1082 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Hatchet chest
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - North Lookout Tower", 1190 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME) or logic.has_vertical_movement(state)), #North Lookout Token chest
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - This chests (on) a butte", 1169 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME)), #Dueller
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Stormy first floor of ruins", 2676 + treasure_index_offset), #Fenix Juice chest
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - West Lookout Tower", 1170 + treasure_index_offset), #West Lookout Token chest
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Potion chest to fortify you for jumping puzzle from hell", 2708 + treasure_index_offset),
@@ -563,6 +565,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Todo NPCs CheckOrNot: three Quintar Eggs in Poko Poko Desert (Nest) map
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver beneath overhang in ruins south of shrine", 2675 + npc_index_offset), #Dust
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver slumbering in broken house NE of shrine", 1081 + npc_index_offset), #Ingot
+        # if you're Good At Jumping you can get to this rocky outcropping gold with no mounts
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Rocky outcropping Gold will put your Quintar to the test", 2817 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Dust
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver in desert arch shade", 2682 + npc_index_offset), #Ingot
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Thirsty Lad", 1201 + npc_index_offset, lambda state: state.has(SPECIAL_MILK, player)),
@@ -621,18 +624,18 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Treasure chests
         LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " Chest - South of Beach Birds Nest", 154 + treasure_index_offset), #Ether chest
         LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " Chest - Across the palms above the dust", 1509 + treasure_index_offset), #Potion chest
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " Chest - Beach cave", 2718 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Blank Pages chest
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " Chest - Tightrope walk below Beach Birds Nest", 1546 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state)), #Potion chest; possible with rental if masochists play our game
+        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " Chest - Beach cave", 2718 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Blank Pages chest
+        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " Chest - Tightrope walk below Beach Birds Nest", 1546 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state)), #Potion chest; possible with rental if masochists play our game/Good At Jumping option
 
         #NPCs
         #Todo NPCs Job Masters: Master Dervish ID 3575 (-255, 103, -237); gives you Dervish Seal in exchange for job mastery
         LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Cross my palms with Silver", 2693 + npc_index_offset), #Dust
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver past angry birds", 2697 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Dust
+        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver past angry birds", 2697 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_glide(state)), #Dust
         LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver south of Beach Birds Nest", 2694 + npc_index_offset), #Ingot
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver at the foot of the Tower of Zot", 2699 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ingot
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Lonely Islet Silver", 2878 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ingot
+        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver at the foot of the Tower of Zot", 2699 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Ingot
+        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Lonely Islet Silver", 2878 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Ingot
         LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Southern silver along the cliffside", 2692 + npc_index_offset), #Ore
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver chilling in beach cave", 2698 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
+        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver chilling in beach cave", 2698 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Ore
         LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver further along beach", 2877 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
 
         #Ancient Reservoir
@@ -733,8 +736,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(THE_OPEN_SEA_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " Chest - South of Jidamba Tangle 2", 3765 + treasure_index_offset, lambda state: logic.has_swimming(state)), #Z-Potion chest
 
         #NPCs
-        #Todo NPCs Player Options: (-139, 91, 123) do we want a filter option to add the guy who fishes things up for you
-        #LocationData(THE_OPEN_SEA_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " NPC - Z27_FisherOnRaft", 2804 + npc_index_offset),
+        LocationData(THE_OPEN_SEA_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " NPC - I'm on a raft!", 2804 + npc_index_offset, lambda state: state.has("Item - Super Rod", player) and state.has("Item - Jigging Lure", player)),
         #CheckOrNot: (930, 91, 253) do we put a check on the guy who gives you a Gaea Shard if you get there with no Salmon lol: no
         #LocationData(THE_OPEN_SEA_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " NPC - Z34_SinisterSailor", 2520 + npc_index_offset),
 
@@ -1004,6 +1006,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold tucked in melted snow past the Chips Challenge east of shrine", 2846 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ore
         LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold past the Athenaeum Chips Challenge", 1602 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
         LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Overpass NPC - Gold past Tall Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset), #1st Gold Dust Overpass (Cloudy Wind)
+        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Fish in the hut", 1549 + npc_index_offset, lambda state: state.has("Item - Tough Rod", player) and state.has("Item - Fly Lure", player)), #Z8_FisherInHut (197, 192, -441)
 
         #Northern Cave
         #Treasure chests
@@ -1108,19 +1111,19 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Jidamba Tangle
         #Treasure chests
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Inside overgrown building E of Eaclaneya", 1629 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Demon Plate chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Up a tree in north foliage", 3024 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
+        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Inside overgrown building E of Eaclaneya", 1629 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Demon Plate chest
+        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Up a tree in north foliage", 3024 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Ether chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Along a river through the foliage", 3026 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Atop overgrown building E of Eaclaneya", 3028 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
+        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Atop overgrown building E of Eaclaneya", 3028 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Ether chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against eastern side of Eaclaneya", 2801 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Flame Guard chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against western side of Eaclaneya", 2802 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Flamespike chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Smack in the center of the foliage", 1632 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Foliage Key chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - NW foliage", 2807 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Partizan chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked below NW foliage", 3025 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Potion chest
+        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Smack in the center of the foliage", 1632 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Foliage Key chest
+        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - NW foliage", 2807 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Partizan chest
+        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked below NW foliage", 3025 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Potion chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Atop Eaclaneya", 2808 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Rune Bow chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Fly down from Weaver Outpost to pedestal", 2803 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Siege Bow chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Island in the river through the foliage", 3011 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Tower Shield chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - North of foliage river", 3027 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Z-Potion chest
+        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Island in the river through the foliage", 3011 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Tower Shield chest
+        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - North of foliage river", 3027 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Z-Potion chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Accompanied by orange cave flowers", 1435 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Cave Key chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Hop from underground root to sneaky passage pond", 2798 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ravens Cloak chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Underground sneaky passage by NE cave exit", 2797 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ravens Hood chest
@@ -1130,9 +1133,9 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #NPCs
         #Todo NPCs Job Masters: Jidamba Tangle (Outpost) has Master Weaver ID 3579 (627, 140, 77); gives you Weaver Seal in exchange for job mastery
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Chloe Queen of the Canopy", 2775 + npc_index_offset), #Super Rod (828, 119, 99); Fixed Missable
+        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Chloe Queen of the Canopy", 2775 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Super Rod (828, 119, 99); Fixed Missable
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Splish splash Diamond", 2871 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond hot girl summer on the beach", 2873 + npc_index_offset), #Dust
+        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond hot girl summer on the beach", 2873 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state) or logic.has_glide(state)), #Dust
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Damp Diamond lurking beneath diamondsmith", 2869 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond at southern mouth of cave", 2874 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Fly from Summoners weeping tree to hot tub Diamond", 2876 + npc_index_offset, lambda state: logic.has_glide(state)), #Ingot
@@ -1326,11 +1329,11 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         LocationData(SPAWNING_MEADOWS_AP_REGION, SPAWNING_MEADOWS_DISPLAY_NAME + " Boss - Shaku Summon", 477 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 54)), #(118, 109, 10) Monster ID: 102
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Niltsi Summon", 1109 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 54)), #376, 178, -345 (Capital Sequoia (Maze) map) Monster ID: 93
         LocationData(SALMON_BAY_AP_REGION, SALMON_BAY_DISPLAY_NAME + " Boss - Guaba Summon", 1138 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #-50, 91, -330 Monster ID: 94
-        LocationData(THE_UNDERCITY_AP_REGION, "Underpass Boss - Pah Summon", 1130 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_swimming(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #614, 91, -213 Monster ID: 97
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Boss - Tira Summon", 1132 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE_AP_REGION, player=player) or state.can_reach(GANYMEDE_SHRINE_AP_REGION, player=player)) and logic.is_area_in_level_range(state, 57)), #(720, 138, -278) Monster ID: 98
+        LocationData(THE_UNDERCITY_AP_REGION, "Underpass Boss - Pah Summon", 1130 + boss_index_offset, lambda state: (logic.has_swimming(state) or logic.has_glide(state)) and state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #614, 91, -213 Monster ID: 97
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Boss - Tira Summon", 1132 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE, player=player) or state.can_reach(GANYMEDE_SHRINE, player=player)) and logic.is_area_in_level_range(state, 57)), #(720, 138, -278) Monster ID: 98
         LocationData(LAKE_DELENDE_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " Boss - Ioske Summon", 1111 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 57)), #97, 126, -211 Monster ID: 92
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Boss - Pamoa Summon", 1136 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 53)), #498, 218, -412 Monster ID: 91
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Boss - Juses Summon", 1134 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_swimming(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(672, 124, 106) Monster ID: 99
+        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Tall Heights Boss - Pamoa Summon", 1136 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 53)), #498, 218, -412 Monster ID: 91
+        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Boss - Juses Summon", 1134 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 58)), #(672, 124, 106) Monster ID: 99
         #Mind's Delusion is part of the Coyote fight
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Boss - Coyote Summon", 1140 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #(-60, 53, 202) Monster ID: 95
 

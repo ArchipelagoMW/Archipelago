@@ -181,12 +181,15 @@ class LevelGating(Choice):
     Level Catch-Up: Progressive Levels are added to the pool. Collecting them will help your party catch up in levels (and LP!) based on the number you've collected. For example, if the Progressive Level
     Size Setting is 6 (see below), 1 Progressive Level will bring your party's level up to 6, 2 Progressive Levels will bring your party's level up to 12, etc. If your party
     has already reached that level, no extra levels will be granted. 2 LP are granted per 1 level granted. In-game tracking will light up checks that you have access to based on the number you have collected.
+
+    Level Set: A combination of Level Catch-Up and Capped. The player will always be at the level set by the Progressive Level. There is no escape.
     """
     display_name = "Level Gating"
     option_none = 0
     option_level_passes = 1
     option_level_capped = 2
     option_level_catch_up = 3
+    option_level_set = 4
     default = 1
 
 class LevelComparedToEnemies(Range):
@@ -215,6 +218,7 @@ class ProgressiveLevelSize(Range):
        Level Passes - At the start, areas up to level 6 are considered in logic. The first Progressive Level you collect will signal that areas up to 12 are now logic, the second up to 18, etc.
        Level Capped - Your party's level cap starts at 6. The first Progressive Level you collect will increase your party's level cap to 12, the second to 18, and so on.
        Level Catch-Up - Your party is leveled up to 6 at the start. The first Progressive Level you collect will bring your party's level up to 12 if it isn't already, the second up to 18, and so on.
+       Level Set - Your party's level and level cap start at 6. The first Progressive Level you collect will increase your party's level and level cap to 12, the second to 18, and so on.
 
     This setting will only increase your party's starting level (3 by default) if you pick Level Catch-Up.
     """
@@ -233,12 +237,6 @@ class MaxLevel(Range):
     range_start = 3
     range_end = 99
     default = 60
-
-class EasyLeveling(Toggle):
-    """
-    When enabled, characters will not receive reduced experience for being dead or for being a higher level than the fought enemy.
-    """
-    display_name = "Easy Leveling"
 
 class KeyMode(Choice):
     """
@@ -263,6 +261,27 @@ class ObscureRoutes(Toggle):
     When enabled, connections between regions that are difficult to find will be expected in logic.
     """
     display_name = "Obscure Routes"
+
+class AutoSpendLP(Toggle):
+    """
+    When enabled, every time a character earns LP it will automatically spend LP on abilities or passives.
+    Extra LP earned on a job that is maxxed will then be sent to your subjob or if that is also maxxed a random unmaxxed job.
+    """
+    display_name = "Automatically Spend LP"
+
+class AutoEquipPassives(Toggle):
+    """
+    When enabled, every time a character unlocks a new passive, it will equip it immediately if enough passive points are available.
+    Passives with drawbacks, that enable equipping more gear types, or that modify threat are not automatically equipped.
+    If mods are enabled all passives are auto-equipped with no exclusions.
+    """
+    display_name = "Automatically Equip Passives"
+
+class EasyLeveling(Toggle):
+    """
+    When enabled, characters will not receive reduced experience for being dead or for being a higher level than the fought enemy.
+    """
+    display_name = "Easy Leveling"
 
 #"""Item Pool Options"""
 class ProgressiveEquipmentMode(DefaultOnToggle):
@@ -304,6 +323,31 @@ class IncludeScholarAbilities(DefaultOnToggle):
     display_name = "Include Scholar Abilities in the item pool"
 
 #"""Bonus Fun"""
+class TrapLikelihood(Range):
+    """
+    This is the likelihood that a trap will replace a filler check, a value of 0 means no traps
+    """
+    display_name = "Trap Likelihood"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+class ItemInfoMode(Choice):
+    """
+    For Full, all treasure and store icons on the map will display if they are progression, useful, or filler items.
+
+    For Earned, all treasure and store icons on the map will display as mimics until you obtain the map-revealing item that is not yet implemented idk come back v0.9.
+
+    For Obscured, all treasure and store icons on the map will display as mimics permanently.
+    If you find skipping treasures is distasteful but part of your brain always wants to be efficient, this option is for you!
+    It's also good for a race environment.
+    """
+    display_name = "Item Info Mode"
+    option_full = 0
+    option_earned = 1
+    option_obscured = 2
+    default = 0
+
 class RandomizeMusic(Toggle):
     """
     When enabled, music will be randomized upon connecting to the AP World. (This toggles the base game's Randomize Music function.)
@@ -350,21 +394,25 @@ class CrystalProjectOptions(PerGameCommonOptions):
     levelComparedToEnemies: LevelComparedToEnemies
     progressiveLevelSize: ProgressiveLevelSize
     maxLevel: MaxLevel
-    easyLeveling: EasyLeveling
     keyMode: KeyMode
     obscureRoutes: ObscureRoutes
+    auto_spend_lp: AutoSpendLP
+    auto_equip_passives: AutoEquipPassives
+    easyLeveling: EasyLeveling
     progressiveEquipmentMode: ProgressiveEquipmentMode
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
     includeSummonAbilities: IncludeSummonAbilities
     includeScholarAbilities: IncludeScholarAbilities
+    trapLikelihood: TrapLikelihood
+    item_info_mode: ItemInfoMode
     randomizeMusic: RandomizeMusic
     useMods: UseMods
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity, Regionsanity],
-    "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, EasyLeveling, KeyMode, ObscureRoutes],
+    "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, AutoSpendLP, AutoEquipPassives, EasyLeveling],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
-    "Bonus Fun": [RandomizeMusic, UseMods]
+    "Bonus Fun": [ItemInfoMode, RandomizeMusic, UseMods]
 }
