@@ -116,7 +116,10 @@ def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
             "Black/White Squares",
             "Colored Squares",
             "Sound Dots",
-            "Progressive Symmetry"
+            "Progressive Symmetry",
+            "Progressive Shapers",
+            "Progressive Squares",
+            "Progressive Discard Symbols",
         ]
 
         # Only consider symbols that are actually in the pool
