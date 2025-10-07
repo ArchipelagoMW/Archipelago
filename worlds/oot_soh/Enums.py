@@ -99,7 +99,7 @@ class Regions(str, Enum):
     WASTELAND_NEAR_COLOSSUS = "Wasteland Near Colossus"
     DESERT_COLOSSUS = "Desert Colossus"
     DESERT_COLOSSUS_OASIS = "Desert Colossus Oasis"
-    DESERT_COLOSSUS_FROM_SPIRIT_ENTRYWAY = "Desert Colossus From Spirit Entryway"
+    DESERT_COLOSSUS_OUTSIDE_TEMPLE = "Desert Colossus Outside Temple"
     COLOSSUS_GREAT_FAIRY_FOUNTAIN = "Colossus Great Fairy Fountain"
     COLOSSUS_GROTTO = "Colossus Grotto"
     MARKET_ENTRANCE = "Market Entrance"
