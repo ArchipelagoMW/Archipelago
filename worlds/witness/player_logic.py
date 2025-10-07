@@ -293,7 +293,7 @@ class WitnessPlayerLogic:
 
     def get_entity_requirement(self, entity_id: int) -> WitnessRule:
         """
-        Get requirement of entity by its hex code.
+        Get requirement of entity by its id.
         These requirements are cached, with the actual function calculating them being reduce_req_within_region.
         """
         requirement = self.REQUIREMENTS_BY_ENTITY_ID.get(entity_id)

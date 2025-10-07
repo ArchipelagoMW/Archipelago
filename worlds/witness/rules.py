@@ -176,7 +176,7 @@ def _has_item(item: str, world: "WitnessWorld",
     in which case we return it as an item-count pair ("SimpleItemRepresentation"). This allows some optimisation later.
     """
 
-    assert item not in static_witness_logic.ENTITIES_BY_ID, "Requirements can no longer contain entity hexes directly."
+    assert item not in static_witness_logic.ENTITIES_BY_ID, "Requirements can no longer contain entity ids directly."
 
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
         region = world.get_region(item)
