@@ -1,10 +1,6 @@
-from ..constants.jobs import *
 from ..constants.keys import *
 from ..constants.ap_regions import *
-from ..constants.key_items import *
 from ..constants.mounts import *
-from ..constants.item_groups import *
-from ..constants.region_passes import *
 from .bases import CrystalProjectTestBase
 
 class TestCapitalSequoiaNoLevelGating(CrystalProjectTestBase):

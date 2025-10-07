@@ -1,6 +1,5 @@
 from typing import List, Dict, Tuple, Callable, Optional, Union, Iterable, TYPE_CHECKING
 from BaseClasses import Region, Location, CollectionState
-from worlds.crystal_project.constants.ap_regions import CAPITAL_SEQUOIA_AP_REGION, SPAWNING_MEADOWS_AP_REGION
 from .options import CrystalProjectOptions
 from .locations import LocationData
 from .items import display_region_name_to_pass_dict

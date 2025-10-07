@@ -184,7 +184,7 @@ class CrystalProjectWorld(World):
                 location = LocationData(modded_location.display_region,
                                         modded_location.name,
                                         modded_location.code,
-                                        build_condition_rule(modded_location.region, modded_location.rule_condition, self))
+                                        build_condition_rule(modded_location.display_region, modded_location.rule_condition, self))
                 locations.append(location)
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
@@ -192,7 +192,7 @@ class CrystalProjectWorld(World):
                 location = LocationData(shop.display_region,
                                         shop.name,
                                         shop.code,
-                                        build_condition_rule(modded_location.region, shop.rule_condition, self))
+                                        build_condition_rule(shop.display_region, shop.rule_condition, self))
                 locations.append(location)
 
         if self.options.useMods and self.options.killBossesMode.value == self.options.killBossesMode.option_true:
@@ -200,7 +200,7 @@ class CrystalProjectWorld(World):
                 location = LocationData(modded_location.display_region,
                                         modded_location.name,
                                         modded_location.code,
-                                        build_condition_rule(modded_location.region, modded_location.rule_condition, self))
+                                        build_condition_rule(modded_location.display_region, modded_location.rule_condition, self))
                 locations.append(location)
 
         if self.options.useMods:

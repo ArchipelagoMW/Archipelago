@@ -10,13 +10,14 @@ from .items import item_table, equipment_index_offset, item_index_offset, job_in
 from .locations import get_locations, get_shops, get_bosses, npc_index_offset, treasure_index_offset, crystal_index_offset, boss_index_offset, shop_index_offset
 from .unused_locations import get_unused_locations
 from .constants.biomes import get_display_region_by_id
+from .constants.display_regions import *
 from .constants.keys import *
 from .constants.key_items import *
 from .rules import CrystalProjectLogic
 import json
 
 if TYPE_CHECKING:
-    from . import CrystalProjectWorld, CAPITAL_JAIL, BEAURIOR_ROCK, SARA_SARA_BAZAAR, CASTLE_RAMPARTS
+    from . import CrystalProjectWorld
 
 MAX_SUPPORTED_EDITOR_VERSION: int = 30
 
@@ -340,19 +341,19 @@ def get_removed_locations(mod_info: List[ModInfoModel]) -> List[ModLocationData]
 
                 for vanilla_location in vanilla_locations:
                     if vanilla_location.code == treasure_id:
-                        removed_locations.append(ModLocationData(vanilla_location.region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
                     if vanilla_location.code == npc_id:
-                        removed_locations.append(ModLocationData(vanilla_location.region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
                     if vanilla_location.code == crystal_id:
-                        removed_locations.append(ModLocationData(vanilla_location.region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
 
                 for boss in vanilla_bosses:
                     if boss.code == boss_id:
-                        removed_locations.append(ModLocationData(boss.region, boss.name, boss.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(boss.ap_region, boss.name, boss.code, location_id, '0,0,0', biome_id, None))
 
                 for shop in vanilla_shops:
                     if shop.code == shop_id:
-                        removed_locations.append(ModLocationData(shop.region, shop.name, shop.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(shop.ap_region, shop.name, shop.code, location_id, '0,0,0', biome_id, None))
 
     return removed_locations
 
@@ -688,19 +689,19 @@ def build_condition_rule(region, condition, world: "CrystalProjectWorld") -> Opt
         return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state) and region_rule
 
 def build_region_specific_rules(region, player:int, logic: CrystalProjectLogic) -> Optional[Callable[[CollectionState], bool]]:
-    if region == CAPITAL_SEQUOIA:
+    if region == CAPITAL_SEQUOIA_DISPLAY_NAME:
         return lambda state: logic.has_key(state, LUXURY_KEY) and state.has(PROGRESSIVE_LUXURY_PASS, player) and logic.has_key(state, GARDENERS_KEY)
-    elif region == SARA_SARA_BAZAAR:
+    elif region == SARA_SARA_BAZAAR_DISPLAY_NAME:
         return lambda state: logic.has_key(state, ROOM_ONE_KEY)
-    elif region == CAPITAL_JAIL:
+    elif region == CAPITAL_JAIL_DISPLAY_NAME:
         return lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, WEST_WING_KEY) and logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, DARK_WING_KEY) and logic.has_key(state, CELL_KEY, 6)
-    elif region == BEAURIOR_ROCK:
+    elif region == BEAURIOR_ROCK_DISPLAY_NAME:
         return lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)
-    elif region == SLIP_GLIDE_RIDE:
+    elif region == SLIP_GLIDE_RIDE_DISPLAY_NAME:
         return lambda state: logic.has_key(state, RED_DOOR_KEY, 3)
-    elif region == SEQUOIA_ATHENAEUM:
+    elif region == SEQUOIA_ATHENAEUM_DISPLAY_NAME:
         return lambda state: logic.has_key(state, ICE_PUZZLE_KEY, 6)
-    elif region == CASTLE_RAMPARTS:
+    elif region == CASTLE_RAMPARTS_DISPLAY_NAME:
         return lambda state: logic.has_key(state, RAMPART_KEY)
     else:
         return None
