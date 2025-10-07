@@ -468,7 +468,7 @@ def generate_rules_package():
 
 def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_location_rule(CandyBox2LocationName.DISAPPOINTED_EMOTE_CHOCOLATE_BAR, can_farm_candies(), None)
-    rules_package.add_location_rule(CandyBox2LocationName.HP_BAR_UNLOCK, can_farm_candies(), None)
+    rules_package.add_location_rule(CandyBox2LocationName.HP_BAR_UNLOCK, no_conditions(), None)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_LOLLIPOP_ON_EXHAUST_CHUTE, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_WOODEN_SWORD, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_IRON_AXE, rule_location(CandyBox2LocationName.VILLAGE_FORGE_BUY_WOODEN_SWORD), CandyBox2Room.VILLAGE_FORGE)
