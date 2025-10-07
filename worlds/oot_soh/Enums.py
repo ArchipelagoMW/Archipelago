@@ -133,7 +133,7 @@ class Regions(str, Enum):
     KAK_CARPENTER_BOSS_HOUSE = "Kak Carpenter Boss House"
     KAK_HOUSE_OF_SKULLTULA = "Kak House of Skulltula"
     KAK_IMPAS_HOUSE = "Kak Impas House"
-    KAK_IMPAS_HOUSE_COW = "Kak Impas House Cow"
+    KAK_COW_CAGE = "Kak Cow Cage"
     KAK_IMPAS_LEDGE = "Kak Impas Ledge"
     KAK_IMPAS_HOUSE_BACK = "Kak Impas House Back"
     KAK_WINDMILL = "Kak Windmill"
