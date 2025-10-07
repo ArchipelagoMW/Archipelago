@@ -25,7 +25,7 @@ class RegionDefinition:
 
 
 @dataclass
-class EntityDefinition(NamedTuple):
+class EntityDefinition:
     entity_name: str
     entity_id: int
     region: RegionDefinition | None

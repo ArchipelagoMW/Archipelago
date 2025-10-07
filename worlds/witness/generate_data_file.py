@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 from data import static_logic as static_witness_logic
+from data.utils import entity_id_to_canonical_id_string
 
 if __name__ == "__main__":
     with open("data/APWitnessData.h", "w") as datafile:
@@ -16,10 +17,10 @@ if __name__ == "__main__":
         area_to_entity_ids = defaultdict(list)
 
         for entity_id, entity_object in static_witness_logic.ENTITIES_BY_ID.items():
-            location_id = entity_object["id"]
+            location_id = entity_object.entity_id
 
             area = entity_object["area"].name
-            area_to_entity_ids[area].append(entity_id)
+            area_to_entity_ids[area].append(entity_id_to_canonical_id_string(entity_id))
 
             if location_id is None:
                 continue
@@ -47,8 +48,8 @@ if __name__ == "__main__":
         datafile.write("inline std::map<int, std::string> entityToName = {")
         datafile.write(
             "\n".join(
-                "\t{ " + entity_hex + ', "' + entity_object["checkName"] + '" },'
-                for entity_hex, entity_object in static_witness_logic.ENTITIES_BY_ID.items()
+                "\t{ " + entity_id_to_canonical_id_string(entity_id) + ', "' + entity_object.entity_name + '" },'
+                for entity_id, entity_object in static_witness_logic.ENTITIES_BY_ID.items()
             )
         )
         datafile.write("\n};\n\n")

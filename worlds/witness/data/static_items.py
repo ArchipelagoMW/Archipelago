@@ -4,7 +4,8 @@ from BaseClasses import ItemClassification
 
 from . import static_logic as static_witness_logic
 from .item_definition_classes import DoorItemDefinition, ItemCategory, ItemData
-from .static_locations import ID_START
+
+ID_START = 158000
 
 ITEM_DATA: Dict[str, ItemData] = {}
 ITEM_GROUPS: Dict[str, Set[str]] = {}
@@ -42,8 +43,8 @@ def populate_items() -> None:
         elif definition.category is ItemCategory.DOOR:
             classification = ItemClassification.progression
 
-            first_entity_hex = cast(DoorItemDefinition, definition).panel_id_hexes[0]
-            entity_type = static_witness_logic.ENTITIES_BY_HEX[first_entity_hex]["entityType"]
+            first_entity_id = cast(DoorItemDefinition, definition).panel_entity_ids[0]
+            entity_type = static_witness_logic.ENTITIES_BY_ID[first_entity_id].entity_type
 
             if entity_type == "Door":
                 ITEM_GROUPS.setdefault("Doors", set()).add(item_name)
@@ -77,7 +78,7 @@ def get_item_to_door_mappings() -> Dict[int, List[int]]:
     for item_name, item_data in ITEM_DATA.items():
         if not isinstance(item_data.definition, DoorItemDefinition) or item_data.ap_code is None:
             continue
-        output[item_data.ap_code] = [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]
+        output[item_data.ap_code] = item_data.definition.panel_entity_ids
     return output
 
 

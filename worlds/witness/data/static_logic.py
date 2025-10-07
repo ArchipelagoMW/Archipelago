@@ -1,5 +1,5 @@
 from collections import Counter, defaultdict
-from typing import Dict, FrozenSet, List, Optional, Set, Tuple
+from typing import Dict, FrozenSet, List, Optional, Set
 
 from Utils import cache_argsless
 
@@ -40,7 +40,7 @@ class StaticWitnessLogicObj:
         self.ENTITIES_BY_NAME: Dict[str, EntityDefinition] = {}
         self.STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID: Dict[int, Dict[str, WitnessRule]] = {}
 
-        self.OBELISK_SIDE_ID_TO_EP_HEXES: Dict[int, Tuple[int]] = {}
+        self.OBELISK_SIDE_ID_TO_EP_IDS: Dict[int, List[int]] = {}
 
         self.EP_ID_TO_OBELISK_SIDE_ID: Dict[int, int] = {}
 
@@ -143,7 +143,7 @@ class StaticWitnessLogicObj:
 
             entity_name_full = line_split.pop(0)
 
-            entity_id = int(entity_name_full[0:7])
+            entity_id = int(entity_name_full[0:7], 16)
             entity_name = entity_name_full[9:-1]
 
             entity_requirement_string = line_split.pop(0)
@@ -201,7 +201,7 @@ class StaticWitnessLogicObj:
             elif "Pet the Dog" in entity_name:
                 entity_type = "Event"
                 location_type = "Good Boi"
-            elif entity_id & 0xFF000:
+            elif entity_id & 0xFF000 == 0xFF000:
                 entity_type = "Event"
                 location_type = None
             else:
@@ -222,9 +222,9 @@ class StaticWitnessLogicObj:
                 eps = set(next(iter(required_entities)))
                 eps -= {"Theater to Tunnels"}
 
-                eps_ints = (int(h, 16) for h in eps)
+                eps_ints = [int(h, 16) for h in eps]
 
-                self.OBELISK_SIDE_ID_TO_EP_HEXES[entity_id] = eps_ints
+                self.OBELISK_SIDE_ID_TO_EP_IDS[entity_id] = eps_ints
                 for ep_id in eps_ints:
                     self.EP_ID_TO_OBELISK_SIDE_ID[ep_id] = entity_id
 
@@ -310,7 +310,8 @@ def parse_items() -> None:
 
         if current_category in [ItemCategory.DOOR, ItemCategory.LASER]:
             # Map doors to IDs.
-            ALL_ITEMS[item_name] = DoorItemDefinition(item_code, current_category, arguments)
+            entity_ids = [int(entity_id_str, 16) for entity_id_str in arguments]
+            ALL_ITEMS[item_name] = DoorItemDefinition(item_code, current_category, entity_ids)
         elif current_category == ItemCategory.TRAP or current_category == ItemCategory.FILLER:
             # Read filler weights.
             weight = int(arguments[0]) if len(arguments) >= 1 else 1
@@ -350,6 +351,10 @@ def get_sigma_expert() -> StaticWitnessLogicObj:
 def get_umbra_variety() -> StaticWitnessLogicObj:
     return StaticWitnessLogicObj(get_umbra_variety_logic())
 
+vanilla: StaticWitnessLogicObj
+sigma_normal: StaticWitnessLogicObj
+sigma_expert: StaticWitnessLogicObj
+umbra_variety: StaticWitnessLogicObj
 
 def __getattr__(name: str) -> StaticWitnessLogicObj:
     if name == "vanilla":
@@ -369,10 +374,10 @@ ALL_REGIONS_BY_NAME = get_sigma_normal().ALL_REGIONS_BY_NAME
 ALL_AREAS_BY_NAME = get_sigma_normal().ALL_AREAS_BY_NAME
 STATIC_CONNECTIONS_BY_REGION_NAME = get_sigma_normal().STATIC_CONNECTIONS_BY_REGION_NAME
 
-ENTITIES_BY_HEX = get_sigma_normal().ENTITIES_BY_ID
+ENTITIES_BY_ID = get_sigma_normal().ENTITIES_BY_ID
 ENTITIES_BY_NAME = get_sigma_normal().ENTITIES_BY_NAME
-STATIC_DEPENDENT_REQUIREMENTS_BY_HEX = get_sigma_normal().STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID
+STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID = get_sigma_normal().STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID
 
-OBELISK_SIDE_ID_TO_EP_HEXES = get_sigma_normal().OBELISK_SIDE_ID_TO_EP_HEXES
+OBELISK_SIDE_ID_TO_EP_IDS = get_sigma_normal().OBELISK_SIDE_ID_TO_EP_IDS
 
 EP_TO_OBELISK_SIDE = get_sigma_normal().EP_ID_TO_OBELISK_SIDE_ID

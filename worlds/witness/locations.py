@@ -33,29 +33,25 @@ class WitnessPlayerLocations:
         elif world.options.shuffle_EPs == "obelisk_sides":
             self.PANEL_TYPES_TO_SHUFFLE.add("Obelisk Side")
 
-            for obelisk_loc in static_witness_locations.OBELISK_SIDES:
-                obelisk_loc_hex = static_witness_logic.ENTITIES_BY_NAME[obelisk_loc]["entity_hex"]
-                if player_logic.REQUIREMENTS_BY_HEX[obelisk_loc_hex] == frozenset({frozenset()}):
-                    self.CHECK_LOCATIONS.discard(obelisk_loc)
+            for obelisk_side_name in static_witness_locations.OBELISK_SIDES:
+                obelisk_side_id = static_witness_logic.ENTITIES_BY_NAME[obelisk_side_name].entity_id
+                if player_logic.REQUIREMENTS_BY_ENTITY_ID[obelisk_side_id] == frozenset({frozenset()}):
+                    self.CHECK_LOCATIONS.discard(obelisk_side_name)
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
 
-        self.CHECK_LOCATIONS.discard(static_witness_logic.ENTITIES_BY_HEX[player_logic.VICTORY_LOCATION]["checkName"])
+        self.CHECK_LOCATIONS.discard(static_witness_logic.ENTITIES_BY_ID[player_logic.VICTORY_LOCATION].entity_name)
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
-            static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]
-            for entity_hex in player_logic.COMPLETELY_DISABLED_ENTITIES
+            static_witness_logic.ENTITIES_BY_ID[entity_id].entity_name
+            for entity_id in player_logic.COMPLETELY_DISABLED_ENTITIES
         }
 
-        self.CHECK_PANELHEX_TO_ID = {
-            static_witness_logic.ENTITIES_BY_NAME[ch]["entity_hex"]: static_witness_locations.ALL_LOCATIONS_TO_ID[ch]
-            for ch in self.CHECK_LOCATIONS
-            if static_witness_logic.ENTITIES_BY_NAME[ch]["locationType"] in self.PANEL_TYPES_TO_SHUFFLE
-        }
-
-        self.CHECK_PANELHEX_TO_ID = dict(
-            sorted(self.CHECK_PANELHEX_TO_ID.items(), key=lambda item: item[1])
-        )
+        self.CHECK_LOCATION_IDS = sorted({
+            static_witness_locations.ALL_LOCATIONS_TO_ID[check_name]
+            for check_name in self.CHECK_LOCATIONS
+            if static_witness_logic.ENTITIES_BY_NAME[check_name].location_type in self.PANEL_TYPES_TO_SHUFFLE
+        })
 
         self.EVENT_LOCATION_TABLE = {
             event_location: None
@@ -63,14 +59,14 @@ class WitnessPlayerLocations:
         }
 
         check_dict = {
-            static_witness_logic.ENTITIES_BY_HEX[location]["checkName"]:
-            static_witness_locations.get_id(static_witness_logic.ENTITIES_BY_HEX[location]["entity_hex"])
-            for location in self.CHECK_PANELHEX_TO_ID
+            static_witness_logic.ENTITIES_BY_ID[location_id].entity_name:
+            static_witness_logic.ENTITIES_BY_ID[location_id].entity_id
+            for location_id in self.CHECK_LOCATION_IDS
         }
 
         self.CHECK_LOCATION_TABLE = {**self.EVENT_LOCATION_TABLE, **check_dict}
 
     def add_location_late(self, entity_name: str) -> None:
-        entity_hex = static_witness_logic.ENTITIES_BY_NAME[entity_name]["entity_hex"]
-        self.CHECK_LOCATION_TABLE[entity_hex] = static_witness_locations.get_id(entity_hex)
-        self.CHECK_PANELHEX_TO_ID[entity_hex] = static_witness_locations.get_id(entity_hex)
+        entity_id = static_witness_logic.ENTITIES_BY_NAME[entity_name].entity_id
+        self.CHECK_LOCATION_TABLE[entity_name] = entity_id
+        self.CHECK_LOCATION_IDS = sorted([*self.CHECK_LOCATION_IDS, entity_id])

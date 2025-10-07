@@ -176,7 +176,7 @@ def _has_item(item: str, world: "WitnessWorld",
     in which case we return it as an item-count pair ("SimpleItemRepresentation"). This allows some optimisation later.
     """
 
-    assert item not in static_witness_logic.ENTITIES_BY_HEX, "Requirements can no longer contain entity hexes directly."
+    assert item not in static_witness_logic.ENTITIES_BY_ID, "Requirements can no longer contain entity hexes directly."
 
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
         region = world.get_region(item)
@@ -296,11 +296,11 @@ def _meets_item_requirements(requirements: WitnessRule, world: "WitnessWorld") -
     )
 
 
-def make_lambda(entity_hex: str, world: "WitnessWorld") -> Optional[CollectionRule]:
+def make_lambda(entity_id: int, world: "WitnessWorld") -> Optional[CollectionRule]:
     """
     Lambdas are created in a for loop so values need to be captured
     """
-    entity_req = world.player_logic.REQUIREMENTS_BY_HEX[entity_hex]
+    entity_req = world.player_logic.REQUIREMENTS_BY_ENTITY_ID[entity_id]
 
     return _meets_item_requirements(entity_req, world)
 
@@ -319,17 +319,18 @@ def set_rules(world: "WitnessWorld") -> None:
         real_location = location
 
         if location in world.player_locations.EVENT_LOCATION_TABLE:
-            entity_hex_or_region_name = world.player_logic.EVENT_ITEM_PAIRS[location][1]
-            if entity_hex_or_region_name in static_witness_logic.ALL_REGIONS_BY_NAME:
-                set_rule(world.get_location(location), make_region_lambda(entity_hex_or_region_name, world))
+            entity_id_or_region_name = world.player_logic.EVENT_ITEM_PAIRS[location][1]
+            if isinstance(entity_id_or_region_name, str):
+                set_rule(world.get_location(location), make_region_lambda(entity_id_or_region_name, world))
                 continue
 
-            real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex_or_region_name]["checkName"]
+            entity_id = entity_id_or_region_name
+            real_location = static_witness_logic.ENTITIES_BY_ID[entity_id].entity_name
 
         associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location]
-        entity_hex = associated_entity["entity_hex"]
+        entity_id = associated_entity.entity_id
 
-        rule = make_lambda(entity_hex, world)
+        rule = make_lambda(entity_id, world)
         if rule is None:
             continue
 
