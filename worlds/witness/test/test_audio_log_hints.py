@@ -3,8 +3,9 @@ from typing import cast
 from Fill import distribute_items_restrictive
 
 from worlds.AutoWorld import call_all
-from worlds.witness import WitnessWorld
-from worlds.witness.test import WitnessMultiworldTestBase
+
+from .. import WitnessWorld
+from ..test.bases import WitnessMultiworldTestBase
 
 
 class TestDisabledAudioLogs(WitnessMultiworldTestBase):
