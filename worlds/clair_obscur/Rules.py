@@ -69,7 +69,7 @@ def set_rules(world):
     #         add_rule(loc, lambda state, pl=player, x=i: state.has("Lost Gestral", pl, x + 1))
     #
     # else:
-    if not world.options.char_shuffle:
+    if not world.options.gestral_shuffle:
         #2 gestrals in First Continent North
         add_rule(mw.get_location("Lost Gestral reward 1", player),
                  lambda state: state.has_any_count({"Progressive Rock": 2, "Area - Flying Waters": 1}, player))
