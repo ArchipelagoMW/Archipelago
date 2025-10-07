@@ -22,20 +22,6 @@ if __name__ == "__main__":
             area = entity_object.area.name
             area_to_entity_ids[area].append(entity_id_to_canonical_id_string(entity_id))
 
-            if location_id is None:
-                continue
-
-            area_to_location_ids[area].append(str(location_id))
-
-        datafile.write("inline std::map<std::string, std::set<int64_t>> areaNameToLocationIDs = {\n")
-        datafile.write(
-            "\n".join(
-                '\t{"' + area + '", { ' + ", ".join(location_ids) + " }},"
-                for area, location_ids in area_to_location_ids.items()
-            )
-        )
-        datafile.write("\n};\n\n")
-
         datafile.write("inline std::map<std::string, std::set<int64_t>> areaNameToEntityIDs = {\n")
         datafile.write(
             "\n".join(
