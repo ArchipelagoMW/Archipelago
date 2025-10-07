@@ -69,7 +69,7 @@ class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
             self.assertTrue(self.get_items_by_name("Arrows", 4))
 
         with self.subTest("Test that Discards ask for Triangles in normal, but Arrows in expert."):
-            desert_discard = "0x17CE7"
+            desert_discard = 0x17CE7
             triangles = frozenset({frozenset({"Triangles"})})
             arrows = frozenset({frozenset({"Arrows"})})
             both = frozenset({frozenset({"Triangles", "Arrows"})})
