@@ -336,8 +336,6 @@ class Regions(str, Enum):
     FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND = "Forest Temple NE Courtyard Skulltula Island"
     FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND_GS = "Forest Temple NE Courtyard Skulltula Island Gold Skulltula"
     FOREST_TEMPLE_MAP_ROOM = "Forest Temple Map Room"
-    FOREST_TEMPLE_SEWER = "Forest Temple Sewer"
-    FOREST_TEMPLE_DRAINED_SEWER = "Forest Temple Drained Sewer"
     FOREST_TEMPLE_WELL = "Forest Temple Well"
     FOREST_TEMPLE_BELOW_BOSS_KEY_CHEST = "Forest Temple Below Boss Key Chest"
     FOREST_TEMPLE_FLOORMASTER_ROOM = "Forest Temple Floormaster Room"

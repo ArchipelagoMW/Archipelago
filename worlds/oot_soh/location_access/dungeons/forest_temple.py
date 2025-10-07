@@ -17,7 +17,7 @@ class EventLocations(str, Enum):
     FOREST_TEMPLE_NE_OUTDOORS_UPPER_DEKU_BABA_NUTS = "Forest Temple NE Outdoors Upper Deku Baba Nuts"
     FOREST_TEMPLE_NE_OUTDOORS_LOWER_DEKU_BABA_STICKS = "Forest Temple NE Outdoors Lower Deku Baba Sticks"
     FOREST_TEMPLE_NE_OUTDOORS_LOWER_DEKU_BABA_NUTS = "Forest Temple NE Outdoors Lower Deku Baba Nuts"
-    FOREST_TEMPLE_NE_OUTDOORS_UPPER_DRAIN_SEWER = "Forest Temple NE Outdoors Upper Drain Sewer"
+    FOREST_TEMPLE_NE_OUTDOORS_UPPER_DRAIN_WELL = "Forest Temple NE Outdoors Upper Drain Well"
     FOREST_TEMPLE_BOSS_PHANTOM_GANON = "Forest Temple Boss Phantom Ganon"
    
 class LocalEvents(str, Enum):
@@ -26,7 +26,7 @@ class LocalEvents(str, Enum):
     DEFEATED_AMY = "Defeated Amy"
     DEFEATED_BETH = "Defeated Beth"
     LOWER_STALFOS_FAIRY = "Got Lower Stalfos Fairy"
-    DRAINED_SEWER = "Drained the Sewer"
+    DRAINED_WELL = "Drained the Well"
     
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -132,8 +132,10 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                   has_explosives(bundle) and
                                                                   can_use(Items.HOVER_BOOTS, bundle))),
         (Regions.FOREST_TEMPLE_MAP_ROOM, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_SEWER, lambda bundle: (has_item(Items.GOLDEN_SCALE, bundle) or
-                                                      can_use(Items.IRON_BOOTS, bundle))),
+        (Regions.FOREST_TEMPLE_WELL, lambda bundle: 
+            ((has_item(Items.GOLDEN_SCALE, bundle) or 
+              can_use(Items.IRON_BOOTS, bundle)) or
+             has_item(LocalEvents.DRAINED_WELL, bundle))),
         (Regions.FOREST_TEMPLE_BOSS_ENTRYWAY, lambda bundle: False),
         (Regions.FOREST_TEMPLE_NW_COURTYARD_HEARTS, lambda bundle: (can_use(Items.BOOMERANG, bundle) and 
                                                                     can_do_trick(Tricks.FOREST_OUTDOORS_HEARTS_BOOMERANG, bundle)))
@@ -179,7 +181,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.FOREST_TEMPLE_LOBBY, lambda bundle: True),
         (Regions.FOREST_TEMPLE_NE_OUTDOORS_UPPER, lambda bundle: (can_use(Items.LONGSHOT, bundle) or 
                                                                   (can_do_trick(Tricks.FOREST_VINES, bundle) and can_use(Items.HOOKSHOT, bundle)))),
-        (Regions.FOREST_TEMPLE_SEWER, lambda bundle: (has_item(Items.GOLDEN_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle))),
+        (Regions.FOREST_TEMPLE_WELL, lambda bundle: 
+            ((has_item(Items.GOLDEN_SCALE, bundle) or 
+              can_use(Items.IRON_BOOTS, bundle)) or
+             has_item(LocalEvents.DRAINED_WELL, bundle))),
         (Regions.FOREST_TEMPLE_FALLING_ROOM, lambda bundle: True),
         (Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND, lambda bundle: (can_use(Items.HOOKSHOT, bundle))),
         (Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND_GS, lambda bundle: (can_use(Items.HOOKSHOT, bundle) or 
@@ -189,7 +194,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Forest Temple NE Outdoors Upper
     # Events
     add_events(Regions.FOREST_TEMPLE_NE_OUTDOORS_UPPER, world, [
-        (EventLocations.FOREST_TEMPLE_NE_OUTDOORS_UPPER_DRAIN_SEWER, LocalEvents.DRAINED_SEWER, lambda bundle: True),
+        (EventLocations.FOREST_TEMPLE_NE_OUTDOORS_UPPER_DRAIN_WELL, LocalEvents.DRAINED_WELL, lambda bundle: True),
         (EventLocations.FOREST_TEMPLE_NE_OUTDOORS_UPPER_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: can_get_deku_baba_sticks(bundle)),
         (EventLocations.FOREST_TEMPLE_NE_OUTDOORS_UPPER_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: can_get_deku_baba_nuts(bundle)),
     ])
@@ -197,7 +202,6 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.FOREST_TEMPLE_NE_OUTDOORS_UPPER, world, [
         (Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, lambda bundle: True),
         (Regions.FOREST_TEMPLE_MAP_ROOM, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_DRAINED_SEWER, lambda bundle: True),
         (Regions.FOREST_TEMPLE_FALLING_ROOM, lambda bundle: (can_do_trick(Tricks.FOREST_DOORFRAME, bundle) and
                                                              can_jump_slash_except_hammer(bundle) and
                                                              can_use(Items.HOVER_BOOTS, bundle) and
@@ -230,29 +234,30 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.FOREST_TEMPLE_NE_OUTDOORS_UPPER, lambda bundle: can_kill_enemy(bundle, Enemies.BLUE_BUBBLE)),
     ])
     
-    ## Forest Temple Sewer
-    # Connections
-    connect_regions(Regions.FOREST_TEMPLE_SEWER, world, [
-        (Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, lambda bundle: has_item(Items.BRONZE_SCALE, bundle)),
-        (Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, lambda bundle: has_item(Items.BRONZE_SCALE, bundle)),
-        (Regions.FOREST_TEMPLE_WELL, lambda bundle: (can_open_underwater_chest(bundle) and
-                                                     water_timer(bundle) >= 8))
-    ])
-    
-    ## Forest Temple Drained Well
-    # Connections
-    connect_regions(Regions.FOREST_TEMPLE_DRAINED_SEWER, world, [
-        (Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_WELL, lambda bundle: True)
-    ])
-    
     ## Forest Temple Well
     # Locations
     add_locations(Regions.FOREST_TEMPLE_WELL, world, [
-        (Locations.FOREST_TEMPLE_WELL_CHEST, lambda bundle: True),
-        (Locations.FOREST_TEMPLE_WELL_WEST_HEART, lambda bundle: True),
-        (Locations.FOREST_TEMPLE_WELL_EAST_HEART, lambda bundle: True)
+        (Locations.FOREST_TEMPLE_WELL_CHEST, lambda bundle:
+            ((can_open_underwater_chest(bundle) and 
+              water_timer(bundle) >= 8) or
+             has_item(LocalEvents.DRAINED_WELL, bundle))),
+        (Locations.FOREST_TEMPLE_WELL_WEST_HEART, lambda bundle: 
+            ((can_use(Items.IRON_BOOTS, bundle) and
+              water_timer(bundle) >= 8) or
+             has_item(LocalEvents.DRAINED_WELL, bundle))),
+        (Locations.FOREST_TEMPLE_WELL_EAST_HEART, lambda bundle: 
+            ((can_use(Items.IRON_BOOTS, bundle) and
+              water_timer(bundle) >= 8) or
+             has_item(LocalEvents.DRAINED_WELL, bundle)))
+    ])
+    # Connections
+    connect_regions(Regions.FOREST_TEMPLE_WELL, world, [
+        (Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, lambda bundle: 
+            has_item(Items.BRONZE_SCALE, bundle) or
+            has_item(LocalEvents.DRAINED_WELL, bundle)),
+        (Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, lambda bundle:
+            has_item(Items.BRONZE_SCALE, bundle) or
+            has_item(LocalEvents.DRAINED_WELL, bundle))
     ])
     
     ## Forest Temple Below Boss Key Chest
