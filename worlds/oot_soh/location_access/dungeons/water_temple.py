@@ -9,12 +9,12 @@ class EventLocations(str, Enum):
     WATER_TEMPLE_HIGH_WATER_WATER_HIGH = "Water Temple High Water Water High"
     WATER_TEMPLE_BOSS_KEY_ROOM_FAIRY_POT = "Water Temple Boss Key Room Fairy Pot"
     WATER_TEMPLE_PRE_BOSS_ROOM_FAIRY_POT = "Water Temple Pre Boss Room Fairy Pot"
-    WATER_TEMPLE_BOSS_ROOM_CLEARED = "Water Temple Boss Room Cleared"
+    WATER_TEMPLE_TEMPLE_BOSS_MORPHA = "Water Temple Boss Room Morpha"
     
 class LocalEvents(str, Enum):
-    WATER_TEMPLE_WATER_LOW_FROM_HIGH = "Water Temple Water Low From High"
-    WATER_TEMPLE_WATER_MIDDLE = "Water Temple Water Middle"
-    WATER_TEMPLE_WATER_HIGH = "Water Temple Water High"
+    WATER_LEVEL_LOW = "Water Level Low"
+    WATER_LEVEL_MIDDLE = "Water Level Middle"
+    WATER_LEVEL_HIGH = "Water Level High"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -29,71 +29,71 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.WATER_TEMPLE_LOBBY, world, [
         (Locations.WATER_TEMPLE_MAIN_LEVEL2_POT1, lambda bundle: (can_break_pots(bundle) and
-                                                                  (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
-                                                                   has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE, bundle) or
+                                                                  (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
+                                                                   has_item(LocalEvents.WATER_LEVEL_MIDDLE, bundle) or
                                                                    (can_use(Items.IRON_BOOTS, bundle) and
                                                                     can_use(Items.HOOKSHOT, bundle))))),
         (Locations.WATER_TEMPLE_MAIN_LEVEL2_POT2, lambda bundle: (can_break_pots(bundle) and
-                                                                  (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
-                                                                   has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE, bundle) or
+                                                                  (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
+                                                                   has_item(LocalEvents.WATER_LEVEL_MIDDLE, bundle) or
                                                                    (can_use(Items.IRON_BOOTS, bundle) and
                                                                     can_use(Items.HOOKSHOT, bundle))))),
     ])
     # Connections
     connect_regions(Regions.WATER_TEMPLE_LOBBY, world, [
         (Regions.WATER_TEMPLE_ENTRYWAY, lambda bundle: True),
-        (Regions.WATER_TEMPLE_EAST_LOWER, lambda bundle: (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
+        (Regions.WATER_TEMPLE_EAST_LOWER, lambda bundle: (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
                                                           ((can_do_trick(Tricks.FEWER_TUNIC_REQUIREMENTS, bundle) or
                                                             can_use(Items.ZORA_TUNIC, bundle)) and
                                                            (can_use(Items.IRON_BOOTS, bundle) or
                                                             (can_use(Items.LONGSHOT, bundle) and
                                                              can_do_trick(Tricks.WATER_LONGSHOT_TORCH, bundle)))))),
-        (Regions.WATER_TEMPLE_NORTH_LOWER, lambda bundle: (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
+        (Regions.WATER_TEMPLE_NORTH_LOWER, lambda bundle: (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
                                                            ((can_do_trick(Tricks.FEWER_TUNIC_REQUIREMENTS, bundle) or
                                                              can_use(Items.ZORA_TUNIC, bundle)) and
                                                             can_use(Items.IRON_BOOTS, bundle)))),
-        (Regions.WATER_TEMPLE_SOUTH_LOWER, lambda bundle: (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) and
+        (Regions.WATER_TEMPLE_SOUTH_LOWER, lambda bundle: (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) and
                                                            has_explosives(bundle) and
                                                            (has_item(Items.SILVER_SCALE, bundle) or
                                                             can_use(Items.IRON_BOOTS, bundle)) and
                                                            (can_do_trick(Tricks.FEWER_TUNIC_REQUIREMENTS) or
                                                             can_use(Items.ZORA_TUNIC, bundle)))),
-        (Regions.WATER_TEMPLE_WEST_LOWER, lambda bundle: (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) and
+        (Regions.WATER_TEMPLE_WEST_LOWER, lambda bundle: (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) and
                                                           has_item(Items.GORONS_BRACELET, bundle) and
                                                           (is_child(bundle) or
                                                            has_item(Items.SILVER_SCALE, bundle) or
                                                            can_use(Items.IRON_BOOTS, bundle)) and
                                                           (can_do_trick(Tricks.FEWER_TUNIC_REQUIREMENTS, bundle) or
                                                            can_use(Items.ZORA_TUNIC, bundle)))),
-        (Regions.WATER_TEMPLE_CENTRAL_PILLAR_LOWER, lambda bundle: (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) and
+        (Regions.WATER_TEMPLE_CENTRAL_PILLAR_LOWER, lambda bundle: (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) and
                                                                     small_keys(Items.WATER_TEMPLE_SMALL_KEY, 5, bundle))),
-        (Regions.WATER_TEMPLE_CENTRAL_PILLAR_UPPER, lambda bundle: ((has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
-                                                                    has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE, bundle)) and
+        (Regions.WATER_TEMPLE_CENTRAL_PILLAR_UPPER, lambda bundle: ((has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
+                                                                    has_item(LocalEvents.WATER_LEVEL_MIDDLE, bundle)) and
                                                                     (has_fire_source_with_torch(bundle) or
                                                                      can_use(Items.FAIRY_BOW, bundle)))),
-        (Regions.WATER_TEMPLE_EAST_MIDDLE, lambda bundle: ((has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
-                                                            has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE, bundle) or
+        (Regions.WATER_TEMPLE_EAST_MIDDLE, lambda bundle: ((has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
+                                                            has_item(LocalEvents.WATER_LEVEL_MIDDLE, bundle) or
                                                             (can_use(Items.IRON_BOOTS, bundle) and
                                                              water_timer(bundle) >= 16)) and
                                                            can_use(Items.LONGSHOT, bundle))),
-        (Regions.WATER_TEMPLE_WEST_MIDDLE, lambda bundle: (has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE, bundle))),
+        (Regions.WATER_TEMPLE_WEST_MIDDLE, lambda bundle: (has_item(LocalEvents.WATER_LEVEL_MIDDLE, bundle))),
         (Regions.WATER_TEMPLE_HIGH_WATER, lambda bundle: (is_adult(bundle) and
                                                           (can_use(Items.HOVER_BOOTS, bundle) or
                                                            can_do_trick(Tricks.DAMAGE_BOOST, bundle) and
                                                            can_use(Items.BOMB_BAG, bundle) and
                                                            take_damage(bundle)))),
-        (Regions.WATER_TEMPLE_BLOCK_CORRIDOR, lambda bundle: ((has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
-                                                               has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE, bundle)) and
-                                                              (can_use(Items.FAIRY_SLINGSHOT, bundle) or
-                                                               can_use(Items.FAIRY_BOW, bundle)) and 
-                                                              can_use(Items.LONGSHOT, bundle) or
-                                                              can_use(Items.HOVER_BOOTS, bundle) or
-                                                              can_do_trick(Tricks.WATER_CENTRAL_BOW, bundle) and
-                                                              (is_adult(bundle) or 
-                                                               has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE, bundle)))),
-        (Regions.WATER_TEMPLE_FALLING_PLATFORM_ROOM, lambda bundle: (has_item(LocalEvents.WATER_TEMPLE_WATER_HIGH, bundle) and
+        (Regions.WATER_TEMPLE_BLOCK_CORRIDOR, lambda bundle: ((has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
+                                                               has_item(LocalEvents.WATER_LEVEL_MIDDLE)) and
+                                                              (can_use(Items.FAIRY_SLINGSHOT) or
+                                                               can_use(Items.FAIRY_BOW)) and
+                                                              (can_use(Items.LONGSHOT, bundle) or
+                                                               can_use(Items.HOVER_BOOTS, bundle) or
+                                                               (can_do_trick(Tricks.WATER_CENTRAL_BOW, bundle) and
+                                                                (is_adult(bundle) or
+                                                                 has_item(LocalEvents.WATER_LEVEL_MIDDLE, bundle)))))),
+        (Regions.WATER_TEMPLE_FALLING_PLATFORM_ROOM, lambda bundle: (has_item(LocalEvents.WATER_LEVEL_HIGH, bundle) and
                                                                      small_keys(Items.WATER_TEMPLE_SMALL_KEY, 4, bundle))),
-        (Regions.WATER_TEMPLE_PRE_BOSS_ROOM, lambda bundle: ((has_item(LocalEvents.WATER_TEMPLE_WATER_HIGH, bundle) and
+        (Regions.WATER_TEMPLE_PRE_BOSS_ROOM, lambda bundle: ((has_item(LocalEvents.WATER_LEVEL_HIGH, bundle) and
                                                               can_use(Items.LONGSHOT, bundle)) or
                                                              (can_do_trick(Tricks.HOVER_BOOST_SIMPLE, bundle) and
                                                               can_do_trick(Tricks.DAMAGE_BOOST_SIMPLE, bundle) and 
@@ -104,33 +104,33 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Water Temple East Lower
     # Events
     add_events(Regions.WATER_TEMPLE_EAST_LOWER, world, [
-        (EventLocations.WATER_TEMPLE_EAST_LOWER_WATER_LOW_FROM_HIGH, LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
+        (EventLocations.WATER_TEMPLE_EAST_LOWER_WATER_LOW_FROM_HIGH, LocalEvents.WATER_LEVEL_LOW, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
     ])
     # Locations
     add_locations(Regions.WATER_TEMPLE_EAST_LOWER, world, [
         (Locations.WATER_TEMPLE_TORCH_POT1, lambda bundle: (can_break_pots(bundle) and
-                                                            (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
+                                                            (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
                                                              (can_use(Items.HOOKSHOT, bundle) and
                                                               can_use(Items.IRON_BOOTS, bundle))))),
          (Locations.WATER_TEMPLE_TORCH_POT2, lambda bundle: (can_break_pots(bundle) and
-                                                            (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
+                                                            (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
                                                              (can_use(Items.HOOKSHOT, bundle) and
                                                               can_use(Items.IRON_BOOTS, bundle)))))
     ])
     # Connections
     connect_regions(Regions.WATER_TEMPLE_EAST_LOWER, world, [
-        (Regions.WATER_TEMPLE_LOBBY, lambda bundle: (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
+        (Regions.WATER_TEMPLE_LOBBY, lambda bundle: (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
                                                      ((can_do_trick(Tricks.FEWER_TUNIC_REQUIREMENTS, bundle) or
                                                        can_use(Items.ZORA_TUNIC, bundle)) and
                                                       can_use(Items.IRON_BOOTS, bundle)))),
-        (Regions.WATER_TEMPLE_MAP_ROOM, lambda bundle: has_item(LocalEvents.WATER_TEMPLE_WATER_HIGH, bundle)),
-        (Regions.WATER_TEMPLE_CRACKED_WALL, lambda bundle: (has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE, bundle) or
-                                                            (has_item(LocalEvents.WATER_TEMPLE_WATER_HIGH, bundle) and
-                                                             has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH) and
+        (Regions.WATER_TEMPLE_MAP_ROOM, lambda bundle: has_item(LocalEvents.WATER_LEVEL_HIGH, bundle)),
+        (Regions.WATER_TEMPLE_CRACKED_WALL, lambda bundle: (has_item(LocalEvents.WATER_LEVEL_MIDDLE, bundle) or
+                                                            (has_item(LocalEvents.WATER_LEVEL_HIGH, bundle) and
+                                                             has_item(LocalEvents.WATER_LEVEL_LOW) and
                                                              ((can_use(Items.HOVER_BOOTS, bundle) and
                                                                can_do_trick(Tricks.WATER_CRACKED_WALL_HOVERS)) or
                                                               can_do_trick(Tricks.WATER_CRACKED_WALL))))),
-        (Regions.WATER_TEMPLE_TORCH_ROOM, lambda bundle: (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) and
+        (Regions.WATER_TEMPLE_TORCH_ROOM, lambda bundle: (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) and
                                                           (has_fire_source_with_torch(bundle) or
                                                            can_use(Items.FAIRY_BOW, bundle))))
     ])
@@ -176,10 +176,6 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     
     ## Water Temple Boulders Lower
-    # Locations
-    add_locations(Regions.WATER_TEMPLE_BOULDERS_LOWER, world, [
-        (Locations.WATER_TEMPLE_GS_NEAR_BOSS_KEY_CHEST, lambda bundle: can_use(Items.LONGSHOT, bundle))
-    ])
     # Connections
     connect_regions(Regions.WATER_TEMPLE_BOULDERS_LOWER, world, [
         (Regions.WATER_TEMPLE_NORTH_LOWER, lambda bundle: small_keys(Items.WATER_TEMPLE_SMALL_KEY, 4)),
@@ -188,7 +184,8 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                (can_use(Items.HOVER_BOOTS, bundle) or
                                                                 can_do_trick(Tricks.WATER_NORTH_BASEMENT_LEDGE_JUMP, bundle))) or
                                                               (can_use(Items.HOVER_BOOTS, bundle) and
-                                                               can_use(Items.IRON_BOOTS, bundle))))
+                                                               can_use(Items.IRON_BOOTS, bundle)))),
+        (Regions.WATER_TEMPLE_NEAR_BOSS_KEY_CHEST_GS, lambda bundle: can_use(Items.LONGSHOT, bundle))
     ])
     
     ## Water Temple Block Room
@@ -216,13 +213,6 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     
     ## Water Temple Boulders Upper
-    # Locations
-    add_locations(Regions.WATER_TEMPLE_BOULDERS_UPPER, world, [
-        (Locations.WATER_TEMPLE_GS_NEAR_BOSS_KEY_CHEST, lambda bundle: ((is_adult(bundle) and
-                                                                         hookshot_or_boomerang(bundle)) or
-                                                                        (can_use(Items.IRON_BOOTS, bundle) and
-                                                                         can_use(Items.HOOKSHOT, bundle))))
-    ])
     # Connections
     connect_regions(Regions.WATER_TEMPLE_BOULDERS_UPPER, world, [
         (Regions.WATER_TEMPLE_BOULDERS_LOWER, lambda bundle: True),
@@ -230,7 +220,17 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.WATER_TEMPLE_BOSS_KEY_ROOM, lambda bundle: ((can_use(Items.IRON_BOOTS, bundle) or
                                                               (is_adult(bundle) and
                                                                can_do_trick(Tricks.WATER_BK_JUMP_DIVE, bundle))) and
-                                                             small_keys(Items.WATER_TEMPLE_SMALL_KEY, 5, bundle)))
+                                                             small_keys(Items.WATER_TEMPLE_SMALL_KEY, 5, bundle))),
+        (Regions.WATER_TEMPLE_NEAR_BOSS_KEY_CHEST_GS, lambda bundle: ((is_adult(bundle) and
+                                                                       hookshot_or_boomerang(bundle)) or 
+                                                                      (can_use(Items.IRON_BOOTS, bundle) and 
+                                                                       can_use(Items.HOOKSHOT, bundle))))
+    ])
+    
+    ## Water Temple Near Boss Key Chest GS
+    # Locations
+    add_locations(Regions.WATER_TEMPLE_NEAR_BOSS_KEY_CHEST_GS, world, [
+        (Locations.WATER_TEMPLE_GS_NEAR_BOSS_KEY_CHEST, lambda bundle: True)
     ])
     
     ## Water Temple Boss Key Room
@@ -294,26 +294,23 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     
     ## Water Temple Dragon Room
-    # Locations
-    add_locations(Regions.WATER_TEMPLE_DRAGON_ROOM, world, [
-        (Locations.WATER_TEMPLE_DRAGON_CHEST, lambda bundle: ((can_use(Items.HOOKSHOT, bundle) and
+    # Connections
+    connect_regions(Regions.WATER_TEMPLE_DRAGON_ROOM, world, [
+        (Regions.WATER_TEMPLE_WEST_LOWER, lambda bundle: True),
+        (Regions.WATER_TEMPLE_DRAGON_ROOM_CHEST, lambda bundle: ((can_use(Items.HOOKSHOT, bundle) and
                                                                can_use(Items.IRON_BOOTS, bundle)) or
                                                               (((is_adult(bundle) and
                                                                  can_do_trick(Tricks.WATER_ADULT_DRAGON, bundle) and
-                                                                 can_use(Items.HOOKSHOT, bundle) or
-                                                                 can_use(Items.FAIRY_BOW, bundle) or
-                                                                 can_use(Items.BOMBCHUS_5, bundle))) or
-                                                               (is_child(bundle) and
-                                                                can_do_trick(Tricks.WATER_CHILD_DRAGON) and
-                                                                (can_use(Items.FAIRY_SLINGSHOT, bundle) or
-                                                                can_use(Items.BOOMERANG, bundle) or
-                                                                can_use(Items.BOMBCHUS_5, bundle)))) and
-                                                              (has_item(Items.SILVER_SCALE, bundle) or
-                                                               can_use(Items.IRON_BOOTS, bundle))))
-    ])
-    # Connections
-    connect_regions(Regions.WATER_TEMPLE_DRAGON_ROOM, world, [
-        (Regions.WATER_TEMPLE_WEST_LOWER, lambda bundle: True)
+                                                                 (can_use(Items.HOOKSHOT, bundle) or
+                                                                  can_use(Items.FAIRY_BOW, bundle) or
+                                                                  can_use(Items.BOMBCHUS_5, bundle))) or
+                                                                (is_child(bundle) and
+                                                                 can_do_trick(Tricks.WATER_CHILD_DRAGON, bundle) and
+                                                                 (can_use(Items.FAIRY_SLINGSHOT, bundle) or
+                                                                  can_use(Items.BOOMERANG, bundle) or
+                                                                  can_use(Items.BOMBCHUS_5, bundle)))) and
+                                                               (has_item(Items.SILVER_SCALE, bundle) or
+                                                                can_use(Items.IRON_BOOTS, bundle))))),
     ])
     
     ## Water Temple Central Pillar Lower
@@ -321,7 +318,7 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.WATER_TEMPLE_CENTRAL_PILLAR_LOWER, world, [
         (Regions.WATER_TEMPLE_LOBBY, lambda bundle: small_keys(Items.WATER_TEMPLE_SMALL_KEY, 5, bundle)),
         (Regions.WATER_TEMPLE_CENTRAL_PILLAR_UPPER, lambda bundle: can_use(Items.HOOKSHOT, bundle)),
-        (Regions.WATER_TEMPLE_CENTRAL_PILLAR_BASEMENT, lambda bundle: (has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE) and 
+        (Regions.WATER_TEMPLE_CENTRAL_PILLAR_BASEMENT, lambda bundle: (has_item(LocalEvents.WATER_LEVEL_MIDDLE) and 
                                                                        can_use(Items.IRON_BOOTS, bundle) and
                                                                        water_timer(bundle) >= 40))
     ])
@@ -329,7 +326,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Water Temple Central Pillar Upper
     # Events
     add_events(Regions.WATER_TEMPLE_CENTRAL_PILLAR_UPPER, world, [
-        (EventLocations.WATER_TEMPLE_CENTRAL_PILLAR_UPPER_WATER_MIDDLE, LocalEvents.WATER_TEMPLE_WATER_MIDDLE, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
+        (EventLocations.WATER_TEMPLE_CENTRAL_PILLAR_UPPER_WATER_MIDDLE, LocalEvents.WATER_LEVEL_MIDDLE, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
     ])
     # Locations
     add_locations(Regions.WATER_TEMPLE_CENTRAL_PILLAR_UPPER, world, [
@@ -344,7 +341,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                       ((can_use(Items.HOOKSHOT, bundle) and
                                                                         can_use(Items.FAIRY_BOW, bundle)) or
                                                                        (can_use(Items.DINS_FIRE, bundle))))) and
-                                                                    has_item(LocalEvents.WATER_TEMPLE_WATER_HIGH, bundle) and
+                                                                    has_item(LocalEvents.WATER_LEVEL_HIGH, bundle) and
                                                                     hookshot_or_boomerang(bundle))))
     ])
     # Connections
@@ -389,7 +386,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Water Temple High Water
     # Events
     add_events(Regions.WATER_TEMPLE_HIGH_WATER, world, [
-        (EventLocations.WATER_TEMPLE_HIGH_WATER_WATER_HIGH, LocalEvents.WATER_TEMPLE_WATER_HIGH, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
+        (EventLocations.WATER_TEMPLE_HIGH_WATER_WATER_HIGH, LocalEvents.WATER_LEVEL_HIGH, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
     ])
     # Connections
     connect_regions(Regions.WATER_TEMPLE_HIGH_WATER, world, [
@@ -400,16 +397,16 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.WATER_TEMPLE_BLOCK_CORRIDOR, world, [
         (Locations.WATER_TEMPLE_CENTRAL_BOW_TARGET_CHEST, lambda bundle: (has_item(Items.GORONS_BRACELET, bundle) and
-                                                                          (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
-                                                                           has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE, bundle)))),
+                                                                          (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
+                                                                           has_item(LocalEvents.WATER_LEVEL_MIDDLE, bundle)))),
         (Locations.WATER_TEMPLE_CENTRAL_BOW_POT1, lambda bundle: (can_break_pots(bundle) and
                                                                   has_item(Items.GORONS_BRACELET, bundle) and
-                                                                  (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
-                                                                   has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE)))),
+                                                                  (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
+                                                                   has_item(LocalEvents.WATER_LEVEL_MIDDLE)))),
         (Locations.WATER_TEMPLE_CENTRAL_BOW_POT2, lambda bundle: (can_break_pots(bundle) and
                                                                   has_item(Items.GORONS_BRACELET, bundle) and
-                                                                  (has_item(LocalEvents.WATER_TEMPLE_WATER_LOW_FROM_HIGH, bundle) or
-                                                                   has_item(LocalEvents.WATER_TEMPLE_WATER_MIDDLE))))
+                                                                  (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
+                                                                   has_item(LocalEvents.WATER_LEVEL_MIDDLE))))
     ])
     # Connections
     connect_regions(Regions.WATER_TEMPLE_BLOCK_CORRIDOR, world, [
@@ -491,13 +488,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                               has_item(Items.BRONZE_SCALE, bundle))),
         (Locations.WATER_TEMPLE_RIVER_HEART4, lambda bundle: ((can_use(Items.IRON_BOOTS, bundle) and
                                                                water_timer(bundle) >= 16) or
-                                                              has_item(Items.BRONZE_SCALE, bundle))),
-        (Locations.WATER_TEMPLE_DRAGON_CHEST, lambda bundle: (is_adult(bundle) and
-                                                              can_use(Items.FAIRY_BOW, bundle) and
-                                                              ((can_do_trick(Tricks.WATER_ADULT_DRAGON, bundle) and
-                                                                (has_item(Items.SILVER_SCALE, bundle) or
-                                                                 can_use(Items.IRON_BOOTS, bundle))) or
-                                                               can_do_trick(Tricks.WATER_DRAGON_JUMP_DIVE, bundle))))
+                                                              has_item(Items.BRONZE_SCALE, bundle)))
     ])
     # Connections
     connect_regions(Regions.WATER_TEMPLE_RIVER, world, [
@@ -505,7 +496,18 @@ def set_region_rules(world: "SohWorld") -> None:
                                                             can_use(Items.FAIRY_BOW, bundle)) and
                                                            (is_adult(bundle) or
                                                             can_use(Items.HOVER_BOOTS, bundle) or
-                                                            can_use(Items.HOOKSHOT, bundle))))
+                                                            can_use(Items.HOOKSHOT, bundle)))),
+        (Regions.WATER_TEMPLE_DRAGON_ROOM_CHEST, lambda bundle: (is_adult(bundle) and
+                                                                 can_use(Items.FAIRY_BOW, bundle) and
+                                                                 ((can_do_trick(Tricks.WATER_ADULT_DRAGON, bundle) and
+                                                                   (has_item(Items.SILVER_SCALE, bundle) or
+                                                                    can_use(Items.IRON_BOOTS, bundle))) or
+                                                                  can_do_trick(Tricks.WATER_DRAGON_JUMP_DIVE, bundle))))
+    ])
+    
+    ## Water Temple Dragon Chest
+    add_locations(Regions.WATER_TEMPLE_DRAGON_ROOM_CHEST, world, [
+        (Locations.WATER_TEMPLE_DRAGON_CHEST, lambda bundle: True)
     ])
     
     ## Water Temple Pre Boss Room
@@ -527,14 +529,14 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Water Temple Boss Entryway
     # Connections
     connect_regions(Regions.WATER_TEMPLE_BOSS_ENTRYWAY, world, [
-        (Regions.WATER_TEMPLE_PRE_BOSS_ROOM, lambda bundle: True),
+        (Regions.WATER_TEMPLE_PRE_BOSS_ROOM, lambda bundle: False),
         (Regions.WATER_TEMPLE_BOSS_ROOM, lambda bundle: has_item(Items.WATER_TEMPLE_BOSS_KEY, bundle))
     ])
     
     ## Water Temple Boss Room
     # Events
     add_events(Regions.WATER_TEMPLE_BOSS_ROOM, world, [
-        (EventLocations.WATER_TEMPLE_BOSS_ROOM_CLEARED, Events.CLEARED_WATER_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.MORPHA))
+        (EventLocations.WATER_TEMPLE_TEMPLE_BOSS_MORPHA, Events.CLEARED_WATER_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.MORPHA))
     ])
     # Locations
     add_locations(Regions.WATER_TEMPLE_BOSS_ROOM, world, [
