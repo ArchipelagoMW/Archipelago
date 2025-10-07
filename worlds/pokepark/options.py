@@ -224,7 +224,8 @@ class PokeparkOptions(PerGameCommonOptions):
         return self.as_dict(
             "num_required_battle_count",
             "num_required_prisma_count_skygarden",
-            "harder_enemy_ai"
+            "harder_enemy_ai",
+            "each_zone"
         )
 
 

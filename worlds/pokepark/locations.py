@@ -479,6 +479,17 @@ class PokeparkRayquazaAttractionClientData(PokeparkBaseClientLocationData):
         self.expected_value = 0x0001
         self.in_structure_address_interval = 0xc
         self.bit_mask = 0xFFFFFFFF  # using whole value
+
+
+@dataclass
+class Pokepark07AttractionClientData(PokeparkBaseClientLocationData):
+    def __post_init__(self):
+        self.global_manager_data_struc_offset = 0x2430
+        self.in_structure_offset = 0x0
+        self.expected_value = 0x0001
+        self.in_structure_address_interval = 0xc
+        self.bit_mask = 0xFFFFFFFF  # using whole value
+
 class PokeparkLocation(Location):
     game: str = "PokePark"
 
@@ -1480,10 +1491,11 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ), each_zone=MultiZoneFlag.MULTI
     ),
     "Beach Zone Main Area - Starly Power Competition -- Friendship": PokeparkLocationData(
-        140, PokeparkFlag.CHASE, "Beach Zone Main Area", 0x0301, PokeparkFriendshipClientLocationData(
-            structure_position=20,
-            memory_range=MemoryRange.BYTE
-        ), each_zone=MultiZoneFlag.MULTI
+        140, PokeparkFlag.CHASE, "Beach Zone Main Area", 0x0301, Pokepark07AttractionClientData(
+            structure_position=0,
+            memory_range=MemoryRange.HALFWORD
+        ),
+        each_zone=MultiZoneFlag.MULTI
     ),
     "Beach Zone Main Area - Mudkip Power Competition -- Friendship": PokeparkLocationData(
         141, PokeparkFlag.HIDEANDSEEK, "Beach Zone Main Area", 0x0301, PokeparkFriendshipClientLocationData(
@@ -1954,9 +1966,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     # each zone pokemon
 
     "Ice Zone Main Area - Starly Power Competition -- Friendship": PokeparkLocationData(
-        206, PokeparkFlag.CHASE, "Ice Zone Main Area", 0x0302, PokeparkFriendshipClientLocationData(
-            structure_position=20,
-            memory_range=MemoryRange.BYTE
+        206, PokeparkFlag.CHASE, "Ice Zone Main Area", 0x0302, Pokepark07AttractionClientData(
+            structure_position=1,
+            memory_range=MemoryRange.HALFWORD
         ), each_zone=MultiZoneFlag.MULTI
     ),
     "Ice Zone Main Area - Krabby Power Competition -- Friendship": PokeparkLocationData(
