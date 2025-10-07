@@ -993,3 +993,7 @@ def effective_health(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int
 
 def can_plant_bean(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return has_item(Items.MAGIC_BEAN, bundle) and can_be_both_ages(bundle)
+
+# TODO implement when shuffling keys within a dungeon is implemented
+def is_fire_loop_locked(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    return True
