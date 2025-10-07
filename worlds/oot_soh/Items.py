@@ -265,9 +265,9 @@ item_data_table: Dict[Items, SohItemData] = {
     Items.FAIRY_SLINGSHOT: SohItemData( 234, IC.filler, 0, child_only=True),
     #Items.BIG_BULLET_BAG: SohItemData( 235, IC.filler, 0 ),
     #Items.BIGGEST_BULLET_BAG: SohItemData( 236, IC.filler, 0 ),
-    #Items.GORONS_BRACELET: SohItemData( 237, IC.filler, 0 ),
-    #Items.SILVER_GAUNTLETS: SohItemData( 238, IC.filler, 0, adult_only=True),
-    #Items.GOLDEN_GAUNTLETS: SohItemData( 239, IC.filler, 0, adult_only=True),
+    Items.GORONS_BRACELET: SohItemData( 237, IC.filler, 0 ),
+    Items.SILVER_GAUNTLETS: SohItemData( 238, IC.filler, 0, adult_only=True),
+    Items.GOLDEN_GAUNTLETS: SohItemData( 239, IC.filler, 0, adult_only=True),
     #Items.SILVER_SCALE: SohItemData( 240, IC.filler, 0 ),
     #Items.GOLDEN_SCALE: SohItemData( 241, IC.filler, 0 ),
     #Items.ADULT_WALLET: SohItemData( 242, IC.filler, 0 ),
@@ -306,7 +306,7 @@ item_data_table: Dict[Items, SohItemData] = {
     #Items.DISTANT_SCARECROW: SohItemData( 275, IC.filler, 0, adult_only=True),
     Items.STICKS: SohItemData(276, IC.filler, 0, child_only=True),
     Items.NUTS: SohItemData(277, IC.filler, 0),
-    #Items.EPONA: SohItemData( 278, IC.filler, 0 ),
+    Items.EPONA: SohItemData( 278, IC.filler, 0, adult_only=True ),
     #Items.MAX: SohItemData( 279, IC.filler, 0 ),
 }
 
