@@ -104,7 +104,7 @@ class WitnessPlayerLogic:
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
         )
         self.DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Dict[str, WitnessRule]] = copy.deepcopy(
-            self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX
+            self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID
         )
         self.REQUIREMENTS_BY_HEX: Dict[str, WitnessRule] = {}
 
@@ -176,7 +176,7 @@ class WitnessPlayerLogic:
         if self.is_disabled(entity_hex):
             return frozenset()
 
-        entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
+        entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_ID[entity_hex]
 
         if entity_obj["region"] is not None and entity_obj["region"].name in self.UNREACHABLE_REGIONS:
             return frozenset()
@@ -240,7 +240,7 @@ class WitnessPlayerLogic:
 
             # For each entity in this option, resolve it to its actual requirement.
             for option_entity in option:
-                dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity, {})
+                dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_ID.get(option_entity, {})
 
                 if option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
                                      "PP2 Weirdness", "Theater to Tunnels", "Entity Hunt"}:
@@ -422,7 +422,7 @@ class WitnessPlayerLogic:
 
         if adj_type == "Added Locations":
             if "0x" in line:
-                line = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[line]["checkName"]
+                line = self.REFERENCE_LOGIC.ENTITIES_BY_ID[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
     def handle_regular_postgame(self, world: "WitnessWorld") -> List[List[str]]:
@@ -731,13 +731,13 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(get_obelisk_keys())
 
         if world.options.shuffle_EPs == "obelisk_sides":
-            ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
+            ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_ID.items()
                       if ep_obj["entityType"] == "EP")
 
             for ep_hex, ep_obj in ep_gen:
-                obelisk = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[self.REFERENCE_LOGIC.EP_TO_OBELISK_SIDE[ep_hex]]
+                obelisk = self.REFERENCE_LOGIC.ENTITIES_BY_ID[self.REFERENCE_LOGIC.EP_ID_TO_OBELISK_SIDE_ID[ep_hex]]
                 obelisk_name = obelisk["checkName"]
-                ep_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[ep_hex]["checkName"]
+                ep_name = self.REFERENCE_LOGIC.ENTITIES_BY_ID[ep_hex]["checkName"]
                 self.ALWAYS_EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk_name} - {ep_name}"
         else:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
@@ -895,7 +895,7 @@ class WitnessPlayerLogic:
                 if not self.solvability_guaranteed(entity) or entity in self.DISABLE_EVERYTHING_BEHIND:
                     individual_entity_requirements.append(frozenset())
                 # If a connection requires acquiring an event, add that event to its requirements.
-                elif entity not in self.REFERENCE_LOGIC.ENTITIES_BY_HEX:
+                elif entity not in self.REFERENCE_LOGIC.ENTITIES_BY_ID:
                     individual_entity_requirements.append(frozenset({frozenset({entity})}))
                 elif entity in self.ALWAYS_EVENT_NAMES_BY_HEX:
                     individual_entity_requirements.append(
@@ -905,8 +905,8 @@ class WitnessPlayerLogic:
                 else:
                     entity_req = self.get_entity_requirement(entity)
 
-                    if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]:
-                        region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"].name
+                    if self.REFERENCE_LOGIC.ENTITIES_BY_ID[entity]["region"]:
+                        region_name = self.REFERENCE_LOGIC.ENTITIES_BY_ID[entity]["region"].name
                         entity_req = logical_and_witness_rules([entity_req, frozenset({frozenset({region_name})})])
 
                     individual_entity_requirements.append(entity_req)
@@ -1070,7 +1070,7 @@ class WitnessPlayerLogic:
         }
 
         for entity_hex, event_names in self.USED_EVENT_NAMES_BY_HEX.items():
-            entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
+            entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_ID[entity_hex]
             entity_name = entity_obj["checkName"]
             entity_type = entity_obj["entityType"]
 
@@ -1089,7 +1089,7 @@ class WitnessPlayerLogic:
 
         # Make Panel Hunt Events
         for entity_hex in self.HUNT_ENTITIES:
-            entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
+            entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_ID[entity_hex]
             entity_name = entity_obj["checkName"]
             self.EVENT_ITEM_PAIRS[entity_name + " (Panel Hunt)"] = ("+1 Panel Hunt", entity_hex)
 

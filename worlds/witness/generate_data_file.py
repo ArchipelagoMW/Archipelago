@@ -15,7 +15,7 @@ if __name__ == "__main__":
         area_to_location_ids = defaultdict(list)
         area_to_entity_ids = defaultdict(list)
 
-        for entity_id, entity_object in static_witness_logic.ENTITIES_BY_HEX.items():
+        for entity_id, entity_object in static_witness_logic.ENTITIES_BY_ID.items():
             location_id = entity_object["id"]
 
             area = entity_object["area"].name
@@ -48,7 +48,7 @@ if __name__ == "__main__":
         datafile.write(
             "\n".join(
                 "\t{ " + entity_hex + ', "' + entity_object["checkName"] + '" },'
-                for entity_hex, entity_object in static_witness_logic.ENTITIES_BY_HEX.items()
+                for entity_hex, entity_object in static_witness_logic.ENTITIES_BY_ID.items()
             )
         )
         datafile.write("\n};\n\n")
