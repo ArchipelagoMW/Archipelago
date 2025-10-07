@@ -1759,9 +1759,4 @@ void_trade_age_limits_ms: Dict[int, int] = {
 }
 
 # Store the names of all options
-OPTION_NAME: dict[Option, str] = {}
-for _field in fields(Starcraft2Options):
-    assert _field.type not in OPTION_NAME
-    OPTION_NAME[_field.type] = _field.name
-OPTION_NAME[Accessibility] = "accessibility"
-OPTION_NAME[ProgressionBalancing] = "progression_balancing"
+OPTION_NAME = {option_type: name for name, option_type in Starcraft2Options.type_hints.items()}
