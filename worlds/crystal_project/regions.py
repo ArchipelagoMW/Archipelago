@@ -603,8 +603,8 @@ def fancy_add_exits(self, region: str, exits: List[str],
             rules[destination_ap_region] = rules_on_display_regions[destination_display_region]
 
     # all regions except Menu have an exit to menu
-    if region != MENU:
-        exits.append(MENU)
+    if region != MENU_AP_REGION:
+        exits.append(MENU_AP_REGION)
 
     self.multiworld.get_region(region, self.player).add_exits(exits, rules)
 

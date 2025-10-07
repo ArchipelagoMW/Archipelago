@@ -244,7 +244,7 @@ class CrystalProjectWorld(World):
                 # Generate a collection state that is a copy of the current state but also has all the passes so we can
                 # check what regions we can access without just getting told none because we have no passes
                 all_passes_state: CollectionState = CollectionState(self.multiworld)
-                self.origin_region_name = SPAWNING_MEADOWS
+                self.origin_region_name = SPAWNING_MEADOWS_AP_REGION
                 for region_pass in self.item_name_groups[PASS]:
                     all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
                 for ap_region in self.get_regions():
