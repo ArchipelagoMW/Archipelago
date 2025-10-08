@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-from ...Enums import *
 from ...LogicHelpers import *
 
 if TYPE_CHECKING:
@@ -10,13 +8,13 @@ class EventLocations(str, Enum):
     LAKE_HYLIA_BEAN_FAIRY = "Lake Hylia Bean Fairy"
     LAKE_HYLIA_GOSSIP_FAIRY = "Lake Hylia Gossip Fairy"
     LAKE_HYLIA_BUTTERFLY_FAIRY = "Lake Hylia Butterfly Fairy"
-    CHILD_SCARECROW_UNLOCK = "Child Scarecrow Unlock"
-    ADULT_SCARECROW_UNLOCK = "Adult Scarecrow Unlock"
-    BEAN_PLANTED_LH = "Bean Planted Lake Hylia"
+    CHILD_SCARECROW = "Child Scarecrow Unlock"
+    ADULT_SCARECROW = "Adult Scarecrow Unlock"
+    LH_BEAN_PATCH = "Lake Hylia Bean Patch"
 
 
 class LocalEvents(str, Enum):
-    BEAN_LH = "Lake Hylia Bean"
+    LH_BEAN_PLANTED = "Lake Hylia Bean Planted"
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
@@ -30,13 +28,13 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                                        can_use(Items.SONG_OF_STORMS, bundle)),
         (EventLocations.LAKE_HYLIA_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: can_use(Items.STICKS, bundle)),
         (EventLocations.LAKE_HYLIA_SHRUB, Events.CAN_ACCESS_BUGS, lambda bundle: can_cut_shrubs(bundle)),
-        (EventLocations.CHILD_SCARECROW_UNLOCK, Events.CHILD_SCARECROW, lambda bundle: is_child(bundle) and
+        (EventLocations.CHILD_SCARECROW, Events.CHILD_SCARECROW, lambda bundle: is_child(bundle) and
                                                                                        has_item(Items.FAIRY_OCARINA, bundle) and
                                                                                        ocarina_button_count(bundle)>= 2),
-        (EventLocations.ADULT_SCARECROW_UNLOCK, Events.ADULT_SCARECROW, lambda bundle: is_adult(bundle) and
+        (EventLocations.ADULT_SCARECROW, Events.ADULT_SCARECROW, lambda bundle: is_adult(bundle) and
                                                                                        has_item(Items.FAIRY_OCARINA, bundle) and
                                                                                        ocarina_button_count(bundle)>= 2),
-        (EventLocations.BEAN_PLANTED_LH, LocalEvents.BEAN_LH, lambda bundle: can_plant_bean(bundle)),
+        (EventLocations.LH_BEAN_PATCH, LocalEvents.LH_BEAN_PLANTED, lambda bundle: can_plant_bean(bundle)),
     ])
     # Locations
     add_locations(Regions.LAKE_HYLIA, world, [
@@ -49,7 +47,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                           can_use(Items.FAIRY_BOW, bundle)),
         (Locations.LH_FREESTANDING_POH, lambda bundle: is_adult(bundle) and
                                                        (can_use(Items.SCARECROW, bundle) or
-                                                        bundle.has(LocalEvents.BEAN_LH, bundle))),
+                                                        bundle.has(LocalEvents.LH_BEAN_PLANTED, bundle))),
         (Locations.LH_GS_BEAN_PATCH, lambda bundle: can_spawn_soil_skull(bundle) and
                                                     can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA)),
         (Locations.LH_GS_LAB_WALL, lambda bundle: is_child(bundle) and
@@ -92,52 +90,52 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                (is_child(bundle) or
                                                                 bundle.has(Events.CLEARED_WATER_TEMPLE, bundle))) or
                                                               can_use(Items.DISTANT_SCARECROW, bundle))),
-        (Locations.LH_LHGRASS1, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS2, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS3, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS4, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS5, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS6, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS7, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS8, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS9, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS10, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS11, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS12, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS13, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS14, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS15, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS16, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS17, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS18, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS19, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS20, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS21, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS22, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS23, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS24, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS25, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS26, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS27, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS28, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS29, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS30, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS31, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS32, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS33, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS34, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS35, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHGRASS36, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHCHILD_GRASS1, lambda bundle: is_child(bundle) and
+        (Locations.LH_GRASS_1, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_2, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_3, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_4, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_5, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_6, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_7, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_8, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_9, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_10, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_11, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_12, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_13, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_14, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_15, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_16, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_17, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_18, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_19, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_20, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_21, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_22, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_23, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_24, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_25, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_26, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_27, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_28, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_29, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_30, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_31, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_32, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_33, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_34, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_35, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_GRASS_36, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_CHILD_GRASS_1, lambda bundle: is_child(bundle) and
                                                      can_cut_shrubs(bundle)),
-        (Locations.LH_LHCHILD_GRASS2, lambda bundle: is_child(bundle) and
+        (Locations.LH_CHILD_GRASS_2, lambda bundle: is_child(bundle) and
                                                      can_cut_shrubs(bundle)),
-        (Locations.LH_LHCHILD_GRASS3, lambda bundle: is_child(bundle) and
+        (Locations.LH_CHILD_GRASS_3, lambda bundle: is_child(bundle) and
                                                      can_cut_shrubs(bundle)),
-        (Locations.LH_LHCHILD_GRASS4, lambda bundle: is_child(bundle) and
+        (Locations.LH_CHILD_GRASS_4, lambda bundle: is_child(bundle) and
                                                      can_cut_shrubs(bundle)),
-        (Locations.LH_LHWARP_PAD_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.LH_LHWARP_PAD_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_WARP_PAD_GRASS_1, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.LH_WARP_PAD_GRASS_2, lambda bundle: can_cut_shrubs(bundle)),
     ])
     # Connections
     connect_regions(Regions.LAKE_HYLIA, world, [
@@ -149,7 +147,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                     and has_item(Items.BRONZE_SCALE, bundle))
                                                    or (is_adult(bundle)
                                                        and (can_use(Items.SCARECROW, bundle)
-                                                            or bundle.has(LocalEvents.BEAN_LH)))),
+                                                            or bundle.has(LocalEvents.LH_BEAN_PLANTED)))),
         (Regions.LH_LAB, lambda bundle: can_open_overworld_door(Items.HYLIA_LAB_KEY, bundle)),
         (Regions.LH_FROM_WATER_TEMPLE, lambda bundle: True),
         (Regions.LH_GROTTO, lambda bundle: True),
@@ -260,7 +258,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.LH_ADULT_POND_FISH15, lambda bundle: can_use(Items.FISHING_POLE, bundle) and is_adult(bundle)),
         (Locations.LH_ADULT_POND_LOACH, lambda bundle: can_use(Items.FISHING_POLE, bundle) and is_adult(bundle)),
         (Locations.LH_HYRULE_LOACH_REWARD, lambda bundle: can_use(Items.FISHING_POLE, bundle)),
-        (Locations.LH_FISHING_POLE_HINT, lambda bundle: True), # Unnecessary but doesn't seem to hurt anything so why not?
     ])
     # Connections
     connect_regions(Regions.LH_FISHING_HOLE, world, [
