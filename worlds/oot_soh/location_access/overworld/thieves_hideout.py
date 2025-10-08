@@ -4,17 +4,17 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 class EventsLocations(str, Enum):
-    TH_1_TORCH_CARPENTER_CELL = "TH 1 Torch Cell Free 1 Torch Carpenter"
-    TH_CARPENTER_DOUBLE_CELL = "TH Double Cell Free Double Cell Carpenter"
-    TH_DEAD_END_CARPENTER_CELL = "TH Dead End Cell Free Dead End Carpenter"
-    TH_STEEP_SLOPE_CARPENTER_CELL = "TH Steep Slope Cell Free Slope Carpenter"
+    TH_1_TORCH_CELL_CARPENTER = "TH 1 Torch Cell Carpenter"
+    TH_DOUBLE_CELL_CARPENTER = "TH Double Cell Carpenter"
+    TH_DEAD_END_CELL_CARPENTER = "TH Dead End Cell Carpenter"
+    TH_STEEP_SLOPE_CELL_CARPENTER = "TH Steep Slope Cell Carpenter"
     TH_RESCUED_ALL_CARPENTERS = "TH Rescued All Carpenters"
 
 class LocalEvents(str, Enum):
-    TH_1_TORCH_CELL_CARPENTER_FREED = "TH 1 Torch Cell Freed 1 Torch Carpenter"
-    TH_DOUBLE_CELL_CARPENTER_FREED = "TH Double Cell Freed Double Cell Carpenter"
-    TH_DEAD_END_CELL_CARPENTER_FREED = "TH Dead End Cell Freed Dead End Carpenter"
-    TH_STEEP_SLOPE_CELL_CARPENTER_FREED = "TH Steep Slope Cell Freed Slope Carpenter"
+    TH_1_TORCH_CELL_CARPENTER_FREED = "TH 1 Torch Cell Carpenter Free"
+    TH_DOUBLE_CELL_CARPENTER_FREED = "TH Double Cell Carpenter Freed"
+    TH_DEAD_END_CELL_CARPENTER_FREED = "TH Dead End Cell Carpenter Freed"
+    TH_STEEP_SLOPE_CELL_CARPENTER_FREED = "TH Steep Slope Cell Carpenter Freed"
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
@@ -44,7 +44,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ##Thieves Hideout Double Cell
     # Events
     add_events(Regions.THIEVES_HIDEOUT_DOUBLE_CELL, world, [
-        (EventsLocations.TH_DOUBLE_CELL_FREE_DOUBLE_CELL_CARPENTER, LocalEvents.TH_DOUBLE_CELL_CARPENTER_FREED,
+        (EventsLocations.TH_DOUBLE_CELL_CARPENTER, LocalEvents.TH_DOUBLE_CELL_CARPENTER_FREED,
          lambda bundle: can_kill_enemy(bundle, Enemies.GERUDO_WARRIOR)),
     ])
     # Locations
