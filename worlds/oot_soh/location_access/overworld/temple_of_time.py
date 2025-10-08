@@ -17,21 +17,21 @@ def set_region_rules(world: "SohWorld") -> None:
 
     # Locations
     add_locations(Regions.TOT_ENTRANCE, world, [
-        (Locations.MARKET_TO_TLEFT_GOSSIP_STONE_FAIRY,
+        (Locations.MARKET_TOT_LEFT_GOSSIP_STONE_FAIRY,
          lambda bundle: call_gossip_fairy_except_suns(bundle) or (can_use(Items.SUNS_SONG, bundle) and is_adult(bundle))),
-        (Locations.MARKET_TO_TLEFT_GOSSIP_STONE_BIG_FAIRY,
+        (Locations.MARKET_TOT_LEFT_GOSSIP_STONE_BIG_FAIRY,
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
-        (Locations.MARKET_TO_TLEFT_CENTER_GOSSIP_STONE_FAIRY,
+        (Locations.MARKET_TOT_LEFT_CENTER_GOSSIP_STONE_FAIRY,
          lambda bundle: call_gossip_fairy_except_suns(bundle) or (can_use(Items.SUNS_SONG, bundle) and is_adult(bundle))),
-        (Locations.MARKET_TO_TLEFT_CENTER_GOSSIP_STONE_BIG_FAIRY,
+        (Locations.MARKET_TOT_LEFT_CENTER_GOSSIP_STONE_BIG_FAIRY,
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
-        (Locations.MARKET_TO_TRIGHT_CENTER_GOSSIP_STONE_FAIRY,
+        (Locations.MARKET_TOT_RIGHT_CENTER_GOSSIP_STONE_FAIRY,
          lambda bundle: call_gossip_fairy_except_suns(bundle) or (can_use(Items.SUNS_SONG, bundle) and is_adult(bundle))),
-        (Locations.MARKET_TO_TRIGHT_CENTER_GOSSIP_STONE_BIG_FAIRY,
+        (Locations.MARKET_TOT_RIGHT_CENTER_GOSSIP_STONE_BIG_FAIRY,
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
-        (Locations.MARKET_TO_TRIGHT_GOSSIP_STONE_FAIRY,
+        (Locations.MARKET_TOT_RIGHT_GOSSIP_STONE_FAIRY,
          lambda bundle: call_gossip_fairy_except_suns(bundle) or (can_use(Items.SUNS_SONG, bundle) and is_adult(bundle))),
-        (Locations.MARKET_TO_TRIGHT_GOSSIP_STONE_BIG_FAIRY,
+        (Locations.MARKET_TOT_RIGHT_GOSSIP_STONE_BIG_FAIRY,
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle))
     ])
 

@@ -29,7 +29,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.DMC_UPPER_LOCAL, world, [
-        (Locations.DMC_WALL_FREESTANDING_PO_H, lambda bundle: fire_timer(bundle) >= 16 or hearts(bundle) >= 3),
+        (Locations.DMC_WALL_FREESTANDING_POH, lambda bundle: fire_timer(bundle) >= 16 or hearts(bundle) >= 3),
         (Locations.DMC_GS_CRATE, lambda bundle: (fire_timer(bundle) >= 8 or hearts(bundle) >= 3) and is_child(bundle) and can_attack(bundle) and can_break_crates(bundle)),
         (Locations.DMC_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy_except_suns(bundle) and has_explosives(bundle) and (fire_timer(bundle) >= 16 or hearts(bundle) >= 3)),
         (Locations.DMC_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle) and (fire_timer(bundle) >= 16 or hearts(bundle) >= 3)),
@@ -83,7 +83,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Death Mountain Crater Volcano Vent
     ### This is a deviation from the original SOH logic because of the uni
     add_locations(Regions.DMC_VOLCANO_VENT, world, [
-        (Locations.DMC_VOLCANO_FREESTANDING_PO_H, lambda bundle: True),
+        (Locations.DMC_VOLCANO_FREESTANDING_POH, lambda bundle: True),
     ])
     # Connections
     connect_regions(Regions.DMC_VOLCANO_VENT, world, [

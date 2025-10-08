@@ -215,7 +215,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Kak Impas House Back
     # Locations
     add_locations(Regions.KAK_IMPAS_HOUSE_BACK, world, [
-        (Locations.KAK_IMPAS_HOUSE_FREESTANDING_PO_H, lambda bundle: True),
+        (Locations.KAK_IMPAS_HOUSE_FREESTANDING_POH, lambda bundle: True),
     ])
     # Connections
     connect_regions(Regions.KAK_IMPAS_HOUSE_BACK, world, [
@@ -238,7 +238,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.KAK_WINDMILL, world, [
-        (Locations.KAK_WINDMILL_FREESTANDING_PO_H,
+        (Locations.KAK_WINDMILL_FREESTANDING_POH,
          lambda bundle: can_use(Items.BOOMERANG, bundle) or has_item(Events.DAMPES_WINDMILL_ACCESS, bundle) or (
                  is_adult(bundle) and can_do_trick(Tricks.KAK_ADULT_WINDMILL_POH, bundle)) or (
                                 is_child(bundle) and can_jump_slash_except_hammer(bundle) and can_do_trick(
