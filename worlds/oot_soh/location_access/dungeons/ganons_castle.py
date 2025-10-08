@@ -321,10 +321,6 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     
     ## Ganondorf's Lair
-    # Locations
-    add_locations(Regions.GANONDORFS_LAIR, world, [
-        (Locations.GANONS_CASTLE_GANONDORF_HINT, lambda bundle: has_boss_soul(Items.GANONS_SOUL, bundle))
-    ])
     # Connections
     connect_regions(Regions.GANONDORFS_LAIR, world, [
         (Regions.GANONS_CASTLE_ESCAPE, lambda bundle: can_kill_enemy(bundle, Enemies.GANONDORF))
