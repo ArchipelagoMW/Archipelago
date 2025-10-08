@@ -286,7 +286,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_display_region(world, player, locations_per_region, THE_NEW_WORLD_DISPLAY_NAME, excluded),
     ]
 
-    if options.useMods:
+    if options.useMods.value == options.useMods.option_true:
         excluded = False
     else:
         excluded = True
@@ -559,8 +559,8 @@ def create_display_region(world: "CrystalProjectWorld", player: int, locations_p
 
     for ap_region_name in ap_region_names:
         ap_region, region_completion_location_temp = create_ap_region(world, player, locations_per_region, ap_region_name, excluded)
+        ap_regions.append(ap_region)
         if not excluded:
-            ap_regions.append(ap_region)
             if region_completion_location_temp is not None:
                 if region_completion_location is not None:
                     raise Exception(f"Two region completion locations exist inside {display_region_name}")
