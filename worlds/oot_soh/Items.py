@@ -24,6 +24,7 @@ class SohItemData(NamedTuple):
     adult_only: bool = False
     # todo: fill out more item groups
     item_groups: list[str] = []  # for item_name_groups
+    is_fake: bool = False  # used for filtering out progressive items from the datapackage
 
 
 item_data_table: Dict[Items, SohItemData] = {
@@ -81,7 +82,7 @@ item_data_table: Dict[Items, SohItemData] = {
     #Items.MAGIC_SINGLE: SohItemData( 50, IC.filler, 0 ),
     #Items.MAGIC_DOUBLE: SohItemData( 51, IC.filler, 0 ),
     Items.PROGRESSIVE_OCARINA: SohItemData(52, IC.progression, 2),
-    Items.PROGRESSIVE_GORON_SWORD: SohItemData(53, IC.progression, 0),
+    #Items.PROGRESSIVE_GORON_SWORD: SohItemData(53, IC.progression, 0),
     Items.EMPTY_BOTTLE: SohItemData(54, IC.progression, 0, item_groups=["Bottles"]),
     Items.BOTTLE_WITH_MILK: SohItemData(55, IC.progression, 0, item_groups=["Bottles"]),
     Items.BOTTLE_WITH_RED_POTION: SohItemData(56, IC.progression, 0, item_groups=["Bottles"]),
@@ -243,7 +244,7 @@ item_data_table: Dict[Items, SohItemData] = {
     #Items.DEKU_NUT_BAG: SohItemData( 212, IC.progression, 0 ),
     #Items.HINT: SohItemData( 213, IC.filler, 0 ),
     #Items.TYCOON_WALLET: SohItemData( 214, IC.filler, 0 ),
-    Items.BRONZE_SCALE: SohItemData( 215, IC.progression, 0 ),
+    Items.BRONZE_SCALE: SohItemData( 215, IC.progression, 0, is_fake=True),
     #Items.CHILD_WALLET: SohItemData( 216, IC.progression, 0 ),
     #Items.BOMBCHU_BAG: SohItemData( 217, IC.progression, 0 ),
     #Items.QUIVER_INF: SohItemData( 218, IC.filler, 0 ),
@@ -256,18 +257,18 @@ item_data_table: Dict[Items, SohItemData] = {
     #Items.WALLET_INF: SohItemData( 225, IC.filler, 0 ),
     #Items.FAIRY_OCARINA: SohItemData( 226, IC.filler, 0 ),
     #Items.OCARINA_OF_TIME: SohItemData( 227, IC.filler, 0 ),
-    #Items.BOMB_BAG: SohItemData( 228, IC.filler, 0 ),
+    Items.BOMB_BAG: SohItemData( 228, IC.filler, 0, is_fake=True),
     #Items.BIG_BOMB_BAG: SohItemData( 229, IC.filler, 0 ),
     #Items.BIGGEST_BOMB_BAG: SohItemData( 230, IC.filler, 0 ),
-    Items.FAIRY_BOW: SohItemData( 231, IC.filler, 0, adult_only=True),
+    Items.FAIRY_BOW: SohItemData( 231, IC.filler, 0, adult_only=True, is_fake=True),
     #Items.BIG_QUIVER: SohItemData( 232, IC.filler, 0 ),
     #Items.BIGGEST_QUIVER: SohItemData( 233, IC.filler, 0 ),
-    Items.FAIRY_SLINGSHOT: SohItemData( 234, IC.filler, 0, child_only=True),
+    Items.FAIRY_SLINGSHOT: SohItemData( 234, IC.filler, 0, child_only=True, is_fake=True),
     #Items.BIG_BULLET_BAG: SohItemData( 235, IC.filler, 0 ),
     #Items.BIGGEST_BULLET_BAG: SohItemData( 236, IC.filler, 0 ),
-    Items.GORONS_BRACELET: SohItemData( 237, IC.filler, 0 ),
-    Items.SILVER_GAUNTLETS: SohItemData( 238, IC.filler, 0, adult_only=True),
-    Items.GOLDEN_GAUNTLETS: SohItemData( 239, IC.filler, 0, adult_only=True),
+    Items.GORONS_BRACELET: SohItemData( 237, IC.filler, 0, is_fake=True),
+    Items.SILVER_GAUNTLETS: SohItemData( 238, IC.filler, 0, adult_only=True, is_fake=True),
+    Items.GOLDEN_GAUNTLETS: SohItemData( 239, IC.filler, 0, adult_only=True, is_fake=True),
     #Items.SILVER_SCALE: SohItemData( 240, IC.filler, 0 ),
     #Items.GOLDEN_SCALE: SohItemData( 241, IC.filler, 0 ),
     #Items.ADULT_WALLET: SohItemData( 242, IC.filler, 0 ),
@@ -276,8 +277,8 @@ item_data_table: Dict[Items, SohItemData] = {
     #Items.DEKU_NUT_CAPACITY40: SohItemData( 245, IC.filler, 0 ),
     #Items.DEKU_STICK_CAPACITY20: SohItemData( 246, IC.filler, 0 ),
     #Items.DEKU_STICK_CAPACITY30: SohItemData( 247, IC.filler, 0 ),
-    Items.HOOKSHOT: SohItemData( 248, IC.filler, 0, adult_only=True),
-    Items.LONGSHOT: SohItemData( 249, IC.filler, 0, adult_only=True),
+    Items.HOOKSHOT: SohItemData( 248, IC.filler, 0, adult_only=True, is_fake=True),
+    Items.LONGSHOT: SohItemData( 249, IC.filler, 0, adult_only=True, is_fake=True),
     #Items.SCARECROW: SohItemData( 250, IC.filler, 0, adult_only=True),
     Items.GUARD_HOUSE_KEY: SohItemData(251, IC.progression, 0, item_groups=["Keys"]),
     Items.MARKET_BAZAAR_KEY: SohItemData(252, IC.progression, 0, item_groups=["Keys"]),
