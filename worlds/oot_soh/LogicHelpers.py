@@ -767,13 +767,13 @@ def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         return can_use_any([Items.HOOKSHOT, Items.BOOMERANG], bundle)
 
     if(enemy in [Enemies.GIBDO,Enemies.REDEAD]):
-        return can_use_any([Items.HOOKSHOT,Items.SUNS_SONG],bundle)
+        return can_use_any([Items.HOOKSHOT, Items.SUNS_SONG],bundle)
 
     if(enemy in [Enemies.IRON_KNUCKLE,Enemies.BIG_OCTO]):
-        return can_use_any([Items.HOOKSHOT,Items.SUNS_SONG],bundle)
+        return can_use_any([Items.HOOKSHOT, Items.SUNS_SONG],bundle)
 
     if(enemy == Enemies.GREEN_BUBBLE):
-        return take_damage(bundle) or can_use_any([Items.NUTS,Items.BOOMERANG, Items.HOOKSHOT],bundle)
+        return take_damage(bundle) or can_use_any([Items.NUTS, Items.BOOMERANG, Items.HOOKSHOT],bundle)
 
     # Case of any other enemy
     return False
