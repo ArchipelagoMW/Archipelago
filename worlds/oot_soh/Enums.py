@@ -3750,6 +3750,7 @@ class Tricks(str, Enum):
     FW_VOID_WARP = "FW Void Warp"
     GROUND_CLIP = "Ground Clip"
     GROUND_JUMP = "Ground Jump"
+    GROUND_JUMP_HARD = "Ground Jump Hard"
     HESS = "HESS"
     HOOKSHOT_CLIP = "Hookshot Clip"
     HOOKSHOT_EXTENSION = "Hookshot Extension"
