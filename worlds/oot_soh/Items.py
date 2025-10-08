@@ -73,7 +73,7 @@ item_data_table: Dict[Items, SohItemData] = {
     Items.PROGRESSIVE_BOW: SohItemData(42, IC.progression, 3, item_groups=["Bow"]),
     Items.PROGRESSIVE_SLINGSHOT: SohItemData(43, IC.progression, 3, item_groups=["Slingshot"]),
     Items.PROGRESSIVE_WALLET: SohItemData(44, IC.progression, 3, item_groups=["Wallet", "Giant Wallet", "Adult Wallet", "Tycoon Wallet"]),
-    Items.PROGRESSIVE_SCALE: SohItemData(45, IC.progression, 2, item_groups=["Silver Scale", "Golden Scale"]),
+    Items.PROGRESSIVE_SCALE: SohItemData(45, IC.progression, 2, item_groups=["Bronze Scale", "Silver Scale", "Golden Scale"]),
     Items.PROGRESSIVE_NUT_CAPACITY: SohItemData(46, IC.progression, 2),
     Items.PROGRESSIVE_STICK_CAPACITY: SohItemData(47, IC.progression, 2),
     Items.PROGRESSIVE_BOMBCHU: SohItemData(48, IC.progression, 0, item_groups=["Bombchu Bag"]),
