@@ -225,6 +225,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.GANONS_CASTLE_LIGHT_TRIAL, world, [
         (EventLocations.GANONS_CASTLE_LIGHT_TRIAL_AREA, LocalEvents.GANONS_CASTLE_LIGHT_TRIAL_CLEARED, lambda bundle:
+            # TODO: Missing helper for can_ground_jump.
+            # Would make it myself but it uses a bool hasBombFlower I'm not sure how it is checked.
             can_use(Items.LIGHT_ARROW, bundle) and (can_use(Items.HOOKSHOT, bundle) or (is_adult(bundle) and can_ground_jump(bundle))) and small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2) and (can_do_trick(Tricks.LENS_GANON, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)))
     ])
     # Locations
