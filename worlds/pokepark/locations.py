@@ -1978,9 +1978,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ), each_zone=MultiZoneFlag.MULTI
     ),
     "Ice Zone Main Area - Corphish Power Competition -- Friendship": PokeparkLocationData(
-        208, PokeparkFlag.BATTLE, "Ice Zone Lower Lift Area", 0x0302, PokeparkFriendshipClientLocationData(
-            structure_position=48,
-            memory_range=MemoryRange.BYTE
+        208, PokeparkFlag.BATTLE, "Ice Zone Lower Lift Area", 0x0302, Pokepark07AttractionClientData(
+            structure_position=3,
+            memory_range=MemoryRange.HALFWORD
         ), each_zone=MultiZoneFlag.MULTI
     ),
     "Ice Zone Main Area - Mudkip Power Competition -- Friendship": PokeparkLocationData(
