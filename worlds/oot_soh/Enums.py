@@ -3506,7 +3506,7 @@ class Events(str, Enum):
     CAN_BORROW_SPOOKY_MASK = "Can Borrow Spooky Mask"
     CAN_BORROW_BUNNY_HOOD = "Can Borrow Bunny Hood"
     CAN_BORROW_MASK_OF_TRUTH = "Can Borrow Mask of Truth"
-    SOLD_SKULL_MASK = "Soldkull Mask"
+    SOLD_SKULL_MASK = "Sold Skull Mask"
     SOLD_SPOOKY_MASK = "Sold Spooky Mask"
     SOLD_BUNNY_HOOD = "Sold Bunny Hood"
     COULD_PLAY_BOWLING = "Could Play Bombchu Bowling"
