@@ -6,7 +6,7 @@ import typing
 from schema import Schema, Optional, And, Or, SchemaError
 
 from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
-    StartInventoryPool, PerGameCommonOptions, OptionGroup
+    StartInventoryPool, PerGameCommonOptions, OptionGroup, NamedRange
 
 
 # schema helpers
@@ -58,6 +58,17 @@ class Goal(Choice):
     option_rocket = 0
     option_satellite = 1
     default = 0
+
+
+class CraftSanity(NamedRange):
+    """Choose a percentage of researches to require crafting a specific item rather than with science packs."""
+    display_name = "CraftSanity"
+    default = 0
+    range_start = 0
+    range_end = 75
+    special_range_names = {
+        "disabled": 0
+    }
 
 
 class TechCost(Range):
@@ -473,6 +484,7 @@ class EnergyLink(Toggle):
 class FactorioOptions(PerGameCommonOptions):
     max_science_pack: MaxSciencePack
     goal: Goal
+    craftsanity: CraftSanity
     tech_tree_layout: TechTreeLayout
     min_tech_cost: MinTechCost
     max_tech_cost: MaxTechCost
