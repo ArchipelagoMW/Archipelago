@@ -8,13 +8,17 @@ import os
 import threading
 from io import BytesIO
 
-from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload, Sequence
+from typing import (ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload, Sequence,
+                    TYPE_CHECKING)
 
 import bsdiff4
 
 semaphore = threading.Semaphore(os.cpu_count() or 4)
 
 del threading
+
+if TYPE_CHECKING:
+    from Utils import Version
 
 
 class AutoPatchRegister(abc.ABCMeta):
@@ -65,7 +69,7 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
             return handler
 
 
-container_version: int = 6
+container_version: int = 7
 
 
 def is_ap_player_container(game: str, data: bytes, player: int):
@@ -92,7 +96,7 @@ class APContainer:
     version: ClassVar[int] = container_version
     compression_level: ClassVar[int] = 9
     compression_method: ClassVar[int] = zipfile.ZIP_DEFLATED
-
+    manifest_path: str = "archipelago.json"
     path: Optional[str]
 
     def __init__(self, path: Optional[str] = None):
@@ -116,7 +120,7 @@ class APContainer:
         except Exception as e:
             raise Exception(f"Manifest {manifest} did not convert to json.") from e
         else:
-            opened_zipfile.writestr("archipelago.json", manifest_str)
+            opened_zipfile.writestr(self.manifest_path, manifest_str)
 
     def read(self, file: Optional[Union[str, BinaryIO]] = None) -> None:
         """Read data into patch object. file can be file-like, such as an outer zip file's stream."""
@@ -137,7 +141,18 @@ class APContainer:
                 raise InvalidDataError(f"{message}This might be the incorrect world version for this file") from e
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
-        with opened_zipfile.open("archipelago.json", "r") as f:
+        try:
+            assert self.manifest_path.endswith("archipelago.json"), "Filename should be archipelago.json"
+            manifest_info = opened_zipfile.getinfo(self.manifest_path)
+        except KeyError as e:
+            for info in opened_zipfile.infolist():
+                if info.filename.endswith("archipelago.json"):
+                    manifest_info = info
+                    self.manifest_path = info.filename
+                    break
+            else:
+                raise e
+        with opened_zipfile.open(manifest_info, "r") as f:
             manifest = json.load(f)
         if manifest["compatible_version"] > self.version:
             raise Exception(f"File (version: {manifest['compatible_version']}) too new "
@@ -150,6 +165,33 @@ class APContainer:
             "compatible_version": 5,
             "version": container_version,
         }
+
+
+class APWorldContainer(APContainer):
+    """A zipfile containing a world implementation."""
+    game: str | None = None
+    world_version: "Version | None" = None
+    minimum_ap_version: "Version | None" = None
+    maximum_ap_version: "Version | None" = None
+
+    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
+        from Utils import tuplize_version
+        manifest = super().read_contents(opened_zipfile)
+        self.game = manifest["game"]
+        for version_key in ("world_version", "minimum_ap_version", "maximum_ap_version"):
+            if version_key in manifest:
+                setattr(self, version_key, tuplize_version(manifest[version_key]))
+        return manifest
+
+    def get_manifest(self) -> Dict[str, Any]:
+        manifest = super().get_manifest()
+        manifest["game"] = self.game
+        manifest["compatible_version"] = 7
+        for version_key in ("world_version", "minimum_ap_version", "maximum_ap_version"):
+            version = getattr(self, version_key)
+            if version:
+                manifest[version_key] = version.as_simple_string()
+        return manifest
 
 
 class APPlayerContainer(APContainer):
@@ -248,10 +290,8 @@ class APProcedurePatch(APAutoPatchInterface):
             manifest["compatible_version"] = 5
         return manifest
 
-    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
-        super(APProcedurePatch, self).read_contents(opened_zipfile)
-        with opened_zipfile.open("archipelago.json", "r") as f:
-            manifest = json.load(f)
+    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
+        manifest = super(APProcedurePatch, self).read_contents(opened_zipfile)
         if "procedure" not in manifest:
             # support patching files made before moving to procedures
             self.procedure = [("apply_bsdiff4", ["delta.bsdiff4"])]
@@ -260,6 +300,7 @@ class APProcedurePatch(APAutoPatchInterface):
         for file in opened_zipfile.namelist():
             if file not in ["archipelago.json"]:
                 self.files[file] = opened_zipfile.read(file)
+        return manifest
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         super(APProcedurePatch, self).write_contents(opened_zipfile)
