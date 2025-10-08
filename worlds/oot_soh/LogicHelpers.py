@@ -747,8 +747,8 @@ def has_boss_soul(soul: Items, bundle: tuple[CollectionState, Regions, "SohWorld
     return has_item(soul, bundle)
 
 
-def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies, wall_or_floor: bool) -> bool:
-    if(can_kill_enemy(bundle, enemy, wall_or_floor=wall_or_floor)):
+def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies, distance: EnemyDistance = EnemyDistance.CLOSE, wall_or_floor: bool = True) -> bool:
+    if(can_kill_enemy(bundle, enemy, distance, wall_or_floor)):
         return True
     
     if(enemy in [Enemies.GOLD_SKULLTULA, Enemies.GOHMA_LARVA, Enemies.LIZALFOS, Enemies.DODONGO, Enemies.MAD_SCRUB, Enemies.KEESE, Enemies.FIRE_KEESE, Enemies.BLUE_BUBBLE, Enemies.DEAD_HAND, Enemies.DEKU_BABA, Enemies.WITHERED_DEKU_BABA, Enemies.STALFOS, Enemies.FLARE_DANCER, Enemies.WOLFOS, Enemies.WHITE_WOLFOS, Enemies.FLOORMASTER, Enemies.MEG, Enemies.ARMOS, Enemies.FREEZARD, Enemies.SPIKE, Enemies.DARK_LINK, Enemies.ANUBIS, Enemies.WALLMASTER, Enemies.PURPLE_LEEVER, Enemies.OCTOROK]):
