@@ -612,7 +612,8 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
 
     fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, MERCURY_SHRINE_AP_REGION, SALMON_RIVER_AP_REGION, POKO_POKO_DESERT_AP_REGION, GANYMEDE_SHRINE_AP_REGION, DIONE_SHRINE_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION, LANDS_END_AP_REGION, JIDAMBA_TANGLE_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, MODDED_ZONE_AP_REGION],
                     # If regionsanity is enabled it will set its own origin region, if it isn't we should connect menu to spawning meadows
-                    {SPAWNING_MEADOWS_AP_REGION: lambda state: options.regionsanity.value == options.regionsanity.option_false,CAPITAL_SEQUOIA_AP_REGION: lambda state: state.has(GAEA_STONE, world.player),
+                    {SPAWNING_MEADOWS_AP_REGION: lambda state: options.regionsanity.value == options.regionsanity.option_false,
+                     CAPITAL_SEQUOIA_AP_REGION: lambda state: state.has(GAEA_STONE, world.player),
                      MERCURY_SHRINE_AP_REGION: lambda state: state.has(MERCURY_STONE, world.player),
                      SALMON_RIVER_AP_REGION: lambda state: state.has(POSEIDON_STONE, world.player),
                      POKO_POKO_DESERT_AP_REGION: lambda state: state.has(MARS_STONE, world.player),
