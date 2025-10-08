@@ -167,7 +167,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                                         has_item(Events.SOLD_SKULL_MASK, bundle))),
         (EventLocations.MARKET_MASK_SHOP_BUNNY_HOOD, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest or
                                                                                         has_item(Events.SOLD_SPOOKY_MASK, bundle))),
-        (EventLocations.MARKET_MASK_SHOP_MASK_OF_TRUTH, Events.CAN_BORROW_MASK_OF_TRUTH, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest.value or
+        (EventLocations.MARKET_MASK_SHOP_MASK_OF_TRUTH, Events.CAN_BORROW_MASK_OF_TRUTH, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest or
                                                                                         has_item(Events.SOLD_BUNNY_HOOD, bundle)))
     ])
     # Connections
