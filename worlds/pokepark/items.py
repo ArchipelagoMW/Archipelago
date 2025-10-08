@@ -1193,7 +1193,7 @@ ITEM_TABLE: dict[str, PokeparkItemData] = {
     ),
     "Krabby Unlock": PokeparkItemData(
         "Item", IC.progression, 219, 1, PokeparkUnlockItemClientData(
-            parameter1=0x39
+            parameter1=0x31
         )
     ),
     "Corphish Unlock": PokeparkItemData(
