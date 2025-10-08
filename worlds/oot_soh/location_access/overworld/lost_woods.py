@@ -32,7 +32,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS,
                                                                                            bundle)),
         (EventLocations.LW_BUG_SHRUB, Events.CAN_ACCESS_BUGS, lambda bundle: can_cut_shrubs(bundle)),
-        (EventLocations.LW_SKULL_KID_MASK_TRADE, Events.CAN_BORROW_SPOOKY_MASK,
+        (EventLocations.LW_SKULL_KID_MASK_TRADE, Events.SOLD_SKULL_MASK,
          lambda bundle: is_child(bundle) and can_use(Items.SARIAS_SONG, bundle) and has_item(Events.CAN_BORROW_SKULL_MASK,
                                                                                              bundle) and has_item(
              Items.CHILD_WALLET, bundle)),
@@ -172,7 +172,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.LW_DEKU_THEATER_SKULL_MASK,
          lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_SKULL_MASK, bundle)),
         (Locations.LW_DEKU_THEATER_MASK_OF_TRUTH,
-         lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_RIGHT_MASKS, bundle)),
+         lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_MASK_OF_TRUTH, bundle)),
     ])
     # Connections
     connect_regions(Regions.DEKU_THEATER, world, [

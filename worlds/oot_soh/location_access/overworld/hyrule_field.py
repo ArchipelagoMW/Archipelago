@@ -29,8 +29,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.HYRULE_FIELD, Events.CAN_DEFEAT_BIG_POE, lambda bundle: (has_bottle(bundle) and
                                                                                  can_use(Items.FAIRY_BOW, bundle) and
                                                                                  (can_use(Items.EPONA, bundle) or can_do_trick(Tricks.HF_BIG_POE_WITHOUT_EPONA, bundle)))),
-        (EventLocations.HYRULE_FIELD, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: (is_child(bundle) and
-                                                                                has_item(Events.CAN_BORROW_MASKS, bundle) and
+        (EventLocations.HYRULE_FIELD, Events.SOLD_BUNNY_HOOD, lambda bundle: (is_child(bundle) and
+                                                                                has_item(Events.CAN_BORROW_BUNNY_HOOD, bundle) and
                                                                                 has_item(Items.KOKIRIS_EMERALD, bundle) and
                                                                                 has_item(Items.GORONS_RUBY, bundle) and
                                                                                 has_item(Items.ZORAS_SAPPHIRE, bundle) and
