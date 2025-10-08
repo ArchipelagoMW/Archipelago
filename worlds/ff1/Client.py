@@ -89,11 +89,15 @@ class FF1Client(BizHawkClient):
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
+            if (await bizhawk.get_memory_size(ctx.bizhawk_ctx, self.rom)) < rom_name_location + 0x0D:
+                return False  # ROM is not large enough to be a Final Fantasy 1 ROM
             # Check ROM name/patch version
             rom_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(rom_name_location, 0x0D, self.rom)]))[0])
             rom_name = rom_name.decode("ascii")
             if rom_name != "FINAL FANTASY":
                 return False  # Not a Final Fantasy 1 ROM
+        except UnicodeDecodeError:
+            return False  # rom_name returned invalid text
         except bizhawk.RequestFailedError:
             return False  # Not able to get a response, say no for now
 
