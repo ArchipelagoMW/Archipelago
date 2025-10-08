@@ -11,7 +11,7 @@ class EventsLocations(str, Enum):
     TH_RESCUED_ALL_CARPENTERS = "TH Rescued All Carpenters"
 
 class LocalEvents(str, Enum):
-    TH_1_TORCH_CELL_CARPENTER_FREED = "TH 1 Torch Cell Carpenter Free"
+    TH_1_TORCH_CELL_CARPENTER_FREED = "TH 1 Torch Cell Carpenter Freed"
     TH_DOUBLE_CELL_CARPENTER_FREED = "TH Double Cell Carpenter Freed"
     TH_DEAD_END_CELL_CARPENTER_FREED = "TH Dead End Cell Carpenter Freed"
     TH_STEEP_SLOPE_CELL_CARPENTER_FREED = "TH Steep Slope Cell Carpenter Freed"
