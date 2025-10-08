@@ -47,7 +47,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ##Zora's Fountains Icebergs
     # Locations
     add_locations(Regions.ZF_ICEBERGS, world, [
-        (Locations.ZF_ICEBERG_FREESTANDING_PO_H, lambda bundle: is_adult(bundle))
+        (Locations.ZF_ICEBERG_FREESTANDING_POH, lambda bundle: is_adult(bundle))
     ])
     # Connections
     connect_regions(Regions.ZF_ICEBERGS, world, [
@@ -59,7 +59,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ##Zora's Fountain Lakebed
     # Locations
     add_locations(Regions.ZF_LAKEBED, world, [
-        (Locations.ZF_BOTTOM_FREESTANDING_PO_H,
+        (Locations.ZF_BOTTOM_FREESTANDING_POH,
          lambda bundle: is_adult(bundle) and can_use(Items.IRON_BOOTS, bundle) and water_timer(bundle) >= 16),
         (Locations.ZF_BOTTOM_NORTH_INNER_RUPEE,
          lambda bundle: is_adult(bundle) and can_use(Items.IRON_BOOTS, bundle) and water_timer(bundle) >= 16),
