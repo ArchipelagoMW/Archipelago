@@ -129,17 +129,21 @@ class Factorio(World):
 
         location_pool = []
 
-        craftsanity_count = round(location_count * self.options.craftsanity.value / 100)
+        craftsanity_pool = [craft for craft in craftsanity_locations
+                            if self.options.silo != Silo.option_spawn
+                            or craft not in ["Craft rocket-silo", "Craft cargo-landing-pad"]]
+        craftsanity_count = min(self.options.craftsanity.value, len(craftsanity_pool), location_count - 10)
+
         location_count -= craftsanity_count
 
         for pack in sorted(self.options.max_science_pack.get_allowed_packs()):
             location_pool.extend(location_pools[pack])
         try:
-            science_location_names = random.sample(location_pool, location_count)
-            craftsanity_location_names = random.sample([craft for craft in craftsanity_locations if
-                                                        self.options.silo != Silo.option_spawn or craft not in
-                                                        ["Craft rocket-silo", "Craft cargo-landing-pad"]],
-                                                       craftsanity_count)
+            science_location_names = None
+            while not science_location_names or len([location for location in science_location_names
+                                                     if location.startswith("AP-1-")]) < 2:
+                science_location_names = random.sample(location_pool, location_count)
+            craftsanity_location_names = random.sample(craftsanity_pool, craftsanity_count)
 
         except ValueError as e:
             # should be "ValueError: Sample larger than population or is negative"

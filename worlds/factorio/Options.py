@@ -61,11 +61,12 @@ class Goal(Choice):
 
 
 class CraftSanity(NamedRange):
-    """Choose a percentage of researches to require crafting a specific item rather than with science packs."""
+    """Choose a number of researches to require crafting a specific item rather than with science packs.
+    Will be capped based on the total number of locations."""
     display_name = "CraftSanity"
     default = 0
     range_start = 0
-    range_end = 90
+    range_end = 183
     special_range_names = {
         "disabled": 0
     }
