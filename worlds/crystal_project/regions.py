@@ -321,8 +321,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      GREENSHIRE_REPRISE_AP_REGION: lambda state: logic.has_swimming(state) or options.obscureRoutes.value == options.obscureRoutes.option_true,
                      PROVING_MEADOWS_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state),
                      LAKE_DELENDE_AP_REGION: lambda state: logic.has_vertical_movement(state) or options.obscureRoutes.value == options.obscureRoutes.option_true})
-    fancy_add_exits(world, GRAN_AP_REGION, [DELENDE_AP_REGION, BELOW_GRAN_AP_REGION],
-                    {BELOW_GRAN_AP_REGION: lambda state: logic.has_swimming(state)})
+    fancy_add_exits(world, GRAN_AP_REGION, [DELENDE_AP_REGION, BELOW_GRAN_AP_REGION])
     fancy_add_exits(world, BELOW_GRAN_AP_REGION, [GRAN_AP_REGION, ANCIENT_RESERVOIR_AP_REGION, JADE_CAVERN_AP_REGION],
                     {GRAN_AP_REGION: lambda state: logic.can_fight_gran(state),
                     ANCIENT_RESERVOIR_AP_REGION: lambda state: logic.has_swimming(state),
