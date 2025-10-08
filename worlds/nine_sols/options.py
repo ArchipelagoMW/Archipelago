@@ -56,14 +56,13 @@ class RandomizeJadeCosts(Toggle):
 
     This includes jades which are not Archipelago items.
 
-    Keep in mind that, for now, the maximum number of Computing Units cannot be changed."""
+    As a reminder: you start the game with 2 units of computing power, and there are 8 Computing Unit items to find,
+    for a maximum power of 10."""
     display_name = "Randomize Jade Costs"
 
 
 class JadeCostMin(Range):
-    """The minimum possible jade cost. Has no effect if randomize_jade_costs is false.
-
-    Keep in mind that the maximum number of Computing Units cannot be changed."""
+    """The minimum possible jade cost. Has no effect if randomize_jade_costs is false."""
     display_name = "Jade Cost Minimum"
     range_start = 0
     range_end = 8
@@ -71,9 +70,7 @@ class JadeCostMin(Range):
 
 
 class JadeCostMax(Range):
-    """The maximum possible jade cost. Has no effect if randomize_jade_costs is false.
-
-    Keep in mind that the maximum number of Computing Units cannot be changed."""
+    """The maximum possible jade cost. Has no effect if randomize_jade_costs is false."""
     display_name = "Jade Cost Maximum"
     range_start = 0
     range_end = 8
