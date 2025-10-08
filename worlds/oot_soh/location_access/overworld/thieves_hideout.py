@@ -4,17 +4,17 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 class EventsLocations(str, Enum):
-    TH_1_TORCH_CELL_FREE_1_TORCH_CARPENTER = "TH 1 Torch Cell Free 1 Torch Carpenter"
-    TH_DOUBLE_CELL_FREE_DOUBLE_CELL_CARPENTER = "TH Double Cell Free Double Cell Carpenter"
-    TH_DEAD_END_CELL_FREE_DEAD_END_CARPENTER = "TH Dead End Cell Free Dead End Carpenter"
-    TH_STEEP_SLOPE_CELL_FREE_SLOPE_CARPENTER = "TH Steep Slope Cell Free Slope Carpenter"
+    TH_1_TORCH_CARPENTER_CELL = "TH 1 Torch Cell Free 1 Torch Carpenter"
+    TH_CARPENTER_DOUBLE_CELL = "TH Double Cell Free Double Cell Carpenter"
+    TH_DEAD_END_CARPENTER_CELL = "TH Dead End Cell Free Dead End Carpenter"
+    TH_STEEP_SLOPE_CARPENTER_CELL = "TH Steep Slope Cell Free Slope Carpenter"
     TH_RESCUED_ALL_CARPENTERS = "TH Rescued All Carpenters"
 
 class LocalEvents(str, Enum):
-    TH_1_TORCH_CELL_COULD_FREE_1_TORCH_CARPENTER = "TH 1 Torch Cell Could Free 1 Torch Carpenter"
-    TH_DOUBLE_CELL_COULD_FREE_DOUBLE_CELL_CARPENTER = "TH Double Cell Could Free Double Cell Carpenter"
-    TH_DEAD_END_CELL_COULD_FREE_DEAD_END_CARPENTER = "TH Dead End Cell Could Free Dead End Carpenter"
-    TH_STEEP_SLOPE_CELL_COULD_FREE_SLOPE_CARPENTER = "TH Steep Slope Cell Could Free Slope Carpenter"
+    TH_1_TORCH_CELL_CARPENTER_FREED = "TH 1 Torch Cell Freed 1 Torch Carpenter"
+    TH_DOUBLE_CELL_CARPENTER_FREED = "TH Double Cell Freed Double Cell Carpenter"
+    TH_DEAD_END_CELL_CARPENTER_FREED = "TH Dead End Cell Freed Dead End Carpenter"
+    TH_STEEP_SLOPE_CELL_CARPENTER_FREED = "TH Steep Slope Cell Freed Slope Carpenter"
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
@@ -22,7 +22,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ##Thieves' Hideout 1 Torch Cell
     # Events
     add_events(Regions.THIEVES_HIDEOUT_1_TORCH_CELL, world, [
-        (EventsLocations.TH_1_TORCH_CELL_FREE_1_TORCH_CARPENTER, LocalEvents.TH_1_TORCH_CELL_COULD_FREE_1_TORCH_CARPENTER,
+        (EventsLocations.TH_1_TORCH_CARPENTER_CELL, LocalEvents.TH_1_TORCH_CELL_CARPENTER_FREED,
          lambda bundle: can_kill_enemy(bundle, Enemies.GERUDO_WARRIOR))
     ])
     # Locations
@@ -38,19 +38,13 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GERUDO_FORTRESS_OUTSKIRTS, lambda bundle: True),
         (Regions.GF_NEAR_GROTTO, lambda bundle: True),
         (Regions.THIEVES_HIDEOUT_RESCUE_CARPENTERS,
-         lambda bundle: (((small_keys(Items.GERUDO_FORTRESS_SMALL_KEY,4, bundle) and world.options.fortress_carpenters.value == 0)
-                        or (small_keys(Items.GERUDO_FORTRESS_SMALL_KEY, 1, bundle) and world.options.fortress_carpenters.value == 1))
-                        and has_item(LocalEvents.TH_DOUBLE_CELL_COULD_FREE_DOUBLE_CELL_CARPENTER, bundle)
-                        and has_item(LocalEvents.TH_STEEP_SLOPE_CELL_COULD_FREE_SLOPE_CARPENTER, bundle)
-                        and has_item(LocalEvents.TH_DEAD_END_CELL_COULD_FREE_DEAD_END_CARPENTER, bundle)
-                        and has_item(LocalEvents.TH_1_TORCH_CELL_COULD_FREE_1_TORCH_CARPENTER, bundle))
-                        or world.options.fortress_carpenters.value == 2)
+         lambda bundle: True)
     ])
 
     ##Thieves Hideout Double Cell
     # Events
     add_events(Regions.THIEVES_HIDEOUT_DOUBLE_CELL, world, [
-        (EventsLocations.TH_DOUBLE_CELL_FREE_DOUBLE_CELL_CARPENTER, LocalEvents.TH_DOUBLE_CELL_COULD_FREE_DOUBLE_CELL_CARPENTER,
+        (EventsLocations.TH_DOUBLE_CELL_FREE_DOUBLE_CELL_CARPENTER, LocalEvents.TH_DOUBLE_CELL_CARPENTER_FREED,
          lambda bundle: can_kill_enemy(bundle, Enemies.GERUDO_WARRIOR)),
     ])
     # Locations
@@ -71,21 +65,13 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GERUDO_FORTRESS_OUTSKIRTS, lambda bundle: True),
         (Regions.GF_NEAR_GROTTO, lambda bundle: True),
         (Regions.THIEVES_HIDEOUT_RESCUE_CARPENTERS,
-         lambda bundle: (((small_keys(Items.GERUDO_FORTRESS_SMALL_KEY, 4,
-                                      bundle) and world.options.fortress_carpenters.value == 0)
-                          or (small_keys(Items.GERUDO_FORTRESS_SMALL_KEY, 1,
-                                         bundle) and world.options.fortress_carpenters.value == 1))
-                         and has_item(LocalEvents.TH_DOUBLE_CELL_COULD_FREE_DOUBLE_CELL_CARPENTER, bundle)
-                         and has_item(LocalEvents.TH_STEEP_SLOPE_CELL_COULD_FREE_SLOPE_CARPENTER, bundle)
-                         and has_item(LocalEvents.TH_DEAD_END_CELL_COULD_FREE_DEAD_END_CARPENTER, bundle)
-                         and has_item(LocalEvents.TH_1_TORCH_CELL_COULD_FREE_1_TORCH_CARPENTER, bundle))
-                        or world.options.fortress_carpenters.value == 2)
+         lambda bundle: True)
     ])
 
     ##Thieves Hideout Dead End Cell
     # Events
     add_events(Regions.THIEVES_HIDEOUT_DEAD_END_CELL, world, [
-        (EventsLocations.TH_DEAD_END_CELL_FREE_DEAD_END_CARPENTER, LocalEvents.TH_DEAD_END_CELL_COULD_FREE_DEAD_END_CARPENTER,
+        (EventsLocations.TH_DEAD_END_CARPENTER_CELL, LocalEvents.TH_DEAD_END_CELL_CARPENTER_FREED,
          lambda bundle: can_kill_enemy(bundle, Enemies.GERUDO_WARRIOR))
     ])
     # Locations
@@ -97,21 +83,13 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.THIEVES_HIDEOUT_DEAD_END_CELL, world, [
         (Regions.GF_BELOW_GS, lambda bundle: True),
         (Regions.THIEVES_HIDEOUT_RESCUE_CARPENTERS,
-         lambda bundle: (((small_keys(Items.GERUDO_FORTRESS_SMALL_KEY, 4,
-                                      bundle) and world.options.fortress_carpenters.value == 0)
-                          or (small_keys(Items.GERUDO_FORTRESS_SMALL_KEY, 1,
-                                         bundle) and world.options.fortress_carpenters.value == 1))
-                         and has_item(LocalEvents.TH_DOUBLE_CELL_COULD_FREE_DOUBLE_CELL_CARPENTER, bundle)
-                         and has_item(LocalEvents.TH_STEEP_SLOPE_CELL_COULD_FREE_SLOPE_CARPENTER, bundle)
-                         and has_item(LocalEvents.TH_DEAD_END_CELL_COULD_FREE_DEAD_END_CARPENTER, bundle)
-                         and has_item(LocalEvents.TH_1_TORCH_CELL_COULD_FREE_1_TORCH_CARPENTER, bundle))
-                        or world.options.fortress_carpenters.value == 2)
+         lambda bundle: True)
     ])
 
     ##Thieves Hideout Steep Slope Cell
     # Events
     add_events(Regions.THIEVES_HIDEOUT_STEEP_SLOPE_CELL, world, [
-        (EventsLocations.TH_STEEP_SLOPE_CELL_FREE_SLOPE_CARPENTER, LocalEvents.TH_STEEP_SLOPE_CELL_COULD_FREE_SLOPE_CARPENTER,
+        (EventsLocations.TH_STEEP_SLOPE_CARPENTER_CELL, LocalEvents.TH_STEEP_SLOPE_CELL_CARPENTER_FREED,
          lambda bundle: can_kill_enemy(bundle, Enemies.GERUDO_WARRIOR))
     ])
     # Locations
@@ -125,15 +103,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GF_ABOVE_GTG, lambda bundle: True),
         (Regions.GF_TOP_OF_LOWER_VINES, lambda bundle: True),
         (Regions.THIEVES_HIDEOUT_RESCUE_CARPENTERS,
-         lambda bundle: (((small_keys(Items.GERUDO_FORTRESS_SMALL_KEY, 4,
-                                      bundle) and world.options.fortress_carpenters.value == 0)
-                          or (small_keys(Items.GERUDO_FORTRESS_SMALL_KEY, 1,
-                                         bundle) and world.options.fortress_carpenters.value == 1))
-                         and has_item(LocalEvents.TH_DOUBLE_CELL_COULD_FREE_DOUBLE_CELL_CARPENTER, bundle)
-                         and has_item(LocalEvents.TH_STEEP_SLOPE_CELL_COULD_FREE_SLOPE_CARPENTER, bundle)
-                         and has_item(LocalEvents.TH_DEAD_END_CELL_COULD_FREE_DEAD_END_CARPENTER, bundle)
-                         and has_item(LocalEvents.TH_1_TORCH_CELL_COULD_FREE_1_TORCH_CARPENTER, bundle))
-                        or world.options.fortress_carpenters.value == 2)
+         lambda bundle: True)
     ])
 
     ##TH Rescue Carpenters
@@ -141,12 +111,20 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.THIEVES_HIDEOUT_RESCUE_CARPENTERS, world, [
         (EventsLocations.TH_RESCUED_ALL_CARPENTERS, Events.RESCUED_ALL_CARPENTERS,
-         lambda bundle: True)
+         lambda bundle: (((small_keys(Items.GERUDO_FORTRESS_SMALL_KEY, 4,
+                                      bundle) and world.options.fortress_carpenters.value == 0)
+                          or (small_keys(Items.GERUDO_FORTRESS_SMALL_KEY, 1,
+                                         bundle) and world.options.fortress_carpenters.value == 1))
+                         and has_item(LocalEvents.TH_DOUBLE_CELL_CARPENTER_FREED, bundle)
+                         and has_item(LocalEvents.TH_STEEP_SLOPE_CELL_CARPENTER_FREED, bundle)
+                         and has_item(LocalEvents.TH_DEAD_END_CELL_CARPENTER_FREED, bundle)
+                         and has_item(LocalEvents.TH_1_TORCH_CELL_CARPENTER_FREED, bundle))
+                        or world.options.fortress_carpenters.value == 2)
     ])
     # Locations
     add_locations(Regions.THIEVES_HIDEOUT_RESCUE_CARPENTERS, world, [
         (Locations.GF_GERUDO_MEMBERSHIP_CARD,
-         lambda bundle: True)
+         lambda bundle: has_item(Events.RESCUED_ALL_CARPENTERS, bundle))
     ])
 
     ##Thieves Hideout Kitchen Corridor
