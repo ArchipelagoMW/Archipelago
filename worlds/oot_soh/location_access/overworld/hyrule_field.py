@@ -4,7 +4,6 @@ if TYPE_CHECKING:
     from ... import SohWorld
     
 class EventLocations(str, Enum):
-    HYRULE_FIELD = "Hyrule Field"
     HF_BIG_POE = "HF Big Poe"
     HF_RUNNING_MAN = "HF Running Man"
     HF_COW_GROTTO_BEHIND_WEBS_GOSSIP_STONE = "HF Cow Grotto Behind Webs Gossip Stone"
