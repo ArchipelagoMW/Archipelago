@@ -995,4 +995,4 @@ def can_plant_bean(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return has_item(Items.MAGIC_BEAN, bundle) and can_be_both_ages(bundle)
 
 def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBombFlower: bool = False) -> bool:
-    return can_do_trick(Tricks.GROUND_JUMP) and can_standing_shield(bundle) and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET)))
+    return can_do_trick(Tricks.GROUND_JUMP, bundle) and can_standing_shield(bundle) and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle)))
