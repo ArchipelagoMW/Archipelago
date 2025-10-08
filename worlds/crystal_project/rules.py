@@ -5,7 +5,9 @@ from .constants.mounts import *
 from .constants.teleport_stones import *
 from .constants.ap_regions import *
 from .constants.display_regions import *
+from .constants.jobs import SCHOLAR_JOB
 from .constants.region_passes import *
+from .constants.scholar_abilities import REVERSE_POLARITY
 from .constants.item_groups import *
 from .items import singleton_keys
 from BaseClasses import CollectionState
@@ -169,3 +171,6 @@ class CrystalProjectLogic:
                     break
 
         return has_combat
+
+    def can_fight_gran(self, state: CollectionState) -> bool:
+        return (state.has(SCHOLAR_JOB, self.player) and state.has(REVERSE_POLARITY, self.player)) or self.is_area_in_level_range(state, 30)

@@ -7,7 +7,6 @@ from .constants.keys import *
 from .constants.key_items import *
 from .constants.ap_regions import *
 from .constants.display_regions import *
-from .constants.scholar_abilities import *
 from .constants.teleport_stones import *
 
 class LocationData(NamedTuple):
@@ -98,19 +97,19 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Grans House (Delende)
         #Treasure chests
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Grans House 1", 87 + treasure_index_offset), #(126, 128, -58) style: blank
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Grans House 2", 100 + treasure_index_offset), #(127, 128, -58) style: weapon
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Grans House 3", 177 + treasure_index_offset), #(137, 128, -57) style: consumable
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Grans House 4", 178 + treasure_index_offset), #(137, 128, -56) style: consumable
+        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 1", 87 + treasure_index_offset), #(126, 128, -58) style: blank
+        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 2", 100 + treasure_index_offset), #(127, 128, -58) style: weapon
+        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 3", 177 + treasure_index_offset), #(137, 128, -57) style: consumable
+        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 4", 178 + treasure_index_offset), #(137, 128, -56) style: consumable
 
         #Basement (Somehow Not Delende)
         #Treasure chests
         LocationData(DELENDE_AP_REGION, "Basement Chest - Gran...?", 179 + treasure_index_offset), #Empty chest
         LocationData(DELENDE_AP_REGION, "Basement Chest - Gran......?", 180 + treasure_index_offset), #Digested Head chest
-        LocationData(DELENDE_AP_REGION, "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30) or logic.has_swimming(state)), #(126, 115, -102) Basement map chest
-        LocationData(DELENDE_AP_REGION, "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30) or logic.has_swimming(state)), #(129, 98, -111) Fenix Juice Pouch chest
-        LocationData(DELENDE_AP_REGION, "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30) or logic.has_swimming(state)), #(128, 98, -111) Plate of Wolf chest
-        LocationData(DELENDE_AP_REGION, "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30) or logic.has_swimming(state)), #(119, 98, -110) Underpass Scrap
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Cracks in Gran's foundation", 3653 + treasure_index_offset), #(126, 115, -102) Basement map chest
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement pair 1", 181 + treasure_index_offset), #(129, 98, -111) Fenix Juice Pouch chest
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement pair 2", 182 + treasure_index_offset), #(128, 98, -111) Plate of Wolf chest
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement loner", 3671 + treasure_index_offset), #(119, 98, -110) Underpass Scrap
 
         #Soiled Den
         #Treasure chests
@@ -1339,7 +1338,7 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         #Bosses
         #Not included: Bone Drinker (unused), Rexosaur (too RNG), Astley/Chloe/Reid/Talon Final Fights, Buttermint (you monster)
         LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)), #Monster ID: 8
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Boss - Gran...?", 183 + boss_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30)), #Monster ID: 28
+        LocationData(GRAN_AP_REGION, DELENDE_DISPLAY_NAME + " Boss - Gran...?", 183 + boss_index_offset), #Monster ID: 28 (min level 30)
         LocationData(SOILED_DEN_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Boss - Bone Thief", 175 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)), #Monster ID: 12
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Boss - Guardian", 143 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)), #Monster ID: 23
         LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME + " Boss - Canal Beast", 138 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)), #Monster ID: 18

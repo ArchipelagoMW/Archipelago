@@ -3,6 +3,8 @@
 MENU_AP_REGION = "Menu"
 SPAWNING_MEADOWS_AP_REGION = "Spawning Meadows"
 DELENDE_AP_REGION = "Delende"
+GRAN_AP_REGION = "Gran"
+BELOW_GRAN_AP_REGION = "Below Gran"
 MERCURY_SHRINE_AP_REGION = "Mercury Shrine"
 SOILED_DEN_AP_REGION = "Soiled Den"
 THE_PALE_GROTTO_AP_REGION = "The Pale Grotto"
