@@ -49,6 +49,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GANONS_CASTLE_DEKU_SCRUBS, lambda bundle: can_do_trick(Tricks.LENS_GANON, bundle) or
                                                             can_use(Items.LENS_OF_TRUTH, bundle)),
     ])
+    
     ## Ganon's Castle Deku Scrubs
     # Events
     add_events(Regions.GANONS_CASTLE_DEKU_SCRUBS, world, [
@@ -69,6 +70,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GANONS_CASTLE_SCRUBS_FAIRY7, lambda bundle: True),
         (Locations.GANONS_CASTLE_SCRUBS_FAIRY8, lambda bundle: True),
     ])
+    
     ## Ganon's Castle Forest Trial
     # Events
     add_events(Regions.GANONS_CASTLE_FOREST_TRIAL, world, [
@@ -82,6 +84,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GANONS_CASTLE_FOREST_TRIAL_POT1, lambda bundle: can_break_pots(bundle) and (can_use(Items.FIRE_ARROW, bundle) or (can_use(Items.DINS_FIRE, bundle) and can_use_any([Items.FAIRY_BOW, Items.HOOKSHOT], bundle)))),
         (Locations.GANONS_CASTLE_FOREST_TRIAL_POT2, lambda bundle: can_break_pots(bundle) and (can_use(Items.FIRE_ARROW, bundle) or (can_use(Items.DINS_FIRE, bundle) and can_use_any([Items.FAIRY_BOW, Items.HOOKSHOT], bundle)))),
     ])
+    
     ## Ganon's Castle Fire Trial
     # Events
     add_events(Regions.GANONS_CASTLE_FIRE_TRIAL, world, [
@@ -93,6 +96,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GANONS_CASTLE_FIRE_TRIAL_POT2, lambda bundle: can_break_pots(bundle) and can_use(Items.GORON_TUNIC, bundle) and can_use(Items.GOLDEN_GAUNTLETS, bundle) and can_use(Items.LONGSHOT, bundle)),
         (Locations.GANONS_CASTLE_FIRE_TRIAL_HEART, lambda bundle: can_use(Items.GORON_TUNIC, bundle))
     ])
+    
     ## Ganon's Castle Water Trial
     # Events
     add_events(Regions.GANONS_CASTLE_WATER_TRIAL, world, [
@@ -108,6 +112,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GANONS_CASTLE_WATER_TRIAL_POT2, lambda bundle: can_break_pots(bundle) and blue_fire(bundle) and is_adult(bundle) and can_use(Items.MEGATON_HAMMER, bundle)),
         (Locations.GANONS_CASTLE_WATER_TRIAL_POT3, lambda bundle: can_break_pots(bundle) and blue_fire(bundle) and can_kill_enemy(bundle, Enemies.FREEZARD))
     ])
+    
     ## Ganon's Castle Shadow Trial
     # Events
     add_events(Regions.GANONS_CASTLE_SHADOW_TRIAL, world, [
@@ -196,7 +201,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                                       (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and
                                                                                        (can_use(Items.FAIRY_BOW, bundle) or
                                                                                         can_use(Items.FAIRY_SLINGSHOT, bundle))))))),
-        (Locations.GANONS_CASTLE_SPIRIT_TRIAL_INVISIBLE_CHEST, lambda bundle: (can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT) or can_use(Items.HOOKSHOT, bundle)) and (can_use(Items.BOMBCHUS_5, bundle) or (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and (can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle)))) and ((can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT, bundle) and can_jump_slash_except_hammer(bundle)) or can_use(Items.HOOKSHOT, bundle))),
+        (Locations.GANONS_CASTLE_SPIRIT_TRIAL_INVISIBLE_CHEST, lambda bundle: (can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT, bundle) or can_use(Items.HOOKSHOT, bundle)) and (can_use(Items.BOMBCHUS_5, bundle) or (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and (can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle))) and (can_do_trick(Tricks.LENS_GANON, bundle) or can_use(Items.LENS_OF_TRUTH, bundle))))
         (Locations.GANONS_CASTLE_SPIRIT_TRIAL_POT1, lambda bundle: (((can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT, bundle) and
                                                                       can_jump_slash_except_hammer(bundle)) or
                                                                      can_use(Items.HOOKSHOT, bundle)) and
@@ -241,16 +246,8 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                             small_keys(Items.GANONS_CASTLE_SMALL_KEY, 1, bundle))),
         (Locations.GANONS_CASTLE_LIGHT_TRIAL_BOULDER_POT1, lambda bundle: (can_break_pots(bundle) and
                                                                            small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2, bundle))),
-        (Locations.GANONS_CASTLE_LIGHT_TRIAL_POT1, lambda bundle: (can_break_pots(bundle) and
-                                                                   can_use(Items.HOOKSHOT, bundle) and
-                                                                   small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2, bundle) and
-                                                                   (can_do_trick(Tricks.LENS_GANON, bundle) or
-                                                                    can_use(Items.LENS_OF_TRUTH, bundle)))),
-        (Locations.GANONS_CASTLE_LIGHT_TRIAL_POT2, lambda bundle: (can_break_pots(bundle) and
-                                                                   can_use(Items.HOOKSHOT, bundle) and
-                                                                   small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2, bundle) and
-                                                                   (can_do_trick(Tricks.LENS_GANON, bundle) or
-                                                                    can_use(Items.LENS_OF_TRUTH, bundle))))
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_POT1, lambda bundle: can_break_pots(bundle) and (can_use(Items.HOOKSHOT, bundle) or (is_adult(bundle) and can_ground_jump(bundle))) and small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2, bundle) and (can_do_trick(Tricks.LENS_GANON, bundle) or can_use(Items.LENS_OF_TRUTH, bundle))),
+        (Locations.GANONS_CASTLE_LIGHT_TRIAL_POT2, lambda bundle: can_break_pots(bundle) and (can_use(Items.HOOKSHOT, bundle) or (is_adult(bundle) and can_ground_jump(bundle))) and small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2, bundle) and (can_do_trick(Tricks.LENS_GANON, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)))
     ])
     
     ## Ganon's Tower Entryway
@@ -315,7 +312,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GANONS_TOWER_BEFORE_GANONDORFS_LAIR, world, [
         (Regions.GANONS_TOWER_FLOOR_3, lambda bundle: True),
-        (Regions.GANONDORFS_LAIR, lambda bundle: has_item(Items.GANONS_CASTLE_BOSS_KEY, bundle))
+        (Regions.GANONDORFS_LAIR, lambda bundle: has_item(Items.GANONS_CASTLE_BOSS_KEY, bundle) or world.options.triforce_hunt)
     ])
     
     ## Ganondorf's Lair
@@ -325,10 +322,6 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     
     ## Ganon's Castle Escape
-    # Locations
-    #add_locations(Regions.GANONS_CASTLE_ESCAPE, world, [
-    #   # 10 pots
-    #])
     # Connections
     connect_regions(Regions.GANONS_CASTLE_ESCAPE, world, [
         (Regions.GANONS_ARENA, lambda bundle: True)
@@ -338,11 +331,5 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.GANONS_ARENA, world, [
         (EventLocations.GANON_DEFEATED, Events.GAME_COMPLETED, lambda bundle: 
-         (can_use(Items.LIGHT_ARROW, bundle) and can_use(Items.MASTER_SWORD, bundle)
-          and not world.options.triforce_hunt)
-         or has_item(Events.GAME_COMPLETED, bundle))
-    ])
-    # Locations
-    add_locations(Regions.GANONS_ARENA, world, [
-        (Locations.GANON, lambda bundle: can_kill_enemy(bundle, Enemies.GANON))
+         (can_kill_enemy(bundle, Enemies.GANON) and not world.options.triforce_hunt) or has_item(Events.GAME_COMPLETED, bundle))
     ])
