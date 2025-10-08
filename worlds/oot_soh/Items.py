@@ -311,7 +311,7 @@ item_data_table: Dict[Items, SohItemData] = {
     #Items.MAX: SohItemData( 279, IC.filler, 0 ),
 }
 
-item_table = {name.value: data.item_id for name, data in item_data_table.items() if data.item_id is not None}
+item_table = {name.value: data.item_id for name, data in item_data_table.items() if not data.is_fake}
 
 filler_items = [
     Items.RECOVERY_HEART,
