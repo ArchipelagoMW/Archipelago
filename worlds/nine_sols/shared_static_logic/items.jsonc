@@ -115,6 +115,7 @@
 
     { "code": 401, "name": "(Poison) Medicinal Citrine", "type": "useful" },
     { "code": 402, "name": "(Poison) Golden Yinglong Egg", "type": "useful" },
+    { "code": 408, "name": "(Poison) Molted Tianma Hide", "type": "useful" },
     { "code": 403, "name": "(Poison) Residual Hair", "type": "useful" },
     { "code": 404, "name": "(Poison) Porcine Gem", "type": "useful" },
     { "code": 405, "name": "(Poison) Plantago Frog", "type": "useful" },
