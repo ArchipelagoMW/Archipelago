@@ -3,10 +3,14 @@ from dataclasses import dataclass
 from Options import Choice, Range, DeathLink, PerGameCommonOptions, StartInventoryPool, OptionGroup, OptionSet, \
     DeathLinkMixin
 from .Levels import low_victory_checks_levels, high_victory_checks_levels, final_levels
+from .Items import faction_table
 
 early_level_names = {level.name for level in low_victory_checks_levels}
 main_level_names = {level.name for level in high_victory_checks_levels}
 final_level_names = {level.name for level in final_levels}
+commander_names = {commander_data.name
+                   for commander_data_list in faction_table.values()
+                   for commander_data in commander_data_list }
 
 class VictoryLocations(Range):
     """How many checks are sent per level completed."""
@@ -70,6 +74,18 @@ class CommanderChoice(Choice):
     option_locked_random = 0
     option_unlockable_factions = 1
     option_random_starting_faction = 2
+
+class EnabledCommanders(OptionSet):
+    """
+    The commanders available to the player and the AI.
+    If no commanders are enabled, Mercival will be the only available commander.
+
+    Format as a comma-separated list of commander names: ["Mercia", "Valder"]
+    """
+    display_name = "Enabled Commanders"
+    default = commander_names
+    valid_keys = frozenset(commander_names)
+    valid_keys_casefold = False
 
 
 class FinalLevels(Range):
@@ -166,6 +182,7 @@ wargroove2_option_groups = [
             ObjectiveLocations,
             LevelShuffleSeed,
             CommanderChoice,
+            EnabledCommanders,
             FinalLevels,
             DeathLink
         ]),
@@ -196,6 +213,7 @@ class Wargroove2Options(DeathLinkMixin, PerGameCommonOptions):
     groove_boost: GrooveBoost
     level_shuffle_seed: LevelShuffleSeed
     commander_choice: CommanderChoice
+    enabled_commanders: EnabledCommanders
     final_levels: FinalLevels
     player_sacrifice_limit: PlayerSacrificeLimit
     player_summon_limit: PlayerSummonLimit

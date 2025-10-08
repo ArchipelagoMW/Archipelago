@@ -5,7 +5,7 @@ import string
 import typing
 
 from BaseClasses import Item, Tutorial, ItemClassification
-from Options import NumericOption
+from Options import NumericOption, OptionSet
 from .Items import item_table, faction_table, Wargroove2Item
 from .Levels import Wargroove2Level, low_victory_checks_levels, high_victory_checks_levels, first_level, \
     final_levels, region_names, FINAL_LEVEL_1, \
@@ -189,6 +189,12 @@ class Wargroove2World(World):
             option = getattr(self.options, option_name)
             if isinstance(option, NumericOption):
                 slot_data[option_name] = int(option.value)
+            elif isinstance(option, OptionSet):
+                option_set = list(option.value)
+                option_set_length = len(option_set)
+                slot_data[f"{option_name}_length"] = option_set_length
+                for i in range(0, option_set_length):
+                    slot_data[f"{option_name} #{i}"] = str(option_set[i])
             else:
                 slot_data[option_name] = str(option.value)
         for i in range(0, min(LEVEL_COUNT, len(self.level_list))):

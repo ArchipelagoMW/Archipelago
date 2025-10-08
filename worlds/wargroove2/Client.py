@@ -97,6 +97,7 @@ class Wargroove2Context(CommonContext):
     objective_locations: int = 1
     final_levels: int = 1
     level_shuffle_seed: int = 0
+    available_commanders: list[str] = []
     slot_data: dict[str, Any]
     stored_finale_key: str = ""
     player_stored_units_key: str = ""
@@ -281,6 +282,16 @@ class Wargroove2Context(CommonContext):
                 else:
                     with open(os.path.join(self.game_communication_path, filename), 'wb') as f:
                         f.write(file_data)
+
+            # Available Commanders:
+            total_enabled_commanders = args["slot_data"].get("enabled_commanders_length", 0)
+            self.available_commanders = [args["slot_data"].get(f"enabled_commanders #{i}", "Mercival")
+                                         for i in range(0, total_enabled_commanders)]
+            filename = f"available_commanders.json"
+            with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                commanders = self.get_commanders()
+                available_commander_objects = [commander for commander in commanders if commander[0].name in self.available_commanders]
+                json.dump(available_commander_objects, f)
 
         if cmd in {"RoomInfo"}:
             self.seed_name = args["seed_name"]
@@ -640,9 +651,10 @@ class Wargroove2Context(CommonContext):
 
             def update_tracker(self):
                 received_ids = [item.item for item in self.ctx.items_received]
+                enabled_commander_names = [commander_data[0].name for commander_data in self.ctx.get_commanders() if commander_data[1]]
                 for faction, item_id in self.ctx.faction_item_ids.items():
                     for commander_button in self.commander_buttons[faction]:
-                        commander_button.disabled = not (faction == "Starter" or item_id in received_ids)
+                        commander_button.disabled = not ((faction == "Starter" or item_id in received_ids) and commander_button.text in enabled_commander_names)
                 self.unit_tracker.clear_widgets()
                 self.trigger_tracker.clear_widgets()
                 for name, item in self.tracker_items.items():
@@ -715,8 +727,12 @@ class Wargroove2Context(CommonContext):
         commanders = []
         received_ids = [item.item for item in self.items_received]
         for faction in faction_table.keys():
-            unlocked = faction == 'Starter' or self.faction_item_ids[faction] in received_ids
-            commanders += [(commander, unlocked) for commander in faction_table[faction]]
+            for commander in faction_table[faction]:
+                is_starter = faction == 'Starter'
+                unlocked_faction = ((is_starter or self.faction_item_ids[faction] in received_ids) and
+                                    commander.name in self.available_commanders or
+                                    (len(self.available_commanders) == 0 and is_starter))
+                commanders += [(commander, unlocked_faction)]
         return commanders
 
 
