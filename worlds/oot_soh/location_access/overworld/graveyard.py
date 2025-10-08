@@ -7,13 +7,12 @@ class EventLocations(str, Enum):
     GRAVEYARD_BUTTERFLY_FAIRY = "Graveyard Butterfly Fairy"
     GRAVEYARD_BEAN_PLANT_FAIRY = "Graveyard Bean Plant Fairy"
     GRAVEYARD_BUG_ROCK = "Graveyard Bug Rock"
-    GRAVEYARD_BORROW_BUNNY_HOOD = "Graveyard Borrow Bunny Hood"
+    GRAVEYARD_SOLD_SPOOKY_MASK = "Graveyard Sold Spooky Mask"
     DAMPES_GRAVE_NUT_POT = "Dampes Grave Nut Pot"
     DAMPES_WINDMILL_ACCESS = "Dampes Windmill Access"
     GRAVEYARD_GOSSIP_STONE_FAIRY = "Graveyard Gossip Stone Fairy"
 
 class LocalEvents(str, Enum):
-    CAN_BORROW_BUNNY_HOOD = "Can Borrow Bunny Hood"
     ACCESS_TO_WINDMILL_FROM_DAMPES_GRAVE = "Access to Windmill From Dampes Grave"
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -25,7 +24,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.GRAVEYARD_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: can_use(Items.STICKS, bundle) and at_day(bundle)),
         (EventLocations.GRAVEYARD_BEAN_PLANT_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS, bundle)),
         (EventLocations.GRAVEYARD_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
-        (EventLocations.GRAVEYARD_BORROW_BUNNY_HOOD, LocalEvents.CAN_BORROW_BUNNY_HOOD, lambda bundle: is_child(bundle) and at_day(bundle) and has_item(Events.CAN_BORROW_SPOOKY_MASK, bundle) and has_item(Items.CHILD_WALLET, bundle))
+        (EventLocations.GRAVEYARD_SOLD_SPOOKY_MASK, Events.SOLD_SPOOKY_MASK, lambda bundle: is_child(bundle) and at_day(bundle) and has_item(Events.CAN_BORROW_SPOOKY_MASK, bundle) and has_item(Items.CHILD_WALLET, bundle))
     ])
     # Locations
     add_locations(Regions.THE_GRAVEYARD, world, [
