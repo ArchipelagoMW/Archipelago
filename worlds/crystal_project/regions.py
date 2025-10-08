@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple, Callable, Optional, Union, Iterable, TYPE_CHECKING
+from typing import List, Dict, Tuple, Callable, TYPE_CHECKING
 from BaseClasses import Region, Location, CollectionState
 from .options import CrystalProjectOptions
 from .locations import LocationData
@@ -533,7 +533,6 @@ def create_ap_region(world: "CrystalProjectWorld", player: int, locations_per_re
     #if the region isn't part of the multiworld, we still make the region so that all the exits still work,
         #but we also don't fill it with locations
     if not excluded:
-        world.included_regions.append(region.name)
         if name in locations_per_region:
             for location_data in locations_per_region[name]:
                 location = create_location(player, location_data, region)
@@ -541,11 +540,11 @@ def create_ap_region(world: "CrystalProjectWorld", player: int, locations_per_re
                 if location_data.regionsanity:
                     region_completion = location
 
-    # This is for making sure players can earn money for required shop checks in shopsanity + regionsanity
-    if world.options.regionsanity.value == world.options.regionsanity.option_true and world.options.shopsanity.value != world.options.shopsanity.option_disabled:
-        for location in region.locations:
-            if "Shop -" in location.name:
-                location.access_rule = combine_callables(location.access_rule, lambda state: logic.can_earn_money(state, region.name))
+        # This is for making sure players can earn money for required shop checks in shopsanity + regionsanity
+        if world.options.regionsanity.value == world.options.regionsanity.option_true and world.options.shopsanity.value != world.options.shopsanity.option_disabled:
+            for location in region.locations:
+                if "Shop -" in location.name:
+                    location.access_rule = combine_callables(location.access_rule, lambda state: logic.can_earn_money(state, region.name))
 
     return region, region_completion
 
@@ -554,23 +553,29 @@ def create_display_region(world: "CrystalProjectWorld", player: int, locations_p
     ap_region_names = display_region_subregions_dictionary[display_region_name]
 
     region_completion_location = None
+
+    if not excluded:
+        world.included_regions.append(display_region_name)
+
     for ap_region_name in ap_region_names:
         ap_region, region_completion_location_temp = create_ap_region(world, player, locations_per_region, ap_region_name, excluded)
-        ap_regions.append(ap_region)
-        if region_completion_location_temp is not None:
-            if region_completion_location is not None:
-                raise Exception(f"Two region completion locations exist inside {display_region_name}")
-            region_completion_location = region_completion_location_temp
+        if not excluded:
+            ap_regions.append(ap_region)
+            if region_completion_location_temp is not None:
+                if region_completion_location is not None:
+                    raise Exception(f"Two region completion locations exist inside {display_region_name}")
+                region_completion_location = region_completion_location_temp
 
     #need to add the rule for every other location in the ap region, as well as every location in other ap regions, as well as a can_reach rule on other ap regions in this display region
     # This is for the region completion location
-    if world.options.regionsanity.value == world.options.regionsanity.option_true and region_completion_location is not None:
-        for ap_region_name in display_region_subregions_dictionary[display_region_name]:
-            ap_region = Region(ap_region_name, player, world.multiworld)
-            region_completion_location.access_rule = combine_callables(region_completion_location.access_rule, lambda state, lambda_region_name = ap_region_name: state.can_reach(lambda_region_name, player=player))
-            for location in ap_region.locations:
-                if location != region_completion_location:
-                    region_completion_location.access_rule = combine_callables(region_completion_location.access_rule, location.access_rule)
+    if not excluded:
+        if world.options.regionsanity.value == world.options.regionsanity.option_true and region_completion_location is not None:
+            for ap_region_name in display_region_subregions_dictionary[display_region_name]:
+                ap_region = Region(ap_region_name, player, world.multiworld)
+                region_completion_location.access_rule = combine_callables(region_completion_location.access_rule, lambda state, lambda_region_name = ap_region_name: state.can_reach(lambda_region_name, player=player))
+                for location in ap_region.locations:
+                    if location != region_completion_location:
+                        region_completion_location.access_rule = combine_callables(region_completion_location.access_rule, location.access_rule)
 
     return ap_regions
 
