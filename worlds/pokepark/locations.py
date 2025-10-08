@@ -4577,4 +4577,11 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             memory_range=MemoryRange.BYTE
         )
     ),
+
+    "Beach Zone Main Area - Corphish Power Competition -- Friendship": PokeparkLocationData(
+        572, PokeparkFlag.BATTLE, "Beach Zone Main Area", 0x0302, PokeparkFriendshipClientLocationData(
+            structure_position=48,
+            memory_range=MemoryRange.BYTE
+        ), each_zone=MultiZoneFlag.MULTI
+    ),
 }

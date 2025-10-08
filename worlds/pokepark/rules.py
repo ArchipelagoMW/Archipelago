@@ -621,6 +621,11 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
 
     set_rule_if_exists(
+        "Beach Zone Main Area - Corphish Power Competition -- Friendship",
+        lambda state: can_battle(state, player) and state.has("Corphish Unlock", player)
+    )
+
+    set_rule_if_exists(
         "Beach Zone Main Area - Pelipper -- Friendship",
         lambda state: state.has("Pelipper Prisma", player)
     )
