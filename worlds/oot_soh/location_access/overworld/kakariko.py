@@ -28,7 +28,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.KAKARIKO_GATE, Events.KAKARIKO_GATE_OPEN,
          lambda bundle: is_child(bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
         (EventLocations.KAKARIKO_GATE_GUARD, Events.SOLD_KEATON_MASK,
-         lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_KEATON_MASK, bundle) and has_item(Items.CHILD_WALLET,
+         lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_MASKS, bundle) and has_item(Items.CHILD_WALLET,
                                                                                                     bundle)),
     ])
     # Locations
