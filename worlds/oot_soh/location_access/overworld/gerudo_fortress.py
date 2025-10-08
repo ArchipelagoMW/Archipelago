@@ -114,6 +114,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GF_NEAR_GROTTO, lambda bundle: True),
         (Regions.GF_TOP_OF_LOWER_VINES, lambda bundle: True),
         (Regions.GF_ABOVE_GTG, lambda bundle: True),
+        (Regions.GF_BELOW_GS, lambda bundle: is_adult(bundle) and can_ground_jump(bundle))
     ])
 
     # GF Top of Lower Vines
@@ -132,7 +133,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.THIEVES_HIDEOUT_KITCHEN_TOP, lambda bundle: True),
         (Regions.GF_BOTTOM_OF_LOWER_VINES, lambda bundle: True),
         (Regions.GF_TOP_OF_LOWER_VINES, lambda bundle: True),
-        (Regions.GF_SLOPED_ROOF, lambda bundle: is_adult(bundle)),
+        (Regions.GF_SLOPED_ROOF, lambda bundle: is_adult(bundle) or can_ground_jump(bundle)),
         (Regions.GF_LONG_ROOF,
          lambda bundle: can_use(Items.HOVER_BOOTS, bundle) or is_adult(bundle) and can_do_trick(Tricks.GF_JUMP,
                                                                                                 bundle)),
