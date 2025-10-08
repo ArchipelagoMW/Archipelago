@@ -169,9 +169,16 @@ technologies["{{ original_tech_name }}"].hidden_in_factoriopedia = true
 {#- the tech researched by the local player #}
 new_tree_copy = table.deepcopy(template_tech)
 new_tree_copy.name = "ap-{{ location.address }}-"{# use AP ID #}
+{% if location.crafted_item is not none %}
+new_tree_copy.research_trigger = {
+    type = "{{ 'craft-fluid' if location.crafted_item in liquids else 'craft-item' }}",
+    {{ 'fluid' if location.crafted_item in liquids else 'item' }} = {{ variable_to_lua(location.crafted_item) }}
+}
+new_tree_copy.unit = nil
+{% else %}
 new_tree_copy.unit.count = {{ location.count }}
 new_tree_copy.unit.ingredients = {{ variable_to_lua(location.factorio_ingredients) }}
-
+{% endif %}
 {%- if location.revealed and item.name in base_tech_table -%}
 {#- copy Factorio Technology Icon #}
 copy_factorio_icon(new_tree_copy, "{{ item.name }}")
