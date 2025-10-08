@@ -8,7 +8,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Gerudo Training Ground Entryway
     # Connections
     connect_regions(Regions.GERUDO_TRAINING_GROUND_ENTRYWAY, world, [
-        (Regions.GERUDO_TRAINING_GROUND_ENTRYWAY, lambda bundle: True),
+        (Regions.GERUDO_TRAINING_GROUND_LOBBY, lambda bundle: True),
         (Regions.GF_EXITING_GTG, lambda bundle: True),
     ])
 
@@ -52,7 +52,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GERUDO_TRAINING_GROUND_MAZE_PATH_THIRD_CHEST,
          lambda bundle: small_keys(Items.TRAINING_GROUND_SMALL_KEY, 7, bundle)),
         (Locations.GERUDO_TRAINING_GROUND_MAZE_PATH_FINAL_CHEST,
-         lambda bundle: small_keys(Items.TRAINING_GROUND_SMALL_KEY, 8, bundle)),
+         lambda bundle: small_keys(Items.TRAINING_GROUND_SMALL_KEY, 9, bundle)),
     ])
     # Connections
     connect_regions(Regions.GERUDO_TRAINING_GROUND_CENTRAL_MAZE, world, [
@@ -95,6 +95,11 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GERUDO_TRAINING_GROUND_HAMMER_ROOM_SWITCH_CHEST,
          lambda bundle: can_use(Items.MEGATON_HAMMER, bundle) or (
                      take_damage(bundle) and can_do_trick(Tricks.FLAMING_CHESTS, bundle))),
+    ])
+    # Connections
+    connect_regions(Regions.GERUDO_TRAINING_GROUND_HAMMER_ROOM, world, [
+        (Regions.GERUDO_TRAINING_GROUND_EYE_STATUE_LOWER, lambda bundle: can_use(Items.MEGATON_HAMMER, bundle) and can_use(Items.FAIRY_BOW, bundle)),
+        (Regions.GERUDO_TRAINING_GROUND_LAVA_ROOM, lambda bundle: True),
     ])
 
     # Gerudo Training Ground Eye Statue Lower
