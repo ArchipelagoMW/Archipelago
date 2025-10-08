@@ -10,8 +10,8 @@ from .adjuster_patcher import get_patch_from_sprite_pack, extract_palette_from_f
     validate_pokemon_data_string, stringify_move_pool, destringify_move_pool, keep_different_pokemon_data, \
     handle_address_collection, find_folder_object_info, load_constants
 from .adjuster_patcher import extract_sprites as extract_sprites_internal
-from .adjuster_constants import POKEMON_TYPES, POKEMON_FOLDERS, POKEMON_ABILITIES, POKEMON_GENDER_RATIOS, \
-    REVERSE_POKEMON_GENDER_RATIOS
+from .adjuster_constants import POKEMON_TYPES, POKEMON_FOLDERS, POKEMON_ABILITIES, POKEMON_M_OR_F_RATIOS, \
+    REVERSE_POKEMON_M_OR_F_RATIOS
 from argparse import Namespace
 
 # Try to import the Pokemon Emerald and Pokemon Firered/Leafgreen data
@@ -579,7 +579,7 @@ def run_kivy_gui() -> None:
             # Dropdown for the Gender Ratio field
             self.gender_ratio_dropdown = MDDropdownMenu(caller=self.gender_ratio_button, position="bottom",
                                                         border_margin=8, width=self.gender_ratio_button.width)
-            for _, gender_ratio in POKEMON_GENDER_RATIOS.items():
+            for _, gender_ratio in POKEMON_M_OR_F_RATIOS.items():
                 self.gender_ratio_dropdown.items.append({
                     "text": gender_ratio,
                     "on_release": lambda txt=gender_ratio: on_press_gender_ratio(txt),
@@ -673,7 +673,7 @@ def run_kivy_gui() -> None:
             self.ability_1_input.text = POKEMON_ABILITIES[pokemon_data["ability1"]].title()
             self.ability_2_input.text = POKEMON_ABILITIES[pokemon_data["ability2"]].title() \
                 if pokemon_data["ability2"] else POKEMON_ABILITIES[pokemon_data["ability1"]].title()
-            self.gender_ratio_input.text = POKEMON_GENDER_RATIOS[pokemon_data["gender_ratio"]]
+            self.gender_ratio_input.text = POKEMON_M_OR_F_RATIOS[pokemon_data["gender_ratio"]]
             self.forbid_flip_input.active = (pokemon_data["dex"] >> 7) > 0
             self.move_pool_input.text = stringify_move_pool(pokemon_data["move_pool"])
 
@@ -714,7 +714,7 @@ def run_kivy_gui() -> None:
                 "ability1": POKEMON_ABILITIES.index(self.ability_1_input.text.upper()),
                 "ability2": POKEMON_ABILITIES.index(self.ability_2_input.text.upper())
                     or POKEMON_ABILITIES.index(self.ability_1_input.text.upper()),
-                "gender_ratio": REVERSE_POKEMON_GENDER_RATIOS[self.gender_ratio_input.text],
+                "gender_ratio": REVERSE_POKEMON_M_OR_F_RATIOS[self.gender_ratio_input.text],
                 "dex": ((1 if self.forbid_flip_input.active else 0) << 7) + int(self.pokemon_rom_data["dex"]) % 0x80,
                 "move_pool": destringify_move_pool(self.move_pool_input.text)
             }

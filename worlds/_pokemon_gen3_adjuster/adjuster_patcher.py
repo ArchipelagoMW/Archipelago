@@ -7,7 +7,7 @@ from Utils import open_image_secure
 
 # Try to import the Pokemon Emerald and Pokemon Firered/Leafgreen data
 from .adjuster_constants import POKEMON_NAME_TO_ID, POKEMON_ID_TO_INTERNAL_ID, POKEMON_TYPES, POKEMON_MOVES, \
-    POKEMON_ABILITIES, POKEMON_GENDER_RATIOS, REVERSE_POKEMON_GENDER_RATIOS, SPRITE_PIXEL_REFERENCE, \
+    POKEMON_ABILITIES, POKEMON_M_OR_F_RATIOS, REVERSE_POKEMON_M_OR_F_RATIOS, SPRITE_PIXEL_REFERENCE, \
     OBJECT_NEEDS_COMPRESSION, COMPLEX_SPRITES_LIST, OVERWORLD_PALETTE_INFO, OVERWORLD_SPRITE_OBJECT_INFO, \
     POKEMON_DATA_INFO, VALID_ICON_PALETTES, VALID_FOOTPRINT_PALETTE
 try:
@@ -946,9 +946,9 @@ def validate_pokemon_data_string(_pokemon_name: str, _data: str | dict[str, int 
         elif field_name == "gender_ratio":
             # Data must be a number corresponding to a valid gender ratio
             try:
-                if field_value not in list(POKEMON_GENDER_RATIOS.values()):
+                if field_value not in list(POKEMON_M_OR_F_RATIOS.values()):
                     field_number_value = int(field_value)
-                    if field_number_value not in list(POKEMON_GENDER_RATIOS.keys()):
+                    if field_number_value not in list(POKEMON_M_OR_F_RATIOS.keys()):
                         add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_value}'.", True)
             except Exception:
                 add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_value}'.", True)
@@ -1319,7 +1319,7 @@ def stringify_pokemon_data(_data: dict[str, int | list[dict[str, str | int]]]):
         elif field_name in ["ability1", "ability2"]:
             new_field_value = POKEMON_ABILITIES[field_value].title()
         elif field_name == "gender_ratio":
-            new_field_value = POKEMON_GENDER_RATIOS[field_value]
+            new_field_value = POKEMON_M_OR_F_RATIOS[field_value]
         elif field_name == "dex":
             # The dex value is stored as a boolean named "forbid_flip" for clarity
             new_field_value = "True" if field_value & 0x80 else "False"
@@ -1349,7 +1349,7 @@ def destringify_pokemon_data(_pokemon_name: str, _data_string: str, _safe_mode=F
         elif field_name in ["ability1", "ability2"]:
             new_field_value = field_value if _safe_mode else POKEMON_ABILITIES.index(field_value.upper())
         elif field_name == "gender_ratio":
-            new_field_value = field_value if _safe_mode else REVERSE_POKEMON_GENDER_RATIOS[field_value]
+            new_field_value = field_value if _safe_mode else REVERSE_POKEMON_M_OR_F_RATIOS[field_value]
         elif field_name in ["dex", "forbid_flip"]:
             # The dex value is stored as a boolean named "forbid_flip" for clarity
             new_field_value = field_value if _safe_mode else (1 if field_value in [1, "1", "True"] else 0)
