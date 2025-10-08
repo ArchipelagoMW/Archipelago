@@ -766,10 +766,10 @@ def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
     if(enemy == Enemies.LIKE_LIKE):
         return can_use_any([Items.HOOKSHOT, Items.BOOMERANG], bundle)
 
-    if(enemy in [Enemies.GIBDO,Enemies.REDEAD]):
+    if(enemy in [Enemies.GIBDO, Enemies.REDEAD]):
         return can_use_any([Items.HOOKSHOT, Items.SUNS_SONG],bundle)
 
-    if(enemy in [Enemies.IRON_KNUCKLE,Enemies.BIG_OCTO]):
+    if(enemy in [Enemies.IRON_KNUCKLE, Enemies.BIG_OCTO]):
         return can_use_any([Items.HOOKSHOT, Items.SUNS_SONG],bundle)
 
     if(enemy == Enemies.GREEN_BUBBLE):
