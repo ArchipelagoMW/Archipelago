@@ -127,7 +127,7 @@ def connect_entrances(world: "CandyBox2World"):
 
     if hasattr(world.multiworld, "re_gen_passthrough"):
         placements = getattr(world.multiworld, "re_gen_passthrough")["Candy Box 2"]["entranceInformation"]
-        placement_state = ERPlacementState(world, True)
+        placement_state = ERPlacementState(world, False)
 
         er_targets = dict([(entrance.name, entrance) for region in world.multiworld.get_regions(world.player)
                              for entrance in region.entrances if not entrance.parent_region])
@@ -141,13 +141,13 @@ def connect_entrances(world: "CandyBox2World"):
         return world.entrance_randomisation.pairings
 
     if world.options.quest_randomisation == "quests_only":
-        world.entrance_randomisation = randomize_entrances(world, True, {
+        world.entrance_randomisation = randomize_entrances(world, False, {
             CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
         })
         return world.entrance_randomisation.pairings
 
     if world.options.quest_randomisation == "quests_and_rooms_separate":
-        world.entrance_randomisation = randomize_entrances(world, True, {
+        world.entrance_randomisation = randomize_entrances(world, False, {
             CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
             CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
             CandyBox2RandomizationGroup.LOLLIPOP_FARM: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
@@ -160,7 +160,7 @@ def connect_entrances(world: "CandyBox2World"):
         lollipop_farm_entrance = world.random.choice([ex for region in world.multiworld.get_regions(world.player) for ex in region.exits if not ex.connected_region])
         entrance_randomisation_entry_lollipop_farm = manual_connect_entrances(lollipop_farm_entrance, lollipop_farm)
 
-        world.entrance_randomisation = randomize_entrances(world, True, {
+        world.entrance_randomisation = randomize_entrances(world, False, {
             CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
             CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
             CandyBox2RandomizationGroup.LOLLIPOP_FARM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
