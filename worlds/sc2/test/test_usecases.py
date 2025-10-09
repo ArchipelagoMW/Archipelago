@@ -6,9 +6,14 @@ from .test_base import Sc2SetupTestBase
 from .. import get_all_missions, mission_tables, options
 from ..item import item_groups, item_tables, item_names
 from ..mission_tables import SC2Race, SC2Mission, SC2Campaign, MissionFlag
-from ..options import EnabledCampaigns, MasteryLocations, MissionOrder, EnableRaceSwapVariants, ShuffleCampaigns, \
-    ShuffleNoBuild, StarterUnit, RequiredTactics, KerriganPresence, KerriganLevelItemDistribution, GrantStoryTech, \
-    GrantStoryLevels
+from ..options import (
+    EnabledCampaigns, MasteryLocations, MissionOrder, EnableRaceSwapVariants, ShuffleCampaigns,
+    ShuffleNoBuild, StarterUnit, RequiredTactics, KerriganPresence, KerriganLevelItemDistribution, GrantStoryTech,
+    GrantStoryLevels, BasebustLocations, ChallengeLocations, DifficultyCurve, EnableMorphling, ExcludeOverpoweredItems,
+    ExcludeVeryHardMissions, ExtraLocations, GenericUpgradeItems, GenericUpgradeResearch, GenericUpgradeResearchSpeedup,
+    KerriganPrimalStatus, KeyMode, MissionOrderScouting, EnableMissionRaceBalancing,
+    NovaGhostOfAChanceVariant, PreventativeLocations, SpeedrunLocations, TakeOverAIAllies, VanillaItemsOnly
+)
 
 
 class TestSupportedUseCases(Sc2SetupTestBase):
@@ -499,6 +504,69 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
         self.assertTupleEqual(terran_nonmerc_units, ())
         self.assertTupleEqual(zerg_nonmerc_units, ())
+
+    def test_zerg_hots_no_terran_items(self) -> None:
+        # The actual situation the bug got caught
+        world_options = {
+            'basebust_locations': BasebustLocations.option_enabled,
+            'challenge_locations': ChallengeLocations.option_enabled,
+            'difficulty_curve': DifficultyCurve.option_standard,
+            'enable_morphling': EnableMorphling.option_false,
+            'enable_race_swap': EnableRaceSwapVariants.option_disabled,
+            'enabled_campaigns': [SC2Campaign.HOTS.campaign_name],
+            'ensure_generic_items': 25,
+            'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
+            'exclude_very_hard_missions': ExcludeVeryHardMissions.option_default,
+            'excluded_missions': [
+                SC2Mission.SUPREME.mission_name
+            ],
+            'extra_locations': ExtraLocations.option_enabled,
+            'generic_upgrade_items': GenericUpgradeItems.option_individual_items,
+            'generic_upgrade_missions': 0,
+            'generic_upgrade_research': GenericUpgradeResearch.option_auto_in_no_build,
+            'generic_upgrade_research_speedup': GenericUpgradeResearchSpeedup.option_false,
+            'grant_story_levels': GrantStoryLevels.option_disabled,
+            'grant_story_tech': GrantStoryTech.option_no_grant,
+            'kerrigan_level_item_distribution': KerriganLevelItemDistribution.option_size_14,
+            'kerrigan_level_item_sum': 86,
+            'kerrigan_levels_per_mission_completed': 0,
+            'kerrigan_levels_per_mission_completed_cap': -1,
+            'kerrigan_max_active_abilities': 12,
+            'kerrigan_max_passive_abilities': 5,
+            'kerrigan_presence': KerriganPresence.option_vanilla,
+            'kerrigan_primal_status': KerriganPrimalStatus.option_vanilla,
+            'kerrigan_total_level_cap': -1,
+            'key_mode': KeyMode.option_progressive_questlines,
+            'mastery_locations': MasteryLocations.option_disabled,
+            'max_number_of_upgrades': -1,
+            'max_upgrade_level': 4,
+            'maximum_campaign_size': 40,
+            'min_number_of_upgrades': 2,
+            'mission_order': MissionOrder.option_mini_campaign,
+            'mission_order_scouting': MissionOrderScouting.option_none,
+            'mission_race_balancing': EnableMissionRaceBalancing.option_semi_balanced,
+            'nova_ghost_of_a_chance_variant': NovaGhostOfAChanceVariant.option_wol,
+            'preventative_locations': PreventativeLocations.option_enabled,
+            'required_tactics': RequiredTactics.option_standard,
+            'shuffle_campaigns': ShuffleCampaigns.option_true,
+            'shuffle_no_build': ShuffleNoBuild.option_true,
+            'speedrun_locations': SpeedrunLocations.option_disabled,
+            'start_primary_abilities': 0,
+            'starter_unit': StarterUnit.option_balanced,
+            'starting_supply_per_item': 2,
+            'take_over_ai_allies': TakeOverAIAllies.option_false,
+            'vanilla_items_only': VanillaItemsOnly.option_false,
+            'victory_cache': 0,
+        }
+        self.generate_world(world_options)
+
+        world_item_names = [item.name for item in self.multiworld.itempool]
+
+        self.assertNotIn(item_names.COMMAND_CENTER_SCANNER_SWEEP, world_item_names)
+        self.assertNotIn(item_names.COMMAND_CENTER_EXTRA_SUPPLIES, world_item_names)
+        self.assertNotIn(item_names.ULTRA_CAPACITORS, world_item_names)
+        self.assertNotIn(item_names.ORBITAL_DEPOTS, world_item_names)
+        self.assertNotIn(item_names.DOMINION_TROOPER, world_item_names)
 
     def test_all_kerrigan_missions_are_nobuild_and_grant_story_tech_is_on(self) -> None:
         # The actual situation the bug got caught
