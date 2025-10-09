@@ -1,6 +1,8 @@
 from ..constants.keys import *
 from ..constants.ap_regions import *
 from ..constants.mounts import *
+from ..constants.region_passes import *
+
 from .bases import CrystalProjectTestBase
 
 class TestCapitalSequoiaNoLevelGating(CrystalProjectTestBase):
@@ -44,7 +46,8 @@ class TestCapitalSequoiaWithRegionsanity(CrystalProjectTestBase):
     options = {
         "levelGating": 0,
         "progressiveMountMode": 0,
-        "regionsanity": 1
+        "regionsanity": 1,
+        "start_inventory_from_pool": {SPAWNING_MEADOWS_PASS: 1}
     }
 
     def test_region_connections_no_items(self):
