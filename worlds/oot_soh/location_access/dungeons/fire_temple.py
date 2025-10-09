@@ -27,19 +27,15 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.FIRE_TEMPLE_FIRST_ROOM, world, [
         (Regions.FIRE_TEMPLE_ENTRYWAY, lambda bundle: True),
         (Regions.FIRE_TEMPLE_NEAR_BOSS_ROOM, lambda bundle: fire_timer(bundle) >= 24),
-        (Regions.FIRE_TEMPLE_LOOP_ENEMIES, lambda bundle: 
-            (can_use(Items.MEGATON_HAMMER, bundle) and
-             (small_keys(Items.FIRE_TEMPLE_SMALL_KEY, 8, bundle) or not is_fire_loop_locked(bundle)))),
+        (Regions.FIRE_TEMPLE_LOOP_ENEMIES, lambda bundle: (can_use(Items.MEGATON_HAMMER, bundle) and (small_keys(Items.FIRE_TEMPLE_SMALL_KEY, 8, bundle) or not is_fire_loop_locked(bundle)))),
         (Regions.FIRE_TEMPLE_LOOP_EXIT, lambda bundle: True),
-        (Regions.FIRE_TEMPLE_BIG_LAVA_ROOM, lambda bundle:
-            (small_keys(Items.FIRE_TEMPLE_SMALL_KEY, 2, bundle) and fire_timer(bundle) >= 24))
+        (Regions.FIRE_TEMPLE_BIG_LAVA_ROOM, lambda bundle: small_keys(Items.FIRE_TEMPLE_SMALL_KEY, 2, bundle) and fire_timer(bundle) >= 24)
     ])
     
     ## Fire Temple Near Boss Room
     # Events
     add_events(Regions.FIRE_TEMPLE_NEAR_BOSS_ROOM, world, [
-        (EventLocations.FIRE_TEMPLE_NEAR_BOSS_ROOM_FAIRY_POT, Events.CAN_ACCESS_FAIRIES, lambda bundle:
-            (can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle)))
+        (EventLocations.FIRE_TEMPLE_NEAR_BOSS_ROOM_FAIRY_POT, Events.CAN_ACCESS_FAIRIES, lambda bundle: can_use(Items.HOVER_BOOTS, bundle) or can_use(Items.HOOKSHOT, bundle))
     ])
     # Locations
     add_locations(Regions.FIRE_TEMPLE_NEAR_BOSS_ROOM, world, [
@@ -92,9 +88,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.FIRE_TEMPLE_LOOP_FLARE_DANCER, world, [
         (Locations.FIRE_TEMPLE_FLARE_DANCER_CHEST, lambda bundle:
-            (has_explosives(bundle) or
-             can_use(Items.MEGATON_HAMMER, bundle)) and
-            is_adult(bundle))
+            (has_explosives(bundle) or can_use(Items.MEGATON_HAMMER, bundle)) and
+            (is_adult(bundle) or can_ground_jump(bundle)))
     ])
     # Connections
     connect_regions(Regions.FIRE_TEMPLE_LOOP_FLARE_DANCER, world, [
@@ -106,14 +101,12 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Fire Temple Loop Hammer Switch
     # Events
     add_events(Regions.FIRE_TEMPLE_LOOP_HAMMER_SWITCH, world, [
-        (EventLocations.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_ROOM_SWITCH, LocalEvents.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT, lambda bundle:
-            (can_use(Items.MEGATON_HAMMER, bundle)))
+        (EventLocations.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_ROOM_SWITCH, LocalEvents.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT, lambda bundle: can_use(Items.MEGATON_HAMMER, bundle))
     ])
     # Connections
     connect_regions(Regions.FIRE_TEMPLE_LOOP_HAMMER_SWITCH, world, [
         (Regions.FIRE_TEMPLE_LOOP_FLARE_DANCER, lambda bundle: True),
-        (Regions.FIRE_TEMPLE_LOOP_GORON_ROOM, lambda bundle:
-            (has_item(LocalEvents.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT, bundle)))
+        (Regions.FIRE_TEMPLE_LOOP_GORON_ROOM, lambda bundle: has_item(LocalEvents.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT, bundle))
     ])
     
     ## Fire Temple Loop Goron Room
@@ -123,18 +116,15 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.FIRE_TEMPLE_LOOP_GORON_ROOM, world, [
-        (Regions.FIRE_TEMPLE_LOOP_HAMMER_SWITCH, lambda bundle:
-            (has_item(LocalEvents.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT, bundle))),
-        (Regions.FIRE_TEMPLE_LOOP_EXIT, lambda bundle:
-            (has_item(LocalEvents.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT, bundle)))
+        (Regions.FIRE_TEMPLE_LOOP_HAMMER_SWITCH, lambda bundle: has_item(LocalEvents.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT, bundle)),
+        (Regions.FIRE_TEMPLE_LOOP_EXIT, lambda bundle: has_item(LocalEvents.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT, bundle))
     ])
     
     ## Fire Temple Loop Exit
     # Connections
     connect_regions(Regions.FIRE_TEMPLE_LOOP_EXIT, world, [
         (Regions.FIRE_TEMPLE_FIRST_ROOM, lambda bundle: True),
-        (Regions.FIRE_TEMPLE_LOOP_GORON_ROOM, lambda bundle:
-            (has_item(LocalEvents.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT, bundle)))
+        (Regions.FIRE_TEMPLE_LOOP_GORON_ROOM, lambda bundle: has_item(LocalEvents.FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT, bundle))
     ])
     
     ## Fire Temple Big Lava Room
@@ -150,11 +140,9 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.FIRE_TEMPLE_BIG_LAVA_ROOM_NORTH_GORON, lambda bundle: True),
         (Regions.FIRE_TEMPLE_BIG_LAVA_ROOM_NORTH_TILES, lambda bundle:
             (is_adult(bundle) and
-             (can_use(Items.SONG_OF_TIME) or
+             (can_use(Items.SONG_OF_TIME, bundle) or
               can_do_trick(Tricks.FIRE_SOT, bundle)))),
-        (Regions.FIRE_TEMPLE_BIG_LAVA_ROOM_SOUTH_GORON, lambda bundle:
-            (is_adult(bundle) and
-             has_explosives(bundle))),
+        (Regions.FIRE_TEMPLE_BIG_LAVA_ROOM_SOUTH_GORON, lambda bundle: is_adult(bundle) and has_explosives(bundle)),
         (Regions.FIRE_TEMPLE_FIRE_PILLAR_ROOM, lambda bundle: small_keys(Items.FIRE_TEMPLE_SMALL_KEY, 3, bundle))
     ])
     
@@ -212,13 +200,9 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.FIRE_TEMPLE_FIRE_PILLAR_ROOM, lambda bundle: small_keys(Items.FIRE_TEMPLE_SMALL_KEY, 4, bundle)),
         (Regions.FIRE_TEMPLE_SHORTCUT_CLIMB, lambda bundle: True),
         (Regions.FIRE_TEMPLE_BOULDER_MAZE_LOWER, lambda bundle:
-            (is_adult(bundle) and
-             (has_item(Items.GORONS_BRACELET, bundle) or
-              can_do_trick(Tricks.FIRE_STRENGTH, bundle)) and
-             (has_explosives(bundle) or
-              can_use(Items.FAIRY_BOW) or
-              can_use(Items.HOOKSHOT, bundle) or
-              can_use(Items.FAIRY_SLINGSHOT))))
+            is_adult(bundle) and (
+                has_item(Items.GORONS_BRACELET, bundle) or can_do_trick(Tricks.FIRE_STRENGTH, bundle) or can_ground_jump(bundle)) and (
+                    (has_explosives(bundle) or can_use_any([Items.FAIRY_BOW, Items.HOOKSHOT, Items.FAIRY_SLINGSHOT], bundle))))
     ])
     
     ## Fire Temple Shortcut Climb
@@ -295,13 +279,8 @@ def set_region_rules(world: "SohWorld") -> None:
             (fire_timer(bundle) >= 24 and
              small_keys(Items.FIRE_TEMPLE_SMALL_KEY, 6, bundle))),
         (Regions.FIRE_TEMPLE_MAP_REGION, lambda bundle: is_adult(bundle)),
-        (Regions.FIRE_TEMPLE_BOULDER_MAZE_UPPER, lambda bundle:
-            (fire_timer(bundle) >= 24 and
-             is_adult(bundle))),
-        (Regions.FIRE_TEMPLE_CORRIDOR, lambda bundle:
-            (fire_timer(bundle) >= 24 and
-             is_adult(bundle) and
-             small_keys(Items.FIRE_TEMPLE_SMALL_KEY, 7, bundle)))
+        (Regions.FIRE_TEMPLE_BOULDER_MAZE_UPPER, lambda bundle: fire_timer(bundle) >= 24 and is_adult(bundle)),
+        (Regions.FIRE_TEMPLE_CORRIDOR, lambda bundle: fire_timer(bundle) >= 24 and is_adult(bundle) and small_keys(Items.FIRE_TEMPLE_SMALL_KEY, 7, bundle))
     ])
     
     ## Fire Temple Map Region
@@ -334,15 +313,12 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Fire Temple Scarecrow Room
     # Locations
     add_locations(Regions.FIRE_TEMPLE_SCARECROW_ROOM, world, [
-        (Locations.FIRE_TEMPLE_GS_SCARECROW_CLIMB, lambda bundle:
-            (can_jump_slash_except_hammer(bundle) or
-             can_use(Items.FAIRY_SLINGSHOT, bundle) or
-             can_use(Items.BOOMERANG, bundle) or
-             has_explosives(bundle) or
-             can_use(Items.FAIRY_BOW, bundle) or
-             can_use(Items.HOOKSHOT, bundle) or
-             can_use(Items.DINS_FIRE, bundle)))
+        (Locations.FIRE_TEMPLE_GS_SCARECROW_CLIMB, lambda bundle: 
+            can_jump_slash_except_hammer(bundle) or 
+            can_use_any([Items.FAIRY_SLINGSHOT, Items.BOOMERANG, Items.FAIRY_BOW, Items.HOOKSHOT, Items.DINS_FIRE], bundle) or
+            has_explosives(bundle))
     ])
+        
     # Connections
     connect_regions(Regions.FIRE_TEMPLE_SCARECROW_ROOM, world, [
         (Regions.FIRE_TEMPLE_BOULDER_MAZE_UPPER, lambda bundle: True),
@@ -379,7 +355,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.FIRE_TEMPLE_FIRE_MAZE_ROOM, world, [
         (Regions.FIRE_TEMPLE_CORRIDOR, lambda bundle: True),
-        (Regions.FIRE_TEMPLE_FIRE_MAZE_UPPER, lambda bundle: can_use(Items.HOVER_BOOTS, bundle)),
+        (Regions.FIRE_TEMPLE_FIRE_MAZE_UPPER, lambda bundle: can_use(Items.HOVER_BOOTS, bundle) or can_ground_jump(bundle)),
         (Regions.FIRE_TEMPLE_FIRE_MAZE_SIDE_ROOM, lambda bundle: True),
         (Regions.FIRE_TEMPLE_WEST_CENTRAL_LOWER, lambda bundle: small_keys(Items.FIRE_TEMPLE_SMALL_KEY, 8, bundle)),
         (Regions.FIRE_TEMPLE_LATE_FIRE_MAZE, lambda bundle: can_do_trick(Tricks.FIRE_FLAME_MAZE, bundle))
@@ -503,8 +479,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.FIRE_TEMPLE_BOSS_ROOM, world, [
         (EventLocations.FIRE_TEMPLE_BOSS_VOLVAGIA, Events.CLEARED_FIRE_TEMPLE, lambda bundle:
-            (fire_timer(bundle) >= 64 and
-             can_kill_enemy(bundle, Enemies.VOLVAGIA)))
+            fire_timer(bundle) >= 64 and can_kill_enemy(bundle, Enemies.VOLVAGIA))
     ])
     # Locations
     add_locations(Regions.FIRE_TEMPLE_BOSS_ROOM, world, [
