@@ -2008,9 +2008,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ), each_zone=MultiZoneFlag.MULTI
     ),
     "Ice Zone Lower Lift Area - Wingull Power Competition -- Friendship": PokeparkLocationData(
-        213, PokeparkFlag.CHASE, "Ice Zone Lower Lift Area", 0x0302, PokeparkFriendshipClientLocationData(
-            structure_position=62,
-            memory_range=MemoryRange.BYTE
+        213, PokeparkFlag.CHASE, "Ice Zone Lower Lift Area", 0x0302, Pokepark07AttractionClientData(
+            structure_position=7,
+            memory_range=MemoryRange.HALFWORD
         ), each_zone=MultiZoneFlag.MULTI
     ),
 
