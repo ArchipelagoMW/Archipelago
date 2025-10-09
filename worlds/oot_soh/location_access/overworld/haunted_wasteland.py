@@ -33,7 +33,7 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.HAUNTED_WASTELAND, world, [
         (Locations.WASTELAND_CHEST, lambda bundle: has_fire_source(bundle)),
         (Locations.WASTELAND_CARPET_SALESMAN, lambda bundle: has_item(Items.ADULT_WALLET, bundle) and (can_jump_slash(bundle) or can_use(Items.HOVER_BOOTS, bundle))),
-        (Locations.WASTELAND_GS, lambda bundle: hookshot_or_boomerang(bundle)),
+        (Locations.WASTELAND_GS, lambda bundle: hookshot_or_boomerang(bundle) or (is_adult(bundle) and can_ground_jump(bundle) and can_jump_slash(bundle))),
         (Locations.WASTELAND_NEAR_GS_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.WASTELAND_NEAR_GS_POT2, lambda bundle: can_break_pots(bundle)),
         (Locations.WASTELAND_NEAR_GS_POT3, lambda bundle: can_break_pots(bundle)),
