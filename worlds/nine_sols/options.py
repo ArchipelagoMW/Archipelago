@@ -65,7 +65,7 @@ class JadeCostMin(Range):
     """The minimum possible jade cost. Has no effect if randomize_jade_costs is false."""
     display_name = "Jade Cost Minimum"
     range_start = 0
-    range_end = 8
+    range_end = 10
     default = 1
 
 
@@ -73,7 +73,7 @@ class JadeCostMax(Range):
     """The maximum possible jade cost. Has no effect if randomize_jade_costs is false."""
     display_name = "Jade Cost Maximum"
     range_start = 0
-    range_end = 8
+    range_end = 10
     default = 3
 
 
