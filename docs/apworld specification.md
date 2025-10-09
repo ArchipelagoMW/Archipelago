@@ -29,11 +29,11 @@ If the APWorld is a folder, the only required field is "game":
 }
 ```
 
-If the APWorld is packaged as an .apworld zip file, it also needs to have `version` and `compatible_version`,
+If the APWorld is packaged as an `.apworld` zip file, it also needs to have `version` and `compatible_version`,
 which refer to the version of the APContainer packaging scheme defined in [Files.py](../worlds/Files.py).  
 These get automatically added to the `archipelago.json` of an .apworld if it is packaged using the 
 ["Build apworlds" launcher component](#build-apworlds-launcher-component),
-which is the correct way to package your .apworld as a world developer. Do not write these fields yourself.
+which is the correct way to package your `.apworld` as a world developer. Do not write these fields yourself.
 
 There are also the following optional fields:
 * `minimum_ap_version` and `maximum_ap_version` - which if present will each be compared against the current
