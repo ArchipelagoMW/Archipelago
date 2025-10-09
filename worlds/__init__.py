@@ -54,17 +54,12 @@ class WorldSource:
             start = time.perf_counter()
             if self.is_zip:
                 importer = zipimport.zipimporter(self.resolved_path)
-                spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0])
+                world_name = os.path.basename(self.path).rsplit(".", 1)[0]
+                spec = importer.find_spec(f"worlds.{world_name}")
                 assert spec, f"{self.path} is not a loadable module"
                 mod = importlib.util.module_from_spec(spec)
-
-                mod.__package__ = f"worlds.{mod.__package__}"
-
-                mod.__name__ = f"worlds.{mod.__name__}"
                 sys.modules[mod.__name__] = mod
-                with warnings.catch_warnings():
-                    warnings.filterwarnings("ignore", message="__package__ != __spec__.parent")
-                    importer.exec_module(mod)
+                importer.exec_module(mod)
             else:
                 importlib.import_module(f".{self.path}", "worlds")
             self.time_taken = time.perf_counter()-start
