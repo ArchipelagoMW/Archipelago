@@ -4,6 +4,7 @@ from typing import Any, ClassVar
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
+from Options import OptionError
 from .items import NineSolsItem, all_non_event_items_table, item_name_groups, create_item, create_items
 from .locations_and_regions import all_non_event_locations_table, location_name_groups, create_regions
 from .options import NineSolsGameOptions
@@ -49,6 +50,9 @@ class NineSolsWorld(World):
     }
 
     def generate_early(self) -> None:
+        if self.options.jade_cost_max < self.options.jade_cost_min:
+            raise OptionError("jade_cost_max is less than jade_cost_min")
+
         # implement .yaml-less Universal Tracker support
         if hasattr(self.multiworld, "generation_is_fake"):
             if hasattr(self.multiworld, "re_gen_passthrough"):
