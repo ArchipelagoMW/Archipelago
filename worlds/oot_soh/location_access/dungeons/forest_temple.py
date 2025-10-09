@@ -127,10 +127,10 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.FOREST_TEMPLE_NW_OUTDOORS_LOWER, world, [
         (Regions.FOREST_TEMPLE_LOBBY, lambda bundle: can_use(Items.SONG_OF_TIME, bundle)),
         (Regions.FOREST_TEMPLE_NW_COURTYARD_SKULLTULA_ISLAND, lambda bundle: can_use(Items.LONGSHOT, bundle)),
-        (Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, lambda bundle: (can_do_trick(Tricks.HOVER_BOOST_SIMPLE, bundle) and
-                                                                  can_do_trick(Tricks.DAMAGE_BOOST_SIMPLE, bundle) and
-                                                                  has_explosives(bundle) and
-                                                                  can_use(Items.HOVER_BOOTS, bundle))),
+        (Regions.FOREST_TEMPLE_NW_OUTDOORS_UPPER, lambda bundle: (
+            can_use(Items.HOVER_BOOTS, bundle) and (
+                (can_do_trick(Tricks.HOVER_BOOST_SIMPLE, bundle) and can_do_trick(Tricks.DAMAGE_BOOST_SIMPLE, bundle) and has_explosives(bundle)) or
+                (can_do_trick(Tricks.GROUND_JUMP_HARD, bundle) and can_ground_jump(bundle))))),
         (Regions.FOREST_TEMPLE_MAP_ROOM, lambda bundle: True),
         (Regions.FOREST_TEMPLE_WELL, lambda bundle: 
             ((has_item(Items.GOLDEN_SCALE, bundle) or 
