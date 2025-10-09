@@ -997,3 +997,7 @@ def can_plant_bean(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 # TODO implement when shuffling keys within a dungeon is implemented
 def is_fire_loop_locked(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return True
+
+def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBombFlower: bool = False) -> bool:
+    return can_do_trick(Tricks.GROUND_JUMP, bundle) and can_standing_shield(bundle) and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle)))
+
