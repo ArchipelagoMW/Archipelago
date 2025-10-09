@@ -239,7 +239,7 @@ class WitnessWorld(World):
         num_reachable_tutorial_locations = sum(
             static_witness_logic.ALL_REGIONS_BY_NAME[
                 cast(Region, location.parent_region).name
-            ].name == "Tutorial (Inside)"
+            ].area.name == "Tutorial (Inside)"
             for location in early_locations
         )
 
