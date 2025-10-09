@@ -3752,6 +3752,7 @@ class Tricks(str, Enum):
     GROUND_JUMP = "Ground Jump"
     HESS = "HESS"
     HOOKSHOT_CLIP = "Hookshot Clip"
+    HOOKSHOT_EXTENSION = "Hookshot Extension"
     HOOKSHOT_JUMP = "Hookshot Jump"
     HOVERING = "Hovering"
     HOVERING_BOW_SLINGSHOT = "Hovering Bow Slingshot"
