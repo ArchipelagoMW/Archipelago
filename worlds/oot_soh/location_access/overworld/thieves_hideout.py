@@ -4,10 +4,10 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 class EventsLocations(str, Enum):
-    TH_1_TORCH_CELL_CARPENTER = "TH 1 Torch Cell Carpenter"
-    TH_DOUBLE_CELL_CARPENTER = "TH Double Cell Carpenter"
-    TH_DEAD_END_CELL_CARPENTER = "TH Dead End Cell Carpenter"
-    TH_STEEP_SLOPE_CELL_CARPENTER = "TH Steep Slope Cell Carpenter"
+    TH_1_TORCH_CARPENTER_CELL = "TH 1 Torch Cell Carpenter"
+    TH_DOUBLE_CELL_CARPENTER_CELL = "TH Double Cell Carpenter"
+    TH_DEAD_END_CARPENTER_CELL = "TH Dead End Cell Carpenter"
+    TH_STEEP_SLOPE_CARPENTER_CELL = "TH Steep Slope Cell Carpenter"
     TH_RESCUED_ALL_CARPENTERS = "TH Rescued All Carpenters"
 
 class LocalEvents(str, Enum):
@@ -44,7 +44,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ##Thieves Hideout Double Cell
     # Events
     add_events(Regions.THIEVES_HIDEOUT_DOUBLE_CELL, world, [
-        (EventsLocations.TH_DOUBLE_CELL_CARPENTER, LocalEvents.TH_DOUBLE_CELL_CARPENTER_FREED,
+        (EventsLocations.TH_DOUBLE_CELL_CARPENTER_CELL, LocalEvents.TH_DOUBLE_CELL_CARPENTER_FREED,
          lambda bundle: can_kill_enemy(bundle, Enemies.GERUDO_WARRIOR)),
     ])
     # Locations
