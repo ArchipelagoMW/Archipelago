@@ -1996,9 +1996,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ), each_zone=MultiZoneFlag.MULTI
     ),
     "Ice Zone Main Area - Staravia Power Competition -- Friendship": PokeparkLocationData(
-        211, PokeparkFlag.CHASE, "Ice Zone Main Area", 0x0302, PokeparkFriendshipClientLocationData(
-            structure_position=21,
-            memory_range=MemoryRange.BYTE
+        211, PokeparkFlag.CHASE, "Ice Zone Main Area", 0x0302, Pokepark07AttractionClientData(
+            structure_position=6,
+            memory_range=MemoryRange.HALFWORD
         ), each_zone=MultiZoneFlag.MULTI
     ),
     "Ice Zone Main Area - Teddiursa Power Competition -- Friendship": PokeparkLocationData(
