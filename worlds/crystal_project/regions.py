@@ -371,11 +371,13 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, QUINTAR_SANCTUM_AP_REGION, [ROLLING_QUINTAR_FIELDS_AP_REGION, QUINTAR_NEST_AP_REGION, QUINTAR_MAUSOLEUM_AP_REGION],
                     {QUINTAR_MAUSOLEUM_AP_REGION: lambda state: logic.has_swimming(state),
                      QUINTAR_NEST_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, CAPITAL_JAIL_AP_REGION, [JOJO_SEWERS_AP_REGION, CAPITAL_PIPELINE_AP_REGION],
-                    {CAPITAL_PIPELINE_AP_REGION: lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)})
-    fancy_add_exits(world, CAPITAL_PIPELINE_AP_REGION, [CAPITAL_JAIL_AP_REGION, JIDAMBA_TANGLE_AP_REGION, CONTINENTAL_TRAM_AP_REGION],
-                    {JIDAMBA_TANGLE_AP_REGION: lambda state: logic.has_vertical_movement(state),
-                     CONTINENTAL_TRAM_AP_REGION: lambda state: logic.has_vertical_movement(state)})
+    fancy_add_exits(world, CAPITAL_JAIL_AP_REGION, [JOJO_SEWERS_AP_REGION, PIPELINE_NORTH_AP_REGION],
+                    {PIPELINE_NORTH_AP_REGION: lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)})
+    fancy_add_exits(world, PIPELINE_NORTH_AP_REGION, [PIPELINE_SOUTH_AP_REGION, CAPITAL_JAIL_AP_REGION],
+                    {PIPELINE_SOUTH_AP_REGION: lambda state: logic.has_vertical_movement(state),
+                     CAPITAL_JAIL_AP_REGION: lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)})
+    fancy_add_exits(world, PIPELINE_SOUTH_AP_REGION, [PIPELINE_NORTH_AP_REGION, JIDAMBA_TANGLE_AP_REGION, CONTINENTAL_TRAM_AP_REGION],
+                    {JIDAMBA_TANGLE_AP_REGION: lambda state: logic.has_glide(state)})
     fancy_add_exits(world, COBBLESTONE_CRAG_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, THE_OPEN_SEA_AP_REGION, SHOUDU_WATERFRONT_AP_REGION, OKIMOTO_NS_AP_REGION],
                     {SHOUDU_WATERFRONT_AP_REGION: lambda state: logic.has_horizontal_movement(state),
                      OKIMOTO_NS_AP_REGION: lambda state: logic.has_horizontal_movement(state),
@@ -493,6 +495,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, FLYERS_CRAG_AP_REGION, [OKIMOTO_NS_AP_REGION, JIDAMBA_TANGLE_AP_REGION],
                     {JIDAMBA_TANGLE_AP_REGION: lambda state: logic.has_glide(state)})
     fancy_add_exits(world, JIDAMBA_TANGLE_AP_REGION, [THE_OPEN_SEA_AP_REGION, JIDAMBA_EACLANEYA_AP_REGION],
+                    #if we change the elevators to Pipeline to always be powered, then add an exit to Pipeline South
                     {JIDAMBA_EACLANEYA_AP_REGION: lambda state: (logic.has_glide(state) or logic.has_swimming(state)) and logic.has_jidamba_keys(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, JIDAMBA_EACLANEYA_AP_REGION, [JIDAMBA_TANGLE_AP_REGION, THE_OPEN_SEA_AP_REGION],
@@ -507,7 +510,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, JADE_CAVERN_AP_REGION, [SOILED_DEN_AP_REGION, BELOW_GRAN_AP_REGION],
                     {SOILED_DEN_AP_REGION: lambda state: logic.has_swimming(state),
                      BELOW_GRAN_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, CONTINENTAL_TRAM_AP_REGION, [CAPITAL_PIPELINE_AP_REGION, SARA_SARA_BAZAAR_AP_REGION],
+    fancy_add_exits(world, CONTINENTAL_TRAM_AP_REGION, [PIPELINE_SOUTH_AP_REGION, SARA_SARA_BAZAAR_AP_REGION],
                     {SARA_SARA_BAZAAR_AP_REGION: lambda state: logic.has_swimming(state) or state.has(TRAM_KEY, player)})
     fancy_add_exits(world, ANCIENT_LABYRINTH_AP_REGION, [POKO_POKO_DESERT_AP_REGION])
     fancy_add_exits(world, THE_SEQUOIA_AP_REGION, [THE_DEEP_SEA_AP_REGION])

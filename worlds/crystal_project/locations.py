@@ -445,14 +445,17 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Capital Pipeline
         #Treasure chests
-        #If you got here from the jail, you'd need vert, or you could get in with swimming, or you could get in with the tram key, (not from jidamba)
-        LocationData(CAPITAL_PIPELINE_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " Chest - I wanna go home", 2912 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)), #Capital Pipeline map chest
-        LocationData(CAPITAL_PIPELINE_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " Chest - Do not anger the fungus", 1294 + treasure_index_offset), #Lucky Platter chest
+        #Pipeline South
+        LocationData(PIPELINE_SOUTH_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " Chest - I wanna go home", 2912 + treasure_index_offset), #Capital Pipeline map chest
+        #Pipeline North
+        LocationData(PIPELINE_NORTH_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " Chest - Do not anger the fungus", 1294 + treasure_index_offset), #Lucky Platter chest
 
         #NPCs
-        LocationData(CAPITAL_PIPELINE_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " NPC - Silver in corrupted tunnel 1", 2660 + npc_index_offset), #Ingot
-        LocationData(CAPITAL_PIPELINE_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " NPC - Silver in corrupted tunnel 2", 1295 + npc_index_offset), #Ore
-        LocationData(CAPITAL_PIPELINE_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + " NPC - Diamond down Pipeline elevator into Jidamba", 2897 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)), #Dust
+        #Pipeline South
+        LocationData(PIPELINE_SOUTH_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + " NPC - Diamond down Pipeline elevator into Jidamba", 2897 + npc_index_offset), #Dust
+        #Pipeline North
+        LocationData(PIPELINE_NORTH_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " NPC - Silver in corrupted tunnel 1", 2660 + npc_index_offset), #Ingot
+        LocationData(PIPELINE_NORTH_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " NPC - Silver in corrupted tunnel 2", 1295 + npc_index_offset), #Ore
 
         #Cobblestone Crag
         #Treasure chests
@@ -1842,7 +1845,7 @@ def get_region_completions(player: int, options: CrystalProjectOptions) -> List[
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " Region Completion", 6015 + regionsanity_index_offset, regionsanity=True),
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " Region Completion", 6016 + regionsanity_index_offset, regionsanity=True),
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Region Completion", 6017 + regionsanity_index_offset, regionsanity=True),
-        LocationData(CAPITAL_PIPELINE_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " Region Completion", 6018 + regionsanity_index_offset, regionsanity=True),
+        LocationData(PIPELINE_SOUTH_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " Region Completion", 6018 + regionsanity_index_offset, regionsanity=True),
         LocationData(COBBLESTONE_CRAG_AP_REGION, COBBLESTONE_CRAG_DISPLAY_NAME + " Region Completion", 6019 + regionsanity_index_offset, regionsanity=True),
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Region Completion", 6020 + regionsanity_index_offset, regionsanity=True),
         LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Region Completion", 6021 + regionsanity_index_offset, regionsanity=True),

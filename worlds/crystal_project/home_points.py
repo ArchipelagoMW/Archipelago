@@ -93,8 +93,8 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
 
         LocationData(THE_UNDERCITY_AP_REGION, "The Undercity", 1266, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE_AP_REGION, player=player) or state.can_reach(QUINTAR_RESERVE_AP_REGION, player=player)),
 
-        LocationData(CAPITAL_PIPELINE_AP_REGION, "Capital Pipeline", 1127),
-        LocationData(CAPITAL_PIPELINE_AP_REGION, "East Capital Pipeline", 1420, lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)),
+        LocationData(PIPELINE_NORTH_AP_REGION, "Capital Pipeline", 1127),
+        LocationData(PIPELINE_SOUTH_AP_REGION, "East Capital Pipeline", 1420),
 
         LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Sequoia Athenaeum", 2361, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
         LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Ice Pass", 2413),
