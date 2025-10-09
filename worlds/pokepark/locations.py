@@ -2263,16 +2263,16 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Cavern Zone Main Area - Bonsly Power Competition -- Friendship": PokeparkLocationData(
-        249, PokeparkFlag.HIDEANDSEEK, "Cavern Zone Main Area", 0x0401, PokeparkFriendshipClientLocationData(
-            structure_position=12,
-            memory_range=MemoryRange.BYTE
+        249, PokeparkFlag.HIDEANDSEEK, "Cavern Zone Main Area", 0x0401, Pokepark07AttractionClientData(
+            structure_position=8,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
     "Cavern Zone Main Area - Bonsly Power Competition -- Sudowoodo Unlocked": PokeparkLocationData(
-        250, PokeparkFlag.HIDEANDSEEK, "Cavern Zone Main Area", 0x0401, PokeparkFriendshipClientLocationData(
-            structure_position=12,
-            memory_range=MemoryRange.BYTE
+        250, PokeparkFlag.HIDEANDSEEK, "Cavern Zone Main Area", 0x0401, Pokepark07AttractionClientData(
+            structure_position=8,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
