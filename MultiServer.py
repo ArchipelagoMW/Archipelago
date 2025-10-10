@@ -216,6 +216,7 @@ class Context:
                       "release_mode": str,
                       "remaining_mode": str,
                       "collect_mode": str,
+                      "countdown_mode": str,
                       "item_cheat": bool,
                       "compatibility": int}
     # team -> slot id -> list of clients authenticated to slot.
@@ -245,8 +246,8 @@ class Context:
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
-                 remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2,
-                 log_network: bool = False, logger: logging.Logger = logging.getLogger()):
+                 countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, 
+                 compatibility: int = 2, log_network: bool = False, logger: logging.Logger = logging.getLogger()):
         self.logger = logger
         super(Context, self).__init__()
         self.slot_info = {}
@@ -279,6 +280,7 @@ class Context:
         self.release_mode: str = release_mode
         self.remaining_mode: str = remaining_mode
         self.collect_mode: str = collect_mode
+        self.countdown_mode: str = countdown_mode
         self.item_cheat = item_cheat
         self.exit_event = asyncio.Event()
         self.client_activity_timers: typing.Dict[
@@ -664,6 +666,7 @@ class Context:
                              "server_password": self.server_password, "password": self.password,
                              "release_mode": self.release_mode,
                              "remaining_mode": self.remaining_mode, "collect_mode": self.collect_mode,
+                             "countdown_mode": self.countdown_mode,
                              "item_cheat": self.item_cheat, "compatibility": self.compatibility}
 
         }
@@ -698,6 +701,7 @@ class Context:
             self.release_mode = savedata["game_options"]["release_mode"]
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
             self.collect_mode = savedata["game_options"]["collect_mode"]
+            self.countdown_mode = savedata["game_options"].get("countdown_mode", self.countdown_mode)
             self.item_cheat = savedata["game_options"]["item_cheat"]
             self.compatibility = savedata["game_options"]["compatibility"]
 
@@ -1528,6 +1532,23 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, client collecting requires you to have beaten the game on this server."
                     " You can ask the server admin for a /collect")
                 return False
+
+    def _cmd_countdown(self, seconds: str = "10") -> bool:
+        """Start a countdown in seconds"""
+        if self.ctx.countdown_mode == "disabled" or \
+           self.ctx.countdown_mode == "auto" and len(self.ctx.player_names) >= 30:
+            self.output("Sorry, client countdowns have been disabled on this server. You can ask the server admin for a /countdown")
+            return False
+        try:
+            timer = int(seconds, 10)
+        except ValueError:
+            timer = 10
+        else:
+            if timer > 60 * 60:
+                raise ValueError(f"{timer} is invalid. Maximum is 1 hour.")
+
+        async_start(countdown(self.ctx, timer))
+        return True
 
     def _cmd_remaining(self) -> bool:
         """List remaining items in your game, but not their location or recipient"""
@@ -2489,6 +2510,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
         elif value_type == str and option_name.endswith("password"):
             def value_type(input_text: str):
                 return None if input_text.lower() in {"null", "none", '""', "''"} else input_text
+        elif option_name == "countdown_mode":
+            valid_values = {"enabled", "disabled", "auto"}
+            if option_value.lower() not in valid_values:
+                self.output(f"Unrecognized {option_name} value '{option_value}', known: {', '.join(valid_values)}")
+                return False
         elif value_type == str and option_name.endswith("mode"):
             valid_values = {"goal", "enabled", "disabled"}
             valid_values.update(("auto", "auto_enabled") if option_name != "remaining_mode" else [])
@@ -2576,6 +2602,13 @@ def parse_args() -> argparse.Namespace:
                              goal:     !collect can be used after goal completion
                              auto-enabled: !collect is available and automatically triggered on goal completion
                              ''')
+    parser.add_argument('--countdown_mode', default=defaults["countdown_mode"], nargs='?',
+                        choices=['enabled', 'disabled', "auto"], help='''\
+                                Select !countdown Accessibility. (default: %(default)s)
+                                enabled:  !countdown is always available
+                                disabled: !countdown is never available
+                                auto:     !countdown is available for rooms with less than 30 players
+                                ''')
     parser.add_argument('--remaining_mode', default=defaults["remaining_mode"], nargs='?',
                         choices=['enabled', 'disabled', "goal"], help='''\
                              Select !remaining Accessibility. (default: %(default)s)
@@ -2641,7 +2674,7 @@ async def main(args: argparse.Namespace):
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.release_mode, args.collect_mode,
-                  args.remaining_mode,
+                  args.countdown_mode, args.remaining_mode,
                   args.auto_shutdown, args.compatibility, args.log_network)
     data_filename = args.multidata
 
