@@ -767,7 +767,7 @@ def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         return can_kill_enemy(bundle, enemy, distance, wall_or_floor) or can_use_any([Items.HOOKSHOT, Items.SUNS_SONG],bundle)
 
     if(enemy in [Enemies.IRON_KNUCKLE, Enemies.BIG_OCTO]):
-        return False
+        return can_kill_enemy(bundle, enemy, distance, wall_or_floor)
 
     if(enemy == Enemies.GREEN_BUBBLE):
         return can_kill_enemy(bundle, enemy, distance, wall_or_floor) or take_damage(bundle) or can_use_any([Items.NUTS, Items.BOOMERANG, Items.HOOKSHOT],bundle)
