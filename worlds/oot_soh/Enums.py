@@ -3572,7 +3572,6 @@ class Tricks(str, Enum):
     BOMBCHU_BEEHIVES = "Bombchu Beehives"
     BLUE_FIRE_MUD_WALLS = "Blue Fire Mud Walls"
     OPEN_UNDERWATER_CHEST = "Open Underwater Chest"
-    HOOKSHOT_EXTENSION = "Hookshot Extension"
     # Location Tricks
     KF_ADULT_GS = "KF Adult GS"
     LW_BRIDGE = "LW Bridge"
