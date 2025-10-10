@@ -408,11 +408,11 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.FOREST_TEMPLE_FALLING_ROOM, world, [
         (Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, lambda bundle: True),
         (Regions.FOREST_TEMPLE_GREEN_POE_ROOM, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_COURTYARD_RAISED_ISLAND, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_COURTYARD_RAISED_ISLAND_GS, lambda bundle: (can_use(Items.FAIRY_BOW, bundle) or
-                                                                             can_use(Items.FAIRY_SLINGSHOT, bundle) or
-                                                                             can_use(Items.DINS_FIRE, bundle) or
-                                                                             has_explosives(bundle)))
+        (Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND_GS, lambda bundle: (can_use(Items.FAIRY_BOW, bundle) or
+                                                                                 can_use(Items.FAIRY_SLINGSHOT, bundle) or
+                                                                                 can_use(Items.DINS_FIRE, bundle) or
+                                                                                 has_explosives(bundle)))
     ])
     
     ## Forest Temple Green Poe Room
