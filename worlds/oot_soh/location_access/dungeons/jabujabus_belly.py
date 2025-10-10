@@ -14,7 +14,7 @@ class EventLocations(str, Enum):
     JABU_JABUS_BELLY_WATER_SWITCH_ROOM_FAIRY_POT = "Jabu Jabus Belly Water Switch Room Fairy Pot"
     JABU_JABUS_BELLY_ABOVE_BIGOCTO_FAIRY_POT = "Jabu Jabus Belly Above Bigocto Fairy Pot"
     JABU_JABUS_BELLY_ABOVE_BIGOCTO_NUT_POT = "Jabu Jabus Belly Above Bigocto Nut Pot"
-    JABU_JABUS_BELLY_BOSS = "Jabu Jabu Boss Barinade"
+    JABU_JABUS_BELLY_BOSS = "Jabu Jabus Boss Barinade"
 
 
 class LocalEvents(str, Enum):
@@ -73,7 +73,6 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.JABU_JABUS_BELLY_B1_NORTH, world, [
         (Locations.JABU_JABUS_BELLY_GS_LOBBY_BASEMENT_LOWER, lambda bundle: hookshot_or_boomerang(bundle)),
-        (Locations.JABU_JABUS_BELLY_GS_LOBBY_BASEMENT_UPPER, lambda bundle: hookshot_or_boomerang(bundle)),
         (Locations.JABU_JABUS_BELLY_GS_WATER_SWITCH_ROOM, lambda bundle: hookshot_or_boomerang(bundle)),
         (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT_1, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False)))),
         (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT_2, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False)))),
@@ -85,7 +84,8 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.JABU_JABUS_BELLY_B1_NORTH, world, [
         (Regions.JABU_JABUS_BELLY_MAIN, lambda bundle: True),
         (Regions.JABU_JABUS_BELLY_WATER_SWITCH_ROOM_LEDGE, lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.HOVER_BOOTS, bundle)),
-        (Regions.JABU_JABUS_BELLY_WATER_SWITCH_ROOM_SOUTH, lambda bundle: is_adult(bundle) or has_item(Items.BRONZE_SCALE, bundle))
+        (Regions.JABU_JABUS_BELLY_WATER_SWITCH_ROOM_SOUTH, lambda bundle: is_adult(bundle) or has_item(Items.BRONZE_SCALE, bundle)),
+        (Regions.JABU_JABUS_BELLY_LOBBY_BASEMENT_UPPER_GS, lambda bundle: hookshot_or_boomerang(bundle)),
     ])
 
     ## Jabu Jabu's Belly Water Switch Room Ledge
@@ -149,18 +149,20 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     ## Jabu Jabu's Belly Bigocto Room
-    # Locations
-    add_locations(Regions.JABU_JABUS_BELLY_BIGOCTO_ROOM, world, [
-        (Locations.JABU_JABUS_BELLY_GS_LOBBY_BASEMENT_UPPER, lambda bundle: is_adult(bundle) and can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.SHORT_JUMPSLASH))
-    ])
     # Connections
     connect_regions(Regions.JABU_JABUS_BELLY_BIGOCTO_ROOM, world, [
         (Regions.JABU_JABUS_BELLY_B1_NORTH, lambda bundle: True),
-        (Regions.JABU_JABUS_BELLY_ABOVE_BIGOCTO, lambda bundle: has_item(LocalEvents.JABU_JABUS_BELLY_RUTO_IN_1F_RESCUED, bundle, world) and can_kill_enemy(bundle, Enemies.BIG_OCTO))
+        (Regions.JABU_JABUS_BELLY_ABOVE_BIGOCTO, lambda bundle: has_item(LocalEvents.JABU_JABUS_BELLY_RUTO_IN_1F_RESCUED, bundle, world) and can_kill_enemy(bundle, Enemies.BIG_OCTO)),
+        (Regions.JABU_JABUS_BELLY_LOBBY_BASEMENT_UPPER_GS, lambda bundle: is_adult(bundle) and can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.SHORT_JUMPSLASH))
+    ])
+    
+    ## Jabu Jabu's Belly GS Lobby Basement Upper
+    # Locations
+    add_locations(Regions.JABU_JABUS_BELLY_LOBBY_BASEMENT_UPPER_GS, world, [
+        (Locations.JABU_JABUS_BELLY_GS_LOBBY_BASEMENT_UPPER, lambda bundle: True)
     ])
 
     ## Jabu Jabu's Belly Above Bigocto
-    # Events (TODO: Add FairyPot and NutPot events)
     add_events(Regions.JABU_JABUS_BELLY_ABOVE_BIGOCTO, world, [
         (EventLocations.JABU_JABUS_BELLY_ABOVE_BIGOCTO_FAIRY_POT, Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
         (EventLocations.JABU_JABUS_BELLY_ABOVE_BIGOCTO_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True)

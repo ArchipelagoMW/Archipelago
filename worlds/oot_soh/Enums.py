@@ -307,6 +307,7 @@ class Regions(str, Enum):
     JABU_JABUS_BELLY_COMPASS_ROOM = "Jabu Jabus Belly Compass Room"
     JABU_JABUS_BELLY_BLUE_TENTACLE = "Jabu Jabus Belly Blue Tentacle"
     JABU_JABUS_BELLY_GREEN_TENTACLE = "Jabu Jabus Belly Green Tentacle"
+    JABU_JABUS_BELLY_LOBBY_BASEMENT_UPPER_GS = "Jabu Jabu's Belly Lobby Basement Upper GS"
     JABU_JABUS_BELLY_BIGOCTO_ROOM = "Jabu Jabus Belly Bigocto Room"
     JABU_JABUS_BELLY_ABOVE_BIGOCTO = "Jabu Jabus Belly Above Bigocto"
     JABU_JABUS_BELLY_LIFT_UPPER = "Jabu Jabus Belly Lift Upper"
