@@ -9,7 +9,7 @@ import settings
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, components, SuffixIdentifier, Type, launch_subprocess, icon_paths
+from worlds.LauncherComponents import Component, components, SuffixIdentifier, Type, launch, icon_paths
 from .Common import *
 from . import ItemIconGuessing
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
@@ -31,8 +31,8 @@ DEVELOPER_MODE = False
 
 
 def launch_client(*args):
-    from .LinksAwakeningClient import launch
-    launch_subprocess(launch, name=f"{LINKS_AWAKENING} Client", args=args)
+    from .LinksAwakeningClient import launch as ladx_launch
+    launch(ladx_launch, name=f"{LINKS_AWAKENING} Client", args=args)
 
 components.append(Component(f"{LINKS_AWAKENING} Client",
                             func=launch_client,
