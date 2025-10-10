@@ -81,7 +81,8 @@ are `description`, `name`, `game`, `requires`, and the name of the games you wan
 * `requires` details different requirements from the generator for the YAML to work as you expect it to. Generally this
   is good for detailing the version of Archipelago this YAML was prepared for. If it is rolled on an older version,
   options may be missing and as such it will not work as expected. If any plando is used in the file then requiring it
-  here to ensure it will be used is good practice.
+  here to ensure it will be used is good practice. Specific versions of custom worlds can also be required, ensuring 
+  that the generator is using a compatible version.
 
 ## Game Options
 
@@ -165,7 +166,9 @@ game:
   A Link to the Past: 10
   Timespinner: 10
 requires: 
-  version: 0.4.1
+  version: 0.6.4
+  game:
+      A Link to the Past: 0.6.4
 A Link to the Past:
   accessibility: minimal
   progression_balancing: 50
@@ -229,7 +232,7 @@ Timespinner:
 * `name` is `Example Player` and this will be used in the server console when sending and receiving items.
 * `game` has an equal chance of being either `A Link to the Past` or `Timespinner` with a 10/20 chance for each. This is
   because each game has a weight of 10 and the total of all weights is 20.
-* `requires` is set to required release version 0.3.2 or higher.
+* `requires` is set to require Archipelago release version 0.6.4 or higher, as well as A Link to the Past version 0.6.4.
 * `accessibility` for both games is set to `minimal` which will set this seed to beatable only, so some locations and
   items may be completely inaccessible but the seed will still be completable.
 * `progression_balancing` for both games is set to 50, the default value, meaning we will likely receive important items
