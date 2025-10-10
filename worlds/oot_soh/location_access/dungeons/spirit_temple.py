@@ -15,7 +15,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.SPIRIT_TEMPLE_ENTRYWAY, world, [
         (Regions.SPIRIT_TEMPLE_LOBBY, lambda bundle: True), 
-        (Regions.DESERT_COLOSSUS_FROM_SPIRIT_ENTRYWAY, lambda bundle: True)
+        (Regions.DESERT_COLOSSUS_OUTSIDE_TEMPLE, lambda bundle: True)
     ])
 
     ## Spirit Temple Lobby
@@ -56,8 +56,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Spirit Temple Child Climb
     # Locations
     add_locations(Regions.SPIRIT_TEMPLE_CHILD_CLIMB, world, [
-        (Locations.SPIRIT_TEMPLE_CHILD_CLIMB_NORTH_CHEST, lambda bundle: has_projectile(bundle, Ages.BOTH) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, bundle) and can_use(Items.SILVER_GAUNTLETS, bundle) and has_projectile(bundle, Ages.ADULT)) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 5, bundle) and is_child(bundle) and has_projectile(bundle, Ages.CHILD))),
-        (Locations.SPIRIT_TEMPLE_CHILD_CLIMB_EAST_CHEST, lambda bundle: has_projectile(bundle, Ages.BOTH) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, bundle) and can_use(Items.SILVER_GAUNTLETS, bundle) and has_projectile(bundle, Ages.ADULT)) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 5, bundle) and is_child(bundle) and has_projectile(bundle, Ages.CHILD))),
+        (Locations.SPIRIT_TEMPLE_CHILD_CLIMB_NORTH_CHEST, lambda bundle: has_projectile(bundle, Ages.BOTH) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 2, bundle) and can_use(Items.SILVER_GAUNTLETS, bundle) and has_projectile(bundle, Ages.ADULT)) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 5, bundle) and is_child(bundle) and has_projectile(bundle, Ages.CHILD))),
+        (Locations.SPIRIT_TEMPLE_CHILD_CLIMB_EAST_CHEST, lambda bundle: has_projectile(bundle, Ages.BOTH) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 2, bundle) and can_use(Items.SILVER_GAUNTLETS, bundle) and has_projectile(bundle, Ages.ADULT)) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 5, bundle) and is_child(bundle) and has_projectile(bundle, Ages.CHILD))),
         (Locations.SPIRIT_TEMPLE_GS_SUN_ON_FLOOR_ROOM, lambda bundle: has_projectile(bundle, Ages.BOTH) or can_use(Items.DINS_FIRE, bundle) or (take_damage(bundle) and (can_jump_slash_except_hammer(bundle) or has_projectile(bundle, Ages.CHILD))) or (is_child(bundle) and small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 5, bundle) and has_projectile(bundle, Ages.CHILD)) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 2, bundle) and can_use(Items.SILVER_GAUNTLETS, bundle) and (has_projectile(bundle, Ages.ADULT) or (take_damage(bundle) and can_jump_slash_except_hammer(bundle))))),
         (Locations.SPIRIT_TEMPLE_CHILD_CLIMB_POT1, lambda bundle: can_break_pots(bundle))
     ])
@@ -84,7 +84,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Spirit Temple Central Chamber
     # Locations
     add_locations(Regions.SPIRIT_TEMPLE_CENTRAL_CHAMBER, world, [
-        (Locations.SPIRIT_TEMPLE_MAP_CHEST, lambda bundle: ((has_explosives(bundle) or small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 2, bundle)) and (can_use(Items.DINS_FIRE, bundle) or ((can_use(Items.FIRE_ARROW, bundle) or can_do_trick(Tricks.SPIRIT_MAP_CHEST, bundle)) and can_use(Items.FAIRY_BOW, bundle) and can_use(Items.STICKS, bundle))) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 5, bundle) and has_explosives(bundle) and can_use(Items.STICKS, bundle)) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 3, bundle) and can_use(Items.FIRE_ARROW, bundle) or (can_do_trick(Tricks.SPIRIT_MAP_CHEST, bundle) and can_use(Items.FAIRY_BOW, bundle))) and can_use(Items.SILVER_GAUNTLETS, bundle))),
+        (Locations.SPIRIT_TEMPLE_MAP_CHEST, lambda bundle: ((has_explosives(bundle) or small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 2, bundle)) and (can_use(Items.DINS_FIRE, bundle) or ((can_use(Items.FIRE_ARROW, bundle) or can_do_trick(Tricks.SPIRIT_MAP_CHEST, bundle)) and can_use(Items.FAIRY_BOW, bundle) and can_use(Items.STICKS, bundle)))) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 5, bundle) and has_explosives(bundle) and can_use(Items.STICKS, bundle)) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 3, bundle) and (can_use(Items.FIRE_ARROW, bundle) or (can_do_trick(Tricks.SPIRIT_MAP_CHEST, bundle) and can_use(Items.FAIRY_BOW, bundle))) and can_use(Items.SILVER_GAUNTLETS, bundle))),
         (Locations.SPIRIT_TEMPLE_SUN_BLOCK_ROOM_CHEST, lambda bundle: ((has_explosives(bundle) or small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 2, bundle)) and (can_use(Items.DINS_FIRE, bundle) or ((can_use(Items.FIRE_ARROW, bundle) or can_do_trick(Tricks.SPIRIT_SUN_CHEST, bundle)) and can_use(Items.FAIRY_BOW, bundle) and can_use(Items.STICKS, bundle) ))) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 5, bundle) and has_explosives(bundle) and can_use(Items.STICKS, bundle)) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 3, bundle) and (can_use(Items.FIRE_ARROW, bundle) or (can_do_trick(Tricks.SPIRIT_SUN_CHEST, bundle) and can_use(Items.FAIRY_BOW, bundle))) and can_use(Items.SILVER_GAUNTLETS, bundle))),
         (Locations.SPIRIT_TEMPLE_STATUE_ROOM_HAND_CHEST, lambda bundle: small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 3, bundle) and can_use(Items.SILVER_GAUNTLETS, bundle) and can_use(Items.ZELDAS_LULLABY, bundle)),
         (Locations.SPIRIT_TEMPLE_STATUE_ROOM_NORTHEAST_CHEST, lambda bundle: small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 3, bundle) and can_use(Items.SILVER_GAUNTLETS, bundle) and can_use(Items.ZELDAS_LULLABY, bundle) and (can_use_any([Items.HOOKSHOT, Items.HOVER_BOOTS], bundle) or can_do_trick(Tricks.SPIRIT_LOBBY_JUMP, bundle))),
