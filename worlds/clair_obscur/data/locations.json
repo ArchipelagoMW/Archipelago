@@ -2969,18 +2969,18 @@
     },
     {
         "internal_name": "Chest_SeaCliff_37",
-        "name": "Stone Wave Cliffs: Old Farm - Near Chromatic miniboss",
-        "location": "Sea Cliff",
-        "original_item": "AutoShell",
-        "condition": {"Paint Break": 1},
-        "type": "Chest"
-    },
-    {
-        "internal_name": "Chest_SeaCliff_38",
         "name": "Stone Wave Cliffs: White Hexga reward",
         "location": "Sea Cliff",
         "original_item": "AutoShell",
         "condition": {"Rock Crystal":  3},
+        "type": "Chest"
+    },
+    {
+        "internal_name": "Chest_SeaCliff_38",
+        "name": "Stone Wave Cliffs: Rock Crystal",
+        "location": "Sea Cliff",
+        "original_item": "AutoShell",
+        "condition": {},
         "type": "Chest"
     },
     {
