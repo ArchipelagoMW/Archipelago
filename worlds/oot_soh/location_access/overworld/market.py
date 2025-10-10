@@ -161,13 +161,13 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.MARKET_MASK_SHOP, world, [
         (EventLocations.MARKET_MASK_SHOP_MASKS, Events.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER, bundle) and has_item(Events.KAKARIKO_GATE_OPEN, bundle))),
-        (EventLocations.MARKET_MASK_SHOP_SKULL_MASK, Events.CAN_BORROW_SKULL_MASK, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest.value == 1 or
+        (EventLocations.MARKET_MASK_SHOP_SKULL_MASK, Events.CAN_BORROW_SKULL_MASK, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest or
                                                                                         has_item(Events.SOLD_KEATON_MASK, bundle))),
-        (EventLocations.MARKET_MASK_SHOP_SPOOKY_MASK, Events.CAN_BORROW_SPOOKY_MASK, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest.value == 1 or
+        (EventLocations.MARKET_MASK_SHOP_SPOOKY_MASK, Events.CAN_BORROW_SPOOKY_MASK, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest or
                                                                                         has_item(Events.SOLD_SKULL_MASK, bundle))),
-        (EventLocations.MARKET_MASK_SHOP_BUNNY_HOOD, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest.value == 1 or
-                                                                                        has_item(Events.SOLD_SPOOKY_MASK, bundle)))
-        (EventLocations.MARKET_MASK_SHOP_MASK_OF_TRUTH, Events.CAN_BORROW_MASK_OF_TRUTH, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest.value == 1 or
+        (EventLocations.MARKET_MASK_SHOP_BUNNY_HOOD, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest or
+                                                                                        has_item(Events.SOLD_SPOOKY_MASK, bundle))),
+        (EventLocations.MARKET_MASK_SHOP_MASK_OF_TRUTH, Events.CAN_BORROW_MASK_OF_TRUTH, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest or
                                                                                         has_item(Events.SOLD_BUNNY_HOOD, bundle)))
     ])
     # Connections
@@ -188,11 +188,11 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Market Bombchu Bowling
     # Events
     add_events(Regions.MARKET_BOMBCHU_BOWLING, world, [
-        (EventLocations.MARKET_BOMBCHU_BOWLING, Events.COULD_PLAY_BOWLING, lambda bundle: (has_item(Items.CHILD_WALLET, bundle)))
+        (EventLocations.MARKET_BOMBCHU_BOWLING_GAME, Events.COULD_PLAY_BOWLING, lambda bundle: (has_item(Items.CHILD_WALLET, bundle)))
     ])
     # Locations
     add_locations(Regions.MARKET_BOMBCHU_BOWLING, world, [
-        (Locations.MARKET_BOMBCHU_BOWLING_FIRST_PRIZE, lambda bundle: (Events.COULD_PLAY_BOWLING and bombchus_enabled(bundle)))
+        (Locations.MARKET_BOMBCHU_BOWLING_FIRST_PRIZE, lambda bundle: (Events.COULD_PLAY_BOWLING and bombchus_enabled(bundle))),
         (Locations.MARKET_BOMBCHU_BOWLING_SECOND_PRIZE, lambda bundle: (Events.COULD_PLAY_BOWLING and bombchus_enabled(bundle)))
     ])
     # Connections
