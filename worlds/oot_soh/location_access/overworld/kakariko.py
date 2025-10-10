@@ -79,6 +79,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_NEAR_FENCE_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
         (Locations.KAK_NEAR_BOARDING_HOUSE_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
         (Locations.KAK_NEAR_BAZAAR_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_TREE, lambda bundle: can_bonk_trees(bundle)),
     ])
     # Connections
     connect_regions(Regions.KAKARIKO_VILLAGE, world, [

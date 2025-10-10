@@ -30,7 +30,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ZF_NEAR_JABU_POT1, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
         (Locations.ZF_NEAR_JABU_POT2, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
         (Locations.ZF_NEAR_JABU_POT3, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
-        (Locations.ZF_NEAR_JABU_POT4, lambda bundle: is_child(bundle) and can_break_pots(bundle))
+        (Locations.ZF_NEAR_JABU_POT4, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
+        (Locations.ZF_TREE, lambda bundle: is_child(bundle) and can_bonk_trees(bundle)),
     ])
     # Connections
     connect_regions(Regions.ZORAS_FOUNTAIN, world, [

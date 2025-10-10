@@ -40,7 +40,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ZR_NEAR_TREE_GRASS9, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.ZR_NEAR_TREE_GRASS10, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.ZR_NEAR_TREE_GRASS11, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.ZR_NEAR_TREE_GRASS12, lambda bundle: can_cut_shrubs(bundle))
+        (Locations.ZR_NEAR_TREE_GRASS12, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.ZR_TREE, lambda bundle: is_child(bundle) and can_bonk_trees(bundle)),
 
     ])
     # Connections
