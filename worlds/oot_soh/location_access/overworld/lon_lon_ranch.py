@@ -31,6 +31,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.LLR_RAIN_SHED_POT2, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
         (Locations.LLR_RAIN_SHED_POT3, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
         (Locations.LLR_NEAR_TREE_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
+        (Locations.LLR_TREE, lambda bundle: is_child(bundle) and can_bonk_trees(bundle)),
     ])
     # Connections
     connect_regions(Regions.LON_LON_RANCH, world, [

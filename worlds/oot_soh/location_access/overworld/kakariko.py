@@ -27,7 +27,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.KAKARIKO_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
         (EventLocations.KAKARIKO_GATE, Events.KAKARIKO_GATE_OPEN,
          lambda bundle: is_child(bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
-        (EventLocations.KAKARIKO_GATE_GUARD, Events.CAN_BORROW_SKULL_MASK,
+        (EventLocations.KAKARIKO_GATE_GUARD, Events.SOLD_KEATON_MASK,
          lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_MASKS, bundle) and has_item(Items.CHILD_WALLET,
                                                                                                     bundle)),
     ])
@@ -79,6 +79,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_NEAR_FENCE_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
         (Locations.KAK_NEAR_BOARDING_HOUSE_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
         (Locations.KAK_NEAR_BAZAAR_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_TREE, lambda bundle: can_bonk_trees(bundle)),
     ])
     # Connections
     connect_regions(Regions.KAKARIKO_VILLAGE, world, [
@@ -206,24 +207,28 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     # Kak Impas House
-    # Locations
-    add_locations(Regions.KAK_IMPAS_HOUSE, world, [
-        (Locations.KAK_IMPAS_HOUSE_COW, lambda bundle: can_play_song(Items.EPONAS_SONG, bundle)),
-    ])
     # Connections
     connect_regions(Regions.KAK_IMPAS_HOUSE, world, [
         (Regions.KAKARIKO_VILLAGE, lambda bundle: True),
+        (Regions.KAK_COW_CAGE, lambda bundle: can_play_song(Items.EPONAS_SONG, bundle))
     ])
 
     # Kak Impas House Back
     # Locations
     add_locations(Regions.KAK_IMPAS_HOUSE_BACK, world, [
-        (Locations.KAK_IMPAS_HOUSE_FREESTANDING_PO_H, lambda bundle: True),
-        (Locations.KAK_IMPAS_HOUSE_COW, lambda bundle: can_play_song(Items.EPONAS_SONG, bundle)),
+        (Locations.KAK_IMPAS_HOUSE_FREESTANDING_POH, lambda bundle: True),
     ])
     # Connections
     connect_regions(Regions.KAK_IMPAS_HOUSE_BACK, world, [
         (Regions.KAK_IMPAS_LEDGE, lambda bundle: True),
+        (Regions.KAK_COW_CAGE, lambda bundle: can_play_song(Items.EPONAS_SONG, bundle)),
+    ])
+
+    # Kak Impas House Cow
+    # This region exists because to get around AP's restriction on locations having one parent region
+    # Locations
+    add_locations(Regions.KAK_COW_CAGE, world, [
+        (Locations.KAK_IMPAS_HOUSE_COW, lambda bundle: True),
     ])
 
     # Kak Windmill
@@ -234,7 +239,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.KAK_WINDMILL, world, [
-        (Locations.KAK_WINDMILL_FREESTANDING_PO_H,
+        (Locations.KAK_WINDMILL_FREESTANDING_POH,
          lambda bundle: can_use(Items.BOOMERANG, bundle) or has_item(Events.DAMPES_WINDMILL_ACCESS, bundle) or (
                  is_adult(bundle) and can_do_trick(Tricks.KAK_ADULT_WINDMILL_POH, bundle)) or (
                                 is_child(bundle) and can_jump_slash_except_hammer(bundle) and can_do_trick(

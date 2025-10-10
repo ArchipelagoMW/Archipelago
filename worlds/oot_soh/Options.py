@@ -415,6 +415,17 @@ class ShuffleCrates(Choice):
     default = 0
 
 
+class ShuffleTrees(Toggle):
+    """
+    Trees will contain randomized items which are dropped the first time the player rolls into one.
+    Trees will have a special appearance when carrying randomized items.
+
+    Some trees are dependent on Link's age, such as some trees in Hyrule Field.
+    Two trees at Hyrule Castle are only shuffle with No Logic.
+    """
+    display_name = "Shuffle Trees"
+
+
 class ShuffleMerchants(Choice):
     """
     This setting governs if the Bean Salesman, Medigoron, Granny and the Carpet Salesman sell a random item.
@@ -765,6 +776,7 @@ class SohOptions(PerGameCommonOptions):
     shuffle_cows: ShuffleCows
     shuffle_pots: ShufflePots
     shuffle_crates: ShuffleCrates
+    shuffle_trees: ShuffleTrees
     shuffle_merchants: ShuffleMerchants
     shuffle_frog_song_rupees: ShuffleFrogSongRupees
     shuffle_adult_trade_items: ShuffleAdultTradeItems
@@ -864,6 +876,7 @@ soh_option_groups = [
         ShuffleCows,
         ShufflePots,
         ShuffleCrates,
+        ShuffleTrees,
         ShuffleMerchants,
         # Merchant prices
         ShuffleFrogSongRupees,

@@ -747,9 +747,33 @@ def has_boss_soul(soul: Items, bundle: tuple[CollectionState, Regions, "SohWorld
     return has_item(soul, bundle)
 
 
-def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies) -> bool:
-    """Check if Link can pass by an enemy (usually by killing or stunning it)."""
-    return can_kill_enemy(bundle, enemy) # I think that we can be more permissive here, but for now this is fine
+def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies, distance: EnemyDistance = EnemyDistance.CLOSE, wall_or_floor: bool = True) -> bool:    
+    if(enemy in [Enemies.GOLD_SKULLTULA, Enemies.GOHMA_LARVA, Enemies.LIZALFOS, Enemies.DODONGO, Enemies.MAD_SCRUB, Enemies.KEESE, Enemies.FIRE_KEESE, Enemies.BLUE_BUBBLE, Enemies.DEAD_HAND, Enemies.DEKU_BABA, Enemies.WITHERED_DEKU_BABA, Enemies.STALFOS, Enemies.FLARE_DANCER, Enemies.WOLFOS, Enemies.WHITE_WOLFOS, Enemies.FLOORMASTER, Enemies.MEG, Enemies.ARMOS, Enemies.FREEZARD, Enemies.SPIKE, Enemies.DARK_LINK, Enemies.ANUBIS, Enemies.WALLMASTER, Enemies.PURPLE_LEEVER, Enemies.OCTOROK]):
+        return True
+    
+    if(enemy == Enemies.GERUDO_GUARD):
+        return can_do_trick(Tricks.PASS_GUARDS_WITH_NOTHING, bundle) or has_item(Items.GERUDO_MEMBERSHIP_CARD, bundle) or can_use_any([Items.FAIRY_BOW, Items.HOOKSHOT], bundle)
+
+    if(enemy == Enemies.BREAK_ROOM_GUARD):
+        return has_item(Items.GERUDO_MEMBERSHIP_CARD, bundle) or can_use_any([Items.FAIRY_BOW, Items.HOOKSHOT], bundle)
+
+    if(enemy == Enemies.BIG_SKULLTULA):
+        return can_kill_enemy(bundle, enemy, distance, wall_or_floor) or can_use_any([Items.NUTS, Items.BOOMERANG], bundle)
+
+    if(enemy == Enemies.LIKE_LIKE):
+        return can_kill_enemy(bundle, enemy, distance, wall_or_floor) or can_use_any([Items.HOOKSHOT, Items.BOOMERANG], bundle)
+
+    if(enemy in [Enemies.GIBDO, Enemies.REDEAD]):
+        return can_kill_enemy(bundle, enemy, distance, wall_or_floor) or can_use_any([Items.HOOKSHOT, Items.SUNS_SONG],bundle)
+
+    if(enemy in [Enemies.IRON_KNUCKLE, Enemies.BIG_OCTO]):
+        return can_kill_enemy(bundle, enemy, distance, wall_or_floor)
+
+    if(enemy == Enemies.GREEN_BUBBLE):
+        return can_kill_enemy(bundle, enemy, distance, wall_or_floor) or take_damage(bundle) or can_use_any([Items.NUTS, Items.BOOMERANG, Items.HOOKSHOT],bundle)
+
+    # Case of any other enemy
+    return can_kill_enemy(bundle, enemy, distance, wall_or_floor)
 
 
 def can_cut_shrubs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -993,3 +1017,6 @@ def effective_health(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int
 
 def can_plant_bean(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return has_item(Items.MAGIC_BEAN, bundle) and can_be_both_ages(bundle)
+
+def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBombFlower: bool = False) -> bool:
+    return can_do_trick(Tricks.GROUND_JUMP, bundle) and can_standing_shield(bundle) and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle)))
