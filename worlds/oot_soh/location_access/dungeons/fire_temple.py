@@ -230,7 +230,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.FIRE_TEMPLE_SHORTCUT_ROOM, lambda bundle: True),
         (Regions.FIRE_TEMPLE_BOULDER_MAZE_LOWER_SIDE_ROOM, lambda bundle: True),
         (Regions.FIRE_TEMPLE_EAST_CENTRAL_ROOM, lambda bundle: small_keys(Items.FIRE_TEMPLE_SMALL_KEY, 5, bundle)),
-        (Regions.FIRE_TEMPLE_BOULDER_MAZE_UPPER, lambda bundle: True)
+        (Regions.FIRE_TEMPLE_BOULDER_MAZE_UPPER, lambda bundle: False)
     ])
 
     ## Fire Temple Boulder Maze Lower Side Room
