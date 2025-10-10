@@ -19,7 +19,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.DESERT_COLOSSUS, world, [
-        (Locations.COLOSSUS_FREESTANDING_PO_H, lambda bundle: is_adult(bundle) and can_plant_bean(bundle)),
+        (Locations.COLOSSUS_FREESTANDING_POH, lambda bundle: is_adult(bundle) and can_plant_bean(bundle)),
         (Locations.COLOSSUS_GS_BEAN_PATCH, lambda bundle: can_spawn_soil_skull(bundle) and can_attack(bundle)),
         (Locations.COLOSSUS_GS_TREE, lambda bundle: is_adult(bundle) and hookshot_or_boomerang(bundle) and can_get_nighttime_gs(bundle)),
         (Locations.COLOSSUS_GS_HILL, lambda bundle: is_adult(bundle) and ((can_plant_bean(bundle) and can_attack(bundle)) or can_use(Items.LONGSHOT, bundle) or (can_do_trick(Tricks.COLOSSUS_GS, bundle) and can_use(Items.HOOKSHOT, bundle))) and can_get_nighttime_gs(bundle)),

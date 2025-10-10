@@ -103,6 +103,7 @@ class SohWorld(World):
             "shuffle_cows": self.options.shuffle_cows.value,
             "shuffle_pots": self.options.shuffle_pots.value,
             "shuffle_crates": self.options.shuffle_crates.value,
+            "shuffle_trees": self.options.shuffle_trees.value,
             "shuffle_merchants": self.options.shuffle_merchants.value,
             "shuffle_frog_song_rupees": self.options.shuffle_frog_song_rupees.value,
             "shuffle_adult_trade_items": self.options.shuffle_adult_trade_items.value,

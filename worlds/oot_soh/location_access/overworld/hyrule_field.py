@@ -4,7 +4,8 @@ if TYPE_CHECKING:
     from ... import SohWorld
     
 class EventLocations(str, Enum):
-    HYRULE_FIELD = "Hyrule Field"
+    HF_BIG_POE = "HF Big Poe"
+    HF_RUNNING_MAN = "HF Running Man"
     HF_COW_GROTTO_BEHIND_WEBS_GOSSIP_STONE = "HF Cow Grotto Behind Webs Gossip Stone"
     HF_COW_GROTTO_BEHIND_WEBS_BUGS_SHRUB = "HF Cow Grotto Behind Webs Bugs Shrub"
     HF_FAIRY_GROTTO_FAIRY = "HF Fairy Grotto Fairy"
@@ -26,11 +27,11 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Hyrule Field
     # Events
     add_events(Regions.HYRULE_FIELD, world, [
-        (EventLocations.HYRULE_FIELD, Events.CAN_DEFEAT_BIG_POE, lambda bundle: (has_bottle(bundle) and
+        (EventLocations.HF_BIG_POE, Events.CAN_DEFEAT_BIG_POE, lambda bundle: (has_bottle(bundle) and
                                                                                  can_use(Items.FAIRY_BOW, bundle) and
                                                                                  (can_use(Items.EPONA, bundle) or can_do_trick(Tricks.HF_BIG_POE_WITHOUT_EPONA, bundle)))),
-        (EventLocations.HYRULE_FIELD, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: (is_child(bundle) and
-                                                                                has_item(Events.CAN_BORROW_MASKS, bundle) and
+        (EventLocations.HF_RUNNING_MAN, Events.SOLD_BUNNY_HOOD, lambda bundle: (is_child(bundle) and
+                                                                                has_item(Events.CAN_BORROW_BUNNY_HOOD, bundle) and
                                                                                 has_item(Items.KOKIRIS_EMERALD, bundle) and
                                                                                 has_item(Items.GORONS_RUBY, bundle) and
                                                                                 has_item(Items.ZORAS_SAPPHIRE, bundle) and
