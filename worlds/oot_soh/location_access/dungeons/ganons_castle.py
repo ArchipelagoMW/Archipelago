@@ -201,7 +201,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                                       (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and
                                                                                        (can_use(Items.FAIRY_BOW, bundle) or
                                                                                         can_use(Items.FAIRY_SLINGSHOT, bundle))))))),
-        (Locations.GANONS_CASTLE_SPIRIT_TRIAL_INVISIBLE_CHEST, lambda bundle: (can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT, bundle) or can_use(Items.HOOKSHOT, bundle)) and (can_use(Items.BOMBCHUS_5, bundle) or (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and (can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle))) and (can_do_trick(Tricks.LENS_GANON, bundle) or can_use(Items.LENS_OF_TRUTH, bundle))))
+        (Locations.GANONS_CASTLE_SPIRIT_TRIAL_INVISIBLE_CHEST, lambda bundle: (can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT, bundle) or can_use(Items.HOOKSHOT, bundle)) and (can_use(Items.BOMBCHUS_5, bundle) or (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and (can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle))) and (can_do_trick(Tricks.LENS_GANON, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)))),
         (Locations.GANONS_CASTLE_SPIRIT_TRIAL_POT1, lambda bundle: (((can_do_trick(Tricks.GANON_SPIRIT_TRIAL_HOOKSHOT, bundle) and
                                                                       can_jump_slash_except_hammer(bundle)) or
                                                                      can_use(Items.HOOKSHOT, bundle)) and

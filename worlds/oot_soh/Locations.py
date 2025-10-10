@@ -1,4 +1,4 @@
-from Enums import Locations
+from .Enums import Locations
 
 from typing import Dict, TYPE_CHECKING
 
