@@ -1378,7 +1378,7 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Boss - Parasite X", 1457 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 56)), #Monster ID: 198 (Castle Sequoia (Skums) Z58_TrapdoorGuard)
         LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Boss - Neo Warden", 1477 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 57)), #Monster ID: 200 (Castle Sequoia (Bounce) Z58_F2TrapdoorGuard)
         LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Boss - Akamanto", 1503 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 58)), #Monster ID: 201 (Castle Sequoia (Ice) Z58_F3TrapdoorGuard)
-        LocationData(THE_OLD_WORLD_AP_REGION, THE_OLD_WORLD_DISPLAY_NAME + " Boss - Periculum", 3650 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 70)), #Monster ID: 268
+        LocationData(THE_OLD_WORLD_AP_REGION, THE_OLD_WORLD_DISPLAY_NAME + " Boss - Periculum", 3650 + boss_index_offset), #Monster ID: 268 (min level 70)
         ]
     return location_table
 

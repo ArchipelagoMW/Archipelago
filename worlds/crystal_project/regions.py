@@ -154,7 +154,7 @@ display_region_levels_dictionary: Dict[str, Tuple[int, int]] = {
     THE_SEQUOIA_DISPLAY_NAME: (60, 63),
     THE_DEPTHS_DISPLAY_NAME: (63, 65),
     CASTLE_SEQUOIA_DISPLAY_NAME: (56, 59),
-    THE_OLD_WORLD_DISPLAY_NAME: (0, 0),
+    THE_OLD_WORLD_DISPLAY_NAME: (70, 70),
     THE_NEW_WORLD_DISPLAY_NAME: (60, 60),
     MODDED_ZONE_DISPLAY_NAME: (30, 30),
 }
