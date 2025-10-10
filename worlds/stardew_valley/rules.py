@@ -325,7 +325,12 @@ def set_bookseller_rules(logic, rule_collector):
 
 def set_raccoon_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, bundle_rooms: List[BundleRoom], world_options: StardewValleyOptions):
     rule_collector.set_entrance_rule(LogicEntrance.has_giant_stump, logic.received(CommunityUpgrade.raccoon))
-    rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon, logic.quest.has_raccoon_shop())
+    rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_1, logic.quest.has_raccoon_shop())
+    rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_2, logic.quest.has_raccoon_shop(2))
+    rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_3, logic.quest.has_raccoon_shop(3))
+    rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_4, logic.quest.has_raccoon_shop(4))
+    rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_5, logic.quest.has_raccoon_shop(5))
+    rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_6, logic.quest.has_raccoon_shop(6))
 
     raccoon_room = next(iter(room for room in bundle_rooms if room.name == CCRoom.raccoon_requests))
     extra_raccoons = 1 if world_options.quest_locations.has_story_quests() else 0

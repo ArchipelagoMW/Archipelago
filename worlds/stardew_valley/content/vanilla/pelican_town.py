@@ -230,10 +230,10 @@ pelican_town = ContentPack(
         Seed.grape: (ShopSource(price=60, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
         Seed.artichoke: (ShopSource(price=30, shop_region=Region.pierre_store, seasons=(Season.fall,)),),
 
-        Seed.broccoli: (ShopSource(items_price=((5, Material.moss),), shop_region=LogicRegion.raccoon_shop),),
-        Seed.carrot: (ShopSource(items_price=((1, TreeSeed.maple),), shop_region=LogicRegion.raccoon_shop),),
-        Seed.powdermelon: (ShopSource(items_price=((2, TreeSeed.acorn),), shop_region=LogicRegion.raccoon_shop),),
-        Seed.summer_squash: (ShopSource(items_price=((15, Material.sap),), shop_region=LogicRegion.raccoon_shop),),
+        Seed.broccoli: (ShopSource(items_price=((5, Material.moss),), shop_region=LogicRegion.raccoon_shop_1),),
+        Seed.carrot: (ShopSource(items_price=((1, TreeSeed.maple),), shop_region=LogicRegion.raccoon_shop_1),),
+        Seed.powdermelon: (ShopSource(items_price=((2, TreeSeed.acorn),), shop_region=LogicRegion.raccoon_shop_1),),
+        Seed.summer_squash: (ShopSource(items_price=((15, Material.sap),), shop_region=LogicRegion.raccoon_shop_1),),
 
         Seed.strawberry: (ShopSource(price=100, shop_region=LogicRegion.egg_festival, seasons=(Season.spring,)),),
         Seed.rare_seed: (ShopSource(price=1000, shop_region=LogicRegion.traveling_cart, seasons=(Season.spring, Season.summer)),),
@@ -303,7 +303,7 @@ pelican_town = ContentPack(
         Book.raccoon_journal: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             #  ShopSource(price=20000, shop_region=LogicRegion.bookseller_rare),  # Repeatable, so no need for bookseller
-            ShopSource(items_price=((999, Material.fiber),), shop_region=LogicRegion.raccoon_shop),),
+            ShopSource(items_price=((999, Material.fiber),), shop_region=LogicRegion.raccoon_shop_2),),
         Book.way_of_the_wind_pt_1: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(price=15000, shop_region=LogicRegion.bookseller_permanent),),
@@ -737,7 +737,7 @@ pelican_town = ContentPack(
         Hats.mushroom_cap: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.farm,), seasons=(Season.fall,), ),),
 
         Hats.raccoon_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.quest.has_raccoon_shop(3) &
-                                                                                        logic.region.can_reach(LogicRegion.raccoon_shop)),),
+                                                                                        logic.region.can_reach(LogicRegion.raccoon_shop_3)),),
 
         Hats.squid_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.festival.can_squidfest_iridium_reward()),),
 
