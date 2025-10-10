@@ -125,7 +125,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.SPIRIT_TEMPLE_HALLWAY_LEFT_INVISIBLE_CHEST, lambda bundle: (can_do_trick(Tricks.LENS_SPIRIT, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)) and has_explosives(bundle)),
         (Locations.SPIRIT_TEMPLE_HALLWAY_RIGHT_INVISIBLE_CHEST, lambda bundle: (can_do_trick(Tricks.LENS_SPIRIT, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)) and has_explosives(bundle)),
         (Locations.SPIRIT_TEMPLE_BEAMOS_HALL_POT1, lambda bundle: can_break_pots(bundle)),
-        (Locations.DODONGOS_CAVERN_MQ_ARMOS_ROOM_NEPOT, lambda bundle: has_explosives(bundle) and can_use(Items.SUNS_SONG, bundle))
+        (Locations.SPIRIT_TEMPLE_FOUR_ARMOS_ROOM_SUNS_SONG_FAIRY, lambda bundle: has_explosives(bundle) and can_use(Items.SUNS_SONG, bundle))
     ])
     # Connections
     connect_regions(Regions.SPIRIT_TEMPLE_BEYOND_CENTRAL_LOCKED_DOOR, world, [
@@ -155,7 +155,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Spirit Temple Boss Entryway
     # Connections
     connect_regions(Regions.SPIRIT_TEMPLE_BOSS_ENTRYWAY, world, [
-        (Regions.SPIRIT_TEMPLE_INSIDE_STATUE_HEAD, lambda bundle: True),
+        (Regions.SPIRIT_TEMPLE_INSIDE_STATUE_HEAD, lambda bundle: False),
         (Regions.SPIRIT_TEMPLE_BOSS_ROOM, lambda bundle: has_item(Items.SPIRIT_TEMPLE_BOSS_KEY, bundle))
     ])
 
