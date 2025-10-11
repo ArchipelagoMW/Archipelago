@@ -18,7 +18,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Death Mountain Trail
     # Events
     add_events(Regions.DEATH_MOUNTAIN_TRAIL, world, [
-        (EventLocations.DMT_BEAN_PLANT_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS, bundle) and (has_explosives(bundle) or has_item(Items.GORONS_BRACELET)))
+        (EventLocations.DMT_BEAN_PLANT_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS, bundle) and (has_explosives(bundle) or has_item(Items.GORONS_BRACELET, bundle)))
     ])
     # Locations
     add_locations(Regions.DEATH_MOUNTAIN_TRAIL, world, [
