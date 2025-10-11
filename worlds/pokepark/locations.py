@@ -2640,16 +2640,16 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Magma Zone Main Area - Baltoy Power Competition -- Friendship": PokeparkLocationData(
-        303, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0403, PokeparkFriendshipClientLocationData(
-            structure_position=103,
-            memory_range=MemoryRange.BYTE
+        303, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0403, Pokepark07AttractionClientData(
+            structure_position=17,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
     "Magma Zone Main Area - Baltoy Power Competition -- Claydol Unlocked": PokeparkLocationData(
-        304, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0403, PokeparkFriendshipClientLocationData(
-            structure_position=103,
-            memory_range=MemoryRange.BYTE
+        304, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0403, Pokepark07AttractionClientData(
+            structure_position=17,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
