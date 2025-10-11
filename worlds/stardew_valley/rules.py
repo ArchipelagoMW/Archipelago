@@ -141,7 +141,6 @@ def set_rules(world):
     set_craftsanity_rules(all_location_names, logic, rule_collector, world_options)
     set_booksanity_rules(logic, rule_collector, world_content)
     set_isolated_locations_rules(logic, rule_collector, trash_bear_requests)
-    set_traveling_merchant_day_rules(logic, rule_collector)
     set_arcade_machine_rules(logic, rule_collector, world_options)
     set_movie_rules(logic, rule_collector, world_options, world_content)
     set_secrets_rules(logic, rule_collector, world_options, world_content)
@@ -243,7 +242,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     set_skull_cavern_floor_entrance_rules(logic, rule_collector)
     set_blacksmith_entrance_rules(logic, rule_collector)
     set_skill_entrance_rules(logic, rule_collector, content)
-    set_traveling_merchant_day_rules(logic, rule_collector)
+    set_traveling_merchant_day_entrance_rules(logic, rule_collector)
     set_dangerous_mine_rules(logic, rule_collector, content)
 
     rule_collector.set_entrance_rule(Entrance.enter_tide_pools, logic.received("Beach Bridge") | logic.mod.magic.can_blink())
@@ -935,7 +934,7 @@ def set_booksanity_rules(logic: StardewLogic, rule_collector: StardewRuleCollect
         rule_collector.set_location_rule(booksanity.to_location_name(book), logic.received(booksanity.progressive_lost_book, i))
 
 
-def set_traveling_merchant_day_rules(logic: StardewLogic, rule_collector: StardewRuleCollector):
+def set_traveling_merchant_day_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector):
     for day in Weekday.all_days:
         item_for_day = f"Traveling Merchant: {day}"
         entrance_name = f"Buy from Traveling Merchant {day}"
