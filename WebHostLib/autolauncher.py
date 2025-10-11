@@ -40,9 +40,10 @@ def _mp_gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=No
     from setproctitle import setproctitle
 
     setproctitle(f"Generator ({sid})")
-    res = gen_game(gen_options, meta=meta, owner=owner, sid=sid)
-    setproctitle(f"Generator (idle)")
-    return res
+    try:
+        return gen_game(gen_options, meta=meta, owner=owner, sid=sid)
+    finally:
+        setproctitle(f"Generator (idle)")
 
 
 def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation):
