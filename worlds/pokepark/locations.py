@@ -2605,17 +2605,18 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Magma Zone Main Area - Chimchar Power Competition -- Friendship": PokeparkLocationData(
-        298, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0403, PokeparkFriendshipClientLocationData(
-            structure_position=112,
-            memory_range=MemoryRange.BYTE
+        298, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0403, Pokepark07AttractionClientData(
+            structure_position=13,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
     "Magma Zone Main Area - Chimchar Power Competition -- Infernape Unlocked": PokeparkLocationData(
-        299, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0403, PokeparkFriendshipClientLocationData(
-            structure_position=112,
-            memory_range=MemoryRange.BYTE
+        299, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0403, Pokepark07AttractionClientData(
+            structure_position=13,
+            memory_range=MemoryRange.HALFWORD
         ),
+        each_zone=MultiZoneFlag.MULTI
     ),
     "Magma Zone Main Area - Aron Power Competition -- Friendship": PokeparkLocationData(
         300, PokeparkFlag.ERRAND, "Magma Zone Main Area", 0x0403, PokeparkFriendshipClientLocationData(
