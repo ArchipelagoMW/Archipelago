@@ -2619,9 +2619,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Magma Zone Main Area - Aron Power Competition -- Friendship": PokeparkLocationData(
-        300, PokeparkFlag.ERRAND, "Magma Zone Main Area", 0x0403, PokeparkFriendshipClientLocationData(
-            structure_position=171,
-            memory_range=MemoryRange.BYTE
+        300, PokeparkFlag.ERRAND, "Magma Zone Main Area", 0x0403, Pokepark07AttractionClientData(
+            structure_position=14,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
