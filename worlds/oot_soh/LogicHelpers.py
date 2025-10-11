@@ -187,7 +187,7 @@ def scarecrows_song(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool
     # TODO handle scarecrow song option in place of the False
     return ((False and has_item(Items.FAIRY_OCARINA, bundle)
             and state.has_group_unique("Ocarina Buttons", world.player, 2))
-            or (has_item(Events.CHILD_SCARECROW, bundle) and has_item(Events.ADULT_SCARECROW, bundle)))
+            or (has_item(Events.CHILD_SCARECROW_UNLOCKED, bundle) and has_item(Events.ADULT_SCARECROW_UNLOCKED, bundle)))
 
 
 def has_bottle(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:  # soup
@@ -300,7 +300,7 @@ def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: Age
         return child_projectiles or adult_projectiles
 
 
-def can_use_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: str = "either") -> bool:
+def can_use_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return (can_use_any([Items.FAIRY_SLINGSHOT,Items.BOOMERANG,Items.HOOKSHOT,Items.FAIRY_BOW], bundle)
         or has_explosives(bundle))
 
@@ -321,7 +321,7 @@ def is_adult(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
-    return state._soh_can_reach_as_age(parent_region, Ages.ADULT, world.player)
+    return state._soh_can_reach_as_age(parent_region, Ages.ADULT, world.player) # type: ignore
 
 
 def at_day(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -340,14 +340,14 @@ def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
-    return state._soh_can_reach_as_age(parent_region, Ages.CHILD, world.player)
+    return state._soh_can_reach_as_age(parent_region, Ages.CHILD, world.player) # type: ignore
 
 
 def can_be_both_ages(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
-    return state._soh_can_reach_as_age(parent_region, Ages.BOTH, world.player)
+    return state._soh_can_reach_as_age(parent_region, Ages.BOTH, world.player) # type: ignore
 
 
 def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
