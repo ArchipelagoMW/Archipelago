@@ -2633,9 +2633,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Magma Zone Main Area - Geodude Power Competition -- Friendship": PokeparkLocationData(
-        302, PokeparkFlag.HIDEANDSEEK, "Magma Zone Main Area", 0x0403, PokeparkFriendshipClientLocationData(
-            structure_position=81,
-            memory_range=MemoryRange.BYTE
+        302, PokeparkFlag.HIDEANDSEEK, "Magma Zone Main Area", 0x0403, Pokepark07AttractionClientData(
+            structure_position=16,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
