@@ -71,8 +71,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.SPIRIT_TEMPLE_EARLY_ADULT, world, [
         (Locations.SPIRIT_TEMPLE_COMPASS_CHEST, lambda bundle: can_use(Items.HOOKSHOT, bundle) and can_use(Items.ZELDAS_LULLABY, bundle)),
         (Locations.SPIRIT_TEMPLE_EARLY_ADULT_RIGHT_CHEST, lambda bundle: (can_use_any([Items.FAIRY_BOW, Items.HOOKSHOT, Items.FAIRY_SLINGSHOT, Items.BOOMERANG, Items.BOMBCHUS_5], bundle) or (can_use(Items.BOMB_BAG, bundle) and is_adult(bundle) and can_do_trick(Tricks.SPIRIT_LOWER_ADULT_SWITCH, bundle))) and (can_use(Items.HOVER_BOOTS, bundle) or can_jump_slash_except_hammer(bundle))),
-        (Locations.SPIRIT_TEMPLE_FIRST_MIRROR_LEFT_CHEST, lambda bundle: small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 3)),
-        (Locations.SPIRIT_TEMPLE_FIRST_MIRROR_RIGHT_CHEST, lambda bundle: small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 3)),
+        (Locations.SPIRIT_TEMPLE_FIRST_MIRROR_LEFT_CHEST, lambda bundle: small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 3, bundle)),
+        (Locations.SPIRIT_TEMPLE_FIRST_MIRROR_RIGHT_CHEST, lambda bundle: small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 3, bundle)),
         (Locations.SPIRIT_TEMPLE_GS_BOULDER_ROOM, lambda bundle: can_use(Items.SONG_OF_TIME, bundle) and (can_use_any([Items.FAIRY_BOW, Items.HOOKSHOT, Items.BOMBCHUS_5], bundle) or (can_use(Items.BOMB_BAG, bundle) and can_do_trick(Tricks.SPIRIT_LOWER_ADULT_SWITCH, bundle)))),
         (Locations.SPIRIT_TEMPLE_AFTER_BOULDER_ROOM_SUNS_SONG_FAIRY, lambda bundle: can_use(Items.SUNS_SONG, bundle) and (can_use_any([Items.FAIRY_BOW, Items.HOOKSHOT, Items.FAIRY_SLINGSHOT, Items.BOOMERANG, Items.BOMBCHUS_5], bundle) or (can_use(Items.BOMB_BAG, bundle) and is_adult(bundle) and can_do_trick(Tricks.SPIRIT_LOWER_ADULT_SWITCH, bundle))) and (can_use(Items.HOVER_BOOTS, bundle) or can_jump_slash(bundle)))
     ])
