@@ -33,13 +33,15 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.DODONGOS_CAVERN_BEGINNING, world, [
         (Regions.DODONGOS_CAVERN_ENTRYWAY, lambda bundle: True),
         (Regions.DODONGOS_CAVERN_LOBBY,
-         lambda bundle: blast_or_smash(bundle) or has_item(Items.STRENGTH_UPGRADE, bundle))
+         lambda bundle: blast_or_smash(bundle) or has_item(Items.GORONS_BRACELET, bundle))
     ]),
 
     ## Dodongos Cavern Lobby
     # Events
     add_events(Regions.DODONGOS_CAVERN_LOBBY, world, [
-        (EventLocations.DODONGOS_CAVERN_GOSSIP_STONE_LOBBY, Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
+        (EventLocations.DODONGOS_CAVERN_GOSSIP_STONE_LOBBY, Events.CAN_ACCESS_FAIRIES,
+         lambda bundle: (can_break_mud_walls(bundle) or has_item(Items.GORONS_BRACELET, bundle)) and call_gossip_fairy(
+             bundle)),
     ])
     # Locations
     add_locations(Regions.DODONGOS_CAVERN_LOBBY, world, [
@@ -84,7 +86,7 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.DODONGOS_CAVERN_SE_CORRIDOR, world, [
         (Locations.DODONGOS_CAVERN_GS_SCARECROW,
          lambda bundle: can_use(Items.SCARECROW, bundle) or (is_adult(bundle) and can_use(Items.LONGSHOT, bundle)) or (
-                     can_do_trick(Tricks.DC_SCARECROW_GS, bundle) and can_attack(bundle))),
+                 can_do_trick(Tricks.DC_SCARECROW_GS, bundle) and can_attack(bundle))),
         (Locations.DODONGOS_CAVERN_SIDE_ROOM_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.DODONGOS_CAVERN_SIDE_ROOM_POT2, lambda bundle: can_break_pots(bundle)),
         (Locations.DODONGOS_CAVERN_SIDE_ROOM_POT3, lambda bundle: can_break_pots(bundle)),
@@ -96,7 +98,7 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.DODONGOS_CAVERN_SE_CORRIDOR, world, [
         (Regions.DODONGOS_CAVERN_LOBBY, lambda bundle: True),
         (Regions.DODONGOS_CAVERN_SE_ROOM, lambda bundle: can_break_mud_walls(bundle) or can_attack(bundle) or (
-                    take_damage(bundle) and can_shield(bundle))),
+                take_damage(bundle) and can_shield(bundle))),
         (Regions.DODONGOS_CAVERN_NEAR_LOWER_LIZALFOS, lambda bundle: True),
     ])
 
@@ -177,8 +179,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DODONGOS_CAVERN_STAIRS_UPPER,
          lambda bundle: has_explosives(bundle) or has_item(Items.GORONS_BRACELET, bundle) or can_use(Items.DINS_FIRE,
                                                                                                      bundle) or (
-                                    can_do_trick(Tricks.DC_STAIRS_WITH_BOW, bundle) and can_use(Items.FAIRY_BOW,
-                                                                                                bundle))),
+                                can_do_trick(Tricks.DC_STAIRS_WITH_BOW, bundle) and can_use(Items.FAIRY_BOW,
+                                                                                            bundle))),
         (Regions.DODONGOS_CAVERN_COMPASS_ROOM,
          lambda bundle: can_break_mud_walls(bundle) or has_item(Items.GORONS_BRACELET, bundle)),
         (Regions.DODONGOS_CAVERN_VINES_ABOVE_STAIRS,
@@ -191,9 +193,9 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.DODONGOS_CAVERN_STAIRS_UPPER, world, [
         (Locations.DODONGOS_CAVERN_GS_ALCOVE_ABOVE_STAIRS,
          lambda bundle: can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.LONGSHOT) or (
-                     has_item(LocalEvents.DODONGOS_CAVERN_LIFT_PLATFORM, bundle) and can_get_enemy_drop(bundle,
-                                                                                                        Enemies.GOLD_SKULLTULA,
-                                                                                                        EnemyDistance.BOOMERANG))),
+                 has_item(LocalEvents.DODONGOS_CAVERN_LIFT_PLATFORM, bundle) and can_get_enemy_drop(bundle,
+                                                                                                    Enemies.GOLD_SKULLTULA,
+                                                                                                    EnemyDistance.BOOMERANG))),
         (Locations.DODONGOS_CAVERN_STAIRCASE_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.DODONGOS_CAVERN_STAIRCASE_POT2, lambda bundle: can_break_pots(bundle)),
         (Locations.DODONGOS_CAVERN_STAIRCASE_POT3, lambda bundle: can_break_pots(bundle)),
@@ -219,8 +221,9 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DODONGOS_CAVERN_COMPASS_ROOM, world, [
         (Regions.DODONGOS_CAVERN_STAIRS_LOWER,
-         lambda bundle: can_use(Items.MASTER_SWORD, bundle) or can_use(Items.BIGGORONS_SWORD, bundle) or can_use(
-             Items.MEGATON_HAMMER, bundle) or has_explosives(bundle) or has_item(Items.GORONS_BRACELET, bundle)),
+         lambda bundle: can_use_any(
+             [Items.MASTER_SWORD, Items.BIGGORONS_SWORD, Items.MEGATON_HAMMER, Items.GORONS_BRACELET],
+             bundle) or has_explosives(bundle)),
     ])
 
     ## Dodongos Cavern Armos Room
@@ -242,15 +245,15 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.DODONGOS_CAVERN_BOMB_ROOM_LOWER, world, [
         (Regions.DODONGOS_CAVERN_ARMOS_ROOM, lambda bundle: True),
         (Regions.DODONGOS_CAVERN_2F_SIDE_ROOM, lambda bundle: can_break_mud_walls(bundle) or (
-                    can_do_trick(Tricks.DC_SCRUB_ROOM, bundle) and has_item(Items.GORONS_BRACELET, bundle))),
+                can_do_trick(Tricks.DC_SCRUB_ROOM, bundle) and has_item(Items.GORONS_BRACELET, bundle))),
         (Regions.DODONGOS_CAVERN_FIRST_SLINGSHOT_ROOM,
          lambda bundle: can_break_mud_walls(bundle) or has_item(Items.GORONS_BRACELET, bundle)),
         (Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER,
          lambda bundle: (is_adult(bundle) and can_do_trick(Tricks.DC_JUMP, bundle)) or can_use(Items.HOVER_BOOTS,
                                                                                                bundle) or (
-                                    is_adult(bundle) and can_use(Items.LONGSHOT, bundle)) or (
-                                    can_do_trick(Tricks.DAMAGE_BOOST_SIMPLE, bundle) and has_explosives(
-                                bundle) and can_jump_slash(bundle))),
+                                is_adult(bundle) and can_use(Items.LONGSHOT, bundle)) or (
+                                can_do_trick(Tricks.DAMAGE_BOOST_SIMPLE, bundle) and has_explosives(
+                            bundle) and can_jump_slash(bundle))),
     ])
 
     ## Dodongos Cavern 2F Side Room
@@ -308,7 +311,7 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.DODONGOS_CAVERN_SECOND_SLINGSHOT_ROOM, world, [
         (Regions.DODONGOS_CAVERN_UPPER_LIZALFOS, lambda bundle: True),
         (Regions.DODONGOS_CAVERN_BOMB_ROOM_UPPER,
-         lambda bundle: can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle) or can_do_trick(
+         lambda bundle: can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle) or can_do_trick(
              Tricks.DC_SLINGSHOT_SKIP, bundle)),
     ])
 
@@ -389,11 +392,10 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.DODONGOS_CAVERN_BOSS_ROOM, world, [
         (EventLocations.DODONGOS_CAVERN_BOSS_DEFEATED, Events.CLEARED_DODONGOS_CAVERN,
-         lambda bundle: has_explosives(bundle) or (
-                     (can_do_trick(Tricks.DC_HAMMER_FLOOR, bundle) and can_use(Items.MEGATON_HAMMER, bundle)) or (
-                         can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle) and can_use(Items.BOTTLE_WITH_BLUE_FIRE,
-                                                                                      bundle))) and can_kill_enemy(
-             bundle, Enemies.KING_DODONGO)),
+         lambda bundle: has_explosives(bundle) or (can_use(Items.MEGATON_HAMMER, bundle) or (
+                 can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle) and blue_fire(bundle)) if can_do_trick(
+             Tricks.DC_HAMMER_FLOOR, bundle) else can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle) and can_use(
+             Items.BOTTLE_WITH_BLUE_FIRE, bundle)) and can_kill_enemy(bundle, Enemies.KING_DODONGO))
     ])
     # Locations
     add_locations(Regions.DODONGOS_CAVERN_BOSS_ROOM, world, [
