@@ -60,7 +60,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     item_count = len(str(max(len(cls.item_names) for cls in world_classes)))
     location_count = len(str(max(len(cls.location_names) for cls in world_classes)))
 
-    for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
+    for name, cls in sorted(AutoWorld.AutoWorldRegister.world_types.items(), key=lambda it: it[0].casefold()):
         if not cls.hidden and len(cls.item_names) > 0:
             logger.info(f" {name:{longest_name}}: "
                         f"v{cls.world_version.as_simple_string():{version_count}} | "
