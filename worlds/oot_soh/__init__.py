@@ -45,6 +45,9 @@ class SohWorld(World):
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
         self.included_locations = dict[str, int]()
+        self.shop_prices = dict[str, int]()
+        self.shop_vanilla_items = dict[str, str]()
+        self.scrub_prices = dict[str, int]()
 
     def generate_early(self) -> None:
         #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
@@ -133,6 +136,9 @@ class SohWorld(World):
             "skeleton_key": self.options.skeleton_key.value,
             "starting_age": self.options.starting_age.value,
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
+            "shop_prices": self.shop_prices,
+            "shop_vanilla_items": self.shop_vanilla_items,
+            "scrub_prices": self.scrub_prices,
         }
     
     def collect(self, state: CollectionState, item: Item) -> bool:
