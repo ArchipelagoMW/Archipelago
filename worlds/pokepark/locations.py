@@ -2626,9 +2626,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Magma Zone Main Area - Torchic Power Competition -- Friendship": PokeparkLocationData(
-        301, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0403, PokeparkFriendshipClientLocationData(
-            structure_position=115,
-            memory_range=MemoryRange.BYTE
+        301, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0403, Pokepark07AttractionClientData(
+            structure_position=15,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
