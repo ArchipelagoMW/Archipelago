@@ -175,7 +175,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                                                     can_jump_slash_except_hammer(bundle)) or
                                                                                                    can_use(Items.HOOKSHOT, bundle)) and
                                                                                                   (can_use(Items.BOMBCHUS_5, bundle) or
-                                                                                                   (can_do_trick(Tricks.HOOKSHOT_EXTENSION) and
+                                                                                                   (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and
                                                                                                     (can_use(Items.FAIRY_BOW, bundle) or
                                                                                                      can_use(Items.FAIRY_SLINGSHOT, bundle)))) and
                                                                                                   can_use(Items.FAIRY_BOW, bundle) and
