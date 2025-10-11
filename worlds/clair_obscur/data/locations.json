@@ -1844,7 +1844,7 @@
         "name": "Manor: Renoir's Atelier",
         "location": "Manor",
         "original_item": "SkinMaelle_Alicia",
-        "condition": {},
+        "condition": {"Manor Family Canvas": 1},
         "type": "Chest"
     },
     {
