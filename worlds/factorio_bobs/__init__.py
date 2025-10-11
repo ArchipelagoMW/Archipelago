@@ -482,10 +482,6 @@ class FactorioBobs(World):
         item_pools: dict[str, list[InternalItem]] = {"automation-science-pack":
                                                          list(sorted(automation_pool, key=lambda item: item.name))}
 
-        # TODO enable artifacts with custom recepes
-        ordered_items = [item for item in ordered_items
-                         if all(raw.name not in artifacts for raw in item.get_raw_ingredients().keys())]
-
         ordered_items = ordered_items[:int(len(ordered_items) * (self.options.percent_items_in_game.value / 100))]
 
         pool_names = self.options.max_science_pack.get_ordered_science_packs()[1:self.options.max_science_pack.value+1]
