@@ -16,9 +16,9 @@ class ItemType(IntEnum):
 
 
 class SohItemData(NamedTuple):
-    item_id: int | None
-    classification: IC
-    quantity_in_item_pool: int
+    item_id: int | None  # 0 means it's just here for the data, and won't be added to the datapackage
+    classification: IC = IC.filler
+    quantity_in_item_pool: int = 0
     item_type: int = ItemType.none
     child_only: bool = False
     adult_only: bool = False
@@ -69,19 +69,19 @@ item_data_table: Dict[Items, SohItemData] = {
     Items.GOLD_SKULLTULA_TOKEN: SohItemData(38, IC.progression_skip_balancing, 0),
     Items.PROGRESSIVE_HOOKSHOT: SohItemData(39, IC.progression, 2),
     Items.STRENGTH_UPGRADE: SohItemData(40, IC.progression, 3),
-    Items.PROGRESSIVE_BOMB_BAG: SohItemData(41, IC.progression, 3),
-    Items.PROGRESSIVE_BOW: SohItemData(42, IC.progression, 3),
-    Items.PROGRESSIVE_SLINGSHOT: SohItemData(43, IC.progression, 3),
-    Items.PROGRESSIVE_WALLET: SohItemData(44, IC.progression, 3),
-    Items.PROGRESSIVE_SCALE: SohItemData(45, IC.progression, 2),
+    Items.PROGRESSIVE_BOMB_BAG: SohItemData(41, IC.progression, 3, item_groups=["Bomb Bag"]),
+    Items.PROGRESSIVE_BOW: SohItemData(42, IC.progression, 3, item_groups=["Bow"]),
+    Items.PROGRESSIVE_SLINGSHOT: SohItemData(43, IC.progression, 3, item_groups=["Slingshot"]),
+    Items.PROGRESSIVE_WALLET: SohItemData(44, IC.progression, 3, item_groups=["Wallet", "Giant Wallet", "Adult Wallet", "Tycoon Wallet"]),
+    Items.PROGRESSIVE_SCALE: SohItemData(45, IC.progression, 2, item_groups=["Bronze Scale", "Silver Scale", "Golden Scale"]),
     Items.PROGRESSIVE_NUT_CAPACITY: SohItemData(46, IC.progression, 2),
     Items.PROGRESSIVE_STICK_CAPACITY: SohItemData(47, IC.progression, 2),
-    Items.PROGRESSIVE_BOMBCHU: SohItemData(48, IC.progression, 0),
-    Items.PROGRESSIVE_MAGIC_METER: SohItemData(49, IC.progression, 2),
+    Items.PROGRESSIVE_BOMBCHU: SohItemData(48, IC.progression, 0, item_groups=["Bombchu Bag"]),
+    Items.PROGRESSIVE_MAGIC_METER: SohItemData(49, IC.progression, 2, item_groups=["Magic Meter"]),
     #Items.MAGIC_SINGLE: SohItemData( 50, IC.filler, 0 ),
     #Items.MAGIC_DOUBLE: SohItemData( 51, IC.filler, 0 ),
-    Items.PROGRESSIVE_OCARINA: SohItemData(52, IC.progression, 2),
-    Items.PROGRESSIVE_GORON_SWORD: SohItemData(53, IC.progression, 0),
+    Items.PROGRESSIVE_OCARINA: SohItemData(52, IC.progression, 2, item_groups=["Ocarina"]),
+    #Items.PROGRESSIVE_GORON_SWORD: SohItemData(53, IC.progression, 0),
     Items.EMPTY_BOTTLE: SohItemData(54, IC.progression, 0, item_groups=["Bottles"]),
     Items.BOTTLE_WITH_MILK: SohItemData(55, IC.progression, 0, item_groups=["Bottles"]),
     Items.BOTTLE_WITH_RED_POTION: SohItemData(56, IC.progression, 0, item_groups=["Bottles"]),
@@ -242,9 +242,9 @@ item_data_table: Dict[Items, SohItemData] = {
     #Items.DEKU_STICK_BAG: SohItemData( 211, IC.progression, 0 ),
     #Items.DEKU_NUT_BAG: SohItemData( 212, IC.progression, 0 ),
     #Items.HINT: SohItemData( 213, IC.filler, 0 ),
-    #Items.TYCOON_WALLET: SohItemData( 214, IC.filler, 0 ),
-    Items.BRONZE_SCALE: SohItemData( 215, IC.progression, 0 ),
-    #Items.CHILD_WALLET: SohItemData( 216, IC.progression, 0 ),
+    Items.TYCOON_WALLET: SohItemData(0),
+    Items.BRONZE_SCALE: SohItemData(0),
+    Items.CHILD_WALLET: SohItemData(0),
     #Items.BOMBCHU_BAG: SohItemData( 217, IC.progression, 0 ),
     #Items.QUIVER_INF: SohItemData( 218, IC.filler, 0 ),
     #Items.BOMB_BAG_INF: SohItemData( 219, IC.filler, 0 ),
@@ -254,30 +254,30 @@ item_data_table: Dict[Items, SohItemData] = {
     #Items.MAGIC_INF: SohItemData( 223, IC.filler, 0 ),
     #Items.BOMBCHU_INF: SohItemData( 224, IC.filler, 0 ),
     #Items.WALLET_INF: SohItemData( 225, IC.filler, 0 ),
-    #Items.FAIRY_OCARINA: SohItemData( 226, IC.filler, 0 ),
-    #Items.OCARINA_OF_TIME: SohItemData( 227, IC.filler, 0 ),
-    #Items.BOMB_BAG: SohItemData( 228, IC.filler, 0 ),
+    Items.FAIRY_OCARINA: SohItemData(0),
+    Items.OCARINA_OF_TIME: SohItemData(0),
+    Items.BOMB_BAG: SohItemData(0),
     #Items.BIG_BOMB_BAG: SohItemData( 229, IC.filler, 0 ),
     #Items.BIGGEST_BOMB_BAG: SohItemData( 230, IC.filler, 0 ),
-    Items.FAIRY_BOW: SohItemData( 231, IC.filler, 0, adult_only=True),
+    Items.FAIRY_BOW: SohItemData(0, adult_only=True),
     #Items.BIG_QUIVER: SohItemData( 232, IC.filler, 0 ),
     #Items.BIGGEST_QUIVER: SohItemData( 233, IC.filler, 0 ),
-    Items.FAIRY_SLINGSHOT: SohItemData( 234, IC.filler, 0, child_only=True),
+    Items.FAIRY_SLINGSHOT: SohItemData(0, child_only=True),
     #Items.BIG_BULLET_BAG: SohItemData( 235, IC.filler, 0 ),
     #Items.BIGGEST_BULLET_BAG: SohItemData( 236, IC.filler, 0 ),
-    Items.GORONS_BRACELET: SohItemData( 237, IC.filler, 0 ),
-    Items.SILVER_GAUNTLETS: SohItemData( 238, IC.filler, 0, adult_only=True),
-    Items.GOLDEN_GAUNTLETS: SohItemData( 239, IC.filler, 0, adult_only=True),
-    #Items.SILVER_SCALE: SohItemData( 240, IC.filler, 0 ),
-    #Items.GOLDEN_SCALE: SohItemData( 241, IC.filler, 0 ),
-    #Items.ADULT_WALLET: SohItemData( 242, IC.filler, 0 ),
-    #Items.GIANT_WALLET: SohItemData( 243, IC.filler, 0 ),
+    Items.GORONS_BRACELET: SohItemData(0),
+    Items.SILVER_GAUNTLETS: SohItemData(0, adult_only=True),
+    Items.GOLDEN_GAUNTLETS: SohItemData(0, adult_only=True),
+    Items.SILVER_SCALE: SohItemData(0),
+    Items.GOLDEN_SCALE: SohItemData(0),
+    Items.ADULT_WALLET: SohItemData(0),
+    Items.GIANT_WALLET: SohItemData(0),
     #Items.DEKU_NUT_CAPACITY30: SohItemData( 244, IC.filler, 0 ),
     #Items.DEKU_NUT_CAPACITY40: SohItemData( 245, IC.filler, 0 ),
     #Items.DEKU_STICK_CAPACITY20: SohItemData( 246, IC.filler, 0 ),
     #Items.DEKU_STICK_CAPACITY30: SohItemData( 247, IC.filler, 0 ),
-    Items.HOOKSHOT: SohItemData( 248, IC.filler, 0, adult_only=True),
-    Items.LONGSHOT: SohItemData( 249, IC.filler, 0, adult_only=True),
+    Items.HOOKSHOT: SohItemData(0, adult_only=True),
+    Items.LONGSHOT: SohItemData(0, adult_only=True),
     #Items.SCARECROW: SohItemData( 250, IC.filler, 0, adult_only=True),
     Items.GUARD_HOUSE_KEY: SohItemData(251, IC.progression, 0, item_groups=["Keys"]),
     Items.MARKET_BAZAAR_KEY: SohItemData(252, IC.progression, 0, item_groups=["Keys"]),
@@ -310,7 +310,7 @@ item_data_table: Dict[Items, SohItemData] = {
     #Items.MAX: SohItemData( 279, IC.filler, 0 ),
 }
 
-item_table = {name.value: data.item_id for name, data in item_data_table.items() if data.item_id is not None}
+item_table = {name.value: data.item_id for name, data in item_data_table.items() if data.item_id}
 
 filler_items = [
     Items.RECOVERY_HEART,

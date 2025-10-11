@@ -30,7 +30,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ZF_NEAR_JABU_POT1, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
         (Locations.ZF_NEAR_JABU_POT2, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
         (Locations.ZF_NEAR_JABU_POT3, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
-        (Locations.ZF_NEAR_JABU_POT4, lambda bundle: is_child(bundle) and can_break_pots(bundle))
+        (Locations.ZF_NEAR_JABU_POT4, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
+        (Locations.ZF_TREE, lambda bundle: is_child(bundle) and can_bonk_trees(bundle)),
     ])
     # Connections
     connect_regions(Regions.ZORAS_FOUNTAIN, world, [
@@ -47,7 +48,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ##Zora's Fountains Icebergs
     # Locations
     add_locations(Regions.ZF_ICEBERGS, world, [
-        (Locations.ZF_ICEBERG_FREESTANDING_PO_H, lambda bundle: is_adult(bundle))
+        (Locations.ZF_ICEBERG_FREESTANDING_POH, lambda bundle: is_adult(bundle))
     ])
     # Connections
     connect_regions(Regions.ZF_ICEBERGS, world, [
@@ -59,7 +60,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ##Zora's Fountain Lakebed
     # Locations
     add_locations(Regions.ZF_LAKEBED, world, [
-        (Locations.ZF_BOTTOM_FREESTANDING_PO_H,
+        (Locations.ZF_BOTTOM_FREESTANDING_POH,
          lambda bundle: is_adult(bundle) and can_use(Items.IRON_BOOTS, bundle) and water_timer(bundle) >= 16),
         (Locations.ZF_BOTTOM_NORTH_INNER_RUPEE,
          lambda bundle: is_adult(bundle) and can_use(Items.IRON_BOOTS, bundle) and water_timer(bundle) >= 16),

@@ -17,6 +17,7 @@ from .Locations import SohLocation, base_location_table, \
     pots_dungeon_location_table, \
     crates_overworld_location_table, \
     crates_dungeon_location_table, \
+    tree_location_table, \
     freestanding_overworld_location_table, \
     freestanding_dungeon_location_table, \
     fairies_location_table, \
@@ -164,6 +165,10 @@ def create_regions_and_locations(world: "SohWorld") -> None:
         # Crates (Dungeon)
         if world.options.shuffle_crates == "dungeon" or world.options.shuffle_crates == "all":
             world.included_locations.update(crates_dungeon_location_table)
+
+        # Trees
+        if world.options.shuffle_trees:
+            world.included_locations.update(tree_location_table)
 
         # Freestanding (Overworld)
         if world.options.shuffle_freestanding_items == "overworld" or world.options.shuffle_freestanding_items == "all":

@@ -106,6 +106,7 @@ class SohWorld(World):
             "shuffle_cows": self.options.shuffle_cows.value,
             "shuffle_pots": self.options.shuffle_pots.value,
             "shuffle_crates": self.options.shuffle_crates.value,
+            "shuffle_trees": self.options.shuffle_trees.value,
             "shuffle_merchants": self.options.shuffle_merchants.value,
             "shuffle_frog_song_rupees": self.options.shuffle_frog_song_rupees.value,
             "shuffle_adult_trade_items": self.options.shuffle_adult_trade_items.value,
@@ -144,14 +145,14 @@ class SohWorld(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         # Temporarily disabled because logic is in progress
         #update_age_access(self, state)
-        state._soh_stale[self.player] = True
+        state._soh_stale[self.player] = True # type: ignore
         return super().collect(state, item)
     
     def remove(self, state: CollectionState, item: Item) -> bool:
         # Temporarily disabled because logic is in progress
         changed = super().remove(state, item)
         if changed:
-            state._soh_invalidate(self.player)
+            state._soh_invalidate(self.player) # type: ignore
         return changed
 
     def generate_output(self, output_directory: str):

@@ -46,7 +46,15 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.HC_ROCK_WALL_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy(bundle)),
         (Locations.HC_ROCK_WALL_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.HC_NEAR_STORMS_GROTTO_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.HC_NEAR_STORMS_GROTTO_GRASS2, lambda bundle: can_cut_shrubs(bundle))
+        (Locations.HC_NEAR_STORMS_GROTTO_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.HC_GROTTO_TREE, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_SKULLTULA_TREE, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_1, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_2, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_3, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_4, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_5, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_6, lambda bundle: can_bonk_trees(bundle)),
     ])
     # Connections
     connect_regions(Regions.HYRULE_CASTLE_GROUNDS, world, [
@@ -134,7 +142,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GANONS_CASTLE_GROUNDS, world, [
         (Regions.CASTLE_GROUNDS, lambda bundle: at_night(bundle)),
-        (Regions.OGC_GREAT_FAIRY_FOUNTAIN, lambda bundle: can_use(Items.GOLDEN_GAUNTLETS) and at_night(bundle)),
+        (Regions.OGC_GREAT_FAIRY_FOUNTAIN, lambda bundle: can_use(Items.GOLDEN_GAUNTLETS, bundle) and at_night(bundle)),
         (Regions.GANONS_CASTLE_LEDGE, lambda bundle: has_item(LocalEvents.GANONS_CASTLE_GROUNDS_BUILT_RAINBOW_BRIDGE, bundle))
     ])
 
