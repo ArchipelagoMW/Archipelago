@@ -1,5 +1,6 @@
 from typing import Any, Dict
 from uuid import UUID
+import datetime
 
 from flask import abort, url_for
 
@@ -32,8 +33,18 @@ def room_info(room_id: UUID) -> Dict[str, Any]:
                 "download": url_for("download_patch", patch_id=slot.id, room_id=room.id)
             }
             downloads.append(slot_download)
+    
+    delta = datetime.datetime.now(datetime.timezone.utc) - room.last_activity.replace(tzinfo=datetime.timezone.utc)
+    remaining_time = room.timeout - delta.total_seconds()
+    if remaining_time <= 0:
+        remaining_time = 0
+        room_status = "shutdown"
+    else:
+        room_status = "active"
 
     return {
+        "remaining_time": remaining_time,
+        "status": room_status,
         "tracker": to_url(room.tracker),
         "players": get_players(room.seed),
         "last_port": room.last_port,
