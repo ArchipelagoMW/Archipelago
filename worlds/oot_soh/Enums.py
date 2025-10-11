@@ -264,7 +264,7 @@ class Regions(str, Enum):
     DODONGOS_CAVERN_NEAR_DODONGO_ROOM = "Dodongos Cavern Near Dodongo Room"
     DODONGOS_CAVERN_STAIRS_LOWER = "Dodongos Cavern Stairs Lower"
     DODONGOS_CAVERN_STAIRS_UPPER = "Dodongos Cavern Stairs Upper"
-    DODONGOS_CAVERN_VINES_ABOVE_STAIRS = "Dodongos Cavern Vines Above Stairs"
+    DODONGOS_CAVERN_VINES_ABOVE_STAIRS_GS = "Dodongos Cavern Vines Above Stairs GS"
     DODONGOS_CAVERN_COMPASS_ROOM = "Dodongos Cavern Compass Room"
     DODONGOS_CAVERN_ARMOS_ROOM = "Dodongos Cavern Armos Room"
     DODONGOS_CAVERN_BOMB_ROOM_LOWER = "Dodongos Cavern Bomb Room Lower"
