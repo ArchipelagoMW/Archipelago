@@ -575,7 +575,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         return can_hit_at_range(distance) or (distance == EnemyDistance.CLOSE and can_use(Items.KOKIRI_SWORD, bundle)) \
             or (distance <= EnemyDistance.BOOMERANG and can_use(Items.BOOMERANG, bundle))
 
-    if enemy in Enemies.BLUE_BUBBLE:
+    if enemy == Enemies.BLUE_BUBBLE:
         return blast_or_smash(bundle) or can_use(Items.FAIRY_BOW, bundle) or \
             ((can_jump_slash_except_hammer(bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle)) and \
              (can_use(Items.NUTS, bundle) or hookshot_or_boomerang(bundle) or can_standing_shield(bundle)))
