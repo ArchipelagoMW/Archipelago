@@ -2284,9 +2284,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Cavern Zone Main Area - Chimchar Power Competition -- Friendship": PokeparkLocationData(
-        252, PokeparkFlag.BATTLE, "Cavern Zone Main Area", 0x0401, PokeparkFriendshipClientLocationData(
-            structure_position=112,
-            memory_range=MemoryRange.BYTE
+        252, PokeparkFlag.BATTLE, "Cavern Zone Main Area", 0x0401, Pokepark07AttractionClientData(
+            structure_position=10,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
