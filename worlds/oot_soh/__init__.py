@@ -47,8 +47,20 @@ class SohWorld(World):
         self.included_locations = dict[str, int]()
 
     def generate_early(self) -> None:
-        #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
-        pass
+        from dataclasses import fields
+        from Options import PerGameCommonOptions, Removed, Range
+        for option_name in (attr.name for attr in fields(SohOptions)
+                            if attr not in fields(PerGameCommonOptions)):
+            option = getattr(self.options, option_name)
+            if option_name == "all_random":
+                continue
+            if isinstance(option, Removed):
+                continue
+            if option.supports_weighting:
+                if isinstance(option, Range):
+                    option.value = self.random.randint(option.range_start, option.range_end)
+                else:
+                    option.value = self.random.choice(list(option.name_lookup))
 
     def create_item(self, name: str) -> SohItem:
         item_entry = Items(name)

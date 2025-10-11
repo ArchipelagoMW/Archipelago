@@ -26,7 +26,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.DMT_FREESTANDING_POH, lambda bundle: take_damage(bundle) or can_use(Items.HOVER_BOOTS, bundle) or (is_adult(bundle) and can_plant_bean(bundle) and (has_explosives(bundle) or has_item(Items.GORONS_BRACELET, bundle)))),
         (Locations.DMT_GS_BEAN_PATCH, lambda bundle: can_spawn_soil_skull(bundle) and (has_explosives(bundle) or has_item(Items.GORONS_BRACELET, bundle) or (can_do_trick(Tricks.DMT_SOIL_GS, bundle) and (take_damage(bundle) or can_use(Items.HOVER_BOOTS, bundle)) and can_use(Items.BOOMERANG, bundle)))),
         (Locations.DMT_GS_NEAR_KAK, lambda bundle: blast_or_smash(bundle)),
-        (Locations.DMT_GS_ABOVE_DODONGOS_CAVERN, lambda bundle: is_adult(bundle) and at_night(bundle) and (can_use(Items.MEGATON_HAMMER, bundle) or (can_do_trick(Tricks.DMT_HOOKSHOT_LOWER_GS, bundle) and can_use(Items.HOOKSHOT, bundle)) or (can_do_trick(Tricks.DMT_BEAN_LOWER_GS, bundle) and can_plant_bean(bundle)) or (can_do_trick(Tricks.DMT_HOVERS_LOWER_GS, bundle) and can_use(Items.HOVER_BOOTS)) or can_do_trick(Tricks.DMT_JS_LOWER_GS, bundle)) and can_get_nighttime_gs(bundle)),
+        (Locations.DMT_GS_ABOVE_DODONGOS_CAVERN, lambda bundle: is_adult(bundle) and at_night(bundle) and (can_use(Items.MEGATON_HAMMER, bundle) or (can_do_trick(Tricks.DMT_HOOKSHOT_LOWER_GS, bundle) and can_use(Items.HOOKSHOT, bundle)) or (can_do_trick(Tricks.DMT_BEAN_LOWER_GS, bundle) and can_plant_bean(bundle)) or (can_do_trick(Tricks.DMT_HOVERS_LOWER_GS, bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_do_trick(Tricks.DMT_JS_LOWER_GS, bundle)) and can_get_nighttime_gs(bundle)),
         (Locations.DMT_BLUE_RUPEE_UNDER_BOULDER, lambda bundle: is_child(bundle) and blast_or_smash(bundle)),
         (Locations.DMT_RED_RUPEE_UNDER_BOULDER, lambda bundle: is_child(bundle) and blast_or_smash(bundle)),
         (Locations.DMT_BEAN_SPROUT_FAIRY1, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS, bundle) and (has_explosives(bundle) or has_item(Items.GORONS_BRACELET, bundle))),
@@ -56,7 +56,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.DMT_TRADE_CLAIM_CHECK, lambda bundle: is_adult(bundle) and can_use(Items.CLAIM_CHECK, bundle)),
         (Locations.DMT_GS_FALLING_ROCKS_PATH, lambda bundle: is_adult(bundle) and at_night(bundle) and (can_use(Items.MEGATON_HAMMER, bundle) or can_do_trick(Tricks.DMT_UPPER_GS, bundle)) and can_get_nighttime_gs(bundle)),
         (Locations.DMT_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy(bundle)),
-        (Locations.DMT_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS))
+        (Locations.DMT_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle))
     ])
     # Connections
     connect_regions(Regions.DEATH_MOUNTAIN_SUMMIT, world, [
