@@ -2598,9 +2598,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Magma Zone Main Area - Bonsly Power Competition -- Friendship": PokeparkLocationData(
-        297, PokeparkFlag.HIDEANDSEEK, "Magma Zone Main Area", 0x0403, PokeparkFriendshipClientLocationData(
+        297, PokeparkFlag.HIDEANDSEEK, "Magma Zone Main Area", 0x0403, Pokepark07AttractionClientData(
             structure_position=12,
-            memory_range=MemoryRange.BYTE
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
