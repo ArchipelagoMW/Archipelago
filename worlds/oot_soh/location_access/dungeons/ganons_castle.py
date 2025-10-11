@@ -230,7 +230,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.GANONS_CASTLE_LIGHT_TRIAL, world, [
         (EventLocations.GANONS_CASTLE_LIGHT_TRIAL_AREA, LocalEvents.GANONS_CASTLE_LIGHT_TRIAL_CLEARED, lambda bundle:
-            can_use(Items.LIGHT_ARROW, bundle) and (can_use(Items.HOOKSHOT, bundle) or (is_adult(bundle) and can_ground_jump(bundle))) and small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2) and (can_do_trick(Tricks.LENS_GANON, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)))
+            can_use(Items.LIGHT_ARROW, bundle) and (can_use(Items.HOOKSHOT, bundle) or (is_adult(bundle) and can_ground_jump(bundle))) and small_keys(Items.GANONS_CASTLE_SMALL_KEY, 2, bundle) and (can_do_trick(Tricks.LENS_GANON, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)))
     ])
     # Locations
     add_locations(Regions.GANONS_CASTLE_LIGHT_TRIAL, world, [
@@ -254,12 +254,12 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GANONS_TOWER_ENTRYWAY, world, [
         (Regions.GANONS_CASTLE_LOBBY, lambda bundle: True),
-        (Regions.GANONS_TOWER_FLOOR_1, lambda bundle: ((has_item(LocalEvents.GANONS_CASTLE_FOREST_TRIAL_CLEARED) or world.skipped_trials['Forest']) and
-                                                       (has_item(LocalEvents.GANONS_CASTLE_FIRE_TRIAL_CLEARED) or world.skipped_trials['Fire']) and
-                                                       (has_item(LocalEvents.GANONS_CASTLE_WATER_TRIAL_CLEARED) or world.skipped_trials['Water']) and
-                                                       (has_item(LocalEvents.GANONS_CASTLE_SHADOW_TRIAL_CLEARED) or world.skipped_trials['Shadow']) and
-                                                       (has_item(LocalEvents.GANONS_CASTLE_SPIRIT_TRIAL_CLEARED) or world.skipped_trials['Spirit']) and
-                                                       (has_item(LocalEvents.GANONS_CASTLE_LIGHT_TRIAL_CLEARED) or world.skipped_trials['Light'])))
+        (Regions.GANONS_TOWER_FLOOR_1, lambda bundle: ((has_item(LocalEvents.GANONS_CASTLE_FOREST_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Forest']
+                                                       (has_item(LocalEvents.GANONS_CASTLE_FIRE_TRIAL_CLEARED, bundle)) and #or world.skipped_trials['Fire']
+                                                       (has_item(LocalEvents.GANONS_CASTLE_WATER_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Water']
+                                                       (has_item(LocalEvents.GANONS_CASTLE_SHADOW_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Shadow']
+                                                       (has_item(LocalEvents.GANONS_CASTLE_SPIRIT_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Spirit']
+                                                       (has_item(LocalEvents.GANONS_CASTLE_LIGHT_TRIAL_CLEARED, bundle) ))) #or world.skipped_trials['Light']
     ])
     
     ## Ganon's Tower Floor 1
