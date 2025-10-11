@@ -2986,9 +2986,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     ),
 
     "Haunted Zone Main Area - Raichu Power Competition -- Friendship": PokeparkLocationData(
-        350, PokeparkFlag.CHASE, "Haunted Zone Main Area", 0x0501, PokeparkFriendshipClientLocationData(
-            structure_position=91,
-            memory_range=MemoryRange.BYTE
+        350, PokeparkFlag.CHASE, "Haunted Zone Main Area", 0x0501, Pokepark07AttractionClientData(
+            structure_position=18,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
