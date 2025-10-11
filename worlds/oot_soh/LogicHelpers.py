@@ -97,7 +97,29 @@ def can_use(item: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
     
     if item == Items.EPONA:
         return is_adult(bundle) and can_use(Items.EPONAS_SONG, bundle)
+    
+    if item == Items.NUTS:
+        return has_item(Events.CAN_FARM_NUTS, bundle)
 
+    if item == Items.STICKS:
+        return has_item(Events.CAN_FARM_STICKS, bundle)
+    
+    if item == Items.FISHING_POLE:
+        return has_item(Items.CHILD_WALLET, bundle)
+    
+    # I feel like we need to also check to see if they have a bottle but lmk
+    if item == Items.BOTTLE_WITH_BUGS:
+        return has_item(Events.CAN_ACCESS_BUGS, bundle)
+    
+    if item == Items.BOTTLE_WITH_FISH:
+        return has_item(Events.CAN_ACCESS_FISH, bundle)
+    
+    if item ==  Items.BOTTLE_WITH_BLUE_FIRE:
+        return has_item(Events.CAN_ACCESS_BLUE_FIRE, bundle)
+    
+    if item == Items.BOTTLE_WITH_FAIRY:
+        return has_item(Events.CAN_ACCESS_FAIRIES, bundle)
+    
     return True
 
 
@@ -226,11 +248,8 @@ def bombchu_refill(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 
 def bombchus_enabled(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    state = bundle[0]
-    parent_region = bundle[1]
     world = bundle[2]
-    bombchu_bag_enabled = False
-    if bombchu_bag_enabled:  # TODO bombchu bag enabled
+    if world.options.bombchu_bag.value:
         return has_item(Items.BOMBCHU_BAG, bundle)
     return has_item(Items.BOMB_BAG, bundle)
 
@@ -252,7 +271,6 @@ ocarina_buttons_required: dict[str, list[str]] = {
 
 def can_play_song(song: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
-    parent_region = bundle[1]
     world = bundle[2]
     if not has_item(Items.FAIRY_OCARINA, bundle):
         return False
