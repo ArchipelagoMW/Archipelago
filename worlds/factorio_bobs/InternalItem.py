@@ -371,17 +371,35 @@ class Recipe(FactorioElement):
     products: dict[InternalItem, float]
     energy: float
 
-    def __init__(self, name: str, category: str, ingredients: dict[InternalItem, float],
-                 products: dict[InternalItem, float], energy: float):
+    def __init__(self, name: str, category: str, ingredients_raw: dict[InternalItem | str, float],
+                 products_raw: dict[InternalItem | str, float], energy: float):
         self.name = name
         self.category = category
-        self.ingredients = ingredients
-        self.products = products
         self.energy = energy
         self.productivity = False
         self.__raw_ingredients: dict[InternalItem, float] = {}
         self.__all_unlocking_technologies: set[Technology] = set()
         self.__all_categories: set[Category] = set()
+
+        self.ingredients = {}
+        for ingredient, amount in ingredients_raw.items():
+            if type(ingredient) is InternalItem:
+                self.ingredients[ingredient] = amount
+            elif type(ingredient) is str:
+                assert ingredient in all_ingredients, (f"Unknown ingredient: {ingredient}", f"In recipe {self.name}")
+                self.ingredients[all_ingredients[ingredient]] = amount
+            else:
+                raise TypeError(f"Unknown ingredient type: {ingredient} \nIn recipe {self.name}")
+
+        self.products = {}
+        for product, amount in products_raw.items():
+            if type(product) is InternalItem:
+                self.products[product] = amount
+            elif type(product) is str:
+                assert product in all_ingredients, (f"Unknown product: {product}", f"In recipe {self.name}")
+                self.products[all_ingredients[product]] = amount
+            else:
+                raise TypeError(f"Unknown product type: {product} \nIn recipe {self.name}")
 
         for product in self.products.keys():
             product.recipes.add(self)
