@@ -9,6 +9,7 @@ import settings
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, components, SuffixIdentifier, Type, launch, icon_paths
 from .Common import *
 from . import ItemIconGuessing
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
@@ -27,6 +28,19 @@ from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptio
 from .Rom import LADXProcedurePatch, write_patch_data
 
 DEVELOPER_MODE = False
+
+
+def launch_client(*args):
+    from .LinksAwakeningClient import launch as ladx_launch
+    launch(ladx_launch, name=f"{LINKS_AWAKENING} Client", args=args)
+
+components.append(Component(f"{LINKS_AWAKENING} Client",
+                            func=launch_client,
+                            component_type=Type.CLIENT,
+                            icon=LINKS_AWAKENING,
+                            file_identifier=SuffixIdentifier('.apladx')))
+
+icon_paths[LINKS_AWAKENING] = "ap:worlds.ladx/assets/MarinV-3_small.png"
 
 
 class LinksAwakeningSettings(settings.Group):
@@ -71,7 +85,7 @@ class LinksAwakeningWebWorld(WebWorld):
         "setup/en",
         ["zig"]
     )]
-    theme = "dirt"
+    theme = "ocean"
     option_groups = ladx_option_groups
     options_presets: typing.Dict[str, typing.Dict[str, typing.Any]] = {
         "Keysanity": {
