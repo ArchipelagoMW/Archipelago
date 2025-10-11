@@ -2993,9 +2993,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Haunted Zone Main Area - Meowth Power Competition -- Friendship": PokeparkLocationData(
-        351, PokeparkFlag.QUIZ, "Haunted Zone Main Area", 0x0501, PokeparkFriendshipClientLocationData(
-            structure_position=117,
-            memory_range=MemoryRange.BYTE
+        351, PokeparkFlag.QUIZ, "Haunted Zone Main Area", 0x0501, Pokepark07AttractionClientData(
+            structure_position=19,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
