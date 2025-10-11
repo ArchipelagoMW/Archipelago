@@ -652,13 +652,6 @@ rel_cost = {
     "depleted-uranium-fuel-cell": float("inf"),
     "bob-depleted-thorium-fuel-cell": float("inf"),
     "bob-depleted-deuterium-fuel-cell": float("inf"),
-    "bob-small-alien-artifact": 50,
-    "bob-small-alien-artifact-red": 50,
-    "bob-small-alien-artifact-orange": 50,
-    "bob-small-alien-artifact-yellow": 50,
-    "bob-small-alien-artifact-green": 50,
-    "bob-small-alien-artifact-blue": 50,
-    "bob-small-alien-artifact-purple": 50,
     "bob-liquid-air": 0.5,
     "bob-lithia-water": 1,
 }
