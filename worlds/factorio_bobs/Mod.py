@@ -3,7 +3,6 @@
 import dataclasses
 import json
 import os
-import shutil
 import threading
 import zipfile
 from typing import Optional, TYPE_CHECKING, Any, List, Callable, Tuple, Union
@@ -13,7 +12,7 @@ import jinja2
 import Utils
 import worlds.Files
 from . import FactorioOptions
-from .InternalItem import fluids, imported_recipes
+from .InternalItem import fluids, recipes
 from .Technologies import tech_table, free_sample_exclusions, progressive_technology_table, \
     base_tech_table, tech_to_progressive_lookup
 
@@ -158,7 +157,7 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
         "slot_name": world.player_name,
         "seed_name": multiworld.seed_name,
         "slot_player": player,
-        "recipes": imported_recipes,
+        "recipes": recipes,
         "random": random,
         "flop_random": flop_random,
         "recipe_time_scale": recipe_time_scales.get(world.options.recipe_time.value, None),
