@@ -12,7 +12,7 @@ import jinja2
 import Utils
 import worlds.Files
 from . import FactorioOptions
-from .InternalItem import fluids, recipes
+from .InternalItem import fluids, recipes, global_custom_recipes
 from .Technologies import tech_table, free_sample_exclusions, progressive_technology_table, \
     base_tech_table, tech_to_progressive_lookup
 
@@ -132,6 +132,8 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
                  for location in world.science_locations]
     mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
     versioned_mod_name = mod_name + "_" + Utils.__version__
+    custom_recipes = world.custom_recipes.copy()
+    custom_recipes.update(global_custom_recipes)
 
     def flop_random(low, high, base=None):
         """Guarantees 50% below base and 50% above base, uniform distribution in each direction."""
@@ -166,7 +168,7 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
         "free_sample_quality_name": world.options.free_samples_quality.current_key,
         "progressive_technology_table": {tech.name: tech.progressive for tech in
                                          progressive_technology_table.values()},
-        "custom_recipes": world.custom_recipes,
+        "custom_recipes": custom_recipes,
         "liquids": fluids,
         "removed_technologies": world.removed_technologies,
         "chunk_shuffle": 0,

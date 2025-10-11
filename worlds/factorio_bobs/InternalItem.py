@@ -374,6 +374,7 @@ class Recipe(FactorioElement):
     def __init__(self, name: str, category: str, ingredients_raw: dict[InternalItem | str, float],
                  products_raw: dict[InternalItem | str, float], energy: float):
         self.name = name
+        # TODO add check for category
         self.category = category
         self.energy = energy
         self.productivity = False
@@ -583,6 +584,28 @@ for recipe_name, recipe_data in raw_recipes.items():
         # for product_name in recipe.products:
         #     all_product_sources.setdefault(product_name, set()).add(recipe)
 imported_recipes: dict[str, Recipe] = recipes.copy()
+
+# name, category, ingredients_name, products_name, energy
+custom_recipes_prototype: list[tuple[str, Category, dict[str, float], dict[str, float], float]] = [
+    ("bob-small-alien-artifact", "advanced-crafting", {"bob-laser-rifle-battery": 1}, {"bob-small-alien-artifact": 1}, 5),
+    ("bob-small-alien-artifact-red", "advanced-crafting", {"bob-laser-rifle-battery-ruby": 1}, {"bob-small-alien-artifact-red": 1}, 5),
+    ("bob-small-alien-artifact-orange", "advanced-crafting", {"bob-laser-rifle-battery-topaz": 1}, {"bob-small-alien-artifact-orange": 1}, 5),
+    ("bob-small-alien-artifact-yellow", "advanced-crafting", {"bob-laser-rifle-battery-diamond": 1}, {"bob-small-alien-artifact-yellow": 1}, 5),
+    ("bob-small-alien-artifact-green", "advanced-crafting", {"bob-laser-rifle-battery-emerald": 1}, {"bob-small-alien-artifact-green": 1}, 5),
+    ("bob-small-alien-artifact-blue", "advanced-crafting", {"bob-laser-rifle-battery-sapphire": 1}, {"bob-small-alien-artifact-blue": 1}, 5),
+    ("bob-small-alien-artifact-purple", "advanced-crafting", {"bob-laser-rifle-battery-amethyst": 1}, {"bob-small-alien-artifact-purple": 1}, 5),
+]
+global_custom_recipes: dict[str, Recipe] = {}
+for custom_recipe_prototype in custom_recipes_prototype:
+    # TODO add optional crafting_machine_tints
+    # TODO add group for AP recipes
+    # TODO add support for custom techs for recipes
+    recipe = Recipe(custom_recipe_prototype[0], custom_recipe_prototype[1],
+                                                 custom_recipe_prototype[2],
+                                                 custom_recipe_prototype[3],
+                                                 custom_recipe_prototype[4])
+    recipes[custom_recipe_prototype[0]] = recipe
+    global_custom_recipes[custom_recipe_prototype[0]] = recipe
 
 
 machines: dict[str, Machine] = {}
