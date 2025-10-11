@@ -1,0 +1,172 @@
+
+base_id = 24000
+base_filler_id = 24500
+
+tmx_map_tags = ["Race","FullSpeed","Tech","RPG","LOL","Press Forward","SpeedTech","MultiLap",
+               "Offroad","Trial","ZrT","SpeedFun","Competitive","Ice","Dirt","Stunt","Reactor",
+               "Platform","Slow Motion","Bumper","Fragile","Scenery","Kacky","Endurance","Mini",
+               "Remake","Mixed","Nascar","SpeedDrift","Minigame","Obstacle","Transitional","Grass",
+               "Backwards","EngineOff","Signature","Royal","Water","Plastic","Arena","Freestyle",
+               "Educational","Sausage","Bobsleigh","Pathfinding","FlagRush","Puzzle","Freeblocking",
+               "Altered Nadeo","SnowCar","Wood","Underwater","Turtle","RallyCar","MixedCar",
+               "Bugslide","Mudslide","Moving Items","DesertCar","SpeedMapping","NoBrake","CruiseControl",
+               "NoSteer","RPG-Immersive","Pipes","Magnet","NoGrip",
+                #tm2 exclusive tags
+                "Glass","Sand","Cobblestone","ForceAccel"
+]
+
+tmx_map_difficulties = ["Beginner","Intermediate","Advanced","Expert","Lunatic","Impossible"]
+
+tmx_default_excluded_tags = ["Kacky", "Royal", "Arena", "FlagRush", "Puzzle"]
+
+tmx_default_map_difficulties = ["Beginner","Intermediate","Advanced","Expert"]
+
+filler_item_names = [
+    "Keyboard",
+    "Analogue Keyboard",
+    "Controller",
+    "Wheel",
+    "Joystick",
+    "Propeller Hat",
+    "Can of Water",
+    "Tie Dye Headband",
+    "Sniff",
+    "Penguin Onesie",
+    "Ice Wiggle",
+    "Reactor Cut",
+    "SD Overlap Spreadsheet",
+    "Noslide",
+    "Randstein Bug",
+    "Brake Trick",
+    "Ramp Trick",
+    "Favorite Alt Car",
+    "FWO Membership Card",
+    "joel",
+    "bla",
+    "Reactor Zoop",
+    "Icy 1-up Checkpointless Underwater Magnet Yeet Campaign",
+    "Ice Physics Patch",
+    "STM",
+    "DX Tweak Profile",
+    "Car is Faster Backwards",
+    "Safemeister",
+    "Wampus Reroute",
+    "Boltholes",
+    "Agility Dash",
+    "Gyroscope",
+    "Landing Bug",
+    "Backwards Gear",
+    "Gears for Breakfast",
+    "Uberbug",
+    "Nadeo World Record",
+    "Undone Nadeo Cut",
+    "Nando Noodles",
+    "Low Input Strat",
+    "A07 shortcut",
+    "A08 map",
+    "Canyon for TM2020 Campaign Sticker",
+    "Valley for TM2020 Campaign Button",
+    "Lagoon for TM2020 Campaign Hat",
+    "Consistent Magnet Yeet",
+    "Slideout Preventer",
+    "Trackmania Ugly Christmas Sweater",
+    "Map Editor Update",
+    "Custom Action Key",
+    "Slow Motion Horn",
+    "Replay Inputs",
+    "Coppers Farming Accounts",
+    "Anti-Cheat",
+    "Sausage Looping",
+    "Bobsleigh Looping",
+    "Dragon Yeet",
+    "Perfect Cup of the Day",
+    "Grass Track of the Day",
+    "First Map",
+    "Chat Logs",
+    "Solution for Competitively Balancing Keyboard",
+    "Trackmania Brain Cell",
+    "Hunted Altered Nadeo AT",
+    "Secret Bobsleigh Fan Club Membership",
+    "Obscure Style Specialization",
+    "Fullspeed Addiction",
+    "Scuffed Transition ",
+    "spammie_horn.mp3",
+    "Whoosh Noise",
+    "Helicopter Drop",
+    "Bonk Cup Map Idea",
+    "Kacky Validation",
+    "RMC Reset",
+    "Two-Wheel of Doom!",
+    "Quantum Slide Observation Experiment",
+    "Manual Gearbox",
+    "TM Esports Format Idea",
+    "Banger Identity Idea",
+    "Impossible Plugin Request",
+    "Ability to just Copy World Record",
+    "Backseating Impulse",
+    "New Biggest K Project Plans",
+    "Broken Press Forward Map",
+    "Bad Drama Take",
+    "Broken Hitbox",
+    "Maniapositivity ^_^",
+    "Copium Reserves",
+    "Finish Block Crash",
+    "Bug Finish",
+    "Turtle Anxiety",
+    "Dirt Wallride",
+    "Booster Spam",
+    "Coffin Drone Car Skin",
+    "Woogles",
+    "Very Useful Item Yeppers",
+    "pwogweshon mehdol",
+    "\"just dont slide\" Fullspeed Advice",
+    "\"just tap brake\" Iceslide Advice",
+    "\"just dont steer\" Dirt Gears Advice",
+    "\"just dont oversteer\" Noslide Advice",
+    "\"just commit to turns\" Tech Advice",
+    "Nosebug Chain",
+    "Noseboost World Record",
+    "Fast Learning Skills",
+    "Nostalgia for Two Years Ago",
+    "Steve Car Skin",
+    "Lighting Calculations",
+    "Upcoming Patch Leaks",
+    "widePolarStrut Affiliation",
+    "Fire D&B Remix",
+    "A01 but its 1910",
+    "Greek Flag Pole Bounce",
+    "Tiktok Background Gameplay",
+    "Secret Weekly Shorts Times",
+    "Ice Gears Understanding",
+    "horsn",
+    "pedro",
+    "Super Unlucky Landing",
+    "Brick Bob",
+    "GPS",
+    "Green Timer",
+    "borpaspin",
+    "Blind Jump",
+    "Loop Cut",
+    "First Connection in 9999999 Days!",
+    "Royal Obituary",
+    "Snowo Dance",
+    "Gear Bug",
+    "Tower Map Spinoff"
+    "Yep Tree",
+
+
+]
+
+def get_all_map_tags() -> list[str]:
+    return tmx_map_tags
+
+def get_excluded_map_tags() -> list[str]:
+    return tmx_default_excluded_tags
+
+def get_all_map_difficulties() -> list[str]:
+    return tmx_map_difficulties
+
+def get_default_map_difficulties() -> list[str]:
+    return tmx_default_map_difficulties
+
+
