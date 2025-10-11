@@ -2291,9 +2291,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Cavern Zone Main Area - Sudowoodo Power Competition -- Friendship": PokeparkLocationData(
-        253, PokeparkFlag.HIDEANDSEEK, "Cavern Zone Main Area", 0x0401, PokeparkFriendshipClientLocationData(
-            structure_position=13,
-            memory_range=MemoryRange.BYTE
+        253, PokeparkFlag.HIDEANDSEEK, "Cavern Zone Main Area", 0x0401, Pokepark07AttractionClientData(
+            structure_position=11,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
