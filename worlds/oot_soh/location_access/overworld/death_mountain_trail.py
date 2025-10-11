@@ -10,7 +10,6 @@ class EventLocations(str, Enum):
     DMT_STORMS_GROTTO_GOSSIP_STONE = "DMT Storms Grotto Gossip Stone"
     DMT_STORMS_GROTTO_BUTTERFLY_FAIRY = "DMT Storms Grotto Butterfly Fairy"
     DMT_STORMS_GROTTO_BUG_GRASS = "DMT Storms Grotto Bug Grass"
-    DMT_STORMS_GROTTO_FISH = "DMT Storms Grotto Fish"
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
@@ -104,7 +103,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.DMT_STORMS_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
         (EventLocations.DMT_STORMS_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
         (EventLocations.DMT_STORMS_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
-        (EventLocations.DMT_STORMS_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.DMT_STORMS_GROTTO, world, [
