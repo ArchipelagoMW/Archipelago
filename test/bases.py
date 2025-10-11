@@ -71,7 +71,8 @@ class WorldTestBase(unittest.TestCase):
         random.seed(self.multiworld.seed)
         self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
         args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
+        world_type = AutoWorld.AutoWorldRegister.testable_worlds[self.game].world_type
+        for name, option in world_type.options_dataclass.type_hints.items():
             setattr(args, name, {
                 1: option.from_any(self.options.get(name, option.default))
             })

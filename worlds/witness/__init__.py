@@ -23,6 +23,7 @@ from .player_logic import WitnessPlayerLogic
 from .presets import witness_option_presets
 from .regions import WitnessPlayerRegions
 from .rules import set_rules
+from .presets_for_generic_unittests import TEST_PRESETS
 
 
 class WitnessWebWorld(WebWorld):
@@ -80,6 +81,8 @@ class WitnessWorld(World):
     location_name_to_id = static_witness_locations.ALL_LOCATIONS_TO_ID
     item_name_groups = static_witness_items.ITEM_GROUPS
     location_name_groups = static_witness_locations.AREA_LOCATION_GROUPS
+
+    test_presets = TEST_PRESETS
 
     required_client_version = (0, 6, 0)
 
