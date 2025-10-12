@@ -93,7 +93,7 @@ class KH2Rules:
         return amount <= sum([state.count(item_name, self.player) for item_name in visit_locking_dict["2VisitLocking"]])
 
     def summon_levels_unlocked(self, state: CollectionState, amount) -> bool:
-        return amount <= sum([1 for item_name in summons if state.has(item_name,self.player)])
+        return amount <= sum([1 for item_name in summons if state.has(item_name, self.player)])
 
     def kh2_list_count_sum(self, item_name_list: list, state: CollectionState) -> int:
         """
@@ -509,197 +509,78 @@ class KH2FightRules(KH2Rules):
     def __init__(self, world: KH2World) -> None:
         super().__init__(world)
         self.fight_logic = world.options.FightLogic.current_key
+        self.fight_logic_overrides = world.options.FightLogicOverrides.value
         self.fight_region_rules = {}
-        if self.fight_logic == "Easy":
-            self.fight_region_rules[RegionName.ShanYu] = lambda state: self.get_easy_shanyu_rules(state)
-            self.fight_region_rules[RegionName.AnsemRiku] = lambda state: self.get_easy_ansemriku_rules(state)
-            self.fight_region_rules[RegionName.StormRider] = lambda state: self.get_easy_stormrider_rules(state)
-            self.fight_region_rules[RegionName.DataXigbar] = lambda state: self.get_easy_dataxigbar_rules(state)
-            self.fight_region_rules[RegionName.TwinLords] = lambda state: self.get_easy_firelord_rules(state) and self.get_easy_blizzardlord_rules(state)
-            self.fight_region_rules[RegionName.GenieJafar] = lambda state: self.get_easy_geniejafar_rules(state)
-            self.fight_region_rules[RegionName.DataLexaeus] = lambda state: self.get_easy_datalexaeus_rules(state)
-            self.fight_region_rules[RegionName.OldPete] = lambda state: self.get_old_pete_rules(),
-            self.fight_region_rules[RegionName.FuturePete] = lambda state: self.get_easy_futurepete_rules(state)
-            self.fight_region_rules[RegionName.Terra] = lambda state: self.get_easy_terra_rules(state)
-            self.fight_region_rules[RegionName.DataMarluxia] = lambda state: self.get_easy_datamarluxia_rules(state)
-            self.fight_region_rules[RegionName.Barbosa] = lambda state: self.get_easy_barbosa_rules(state)
-            self.fight_region_rules[RegionName.GrimReaper1] = lambda state: self.get_grim_reaper1_rules(),
-            self.fight_region_rules[RegionName.GrimReaper2] = lambda state: self.get_easy_grimreaper2_rules(state)
-            self.fight_region_rules[RegionName.DataLuxord] = lambda state: self.get_easy_dataluxord_rules(state)
-            self.fight_region_rules[RegionName.Cerberus] = lambda state: self.get_easy_cerberus_rules(state)
-            self.fight_region_rules[RegionName.OlympusPete] = lambda state: self.get_easy_olympus_pete_rules(state)
-            self.fight_region_rules[RegionName.Hydra] = lambda state: self.get_easy_hydra_rules(state)
-            self.fight_region_rules[RegionName.Hades] = lambda state: self.get_easy_hades_rules(state)
-            self.fight_region_rules[RegionName.DataZexion] = lambda state: self.get_easy_data_zexion_rules(state)
-            self.fight_region_rules[RegionName.OcPainAndPanicCup] = lambda state: self.get_pain_and_panic_cup_rules(state)
-            self.fight_region_rules[RegionName.OcCerberusCup] = lambda state: self.get_easy_cerberus_cup_rules(state)
-            self.fight_region_rules[RegionName.Oc2TitanCup] = lambda state: self.get_easy_titan_cup_rules(state)
-            self.fight_region_rules[RegionName.Oc2GofCup] = lambda state: self.get_goddess_of_fate_cup_entrance_rules(state)
-            self.fight_region_rules[RegionName.HadesCups] = lambda state: self.get_hades_cup_rules(state)
-            self.fight_region_rules[RegionName.Thresholder] = lambda state: self.get_easy_thresholder_rules(state)
-            self.fight_region_rules[RegionName.Beast] = lambda state: self.get_beast_rules()
-            self.fight_region_rules[RegionName.DarkThorn] = lambda state: self.get_easy_dark_thorn_rules(state)
-            self.fight_region_rules[RegionName.Xaldin] = lambda state: self.get_easy_xaldin_rules(state)
-            self.fight_region_rules[RegionName.DataXaldin] = lambda state: self.get_easy_data_xaldin_rules(state)
-            self.fight_region_rules[RegionName.HostileProgram] = lambda state: self.get_easy_hostile_program_rules(state)
-            self.fight_region_rules[RegionName.Mcp] = lambda state: self.get_mcp_rules(state)
-            self.fight_region_rules[RegionName.DataLarxene] = lambda state: self.get_easy_data_larxene_rules(state)
-            self.fight_region_rules[RegionName.PrisonKeeper] = lambda state: self.get_easy_prison_keeper_rules(state)
-            self.fight_region_rules[RegionName.OogieBoogie] = lambda state: self.get_oogie_rules()
-            self.fight_region_rules[RegionName.Experiment] = lambda state: self.get_easy_experiment_rules(state)
-            self.fight_region_rules[RegionName.DataVexen] = lambda state: self.get_easy_data_vexen_rules(state)
-            self.fight_region_rules[RegionName.Hb2Corridors]= lambda state:self.get_easy_corridors_fight_rules(state)
-            self.fight_region_rules[RegionName.HBDemyx] = lambda state: self.get_easy_demyx_rules(state)
-            self.fight_region_rules[RegionName.ThousandHeartless] = lambda state: self.get_easy_thousand_heartless_rules(state)
-            self.fight_region_rules[RegionName.DataDemyx] = lambda state: self.get_easy_data_demyx_rules(state)
-            self.fight_region_rules[RegionName.Sephi] = lambda state: self.get_easy_sephiroth_rules(state)
-            self.fight_region_rules[RegionName.CorFirstFight] = lambda state: self.get_easy_cor_first_fight_movement_rules(state) and (self.get_easy_cor_first_fight_rules(state) or self.get_easy_cor_skip_first_rules(state))
-            self.fight_region_rules[RegionName.CorSecondFight] = lambda state: self.get_easy_cor_second_fight_movement_rules(state)
-            self.fight_region_rules[RegionName.Transport] = lambda state: self.get_easy_transport_fight_rules(state) and self.get_easy_transport_movement_rules(state)
-            self.fight_region_rules[RegionName.Scar] = lambda state: self.get_easy_scar_rules(state)
-            self.fight_region_rules[RegionName.GroundShaker] = lambda state: self.get_easy_groundshaker_rules(state)
-            self.fight_region_rules[RegionName.DataSaix] = lambda state: self.get_easy_data_saix_rules(state)
-            self.fight_region_rules[RegionName.TwilightThorn] = lambda state: self.get_twilight_thorn_rules()
-            self.fight_region_rules[RegionName.Axel1] = lambda state: self.get_axel_one_rules()
-            self.fight_region_rules[RegionName.Axel2] = lambda state: self.get_axel_two_rules()
-            self.fight_region_rules[RegionName.DataRoxas] = lambda state: self.get_easy_data_roxas_rules(state)
-            self.fight_region_rules[RegionName.DataAxel] = lambda state: self.get_easy_data_axel_rules(state)
-            self.fight_region_rules[RegionName.Roxas] = lambda state: self.get_easy_roxas_rules(state)
-            self.fight_region_rules[RegionName.Xigbar] = lambda state: self.get_easy_xigbar_rules(state)
-            self.fight_region_rules[RegionName.Luxord] = lambda state: self.get_easy_luxord_rules(state)
-            self.fight_region_rules[RegionName.Saix] = lambda state: self.get_easy_saix_rules(state)
-            self.fight_region_rules[RegionName.Xemnas] = lambda state: self.get_easy_xemnas_rules(state)
-            self.fight_region_rules[RegionName.ArmoredXemnas] = lambda state: self.get_easy_armored_xemnas_one_rules(state)
-            self.fight_region_rules[RegionName.ArmoredXemnas2] = lambda state: self.get_normal_armored_xemnas_one_rules(state)
-            self.fight_region_rules[RegionName.FinalXemnas] = lambda state: self.get_easy_final_xemnas_rules(state)
-            self.fight_region_rules[RegionName.DataXemnas] = lambda state: self.get_easy_data_xemnas_rules(state)
+        # get_x_settings returns a fight function
+        RegionNameToSettingFunctions = {
+            RegionName.ShanYu:            self.get_shanyu_settings,
+            RegionName.AnsemRiku:         self.get_ansemriku_settings,
+            RegionName.StormRider:        self.get_stormrider_settings,
+            RegionName.DataXigbar:        self.get_dataxigbar_settings,
+            RegionName.TwinLords:         self.get_twinlords_settings,
+            RegionName.GenieJafar:        self.get_geniejafar_settings,
+            RegionName.DataLexaeus:       self.get_datalexaeus_settings,
+            RegionName.OldPete:           self.get_oldpete_settings,
+            RegionName.FuturePete:        self.get_futurepete_settings,
+            RegionName.Terra:             self.get_terra_settings,
+            RegionName.DataMarluxia:      self.get_datamarluxia_settings,
+            RegionName.Barbosa:           self.get_barbosa_settings,
+            RegionName.GrimReaper1:       self.get_grimreaper1_settings,
+            RegionName.GrimReaper2:       self.get_grimreaper2_settings,
+            RegionName.DataLuxord:        self.get_dataluxord_settings,
+            RegionName.Cerberus:          self.get_cerberus_settings,
+            RegionName.OlympusPete:       self.get_olympuspete_settings,
+            RegionName.Hydra:             self.get_hydra_settings,
+            RegionName.Hades:             self.get_hades_settings,
+            RegionName.DataZexion:        self.get_data_zexion_settings,
+            RegionName.OcPainAndPanicCup: self.get_pain_and_panic_cup_settings,
+            RegionName.OcCerberusCup:     self.get_cerberus_cup_settings,
+            RegionName.Oc2TitanCup:       self.get_titan_cup_settings,
+            RegionName.Oc2GofCup:         self.get_goddess_of_fate_cup_settings,
+            RegionName.HadesCups:         self.get_hades_cups_settings,
+            RegionName.Thresholder:       self.get_thresholder_settings,
+            RegionName.Beast:             self.get_beast_settings,
+            RegionName.DarkThorn:         self.get_dark_thorn_settings,
+            RegionName.Xaldin:            self.get_xaldin_settings,
+            RegionName.DataXaldin:        self.get_data_xaldin_settings,
+            RegionName.HostileProgram:    self.get_hostile_program_settings,
+            RegionName.Mcp:               self.get_mcp_settings,
+            RegionName.DataLarxene:       self.get_data_larxene_settings,
+            RegionName.PrisonKeeper:      self.get_prison_keeper_settings,
+            RegionName.OogieBoogie:       self.get_oogieboogie_settings,
+            RegionName.Experiment:        self.get_experiment_settings,
+            RegionName.DataVexen:         self.get_data_vexen_settings,
+            RegionName.Hb2Corridors:      self.get_corridors_settings,
+            RegionName.HBDemyx:           self.get_demyx_settings,
+            RegionName.ThousandHeartless: self.get_thousand_heartless_settings,
+            RegionName.DataDemyx:         self.get_data_demyx_settings,
+            RegionName.Sephi:             self.get_sephiroth_settings,
+            RegionName.CorFirstFight:     self.get_cor_first_fight_settings,
+            RegionName.CorSecondFight:    self.get_cor_second_fight_settings,
+            RegionName.Transport:         self.get_transport_settings,
+            RegionName.Scar:              self.get_scar_settings,
+            RegionName.GroundShaker:      self.get_groundshaker_settings,
+            RegionName.DataSaix:          self.get_data_saix_settings,
+            RegionName.TwilightThorn:     self.get_twilight_thorn_settings,
+            RegionName.Axel1:             self.get_axel_one_settings,
+            RegionName.Axel2:             self.get_axel_two_settings,
+            RegionName.DataRoxas:         self.get_data_roxas_settings,
+            RegionName.DataAxel:          self.get_data_axel_settings,
+            RegionName.Roxas:             self.get_roxas_settings,
+            RegionName.Xigbar:            self.get_xigbar_settings,
+            RegionName.Luxord:            self.get_luxord_settings,
+            RegionName.Saix:              self.get_saix_settings,
+            RegionName.Xemnas:            self.get_xemnas_settings,
+            RegionName.ArmoredXemnas:     self.get_armored_xemnas_one_settings,
+            RegionName.ArmoredXemnas2:    self.get_armored_xemnas_two_settings,
+            RegionName.FinalXemnas:       self.get_final_xemnas_settings,
+            RegionName.DataXemnas:        self.get_data_xemnas_settings,
+        }
+        self.fight_region_rules = {region : settings_function(self.fight_logic) for region,settings_function in RegionNameToSettingFunctions.items()}
 
-        elif self.fight_logic == "Normal":
-            self.fight_region_rules[RegionName.ShanYu] = lambda state: self.get_normal_shanyu_rules(state)
-            self.fight_region_rules[RegionName.AnsemRiku] = lambda state: self.get_normal_ansemriku_rules(state)
-            self.fight_region_rules[RegionName.StormRider] = lambda state: self.get_normal_stormrider_rules(state)
-            self.fight_region_rules[RegionName.DataXigbar] = lambda state: self.get_normal_dataxigbar_rules(state)
-            self.fight_region_rules[RegionName.TwinLords] = lambda state: self.get_normal_firelord_rules(state) and self.get_normal_blizzardlord_rules(state)
-            self.fight_region_rules[RegionName.GenieJafar] = lambda state: self.get_normal_geniejafar_rules(state)
-            self.fight_region_rules[RegionName.DataLexaeus] = lambda state: self.get_normal_datalexaeus_rules(state)
-            self.fight_region_rules[RegionName.OldPete] = lambda state: self.get_old_pete_rules()
-            self.fight_region_rules[RegionName.FuturePete] = lambda state: self.get_normal_futurepete_rules(state)
-            self.fight_region_rules[RegionName.Terra] = lambda state: self.get_normal_terra_rules(state)
-            self.fight_region_rules[RegionName.DataMarluxia] = lambda state: self.get_normal_datamarluxia_rules(state)
-            self.fight_region_rules[RegionName.Barbosa] = lambda state: self.get_normal_barbosa_rules(state)
-            self.fight_region_rules[RegionName.GrimReaper1] = lambda state: self.get_grim_reaper1_rules()
-            self.fight_region_rules[RegionName.GrimReaper2] = lambda state: self.get_normal_grimreaper2_rules(state)
-            self.fight_region_rules[RegionName.DataLuxord] = lambda state: self.get_normal_dataluxord_rules(state)
-            self.fight_region_rules[RegionName.Cerberus] = lambda state: self.get_normal_cerberus_rules(state)
-            self.fight_region_rules[RegionName.OlympusPete] = lambda state: self.get_normal_olympus_pete_rules(state)
-            self.fight_region_rules[RegionName.Hydra] = lambda state: self.get_normal_hydra_rules(state)
-            self.fight_region_rules[RegionName.Hades] = lambda state: self.get_normal_hades_rules(state)
-            self.fight_region_rules[RegionName.DataZexion] = lambda state: self.get_normal_data_zexion_rules(state)
-            self.fight_region_rules[RegionName.OcPainAndPanicCup] = lambda state: self.get_pain_and_panic_cup_rules(state)
-            self.fight_region_rules[RegionName.OcCerberusCup] = lambda state: self.get_normal_cerberus_cup_rules(state)
-            self.fight_region_rules[RegionName.Oc2TitanCup] = lambda state: self.get_normal_titan_cup_rules(state)
-            self.fight_region_rules[RegionName.Oc2GofCup] = lambda state: self.get_goddess_of_fate_cup_entrance_rules(state),
-            self.fight_region_rules[RegionName.HadesCups] = lambda state: self.get_hades_cup_rules(state)
-            self.fight_region_rules[RegionName.Thresholder] = lambda state: self.get_normal_thresholder_rules(state)
-            self.fight_region_rules[RegionName.Beast] = lambda state: self.get_beast_rules()
-            self.fight_region_rules[RegionName.DarkThorn] = lambda state: self.get_normal_dark_thorn_rules(state)
-            self.fight_region_rules[RegionName.Xaldin] = lambda state: self.get_normal_xaldin_rules(state)
-            self.fight_region_rules[RegionName.DataXaldin] = lambda state: self.get_normal_data_xaldin_rules(state)
-            self.fight_region_rules[RegionName.HostileProgram] = lambda state: self.get_normal_hostile_program_rules(state)
-            self.fight_region_rules[RegionName.Mcp] = lambda state: self.get_mcp_rules(state)
-            self.fight_region_rules[RegionName.DataLarxene] = lambda state: self.get_normal_data_larxene_rules(state)
-            self.fight_region_rules[RegionName.PrisonKeeper] = lambda state: self.get_normal_prison_keeper_rules(state)
-            self.fight_region_rules[RegionName.OogieBoogie] = lambda state: self.get_oogie_rules()
-            self.fight_region_rules[RegionName.Experiment] = lambda state: self.get_normal_experiment_rules(state)
-            self.fight_region_rules[RegionName.DataVexen] = lambda state: self.get_normal_data_vexen_rules(state)
-            self.fight_region_rules[RegionName.Hb2Corridors] = lambda state: self.get_normal_corridors_fight_rules(state)
-            self.fight_region_rules[RegionName.HBDemyx] = lambda state: self.get_normal_demyx_rules(state)
-            self.fight_region_rules[RegionName.ThousandHeartless] = lambda state: self.get_normal_thousand_heartless_rules(state)
-            self.fight_region_rules[RegionName.DataDemyx] = lambda state: self.get_normal_data_demyx_rules(state)
-            self.fight_region_rules[RegionName.Sephi] = lambda state: self.get_normal_sephiroth_rules(state)
-            self.fight_region_rules[RegionName.CorFirstFight] = lambda state: self.get_normal_cor_first_fight_movement_rules(state) and (self.get_normal_cor_first_fight_rules(state) or self.get_normal_cor_skip_first_rules(state))
-            self.fight_region_rules[RegionName.CorSecondFight] = lambda state: self.get_normal_cor_second_fight_movement_rules(state)
-            self.fight_region_rules[RegionName.Transport] = lambda state: self.get_normal_transport_fight_rules(state) and self.get_normal_transport_movement_rules(state)
-            self.fight_region_rules[RegionName.Scar] = lambda state: self.get_normal_scar_rules(state)
-            self.fight_region_rules[RegionName.GroundShaker] = lambda state: self.get_normal_groundshaker_rules(state)
-            self.fight_region_rules[RegionName.DataSaix] = lambda state: self.get_normal_data_saix_rules(state)
-            self.fight_region_rules[RegionName.TwilightThorn] = lambda state: self.get_twilight_thorn_rules()
-            self.fight_region_rules[RegionName.Axel1] = lambda state: self.get_axel_one_rules()
-            self.fight_region_rules[RegionName.Axel2] = lambda state: self.get_axel_two_rules()
-            self.fight_region_rules[RegionName.DataRoxas] = lambda state: self.get_normal_data_roxas_rules(state)
-            self.fight_region_rules[RegionName.DataAxel] = lambda state: self.get_normal_data_axel_rules(state)
-            self.fight_region_rules[RegionName.Roxas] = lambda state: self.get_normal_roxas_rules(state)
-            self.fight_region_rules[RegionName.Xigbar] = lambda state: self.get_normal_xigbar_rules(state)
-            self.fight_region_rules[RegionName.Luxord] = lambda state: self.get_normal_luxord_rules(state)
-            self.fight_region_rules[RegionName.Saix] = lambda state: self.get_normal_saix_rules(state)
-            self.fight_region_rules[RegionName.Xemnas] = lambda state: self.get_normal_xemnas_rules(state)
-            self.fight_region_rules[RegionName.ArmoredXemnas] = lambda state: self.get_normal_armored_xemnas_one_rules(state)
-            self.fight_region_rules[RegionName.ArmoredXemnas2] = lambda state: self.get_normal_armored_xemnas_one_rules(state)
-            self.fight_region_rules[RegionName.FinalXemnas] = lambda state: self.get_normal_final_xemnas_rules(state)
-            self.fight_region_rules[RegionName.DataXemnas] = lambda state: self.get_normal_data_xemnas_rules(state)
-        else:
-            self.fight_region_rules[RegionName.ShanYu] = lambda state: self.get_hard_shanyu_rules(state)
-            self.fight_region_rules[RegionName.AnsemRiku] = lambda state: self.get_hard_ansemriku_rules(state)
-            self.fight_region_rules[RegionName.StormRider] = lambda state: self.get_hard_stormrider_rules(state)
-            self.fight_region_rules[RegionName.DataXigbar] = lambda state: self.get_hard_dataxigbar_rules(state)
-            self.fight_region_rules[RegionName.TwinLords] = lambda state: self.get_hard_firelord_rules(state) and self.get_hard_blizzardlord_rules(state)
-            self.fight_region_rules[RegionName.GenieJafar] = lambda state: self.get_hard_geniejafar_rules(state)
-            self.fight_region_rules[RegionName.DataLexaeus] = lambda state: self.get_hard_datalexaeus_rules(state)
-            self.fight_region_rules[RegionName.OldPete] = lambda state: self.get_old_pete_rules()
-            self.fight_region_rules[RegionName.FuturePete] = lambda state: self.get_hard_futurepete_rules(state)
-            self.fight_region_rules[RegionName.Terra] = lambda state: self.get_hard_terra_rules(state)
-            self.fight_region_rules[RegionName.DataMarluxia] = lambda state: self.get_hard_datamarluxia_rules(state)
-            self.fight_region_rules[RegionName.Barbosa] = lambda state: self.get_hard_barbosa_rules(state)
-            self.fight_region_rules[RegionName.GrimReaper1] = lambda state: self.get_grim_reaper1_rules()
-            self.fight_region_rules[RegionName.GrimReaper2] = lambda state: self.get_hard_grimreaper2_rules(state)
-            self.fight_region_rules[RegionName.DataLuxord] = lambda state: self.get_hard_dataluxord_rules(state)
-            self.fight_region_rules[RegionName.Cerberus] = lambda state: self.get_hard_cerberus_rules(state)
-            self.fight_region_rules[RegionName.OlympusPete] = lambda state: self.get_hard_olympus_pete_rules(state)
-            self.fight_region_rules[RegionName.Hydra] = lambda state: self.get_hard_hydra_rules(state)
-            self.fight_region_rules[RegionName.Hades] = lambda state: self.get_hard_hades_rules(state)
-            self.fight_region_rules[RegionName.DataZexion] = lambda state: self.get_hard_data_zexion_rules(state)
-            self.fight_region_rules[RegionName.OcPainAndPanicCup] = lambda state: self.get_pain_and_panic_cup_rules(state)
-            self.fight_region_rules[RegionName.OcCerberusCup] = lambda state: self.get_hard_cerberus_cup_rules(state)
-            self.fight_region_rules[RegionName.Oc2TitanCup] = lambda state: self.get_hard_titan_cup_rules(state)
-            self.fight_region_rules[RegionName.Oc2GofCup] = lambda state: self.get_goddess_of_fate_cup_entrance_rules(state)
-            self.fight_region_rules[RegionName.HadesCups] = lambda state: self.get_hades_cup_rules(state)
-            self.fight_region_rules[RegionName.Thresholder] = lambda state: self.get_hard_thresholder_rules(state)
-            self.fight_region_rules[RegionName.Beast] = lambda state: self.get_beast_rules()
-            self.fight_region_rules[RegionName.DarkThorn] = lambda state: self.get_hard_dark_thorn_rules(state)
-            self.fight_region_rules[RegionName.Xaldin] = lambda state: self.get_hard_xaldin_rules(state)
-            self.fight_region_rules[RegionName.DataXaldin] = lambda state: self.get_hard_data_xaldin_rules(state)
-            self.fight_region_rules[RegionName.HostileProgram] = lambda state: self.get_hard_hostile_program_rules(state)
-            self.fight_region_rules[RegionName.Mcp] = lambda state: self.get_mcp_rules(state)
-            self.fight_region_rules[RegionName.DataLarxene] = lambda state: self.get_hard_data_larxene_rules(state)
-            self.fight_region_rules[RegionName.PrisonKeeper] = lambda state: self.get_hard_prison_keeper_rules(state)
-            self.fight_region_rules[RegionName.OogieBoogie] = lambda state: self.get_oogie_rules()
-            self.fight_region_rules[RegionName.Experiment] = lambda state: self.get_hard_experiment_rules(state)
-            self.fight_region_rules[RegionName.DataVexen] = lambda state: self.get_hard_data_vexen_rules(state)
-            self.fight_region_rules[RegionName.Hb2Corridors] = lambda state: self.get_hard_corridors_fight_rules(state)
-            self.fight_region_rules[RegionName.HBDemyx] = lambda state: self.get_hard_demyx_rules(state)
-            self.fight_region_rules[RegionName.ThousandHeartless] = lambda state: self.get_hard_thousand_heartless_rules(state)
-            self.fight_region_rules[RegionName.DataDemyx] = lambda state: self.get_hard_data_demyx_rules(state)
-            self.fight_region_rules[RegionName.Sephi] = lambda state: self.get_hard_sephiroth_rules(state)
-            self.fight_region_rules[RegionName.CorFirstFight] = lambda state: self.get_hard_cor_first_fight_movement_rules(state) and (self.get_hard_cor_first_fight_rules(state) or self.get_hard_cor_skip_first_rules(state))
-            self.fight_region_rules[RegionName.CorSecondFight] = lambda state: self.get_hard_cor_second_fight_movement_rules(state)
-            self.fight_region_rules[RegionName.Transport] = lambda state: self.get_hard_transport_fight_rules(state) and self.get_hard_transport_movement_rules(state)
-            self.fight_region_rules[RegionName.Scar] = lambda state: self.get_hard_scar_rules(state)
-            self.fight_region_rules[RegionName.GroundShaker] = lambda state: self.get_hard_groundshaker_rules(state)
-            self.fight_region_rules[RegionName.DataSaix] = lambda state: self.get_hard_data_saix_rules(state)
-            self.fight_region_rules[RegionName.TwilightThorn] = lambda state: self.get_twilight_thorn_rules()
-            self.fight_region_rules[RegionName.Axel1] = lambda state: self.get_axel_one_rules()
-            self.fight_region_rules[RegionName.Axel2] = lambda state: self.get_axel_two_rules()
-            self.fight_region_rules[RegionName.DataRoxas] = lambda state: self.get_hard_data_roxas_rules(state)
-            self.fight_region_rules[RegionName.DataAxel] = lambda state: self.get_hard_data_axel_rules(state)
-            self.fight_region_rules[RegionName.Roxas] = lambda state: self.get_hard_roxas_rules(state)
-            self.fight_region_rules[RegionName.Xigbar] = lambda state: self.get_hard_xigbar_rules(state)
-            self.fight_region_rules[RegionName.Luxord] = lambda state: self.get_hard_luxord_rules(state)
-            self.fight_region_rules[RegionName.Saix] = lambda state: self.get_hard_saix_rules(state)
-            self.fight_region_rules[RegionName.Xemnas] = lambda state: self.get_hard_xemnas_rules(state)
-            self.fight_region_rules[RegionName.ArmoredXemnas] = lambda state: self.get_hard_armored_xemnas_one_rules(state)
-            self.fight_region_rules[RegionName.ArmoredXemnas2] = lambda state: self.get_hard_armored_xemnas_one_rules(state)
-            self.fight_region_rules[RegionName.FinalXemnas] = lambda state: self.get_hard_final_xemnas_rules(state)
-            self.fight_region_rules[RegionName.DataXemnas] = lambda state: self.get_hard_data_xemnas_rules(state)
+        for regionName , override in self.fight_logic_overrides.items():
+            if regionName in self.fight_region_rules:
+                self.fight_region_rules[regionName] = RegionNameToSettingFunctions[regionName](override.lower())
 
     def set_kh2_fight_rules(self) -> None:
         for region_name, rules in self.fight_region_rules.items():
@@ -707,9 +588,632 @@ class KH2FightRules(KH2Rules):
             for entrance in region.entrances:
                 entrance.access_rule = rules
 
+    def kh2_true(self, state: CollectionState):
+        return self.kh2_true
+
     def get_easy_shanyu_rules(self, state: CollectionState) -> bool:
         # easy: gap closer, defensive tool,drive form
         return self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 3
+
+    def get_shanyu_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_shanyu_rules
+        elif fight_logic == "normal":
+            return self.get_normal_shanyu_rules
+        elif fight_logic == "hard":
+            return self.get_hard_shanyu_rules
+        else:
+            return self.kh2_true
+
+    def get_ansemriku_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_ansemriku_rules
+        elif fight_logic == "normal":
+            return self.get_normal_ansemriku_rules
+        elif fight_logic == "hard":
+            return self.get_hard_ansemriku_rules
+        else:
+            return self.kh2_true
+
+    def get_stormrider_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_stormrider_rules
+        elif fight_logic == "normal":
+            return self.get_normal_stormrider_rules
+        elif fight_logic == "hard":
+            return self.get_hard_stormrider_rules
+        else:
+            return self.kh2_true
+
+    def get_dataxigbar_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_dataxigbar_rules
+        elif fight_logic == "normal":
+            return self.get_normal_dataxigbar_rules
+        elif fight_logic == "hard":
+            return self.get_hard_dataxigbar_rules
+        else:
+            return self.kh2_true
+
+    def get_twinlords_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_lord_rules
+        elif fight_logic == "normal":
+            return self.get_normal_lord_rules
+        elif fight_logic == "hard":
+            return self.get_hard_lord_rules
+        else:
+            return self.kh2_true
+
+    def get_geniejafar_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_geniejafar_rules
+        elif fight_logic == "normal":
+            return self.get_normal_geniejafar_rules
+        elif fight_logic == "hard":
+            return self.get_hard_geniejafar_rules
+        else:
+            return self.kh2_true
+
+    def get_datalexaeus_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_datalexaeus_rules
+        elif fight_logic == "normal":
+            return self.get_normal_datalexaeus_rules
+        elif fight_logic == "hard":
+            return self.get_hard_datalexaeus_rules
+        else:
+            return self.kh2_true
+
+    def get_oldpete_settings(self, fight_logic):
+        #if fight_logic == "easy":
+        #    return self.get_easy_oldpete_rules
+        #elif fight_logic == "normal":
+        #    return self.get_normal_oldpete_rules
+        #elif fight_logic == "hard":
+        #    return self.get_hard_oldpete_rules
+        #else:
+        return self.kh2_true
+
+    def get_futurepete_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_futurepete_rules
+        elif fight_logic == "normal":
+            return self.get_normal_futurepete_rules
+        elif fight_logic == "hard":
+            return self.get_hard_futurepete_rules
+        else:
+            return self.kh2_true
+
+    def get_terra_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_terra_rules
+        elif fight_logic == "normal":
+            return self.get_normal_terra_rules
+        elif fight_logic == "hard":
+            return self.get_hard_terra_rules
+        else:
+            return self.kh2_true
+
+    def get_datamarluxia_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_datamarluxia_rules
+        elif fight_logic == "normal":
+            return self.get_normal_datamarluxia_rules
+        elif fight_logic == "hard":
+            return self.get_hard_datamarluxia_rules
+        else:
+            return self.kh2_true
+
+    def get_barbosa_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_barbosa_rules
+        elif fight_logic == "normal":
+            return self.get_normal_barbosa_rules
+        elif fight_logic == "hard":
+            return self.get_hard_barbosa_rules
+        else:
+            return self.kh2_true
+
+    def get_grimreaper1_settings(self, fight_logic):
+        #if fight_logic == "easy":
+        #    return self.get_easy_grimreaper1_rules
+        #elif fight_logic == "normal":
+        #    return self.get_normal_grimreaper1_rules
+        #elif fight_logic == "hard":
+        #    return self.get_hard_grimreaper1_rules
+        #else:
+        return self.kh2_true
+
+    def get_grimreaper2_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_grimreaper2_rules
+        elif fight_logic == "normal":
+            return self.get_normal_grimreaper2_rules
+        elif fight_logic == "hard":
+            return self.get_hard_grimreaper2_rules
+        else:
+            return self.kh2_true
+
+    def get_dataluxord_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_dataluxord_rules
+        elif fight_logic == "normal":
+            return self.get_normal_dataluxord_rules
+        elif fight_logic == "hard":
+            return self.get_hard_dataluxord_rules
+        else:
+            return self.kh2_true
+
+    def get_cerberus_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_cerberus_rules
+        elif fight_logic == "normal":
+            return self.get_normal_cerberus_rules
+        elif fight_logic == "hard":
+            return self.get_hard_cerberus_rules
+        else:
+            return self.kh2_true
+
+    def get_olympuspete_settings(self, fight_logic):
+        #if fight_logic == "easy":
+        #    return self.get_easy_olympuspete_rules
+        #elif fight_logic == "normal":
+        #    return self.get_normal_olympuspete_rules
+        #elif fight_logic == "hard":
+        #    return self.g   #t_hard_olympuspete_rules
+        #else:
+        return self.kh2_true
+
+    def get_hydra_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_hydra_rules
+        elif fight_logic == "normal":
+            return self.get_normal_hydra_rules
+        elif fight_logic == "hard":
+            return self.get_hard_hydra_rules
+        else:
+            return self.kh2_true
+
+    def get_hades_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_hades_rules
+        elif fight_logic == "normal":
+            return self.get_normal_hades_rules
+        elif fight_logic == "hard":
+            return self.get_hard_hades_rules
+        else:
+            return self.kh2_true
+
+    def get_data_zexion_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_data_zexion_rules
+        elif fight_logic == "normal":
+            return self.get_normal_data_zexion_rules
+        elif fight_logic == "hard":
+            return self.get_hard_data_zexion_rules
+        else:
+            return self.kh2_true
+
+    def get_pain_and_panic_cup_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_pain_and_panic_cup_rules
+        elif fight_logic == "normal":
+            return self.get_normal_pain_and_panic_cup_rules
+        elif fight_logic == "hard":
+            return self.get_hard_pain_and_panic_cup_rules
+        else:
+            return self.kh2_true
+
+    def get_cerberus_cup_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_cerberus_cup_rules
+        elif fight_logic == "normal":
+            return self.get_normal_cerberus_cup_rules
+        elif fight_logic == "hard":
+            return self.get_hard_cerberus_cup_rules
+        else:
+            return self.kh2_true
+
+    def get_titan_cup_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_titan_cup_rules
+        elif fight_logic == "normal":
+            return self.get_normal_titan_cup_rules
+        elif fight_logic == "hard":
+            return self.get_hard_titan_cup_rules
+        else:
+            return self.kh2_true
+
+    def get_goddess_of_fate_cup_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_goddess_of_fate_cup_entrance_rules
+        elif fight_logic == "normal":
+            return self.get_goddess_of_fate_cup_entrance_rules
+        elif fight_logic == "hard":
+            return self.get_goddess_of_fate_cup_entrance_rules
+        else:
+            return self.kh2_true
+
+    def get_hades_cups_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_hades_cup_rules
+        elif fight_logic == "normal":
+            return self.get_hades_cup_rules
+        elif fight_logic == "hard":
+            return self.get_hades_cup_rules
+        else:
+            return self.kh2_true
+
+    def get_thresholder_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_thresholder_rules
+        elif fight_logic == "normal":
+            return self.get_normal_thresholder_rules
+        elif fight_logic == "hard":
+            return self.get_hard_thresholder_rules
+        else:
+            return self.kh2_true
+
+    def get_beast_settings(self, fight_logic):
+        #if fight_logic == "easy":
+        #    return self.get_easy_beast_rules
+        #elif fight_logic == "normal":
+        #    return self.get_normal_beast_rules
+        #elif fight_logic == "hard":
+        #    return self.get_hard_beast_rules
+        #else:
+        return self.kh2_true
+
+    def get_dark_thorn_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_dark_thorn_rules
+        elif fight_logic == "normal":
+            return self.get_normal_dark_thorn_rules
+        elif fight_logic == "hard":
+            return self.get_hard_dark_thorn_rules
+        else:
+            return self.kh2_true
+
+    def get_xaldin_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_xaldin_rules
+        elif fight_logic == "normal":
+            return self.get_normal_xaldin_rules
+        elif fight_logic == "hard":
+            return self.get_hard_xaldin_rules
+        else:
+            return self.kh2_true
+
+    def get_data_xaldin_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_data_xaldin_rules
+        elif fight_logic == "normal":
+            return self.get_normal_data_xaldin_rules
+        elif fight_logic == "hard":
+            return self.get_hard_data_xaldin_rules
+        else:
+            return self.kh2_true
+
+    def get_hostile_program_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_hostile_program_rules
+        elif fight_logic == "normal":
+            return self.get_normal_hostile_program_rules
+        elif fight_logic == "hard":
+            return self.get_hard_hostile_program_rules
+        else:
+            return self.kh2_true
+
+    def get_mcp_settings(self, fight_logic):
+        #if fight_logic == "easy":
+        #    return self.get_easy_mcp_rules
+        #elif fight_logic == "normal":
+        #    return self.get_normal_mcp_rules
+        #elif fight_logic == "hard":
+        #    return self.get_hard_mcp_rules
+        #else:
+        return self.kh2_true
+
+    def get_data_larxene_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_data_larxene_rules
+        elif fight_logic == "normal":
+            return self.get_normal_data_larxene_rules
+        elif fight_logic == "hard":
+            return self.get_hard_data_larxene_rules
+        else:
+            return self.kh2_true
+
+    def get_prison_keeper_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_prison_keeper_rules
+        elif fight_logic == "normal":
+            return self.get_normal_prison_keeper_rules
+        elif fight_logic == "hard":
+            return self.get_hard_prison_keeper_rules
+        else:
+            return self.kh2_true
+
+    def get_oogieboogie_settings(self, fight_logic):
+        #if fight_logic == "easy":
+        #    return self.get_easy_oogieboogie_rules
+        #elif fight_logic == "normal":
+        #    return self.get_normal_oogieboogie_rules
+        #elif fight_logic == "hard":
+        #    return self.get_hard_oogieboogie_rules
+        #else:
+        return self.kh2_true
+
+    def get_experiment_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_experiment_rules
+        elif fight_logic == "normal":
+            return self.get_normal_experiment_rules
+        elif fight_logic == "hard":
+            return self.get_hard_experiment_rules
+        else:
+            return self.kh2_true
+
+    def get_data_vexen_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_data_vexen_rules
+        elif fight_logic == "normal":
+            return self.get_normal_data_vexen_rules
+        elif fight_logic == "hard":
+            return self.get_hard_data_vexen_rules
+        else:
+            return self.kh2_true
+
+    def get_corridors_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_corridors_fight_rules
+        elif fight_logic == "normal":
+            return self.get_normal_corridors_fight_rules
+        elif fight_logic == "hard":
+            return self.get_hard_corridors_fight_rules
+        else:
+            return self.kh2_true
+
+    def get_demyx_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_demyx_rules
+        elif fight_logic == "normal":
+            return self.get_normal_demyx_rules
+        elif fight_logic == "hard":
+            return self.get_hard_demyx_rules
+        else:
+            return self.kh2_true
+
+    def get_thousand_heartless_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_thousand_heartless_rules
+        elif fight_logic == "normal":
+            return self.get_normal_thousand_heartless_rules
+        elif fight_logic == "hard":
+            return self.get_hard_thousand_heartless_rules
+        else:
+            return self.kh2_true
+
+    def get_data_demyx_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_data_demyx_rules
+        elif fight_logic == "normal":
+            return self.get_normal_data_demyx_rules
+        elif fight_logic == "hard":
+            return self.get_hard_data_demyx_rules
+        else:
+            return self.kh2_true
+
+    def get_sephiroth_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_sephiroth_rules
+        elif fight_logic == "normal":
+            return self.get_normal_sephiroth_rules
+        elif fight_logic == "hard":
+            return self.get_hard_sephiroth_rules
+        else:
+            return self.kh2_true
+
+    def get_cor_first_fight_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_cor_first_fight_rules
+        elif fight_logic == "normal":
+            return self.get_normal_cor_first_fight_rules
+        elif fight_logic == "hard":
+            return self.get_hard_cor_first_fight_rules
+        else:
+            return self.kh2_true
+
+    def get_cor_second_fight_settings(self, fight_logic):
+        #if fight_logic == "easy":
+        #    return self.get_easy_cor_second_fight_rules
+        #elif fight_logic == "normal":
+        #    return self.get_normal_cor_second_fight_rules
+        #elif fight_logic == "hard":
+        #    return self.get_hard_cor_second_fight_rules
+        #else:
+        return self.kh2_true
+
+    def get_transport_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_transport_fight_rules
+        elif fight_logic == "normal":
+            return self.get_normal_transport_fight_rules
+        elif fight_logic == "hard":
+            return self.get_hard_transport_fight_rules
+        else:
+            return self.kh2_true
+
+    def get_scar_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_scar_rules
+        elif fight_logic == "normal":
+            return self.get_normal_scar_rules
+        elif fight_logic == "hard":
+            return self.get_hard_scar_rules
+        else:
+            return self.kh2_true
+
+    def get_groundshaker_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_groundshaker_rules
+        elif fight_logic == "normal":
+            return self.get_normal_groundshaker_rules
+        elif fight_logic == "hard":
+            return self.get_hard_groundshaker_rules
+        else:
+            return self.kh2_true
+
+    def get_data_saix_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_data_saix_rules
+        elif fight_logic == "normal":
+            return self.get_normal_data_saix_rules
+        elif fight_logic == "hard":
+            return self.get_hard_data_saix_rules
+        else:
+            return self.kh2_true
+
+    def get_twilight_thorn_settings(self, fight_logic):
+        #if fight_logic == "easy":
+        #    return self.get_easy_twilight_thorn_rules
+        #elif fight_logic == "normal":
+        #    return self.get_normal_twilight_thorn_rules
+        #elif fight_logic == "hard":
+        #    return self.get_hard_twilight_thorn_rules
+        #else:
+        return self.kh2_true
+
+    def get_axel_one_settings(self, fight_logic):
+        #if fight_logic == "easy":
+        #    return self.get_easy_axel1_rules
+        #elif fight_logic == "normal":
+        #    return self.get_normal_axel1_rules
+        #elif fight_logic == "hard":
+        #    return self.get_hard_axel1_rules
+        #else:
+        return self.kh2_true
+
+    def get_axel_two_settings(self, fight_logic):
+        #if fight_logic == "easy":
+        #    return self.get_easy_axel2_rules
+        #elif fight_logic == "normal":
+        #    return self.get_normal_axel2_rules
+        #elif fight_logic == "hard":
+        #    return self.get_hard_axel2_rules
+        #else:
+        return self.kh2_true
+
+    def get_data_roxas_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_data_roxas_rules
+        elif fight_logic == "normal":
+            return self.get_normal_data_roxas_rules
+        elif fight_logic == "hard":
+            return self.get_hard_data_roxas_rules
+        else:
+            return self.kh2_true
+
+    def get_data_axel_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_data_axel_rules
+        elif fight_logic == "normal":
+            return self.get_normal_data_axel_rules
+        elif fight_logic == "hard":
+            return self.get_hard_data_axel_rules
+        else:
+            return self.kh2_true
+
+    def get_roxas_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_roxas_rules
+        elif fight_logic == "normal":
+            return self.get_normal_roxas_rules
+        elif fight_logic == "hard":
+            return self.get_hard_roxas_rules
+        else:
+            return self.kh2_true
+
+    def get_xigbar_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_xigbar_rules
+        elif fight_logic == "normal":
+            return self.get_normal_xigbar_rules
+        elif fight_logic == "hard":
+            return self.get_hard_xigbar_rules
+        else:
+            return self.kh2_true
+
+    def get_luxord_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_luxord_rules
+        elif fight_logic == "normal":
+            return self.get_normal_luxord_rules
+        elif fight_logic == "hard":
+            return self.get_hard_luxord_rules
+        else:
+            return self.kh2_true
+
+    def get_saix_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_saix_rules
+        elif fight_logic == "normal":
+            return self.get_normal_saix_rules
+        elif fight_logic == "hard":
+            return self.get_hard_saix_rules
+        else:
+            return self.kh2_true
+
+    def get_xemnas_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_xemnas_rules
+        elif fight_logic == "normal":
+            return self.get_normal_xemnas_rules
+        elif fight_logic == "hard":
+            return self.get_hard_xemnas_rules
+        else:
+            return self.kh2_true
+
+    def get_armored_xemnas_one_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_armored_xemnas_one_rules
+        elif fight_logic == "normal":
+            return self.get_normal_armored_xemnas_one_rules
+        elif fight_logic == "hard":
+            return self.get_hard_armored_xemnas_one_rules
+        else:
+            return self.kh2_true
+
+    def get_armored_xemnas_two_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_armored_xemnas_two_rules
+        elif fight_logic == "normal":
+            return self.get_normal_armored_xemnas_two_rules
+        elif fight_logic == "hard":
+            return self.get_hard_armored_xemnas_two_rules
+        else:
+            return self.kh2_true
+
+    def get_final_xemnas_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_final_xemnas_rules
+        elif fight_logic == "normal":
+            return self.get_normal_final_xemnas_rules
+        elif fight_logic == "hard":
+            return self.get_hard_final_xemnas_rules
+        else:
+            return self.kh2_true
+
+    def get_data_xemnas_settings(self, fight_logic):
+        if fight_logic == "easy":
+            return self.get_easy_data_xemnas_rules
+        elif fight_logic == "normal":
+            return self.get_normal_data_xemnas_rules
+        elif fight_logic == "hard":
+            return self.get_hard_data_xemnas_rules
+        else:
+            return self.kh2_true
 
     def get_normal_shanyu_rules(self, state: CollectionState) -> bool:
         # normal: 2 out of easy
@@ -758,29 +1262,29 @@ class KH2FightRules(KH2Rules):
         return ((self.kh2_has_final_form(state) and self.get_form_level_max(state, 3) and state.has(ItemName.FireElement, self.player, 2))
                 or self.kh2_has_any(donald_limit, state)) and state.has(ItemName.FinishingPlus, self.player) and self.kh2_has_any(defensive_tool, state)
 
-    def get_easy_firelord_rules(self, state: CollectionState) -> bool:
+    def get_easy_lord_rules(self, state: CollectionState) -> bool:
         # easy: drive form,defensive tool,one black magic,party limit
         return self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 4
 
-    def get_normal_firelord_rules(self, state: CollectionState) -> bool:
+    def get_normal_lord_rules(self, state: CollectionState) -> bool:
         # normal: 3 of easy
         return self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 3
 
-    def get_hard_firelord_rules(self, state: CollectionState) -> bool:
+    def get_hard_lord_rules(self, state: CollectionState) -> bool:
         # hard:2 of easy
         return self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 2
 
-    def get_easy_blizzardlord_rules(self, state: CollectionState) -> bool:
-        # easy: drive form,defensive tool,one black magic,party limit
-        return self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 4
-
-    def get_normal_blizzardlord_rules(self, state: CollectionState) -> bool:
-        # normal: 3 of easy
-        return self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 3
-
-    def get_hard_blizzardlord_rules(self, state: CollectionState) -> bool:
-        # hard: 2 of easy
-        return self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 2
+    #def get_easy_blizzardlord_rules(self, state: CollectionState) -> bool:
+    #    # easy: drive form,defensive tool,one black magic,party limit
+    #    return self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 4
+    #
+    #def get_normal_blizzardlord_rules(self, state: CollectionState) -> bool:
+    #    # normal: 3 of easy
+    #    return self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 3
+    #
+    #def get_hard_blizzardlord_rules(self, state: CollectionState) -> bool:
+    #    # hard: 2 of easy
+    #    return self.kh2_list_any_sum([form_list, defensive_tool, black_magic, party_limit], state) >= 2
 
     def get_easy_geniejafar_rules(self, state: CollectionState) -> bool:
         # easy: defensive tool,black magic,ground finisher,finishing plus
@@ -1362,7 +1866,7 @@ class KH2FightRules(KH2Rules):
 
     def get_normal_data_axel_rules(self, state: CollectionState) -> bool:
         # normal:1 gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus,blizzaga and 1 thunder
-        return self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_has_any([gap_closer], state)
+        return self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_has_any(gap_closer, state)
 
     def get_hard_data_axel_rules(self, state: CollectionState) -> bool:
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus,blizzara,thunder
