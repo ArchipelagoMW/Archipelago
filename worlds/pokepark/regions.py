@@ -135,6 +135,7 @@ ADDITIONAL_REGION_TO_ENTRANCES: dict[str, List[str]] = {
     "Haunted Zone Mansion Antic Area": [
         "Haunted Zone Abra"
     ],
+    "Haunted Zone Mansion Ballroom Area": ["Haunted Zone Drifloon"],
     "Granite Zone Main Area": [
         "Granite Zone Marowak",
         "Granite Zone Baltoy",

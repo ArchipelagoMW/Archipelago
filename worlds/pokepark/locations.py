@@ -3211,8 +3211,8 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             memory_range=MemoryRange.BYTE
         ),
     ),
-    "Haunted Zone Mansion Area - Riolu Power Competition -- Friendship": PokeparkLocationData(
-        381, PokeparkFlag.BATTLE, "Haunted Zone Mansion Area", 0x0502, PokeparkFriendshipClientLocationData(
+    "Haunted Zone Main Area - Riolu Power Competition -- Friendship": PokeparkLocationData(
+        381, PokeparkFlag.BATTLE, "Haunted Zone Main Area", 0x0502, PokeparkFriendshipClientLocationData(
             structure_position=151,
             memory_range=MemoryRange.BYTE
         ),
@@ -3691,9 +3691,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Granite Zone Main Area - Drifloon Power Competition -- Friendship": PokeparkLocationData(
-        450, PokeparkFlag.FRIENDSHIP, "Granite Zone Main Area", 0x0601, PokeparkFriendshipClientLocationData(
-            structure_position=175,
-            memory_range=MemoryRange.BYTE
+        450, PokeparkFlag.FRIENDSHIP, "Granite Zone Main Area", 0x0601, Pokepark07AttractionClientData(
+            structure_position=23,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
