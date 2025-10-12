@@ -154,6 +154,8 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
             return state.has(Items.STRENGTH_UPGRADE.value, player, 3)
         case Items.BOMB_BAG:
             return state.has(Items.PROGRESSIVE_BOMB_BAG.value, player) 
+        case Items.EPONA:
+            return state.has(Events.FREED_EPONA, player)
         case Items.CHILD_WALLET:
             return can_afford(99, bundle)
         case Items.ADULT_WALLET:
