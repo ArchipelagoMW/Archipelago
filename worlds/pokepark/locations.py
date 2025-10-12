@@ -3698,9 +3698,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Granite Zone Main Area - Marowak Power Competition -- Friendship": PokeparkLocationData(
-        451, PokeparkFlag.BATTLE, "Granite Zone Main Area", 0x0601, PokeparkFriendshipClientLocationData(
-            structure_position=88,
-            memory_range=MemoryRange.BYTE
+        451, PokeparkFlag.BATTLE, "Granite Zone Main Area", 0x0601, Pokepark07AttractionClientData(
+            structure_position=25,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
