@@ -4056,9 +4056,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Flower Zone Main Area - Furret Power Competition -- Friendship": PokeparkLocationData(
-        499, PokeparkFlag.HIDEANDSEEK, "Flower Zone Main Area", 0x0601, PokeparkFriendshipClientLocationData(
-            structure_position=140,
-            memory_range=MemoryRange.BYTE
+        499, PokeparkFlag.HIDEANDSEEK, "Flower Zone Main Area", 0x0601, Pokepark13AttractionClientData(
+            structure_position=2,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
