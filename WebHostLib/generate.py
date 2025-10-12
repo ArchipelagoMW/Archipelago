@@ -14,7 +14,7 @@ from pony.orm import commit, db_session
 from BaseClasses import get_seed, seeddigits
 from Generate import PlandoOptions, handle_name, mystery_argparse
 from Main import main as ERmain
-from Utils import __version__, restricted_dumps
+from Utils import __version__, restricted_dumps, DaemonThreadPoolExecutor
 from WebHostLib import app
 from settings import ServerOptions, GeneratorOptions
 from .check import get_yaml_data, roll_options
@@ -172,7 +172,8 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
         ERmain(args, seed, baked_server_options=meta["server_options"])
 
         return upload_to_db(target.name, sid, owner, race)
-    thread_pool = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+
+    thread_pool = DaemonThreadPoolExecutor(max_workers=1)
     thread = thread_pool.submit(task)
 
     try:
@@ -200,6 +201,11 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
                     gen.meta = json.dumps(meta)
                     commit()
         raise
+    finally:
+        # free resources claimed by thread pool, if possible
+        # NOTE: Timeout depends on the process being killed at some point
+        #       since we can't actually cancel a running gen at the moment.
+        thread_pool.shutdown(wait=False, cancel_futures=True)
 
 
 @app.route('/wait/<suuid:seed>')
