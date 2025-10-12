@@ -47,7 +47,7 @@ class SohWorld(World):
         self.included_locations = dict[str, int]()
 
     def generate_early(self) -> None:
-        # input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
+        #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
         pass
 
     def create_item(self, name: str) -> SohItem:
