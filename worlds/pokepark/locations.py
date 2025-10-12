@@ -490,6 +490,17 @@ class Pokepark07AttractionClientData(PokeparkBaseClientLocationData):
         self.in_structure_address_interval = 0xc
         self.bit_mask = 0xFFFFFFFF  # using whole value
 
+
+@dataclass
+class Pokepark13AttractionClientData(PokeparkBaseClientLocationData):
+    def __post_init__(self):
+        self.global_manager_data_struc_offset = 0x2bc8
+        self.in_structure_offset = 0x0
+        self.expected_value = 0x0001
+        self.in_structure_address_interval = 0xc
+        self.bit_mask = 0xFFFFFFFF  # using whole value
+
+
 class PokeparkLocation(Location):
     game: str = "PokePark"
 
@@ -3705,16 +3716,16 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Granite Zone Main Area - Baltoy Power Competition -- Friendship": PokeparkLocationData(
-        452, PokeparkFlag.BATTLE, "Granite Zone Main Area", 0x0601, PokeparkFriendshipClientLocationData(
-            structure_position=103,
-            memory_range=MemoryRange.BYTE
+        452, PokeparkFlag.BATTLE, "Granite Zone Main Area", 0x0601, Pokepark13AttractionClientData(
+            structure_position=0,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
     "Granite Zone Main Area - Baltoy Power Competition -- Claydol Unlocked": PokeparkLocationData(
-        453, PokeparkFlag.BATTLE, "Granite Zone Main Area", 0x0601, PokeparkFriendshipClientLocationData(
-            structure_position=103,
-            memory_range=MemoryRange.BYTE
+        453, PokeparkFlag.BATTLE, "Granite Zone Main Area", 0x0601, Pokepark13AttractionClientData(
+            structure_position=0,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
@@ -4585,4 +4596,8 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             memory_range=MemoryRange.BYTE
         ), each_zone=MultiZoneFlag.MULTI
     ),
+
+    # TODO add missing claydol
+    # TODO add missing spearow beach zone
+
 }
