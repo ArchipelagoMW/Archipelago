@@ -1380,7 +1380,7 @@ class NonLocalItems(ItemSet):
 
 
 class StartInventory(ItemDict):
-    """Start with these items."""
+    """Start with the specified amount of these items. Example: "Bomb: 1" """
     verify_item_name = True
     display_name = "Start Inventory"
     rich_text_doc = True
@@ -1388,7 +1388,7 @@ class StartInventory(ItemDict):
 
 
 class StartInventoryPool(StartInventory):
-    """Start with these items and don't place them in the world.
+    """Start with the specified amount of these items and don't place them in the world. Example: "Bomb: 1"
 
     The game decides what the replacement items will be.
     """
@@ -1446,6 +1446,7 @@ class ItemLinks(OptionList):
             Optional("local_items"): [And(str, len)],
             Optional("non_local_items"): [And(str, len)],
             Optional("link_replacement"): Or(None, bool),
+            Optional("skip_if_solo"): Or(None, bool),
         }
     ])
 
@@ -1752,7 +1753,10 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
             res = template.render(
                 option_groups=option_groups,
-                __version__=__version__, game=game_name, yaml_dump=yaml_dump_scalar,
+                __version__=__version__,
+                game=game_name,
+                world_version=world.world_version.as_simple_string(),
+                yaml_dump=yaml_dump_scalar,
                 dictify_range=dictify_range,
                 cleandoc=cleandoc,
             )

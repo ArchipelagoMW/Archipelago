@@ -81,7 +81,7 @@ class CoinsanityChecks(Range):
     """
     display_name = "Coinsanity Checks"
     range_start = 31
-    range_end = 2599
+    range_end = 2597
     default = 150
 
 
