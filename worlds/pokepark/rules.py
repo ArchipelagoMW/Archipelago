@@ -1340,6 +1340,14 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: can_battle_thunderbolt_immune(state, player) and state.has("Baltoy Unlock", player)
     )
     set_rule_if_exists(
+        "Magma Zone Main Area - Claydol Power Competition -- Friendship",
+        lambda state: can_battle_thunderbolt_immune(state, player) and state.has("Claydol Unlock", player)
+    ),
+    set_rule_if_exists(
+        "Granite Zone Main Area - Claydol Power Competition -- Friendship",
+        lambda state: can_battle_thunderbolt_immune(state, player) and state.has("Claydol Unlock", player)
+    )
+    set_rule_if_exists(
         "Magma Zone Circle Area - Meditite Power Competition -- Friendship",
         lambda state: True
     )

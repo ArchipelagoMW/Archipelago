@@ -122,6 +122,7 @@ ADDITIONAL_REGION_TO_ENTRANCES: dict[str, List[str]] = {
         "Magma Zone Baltoy",
         "Magma Zone Baltoy Unlocks",
         "Magma Zone Meditite",
+        "Magma Zone Claydol"
 
     ],
     "Haunted Zone Main Area": [
@@ -135,13 +136,13 @@ ADDITIONAL_REGION_TO_ENTRANCES: dict[str, List[str]] = {
     "Haunted Zone Mansion Antic Area": [
         "Haunted Zone Abra"
     ],
-    "Haunted Zone Mansion Ballroom Area": ["Haunted Zone Drifloon"],
     "Granite Zone Main Area": [
         "Granite Zone Marowak",
         "Granite Zone Baltoy",
         "Granite Zone Baltoy Unlocks",
         "Granite Zone Drifloon",
-        "Granite Zone Furret"
+        "Granite Zone Furret",
+        "Granite Zone Claydol"
     ],
     "Granite Zone Salamence Area": [
         "Granite Zone Taillow"
@@ -290,8 +291,11 @@ ADDITIONAL_ENTRANCES_TO_EXITS: dict[str, str] = {
 
     "Magma Zone Baltoy": "Baltoy",
     "Magma Zone Baltoy Unlocks": "Baltoy Unlocks",
+    "Magma Zone Claydol": "Claydol",
+
     "Granite Zone Baltoy": "Baltoy",
     "Granite Zone Baltoy Unlocks": "Baltoy Unlocks",
+    "Granite Zone Claydol": "Claydol",
 
     "Magma Zone Meditite": "Meditite",
     "Flower Zone Meditite": "Meditite",
@@ -512,6 +516,8 @@ class EntranceRandomizer:
         "Granite Zone Baltoy": lambda state: state.has("Baltoy Unlock", player),
         "Granite Zone Baltoy Unlocks": lambda state: state.has("Baltoy Unlock", player),
 
+            "Magma Zone Claydol": lambda state: state.has("Claydol Unlock", player),
+            "Granite Zone Claydol": lambda state: state.has("Claydol Unlock", player),
         "Magma Zone Meditite": lambda state: True,
         "Flower Zone Meditite": lambda state: True,
 

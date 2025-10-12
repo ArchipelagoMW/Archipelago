@@ -4596,8 +4596,27 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             memory_range=MemoryRange.BYTE
         ), each_zone=MultiZoneFlag.MULTI
     ),
-
-    # TODO add missing claydol
+    "Magma Zone Main Area - Claydol Power Competition -- Friendship": PokeparkLocationData(
+        573, PokeparkFlag.BATTLE, "Magma Zone Main Area", 0x0403, PokeparkFriendshipClientLocationData(
+            structure_position=104,
+            memory_range=MemoryRange.BYTE
+        ),
+        each_zone=MultiZoneFlag.MULTI
+    ),
+    "Granite Zone Main Area - Claydol Power Competition -- Friendship": PokeparkLocationData(
+        574, PokeparkFlag.BATTLE, "Granite Zone Main Area", 0x0403, Pokepark13AttractionClientData(
+            structure_position=4,
+            memory_range=MemoryRange.HALFWORD
+        ),
+        each_zone=MultiZoneFlag.MULTI
+    ),
+    "Claydol Power Competition -- Friendship": PokeparkLocationData(
+        575, PokeparkFlag.BATTLE, "Claydol", 0x0403, PokeparkFriendshipClientLocationData(
+            structure_position=104,
+            memory_range=MemoryRange.BYTE
+        ),
+        each_zone=MultiZoneFlag.SINGLE
+    ),
     # TODO add missing spearow beach zone
 
 }
