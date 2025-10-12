@@ -4049,9 +4049,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Flower Zone Main Area - Teddiursa Power Competition -- Friendship": PokeparkLocationData(
-        498, PokeparkFlag.BATTLE, "Flower Zone Main Area", 0x0601, PokeparkFriendshipClientLocationData(
-            structure_position=66,
-            memory_range=MemoryRange.BYTE
+        498, PokeparkFlag.BATTLE, "Flower Zone Main Area", 0x0601, Pokepark13AttractionClientData(
+            structure_position=1,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
