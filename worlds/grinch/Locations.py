@@ -189,11 +189,11 @@ grinch_locations = {
         # "Bike Race - Top 2": GrinchLocationData("Bike Race", ["Supadow Minigames", "Bike Race"], 1510, [GrinchRamData()]),
         # "Bike Race - Top 3": GrinchLocationData("Bike Race", ["Supadow Minigames", "Bike Race"], 1511, [GrinchRamData()]),
 # Sleigh Part Locations
-        "WV - Exhaust Pipes": GrinchLocationData("Sleigh Room", ["Sleigh Ride", "Whoville"], 1600, [GrinchRamData(0x0101FB, binary_bit_pos=2)]),
-        "WF - Skis": GrinchLocationData("Sleigh Room", ["Sleigh Ride", "Who Forest"], 1601, [GrinchRamData(0x0101FB, binary_bit_pos=3)]),
-        "WD - Tires": GrinchLocationData("Sleigh Room", ["Sleigh Ride", "Who Dump"], 1602, [GrinchRamData(0x0101FB, binary_bit_pos=4)]),
-        "WL - Submarine World - Twin-End Tuba": GrinchLocationData("Sleigh Room", ["Sleigh Ride", "Who Lake", "South Shore"], 1603, [GrinchRamData(0x0101FB, binary_bit_pos=6)]),
-        "WL - South Shore - GPS": GrinchLocationData("Sleigh Room", ["Sleigh Ride", "Who Lake", "Submarine World"], 1604, [GrinchRamData(0x0101FB, binary_bit_pos=5)]),
+        "WV - Exhaust Pipes": GrinchLocationData("Whoville", ["Sleigh Ride", "Whoville"], 1600, [GrinchRamData(0x0101FB, binary_bit_pos=2)]),
+        "WF - Skis": GrinchLocationData("Who Forest", ["Sleigh Ride", "Who Forest"], 1601, [GrinchRamData(0x0101FB, binary_bit_pos=3)]),
+        "WD - Tires": GrinchLocationData("Who Dump", ["Sleigh Ride", "Who Dump"], 1602, [GrinchRamData(0x0101FB, binary_bit_pos=4)]),
+        "WL - Submarine World - Twin-End Tuba": GrinchLocationData("Submarine World", ["Sleigh Ride", "Who Lake", "South Shore"], 1603, [GrinchRamData(0x0101FB, binary_bit_pos=6)]),
+        "WL - South Shore - GPS": GrinchLocationData("Who Lake", ["Sleigh Ride", "Who Lake", "Submarine World"], 1604, [GrinchRamData(0x0101FB, binary_bit_pos=5)]),
 # Mount Crumpit Locations
         "MC - 1st Crate Squashed": GrinchLocationData("Mount Crumpit", ["Mount Crumpit"], 1700, [GrinchRamData(0x095343, value=1)]),
         "MC - 2nd Crate Squashed": GrinchLocationData("Mount Crumpit", ["Mount Crumpit"], 1701, [GrinchRamData(0x095343, value=2)]),

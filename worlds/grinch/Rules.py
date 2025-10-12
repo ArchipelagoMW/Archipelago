@@ -512,19 +512,19 @@ rules_dict: dict[str,list[list[str]]] = {
         []
     ],
     "WV - Exhaust Pipes": [
-        [WV, REL]
+        [WV, REL, SR]
     ],
     "WF - Skis": [
-        [WF]
+        [WF, SR]
     ],
     "WD - Tires": [
-        [WD, RS, REL]
+        [WD, RS, REL, SR]
     ],
     "WL - Submarine World - Twin-End Tuba": [
-        [WL, MM]
+        [WL, MM, SR]
     ],
     "WL - South Shore - GPS": [
-        [WL, REL]
+        [WL, REL, SR]
     ],
     "MC - 1st Crate Squashed": [
         []
