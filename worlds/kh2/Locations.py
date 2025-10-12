@@ -1365,6 +1365,7 @@ FightLogicRegions = [
     RegionName.FuturePete,
     RegionName.Terra,
     RegionName.DataMarluxia,
+    RegionName.PrMinute,
     RegionName.Barbosa,
     RegionName.GrimReaper1,
     RegionName.GrimReaper2,

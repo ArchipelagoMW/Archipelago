@@ -341,6 +341,8 @@ class FightLogicOverrides(OptionDict):
      Normal: Overrides the Fight Logic option with Normal for that specific fight,
      Hard: Overrides the Fight Logic option with Hard for that specific fight,
      None: Overrides removes logic for that fight. Not recommended if you don't know what you are doing
+
+     RegionName: difficulty
      """
     display_name = "Fight Logic Overrides"
     #default = {fightName: None for fightName in FightLogicRegions}

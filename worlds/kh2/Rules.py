@@ -568,6 +568,11 @@ class KH2FightRules(KH2Rules):
                 "normal": self.get_normal_datamarluxia_rules,
                 "hard":   self.get_hard_datamarluxia_rules
             },
+            RegionName.PrMinute:          {
+                "easy":   self.get_easy_minute_fight_pr_rules,
+                "normal": self.get_normal_minute_fight_pr_rules,
+                "hard":   self.get_hard_minute_fight_pr_rules,
+            },
             RegionName.Barbosa:           {
                 "easy":   self.get_easy_barbosa_rules,
                 "normal": self.get_normal_barbosa_rules,
@@ -719,9 +724,9 @@ class KH2FightRules(KH2Rules):
                 "hard":   self.get_hard_sephiroth_rules
             },
             RegionName.CorFirstFight:     {
-                "easy":   self.get_easy_cor_first_fight_rules,
-                "normal": self.get_normal_cor_first_fight_rules,
-                "hard":   self.get_hard_cor_first_fight_rules
+                "easy":   self.get_easy_cor_first_fight_rules and self.get_easy_cor_first_fight_movement_rules,
+                "normal": self.get_normal_cor_first_fight_rules and self.get_normal_cor_first_fight_movement_rules,
+                "hard":   self.get_hard_cor_first_fight_rules and self.get_hard_cor_first_fight_movement_rules
             },
             RegionName.CorSecondFight:    {
                 "easy":   self.get_normal_cor_second_fight_movement_rules,
@@ -729,9 +734,9 @@ class KH2FightRules(KH2Rules):
                 "hard":   self.get_normal_cor_second_fight_movement_rules
             },
             RegionName.Transport:         {
-                "easy":   self.get_easy_transport_fight_rules,
-                "normal": self.get_normal_transport_fight_rules,
-                "hard":   self.get_hard_transport_fight_rules
+                "easy":   self.get_easy_transport_fight_rules and self.get_easy_transport_movement_rules,
+                "normal": self.get_normal_transport_fight_rules and self.get_normal_transport_movement_rules,
+                "hard":   self.get_hard_transport_fight_rules and self.get_hard_transport_movement_rules
             },
             RegionName.Scar:              {
                 "easy":   self.get_easy_scar_rules,
@@ -819,16 +824,38 @@ class KH2FightRules(KH2Rules):
                 "hard":   self.get_hard_data_xemnas_rules
             }
         }
-
+        CorSkip = {
+            RegionName.CorFirstFight: {
+                "easy":   self.get_easy_cor_skip_first_rules,
+                "normal": self.get_normal_cor_skip_first_rules,
+                "hard":   self.get_hard_cor_skip_first_rules,
+            },
+        }
         self.fight_region_rules = {region: rulesFunction[self.fight_logic] for region, rulesFunction in fight_rule_settings.items() if region not in self.fight_logic_overrides.keys()}
+
         for regionName, override in self.fight_logic_overrides.items():
-            self.fight_region_rules[regionName] = fight_rule_settings[regionName][override.lower()]
+            if override.lower() == "none":
+                self.fight_region_rules[regionName] = self.kh2_true
+            else:
+                self.fight_region_rules[regionName] = fight_rule_settings[regionName][override.lower()]
+
+        if self.world.options.CorSkipToggle:
+            if RegionName.CorFirstFight in self.fight_logic_overrides.keys() and self.fight_logic_overrides[RegionName.CorFirstFight].lower() != "none":
+                self.fight_region_rules[RegionName.CorFirstFight] = (self.fight_region_rules[RegionName.CorFirstFight]) or CorSkip[RegionName.CorFirstFight][self.fight_logic_overrides[RegionName.CorFirstFight].lower()]
+            else:
+                self.fight_region_rules[RegionName.CorFirstFight] = (self.fight_region_rules[RegionName.CorFirstFight]) or CorSkip[RegionName.CorFirstFight][self.fight_logic]
 
     def set_kh2_fight_rules(self) -> None:
         for region_name, rules in self.fight_region_rules.items():
             region = self.multiworld.get_region(region_name, self.player)
             for entrance in region.entrances:
                 entrance.access_rule = rules
+
+    def kh2_true(self, state):
+        return True
+
+    #def kh2_false(self, state):
+    #    return False
 
     def get_easy_shanyu_rules(self, state: CollectionState) -> bool:
         # easy: gap closer, defensive tool,drive form
@@ -959,6 +986,15 @@ class KH2FightRules(KH2Rules):
     def get_hard_terra_rules(self, state: CollectionState) -> bool:
         # hard:1 gap closer,explosion,2 combo pluses,2 dodge roll,2 aerial dodge and lvl 2glide,guard,aerial recovery
         return self.kh2_dict_count(hard_terra_tools, state) and self.kh2_list_any_sum([gap_closer], state) >= 1
+
+    def get_easy_minute_fight_pr_rules(self, state: CollectionState) -> bool:
+        return self.kh2_list_count_sum([ItemName.BlizzardElement, ItemName.ThunderElement], state) >= 2 and self.kh2_has_all([ItemName.ChickenLittle, ItemName.Stitch], state)
+
+    def get_normal_minute_fight_pr_rules(self, state: CollectionState) -> bool:
+        return self.kh2_list_count_sum([ItemName.BlizzardElement, ItemName.ThunderElement], state) >= 1 and self.kh2_has_any([ItemName.ChickenLittle, ItemName.Stitch], state)
+
+    def get_hard_minute_fight_pr_rules(self, state: CollectionState) -> bool:
+        return self.kh2_list_count_sum([ItemName.BlizzardElement, ItemName.ThunderElement], state) >= 1 or self.kh2_has_any([ItemName.ChickenLittle, ItemName.Stitch], state)
 
     def get_easy_barbosa_rules(self, state: CollectionState) -> bool:
         # easy:blizzara and thundara or one of each,defensive tool
@@ -1333,23 +1369,14 @@ class KH2FightRules(KH2Rules):
         return state.has(ItemName.ReflectElement, self.player) and self.kh2_has_any([ItemName.Stitch, ItemName.ChickenLittle], state) and self.kh2_has_final_form(state)
 
     def get_easy_cor_skip_first_rules(self, state: CollectionState) -> bool:
-        # if option is not allow skips return false else run rules
-        if not self.world.options.CorSkipToggle:
-            return False
         # easy: aerial dodge 3,master form,fire
         return state.has(ItemName.AerialDodge, self.player, 3) and self.kh2_has_all([ItemName.MasterForm, ItemName.FireElement], state)
 
     def get_normal_cor_skip_first_rules(self, state: CollectionState) -> bool:
-        # if option is not allow skips return false else run rules
-        if not self.world.options.CorSkipToggle:
-            return False
         # normal: aerial dodge 2, master form,fire
         return state.has(ItemName.AerialDodge, self.player, 2) and self.kh2_has_all([ItemName.MasterForm, ItemName.FireElement], state)
 
     def get_hard_cor_skip_first_rules(self, state: CollectionState) -> bool:
-        # if option is not allow skips return false else run rules
-        if not self.world.options.CorSkipToggle:
-            return False
         # hard:void cross(quick run 3,aerial dodge 1)
         # or (quick run 2,aerial dodge 2 and magic)
         # or (final form and (magic or combo master))

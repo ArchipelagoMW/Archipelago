@@ -25,6 +25,7 @@ DataLarxene = "Data Larxene"
 
 # pr
 Pr = "Port Royal"
+PrMinute = "Port Royal: Minute Fight"
 Barbosa = "Barbosa"
 Pr2 = "Port Royal 2"
 GrimReaper1 = "Grim Reaper 1"

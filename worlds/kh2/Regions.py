@@ -211,6 +211,8 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.TownMythrilGem,
         LocationName.CaveMouthBrightShard,
         LocationName.CaveMouthMythrilShard,
+    ],
+    RegionName.PrMinute:          [
         LocationName.IsladeMuertaMap,
         LocationName.BoatFight,
         LocationName.InterceptorBarrels,
@@ -221,7 +223,6 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.MoonlightNookPowerStone,
         LocationName.DonaldBoatFight,
         LocationName.GoofyInterceptorBarrels,
-
     ],
     RegionName.Barbosa:            [
         LocationName.Barbossa,
@@ -1061,7 +1062,8 @@ def connect_regions(self):
         RegionName.Ha3:                (RegionName.Ha4,),
         RegionName.Ha4:                (RegionName.Ha5,),
         RegionName.Ha5:                (RegionName.Ha6,),
-        RegionName.Pr:                 (RegionName.Barbosa,),
+        RegionName.Pr:                 (RegionName.PrMinute,),
+        RegionName.PrMinute:           (RegionName.Barbosa,),
         RegionName.Barbosa:            (RegionName.Pr2,),
         RegionName.Pr2:                (RegionName.GrimReaper1,),
         RegionName.GrimReaper1:        (RegionName.GrimReaper2,),
