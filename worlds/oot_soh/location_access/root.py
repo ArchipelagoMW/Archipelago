@@ -9,6 +9,7 @@ class EventLocations(str, Enum):
     ROOT_DEKU_SHIELD = "Root Deku Shield"
     ROOT_HYLIAN_SHIELD = "Root Hylian Shield"
     TRIFORCE_HUNT_COMPLETION = "Triforce Hunt Completion"
+    ZELDAS_LETTER_FROM_SKIP_OPTION = "Zeldas Letter From Skip Option"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -32,6 +33,17 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.ROOT, world, [
         (Regions.ROOT_EXITS, lambda bundle: starting_age(bundle) or has_item(Events.TIME_TRAVEL, bundle))
     ])
+    
+    ## Event and connection for Zeldas Letter/Impas Song
+    if(bool(world.options.skip_child_zelda)):
+        # Events
+        add_events(Regions.ROOT, world, [
+            (EventLocations.ZELDAS_LETTER_FROM_SKIP_OPTION, Items.ZELDAS_LETTER, lambda bundle: True)
+        ])
+        # Connections
+        connect_regions(Regions.ROOT, world, [
+            (Regions.HC_GARDEN_SONG_FROM_IMPA, lambda bundle: True)
+        ])
     
     ## Root Exits
     # Connections
