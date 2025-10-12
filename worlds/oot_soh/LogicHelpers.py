@@ -113,11 +113,11 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
     world = bundle[2]
     player = world.player
       
-    if item in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
-        return (state.has_any((Items.BOMBCHUS_5.value, Items.BOMBCHUS_10.value, Items.BOMBCHUS_20.value,
-                               Items.PROGRESSIVE_BOMBCHU.value), world.player)
+    if item in {Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20}:
+        return (state.has_any({Items.BOMBCHUS_5.value, Items.BOMBCHUS_10.value, Items.BOMBCHUS_20.value,
+                               Items.PROGRESSIVE_BOMBCHU.value}, world.player)
                 or (bombchus_enabled(bundle)
-                    and state.has_any((Events.CAN_BUY_BOMBCHUS.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value), world.player)))
+                    and state.has_any({Events.CAN_BUY_BOMBCHUS.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value}, world.player)))
     
     match item:
         case Items.FAIRY_OCARINA:
