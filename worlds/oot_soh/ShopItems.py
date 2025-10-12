@@ -161,11 +161,11 @@ def fill_shop_items(world: "SohWorld") -> None:
     vanilla_pool = list[Items]()
     vanilla_shop_slots = list[str]()
 
-    for i in range(0, world.options.shuffle_shops_item_amount + 1):
+    for i in range(0, world.options.shuffle_shops_item_amount):
         vanilla_pool += vanilla_items_to_add[i]
 
     for region, shop in all_shop_locations:
-        vanilla_shop_slots += list(shop.keys())[0: world.options.shuffle_shops_item_amount + 1]
+        vanilla_shop_slots += list(shop.keys())[0: world.options.shuffle_shops_item_amount]
 
     vanilla_shop_locations = [world.get_location(slot) for slot in vanilla_shop_slots]
     vanilla_items = [world.create_item(item.value) for item in vanilla_pool]
