@@ -107,7 +107,7 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
     else:
         try:
             seed_id = gen_game({name: vars(options) for name, options in gen_options.items()},
-                               meta=meta, owner=session["_id"].int)
+                               meta=meta, owner=session["_id"].int, timeout=app.config["JOB_TIME"])
         except BaseException as e:
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
@@ -118,7 +118,7 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
         return redirect(url_for("view_seed", seed=seed_id))
 
 
-def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, sid=None):
+def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, sid=None, timeout: int|None = None):
     if meta is None:
         meta = {}
 
@@ -177,7 +177,7 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
     thread = thread_pool.submit(task)
 
     try:
-        return thread.result(app.config["JOB_TIME"])
+        return thread.result(timeout)
     except concurrent.futures.TimeoutError as e:
         if sid:
             with db_session:
