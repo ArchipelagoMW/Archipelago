@@ -91,7 +91,14 @@ class SC2MOGenMissionPools:
             self.difficulty_pools[self.get_modified_mission_difficulty(mission)].remove(mission.id)
 
     def get_allowed_mission_count(self) -> int:
-        return len(self.master_list)
+        if self.exclude_mission_variants_on_pull:
+            used_files = set(
+                lookup_id_to_mission[mission].map_file
+                for mission in self.master_list
+            )
+            return len(used_files)
+        else:
+            return len(self.master_list)
     
     def count_allowed_missions(self, campaign: SC2Campaign) -> int:
         allowed_missions = [
