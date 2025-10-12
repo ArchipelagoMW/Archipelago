@@ -3684,9 +3684,9 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Granite Zone Main Area - Taillow Power Competition -- Friendship": PokeparkLocationData(
-        449, PokeparkFlag.CHASE, "Granite Zone Salamence Area", 0x0601, PokeparkFriendshipClientLocationData(
-            structure_position=55,
-            memory_range=MemoryRange.BYTE
+        449, PokeparkFlag.CHASE, "Granite Zone Salamence Area", 0x0601, Pokepark07AttractionClientData(
+            structure_position=24,
+            memory_range=MemoryRange.HALFWORD
         ),
         each_zone=MultiZoneFlag.MULTI
     ),
