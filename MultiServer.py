@@ -135,6 +135,7 @@ def get_saving_second(seed_name: str, interval: int = 60) -> int:
 
 class Client(Endpoint):
     __slots__ = (
+        "__weakref__",
         "version",
         "auth",
         "team",
