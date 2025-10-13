@@ -376,7 +376,6 @@ def write_shop_checks(world: "EarthBoundWorld", rom: "LocalRom", shop_checks: li
             if location.parent_region.name in high_purchase_areas:
                 price = int(price / 1.5)
             
-            print(f"{location.item.name} for ${price}")
             item_struct = struct.pack('<BHBH', item_id, price, item_type, flag)
             rom.write_bytes(0x34002A + (0x06 * flag), item_struct)
             menu_long_name = text_encoder(location.item.name, 127)
