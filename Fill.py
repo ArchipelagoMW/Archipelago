@@ -495,11 +495,13 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
     if equalization_percentage > 100 or equalization_percentage < 0:
         raise ValueError(f"Progression equalization must be 0-100. Value found: {equalization_percentage}")
 
+    equalization_factor = equalization_percentage / 100
+
     # First, we shuffle the location pool.
     multiworld.random.shuffle(fill_locations)
 
     # If balancing factor is 0, don't do any more unnecessary work.
-    if equalization_percentage == 0:
+    if equalization_factor == 0:
         return fill_locations
 
     # Balancing only has an effect if there is progression
@@ -555,7 +557,7 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
 
     # Now, we use the balancing factor to interpolate between the "random" distribution and the "fair" distribution.
     weights_per_player = {
-        player: random_count + (balanced_progression_counts[player] - random_count) * equalization_percentage
+        player: random_count + (balanced_progression_counts[player] - random_count) * equalization_factor
         for player, random_count in expected_progression_counts_if_random.items()
     }
 
