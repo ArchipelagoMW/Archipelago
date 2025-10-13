@@ -129,6 +129,10 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                                      for i, location in enumerate(placements))
                     for (i, location, unsafe) in swap_attempts:
                         placed_item = location.item
+                        if item_to_place == placed_item:
+                            # The number of allowed swaps is limited, so do not allow a swap of an item with a copy of
+                            # itself.
+                            continue
                         # Unplaceable items can sometimes be swapped infinitely. Limit the
                         # number of times we will swap an individual item to prevent this
                         swap_count = swapped_items[placed_item.player, placed_item.name, unsafe]

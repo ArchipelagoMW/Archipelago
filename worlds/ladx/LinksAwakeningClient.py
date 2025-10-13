@@ -3,9 +3,6 @@ ModuleUpdate.update()
 
 import Utils
 
-if __name__ == "__main__":
-    Utils.init_logging("LinksAwakeningContext", exception_logger="Client")
-
 import asyncio
 import base64
 import binascii
@@ -26,16 +23,14 @@ import typing
 from CommonClient import (CommonContext, get_base_parser, gui_enabled, logger,
                           server_loop)
 from NetUtils import ClientStatus
-from worlds.ladx import LinksAwakeningWorld
-from worlds.ladx.Common import BASE_ID as LABaseID
-from worlds.ladx.GpsTracker import GpsTracker
-from worlds.ladx.TrackerConsts import storage_key
-from worlds.ladx.ItemTracker import ItemTracker
-from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
-from worlds.ladx.Locations import get_locations_to_id, meta_to_name
-from worlds.ladx.Tracker import LocationTracker, MagpieBridge, Check
-
-
+from . import LinksAwakeningWorld
+from .Common import BASE_ID as LABaseID
+from .GpsTracker import GpsTracker
+from .TrackerConsts import storage_key
+from .ItemTracker import ItemTracker
+from .LADXR.checkMetadata import checkMetadataTable
+from .Locations import get_locations_to_id, meta_to_name
+from .Tracker import LocationTracker, MagpieBridge, Check
 class GameboyException(Exception):
     pass
 
@@ -412,10 +407,10 @@ class LinksAwakeningClient():
             status = (await self.gameboy.async_read_memory_safe(LAClientConstants.wLinkStatusBits))[0]
 
         item_id -= LABaseID
-        # The player name table only goes up to 100, so don't go past that
+        # The player name table only goes up to 101, so don't go past that
         # Even if it didn't, the remote player _index_ byte is just a byte, so 255 max
-        if from_player > 100:
-            from_player = 100
+        if from_player > 101:
+            from_player = 101
 
         next_index += 1
         self.gameboy.write_memory(LAClientConstants.wLinkGiveItem, [
@@ -760,42 +755,44 @@ def run_game(romfile: str) -> None:
         except FileNotFoundError:
             logger.error(f"Couldn't launch ROM, {args[0]} is missing")
 
-async def main():
-    parser = get_base_parser(description="Link's Awakening Client.")
-    parser.add_argument("--url", help="Archipelago connection url")
-    parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
-    parser.add_argument('diff_file', default="", type=str, nargs="?",
-                        help='Path to a .apladx Archipelago Binary Patch file')
+def launch(*launch_args):
+    async def main():
+        parser = get_base_parser(description="Link's Awakening Client.")
+        parser.add_argument("--url", help="Archipelago connection url")
+        parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
+        parser.add_argument('diff_file', default="", type=str, nargs="?",
+                            help='Path to a .apladx Archipelago Binary Patch file')
 
-    args = parser.parse_args()
+        args = parser.parse_args(launch_args)
 
-    if args.diff_file:
-        import Patch
-        logger.info("patch file was supplied - creating rom...")
-        meta, rom_file = Patch.create_rom_file(args.diff_file)
-        if "server" in meta and not args.connect:
-            args.connect = meta["server"]
-        logger.info(f"wrote rom file to {rom_file}")
+        if args.diff_file:
+            import Patch
+            logger.info("patch file was supplied - creating rom...")
+            meta, rom_file = Patch.create_rom_file(args.diff_file)
+            if "server" in meta and not args.connect:
+                args.connect = meta["server"]
+            logger.info(f"wrote rom file to {rom_file}")
 
 
-    ctx = LinksAwakeningContext(args.connect, args.password, args.magpie)
+        ctx = LinksAwakeningContext(args.connect, args.password, args.magpie)
 
-    ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
-    # TODO: nothing about the lambda about has to be in a lambda
-    ctx.la_task = create_task_log_exception(ctx.run_game_loop())
-    if gui_enabled:
-        ctx.run_gui()
-    ctx.run_cli()
+        # TODO: nothing about the lambda about has to be in a lambda
+        ctx.la_task = create_task_log_exception(ctx.run_game_loop())
+        if gui_enabled:
+            ctx.run_gui()
+        ctx.run_cli()
 
-    # Down below run_gui so that we get errors out of the process
-    if args.diff_file:
-        run_game(rom_file)
+        # Down below run_gui so that we get errors out of the process
+        if args.diff_file:
+            run_game(rom_file)
 
-    await ctx.exit_event.wait()
-    await ctx.shutdown()
+        await ctx.exit_event.wait()
+        await ctx.shutdown()
 
-if __name__ == '__main__':
+    Utils.init_logging("LinksAwakeningContext", exception_logger="Client")
+
     colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()
