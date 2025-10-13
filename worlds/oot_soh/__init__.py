@@ -139,14 +139,14 @@ class SohWorld(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         # Temporarily disabled because logic is in progress
         #update_age_access(self, state)
-        state._soh_stale[self.player] = True
+        state._soh_stale[self.player] = True # type: ignore
         return super().collect(state, item)
     
     def remove(self, state: CollectionState, item: Item) -> bool:
         # Temporarily disabled because logic is in progress
         changed = super().remove(state, item)
         if changed:
-            state._soh_invalidate(self.player)
+            state._soh_invalidate(self.player) # type: ignore
         return changed
 
     def generate_output(self, output_directory: str):
