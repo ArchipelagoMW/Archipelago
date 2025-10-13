@@ -837,7 +837,7 @@ location_groups = {
         "Snow Wood - Bottom Left Locker"
     },
 
-    "Snow Wood Boarding School (not lockers)": {
+    "Snow Wood Boarding School": {
         "Snow Wood - Many Present Room Present #1",
         "Snow Wood - Many Present Room Present #2",
         "Snow Wood - Many Present Room Present #3",
@@ -846,7 +846,11 @@ location_groups = {
         "Snow Wood - Many Present Room Present #6",
         "Snow Wood - Many Present Room Present #7",
         "Snow Wood - Maxwell Item",
-        "Snow Wood - Bedroom"
+        "Snow Wood - Bedroom",
+        "Snow Wood - Upper Right Locker",
+        "Snow Wood - Upper Left Locker",
+        "Snow Wood - Bottom Right Locker",
+        "Snow Wood - Bottom Left Locker"
     },
 
     "Winters": {
