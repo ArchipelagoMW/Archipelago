@@ -689,6 +689,7 @@ class GeneratorOptions(Group):
 
     class ProgressionEqualization(int):
         """
+        Percentage value from 0-100.
         If set to a non-zero value, slots with fewer locations will have more progression filled into them.
         This can help balance the experience of a multiworld by making all seeds feel worth playing.
         0 means that each location across the whole multiworld has the same chance to receive a progression item.
