@@ -9120,7 +9120,7 @@ ORG $C99CCD
 db $0A
 dl DisableOSSOnLumine
 
-ORG $C0D668
+ORG $C0D668 ;Fix vanilla ambush detection
 LDA $9889
 
 
@@ -11276,7 +11276,7 @@ ADC #$0030
 BRA ..CompareID
 ..GotName:
 TAX
-LDA #$002F
+LDA #$007F
 LDY #$FF80
 MVN $F47E
 PLY
@@ -13289,7 +13289,7 @@ db $18, $0A
 db $08
 dd $C5D835
 db $08
-dd $C50198
+dd $C51568
 db $02
 .NotSpecial:
 db $19, $20
