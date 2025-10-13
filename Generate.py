@@ -25,7 +25,6 @@ from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 
 def mystery_argparse(argv: list[str] | None = None):
     from settings import get_settings
-
     settings = get_settings()
     defaults = settings.generator
 
