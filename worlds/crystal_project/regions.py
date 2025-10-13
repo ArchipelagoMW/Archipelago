@@ -371,13 +371,18 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, QUINTAR_SANCTUM_AP_REGION, [ROLLING_QUINTAR_FIELDS_AP_REGION, QUINTAR_NEST_AP_REGION, QUINTAR_MAUSOLEUM_AP_REGION],
                     {QUINTAR_MAUSOLEUM_AP_REGION: lambda state: logic.has_swimming(state),
                      QUINTAR_NEST_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, CAPITAL_JAIL_AP_REGION, [JOJO_SEWERS_AP_REGION, PIPELINE_NORTH_AP_REGION],
-                    {PIPELINE_NORTH_AP_REGION: lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)})
-    fancy_add_exits(world, PIPELINE_NORTH_AP_REGION, [PIPELINE_SOUTH_AP_REGION, CAPITAL_JAIL_AP_REGION],
-                    {PIPELINE_SOUTH_AP_REGION: lambda state: logic.has_vertical_movement(state),
-                     CAPITAL_JAIL_AP_REGION: lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)})
-    fancy_add_exits(world, PIPELINE_SOUTH_AP_REGION, [PIPELINE_NORTH_AP_REGION, JIDAMBA_TANGLE_AP_REGION, CONTINENTAL_TRAM_AP_REGION],
-                    {JIDAMBA_TANGLE_AP_REGION: lambda state: logic.has_glide(state)})
+    fancy_add_exits(world, CAPITAL_JAIL_AP_REGION, [JOJO_SEWERS_AP_REGION, JAIL_SOUTH_WING_AP_REGION],
+                    {JAIL_SOUTH_WING_AP_REGION: lambda state: logic.has_key(state, SOUTH_WING_KEY)})
+    fancy_add_exits(world, JAIL_SOUTH_WING_AP_REGION, [CAPITAL_JAIL_AP_REGION, JAIL_SOUTH_WING_RUBBLE_AP_REGION],
+                    {CAPITAL_JAIL_AP_REGION: lambda state: logic.has_key(state, SOUTH_WING_KEY),
+                     JAIL_SOUTH_WING_RUBBLE_AP_REGION: lambda state: logic.has_key(state, CELL_KEY, 6)})
+    fancy_add_exits(world, JAIL_SOUTH_WING_RUBBLE_AP_REGION, [JAIL_SOUTH_WING_AP_REGION, PIPELINE_NORTH_AP_REGION],
+                    {JAIL_SOUTH_WING_AP_REGION: lambda state: logic.has_key(state, CELL_KEY, 6)})
+    fancy_add_exits(world, PIPELINE_NORTH_AP_REGION, [PIPELINE_SOUTH_AP_REGION, JAIL_SOUTH_WING_RUBBLE_AP_REGION],
+                    {PIPELINE_SOUTH_AP_REGION: lambda state: logic.has_vertical_movement(state)})
+    fancy_add_exits(world, PIPELINE_SOUTH_AP_REGION, [PIPELINE_NORTH_AP_REGION, CONTINENTAL_TRAM_AP_REGION, PIPELINE_JIDAMBA_CONNECTOR_AP_REGION])
+    #Regionsanity: Jidamba Connector is untraversable w/o region pass
+    fancy_add_exits(world, PIPELINE_JIDAMBA_CONNECTOR_AP_REGION, [PIPELINE_SOUTH_AP_REGION, JIDAMBA_CAVE_AP_REGION])
     fancy_add_exits(world, COBBLESTONE_CRAG_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, THE_OPEN_SEA_AP_REGION, SHOUDU_WATERFRONT_AP_REGION, OKIMOTO_NS_AP_REGION],
                     {SHOUDU_WATERFRONT_AP_REGION: lambda state: logic.has_horizontal_movement(state),
                      OKIMOTO_NS_AP_REGION: lambda state: logic.has_horizontal_movement(state),
@@ -494,10 +499,12 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_glide(state)})
     fancy_add_exits(world, FLYERS_CRAG_AP_REGION, [OKIMOTO_NS_AP_REGION, JIDAMBA_TANGLE_AP_REGION],
                     {JIDAMBA_TANGLE_AP_REGION: lambda state: logic.has_glide(state)})
-    fancy_add_exits(world, JIDAMBA_TANGLE_AP_REGION, [THE_OPEN_SEA_AP_REGION, JIDAMBA_EACLANEYA_AP_REGION],
-                    #if we change the elevators to Pipeline to always be powered, then add an exit to Pipeline South
+    fancy_add_exits(world, JIDAMBA_TANGLE_AP_REGION, [THE_OPEN_SEA_AP_REGION, EUROPA_SHRINE_AP_REGION, JIDAMBA_EACLANEYA_AP_REGION],
+                    #if we change the elevators to Pipeline to always be powered, then add an exit to Pipeline Jidamba Connector
                     {JIDAMBA_EACLANEYA_AP_REGION: lambda state: (logic.has_glide(state) or logic.has_swimming(state)) and logic.has_jidamba_keys(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
+    #TODO: get the rules correct for this
+    fancy_add_exits(world, EUROPA_SHRINE_AP_REGION, [JIDAMBA_TANGLE_AP_REGION])
     fancy_add_exits(world, JIDAMBA_EACLANEYA_AP_REGION, [JIDAMBA_TANGLE_AP_REGION, THE_OPEN_SEA_AP_REGION],
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, THE_DEEP_SEA_AP_REGION, [THE_OPEN_SEA_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_DEPTHS_AP_REGION, THE_SEQUOIA_AP_REGION],
@@ -623,7 +630,7 @@ def fancy_add_exits(self, region: str, exits: List[str],
 def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOptions) -> None:
     logic = CrystalProjectLogic(world.player, options)
 
-    fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, MERCURY_SHRINE_AP_REGION, SALMON_RIVER_AP_REGION, POKO_POKO_DESERT_AP_REGION, GANYMEDE_SHRINE_AP_REGION, DIONE_SHRINE_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION, LANDS_END_AP_REGION, JIDAMBA_TANGLE_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, MODDED_ZONE_AP_REGION],
+    fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, MERCURY_SHRINE_AP_REGION, SALMON_RIVER_AP_REGION, POKO_POKO_DESERT_AP_REGION, GANYMEDE_SHRINE_AP_REGION, DIONE_SHRINE_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION, LANDS_END_AP_REGION, EUROPA_SHRINE_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, MODDED_ZONE_AP_REGION],
                     # If regionsanity is enabled it will set its own origin region, if it isn't we should connect menu to spawning meadows
                     {SPAWNING_MEADOWS_AP_REGION: lambda state: options.regionsanity.value == options.regionsanity.option_false,
                      CAPITAL_SEQUOIA_AP_REGION: lambda state: state.has(GAEA_STONE, world.player),
@@ -634,7 +641,7 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
                      DIONE_SHRINE_AP_REGION: lambda state: state.has(DIONE_STONE, world.player),
                      TALL_TALL_HEIGHTS_AP_REGION: lambda state: state.has(TRITON_STONE, world.player),
                      LANDS_END_AP_REGION: lambda state: state.has(CALLISTO_STONE, world.player),
-                     JIDAMBA_TANGLE_AP_REGION: lambda state: state.has(EUROPA_STONE, world.player),
+                     EUROPA_SHRINE_AP_REGION: lambda state: state.has(EUROPA_STONE, world.player),
                      NEPTUNE_SHRINE_AP_REGION: lambda state: state.has(NEPTUNE_STONE, world.player),
                      THE_OLD_WORLD_AP_REGION: lambda state: logic.old_world_requirements(state),
                      THE_NEW_WORLD_AP_REGION: lambda state: logic.new_world_requirements(state)})

@@ -114,7 +114,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
 
         LocationData(QUINTAR_RESERVE_AP_REGION, "Dione Shrine", 1595),
 
-        LocationData(JIDAMBA_TANGLE_AP_REGION, "Europa Shrine", 1626),
+        LocationData(EUROPA_SHRINE_AP_REGION, "Europa Shrine", 1626),
 
         LocationData(JIDAMBA_EACLANEYA_AP_REGION, "Eaclaneya Entrance", 1402),
         LocationData(JIDAMBA_EACLANEYA_AP_REGION, "Salmon Room", 2474),

@@ -410,34 +410,42 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Capital Jail
         #Treasure chests
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Touchdown", 640 + treasure_index_offset), #South Wing Key chest
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - South Wing jail cell across from busted wall", 930 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY)), #West Wing Key chest
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Haunted jail cell in South Wing dead end", 931 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY)), #East Wing Key chest
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Fiercely guarded and locked behind South Wing rubble 1", 990 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Cell Key chest
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Fiercely guarded and locked behind South Wing rubble 2", 2668 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Iron Rod chest
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Locked behind South Wing rubble", 991 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Battleplate chest
-        LocationData(CAPITAL_JAIL_AP_REGION, "Underpass Chest - Drop down behind Capital Jail South Wing rubble", 3675 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #7th Underpass Scrap on main map
+        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Touchdown", 640 + treasure_index_offset),  # South Wing Key chest
+        #South Wing
+        LocationData(JAIL_SOUTH_WING_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - South Wing jail cell across from busted wall", 930 + treasure_index_offset),  # West Wing Key chest
+        LocationData(JAIL_SOUTH_WING_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Haunted jail cell in South Wing dead end", 931 + treasure_index_offset),  # East Wing Key chest
+        #South Wing Rubble
+        LocationData(JAIL_SOUTH_WING_RUBBLE_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Fiercely guarded and locked in South Wing rubble 1", 990 + treasure_index_offset),  # Cell Key chest
+        LocationData(JAIL_SOUTH_WING_RUBBLE_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Fiercely guarded and locked in South Wing rubble 2", 2668 + treasure_index_offset),  # Iron Rod chest
+        LocationData(JAIL_SOUTH_WING_RUBBLE_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Locked in South Wing rubble", 991 + treasure_index_offset),  # Battleplate chest
+        LocationData(JAIL_SOUTH_WING_RUBBLE_AP_REGION, "Underpass Chest - Drop down behind Capital Jail South Wing rubble", 3675 + treasure_index_offset),  # 7th Underpass Scrap on main map
+        #West Wing
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - West Wing jail cell among the glowy plants", 925 + treasure_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY)), #Cell Key chest
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - West Wing arrow plants", 923 + treasure_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY)), #Battle Helm chest
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Locked among the foliage in West Wing", 916 + treasure_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY) and logic.has_key(state, CELL_KEY, 4)), #Cell Key chest
+        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Locked beyond overgrown West Wing hallway", 909 + treasure_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)),  # Dark Wing Key chest
+        #East Wing
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - East Wing bedroom closet twinsies the 1st", 2999 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY)), #empty chest
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - East Wing bedroom closet twinsies the 2nd", 906 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY)), #Potion chest
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Waterlogged East Wing hallway twinsies the 1st", 676 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY)), #Cell Key top chest
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Waterlogged East Wing hallway twinsies the 2nd", 707 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY)), #Cell Key bottom chest
-
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Locked in broken East Wing jail cell", 708 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Cell Key chest
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Locked in East Wing bedroom", 763 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Cell Key chest
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Locked beyond overgrown West Wing hallway", 909 + treasure_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Dark Wing Key chest
+        #Dark Wing
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Dark Wing entry left cell", 2911 + treasure_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Capital Jail map chest
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Sneaky chest in Dark Wing", 929 + treasure_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Woven Hood chest
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Corner lava jump in Dark Wing", 920 + treasure_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Woven Shirt chest
 
         #NPCs
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver in haunted South Wing jail cell", 972 + npc_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY)), #Ingot
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver in zombified South Wing jail cell", 989 + npc_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY)), #Ingot
+        #South Wing
+        LocationData(JAIL_SOUTH_WING_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver in haunted South Wing jail cell", 972 + npc_index_offset), #Ingot
+        LocationData(JAIL_SOUTH_WING_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver in zombified South Wing jail cell", 989 + npc_index_offset), #Ingot
+        #West Wing
+        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver locked in overgrown West Wing hallway", 759 + npc_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)),  # Ore
+        #East Wing
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver locked in broken East Wing jail cell accompanied by blue flower", 760 + npc_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Ore
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver locked in East Wing bedroom", 782 + npc_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Dust
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver locked in overgrown West Wing hallway", 759 + npc_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Ore
+        #Dark Wing
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver in Dark Wing entry right cell", 472 + npc_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Dust
 
         #Crystals
@@ -451,11 +459,11 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(PIPELINE_NORTH_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " Chest - Do not anger the fungus", 1294 + treasure_index_offset), #Lucky Platter chest
 
         #NPCs
-        #Pipeline South
-        LocationData(PIPELINE_SOUTH_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + " NPC - Diamond down Pipeline elevator into Jidamba", 2897 + npc_index_offset), #Dust
         #Pipeline North
         LocationData(PIPELINE_NORTH_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " NPC - Silver in corrupted tunnel 1", 2660 + npc_index_offset), #Ingot
         LocationData(PIPELINE_NORTH_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " NPC - Silver in corrupted tunnel 2", 1295 + npc_index_offset), #Ore
+        # Pipeline Jidamba Connector
+        LocationData(PIPELINE_JIDAMBA_CONNECTOR_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + " NPC - Diamond down Pipeline elevator into Jidamba", 2897 + npc_index_offset),  # Dust
 
         #Cobblestone Crag
         #Treasure chests
@@ -1112,6 +1120,13 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Jidamba Tangle
         #Treasure chests
+        #Europa Shrine
+
+        #Jidamba Cave
+        LocationData(JIDAMBA_CAVE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Underground sneaky passage by NE cave exit", 2797 + treasure_index_offset),  # Ravens Hood chest
+        LocationData(JIDAMBA_CAVE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Hop from underground root to sneaky passage pond", 2798 + treasure_index_offset, lambda state: logic.has_glide(state)),  # Ravens Cloak chest
+        LocationData(JIDAMBA_CAVE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Accompanied by orange cave flowers", 1435 + treasure_index_offset, lambda state: logic.has_glide(state)),  # Cave Key chest
+
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Inside overgrown building E of Eaclaneya", 1629 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Demon Plate chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Up a tree in north foliage", 3024 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Ether chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Along a river through the foliage", 3026 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
@@ -1125,9 +1140,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Fly down from Weaver Outpost to pedestal", 2803 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Siege Bow chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Island in the river through the foliage", 3011 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Tower Shield chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - North of foliage river", 3027 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Z-Potion chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Accompanied by orange cave flowers", 1435 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Cave Key chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Hop from underground root to sneaky passage pond", 2798 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ravens Cloak chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Underground sneaky passage by NE cave exit", 2797 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ravens Hood chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Smack in the center of the canopy", 1631 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Canopy Key chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Up in the canopy south of shrine", 1171 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Demon Helm chest
         LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Eaclaneya entrance hall", 2919 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Jidamba Tangle map chest
@@ -1810,8 +1822,8 @@ def get_shops(player: int, options: CrystalProjectOptions | None) -> List[Locati
         LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Souvenir Merchant 4", 42918 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
 
         #Jidamba Tangle
-        LocationData(JIDAMBA_TANGLE_AP_REGION, "Europa Shrine Shop - Attendant 1", 11163 + shop_index_offset),
-        LocationData(JIDAMBA_TANGLE_AP_REGION, "Europa Shrine Shop - Attendant 2", 21163 + shop_index_offset),
+        LocationData(EUROPA_SHRINE_AP_REGION, EUROPA_SHRINE_AP_REGION + " Shop - Attendant 1", 11163 + shop_index_offset),
+        LocationData(EUROPA_SHRINE_AP_REGION, EUROPA_SHRINE_AP_REGION + " Shop - Attendant 2", 21163 + shop_index_offset),
 
         #Neptune Shrine
         LocationData(NEPTUNE_SHRINE_AP_REGION, NEPTUNE_SHRINE_DISPLAY_NAME + " Shop - Attendant 1", 13164 + shop_index_offset),
