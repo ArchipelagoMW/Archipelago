@@ -9,6 +9,13 @@ if TYPE_CHECKING:
     from . import EarthBoundWorld
     from .Rom import LocalRom
 
+high_purchase_areas = {
+    "Twoson",
+    "Fourside",
+    "Scaraba",
+    "Andonuts Lab Area"  # long walk with no atm
+}
+
 shop_locations = {
     "Onett Drugstore - Right Counter Slot 1",
     "Onett Drugstore - Right Counter Slot 2",
@@ -364,11 +371,12 @@ def write_shop_checks(world: "EarthBoundWorld", rom: "LocalRom", shop_checks: li
             if ItemClassification.trap in location.item.classification:
                 price = 0
             else:
-                price = world.random.randint(1, (75 * (world.accessible_regions.index(location.parent_region.name) + 1)))
-            if not world.accessible_regions.index(location.parent_region.name):
-                price = int(price / 2)
-            elif location.parent_region.name == "Onett" and not world.options.random_start_location:
-                price = int(price / 3)
+                price = world.random.randint(1, (75 * world.area_levels[location.parent_region.name]))
+
+            if location.parent_region.name in high_purchase_areas:
+                price = int(price / 1.5)
+            
+            print(f"{location.item.name} for ${price}")
             item_struct = struct.pack('<BHBH', item_id, price, item_type, flag)
             rom.write_bytes(0x34002A + (0x06 * flag), item_struct)
             menu_long_name = text_encoder(location.item.name, 127)

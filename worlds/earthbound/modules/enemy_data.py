@@ -244,7 +244,7 @@ def initialize_enemies(world: "EarthBoundWorld") -> None:
         "Trick or Trick Kid": 0x01BC,
         "Cave Boy": 0x0149,
         "Abstract Art": 0x012C,
-        "Shattered Man": 0x0133,
+        "Shattered Man": 0x0142,
         "Fierce Shattered Man": 0x0133,
         "Ego Orb": 0x0147,
         "Yes Man Junior": 0x011C,

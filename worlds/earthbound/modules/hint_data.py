@@ -243,13 +243,11 @@ def parse_hint_data(world: "EarthBoundWorld", location: Location, rom: "LocalRom
     if hint == "item_at_location":
         if world.player == location.item.player and location.item.name in character_item_table and location.item.name != "Photograph":
             player_text = "your friend "
-            # In-game text command to display party member names
-            item_text = bytearray([0x1C, 0x02, party_id_nums[location.item.name]])
+            item_text = bytearray([0x1C, 0x02, party_id_nums[location.item.name]]) # In-game text command to display party member names
         elif world.player == location.item.player:
             player_text = "your "
             if location.item.name in item_id_table:
-                # In-game text command to display item names
-                item_text = bytearray([0x1C, 0x05, item_id_table[location.item.name]])
+                item_text = bytearray([0x1C, 0x05, item_id_table[location.item.name]]) # In-game text command to display item names
             else:
                 # if the item doesn't have a name (e.g it's PSI)
                 item_text = text_encoder(location.item.name, 128)
