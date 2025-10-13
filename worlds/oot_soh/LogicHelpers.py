@@ -76,49 +76,49 @@ def can_use(item: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
 
     if data[item.value].child_only and not is_child(bundle):
         return False
-
+    
     if data[item.value].item_type == ItemType.magic and not has_item(Items.PROGRESSIVE_MAGIC_METER, bundle):
         return False
 
     if data[item.value].item_type == ItemType.song:
         return can_play_song(item, bundle)
     
-    if item in (Items.FIRE_ARROW, Items.ICE_ARROW, Items.LIGHT_ARROW):
-        return can_use(Items.FAIRY_BOW, bundle)
-    
-    if item in [Items.PROGRESSIVE_BOMBCHU,Items.BOMBCHUS_5,Items.BOMBCHUS_10,Items.BOMBCHUS_20]:
-        return bombchu_refill(bundle) and bombchus_enabled(bundle)
-    
-    if item == Items.SCARECROW:
-        return scarecrows_song(bundle) and can_use(Items.HOOKSHOT, bundle)
-    
-    if item == Items.DISTANT_SCARECROW:
-        return scarecrows_song(bundle) and can_use(Items.LONGSHOT, bundle)
-    
-    if item == Items.EPONA:
-        return is_adult(bundle) and can_use(Items.EPONAS_SONG, bundle)
-    
-    if item == Items.NUTS:
-        return has_item(Events.CAN_FARM_NUTS, bundle)
-
-    if item == Items.STICKS:
-        return has_item(Events.CAN_FARM_STICKS, bundle)
-    
-    if item == Items.FISHING_POLE:
+    if item == Items.FISHING_POLE: # 36
         return has_item(Items.CHILD_WALLET, bundle)
     
+    if item in (Items.FIRE_ARROW, Items.ICE_ARROW, Items.LIGHT_ARROW): # 34
+        return can_use(Items.FAIRY_BOW, bundle)
+    
+    if item == Items.STICKS: # 33
+        return has_item(Events.CAN_FARM_STICKS, bundle)
+    
+    if item in [Items.PROGRESSIVE_BOMBCHU,Items.BOMBCHUS_5,Items.BOMBCHUS_10,Items.BOMBCHUS_20]: # 33
+        return bombchu_refill(bundle) and bombchus_enabled(bundle)
+
+    if item == Items.DISTANT_SCARECROW: # 14
+        return scarecrows_song(bundle) and can_use(Items.LONGSHOT, bundle)
+    
+    if item == Items.NUTS: # 11
+        return has_item(Events.CAN_FARM_NUTS, bundle)
+    
+    if item == Items.SCARECROW: # 5
+        return scarecrows_song(bundle) and can_use(Items.HOOKSHOT, bundle)
+    
+    if item == Items.EPONA: # 5
+        return is_adult(bundle) and can_use(Items.EPONAS_SONG, bundle)
+    
     # I feel like we need to also check to see if they have a bottle but lmk
-    if item == Items.BOTTLE_WITH_BUGS:
+    if item == Items.BOTTLE_WITH_BUGS: # 2
         return has_item(Events.CAN_ACCESS_BUGS, bundle)
     
-    if item == Items.BOTTLE_WITH_FISH:
+    if item == Items.BOTTLE_WITH_FAIRY: # 2
+        return has_item(Events.CAN_ACCESS_FAIRIES, bundle)
+    
+    if item == Items.BOTTLE_WITH_FISH: # 1
         return has_item(Events.CAN_ACCESS_FISH, bundle)
     
-    if item ==  Items.BOTTLE_WITH_BLUE_FIRE:
+    if item ==  Items.BOTTLE_WITH_BLUE_FIRE: # 1
         return has_item(Events.CAN_ACCESS_BLUE_FIRE, bundle)
-    
-    if item == Items.BOTTLE_WITH_FAIRY:
-        return has_item(Events.CAN_ACCESS_FAIRIES, bundle)
     
     return True
 
