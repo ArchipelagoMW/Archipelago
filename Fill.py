@@ -577,8 +577,9 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
     return ret
 
 
-def distribute_items_restrictive(multiworld: MultiWorld, equalization_percentage: int = 0,
-                                 panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap") -> None:
+def distribute_items_restrictive(multiworld: MultiWorld,
+                                 panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap",
+                                 equalization_percentage: int = 0) -> None:
     assert all(item.location is None for item in multiworld.itempool), (
         "At the start of distribute_items_restrictive, "
         "there are items in the multiworld itempool that are already placed on locations:\n"
