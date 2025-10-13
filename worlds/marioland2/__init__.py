@@ -423,9 +423,32 @@ class MarioLand2World(World):
             self.multiworld.itempool += [self.create_item(item_name) for _ in range(count)]
 
     def fill_slot_data(self):
-        return {
-            "energy_link": self.options.energy_link.value
-        }
+        # Expose settings for accurate tracker logic
+        shark_count: int = [
+            self.multiworld.worlds[self.player].sprite_data["Turtle Zone 1"][i]["sprite"]
+            for i in (27, 28)
+        ].count("Shark")
+        crane_count: int = [
+            self.multiworld.worlds[self.player].sprite_data["Mario Zone 3"][i]["sprite"]
+            for i in (17, 18, 25)
+        ].count("Claw Grabber")
+        options_dict = self.options.as_dict(
+            "energy_link",
+            "shuffle_golden_coins",
+            "required_golden_coins",
+            "coinsanity",
+            "shuffle_midway_bells",
+            "marios_castle_midway_bell",
+            "shuffle_pipe_traversal",
+            "auto_scroll_mode"
+        )
+        options_dict.update({
+            "auto_scroll_levels": self.auto_scroll_levels,
+            "turtle_zone_1_shark_count": shark_count,
+            "mario_zone_3_crane_count": crane_count,
+            "coin_fragments_required": self.coin_fragments_required
+        })
+        return options_dict
 
     def create_item(self, name: str) -> Item:
         return MarioLand2Item(name, items[name], self.item_name_to_id[name], self.player)
