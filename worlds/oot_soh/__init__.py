@@ -169,9 +169,7 @@ class SohWorld(World):
             current_count = state.prog_items[self.player][item.name] - 1
             current_count = increment_current_count(self, item, current_count)
             for i, non_prog_version in enumerate(progressive_items[item.name]):
-                if i + 1 <= current_count:
-                    continue
-                else:
+                if i + 1 > current_count:
                     state.prog_items[self.player][non_prog_version] = 0
 
         return changed
