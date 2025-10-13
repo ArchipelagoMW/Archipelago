@@ -590,11 +590,13 @@ def distribute_items_restrictive(multiworld: MultiWorld,
 
     # get items to distribute
     itempool = sorted(multiworld.itempool)
-    multiworld.random.shuffle(itempool)
 
     fill_locations = sorted(multiworld.get_unfilled_locations())
     # All fill steps for "important" items (early, priority, progression) should be balanced by the balancing factor.
     fill_locations = balanced_shuffle(multiworld, fill_locations, itempool, equalization_percentage)
+
+    # Shuffle itempool after locations to maintain determinism between versions
+    multiworld.random.shuffle(itempool)
 
     fill_locations, itempool = distribute_early_items(multiworld, fill_locations, itempool)
 
