@@ -490,14 +490,16 @@ def distribute_early_items(multiworld: MultiWorld,
     return fill_locations, itempool
 
 
-def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], itempool: list[Item]) -> list[Location]:
-    balancing_factor = 0.5  # This would be a setting instead. Acts as a percentage. 0.0 is min, 1.0 is max.
+def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], itempool: list[Item],
+                     equalization_percentage: int) -> list[Location]:
+    if equalization_percentage > 100 or equalization_percentage < 0:
+        raise ValueError(f"Progression equalization must be 0-100. Value found: {equalization_percentage}")
 
     # First, we shuffle the location pool.
     multiworld.random.shuffle(fill_locations)
 
     # If balancing factor is 0, don't do any more unnecessary work.
-    if balancing_factor == 0.0:
+    if equalization_percentage == 0:
         return fill_locations
 
     # Balancing only has an effect if there is progression
@@ -553,7 +555,7 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
 
     # Now, we use the balancing factor to interpolate between the "random" distribution and the "fair" distribution.
     weights_per_player = {
-        player: random_count + (balanced_progression_counts[player] - random_count) * balancing_factor
+        player: random_count + (balanced_progression_counts[player] - random_count) * equalization_percentage
         for player, random_count in expected_progression_counts_if_random.items()
     }
 
@@ -575,7 +577,7 @@ def balanced_shuffle(multiworld: MultiWorld, fill_locations: list[Location], ite
     return ret
 
 
-def distribute_items_restrictive(multiworld: MultiWorld,
+def distribute_items_restrictive(multiworld: MultiWorld, equalization_percentage: int = 0,
                                  panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap") -> None:
     assert all(item.location is None for item in multiworld.itempool), (
         "At the start of distribute_items_restrictive, "
@@ -589,7 +591,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
 
     fill_locations = sorted(multiworld.get_unfilled_locations())
     # All fill steps for "important" items (early, priority, progression) should be balanced by the balancing factor.
-    fill_locations = balanced_shuffle(multiworld, fill_locations, itempool)
+    fill_locations = balanced_shuffle(multiworld, fill_locations, itempool, equalization_percentage)
 
     fill_locations, itempool = distribute_early_items(multiworld, fill_locations, itempool)
 

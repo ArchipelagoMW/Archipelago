@@ -687,6 +687,15 @@ class GeneratorOptions(Group):
         start_inventory -> Move remaining items to start_inventory, generate additional filler items to fill locations.
         """
 
+    class ProgressionEqualization(int):
+        """
+        If set to a non-zero value, slots with fewer locations will have more progression filled into them.
+        This can help balance the experience of a multiworld by making all seeds feel worth playing.
+        0 means that each location across the whole multiworld has the same chance to receive a progression item.
+        100 means that each slot will have the same number of progression items in it, regardless of location count.
+        Values between 0 and 100 linearly interpolate between the two.
+        """
+
     enemizer_path: EnemizerPath = EnemizerPath("EnemizerCLI/EnemizerCLI.Core")  # + ".exe" is implied on Windows
     player_files_path: PlayerFilesPath = PlayerFilesPath("Players")
     players: Players = Players(0)
@@ -696,6 +705,7 @@ class GeneratorOptions(Group):
     race: Race = Race(0)
     plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
     panic_method: PanicMethod = PanicMethod("swap")
+    progression_equalization = ProgressionEqualization(20)
     loglevel: str = "info"
     logtime: bool = False
 
