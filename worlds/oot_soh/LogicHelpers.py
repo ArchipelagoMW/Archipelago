@@ -112,88 +112,124 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
     state = bundle[0]
     world = bundle[2]
     player = world.player
-      
-    if item in {Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20}:
-        return (state.has_any({Items.BOMBCHUS_5.value, Items.BOMBCHUS_10.value, Items.BOMBCHUS_20.value,
-                               Items.PROGRESSIVE_BOMBCHU.value}, world.player)
-                or (bombchus_enabled(bundle)
-                    and state.has_any({Events.CAN_BUY_BOMBCHUS.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value}, world.player)))
+
+    if item == Items.HOOKSHOT: # 112
+        return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player)
     
-    match item:
-        case Items.FAIRY_OCARINA:
-            return state.has(Items.PROGRESSIVE_OCARINA.value, player)
-        case Items.OCARINA_OF_TIME:
-            return state.has(Items.PROGRESSIVE_OCARINA.value, player, 2)
-        case Items.FAIRY_BOW:
-            return state.has(Items.PROGRESSIVE_BOW.value, player)
-        case Items.HOOKSHOT:
-            return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player)
-        case Items.LONGSHOT:
-            return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player, 2)
-        case Items.STICKS:
-            return (state.has(Events.CAN_FARM_STICKS.value, player) and (world.options.shuffle_deku_stick_bag.value == 0 or state.has(Items.PROGRESSIVE_STICK_CAPACITY.value, player)))
-        case Items.FAIRY_SLINGSHOT:
-            return state.has(Items.PROGRESSIVE_SLINGSHOT.value, player)
-        case Items.NUTS:
-            return (state.has(Events.CAN_FARM_NUTS.value, player) and (world.options.shuffle_deku_nut_bag.value == 0 or state.has(Items.PROGRESSIVE_NUT_CAPACITY.value, player)))
-        case Items.SCARECROW:
-            return scarecrows_song(bundle) and can_use(Items.HOOKSHOT, bundle)
-        case Items.DISTANT_SCARECROW:
-            return scarecrows_song(bundle) and can_use(Items.LONGSHOT, bundle)
-        case Items.MAGIC_BEAN:
-            return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
-        case Items.DEKU_SHIELD:
-            return state.has(Events.CAN_BUY_DEKU_SHIELD.value, player)
-        case Items.HYLIAN_SHIELD:
-            return state.has(Events.CAN_BUY_HYLIAN_SHIELD.value, player)
-        case Items.GORONS_BRACELET:
-            return state.has(Items.STRENGTH_UPGRADE.value, player)
-        case Items.SILVER_GAUNTLETS:
-            return state.has(Items.STRENGTH_UPGRADE.value, player, 2)
-        case Items.GOLDEN_GAUNTLETS:
-            return state.has(Items.STRENGTH_UPGRADE.value, player, 3)
-        case Items.BOMB_BAG:
-            return state.has(Items.PROGRESSIVE_BOMB_BAG.value, player) 
-        case Items.EPONA:
-            return state.has(Events.FREED_EPONA, player)
-        case Items.CHILD_WALLET:
-            return can_afford(99, bundle)
-        case Items.ADULT_WALLET:
-            return can_afford(200, bundle)
-        case Items.GIANT_WALLET:
-            return can_afford(500, bundle)
-        case Items.TYCOON_WALLET:
-            return can_afford(999, bundle)
-        case Items.BRONZE_SCALE:
-            return state.has(Items.PROGRESSIVE_SCALE.value, player) or world.options.shuffle_swim == 0
-        case Items.SILVER_SCALE:
-            return state.has(Items.PROGRESSIVE_SCALE.value, player, 2) or (state.has(Items.PROGRESSIVE_SCALE.value, player, 1) and world.options.shuffle_swim == 0)
-        case Items.GOLDEN_SCALE:
-            return state.has(Items.PROGRESSIVE_SCALE.value, player, 3) or (state.has(Items.PROGRESSIVE_SCALE.value, player, 2) and world.options.shuffle_swim == 0)
-        case Items.BOTTLE_WITH_BIG_POE:
-            return has_bottle(bundle) and state.has(Events.CAN_DEFEAT_BIG_POE.value, player)
-        case Items.BOTTLE_WITH_BLUE_FIRE:
-            return has_bottle(bundle) and state.has(Events.CAN_ACCESS_BLUE_FIRE.value, player) #TODO Should we check if you can buy blue fire?
-        case Items.BUY_BLUE_POTION:
-            return has_bottle(bundle) #TODO Should we check if you can buy blue potion?
-        case Items.BOTTLE_WITH_BUGS:
-            return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BUGS.value, player) or state.has(Events.CAN_BUY_BUGS.value, player))
-        case Items.BOTTLE_WITH_FAIRY:
-            return has_bottle(bundle) and state.has(Events.CAN_ACCESS_FAIRIES.value, player) # TODO Should we check if we can buy a fairy?
-        case Items.BOTTLE_WITH_FISH:
-            return has_bottle(bundle) and state.has(Events.CAN_ACCESS_FISH.value, player) # TODO Should we check if you can buy a fish?
-        case Items.BOTTLE_WITH_GREEN_POTION:
-            return has_bottle(bundle) and state.has(Events.CAN_BUY_GREEN_POTION.value, player)
-        case Items.BOTTLE_WITH_MILK:
-            return has_bottle(bundle) # TODO Should we check if we can buy milk? 
-        case Items.BOTTLE_WITH_POE:
-            return has_bottle(bundle) # TODO Should we check if we can access poes? 
-        case Items.BOTTLE_WITH_RED_POTION:
-            return has_bottle(bundle) # TODO Should we check if we can buy red potion?
-        case Items.EMPTY_BOTTLE:
-            return has_bottle(bundle)
-        case _:
-            return state.has(item.value, player, count)
+    if item == Items.FAIRY_BOW: # 80
+        return state.has(Items.PROGRESSIVE_BOW.value, player)
+
+    if item == Items.BRONZE_SCALE: # 62
+        return state.has(Items.PROGRESSIVE_SCALE.value, player) or world.options.shuffle_swim == 0
+    
+    if item == Items.GORONS_BRACELET: # 57
+        return state.has(Items.STRENGTH_UPGRADE.value, player)
+    
+    if item == Items.LONGSHOT: # 52
+        return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player, 2)
+    
+    if item == Items.FAIRY_SLINGSHOT: # 37
+        return state.has(Items.PROGRESSIVE_SLINGSHOT.value, player)
+    
+    if item == Items.MAGIC_BEAN: # 35
+        return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
+    
+    if item == Items.STICKS: # 33
+        return (state.has(Events.CAN_FARM_STICKS.value, player) and (world.options.shuffle_deku_stick_bag.value == 0 or state.has(Items.PROGRESSIVE_STICK_CAPACITY.value, player)))
+    
+    if item in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20): # 33
+        return (state.has_any((Items.BOMBCHUS_5.value, Items.BOMBCHUS_10.value, Items.BOMBCHUS_20.value,
+                               Items.PROGRESSIVE_BOMBCHU.value), world.player)
+                or (bombchus_enabled(bundle)
+                    and state.has_any((Events.CAN_BUY_BOMBCHUS.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value), world.player)))
+    
+    if item == Items.SILVER_GAUNTLETS: # 23
+        return state.has(Items.STRENGTH_UPGRADE.value, player, 2)
+
+    if item == Items.SILVER_SCALE: # 22
+        return state.has(Items.PROGRESSIVE_SCALE.value, player, 2) or (state.has(Items.PROGRESSIVE_SCALE.value, player, 1) and world.options.shuffle_swim == 0)
+    
+    if item == Items.BOMB_BAG: # 18
+        return state.has(Items.PROGRESSIVE_BOMB_BAG.value, player) 
+
+    if item == Items.CHILD_WALLET: # 16
+        return can_afford(99, bundle)
+    
+    if item == Items.DISTANT_SCARECROW: # 14
+        return scarecrows_song(bundle) and can_use(Items.LONGSHOT, bundle)
+    
+    if item == Items.NUTS: # 11
+        return (state.has(Events.CAN_FARM_NUTS.value, player) and (world.options.shuffle_deku_nut_bag.value == 0 or state.has(Items.PROGRESSIVE_NUT_CAPACITY.value, player)))
+
+    if item == Items.GOLDEN_SCALE: # 9
+        return state.has(Items.PROGRESSIVE_SCALE.value, player, 3) or (state.has(Items.PROGRESSIVE_SCALE.value, player, 2) and world.options.shuffle_swim == 0)
+    
+    if item == Items.SCARECROW: # 7
+        return scarecrows_song(bundle) and can_use(Items.HOOKSHOT, bundle)
+    
+    if item == Items.FAIRY_OCARINA: # 6
+        return state.has(Items.PROGRESSIVE_OCARINA.value, player)
+    
+    if item == Items.BOTTLE_WITH_FAIRY: # 5
+        return has_bottle(bundle) and state.has(Events.CAN_ACCESS_FAIRIES.value, player) # TODO Should we check if we can buy a fairy?
+    
+    if item == Items.GOLDEN_GAUNTLETS: # 5
+        return state.has(Items.STRENGTH_UPGRADE.value, player, 3)
+    
+    if item == Items.EPONA: # 5
+        return state.has(Events.FREED_EPONA, player)
+
+    if item == Items.ADULT_WALLET: # 4
+        return can_afford(200, bundle)
+    
+    if item == Items.DEKU_SHIELD: # 4
+        return state.has(Events.CAN_BUY_DEKU_SHIELD.value, player)
+    
+    if item == Items.HYLIAN_SHIELD: # 2
+        return state.has(Events.CAN_BUY_HYLIAN_SHIELD.value, player)
+    
+    if item == Items.BOTTLE_WITH_BIG_POE: # 2
+        return has_bottle(bundle) and state.has(Events.CAN_DEFEAT_BIG_POE.value, player)
+    
+    if item == Items.BOTTLE_WITH_BLUE_FIRE: # 2
+        return has_bottle(bundle) and state.has(Events.CAN_ACCESS_BLUE_FIRE.value, player) #TODO Should we check if you can buy blue fire?
+    
+    if item == Items.BOTTLE_WITH_BUGS: # 2
+        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BUGS.value, player) or state.has(Events.CAN_BUY_BUGS.value, player))
+    
+    if item == Items.BOTTLE_WITH_FISH: # 1
+        return has_bottle(bundle) and state.has(Events.CAN_ACCESS_FISH.value, player) # TODO Should we check if you can buy a fish?
+
+    if item == Items.OCARINA_OF_TIME: # 1
+        return state.has(Items.PROGRESSIVE_OCARINA.value, player, 2)
+    
+    # Should Items with 0 calls even exist?
+
+    if item == Items.GIANT_WALLET: # 0
+        return can_afford(500, bundle)
+    
+    if item == Items.TYCOON_WALLET: # 0
+        return can_afford(999, bundle)
+
+    if item == Items.BOTTLE_WITH_BLUE_POTION: # 0
+        return has_bottle(bundle) #TODO Should we check if you can buy blue potion?
+    
+    if item == Items.BOTTLE_WITH_GREEN_POTION: # 0
+        return has_bottle(bundle) and state.has(Events.CAN_BUY_GREEN_POTION.value, player)
+    
+    if item == Items.BOTTLE_WITH_MILK: # 0
+        return has_bottle(bundle) # TODO Should we check if we can buy milk? 
+    
+    if item == Items.BOTTLE_WITH_POE: # 0
+        return has_bottle(bundle) # TODO Should we check if we can access poes? 
+    
+    if item == Items.BOTTLE_WITH_RED_POTION: # 0
+        return has_bottle(bundle) # TODO Should we check if we can buy red potion?
+    
+    if item == Items.EMPTY_BOTTLE: # 0
+        return has_bottle(bundle)
+
+    return state.has(item.value, player, count)
         
 
 def can_afford(price: int, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
