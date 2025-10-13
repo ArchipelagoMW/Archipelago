@@ -33,6 +33,17 @@ html{
     z-index: 10;
 }
 
+#landing-header h5 {
+    color: #ffffff;
+    font-style: italic;
+    font-size: 28px;
+    margin-top: 15px;
+    margin-bottom: -43px;
+    text-shadow: 1px 1px 7px #000000;
+    font-kerning: none;
+    z-index: 10;
+}
+
 #landing-links{
     margin-left: auto;
     margin-right: auto;
