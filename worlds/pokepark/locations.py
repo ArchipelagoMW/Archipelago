@@ -4617,6 +4617,11 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
         each_zone=MultiZoneFlag.SINGLE
     ),
-    # TODO add missing spearow beach zone
+    "Beach Zone Main Area - Spearow Power Competition -- Friendship": PokeparkLocationData(
+        576, PokeparkFlag.BATTLE, "Beach Zone Main Area", 0x0101, Pokepark13AttractionClientData(
+            structure_position=5,
+            memory_range=MemoryRange.HALFWORD
+        ), each_zone=MultiZoneFlag.MULTI
+    ),
 
 }

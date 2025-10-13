@@ -560,6 +560,10 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: can_battle(state, player)
     )
     set_rule_if_exists(
+        "Beach Zone Main Area - Spearow Power Competition -- Friendship",
+        lambda state: can_battle(state, player)
+    )
+    set_rule_if_exists(
         "Beach Zone Main Area - Blastoise Power Competition -- Friendship",
         lambda state: can_battle(state, player) and state.has("Blastoise Unlock", player)
     )
