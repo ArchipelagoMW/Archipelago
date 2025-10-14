@@ -11,10 +11,12 @@ class EventLocations(str, Enum):
     GRAVEYARD_DAMPES_GRAVE_NUT_POT = "Graveyard Dampes Grave Nut Pot"
     GRAVEYARD_DAMPES_WINDMILL_ACCESS = "Graveyard Dampes Windmill Access"
     GRAVEYARD_GOSSIP_STONE_SONG_FAIRY = "Graveyard Gossip Stone Song Fairy"
+    GRAVEYARD_BEAN_PATCH = "Graveyard Bean Patch"
 
 
 class LocalEvents(str, Enum):
     ACCESS_TO_WINDMILL_FROM_DAMPES_GRAVE = "Access to Windmill From Dampes Grave"
+    GRAVEYARD_BEAN_PLANTED = "Graveyard Bean Planted"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -24,11 +26,12 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.GRAVEYARD_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: can_use(Items.STICKS, bundle) and at_day(bundle)),
         (EventLocations.GRAVEYARD_BEAN_PLANT_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS, bundle)),
         (EventLocations.GRAVEYARD_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
-        (EventLocations.GRAVEYARD_SOLD_SPOOKY_MASK, Events.SOLD_SPOOKY_MASK, lambda bundle: is_child(bundle) and at_day(bundle) and has_item(Events.CAN_BORROW_SPOOKY_MASK, bundle) and has_item(Items.CHILD_WALLET, bundle))
+        (EventLocations.GRAVEYARD_SOLD_SPOOKY_MASK, Events.SOLD_SPOOKY_MASK, lambda bundle: is_child(bundle) and at_day(bundle) and has_item(Events.CAN_BORROW_SPOOKY_MASK, bundle) and has_item(Items.CHILD_WALLET, bundle)),
+        (EventLocations.GRAVEYARD_BEAN_PATCH, LocalEvents.GRAVEYARD_BEAN_PLANTED, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle)),
     ])
     # Locations
     add_locations(Regions.THE_GRAVEYARD, world, [
-        (Locations.GRAVEYARD_FREESTANDING_POH, lambda bundle: (((is_adult(bundle) and can_plant_bean(bundle)) or can_use(Items.LONGSHOT, bundle)) and can_break_crates(bundle)) or (can_do_trick(Tricks.GY_POH, bundle) and can_use(Items.BOOMERANG, bundle))),
+        (Locations.GRAVEYARD_FREESTANDING_POH, lambda bundle: (((is_adult(bundle) and has_item(LocalEvents.GRAVEYARD_BEAN_PLANTED, bundle)) or can_use(Items.LONGSHOT, bundle)) and can_break_crates(bundle)) or (can_do_trick(Tricks.GY_POH, bundle) and can_use(Items.BOOMERANG, bundle))),
         (Locations.GRAVEYARD_DAMPE_GRAVEDIGGING_TOUR, lambda bundle: has_item(Items.CHILD_WALLET, bundle) and is_child(bundle) and at_night(bundle)),
         (Locations.GRAVEYARD_GS_WALL, lambda bundle: is_child(bundle) and hookshot_or_boomerang(bundle) and at_night(bundle) and can_get_nighttime_gs(bundle)),
         (Locations.GRAVEYARD_GS_BEAN_PATCH, lambda bundle:can_spawn_soil_skull(bundle) and can_attack(bundle)),
@@ -47,7 +50,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GRAVEYARD_GRASS10, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.GRAVEYARD_GRASS11, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.GRAVEYARD_GRASS12, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.GRAVEYARD_FREESTANDING_POH_CRATE, lambda bundle: (is_adult(bundle) and can_plant_bean(bundle)) or can_use(Items.LONGSHOT, bundle) and can_break_crates(bundle))
+        (Locations.GRAVEYARD_FREESTANDING_POH_CRATE, lambda bundle: (is_adult(bundle) and has_item(LocalEvents.GRAVEYARD_BEAN_PLANTED, bundle)) or can_use(Items.LONGSHOT, bundle) and can_break_crates(bundle))
 
     ])
     # Connections

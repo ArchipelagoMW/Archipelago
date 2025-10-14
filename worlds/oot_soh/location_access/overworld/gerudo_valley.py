@@ -8,6 +8,10 @@ class EventLocations(str, Enum):
     GV_BUG_ROCK = "GV Bug Rock"
     GV_GOSSIP_STONE_SONG_FAIRY = "GV Gossip Stone Song Fairy"
     GV_BEAN_SOIL = "GV Bean Soil"
+    GV_BEAN_PATCH = "GV Bean Patch"
+
+class LocalEvents(str, Enum):
+    GV_BEAN_PLANTED = "GV Bean Planted"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -42,6 +46,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.GV_BEAN_SOIL, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS,
                                                                                            bundle)),
+        (EventLocations.GV_BEAN_PATCH, LocalEvents.GV_BEAN_PLANTED, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle)),
     ])
     # Locations
     add_locations(Regions.GV_UPPER_STREAM, world, [

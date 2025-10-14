@@ -13,6 +13,10 @@ class EventLocations(str, Enum):
     LW_NEAR_SHORTCUTS_GROTTO_BUTTERFLY_FAIRY = "LW Near Shortcuts Grotto Butterfly Fairy"
     LW_NEAR_SHORTCUTS_GROTTO_BUG_GRASS = "LW Near Shortcuts Grotto Bug Grass"
     LW_NEAR_SHORTCUTS_GROTTO_PUDDLE_FISH = "LW Near Shortcuts Grotto Puddle Fish"
+    LW_BEAN_PATCH = "LW Bean Patch"
+
+class LocalEvents(str, Enum):
+    LW_BEAN_PLANTED = "LW Bean Planted"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -35,6 +39,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) and can_use(Items.SARIAS_SONG, bundle) and has_item(Events.CAN_BORROW_SKULL_MASK,
                                                                                              bundle) and has_item(
              Items.CHILD_WALLET, bundle)),
+        (EventLocations.LW_BEAN_PATCH, LocalEvents.LW_BEAN_PLANTED, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle)),
     ])
     # Locations
     add_locations(Regions.LOST_WOODS, world, [
@@ -82,7 +87,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.LW_FOREST_EXIT, lambda bundle: True),
         (Regions.GC_WOODS_WARP, lambda bundle: True),
         (Regions.LW_BRIDGE, lambda bundle: (is_adult(bundle) and (
-                    can_plant_bean(bundle) or can_do_trick(Tricks.LW_BRIDGE, bundle))) or can_use(Items.HOVER_BOOTS,
+                    has_item(LocalEvents.LW_BEAN_PLANTED, bundle) or can_do_trick(Tricks.LW_BRIDGE, bundle))) or can_use(Items.HOVER_BOOTS,
                                                                                                   bundle) or can_use(
             Items.LONGSHOT, bundle)),
         (Regions.ZR_FROM_SHORTCUT,
@@ -105,7 +110,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.LW_DEKU_SCRUB_NEAR_DEKU_THEATER_RIGHT, lambda bundle: is_child(bundle) and can_stun_deku(bundle)),
         (Locations.LW_DEKU_SCRUB_NEAR_DEKU_THEATER_LEFT, lambda bundle: is_child(bundle) and can_stun_deku(bundle)),
         (Locations.LW_GS_ABOVE_THEATER, lambda bundle: is_adult(bundle) and (
-                    (can_plant_bean(bundle) and can_attack(bundle)) or (
+                    (has_item(LocalEvents.LW_BEAN_PLANTED, bundle) and can_attack(bundle)) or (
                         can_do_trick(Tricks.LW_GS_BEAN, bundle) and can_use(Items.LONGSHOT, bundle) or can_use(
                     Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.BOMBCHUS_5,
                                                                                                   bundle) or can_use(

@@ -10,6 +10,10 @@ class EventLocations(str, Enum):
     ZR_OPEN_GROTTO_BUTTERFLY_FAIRY = "ZR Upper Grotto Butterfly Fairy"
     ZR_OPEN_GROTTO_BUG_GRASS = "ZR Upper Grotto Bug Grass"
     ZR_OPEN_GROTTO_POND_FISH = "ZR Upper Grotto Pond Fish"
+    ZR_BEAN_PATCH = "ZR Bean Patch"
+
+class LocalEvents(str, Enum):
+    ZR_BEAN_PLANTED = "ZR Bean Planted"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -42,7 +46,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Zora River
     # Events
     add_events(Regions.ZORA_RIVER, world, [
-        (EventLocations.ZR_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: can_cut_shrubs(bundle))
+        (EventLocations.ZR_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: can_cut_shrubs(bundle)),
+        (EventLocations.ZR_BEAN_PATCH, LocalEvents.ZR_BEAN_PLANTED, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle)),
     ])
     if world.options.shuffle_merchants.value == 0 or world.options.shuffle_merchants.value == 2: # Only when selling vanilla item (beans)
         add_events(Regions.ZORA_RIVER, world, [
