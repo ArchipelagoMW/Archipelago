@@ -182,6 +182,7 @@ def fill_shop_items(world: "SohWorld") -> None:
     fill_restrictive(world.multiworld, prefill_state, vanilla_shop_locations, vanilla_items, single_player_placement=True, lock=True)
     for slot in vanilla_shop_slots:
         location = world.get_location(slot)
+        world.get_location(slot).address = None
         world.shop_prices[slot] = vanilla_shop_prices[Items(location.item.name)]
         world.shop_vanilla_items[slot] = location.item.name
     
@@ -199,6 +200,7 @@ def no_shop_shuffle(world: "SohWorld") -> None:
         for slot, item in shop.items():
             world.shop_prices[slot] = vanilla_shop_prices[item]
             world.get_location(slot).place_locked_item(world.create_item(item.value))
+            world.get_location(slot).address = None
             world.shop_vanilla_items[slot] = item.value
 
 def create_random_shop_price(world: "SohWorld") -> int:
