@@ -134,6 +134,8 @@ class SohWorld(World):
             "skeleton_key": self.options.skeleton_key.value,
             "starting_age": self.options.starting_age.value,
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
+            "ice_trap_count": self.options.ice_trap_count,
+            "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement
         }
     
     def collect(self, state: CollectionState, item: Item) -> bool:

@@ -737,6 +737,26 @@ class Shuffle100GSReward(Toggle):
     visibility = Visibility.none
 
 
+class IceTrapCount(Range):
+    """
+    Specify an exact number of Ice Traps to add to the item pool. If the item pool is out of space, no more will be added.
+    """
+    display_name = "Ice Trap Count"
+    range_start = 0
+    range_end = 100
+    default = 6
+
+
+class IceTrapFillerReplacement(Range):
+    """
+    Specify a percentage of filler items to replace with Ice Traps.
+    """
+    display_name = "Ice Trap Filler Replacement Count"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
 @dataclass
 class SohOptions(PerGameCommonOptions):
     closed_forest: ClosedForest
@@ -808,6 +828,8 @@ class SohOptions(PerGameCommonOptions):
     skeleton_key: SkeletonKey
     starting_age: StartingAge
     shuffle_100_gs_reward: Shuffle100GSReward
+    ice_trap_count: IceTrapCount 
+    ice_trap_filler_replacement: IceTrapFillerReplacement
 
 
 soh_option_groups = [
