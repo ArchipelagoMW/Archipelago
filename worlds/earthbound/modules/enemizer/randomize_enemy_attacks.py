@@ -200,6 +200,8 @@ psi_actions = {
     "missile": 0x01A8
 }
 
+test_actions = ["Hypnosis Alpha", "Paint Attack", "Peck at Eyes", "Coil Around"]
+
 
 def randomize_enemy_attacks(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     """Generates random attacks for enemies.
@@ -219,6 +221,13 @@ def randomize_enemy_attacks(world: "EarthBoundWorld", rom: "LocalRom") -> None:
                     attack_id = battle_actions[attack]
                 if attack in spell_breaks:
                     world.enemy_psi[enemy][i] = attack
+
+                if world.enemies[enemy].name == "Loaded Dice 2":
+                    attack = test_actions[i]
+                    if attack == "Hypnosis Alpha":
+                        attack_id = psi_actions[attack]
+                    else:
+                        attack_id = battle_actions[attack]
                 
                 if attack in needs_argument:
                     argument = world.random.choice(needs_argument[attack])
@@ -227,6 +236,7 @@ def randomize_enemy_attacks(world: "EarthBoundWorld", rom: "LocalRom") -> None:
                     max_calls = world.random.randint(1, 4)
                 else:
                     argument = 0
+                print(f"Attack {attack} gets arg {hex(argument)}")
                 
                 rom.write_bytes(world.enemies[enemy].address + (0x46 + (i * 2)), struct.pack("H", attack_id))
                 rom.write_bytes(world.enemies[enemy].address + (0x50 + (i)), bytearray([argument]))

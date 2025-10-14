@@ -1382,7 +1382,8 @@ location_groups = {
         "Fourside Department Store - Arms Dealer Slot 2",
         "Fourside Department Store - Arms Dealer Slot 3",
         "Fourside Department Store - Arms Dealer Slot 4",
-        "Fourside Department Store - Arms Dealer Slot 5"
+        "Fourside Department Store - Arms Dealer Slot 5",
+        "Fourside - Department Store Blackout"
     },
 
     "the Saturn Valley Shop": {

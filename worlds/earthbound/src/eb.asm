@@ -9123,6 +9123,10 @@ dl DisableOSSOnLumine
 ORG $C0D668 ;Fix vanilla ambush detection
 LDA $9889
 
+ORG $EEC777
+db $73, $98, $99, $95, $96, $50, $0A
+dl TwosonCopBossText
+
 
 ;New data table go here
 
@@ -18372,6 +18376,12 @@ db $1f, $eb, $ff, $06
 db $1F, $41, $06
 db $0A
 dl $C99CD1
+
+TwosonCopBossText:
+db $08
+dd $EEEEBC
+db $0A
+dl $EEC785
 
 
 ;ORG $C7617D

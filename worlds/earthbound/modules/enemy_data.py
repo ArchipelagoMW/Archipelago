@@ -508,7 +508,8 @@ def initialize_enemies(world: "EarthBoundWorld") -> None:
         "Carbon Dog": world.enemies[world.boss_list[27]],  # This should be the enemy that gets shuffled WITH carbon dog, right? Fix???
         "Skate Punk": [shuffled_enemies["Pogo Punk"], shuffled_enemies["Yes Man Junior"]],
         "Loaded Dice": [shuffled_enemies["Care Free Bomb"], shuffled_enemies["Beautiful UFO"], shuffled_enemies["High-class UFO"]],
-        "Loaded Dice 2": [shuffled_enemies["Electro Swoosh"], shuffled_enemies["Fobby"], shuffled_enemies["Uncontrollable Sphere"]]
+        "Loaded Dice 2": [shuffled_enemies["Electro Swoosh"], shuffled_enemies["Fobby"], shuffled_enemies["Uncontrollable Sphere"]],
+        "Starman Super": [shuffled_enemies["Starman"]]
     }
 
     world.regional_enemies = {"Northern Onett": {shuffled_enemies["Spiteful Crow"], shuffled_enemies["Runaway Dog"], shuffled_enemies["Coil Snake"]},
@@ -567,6 +568,13 @@ def initialize_enemies(world: "EarthBoundWorld") -> None:
                               "Endgame": {world.enemies[world.boss_list[25]], world.enemies["Giygas (2)"], world.enemies[world.boss_list[28]], world.enemies["Giygas (3)"], world.enemies["Giygas (5)"], world.enemies["Giygas (6)"]},
                         
                               }
+
+    if world.options.randomize_enemy_attacks:
+        del flunkies["Loaded Dice 2"]
+        del flunkies["Skate Punk"]
+        del flunkies["Loaded Dice"]
+        del flunkies["Starman Super"]
+
     for region in world.regional_enemies:
         enemy_list = world.regional_enemies[region]
         updated_list = set(enemy_list)
@@ -579,7 +587,7 @@ def initialize_enemies(world: "EarthBoundWorld") -> None:
 
             if enemy.name in flunkies:
                 # Can I just always update instead of doing an add? Would probably need to make singulars a list of one item...
-                if enemy.name in ["Starman Deluxe", "Skate Punk", "Loaded Dice", "Loaded Dice 2"]:
+                if enemy.name in ["Starman Deluxe", "Skate Punk", "Loaded Dice", "Loaded Dice 2", "Starman Super"]:
                     updated_list.update(flunkies[enemy.name])
                 else:
                     updated_list.add(flunkies[enemy.name])
