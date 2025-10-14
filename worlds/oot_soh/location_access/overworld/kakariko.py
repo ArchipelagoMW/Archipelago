@@ -5,15 +5,15 @@ if TYPE_CHECKING:
 
 
 class EventLocations(str, Enum):
-    KAKARIKO_GATE = "Kakariko Gate"
-    KAKARIKO_GATE_GUARD = "Kakariko Gate Guard"
-    KAKARIKO_ROCK = "Kakariko Rock"
-    KAKARIKO_ADULT_TALON = "Kakariko Adult Talon"
-    KAKARIKO_WINDMILL_PHONOGRAM_MAN = "Kakariko Windmill Phonogram Man"
-    KAK_OPEN_GROTTO_GOSSIP_STONE = "Kak Open Grotto Gossip Stone"
+    KAK_GATE = "Kak Gate"
+    KAK_GATE_GUARD = "Kak Gate Guard"
+    KAK_BUG_ROCK = "Kak Bug Rock"
+    KAK_ADULT_TALON = "Kak Adult Talon"
+    KAK_WINDMILL_PHONOGRAM_MAN = "Kak Windmill Phonogram Man"
+    KAK_OPEN_GROTTO_GOSSIP_STONE_SONG_FAIRY = "Kak Open Grotto Gossip Stone Song Fairy"
     KAK_OPEN_GROTTO_BUTTERFLY_FAIRY = "Kak Open Grotto Butterfly Fairy"
     KAK_OPEN_GROTTO_BUG_GRASS = "Kak Open Grotto Bug Grass"
-    KAK_OPEN_GROTTO_FISH = "Kak Open Grotto Fish"
+    KAK_OPEN_GROTTO_PUDDLE_FISH = "Kak Open Grotto Puddle Fish"
 
 
 class LocalEvents(str, Enum):
@@ -24,10 +24,10 @@ def set_region_rules(world: "SohWorld") -> None:
     # Kakariko Village
     # Events
     add_events(Regions.KAKARIKO_VILLAGE, world, [
-        (EventLocations.KAKARIKO_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
-        (EventLocations.KAKARIKO_GATE, Events.KAKARIKO_GATE_OPEN,
+        (EventLocations.KAK_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
+        (EventLocations.KAK_GATE, Events.KAKARIKO_GATE_OPEN,
          lambda bundle: is_child(bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
-        (EventLocations.KAKARIKO_GATE_GUARD, Events.SOLD_KEATON_MASK,
+        (EventLocations.KAK_GATE_GUARD, Events.SOLD_KEATON_MASK,
          lambda bundle: is_child(bundle) and has_item(Events.CAN_BORROW_MASKS, bundle) and has_item(Items.CHILD_WALLET,
                                                                                                     bundle)),
     ])
@@ -79,6 +79,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_NEAR_FENCE_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
         (Locations.KAK_NEAR_BOARDING_HOUSE_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
         (Locations.KAK_NEAR_BAZAAR_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_TREE, lambda bundle: can_bonk_trees(bundle)),
     ])
     # Connections
     connect_regions(Regions.KAKARIKO_VILLAGE, world, [
@@ -182,7 +183,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Kak Carpenter Boss House
     # Events
     add_events(Regions.KAK_CARPENTER_BOSS_HOUSE, world, [
-        (EventLocations.KAKARIKO_ADULT_TALON, LocalEvents.WAKE_UP_ADULT_TALON,
+        (EventLocations.KAK_ADULT_TALON, LocalEvents.WAKE_UP_ADULT_TALON,
          lambda bundle: is_adult(bundle) and can_use(Items.POCKET_EGG, bundle)),
     ])
     # Connections
@@ -233,7 +234,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Kak Windmill
     # Events
     add_events(Regions.KAK_WINDMILL, world, [
-        (EventLocations.KAKARIKO_WINDMILL_PHONOGRAM_MAN, Events.DRAIN_WELL,
+        (EventLocations.KAK_WINDMILL_PHONOGRAM_MAN, Events.DRAIN_WELL,
          lambda bundle: is_child(bundle) and can_play_song(Items.SONG_OF_STORMS, bundle)),
     ])
     # Locations
@@ -331,10 +332,10 @@ def set_region_rules(world: "SohWorld") -> None:
     # Kak Open Grotto
     # Events
     add_events(Regions.KAK_OPEN_GROTTO, world, [
-        (EventLocations.KAK_OPEN_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.KAK_OPEN_GROTTO_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
         (EventLocations.KAK_OPEN_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
         (EventLocations.KAK_OPEN_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
-        (EventLocations.KAK_OPEN_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+        (EventLocations.KAK_OPEN_GROTTO_PUDDLE_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.KAK_OPEN_GROTTO, world, [

@@ -3,16 +3,15 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-
 def set_region_rules(world: "SohWorld") -> None:
-    # Gerudo Training Ground Entryway
+    ## Gerudo Training Ground Entryway
     # Connections
     connect_regions(Regions.GERUDO_TRAINING_GROUND_ENTRYWAY, world, [
         (Regions.GERUDO_TRAINING_GROUND_LOBBY, lambda bundle: True),
         (Regions.GF_EXITING_GTG, lambda bundle: True),
     ])
 
-    # Gerudo Training Ground Lobby
+    ## Gerudo Training Ground Lobby
     # Locations
     add_locations(Regions.GERUDO_TRAINING_GROUND_LOBBY, world, [
         (Locations.GERUDO_TRAINING_GROUND_LOBBY_LEFT_CHEST, lambda bundle: can_hit_eye_targets(bundle)),
@@ -39,7 +38,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GERUDO_TRAINING_GROUND_CENTRAL_MAZE, lambda bundle: True),
     ])
 
-    # Gerudo Training Ground Central Maze
+    ## Gerudo Training Ground Central Maze
     # Locations
     add_locations(Regions.GERUDO_TRAINING_GROUND_CENTRAL_MAZE, world, [
         (Locations.GERUDO_TRAINING_GROUND_HIDDEN_CEILING_CHEST,
@@ -60,7 +59,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: small_keys(Items.TRAINING_GROUND_SMALL_KEY, 9, bundle)),
     ])
 
-    # Gerudo Training Ground Central Maze Right
+    ## Gerudo Training Ground Central Maze Right
     # Locations
     add_locations(Regions.GERUDO_TRAINING_GROUND_CENTRAL_MAZE_RIGHT, world, [
         (Locations.GERUDO_TRAINING_GROUND_FREESTANDING_KEY, lambda bundle: True),
@@ -73,7 +72,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GERUDO_TRAINING_GROUND_LAVA_ROOM, lambda bundle: True),
     ])
 
-    # Gerudo Training Ground Lava Room
+    ## Gerudo Training Ground Lava Room
     # Locations
     add_locations(Regions.GERUDO_TRAINING_GROUND_LAVA_ROOM, world, [
         (Locations.GERUDO_TRAINING_GROUND_UNDERWATER_SILVER_RUPEE_CHEST,
@@ -88,7 +87,7 @@ def set_region_rules(world: "SohWorld") -> None:
                     can_use(Items.HOVER_BOOTS, bundle) and can_use(Items.HOOKSHOT, bundle))),
     ])
 
-    # Gerudo Training Ground Hammer Room
+    ## Gerudo Training Ground Hammer Room
     # Locations
     add_locations(Regions.GERUDO_TRAINING_GROUND_HAMMER_ROOM, world, [
         (Locations.GERUDO_TRAINING_GROUND_HAMMER_ROOM_CLEAR_CHEST, lambda bundle: can_attack(bundle)),
@@ -102,7 +101,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GERUDO_TRAINING_GROUND_LAVA_ROOM, lambda bundle: True),
     ])
 
-    # Gerudo Training Ground Eye Statue Lower
+    ## Gerudo Training Ground Eye Statue Lower
     # Locations
     add_locations(Regions.GERUDO_TRAINING_GROUND_EYE_STATUE_LOWER, world, [
         (Locations.GERUDO_TRAINING_GROUND_EYE_STATUE_CHEST, lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
@@ -112,7 +111,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GERUDO_TRAINING_GROUND_HAMMER_ROOM, lambda bundle: True),
     ])
 
-    # Gerudo Training Ground Eye Statue Upper
+    ## Gerudo Training Ground Eye Statue Upper
     # Locations
     add_locations(Regions.GERUDO_TRAINING_GROUND_EYE_STATUE_UPPER, world, [
         (Locations.GERUDO_TRAINING_GROUND_NEAR_SCARECROW_CHEST, lambda bundle: can_use(Items.FAIRY_BOW, bundle)),
@@ -122,7 +121,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GERUDO_TRAINING_GROUND_EYE_STATUE_LOWER, lambda bundle: True),
     ])
 
-    # Gerudo Training Ground Heavy Block Room
+    ## Gerudo Training Ground Heavy Block Room
     # Locations
     add_locations(Regions.GERUDO_TRAINING_GROUND_HEAVY_BLOCK_ROOM, world, [
         (Locations.GERUDO_TRAINING_GROUND_BEFORE_HEAVY_BLOCK_CHEST,
@@ -142,7 +141,7 @@ def set_region_rules(world: "SohWorld") -> None:
                              can_do_trick(Tricks.GTG_FAKE_WALL, bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_ground_jump(bundle))) and can_use(Items.SILVER_GAUNTLETS, bundle)),
     ])
 
-    # Gerudo Training Ground Like Like Room
+    ## Gerudo Training Ground Like Like Room
     # Locations
     add_locations(Regions.GERUDO_TRAINING_GROUND_LIKE_LIKE_ROOM, world, [
         (Locations.GERUDO_TRAINING_GROUND_HEAVY_BLOCK_FIRST_CHEST, lambda bundle: can_jump_slash_except_hammer(bundle)),

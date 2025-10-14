@@ -10,7 +10,7 @@ class EventLocations(str, Enum):
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    # Lon Lon Ranch
+    ## Lon Lon Ranch
     # Events
     add_events(Regions.LON_LON_RANCH, world, [
         (EventLocations.LLR_TALON_RACE, Events.FREED_EPONA, lambda bundle: (has_item(Items.CHILD_WALLET, bundle) or world.options.skip_epona_race.value == 1) and can_play_song(Items.EPONAS_SONG, bundle) and is_adult(bundle) and at_day(bundle)),
@@ -31,6 +31,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.LLR_RAIN_SHED_POT2, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
         (Locations.LLR_RAIN_SHED_POT3, lambda bundle: is_child(bundle) and can_break_pots(bundle)),
         (Locations.LLR_NEAR_TREE_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
+        (Locations.LLR_TREE, lambda bundle: is_child(bundle) and can_bonk_trees(bundle)),
     ])
     # Connections
     connect_regions(Regions.LON_LON_RANCH, world, [
@@ -41,7 +42,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.LLR_GROTTO, lambda bundle: is_child(bundle)),
     ])
 
-    # LLR Talons House
+    ## LLR Talons House
     # Locations
     add_locations(Regions.LLR_TALONS_HOUSE, world, [
         (Locations.LLR_TALONS_CHICKENS, lambda bundle: has_item(Items.CHILD_WALLET, bundle) and is_child(bundle) and at_day(bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
@@ -54,7 +55,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.LON_LON_RANCH, lambda bundle: True)
     ])
 
-    # LLR Stables
+    ## LLR Stables
     # Locations
     add_locations(Regions.LLR_STABLES, world, [
         (Locations.LLR_STABLES_LEFT_COW, lambda bundle: can_play_song(Items.EPONAS_SONG, bundle)),
@@ -65,7 +66,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.LON_LON_RANCH, lambda bundle: True)
     ])
 
-    # LLR Tower
+    ## LLR Tower
     # Locations
     add_locations(Regions.LLR_TOWER, world, [
         (Locations.LLR_FREESTANDING_POH, lambda bundle: is_child(bundle)),
@@ -77,7 +78,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.LON_LON_RANCH, lambda bundle: True)
     ])
 
-    # LLR Grotto
+    ## LLR Grotto
     # Locations
     add_locations(Regions.LLR_GROTTO, world, [
         (Locations.LLR_DEKU_SCRUB_GROTTO_LEFT, lambda bundle: can_stun_deku(bundle)),

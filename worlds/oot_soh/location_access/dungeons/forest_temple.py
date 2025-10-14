@@ -18,16 +18,16 @@ class EventLocations(str, Enum):
     FOREST_TEMPLE_NE_OUTDOORS_LOWER_DEKU_BABA_STICKS = "Forest Temple NE Outdoors Lower Deku Baba Sticks"
     FOREST_TEMPLE_NE_OUTDOORS_LOWER_DEKU_BABA_NUTS = "Forest Temple NE Outdoors Lower Deku Baba Nuts"
     FOREST_TEMPLE_NE_OUTDOORS_UPPER_DRAIN_WELL = "Forest Temple NE Outdoors Upper Drain Well"
-    FOREST_TEMPLE_BOSS_PHANTOM_GANON = "Forest Temple Boss Phantom Ganon"
-   
+    FOREST_TEMPLE_PHANTOM_GANON = "Forest Temple Phantom Ganon"
+
+
 class LocalEvents(str, Enum):
     DEFEATED_MEG = "Defeated Meg"
     DEFEATED_JOELLE = "Defeated Joelle"
     DEFEATED_AMY = "Defeated Amy"
     DEFEATED_BETH = "Defeated Beth"
-    LOWER_STALFOS_FAIRY = "Got Lower Stalfos Fairy"
     DRAINED_WELL = "Drained the Well"
-    
+
 
 def set_region_rules(world: "SohWorld") -> None:
     ## Forest Temple Entryway
@@ -49,7 +49,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                 can_use(Items.FAIRY_SLINGSHOT, bundle) or
                                                                 can_use(Items.BOMBCHUS_5, bundle) or
                                                                 can_use(Items.DINS_FIRE, bundle) or
-                                                                (can_do_trick(Tricks.FOREST_FIRST_GS) and (can_jump_slash_except_hammer(bundle) or (is_child(bundle) and can_use(Items.BOMB_BAG, bundle)))))),
+                                                                (can_do_trick(Tricks.FOREST_FIRST_GS, bundle) and (can_jump_slash_except_hammer(bundle) or (is_child(bundle) and can_use(Items.BOMB_BAG, bundle)))))),
     ])
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_FIRST_ROOM, world, [
@@ -104,7 +104,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Forest Temple Lower Stalfos
     # Events
     add_events(Regions.FOREST_TEMPLE_LOWER_STALFOS, world, [
-        (EventLocations.FOREST_TEMPLE_LOWER_STALFOS_FAIRY_POT, LocalEvents.LOWER_STALFOS_FAIRY, lambda bundle: True),
+        (EventLocations.FOREST_TEMPLE_LOWER_STALFOS_FAIRY_POT, Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
     ])
     # Locations
     add_locations(Regions.FOREST_TEMPLE_LOWER_STALFOS, world, [
@@ -369,20 +369,20 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_BLUE_POE_ROOM, world, [
         (Regions.FOREST_TEMPLE_UPPER_STALFOS, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_NE_CORRIDOR_STRAIGHTENED, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 4))
+        (Regions.FOREST_TEMPLE_NE_CORRIDOR_STRAIGHTENED, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 4, bundle))
     ])
     
     ## Forest Temple NE Corridor Straightened
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_NE_CORRIDOR_STRAIGHTENED, world, [
-        (Regions.FOREST_TEMPLE_BLUE_POE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 4)),
-        (Regions.FOREST_TEMPLE_FROZEN_EYE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 5)),
+        (Regions.FOREST_TEMPLE_BLUE_POE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 4, bundle)),
+        (Regions.FOREST_TEMPLE_FROZEN_EYE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 5, bundle))
     ])
     
     ## Forest Temple NE Corridor Twisted
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_NE_CORRIDOR_TWISTED, world, [
-        (Regions.FOREST_TEMPLE_FROZEN_EYE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 5)),
+        (Regions.FOREST_TEMPLE_FROZEN_EYE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 5, bundle)),
         (Regions.FOREST_TEMPLE_FALLING_ROOM, lambda bundle: True)
     ])
     
@@ -408,11 +408,11 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.FOREST_TEMPLE_FALLING_ROOM, world, [
         (Regions.FOREST_TEMPLE_NE_OUTDOORS_LOWER, lambda bundle: True),
         (Regions.FOREST_TEMPLE_GREEN_POE_ROOM, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_COURTYARD_RAISED_ISLAND, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_COURTYARD_RAISED_ISLAND_GS, lambda bundle: (can_use(Items.FAIRY_BOW, bundle) or
-                                                                             can_use(Items.FAIRY_SLINGSHOT, bundle) or
-                                                                             can_use(Items.DINS_FIRE, bundle) or
-                                                                             has_explosives(bundle)))
+        (Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND_GS, lambda bundle: (can_use(Items.FAIRY_BOW, bundle) or
+                                                                                 can_use(Items.FAIRY_SLINGSHOT, bundle) or
+                                                                                 can_use(Items.DINS_FIRE, bundle) or
+                                                                                 has_explosives(bundle)))
     ])
     
     ## Forest Temple Green Poe Room
@@ -461,15 +461,15 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Forest Temple Boss Room
     # Events
     add_events(Regions.FOREST_TEMPLE_BOSS_ROOM, world, [
-        (EventLocations.FOREST_TEMPLE_BOSS_PHANTOM_GANON, Events.CLEARED_FOREST_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.PHANTOM_GANON))
+        (EventLocations.FOREST_TEMPLE_PHANTOM_GANON, Events.FOREST_TEMPLE_COMPLETED, lambda bundle: can_kill_enemy(bundle, Enemies.PHANTOM_GANON))
     ])
     # Locations
     add_locations(Regions.FOREST_TEMPLE_BOSS_ROOM, world, [
-        (Locations.FOREST_TEMPLE_PHANTOM_GANON_HEART_CONTAINER, lambda bundle: has_item(Events.CLEARED_FOREST_TEMPLE, bundle)),
-        (Locations.PHANTOM_GANON, lambda bundle: has_item(Events.CLEARED_FOREST_TEMPLE, bundle))
+        (Locations.FOREST_TEMPLE_PHANTOM_GANON_HEART_CONTAINER, lambda bundle: has_item(Events.FOREST_TEMPLE_COMPLETED, bundle)),
+        (Locations.PHANTOM_GANON, lambda bundle: has_item(Events.FOREST_TEMPLE_COMPLETED, bundle))
     ])
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_BOSS_ROOM, world, [
         (Regions.FOREST_TEMPLE_BOSS_ENTRYWAY, lambda bundle: False),
-        (Regions.SACRED_FOREST_MEADOW, lambda bundle: has_item(Events.CLEARED_FOREST_TEMPLE, bundle))
+        (Regions.SACRED_FOREST_MEADOW, lambda bundle: has_item(Events.FOREST_TEMPLE_COMPLETED, bundle))
     ])

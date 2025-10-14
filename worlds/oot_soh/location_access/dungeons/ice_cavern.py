@@ -3,13 +3,11 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-
 class EventLocations(str, Enum):
     ICE_CAVERN_BLUE_FIRE_ACCESS = "Ice Cavern Blue Fire Access"
 
+
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-    
     ## Ice Cavern Entryway
     # Locations
     add_locations(Regions.ICE_CAVERN_ENTRYWAY, world, [])

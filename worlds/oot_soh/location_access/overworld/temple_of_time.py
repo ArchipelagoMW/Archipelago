@@ -4,17 +4,17 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 class EventLocations(str, Enum):
-    TOT_ENTRANCE_GOSSIP_STONE_FAIRY = "ToT Entrance Gossip Stone Fairy"
+    TOT_ENTRANCE_GOSSIP_STONE_SONG_FAIRY = "ToT Entrance Gossip Stone Fairy"
+    MASTER_SWORD_PEDESTAL = "Master Sword Pedestal"
+
 
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-
-    ##ToT Entrance
+    ## ToT Entrance
     # Events
     add_events(Regions.TOT_ENTRANCE, world, [
-        (EventLocations.TOT_ENTRANCE_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES,
-         lambda bundle: call_gossip_fairy_except_suns(bundle))])
-
+        (EventLocations.TOT_ENTRANCE_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES,
+         lambda bundle: call_gossip_fairy_except_suns(bundle))
+    ])
     # Locations
     add_locations(Regions.TOT_ENTRANCE, world, [
         (Locations.MARKET_TOT_LEFT_GOSSIP_STONE_FAIRY,
@@ -34,7 +34,6 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.MARKET_TOT_RIGHT_GOSSIP_STONE_BIG_FAIRY,
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle))
     ])
-
     # Connections
     connect_regions(Regions.TOT_ENTRANCE, world,[
         (Regions.MARKET, lambda bundle: True),
@@ -46,7 +45,6 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.TEMPLE_OF_TIME, world, [
         (Locations.MARKET_TOT_LIGHT_ARROW_CUTSCENE, lambda bundle: is_adult(bundle) and can_trigger_lacs(bundle))
     ])
-
     # Connections
     connect_regions(Regions.TEMPLE_OF_TIME, world, [
         (Regions.TOT_ENTRANCE, lambda bundle: True),
@@ -56,10 +54,13 @@ def set_region_rules(world: "SohWorld") -> None:
                         (stone_count(bundle) == 3 and has_item(Items.OCARINA_OF_TIME, bundle))))),
     ])
 
-    ##Beyond Door of Time
+    ## Beyond Door of Time
+    # Events
+    add_events(Regions.BEYOND_DOOR_OF_TIME, world, [
+        (EventLocations.MASTER_SWORD_PEDESTAL, Events.TIME_TRAVEL, lambda bundle: True)
+    ])
     # Locations
-    add_locations(Regions.BEYOND_DOOR_OF_TIME, world,[
-
+    add_locations(Regions.BEYOND_DOOR_OF_TIME, world, [
         (Locations.MARKET_TOT_MASTER_SWORD, lambda bundle: is_adult(bundle)),
         (Locations.GIFT_FROM_RAURU, lambda bundle: is_adult(bundle)),
         (Locations.SHEIK_AT_TEMPLE, lambda bundle: has_item(Items.FOREST_MEDALLION, bundle) and is_adult(bundle))

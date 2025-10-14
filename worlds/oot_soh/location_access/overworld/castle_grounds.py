@@ -4,22 +4,21 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 class EventLocations(str, Enum):
-    HYRULE_CASTLE_GROUNDS_GOSSIP_STONE_FAIRY = "Hyrule Castle Grounds Gossip Stone Fairy"
-    HYRULE_CASTLE_GROUNDS_BUTTERFLY_FAIRY = "Hyrule Castle Grounds Butterfly Fairy"
-    HYRULE_CASTLE_GROUNDS_BUG_ROCK = "Hyrule Castle Grounds Bug Rock"
-    HYRULE_CASTLE_STORMS_GROTTO_BEHIND_WALLS_NUT_POT = "Hyrule Castle Storms Grotto Behind Walls Nut Pot"
-    HYRULE_CASTLE_STORMS_GROTTO_BEHIND_WALLS_GOSSIP_STONE_FAIRY = "Hyrule Castle Storms Grotto Behind Walls Gossip Stone Fairy"
-    HYRULE_CASTLE_STORMS_GROTTO_BEHIND_WALLS_WANDERING_BUGS = "Hyrule Castle Storms Grotto Behind Walls Wandering Bugs"
-    GANONS_CASTLE_GROUNDS_BUILD_RAINBOW_BRIDGE = "Ganon's Castle Grounds Build Rainbow Bridge"
+    HC_GOSSIP_STONE_SONG_FAIRY = "HC Gossip Stone Song Fairy"
+    HC_BUTTERFLY_FAIRY = "HC Butterfly Fairy"
+    HC_BUG_ROCK = "HC Bug Rock"
+    HC_STORMS_GROTTO_BEHIND_WALLS_NUT_POT = "HC Storms Grotto Behind Walls Nut Pot"
+    HC_STORMS_GROTTO_BEHIND_WALLS_GOSSIP_STONE_SONG_FAIRY = "HC Storms Grotto Behind Walls Gossip Stone Song Fairy"
+    HC_STORMS_GROTTO_BEHIND_WALLS_WANDERING_BUGS = "HC Storms Grotto Behind Walls Wandering Bugs"
+    HC_OGC_RAINBOW_BRIDGE = "HC OGC Rainbow Bridge"
 
 
 class LocalEvents(str, Enum):
-    GANONS_CASTLE_GROUNDS_BUILT_RAINBOW_BRIDGE = "Ganon's Castle Grounds Built Rainbow Bridge"
+    HC_OGC_RAINBOW_BRIDGE_BUILT = "HC OGC Rainbow Bridge Built"
+
 
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-
-    ##Castle Grounds
+    ## Castle Grounds
     # Connections
     connect_regions(Regions.CASTLE_GROUNDS, world, [
         (Regions.MARKET, lambda bundle: True),
@@ -27,14 +26,14 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GANONS_CASTLE_GROUNDS, lambda bundle: is_adult(bundle))
     ])
     
-    ##Hyrule Castle Grounds
+    ## Hyrule Castle Grounds
     # Events
     add_events(Regions.HYRULE_CASTLE_GROUNDS, world, [
-        (EventLocations.HYRULE_CASTLE_GROUNDS_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES,
+        (EventLocations.HC_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: call_gossip_fairy(bundle)),
-        (EventLocations.HYRULE_CASTLE_GROUNDS_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES,
+        (EventLocations.HC_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: can_use(Items.STICKS, bundle)),
-        (EventLocations.HYRULE_CASTLE_GROUNDS_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True)
+        (EventLocations.HC_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.HYRULE_CASTLE_GROUNDS, world, [
@@ -46,7 +45,15 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.HC_ROCK_WALL_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy(bundle)),
         (Locations.HC_ROCK_WALL_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.HC_NEAR_STORMS_GROTTO_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
-        (Locations.HC_NEAR_STORMS_GROTTO_GRASS2, lambda bundle: can_cut_shrubs(bundle))
+        (Locations.HC_NEAR_STORMS_GROTTO_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
+        (Locations.HC_GROTTO_TREE, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_SKULLTULA_TREE, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_1, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_2, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_3, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_4, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_5, lambda bundle: can_bonk_trees(bundle)),
+        (Locations.HC_NEAR_GUARDS_TREE_6, lambda bundle: can_bonk_trees(bundle)),
     ])
     # Connections
     connect_regions(Regions.HYRULE_CASTLE_GROUNDS, world, [
@@ -58,18 +65,23 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.HC_STORMS_GROTTO, lambda  bundle: can_open_storms_grotto(bundle))
     ])
 
-    ##Hyrule Castle Garden
+    ## Hyrule Castle Garden
     # Locations
     add_locations(Regions.HC_GARDEN, world, [
-        (Locations.HC_ZELDAS_LETTER, lambda bundle: True),
-        (Locations.SONG_FROM_IMPA, lambda bundle: True)
+        (Locations.HC_ZELDAS_LETTER, lambda bundle: True)
     ])
     # Connections
     connect_regions(Regions.HC_GARDEN, world, [
-        (Regions.HYRULE_CASTLE_GROUNDS, lambda bundle: True)
+        (Regions.HYRULE_CASTLE_GROUNDS, lambda bundle: True),
+        (Regions.HC_GARDEN_SONG_FROM_IMPA, lambda bundle: True)
     ])
-    
-    ##Hyrule Castle Great Fairy Fountain
+
+    ## Hyrule Castle Garden Song From Impa
+    add_locations(Regions.HC_GARDEN_SONG_FROM_IMPA, world, [
+        (Locations.SONG_FROM_IMPA, lambda bundle: True)
+    ])
+
+    ## Hyrule Castle Great Fairy Fountain
     # Locations
     add_locations(Regions.HC_GREAT_FAIRY_FOUNTAIN, world, [
         (Locations.HC_GREAT_FAIRY_REWARD, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
@@ -79,7 +91,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.CASTLE_GROUNDS, lambda bundle: True)
     ])
 
-    ##Hyrule Castle Storms Grotto
+    ## Hyrule Castle Storms Grotto
     # Connections
     connect_regions(Regions.HC_STORMS_GROTTO, world, [
         (Regions.CASTLE_GROUNDS, lambda bundle: True),
@@ -87,13 +99,13 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.HC_STORMS_SKULLTULA, lambda bundle: can_use(Items.BOOMERANG, bundle) and can_do_trick(Tricks.HC_STORMS_GS, bundle))
     ])
 
-    ##Hyrule Castle Storms Grotto Behind Walls
+    ## Hyrule Castle Storms Grotto Behind Walls
     # Events
     add_events(Regions.HC_STORMS_GROTTO_BEHIND_WALLS, world, [
-        (EventLocations.HYRULE_CASTLE_STORMS_GROTTO_BEHIND_WALLS_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: can_break_pots(bundle)),
-        (EventLocations.HYRULE_CASTLE_STORMS_GROTTO_BEHIND_WALLS_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES,
+        (EventLocations.HC_STORMS_GROTTO_BEHIND_WALLS_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: can_break_pots(bundle)),
+        (EventLocations.HC_STORMS_GROTTO_BEHIND_WALLS_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: call_gossip_fairy(bundle)),
-        (EventLocations.HYRULE_CASTLE_STORMS_GROTTO_BEHIND_WALLS_WANDERING_BUGS, Events.CAN_ACCESS_BUGS, lambda bundle: True)
+        (EventLocations.HC_STORMS_GROTTO_BEHIND_WALLS_WANDERING_BUGS, Events.CAN_ACCESS_BUGS, lambda bundle: True)
 
     ])
     # Locations
@@ -111,17 +123,17 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.HC_STORMS_SKULLTULA, lambda bundle: hookshot_or_boomerang(bundle)),
     ])
 
-    ##Hyrule Castle Storms Skulltule
+    ## Hyrule Castle Storms Skulltule
     ### This is a deviation from the original SOH logic because of the union of locations
     # Locations
     add_locations(Regions.HC_STORMS_SKULLTULA, world, [
         (Locations.HC_GS_STORMS_GROTTO, lambda bundle: True)
     ])
     
-    ##Ganon's Castle Grounds
+    ## Ganon's Castle Grounds
     # Events
     add_events(Regions.GANONS_CASTLE_GROUNDS, world, [
-        (EventLocations.GANONS_CASTLE_GROUNDS_BUILD_RAINBOW_BRIDGE, LocalEvents.GANONS_CASTLE_GROUNDS_BUILT_RAINBOW_BRIDGE,
+        (EventLocations.HC_OGC_RAINBOW_BRIDGE, LocalEvents.HC_OGC_RAINBOW_BRIDGE_BUILT,
          lambda bundle: can_build_rainbow_bridge(bundle))
     ])
     # Locations
@@ -134,11 +146,11 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GANONS_CASTLE_GROUNDS, world, [
         (Regions.CASTLE_GROUNDS, lambda bundle: at_night(bundle)),
-        (Regions.OGC_GREAT_FAIRY_FOUNTAIN, lambda bundle: can_use(Items.GOLDEN_GAUNTLETS) and at_night(bundle)),
-        (Regions.GANONS_CASTLE_LEDGE, lambda bundle: has_item(LocalEvents.GANONS_CASTLE_GROUNDS_BUILT_RAINBOW_BRIDGE, bundle))
+        (Regions.OGC_GREAT_FAIRY_FOUNTAIN, lambda bundle: can_use(Items.GOLDEN_GAUNTLETS, bundle) and at_night(bundle)),
+        (Regions.GANONS_CASTLE_LEDGE, lambda bundle: has_item(LocalEvents.HC_OGC_RAINBOW_BRIDGE_BUILT, bundle))
     ])
 
-    ##OGC Great Fairy Fountain
+    ## OGC Great Fairy Fountain
     # Locations
     add_locations(Regions.OGC_GREAT_FAIRY_FOUNTAIN, world, [
         (Locations.OGC_GREAT_FAIRY_REWARD, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle))
@@ -148,16 +160,16 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.CASTLE_GROUNDS, lambda bundle: True)
     ])
 
-    ##Castle Grounds from Ganon's Castle
+    ## Castle Grounds from Ganon's Castle
     # Connections
     connect_regions(Regions.CASTLE_GROUNDS_FROM_GANONS_CASTLE, world, [
         (Regions.HYRULE_CASTLE_GROUNDS, lambda bundle: is_child(bundle)),
         (Regions.GANONS_CASTLE_LEDGE, lambda bundle: is_adult(bundle))
     ])
     
-    ##Ganon's Castle Ledge
+    ## Ganon's Castle Ledge
     # Connections
     connect_regions(Regions.GANONS_CASTLE_LEDGE, world, [
-        (Regions.GANONS_CASTLE_GROUNDS, lambda bundle: has_item(LocalEvents.GANONS_CASTLE_GROUNDS_BUILT_RAINBOW_BRIDGE, bundle)),
+        (Regions.GANONS_CASTLE_GROUNDS, lambda bundle: has_item(LocalEvents.HC_OGC_RAINBOW_BRIDGE_BUILT, bundle)),
         (Regions.GANONS_TOWER_ENTRYWAY, lambda bundle: is_adult(bundle))
     ])

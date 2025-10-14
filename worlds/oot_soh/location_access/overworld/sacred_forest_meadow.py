@@ -3,14 +3,13 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-
 class EventLocations(str, Enum):
-    SFM_GOSSIP_STONE = "SFM Gossip Stone"
-    SFM_FAIRY_FOUNTAIN = "SFM Fairy Fountain"
+    SFM_GOSSIP_STONE_SONG_FAIRY = "SFM Gossip Stone Song Fairy"
+    SFM_FAIRY_FOUNTAIN_FAIRY = "SFM Fairy Fountain Fairy"
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    # SFM Entryway
+    ## SFM Entryway
     # Connections
     connect_regions(Regions.SFM_ENTRYWAY, world, [
         (Regions.LW_BEYOND_MIDO, lambda bundle: True),
@@ -18,10 +17,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.SFM_WOLFOS_GROTTO, lambda bundle: can_open_bomb_grotto(bundle)),
     ])
 
-    # Sacred Forest Meadow
+    ## Sacred Forest Meadow
     # Events
     add_events(Regions.SACRED_FOREST_MEADOW, world, [
-        (EventLocations.SFM_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
+        (EventLocations.SFM_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
     ])
     # Location
     add_locations(Regions.SACRED_FOREST_MEADOW, world, [
@@ -43,11 +42,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.SFM_STORMS_GROTTO, lambda bundle: can_open_storms_grotto(bundle)),
     ])
 
-
-    # SFM Fairy Grotto
+    ## SFM Fairy Grotto
     # Events
     add_events(Regions.SFM_FAIRY_GROTTO, world, [
-        (EventLocations.SFM_FAIRY_FOUNTAIN, Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
+        (EventLocations.SFM_FAIRY_FOUNTAIN_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
     ])
     # Locations
     add_locations(Regions.SFM_FAIRY_GROTTO, world, [
@@ -65,7 +63,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.SACRED_FOREST_MEADOW, lambda bundle: True),
     ])
 
-    # SFM Wolfos Grotto
+    ## SFM Wolfos Grotto
     # Locations
     add_locations(Regions.SFM_WOLFOS_GROTTO, world, [
         (Locations.SFM_WOLFOS_GROTTO_CHEST, lambda bundle: can_kill_enemy(bundle, Enemies.WOLFOS, EnemyDistance.CLOSE, True, 2)),
@@ -75,7 +73,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.SACRED_FOREST_MEADOW, lambda bundle: True),
     ])
 
-    # SFM Storms Grotto
+    ## SFM Storms Grotto
     #Locations
     add_locations(Regions.SFM_STORMS_GROTTO, world, [
         (Locations.SFM_DEKU_SCRUB_GROTTO_FRONT, lambda bundle: can_stun_deku(bundle)),
