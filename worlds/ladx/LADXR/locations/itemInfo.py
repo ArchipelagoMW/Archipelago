@@ -2,6 +2,10 @@ import typing
 from ..checkMetadata import checkMetadataTable
 from .constants import *
 
+custom_name_replacements = {
+    '"':"'",
+    '_':' ',
+}
 
 class ItemInfo:
     MULTIWORLD = True
@@ -22,6 +26,11 @@ class ItemInfo:
 
     def setLocation(self, location):
         self._location = location
+
+    def setCustomItemName(self, name):
+        for key, val in custom_name_replacements.items():
+            name = name.replace(key, val)
+        self.custom_item_name = name
 
     def getOptions(self):
         return self.OPTIONS

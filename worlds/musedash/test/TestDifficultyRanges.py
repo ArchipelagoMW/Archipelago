@@ -1,7 +1,17 @@
 from . import MuseDashTestBase
+from typing import List
 
 
 class DifficultyRanges(MuseDashTestBase):
+    DIFF_OVERRIDES: List[str] = [
+        "MuseDash ka nanika hi",
+        "Rush-Hour",
+        "Find this Month's Featured Playlist",
+        "PeroPero in the Universe",
+        "umpopoff",
+        "P E R O P E R O Brother Dance",
+    ]
+
     def test_all_difficulty_ranges(self) -> None:
         muse_dash_world = self.get_world()
         dlc_set = {x for x in muse_dash_world.md_collection.DLC}
@@ -63,7 +73,7 @@ class DifficultyRanges(MuseDashTestBase):
     def test_songs_have_difficulty(self) -> None:
         muse_dash_world = self.get_world()
 
-        for song_name in muse_dash_world.md_collection.DIFF_OVERRIDES:
+        for song_name in self.DIFF_OVERRIDES:
             song = muse_dash_world.md_collection.song_items[song_name]
 
             # Some songs are weird and have less than the usual 3 difficulties.

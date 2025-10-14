@@ -1,5 +1,5 @@
 from collections import defaultdict
-from logging import debug
+from logging import debug, warning
 from pprint import pformat
 from typing import TYPE_CHECKING, Dict, List, Set, Tuple
 
@@ -48,6 +48,8 @@ class EntityHuntPicker:
         self.PRE_PICKED_HUNT_ENTITIES = pre_picked_entities.copy()
         self.HUNT_ENTITIES: Set[str] = set()
 
+        self._add_plandoed_hunt_panels_to_pre_picked()
+
         self.ALL_ELIGIBLE_ENTITIES, self.ELIGIBLE_ENTITIES_PER_AREA = self._get_eligible_panels()
 
     def pick_panel_hunt_panels(self, total_amount: int) -> Set[str]:
@@ -69,23 +71,50 @@ class EntityHuntPicker:
 
         return self.HUNT_ENTITIES
 
-    def _entity_is_eligible(self, panel_hex: str) -> bool:
+    def _entity_is_eligible(self, panel_hex: str, plando: bool = False) -> bool:
         """
         Determine whether an entity is eligible for entity hunt based on player options.
         """
         panel_obj = static_witness_logic.ENTITIES_BY_HEX[panel_hex]
 
-        return (
-            self.player_logic.solvability_guaranteed(panel_hex)
-            and panel_hex not in self.player_logic.EXCLUDED_ENTITIES
-            and not (
-                # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
-                # However, I don't think they should be hunt panels in this case.
-                self.player_options.disable_non_randomized_puzzles
-                and not self.player_options.shuffle_discarded_panels
-                and panel_obj["locationType"] == "Discard"
-            )
+        if not self.player_logic.solvability_guaranteed(panel_hex) or panel_hex in self.player_logic.EXCLUDED_ENTITIES:
+            if plando:
+                warning(f"Panel {panel_obj['checkName']} is disabled / excluded and thus not eligible for panel hunt.")
+            return False
+
+        return plando or not (
+            # Due to an edge case, Discards have to be on in disable_non_randomized even if Discard Shuffle is off.
+            # However, I don't think they should be hunt panels in this case.
+            self.player_options.disable_non_randomized_puzzles
+            and not self.player_options.shuffle_discarded_panels
+            and panel_obj["locationType"] == "Discard"
         )
+
+    def _add_plandoed_hunt_panels_to_pre_picked(self) -> None:
+        """
+        Add panels the player explicitly specified to be included in panel hunt to the pre picked hunt panels.
+        Output a warning if a panel could not be added for some reason.
+        """
+
+        # Plandoed hunt panels should be in random order, but deterministic by seed, so we sort, then shuffle
+        panels_to_plando = sorted(self.player_options.panel_hunt_plando.value)
+        self.random.shuffle(panels_to_plando)
+
+        for location_name in panels_to_plando:
+            entity_hex = static_witness_logic.ENTITIES_BY_NAME[location_name]["entity_hex"]
+
+            if entity_hex in self.PRE_PICKED_HUNT_ENTITIES:
+                continue
+
+            if self._entity_is_eligible(entity_hex, plando=True):
+                if len(self.PRE_PICKED_HUNT_ENTITIES) == self.player_options.panel_hunt_total:
+                    warning(
+                        f"Panel {location_name} could not be plandoed as a hunt panel for {self.player_name}'s world, "
+                        f"because it would exceed their panel hunt total."
+                    )
+                    continue
+
+                self.PRE_PICKED_HUNT_ENTITIES.add(entity_hex)
 
     def _get_eligible_panels(self) -> Tuple[List[str], Dict[str, Set[str]]]:
         """
@@ -100,7 +129,7 @@ class EntityHuntPicker:
 
         eligible_panels_by_area = defaultdict(set)
         for eligible_panel in all_eligible_panels:
-            associated_area = static_witness_logic.ENTITIES_BY_HEX[eligible_panel]["area"]["name"]
+            associated_area = static_witness_logic.ENTITIES_BY_HEX[eligible_panel]["area"].name
             eligible_panels_by_area[associated_area].add(eligible_panel)
 
         return all_eligible_panels, eligible_panels_by_area
@@ -213,6 +242,10 @@ class EntityHuntPicker:
 
             # ... and the good entity was not ...
             if good_entity in self.HUNT_ENTITIES or good_entity not in self.ALL_ELIGIBLE_ENTITIES:
+                continue
+
+            # ... and it's not a forced pick that should stay the same ...
+            if bad_entitiy in self.PRE_PICKED_HUNT_ENTITIES:
                 continue
 
             # ... replace the bad entity with the good entity.

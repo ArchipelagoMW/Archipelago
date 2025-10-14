@@ -45,7 +45,7 @@ def generate_lithograph_hint(world: "LandstalkerWorld"):
             words.append(item.name.split(" ")[0].upper())
         if item.location.player != world.player:
             # Add player name if it's not in our own world
-            player_name = world.multiworld.get_player_name(world.player)
+            player_name = world.multiworld.get_player_name(item.location.player)
             words.append(player_name.upper())
         world.random.shuffle(words)
         hint_text += " ".join(words) + "\n"
@@ -131,7 +131,7 @@ def generate_random_hints(world: "LandstalkerWorld"):
     hint_texts = list(set(hint_texts))
     random.shuffle(hint_texts)
 
-    hint_count = world.options.hint_count.value
+    hint_count = min(world.options.hint_count.value, len(hint_texts))
     del hint_texts[hint_count:]
 
     hint_source_names = [source["description"] for source in HINT_SOURCES_JSON if

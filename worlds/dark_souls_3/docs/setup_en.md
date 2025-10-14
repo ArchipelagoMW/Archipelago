@@ -3,11 +3,13 @@
 ## Required Software
 
 - [Dark Souls III](https://store.steampowered.com/app/374320/DARK_SOULS_III/)
-- [Dark Souls III AP Client](https://github.com/nex3/Dark-Souls-III-Archipelago-client/releases/latest)
+- [Dark Souls III AP Client]
+
+[Dark Souls III AP Client]: https://github.com/nex3/Dark-Souls-III-Archipelago-client/releases/latest
 
 ## Optional Software
 
-- Map tracker not yet updated for 3.0.0
+- [Map tracker](https://github.com/TVV1GK/DS3_AP_Maptracker)
 
 ## Setting Up
 
@@ -37,15 +39,13 @@ randomized item and (optionally) enemy locations. You only need to do this once 
 
 To run _Dark Souls III_ in Archipelago mode:
 
-1. Start Steam. **Do not run in offline mode.** Running Steam in offline mode will make certain
-   scripted invaders fail to spawn. Instead, change the game itself to offline mode on the menu
-   screen.
+1. Start Steam. **Do not run Steam in offline mode.** Running Steam in offline mode will make certain
+   scripted invaders fail to spawn.
 
-2. Run `launchmod_darksouls3.bat`. This will start _Dark Souls III_ as well as a command prompt that
+2. To prevent you from getting penalized, **make sure to set _Dark Souls III_ to offline mode in the game options.**
+
+3. Run `launchmod_darksouls3.bat`. This will start _Dark Souls III_ as well as a command prompt that
    you can use to interact with the Archipelago server.
-
-3. Type `/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME}` into the command prompt, with the
-   appropriate values filled in. For example: `/connect archipelago.gg:24242 PlayerName`.
 
 4. Start playing as normal. An "Archipelago connected" message will appear onscreen once you have
    control of your character and the connection is established.
@@ -71,5 +71,67 @@ things to keep in mind:
 
 * To run the game itself, just run `launchmod_darksouls3.bat` under Proton.
 
-[.NET Runtime]: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+[.NET Runtime]: https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 [WINE]: https://www.winehq.org/
+
+## Troubleshooting
+
+### Enemy randomizer issues
+
+The DS3 Archipelago randomizer uses [thefifthmatt's DS3 enemy randomizer],
+essentially unchanged. Unfortunately, this randomizer has a few known issues,
+including enemy AI not working, enemies spawning in places they can't be killed,
+and, in a few rare cases, enemies spawning in ways that crash the game when they
+load. These bugs should be [reported upstream], but unfortunately the
+Archipelago devs can't help much with them.
+
+[thefifthmatt's DS3 enemy randomizer]: https://www.nexusmods.com/darksouls3/mods/484
+[reported upstream]: https://github.com/thefifthmatt/SoulsRandomizers/issues
+
+Because in rare cases the enemy randomizer can cause seeds to be impossible to
+complete, we recommend disabling it for large async multiworlds for safety
+purposes.
+
+### `launchmod_darksouls3.bat` isn't working
+
+Sometimes `launchmod_darksouls3.bat` will briefly flash a terminal on your
+screen and then terminate without actually starting the game. This is usually
+caused by some issue communicating with Steam either to find `DarkSoulsIII.exe`
+or to launch it properly. If this is happening to you, make sure:
+
+* You have DS3 1.15.2 installed. This is the latest patch as of January 2025.
+  (Note that older versions of Archipelago required an older patch, but that
+  _will not work_ with the current version.)
+
+* You own the DS3 DLC if your randomizer config has DLC enabled. (It's possible,
+  but unconfirmed, that you need the DLC even when it's disabled in your config).
+
+* Steam is not running in administrator mode. To fix this, right-click
+  `steam.exe` (by default this is in `C:\Program Files\Steam`), select
+  "Properties", open the "Compatiblity" tab, and uncheck "Run this program as an
+  administrator".
+
+* There is no `dinput8.dll` file in your DS3 game directory. This is the old way
+  of installing mods, and it can interfere with the new ModEngine2 workflow.
+
+If you've checked all of these, you can also try:
+
+* Running `launchmod_darksouls3.bat` as an administrator.
+
+* Reinstalling DS3 or even reinstalling Steam itself.
+
+* Making sure DS3 is installed on the same drive as Steam and as the randomizer.
+  (A number of users are able to run these on different drives, but this has
+  helped some users.)
+
+If none of this works, unfortunately there's not much we can do. We use
+ModEngine2 to launch DS3 with the Archipelago mod enabled, but unfortunately
+it's no longer maintained and its successor, ModEngine3, isn't usable yet.
+
+### `DS3Randomizer.exe` isn't working
+
+This is almost always caused by using a version of the randomizer client that's
+not compatible with the version used to generate the multiworld. If you're
+generating your multiworld on archipelago.gg, you *must* use the latest [Dark
+Souls III AP Client]. If you want to use a different client version, you *must*
+generate the multiworld locally using the apworld bundled with the client.

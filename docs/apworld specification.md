@@ -19,8 +19,65 @@ the world's folder in `worlds/`. I.e. `worlds/ror2.apworld` containing `ror2/__i
 
 ## Metadata
 
-No metadata is specified yet.
+Metadata about the apworld is defined in an `archipelago.json` file inside the zip archive.
+The current format version has at minimum:
+```json
+{
+    "version": 7,
+    "compatible_version": 7,
+    "game": "Game Name"
+}
+```
 
+The `version` and `compatible_version` fields refer to Archipelago's internal file packaging scheme
+and get automatically added to the `archipelago.json` of an .apworld if it is packaged using the 
+["Build apworlds" launcher component](#build-apworlds-launcher-component),
+which is the correct way to package your .apworld as a world developer. Do not write these fields yourself.  
+On the other hand, the `game` field should be present in the world folder's manifest file before packaging.
+
+There are also the following optional fields:
+* `minimum_ap_version` and `maximum_ap_version` - which if present will each be compared against the current
+  Archipelago version respectively to filter those files from being loaded.
+* `world_version` - an arbitrary version for that world in order to only load the newest valid world.
+  An apworld without a world_version is always treated as older than one with a version.
+  (**Must** use exactly the format `"major.minor.build"`, e.g. `1.0.0`)
+* `authors` - a list of authors, to eventually be displayed in various user-facing places such as WebHost and
+  package managers. Should always be a list of strings.
+
+### "Build apworlds" Launcher Component
+
+In the Archipelago Launcher, there is a "Build apworlds" component that will package all world folders to `.apworld`,
+and add `archipelago.json` manifest files to them.  
+These .apworld files will be output to `build/apworlds` (relative to the Archipelago root directory).  
+The `archipelago.json` file in each .apworld will automatically include the appropriate
+`version` and `compatible_version`.
+
+If a world folder has an `archipelago.json` in its root, any fields it contains will be carried over.  
+So, a world folder with an `archipelago.json` that looks like this:
+
+```json
+{
+    "game": "Game Name",
+    "minimum_ap_version": "0.6.4",
+    "world_version": "2.1.4",
+    "authors": ["NewSoupVi"]
+}
+```
+
+will be packaged into an `.apworld` with a manifest file inside of it that looks like this:
+
+```json
+{
+    "minimum_ap_version": "0.6.4", 
+    "world_version": "2.1.4",
+    "authors": ["NewSoupVi"],
+    "version": 7,
+    "compatible_version": 7,
+    "game": "Game Name"
+}
+```
+
+This is the recommended workflow for packaging your world to an `.apworld`.
 
 ## Extra Data
 

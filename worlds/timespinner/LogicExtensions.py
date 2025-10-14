@@ -10,6 +10,7 @@ class TimespinnerLogic:
     flag_unchained_keys: bool
     flag_eye_spy: bool
     flag_specific_keycards: bool
+    flag_prism_break: bool
     pyramid_keys_unlock: Optional[str]
     present_keys_unlock: Optional[str]
     past_keys_unlock: Optional[str]
@@ -22,6 +23,8 @@ class TimespinnerLogic:
         self.flag_specific_keycards = bool(options and options.specific_keycards)
         self.flag_eye_spy = bool(options and options.eye_spy)
         self.flag_unchained_keys = bool(options and options.unchained_keys)
+        self.flag_prism_break = bool(options and options.prism_break)
+        self.flag_find_the_flame = bool(options and options.find_the_flame)
 
         if precalculated_weights:
             if self.flag_unchained_keys:
@@ -91,7 +94,15 @@ class TimespinnerLogic:
         else:
             return True
 
+    def can_break_lanterns(self, state: CollectionState) -> bool:
+        if self.flag_find_the_flame:
+            return state.has('Cube of Bodie', self.player)
+        else:
+            return True
+
     def can_kill_all_3_bosses(self, state: CollectionState) -> bool:
+        if self.flag_prism_break:
+            return state.has_all({'Laser Access M', 'Laser Access I', 'Laser Access A'}, self.player)
         return state.has_all({'Killed Maw', 'Killed Twins', 'Killed Aelana'}, self.player)
 
     def has_teleport(self, state: CollectionState) -> bool:
