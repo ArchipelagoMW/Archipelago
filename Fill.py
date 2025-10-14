@@ -211,16 +211,42 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
     if cleanup_required:
         # validate all placements and remove invalid ones
-        state = sweep_from_pool(
+        cleanup_state = sweep_from_pool(
             base_state, [], multiworld.get_filled_locations(item.player)
             if single_player_placement else None)
+
+        # accessibilty_corrections can clean up any case where locations are unreachable as a result of
+        # a full player's item being on a minimal player's unreachable location.
+        # So, we make a state where we collect all such minimal->full items to check against.
+        changed = False
+        for location in multiworld.get_filled_locations():
+            if location.item is None:
+                continue
+            if location in cleanup_state.locations_checked:
+                continue
+
+            if multiworld.worlds[location.player].options.accessibility == "minimal":
+                if multiworld.worlds[location.item.player].options.accessibility != "minimal":
+                    changed |= cleanup_state.collect(location.item, prevent_sweep=True)
+        if changed:
+            cleanup_state.sweep_for_advancements()
+
         for placement in placements:
-            if (
-                multiworld.worlds[placement.item.player].options.accessibility != "minimal"
-                # accessibility_corrections can clean up the case where the location's player is minimal
-                and multiworld.worlds[placement.player].options.accessibility != "minimal"
-                and not placement.can_reach(state)
-            ):
+            # If the item's player is minimal, we don't care that it's unreachable.
+            if multiworld.worlds[placement.item.player].options.accessibility == "minimal":
+                continue
+
+            # This item belongs to a full player.
+            # If the location's player is minimal, we don't need to be concerned.
+            # Even if the location is inaccessible, accessibility_corrections will clean this up.
+            if multiworld.worlds[placement.player].options.accessibility == "minimal":
+                continue
+
+            # This is a full player's item on a full player's location.
+            # If this item is unreachable, we have a problem - UNLESS the location is just stuck behind a full player's
+            # item on a minimal player's location. That case will transitively get solved by accessibility_corrections.
+            # This is why we use our special "cleanup_state", not just the maximum exploration state.
+            if not placement.can_reach(cleanup_state):
                 placement.item.location = None
                 unplaced_items.append(placement.item)
                 placement.item = None
