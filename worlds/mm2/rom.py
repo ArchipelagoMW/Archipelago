@@ -327,8 +327,6 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
         patch.write_byte(0x36089, pool[18])  # Intro
         patch.write_byte(0x361F1, pool[19])  # Title
 
-
-
     from Utils import __version__
     patch.name = bytearray(f'MM2{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0',
                            'utf8')[:21]
