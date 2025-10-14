@@ -71,17 +71,18 @@ def can_use(item: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
 
     data = item_data_table
 
-    if data[item.value].adult_only and not is_adult(bundle):
-        return False
+    if item in data:
+        if data[item.value].adult_only and not is_adult(bundle):
+            return False
 
-    if data[item.value].child_only and not is_child(bundle):
-        return False
-    
-    if data[item.value].item_type == ItemType.magic and not has_item(Items.PROGRESSIVE_MAGIC_METER, bundle):
-        return False
+        if data[item.value].child_only and not is_child(bundle):
+            return False
+        
+        if data[item.value].item_type == ItemType.magic and not has_item(Items.PROGRESSIVE_MAGIC_METER, bundle):
+            return False
 
-    if data[item.value].item_type == ItemType.song:
-        return can_play_song(item, bundle)
+        if data[item.value].item_type == ItemType.song:
+            return can_play_song(item, bundle)
     
     if item == Items.FISHING_POLE: # 36
         return has_item(Items.CHILD_WALLET, bundle)
@@ -907,8 +908,10 @@ def item_group_count(bundle: tuple[CollectionState, Regions, "SohWorld"], item_g
 
 
 def ocarina_button_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
-    return item_group_count(bundle, "Ocarina Buttons")
+    if(bundle[2].options.shuffle_ocarina_buttons):
+        return item_group_count(bundle, "Ocarina Buttons")
 
+    return 5
 
 def stone_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     return item_group_count(bundle, "Stones")
