@@ -182,10 +182,11 @@ def set_region_rules(world: "SohWorld") -> None:
 
     # Kak Carpenter Boss House
     # Events
-    add_events(Regions.KAK_CARPENTER_BOSS_HOUSE, world, [
-        (EventLocations.KAK_ADULT_TALON, LocalEvents.WAKE_UP_ADULT_TALON,
-         lambda bundle: is_adult(bundle) and can_use(Items.POCKET_EGG, bundle)),
-    ])
+    if bool(world.options.shuffle_adult_trade_items.value):
+        add_events(Regions.KAK_CARPENTER_BOSS_HOUSE, world, [
+            (EventLocations.KAK_ADULT_TALON, LocalEvents.WAKE_UP_ADULT_TALON,
+            lambda bundle: is_adult(bundle) and can_use(Items.POCKET_EGG, bundle)),
+        ])
     # Connections
     connect_regions(Regions.KAK_CARPENTER_BOSS_HOUSE, world, [
         (Regions.KAKARIKO_VILLAGE, lambda bundle: True),
