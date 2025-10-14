@@ -4,30 +4,29 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 class EventLocations(str, Enum):
-    LAKE_HYLIA_SHRUB = "Lake Hylia Shrub"
-    LAKE_HYLIA_BEAN_FAIRY = "Lake Hylia Bean Fairy"
-    LAKE_HYLIA_GOSSIP_FAIRY = "Lake Hylia Gossip Fairy"
-    LAKE_HYLIA_BUTTERFLY_FAIRY = "Lake Hylia Butterfly Fairy"
+    LH_BUG_SHRUB = "LH Bug Shrub"
+    LH_BEAN_FAIRY = "LH Bean Fairy"
+    LH_GOSSIP_STONE_SONG_FAIRY = "LH Gossip Stone Song Fairy"
+    LH_BUTTERFLY_FAIRY = "LH Butterfly Fairy"
     CHILD_SCARECROW = "Child Scarecrow"
     ADULT_SCARECROW = "Adult Scarecrow"
-    LH_BEAN_PATCH = "Lake Hylia Bean Patch"
+    LH_BEAN_PATCH = "LH Bean Patch"
 
 
 class LocalEvents(str, Enum):
     LH_BEAN_PLANTED = "Lake Hylia Bean Planted"
 
-def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
 
+def set_region_rules(world: "SohWorld") -> None:
     ## Lake Hylia
     # Events
     add_events(Regions.LAKE_HYLIA, world, [
-        (EventLocations.LAKE_HYLIA_GOSSIP_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy(bundle)),
-        (EventLocations.LAKE_HYLIA_BEAN_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: is_child(bundle) and
+        (EventLocations.LH_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy(bundle)),
+        (EventLocations.LH_BEAN_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: is_child(bundle) and
                                                                                        can_use(Items.MAGIC_BEAN, bundle) and
                                                                                        can_use(Items.SONG_OF_STORMS, bundle)),
-        (EventLocations.LAKE_HYLIA_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: can_use(Items.STICKS, bundle)),
-        (EventLocations.LAKE_HYLIA_SHRUB, Events.CAN_ACCESS_BUGS, lambda bundle: can_cut_shrubs(bundle)),
+        (EventLocations.LH_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: can_use(Items.STICKS, bundle)),
+        (EventLocations.LH_BUG_SHRUB, Events.CAN_ACCESS_BUGS, lambda bundle: can_cut_shrubs(bundle)),
         (EventLocations.CHILD_SCARECROW, Events.CHILD_SCARECROW_UNLOCKED, lambda bundle: is_child(bundle) and
                                                                                        has_item(Items.FAIRY_OCARINA, bundle) and
                                                                                        ocarina_button_count(bundle)>= 2),
@@ -41,7 +40,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.LH_UNDERWATER_ITEM, lambda bundle: is_child(bundle) and
                                                       can_use(Items.SILVER_SCALE, bundle)),
         (Locations.LH_SUN, lambda bundle: is_adult(bundle) and
-                                          ((has_item(Events.CLEARED_WATER_TEMPLE, bundle) and
+                                          ((has_item(Events.WATER_TEMPLE_COMPLETED, bundle) and
                                                                  has_item(Items.BRONZE_SCALE, bundle)) or
                                                                 can_use(Items.DISTANT_SCARECROW, bundle)) and
                                           can_use(Items.FAIRY_BOW, bundle)),
@@ -88,7 +87,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.LH_ISLAND_SUNS_SONG_FAIRY, lambda bundle: can_use(Items.SUNS_SONG, bundle) and
                                                              ((has_item(Items.BRONZE_SCALE, bundle) and
                                                                (is_child(bundle) or
-                                                                has_item(Events.CLEARED_WATER_TEMPLE, bundle))) or
+                                                                has_item(Events.WATER_TEMPLE_COMPLETED, bundle))) or
                                                               can_use(Items.DISTANT_SCARECROW, bundle))),
         (Locations.LH_GRASS_1, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.LH_GRASS_2, lambda bundle: can_cut_shrubs(bundle)),
@@ -143,7 +142,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.LH_FROM_SHORTCUT, lambda bundle: True),
         (Regions.LH_OWL_FLIGHT, lambda bundle: is_child(bundle)),
         (Regions.LH_FISHING_ISLAND, lambda bundle: ((is_child(bundle)
-                                                     or has_item(Events.CLEARED_WATER_TEMPLE, bundle))
+                                                     or has_item(Events.WATER_TEMPLE_COMPLETED, bundle))
                                                     and has_item(Items.BRONZE_SCALE, bundle))
                                                    or (is_adult(bundle)
                                                        and (can_use(Items.SCARECROW, bundle)

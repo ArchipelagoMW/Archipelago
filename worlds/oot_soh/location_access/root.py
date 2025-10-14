@@ -6,8 +6,8 @@ if TYPE_CHECKING:
 
 class EventLocations(str, Enum):
     ROOT_AMMO_DROP = "Root Ammo Drop"
-    ROOT_TIME_TRAVEL = "Root Time Travel"
-    ROOT_SHIELD = "Root Shield"
+    ROOT_DEKU_SHIELD = "Root Deku Shield"
+    ROOT_HYLIAN_SHIELD = "Root Hylian Shield"
     TRIFORCE_HUNT_COMPLETION = "Triforce Hunt Completion"
 
 
@@ -16,19 +16,14 @@ def set_region_rules(world: "SohWorld") -> None:
 
     ## Root
     # Events
-    add_events(Regions.KOKIRI_FOREST, world, [
-        (EventLocations.ROOT_TIME_TRAVEL, Events.TIME_TRAVEL, lambda bundle: has_item(Events.CLEARED_DEKU_TREE, bundle)), # TODO: Remove this when it's on Temple of Time region
-        (EventLocations.ROOT_SHIELD, Events.CAN_BUY_DEKU_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
-        (EventLocations.TRIFORCE_HUNT_COMPLETION, Events.GAME_COMPLETED,  lambda bundle:
+    add_events(Regions.ROOT, world, [
+        (EventLocations.ROOT_DEKU_SHIELD, Events.CAN_BUY_DEKU_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
+        (EventLocations.ROOT_HYLIAN_SHIELD, Events.CAN_BUY_HYLIAN_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
+        (EventLocations.TRIFORCE_HUNT_COMPLETION, Events.GAME_COMPLETED, lambda bundle:
          (world.options.triforce_hunt == 1 and 
          has_item(Items.TRIFORCE_PIECE, bundle, world.options.triforce_hunt_required_pieces.value)) or 
          has_item(Events.GAME_COMPLETED, bundle))
     ])
-
-    connect_regions(Regions.TEMPLE_OF_TIME, world, [
-        (Regions.KOKIRI_FOREST, lambda bundle: True)
-    ])
-
     # Locations
     add_locations(Regions.ROOT, world, [
         (Locations.LINKS_POCKET, lambda bundle: True)

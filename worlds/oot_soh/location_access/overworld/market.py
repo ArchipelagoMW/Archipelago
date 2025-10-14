@@ -161,13 +161,13 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.MARKET_MASK_SHOP, world, [
         (EventLocations.MARKET_MASK_SHOP_MASKS, Events.CAN_BORROW_MASKS, lambda bundle: (has_item(Items.ZELDAS_LETTER, bundle) and has_item(Events.KAKARIKO_GATE_OPEN, bundle))),
-        (EventLocations.MARKET_MASK_SHOP_SKULL_MASK, Events.CAN_BORROW_SKULL_MASK, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest or
+        (EventLocations.MARKET_MASK_SHOP_SKULL_MASK, Events.CAN_BORROW_SKULL_MASK, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (bool(world.options.complete_mask_quest) or
                                                                                         has_item(Events.SOLD_KEATON_MASK, bundle))),
-        (EventLocations.MARKET_MASK_SHOP_SPOOKY_MASK, Events.CAN_BORROW_SPOOKY_MASK, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest or
+        (EventLocations.MARKET_MASK_SHOP_SPOOKY_MASK, Events.CAN_BORROW_SPOOKY_MASK, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (bool(world.options.complete_mask_quest) or
                                                                                         has_item(Events.SOLD_SKULL_MASK, bundle))),
-        (EventLocations.MARKET_MASK_SHOP_BUNNY_HOOD, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest or
+        (EventLocations.MARKET_MASK_SHOP_BUNNY_HOOD, Events.CAN_BORROW_BUNNY_HOOD, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (bool(world.options.complete_mask_quest) or
                                                                                         has_item(Events.SOLD_SPOOKY_MASK, bundle))),
-        (EventLocations.MARKET_MASK_SHOP_MASK_OF_TRUTH, Events.CAN_BORROW_MASK_OF_TRUTH, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (world.options.complete_mask_quest or
+        (EventLocations.MARKET_MASK_SHOP_MASK_OF_TRUTH, Events.CAN_BORROW_MASK_OF_TRUTH, lambda bundle: has_item(Events.CAN_BORROW_MASKS, bundle) and (bool(world.options.complete_mask_quest) or
                                                                                         has_item(Events.SOLD_BUNNY_HOOD, bundle)))
     ])
     # Connections

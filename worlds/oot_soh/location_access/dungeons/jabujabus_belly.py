@@ -3,7 +3,6 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-
 class EventLocations(str, Enum):
     JABU_JABUS_BELLY_WEST_TENTACLE = "Jabu Jabus Belly West Tentacle"
     JABU_JABUS_BELLY_EAST_TENTACLE = "Jabu Jabus Belly East Tentacle"
@@ -14,7 +13,7 @@ class EventLocations(str, Enum):
     JABU_JABUS_BELLY_WATER_SWITCH_ROOM_FAIRY_POT = "Jabu Jabus Belly Water Switch Room Fairy Pot"
     JABU_JABUS_BELLY_ABOVE_BIGOCTO_FAIRY_POT = "Jabu Jabus Belly Above Bigocto Fairy Pot"
     JABU_JABUS_BELLY_ABOVE_BIGOCTO_NUT_POT = "Jabu Jabus Belly Above Bigocto Nut Pot"
-    JABU_JABUS_BELLY_BOSS = "Jabu Jabus Boss Barinade"
+    JABU_JABUS_BELLY_BARINADE = "Jabu Jabus Belly Barinade"
 
 
 class LocalEvents(str, Enum):
@@ -217,7 +216,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Jabu Jabu's Belly Boss Room
     # Events
     add_events(Regions.JABU_JABUS_BELLY_BOSS_ROOM, world, [
-        (EventLocations.JABU_JABUS_BELLY_BOSS, Events.CLEARED_JABU_JABUS_BELLY, lambda bundle: can_kill_enemy(bundle, Enemies.BARINADE))
+        (EventLocations.JABU_JABUS_BELLY_BARINADE, Events.JABU_JABUS_BELLY_COMPLETED, lambda bundle: can_kill_enemy(bundle, Enemies.BARINADE))
     ])
     # Locations
     add_locations(Regions.JABU_JABUS_BELLY_BOSS_ROOM, world, [
@@ -227,11 +226,11 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.JABU_JABUS_BELLY_BARINADE_POT4, lambda bundle: can_break_pots(bundle)),
         (Locations.JABU_JABUS_BELLY_BARINADE_POT5, lambda bundle: can_break_pots(bundle)),
         (Locations.JABU_JABUS_BELLY_BARINADE_POT6, lambda bundle: can_break_pots(bundle)),
-        (Locations.JABU_JABUS_BELLY_BARINADE_HEART_CONTAINER, lambda bundle: has_item(Events.CLEARED_JABU_JABUS_BELLY, bundle)),
-        (Locations.BARINADE, lambda bundle: has_item(Events.CLEARED_JABU_JABUS_BELLY, bundle))
+        (Locations.JABU_JABUS_BELLY_BARINADE_HEART_CONTAINER, lambda bundle: has_item(Events.JABU_JABUS_BELLY_COMPLETED, bundle)),
+        (Locations.BARINADE, lambda bundle: has_item(Events.JABU_JABUS_BELLY_COMPLETED, bundle))
     ])
     # Connections
     connect_regions(Regions.JABU_JABUS_BELLY_BOSS_ROOM, world, [
         (Regions.JABU_JABUS_BELLY_BOSS_EXIT, lambda bundle: False),
-        (Regions.ZORAS_FOUNTAIN, lambda bundle: has_item(Events.CLEARED_JABU_JABUS_BELLY, bundle))
+        (Regions.ZORAS_FOUNTAIN, lambda bundle: has_item(Events.JABU_JABUS_BELLY_COMPLETED, bundle))
     ])

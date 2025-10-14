@@ -6,12 +6,12 @@ if TYPE_CHECKING:
 
 class EventLocations(str, Enum):
     GV_BUG_ROCK = "GV Bug Rock"
-    GV_GOSSIP_STONE = "GV Gossip Stone"
+    GV_GOSSIP_STONE_SONG_FAIRY = "GV Gossip Stone Song Fairy"
     GV_BEAN_SOIL = "GV Bean Soil"
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    # Gerudo Valley
+    ## Gerudo Valley
     # Events
     add_events(Regions.GERUDO_VALLEY, world, [
         (EventLocations.GV_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: is_child(bundle)),
@@ -35,10 +35,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GV_LOWER_STREAM, lambda bundle: is_child(bundle))
     ])
 
-    # GV Upper Stream
+    ## GV Upper Stream
     # Events
     add_events(Regions.GV_UPPER_STREAM, world, [
-        (EventLocations.GV_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy(bundle)),
+        (EventLocations.GV_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy(bundle)),
         (EventLocations.GV_BEAN_SOIL, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS,
                                                                                            bundle)),
@@ -67,13 +67,13 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle)),
     ])
 
-    # GV Lower Stream
+    ## GV Lower Stream
     # Connections
     connect_regions(Regions.GV_LOWER_STREAM, world, [
         (Regions.LAKE_HYLIA, lambda bundle: True)
     ])
 
-    # GV Grotto Ledge
+    ## GV Grotto Ledge
     # Connections
     connect_regions(Regions.GV_GROTTO_LEDGE, world, [
         (Regions.GV_UPPER_STREAM,
@@ -84,7 +84,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GV_CRATE_LEDGE, lambda bundle: can_use(Items.LONGSHOT, bundle))
     ])
 
-    # GV Crate Ledge
+    ## GV Crate Ledge
     # Locations
     add_locations(Regions.GV_CRATE_LEDGE, world, [
         (Locations.GV_CRATE_FREESTANDING_POH, lambda bundle: can_break_crates(bundle)),
@@ -98,7 +98,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_use(Items.BRONZE_SCALE, bundle) or can_use(Items.IRON_BOOTS, bundle)),
     ])
 
-    # GV Fortress Side
+    ## GV Fortress Side
     # Locations
     add_locations(Regions.GV_FORTRESS_SIDE, world, [
         (Locations.GV_CHEST, lambda bundle: is_adult(bundle) and can_use(Items.MEGATON_HAMMER, bundle)),
@@ -126,13 +126,13 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_do_trick(Tricks.DAMAGE_BOOST_SIMPLE, bundle) and has_explosives(bundle)),
     ])
 
-    # GV Carpenter Tent
+    ## GV Carpenter Tent
     # Connections
     connect_regions(Regions.GV_CARPENTER_TENT, world, [
         (Regions.GV_FORTRESS_SIDE, lambda bundle: True),
     ])
 
-    # GV Octorok Grotto
+    ## GV Octorok Grotto
     # Locations
     add_locations(Regions.GV_OCTOROK_GROTTO, world, [
         (Locations.GV_OCTOROK_GROTTO_FRONT_LEFT_BLUE_RUPEE,
@@ -165,7 +165,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GV_GROTTO_LEDGE, lambda bundle: True),
     ])
 
-    # GV Storms Grotto
+    ## GV Storms Grotto
     # Locations
     add_locations(Regions.GV_STORMS_GROTTO, world, [
         (Locations.GV_DEKU_SCRUB_GROTTO_REAR, lambda bundle: can_stun_deku(bundle)),

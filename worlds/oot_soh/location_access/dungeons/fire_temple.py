@@ -7,8 +7,9 @@ class EventLocations(str, Enum):
     FIRE_TEMPLE_NEAR_BOSS_ROOM_FAIRY_POT = "Fire Temple Near Boss Room Fairy Pot"
     FIRE_TEMPLE_LOOP_HAMMER_SWITCH_ROOM_SWITCH = "Fire Temple Loop Hammer Switch Room Switch"
     FIRE_TEMPLE_FIRE_MAZE_UPPER_PLATFORM = "Fire Temple Fire Maze Upper Platform"
-    FIRE_TEMPLE_BOSS_VOLVAGIA = "Fire Temple Boss Volvagia"
-    
+    FIRE_TEMPLE_VOLVAGIA = "Fire Temple Volvagia"
+
+
 class LocalEvents(str, Enum):
     FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT = "Fire Temple Loop Hammer Switch Hit"
     FIRE_TEMPLE_FIRE_MAZE_UPPER_PLATFORM_HIT = "Fire Temple Fire Maze Upper Platform Hit"
@@ -478,17 +479,17 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Fire Temple Boss Room
     # Events
     add_events(Regions.FIRE_TEMPLE_BOSS_ROOM, world, [
-        (EventLocations.FIRE_TEMPLE_BOSS_VOLVAGIA, Events.CLEARED_FIRE_TEMPLE, lambda bundle:
+        (EventLocations.FIRE_TEMPLE_VOLVAGIA, Events.FIRE_TEMPLE_COMPLETED, lambda bundle:
             fire_timer(bundle) >= 64 and can_kill_enemy(bundle, Enemies.VOLVAGIA))
     ])
     # Locations
     add_locations(Regions.FIRE_TEMPLE_BOSS_ROOM, world, [
-        (Locations.FIRE_TEMPLE_VOLVAGIA_HEART_CONTAINER, lambda bundle: has_item(Events.CLEARED_FIRE_TEMPLE, bundle)),
-        (Locations.VOLVAGIA, lambda bundle: has_item(Events.CLEARED_FIRE_TEMPLE, bundle))
+        (Locations.FIRE_TEMPLE_VOLVAGIA_HEART_CONTAINER, lambda bundle: has_item(Events.FIRE_TEMPLE_COMPLETED, bundle)),
+        (Locations.VOLVAGIA, lambda bundle: has_item(Events.FIRE_TEMPLE_COMPLETED, bundle))
     ])
     # Connections
     connect_regions(Regions.FIRE_TEMPLE_BOSS_ROOM, world, [
         (Regions.FIRE_TEMPLE_BOSS_ENTRYWAY, lambda bundle: False),
-        (Regions.DMC_CENTRAL_LOCAL, lambda bundle: has_item(Events.CLEARED_FIRE_TEMPLE, bundle))
+        (Regions.DMC_CENTRAL_LOCAL, lambda bundle: has_item(Events.FIRE_TEMPLE_COMPLETED, bundle))
     ])
     

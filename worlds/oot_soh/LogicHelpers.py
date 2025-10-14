@@ -875,9 +875,9 @@ def medallion_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     return item_group_count(bundle, "Medallions")
 
 
-dungeon_events: list[Events] = [Events.CLEARED_DEKU_TREE, Events.CLEARED_DODONGOS_CAVERN, Events.CLEARED_JABU_JABUS_BELLY,
-                      Events.CLEARED_FOREST_TEMPLE, Events.CLEARED_FIRE_TEMPLE, Events.CLEARED_WATER_TEMPLE,
-                      Events.CLEARED_SPIRIT_TEMPLE, Events.CLEARED_SHADOW_TEMPLE]
+dungeon_events: list[Events] = [Events.DEKU_TREE_COMPLETED, Events.DODONGOS_CAVERN_COMPLETED, Events.JABU_JABUS_BELLY_COMPLETED,
+                      Events.FOREST_TEMPLE_COMPLETED, Events.FIRE_TEMPLE_COMPLETED, Events.WATER_TEMPLE_COMPLETED,
+                      Events.SPIRIT_TEMPLE_COMPLETED, Events.SHADOW_TEMPLE_COMPLETED]
 def dungeon_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     count = 0
     for dungeon in dungeon_events:

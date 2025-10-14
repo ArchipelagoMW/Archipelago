@@ -5,12 +5,13 @@ if TYPE_CHECKING:
 
 class EventLocations(str, Enum):
     DMT_BEAN_PLANT_FAIRY = "DMT Bean Plant Fairy"
-    DMT_GOSSIP_STONE_FAIRY = "DMT Gossip Stone Fairy"
+    DMT_GOSSIP_STONE_SONG_FAIRY = "DMT Gossip Stone Song Fairy"
     DMT_BUG_ROCK = "DMT Bug Rock"
-    DMT_STORMS_GROTTO_GOSSIP_STONE = "DMT Storms Grotto Gossip Stone"
+    DMT_STORMS_GROTTO_GOSSIP_STONE_SONG_FAIRY = "DMT Storms Grotto Gossip Stone Song Fairy"
     DMT_STORMS_GROTTO_BUTTERFLY_FAIRY = "DMT Storms Grotto Butterfly Fairy"
     DMT_STORMS_GROTTO_BUG_GRASS = "DMT Storms Grotto Bug Grass"
-    DMT_STORMS_GROTTO_FISH = "DMT Storms Grotto Fish"
+    DMT_STORMS_GROTTO_PUDDLE_FISH = "DMT Storms Grotto Puddle Fish"
+
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
@@ -46,7 +47,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Death Mountain Summit
     # Events
     add_events(Regions.DEATH_MOUNTAIN_SUMMIT, world, [
-        (EventLocations.DMT_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy(bundle)),
+        (EventLocations.DMT_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy(bundle)),
         (EventLocations.DMT_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: is_child(bundle))
     ])
     # Locations
@@ -101,10 +102,10 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Death Mountain Trail Storms Grotto
     # Events
     add_events(Regions.DMT_STORMS_GROTTO, world, [
-        (EventLocations.DMT_STORMS_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.DMT_STORMS_GROTTO_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
         (EventLocations.DMT_STORMS_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
         (EventLocations.DMT_STORMS_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
-        (EventLocations.DMT_STORMS_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+        (EventLocations.DMT_STORMS_GROTTO_PUDDLE_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.DMT_STORMS_GROTTO, world, [

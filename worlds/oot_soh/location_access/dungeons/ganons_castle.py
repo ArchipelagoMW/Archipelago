@@ -3,7 +3,6 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-
 class EventLocations(str, Enum):
     GANONS_CASTLE_FREE_FAIRIES = "Ganon's Castle Free Fairies"
     GANONS_CASTLE_FOREST_TRIAL_AREA = "Ganon's Castle Forest Trial Area"
@@ -16,7 +15,8 @@ class EventLocations(str, Enum):
     GANONS_CASTLE_WATER_TRIAL_FAIRY_POT = "Ganon's Castle Water Trial Fairy Pot"
     GANONS_CASTLE_SPIRIT_TRIAL_NUT_POT = "Ganon's Castle Spirit Trial Nut Pot"
     GANON_DEFEATED = "Ganon Defeated"
-    
+
+
 class LocalEvents(str, Enum):
     GANONS_CASTLE_FOREST_TRIAL_CLEARED = "Ganon's Castle Forest Trial Cleared"
     GANONS_CASTLE_FIRE_TRIAL_CLEARED = "Ganon's Castle Fire Trial Cleared"
@@ -24,7 +24,6 @@ class LocalEvents(str, Enum):
     GANONS_CASTLE_SHADOW_TRIAL_CLEARED = "Ganon's Castle Shadow Trial Cleared"
     GANONS_CASTLE_SPIRIT_TRIAL_CLEARED = "Ganon's Castle Spirit Trial Cleared"
     GANONS_CASTLE_LIGHT_TRIAL_CLEARED = "Ganon's Castle Light Trial Cleared"
-    
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -312,7 +311,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GANONS_TOWER_BEFORE_GANONDORFS_LAIR, world, [
         (Regions.GANONS_TOWER_FLOOR_3, lambda bundle: True),
-        (Regions.GANONDORFS_LAIR, lambda bundle: has_item(Items.GANONS_CASTLE_BOSS_KEY, bundle) or world.options.triforce_hunt)
+        (Regions.GANONDORFS_LAIR, lambda bundle: has_item(Items.GANONS_CASTLE_BOSS_KEY, bundle) or bool(world.options.triforce_hunt))
     ])
     
     ## Ganondorf's Lair

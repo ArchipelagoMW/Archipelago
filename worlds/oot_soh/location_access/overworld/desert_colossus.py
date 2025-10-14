@@ -8,9 +8,8 @@ class EventLocations(str, Enum):
     DESERT_COLOSSUS_FAIRY_POND_OASIS = "Desert Colossus Fairy Pond Oasis"
     DESERT_COLOSSUS_BUG_ROCK = "Desert Colossus Bug Rock"
 
+
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-    
     ## Desert Colossus
     # Events
     add_events(Regions.DESERT_COLOSSUS, world, [

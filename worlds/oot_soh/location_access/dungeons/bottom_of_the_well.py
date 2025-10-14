@@ -3,7 +3,6 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-
 class EventLocations(str, Enum):
     BOTTOM_OF_THE_WELL_LOWERED_WATER = "Bottom of the Well Lowered Water"
     BOTTOM_OF_THE_WELL_NUT_POT = "Bottom of the Well Nut Pot"
@@ -17,16 +16,6 @@ class LocalEvents(str, Enum):
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-    
-    # TODO: Temporary to test generation
-    connect_regions(Regions.KOKIRI_FOREST, world, [
-        (Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, lambda bundle: True)
-    ])
-    connect_regions(Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, world, [
-        (Regions.KOKIRI_FOREST, lambda bundle: True)
-    ])
-
     ## Bottom of The Well Entryway
     # Locations
     add_locations(Regions.BOTTOM_OF_THE_WELL_ENTRYWAY, world, [])
