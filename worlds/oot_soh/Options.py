@@ -348,6 +348,23 @@ class ShuffleShopsItemAmount(Range):
     default = 4
     visibility = Visibility.none
 
+class ShuffleShopPrices(Choice):
+    """
+    If Shuffle Shops is on, set the price of randomized shop items.
+    - affordable: always 10 rupies
+    - child: 10 - 99 rupies
+    - adult: 10 - 200 rupies
+    - giant: 10 - 500 rupies
+    - tycoon: 10 - 999 rupies
+    """
+    display_name = "ShuffleShopPrices"
+    option_affordable = 0
+    option_child = 1
+    option_adult = 2
+    option_giant = 3
+    option_tycoon = 4
+    default = 0
+
 
 class ShuffleFish(Choice):
     """
@@ -770,6 +787,7 @@ class SohOptions(PerGameCommonOptions):
     shuffle_freestanding_items: ShuffleFreestandingItems
     shuffle_shops: ShuffleShops
     shuffle_shops_item_amount: ShuffleShopsItemAmount
+    shuffle_shops_prices: ShuffleShopPrices
     shuffle_fish: ShuffleFish
     shuffle_scrubs: ShuffleScrubs
     shuffle_beehives: ShuffleBeehives
