@@ -122,7 +122,9 @@ for world_source in world_sources:
         for dirpath, dirnames, filenames in os.walk(world_source.resolved_path):
             for file in filenames:
                 if file.endswith("archipelago.json"):
-                    manifest = json.load(open(os.path.join(dirpath, file), "r"))
+                    manifest_file = open(os.path.join(dirpath, file), "r")
+                    manifest = json.load(manifest_file)
+                    manifest_file.close()
                     break
             if manifest:
                 break
