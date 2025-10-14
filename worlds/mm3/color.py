@@ -85,11 +85,21 @@ MM3_COLORS: dict[str, tuple[int, int]] = {
 
 MM3_KNOWN_COLORS: dict[str, tuple[int, int]] = {
     **MM3_COLORS,
+    # Metroid series
+    "Varia Suit": (0x27, 0x16),
+    "Gravity Suit": (0x14, 0x16),
+    "Phazon Suit": (0x06, 0x1D),
     # Street Fighter, technically
     "Hadouken": (0x3C, 0x11),
     "Shoryuken": (0x38, 0x16),
     # X Series
     "Z-Saber": (0x20, 0x16),
+    "Helmet Upgrade": (0x20, 0x01),
+    "Body Upgrade": (0x20, 0x01),
+    "Arms Upgrade": (0x20, 0x01),
+    "Plasma Shot Upgrade": (0x20, 0x01),
+    "Stock Charge Upgrade": (0x20, 0x01),
+    "Legs Upgrade": (0x20, 0x01),
     # X1
     "Homing Torpedo": (0x3D, 0x37),
     "Chameleon Sting": (0x3B, 0x1A),
@@ -117,16 +127,26 @@ MM3_KNOWN_COLORS: dict[str, tuple[int, int]] = {
     "Gravity Well": (0x38, 0x14),
     "Parasitic Bomb": (0x31, 0x28),
     "Frost Shield": (0x23, 0x2C),
+    # X4
+    "Lightning Web": (0x3D, 0x28),
+    "Aiming Laser": (0x2C, 0x14),
+    "Double Cyclone": (0x28, 0x1A),
+    "Rising Fire": (0x20, 0x16),
+    "Ground Hunter": (0x2C, 0x15),
+    "Soul Body": (0x37, 0x27),
+    "Twin Slasher": (0x28, 0x00),
+    "Frost Tower": (0x3D, 0x2C),
 }
 
 if "worlds.mm2" in sys.modules:
     # is this the proper way to do this? who knows!
     try:
         mm2 = sys.modules["worlds.mm2"]
-        MM3_KNOWN_COLORS.update(mm2.Color.MM2_COLORS)
+        MM3_KNOWN_COLORS.update(mm2.color.MM2_COLORS)
         for item in MM3_COLORS:
-            mm2.Color.add_color_to_mm2(item, MM3_COLORS[item])
-    except Exception:
+            mm2.color.add_color_to_mm2(item, MM3_COLORS[item])
+    except AttributeError:
+        # pass through if an old MM2 is found
         pass
 
 palette_pointers: dict[str, list[int]] = {

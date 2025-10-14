@@ -93,6 +93,7 @@ class MM3World(World):
     location_name_groups = location_groups
     web = MM3WebWorld()
     rom_name: bytearray
+
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name = bytearray()
         self.rom_name_available_event = threading.Event()
