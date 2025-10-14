@@ -24,16 +24,17 @@ from enum import IntEnum
 from CommonClient import (CommonContext, ClientCommandProcessor, get_base_parser, gui_enabled, logger, server_loop)
 from NetUtils import ClientStatus
 from . import LinksAwakeningWorld
-from . import Commonfrom .GpsTracker import GpsTracker
+from . import Common
+from .GpsTracker import GpsTracker
 from .TrackerConsts import storage_key
 from .ItemTracker import ItemTracker
-from .LADXR.checkMetadata import checkMetadataTable
-from .Locations import get_locations_to_id, meta_to_name
+from .Locations import links_awakening_location_meta_to_id
 from .Tracker import LocationTracker, MagpieBridge, Check
 
 links_awakening_location_id_to_meta = {v:k for k,v in links_awakening_location_meta_to_id.items()}
 
-class GameboyException(Exception):
+
+class GameboyException(Exception):
     pass
 
 
