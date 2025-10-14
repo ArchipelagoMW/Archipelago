@@ -41,7 +41,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GC_MAZE_LEFT_CHEST, lambda bundle: can_use_any([Items.MEGATON_HAMMER, Items.SILVER_GAUNTLETS], bundle) or (can_do_trick(Tricks.GC_LEFTMOST, bundle) and has_explosives(bundle) and can_use(Items.HOVER_BOOTS, bundle))),
         (Locations.GC_MAZE_CENTER_CHEST, lambda bundle: blast_or_smash(bundle) or can_use(Items.SILVER_GAUNTLETS, bundle)),
         (Locations.GC_MAZE_RIGHT_CHEST, lambda bundle: blast_or_smash(bundle) or can_use(Items.SILVER_GAUNTLETS, bundle)),
-        (Locations.GC_POT_FREESTANDING_POH, lambda bundle: is_child(bundle) and has_item(LocalEvents.GORON_CITY_CHILD_FIRE_LIT, bundle) and (can_use(Items.BOMB_BAG, bundle) or (has_item(Items.GORONS_BRACELET, bundle) and can_do_trick(Tricks.GC_POT_STRENGTH)) or (can_use(Items.BOMBCHUS_5, bundle) and can_do_trick(Tricks.GC_POT, bundle)))),
+        (Locations.GC_POT_FREESTANDING_POH, lambda bundle: is_child(bundle) and has_item(LocalEvents.GORON_CITY_CHILD_FIRE_LIT, bundle) and (can_use(Items.BOMB_BAG, bundle) or (has_item(Items.GORONS_BRACELET, bundle) and can_do_trick(Tricks.GC_POT_STRENGTH, bundle)) or (can_use(Items.BOMBCHUS_5, bundle) and can_do_trick(Tricks.GC_POT, bundle)))),
         (Locations.GC_ROLLING_GORON_AS_CHILD, lambda bundle: is_child(bundle) and (has_explosives(bundle) or (has_item(Items.GORONS_BRACELET, bundle) and can_do_trick(Tricks.GC_ROLLING_STRENGTH, bundle)))),
         (Locations.GC_ROLLING_GORON_AS_ADULT, lambda bundle: has_item(LocalEvents.GORON_CITY_STOP_ROLLING_GORON_AS_ADULT, bundle)),
         (Locations.GC_GS_BOULDER_MAZE, lambda bundle: is_child(bundle) and blast_or_smash(bundle)),

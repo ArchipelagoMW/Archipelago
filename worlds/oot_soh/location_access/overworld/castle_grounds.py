@@ -142,7 +142,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GANONS_CASTLE_GROUNDS, world, [
         (Regions.CASTLE_GROUNDS, lambda bundle: at_night(bundle)),
-        (Regions.OGC_GREAT_FAIRY_FOUNTAIN, lambda bundle: can_use(Items.GOLDEN_GAUNTLETS) and at_night(bundle)),
+        (Regions.OGC_GREAT_FAIRY_FOUNTAIN, lambda bundle: can_use(Items.GOLDEN_GAUNTLETS, bundle) and at_night(bundle)),
         (Regions.GANONS_CASTLE_LEDGE, lambda bundle: has_item(LocalEvents.GANONS_CASTLE_GROUNDS_BUILT_RAINBOW_BRIDGE, bundle))
     ])
 

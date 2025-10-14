@@ -369,14 +369,14 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_BLUE_POE_ROOM, world, [
         (Regions.FOREST_TEMPLE_UPPER_STALFOS, lambda bundle: True),
-        (Regions.FOREST_TEMPLE_NE_CORRIDOR_STRAIGHTENED, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 4))
+        (Regions.FOREST_TEMPLE_NE_CORRIDOR_STRAIGHTENED, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 4, bundle))
     ])
     
     ## Forest Temple NE Corridor Straightened
     # Connections
     connect_regions(Regions.FOREST_TEMPLE_NE_CORRIDOR_STRAIGHTENED, world, [
-        (Regions.FOREST_TEMPLE_BLUE_POE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 4)),
-        (Regions.FOREST_TEMPLE_FROZEN_EYE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 5)),
+        (Regions.FOREST_TEMPLE_BLUE_POE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 4, bundle)),
+        (Regions.FOREST_TEMPLE_FROZEN_EYE_ROOM, lambda bundle: small_keys(Items.FOREST_TEMPLE_SMALL_KEY, 5, bundle))
     ])
     
     ## Forest Temple NE Corridor Twisted
