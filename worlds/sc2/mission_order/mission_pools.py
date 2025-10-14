@@ -64,7 +64,7 @@ class SC2MOGenMissionPools:
     _flag_weights: Dict[MissionFlag, int]
     _unexcluded_missions: Iterable[SC2Mission]
 
-    def __init__(self, exclude_mission_variants_on_pull) -> None:
+    def __init__(self, exclude_mission_variants_on_pull: bool) -> None:
         self.master_list = {mission.id for mission in SC2Mission}
         self.difficulty_pools = {
             diff: {mission.id for mission in SC2Mission if mission.pool + 1 == diff}
