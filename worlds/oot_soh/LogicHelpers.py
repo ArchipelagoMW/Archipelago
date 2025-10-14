@@ -154,6 +154,9 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
     
     if item == Items.BOMB_BAG: # 18
         return state.has(Items.PROGRESSIVE_BOMB_BAG.value, player) 
+    
+    if item in (Items.POCKET_EGG, Items.COJIRO, Items.ODD_MUSHROOM, Items.ODD_POTION, Items.POACHERS_SAW, Items.BROKEN_GORONS_SWORD, Items.PRESCRIPTION, Items.EYEBALL_FROG, Items.WORLDS_FINEST_EYEDROPS): # 17
+        return (not world.options.shuffle_adult_trade_items) or state.has(item.value, player)
 
     if item == Items.CHILD_WALLET: # 16
         return can_afford(99, bundle)
