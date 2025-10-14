@@ -162,7 +162,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Spirit Temple Boss Room
     # Events
     add_events(Regions.SPIRIT_TEMPLE_BOSS_ROOM, world, [
-        (EventLocations.SPIRIT_TEMPLE_BOSS_TWINROVA, Events.CLEARED_SPIRIT_TEMPLE, lambda bundle: can_kill_enemy(Enemies.TWINROVA, bundle))
+        (EventLocations.SPIRIT_TEMPLE_BOSS_TWINROVA, Events.CLEARED_SPIRIT_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.TWINROVA))
     ])
     # Locations
     add_locations(Regions.SPIRIT_TEMPLE_BOSS_ROOM, world, [
