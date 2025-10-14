@@ -103,8 +103,8 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     assembler.const("wCustomMessage", 0xC0A0)
     assembler.const("wOverworldRoomStatus", 0xD800)
 
-    # There's a third unused death count address, use it to count consecutive safe frames
-    assembler.const("wConsecutiveSafe", 0xDB59)
+    # Unused wram address, use it to track consecutive safe frames for death link
+    assembler.const("wConsecutiveSafe", 0xDBA8)
 
     # We store the link info in unused color dungeon flags, so it gets preserved in the savegame.
     assembler.const("wMWRecvIndexHi", 0xDDF6)

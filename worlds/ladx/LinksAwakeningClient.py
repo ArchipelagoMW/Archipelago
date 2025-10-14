@@ -91,6 +91,8 @@ class MWCommands(IntEnum):
     # bit 2: collect location
     # bit 3: send death link
     # bit 4,5: clear trade item (bit in wMWMultipurposeF)
+    # bit 7: no commands happen unless this is set, the gb will unset this bit
+    #        after executing the command allowing for confirmation in client
     NONE =              0b00000000
     SEND_ITEM_SPECIAL = 0b00000001
     SEND_ITEM =         0b00000011
@@ -99,6 +101,7 @@ class MWCommands(IntEnum):
     DEATH_LINK =        0b00001000
     CLEAR_TRADE_1 =     0b00010000
     CLEAR_TRADE_2 =     0b00100000
+    EXECUTE_COMMAND =   0b10000000
 
 
 class DeathLinkStatus(IntEnum):
@@ -341,6 +344,7 @@ class RAGameboy():
     def send_mw_command(self, command, item_code=0xFF, item_sender=0x0000,
                         mp_c=0x00, mp_d=0x00, mp_e=0x00, mp_f=0x00,
                         mp_cd=0x0000, mp_ef=0x0000):
+        command |= MWCommands.EXECUTE_COMMAND
         [sender_high, sender_low] = struct.pack('>H', item_sender)
         if mp_cd:
             [mp_c, mp_d] = struct.pack('>H', mp_cd)
@@ -524,13 +528,17 @@ class LinksAwakeningClient():
                 await death_link_cb()
                 self.death_link_status = DeathLinkStatus.DYING
         elif self.death_link_status == DeathLinkStatus.PENDING:
-            self.gameboy.send_mw_command(command=MWCommands.DEATH_LINK)
-            self.death_link_status = DeathLinkStatus.DYING
+            if wMWCommand & MWCommands.DEATH_LINK:
+                if not wMWCommand & MWCommands.EXECUTE_COMMAND:
+                    self.death_link_status = DeathLinkStatus.DYING
+                    self.gameboy.send_mw_command(command=MWCommands.NONE)
+            else:
+                self.gameboy.send_mw_command(command=MWCommands.DEATH_LINK)
         elif self.death_link_status == DeathLinkStatus.DYING:
             if wHealth:
                 self.death_link_status = DeathLinkStatus.NONE
 
-        if wMWCommand or self.death_link_status:
+        if wMWCommand & MWCommands.EXECUTE_COMMAND or self.death_link_status:
             return
 
         recv_index = wMWRecvIndexHi << 8 | wMWRecvIndexLo

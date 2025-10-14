@@ -58,7 +58,9 @@ MainLoop:
 
 .deathLink:
     ld   hl, wMWCommand
-    bit  3, [hl]
+    bit  7, [hl] ; no commands happen if bit 7 is unset
+    ret  z
+    bit  3, [hl] ; check for death link
     jr   z, .collect
     ; require an arbitrary number of consecutive safe frames to kill the player
     ; the goal is to avoid killing a player after they give up a trade item
@@ -175,8 +177,7 @@ MainLoop:
     ld   [wTradeSequenceItem2], a
 
 .actuallyClearCmdAndRet:
-    xor  a
-    ld   [wMWCommand], a
+    res  7, [hl]
     ret
 
 LinkGiveSlime:
