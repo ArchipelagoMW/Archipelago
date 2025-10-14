@@ -6,7 +6,8 @@ from datetime import timedelta
 from Options import (
     Choice, Toggle, DefaultOnToggle, OptionSet, Range,
     PerGameCommonOptions, Option, VerifyKeys, StartInventory,
-    is_iterable_except_str, OptionGroup, Visibility, ItemDict
+    is_iterable_except_str, OptionGroup, Visibility, ItemDict,
+    Accessibility, ProgressionBalancing
 )
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
@@ -1756,3 +1757,6 @@ void_trade_age_limits_ms: Dict[int, int] = {
     VoidTradeAgeLimit.option_1_day: 1000 * int(timedelta(days = 1).total_seconds()),
     VoidTradeAgeLimit.option_1_week: 1000 * int(timedelta(weeks = 1).total_seconds()),
 }
+
+# Store the names of all options
+OPTION_NAME = {option_type: name for name, option_type in Starcraft2Options.type_hints.items()}
