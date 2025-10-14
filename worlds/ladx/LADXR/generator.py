@@ -103,15 +103,20 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     assembler.const("wCustomMessage", 0xC0A0)
     assembler.const("wOverworldRoomStatus", 0xD800)
 
+    # Unused wram address, use it to track consecutive safe frames for death link
+    assembler.const("wConsecutiveSafe", 0xDBA8)
+
     # We store the link info in unused color dungeon flags, so it gets preserved in the savegame.
-    assembler.const("wLinkSyncSequenceNumber", 0xDDF6)
-    assembler.const("wLinkStatusBits", 0xDDF7)
-    assembler.const("wLinkGiveItem", 0xDDF8)
-    assembler.const("wLinkGiveItemFrom", 0xDDF9)
-    assembler.const("wLinkSendItemRoomHigh", 0xDDFA)
-    assembler.const("wLinkSendItemRoomLow", 0xDDFB)
-    assembler.const("wLinkSendItemTarget", 0xDDFC)
-    assembler.const("wLinkSendItemItem", 0xDDFD)
+    assembler.const("wMWRecvIndexHi", 0xDDF6)
+    assembler.const("wMWRecvIndexLo", 0xDDF7)
+    assembler.const("wMWCommand", 0xDDF8)
+    assembler.const("wMWItemCode", 0xDDF9)
+    assembler.const("wMWItemSenderHi", 0xDDFA)
+    assembler.const("wMWItemSenderLo", 0xDDFB)
+    assembler.const("wMWMultipurposeC", 0xDDFC)
+    assembler.const("wMWMultipurposeD", 0xDDFD)
+    assembler.const("wMWMultipurposeE", 0xDDFE)
+    assembler.const("wMWMultipurposeF", 0xDDFF)
 
     assembler.const("wZolSpawnCount", 0xDE10)
     assembler.const("wCuccoSpawnCount", 0xDE11)

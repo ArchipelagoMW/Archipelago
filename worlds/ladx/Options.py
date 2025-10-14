@@ -3,8 +3,8 @@ from dataclasses import dataclass
 import os.path
 import typing
 import logging
-from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Removed, StartInventoryPool
-from collections import defaultdict
+from Options import (Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Removed,
+                     DeathLink, StartInventoryPool)from collections import defaultdict
 import Utils
 
 DefaultOffToggle = Toggle
@@ -665,6 +665,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     tarins_gift: TarinsGift
     overworld: Overworld
     stabilize_item_pool: StabilizeItemPool
+    death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool
 
     warp_improvements: Removed
