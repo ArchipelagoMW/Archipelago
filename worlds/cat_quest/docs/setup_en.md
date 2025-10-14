@@ -11,11 +11,11 @@
 
 ## Installation
 
-1. Download and install BepInEx 5 (x86, version 5.4.20 or newer) into your Cat Quest root folder. (Don't use the pre-release of 6)
+1. Download and install BepInEx 5 (x86, version 5.4.20 or newer) into your Cat Quest root folder. (Don't use the pre-release of 6) (Installation guide for BepInEx can be found [here](https://docs.bepinex.dev/articles/user_guide/installation/index.html))
 
-2. Start Cat Quest once, so that BepInEx can create its required configuration files.
+3. Start Cat Quest once, so that BepInEx can create its required configuration files.
 
-3. After BepInEx has been installed and configured, download the Cat Quest Randomizer zip file, move it to the Cat Quest root folder alongside Cat Quest.exe, right click and select "Extract Here" or the equivalent for your extraction software.
+4. After BepInEx has been installed and configured, download the Cat Quest Randomizer zip file, move it to the Cat Quest root folder alongside Cat Quest.exe, right click and select "Extract Here" or the equivalent for your extraction software.
    After this, you can delete the .zip file
 
 ## Connecting
