@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Callable
 
-from BaseClasses import CollectionState, ItemClassification as IC
+from BaseClasses import CollectionState, ItemClassification as IC, Item
 from .Locations import SohLocation
 from worlds.generic.Rules import set_rule
 from .Enums import *
@@ -119,65 +119,39 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
                 or (bombchus_enabled(bundle)
                     and state.has_any((Events.CAN_BUY_BOMBCHUS.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value), world.player)))
 
-    if item == Items.FAIRY_OCARINA:
-        return state.has(Items.PROGRESSIVE_OCARINA.value, player)
-    elif item == Items.OCARINA_OF_TIME:
-        return state.has(Items.PROGRESSIVE_OCARINA.value, player, 2)
     elif item == Items.DEKU_SHIELD:
         return state.has(Events.CAN_BUY_DEKU_SHIELD.value, player)
     elif item == Items.HYLIAN_SHIELD:
         return state.has(Events.CAN_BUY_HYLIAN_SHIELD.value, player)
-    elif item == Items.GORONS_BRACELET:
-        return state.has(Items.STRENGTH_UPGRADE.value, player)
-    elif item == Items.SILVER_GAUNTLETS:
-        return state.has(Items.STRENGTH_UPGRADE.value, player, 2)
-    elif item == Items.GOLDEN_GAUNTLETS:
-        return state.has(Items.STRENGTH_UPGRADE.value, player, 3)
-    elif item == Items.BRONZE_SCALE:
-        return state.has(Items.PROGRESSIVE_SCALE.value, player) or world.options.shuffle_swim == 0
-    elif item == Items.SILVER_SCALE:
-        return state.has(Items.PROGRESSIVE_SCALE.value, player, 2) or (state.has(Items.PROGRESSIVE_SCALE.value, player, 1) and world.options.shuffle_swim == 0)
-    elif item == Items.GOLDEN_SCALE:
-        return state.has(Items.PROGRESSIVE_SCALE.value, player, 3) or (state.has(Items.PROGRESSIVE_SCALE.value, player, 2) and world.options.shuffle_swim == 0)
-    elif item == Items.FAIRY_SLINGSHOT:
-        return state.has(Items.PROGRESSIVE_SLINGSHOT.value, player)
-    elif item == Items.FAIRY_BOW:
-        return state.has(Items.PROGRESSIVE_BOW.value, player)
-    elif item == Items.HOOKSHOT:
-        return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player)
-    elif item == Items.LONGSHOT:
-        return state.has(Items.PROGRESSIVE_HOOKSHOT.value, player, 2)
-    elif item == Items.BOMB_BAG:
-        return state.has(Items.PROGRESSIVE_BOMB_BAG.value, player)
-    elif item == Items.CHILD_WALLET:
-        return can_afford(99, bundle)
-    elif item == Items.ADULT_WALLET:
-        return can_afford(200, bundle)
-    elif item == Items.GIANT_WALLET:
-        return can_afford(500, bundle)
-    elif item == Items.TYCOON_WALLET:
-        return can_afford(999, bundle)
     elif item == Items.MAGIC_BEAN:
         return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
     elif item == Items.BOTTLE_WITH_BUGS:
         return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BUGS.value, player) or state.has(Events.CAN_BUY_BUGS.value, player))
     elif item == Items.STICKS:
-        return (state.has(Events.CAN_FARM_STICKS.value, player) and (world.options.shuffle_deku_stick_bag.value == 0 or state.has(Items.PROGRESSIVE_STICK_CAPACITY.value, player)))
+        return state.has_all((Events.CAN_FARM_STICKS, Items.DEKU_STICK_BAG), player)
     elif item == Items.NUTS:
-        return (state.has(Events.CAN_FARM_NUTS.value, player) and (world.options.shuffle_deku_nut_bag.value == 0 or state.has(Items.PROGRESSIVE_NUT_CAPACITY.value, player)))
+        return state.has_all((Events.CAN_FARM_NUTS, Items.DEKU_NUT_BAG), player)
     else:
         return state.has(item.value, player, count)
+
+
+wallet_capacities: dict[str, int] = {
+    Items.CHILD_WALLET.value: 99,
+    Items.ADULT_WALLET.value: 200,
+    Items.GIANT_WALLET.value: 500,
+    Items.TYCOON_WALLET.value: 999
+}
 
 
 def can_afford(price: int, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     world = bundle[2]
     player = world.player
-    wallets = state.count(Items.PROGRESSIVE_WALLET.value, player)
-    if world.options.shuffle_childs_wallet == 0:
-        wallets += 1
-    if (price <= 99 and wallets <= 1) or (price <= 200 and wallets <= 2) or (price <= 500 and wallets <= 3) or (wallets <= 4):
-        return True
+
+    for wallet, amount in wallet_capacities.items():
+        if amount >= price:
+            return state.has(wallet, player)
+
     return False
 
 
@@ -1026,3 +1000,14 @@ def is_fire_loop_locked(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
 def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBombFlower: bool = False) -> bool:
     return can_do_trick(Tricks.GROUND_JUMP, bundle) and can_standing_shield(bundle) and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle)))
 
+
+def increment_current_count(world: "SohWorld", item: Item, current_count: int) -> int:
+    """
+    If the progressive item count should be increased because of an option (like shuffle_swim), this will increase its current count by 1.
+    Does nothing otherwise.
+    """
+    if ((item.name == Items.PROGRESSIVE_SCALE and not world.options.shuffle_swim)
+            or (item.name == Items.PROGRESSIVE_STICK_CAPACITY and not world.options.shuffle_deku_stick_bag)
+            or (item.name == Items.PROGRESSIVE_NUT_CAPACITY and not world.options.shuffle_deku_nut_bag)):
+        current_count += 1
+    return current_count

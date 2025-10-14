@@ -17,7 +17,7 @@ class ItemType(IntEnum):
 
 class SohItemData(NamedTuple):
     item_id: int | None  # None means it's just here for the data, and won't be added to the datapackage
-    classification: IC = IC.filler
+    classification: IC = IC.progression
     quantity_in_item_pool: int = 0
     item_type: int = ItemType.none
     child_only: bool = False
@@ -239,8 +239,8 @@ item_data_table: Dict[Items, SohItemData] = {
     Items.OCARINA_CRIGHT_BUTTON: SohItemData(208, IC.progression, 0, item_groups=["Ocarina Buttons"]),
     Items.SKELETON_KEY: SohItemData(209, IC.progression, 0, item_groups=["Keys", "Key"]),
     Items.FISHING_POLE: SohItemData(210, IC.progression, 0),
-    #Items.DEKU_STICK_BAG: SohItemData( 211, IC.progression, 0 ),
-    #Items.DEKU_NUT_BAG: SohItemData( 212, IC.progression, 0 ),
+    Items.DEKU_STICK_BAG: SohItemData(None),
+    Items.DEKU_NUT_BAG: SohItemData(None),
     #Items.HINT: SohItemData( 213, IC.filler, 0 ),
     Items.TYCOON_WALLET: SohItemData(None),
     Items.BRONZE_SCALE: SohItemData(None),
@@ -348,6 +348,19 @@ all_bottles: list[Items] = [
     *filler_bottles,
     Items.BOTTLE_WITH_RUTOS_LETTER,
 ]
+
+progressive_items: dict[str, tuple[str, ...]] = {
+    Items.PROGRESSIVE_SCALE: (Items.BRONZE_SCALE, Items.SILVER_SCALE, Items.GOLDEN_SCALE),
+    Items.PROGRESSIVE_OCARINA: (Items.FAIRY_OCARINA, Items.OCARINA_OF_TIME),
+    Items.STRENGTH_UPGRADE: (Items.GORONS_BRACELET, Items.SILVER_GAUNTLETS, Items.GOLDEN_GAUNTLETS),
+    Items.PROGRESSIVE_HOOKSHOT: (Items.HOOKSHOT, Items.LONGSHOT),
+    Items.PROGRESSIVE_WALLET: (Items.CHILD_WALLET, Items.ADULT_WALLET, Items.GIANT_WALLET, Items.TYCOON_WALLET),
+    Items.PROGRESSIVE_SLINGSHOT: (Items.FAIRY_SLINGSHOT,),
+    Items.PROGRESSIVE_BOW: (Items.FAIRY_BOW,),
+    Items.PROGRESSIVE_BOMB_BAG: (Items.BOMB_BAG,),
+    Items.PROGRESSIVE_STICK_CAPACITY: (Items.DEKU_STICK_BAG,),
+    Items.PROGRESSIVE_NUT_CAPACITY: (Items.DEKU_NUT_BAG,),
+}
 
 item_name_groups: dict[str, set[str]] = {}
 for item, data in item_data_table.items():
