@@ -9,8 +9,9 @@ class EventLocations(str, Enum):
     WATER_TEMPLE_HIGH_WATER_WATER_HIGH = "Water Temple High Water Water High"
     WATER_TEMPLE_BOSS_KEY_ROOM_FAIRY_POT = "Water Temple Boss Key Room Fairy Pot"
     WATER_TEMPLE_PRE_BOSS_ROOM_FAIRY_POT = "Water Temple Pre Boss Room Fairy Pot"
-    WATER_TEMPLE_TEMPLE_BOSS_MORPHA = "Water Temple Boss Room Morpha"
-    
+    WATER_TEMPLE_MORPHA = "Water Temple Morpha"
+
+
 class LocalEvents(str, Enum):
     WATER_LEVEL_LOW = "Water Level Low"
     WATER_LEVEL_MIDDLE = "Water Level Middle"
@@ -402,7 +403,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.WATER_TEMPLE_CENTRAL_BOW_POT1, lambda bundle: (can_break_pots(bundle) and
                                                                   has_item(Items.GORONS_BRACELET, bundle) and
                                                                   (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
-                                                                   has_item(LocalEvents.WATER_LEVEL_MIDDLE)))),
+                                                                   has_item(LocalEvents.WATER_LEVEL_MIDDLE, bundle)))),
         (Locations.WATER_TEMPLE_CENTRAL_BOW_POT2, lambda bundle: (can_break_pots(bundle) and
                                                                   has_item(Items.GORONS_BRACELET, bundle) and
                                                                   (has_item(LocalEvents.WATER_LEVEL_LOW, bundle) or
@@ -536,15 +537,15 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Water Temple Boss Room
     # Events
     add_events(Regions.WATER_TEMPLE_BOSS_ROOM, world, [
-        (EventLocations.WATER_TEMPLE_TEMPLE_BOSS_MORPHA, Events.CLEARED_WATER_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.MORPHA))
+        (EventLocations.WATER_TEMPLE_MORPHA, Events.WATER_TEMPLE_COMPLETED, lambda bundle: can_kill_enemy(bundle, Enemies.MORPHA))
     ])
     # Locations
     add_locations(Regions.WATER_TEMPLE_BOSS_ROOM, world, [
-        (Locations.WATER_TEMPLE_MORPHA_HEART_CONTAINER, lambda bundle: has_item(Events.CLEARED_WATER_TEMPLE, bundle)),
-        (Locations.MORPHA, lambda bundle: has_item(Events.CLEARED_WATER_TEMPLE, bundle)),
+        (Locations.WATER_TEMPLE_MORPHA_HEART_CONTAINER, lambda bundle: has_item(Events.WATER_TEMPLE_COMPLETED, bundle)),
+        (Locations.MORPHA, lambda bundle: has_item(Events.WATER_TEMPLE_COMPLETED, bundle)),
     ])
     # Connections
     connect_regions(Regions.WATER_TEMPLE_BOSS_ROOM, world, [
         (Regions.WATER_TEMPLE_BOSS_ENTRYWAY, lambda bundle: False),
-        (Regions.LAKE_HYLIA, lambda bundle: has_item(Events.CLEARED_WATER_TEMPLE, bundle))
+        (Regions.LAKE_HYLIA, lambda bundle: has_item(Events.WATER_TEMPLE_COMPLETED, bundle))
     ])

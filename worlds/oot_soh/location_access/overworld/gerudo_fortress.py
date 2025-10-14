@@ -105,7 +105,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GF_NEAR_GROTTO, lambda bundle: True),
         (Regions.GF_OUTSIDE_GTG, lambda bundle: is_child(bundle) or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
         (Regions.GF_BOTTOM_OF_LOWER_VINES, lambda bundle: can_do_trick(Tricks.GF_JUMP, bundle)),
-    ]),
+    ])
 
     # GF Bottom of Lower Vines
     # Connections

@@ -3,16 +3,15 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-
 class EventLocations(str, Enum):
-    ZD_GOSSIP_STONE = "ZD Gossip Stone"
+    ZD_GOSSIP_STONE_SONG_FAIRY = "ZD Gossip Stone Song Fairy"
     ZD_NUT_POT = "ZD Nut Pot"
     ZD_STICK_POT = "ZD Stick Pot"
     ZD_FISH_GROUP = "ZD Fish Group"
     ZD_KING_ZORA_THAWING = "ZD King Zora Thawing"
     ZD_BEHIND_KING_ZORA_THAWING = "ZD Behind King Zora Thawing"
     ZD_DELIVER_RUTOS_LETTER = "ZD Deliver Ruto's Letter"
-    ZD_STORMS_GROTTO_FAIRY_ACCESS = "ZD STORMS GROTTO FAIRY ACCESS"
+    ZD_FAIRY_GROTTO_FAIRY = "ZD Fairy Grotto Fairy"
 
 
 class LocalEvents(str, Enum):
@@ -20,10 +19,10 @@ class LocalEvents(str, Enum):
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    # Zoras Domain
+    ## Zoras Domain
     # Events
     add_events(Regions.ZORAS_DOMAIN, world, [
-        (EventLocations.ZD_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES,
+        (EventLocations.ZD_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (EventLocations.ZD_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True),
         (EventLocations.ZD_STICK_POT, Events.CAN_FARM_STICKS, lambda bundle: is_child(bundle)),
@@ -83,14 +82,14 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.ZORAS_DOMAIN_ISLAND, lambda bundle: True),
     ])
 
-    # Zoras Domain Island
+    ## Zoras Domain Island
     # Connections
     connect_regions(Regions.ZORAS_DOMAIN_ISLAND, world, [
         (Regions.ZORAS_DOMAIN, lambda bundle: is_adult(bundle) or has_item(Items.BRONZE_SCALE, bundle)),
         (Regions.ZD_STORMS_GROTTO, lambda bundle: can_open_storms_grotto(bundle)),
     ])
 
-    # ZD Behind King Zora
+    ## ZD Behind King Zora
     # Events
     add_events(Regions.ZD_BEHIND_KING_ZORA, world, [
         (EventLocations.ZD_BEHIND_KING_ZORA_THAWING, LocalEvents.KING_ZORA_THAWED,
@@ -108,7 +107,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.ZORAS_FOUNTAIN, lambda bundle: True),
     ])
 
-    # ZD Shop
+    ## ZD Shop
     # Locations
     add_locations(Regions.ZD_SHOP, world, [
         (Locations.ZD_SHOP_ITEM1, lambda bundle: True),
@@ -125,10 +124,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.ZORAS_DOMAIN, lambda bundle: True),
     ])
 
-    # ZD Storms Grotto
+    ## ZD Storms Grotto
     # Events
     add_events(Regions.ZD_STORMS_GROTTO, world, [
-        (EventLocations.ZD_STORMS_GROTTO_FAIRY_ACCESS, Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
+        (EventLocations.ZD_FAIRY_GROTTO_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
     ])
     # Locations
     add_locations(Regions.ZD_STORMS_GROTTO, world, [

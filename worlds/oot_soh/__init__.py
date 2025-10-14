@@ -3,12 +3,13 @@ from typing import Dict, Any
 from BaseClasses import CollectionState, Item, Tutorial
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
-from .Items import SohItem, item_data_table, item_table, item_name_groups
+from .Items import SohItem, item_data_table, item_table, item_name_groups, progressive_items
 from .Locations import location_table
 from .Options import SohOptions, soh_option_groups
 from .Regions import create_regions_and_locations, place_locked_items
 from .Enums import *
 from .ItemPool import create_item_pool
+from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
 
 import logging
@@ -55,6 +56,12 @@ class SohWorld(World):
         return SohItem(name, item_data_table[item_entry].classification, item_data_table[item_entry].item_id, self.player)
 
     def create_items(self) -> None:
+        if not self.options.shuffle_swim:
+            self.push_precollected(self.create_item(Items.BRONZE_SCALE.value))
+        if not self.options.shuffle_deku_stick_bag:
+            self.push_precollected(self.create_item(Items.DEKU_STICK_BAG.value))
+        if not self.options.shuffle_deku_nut_bag:
+            self.push_precollected(self.create_item(Items.DEKU_NUT_BAG.value))
         create_item_pool(self)
 
     def create_regions(self) -> None: 
@@ -134,12 +141,24 @@ class SohWorld(World):
             "skeleton_key": self.options.skeleton_key.value,
             "starting_age": self.options.starting_age.value,
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
+            "ice_trap_count": self.options.ice_trap_count,
+            "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement
         }
-    
+
     def collect(self, state: CollectionState, item: Item) -> bool:
         # Temporarily disabled because logic is in progress
         #update_age_access(self, state)
         state._soh_stale[self.player] = True # type: ignore
+
+        if item.name in progressive_items:
+            current_count = state.prog_items[self.player][item.name] + 1
+            current_count = increment_current_count(self, item, current_count)
+            for non_prog_version in progressive_items[item.name]:
+                state.prog_items[self.player][non_prog_version] = 1
+                current_count -= 1
+                if not current_count:
+                    break
+
         return super().collect(state, item)
     
     def remove(self, state: CollectionState, item: Item) -> bool:
@@ -147,6 +166,14 @@ class SohWorld(World):
         changed = super().remove(state, item)
         if changed:
             state._soh_invalidate(self.player) # type: ignore
+
+        if item.name in progressive_items:
+            current_count = state.prog_items[self.player][item.name] - 1
+            current_count = increment_current_count(self, item, current_count)
+            for i, non_prog_version in enumerate(progressive_items[item.name]):
+                if i + 1 > current_count:
+                    state.prog_items[self.player][non_prog_version] = 0
+
         return changed
 
     def generate_output(self, output_directory: str):

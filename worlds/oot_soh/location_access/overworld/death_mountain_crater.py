@@ -4,16 +4,15 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 class EventLocations(str, Enum):
-    DMC_GOSSIP_STONE_FAIRY = "Death Mountain Crater Gossip Stone Fairy"
-    DMC_BEAN_PLANT_FAIRY = "Death Mountain Crater Bean Plant Fairy"
-    DMC_UPPER_GROTTO_GOSSIP_STONE = "Death Mountain Crater Upper Grotto Gossip Stone"
-    DMC_UPPER_GROTTO_BUTTERFLY_FAIRY = "Death Mountain Crater Upper Grotto Butterfly Fairy"
-    DMC_UPPER_GROTTO_BUG_GRASS = "Death Mountain Crater Upper Grotto Bug Grass"
-    DMC_UPPER_GROTTO_FISH = "Death Mountain Crater Upper Grotto Fish"
+    DMC_GOSSIP_STONE_SONG_FAIRY = "DMC Gossip Stone Song Fairy"
+    DMC_BEAN_PLANT_FAIRY = "DMC Bean Plant Fairy"
+    DMC_UPPER_GROTTO_GOSSIP_STONE_SONG_FAIRY = "DMC Upper Grotto Gossip Stone Song Fairy"
+    DMC_UPPER_GROTTO_BUTTERFLY_FAIRY = "DMC Upper Grotto Butterfly Fairy"
+    DMC_UPPER_GROTTO_BUG_GRASS = "DMC Upper Grotto Bug Grass"
+    DMC_UPPER_GROTTO_PUDDLE_FISH = "DMC Upper Grotto Puddle Fish"
 
 
 def set_region_rules(world: "SohWorld") -> None:
-
     ## Death Mountain Crater Upper Nearby
     # Connections
     connect_regions(Regions.DMC_UPPER_NEARBY, world, [
@@ -25,7 +24,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Death Mountain Crater Upper Local
     # Events
     add_events(Regions.DMC_UPPER_LOCAL, world, [
-        (EventLocations.DMC_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: has_explosives(bundle) and call_gossip_fairy_except_suns(bundle) and (fire_timer(bundle) >= 16 or hearts(bundle) >= 3))
+        (EventLocations.DMC_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: has_explosives(bundle) and call_gossip_fairy_except_suns(bundle) and (fire_timer(bundle) >= 16 or hearts(bundle) >= 3))
     ])
     # Locations
     add_locations(Regions.DMC_UPPER_LOCAL, world, [
@@ -145,10 +144,10 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Death Mountain Crater Upper Grotto
     # Events
     add_events(Regions.DMC_UPPER_GROTTO, world, [
-        (EventLocations.DMC_UPPER_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.DMC_UPPER_GROTTO_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
         (EventLocations.DMC_UPPER_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
         (EventLocations.DMC_UPPER_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
-        (EventLocations.DMC_UPPER_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+        (EventLocations.DMC_UPPER_GROTTO_PUDDLE_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.DMC_UPPER_GROTTO, world, [

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Callable
 
-from BaseClasses import CollectionState, ItemClassification as IC
+from BaseClasses import CollectionState, ItemClassification as IC, Item
 from .Locations import SohLocation
 from worlds.generic.Rules import set_rule
 from .Enums import *
@@ -238,15 +238,23 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
     return state.has(item.value, player, count)
         
 
+wallet_capacities: dict[str, int] = {
+    Items.CHILD_WALLET.value: 99,
+    Items.ADULT_WALLET.value: 200,
+    Items.GIANT_WALLET.value: 500,
+    Items.TYCOON_WALLET.value: 999
+}
+
+
 def can_afford(price: int, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     world = bundle[2]
     player = world.player
-    wallets = state.count(Items.PROGRESSIVE_WALLET.value, player)
-    if world.options.shuffle_childs_wallet == 0:
-        wallets += 1
-    if (price <= 99 and wallets <= 1) or (price <= 200 and wallets <= 2) or (price <= 500 and wallets <= 3) or (wallets <= 4):
-        return True
+
+    for wallet, amount in wallet_capacities.items():
+        if amount >= price:
+            return state.has(wallet, player)
+
     return False
 
 
@@ -316,6 +324,7 @@ ocarina_buttons_required: dict[str, list[str]] = {
     Items.SONG_OF_STORMS.value: [Items.OCARINA_A_BUTTON.value, Items.OCARINA_CUP_BUTTON.value, Items.OCARINA_CDOWN_BUTTON.value],
     Items.MINUET_OF_FOREST.value: [Items.OCARINA_A_BUTTON.value, Items.OCARINA_CLEFT_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CUP_BUTTON.value],
     Items.SERENADE_OF_WATER.value: [Items.OCARINA_A_BUTTON.value, Items.OCARINA_CLEFT_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CDOWN_BUTTON.value],
+    Items.NOCTURNE_OF_SHADOW.value: [Items.OCARINA_A_BUTTON.value, Items.OCARINA_CLEFT_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CDOWN_BUTTON.value],
 }
 
 
@@ -969,9 +978,9 @@ def medallion_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     return item_group_count(bundle, "Medallions")
 
 
-dungeon_events: list[Events] = [Events.CLEARED_DEKU_TREE, Events.CLEARED_DODONGOS_CAVERN, Events.CLEARED_JABU_JABUS_BELLY,
-                      Events.CLEARED_FOREST_TEMPLE, Events.CLEARED_FIRE_TEMPLE, Events.CLEARED_WATER_TEMPLE,
-                      Events.CLEARED_SPIRIT_TEMPLE, Events.CLEARED_SHADOW_TEMPLE]
+dungeon_events: list[Events] = [Events.DEKU_TREE_COMPLETED, Events.DODONGOS_CAVERN_COMPLETED, Events.JABU_JABUS_BELLY_COMPLETED,
+                      Events.FOREST_TEMPLE_COMPLETED, Events.FIRE_TEMPLE_COMPLETED, Events.WATER_TEMPLE_COMPLETED,
+                      Events.SPIRIT_TEMPLE_COMPLETED, Events.SHADOW_TEMPLE_COMPLETED]
 def dungeon_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     count = 0
     for dungeon in dungeon_events:
@@ -1094,3 +1103,14 @@ def is_fire_loop_locked(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
 def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBombFlower: bool = False) -> bool:
     return can_do_trick(Tricks.GROUND_JUMP, bundle) and can_standing_shield(bundle) and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle)))
 
+
+def increment_current_count(world: "SohWorld", item: Item, current_count: int) -> int:
+    """
+    If the progressive item count should be increased because of an option (like shuffle_swim), this will increase its current count by 1.
+    Does nothing otherwise.
+    """
+    if ((item.name == Items.PROGRESSIVE_SCALE and not world.options.shuffle_swim)
+            or (item.name == Items.PROGRESSIVE_STICK_CAPACITY and not world.options.shuffle_deku_stick_bag)
+            or (item.name == Items.PROGRESSIVE_NUT_CAPACITY and not world.options.shuffle_deku_nut_bag)):
+        current_count += 1
+    return current_count

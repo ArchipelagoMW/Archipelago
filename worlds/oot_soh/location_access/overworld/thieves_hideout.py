@@ -10,16 +10,16 @@ class EventsLocations(str, Enum):
     TH_STEEP_SLOPE_CARPENTER_CELL = "TH Steep Slope Carpenter Cell"
     TH_RESCUED_ALL_CARPENTERS = "TH Rescued All Carpenters"
 
+
 class LocalEvents(str, Enum):
     TH_1_TORCH_CELL_CARPENTER_FREED = "TH 1 Torch Cell Carpenter Freed"
     TH_DOUBLE_CELL_CARPENTER_FREED = "TH Double Cell Carpenter Freed"
     TH_DEAD_END_CELL_CARPENTER_FREED = "TH Dead End Cell Carpenter Freed"
     TH_STEEP_SLOPE_CELL_CARPENTER_FREED = "TH Steep Slope Cell Carpenter Freed"
 
-def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
 
-    ##Thieves' Hideout 1 Torch Cell
+def set_region_rules(world: "SohWorld") -> None:
+    ## Thieves' Hideout 1 Torch Cell
     # Events
     add_events(Regions.THIEVES_HIDEOUT_1_TORCH_CELL, world, [
         (EventsLocations.TH_1_TORCH_CARPENTER_CELL, LocalEvents.TH_1_TORCH_CELL_CARPENTER_FREED,
@@ -41,7 +41,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: True)
     ])
 
-    ##Thieves Hideout Double Cell
+    ## Thieves Hideout Double Cell
     # Events
     add_events(Regions.THIEVES_HIDEOUT_DOUBLE_CELL, world, [
         (EventsLocations.TH_DOUBLE_CELL_CARPENTER_CELL, LocalEvents.TH_DOUBLE_CELL_CARPENTER_FREED,
@@ -68,7 +68,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: True)
     ])
 
-    ##Thieves Hideout Dead End Cell
+    ## Thieves Hideout Dead End Cell
     # Events
     add_events(Regions.THIEVES_HIDEOUT_DEAD_END_CELL, world, [
         (EventsLocations.TH_DEAD_END_CARPENTER_CELL, LocalEvents.TH_DEAD_END_CELL_CARPENTER_FREED,
@@ -86,7 +86,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: True)
     ])
 
-    ##Thieves Hideout Steep Slope Cell
+    ## Thieves Hideout Steep Slope Cell
     # Events
     add_events(Regions.THIEVES_HIDEOUT_STEEP_SLOPE_CELL, world, [
         (EventsLocations.TH_STEEP_SLOPE_CARPENTER_CELL, LocalEvents.TH_STEEP_SLOPE_CELL_CARPENTER_FREED,
@@ -106,7 +106,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: True)
     ])
 
-    ##TH Rescue Carpenters
+    ## Thieves Hideout Rescue Carpenters
     ### This is a deviation from ship logic due to the union of locations
     # Events
     add_events(Regions.THIEVES_HIDEOUT_RESCUE_CARPENTERS, world, [
@@ -127,7 +127,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: has_item(Events.RESCUED_ALL_CARPENTERS, bundle))
     ])
 
-    ##Thieves Hideout Kitchen Corridor
+    ## Thieves Hideout Kitchen Corridor
     # Locations
     add_locations(Regions.THIEVES_HIDEOUT_KITCHEN_CORRIDOR, world, [
         (Locations.TH_NEAR_KITCHEN_LEFTMOST_CRATE, lambda bundle: can_break_crates(bundle)),
@@ -142,7 +142,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.THIEVES_HIDEOUT_KITCHEN_BOTTOM, lambda bundle: can_pass_enemy(bundle, Enemies.GERUDO_GUARD))
     ])
 
-    ##Thieves Hideout Kitchen Bottom
+    ## Thieves Hideout Kitchen Bottom
     # Locations
     add_locations(Regions.THIEVES_HIDEOUT_KITCHEN_BOTTOM, world, [
         (Locations.TH_KITCHEN_CRATE,
@@ -158,7 +158,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_break_pots(bundle) and can_pass_enemy(bundle, Enemies.GERUDO_GUARD))
     ])
 
-    ##Thieves Hideout Kitchen Top
+    ## Thieves Hideout Kitchen Top
     # Connections
     connect_regions(Regions.THIEVES_HIDEOUT_KITCHEN_TOP, world, [
         (Regions.THIEVES_HIDEOUT_KITCHEN_BOTTOM, lambda bundle: True),
@@ -170,7 +170,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_pass_enemy(bundle, Enemies.GERUDO_GUARD) or can_use(Items.HOVER_BOOTS, bundle))
     ])
 
-    ##Thieves Hideout Kitchen Pots
+    ## Thieves Hideout Kitchen Pots
     ### This is a deviation from ship logic due to the union of locations
     # Locations
     add_locations(Regions.THIEVES_HIDEOUT_KITCHEN_POTS, world, [
@@ -178,7 +178,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.TH_KITCHEN_POT2, lambda bundle: True),
     ])
 
-    ##Thieves Hideout Break Room
+    ## Thieves Hideout Break Room
     # Locations
     add_locations(Regions.THIEVES_HIDEOUT_BREAK_ROOM, world, [
         (Locations.TH_BREAK_ROOM_FRONT_POT,
@@ -205,7 +205,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.THIEVES_HIDEOUT_BREAK_ROOM_CORRIDOR, lambda bundle: can_use(Items.HOOKSHOT, bundle))
     ])
 
-    ##Thieves Hideout Break Room Corridor
+    ## Thieves Hideout Break Room Corridor
     # Connections
     connect_regions(Regions.THIEVES_HIDEOUT_BREAK_ROOM_CORRIDOR, world, [
         (Regions.THIEVES_HIDEOUT_BREAK_ROOM, lambda bundle: can_use(Items.HOOKSHOT, bundle)),

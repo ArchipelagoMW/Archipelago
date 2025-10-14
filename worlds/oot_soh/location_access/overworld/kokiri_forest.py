@@ -5,22 +5,22 @@ if TYPE_CHECKING:
 
 
 class EventLocations(str, Enum):
-    MIDO = "Mido's Location"
-    MIDO_OUTSIDE = "Mido's Location From Outside Deku Tree"
-    KOKIRI_FOREST_GOSSIP_STONE_FAIRY = "Kokiri Forest Gossip Stone Fairy"
-    KOKIRI_FOREST_SOFT_SOIL = "Kokiri Forest Soft Soil"
-    OUTSIDE_DEKU_TREE_DEKU_BABA_NUTS = "Outside Deku Tree Deku Baba Nuts"
-    OUTSIDE_DEKU_TREE_DEKU_BABA_STICKS = "Outside Deku Tree Deku Baba Sticks"
-    OUTSIDE_DEKU_TREE_GOSSIP_STONE_FAIRY = "Outside Deku Tree Gossip Stone Fairy"
-    KOKIRI_FOREST_STORMS_GROTTO_GOSSIP_STONE = "Kokiri Forest Storms Grotto Gossip Stone"
-    KOKIRI_FOREST_STORMS_GROTTO_BUTTERFLY_FAIRY = "Kokiri Forest Storms Grotto Butterfly Stone Fairy"
-    KOKIRI_FOREST_STORMS_GROTTO_BUG_GRASS = "Kokiri Forest Storms Grotto Bugs"
-    KOKIRI_FOREST_STORMS_GROTTO_FISH = "Kokiri Forest Storms Grotto Fish"
+    MIDO = "Mido"
+    MIDO_FROM_OUTSIDE_DEKU_TREE = "Mido From Outside Deku Tree"
+    KF_GOSSIP_STONE_SONG_FAIRY = "KF Gossip Stone Song Fairy"
+    KF_SOFT_SOIL = "KF Soft Soil"
+    KF_DEKU_TREE_DEKU_BABA_NUTS = "KF Deku Tree Deku Baba Nuts"
+    KF_DEKU_TREE_DEKU_BABA_STICKS = "KF Deku Tree Deku Baba Sticks"
+    KF_DEKU_TREE_GOSSIP_STONE_SONG_FAIRY = "KF Deku Tree Gossip Stone Song Fairy"
+    KF_STORMS_GROTTO_GOSSIP_STONE_SONG_FAIRY = "KF Storms Grotto Gossip Stone Song Fairy"
+    KF_STORMS_GROTTO_BUTTERFLY_FAIRY = "KF Storms Grotto Butterfly Stone Fairy"
+    KF_STORMS_GROTTO_BUG_GRASS = "KF Storms Grotto Bugs"
+    KF_STORMS_GROTTO_PUDDLE_FISH = "KF Storms Grotto Puddle Fish"
     
 
 class LocalEvents(str, Enum):
     MIDO_SWORD_AND_SHIELD = "Showed Mido the Sword and Shield"
-    KOKIRI_FOREST_BEAN_PLANTED = "Kokiri Forest Bean Planted"
+    KF_BEAN_PLANTED = "KF Bean Planted"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -30,8 +30,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.MIDO, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: is_child(bundle)
                                                                     and has_item(Items.KOKIRI_SWORD, bundle) 
                                                                     and has_item(Items.DEKU_SHIELD, bundle)),
-        (EventLocations.KOKIRI_FOREST_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
-        (EventLocations.KOKIRI_FOREST_SOFT_SOIL, LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, lambda bundle: is_child(bundle) and
+        (EventLocations.KF_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
+        (EventLocations.KF_SOFT_SOIL, LocalEvents.KF_BEAN_PLANTED, lambda bundle: is_child(bundle) and
                                                                                             can_use(Items.MAGIC_BEAN, bundle)),
     ])
     # Locations
@@ -48,13 +48,13 @@ def set_region_rules(world: "SohWorld") -> None:
                                                               or (can_do_trick(Tricks.KF_ADULT_GS, bundle)
                                                                   and can_use(Items.HOVER_BOOTS, bundle))) and can_get_nighttime_gs(bundle)),
         (Locations.KF_BEAN_SPROUT_FAIRY1, lambda bundle: is_child(bundle)
-                                                              and has_item(LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, bundle)
+                                                              and has_item(LocalEvents.KF_BEAN_PLANTED, bundle)
                                                               and can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.KF_BEAN_SPROUT_FAIRY2, lambda bundle: is_child(bundle)
-                                                              and has_item(LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, bundle)
+                                                              and has_item(LocalEvents.KF_BEAN_PLANTED, bundle)
                                                               and can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.KF_BEAN_SPROUT_FAIRY3, lambda bundle: is_child(bundle)
-                                                              and has_item(LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, bundle)
+                                                              and has_item(LocalEvents.KF_BEAN_PLANTED, bundle)
                                                               and can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.KF_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (Locations.KF_GOSSIP_STONE_BIG_FAIRY, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
@@ -68,25 +68,25 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KF_BOULDER_MAZE_SECOND_RUPEE, lambda bundle: is_child(bundle)),
         (Locations.KF_BEAN_PLATFORM_RUPEE1, lambda bundle: is_adult(bundle) and (has_item(Items.HOVER_BOOTS, bundle) or
                                                                    can_use(Items.BOOMERANG, bundle) or
-                                                                   has_item(LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, bundle))),
+                                                                   has_item(LocalEvents.KF_BEAN_PLANTED, bundle))),
         (Locations.KF_BEAN_PLATFORM_RUPEE2, lambda bundle: is_adult(bundle) and (has_item(Items.HOVER_BOOTS, bundle) or
                                                                    can_use(Items.BOOMERANG, bundle) or
-                                                                   has_item(LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, bundle))),
+                                                                   has_item(LocalEvents.KF_BEAN_PLANTED, bundle))),
         (Locations.KF_BEAN_PLATFORM_RUPEE3, lambda bundle: is_adult(bundle) and (has_item(Items.HOVER_BOOTS, bundle) or
                                                                    can_use(Items.BOOMERANG, bundle) or
-                                                                   has_item(LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, bundle))),
+                                                                   has_item(LocalEvents.KF_BEAN_PLANTED, bundle))),
         (Locations.KF_BEAN_PLATFORM_RUPEE4, lambda bundle: is_adult(bundle) and (has_item(Items.HOVER_BOOTS, bundle) or
                                                                    can_use(Items.BOOMERANG, bundle) or
-                                                                   has_item(LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, bundle))),
+                                                                   has_item(LocalEvents.KF_BEAN_PLANTED, bundle))),
         (Locations.KF_BEAN_PLATFORM_RUPEE5, lambda bundle: is_adult(bundle) and (has_item(Items.HOVER_BOOTS, bundle) or
                                                                    can_use(Items.BOOMERANG, bundle) or
-                                                                   has_item(LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, bundle))),
+                                                                   has_item(LocalEvents.KF_BEAN_PLANTED, bundle))),
         (Locations.KF_BEAN_PLATFORM_RUPEE6, lambda bundle:  is_adult(bundle) and (has_item(Items.HOVER_BOOTS, bundle) or
                                                                    can_use(Items.BOOMERANG, bundle) or
-                                                                   has_item(LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, bundle))),
+                                                                   has_item(LocalEvents.KF_BEAN_PLANTED, bundle))),
         (Locations.KF_BEAN_PLATFORM_RED_RUPEE, lambda bundle: is_adult(bundle) and (has_item(Items.HOVER_BOOTS, bundle) or
                                                                    can_use(Items.BOOMERANG, bundle) or
-                                                                   has_item(LocalEvents.KOKIRI_FOREST_BEAN_PLANTED, bundle))),
+                                                                   has_item(LocalEvents.KF_BEAN_PLANTED, bundle))),
         (Locations.KF_SARIAS_ROOF_EAST_HEART, lambda bundle: is_child(bundle)),
         (Locations.KF_SARIAS_ROOF_NORTH_HEART, lambda bundle: is_child(bundle)),
         (Locations.KF_SARIAS_ROOF_WEST_HEART, lambda bundle: is_child(bundle)),
@@ -135,23 +135,23 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.KF_KOKIRI_SHOP, lambda bundle: True),
         (Regions.KF_OUTSIDE_DEKU_TREE, lambda bundle: (is_adult(bundle) and
                                                              (can_pass_enemy(bundle, Enemies.BIG_SKULLTULA) or
-                                                             has_item(Events.CLEARED_FOREST_TEMPLE, bundle)))
+                                                             has_item(Events.FOREST_TEMPLE_COMPLETED, bundle)))
                                                             or (is_child(bundle) and has_item(LocalEvents.MIDO_SWORD_AND_SHIELD, bundle))
                                                            or world.options.closed_forest.value == 2),  # Todo, maybe create a helper for handling settings
         (Regions.LOST_WOODS, lambda bundle: True),
         (Regions.LW_BRIDGE_FROM_FOREST, lambda bundle: world.options.closed_forest.value >= 1 or is_adult(bundle) or
-                                                            has_item(Events.CLEARED_DEKU_TREE, bundle)),
+                                                            has_item(Events.FOREST_TEMPLE_COMPLETED, bundle)),
         (Regions.KF_STORMS_GROTTO, lambda bundle: can_open_storms_grotto(bundle))
     ])
 
     ## KF Outside Deku Tree
     # Locations
     add_events(Regions.KF_OUTSIDE_DEKU_TREE, world, [
-        (EventLocations.OUTSIDE_DEKU_TREE_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: (can_get_deku_baba_nuts(bundle))),
-        (EventLocations.OUTSIDE_DEKU_TREE_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: (can_get_deku_baba_sticks(bundle))),
-        (EventLocations.MIDO_OUTSIDE, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: (has_item(Items.KOKIRI_SWORD, bundle) and 
+        (EventLocations.KF_DEKU_TREE_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: (can_get_deku_baba_nuts(bundle))),
+        (EventLocations.KF_DEKU_TREE_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: (can_get_deku_baba_sticks(bundle))),
+        (EventLocations.MIDO_FROM_OUTSIDE_DEKU_TREE, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: (has_item(Items.KOKIRI_SWORD, bundle) and 
                                                                                          has_item(Items.DEKU_SHIELD, bundle))),
-        (EventLocations.OUTSIDE_DEKU_TREE_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy_except_suns(bundle))),
+        (EventLocations.KF_DEKU_TREE_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy_except_suns(bundle))),
     ])
     add_locations(Regions.KF_OUTSIDE_DEKU_TREE, world, [
         (Locations.KF_DEKU_TREE_LEFT_GOSSIP_STONE_FAIRY, lambda bundle: call_gossip_fairy_except_suns(bundle)),
@@ -167,7 +167,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                             or has_item(LocalEvents.MIDO_SWORD_AND_SHIELD, bundle))),
         (Regions.KOKIRI_FOREST, lambda bundle:  (is_adult(bundle) and
                                                              (can_pass_enemy(bundle, Enemies.BIG_SKULLTULA) or
-                                                             has_item(Events.CLEARED_FOREST_TEMPLE, bundle)))
+                                                             has_item(Events.FOREST_TEMPLE_COMPLETED, bundle)))
                                                             or has_item(LocalEvents.MIDO_SWORD_AND_SHIELD, bundle)
                                                            or world.options.closed_forest.value == 2)
     ])
@@ -255,10 +255,10 @@ def set_region_rules(world: "SohWorld") -> None:
     ## KF Storms Grotto
     # Events
     add_events(Regions.KF_STORMS_GROTTO, world, [
-        (EventLocations.KOKIRI_FOREST_STORMS_GROTTO_GOSSIP_STONE, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
-        (EventLocations.KOKIRI_FOREST_STORMS_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
-        (EventLocations.KOKIRI_FOREST_STORMS_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
-        (EventLocations.KOKIRI_FOREST_STORMS_GROTTO_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+        (EventLocations.KF_STORMS_GROTTO_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.KF_STORMS_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.KF_STORMS_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.KF_STORMS_GROTTO_PUDDLE_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.KF_STORMS_GROTTO, world, [
