@@ -210,16 +210,16 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
         _log_fill_progress(name, placed, total)
 
     if cleanup_required:
+        relevant_locations = multiworld.get_filled_locations(item.player if single_player_placement else None)
+
         # validate all placements and remove invalid ones
-        cleanup_state = sweep_from_pool(
-            base_state, [], multiworld.get_filled_locations(item.player)
-            if single_player_placement else None)
+        cleanup_state = sweep_from_pool(base_state, [], relevant_locations)
 
         # accessibilty_corrections can clean up any case where locations are unreachable as a result of
         # a full player's item being on a minimal player's unreachable location.
         # So, we make a state where we collect all such minimal->full items to check against.
         changed = False
-        for location in multiworld.get_filled_locations():
+        for location in relevant_locations:
             if location.item is None:
                 continue
             if location in cleanup_state.locations_checked:
@@ -229,7 +229,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                 if multiworld.worlds[location.item.player].options.accessibility != "minimal":
                     changed |= cleanup_state.collect(location.item, prevent_sweep=True)
         if changed:
-            cleanup_state.sweep_for_advancements()
+            cleanup_state.sweep_for_advancements(relevant_locations)
 
         for placement in placements:
             # If the item's player is minimal, we don't care that it's unreachable.
