@@ -131,9 +131,12 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
     if item == Items.FAIRY_SLINGSHOT: # 37
         return state.has(Items.PROGRESSIVE_SLINGSHOT.value, player)
     
+    if item == Items.FISHING_POLE: # 36
+        return (not world.options.shuffle_fishing_pole) or state.has(Items.FISHING_POLE.value, player)
+    
     if item == Items.MAGIC_BEAN: # 35
         return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
-    
+        
     if item == Items.STICKS: # 33
         return (state.has(Events.CAN_FARM_STICKS.value, player) and (world.options.shuffle_deku_stick_bag.value == 0 or state.has(Items.PROGRESSIVE_STICK_CAPACITY.value, player)))
     
