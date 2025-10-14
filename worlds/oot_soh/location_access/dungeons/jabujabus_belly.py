@@ -50,8 +50,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.JABU_JABUS_BELLY_DEKU_SCRUB, lambda bundle: has_item(Items.BRONZE_SCALE, bundle) and (is_child(bundle) or has_item(Items.SILVER_SCALE, bundle) or can_do_trick(Tricks.JABU_ALCOVE_JUMP_DIVE, bundle) or can_use(Items.IRON_BOOTS, bundle)) and can_stun_deku(bundle)),
         (Locations.JABU_JABUS_BELLY_BOOMERANG_CHEST, lambda bundle: has_item(LocalEvents.JABU_JABUS_BELLY_RUTO_IN_1F_RESCUED, bundle)),
         (Locations.JABU_JABUS_BELLY_MAP_CHEST, lambda bundle: has_item(LocalEvents.JABU_JABUS_BELLY_WEST_TENTACLE_DEFEATED, bundle)),
-        (Locations.JABU_JABUS_BELLY_PLATFORM_ROOM_SMALL_CRATE_1, lambda bundle: can_break_small_crates(bundle)),
-        (Locations.JABU_JABUS_BELLY_PLATFORM_ROOM_SMALL_CRATE_2, lambda bundle: can_break_small_crates(bundle))
+        (Locations.JABU_JABUS_BELLY_PLATFORM_ROOM_SMALL_CRATE1, lambda bundle: can_break_small_crates(bundle)),
+        (Locations.JABU_JABUS_BELLY_PLATFORM_ROOM_SMALL_CRATE2, lambda bundle: can_break_small_crates(bundle))
     ])
     # Connections
     connect_regions(Regions.JABU_JABUS_BELLY_MAIN, world, [
@@ -74,11 +74,11 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.JABU_JABUS_BELLY_B1_NORTH, world, [
         (Locations.JABU_JABUS_BELLY_GS_LOBBY_BASEMENT_LOWER, lambda bundle: hookshot_or_boomerang(bundle)),
         (Locations.JABU_JABUS_BELLY_GS_WATER_SWITCH_ROOM, lambda bundle: hookshot_or_boomerang(bundle)),
-        (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT_1, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False)))),
-        (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT_2, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False)))),
-        (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT_3, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False)))),
-        (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT_4, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False)))),
-        (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT_5, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False))))
+        (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT1, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False)))),
+        (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT2, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False)))),
+        (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT3, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False)))),
+        (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT4, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False)))),
+        (Locations.JABU_JABUS_BELLY_TWO_OCTOROK_POT5, lambda bundle: can_break_pots(bundle) and (can_use(Items.BOOMERANG, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_kill_enemy(bundle, Enemies.OCTOROK, EnemyDistance.BOOMERANG, False))))
     ])
     # Connections
     connect_regions(Regions.JABU_JABUS_BELLY_B1_NORTH, world, [
@@ -96,9 +96,9 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.JABU_JABUS_BELLY_WATER_SWITCH_ROOM_LEDGE, world, [
         (Locations.JABU_JABUS_BELLY_GS_WATER_SWITCH_ROOM, lambda bundle: has_item(Items.BRONZE_SCALE, bundle) or (is_adult(bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_kill_enemy(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOMB_THROW)),
-        (Locations.JABU_JABUS_BELLY_BASEMENT_POT_1, lambda bundle: can_break_pots(bundle)),
-        (Locations.JABU_JABUS_BELLY_BASEMENT_POT_2, lambda bundle: can_break_pots(bundle)),
-        (Locations.JABU_JABUS_BELLY_BASEMENT_POT_3, lambda bundle: can_break_pots(bundle))
+        (Locations.JABU_JABUS_BELLY_BASEMENT_POT1, lambda bundle: can_break_pots(bundle)),
+        (Locations.JABU_JABUS_BELLY_BASEMENT_POT2, lambda bundle: can_break_pots(bundle)),
+        (Locations.JABU_JABUS_BELLY_BASEMENT_POT3, lambda bundle: can_break_pots(bundle))
     ])
     # Connections
     connect_regions(Regions.JABU_JABUS_BELLY_WATER_SWITCH_ROOM_LEDGE, world, [
@@ -150,9 +150,9 @@ def set_region_rules(world: "SohWorld") -> None:
 
     ## Jabu Jabu's Belly Bigocto Room
     # Connections
-    connect_regions(Regions.JABU_JABUS_BELLY_BIGOCTO_ROOM, world, [
+    connect_regions(Regions.JABU_JABUS_BELLY_BIGOCTO_LEDGE, world, [
         (Regions.JABU_JABUS_BELLY_B1_NORTH, lambda bundle: True),
-        (Regions.JABU_JABUS_BELLY_ABOVE_BIGOCTO, lambda bundle: has_item(LocalEvents.JABU_JABUS_BELLY_RUTO_IN_1F_RESCUED, bundle, world) and can_kill_enemy(bundle, Enemies.BIG_OCTO)),
+        (Regions.JABU_JABUS_BELLY_ABOVE_BIGOCTO, lambda bundle: has_item(LocalEvents.JABU_JABUS_BELLY_RUTO_IN_1F_RESCUED, bundle) and can_kill_enemy(bundle, Enemies.BIG_OCTO)),
         (Regions.JABU_JABUS_BELLY_LOBBY_BASEMENT_UPPER_GS, lambda bundle: is_adult(bundle) and can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.SHORT_JUMPSLASH))
     ])
     
@@ -169,9 +169,9 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.JABU_JABUS_BELLY_ABOVE_BIGOCTO, world, [
-        (Locations.JABU_JABUS_BELLY_ABOVE_BIG_OCTO_POT_1, lambda bundle: can_break_pots(bundle)),
-        (Locations.JABU_JABUS_BELLY_ABOVE_BIG_OCTO_POT_2, lambda bundle: can_break_pots(bundle)),
-        (Locations.JABU_JABUS_BELLY_ABOVE_BIG_OCTO_POT_3, lambda bundle: can_break_pots(bundle))
+        (Locations.JABU_JABUS_BELLY_ABOVE_BIG_OCTO_POT1, lambda bundle: can_break_pots(bundle)),
+        (Locations.JABU_JABUS_BELLY_ABOVE_BIG_OCTO_POT2, lambda bundle: can_break_pots(bundle)),
+        (Locations.JABU_JABUS_BELLY_ABOVE_BIG_OCTO_POT3, lambda bundle: can_break_pots(bundle))
     ])
     # Connections
     connect_regions(Regions.JABU_JABUS_BELLY_ABOVE_BIGOCTO, world, [
@@ -196,7 +196,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.JABU_JABUS_BELLY_NEAR_BOSS_ROOM, world, [
         (Regions.JABU_JABUS_BELLY_MAIN, lambda bundle: True),
-        (Regions.JABU_JABUS_BELLY_BOSS_ENTRYWAY, lambda bundle: can_use(Items.BOOMERANG, bundle) or (can_do_trick(Tricks.JABU_NEAR_BOSS_RANGED, bundle) and can_use_any([Items.HOOKSHOT, Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle)) or (can_do_trick(Tricks.JABU_NEAR_BOSS_EXPLOSIVES, bundle) and (can_use(Items.BOMBCHU_5, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_use(Items.BOMB_BAG, bundle)))))
+        (Regions.JABU_JABUS_BELLY_BOSS_ENTRYWAY, lambda bundle: can_use(Items.BOOMERANG, bundle) or (can_do_trick(Tricks.JABU_NEAR_BOSS_RANGED, bundle) and can_use_any([Items.HOOKSHOT, Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle)) or (can_do_trick(Tricks.JABU_NEAR_BOSS_EXPLOSIVES, bundle) and (can_use(Items.BOMBCHUS_5, bundle) or (can_use(Items.HOVER_BOOTS, bundle) and can_use(Items.BOMB_BAG, bundle)))))
     ])
 
     # Skipping master quest for now
@@ -221,18 +221,17 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.JABU_JABUS_BELLY_BOSS_ROOM, world, [
-        (Locations.JABU_JABUS_BELLY_BARINADE_POT_1, lambda bundle: can_break_pots(bundle)),
-        (Locations.JABU_JABUS_BELLY_BARINADE_POT_2, lambda bundle: can_break_pots(bundle)),
-        (Locations.JABU_JABUS_BELLY_BARINADE_POT_3, lambda bundle: can_break_pots(bundle)),
-        (Locations.JABU_JABUS_BELLY_BARINADE_POT_4, lambda bundle: can_break_pots(bundle)),
-        (Locations.JABU_JABUS_BELLY_BARINADE_POT_5, lambda bundle: can_break_pots(bundle)),
-        (Locations.JABU_JABUS_BELLY_BARINADE_POT_6, lambda bundle: can_break_pots(bundle)),
-        (Locations.JABU_JABUS_BELLY_BARINADE_HEART, lambda bundle: has_item(Events.CLEARED_JABU_JABU_BELLY, bundle)),
-        (Locations.BARINADE, lambda bundle: has_item(Events.CLEARED_JABU_JABU_BELLY, bundle))
+        (Locations.JABU_JABUS_BELLY_BARINADE_POT1, lambda bundle: can_break_pots(bundle)),
+        (Locations.JABU_JABUS_BELLY_BARINADE_POT2, lambda bundle: can_break_pots(bundle)),
+        (Locations.JABU_JABUS_BELLY_BARINADE_POT3, lambda bundle: can_break_pots(bundle)),
+        (Locations.JABU_JABUS_BELLY_BARINADE_POT4, lambda bundle: can_break_pots(bundle)),
+        (Locations.JABU_JABUS_BELLY_BARINADE_POT5, lambda bundle: can_break_pots(bundle)),
+        (Locations.JABU_JABUS_BELLY_BARINADE_POT6, lambda bundle: can_break_pots(bundle)),
+        (Locations.JABU_JABUS_BELLY_BARINADE_HEART_CONTAINER, lambda bundle: has_item(Events.CLEARED_JABU_JABUS_BELLY, bundle)),
+        (Locations.BARINADE, lambda bundle: has_item(Events.CLEARED_JABU_JABUS_BELLY, bundle))
     ])
     # Connections
     connect_regions(Regions.JABU_JABUS_BELLY_BOSS_ROOM, world, [
         (Regions.JABU_JABUS_BELLY_BOSS_EXIT, lambda bundle: False),
-        (Regions.ZORAS_FOUNTAIN, lambda bundle: has_item(Events.CLEARED_JABU_JABU_BELLY, bundle))
+        (Regions.ZORAS_FOUNTAIN, lambda bundle: has_item(Events.CLEARED_JABU_JABUS_BELLY, bundle))
     ])
-    
