@@ -10,6 +10,7 @@ from .Regions import create_regions_and_locations, place_locked_items
 from .Enums import *
 from .ItemPool import create_item_pool
 from . import RegionAgeAccess
+from .ShopItems import fill_shop_items
 
 import logging
 logger = logging.getLogger("SOH_OOT")
@@ -44,6 +45,7 @@ class SohWorld(World):
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
+        self.item_pool = list[SohItem]()
         self.included_locations = dict[str, int]()
         self.shop_prices = dict[str, int]()
         self.shop_vanilla_items = dict[str, str]()
@@ -67,6 +69,9 @@ class SohWorld(World):
     def set_rules(self) -> None:
         # Completion condition.
         self.multiworld.completion_condition[self.player] = lambda state: state.has(Events.GAME_COMPLETED.value, self.player)
+
+    def pre_fill(self) -> None:
+        fill_shop_items(self)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {

@@ -158,20 +158,28 @@ def fill_shop_items(world: "SohWorld") -> None:
         no_shop_shuffle(world)
         return
     
+    # select what shop slots to and vanilla items to shuffle
+    num_vanilla = 8 - world.options.shuffle_shops_item_amount
     vanilla_pool = list[Items]()
     vanilla_shop_slots = list[str]()
 
-    for i in range(0, world.options.shuffle_shops_item_amount):
+    for i in range(0, num_vanilla):
         vanilla_pool += vanilla_items_to_add[i]
 
     for region, shop in all_shop_locations:
-        vanilla_shop_slots += list(shop.keys())[0: world.options.shuffle_shops_item_amount]
+        vanilla_shop_slots += list(shop.keys())[0: num_vanilla]
 
     vanilla_shop_locations = [world.get_location(slot) for slot in vanilla_shop_slots]
     vanilla_items = [world.create_item(item.value) for item in vanilla_pool]
 
+    # create a filled copy of the state so the multiworld can place the vanilla shop items using logic
+    prefill_state = CollectionState(world.multiworld)
+    for item in world.item_pool:
+        prefill_state.collect(item, False)
+    prefill_state.sweep_for_advancements()
+
     # place the vanilla shop items
-    fill_restrictive(world.multiworld, CollectionState(world.multiworld), vanilla_shop_locations, vanilla_items, single_player_placement=True, lock=True)
+    fill_restrictive(world.multiworld, prefill_state, vanilla_shop_locations, vanilla_items, single_player_placement=True, lock=True)
     for slot in vanilla_shop_slots:
         location = world.get_location(slot)
         world.shop_prices[slot] = vanilla_shop_prices[Items(location.item.name)]
@@ -195,7 +203,29 @@ def no_shop_shuffle(world: "SohWorld") -> None:
 
 def create_random_shop_price(world: "SohWorld") -> int:
     # Todo randomized prices depending on the settings
-    return world.random.randrange(10, 100, 5)
+    price = 10
+    match world.options.shuffle_shops_prices:
+        case 0: 
+            # affordable prices
+            price = 10
+        case 1:
+            # child wallet
+            price = world.random.randrange(10, 101, 5)
+            if price == 100:
+                price = 99
+        case 2:
+            # adult wallet
+            price = world.random.randrange(10, 201, 5)
+        case 3:
+            # giant wallet
+            price = world.random.randrange(10, 501, 5)
+        case 4:
+            # tycoon's wallet
+            price = world.random.randrange(10, 1001, 5)
+            if price == 1000:
+                price = 999
+
+    return price
 
 def set_price_rules(world: "SohWorld") -> None:
     for region, shop in all_shop_locations:

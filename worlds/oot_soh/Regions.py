@@ -119,6 +119,8 @@ def create_regions_and_locations(world: "SohWorld") -> None:
         world.included_locations.update(gold_skulltula_dungeon_location_table)
 
         # Shops, Add all shop locations vanilla items will get prefilled and locked
+        # Todo: maybe we have to add the vanilla locations as events (id = None)
+        # check if vanilla items show up in the list of checks
         world.included_locations.update(shops_location_table)
 
         # Scrubs
@@ -291,4 +293,3 @@ def place_locked_items(world: "SohWorld") -> None:
         for location_name, address in gold_skulltula_dungeon_location_table.items():
             world.get_location(location_name).place_locked_item(token_item)
 
-    fill_shop_items(world)
