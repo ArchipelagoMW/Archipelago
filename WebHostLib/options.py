@@ -231,7 +231,7 @@ def generate_yaml(game: str):
             if key_parts[-1] == "qty":
                 if key_parts[0] not in options:
                     options[key_parts[0]] = {}
-                if val != "0":
+                if val and val != "0":
                     options[key_parts[0]][key_parts[1]] = int(val)
                 del options[key]
 

@@ -98,7 +98,7 @@
                             <td>
                                 {% if hint.finding_player == player %}
                                     <b>{{ player_names_with_alias[(team, hint.finding_player)] }}</b>
-                                {% elif get_slot_info(team, hint.finding_player).type == 2 %}
+                                {% elif get_slot_info(hint.finding_player).type == 2 %}
                                     <i>{{ player_names_with_alias[(team, hint.finding_player)] }}</i>
                                 {% else %}
                                     <a href="{{ url_for("get_player_tracker", tracker=room.tracker, tracked_team=team, tracked_player=hint.finding_player) }}">
@@ -109,7 +109,7 @@
                             <td>
                                 {% if hint.receiving_player == player %}
                                     <b>{{ player_names_with_alias[(team, hint.receiving_player)] }}</b>
-                                {% elif get_slot_info(team, hint.receiving_player).type == 2 %}
+                                {% elif get_slot_info(hint.receiving_player).type == 2 %}
                                     <i>{{ player_names_with_alias[(team, hint.receiving_player)] }}</i>
                                 {% else %}
                                     <a href="{{ url_for("get_player_tracker", tracker=room.tracker, tracked_team=team, tracked_player=hint.receiving_player) }}">
