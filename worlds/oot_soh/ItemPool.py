@@ -233,9 +233,21 @@ def create_item_pool(world: "SohWorld") -> None:
     # Add random filler bottles
     item_pool += [world.create_item(get_filler_bottle(world).value) for _ in range(filler_bottle_amount)]
 
+    # Figure out Ice Trap amount with Options
+    # Ice Trap Count
+    open_location_count: int = sum(1 for loc in world.get_locations() if not loc.locked)
+    filler_item_count: int = open_location_count - len(item_pool)
+    item_pool += [world.create_item(Items.ICE_TRAP.value) for _ in range(min(filler_item_count, world.options.ice_trap_count.value))]
+
+    #Ice Trap Filler Replacement
+    open_location_count = sum(1 for loc in world.get_locations() if not loc.locked)
+    filler_item_count = open_location_count - len(item_pool)
+    places_to_fill: int = int(filler_item_count * (world.options.ice_trap_filler_replacement.value * .01))
+    item_pool += [world.create_item(Items.ICE_TRAP.value) for _ in range(places_to_fill)]
+
     # Add junk items to fill remaining locations
     open_location_count = sum(1 for loc in world.get_locations() if not loc.locked)
-    filler_item_count: int = open_location_count - len(item_pool)
+    filler_item_count = open_location_count - len(item_pool)
     item_pool += [world.create_item(get_filler_item(world).value) for _ in range(filler_item_count)]
 
     world.multiworld.itempool += item_pool

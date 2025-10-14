@@ -3,13 +3,11 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-
 class EventLocations(str, Enum):
     ICE_CAVERN_BLUE_FIRE_ACCESS = "Ice Cavern Blue Fire Access"
 
+
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-    
     ## Ice Cavern Entryway
     # Locations
     add_locations(Regions.ICE_CAVERN_ENTRYWAY, world, [])
@@ -43,7 +41,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ICE_CAVERN_COMPASS_CHEST, lambda bundle: blue_fire(bundle)),
         (Locations.ICE_CAVERN_IRON_BOOTS_CHEST, lambda bundle: blue_fire(bundle) and can_kill_enemy(bundle, Enemies.WOLFOS)),
         (Locations.SHEIK_IN_ICE_CAVERN, lambda bundle: blue_fire(bundle) and can_kill_enemy(bundle, Enemies.WOLFOS) and is_adult(bundle)),
-        (Locations.ICE_CAVERN_FREESTANDING_PO_H, lambda bundle: blue_fire(bundle)),
+        (Locations.ICE_CAVERN_FREESTANDING_POH, lambda bundle: blue_fire(bundle)),
         (Locations.ICE_CAVERN_GS_SPINNING_SCYTHE_ROOM, lambda bundle: hookshot_or_boomerang(bundle)),
         (Locations.ICE_CAVERN_GS_HEART_PIECE_ROOM, lambda bundle: blue_fire(bundle) and hookshot_or_boomerang(bundle)),
         (Locations.ICE_CAVERN_GS_PUSH_BLOCK_ROOM, lambda bundle: blue_fire(bundle) and (hookshot_or_boomerang(bundle) or (can_do_trick(Tricks.ICE_BLOCK_GS, bundle) and can_use(Items.HOVER_BOOTS, bundle)))),

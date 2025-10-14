@@ -3,7 +3,6 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-
 class EventLocations(str, Enum):
     DEKU_TREE_LOBBY_BABA_STICKS = "Deku Tree Lobby Baba Sticks",
     DEKU_TREE_LOBBY_BABA_NUTS = "Deku Tree Lobby Baba Nuts",
@@ -18,7 +17,7 @@ class EventLocations(str, Enum):
     DEKU_TREE_BASEMENT_UPPER_BABA_STICKS = "Deku Tree Basement Upper Baba Sticks",
     DEKU_TREE_BASEMENT_UPPER_BABA_NUTS = "Deku Tree Basement Upper Baba Nuts",
     DEKU_TREE_BASEMENT_UPPER_BLOCK = "Deku Tree Basement Upper Push Block",
-    DEKU_TREE_BOSS = "Deku Tree Queen Gohma"
+    DEKU_TREE_QUEEN_GOHMA = "Deku Tree Queen Gohma"
 
 
 class LocalEvents(str, Enum):
@@ -26,8 +25,6 @@ class LocalEvents(str, Enum):
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-
     ## Deku Tree Entryway
     # Connections
     connect_regions(Regions.DEKU_TREE_ENTRYWAY, world, [
@@ -59,13 +56,13 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DEKU_TREE_BASEMENT_LOWER, lambda bundle: can_attack(bundle) or can_use(Items.NUTS, bundle))
     ])
     
-
     ## Deku F2 middle room
     # Connections
     connect_regions(Regions.DEKU_TREE_2F_MIDDLE_ROOM, world, [
         (Regions.DEKU_TREE_LOBBY, lambda bundle: can_reflect_nuts(bundle) or can_use(Items.MEGATON_HAMMER, bundle)),
         (Regions.DEKU_TREE_SLINGSHOT_ROOM, lambda bundle: can_reflect_nuts(bundle) or can_use(Items.MEGATON_HAMMER, bundle))
     ])
+
     ## Deku slingshot room
     # Locations
     add_locations(Regions.DEKU_TREE_SLINGSHOT_ROOM, world, [
@@ -248,16 +245,15 @@ def set_region_rules(world: "SohWorld") -> None:
         # skipping mq connection
     ])
     
-
     ## Deku Tree boss room
     # Events
     add_events(Regions.DEKU_TREE_BOSS_ROOM, world, [
-        (EventLocations.DEKU_TREE_BOSS, Events.CLEARED_DEKU_TREE, lambda bundle: can_kill_enemy(bundle, Enemies.GOHMA))
+        (EventLocations.DEKU_TREE_QUEEN_GOHMA, Events.DEKU_TREE_COMPLETED, lambda bundle: can_kill_enemy(bundle, Enemies.GOHMA))
     ])
     # Locations
     add_locations(Regions.DEKU_TREE_BOSS_ROOM, world, [
-        (Locations.QUEEN_GOHMA, lambda bundle: has_item(Events.CLEARED_DEKU_TREE, bundle)),
-        (Locations.DEKU_TREE_QUEEN_GOHMA_HEART_CONTAINER, lambda bundle: has_item(Events.CLEARED_DEKU_TREE, bundle)),
+        (Locations.QUEEN_GOHMA, lambda bundle: has_item(Events.DEKU_TREE_COMPLETED, bundle)),
+        (Locations.DEKU_TREE_QUEEN_GOHMA_HEART_CONTAINER, lambda bundle: has_item(Events.DEKU_TREE_COMPLETED, bundle)),
         (Locations.DEKU_TREE_QUEEN_GOHMA_GRASS1, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.DEKU_TREE_QUEEN_GOHMA_GRASS2, lambda bundle: can_cut_shrubs(bundle)),
         (Locations.DEKU_TREE_QUEEN_GOHMA_GRASS3, lambda bundle: can_cut_shrubs(bundle)),
@@ -270,5 +266,5 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.DEKU_TREE_BOSS_ROOM, world, [
         (Regions.DEKU_TREE_BOSS_EXIT, lambda bundle: True),
-        (Regions.KF_OUTSIDE_DEKU_TREE, lambda bundle: has_item(Events.CLEARED_DEKU_TREE, bundle))  
+        (Regions.KF_OUTSIDE_DEKU_TREE, lambda bundle: has_item(Events.DEKU_TREE_COMPLETED, bundle))  
     ])

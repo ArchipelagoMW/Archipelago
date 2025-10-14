@@ -415,6 +415,17 @@ class ShuffleCrates(Choice):
     default = 0
 
 
+class ShuffleTrees(Toggle):
+    """
+    Trees will contain randomized items which are dropped the first time the player rolls into one.
+    Trees will have a special appearance when carrying randomized items.
+
+    Some trees are dependent on Link's age, such as some trees in Hyrule Field.
+    Two trees at Hyrule Castle are only shuffle with No Logic.
+    """
+    display_name = "Shuffle Trees"
+
+
 class ShuffleMerchants(Choice):
     """
     This setting governs if the Bean Salesman, Medigoron, Granny and the Carpet Salesman sell a random item.
@@ -726,6 +737,26 @@ class Shuffle100GSReward(Toggle):
     visibility = Visibility.none
 
 
+class IceTrapCount(Range):
+    """
+    Specify an exact number of Ice Traps to add to the item pool. If the item pool is out of space, no more will be added.
+    """
+    display_name = "Ice Trap Count"
+    range_start = 0
+    range_end = 100
+    default = 6
+
+
+class IceTrapFillerReplacement(Range):
+    """
+    Specify a percentage of filler items to replace with Ice Traps.
+    """
+    display_name = "Ice Trap Filler Replacement Count"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
 @dataclass
 class SohOptions(PerGameCommonOptions):
     closed_forest: ClosedForest
@@ -765,6 +796,7 @@ class SohOptions(PerGameCommonOptions):
     shuffle_cows: ShuffleCows
     shuffle_pots: ShufflePots
     shuffle_crates: ShuffleCrates
+    shuffle_trees: ShuffleTrees
     shuffle_merchants: ShuffleMerchants
     shuffle_frog_song_rupees: ShuffleFrogSongRupees
     shuffle_adult_trade_items: ShuffleAdultTradeItems
@@ -796,6 +828,8 @@ class SohOptions(PerGameCommonOptions):
     skeleton_key: SkeletonKey
     starting_age: StartingAge
     shuffle_100_gs_reward: Shuffle100GSReward
+    ice_trap_count: IceTrapCount 
+    ice_trap_filler_replacement: IceTrapFillerReplacement
 
 
 soh_option_groups = [
@@ -864,6 +898,7 @@ soh_option_groups = [
         ShuffleCows,
         ShufflePots,
         ShuffleCrates,
+        ShuffleTrees,
         ShuffleMerchants,
         # Merchant prices
         ShuffleFrogSongRupees,

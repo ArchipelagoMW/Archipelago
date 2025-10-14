@@ -6,7 +6,8 @@ if TYPE_CHECKING:
 class EventLocations(str, Enum):
     SHADOW_TEMPLE_BEGINNING_NUT_POT = "Shadow Temple Beginning Nut Pot"
     SHADOW_TEMPLE_FAIRY_POT = "Shadow Temple Fairy Pot"
-    SHADOW_TEMPLE_BOSS_BONGO_BONGO = "Shadow Temple Boss Bongo Bongo"
+    SHADOW_TEMPLE_BONGO_BONGO = "Shadow Temple Bongo Bongo"
+
 
 def set_region_rules(world: "SohWorld") -> None:
     player = world.player
@@ -133,15 +134,15 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Shadow Temple Boss Room
     # Events
     add_events(Regions.SHADOW_TEMPLE_BOSS_ROOM, world, [
-        (EventLocations.SHADOW_TEMPLE_BOSS_BONGO_BONGO, Events.CLEARED_SHADOW_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.BONGO_BONGO))
+        (EventLocations.SHADOW_TEMPLE_BONGO_BONGO, Events.SHADOW_TEMPLE_COMPLETED, lambda bundle: can_kill_enemy(bundle, Enemies.BONGO_BONGO))
     ])
     # Locations
     add_locations(Regions.SHADOW_TEMPLE_BOSS_ROOM, world, [
-        (Locations.SHADOW_TEMPLE_BONGO_BONGO_HEART_CONTAINER, lambda bundle: has_item(Events.CLEARED_SHADOW_TEMPLE, bundle)),
-        (Locations.BONGO_BONGO, lambda bundle: has_item(Events.CLEARED_SHADOW_TEMPLE, bundle))
+        (Locations.SHADOW_TEMPLE_BONGO_BONGO_HEART_CONTAINER, lambda bundle: has_item(Events.SHADOW_TEMPLE_COMPLETED, bundle)),
+        (Locations.BONGO_BONGO, lambda bundle: has_item(Events.SHADOW_TEMPLE_COMPLETED, bundle))
     ])
     # Connections
     connect_regions(Regions.SHADOW_TEMPLE_BOSS_ROOM, world, [
         (Regions.SHADOW_TEMPLE_BOSS_ENTRYWAY, lambda bundle: False),
-        (Regions.GRAVEYARD_WARP_PAD_REGION, lambda bundle: has_item(Events.CLEARED_SHADOW_TEMPLE, bundle))
+        (Regions.GRAVEYARD_WARP_PAD_REGION, lambda bundle: has_item(Events.SHADOW_TEMPLE_COMPLETED, bundle))
     ])
