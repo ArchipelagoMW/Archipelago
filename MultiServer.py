@@ -1158,7 +1158,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
             found = location_id in ctx.location_checks[team, finding_player]
             entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
 
-            hint_status = status  # Copy because we're in a for loop
+            hint_status = status  # Assign again because we're in a for loop
             if found:
                 hint_status = HintStatus.HINT_FOUND
             elif hint_status is None:
