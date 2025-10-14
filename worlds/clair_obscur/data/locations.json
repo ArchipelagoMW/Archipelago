@@ -4632,7 +4632,7 @@
         "type": "Chest"
     },
     {
-        "internal_name": "Chest_Generic_Lumina",
+        "internal_name": "Chest_Generic_LuminaPoint",
         "name": "Camp: Gestrals - Break Paint Spike",
         "location": "Camps",
         "original_item": "Consumable_LuminaPoint",
@@ -6075,7 +6075,7 @@
     },
     {
         "name": "Lost Gestral near Esquie's Nest",
-        "internal_name": "Bonus_LostGestrals",
+        "internal_name": "FindLostGestral_1",
         "location": "World Map",
         "condition": {},
         "original_item": "",
@@ -6083,7 +6083,7 @@
     },
     {
         "name": "Lost Gestral near Stone Wave Cliffs",
-        "internal_name": "Bonus_LostGestrals",
+        "internal_name": "FindLostGestral_2",
         "location": "World Map",
         "condition": {
             "Progressive Rock": 1
@@ -6092,24 +6092,8 @@
         "type": "Lost Gestral"
     },
     {
-        "name": "Lost Gestral near The Reacher",
-        "internal_name": "Bonus_LostGestrals",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "",
-        "type": "Lost Gestral"
-    },
-    {
-        "name": "Lost Gestral near Endless Night Sanctuary",
-        "internal_name": "Bonus_LostGestrals",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "",
-        "type": "Lost Gestral"
-    },
-    {
         "name": "Lost Gestral near White Tree",
-        "internal_name": "Bonus_LostGestrals",
+        "internal_name": "FindLostGestral_3",
         "location": "World Map",
         "condition": {},
         "original_item": "",
@@ -6117,23 +6101,15 @@
     },
     {
         "name": "Lost Gestral near Monoco's Station",
-        "internal_name": "Bonus_LostGestrals",
+        "internal_name": "FindLostGestral_4",
         "location": "World Map",
         "condition": {},
         "original_item": "",
         "type": "Lost Gestral"
     },
     {
-        "name": "Lost Gestral on flying island",
-        "internal_name": "Bonus_LostGestrals",
-        "location": "World Map",
-        "condition": {},
-        "original_item": "",
-        "type": "Lost Gestral"
-    },
-    {
-        "name": "Lost Gestral near Coastal Cave",
-        "internal_name": "Bonus_LostGestrals",
+        "name": "Lost Gestral near Endless Night Sanctuary",
+        "internal_name": "FindLostGestral_5",
         "location": "World Map",
         "condition": {},
         "original_item": "",
@@ -6141,7 +6117,31 @@
     },
     {
         "name": "Lost Gestral on red island near the mimes",
-        "internal_name": "Bonus_LostGestrals",
+        "internal_name": "FindLostGestral_6",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral near Coastal Cave",
+        "internal_name": "FindLostGestral_7",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral near The Reacher",
+        "internal_name": "FindLostGestral_8",
+        "location": "World Map",
+        "condition": {},
+        "original_item": "",
+        "type": "Lost Gestral"
+    },
+    {
+        "name": "Lost Gestral on flying island",
+        "internal_name": "FindLostGestral_9",
         "location": "World Map",
         "condition": {},
         "original_item": "",
