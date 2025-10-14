@@ -382,7 +382,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 world_directory = self.libfolder / "worlds" / file_name
                 if os.path.isfile(world_directory / "archipelago.json"):
                     with open(world_directory / "archipelago.json") as manifest_file:
-                        manifest = json.load(manifest_file)
+                        manifest = json.load(manifest_file, mode="r", encoding="utf-8")
 
                     assert "game" in manifest, (
                         f"World directory {world_directory} has an archipelago.json manifest file, but it"

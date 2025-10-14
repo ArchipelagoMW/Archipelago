@@ -271,7 +271,7 @@ if not is_frozen():
             file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
             world_directory = os.path.join("worlds", file_name)
             if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
-                with open(os.path.join(world_directory, "archipelago.json")) as manifest_file:
+                with open(os.path.join(world_directory, "archipelago.json"), mode="r", encoding="utf-8") as manifest_file:
                     manifest = json.load(manifest_file)
 
                 assert "game" in manifest, (
