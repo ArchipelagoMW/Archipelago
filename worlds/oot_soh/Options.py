@@ -135,7 +135,6 @@ class RainbowBridgeGregModifier(Choice):
     option_off = 0
     option_reward = 1
     option_wildcard = 2
-    visibility = Visibility.none
 
 
 class RainbowBridgeStonesRequired(Range):
@@ -571,7 +570,6 @@ class GanonsCastleBossKeyGregModifier(Choice):
     option_off = 0
     option_reward = 1
     option_wildcard = 2
-    visibility = Visibility.none
 
 
 class GanonsCastleBossKeyStonesRequired(Range):
@@ -739,14 +737,11 @@ class StartingAge(Choice):
     Decide whether to start as child Link or adult Link.
     Child Link starts in Link's House in Kokiri Forest.
     Adult Link starts in the Temple of Time.
-
-    TODO: This is hidden for now until it's implemented mod-side.
     """
     display_name = "Starting Age"
     option_child = 0
     option_adult = 1
     default = 0
-    visibility = Visibility.none
 
 
 class Shuffle100GSReward(Toggle):
@@ -755,7 +750,6 @@ class Shuffle100GSReward(Toggle):
     You can still talk to him multiple times to get Huge Rupees.
     """
     display_name = "Shuffle 100 GS Reward"
-    visibility = Visibility.none
 
 
 class IceTrapCount(Range):
@@ -927,7 +921,7 @@ soh_option_groups = [
         # Merchant prices
         ShuffleFrogSongRupees,
         ShuffleAdultTradeItems,
-        # 100 skulls reward shuffle
+        Shuffle100GSReward,
         ShuffleBossSouls,
         ShuffleFountainFairies,
         ShuffleStoneFairies,
@@ -953,7 +947,6 @@ soh_option_groups = [
     ]),
     # todo: decide whether these should be in the yaml or just let you change them locally on the fly
     OptionGroup("Timesavers", [
-        # Cuccoos to Return
         BigPoeTargetCount,
         SkipChildZelda,
         SkipEponaRace,
