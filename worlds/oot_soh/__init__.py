@@ -119,6 +119,7 @@ class SohWorld(World):
             "triforce_hunt_required_pieces": self.options.triforce_hunt_required_pieces.value,
             "triforce_hunt_extra_pieces_percentage": self.options.triforce_hunt_extra_pieces_percentage.value,
             "shuffle_skull_tokens": self.options.shuffle_skull_tokens.value,
+            "skull_sun_song": self.options.skull_sun_song.value,
             "shuffle_master_sword": self.options.shuffle_master_sword.value,
             "shuffle_childs_wallet": self.options.shuffle_childs_wallet.value,
             "shuffle_ocarina_buttons": self.options.shuffle_ocarina_buttons.value,

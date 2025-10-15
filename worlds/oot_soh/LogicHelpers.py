@@ -416,7 +416,9 @@ def can_do_trick(trick: Tricks, bundle: tuple[CollectionState, Regions, "SohWorl
 
 
 def can_get_nighttime_gs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    # TODO: Add check for "Skulls Expect Sun Song` option when implemented
+    world = bundle[2]
+    if world.options.skull_sun_song.value:
+        return can_use(Items.SUNS_SONG, bundle)
     return True
 
 
