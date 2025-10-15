@@ -354,13 +354,6 @@ def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return state._soh_can_reach_as_age(parent_region, Ages.CHILD, world.player) # type: ignore
 
 
-def can_be_both_ages(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    state = bundle[0]
-    parent_region = bundle[1]
-    world = bundle[2]
-    return state._soh_can_reach_as_age(parent_region, Ages.BOTH, world.player) # type: ignore
-
-
 def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
@@ -1033,16 +1026,16 @@ def can_trigger_lacs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> boo
             (gbk_setting == 6 and (dungeon_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_dungeons_required.value)) or
             (gbk_setting == 7 and (get_gs_count(bundle) >= world.options.ganons_castle_boss_key_skull_tokens_required.value)))
 
+
 # TODO implement EffectiveHealth(); Returns 2 for now. Requires implementing a damage multiplier option
 def effective_health(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     return 2
 
-def can_plant_bean(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return has_item(Items.MAGIC_BEAN, bundle) and can_be_both_ages(bundle)
 
 # TODO implement when shuffling keys within a dungeon is implemented
 def is_fire_loop_locked(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return True
+
 
 def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBombFlower: bool = False) -> bool:
     return can_do_trick(Tricks.GROUND_JUMP, bundle) and can_standing_shield(bundle) and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle)))
