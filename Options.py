@@ -1474,8 +1474,10 @@ class ItemLinks(OptionList):
         super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
         for link in self.value:
+            link["name"] = link["name"].strip()[:16].strip()
             if link["name"] in existing_links:
-                raise Exception(f"You cannot have more than one link named {link['name']}.")
+                raise Exception(f"Item link names are limited to their first 16 characters and must be unique. "
+                                f"You have more than one link named '{link['name']}'.")
             existing_links.add(link["name"])
 
             pool = self.verify_items(link["item_pool"], link["name"], "item_pool", world)
@@ -1710,7 +1712,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
     from jinja2 import Template
 
     from worlds import AutoWorldRegister
-    from Utils import local_path, __version__, tuplize_version
+    from Utils import local_path, __version__
 
     full_path: str
 

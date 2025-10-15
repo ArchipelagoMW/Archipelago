@@ -68,7 +68,9 @@ def main(
 
     if os.path.isfile(apworld.manifest_path):
         game_key = "game"
-        manifest = orjson.loads(open(apworld.manifest_path).read())
+
+        with open(apworld.manifest_path, mode="r", encoding="utf-8") as manifest_file:
+            manifest = orjson.loads(manifest_file.read())
 
         assert game_key in manifest, \
             f"World directory {input_path} has an {MANIFEST_NAME} manifest file, but it does not define a \"{game_key}\"."
