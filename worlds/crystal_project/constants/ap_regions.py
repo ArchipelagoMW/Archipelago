@@ -16,7 +16,8 @@ PROVING_MEADOWS_SKUMPARADISE_CONNECTOR_AP_REGION = "Proving Meadows Skumparadise
 SKUMPARADISE_AP_REGION = "Skumparadise"
 #Advanced
 CAPITAL_SEQUOIA_AP_REGION = "Capital Sequoia"
-JOJO_SEWERS_AP_REGION = "Jojo Sewers"
+JOJO_SEWERS_AP_REGION = "Jojo Sewers Main (lol)"
+SEWERS_PAST_SECRET_PASSWORD_AP_REGION = "Sewers Past Secret Password"
 BOOMER_SOCIETY_AP_REGION = "Boomer Society"
 ROLLING_QUINTAR_FIELDS_AP_REGION = "Rolling Quintar Fields"
 QUINTAR_NEST_AP_REGION = "Quintar Nest"
