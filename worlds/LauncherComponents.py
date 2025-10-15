@@ -245,7 +245,7 @@ if not is_frozen():
         import os
         import zipfile
 
-        import build_apworld
+        from build_apworld import build_apworld
         from worlds import AutoWorldRegister
         from Launcher import open_folder
 
@@ -268,7 +268,7 @@ if not is_frozen():
                 logging.error(f"Requested APWorld \"{worldname}\" does not exist.")
                 continue
 
-            build_apworld.main(
+            build_apworld(
                 input_path=os.path.dirname(worldtype.__file__),
                 output_path=apworlds_folder,
                 world_type=worldtype

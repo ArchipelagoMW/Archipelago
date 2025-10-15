@@ -14,7 +14,7 @@ from typing import Any, AnyStr, ClassVar, Final, Self, Type
 import orjson
 
 import Launcher
-import build_apworld
+from build_apworld import MANIFEST_NAME, ZIP_EXCLUDE, build_apworld
 from general import TestWorld
 from worlds import AutoWorldRegister
 from worlds.AutoWorld import World
@@ -67,7 +67,7 @@ class TestBuildApworld(unittest.TestCase):
         else:
             apworld_dir.mkdir()
             (apworld_dir / "__init__.py").write_text(INIT_CONTENTS)
-            (apworld_dir / build_apworld.MANIFEST_NAME).write_text(MANIFEST_CONTENTS)
+            (apworld_dir / MANIFEST_NAME).write_text(MANIFEST_CONTENTS)
             shutil.copyfile(TestWorld.__file__, os.path.join(apworld_dir, "world.py"))
 
         return apworld_dir
@@ -76,7 +76,7 @@ class TestBuildApworld(unittest.TestCase):
         input_path = self.create_apworld_dir().resolve()
         output_path = self.output_tempdir.name
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             input_path=input_path,
             output_path=output_path
         )
@@ -87,7 +87,7 @@ class TestBuildApworld(unittest.TestCase):
         input_path = self.create_apworld_dir().relative_to(os.path.abspath(os.curdir), walk_up=True)
         output_path = self.output_tempdir.name
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             input_path=input_path,
             output_path=output_path
         )
@@ -99,7 +99,7 @@ class TestBuildApworld(unittest.TestCase):
         input_path = self.create_apworld_dir(apworld_name)
         output_path = self.output_tempdir.name
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             input_path=input_path,
             output_path=output_path
         )
@@ -111,7 +111,7 @@ class TestBuildApworld(unittest.TestCase):
         input_path = self.create_apworld_dir()
         output_path = os.path.abspath(self.output_tempdir.name)
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             input_path=input_path,
             output_path=output_path
         )
@@ -122,7 +122,7 @@ class TestBuildApworld(unittest.TestCase):
         input_path = self.create_apworld_dir()
         output_path = os.path.relpath(self.output_tempdir.name, os.curdir)
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             input_path=input_path,
             output_path=output_path
         )
@@ -134,7 +134,7 @@ class TestBuildApworld(unittest.TestCase):
         input_path = self.create_apworld_dir()
         output_path = self.output_tempdir.name
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             apworld_name=apworld_name,
             input_path=input_path,
             output_path=output_path
@@ -148,7 +148,7 @@ class TestBuildApworld(unittest.TestCase):
         output_path = self.output_tempdir.name
 
         with self.assertRaises(AssertionError):
-            build_apworld.main(
+            build_apworld(
                 input_path=input_path,
                 output_path=output_path,
                 world_type=TestWorld
@@ -160,7 +160,7 @@ class TestBuildApworld(unittest.TestCase):
 
         importlib.import_module(input_path.name)
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             input_path=input_path,
             output_path=output_path,
             world_type=AutoWorldRegister.world_types[TestWorld.game]
@@ -172,9 +172,9 @@ class TestBuildApworld(unittest.TestCase):
         input_path = self.create_apworld_dir(dir_name="manifest")
         output_path = self.output_tempdir.name
 
-        (input_path / build_apworld.MANIFEST_NAME).unlink()
+        (input_path / MANIFEST_NAME).unlink()
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             input_path=input_path,
             output_path=output_path
         )
@@ -185,10 +185,10 @@ class TestBuildApworld(unittest.TestCase):
         input_path = self.create_apworld_dir(dir_name="manifest")
         output_path = self.output_tempdir.name
 
-        (input_path / build_apworld.MANIFEST_NAME).write_text("{}")
+        (input_path / MANIFEST_NAME).write_text("{}")
 
         with self.assertRaises(AssertionError):
-            build_apworld.main(
+            build_apworld(
                 input_path=input_path,
                 output_path=output_path
             )
@@ -197,7 +197,7 @@ class TestBuildApworld(unittest.TestCase):
         input_path = self.create_apworld_dir(dir_name="manifest")
         output_path = self.output_tempdir.name
 
-        (input_path / build_apworld.MANIFEST_NAME).write_text(
+        (input_path / MANIFEST_NAME).write_text(
             textwrap.dedent("""
                 {
                     "game": "This game does not exist"
@@ -206,7 +206,7 @@ class TestBuildApworld(unittest.TestCase):
         )
 
         with self.assertRaises(AssertionError):
-            build_apworld.main(
+            build_apworld(
                 input_path=input_path,
                 output_path=output_path
             )
@@ -216,7 +216,7 @@ class TestBuildApworld(unittest.TestCase):
         input_path = self.create_apworld_dir()
         output_path = self.output_tempdir.name
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             apworld_name=apworld_name,
             input_path=input_path,
             output_path=output_path
@@ -229,7 +229,7 @@ class TestBuildApworld(unittest.TestCase):
             zip_file_paths = zf.namelist()
 
             for input_file in input_path.iterdir():
-                if input_file.name in build_apworld.ZIP_EXCLUDE:
+                if input_file.name in ZIP_EXCLUDE:
                     continue
 
                 zip_file_path = f"{apworld_name}/{input_file.name}"
@@ -252,7 +252,7 @@ class TestBuildApworld(unittest.TestCase):
 
         self.assertTrue(excluded_file_path.exists())
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             input_path=input_path,
             output_path=output_path
         )
@@ -272,7 +272,7 @@ class TestBuildApworld(unittest.TestCase):
 
         self.assertTrue(excluded_file_path.exists())
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             input_path=input_path,
             output_path=output_path
         )
@@ -286,7 +286,7 @@ class TestBuildApworld(unittest.TestCase):
         input_path = self.create_apworld_dir()
         output_path = self.output_tempdir.name
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             input_path=input_path,
             output_path=output_path
         )
@@ -294,7 +294,7 @@ class TestBuildApworld(unittest.TestCase):
         self.assertTrue(os.path.exists(apworld_path))
 
         with zipfile.ZipFile(apworld_path) as zf:
-            manifest: dict[str, Any] = orjson.loads(zf.read(f"{input_path.name}/{build_apworld.MANIFEST_NAME}"))
+            manifest: dict[str, Any] = orjson.loads(zf.read(f"{input_path.name}/{MANIFEST_NAME}"))
 
             self.assertIn("compatible_version", manifest)
             self.assertIn("version", manifest)
@@ -306,7 +306,7 @@ class TestBuildApworld(unittest.TestCase):
         for input_file in os.listdir(input_path):
             os.utime(os.path.join(input_path, input_file), (0, 0))
 
-        apworld_path = build_apworld.main(
+        apworld_path = build_apworld(
             input_path=input_path,
             output_path=output_path
         )

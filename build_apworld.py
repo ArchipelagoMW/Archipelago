@@ -23,7 +23,7 @@ ZIP_EXCLUDE = {
 }
 
 
-def main(
+def build_apworld(
     input_path: StrPath,
     output_path: StrPath = os.curdir,
     apworld_name: Optional[str] = None,
@@ -153,7 +153,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    main(
+    build_apworld(
         apworld_name=args.apworld_name,
         input_path=args.input_path,
         output_path=args.output_path
