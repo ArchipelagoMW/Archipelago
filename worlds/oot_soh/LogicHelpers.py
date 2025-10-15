@@ -832,25 +832,35 @@ def small_keys(key: Items, requiredAmount: int, bundle: tuple[CollectionState, R
 
 
 def has_key_ring(key : Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    match key:
-        case Items.FOREST_TEMPLE_SMALL_KEY:
-            return has_item(Items.FOREST_TEMPLE_KEY_RING, bundle)
-        case Items.FIRE_TEMPLE_SMALL_KEY:
-            return has_item(Items.FIRE_TEMPLE_KEY_RING, bundle)
-        case Items.WATER_TEMPLE_SMALL_KEY:
-            return has_item(Items.WATER_TEMPLE_KEY_RING, bundle)
-        case Items.BOTTOM_OF_THE_WELL_SMALL_KEY:
-            return has_item(Items.BOTTOM_OF_THE_WELL_KEY_RING, bundle)
-        case Items.SHADOW_TEMPLE_SMALL_KEY:
-            return has_item(Items.SHADOW_TEMPLE_KEY_RING, bundle)
-        case Items.GERUDO_FORTRESS_SMALL_KEY:
-            return has_item(Items.GERUDO_FORTRESS_KEY_RING, bundle)
-        case Items.SPIRIT_TEMPLE_SMALL_KEY:
-            return has_item(Items.SPIRIT_TEMPLE_KEY_RING, bundle)
-        case Items.GANONS_CASTLE_SMALL_KEY:
-            return has_item(Items.GANONS_CASTLE_KEY_RING, bundle)
-        case _:
-            return False
+
+    if key == Items.FOREST_TEMPLE_SMALL_KEY:
+        return has_item(Items.FOREST_TEMPLE_KEY_RING, bundle)
+    
+    if key == Items.FIRE_TEMPLE_SMALL_KEY:
+        return has_item(Items.FIRE_TEMPLE_KEY_RING, bundle)
+    
+    if key == Items.WATER_TEMPLE_SMALL_KEY:
+        return has_item(Items.WATER_TEMPLE_KEY_RING, bundle)
+    
+    if key == Items.BOTTOM_OF_THE_WELL_SMALL_KEY:
+        return has_item(Items.BOTTOM_OF_THE_WELL_KEY_RING, bundle)
+    
+    if key == Items.SHADOW_TEMPLE_SMALL_KEY:
+        return has_item(Items.SHADOW_TEMPLE_KEY_RING, bundle)
+    
+    if key == Items.GERUDO_FORTRESS_SMALL_KEY:
+        return has_item(Items.GERUDO_FORTRESS_KEY_RING, bundle)
+    
+    if key == Items.TRAINING_GROUND_SMALL_KEY:
+        return has_item(Items.TRAINING_GROUND_KEY_RING, bundle)
+    
+    if key == Items.SPIRIT_TEMPLE_SMALL_KEY:
+        return has_item(Items.SPIRIT_TEMPLE_KEY_RING, bundle)
+    
+    if key == Items.GANONS_CASTLE_SMALL_KEY:
+        return has_item(Items.GANONS_CASTLE_KEY_RING, bundle)
+
+    return False
 
 
 def can_get_enemy_drop(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy : Enemies, distance : EnemyDistance = EnemyDistance.CLOSE, aboveLink : bool = False) -> bool:
