@@ -253,12 +253,13 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GANONS_TOWER_ENTRYWAY, world, [
         (Regions.GANONS_CASTLE_LOBBY, lambda bundle: True),
-        (Regions.GANONS_TOWER_FLOOR_1, lambda bundle: ((has_item(LocalEvents.GANONS_CASTLE_FOREST_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Forest']
-                                                       (has_item(LocalEvents.GANONS_CASTLE_FIRE_TRIAL_CLEARED, bundle)) and #or world.skipped_trials['Fire']
-                                                       (has_item(LocalEvents.GANONS_CASTLE_WATER_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Water']
-                                                       (has_item(LocalEvents.GANONS_CASTLE_SHADOW_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Shadow']
-                                                       (has_item(LocalEvents.GANONS_CASTLE_SPIRIT_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Spirit']
-                                                       (has_item(LocalEvents.GANONS_CASTLE_LIGHT_TRIAL_CLEARED, bundle) ))) #or world.skipped_trials['Light']
+        (Regions.GANONS_TOWER_FLOOR_1, lambda bundle: (((has_item(LocalEvents.GANONS_CASTLE_FOREST_TRIAL_CLEARED, bundle)) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_FIRE_TRIAL_CLEARED, bundle)) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_WATER_TRIAL_CLEARED, bundle)) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_SHADOW_TRIAL_CLEARED, bundle)) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_SPIRIT_TRIAL_CLEARED, bundle)) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_LIGHT_TRIAL_CLEARED, bundle))) or 
+                                                       bool(world.options.skip_ganons_trials)))
     ])
     
     ## Ganon's Tower Floor 1

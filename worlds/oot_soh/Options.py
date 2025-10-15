@@ -188,14 +188,11 @@ class RainbowBridgeSkullTokensRequired(Range):
     default = 50
 
 
-class GanonsTrialsRequired(Range):
+class SkipGanonsTrials(Toggle):
     """
-    Sets the number of Ganon's Trials required to dispel the barrier.
+    Choose wether or not Ganon's Trials are completed from the start.
     """
-    display_name = "Ganon's Trials Required"
-    range_start = 0
-    range_end = 6
-    default = 0
+    display_name = "Skip Ganon's Trials"
 
 
 class TriforceHunt(Toggle):
@@ -539,7 +536,7 @@ class GanonsCastleBossKey(Choice):
     default = 5
 
 
-class GanonsCastleBossKeyGregModifier(Toggle):
+class GanonsCastleBossKeyGregModifier(Choice):
     """
     If Ganons Castle Boss Key is enabled, Greg will count toward the LACS goal.
     Off - Greg won't change the LACS goal requirement.
@@ -774,7 +771,7 @@ class SohOptions(PerGameCommonOptions):
     rainbow_bridge_dungeons_required: RainbowBridgeDungeonsRequired
     rainbow_bridge_skull_tokens_required: RainbowBridgeSkullTokensRequired
     rainbow_bridge_greg_modifier: RainbowBridgeGregModifier
-    ganons_trials_required: GanonsTrialsRequired
+    skip_ganons_trials: SkipGanonsTrials
     triforce_hunt: TriforceHunt
     triforce_hunt_required_pieces: TriforceHuntRequiredPieces
     triforce_hunt_extra_pieces_percentage: TriforceHuntExtraPiecesPercentage
@@ -852,7 +849,7 @@ soh_option_groups = [
         RainbowBridgeDungeonsRequired,
         RainbowBridgeSkullTokensRequired,
         RainbowBridgeGregModifier,
-        GanonsTrialsRequired,
+        SkipGanonsTrials,
         TriforceHunt,
         TriforceHuntRequiredPieces,
         TriforceHuntExtraPiecesPercentage,

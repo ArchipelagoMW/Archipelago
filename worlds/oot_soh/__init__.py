@@ -91,7 +91,7 @@ class SohWorld(World):
             "rainbow_bridge_dungeon_rewards_required": self.options.rainbow_bridge_dungeon_rewards_required.value,
             "rainbow_bridge_dungeons_required": self.options.rainbow_bridge_dungeons_required.value,
             "rainbow_bridge_skull_tokens_required": self.options.rainbow_bridge_skull_tokens_required.value,
-            "ganons_trials_required": self.options.ganons_trials_required.value,
+            "skip_ganons_trials": self.options.skip_ganons_trials.value,
             "triforce_hunt": self.options.triforce_hunt.value,
             "triforce_hunt_required_pieces": self.options.triforce_hunt_required_pieces.value,
             "triforce_hunt_extra_pieces_percentage": self.options.triforce_hunt_extra_pieces_percentage.value,
