@@ -53,8 +53,9 @@ class SohWorld(World):
         self.scrub_prices = dict[str, int]()
 
     def generate_early(self) -> None:
-        #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
-        pass
+        # If door of time is set to closed and dungeon rewards aren't shuffled, force child spawn
+        if self.options.door_of_time.value == 0 and self.options.shuffle_dungeon_rewards.value == 0:
+            self.options.starting_age.value = 0
 
     def create_item(self, name: str) -> SohItem:
         item_entry = Items(name)

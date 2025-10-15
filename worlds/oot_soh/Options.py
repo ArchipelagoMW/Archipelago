@@ -754,6 +754,7 @@ class StartingAge(Choice):
     Decide whether to start as child Link or adult Link.
     Child Link starts in Link's House in Kokiri Forest.
     Adult Link starts in the Temple of Time.
+    CAUTION: When Door of Time is set to closed, and Shuffle Dungeon Rewards set to off, this option will be forced to child.
     """
     display_name = "Starting Age"
     option_child = 0
