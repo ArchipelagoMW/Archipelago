@@ -151,8 +151,6 @@ class SohWorld(World):
         }
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        # Temporarily disabled because logic is in progress
-        #update_age_access(self, state)
         state._soh_stale[self.player] = True # type: ignore
 
         if item.name in progressive_items:
@@ -167,7 +165,6 @@ class SohWorld(World):
         return super().collect(state, item)
     
     def remove(self, state: CollectionState, item: Item) -> bool:
-        # Temporarily disabled because logic is in progress
         changed = super().remove(state, item)
         if changed:
             state._soh_invalidate(self.player) # type: ignore

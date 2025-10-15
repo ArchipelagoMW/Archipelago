@@ -79,7 +79,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.SHADOW_TEMPLE_HUGE_PIT, world, [
-        (Regions.SHADOW_TEMPLE_WIND_TUNNEL, lambda bundle: ((can_do_trick(Tricks.LENS_SHADOW_PLATFORM, bundle) and can_do_trick(Tricks.LENS_SHADOW, bundle)) or can_use(Items.LENS_OF_TRUTH, bundle)) and (can_use(Items.HOOKSHOT, bundle) or (can_do_trick(Tricks.GROUND_JUMP_HARD) and can_ground_jump(bundle))) and small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 3, bundle)),
+        (Regions.SHADOW_TEMPLE_WIND_TUNNEL, lambda bundle: ((can_do_trick(Tricks.LENS_SHADOW_PLATFORM, bundle) and can_do_trick(Tricks.LENS_SHADOW, bundle)) or can_use(Items.LENS_OF_TRUTH, bundle)) and (can_use(Items.HOOKSHOT, bundle) or (can_do_trick(Tricks.GROUND_JUMP_HARD, bundle) and can_ground_jump(bundle))) and small_keys(Items.SHADOW_TEMPLE_SMALL_KEY, 3, bundle)),
     ])
 
     ## Shadow Temple Wind Tunnel

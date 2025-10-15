@@ -52,7 +52,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ICE_CAVERN_SPINNING_BLADE_POT3, lambda bundle: can_break_pots(bundle)),
         (Locations.ICE_CAVERN_NEAR_END_POT1, lambda bundle: can_break_pots(bundle) and blue_fire(bundle)),
         (Locations.ICE_CAVERN_NEAR_END_POT2, lambda bundle: can_break_pots(bundle) and blue_fire(bundle)),
-        (Locations.ICE_CAVERN_FROZEN_POT1, lambda bundle: can_break_pots(bundle) and blue_fire(bundle) and (is_adult(bundle) or (can_do_trick(Tricks.GROUND_JUMP_HARD) and can_ground_jump(bundle)))),
+        (Locations.ICE_CAVERN_FROZEN_POT1, lambda bundle: can_break_pots(bundle) and blue_fire(bundle) and (is_adult(bundle) or (can_do_trick(Tricks.GROUND_JUMP_HARD, bundle) and can_ground_jump(bundle)))),
         (Locations.ICE_CAVERN_LOBBY_RUPEE, lambda bundle: blue_fire(bundle)),
         (Locations.ICE_CAVERN_MAP_ROOM_LEFT_HEART, lambda bundle: is_adult(bundle) or (can_do_trick(Tricks.GROUND_JUMP_HARD, bundle) and can_ground_jump(bundle))),
         (Locations.ICE_CAVERN_MAP_ROOM_MIDDLE_HEART, lambda bundle: is_adult(bundle) or (can_do_trick(Tricks.GROUND_JUMP_HARD, bundle) and can_ground_jump(bundle))),
