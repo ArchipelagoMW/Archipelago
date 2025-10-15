@@ -88,37 +88,19 @@ def can_use(item: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
         return can_use(Items.FAIRY_BOW, bundle)
 
     if item == Items.SCARECROW:
-        return scarecrows_song(bundle) and can_use(Items.HOOKSHOT, bundle)
+        return is_adult(bundle)
     
     if item == Items.DISTANT_SCARECROW:
-        return scarecrows_song(bundle) and can_use(Items.LONGSHOT, bundle)
+        return is_adult(bundle)
     
     if item in (Items.PROGRESSIVE_BOMBCHU,Items.BOMBCHUS_5,Items.BOMBCHUS_10,Items.BOMBCHUS_20):
         return bombchu_refill(bundle) and bombchus_enabled(bundle)
-    
-    if item == Items.NUTS:
-        return has_item(Events.CAN_FARM_NUTS, bundle)
-    
-    if item == Items.STICKS:
-        return has_item(Events.CAN_FARM_STICKS, bundle)
     
     if item == Items.FISHING_POLE:
         return has_item(Items.CHILD_WALLET, bundle)
     
     if item == Items.EPONA:
         return is_adult(bundle) and can_use(Items.EPONAS_SONG, bundle)
-    
-    if item == Items.BOTTLE_WITH_BUGS:
-        return has_item(Events.CAN_ACCESS_BUGS, bundle)
-    
-    if item == Items.BOTTLE_WITH_FAIRY:
-        return has_item(Events.CAN_ACCESS_FAIRIES, bundle)
-    
-    if item == Items.BOTTLE_WITH_FISH:
-        return has_item(Events.CAN_ACCESS_FISH, bundle)
-    
-    if item ==  Items.BOTTLE_WITH_BLUE_FIRE:
-        return has_item(Events.CAN_ACCESS_BLUE_FIRE, bundle)
     
     return True
 
@@ -175,31 +157,31 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return has_bottle(bundle) and state.has(Events.CAN_DEFEAT_BIG_POE.value, player)
     
     if item == Items.BOTTLE_WITH_BLUE_FIRE:
-        return has_bottle(bundle) and state.has(Events.CAN_ACCESS_BLUE_FIRE.value, player) #TODO Should we check if you can buy blue fire?
+        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BLUE_FIRE.value, player) or state.has(Items.BUY_BLUE_FIRE.value, player))
     
     if item == Items.BOTTLE_WITH_BLUE_POTION:
-        return has_bottle(bundle) #TODO Should we check if you can buy blue potion?
+        return has_bottle(bundle) and state.has(Items.BUY_BLUE_POTION.value, player)
     
     if item == Items.BOTTLE_WITH_BUGS:
         return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BUGS.value, player) or state.has(Items.BUY_BOTTLE_BUG.value, player))
     
     if item == Items.BOTTLE_WITH_FAIRY:
-        return has_bottle(bundle) and state.has(Events.CAN_ACCESS_FAIRIES.value, player) # TODO Should we check if we can buy a fairy?
+        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_FAIRIES.value, player) or state.has(Items.BUY_FAIRYS_SPIRIT.value, player))
     
     if item == Items.BOTTLE_WITH_FISH:
-        return has_bottle(bundle) and state.has(Events.CAN_ACCESS_FISH.value, player) # TODO Should we check if you can buy a fish?
+        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_FISH.value, player) or state.has(Items.BUY_FISH.value, player))
     
     if item == Items.BOTTLE_WITH_GREEN_POTION:
         return has_bottle(bundle) and state.has(Items.BUY_GREEN_POTION.value, player)
     
     if item == Items.BOTTLE_WITH_MILK:
-        return has_bottle(bundle) # TODO Should we check if we can buy milk? 
+        return has_bottle(bundle)
     
     if item == Items.BOTTLE_WITH_POE:
-        return has_bottle(bundle) # TODO Should we check if we can access poes? 
+        return has_bottle(bundle)
     
     if item == Items.BOTTLE_WITH_RED_POTION:
-        return has_bottle(bundle) # TODO Should we check if we can buy red potion?
+        return has_bottle(bundle)
     
     if item == Items.EMPTY_BOTTLE:
         return has_bottle(bundle)
