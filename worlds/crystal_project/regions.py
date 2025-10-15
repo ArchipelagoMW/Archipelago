@@ -587,7 +587,7 @@ def create_ap_region(world: "CrystalProjectWorld", player: int, locations_per_re
     Creates an AP Region and returns it, as well as the Location used for region completion
     """
     logic = CrystalProjectLogic(player, world.options)
-    region = Region(name, player, world.multiworld)
+    ap_region = Region(name, player, world.multiworld)
 
     region_completion: Location | None = None
 
@@ -596,18 +596,18 @@ def create_ap_region(world: "CrystalProjectWorld", player: int, locations_per_re
     if not excluded:
         if name in locations_per_region:
             for location_data in locations_per_region[name]:
-                location = create_location(player, location_data, region)
-                region.locations.append(location)
+                location = create_location(player, location_data, ap_region)
+                ap_region.locations.append(location)
                 if location_data.regionsanity:
                     region_completion = location
 
         # This is for making sure players can earn money for required shop checks in shopsanity + regionsanity
         if world.options.regionsanity.value == world.options.regionsanity.option_true and world.options.shopsanity.value != world.options.shopsanity.option_disabled:
-            for location in region.locations:
+            for location in ap_region.locations:
                 if "Shop -" in location.name:
-                    location.access_rule = combine_callables(location.access_rule, lambda state: logic.can_earn_money(state, region.name))
+                    location.access_rule = combine_callables(location.access_rule, lambda state: logic.can_earn_money(state, ap_region.name))
 
-    return region, region_completion
+    return ap_region, region_completion
 
 def create_display_region(world: "CrystalProjectWorld", player: int, locations_per_region: Dict[str, List[LocationData]], display_region_name: str, excluded: bool) -> List[Region]:
     ap_regions: List[Region] = []

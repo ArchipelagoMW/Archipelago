@@ -150,8 +150,8 @@ class CrystalProjectLogic:
         else:
             return False
 
-    def can_earn_money(self, state: CollectionState, shop_region: str) -> bool:
-        if shop_region == MERCURY_SHRINE_AP_REGION:
+    def can_earn_money(self, state: CollectionState, shop_ap_region: str) -> bool:
+        if shop_ap_region == MERCURY_SHRINE_AP_REGION:
             return True
 
         from .regions import display_region_levels_dictionary
@@ -159,7 +159,7 @@ class CrystalProjectLogic:
 
         has_combat = False
         region_checked = 0
-        shop_region_index = list(display_region_levels_dictionary.keys()).index(shop_region)
+        shop_region_index = list(display_region_levels_dictionary.keys()).index(ap_region_to_display_region_dictionary[shop_ap_region])
 
         for ap_region in state.multiworld.worlds[self.player].get_regions():
             region_checked += 1
