@@ -167,6 +167,7 @@ class SohWorld(World):
             "sunlight_arrows": self.options.sunlight_arrows.value,
             "infinite_upgrades": self.options.infinite_upgrades.value,
             "skeleton_key": self.options.skeleton_key.value,
+            "slingbow_break_behives": self.options.slingbow_break_behives.value,
             "starting_age": self.options.starting_age.value,
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
             "ice_trap_count": self.options.ice_trap_count,
