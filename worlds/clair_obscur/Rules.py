@@ -50,8 +50,8 @@ def set_rules(world):
             ], player, 2 / world.options.area_logic))
 
     if world.options.char_shuffle:
-        add_rule(major_connection_1, lambda state: state.has_group("Character", player, 1))
-        add_rule(major_connection_2, lambda state: state.has_group("Character", player, 2))
+        add_rule(major_connection_1, lambda state: state.has_group("Character", player, 3))
+        add_rule(major_connection_2, lambda state: state.has_group("Character", player, 4))
 
     #Lost Gestral access
     # if world.options.gestral_shuffle:
