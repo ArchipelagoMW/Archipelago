@@ -212,16 +212,7 @@ def scarecrows_song(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool
 
 
 def has_bottle(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:  # soup
-    state = bundle[0]
-    world = bundle[2]
-    for bottle in no_rules_bottles:
-        if state.has(bottle.value, world.player):
-            return True
-    if state.has_all((Events.DELIVER_LETTER.value, Items.BOTTLE_WITH_RUTOS_LETTER.value), world.player):
-        return True
-    if state.has_all((Events.CAN_EMPTY_BIG_POES.value, Items.BOTTLE_WITH_BIG_POE.value), world.player):
-        return True
-    return False #This seems redundant we already have all these checks in bottle count and we can just do a simple logical operator on it, that's how ship does it too
+    return bottle_count(bundle) >= 1
 
 
 def bottle_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
@@ -998,8 +989,12 @@ def can_build_rainbow_bridge(bundle: tuple[CollectionState, Regions, "SohWorld"]
     if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.rainbow_bridge_greg_modifier.value == 1:
         greg_reward = 1
 
-    return (world.options.rainbow_bridge or
-            (has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle) and can_use(Items.LIGHT_ARROW, bundle)) or
+    bridge_setting = world.options.rainbow_bridge.value
+
+    return (bridge_setting == 1 or
+            (bridge_setting == 0 and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION,
+                                                                                           bundle) and can_use(
+                Items.LIGHT_ARROW, bundle)) or
             (bridge_setting == 2 and ((stone_count(bundle) + greg_reward) >= world.options.rainbow_bridge_stones_required.value)) or
             (bridge_setting == 3 and ((medallion_count(bundle) + greg_reward) >= world.options.rainbow_bridge_medallions_required.value)) or
             (bridge_setting == 4 and ((stone_count(bundle) + medallion_count(bundle) + greg_reward) >= world.options.rainbow_bridge_dungeon_rewards_required.value)) or
