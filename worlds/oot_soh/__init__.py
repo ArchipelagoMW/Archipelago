@@ -6,7 +6,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table, item_name_groups, progressive_items
 from .Locations import location_table
 from .Options import SohOptions, soh_option_groups
-from .Regions import create_regions_and_locations, place_locked_items
+from .Regions import create_regions_and_locations, place_locked_items, dungeon_reward_item_mapping
 from .Enums import *
 from .ItemPool import create_item_pool
 from .LogicHelpers import increment_current_count
@@ -87,6 +87,19 @@ class SohWorld(World):
 
     def pre_fill(self) -> None:
         fill_shop_items(self)
+
+        if self.options.shuffle_dungeon_rewards.value == 1:
+            # Create a filled copy of the state so the multiworld can place the dungeon rewards using logic
+            prefill_state = CollectionState(self.multiworld)
+            for item in self.item_pool:
+                prefill_state.collect(item, False)
+            prefill_state.sweep_for_advancements()
+
+            dungeon_reward_locations = [self.get_location(location.value) for location in dungeon_reward_item_mapping.keys()]
+            dungeon_reward_items = [self.create_item(item.value) for item in dungeon_reward_item_mapping.values()]
+
+            # Place dungeon rewards
+            fill_restrictive(self.multiworld, prefill_state, dungeon_reward_locations, dungeon_reward_items, single_player_placement=True, lock=True)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {

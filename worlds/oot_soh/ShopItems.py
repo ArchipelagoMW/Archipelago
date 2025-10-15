@@ -173,29 +173,15 @@ def fill_shop_items(world: "SohWorld") -> None:
     vanilla_shop_locations = [world.get_location(slot) for slot in vanilla_shop_slots]
     vanilla_items = [world.create_item(item.value) for item in vanilla_pool]
 
-    # Prefill dungeon rewards first as otherwise items in adult/child only shops can lock time travel
-    if world.options.shuffle_dungeon_rewards.value == 1:
-        # Create a filled copy of the state so the multiworld can place the dungeon rewards using logic
-        prefill_state = CollectionState(world.multiworld)
-        for item in world.item_pool:
-            prefill_state.collect(item, False)
-        for item in vanilla_items:
-            prefill_state.collect(item, False)
-        prefill_state.sweep_for_advancements()
-
-        dungeon_reward_locations = [world.get_location(location.value) for location in dungeon_reward_item_mapping.keys()]
-        dungeon_reward_items = [world.create_item(item.value) for item in dungeon_reward_item_mapping.values()]
-
-        # Place dungeon rewards
-        fill_restrictive(world.multiworld, prefill_state, dungeon_reward_locations, dungeon_reward_items, single_player_placement=True, lock=True)
-
-    # Create a filled copy of the state so the multiworld can place the vanilla shop items using logic
+    # create a filled copy of the state so the multiworld can place the vanilla shop items using logic
     prefill_state = CollectionState(world.multiworld)
     for item in world.item_pool:
         prefill_state.collect(item, False)
+    for item in dungeon_reward_item_mapping.values():
+        prefill_state.collect(world.create_item(item.value), False)
     prefill_state.sweep_for_advancements()
 
-    # Place the vanilla shop items
+    # place the vanilla shop items
     fill_restrictive(world.multiworld, prefill_state, vanilla_shop_locations, vanilla_items, single_player_placement=True, lock=True)
     for slot in vanilla_shop_slots:
         location = world.get_location(slot)
