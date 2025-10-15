@@ -326,9 +326,9 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(JOJO_SEWERS_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - Invisible maze", 744 + treasure_index_offset), #Iron Armor chest
         LocationData(JOJO_SEWERS_AP_REGION, "Underpass Chest - Walking the plank above Pale Grotto waterfall", 3670 + treasure_index_offset, lambda state: logic.has_swimming(state)), #(337, 155, -319) Underpass Scrap chest
         #Past Secret Password
-        LocationData(SEWERS_PAST_SECRET_PASSWORD_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - Drowned passage to Boomer Society", 634 + treasure_index_offset),  # Money chest
-        LocationData(SEWERS_PAST_SECRET_PASSWORD_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - In the shadow of the waterfall", 1126 + treasure_index_offset),  # Tincture Pouch
-        LocationData(SEWERS_PAST_SECRET_PASSWORD_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - Leap of faith", 887 + treasure_index_offset),  # Smelly Gi chest
+        LocationData(SEWERS_TO_BOOMER_SOCIETY_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - Drowned passage to Boomer Society", 634 + treasure_index_offset),  # Money chest
+        LocationData(SEWERS_TO_BOOMER_SOCIETY_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - In the shadow of the waterfall", 1126 + treasure_index_offset),  # Tincture Pouch
+        LocationData(SEWERS_TO_BOOMER_SOCIETY_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Chest - Leap of faith", 887 + treasure_index_offset),  # Smelly Gi chest
 
         #NPCs
         #Sewer Main (lol)

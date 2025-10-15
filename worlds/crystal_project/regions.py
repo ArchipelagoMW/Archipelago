@@ -359,14 +359,19 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      GREENSHIRE_REPRISE_AP_REGION: lambda state: logic.has_jobs(state, 5),
                      #note for eme: technically possible to get into the first dungeon with quintar instead of glide, but it's hard lol; come from Quintar Sanctum save point and go west up mountain and fall down through grate (that part's easy) then the quintar jump to the lamp is hard
                      CASTLE_SEQUOIA_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)})
-    fancy_add_exits(world, JOJO_SEWERS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, SEWERS_PAST_SECRET_PASSWORD_AP_REGION, THE_PALE_GROTTO_AP_REGION, CAPITAL_JAIL_AP_REGION, QUINTAR_NEST_AP_REGION],
-                    {SEWERS_PAST_SECRET_PASSWORD_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_false or logic.has_swimming(state),
+    #Jojo Sewers section start
+    fancy_add_exits(world, JOJO_SEWERS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, SEWERS_SECRET_PASSWORD_AP_REGION, SEWERS_TO_BOOMER_SOCIETY_AP_REGION, THE_PALE_GROTTO_AP_REGION, CAPITAL_JAIL_AP_REGION, QUINTAR_NEST_AP_REGION],
+                    {SEWERS_TO_BOOMER_SOCIETY_AP_REGION: lambda state: logic.has_swimming(state),
                      CAPITAL_JAIL_AP_REGION: lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_swimming(state),
                      THE_PALE_GROTTO_AP_REGION: lambda state: logic.has_swimming(state),
                      QUINTAR_NEST_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_swimming(state))})
-    fancy_add_exits(world, SEWERS_PAST_SECRET_PASSWORD_AP_REGION, [JOJO_SEWERS_AP_REGION, BOOMER_SOCIETY_AP_REGION],
-                    {JOJO_SEWERS_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_false or logic.has_swimming(state)})
-    fancy_add_exits(world, BOOMER_SOCIETY_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, SEWERS_PAST_SECRET_PASSWORD_AP_REGION, GREENSHIRE_REPRISE_AP_REGION])
+    fancy_add_exits(world, SEWERS_SECRET_PASSWORD_AP_REGION, [JOJO_SEWERS_AP_REGION, SEWERS_TO_BOOMER_SOCIETY_AP_REGION],
+                    {JOJO_SEWERS_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_false,
+                     SEWERS_TO_BOOMER_SOCIETY_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_false})
+    fancy_add_exits(world, SEWERS_TO_BOOMER_SOCIETY_AP_REGION, [JOJO_SEWERS_AP_REGION, SEWERS_SECRET_PASSWORD_AP_REGION, BOOMER_SOCIETY_AP_REGION],
+                    {JOJO_SEWERS_AP_REGION: lambda state: logic.has_swimming(state)})
+    #Jojo Sewers section end
+    fancy_add_exits(world, BOOMER_SOCIETY_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, SEWERS_TO_BOOMER_SOCIETY_AP_REGION, GREENSHIRE_REPRISE_AP_REGION])
     fancy_add_exits(world, ROLLING_QUINTAR_FIELDS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, QUINTAR_NEST_AP_REGION, QUINTAR_SANCTUM_AP_REGION, QUINTAR_RESERVE_AP_REGION],
                     {QUINTAR_SANCTUM_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_vertical_movement(state)),
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_vertical_movement(state)})
