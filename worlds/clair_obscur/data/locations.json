@@ -4084,7 +4084,7 @@
         "name": "World Map: First Continent - Outside Twilight Quarry 1",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {},
+        "condition": {"Progressive Rock": 1},
         "type": "Chest"
     },
     {
@@ -4092,7 +4092,7 @@
         "name": "World Map: First Continent - Outside Twilight Quarry 2",
         "location": "World Map",
         "original_item": "ChromaPack_Large",
-        "condition": {},
+        "condition": {"Progressive Rock": 1},
         "type": "Chest"
     },
     {
@@ -4124,7 +4124,7 @@
         "name": "World Map: First Continent - Past bourgeon outside Stone Wave Cliffs",
         "location": "World Map",
         "original_item": "HealingParry",
-        "condition": {},
+        "condition": {"Progressive Rock": 1},
         "type": "Chest"
     },
     {
@@ -4132,7 +4132,7 @@
         "name": "World Map: First Continent - Past blue spikes leading to Stone Wave Cliffs",
         "location": "World Map",
         "original_item": "ChromaPack_Large",
-        "condition": {},
+        "condition": {"Progressive Rock": 1},
         "type": "Chest"
     },
     {
@@ -4140,7 +4140,7 @@
         "name": "World Map: First Continent - Arc de Triomphe on the north beach",
         "location": "World Map",
         "original_item": "InitialAp+1A",
-        "condition": {},
+        "condition": {"Progressive Rock": 1},
         "type": "Chest"
     },
     {
@@ -4180,7 +4180,10 @@
         "name": "World Map: First Continent - Paint spike outside Yellow Harvest",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {"Paint Break": 1},
+        "condition": {
+            "Paint Break": 1,
+            "Progressive Rock": 1
+        },
         "type": "Chest"
     },
     {
