@@ -74,8 +74,8 @@ item_data_table: Dict[Items, SohItemData] = {
     Items.PROGRESSIVE_SLINGSHOT: SohItemData(43, IC.progression, 3, item_groups=["Slingshot"]),
     Items.PROGRESSIVE_WALLET: SohItemData(44, IC.progression, 3, item_groups=["Wallet", "Giant Wallet", "Adult Wallet", "Tycoon Wallet"]),
     Items.PROGRESSIVE_SCALE: SohItemData(45, IC.progression, 2, item_groups=["Bronze Scale", "Silver Scale", "Golden Scale", "Scale"]),
-    Items.PROGRESSIVE_NUT_CAPACITY: SohItemData(46, IC.progression, 2, item_groups=["Nuts", "Nut"]),
-    Items.PROGRESSIVE_STICK_CAPACITY: SohItemData(47, IC.progression, 2, item_groups=["Sticks", "Stick"]),
+    Items.PROGRESSIVE_NUT_CAPACITY: SohItemData(46, IC.progression, 2, item_groups=["Deku Nut Bag"]),
+    Items.PROGRESSIVE_STICK_CAPACITY: SohItemData(47, IC.progression, 2, item_groups=["Stick Bag"]),
     Items.PROGRESSIVE_BOMBCHU: SohItemData(48, IC.progression, 0, item_groups=["Bombchu Bag", "Bombs"]),
     Items.PROGRESSIVE_MAGIC_METER: SohItemData(49, IC.progression, 2, item_groups=["Magic Meter"]),
     #Items.MAGIC_SINGLE: SohItemData( 50, IC.filler, 0 ),
@@ -306,7 +306,7 @@ item_data_table: Dict[Items, SohItemData] = {
     Items.DISTANT_SCARECROW: SohItemData( 275, IC.progression, 0, adult_only=True),
     Items.STICKS: SohItemData(276, IC.filler, 0, child_only=True),
     Items.NUTS: SohItemData(277, IC.filler, 0),
-    Items.EPONA: SohItemData( 278, IC.filler, 0, adult_only=True ),
+    Items.EPONA: SohItemData(None),
     #Items.MAX: SohItemData( 279, IC.filler, 0 ),
 }
 
