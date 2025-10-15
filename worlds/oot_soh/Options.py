@@ -245,7 +245,7 @@ class ShuffleTokens(Choice):
 
 class SkullsSunSong(Toggle):
     """
-    Night Skulltula's won't be expected in logic until Sun's Song is found.
+    All Golden Skulltulas that require nighttime to appear will only be expected to be collected after getting Sun's Song.
     """
     display_name = "Night Skulltula's Expect Sun's Song"
 
