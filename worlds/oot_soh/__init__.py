@@ -63,6 +63,9 @@ class SohWorld(World):
         return SohItem(name, item_data_table[item_entry].classification, item_data_table[item_entry].item_id, self.player)
 
     def create_items(self) -> None:
+        # these are for making the progressive items collect/remove work properly
+        # when adding another progressive item that is option-dependent like these,
+        # be sure to also update LogicHelpers.increment_current_count with it too
         if not self.options.shuffle_swim:
             self.push_precollected(self.create_item(Items.BRONZE_SCALE.value))
         if not self.options.shuffle_deku_stick_bag:
@@ -71,6 +74,7 @@ class SohWorld(World):
             self.push_precollected(self.create_item(Items.DEKU_NUT_BAG.value))
         if not self.options.bombchu_bag:
             self.push_precollected(self.create_item(Items.BOMBCHU_BAG.value))
+        
         create_item_pool(self)
 
     def create_regions(self) -> None: 

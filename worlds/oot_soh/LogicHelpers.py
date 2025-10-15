@@ -1061,6 +1061,7 @@ def increment_current_count(world: "SohWorld", item: Item, current_count: int) -
     """
     if ((item.name == Items.PROGRESSIVE_SCALE and not world.options.shuffle_swim)
             or (item.name == Items.PROGRESSIVE_STICK_CAPACITY and not world.options.shuffle_deku_stick_bag)
-            or (item.name == Items.PROGRESSIVE_NUT_CAPACITY and not world.options.shuffle_deku_nut_bag)):
+            or (item.name == Items.PROGRESSIVE_NUT_CAPACITY and not world.options.shuffle_deku_nut_bag)
+            or (item.name == Items.PROGRESSIVE_BOMBCHU and not world.options.bombchu_bag)):
         current_count += 1
     return current_count
