@@ -581,6 +581,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {LABYRINTH_WEIRD_REBAR_HALLWAY_AP_REGION: lambda state: state.has(ANCIENT_TABLET_B, player) or options.obscureRoutes.value == options.obscureRoutes.option_true})
     fancy_add_exits(world, LABYRINTH_WEIRD_REBAR_HALLWAY_AP_REGION, [LABYRINTH_CORE_AP_REGION],
                     {LABYRINTH_CORE_AP_REGION: lambda state: state.has(ANCIENT_TABLET_C, player) or options.obscureRoutes.value == options.obscureRoutes.option_true})
+    fancy_add_exits(world, LABYRINTH_CORE_AP_REGION,[])
     #Ancient Labyrinth section end
     fancy_add_exits(world, THE_SEQUOIA_AP_REGION, [THE_DEEP_SEA_AP_REGION])
     fancy_add_exits(world, THE_DEPTHS_AP_REGION, [THE_DEEP_SEA_AP_REGION])
