@@ -116,7 +116,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.DEKU_TREE_LOBBY, lambda bundle: True),
         (Regions.DEKU_TREE_BASEMENT_SCRUB_ROOM, lambda bundle: has_fire_source_with_torch(bundle) or can_use(Items.FAIRY_BOW, bundle)),
         (Regions.DEKU_TREE_BASEMENT_UPPER, lambda bundle: is_adult(bundle) or can_do_trick(Tricks.DEKU_B1_SKIP, bundle)
-            or has_item(LocalEvents.DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED, bundle))
+            or has_item(LocalEvents.DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED, bundle) or can_ground_jump(bundle))
     ])
 
     ## Deku basement shrub room

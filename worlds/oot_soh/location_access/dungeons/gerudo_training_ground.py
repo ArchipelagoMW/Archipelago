@@ -132,13 +132,13 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GERUDO_TRAINING_GROUND_EYE_STATUE_UPPER,
          lambda bundle: (can_do_trick(Tricks.LENS_GTG, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)) and (
                      can_use(Items.HOOKSHOT, bundle) or (
-                         can_do_trick(Tricks.GTG_FAKE_WALL, bundle) and can_use(Items.HOVER_BOOTS, bundle)))),
+                         is_adult(bundle) and (
+                            can_do_trick(Tricks.GTG_FAKE_WALL, bundle) and can_use(Items.HOVER_BOOTS, bundle))) or can_ground_jump(bundle))),
         (Regions.GERUDO_TRAINING_GROUND_LIKE_LIKE_ROOM,
          lambda bundle: (can_do_trick(Tricks.LENS_GTG, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)) and (
                      can_use(Items.HOOKSHOT, bundle) or (
-                         can_do_trick(Tricks.GTG_FAKE_WALL, bundle) and can_use(Items.HOVER_BOOTS,
-                                                                                bundle))) and can_use(
-             Items.SILVER_GAUNTLETS, bundle)),
+                         is_adult(bundle) and (
+                             can_do_trick(Tricks.GTG_FAKE_WALL, bundle) and can_use(Items.HOVER_BOOTS, bundle)) or can_ground_jump(bundle))) and can_use(Items.SILVER_GAUNTLETS, bundle)),
     ])
 
     ## Gerudo Training Ground Like Like Room

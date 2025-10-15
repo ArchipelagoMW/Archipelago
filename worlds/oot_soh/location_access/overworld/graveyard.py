@@ -139,7 +139,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GRAVEYARD_DAMPES_GRAVE, world, [
         (Regions.THE_GRAVEYARD, lambda bundle: True),
-        (Regions.KAK_WINDMILL, lambda bundle: is_adult(bundle) and can_use(Items.SONG_OF_TIME, bundle)) 
+        (Regions.KAK_WINDMILL, lambda bundle: (is_adult(bundle) and can_use(Items.SONG_OF_TIME, bundle)) or (is_child(bundle) and can_ground_jump(bundle))) 
     ])
 
     ## The Graveyard Dampes House
