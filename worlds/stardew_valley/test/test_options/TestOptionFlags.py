@@ -1,6 +1,5 @@
-from .bases import SVTestBase
-from .. import BuildingProgression
-from ..options import ToolProgression
+from ...options import ToolProgression, BuildingProgression
+from ...test.bases import SVTestBase
 
 
 class TestBitFlagsVanilla(SVTestBase):
