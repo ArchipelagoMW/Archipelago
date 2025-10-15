@@ -3,6 +3,7 @@ from worlds.generic.Rules import add_rule
 from .LogicHelpers import rule_wrapper, can_afford
 from Fill import fill_restrictive, FillError
 from BaseClasses import MultiWorld, CollectionState
+from .Regions import dungeon_reward_item_mapping
 
 from .Enums import *
 
@@ -176,6 +177,8 @@ def fill_shop_items(world: "SohWorld") -> None:
     prefill_state = CollectionState(world.multiworld)
     for item in world.item_pool:
         prefill_state.collect(item, False)
+    for item in dungeon_reward_item_mapping.values():
+        prefill_state.collect(world.create_item(item.value), False)
     prefill_state.sweep_for_advancements()
 
     # place the vanilla shop items

@@ -2,7 +2,6 @@ from typing import Dict, List, NamedTuple, TYPE_CHECKING
 from worlds.AutoWorld import LogicMixin
 from BaseClasses import MultiWorld, Region
 from .Enums import *
-from .ShopItems import fill_shop_items
 from .Locations import SohLocation, base_location_table, \
     gold_skulltula_overworld_location_table, \
     gold_skulltula_dungeon_location_table, \
@@ -237,6 +236,18 @@ def create_regions_and_locations(world: "SohWorld") -> None:
     for location_name, location_address in world.included_locations.items():
         world.get_region(Regions.ROOT.value).add_locations({location_name: location_address}, SohLocation)
 
+# Create a dictionary mapping blue warp rewards to their vanilla items
+dungeon_reward_item_mapping = {
+    Locations.QUEEN_GOHMA: Items.KOKIRIS_EMERALD,
+    Locations.KING_DODONGO: Items.GORONS_RUBY,
+    Locations.BARINADE: Items.ZORAS_SAPPHIRE,
+    Locations.PHANTOM_GANON: Items.FOREST_MEDALLION,
+    Locations.VOLVAGIA: Items.FIRE_MEDALLION,
+    Locations.MORPHA: Items.WATER_MEDALLION,
+    Locations.BONGO_BONGO: Items.SHADOW_MEDALLION,
+    Locations.TWINROVA: Items.SPIRIT_MEDALLION,
+    Locations.LINKS_POCKET: Items.LIGHT_MEDALLION
+}
 
 def place_locked_items(world: "SohWorld") -> None:
     
@@ -256,32 +267,10 @@ def place_locked_items(world: "SohWorld") -> None:
     if world.options.shuffle_shops:
         world.get_location(Locations.GC_SHOP_ITEM1.value).place_locked_item(world.create_item(Items.BUY_GORON_TUNIC.value))
 
-    # Create a dictionary mapping blue warp rewards to their vanilla items
-    dungeon_reward_item_mapping = {
-        Locations.QUEEN_GOHMA: Items.KOKIRIS_EMERALD,
-        Locations.KING_DODONGO: Items.GORONS_RUBY,
-        Locations.BARINADE: Items.ZORAS_SAPPHIRE,
-        Locations.PHANTOM_GANON: Items.FOREST_MEDALLION,
-        Locations.VOLVAGIA: Items.FIRE_MEDALLION,
-        Locations.MORPHA: Items.WATER_MEDALLION,
-        Locations.BONGO_BONGO: Items.SHADOW_MEDALLION,
-        Locations.TWINROVA: Items.SPIRIT_MEDALLION,
-        Locations.LINKS_POCKET: Items.LIGHT_MEDALLION
-    }
-
     # Preplace dungeon rewards in vanilla locations when not shuffled
     if world.options.shuffle_dungeon_rewards == "off":      
         # Loop through dungeons rewards and set their items to the vanilla reward.      
         for location_name, reward_name in zip(dungeon_reward_item_mapping.keys(), dungeon_reward_item_mapping.values()):
-            world.get_location(location_name.value).place_locked_item(world.create_item(reward_name.value))
-
-    if world.options.shuffle_dungeon_rewards == "dungeons": 
-        # Extract and shuffle just the item names from location_item_mapping
-        reward_names = list(dungeon_reward_item_mapping.values())
-        world.random.shuffle(reward_names)
-        
-        # Pair each location with a unique shuffled dungeon reward
-        for location_name, reward_name in zip(dungeon_reward_item_mapping.keys(), reward_names):
             world.get_location(location_name.value).place_locked_item(world.create_item(reward_name.value))
 
     # Place Ganons Boss Key
