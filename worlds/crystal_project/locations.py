@@ -1261,10 +1261,10 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(ANCIENT_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Chest - Dungeon East sneaky hole in wall", 1274 + treasure_index_offset), #(-186, 125, -316) F2 Money chest
         LocationData(ANCIENT_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Chest - Dungeon West sneaky hole in wall", 2412 + treasure_index_offset), #(-190, 125, -316) F2 Archmage Vest chest
         LocationData(ANCIENT_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Chest - B1 Searching for greener pastures", 1738 + treasure_index_offset), #(-209, 87, -311) F3 Vita Crown chest
-        LocationData(ANCIENT_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Chest - B2 North weird rebar hallway", 2924 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player) or options.obscureRoutes.value == options.obscureRoutes.option_true), #(-185, 63, -363) F4 Judgement chest
-        LocationData(ANCIENT_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Chest - B2 East weird rebar hallway", 2926 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player) or options.obscureRoutes.value == options.obscureRoutes.option_true), #(-162, 63, -336) F4 Zether Pouch chest
-        LocationData(ANCIENT_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Chest - B4 Tar pit platform", 3649 + treasure_index_offset, lambda state: (state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)) or options.obscureRoutes.value == options.obscureRoutes.option_true), #(-185, 38, -301) F6 Ancient Labyrinth map chest
-        LocationData(ANCIENT_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Chest - Dog-headed dogshit boss", 2591 + treasure_index_offset, lambda state: (state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)) or options.obscureRoutes.value == options.obscureRoutes.option_true), #(-219, 27, -350) F7 Mirror Shield chest
+        LocationData(LABYRINTH_WEIRD_REBAR_HALLWAY_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Chest - B2 North weird rebar hallway", 2924 + treasure_index_offset), #(-185, 63, -363) F4 Judgement chest
+        LocationData(LABYRINTH_WEIRD_REBAR_HALLWAY_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Chest - B2 East weird rebar hallway", 2926 + treasure_index_offset), #(-162, 63, -336) F4 Zether Pouch chest
+        LocationData(LABYRINTH_CORE_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Chest - B4 Tar pit platform", 3649 + treasure_index_offset), #(-185, 38, -301) F6 Ancient Labyrinth map chest
+        LocationData(LABYRINTH_CORE_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Chest - Dog-headed dogshit boss", 2591 + treasure_index_offset), #(-219, 27, -350) F7 Mirror Shield chest
 
         #NPCs
         LocationData(ANCIENT_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " NPC - Dungeon East sneaky hole in wall Diamond", 2881 + npc_index_offset), #(-186, 125, -300) F2 Ingot
@@ -1391,7 +1391,7 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + " Boss - Red Guardian", 1713 + boss_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3) and logic.is_area_in_level_range(state, 49)), #Monster ID: 224
         LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Boss - Rampart Demon", 1373 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, 54)), #Monster ID: 222
         LocationData(CONTINENTAL_TRAM_AP_REGION, CONTINENTAL_TRAM_DISPLAY_NAME + " Boss - Conscript", 1621 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)), #Monster ID: 242
-        LocationData(ANCIENT_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Boss - Anubis", 2473 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 62)), #Monster ID: 117
+        LocationData(LABYRINTH_CORE_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Boss - Anubis", 2473 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 62)), #Monster ID: 117
         LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Boss - Spirit Cage", 2453 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 63)), #Monster ID: 192
         LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Devourer", 1265 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)), #Monster ID: 171
         LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Old One", 206 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)), #Monster ID: 170

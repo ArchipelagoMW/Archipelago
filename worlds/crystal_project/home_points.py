@@ -6,7 +6,6 @@ from .locations import LocationData
 from .constants.ap_regions import *
 from .constants.display_regions import *
 from .constants.keys import *
-from .constants.key_items import *
 from .constants.teleport_stones import *
 
 def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
@@ -119,7 +118,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(JIDAMBA_EACLANEYA_AP_REGION, "Eaclaneya Entrance", 1402),
         LocationData(JIDAMBA_EACLANEYA_AP_REGION, "Salmon Room", 2474),
 
-        LocationData(ANCIENT_LABYRINTH_AP_REGION, "Ancient Labyrinth Core", 1739, lambda state: state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)),
+        LocationData(LABYRINTH_CORE_AP_REGION, "Ancient Labyrinth Core", 1739),
 
         LocationData(DIONE_SHRINE_AP_REGION, "Flyer's Lookout", 2141),
 

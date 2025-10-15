@@ -83,6 +83,8 @@ JADE_CAVERN_AP_REGION = "Jade Cavern"
 CONTINENTAL_TRAM_AP_REGION = "Continental Tram"
 #End Game
 ANCIENT_LABYRINTH_AP_REGION = "Ancient Labyrinth"
+LABYRINTH_WEIRD_REBAR_HALLWAY_AP_REGION = "Ancient Labyrinth Weird Rebar Hallway"
+LABYRINTH_CORE_AP_REGION = "Ancient Labyrinth Core"
 THE_SEQUOIA_AP_REGION = "The Sequoia"
 THE_DEPTHS_AP_REGION = "The Depths"
 CASTLE_SEQUOIA_AP_REGION = "Castle Sequoia"
