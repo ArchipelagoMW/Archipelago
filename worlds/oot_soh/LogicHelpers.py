@@ -120,7 +120,7 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return (state.has_any((Items.BOMBCHUS_5.value, Items.BOMBCHUS_10.value, Items.BOMBCHUS_20.value,
                                Items.PROGRESSIVE_BOMBCHU.value), world.player)
                 or (bombchus_enabled(bundle)
-                    and state.has_any((Events.CAN_BUY_BOMBCHUS.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value), world.player)))
+                    and state.has_any((Items.BUY_BOMBCHUS10.value, Items.BUY_BOMBCHUS20.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value), world.player)))
     
     if item == Items.NUTS:
         return state.has_all((Events.CAN_FARM_NUTS, Items.DEKU_NUT_BAG), player)
@@ -129,10 +129,10 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
     
     if item == Items.DEKU_SHIELD:
-        return state.has(Events.CAN_BUY_DEKU_SHIELD.value, player)
+        return state.has(Items.BUY_DEKU_SHIELD.value, player)
     
     if item == Items.HYLIAN_SHIELD:
-        return state.has(Events.CAN_BUY_HYLIAN_SHIELD.value, player)
+        return state.has(Items.BUY_HYLIAN_SHIELD.value, player)
     
     if item == Items.SCARECROW:
         return scarecrows_song(bundle) and can_use(Items.HOOKSHOT, bundle)
@@ -159,7 +159,7 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return has_bottle(bundle) #TODO Should we check if you can buy blue potion?
     
     if item == Items.BOTTLE_WITH_BUGS:
-        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BUGS.value, player) or state.has(Events.CAN_BUY_BUGS.value, player))
+        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BUGS.value, player) or state.has(Items.BUY_BOTTLE_BUG.value, player))
     
     if item == Items.BOTTLE_WITH_FAIRY:
         return has_bottle(bundle) and state.has(Events.CAN_ACCESS_FAIRIES.value, player) # TODO Should we check if we can buy a fairy?
@@ -168,7 +168,7 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return has_bottle(bundle) and state.has(Events.CAN_ACCESS_FISH.value, player) # TODO Should we check if you can buy a fish?
     
     if item == Items.BOTTLE_WITH_GREEN_POTION:
-        return has_bottle(bundle) and state.has(Events.CAN_BUY_GREEN_POTION.value, player)
+        return has_bottle(bundle) and state.has(Items.BUY_GREEN_POTION.value, player)
     
     if item == Items.BOTTLE_WITH_MILK:
         return has_bottle(bundle) # TODO Should we check if we can buy milk? 
@@ -216,7 +216,6 @@ def scarecrows_song(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool
 
 def has_bottle(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:  # soup
     state = bundle[0]
-    parent_region = bundle[1]
     world = bundle[2]
     for bottle in no_rules_bottles:
         if state.has(bottle.value, world.player):
@@ -230,7 +229,6 @@ def has_bottle(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:  # 
 
 def bottle_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     state = bundle[0]
-    parent_region = bundle[1]
     world = bundle[2]
     count = 0
     for bottle in no_rules_bottles:
@@ -244,9 +242,8 @@ def bottle_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
 
 def bombchu_refill(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
-    parent_region = bundle[1]
     world = bundle[2]
-    return state.has_any([Events.CAN_BUY_BOMBCHUS.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value], world.player) or False #TODO put enable bombchu drops option here
+    return state.has_any([Items.BUY_BOMBCHUS10.value, Items.BUY_BOMBCHUS20.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value], world.player) or bool(world.options.bombchu_drops)
 
 
 def bombchus_enabled(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:

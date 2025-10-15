@@ -18,8 +18,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Root
     # Events
     add_events(Regions.ROOT, world, [
-        (EventLocations.ROOT_DEKU_SHIELD, Events.CAN_BUY_DEKU_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
-        (EventLocations.ROOT_HYLIAN_SHIELD, Events.CAN_BUY_HYLIAN_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
+        (EventLocations.ROOT_DEKU_SHIELD, Items.BUY_DEKU_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
+        (EventLocations.ROOT_HYLIAN_SHIELD, Items.BUY_HYLIAN_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
         (EventLocations.TRIFORCE_HUNT_COMPLETION, Events.GAME_COMPLETED, lambda bundle:
          (world.options.triforce_hunt == 1 and 
          has_item(Items.TRIFORCE_PIECE, bundle, world.options.triforce_hunt_required_pieces.value)) or 
