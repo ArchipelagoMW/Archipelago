@@ -464,11 +464,35 @@ class ShuffleBossSouls(Choice):
     default = 0
 
 
-class ShuffleFairies(Toggle):
+class ShuffleFountainFairies(Toggle):
     """
-    Shuffle fairies from wonder spots, playing Song of Storms and other regular songs for Gossip Stones and in Fairy Fountains.
+    Shuffle fairies in fountain locations.
+    This includes the sets of fairies found in Ganon's Castle and the Desert Oasis.
     """
-    display_name = "Shuffle Fairies"
+    display_name = "Shuffle Fairies in Fountains"
+
+
+class ShuffleStoneFairies(Toggle):
+    """
+    Shuffle fairies from gossip stone locations.
+    """
+    display_name = "Shuffle Gossip Stone Fairies"
+
+
+class ShuffleBeanFairies(Toggle):
+    """
+    Shuffle fairies from magic bean locations.
+    """
+    display_name = "Shuffle Bean Fairies"
+
+
+class ShuffleSongFairies(Toggle):
+    """
+    Shuffle fairy spots. These are spots where a big fairy is revealed by a song.
+
+    This excludes gossip stones and magic bean locations.
+    """
+    display_name = "Shuffle Fairy Spots"
 
 
 class ShuffleGrass(Choice):
@@ -798,7 +822,10 @@ class SohOptions(PerGameCommonOptions):
     shuffle_frog_song_rupees: ShuffleFrogSongRupees
     shuffle_adult_trade_items: ShuffleAdultTradeItems
     shuffle_boss_souls: ShuffleBossSouls
-    shuffle_fairies: ShuffleFairies
+    shuffle_fountain_fairies: ShuffleFountainFairies
+    shuffle_stone_fairies: ShuffleStoneFairies
+    shuffle_bean_fairies: ShuffleBeanFairies
+    shuffle_song_fairies: ShuffleSongFairies
     shuffle_grass: ShuffleGrass
     shuffle_dungeon_rewards: ShuffleDungeonRewards
     maps_and_compasses: MapsAndCompasses
@@ -902,7 +929,10 @@ soh_option_groups = [
         ShuffleAdultTradeItems,
         # 100 skulls reward shuffle
         ShuffleBossSouls,
-        ShuffleFairies,
+        ShuffleFountainFairies,
+        ShuffleStoneFairies,
+        ShuffleBeanFairies,
+        ShuffleStoneFairies,
         ShuffleGrass,
     ]),
     OptionGroup("Shuffle Dungeon Items", [
