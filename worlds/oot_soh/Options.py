@@ -926,7 +926,7 @@ soh_option_groups = [
         ShuffleFountainFairies,
         ShuffleStoneFairies,
         ShuffleBeanFairies,
-        ShuffleStoneFairies,
+        ShuffleSongFairies,
         ShuffleGrass,
     ]),
     OptionGroup("Shuffle Dungeon Items", [
