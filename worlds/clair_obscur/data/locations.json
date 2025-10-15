@@ -3476,7 +3476,7 @@
         "name": "Twilight Quarry item",
         "location": "Mini Levels",
         "original_item": "MusicRecord_11",
-        "condition": {},
+        "condition": {"Progressive Rock": 1},
         "type": "Chest"
     },
     {
