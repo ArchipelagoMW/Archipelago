@@ -740,6 +740,10 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Zones (Expert)
         #The Open Sea
+        #Treasure chests
+        #Atolls
+        LocationData(JIDAMBA_ATOLLS_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " Chest - Atoll southeast of Jidamba Tangle", 3767 + treasure_index_offset),  # Fenix Syrup chest
+        LocationData(JIDAMBA_ATOLLS_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " Chest - Atoll southwest of southeast Jidamba Tangle atoll", 3765 + treasure_index_offset),  # Z-Potion chest
         #NPCs
         LocationData(THE_OPEN_SEA_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " NPC - I'm on a raft!", 2804 + npc_index_offset, lambda state: state.has("Item - Super Rod", player) and state.has("Item - Jigging Lure", player)),
         #CheckOrNot: (930, 91, 253) do we put a check on the guy who gives you a Gaea Shard if you get there with no Salmon lol: no
@@ -1126,9 +1130,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Up a tree in north foliage", 3024 + treasure_index_offset),  # Ether chest
         LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Along a river through the foliage", 3026 + treasure_index_offset),  # Ether chest
         LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Island in the river through the foliage", 3011 + treasure_index_offset),  # Tower Shield chest
-        #Atolls
-        LocationData(JIDAMBA_ATOLLS_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " Chest - Atoll southeast of Jidamba Tangle", 3767 + treasure_index_offset),  # Fenix Syrup chest
-        LocationData(JIDAMBA_ATOLLS_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " Chest - Atoll southwest of southeast Jidamba Tangle atoll", 3765 + treasure_index_offset),  # Z-Potion chest
         #Jidamba Cave
         LocationData(JIDAMBA_CAVE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Underground sneaky passage by NE cave exit", 2797 + treasure_index_offset),  # Ravens Hood chest
         LocationData(JIDAMBA_CAVE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Hop from underground root to sneaky passage pond", 2798 + treasure_index_offset, lambda state: logic.has_glide(state)),  # Ravens Cloak chest

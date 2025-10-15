@@ -429,7 +429,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, SALMON_BAY_AP_REGION, [THE_OPEN_SEA_AP_REGION, SALMON_RIVER_AP_REGION],
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
                      SALMON_RIVER_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, THE_OPEN_SEA_AP_REGION, [SEASIDE_CLIFFS_AP_REGION, PROVING_MEADOWS_AP_REGION, OKIMOTO_NS_AP_REGION, SHOUDU_WATERFRONT_AP_REGION, SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_WEST_AP_REGION, SALMON_BAY_AP_REGION, SHOUDU_PROVINCE_AP_REGION, THE_UNDERCITY_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION, THE_DEEP_SEA_AP_REGION],
+    fancy_add_exits(world, THE_OPEN_SEA_AP_REGION, [SEASIDE_CLIFFS_AP_REGION, PROVING_MEADOWS_AP_REGION, OKIMOTO_NS_AP_REGION, SHOUDU_WATERFRONT_AP_REGION, SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_WEST_AP_REGION, SALMON_BAY_AP_REGION, SHOUDU_PROVINCE_AP_REGION, THE_UNDERCITY_AP_REGION, JIDAMBA_ATOLLS_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION, THE_DEEP_SEA_AP_REGION],
                     {SEASIDE_CLIFFS_AP_REGION: lambda state: logic.has_swimming(state),
                      PROVING_MEADOWS_AP_REGION: lambda state: logic.has_swimming(state),
                      OKIMOTO_NS_AP_REGION: lambda state: logic.has_swimming(state),
@@ -440,8 +440,12 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      SARA_SARA_BEACH_WEST_AP_REGION: lambda state: logic.has_swimming(state),
                      SALMON_BAY_AP_REGION: lambda state: logic.has_swimming(state),
                      SHOUDU_PROVINCE_AP_REGION: lambda state: logic.has_swimming(state),
+                     JIDAMBA_ATOLLS_AP_REGION: lambda state: logic.has_swimming(state),
                      JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state),
                      THE_DEEP_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
+    fancy_add_exits(world, JIDAMBA_ATOLLS_AP_REGION, [JIDAMBA_FOREST_FLOOR_AP_REGION, THE_OPEN_SEA_AP_REGION],
+                    {JIDAMBA_FOREST_FLOOR_AP_REGION: lambda state: logic.has_glide(state),
+                     THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, SHOUDU_WATERFRONT_AP_REGION, [THE_OPEN_SEA_AP_REGION, SHOUDU_PROVINCE_AP_REGION, COBBLESTONE_CRAG_AP_REGION],
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
                      SHOUDU_PROVINCE_AP_REGION: lambda state: logic.has_vertical_movement(state),
@@ -511,9 +515,6 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, JIDAMBA_DIAMONDSMITH_AP_REGION, [JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_ATOLLS_AP_REGION, JIDAMBA_CANOPY_AP_REGION],
                     {JIDAMBA_ATOLLS_AP_REGION: lambda state: logic.has_glide(state)})
-    fancy_add_exits(world, JIDAMBA_ATOLLS_AP_REGION, [JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION],
-                    {JIDAMBA_FOREST_FLOOR_AP_REGION: lambda state: logic.has_glide(state),
-                     JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, JIDAMBA_SOUTHWEST_BEACH_AP_REGION,[JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION],
                     {JIDAMBA_FOREST_FLOOR_AP_REGION: lambda state: logic.has_glide(state),
                      JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
