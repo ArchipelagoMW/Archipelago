@@ -411,7 +411,7 @@ def can_do_trick(trick: Tricks, bundle: tuple[CollectionState, Regions, "SohWorl
 
 def can_get_nighttime_gs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
-    return at_night(bundle) and (can_use(Items.SUNS_SONG, bundle) or bool(world.options.nighttime_gs)) #TODO: Implement the setting
+    return at_night(bundle) and (can_use(Items.SUNS_SONG, bundle)) #or bool(world.options.nighttime_gs)) #TODO: Implement the setting
 
 
 def can_break_pots(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
