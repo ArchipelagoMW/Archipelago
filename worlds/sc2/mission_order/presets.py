@@ -209,7 +209,7 @@ bread_and_butter_settings = {
     OPTION_NAME[ProgressionBalancing]:                  ProgressionBalancing.default,
     OPTION_NAME[GameDifficulty]:                        GameDifficulty.option_normal,
     OPTION_NAME[SelectedRaces]:                         SelectedRaces.valid_keys,
-    OPTION_NAME[MissionOrder]:                          MissionOrder.option_blitz,
+    OPTION_NAME[MissionOrder]:                          MissionOrder.option_golden_path,
     OPTION_NAME[RequiredTactics]:                       RequiredTactics.option_standard,
     OPTION_NAME[EnabledCampaigns]:                      EnabledCampaigns.valid_keys,
     OPTION_NAME[EnableRaceSwapVariants]:                EnableRaceSwapVariants.option_pick_one,
