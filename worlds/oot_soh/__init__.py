@@ -62,6 +62,8 @@ class SohWorld(World):
             self.push_precollected(self.create_item(Items.DEKU_STICK_BAG.value))
         if not self.options.shuffle_deku_nut_bag:
             self.push_precollected(self.create_item(Items.DEKU_NUT_BAG.value))
+        if not self.options.bombchu_bag:
+            self.push_precollected(self.create_item(Items.BOMBCHU_BAG.value))
         create_item_pool(self)
 
     def create_regions(self) -> None: 
