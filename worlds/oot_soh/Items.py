@@ -245,7 +245,7 @@ item_data_table: Dict[Items, SohItemData] = {
     Items.TYCOON_WALLET: SohItemData(None),
     Items.BRONZE_SCALE: SohItemData(None),
     Items.CHILD_WALLET: SohItemData(None),
-    #Items.BOMBCHU_BAG: SohItemData( 217, IC.progression, 0 ),
+    Items.BOMBCHU_BAG: SohItemData(None),
     #Items.QUIVER_INF: SohItemData( 218, IC.filler, 0 ),
     #Items.BOMB_BAG_INF: SohItemData( 219, IC.filler, 0 ),
     #Items.BULLET_BAG_INF: SohItemData( 220, IC.filler, 0 ),
@@ -360,6 +360,7 @@ progressive_items: dict[str, tuple[str, ...]] = {
     Items.PROGRESSIVE_BOMB_BAG: (Items.BOMB_BAG,),
     Items.PROGRESSIVE_STICK_CAPACITY: (Items.DEKU_STICK_BAG,),
     Items.PROGRESSIVE_NUT_CAPACITY: (Items.DEKU_NUT_BAG,),
+    Items.PROGRESSIVE_BOMBCHU: (Items.BOMBCHU_BAG,),
 }
 
 item_name_groups: dict[str, set[str]] = {}
