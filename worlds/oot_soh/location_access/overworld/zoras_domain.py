@@ -21,6 +21,11 @@ class LocalEvents(str, Enum):
 def set_region_rules(world: "SohWorld") -> None:
     ## Zoras Domain
     # Events
+    if world.options.zoras_fountain.value != 2:
+        add_events(Regions.ZORAS_DOMAIN, world, [
+            (EventLocations.ZD_DELIVER_RUTOS_LETTER, Events.DELIVER_LETTER,
+            lambda bundle: can_use(Items.BOTTLE_WITH_RUTOS_LETTER, bundle) and is_child(bundle))
+        ])
     add_events(Regions.ZORAS_DOMAIN, world, [
         (EventLocations.ZD_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES,
          lambda bundle: call_gossip_fairy_except_suns(bundle)),
@@ -28,10 +33,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (EventLocations.ZD_STICK_POT, Events.CAN_FARM_STICKS, lambda bundle: is_child(bundle)),
         (EventLocations.ZD_FISH_GROUP, Events.CAN_ACCESS_FISH, lambda bundle: is_child(bundle)),
         (EventLocations.ZD_KING_ZORA_THAWING, LocalEvents.KING_ZORA_THAWED,
-         lambda bundle: is_adult(bundle) and blue_fire(bundle)),
-        (EventLocations.ZD_DELIVER_RUTOS_LETTER, Events.DELIVER_LETTER,
-         lambda bundle: can_use(Items.BOTTLE_WITH_RUTOS_LETTER, bundle) and is_child(
-             bundle) and world.options.zoras_fountain.value != 2),
+         lambda bundle: is_adult(bundle) and blue_fire(bundle))
     ])
     # Locations
     add_locations(Regions.ZORAS_DOMAIN, world, [
