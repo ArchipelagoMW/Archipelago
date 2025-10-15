@@ -7,6 +7,10 @@ class EventLocations(str, Enum):
     DESERT_COLOSSUS_FAIRY_POND_COLOSSUS = "Desert Colossus Fairy Pond Colossus"
     DESERT_COLOSSUS_FAIRY_POND_OASIS = "Desert Colossus Fairy Pond Oasis"
     DESERT_COLOSSUS_BUG_ROCK = "Desert Colossus Bug Rock"
+    DESERT_COLOSSUS_BEAN_PATCH = "Desert Colossus Bean Patch"
+
+class LocalEvents(str, Enum):
+    DESERT_COLOSSUS_BEAN_PLANTED = "Desert Colossus Bean Planted"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -14,14 +18,15 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.DESERT_COLOSSUS, world, [
         (EventLocations.DESERT_COLOSSUS_FAIRY_POND_COLOSSUS, Events.CAN_ACCESS_FAIRIES, lambda bundle: can_use(Items.SONG_OF_STORMS, bundle)),
-        (EventLocations.DESERT_COLOSSUS_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True)
+        (EventLocations.DESERT_COLOSSUS_BUG_ROCK, Events.CAN_ACCESS_BUGS, lambda bundle: True),
+        (EventLocations.DESERT_COLOSSUS_BEAN_PATCH, LocalEvents.DESERT_COLOSSUS_BEAN_PLANTED, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle))
     ])
     # Locations
     add_locations(Regions.DESERT_COLOSSUS, world, [
-        (Locations.COLOSSUS_FREESTANDING_POH, lambda bundle: is_adult(bundle) and can_plant_bean(bundle)),
+        (Locations.COLOSSUS_FREESTANDING_POH, lambda bundle: is_adult(bundle) and has_item(LocalEvents.DESERT_COLOSSUS_BEAN_PLANTED, bundle)),
         (Locations.COLOSSUS_GS_BEAN_PATCH, lambda bundle: can_spawn_soil_skull(bundle) and can_attack(bundle)),
         (Locations.COLOSSUS_GS_TREE, lambda bundle: is_adult(bundle) and hookshot_or_boomerang(bundle) and can_get_nighttime_gs(bundle)),
-        (Locations.COLOSSUS_GS_HILL, lambda bundle: is_adult(bundle) and ((can_plant_bean(bundle) and can_attack(bundle)) or can_use(Items.LONGSHOT, bundle) or (can_do_trick(Tricks.COLOSSUS_GS, bundle) and can_use(Items.HOOKSHOT, bundle))) and can_get_nighttime_gs(bundle)),
+        (Locations.COLOSSUS_GS_HILL, lambda bundle: is_adult(bundle) and ((has_item(LocalEvents.DESERT_COLOSSUS_BEAN_PLANTED, bundle) and can_attack(bundle)) or can_use(Items.LONGSHOT, bundle) or (can_do_trick(Tricks.COLOSSUS_GS, bundle) and can_use(Items.HOOKSHOT, bundle))) and can_get_nighttime_gs(bundle)),
         (Locations.COLOSSUS_BEAN_SPROUT_FAIRY1, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.COLOSSUS_BEAN_SPROUT_FAIRY2, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS, bundle)),
         (Locations.COLOSSUS_BEAN_SPROUT_FAIRY3, lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle) and can_use(Items.SONG_OF_STORMS, bundle)),
