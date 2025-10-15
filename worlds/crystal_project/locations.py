@@ -203,7 +203,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Chest - Dead end", 3056 + treasure_index_offset), #Tonic chest
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Chest - Hidden stairway", 757 + treasure_index_offset), #Tonic Pouch chest
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Chest - Drop down to mountain balcony", 290 + treasure_index_offset), #Torpid Cuffs chest
-        LocationData(YAMAGAWA_MA_AP_REGION, "Overpass Chest - Dead tree by Fencers Keep", 3537 + treasure_index_offset), #(148, 151, -114) 6th Overpass Scrap on Overpass main map
+        LocationData(YAMAGAWA_MA_AP_REGION, "Overpass Chest - Hop over from Yamagawa to dead tree by Fencers Keep", 3537 + treasure_index_offset), #(148, 151, -114) 6th Overpass Scrap on Overpass main map
 
         #NPCs
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " NPC - Hidden inside waterfall source", 628 + npc_index_offset, lambda state: logic.has_swimming(state)), #Autumns Oath
