@@ -749,11 +749,11 @@ class SkeletonKey(Toggle):
     display_name = "Skeleton Key"
 
 
-class SlingbowBreakBehives(Toggle):
+class SlingbowBreakBeehives(Toggle):
     """
-    Both of the Slingshot or Fairy Bow can be used to break beehives if beehives are shuffled.
+    Allows Slingshot and Bow to break beehives when Beehive Shuffle is turned on.
     """
-    display_name = "Slingshot/Bow Can Break Beehives"
+    display_name = "Slingshot and Bow Can Break Beehives"
 
 
 class StartingAge(Choice):
@@ -870,7 +870,7 @@ class SohOptions(PerGameCommonOptions):
     sunlight_arrows: SunlightArrows
     infinite_upgrades: InfiniteUpgrades
     skeleton_key: SkeletonKey
-    slingbow_break_behives: SlingbowBreakBehives
+    slingbow_break_beehives: SlingbowBreakBeehives
     starting_age: StartingAge
     shuffle_100_gs_reward: Shuffle100GSReward
     ice_trap_count: IceTrapCount 
