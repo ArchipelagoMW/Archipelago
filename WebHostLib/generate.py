@@ -190,6 +190,9 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
                                      format_exception(e))
                     gen.meta = json.dumps(meta)
                     commit()
+    except (KeyboardInterrupt, SystemExit):
+        # don't update db, retry next time
+        raise
     except BaseException as e:
         if sid:
             with db_session:
