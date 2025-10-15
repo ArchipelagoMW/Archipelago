@@ -740,10 +740,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Zones (Expert)
         #The Open Sea
-        #Treasure chests
-        LocationData(THE_OPEN_SEA_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " Chest - South of Jidamba Tangle 1", 3767 + treasure_index_offset, lambda state: logic.has_swimming(state)), #Fenix Syrup chest
-        LocationData(THE_OPEN_SEA_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " Chest - South of Jidamba Tangle 2", 3765 + treasure_index_offset, lambda state: logic.has_swimming(state)), #Z-Potion chest
-
         #NPCs
         LocationData(THE_OPEN_SEA_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " NPC - I'm on a raft!", 2804 + npc_index_offset, lambda state: state.has("Item - Super Rod", player) and state.has("Item - Jigging Lure", player)),
         #CheckOrNot: (930, 91, 253) do we put a check on the guy who gives you a Gaea Shard if you get there with no Salmon lol: no
@@ -1120,44 +1116,55 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Jidamba Tangle
         #Treasure chests
-        #Europa Shrine
-
+        #Forest Floor
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Inside overgrown building E of Eaclaneya", 1629 + treasure_index_offset),  # Demon Plate chest
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Atop overgrown building E of Eaclaneya", 3028 + treasure_index_offset),  # Ether chest
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - NW foliage", 2807 + treasure_index_offset),  # Partizan chest
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked below NW foliage", 3025 + treasure_index_offset),  # Potion chest
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - North of foliage river", 3027 + treasure_index_offset),  # Z-Potion chest
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Smack in the center of the foliage", 1632 + treasure_index_offset),  # Foliage Key chest
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Up a tree in north foliage", 3024 + treasure_index_offset),  # Ether chest
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Along a river through the foliage", 3026 + treasure_index_offset),  # Ether chest
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Island in the river through the foliage", 3011 + treasure_index_offset),  # Tower Shield chest
+        #Atolls
+        LocationData(JIDAMBA_ATOLLS_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " Chest - Atoll southeast of Jidamba Tangle", 3767 + treasure_index_offset),  # Fenix Syrup chest
+        LocationData(JIDAMBA_ATOLLS_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " Chest - Atoll southwest of southeast Jidamba Tangle atoll", 3765 + treasure_index_offset),  # Z-Potion chest
         #Jidamba Cave
         LocationData(JIDAMBA_CAVE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Underground sneaky passage by NE cave exit", 2797 + treasure_index_offset),  # Ravens Hood chest
         LocationData(JIDAMBA_CAVE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Hop from underground root to sneaky passage pond", 2798 + treasure_index_offset, lambda state: logic.has_glide(state)),  # Ravens Cloak chest
         LocationData(JIDAMBA_CAVE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Accompanied by orange cave flowers", 1435 + treasure_index_offset, lambda state: logic.has_glide(state)),  # Cave Key chest
-
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Inside overgrown building E of Eaclaneya", 1629 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Demon Plate chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Up a tree in north foliage", 3024 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Ether chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Along a river through the foliage", 3026 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ether chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Atop overgrown building E of Eaclaneya", 3028 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Ether chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against eastern side of Eaclaneya", 2801 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Flame Guard chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against western side of Eaclaneya", 2802 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Flamespike chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Smack in the center of the foliage", 1632 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Foliage Key chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - NW foliage", 2807 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Partizan chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked below NW foliage", 3025 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Potion chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Atop Eaclaneya", 2808 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Rune Bow chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Scramble down the escarpment from Weaver Outpost to pedestal", 2803 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Siege Bow chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Island in the river through the foliage", 3011 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Tower Shield chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - North of foliage river", 3027 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or state.has(EUROPA_STONE, player)), #Z-Potion chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Smack in the center of the canopy", 1631 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Canopy Key chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Up in the canopy south of shrine", 1171 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Demon Helm chest
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Eaclaneya entrance hall", 2919 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Jidamba Tangle map chest
+        #Eaclaneya Courtyard
+        LocationData(JIDAMBA_EACLANEYA_COURTYARD_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Eaclaneya entrance hall", 2919 + treasure_index_offset),  # Jidamba Tangle map chest
+        #Summit
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against eastern side of Eaclaneya", 2801 + treasure_index_offset),  # Flame Guard chest
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Atop Eaclaneya", 2808 + treasure_index_offset),  # Rune Bow chest
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against western side of Eaclaneya", 2802 + treasure_index_offset),  # Flamespike chest
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Scramble down the escarpment from Weaver Outpost to pedestal", 2803 + treasure_index_offset),  # Siege Bow chest
+        #Canopy
+        LocationData(JIDAMBA_CANOPY_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Up in the canopy south of shrine", 1171 + treasure_index_offset),  # Demon Helm chest
+        LocationData(JIDAMBA_CANOPY_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Smack in the center of the canopy", 1631 + treasure_index_offset),  # Canopy Key chest
 
         #NPCs
         #Todo NPCs Job Masters: Jidamba Tangle (Outpost) has Master Weaver ID 3579 (627, 140, 77); gives you Weaver Seal in exchange for job mastery
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Chloe Queen of the Canopy", 2775 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Super Rod (828, 119, 99); Fixed Missable
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Splish splash Diamond", 2871 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond hot girl summer on the beach", 2873 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state) or logic.has_glide(state)), #Dust
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Damp Diamond lurking beneath diamondsmith", 2869 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond at southern mouth of cave", 2874 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Fly from Summoners weeping tree to hot tub Diamond", 2876 + npc_index_offset, lambda state: logic.has_glide(state)), #Ingot
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Splash Mountain Diamond (pool at S end of canopy)", 2870 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond atop broken ruins along the beach", 2872 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond atop broken ruins by the Summoner tree", 2875 + npc_index_offset, lambda state: logic.has_glide(state)), #Ore
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Splash Mountain Gold (pool at NE end of canopy)", 2900 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond in the boughs above the shrine", 2898 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Canopy Gold above big lake", 2899 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
+        #Forest Floor
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond atop broken ruins along the beach", 2872 + npc_index_offset, lambda state: logic.has_glide(state)),  # Ore
+        #Diamondsmith
+        LocationData(JIDAMBA_DIAMONDSMITH_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Damp Diamond lurking beneath diamondsmith", 2869 + npc_index_offset),  # Ingot
+        #Southwest Beach
+        LocationData(JIDAMBA_SOUTHWEST_BEACH_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond hot girl summer on the beach", 2873 + npc_index_offset),  # Dust
+        #South Cliff
+        LocationData(JIDAMBA_SOUTH_CLIFF_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Splish splash Diamond", 2871 + npc_index_offset),  # Dust
+        #Southwest Beach Cliff
+        LocationData(JIDAMBA_SOUTHWEST_BEACH_CLIFF_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond at southern mouth of cave", 2874 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)),  # Ingot
+        #Summit
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Fly from Summoners weeping tree to hot tub Diamond", 2876 + npc_index_offset, lambda state: logic.has_glide(state)),  # Ingot
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond atop broken ruins by the Summoner tree", 2875 + npc_index_offset, lambda state: logic.has_glide(state)),  # Ore
+        #Canopy
+        LocationData(JIDAMBA_CANOPY_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Chloe Queen of the Canopy", 2775 + npc_index_offset), #Super Rod (828, 119, 99); Fixed Missable
+        LocationData(JIDAMBA_CANOPY_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Splash Mountain Diamond (pool at S end of canopy)", 2870 + npc_index_offset),  # Ore
+        LocationData(JIDAMBA_CANOPY_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Splash Mountain Gold (pool at NE end of canopy)", 2900 + npc_index_offset),  # Ore
+        LocationData(JIDAMBA_CANOPY_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Diamond in the boughs above the shrine", 2898 + npc_index_offset),  # Ingot
+        LocationData(JIDAMBA_CANOPY_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Canopy Gold above big lake", 2899 + npc_index_offset), #Ingot
 
         #Jidamba Eaclaneya
         #Treasure chests
@@ -1346,7 +1353,7 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Boss - Tira Summon", 1132 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE_AP_REGION, player=player) or state.can_reach(GANYMEDE_SHRINE_AP_REGION, player=player)) and logic.is_area_in_level_range(state, 57)), #(720, 138, -278) Monster ID: 98
         LocationData(LAKE_DELENDE_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " Boss - Ioske Summon", 1111 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 57)), #97, 126, -211 Monster ID: 92
         LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Boss - Pamoa Summon", 1136 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 53)), #498, 218, -412 Monster ID: 91
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Boss - Juses Summon", 1134 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_swimming(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(672, 124, 106) Monster ID: 99
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Boss - Juses Summon", 1134 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #(672, 124, 106) Monster ID: 99
         #Mind's Delusion is part of the Coyote fight
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Boss - Coyote Summon", 1140 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #(-60, 53, 202) Monster ID: 95
 
@@ -1890,7 +1897,7 @@ def get_region_completions(player: int, options: CrystalProjectOptions) -> List[
         LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Region Completion", 6049 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Region Completion", 6050 + regionsanity_index_offset, regionsanity=True),
         LocationData(FLYERS_CRAG_AP_REGION, FLYERS_CRAG_DISPLAY_NAME + " Region Completion", 6051 + regionsanity_index_offset, regionsanity=True),
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Region Completion", 6052 + regionsanity_index_offset, regionsanity=True),
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Region Completion", 6052 + regionsanity_index_offset, regionsanity=True),
         LocationData(JIDAMBA_EACLANEYA_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + " Region Completion", 6053 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Region Completion", 6054 + regionsanity_index_offset, regionsanity=True),
         LocationData(NEPTUNE_SHRINE_AP_REGION, NEPTUNE_SHRINE_DISPLAY_NAME + " Region Completion", 6055 + regionsanity_index_offset, regionsanity=True),

@@ -42,9 +42,9 @@ class TestProgressiveMountModeOn(CrystalProjectTestBase):
         self.collect(self.get_item_by_name(PROGRESSIVE_MOUNT))
         self.collect(self.get_item_by_name(PROGRESSIVE_MOUNT))
         self.collect(self.get_item_by_name(PROGRESSIVE_MOUNT))
-        self.assertFalse(self.can_reach_region(JIDAMBA_TANGLE_AP_REGION))
+        self.assertFalse(self.can_reach_region(JIDAMBA_FOREST_FLOOR_AP_REGION))
         self.collect(self.get_item_by_name(PROGRESSIVE_MOUNT))
-        self.assertTrue(self.can_reach_region(JIDAMBA_TANGLE_AP_REGION))
+        self.assertTrue(self.can_reach_region(JIDAMBA_FOREST_FLOOR_AP_REGION))
 
     def test_salmon_violin(self):
         self.set_collected_job_count(18)
@@ -104,9 +104,9 @@ class TestProgressiveMountModeOff(CrystalProjectTestBase):
         self.set_collected_job_count(18)
         self.collect_by_name(GAEA_STONE)
         self.collect_by_name(DIONE_STONE)
-        self.assertFalse(self.can_reach_region(JIDAMBA_TANGLE_AP_REGION))
+        self.assertFalse(self.can_reach_region(JIDAMBA_FOREST_FLOOR_AP_REGION))
         self.collect(self.get_item_by_name(OWL_DRUM))
-        self.assertTrue(self.can_reach_region(JIDAMBA_TANGLE_AP_REGION))
+        self.assertTrue(self.can_reach_region(JIDAMBA_FOREST_FLOOR_AP_REGION))
 
     def test_salmon_violin(self):
         self.set_collected_job_count(18)

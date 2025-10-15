@@ -29,7 +29,7 @@ def get_unused_locations() -> List[LocationData]:
         LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Master Samurai", 3576 + npc_index_offset),
         LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Master Chemist", 3707 + npc_index_offset),
         LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " NPC - Master Mimic", 3606 + npc_index_offset),
-        LocationData(JIDAMBA_TANGLE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Master Weaver", 3579 + npc_index_offset),
+        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Master Weaver", 3579 + npc_index_offset),
     ]
 
     return location_table

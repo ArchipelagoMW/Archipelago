@@ -381,7 +381,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, PIPELINE_NORTH_AP_REGION, [PIPELINE_SOUTH_AP_REGION, JAIL_SOUTH_WING_RUBBLE_AP_REGION],
                     {PIPELINE_SOUTH_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, PIPELINE_SOUTH_AP_REGION, [PIPELINE_NORTH_AP_REGION, CONTINENTAL_TRAM_AP_REGION, PIPELINE_JIDAMBA_CONNECTOR_AP_REGION])
-    #Regionsanity: Jidamba Connector is untraversable w/o region pass
+    #A Pipeline <-> Jidamba connector; untraversable w/o region pass in Regionsanity
     fancy_add_exits(world, PIPELINE_JIDAMBA_CONNECTOR_AP_REGION, [PIPELINE_SOUTH_AP_REGION, JIDAMBA_CAVE_AP_REGION])
     fancy_add_exits(world, COBBLESTONE_CRAG_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, THE_OPEN_SEA_AP_REGION, SHOUDU_WATERFRONT_AP_REGION, OKIMOTO_NS_AP_REGION],
                     {SHOUDU_WATERFRONT_AP_REGION: lambda state: logic.has_horizontal_movement(state),
@@ -427,7 +427,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, SALMON_BAY_AP_REGION, [THE_OPEN_SEA_AP_REGION, SALMON_RIVER_AP_REGION],
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
                      SALMON_RIVER_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, THE_OPEN_SEA_AP_REGION, [SEASIDE_CLIFFS_AP_REGION, PROVING_MEADOWS_AP_REGION, OKIMOTO_NS_AP_REGION, SHOUDU_WATERFRONT_AP_REGION, SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_WEST_AP_REGION, SALMON_BAY_AP_REGION, SHOUDU_PROVINCE_AP_REGION, THE_UNDERCITY_AP_REGION, JIDAMBA_TANGLE_AP_REGION, THE_DEEP_SEA_AP_REGION],
+    fancy_add_exits(world, THE_OPEN_SEA_AP_REGION, [SEASIDE_CLIFFS_AP_REGION, PROVING_MEADOWS_AP_REGION, OKIMOTO_NS_AP_REGION, SHOUDU_WATERFRONT_AP_REGION, SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_WEST_AP_REGION, SALMON_BAY_AP_REGION, SHOUDU_PROVINCE_AP_REGION, THE_UNDERCITY_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION, THE_DEEP_SEA_AP_REGION],
                     {SEASIDE_CLIFFS_AP_REGION: lambda state: logic.has_swimming(state),
                      PROVING_MEADOWS_AP_REGION: lambda state: logic.has_swimming(state),
                      OKIMOTO_NS_AP_REGION: lambda state: logic.has_swimming(state),
@@ -438,7 +438,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      SARA_SARA_BEACH_WEST_AP_REGION: lambda state: logic.has_swimming(state),
                      SALMON_BAY_AP_REGION: lambda state: logic.has_swimming(state),
                      SHOUDU_PROVINCE_AP_REGION: lambda state: logic.has_swimming(state),
-                     JIDAMBA_TANGLE_AP_REGION: lambda state: logic.has_swimming(state),
+                     JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state),
                      THE_DEEP_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, SHOUDU_WATERFRONT_AP_REGION, [THE_OPEN_SEA_AP_REGION, SHOUDU_PROVINCE_AP_REGION, COBBLESTONE_CRAG_AP_REGION],
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
@@ -460,8 +460,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      DELENDE_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, QUINTAR_RESERVE_AP_REGION, [SHOUDU_PROVINCE_AP_REGION, DIONE_SHRINE_AP_REGION, QUINTAR_MAUSOLEUM_AP_REGION],
                     {QUINTAR_MAUSOLEUM_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, DIONE_SHRINE_AP_REGION, [QUINTAR_RESERVE_AP_REGION, EASTERN_CHASM_AP_REGION, JIDAMBA_TANGLE_AP_REGION, THE_CHALICE_OF_TAR_AP_REGION],
-                    {JIDAMBA_TANGLE_AP_REGION: lambda state: logic.has_glide(state),
+    fancy_add_exits(world, DIONE_SHRINE_AP_REGION, [QUINTAR_RESERVE_AP_REGION, EASTERN_CHASM_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, THE_CHALICE_OF_TAR_AP_REGION],
+                    {JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state),
                      THE_CHALICE_OF_TAR_AP_REGION: lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player),
                      EASTERN_CHASM_AP_REGION: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state)})
     fancy_add_exits(world, QUINTAR_MAUSOLEUM_AP_REGION, [QUINTAR_RESERVE_AP_REGION, QUINTAR_SANCTUM_AP_REGION],
@@ -480,8 +480,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, NORTHERN_CAVE_AP_REGION, [TALL_TALL_HEIGHTS_AP_REGION, SLIP_GLIDE_RIDE_AP_REGION],
                     {SLIP_GLIDE_RIDE_AP_REGION: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state),
                      TALL_TALL_HEIGHTS_AP_REGION: lambda state: logic.has_vertical_movement(state)})
-    fancy_add_exits(world, LANDS_END_AP_REGION, [TALL_TALL_HEIGHTS_AP_REGION, JIDAMBA_TANGLE_AP_REGION],
-                    {JIDAMBA_TANGLE_AP_REGION: lambda state: logic.has_glide(state),
+    fancy_add_exits(world, LANDS_END_AP_REGION, [TALL_TALL_HEIGHTS_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
+                    {JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state),
                      TALL_TALL_HEIGHTS_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, SLIP_GLIDE_RIDE_AP_REGION, [TALL_TALL_HEIGHTS_AP_REGION, NORTHERN_CAVE_AP_REGION],
                     {NORTHERN_CAVE_AP_REGION: lambda state: logic.has_glide(state),
@@ -497,15 +497,59 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, THE_CHALICE_OF_TAR_AP_REGION, [TALL_TALL_HEIGHTS_AP_REGION, QUINTAR_RESERVE_AP_REGION],
                     {TALL_TALL_HEIGHTS_AP_REGION: lambda state: logic.has_glide(state),
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_glide(state)})
-    fancy_add_exits(world, FLYERS_CRAG_AP_REGION, [OKIMOTO_NS_AP_REGION, JIDAMBA_TANGLE_AP_REGION],
-                    {JIDAMBA_TANGLE_AP_REGION: lambda state: logic.has_glide(state)})
-    fancy_add_exits(world, JIDAMBA_TANGLE_AP_REGION, [THE_OPEN_SEA_AP_REGION, EUROPA_SHRINE_AP_REGION, JIDAMBA_EACLANEYA_AP_REGION],
+    fancy_add_exits(world, FLYERS_CRAG_AP_REGION, [OKIMOTO_NS_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
+                    {JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state)})
+    #Jidamba Tangle section start
+    fancy_add_exits(world, JIDAMBA_FOREST_FLOOR_AP_REGION, [JIDAMBA_DIAMONDSMITH_AP_REGION, JIDAMBA_SOUTHWEST_BEACH_AP_REGION, EUROPA_SHRINE_AP_REGION, JIDAMBA_CANOPY_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION],
                     #if we change the elevators to Pipeline to always be powered, then add an exit to Pipeline Jidamba Connector
-                    {JIDAMBA_EACLANEYA_AP_REGION: lambda state: (logic.has_glide(state) or logic.has_swimming(state)) and logic.has_jidamba_keys(state),
-                     THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
-    #TODO: get the rules correct for this
-    fancy_add_exits(world, EUROPA_SHRINE_AP_REGION, [JIDAMBA_TANGLE_AP_REGION])
-    fancy_add_exits(world, JIDAMBA_EACLANEYA_AP_REGION, [JIDAMBA_TANGLE_AP_REGION, THE_OPEN_SEA_AP_REGION],
+                    {JIDAMBA_DIAMONDSMITH_AP_REGION: lambda state: logic.has_glide(state),
+                     JIDAMBA_SOUTHWEST_BEACH_AP_REGION: lambda state: logic.has_glide(state),
+                     EUROPA_SHRINE_AP_REGION: lambda state: logic.has_glide(state),
+                     JIDAMBA_CANOPY_AP_REGION: lambda state: logic.has_vertical_movement(state),
+                     JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
+    fancy_add_exits(world, JIDAMBA_DIAMONDSMITH_AP_REGION, [JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_ATOLLS_AP_REGION, JIDAMBA_CANOPY_AP_REGION],
+                    {JIDAMBA_ATOLLS_AP_REGION: lambda state: logic.has_glide(state)})
+    fancy_add_exits(world, JIDAMBA_ATOLLS_AP_REGION, [JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION],
+                    {JIDAMBA_FOREST_FLOOR_AP_REGION: lambda state: logic.has_glide(state),
+                     JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
+    fancy_add_exits(world, JIDAMBA_SOUTHWEST_BEACH_AP_REGION,[JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION],
+                    {JIDAMBA_FOREST_FLOOR_AP_REGION: lambda state: logic.has_glide(state),
+                     JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
+    fancy_add_exits(world, EUROPA_SHRINE_AP_REGION, [JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_CAVE_AP_REGION, JIDAMBA_SOUTH_CLIFF_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
+                    {JIDAMBA_CAVE_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
+                     JIDAMBA_SOUTH_CLIFF_AP_REGION: lambda state: logic.has_glide(state),
+                     JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state)})
+    fancy_add_exits(world, JIDAMBA_CAVE_AP_REGION, [EUROPA_SHRINE_AP_REGION, JIDAMBA_SOUTHWEST_BEACH_CLIFF_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
+                    {EUROPA_SHRINE_AP_REGION: lambda state: logic.has_glide(state),
+                     JIDAMBA_SOUTHWEST_BEACH_CLIFF_AP_REGION: lambda state: logic.has_glide(state),
+                     JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state)})
+    fancy_add_exits(world, JIDAMBA_SOUTH_CLIFF_AP_REGION, [JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_DIAMONDSMITH_AP_REGION, EUROPA_SHRINE_AP_REGION, JIDAMBA_EACLANEYA_COURTYARD_AP_REGION, JIDAMBA_SOUTHWEST_BEACH_CLIFF_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION],
+                    {JIDAMBA_DIAMONDSMITH_AP_REGION: lambda state: logic.has_horizontal_movement(state),
+                     EUROPA_SHRINE_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
+                     JIDAMBA_SOUTHWEST_BEACH_CLIFF_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state),
+                     JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
+    fancy_add_exits(world, JIDAMBA_EACLANEYA_COURTYARD_AP_REGION, [JIDAMBA_SOUTH_CLIFF_AP_REGION, JIDAMBA_SOUTHWEST_BEACH_CLIFF_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION],
+                    {JIDAMBA_SOUTHWEST_BEACH_CLIFF_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state),
+                     JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
+                     JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
+    fancy_add_exits(world, JIDAMBA_SOUTHWEST_BEACH_CLIFF_AP_REGION, [JIDAMBA_SOUTHWEST_BEACH_AP_REGION, JIDAMBA_CAVE_AP_REGION, JIDAMBA_SOUTH_CLIFF_AP_REGION, JIDAMBA_EACLANEYA_COURTYARD_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION],
+                    {JIDAMBA_SOUTH_CLIFF_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state),
+                     JIDAMBA_EACLANEYA_COURTYARD_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state),
+                     JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state),
+                     JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
+    #The one-way Tangle -> Eaclaneya connector is logically connected from the Summit because the Canopy door you need to unlock & switch you need to press is up there, even though the physical door to the Eaclaneya is in the Courtyard
+    fancy_add_exits(world, JIDAMBA_SUMMIT_AP_REGION, [JIDAMBA_FOREST_FLOOR_AP_REGION, EUROPA_SHRINE_AP_REGION, JIDAMBA_CAVE_AP_REGION, JIDAMBA_SOUTH_CLIFF_AP_REGION, JIDAMBA_EACLANEYA_COURTYARD_AP_REGION, JIDAMBA_SOUTHWEST_BEACH_CLIFF_AP_REGION, JIDAMBA_CANOPY_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION, TANGLE_EACLANEYA_CONNECTOR_AP_REGION],
+                    {JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
+    #A one-way Tangle -> Eaclaneya connector; untraversable w/o region pass in Regionsanity
+    fancy_add_exits(world, TANGLE_EACLANEYA_CONNECTOR_AP_REGION, [JIDAMBA_EACLANEYA_AP_REGION],
+                    {JIDAMBA_EACLANEYA_AP_REGION: lambda state: logic.has_jidamba_keys(state)})
+    fancy_add_exits(world, JIDAMBA_CANOPY_AP_REGION, [JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_DIAMONDSMITH_AP_REGION, EUROPA_SHRINE_AP_REGION, JIDAMBA_SOUTH_CLIFF_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION],
+                    {JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
+    #I am not listing has_swimming on all these exits; i already wrote a has_swimming rule on every entrance into the Waterways
+    fancy_add_exits(world, JIDAMBA_WATERWAYS_AP_REGION, [THE_OPEN_SEA_AP_REGION, JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_ATOLLS_AP_REGION, JIDAMBA_SOUTHWEST_BEACH_AP_REGION, JIDAMBA_SOUTH_CLIFF_AP_REGION, JIDAMBA_EACLANEYA_COURTYARD_AP_REGION, JIDAMBA_SOUTHWEST_BEACH_CLIFF_AP_REGION, JIDAMBA_SUMMIT_AP_REGION])
+    #Jidamba Tangle section end
+    #Removed connection from Eaclaneya -> Tangle because you can't go through that door if you haven't hit the switches on the Tangle side
+    fancy_add_exits(world, JIDAMBA_EACLANEYA_AP_REGION, [THE_OPEN_SEA_AP_REGION],
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, THE_DEEP_SEA_AP_REGION, [THE_OPEN_SEA_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_DEPTHS_AP_REGION, THE_SEQUOIA_AP_REGION],
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
