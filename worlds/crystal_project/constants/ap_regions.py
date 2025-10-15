@@ -12,6 +12,7 @@ SEASIDE_CLIFFS_AP_REGION = "Seaside Cliffs"
 DRAFT_SHAFT_CONDUIT_AP_REGION = "Draft Shaft Conduit"
 YAMAGAWA_MA_AP_REGION = "Yamagawa M.A."
 PROVING_MEADOWS_AP_REGION = "Proving Meadows"
+PROVING_MEADOWS_SKUMPARADISE_CONNECTOR_AP_REGION = "Proving Meadows Skumparadise Connector"
 SKUMPARADISE_AP_REGION = "Skumparadise"
 #Advanced
 CAPITAL_SEQUOIA_AP_REGION = "Capital Sequoia"

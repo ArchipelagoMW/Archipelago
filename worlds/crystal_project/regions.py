@@ -345,12 +345,14 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {SOILED_DEN_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, YAMAGAWA_MA_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, DELENDE_AP_REGION, LAKE_DELENDE_AP_REGION],
                     {LAKE_DELENDE_AP_REGION: lambda state: logic.has_vertical_movement(state) or options.obscureRoutes.value == options.obscureRoutes.option_true})
-    fancy_add_exits(world, PROVING_MEADOWS_AP_REGION, [DELENDE_AP_REGION, THE_PALE_GROTTO_AP_REGION, SKUMPARADISE_AP_REGION, THE_OPEN_SEA_AP_REGION],
-                    {SKUMPARADISE_AP_REGION: lambda state: logic.has_jobs(state, 3),
-                     THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, SKUMPARADISE_AP_REGION, [PROVING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION],
-                    {PROVING_MEADOWS_AP_REGION: lambda state: logic.has_jobs(state, 3)})
-    fancy_add_exits(world, CAPITAL_SEQUOIA_AP_REGION, [JOJO_SEWERS_AP_REGION, BOOMER_SOCIETY_AP_REGION, ROLLING_QUINTAR_FIELDS_AP_REGION, COBBLESTONE_CRAG_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, CASTLE_SEQUOIA_AP_REGION, SKUMPARADISE_AP_REGION],
+    fancy_add_exits(world, PROVING_MEADOWS_AP_REGION, [DELENDE_AP_REGION, THE_PALE_GROTTO_AP_REGION, PROVING_MEADOWS_SKUMPARADISE_CONNECTOR_AP_REGION, THE_OPEN_SEA_AP_REGION],
+                    {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
+    #A Proving Meadows <-> Skumparadise connector; untraversable w/o a region pass in Regionsanity
+    fancy_add_exits(world, PROVING_MEADOWS_SKUMPARADISE_CONNECTOR_AP_REGION, [PROVING_MEADOWS_AP_REGION, SKUMPARADISE_AP_REGION],
+                    {PROVING_MEADOWS_AP_REGION: lambda state: logic.has_jobs(state, 3),
+                     SKUMPARADISE_AP_REGION: lambda state: logic.has_jobs(state, 3)})
+    fancy_add_exits(world, SKUMPARADISE_AP_REGION, [PROVING_MEADOWS_SKUMPARADISE_CONNECTOR_AP_REGION, CAPITAL_SEQUOIA_AP_REGION])
+    fancy_add_exits(world, CAPITAL_SEQUOIA_AP_REGION, [PROVING_MEADOWS_AP_REGION, JOJO_SEWERS_AP_REGION, BOOMER_SOCIETY_AP_REGION, ROLLING_QUINTAR_FIELDS_AP_REGION, COBBLESTONE_CRAG_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, CASTLE_SEQUOIA_AP_REGION, SKUMPARADISE_AP_REGION],
                     # why rental and horizontal both listed?
                     {BOOMER_SOCIETY_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
                      COBBLESTONE_CRAG_AP_REGION: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state),
