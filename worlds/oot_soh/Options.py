@@ -247,7 +247,7 @@ class SkullsSunSong(Toggle):
     """
     All Golden Skulltulas that require nighttime to appear will only be expected to be collected after getting Sun's Song.
     """
-    display_name = "Night Skulltula's Expect Sun's Song"
+    display_name = "Night Skulltulas Expect Sun's Song"
 
 
 class ShuffleMasterSword(Toggle):
