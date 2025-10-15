@@ -329,7 +329,8 @@ def set_region_rules(world: "SohWorld") -> None:
     
     ## Ganon's Arena
     # Events
-    add_events(Regions.GANONS_ARENA, world, [
-        (EventLocations.GANON_DEFEATED, Events.GAME_COMPLETED, lambda bundle: 
-         (can_kill_enemy(bundle, Enemies.GANON) and not world.options.triforce_hunt) or has_item(Events.GAME_COMPLETED, bundle))
-    ])
+    if not bool(world.options.triforce_hunt):
+        add_events(Regions.GANONS_ARENA, world, [
+            (EventLocations.GANON_DEFEATED, Events.GAME_COMPLETED, lambda bundle: 
+            (can_kill_enemy(bundle, Enemies.GANON)))
+        ])
