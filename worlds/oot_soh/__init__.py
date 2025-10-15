@@ -6,11 +6,13 @@ from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table, item_name_groups, progressive_items
 from .Locations import location_table
 from .Options import SohOptions, soh_option_groups
-from .Regions import create_regions_and_locations, place_locked_items
+from .Regions import create_regions_and_locations, place_locked_items, dungeon_reward_item_mapping
 from .Enums import *
 from .ItemPool import create_item_pool
 from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
+from .ShopItems import fill_shop_items
+from Fill import fill_restrictive
 
 import logging
 logger = logging.getLogger("SOH_OOT")
@@ -45,11 +47,16 @@ class SohWorld(World):
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
+        self.item_pool = list[SohItem]()
         self.included_locations = dict[str, int]()
+        self.shop_prices = dict[str, int]()
+        self.shop_vanilla_items = dict[str, str]()
+        self.scrub_prices = dict[str, int]()
 
     def generate_early(self) -> None:
-        #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
-        pass
+        # If door of time is set to closed and dungeon rewards aren't shuffled, force child spawn
+        if self.options.door_of_time.value == 0 and self.options.shuffle_dungeon_rewards.value == 0:
+            self.options.starting_age.value = 0
 
     def create_item(self, name: str) -> SohItem:
         item_entry = Items(name)
@@ -62,6 +69,8 @@ class SohWorld(World):
             self.push_precollected(self.create_item(Items.DEKU_STICK_BAG.value))
         if not self.options.shuffle_deku_nut_bag:
             self.push_precollected(self.create_item(Items.DEKU_NUT_BAG.value))
+        if not self.options.bombchu_bag:
+            self.push_precollected(self.create_item(Items.BOMBCHU_BAG.value))
         create_item_pool(self)
 
     def create_regions(self) -> None: 
@@ -71,6 +80,22 @@ class SohWorld(World):
     def set_rules(self) -> None:
         # Completion condition.
         self.multiworld.completion_condition[self.player] = lambda state: state.has(Events.GAME_COMPLETED.value, self.player)
+
+    def pre_fill(self) -> None:
+        fill_shop_items(self)
+
+        if self.options.shuffle_dungeon_rewards.value == 1:
+            # Create a filled copy of the state so the multiworld can place the dungeon rewards using logic
+            prefill_state = CollectionState(self.multiworld)
+            for item in self.item_pool:
+                prefill_state.collect(item, False)
+            prefill_state.sweep_for_advancements()
+
+            dungeon_reward_locations = [self.get_location(location.value) for location in dungeon_reward_item_mapping.keys()]
+            dungeon_reward_items = [self.create_item(item.value) for item in dungeon_reward_item_mapping.values()]
+
+            # Place dungeon rewards
+            fill_restrictive(self.multiworld, prefill_state, dungeon_reward_locations, dungeon_reward_items, single_player_placement=True, lock=True)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
@@ -89,7 +114,7 @@ class SohWorld(World):
             "rainbow_bridge_dungeon_rewards_required": self.options.rainbow_bridge_dungeon_rewards_required.value,
             "rainbow_bridge_dungeons_required": self.options.rainbow_bridge_dungeons_required.value,
             "rainbow_bridge_skull_tokens_required": self.options.rainbow_bridge_skull_tokens_required.value,
-            "ganons_trials_required": self.options.ganons_trials_required.value,
+            "skip_ganons_trials": self.options.skip_ganons_trials.value,
             "triforce_hunt": self.options.triforce_hunt.value,
             "triforce_hunt_required_pieces": self.options.triforce_hunt_required_pieces.value,
             "triforce_hunt_extra_pieces_percentage": self.options.triforce_hunt_extra_pieces_percentage.value,
@@ -115,7 +140,10 @@ class SohWorld(World):
             "shuffle_frog_song_rupees": self.options.shuffle_frog_song_rupees.value,
             "shuffle_adult_trade_items": self.options.shuffle_adult_trade_items.value,
             "shuffle_boss_souls": self.options.shuffle_boss_souls.value,
-            "shuffle_fairies": self.options.shuffle_fairies.value,
+            "shuffle_fountain_fairies": self.options.shuffle_fountain_fairies.value,
+            "shuffle_stone_fairies": self.options.shuffle_stone_fairies.value,
+            "shuffle_bean_fairies": self.options.shuffle_bean_fairies.value,
+            "shuffle_song_fairies": self.options.shuffle_song_fairies.value,
             "shuffle_grass": self.options.shuffle_grass.value,
             "shuffle_dungeon_rewards": self.options.shuffle_dungeon_rewards.value,
             "maps_and_compasses": self.options.maps_and_compasses.value,
@@ -142,12 +170,13 @@ class SohWorld(World):
             "starting_age": self.options.starting_age.value,
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
             "ice_trap_count": self.options.ice_trap_count,
-            "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement
+            "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement,
+            "shop_prices": self.shop_prices,
+            "shop_vanilla_items": self.shop_vanilla_items,
+            "scrub_prices": self.scrub_prices,
         }
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        # Temporarily disabled because logic is in progress
-        #update_age_access(self, state)
         state._soh_stale[self.player] = True # type: ignore
 
         if item.name in progressive_items:
@@ -162,7 +191,6 @@ class SohWorld(World):
         return super().collect(state, item)
     
     def remove(self, state: CollectionState, item: Item) -> bool:
-        # Temporarily disabled because logic is in progress
         changed = super().remove(state, item)
         if changed:
             state._soh_invalidate(self.player) # type: ignore

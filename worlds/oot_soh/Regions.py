@@ -19,7 +19,10 @@ from .Locations import SohLocation, base_location_table, \
     tree_location_table, \
     freestanding_overworld_location_table, \
     freestanding_dungeon_location_table, \
-    fairies_location_table, \
+    fairies_fountain_location_table, \
+    fairies_stone_location_table, \
+    fairies_bean_location_table, \
+    fairies_song_location_table, \
     grass_overworld_location_table, \
     grass_dungeon_location_table, \
     fish_pond_location_table, \
@@ -117,9 +120,10 @@ def create_regions_and_locations(world: "SohWorld") -> None:
         # Gold Skulltulas (Dungeon)
         world.included_locations.update(gold_skulltula_dungeon_location_table)
 
-        # Shops
-        if world.options.shuffle_shops:
-            world.included_locations.update(shops_location_table)
+        # Shops, Add all shop locations vanilla items will get prefilled and locked
+        # Todo: maybe we have to add the vanilla locations as events (id = None)
+        # check if vanilla items show up in the list of checks
+        world.included_locations.update(shops_location_table)
 
         # Scrubs
         if world.options.shuffle_scrubs:
@@ -178,8 +182,14 @@ def create_regions_and_locations(world: "SohWorld") -> None:
             world.included_locations.update(freestanding_dungeon_location_table)
 
         # Fairies
-        if world.options.shuffle_fairies:
-            world.included_locations.update(fairies_location_table)
+        if world.options.shuffle_fountain_fairies:
+            world.included_locations.update(fairies_fountain_location_table)
+        if world.options.shuffle_stone_fairies:
+            world.included_locations.update(fairies_stone_location_table)
+        if world.options.shuffle_bean_fairies:
+            world.included_locations.update(fairies_bean_location_table)
+        if world.options.shuffle_song_fairies:
+            world.included_locations.update(fairies_song_location_table)
 
         # Grass (Overworld)
         if world.options.shuffle_grass == "overworld" or world.options.shuffle_grass == "all":
@@ -226,6 +236,18 @@ def create_regions_and_locations(world: "SohWorld") -> None:
     for location_name, location_address in world.included_locations.items():
         world.get_region(Regions.ROOT.value).add_locations({location_name: location_address}, SohLocation)
 
+# Create a dictionary mapping blue warp rewards to their vanilla items
+dungeon_reward_item_mapping = {
+    Locations.QUEEN_GOHMA: Items.KOKIRIS_EMERALD,
+    Locations.KING_DODONGO: Items.GORONS_RUBY,
+    Locations.BARINADE: Items.ZORAS_SAPPHIRE,
+    Locations.PHANTOM_GANON: Items.FOREST_MEDALLION,
+    Locations.VOLVAGIA: Items.FIRE_MEDALLION,
+    Locations.MORPHA: Items.WATER_MEDALLION,
+    Locations.BONGO_BONGO: Items.SHADOW_MEDALLION,
+    Locations.TWINROVA: Items.SPIRIT_MEDALLION,
+    Locations.LINKS_POCKET: Items.LIGHT_MEDALLION
+}
 
 def place_locked_items(world: "SohWorld") -> None:
     
@@ -245,32 +267,10 @@ def place_locked_items(world: "SohWorld") -> None:
     if world.options.shuffle_shops:
         world.get_location(Locations.GC_SHOP_ITEM1.value).place_locked_item(world.create_item(Items.BUY_GORON_TUNIC.value))
 
-    # Create a dictionary mapping blue warp rewards to their vanilla items
-    dungeon_reward_item_mapping = {
-        Locations.QUEEN_GOHMA: Items.KOKIRIS_EMERALD,
-        Locations.KING_DODONGO: Items.GORONS_RUBY,
-        Locations.BARINADE: Items.ZORAS_SAPPHIRE,
-        Locations.PHANTOM_GANON: Items.FOREST_MEDALLION,
-        Locations.VOLVAGIA: Items.FIRE_MEDALLION,
-        Locations.MORPHA: Items.WATER_MEDALLION,
-        Locations.BONGO_BONGO: Items.SHADOW_MEDALLION,
-        Locations.TWINROVA: Items.SPIRIT_MEDALLION,
-        Locations.LINKS_POCKET: Items.LIGHT_MEDALLION
-    }
-
     # Preplace dungeon rewards in vanilla locations when not shuffled
     if world.options.shuffle_dungeon_rewards == "off":      
         # Loop through dungeons rewards and set their items to the vanilla reward.      
         for location_name, reward_name in zip(dungeon_reward_item_mapping.keys(), dungeon_reward_item_mapping.values()):
-            world.get_location(location_name.value).place_locked_item(world.create_item(reward_name.value))
-
-    if world.options.shuffle_dungeon_rewards == "dungeons": 
-        # Extract and shuffle just the item names from location_item_mapping
-        reward_names = list(dungeon_reward_item_mapping.values())
-        world.random.shuffle(reward_names)
-        
-        # Pair each location with a unique shuffled dungeon reward
-        for location_name, reward_name in zip(dungeon_reward_item_mapping.keys(), reward_names):
             world.get_location(location_name.value).place_locked_item(world.create_item(reward_name.value))
 
     # Place Ganons Boss Key
@@ -290,3 +290,4 @@ def place_locked_items(world: "SohWorld") -> None:
         token_item = world.create_item(Items.GOLD_SKULLTULA_TOKEN.value)
         for location_name, address in gold_skulltula_dungeon_location_table.items():
             world.get_location(location_name).place_locked_item(token_item)
+

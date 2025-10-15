@@ -13,18 +13,13 @@ class EventLocations(str, Enum):
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-
     ## Root
     # Events
-    add_events(Regions.ROOT, world, [
-        (EventLocations.ROOT_DEKU_SHIELD, Events.CAN_BUY_DEKU_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
-        (EventLocations.ROOT_HYLIAN_SHIELD, Events.CAN_BUY_HYLIAN_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
-        (EventLocations.TRIFORCE_HUNT_COMPLETION, Events.GAME_COMPLETED, lambda bundle:
-         (world.options.triforce_hunt == 1 and 
-         has_item(Items.TRIFORCE_PIECE, bundle, world.options.triforce_hunt_required_pieces.value)) or 
-         has_item(Events.GAME_COMPLETED, bundle))
-    ])
+    if bool(world.options.triforce_hunt):
+        add_events(Regions.ROOT, world, [
+            (EventLocations.TRIFORCE_HUNT_COMPLETION, Events.GAME_COMPLETED, lambda bundle:
+            (has_item(Items.TRIFORCE_PIECE, bundle, world.options.triforce_hunt_required_pieces.value)))
+        ])
     # Locations
     add_locations(Regions.ROOT, world, [
         (Locations.LINKS_POCKET, lambda bundle: True)
