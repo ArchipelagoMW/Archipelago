@@ -243,7 +243,6 @@ def bombchu_refill(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return state.has_any([Items.BUY_BOMBCHUS10.value, Items.BUY_BOMBCHUS20.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value], world.player) or bool(world.options.bombchu_drops)
 
 
-
 def bombchus_enabled(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
     if world.options.bombchu_bag.value:
