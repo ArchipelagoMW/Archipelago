@@ -67,6 +67,8 @@ class SohWorld(World):
             self.push_precollected(self.create_item(Items.DEKU_STICK_BAG.value))
         if not self.options.shuffle_deku_nut_bag:
             self.push_precollected(self.create_item(Items.DEKU_NUT_BAG.value))
+        if not self.options.bombchu_bag:
+            self.push_precollected(self.create_item(Items.BOMBCHU_BAG.value))
         create_item_pool(self)
 
     def create_regions(self) -> None: 
@@ -97,7 +99,7 @@ class SohWorld(World):
             "rainbow_bridge_dungeon_rewards_required": self.options.rainbow_bridge_dungeon_rewards_required.value,
             "rainbow_bridge_dungeons_required": self.options.rainbow_bridge_dungeons_required.value,
             "rainbow_bridge_skull_tokens_required": self.options.rainbow_bridge_skull_tokens_required.value,
-            "ganons_trials_required": self.options.ganons_trials_required.value,
+            "skip_ganons_trials": self.options.skip_ganons_trials.value,
             "triforce_hunt": self.options.triforce_hunt.value,
             "triforce_hunt_required_pieces": self.options.triforce_hunt_required_pieces.value,
             "triforce_hunt_extra_pieces_percentage": self.options.triforce_hunt_extra_pieces_percentage.value,
@@ -123,7 +125,10 @@ class SohWorld(World):
             "shuffle_frog_song_rupees": self.options.shuffle_frog_song_rupees.value,
             "shuffle_adult_trade_items": self.options.shuffle_adult_trade_items.value,
             "shuffle_boss_souls": self.options.shuffle_boss_souls.value,
-            "shuffle_fairies": self.options.shuffle_fairies.value,
+            "shuffle_fountain_fairies": self.options.shuffle_fountain_fairies.value,
+            "shuffle_stone_fairies": self.options.shuffle_stone_fairies.value,
+            "shuffle_bean_fairies": self.options.shuffle_bean_fairies.value,
+            "shuffle_song_fairies": self.options.shuffle_song_fairies.value,
             "shuffle_grass": self.options.shuffle_grass.value,
             "shuffle_dungeon_rewards": self.options.shuffle_dungeon_rewards.value,
             "maps_and_compasses": self.options.maps_and_compasses.value,
@@ -157,8 +162,6 @@ class SohWorld(World):
         }
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        # Temporarily disabled because logic is in progress
-        #update_age_access(self, state)
         state._soh_stale[self.player] = True # type: ignore
 
         if item.name in progressive_items:
@@ -173,7 +176,6 @@ class SohWorld(World):
         return super().collect(state, item)
     
     def remove(self, state: CollectionState, item: Item) -> bool:
-        # Temporarily disabled because logic is in progress
         changed = super().remove(state, item)
         if changed:
             state._soh_invalidate(self.player) # type: ignore

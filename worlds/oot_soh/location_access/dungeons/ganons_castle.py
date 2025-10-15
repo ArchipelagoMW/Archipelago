@@ -3,7 +3,6 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-
 class EventLocations(str, Enum):
     GANONS_CASTLE_FREE_FAIRIES = "Ganon's Castle Free Fairies"
     GANONS_CASTLE_FOREST_TRIAL_AREA = "Ganon's Castle Forest Trial Area"
@@ -16,7 +15,8 @@ class EventLocations(str, Enum):
     GANONS_CASTLE_WATER_TRIAL_FAIRY_POT = "Ganon's Castle Water Trial Fairy Pot"
     GANONS_CASTLE_SPIRIT_TRIAL_NUT_POT = "Ganon's Castle Spirit Trial Nut Pot"
     GANON_DEFEATED = "Ganon Defeated"
-    
+
+
 class LocalEvents(str, Enum):
     GANONS_CASTLE_FOREST_TRIAL_CLEARED = "Ganon's Castle Forest Trial Cleared"
     GANONS_CASTLE_FIRE_TRIAL_CLEARED = "Ganon's Castle Fire Trial Cleared"
@@ -24,7 +24,6 @@ class LocalEvents(str, Enum):
     GANONS_CASTLE_SHADOW_TRIAL_CLEARED = "Ganon's Castle Shadow Trial Cleared"
     GANONS_CASTLE_SPIRIT_TRIAL_CLEARED = "Ganon's Castle Spirit Trial Cleared"
     GANONS_CASTLE_LIGHT_TRIAL_CLEARED = "Ganon's Castle Light Trial Cleared"
-    
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -254,12 +253,13 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GANONS_TOWER_ENTRYWAY, world, [
         (Regions.GANONS_CASTLE_LOBBY, lambda bundle: True),
-        (Regions.GANONS_TOWER_FLOOR_1, lambda bundle: ((has_item(LocalEvents.GANONS_CASTLE_FOREST_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Forest']
-                                                       (has_item(LocalEvents.GANONS_CASTLE_FIRE_TRIAL_CLEARED, bundle)) and #or world.skipped_trials['Fire']
-                                                       (has_item(LocalEvents.GANONS_CASTLE_WATER_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Water']
-                                                       (has_item(LocalEvents.GANONS_CASTLE_SHADOW_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Shadow']
-                                                       (has_item(LocalEvents.GANONS_CASTLE_SPIRIT_TRIAL_CLEARED, bundle) ) and #or world.skipped_trials['Spirit']
-                                                       (has_item(LocalEvents.GANONS_CASTLE_LIGHT_TRIAL_CLEARED, bundle) ))) #or world.skipped_trials['Light']
+        (Regions.GANONS_TOWER_FLOOR_1, lambda bundle: (((has_item(LocalEvents.GANONS_CASTLE_FOREST_TRIAL_CLEARED, bundle)) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_FIRE_TRIAL_CLEARED, bundle)) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_WATER_TRIAL_CLEARED, bundle)) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_SHADOW_TRIAL_CLEARED, bundle)) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_SPIRIT_TRIAL_CLEARED, bundle)) and
+                                                       (has_item(LocalEvents.GANONS_CASTLE_LIGHT_TRIAL_CLEARED, bundle))) or 
+                                                       bool(world.options.skip_ganons_trials)))
     ])
     
     ## Ganon's Tower Floor 1
@@ -312,7 +312,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GANONS_TOWER_BEFORE_GANONDORFS_LAIR, world, [
         (Regions.GANONS_TOWER_FLOOR_3, lambda bundle: True),
-        (Regions.GANONDORFS_LAIR, lambda bundle: has_item(Items.GANONS_CASTLE_BOSS_KEY, bundle) or world.options.triforce_hunt)
+        (Regions.GANONDORFS_LAIR, lambda bundle: has_item(Items.GANONS_CASTLE_BOSS_KEY, bundle) or bool(world.options.triforce_hunt))
     ])
     
     ## Ganondorf's Lair
@@ -329,7 +329,8 @@ def set_region_rules(world: "SohWorld") -> None:
     
     ## Ganon's Arena
     # Events
-    add_events(Regions.GANONS_ARENA, world, [
-        (EventLocations.GANON_DEFEATED, Events.GAME_COMPLETED, lambda bundle: 
-         (can_kill_enemy(bundle, Enemies.GANON) and not world.options.triforce_hunt) or has_item(Events.GAME_COMPLETED, bundle))
-    ])
+    if not bool(world.options.triforce_hunt):
+        add_events(Regions.GANONS_ARENA, world, [
+            (EventLocations.GANON_DEFEATED, Events.GAME_COMPLETED, lambda bundle: 
+            (can_kill_enemy(bundle, Enemies.GANON)))
+        ])

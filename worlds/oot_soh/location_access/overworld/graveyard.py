@@ -8,16 +8,16 @@ class EventLocations(str, Enum):
     GRAVEYARD_BEAN_PLANT_FAIRY = "Graveyard Bean Plant Fairy"
     GRAVEYARD_BUG_ROCK = "Graveyard Bug Rock"
     GRAVEYARD_SOLD_SPOOKY_MASK = "Graveyard Sold Spooky Mask"
-    DAMPES_GRAVE_NUT_POT = "Dampes Grave Nut Pot"
-    DAMPES_WINDMILL_ACCESS = "Dampes Windmill Access"
-    GRAVEYARD_GOSSIP_STONE_FAIRY = "Graveyard Gossip Stone Fairy"
+    GRAVEYARD_DAMPES_GRAVE_NUT_POT = "Graveyard Dampes Grave Nut Pot"
+    GRAVEYARD_DAMPES_WINDMILL_ACCESS = "Graveyard Dampes Windmill Access"
+    GRAVEYARD_GOSSIP_STONE_SONG_FAIRY = "Graveyard Gossip Stone Song Fairy"
+
 
 class LocalEvents(str, Enum):
     ACCESS_TO_WINDMILL_FROM_DAMPES_GRAVE = "Access to Windmill From Dampes Grave"
 
+
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-    
     ## The Graveyard
     # Events
     add_events(Regions.THE_GRAVEYARD, world, [
@@ -114,8 +114,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ## The Graveyard Dampes Grave
     # Events
     add_events(Regions.GRAVEYARD_DAMPES_GRAVE, world, [
-        (EventLocations.DAMPES_GRAVE_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True),
-        (EventLocations.DAMPES_WINDMILL_ACCESS, Events.DAMPES_WINDMILL_ACCESS, lambda bundle: is_adult(bundle) and can_use(Items.SONG_OF_TIME, bundle))
+        (EventLocations.GRAVEYARD_DAMPES_GRAVE_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True),
+        (EventLocations.GRAVEYARD_DAMPES_WINDMILL_ACCESS, Events.DAMPES_WINDMILL_ACCESS, lambda bundle: is_adult(bundle) and can_use(Items.SONG_OF_TIME, bundle))
     ])
     # Locations
     add_locations(Regions.GRAVEYARD_DAMPES_GRAVE, world, [
@@ -139,7 +139,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GRAVEYARD_DAMPES_GRAVE, world, [
         (Regions.THE_GRAVEYARD, lambda bundle: True),
-        (Regions.KAK_WINDMILL, lambda bundle: is_adult(bundle) and can_use(Items.SONG_OF_TIME, bundle)) 
+        (Regions.KAK_WINDMILL, lambda bundle: (is_adult(bundle) and can_use(Items.SONG_OF_TIME, bundle)) or (is_child(bundle) and can_ground_jump(bundle))) 
     ])
 
     ## The Graveyard Dampes House
@@ -151,7 +151,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## The Graveyard Warp Pad Region
     # Events
     add_events(Regions.GRAVEYARD_WARP_PAD_REGION, world, [
-        (EventLocations.GRAVEYARD_GOSSIP_STONE_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle))
+        (EventLocations.GRAVEYARD_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle))
     ])
     # Locations
     add_locations(Regions.GRAVEYARD_WARP_PAD_REGION, world, [

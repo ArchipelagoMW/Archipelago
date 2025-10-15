@@ -212,7 +212,7 @@ item_data_table: Dict[Items, SohItemData] = {
     Items.BUY_DEKU_SEEDS30: SohItemData(None, IC.progression, 0),
     #Items.SOLD_OUT: SohItemData( None, IC.progression, 0 ),
     Items.BUY_BLUE_FIRE: SohItemData(None, IC.progression, 0),
-    Items.BUY_BOTTLE_BUG: SohItemData(None, IC.progression, 0, item_groups=["Bottles", "Bottle"]),
+    Items.BUY_BOTTLE_BUG: SohItemData(None, IC.progression, 0),
     Items.BUY_POE: SohItemData(None, IC.progression, 0),
     Items.BUY_FAIRYS_SPIRIT: SohItemData(None, IC.progression, 0),
     Items.BUY_ARROWS10: SohItemData(None, IC.progression, 0),
@@ -245,7 +245,7 @@ item_data_table: Dict[Items, SohItemData] = {
     Items.TYCOON_WALLET: SohItemData(None),
     Items.BRONZE_SCALE: SohItemData(None),
     Items.CHILD_WALLET: SohItemData(None),
-    #Items.BOMBCHU_BAG: SohItemData( 217, IC.progression, 0 ),
+    Items.BOMBCHU_BAG: SohItemData(None),
     #Items.QUIVER_INF: SohItemData( 218, IC.filler, 0 ),
     #Items.BOMB_BAG_INF: SohItemData( 219, IC.filler, 0 ),
     #Items.BULLET_BAG_INF: SohItemData( 220, IC.filler, 0 ),
@@ -278,7 +278,7 @@ item_data_table: Dict[Items, SohItemData] = {
     #Items.DEKU_STICK_CAPACITY30: SohItemData( 247, IC.filler, 0 ),
     Items.HOOKSHOT: SohItemData(None, adult_only=True),
     Items.LONGSHOT: SohItemData(None, adult_only=True),
-    #Items.SCARECROW: SohItemData( 250, IC.filler, 0, adult_only=True),
+    Items.SCARECROW: SohItemData( 250, IC.progression, 0, adult_only=True),
     Items.GUARD_HOUSE_KEY: SohItemData(251, IC.progression, 0, item_groups=["Overworld Keys"]),
     Items.MARKET_BAZAAR_KEY: SohItemData(252, IC.progression, 0, item_groups=["Overworld Keys"]),
     Items.MARKET_POTION_SHOP_KEY: SohItemData(253, IC.progression, 0, item_groups=["Overworld Keys"]),
@@ -303,7 +303,7 @@ item_data_table: Dict[Items, SohItemData] = {
     Items.BACK_TOWER_KEY: SohItemData(272, IC.progression, 0, item_groups=["Overworld Keys"]),
     Items.HYLIA_LAB_KEY: SohItemData(273, IC.progression, 0, item_groups=["Overworld Keys"]),
     Items.FISHING_HOLE_KEY: SohItemData(274, IC.progression, 0, item_groups=["Overworld Keys"]),
-    #Items.DISTANT_SCARECROW: SohItemData( 275, IC.filler, 0, adult_only=True),
+    Items.DISTANT_SCARECROW: SohItemData( 275, IC.progression, 0, adult_only=True),
     Items.STICKS: SohItemData(276, IC.filler, 0, child_only=True),
     Items.NUTS: SohItemData(277, IC.filler, 0),
     Items.EPONA: SohItemData( 278, IC.filler, 0, adult_only=True ),
@@ -360,6 +360,7 @@ progressive_items: dict[str, tuple[str, ...]] = {
     Items.PROGRESSIVE_BOMB_BAG: (Items.BOMB_BAG,),
     Items.PROGRESSIVE_STICK_CAPACITY: (Items.DEKU_STICK_BAG,),
     Items.PROGRESSIVE_NUT_CAPACITY: (Items.DEKU_NUT_BAG,),
+    Items.PROGRESSIVE_BOMBCHU: (Items.BOMBCHU_BAG,),
 }
 
 item_name_groups: dict[str, set[str]] = {}

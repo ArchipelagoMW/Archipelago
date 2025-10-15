@@ -135,7 +135,6 @@ class RainbowBridgeGregModifier(Choice):
     option_off = 0
     option_reward = 1
     option_wildcard = 2
-    visibility = Visibility.none
 
 
 class RainbowBridgeStonesRequired(Range):
@@ -188,14 +187,11 @@ class RainbowBridgeSkullTokensRequired(Range):
     default = 50
 
 
-class GanonsTrialsRequired(Range):
+class SkipGanonsTrials(Toggle):
     """
-    Sets the number of Ganon's Trials required to dispel the barrier.
+    Choose wether or not Ganon's Trials are completed from the start.
     """
-    display_name = "Ganon's Trials Required"
-    range_start = 0
-    range_end = 6
-    default = 0
+    display_name = "Skip Ganon's Trials"
 
 
 class TriforceHunt(Toggle):
@@ -484,11 +480,35 @@ class ShuffleBossSouls(Choice):
     default = 0
 
 
-class ShuffleFairies(Toggle):
+class ShuffleFountainFairies(Toggle):
     """
-    Shuffle fairies from wonder spots, playing Song of Storms and other regular songs for Gossip Stones and in Fairy Fountains.
+    Shuffle fairies in fountain locations.
+    This includes the sets of fairies found in Ganon's Castle and the Desert Oasis.
     """
-    display_name = "Shuffle Fairies"
+    display_name = "Shuffle Fairies in Fountains"
+
+
+class ShuffleStoneFairies(Toggle):
+    """
+    Shuffle fairies from gossip stone locations.
+    """
+    display_name = "Shuffle Gossip Stone Fairies"
+
+
+class ShuffleBeanFairies(Toggle):
+    """
+    Shuffle fairies from magic bean locations.
+    """
+    display_name = "Shuffle Bean Fairies"
+
+
+class ShuffleSongFairies(Toggle):
+    """
+    Shuffle fairy spots. These are spots where a big fairy is revealed by a song.
+
+    This excludes gossip stones and magic bean locations.
+    """
+    display_name = "Shuffle Fairy Spots"
 
 
 class ShuffleGrass(Choice):
@@ -556,7 +576,7 @@ class GanonsCastleBossKey(Choice):
     default = 5
 
 
-class GanonsCastleBossKeyGregModifier(Toggle):
+class GanonsCastleBossKeyGregModifier(Choice):
     """
     If Ganons Castle Boss Key is enabled, Greg will count toward the LACS goal.
     Off - Greg won't change the LACS goal requirement.
@@ -567,7 +587,6 @@ class GanonsCastleBossKeyGregModifier(Toggle):
     option_off = 0
     option_reward = 1
     option_wildcard = 2
-    visibility = Visibility.none
 
 
 class GanonsCastleBossKeyStonesRequired(Range):
@@ -735,14 +754,11 @@ class StartingAge(Choice):
     Decide whether to start as child Link or adult Link.
     Child Link starts in Link's House in Kokiri Forest.
     Adult Link starts in the Temple of Time.
-
-    TODO: This is hidden for now until it's implemented mod-side.
     """
     display_name = "Starting Age"
     option_child = 0
     option_adult = 1
     default = 0
-    visibility = Visibility.none
 
 
 class Shuffle100GSReward(Toggle):
@@ -751,7 +767,6 @@ class Shuffle100GSReward(Toggle):
     You can still talk to him multiple times to get Huge Rupees.
     """
     display_name = "Shuffle 100 GS Reward"
-    visibility = Visibility.none
 
 
 class IceTrapCount(Range):
@@ -791,7 +806,7 @@ class SohOptions(PerGameCommonOptions):
     rainbow_bridge_dungeons_required: RainbowBridgeDungeonsRequired
     rainbow_bridge_skull_tokens_required: RainbowBridgeSkullTokensRequired
     rainbow_bridge_greg_modifier: RainbowBridgeGregModifier
-    ganons_trials_required: GanonsTrialsRequired
+    skip_ganons_trials: SkipGanonsTrials
     triforce_hunt: TriforceHunt
     triforce_hunt_required_pieces: TriforceHuntRequiredPieces
     triforce_hunt_extra_pieces_percentage: TriforceHuntExtraPiecesPercentage
@@ -819,7 +834,10 @@ class SohOptions(PerGameCommonOptions):
     shuffle_frog_song_rupees: ShuffleFrogSongRupees
     shuffle_adult_trade_items: ShuffleAdultTradeItems
     shuffle_boss_souls: ShuffleBossSouls
-    shuffle_fairies: ShuffleFairies
+    shuffle_fountain_fairies: ShuffleFountainFairies
+    shuffle_stone_fairies: ShuffleStoneFairies
+    shuffle_bean_fairies: ShuffleBeanFairies
+    shuffle_song_fairies: ShuffleSongFairies
     shuffle_grass: ShuffleGrass
     shuffle_dungeon_rewards: ShuffleDungeonRewards
     maps_and_compasses: MapsAndCompasses
@@ -870,7 +888,7 @@ soh_option_groups = [
         RainbowBridgeDungeonsRequired,
         RainbowBridgeSkullTokensRequired,
         RainbowBridgeGregModifier,
-        GanonsTrialsRequired,
+        SkipGanonsTrials,
         TriforceHunt,
         TriforceHuntRequiredPieces,
         TriforceHuntExtraPiecesPercentage,
@@ -921,9 +939,12 @@ soh_option_groups = [
         # Merchant prices
         ShuffleFrogSongRupees,
         ShuffleAdultTradeItems,
-        # 100 skulls reward shuffle
+        Shuffle100GSReward,
         ShuffleBossSouls,
-        ShuffleFairies,
+        ShuffleFountainFairies,
+        ShuffleStoneFairies,
+        ShuffleBeanFairies,
+        ShuffleSongFairies,
         ShuffleGrass,
     ]),
     OptionGroup("Shuffle Dungeon Items", [
@@ -944,7 +965,6 @@ soh_option_groups = [
     ]),
     # todo: decide whether these should be in the yaml or just let you change them locally on the fly
     OptionGroup("Timesavers", [
-        # Cuccoos to Return
         BigPoeTargetCount,
         SkipChildZelda,
         SkipEponaRace,

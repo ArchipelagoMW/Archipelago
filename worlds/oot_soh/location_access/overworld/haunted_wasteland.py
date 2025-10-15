@@ -4,13 +4,12 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 class EventLocations(str, Enum):
-    HAUNTED_WATELAND_FAIRY_POT = "Haunted Wasteland Fairy Pot"
-    HAUNTED_WATELAND_NUT_POT = "Haunted Wasteland Nut Pot"
-    HAUNTED_WATELAND_CARPET_MERCHANT = "Haunted Wasteland Carpet Merchant"
+    WASTELAND_FAIRY_POT = "Wasteland Fairy Pot"
+    WASTELAND_NUT_POT = "Wasteland Nut Pot"
+    WASTELAND_CARPET_SALESMAN_STORE = "Wasteland Carpet Salesman Store"
+
 
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-    
     ## Haunted Wasteland Near Fortress
     # Locations
     add_locations(Regions.WASTELAND_NEAR_FORTRESS, world, [
@@ -25,18 +24,18 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Haunted Wasteland
     # Events
     add_events(Regions.HAUNTED_WASTELAND, world, [
-        (EventLocations.HAUNTED_WATELAND_FAIRY_POT, Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
-        (EventLocations.HAUNTED_WATELAND_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True)
+        (EventLocations.WASTELAND_FAIRY_POT, Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
+        (EventLocations.WASTELAND_NUT_POT, Events.CAN_FARM_NUTS, lambda bundle: True)
     ])
     if world.options.shuffle_merchants.value == 0 or world.options.shuffle_merchants.value == 1:
         add_events(Regions.HAUNTED_WASTELAND, world, [
-            (EventLocations.HAUNTED_WATELAND_CARPET_MERCHANT, Events.CARPET_MERCHANT, lambda bundle: has_item(Items.ADULT_WALLET, bundle) and (can_jump_slash(bundle) or can_use(Items.HOVER_BOOTS, bundle)))
+            (EventLocations.WASTELAND_CARPET_SALESMAN_STORE, Events.CARPET_MERCHANT, lambda bundle: has_item(Items.ADULT_WALLET, bundle) and (can_jump_slash(bundle) or can_use(Items.HOVER_BOOTS, bundle)))
         ])
     # Locations
     add_locations(Regions.HAUNTED_WASTELAND, world, [
         (Locations.WASTELAND_CHEST, lambda bundle: has_fire_source(bundle)),
         (Locations.WASTELAND_CARPET_SALESMAN, lambda bundle: has_item(Items.ADULT_WALLET, bundle) and (can_jump_slash(bundle) or can_use(Items.HOVER_BOOTS, bundle))),
-        (Locations.WASTELAND_GS, lambda bundle: hookshot_or_boomerang(bundle)),
+        (Locations.WASTELAND_GS, lambda bundle: hookshot_or_boomerang(bundle) or (is_adult(bundle) and can_ground_jump(bundle) and can_jump_slash(bundle))),
         (Locations.WASTELAND_NEAR_GS_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.WASTELAND_NEAR_GS_POT2, lambda bundle: can_break_pots(bundle)),
         (Locations.WASTELAND_NEAR_GS_POT3, lambda bundle: can_break_pots(bundle)),

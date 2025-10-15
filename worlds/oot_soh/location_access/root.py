@@ -6,29 +6,24 @@ if TYPE_CHECKING:
 
 class EventLocations(str, Enum):
     ROOT_AMMO_DROP = "Root Ammo Drop"
-    ROOT_TIME_TRAVEL = "Root Time Travel"
-    ROOT_SHIELD = "Root Shield"
+    ROOT_DEKU_SHIELD = "Root Deku Shield"
+    ROOT_HYLIAN_SHIELD = "Root Hylian Shield"
     TRIFORCE_HUNT_COMPLETION = "Triforce Hunt Completion"
+    ZELDAS_LETTER_FROM_SKIP_OPTION = "Zeldas Letter From Skip Option"
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-
     ## Root
     # Events
-    add_events(Regions.KOKIRI_FOREST, world, [
-        (EventLocations.ROOT_TIME_TRAVEL, Events.TIME_TRAVEL, lambda bundle: has_item(Events.CLEARED_DEKU_TREE, bundle)), # TODO: Remove this when it's on Temple of Time region
-        (EventLocations.ROOT_SHIELD, Events.CAN_BUY_DEKU_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
-        (EventLocations.TRIFORCE_HUNT_COMPLETION, Events.GAME_COMPLETED,  lambda bundle:
-         (world.options.triforce_hunt == 1 and 
-         has_item(Items.TRIFORCE_PIECE, bundle, world.options.triforce_hunt_required_pieces.value)) or 
-         has_item(Events.GAME_COMPLETED, bundle))
+    add_events(Regions.ROOT, world, [
+        (EventLocations.ROOT_DEKU_SHIELD, Items.BUY_DEKU_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
+        (EventLocations.ROOT_HYLIAN_SHIELD, Items.BUY_HYLIAN_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
     ])
-
-    connect_regions(Regions.TEMPLE_OF_TIME, world, [
-        (Regions.KOKIRI_FOREST, lambda bundle: True)
-    ])
-
+    if bool(world.options.triforce_hunt):
+        add_events(Regions.ROOT, world, [
+            (EventLocations.TRIFORCE_HUNT_COMPLETION, Events.GAME_COMPLETED, lambda bundle:
+            (has_item(Items.TRIFORCE_PIECE, bundle, world.options.triforce_hunt_required_pieces.value)))
+        ])
     # Locations
     add_locations(Regions.ROOT, world, [
         (Locations.LINKS_POCKET, lambda bundle: True)
@@ -37,6 +32,17 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.ROOT, world, [
         (Regions.ROOT_EXITS, lambda bundle: starting_age(bundle) or has_item(Events.TIME_TRAVEL, bundle))
     ])
+    
+    ## Event and connection for Zeldas Letter/Impas Song
+    if(bool(world.options.skip_child_zelda)):
+        # Events
+        add_events(Regions.ROOT, world, [
+            (EventLocations.ZELDAS_LETTER_FROM_SKIP_OPTION, Items.ZELDAS_LETTER, lambda bundle: True)
+        ])
+        # Connections
+        connect_regions(Regions.ROOT, world, [
+            (Regions.HC_GARDEN_SONG_FROM_IMPA, lambda bundle: True)
+        ])
     
     ## Root Exits
     # Connections

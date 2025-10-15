@@ -5,12 +5,10 @@ if TYPE_CHECKING:
 
 class EventLocations(str, Enum):
     SPIRIT_TEMPLE_BEGINNING_NUT_CRATE = "Spirit Temple Nut Crate"
-    SPIRIT_TEMPLE_BOSS_TWINROVA = "Spirit Temple Boss Twinrova"
+    SPIRIT_TEMPLE_TWINROVA = "Spirit Temple Twinrova"
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-    
     ## Spirit Temple Entryway
     # Connections
     connect_regions(Regions.SPIRIT_TEMPLE_ENTRYWAY, world, [
@@ -63,7 +61,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.SPIRIT_TEMPLE_CHILD_CLIMB, world, [
-        (Regions.SPIRIT_TEMPLE_CENTRAL_CHAMBER, lambda bundle: has_explosives(bundle) or (world.options.sunlight_arrows.value and can_use(Items.LIGHT_ARROW, bundle)))
+        (Regions.SPIRIT_TEMPLE_CENTRAL_CHAMBER, lambda bundle: has_explosives(bundle) or (bool(world.options.sunlight_arrows) and can_use(Items.LIGHT_ARROW, bundle)))
     ])
 
     ## Spirit Temple Early Adult
@@ -121,7 +119,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Spirit Temple Beyond Central Locked Door
     # Locations
     add_locations(Regions.SPIRIT_TEMPLE_BEYOND_CENTRAL_LOCKED_DOOR, world, [
-        (Locations.SPIRIT_TEMPLE_NEAR_FOUR_ARMOS_CHEST, lambda bundle: (can_use(Items.MIRROR_SHIELD, bundle) or (world.options.sunlight_arrows.value and can_use(Items.LIGHT_ARROW, bundle))) and has_explosives(bundle)),
+        (Locations.SPIRIT_TEMPLE_NEAR_FOUR_ARMOS_CHEST, lambda bundle: (can_use(Items.MIRROR_SHIELD, bundle) or (bool(world.options.sunlight_arrows) and can_use(Items.LIGHT_ARROW, bundle))) and has_explosives(bundle)),
         (Locations.SPIRIT_TEMPLE_HALLWAY_LEFT_INVISIBLE_CHEST, lambda bundle: (can_do_trick(Tricks.LENS_SPIRIT, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)) and has_explosives(bundle)),
         (Locations.SPIRIT_TEMPLE_HALLWAY_RIGHT_INVISIBLE_CHEST, lambda bundle: (can_do_trick(Tricks.LENS_SPIRIT, bundle) or can_use(Items.LENS_OF_TRUTH, bundle)) and has_explosives(bundle)),
         (Locations.SPIRIT_TEMPLE_BEAMOS_HALL_POT1, lambda bundle: can_break_pots(bundle)),
@@ -136,7 +134,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.SPIRIT_TEMPLE_BEYOND_FINAL_LOCKED_DOOR, world, [
         (Locations.SPIRIT_TEMPLE_BOSS_KEY_CHEST, lambda bundle: can_use(Items.ZELDAS_LULLABY, bundle) and ((take_damage(bundle) and can_do_trick(Tricks.FLAMING_CHESTS, bundle)) or (can_use(Items.FAIRY_BOW, bundle) and can_use(Items.HOOKSHOT, bundle)))),
-        (Locations.SPIRIT_TEMPLE_TOPMOST_CHEST, lambda bundle: (can_use(Items.MIRROR_SHIELD, bundle) and (can_jump_slash(bundle) or has_explosives(bundle) or (can_do_trick(Tricks.HOOKSHOT_EXTENSION) and (can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.HOOKSHOT], bundle))))) or (world.options.sunlight_arrows.value and can_use(Items.LIGHT_ARROW, bundle))),
+        (Locations.SPIRIT_TEMPLE_TOPMOST_CHEST, lambda bundle: (can_use(Items.MIRROR_SHIELD, bundle) and (can_jump_slash(bundle) or has_explosives(bundle) or (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and (can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.HOOKSHOT], bundle))))) or (bool(world.options.sunlight_arrows) and can_use(Items.LIGHT_ARROW, bundle))),
         (Locations.SPIRIT_TEMPLE_ADULT_CLIMB_LEFT_HEART, lambda bundle: can_use(Items.HOOKSHOT, bundle)),
         (Locations.SPIRIT_TEMPLE_ADULT_CLIMB_RIGHT_HEART, lambda bundle: can_use(Items.HOOKSHOT, bundle))
     ])
@@ -162,15 +160,15 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Spirit Temple Boss Room
     # Events
     add_events(Regions.SPIRIT_TEMPLE_BOSS_ROOM, world, [
-        (EventLocations.SPIRIT_TEMPLE_BOSS_TWINROVA, Events.CLEARED_SPIRIT_TEMPLE, lambda bundle: can_kill_enemy(bundle, Enemies.TWINROVA))
+        (EventLocations.SPIRIT_TEMPLE_TWINROVA, Events.SPIRIT_TEMPLE_COMPLETED, lambda bundle: can_kill_enemy(bundle, Enemies.TWINROVA))
     ])
     # Locations
     add_locations(Regions.SPIRIT_TEMPLE_BOSS_ROOM, world, [
-        (Locations.SPIRIT_TEMPLE_TWINROVA_HEART_CONTAINER, lambda bundle: has_item(Events.CLEARED_SPIRIT_TEMPLE, bundle)),
-        (Locations.TWINROVA, lambda bundle: has_item(Events.CLEARED_SPIRIT_TEMPLE, bundle))
+        (Locations.SPIRIT_TEMPLE_TWINROVA_HEART_CONTAINER, lambda bundle: has_item(Events.SPIRIT_TEMPLE_COMPLETED, bundle)),
+        (Locations.TWINROVA, lambda bundle: has_item(Events.SPIRIT_TEMPLE_COMPLETED, bundle))
     ])
     # Connections
     connect_regions(Regions.SPIRIT_TEMPLE_BOSS_ROOM, world, [
         (Regions.SPIRIT_TEMPLE_BOSS_ENTRYWAY, lambda bundle: False),
-        (Regions.DESERT_COLOSSUS, lambda bundle: has_item(Events.CLEARED_SPIRIT_TEMPLE, bundle))
+        (Regions.DESERT_COLOSSUS, lambda bundle: has_item(Events.SPIRIT_TEMPLE_COMPLETED, bundle))
     ])
