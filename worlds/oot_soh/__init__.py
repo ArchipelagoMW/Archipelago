@@ -11,6 +11,7 @@ from .Enums import *
 from .ItemPool import create_item_pool
 from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
+from .ShopItems import fill_shop_items
 
 import logging
 logger = logging.getLogger("SOH_OOT")
@@ -45,7 +46,11 @@ class SohWorld(World):
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
+        self.item_pool = list[SohItem]()
         self.included_locations = dict[str, int]()
+        self.shop_prices = dict[str, int]()
+        self.shop_vanilla_items = dict[str, str]()
+        self.scrub_prices = dict[str, int]()
 
     def generate_early(self) -> None:
         #input("\033[33m WARNING: Ship of Harkinian currently only supports SOME LOGIC! There may still be impossible generations. If you're OK with this, press Enter to continue. \033[0m")
@@ -73,6 +78,9 @@ class SohWorld(World):
     def set_rules(self) -> None:
         # Completion condition.
         self.multiworld.completion_condition[self.player] = lambda state: state.has(Events.GAME_COMPLETED.value, self.player)
+
+    def pre_fill(self) -> None:
+        fill_shop_items(self)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
@@ -146,8 +154,11 @@ class SohWorld(World):
             "skeleton_key": self.options.skeleton_key.value,
             "starting_age": self.options.starting_age.value,
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
-            "ice_trap_count": self.options.ice_trap_count.value,
-            "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement.value
+            "ice_trap_count": self.options.ice_trap_count,
+            "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement,
+            "shop_prices": self.shop_prices,
+            "shop_vanilla_items": self.shop_vanilla_items,
+            "scrub_prices": self.scrub_prices,
         }
 
     def collect(self, state: CollectionState, item: Item) -> bool:

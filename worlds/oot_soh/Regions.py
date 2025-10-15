@@ -2,6 +2,7 @@ from typing import Dict, List, NamedTuple, TYPE_CHECKING
 from worlds.AutoWorld import LogicMixin
 from BaseClasses import MultiWorld, Region
 from .Enums import *
+from .ShopItems import fill_shop_items
 from .Locations import SohLocation, base_location_table, \
     gold_skulltula_overworld_location_table, \
     gold_skulltula_dungeon_location_table, \
@@ -120,9 +121,10 @@ def create_regions_and_locations(world: "SohWorld") -> None:
         # Gold Skulltulas (Dungeon)
         world.included_locations.update(gold_skulltula_dungeon_location_table)
 
-        # Shops
-        if world.options.shuffle_shops:
-            world.included_locations.update(shops_location_table)
+        # Shops, Add all shop locations vanilla items will get prefilled and locked
+        # Todo: maybe we have to add the vanilla locations as events (id = None)
+        # check if vanilla items show up in the list of checks
+        world.included_locations.update(shops_location_table)
 
         # Scrubs
         if world.options.shuffle_scrubs:
@@ -299,3 +301,4 @@ def place_locked_items(world: "SohWorld") -> None:
         token_item = world.create_item(Items.GOLD_SKULLTULA_TOKEN.value)
         for location_name, address in gold_skulltula_dungeon_location_table.items():
             world.get_location(location_name).place_locked_item(token_item)
+
