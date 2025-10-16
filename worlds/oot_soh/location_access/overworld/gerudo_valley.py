@@ -4,13 +4,13 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     GV_BUG_ROCK = "GV Bug Rock"
     GV_GOSSIP_STONE_SONG_FAIRY = "GV Gossip Stone Song Fairy"
     GV_BEAN_SOIL = "GV Bean Soil"
     GV_BEAN_PATCH = "GV Bean Patch"
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     GV_BEAN_PLANTED = "GV Bean Planted"
 
 

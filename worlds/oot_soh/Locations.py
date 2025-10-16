@@ -1,6 +1,6 @@
 from .Enums import Locations
 
-from typing import Dict, TYPE_CHECKING
+from typing import Dict
 
 from BaseClasses import Location
 

@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-class EventsLocations(str, Enum):
+class EventsLocations(StrEnum):
     TH_1_TORCH_CARPENTER_CELL = "TH 1 Torch Carpenter Cell"
     TH_DOUBLE_CELL_CARPENTER_CELL = "TH Double Cell Carpenter Cell"
     TH_DEAD_END_CARPENTER_CELL = "TH Dead End Carpenter Cell"
@@ -11,7 +11,7 @@ class EventsLocations(str, Enum):
     TH_RESCUED_ALL_CARPENTERS = "TH Rescued All Carpenters"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     TH_1_TORCH_CELL_CARPENTER_FREED = "TH 1 Torch Cell Carpenter Freed"
     TH_DOUBLE_CELL_CARPENTER_FREED = "TH Double Cell Carpenter Freed"
     TH_DEAD_END_CELL_CARPENTER_FREED = "TH Dead End Cell Carpenter Freed"

@@ -3,13 +3,13 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     DESERT_COLOSSUS_FAIRY_POND_COLOSSUS = "Desert Colossus Fairy Pond Colossus"
     DESERT_COLOSSUS_FAIRY_POND_OASIS = "Desert Colossus Fairy Pond Oasis"
     DESERT_COLOSSUS_BUG_ROCK = "Desert Colossus Bug Rock"
     DESERT_COLOSSUS_BEAN_PATCH = "Desert Colossus Bean Patch"
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     DESERT_COLOSSUS_BEAN_PLANTED = "Desert Colossus Bean Planted"
 
 

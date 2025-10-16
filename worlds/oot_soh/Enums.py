@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum, IntEnum
 from functools import total_ordering #allows defining orders with fewer functions; with this decorator only __eq__ and __lt__ is needed, and since enums implement __eq__ we can just implement __lt__
 
-class Regions(str, Enum):
+class Regions(StrEnum):
     """List of all region enums"""
 
     ROOT = "Menu"
@@ -698,7 +698,7 @@ class Regions(str, Enum):
 #TODO go through this and Locations for any that aren't needed or should be events
 #For any such entries, remove them from Items and Locations and add to Events. Also, set up event registration.
 #Later, we'll go through the events and replace some with other methods
-class Items(str, Enum):
+class Items(StrEnum):
     KOKIRI_SWORD = "Kokiri Sword"
     MASTER_SWORD = "Master Sword"
     GIANTS_KNIFE = "Giant's Knife"
@@ -979,7 +979,7 @@ class Items(str, Enum):
     EPONA = "Epona"
     MAX = "Max"
 
-class Locations(str, Enum):
+class Locations(StrEnum):
     LINKS_POCKET = "Link's Pocket"
     QUEEN_GOHMA = "Queen Gohma"
     KING_DODONGO = "King Dodongo"
@@ -3439,7 +3439,7 @@ class Locations(str, Enum):
     HF_INSIDE_FENCE_GROTTO_BEEHIVE = "HF Inside Fence Grotto Beehive"
     HF_FENCE_GROTTO_STORMS_FAIRY = "HF Fence Grotto Storms Fairy"
 
-class Enemies(str, Enum):
+class Enemies(StrEnum):
     GOLD_SKULLTULA = "gold_skulltula"
     BIG_SKULLTULA = "big_skulltula"
     DODONGO = "dodongo"
@@ -3495,7 +3495,7 @@ class Enemies(str, Enum):
     OCTOROK = "octorok"
     
 @total_ordering
-class EnemyDistance(Enum):
+class EnemyDistance(IntEnum):
     CLOSE = 1
     SHORT_JUMPSLASH = 2
     MASTER_SWORD_JUMPSLASH = 3
@@ -3509,7 +3509,7 @@ class EnemyDistance(Enum):
     def __lt__(self, other):
         return self.value < other.value
 
-class Events(str, Enum):
+class Events(StrEnum):
     CAN_FARM_STICKS = "Can Farm Sticks"
     CAN_FARM_NUTS = "Can Farm Nuts"
     CAN_BUY_BEANS = "Can Buy Beans"
@@ -3550,14 +3550,14 @@ class Events(str, Enum):
     KAKARIKO_GATE_OPEN = "Kakariko Gate Open"
     GAME_COMPLETED = "Game Completed"
 
-class Ages(str, Enum):
+class Ages(StrEnum):
     CHILD = "child"
     ADULT = "adult"
     BOTH = "both"
-    null = None
+    null = "none"
 
 
-class Tricks(str, Enum):
+class Tricks(StrEnum):
     # General Tricks
     VISIBLE_COLLISION = "Visible Collision"
     GROTTOS_WITHOUT_AGONY = "Grottos Without Agony"

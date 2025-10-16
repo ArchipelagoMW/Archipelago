@@ -1,9 +1,8 @@
 from typing import List, Dict, TYPE_CHECKING
 from worlds.generic.Rules import add_rule
 from .LogicHelpers import rule_wrapper, can_afford
-from Fill import fill_restrictive, FillError
-from BaseClasses import MultiWorld, CollectionState
-from .Regions import dungeon_reward_item_mapping
+from Fill import fill_restrictive
+from BaseClasses import CollectionState
 
 from .Enums import *
 
@@ -171,7 +170,7 @@ def fill_shop_items(world: "SohWorld") -> None:
         vanilla_shop_slots += list(shop.keys())[0: num_vanilla]
 
     vanilla_shop_locations = [world.get_location(slot) for slot in vanilla_shop_slots]
-    vanilla_items = [world.create_item(item.value) for item in vanilla_pool]
+    vanilla_items = [world.create_item(item) for item in vanilla_pool]
 
     # create a filled copy of the state so the multiworld can place the vanilla shop items using logic
     prefill_state = CollectionState(world.multiworld)
@@ -200,7 +199,7 @@ def no_shop_shuffle(world: "SohWorld") -> None:
     for region, shop in all_shop_locations:
         for slot, item in shop.items():
             world.shop_prices[slot] = vanilla_shop_prices[item]
-            world.get_location(slot).place_locked_item(world.create_item(item.value))
+            world.get_location(slot).place_locked_item(world.create_item(item))
             world.get_location(slot).address = None
             world.shop_vanilla_items[slot] = item.value
 

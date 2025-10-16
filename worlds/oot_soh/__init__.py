@@ -67,13 +67,13 @@ class SohWorld(World):
         # when adding another progressive item that is option-dependent like these,
         # be sure to also update LogicHelpers.increment_current_count with it too
         if not self.options.shuffle_swim:
-            self.push_precollected(self.create_item(Items.BRONZE_SCALE.value))
+            self.push_precollected(self.create_item(Items.BRONZE_SCALE))
         if not self.options.shuffle_deku_stick_bag:
-            self.push_precollected(self.create_item(Items.DEKU_STICK_BAG.value))
+            self.push_precollected(self.create_item(Items.DEKU_STICK_BAG))
         if not self.options.shuffle_deku_nut_bag:
-            self.push_precollected(self.create_item(Items.DEKU_NUT_BAG.value))
+            self.push_precollected(self.create_item(Items.DEKU_NUT_BAG))
         if not self.options.bombchu_bag:
-            self.push_precollected(self.create_item(Items.BOMBCHU_BAG.value))
+            self.push_precollected(self.create_item(Items.BOMBCHU_BAG))
         
         create_item_pool(self)
 
@@ -94,7 +94,7 @@ class SohWorld(World):
                 prefill_state.collect(item, False)
             for region, shop in all_shop_locations:
                 for slot, item in shop.items():
-                    prefill_state.collect(self.create_item(item.value), False)
+                    prefill_state.collect(self.create_item(item), False)
             prefill_state.sweep_for_advancements()
 
             dungeon_reward_locations = [self.get_location(location.value) for location in dungeon_reward_item_mapping.keys()]
