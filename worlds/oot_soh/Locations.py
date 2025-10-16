@@ -1,14 +1,12 @@
 from .Enums import Locations
 
-from typing import Dict, TYPE_CHECKING
-
 from BaseClasses import Location
 
 
 class SohLocation(Location):
     game = "Ship of Harkinian"
 
-base_location_table: Dict[str, int] = {
+base_location_table: dict[str, int] = {
     # Commented out locations that aren't added as shuffle options yet, or are MQ locations.
     # Some are disabled because they're not real locations (ex Ganon and hint locations).
 
@@ -485,7 +483,7 @@ base_location_table: Dict[str, int] = {
     #"Market Mask Shop Hint": 1620,
 }
 
-gold_skulltula_overworld_location_table: Dict[str, int] = {
+gold_skulltula_overworld_location_table: dict[str, int] = {
     "KF GS Know It All House": 31,
     "KF GS Bean Patch": 32,
     "KF GS House of Twins": 33,
@@ -544,7 +542,7 @@ gold_skulltula_overworld_location_table: Dict[str, int] = {
     "HC OGC GS": 347,
 }
 
-gold_skulltula_dungeon_location_table: Dict[str, int] = {
+gold_skulltula_dungeon_location_table: dict[str, int] = {
     "Deku Tree GS Compass Room": 354,
     "Deku Tree GS Basement Vines": 355,
     "Deku Tree GS Basement Gate": 356,
@@ -635,7 +633,7 @@ gold_skulltula_dungeon_location_table: Dict[str, int] = {
     #"Ice Cavern MQ GS Scarecrow": 663,
 }
 
-shops_location_table: Dict[str, int] = {
+shops_location_table: dict[str, int] = {
     "KF Shop Item 1": 34,
     "KF Shop Item 2": 35,
     "KF Shop Item 3": 36,
@@ -702,7 +700,7 @@ shops_location_table: Dict[str, int] = {
     "ZD Shop Item 8": 254,
 }
 
-scrubs_location_table: Dict[str, int] = {
+scrubs_location_table: dict[str, int] = {
     "LW Deku Scrub Near Bridge": 51,
     "LW Deku Scrub Near Deku Theater Left": 52,
     "LW Deku Scrub Near Deku Theater Right": 53,
@@ -751,7 +749,7 @@ scrubs_location_table: Dict[str, int] = {
     #"Ganon's Castle MQ Deku Scrub Right": 739,
 }
 
-trade_items_location_table: Dict[str, int] = {
+trade_items_location_table: dict[str, int] = {
     "LW Trade Cojiro": 46,
     "LW Trade Odd Potion": 50,
     "Kak Trade Odd Mushroom": 141,
@@ -763,14 +761,14 @@ trade_items_location_table: Dict[str, int] = {
     "GV Trade Saw": 313,
 }
 
-merchants_items_location_table: Dict[str, int] = {
+merchants_items_location_table: dict[str, int] = {
     "Kak Granny's Shop": 142,
     "GC Medigoron": 198,
     "ZR Magic Bean Salesman": 225,
     "Wasteland Carpet Salesman": 336,
 }
 
-cows_location_table: Dict[str, int] = {
+cows_location_table: dict[str, int] = {
     "KF Links House Cow": 30,
     "HF Cow Grotto Cow": 69,
     "LLR Stables Left Cow": 125,
@@ -783,7 +781,7 @@ cows_location_table: Dict[str, int] = {
     #"Jabu Jabus Belly MQ Cow": 421,
 }
 
-frogs_location_table: Dict[str, int] = {
+frogs_location_table: dict[str, int] = {
     "ZR Frogs Zelda's Lullaby": 227,
     "ZR Frogs Epona's Song": 228,
     "ZR Frogs Saria's Song": 229,
@@ -791,7 +789,7 @@ frogs_location_table: Dict[str, int] = {
     "ZR Frogs Song of Time": 231,
 }
 
-beehives_location_table: Dict[str, int] = {
+beehives_location_table: dict[str, int] = {
     "KF Storms Grotto Beehive Left": 1577,
     "KF Storms Grotto Beehive Right": 1578,
     "LW Tunnel Grotto Beehive Left": 1579,
@@ -826,7 +824,7 @@ beehives_location_table: Dict[str, int] = {
     "Colossus Deku Scrub Grotto Beehive": 1608,
 }
 
-pots_overworld_location_table: Dict[str, int] = {
+pots_overworld_location_table: dict[str, int] = {
     "KF Links House Pot": 741,
     "KF Twins House Pot 1": 742,
     "KF Twins House Pot 2": 743,
@@ -970,7 +968,7 @@ pots_overworld_location_table: Dict[str, int] = {
     "ZF Near Jabu Pot 4": 881,
 }
 
-pots_dungeon_location_table: Dict[str, int] = {
+pots_dungeon_location_table: dict[str, int] = {
     "Dodongos Cavern Lizalfos Pot 1": 882,
     "Dodongos Cavern Lizalfos Pot 2": 883,
     "Dodongos Cavern Lizalfos Pot 3": 884,
@@ -1372,7 +1370,7 @@ pots_dungeon_location_table: Dict[str, int] = {
     #"Ganon's Castle MQ Spirit Trial Pot 2": 1280,
 }
 
-crates_overworld_location_table: Dict[str, int] = {
+crates_overworld_location_table: dict[str, int] = {
     "GV Freestanding PoH Crate": 1281,
     "GV Near Cow Crate": 1282,
     #"GV Near Bridge Crate 1": 1283,
@@ -1453,7 +1451,7 @@ crates_overworld_location_table: Dict[str, int] = {
     "LH Lab Crate": 1358,
 }
 
-crates_dungeon_location_table: Dict[str, int] = {
+crates_dungeon_location_table: dict[str, int] = {
     #"Deku Tree MQ Lobby Crate": 1359,
     #"Deku Tree MQ Slingshot Room Crate 1": 1360,
     #"Deku Tree MQ Slingshot Room Crate 2": 1361,
@@ -1631,7 +1629,7 @@ crates_dungeon_location_table: Dict[str, int] = {
     #"Spirit Temple MQ Beamos Small Crate": 1533,
 }
 
-freestanding_overworld_location_table: Dict[str, int] = {
+freestanding_overworld_location_table: dict[str, int] = {
     "KF Boulder Maze First Rupee": 1635,
     "KF Boulder Maze Second Rupee": 1636,
     "KF Bridge Rupee": 1637,
@@ -1737,7 +1735,7 @@ freestanding_overworld_location_table: Dict[str, int] = {
     "ZF Bottom Northwest Outer Rupee": 1737,
 }
 
-freestanding_dungeon_location_table: Dict[str, int] = {
+freestanding_dungeon_location_table: dict[str, int] = {
     "Deku Tree Lobby Lower Heart": 1738,
     "Deku Tree Lobby Upper Heart": 1739,
     "Deku Tree Final Room Left Front Heart": 1740,
@@ -1838,7 +1836,7 @@ freestanding_dungeon_location_table: Dict[str, int] = {
     #"Ganon's Castle MQ Light Trial Left Heart": 1835,
 }
 
-fairies_fountain_location_table: Dict[str, int] = {
+fairies_fountain_location_table: dict[str, int] = {
 "SFM Fairy Grotto Fairy 1": 1836,
     "SFM Fairy Grotto Fairy 2": 1837,
     "SFM Fairy Grotto Fairy 3": 1838,
@@ -1913,7 +1911,7 @@ fairies_fountain_location_table: Dict[str, int] = {
     "Colossus Oasis Fairy 8": 1907,
 }
 
-fairies_stone_location_table: Dict[str, int] = {
+fairies_stone_location_table: dict[str, int] = {
     "Market ToT Left Gossip Stone Fairy": 1938,
     "Market ToT Left Gossip Stone Big Fairy": 1939,
     "Market ToT Left Center Gossip Stone Fairy": 1940,
@@ -1998,7 +1996,7 @@ fairies_stone_location_table: Dict[str, int] = {
     "DMC Upper Grotto Gossip Stone Big Fairy": 2019,
 }
 
-fairies_bean_location_table: Dict[str, int] = {
+fairies_bean_location_table: dict[str, int] = {
     "ZR Bean Sprout Fairy 1": 1908,
     "ZR Bean Sprout Fairy 2": 1909,
     "ZR Bean Sprout Fairy 3": 1910,
@@ -2031,7 +2029,7 @@ fairies_bean_location_table: Dict[str, int] = {
     "DMT Bean Sprout Fairy 3": 1937,
 }
 
-fairies_song_location_table: Dict[str, int] = {
+fairies_song_location_table: dict[str, int] = {
     "LH Island Sun's Song Fairy": 2020,
     "HF Pond Song of Storms Fairy": 2021,
     "HF Deku Scrub Grotto Storms Fairy": 2022,
@@ -2063,7 +2061,7 @@ fairies_song_location_table: Dict[str, int] = {
     #"Bottom of the Well MQ Basement Sun's Song Fairy": 2048,
 }
 
-grass_overworld_location_table: Dict[str, int] = {
+grass_overworld_location_table: dict[str, int] = {
     "KF Child Grass 1": 2049,
     "KF Child Grass 2": 2050,
     "KF Child Grass 3": 2051,
@@ -2283,7 +2281,7 @@ grass_overworld_location_table: Dict[str, int] = {
     "ZR Open Grotto Grass 4": 2265,
 }
 
-grass_dungeon_location_table: Dict[str, int] = {
+grass_dungeon_location_table: dict[str, int] = {
     "Deku Tree Lobby Grass 1": 2266,
     "Deku Tree Lobby Grass 2": 2267,
     "Deku Tree Lobby Grass 3": 2268,
@@ -2413,7 +2411,7 @@ grass_dungeon_location_table: Dict[str, int] = {
     "Deku Tree Queen Gohma Grass 8": 2392,
 }
 
-tree_location_table: Dict[str, int] = {
+tree_location_table: dict[str, int] = {
     Locations.MARKET_TREE.value: 2393,
     Locations.HC_NEAR_GUARDS_TREE_1.value: 2394,
     Locations.HC_NEAR_GUARDS_TREE_2.value: 2395,
@@ -2479,7 +2477,7 @@ tree_location_table: Dict[str, int] = {
     Locations.LLR_TREE.value: 2456,
 }
 
-fish_pond_location_table: Dict[str, int] = {
+fish_pond_location_table: dict[str, int] = {
     "LH Child Pond Fish 1": 263,
     "LH Child Pond Fish 2": 264,
     "LH Child Pond Fish 3": 265,
@@ -2516,7 +2514,7 @@ fish_pond_location_table: Dict[str, int] = {
     #"LH Adult Pond Loach": 297,
 }
 
-fish_overworld_location_table: Dict[str, int] = {
+fish_overworld_location_table: dict[str, int] = {
     "DMC Upper Grotto Fish": 1621,
     "DMT Storms Grotto Fish": 1622,
     "HF Southeast Grotto Fish": 1623,
@@ -2533,12 +2531,12 @@ fish_overworld_location_table: Dict[str, int] = {
     "ZD Fish 5": 1634,
 }
 
-child_zelda_location_table: Dict[str, int] = {
+child_zelda_location_table: dict[str, int] = {
     "HC Malon Egg": 115,
     "HC Zeldas Letter": 116,
 }
 
-carpenters_location_table: Dict[str, int] = {
+carpenters_location_table: dict[str, int] = {
     "GF Freed All Carpenters": 324,
     "GF 1 Torch Carpenter": 325,
     "GF Dead End Carpenter": 326,
@@ -2550,7 +2548,7 @@ hundred_skulls_location_table: dict[str, int] = {
     "Kak 100 Gold Skulltula Reward": 149,
 }
 
-location_data_table: Dict[str, int] = {
+location_data_table: dict[str, int] = {
     **base_location_table,
     **gold_skulltula_overworld_location_table,
     **gold_skulltula_dungeon_location_table,
