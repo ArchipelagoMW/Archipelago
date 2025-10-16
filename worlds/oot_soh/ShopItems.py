@@ -192,8 +192,6 @@ def fill_shop_items(world: "SohWorld") -> None:
                 continue
             world.shop_prices[slot] = create_random_shop_price(world)
 
-    set_price_rules(world)
-
 def no_shop_shuffle(world: "SohWorld") -> None:
     # put everything in its place as plain vanilla
     for region, shop in all_shop_locations:

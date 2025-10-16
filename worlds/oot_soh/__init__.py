@@ -11,7 +11,7 @@ from .Enums import *
 from .ItemPool import create_item_pool, get_filler_item
 from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
-from .ShopItems import fill_shop_items, all_shop_locations
+from .ShopItems import fill_shop_items, set_price_rules, all_shop_locations
 from Fill import fill_restrictive
 
 import logging
@@ -104,6 +104,7 @@ class SohWorld(World):
             fill_restrictive(self.multiworld, prefill_state, dungeon_reward_locations, dungeon_reward_items, single_player_placement=True, lock=True)
 
         fill_shop_items(self)
+        set_price_rules(self)
 
         open_location_count: int = sum(1 for loc in self.get_locations() if not loc.locked)
         filler_item_count: int = open_location_count - len(self.item_pool)
