@@ -349,7 +349,6 @@ class ShuffleShopsItemAmount(Range):
     range_start = 0
     range_end = 7
     default = 4
-    visibility = Visibility.none
 
 class ShuffleShopPrices(Choice):
     """
