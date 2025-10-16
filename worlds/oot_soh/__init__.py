@@ -125,7 +125,7 @@ class SohWorld(World):
 
         self.multiworld.itempool += self.item_pool
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         return {
             "closed_forest": self.options.closed_forest.value,
             "kakariko_gate": self.options.kakariko_gate.value,
