@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     LLR_TALON_RACE = "LLR Talon Race"
     LLR_TIME_TRIAL = "LLR Time Trial"
 

@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     SPIRIT_TEMPLE_BEGINNING_NUT_CRATE = "Spirit Temple Nut Crate"
     SPIRIT_TEMPLE_TWINROVA = "Spirit Temple Twinrova"
 

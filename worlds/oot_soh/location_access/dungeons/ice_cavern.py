@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     ICE_CAVERN_BLUE_FIRE_ACCESS = "Ice Cavern Blue Fire Access"
 
 

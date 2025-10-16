@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     LW_GOSSIP_STONE_SONG_FAIRY = "LW Gossip Stone Song Fairy"
     LW_BEAN_PLANT_FAIRY = "LW Bean Plant Fairy"
     LW_BUG_GRASS = "LW Bug Grass"
@@ -16,7 +16,7 @@ class EventLocations(str, Enum):
     LW_BRIDGE_BEAN_PATCH = "LW Bridge Bean Patch"
     LW_THEATER_BEAN_PATCH = "LW Theater Bean Patch"
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     LW_BRIDGE_BEAN_PLANTED = "LW Bridge Bean Planted"
     LW_THEATER_BEAN_PLANTED = "LW Theater Bean Planted"
 

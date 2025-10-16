@@ -31,13 +31,13 @@ class rule_wrapper:
 def add_locations(parent_region: Regions, world: "SohWorld",
                   locations: list[tuple[Locations, Callable[[tuple[CollectionState, Regions, "SohWorld"]], bool]]]) -> None:
     for location in locations:
-        locationName = location[0].value
+        locationName = location[0]
         locationRule = lambda bundle: True
         if len(location) > 1:
             locationRule = location[1]
         if locationName in world.included_locations:
             locationAddress = world.included_locations.pop(location[0])
-            world.get_region(parent_region.value).add_locations({locationName: locationAddress}, SohLocation)
+            world.get_region(parent_region).add_locations({locationName: locationAddress}, SohLocation)
             set_rule(world.get_location(locationName), rule_wrapper.wrap(parent_region, locationRule, world))
 
 
@@ -49,39 +49,39 @@ def connect_regions(parent_region: Regions, world: "SohWorld",
         regionRule = lambda bundle: True
         if len(region) > 1:
             regionRule = region[1]
-        world.get_region(parent_region.value).connect(world.get_region(regionName.value),
+        world.get_region(parent_region).connect(world.get_region(regionName),
                                                       rule=rule_wrapper.wrap(parent_region, regionRule, world))
 
 
 def add_events(parent_region: Regions, world: "SohWorld",
-               events: list[tuple[Enum, Events | Enum, Callable[[tuple[CollectionState, Regions, "SohWorld"]], bool]]]) -> None:
+               events: list[tuple[StrEnum, Events | StrEnum, Callable[[tuple[CollectionState, Regions, "SohWorld"]], bool]]]) -> None:
     for event in events:
-        event_location = event[0].value
-        event_item = event[1].value
+        event_location = event[0]
+        event_item = event[1]
         event_rule = event[2]
         
-        world.get_region(parent_region.value).add_locations({event_location: None}, SohLocation)
+        world.get_region(parent_region).add_locations({event_location: None}, SohLocation)
         world.get_location(event_location).place_locked_item(SohItem(event_item, IC.progression, None, world.player))
         set_rule(world.get_location(event_location), rule_wrapper.wrap(parent_region, event_rule, world))
 
 
-def can_use(item: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+def can_use(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     if not has_item(item, bundle):
         return False
 
     data = item_data_table
 
     if item in data:
-        if data[item.value].adult_only and not is_adult(bundle):
+        if data[item].adult_only and not is_adult(bundle):
             return False
 
-        if data[item.value].child_only and not is_child(bundle):
+        if data[item].child_only and not is_child(bundle):
             return False
         
-        if data[item.value].item_type == ItemType.magic and not has_item(Items.PROGRESSIVE_MAGIC_METER, bundle):
+        if data[item].item_type == ItemType.magic and not has_item(Items.PROGRESSIVE_MAGIC_METER, bundle):
             return False
 
-        if data[item.value].item_type == ItemType.song:
+        if data[item].item_type == ItemType.song:
             return can_play_song(item, bundle)
     
     if item in (Items.FIRE_ARROW, Items.ICE_ARROW, Items.LIGHT_ARROW):
@@ -99,14 +99,14 @@ def can_use(item: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
     return True
 
 
-def can_use_any(names: list[Enum], bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+def can_use_any(names: list[Items], bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     for name in names:
         if can_use(name, bundle):
             return True
     return False
 
 
-def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions, "SohWorld"], count: int = 1) -> bool:
+def has_item(item: Items | Events | StrEnum, bundle: tuple[CollectionState, Regions, "SohWorld"], count: int = 1) -> bool:
     state = bundle[0]
     world = bundle[2]
     player = world.player
@@ -115,22 +115,22 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return state.has_all((Events.CAN_FARM_STICKS, Items.DEKU_STICK_BAG), player)
     
     if item in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
-        return (state.has_any((Items.BOMBCHUS_5.value, Items.BOMBCHUS_10.value, Items.BOMBCHUS_20.value,
-                               Items.PROGRESSIVE_BOMBCHU.value), world.player)
+        return (state.has_any((Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20,
+                               Items.PROGRESSIVE_BOMBCHU), world.player)
                 or (bombchus_enabled(bundle)
-                    and state.has_any((Items.BUY_BOMBCHUS10.value, Items.BUY_BOMBCHUS20.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value), world.player)))
+                    and state.has_any((Items.BUY_BOMBCHUS10, Items.BUY_BOMBCHUS20, Events.COULD_PLAY_BOWLING, Events.CARPET_MERCHANT), world.player)))
     
     if item == Items.NUTS:
         return state.has_all((Events.CAN_FARM_NUTS, Items.DEKU_NUT_BAG), player)
 
     if item == Items.MAGIC_BEAN:
-        return state.has_any({Items.MAGIC_BEAN_PACK.value, Events.CAN_BUY_BEANS.value}, player)
+        return state.has_any({Items.MAGIC_BEAN_PACK, Events.CAN_BUY_BEANS}, player)
     
     if item == Items.DEKU_SHIELD:
-        return state.has(Items.BUY_DEKU_SHIELD.value, player)
+        return state.has(Items.BUY_DEKU_SHIELD, player)
     
     if item == Items.HYLIAN_SHIELD:
-        return state.has(Items.BUY_HYLIAN_SHIELD.value, player)
+        return state.has(Items.BUY_HYLIAN_SHIELD, player)
     
     if item == Items.SCARECROW:
         return scarecrows_song(bundle) and can_use(Items.HOOKSHOT, bundle)
@@ -139,34 +139,34 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
         return scarecrows_song(bundle) and can_use(Items.LONGSHOT, bundle)
     
     if item == Items.FISHING_POLE:
-        return (not world.options.shuffle_fishing_pole) or state.has(Items.FISHING_POLE.value, player)
+        return (not world.options.shuffle_fishing_pole) or state.has(Items.FISHING_POLE, player)
     
     if item == Items.EPONA:
         return state.has(Events.FREED_EPONA, player)
 
     if item in (Items.POCKET_EGG, Items.COJIRO, Items.ODD_MUSHROOM, Items.ODD_POTION, Items.POACHERS_SAW, Items.BROKEN_GORONS_SWORD, Items.PRESCRIPTION, Items.EYEBALL_FROG, Items.WORLDS_FINEST_EYEDROPS):
-        return (not world.options.shuffle_adult_trade_items) or state.has(item.value, player)
+        return (not world.options.shuffle_adult_trade_items) or state.has(item, player)
     
     if item == Items.BOTTLE_WITH_BIG_POE:
-        return has_bottle(bundle) and state.has(Events.CAN_DEFEAT_BIG_POE.value, player)
+        return has_bottle(bundle) and state.has(Events.CAN_DEFEAT_BIG_POE, player)
     
     if item == Items.BOTTLE_WITH_BLUE_FIRE:
-        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BLUE_FIRE.value, player) or state.has(Items.BUY_BLUE_FIRE.value, player))
+        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BLUE_FIRE, player) or state.has(Items.BUY_BLUE_FIRE, player))
     
     if item == Items.BOTTLE_WITH_BLUE_POTION:
-        return has_bottle(bundle) and state.has(Items.BUY_BLUE_POTION.value, player)
+        return has_bottle(bundle) and state.has(Items.BUY_BLUE_POTION, player)
     
     if item == Items.BOTTLE_WITH_BUGS:
-        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BUGS.value, player) or state.has(Items.BUY_BOTTLE_BUG.value, player))
+        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_BUGS, player) or state.has(Items.BUY_BOTTLE_BUG, player))
     
     if item == Items.BOTTLE_WITH_FAIRY:
-        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_FAIRIES.value, player) or state.has(Items.BUY_FAIRYS_SPIRIT.value, player))
+        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_FAIRIES, player) or state.has(Items.BUY_FAIRYS_SPIRIT, player))
     
     if item == Items.BOTTLE_WITH_FISH:
-        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_FISH.value, player) or state.has(Items.BUY_FISH.value, player))
+        return has_bottle(bundle) and (state.has(Events.CAN_ACCESS_FISH, player) or state.has(Items.BUY_FISH, player))
     
     if item == Items.BOTTLE_WITH_GREEN_POTION:
-        return has_bottle(bundle) and state.has(Items.BUY_GREEN_POTION.value, player)
+        return has_bottle(bundle) and state.has(Items.BUY_GREEN_POTION, player)
     
     if item == Items.BOTTLE_WITH_MILK:
         return has_bottle(bundle)
@@ -180,14 +180,14 @@ def has_item(item: Items | Events | Enum, bundle: tuple[CollectionState, Regions
     if item == Items.EMPTY_BOTTLE:
         return has_bottle(bundle)
 
-    return state.has(item.value, player, count)
+    return state.has(item, player, count)
         
 
 wallet_capacities: dict[str, int] = {
-    Items.CHILD_WALLET.value: 99,
-    Items.ADULT_WALLET.value: 200,
-    Items.GIANT_WALLET.value: 500,
-    Items.TYCOON_WALLET.value: 999
+    Items.CHILD_WALLET: 99,
+    Items.ADULT_WALLET: 200,
+    Items.GIANT_WALLET: 500,
+    Items.TYCOON_WALLET: 999
 }
 
 
@@ -221,17 +221,17 @@ def bottle_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     count = 0
     for bottle in no_rules_bottles:
         count += state.count(bottle.value, world.player)
-    if state.has(Events.DELIVER_LETTER.value, world.player):
-        count += state.count(Items.BOTTLE_WITH_RUTOS_LETTER.value, world.player)
-    if state.has(Events.CAN_EMPTY_BIG_POES.value, world.player):
-        count += state.count(Items.BOTTLE_WITH_BIG_POE.value, world.player)
+    if state.has(Events.DELIVER_LETTER, world.player):
+        count += state.count(Items.BOTTLE_WITH_RUTOS_LETTER, world.player)
+    if state.has(Events.CAN_EMPTY_BIG_POES, world.player):
+        count += state.count(Items.BOTTLE_WITH_BIG_POE, world.player)
     return count
 
 
 def bombchu_refill(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     world = bundle[2]
-    return state.has_any([Items.BUY_BOMBCHUS10.value, Items.BUY_BOMBCHUS20.value, Events.COULD_PLAY_BOWLING.value, Events.CARPET_MERCHANT.value], world.player) or bool(world.options.bombchu_drops)
+    return state.has_any([Items.BUY_BOMBCHUS10, Items.BUY_BOMBCHUS20, Events.COULD_PLAY_BOWLING, Events.CARPET_MERCHANT], world.player) or bool(world.options.bombchu_drops)
 
 
 def bombchus_enabled(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -242,22 +242,22 @@ def bombchus_enabled(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> boo
 
 
 ocarina_buttons_required: dict[str, list[str]] = {
-    Items.ZELDAS_LULLABY.value: [Items.OCARINA_CLEFT_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value,Items.OCARINA_CUP_BUTTON.value],
-    Items.EPONAS_SONG.value: [Items.OCARINA_CLEFT_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CUP_BUTTON.value],
-    Items.PRELUDE_OF_LIGHT.value: [Items.OCARINA_CLEFT_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CUP_BUTTON.value],
-    Items.SARIAS_SONG.value: [Items.OCARINA_CLEFT_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CDOWN_BUTTON.value],
-    Items.SUNS_SONG.value: [Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CUP_BUTTON.value, Items.OCARINA_CDOWN_BUTTON.value],
-    Items.SONG_OF_TIME.value: [Items.OCARINA_A_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CDOWN_BUTTON.value],
-    Items.BOLERO_OF_FIRE.value: [Items.OCARINA_A_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CDOWN_BUTTON.value],
-    Items.REQUIEM_OF_SPIRIT.value: [Items.OCARINA_A_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CDOWN_BUTTON.value],
-    Items.SONG_OF_STORMS.value: [Items.OCARINA_A_BUTTON.value, Items.OCARINA_CUP_BUTTON.value, Items.OCARINA_CDOWN_BUTTON.value],
-    Items.MINUET_OF_FOREST.value: [Items.OCARINA_A_BUTTON.value, Items.OCARINA_CLEFT_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CUP_BUTTON.value],
-    Items.SERENADE_OF_WATER.value: [Items.OCARINA_A_BUTTON.value, Items.OCARINA_CLEFT_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CDOWN_BUTTON.value],
-    Items.NOCTURNE_OF_SHADOW.value: [Items.OCARINA_A_BUTTON.value, Items.OCARINA_CLEFT_BUTTON.value, Items.OCARINA_CRIGHT_BUTTON.value, Items.OCARINA_CDOWN_BUTTON.value],
+    Items.ZELDAS_LULLABY: [Items.OCARINA_CLEFT_BUTTON, Items.OCARINA_CRIGHT_BUTTON,Items.OCARINA_CUP_BUTTON],
+    Items.EPONAS_SONG: [Items.OCARINA_CLEFT_BUTTON, Items.OCARINA_CRIGHT_BUTTON, Items.OCARINA_CUP_BUTTON],
+    Items.PRELUDE_OF_LIGHT: [Items.OCARINA_CLEFT_BUTTON, Items.OCARINA_CRIGHT_BUTTON, Items.OCARINA_CUP_BUTTON],
+    Items.SARIAS_SONG: [Items.OCARINA_CLEFT_BUTTON, Items.OCARINA_CRIGHT_BUTTON, Items.OCARINA_CDOWN_BUTTON],
+    Items.SUNS_SONG: [Items.OCARINA_CRIGHT_BUTTON, Items.OCARINA_CUP_BUTTON, Items.OCARINA_CDOWN_BUTTON],
+    Items.SONG_OF_TIME: [Items.OCARINA_A_BUTTON, Items.OCARINA_CRIGHT_BUTTON, Items.OCARINA_CDOWN_BUTTON],
+    Items.BOLERO_OF_FIRE: [Items.OCARINA_A_BUTTON, Items.OCARINA_CRIGHT_BUTTON, Items.OCARINA_CDOWN_BUTTON],
+    Items.REQUIEM_OF_SPIRIT: [Items.OCARINA_A_BUTTON, Items.OCARINA_CRIGHT_BUTTON, Items.OCARINA_CDOWN_BUTTON],
+    Items.SONG_OF_STORMS: [Items.OCARINA_A_BUTTON, Items.OCARINA_CUP_BUTTON, Items.OCARINA_CDOWN_BUTTON],
+    Items.MINUET_OF_FOREST: [Items.OCARINA_A_BUTTON, Items.OCARINA_CLEFT_BUTTON, Items.OCARINA_CRIGHT_BUTTON, Items.OCARINA_CUP_BUTTON],
+    Items.SERENADE_OF_WATER: [Items.OCARINA_A_BUTTON, Items.OCARINA_CLEFT_BUTTON, Items.OCARINA_CRIGHT_BUTTON, Items.OCARINA_CDOWN_BUTTON],
+    Items.NOCTURNE_OF_SHADOW: [Items.OCARINA_A_BUTTON, Items.OCARINA_CLEFT_BUTTON, Items.OCARINA_CRIGHT_BUTTON, Items.OCARINA_CDOWN_BUTTON],
 }
 
 
-def can_play_song(song: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+def can_play_song(song: StrEnum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     world = bundle[2]
     if not has_item(Items.FAIRY_OCARINA, bundle):
@@ -265,7 +265,7 @@ def can_play_song(song: Enum, bundle: tuple[CollectionState, Regions, "SohWorld"
     if not world.options.shuffle_ocarina_buttons:
         return True
     else:
-        return state.has_all(ocarina_buttons_required[song.value], world.player)
+        return state.has_all(ocarina_buttons_required[song], world.player)
 
 
 def has_explosives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -404,7 +404,7 @@ def can_do_trick(trick: Tricks, bundle: tuple[CollectionState, Regions, "SohWorl
 
 def can_get_nighttime_gs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
-    return at_night(bundle) and (can_use(Items.SUNS_SONG, bundle)) # or bool(world.options.nighttime_gs)) #TODO: Implement the setting
+    return at_night(bundle) and (can_use(Items.SUNS_SONG, bundle) or not bool(world.options.skull_sun_song))
 
 
 def can_break_pots(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -477,9 +477,10 @@ def can_break_lower_hives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -
 
 
 def can_break_upper_beehives(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    world = bundle[2]
     return (hookshot_or_boomerang(bundle) or
             (can_do_trick(Tricks.BOMBCHU_BEEHIVES, bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) or
-            (False and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle)))) #TODO implement sling/bow destroy hives option instead of false
+            (world.options.slingbow_break_beehives and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle))))
 
 
 def can_open_storms_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -580,7 +581,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
 
     if enemy == Enemies.BLUE_BUBBLE:
         return blast_or_smash(bundle) or can_use(Items.FAIRY_BOW, bundle) or \
-            ((can_jump_slash_except_hammer(bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle)) and \
+            ((can_jump_slash_except_hammer(bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle)) and
              (can_use(Items.NUTS, bundle) or hookshot_or_boomerang(bundle) or can_standing_shield(bundle)))
 
     if enemy == Enemies.DEAD_HAND:
@@ -616,7 +617,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
     if enemy == Enemies.FLARE_DANCER:
         return can_use(Items.MEGATON_HAMMER, bundle) or \
                can_use(Items.HOOKSHOT, bundle) or \
-               (has_explosives(bundle) and (can_jump_slash_except_hammer(bundle) or can_use(Items.FAIRY_BOW, bundle) or \
+               (has_explosives(bundle) and (can_jump_slash_except_hammer(bundle) or can_use(Items.FAIRY_BOW, bundle) or
                     can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.BOOMERANG, bundle)))
 
     if enemy in [Enemies.WOLFOS, Enemies.WHITE_WOLFOS, Enemies.WALLMASTER]:
@@ -694,7 +695,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
     if enemy == Enemies.BONGO_BONGO:
         return has_boss_soul(Items.BONGO_BONGOS_SOUL, bundle) and \
                (can_use(Items.LENS_OF_TRUTH, bundle) or can_do_trick(Tricks.LENS_BONGO, bundle)) and can_use_sword(bundle) and \
-               (can_use(Items.HOOKSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or \
+               (can_use(Items.HOOKSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or
                 can_do_trick(Tricks.SHADOW_BONGO, bundle))
     if enemy == Enemies.TWINROVA:
         return has_boss_soul(Items.TWINROVAS_SOUL, bundle) and can_use(Items.MIRROR_SHIELD, bundle) and \
@@ -815,35 +816,35 @@ def small_keys(key: Items, requiredAmount: int, bundle: tuple[CollectionState, R
     if has_item(Items.SKELETON_KEY, bundle) or (world.options.key_rings.value and has_key_ring(key, bundle)):
         return True
 
-    return (state.has(key.value, world.player, requiredAmount))
+    return (state.has(key, world.player, requiredAmount))
 
 
 def has_key_ring(key : Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
     if key == Items.FOREST_TEMPLE_SMALL_KEY:
         return has_item(Items.FOREST_TEMPLE_KEY_RING, bundle)
-    
+
     if key == Items.FIRE_TEMPLE_SMALL_KEY:
         return has_item(Items.FIRE_TEMPLE_KEY_RING, bundle)
-    
+
     if key == Items.WATER_TEMPLE_SMALL_KEY:
         return has_item(Items.WATER_TEMPLE_KEY_RING, bundle)
-    
+
     if key == Items.BOTTOM_OF_THE_WELL_SMALL_KEY:
         return has_item(Items.BOTTOM_OF_THE_WELL_KEY_RING, bundle)
-    
+
     if key == Items.SHADOW_TEMPLE_SMALL_KEY:
         return has_item(Items.SHADOW_TEMPLE_KEY_RING, bundle)
-    
+
     if key == Items.GERUDO_FORTRESS_SMALL_KEY:
         return has_item(Items.GERUDO_FORTRESS_KEY_RING, bundle)
-    
+
     if key == Items.TRAINING_GROUND_SMALL_KEY:
         return has_item(Items.TRAINING_GROUND_KEY_RING, bundle)
-    
+
     if key == Items.SPIRIT_TEMPLE_SMALL_KEY:
         return has_item(Items.SPIRIT_TEMPLE_KEY_RING, bundle)
-    
+
     if key == Items.GANONS_CASTLE_SMALL_KEY:
         return has_item(Items.GANONS_CASTLE_KEY_RING, bundle)
 
@@ -941,7 +942,7 @@ def water_timer(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
 def hearts(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     state = bundle[0]
     world = bundle[2]
-    return 3 + state.count(Items.HEART_CONTAINER.value, world.player) + (state.count(Items.PIECE_OF_HEART.value, world.player) // 4)
+    return 3 + state.count(Items.HEART_CONTAINER, world.player) + (state.count(Items.PIECE_OF_HEART, world.player) // 4)
 
 
 def can_open_bomb_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -1007,7 +1008,7 @@ def can_build_rainbow_bridge(bundle: tuple[CollectionState, Regions, "SohWorld"]
 def get_gs_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     state = bundle[0]
     world = bundle[2]
-    return state.count(Items.GOLD_SKULLTULA_TOKEN.value, world.player)
+    return state.count(Items.GOLD_SKULLTULA_TOKEN, world.player)
 
 
 def can_trigger_lacs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:

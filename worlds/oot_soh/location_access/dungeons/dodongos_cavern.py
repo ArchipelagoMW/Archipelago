@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     DODONGOS_CAVERN_GOSSIP_STONE_SONG_FAIRY = "Dodongos Cavern Gossip Stone Song Fairy"
     DODONGOS_CAVERN_LOBBY_SWITCH = "Dodongos Cavern Lobby Switch",
     DODONGOS_CAVERN_LOWER_LIZALFOS_FIGHT = "Dodongos Cavern Lower Lizalfos Fight"
@@ -13,7 +13,7 @@ class EventLocations(str, Enum):
     DODONGOS_CAVERN_KING_DODONGO = "Dodongos Cavern King Dodongo"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     DODONGOS_CAVERN_STAIRS_ROOM_DOOR = "Dodongos Cavern Stairs Room Door"
     DODONGOS_CAVERN_LIFT_PLATFORM = "Dodongos Cavern Lift Platform"
     DODONGOS_CAVERN_EYES_LIT = "Dodongos Cavern Eyes Lit"

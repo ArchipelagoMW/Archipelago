@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     MIDO = "Mido"
     MIDO_FROM_OUTSIDE_DEKU_TREE = "Mido From Outside Deku Tree"
     KF_GOSSIP_STONE_SONG_FAIRY = "KF Gossip Stone Song Fairy"
@@ -18,7 +18,7 @@ class EventLocations(str, Enum):
     KF_STORMS_GROTTO_PUDDLE_FISH = "KF Storms Grotto Puddle Fish"
     
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     MIDO_SWORD_AND_SHIELD = "Showed Mido the Sword and Shield"
     KF_BEAN_PLANTED = "KF Bean Planted"
 

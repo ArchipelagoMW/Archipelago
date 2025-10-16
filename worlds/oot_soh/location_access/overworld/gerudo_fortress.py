@@ -4,14 +4,14 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     GF_GATE = "GF Gate"
     GF_GATE_OUTSIDE = "GF Gate Outside"
     GTG_GATE = "GTG Gate"
     GF_STORMS_GROTTO_FAIRY = "GF Storms Grotto Fairy"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     GF_GATE_OPEN = "GF Gate Open"
     GTG_GATE_OPEN = "GTG Gate Open"
 
