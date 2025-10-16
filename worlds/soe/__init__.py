@@ -20,7 +20,8 @@ if typing.TYPE_CHECKING:
     from BaseClasses import MultiWorld, CollectionState
 
 __all__ = ["pyevermizer", "SoEWorld"]
-
+__version__ = "0.50.1"
+__author__ = "black-sliver"
 
 """
 In evermizer:
