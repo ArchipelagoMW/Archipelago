@@ -230,7 +230,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.HF_INSIDE_FENCE_GROTTO, world, [
         (Locations.HF_DEKU_SCRUB_GROTTO, lambda bundle: (can_stun_deku(bundle))),
-        (Locations.HF_INSIDE_FENCE_GROTTO_BEEHIVE, lambda bundle: (can_break_lower_hives(bundle))),
+        (Locations.HF_DEKU_SCRUB_GROTTO_BEEHIVE, lambda bundle: (can_break_lower_hives(bundle))),
         (Locations.HF_FENCE_GROTTO_STORMS_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle)))
     ])
     # Connections
@@ -279,8 +279,8 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.HF_NEAR_MARKET_GROTTO, world, [
         (Locations.HF_NEAR_MARKET_GROTTO_CHEST, lambda bundle: True),
         (Locations.HF_NEAR_MARKET_GROTTO_FISH, lambda bundle: (has_bottle(bundle))),
-        (Locations.HF_NEAR_MARKET_GROTTO_GOSSIP_STONE_FAIRY , lambda bundle: (call_gossip_fairy(bundle))),
-        (Locations.HF_NEAR_MARKET_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
+        (Locations.HF_NEAR_MARKET_GOSSIP_STONE_FAIRY , lambda bundle: (call_gossip_fairy(bundle))),
+        (Locations.HF_NEAR_MARKET_GOSSIP_STONE_BIG_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
         (Locations.HF_NEAR_MARKET_GROTTO_BEEHIVE_LEFT, lambda bundle: (can_break_lower_hives(bundle))),
         (Locations.HF_NEAR_MARKET_GROTTO_BEEHIVE_RIGHT, lambda bundle: (can_break_lower_hives(bundle))),
         (Locations.HF_NEAR_MARKET_GROTTO_GRASS1, lambda bundle: (can_cut_shrubs(bundle))),

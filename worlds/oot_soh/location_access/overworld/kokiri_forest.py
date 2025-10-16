@@ -123,6 +123,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KF_ADULT_GRASS15, lambda bundle: (is_adult(bundle) and can_cut_shrubs(bundle))),
         (Locations.KF_ADULT_GRASS16, lambda bundle: (is_adult(bundle) and can_cut_shrubs(bundle))),
         (Locations.KF_ADULT_GRASS17, lambda bundle: (is_adult(bundle) and can_cut_shrubs(bundle))),
+        (Locations.KF_ADULT_GRASS18, lambda bundle: (is_adult(bundle) and can_cut_shrubs(bundle))),
         (Locations.KF_ADULT_GRASS19, lambda bundle: (is_adult(bundle) and can_cut_shrubs(bundle))),
         (Locations.KF_ADULT_GRASS20, lambda bundle: (is_adult(bundle) and can_cut_shrubs(bundle))),
     ])

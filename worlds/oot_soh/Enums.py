@@ -2936,8 +2936,8 @@ class Locations(StrEnum):
     ZR_NEAR_DOMAIN_GOSSIP_STONE_BIG_FAIRY = "ZR Near Domain Gossip Stone Big Fairy"
     HF_COW_GROTTO_GOSSIP_STONE_FAIRY = "HF Cow Grotto Gossip Stone Fairy"
     HF_COW_GROTTO_GOSSIP_STONE_BIG_FAIRY = "HF Cow Grotto Gossip Stone Big Fairy"
-    HF_NEAR_MARKET_GROTTO_GOSSIP_STONE_FAIRY = "HF Near Market Grotto Gossip Stone Fairy"
-    HF_NEAR_MARKET_GROTTO_GOSSIP_STONE_BIG_FAIRY = "HF Near Market Grotto Gossip Stone Big Fairy"
+    HF_NEAR_MARKET_GOSSIP_STONE_FAIRY = "HF Near Market Gossip Stone Fairy"
+    HF_NEAR_MARKET_GOSSIP_STONE_BIG_FAIRY = "HF Near Market Gossip Stone Big Fairy"
     HF_SOUTHEAST_GROTTO_GOSSIP_STONE_FAIRY = "HF Southeast Gossip Stone Fairy"
     HF_SOUTHEAST_GROTTO_GOSSIP_STONE_BIG_FAIRY = "HF Southeast Gossip Stone Big Fairy"
     HF_OPEN_GROTTO_GOSSIP_STONE_FAIRY = "HF Open Grotto Gossip Stone Fairy"
@@ -3436,7 +3436,6 @@ class Locations(StrEnum):
     ZR_TREE = "ZR Tree"
     KAK_TREE = "Kak Tree"
     LLR_TREE = "LLR Tree"
-    HF_INSIDE_FENCE_GROTTO_BEEHIVE = "HF Inside Fence Grotto Beehive"
 
 class Enemies(StrEnum):
     GOLD_SKULLTULA = "gold_skulltula"
