@@ -262,11 +262,6 @@ def place_locked_items(world: "SohWorld") -> None:
     if not world.options.shuffle_master_sword:
         world.get_location(Locations.MARKET_TOT_MASTER_SWORD).place_locked_item(world.create_item(Items.MASTER_SWORD))
 
-    # Handle vanilla goron tunic in shop
-    # TODO: Proper implementation of vanilla shop items and shuffle them amongst all shops
-    if world.options.shuffle_shops:
-        world.get_location(Locations.GC_SHOP_ITEM1).place_locked_item(world.create_item(Items.BUY_GORON_TUNIC))
-
     # Preplace dungeon rewards in vanilla locations when not shuffled
     if world.options.shuffle_dungeon_rewards == "off":      
         # Loop through dungeons rewards and set their items to the vanilla reward.      
