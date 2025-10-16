@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum, IntEnum
 from functools import total_ordering #allows defining orders with fewer functions; with this decorator only __eq__ and __lt__ is needed, and since enums implement __eq__ we can just implement __lt__
 
-class Regions(str, Enum):
+class Regions(StrEnum):
     """List of all region enums"""
 
     ROOT = "Menu"
@@ -698,7 +698,7 @@ class Regions(str, Enum):
 #TODO go through this and Locations for any that aren't needed or should be events
 #For any such entries, remove them from Items and Locations and add to Events. Also, set up event registration.
 #Later, we'll go through the events and replace some with other methods
-class Items(str, Enum):
+class Items(StrEnum):
     KOKIRI_SWORD = "Kokiri Sword"
     MASTER_SWORD = "Master Sword"
     GIANTS_KNIFE = "Giant's Knife"
@@ -979,7 +979,7 @@ class Items(str, Enum):
     EPONA = "Epona"
     MAX = "Max"
 
-class Locations(str, Enum):
+class Locations(StrEnum):
     LINKS_POCKET = "Link's Pocket"
     QUEEN_GOHMA = "Queen Gohma"
     KING_DODONGO = "King Dodongo"
@@ -1784,13 +1784,13 @@ class Locations(str, Enum):
     TH_KITCHEN_POT1 = "TH Kitchen Pot 1"
     TH_KITCHEN_POT2 = "TH Kitchen Pot 2"
     TH_1_TORCH_CELL_RIGHT_POT = "TH 1 Torch Cell Right Pot"
-    TH_1_TORCH_CELL_MID_POT = "TH 1 Torch Cell Mid Pot"
+    TH_1_TORCH_CELL_MIDDLE_POT = "TH 1 Torch Cell Middle Pot"
     TH_1_TORCH_CELL_LEFT_POT = "TH 1 Torch Cell Left Pot"
-    TH_STEEP_SLOPE_CELL_RIGHT_POT = "TH Steep Slope Cell Right Pot"
-    TH_STEEP_SLOPE_CELL_LEFT_POT = "TH Steep Slope Cell Left Pot"
-    TH_NEAR_DOUBLE_CELL_RIGHT_POT = "TH Near Double Cell Right Pot"
-    TH_NEAR_DOUBLE_CELL_MID_POT = "TH Near Double Cell Mid Pot"
-    TH_NEAR_DOUBLE_CELL_LEFT_POT = "TH Near Double Cell Left Pot"
+    TH_STEEP_SLOPE_RIGHT_POT = "TH Steep Slope Right Pot"
+    TH_STEEP_SLOPE_LEFT_POT = "TH Steep Slope Left Pot"
+    TH_DOUBLE_CELL_RIGHT_POT = "TH Double Cell Right Pot"
+    TH_DOUBLE_CELL_MIDDLE_POT = "TH Double Cell Middle Pot"
+    TH_DOUBLE_CELL_LEFT_POT = "TH Double Cell Left Pot"
     TH_RIGHTMOST_JAILED_POT = "TH Rightmost Jailed Pot"
     TH_RIGHT_MIDDLE_JAILED_POT = "TH Right Middle Jailed Pot"
     TH_LEFT_MIDDLE_JAILED_POT = "TH Left Middle Jailed Pot"
@@ -2322,33 +2322,33 @@ class Locations(str, Enum):
     GV_NEAR_BRIDGE_CRATE4 = "GV Near Bridge Crate 4"
     GF_ABOVE_JAIL_CRATE = "GF Above Jail Crate"
     GF_SOUTHMOST_CENTER_CRATE = "GF Southmost Center Crate"
-    GF_MID_SOUTH_CENTER_CRATE = "Mid South Center Crate"
-    GF_MID_NORTH_CENTER_CRATE = "Mid North Center Crate"
-    GF_NORTHMOST_CENTER_CRATE = "Northmost Center Crate"
-    GF_OUTSKIRTS_NE_CRATE = "GF Outskirts NE Crate"
-    GF_OUTSKIRTS_NW_CRATE = "GF Outskirts NW Crate"
-    GF_HBA_RANGE_CRATE_1 = "GF HBA Range Crate 1"
-    GF_HBA_RANGE_CRATE_2 = "GF HBA Range Crate 2"
-    GF_HBA_RANGE_CRATE_3 = "GF HBA Range Crate 3"
-    GF_HBA_RANGE_CRATE_4 = "GF HBA Range Crate 4"
-    GF_HBA_RANGE_CRATE_5 = "GF HBA Range Crate 5"
-    GF_HBA_RANGE_CRATE_6 = "GF HBA Range Crate 6"
-    GF_HBA_RANGE_CRATE_7 = "GF HBA Range Crate 7"
-    GF_HBA_CANOPY_EAST_CRATE = "GF HBA Canopy East Crate"
-    GF_HBA_CANOPY_WEST_CRATE = "GF HBA Canopy West Crate"
+    GF_MIDDLE_SOUTH_CENTER_CRATE = "GF Middle South Center Crate"
+    GF_MIDDLE_NORTH_CENTER_CRATE = "GF Middle North Center Crate"
+    GF_NORTHMOST_CENTER_CRATE = "GF Northmost Center Crate"
+    GF_OUTSKIRTS_NORTHEAST_CRATE = "GF Outskirts Northeast Crate"
+    GF_OUTSKIRTS_NORTHWEST_CRATE = "GF Outskirts Northwest Crate"
+    GF_HBA_RANGE_CRATE_1 = "GF Horseback Archery Range Crate 1"
+    GF_HBA_RANGE_CRATE_2 = "GF Horseback Archery Range Crate 2"
+    GF_HBA_RANGE_CRATE_3 = "GF Horseback Archery Range Crate 3"
+    GF_HBA_RANGE_CRATE_4 = "GF Horseback Archery Range Crate 4"
+    GF_HBA_RANGE_CRATE_5 = "GF Horseback Archery Range Crate 5"
+    GF_HBA_RANGE_CRATE_6 = "GF Horseback Archery Range Crate 6"
+    GF_HBA_RANGE_CRATE_7 = "GF Horseback Archery Range Crate 7"
+    GF_HBA_CANOPY_EAST_CRATE = "GF Horseback Archery Canopy East Crate"
+    GF_HBA_CANOPY_WEST_CRATE = "GF Horseback Archery Canopy West Crate"
     GF_NORTH_TARGET_EAST_CRATE = "GF North Target East Crate"
-    GF_NORTH_TARGET_WEST_CRATE = "Gf North Target West Crate"
+    GF_NORTH_TARGET_WEST_CRATE = "GF North Target West Crate"
     GF_NORTH_TARGET_CHILD_CRATE = "GF North Target Child Crate"
     GF_SOUTH_TARGET_EAST_CRATE = "GF South Target East Crate"
     GF_SOUTH_TARGET_WEST_CRATE = "GF South Target West Crate"
     TH_NEAR_KITCHEN_LEFTMOST_CRATE = "TH Near Kitchen Leftmost Crate"
-    TH_NEAR_KITCHEN_MID_LEFT_CRATE = "TH Near Kitchen Mid Left Crate"
-    TH_NEAR_KITCHEN_MID_RIGHT_CRATE = "TH Near Kitchen Mid Right Crate"
+    TH_NEAR_KITCHEN_MIDDLE_LEFT_CRATE = "TH Near Kitchen Middle Left Crate"
+    TH_NEAR_KITCHEN_MIDDLE_RIGHT_CRATE = "TH Near Kitchen Middle Right Crate"
     TH_NEAR_KITCHEN_RIGHTMOST_CRATE = "TH Near Kitchen Rightmost Crate"
     TH_KITCHEN_CRATE = "TH Kitchen Crate"
     TH_BREAK_HALLWAY_OUTER_CRATE = "TH Break Hallway Outer Crate"
     TH_BREAK_ROOM_LEFT_CRATE = "TH Break Room Left Crate"
-    TH_BREAK_HALLWAY_INNER_CRATE = "TH Break hallway Inner Crate"
+    TH_BREAK_HALLWAY_INNER_CRATE = "TH Break Hallway Inner Crate"
     TH_BREAK_ROOM_RIGHT_CRATE = "TH Break Room Right Crate"
     TH_1_TORCH_CELL_CRATE = "TH 1 Torch Cell Crate"
     TH_DEAD_END_CELL_CRATE = "TH Dead End Cell Crate"
@@ -2954,7 +2954,7 @@ class Locations(str, Enum):
     DMC_UPPER_GROTTO_GOSSIP_STONE_BIG_FAIRY = "DMC Upper Grotto Gossip Stone Big Fairy"
     LH_ISLAND_SUNS_SONG_FAIRY = "LH Island Sun's Song Fairy"
     HF_POND_SONG_OF_STORMS_FAIRY = "HF Pond Song of Storms Fairy"
-    HF_DEKU_SCRUB_GROTTO_STORMS_FAIRY = "HF Deku Scrub Grotto Storms Fairy"
+    HF_FENCE_GROTTO_STORMS_FAIRY = "HF Fence Grotto Storms Fairy"
     DMT_FLAG_SUNS_SONG_FAIRY = "DMT Flag Sun's Song Fairy"
     DMT_COW_GROTTO_SONG_OF_STORMS_FAIRY = "DMT Cow Grotto Song of Storms Fairy"
     LW_SHORTCUTS_SONG_OF_STORMS_FAIRY = "LW Shortcuts Song of Storms Fairy"
@@ -3437,9 +3437,8 @@ class Locations(str, Enum):
     KAK_TREE = "Kak Tree"
     LLR_TREE = "LLR Tree"
     HF_INSIDE_FENCE_GROTTO_BEEHIVE = "HF Inside Fence Grotto Beehive"
-    HF_FENCE_GROTTO_STORMS_FAIRY = "HF Fence Grotto Storms Fairy"
 
-class Enemies(str, Enum):
+class Enemies(StrEnum):
     GOLD_SKULLTULA = "gold_skulltula"
     BIG_SKULLTULA = "big_skulltula"
     DODONGO = "dodongo"
@@ -3495,7 +3494,7 @@ class Enemies(str, Enum):
     OCTOROK = "octorok"
     
 @total_ordering
-class EnemyDistance(Enum):
+class EnemyDistance(IntEnum):
     CLOSE = 1
     SHORT_JUMPSLASH = 2
     MASTER_SWORD_JUMPSLASH = 3
@@ -3509,7 +3508,7 @@ class EnemyDistance(Enum):
     def __lt__(self, other):
         return self.value < other.value
 
-class Events(str, Enum):
+class Events(StrEnum):
     CAN_FARM_STICKS = "Can Farm Sticks"
     CAN_FARM_NUTS = "Can Farm Nuts"
     CAN_BUY_BEANS = "Can Buy Beans"
@@ -3550,14 +3549,14 @@ class Events(str, Enum):
     KAKARIKO_GATE_OPEN = "Kakariko Gate Open"
     GAME_COMPLETED = "Game Completed"
 
-class Ages(str, Enum):
+class Ages(StrEnum):
     CHILD = "child"
     ADULT = "adult"
     BOTH = "both"
-    null = None
+    null = "none"
 
 
-class Tricks(str, Enum):
+class Tricks(StrEnum):
     # General Tricks
     VISIBLE_COLLISION = "Visible Collision"
     GROTTOS_WITHOUT_AGONY = "Grottos Without Agony"

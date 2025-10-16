@@ -1,4 +1,4 @@
-from typing import NamedTuple, TYPE_CHECKING
+from typing import NamedTuple
 from enum import IntEnum
 from BaseClasses import Item, ItemClassification as IC
 from .Enums import *

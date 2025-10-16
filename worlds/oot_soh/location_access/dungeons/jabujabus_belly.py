@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     JABU_JABUS_BELLY_WEST_TENTACLE = "Jabu Jabus Belly West Tentacle"
     JABU_JABUS_BELLY_EAST_TENTACLE = "Jabu Jabus Belly East Tentacle"
     JABU_JABUS_BELLY_NORTH_TENTACLE = "Jabu Jabus Belly North Tentacle"
@@ -16,7 +16,7 @@ class EventLocations(str, Enum):
     JABU_JABUS_BELLY_BARINADE = "Jabu Jabus Belly Barinade"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     JABU_JABUS_BELLY_WEST_TENTACLE_DEFEATED = "Jabu Jabus Belly West Tentacle Defeated"
     JABU_JABUS_BELLY_EAST_TENTACLE_DEFEATED = "Jabu Jabus Belly East Tentacle Defeated"
     JABU_JABUS_BELLY_NORTH_TENTACLE_DEFEATED = "Jabu Jabus Belly North Tentacle Defeated"

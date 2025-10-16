@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-class EventsLocations(str, Enum):
+class EventsLocations(StrEnum):
     TH_1_TORCH_CARPENTER_CELL = "TH 1 Torch Carpenter Cell"
     TH_DOUBLE_CELL_CARPENTER_CELL = "TH Double Cell Carpenter Cell"
     TH_DEAD_END_CARPENTER_CELL = "TH Dead End Carpenter Cell"
@@ -11,7 +11,7 @@ class EventsLocations(str, Enum):
     TH_RESCUED_ALL_CARPENTERS = "TH Rescued All Carpenters"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     TH_1_TORCH_CELL_CARPENTER_FREED = "TH 1 Torch Cell Carpenter Freed"
     TH_DOUBLE_CELL_CARPENTER_FREED = "TH Double Cell Carpenter Freed"
     TH_DEAD_END_CELL_CARPENTER_FREED = "TH Dead End Cell Carpenter Freed"
@@ -29,7 +29,7 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.THIEVES_HIDEOUT_1_TORCH_CELL, world, [
         (Locations.TH_1_TORCH_CARPENTER, lambda bundle: can_kill_enemy(bundle, Enemies.GERUDO_WARRIOR)),
         (Locations.TH_1_TORCH_CELL_RIGHT_POT, lambda bundle: can_break_pots(bundle)),
-        (Locations.TH_1_TORCH_CELL_MID_POT, lambda bundle: can_break_pots(bundle)),
+        (Locations.TH_1_TORCH_CELL_MIDDLE_POT, lambda bundle: can_break_pots(bundle)),
         (Locations.TH_1_TORCH_CELL_LEFT_POT, lambda bundle: can_break_pots(bundle)),
         (Locations.TH_1_TORCH_CELL_CRATE, lambda bundle: can_break_crates(bundle))
     ])
@@ -50,9 +50,9 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.THIEVES_HIDEOUT_DOUBLE_CELL, world, [
         (Locations.TH_DOUBLE_CELL_CARPENTER, lambda bundle: can_kill_enemy(bundle, Enemies.GERUDO_WARRIOR)),
-        (Locations.TH_NEAR_DOUBLE_CELL_RIGHT_POT, lambda bundle: can_break_pots(bundle)),
-        (Locations.TH_NEAR_DOUBLE_CELL_MID_POT, lambda bundle: can_break_pots(bundle)),
-        (Locations.TH_NEAR_DOUBLE_CELL_LEFT_POT, lambda bundle: can_break_pots(bundle)),
+        (Locations.TH_DOUBLE_CELL_RIGHT_POT, lambda bundle: can_break_pots(bundle)),
+        (Locations.TH_DOUBLE_CELL_MIDDLE_POT, lambda bundle: can_break_pots(bundle)),
+        (Locations.TH_DOUBLE_CELL_LEFT_POT, lambda bundle: can_break_pots(bundle)),
         (Locations.TH_RIGHTMOST_JAILED_POT, lambda bundle: can_break_pots(bundle)),
         (Locations.TH_RIGHT_MIDDLE_JAILED_POT, lambda bundle: can_break_pots(bundle)),
         (Locations.TH_LEFT_MIDDLE_JAILED_POT, lambda bundle: can_break_pots(bundle)),
@@ -95,8 +95,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.THIEVES_HIDEOUT_STEEP_SLOPE_CELL, world, [
         (Locations.TH_STEEP_SLOPE_CARPENTER, lambda bundle: can_kill_enemy(bundle, Enemies.GERUDO_WARRIOR)),
-        (Locations.TH_STEEP_SLOPE_CELL_RIGHT_POT, lambda bundle: can_break_pots(bundle)),
-        (Locations.TH_STEEP_SLOPE_CELL_LEFT_POT, lambda bundle: can_break_pots(bundle))
+        (Locations.TH_STEEP_SLOPE_RIGHT_POT, lambda bundle: can_break_pots(bundle)),
+        (Locations.TH_STEEP_SLOPE_LEFT_POT, lambda bundle: can_break_pots(bundle))
     ])
     # Connections
     connect_regions(Regions.THIEVES_HIDEOUT_STEEP_SLOPE_CELL, world, [
@@ -131,8 +131,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.THIEVES_HIDEOUT_KITCHEN_CORRIDOR, world, [
         (Locations.TH_NEAR_KITCHEN_LEFTMOST_CRATE, lambda bundle: can_break_crates(bundle)),
-        (Locations.TH_NEAR_KITCHEN_MID_LEFT_CRATE, lambda bundle: can_break_crates(bundle)),
-        (Locations.TH_NEAR_KITCHEN_MID_RIGHT_CRATE, lambda bundle: can_break_crates(bundle)),
+        (Locations.TH_NEAR_KITCHEN_MIDDLE_LEFT_CRATE, lambda bundle: can_break_crates(bundle)),
+        (Locations.TH_NEAR_KITCHEN_MIDDLE_RIGHT_CRATE, lambda bundle: can_break_crates(bundle)),
         (Locations.TH_NEAR_KITCHEN_RIGHTMOST_CRATE, lambda bundle: can_break_crates(bundle))
     ])
     # Connections

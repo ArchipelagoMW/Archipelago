@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from .. import SohWorld
 
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     ROOT_AMMO_DROP = "Root Ammo Drop"
     ROOT_DEKU_SHIELD = "Root Deku Shield"
     ROOT_HYLIAN_SHIELD = "Root Hylian Shield"

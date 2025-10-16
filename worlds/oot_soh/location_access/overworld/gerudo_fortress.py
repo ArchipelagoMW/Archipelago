@@ -4,14 +4,14 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     GF_GATE = "GF Gate"
     GF_GATE_OUTSIDE = "GF Gate Outside"
     GTG_GATE = "GTG Gate"
     GF_STORMS_GROTTO_FAIRY = "GF Storms Grotto Fairy"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     GF_GATE_OPEN = "GF Gate Open"
     GTG_GATE_OPEN = "GTG Gate Open"
 
@@ -25,10 +25,10 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.GERUDO_FORTRESS_OUTSKIRTS, world, [
-        (Locations.GF_OUTSKIRTS_NE_CRATE,
+        (Locations.GF_OUTSKIRTS_NORTHEAST_CRATE,
          lambda bundle: (is_child(bundle) or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)) and can_break_crates(
              bundle)),
-        (Locations.GF_OUTSKIRTS_NW_CRATE,
+        (Locations.GF_OUTSKIRTS_NORTHWEST_CRATE,
          lambda bundle: is_child(bundle) or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
     ])
     # Connections
@@ -45,8 +45,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.GF_NEAR_GROTTO, world, [
         (Locations.GF_SOUTHMOST_CENTER_CRATE, lambda bundle: can_break_crates(bundle)),
-        (Locations.GF_MID_SOUTH_CENTER_CRATE, lambda bundle: can_break_crates(bundle)),
-        (Locations.GF_MID_NORTH_CENTER_CRATE, lambda bundle: can_break_crates(bundle)),
+        (Locations.GF_MIDDLE_SOUTH_CENTER_CRATE, lambda bundle: can_break_crates(bundle)),
+        (Locations.GF_MIDDLE_NORTH_CENTER_CRATE, lambda bundle: can_break_crates(bundle)),
         (Locations.GF_NORTHMOST_CENTER_CRATE, lambda bundle: can_break_crates(bundle)),
     ])
     # Connections

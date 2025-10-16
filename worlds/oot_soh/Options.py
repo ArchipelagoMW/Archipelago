@@ -243,6 +243,13 @@ class ShuffleTokens(Choice):
     default = 0
 
 
+class SkullsSunSong(Toggle):
+    """
+    All Golden Skulltulas that require nighttime to appear will only be expected to be collected after getting Sun's Song.
+    """
+    display_name = "Night Skulltulas Expect Sun's Song"
+
+
 class ShuffleMasterSword(Toggle):
     """
     Shuffles the Master Sword into the item pool.
@@ -748,6 +755,13 @@ class SkeletonKey(Toggle):
     display_name = "Skeleton Key"
 
 
+class SlingbowBreakBeehives(Toggle):
+    """
+    Allows Slingshot and Bow to break beehives when Beehive Shuffle is turned on.
+    """
+    display_name = "Slingshot and Bow Can Break Beehives"
+
+
 class StartingAge(Choice):
     """
     Decide whether to start as child Link or adult Link.
@@ -811,6 +825,7 @@ class SohOptions(PerGameCommonOptions):
     triforce_hunt_required_pieces: TriforceHuntRequiredPieces
     triforce_hunt_extra_pieces_percentage: TriforceHuntExtraPiecesPercentage
     shuffle_skull_tokens: ShuffleTokens
+    skull_sun_song: SkullsSunSong
     shuffle_master_sword: ShuffleMasterSword
     shuffle_childs_wallet: ShuffleChildsWallet
     shuffle_ocarina_buttons: ShuffleOcarinaButtons
@@ -862,6 +877,7 @@ class SohOptions(PerGameCommonOptions):
     sunlight_arrows: SunlightArrows
     infinite_upgrades: InfiniteUpgrades
     skeleton_key: SkeletonKey
+    slingbow_break_beehives: SlingbowBreakBeehives
     starting_age: StartingAge
     shuffle_100_gs_reward: Shuffle100GSReward
     ice_trap_count: IceTrapCount 
@@ -907,7 +923,7 @@ soh_option_groups = [
     OptionGroup("Shuffle Items", [
         # Shuffle Songs -- idk if this or the other ones here will be an actual option here, delete if not
         ShuffleTokens,
-        # Night Skulltulas Expect Sun's Song
+        SkullsSunSong,
         # Shuffle Kokiri Sword
         ShuffleMasterSword,
         ShuffleChildsWallet,
@@ -982,5 +998,6 @@ soh_option_groups = [
         SunlightArrows,
         InfiniteUpgrades,
         SkeletonKey,
+        SlingbowBreakBeehives,
     ])
 ]

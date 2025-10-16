@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
     
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     MARKET_GUARD_HOUSE = "Market Guard House"
     MARKET_MASK_SHOP_MASKS = "Market Mask Shop Masks"
     MARKET_MASK_SHOP_SKULL_MASK = "Market Mask Shop Skull Mask"

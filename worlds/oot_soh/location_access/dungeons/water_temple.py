@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
     
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     WATER_TEMPLE_EAST_LOWER_WATER_LOW_FROM_HIGH = "Water Temple East Lower Water Low From High"
     WATER_TEMPLE_CENTRAL_PILLAR_UPPER_WATER_MIDDLE = "Water Temple Central Pillar Upper Water Middle"
     WATER_TEMPLE_HIGH_WATER_WATER_HIGH = "Water Temple High Water Water High"
@@ -12,7 +12,7 @@ class EventLocations(str, Enum):
     WATER_TEMPLE_MORPHA = "Water Temple Morpha"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     WATER_LEVEL_LOW = "Water Level Low"
     WATER_LEVEL_MIDDLE = "Water Level Middle"
     WATER_LEVEL_HIGH = "Water Level High"

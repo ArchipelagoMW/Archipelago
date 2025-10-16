@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     KAK_GATE = "Kak Gate"
     KAK_GATE_GUARD = "Kak Gate Guard"
     KAK_BUG_ROCK = "Kak Bug Rock"
@@ -16,7 +16,7 @@ class EventLocations(str, Enum):
     KAK_OPEN_GROTTO_PUDDLE_FISH = "Kak Open Grotto Puddle Fish"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     WAKE_UP_ADULT_TALON = "Wake Up Talon As Adult"
 
 
@@ -73,6 +73,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.KAK_NEAR_SHOOTING_GALLERY_ADULT_CRATE, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
         (Locations.KAK_NEAR_BOARDING_HOUSE_ADULT_CRATE1, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
         (Locations.KAK_NEAR_BOARDING_HOUSE_ADULT_CRATE2, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_IMPAS_HOUSE_ADULT_CRATE1, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_IMPAS_HOUSE_ADULT_CRATE2, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_BAZAAR_ADULT_CRATE1, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
+        (Locations.KAK_NEAR_BAZAAR_ADULT_CRATE2, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
         (Locations.KAK_BEHIND_GS_HOUSE_ADULT_CRATE, lambda bundle: is_adult(bundle) and can_break_crates(bundle)),
         (Locations.KAK_NEAR_GRAVEYARD_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),
         (Locations.KAK_NEAR_WINDMILL_CHILD_CRATE, lambda bundle: is_child(bundle) and can_break_crates(bundle)),

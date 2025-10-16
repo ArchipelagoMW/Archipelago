@@ -8,7 +8,7 @@ from .Locations import location_table
 from .Options import SohOptions, soh_option_groups
 from .Regions import create_regions_and_locations, place_locked_items, dungeon_reward_item_mapping
 from .Enums import *
-from .ItemPool import create_item_pool
+from .ItemPool import create_item_pool, get_filler_item
 from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
 from .ShopItems import fill_shop_items, all_shop_locations
@@ -67,13 +67,13 @@ class SohWorld(World):
         # when adding another progressive item that is option-dependent like these,
         # be sure to also update LogicHelpers.increment_current_count with it too
         if not self.options.shuffle_swim:
-            self.push_precollected(self.create_item(Items.BRONZE_SCALE.value))
+            self.push_precollected(self.create_item(Items.BRONZE_SCALE))
         if not self.options.shuffle_deku_stick_bag:
-            self.push_precollected(self.create_item(Items.DEKU_STICK_BAG.value))
+            self.push_precollected(self.create_item(Items.DEKU_STICK_BAG))
         if not self.options.shuffle_deku_nut_bag:
-            self.push_precollected(self.create_item(Items.DEKU_NUT_BAG.value))
+            self.push_precollected(self.create_item(Items.DEKU_NUT_BAG))
         if not self.options.bombchu_bag:
-            self.push_precollected(self.create_item(Items.BOMBCHU_BAG.value))
+            self.push_precollected(self.create_item(Items.BOMBCHU_BAG))
         
         create_item_pool(self)
 
@@ -94,7 +94,7 @@ class SohWorld(World):
                 prefill_state.collect(item, False)
             for region, shop in all_shop_locations:
                 for slot, item in shop.items():
-                    prefill_state.collect(self.create_item(item.value), False)
+                    prefill_state.collect(self.create_item(item), False)
             prefill_state.sweep_for_advancements()
 
             dungeon_reward_locations = [self.get_location(location.value) for location in dungeon_reward_item_mapping.keys()]
@@ -105,7 +105,27 @@ class SohWorld(World):
 
         fill_shop_items(self)
 
-    def fill_slot_data(self) -> dict[str, Any]:
+        open_location_count: int = sum(1 for loc in self.get_locations() if not loc.locked)
+        filler_item_count: int = open_location_count - len(self.item_pool)
+
+        # Ice Trap Count
+        for _ in range(min(filler_item_count, self.options.ice_trap_count.value)):
+            self.item_pool += [self.create_item(Items.ICE_TRAP)]
+            filler_item_count -= 1
+
+        # Ice Trap Filler Replacement
+        places_to_fill: int = int(filler_item_count * (self.options.ice_trap_filler_replacement.value * .01))
+        for _ in range(places_to_fill):
+            self.item_pool += [self.create_item(Items.ICE_TRAP)]
+            filler_item_count -= 1
+
+        # Add junk items to fill remaining locations
+        for _ in range(filler_item_count):
+            self.item_pool += [self.create_item(get_filler_item(self))]
+
+        self.multiworld.itempool += self.item_pool
+
+    def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "closed_forest": self.options.closed_forest.value,
             "kakariko_gate": self.options.kakariko_gate.value,
@@ -127,6 +147,7 @@ class SohWorld(World):
             "triforce_hunt_required_pieces": self.options.triforce_hunt_required_pieces.value,
             "triforce_hunt_extra_pieces_percentage": self.options.triforce_hunt_extra_pieces_percentage.value,
             "shuffle_skull_tokens": self.options.shuffle_skull_tokens.value,
+            "skull_sun_song": self.options.skull_sun_song.value,
             "shuffle_master_sword": self.options.shuffle_master_sword.value,
             "shuffle_childs_wallet": self.options.shuffle_childs_wallet.value,
             "shuffle_ocarina_buttons": self.options.shuffle_ocarina_buttons.value,
@@ -175,6 +196,7 @@ class SohWorld(World):
             "sunlight_arrows": self.options.sunlight_arrows.value,
             "infinite_upgrades": self.options.infinite_upgrades.value,
             "skeleton_key": self.options.skeleton_key.value,
+            "slingbow_break_beehives": self.options.slingbow_break_beehives.value,
             "starting_age": self.options.starting_age.value,
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
             "ice_trap_count": self.options.ice_trap_count.value,
@@ -204,7 +226,7 @@ class SohWorld(World):
             state._soh_invalidate(self.player) # type: ignore
 
         if item.name in progressive_items:
-            current_count = state.prog_items[self.player][item.name] - 1
+            current_count = state.prog_items[self.player][item.name]
             current_count = increment_current_count(self, item, current_count)
             for i, non_prog_version in enumerate(progressive_items[item.name]):
                 if i + 1 > current_count:
