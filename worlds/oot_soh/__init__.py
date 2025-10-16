@@ -11,7 +11,7 @@ from .Enums import *
 from .ItemPool import create_item_pool
 from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
-from .ShopItems import fill_shop_items
+from .ShopItems import fill_shop_items, all_shop_locations
 from Fill import fill_restrictive
 
 import logging
@@ -63,6 +63,9 @@ class SohWorld(World):
         return SohItem(name, item_data_table[item_entry].classification, item_data_table[item_entry].item_id, self.player)
 
     def create_items(self) -> None:
+        # these are for making the progressive items collect/remove work properly
+        # when adding another progressive item that is option-dependent like these,
+        # be sure to also update LogicHelpers.increment_current_count with it too
         if not self.options.shuffle_swim:
             self.push_precollected(self.create_item(Items.BRONZE_SCALE.value))
         if not self.options.shuffle_deku_stick_bag:
@@ -71,6 +74,7 @@ class SohWorld(World):
             self.push_precollected(self.create_item(Items.DEKU_NUT_BAG.value))
         if not self.options.bombchu_bag:
             self.push_precollected(self.create_item(Items.BOMBCHU_BAG.value))
+        
         create_item_pool(self)
 
     def create_regions(self) -> None: 
@@ -82,13 +86,15 @@ class SohWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(Events.GAME_COMPLETED.value, self.player)
 
     def pre_fill(self) -> None:
-        fill_shop_items(self)
-
+        # Prefill Dungeon Rewards. Need to collect the item pool and vanilla shop items before doing so.
         if self.options.shuffle_dungeon_rewards.value == 1:
             # Create a filled copy of the state so the multiworld can place the dungeon rewards using logic
             prefill_state = CollectionState(self.multiworld)
             for item in self.item_pool:
                 prefill_state.collect(item, False)
+            for region, shop in all_shop_locations:
+                for slot, item in shop.items():
+                    prefill_state.collect(self.create_item(item.value), False)
             prefill_state.sweep_for_advancements()
 
             dungeon_reward_locations = [self.get_location(location.value) for location in dungeon_reward_item_mapping.keys()]
@@ -96,6 +102,8 @@ class SohWorld(World):
 
             # Place dungeon rewards
             fill_restrictive(self.multiworld, prefill_state, dungeon_reward_locations, dungeon_reward_items, single_player_placement=True, lock=True)
+
+        fill_shop_items(self)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
@@ -170,8 +178,8 @@ class SohWorld(World):
             "slingbow_break_beehives": self.options.slingbow_break_beehives.value,
             "starting_age": self.options.starting_age.value,
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
-            "ice_trap_count": self.options.ice_trap_count,
-            "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement,
+            "ice_trap_count": self.options.ice_trap_count.value,
+            "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement.value,
             "shop_prices": self.shop_prices,
             "shop_vanilla_items": self.shop_vanilla_items,
             "scrub_prices": self.scrub_prices,
