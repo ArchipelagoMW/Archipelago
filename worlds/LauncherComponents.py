@@ -217,8 +217,6 @@ components: List[Component] = [
               description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
               description="Connect to a multiworld using the text client."),
-    Component('Links Awakening DX Client', 'LinksAwakeningClient',
-              file_identifier=SuffixIdentifier('.apladx')),
     Component('LttP Adjuster', 'LttPAdjuster'),
     # Ocarina of Time
     Component('OoT Client', 'OoTClient',
@@ -273,7 +271,8 @@ if not is_frozen():
             file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
             world_directory = os.path.join("worlds", file_name)
             if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
-                manifest = json.load(open(os.path.join(world_directory, "archipelago.json")))
+                with open(os.path.join(world_directory, "archipelago.json"), mode="r", encoding="utf-8") as manifest_file:
+                    manifest = json.load(manifest_file)
 
                 assert "game" in manifest, (
                     f"World directory {world_directory} has an archipelago.json manifest file, but it"
