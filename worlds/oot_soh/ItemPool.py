@@ -231,37 +231,6 @@ def create_item_pool(world: "SohWorld") -> None:
     # Add random filler bottles
     world.item_pool += [world.create_item(get_filler_bottle(world)) for _ in range(filler_bottle_amount)]
 
-    open_location_count: int = sum(1 for loc in world.get_locations() if not loc.locked)
-    filler_item_count: int = open_location_count - len(world.item_pool)
-
-    # Remove vanilla shop numbers from the open locations as they're pre-filled later
-    if world.options.shuffle_shops:
-        vanilla_shop_item_amount = 64 - (8 * world.options.shuffle_shops_item_amount.value)
-        filler_item_count -= vanilla_shop_item_amount
-    else:
-        filler_item_count -= 64
-
-    # Remove dungeon rewards from the open locations when set to shuffle between dungeons as they're pre-filled later
-    if world.options.shuffle_dungeon_rewards == "dungeons":
-        filler_item_count -= 9
-
-    # Ice Trap Count
-    for _ in range(min(filler_item_count, world.options.ice_trap_count.value)):
-        world.item_pool += [world.create_item(Items.ICE_TRAP)]
-        filler_item_count -= 1
-
-    # Ice Trap Filler Replacement
-    places_to_fill: int = int(filler_item_count * (world.options.ice_trap_filler_replacement.value * .01))
-    for _ in range(places_to_fill):
-        world.item_pool += [world.create_item(Items.ICE_TRAP)]
-        filler_item_count -= 1
-
-    # Add junk items to fill remaining locations
-    for _ in range(filler_item_count):
-        world.item_pool += [world.create_item(get_filler_item(world))]
-
-    world.multiworld.itempool += world.item_pool
-
 def get_filler_item(world: "SohWorld") -> str:
     return world.random.choice(filler_items)
 
