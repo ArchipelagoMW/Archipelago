@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     DEKU_TREE_LOBBY_BABA_STICKS = "Deku Tree Lobby Baba Sticks",
     DEKU_TREE_LOBBY_BABA_NUTS = "Deku Tree Lobby Baba Nuts",
     DEKU_TREE_COMPASS_BABA_STICKS = "Deku Tree Compass Room Baba Sticks",
@@ -20,7 +20,7 @@ class EventLocations(str, Enum):
     DEKU_TREE_QUEEN_GOHMA = "Deku Tree Queen Gohma"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     DEKU_TREE_BASEMENT_UPPER_BLOCK_PUSHED = "Deku Tree Basement Upper Block Pushed"
 
 

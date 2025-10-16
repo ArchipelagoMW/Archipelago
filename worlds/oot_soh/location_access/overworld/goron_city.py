@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     GC_GOSSIP_STONE_SONG_FAIRY = "GC Gossip Stone Song Fairy"
     GC_STICK_POT = "GC Stick Pot"
     GC_BUG_ROCK = "GC Bug Rock"
@@ -15,7 +15,7 @@ class EventLocations(str, Enum):
     GC_STOP_ROLLING_GORON_AS_ADULT = "GC Stop Rolling Goron as Adult"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     GC_CHILD_FIRE_LIT = "GC Child Fire Lit"
     GC_WOODS_WARP_OPEN = "GC Woods Warp Open"
     GC_DARUNIAS_DOOR_OPENED_AS_CHILD = "GC Darunias Door Opened as Child"

@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     TOT_ENTRANCE_GOSSIP_STONE_SONG_FAIRY = "ToT Entrance Gossip Stone Fairy"
     MASTER_SWORD_PEDESTAL = "Master Sword Pedestal"
 

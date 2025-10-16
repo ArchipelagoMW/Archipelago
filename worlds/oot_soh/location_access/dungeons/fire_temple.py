@@ -3,14 +3,14 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
     
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     FIRE_TEMPLE_NEAR_BOSS_ROOM_FAIRY_POT = "Fire Temple Near Boss Room Fairy Pot"
     FIRE_TEMPLE_LOOP_HAMMER_SWITCH_ROOM_SWITCH = "Fire Temple Loop Hammer Switch Room Switch"
     FIRE_TEMPLE_FIRE_MAZE_UPPER_PLATFORM = "Fire Temple Fire Maze Upper Platform"
     FIRE_TEMPLE_VOLVAGIA = "Fire Temple Volvagia"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT = "Fire Temple Loop Hammer Switch Hit"
     FIRE_TEMPLE_FIRE_MAZE_UPPER_PLATFORM_HIT = "Fire Temple Fire Maze Upper Platform Hit"
 

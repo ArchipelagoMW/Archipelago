@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from ... import SohWorld
 
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     KAK_GATE = "Kak Gate"
     KAK_GATE_GUARD = "Kak Gate Guard"
     KAK_BUG_ROCK = "Kak Bug Rock"
@@ -16,7 +16,7 @@ class EventLocations(str, Enum):
     KAK_OPEN_GROTTO_PUDDLE_FISH = "Kak Open Grotto Puddle Fish"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     WAKE_UP_ADULT_TALON = "Wake Up Talon As Adult"
 
 

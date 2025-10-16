@@ -3,7 +3,7 @@ from ...LogicHelpers import *
 if TYPE_CHECKING:
     from ... import SohWorld
     
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     FOREST_TEMPLE_MEG = "Forest Temple Meg"
     FOREST_TEMPLE_JOELLE = "Forest Temple Joelle"
     FOREST_TEMPLE_AMY = "Forest Temple Amy"
@@ -21,7 +21,7 @@ class EventLocations(str, Enum):
     FOREST_TEMPLE_PHANTOM_GANON = "Forest Temple Phantom Ganon"
 
 
-class LocalEvents(str, Enum):
+class LocalEvents(StrEnum):
     DEFEATED_MEG = "Defeated Meg"
     DEFEATED_JOELLE = "Defeated Joelle"
     DEFEATED_AMY = "Defeated Amy"
