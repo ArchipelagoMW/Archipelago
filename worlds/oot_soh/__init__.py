@@ -8,7 +8,7 @@ from .Locations import location_table
 from .Options import SohOptions, soh_option_groups
 from .Regions import create_regions_and_locations, place_locked_items, dungeon_reward_item_mapping
 from .Enums import *
-from .ItemPool import create_item_pool, get_filler_item
+from .ItemPool import create_item_pool
 from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
 from .ShopItems import fill_shop_items, set_price_rules, all_shop_locations
@@ -105,26 +105,6 @@ class SohWorld(World):
 
         fill_shop_items(self)
         set_price_rules(self)
-
-        open_location_count: int = sum(1 for loc in self.get_locations() if not loc.locked)
-        filler_item_count: int = open_location_count - len(self.item_pool)
-
-        # Ice Trap Count
-        for _ in range(min(filler_item_count, self.options.ice_trap_count.value)):
-            self.item_pool += [self.create_item(Items.ICE_TRAP)]
-            filler_item_count -= 1
-
-        # Ice Trap Filler Replacement
-        places_to_fill: int = int(filler_item_count * (self.options.ice_trap_filler_replacement.value * .01))
-        for _ in range(places_to_fill):
-            self.item_pool += [self.create_item(Items.ICE_TRAP)]
-            filler_item_count -= 1
-
-        # Add junk items to fill remaining locations
-        for _ in range(filler_item_count):
-            self.item_pool += [self.create_item(get_filler_item(self))]
-
-        self.multiworld.itempool += self.item_pool
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
