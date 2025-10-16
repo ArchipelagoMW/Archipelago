@@ -336,14 +336,14 @@ class ShuffleFreestandingItems(Choice):
 
 class ShuffleShops(Toggle):
     """
-    Shuffle the 4 left items in every shop. Randomized items cost 10 rupees. The other 4 shop items stay vanilla.
+    Shuffle shop items amongst the different shops.
     """
     display_name = "Shuffle Shops"
 
 
 class ShuffleShopsItemAmount(Range):
     """
-    If Shuffle Shops is on, set how many shop items in each shop will be randomized.
+    If Shuffle Shops is on, set how many shop items in each shop will be replaced by an entirely random item with a random price.
     """
     display_name = "Shuffle Shops Item Amount"
     range_start = 0
@@ -354,18 +354,18 @@ class ShuffleShopPrices(Choice):
     """
     If Shuffle Shops is on, set the price of randomized shop items.
     - affordable: always 10 rupies
-    - child: 10 - 99 rupies
-    - adult: 10 - 200 rupies
-    - giant: 10 - 500 rupies
-    - tycoon: 10 - 999 rupies
+    - child: 10 - 99 rupees
+    - adult: 10 - 200 rupees
+    - giant: 10 - 500 rupees
+    - tycoon: 10 - 999 rupees
     """
-    display_name = "ShuffleShopPrices"
+    display_name = "Shuffle Shop Prices"
     option_affordable = 0
     option_child = 1
     option_adult = 2
     option_giant = 3
     option_tycoon = 4
-    default = 0
+    default = 2
 
 
 class ShuffleFish(Choice):
