@@ -128,7 +128,7 @@ class SohWorld(World):
             "triforce_hunt_required_pieces": self.options.triforce_hunt_required_pieces.value,
             "triforce_hunt_extra_pieces_percentage": self.options.triforce_hunt_extra_pieces_percentage.value,
             "shuffle_skull_tokens": self.options.shuffle_skull_tokens.value,
-            "skull_sun_song": self.options.skull_sun_song.value,
+            "skulls_sun_song": self.options.skulls_sun_song.value,
             "shuffle_master_sword": self.options.shuffle_master_sword.value,
             "shuffle_childs_wallet": self.options.shuffle_childs_wallet.value,
             "shuffle_ocarina_buttons": self.options.shuffle_ocarina_buttons.value,
@@ -139,8 +139,12 @@ class SohWorld(World):
             "shuffle_deku_nut_bag": self.options.shuffle_deku_nut_bag.value,
             "shuffle_freestanding_items": self.options.shuffle_freestanding_items.value,
             "shuffle_shops": self.options.shuffle_shops.value,
+            "shuffle_shops_item_amount": self.options.shuffle_shops_item_amount.value,
+            "shop_prices": self.shop_prices,
+            "shop_vanilla_items": self.shop_vanilla_items,
             "shuffle_fish": self.options.shuffle_fish.value,
             "shuffle_scrubs": self.options.shuffle_scrubs.value,
+            "scrub_prices": self.scrub_prices,
             "shuffle_beehives": self.options.shuffle_beehives.value,
             "shuffle_cows": self.options.shuffle_cows.value,
             "shuffle_pots": self.options.shuffle_pots.value,
@@ -182,9 +186,6 @@ class SohWorld(World):
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
             "ice_trap_count": self.options.ice_trap_count.value,
             "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement.value,
-            "shop_prices": self.shop_prices,
-            "shop_vanilla_items": self.shop_vanilla_items,
-            "scrub_prices": self.scrub_prices,
         }
 
     def collect(self, state: CollectionState, item: Item) -> bool:

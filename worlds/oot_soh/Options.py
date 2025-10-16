@@ -825,7 +825,7 @@ class SohOptions(PerGameCommonOptions):
     triforce_hunt_required_pieces: TriforceHuntRequiredPieces
     triforce_hunt_extra_pieces_percentage: TriforceHuntExtraPiecesPercentage
     shuffle_skull_tokens: ShuffleTokens
-    skull_sun_song: SkullsSunSong
+    skulls_sun_song: SkullsSunSong
     shuffle_master_sword: ShuffleMasterSword
     shuffle_childs_wallet: ShuffleChildsWallet
     shuffle_ocarina_buttons: ShuffleOcarinaButtons
