@@ -243,6 +243,13 @@ class ShuffleTokens(Choice):
     default = 0
 
 
+class SkullsSunSong(Toggle):
+    """
+    All Golden Skulltulas that require nighttime to appear will only be expected to be collected after getting Sun's Song.
+    """
+    display_name = "Night Skulltulas Expect Sun's Song"
+
+
 class ShuffleMasterSword(Toggle):
     """
     Shuffles the Master Sword into the item pool.
@@ -811,6 +818,7 @@ class SohOptions(PerGameCommonOptions):
     triforce_hunt_required_pieces: TriforceHuntRequiredPieces
     triforce_hunt_extra_pieces_percentage: TriforceHuntExtraPiecesPercentage
     shuffle_skull_tokens: ShuffleTokens
+    skull_sun_song: SkullsSunSong
     shuffle_master_sword: ShuffleMasterSword
     shuffle_childs_wallet: ShuffleChildsWallet
     shuffle_ocarina_buttons: ShuffleOcarinaButtons
@@ -907,7 +915,7 @@ soh_option_groups = [
     OptionGroup("Shuffle Items", [
         # Shuffle Songs -- idk if this or the other ones here will be an actual option here, delete if not
         ShuffleTokens,
-        # Night Skulltulas Expect Sun's Song
+        SkullsSunSong,
         # Shuffle Kokiri Sword
         ShuffleMasterSword,
         ShuffleChildsWallet,
