@@ -941,7 +941,7 @@ soh_option_groups = [
     OptionGroup("Shuffle NPCs & Merchants", [
         ShuffleShops,
         ShuffleShopsItemAmount,
-        # Shop Prices
+        ShuffleShopPrices,
         # Other shop weight stuff
         ShuffleFish,
         ShuffleScrubs,
@@ -999,5 +999,7 @@ soh_option_groups = [
         InfiniteUpgrades,
         SkeletonKey,
         SlingbowBreakBeehives,
+        IceTrapCount,
+        IceTrapFillerReplacement
     ])
 ]
