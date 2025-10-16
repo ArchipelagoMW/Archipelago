@@ -403,8 +403,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
                      FLYERS_CRAG_AP_REGION: lambda state: (logic.has_glide(state) and logic.has_vertical_movement(state)) or logic.has_swimming(state)})
     fancy_add_exits(world, GREENSHIRE_REPRISE_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, SALMON_PASS_EAST_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION],
-                    # if we add hard logic, it is possible to jump from the rolling quintar fields onto the cap seq walls from the southeast and manage to bypass the guard and thus the job requirement
-                    {SALMON_PASS_EAST_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.has_jobs(state, 5)) or logic.has_vertical_movement(state),
+                    #Obscure Routes: it is possible to jump from Rolling Quintar Fields onto the Capital Sequoia walls from the southeast and manage to bypass the guard and thus the job requirement
+                    {SALMON_PASS_EAST_AP_REGION: lambda state: ((logic.has_jobs(state, 5) or options.obscureRoutes.value == options.obscureRoutes.option_true) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME)) or logic.has_vertical_movement(state),
                      TALL_TALL_HEIGHTS_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, SALMON_PASS_EAST_AP_REGION, [GREENSHIRE_REPRISE_AP_REGION, SALMON_PASS_WEST_AP_REGION, DELENDE_AP_REGION],
                     {SALMON_PASS_WEST_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state),
