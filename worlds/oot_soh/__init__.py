@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Any
 
 from BaseClasses import CollectionState, Item, Tutorial
 from Utils import visualize_regions
@@ -106,7 +106,7 @@ class SohWorld(World):
         fill_shop_items(self)
         set_price_rules(self)
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         return {
             "closed_forest": self.options.closed_forest.value,
             "kakariko_gate": self.options.kakariko_gate.value,

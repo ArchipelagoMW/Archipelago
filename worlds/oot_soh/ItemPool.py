@@ -1,4 +1,4 @@
-from typing import Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING
 import math
 
 from .Enums import *
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 def create_item_pool(world: "SohWorld") -> None:
-    items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_data_table.items()}
+    items_to_create: dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_data_table.items()}
 
     filler_bottle_amount: int = 2
 

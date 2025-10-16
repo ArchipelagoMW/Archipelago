@@ -1,4 +1,4 @@
-from typing import Dict, List, NamedTuple, TYPE_CHECKING
+from typing import NamedTuple, TYPE_CHECKING
 from worlds.AutoWorld import LogicMixin
 from BaseClasses import MultiWorld, Region
 from .Enums import *
@@ -73,7 +73,7 @@ if TYPE_CHECKING:
 
 
 class SohRegionData(NamedTuple):
-    connecting_regions: List[str] = []
+    connecting_regions: list[str] = []
 
 class SohRegion(Region):
     game="Ship of Harkinian"
@@ -99,7 +99,7 @@ class SohRegion(Region):
 def create_regions_and_locations(world: "SohWorld") -> None:
 
     # Fill region data table based on the regions enum list
-    region_data_table: Dict[str, SohRegionData] = {}
+    region_data_table: dict[str, SohRegionData] = {}
     for entry in Regions:
         region_data_table[entry] = SohRegionData([])
 

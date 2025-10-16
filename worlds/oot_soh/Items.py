@@ -1,4 +1,5 @@
-from typing import Dict, NamedTuple
+from typing import NamedTuple
+from enum import IntEnum
 from BaseClasses import Item, ItemClassification as IC
 from .Enums import *
 
@@ -25,7 +26,7 @@ class SohItemData(NamedTuple):
     item_groups: list[str] = []  # for item_name_groups
 
 
-item_data_table: Dict[Items, SohItemData] = {
+item_data_table: dict[Items, SohItemData] = {
     # Items commented out that can never appear in the item pool and are only used on Ship internally
 
     Items.KOKIRI_SWORD: SohItemData(1, IC.progression, 1, child_only=True, item_groups=["Swords", "Sword"]),
