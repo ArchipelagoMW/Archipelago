@@ -216,7 +216,7 @@ def create_regions_and_locations(world: "SohWorld") -> None:
             world.included_locations.update(carpenters_location_table)
 
         if world.options.fortress_carpenters == "fast":
-            for location_name in ("GF Freed All Carpenters", "GF 1 Torch Carpenter"):
+            for location_name in ("GF Gerudo Membership Card", "TH 1 Torch Carpenter"):
                 world.included_locations[location_name] = carpenters_location_table[location_name]
 
         if world.options.shuffle_100_gs_reward:

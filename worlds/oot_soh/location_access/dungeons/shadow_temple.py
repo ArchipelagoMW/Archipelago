@@ -10,8 +10,6 @@ class EventLocations(str, Enum):
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    player = world.player
-    
     ## Shadow Temple Entryway
     # Connections
     connect_regions(Regions.SHADOW_TEMPLE_ENTRYWAY, world, [
@@ -27,6 +25,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.SHADOW_TEMPLE_BEGINNING, world, [
         (Locations.SHADOW_TEMPLE_MAP_CHEST, lambda bundle: can_jump_slash_except_hammer(bundle)),
+        (Locations.SHADOW_TEMPLE_HOVER_BOOTS_CHEST, lambda bundle: can_kill_enemy(bundle, Enemies.DEAD_HAND)),
         (Locations.SHADOW_TEMPLE_NEAR_DEAD_HAND_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.SHADOW_TEMPLE_WHISPERING_WALLS_POT1, lambda bundle: can_break_pots(bundle)),
         (Locations.SHADOW_TEMPLE_WHISPERING_WALLS_POT2, lambda bundle: can_break_pots(bundle)),
