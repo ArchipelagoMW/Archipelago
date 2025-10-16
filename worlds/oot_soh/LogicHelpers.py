@@ -183,7 +183,7 @@ def has_item(item: Items | Events | StrEnum, bundle: tuple[CollectionState, Regi
     return state.has(item, player, count)
         
 
-wallet_capacities: dict[str, int] = {
+wallet_capacities: dict[Items, int] = {
     Items.CHILD_WALLET: 99,
     Items.ADULT_WALLET: 200,
     Items.GIANT_WALLET: 500,
@@ -198,7 +198,7 @@ def can_afford(price: int, bundle: tuple[CollectionState, Regions, "SohWorld"]) 
 
     for wallet, amount in wallet_capacities.items():
         if amount >= price:
-            return state.has(wallet, player)
+            return has_item(wallet, bundle)
 
     return False
 

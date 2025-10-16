@@ -27,9 +27,10 @@ def set_region_rules(world: "SohWorld") -> None:
     ## Kokiri Forest
     # Events
     add_events(Regions.KOKIRI_FOREST, world, [
-        (EventLocations.MIDO, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: is_child(bundle)
+        (EventLocations.MIDO, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: (is_child(bundle)
                                                                     and has_item(Items.KOKIRI_SWORD, bundle) 
-                                                                    and has_item(Items.DEKU_SHIELD, bundle)),
+                                                                    and has_item(Items.DEKU_SHIELD, bundle))
+                                                                    or world.options.closed_forest.value == 2),
         (EventLocations.KF_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (EventLocations.KF_SOFT_SOIL, LocalEvents.KF_BEAN_PLANTED, lambda bundle: is_child(bundle) and
                                                                                             can_use(Items.MAGIC_BEAN, bundle)),
@@ -140,7 +141,7 @@ def set_region_rules(world: "SohWorld") -> None:
                                                            or world.options.closed_forest.value == 2),  # Todo, maybe create a helper for handling settings
         (Regions.LOST_WOODS, lambda bundle: True),
         (Regions.LW_BRIDGE_FROM_FOREST, lambda bundle: world.options.closed_forest.value >= 1 or is_adult(bundle) or
-                                                            has_item(Events.FOREST_TEMPLE_COMPLETED, bundle)),
+                                                            has_item(Events.DEKU_TREE_COMPLETED, bundle)),
         (Regions.KF_STORMS_GROTTO, lambda bundle: can_open_storms_grotto(bundle))
     ])
 
@@ -149,8 +150,10 @@ def set_region_rules(world: "SohWorld") -> None:
     add_events(Regions.KF_OUTSIDE_DEKU_TREE, world, [
         (EventLocations.KF_DEKU_TREE_DEKU_BABA_NUTS, Events.CAN_FARM_NUTS, lambda bundle: (can_get_deku_baba_nuts(bundle))),
         (EventLocations.KF_DEKU_TREE_DEKU_BABA_STICKS, Events.CAN_FARM_STICKS, lambda bundle: (can_get_deku_baba_sticks(bundle))),
-        (EventLocations.MIDO_FROM_OUTSIDE_DEKU_TREE, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: (has_item(Items.KOKIRI_SWORD, bundle) and 
-                                                                                         has_item(Items.DEKU_SHIELD, bundle))),
+        (EventLocations.MIDO_FROM_OUTSIDE_DEKU_TREE, LocalEvents.MIDO_SWORD_AND_SHIELD, lambda bundle: (is_child(bundle)
+                                                                    and has_item(Items.KOKIRI_SWORD, bundle) 
+                                                                    and has_item(Items.DEKU_SHIELD, bundle))
+                                                                    or world.options.closed_forest.value == 2),
         (EventLocations.KF_DEKU_TREE_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy_except_suns(bundle))),
     ])
     add_locations(Regions.KF_OUTSIDE_DEKU_TREE, world, [
