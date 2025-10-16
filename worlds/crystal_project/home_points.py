@@ -56,7 +56,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(OKIMOTO_NS_AP_REGION, "Okimoto N.S. Base", 335),
         LocationData(OKIMOTO_NS_AP_REGION, "Ninja Yashiki", 366),
 
-        LocationData(SALMON_PASS_AP_REGION, "Salmon Pass Entrance", 367),
+        LocationData(SALMON_PASS_EAST_AP_REGION, "Salmon Pass Entrance", 367),
 
         LocationData(SALMON_RIVER_AP_REGION, "Salmon Shack", 1076),
 

@@ -524,11 +524,11 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Salmon Pass
         #Treasure chests
-        # 2 chests on the east side that either require the ability to get to Greenshire Reprise and cross it or hop the bridge (also you need the 5 jobs bc the rental quintar comes from Capital Sequoia)
-        LocationData(SALMON_PASS_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Chest - Riverbank among yellow flowers", 2700 + treasure_index_offset, lambda state: (state.can_reach(GREENSHIRE_REPRISE_AP_REGION, player=player) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.has_jobs(state, 5)) or logic.has_horizontal_movement(state) or logic.has_swimming(state)), #Paypirbak chest
-        LocationData(SALMON_PASS_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Chest - Admiring the hidden waterfall", 419 + treasure_index_offset, lambda state: (state.can_reach(GREENSHIRE_REPRISE_AP_REGION, player=player) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.has_jobs(state, 5)) or logic.has_horizontal_movement(state) or logic.has_swimming(state)), #Fenix Juice chest
-        # 1 chest on the west side that either requires crossing the bridge or hoofing it from Salmon River
-        LocationData(SALMON_PASS_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Chest - Across a bridge and around through a tunnel", 2420 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or state.can_reach(SALMON_RIVER_AP_REGION, player=player)),  # Fenix Juice chest
+        #Salmon Pass East: 2 chests on the east side that either require the ability to get to Greenshire Reprise and cross it or hop the bridge (also you need the 5 jobs bc the rental quintar comes from Capital Sequoia)
+        LocationData(SALMON_PASS_EAST_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Chest - Riverbank among yellow flowers", 2700 + treasure_index_offset), #Paypirbak chest
+        LocationData(SALMON_PASS_EAST_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Chest - Admiring the hidden waterfall", 419 + treasure_index_offset), #Fenix Juice chest
+        #Salmon Pass West: 1 chest on the west side that either requires crossing the bridge or hoofing it from Salmon River
+        LocationData(SALMON_PASS_WEST_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Chest - Across a bridge and around through a tunnel", 2420 + treasure_index_offset),  # Fenix Juice chest
 
         #Salmon River
         #Treasure chests
@@ -1872,7 +1872,7 @@ def get_region_completions(player: int, options: CrystalProjectOptions) -> List[
         LocationData(COBBLESTONE_CRAG_AP_REGION, COBBLESTONE_CRAG_DISPLAY_NAME + " Region Completion", 6019 + regionsanity_index_offset, regionsanity=True),
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Region Completion", 6020 + regionsanity_index_offset, regionsanity=True),
         LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Region Completion", 6021 + regionsanity_index_offset, regionsanity=True),
-        LocationData(SALMON_PASS_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Region Completion", 6022 + regionsanity_index_offset, regionsanity=True),
+        LocationData(SALMON_PASS_EAST_AP_REGION, SALMON_PASS_DISPLAY_NAME + " Region Completion", 6022 + regionsanity_index_offset, regionsanity=True),
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Region Completion", 6023 + regionsanity_index_offset, regionsanity=True),
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Region Completion", 6024 + regionsanity_index_offset, regionsanity=True),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Region Completion", 6025 + regionsanity_index_offset, regionsanity=True),

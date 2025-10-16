@@ -68,9 +68,9 @@ class TestRegionsanityOn(CrystalProjectTestBase):
         self.collect_by_name(SALMON_PASS_PASS)
         self.collect_by_name(CAPITAL_SEQUOIA_PASS)
         self.collect_by_name(GREENSHIRE_REPRISE_PASS)
-        self.assertFalse(self.can_reach_region(SALMON_PASS_AP_REGION))
+        self.assertFalse(self.can_reach_region(SALMON_PASS_EAST_AP_REGION))
         self.collect_by_name(ROLLING_QUINTAR_FIELDS_PASS)
-        self.assertTrue(self.can_reach_region(SALMON_PASS_AP_REGION))
+        self.assertTrue(self.can_reach_region(SALMON_PASS_EAST_AP_REGION))
 
     def test_region_completion(self):
         #Verifying that all subregions must be reachable before the region completion location is reachable

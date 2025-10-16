@@ -314,10 +314,10 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      POKO_POKO_DESERT_AP_REGION: lambda state: logic.has_vertical_movement(state) or options.obscureRoutes.value == options.obscureRoutes.option_true,
                      BEAURIOR_VOLCANO_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      YAMAGAWA_MA_AP_REGION: lambda state: logic.has_swimming(state) or logic.has_vertical_movement(state)})
-    fancy_add_exits(world, DELENDE_AP_REGION, [GRAN_AP_REGION, BELOW_GRAN_AP_REGION, SPAWNING_MEADOWS_AP_REGION, SOILED_DEN_AP_REGION, THE_PALE_GROTTO_AP_REGION, YAMAGAWA_MA_AP_REGION, SEASIDE_CLIFFS_AP_REGION, MERCURY_SHRINE_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, SALMON_PASS_AP_REGION, PROVING_MEADOWS_AP_REGION, LAKE_DELENDE_AP_REGION],
+    fancy_add_exits(world, DELENDE_AP_REGION, [GRAN_AP_REGION, BELOW_GRAN_AP_REGION, SPAWNING_MEADOWS_AP_REGION, SOILED_DEN_AP_REGION, THE_PALE_GROTTO_AP_REGION, YAMAGAWA_MA_AP_REGION, SEASIDE_CLIFFS_AP_REGION, MERCURY_SHRINE_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, SALMON_PASS_EAST_AP_REGION, PROVING_MEADOWS_AP_REGION, LAKE_DELENDE_AP_REGION],
                     {GRAN_AP_REGION: lambda state: logic.can_fight_gran(state),
                      BELOW_GRAN_AP_REGION: lambda state: options.obscureRoutes.value == options.obscureRoutes.option_true,
-                     SALMON_PASS_AP_REGION: lambda state: logic.has_swimming(state),
+                     SALMON_PASS_EAST_AP_REGION: lambda state: logic.has_swimming(state),
                      GREENSHIRE_REPRISE_AP_REGION: lambda state: logic.has_swimming(state) or options.obscureRoutes.value == options.obscureRoutes.option_true,
                      PROVING_MEADOWS_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state),
                      LAKE_DELENDE_AP_REGION: lambda state: logic.has_vertical_movement(state) or options.obscureRoutes.value == options.obscureRoutes.option_true})
@@ -332,11 +332,11 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {JADE_CAVERN_AP_REGION: lambda state: logic.has_golden_quintar(state),
                      THE_PALE_GROTTO_AP_REGION: lambda state: logic.has_swimming(state),
                      DRAFT_SHAFT_CONDUIT_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, THE_PALE_GROTTO_AP_REGION, [DELENDE_AP_REGION, SOILED_DEN_AP_REGION, PROVING_MEADOWS_AP_REGION, JOJO_SEWERS_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION, SALMON_PASS_AP_REGION],
+    fancy_add_exits(world, THE_PALE_GROTTO_AP_REGION, [DELENDE_AP_REGION, SOILED_DEN_AP_REGION, PROVING_MEADOWS_AP_REGION, JOJO_SEWERS_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION, SALMON_PASS_EAST_AP_REGION],
                     {SOILED_DEN_AP_REGION: lambda state: logic.has_swimming(state),
                      JOJO_SEWERS_AP_REGION: lambda state: logic.has_swimming(state),
                      TALL_TALL_HEIGHTS_AP_REGION: lambda state: logic.has_swimming(state),
-                     SALMON_PASS_AP_REGION: lambda state: logic.has_swimming(state)})
+                     SALMON_PASS_EAST_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, SEASIDE_CLIFFS_AP_REGION, [DELENDE_AP_REGION, DRAFT_SHAFT_CONDUIT_AP_REGION, THE_OPEN_SEA_AP_REGION, MERCURY_SHRINE_AP_REGION, BEAURIOR_VOLCANO_AP_REGION],
                     {BEAURIOR_VOLCANO_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
@@ -402,15 +402,16 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, OKIMOTO_NS_AP_REGION, [COBBLESTONE_CRAG_AP_REGION, THE_OPEN_SEA_AP_REGION, FLYERS_CRAG_AP_REGION],
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
                      FLYERS_CRAG_AP_REGION: lambda state: (logic.has_glide(state) and logic.has_vertical_movement(state)) or logic.has_swimming(state)})
-    fancy_add_exits(world, GREENSHIRE_REPRISE_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, SALMON_PASS_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION],
+    fancy_add_exits(world, GREENSHIRE_REPRISE_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, SALMON_PASS_EAST_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION],
                     # if we add hard logic, it is possible to jump from the rolling quintar fields onto the cap seq walls from the southeast and manage to bypass the guard and thus the job requirement
-                    {SALMON_PASS_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.has_jobs(state, 5)) or logic.has_vertical_movement(state),
+                    {SALMON_PASS_EAST_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.has_jobs(state, 5)) or logic.has_vertical_movement(state),
                      TALL_TALL_HEIGHTS_AP_REGION: lambda state: logic.has_vertical_movement(state)})
-    fancy_add_exits(world, SALMON_PASS_AP_REGION, [GREENSHIRE_REPRISE_AP_REGION, SALMON_RIVER_AP_REGION, DELENDE_AP_REGION],
-                    {GREENSHIRE_REPRISE_AP_REGION: lambda state: (logic.has_horizontal_movement(state) or logic.has_swimming(state)),
-                     SALMON_RIVER_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state),
+    fancy_add_exits(world, SALMON_PASS_EAST_AP_REGION, [GREENSHIRE_REPRISE_AP_REGION, SALMON_PASS_WEST_AP_REGION, DELENDE_AP_REGION],
+                    {SALMON_PASS_WEST_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state),
                      DELENDE_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, SALMON_RIVER_AP_REGION, [SALMON_PASS_AP_REGION, SALMON_BAY_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION],
+    fancy_add_exits(world, SALMON_PASS_WEST_AP_REGION, [SALMON_PASS_EAST_AP_REGION, SALMON_RIVER_AP_REGION],
+                    {SALMON_PASS_EAST_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state)})
+    fancy_add_exits(world, SALMON_RIVER_AP_REGION, [SALMON_PASS_WEST_AP_REGION, SALMON_BAY_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION],
                     {SALMON_BAY_AP_REGION: lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state),
                      TALL_TALL_HEIGHTS_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, POKO_POKO_DESERT_AP_REGION, [SARA_SARA_BAZAAR_AP_REGION, ANCIENT_RESERVOIR_AP_REGION, LAKE_DELENDE_AP_REGION, SALMON_BAY_AP_REGION, ANCIENT_LABYRINTH_AP_REGION],
