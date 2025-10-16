@@ -6,29 +6,34 @@ from typing import TYPE_CHECKING, Dict, Type
 from Utils import parse_yaml
 
 if TYPE_CHECKING:
-    from worlds.AutoWorld import World
+    from worlds.AutoWorld import TestableWorld, World
 
 
 class TestGenerateYamlTemplates(unittest.TestCase):
     old_world_types: Dict[str, Type["World"]]
+    old_testable_worlds: Dict[str, "TestableWorld"]
 
     def setUp(self) -> None:
         import worlds.AutoWorld
 
         self.old_world_types = worlds.AutoWorld.AutoWorldRegister.world_types
+        self.old_testable_worlds = worlds.AutoWorld.AutoWorldRegister.testable_worlds
 
     def tearDown(self) -> None:
         import worlds.AutoWorld
 
         worlds.AutoWorld.AutoWorldRegister.world_types = self.old_world_types
+        worlds.AutoWorld.AutoWorldRegister.testable_worlds = self.old_testable_worlds
 
         if "World: with colon" in worlds.AutoWorld.AutoWorldRegister.world_types:
             del worlds.AutoWorld.AutoWorldRegister.world_types["World: with colon"]
 
+        if "World: with colon" in worlds.AutoWorld.AutoWorldRegister.testable_worlds:
+            del worlds.AutoWorld.AutoWorldRegister.testable_worlds["World: with colon"]
+
     def test_name_with_colon(self) -> None:
         from Options import generate_yaml_templates
-        from worlds.AutoWorld import AutoWorldRegister
-        from worlds.AutoWorld import World
+        from worlds.AutoWorld import AutoWorldRegister, TestableWorld, World
 
         class WorldWithColon(World):
             game = "World: with colon"
@@ -36,6 +41,7 @@ class TestGenerateYamlTemplates(unittest.TestCase):
             location_name_to_id = {}
 
         AutoWorldRegister.world_types = {WorldWithColon.game: WorldWithColon}
+        AutoWorldRegister.testable_worlds = {WorldWithColon.game: TestableWorld(WorldWithColon)}
         with TemporaryDirectory(f"archipelago_{__name__}") as temp_dir:
             generate_yaml_templates(temp_dir)
             path: Path
