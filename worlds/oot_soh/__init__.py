@@ -206,7 +206,7 @@ class SohWorld(World):
             state._soh_invalidate(self.player) # type: ignore
 
         if item.name in progressive_items:
-            current_count = state.prog_items[self.player][item.name] - 1
+            current_count = state.prog_items[self.player][item.name]
             current_count = increment_current_count(self, item, current_count)
             for i, non_prog_version in enumerate(progressive_items[item.name]):
                 if i + 1 > current_count:
