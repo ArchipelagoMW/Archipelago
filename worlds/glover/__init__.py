@@ -92,7 +92,13 @@ class GloverWorld(World):
     #Check/Item Prefixes
     world_prefixes = ["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"]
     level_prefixes = ["H", "1", "2", "3", "!", "?"]
-    existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", "Crn1", "Crn2", "Crn3", "Crn!", "Crn?", "Prt1", "Prt2", "Prt3", "Prt!", "Prt?", "Pht1", "Pht2", "Pht3", "Pht!", "Pht?", "FoF!", "Otw!", "Training"]
+    existing_levels = ["Atl1", "Atl2", "Atl3", "Atl!", "Atl?", 
+                       "Crn1", "Crn2", "Crn3", "Crn!", "Crn?", 
+                       "Prt1", "Prt2", "Prt3", "Prt!", "Prt?", 
+                       "Pht1", "Pht2", "Pht3", "Pht!", "Pht?", 
+                       "FoF1", "FoF2", "FoF3", "FoF!", "FoF?", 
+                       "Otw1", "Otw2", "Otw3", "Otw!", "Otw?", 
+                       "Training"]
     group_lists : list[str] = ["Not Crystal",
 	"Not Bowling",
 	"Not Bowling or Crystal",
@@ -199,15 +205,15 @@ class GloverWorld(World):
             ["Pht1", 80],
             ["Pht2", 80],
             ["Pht3", 80],
-            ["Pht?", 60]#,
-            #["FoF1", 60]#,
-            #["FoF2", 60]#,
-            #["FoF3", 70]#,
-            #["FoF?", 56]#,
-            #["Otw1", 50]#,
-            #["Otw2", 50]#,
-            #["Otw3", 80]#,
-            #["Otw?", 50]
+            ["Pht?", 60],
+            ["FoF1", 60],
+            ["FoF2", 60],
+            ["FoF3", 70],
+            ["FoF?", 56],
+            ["Otw1", 50],
+            ["Otw2", 50],
+            ["Otw3", 80],
+            ["Otw?", 50]
         ]
         #Extra garib placements
         self.extra_garib_levels = [
@@ -226,15 +232,15 @@ class GloverWorld(World):
             ["Pht1", 0],
             ["Pht2", 0],
             ["Pht3", 0],
-            ["Pht?", 0]#,
-            #["FoF1", 0]#,
-            #["FoF2", 0]#,
-            #["FoF3", 0]#,
-            #["FoF?", 0]#,
-            #["Otw1", 0]#,
-            #["Otw2", 0]#,
-            #["Otw3", 0]#,
-            #["Otw?", 0]
+            ["Pht?", 0],
+            ["FoF1", 0],
+            ["FoF2", 0],
+            ["FoF3", 0],
+            ["FoF?", 0],
+            ["Otw1", 0],
+            ["Otw2", 0],
+            ["Otw3", 0],
+            ["Otw?", 0]
         ]
         self.starting_ball : str = "Rubber Ball"
         #Grab Mr. Tips for hints
@@ -283,10 +289,8 @@ class GloverWorld(World):
             #When all levels exist, you can just shuffle this
             #self.random.shuffle(self.wayroom_entrances)
 
-            #TEMP: While only certain levels exist, randomize only those.
+            #While only certain levels exist, randomize only those.
             randomizable_existing_levels = self.existing_levels.copy()
-            randomizable_existing_levels.remove("FoF!")
-            randomizable_existing_levels.remove("Otw!")
             randomizable_existing_levels.remove("Training")
             shuffled_existing_levels = randomizable_existing_levels.copy()
             self.random.shuffle(shuffled_existing_levels)
@@ -329,8 +333,8 @@ class GloverWorld(World):
             self.garib_level_order.append(self.garib_level_order.pop(["Crn?", 20]))
             self.garib_level_order.append(self.garib_level_order.pop(["Prt?", 50]))
             self.garib_level_order.append(self.garib_level_order.pop(["Pht?", 60]))
-            #self.garib_level_order.append(self.garib_level_order.pop(["FoF?", 56]))
-            #self.garib_level_order.append(self.garib_level_order.pop(["Otw?", 50]))
+            self.garib_level_order.append(self.garib_level_order.pop(["FoF?", 56]))
+            self.garib_level_order.append(self.garib_level_order.pop(["Otw?", 50]))
 
         #Set the starting ball
         match self.options.starting_ball:
@@ -805,7 +809,6 @@ class GloverWorld(World):
                 all_garibs_item  = self.create_event(wayroom_name + " Bonus Star")
         #What kind of level is this?
         
-        #TEMP: REMOVE IF SATEMENTS ONCE GAME'S CONSTRUCTED
         if connecting_level_name in self.existing_levels:
             goal_or_boss : str = ": Goal"
             if connecting_level_name.endswith('!'):
