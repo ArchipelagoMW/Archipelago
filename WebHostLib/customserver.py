@@ -19,7 +19,10 @@ from pony.orm import commit, db_session, select
 
 import Utils
 
-from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
+from MultiServer import (
+    Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert,
+    server_per_message_deflate_factory,
+)
 from Utils import restricted_loads, cache_argsless
 from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
@@ -283,8 +286,12 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                 assert ctx.server is None
                 try:
                     ctx.server = websockets.serve(
-                        functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=get_ssl_context())
-
+                        functools.partial(server, ctx=ctx),
+                        ctx.host,
+                        ctx.port,
+                        ssl=get_ssl_context(),
+                        extensions=[server_per_message_deflate_factory],
+                    )
                     await ctx.server
                 except OSError:  # likely port in use
                     ctx.server = websockets.serve(
