@@ -18,7 +18,7 @@ def set_region_rules(world: "SohWorld") -> None:
     if bool(world.options.triforce_hunt):
         add_events(Regions.ROOT, world, [
             (EventLocations.TRIFORCE_HUNT_COMPLETION, Events.GAME_COMPLETED, lambda bundle:
-             (has_item(Items.TRIFORCE_PIECE, bundle, world.options.triforce_hunt_pieces_total.value * (world.options.triforce_hunt_pieces_required.value * .01))))
+             (has_item(Items.TRIFORCE_PIECE, bundle, round(world.options.triforce_hunt_pieces_total.value * (world.options.triforce_hunt_pieces_required.value * .01)))))
         ])
     # Locations
     add_locations(Regions.ROOT, world, [
