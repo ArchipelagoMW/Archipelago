@@ -74,6 +74,8 @@ class SohWorld(World):
             self.push_precollected(self.create_item(Items.DEKU_NUT_BAG))
         if not self.options.bombchu_bag:
             self.push_precollected(self.create_item(Items.BOMBCHU_BAG))
+        if not self.options.shuffle_childs_wallet:
+            self.push_precollected(self.create_item(Items.CHILD_WALLET))
         
         create_item_pool(self)
 
