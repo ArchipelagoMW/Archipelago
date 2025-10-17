@@ -1,20 +1,7 @@
 import functools
-from typing import Union, Iterable
+from typing import Iterable
 
 from .base_logic import BaseLogicMixin, BaseLogic
-from .book_logic import BookLogicMixin
-from .combat_logic import CombatLogicMixin
-from .fishing_logic import FishingLogicMixin
-from .has_logic import HasLogicMixin
-from .quest_logic import QuestLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogicMixin
-from .season_logic import SeasonLogicMixin
-from .skill_logic import SkillLogicMixin
-from .time_logic import TimeLogicMixin
-from .tool_logic import ToolLogicMixin
-from .walnut_logic import WalnutLogicMixin
 from ..data.game_item import Requirement
 from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, YearRequirement, CombatRequirement, QuestRequirement, \
     RelationshipRequirement, FishingRequirement, WalnutRequirement, RegionRequirement
@@ -26,8 +13,7 @@ class RequirementLogicMixin(BaseLogicMixin):
         self.requirement = RequirementLogic(*args, **kwargs)
 
 
-class RequirementLogic(BaseLogic[Union[RequirementLogicMixin, HasLogicMixin, ReceivedLogicMixin, ToolLogicMixin, SkillLogicMixin, BookLogicMixin,
-SeasonLogicMixin, TimeLogicMixin, CombatLogicMixin, QuestLogicMixin, RelationshipLogicMixin, FishingLogicMixin, WalnutLogicMixin, RegionLogicMixin]]):
+class RequirementLogic(BaseLogic):
 
     def meet_all_requirements(self, requirements: Iterable[Requirement]):
         if not requirements:

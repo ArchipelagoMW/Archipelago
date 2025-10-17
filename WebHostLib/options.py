@@ -108,7 +108,7 @@ def option_presets(game: str) -> Response:
                     f"Expected {option.special_range_names.keys()} or {option.range_start}-{option.range_end}."
 
                 presets[preset_name][preset_option_name] = option.value
-            elif isinstance(option, (Options.Range, Options.OptionSet, Options.OptionList, Options.ItemDict)):
+            elif isinstance(option, (Options.Range, Options.OptionSet, Options.OptionList, Options.OptionCounter)):
                 presets[preset_name][preset_option_name] = option.value
             elif isinstance(preset_option, str):
                 # Ensure the option value is valid for Choice and Toggle options
@@ -155,7 +155,9 @@ def generate_weighted_yaml(game: str):
         options = {}
 
         for key, val in request.form.items():
-            if "||" not in key:
+            if val == "_ensure-empty-list":
+                options[key] = {}
+            elif "||" not in key:
                 if len(str(val)) == 0:
                     continue
 
@@ -212,8 +214,11 @@ def generate_yaml(game: str):
     if request.method == "POST":
         options = {}
         intent_generate = False
+
         for key, val in request.form.items(multi=True):
-            if key in options:
+            if val == "_ensure-empty-list":
+                options[key] = []
+            elif options.get(key):
                 if not isinstance(options[key], list):
                     options[key] = [options[key]]
                 options[key].append(val)
@@ -222,11 +227,11 @@ def generate_yaml(game: str):
 
         for key, val in options.copy().items():
             key_parts = key.rsplit("||", 2)
-            # Detect and build ItemDict options from their name pattern
+            # Detect and build OptionCounter options from their name pattern
             if key_parts[-1] == "qty":
                 if key_parts[0] not in options:
                     options[key_parts[0]] = {}
-                if val != "0":
+                if val and val != "0":
                     options[key_parts[0]][key_parts[1]] = int(val)
                 del options[key]
 

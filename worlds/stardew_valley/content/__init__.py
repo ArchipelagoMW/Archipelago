@@ -21,7 +21,7 @@ def choose_content_packs(player_options: options.StardewValleyOptions):
         if player_options.special_order_locations & options.SpecialOrderLocations.value_qi:
             active_packs.append(content_packs.qi_board_content_pack)
 
-    for mod in player_options.mods.value:
+    for mod in sorted(player_options.mods.value):
         active_packs.append(content_packs.by_mod[mod])
 
     return active_packs
