@@ -33,6 +33,7 @@ def get_meta(options_source: dict, race: bool = False) -> dict[str, list[str] | 
         "release_mode": str(options_source.get("release_mode", ServerOptions.release_mode)),
         "remaining_mode": str(options_source.get("remaining_mode", ServerOptions.remaining_mode)),
         "collect_mode": str(options_source.get("collect_mode", ServerOptions.collect_mode)),
+        "countdown_mode": str(options_source.get("countdown_mode", ServerOptions.countdown_mode)),
         "item_cheat": bool(int(options_source.get("item_cheat", not ServerOptions.disable_item_cheat))),
         "server_password": str(options_source.get("server_password", None)),
     }
@@ -72,6 +73,10 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
+def format_exception(e: BaseException) -> str:
+    return f"{e.__class__.__name__}: {e}"
+
+
 def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
     results, gen_options = roll_options(options, set(meta["plando_options"]))
 
@@ -92,7 +97,9 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
         except PicklingError as e:
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
-            return render_template("seedError.html", seed_error=("PicklingError: " + str(e)))
+            meta["error"] = format_exception(e)
+            details = json.dumps(meta, indent=4).strip()
+            return render_template("seedError.html", seed_error=meta["error"], details=details)
 
         commit()
 
@@ -104,7 +111,9 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
         except BaseException as e:
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
-            return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": " + str(e)))
+            meta["error"] = format_exception(e)
+            details = json.dumps(meta, indent=4).strip()
+            return render_template("seedError.html", seed_error=meta["error"], details=details)
 
         return redirect(url_for("view_seed", seed=seed_id))
 
@@ -175,9 +184,9 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
                 if gen is not None:
                     gen.state = STATE_ERROR
                     meta = json.loads(gen.meta)
-                    meta["error"] = (
-                            "Allowed time for Generation exceeded, please consider generating locally instead. " +
-                            e.__class__.__name__ + ": " + str(e))
+                    meta["error"] = ("Allowed time for Generation exceeded, " +
+                                     "please consider generating locally instead. " +
+                                     format_exception(e))
                     gen.meta = json.dumps(meta)
                     commit()
     except BaseException as e:
@@ -187,7 +196,7 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
                 if gen is not None:
                     gen.state = STATE_ERROR
                     meta = json.loads(gen.meta)
-                    meta["error"] = (e.__class__.__name__ + ": " + str(e))
+                    meta["error"] = format_exception(e)
                     gen.meta = json.dumps(meta)
                     commit()
         raise
@@ -204,7 +213,9 @@ def wait_seed(seed: UUID):
     if not generation:
         return "Generation not found."
     elif generation.state == STATE_ERROR:
-        return render_template("seedError.html", seed_error=generation.meta)
+        meta = json.loads(generation.meta)
+        details = json.dumps(meta, indent=4).strip()
+        return render_template("seedError.html", seed_error=meta["error"], details=details)
     return render_template("waitSeed.html", seed_id=seed_id)
 
 

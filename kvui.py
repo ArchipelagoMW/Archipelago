@@ -838,15 +838,15 @@ class GameManager(ThemedApp):
         self.log_panels: typing.Dict[str, Widget] = {}
 
         # keep track of last used command to autofill on click
-        self.last_autofillable_command = "hint"
-        autofillable_commands = ("hint_location", "hint", "getitem")
+        self.last_autofillable_command = "!hint"
+        autofillable_commands = ("!hint_location", "!hint", "!getitem")
         original_say = ctx.on_user_say
 
         def intercept_say(text):
             text = original_say(text)
             if text:
                 for command in autofillable_commands:
-                    if text.startswith("!" + command):
+                    if text.startswith(command):
                         self.last_autofillable_command = command
                         break
             return text
@@ -1098,10 +1098,6 @@ class GameManager(ThemedApp):
     def update_hints(self):
         hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", [])
         self.hint_log.refresh_hints(hints)
-
-    # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
-    def open_settings(self, *largs):
-        pass
 
 
 class LogtoUI(logging.Handler):

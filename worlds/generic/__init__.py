@@ -1,4 +1,5 @@
 from typing import NamedTuple, Union
+from typing_extensions import deprecated
 import logging
 
 from BaseClasses import Item, Tutorial, ItemClassification
@@ -49,7 +50,8 @@ class GenericWorld(World):
             return Item(name, ItemClassification.filler, -1, self.player)
         raise InvalidItemError(name)
 
-
+@deprecated("worlds.generic.PlandoItem is deprecated and will be removed in the next version. "
+            "Use Options.PlandoItem(s) instead.")
 class PlandoItem(NamedTuple):
     item: str
     location: str
