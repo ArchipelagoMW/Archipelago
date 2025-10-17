@@ -5,20 +5,40 @@ import unittest
 from pathlib import Path
 from typing import ClassVar
 
+import test
+import worlds
+from Utils import home_path
 from worlds.AutoWorld import AutoWorldRegister
 from ..param import classvar_matrix
 
 
+test_path = Path(test.__file__).parent
+worlds_paths = [
+    Path(worlds.__file__).parent,
+    Path(worlds.__file__).parent / "custom_worlds",
+    Path(home_path("worlds")),
+    Path(home_path("custom_worlds")),
+]
+
 # Only check source folders for now. Zip validation should probably be in the loader and/or installer.
-source_world_names = [k for k, v in AutoWorldRegister.world_types.items() if not v.zip_path]
+source_world_names = [
+    k
+    for k, v in AutoWorldRegister.world_types.items()
+    if not v.zip_path and not Path(v.__file__).is_relative_to(test_path)
+]
 
 
 def get_source_world_manifest_path(game: str) -> Path | None:
+    """Get the world's root folder from game name."""
+    # TODO: add a feature to AutoWorld that makes this less annoying
     world_type = AutoWorldRegister.world_types[game]
-    manifest_path = Path(world_type.__file__).parent / "archipelago.json"
-    if manifest_path.exists():
-        return manifest_path
-    return None
+    world_type_path = Path(world_type.__file__)
+    for worlds_path in worlds_paths:
+        if world_type_path.is_relative_to(worlds_path):
+            world_root = worlds_path / world_type_path.relative_to(worlds_path).parents[0]
+            manifest_path = world_root / "archipelago.json"
+            return manifest_path if manifest_path.exists() else None
+    assert False, f"{world_type_path} not found in any worlds path"
 
 
 # TODO: remove the filter once manifests are mandatory.
