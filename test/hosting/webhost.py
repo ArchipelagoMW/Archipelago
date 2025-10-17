@@ -1,6 +1,10 @@
+import io
+import json
 import re
+import time
+import zipfile
 from pathlib import Path
-from typing import TYPE_CHECKING, Optional, cast
+from typing import TYPE_CHECKING, Iterable, Optional, cast
 
 from WebHostLib import to_python
 
@@ -10,6 +14,7 @@ if TYPE_CHECKING:
 
 __all__ = [
     "get_app",
+    "generate_remote",
     "upload_multidata",
     "create_room",
     "start_room",
@@ -17,6 +22,7 @@ __all__ = [
     "set_room_timeout",
     "get_multidata_for_room",
     "set_multidata_for_room",
+    "stop_autogen",
     "stop_autohost",
 ]
 
@@ -33,8 +39,41 @@ def get_app(tempdir: str) -> "Flask":
         "TESTING": True,
         "HOST_ADDRESS": "localhost",
         "HOSTERS": 1,
+        "GENERATORS": 1,
+        "JOB_THRESHOLD": 1,
     })
     return get_app()
+
+
+def generate_remote(app_client: "FlaskClient", games: Iterable[str]) -> str:
+    data = io.BytesIO()
+    with zipfile.ZipFile(data, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
+        for n, game in enumerate(games, 1):
+            name = f"{n}.yaml"
+            zip_file.writestr(name, json.dumps({
+                "name": f"Player{n}",
+                "game": game,
+                game: {},
+                "description": f"generate_remote slot {n} ('Player{n}'): {game}",
+            }))
+    data.seek(0)
+    response = app_client.post("/generate", content_type="multipart/form-data", data={
+        "file": (data, "yamls.zip"),
+    })
+    assert response.status_code < 400, f"Starting gen failed: status {response.status_code}"
+    assert "Location" in response.headers, f"Starting gen failed: no redirect"
+    location = response.headers["Location"]
+    assert isinstance(location, str)
+    assert location.startswith("/wait/"), f"Starting WebHost gen failed: unexpected redirect to {location}"
+    for attempt in range(10):
+        response = app_client.get(location)
+        if "Location" in response.headers:
+            location = response.headers["Location"]
+            assert isinstance(location, str)
+            assert location.startswith("/seed/"), f"Finishing WebHost gen failed: unexpected redirect to {location}"
+            return location[6:]
+        time.sleep(1)
+    raise TimeoutError("WebHost gen did not finish")
 
 
 def upload_multidata(app_client: "FlaskClient", multidata: Path) -> str:
@@ -186,6 +225,29 @@ def set_multidata_for_room(webhost_client: "FlaskClient", room_id: str, data: by
     with db_session:
         room: Room = Room.get(id=room_uuid)
         room.seed.multidata = data
+
+
+def stop_autogen(graceful: bool = True) -> None:
+    import os
+    import signal
+
+    import multiprocessing
+
+    from WebHostLib.autolauncher import stop
+
+    stop()
+    proc: multiprocessing.process.BaseProcess
+    # FIXME: this startswith is jank, but there seems to be no way to add a prefix for a Pool
+    for proc in filter(lambda child: child.name.startswith("SpawnPoolWorker-"), multiprocessing.active_children()):
+        if graceful and proc.pid:
+            os.kill(proc.pid, getattr(signal, "CTRL_C_EVENT", signal.SIGINT))
+        else:
+            proc.kill()
+        try:
+            proc.join(30)
+        except TimeoutError:
+            proc.kill()
+            proc.join()
 
 
 def stop_autohost(graceful: bool = True) -> None:
