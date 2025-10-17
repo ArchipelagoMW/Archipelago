@@ -164,7 +164,7 @@ def set_region_rules(world: "SohWorld") -> None:
     add_locations(Regions.THIEVES_HIDEOUT_KITCHEN_BOTTOM, world, [
         (Locations.TH_KITCHEN_CRATE,
          lambda bundle: can_break_crates(bundle) and can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
-        (Locations.TH_KITCHEN_SUNS_SONG_FAIRY,
+        (Locations.TH_KITCHEN_SUN_FAIRY,
          lambda bundle: can_pass_enemy(bundle, Enemies.GERUDO_GUARD) and can_use(Items.SUNS_SONG, bundle))
     ])
     # Connections
