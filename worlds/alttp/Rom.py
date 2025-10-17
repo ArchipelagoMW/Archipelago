@@ -183,7 +183,7 @@ def check_enemizer(enemizercli):
     if getattr(check_enemizer, "done", None):
         return
     if not os.path.exists(enemizercli) and not os.path.exists(enemizercli + ".exe"):
-        raise Exception(f"Enemizer not found at {enemizercli}, please install it."
+        raise Exception(f"Enemizer not found at {enemizercli}, please install it. "
                         f"Such as https://github.com/Ijwu/Enemizer/releases")
 
     with check_lock:
