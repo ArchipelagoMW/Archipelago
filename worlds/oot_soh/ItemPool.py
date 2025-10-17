@@ -250,7 +250,7 @@ def create_item_pool(world: "SohWorld") -> None:
         for _ in range(total_triforce_pieces):
             world.item_pool += [world.create_item(Items.TRIFORCE_PIECE)]
 
-        filler_item_count = filler_item_count - total_triforce_pieces
+        filler_item_count -= total_triforce_pieces
 
         if world.options.triforce_hunt_required_pieces > total_triforce_pieces:
             world.options.triforce_hunt_required_pieces = total_triforce_pieces
