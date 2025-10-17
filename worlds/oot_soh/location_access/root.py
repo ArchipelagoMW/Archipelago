@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from .. import SohWorld
 
 
-class EventLocations(str, Enum):
+class EventLocations(StrEnum):
     ROOT_AMMO_DROP = "Root Ammo Drop"
     ROOT_DEKU_SHIELD = "Root Deku Shield"
     ROOT_HYLIAN_SHIELD = "Root Hylian Shield"
@@ -13,16 +13,12 @@ class EventLocations(str, Enum):
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    ## Root
+    # Root
     # Events
-    add_events(Regions.ROOT, world, [
-        (EventLocations.ROOT_DEKU_SHIELD, Items.BUY_DEKU_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
-        (EventLocations.ROOT_HYLIAN_SHIELD, Items.BUY_HYLIAN_SHIELD, lambda bundle: True), # TODO: Remove this when shop has it properly implemented
-    ])
     if bool(world.options.triforce_hunt):
         add_events(Regions.ROOT, world, [
             (EventLocations.TRIFORCE_HUNT_COMPLETION, Events.GAME_COMPLETED, lambda bundle:
-            (has_item(Items.TRIFORCE_PIECE, bundle, world.options.triforce_hunt_required_pieces.value)))
+             (has_item(Items.TRIFORCE_PIECE, bundle, world.options.triforce_hunt_required_pieces.value)))
         ])
     # Locations
     add_locations(Regions.ROOT, world, [
@@ -30,21 +26,23 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.ROOT, world, [
-        (Regions.ROOT_EXITS, lambda bundle: starting_age(bundle) or has_item(Events.TIME_TRAVEL, bundle))
+        (Regions.ROOT_EXITS, lambda bundle: starting_age(
+            bundle) or has_item(Events.TIME_TRAVEL, bundle))
     ])
-    
-    ## Event and connection for Zeldas Letter/Impas Song
-    if(bool(world.options.skip_child_zelda)):
+
+    # Event and connection for Zeldas Letter/Impas Song
+    if (bool(world.options.skip_child_zelda)):
         # Events
         add_events(Regions.ROOT, world, [
-            (EventLocations.ZELDAS_LETTER_FROM_SKIP_OPTION, Items.ZELDAS_LETTER, lambda bundle: True)
+            (EventLocations.ZELDAS_LETTER_FROM_SKIP_OPTION,
+             Items.ZELDAS_LETTER, lambda bundle: True)
         ])
         # Connections
         connect_regions(Regions.ROOT, world, [
             (Regions.HC_GARDEN_SONG_FROM_IMPA, lambda bundle: True)
         ])
-    
-    ## Root Exits
+
+    # Root Exits
     # Connections
     connect_regions(Regions.ROOT_EXITS, world, [
         (Regions.CHILD_SPAWN, lambda bundle: is_child(bundle)),
@@ -57,50 +55,56 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.PRELUDE_OF_LIGHT_WARP, lambda bundle: True),
     ])
 
-    ## Child Spawn
+    # Child Spawn
     # Connections
     connect_regions(Regions.CHILD_SPAWN, world, [
         (Regions.KF_LINKS_HOUSE, lambda bundle: True)
     ])
 
-    ## Adult Spawn
+    # Adult Spawn
     # Connections
     connect_regions(Regions.ADULT_SPAWN, world, [
         (Regions.TEMPLE_OF_TIME, lambda bundle: True)
     ])
 
-    ## Minuet of Forest Warp
+    # Minuet of Forest Warp
     # Connections
     connect_regions(Regions.MINUET_OF_FOREST_WARP, world, [
-        (Regions.SACRED_FOREST_MEADOW, lambda bundle: can_use(Items.MINUET_OF_FOREST, bundle))
+        (Regions.SACRED_FOREST_MEADOW, lambda bundle: can_use(
+            Items.MINUET_OF_FOREST, bundle))
     ])
 
-    ## Bolero of Fire Warp
+    # Bolero of Fire Warp
     # Connections
     connect_regions(Regions.BOLERO_OF_FIRE_WARP, world, [
-        (Regions.DMC_CENTRAL_LOCAL, lambda bundle: can_use(Items.BOLERO_OF_FIRE, bundle))
+        (Regions.DMC_CENTRAL_LOCAL, lambda bundle: can_use(
+            Items.BOLERO_OF_FIRE, bundle))
     ])
 
-    ## Serenade of Water Warp
+    # Serenade of Water Warp
     # Connections
     connect_regions(Regions.SERENADE_OF_WATER_WARP, world, [
-        (Regions.LAKE_HYLIA, lambda bundle: can_use(Items.SERENADE_OF_WATER, bundle))
+        (Regions.LAKE_HYLIA, lambda bundle: can_use(
+            Items.SERENADE_OF_WATER, bundle))
     ])
 
-    ## Requiem of Spirit Warp
+    # Requiem of Spirit Warp
     # Connections
     connect_regions(Regions.REQUIEM_OF_SPIRIT_WARP, world, [
-        (Regions.DESERT_COLOSSUS, lambda bundle: can_use(Items.REQUIEM_OF_SPIRIT, bundle))
+        (Regions.DESERT_COLOSSUS, lambda bundle: can_use(
+            Items.REQUIEM_OF_SPIRIT, bundle))
     ])
 
-    ## Nocturne of Shadow Warp
+    # Nocturne of Shadow Warp
     # Connections
     connect_regions(Regions.NOCTURNE_OF_SHADOW_WARP, world, [
-        (Regions.GRAVEYARD_WARP_PAD_REGION, lambda bundle: can_use(Items.NOCTURNE_OF_SHADOW, bundle))
+        (Regions.GRAVEYARD_WARP_PAD_REGION, lambda bundle: can_use(
+            Items.NOCTURNE_OF_SHADOW, bundle))
     ])
-    
-    ## Prelude of Light Warp
+
+    # Prelude of Light Warp
     # Connections
     connect_regions(Regions.PRELUDE_OF_LIGHT_WARP, world, [
-        (Regions.TEMPLE_OF_TIME, lambda bundle: can_use(Items.PRELUDE_OF_LIGHT, bundle))
+        (Regions.TEMPLE_OF_TIME, lambda bundle: can_use(
+            Items.PRELUDE_OF_LIGHT, bundle))
     ])

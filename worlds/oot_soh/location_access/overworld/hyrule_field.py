@@ -2,8 +2,9 @@ from ...LogicHelpers import *
 
 if TYPE_CHECKING:
     from ... import SohWorld
-    
-class EventLocations(str, Enum):
+
+
+class EventLocations(StrEnum):
     HF_BIG_POE = "HF Big Poe"
     HF_RUNNING_MAN = "HF Running Man"
     HF_COW_GROTTO_BEHIND_WEBS_GOSSIP_STONE_SONG_FAIRY = "HF Cow Grotto Behind Webs Gossip Stone Song Fairy"
@@ -24,12 +25,12 @@ class EventLocations(str, Enum):
 
 
 def set_region_rules(world: "SohWorld") -> None:
-    ## Hyrule Field
+    # Hyrule Field
     # Events
     add_events(Regions.HYRULE_FIELD, world, [
         (EventLocations.HF_BIG_POE, Events.CAN_DEFEAT_BIG_POE, lambda bundle: (has_bottle(bundle) and
-                                                                                 can_use(Items.FAIRY_BOW, bundle) and
-                                                                                 (can_use(Items.EPONA, bundle) or can_do_trick(Tricks.HF_BIG_POE_WITHOUT_EPONA, bundle)))),
+                                                                               can_use(Items.FAIRY_BOW, bundle) and
+                                                                               (can_use(Items.EPONA, bundle) or can_do_trick(Tricks.HF_BIG_POE_WITHOUT_EPONA, bundle)))),
         (EventLocations.HF_RUNNING_MAN, Events.SOLD_BUNNY_HOOD, lambda bundle: (is_child(bundle) and
                                                                                 has_item(Events.CAN_BORROW_BUNNY_HOOD, bundle) and
                                                                                 has_item(Items.KOKIRIS_EMERALD, bundle) and
@@ -45,7 +46,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.SONG_FROM_OCARINA_OF_TIME, lambda bundle: (is_child(bundle) and
                                                               stone_count(bundle) == 3 and
                                                               has_item(Items.BRONZE_SCALE, bundle))),
-        (Locations.HF_POND_SONG_OF_STORMS_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
+        (Locations.HF_POND_SONG_OF_STORMS_FAIRY, lambda bundle: (
+            can_use(Items.SONG_OF_STORMS, bundle))),
         (Locations.HF_CENTRAL_GRASS1, lambda bundle: (can_cut_shrubs(bundle))),
         (Locations.HF_CENTRAL_GRASS2, lambda bundle: (can_cut_shrubs(bundle))),
         (Locations.HF_CENTRAL_GRASS3, lambda bundle: (can_cut_shrubs(bundle))),
@@ -108,8 +110,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.HF_NEAR_KFGRASS12, lambda bundle: (can_cut_shrubs(bundle))),
         (Locations.HF_NEAR_LLR_TREE, lambda bundle: (can_bonk_trees(bundle))),
         (Locations.HF_NEAR_LH_TREE, lambda bundle: (can_bonk_trees(bundle))),
-        (Locations.HF_CHILD_NEAR_GV_TREE, lambda bundle: (is_child(bundle) and can_bonk_trees(bundle))),
-        (Locations.HF_ADULT_NEAR_GV_TREE, lambda bundle: (is_adult(bundle) and can_bonk_trees(bundle))),
+        (Locations.HF_CHILD_NEAR_GV_TREE, lambda bundle: (
+            is_child(bundle) and can_bonk_trees(bundle))),
+        (Locations.HF_ADULT_NEAR_GV_TREE, lambda bundle: (
+            is_adult(bundle) and can_bonk_trees(bundle))),
         (Locations.HF_NEAR_ZR_TREE, lambda bundle: (can_bonk_trees(bundle))),
         (Locations.HF_NEAR_KAK_TREE, lambda bundle: (can_bonk_trees(bundle))),
         (Locations.HF_NEAR_KAK_SMALL_TREE, lambda bundle: (can_bonk_trees(bundle))),
@@ -147,12 +151,18 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.HF_SOUTHEAST_TREE_17, lambda bundle: (can_bonk_trees(bundle))),
         (Locations.HF_SOUTHEAST_TREE_18, lambda bundle: (can_bonk_trees(bundle))),
         (Locations.HF_SOUTHEAST_TREE_19, lambda bundle: (can_bonk_trees(bundle))),
-        (Locations.HF_CHILD_SOUTHEAST_TREE_1, lambda bundle: (is_child(bundle) and can_bonk_trees(bundle))),
-        (Locations.HF_CHILD_SOUTHEAST_TREE_2, lambda bundle: (is_child(bundle) and can_bonk_trees(bundle))),
-        (Locations.HF_CHILD_SOUTHEAST_TREE_3, lambda bundle: (is_child(bundle) and can_bonk_trees(bundle))),
-        (Locations.HF_CHILD_SOUTHEAST_TREE_4, lambda bundle: (is_child(bundle) and can_bonk_trees(bundle))),
-        (Locations.HF_CHILD_SOUTHEAST_TREE_5, lambda bundle: (is_child(bundle) and can_bonk_trees(bundle))),
-        (Locations.HF_CHILD_SOUTHEAST_TREE_6, lambda bundle: (is_child(bundle) and can_bonk_trees(bundle))),
+        (Locations.HF_CHILD_SOUTHEAST_TREE_1, lambda bundle: (
+            is_child(bundle) and can_bonk_trees(bundle))),
+        (Locations.HF_CHILD_SOUTHEAST_TREE_2, lambda bundle: (
+            is_child(bundle) and can_bonk_trees(bundle))),
+        (Locations.HF_CHILD_SOUTHEAST_TREE_3, lambda bundle: (
+            is_child(bundle) and can_bonk_trees(bundle))),
+        (Locations.HF_CHILD_SOUTHEAST_TREE_4, lambda bundle: (
+            is_child(bundle) and can_bonk_trees(bundle))),
+        (Locations.HF_CHILD_SOUTHEAST_TREE_5, lambda bundle: (
+            is_child(bundle) and can_bonk_trees(bundle))),
+        (Locations.HF_CHILD_SOUTHEAST_TREE_6, lambda bundle: (
+            is_child(bundle) and can_bonk_trees(bundle))),
         (Locations.HF_TEKTITE_GROTTO_TREE, lambda bundle: (can_bonk_trees(bundle)))
     ])
     # Connections
@@ -166,56 +176,78 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.LON_LON_RANCH, lambda bundle: True),
         (Regions.HF_SOUTHEAST_GROTTO, lambda bundle: (blast_or_smash(bundle))),
         (Regions.HF_OPEN_GROTTO, lambda bundle: True),
-        (Regions.HF_INSIDE_FENCE_GROTTO, lambda bundle: (can_open_bomb_grotto(bundle))),
-        (Regions.HF_COW_GROTTO, lambda bundle: ((can_use(Items.MEGATON_HAMMER, bundle) or is_child(bundle)) and can_open_bomb_grotto(bundle))),
+        (Regions.HF_INSIDE_FENCE_GROTTO, lambda bundle: (
+            can_open_bomb_grotto(bundle))),
+        (Regions.HF_COW_GROTTO, lambda bundle: ((can_use(Items.MEGATON_HAMMER,
+         bundle) or is_child(bundle)) and can_open_bomb_grotto(bundle))),
         (Regions.HF_NEAR_MARKET_GROTTO, lambda bundle: (blast_or_smash(bundle))),
         (Regions.HF_FAIRY_GROTTO, lambda bundle: (blast_or_smash(bundle))),
         (Regions.HF_NEAR_KAK_GROTTO, lambda bundle: (can_open_bomb_grotto(bundle))),
         (Regions.HF_TEKTITE_GROTTO, lambda bundle: (can_open_bomb_grotto(bundle))),
     ])
-    
-    ## HF Southeast Grotto
+
+    # HF Southeast Grotto
     # Events
     add_events(Regions.HF_SOUTHEAST_GROTTO, world, [
-        (EventLocations.HF_SOUTHEAST_GROTTO_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
-        (EventLocations.HF_SOUTHEAST_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
-        (EventLocations.HF_SOUTHEAST_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
-        (EventLocations.HF_SOUTHEAST_GROTTO_PUDDLE_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+        (EventLocations.HF_SOUTHEAST_GROTTO_GOSSIP_STONE_SONG_FAIRY,
+         Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.HF_SOUTHEAST_GROTTO_BUTTERFLY_FAIRY,
+         Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.HF_SOUTHEAST_GROTTO_BUG_GRASS,
+         Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.HF_SOUTHEAST_GROTTO_PUDDLE_FISH,
+         Events.CAN_ACCESS_FISH, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.HF_SOUTHEAST_GROTTO, world, [
         (Locations.HF_SOUTHEAST_GROTTO_CHEST, lambda bundle: True),
         (Locations.HF_SOUTHEAST_GROTTO_FISH, lambda bundle: (has_bottle(bundle))),
-        (Locations.HF_SOUTHEAST_GROTTO_GOSSIP_STONE_FAIRY , lambda bundle: (call_gossip_fairy(bundle))),
-        (Locations.HF_SOUTHEAST_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
-        (Locations.HF_SOUTHEAST_GROTTO_BEEHIVE_LEFT, lambda bundle: (can_break_lower_hives(bundle))),
-        (Locations.HF_SOUTHEAST_GROTTO_BEEHIVE_RIGHT, lambda bundle: (can_break_lower_hives(bundle))),
-        (Locations.HF_SOUTHEAST_GROTTO_GRASS1, lambda bundle: (can_cut_shrubs(bundle))),
-        (Locations.HF_SOUTHEAST_GROTTO_GRASS2, lambda bundle: (can_cut_shrubs(bundle))),
-        (Locations.HF_SOUTHEAST_GROTTO_GRASS3, lambda bundle: (can_cut_shrubs(bundle))),
-        (Locations.HF_SOUTHEAST_GROTTO_GRASS4, lambda bundle: (can_cut_shrubs(bundle)))
+        (Locations.HF_SOUTHEAST_GROTTO_GOSSIP_STONE_FAIRY,
+         lambda bundle: (call_gossip_fairy(bundle))),
+        (Locations.HF_SOUTHEAST_GROTTO_GOSSIP_STONE_BIG_FAIRY,
+         lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
+        (Locations.HF_SOUTHEAST_GROTTO_BEEHIVE_LEFT,
+         lambda bundle: (can_break_lower_hives(bundle))),
+        (Locations.HF_SOUTHEAST_GROTTO_BEEHIVE_RIGHT,
+         lambda bundle: (can_break_lower_hives(bundle))),
+        (Locations.HF_SOUTHEAST_GROTTO_GRASS1,
+         lambda bundle: (can_cut_shrubs(bundle))),
+        (Locations.HF_SOUTHEAST_GROTTO_GRASS2,
+         lambda bundle: (can_cut_shrubs(bundle))),
+        (Locations.HF_SOUTHEAST_GROTTO_GRASS3,
+         lambda bundle: (can_cut_shrubs(bundle))),
+        (Locations.HF_SOUTHEAST_GROTTO_GRASS4,
+         lambda bundle: (can_cut_shrubs(bundle)))
     ])
     # Connections
     connect_regions(Regions.HF_SOUTHEAST_GROTTO, world, [
         (Regions.HYRULE_FIELD, lambda bundle: True)
     ])
-    
-    ## HF Open Grotto
+
+    # HF Open Grotto
     # Events
     add_events(Regions.HF_OPEN_GROTTO, world, [
-        (EventLocations.HF_OPEN_GROTTO_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
-        (EventLocations.HF_OPEN_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
-        (EventLocations.HF_OPEN_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
-        (EventLocations.HF_OPEN_GROTTO_PUDDLE_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+        (EventLocations.HF_OPEN_GROTTO_GOSSIP_STONE_SONG_FAIRY,
+         Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.HF_OPEN_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES,
+         lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.HF_OPEN_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS,
+         lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.HF_OPEN_GROTTO_PUDDLE_FISH,
+         Events.CAN_ACCESS_FISH, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.HF_OPEN_GROTTO, world, [
         (Locations.HF_OPEN_GROTTO_CHEST, lambda bundle: True),
         (Locations.HF_OPEN_GROTTO_FISH, lambda bundle: (has_bottle(bundle))),
-        (Locations.HF_OPEN_GROTTO_GOSSIP_STONE_FAIRY , lambda bundle: (call_gossip_fairy(bundle))),
-        (Locations.HF_OPEN_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
-        (Locations.HF_OPEN_GROTTO_BEEHIVE_LEFT, lambda bundle: (can_break_lower_hives(bundle))),
-        (Locations.HF_OPEN_GROTTO_BEEHIVE_RIGHT, lambda bundle: (can_break_lower_hives(bundle))),
+        (Locations.HF_OPEN_GROTTO_GOSSIP_STONE_FAIRY,
+         lambda bundle: (call_gossip_fairy(bundle))),
+        (Locations.HF_OPEN_GROTTO_GOSSIP_STONE_BIG_FAIRY,
+         lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
+        (Locations.HF_OPEN_GROTTO_BEEHIVE_LEFT,
+         lambda bundle: (can_break_lower_hives(bundle))),
+        (Locations.HF_OPEN_GROTTO_BEEHIVE_RIGHT,
+         lambda bundle: (can_break_lower_hives(bundle))),
         (Locations.HF_OPEN_GROTTO_GRASS1, lambda bundle: (can_cut_shrubs(bundle))),
         (Locations.HF_OPEN_GROTTO_GRASS2, lambda bundle: (can_cut_shrubs(bundle))),
         (Locations.HF_OPEN_GROTTO_GRASS3, lambda bundle: (can_cut_shrubs(bundle))),
@@ -225,38 +257,47 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.HF_OPEN_GROTTO, world, [
         (Regions.HYRULE_FIELD, lambda bundle: True)
     ])
-    
-    ## HF Inside Fence Grotto
+
+    # HF Inside Fence Grotto
     # Locations
     add_locations(Regions.HF_INSIDE_FENCE_GROTTO, world, [
         (Locations.HF_DEKU_SCRUB_GROTTO, lambda bundle: (can_stun_deku(bundle))),
-        (Locations.HF_INSIDE_FENCE_GROTTO_BEEHIVE, lambda bundle: (can_break_lower_hives(bundle))),
-        (Locations.HF_FENCE_GROTTO_STORMS_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle)))
+        (Locations.HF_DEKU_SCRUB_GROTTO_BEEHIVE,
+         lambda bundle: (can_break_lower_hives(bundle))),
+        (Locations.HF_FENCE_GROTTO_STORMS_FAIRY, lambda bundle: (
+            can_use(Items.SONG_OF_STORMS, bundle)))
     ])
     # Connections
     connect_regions(Regions.HF_INSIDE_FENCE_GROTTO, world, [
         (Regions.HYRULE_FIELD, lambda bundle: True)
     ])
-    
-    ## HF Cow Grotto
+
+    # HF Cow Grotto
     # Connections
     connect_regions(Regions.HF_COW_GROTTO, world, [
         (Regions.HYRULE_FIELD, lambda bundle: True),
-        (Regions.HF_COW_GROTTO_BEHIND_WEBS, lambda bundle: (has_fire_source(bundle)))
+        (Regions.HF_COW_GROTTO_BEHIND_WEBS,
+         lambda bundle: (has_fire_source(bundle)))
     ])
-    
-    ## HF Cow Grotto Behind Webs
+
+    # HF Cow Grotto Behind Webs
     # Events
     add_events(Regions.HF_COW_GROTTO_BEHIND_WEBS, world, [
-        (EventLocations.HF_COW_GROTTO_BEHIND_WEBS_BUGS_SHRUB, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
-        (EventLocations.HF_COW_GROTTO_BEHIND_WEBS_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle)))
+        (EventLocations.HF_COW_GROTTO_BEHIND_WEBS_BUGS_SHRUB,
+         Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.HF_COW_GROTTO_BEHIND_WEBS_GOSSIP_STONE_SONG_FAIRY,
+         Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle)))
     ])
     # Locations
     add_locations(Regions.HF_COW_GROTTO_BEHIND_WEBS, world, [
-        (Locations.HF_GS_COW_GROTTO, lambda bundle: (can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG))),
-        (Locations.HF_COW_GROTTO_COW, lambda bundle: (can_use(Items.EPONAS_SONG, bundle))),
-        (Locations.HF_COW_GROTTO_GOSSIP_STONE_FAIRY, lambda bundle: (call_gossip_fairy(bundle))),
-        (Locations.HF_COW_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
+        (Locations.HF_GS_COW_GROTTO, lambda bundle: (can_get_enemy_drop(
+            bundle, Enemies.GOLD_SKULLTULA, EnemyDistance.BOOMERANG))),
+        (Locations.HF_COW_GROTTO_COW, lambda bundle: (
+            can_use(Items.EPONAS_SONG, bundle))),
+        (Locations.HF_COW_GROTTO_GOSSIP_STONE_FAIRY,
+         lambda bundle: (call_gossip_fairy(bundle))),
+        (Locations.HF_COW_GROTTO_GOSSIP_STONE_BIG_FAIRY,
+         lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
         (Locations.HF_COW_GROTTO_POT1, lambda bundle: (can_break_pots(bundle))),
         (Locations.HF_COW_GROTTO_POT2, lambda bundle: (can_break_pots(bundle))),
         (Locations.HF_COW_GROTTO_GRASS1, lambda bundle: (can_cut_shrubs(bundle))),
@@ -266,37 +307,51 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.HF_COW_GROTTO_BEHIND_WEBS, world, [
         (Regions.HF_COW_GROTTO, lambda bundle: True)
     ])
-    
-    ## HF Near Market Grotto
+
+    # HF Near Market Grotto
     # Events
     add_events(Regions.HF_NEAR_MARKET_GROTTO, world, [
-        (EventLocations.HF_NEAR_MARKET_GROTTO_GOSSIP_STONE_SONG_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
-        (EventLocations.HF_NEAR_MARKET_GROTTO_BUTTERFLY_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
-        (EventLocations.HF_NEAR_MARKET_GROTTO_BUG_GRASS, Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
-        (EventLocations.HF_NEAR_MARKET_GROTTO_PUDDLE_FISH, Events.CAN_ACCESS_FISH, lambda bundle: True)
+        (EventLocations.HF_NEAR_MARKET_GROTTO_GOSSIP_STONE_SONG_FAIRY,
+         Events.CAN_ACCESS_FAIRIES, lambda bundle: (call_gossip_fairy(bundle))),
+        (EventLocations.HF_NEAR_MARKET_GROTTO_BUTTERFLY_FAIRY,
+         Events.CAN_ACCESS_FAIRIES, lambda bundle: (can_use(Items.STICKS, bundle))),
+        (EventLocations.HF_NEAR_MARKET_GROTTO_BUG_GRASS,
+         Events.CAN_ACCESS_BUGS, lambda bundle: (can_cut_shrubs(bundle))),
+        (EventLocations.HF_NEAR_MARKET_GROTTO_PUDDLE_FISH,
+         Events.CAN_ACCESS_FISH, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.HF_NEAR_MARKET_GROTTO, world, [
         (Locations.HF_NEAR_MARKET_GROTTO_CHEST, lambda bundle: True),
-        (Locations.HF_NEAR_MARKET_GROTTO_FISH, lambda bundle: (has_bottle(bundle))),
-        (Locations.HF_NEAR_MARKET_GROTTO_GOSSIP_STONE_FAIRY , lambda bundle: (call_gossip_fairy(bundle))),
-        (Locations.HF_NEAR_MARKET_GROTTO_GOSSIP_STONE_BIG_FAIRY, lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
-        (Locations.HF_NEAR_MARKET_GROTTO_BEEHIVE_LEFT, lambda bundle: (can_break_lower_hives(bundle))),
-        (Locations.HF_NEAR_MARKET_GROTTO_BEEHIVE_RIGHT, lambda bundle: (can_break_lower_hives(bundle))),
-        (Locations.HF_NEAR_MARKET_GROTTO_GRASS1, lambda bundle: (can_cut_shrubs(bundle))),
-        (Locations.HF_NEAR_MARKET_GROTTO_GRASS2, lambda bundle: (can_cut_shrubs(bundle))),
-        (Locations.HF_NEAR_MARKET_GROTTO_GRASS3, lambda bundle: (can_cut_shrubs(bundle))),
-        (Locations.HF_NEAR_MARKET_GROTTO_GRASS4, lambda bundle: (can_cut_shrubs(bundle)))
+        (Locations.HF_NEAR_MARKET_GROTTO_FISH,
+         lambda bundle: (has_bottle(bundle))),
+        (Locations.HF_NEAR_MARKET_GOSSIP_STONE_FAIRY,
+         lambda bundle: (call_gossip_fairy(bundle))),
+        (Locations.HF_NEAR_MARKET_GOSSIP_STONE_BIG_FAIRY,
+         lambda bundle: (can_use(Items.SONG_OF_STORMS, bundle))),
+        (Locations.HF_NEAR_MARKET_GROTTO_BEEHIVE_LEFT,
+         lambda bundle: (can_break_lower_hives(bundle))),
+        (Locations.HF_NEAR_MARKET_GROTTO_BEEHIVE_RIGHT,
+         lambda bundle: (can_break_lower_hives(bundle))),
+        (Locations.HF_NEAR_MARKET_GROTTO_GRASS1,
+         lambda bundle: (can_cut_shrubs(bundle))),
+        (Locations.HF_NEAR_MARKET_GROTTO_GRASS2,
+         lambda bundle: (can_cut_shrubs(bundle))),
+        (Locations.HF_NEAR_MARKET_GROTTO_GRASS3,
+         lambda bundle: (can_cut_shrubs(bundle))),
+        (Locations.HF_NEAR_MARKET_GROTTO_GRASS4,
+         lambda bundle: (can_cut_shrubs(bundle)))
     ])
     # Connections
     connect_regions(Regions.HF_NEAR_MARKET_GROTTO, world, [
         (Regions.HYRULE_FIELD, lambda bundle: True)
     ])
-    
-    ## HF Fairy Grotto
+
+    # HF Fairy Grotto
     # Events
     add_events(Regions.HF_FAIRY_GROTTO, world, [
-        (EventLocations.HF_FAIRY_GROTTO_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: True)
+        (EventLocations.HF_FAIRY_GROTTO_FAIRY,
+         Events.CAN_ACCESS_FAIRIES, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.HF_FAIRY_GROTTO, world, [
@@ -313,18 +368,19 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.HF_FAIRY_GROTTO, world, [
         (Regions.HYRULE_FIELD, lambda bundle: True)
     ])
-    
-    ## HF Near Kak Grotto
+
+    # HF Near Kak Grotto
     # Locations
     add_locations(Regions.HF_NEAR_KAK_GROTTO, world, [
-        (Locations.HF_GS_STONE_BRIDGE_TREE_GROTTO, lambda bundle: hookshot_or_boomerang(bundle))
+        (Locations.HF_GS_STONE_BRIDGE_TREE_GROTTO,
+         lambda bundle: hookshot_or_boomerang(bundle))
     ])
     # Connections
     connect_regions(Regions.HF_NEAR_KAK_GROTTO, world, [
         (Regions.HYRULE_FIELD, lambda bundle: True)
     ])
-    
-    ## HF Tektite Grotto
+
+    # HF Tektite Grotto
     # Locations
     add_locations(Regions.HF_TEKTITE_GROTTO, world, [
         (Locations.HF_TEKTITE_GROTTO_FREESTANDING_POH, lambda bundle: (has_item(Items.GOLDEN_SCALE, bundle) or
