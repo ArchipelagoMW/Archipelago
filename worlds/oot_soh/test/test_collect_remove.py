@@ -21,6 +21,8 @@ class TestCollectRemoveAllOff(SohTestBase):
                 self.collect(item)
             self.assertTrue(self.multiworld.state.has(prog_items[0], self.player),
                             f"Failed for {item_name}, we do not have {prog_items[0]}")
+            if len(prog_items) > 1:
+                self.assertFalse(self.multiworld.state.has(prog_items[1], self.player))
 
     def test_one_collect_of_optional_ones(self):
         """
@@ -35,6 +37,8 @@ class TestCollectRemoveAllOff(SohTestBase):
                     # if there's only 1 item in the list, we just want to make sure that it doesn't break
                     index_to_check = 0
                 self.assertTrue(self.multiworld.state.has(prog_items[index_to_check], self.player))
+                if len(prog_items) > 1:
+                    self.assertFalse(self.multiworld.state.has(prog_items[index_to_check + 1], self.player))
 
     def test_full_collect_and_remove_of_all(self):
         """
@@ -79,6 +83,8 @@ class TestCollectRemoveAllOn(SohTestBase):
             self.collect(item)
             self.assertTrue(self.multiworld.state.has(prog_items[0], self.player),
                             f"Failed for {item_name}, we do not have {prog_items[0]}")
+            if len(prog_items) > 1:
+                self.assertFalse(self.multiworld.state.has(prog_items[1], self.player))
 
     def test_full_collect_and_remove_of_all(self):
         """
