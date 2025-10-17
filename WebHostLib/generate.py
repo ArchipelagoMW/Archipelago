@@ -137,7 +137,7 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
 
         seedname = "W" + (f"{random.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits))
 
-        args = mystery_argparse()
+        args = mystery_argparse([])  # Just to set up the Namespace with defaults
         args.multi = playercount
         args.seed = seed
         args.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery

@@ -23,7 +23,7 @@ from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 
 
-def mystery_argparse():
+def mystery_argparse(argv: list[str] | None = None):
     from settings import get_settings
     settings = get_settings()
     defaults = settings.generator
@@ -57,7 +57,7 @@ def mystery_argparse():
     parser.add_argument("--spoiler_only", action="store_true",
                         help="Skips generation assertion and multidata, outputting only a spoiler log. "
                              "Intended for debugging and testing purposes.")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.skip_output and args.spoiler_only:
         parser.error("Cannot mix --skip_output and --spoiler_only")
