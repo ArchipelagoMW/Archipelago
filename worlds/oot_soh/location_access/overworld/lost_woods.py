@@ -226,7 +226,7 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: can_stun_deku(bundle)),
         (Locations.LW_DEKU_SCRUB_GROTTO_BEEHIVE,
          lambda bundle: can_break_upper_beehives(bundle)),
-        (Locations.LW_SCRUB_GROTTO_SUNS_SONG_FAIRY,
+        (Locations.LW_DEKU_SCRUB_GROTTO_SUN_FAIRY,
          lambda bundle: can_use(Items.SUNS_SONG, bundle)),
     ])
     # Connections
