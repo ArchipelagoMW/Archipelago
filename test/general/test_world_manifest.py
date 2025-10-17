@@ -1,0 +1,65 @@
+"""Check world sources' manifest files"""
+
+import json
+import unittest
+from pathlib import Path
+from typing import ClassVar
+
+import test
+import worlds
+from Utils import home_path
+from worlds.AutoWorld import AutoWorldRegister
+from ..param import classvar_matrix
+
+
+test_path = Path(test.__file__).parent
+worlds_paths = [
+    Path(worlds.__file__).parent,
+    Path(worlds.__file__).parent / "custom_worlds",
+    Path(home_path("worlds")),
+    Path(home_path("custom_worlds")),
+]
+
+# Only check source folders for now. Zip validation should probably be in the loader and/or installer.
+source_world_names = [
+    k
+    for k, v in AutoWorldRegister.world_types.items()
+    if not v.zip_path and not Path(v.__file__).is_relative_to(test_path)
+]
+
+
+def get_source_world_manifest_path(game: str) -> Path | None:
+    """Get path of archipelago.json in the world's root folder from game name."""
+    # TODO: add a feature to AutoWorld that makes this less annoying
+    world_type = AutoWorldRegister.world_types[game]
+    world_type_path = Path(world_type.__file__)
+    for worlds_path in worlds_paths:
+        if world_type_path.is_relative_to(worlds_path):
+            world_root = worlds_path / world_type_path.relative_to(worlds_path).parents[0]
+            manifest_path = world_root / "archipelago.json"
+            return manifest_path if manifest_path.exists() else None
+    assert False, f"{world_type_path} not found in any worlds path"
+
+
+# TODO: remove the filter once manifests are mandatory.
+@classvar_matrix(game=filter(get_source_world_manifest_path, source_world_names))
+class TestWorldManifest(unittest.TestCase):
+    game: ClassVar[str]
+
+    def test_game(self) -> None:
+        """Test that 'game' will be correctly defined when generating APWorld manifest from source."""
+        world_type = AutoWorldRegister.world_types[self.game]
+        manifest_path = get_source_world_manifest_path(self.game)
+        assert manifest_path  # make mypy happy
+        with manifest_path.open("r", encoding="utf-8") as f:
+            manifest = json.load(f)
+        self.assertIn(
+            "game",
+            manifest,
+            f"archipelago.json manifest exists for {self.game} but does not contain 'game'",
+        )
+        self.assertEqual(
+            manifest["game"],
+            world_type.game,
+            f"archipelago.json manifest for {self.game} specifies wrong game '{manifest['game']}'",
+        )
