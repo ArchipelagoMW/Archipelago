@@ -910,7 +910,7 @@ class SohOptions(PerGameCommonOptions):
     slingbow_break_beehives: SlingbowBreakBeehives
     starting_age: StartingAge
     shuffle_100_gs_reward: Shuffle100GSReward
-    ice_trap_count: IceTrapCount 
+    ice_trap_count: IceTrapCount
     ice_trap_filler_replacement: IceTrapFillerReplacement
 
 

@@ -35,19 +35,26 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.GERUDO_FORTRESS_OUTSKIRTS, world, [
         (Regions.GV_FORTRESS_SIDE, lambda bundle: True),
         (Regions.THIEVES_HIDEOUT_1_TORCH_CELL, lambda bundle: True),
-        (Regions.GF_OUTSIDE_GATE, lambda bundle: has_item(LocalEvents.GF_GATE_OPEN, bundle)),
-        (Regions.GF_NEAR_GROTTO, lambda bundle: is_child(bundle) or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
-        (Regions.GF_OUTSIDE_GTG, lambda bundle: is_child(bundle) or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
+        (Regions.GF_OUTSIDE_GATE, lambda bundle: has_item(
+            LocalEvents.GF_GATE_OPEN, bundle)),
+        (Regions.GF_NEAR_GROTTO, lambda bundle: is_child(bundle)
+         or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
+        (Regions.GF_OUTSIDE_GTG, lambda bundle: is_child(bundle)
+         or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
         (Regions.GF_JAIL_WINDOW, lambda bundle: can_use(Items.HOOKSHOT, bundle)),
     ])
 
     # GF Near Grotto
     # Locations
     add_locations(Regions.GF_NEAR_GROTTO, world, [
-        (Locations.GF_SOUTHMOST_CENTER_CRATE, lambda bundle: can_break_crates(bundle)),
-        (Locations.GF_MIDDLE_SOUTH_CENTER_CRATE, lambda bundle: can_break_crates(bundle)),
-        (Locations.GF_MIDDLE_NORTH_CENTER_CRATE, lambda bundle: can_break_crates(bundle)),
-        (Locations.GF_NORTHMOST_CENTER_CRATE, lambda bundle: can_break_crates(bundle)),
+        (Locations.GF_SOUTHMOST_CENTER_CRATE,
+         lambda bundle: can_break_crates(bundle)),
+        (Locations.GF_MIDDLE_SOUTH_CENTER_CRATE,
+         lambda bundle: can_break_crates(bundle)),
+        (Locations.GF_MIDDLE_NORTH_CENTER_CRATE,
+         lambda bundle: can_break_crates(bundle)),
+        (Locations.GF_NORTHMOST_CENTER_CRATE,
+         lambda bundle: can_break_crates(bundle)),
     ])
     # Connections
     connect_regions(Regions.GF_NEAR_GROTTO, world, [
@@ -56,9 +63,12 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.THIEVES_HIDEOUT_KITCHEN_CORRIDOR, lambda bundle: True),
         (Regions.GERUDO_FORTRESS_OUTSKIRTS, lambda bundle: True),
         (Regions.GF_JAIL_WINDOW, lambda bundle: can_use(Items.HOOKSHOT, bundle)),
-        (Regions.GF_OUTSIDE_GTG, lambda bundle: is_child(bundle) or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
-        (Regions.GF_TOP_OF_UPPER_VINES, lambda bundle: can_use(Items.LONGSHOT, bundle)),
-        (Regions.GF_STORMS_GROTTO, lambda bundle: is_adult(bundle) and can_open_storms_grotto(bundle)),
+        (Regions.GF_OUTSIDE_GTG, lambda bundle: is_child(bundle)
+         or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
+        (Regions.GF_TOP_OF_UPPER_VINES,
+         lambda bundle: can_use(Items.LONGSHOT, bundle)),
+        (Regions.GF_STORMS_GROTTO, lambda bundle: is_adult(
+            bundle) and can_open_storms_grotto(bundle)),
     ])
 
     # GF Outside GTG
@@ -71,14 +81,18 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.GF_OUTSIDE_GTG, world, [
         # TODO: Check for entrance rando
-        (Regions.GF_TO_GTG, lambda bundle: has_item(LocalEvents.GTG_GATE_OPEN, bundle) and is_adult(bundle)),
+        (Regions.GF_TO_GTG, lambda bundle: has_item(
+            LocalEvents.GTG_GATE_OPEN, bundle) and is_adult(bundle)),
         (Regions.GF_JAIL_WINDOW, lambda bundle: can_use(Items.HOOKSHOT, bundle)),
         (Regions.GERUDO_FORTRESS_OUTSKIRTS, lambda bundle: True),
-        (Regions.GF_NEAR_GROTTO, lambda bundle: is_child(bundle) or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
-        (Regions.GF_ABOVE_GTG, lambda bundle: is_child(bundle) or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
+        (Regions.GF_NEAR_GROTTO, lambda bundle: is_child(bundle)
+         or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
+        (Regions.GF_ABOVE_GTG, lambda bundle: is_child(bundle)
+         or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
         (Regions.GF_TOP_OF_UPPER_VINES,
          lambda bundle: has_item(Items.GERUDO_MEMBERSHIP_CARD, bundle) and can_use(Items.LONGSHOT, bundle)),
-        (Regions.GF_HBA_RANGE, lambda bundle: is_child(bundle) or has_item(Items.GERUDO_MEMBERSHIP_CARD, bundle)),
+        (Regions.GF_HBA_RANGE, lambda bundle: is_child(bundle)
+         or has_item(Items.GERUDO_MEMBERSHIP_CARD, bundle)),
     ])
 
     # GF to GTG
@@ -90,7 +104,8 @@ def set_region_rules(world: "SohWorld") -> None:
     # GF Exiting GTG
     # Connections
     connect_regions(Regions.GF_EXITING_GTG, world, [
-        (Regions.GF_OUTSIDE_GTG, lambda bundle: is_child(bundle) or has_item(Items.GERUDO_MEMBERSHIP_CARD, bundle)),
+        (Regions.GF_OUTSIDE_GTG, lambda bundle: is_child(bundle)
+         or has_item(Items.GERUDO_MEMBERSHIP_CARD, bundle)),
         (Regions.GF_JAIL_WINDOW, lambda bundle: can_use(Items.HOOKSHOT, bundle)),
         (Regions.GERUDO_FORTRESS_OUTSKIRTS, lambda bundle: True),
     ])
@@ -103,8 +118,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GF_JAIL_WINDOW, lambda bundle: can_use(Items.HOOKSHOT, bundle)),
         (Regions.GERUDO_FORTRESS_OUTSKIRTS, lambda bundle: True),
         (Regions.GF_NEAR_GROTTO, lambda bundle: True),
-        (Regions.GF_OUTSIDE_GTG, lambda bundle: is_child(bundle) or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
-        (Regions.GF_BOTTOM_OF_LOWER_VINES, lambda bundle: can_do_trick(Tricks.GF_JUMP, bundle)),
+        (Regions.GF_OUTSIDE_GTG, lambda bundle: is_child(bundle)
+         or can_pass_enemy(bundle, Enemies.GERUDO_GUARD)),
+        (Regions.GF_BOTTOM_OF_LOWER_VINES,
+         lambda bundle: can_do_trick(Tricks.GF_JUMP, bundle)),
     ])
 
     # GF Bottom of Lower Vines
@@ -114,7 +131,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GF_NEAR_GROTTO, lambda bundle: True),
         (Regions.GF_TOP_OF_LOWER_VINES, lambda bundle: True),
         (Regions.GF_ABOVE_GTG, lambda bundle: True),
-        (Regions.GF_BELOW_GS, lambda bundle: is_adult(bundle) and can_ground_jump(bundle))
+        (Regions.GF_BELOW_GS, lambda bundle: is_adult(
+            bundle) and can_ground_jump(bundle))
     ])
 
     # GF Top of Lower Vines
@@ -124,7 +142,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.THIEVES_HIDEOUT_DOUBLE_CELL, lambda bundle: True),
         (Regions.GF_ABOVE_GTG, lambda bundle: True),
         (Regions.GF_BOTTOM_OF_LOWER_VINES, lambda bundle: True),
-        (Regions.GF_BOTTOM_OF_UPPER_VINES, lambda bundle: is_adult(bundle) and can_do_trick(Tricks.GF_JUMP, bundle)),
+        (Regions.GF_BOTTOM_OF_UPPER_VINES, lambda bundle: is_adult(
+            bundle) and can_do_trick(Tricks.GF_JUMP, bundle)),
     ])
 
     # GF Near GS
@@ -133,7 +152,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.THIEVES_HIDEOUT_KITCHEN_TOP, lambda bundle: True),
         (Regions.GF_BOTTOM_OF_LOWER_VINES, lambda bundle: True),
         (Regions.GF_TOP_OF_LOWER_VINES, lambda bundle: True),
-        (Regions.GF_SLOPED_ROOF, lambda bundle: is_adult(bundle) or can_ground_jump(bundle)),
+        (Regions.GF_SLOPED_ROOF, lambda bundle: is_adult(
+            bundle) or can_ground_jump(bundle)),
         (Regions.GF_LONG_ROOF,
          lambda bundle: can_use(Items.HOVER_BOOTS, bundle) or is_adult(bundle) and can_do_trick(Tricks.GF_JUMP,
                                                                                                 bundle)),
@@ -157,7 +177,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GF_TOP_OF_LOWER_VINES, lambda bundle: True),
         (Regions.GF_NEAR_GS, lambda bundle: True),
         (Regions.GF_BOTTOM_OF_UPPER_VINES, lambda bundle: True),
-        (Regions.GF_TOP_OF_UPPER_VINES, lambda bundle: is_adult(bundle) and can_do_trick(Tricks.GF_JUMP, bundle)),
+        (Regions.GF_TOP_OF_UPPER_VINES, lambda bundle: is_adult(
+            bundle) and can_do_trick(Tricks.GF_JUMP, bundle)),
     ])
 
     # GF Bottom of Upper Vines
@@ -166,9 +187,10 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GF_OUTSIDE_GTG, lambda bundle: True),
         (Regions.GF_TOP_OF_LOWER_VINES, lambda bundle: True),
         (Regions.GF_SLOPED_ROOF, lambda bundle: is_adult(bundle) and (
-                    can_use(Items.HOVER_BOOTS, bundle) or can_do_trick(Tricks.GF_JUMP, bundle))),
+            can_use(Items.HOVER_BOOTS, bundle) or can_do_trick(Tricks.GF_JUMP, bundle))),
         (Regions.GF_TOP_OF_UPPER_VINES, lambda bundle: True),
-        (Regions.GF_TO_GTG, lambda bundle: is_adult(bundle) and can_do_trick(Tricks.GF_LEDGE_CLIP_INTO_GTG, bundle))
+        (Regions.GF_TO_GTG, lambda bundle: is_adult(bundle)
+         and can_do_trick(Tricks.GF_LEDGE_CLIP_INTO_GTG, bundle))
     ])
 
     # GF Top of Upper Vines
@@ -178,8 +200,8 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.GF_SLOPED_ROOF, lambda bundle: True),
         (Regions.GF_BOTTOM_OF_UPPER_VINES, lambda bundle: True),
         (Regions.GF_NEAR_CHEST, lambda bundle: can_use(Items.HOVER_BOOTS, bundle) or (
-                    is_adult(bundle) and can_use(Items.SCARECROW, bundle) and can_use(Items.HOOKSHOT,
-                                                                                      bundle)) or can_use(
+            is_adult(bundle) and can_use(Items.SCARECROW, bundle) and can_use(Items.HOOKSHOT,
+                                                                              bundle)) or can_use(
             Items.LONGSHOT, bundle)),
         (Regions.GF_GS_KILL_ZONE,
          lambda bundle: is_adult(bundle) and can_get_enemy_drop(bundle, Enemies.GOLD_SKULLTULA,
@@ -239,7 +261,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connection
     connect_regions(Regions.GF_ABOVE_JAIL, world, [
-        (Regions.GERUDO_FORTRESS_OUTSKIRTS, lambda bundle: can_do_trick(Tricks.GF_JUMP, bundle)),
+        (Regions.GERUDO_FORTRESS_OUTSKIRTS,
+         lambda bundle: can_do_trick(Tricks.GF_JUMP, bundle)),
         (Regions.GF_NEAR_CHEST, lambda bundle: can_use(Items.LONGSHOT, bundle)),
         (Regions.GF_BELOW_CHEST, lambda bundle: take_damage(bundle)),
         (Regions.GF_JAIL_WINDOW, lambda bundle: can_use(Items.HOOKSHOT, bundle)),
@@ -276,18 +299,25 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GF_HBA_RANGE_CRATE_5, lambda bundle: can_break_crates(bundle)),
         (Locations.GF_HBA_RANGE_CRATE_6, lambda bundle: can_break_crates(bundle)),
         (Locations.GF_HBA_RANGE_CRATE_7, lambda bundle: can_break_crates(bundle)),
-        (Locations.GF_HBA_CANOPY_EAST_CRATE, lambda bundle: can_break_crates(bundle)),
-        (Locations.GF_HBA_CANOPY_WEST_CRATE, lambda bundle: can_break_crates(bundle)),
-        (Locations.GF_NORTH_TARGET_EAST_CRATE, lambda bundle: can_break_crates(bundle)),
+        (Locations.GF_HBA_CANOPY_EAST_CRATE,
+         lambda bundle: can_break_crates(bundle)),
+        (Locations.GF_HBA_CANOPY_WEST_CRATE,
+         lambda bundle: can_break_crates(bundle)),
+        (Locations.GF_NORTH_TARGET_EAST_CRATE,
+         lambda bundle: can_break_crates(bundle)),
         (Locations.GF_NORTH_TARGET_WEST_CRATE, lambda bundle: is_adult(bundle) or (
-                    blast_or_smash(bundle) or hookshot_or_boomerang(bundle) or can_use(Items.HOVER_BOOTS, bundle))),
-        (Locations.GF_NORTH_TARGET_CHILD_CRATE, lambda bundle: is_child(bundle) and blast_or_smash(bundle)),
-        (Locations.GF_SOUTH_TARGET_EAST_CRATE, lambda bundle: can_break_crates(bundle)),
-        (Locations.GF_SOUTH_TARGET_WEST_CRATE, lambda bundle: can_break_crates(bundle)),
+            blast_or_smash(bundle) or hookshot_or_boomerang(bundle) or can_use(Items.HOVER_BOOTS, bundle))),
+        (Locations.GF_NORTH_TARGET_CHILD_CRATE,
+         lambda bundle: is_child(bundle) and blast_or_smash(bundle)),
+        (Locations.GF_SOUTH_TARGET_EAST_CRATE,
+         lambda bundle: can_break_crates(bundle)),
+        (Locations.GF_SOUTH_TARGET_WEST_CRATE,
+         lambda bundle: can_break_crates(bundle)),
     ])
     # Connections
     connect_regions(Regions.GF_HBA_RANGE, world, [
-        (Regions.GF_OUTSIDE_GTG, lambda bundle: is_child(bundle) or has_item(Items.GERUDO_MEMBERSHIP_CARD, bundle)),
+        (Regions.GF_OUTSIDE_GTG, lambda bundle: is_child(bundle)
+         or has_item(Items.GERUDO_MEMBERSHIP_CARD, bundle)),
     ])
 
     # GF Outside Gate
@@ -298,14 +328,16 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.GF_OUTSIDE_GATE, world, [
-        (Regions.GERUDO_FORTRESS_OUTSKIRTS, lambda bundle: has_item(LocalEvents.GF_GATE_OPEN, bundle)),
+        (Regions.GERUDO_FORTRESS_OUTSKIRTS, lambda bundle: has_item(
+            LocalEvents.GF_GATE_OPEN, bundle)),
         (Regions.WASTELAND_NEAR_FORTRESS, lambda bundle: True),
     ])
 
     # GF Storms Grotto
     # Events
     add_events(Regions.GF_STORMS_GROTTO, world, [
-        (EventLocations.GF_STORMS_GROTTO_FAIRY, Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
+        (EventLocations.GF_STORMS_GROTTO_FAIRY,
+         Events.CAN_ACCESS_FAIRIES, lambda bundle: True),
     ])
     # Locations
     add_locations(Regions.GF_STORMS_GROTTO, world, [

@@ -1,5 +1,7 @@
 from enum import StrEnum, IntEnum
-from functools import total_ordering #allows defining orders with fewer functions; with this decorator only __eq__ and __lt__ is needed, and since enums implement __eq__ we can just implement __lt__
+# allows defining orders with fewer functions; with this decorator only __eq__ and __lt__ is needed, and since enums implement __eq__ we can just implement __lt__
+from functools import total_ordering
+
 
 class Regions(StrEnum):
     """List of all region enums"""
@@ -694,9 +696,11 @@ class Regions(StrEnum):
     GANONS_CASTLE_ESCAPE = "Ganon's Castle Escape"
     GANONS_ARENA = "Ganon's Arena"
 
-#TODO go through this and Locations for any that aren't needed or should be events
-#For any such entries, remove them from Items and Locations and add to Events. Also, set up event registration.
-#Later, we'll go through the events and replace some with other methods
+# TODO go through this and Locations for any that aren't needed or should be events
+# For any such entries, remove them from Items and Locations and add to Events. Also, set up event registration.
+# Later, we'll go through the events and replace some with other methods
+
+
 class Items(StrEnum):
     KOKIRI_SWORD = "Kokiri Sword"
     MASTER_SWORD = "Master Sword"
@@ -977,6 +981,7 @@ class Items(StrEnum):
     NUTS = "Nuts"
     EPONA = "Epona"
     MAX = "Max"
+
 
 class Locations(StrEnum):
     LINKS_POCKET = "Link's Pocket"
@@ -1407,49 +1412,49 @@ class Locations(StrEnum):
     UNUSED7 = "Unused 7"
     UNUSED8 = "Unused 8"
     # The gossip stones below here are used as hint locations in Ship and aren't required for archipelago
-    #KF_DEKU_TREE_LEFT_GOSSIP_STONE = "KF Deku Tree Left Gossip Stone"
-    #KF_DEKU_TREE_RIGHT_GOSSIP_STONE = "KF Deku Tree Right Gossip Stone"
-    #KF_GOSSIP_STONE = "KF Gossip Stone"
-    #KF_STORMS_GOSSIP_STONE = "KF Storms Gossip Stone"
-    #LW_GOSSIP_STONE = "LW Gossip Stone"
-    #LW_NEAR_SHORTCUTS_GROTTO_GOSSIP_STONE = "LW Near Shortcuts Grotto Gossip Stone"
-    #SFM_MAZE_LOWER_GOSSIP_STONE = "SFM Maze Lower Gossip Stone"
-    #SFM_MAZE_UPPER_GOSSIP_STONE = "SFM Maze Upper Gossip Stone"
-    #SFM_SARIA_GOSSIP_STONE = "SFM Saria Gossip Stone"
-    #HF_COW_GROTTO_GOSSIP_STONE = "HF Cow Grotto Gossip Stone"
-    #HF_NEAR_MARKET_GOSSIP_STONE = "HF Near Market Gossip Stone"
-    #HF_OPEN_GROTTO_GOSSIP_STONE = "HF Open Grotto Gossip Stone"
-    #HF_SOUTHEAST_GOSSIP_STONE = "HF Southeast Gossip Stone"
-    #MARKET_TOT_LEFT_CENTER_GOSSIP_STONE = "Market ToT Left Center Gossip Stone"
-    #MARKET_TOT_LEFT_GOSSIP_STONE = "Market ToT Left Gossip Stone"
-    #MARKET_TOT_RIGHT_CENTER_GOSSIP_STONE = "Market ToT Right Center Gossip Stone"
-    #MARKET_TOT_RIGHT_GOSSIP_STONE = "Market ToT Right Gossip Stone"
-    #HC_MALON_GOSSIP_STONE = "HC Malon Gossip Stone"
-    #HC_ROCK_WALL_GOSSIP_STONE = "HC Rock Wall Gossip Stone"
-    #HC_STORMS_GROTTO_GOSSIP_STONE = "HC Storms Grotto Gossip Stone"
-    #KAK_OPEN_GROTTO_GOSSIP_STONE = "Kak Open Grotto Gossip Stone"
-    #GRAVEYARD_GOSSIP_STONE = "Graveyard Gossip Stone"
-    #DMT_GOSSIP_STONE = "DMT Gossip Stone"
-    #DMT_STORMS_GROTTO_GOSSIP_STONE = "DMT Storms Grotto Gossip Stone"
-    #GC_MAZE_GOSSIP_STONE = "GC Maze Gossip Stone"
-    #GC_MEDIGORON_GOSSIP_STONE = "GC Medigoron Gossip Stone"
-    #DMC_GOSSIP_STONE = "DMC Gossip Stone"
-    #DMC_UPPER_GROTTO_GOSSIP_STONE = "DMC Upper Grotto Gossip Stone"
-    #ZR_NEAR_DOMAIN_GOSSIP_STONE = "ZR Near Domain Gossip Stone"
-    #ZR_NEAR_GROTTOS_GOSSIP_STONE = "ZR Near Grottos Gossip Stone"
-    #ZR_OPEN_GROTTO_GOSSIP_STONE = "ZR Open Grotto Gossip Stone"
-    #ZD_GOSSIP_STONE = "ZD Gossip Stone"
-    #ZF_JABU_GOSSIP_STONE = "ZF Jabu Gossip Stone"
-    #ZF_FAIRY_GOSSIP_STONE = "ZF Fairy Gossip Stone"
-    #LH_LAB_GOSSIP_STONE = "LH Lab Gossip Stone"
-    #LH_SOUTHEAST_GOSSIP_STONE = "LH Southeast Gossip Stone"
-    #LH_SOUTHWEST_GOSSIP_STONE = "LH Southwest Gossip Stone"
-    #GV_GOSSIP_STONE = "GV Gossip Stone"
-    #COLOSSUS_GOSSIP_STONE = "Colossus Gossip Stone"
-    #DODONGOS_CAVERN_GOSSIP_STONE = "Dodongos Cavern Gossip Stone"
+    # KF_DEKU_TREE_LEFT_GOSSIP_STONE = "KF Deku Tree Left Gossip Stone"
+    # KF_DEKU_TREE_RIGHT_GOSSIP_STONE = "KF Deku Tree Right Gossip Stone"
+    # KF_GOSSIP_STONE = "KF Gossip Stone"
+    # KF_STORMS_GOSSIP_STONE = "KF Storms Gossip Stone"
+    # LW_GOSSIP_STONE = "LW Gossip Stone"
+    # LW_NEAR_SHORTCUTS_GROTTO_GOSSIP_STONE = "LW Near Shortcuts Grotto Gossip Stone"
+    # SFM_MAZE_LOWER_GOSSIP_STONE = "SFM Maze Lower Gossip Stone"
+    # SFM_MAZE_UPPER_GOSSIP_STONE = "SFM Maze Upper Gossip Stone"
+    # SFM_SARIA_GOSSIP_STONE = "SFM Saria Gossip Stone"
+    # HF_COW_GROTTO_GOSSIP_STONE = "HF Cow Grotto Gossip Stone"
+    # HF_NEAR_MARKET_GOSSIP_STONE = "HF Near Market Gossip Stone"
+    # HF_OPEN_GROTTO_GOSSIP_STONE = "HF Open Grotto Gossip Stone"
+    # HF_SOUTHEAST_GOSSIP_STONE = "HF Southeast Gossip Stone"
+    # MARKET_TOT_LEFT_CENTER_GOSSIP_STONE = "Market ToT Left Center Gossip Stone"
+    # MARKET_TOT_LEFT_GOSSIP_STONE = "Market ToT Left Gossip Stone"
+    # MARKET_TOT_RIGHT_CENTER_GOSSIP_STONE = "Market ToT Right Center Gossip Stone"
+    # MARKET_TOT_RIGHT_GOSSIP_STONE = "Market ToT Right Gossip Stone"
+    # HC_MALON_GOSSIP_STONE = "HC Malon Gossip Stone"
+    # HC_ROCK_WALL_GOSSIP_STONE = "HC Rock Wall Gossip Stone"
+    # HC_STORMS_GROTTO_GOSSIP_STONE = "HC Storms Grotto Gossip Stone"
+    # KAK_OPEN_GROTTO_GOSSIP_STONE = "Kak Open Grotto Gossip Stone"
+    # GRAVEYARD_GOSSIP_STONE = "Graveyard Gossip Stone"
+    # DMT_GOSSIP_STONE = "DMT Gossip Stone"
+    # DMT_STORMS_GROTTO_GOSSIP_STONE = "DMT Storms Grotto Gossip Stone"
+    # GC_MAZE_GOSSIP_STONE = "GC Maze Gossip Stone"
+    # GC_MEDIGORON_GOSSIP_STONE = "GC Medigoron Gossip Stone"
+    # DMC_GOSSIP_STONE = "DMC Gossip Stone"
+    # DMC_UPPER_GROTTO_GOSSIP_STONE = "DMC Upper Grotto Gossip Stone"
+    # ZR_NEAR_DOMAIN_GOSSIP_STONE = "ZR Near Domain Gossip Stone"
+    # ZR_NEAR_GROTTOS_GOSSIP_STONE = "ZR Near Grottos Gossip Stone"
+    # ZR_OPEN_GROTTO_GOSSIP_STONE = "ZR Open Grotto Gossip Stone"
+    # ZD_GOSSIP_STONE = "ZD Gossip Stone"
+    # ZF_JABU_GOSSIP_STONE = "ZF Jabu Gossip Stone"
+    # ZF_FAIRY_GOSSIP_STONE = "ZF Fairy Gossip Stone"
+    # LH_LAB_GOSSIP_STONE = "LH Lab Gossip Stone"
+    # LH_SOUTHEAST_GOSSIP_STONE = "LH Southeast Gossip Stone"
+    # LH_SOUTHWEST_GOSSIP_STONE = "LH Southwest Gossip Stone"
+    # GV_GOSSIP_STONE = "GV Gossip Stone"
+    # COLOSSUS_GOSSIP_STONE = "Colossus Gossip Stone"
+    # DODONGOS_CAVERN_GOSSIP_STONE = "Dodongos Cavern Gossip Stone"
     GANONS_CASTLE_GANONDORF_HINT = "Ganon's Castle Ganondorf Hint"
     GANONS_CASTLE_SHEIK_HINT = "Ganon's Castle Sheik Hint"
-    #GANONS_CASTLE_SHEIK_HINT = "Ganon's Castle Sheik Hint"
+    # GANONS_CASTLE_SHEIK_HINT = "Ganon's Castle Sheik Hint"
     COMPLETED_TRIFORCE = "Completed Triforce"
     GRAVEYARD_DIARY_HINT = "Graveyard Diary Hint"
     MARKET_GREG_HINT = "Market Greg Hint"
@@ -3436,6 +3441,7 @@ class Locations(StrEnum):
     KAK_TREE = "Kak Tree"
     LLR_TREE = "LLR Tree"
 
+
 class Enemies(StrEnum):
     GOLD_SKULLTULA = "gold_skulltula"
     BIG_SKULLTULA = "big_skulltula"
@@ -3490,7 +3496,8 @@ class Enemies(StrEnum):
     BARI = "bari"
     SHABOM = "shabom"
     OCTOROK = "octorok"
-    
+
+
 @total_ordering
 class EnemyDistance(IntEnum):
     CLOSE = 1
@@ -3505,6 +3512,7 @@ class EnemyDistance(IntEnum):
 
     def __lt__(self, other):
         return self.value < other.value
+
 
 class Events(StrEnum):
     CAN_FARM_STICKS = "Can Farm Sticks"
@@ -3546,6 +3554,7 @@ class Events(StrEnum):
     DRAIN_WELL = "Drain Well"
     KAKARIKO_GATE_OPEN = "Kakariko Gate Open"
     GAME_COMPLETED = "Game Completed"
+
 
 class Ages(StrEnum):
     CHILD = "child"
@@ -3673,7 +3682,7 @@ class Tricks(StrEnum):
     FIRE_MQ_BK_CHEST = "Fire MQ BK Chest"
     FIRE_MQ_CLIMB = "Fire MQ Climb"
     FIRE_MQ_MAZE_SIDE_ROOM = "Fire MQ Maze Side Room"
-    FIRE_MQ_MAZE_HOVERS= "Fire MQ Maze Hovers"
+    FIRE_MQ_MAZE_HOVERS = "Fire MQ Maze Hovers"
     FIRE_MQ_MAZE_JUMP = "Fire MQ Maze Jump"
     FIRE_MQ_ABOVE_MAZE_GS = "Fire MQ Above Maze GS"
     FIRE_MQ_FLAME_MAZE = "Fire MQ Flame Maze"

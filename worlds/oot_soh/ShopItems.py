@@ -139,19 +139,27 @@ all_shop_locations: list[tuple[Regions, dict[str, Items]]] = [
     (Regions.MARKET_BOMBCHU_SHOP, shop_locations_market_bombchu_shop),
     (Regions.KAK_BAZAAR, shop_locations_kak_bazaar),
     (Regions.KAK_POTION_SHOP_FRONT, shop_locations_kak_potion_shop),
-    (Regions.GC_SHOP, shop_locations_gc_shop), 
+    (Regions.GC_SHOP, shop_locations_gc_shop),
     (Regions.ZD_SHOP, shop_locations_zd_shop)
 ]
 
 vanilla_items_to_add: list[list[Items]] = [
-    [Items.BUY_DEKU_SHIELD, Items.BUY_HYLIAN_SHIELD, Items.BUY_GORON_TUNIC, Items.BUY_ZORA_TUNIC, Items.BUY_DEKU_NUTS5, Items.BUY_BOMBS20, Items.BUY_BOMBCHUS10, Items.BUY_DEKU_STICK1],
-    [Items.BUY_FAIRYS_SPIRIT, Items.BUY_DEKU_SEEDS30, Items.BUY_ARROWS10, Items.BUY_BLUE_FIRE, Items.BUY_RED_POTION30, Items.BUY_GREEN_POTION, Items.BUY_DEKU_NUTS10, Items.BUY_BOMBCHUS10],
-    [Items.BUY_BOMBCHUS10, Items.BUY_BOMBCHUS20, Items.BUY_BOMBS525, Items.BUY_BOMBS535, Items.BUY_BOMBS10, Items.BUY_DEKU_NUTS5, Items.BUY_ARROWS30, Items.BUY_ARROWS50],
-    [Items.BUY_ARROWS10, Items.BUY_FAIRYS_SPIRIT, Items.BUY_BOTTLE_BUG, Items.BUY_FISH, Items.BUY_HYLIAN_SHIELD, Items.BUY_BOTTLE_BUG, Items.BUY_DEKU_STICK1, Items.BUY_DEKU_STICK1],
-    [Items.BUY_BLUE_FIRE, Items.BUY_FISH, Items.BUY_BOMBCHUS10, Items.BUY_DEKU_NUTS5, Items.BUY_ARROWS10, Items.BUY_BOMBCHUS20, Items.BUY_BOMBS535, Items.BUY_RED_POTION30],
-    [Items.BUY_BOMBS30, Items.BUY_BOMBCHUS20, Items.BUY_DEKU_NUTS5, Items.BUY_ARROWS10, Items.BUY_DEKU_NUTS5, Items.BUY_ARROWS30, Items.BUY_RED_POTION40, Items.BUY_FISH],
-    [Items.BUY_BOMBCHUS20, Items.BUY_ARROWS30, Items.BUY_RED_POTION50, Items.BUY_ARROWS30, Items.BUY_DEKU_NUTS5, Items.BUY_ARROWS50, Items.BUY_ARROWS50, Items.BUY_GREEN_POTION],
-    [Items.BUY_POE, Items.BUY_POE, Items.BUY_HEART, Items.BUY_HEART, Items.BUY_HEART, Items.BUY_HEART, Items.BUY_HEART, Items.BUY_HEART],
+    [Items.BUY_DEKU_SHIELD, Items.BUY_HYLIAN_SHIELD, Items.BUY_GORON_TUNIC, Items.BUY_ZORA_TUNIC,
+        Items.BUY_DEKU_NUTS5, Items.BUY_BOMBS20, Items.BUY_BOMBCHUS10, Items.BUY_DEKU_STICK1],
+    [Items.BUY_FAIRYS_SPIRIT, Items.BUY_DEKU_SEEDS30, Items.BUY_ARROWS10, Items.BUY_BLUE_FIRE,
+        Items.BUY_RED_POTION30, Items.BUY_GREEN_POTION, Items.BUY_DEKU_NUTS10, Items.BUY_BOMBCHUS10],
+    [Items.BUY_BOMBCHUS10, Items.BUY_BOMBCHUS20, Items.BUY_BOMBS525, Items.BUY_BOMBS535,
+        Items.BUY_BOMBS10, Items.BUY_DEKU_NUTS5, Items.BUY_ARROWS30, Items.BUY_ARROWS50],
+    [Items.BUY_ARROWS10, Items.BUY_FAIRYS_SPIRIT, Items.BUY_BOTTLE_BUG, Items.BUY_FISH,
+        Items.BUY_HYLIAN_SHIELD, Items.BUY_BOTTLE_BUG, Items.BUY_DEKU_STICK1, Items.BUY_DEKU_STICK1],
+    [Items.BUY_BLUE_FIRE, Items.BUY_FISH, Items.BUY_BOMBCHUS10, Items.BUY_DEKU_NUTS5,
+        Items.BUY_ARROWS10, Items.BUY_BOMBCHUS20, Items.BUY_BOMBS535, Items.BUY_RED_POTION30],
+    [Items.BUY_BOMBS30, Items.BUY_BOMBCHUS20, Items.BUY_DEKU_NUTS5, Items.BUY_ARROWS10,
+        Items.BUY_DEKU_NUTS5, Items.BUY_ARROWS30, Items.BUY_RED_POTION40, Items.BUY_FISH],
+    [Items.BUY_BOMBCHUS20, Items.BUY_ARROWS30, Items.BUY_RED_POTION50, Items.BUY_ARROWS30,
+        Items.BUY_DEKU_NUTS5, Items.BUY_ARROWS50, Items.BUY_ARROWS50, Items.BUY_GREEN_POTION],
+    [Items.BUY_POE, Items.BUY_POE, Items.BUY_HEART, Items.BUY_HEART,
+        Items.BUY_HEART, Items.BUY_HEART, Items.BUY_HEART, Items.BUY_HEART],
 ]
 
 
@@ -159,7 +167,7 @@ def fill_shop_items(world: "SohWorld") -> None:
     if not world.options.shuffle_shops:
         no_shop_shuffle(world)
         return
-    
+
     # select what shop slots to and vanilla items to shuffle
     num_vanilla = 8 - world.options.shuffle_shops_item_amount
     vanilla_pool = list[Items]()
@@ -171,7 +179,8 @@ def fill_shop_items(world: "SohWorld") -> None:
     for region, shop in all_shop_locations:
         vanilla_shop_slots += list(shop.keys())[0: num_vanilla]
 
-    vanilla_shop_locations = [world.get_location(slot) for slot in vanilla_shop_slots]
+    vanilla_shop_locations = [world.get_location(
+        slot) for slot in vanilla_shop_slots]
     vanilla_items = [world.create_item(item) for item in vanilla_pool]
 
     # create a filled copy of the state so the multiworld can place the vanilla shop items using logic
@@ -181,21 +190,24 @@ def fill_shop_items(world: "SohWorld") -> None:
     prefill_state.sweep_for_advancements()
 
     # place the vanilla shop items
-    fill_restrictive(world.multiworld, prefill_state, vanilla_shop_locations, vanilla_items, single_player_placement=True, lock=True)
+    fill_restrictive(world.multiworld, prefill_state, vanilla_shop_locations,
+                     vanilla_items, single_player_placement=True, lock=True)
     for slot in vanilla_shop_slots:
         location = world.get_location(slot)
         world.get_location(slot).address = None
-        world.shop_prices[slot] = vanilla_shop_prices[Items(location.item.name)]
+        world.shop_prices[slot] = vanilla_shop_prices[Items(
+            location.item.name)]
         world.shop_vanilla_items[slot] = location.item.name
-    
+
     min_shop_price = world.options.shuffle_shops_minimum_price.value
     max_shop_price = world.options.shuffle_shops_maximum_price.value
-    
+
     for region, shop in all_shop_locations:
         for slot in shop.keys():
             if slot in world.shop_prices:
                 continue
-            world.shop_prices[slot] = create_random_price(min_shop_price, max_shop_price, world)
+            world.shop_prices[slot] = create_random_price(
+                min_shop_price, max_shop_price, world)
 
 
 def no_shop_shuffle(world: "SohWorld") -> None:
@@ -214,7 +226,8 @@ def generate_scrub_prices(world: "SohWorld") -> None:
         max_scrub_price = world.options.shuffle_scrubs_maximum_price.value
 
         for slot in scrubs_location_table.keys():
-            world.scrub_prices[slot] = create_random_price(min_scrub_price, max_scrub_price, world)
+            world.scrub_prices[slot] = create_random_price(
+                min_scrub_price, max_scrub_price, world)
 
 
 def create_random_price(min_price: int, max_price: int, world: "SohWorld") -> int:
@@ -234,7 +247,7 @@ def set_price_rules(world: "SohWorld") -> None:
     for region, shop in all_shop_locations:
         for slot in shop.keys():
             price = world.shop_prices[slot]
-            price_rule = lambda bundle: can_afford(price, bundle)
+            def price_rule(bundle): return can_afford(price, bundle)
             location = world.get_location(slot)
             add_rule(location, rule_wrapper.wrap(region, price_rule, world))
 
@@ -242,7 +255,8 @@ def set_price_rules(world: "SohWorld") -> None:
     if world.options.shuffle_scrubs:
         for slot in scrubs_location_table.keys():
             price = world.scrub_prices[slot]
-            price_rule = lambda bundle: can_afford(price, bundle)
+            def price_rule(bundle): return can_afford(price, bundle)
             location = world.get_location(slot)
             # Parent region shouldn't matter at all here, so just add ROOT so we don't have to make a list of all scrubs and their regions.
-            add_rule(location, rule_wrapper.wrap(Regions.ROOT, price_rule, world))
+            add_rule(location, rule_wrapper.wrap(
+                Regions.ROOT, price_rule, world))

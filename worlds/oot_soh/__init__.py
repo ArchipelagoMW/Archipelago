@@ -17,9 +17,10 @@ from Fill import fill_restrictive
 import logging
 logger = logging.getLogger("SOH_OOT")
 
+
 class SohWebWorld(WebWorld):
     theme = "ice"
-    
+
     setup_en = Tutorial(
         tutorial_name="Start Guide",
         description="A guide to playing Ship of Harkinian.",
@@ -28,7 +29,7 @@ class SohWebWorld(WebWorld):
         link="guide/en",
         authors=["aMannus"]
     )
-    
+
     tutorials = [setup_en]
     game_info_languages = ["en"]
     option_groups = soh_option_groups
@@ -61,7 +62,7 @@ class SohWorld(World):
         # If maximum price is below minimum, set max to minimum.
         if self.options.shuffle_shops_minimum_price.value > self.options.shuffle_shops_maximum_price.value:
             self.options.shuffle_shops_maximum_price.value = self.options.shuffle_shops_minimum_price.value
-        
+
         if self.options.shuffle_scrubs_minimum_price.value > self.options.shuffle_scrubs_maximum_price.value:
             self.options.shuffle_scrubs_maximum_price.value = self.options.shuffle_scrubs_minimum_price.value
 
@@ -83,16 +84,17 @@ class SohWorld(World):
             self.push_precollected(self.create_item(Items.BOMBCHU_BAG))
         if not self.options.shuffle_childs_wallet:
             self.push_precollected(self.create_item(Items.CHILD_WALLET))
-        
+
         create_item_pool(self)
 
-    def create_regions(self) -> None: 
+    def create_regions(self) -> None:
         create_regions_and_locations(self)
         place_locked_items(self)
 
     def set_rules(self) -> None:
         # Completion condition.
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(Events.GAME_COMPLETED.value, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(
+            Events.GAME_COMPLETED.value, self.player)
 
     def pre_fill(self) -> None:
         # Prefill Dungeon Rewards. Need to collect the item pool and vanilla shop items before doing so.
@@ -106,11 +108,14 @@ class SohWorld(World):
                     prefill_state.collect(self.create_item(item), False)
             prefill_state.sweep_for_advancements()
 
-            dungeon_reward_locations = [self.get_location(location.value) for location in dungeon_reward_item_mapping.keys()]
-            dungeon_reward_items = [self.create_item(item.value) for item in dungeon_reward_item_mapping.values()]
+            dungeon_reward_locations = [self.get_location(
+                location.value) for location in dungeon_reward_item_mapping.keys()]
+            dungeon_reward_items = [self.create_item(
+                item.value) for item in dungeon_reward_item_mapping.values()]
 
             # Place dungeon rewards
-            fill_restrictive(self.multiworld, prefill_state, dungeon_reward_locations, dungeon_reward_items, single_player_placement=True, lock=True)
+            fill_restrictive(self.multiworld, prefill_state, dungeon_reward_locations,
+                             dungeon_reward_items, single_player_placement=True, lock=True)
 
         fill_shop_items(self)
         generate_scrub_prices(self)
@@ -199,7 +204,7 @@ class SohWorld(World):
         }
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        state._soh_stale[self.player] = True # type: ignore
+        state._soh_stale[self.player] = True  # type: ignore
 
         if item.name in progressive_items:
             current_count = state.prog_items[self.player][item.name] + 1
@@ -211,11 +216,11 @@ class SohWorld(World):
                     break
 
         return super().collect(state, item)
-    
+
     def remove(self, state: CollectionState, item: Item) -> bool:
         changed = super().remove(state, item)
         if changed:
-            state._soh_invalidate(self.player) # type: ignore
+            state._soh_invalidate(self.player)  # type: ignore
 
         if item.name in progressive_items:
             current_count = state.prog_items[self.player][item.name]
@@ -227,8 +232,8 @@ class SohWorld(World):
         return changed
 
     def generate_output(self, output_directory: str):
-    
+
         visualize_regions(self.multiworld.get_region(self.origin_region_name, self.player), f"SOH-Player{self.player}.puml",
-                        show_entrance_names=True,
-                        regions_to_highlight=self.multiworld.get_all_state().reachable_regions[
-                            self.player])
+                          show_entrance_names=True,
+                          regions_to_highlight=self.multiworld.get_all_state().reachable_regions[
+            self.player])

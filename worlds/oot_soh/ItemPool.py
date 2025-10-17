@@ -9,7 +9,8 @@ if TYPE_CHECKING:
 
 
 def create_item_pool(world: "SohWorld") -> None:
-    items_to_create: dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_data_table.items()}
+    items_to_create: dict[str, int] = {
+        item: data.quantity_in_item_pool for item, data in item_data_table.items()}
 
     filler_bottle_amount: int = 2
 
@@ -47,14 +48,15 @@ def create_item_pool(world: "SohWorld") -> None:
 
     # Gerudo Fortress Keys
     if world.options.fortress_carpenters == "fast":
-            items_to_create[Items.GERUDO_FORTRESS_SMALL_KEY] = 1
+        items_to_create[Items.GERUDO_FORTRESS_SMALL_KEY] = 1
 
     if world.options.fortress_carpenters == "free":
         items_to_create[Items.GERUDO_FORTRESS_SMALL_KEY] = 0
-    
+
     # Triforce pieces
     if world.options.triforce_hunt:
-        total_triforce_pieces = math.floor(world.options.triforce_hunt_required_pieces * (1 + (world.options.triforce_hunt_extra_pieces_percentage / 100)))
+        total_triforce_pieces = math.floor(world.options.triforce_hunt_required_pieces * (
+            1 + (world.options.triforce_hunt_extra_pieces_percentage / 100)))
         if total_triforce_pieces > 100:
             total_triforce_pieces = 100
         items_to_create[Items.TRIFORCE_PIECE] = total_triforce_pieces
@@ -132,7 +134,7 @@ def create_item_pool(world: "SohWorld") -> None:
         items_to_create[Items.MORPHAS_SOUL] = 1
         items_to_create[Items.BONGO_BONGOS_SOUL] = 1
         items_to_create[Items.TWINROVAS_SOUL] = 1
-    
+
     if world.options.shuffle_boss_souls == "on_plus_ganons":
         items_to_create[Items.GANONS_SOUL] = 1
 
@@ -229,14 +231,17 @@ def create_item_pool(world: "SohWorld") -> None:
             world.item_pool.append(world.create_item(item))
 
     # Add random filler bottles
-    world.item_pool += [world.create_item(get_filler_bottle(world)) for _ in range(filler_bottle_amount)]
+    world.item_pool += [world.create_item(get_filler_bottle(world))
+                        for _ in range(filler_bottle_amount)]
 
-    open_location_count: int = sum(1 for loc in world.get_locations() if not loc.locked)
+    open_location_count: int = sum(
+        1 for loc in world.get_locations() if not loc.locked)
     filler_item_count: int = open_location_count - len(world.item_pool)
 
     # Remove vanilla shop numbers from the open locations as they're pre-filled later
     if world.options.shuffle_shops:
-        vanilla_shop_item_amount = 64 - (8 * world.options.shuffle_shops_item_amount.value)
+        vanilla_shop_item_amount = 64 - \
+            (8 * world.options.shuffle_shops_item_amount.value)
         filler_item_count -= vanilla_shop_item_amount
     else:
         filler_item_count -= 64
@@ -251,7 +256,8 @@ def create_item_pool(world: "SohWorld") -> None:
         filler_item_count -= 1
 
     # Ice Trap Filler Replacement
-    places_to_fill: int = int(filler_item_count * (world.options.ice_trap_filler_replacement.value * .01))
+    places_to_fill: int = int(
+        filler_item_count * (world.options.ice_trap_filler_replacement.value * .01))
     for _ in range(places_to_fill):
         world.item_pool += [world.create_item(Items.ICE_TRAP)]
         filler_item_count -= 1
@@ -262,8 +268,10 @@ def create_item_pool(world: "SohWorld") -> None:
 
     world.multiworld.itempool += world.item_pool
 
+
 def get_filler_item(world: "SohWorld") -> str:
     return world.random.choice(filler_items)
+
 
 def get_filler_bottle(world: "SohWorld") -> str:
     return world.random.choice(filler_bottles)
