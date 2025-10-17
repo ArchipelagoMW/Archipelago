@@ -204,27 +204,24 @@ class TriforceHunt(Toggle):
     display_name = "Triforce Hunt"
 
 
-class TriforceHuntRequiredPieces(Range):
+class TriforceHuntPiecesTotal(Range):
     """
-    The amount of Triforce pieces required to win the game.
+    Specify an exact number of Triforce Pieces to add to the item pool. If the item pool is out of space, no more will be added.
     """
-    display_name = "Triforce Hunt Required Pieces"
+    display_name = "Triforce Hunt Pieces Total"
     range_start = 1
     range_end = 100
-    default = 20
+    default = 30
 
 
-class TriforceHuntExtraPiecesPercentage(Range):
+class TriforceHuntPiecesRequired(Range):
     """
-    The percentage of extra Triforce pieces that will be added to the pool. The maximum total Triforce pieces is 100.
-    For example:
-    If 10 pieces are required, and this option is set to 50%, 5 extra pieces will be added.
-    If 20 pieces are required, and this option is set to 100%, 20 extra pieces will be added.
+    The percentage of Triforce pieces that will be required to complete the game.
     """
-    display_name = "Triforce Hunt Extra Pieces Percentage"
-    range_start = 0
+    display_name = "Triforce Hunt Pieces Required Percentage"
+    range_start = 1
     range_end = 100
-    default = 50
+    default = 60
 
 
 class ShuffleTokens(Choice):
@@ -849,8 +846,8 @@ class SohOptions(PerGameCommonOptions):
     rainbow_bridge_greg_modifier: RainbowBridgeGregModifier
     skip_ganons_trials: SkipGanonsTrials
     triforce_hunt: TriforceHunt
-    triforce_hunt_required_pieces: TriforceHuntRequiredPieces
-    triforce_hunt_extra_pieces_percentage: TriforceHuntExtraPiecesPercentage
+    triforce_hunt_pieces_total: TriforceHuntPiecesTotal
+    triforce_hunt_pieces_required: TriforceHuntPiecesRequired
     shuffle_skull_tokens: ShuffleTokens
     skulls_sun_song: SkullsSunSong
     shuffle_master_sword: ShuffleMasterSword
@@ -936,8 +933,8 @@ soh_option_groups = [
         RainbowBridgeGregModifier,
         SkipGanonsTrials,
         TriforceHunt,
-        TriforceHuntRequiredPieces,
-        TriforceHuntExtraPiecesPercentage,
+        TriforceHuntPiecesTotal,
+        TriforceHuntPiecesRequired,
     ]),
     # OptionGroup("Shuffle Entrances", [
     #     # Dungeon Entrances
