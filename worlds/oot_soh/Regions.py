@@ -103,6 +103,11 @@ def create_regions_and_locations(world: "SohWorld") -> None:
     for entry in Regions:
         region_data_table[entry] = SohRegionData([])
 
+    # exclusions
+    # We don't need HC Garden if child zelda is skipped
+    if world.options.skip_child_zelda:
+        region_data_table.pop(Regions.HC_GARDEN)
+
     # Create regions.
     for region_name in region_data_table.keys():
         region = SohRegion(region_name, world.player, world.multiworld)

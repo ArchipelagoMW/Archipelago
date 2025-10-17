@@ -58,23 +58,27 @@ def set_region_rules(world: "SohWorld") -> None:
     # Connections
     connect_regions(Regions.HYRULE_CASTLE_GROUNDS, world, [
         (Regions.CASTLE_GROUNDS, lambda bundle: True),
-        (Regions.HC_GARDEN,
-         lambda bundle: can_use(Items.WEIRD_EGG, bundle) or
-                        (can_do_trick(Tricks.DAMAGE_BOOST_SIMPLE, bundle) and has_explosives(bundle) and can_jump_slash(bundle))),
         (Regions.HC_GREAT_FAIRY_FOUNTAIN, lambda bundle: blast_or_smash(bundle)),
         (Regions.HC_STORMS_GROTTO, lambda  bundle: can_open_storms_grotto(bundle))
     ])
+    if not world.options.skip_child_zelda:
+        connect_regions(Regions.HYRULE_CASTLE_GROUNDS, world, [
+            (Regions.HC_GARDEN,
+            lambda bundle: can_use(Items.WEIRD_EGG, bundle) or
+                            (can_do_trick(Tricks.DAMAGE_BOOST_SIMPLE, bundle) and has_explosives(bundle) and can_jump_slash(bundle)))
+        ])
 
     ## Hyrule Castle Garden
     # Locations
-    add_locations(Regions.HC_GARDEN, world, [
-        (Locations.HC_ZELDAS_LETTER, lambda bundle: True)
-    ])
-    # Connections
-    connect_regions(Regions.HC_GARDEN, world, [
-        (Regions.HYRULE_CASTLE_GROUNDS, lambda bundle: True),
-        (Regions.HC_GARDEN_SONG_FROM_IMPA, lambda bundle: True)
-    ])
+    if not world.options.skip_child_zelda:
+        add_locations(Regions.HC_GARDEN, world, [
+            (Locations.HC_ZELDAS_LETTER, lambda bundle: True)
+        ])
+        # Connections
+        connect_regions(Regions.HC_GARDEN, world, [
+            (Regions.HYRULE_CASTLE_GROUNDS, lambda bundle: True),
+            (Regions.HC_GARDEN_SONG_FROM_IMPA, lambda bundle: True)
+        ])
 
     ## Hyrule Castle Garden Song From Impa
     add_locations(Regions.HC_GARDEN_SONG_FROM_IMPA, world, [

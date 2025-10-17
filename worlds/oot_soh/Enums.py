@@ -182,7 +182,6 @@ class Regions(StrEnum):
     DMC_UPPER_NEARBY = "DMC Upper Nearby"
     DMC_CENTRAL_NEARBY = "DMC Central Nearby"
     DMC_LADDER_REGION_NEARBY = "DMC Ladder Region Nearby"
-    DMC_VOLCANO_VENT = "DMC Volcano Vent"
     DMC_UPPER_GROTTO = "DMC Upper Grotto"
     DMC_HAMMER_GROTTO = "DMC Hammer Grotto"
     DMC_GREAT_FAIRY_FOUNTAIN = "DMC Great Fairy Fountain"
