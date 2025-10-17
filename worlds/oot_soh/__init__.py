@@ -58,6 +58,10 @@ class SohWorld(World):
         if self.options.door_of_time.value == 0 and self.options.shuffle_dungeon_rewards.value == 0:
             self.options.starting_age.value = 0
 
+        # If maximum price is below minimum, set max to minimum.
+        if self.options.shuffle_shops_minimum_price.value > self.options.shuffle_shops_maximum_price.value:
+            self.options.shuffle_shops_maximum_price.value = self.options.shuffle_shops_minimum_price.value
+
     def create_item(self, name: str) -> SohItem:
         item_entry = Items(name)
         return SohItem(name, item_data_table[item_entry].classification, item_data_table[item_entry].item_id, self.player)

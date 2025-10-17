@@ -186,11 +186,14 @@ def fill_shop_items(world: "SohWorld") -> None:
         world.shop_prices[slot] = vanilla_shop_prices[Items(location.item.name)]
         world.shop_vanilla_items[slot] = location.item.name
     
+    min_shop_price = world.options.shuffle_shops_minimum_price.value
+    max_shop_price = world.options.shuffle_shops_maximum_price.value
+    
     for region, shop in all_shop_locations:
         for slot in shop.keys():
             if slot in world.shop_prices:
                 continue
-            world.shop_prices[slot] = create_random_shop_price(world)
+            world.shop_prices[slot] = create_random_price(min_shop_price, max_shop_price, world)
 
 def no_shop_shuffle(world: "SohWorld") -> None:
     # put everything in its place as plain vanilla
@@ -201,29 +204,16 @@ def no_shop_shuffle(world: "SohWorld") -> None:
             world.get_location(slot).address = None
             world.shop_vanilla_items[slot] = item.value
 
-def create_random_shop_price(world: "SohWorld") -> int:
-    # Todo randomized prices depending on the settings
-    price = 10
-    match world.options.shuffle_shops_prices:
-        case 0: 
-            # affordable prices
-            price = 10
-        case 1:
-            # child wallet
-            price = world.random.randrange(10, 101, 5)
-            if price == 100:
-                price = 99
-        case 2:
-            # adult wallet
-            price = world.random.randrange(10, 201, 5)
-        case 3:
-            # giant wallet
-            price = world.random.randrange(10, 501, 5)
-        case 4:
-            # tycoon's wallet
-            price = world.random.randrange(10, 1001, 5)
-            if price == 1000:
-                price = 999
+def create_random_price(min_price: int, max_price: int, world: "SohWorld") -> int:
+    price = 0
+
+    # randrange needs an actual range to work, so just pick the price directly if min/max are the same.
+    if min_price == max_price:
+        price = min_price
+    else:
+        price = world.random.randrange(min_price, max_price)
+
+    price = price - (price % 5)
 
     return price
 

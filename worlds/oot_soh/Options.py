@@ -350,22 +350,28 @@ class ShuffleShopsItemAmount(Range):
     range_end = 7
     default = 4
 
-class ShuffleShopPrices(Choice):
+
+class ShuffleShopsMinimumPrice(Range):
     """
-    If Shuffle Shops is on, set the price of randomized shop items.
-    - affordable: always 10 rupies
-    - child: 10 - 99 rupees
-    - adult: 10 - 200 rupees
-    - giant: 10 - 500 rupees
-    - tycoon: 10 - 999 rupees
+    If Shuffle Shops is on, set the minimum price of randomized shop items. Final price will be rounded down to multiples of 5.
+    Shuffled vanilla shop items will keep their vanilla price regardless of what's chosen here.
     """
-    display_name = "Shuffle Shop Prices"
-    option_affordable = 0
-    option_child = 1
-    option_adult = 2
-    option_giant = 3
-    option_tycoon = 4
-    default = 2
+    display_name = "Shuffle Shops Minimum Price"
+    range_start = 0
+    range_end = 999
+    default = 10
+
+
+class ShuffleShopsMaximumPrice(Range):
+    """
+    If Shuffle Shops is on, set the maximum price of randomized shop items. Final price will be rounded down to multiples of 5.
+    If this is set below the minimum, this option will be set to whatever the minimum is set to.
+    Shuffled vanilla shop items will keep their vanilla price regardless of what's chosen here.
+    """
+    display_name = "Shuffle Shops Maximum Price"
+    range_start = 0
+    range_end = 999
+    default = 250
 
 
 class ShuffleFish(Choice):
@@ -837,7 +843,8 @@ class SohOptions(PerGameCommonOptions):
     shuffle_freestanding_items: ShuffleFreestandingItems
     shuffle_shops: ShuffleShops
     shuffle_shops_item_amount: ShuffleShopsItemAmount
-    shuffle_shops_prices: ShuffleShopPrices
+    shuffle_shops_minimum_price: ShuffleShopsMinimumPrice
+    shuffle_shops_maximum_price: ShuffleShopsMaximumPrice
     shuffle_fish: ShuffleFish
     shuffle_scrubs: ShuffleScrubs
     shuffle_beehives: ShuffleBeehives
@@ -941,7 +948,8 @@ soh_option_groups = [
     OptionGroup("Shuffle NPCs & Merchants", [
         ShuffleShops,
         ShuffleShopsItemAmount,
-        ShuffleShopPrices,
+        ShuffleShopsMinimumPrice,
+        ShuffleShopsMaximumPrice,
         # Other shop weight stuff
         ShuffleFish,
         ShuffleScrubs,
