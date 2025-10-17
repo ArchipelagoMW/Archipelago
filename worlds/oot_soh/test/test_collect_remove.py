@@ -72,8 +72,7 @@ class TestCollectRemoveAllOn(SohTestBase):
 
     def test_single_of_each(self):
         """
-        Checking if we collect 1 of each progressive item, or 0 in the case of ones that aren't shuffled, that we have
-        the first "rank" of each item.
+        Checking if we collect 1 of each progressive item that we have the first "rank" of each item.
         """
         for item_name, prog_items in progressive_items.items():
             item = SohWorld.create_item(self.world, item_name)
