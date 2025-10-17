@@ -224,6 +224,7 @@
     height: self.content.texture_size[1] + 80
 <ScrollBox>:
     layout: layout
+    box_height: dp(100)
     bar_width: "12dp"
     scroll_wheel_distance: 40
     do_scroll_x: False
@@ -234,4 +235,11 @@
         orientation: "vertical"
         spacing: 10
         size_hint_y: None
-        height: self.minimum_height
+        height: max(self.minimum_height, root.box_height)
+
+<MessageBoxLabel>:
+    valign: "middle"
+    halign: "center"
+    text_size: self.width, None
+    height: self.texture_size[1]
+
