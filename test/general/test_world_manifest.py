@@ -38,7 +38,7 @@ class TestWorldManifest(unittest.TestCase):
             manifest,
             f"archipelago.json manifest exists for {self.game} but does not contain 'game'",
         )
-        self.assertIn(
+        self.assertEqual(
             manifest["game"],
             world_type.game,
             f"archipelago.json manifest for {self.game} specifies wrong game '{manifest['game']}'",
