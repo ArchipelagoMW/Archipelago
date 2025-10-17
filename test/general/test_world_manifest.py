@@ -29,7 +29,7 @@ source_world_names = [
 
 
 def get_source_world_manifest_path(game: str) -> Path | None:
-    """Get the world's root folder from game name."""
+    """Get path of archipelago.json in the world's root folder from game name."""
     # TODO: add a feature to AutoWorld that makes this less annoying
     world_type = AutoWorldRegister.world_types[game]
     world_type_path = Path(world_type.__file__)
