@@ -393,6 +393,27 @@ class ShuffleScrubs(Toggle):
     display_name = "Shuffle Scrubs"
 
 
+class ShuffleScrubsMinimumPrice(Range):
+    """
+    If Shuffle Scrubs is on, set their minimum price. Final price will be rounded down to multiples of 5.
+    """
+    display_name = "Shuffle Scrubs Minimum Price"
+    range_start = 0
+    range_end = 999
+    default = 10
+
+
+class ShuffleScrubsMaximumPrice(Range):
+    """
+    If Shuffle Scrubs is on, set their maximum price. Final price will be rounded down to multiples of 5.
+    If this is set below the minimum, this option will be set to whatever the minimum is set to.
+    """
+    display_name = "Shuffle Scrubs Maximum Price"
+    range_start = 0
+    range_end = 999
+    default = 90
+
+
 class ShuffleBeehives(Toggle):
     """
     Shuffle all beehives.
@@ -847,6 +868,8 @@ class SohOptions(PerGameCommonOptions):
     shuffle_shops_maximum_price: ShuffleShopsMaximumPrice
     shuffle_fish: ShuffleFish
     shuffle_scrubs: ShuffleScrubs
+    shuffle_scrubs_minimum_price: ShuffleScrubsMinimumPrice
+    shuffle_scrubs_maximum_price: ShuffleScrubsMaximumPrice
     shuffle_beehives: ShuffleBeehives
     shuffle_cows: ShuffleCows
     shuffle_pots: ShufflePots
@@ -953,7 +976,8 @@ soh_option_groups = [
         # Other shop weight stuff
         ShuffleFish,
         ShuffleScrubs,
-        # Scrub prices
+        ShuffleScrubsMinimumPrice,
+        ShuffleScrubsMaximumPrice,
         ShuffleBeehives,
         ShuffleCows,
         ShufflePots,

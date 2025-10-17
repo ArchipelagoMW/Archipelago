@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
 from worlds.generic.Rules import add_rule
-from .LogicHelpers import rule_wrapper, can_afford
 from Fill import fill_restrictive
 from BaseClasses import CollectionState
 
+from .LogicHelpers import rule_wrapper, can_afford
+from .Locations import scrubs_location_table
 from .Enums import *
 
 if TYPE_CHECKING:
@@ -153,6 +154,7 @@ vanilla_items_to_add: list[list[Items]] = [
     [Items.BUY_POE, Items.BUY_POE, Items.BUY_HEART, Items.BUY_HEART, Items.BUY_HEART, Items.BUY_HEART, Items.BUY_HEART, Items.BUY_HEART],
 ]
 
+
 def fill_shop_items(world: "SohWorld") -> None:
     if not world.options.shuffle_shops:
         no_shop_shuffle(world)
@@ -195,6 +197,7 @@ def fill_shop_items(world: "SohWorld") -> None:
                 continue
             world.shop_prices[slot] = create_random_price(min_shop_price, max_shop_price, world)
 
+
 def no_shop_shuffle(world: "SohWorld") -> None:
     # put everything in its place as plain vanilla
     for region, shop in all_shop_locations:
@@ -204,9 +207,18 @@ def no_shop_shuffle(world: "SohWorld") -> None:
             world.get_location(slot).address = None
             world.shop_vanilla_items[slot] = item.value
 
+
+def generate_scrub_prices(world: "SohWorld") -> None:
+    if world.options.shuffle_scrubs:
+        min_scrub_price = world.options.shuffle_scrubs_minimum_price.value
+        max_scrub_price = world.options.shuffle_scrubs_maximum_price.value
+
+        for slot in scrubs_location_table.keys():
+            world.scrub_prices[slot] = create_random_price(min_scrub_price, max_scrub_price, world)
+
+
 def create_random_price(min_price: int, max_price: int, world: "SohWorld") -> int:
     price = 0
-
     # randrange needs an actual range to work, so just pick the price directly if min/max are the same.
     if min_price == max_price:
         price = min_price
@@ -214,13 +226,23 @@ def create_random_price(min_price: int, max_price: int, world: "SohWorld") -> in
         price = world.random.randrange(min_price, max_price)
 
     price = price - (price % 5)
-
     return price
 
+
 def set_price_rules(world: "SohWorld") -> None:
+    # Shop Price Rules
     for region, shop in all_shop_locations:
         for slot in shop.keys():
             price = world.shop_prices[slot]
             price_rule = lambda bundle: can_afford(price, bundle)
             location = world.get_location(slot)
             add_rule(location, rule_wrapper.wrap(region, price_rule, world))
+
+    # Scrub Price Rules
+    if world.options.shuffle_scrubs:
+        for slot in scrubs_location_table.keys():
+            price = world.scrub_prices[slot]
+            price_rule = lambda bundle: can_afford(price, bundle)
+            location = world.get_location(slot)
+            # Parent region shouldn't matter at all here, so just add ROOT so we don't have to make a list of all scrubs and their regions.
+            add_rule(location, rule_wrapper.wrap(Regions.ROOT, price_rule, world))

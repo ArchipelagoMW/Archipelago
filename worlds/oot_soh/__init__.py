@@ -11,7 +11,7 @@ from .Enums import *
 from .ItemPool import create_item_pool
 from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
-from .ShopItems import fill_shop_items, set_price_rules, all_shop_locations
+from .ShopItems import fill_shop_items, generate_scrub_prices, set_price_rules, all_shop_locations
 from Fill import fill_restrictive
 
 import logging
@@ -61,6 +61,9 @@ class SohWorld(World):
         # If maximum price is below minimum, set max to minimum.
         if self.options.shuffle_shops_minimum_price.value > self.options.shuffle_shops_maximum_price.value:
             self.options.shuffle_shops_maximum_price.value = self.options.shuffle_shops_minimum_price.value
+        
+        if self.options.shuffle_scrubs_minimum_price.value > self.options.shuffle_scrubs_maximum_price.value:
+            self.options.shuffle_scrubs_maximum_price.value = self.options.shuffle_scrubs_minimum_price.value
 
     def create_item(self, name: str) -> SohItem:
         item_entry = Items(name)
@@ -110,6 +113,7 @@ class SohWorld(World):
             fill_restrictive(self.multiworld, prefill_state, dungeon_reward_locations, dungeon_reward_items, single_player_placement=True, lock=True)
 
         fill_shop_items(self)
+        generate_scrub_prices(self)
         set_price_rules(self)
 
     def fill_slot_data(self) -> dict[str, Any]:
