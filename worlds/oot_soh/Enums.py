@@ -3548,7 +3548,7 @@ class Events(StrEnum):
     SHADOW_TEMPLE_COMPLETED = "Shadow Temple Completed"
     TIME_TRAVEL = "Time Travel"
     FREED_EPONA = "Freed Epona"
-    RESCUED_ALL_CARPENTERS = "GF Freed All Carpenters"
+    RESCUED_ALL_CARPENTERS = "Rescued All Carpenters"
     GOTTEN_LINKS_COW = "Link's Cow Was Gifted"
     DAMPES_WINDMILL_ACCESS = "Dampe's Windmill Access"
     DRAIN_WELL = "Drain Well"
