@@ -168,5 +168,3 @@ def get_all_map_difficulties() -> list[str]:
 
 def get_default_map_difficulties() -> list[str]:
     return tmx_default_map_difficulties
-
-

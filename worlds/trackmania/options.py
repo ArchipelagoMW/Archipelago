@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime  # for custom_series: uploaded_before and uploaded_after
 from schema import Schema, And, Or, Optional  # for custom series validation
-from typing import List, Dict, Any
+from typing import Any
 from Options import Toggle, Range, OptionSet, OptionDict, PerGameCommonOptions, OptionGroup, ProgressionBalancing, Accessibility, Visibility#, PlandoItems
 from .data import get_all_map_tags, get_excluded_map_tags, get_all_map_difficulties, get_default_map_difficulties
 
@@ -95,7 +95,7 @@ class DiscountPercentage(Range):
 
 
 class DiscountAmount(Range):
-    """The strength of PB Discount Items. The discount is calculated by dividing this setting by 10 and multiplying it by the author time. For example, the default setting of 15 becomes 1.5% of the author time.
+    """The amount PB Discount Items reduce your effective personal best by. The discount is calculated by dividing this setting by 10 and multiplying it by the author time. For example, the default setting of 15 becomes 1.5% of the author time.
     """
     display_name = "PB Discount Item Strength"
     range_start = 1
@@ -303,7 +303,7 @@ class TrackmaniaOptions(PerGameCommonOptions):
 
     custom_series: CustomSeries
 
-option_groups: Dict[str, List[Any]] = {
+option_groups: dict[str, list[Any]] = {
     "Generation":[ProgressionBalancing, Accessibility],
     "Difficulty":[TargetTime, SkipPercentage, DiscountPercentage, DiscountAmount, MapDifficulties],
     "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber],
@@ -311,8 +311,8 @@ option_groups: Dict[str, List[Any]] = {
     "Advanced":[FirstSeriesSize, DisableBronzeLocations, DisableBronzeMedals, DisableSilverLocations, DisableSilverMedals, DisableGoldLocations, DisableGoldMedals, DisableAuthorLocations, CustomSeries]#, PlandoItems]
 }
 
-def create_option_groups() -> List[OptionGroup]:
-    option_group_list: List[OptionGroup] = []
+def create_option_groups() -> list[OptionGroup]:
+    option_group_list: list[OptionGroup] = []
     for name, options in option_groups.items():
         option_group_list.append(OptionGroup(name=name, options=options))
 

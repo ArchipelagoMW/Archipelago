@@ -157,4 +157,3 @@ def build_items() -> dict[str,int]:
         filler_id += 1
 
     return items
-

@@ -28,7 +28,7 @@ The setup guide for this game can be found [here](../../../tutorial/Trackmania/s
 
 ## Which items can be in another player's world?
 
-Any medal from any track, the Map Skip item, the PB Discount item, and anny filler items!
+Any medal from any track, the Map Skip item, the PB Discount item, and any filler items!
 
 ## What does another world's item look like in Trackmania?
 

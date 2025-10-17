@@ -53,4 +53,3 @@ def get_check_type_name(check: MapCheckTypes) -> str:
             return "Target Time"
         case _:
             return ""
-        

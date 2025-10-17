@@ -3,7 +3,7 @@ import Utils
 import websockets
 import functools
 from copy import deepcopy
-from typing import List, Any, Iterable
+from typing import Any, Iterable
 from NetUtils import decode, encode, JSONtoTextParser, NetworkItem, NetworkPlayer
 from MultiServer import Endpoint
 from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
@@ -48,8 +48,8 @@ class TrackmaniaContext(CommonContext):
         self.connected_msg = None
         self.game_connected = False
         self.awaiting_info = False
-        self.full_inventory: List[Any] = []
-        self.server_msgs: List[Any] = []
+        self.full_inventory: list[Any] = []
+        self.server_msgs: list[Any] = []
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
