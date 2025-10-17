@@ -36,7 +36,8 @@ def create_mission_order(
     # whenever the event location becomes accessible
 
     # Set up mission pools
-    mission_pools = SC2MOGenMissionPools()
+    race_swap_pick_one = world.options.enable_race_swap.value in [EnableRaceSwapVariants.option_pick_one, EnableRaceSwapVariants.option_pick_one_non_vanilla]
+    mission_pools = SC2MOGenMissionPools(race_swap_pick_one)
     mission_pools.set_exclusions(get_excluded_missions(world), []) # TODO set unexcluded
     adjust_mission_pools(world, mission_pools)
     setup_mission_pool_balancing(world, mission_pools)
