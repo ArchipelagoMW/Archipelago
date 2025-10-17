@@ -11,7 +11,7 @@ import jinja2
 
 import Utils
 import worlds.Files
-from . import FactorioOptions
+from . import FactorioOptions, all_ingredients
 from .InternalItem import fluids, recipes, global_custom_recipes
 from .Technologies import tech_table, free_sample_exclusions, progressive_technology_table, \
     base_tech_table, tech_to_progressive_lookup
@@ -171,6 +171,8 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
         "custom_recipes": custom_recipes,
         "liquids": fluids,
         "removed_technologies": world.removed_technologies,
+        "all_ingredients": all_ingredients,
+        "want_progressives": world.want_progressives,
         "chunk_shuffle": 0,
     }
 

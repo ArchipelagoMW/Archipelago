@@ -220,6 +220,52 @@ set_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_range) }})
 {%- endfor -%}
 {% endif %}
 
+{% for itemTM in all_ingredients.values() %}
+{%- if itemTM.best_recipe is not none %}
+{%- set logic_recipe = itemTM.best_recipe %}
+{%- if itemTM.is_fluid%}
+itemTM = data.raw["fluid"]["{{ itemTM.name }}"]
+{%- else %}
+{#- why are all items not in data.raw["item"] #}
+itemTM = data.raw["item"]["{{ itemTM.name }}"] or data.raw["item-with-entity-data"]["{{ itemTM.name }}"] or data.raw["tool"]["{{ itemTM.name }}"] or data.raw["repair-tool"]["{{ itemTM.name }}"] or data.raw["gun"]["{{ itemTM.name }}"] or data.raw["ammo"]["{{ itemTM.name }}"] or data.raw["armor"]["{{ itemTM.name }}"] or data.raw["module"]["{{ itemTM.name }}"] or data.raw["capsule"]["{{ itemTM.name }}"] or data.raw["rail-planner"]["{{ itemTM.name }}"]
+{%- endif %}
+if itemTM.custom_tooltip_fields == nil then
+    itemTM.custom_tooltip_fields = { {
+        name = {"", "Logic recipe"},
+        value = {"", "{{logic_recipe.name}}"},
+        show_in_tooltip = false,
+        order = 200,
+    } }
+else
+    table.insert(itemTM.custom_tooltip_fields, {
+        name = {"", "Logic recipe"},
+        value = {"", "{{logic_recipe.name}}"},
+        show_in_tooltip = false,
+        order = 200,
+    })
+end
+{%- for tech in logic_recipe.unlocking_technologies %}
+{%- set progressive_item_name = tech_to_progressive_lookup.get(tech.name, tech.name) %}
+{%- set want_progressive = want_progressives[progressive_item_name] %}
+{%- if want_progressive %}
+table.insert(itemTM.custom_tooltip_fields, {
+    name = {"", "Logic unlock"},
+    value = {"", "{{progressive_item_name}}"},
+    show_in_tooltip = false,
+    order = 210,
+})
+{%- else %}
+table.insert(itemTM.custom_tooltip_fields, {
+    name = {"", "Logic unlock"},
+    value = {"", "{{tech.name}}"},
+    show_in_tooltip = false,
+    order = 210,
+})
+{%- endif %}
+{%- endfor %}
+{%- endif %}
+{% endfor -%}
+
 {%- if silo==2 %}
 -- disable silo research for pre-placed silo
 technologies["rocket-silo"].enabled = false
