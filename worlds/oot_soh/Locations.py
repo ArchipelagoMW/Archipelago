@@ -2475,7 +2475,6 @@ tree_location_table: dict[str, int] = {
     Locations.ZR_TREE.value: 2454,
     Locations.KAK_TREE.value: 2455,
     Locations.LLR_TREE.value: 2456,
-    Locations.LLR_GS_TREE.value: 2457,
 }
 
 fish_pond_location_table: dict[str, int] = {

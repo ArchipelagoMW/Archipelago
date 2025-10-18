@@ -3439,7 +3439,7 @@ class Locations(StrEnum):
     ZF_TREE = "ZF Tree in Zora's Fountain"
     ZR_TREE = "ZR Tree in Zoras River"
     KAK_TREE = "Kak Kakariko GS Tree"
-    LLR_TREE = "LLR Tree"
+    LLR_TREE = "LLR Lon Lon Ranch GS Tree"
 
 
 class Enemies(StrEnum):
