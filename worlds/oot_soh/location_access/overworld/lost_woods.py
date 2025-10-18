@@ -55,8 +55,8 @@ def set_region_rules(world: "SohWorld") -> None:
             bundle) and can_use(Items.COJIRO, bundle)),
         (Locations.LW_TRADE_ODD_POTION, lambda bundle: is_adult(
             bundle) and can_use(Items.ODD_POTION, bundle)),
-        (Locations.LW_OCARINA_MEMORY_GAME, lambda bundle: is_child(
-            bundle) and ocarina_button_count(bundle) >= 5),
+        (Locations.LW_OCARINA_MEMORY_GAME, lambda bundle:
+            is_child(bundle) and has_item(Items.FAIRY_OCARINA, bundle) and ocarina_button_count(bundle) >= 5),
         (Locations.LW_TARGET_IN_WOODS, lambda bundle: is_child(
             bundle) and can_use(Items.FAIRY_SLINGSHOT, bundle)),
         (Locations.LW_DEKU_SCRUB_NEAR_BRIDGE,
