@@ -50,14 +50,6 @@ def create_item_pool(world: "SohWorld") -> None:
     if world.options.fortress_carpenters == "free":
         items_to_create[Items.GERUDO_FORTRESS_SMALL_KEY] = 0
 
-    # Triforce pieces
-    if world.options.triforce_hunt:
-        total_triforce_pieces = math.floor(world.options.triforce_hunt_required_pieces * (
-            1 + (world.options.triforce_hunt_extra_pieces_percentage / 100)))
-        if total_triforce_pieces > 100:
-            total_triforce_pieces = 100
-        items_to_create[Items.TRIFORCE_PIECE] = total_triforce_pieces
-
     # Overworld Skull Tokens
     if world.options.shuffle_skull_tokens == "overworld" or world.options.shuffle_skull_tokens == "all":
         items_to_create[Items.GOLD_SKULLTULA_TOKEN] += 56
@@ -239,6 +231,22 @@ def create_filler_item_pool(world: "SohWorld") -> None:
     world.multiworld.itempool += [world.create_item(get_filler_bottle(world)) for _ in range(filler_bottle_amount)]
 
     filler_item_count = len(world.multiworld.get_unfilled_locations(world.player)) - len(world.item_pool) - filler_bottle_amount
+
+    # Triforce pieces
+    if world.options.triforce_hunt:
+        total_triforce_pieces: int = min(
+            filler_item_count, world.options.triforce_hunt_pieces_total.value)
+
+        world.item_pool += [world.create_item(Items.TRIFORCE_PIECE)
+                            for _ in range(total_triforce_pieces)]
+
+        filler_item_count -= total_triforce_pieces
+
+        triforce_pieces_to_win: int = max(1, round(
+            total_triforce_pieces * (world.options.triforce_hunt_pieces_required_percentage.value * .01)))
+
+        world.options.triforce_hunt_pieces_total.value = total_triforce_pieces
+        world.triforce_pieces_required = triforce_pieces_to_win
 
     # Ice Trap Count
     ice_trap_count = min(filler_item_count, world.options.ice_trap_count.value)
