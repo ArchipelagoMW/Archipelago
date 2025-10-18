@@ -290,7 +290,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.JABU_JABUS_BELLY_BOSS_ROOM, world, [
-        (Regions.JABU_JABUS_BELLY_BOSS_EXIT, lambda bundle: False),
+        (Regions.JABU_JABUS_BELLY_BOSS_EXIT, lambda bundle: True),
         (Regions.ZORAS_FOUNTAIN, lambda bundle: has_item(
             Events.JABU_JABUS_BELLY_COMPLETED, bundle))
     ])
