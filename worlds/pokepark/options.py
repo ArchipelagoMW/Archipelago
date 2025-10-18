@@ -163,8 +163,9 @@ class RemovePokemonUnlockLocations(Toggle):
 
 class HarderEnemyAI(Toggle):
     """
-Pokémon always have the harder AI in Power Competition.
-WARNING: Generation currently does not account for the harder enemy AI, which can lead to frustrating gameplay.
+    Pokémon always have the harder AI in Power Competition.
+    WARNING: Generation currently does not account in detail for the harder enemy AI, which can lead to frustrating
+    gameplay.
     """
     default = False
 
@@ -177,7 +178,6 @@ class RandomizeAttractionEntrances(Toggle):
 class EachZone(Toggle):
     """
     Pokemon that are in multiple Zones become additional Locations. e.g. Bonsly (Meadow, Cavern, Magma Zone)
-    (not implemented, still generating)
     """
     default = False
 
@@ -233,9 +233,34 @@ pokepark_option_groups = [
     OptionGroup("Goal", [
         Goal
     ]),
+    OptionGroup(
+        "Entrances", [
+            RandomizeAttractionEntrances
+        ]
+    ),
     OptionGroup("Misc", [
         Powers,
         RandomStartingZones,
-        NumRequiredBattleCount
-    ])
+        NumRequiredBattleCount,
+        NumRequiredPrismaCountSkygarden,
+        InZoneRoadBlocks,
+        HarderEnemyAI
+    ]
+                ),
+    OptionGroup(
+        "Locations", [
+            RemoveBattlePowerCompLocations,
+            RemoveChasePowerCompLocations,
+            RemoveQuizPowerCompLocations,
+            RemoveHideAndSeekPowerCompLocations,
+            RemoveErrandPowerCompLocations,
+            RemoveMiscPowerCompLocations,
+            RemovePowerUpLocations,
+            RemoveQuestLocations,
+            RemoveAttractionLocations,
+            RemoveAttractionPrismaLocations,
+            RemovePokemonUnlockLocations,
+            EachZone
+        ]
+    )
 ]
