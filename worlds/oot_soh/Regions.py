@@ -143,10 +143,12 @@ def create_regions_and_locations(world: "SohWorld") -> None:
 
         # Merchants
         if world.options.shuffle_merchants == "bean_merchant_only" or world.options.shuffle_merchants == "all":
-            world.included_locations["ZR Magic Bean Salesman"] = merchants_items_location_table["ZR Magic Bean Salesman"]
+            world.included_locations[Locations.ZR_MAGIC_BEAN_SALESMAN] \
+                = merchants_items_location_table[Locations.ZR_MAGIC_BEAN_SALESMAN]
 
         if world.options.shuffle_merchants == "all_but_beans" or world.options.shuffle_merchants == "all":
-            for location_name in ("Kak Granny's Shop", "GC Medigoron", "Wasteland Carpet Salesman"):
+            for location_name in (Locations.KAK_GRANNYS_SHOP, Locations.GC_MEDIGORON,
+                                  Locations.WASTELAND_CARPET_SALESMAN):
                 world.included_locations[location_name] = merchants_items_location_table[location_name]
 
         # Cows
@@ -226,7 +228,7 @@ def create_regions_and_locations(world: "SohWorld") -> None:
             world.included_locations.update(carpenters_location_table)
 
         if world.options.fortress_carpenters == "fast":
-            for location_name in ("GF Gerudo Membership Card", "TH 1 Torch Carpenter"):
+            for location_name in (Locations.GF_GERUDO_MEMBERSHIP_CARD, Locations.TH_1_TORCH_CARPENTER):
                 world.included_locations[location_name] = carpenters_location_table[location_name]
 
         if world.options.shuffle_100_gs_reward:
@@ -234,10 +236,11 @@ def create_regions_and_locations(world: "SohWorld") -> None:
 
     # Set region rules and location rules after all locations are created
     all_regions = [root, castle_grounds, death_mountain_crater, death_mountain_trail, desert_colossus, gerudo_fortress,
-                   gerudo_valley, goron_city, graveyard, haunted_wasteland, hyrule_field, kakariko, kokiri_forest, lake_hylia,
-                   lon_lon_ranch, lost_woods, market, sacred_forest_meadow, temple_of_time, thieves_hideout, zoras_domain,
-                   zoras_fountain, zoras_river, bottom_of_the_well, deku_tree, dodongos_cavern, fire_temple, forest_temple,
-                   ganons_castle, gerudo_training_ground, ice_cavern, jabujabus_belly, shadow_temple, spirit_temple, water_temple]
+                   gerudo_valley, goron_city, graveyard, haunted_wasteland, hyrule_field, kakariko, kokiri_forest,
+                   lake_hylia, lon_lon_ranch, lost_woods, market, sacred_forest_meadow, temple_of_time, thieves_hideout,
+                   zoras_domain, zoras_fountain, zoras_river, bottom_of_the_well, deku_tree, dodongos_cavern,
+                   fire_temple, forest_temple, ganons_castle, gerudo_training_ground, ice_cavern, jabujabus_belly,
+                   shadow_temple, spirit_temple, water_temple]
     for region in all_regions:
         region.set_region_rules(world)
 
