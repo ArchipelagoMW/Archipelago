@@ -309,7 +309,7 @@ base_location_table: dict[str, int] = {
     # Locations.SHADOW_TEMPLE_MQ_BOSS_KEY_CHEST.value: 304,
     # Locations.SHADOW_TEMPLE_MQ_SPIKE_WALLS_LEFT_CHEST.value: 305,
     # Locations.SHADOW_TEMPLE_MQ_FREESTANDING_KEY.value: 306,
-    Locations.SHADOW_TEMPLE_MQ_BOMB_FLOWER_CHEST.value: 307,
+    # Locations.SHADOW_TEMPLE_MQ_BOMB_FLOWER_CHEST.value: 307,
     Locations.SHADOW_TEMPLE_BONGO_BONGO_HEART_CONTAINER.value: 308,
     Locations.SPIRIT_TEMPLE_CHILD_BRIDGE_CHEST.value: 309,
     Locations.SPIRIT_TEMPLE_CHILD_EARLY_TORCHES_CHEST.value: 310,
