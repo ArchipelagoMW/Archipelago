@@ -256,12 +256,12 @@ def set_region_rules(world: "SohWorld") -> None:
         (Regions.JABU_JABUS_BELLY_BOSS_ROOM, lambda bundle: True)
     ])
 
-    # Jabu Jabu's Belly Boss Exit
-    # Connections
-    connect_regions(Regions.JABU_JABUS_BELLY_BOSS_EXIT, world, [
-        (Regions.JABU_JABUS_BELLY_NEAR_BOSS_ROOM, lambda bundle: True)
-        # skipping mq connection
-    ])
+    # # Jabu Jabu's Belly Boss Exit
+    # # Connections
+    # connect_regions(Regions.JABU_JABUS_BELLY_BOSS_EXIT, world, [
+    #     (Regions.JABU_JABUS_BELLY_NEAR_BOSS_ROOM, lambda bundle: True)
+    #     # skipping mq connection
+    # ])
 
     # Jabu Jabu's Belly Boss Room
     # Events
@@ -290,7 +290,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.JABU_JABUS_BELLY_BOSS_ROOM, world, [
-        (Regions.JABU_JABUS_BELLY_BOSS_EXIT, lambda bundle: False),
+        # (Regions.JABU_JABUS_BELLY_BOSS_EXIT, lambda bundle: False),  # readd for MQ stuff
         (Regions.ZORAS_FOUNTAIN, lambda bundle: has_item(
             Events.JABU_JABUS_BELLY_COMPLETED, bundle))
     ])
