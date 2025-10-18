@@ -26,11 +26,13 @@ def set_rules(world: "PokeparkWorld") -> None:
     set_rule_if_exists("Treehouse - Power Up - Thunderbolt Upgrade 1", lambda state: can_farm_berries(state, player))
     set_rule_if_exists(
         "Treehouse - Power Up - Thunderbolt Upgrade 2",
-        lambda state: state.can_reach_location("Treehouse - Power Up - Thunderbolt Upgrade 1", player)
+        lambda state: state.can_reach_location("Treehouse - Power Up - Thunderbolt Upgrade 1", player) and
+                      can_farm_berries_intermediate(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Thunderbolt Upgrade 3",
-        lambda state: state.can_reach_location("Treehouse - Power Up - Thunderbolt Upgrade 2", player)
+        lambda state: state.can_reach_location("Treehouse - Power Up - Thunderbolt Upgrade 2", player) and
+                      can_farm_berries_advanced(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Dash Upgrade 1",
@@ -38,7 +40,8 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Dash Upgrade 2",
-        lambda state: state.can_reach_location("Treehouse - Power Up - Dash Upgrade 1", player)
+        lambda state: state.can_reach_location("Treehouse - Power Up - Dash Upgrade 1", player) and
+                      can_farm_berries_intermediate(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Ponyta Unlocked",
@@ -46,7 +49,8 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Dash Upgrade 3",
-        lambda state: state.can_reach_location("Treehouse - Power Up - Dash Upgrade 2", player)
+        lambda state: state.can_reach_location("Treehouse - Power Up - Dash Upgrade 2", player) and
+                      can_farm_berries_advanced(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Double Dash Upgrade",
@@ -61,14 +65,14 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: state.can_reach_location(
             "Treehouse - Power Up - Health Upgrade 1",
             player
-        )
+        ) and can_farm_berries_intermediate(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Health Upgrade 3",
         lambda state: state.can_reach_location(
             "Treehouse - Power Up - Health Upgrade 2",
             player
-        )
+        ) and can_farm_berries_advanced(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Iron Tail Upgrade 1",
@@ -79,14 +83,14 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: state.can_reach_location(
             "Treehouse - Power Up - Iron Tail Upgrade 1",
             player
-        )
+        ) and can_farm_berries_intermediate(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Iron Tail Upgrade 3",
         lambda state: state.can_reach_location(
             "Treehouse - Power Up - Iron Tail Upgrade 2",
             player
-        )
+        ) and can_farm_berries_advanced(state, player)
     )
 
     # Meadow Zone
@@ -2938,4 +2942,16 @@ def can_battle(state: CollectionState, player: int):
 
 
 def can_destroy_objects_overworld(state: CollectionState, player: int):
-    return state.has("Progressive Dash", player) or state.has("Progressive Thunderbolt", player)
+    return (state.has("Progressive Dash", player) or
+            state.has("Progressive Thunderbolt", player))
+
+
+def can_farm_berries_intermediate(state: CollectionState, player: int):
+    return (state.can_reach_region("Magma Zone Main Area", player) or
+            state.can_reach_region("Granite Zone Main Area", player) or
+            state.can_reach_region("Flower Zone Main Area", player))
+
+
+def can_farm_berries_advanced(state: CollectionState, player: int):
+    return (state.can_reach_region("Magma Zone Main Area", player) and
+            state.has("Golem Unlock", player))

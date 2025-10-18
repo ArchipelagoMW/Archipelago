@@ -22,6 +22,9 @@ from ..Files import APPlayerContainer
 VERSION: tuple[int, int, int] = (0, 0, 1)
 
 option_to_progression: dict[tuple[str, int], (int, list[str])] = {
+    ("remove_power_training_locations", 0): (0, [
+        "Golem Unlock"
+    ]),
     ("remove_battle_power_comp_locations", 0): (60, [
         "Lotad Unlock",
         "Weedle Unlock",
