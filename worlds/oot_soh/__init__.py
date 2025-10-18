@@ -141,6 +141,7 @@ class SohWorld(World):
             "rainbow_bridge_skull_tokens_required": self.options.rainbow_bridge_skull_tokens_required.value,
             "skip_ganons_trials": self.options.skip_ganons_trials.value,
             "triforce_hunt": self.options.triforce_hunt.value,
+            "triforce_hunt_pieces_total": self.options.triforce_hunt_pieces_total.value,
             "triforce_hunt_pieces_required": self.triforce_pieces_required,
             "shuffle_skull_tokens": self.options.shuffle_skull_tokens.value,
             "skulls_sun_song": self.options.skulls_sun_song.value,
