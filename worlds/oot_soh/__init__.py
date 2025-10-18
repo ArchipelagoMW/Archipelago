@@ -1,3 +1,6 @@
+import orjson
+import pkgutil
+
 from typing import Any
 
 from BaseClasses import CollectionState, Item, Tutorial
@@ -55,6 +58,12 @@ class SohWorld(World):
         self.scrub_prices = dict[str, int]()
         self.triforce_pieces_required: int = 0
 
+        apworld_manifest = orjson.loads(pkgutil.get_data(
+            __name__, "archipelago.json").decode("utf-8"))
+        self.apworld_version: str = apworld_manifest["world_version"]
+        # The version is stored on Worlds, so when we're ready to bump our min AP version to 0.6.4, we can use this directly in our slot data:
+        # slot_data["apworld_version"] = self.world_version
+
     def generate_early(self) -> None:
         # If door of time is set to closed and dungeon rewards aren't shuffled, force child spawn
         if self.options.door_of_time.value == 0 and self.options.shuffle_dungeon_rewards.value == 0:
@@ -101,7 +110,8 @@ class SohWorld(World):
 
             dungeon_reward_locations = [self.get_location(location.value)
                                         for location in dungeon_reward_item_mapping.keys()]
-            dungeon_reward_items = [self.create_item(item.value) for item in dungeon_reward_item_mapping.values()]
+            dungeon_reward_items = [self.create_item(
+                item.value) for item in dungeon_reward_item_mapping.values()]
 
             # Place dungeon rewards
             fill_restrictive(self.multiworld, prefill_state, dungeon_reward_locations,
@@ -206,6 +216,7 @@ class SohWorld(World):
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
             "ice_trap_count": self.options.ice_trap_count.value,
             "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement.value,
+            "apworld_version": self.apworld_version,
         }
 
     def collect(self, state: CollectionState, item: Item) -> bool:
