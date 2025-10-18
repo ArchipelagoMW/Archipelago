@@ -171,7 +171,7 @@ local ROM_ITEM_TABLE = {
     "AP_FROG_POTION",
     "AP_BOOMERANG_POTION",
     "AP_HELICOPTER_POTION",
-	"AP_BEACHBALL_POTION",
+	--"AP_BEACHBALL_POTION",
     "AP_DEATH_POTION",
     "AP_ATLANTIS_L1_GATE",
     "AP_ATLANTIS_L2_RAISE_WATER",
@@ -12583,15 +12583,15 @@ function map_handler()
         set_map("AP_PIRATES_BONUS")
 
     elseif CURRENT_MAP == 0x19 then
-        set_map("AP_PREHISTOIC_L1")
+        set_map("AP_PREHISTORIC_L1")
     elseif CURRENT_MAP == 0x1A then
-        set_map("AP_PREHISTOIC_L2")
+        set_map("AP_PREHISTORIC_L2")
     elseif CURRENT_MAP == 0x1B then
-        set_map("AP_PREHISTOIC_L3")
+        set_map("AP_PREHISTORIC_L3")
     elseif CURRENT_MAP == 0x1C then
-        set_map("AP_PREHISTOIC_BOSS")
+        set_map("AP_PREHISTORIC_BOSS")
     elseif CURRENT_MAP == 0x1D then
-        set_map("AP_PREHISTOIC_BONUS")
+        set_map("AP_PREHISTORIC_BONUS")
 
     elseif CURRENT_MAP == 0x1E then
         set_map("AP_FORTRESS_L1")
