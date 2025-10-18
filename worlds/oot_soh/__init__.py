@@ -116,6 +116,8 @@ class SohWorld(World):
     def create_regions(self) -> None:
         create_regions_and_locations(self)
         place_locked_items(self)
+        for location in self.get_locations():
+            location.name = str(location.name)
 
     def set_rules(self) -> None:
         # Completion condition.
