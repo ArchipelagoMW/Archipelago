@@ -45,7 +45,6 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Ursaring Unlock",
         "Mamoswine Unlock",
         "Magnezone Unlock",
-        "Phanpy Unlock",
         "Hitmonlee Unlock",
         "Electivire Unlock",
         "Infernape Unlock",
@@ -54,8 +53,8 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Magmortar Unlock",
         "Baltoy Unlock",
         "Honchkrow Unlock",
-        "Elekid Unlock",
         "Electabuzz Unlock",
+        "Voltorb Unlock",
         "Skuntank Unlock",
         "Breloom Unlock",
         "Mismagius Unlock",
@@ -81,7 +80,6 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Ninetales Unlock",
         "Ponyta Unlock",
         "Espeon Unlock",
-        "Voltorb Unlock",
         "Luxray Unlock",
         "Stunky Unlock",
         "Electrode Unlock",
@@ -94,9 +92,11 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Bonsly Unlock",
         "Sudowoodo Unlock",
         "Mudkip Unlock",
+        "Elekid Unlock"
     ]),
     ("remove_errand_power_comp_locations", 0): (0, [
         "Tropius Unlock",
+        "Phanpy Unlock",
         "Progressive Thunderbolt",
     ]),
     ("remove_misc_power_comp_locations", 0): (0, [
@@ -560,6 +560,8 @@ class PokeparkWorld(World):
             "Ice Zone Frozen Lake Unlock",
 
             "Progressive Dash",
+            "Progressive Thunderbolt",
+            "Progressive Iron Tail",
         ]
 
         options = self.options

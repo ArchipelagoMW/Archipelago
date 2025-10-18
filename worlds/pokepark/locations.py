@@ -2041,7 +2041,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Cavern Zone Main Area - Phanpy Power Competition -- Friendship": PokeparkLocationData(
-        251, PokeparkFlag.BATTLE, "Cavern Zone Main Area", PokeparkFriendshipClientLocationData(
+        251, PokeparkFlag.ERRAND, "Cavern Zone Main Area", PokeparkFriendshipClientLocationData(
             structure_position=86
         ),
     ),
@@ -2345,7 +2345,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Magma Zone Main Area - Hitmontop Power Competition -- Friendship": PokeparkLocationData(
-        303, PokeparkFlag.BATTLE, "Magma Zone Main Area", PokeparkFriendshipClientLocationData(
+        303, PokeparkFlag.ERRAND, "Magma Zone Main Area", PokeparkFriendshipClientLocationData(
             structure_position=109
         ),
     ),
@@ -2927,17 +2927,17 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Haunted Zone Mansion Area - Voltorb Power Competition -- Friendship": PokeparkLocationData(
-        398, PokeparkFlag.CHASE, "Haunted Zone Mansion Gengar Area", PokeparkFriendshipClientLocationData(
+        398, PokeparkFlag.BATTLE, "Haunted Zone Mansion Gengar Area", PokeparkFriendshipClientLocationData(
             structure_position=127
         ),
     ),
     "Haunted Zone Mansion Area - Elekid Power Competition -- Friendship": PokeparkLocationData(
-        399, PokeparkFlag.BATTLE, "Haunted Zone Mansion Area", PokeparkFriendshipClientLocationData(
+        399, PokeparkFlag.HIDEANDSEEK, "Haunted Zone Mansion Area", PokeparkFriendshipClientLocationData(
             structure_position=92
         ),
     ),
     "Haunted Zone Mansion Area - Elekid Power Competition -- Electabuzz Unlocked": PokeparkLocationData(
-        400, PokeparkFlag.BATTLE, "Haunted Zone Mansion Area", PokeparkFriendshipClientLocationData(
+        400, PokeparkFlag.HIDEANDSEEK, "Haunted Zone Mansion Area", PokeparkFriendshipClientLocationData(
             structure_position=92
         ),
     ),
@@ -3293,7 +3293,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Granite Zone Main Area - Arcanine Power Competition -- Friendship": PokeparkLocationData(
-        460, PokeparkFlag.BATTLE, "Granite Zone Salamence Area", PokeparkFriendshipClientLocationData(
+        460, PokeparkFlag.CHASE, "Granite Zone Salamence Area", PokeparkFriendshipClientLocationData(
             structure_position=144
         ),
     ),
