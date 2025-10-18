@@ -266,7 +266,7 @@ base_location_table: dict[str, int] = {
     Locations.WATER_TEMPLE_LONGSHOT_CHEST.value: 261,
     Locations.WATER_TEMPLE_RIVER_CHEST.value: 262,
     Locations.WATER_TEMPLE_DRAGON_CHEST.value: 263,
-    Locations.WATER_TEMPLE_MQ_LONGSHOT_CHEST.value: 264,
+    # Locations.WATER_TEMPLE_MQ_LONGSHOT_CHEST.value: 264,
     # Locations.WATER_TEMPLE_MQ_MAP_CHEST.value: 265,
     # Locations.WATER_TEMPLE_MQ_COMPASS_CHEST.value: 266,
     # Locations.WATER_TEMPLE_MQ_CENTRAL_PILLAR_CHEST.value: 267,
