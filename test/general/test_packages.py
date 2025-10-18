@@ -9,7 +9,7 @@ class TestPackages(unittest.TestCase):
         import Utils
 
         # Ignore directories with these names.
-        ignore_dirs = {".github"}
+        ignore_dirs = {".github", "vendor"}
 
         worlds_path = Utils.local_path("worlds")
         for dirpath, dirnames, filenames in os.walk(worlds_path):
