@@ -220,6 +220,29 @@ def create_item_pool(world: "SohWorld") -> None:
         world.item_pool += [world.create_item(item) for _ in range(quantity)]
 
 
+def create_triforce_pieces(world: "SohWorld") -> None:
+    filler_bottle_amount: int = 2
+    if world.options.zoras_fountain == "open":
+        filler_bottle_amount += 1
+    if world.options.big_poe_target_count == 0:
+        filler_bottle_amount += 1
+
+    filler_item_count = (len(world.multiworld.get_unfilled_locations(world.player))
+                         - len(world.item_pool) - filler_bottle_amount)
+
+    total_triforce_pieces: int = min(filler_item_count, world.options.triforce_hunt_pieces_total.value)
+
+    triforce_pieces_made = [world.create_item(Items.TRIFORCE_PIECE) for _ in range(total_triforce_pieces)]
+    world.item_pool += triforce_pieces_made
+    world.multiworld.itempool += triforce_pieces_made
+
+    triforce_pieces_to_win: int = max(1, round(
+        total_triforce_pieces * (world.options.triforce_hunt_pieces_required_percentage.value * .01)))
+
+    world.options.triforce_hunt_pieces_total.value = total_triforce_pieces
+    world.triforce_pieces_required = triforce_pieces_to_win
+
+
 def create_filler_item_pool(world: "SohWorld") -> None:
     filler_bottle_amount: int = 2
     if world.options.zoras_fountain == "open":
@@ -231,22 +254,6 @@ def create_filler_item_pool(world: "SohWorld") -> None:
     world.multiworld.itempool += [world.create_item(get_filler_bottle(world)) for _ in range(filler_bottle_amount)]
 
     filler_item_count = len(world.multiworld.get_unfilled_locations(world.player)) - len(world.item_pool) - filler_bottle_amount
-
-    # Triforce pieces
-    if world.options.triforce_hunt:
-        total_triforce_pieces: int = min(
-            filler_item_count, world.options.triforce_hunt_pieces_total.value)
-
-        world.item_pool += [world.create_item(Items.TRIFORCE_PIECE)
-                            for _ in range(total_triforce_pieces)]
-
-        filler_item_count -= total_triforce_pieces
-
-        triforce_pieces_to_win: int = max(1, round(
-            total_triforce_pieces * (world.options.triforce_hunt_pieces_required_percentage.value * .01)))
-
-        world.options.triforce_hunt_pieces_total.value = total_triforce_pieces
-        world.triforce_pieces_required = triforce_pieces_to_win
 
     # Ice Trap Count
     ice_trap_count = min(filler_item_count, world.options.ice_trap_count.value)

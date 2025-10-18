@@ -11,7 +11,7 @@ from .Locations import location_table
 from .Options import SohOptions, soh_option_groups
 from .Regions import create_regions_and_locations, place_locked_items, dungeon_reward_item_mapping
 from .Enums import *
-from .ItemPool import create_item_pool, create_filler_item_pool
+from .ItemPool import create_item_pool, create_filler_item_pool, create_triforce_pieces
 from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
 from .ShopItems import fill_shop_items, generate_scrub_prices, set_price_rules, all_shop_locations
@@ -120,6 +120,8 @@ class SohWorld(World):
         fill_shop_items(self)
         generate_scrub_prices(self)
         set_price_rules(self)
+        if self.options.triforce_hunt:
+            create_triforce_pieces(self)
 
         create_filler_item_pool(self)
 
