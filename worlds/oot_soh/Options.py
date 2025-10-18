@@ -214,7 +214,7 @@ class TriforceHuntPiecesTotal(Range):
     default = 30
 
 
-class TriforceHuntPiecesRequired(Range):
+class TriforceHuntPiecesRequiredPercentage(Range):
     """
     The percentage of Triforce pieces that will be required to complete the game.
     """
@@ -847,7 +847,7 @@ class SohOptions(PerGameCommonOptions):
     skip_ganons_trials: SkipGanonsTrials
     triforce_hunt: TriforceHunt
     triforce_hunt_pieces_total: TriforceHuntPiecesTotal
-    triforce_hunt_pieces_required: TriforceHuntPiecesRequired
+    triforce_hunt_pieces_required_percentage: TriforceHuntPiecesRequiredPercentage
     shuffle_skull_tokens: ShuffleTokens
     skulls_sun_song: SkullsSunSong
     shuffle_master_sword: ShuffleMasterSword
@@ -934,7 +934,7 @@ soh_option_groups = [
         SkipGanonsTrials,
         TriforceHunt,
         TriforceHuntPiecesTotal,
-        TriforceHuntPiecesRequired,
+        TriforceHuntPiecesRequiredPercentage,
     ]),
     # OptionGroup("Shuffle Entrances", [
     #     # Dungeon Entrances

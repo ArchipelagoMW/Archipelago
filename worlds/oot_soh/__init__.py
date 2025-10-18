@@ -53,6 +53,7 @@ class SohWorld(World):
         self.shop_prices = dict[str, int]()
         self.shop_vanilla_items = dict[str, str]()
         self.scrub_prices = dict[str, int]()
+        self.triforce_pieces_required: int = 0
 
     def generate_early(self) -> None:
         # If door of time is set to closed and dungeon rewards aren't shuffled, force child spawn
@@ -140,8 +141,7 @@ class SohWorld(World):
             "rainbow_bridge_skull_tokens_required": self.options.rainbow_bridge_skull_tokens_required.value,
             "skip_ganons_trials": self.options.skip_ganons_trials.value,
             "triforce_hunt": self.options.triforce_hunt.value,
-            "triforce_hunt_total_pieces": self.options.triforce_hunt_pieces_total.value,
-            "triforce_hunt_required_pieces": self.options.triforce_hunt_pieces_required.value,
+            "triforce_hunt_pieces_required": self.triforce_pieces_required,
             "shuffle_skull_tokens": self.options.shuffle_skull_tokens.value,
             "skulls_sun_song": self.options.skulls_sun_song.value,
             "shuffle_master_sword": self.options.shuffle_master_sword.value,

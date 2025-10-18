@@ -252,8 +252,10 @@ def create_item_pool(world: "SohWorld") -> None:
 
         filler_item_count -= total_triforce_pieces
 
-        if world.options.triforce_hunt_pieces_total.value > total_triforce_pieces:
-            world.options.triforce_hunt_pieces_total.value = total_triforce_pieces
+        triforce_pieces_to_win: int = max(1, round(
+            total_triforce_pieces * (world.options.triforce_hunt_pieces_required_percentage.value * .01)))
+
+        world.triforce_pieces_required = triforce_pieces_to_win
 
     # Ice Trap Count
     for _ in range(min(filler_item_count, world.options.ice_trap_count.value)):
