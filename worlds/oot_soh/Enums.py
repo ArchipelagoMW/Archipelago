@@ -328,7 +328,7 @@ class Regions(StrEnum):
     # JABU_JABUS_BELLY_MQ_PAST_OCTO = "Jabu Jabus Belly MQ Past Octo"
     # JABU_JABUS_BELLY_MQ_BOSS_REGION = "Jabu Jabus Belly MQ Boss Region"
     JABU_JABUS_BELLY_BOSS_ENTRYWAY = "Jabu Jabus Belly Boss Entryway"
-    JABU_JABUS_BELLY_BOSS_EXIT = "Jabu Jabus Belly Boss Exit"
+    # JABU_JABUS_BELLY_BOSS_EXIT = "Jabu Jabus Belly Boss Exit"  # readd for MQ stuff
     JABU_JABUS_BELLY_BOSS_ROOM = "Jabu Jabus Belly Boss Room"
     FOREST_TEMPLE_FIRST_ROOM = "Forest Temple First Room"
     FOREST_TEMPLE_SOUTH_CORRIDOR = "Forest Temple South Corridor"
