@@ -8,7 +8,7 @@ from .Locations import location_table
 from .Options import SohOptions, soh_option_groups
 from .Regions import create_regions_and_locations, place_locked_items, dungeon_reward_item_mapping
 from .Enums import *
-from .ItemPool import create_item_pool
+from .ItemPool import create_item_pool, create_filler_item_pool
 from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
 from .ShopItems import fill_shop_items, generate_scrub_prices, set_price_rules, all_shop_locations
@@ -88,18 +88,8 @@ class SohWorld(World):
 
         create_item_pool(self)
 
-    def create_regions(self) -> None:
-        create_regions_and_locations(self)
-        place_locked_items(self)
-
-    def set_rules(self) -> None:
-        # Completion condition.
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(
-            Events.GAME_COMPLETED.value, self.player)
-
-    def pre_fill(self) -> None:
         # Prefill Dungeon Rewards. Need to collect the item pool and vanilla shop items before doing so.
-        if self.options.shuffle_dungeon_rewards.value == 1:
+        if self.options.shuffle_dungeon_rewards == "dungeons":
             # Create a filled copy of the state so the multiworld can place the dungeon rewards using logic
             prefill_state = CollectionState(self.multiworld)
             for item in self.item_pool:
@@ -109,10 +99,9 @@ class SohWorld(World):
                     prefill_state.collect(self.create_item(item), False)
             prefill_state.sweep_for_advancements()
 
-            dungeon_reward_locations = [self.get_location(
-                location.value) for location in dungeon_reward_item_mapping.keys()]
-            dungeon_reward_items = [self.create_item(
-                item.value) for item in dungeon_reward_item_mapping.values()]
+            dungeon_reward_locations = [self.get_location(location.value)
+                                        for location in dungeon_reward_item_mapping.keys()]
+            dungeon_reward_items = [self.create_item(item.value) for item in dungeon_reward_item_mapping.values()]
 
             # Place dungeon rewards
             fill_restrictive(self.multiworld, prefill_state, dungeon_reward_locations,
@@ -121,6 +110,17 @@ class SohWorld(World):
         fill_shop_items(self)
         generate_scrub_prices(self)
         set_price_rules(self)
+
+        create_filler_item_pool(self)
+
+    def create_regions(self) -> None:
+        create_regions_and_locations(self)
+        place_locked_items(self)
+
+    def set_rules(self) -> None:
+        # Completion condition.
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(
+            Events.GAME_COMPLETED.value, self.player)
 
     def fill_slot_data(self) -> dict[str, Any]:
         return {
