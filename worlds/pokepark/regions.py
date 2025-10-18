@@ -31,7 +31,7 @@ REGION_TO_ENTRANCES: dict[str, List[str]] = {
     "Meadow Zone Venusaur Area": ["Meadow Zone Venusaur Area - Venusaur's Vine Swing Attraction"],
     "Beach Zone Main Area": ["Beach Zone Main Area - Pelipper's Circle Circuit Attraction",
                              "Beach Zone Main Area Lapras Travel", "Beach Zone Bridge 2", "Beach Zone Bridge 1"],
-    "Beach Zone Recycle Area": ["Beach Zone Recycle Area - Gyarado's Aqua Dash Attraction"],
+    "Beach Zone Recycle Area": ["Beach Zone Recycle Area - Gyarados' Aqua Dash Attraction"],
     "Ice Zone Main Area": ["Ice Zone Main Area Lift", "Ice Zone Main Area Empoleon Gate", "Ice Zone Frozen Lake"],
     "Ice Zone Empoleon Area": ["Ice Zone Empoleon Area - Empoleon's Snow Slide Attraction"],
     "Cavern Zone Main Area": ["Cavern Zone Main Area - Bastiodon's Panel Crush Attraction",
@@ -202,7 +202,7 @@ ATTRACTION_ENTRANCES_TO_EXITS: dict[str, str] = {
     "Meadow Zone Main Area - Bulbasaur's Daring Dash Attraction": "Bulbasaur's Daring Dash Attraction",
     "Meadow Zone Venusaur Area - Venusaur's Vine Swing Attraction": "Venusaur's Vine Swing Attraction",
     "Beach Zone Main Area - Pelipper's Circle Circuit Attraction": "Pelipper's Circle Circuit Attraction",
-    "Beach Zone Recycle Area - Gyarado's Aqua Dash Attraction": "Gyarado's Aqua Dash Attraction",
+    "Beach Zone Recycle Area - Gyarados' Aqua Dash Attraction": "Gyarados' Aqua Dash Attraction",
     "Ice Zone Empoleon Area - Empoleon's Snow Slide Attraction": "Empoleon's Snow Slide Attraction",
     "Cavern Zone Main Area - Bastiodon's Panel Crush Attraction": "Bastiodon's Panel Crush Attraction",
     "Magma Zone Circle Area - Rhyperior's Bumper Burn Attraction": "Rhyperior's Bumper Burn Attraction",
@@ -342,7 +342,7 @@ class EntranceRandomizer:
             player
         ),
         "Beach Zone Main Area - Pelipper's Circle Circuit Attraction": lambda state: True,
-        "Beach Zone Recycle Area - Gyarado's Aqua Dash Attraction": lambda state: True,
+            "Beach Zone Recycle Area - Gyarados' Aqua Dash Attraction": lambda state: True,
         "Beach Zone Bridge 2": lambda state: state.has("Beach Bridge 2 Unlock", player),
         "Beach Zone Middle Isle Bridge 2": lambda state: state.has("Beach Bridge 2 Unlock", player),
         "Beach Zone Bridge 1": lambda state: state.has("Beach Bridge 1 Unlock", player) or state.has(

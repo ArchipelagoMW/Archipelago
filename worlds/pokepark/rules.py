@@ -713,77 +713,77 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: can_beat_all_pelipper_circle_circuit_records(state, player)
     )
 
-    # Gyarado's Aqua Dash
+    # Gyarados' Aqua Dash
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Prisma",
+        "Gyarados' Aqua Dash Attraction -- Prisma",
         lambda state: can_beat_any_gyarados_aqua_dash_record(state, player, options)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Pikachu",
+        "Gyarados' Aqua Dash Attraction -- Pikachu",
         lambda state: state.has("Pikachu Surfboard", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Psyduck",
+        "Gyarados' Aqua Dash Attraction -- Psyduck",
         lambda state: state.has("Psyduck Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Azurill",
+        "Gyarados' Aqua Dash Attraction -- Azurill",
         lambda state: state.has("Azurill Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Slowpoke",
+        "Gyarados' Aqua Dash Attraction -- Slowpoke",
         lambda state: state.has("Slowpoke Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Empoleon",
+        "Gyarados' Aqua Dash Attraction -- Empoleon",
         lambda state: state.has("Empoleon Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Floatzel",
+        "Gyarados' Aqua Dash Attraction -- Floatzel",
         lambda state: state.has("Floatzel Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Feraligatr",
+        "Gyarados' Aqua Dash Attraction -- Feraligatr",
         lambda state: state.has("Feraligatr Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Golduck",
+        "Gyarados' Aqua Dash Attraction -- Golduck",
         lambda state: state.has("Golduck Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Vaporeon",
+        "Gyarados' Aqua Dash Attraction -- Vaporeon",
         lambda state: state.has("Vaporeon Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Prinplup",
+        "Gyarados' Aqua Dash Attraction -- Prinplup",
         lambda state: state.has("Prinplup Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Bibarel",
+        "Gyarados' Aqua Dash Attraction -- Bibarel",
         lambda state: state.has("Bibarel Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Buizel",
+        "Gyarados' Aqua Dash Attraction -- Buizel",
         lambda state: state.has("Buizel Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Corsola",
+        "Gyarados' Aqua Dash Attraction -- Corsola",
         lambda state: state.has("Corsola Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Piplup",
+        "Gyarados' Aqua Dash Attraction -- Piplup",
         lambda state: state.has("Piplup Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Lotad",
+        "Gyarados' Aqua Dash Attraction -- Lotad",
         lambda state: state.has("Lotad Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Manaphy",
+        "Gyarados' Aqua Dash Attraction -- Manaphy",
         lambda state: state.has("Manaphy Friendship", player)
     )
     set_rule_if_exists(
-        "Gyarado's Aqua Dash Attraction -- Manaphy Friendship",
+        "Gyarados' Aqua Dash Attraction -- Manaphy Friendship",
         lambda state: can_beat_all_gyarados_aqua_dash_records(state, player)
     )
     # Ice Zone
@@ -1028,7 +1028,9 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Cavern Zone
     set_rule_if_exists(
         "Cavern Zone Main Area - Magnemite -- Friendship",
-        lambda state: state.has("Magnemite Unlock", player)
+        lambda state: state.has("Magnemite Unlock", player) or
+                      state.has("Magnemite 2 Unlock", player) or
+                      state.has("Magnemite 3 Unlock", player)
     )
     set_rule_if_exists(
         "Cavern Zone Main Area - Machamp Power Competition -- Friendship",
