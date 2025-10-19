@@ -184,81 +184,81 @@ def set_rules(world: "MM3World") -> None:
                     elif 4 > world.weapon_damage[weapon][i] > 0:
                         world.weapon_damage[weapon][i] = 0
 
-    for p_boss in world.options.plando_weakness:
-        for p_weapon in world.options.plando_weakness[p_boss]:
-            if not any(w for w in world.weapon_damage
-                       if w != weapons_to_id[p_weapon]
-                          and world.weapon_damage[w][bosses[p_boss]] > minimum_weakness_requirement[w]):
-                # we need to replace this weakness
-                weakness = world.random.choice([key for key in world.weapon_damage if key != weapons_to_id[p_weapon]])
-                world.weapon_damage[weakness][bosses[p_boss]] = minimum_weakness_requirement[weakness]
-            world.weapon_damage[weapons_to_id[p_weapon]][bosses[p_boss]] \
-                = world.options.plando_weakness[p_boss][p_weapon]
+        for p_boss in world.options.plando_weakness:
+            for p_weapon in world.options.plando_weakness[p_boss]:
+                if not any(w for w in world.weapon_damage
+                           if w != weapons_to_id[p_weapon]
+                              and world.weapon_damage[w][bosses[p_boss]] > minimum_weakness_requirement[w]):
+                    # we need to replace this weakness
+                    weakness = world.random.choice([key for key in world.weapon_damage if key != weapons_to_id[p_weapon]])
+                    world.weapon_damage[weakness][bosses[p_boss]] = minimum_weakness_requirement[weakness]
+                world.weapon_damage[weapons_to_id[p_weapon]][bosses[p_boss]] \
+                    = world.options.plando_weakness[p_boss][p_weapon]
 
-    # handle special cases
-    for boss in range(22):
-        for weapon in range(1, 9):
-            if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
-                    not any(world.weapon_damage[i][boss] >= minimum_weakness_requirement[weapon]
-                            for i in range(1, 8) if i != weapon)):
-                world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
+        # handle special cases
+        for boss in range(22):
+            for weapon in range(1, 9):
+                if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
+                        not any(world.weapon_damage[i][boss] >= minimum_weakness_requirement[weapon]
+                                for i in range(1, 8) if i != weapon)):
+                    world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
 
-    if world.weapon_damage[0][world.options.starting_robot_master.value] < 1:
-        world.weapon_damage[0][world.options.starting_robot_master.value] = 1
+        if world.weapon_damage[0][world.options.starting_robot_master.value] < 1:
+            world.weapon_damage[0][world.options.starting_robot_master.value] = 1
 
-    # weakness validation, it is better to confirm a completable seed than respect plando
-    boss_health = {boss: 0x1C for boss in range(8)}
+        # weakness validation, it is better to confirm a completable seed than respect plando
+        boss_health = {boss: 0x1C for boss in range(8)}
 
-    weapon_energy = {key: float(0x1C) for key in weapon_costs}
-    weapon_boss = {boss: {weapon: world.weapon_damage[weapon][boss] for weapon in world.weapon_damage}
-                   for boss in range(8)}
-    flexibility = {
-        boss: (
-                sum(damage_value > 0 for damage_value in
-                    weapon_damages.values())  # Amount of weapons that hit this boss
-                * sum(weapon_damages.values())  # Overall damage that those weapons do
-        )
-        for boss, weapon_damages in weapon_boss.items()
-    }
-    boss_flexibility = sorted(flexibility, key=flexibility.get)  # Fast way to sort dict by value
-    used_weapons: dict[int, set[int]] = {i: set() for i in range(8)}
-    for boss in boss_flexibility:
-        boss_damage = weapon_boss[boss]
-        weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in
-                         boss_damage.items() if weapon_energy[weapon] > 0}
-        while boss_health[boss] > 0:
-            if boss_damage[0] > 0:
-                boss_health[boss] = 0  # if we can buster, we should buster
-                continue
-            highest, wp = max(zip(weapon_weight.values(), weapon_weight.keys()))
-            uses = weapon_energy[wp] // weapon_costs[wp]
-            if int(uses * boss_damage[wp]) >= boss_health[boss]:
-                used = ceil(boss_health[boss] / boss_damage[wp])
-                weapon_energy[wp] -= weapon_costs[wp] * used
-                boss_health[boss] = 0
-                used_weapons[boss].add(wp)
-            elif highest <= 0:
-                # we are out of weapons that can actually damage the boss
-                # so find the weapon that has the most uses, and apply that as an additional weakness
-                # it should be impossible to be out of energy
-                max_uses, wp = max((weapon_energy[weapon] // weapon_costs[weapon], weapon)
-                                   for weapon in weapon_weight
-                                   if weapon != 0)
-                world.weapon_damage[wp][boss] = minimum_weakness_requirement[wp]
-                used = min(int(weapon_energy[wp] // weapon_costs[wp]),
-                           ceil(boss_health[boss] / minimum_weakness_requirement[wp]))
-                weapon_energy[wp] -= weapon_costs[wp] * used
-                boss_health[boss] -= int(used * minimum_weakness_requirement[wp])
-                weapon_weight.pop(wp)
-                used_weapons[boss].add(wp)
-            else:
-                # drain the weapon and continue
-                boss_health[boss] -= int(uses * boss_damage[wp])
-                weapon_energy[wp] -= weapon_costs[wp] * uses
-                weapon_weight.pop(wp)
-                used_weapons[boss].add(wp)
+        weapon_energy = {key: float(0x1C) for key in weapon_costs}
+        weapon_boss = {boss: {weapon: world.weapon_damage[weapon][boss] for weapon in world.weapon_damage}
+                       for boss in range(8)}
+        flexibility = {
+            boss: (
+                    sum(damage_value > 0 for damage_value in
+                        weapon_damages.values())  # Amount of weapons that hit this boss
+                    * sum(weapon_damages.values())  # Overall damage that those weapons do
+            )
+            for boss, weapon_damages in weapon_boss.items()
+        }
+        boss_flexibility = sorted(flexibility, key=flexibility.get)  # Fast way to sort dict by value
+        used_weapons: dict[int, set[int]] = {i: set() for i in range(8)}
+        for boss in boss_flexibility:
+            boss_damage = weapon_boss[boss]
+            weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in
+                             boss_damage.items() if weapon_energy[weapon] > 0}
+            while boss_health[boss] > 0:
+                if boss_damage[0] > 0:
+                    boss_health[boss] = 0  # if we can buster, we should buster
+                    continue
+                highest, wp = max(zip(weapon_weight.values(), weapon_weight.keys()))
+                uses = weapon_energy[wp] // weapon_costs[wp]
+                if int(uses * boss_damage[wp]) >= boss_health[boss]:
+                    used = ceil(boss_health[boss] / boss_damage[wp])
+                    weapon_energy[wp] -= weapon_costs[wp] * used
+                    boss_health[boss] = 0
+                    used_weapons[boss].add(wp)
+                elif highest <= 0:
+                    # we are out of weapons that can actually damage the boss
+                    # so find the weapon that has the most uses, and apply that as an additional weakness
+                    # it should be impossible to be out of energy
+                    max_uses, wp = max((weapon_energy[weapon] // weapon_costs[weapon], weapon)
+                                       for weapon in weapon_weight
+                                       if weapon != 0)
+                    world.weapon_damage[wp][boss] = minimum_weakness_requirement[wp]
+                    used = min(int(weapon_energy[wp] // weapon_costs[wp]),
+                               ceil(boss_health[boss] / minimum_weakness_requirement[wp]))
+                    weapon_energy[wp] -= weapon_costs[wp] * used
+                    boss_health[boss] -= int(used * minimum_weakness_requirement[wp])
+                    weapon_weight.pop(wp)
+                    used_weapons[boss].add(wp)
+                else:
+                    # drain the weapon and continue
+                    boss_health[boss] -= int(uses * boss_damage[wp])
+                    weapon_energy[wp] -= weapon_costs[wp] * uses
+                    weapon_weight.pop(wp)
+                    used_weapons[boss].add(wp)
 
-        world.wily_4_weapons = {boss: sorted(weapons) for boss, weapons in used_weapons.items()}
+            world.wily_4_weapons = {boss: sorted(weapons) for boss, weapons in used_weapons.items()}
 
     for i, boss_locations in zip(range(22), [
         needle_man_locations,

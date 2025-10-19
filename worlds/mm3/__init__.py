@@ -266,13 +266,15 @@ class MM3World(World):
     def fill_slot_data(self) -> dict[str, Any]:
         return {
             "death_link": self.options.death_link.value,
-            "weapon_damage": self.weapon_damage
+            "weapon_damage": self.weapon_damage,
+            "wily_4_weapons": self.wily_4_weapons
         }
 
     @staticmethod
     def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
         local_weapon = {int(key): value for key, value in slot_data["weapon_damage"].items()}
-        return {"weapon_damage": local_weapon}
+        local_wily = {int(key): value for key, value in slot_data["wily_4_weapons"].items()}
+        return {"weapon_damage": local_weapon, "wily_4_weapons": local_wily}
 
     def modify_multidata(self, multidata: dict[str, Any]) -> None:
         # wait for self.rom_name to be available.
