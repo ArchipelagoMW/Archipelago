@@ -155,6 +155,7 @@ class ClairObscurWorld(World):
                 spheres = self.multiworld.get_spheres()
                 for sphere in spheres:
                     for loc in sphere:
+                        if loc.item.player != self.player: continue
                         if loc.item.name in self.item_name_groups["Picto"]:
                             slot_data["pictos"].append(loc.item.code)
                         elif loc.item.name in self.item_name_groups["Weapon"]:
