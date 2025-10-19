@@ -277,6 +277,8 @@ def get_open_location_count(world: "SohWorld") -> int:
     if world.options.shuffle_shops:
         open_location_count -= (64 -
                                 (8 * world.options.shuffle_shops_item_amount))
+    else:
+        open_location_count -= 64
     # Subtract dungeon rewards when set to dungeons as they're prefilled later.
     if world.options.shuffle_dungeon_rewards == "dungeons":
         open_location_count -= 9
