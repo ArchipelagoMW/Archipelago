@@ -227,7 +227,7 @@ def set_multidata_for_room(webhost_client: "FlaskClient", room_id: str, data: by
         room.seed.multidata = data
 
 
-def _stop_webhost_mp(name_filter: str, graceful : bool = True) -> None:
+def _stop_webhost_mp(name_filter: str, graceful: bool = True) -> None:
     import os
     import signal
 
