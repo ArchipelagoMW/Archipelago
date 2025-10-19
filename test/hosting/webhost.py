@@ -227,7 +227,7 @@ def set_multidata_for_room(webhost_client: "FlaskClient", room_id: str, data: by
         room.seed.multidata = data
 
 
-def stop_autogen(graceful: bool = True) -> None:
+def _stop_webhost_mp(name_filter: str, graceful : bool = True) -> None:
     import os
     import signal
 
@@ -237,8 +237,11 @@ def stop_autogen(graceful: bool = True) -> None:
 
     stop()
     proc: multiprocessing.process.BaseProcess
-    # FIXME: this startswith is jank, but there seems to be no way to add a prefix for a Pool
-    for proc in filter(lambda child: child.name.startswith("SpawnPoolWorker-"), multiprocessing.active_children()):
+    for proc in filter(lambda child: child.name.startswith(name_filter), multiprocessing.active_children()):
+        # FIXME: graceful currently does not work on Windows because the signals are not properly emulated
+        #        and ungraceful may not save the game
+        if proc.pid == os.getpid():
+            continue
         if graceful and proc.pid:
             os.kill(proc.pid, getattr(signal, "CTRL_C_EVENT", signal.SIGINT))
         else:
@@ -249,24 +252,9 @@ def stop_autogen(graceful: bool = True) -> None:
             proc.kill()
             proc.join()
 
+def stop_autogen(graceful: bool = True) -> None:
+    # FIXME: this name filter is jank, but there seems to be no way to add a custom prefix for a Pool
+    _stop_webhost_mp("SpawnPoolWorker-", graceful)
 
 def stop_autohost(graceful: bool = True) -> None:
-    import os
-    import signal
-
-    import multiprocessing
-
-    from WebHostLib.autolauncher import stop
-
-    stop()
-    proc: multiprocessing.process.BaseProcess
-    for proc in filter(lambda child: child.name.startswith("MultiHoster"), multiprocessing.active_children()):
-        if graceful and proc.pid:
-            os.kill(proc.pid, getattr(signal, "CTRL_C_EVENT", signal.SIGINT))
-        else:
-            proc.kill()
-        try:
-            proc.join(30)
-        except TimeoutError:
-            proc.kill()
-            proc.join()
+    _stop_webhost_mp("MultiHoster", graceful)
