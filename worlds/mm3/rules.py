@@ -188,9 +188,10 @@ def set_rules(world: "MM3World") -> None:
             for p_weapon in world.options.plando_weakness[p_boss]:
                 if not any(w for w in world.weapon_damage
                            if w != weapons_to_id[p_weapon]
-                              and world.weapon_damage[w][bosses[p_boss]] > minimum_weakness_requirement[w]):
+                           and world.weapon_damage[w][bosses[p_boss]] > minimum_weakness_requirement[w]):
                     # we need to replace this weakness
-                    weakness = world.random.choice([key for key in world.weapon_damage if key != weapons_to_id[p_weapon]])
+                    weakness = world.random.choice([key for key in world.weapon_damage
+                                                    if key != weapons_to_id[p_weapon]])
                     world.weapon_damage[weakness][bosses[p_boss]] = minimum_weakness_requirement[weakness]
                 world.weapon_damage[weapons_to_id[p_weapon]][bosses[p_boss]] \
                     = world.options.plando_weakness[p_boss][p_weapon]
