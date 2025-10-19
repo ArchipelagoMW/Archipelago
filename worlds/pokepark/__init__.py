@@ -19,7 +19,7 @@ from .regions import EntranceRandomizer
 from .rules import set_rules
 from ..Files import APPlayerContainer
 
-VERSION: tuple[int, int, int] = (0, 0, 1)
+VERSION: tuple[int, int, int] = (1, 0, 0)
 
 option_to_progression: dict[tuple[str, int], (int, list[str])] = {
     ("remove_power_training_locations", 0): (0, [
