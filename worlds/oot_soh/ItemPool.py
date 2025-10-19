@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-import math
 
 from .Enums import *
 from .Items import item_data_table, filler_items, filler_bottles
@@ -219,6 +218,17 @@ def create_item_pool(world: "SohWorld") -> None:
         world.multiworld.itempool += new_items
         world.item_pool += [world.create_item(item) for _ in range(quantity)]
 
+    filler_bottle_amount: int = 2
+    if world.options.zoras_fountain == "open":
+        filler_bottle_amount += 1
+    if world.options.big_poe_target_count == 0:
+        filler_bottle_amount += 1
+
+    # Add random filler bottles
+    filler_bottle_items = [world.create_item(get_filler_bottle(world)) for _ in range(filler_bottle_amount)]
+    world.multiworld.itempool += filler_bottle_items
+    world.item_pool += filler_bottle_items
+
 
 def create_triforce_pieces(world: "SohWorld") -> None:
     filler_bottle_amount: int = 2
@@ -244,16 +254,7 @@ def create_triforce_pieces(world: "SohWorld") -> None:
 
 
 def create_filler_item_pool(world: "SohWorld") -> None:
-    filler_bottle_amount: int = 2
-    if world.options.zoras_fountain == "open":
-        filler_bottle_amount += 1
-    if world.options.big_poe_target_count == 0:
-        filler_bottle_amount += 1
-
-    # Add random filler bottles
-    world.multiworld.itempool += [world.create_item(get_filler_bottle(world)) for _ in range(filler_bottle_amount)]
-
-    filler_item_count = len(world.multiworld.get_unfilled_locations(world.player)) - len(world.item_pool) - filler_bottle_amount
+    filler_item_count = len(world.multiworld.get_unfilled_locations(world.player)) - len(world.item_pool)
 
     # Ice Trap Count
     ice_trap_count = min(filler_item_count, world.options.ice_trap_count.value)
