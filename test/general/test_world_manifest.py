@@ -87,3 +87,15 @@ class TestWorldManifest(unittest.TestCase):
                     part.isdigit(),
                     f"world_version in manifest for '{self.game}' may only contain numbers.",
                 )
+
+    def test_no_container_version(self) -> None:
+        self.assertNotIn(
+            "version",
+            self.manifest,
+            f"manifest for '{self.game}' may not define 'version'.",
+        )
+        self.assertNotIn(
+            "compatible_version",
+            self.manifest,
+            f"manifest for '{self.game}' may not define 'compatible_version'.",
+        )
