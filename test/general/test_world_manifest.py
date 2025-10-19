@@ -6,16 +6,15 @@ from pathlib import Path
 from typing import ClassVar
 
 import test
-import worlds
-from Utils import home_path
+from Utils import home_path, local_path
 from worlds.AutoWorld import AutoWorldRegister
 from ..param import classvar_matrix
 
 
 test_path = Path(test.__file__).parent
 worlds_paths = [
-    Path(worlds.__file__).parent,
-    Path(worlds.__file__).parent / "custom_worlds",
+    Path(local_path("worlds")),
+    Path(local_path("custom_worlds")),
     Path(home_path("worlds")),
     Path(home_path("custom_worlds")),
 ]
