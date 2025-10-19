@@ -136,10 +136,10 @@ class SohWorld(World):
             # Create a filled copy of the state so the multiworld can place the dungeon rewards using logic
             prefill_state = CollectionState(self.multiworld)
             for item in self.item_pool:
-                prefill_state.collect(item, False)
+                prefill_state.collect(item, True)
             for region, shop in all_shop_locations:
                 for slot, item in shop.items():
-                    prefill_state.collect(self.create_item(item), False)
+                    prefill_state.collect(self.create_item(item), True)
             prefill_state.sweep_for_advancements()
 
             dungeon_reward_locations = [self.get_location(location.value)
@@ -154,11 +154,11 @@ class SohWorld(World):
         fill_shop_items(self)
         set_price_rules(self)
 
+    # todo: comment this out before distributing this to players
     def generate_output(self, output_directory: str):
-        visualize_regions(self.multiworld.get_region(self.origin_region_name, self.player), f"SOH-Player{self.player}.puml",
+        visualize_regions(self.get_region(self.origin_region_name), f"SOH-Player{self.player}.puml",
                           show_entrance_names=True,
-                          regions_to_highlight=self.multiworld.get_all_state().reachable_regions[
-            self.player])
+                          regions_to_highlight=self.multiworld.get_all_state().reachable_regions[self.player])
 
     def fill_slot_data(self) -> dict[str, Any]:
         return {

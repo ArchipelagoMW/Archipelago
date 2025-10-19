@@ -186,7 +186,7 @@ def fill_shop_items(world: "SohWorld") -> None:
     # create a filled copy of the state so the multiworld can place the vanilla shop items using logic
     prefill_state = CollectionState(world.multiworld)
     for item in world.item_pool:
-        prefill_state.collect(item, False)
+        prefill_state.collect(item, True)
     prefill_state.sweep_for_advancements()
 
     # place the vanilla shop items
