@@ -214,6 +214,8 @@ def create_item_pool(world: "SohWorld") -> None:
 
     # Add regular item pool
     for item, quantity in items_to_create.items():
+        new_items = [world.create_item(item) for _ in range(quantity)]
+        world.multiworld.itempool += new_items
         world.item_pool += [world.create_item(item) for _ in range(quantity)]
 
     filler_bottle_amount: int = 2
@@ -225,20 +227,20 @@ def create_item_pool(world: "SohWorld") -> None:
     # Add random filler bottles
     filler_bottle_items = [world.create_item(
         get_filler_bottle(world)) for _ in range(filler_bottle_amount)]
+    world.multiworld.itempool += filler_bottle_items
     world.item_pool += filler_bottle_items
-
-    world.multiworld.itempool += world.item_pool
 
 
 def create_triforce_pieces(world: "SohWorld") -> None:
     filler_item_count = (len(world.multiworld.get_unfilled_locations(world.player))
-                         - len(world.multiworld.itempool))
+                         - len(world.item_pool))
 
     total_triforce_pieces: int = min(
         filler_item_count, world.options.triforce_hunt_pieces_total.value)
 
     triforce_pieces_made = [world.create_item(
         Items.TRIFORCE_PIECE) for _ in range(total_triforce_pieces)]
+    world.item_pool += triforce_pieces_made
     world.multiworld.itempool += triforce_pieces_made
 
     triforce_pieces_to_win: int = max(1, round(
@@ -250,7 +252,7 @@ def create_triforce_pieces(world: "SohWorld") -> None:
 
 def create_filler_item_pool(world: "SohWorld") -> None:
     filler_item_count = len(world.multiworld.get_unfilled_locations(
-        world.player)) - len(world.multiworld.itempool)
+        world.player)) - len(world.item_pool)
 
     # Ice Trap Count
     ice_trap_count = min(filler_item_count, world.options.ice_trap_count.value)
