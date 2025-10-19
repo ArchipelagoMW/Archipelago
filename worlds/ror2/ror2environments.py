@@ -125,9 +125,9 @@ def collapse_dict_list_vertical(list_of_dict_1: List[Dict[X, Y]], *args: List[Di
 #  (unsure of the space/time cost of creating these initially)
 
 environment_vanilla_orderedstages_table = \
-    [environment_vanilla_orderedstage_1_table,
-     environment_vanilla_orderedstage_2_table, environment_vanilla_orderedstage_3_table,
-     environment_vanilla_orderedstage_4_table, environment_vanilla_orderedstage_5_table]
+    [environment_vanilla_orderedstage_1_table, environment_vanilla_orderedstage_2_table,
+     environment_vanilla_orderedstage_3_table, environment_vanilla_orderedstage_4_table,
+     environment_vanilla_orderedstage_5_table]
 environment_vanilla_table = \
     {**compress_dict_list_horizontal(environment_vanilla_orderedstages_table),
      **environment_vanilla_hidden_realm_table, **environment_vanilla_special_table}

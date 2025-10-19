@@ -142,18 +142,13 @@ def create_explore_regions(ror2_world: "RiskOfRainWorld") -> None:
         non_dlc_regions["Menu"].region_exits.append("Shattered Abodes")
         other_regions["OrderedStage_1"].region_exits.append("Reformed Altar")
         other_regions["OrderedStage_4"].region_exits.append("Helminth Hatchery")
+
+    # SOTS Variant Locations
     if ror2_options.dlc_sots and ror2_options.stage_variants:
         non_dlc_regions["Menu"].region_exits.append("Viscous Falls")
         non_dlc_regions["Menu"].region_exits.append("Disturbed Impact")
         dlc_sost_regions["Reformed Altar"].region_exits.append("Golden Dieback")
 
-    # if ror2_options.dlc_sotv and not ror2_options.dlc_sots:
-    #     regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_sotv_other_regions}
-    # elif ror2_options.dlc_sots and not ror2_options.dlc_sotv:
-    #     regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_sost_other_regions}
-    # elif ror2_options.dlc_sots and ror2_options.dlc_sotv:
-    #     regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_sotv_other_regions,
-    #                           **dlc_sost_other_regions}
     if ror2_options.dlc_sotv:
         regions_pool.update(dlc_sotv_other_regions)
     if ror2_options.dlc_sots:

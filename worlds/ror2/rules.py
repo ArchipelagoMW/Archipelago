@@ -45,7 +45,7 @@ def has_location_access_rule(multiworld: MultiWorld, environment: str, player: i
         multiworld.get_location(location_name, player).access_rule = \
             lambda state: state.has(environment, player)
 
-def explore_environment_rule(table, multiworld, player, chests, shrines, newts, scavengers, scanners):
+def explore_environment_location_rules(table, multiworld, player, chests, shrines, newts, scavengers, scanners):
     for i in range(len(table)):
         for environment_name, _ in table[i].items():
             # Make sure to go through each location
@@ -124,23 +124,23 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
         scavengers = ror2_options.scavengers_per_stage.value
         scanners = ror2_options.scanner_per_stage.value
         # Vanilla stages
-        explore_environment_rule(environment_vanilla_orderedstages_table, multiworld, player, chests, shrines, newts,
-                                 scavengers, scanners)
+        explore_environment_location_rules(environment_vanilla_orderedstages_table, multiworld, player, chests, shrines, newts,
+                                           scavengers, scanners)
         # Vanilla Variant stages
         if ror2_options.stage_variants:
-            explore_environment_rule(environment_vanilla_variant_orderedstages_table, multiworld, player, chests, shrines, newts,
-                                 scavengers, scanners)
+            explore_environment_location_rules(environment_vanilla_variant_orderedstages_table, multiworld, player, chests, shrines, newts,
+                                               scavengers, scanners)
         # SoTv stages
         if ror2_options.dlc_sotv:
-            explore_environment_rule(environment_sotv_orderedstages_table, multiworld, player, chests, shrines,
-                                     newts, scavengers, scanners)
+            explore_environment_location_rules(environment_sotv_orderedstages_table, multiworld, player, chests, shrines,
+                                               newts, scavengers, scanners)
         # SoTS stages
         if ror2_options.dlc_sots:
-            explore_environment_rule(environment_sost_orderedstages_table, multiworld, player, chests, shrines,
-                                     newts, scavengers, scanners)
+            explore_environment_location_rules(environment_sost_orderedstages_table, multiworld, player, chests, shrines,
+                                               newts, scavengers, scanners)
         if ror2_options.dlc_sots and ror2_options.stage_variants:
-            explore_environment_rule(environment_sots_variants_orderedstages_table, multiworld, player, chests, shrines,
-                                     newts, scavengers, scanners)
+            explore_environment_location_rules(environment_sots_variants_orderedstages_table, multiworld, player, chests, shrines,
+                                               newts, scavengers, scanners)
 
         has_entrance_access_rule(multiworld, "Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole",
                                  player)
