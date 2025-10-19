@@ -229,6 +229,9 @@ def generate_scrub_prices(world: "SohWorld") -> None:
             world.scrub_prices[slot] = create_random_price(
                 min_scrub_price, max_scrub_price, world)
 
+        if world.using_ut:
+            world.scrub_prices = world.passthrough["scrub_prices"]
+
 
 def create_random_price(min_price: int, max_price: int, world: "SohWorld") -> int:
     price = 0
