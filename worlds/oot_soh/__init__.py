@@ -16,6 +16,7 @@ from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
 from .ShopItems import fill_shop_items, generate_scrub_prices, set_price_rules, all_shop_locations
 from Fill import fill_restrictive
+from .Presets import oot_soh_options_presets
 
 import logging
 logger = logging.getLogger("SOH_OOT")
@@ -23,6 +24,7 @@ logger = logging.getLogger("SOH_OOT")
 
 class SohWebWorld(WebWorld):
     theme = "ice"
+    options_presets = oot_soh_options_presets
 
     setup_en = Tutorial(
         tutorial_name="Start Guide",
