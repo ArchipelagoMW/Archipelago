@@ -140,6 +140,7 @@ item_info = {
     "Guest Happiness Trap",
     "Guest Tiredness Trap",
     "Guest Vandal Trap",
+    "Skip",
   ],
   "trap_items": [
     "Player Money Trap",

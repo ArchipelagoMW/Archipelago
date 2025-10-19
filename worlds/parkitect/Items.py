@@ -126,6 +126,9 @@ def set_parkitect_items(world):
     for each in range(world.options.trap_guests_vandal.value):
         parkitect_items.append("Guest Vandal Trap")
 
+    for each in range(world.options.challenge_skips.value):
+        parkitect_items.append("Skip")
+
     items = item_info["Rides"] + item_info["Shops"]
     
     # Filter items based on DLC selection for starting ride selection

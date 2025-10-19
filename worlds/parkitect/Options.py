@@ -132,7 +132,8 @@ class GoalShopProfit(Range): # ShopProfitGoal
 
 # Challenge
 class ChallengeMaximumExcitement(Range):
-    """If a challenge determines you need a rollercoaster with a maximum excitement, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a rollercoaster with a maximum excitement, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Maximum Ride Excitement"
@@ -141,7 +142,8 @@ class ChallengeMaximumExcitement(Range):
     default = 0
 
 class ChallengeMaximumIntensity(Range):
-    """If a challenge determines you need a rollercoaster with a maximum intensity, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a rollercoaster with a maximum intensity, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Maximum Ride Intensity"
@@ -150,7 +152,8 @@ class ChallengeMaximumIntensity(Range):
     default = 0
 
 class ChallengeMaximumNausea(Range):
-    """If a challenge determines you need a rollercoaster with a maximum nausea, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a rollercoaster with a maximum nausea, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Maximum Ride Nausea"
@@ -159,7 +162,8 @@ class ChallengeMaximumNausea(Range):
     default = 0
 
 class ChallengeMaximumSatisfaction(Range):
-    """If a challenge determines you need a rollercoaster with a maximum satisfaction, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a rollercoaster with a maximum satisfaction, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Maximum Ride Satisfaction"
@@ -168,7 +172,8 @@ class ChallengeMaximumSatisfaction(Range):
     default = 0
 
 class ChallengeCustomers(Range):
-    """If a challenge determines you need a ride or shop with a maximum amount of customers, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a ride or shop with a maximum amount of customers, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Maximum Customers"
@@ -177,7 +182,8 @@ class ChallengeCustomers(Range):
     default = 0
 
 class ChallengeMaximumRideRevenue(Range):
-    """If a challenge determines you need a rollercoaster with a total revenue, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a rollercoaster with a total revenue, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Total Ride Revenue"
@@ -186,13 +192,23 @@ class ChallengeMaximumRideRevenue(Range):
     default = 0
 
 class ChallengeMaximumShopRevenue(Range):
-    """If a challenge determines you need a shop with a total revenue, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a shop with a total revenue, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Total Shop Revenue"
     range_start = 0
     range_end = 2500
     default = 0
+
+class ChallengeSkips(Range):
+    """
+    by default, every game start with 5 skips to, well, skip a challenge. This will add additional skips to be found in the item pool.
+    """
+    display_name = "Skips"
+    range_start = 0
+    range_end = 15
+    default = 5
 
 # Traps
 # Traps - Player
@@ -443,6 +459,7 @@ parkitect_option_groups = [
         ChallengeMaximumSatisfaction,
         ChallengeMaximumRideRevenue,
         ChallengeMaximumShopRevenue,
+        ChallengeSkips,
     ]),
     OptionGroup("Rules", [
         TrapGuestsMoneyFlux
@@ -488,6 +505,7 @@ class ParkitectOptions(PerGameCommonOptions):
     challenge_maximum_satisfaction: ChallengeMaximumSatisfaction
     challenge_maximum_ride_revenue: ChallengeMaximumRideRevenue
     challenge_maximum_shop_revenue: ChallengeMaximumShopRevenue
+    challenge_skips: ChallengeSkips
     
     # the obvious
     goal_guests: GoalGuests
