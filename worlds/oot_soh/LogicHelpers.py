@@ -910,12 +910,7 @@ def can_detonate_upright_bomb_flower(bundle: tuple[CollectionState, Regions, "So
 def item_group_count(bundle: tuple[CollectionState, Regions, "SohWorld"], item_group: str) -> int:
     state = bundle[0]
     world = bundle[2]
-    items = item_name_groups[item_group]
-    count = 0
-    for item in items:
-        if (state.has(item, world.player)):
-            count += 1
-    return count
+    return state.count_group_unique(item_group, world.player)
 
 
 def ocarina_button_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
