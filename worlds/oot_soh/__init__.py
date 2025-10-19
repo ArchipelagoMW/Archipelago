@@ -1,7 +1,7 @@
 import orjson
 import pkgutil
 
-from typing import Any
+from typing import Any, List
 
 from BaseClasses import CollectionState, Item, Tutorial
 from Utils import visualize_regions
@@ -64,6 +64,10 @@ class SohWorld(World):
         # The version is stored on Worlds, so when we're ready to bump our min AP version to 0.6.4, we can use this directly in our slot data:
         # slot_data["apworld_version"] = self.world_version
 
+    def create_item(self, name: str) -> SohItem:
+        item_entry = Items(name)
+        return SohItem(name, item_data_table[item_entry].classification, item_data_table[item_entry].item_id, self.player)
+
     def generate_early(self) -> None:
         # If door of time is set to closed and dungeon rewards aren't shuffled, force child spawn
         if self.options.door_of_time.value == 0 and self.options.shuffle_dungeon_rewards.value == 0:
@@ -76,9 +80,14 @@ class SohWorld(World):
         if self.options.shuffle_scrubs_minimum_price.value > self.options.shuffle_scrubs_maximum_price.value:
             self.options.shuffle_scrubs_maximum_price.value = self.options.shuffle_scrubs_minimum_price.value
 
-    def create_item(self, name: str) -> SohItem:
-        item_entry = Items(name)
-        return SohItem(name, item_data_table[item_entry].classification, item_data_table[item_entry].item_id, self.player)
+    def create_regions(self) -> None:
+        create_regions_and_locations(self)
+        place_locked_items(self)
+        generate_scrub_prices(self)
+        for location in self.get_locations():
+            location.name = str(location.name)
+        for region in self.get_regions():
+            region.name = str(region.name)
 
     def create_items(self) -> None:
         # these are for making the progressive items collect/remove work properly
@@ -96,6 +105,16 @@ class SohWorld(World):
             self.push_precollected(self.create_item(Items.CHILD_WALLET))
 
         create_item_pool(self)
+
+    def set_rules(self) -> None:
+        # Completion condition.
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(
+            Events.GAME_COMPLETED.value, self.player)
+
+    def get_pre_fill_items(self) -> List["Item"]:
+        dungeon_reward_items = [self.create_item(
+            item.value) for item in dungeon_reward_item_mapping.values()]
+        return dungeon_reward_items
 
     def pre_fill(self):
         # Prefill Dungeon Rewards. Need to collect the item pool and vanilla shop items before doing so.
@@ -119,25 +138,18 @@ class SohWorld(World):
                              dungeon_reward_items, single_player_placement=True, lock=True)
 
         fill_shop_items(self)
-        generate_scrub_prices(self)
         set_price_rules(self)
+
         if self.options.triforce_hunt:
             create_triforce_pieces(self)
 
         create_filler_item_pool(self)
 
-    def create_regions(self) -> None:
-        create_regions_and_locations(self)
-        place_locked_items(self)
-        for location in self.get_locations():
-            location.name = str(location.name)
-        for region in self.get_regions():
-            region.name = str(region.name)
-
-    def set_rules(self) -> None:
-        # Completion condition.
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(
-            Events.GAME_COMPLETED.value, self.player)
+    def generate_output(self, output_directory: str):
+        visualize_regions(self.multiworld.get_region(self.origin_region_name, self.player), f"SOH-Player{self.player}.puml",
+                          show_entrance_names=True,
+                          regions_to_highlight=self.multiworld.get_all_state().reachable_regions[
+            self.player])
 
     def fill_slot_data(self) -> dict[str, Any]:
         return {
@@ -249,10 +261,3 @@ class SohWorld(World):
                     state.prog_items[self.player][non_prog_version] = 0
 
         return changed
-
-    def generate_output(self, output_directory: str):
-
-        visualize_regions(self.multiworld.get_region(self.origin_region_name, self.player), f"SOH-Player{self.player}.puml",
-                          show_entrance_names=True,
-                          regions_to_highlight=self.multiworld.get_all_state().reachable_regions[
-            self.player])
