@@ -3,7 +3,7 @@
 import json
 import unittest
 from pathlib import Path
-from typing import ClassVar
+from typing import Any, ClassVar
 
 import test
 from Utils import home_path, local_path
@@ -44,21 +44,26 @@ def get_source_world_manifest_path(game: str) -> Path | None:
 @classvar_matrix(game=filter(get_source_world_manifest_path, source_world_names))
 class TestWorldManifest(unittest.TestCase):
     game: ClassVar[str]
+    manifest: ClassVar[dict[str, Any]]
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        world_type = AutoWorldRegister.world_types[cls.game]
+        assert world_type.game == cls.game
+        manifest_path = get_source_world_manifest_path(cls.game)
+        assert manifest_path  # make mypy happy
+        with manifest_path.open("r", encoding="utf-8") as f:
+            cls.manifest = json.load(f)
 
     def test_game(self) -> None:
         """Test that 'game' will be correctly defined when generating APWorld manifest from source."""
-        world_type = AutoWorldRegister.world_types[self.game]
-        manifest_path = get_source_world_manifest_path(self.game)
-        assert manifest_path  # make mypy happy
-        with manifest_path.open("r", encoding="utf-8") as f:
-            manifest = json.load(f)
         self.assertIn(
             "game",
-            manifest,
+            self.manifest,
             f"archipelago.json manifest exists for {self.game} but does not contain 'game'",
         )
         self.assertEqual(
-            manifest["game"],
-            world_type.game,
-            f"archipelago.json manifest for {self.game} specifies wrong game '{manifest['game']}'",
+            self.manifest["game"],
+            self.game,
+            f"archipelago.json manifest for {self.game} specifies wrong game '{self.manifest['game']}'",
         )
