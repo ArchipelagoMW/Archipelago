@@ -154,11 +154,11 @@ class SohWorld(World):
         fill_shop_items(self)
         set_price_rules(self)
 
-    # todo: comment this out before distributing this to players
-    def generate_output(self, output_directory: str):
-        visualize_regions(self.get_region(self.origin_region_name), f"SOH-Player{self.player}.puml",
-                          show_entrance_names=True,
-                          regions_to_highlight=self.multiworld.get_all_state().reachable_regions[self.player])
+    # For debugging purposes
+    # def generate_output(self, output_directory: str):
+    #    visualize_regions(self.get_region(self.origin_region_name), f"SOH-Player{self.player}.puml",
+    #                      show_entrance_names=True,
+    #                      regions_to_highlight=self.multiworld.get_all_state().reachable_regions[self.player])
 
     def fill_slot_data(self) -> dict[str, Any]:
         return {
