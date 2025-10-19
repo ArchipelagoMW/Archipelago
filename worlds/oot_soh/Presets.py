@@ -447,9 +447,9 @@ standard_options = {
 }
 
 oot_soh_options_presets: dict[str, dict[str, Any]] = {
-    "Default": default_options,
-    "Beginner": beginner_options,
-    "Standard": standard_options,
-    "Advanced": advanced_options,
-    "Hell Mode": hell_mode_options
+    "Ship Default": default_options,
+    "Ship Beginner": beginner_options,
+    "Ship Standard": standard_options,
+    "Ship Advanced": advanced_options,
+    "Ship Hell Mode": hell_mode_options
 }
