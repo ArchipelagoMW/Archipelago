@@ -35,7 +35,7 @@ if typing.TYPE_CHECKING:
 
 
 def tuplize_version(version: str) -> Version:
-    return Version(*(int(piece, 10) for piece in version.split(".")))
+    return Version(*(int(piece) for piece in version.split(".")))
 
 
 class Version(typing.NamedTuple):
@@ -49,7 +49,6 @@ class Version(typing.NamedTuple):
 
 __version__ = "0.6.4"
 version_tuple = tuplize_version(__version__)
-version = Version(*version_tuple)
 
 is_linux = sys.platform.startswith("linux")
 is_macos = sys.platform == "darwin"
@@ -478,7 +477,7 @@ class RestrictedUnpickler(pickle.Unpickler):
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
             if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection,
-                                self.options_module.PlandoText)):
+                                self.options_module.PlandoItem, self.options_module.PlandoText)):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
@@ -721,13 +720,22 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
 
 
 def get_input_text_from_response(text: str, command: str) -> typing.Optional[str]:
+    """
+    Parses the response text from `get_intended_text` to find the suggested input and autocomplete the command in
+    arguments with it.
+
+    :param text: The response text from `get_intended_text`.
+    :param command: The command to which the input text should be added. Must contain the prefix used by the command
+                    (`!` or `/`).
+    :return: The command with the suggested input text appended, or None if no suggestion was found.
+    """
     if "did you mean " in text:
         for question in ("Didn't find something that closely matches",
                          "Too many close matches"):
             if text.startswith(question):
                 name = get_text_between(text, "did you mean '",
                                         "'? (")
-                return f"!{command} {name}"
+                return f"{command} {name}"
     elif text.startswith("Missing: "):
         return text.replace("Missing: ", "!hint_location ")
     return None

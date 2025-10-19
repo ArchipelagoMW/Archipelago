@@ -9,12 +9,14 @@ on:
       - 'setup.py'
       - 'requirements.txt'
       - '*.iss'
+      - 'worlds/*/archipelago.json'
   pull_request:
     paths:
       - '.github/workflows/build.yml'
       - 'setup.py'
       - 'requirements.txt'
       - '*.iss'
+      - 'worlds/*/archipelago.json'
   workflow_dispatch:
 
 env:
