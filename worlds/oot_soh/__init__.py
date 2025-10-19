@@ -80,14 +80,6 @@ class SohWorld(World):
         item_entry = Items(name)
         return SohItem(name, item_data_table[item_entry].classification, item_data_table[item_entry].item_id, self.player)
 
-    def create_regions(self) -> None:
-        create_regions_and_locations(self)
-        place_locked_items(self)
-        for location in self.get_locations():
-            location.name = str(location.name)
-        for region in self.get_regions():
-            region.name = str(region.name)
-
     def create_items(self) -> None:
         # these are for making the progressive items collect/remove work properly
         # when adding another progressive item that is option-dependent like these,
@@ -132,6 +124,14 @@ class SohWorld(World):
             create_triforce_pieces(self)
 
         create_filler_item_pool(self)
+
+    def create_regions(self) -> None:
+        create_regions_and_locations(self)
+        place_locked_items(self)
+        for location in self.get_locations():
+            location.name = str(location.name)
+        for region in self.get_regions():
+            region.name = str(region.name)
 
     def set_rules(self) -> None:
         # Completion condition.
