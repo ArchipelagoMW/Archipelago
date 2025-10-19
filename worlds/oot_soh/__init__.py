@@ -105,6 +105,7 @@ class SohWorld(World):
 
         create_item_pool(self)
 
+    def pre_fill(self):
         # Prefill Dungeon Rewards. Need to collect the item pool and vanilla shop items before doing so.
         if self.options.shuffle_dungeon_rewards == "dungeons":
             # Create a filled copy of the state so the multiworld can place the dungeon rewards using logic
