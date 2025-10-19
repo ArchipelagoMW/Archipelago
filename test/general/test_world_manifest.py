@@ -74,28 +74,28 @@ class TestWorldManifest(unittest.TestCase):
             self.assertIsInstance(
                 world_version,
                 str,
-                f"world_version in manifest for '{self.game}' has to be string if provided for.",
+                f"world_version in archipelago.json for '{self.game}' has to be string if provided.",
             )
             parts = world_version.split(".")
             self.assertEqual(
                 len(parts),
                 3,
-                f"world_version in manifest for '{self.game}' has to be in the form of 'major.minor.build'.",
+                f"world_version in archipelago.json for '{self.game}' has to be in the form of 'major.minor.build'.",
             )
             for part in parts:
                 self.assertTrue(
                     part.isdigit(),
-                    f"world_version in manifest for '{self.game}' may only contain numbers.",
+                    f"world_version in archipelago.json for '{self.game}' may only contain numbers.",
                 )
 
     def test_no_container_version(self) -> None:
         self.assertNotIn(
             "version",
             self.manifest,
-            f"manifest for '{self.game}' may not define 'version'.",
+            f"archipelago.json for '{self.game}' may not define 'version', see apworld specification.md.",
         )
         self.assertNotIn(
             "compatible_version",
             self.manifest,
-            f"manifest for '{self.game}' may not define 'compatible_version'.",
+            f"archipelago.json for '{self.game}' may not define 'compatible_version', see apworld specification.md.",
         )
