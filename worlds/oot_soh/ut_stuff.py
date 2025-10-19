@@ -1,4 +1,4 @@
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import SohWorld
@@ -84,7 +84,6 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.skeleton_key.value = world.passthrough["skeleton_key"]
             world.options.slingbow_break_beehives.value = world.passthrough["slingbow_break_beehives"]
             world.options.starting_age.value = world.passthrough["starting_age"]
-            #
             # the below do not need to be handled in UT at all, since they do not affect logic
             # shuffle_100_gs_reward, ice_trap_count, ice_trap_filler_replacement, and apworld_version
         else:
