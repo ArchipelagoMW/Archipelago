@@ -112,9 +112,18 @@ class SohWorld(World):
             Events.GAME_COMPLETED.value, self.player)
 
     def get_pre_fill_items(self) -> List["Item"]:
-        dungeon_reward_items = [self.create_item(
-            item.value) for item in dungeon_reward_item_mapping.values()]
-        return dungeon_reward_items
+        pre_fill_items = []
+
+        if self.options.shuffle_dungeon_rewards == "dungeons":
+            dungeon_reward_items = [self.create_item(
+                item.value) for item in dungeon_reward_item_mapping.values()]
+            pre_fill_items.extend(dungeon_reward_items)
+
+        for region, shop in all_shop_locations:
+            for slot, item in shop.items():
+                pre_fill_items.append(self.create_item(item))
+
+        return pre_fill_items
 
     def pre_fill(self):
         # Prefill Dungeon Rewards. Need to collect the item pool and vanilla shop items before doing so.
