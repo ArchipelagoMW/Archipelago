@@ -67,3 +67,23 @@ class TestWorldManifest(unittest.TestCase):
             self.game,
             f"archipelago.json manifest for {self.game} specifies wrong game '{self.manifest['game']}'",
         )
+
+    def test_world_version(self) -> None:
+        if "world_version" in self.manifest:
+            world_version: str = self.manifest["world_version"]
+            self.assertIsInstance(
+                world_version,
+                str,
+                f"world_version in manifest for '{self.game}' has to be string if provided for.",
+            )
+            parts = world_version.split(".")
+            self.assertEqual(
+                len(parts),
+                3,
+                f"world_version in manifest for '{self.game}' has to be in the form of 'major.minor.build'.",
+            )
+            for part in parts:
+                self.assertTrue(
+                    part.isdigit(),
+                    f"world_version in manifest for '{self.game}' may only contain numbers.",
+                )
