@@ -3,8 +3,13 @@ from typing import Callable, List, TYPE_CHECKING
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
-    from worlds.pokepark import PokeparkOptions, PokeparkWorld
-from worlds.pokepark.rules import can_farm_berries
+    from worlds.pokepark import PokeparkWorld
+from worlds.pokepark.rules import can_battle, can_battle_intermediate, can_battle_thunderbolt_immune_advanced, \
+    can_battle_thunderbolt_immune_intermediate, \
+    can_dash_overworld, \
+    can_destroy_objects_overworld, can_farm_berries, \
+    can_play_catch, \
+    can_play_catch_intermediate
 
 # for now like this to simplify documentation of entrances and logic, should be later replaced with extensive logic
 # (randomization)
@@ -455,73 +460,134 @@ class EntranceRandomizer:
         "Cavern Zone Bonsly Unlocks": lambda state: True,
         "Magma Zone Bonsly": lambda state: True,
 
-        "Meadow Zone Chimchar": lambda state: state.has("Chimchar Unlock", player),
-        "Cavern Zone Chimchar": lambda state: True,
-        "Magma Zone Chimchar": lambda state: True,
+            "Meadow Zone Chimchar": lambda state: state.has("Chimchar Unlock", player) and can_battle(
+                state, player,
+                options
+            ),
+            "Cavern Zone Chimchar": lambda state: can_battle_intermediate(
+                state, player,
+                options
+            ),
+            "Magma Zone Chimchar": lambda state: can_battle_intermediate(
+                state, player,
+                options
+            ),
 
         "Meadow Zone Sudowoodo": lambda state: state.has("Sudowoodo Unlock", player),
         "Cavern Zone Sudowoodo": lambda state: state.has("Sudowoodo Unlock", player),
 
-        "Meadow Zone Aipom": lambda state: True,
-        "Meadow Zone Aipom Unlocks": lambda state: True,
-        "Haunted Zone Aipom": lambda state: True,
-        "Haunted Zone Aipom Unlocks": lambda state: True,
+            "Meadow Zone Aipom": lambda state: can_play_catch(state, player, options),
+            "Meadow Zone Aipom Unlocks": lambda state: can_play_catch(state, player, options),
+            "Haunted Zone Aipom": lambda state: can_play_catch(state, player, options),
+            "Haunted Zone Aipom Unlocks": lambda state: can_play_catch(state, player, options),
 
-        "Meadow Zone Ambipom": lambda state: state.has("Ambipom Unlock", player),
-        "Haunted Zone Ambipom": lambda state: state.has("Ambipom Unlock", player),
+            "Meadow Zone Ambipom": lambda state: state.has("Ambipom Unlock", player) and can_battle(
+                state,
+                player,
+                options
+            ),
+            "Haunted Zone Ambipom": lambda state: state.has("Ambipom Unlock", player) and can_battle_intermediate(
+                state,
+                player,
+                options
+            ),
 
-        "Beach Zone Krabby": lambda state: state.has("Krabby Unlock", player),
-        "Ice Zone Krabby": lambda state: state.has("Krabby Unlock", player),
+            "Beach Zone Krabby": lambda state: state.has("Krabby Unlock", player) and can_play_catch(
+                state, player, options
+            ),
+            "Ice Zone Krabby": lambda state: state.has("Krabby Unlock", player) and can_play_catch(
+                state, player, options
+            ),
 
         "Beach Zone Mudkip": lambda state: state.has("Mudkip Unlock", player),
         "Ice Zone Mudkip": lambda state: state.has("Mudkip Unlock", player),
 
-        "Beach Zone Taillow": lambda state: True,
-        "Ice Zone Taillow": lambda state: True,
-        "Granite Zone Taillow": lambda state: True,
+            "Beach Zone Taillow": lambda state: can_play_catch(
+                state, player, options
+            ),
+            "Ice Zone Taillow": lambda state: can_play_catch(
+                state, player, options
+            ),
+            "Granite Zone Taillow": lambda state: can_play_catch(
+                state, player, options
+            ),
 
-        "Beach Zone Staravia": lambda state: True,
-        "Ice Zone Staravia": lambda state: True,
+            "Beach Zone Staravia": lambda state: can_battle(state, player, options),
+            "Ice Zone Staravia": lambda state: can_battle(state, player, options),
 
-        "Beach Zone Wingull": lambda state: True,
-        "Ice Zone Wingull": lambda state: True,
+            "Beach Zone Wingull": lambda state: can_play_catch(state, player, options),
+            "Ice Zone Wingull": lambda state: can_play_catch(state, player, options),
 
-        "Beach Zone Corphish": lambda state: state.has("Corphish Unlock", player),
-        "Ice Zone Corphish": lambda state: state.has("Corphish Unlock", player),
+            "Beach Zone Corphish": lambda state: state.has("Corphish Unlock", player) and can_battle(
+                state, player, options
+            ),
+            "Ice Zone Corphish": lambda state: state.has("Corphish Unlock", player) and can_battle(
+                state, player, options
+            ),
 
-        "Ice Zone Teddiursa": lambda state: True,
+            "Ice Zone Teddiursa": lambda state: can_play_catch(state, player, options),
         "Cavern Zone Teddiursa": lambda state: True,
         "Flower Zone Teddiursa": lambda state: True,
 
-        "Cavern Zone Aron": lambda state: True,
-        "Magma Zone Aron": lambda state: True,
+            "Cavern Zone Aron": lambda state: can_destroy_objects_overworld(state, player),
+            "Magma Zone Aron": lambda state: can_dash_overworld(state, player),
 
-        "Cavern Zone Torchic": lambda state: True,
-        "Magma Zone Torchic": lambda state: True,
+            "Cavern Zone Torchic": lambda state: can_battle_intermediate(state, player, options),
+            "Magma Zone Torchic": lambda state: can_battle_intermediate(state, player, options),
 
         "Cavern Zone Geodude": lambda state: True,
         "Magma Zone Geodude": lambda state: True,
 
-        "Cavern Zone Raichu": lambda state: state.has("Raichu Unlock", player),
-        "Haunted Zone Raichu": lambda state: True,
+            "Cavern Zone Raichu": lambda state: state.has("Raichu Unlock", player) and can_play_catch_intermediate(
+                state,
+                player, options
+            ),
+            "Haunted Zone Raichu": lambda state: can_play_catch_intermediate(
+                state,
+                player, options
+            ),
 
         "Cavern Zone Meowth": lambda state: True,
         "Haunted Zone Meowth": lambda state: True,
 
-        "Cavern Zone Marowak": lambda state: True,
-        "Granite Zone Marowak": lambda state: True,
+            "Cavern Zone Marowak": lambda state: can_battle_intermediate(state, player, options),
+            "Granite Zone Marowak": lambda state: can_battle_intermediate(state, player, options),
 
-        "Magma Zone Baltoy": lambda state: state.has("Baltoy Unlock", player),
-        "Magma Zone Baltoy Unlocks": lambda state: state.has("Baltoy Unlock", player),
-        "Granite Zone Baltoy": lambda state: state.has("Baltoy Unlock", player),
-        "Granite Zone Baltoy Unlocks": lambda state: state.has("Baltoy Unlock", player),
+            "Magma Zone Baltoy": lambda state: state.has(
+                "Baltoy Unlock", player
+            ) and can_battle_thunderbolt_immune_intermediate(
+                state, player, options
+            ),
+            "Magma Zone Baltoy Unlocks": lambda state: state.has(
+                "Baltoy Unlock", player
+            ) and can_battle_thunderbolt_immune_intermediate(
+                state, player, options
+            ),
+            "Granite Zone Baltoy": lambda state: state.has(
+                "Baltoy Unlock", player
+            ) and can_battle_thunderbolt_immune_advanced(
+                state, player, options
+            ),
+            "Granite Zone Baltoy Unlocks": lambda state: state.has(
+                "Baltoy Unlock", player
+            ) and can_battle_thunderbolt_immune_advanced(
+                state, player, options
+            ),
 
-            "Magma Zone Claydol": lambda state: state.has("Claydol Unlock", player),
-            "Granite Zone Claydol": lambda state: state.has("Claydol Unlock", player),
+            "Magma Zone Claydol": lambda state: state.has(
+                "Claydol Unlock", player
+            ) and can_battle_thunderbolt_immune_intermediate(
+                state, player, options
+            ),
+            "Granite Zone Claydol": lambda state: state.has(
+                "Claydol Unlock", player
+            ) and can_battle_thunderbolt_immune_advanced(
+                state, player, options
+            ),
         "Magma Zone Meditite": lambda state: True,
         "Flower Zone Meditite": lambda state: True,
 
-        "Haunted Zone Drifloon": lambda state: True,
+            "Haunted Zone Drifloon": lambda state: state.has("Rotom Prisma", player),
         "Granite Zone Drifloon": lambda state: True,
 
         "Granite Zone Furret": lambda state: True,

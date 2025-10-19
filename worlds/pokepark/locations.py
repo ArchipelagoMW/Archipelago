@@ -1858,7 +1858,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ), each_zone=MultiZoneFlag.MULTI
     ),
     "Ice Zone Main Area - Teddiursa Power Competition -- Friendship": PokeparkLocationData(
-        219, PokeparkFlag.BATTLE, "Ice Zone Main Area", PokeparkFriendshipClientLocationData(
+        219, PokeparkFlag.CHASE, "Ice Zone Main Area", PokeparkFriendshipClientLocationData(
             structure_position=66
         ), each_zone=MultiZoneFlag.MULTI
     ),

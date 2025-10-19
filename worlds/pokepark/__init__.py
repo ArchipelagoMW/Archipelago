@@ -562,6 +562,7 @@ class PokeparkWorld(World):
             "Progressive Dash",
             "Progressive Thunderbolt",
             "Progressive Iron Tail",
+            "Progressive Health"
         ]
 
         options = self.options
@@ -599,10 +600,7 @@ class PokeparkWorld(World):
             if name in progressive_set or name not in items_to_remove:
                 self.item_classification_overrides[name] = IC.progression
 
-        useful_items = ["Progressive Dash",
-                        "Progressive Thunderbolt",
-                        "Progressive Thunderbolt",
-                        "Progressive Health",
+        useful_items = [
                         "Double Dash",
                         "Meadow Zone Fast Travel"
                         ]
@@ -809,7 +807,6 @@ class PokeparkWorld(World):
         )
 
         self.random.shuffle(self.progressive_pool)
-
         for item in self.progressive_pool:
             self.multiworld.itempool.append(self.create_item(item))
 

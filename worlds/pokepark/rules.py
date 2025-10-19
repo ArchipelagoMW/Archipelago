@@ -277,7 +277,8 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Starly Power Competition -- Friendship",
-        lambda state: state.has("Starly 2 Unlock", player)
+        lambda state: can_play_catch(state, player, options) and (
+                state.has("Starly 2 Unlock", player) or state.has("Starly Unlock", player))
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bonsly Power Competition -- Friendship",
@@ -949,7 +950,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Teddiursa Power Competition -- Friendship",
-        lambda state: can_battle(state, player, options)
+        lambda state: can_play_catch(state, player, options)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Wingull Power Competition -- Friendship",
@@ -1573,7 +1574,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Haunted Zone Main Area - Drifloon Power Competition -- Friendship",
-        lambda state: True
+        lambda state: state.has("Rotom Prisma", player)
     )
     set_rule_if_exists(
         "Haunted Zone Main Area - Tangrowth -- Friendship",
@@ -2937,89 +2938,87 @@ def can_beat_any_bulbasaur_daring_dash_record(state: CollectionState, player: in
 
 def can_battle(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.harder_enemy_ai.value:
-        return (
-                state.has("Progressive Dash", player) and
-                (
-                        state.has("Progressive Thunderbolt", player, 2) or
-                        state.has("Progressive Iron Tail", player)
-                )
+
+        return state.has("Progressive Health", player) and state.has_any_count(
+            {"Progressive Dash": 1,
+             "Progressive Iron Tail": 1,
+             "Progressive Thunderbolt": 1
+             }, player
         )
-    return (
-            state.has("Progressive Thunderbolt", player) or
-            state.has("Progressive Dash", player) or
-            state.has("Progressive Iron Tail", player)
+    return state.has_any_count(
+        {"Progressive Dash": 1,
+         "Progressive Iron Tail": 1,
+         "Progressive Thunderbolt": 1
+         }, player
     )
 
 
 def can_battle_intermediate(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.harder_enemy_ai.value:
-        return (
-                state.has("Progressive Dash", player, 2) and
-                (
-                        state.has("Progressive Thunderbolt", player, 3) or
-                        state.has("Progressive Iron Tail", player, 2)
-                )
+        return state.has("Progressive Health", player, 2) and state.has_any_count(
+            {"Progressive Dash": 3,
+             "Progressive Iron Tail": 2,
+             "Progressive Thunderbolt": 2
+             }, player
         )
-    return (
-            state.has("Progressive Dash", player, 2) and
-            (
-                    state.has("Progressive Thunderbolt", player, 2) or
-                    state.has("Progressive Iron Tail", player, 2)
-            )
+    return state.has("Progressive Health", player, 2) and state.has_any_count(
+        {"Progressive Dash": 2,
+         "Progressive Iron Tail": 1,
+         "Progressive Thunderbolt": 1
+         }, player
     )
+
 
 
 def can_battle_advanced(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.harder_enemy_ai.value:
-        return (
-                state.has("Progressive Dash", player, 3) and
-                (
-                        state.has("Progressive Thunderbolt", player, 4) or
-                        state.has("Progressive Iron Tail", player, 3)
-                )
+        return state.has("Progressive Health", player, 3) and state.has_any_count(
+            {"Progressive Dash": 4,
+             "Progressive Iron Tail": 3,
+             "Progressive Thunderbolt": 3
+             }, player
         )
-    return (
-            state.has("Progressive Dash", player, 3) and
-            (
-                    state.has("Progressive Thunderbolt", player, 3) or
-                    state.has("Progressive Iron Tail", player, 3)
-            )
+    return state.has("Progressive Health", player, 3) and state.has_any_count(
+        {"Progressive Dash": 3,
+         "Progressive Iron Tail": 2,
+         "Progressive Thunderbolt": 2
+         }, player
     )
 
 
 def can_battle_thunderbolt_immune(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.harder_enemy_ai.value:
-        return (
-                state.has("Progressive Dash", player, 2) or
-                state.has("Progressive Iron Tail", player)
+        return state.has("Progressive Health", player) and state.has_any_count(
+            {"Progressive Dash": 2,
+             "Progressive Iron Tail": 1}, player
         )
-    return (
-            state.has("Progressive Dash", player) or
-            state.has("Progressive Iron Tail", player)
+    return state.has("Progressive Health", player) and state.has_any_count(
+        {"Progressive Dash": 1,
+         "Progressive Iron Tail": 1}, player
     )
 
 
 def can_battle_thunderbolt_immune_intermediate(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.harder_enemy_ai.value:
-        return (
-                state.has("Progressive Dash", player, 3) or
-                state.has("Progressive Iron Tail", player, 2)
+        return state.has("Progressive Health", player, 2) and state.has_any_count(
+            {"Progressive Dash": 3,
+             "Progressive Iron Tail": 2}, player
         )
-    return (
-            state.has("Progressive Dash", player, 2) or
-            state.has("Progressive Iron Tail", player, 2)
+    return state.has("Progressive Health", player, 2) and state.has_any_count(
+        {"Progressive Dash": 2,
+         "Progressive Iron Tail": 1}, player
     )
 
 
 def can_battle_thunderbolt_immune_advanced(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.harder_enemy_ai.value:
-        return (
-                state.has("Progressive Dash", player, 4) or
-                state.has("Progressive Iron Tail", player, 3)
+        return state.has("Progressive Health", player, 3) and state.has_any_count(
+            {"Progressive Dash": 4,
+             "Progressive Iron Tail": 3}, player
         )
-    return (
-            state.has("Progressive Dash", player, 3) or
-            state.has("Progressive Iron Tail", player, 3)
+    return state.has("Progressive Health", player, 3) and state.has_any_count(
+        {"Progressive Dash": 3,
+         "Progressive Iron Tail": 2}, player
     )
 
 def can_farm_berries(state: CollectionState, player: int):

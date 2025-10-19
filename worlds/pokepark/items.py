@@ -1592,12 +1592,12 @@ ITEM_TABLE: dict[str, PokeparkItemData] = {
         )
     ),
     "Progressive Health": PokeparkItemData(
-        "Item", IC.useful, 299, 3, PokeparkPowerItemClientData(
+        "Item", IC.progression, 299, 3, PokeparkPowerItemClientData(
             parameter1=0x03
         )
     ),
     "Progressive Iron Tail": PokeparkItemData(
-        "Item", IC.useful, 300, 3, PokeparkPowerItemClientData(
+        "Item", IC.progression, 300, 3, PokeparkPowerItemClientData(
             parameter1=0x04
         )
     ),
