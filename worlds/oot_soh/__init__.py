@@ -1,3 +1,6 @@
+import orjson
+import pkgutil
+
 from typing import Any
 
 from BaseClasses import CollectionState, Item, Tutorial
@@ -8,7 +11,7 @@ from .Locations import location_table
 from .Options import SohOptions, soh_option_groups
 from .Regions import create_regions_and_locations, place_locked_items, dungeon_reward_item_mapping
 from .Enums import *
-from .ItemPool import create_item_pool
+from .ItemPool import create_item_pool, create_filler_item_pool, create_triforce_pieces
 from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
 from .ShopItems import fill_shop_items, generate_scrub_prices, set_price_rules, all_shop_locations
@@ -55,6 +58,12 @@ class SohWorld(World):
         self.scrub_prices = dict[str, int]()
         self.triforce_pieces_required: int = 0
 
+        apworld_manifest = orjson.loads(pkgutil.get_data(
+            __name__, "archipelago.json").decode("utf-8"))
+        self.apworld_version: str = apworld_manifest["world_version"]
+        # The version is stored on Worlds, so when we're ready to bump our min AP version to 0.6.4, we can use this directly in our slot data:
+        # slot_data["apworld_version"] = self.world_version
+
     def generate_early(self) -> None:
         # If door of time is set to closed and dungeon rewards aren't shuffled, force child spawn
         if self.options.door_of_time.value == 0 and self.options.shuffle_dungeon_rewards.value == 0:
@@ -88,18 +97,8 @@ class SohWorld(World):
 
         create_item_pool(self)
 
-    def create_regions(self) -> None:
-        create_regions_and_locations(self)
-        place_locked_items(self)
-
-    def set_rules(self) -> None:
-        # Completion condition.
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(
-            Events.GAME_COMPLETED.value, self.player)
-
-    def pre_fill(self) -> None:
         # Prefill Dungeon Rewards. Need to collect the item pool and vanilla shop items before doing so.
-        if self.options.shuffle_dungeon_rewards.value == 1:
+        if self.options.shuffle_dungeon_rewards == "dungeons":
             # Create a filled copy of the state so the multiworld can place the dungeon rewards using logic
             prefill_state = CollectionState(self.multiworld)
             for item in self.item_pool:
@@ -109,8 +108,8 @@ class SohWorld(World):
                     prefill_state.collect(self.create_item(item), False)
             prefill_state.sweep_for_advancements()
 
-            dungeon_reward_locations = [self.get_location(
-                location.value) for location in dungeon_reward_item_mapping.keys()]
+            dungeon_reward_locations = [self.get_location(location.value)
+                                        for location in dungeon_reward_item_mapping.keys()]
             dungeon_reward_items = [self.create_item(
                 item.value) for item in dungeon_reward_item_mapping.values()]
 
@@ -121,6 +120,23 @@ class SohWorld(World):
         fill_shop_items(self)
         generate_scrub_prices(self)
         set_price_rules(self)
+        if self.options.triforce_hunt:
+            create_triforce_pieces(self)
+
+        create_filler_item_pool(self)
+
+    def create_regions(self) -> None:
+        create_regions_and_locations(self)
+        place_locked_items(self)
+        for location in self.get_locations():
+            location.name = str(location.name)
+        for region in self.get_regions():
+            region.name = str(region.name)
+
+    def set_rules(self) -> None:
+        # Completion condition.
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(
+            Events.GAME_COMPLETED.value, self.player)
 
     def fill_slot_data(self) -> dict[str, Any]:
         return {
@@ -202,6 +218,7 @@ class SohWorld(World):
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
             "ice_trap_count": self.options.ice_trap_count.value,
             "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement.value,
+            "apworld_version": self.apworld_version,
         }
 
     def collect(self, state: CollectionState, item: Item) -> bool:
