@@ -232,11 +232,8 @@ def create_item_pool(world: "SohWorld") -> None:
 
 
 def create_triforce_pieces(world: "SohWorld") -> None:
-    filler_item_count = (len(world.multiworld.get_unfilled_locations(world.player))
-                         - len(world.item_pool))
-
     total_triforce_pieces: int = min(
-        filler_item_count, world.options.triforce_hunt_pieces_total.value)
+        get_open_location_count(world), world.options.triforce_hunt_pieces_total.value)
 
     triforce_pieces_made = [world.create_item(
         Items.TRIFORCE_PIECE) for _ in range(total_triforce_pieces)]
@@ -251,8 +248,7 @@ def create_triforce_pieces(world: "SohWorld") -> None:
 
 
 def create_filler_item_pool(world: "SohWorld") -> None:
-    filler_item_count = len(world.multiworld.get_unfilled_locations(
-        world.player)) - len(world.item_pool)
+    filler_item_count = get_open_location_count(world)
 
     # Ice Trap Count
     ice_trap_count = min(filler_item_count, world.options.ice_trap_count.value)
@@ -272,6 +268,19 @@ def create_filler_item_pool(world: "SohWorld") -> None:
     # Add junk items to fill remaining locations
     world.multiworld.itempool += [world.create_item(
         get_filler_item(world)) for _ in range(filler_item_count)]
+
+
+def get_open_location_count(world: "SohWorld") -> int:
+    open_location_count = len(world.multiworld.get_unfilled_locations(
+        world.player)) - len(world.item_pool)
+    # Subtract vanilla shop items because they're prefilled later.
+    if world.options.shuffle_shops:
+        open_location_count -= (64 -
+                                (8 * world.options.shuffle_shops_item_amount))
+    # Subtract dungeon rewards when set to dungeons as they're prefilled later.
+    if world.options.shuffle_dungeon_rewards == "dungeons":
+        open_location_count -= 9
+    return open_location_count
 
 
 def get_filler_item(world: "SohWorld") -> str:

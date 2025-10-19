@@ -106,6 +106,11 @@ class SohWorld(World):
 
         create_item_pool(self)
 
+        if self.options.triforce_hunt:
+            create_triforce_pieces(self)
+
+        create_filler_item_pool(self)
+
     def set_rules(self) -> None:
         # Completion condition.
         self.multiworld.completion_condition[self.player] = lambda state: state.has(
@@ -148,11 +153,6 @@ class SohWorld(World):
 
         fill_shop_items(self)
         set_price_rules(self)
-
-        if self.options.triforce_hunt:
-            create_triforce_pieces(self)
-
-        create_filler_item_pool(self)
 
     def generate_output(self, output_directory: str):
         visualize_regions(self.multiworld.get_region(self.origin_region_name, self.player), f"SOH-Player{self.player}.puml",
