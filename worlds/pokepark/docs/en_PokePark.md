@@ -7,7 +7,11 @@ events, quests and playing minigames are treated as locations.
 
 The story has been removed, and some changes were made to the game’s logic to support randomization.
 
-## Rom changes
+## Other Pages
+
+- [Setup](https://github.com/Mekurushi/Archipelago_Pokepark/blob/main/worlds/pokepark/docs/setup_en.md)
+
+## Rom Changes
 
 ### Treehouse
 
@@ -88,7 +92,7 @@ The story has been removed, and some changes were made to the game’s logic to 
 - Drifblim always spawns
 - Removed Intro and Ending files
 
-## Feature roadmap
+## Feature Roadmap
 
 - In-game client messages
 - In-game hints
@@ -96,4 +100,18 @@ The story has been removed, and some changes were made to the game’s logic to 
 - Model randomizer
 - Locations of missing Pokemon
 
+## Credits
 
+### Core Development / APWorld Integration
+
+- Joe Mama (Mekurushi)
+- Seph — Reverse Engineering & Tools Support
+
+### Testing & Feedback
+
+- River — Testing, Q&A, and Feedback
+- Various users in the #future-game-design thread
+
+### Resources & References
+
+- Various other APWorlds as references
