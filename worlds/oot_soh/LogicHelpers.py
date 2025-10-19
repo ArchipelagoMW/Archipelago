@@ -264,7 +264,7 @@ ocarina_buttons_required: dict[str, list[str]] = {
 def can_play_song(song: StrEnum, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     world = bundle[2]
-    if not has_item(Items.FAIRY_OCARINA, bundle) or not has_item(song, bundle):
+    if not (has_item(Items.FAIRY_OCARINA, bundle) and has_item(song, bundle)):
         return False
     if not world.options.shuffle_ocarina_buttons:
         return True
