@@ -129,6 +129,10 @@ def set_parkitect_items(world):
     for each in range(world.options.challenge_skips.value):
         parkitect_items.append("Skip")
 
+    if (world.options.progressive_speedups.value == 1):
+        for each in range(6):
+            parkitect_items.append("Progressive Speed")
+
     items = item_info["Rides"] + item_info["Shops"]
     
     # Filter items based on DLC selection for starting ride selection

@@ -141,6 +141,7 @@ item_info = {
     "Guest Tiredness Trap",
     "Guest Vandal Trap",
     "Skip",
+    "Progressive Speed",
   ],
   "trap_items": [
     "Player Money Trap",

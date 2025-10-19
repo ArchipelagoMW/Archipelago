@@ -224,7 +224,7 @@ class TrapPlayerMoney(Range):
 # Traps - Attraction
 class TrapAttractionBreakdown(Range):
     """
-    When found, instantly break 1 Attraction! Adding traps will increase the total number of items in the world.
+    When found, instantly break specific amount of Attraction/s! Adding traps will increase the total number of items in the world.
     """
     display_name = "Attraction Breakdown Trap"
     range_start = 0
@@ -243,7 +243,7 @@ class TrapAttractionVoucher(Range):
 # Traps - Shop
 class TrapShopsIngredient(Range):
     """
-    When found, few Shops has molded Ingredients, Get new ones! Adding traps will increase the total number of items in the world.
+    When found, ProductShops ingredients needs to be restocked! Adding traps will increase the total number of items in the world.
     """
     display_name = "Shop Ingredients Trap"
     range_start = 0
@@ -252,7 +252,7 @@ class TrapShopsIngredient(Range):
 
 class TrapShopsClean(Range):
     """
-    When found, few Shops has are very dirty and needs to be cleaned! Adding traps will increase the total number of items in the world.
+    When found, Shops needs to be cleaned! Adding traps will increase the total number of items in the world.
     """
     display_name = "Shop Cleaning Trap"
     range_start = 0
@@ -261,7 +261,7 @@ class TrapShopsClean(Range):
 
 class TrapShopsVoucher(Range):
     """
-    When found, few Guests will receive a Shop Voucher in your Park! Adding traps will increase the total number of items in the world.
+    When found, some Guests will receive a Shop Voucher in your Park! Adding traps will increase the total number of items in the world.
     """
     display_name = "Shop Voucher Trap"
     range_start = 0
@@ -340,7 +340,7 @@ class TrapGuestsMoney(Range):
 class TrapGuestsMoneyFlux(Choice):
     f"""
     (If Guest Money Trap is enabled!)
-    Decides if the Guest receive or lose money.
+    Decides if the Guest receive or/and lose money.
     """
     display_name = "Guest Money Flux"
     default = 2
@@ -350,7 +350,7 @@ class TrapGuestsMoneyFlux(Choice):
 
 class TrapGuestsHunger(Range):
     """
-    When found, few Guests will be very hungry! Adding traps will increase the total number of items in the world.
+    When found, Guests will be hungry! Adding traps will increase the total number of items in the world.
     """
     display_name = "Guest Hunger Trap"
     range_start = 0
@@ -359,7 +359,7 @@ class TrapGuestsHunger(Range):
 
 class TrapGuestsThirst(Range):
     """
-    When found, few Guests will be very thirsty! Adding traps will increase the total number of items in the world.
+    When found, Guests will be thirsty! Adding traps will increase the total number of items in the world.
     """
     display_name = "Guest Thirst Trap"
     range_start = 0
@@ -411,6 +411,16 @@ class TrapGuestsVandal(Range):
     range_start = 0
     range_end = 30
     default = 10
+    
+class SelectedProgressiveSpeedups(Choice):
+    """
+    If included, the ability to use the speedups at the window will be restricted behind an item. 6 items total will be added, each progressively unlocking a faster speed.
+    Game Speedups (0x, 1x, 2x, 3x) are always usable.
+    """
+    display_name = "Progressive Speedups"
+    option_no = 0
+    option_yes = 1
+    default = 0
 
 parkitect_option_groups = [
     OptionGroup("Scenario Options", [
@@ -462,7 +472,8 @@ parkitect_option_groups = [
         ChallengeSkips,
     ]),
     OptionGroup("Rules", [
-        TrapGuestsMoneyFlux
+        TrapGuestsMoneyFlux,
+        SelectedProgressiveSpeedups
     ]),
 ]
 
@@ -494,8 +505,9 @@ class ParkitectOptions(PerGameCommonOptions):
     trap_guests_tiredness: TrapGuestsTiredness
     trap_guests_vandal: TrapGuestsVandal
 
-    # in-game options.
+    # Parkitect Mod rules.
     guests_money_flux: TrapGuestsMoneyFlux
+    progressive_speedups: SelectedProgressiveSpeedups
 
     # challenges
     challenge_customers: ChallengeCustomers

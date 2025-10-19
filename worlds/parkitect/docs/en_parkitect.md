@@ -133,7 +133,6 @@ If you want to submit your own Parkitect scenario for the AP World:
 
 - Proper **Delivery System** for AP items  
 - Additional **Scenario maps** and themed challenges  
-- Optional **“Skip Items”** for QoL progression  
 
 ---
 
