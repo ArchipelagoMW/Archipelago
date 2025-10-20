@@ -107,6 +107,31 @@ class FactorioBobs(World):
 
     generate_output = generate_mod
 
+
+    def interpret_slot_data(self, slot_data: dict[str, typing.Any]) -> tuple[dict[str, InternalItem], dict[str, Recipe]]:
+        slot_custom_items = {}
+        slot_custom_recipes = {}
+        for product_name, ingredients_name in slot_data.items():
+            product = all_ingredients[product_name]
+            new_ingredients = {}
+            liquids_used = 0
+            for ingredient_name in ingredients_name:
+                ingredient = all_ingredients[ingredient_name]
+                if ingredient.is_fluid:
+                    liquids_used += 1
+                new_ingredients[ingredient] = 1
+
+            custom_products = {}
+            if product.name not in slot_custom_items:
+                slot_custom_items[product.name] = InternalItem(product.name, product.is_fluid)
+            custom_products[slot_custom_items[product.name]] = 1
+            slot_custom_recipes[product_name] = Recipe(product_name, self.get_category("crafting", liquids_used), new_ingredients,
+                                                       custom_products, 1)
+        return slot_custom_items, slot_custom_recipes
+
+    # and this is how we tell Universal Tracker we don't need the yaml
+    ut_can_gen_without_yaml = True
+
     def generate_early(self) -> None:
         # if max < min, then swap max and min
         if self.options.max_tech_cost < self.options.min_tech_cost:
@@ -116,6 +141,18 @@ class FactorioBobs(World):
         self.skip_silo = self.options.silo.value == Silo.option_spawn
         self.want_progressives = collections.defaultdict(
             lambda: self.options.progressive.want_progressives(self.random))
+
+        load_precalc()
+        if not hasattr(self.multiworld, "generation_is_fake"):
+            self.set_custom_recipes()
+        elif hasattr(self.multiworld, "re_gen_passthrough") and self.game in self.multiworld.re_gen_passthrough:
+            true_data = self.multiworld.re_gen_passthrough[self.game]
+            self.custom_products.update(true_data[0])
+            self.custom_recipes.update(true_data[1])
+            self.options.max_science_pack.value = len([x for x in true_data[0]
+                                                      if true_data[0].name in FactorioOptions.max_science_pack.get_ordered_science_packs]) - 1
+        else:
+            return
 
     def create_regions(self):
         player = self.player
@@ -176,11 +213,7 @@ class FactorioBobs(World):
         self.multiworld.regions.append(nauvis)
 
     def create_items(self) -> None:
-        load_precalc()
         self.custom_technologies = self.set_custom_technologies()
-        if  not hasattr(self.multiworld, "generation_is_fake"):
-            self.set_custom_recipes()
-
         for trap_name in self.trap_names:
             self.multiworld.itempool.extend(self.create_item(f"{trap_name} Trap") for _ in
                                             range(getattr(self.options,
@@ -262,7 +295,7 @@ class FactorioBobs(World):
         if self.options.silo != Silo.option_spawn:
             silo_recipe = self.get_internal_item("rocket-silo").best_recipe
             cargo_pad_recipe = self.get_internal_item("cargo-landing-pad").best_recipe
-        part_recipe = self.custom_recipes["rocket-part"]
+        part_recipe = self.get_internal_item("rocket-part").best_recipe
         satellite_recipe = None
         if self.options.goal == Goal.option_satellite:
             satellite_recipe = self.get_internal_item("satellite").best_recipe
@@ -611,24 +644,6 @@ class FactorioBobs(World):
             slot_data[recipe.name] = ingredients
         return slot_data
 
-    def interpret_slot_data(self, slot_data: dict[str, typing.Any]) -> None:
-        for product_name, ingredients_name in slot_data.items():
-            product = all_ingredients[product_name]
-            new_ingredients = {}
-            liquids_used = 0
-            for ingredient_name in ingredients_name:
-                ingredient = all_ingredients[ingredient_name]
-                if ingredient.is_fluid:
-                    liquids_used += 1
-                new_ingredients[ingredient] = 1
-
-            custom_products = {}
-            if product.name not in self.custom_products:
-                self.custom_products[product.name] = InternalItem(product.name, product.is_fluid)
-            custom_products[self.custom_products[product.name]] = 1
-            self.custom_recipes[product_name] = Recipe(product_name, self.get_category("crafting", liquids_used), new_ingredients,
-                                                       custom_products, 1)
-        self.set_rules()
 
 
 class FactorioLocation(Location):
