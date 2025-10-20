@@ -1477,7 +1477,7 @@ class Locations(StrEnum):
     HC_GS_TREE = "HC GS Tree"
     HC_GS_STORMS_GROTTO = "HC GS Storms Grotto"
     LLR_GS_HOUSE_WINDOW = "LLR GS House Window"
-    LLR_GS_TREE = "LLR Lon Lon Ranch GS Tree"
+    LLR_GS_TREE = "LLR GS Tree"
     LLR_GS_RAIN_SHED = "LLR GS Rain Shed"
     LLR_GS_BACK_WALL = "LLR GS Back Wall"
     KAK_GS_TREE = "Kak GS Tree"

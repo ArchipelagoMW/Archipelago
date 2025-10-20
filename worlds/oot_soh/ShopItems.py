@@ -186,7 +186,7 @@ def fill_shop_items(world: "SohWorld") -> None:
     # create a filled copy of the state so the multiworld can place the vanilla shop items using logic
     prefill_state = CollectionState(world.multiworld)
     for item in world.item_pool:
-        prefill_state.collect(item, False)
+        prefill_state.collect(item, True)
     prefill_state.sweep_for_advancements()
 
     # place the vanilla shop items
@@ -228,6 +228,9 @@ def generate_scrub_prices(world: "SohWorld") -> None:
         for slot in scrubs_location_table.keys():
             world.scrub_prices[slot] = create_random_price(
                 min_scrub_price, max_scrub_price, world)
+
+        if world.using_ut:
+            world.scrub_prices = world.passthrough["scrub_prices"]
 
 
 def create_random_price(min_price: int, max_price: int, world: "SohWorld") -> int:
