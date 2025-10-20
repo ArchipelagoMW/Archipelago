@@ -164,12 +164,16 @@ class FactorioBobs(World):
 
         for pack in sorted(self.options.max_science_pack.get_allowed_packs()):
             location_pool.extend(location_pools[pack])
-        try:
-            location_names = random.sample(location_pool, location_count)
-        except ValueError as e:
-            # should be "ValueError: Sample larger than population or is negative"
-            raise Exception("Too many traps for too few locations. Either decrease the trap count, "
-                            f"or increase the location count (higher max science pack). (Player {self.player})") from e
+
+        if not hasattr(self.multiworld, "generation_is_fake"):
+            try:
+                location_names = random.sample(location_pool, location_count)
+            except ValueError as e:
+                # should be "ValueError: Sample larger than population or is negative"
+                raise Exception("Too many traps for too few locations. Either decrease the trap count, "
+                                f"or increase the location count (higher max science pack). (Player {self.player})") from e
+        else:
+            location_names = location_pool
 
         self.science_locations = [FactorioScienceLocation(player, loc_name, self.location_name_to_id[loc_name], nauvis)
                                   for loc_name in location_names]
