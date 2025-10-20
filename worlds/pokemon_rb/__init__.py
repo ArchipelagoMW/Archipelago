@@ -653,14 +653,30 @@ class PokemonRedBlueWorld(World):
     def extend_hint_information(self, hint_data):
         if self.options.dexsanity or self.options.door_shuffle:
             hint_data[self.player] = {}
-        if self.options.dexsanity:
+        randomized_encounter_types = []
+        if self.options.randomize_wild_pokemon:
+            randomized_encounter_types.append("Wild Encounter")
+        if self.options.randomize_static_pokemon:
+            randomized_encounter_types.append("Static Pokemon")
+        if self.options.randomize_legendary_pokemon:
+            randomized_encounter_types.append("Legendary Pokemon")
+        if self.options.dexsanity and randomized_encounter_types:
             mon_locations = {mon: set() for mon in poke_data.pokemon_data.keys()}
             for loc in location_data:
-                if loc.type in ["Wild Encounter", "Static Pokemon", "Legendary Pokemon", "Missable Pokemon"]:
+                if loc.type in randomized_encounter_types:
                     mon = self.multiworld.get_location(loc.name, self.player).item.name
-                    if mon.startswith("Static ") or mon.startswith("Missable "):
+                    if mon.startswith("Static "):
                         mon = " ".join(mon.split(" ")[1:])
-                    mon_locations[mon].add(loc.name.split(" -")[0])
+                    if "Wild" in loc.name or "Fishing" in loc.name or "Prize" in loc.name:
+                        encounter_label = loc.name.split(" -")[0]
+                    elif "Surf" in loc.name:
+                        encounter_label = f"{loc.name.split(' -')[0]} (Surf)"
+                    elif "Fake" in loc.name:
+                        encounter_label = f"{loc.name.split(' -')[0]} (Fake Pokeball)"
+                    else:
+                        split_loc_name = loc.name.split(" - ")
+                        encounter_label = f"{split_loc_name[0]} ({split_loc_name[1]})"
+                    mon_locations[mon].add(encounter_label)
             for i, mon in enumerate(mon_locations):
                 if self.dexsanity_table[i] and mon_locations[mon]:
                     hint_data[self.player][self.multiworld.get_location(f"Pokedex - {mon}", self.player).address] =\
